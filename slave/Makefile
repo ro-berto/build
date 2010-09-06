@@ -28,6 +28,8 @@ USE_LAUNCHD := \
           [ "$$(pwd -P)" = "/b/slave" ] && \
           echo 1)
 
+export PYTHON_PATH=../third_party/buildbot_7_8;../third_party/twisted_8_1
+
 start:
 ifneq ($(USE_LAUNCHD),1)
 	python run_slave.py --no_save -y buildbot.tac

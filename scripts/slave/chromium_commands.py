@@ -16,7 +16,7 @@ from twisted.internet import defer
 from buildbot.slave import commands
 from buildbot.slave.registry import registerSlaveCommand
 
-import chromium_utils
+from common import chromium_utils
 
 # Local errors.
 class InvalidPath(Exception): pass

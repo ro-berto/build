@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -17,9 +17,11 @@ import sys
 
 from twisted.spread import banana
 
-import chromium_config_private
-reload(chromium_config_private)
-import chromium_utils
+try:
+  import config_private
+except:
+  import config_default as config_private
+from common import chromium_utils
 
 # By default, the banana's string size limit is 640kb, which is unsufficient
 # when passing diff's around. Raise it to 100megs. Do this here since the limit
@@ -28,13 +30,13 @@ import chromium_utils
 banana.SIZE_LIMIT = 100 * 1024 * 1024
 
 
-class Master(chromium_config_private.Master):
+class Master(config_private.Master):
   """Buildbot master configuration options."""
 
-  trunk_url = (chromium_config_private.Master.server_url +
-               chromium_config_private.Master.repo_root + '/trunk')
+  trunk_url = (config_private.Master.server_url +
+               config_private.Master.repo_root + '/trunk')
 
-  webkit_trunk_url = (chromium_config_private.Master.webkit_root_url + '/trunk')
+  webkit_trunk_url = (config_private.Master.webkit_root_url + '/trunk')
 
   trunk_url_src = trunk_url + '/src'
   o3d_url = trunk_url_src + '/o3d'
@@ -46,8 +48,8 @@ class Master(chromium_config_private.Master):
   nacl_ports_url = nacl_ports_trunk_url + '/src'
   gears_url = 'http://gears.googlecode.com/svn/trunk'
   gyp_trunk_url = 'http://gyp.googlecode.com/svn/trunk'
-  branch_url = (chromium_config_private.Master.server_url +
-                chromium_config_private.Master.repo_root + '/branches')
+  branch_url = (config_private.Master.server_url +
+                config_private.Master.repo_root + '/branches')
   merge_branch_url = branch_url + '/chrome_webkit_merge_branch'
   merge_branch_url_src = merge_branch_url + '/src'
 
@@ -94,17 +96,17 @@ class Master(chromium_config_private.Master):
     We can't both make this a property and also keep it static unless we use a
     <metaclass, which is overkill for this usage.
     """
-    # Note: could be overriden by chromium_config_private.
+    # Note: could be overriden by config_private.
     if not Master.bot_password:
       # If the bot_password has been requested, the file is required to exist
-      # if not overriden in chromium_config_private.
+      # if not overriden in config_private.
       bot_password_path = os.path.join(os.path.dirname(__file__),
                                        '.bot_password')
       Master.bot_password = open(bot_password_path).read().strip('\n\r')
     return Master.bot_password
 
 
-class Installer(chromium_config_private.Installer):
+class Installer(config_private.Installer):
   """Installer configuration options."""
 
   # Executable name.
@@ -120,7 +122,7 @@ class Installer(chromium_config_private.Installer):
   output_file = 'packed_files.txt'
 
 
-class Archive(chromium_config_private.Archive):
+class Archive(config_private.Archive):
   """Build and data archival options."""
 
   # List of symbol files archived by official and dev builds.
@@ -192,8 +194,8 @@ class Archive(chromium_config_private.Archive):
 
   # Directories in which to store built files, for dev, official, and full
   # builds. (We don't use the full ones yet.)
-  archive_host = chromium_config_private.Archive.archive_host
-  www_dir_base = chromium_config_private.Archive.www_dir_base
+  archive_host = config_private.Archive.archive_host
+  www_dir_base = config_private.Archive.www_dir_base
   www_dir_base_dev = www_dir_base + 'snapshots'
   www_dir_base_official = www_dir_base + 'official_builds'
   www_dir_base_full = 'unused'
@@ -210,7 +212,7 @@ class Archive(chromium_config_private.Archive):
   # Where to save gtest JSON results.
   gtest_result_archive = www_dir_base + 'gtest_results'
 
-class IRC(chromium_config_private.IRC):
+class IRC(config_private.IRC):
   """Options for the IRC bot."""
   # Where the IRC bot lives.
   host = 'irc.freenode.net'
@@ -228,6 +230,6 @@ class IRC(chromium_config_private.IRC):
   href_redirect_format = 'http://www.google.com/url?sa=D&q=%s'
 
 
-class Distributed(chromium_config_private.Distributed):
+class Distributed(config_private.Distributed):
   # File holding current version information.
   version_file = Installer.version_file

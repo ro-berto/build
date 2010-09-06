@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -46,13 +46,14 @@ if '__main__' == __name__:
 
   # Set the python path.
   parent_dir = os.path.abspath(os.path.pardir)
+  root = os.path.abspath(os.path.pardir)
   python_path = [
-  # Put anything that you want to keep private in this path.
-    os.path.join(parent_dir, 'scripts', 'private'),
-    os.path.join(parent_dir, 'scripts', 'common'),
-    os.path.join(parent_dir, 'scripts', 'slave'),
-    os.path.join(parent_dir, 'pylibs'),
-    os.path.join(parent_dir, 'symsrc'),
+    os.environ['PYTHONPATH'],
+    os.path.join(parent_dir, 'site_config'),
+    os.path.join(parent_dir, 'scripts'),
+    os.path.join(parent_dir, 'third_party'),
+    os.path.join(root, 'build_internal', 'site_config'),
+    os.path.join(root, 'build_internal', 'scripts'),
   ]
   os.environ['PYTHONPATH'] = os.pathsep.join(python_path)
 

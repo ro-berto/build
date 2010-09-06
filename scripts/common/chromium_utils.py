@@ -656,9 +656,6 @@ def SshCopyTree(srctree, host, dst):
                        (srctree, host + ':' + dst, result))
 
 
-# This needs to be imported after IsWindows/IsLinux/IsMac is defined.
-import chromium_config
-
 def CopyFileToArchiveHost(src, dest_dir):
   """A wrapper method to copy files to the archive host.
   It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
@@ -669,7 +666,8 @@ def CopyFileToArchiveHost(src, dest_dir):
       src: full path to the src file.
       dest_dir: destination directory on the host.
   """
-  host = chromium_config.Archive.archive_host
+  import config
+  host = config.Archive.archive_host
   if not os.path.exists(src):
     raise ExternalError('Source path "%s" does not exist' % (src))
     return
@@ -692,7 +690,8 @@ def MaybeMakeDirectoryOnArchiveHost(dest_dir):
   Args:
       dest_dir: destination directory on the host.
   """
-  host = chromium_config.Archive.archive_host
+  import config
+  host = config.Archive.archive_host
   if IsWindows():
     MaybeMakeDirectory(dest_dir)
     print 'saving results to %s' % dest_dir
