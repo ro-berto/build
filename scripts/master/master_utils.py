@@ -1,0 +1,216 @@
+# Copyright (c) 2009 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import os
+
+from buildbot import interfaces, util
+from buildbot.buildslave import BuildSlave
+from buildbot.status import mail
+from buildbot.status.builder import BuildStatus
+from buildbot.status.mail import Domain
+from zope.interface import implements
+
+from autoreboot_buildslave import AutoRebootBuildSlave
+import chromium_config
+from chromium_status import WebStatus
+import slaves_list
+
+
+def HackMaxTime(maxTime=6*60*60):
+  """Set maxTime default value to 6 hours. This function must be called before
+  adding steps."""
+  from buildbot.process.buildstep import RemoteShellCommand
+  assert RemoteShellCommand.__init__.func_defaults == (None, 1, 1, 1200, None,
+      {}, 'slave-config', True)
+  RemoteShellCommand.__init__.im_func.func_defaults = (None, 1, 1, 1200,
+      maxTime, {}, 'slave-config', True)
+  assert RemoteShellCommand.__init__.func_defaults == (None, 1, 1, 1200,
+      maxTime, {}, 'slave-config', True)
+
+HackMaxTime()
+
+
+def HackBuildStatus():
+  """Adds a property to Build named 'blamelist' with the blamelist."""
+  old_setBlamelist = BuildStatus.setBlamelist
+  def setBlamelist(self, blamelist):
+    self.setProperty('blamelist', blamelist, 'Build')
+    old_setBlamelist(self, blamelist)
+  BuildStatus.setBlamelist = setBlamelist
+
+HackBuildStatus()
+
+
+class InvalidConfig(Exception):
+  """Used by VerifySetup."""
+  pass
+
+
+def AutoSetupSlaves(builders, bot_password, max_builds=1):
+  """Helper function for master.cfg to quickly setup c['slaves']."""
+  slaves_dict = {}
+  for builder in builders:
+    if builder.get('slavename'):
+      slaves_dict.setdefault(builder['slavename'],
+                             builder.get('auto_reboot', False))
+    if builder.get('slavenames'):
+      for slavename in builder['slavenames']:
+        slaves_dict.setdefault(slavename, builder.get('auto_reboot', False))
+  slaves = []
+  for (slavename, auto_reboot) in slaves_dict.iteritems():
+    if auto_reboot:
+      slave_class = AutoRebootBuildSlave
+    else:
+      slave_class = BuildSlave
+    slaves.append(slave_class(slavename, bot_password, max_builds=max_builds))
+  return slaves
+
+
+def VerifySetup(c, slaves):
+  """Verify all the available slaves in the slave configuration are used and
+  that all the builders have a slave."""
+  # Extract the list of slaves associated to a builder and make sure each
+  # builder has its slaves connected.
+  # Verify each builder has at least one slave.
+  builders_slaves = set()
+  slaves_name = [s.slavename for s in c['slaves']]
+  for b in c['builders']:
+    builder_slaves = set()
+    slavename = b.get('slavename')
+    if slavename:
+      builder_slaves.add(slavename)
+    slavenames = b.get('slavenames', [])
+    for s in slavenames:
+      builder_slaves.add(s)
+    if not slavename and not slavenames:
+      raise InvalidConfig('Builder %s has no slave' % b['name'])
+    # Now test.
+    for s in builder_slaves:
+      if not s in slaves_name:
+        raise InvalidConfig('Builder %s using undefined slave %s' % (b['name'],
+                                                                     s))
+    builders_slaves |= builder_slaves
+  if len(builders_slaves) != len(slaves_name):
+    raise InvalidConfig('Same slave defined multiple times')
+
+  # Make sure each slave has their builder.
+  builders_name = [b['name'] for b in c['builders']]
+  for s in c['slaves']:
+    name = s.slavename
+    if not name in builders_slaves:
+      raise InvalidConfig('Slave %s not associated with any builder' % name)
+
+  # Make sure every defined slave is used.
+  for s in slaves.GetSlaves():
+    name = slaves_list.EntryToSlaveName(s)
+    if not name in slaves_name:
+      raise InvalidConfig('Slave %s defined in your slaves_list is not '
+                          'referenced at all' % name)
+    builders = s.get('builder', [])
+    if not isinstance(builders, (list, tuple)):
+      builders = [builders]
+    testers = s.get('testers', [])
+    if not isinstance(testers, (list, tuple)):
+      testers = [testers]
+    builders.extend(testers)
+    for b in builders:
+      if not b in builders_name:
+        raise InvalidConfig('Slave %s uses non-existent builder %s' % (name,
+                                                                       b))
+
+
+class FilterDomain(util.ComparableMixin):
+  """Similar to buildbot.mail.Domain but permits filtering out people we don't
+  want to spam.
+
+  Also loads default values from chromium_config."""
+  implements(interfaces.IEmailLookup)
+
+  compare_attrs = ['domain', 'permitted_domains']
+
+
+  def __init__(self, domain=None, permitted_domains=None):
+    """domain is the default domain to append when only the naked username is
+    available.
+    permitted_domains is a whitelist of domains that emails will be sent to."""
+    self.domain = domain or chromium_config.Master.master_domain
+    self.permitted_domains = (permitted_domains or
+                              chromium_config.Master.permitted_domains)
+
+  def getAddress(self, name):
+    """If name is already an email address, pass it through."""
+    result = name
+    if self.domain and not '@' in result:
+      result = '%s@%s' % (name, self.domain)
+    if not '@' in result:
+      log.msg('Invalid blame email address "%s"' % result)
+      return None
+    if self.permitted_domains:
+      for p in self.permitted_domains:
+        if result.endswith(p):
+          return result
+      return None
+    return result
+
+
+def AutoSetupMaster(c, active_master, mail_notifier=False,
+                    public_html=None):
+  """Add common settings and status services to a master.
+
+  - Default number of logs to keep
+  - WebStatus and MailNotifier
+  - Debug ssh port. Just add a file named .manhole beside master.cfg and
+    simply include one line containing 'port = 10101', then you can
+    'ssh localhost -p' and you can access your buildbot from the inside."""
+  # 'status' is a list of Status Targets. The results of each build will be
+  # pushed to these targets. buildbot/status/*.py has a variety to choose from,
+  # including web pages, email senders, and IRC bots.
+  c.setdefault('status', [])
+  if mail_notifier:
+    c['status'].append(mail.MailNotifier(
+        fromaddr=active_master.from_address,
+        mode='problem',
+        relayhost=chromium_config.Master.smtp,
+        lookup=FilterDomain()))
+
+  kwargs = {}
+  if public_html:
+    kwargs['public_html'] = public_html
+  if active_master.master_port:
+    c['status'].append(WebStatus(active_master.master_port, allowForce=True,
+                                 **kwargs))
+  if active_master.master_port_alt:
+    c['status'].append(WebStatus(active_master.master_port_alt,
+                                 allowForce=False,
+                                 **kwargs))
+
+  # Keep last build logs, the default is too low.
+  c['buildHorizon'] = 1000
+  c['logHorizon'] = 500
+  # Must be at least 2x the number of slaves.
+  c['eventHorizon'] = 200
+  # Must be at least 1x the number of builds listed in console.
+  c['buildCacheSize'] = 60
+
+  # See http://buildbot.net/buildbot/docs/0.8.1/Debug-Options.html for more
+  # details.
+  if os.path.isfile('.manhole'):
+    # This import has an implicit dependency on Crypto.Cipher. You may need to
+    # install it manually: sudo apt-get install python-crypto on ubuntu.
+    from buildbot import manhole
+    # If 'port' is defined, it uses the same valid keys as the current user.
+    values = {}
+    try:
+      execfile('.manhole', values)
+    except:
+      pass
+    if 'debugPassword' in values:
+      c['debugPassword'] = values['debugPassword']
+    interface = 'tcp:%s:interface=127.0.0.1' % values.get('port', 0)
+    if 'port' in values and 'user' in values and 'password' in values:
+      c['manhole'] = manhole.PasswordManhole(interface, values['user'],
+                                            values['password'])
+    elif 'port' in values:
+      c['manhole'] = manhole.AuthorizedKeysManhole(interface,
+          os.path.expanduser("~/.ssh/authorized_keys"))

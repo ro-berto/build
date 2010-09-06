@@ -1,0 +1,27 @@
+#!/usr/bin/python
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import os
+import unittest
+
+import cl_command
+import runtests
+
+class DevenvLogToIbLogTest(unittest.TestCase):
+
+  def testConvert(self):
+    source_log = open(os.path.join(runtests.DATA_PATH,
+                                   'error-log-compile-stdio-devenv'))
+    expected_result_log = open(
+        os.path.join(runtests.DATA_PATH,
+                     'error-log-compile-stdio-devenv-converted'))
+    converted_content = cl_command.DevenvLogToIbLog(source_log.read()).Convert()
+    self.assertEqual(expected_result_log.read(), converted_content)
+
+    source_log.close()
+    expected_result_log.close()
+
+if __name__ == '__main__':
+  unittest.main()

@@ -1,0 +1,29 @@
+URL: http://buildbot.net/trac
+GIT: git://github.com/nsylvain/buildbot.git in branch "chromium"
+Sources: http://github.com/nsylvain/buildbot/tree/chromium
+Version: 0.7.12
+License: GNU General Public License (GPL) Version 2
+
+This is a forked copy of buildbot v0.7.12 with the modifications living
+in github. To list the local modifications, use:
+  git log nsylvain/chromium ^v0.7.12
+  
+
+The following change has been made to fix issues that are now fixed in
+a newer version of the upstream repository.
+
+--- buildbot/status/web/console.py      (revision 54225)
++++ buildbot/status/web/console.py      (working copy)
+@@ -431,11 +431,8 @@
+                 builds.append(devBuild)
+
+                 # Now break if we have enough builds.
+-                current_revision = self.getChangeForBuild(
+-                    builder.getBuild(-1), revision)
+-                if self.comparator.isRevisionEarlier(
+-                    devBuild, current_revision):
+-                    break
++                if int(got_rev) < int(revision):
++                    break;
+
+
