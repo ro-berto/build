@@ -46,7 +46,7 @@ if '__main__' == __name__:
 
   # Set the python path.
   parent_dir = os.path.abspath(os.path.pardir)
-  root = os.path.abspath(os.path.pardir)
+  root = os.path.dirname(parent_dir)
   python_path = [
     os.environ['PYTHONPATH'],
     os.path.join(parent_dir, 'site_config'),

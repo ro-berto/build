@@ -39,7 +39,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # Where the chromium slave scritps are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
-    self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
+    self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
+                                             'build_internal', 'slave_external')
 
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin

@@ -111,8 +111,8 @@ class FactoryCommands(object):
     self._build_dir = build_dir
     self._target_platform = target_platform
 
-    # Starting from e.g. C:\b\slave\build_slave_path\build, find
-    # C:\b\scripts\slave.
+    # Starting from e.g. C:\b\build\slave\build_slave_path\build, find
+    # C:\b\build\scripts\slave.
     self._script_dir = self.PathJoin('..', '..', '..', 'scripts', 'slave')
 
     self._perl = self.GetExecutableName('perl')
