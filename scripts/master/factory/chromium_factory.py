@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,9 +12,9 @@ import os
 from buildbot.steps import trigger
 
 from build_factory import BuildFactory
-import chromium_commands
-import chromium_config as config
-import gclient_factory
+from master.factory import chromium_commands
+from master.factory import gclient_factory
+import config
 
 class ChromiumFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the chromium master.cfg files."""

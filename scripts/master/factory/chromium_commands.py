@@ -15,15 +15,15 @@ from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from buildbot.steps.transfer import FileUpload
 
-import chromium_config as config
-import chromium_utils
-import commands
+import config
+from common import chromium_utils
+from master.factory import commands
 
-from log_parser import archive_command
-from log_parser import gtest_command
-from log_parser import process_log
-from log_parser import retcode_command
-from log_parser import webkit_test_command
+from master.log_parser import archive_command
+from master.log_parser import gtest_command
+from master.log_parser import process_log
+from master.log_parser import retcode_command
+from master.log_parser import webkit_test_command
 
 class ChromiumCommands(commands.FactoryCommands):
   """Encapsulates methods to add chromium commands to a buildbot factory."""

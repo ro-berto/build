@@ -14,9 +14,9 @@ Based on chromium_factory.py."""
 import os
 import re
 
-import chromium_config as config
-import chromium_commands
-import chromium_factory
+from master.factory import chromium_commands
+from master.factory import chromium_factory
+import config
 
 
 class ChromiumSubmodulesFactory(chromium_factory.ChromiumFactory):

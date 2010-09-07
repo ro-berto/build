@@ -16,8 +16,8 @@ import os
 import re
 import simplejson
 
-import chromium_config as config
-import chromium_utils
+import config
+from common import chromium_utils
 
 from buildbot.status import builder
 

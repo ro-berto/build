@@ -10,7 +10,7 @@ from buildbot.process import buildstep
 from buildbot.steps import shell
 from buildbot.status import builder
 
-import chromium_config as config
+import config
 
 
 class ReturnCodeCommand(shell.ShellCommand):

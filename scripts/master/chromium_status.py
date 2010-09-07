@@ -35,7 +35,7 @@ from twisted.web import html
 from zope.interface import interface
 from zope.interface import declarations
 
-import chromium_config as config
+import config
 
 
 class BuildBox(waterfall.BuildBox):

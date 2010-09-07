@@ -11,10 +11,10 @@ from buildbot.status.builder import BuildStatus
 from buildbot.status.mail import Domain
 from zope.interface import implements
 
-from autoreboot_buildslave import AutoRebootBuildSlave
-import chromium_config
-from chromium_status import WebStatus
-import slaves_list
+from master.autoreboot_buildslave import AutoRebootBuildSlave
+from master.chromium_status import WebStatus
+from master import slaves_list
+import config
 
 
 def HackMaxTime(maxTime=6*60*60):
@@ -134,9 +134,9 @@ class FilterDomain(util.ComparableMixin):
     """domain is the default domain to append when only the naked username is
     available.
     permitted_domains is a whitelist of domains that emails will be sent to."""
-    self.domain = domain or chromium_config.Master.master_domain
+    self.domain = domain or config.Master.master_domain
     self.permitted_domains = (permitted_domains or
-                              chromium_config.Master.permitted_domains)
+                              config.Master.permitted_domains)
 
   def getAddress(self, name):
     """If name is already an email address, pass it through."""
@@ -171,7 +171,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     c['status'].append(mail.MailNotifier(
         fromaddr=active_master.from_address,
         mode='problem',
-        relayhost=chromium_config.Master.smtp,
+        relayhost=config.Master.smtp,
         lookup=FilterDomain()))
 
   kwargs = {}

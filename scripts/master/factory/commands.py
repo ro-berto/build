@@ -17,14 +17,14 @@ from buildbot.process.properties import WithProperties
 from buildbot.status.builder import SUCCESS
 from buildbot.steps import shell
 
-import chromium_config as config
-import chromium_step
-import chromium_utils
-from optional_arguments import ListProperties
+from common import chromium_utils
+from master import chromium_step
+from master.log_parser import cl_command
+from master.log_parser import gtest_command
+from master.log_parser import retcode_command
+from master.optional_arguments import ListProperties
 
-from log_parser import cl_command
-from log_parser import gtest_command
-from log_parser import retcode_command
+import config
 
 
 class FactoryCommands(object):
