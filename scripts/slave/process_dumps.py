@@ -10,8 +10,8 @@ import optparse
 import os
 import sys
 
-import chromium_config
-import chromium_utils
+from common import chromium_utils
+import config
 
 
 def GetCrashDumpDir():
@@ -84,14 +84,14 @@ def main(options, args):
     debugger_dir = ProbeDebuggerDir()
   if not debugger_dir:
     print 'Cannot find debugger.'
-    return chromium_config.Master.retcode_warnings
+    return config.Master.retcode_warnings
 
   symbol_path = os.path.join(options.build_dir, options.target)
   dll_symbol = os.path.join(symbol_path, 'chrome_dll.pdb')
 
   if not os.path.exists(dll_symbol):
     print 'Cannot find symbols.'
-    return chromium_config.Master.retcode_warnings
+    return config.Master.retcode_warnings
   symbol_time = os.path.getmtime(dll_symbol)
 
   dump_dir = options.dump_dir

@@ -21,8 +21,8 @@ import socket
 import subprocess
 import sys
 
-import chromium_config as config
-import slave_utils
+from slave import slave_utils
+import config
 
 
 class ArchiveCoverage(object):

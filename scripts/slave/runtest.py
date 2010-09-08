@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2007-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -30,9 +30,9 @@ import sys
 # which I really don't understand).
 sys.path.insert(0, os.path.abspath('src/tools/python'))
 
-import chromium_config as config
-import chromium_utils
-import slave_utils
+from common import chromium_utils
+from slave import slave_utils
+import config
 
 import google.httpd_utils
 import google.platform_utils

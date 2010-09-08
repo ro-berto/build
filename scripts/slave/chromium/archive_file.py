@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -13,8 +13,8 @@ import os
 import shutil
 import sys
 
-import chromium_config as config
-import chromium_utils
+from chromium import chromium_utils
+import config
 
 
 def _UploadFile(src, dst, force_ssh=False):

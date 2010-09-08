@@ -21,10 +21,9 @@ import sys
 import tempfile
 import threading
 
-import chromium_utils
-import slave_utils
-
-import playback_benchmark_replay
+from common import chromium_utils
+from slave import slave_utils
+from slave.chromium import playback_benchmark_replay
 
 # So we can import google.*_utils below with native Pythons.
 sys.path.append(os.path.abspath('src/tools/python'))

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -20,9 +20,9 @@ import optparse
 import os
 import sys
 
-import chromium_config as config
 import google.path_utils
-import chromium_utils
+from common import chromium_utils
+import config
 
 
 # LAST_RELEASE_INFO file should contain the information about the last

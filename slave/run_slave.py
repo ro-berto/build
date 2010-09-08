@@ -44,18 +44,23 @@ if '__main__' == __name__:
   # change the current directory to the directory of the script.
   os.chdir(sys.path[0])
 
-  # Set the python path.
+  # Make sure the current python path is absolute.
+  paths = os.environ['PYTHONPATH'].split(os.pathsep)
+  os.environ['PYTHONPATH'] = ''
+  for path in paths:
+    os.environ['PYTHONPATH'] += os.path.abspath(path)
+    os.environ['PYTHONPATH'] += os.pathsep
+
+  # Update the python path.
   parent_dir = os.path.abspath(os.path.pardir)
   root = os.path.dirname(parent_dir)
   python_path = [
-    os.environ['PYTHONPATH'],
     os.path.join(parent_dir, 'site_config'),
     os.path.join(parent_dir, 'scripts'),
     os.path.join(parent_dir, 'third_party'),
     os.path.join(root, 'build_internal', 'site_config'),
-    os.path.join(root, 'build_internal', 'scripts'),
   ]
-  os.environ['PYTHONPATH'] = os.pathsep.join(python_path)
+  os.environ['PYTHONPATH'] += os.pathsep.join(python_path)
 
   # Add these in from of the PATH too.
   new_path = python_path
@@ -102,7 +107,7 @@ if '__main__' == __name__:
     remove_all_vars_except(os.environ, env_var)
 
     # extend the env variables with the chrome-specific settings.
-    depot_tools = os.path.join(parent_dir, 'depot_tools')
+    depot_tools = os.path.join(parent_dir, '..', 'depot_tools')
     # Reuse the python executable used to start this script.
     python = os.path.dirname(sys.executable)
     system32 = os.path.join(os.environ['SYSTEMROOT'], 'system32')
@@ -143,7 +148,7 @@ if '__main__' == __name__:
 
     remove_all_vars_except(os.environ, env_var)
 
-    depot_tools = os.path.join(parent_dir, 'depot_tools')
+    depot_tools = os.path.join(parent_dir, '..', 'depot_tools')
 
     slave_path = [depot_tools, '/usr/bin', '/bin',
                   '/usr/sbin', '/sbin', '/usr/local/bin']
