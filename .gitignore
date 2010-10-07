@@ -1,0 +1,6 @@
+*.pyc
+.manhole
+changes.pck
+events_*
+twistd.log*
+twistd.pid
