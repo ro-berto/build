@@ -185,19 +185,5 @@ F('dbg_int', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-#
-# Win Dbg Perf Tests
-#
-B('XP Perf (dbg)', 'dbg_perf', 'testers|windows', 'win_dbg_dep')
-B('Vista Perf (dbg)', 'dbg_perf', 'testers|windows', 'win_dbg_dep')
-F('dbg_perf', win().ChromiumFactory(
-    'chromium-win-dbg',
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
-    tests=['plugin', 'page_cycler', 'startup'],
-    factory_properties={'process_dumps': True,
-                        'start_crash_handler': True}))
-
 def Update(config, active_master, c):
   return helper.Update(c)
