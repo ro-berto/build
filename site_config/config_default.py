@@ -15,6 +15,9 @@ class Master(object):
   git_server_url =  'http://src.chromium.org/git'
   repo_root = '/svn'
 
+  # Googlecode.com repos.
+  googlecode_url = 'http://%s.googlecode.com/svn'
+
   # Directly fetches from anonymous webkit svn server.
   webkit_root_url = 'http://svn.webkit.org/repository/webkit'
 
@@ -180,6 +183,12 @@ class Master(object):
 
   class NativeClientChrome(_NaClBase):
     project_name = 'NativeClientChrome'
+    master_port = 9025
+    slave_port = 9026
+    master_port_alt = 9041
+
+  class NativeClientPPAPI(_NaClBase):
+    project_name = 'NativeClientPPAPI'
     master_port = 9025
     slave_port = 9026
     master_port_alt = 9041
