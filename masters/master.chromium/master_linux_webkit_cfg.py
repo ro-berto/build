@@ -20,7 +20,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '10webkit linux'
+defaults['category'] = '7webkit linux'
 
 #
 # Main debug scheduler for src/

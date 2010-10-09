@@ -20,7 +20,7 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 ## Release
 ################################################################################
 
-defaults['category'] = '9webkit mac'
+defaults['category'] = '6webkit mac'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('Chromium', 'Webkit Mac Builder',

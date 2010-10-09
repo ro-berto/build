@@ -20,7 +20,7 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 ## Release
 ################################################################################
 
-defaults['category'] = '2win rel'
+defaults['category'] = '2windows'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('Chromium', 'Win Builder',
@@ -87,8 +87,6 @@ B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_dep')
 ################################################################################
 ## Debug
 ################################################################################
-
-defaults['category'] = '3win dbg'
 
 dbg_archive = master_config.GetArchiveUrl('Chromium', 'Win Builder (dbg)',
                                           'cr-win-dbg', 'win32')

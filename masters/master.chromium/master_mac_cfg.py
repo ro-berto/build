@@ -20,7 +20,7 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 ## Release
 ################################################################################
 
-defaults['category'] = '4mac rel'
+defaults['category'] = '3mac'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder',
@@ -63,8 +63,6 @@ B('Mac10.6 Tests', 'rel_unit', 'testers', 'mac_rel_dep')
 ################################################################################
 ## Debug
 ################################################################################
-
-defaults['category'] = '5mac dbg'
 
 dbg_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder (dbg)',
                                           'cr-mac-dbg', 'mac')

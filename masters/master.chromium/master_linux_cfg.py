@@ -20,7 +20,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '6linux rel'
+defaults['category'] = '4linux'
 
 # Archive location
 rel_archive_x64 = master_config.GetArchiveUrl('Chromium', 'Linux Builder x64',
@@ -65,8 +65,6 @@ F('rel_unit', linux().ChromiumFactory(
 ################################################################################
 ## Debug
 ################################################################################
-
-defaults['category'] = '7linux dbg'
 
 dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
                                           'cr-linux-dbg', 'linux')
