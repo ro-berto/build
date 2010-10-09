@@ -146,7 +146,8 @@ class GClientFactory(object):
 
   def BaseFactory(self, gclient_spec=None, official_release=False,
                   factory_properties=None, build_properties=None,
-                  delay_compile_step=False, sudo_for_remove=False):
+                  delay_compile_step=False, sudo_for_remove=False,
+                  gclient_deps=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -165,12 +166,12 @@ class GClientFactory(object):
     env = factory_properties.get('gclient_env', {})
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
-    if official_release:
-      factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout)
-    # We safely update the tree only after killing the residual tasks.
-    if not delay_compile_step:
+    if official_release or factory_properties.get('nuke_and_pave'):
+      factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
+                                         gclient_deps=gclient_deps)
+    elif not delay_compile_step:
       self.AddUpdateStep(gclient_spec, factory_properties, factory,
-                         sudo_for_remove)
+                         sudo_for_remove, gclient_deps=gclient_deps)
     return factory
 
   def BuildFactory(self, identifier, target='Release', clobber=False,
@@ -207,7 +208,7 @@ class GClientFactory(object):
     return factory
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
-                    sudo_for_remove=False):
+                    sudo_for_remove=False, gclient_deps=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -221,4 +222,5 @@ class GClientFactory(object):
     timeout = factory_properties.get('gclient_timeout')
 
     # Add the update step.
-    factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove)
+    factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove,
+                                  gclient_deps=gclient_deps)

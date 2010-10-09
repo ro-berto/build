@@ -12,6 +12,7 @@
 """
 
 import logging
+import math
 import optparse
 import os
 import sys
@@ -25,7 +26,38 @@ sys.path.append(os.path.abspath('src/tools/python'))
 
 USAGE = '%s [options]' % os.path.basename(sys.argv[0])
 
-URL = 'file:///%s/run.html?run=all%s&reportInJS=1&tags=buildbot_trunk,revision_%s'
+URL = 'file:///%s/run.html?run=%s%s&reportInJS=1&tags=buildbot_trunk,revision_%s'
+
+TESTS = [
+  'Accessors',
+  'CloneNodes',
+  'CreateNodes',
+  'DOMDivWalk',
+  'DOMTable',
+  'DOMWalk',
+  'Events',
+  'Get+Elements',
+  'GridSort',
+  'Template',
+]
+
+def geometric_mean(values):
+  """Compute a rounded geometric mean from an array of values."""
+  if not values:
+    return None
+  # To avoid infinite value errors, make sure no value is less than 0.001.
+  new_values = []
+  for value in values:
+    if value > 0.001:
+      new_values.append(value)
+    else:
+      new_values.append(0.001)
+  # Compute the sum of the log of the values.
+  log_sum = sum(map(lambda x: math.log(x), new_values))
+  # Raise e to that sum over the number of values.
+  mean = math.pow(math.e, (log_sum / len(new_values)))
+  # Return the rounded mean.
+  return int(round(mean))
 
 def print_result(top, name, score_string, refbuild):
   prefix = ''
@@ -78,35 +110,44 @@ def main(options, args):
                                'dom_perf_result_%s%s.txt' % (build_revision,
                                                              suffix))
 
-    url = URL % (dom_perf_dir, iterations, build_revision)
-    url_flag = '--url=%s' % url
+    result = 0
+    compiled_data = []
+    for test in TESTS:
+      url = URL % (dom_perf_dir, test, iterations, build_revision)
+      url_flag = '--url=%s' % url
 
-    command = [test_exe_path,
-               '--wait_cookie_name=__domperf_finished',
-               '--jsvar=__domperf_result',
-               '--jsvar_output=%s' % output_file,
-               url_flag]
-    if use_refbuild:
-      command.append('--reference_build')
+      command = [test_exe_path,
+                 '--wait_cookie_name=__domperf_finished',
+                 '--jsvar=__domperf_result',
+                 '--jsvar_output=%s' % output_file,
+                 url_flag]
+      if use_refbuild:
+        command.append('--reference_build')
 
-    print "Executing: "
-    print command
-    result = chromium_utils.RunCommand(command)
+      print "Executing: "
+      print command
+      result |= chromium_utils.RunCommand(command)
 
-    # Open the resulting file and display it.
-    file = open(output_file, 'r')
-    data = json.loads(''.join(file.readlines()))
-    file.close()
+      # Open the resulting file and display it.
+      file = open(output_file, 'r')
+      data = json.loads(''.join(file.readlines()))
+      file.close()
+      for suite in data['BenchmarkSuites']:
+        # Skip benchmarks that we didn't actually run this time around.
+        if len(suite['Benchmarks']) == 0 and suite['score'] == 0:
+          continue
+        compiled_data.append(suite)
 
-    print_result(True, 'Total', data['BenchmarkRun']['totalScore'], 
-                 use_refbuild)
-    for suite in data['BenchmarkSuites']:
+    # Now give the geometric mean as the total for the combined runs.
+    total = geometric_mean([s['score'] for s in compiled_data])
+    print_result(True, 'Total', total, use_refbuild)
+    for suite in compiled_data:
       print_result(False, suite['name'], suite['score'], use_refbuild)
 
     return result
 
   result = run_and_print(False)
-  result &= run_and_print(True)
+  result |= run_and_print(True)
 
   if chromium_utils.IsLinux():
     slave_utils.StopVirtualX(options.target)

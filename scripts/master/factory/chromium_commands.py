@@ -546,18 +546,27 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
-                              functional_base=None):
-    """Adds a step to run PyAuto functional tests."""
+                              src_base=None):
+    """Adds a step to run PyAuto functional tests.
+
+    Args:
+      workdir: the working dir for this step
+      src_base: relative path (from workdir) to src. Not needed if workdir is
+                'build' (the default)
+       
+    """
     J = self.PathJoin
     pyauto_script = J('src', 'chrome', 'test', 'functional',
                       'pyauto_functional.py')
     # in case a '..' prefix is needed
-    if functional_base:
-      pyauto_script = J(functional_base, pyauto_script)
+    if src_base:
+      pyauto_script = J(src_base, pyauto_script)
 
     pyauto_functional_cmd = ['python', pyauto_script, '-v']
     if self._target_platform == 'win32':  # win needs python24
       py24 = J('src', 'third_party', 'python_24', 'python_slave.exe')
+      if src_base:
+        py24 = J(src_base, py24)
       pyauto_functional_cmd = ['cmd', '/C'] + [py24, pyauto_script, '-v']
     elif self._target_platform == 'darwin':
       pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']

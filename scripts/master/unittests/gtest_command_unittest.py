@@ -10,9 +10,15 @@ import unittest
 from log_parser import gtest_command
 
 FAILURES = ['NavigationControllerTest.Reload',
-            'NavigationControllerTest.Back',
+            'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0',
             'BadTest.TimesOut',
+            'MoreBadTest.TimesOutAndFails',
             'SomeOtherTest.SwitchTypes']
+
+FAILS_FAILURES = ['SomeOtherTest.FAILS_Bar']
+FLAKY_FAILURES = ['SomeOtherTest.FLAKY_Baz']
+
+TIMEOUT_MESSAGE = 'Killed (timed out).'
 
 RELOAD_ERRORS = """
 C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:381: Failure
@@ -22,7 +28,7 @@ Which is: 0
 
 """
 
-BACK_ERRORS = """
+SPDY_ERRORS = """
 C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:439: Failure
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
@@ -43,6 +49,16 @@ Expected: false
 
 """
 
+TIMEOUT_ERRORS = """
+[61613:263:0531/042613:2887943745568888:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/extensions/extension_error_reporter.cc(56)] Extension error: Could not load extension from 'extensions/api_test/geolocation/no_permission'. Manifest file is missing or unreadable.
+"""
+
+MOREBAD_ERRORS = """
+Value of: entry->page_type()
+  Actual: 2
+Expected: NavigationEntry::NORMAL_PAGE
+"""
+
 TEST_DATA = """
 [==========] Running 7 tests from 3 test cases.
 [----------] Global test environment set-up.
@@ -59,27 +75,41 @@ TEST_DATA = """
 [  FAILED  ] NavigationControllerTest.Reload (2 ms)
 [ RUN      ] NavigationControllerTest.Reload_GeneratesNewPage
 [       OK ] NavigationControllerTest.Reload_GeneratesNewPage (22 ms)
-[ RUN      ] NavigationControllerTest.Back
-%(back_errors)s
-[  FAILED  ] NavigationControllerTest.Back (2 ms)
+[ RUN      ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0
+%(spdy_errors)s
+[  FAILED  ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0 (2 ms)
 [----------] 4 tests from NavigationControllerTest (74 ms total)
 
   YOU HAVE 2 FLAKY TESTS
 
 [----------] 1 test from BadTest
 [ RUN      ] BadTest.TimesOut
-[61613:263:0531/042613:2887943745568888:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/extensions/extension_error_reporter.cc(56)] Extension error: Could not load extension from 'extensions/api_test/geolocation/no_permission'. Manifest file is missing or unreadable.
+%(timeout_errors)s
 [0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) exceeded for BadTest.TimesOut
 Handling SIGTERM.
 Successfully wrote to shutdown pipe, resetting signal handler.
 [61613:19971:0531/042642:2887973024284693:INFO:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/browser_main.cc(285)] Handling shutdown for signal 15.
 
-[----------] 1 test from SomeOtherTest
+[----------] 1 test from MoreBadTest
+[ RUN      ] MoreBadTest.TimesOutAndFails
+%(morebad_errors)s
+[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) exceeded for MoreBadTest.TimesOutAndFails
+Handling SIGTERM.
+Successfully wrote to shutdown pipe, resetting signal handler.
+[  FAILED  ] MoreBadTest.TimesOutAndFails (31000 ms)
+
+[----------] 4 tests from SomeOtherTest
 [ RUN      ] SomeOtherTest.SwitchTypes
 %(switch_errors)s
 [  FAILED  ] SomeOtherTest.SwitchTypes (40 ms)
 [ RUN      ] SomeOtherTest.Foo
 [       OK ] SomeOtherTest.Foo (20 ms)
+[ RUN      ] SomeOtherTest.FAILS_Bar
+Some error message for a failing test.
+[  FAILED  ] SomeOtherTest.FAILS_Bar (40 ms)
+[ RUN      ] SomeOtherTest.FLAKY_Baz
+Some error message for a flaky test.
+[  FAILED  ] SomeOtherTest.FLAKY_Baz (40 ms)
 [----------] 2 tests from SomeOtherTest (60 ms total)
 
 [----------] Global test environment tear-down
@@ -87,7 +117,7 @@ Successfully wrote to shutdown pipe, resetting signal handler.
 [  PASSED  ] 4 tests.
 [  FAILED  ] 3 tests, listed below:
 [  FAILED  ] NavigationControllerTest.Reload
-[  FAILED  ] NavigationControllerTest.Back
+[  FAILED  ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0
 [  FAILED  ] SomeOtherTest.SwitchTypes
 
  1 FAILED TEST
@@ -96,9 +126,11 @@ Successfully wrote to shutdown pipe, resetting signal handler.
   YOU HAVE 2 FLAKY TESTS
 
 program finished with exit code 1
-""" % {'reload_errors': RELOAD_ERRORS,
-       'back_errors'  : BACK_ERRORS,
-       'switch_errors': SWITCH_ERRORS}
+""" % {'reload_errors' : RELOAD_ERRORS,
+       'spdy_errors'   : SPDY_ERRORS,
+       'switch_errors' : SWITCH_ERRORS,
+       'timeout_errors': TIMEOUT_ERRORS,
+       'morebad_errors': MOREBAD_ERRORS}
 
 TEST_DATA_CRASH = """
 [==========] Running 7 tests from 3 test cases.
@@ -114,18 +146,26 @@ class TestObserverTests(unittest.TestCase):
     for line in TEST_DATA.splitlines():
       observer.outLineReceived(line)
 
-    self.assertFalse(observer.internal_error)
+    self.assertEqual(0, len(observer.internal_error_lines))
     self.assertFalse(observer.RunningTests())
+
     self.assertEqual(sorted(FAILURES), sorted(observer.FailedTests()))
+    self.assertEqual(sorted(FAILURES + FAILS_FAILURES),
+                     sorted(observer.FailedTests(include_fails=True)))
+    self.assertEqual(sorted(FAILURES + FLAKY_FAILURES),
+                     sorted(observer.FailedTests(include_flaky=True)))
+    self.assertEqual(sorted(FAILURES + FAILS_FAILURES + FLAKY_FAILURES),
+        sorted(observer.FailedTests(include_fails=True, include_flaky=True)))
+
     self.assertEqual(10, observer.disabled_tests)
-    self.assertEquals(2, observer.flaky_tests)
+    self.assertEqual(2, observer.flaky_tests)
 
     test_name = 'NavigationControllerTest.Reload'
     self.assertEqual('\n'.join(['%s: ' % test_name, RELOAD_ERRORS]),
                      '\n'.join(observer.FailureDescription(test_name)))
 
-    test_name = 'NavigationControllerTest.Back'
-    self.assertEqual('\n'.join(['%s: ' % test_name, BACK_ERRORS]),
+    test_name = 'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0'
+    self.assertEqual('\n'.join(['%s: ' % test_name, SPDY_ERRORS]),
                      '\n'.join(observer.FailureDescription(test_name)))
 
     test_name = 'SomeOtherTest.SwitchTypes'
@@ -133,18 +173,24 @@ class TestObserverTests(unittest.TestCase):
                      '\n'.join(observer.FailureDescription(test_name)))
 
     test_name = 'BadTest.TimesOut'
-    self.assertEqual('\n'.join(['%s: ' % test_name, 'Killed (timed out).']),
+    self.assertEqual('\n'.join(['%s: ' % test_name,
+                                TIMEOUT_ERRORS, TIMEOUT_MESSAGE]),
+                     '\n'.join(observer.FailureDescription(test_name)))
+
+    test_name = 'MoreBadTest.TimesOutAndFails'
+    self.assertEqual('\n'.join(['%s: ' % test_name,
+                                MOREBAD_ERRORS, TIMEOUT_MESSAGE]),
                      '\n'.join(observer.FailureDescription(test_name)))
 
     observer = gtest_command.TestObserver()
     for line in TEST_DATA_CRASH.splitlines():
       observer.outLineReceived(line)
 
-    self.assertFalse(observer.internal_error)
+    self.assertEqual(0, len(observer.internal_error_lines))
     self.assertTrue(observer.RunningTests())
     self.assertEqual(['HunspellTest.Crashes'], observer.FailedTests())
     self.assertEqual(0, observer.disabled_tests)
-    self.assertEquals(0, observer.flaky_tests)
+    self.assertEqual(0, observer.flaky_tests)
 
     test_name = 'HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),

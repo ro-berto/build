@@ -37,13 +37,20 @@ def ReadHKLMValue(path, value):
 def main_xcode(options, args):
   """Interprets options, clobbers object files, and calls xcodebuild.
   """
+  compiler = options.compiler
+  assert compiler in (None, 'clang')
+
   # Note: this clobbers all targets, not just Debug or Release.
-  if options.clobber:
+  build_output_dir = os.path.join(os.path.dirname(options.build_dir),
+      'xcodebuild')
+  if compiler == 'clang':
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-                                    'xcodebuild')
+        'clang')
+
+  if options.clobber:
     chromium_utils.RemoveDirectory(build_output_dir)
 
-  # If the project isn't in args, add all.xcodeproj so simplify configuration.
+  # If the project isn't in args, add all.xcodeproj to simplify configuration.
   command = ['xcodebuild', '-configuration', options.target]
 
   # TODO(mmoss) Support the old 'args' usage until we're confident the master is
@@ -52,7 +59,8 @@ def main_xcode(options, args):
     # TODO(mmoss) Temporary hack to ignore the Windows --solution flag that is
     # passed to all builders. This can be taken out once the master scripts are
     # updated to only pass platform-appropriate --solution values.
-    if not options.solution or os.path.splitext(options.solution)[1] != '.xcodeproj':
+    if (not options.solution or
+        os.path.splitext(options.solution)[1] != '.xcodeproj'):
       options.solution = 'all.xcodeproj'
     command.extend(['-project', options.solution])
 
@@ -69,6 +77,7 @@ def main_xcode(options, args):
   full_hostname = uname_tuple[1]
   os_revision = uname_tuple[2]
   split_full_hostname = full_hostname.split('.', 2)
+  env = os.environ.copy()
   if len(split_full_hostname) >= 3:
     (hostname_only, hostname_subnet, ignored) = split_full_hostname
     import re
@@ -91,29 +100,38 @@ def main_xcode(options, args):
           # tries to collect real host status for this step.  Work around this
           # by manually invoking pump around xcodebuild with enough of
           # a DISTCC_HOSTS so it always starts. (radr://8151956)
-          os.environ['DISTCC_HOSTS'] = 'dummy,cpp,lzo'
+          env['DISTCC_HOSTS'] = 'dummy,cpp,lzo'
           command.insert(0, "pump")
+
+  if compiler == 'clang':
+    env['CC'] = 'clang++'
+    env['DSTROOT'] = os.path.abspath(build_output_dir)
+    env['OBJROOT'] = os.path.join(env['DSTROOT'], 'obj')
+    env['SYMROOT'] = os.path.join(env['DSTROOT'], 'sym')
+
+  if options.xcode_target:
+    command.extend(['-target', options.xcode_target])
 
   # Add on any remaining args
   command.extend(args)
 
   os.chdir(options.build_dir)
-  result = chromium_utils.RunCommand(command)
+  result = chromium_utils.RunCommand(command, env=env)
   return result
 
 
-def common_linux_settings(command, crosstool=None):
+def common_linux_settings(command, env, crosstool=None, compiler=None):
   """
   Sets desirable Linux environment variables and command-line options
   that are common to the Make and SCons builds.
   """
   if options.mode == 'google_chrome' or options.mode == 'official':
-    os.environ['CHROMIUM_BUILD'] = '_google_chrome'
+    env['CHROMIUM_BUILD'] = '_google_chrome'
 
   if options.mode == 'official':
-    os.environ['OFFICIAL_BUILD'] = '1'
-    os.environ['CHROME_BUILD_TYPE'] = '_official'
     # Official builds are always Google Chrome.
+    env['OFFICIAL_BUILD'] = '1'
+    env['CHROME_BUILD_TYPE'] = '_official'
 
   # Don't stop at the first error.
   command.append('-k')
@@ -123,17 +141,29 @@ def common_linux_settings(command, crosstool=None):
 
   # Setup crosstool environment variables.
   if crosstool:
-    os.environ['AR'] = crosstool + '-ar'
-    os.environ['AS'] = crosstool + '-as'
-    os.environ['CC'] = crosstool + '-gcc'
-    os.environ['CXX'] = crosstool + '-g++'
-    os.environ['LD'] = crosstool + '-ld'
-    os.environ['RANLIB'] = crosstool + '-ranlib'
+    env['AR'] = crosstool + '-ar'
+    env['AS'] = crosstool + '-as'
+    env['CC'] = crosstool + '-gcc'
+    env['CXX'] = crosstool + '-g++'
+    env['LD'] = crosstool + '-ld'
+    env['RANLIB'] = crosstool + '-ranlib'
     command.append('-j%d' % jobs)
     # Don't use build-in rules.
     command.append('-r')
     # For now only build chrome, as other things will break.
     command.append('chrome')
+    return
+
+  assert compiler in (None, 'clang')
+  if compiler == 'clang':
+    env['CC'] = 'clang'
+    env['CXX'] = 'clang++'
+    # We intentionally don't reuse the ccache/distcc modifications seen below,
+    # as they don't work with clang.
+    command.append('-j%d' % jobs)
+    command.append('-r')
+    # For now only build targets we know work.
+    command.extend(['base_unittests', 'chrome'])
     return
 
   cc = 'gcc'
@@ -151,8 +181,8 @@ def common_linux_settings(command, crosstool=None):
     # mmoss if you have questions.
     cc = 'ccache ' + cc
     cpp = 'ccache ' + cpp
-  os.environ['CC'] = cc
-  os.environ['CXX'] = cpp
+  env['CC'] = cc
+  env['CXX'] = cpp
   command.append('-j%d' % jobs)
 
 
@@ -199,8 +229,8 @@ def main_make(options, args):
     os.symlink('out', sconsbuild)
 
   os.chdir(working_dir)
-
-  common_linux_settings(command, options.crosstool)
+  env = os.environ.copy()
+  common_linux_settings(command, env, options.crosstool, options.compiler)
 
   command.append('BUILDTYPE=' + options.target)
 
@@ -214,8 +244,8 @@ def main_make(options, args):
 
   # Force serial linking, otherwise too many links make bots run out of memory
   # (scons does this with 'scons_variable_settings' in common.gypi).
-  os.environ['LINK'] = 'flock %s/linker.lock \$(CXX)' % sconsbuild
-  return chromium_utils.RunCommand(command)
+  env['LINK'] = 'flock %s/linker.lock \$(CXX)' % sconsbuild
+  return chromium_utils.RunCommand(command, env=env)
 
 
 def main_scons(options, args):
@@ -234,8 +264,9 @@ def main_scons(options, args):
   else:
     command = ['hammer']
 
+  env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_linux_settings(command)
+    common_linux_settings(command, env)
   else:
     command.extend(['-k'])
 
@@ -258,7 +289,7 @@ def main_scons(options, args):
   #
   #command.extend(['--debug=explain', 'VERBOSE=1'])
   command.extend(options.build_args + args)
-  return chromium_utils.RunCommand(command)
+  return chromium_utils.RunCommand(command, env=env)
 
 def main_scons_v8(options, args):
   """Interprets options, clobbers object files, and calls scons.
@@ -273,8 +304,9 @@ def main_scons_v8(options, args):
 
   command = ['python', '../third_party/scons/scons.py']
 
+  env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_linux_settings(command)
+    common_linux_settings(command, env)
   else:
     command.extend(['-k'])
 
@@ -285,7 +317,7 @@ def main_scons_v8(options, args):
   ])
 
   command.extend(options.build_args + args)
-  return chromium_utils.RunCommand(command)
+  return chromium_utils.RunCommand(command, env=env)
 
 
 
@@ -304,7 +336,7 @@ def main_win(options, args):
     elif header.endswith('9.00'):
       options.msvs_version = '8'
     else:
-      print >>sys.stderr, "Unknown sln header:\n" + header
+      print >> sys.stderr, "Unknown sln header:\n" + header
       sys.exit(1)
 
   REG_ROOT = 'SOFTWARE\\Microsoft\\VisualStudio\\'
@@ -312,7 +344,7 @@ def main_win(options, args):
   if devenv:
     devenv = os.path.join(devenv, 'devenv.com')
   else:
-    print >>sys.stderr, ("MSVS %s was requested but is not installed." %
+    print >> sys.stderr, ("MSVS %s was requested but is not installed." %
         options.msvs_version)
     sys.exit(1)
 
@@ -344,20 +376,16 @@ def main_win(options, args):
     # Bug 1064677 for more details.
     if not options.keep_version_file:
       chromium_utils.RemoveFile(build_output_dir, 'obj', 'chrome_dll',
-                              'chrome_dll_version.rc')
+                                'chrome_dll_version.rc')
 
-  # The save-and-restore isn't necessary in the normal usage of this script,
-  # but it's safer.
-  old_official_build = os.environ.get('OFFICIAL_BUILD', None)
-  old_build_type = os.environ.get('CHROME_BUILD_TYPE', None)
-
+  env = os.environ.copy()
   if options.mode == 'google_chrome' or options.mode == 'official':
-    os.environ['CHROMIUM_BUILD'] = '_google_chrome'
+    env['CHROMIUM_BUILD'] = '_google_chrome'
 
   if options.mode == 'official':
-    os.environ['OFFICIAL_BUILD'] = '1'
-    os.environ['CHROME_BUILD_TYPE'] = '_official'
     # Official builds are always Google Chrome.
+    env['OFFICIAL_BUILD'] = '1'
+    env['CHROME_BUILD_TYPE'] = '_official'
 
   if not options.solution:
     options.solution = 'all.sln'
@@ -365,21 +393,54 @@ def main_win(options, args):
   # jsc builds need another environment variable.
   # TODO(nsylvain): We should have --js-engine option instead.
   if options.solution.find('_kjs') != -1:
-    os.environ['JS_ENGINE_TYPE'] = '_kjs'
+    env['JS_ENGINE_TYPE'] = '_kjs'
 
   result = -1
-  try:
-    solution = os.path.join(options.build_dir, options.solution)
-    command = [tool, solution]
-    command.extend(tool_options)
-    command.extend(args)
-    result = chromium_utils.RunCommand(command)
-  finally:
-    if old_official_build is not None:
-      os.environ['OFFICIAL_BUILD'] = old_official_build
-    if old_build_type is not None:
-      os.environ['CHROME_BUILD_TYPE'] = old_build_type
+  solution = os.path.join(options.build_dir, options.solution)
+  command = [tool, solution] + tool_options + args
+  errors = []
+  # Examples:
+  # midl : command line error MIDL1003 : error returned by the C
+  #   preprocessor (-1073741431)
+  #
+  # Error executing C:\PROGRA~2\MICROS~1\Common7\Tools\Bin\Midl.Exe (tool
+  #    returned code: 1282)
+  #
+  # cl : Command line error D8027 : cannot execute 'C:\Program Files
+  #    (x86)\Microsoft Visual Studio 8\VC\bin\c2.dll'
+  #
+  # Warning: Could not delete file "c:\b\slave\win\build\src\build\Debug\
+  #    chrome.dll" : Access is denied
+  # --------------------Build System Warning--------------------------------
+  #    -------
+  # Could not delete file:
+  #     Could not delete file "c:\b\slave\win\build\src\build\Debug\
+  #        chrome.dll" : Access is denied
+  #     (Automatically running xgHandle on first 10 files that could not be
+  #        deleted)
+  #     Searching for '\Device\HarddiskVolume1\b\slave\win\build\src\build\
+  #        Debug\chrome.dll':
+  #     No handles found.
+  #     (xgHandle utility returned code: 0x00000000)
+  known_toolset_bugs = [
+    '\\c2.dll',
+    'Midl.Exe (tool returned code: 1282)',
+    'LINK : fatal error LNK1102: out of memory',
+  ]
+  def scan(line):
+    for known_line in known_toolset_bugs:
+      if known_line in line:
+        errors.append(line)
+        break
 
+  result = chromium_utils.RunCommand(
+      command, parser_func=scan, env=env, universal_newlines=True)
+  if errors:
+    print('Retrying a clobber build because of:')
+    print('\n'.join(('  ' + l for l in errors)))
+    print('Deleting %s...' % build_output_dir)
+    chromium_utils.RemoveDirectory(build_output_dir)
+    result = chromium_utils.RunCommand(command, env=env)
   return result
 
 
@@ -408,6 +469,8 @@ if '__main__' == __name__:
                            help='specify build tool (ib, vs, scons, xcode)')
   option_parser.add_option('', '--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
+  option_parser.add_option('', '--compiler', default=None,
+                           help='specify alternative compiler (e.g. clang)')
   if chromium_utils.IsWindows():
     # Windows only.
     option_parser.add_option('', '--no-ib', action='store_true', default=False,
@@ -418,6 +481,10 @@ if '__main__' == __name__:
     # For linux to arm cross compile.
     option_parser.add_option('', '--crosstool', default=None,
                              help='optional path to crosstool toolset')
+  if chromium_utils.IsMac():
+    # Mac only.
+    option_parser.add_option('', '--xcode-target', default=None,
+                             help='Target from the xcodeproj file')
 
   options, args = option_parser.parse_args()
 

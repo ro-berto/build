@@ -54,7 +54,8 @@ F('rel_unit', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=['unit', 'ui', 'media', 'printing', 'remoting', 'gpu',
-           'browser_tests', 'courgette', 'googleurl', 'installer'],
+           'browser_tests', 'courgette', 'googleurl', 'installer',
+           'safe_browsing'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
@@ -122,7 +123,7 @@ F('dbg_unit_1', win().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting',
-           'courgette', 'unit', 'gpu', 'installer'],
+           'courgette', 'unit', 'gpu', 'installer', 'safe_browsing'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))

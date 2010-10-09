@@ -20,6 +20,7 @@ from slave import slave_utils
 
 class StagingError(Exception): pass
 
+WARNING_EXIT_CODE = 88
 
 def archive(options, args):
   # Create some variables
@@ -118,9 +119,10 @@ def archive(options, args):
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.
-    expression = (r"^(chrome_dll|chrome_exe|browser_test.+|unit_tests|"
-                  r"chrome_frame_.*tests)"
-                  r"\.pdb$")
+    expression = (r"^(chrome_dll|chrome_exe"
+    #             r"|browser_test.+|unit_tests"
+    #             r"|chrome_frame_.*tests"
+                  r")\.pdb$")
     zip_file_list.extend([file for file in os.listdir(build_dir)
                           if re.match(expression, file)])
 
@@ -136,7 +138,7 @@ def archive(options, args):
     build_revision_file.write('%d' % build_revision)
     build_revision_file.close()
     if chromium_utils.IsMac() or chromium_utils.IsLinux():
-      os.chmod(build_revision_path, 0644)
+      chromium_utils.MakeWorldReadable(build_revision_path)
     zip_file_list.append(build_revision_file_name)
   except IOError:
     print 'Writing to revision file %s failed ' % build_revision_path
@@ -151,7 +153,7 @@ def archive(options, args):
   if not os.path.exists(zip_file):
     raise StagingError('Failed to make zip package %s' % zip_file)
   if chromium_utils.IsMac() or chromium_utils.IsLinux():
-    os.chmod(zip_file, 0644)
+    chromium_utils.MakeWorldReadable(zip_file)
 
   # Report the size of the zip file to help catch when it gets too big and
   # can cause bot failures from timeouts during downloads to testers.
@@ -170,7 +172,7 @@ def archive(options, args):
     chromium_utils.MoveFile(versioned_file, old_file)
   shutil.copyfile(zip_file, versioned_file)
   if chromium_utils.IsMac() or chromium_utils.IsLinux():
-    os.chmod(versioned_file, 0644)
+    chromium_utils.MakeWorldReadable(versioned_file)
 
   # Now before we finish, trim out old builds to make sure we don't
   # fill the disk completely.

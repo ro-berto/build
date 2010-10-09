@@ -13,7 +13,7 @@ import os
 import shutil
 import sys
 
-from chromium import chromium_utils
+from common import chromium_utils
 import config
 
 

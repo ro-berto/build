@@ -21,6 +21,8 @@ import socket
 import subprocess
 import sys
 
+from common import chromium_utils
+
 from slave import slave_utils
 import config
 
@@ -102,13 +104,9 @@ class ArchiveCoverage(object):
 
   def _MakeSourceWorldReadable(self):
     """Makes the source tree world-readable."""
-    # Files are created umask 077 by default; change to 755 for dirs and 644
-    # for files so they're world-readable.
     for (dirpath, dirnames, filenames) in os.walk(self.from_dir):
-      for d in dirnames:
-        os.chmod(os.path.join(dirpath, d), 0755)
-      for f in filenames:
-        os.chmod(os.path.join(dirpath, f), 0644)
+      for node in dirnames + filenames:
+        chromium_utils.MakeWorldReadable(os.path.join(dirpath, node))
 
   def Run(self):
     """Does the actual upload.

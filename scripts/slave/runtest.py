@@ -30,6 +30,10 @@ import sys
 # which I really don't understand).
 sys.path.insert(0, os.path.abspath('src/tools/python'))
 
+# Because of this dependency on a chromium checkout, we need to disable some
+# pylint checks.
+# pylint: disable=E0611
+# pylint: disable=E1101
 from common import chromium_utils
 from slave import slave_utils
 import config
@@ -114,7 +118,7 @@ class GTestUnexpectedDeathTracker(object):
 def _RunGTestCommand(command, results_tracker):
   if results_tracker:
     return chromium_utils.RunCommand(
-        command, stdout_parser_func=results_tracker.OnReceiveLine)
+        command, parser_func=results_tracker.OnReceiveLine)
   else:
     return chromium_utils.RunCommand(command)
 
@@ -225,9 +229,6 @@ def main_mac(options, args):
   command.extend(args[1:])
 
   results_tracker = None
-  # TODO(nsylvain): TEMPORARY HACK. This option is causing the Mac bots to be
-  # unable to parse the gtest output due to mixing of stderr and stdout.
-  options.generate_json_file = False
   if options.generate_json_file:
     results_tracker = GTestUnexpectedDeathTracker()
 
@@ -406,7 +407,12 @@ def main_win(options, args):
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', True)
 
-  command = [test_exe_path]
+  if options.parallel:
+    launcher_path = os.path.join(build_dir, '..', 'tools',
+                                 'parallel_launcher', 'parallel_launcher.py')
+    command = ['python.exe', launcher_path, test_exe_path]
+  else:
+    command = [test_exe_path]
   command.extend(args[1:])
 
   # Nuke anything that appears to be stale chrome items in the temporary
@@ -475,6 +481,8 @@ if '__main__' == __name__:
   option_parser.add_option('', '--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
+  option_parser.add_option('--parallel', action='store_true',
+                           help='run tests in parallel for speed')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
   option_parser.add_option("", "--builder-name", default=None,

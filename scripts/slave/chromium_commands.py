@@ -396,23 +396,39 @@ class GClient(commands.SourceBase):
     """
     SVN_REVISION_RE = re.compile(
         r'^(Checked out|At|Updated to) revision ([0-9]+)\.')
-    def findRevisionNumber(line):
+    def findRevisionNumberFromSvn(line):
       m = SVN_REVISION_RE.search(line)
       if m:
         return int(m.group(2))
       return None
 
     WEBKIT_UPDATE_RE = re.compile(
-        r'svn (checkout|update) .*src/third_party/WebKit/WebCore ')
+        r'svn (checkout|update) .*%s ' %
+            os.path.join('src', 'third_party', 'WebKit', 'WebCore'))
     def findWebKitUpdate(line):
       return WEBKIT_UPDATE_RE.search(line)
+
+    def findRevisionNumberFromGclient(repo, line):
+      m = re.match(r'_____ %s at ([0-9]+)' % repo, line)
+      if m:
+        return int(m.group(1))
+      return None
 
     chromium_revision = None
     webkit_revision = None
     found_webkit_update = False
 
-    for line in self.command.stdout.splitlines():
-      revision = findRevisionNumber(line)
+    untangled_stdout = self._untangle(self.command.stdout.splitlines(False))
+    # We only care about the last sync which starts with "solutions=[...".
+    # Look backwards to find the last one first.
+    for i, line in enumerate(reversed(untangled_stdout)):
+      if line.startswith('solutions=['):
+        # Only keep from "solutions" line to end.
+        untangled_stdout = untangled_stdout[-i-1:]
+        break
+
+    for line in untangled_stdout:
+      revision = findRevisionNumberFromSvn(line)
       if revision:
         if not found_webkit_update and not chromium_revision:
           chromium_revision = revision
@@ -423,11 +439,39 @@ class GClient(commands.SourceBase):
       elif not found_webkit_update:
         found_webkit_update = findWebKitUpdate(line)
 
+      # Check for gclient output.
+      if not chromium_revision:
+        chromium_revision = findRevisionNumberFromGclient('src', line)
+      if not webkit_revision:
+        webkit_revision = findRevisionNumberFromGclient(
+            os.path.join('src', 'third_party', 'WebKit', 'WebCore'), line)
+
       # Exit if we're done.
       if chromium_revision and webkit_revision:
         break
 
     return chromium_revision, webkit_revision
+
+  def _untangle(self, stdout_lines):
+    """Sort the lines of stdout by the job number prefix."""
+    out = []
+    tasks = {}
+    UNTANGLE_RE = re.compile(r'^(\d+)>(.*)$')
+    for line in stdout_lines:
+      m = UNTANGLE_RE.match(line)
+      if not m:
+        if line:  # skip empty lines
+          # Output untangled lines so far.
+          for key in sorted(tasks.iterkeys()):
+            out.extend(tasks[key])
+          tasks = {}
+          out.append(line)
+      else:
+        if m.group(2):  # skip empty lines
+          tasks.setdefault(int(m.group(1)), []).append(m.group(2))
+    for key in sorted(tasks.iterkeys()):
+      out.extend(tasks[key])
+    return out
 
   def _handleGotRevision(self, res):
     """Send parseGotRevision() return values as status updates to the master."""

@@ -91,7 +91,7 @@ def main(options, args):
 
   if not os.path.exists(dll_symbol):
     print 'Cannot find symbols.'
-    return config.Master.retcode_warnings
+    return 0
   symbol_time = os.path.getmtime(dll_symbol)
 
   dump_dir = options.dump_dir

@@ -9,6 +9,7 @@ from buildbot.buildslave import BuildSlave
 from buildbot.status import mail
 from buildbot.status.builder import BuildStatus
 from buildbot.status.mail import Domain
+from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
@@ -17,8 +18,8 @@ from master import slaves_list
 import config
 
 
-def HackMaxTime(maxTime=6*60*60):
-  """Set maxTime default value to 6 hours. This function must be called before
+def HackMaxTime(maxTime=8*60*60):
+  """Set maxTime default value to 8 hours. This function must be called before
   adding steps."""
   from buildbot.process.buildstep import RemoteShellCommand
   assert RemoteShellCommand.__init__.func_defaults == (None, 1, 1, 1200, None,
@@ -134,6 +135,7 @@ class FilterDomain(util.ComparableMixin):
     """domain is the default domain to append when only the naked username is
     available.
     permitted_domains is a whitelist of domains that emails will be sent to."""
+    # pylint: disable=E1101
     self.domain = domain or config.Master.master_domain
     self.permitted_domains = (permitted_domains or
                               config.Master.permitted_domains)
@@ -158,16 +160,25 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
                     public_html=None):
   """Add common settings and status services to a master.
 
+  If you wonder what all these mean, PLEASE go check the official doc!
+  http://buildbot.net/buildbot/docs/0.7.12/ or
+  http://buildbot.net/buildbot/docs/latest/full.html
+
   - Default number of logs to keep
   - WebStatus and MailNotifier
   - Debug ssh port. Just add a file named .manhole beside master.cfg and
     simply include one line containing 'port = 10101', then you can
     'ssh localhost -p' and you can access your buildbot from the inside."""
+  c['slavePortnum'] = active_master.slave_port
+  c['projectName'] = active_master.project_name
+  c['projectURL'] = config.Master.project_url
+
   # 'status' is a list of Status Targets. The results of each build will be
   # pushed to these targets. buildbot/status/*.py has a variety to choose from,
   # including web pages, email senders, and IRC bots.
   c.setdefault('status', [])
   if mail_notifier:
+    # pylint: disable=E1101
     c['status'].append(mail.MailNotifier(
         fromaddr=active_master.from_address,
         mode='problem',

@@ -161,7 +161,7 @@ class PerformanceLogProcessor(object):
                     (self._perf_filename, e.errno, e.strerror))
       return
 
-    perf_data = []
+    perf_data = {}
     if perf_file:
       try:
         perf_data = simplejson.load(perf_file)

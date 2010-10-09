@@ -10,12 +10,18 @@ it and also reuse some of its methods to send emails.
 
 import time
 import urllib
+try:
+  # Create a block to work around evil sys.modules manipulation in
+  # email/__init__.py that triggers pylint false positives.
+  # pylint: disable=E0611
+  from email.MIMEMultipart import MIMEMultipart
+  from email.MIMEText import MIMEText
+  from email.Utils import formatdate
+except ImportError:
+  raise
 
 from buildbot.status.builder import SUCCESS, FAILURE
 from buildbot.status.mail import MailNotifier
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.Utils import formatdate
 from twisted.internet import defer
 from twisted.python import log
 
@@ -35,7 +41,9 @@ class ChromiumNotifier(MailNotifier):
   _CATEGORY_SPLITTER = '|'
   _MINIMUM_DELAY_BETWEEN_ALERT = 600  # 10 minutes in seconds
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, reply_to=None, categories_steps=None,
+      exclusions=None, forgiving_steps=None, status_header=None,
+      send_to_sheriffs=False, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type categories_steps: Dictionary of category string mapped to a list of
@@ -63,23 +71,18 @@ class ChromiumNotifier(MailNotifier):
     @type send_to_sheriffs: Boolean.
     @param send_to_sheriffs: If true, build sheriffs are copied on emails.
     """
-    # Set defaults.
-    self._last_time_mail_sent = None
-    kwargs.setdefault('send_to_sheriffs', False)
+    # Change the default.
     kwargs.setdefault('sendToInterestedUsers', False)
-    kwargs.setdefault('exclusions', {})
-    kwargs.setdefault('forgiving_steps', [])
+    MailNotifier.__init__(self, **kwargs)
 
-    # Attributes we want to set from provided arguments, or set to None
-    params = ['reply_to', 'categories_steps', 'exclusions',
-              'forgiving_steps', 'status_header', 'send_to_sheriffs']
-    for param in params:
-      if param in kwargs:
-        setattr(self, param, kwargs.pop(param))
-      else:
-        setattr(self, param, None)
+    self.reply_to = reply_to
+    self.categories_steps = categories_steps
+    self.exclusions = exclusions or {}
+    self.forgiving_steps = forgiving_steps or []
+    self.status_header = status_header
     assert self.status_header
-    MailNotifier.__init__(self, *args, **kwargs)
+    self.send_to_sheriffs = send_to_sheriffs
+    self._last_time_mail_sent = None
 
   def isInterestingBuilder(self, builder_status):
     """Confirm if we are interested in this builder."""

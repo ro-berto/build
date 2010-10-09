@@ -127,17 +127,17 @@ class ProcessLogShellStep(shell.ShellCommand):
     Sample usage:
     # construct class that will have no-arg constructor.
     log_processor_class = chromium_utils.PartiallyInitialize(
-        process_log.PageCyclerLogProcessor,
+        process_log.GraphingPageCyclerLogProcessor,
         report_link='http://host:8010/report.html,
         output_dir='~/www')
     # We are partially constructing Step because the step final
     # initialization is done by BuildBot.
     step = chromium_utils.PartiallyInitialize(
         chromium_step.ProcessLogShellStep,
-        log_processor_class=log_processor_class)
+        log_processor_class)
 
   """
-  def  __init__(self, log_processor_class, *args, **kwargs):
+  def  __init__(self, log_processor_class=None, *args, **kwargs):
     """
     Args:
       log_processor_class: subclass of
@@ -145,7 +145,11 @@ class ProcessLogShellStep(shell.ShellCommand):
         invoked once command was successfully completed.
     """
     self._result_text = []
-    self._log_processor = log_processor_class()
+    self._log_processor = None
+    # If log_processor_class is not None, it should be a class.  Create an
+    # instance of it.
+    if log_processor_class:
+      self._log_processor = log_processor_class()
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
@@ -160,17 +164,30 @@ class ProcessLogShellStep(shell.ShellCommand):
     """Returns the revision number for the build.
 
     Result is the revision number of the latest change that went in
-    while doing gclient sync. If None, will return -1 instead.
+    while doing gclient sync. Tries 'got_revision' (from log parsing)
+    then tries 'revision' (usually from forced build). If neither are
+    found, will return -1 instead.
     """
-    if self.build.getProperty('got_revision'):
-      return self.build.getProperty('got_revision')
-    return -1
+    revision = None
+    try:
+      revision = self.build.getProperty('got_revision')
+    except KeyError:
+      pass  # 'got_revision' doesn't exist (yet)
+    if not revision:
+      try:
+        revision = self.build.getProperty('revision')
+      except KeyError:
+        pass  # neither exist
+    if not revision:
+      revision = -1
+    return revision
 
   def commandComplete(self, cmd):
     """Callback implementation that will use log process to parse 'stdio' data.
     """
-    self._result_text = self._log_processor.Process(
-        self._GetRevision(), self.getLog('stdio').getText())
+    if self._log_processor:
+      self._result_text = self._log_processor.Process(
+          self._GetRevision(), self.getLog('stdio').getText())
 
   def getText(self, cmd, results):
     text_list = self.describe(True)
@@ -192,5 +209,5 @@ class ProcessLogShellStep(shell.ShellCommand):
     return builder.SUCCESS
 
   def _CreateReportLinkIfNeccessary(self):
-    if self._log_processor.ReportLink():
+    if self._log_processor and self._log_processor.ReportLink():
       self.addURL('results', "%s" % self._log_processor.ReportLink())

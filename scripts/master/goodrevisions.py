@@ -65,11 +65,13 @@ class GoodRevisions(base.StatusReceiverMultiService):
     self.setup()
 
   def setup(self):
+    # pylint: disable=E1101
     self.status = self.parent.getStatus()
     self.status.subscribe(self)
 
   def disownServiceParent(self):
     self.status.unsubscribe(self)
+    # pylint: disable=E1101
     for w in self.watched:
       w.unsubscribe(self)
     return base.StatusReceiverMultiService.disownServiceParent(self)

@@ -45,6 +45,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   )
 
   # gclient custom vars
+  CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
   CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
   CUSTOM_VARS_WEBKIT_LATEST = [('webkit_trunk', config.Master.webkit_trunk_url),
                                ('webkit_revision','')]
@@ -55,7 +56,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
   CUSTOM_DEPS_NACL_LATEST = ('src/native_client',
-    'http://nativeclient.googlecode.com/svn/trunk/src/native_client')
+    'http://src.chromium.org/native_client/trunk/src/native_client')
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
   CUSTOM_DEPS_TSAN_WIN = ('src/third_party/tsan',
@@ -124,6 +125,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/third_party/python_24',
         'http://src.chromium.org/svn/trunk/deps/third_party/python_24')]
   # Extend if we can.
+  # pylint: disable=E1101
   if config.Master.trunk_internal_url:
     PYAUTO_DEPS.append(('src/chrome/test/data/plugin',
                         config.Master.trunk_internal_url +
@@ -132,7 +134,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir, target_platform=None):
     main = gclient_factory.GClientSolution(config.Master.trunk_url_src,
                needed_components=self.NEEDED_COMPONENTS,
-               custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR])
+               custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
+                                 self.CUSTOM_VARS_GOOGLECODE_URL])
     custom_deps_list = [main]
     if config.Master.trunk_internal_url_src:
       internal = gclient_factory.GClientSolution(
@@ -183,6 +186,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('printing'):       f.AddBasicGTestTestStep('printing_unittests', fp)
     if R('remoting'):       f.AddBasicGTestTestStep('remoting_unittests', fp)
     if R('test_shell'):     f.AddBasicGTestTestStep('test_shell_tests', fp)
+    if R('safe_browsing'):  f.AddBasicGTestTestStep('safe_browsing_tests', fp)
 
     # Medium-sized tests (unit and browser):
     if R('unit'):           f.AddChromeUnitTests(fp)
@@ -245,22 +249,33 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       if test.startswith(prefix):
         test_name = test[len(prefix):]
         f.AddMemoryTest(test_name, "memcheck")
+        continue
+      # Run TSan in two-stage RaceVerifier mode.
+      prefix = 'tsan_rv_'
+      if test.startswith(prefix):
+        test_name = test[len(prefix):]
+        f.AddMemoryTest(test_name, "tsan_rv")
+        continue
       prefix = 'tsan_'
       if test.startswith(prefix):
         test_name = test[len(prefix):]
         f.AddMemoryTest(test_name, "tsan")
+        continue
       prefix = 'drmemory_'
       if test.startswith(prefix):
         test_name = test[len(prefix):]
         f.AddMemoryTest(test_name, "drmemory")
+        continue
       prefix = 'heapcheck_'
       if test.startswith(prefix):
         test_name = test[len(prefix):]
         f.AddHeapcheckTest(test_name)
+        continue
       prefix = 'wine_valgrind_'
       if test.startswith(prefix):
         test_name = test[len(prefix):]
         f.AddWineValgrindTest(test_name)
+        continue
 
 
     # PyAuto functional tests.
@@ -268,13 +283,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddPyAutoFunctionalTest('pyauto_functional_tests')
     elif R('pyauto_official_tests'):
       # Mapping from self._target_platform to a chrome-*.zip
-      platmap = {'win32': 'win',
+      platmap = {'win32': 'win32',
                  'darwin': 'mac',
                  'linux2': 'linux' }
       zip_plat = platmap[self._target_platform]
       workdir = os.path.join(f._working_dir, 'chrome-' + zip_plat)
       f.AddPyAutoFunctionalTest('pyauto_functional_tests',
-                                functional_base='..',
+                                src_base='..',
                                 workdir=workdir)
 
     # When adding a test that uses a new executable, update kill_processes.py.

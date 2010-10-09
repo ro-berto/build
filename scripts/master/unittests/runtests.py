@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../log_parser'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../common'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../private'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../slave'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../pylibs'))
 
 parser = optparse.OptionParser()

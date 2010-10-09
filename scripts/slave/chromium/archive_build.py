@@ -31,8 +31,6 @@ import slave_utils
 # directories, for testing.
 DRY_RUN = False
 
-SYMBOLS_COPY_LINUX = config.Archive.symbols_to_archive_linux
-
 # Independent of any other configuration, these exes and any symbol files
 # derived from them (i.e., any filename starting with these strings) will not
 # be archived or uploaded, typically because they're not built for the current
@@ -55,14 +53,6 @@ DEV_BASE_DIRS = {
 ARCHIVE_FILE_NAME = 'FILES'
 SYMBOL_FILE_NAME = 'SYMBOLS'
 TEST_FILE_NAME = 'TESTS'
-
-
-def MakeWorldReadable(path):
-  """Change the permissions of the given path to make it world-readable.
-  This is often needed for archived files, so they can be served by web servers
-  or accessed by unprivileged network users."""
-  perms = stat.S_IMODE(os.stat(path)[stat.ST_MODE])
-  os.chmod(path, perms | 0444)
 
 
 class StagingError(Exception): pass
@@ -417,7 +407,7 @@ class StagerBase(object):
         print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
                                             www_dir)
         chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
-        MakeWorldReadable(sym_zip_file)
+        chromium_utils.MakeWorldReadable(sym_zip_file)
         chromium_utils.SshCopyFiles(sym_zip_file, config.Archive.archive_host,
                                     www_dir)
         os.unlink(sym_zip_file)
@@ -468,16 +458,16 @@ class StagerBase(object):
                                             www_dir)
         chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
         for archive in archive_files:
-          MakeWorldReadable(archive)
+          chromium_utils.MakeWorldReadable(archive)
           chromium_utils.SshCopyFiles(archive, config.Archive.archive_host,
                                       www_dir)
           os.unlink(archive)
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
-        MakeWorldReadable(changelog_path)
+        chromium_utils.MakeWorldReadable(changelog_path)
         chromium_utils.SshCopyFiles(changelog_path, config.Archive.archive_host,
                                     www_dir)
-        MakeWorldReadable(revisions_path)
+        chromium_utils.MakeWorldReadable(revisions_path)
         chromium_utils.SshCopyFiles(revisions_path, config.Archive.archive_host,
                                     www_dir)
     else:
@@ -547,7 +537,7 @@ class StagerBase(object):
         for test_dir in test_dirs:
           chromium_utils.SshMakeDirectory(config.Archive.archive_host, test_dir)
         for test_file in test_file_list:
-          MakeWorldReadable(test_file)
+          chromium_utils.MakeWorldReadable(test_file)
           # TODO(robertshield): binaries and symbols are stored in a zip file
           # via CreateArchiveFile. Tests should be too.
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
@@ -652,7 +642,7 @@ class StagerBase(object):
                                             www_dir)
         chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
         for package_file in linux_packages:
-          MakeWorldReadable(package_file)
+          chromium_utils.MakeWorldReadable(package_file)
           chromium_utils.SshCopyFiles(package_file, config.Archive.archive_host,
                                       www_dir)
           # Cleanup archived packages, otherwise they keep accumlating since
@@ -674,7 +664,7 @@ class StagerBase(object):
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
-        MakeWorldReadable(self.last_change_file)
+        chromium_utils.MakeWorldReadable(self.last_change_file)
         print 'Saving revision to %s:%s' % (config.Archive.archive_host,
                                             latest_file_path)
         chromium_utils.SshCopyFiles(self.last_change_file,

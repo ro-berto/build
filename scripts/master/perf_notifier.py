@@ -13,8 +13,8 @@ class PerfNotifier(chromium_notifier.ChromiumNotifier):
   See builder.interfaces.IStatusReceiver to have more information about the
   parameters type."""
 
-  def __init__(self, *args, **kwargs):
-    chromium_notifier.ChromiumNotifier.__init__(self, *args, **kwargs)
+  def __init__(self, **kwargs):
+    chromium_notifier.ChromiumNotifier.__init__(self, **kwargs)
 
   def stepFinished(self, build, step, results):
     """A build step has just finished.

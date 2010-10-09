@@ -82,6 +82,7 @@ class FactoryCommands(object):
       'chrome-linux32-stable': 'linux32-stable',
       'chrome-linux64-stable': 'linux64-stable',
       'chrome-mac-stable': 'mac-stable',
+      'nacl-lucid64-spec-x86': 'nacl-lucid64-spec-x86',
     },
     'Debug': {
       'chromium-dbg-linux': 'linux-debug',
@@ -138,6 +139,8 @@ class FactoryCommands(object):
                                            'slavelastic', 'slavelastic',
                                            'slavelastic', 'client',
                                            'distribute.py')
+    self._resource_sizes_tool = self.PathJoin(self._script_dir,
+                                              'resource_sizes.py')
 
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
@@ -226,7 +229,7 @@ class FactoryCommands(object):
 
   def AddBasicGTestTestStep(self, test_name, factory_properties=None,
                             description='', arg_list=None, total_shards=None,
-                            shard_index=None):
+                            shard_index=None, parallel=False):
     """Adds a step to the factory to run the gtest tests.
 
     Args:
@@ -258,6 +261,9 @@ class FactoryCommands(object):
     if total_shards and shard_index:
       cmd.extend(['--total-shards', str(total_shards),
                   '--shard-index', str(shard_index)])
+
+    if parallel:
+      cmd.extend(['--parallel'])
 
     cmd.append(self.GetExecutableName(test_name))
 
@@ -310,7 +316,7 @@ class FactoryCommands(object):
                           command=command)
 
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,
-                    sudo_for_remove=False):
+                    sudo_for_remove=False, gclient_deps=None):
     """Adds a step to the factory to update the workspace."""
     if env is None:
       env = {}
@@ -319,6 +325,7 @@ class FactoryCommands(object):
       timeout=60*5     # svn timeout is 2 min; we allow 5
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
+                          gclient_deps=gclient_deps,
                           workdir=self._working_dir,
                           mode='update',
                           env=env,
@@ -328,7 +335,8 @@ class FactoryCommands(object):
                           sudo_for_remove=sudo_for_remove,
                           rm_timeout=60*15) # The step can take a long time.
 
-  def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None):
+  def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
+                         gclient_deps=None):
     """ This is not for pressing 'clobber' on the waterfall UI page. This is
         for clobbering all the sources. Using mode='clobber' causes the entire
         working directory to get moved aside (to build.dead) --OR-- if
@@ -355,6 +363,7 @@ class FactoryCommands(object):
       timeout=60*5     # svn timeout is 2 min; we allow 5
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
+                          gclient_deps=gclient_deps,
                           workdir=self._working_dir,
                           mode='clobber',
                           env=env,
@@ -363,7 +372,9 @@ class FactoryCommands(object):
 
   def AddTaskkillStep(self):
     """Adds a step to kill the running processes before a build."""
-    self._factory.addStep(shell.ShellCommand, description='taskkill',
+    # Use ReturnCodeCommand so we can indicate a "warning" status (orange).
+    self._factory.addStep(retcode_command.ReturnCodeCommand,
+                          description='taskkill',
                           timeout=60,
                           workdir='',  # Doesn't really matter where we are.
                           command=['python', self._kill_tool])
@@ -466,7 +477,7 @@ class FactoryCommands(object):
   def _CreatePerformanceStepClass(
       self, log_processor_class, report_link=None, output_dir=None,
       factory_properties=None, perf_name=None, test_name=None,
-      command_class=chromium_step.ProcessLogShellStep):
+      command_class=None):
     """Returns ProcessLogShellStep class.
 
     Args:
@@ -479,6 +490,7 @@ class FactoryCommands(object):
         chromium_step.ProcessLogShellStep.
     """
     factory_properties = factory_properties or {}
+    command_class = command_class or chromium_step.ProcessLogShellStep
     # We create a log-processor class using
     # chromium_utils.InitializePartiallyWithArguments, which uses function
     # currying to create classes that have preset constructor arguments.
@@ -494,11 +506,11 @@ class FactoryCommands(object):
     # Similarly, we need to allow buildbot to create the step itself without
     # using additional parameters, so we create a step class that already
     # knows which log_processor to use.
-    return chromium_utils.InitializePartiallyWithArguments(command_class,
-                                                           log_processor_class)
+    return chromium_utils.InitializePartiallyWithArguments(
+        command_class, log_processor_class=log_processor_class)
 
   def GetPerfStepClass(self, factory_properties, test_name, log_processor_class,
-                       **kwargs):
+                       command_class=None, **kwargs):
     """Selects the right build step for the specified perf test."""
     factory_properties = factory_properties or {}
     perf_id = factory_properties.get('perf_id')
@@ -520,7 +532,7 @@ class FactoryCommands(object):
     return self._CreatePerformanceStepClass(log_processor_class,
                report_link=report_link, output_dir=output_dir,
                factory_properties=factory_properties, perf_name=perf_name,
-               test_name=test_name)
+               test_name=test_name, command_class=command_class)
 
 
 class CanCancelBuildShellCommand(shell.ShellCommand):

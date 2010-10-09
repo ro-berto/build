@@ -21,7 +21,7 @@ import os
 import socket
 import sys
 
-from chromium import chromium_utils
+from common import chromium_utils
 from slave import slave_utils
 import config
 
@@ -66,17 +66,6 @@ def _CollectArchiveFiles(output_dir):
 def _CopyResultsFile(filename, host, dest_dir):
   full_path = os.path.join(options.results_dir, filename)
   chromium_utils.CopyFileToArchiveHost(full_path, dest_dir)
-
-def _ChmodRecursive(arg, dirname, filenames):
-  os.chmod(dirname, 0755)
-  for file in filenames:
-    try:
-      os.chmod(os.path.join(dirname, file), 0755)
-    except:
-      # We didn't have the rights to change the permissions on this dir.
-      logging.info("Couldn't change the mode of %s: %s" %
-                   (os.path.join(dirname, file), sys.exc_info()[0]))
-      continue
 
 def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
     options):
@@ -137,11 +126,6 @@ def main(options, args):
 
   _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
       options)
-
-  print 'copying dashboard files to %s' % dest_dir
-  _CopyResultsFile("results.json", config.Archive.archive_host, dest_parent_dir)
-  _CopyResultsFile("expectations.json", config.Archive.archive_host,
-                   dest_parent_dir)
 
 if '__main__' == __name__:
   option_parser = optparse.OptionParser()

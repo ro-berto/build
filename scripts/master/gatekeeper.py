@@ -35,7 +35,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
   parameters type."""
 
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, tree_status_url=None, tree_message=None, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type tree_status_url: String.
@@ -45,29 +45,21 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     @param tree_message: Message posted to the tree status site when closed.
     """
     # Set defaults.
-    self._last_closure_revision = 0
     kwargs.setdefault('send_to_sheriffs', True)
     kwargs.setdefault('sendToInterestedUsers', True)
     kwargs.setdefault(
         'status_header',
         'Automatically closing tree for "%(steps)s" on "%(builder)s"')
-    kwargs.setdefault(
-        'tree_message',
-        'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
+    chromium_notifier.ChromiumNotifier.__init__(self, **kwargs)
 
-    # Attributes we want to set from provided arguments, or set to None
-    params = ['tree_status_url', 'tree_message']
-
-    for param in params:
-      if param in kwargs:
-        setattr(self, param, kwargs.pop(param))
-      else:
-        setattr(self, param, None)
-
+    self.tree_status_url = tree_status_url
     assert self.tree_status_url
-    assert self.tree_message
-    chromium_notifier.ChromiumNotifier.__init__(self, *args, **kwargs)
+    self.tree_message = (
+        tree_message or
+        'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
+    self._last_closure_revision = 0
     self.password = get_password.Password('.status_password').GetPassword()
+
 
   def isInterestingStep(self, build_status, step_status, results):
     """Look at most cases that could make us ignore the step results.

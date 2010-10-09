@@ -151,6 +151,18 @@ def Prepend(filepath, text):
   f.close()
 
 
+def MakeWorldReadable(path):
+  """Change the permissions of the given path to make it world-readable.
+  This is often needed for archived files, so they can be served by web servers
+  or accessed by unprivileged network users."""
+  perms = stat.S_IMODE(os.stat(path)[stat.ST_MODE])
+  if os.path.isdir(path):
+    # Directories need read and exec.
+    os.chmod(path, perms | 0555)
+  else:
+    os.chmod(path, perms | 0444)
+
+
 def MaybeMakeDirectory(*path):
   """Creates an entire path, if it doesn't already exist."""
   file_path = os.path.join(*path)
@@ -261,7 +273,7 @@ def RemoveDirectory(*path):
     for name in files:
       remove_with_retry(os.remove, os.path.join(root, name))
     for name in dirs:
-      remove_with_retry(os.rmdir, os.path.join(root, name))
+      remove_with_retry(shutil.rmtree, os.path.join(root, name))
 
   remove_with_retry(os.rmdir, file_path)
 
@@ -494,15 +506,20 @@ def RunAndPrintDots(function):
   return Hook
 
 
-def RunCommand(command, stdout_parser_func=None, stderr_parser_func=None):
+def RunCommand(command, parser_func=None, **kwargs):
   """Runs the command list, printing its output and returning its exit status.
 
   Prints the given command (which should be a list of one or more strings),
   then runs it and writes its stdout and stderr to the appropriate file handles.
 
-  If line_parser_func is not given, the subprocess's output is passed to
-  stdout and stderr directly.  If the func is given, each line of the
-  subprocess's output is passed to the func as well as stdout/stderr.
+  If parser_func is not given, the subprocess's output is passed to stdout
+  and stderr directly.  If the func is given, each line of the subprocess's
+  stdout/stderr is passed to the func and then written to stdout.
+
+  We do not currently support parsing stdout and stderr independent of
+  each other.  In previous attempts, this led to output ordering issues.
+  By merging them when either needs to be parsed, we avoid those ordering
+  issues completely.
   """
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
@@ -541,29 +558,23 @@ def RunCommand(command, stdout_parser_func=None, stderr_parser_func=None):
   print '\n' + subprocess.list2cmdline(command) + '\n',
   sys.stdout.flush()
   sys.stderr.flush()
-  if not stdout_parser_func and not stderr_parser_func:
+  if not parser_func:
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
-                            bufsize=0)
+                            bufsize=0, **kwargs)
   else:
     # Run the command.
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, bufsize=0)
-    # Launch and start the reader threads.
-    stdout_thread = threading.Thread(target=ProcessRead,
-                                     args=(proc.stdout, sys.stdout,
-                                           stdout_parser_func))
-    stderr_thread = threading.Thread(target=ProcessRead,
-                                     args=(proc.stderr, sys.stderr,
-                                           stderr_parser_func))
-    stdout_thread.start()
-    stderr_thread.start()
-    # Wait for both reader threads to complete (implies EOF reached on stdout
-    # and stderr pipes).
-    stdout_thread.join()
-    stderr_thread.join()
+                            stderr=subprocess.STDOUT, bufsize=0, **kwargs)
+    # Launch and start the reader thread.
+    thread = threading.Thread(target=ProcessRead,
+                              args=(proc.stdout, sys.stdout, parser_func))
+    thread.start()
+    # Wait for the reader thread to complete (implies EOF reached on stdout/
+    # stderr pipes).
+    thread.join()
   # Wait for the command to terminate.
   proc.wait()
   return proc.returncode
@@ -676,7 +687,7 @@ def CopyFileToArchiveHost(src, dest_dir):
   elif IsLinux() or IsMac():
     # Files are created umask 077 by default, so make it world-readable before
     # pushing to web server.
-    os.chmod(src, 0644)
+    MakeWorldReadable(src)
     SshCopyFiles(src, host, dest_dir)
   else:
     raise NotImplementedError(
