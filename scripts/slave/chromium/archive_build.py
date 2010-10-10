@@ -22,9 +22,10 @@ import stat
 import sys
 import re
 
-import chromium_config as config
-import chromium_utils
-import slave_utils
+from common import chromium_utils
+from slave import slave_utils
+
+import config
 
 
 # Set DRY_RUN to True to avoid making changes to external symbol and build

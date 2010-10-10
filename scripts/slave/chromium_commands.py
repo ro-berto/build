@@ -146,7 +146,7 @@ class GClient(commands.SourceBase):
     """Returns a command list to delete a directory using Python."""
     # Use / instead of \ in paths to avoid issues with escaping.
     cmd = ['python', '-c',
-           'import chromium_utils; '
+           'from common import chromium_utils; '
            'chromium_utils.RemoveDirectory("%s")' % rm_dir.replace('\\', '/')]
     if self.sudo_for_remove:
       cmd = ['sudo'] + cmd
@@ -164,7 +164,7 @@ class GClient(commands.SourceBase):
     """Returns a command list to remove a directory (or file) using Python."""
     # Use / instead of \ in paths to avoid issues with escaping.
     return ['python', '-c',
-            'import chromium_utils; '
+            'from common import chromium_utils; '
             'chromium_utils.RemoveFile("%s")' % file.replace('\\', '/')]
 
   def _RemoveFilesWildCardsCommand(self, file_wildcard):
@@ -175,7 +175,7 @@ class GClient(commands.SourceBase):
       raise InvalidPath(r"Contains unsupported character '\' :" +
                         file_wildcard)
     return ['python', '-c',
-            'import chromium_utils; '
+            'from common import chromium_utils; '
             'chromium_utils.RemoveFilesWildcards("%s")' % file_wildcard]
 
   def doGclientUpdate(self):
