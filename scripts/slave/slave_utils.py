@@ -100,6 +100,9 @@ def SlaveBaseDir(chrome_dir):
     if leaf == 'build':
       # Remember this one and keep looking for something shallower.
       result = parent
+    if leaf == 'slave':
+      # We are too deep, stop now.
+      break
     prev_dir = curr_dir
     curr_dir = parent
   if not result:
