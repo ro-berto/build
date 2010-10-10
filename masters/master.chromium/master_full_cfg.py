@@ -36,7 +36,7 @@ F('win_full', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
     tests=['sizes', 'selenium', 'unit', 'ui', 'test_shell', 'memory',
-           'reliability', 'printing', 'remoting', 'dom_checker', 'check_deps',
+           'reliability', 'printing', 'remoting', 'check_deps',
            'browser_tests', 'courgette', 'check_bins', 'webkit_unit',
            'chrome_frame_unittests', 'gpu', 'installer'],
     factory_properties={'archive_build': True,
