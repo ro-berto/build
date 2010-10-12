@@ -14,7 +14,7 @@ def GetArchiveUrl(project, machine_name, builder_name, zip_os_name):
   host = slaves.GetSlaveName(project, machine_name)
   if not host:
     raise ValueError("%s isn't reachable" % machine_name)
-  return ('http://%s/b/slave/%s/chrome_staging/full-build-%s.zip' % (
+  return ('http://%s/b/build/slave/%s/chrome_staging/full-build-%s.zip' % (
               host, builder_name, zip_os_name))
 
 class Helper(object):
