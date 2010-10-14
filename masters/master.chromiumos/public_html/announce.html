@@ -1,0 +1,117 @@
+<script>
+  function autoLink(className) {
+    var comments = document.querySelectorAll(className);
+    for(var i = 0; i < comments.length; i++) {
+      comments[i].innerHTML = comments[i].innerHTML.replace(/http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
+    }
+  }
+
+  window.onload = function() {
+    autoLink('.DevComment');
+  }
+</script>
+
+<div class="Announcement">
+
+<iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://chromiumos-status.appspot.com/current"></iframe>
+
+<center style="padding: 0 7px">
+  <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
+    <tr>
+      <td width="23%">
+        <table valign="top" width="100%">
+          <tr>
+            <td style="text-align: right;">
+              <b>Builds:</b>
+            </td>
+            <td>
+              <a href="http://chromiumos-status.appspot.com">status</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>ChromiumOS:</b>
+            </td>
+            <td>
+              <a href="http://src.chromium.org/cgi-bin/gitweb.cgi">sources</a> |
+              <a href="http://codereview.chromium.org/">reviews</a> |
+              <a href="http://code.google.com/p/chromium-os/issues/list?can=2&q=&sort=pri+mstone&colspec=ID%20Stars%20Pri%20Area%20Type%20Status%20Summary%20Modified%20Owner%20Mstone">bugs</a> |
+              <a href="http://dev.chromium.org/chromium-os">dev</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+               <b>Sheriffs:</b>
+            </td>
+            <td>
+              <script src='./sheriff.js'></script>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+               <b>Navigate:</b>
+            </td>
+            <td colspan="2">
+              <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
+              <a href="./waterfall/help">customize</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td width="1" bgcolor="#CCCCCC">
+      </td>
+      <td width="2%">
+      </td>
+      <td width="72%">
+        <table width="100%">
+          <script language="javascript">
+            var arm = [
+                "builder=arm+generic+bin",
+                "builder=arm+generic+full",
+                "builder=arm+st1q+bin",
+                "builder=arm+st1q+full",
+                "builder=arm+beagleboard+bin",
+                "builder=arm+beagleboard+full",
+                "builder=arm+voguev210+bin",
+                "builder=arm+voguev210+full",
+                "builder=arm+tegra2+bin",
+                "builder=arm+tegra2+full",
+            ].join("&");
+            var x86 = [
+                "builder=x86+generic+bin",
+                "builder=x86+generic+full",
+                "builder=x86+generic+full+bvt",
+                "builder=x86+pineview+bin",
+                "builder=x86+pineview+full",
+            ].join("&");
+
+            var bar = "http://build.chromium.org/buildbot/chromiumos/horizontal_one_box_per_builder"
+            var waterfall = "waterfall"
+
+            if (document.location.port != 80 && document.location.port) {
+              waterfall = 'http://' + document.location.hostname + ':' + document.location.port + '/' + waterfall
+            } else if (document.location.pathname == '/buildbot/chromiumos/waterfall' ||
+                       document.location.pathname == '/buildbot/chromiumos/grid') {
+              waterfall = '../chromiumos/' + waterfall
+            }
+
+            function GetUrl(type, content) {
+              return type + "?" + content + "&reload=30";
+            }
+
+            function DisplayBar(content, name) {
+              document.write("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
+            }
+
+            DisplayBar(arm, "arm");
+            DisplayBar(x86, "x86");
+          </script>
+        </table>
+      </td>
+      <td width="3%">
+      </td>
+    </tr>
+  </table>
+</center>
+
+</div>
