@@ -35,18 +35,26 @@ class Helper(object):
                            'category': category})
 
   def Dependent(self, name, parent):
+    if name in self._schedulers:
+      raise ValueError('Scheduler %s already exist' % name)
     self._schedulers[name] = {'type': 'Dependent',
                               'parent': parent,
                               'builders': []}
 
   def Triggerable(self, name):
+    if name in self._schedulers:
+      raise ValueError('Scheduler %s already exist' % name)
     self._schedulers[name] = {'type': 'Triggerable',
                               'builders': []}
 
   def Factory(self, name, factory):
+    if name in self._factories:
+      raise ValueError('Factory %s already exist' % name)
     self._factories[name] = factory
 
   def Scheduler(self, name, branch, treeStableTimer=60):
+    if name in self._schedulers:
+      raise ValueError('Scheduler %s already exist' % name)
     self._schedulers[name] = {'type': 'Scheduler',
                               'branch': branch,
                               'treeStableTimer': treeStableTimer,

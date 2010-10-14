@@ -55,8 +55,8 @@ S('chromeos_dbg', branch='src', treeStableTimer=60)
 #
 # ChromeOS Dbg Builder
 #
-B('Linux Builder (ChromiumOS dbg)', 'dbg', 'compile', 'chromeos_dbg')
-F('dbg', chromeos().ChromiumOSFactory(
+B('Linux Builder (ChromiumOS dbg)', 'cros_dbg', 'compile', 'chromeos_dbg')
+F('cros_dbg', chromeos().ChromiumOSFactory(
     'chromium-chromiumos-dbg',
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
@@ -66,8 +66,8 @@ F('dbg', chromeos().ChromiumOSFactory(
         'gclient_env': { 'GYP_DEFINES':'chromeos=1'},
         'generate_gtest_json': True}))
 
-B('Linux Builder (Views dbg)', 'dbg', 'compile', 'chromeos_dbg')
-F('dbg', chromeos().ChromiumOSFactory(
+B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
+F('view_dbg', chromeos().ChromiumOSFactory(
     'chromium-views-dbg',
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
@@ -108,8 +108,8 @@ arm_dbg_factory_properties = {
   'gclient_env': arm_gclient_env,
 }
 
-B('Arm (dbg)', 'dbg', 'compile', 'chromeos_dbg')
-F('dbg', chromeos().ChromiumOSFactory(
+B('Arm (dbg)', 'arm_dbg', 'compile', 'chromeos_dbg')
+F('arm_dbg', chromeos().ChromiumOSFactory(
     'chromium-arm-dbg',
     clobber=True,
     target='Debug',
