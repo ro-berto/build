@@ -108,7 +108,7 @@ arm_dbg_factory_properties = {
   'gclient_env': arm_gclient_env,
 }
 
-B('Chromium Arm (dbg)', 'dbg', 'compile', 'chromeos_dbg')
+B('Arm (dbg)', 'dbg', 'compile', 'chromeos_dbg')
 F('dbg', chromeos().ChromiumOSFactory(
     'chromium-arm-dbg',
     clobber=True,
