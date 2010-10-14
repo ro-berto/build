@@ -234,12 +234,9 @@ def main_make(options, args):
 
   command.append('BUILDTYPE=' + options.target)
 
-  # Here's what you can uncomment if you need to see more info
-  # about what the build is doing on a slave:
-  #
-  #   V=1 prints the actual executed command
-  #
-  #command.extend(['V=1'])
+  # V=1 prints the actual executed command
+  if options.verbose:
+    command.extend(['V=1'])
   command.extend(options.build_args + args)
 
   # Force serial linking, otherwise too many links make bots run out of memory
@@ -485,6 +482,7 @@ if '__main__' == __name__:
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
                              help='Target from the xcodeproj file')
+  option_parser.add_option('--verbose', action='store_true')
 
   options, args = option_parser.parse_args()
 
