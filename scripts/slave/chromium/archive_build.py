@@ -18,7 +18,6 @@ import optparse
 import os
 import shutil
 import simplejson
-import stat
 import sys
 import re
 
@@ -46,6 +45,71 @@ TEST_FILE_NAME = 'TESTS'
 
 class StagingError(Exception):
   pass
+
+
+def ExpandWildcards(base_dir, path_list):
+  """Accepts a list of paths relative to base_dir and replaces wildcards.
+
+  Uses glob to change all file paths containing wild cards into lists
+  of files present on the file system at time of calling.
+  """
+  if not path_list:
+    return []
+
+  regex = re.compile('[*?[]')
+
+  returned_paths = []
+  for path_fragment in path_list:
+    if regex.search(path_fragment):
+      globbed_paths = glob.glob(os.path.join(base_dir, path_fragment))
+      new_paths = [
+          globbed_path[len(base_dir)+1:] for globbed_path in globbed_paths
+          if not os.path.isdir(globbed_path) ]
+      returned_paths.extend(new_paths)
+    else:
+      returned_paths.append(path_fragment)
+
+  return returned_paths
+
+
+def ExtractDirsFromPaths(path_list):
+  """Extracts a list of unique directory names from a list of paths.
+
+  Given a list of relative paths, e.g. ['foo.txt', 'baz\\bar', 'baz\\bee.txt']
+  returns a list of the directories therein (e.g. ['baz']). Does not
+  include duplicates in the list.
+  """
+  dirs = set([])
+  for path in path_list:
+    dir_name = os.path.dirname(path)
+    if dir_name:
+      dirs.add(dir_name)
+  return list(dirs)
+
+
+def _GetXMLChangeLogByModule(module_name, module_src_dir,
+                             last_revision, current_revision):
+  """Get the change log information for specified module and start/end
+  revision.
+  """
+  if (last_revision and current_revision > last_revision):
+    command = [slave_utils.SubversionExe(), 'log', module_src_dir,
+                '--xml', '-r', '%d:%d' % (last_revision + 1, current_revision)]
+    changelog = chromium_utils.GetCommandOutput(command)
+    changelog_description = '%s changeLogs from ]%d to %d]' % (
+        module_name, last_revision, current_revision)
+  else:
+    changelog = ''
+    changelog_description = 'No new ChangeLogs on %s' % (module_name)
+  return (changelog, changelog_description)
+
+
+def Write(file_path, data):
+  f = open(file_path, 'w')
+  try:
+    f.write(data)
+  finally:
+    f.close()
 
 
 class StagerBase(object):
@@ -118,44 +182,6 @@ class StagerBase(object):
     self._extra_tests = self.GetExtraFiles(options.extra_archive_paths,
                                            TEST_FILE_NAME)
 
-  def ExpandWildcards(self, base_dir, path_list):
-    """Accepts a list of paths relative to base_dir and replaces wildcards.
-
-    Uses glob to change all file paths containing wild cards into lists
-    of files present on the file system at time of calling.
-    """
-    if not path_list:
-      return []
-
-    regex = re.compile('[*?[]')
-
-    returned_paths = []
-    for path_fragment in path_list:
-      if regex.search(path_fragment):
-        globbed_paths = glob.glob(os.path.join(base_dir, path_fragment))
-        new_paths = \
-            [ globbed_path[len(base_dir)+1:] for globbed_path in globbed_paths
-                          if not os.path.isdir(globbed_path) ]
-        returned_paths.extend(new_paths)
-      else:
-        returned_paths.append(path_fragment)
-
-    return returned_paths
-
-  def ExtractDirsFromPaths(self, path_list):
-    """Extracts a list of unique directory names from a list of paths.
-
-    Given a list of relative paths, e.g. ['foo.txt', 'baz\\bar', 'baz\\bee.txt']
-    returns a list of the directories therein (e.g. ['baz']). Does not
-    include duplicates in the list.
-    """
-    dirs = set([])
-    for path in path_list:
-      dir_name = os.path.dirname(path)
-      if dir_name:
-        dirs.add(dir_name)
-    return list(dirs)
-
   def GetExtraFiles(self, extra_archive_paths, source_file_name):
     """Returns a list of extra files to package in the build output directory.
 
@@ -174,7 +200,7 @@ class StagerBase(object):
         extra_files_list = open(source_file).readlines()
 
     extra_files_list = [e.strip() for e in extra_files_list]
-    extra_files_list = self.ExpandWildcards(self._build_dir, extra_files_list)
+    extra_files_list = ExpandWildcards(self._build_dir, extra_files_list)
     return extra_files_list
 
   def GenerateRevisionFile(self):
@@ -187,14 +213,12 @@ class StagerBase(object):
     """
 
     print 'Saving revision to %s' % self.revisions_path
-    file = open(self.revisions_path, 'w')
-    try:
-      file.write('{"chromium_revision":%d, "webkit_revision":%d, '
-                 '"v8_revision":%d}' % (self._chromium_revision,
-                                        self._webkit_revision,
-                                        self._v8_revision))
-    finally:
-      file.close()
+    Write(
+        self.revisions_path,
+        ('{"chromium_revision":%d, "webkit_revision":%d, '
+         '"v8_revision":%d}') % (self._chromium_revision,
+                                 self._webkit_revision,
+                                 self._v8_revision))
 
   def GetLastBuildRevision(self):
     """Reads the last staged build revision from last_change_file.
@@ -220,7 +244,7 @@ class StagerBase(object):
           self.last_chromium_revision = revisions_dict['chromium_revision']
           self.last_webkit_revision = revisions_dict['webkit_revision']
           self.last_v8_revision = revisions_dict['v8_revision']
-      except (IOError, KeyError, simplejson.decoder.JSONDecodeError), e:
+      except (IOError, KeyError, ValueError), e:
         self.last_chromium_revision = None
         self.last_webkit_revision = None
         self.last_v8_revision = None
@@ -232,11 +256,7 @@ class StagerBase(object):
     """Save build revision in the specified file"""
 
     print 'Saving revision to %s' % file_path
-    file = open(file_path, 'w')
-    try:
-      file.write('%d' % self._build_revision)
-    finally:
-      file.close()
+    Write(file_path, '%d' % self._build_revision)
 
   def _BuildVersion(self):
     """Returns the full build version string constructed from information in
@@ -257,22 +277,6 @@ class StagerBase(object):
       elif line.startswith('PATCH='):
         patch = line[6:]
     return '%s.%s.%s.%s' % (major, minor, build, patch)
-
-  def _GetXMLChangeLogByModule(self, module_name, module_src_dir,
-                               last_revision, current_revision):
-    """Get the change log information for specified module and start/end
-    revision.
-    """
-    if (last_revision and current_revision > last_revision):
-      command = [slave_utils.SubversionExe(), 'log', module_src_dir,
-                 '--xml', '-r', '%d:%d' % (last_revision + 1, current_revision)]
-      changelog = chromium_utils.GetCommandOutput(command)
-      changelog_description = '%s changeLogs from ]%d to %d]' % (
-          module_name, last_revision, current_revision)
-    else:
-      changelog = ''
-      changelog_description = 'No new ChangeLogs on %s' % (module_name)
-    return (changelog, changelog_description)
 
   def _VerifyFiles(self):
     """Ensures that the needed directories and files are accessible.
@@ -300,9 +304,9 @@ class StagerBase(object):
     Checks for file name of format *_<current version>_mini_installer.exe and
     returns the full path of first such file found.
     """
-    for file in glob.glob(os.path.join(self._build_dir,
-                                       '*' + version + '_' + INSTALLER_EXE)):
-      return file
+    for f in glob.glob(os.path.join(self._build_dir,
+                                    '*' + version + '_' + INSTALLER_EXE)):
+      return f
     return None
 
   def _RemoveIgnored(self, file_list):
@@ -339,7 +343,7 @@ class StagerBase(object):
     """
     zip_file_list = open(os.path.join(self._tool_dir,
                                       archive_source_file)).readlines()
-    zip_file_list = self.ExpandWildcards(self._build_dir, zip_file_list)
+    zip_file_list = ExpandWildcards(self._build_dir, zip_file_list)
     if extra_file_list:
       zip_file_list.extend(extra_file_list)
 
@@ -391,7 +395,7 @@ class StagerBase(object):
       (sym_zip_dir, sym_zip_file) = self.CreateArchiveFile('chrome-linux-syms',
                                                            SYMBOL_FILE_NAME,
                                                            self._extra_symbols)
-      if not (sym_zip_file):
+      if not sym_zip_file:
         print 'No symbols found, not uploading symbols'
         return 0
       if not self.options.dry_run:
@@ -476,7 +480,7 @@ class StagerBase(object):
       test_file_list = []
     test_file_list = [tf.strip() for tf in test_file_list]
     test_file_list.extend(self._extra_tests)
-    test_file_list = self.ExpandWildcards(self._build_dir, test_file_list)
+    test_file_list = ExpandWildcards(self._build_dir, test_file_list)
 
     if not test_file_list:
       return
@@ -501,7 +505,7 @@ class StagerBase(object):
     # to be relative to the archive dir. We have to rebuild the relative
     # list from the now-pruned absolute test_file_list.
     relative_file_list = [tf[len(base_src_dir):] for tf in test_file_list]
-    test_dirs = self.ExtractDirsFromPaths(relative_file_list)
+    test_dirs = ExtractDirsFromPaths(relative_file_list)
     test_dirs = [os.path.join(www_dir, UPLOAD_DIR, d) for d in test_dirs]
 
     root_test_dir = os.path.join(www_dir, UPLOAD_DIR)
@@ -544,7 +548,7 @@ class StagerBase(object):
       changelog = 'Unknown previous build number: no change log produced.'
     else:
       # Generate Chromium changelogs
-      (chromium_cl, chromium_cl_description) = self._GetXMLChangeLogByModule(
+      (chromium_cl, chromium_cl_description) = _GetXMLChangeLogByModule(
           'Chromium', self._src_dir, self.last_chromium_revision,
           self._chromium_revision)
       # Remove the xml declaration since we need to combine  the changelogs
@@ -553,7 +557,7 @@ class StagerBase(object):
         chromium_cl = regex.sub('', chromium_cl)
 
       # Generate WebKit changelogs
-      (webkit_cl, webkit_cl_description) = self._GetXMLChangeLogByModule(
+      (webkit_cl, webkit_cl_description) = _GetXMLChangeLogByModule(
           'WebKit', self._webkit_dir, self.last_webkit_revision,
           self._webkit_revision)
       # Remove the xml declaration since we need to combine  the changelogs
@@ -562,7 +566,7 @@ class StagerBase(object):
         webkit_cl = regex.sub('', webkit_cl)
 
       # Generate V8 changelogs
-      (v8_cl, v8_cl_description) = self._GetXMLChangeLogByModule(
+      (v8_cl, v8_cl_description) = _GetXMLChangeLogByModule(
           'V8', self._v8_dir, self.last_v8_revision, self._v8_revision)
       # Remove the xml declaration since we need to combine the changelogs
       # of both chromium and webkit.
@@ -575,12 +579,7 @@ class StagerBase(object):
                       chromium_cl_description, chromium_cl,
                       webkit_cl_description, webkit_cl,
                       v8_cl_description, v8_cl))
-
-    f = open(changelog_path, 'w')
-    try:
-      f.write(changelog)
-    finally:
-      f.close()
+    Write(changelog_path, changelog)
 
   def ArchiveBuild(self):
     """Zips build files and uploads them, their symbols, and a change log."""
@@ -682,6 +681,7 @@ class StagerByChromiumRevision(StagerBase):
     StagerBase.__init__(self, options, None)
     self._build_revision = self._chromium_revision
 
+
 class StagerByBuildNumber(StagerBase):
   """Handles archiving a build. Call the public ArchiveBuild() method.
   Archive a build according to the build number if it is because of
@@ -693,7 +693,47 @@ class StagerByBuildNumber(StagerBase):
 
     StagerBase.__init__(self, options, options.build_number)
 
-def main(options, args):
+
+def main(argv):
+  option_parser = optparse.OptionParser()
+
+  option_parser.add_option('--mode', default='dev',
+      help='switch indicating how to archive build (dev is only valid value)')
+  option_parser.add_option('--target', default='Release',
+      help='build target to archive (Debug or Release)')
+  option_parser.add_option('--src-dir', default='src',
+                           help='path to the top-level sources directory')
+  option_parser.add_option('--build-dir', default='chrome',
+                           help='path to main build directory (the parent of '
+                                'the Release or Debug directory)')
+  option_parser.add_option('--extra-archive-paths', default='',
+                           help='comma-separated lists of paths containing '
+                                'files named FILES, SYMBOLS and TESTS. These '
+                                'files contain lists of extra files to be '
+                                'that will be archived. The paths are relative '
+                                'to the directory given in --src-dir.')
+  option_parser.add_option('--build-number', type=int,
+                           help='The build number of the builder running '
+                                'this script. we use it as the name of build '
+                                'archive directory')
+  option_parser.add_option('--default-chromium-revision', type=int,
+                           help='The default chromium revision so far is only '
+                                'used by archive_build unittest to set valid '
+                                'chromium revision in test')
+  option_parser.add_option('--default-webkit-revision', type=int,
+                           help='The default webkit revision so far is only '
+                                'used by archive_build unittest to set valid '
+                                'webkit revision in test')
+  option_parser.add_option('--default-v8-revision', type=int,
+                           help='The default v8 revision so far is only '
+                                'used by archive_build unittest to set valid '
+                                'v8 revision in test')
+  option_parser.add_option('--dry-run', action='store_true',
+                           help='Avoid making changes, for testing')
+  options, args = option_parser.parse_args()
+  if args:
+    raise StagingError('Unknown arguments: %s' % args)
+
   if options.mode == 'official':
     raise StagingError('Official mode is not supported here')
   elif options.mode == 'dev':
@@ -713,41 +753,6 @@ def main(options, args):
     s = StagerByChromiumRevision(options)
   return s.ArchiveBuild()
 
-if '__main__' == __name__:
-  option_parser = optparse.OptionParser()
 
-  option_parser.add_option('', '--mode', default='dev',
-      help='switch indicating how to archive build (dev is only valid value)')
-  option_parser.add_option('', '--target', default='Release',
-      help='build target to archive (Debug or Release)')
-  option_parser.add_option('', '--src-dir', default='src',
-                           help='path to the top-level sources directory')
-  option_parser.add_option('', '--build-dir', default='chrome',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
-  option_parser.add_option('', '--extra-archive-paths', default='',
-                           help='comma-separated lists of paths containing '
-                                'files named FILES, SYMBOLS and TESTS. These '
-                                'files contain lists of extra files to be '
-                                'that will be archived. The paths are relative '
-                                'to the directory given in --src-dir.')
-  option_parser.add_option('', '--build-number', type=int,
-                           help='The build number of the builder running '
-                                'this script. we use it as the name of build '
-                                'archive directory')
-  option_parser.add_option('', '--default-chromium-revision', type=int,
-                           help='The default chromium revision so far is only '
-                                'used by archive_build unittest to set valid '
-                                'chromium revision in test')
-  option_parser.add_option('', '--default-webkit-revision', type=int,
-                           help='The default webkit revision so far is only '
-                                'used by archive_build unittest to set valid '
-                                'webkit revision in test')
-  option_parser.add_option('', '--default-v8-revision', type=int,
-                           help='The default v8 revision so far is only '
-                                'used by archive_build unittest to set valid '
-                                'v8 revision in test')
-  option_parser.add_option('--dry-run', action='store_true',
-                           help='Avoid making changes, for testing')
-  options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+if '__main__' == __name__:
+  sys.exit(main(None))
