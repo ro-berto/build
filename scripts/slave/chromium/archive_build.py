@@ -28,10 +28,6 @@ from slave import slave_utils
 import config
 
 
-# Set DRY_RUN to True to avoid making changes to external symbol and build
-# directories, for testing.
-DRY_RUN = False
-
 # Independent of any other configuration, these exes and any symbol files
 # derived from them (i.e., any filename starting with these strings) will not
 # be archived or uploaded, typically because they're not built for the current
@@ -39,14 +35,6 @@ DRY_RUN = False
 IGNORE_EXES = config.Archive.exes_to_skip_entirely
 
 INSTALLER_EXE = config.Archive.installer_exe
-
-DEV_BASE_DIRS = {
-    # Built files are stored here, in a subdir. named for the build version.
-    'www_dir_base': config.Archive.www_dir_base_dev,
-
-    # Symbols are stored here, in a subdirectory named for the build version.
-    'symbol_dir_base': config.Archive.symbol_dir_base_dev
-    }
 
 # The names of the files containing the list of files, symbols and tests to be
 # archived for the build. This file can be present in self._tool_dir as well
@@ -56,7 +44,8 @@ SYMBOL_FILE_NAME = 'SYMBOLS'
 TEST_FILE_NAME = 'TESTS'
 
 
-class StagingError(Exception): pass
+class StagingError(Exception):
+  pass
 
 
 class StagerBase(object):
@@ -65,6 +54,7 @@ class StagerBase(object):
   def __init__(self, options, build_revision):
     """Sets a number of file and directory paths for convenient use."""
 
+    self.options = options
     self._src_dir = os.path.abspath(options.src_dir)
     self._chrome_dir = os.path.join(self._src_dir, 'chrome')
     self._webkit_dir = os.path.join(self._src_dir, 'third_party', 'WebKit',
@@ -392,7 +382,7 @@ class StagerBase(object):
                                 str(self._build_revision))
       print 'os.makedirs(%s)' % symbol_dir
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (sym_zip_file, symbol_dir)
-      if not DRY_RUN:
+      if not self.options.dry_run:
         chromium_utils.MaybeMakeDirectory(symbol_dir)
         chromium_utils.CopyFileToDir(sym_zip_file, symbol_dir)
     elif chromium_utils.IsLinux():
@@ -404,7 +394,7 @@ class StagerBase(object):
       if not (sym_zip_file):
         print 'No symbols found, not uploading symbols'
         return 0
-      if not DRY_RUN:
+      if not self.options.dry_run:
         print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
                                             www_dir)
         chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
@@ -436,7 +426,7 @@ class StagerBase(object):
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (changelog_path, www_dir)
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (revisions_path, www_dir)
 
-      if not DRY_RUN:
+      if not self.options.dry_run:
         chromium_utils.MaybeMakeDirectory(www_dir)
         shutil.copyfile(self._installer_file, installer_destination_file)
         if incremental_installer:
@@ -454,7 +444,7 @@ class StagerBase(object):
                                           config.Archive.archive_host, www_dir)
       print 'SshCopyFiles(%s, %s, %s)' % (revisions_path,
                                           config.Archive.archive_host, www_dir)
-      if not DRY_RUN:
+      if not self.options.dry_run:
         print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
                                             www_dir)
         chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
@@ -519,7 +509,7 @@ class StagerBase(object):
     for test_dir in test_dirs:
       print 'chromium_utils.MaybeMakeDirectory(%s)' % test_dir
 
-    if not DRY_RUN:
+    if not self.options.dry_run:
       if chromium_utils.IsWindows():
         # Use Samba on Windows.
         chromium_utils.MaybeMakeDirectory(root_test_dir)
@@ -638,7 +628,7 @@ class StagerBase(object):
         print 'SshCopyFiles(%s, %s, %s)' % (package_file,
                                             config.Archive.archive_host,
                                             www_dir)
-      if not DRY_RUN:
+      if not self.options.dry_run:
         print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
                                             www_dir)
         chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
@@ -652,7 +642,7 @@ class StagerBase(object):
 
     self.UploadTests(www_dir)
 
-    if not DRY_RUN:
+    if not self.options.dry_run:
       # Save the current build revision locally so we can compute a changelog
       # next time
       self.SaveBuildRevisionToSpecifiedFile(self.last_change_file)
@@ -707,7 +697,13 @@ def main(options, args):
   if options.mode == 'official':
     raise StagingError('Official mode is not supported here')
   elif options.mode == 'dev':
-    options.dirs = DEV_BASE_DIRS
+    options.dirs = {
+      # Built files are stored here, in a subdir. named for the build version.
+      'www_dir_base': config.Archive.www_dir_base_dev,
+
+      # Symbols are stored here, in a subdirectory named for the build version.
+      'symbol_dir_base': config.Archive.symbol_dir_base_dev
+    }
   else:
     raise StagingError('Invalid options mode %s' % options.mode)
 
@@ -751,5 +747,7 @@ if '__main__' == __name__:
                            help='The default v8 revision so far is only '
                                 'used by archive_build unittest to set valid '
                                 'v8 revision in test')
+  option_parser.add_option('--dry-run', action='store_true',
+                           help='Avoid making changes, for testing')
   options, args = option_parser.parse_args()
   sys.exit(main(options, args))
