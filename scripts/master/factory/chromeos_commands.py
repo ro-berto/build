@@ -6,12 +6,11 @@
 """Set of utilities to add commands to a buildbot factory."""
 
 from buildbot.steps import shell
-from factory import commands
-from log_parser import retcode_command
-from log_parser import archive_command
+from master.factory import commands
+from master.log_parser import retcode_command
+from master.log_parser import archive_command
 
-import chromium_config as config
-import chromium_utils
+from common import chromium_utils
 
 import os
 

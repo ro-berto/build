@@ -11,12 +11,12 @@ from buildbot.process import factory
 from build_factory import BuildFactory
 
 
-import chromium_config as config
-import chromeos_commands
-import chromeos_build_factory
-import chromeos_revision_source
+from master.factory import chromeos_commands
+from master.factory import chromeos_build_factory
+from master.factory import gclient_factory
+from master import chromeos_revision_source
 
-import gclient_factory
+import config
 
 from buildbot.process.properties import WithProperties
 

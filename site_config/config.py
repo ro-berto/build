@@ -17,10 +17,7 @@ import sys
 
 from twisted.spread import banana
 
-try:
-  import config_private
-except:
-  import config_default as config_private
+import config_private
 from common import chromium_utils
 
 # By default, the banana's string size limit is 640kb, which is unsufficient
@@ -211,24 +208,6 @@ class Archive(config_private.Archive):
 
   # Where to save gtest JSON results.
   gtest_result_archive = www_dir_base + 'gtest_results'
-
-class IRC(config_private.IRC):
-  """Options for the IRC bot."""
-  # Where the IRC bot lives.
-  host = 'irc.freenode.net'
-  channels = ['#chromium']
-
-  default_topic = 'IRC bot not yet connected'
-
-  whuffie_file = '~/www/irc/whuffie_list.js'
-  whuffie_reason_file = '~/www/irc/whuffie_reasons.js'
-  topic_file = '~/www/irc/topic_list.js'
-
-  # Any URLs found in IRC topics will be passed as %s to this format before
-  # being added to the topic-list page. It must contain exactly one "%s" token.
-  # To disable URL mangling, set this to "%s".
-  href_redirect_format = 'http://www.google.com/url?sa=D&q=%s'
-
 
 class Distributed(config_private.Distributed):
   # File holding current version information.

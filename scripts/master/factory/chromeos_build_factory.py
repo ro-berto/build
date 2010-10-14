@@ -4,8 +4,8 @@
 
 """Inherits build_factory.BuildFactory to use chromeos_factory."""
 
-import build_factory
-import chromeos_build
+from master.factory import build_factory
+from master.factory import chromeos_build
 
 
 class BuildFactory(build_factory.BuildFactory):
