@@ -138,9 +138,9 @@ class Master(object):
     slave_port = 9011
     from_address = 'nobody@example.com'
 
-  ## ChromeOS related
+  ## ChromiumOS related
 
-  class ChromeOS(_Base):
+  class ChromiumOS(_Base):
     project_name = 'ChromeOS'
     master_port = 9030
     slave_port = 9027

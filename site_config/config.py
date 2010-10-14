@@ -17,7 +17,12 @@ import sys
 
 from twisted.spread import banana
 
-import config_private
+# Override config_default with a config_private file.
+try:
+  import config_private
+except ImportError:
+  import config_default as config_private
+
 from common import chromium_utils
 
 # By default, the banana's string size limit is 640kb, which is unsufficient
