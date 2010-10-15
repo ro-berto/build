@@ -248,9 +248,5 @@ class Archive(object):
   www_dir_base = "\\\\" + archive_host + "\\www\\"
 
 
-class IRC(object):
-  bot_admins = ['root']
-  nickname = 'change_me_buildbot'
-
 class Distributed(object):
   """Not much to describe."""
