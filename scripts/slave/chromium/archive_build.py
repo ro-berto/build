@@ -393,11 +393,11 @@ class StagerBase(object):
         print 'No symbols found, not uploading symbols'
         return 0
       if not self.options.dry_run:
-        print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
+        print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
-        chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
+        chromium_utils.SshMakeDirectory(self.options.archive_host, www_dir)
         chromium_utils.MakeWorldReadable(sym_zip_file)
-        chromium_utils.SshCopyFiles(sym_zip_file, config.Archive.archive_host,
+        chromium_utils.SshCopyFiles(sym_zip_file, self.options.archive_host,
                                     www_dir)
         os.unlink(sym_zip_file)
     elif chromium_utils.IsMac():
@@ -437,28 +437,28 @@ class StagerBase(object):
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       for archive in archive_files:
         print 'SshCopyFiles(%s, %s, %s)' % (archive,
-                                            config.Archive.archive_host,
+                                            self.options.archive_host,
                                             www_dir)
       print 'SshCopyFiles(%s, %s, %s)' % (changelog_path,
-                                          config.Archive.archive_host, www_dir)
+                                          self.options.archive_host, www_dir)
       print 'SshCopyFiles(%s, %s, %s)' % (revisions_path,
-                                          config.Archive.archive_host, www_dir)
+                                          self.options.archive_host, www_dir)
       if not self.options.dry_run:
-        print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
+        print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
-        chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
+        chromium_utils.SshMakeDirectory(self.options.archive_host, www_dir)
         for archive in archive_files:
           chromium_utils.MakeWorldReadable(archive)
-          chromium_utils.SshCopyFiles(archive, config.Archive.archive_host,
+          chromium_utils.SshCopyFiles(archive, self.options.archive_host,
                                       www_dir)
           os.unlink(archive)
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
         chromium_utils.MakeWorldReadable(changelog_path)
-        chromium_utils.SshCopyFiles(changelog_path, config.Archive.archive_host,
+        chromium_utils.SshCopyFiles(changelog_path, self.options.archive_host,
                                     www_dir)
         chromium_utils.MakeWorldReadable(revisions_path)
-        chromium_utils.SshCopyFiles(revisions_path, config.Archive.archive_host,
+        chromium_utils.SshCopyFiles(revisions_path, self.options.archive_host,
                                     www_dir)
     else:
       raise NotImplementedError(
@@ -522,17 +522,17 @@ class StagerBase(object):
           chromium_utils.CopyFileToDir(test_file, test_dir)
       else:
         # Otherwise use scp.
-        chromium_utils.SshMakeDirectory(config.Archive.archive_host,
+        chromium_utils.SshMakeDirectory(self.options.archive_host,
                                         root_test_dir)
         for test_dir in test_dirs:
-          chromium_utils.SshMakeDirectory(config.Archive.archive_host, test_dir)
+          chromium_utils.SshMakeDirectory(self.options.archive_host, test_dir)
         for test_file in test_file_list:
           chromium_utils.MakeWorldReadable(test_file)
           # TODO(robertshield): binaries and symbols are stored in a zip file
           # via CreateArchiveFile. Tests should be too.
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
           test_dir = os.path.join(www_dir, UPLOAD_DIR, relative_dir)
-          chromium_utils.SshCopyFiles(test_file, config.Archive.archive_host,
+          chromium_utils.SshCopyFiles(test_file, self.options.archive_host,
                                       test_dir)
 
   def _GenerateChangeLog(self, previous_revision, changelog_path):
@@ -620,15 +620,15 @@ class StagerBase(object):
           self._build_dir, '*-%s.*.rpm' % self._chromium_revision)))
       for package_file in linux_packages:
         print 'SshCopyFiles(%s, %s, %s)' % (package_file,
-                                            config.Archive.archive_host,
+                                            self.options.archive_host,
                                             www_dir)
       if not self.options.dry_run:
-        print 'SshMakeDirectory(%s, %s)' % (config.Archive.archive_host,
+        print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
-        chromium_utils.SshMakeDirectory(config.Archive.archive_host, www_dir)
+        chromium_utils.SshMakeDirectory(self.options.archive_host, www_dir)
         for package_file in linux_packages:
           chromium_utils.MakeWorldReadable(package_file)
-          chromium_utils.SshCopyFiles(package_file, config.Archive.archive_host,
+          chromium_utils.SshCopyFiles(package_file, self.options.archive_host,
                                       www_dir)
           # Cleanup archived packages, otherwise they keep accumlating since
           # they have different filenames with each build.
@@ -650,10 +650,10 @@ class StagerBase(object):
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
         chromium_utils.MakeWorldReadable(self.last_change_file)
-        print 'Saving revision to %s:%s' % (config.Archive.archive_host,
+        print 'Saving revision to %s:%s' % (self.options.archive_host,
                                             latest_file_path)
         chromium_utils.SshCopyFiles(self.last_change_file,
-                                    config.Archive.archive_host,
+                                    self.options.archive_host,
                                     latest_file_path)
       else:
         raise NotImplementedError(
@@ -729,6 +729,8 @@ def main(argv):
                            help='Installer executable name')
   option_parser.add_option('--ignore', default=[], action='append',
                            help='Files to ignore')
+  option_parser.add_option('--archive_host',
+                           default=config.Archive.archive_host)
   options, args = option_parser.parse_args()
   if args:
     raise StagingError('Unknown arguments: %s' % args)
