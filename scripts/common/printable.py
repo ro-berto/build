@@ -23,26 +23,26 @@ CONTROL_CHARS = {tuple: '()', list: '[]', set: '«»'}
 SIMPLE_TYPES = (basestring, bool, buffer, xrange, int, float, long, complex,
                 None.__class__)
 
-def StrippedStr(obj, max=80):
+def StrippedStr(obj, maxlen=80):
   """Strings too long are useless anyway."""
   if isinstance(obj, str):
     # Quote strings.
     b = "'%s'" % obj
   else:
     b = str(obj)
-  if len(b) > max:
-    b = b[0:max] + '...'
+  if len(b) > maxlen:
+    b = b[0:maxlen] + '...'
   return b
 
 
-def AutoString(obj, depth=3, max=80):
+def AutoString(obj, depth=3, maxlen=80):
   """Returns a textual representation the members of an object for debugging.
 
   List member variables but not functions.
   """
   out = []
   if isinstance(obj, SIMPLE_TYPES):
-    return StrippedStr(obj, max)
+    return StrippedStr(obj, maxlen)
   elif isinstance(obj, (tuple, list, set)):
     # Print each item.
     chars = CONTROL_CHARS[obj.__class__]
@@ -52,10 +52,10 @@ def AutoString(obj, depth=3, max=80):
     for v in obj:
       if depth > 0:
         out.extend(['  %s' % l
-                    for l in AutoString(v, depth-1, max).split('\n')])
+                    for l in AutoString(v, depth-1, maxlen).split('\n')])
         out[-1] = '%s,' % out[-1]
       else:
-        out.append('  %s,' % StrippedStr(v, max))
+        out.append('  %s,' % StrippedStr(v, maxlen))
     out.append(chars[1])
     if len(out) == 3:
       out = ['%s%s%s' % (out[0], out[1].lstrip(' '), out[2])]
@@ -65,8 +65,8 @@ def AutoString(obj, depth=3, max=80):
     out.append('{')
     for (k, v) in obj.iteritems():
       if depth > 0:
-        k_lines = AutoString(k, depth-1, max).split('\n')
-        v_lines = AutoString(v, depth-1, max).split('\n')
+        k_lines = AutoString(k, depth-1, maxlen).split('\n')
+        v_lines = AutoString(v, depth-1, maxlen).split('\n')
         out.extend(['  %s' % k for k in k_lines])
         out[-1] = '%s:' % out[-1]
         if len(v_lines) > 1:
@@ -75,7 +75,8 @@ def AutoString(obj, depth=3, max=80):
         else:
           out[-1] = '%s %s,' % (out[-1], v_lines[0])
       else:
-        out.append('  %s: %s,' % (StrippedStr(k, max), StrippedStr(v, max)))
+        out.append('  %s: %s,' % (
+            StrippedStr(k, maxlen), StrippedStr(v, maxlen)))
     out.append('}')
     if len(out) == 3:
       out = ['%s%s%s' % (out[0], out[1].lstrip(' '), out[2])]
@@ -87,13 +88,14 @@ def AutoString(obj, depth=3, max=80):
       if not callable(member_obj) and not member_name.startswith('__'):
         if depth > 0:
           out.append('  %s:' % member_name)
-          v_lines = AutoString(member_obj, depth-1, max).split('\n')
+          v_lines = AutoString(member_obj, depth-1, maxlen).split('\n')
           if len(v_lines) > 1:
             out.extend(['    %s' % l for l in v_lines])
           else:
             out[-1] = '%s %s' % (out[-1], v_lines[0])
         else:
-          out.append('  %s: %s' % (member_name, StrippedStr(member_obj, max)))
+          out.append('  %s: %s' % (
+              member_name, StrippedStr(member_obj, maxlen)))
   return '\n'.join(out)
 
 

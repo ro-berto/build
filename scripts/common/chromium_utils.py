@@ -55,7 +55,6 @@ def OverridePlatformName(name):
 
 def PlatformName():
   """Return a string to be used in paths for the platform."""
-  global override_platform_name
   if override_platform_name:
     return override_platform_name
   if IsWindows():
@@ -195,7 +194,7 @@ def LocateFiles(pattern, root=os.curdir):
   """Yeilds files matching pattern found in root and its subdirectories.
 
   An exception is thrown if root doesn't exist."""
-  for path, dirs, files in os.walk(os.path.abspath(root)):
+  for path, _, files in os.walk(os.path.abspath(root)):
     for filename in fnmatch.filter(files, pattern):
       yield os.path.join(path, filename)
 
@@ -390,7 +389,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   return (archive_dir, output_file)
 
 
-def ExtractZip(file, output_dir, verbose=True):
+def ExtractZip(filename, output_dir, verbose=True):
   """ Extract the zip archive in the output directory.
       Based on http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/252508.
   """
@@ -400,7 +399,7 @@ def ExtractZip(file, output_dir, verbose=True):
   # command as it will handle links and file bits (executable).  Which is much
   # easier then trying to do that with ZipInfo options.
   if IsWindows():
-    zf = zipfile.ZipFile(file)
+    zf = zipfile.ZipFile(filename)
 
     # Grabs all the directories in the zip structure. This is necessary
     # to create the structure before trying to extract the file to it.
@@ -420,7 +419,7 @@ def ExtractZip(file, output_dir, verbose=True):
   else:
     assert IsMac() or IsLinux()
     # Make sure path is absolute before changing directories.
-    filepath = os.path.abspath(file)
+    filepath = os.path.abspath(filename)
     saved_dir = os.getcwd()
     os.chdir(output_dir)
     command = ['unzip', '-o', filepath]
@@ -631,16 +630,16 @@ def SshCopyFiles(srcs, host, dst):
                         (srcs, host + ':' + dst, result))
 
 
-def SshExtractZip(host, zip, dst):
+def SshExtractZip(host, zipname, dst):
   """extract the remote zip file to dst on the remote ssh host.
   """
-  command = ['ssh', host, 'unzip', '-o', '-d', dst, zip]
+  command = ['ssh', host, 'unzip', '-o', '-d', dst, zipname]
   result = RunCommand(command)
   if result:
     raise ExternalError('Failed to ssh unzip -o -d "%s" "%s" on "%s" (%s)' %
-                        (dst, zip, host, result))
+                        (dst, zipname, host, result))
 
-  # zip will create directories with access 700, which is not often what we
+  # unzip will create directories with access 700, which is not often what we
   # need. Fix the permissions for the whole archive.
   command = ['ssh', host, 'chmod', '-R', '755', dst]
   result = RunCommand(command)
@@ -681,7 +680,6 @@ def CopyFileToArchiveHost(src, dest_dir):
   host = config.Archive.archive_host
   if not os.path.exists(src):
     raise ExternalError('Source path "%s" does not exist' % (src))
-    return
   if IsWindows():
     CopyFileToDir(src, dest_dir)
   elif IsLinux() or IsMac():
