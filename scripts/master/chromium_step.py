@@ -1,19 +1,15 @@
-#!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Subclasses of various slave command classes."""
 
 import copy
-import os
 
 from buildbot.steps import source
 from buildbot.process import buildstep
-from buildbot import slave
 from buildbot.steps import shell
 from buildbot.status import builder
-from log_parser import process_log
 
 
 class GClient(source.Source):
@@ -54,8 +50,6 @@ class GClient(source.Source):
     return lastChange
 
   def startVC(self, branch, revision, patch):
-    """
-    """
     warnings = []
     args = copy.copy(self.args)
     args['revision'] = revision

@@ -1,11 +1,9 @@
-#!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """ Source file for buildbot.status module modifications. """
 
-import cgi
 import os
 import re
 import urllib
@@ -20,22 +18,15 @@ import buildbot.status.web.stats as stats
 import buildbot.status.web.waterfall as waterfall
 import buildbot.status.web.changes as changes
 import buildbot.status.web.builder as builder
-import buildbot.status.web.slaves as slaves
-import buildbot.status.web.xmlrpc as xmlrpc
-import buildbot.status.web.about as about
 from buildbot.status.web.base import make_row
 import buildbot.status.builder as statusbuilder
-import buildbot.status.words as words
 import buildbot.sourcestamp as sourcestamp
 
 from twisted.python import log
 from twisted.python import components
 from twisted.web.util import Redirect
 from twisted.web import html
-from zope.interface import interface
 from zope.interface import declarations
-
-import config
 
 
 class BuildBox(waterfall.BuildBox):
@@ -76,40 +67,40 @@ registry.register([origInterface], base.IBox, '', None)
 components.registerAdapter(BuildBox, statusbuilder.BuildStatus, base.IBox)
 
 class HorizontalOneBoxPerBuilder(base.HtmlResource):
-    """This shows a table with one cell per build. The color of the cell is
-    the state of the most recently completed build. If there is a build in
-    progress, the ETA is shown in table cell. The table cell links to the page
-    for that builder. They are layed out, you guessed it, horizontally.
+  """This shows a table with one cell per build. The color of the cell is
+  the state of the most recently completed build. If there is a build in
+  progress, the ETA is shown in table cell. The table cell links to the page
+  for that builder. They are layed out, you guessed it, horizontally.
 
-    builder=: show only builds for this builder. Multiple builder= arguments
-              can be used to see builds from any builder in the set. If no
-              builder= is given, shows them all.
-    """
+  builder=: show only builds for this builder. Multiple builder= arguments
+            can be used to see builds from any builder in the set. If no
+            builder= is given, shows them all.
+  """
 
-    def body(self, request):
-      status = self.getStatus(request)
-      builders = request.args.get("builder", status.getBuilderNames())
+  def body(self, request):
+    status = self.getStatus(request)
+    builders = request.args.get("builder", status.getBuilderNames())
 
-      data = "<table style='width:100%'><tr>"
+    data = "<table style='width:100%'><tr>"
 
-      for builder_name in builders:
-        try:
-          builder = status.getBuilder(builder_name)
-        except KeyError:
-          log.msg('status.getBuilder(%r) failed' % builder_name)
-          continue
-        classname = base.ITopBox(builder).getBox(request).class_
-        title = builder_name
+    for builder_name in builders:
+      try:
+        builder_status = status.getBuilder(builder_name)
+      except KeyError:
+        log.msg('status.getBuilder(%r) failed' % builder_name)
+        continue
+      classname = base.ITopBox(builder_status).getBox(request).class_
+      title = builder_name
 
-        url = (self.path_to_root(request) + "waterfall?builder=" +
-               urllib.quote(builder_name, safe=''))
-        link = '<a href="%s" class="%s" title="%s" \
-            target=_blank> </a>' % (url, classname, title)
-        data += '<td valign=bottom class=mini-box>%s</td>' % link
+      url = (self.path_to_root(request) + "waterfall?builder=" +
+              urllib.quote(builder_name, safe=''))
+      link = '<a href="%s" class="%s" title="%s" \
+          target=_blank> </a>' % (url, classname, title)
+      data += '<td valign=bottom class=mini-box>%s</td>' % link
 
-      data += "</tr></table>"
+    data += "</tr></table>"
 
-      return data
+    return data
 
 
 def HookChangeHtmlBox():
@@ -238,7 +229,7 @@ class StatusResourceBuilder(builder.StatusResourceBuilder):
 
     data += "<h2>Recent Builds:</h2>\n"
     data += "<ul>\n"
-    for i,build in enumerate(b.generateFinishedBuilds(num_builds=5)):
+    for i, build in enumerate(b.generateFinishedBuilds(num_builds=5)):
       data += " <li>" + self.make_line(req, build, False) + "</li>\n"
       if i == 0:
         data += "<br />\n" # separator

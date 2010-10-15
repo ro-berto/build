@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -11,10 +10,12 @@ import os
 
 from buildbot.steps import trigger
 
-from build_factory import BuildFactory
 from master.factory import chromium_commands
 from master.factory import gclient_factory
+from master.factory.build_factory import BuildFactory
+
 import config
+
 
 class ChromiumFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the chromium master.cfg files."""
@@ -307,15 +308,15 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                       tests=None, mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
                       project=None, factory_properties=None):
-    tests = tests or []
     factory_properties = factory_properties or {}
+    tests = tests or []
 
     if factory_properties.get("needs_valgrind"):
-       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
+      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
     elif factory_properties.get("needs_tsan_win"):
-       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_WIN]
+      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_WIN]
     elif factory_properties.get("needs_drmemory"):
-       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_DRMEMORY]
+      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_DRMEMORY]
 
     if factory_properties.get("lkgr"):
       self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
@@ -385,7 +386,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return factory
 
   def ChromiumV8LatestFactory(self, identifier, target='Release', clobber=False,
-                              tests=[], mode=None, slave_type='BuilderTester',
+                              tests=None, mode=None, slave_type='BuilderTester',
                               options=None, compile_timeout=1200,
                               build_url=None, project=None,
                               factory_properties=None):
@@ -396,7 +397,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   def ChromiumNativeClientLatestFactory(
       self, identifier, target='Release', clobber=False,
-      tests=[], mode=None, slave_type='BuilderTester',
+      tests=None, mode=None, slave_type='BuilderTester',
       options=None, compile_timeout=1200,
       build_url=None, project=None,
       factory_properties=None, on_nacl_waterfall=True,
@@ -510,7 +511,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self._solutions = []
 
     # Sync only what we need (e.g. PyAuto test files).
-    for (name,url) in self.PYAUTO_DEPS:
+    for name, url in self.PYAUTO_DEPS:
       # Yes, url goes first, which is different from how most people
       # lay out their .gclient.
       # Prepend to make sure chrome/src is not created by a DEPS pull.

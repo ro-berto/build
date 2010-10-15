@@ -1,20 +1,16 @@
-#!/usr/bin/python
-# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Set of utilities to add commands to a buildbot factory."""
 
-from buildbot.steps import shell
-from master.factory import commands
-from master.log_parser import retcode_command
-from master.log_parser import archive_command
-
-from common import chromium_utils
-
 import os
 
+from buildbot.steps import shell
 from buildbot.process.properties import WithProperties
+
+from master.factory import commands
+from master.log_parser import archive_command
 
 
 class ChromeOSCommands(commands.FactoryCommands):
@@ -49,7 +45,7 @@ class ChromeOSCommands(commands.FactoryCommands):
 
   def AddChromeOSRepoUpdateStep(self, clobber=False, mode=None, options=None,
                                 timeout=2400):
-    cmd = ['crosutils/bin/cros_repo_sync_all']    
+    cmd = ['crosutils/bin/cros_repo_sync_all']
     # chromiumos set up by master.cfg.
     cmd += ['--buildroot=%s' % 'chromiumos']
     if clobber:
@@ -94,16 +90,6 @@ class ChromeOSCommands(commands.FactoryCommands):
     # XXX: If I can ever figure out how to symlink cbuild.log to a buildbot
     # viewable/accessible URL, I can turn -v off and add this link here to
     # the full log and let the main log just be a summary.
-
-    #"""Adds a step to the factory to link to full log."""
-    #if base_url:
-    #  url = base_url + '/' + self._identifier + '/cbuild.log'
-    #  text = 'full log'
-    #else:
-    #  url = None
-    #  text = None
-
-           #'--official'
     cmd = ['/b/scripts/crostools/cbuild', '-v', '--clean', '--chromeos',
            '--buildroot=../../../..',
            WithProperties("--buildnumber=%(buildnumber)s")]
@@ -118,13 +104,6 @@ class ChromeOSCommands(commands.FactoryCommands):
 
   def AddcbuildDownloadLinkStep(self, options=None, base_url=None):
     """Adds a step to the factory to archive a build."""
-    if base_url:
-      url = base_url + '/' + self._identifier
-      text = 'download'
-    else:
-      url = None
-      text = None
-
     cmd = ['sudo']
     self._factory.addStep(shell.ShellCommand,
                           name='Download Link',
@@ -137,13 +116,6 @@ class ChromeOSCommands(commands.FactoryCommands):
   def AddcbuildTriageLogLinkStep(self, timeout=120, options=None,
                                  base_url=None):
     """Adds a step to the factory to archive a build."""
-    if base_url:
-      url = base_url + '/' + self._identifier + '/triagelog.html'
-      text = 'triagelog'
-    else:
-      url = None
-      text = None
-
     cmd = ['sudo']
     self._factory.addStep(shell.ShellCommand,
                           name='Error Summary',
@@ -320,8 +292,8 @@ class ChromeOSCommands(commands.FactoryCommands):
                           command=cmd)
 
 
-  def AddChromeOSFactoryInstallStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
+  def AddChromeOSFactoryInstallStep(self, clobber=False, mode=None,
+                                    options=None, timeout=1200):
     board = self.BoardName(options)
     cmd = self._enter_chroot + [
         './image_to_usb.sh ',

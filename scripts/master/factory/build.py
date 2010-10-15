@@ -8,7 +8,7 @@ properties and support for TryJob.canceled."""
 
 from buildbot.process import base
 from buildbot.status.builder import SKIPPED
-from twisted.python import log
+
 
 class Build(base.Build):
   """Build class that inherits the BuildFactory properties."""

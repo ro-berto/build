@@ -62,7 +62,8 @@ def main():
   testmodules = []
   for entry in os.listdir(os.path.abspath(os.path.dirname(__file__))):
     if IsTestFile(entry):
-      testmodules.append(entry[0:-3]) # remove .py to convert filename to module name
+      # remove .py to convert filename to module name
+      testmodules.append(entry[0:-3])
 
   for testmodule in testmodules:
     m = __import__(testmodule)

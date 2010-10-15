@@ -9,8 +9,8 @@ import os
 
 from buildbot.steps.shell import ShellCommand
 
-import chromium_config as config
-import gclient_factory
+import config
+from master.factory import gclient_factory
 
 
 class GYPFactory(gclient_factory.GClientFactory):
@@ -22,13 +22,13 @@ class GYPFactory(gclient_factory.GClientFactory):
 
   def GYPFactory(self, formats):
     f = self.BaseFactory()
-    for format in formats:
+    for format_val in formats:
       cmd = [
           'python',
           os.path.join(self._build_dir, 'gyptest.py'),
           '--all',
           '--passed',
-          '--format', format,
+          '--format', format_val,
           '--chdir', self._build_dir,
           '--path', '../scons'
       ]

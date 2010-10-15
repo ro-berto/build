@@ -12,7 +12,6 @@ import re
 from twisted.web import util
 from buildbot.steps import shell
 from buildbot.status import builder
-from buildbot.process import buildstep
 
 # One of these two strings, used to identify the build system, must appear in
 # the build output before any compiler output from individual projects.
@@ -151,7 +150,7 @@ class IbOutputParser:
     self.project_errors[self.project_name_being_processed].append(content)
 
   def _MakeHtmlFriendly(self, line):
-    return '%s<br />' %util.htmlIndent(line)
+    return '%s<br />' % util.htmlIndent(line)
 
   def _UpdateProjectName(self, line):
     match = IbOutputParser.NAME_MATCHER.match(line)

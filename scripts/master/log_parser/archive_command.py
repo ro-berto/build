@@ -6,7 +6,6 @@
 """A buildbot command for running and interpreting the build_archive.sh script.
 """
 
-import re
 from buildbot.steps import shell
 from buildbot.process import buildstep
 

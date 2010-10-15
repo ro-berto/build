@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -47,9 +47,9 @@ def _FilterField(slaves, value, name):
 
 class SlavesList(object):
   def __init__(self, filename, default_master=None):
-    globals = {}
-    execfile(filename, globals)
-    self.slaves = globals['slaves']
+    local_vars = {}
+    execfile(filename, local_vars)
+    self.slaves = local_vars['slaves']
     self.default_master = default_master
     slaves = [EntryToSlaveName(x).lower() for x in self.slaves]
     dupes = set()
@@ -107,7 +107,7 @@ def Main(argv=None):
   parser.add_option('-t', '--tester', help='Tester to filter')
   parser.add_option('-v', '--version', help='OS\'s version to filter')
   parser.add_option('--bits', help='OS bitness to filter')
-  (options, args) = parser.parse_args(argv)
+  options, _ = parser.parse_args(argv)
   if not options.filename:
     parser.print_help()
     print('\nYou must specify a file to get the slave list from')

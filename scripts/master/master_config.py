@@ -6,7 +6,6 @@ from buildbot.scheduler import Dependent
 from buildbot.scheduler import Scheduler
 from buildbot.scheduler import Triggerable
 
-from master import build_utils
 from master import slaves_list
 
 def GetArchiveUrl(project, machine_name, builder_name, zip_os_name):

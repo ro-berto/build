@@ -1,24 +1,22 @@
-#!/usr/bin/python
-# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Set of utilities to build the chromium master."""
 
 import os
+
 from buildbot.steps import trigger, shell
-from buildbot.process import factory
-from build_factory import BuildFactory
+from buildbot.process.properties import WithProperties
 
-
+from master import chromeos_revision_source
 from master.factory import chromeos_commands
 from master.factory import chromeos_build_factory
 from master.factory import gclient_factory
-from master import chromeos_revision_source
+from master.factory.build_factory import BuildFactory
 
 import config
 
-from buildbot.process.properties import WithProperties
 
 class ChromeOSFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the chromium master.cfg files."""
@@ -237,7 +235,7 @@ class CbuildbotFactory(object):
   """
 
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
-               triagelog=None, params='', timeout=9000, variant=None, 
+               triagelog=None, params='', timeout=9000, variant=None,
                is_master=False,
                crostools_repo='ssh://git@gitrw.chromium.org:9222/crostools',
                crosutils_repo='ssh://git@gitrw.chromium.org:9222/crosutils'):

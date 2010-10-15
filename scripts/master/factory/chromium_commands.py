@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -268,7 +267,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Cold']
-    cmd = test_command=self.GetTestCommand('startup_tests', options)
+    cmd = self.GetTestCommand('startup_tests', options)
     self.AddTestStep(c, 'new_tab_ui_cold_test', cmd)
 
     # Warm tests
@@ -434,7 +433,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if single_process:
       options = ['--single-process']
-      description =' (--single-process)',
+      description = ' (--single-process)'
 
     total_shards = factory_properties.get('ui_total_shards')
     shard_index = factory_properties.get('ui_shard_index')

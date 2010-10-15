@@ -9,7 +9,7 @@ properties."""
 from buildbot.process import factory
 from buildbot.process import properties
 
-import build
+from master.factory import build
 
 
 class BuildFactory(factory.BuildFactory):

@@ -1,4 +1,4 @@
-# Copyright (c) 2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -8,7 +8,6 @@ from buildbot import interfaces, util
 from buildbot.buildslave import BuildSlave
 from buildbot.status import mail
 from buildbot.status.builder import BuildStatus
-from buildbot.status.mail import Domain
 from twisted.python import log
 from zope.interface import implements
 

@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -25,8 +25,8 @@ from buildbot.status.mail import MailNotifier
 from twisted.internet import defer
 from twisted.python import log
 
-from build_sheriffs import BuildSheriffs
-import build_utils
+from master.build_sheriffs import BuildSheriffs
+from master import build_utils
 
 
 # TODO(chase): Notifier doesn't send email on step exception, only on step
@@ -286,10 +286,10 @@ Buildbot waterfall: http://build.chromium.org/
       recipients.extend(BuildSheriffs.GetSheriffs())
     dl = []
     if self.sendToInterestedUsers and self.lookup and blame_interested_users:
-        for u in build_status.getInterestedUsers():
-          d = defer.maybeDeferred(self.lookup.getAddress, u)
-          d.addCallback(recipients.append)
-          dl.append(d)
+      for u in build_status.getInterestedUsers():
+        d = defer.maybeDeferred(self.lookup.getAddress, u)
+        d.addCallback(recipients.append)
+        dl.append(d)
     defered_object = defer.DeferredList(dl)
     defered_object.addCallback(self._gotRecipients, recipients, m)
     defered_object.addCallback(self.getFinishedMessage, builder_name,

@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -85,7 +85,7 @@ def EmailableBuildTable(build_status, waterfall_url, styles=None):
 
   That means the CSS style must be inline."""
   class DummyObject(object):
-    pass
+    prepath = None
 
   def GenBox(item):
     """Generates a box for one build step."""
@@ -112,7 +112,6 @@ def EmailableBuildTable(build_status, waterfall_url, styles=None):
 
   styles = styles or DEFAULT_STYLES
   request = DummyObject()
-  request.prepath = None
 
   # With a hack to fix the url root.
   build_boxes = [GenBox(build_status)]

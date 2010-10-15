@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -11,12 +10,8 @@
 
 Based on chromium_factory.py."""
 
-import os
-import re
-
 from master.factory import chromium_commands
 from master.factory import chromium_factory
-import config
 
 
 class ChromiumSubmodulesFactory(chromium_factory.ChromiumFactory):
@@ -28,7 +23,7 @@ class ChromiumSubmodulesFactory(chromium_factory.ChromiumFactory):
                        mode=None, factory_properties=None,
                        slavelastic=False):
     # Create the spec for the solutions.
-    tests=['unit']
+    tests = ['unit']
     gclient_spec = self.BuildGClientSpec(tests)
 
     # Create the factory.
@@ -77,7 +72,7 @@ class ChromiumSubmodulesFactory(chromium_factory.ChromiumFactory):
                                      options=options, mode=mode)
 
     factory_properties = factory_properties or {}
-    
+
     if slavelastic:
       base_cmd_obj.AddSlavelasticTestStep('base_unittests', factory_properties)
       net_cmd_obj.AddSlavelasticTestStep('net_unittests', factory_properties)

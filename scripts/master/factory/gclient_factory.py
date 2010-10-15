@@ -12,8 +12,8 @@ first."""
 import os
 import re
 
-from build_factory import BuildFactory
-import commands
+from master.factory.build_factory import BuildFactory
+from master.factory import commands
 
 
 def ShouldRunTest(tests, name):
@@ -175,7 +175,7 @@ class GClientFactory(object):
     return factory
 
   def BuildFactory(self, identifier, target='Release', clobber=False,
-                   tests=[], mode=None, slave_type='BuilderTester',
+                   tests=None, mode=None, slave_type='BuilderTester',
                    options=None, compile_timeout=1200, build_url=None,
                     project=None, factory_properties=None):
     # Create the spec for the solutions

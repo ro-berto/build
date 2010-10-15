@@ -6,7 +6,6 @@
 """A buildbot command for running and interpreting tests with magic return
 codes."""
 
-from buildbot.process import buildstep
 from buildbot.steps import shell
 from buildbot.status import builder
 

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -9,10 +8,9 @@ All the utility functions to add steps to a build factory here are not
 project-specific. See the other *_commands.py for project-specific commands.
 """
 
-import os
 import re
 
-from buildbot import locks
+from buildbot.locks import SlaveLock
 from buildbot.process.properties import WithProperties
 from buildbot.status.builder import SUCCESS
 from buildbot.steps import shell
@@ -38,7 +36,7 @@ class FactoryCommands(object):
   # Use this to prevent steps which cannot be run on the same
   # slave from being done together (in the case where slaves are
   # shared by multiple builds).
-  slave_exclusive_lock = locks.SlaveLock('slave_exclusive', maxCount=1)
+  slave_exclusive_lock = SlaveLock('slave_exclusive', maxCount=1)
 
   # --------------------------------------------------------------------------
   # PERF TEST SETTINGS
@@ -218,12 +216,12 @@ class FactoryCommands(object):
     if not filters:
       return True
 
-    for filter in filters:
-      if filter == bStep.name:
+    for testfilter in filters:
+      if testfilter == bStep.name:
         return True
-      if filter.startswith("%s:" % bStep.name):
+      if testfilter.startswith("%s:" % bStep.name):
         bStep.setProperty('gtest_filter', "--gtest_filter=%s" %
-                          filter.split(':',1)[1], "Scheduler")
+                          testfilter.split(':', 1)[1], "Scheduler")
         return True
     return False
 
@@ -322,7 +320,8 @@ class FactoryCommands(object):
       env = {}
     env['DEPOT_TOOLS_UPDATE'] = '0'
     if timeout is None:
-      timeout=60*5     # svn timeout is 2 min; we allow 5
+      # svn timeout is 2 min; we allow 5
+      timeout = 60*5
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,
@@ -360,7 +359,8 @@ class FactoryCommands(object):
       env = {}
     env['DEPOT_TOOLS_UPDATE'] = '0'
     if timeout is None:
-      timeout=60*5     # svn timeout is 2 min; we allow 5
+      # svn timeout is 2 min; we allow 5
+      timeout = 60*5
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,

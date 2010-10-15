@@ -5,7 +5,7 @@
 """Inherits buildbot.process.base.Build to add BuildFactory inherited
 properties and support for TryJob.canceled."""
 
-import build
+from master.factory import build
 
 
 class Build(build.Build):

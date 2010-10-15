@@ -322,14 +322,16 @@ class PerformanceLogProcessor(object):
 
 
 class BenchpressLogProcessor(PerformanceLogProcessor):
-
   TIMING_REGEX = re.compile(r'.*Time \(([\w\d]+)\): (\d+)')
+
+  def __init__(self, *args, **kwargs):
+    PerformanceLogProcessor.__init__(self, *args, **kwargs)
+    # The text summary will be built by other methods as we go.
+    self._text_summary = []
 
   def Process(self, revision, data):
     # Revision may be -1, for a forced build.
     self._revision = revision
-
-    # The text summary wil be built by other methods as we go.
     self._text_summary = []
 
     self._MakeOutputDirectory()
@@ -479,6 +481,7 @@ class Trace(object):
     result = FormatHumanReadable(self.value)
     if self.stddev:
       result += '+/-%s' % FormatHumanReadable(self.stddev)
+    return result
 
 
 class Graph(object):
@@ -525,14 +528,18 @@ class GraphingLogProcessor(PerformanceLogProcessor):
        '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
        '(?P<VALUE>[\{\[]?[\d\., ]+[\}\]]?)( ?(?P<UNITS>.+))?')
 
-  def Process(self, revision, data):
-    # Revision may be -1, for a forced build.
-    self._revision = revision
-
+  def __init__(self, *args, **kwargs):
+    PerformanceLogProcessor.__init__(self, *args, **kwargs)
     # The text summary will be built by other methods as we go.
     self._text_summary = []
 
     # A dict of Graph objects, by name.
+    self._graphs = {}
+
+  def Process(self, revision, data):
+    # Revision may be -1, for a forced build.
+    self._revision = revision
+    self._text_summary = []
     self._graphs = {}
 
     self._MakeOutputDirectory()
