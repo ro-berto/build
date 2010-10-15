@@ -23,7 +23,7 @@ def CheckChangeOnCommit(input_api, output_api):
 def RunPylint(input_api, output_api):
   """Run pylint -E on most python files in buildbot."""
   # In short, it is
-  # PYTHONPATH=third_party:third_party/buildbot_7_12:third_party/twisted_8_1:scripts/common:scripts/master:scripts/slave pylint -E *.py
+  # PYTHONPATH=third_party:third_party/buildbot_7_12:third_party/twisted_8_1:scripts:site_config pylint -E *.py
   import os
   try:
     env = input_api.environ.copy()
@@ -31,9 +31,8 @@ def RunPylint(input_api, output_api):
     path.append('third_party')
     path.append(input_api.os_path.join('third_party', 'buildbot_7_12'))
     path.append(input_api.os_path.join('third_party', 'twisted_8_1'))
-    path.append(input_api.os_path.join('scripts', 'common'))
-    path.append(input_api.os_path.join('scripts', 'master'))
-    path.append(input_api.os_path.join('scripts', 'slave'))
+    path.append(input_api.os_path.join('scripts'))
+    path.append(input_api.os_path.join('site_config'))
     env['PYTHONPATH'] = input_api.os_path.pathsep.join(p for p in path if p)
     files = []
     for dirpath, dirnames, filenames in os.walk('.'):
@@ -42,7 +41,8 @@ def RunPylint(input_api, output_api):
         for item in dirnames[:]:
           dirnames.remove(item)
       for item in dirnames[:]:
-        if item.startswith('.') or item in ('depot_tools', 'third_party'):
+        if (item.startswith('.') or
+            item in ('depot_tools', 'third_party', 'unittests')):
           dirnames.remove(item)
       files.extend(input_api.os_path.join(dirpath, f)
                    for f in filenames
