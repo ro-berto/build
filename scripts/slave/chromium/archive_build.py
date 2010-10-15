@@ -27,14 +27,6 @@ from slave import slave_utils
 import config
 
 
-# Independent of any other configuration, these exes and any symbol files
-# derived from them (i.e., any filename starting with these strings) will not
-# be archived or uploaded, typically because they're not built for the current
-# distributon.
-IGNORE_EXES = config.Archive.exes_to_skip_entirely
-
-INSTALLER_EXE = config.Archive.installer_exe
-
 # The names of the files containing the list of files, symbols and tests to be
 # archived for the build. This file can be present in self._tool_dir as well
 # as in the path specifed by --extra-archive-paths.
@@ -151,7 +143,8 @@ class StagerBase(object):
     self._www_dir_base = os.path.join(self._www_dir_base, build_name)
 
     self._version_file = os.path.join(self._chrome_dir, 'VERSION')
-    self._installer_file = os.path.join(self._build_dir, INSTALLER_EXE)
+    self._installer_file = os.path.join(self._build_dir,
+        self.options.installer)
 
     if options.default_chromium_revision:
       self._chromium_revision = options.default_chromium_revision
@@ -304,23 +297,24 @@ class StagerBase(object):
     Checks for file name of format *_<current version>_mini_installer.exe and
     returns the full path of first such file found.
     """
-    for f in glob.glob(os.path.join(self._build_dir,
-                                    '*' + version + '_' + INSTALLER_EXE)):
+    path = os.path.join(self._build_dir,
+                        '*%s_%s' % (version, self.options.installer))
+    for f in glob.glob(path):
       return f
     return None
 
   def _RemoveIgnored(self, file_list):
     """Returns a list of the file paths in file_list whose filenames don't
-    start with any of the strings in IGNORE_EXEs.
+    start with any of the strings in self.options.ignore.
 
     file_list may contain bare filenames or paths. For paths, only the base
-    filename will be compared to to IGNORE_EXEs.
+    filename will be compared to to self.options.ignore.
     """
     def _IgnoreFile(filename):
       """Returns True if the filename starts with any of the strings in
-      IGNORE_EXEs.
+      self.options.ignore.
       """
-      for ignore in IGNORE_EXES:
+      for ignore in self.options.ignore:
         if filename.startswith(ignore):
           return True
       return False
@@ -416,7 +410,8 @@ class StagerBase(object):
   def _UploadBuild(self, www_dir, changelog_path, revisions_path,
                    archive_files):
     if chromium_utils.IsWindows():
-      installer_destination_file = os.path.join(www_dir, INSTALLER_EXE)
+      installer_destination_file = os.path.join(www_dir,
+          self.options.installer)
       incremental_installer = self._GetDifferentialInstallerFile(
           str(self._chromium_revision))
       print 'os.makedirs(%s)' % www_dir
@@ -730,9 +725,20 @@ def main(argv):
                                 'v8 revision in test')
   option_parser.add_option('--dry-run', action='store_true',
                            help='Avoid making changes, for testing')
+  option_parser.add_option('--installer', default=config.Archive.installer_exe,
+                           help='Installer executable name')
+  option_parser.add_option('--ignore', default=[], action='append',
+                           help='Files to ignore')
   options, args = option_parser.parse_args()
   if args:
     raise StagingError('Unknown arguments: %s' % args)
+
+  if not options.ignore:
+    # Independent of any other configuration, these exes and any symbol files
+    # derived from them (i.e., any filename starting with these strings) will
+    # not be archived or uploaded, typically because they're not built for the
+    # current distributon.
+    options.ignore = config.Archive.exes_to_skip_entirely
 
   if options.mode == 'official':
     raise StagingError('Official mode is not supported here')
