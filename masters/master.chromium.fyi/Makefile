@@ -24,22 +24,22 @@
 # this tests to make sure that the slave is in the known slave location,
 # /b/slave, which is what the LaunchAgent operates on.
 USE_LAUNCHD := \
-  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.chromium.plist ] && \
-          [ "$$(pwd -P)" = "/b/master.chromium" ] && \
+  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.chromium.fyi.plist ] && \
+          [ "$$(pwd -P)" = "/b/build/masters/master.chromium.fyi" ] && \
           echo 1)
 
 start:
 ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=../scripts:../scripts/master:../scripts/common:../scripts/private:../pylibs python ../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
 else
-	launchctl start org.chromium.buildbot.master.chromium
+	launchctl start org.chromium.buildbot.master.chromium.fyi
 endif
 
 stop:
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
 else
-	launchctl stop org.chromium.buildbot.master.chromium
+	launchctl stop org.chromium.buildbot.master.chromium.fyi
 endif
 
 reconfig:

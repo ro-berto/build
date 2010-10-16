@@ -25,12 +25,12 @@
 # /b/slave, which is what the LaunchAgent operates on.
 USE_LAUNCHD := \
   $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.chromium.memory.plist ] && \
-          [ "$$(pwd -P)" = "/b/master.chromium.memory" ] && \
+          [ "$$(pwd -P)" = "/b/build/masters/master.chromium.memory" ] && \
           echo 1)
 
 start:
 ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=../scripts:../scripts/master:../scripts/common:../scripts/private:../pylibs python ../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
 else
 	launchctl start org.chromium.buildbot.master.chromium.memory
 endif
