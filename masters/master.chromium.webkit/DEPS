@@ -1,0 +1,17 @@
+deps = {
+  "pylibs":
+    "/trunk/tools/buildbot/pylibs",
+
+  "scripts/common":
+    "/trunk/tools/buildbot/scripts/common",
+
+  "scripts/master":
+    "/trunk/tools/buildbot/scripts/master",
+
+  "scripts/master/log_parser/perf_expectations":
+    "/trunk/src/tools/perf_expectations",
+
+  # Override this one with your local copy.
+  "scripts/private":
+    "/trunk/tools/buildbot/scripts/private",
+}
