@@ -435,6 +435,8 @@ class WebStatus(baseweb.WebStatus):
   If you wish to override web status classes, this is the place
   to instantiate them.
   """
+  # pylint parsing bug.
+  # pylint: disable=W0221
 
   def setupUsualPages(self, *args, **kwargs):
     """ The method that defines resources to expose.

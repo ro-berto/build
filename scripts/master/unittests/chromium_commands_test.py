@@ -8,8 +8,10 @@
 import pmock
 import unittest
 
-from log_parser import process_log
 from factory.chromium_commands import ChromiumCommands
+from factory.chromium_commands import CreatePerformanceStepClass
+from log_parser import process_log
+
 
 class ChromiumCommandsTest(unittest.TestCase):
 
@@ -20,7 +22,7 @@ class ChromiumCommandsTest(unittest.TestCase):
     self.output_dir = 'output-dir'
 
   def testCreatePerformanceStepClass(self):
-    performanceStepClass = self.cmd._CreatePerformanceStepClass(
+    performanceStepClass = CreatePerformanceStepClass(
         self.log_processor_class, self.report_link, self.output_dir)
     performanceStep = performanceStepClass() # initialize
     self.assert_(performanceStep._log_processor)
@@ -29,8 +31,7 @@ class ChromiumCommandsTest(unittest.TestCase):
     self.assertEqual(self.output_dir, log_processor._output_dir)
 
   def testCreatePerformanceStepClassWithMissingReportLinkArguments(self):
-    performanceStepClass = self.cmd._CreatePerformanceStepClass(
-        self.log_processor_class)
+    performanceStepClass = CreatePerformanceStepClass(self.log_processor_class)
     performanceStep = performanceStepClass() # initialize
     self.assert_(performanceStep._log_processor)
     log_processor = performanceStep._log_processor

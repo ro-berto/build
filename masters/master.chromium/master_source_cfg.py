@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from master import build_utils
-from master import master_config
 
 from buildbot.changes import svnpoller
 
@@ -23,7 +22,7 @@ def ChromeTreeFileSplitter(path):
 
 def Update(config, active_master, c):
   # Polls config.Master.trunk_url for changes
-  viewvc_url ="http://src.chromium.org/viewvc/chrome?view=rev&revision=%s"
+  viewvc_url = "http://src.chromium.org/viewvc/chrome?view=rev&revision=%s"
   poller = svnpoller.SVNPoller(svnurl=config.Master.trunk_url,
                                split_file=ChromeTreeFileSplitter,
                                pollinterval=10,

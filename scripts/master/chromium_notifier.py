@@ -13,7 +13,8 @@ import urllib
 try:
   # Create a block to work around evil sys.modules manipulation in
   # email/__init__.py that triggers pylint false positives.
-  # pylint: disable=E0611
+  # pylint has issues importing it.
+  # pylint: disable=E0611,F0401
   from email.MIMEMultipart import MIMEMultipart
   from email.MIMEText import MIMEText
   from email.Utils import formatdate
@@ -37,6 +38,8 @@ class ChromiumNotifier(MailNotifier):
 
   See builder.interfaces.IStatusReceiver to have more information about the
   parameters type."""
+  # Overloaded functions need to be member even if they don't access self.
+  # pylint: disable=R0201,W0221
 
   _CATEGORY_SPLITTER = '|'
   _MINIMUM_DELAY_BETWEEN_ALERT = 600  # 10 minutes in seconds

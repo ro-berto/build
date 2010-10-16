@@ -278,7 +278,7 @@ class GClient(commands.SourceBase):
     d.addCallback(lambda _: self.doGclientUpdate())
     return d
 
-  def doClobber(self, dummy, dirname):
+  def doClobber(self, dummy, dirname, _=False):
     """Move the old directory aside, or delete it if that's already been done.
 
     This function is designed to be used with a source dir.  If it's called

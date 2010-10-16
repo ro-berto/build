@@ -72,6 +72,15 @@ def FormatHumanReadable(number):
   return '%s%s' % (digits, METRIC_SUFFIX[exponent])
 
 
+def Prepend(filename, data):
+  chromium_utils.Prepend(filename, data)
+  os.chmod(filename, READABLE_FILE_PERMISSIONS)
+
+
+def JoinWithSpacesAndNewLine(array):
+  return ' '.join(str(x) for x in array) + '\n'
+
+
 class PerformanceLogProcessor(object):
   """ Parent class for performance log parsers. """
 
@@ -104,10 +113,6 @@ class PerformanceLogProcessor(object):
 
     # The revision isn't known until the Process() call.
     self._revision = -1
-
-  def Prepend(self, filename, data):
-    chromium_utils.Prepend(filename, data)
-    os.chmod(filename, READABLE_FILE_PERMISSIONS)
 
   def LoadPerformanceExpectationsData(self, all_perf_data):
     """Load the expectations data.
@@ -310,12 +315,6 @@ class PerformanceLogProcessor(object):
     """
     return self._revision > 0 and self.ReportLink()
 
-  def _JoinWithSpaces(self, array):
-    return ' '.join([str(x) for x in array])
-
-  def _JoinWithSpacesAndNewLine(self, array):
-    return '%s\n' % self._JoinWithSpaces(array)
-
   def _MakeOutputDirectory(self):
     if self._output_dir and not os.path.exists(self._output_dir):
       os.makedirs(self._output_dir)
@@ -355,7 +354,7 @@ class BenchpressLogProcessor(PerformanceLogProcessor):
 
     if self._ShouldWriteResults():
       filename = os.path.join(self._output_dir, 'summary.dat')
-      self.Prepend(filename, self._JoinWithSpacesAndNewLine(results))
+      Prepend(filename, JoinWithSpacesAndNewLine(results))
 
     # TODO(pamg): append an appropriate metric to the waterfall display if
     # we start running these tests again.
@@ -449,12 +448,11 @@ class PlaybackLogProcessor(PerformanceLogProcessor):
       # Write the details file, which contains the raw results.
       if self._ShouldWriteResults():
         filename = os.path.join(self._output_dir, 'details.dat')
-        self.Prepend(filename, simplejson.dumps({revision : summary_data}) +
+        Prepend(filename, simplejson.dumps({revision : summary_data}) +
                                                 '\n')
 
-      for type in summary_data.keys():
-        for test_name in summary_data[type].keys():
-          test = summary_data[type][test_name]
+      for summary in summary_data.itervalues():
+        for test in summary.itervalues():
           mean, stdd = chromium_utils.MeanAndStandardDeviation(test['data'])
           test['mean'] = str(FormatFloat(mean))
           test['stdd'] = str(FormatFloat(stdd))
@@ -465,8 +463,7 @@ class PlaybackLogProcessor(PerformanceLogProcessor):
       # to draw the graphs).
       if self._ShouldWriteResults():
         filename = os.path.join(self._output_dir, 'summary.dat')
-        self.Prepend(filename, simplejson.dumps({revision : summary_data}) +
-                                                '\n')
+        Prepend(filename, simplejson.dumps({revision : summary_data}) + '\n')
     return []
 
 
@@ -523,6 +520,9 @@ class GraphingLogProcessor(PerformanceLogProcessor):
   reference value, and shown alongside the corresponding main value on the
   waterfall.
   """
+  # _CalculateStatistics needs to be a member function.
+  # pylint: disable=R0201
+
   RESULTS_REGEX = re.compile(
       r'(?P<IMPORTANT>\*)?RESULT '
        '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
@@ -675,7 +675,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       if  self._ShouldWriteResults():
         filename = os.path.join(self._output_dir,
                                 "%s-summary.dat" % graph_name)
-        self.Prepend(filename, self.__BuildSummaryJSON(graph) + "\n")
+        Prepend(filename, self.__BuildSummaryJSON(graph) + "\n")
 
       # Add a line to the waterfall for each important trace.
       for trace_name, trace in graph.traces.iteritems():
@@ -755,6 +755,8 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
 
   def _ProcessLine(self, line):
     """Also looks for the Pages: line to find the page count."""
+    # super() should be used instead of GetParentClass().
+    # pylint: disable=W0212
     line_match = self.PAGES_REGEXP.match(line)
     if line_match:
       self._page_list = line_match.groupdict()['LIST'].strip().split(',')
@@ -804,11 +806,11 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
       file_data.append("%s (%s+/-%s): %s" % (page,
            FormatFloat(mean),
            FormatFloat(stddev),
-           self._JoinWithSpacesAndNewLine(times)))
+           JoinWithSpacesAndNewLine(times)))
 
     filename = os.path.join(self._output_dir,
                             '%s_%s.dat' % (self._revision, trace_name))
-    file = open(filename, 'w')
-    file.write(''.join(file_data))
-    file.close()
+    fileobj = open(filename, 'w')
+    fileobj.write(''.join(file_data))
+    fileobj.close()
     os.chmod(filename, READABLE_FILE_PERMISSIONS)

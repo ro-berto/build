@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from master import goodrevisions
-from master import master_config
 
 # This is the list of builders with their respective list of critical steps
 # that all need to succeed to mark a revision as successful. A single failure

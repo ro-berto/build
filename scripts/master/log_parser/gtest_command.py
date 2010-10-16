@@ -12,6 +12,8 @@ from buildbot.process import buildstep
 
 class TestObserver(buildstep.LogLineObserver):
   """This class knows how to understand GTest test output."""
+  # TestAbbrFromTestID needs to be a member function.
+  # pylint: disable=R0201
 
   def __init__(self):
     buildstep.LogLineObserver.__init__(self)
@@ -51,7 +53,7 @@ class TestObserver(buildstep.LogLineObserver):
     self._flaky        = re.compile('  YOU HAVE (\d+) FLAKY TEST')
 
     self._builder_name_re = re.compile('\[Running on builder: "([^"]*)"')
-    self._builder_name = ''
+    self.builder_name = ''
 
   def _StatusOfTest(self, test):
     """Returns the status code for the given test, or 'not known'."""
@@ -123,10 +125,10 @@ class TestObserver(buildstep.LogLineObserver):
     # Track line number for error messages.
     self._line_number += 1
 
-    if not self._builder_name:
+    if not self.builder_name:
       results = self._builder_name_re.search(line)
       if results:
-        self._builder_name = results.group(1)
+        self.builder_name = results.group(1)
 
     # Is it a line reporting disabled tests?
     results = self._disabled.search(line)
@@ -218,6 +220,8 @@ class TestObserver(buildstep.LogLineObserver):
 
 class GTestCommand(shell.ShellCommand):
   """Buildbot command that knows how to display GTest output."""
+  # TestAbbrFromTestID needs to be a member function.
+  # pylint: disable=R0201
 
   _GTEST_DASHBOARD_BASE = ("http://test-results.appspot.com"
     "/dashboards/flakiness_dashboard.html")
@@ -263,12 +267,12 @@ class GTestCommand(shell.ShellCommand):
 
     if failed_test_count:
       failure_text = ['failed %d' % failed_test_count]
-      if self.test_observer._builder_name:
+      if self.test_observer.builder_name:
         # Include the link to the flakiness dashboard
         failure_text.append('<div class="BuildResultInfo">')
         failure_text.append('<a href="%s#referringBuilder=%s&testType=%s'
                             '&tests=%s">' % (
-            self._GTEST_DASHBOARD_BASE, self.test_observer._builder_name,
+            self._GTEST_DASHBOARD_BASE, self.test_observer.builder_name,
             self.describe(True)[0],
             ','.join(self.test_observer.FailedTests())))
         failure_text.append('Flakiness dashboard')
@@ -278,11 +282,11 @@ class GTestCommand(shell.ShellCommand):
       failure_text = ['crashed or hung']
     return basic_info + failure_text
 
-  def _TestAbbrFromTestID(self, id):
+  def TestAbbrFromTestID(self, testid):
     """Split the test's individual name from GTest's full identifier.
     The name is assumed to be everything after the final '.', if any.
     """
-    return id.split('.')[-1]
+    return testid.split('.')[-1]
 
   def createSummary(self, log):
     observer = self.test_observer
@@ -291,13 +295,13 @@ class GTestCommand(shell.ShellCommand):
       # the test names only.  Unfortunately, addCompleteLog uses the name as
       # both link text and part of the text file name, so we can't incude
       # HTML tags such as <abbr> in it.
-      self.addCompleteLog(self._TestAbbrFromTestID(failure),
+      self.addCompleteLog(self.TestAbbrFromTestID(failure),
                           '\n'.join(observer.FailureDescription(failure)))
 
 
 class GTestFullCommand(GTestCommand):
-  def _TestAbbrFromTestID(self, id):
+  def TestAbbrFromTestID(self, testid):
     """
     Return the full TestCase.TestName ID.
     """
-    return id
+    return testid

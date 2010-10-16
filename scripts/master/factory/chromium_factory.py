@@ -288,7 +288,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                  'darwin': 'mac',
                  'linux2': 'linux' }
       zip_plat = platmap[self._target_platform]
-      workdir = os.path.join(f._working_dir, 'chrome-' + zip_plat)
+      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
       f.AddPyAutoFunctionalTest('pyauto_functional_tests',
                                 src_base='..',
                                 workdir=workdir)

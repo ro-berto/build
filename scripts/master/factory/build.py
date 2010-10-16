@@ -14,6 +14,7 @@ class Build(base.Build):
   """Build class that inherits the BuildFactory properties."""
 
   def __init__(self, request, factory_properties):
+    self.result = None
     base.Build.__init__(self, request)
     self._factory_properties = factory_properties
 

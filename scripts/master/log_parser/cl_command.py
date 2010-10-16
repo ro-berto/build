@@ -9,9 +9,10 @@ output.
 """
 
 import re
-from twisted.web import util
+
 from buildbot.steps import shell
 from buildbot.status import builder
+from twisted.web import util
 
 # One of these two strings, used to identify the build system, must appear in
 # the build output before any compiler output from individual projects.
@@ -19,7 +20,11 @@ VS_NAME = 'Visual Studio Version 8'
 IB_NAME = 'IncrediBuild Console 3'
 
 
-class IbOutputParser:
+def MakeHtmlFriendly(line):
+  return '%s<br />' % util.htmlIndent(line)
+
+
+class IbOutputParser(object):
   """ Class that parses IB Log and outputs HTML
 
   If VS log is fed, immidatedly converts it to IB log
@@ -72,6 +77,9 @@ class IbOutputParser:
     self.log_content = log_content
     self.__failed_projects = None
     self.__lines_with_warnings = None
+    # {projectname : [error lines]}
+    self.project_errors = {}
+    self.project_name_being_processed = None
     if not self._IsIbLog():
       self.log_content = DevenvLogToIbLog(self.log_content).Convert()
 
@@ -126,12 +134,12 @@ class IbOutputParser:
     return True
 
   def _ResetState(self):
-    self.project_errors = {} # {projectname : [error lines]}
+    self.project_errors = {}
     self.project_name_being_processed = None
 
   def _ProcessLine(self, line):
     self._UpdateProjectName(line)
-    content = self._MakeHtmlFriendly(line)
+    content = MakeHtmlFriendly(line)
     content = self._ApplyPossibleErrorHtmlAttributes(content)
     return content
 
@@ -149,13 +157,10 @@ class IbOutputParser:
       self.project_errors[self.project_name_being_processed] = []
     self.project_errors[self.project_name_being_processed].append(content)
 
-  def _MakeHtmlFriendly(self, line):
-    return '%s<br />' % util.htmlIndent(line)
-
   def _UpdateProjectName(self, line):
     match = IbOutputParser.NAME_MATCHER.match(line)
     if match:
-      self.project_name_being_processed =  match.group(1)
+      self.project_name_being_processed = match.group(1)
 
   def _HtmlHeader(self):
     html = [IbOutputParser.HEADER, '<div id="header">']
@@ -226,7 +231,7 @@ class DevenvLogToIbLog:
     """Groups log lines per project and makes them look like IB log lines"""
 
     all_projects_output = []
-    for project_id, output in self.__project_outputs.iteritems():
+    for output in self.__project_outputs.itervalues():
       if len(output) > 0:
         match = DevenvLogToIbLog.PROJECT_HEADER_REGEXP.match(output[0])
         output[0] = (
@@ -244,7 +249,7 @@ class CLCommand(shell.Compile):
   """Buildbot command that knows how to display the CL compiler output."""
 
   def __init__(self, enable_warnings, **kwargs):
-    shell.ShellCommand.__init__(self, **kwargs)
+    shell.Compile.__init__(self, **kwargs)
     self.workdir = None
 
   def createSummary(self, log):
@@ -261,14 +266,10 @@ class CLCommand(shell.Compile):
       return error_lines
 
   def __AddLogs(self):
-    try:
-      ib_output_parser = IbOutputParser(self.getLog('stdio').getText())
-      self.__AddErrorHtmlLog(ib_output_parser)
-      self.__AddFailedProjectNames(ib_output_parser)
-      self.__AddWarningLog(ib_output_parser)
-    except:
-      # Regex groups can possibly fail
-      pass
+    ib_output_parser = IbOutputParser(self.getLog('stdio').getText())
+    self.__AddErrorHtmlLog(ib_output_parser)
+    self.__AddFailedProjectNames(ib_output_parser)
+    self.__AddWarningLog(ib_output_parser)
 
   def  __AddFailedProjectNames(self, ib_output_parser):
     failed_projects = ib_output_parser.FailedProjects()

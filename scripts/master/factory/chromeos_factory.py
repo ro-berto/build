@@ -234,6 +234,8 @@ class CbuildbotFactory(object):
       crosutils_repo: git repo for crosutils toolset.
   """
 
+  # type is aliasing builtin.
+  # pylint: disable=W0622
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
                triagelog=None, params='', timeout=9000, variant=None,
                is_master=False,

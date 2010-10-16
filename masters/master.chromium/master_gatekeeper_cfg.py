@@ -2,9 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from master import build_utils
 from master import gatekeeper
-from master import master_config
 from master import master_utils
 
 # This is the list of the builder categories and the corresponding critical

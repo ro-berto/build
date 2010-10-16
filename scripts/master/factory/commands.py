@@ -25,6 +25,43 @@ from master.optional_arguments import ListProperties
 import config
 
 
+# Performance step utils.
+def CreatePerformanceStepClass(
+    log_processor_class, report_link=None, output_dir=None,
+    factory_properties=None, perf_name=None, test_name=None,
+    command_class=None):
+  """Returns ProcessLogShellStep class.
+
+  Args:
+    log_processor_class: class that will be used to process logs. Normally
+      should be a subclass of process_log.PerformanceLogProcessor.
+    report_link: URL that will be used as a link to results. If None,
+      result won't be written into file.
+    output_dir: directory where the log processor will write the results.
+    command_class: command type to run for this step. Normally this will be
+      chromium_step.ProcessLogShellStep.
+  """
+  factory_properties = factory_properties or {}
+  command_class = command_class or chromium_step.ProcessLogShellStep
+  # We create a log-processor class using
+  # chromium_utils.InitializePartiallyWithArguments, which uses function
+  # currying to create classes that have preset constructor arguments.
+  # This serves two purposes:
+  # 1. Allows the step to instantiate its log processor without any
+  #    additional parameters;
+  # 2. Creates a unique log processor class for each individual step, so
+  # they can keep state that won't be shared between builds
+  log_processor_class = chromium_utils.InitializePartiallyWithArguments(
+      log_processor_class, report_link=report_link, output_dir=output_dir,
+      factory_properties=factory_properties, perf_name=perf_name,
+      test_name=test_name)
+  # Similarly, we need to allow buildbot to create the step itself without
+  # using additional parameters, so we create a step class that already
+  # knows which log_processor to use.
+  return chromium_utils.InitializePartiallyWithArguments(
+      command_class, log_processor_class=log_processor_class)
+
+
 class FactoryCommands(object):
   # Base URL for performance test results.
   PERF_BASE_URL = config.Master.perf_base_url
@@ -124,7 +161,7 @@ class FactoryCommands(object):
     else:
       self._python = 'python'
 
-    self._working_dir = 'build'
+    self.working_dir = 'build'
     self._repository_root = 'src'
 
     self._kill_tool = self.PathJoin(self._script_dir, 'kill_processes.py')
@@ -325,7 +362,7 @@ class FactoryCommands(object):
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,
-                          workdir=self._working_dir,
+                          workdir=self.working_dir,
                           mode='update',
                           env=env,
                           locks=[self.slave_exclusive_lock],
@@ -364,7 +401,7 @@ class FactoryCommands(object):
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,
-                          workdir=self._working_dir,
+                          workdir=self.working_dir,
                           mode='clobber',
                           env=env,
                           timeout=timeout,
@@ -472,43 +509,6 @@ class FactoryCommands(object):
                                                        mode,
                                                        options))
 
-
-  # Performance step utils.
-  def _CreatePerformanceStepClass(
-      self, log_processor_class, report_link=None, output_dir=None,
-      factory_properties=None, perf_name=None, test_name=None,
-      command_class=None):
-    """Returns ProcessLogShellStep class.
-
-    Args:
-      log_processor_class: class that will be used to process logs. Normally
-        should be a subclass of process_log.PerformanceLogProcessor.
-      report_link: URL that will be used as a link to results. If None,
-        result won't be written into file.
-      output_dir: directory where the log processor will write the results.
-      command_class: command type to run for this step. Normally this will be
-        chromium_step.ProcessLogShellStep.
-    """
-    factory_properties = factory_properties or {}
-    command_class = command_class or chromium_step.ProcessLogShellStep
-    # We create a log-processor class using
-    # chromium_utils.InitializePartiallyWithArguments, which uses function
-    # currying to create classes that have preset constructor arguments.
-    # This serves two purposes:
-    # 1. Allows the step to instantiate its log processor without any
-    #    additional parameters;
-    # 2. Creates a unique log processor class for each individual step, so
-    # they can keep state that won't be shared between builds
-    log_processor_class = chromium_utils.InitializePartiallyWithArguments(
-        log_processor_class, report_link=report_link, output_dir=output_dir,
-        factory_properties=factory_properties, perf_name=perf_name,
-        test_name=test_name)
-    # Similarly, we need to allow buildbot to create the step itself without
-    # using additional parameters, so we create a step class that already
-    # knows which log_processor to use.
-    return chromium_utils.InitializePartiallyWithArguments(
-        command_class, log_processor_class=log_processor_class)
-
   def GetPerfStepClass(self, factory_properties, test_name, log_processor_class,
                        command_class=None, **kwargs):
     """Selects the right build step for the specified perf test."""
@@ -529,7 +529,7 @@ class FactoryCommands(object):
                                      self.PERF_REPORT_URL_SUFFIX)
       output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
 
-    return self._CreatePerformanceStepClass(log_processor_class,
+    return CreatePerformanceStepClass(log_processor_class,
                report_link=report_link, output_dir=output_dir,
                factory_properties=factory_properties, perf_name=perf_name,
                test_name=test_name, command_class=command_class)

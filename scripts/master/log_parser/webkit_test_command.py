@@ -5,11 +5,21 @@
 
 """A buildbot command for running and interpreting webkit layout tests."""
 
-
 import re
+
 from buildbot.process import buildstep
 from buildbot.steps import shell
 from buildbot.status import builder
+
+
+def _BasenameFromPath(path):
+  """Extracts the basename of either a Unix- or Windows- style path,
+  assuming it contains either \ or / but not both.
+  """
+  short_path = path.split('\\')[-1]
+  short_path = short_path.split('/')[-1]
+  return short_path
+
 
 class TestObserver(buildstep.LogLineObserver):
   """This class knows how to understand webkit test output."""
@@ -48,16 +58,16 @@ class TestObserver(buildstep.LogLineObserver):
     self._summary_start = re.compile(
         '=> Tests to be fixed for the current release \((\d+)\):')
     self._summary_skipped = re.compile('(\d+) skipped')
-    
+
     self._builder_name_re = re.compile('--builder-name "([^"]*)"')
-    self._builder_name = ''
+    self.builder_name = ''
 
   def outLineReceived(self, line):
     """This is called once with each line of the test log."""
 
     results = self._builder_name_re.search(line)
     if results:
-      self._builder_name = results.group(1)
+      self.builder_name = results.group(1)
 
     results = self._passing_start.search(line)
     if results:
@@ -138,20 +148,12 @@ class WebKitCommand(shell.ShellCommand):
       return builder.WARNINGS
     return builder.SUCCESS
 
-  def _BasenameFromPath(self, path):
-    """Extracts the basename of either a Unix- or Windows- style path,
-    assuming it contains either \ or / but not both.
-    """
-    short_path = path.split('\\')[-1]
-    short_path = short_path.split('/')[-1]
-    return short_path
-
-  def _BuildTestList(self, tests, max, description):
+  def _BuildTestList(self, tests, maxlen, description):
     """Returns a list of test links to be shown in the waterfall.
 
     Args:
       tests: list of test paths to show
-      max: show at most this many, with '...and more' appended if needed
+      maxlen: show at most this many, with '...and more' appended if needed
       description: a few words describing the tests, e.g. 'failed'
     """
     if not len(tests):
@@ -161,14 +163,14 @@ class WebKitCommand(shell.ShellCommand):
     full_desc.append('<div class="BuildResultInfo">')
 
     full_desc.append('<a href="%s#referringBuilder=%s&tests=%s">' % (
-        self._LAYOUT_TEST_DASHBOARD_BASE, self.test_observer._builder_name,
+        self._LAYOUT_TEST_DASHBOARD_BASE, self.test_observer.builder_name,
         ','.join(tests)))
 
     # Display test names, with full paths as tooltips.
-    for path in tests[:max]:
+    for path in tests[:maxlen]:
       full_desc.append('<abbr title="%s">%s</abbr>' %
-                       (path, self._BasenameFromPath(path)))
-    if len(tests) > max:
+                       (path, _BasenameFromPath(path)))
+    if len(tests) > maxlen:
       full_desc.append('...and more')
 
     full_desc.append('</a>')

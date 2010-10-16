@@ -164,7 +164,7 @@ class ChromiumCommands(commands.FactoryCommands):
     Unlike other "test step" commands, this one can cancel the build
     while still keeping it green.
 
-    Note we use "." as a root (which is the same as self._working_dir)
+    Note we use "." as a root (which is the same as self.working_dir)
     to make sure a clobber step deletes the saved lkgr file.
     """
     cmd = [self._python, self._check_lkgr_tool, '--root', '.']
@@ -317,8 +317,8 @@ class ChromiumCommands(commands.FactoryCommands):
       def Process(self, *args, **kw):
         return self.graphing.Process(*args, **kw)
 
-      def _TestAbbrFromTestID(self, *args, **kw):
-        return self.gtest._TestAbbrFromTestID(*args, **kw)
+      def TestAbbrFromTestID(self, *args, **kw):
+        return self.gtest.TestAbbrFromTestID(*args, **kw)
       def createSummary(self, *args, **kw):
         return self.gtest.createSummary(*args, **kw)
 

@@ -211,10 +211,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     from buildbot import manhole
     # If 'port' is defined, it uses the same valid keys as the current user.
     values = {}
-    try:
-      execfile('.manhole', values)
-    except:
-      pass
+    execfile('.manhole', values)
     if 'debugPassword' in values:
       c['debugPassword'] = values['debugPassword']
     interface = 'tcp:%s:interface=127.0.0.1' % values.get('port', 0)
