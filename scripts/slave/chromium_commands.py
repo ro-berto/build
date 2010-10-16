@@ -9,12 +9,11 @@ directly imported from buildbot/slave/bot.py."""
 
 import os
 import re
-import sys
 
-from twisted.python import log
-from twisted.internet import defer
 from buildbot.slave import commands
 from buildbot.slave.registry import registerSlaveCommand
+from twisted.python import log
+from twisted.internet import defer
 
 from common import chromium_utils
 
@@ -36,6 +35,45 @@ def FixDiffLineEnding(diff):
     else:
       output += line
   return output
+
+
+def untangle(stdout_lines):
+  """Sort the lines of stdout by the job number prefix."""
+  out = []
+  tasks = {}
+  UNTANGLE_RE = re.compile(r'^(\d+)>(.*)$')
+  for line in stdout_lines:
+    m = UNTANGLE_RE.match(line)
+    if not m:
+      if line:  # skip empty lines
+        # Output untangled lines so far.
+        for key in sorted(tasks.iterkeys()):
+          out.extend(tasks[key])
+        tasks = {}
+        out.append(line)
+    else:
+      if m.group(2):  # skip empty lines
+        tasks.setdefault(int(m.group(1)), []).append(m.group(2))
+  for key in sorted(tasks.iterkeys()):
+    out.extend(tasks[key])
+  return out
+
+
+def _RenameDirectoryCommand(src_dir, dest_dir):
+  """Returns a command list to rename a directory (or file) using Python."""
+  # Use / instead of \ in paths to avoid issues with escaping.
+  return ['python', '-c',
+          'import os; '
+          'os.rename("%s", "%s")' %
+              (src_dir.replace('\\', '/'), dest_dir.replace('\\', '/'))]
+
+
+def _RemoveFileCommand(filename):
+  """Returns a command list to remove a directory (or file) using Python."""
+  # Use / instead of \ in paths to avoid issues with escaping.
+  return ['python', '-c',
+          'from common import chromium_utils; '
+          'chromium_utils.RemoveFile("%s")' % filename.replace('\\', '/')]
 
 
 class GClient(commands.SourceBase):
@@ -63,8 +101,29 @@ class GClient(commands.SourceBase):
   ['env']:
     Augment os.environ.
   """
+  # doClobber has a weird extra argument in the base class, generating a pylint
+  # warning.
+  # pylint: disable=W0221
 
   header = 'gclient'
+
+  def __init__(self, *args, **kwargs):
+    # TODO(maruel): Mainly to keep pylint happy, remove once buildbot fixed
+    # their style.
+    self.branch = None
+    self.srcdir = None
+    self.revision = None
+    self.env = None
+    self.sourcedatafile = None
+    self.patch = None
+    self.command = None
+    self.vcexe = None
+    self.svnurl = None
+    self.sudo_for_remove = None
+    self.gclient_spec = None
+    self.gclient_deps = None
+    self.rm_timeout = None
+    commands.SourceBase.__init__(self, *args, **kwargs)
 
   def setup(self, args):
     """Our implementation of command.Commands.setup() method.
@@ -152,36 +211,10 @@ class GClient(commands.SourceBase):
       cmd = ['sudo'] + cmd
     return cmd
 
-  def _RenameDirectoryCommand(self, src_dir, dest_dir):
-    """Returns a command list to rename a directory (or file) using Python."""
-    # Use / instead of \ in paths to avoid issues with escaping.
-    return ['python', '-c',
-            'import os; '
-            'os.rename("%s", "%s")' %
-                (src_dir.replace('\\', '/'), dest_dir.replace('\\', '/'))]
-
-  def _RemoveFileCommand(self, file):
-    """Returns a command list to remove a directory (or file) using Python."""
-    # Use / instead of \ in paths to avoid issues with escaping.
-    return ['python', '-c',
-            'from common import chromium_utils; '
-            'chromium_utils.RemoveFile("%s")' % file.replace('\\', '/')]
-
-  def _RemoveFilesWildCardsCommand(self, file_wildcard):
-    """Returns a command list to delete files using Python.
-
-    Due to shell mangling, the path must not be using the character \\."""
-    if file_wildcard.find('\\') != -1:
-      raise InvalidPath(r"Contains unsupported character '\' :" +
-                        file_wildcard)
-    return ['python', '-c',
-            'from common import chromium_utils; '
-            'chromium_utils.RemoveFilesWildcards("%s")' % file_wildcard]
-
   def doGclientUpdate(self):
     """Sync the client
     """
-    dir = os.path.join(self.builder.basedir, self.srcdir)
+    dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(),
                'sync', '--verbose', '--reset', '--manually_grab_svn_rev',
                '--delete_unversioned_trees']
@@ -198,7 +231,7 @@ class GClient(commands.SourceBase):
     if self.gclient_deps:
       command.append('--deps=' + self.gclient_deps)
 
-    c = commands.ShellCommand(self.builder, command, dir,
+    c = commands.ShellCommand(self.builder, command, dirname,
                               sendRC=False, timeout=self.timeout,
                               keepStdout=True, environ=self.env)
     self.command = c
@@ -207,7 +240,7 @@ class GClient(commands.SourceBase):
   def getGclientConfigCommand(self):
     """Return the command to run the gclient config step.
     """
-    dir = os.path.join(self.builder.basedir, self.srcdir)
+    dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(), 'config']
 
     if self.gclient_spec:
@@ -215,7 +248,7 @@ class GClient(commands.SourceBase):
     else:
       command.append(self.svnurl)
 
-    c = commands.ShellCommand(self.builder, command, dir,
+    c = commands.ShellCommand(self.builder, command, dirname,
                               sendRC=False, timeout=self.timeout,
                               keepStdout=True, environ=self.env)
     return c
@@ -235,8 +268,8 @@ class GClient(commands.SourceBase):
   def doVCFull(self):
     """Setup the .gclient file and then sync
     """
-    dir = os.path.join(self.builder.basedir, self.srcdir)
-    os.mkdir(dir)
+    dirname = os.path.join(self.builder.basedir, self.srcdir)
+    os.mkdir(dirname)
 
     c = self.getGclientConfigCommand()
     self.command = c
@@ -268,7 +301,7 @@ class GClient(commands.SourceBase):
       if os.path.isdir(dead_dir):
         command = self._RemoveDirectoryCommand(old_dir)
       else:
-        command = self._RenameDirectoryCommand(old_dir, dead_dir)
+        command = _RenameDirectoryCommand(old_dir, dead_dir)
       c = commands.ShellCommand(self.builder, command, self.builder.basedir,
                                 sendRC=0, timeout=self.rm_timeout,
                                 environ=self.env)
@@ -286,9 +319,9 @@ class GClient(commands.SourceBase):
     it is assumed that .orig and .rej files will be reverted, e.g. deleted by
     the 'gclient revert' command. If the try bot is configured with
     'global-ignores=*.orig', patch failure will occur."""
-    dir = os.path.join(self.builder.basedir, self.srcdir)
+    dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(), 'revert', '--nohooks']
-    c = commands.ShellCommand(self.builder, command, dir,
+    c = commands.ShellCommand(self.builder, command, dirname,
                               sendRC=False, timeout=self.timeout,
                               keepStdout=True, environ=self.env)
     self.command = c
@@ -303,10 +336,10 @@ class GClient(commands.SourceBase):
 
     Must be called after a revert has been done and the patch residues have
     been removed."""
-    command = self._RemoveFileCommand(os.path.join(self.builder.basedir,
-                           self.srcdir, '.buildbot-patched'))
-    dir = os.path.join(self.builder.basedir, self.srcdir)
-    c = commands.ShellCommand(self.builder, command, dir,
+    command = _RemoveFileCommand(os.path.join(self.builder.basedir,
+                                 self.srcdir, '.buildbot-patched'))
+    dirname = os.path.join(self.builder.basedir, self.srcdir)
+    c = commands.ShellCommand(self.builder, command, dirname,
                               sendRC=False, timeout=self.timeout,
                               keepStdout=True, environ=self.env)
     self.command = c
@@ -327,19 +360,19 @@ class GClient(commands.SourceBase):
         '--force',
         '--forward',
     ]
-    dir = os.path.join(self.builder.basedir, self.workdir)
+    dirname = os.path.join(self.builder.basedir, self.workdir)
     # Mark the directory so we don't try to update it later.
-    open(os.path.join(dir, ".buildbot-patched"), "w").write("patched\n")
+    open(os.path.join(dirname, ".buildbot-patched"), "w").write("patched\n")
 
-    # Update 'dir' with the 'root' option. Make sure it is a subdirectory
-    # of dir.
+    # Update 'dirname' with the 'root' option. Make sure it is a subdirectory
+    # of dirname.
     if (root and
-        os.path.abspath(os.path.join(dir, root)
-                        ).startswith(os.path.abspath(dir))):
-      dir = os.path.join(dir, root)
+        os.path.abspath(os.path.join(dirname, root)
+                        ).startswith(os.path.abspath(dirname))):
+      dirname = os.path.join(dirname, root)
 
     # Now apply the patch.
-    c = commands.ShellCommand(self.builder, command, dir,
+    c = commands.ShellCommand(self.builder, command, dirname,
                               sendRC=False, timeout=self.timeout,
                               initialStdin=diff, environ=self.env)
     self.command = c
@@ -357,9 +390,9 @@ class GClient(commands.SourceBase):
 
   def doRunHooks(self, dummy):
     """Runs "gclient runhooks" after patching."""
-    dir = os.path.join(self.builder.basedir, self.srcdir)
+    dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(), 'runhooks']
-    c = commands.ShellCommand(self.builder, command, dir,
+    c = commands.ShellCommand(self.builder, command, dirname,
                               sendRC=False, timeout=self.timeout,
                               keepStdout=True, environ=self.env)
     self.command = c
@@ -418,7 +451,7 @@ class GClient(commands.SourceBase):
     webkit_revision = None
     found_webkit_update = False
 
-    untangled_stdout = self._untangle(self.command.stdout.splitlines(False))
+    untangled_stdout = untangle(self.command.stdout.splitlines(False))
     # We only care about the last sync which starts with "solutions=[...".
     # Look backwards to find the last one first.
     for i, line in enumerate(reversed(untangled_stdout)):
@@ -451,27 +484,6 @@ class GClient(commands.SourceBase):
         break
 
     return chromium_revision, webkit_revision
-
-  def _untangle(self, stdout_lines):
-    """Sort the lines of stdout by the job number prefix."""
-    out = []
-    tasks = {}
-    UNTANGLE_RE = re.compile(r'^(\d+)>(.*)$')
-    for line in stdout_lines:
-      m = UNTANGLE_RE.match(line)
-      if not m:
-        if line:  # skip empty lines
-          # Output untangled lines so far.
-          for key in sorted(tasks.iterkeys()):
-            out.extend(tasks[key])
-          tasks = {}
-          out.append(line)
-      else:
-        if m.group(2):  # skip empty lines
-          tasks.setdefault(int(m.group(1)), []).append(m.group(2))
-    for key in sorted(tasks.iterkeys()):
-      out.extend(tasks[key])
-    return out
 
   def _handleGotRevision(self, res):
     """Send parseGotRevision() return values as status updates to the master."""

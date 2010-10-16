@@ -78,7 +78,26 @@ def GetStackTrace(debugger_dir, symbol_path, dump_file):
   return output[stack_start:stack_end]
 
 
-def main(options, args):
+def main():
+  parser = optparse.OptionParser()
+  parser.add_option('', '--dump-dir', type='string', default='',
+                    help='The directory where dump files are stored.')
+  parser.add_option('', '--debugger-dir', type='string', default='',
+                    help='The directory where the debugger is installed.'
+                         'The debugger is used to get stack trace from dumps.')
+  parser.add_option('', '--build-dir', default='chrome',
+                    help='path to main build directory (the parent of '
+                         'the Release or Debug directory)')
+  parser.add_option('', '--target', default='Release',
+                    help='build target (Debug or Release)')
+  parser.add_option('', '--archive-dir', type='string', default='',
+                    help='If specified, save dump files to the archive'
+                         'directory.')
+
+  options, args = parser.parse_args()
+  if args:
+    parser.error('Unknown args "%s"' % ' '.join(args))
+    return 1
   debugger_dir = options.debugger_dir
   if not os.path.exists(debugger_dir):
     debugger_dir = ProbeDebuggerDir()
@@ -116,20 +135,4 @@ def main(options, args):
 
 
 if '__main__' == __name__:
-  parser = optparse.OptionParser()
-  parser.add_option('', '--dump-dir', type='string', default='',
-                    help='The directory where dump files are stored.')
-  parser.add_option('', '--debugger-dir', type='string', default='',
-                    help='The directory where the debugger is installed.'
-                         'The debugger is used to get stack trace from dumps.')
-  parser.add_option('', '--build-dir', default='chrome',
-                    help='path to main build directory (the parent of '
-                         'the Release or Debug directory)')
-  parser.add_option('', '--target', default='Release',
-                    help='build target (Debug or Release)')
-  parser.add_option('', '--archive-dir', type='string', default='',
-                    help='If specified, save dump files to the archive'
-                         'directory.')
-
-  (options, args) = parser.parse_args()
-  sys.exit(main(options, args))
+  sys.exit(main())

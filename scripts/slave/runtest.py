@@ -38,6 +38,7 @@ from common import chromium_utils
 from slave import slave_utils
 import config
 
+# pylint: disable=F0401
 import google.httpd_utils
 import google.platform_utils
 
@@ -88,30 +89,31 @@ class GTestUnexpectedDeathTracker(object):
     fout = open(path, "w")
     if not fout:
       return False
+    try:
+      fout.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+      fout.write('<testsuites name="AllTests">\n')
 
-    fout.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    fout.write('<testsuites name="AllTests">\n')
+      last_test_suite = None
+      for test in sorted(self.failed_tests):
+        test_name = test.split('.')
+        if len(test_name) != 2:
+          continue
+        if last_test_suite != test_name[0]:
+          if last_test_suite:
+            fout.write('</testsuite>\n')
+          fout.write('<testsuite name="%s">\n' % test_name[0])
+          last_test_suite = test_name[0]
 
-    last_test_suite = None
-    for test in sorted(self.failed_tests):
-      test_name = test.split('.')
-      if len(test_name) != 2:
-        continue
-      if last_test_suite != test_name[0]:
-        if last_test_suite:
-          fout.write('</testsuite>\n')
-        fout.write('<testsuite name="%s">\n' % test_name[0])
-        last_test_suite = test_name[0]
+        fout.write('<testcase name="%s" status="run" time="0" classname="%s">'
+                  % (test_name[1], test_name[0]))
+        fout.write('<failure message="" type=""></failure>')
+        fout.write('</testcase>\n')
 
-      fout.write('<testcase name="%s" status="run" time="0" classname="%s">'
-                 % (test_name[1], test_name[0]))
-      fout.write('<failure message="" type=""></failure>')
-      fout.write('</testcase>\n')
-
-    if last_test_suite:
-      fout.write('</testsuite>\n')
-    fout.write('</testsuites>\n')
-    fout.close()
+      if last_test_suite:
+        fout.write('</testsuite>\n')
+      fout.write('</testsuites>\n')
+    finally:
+      fout.close()
     return True
 
 
@@ -141,7 +143,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
     # from the log output.
     try:
       results_tracker.GenerateXML(options.test_output_xml)
-    except Exception, e:
+    except (OSError, IOError), e:
       print 'Unexpected error while generating XML: ', e
       return
     if not os.path.exists(options.test_output_xml):
@@ -171,8 +173,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
     print 'copying dashboard file %s to %s' % (src_full_path, dest_dir)
     chromium_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
     chromium_utils.CopyFileToArchiveHost(src_full_path, dest_dir)
-  except Exception, e:
-    # Catch everything here.
+  except (OSError, IOError), e:
     print 'Unexpected error while generating JSON: ', e
 
 def main_mac(options, args):
@@ -441,7 +442,7 @@ def main_win(options, args):
   return result
 
 
-if '__main__' == __name__:
+def main():
   # Initialize logging.
   log_level = logging.INFO
   logging.basicConfig(level=log_level,
@@ -509,11 +510,15 @@ if '__main__' == __name__:
     args.append('--gtest_output=xml:' + options.test_output_xml)
 
   if sys.platform.startswith('darwin'):
-    sys.exit(main_mac(options, args))
+    return main_mac(options, args)
   elif sys.platform == 'win32':
-    sys.exit(main_win(options, args))
+    return main_win(options, args)
   elif sys.platform == 'linux2':
-    sys.exit(main_linux(options, args))
+    return main_linux(options, args)
   else:
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
-    sys.exit(1)
+    return 1
+
+
+if '__main__' == __name__:
+  sys.exit(main())

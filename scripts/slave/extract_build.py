@@ -28,7 +28,7 @@ def urlretrieve(*args, **kwargs):
   return urllib.urlretrieve(*args, **kwargs)
 
 
-def main(options, args):
+def real_main(options, args):
   """ Download a build, extract it to build\BuildDir\full-build-win32
       and rename it to build\BuildDir\Target
   """
@@ -69,7 +69,7 @@ def main(options, args):
   url = options.build_url.replace('.zip', '_%d.zip' % current_revision)
 
   # We try to download and extract 3 times.
-  for tries in range(1,4):
+  for tries in range(1, 4):
     print 'Try %d: Fetching build from %s...' % (tries, url)
 
     failure = False
@@ -107,7 +107,7 @@ def main(options, args):
       chromium_utils.RemoveDirectory(target_build_output_dir)
       chromium_utils.ExtractZip(archive_name, abs_build_output_dir)
       shutil.move(output_dir, target_build_output_dir)
-    except:
+    except (OSError, IOError):
       print 'Failed to extract the build.'
       # Print out the traceback in a nice format
       traceback.print_exc()
@@ -134,7 +134,8 @@ def main(options, args):
   # If we get here, that means that it failed 3 times. We return a failure.
   return -1
 
-if '__main__' == __name__:
+
+def main():
   option_parser = optparse.OptionParser()
 
   option_parser.add_option('', '--target',
@@ -147,4 +148,8 @@ if '__main__' == __name__:
                            help='url where to find the build to extract')
 
   options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+  return real_main(options, args)
+
+
+if '__main__' == __name__:
+  sys.exit(main())

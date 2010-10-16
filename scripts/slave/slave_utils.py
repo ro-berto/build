@@ -42,7 +42,7 @@ def SubversionCat(wc_dir):
   try:
     return chromium_utils.GetCommandOutput([SubversionExe(), 'cat',
                                             wc_dir])
-  except:
+  except chromium_utils.ExternalError:
     return None
 
 def SubversionRevision(wc_dir):
@@ -58,7 +58,7 @@ def SubversionRevision(wc_dir):
       return int(return_value)
     else:
       return 0
-  except:
+  except chromium_utils.ExternalError:
     return 0
 
 def SubversionLastChangedRevision(wc_dir):
@@ -74,7 +74,7 @@ def SubversionLastChangedRevision(wc_dir):
       return int(return_value)
     else:
       return 0
-  except:
+  except chromium_utils.ExternalError:
     return 0
 
 
@@ -226,11 +226,8 @@ def StopVirtualX(slave_build_name):
   If a virtual x server is not running, this method does nothing."""
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   if os.path.exists(xvfb_pid_filename):
-    try:
-      # If the process doesn't exist, we raise an exception that we can ignore.
-      os.kill(int(open(xvfb_pid_filename).read()), signal.SIGKILL)
-    except:
-      pass
+    # If the process doesn't exist, we raise an exception that we can ignore.
+    os.kill(int(open(xvfb_pid_filename).read()), signal.SIGKILL)
     os.remove(xvfb_pid_filename)
 
 def RunPythonCommandInBuildDir(build_dir, target, command_line_args):

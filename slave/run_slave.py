@@ -11,10 +11,10 @@ import subprocess
 import sys
 
 
-def remove_all_vars_except(dict, vars):
-  """Remove all variable keys from the specified dict except those in vars"""
-  for key in set(dict.keys()) - set(vars):
-    dict.pop(key)
+def remove_all_vars_except(dictionary, keep):
+  """Remove all keys from the specified dictionary except those in !keep|"""
+  for key in set(dictionary.keys()) - set(keep):
+    dictionary.pop(key)
 
 
 def Reboot():

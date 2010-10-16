@@ -13,6 +13,7 @@
 
 import optparse
 import os
+import re
 import shutil
 import sys
 
@@ -23,11 +24,13 @@ from slave import slave_utils
 def ReadHKLMValue(path, value):
   """Retrieve the install path from the registry for Visual Studio 8.0 and
   Incredibuild."""
+  # Only available on Windows.
+  # pylint: disable=F0401
   import win32api, win32con
   try:
     regkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE,
                                    path, 0, win32con.KEY_READ)
-    (value, keytype) = win32api.RegQueryValueEx(regkey, value)
+    value = win32api.RegQueryValueEx(regkey, value)[0]
     win32api.RegCloseKey(regkey)
     return value
   except win32api.error:
@@ -79,8 +82,8 @@ def main_xcode(options, args):
   split_full_hostname = full_hostname.split('.', 2)
   env = os.environ.copy()
   if len(split_full_hostname) >= 3:
-    (hostname_only, hostname_subnet, ignored) = split_full_hostname
-    import re
+    hostname_only = split_full_hostname[0]
+    hostname_subnet = split_full_hostname[1]
     name_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname_only)
     if name_match:
       base_hostname = name_match.groups()[0]
@@ -120,7 +123,7 @@ def main_xcode(options, args):
   return result
 
 
-def common_linux_settings(command, env, crosstool=None, compiler=None):
+def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   """
   Sets desirable Linux environment variables and command-line options
   that are common to the Make and SCons builds.
@@ -230,7 +233,8 @@ def main_make(options, args):
 
   os.chdir(working_dir)
   env = os.environ.copy()
-  common_linux_settings(command, env, options.crosstool, options.compiler)
+  common_linux_settings(command, options, env, options.crosstool,
+      options.compiler)
 
   command.append('BUILDTYPE=' + options.target)
 
@@ -263,7 +267,7 @@ def main_scons(options, args):
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_linux_settings(command, env)
+    common_linux_settings(command, options, env)
   else:
     command.extend(['-k'])
 
@@ -303,7 +307,7 @@ def main_scons_v8(options, args):
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_linux_settings(command, env)
+    common_linux_settings(command, options, env)
   else:
     command.extend(['-k'])
 
@@ -334,7 +338,7 @@ def main_win(options, args):
       options.msvs_version = '8'
     else:
       print >> sys.stderr, "Unknown sln header:\n" + header
-      sys.exit(1)
+      return 1
 
   REG_ROOT = 'SOFTWARE\\Microsoft\\VisualStudio\\'
   devenv = ReadHKLMValue(REG_ROOT + options.msvs_version + '.0', 'InstallDir')
@@ -343,7 +347,7 @@ def main_win(options, args):
   else:
     print >> sys.stderr, ("MSVS %s was requested but is not installed." %
         options.msvs_version)
-    sys.exit(1)
+    return 1
 
   ib = ReadHKLMValue('SOFTWARE\\Xoreax\\IncrediBuild\\Builder', 'Folder')
   if ib:
@@ -441,7 +445,7 @@ def main_win(options, args):
   return result
 
 
-if '__main__' == __name__:
+def real_main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--clobber', action='store_true', default=False,
                            help='delete the output directory before compiling')
@@ -502,7 +506,7 @@ if '__main__' == __name__:
         main = main_scons
     else:
       print('Please specify --build-tool.')
-      sys.exit(1)
+      return 1
   else:
     build_tool_map = {
         'ib' : main_win,
@@ -515,6 +519,10 @@ if '__main__' == __name__:
     main = build_tool_map.get(options.build_tool)
     if not main:
       sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
-      sys.exit(2)
+      return 2
 
-  sys.exit(main(options, args))
+  return main(options, args)
+
+
+if '__main__' == __name__:
+  sys.exit(real_main())

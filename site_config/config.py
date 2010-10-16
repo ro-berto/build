@@ -18,8 +18,10 @@ from twisted.spread import banana
 
 # Override config_default with a config_private file.
 try:
+  # pylint: disable=F0401
   import config_private
 except ImportError:
+  # pylint: disable=W0403
   import config_default as config_private
 
 from common import chromium_utils

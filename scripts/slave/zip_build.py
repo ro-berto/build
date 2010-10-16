@@ -70,8 +70,8 @@ def archive(options, args):
     file_filter = '^.+\.(o|a|d)$'
 
   # Build the list of files to archive
-  zip_file_list = [file for file in os.listdir(build_dir)
-                   if not re.match(file_filter, file)]
+  zip_file_list = [f for f in os.listdir(build_dir)
+                   if not re.match(file_filter, f)]
 
   # Skip files that the testers don't care about. Mostly directories.
   things_to_skip = []
@@ -123,12 +123,12 @@ def archive(options, args):
     #             r"|browser_test.+|unit_tests"
     #             r"|chrome_frame_.*tests"
                   r")\.pdb$")
-    zip_file_list.extend([file for file in os.listdir(build_dir)
-                          if re.match(expression, file)])
+    zip_file_list.extend([f for f in os.listdir(build_dir)
+                          if re.match(expression, f)])
 
   if options.include_files is not None:
-    zip_file_list.extend([file for file in os.listdir(build_dir)
-                          if file in options.include_files])
+    zip_file_list.extend([f for f in os.listdir(build_dir)
+                          if f in options.include_files])
 
   # Write out the revision number so we can figure it out in extract_build.py.
   build_revision_file_name = 'FULL_BUILD_REVISION'

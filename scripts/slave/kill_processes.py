@@ -7,7 +7,6 @@
 
 Only works on Windows."""
 
-import os
 import subprocess
 import sys
 
@@ -27,7 +26,7 @@ def Kill(process_name):
 # Killing BuildConsole.exe usually stops an IB build within a few seconds.
 # Unfortunately, killing devenv.com or devenv.exe doesn't stop a VS build, so
 # we don't bother pretending.
-processes=[
+processes = [
     # Utilities we don't build, but which we use or otherwise can't
     # have hanging around.
     'BuildConsole.exe',
