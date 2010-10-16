@@ -46,11 +46,11 @@ def RunPylint(input_api, output_api):
           dirnames.remove(item)
       files.extend(input_api.os_path.join(dirpath, f)
                    for f in filenames
-                   if f.endswith('.py') or f.endswith('.cfg'))
-    proc = input_api.subprocess.Popen(['pylint', '-E'] + sorted(files), env=env)
+                   if f.endswith('.py'))
+    proc = input_api.subprocess.Popen(['pylint'] + sorted(files), env=env)
     proc.communicate()
     if proc.returncode:
-      return [output_api.PresubmitNotifyResult('Fix pylint errors first.')]
+      return [output_api.PresubmitPromptWarning('Fix pylint errors first.')]
     return []
   except OSError:
     if input_api.platform == 'win32':
