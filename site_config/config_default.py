@@ -121,6 +121,18 @@ class Master(object):
     slave_port = 9051
     master_port_alt = 9052
 
+  class ChromiumWebkit(_ChromiumBase):
+    project_name = 'Chromium Webkit'
+    master_port = 9053
+    slave_port = 9054
+    master_port_alt = 9055
+
+  class ChromiumChrome(_ChromiumBase):
+    project_name = 'Chromium Webkit'
+    master_port = 9056
+    slave_port = 9057
+    master_port_alt = 9058
+
   class TryServer(_ChromiumBase):
     project_name = 'Chromium Try Server'
     master_port = 9011
