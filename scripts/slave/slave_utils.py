@@ -19,7 +19,7 @@ import time
 
 
 from common import chromium_utils
-from site_config import config
+import config
 
 
 # Local errors.
