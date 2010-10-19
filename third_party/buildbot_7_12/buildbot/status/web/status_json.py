@@ -238,9 +238,8 @@ class JsonResource(resource.Resource):
         else:
             data = json.dumps(data, sort_keys=True, indent=2)
         if callback:
-            # Only accept [a-zA-Z_] for now.
             callback = callback[0]
-            if not re.search(r'[^a-zA-Z_]', callback):
+            if re.match(r'^[a-zA-Z$][a-zA-Z$0-9.]*$', callback):
                 data = '%s(%s);' % (callback, data)
         return data
 
