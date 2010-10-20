@@ -172,7 +172,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
     src_full_path = os.path.join(options.results_directory, 'results.json')
 
     print 'copying dashboard file %s to %s' % (src_full_path, dest_dir)
-    chromium_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
+    slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
     slave_utils.CopyFileToArchiveHost(src_full_path, dest_dir)
   except (OSError, IOError), e:
     print 'Unexpected error while generating JSON: ', e

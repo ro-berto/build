@@ -119,7 +119,7 @@ def main(options, args):
   dest_parent_dir = os.path.join(config.Archive.www_dir_base,
       'layout_test_results', build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
-  chromium_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
+  slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
   slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
 
   _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
