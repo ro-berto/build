@@ -65,7 +65,7 @@ def _CollectArchiveFiles(output_dir):
 
 def _CopyResultsFile(filename, host, dest_dir):
   full_path = os.path.join(options.results_dir, filename)
-  chromium_utils.CopyFileToArchiveHost(full_path, dest_dir)
+  slave_utils.CopyFileToArchiveHost(full_path, dest_dir)
 
 def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
     options):
@@ -76,7 +76,7 @@ def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
   (full_zip_dir, full_zip_file) = chromium_utils.MakeZip(staging_dir,
       'layout-test-results', diff_file_list, options.results_dir,
       remove_archive_directory=False)
-  chromium_utils.CopyFileToArchiveHost(full_zip_file, dest_dir)
+  slave_utils.CopyFileToArchiveHost(full_zip_file, dest_dir)
 
   # Extract the files on the web server.
   extract_dir = os.path.join(dest_dir, 'results')
@@ -122,7 +122,7 @@ def main(options, args):
   dest_parent_dir = os.path.join(DEST_DIR_BASE, build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
   chromium_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
-  chromium_utils.CopyFileToArchiveHost(zip_file, dest_dir)
+  slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
 
   _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
       options)

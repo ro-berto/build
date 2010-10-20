@@ -666,51 +666,6 @@ def SshCopyTree(srctree, host, dst):
                        (srctree, host + ':' + dst, result))
 
 
-def CopyFileToArchiveHost(src, dest_dir):
-  """A wrapper method to copy files to the archive host.
-  It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
-  TODO: we will eventually want to change the code to upload the
-  data to appengine.
-
-  Args:
-      src: full path to the src file.
-      dest_dir: destination directory on the host.
-  """
-  import config
-  host = config.Archive.archive_host
-  if not os.path.exists(src):
-    raise ExternalError('Source path "%s" does not exist' % (src))
-  if IsWindows():
-    CopyFileToDir(src, dest_dir)
-  elif IsLinux() or IsMac():
-    # Files are created umask 077 by default, so make it world-readable before
-    # pushing to web server.
-    MakeWorldReadable(src)
-    SshCopyFiles(src, host, dest_dir)
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
-
-
-def MaybeMakeDirectoryOnArchiveHost(dest_dir):
-  """A wrapper method to create a directory on the archive host.
-  It calls MaybeMakeDirectory on Windows and SshMakeDirectory on Linux/Mac.
-
-  Args:
-      dest_dir: destination directory on the host.
-  """
-  import config
-  host = config.Archive.archive_host
-  if IsWindows():
-    MaybeMakeDirectory(dest_dir)
-    print 'saving results to %s' % dest_dir
-  elif IsLinux() or IsMac():
-    SshMakeDirectory(host, dest_dir)
-    print 'saving results to "%s" on "%s"' % (dest_dir, host)
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
-
 def LogAndRemoveFiles(temp_dir, regex_pattern):
   """Remove files in |temp_dir| that match |regex_pattern|.
   This function prints out the name of each directory or filename before
