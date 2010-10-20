@@ -27,11 +27,7 @@ import config
 
 # Directory name, above the build directory, in which test results can be
 # found if no --results-dir option is given.
-RESULT_DIR = config.Archive.layout_test_result_dir
-
-# The result file is stored in a subdirectory of this one named for the build
-# configuration (e.g., 'chrome-release') and version.
-DEST_DIR_BASE = config.Archive.layout_test_result_archive
+RESULT_DIR = 'layout-test-results'
 
 def _CollectArchiveFiles(output_dir):
   """Returns a tuple containing two lists list of file paths to archive,
@@ -47,7 +43,7 @@ def _CollectArchiveFiles(output_dir):
   for (path, dirs, files) in os.walk(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
-      if ('-stack.' in name or 
+      if ('-stack.' in name or
           ('-actual.' in name and
            (name.endswith('.txt') or
             name.endswith('.png') or
@@ -119,7 +115,9 @@ def main(options, args):
   print 'build name: %s' % build_name
   print 'host name: %s' % socket.gethostname()
 
-  dest_parent_dir = os.path.join(DEST_DIR_BASE, build_name)
+  # Where to save layout test results.
+  dest_parent_dir = os.path.join(config.Archive.www_dir_base,
+      'layout_test_results', build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
   chromium_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
   slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)

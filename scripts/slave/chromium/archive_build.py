@@ -747,10 +747,10 @@ def main(argv):
   elif options.mode == 'dev':
     options.dirs = {
       # Built files are stored here, in a subdir. named for the build version.
-      'www_dir_base': config.Archive.www_dir_base_dev,
+      'www_dir_base': config.Archive.www_dir_base + 'snapshots',
 
       # Symbols are stored here, in a subdirectory named for the build version.
-      'symbol_dir_base': config.Archive.symbol_dir_base_dev
+      'symbol_dir_base': config.Archive.www_dir_base + 'snapshots',
     }
   else:
     raise StagingError('Invalid options mode %s' % options.mode)

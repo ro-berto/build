@@ -45,6 +45,8 @@ import google.platform_utils
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
+DEST_DIR = 'gtest_results'
+
 
 class GTestUnexpectedDeathTracker(object):
   """A lightweight version of log parser that keeps track of running tests
@@ -129,7 +131,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   """Generate (update) a JSON file from the gtest results XML and
   upload the file to the archive server.
   The archived JSON file will be placed at:
-  www-dir/gtest_results/buildname/testname/results.json
+  www-dir/DEST_DIR/buildname/testname/results.json
   on the archive server.
   Note that it adds slave's webkit/tools/layout_tests to the PYTHONPATH
   to run the JSON generator.
@@ -155,8 +157,8 @@ def _GenerateJSONForTestResults(options, results_tracker):
   postproc_options = copy.copy(options)
   postproc_options.build_name = slave_name
   postproc_options.input_results_xml = options.test_output_xml
-  postproc_options.builder_base_url = '%s/gtest_results/%s/%s' % (
-      config.Master.archive_url, slave_name, options.test_type)
+  postproc_options.builder_base_url = '%s/%s/%s/%s' % (
+      config.Master.archive_url, DEST_DIR, slave_name, options.test_type)
 
   try:
     sys.path.append(chromium_utils.FindUpward(
@@ -165,8 +167,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
     import test_output_xml_to_json
     test_output_xml_to_json.JSONGeneratorFromXML(postproc_options)
 
-    dest_dir = os.path.join(config.Archive.gtest_result_archive,
-        slave_name)
+    dest_dir = os.path.join(config.Archive.www_dir_base, DEST_DIR, slave_name)
     dest_dir = os.path.join(dest_dir, options.test_type)
     src_full_path = os.path.join(options.results_directory, 'results.json')
 
