@@ -40,7 +40,7 @@ def _CollectArchiveFiles(output_dir):
   """
   actual_file_list = []
   diff_file_list = []
-  for (path, dirs, files) in os.walk(output_dir):
+  for path, _, files in os.walk(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
       if ('-stack.' in name or
@@ -59,9 +59,6 @@ def _CollectArchiveFiles(output_dir):
     actual_file_list.append('results.html')
   return (actual_file_list, diff_file_list)
 
-def _CopyResultsFile(filename, host, dest_dir):
-  full_path = os.path.join(options.results_dir, filename)
-  slave_utils.CopyFileToArchiveHost(full_path, dest_dir)
 
 def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
     options):
@@ -69,9 +66,9 @@ def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
   # Don't clobber the staging_dir in the MakeZip call so that it keeps the
   # files from the previous MakeZip call on diff_file_list.
   print "archiving results + diffs"
-  (full_zip_dir, full_zip_file) = chromium_utils.MakeZip(staging_dir,
+  full_zip_file = chromium_utils.MakeZip(staging_dir,
       'layout-test-results', diff_file_list, options.results_dir,
-      remove_archive_directory=False)
+      remove_archive_directory=False)[1]
   slave_utils.CopyFileToArchiveHost(full_zip_file, dest_dir)
 
   # Extract the files on the web server.
@@ -85,7 +82,8 @@ def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
     chromium_utils.SshExtractZip(config.Archive.archive_host, remote_zip_file,
                                  extract_dir)
 
-def main(options, args):
+
+def archive_layout(options, args):
   logging.basicConfig(level=logging.INFO,
                       format='%(asctime)s %(filename)s:%(lineno)-3d'
                              ' %(levelname)s %(message)s',
@@ -101,10 +99,10 @@ def main(options, args):
   print 'Staging in %s' % staging_dir
 
   (actual_file_list, diff_file_list) = _CollectArchiveFiles(options.results_dir)
-  (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
-                                               'layout-test-results',
-                                               actual_file_list,
-                                               options.results_dir)
+  zip_file = chromium_utils.MakeZip(staging_dir,
+                                    'layout-test-results',
+                                    actual_file_list,
+                                    options.results_dir)[1]
 
   # Extract the build name of this slave (e.g., 'chrome-release') from its
   # configuration file.
@@ -124,8 +122,10 @@ def main(options, args):
 
   _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
       options)
+  return 0
 
-if '__main__' == __name__:
+
+def main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--build-dir', default='webkit',
                            help='path to main build directory (the parent of '
@@ -141,4 +141,8 @@ if '__main__' == __name__:
                            help=('The build number of the builder running'
                                  'this script.'))
   options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+  return archive_layout(options, args)
+
+
+if '__main__' == __name__:
+  sys.exit(main())

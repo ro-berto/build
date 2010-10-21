@@ -3,22 +3,21 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import sys
-sys.path.append("../")
-sys.path.append("../../common/")
-sys.path.append("../../private/")
-sys.path.append("../../../pylibs/")
-
-import archive_build
-
-import chromium_utils
 import os
 import os.path
 import shutil
 import simplejson
 import tempfile
 import unittest
+import sys
 import zipfile
+
+sys.path.append("..")
+sys.path.append("../..")
+
+from slave.chromium import archive_build
+from common import chromium_utils
+
 
 TEMP_FILES = ['foo.txt',
               'bar.txt',
@@ -62,7 +61,7 @@ EXTRA_TEST_FILES = ['extra_test1.exe',
                     os.path.join('extra_dir1', 'extra_test3.exe')]
 
 
-class MockOptions:
+class MockOptions(object):
   """ Class used to mock the optparse options object for the Stager.
   """
   def __init__(self, src_dir, build_dir, target, archive_path,
@@ -85,6 +84,9 @@ class PlatformError(Exception): pass
 class InternalStateError(Exception): pass
 
 class ArchiveTest(unittest.TestCase):
+  # Attribute '' defined outside __init__
+  # pylint: disable=W0201
+
   def setUp(self):
     self.temp_dir = tempfile.mkdtemp()
     self.temp_files = TEMP_FILES
@@ -237,7 +239,7 @@ class ArchiveTest(unittest.TestCase):
     expected_path_list.sort()
 
     self.initializeStager()
-    expanded_path_list = self.stager.ExpandWildcards(self.temp_dir, path_list)
+    expanded_path_list = archive_build.ExpandWildcards(self.temp_dir, path_list)
     expanded_path_list.sort()
     self.assertEquals(expected_path_list, expanded_path_list)
 
@@ -247,7 +249,7 @@ class ArchiveTest(unittest.TestCase):
     expected_dir_list.sort()
 
     self.initializeStager()
-    dir_list = self.stager.ExtractDirsFromPaths(path_list)
+    dir_list = archive_build.ExtractDirsFromPaths(path_list)
     dir_list.sort()
     self.assertEquals(expected_dir_list, dir_list)
 
@@ -348,7 +350,7 @@ class ArchiveTest(unittest.TestCase):
     self.stager.GenerateRevisionFile()
     self.assertTrue(os.path.exists(self.stager.revisions_path))
     self.assertEquals(None, self.stager.GetLastBuildRevision())
-    fp = open(self.stager.revisions_path);
+    fp = open(self.stager.revisions_path)
     revisions_dict = simplejson.loads(fp.read())
     self.assertEquals(self.stager.last_chromium_revision,
                       revisions_dict['chromium_revision'])
@@ -369,7 +371,7 @@ class ArchiveTest(unittest.TestCase):
     expect_last_change_file_contents = '%d' % (chromium_revision)
     self.initializeStager(build_number, chromium_revision, webkit_revision,
                           v8_revision)
-    last_change_file_path = self.stager.last_change_file;
+    last_change_file_path = self.stager.last_change_file
     # At first, there is no last change file.
     self.assertFalse(os.path.exists(last_change_file_path))
     self.assertEquals(None, self.stager.GetLastBuildRevision())
@@ -377,7 +379,7 @@ class ArchiveTest(unittest.TestCase):
     self.stager.SaveBuildRevisionToSpecifiedFile(last_change_file_path)
     # Check the contents in last change file.
     self.assertTrue(os.path.exists(last_change_file_path))
-    fp = open(last_change_file_path);
+    fp = open(last_change_file_path)
     self.assertEquals(expect_last_change_file_contents, fp.read())
     fp.close()
     self.assertEquals(chromium_revision, self.stager.GetLastBuildRevision())
@@ -393,7 +395,7 @@ class ArchiveTest(unittest.TestCase):
     expect_last_change_file_contents = '%d' % (build_number)
     self.initializeStager(build_number, chromium_revision, webkit_revision,
                           v8_revision)
-    last_change_file_path = self.stager.last_change_file;
+    last_change_file_path = self.stager.last_change_file
     # At first, there is no last change file.
     self.assertFalse(os.path.exists(last_change_file_path))
     self.assertEquals(None, self.stager.GetLastBuildRevision())
@@ -401,7 +403,7 @@ class ArchiveTest(unittest.TestCase):
     self.stager.SaveBuildRevisionToSpecifiedFile(last_change_file_path)
     # Check the contents in last change file.
     self.assertTrue(os.path.exists(last_change_file_path))
-    fp = open(last_change_file_path);
+    fp = open(last_change_file_path)
     self.assertEquals(expect_last_change_file_contents, fp.read())
     fp.close()
     self.assertEquals(build_number, self.stager.GetLastBuildRevision())

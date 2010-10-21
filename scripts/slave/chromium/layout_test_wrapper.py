@@ -23,7 +23,7 @@ from common import chromium_utils
 from slave import slave_utils
 
 
-def main(options, args):
+def layout_test(options, args):
   """Parse options and call run_webkit_tests.py, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
 
@@ -33,12 +33,11 @@ def main(options, args):
   except chromium_utils.PathNotFound:
     # If we don't have gflags.exe, report it but don't worry about it.
     print 'Warning: Couldn\'t disable page heap, if it was already enabled.'
-    pass
 
   webkit_tests_dir = chromium_utils.FindUpward(build_dir,
                                               'webkit', 'tools', 'layout_tests')
   run_webkit_tests = os.path.join(webkit_tests_dir, 'run_webkit_tests.py')
-  
+
   slave_name = slave_utils.SlaveBuildName(build_dir)
 
   command = [run_webkit_tests,
@@ -105,7 +104,8 @@ def main(options, args):
 
   return result
 
-if '__main__' == __name__:
+
+def main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory')
@@ -148,5 +148,7 @@ if '__main__' == __name__:
   # Disable pageheap checking except on Windows.
   if sys.platform != 'win32':
     options.enable_pageheap = False
+  return layout_test(options, args)
 
-  sys.exit(main(options, args))
+if '__main__' == __name__:
+  sys.exit(main())

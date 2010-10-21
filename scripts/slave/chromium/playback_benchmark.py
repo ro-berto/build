@@ -87,9 +87,8 @@ def run_benchmark(options, use_refbuild, benchmark_results):
 
   benchmark_results['ready'].wait()
   if benchmark_results['ready'].isSet():
-    results = json.loads(benchmark_results['results'])[0];
-    print_result(True, 'Total', results['score'], 
-                 use_refbuild)
+    results = json.loads(benchmark_results['results'])[0]
+    print_result(True, 'Total', results['score'], use_refbuild)
     for child in results['children']:
       print_result(False, child['name'], child['score'], use_refbuild)
   benchmark_results['ready'].clear()
@@ -103,14 +102,8 @@ def run_benchmark(options, use_refbuild, benchmark_results):
   return result
 
 
-def main(options, args):
+def playback_benchmark(options, args):
   """Using the target build configuration, run the playback test."""
-
-  if chromium_utils.IsWindows():
-    platform = 'windows'
-  else:
-    platform = 'linux'
-
   root_dir = os.path.dirname(options.build_dir) # That's src dir.
   data_dir = os.path.join(root_dir, 'data', 'webapp_benchmarks', 'gmailjs')
 
@@ -138,7 +131,7 @@ def main(options, args):
   return result
 
 
-if '__main__' == __name__:
+def main():
   # Initialize logging.
   log_level = logging.INFO
   logging.basicConfig(level=log_level,
@@ -154,5 +147,8 @@ if '__main__' == __name__:
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
   options, args = option_parser.parse_args()
+  return playback_benchmark(options, args)
 
-  sys.exit(main(options, args))
+
+if '__main__' == __name__:
+  sys.exit(main())

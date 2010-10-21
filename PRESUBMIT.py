@@ -36,13 +36,9 @@ def RunPylint(input_api, output_api):
     env['PYTHONPATH'] = input_api.os_path.pathsep.join(p for p in path if p)
     files = []
     for dirpath, dirnames, filenames in os.walk('.'):
-      if dirpath.endswith('slave'):
-        # Don't include subdirectories, it is probably a test slave.
-        for item in dirnames[:]:
-          dirnames.remove(item)
       for item in dirnames[:]:
         if (item.startswith('.') or
-            item in ('depot_tools', 'third_party', 'unittests')):
+            item in ('build', 'depot_tools', 'third_party', 'unittests')):
           dirnames.remove(item)
       files.extend(input_api.os_path.join(dirpath, f)
                    for f in filenames

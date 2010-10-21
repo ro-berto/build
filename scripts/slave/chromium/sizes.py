@@ -18,8 +18,9 @@ import stat
 import subprocess
 import sys
 
+
 def get_size(filename):
-    return os.stat(filename)[stat.ST_SIZE]
+  return os.stat(filename)[stat.ST_SIZE]
 
 
 def main_mac(options, args):
@@ -85,7 +86,7 @@ def main_mac(options, args):
         result = p.returncode
       print_dict['app_bundle_size'] = (int(du_s) * 1024)
 
-      print """*RESULT %(app_name)s: %(app_name)s= %(app_size)s bytes
+      print ("""*RESULT %(app_name)s: %(app_name)s= %(app_size)s bytes
 RESULT %(app_name)s-__TEXT: __TEXT= %(app_text)s bytes
 RESULT %(app_name)s-__DATA: __DATA= %(app_data)s bytes
 RESULT %(app_name)s-__OBJC: __OBJC= %(app_objc)s bytes
@@ -93,9 +94,8 @@ RESULT %(app_name)s-__OBJC: __OBJC= %(app_objc)s bytes
 RESULT %(framework_name)s-__TEXT: __TEXT= %(framework_text)s bytes
 RESULT %(framework_name)s-__DATA: __DATA= %(framework_data)s bytes
 RESULT %(framework_name)s-__OBJC: __OBJC= %(framework_objc)s bytes
-*RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes""" \
-          % print_dict
-
+*RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes""") % (
+        print_dict)
     return result
 
 
@@ -130,7 +130,7 @@ def main_linux(options, args):
   p = subprocess.Popen(['readelf', '-h', chrome], stdout=subprocess.PIPE)
   stdout = p.communicate()[0]
   elf_class_line = re.search('Class:.*$', stdout, re.MULTILINE).group(0)
-  elf_class = re.split('\W+', elf_class_line)[1]  
+  elf_class = re.split('\W+', elf_class_line)[1]
   if elf_class == "ELF32":
     word_size = 4
   else:
@@ -140,14 +140,12 @@ def main_linux(options, args):
   p = subprocess.Popen(['readelf', '-SW', chrome], stdout=subprocess.PIPE)
   stdout = p.communicate()[0]
   size_line = re.search('.ctors.*$', stdout, re.MULTILINE).group(0)
-  size = re.split('\W+', size_line)[5]  
+  size = re.split('\W+', size_line)[5]
   size = int(size, 16)
   # The first entry is always 0 and the last is -1 as guards.
   # So subtract 2 from the count.
   count = (size / word_size) - 2
-  
   print "*RESULT chrome-si: initializers= %s files" % count
-
   return result
 
 
@@ -177,7 +175,7 @@ def main_win(options, args):
   return result
 
 
-if '__main__' == __name__:
+def main():
   if sys.platform in ('win32', 'cygwin'):
     default_platform = 'win'
   elif sys.platform.startswith('darwin'):
@@ -211,14 +209,17 @@ if '__main__' == __name__:
 
   options, args = option_parser.parse_args()
 
-  main = main_map.get(options.platform)
-  if not main:
+  real_main = main_map.get(options.platform)
+  if not real_main:
     if options.platform is None:
       sys.stderr.write('Unsupported sys.platform %s.\n' % repr(sys.platform))
     else:
       sys.stderr.write('Unknown platform %s.\n' % repr(options.platform))
     msg = 'Use the --platform= option to specify a supported platform:\n'
     sys.stderr.write(msg + '    ' + ' '.join(platforms) + '\n')
-    sys.exit(2)
+    return 2
+  return real_main(options, args)
 
-  sys.exit(main(options, args))
+
+if '__main__' == __name__:
+  sys.exit(main())

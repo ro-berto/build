@@ -7,7 +7,6 @@
    Buildbot.
 """
 
-import optparse
 import os
 import stat
 import sys
@@ -15,14 +14,12 @@ import sys
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
 
-def main(options, args):
+def main():
   """Print the size of files specified to it as loose args."""
-  for f in args:
+  for f in sys.argv[1:]:
     print "*RESULT ResourceSizes: %s size= %s bytes" % (
         os.path.basename(f), get_size(f))
   return 0
 
 if '__main__' == __name__:
-  option_parser = optparse.OptionParser()
-  options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+  sys.exit(main())

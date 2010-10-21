@@ -71,12 +71,11 @@ def main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--root', help='root of source tree')
   options, args = option_parser.parse_args()
-  if not options.root:
-    print 'Must use --root argument'
-    return 1
+  if args or not options.root:
+    option_parser.error('Must be invoked with --root argument')
   c = CheckLKGR(options.root)
   if c.CheckForNew():
-    return 0  # success
+    return 0
   return 1
 
 if '__main__' == __name__:

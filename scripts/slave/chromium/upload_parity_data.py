@@ -7,7 +7,6 @@
 import glob
 import httplib
 import os
-import re
 import socket
 import stat
 import subprocess
@@ -55,8 +54,7 @@ def all_tests(path):
   tests = get_tests(path)
   tests_for_binary = {}
   for test in tests:
-    name = os.path.basename(test)
-    (name, ext) = os.path.splitext(name)
+    name = os.path.splitext(os.path.basename(test))[1]
     if name in skip_tests:
       continue
     tests_for_binary[name] = find_test_names(test)
@@ -87,7 +85,7 @@ def split_url(url):
         port is optional. (e.g., 'blah.com:8080').
       uri: String containing the relative URI of the URL. (e.g., '/stuff').
   """
-  scheme, netloc, path, query, fragment = urlparse.urlsplit(url)
+  _, netloc, path, _, _ = urlparse.urlsplit(url)
   return netloc, path
 
 def upload_data(tests_for_binary, url, platform):
@@ -115,7 +113,7 @@ def upload_data(tests_for_binary, url, platform):
 
         status = response.status
         reason = response.reason
-        content = response.read()
+        response.read()
         if status != httplib.OK:
           raise BadServerStatusError('Received code %d: %s, %s %d tests\n' % (
               status, reason, binary, len(tests)))
@@ -124,8 +122,10 @@ def upload_data(tests_for_binary, url, platform):
 
     except (IOError, httplib.HTTPException, socket.error), e:
       raise PostError(e)
+  return 0
 
-if __name__ == "__main__":
+
+def main():
   path = sys.argv[1]
   url = sys.argv[2]
   platform = sys.argv[3]
@@ -135,4 +135,8 @@ if __name__ == "__main__":
     for test in tests[binary]:
       print "%s:%s" % (binary, test)
 
-  upload_data(tests, url, platform)
+  return upload_data(tests, url, platform)
+
+
+if __name__ == "__main__":
+  sys.exit(main())

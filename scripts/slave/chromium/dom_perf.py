@@ -53,7 +53,7 @@ def geometric_mean(values):
     else:
       new_values.append(0.001)
   # Compute the sum of the log of the values.
-  log_sum = sum(map(lambda x: math.log(x), new_values))
+  log_sum = sum(map(math.log, new_values))
   # Raise e to that sum over the number of values.
   mean = math.pow(math.e, (log_sum / len(new_values)))
   # Return the rounded mean.
@@ -70,7 +70,8 @@ def print_result(top, name, score_string, refbuild):
   print ('%sRESULT %s: %s= %d score (bigger is better)' %
          (prefix, name, score_label, score))
 
-def main(options, args):
+
+def dom_perf(options, args):
   """Using the target build configuration, run the dom perf test."""
 
   build_dir = os.path.abspath(options.build_dir)
@@ -129,9 +130,7 @@ def main(options, args):
       result |= chromium_utils.RunCommand(command)
 
       # Open the resulting file and display it.
-      file = open(output_file, 'r')
-      data = json.loads(''.join(file.readlines()))
-      file.close()
+      data = json.load(open(output_file, 'r'))
       for suite in data['BenchmarkSuites']:
         # Skip benchmarks that we didn't actually run this time around.
         if len(suite['Benchmarks']) == 0 and suite['score'] == 0:
@@ -155,7 +154,7 @@ def main(options, args):
   return result
 
 
-if '__main__' == __name__:
+def main():
   # Initialize logging.
   log_level = logging.INFO
   logging.basicConfig(level=log_level,
@@ -171,5 +170,7 @@ if '__main__' == __name__:
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
   options, args = option_parser.parse_args()
+  return dom_perf(options, args)
 
-  sys.exit(main(options, args))
+if '__main__' == __name__:
+  sys.exit(main())

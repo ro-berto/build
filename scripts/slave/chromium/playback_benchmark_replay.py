@@ -32,6 +32,12 @@ def DefReBuster(buster):
 _RE_BUSTERS = [re.compile(DefReBuster(buster_)) for buster_ in _BUSTERS]
 
 
+def __RemoveCacheBusters(path):
+  for re_buster in _RE_BUSTERS:
+    path = re.sub(re_buster, '', path)
+  return path
+
+
 class ProxyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   """Proxy handler class."""
 
@@ -64,11 +70,6 @@ class ProxyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   do_PUT = do_GET
   do_CONNECT = do_GET
 
-  def __RemoveCacheBusters(self, path):
-    for re_buster in _RE_BUSTERS:
-      path = re.sub(re_buster, '', path)
-    return path
-
   def __BrowserString(self):
     agent = str(self.headers['user-agent'])
     substrings = []
@@ -92,7 +93,7 @@ class ProxyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
   def __ProcessRequest(self):
     browserstring = self.__BrowserString()
-    path = self.__RemoveCacheBusters(self.path)[1:]
+    path = __RemoveCacheBusters(self.path)[1:]
     key = hashlib.md5(path).hexdigest()
     try:
       cachedresponse = self.benchmark.GetResponse(browserstring, key)
@@ -110,14 +111,14 @@ class ProxyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   def __PostResults(self):
     length = int(self.headers['content-length'])
     result = cgi.parse_qs(self.rfile.read(length))['result'][0]
-    result = json.loads(result)[0];
+    result = json.loads(result)[0]
     self.benchmark.PostResult(result)
     self.send_response(200, 'Got it.')
     # Needed for goog.net.IframeIo, which checks the body to
     # see if the request worked.
     self.wfile.write('<html><body>OK</body></html>')
 
-  def log_request(code, size):
+  def log_request(self, code='-', size='-'):
     pass
 
 

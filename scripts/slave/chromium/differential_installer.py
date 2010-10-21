@@ -15,14 +15,16 @@ LAST_CHROME_INSTALLER = \\some-server\chrome\official_builds\LastRelease
 LAST_CHROME_VERSION = 0.1.123.0
 """
 import ConfigParser
-import glob
 import optparse
 import os
 import sys
 
-import google.path_utils
 from common import chromium_utils
 import config
+
+# From a chromium checkout
+# pylint: disable=E0611,F0401
+from google import path_utils
 
 
 # LAST_RELEASE_INFO file should contain the information about the last
@@ -81,21 +83,21 @@ def GetPrevReleaseInformation():
   """
   prev_release_dir = None
   prev_version = None
-  config = ConfigParser.SafeConfigParser()
-  config.read(LAST_RELEASE_INFO)
-  for option in config.options(FILE_SECTION):
+  config_parser = ConfigParser.SafeConfigParser()
+  config_parser.read(LAST_RELEASE_INFO)
+  for option in config_parser.options(FILE_SECTION):
     if option.upper() == 'LAST_CHROME_INSTALLER':
-      prev_release_dir = config.get(FILE_SECTION, option)
+      prev_release_dir = config_parser.get(FILE_SECTION, option)
       print 'Prev Release Dir %s' % prev_release_dir
     elif option.upper() == 'LAST_CHROME_VERSION':
-      prev_version = config.get(FILE_SECTION, option)
+      prev_version = config_parser.get(FILE_SECTION, option)
       print 'Prev Release Version %s' % prev_version
     else:
       print 'Unrecognized option %s in %s' % (option, LAST_RELEASE_INFO)
   return (prev_release_dir, prev_version)
 
 
-def main(options, args):
+def differential_installer(options, args):
   """Main method for this script. It reads the information about the
   previous Chrome release, backs up the current Chrome installer
   executable, builds mini_installer project with right options to
@@ -135,7 +137,7 @@ def main(options, args):
   os.environ['LAST_CHROME_INSTALLER'] = prev_installer_dir
   os.environ['LAST_CHROME_VERSION'] = prev_version
   os.environ['SKIP_REBUILD_CHROME_ARCHIVE'] = "true"
-  script_dir = google.path_utils.ScriptDir()
+  script_dir = path_utils.ScriptDir()
 
   cmd = [sys.executable,
          os.path.join(script_dir, 'compile.py')]
@@ -154,7 +156,7 @@ def main(options, args):
   return ret
 
 
-if '__main__' == __name__:
+def main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--target', default='Release',
                            help='build target (Debug or Release)')
@@ -163,4 +165,8 @@ if '__main__' == __name__:
                                 'the Release or Debug directory)')
 
   options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+  return differential_installer(options, args)
+
+
+if '__main__' == __name__:
+  sys.exit(main())

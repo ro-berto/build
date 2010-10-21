@@ -33,19 +33,9 @@ def _UploadFile(src, dst, force_ssh=False):
     chromium_utils.SshCopyFiles(src, host, full_dst)
     print 'done.'
 
-def main(options, args):
-  if not options.source:
-    raise StagingError('No source specified')
-  if not options.target:
-    raise StagingError('No target specified')
 
-  _UploadFile(options.source, options.target,
-              force_ssh=options.force_ssh)
-  return 0
-
-if '__main__' == __name__:
+def main():
   option_parser = optparse.OptionParser()
-
   option_parser.add_option('', '--force-ssh', action='store_true',
       default=False, help='use ssh even on windows')
   option_parser.add_option('', '--target',
@@ -54,4 +44,17 @@ if '__main__' == __name__:
       help='file to send')
 
   options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+  if args:
+    option_parser.error('No args supported')
+  if not options.source:
+    option_parser.error('No source specified')
+  if not options.target:
+    option_parser.error('No target specified')
+
+  _UploadFile(options.source, options.target,
+              force_ssh=options.force_ssh)
+  return 0
+
+
+if '__main__' == __name__:
+  sys.exit(main())

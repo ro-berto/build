@@ -13,9 +13,7 @@
 
 import optparse
 import os
-import re
 import shutil
-import stat
 import subprocess
 import sys
 
@@ -30,8 +28,7 @@ def main_common(cov_file, cmdline):
   # Print some details which may help debugging.
   try:
     print os.stat(cov_file)
-  except:
-    # Naked except bad but the exception is OS-specific.  Ugh.
+  except (OSError, IOError):
     print 'Stat of %s failed (file not found?)' % cov_file
 
   # Croc.
@@ -123,7 +120,7 @@ def main_win(options, args):
   return main_common(cov_file, cmdline)
 
 
-if '__main__' == __name__:
+def main():
   if sys.platform in ('win32', 'cygwin'):
     default_platform = 'win'
   elif sys.platform.startswith('darwin'):
@@ -157,14 +154,17 @@ if '__main__' == __name__:
 
   options, args = option_parser.parse_args()
 
-  main = main_map.get(options.platform)
-  if not main:
+  real_main = main_map.get(options.platform)
+  if not real_main:
     if options.platform is None:
       sys.stderr.write('Unsupported sys.platform %s.\n' % repr(sys.platform))
     else:
       sys.stderr.write('Unknown platform %s.\n' % repr(options.platform))
     msg = 'Use the --platform= option to specify a supported platform:\n'
     sys.stderr.write(msg + '    ' + ' '.join(platforms) + '\n')
-    sys.exit(2)
+    return 2
+  return real_main(options, args)
 
-  sys.exit(main(options, args))
+
+if '__main__' == __name__:
+  sys.exit(main())

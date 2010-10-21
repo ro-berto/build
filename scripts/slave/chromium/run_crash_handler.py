@@ -16,18 +16,32 @@
 import optparse
 import os
 import sys
-import win32process
+try:
+  # pylint: disable=F0401
+  import win32process
+except ImportError:
+  print >> sys.stderr, 'This script runs on Windows only.'
+  sys.exit(1)
 
 from common import chromium_utils
-from slave import slave_utils
 
 USAGE = '%s [options]' % os.path.basename(sys.argv[0])
 
 
-def main(options):
+def main():
   """Using the target build configuration, run the crash_service.exe
   executable.
   """
+  option_parser = optparse.OptionParser(usage=USAGE)
+
+  option_parser.add_option('', '--target', default='Release',
+                           help='build target (Debug or Release)')
+  option_parser.add_option('', '--build-dir', default='chrome',
+                           help='path to main build directory (the parent of '
+                                'the Release or Debug directory)')
+  options, args = option_parser.parse_args()
+  if args:
+    option_parser.error('No args are supported')
 
   build_dir = os.path.abspath(options.build_dir)
   exe_path = os.path.join(build_dir, options.target, 'crash_service.exe')
@@ -46,17 +60,8 @@ def main(options):
                                        win32process.DETACHED_PROCESS, None,
                                        None, si)
   print '\nCreated with process id %d\n' % details[2]
-
   return 0
 
 
 if '__main__' == __name__:
-  option_parser = optparse.OptionParser(usage=USAGE)
-
-  option_parser.add_option('', '--target', default='Release',
-                           help='build target (Debug or Release)')
-  option_parser.add_option('', '--build-dir', default='chrome',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
-  options, args = option_parser.parse_args()
-  sys.exit(main(options))
+  sys.exit(main())

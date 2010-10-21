@@ -13,7 +13,6 @@ import shutil
 import subprocess
 import sys
 import time
-import traceback
 import unittest
 
 
@@ -43,7 +42,7 @@ def time_string(seconds):
   return '%d:%02d:%04.1f' % (hours, minutes % 60, seconds % 60.0)
 
 
-class CommandRunner:
+class CommandRunner(object):
   """
   Executor class for commands, including "commands" implemented by
   Python functions.
@@ -51,8 +50,9 @@ class CommandRunner:
   verbose = True
   active = True
 
-  def __init__(self, dictionary={}):
-    self.subst_dictionary(dictionary)
+  def __init__(self, dictionary=None):
+    self._subst_dictionary = dictionary or {}
+    self.stdout = None
 
   def subst_dictionary(self, dictionary):
     self._subst_dictionary = dictionary
@@ -102,7 +102,7 @@ class CommandRunner:
       command = self.subst(command)
       cmdargs = shlex.split(command)
       if cmdargs[0] == 'cd':
-         command = (os.chdir,) + tuple(cmdargs[1:])
+        command = (os.chdir,) + tuple(cmdargs[1:])
     if type(command) == type(()):
       func = command[0]
       args = command[1:]
@@ -147,6 +147,7 @@ class targetTextTestResult(unittest.TestResult):
     super(targetTextTestResult, self).__init__()
     self.stream = stream
     self.successes = []
+
   def startTest(self, test):
     super(targetTextTestResult, self).startTest(test)
     if test.isFirstForTarget():
@@ -154,12 +155,14 @@ class targetTextTestResult(unittest.TestResult):
       fmt = '[----------] %d tests from %s\n'
       self.stream.write(fmt % (test.target_tests, test.target_name))
     self.stream.write('[ RUN      ] %s\n' % test)
+
   def stopTest(self, test):
     super(targetTextTestResult, self).stopTest(test)
     if test.isLastForTarget():
       # TODO(sgk):  print the elapsed time for the entire target's tests.
       fmt = '[----------] %d tests from %s ()\n'
       self.stream.write(fmt % (test.target_tests, test.target_name))
+
   def addSuccess(self, test):
     super(targetTextTestResult, self).addSuccess(test)
     self.successes.append(test)
@@ -169,16 +172,19 @@ class targetTextTestResult(unittest.TestResult):
                                  test.timeTaken()))
     fmt = '[       OK ] %s (%s seconds)\n'
     self.stream.write(fmt % (test, time_string(test.timeTaken())))
+
   def addError(self, test, err):
     super(targetTextTestResult, self).addError(test, err)
     self.stream.write(self._exc_info_to_string(err, test))
     fmt = '[  ERROR   ] %s (%s seconds)\n'
     self.stream.write(fmt % (test, time_string(test.timeTaken())))
+
   def addFailure(self, test, err):
     super(targetTextTestResult, self).addFailure(test, err)
     self.stream.write(self._exc_info_to_string(err, test))
     fmt = '[  FAILED  ] %s (%s seconds)\n'
     self.stream.write(fmt % (test, time_string(test.timeTaken())))
+
   def allExecutedTests(self):
     """
     Returns the number of tests that executed successfuly, and either
@@ -187,29 +193,31 @@ class targetTextTestResult(unittest.TestResult):
     infrastructure itself.)
     """
     return len(self.successes) + len(self.failures)
+
   def printSummary(self):
     if self.successes:
       self.stream.write('[  PASSED  ] %d tests.\n' % len(self.successes))
     self.printErrorList('[  FAILED  ]', self.failures)
     self.printErrorList('[  ERROR   ]', self.errors)
+
   def printErrorList(self, flavour, errors):
     if not errors:
       return
     fmt = '%s %d tests, listed below:\n'
     self.stream.write(fmt % (flavour, len(errors)))
-    for test, err in errors:
+    for test, _ in errors:
       self.stream.write('%s %s\n' % (flavour, test))
 
 
-class targetTextTestRunner:
-  """
-  """
+class targetTextTestRunner(object):
   # TODO(sgk):  This should probably be refactored into a re-usable
   # GTestRunner class that handles the GTest-format summary,
   # and a separate targetTextTestRunner subclass that handles
   # the pieces that are specific to Chromium build targets.
   def __init__(self, number_of_targets, number_of_tests,
                      stream=sys.stderr, *args, **kw):
+    # Access to a protected member
+    # pylint: disable=W0212
     self.stream = unittest._WritelnDecorator(stream)
     self.number_of_targets = number_of_targets
     self.number_of_tests = number_of_tests
@@ -239,8 +247,12 @@ class targetTestCase(unittest.TestCase):
   be set up or torn down once for a given target, regardless of how many
   individual tests use the configuration.
   """
+
+  # Attribute '' defined outside __init__
+  # pylint: disable=E1101,W0201
+
   def __init__(self, target_name, gyp_file, opts, target_tests,
-                     target_set_ups, target_tear_downs, *args, **kw):
+               target_set_ups, target_tear_downs, *args, **kw):
     super(targetTestCase, self).__init__(*args, **kw)
     self.gyp_file = gyp_file
     self.target_name = target_name
@@ -686,7 +698,7 @@ def manual_import(filename):
   return result
 
 
-def get_all_gyp_targets(filename, format):
+def get_all_gyp_targets(filename, gyp_format):
   """
   Returns a dict mapping all GYP target names (from loading the specified
   gyp filename) to their .gyp file.
@@ -694,6 +706,7 @@ def get_all_gyp_targets(filename, format):
   # TODO(sgk):  this assumes we're in the build directory above src/;
   # either find gyp relative to this script, or use a copy that
   # gets checked in with depot_tools.
+  # pylint: disable=F0401,W0612
   sys.path.append(os.path.join(os.getcwd(), 'src/tools/gyp/pylib'))
   import gyp
   from gyp.common import ParseQualifiedTarget
@@ -701,7 +714,7 @@ def get_all_gyp_targets(filename, format):
   gyp_chromium = manual_import('src/build/gyp_chromium')
   includes = gyp_chromium.additional_include_files()
 
-  [generator, flat_list, targets, data] = gyp.Load(filename, format,
+  [generator, flat_list, targets, data] = gyp.Load(filename, gyp_format,
                                                    includes=includes,
                                                    depth='src')
   result = {}

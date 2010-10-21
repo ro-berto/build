@@ -368,9 +368,9 @@ class StagerBase(object):
     if chromium_utils.IsWindows():
       # Create a zip archive of the symbol files.  This must be done after the
       # main zip archive is created, or the latter will include this one too.
-      (sym_zip_dir, sym_zip_file) = self.CreateArchiveFile('chrome-win32-syms',
-                                                           SYMBOL_FILE_NAME,
-                                                           self._extra_symbols)
+      sym_zip_file = self.CreateArchiveFile('chrome-win32-syms',
+                                            SYMBOL_FILE_NAME,
+                                            self._extra_symbols)[1]
 
       # symbols_copy should hold absolute paths at this point.
       # We avoid joining absolute paths because the version of python used by
@@ -384,11 +384,10 @@ class StagerBase(object):
         chromium_utils.MaybeMakeDirectory(symbol_dir)
         chromium_utils.CopyFileToDir(sym_zip_file, symbol_dir)
     elif chromium_utils.IsLinux():
-      # If there are no symbol files, then sym_zip_dir and sym_zip_file will
-      # be empty strings.
-      (sym_zip_dir, sym_zip_file) = self.CreateArchiveFile('chrome-linux-syms',
-                                                           SYMBOL_FILE_NAME,
-                                                           self._extra_symbols)
+      # If there are no symbol files, then sym_zip_file will be an empty string.
+      sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
+                                            SYMBOL_FILE_NAME,
+                                            self._extra_symbols)[1]
       if not sym_zip_file:
         print 'No symbols found, not uploading symbols'
         return 0
@@ -595,9 +594,9 @@ class StagerBase(object):
       return 0
 
     archive_base_name = 'chrome-%s' % chromium_utils.PlatformName()
-    archive_dir, archive_file = self.CreateArchiveFile(archive_base_name,
-                                                       ARCHIVE_FILE_NAME,
-                                                       self._extra_files)
+    archive_file = self.CreateArchiveFile(archive_base_name,
+                                          ARCHIVE_FILE_NAME,
+                                          self._extra_files)[1]
 
     # Generate a change log or an error message if no previous revision.
     changelog_path = os.path.join(self._staging_dir, 'changelog.xml')
