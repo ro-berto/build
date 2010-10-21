@@ -15,6 +15,7 @@ from buildbot.slave.bot import BuildSlave
 
 # Register the commands.
 from slave import chromium_commands
+from slave import slave_utils
 # Load default settings.
 import config
 
@@ -37,12 +38,15 @@ umask = None
 if slavename is None:
     # Automatically determine the host name.
     import socket
-    slavename = socket.getfqdn().split('.')[0]
+    slavename = socket.getfqdn().split('.')[0].lower()
 
 if password is None:
     msg = '*** No password configured in %s.\n' % repr(__file__)
     sys.stderr.write(msg)
     sys.exit(1)
+
+if ActiveMaster is None:
+  ActiveMaster = slave_utils.GetActiveMasterConfig()
 
 if host is None:
     host = ActiveMaster.master_host
