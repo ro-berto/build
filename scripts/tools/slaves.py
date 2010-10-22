@@ -45,7 +45,7 @@ def RunSSH(options):
   win_cmd = options.win_cmd
   if not options.no_cygwin:
     # Wrap up in cygwin's bash.
-    win_cmd = 'c:\\cygwin\\bin\\base --login -c "%s"' % (
+    win_cmd = 'c:\\cygwin\\bin\\bash --login -c "%s"' % (
         win_cmd.replace('"', '\\"'))
   retcode = SubRun(options.win, options.win_names,
                    ['ssh', '-o ConnectTimeout=5', 'chrome-bot@%(host)s',
