@@ -7,12 +7,9 @@
 
 Based on gclient_factory.py and adds v8-specific steps."""
 
-from buildbot.steps import trigger
-
-from build_factory import BuildFactory
-import v8_commands
-import chromium_config as config
-import gclient_factory
+from master.factory import v8_commands
+from master.factory import gclient_factory
+import config
 
 
 class V8Factory(gclient_factory.GClientFactory):
@@ -41,9 +38,6 @@ class V8Factory(gclient_factory.GClientFactory):
                           config.Master.trunk_url +
                           '/deps/third_party/mozilla-tests')
 
-
-
-
   def __init__(self, build_dir, target_platform=None):
     main = gclient_factory.GClientSolution(config.Master.v8_bleeding_edge)
 
@@ -52,8 +46,8 @@ class V8Factory(gclient_factory.GClientFactory):
     gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,
                                             target_platform=target_platform)
 
-
-  def _AddTests(self, factory_cmd_obj, tests, mode=None,
+  @staticmethod
+  def _AddTests(factory_cmd_obj, tests, mode=None,
                 factory_properties=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
     factory_properties = factory_properties or {}
@@ -69,12 +63,11 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('v8_es5conform'): f.AddV8ES5Conform()
 
     # Mozilla tests should be moved to v8 repo
-    if R('mozilla'): 
+    if R('mozilla'):
       f.AddV8Mozilla()
 
     if R('sputnik'): f.AddV8Sputnik()
     if R('arm'): f.AddArmSimTest()
-
 
   def V8Factory(self, identifier, target='release', clobber=False,
                       tests=None, mode=None, slave_type='BuilderTester',
@@ -98,10 +91,10 @@ class V8Factory(gclient_factory.GClientFactory):
 
     if (gclient_factory.ShouldRunTest(tests, 'leak')):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_VALGRIND)
-    
+
     if (gclient_factory.ShouldRunTest(tests, 'mozilla')):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_MOZILLA)
-    
+
     factory = self.BuildFactory(identifier, target, clobber, tests, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties)
@@ -114,5 +107,4 @@ class V8Factory(gclient_factory.GClientFactory):
                                         self._target_platform)
     # Add all the tests.
     self._AddTests(v8_cmd_obj, tests, mode, factory_properties)
-    
     return factory

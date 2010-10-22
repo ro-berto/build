@@ -9,14 +9,12 @@
 """
 
 import optparse
-import os
-import shutil
 import sys
 
+from common import chromium_utils
 
-import chromium_utils
 
-def main(options, args):
+def test(options, args):
   simultaneous = '-j3'
   if (options.platform == 'win'):
     simultaneous = ''
@@ -53,7 +51,7 @@ def main(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
-if '__main__' == __name__:
+def main():
   if sys.platform in ('win32', 'cygwin'):
     default_platform = 'win'
   elif sys.platform.startswith('darwin'):
@@ -87,8 +85,7 @@ if '__main__' == __name__:
                            help='specify platform [default: %%default]')
 
   options, args = option_parser.parse_args()
+  return test(options, args)
 
-  sys.exit(main(options, args))
-
-if __name__ == '__main__':
+if '__main__' == __name__:
   sys.exit(main())
