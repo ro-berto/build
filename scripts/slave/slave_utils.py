@@ -205,6 +205,7 @@ def StartVirtualX(slave_build_name, build_dir):
   proc = subprocess.Popen(["Xvfb", ":9", "-screen", "0", "1024x768x24", "-ac"],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
+  print "xvfb_pid_filename = %s for %s" % (xvfb_pid_filename, slave_build_name)
   open(xvfb_pid_filename, 'w').write(str(proc.pid))
   os.environ['DISPLAY'] = ":9"
 
