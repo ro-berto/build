@@ -24,22 +24,22 @@
 # this tests to make sure that the slave is in the known slave location,
 # /b/slave, which is what the LaunchAgent operates on.
 USE_LAUNCHD := \
-  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.v8.plist ] && \
-          [ "$$(pwd -P)" = "/b/master.v8" ] && \
+  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.client.v8.plist ] && \
+          [ "$$(pwd -P)" = "/b/build/masters/master.client.v8" ] && \
           echo 1)
 
 start:
 ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=../scripts:../scripts/master:../scripts/common:../scripts/private:../pylibs python ../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
 else
-	launchctl start org.chromium.buildbot.master.v8
+	launchctl start org.chromium.buildbot.master.client.v8
 endif
 
 stop:
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
 else
-	launchctl stop org.chromium.buildbot.master.v8
+	launchctl stop org.chromium.buildbot.master.client.v8
 endif
 
 reconfig:
