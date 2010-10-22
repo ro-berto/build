@@ -205,7 +205,6 @@ def StartVirtualX(slave_build_name, build_dir):
   proc = subprocess.Popen(["Xvfb", ":9", "-screen", "0", "1024x768x24", "-ac"],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
-  print "xvfb_pid_filename = %s for %s" % (xvfb_pid_filename, slave_build_name)
   open(xvfb_pid_filename, 'w').write(str(proc.pid))
   os.environ['DISPLAY'] = ":9"
 
@@ -231,7 +230,10 @@ def StopVirtualX(slave_build_name):
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   if os.path.exists(xvfb_pid_filename):
     # If the process doesn't exist, we raise an exception that we can ignore.
-    os.kill(int(open(xvfb_pid_filename).read()), signal.SIGKILL)
+    try:
+      os.kill(int(open(xvfb_pid_filename).read()), signal.SIGKILL)
+    except OSError:
+      pass
     os.remove(xvfb_pid_filename)
 
 def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
