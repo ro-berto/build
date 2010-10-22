@@ -97,7 +97,6 @@ twistd.pid
 /masters/master.tryserver.chromium/mac_layout_rel
 /masters/master.tryserver.chromium/mac_rel
 /masters/master.tryserver.chromium/mac_valgrind
-/masters/master.tryserver.chromium/public_html
 /masters/master.tryserver.chromium/win
 /masters/master.tryserver.chromium/win_layout
 /masters/master.tryserver.chromium/win_layout_7
