@@ -7,6 +7,7 @@
 import copy
 import errno
 import fnmatch
+import glob
 import math
 import os
 import re
@@ -709,3 +710,14 @@ def RemoveChromeTemporaryFiles():
   else:
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
+
+
+def ListMasters():
+  """Returns all the masters found."""
+  # Look for "internal" masters first.
+  path_internal = os.path.join(os.path.dirname(__file__), '..', '..', '..',
+      'build_internal', 'masters/*/master.cfg')
+  path = os.path.join(os.path.dirname(__file__), '..', '..',
+      'masters/*/master.cfg')
+  filenames = glob.glob(path_internal) + glob.glob(path)
+  return [os.path.abspath(os.path.dirname(f)) for f in filenames]

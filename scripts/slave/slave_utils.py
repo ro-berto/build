@@ -7,7 +7,6 @@
 """
 
 import commands
-import glob
 import os
 import re
 import signal
@@ -16,7 +15,6 @@ import subprocess
 import sys
 import tempfile
 import time
-
 
 from common import chromium_utils
 import config
@@ -287,13 +285,10 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
 def GetActiveMaster():
   """Parses all the slaves.cfg and returns the name of the active master
   determined by the host name. Returns None otherwise."""
-  # Test on Windows!
   hostname = socket.getfqdn().split('.', 1)[0]
-  path = os.path.join(os.path.dirname(__file__), '..', '..',
-      'masters/*/slaves.cfg')
-  for filename in glob.glob(path):
+  for master in chromium_utils.ListMasters():
     slaves = {}
-    execfile(filename, slaves)
+    execfile(os.path.join(master, 'slaves.cfg'), slaves)
     for i in slaves['slaves']:
       if i.get('hostname', None) == hostname:
         return i['master']
