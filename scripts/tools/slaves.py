@@ -41,59 +41,49 @@ def SubRun(enabled, names, cmd, options):
   return 0
 
 
-def RunSSH(options, args):
+def RunSSH(options):
+  win_cmd = options.win_cmd
+  if not options.no_cygwin:
+    # Wrap up in cygwin's bash.
+    win_cmd = 'c:\\cygwin\\bin\\base --login -c "%s"' % (
+        win_cmd.replace('"', '\\"'))
   retcode = SubRun(options.win, options.win_names,
                    ['ssh', '-o ConnectTimeout=5', 'chrome-bot@%(host)s',
-                    options.win_cmd] + args,
+                    win_cmd],
                    options)
   if not retcode:
     retcode = SubRun(options.linux, options.linux_names,
                      ['ssh', '-o ConnectTimeout=5', '-t', 'chrome-bot@%(host)s',
-                      options.linux_cmd] + args,
+                      options.linux_cmd],
                      options)
   if not retcode:
     retcode = SubRun(options.mac, options.mac_names,
                      ['ssh', '-o ConnectTimeout=5', '-t', 'chrome-bot@%(host)s',
-                      options.mac_cmd] + args,
+                      options.mac_cmd],
                      options)
   return retcode
 
 
-def RunSCP(options, args):
+def RunSCP(options, src, dst):
   retcode = SubRun(options.win, options.win_names,
-                   ['scp', args[0], 'chrome-bot@%(host)s:' + args[1]],
+                   ['scp', src, 'chrome-bot@%(host)s:' + dst],
                    options)
   if not retcode:
     retcode = SubRun(options.linux, options.linux_names,
-                     ['scp', args[0], 'chrome-bot@%(host)s:' + args[1]],
+                     ['scp', src, 'chrome-bot@%(host)s:' + dst],
                      options)
   if not retcode:
     retcode = SubRun(options.mac, options.mac_names,
-                     ['scp', args[0], 'chrome-bot@%(host)s:' + args[1]],
+                     ['scp', src, 'chrome-bot@%(host)s:' + dst],
                      options)
   return retcode
 
 
-def Clobber(options, args):
-  # TODO(maruel): Find a way to find the builder's directory or use the same way
-  # as Revert() (quite hackish) Should use python instead since it's guaranteed
-  # to be avail and works cross-platforms.
-  path_base = r'C:\b\build\slave\win\build\src\build'
-  path_rel = path_base + r'\release'
-  path_dbg = path_base + r'\debug'
-  options.win_cmd = 'cmd /c rd /q /s %s %s' % (path_dbg, path_rel)
-  # options.win_cmd = (
-  #    r"cmd /c dir c:\b\build\slave\* /ad /b | findstr /v /i cert | "
-  #    r"findstr /v /i info | findstr /v /i .svn > c:\b\build\slave\subdir")
-  # options.win_cmd = (
-  #    r"cmd /c for /F %a in (c:\b\build\slave\subdir) do "
-  #    r"rd /q /s c:\b\build\slave\%a\build\src\chrome")
-  # options.win_cmd = (
-  #    r"cmd /c for /F %a in (c:\b\build\slave\subdir) do "
-  #    r"echo c:\b\build\slave\%a\build\src\chrome")
-  # options.win_cmd = (
-  #    r"cmd /c for /F %a in (c:\b\build\slave\subdir) do "
-  #    r"rd /q /s c:\b\build\slave\%a\build\src\third_party\WebKit\WebKit")
+def Clobber(options):
+  options.no_cygwin = False
+  path_dbg = '/cygdrive/e/b/build/slave/*/build/src/*/Debug'
+  path_rel = '/cygdrive/e/b/build/slave/*/build/src/*/Release'
+  options.win_cmd = 'rm -rf %s %s' % (path_dbg, path_rel)
   path_scons = '/b/build/slave/*/build/src/sconsbuild'
   path_make = '/b/build/slave/*/build/src/out'
   options.linux_cmd = 'rm -rf %s %s' % (path_scons, path_make)
@@ -101,60 +91,55 @@ def Clobber(options, args):
   options.mac_cmd = 'rm -rf %s' % path
   # We don't want to stop if one slave failed.
   options.ignore_failure = True
-  return RunSSH(options, args)
+  return RunSSH(options)
 
 
-def Revert(options, args):
-  # path_base = r'C:\b\build\slave\win\build\src\chrome'
-  options.win_cmd = (
-      r"cmd /c for /F %a in (c:\\b\\build\\slave\\subdir) do "
-      r"cd c:\\b\\build\\slave\%a\\build\\src && gclient revert")
+def Revert(options):
+  options.no_cygwin = False
+  path = '/cygdrive/e/b/build/slave/*/build/src'
+  options.win_cmd = r"cd %s && gclient.bat revert" % path
   path = '/b/build/slave/*/build/src'
   options.linux_cmd = 'cd %s && gclient revert' % path
-  path = '/b/build/slave/*/build/src'
   options.mac_cmd = 'cd %s && gclient revert' % path
   options.ignore_failure = True
-  return RunSSH(options, args)
+  return RunSSH(options)
 
 
-def Restart(options, args):
+def Restart(options):
+  options.no_cygwin = True
   options.win_cmd = 'shutdown -r -f -t 1'
   options.linux_cmd = 'sudo shutdown -r now'
   options.mac_cmd = 'sudo shutdown -r now'
   # We don't want to stop if one slave failed.
   options.ignore_failure = True
-  return RunSSH(options, args)
+  return RunSSH(options)
 
 
-def SyncScripts(options, args):
-  options.win_cmd = 'cmd /c cd c:\\b && depot_tools\\gclient sync'
+def SyncScripts(options):
+  options.no_cygwin = True
+  options.win_cmd = 'cmd /c cd E:\\b && depot_tools\\gclient sync'
   options.linux_cmd = 'cd /b && ./depot_tools/gclient sync'
   options.mac_cmd = 'cd /b && ./depot_tools/gclient sync'
-  return RunSSH(options, args)
+  return RunSSH(options)
 
 
-def TaskKill(options, args):
+def TaskKill(options):
+  options.no_cygwin = True
   options.win_cmd = 'taskkill /im crash_service.exe'
   options.ignore_failure = True
   options.win = True
   options.linux = False
   options.mac = False
-  return RunSSH(options, args)
+  return RunSSH(options)
 
 
-def InstallMsi(options, args):
+def InstallMsi(options):
   """Example."""
+  options.no_cygwin = True
   options.win_cmd = 'msiexec /quiet /i \\\\hostname\\sharename\\appverif.msi'
   options.linux = False
   options.mac = False
-  return RunSSH(options, args)
-
-
-def SCP(options, args):
-  if len(args) != 2:
-    print 'Need 2 args'
-    return 1
-  return RunSCP(options, args)
+  return RunSSH(options)
 
 
 def Main(argv):
@@ -207,6 +192,9 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
                    help='Print which slaves would have been processed but do '
                         'nothing. With no command, just print the list of '
                         'slaves for the given platform(s).')
+  group.add_option('--no_cygwin', action='store_true',
+                   help='By default cygwin\'s bash is called to execute the '
+                        'command')
   parser.add_option_group(group)
   group = optparse.OptionGroup(parser, 'Custom commands')
   group.add_option('-W', '--win_cmd', help='Run a custom command instead')
@@ -264,18 +252,23 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
     options.min = options.index
     options.max = options.index
 
+  if options.scp:
+    if len(args) != 2:
+      parser.error('Need 2 args')
+    return RunSCP(options, args[0], args[1])
+  if args:
+    parser.error('Only --scp expects arguments')
+
   if options.restart:
-    return Restart(options, args)
+    return Restart(options)
   elif options.clobber:
-    return Clobber(options, args)
+    return Clobber(options)
   elif options.sync_scripts:
-    return SyncScripts(options, args)
+    return SyncScripts(options)
   elif options.taskkill:
-    return TaskKill(options, args)
+    return TaskKill(options)
   elif options.revert:
-    return Revert(options, args)
-  elif options.scp:
-    return SCP(options, args)
+    return Revert(options)
   elif options.print_only and not (options.win_cmd or options.linux_cmd or
                                    options.mac_cmd):
     names_list = []
@@ -302,7 +295,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
         (options.linux and not options.linux_cmd) or
         (options.mac and not options.mac_cmd)):
       parser.error('Need to specify a command')
-    return RunSSH(options, args)
+    return RunSSH(options)
 
 
 if __name__ == '__main__':
