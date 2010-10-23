@@ -160,7 +160,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   parser = optparse.OptionParser(usage=usage)
   group = optparse.OptionGroup(parser, 'Slaves to process')
   group.add_option('-x', '--master',
-      help='Master to use to load the slaves list. Choices are: %s' %
+      help=('Master to use to load the slaves list. If omitted, all masters '
+            'that were started at least once are included. Choices are: %s.') %
               ', '.join(masters))
   group.add_option('-w', '--win', action='store_true')
   group.add_option('-l', '--linux', action='store_true')
@@ -218,18 +219,26 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
 
   if not options.slave:
     if not options.master:
-      parser.error('Need to pass either --slave or --master')
-      return 0
-    if not options.master in masters:
-      # Try subsititions
-      options.master = re.sub(r'\bt\b', 'tryserver', options.master)
-      options.master = re.sub(r'\bc\b', 'chromium', options.master)
-      options.master = re.sub(r'\bco\b', 'chromiumos', options.master)
+      # Populates by defaults with every masters with a twistd.pid, thus has
+      # been started.
+      slaves = []
+      for m_p in masters_path:
+        if os.path.isfile(os.path.join(m_p, 'twistd.pid')):
+          local_vars = {}
+          execfile(os.path.join(m_p, 'slaves.cfg'), local_vars)
+          slaves.extend(local_vars['slaves'])
+      slaves = slaves_list.BaseSlavesList(slaves)
+    else:
       if not options.master in masters:
-        parser.error('Unknown master \'%s\'.\nChoices are: %s' % (
-          options.master, ', '.join(masters)))
-    master_path = masters_path[masters.index(options.master)]
-    slaves = slaves_list.SlavesList(os.path.join(master_path, 'slaves.cfg'))
+        # Try substitutions
+        options.master = re.sub(r'\bt\b', 'tryserver', options.master)
+        options.master = re.sub(r'\bc\b', 'chromium', options.master)
+        options.master = re.sub(r'\bco\b', 'chromiumos', options.master)
+        if not options.master in masters:
+          parser.error('Unknown master \'%s\'.\nChoices are: %s' % (
+            options.master, ', '.join(masters)))
+      master_path = masters_path[masters.index(options.master)]
+      slaves = slaves_list.SlavesList(os.path.join(master_path, 'slaves.cfg'))
     def F(os_type):
       out = slaves.GetSlaves(os=os_type, bits=options.bits,
           version=options.version, builder=options.builder)

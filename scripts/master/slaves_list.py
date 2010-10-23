@@ -45,21 +45,22 @@ def _FilterField(slaves, value, name):
   return [s for s in slaves if _EntryHasValueInField(s, name, value)]
 
 
-class SlavesList(object):
-  def __init__(self, filename, default_master=None):
-    local_vars = {}
-    execfile(filename, local_vars)
-    self.slaves = local_vars['slaves']
+def _CheckDupes(items):
+  dupes = set()
+  while items:
+    x = items.pop()
+    if x in items:
+      dupes.add(x)
+  if dupes:
+    print >> sys.stderr, 'Found slave dupes!\n  %s' % ', '.join(dupes)
+    assert False
+
+
+class BaseSlavesList(object):
+  def __init__(self, slaves, default_master=None):
+    self.slaves = slaves
     self.default_master = default_master
-    slaves = [EntryToSlaveName(x).lower() for x in self.slaves]
-    dupes = set()
-    while len(slaves):
-      x = slaves.pop()
-      if x in slaves:
-        dupes.add(x)
-    if dupes:
-      print 'Found slave dupes!\n  %s' % ', '.join(dupes)
-      assert False
+    _CheckDupes([EntryToSlaveName(x).lower() for x in self.slaves])
 
   def GetSlaves(self, master=None, builder=None, os=None, tester=None,
                 bits=None, version=None):
@@ -95,6 +96,13 @@ class SlavesList(object):
     slave_name = EntryToSlaveName(self.GetSlave(master, builder, os, tester,
                                                 bits, version))
     return slave_name
+
+
+class SlavesList(BaseSlavesList):
+  def __init__(self, filename, default_master=None):
+    local_vars = {}
+    execfile(filename, local_vars)
+    BaseSlavesList.__init__(self, local_vars['slaves'], default_master)
 
 
 def Main(argv=None):
