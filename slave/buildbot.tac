@@ -21,7 +21,7 @@ import config
 
 
 # Determines the slave type:
-ActiveMaster = config.Master.Chromium
+ActiveMaster = None
 
 
 # Slave properties:
