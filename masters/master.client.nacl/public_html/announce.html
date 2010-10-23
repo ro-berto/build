@@ -1,0 +1,266 @@
+<script>
+  function autoLink(className) {
+    var comments = document.querySelectorAll(className);
+    for(var i = 0; i < comments.length; i++) {
+      comments[i].innerHTML = comments[i].innerHTML.replace(/http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
+    }
+  }
+
+  window.onload = function() {
+    autoLink('.DevComment');
+  }
+</script>
+
+<div class="Announcement">
+
+<iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://nativeclient-status.appspot.com/current"></iframe>
+
+<center style="padding: 0 7px">
+  <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
+    <tr>
+      <td width="23%">
+        <table valign="top" width="100%">
+          <tr>
+            <td style="text-align: right;">
+              <b>Controls:</b>
+            </td>
+            <td>
+              <a href="http://nativeclient-status.appspot.com">tree status</a> |
+              <a href="one_line_per_build">manage all</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>Development:</b>
+            </td>
+            <td>
+              <a href="http://code.google.com/p/nativeclient/source/browse/#svn/trunk/nacl">source</a> |
+              <a href="http://codereview.chromium.org/">reviews</a> |
+              <a href="http://code.google.com/p/nativeclient/issues/list">bugs</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+              <b>NativeClient:</b>
+            </td>
+            <td>
+              <a href="http://code.google.com/p/nativeclient">www</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+               <b>Sheriffs:</b>
+            </td>
+            <td>
+              <script src='./sheriff.js'></script>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+               <b>Navigate:</b>
+            </td>
+            <td colspan="2">
+              <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
+              <a href="./waterfall/help">customize</a> |
+              <script>
+                if (document.location.port == 8025) {
+                  document.write('<a href="http://' + document.location.hostname + ':8025/waterfall">waterfall</a> | ');
+                  document.write('<a href="http://' + document.location.hostname + ':8025/console">console</a>');
+                } else {
+                  document.write('<a href="../nacl/waterfall">waterfall</a> | ');
+                  document.write('<a href="../nacl/console">console</a>');
+                }
+              </script>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td width="1" bgcolor="#CCCCCC">
+      </td>
+      <td width="2%">
+      </td>
+      <td width="72%">
+        <table width="100%">
+          <script language="javascript">
+            var raw_flavors = [
+               ["Windows", ["xp-m32-n32",
+                            "vista64-m64-n64",
+                            "win7atom64-m64-n64-test"]],
+               ["Mac", ["mac-m32-n32"]],
+               ["Hardy", ["hardy32-m32-n32",
+                          "hardy64-m32-n32",
+                          "hardy64-m64-n64"]],
+               ["Lucid", ["lucid32-m32-n32",
+                           "lucid64-m32-n32",
+                           "lucid64-m64-n64"]],
+               ["Arm", ["hardy64-m32-narm",
+                        "hardy64-marm-narm",
+                        "arm-marm-narm-test"]],
+               ["Other", ["karmic64-valgrind",
+                          "lucid64-spec-arm",
+                          "lucid64-spec-x86",
+                          "lucid64-pnacl-translator"]],
+               ["Coverage", ["mac-m32-n32-coverage",
+                             "hardy64-m32-n32-coverage",
+                             "hardy64-m64-n64-coverage",
+                             "hardy64-marm-narm-coverage",
+                             "xp-m32-n32-coverage"]],
+            ];
+            var flavors = [];
+            for(var i in raw_flavors) {
+              var row = Array();
+              for(var j in raw_flavors[i][1]) {
+                if(raw_flavors[i][0] == "Other" ||
+                   raw_flavors[i][0] == "Coverage") {
+                  row.push("builder=" + raw_flavors[i][1][j]);
+                } else {
+                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
+                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
+                }
+              }
+              flavors.push([raw_flavors[i][0], row.join("&")]);
+            }
+
+            var bar = "./horizontal_one_box_per_builder"
+            var waterfall = "./waterfall"
+
+            if (document.location.port == 8025) {
+              bar = 'http://' + document.location.hostname + ':8025/' + bar
+              waterfall = 'http://' + document.location.hostname + ':8025/' + waterfall
+            } else {
+              bar = '../nacl/' + bar
+              waterfall = '../nacl/' + waterfall
+            }
+
+            function GetUrl(type, content) {
+              return type + "?" + content + "&reload=30";
+            }
+
+            function DisplayBar(content, name) {
+              document.write("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
+            }
+
+            for(var i in flavors) {
+              DisplayBar(flavors[i][1], flavors[i][0]);
+            }
+          </script>
+        </table>
+        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
+          <tr><th>toolchain</th></tr>
+          <script language="javascript">
+            var raw_flavors = [
+               ["Toolchain", ["win7-toolchain_x86",
+                              "vista-toolchain_x86",
+                              "win2003-toolchain_x86",
+                              "mac-toolchain_x86-32",
+                              "mac-toolchain_x86",
+                              "hardy32-toolchain_x86",
+                              "hardy32-toolchain_arm-trusted",
+                              "lucid32-toolchain_arm-untrusted",
+                              "hardy64-toolchain_arm-untrusted",
+                              "hardy64-glibc"]],
+            ];
+            var flavors = [];
+            for(var i in raw_flavors) {
+              var row = Array();
+              for(var j in raw_flavors[i][1]) {
+                if(raw_flavors[i][0] == "Toolchain" ||
+                   raw_flavors[i][0] == "Integration") {
+                  row.push("builder=" + raw_flavors[i][1][j]);
+                } else {
+                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
+                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
+                }
+              }
+              flavors.push([raw_flavors[i][0], row.join("&")]);
+            }
+
+            waterfall = "../nacl-toolchain/waterfall";
+            bar = "../nacl-toolchain/horizontal_one_box_per_builder";
+            for(var i in flavors) {
+              DisplayBar(flavors[i][1], flavors[i][0]);
+            }
+          </script>
+        </table>
+<table><tr><td height="1"> </td></tr></table>
+        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
+          <tr><th>integration</th></tr>
+          <script language="javascript">
+            var raw_flavors = [
+               ["Integration", ["xp-nacl-chrome",
+                                "mac-nacl-chrome",
+                                "hardy64-nacl-chrome"]],
+            ];
+            var flavors = [];
+            for(var i in raw_flavors) {
+              var row = Array();
+              for(var j in raw_flavors[i][1]) {
+                if(raw_flavors[i][0] == "Toolchain" ||
+                   raw_flavors[i][0] == "Integration") {
+                  row.push("builder=" + raw_flavors[i][1][j]);
+                } else {
+                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
+                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
+                }
+              }
+              flavors.push([raw_flavors[i][0], row.join("&")]);
+            }
+
+            waterfall = "../nacl-chrome/waterfall";
+            bar = "../nacl-chrome/horizontal_one_box_per_builder";
+            for(var i in flavors) {
+              DisplayBar(flavors[i][1], flavors[i][0]);
+            }
+          </script>
+        </table>
+        <table width="100%"><tr>
+        <td width="50%">
+        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
+          <tr><th>naclports</th>
+<th width="100%">
+<iframe name="naclports_status" id="naclports_status" width="100%" height="44" frameborder="0" scrolling="no" src="http://naclports-status.appspot.com/current"></iframe>
+</th></tr>
+          <script language="javascript">
+            var flavors = [
+               ["ports", ["windows-ports",
+                          "mac-ports",
+                          "linux-ports"]],
+            ];
+
+            waterfall = "../naclports/waterfall";
+            bar = "../naclports/horizontal_one_box_per_builder";
+            for(var i in flavors) {
+              DisplayBar(flavors[i][1], flavors[i][0]);
+            }
+          </script>
+        </table>
+        </td>
+        <td width="50%">
+        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 10px;  -webkit-border-top-right-radius: 10px;  -webkit-border-bottom-left-radius: 10px;  -webkit-border-bottom-right-radius: 10px;">
+          <tr><th>SDK</th>
+<th width="100%">
+<iframe name="naclsdk_status" id="naclsdk_status" width="100%" height="44" frameborder="0" scrolling="no" src="http://naclsdk-status.appspot.com/current"></iframe>
+</th></tr>
+          <script language="javascript">
+            var flavors = [
+               ["SDK", ["windows-sdk",
+                        "mac-sdk",
+                        "linux-sdk"]],
+            ];
+
+            waterfall = "../nacl-sdk/waterfall";
+            bar = "../nacl-sdk/horizontal_one_box_per_builder";
+            for(var i in flavors) {
+              DisplayBar(flavors[i][1], flavors[i][0]);
+            }
+          </script>
+        </table>
+        </td></tr></table>
+      </td>
+      <td width="3%">
+      </td>
+    </tr>
+  </table>
+</center>
+
+</div>
