@@ -117,7 +117,7 @@ def Restart(options):
 
 def SyncScripts(options):
   options.no_cygwin = True
-  options.win_cmd = 'cmd /c cd E:\\b && depot_tools\\gclient sync'
+  options.win_cmd = 'cmd /c cd /d E:\\b && depot_tools\\gclient sync'
   options.linux_cmd = 'cd /b && ./depot_tools/gclient sync'
   options.mac_cmd = 'cd /b && ./depot_tools/gclient sync'
   return RunSSH(options)
