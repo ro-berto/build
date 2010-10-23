@@ -97,10 +97,10 @@ def Clobber(options):
 def Revert(options):
   options.no_cygwin = False
   path = '/cygdrive/e/b/build/slave/*/build/src'
-  options.win_cmd = r"cd %s && gclient.bat revert" % path
+  options.win_cmd = r'cd %s && gclient.bat revert --jobs 12' % path
   path = '/b/build/slave/*/build/src'
-  options.linux_cmd = 'cd %s && gclient revert' % path
-  options.mac_cmd = 'cd %s && gclient revert' % path
+  options.linux_cmd = 'cd %s && gclient revert --jobs 12' % path
+  options.mac_cmd = 'cd %s && gclient revert --jobs 12' % path
   options.ignore_failure = True
   return RunSSH(options)
 
@@ -117,9 +117,9 @@ def Restart(options):
 
 def SyncScripts(options):
   options.no_cygwin = True
-  options.win_cmd = 'cmd /c cd /d E:\\b && depot_tools\\gclient sync'
-  options.linux_cmd = 'cd /b && ./depot_tools/gclient sync'
-  options.mac_cmd = 'cd /b && ./depot_tools/gclient sync'
+  options.win_cmd = 'cmd /c cd /d E:\\b && depot_tools\\gclient sync --jobs 12'
+  options.linux_cmd = 'cd /b && ./depot_tools/gclient sync --jobs 12'
+  options.mac_cmd = 'cd /b && ./depot_tools/gclient sync --jobs 12'
   return RunSSH(options)
 
 
