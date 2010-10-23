@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -9,23 +9,22 @@ Contains the Native Client specific commands. Based on commands.py"""
 
 import os
 import re
-
+    
+from buildbot.process import buildstep
+from buildbot.process.properties import WithProperties
+from buildbot.steps import shell
+from buildbot.steps import trigger
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, \
      EXCEPTION
-from buildbot.steps import shell
-from buildbot.process import buildstep
 
-import chromium_config as config
-import chromium_step
-import chromium_utils
-import commands
+from common import chromium_utils
+from master import chromium_step
+from master.factory import commands
+from master.log_parser import archive_command
+from master.log_parser import process_log
+from master.log_parser import retcode_command
 
-from log_parser import archive_command
-from log_parser import process_log
-from log_parser import retcode_command
-
-from buildbot.steps import trigger
-from buildbot.process.properties import WithProperties
+import config
 
 
 class NativeClientCommands(commands.FactoryCommands):

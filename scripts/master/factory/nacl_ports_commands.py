@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,19 +10,17 @@ Contains the Native Client Ports specific commands. Based on commands.py"""
 import os
 import re
 
-from buildbot.steps import shell
-
-import chromium_config as config
-import chromium_utils
-import commands
-
-from log_parser import archive_command
-from log_parser import process_log
-from log_parser import retcode_command
-
-from buildbot.steps import trigger
 from buildbot.process.properties import WithProperties
+from buildbot.steps import shell
+from buildbot.steps import trigger
 
+from common import chromium_utils
+from master.factory import commands
+from master.log_parser import archive_command
+from master.log_parser import process_log
+from master.log_parser import retcode_command
+
+import config
 
 class NativeClientPortsCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""

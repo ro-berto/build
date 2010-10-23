@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,9 +10,10 @@ Based on gclient_factory.py."""
 import os
 import re
 
-import chromium_config as config
-import nacl_sdk_commands
-import gclient_factory
+from master.factory import gclient_factory
+from master.factory import nacl_sdk_commands
+
+import config
 
 
 class NativeClientSDKFactory(gclient_factory.GClientFactory):

@@ -24,22 +24,22 @@
 # this tests to make sure that the slave is in the known slave location,
 # /b/slave, which is what the LaunchAgent operates on.
 USE_LAUNCHD := \
-  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.nacl-internal.plist ] && \
-          [ "$$(pwd -P)" = "/b/master.nacl-internal" ] && \
+  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.master.client.nacl.ppapi.plist ] && \
+          [ "$$(pwd -P)" = "/b/build/masters/master.client.nacl.ppapi" ] && \
           echo 1)
 
 start:
 ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=../scripts:../scripts/master:../scripts/common:../scripts/private:../pylibs python ../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
 else
-	launchctl start org.chromium.buildbot.master.nacl-internal
+	launchctl start org.chromium.buildbot.master.client.nacl.ppapi
 endif
 
 stop:
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
 else
-	launchctl stop org.chromium.buildbot.master.nacl-internal
+	launchctl stop org.chromium.buildbot.master.client.nacl.ppapi
 endif
 
 reconfig:
