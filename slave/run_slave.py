@@ -40,7 +40,7 @@ def HotPatchSlaveBuilder():
   SlaveBuilder.remote_shutdown = rebooting_remote_shutdown
 
 
-if '__main__' == __name__:
+def main():
   # change the current directory to the directory of the script.
   os.chdir(sys.path[0])
 
@@ -112,8 +112,11 @@ if '__main__' == __name__:
     python = os.path.dirname(sys.executable)
     system32 = os.path.join(os.environ['SYSTEMROOT'], 'system32')
     wbem = os.path.join(system32, 'WBEM')
-
     slave_path = [depot_tools, python, system32, wbem]
+    # build_internal/tools contains tools we can't redistribute.
+    tools = os.path.join(os.getcwd(), '..', '..', 'build_internal', 'tools')
+    if os.path.isdir(tools):
+      slave_path.append(os.path.abspath(tools))
     os.environ['PATH'] = os.pathsep.join(slave_path)
     os.environ['LOGNAME'] = os.environ['USERNAME']
 
@@ -164,3 +167,7 @@ if '__main__' == __name__:
   HotPatchSlaveBuilder()
   import twisted.scripts.twistd as twistd
   twistd.run()
+
+
+if '__main__' == __name__:
+  main()
