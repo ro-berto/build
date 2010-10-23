@@ -114,7 +114,7 @@ def main():
     wbem = os.path.join(system32, 'WBEM')
     slave_path = [depot_tools, python, system32, wbem]
     # build_internal/tools contains tools we can't redistribute.
-    tools = os.path.join(os.getcwd(), '..', '..', 'build_internal', 'tools')
+    tools = os.path.join(parent_dir, '..', 'build_internal', 'tools')
     if os.path.isdir(tools):
       slave_path.append(os.path.abspath(tools))
     os.environ['PATH'] = os.pathsep.join(slave_path)
