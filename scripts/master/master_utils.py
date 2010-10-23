@@ -206,9 +206,14 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   # See http://buildbot.net/buildbot/docs/0.8.1/Debug-Options.html for more
   # details.
   if os.path.isfile('.manhole'):
-    # This import has an implicit dependency on Crypto.Cipher. You may need to
-    # install it manually: sudo apt-get install python-crypto on ubuntu.
-    from buildbot import manhole
+    try:
+      from buildbot import manhole
+    except ImportError:
+      log.msg('Using manhole has an implicit dependency on Crypto.Cipher. You '
+              'need to install it manually: sudo apt-get install python-crypto '
+              'on ubuntu.')
+      raise
+
     # If 'port' is defined, it uses the same valid keys as the current user.
     values = {}
     execfile('.manhole', values)
