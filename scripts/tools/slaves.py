@@ -43,7 +43,7 @@ def SubRun(enabled, names, cmd, options):
 
 def RunSSH(options):
   win_cmd = options.win_cmd
-  if not options.no_cygwin:
+  if not options.no_cygwin and win_cmd:
     # Wrap up in cygwin's bash.
     win_cmd = 'c:\\cygwin\\bin\\bash --login -c "%s"' % (
         win_cmd.replace('"', '\\"'))
