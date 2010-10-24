@@ -9,7 +9,7 @@
 # Note that a relative PYTHONPATH entry is relative to the current directory.
 
 start:
-	PYTHONPATH="../scripts;../scripts/master;../scripts/common;../scripts/private;../pylibs;." ../depot_tools/release/python_24/python ../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH="../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:." ../../depot_tools/release/python_24/python ../../scripts/common/twistd --no_save -y buildbot.tac
 
 stop:
 	kill `cat twistd.pid`
