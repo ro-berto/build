@@ -285,7 +285,7 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
 def GetActiveMaster():
   """Parses all the slaves.cfg and returns the name of the active master
   determined by the host name. Returns None otherwise."""
-  hostname = socket.getfqdn().split('.', 1)[0]
+  hostname = socket.getfqdn().split('.', 1)[0].lower()
   for master in chromium_utils.ListMasters():
     slaves = {}
     execfile(os.path.join(master, 'slaves.cfg'), slaves)
