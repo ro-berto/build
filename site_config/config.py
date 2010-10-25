@@ -195,24 +195,10 @@ class Archive(config_private.Archive):
   test_dirs_to_create = ['plugins', 'fonts']
 
   # Directories in which to store built files, for dev, official, and full
-  # builds. (We don't use the full ones yet.)
+  # builds.
   archive_host = config_private.Archive.archive_host
   www_dir_base = config_private.Archive.www_dir_base
-  www_dir_base_dev = www_dir_base + 'snapshots'
-  www_dir_base_official = www_dir_base + 'official_builds'
-  www_dir_base_full = 'unused'
-  symbol_dir_base_dev = www_dir_base_dev
-  symbol_dir_base_full = www_dir_base_full
-  symbol_dir_base_official = www_dir_base_official
 
-  # Where to find layout test results by default, above the build directory.
-  layout_test_result_dir = 'layout-test-results'
-
-  # Where to save layout test results.
-  layout_test_result_archive = www_dir_base + 'layout_test_results'
-
-  # Where to save gtest JSON results.
-  gtest_result_archive = www_dir_base + 'gtest_results'
 
 class Distributed(config_private.Distributed):
   # File holding current version information.
