@@ -44,13 +44,9 @@ def main_xcode(options, args):
   assert compiler in (None, 'clang')
 
   # Note: this clobbers all targets, not just Debug or Release.
-  build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-      'xcodebuild')
-  if compiler == 'clang':
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-        'clang')
-
   if options.clobber:
+    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
+        'xcodebuild')
     chromium_utils.RemoveDirectory(build_output_dir)
 
   # If the project isn't in args, add all.xcodeproj to simplify configuration.
@@ -108,9 +104,6 @@ def main_xcode(options, args):
 
   if compiler == 'clang':
     env['CC'] = 'clang++'
-    env['DSTROOT'] = os.path.abspath(build_output_dir)
-    env['OBJROOT'] = os.path.join(env['DSTROOT'], 'obj')
-    env['SYMROOT'] = os.path.join(env['DSTROOT'], 'sym')
 
   if options.xcode_target:
     command.extend(['-target', options.xcode_target])
