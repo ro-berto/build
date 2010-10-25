@@ -43,7 +43,7 @@ B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel')
 F('rel', mac().ChromiumFactory(
     'chromium-mac-rel',
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_rel']))
+    options=['--', '-target', 'chromium_builder_tests']))
 
 #
 # Mac Rel testers
@@ -54,7 +54,7 @@ F('rel_unit', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=['unit', 'ui', 'media', 'printing', 'remoting', 'gpu', 'browser_tests',
-         'googleurl', 'nacl_ui', 'nacl_sandbox'],
+         'googleurl', 'nacl_ui', 'nacl_sandbox', 'base', 'net'],
   factory_properties={'generate_gtest_json': True})
 )
 
@@ -85,7 +85,7 @@ F('dbg', mac().ChromiumFactory(
     'chromium-mac-dbg',
     target='Debug',
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_dbg']))
+    options=['--', '-target', 'chromium_builder_tests']))
 
 #
 # Mac Dbg Unit testers
@@ -98,7 +98,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
   target='Debug',
   build_url=dbg_archive,
   tests=['check_deps', 'media', 'printing', 'remoting', 'unit', 'googleurl',
-         'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox'],
+         'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox', 'base'],
   factory_properties={'generate_gtest_json': True}))
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
@@ -107,7 +107,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   target='Debug',
   build_url=dbg_archive,
-  tests=['ui'],
+  tests=['ui', 'net'],
   factory_properties={'generate_gtest_json': True}))
 
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')

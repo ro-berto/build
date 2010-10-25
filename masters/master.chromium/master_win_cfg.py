@@ -43,7 +43,7 @@ B('Win Builder', 'rel', 'compile|windows', 'win_rel', builddir='cr-win-rel')
 F('rel', win().ChromiumFactory(
     'chromium-win-rel',
     slave_type='Builder',
-    project='all.sln;chromium_builder'))
+    project='all.sln;chromium_builder_tests'))
 
 #
 # Win Rel testers
@@ -55,7 +55,7 @@ F('rel_unit', win().ChromiumFactory(
     build_url=rel_archive,
     tests=['unit', 'ui', 'media', 'printing', 'remoting', 'gpu',
            'browser_tests', 'courgette', 'googleurl', 'installer',
-           'safe_browsing'],
+           'safe_browsing', 'base', 'net', 'sandbox'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
@@ -111,7 +111,7 @@ F('dbg', win().ChromiumFactory(
     'chromium-win-dbg',
     target='Debug',
     slave_type='Builder',
-    project='all.sln;chromium_builder'))
+    project='all.sln;chromium_builder_tests'))
 
 #
 # Win Dbg Unit testers
@@ -123,7 +123,8 @@ F('dbg_unit_1', win().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting',
-           'courgette', 'unit', 'gpu', 'installer', 'safe_browsing'],
+           'courgette', 'unit', 'gpu', 'installer', 'safe_browsing',
+           'base'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
@@ -135,7 +136,7 @@ F('dbg_unit_2', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['ui'],
+    tests=['ui', 'net'],
     factory_properties={'ui_total_shards': 3, 'ui_shard_index': 1,
                         'process_dumps': True,
                         'start_crash_handler': True,
@@ -147,7 +148,7 @@ F('dbg_unit_3', win().ChromiumFactory(
       target='Debug',
       slave_type='Tester',
       build_url=dbg_archive,
-      tests=['ui'],
+      tests=['ui', 'sandbox'],
       factory_properties={'ui_total_shards': 3, 'ui_shard_index': 2,
                           'process_dumps': True,
                           'start_crash_handler': True,
