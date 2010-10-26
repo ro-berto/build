@@ -24,7 +24,7 @@ class V8Commands(commands.FactoryCommands):
 
     # Override _script_dir - one below because we run our build inside
     # the bleeding_edge directory.
-    self._script_dir = self.PathJoin('..', self._script_dir);
+    self._script_dir = self.PathJoin('..', self._script_dir)
 
     # Where to point waterfall links for builds and test results.
     self._archive_url = config.Master.archive_url
@@ -36,9 +36,9 @@ class V8Commands(commands.FactoryCommands):
     self._es5conform_dir = self.PathJoin('bleeding_edge/test/es5conform/data')
     self._es5conform_url = config.Master.es5conform_root_url
     self._es5conform_revision = config.Master.es5conform_revision
-    self._arch = None;
+    self._arch = None
     if target_arch:
-      self._arch = target_arch;
+      self._arch = target_arch
 
     if self._target_platform == 'win32':
       # Override to use the right python
@@ -48,18 +48,16 @@ class V8Commands(commands.FactoryCommands):
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
 
-    s_dir = self._v8_script_dir
-    p_dir = self._private_script_dir
-    self._archive_tool = J(s_dir, 'archive_v8.py')
+    self._archive_tool = J(self._v8_script_dir, 'archive_v8.py')
     self._v8_test_tool = J(self._build_dir, 'tools')
 
     # Scripts in the v8 scripts dir.
-    self._v8testing_tool = J(s_dir, 'v8testing.py')
+    self._v8testing_tool = J(self._v8_script_dir, 'v8testing.py')
 
 
   def AddV8Testing(self, properties=None, simulator=None, testname=None):
     if (self._target_platform == 'win32'):
-      self.AddTaskkillStep();
+      self.AddTaskkillStep()
     cmd = [self._python, self._v8testing_tool,
            '--target', self._target]
     if (testname):
@@ -77,7 +75,7 @@ class V8Commands(commands.FactoryCommands):
            '--target', self._target,
            '--testname', 'es5conform']
     if (self._target_platform == 'win32'):
-      self.AddTaskkillStep();
+      self.AddTaskkillStep()
     if (self._arch):
       cmd += ['--arch', self._arch]
     if (simulator):
@@ -92,7 +90,7 @@ class V8Commands(commands.FactoryCommands):
            '--target', self._target,
            '--testname', 'mozilla']
     if (self._target_platform == 'win32'):
-      self.AddTaskkillStep();
+      self.AddTaskkillStep()
     if (self._arch):
       cmd += ['--arch', self._arch]
     if (simulator):
@@ -105,7 +103,7 @@ class V8Commands(commands.FactoryCommands):
            '--target', self._target,
            '--testname', 'sputnik']
     if (self._target_platform == 'win32'):
-      self.AddTaskkillStep();
+      self.AddTaskkillStep()
     if (self._arch):
       cmd += ['--arch', self._arch]
     if (simulator):
@@ -140,27 +138,20 @@ class V8Commands(commands.FactoryCommands):
            '--testname', 'leak']
     env = {
       'PATH': (
-        self.build_dir + '../src/third_party/valgrind/linux_x86/bin;'
+        self._build_dir + '../src/third_party/valgrind/linux_x86/bin;'
       ),
       'VALGRIND_LIB': (
-        self.build_dir + '../src/third_party/valgrind/linux_x86/lib/valgrind'
+        self._build_dir + '../src/third_party/valgrind/linux_x86/lib/valgrind'
       ),
     }
     self.AddTestStep(shell.ShellCommand, 'leak', cmd,
                      env=env,
                      workdir='build/bleeding_edge/')
 
-  def AddArchiveBuild(self, mode='dev', show_url=True, extra_archive_paths=None):
+  def AddArchiveBuild(self, mode='dev', show_url=True,
+      extra_archive_paths=None):
     """Adds a step to the factory to archive a build."""
-    if show_url:
-      url = '%s/%s/%s' %  (self._archive_url, 'snapshots', self._identifier)
-      text = 'download'
-    else:
-      url = None
-      text = None
-
-    cmd = [self._python, self._archive_tool,
-           '--target', self._target]
+    cmd = [self._python, self._archive_tool, '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'Archiving', cmd,
                  workdir='build/bleeding_edge')
 

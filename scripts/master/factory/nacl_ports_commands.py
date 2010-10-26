@@ -7,18 +7,11 @@
 
 Contains the Native Client Ports specific commands. Based on commands.py"""
 
-import os
-import re
-
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
-from buildbot.steps import trigger
 
-from common import chromium_utils
 from master.factory import commands
 from master.log_parser import archive_command
-from master.log_parser import process_log
-from master.log_parser import retcode_command
 
 import config
 
@@ -71,7 +64,6 @@ class NativeClientPortsCommands(commands.FactoryCommands):
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
     s_dir = self._chromium_script_dir
-    p_dir = self._private_script_dir
 
     self._process_dumps_tool = self.PathJoin(self._script_dir,
                                              'process_dumps.py')
@@ -109,7 +101,9 @@ class NativeClientPortsCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           command=download_script)
 
-  def AddCompileStep(self, mode, clobber=False, options=None, timeout=1200):
+  def AddCompileStep(self, solution, clobber=False, description='compiling',
+                     descriptionDone='compile', timeout=1200, mode=None,
+                     options=None):
     if clobber:
       clean_script = '%sbuildbot_cleanup_packages%s' % (
           self.script_prefix, self.script_suffix)

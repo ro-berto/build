@@ -7,9 +7,6 @@
 
 Based on gclient_factory.py."""
 
-import os
-import re
-
 from master.factory import gclient_factory
 from master.factory import nacl_sdk_commands
 
@@ -49,13 +46,8 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
   def _AddTests(self, factory_cmd_obj, tests, target,
                 mode=None, factory_properties=None, options=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
-    factory_properties = factory_properties or {}
-    # This function is too crowded, try to simplify it a little.
-    def R(test):
-      return gclient_factory.ShouldRunTest(tests, test)
-    f = factory_cmd_obj
-
     # no tests yet
+    pass
 
   def NativeClientSDKFactory(self, identifier, target='Release', clobber=False,
                              tests=None, mode=None, slave_type='BuilderTester',
@@ -79,10 +71,10 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
     # Add the compile step if needed.
     if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
         slave_type == 'Trybot'):
-      nacl_sdk_cmd_obj.AddCompileStep(mode=mode, clobber=clobber,
+      nacl_sdk_cmd_obj.AddCompileStep(solution=None, mode=mode, clobber=clobber,
                                       options=options, timeout=compile_timeout)
       nacl_sdk_cmd_obj.AddTarballStep()
-      
+
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       nacl_sdk_cmd_obj.AddArchiveBuild(

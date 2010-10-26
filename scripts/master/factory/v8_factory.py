@@ -52,9 +52,8 @@ class V8Factory(gclient_factory.GClientFactory):
     gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,
                                             target_platform=target_platform)
 
-
-  def _AddTests(self, factory_cmd_obj, tests, mode=None,
-                factory_properties=None):
+  @staticmethod
+  def _AddTests(factory_cmd_obj, tests, mode=None, factory_properties=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
     factory_properties = factory_properties or {}
 

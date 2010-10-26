@@ -7,9 +7,6 @@
 
 Based on gclient_factory.py."""
 
-import os
-import re
-
 from master.factory import gclient_factory
 from master.factory import nacl_commands
 
@@ -109,25 +106,25 @@ arm_tester_options = {
          'naclsdk_mode=manual naclsdk_validate=0'),
 }
 linux_marm_narm_options = {}
-for mode in ('dbg', 'opt'):
+for build_mode in ('dbg', 'opt'):
   # For emulated ARM.
-  linux_marm_narm_options[mode] = arm_emu_options.copy()
-  linux_marm_narm_options[mode]['partial_sdk'] = (
-    arm_emu_partial_sdk % {'mode': '%s-linux' % mode})
-  linux_marm_narm_options[mode]['hand_tests'] = (
-    arm_emu_hand_tests % {'mode': '%s-linux' % mode})
+  linux_marm_narm_options[build_mode] = arm_emu_options.copy()
+  linux_marm_narm_options[build_mode]['partial_sdk'] = (
+    arm_emu_partial_sdk % {'build_mode': '%s-linux' % build_mode})
+  linux_marm_narm_options[build_mode]['hand_tests'] = (
+    arm_emu_hand_tests % {'build_mode': '%s-linux' % build_mode})
 
   # For ARM tests.
-  linux_marm_narm_options[mode + '-arm'] = arm_tester_options.copy()
-  linux_marm_narm_options[mode + '-arm']['hand_tests'] = (
-    arm_tester_hand_tests % {'mode': '%s-linux' % mode})
+  linux_marm_narm_options[build_mode + '-arm'] = arm_tester_options.copy()
+  linux_marm_narm_options[build_mode + '-arm']['hand_tests'] = (
+    arm_tester_hand_tests % {'build_mode': '%s-linux' % build_mode})
 
   # For ARM trybot.
-  linux_marm_narm_options[mode + '-arm-try'] = arm_emu_options.copy()
-  linux_marm_narm_options[mode + '-arm-try']['partial_sdk'] = (
-    arm_emu_partial_sdk % {'mode': '%s-linux' % mode})
-  linux_marm_narm_options[mode + '-arm-try']['hand_tests'] = (
-    arm_emu_hand_tests % {'mode': '%s-linux' % mode})
+  linux_marm_narm_options[build_mode + '-arm-try'] = arm_emu_options.copy()
+  linux_marm_narm_options[build_mode + '-arm-try']['partial_sdk'] = (
+    arm_emu_partial_sdk % {'build_mode': '%s-linux' % build_mode})
+  linux_marm_narm_options[build_mode + '-arm-try']['hand_tests'] = (
+    arm_emu_hand_tests % {'build_mode': '%s-linux' % build_mode})
 
 
 class NativeClientFactory(gclient_factory.GClientFactory):
@@ -171,8 +168,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
                                             target_platform=target_platform)
 
-
-  def _AddTests(self, factory_cmd_obj, tests, target,
+  @staticmethod
+  def _AddTests(factory_cmd_obj, tests, target,
                 mode=None, factory_properties=None, options=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
     factory_properties = factory_properties or {}
@@ -211,14 +208,15 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       f.AddUtmanTests('x86-32', options=options)
     if R('nacl_utman_x86_64_tests'):
       f.AddUtmanTests('x86-64', options=options)
-    
+
     if R('nacl_coverage'):
       f.AddCoverageTests(options=options)
 
     if R('nacl_selenium'):
       f.AddSeleniumTests(options=options)
 
-  def _AddTriggerTests(self, factory_cmd_obj, tests, target,
+  @staticmethod
+  def _AddTriggerTests(factory_cmd_obj, tests, target,
                        mode=None, factory_properties=None, options=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
     # This function is too crowded, try to simplify it a little.
@@ -268,8 +266,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                    timeout=compile_timeout)
       if factory_properties.get('nacl_tarball'):
         nacl_cmd_obj.AddTarballStep(factory_properties['nacl_tarball_name'])
-      nacl_cmd_obj.AddCompileStep(mode=mode, clobber=clobber, options=options,
-                                  timeout=compile_timeout)
+      nacl_cmd_obj.AddCompileStep(solution=None, mode=mode, clobber=clobber,
+                                  options=options, timeout=compile_timeout)
 
     # Download the full output directory if the machine is a tester.
     if slave_type == 'Tester':

@@ -7,22 +7,16 @@
 
 Contains the Native Client specific commands. Based on commands.py"""
 
-import os
-import re
-
 from buildbot.process import buildstep
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from buildbot.steps import trigger
-from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, \
-     EXCEPTION
+from buildbot.status.builder import FAILURE
 
-from common import chromium_utils
 from master import chromium_step
 from master.factory import commands
 from master.log_parser import archive_command
 from master.log_parser import process_log
-from master.log_parser import retcode_command
 
 import config
 
@@ -185,7 +179,7 @@ class NativeClientCommands(commands.FactoryCommands):
           r'c:\WINDOWS\system32;'
           r'c:\WINDOWS;') +
           self._depot_tools + ';' +
-          self.PathJoin(self._depot_Tools, 'python_bin;') +
+          self.PathJoin(self._depot_tools, 'python_bin;') +
           (r'c:\Program Files\Microsoft Visual Studio 9.0\VC;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC;'
           r'c:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools;'
@@ -275,7 +269,6 @@ class NativeClientCommands(commands.FactoryCommands):
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
     s_dir = self._chromium_script_dir
-    p_dir = self._private_script_dir
 
     self._process_dumps_tool = self.PathJoin(self._script_dir,
                                              'process_dumps.py')
@@ -307,7 +300,9 @@ class NativeClientCommands(commands.FactoryCommands):
                           env=self._runhooks_env,
                           command=['gclient', 'runhooks', '--force'])
 
-  def AddCompileStep(self, mode, clobber=False, options=None, timeout=1200):
+  def AddCompileStep(self, solution, clobber=False, description='compiling',
+                     descriptionDone='compile', timeout=1200, mode=None,
+                     options=None):
     cmd = self._build_tool
 
     options = options or {}
@@ -370,7 +365,6 @@ class NativeClientCommands(commands.FactoryCommands):
                             env=self._clobber_packages_env,
                             command=self._clobber_packages_tool)
     partial_sdk = options.get('partial_sdk')
-    just_trusted = options.get('just_trusted')
     if build_toolchain:
       if options.get('git_toolchain'):
         self._factory.addStep(shell.ShellCommand,
@@ -545,7 +539,7 @@ class NativeClientCommands(commands.FactoryCommands):
 
   def AddSizedTests(self, test_size, full_name=None, options=None, timeout=300):
     """Add a build step to run tests of a given size."""
-    test_name='%s_tests' % test_size
+    test_name = '%s_tests' % test_size
     if full_name:
       test_name = full_name
     cmd = '%s %s' % (self._test_tool, test_name)
@@ -605,7 +599,7 @@ class NativeClientCommands(commands.FactoryCommands):
       cmd2 = ('%s platform=x86-64 sdl=none '
               'buildbot=%s run_under_extra_args=%s tsan_bot_tests') % (
                   self._test_tool, preset_name, ','.join(extra_args))
-      cmd = cmd + "; echo -e '\n\n== RaceVerifier 2nd run ==\n\n\'; " + cmd2;
+      cmd = cmd + "; echo -e '\n\n== RaceVerifier 2nd run ==\n\n\'; " + cmd2
     test_name = []
     if trusted:
       test_name.append('trusted')
@@ -640,7 +634,6 @@ class NativeClientCommands(commands.FactoryCommands):
     """Adds a step to the factory to archive coverage."""
     url = ('http://gsdview.appspot.com/nativeclient-coverage/'
            'revs/%(got_revision:-other)s/' + coverage_dir + '/html/index.html')
-    text = 'view'
 
     src = 'native_client/scons-out/%s/coverage' % coverage_dir
     dst_path = ('nativeclient-coverage/revs/%(got_revision:-other)s/' +
@@ -682,7 +675,7 @@ class NativeClientCommands(commands.FactoryCommands):
                                        'command_wrapper', 'bin',
                                        'command_wrapper.py'),
            '--', self._python, self._gsutil_tool, 'cp', src, full_dst]
-    cmd2 = [self._python, self.PathJoin(self_script_dir, '..',
+    cmd2 = [self._python, self.PathJoin(self._script_dir, '..',
                                         'command_wrapper', 'bin',
                                         'command_wrapper.py'),
             '--', self._python, self._gsutil_tool,
