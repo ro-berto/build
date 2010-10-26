@@ -110,21 +110,21 @@ for build_mode in ('dbg', 'opt'):
   # For emulated ARM.
   linux_marm_narm_options[build_mode] = arm_emu_options.copy()
   linux_marm_narm_options[build_mode]['partial_sdk'] = (
-    arm_emu_partial_sdk % {'build_mode': '%s-linux' % build_mode})
+    arm_emu_partial_sdk % {'mode': '%s-linux' % build_mode})
   linux_marm_narm_options[build_mode]['hand_tests'] = (
-    arm_emu_hand_tests % {'build_mode': '%s-linux' % build_mode})
+    arm_emu_hand_tests % {'mode': '%s-linux' % build_mode})
 
   # For ARM tests.
   linux_marm_narm_options[build_mode + '-arm'] = arm_tester_options.copy()
   linux_marm_narm_options[build_mode + '-arm']['hand_tests'] = (
-    arm_tester_hand_tests % {'build_mode': '%s-linux' % build_mode})
+    arm_tester_hand_tests % {'mode': '%s-linux' % build_mode})
 
   # For ARM trybot.
   linux_marm_narm_options[build_mode + '-arm-try'] = arm_emu_options.copy()
   linux_marm_narm_options[build_mode + '-arm-try']['partial_sdk'] = (
-    arm_emu_partial_sdk % {'build_mode': '%s-linux' % build_mode})
+    arm_emu_partial_sdk % {'mode': '%s-linux' % build_mode})
   linux_marm_narm_options[build_mode + '-arm-try']['hand_tests'] = (
-    arm_emu_hand_tests % {'build_mode': '%s-linux' % build_mode})
+    arm_emu_hand_tests % {'mode': '%s-linux' % build_mode})
 
 
 class NativeClientFactory(gclient_factory.GClientFactory):
