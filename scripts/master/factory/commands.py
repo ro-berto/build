@@ -192,9 +192,9 @@ class FactoryCommands(object):
 
   def PathJoin(self, *args):
     if self._target_platform == 'win32':
-      return ntpath.normpath(ntpath.join(args))
+      return ntpath.normpath(ntpath.join(*args))
     else:
-      return posixpath.normpath(posixpath.join(args))
+      return posixpath.normpath(posixpath.join(*args))
 
 
   # Basic commands
