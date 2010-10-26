@@ -188,7 +188,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('printing'):       f.AddBasicGTestTestStep('printing_unittests', fp)
     if R('remoting'):       f.AddBasicGTestTestStep('remoting_unittests', fp)
     if R('test_shell'):     f.AddBasicGTestTestStep('test_shell_tests', fp)
-    if R('safe_browsing'):  f.AddBasicGTestTestStep('safe_browsing_tests', fp)
+    if R('safe_browsing'):  f.AddBasicGTestTestStep(
+                                'safe_browsing_tests', fp,
+                                arg_list=['--test-terminate-timeout=40000'])
 
     # Medium-sized tests (unit and browser):
     if R('unit'):           f.AddChromeUnitTests(fp)
