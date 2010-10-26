@@ -25,7 +25,7 @@
 # /b/slave, which is what the LaunchAgent operates on.
 USE_LAUNCHD := \
   $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.slave.plist ] && \
-          [ "$$(pwd -P)" = "/b/slave" ] && \
+          [ "$$(pwd -P)" = "/b/build/slave" ] && \
           echo 1)
 
 export PYTHONPATH=../third_party/buildbot_7_12:../third_party/twisted_8_1
