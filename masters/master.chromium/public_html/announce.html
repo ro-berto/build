@@ -35,12 +35,12 @@
               <b>Dashboards:</b>
             </td>
             <td>
-              <a href="http://build.chromium.org/buildbot/perf/dashboard/overview.html">perf</a> |
-              <a href="http://build.chromium.org/buildbot/perf/dashboard/memory.html">memory</a> |
-              <a href="http://build.chromium.org/buildbot/perf/dashboard/sizes.html">sizes</a> |
-              <a href="http://build.chromium.org/buildbot/coverage/">coverage</a> |
-              <a href="http://build.chromium.org/buildbot/flakiness/">flakiness</a> |
-              <a href="http://build.chromium.org/buildbot/waterfall/stats">stats</a>
+              <a href="http://build.chromium.org/f/chromium/perf/dashboard/overview.html">perf</a> |
+              <a href="http://build.chromium.org/f/chromium/perf/dashboard/memory.html">memory</a> |
+              <a href="http://build.chromium.org/f/chromium/perf/dashboard/sizes.html">sizes</a> |
+              <a href="http://build.chromium.org/f/chromium/coverage/">coverage</a> |
+              <a href="http://build.chromium.org/f/chromium/flakiness/">flakiness</a> |
+              <a href="http://build.chromium.org/p/chromium/stats">stats</a>
             </td>
           </tr>
           <tr>
@@ -70,27 +70,13 @@
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
               <a href="./waterfall/help">customize</a> |
-              <script>
-                if (document.location.port != 80 && document.location.port) {
-                  // internal version of chromium.
-                  document.write('<a href="http://chrome-tryserver:8011/waterfall">try</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8016/waterfall">experimental</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8010/waterfall">waterfall</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8010/waterfall?show_events=true&failures_only=true">failures</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8010/console">console</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8014/console">memory</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8030/waterfall">chromiumos</a>');
-                } else {
-                  // external version of chromium.
-                  document.write('<a href="../try-server">try</a> | ');
-                  document.write('<a href="../waterfall.fyi/waterfall">experimental</a> | ');
-                  document.write('<a href="../waterfall/waterfall">waterfall</a> | ');
-                  document.write('<a href="../waterfall/waterfall?show_events=true&failures_only=true">failures</a> | ');
-                  document.write('<a href="../waterfall/console">console</a> | ');
-                  document.write('<a href="../memory/console">memory</a> | ');
-                  document.write('<a href="../chromiumos/waterfall">chromiumos</a>');
-                }
-              </script>
+              <a href="../tryserver.chromium">try</a> | 
+              <a href="../chromium.fyi/waterfall">experimental</a> |
+              <a href="../chromium/waterfall">waterfall</a> | 
+              <a href="../chromium/waterfall?show_events=true&failures_only=true">failures</a> |
+              <a href="../chromium/console">console</a> |
+              <a href="../chromium.memory/console">memory</a> | 
+              <a href="../chromiumos/waterfall">chromiumos</a>
             </td>
           </tr>
         </table>
@@ -102,31 +88,21 @@
       <td width="72%">
         <table width="100%">
           <script language="javascript">
-            var chrome = "builder=Chromium+XP&builder=Chromium+Mac&builder=Chromium+Arm&builder=Chromium+Linux&builder=Chromium+Linux+x64&builder=Chromium+Reliability&builder=Chromium+Builder&builder=Chromium+Builder+(dbg)&builder=XP+Tests&builder=Vista+Tests&builder=NACL+Tests&builder=NACL+Tests+(x64)&builder=Chrome+Frame+Tests+(ie6)&builder=Chrome+Frame+Tests+(ie7)&builder=Chrome+Frame+Tests+(ie8)&builder=XP+Tests+(dbg)(1)&builder=XP+Tests+(dbg)(2)&builder=XP+Tests+(dbg)(3)&builder=XP+Tests+(dbg)(4)&builder=Interactive+Tests+(dbg)&builder=XP+Perf+(dbg)&builder=XP+Perf+(1)&builder=XP+Perf+(2)&builder=XP+Interactive+Perf&builder=Vista+Tests+(dbg)(1)&builder=Vista+Tests+(dbg)(2)&builder=Vista+Tests+(dbg)(3)&builder=Vista+Tests+(dbg)(4)&builder=Vista+Perf+(dbg)&builder=Vista+Perf+(1)&builder=Vista+Perf+(2)&builder=Vista+Interactive+Perf&builder=Chromium+Linux+Builder+x64&builder=Chromium+Linux+Builder+(dbg)&builder=Linux+Perf+(1)&builder=Linux+Perf+(2)&builder=Linux+Tests+x64&builder=Linux+Tests+(dbg)(1)&builder=Linux+Tests+(dbg)(2)&builder=Chromium+Linux+Builder+(dbg-shlib)&builder=Linux+Tests+(dbg-shlib)(1)&builder=Chromium+Mac+Builder&builder=Chromium+Mac+Builder+(dbg)&builder=Mac10.5+Tests&builder=Mac10.5+Tests+(dbg)(1)&builder=Mac10.5+Tests+(dbg)(2)&builder=Mac10.5+Tests+(dbg)(3)&builder=Mac10.6+Tests&builder=Mac10.6+Tests+(dbg)(1)&builder=Mac10.6+Tests+(dbg)(2)&builder=Mac10.6+Tests+(dbg)(3)&builder=Mac10.5+Perf(1)&builder=Mac10.5+Perf(2)&builder=Mac10.5+Perf(3)&builder=Mac10.6+Perf(1)&builder=Mac10.6+Perf(2)&builder=Mac10.6+Perf(3)"
-            var webkit = "builder=Webkit+Builder&builder=Webkit+Builder+(dbg)&builder=Webkit&builder=Webkit+(dbg)(1)&builder=Webkit+(dbg)(2)&builder=Webkit+(dbg)(3)&builder=Webkit+Linux&builder=Webkit+Linux+Builder+(dbg)&builder=Webkit+Linux+(dbg)(1)&builder=Webkit+Linux+(dbg)(2)&builder=Webkit+Linux+(dbg)(3)&builder=Webkit+Mac+Builder&builder=Webkit+Mac+Builder+(dbg)&builder=Webkit+Mac10.5&builder=Webkit+Mac10.5+(dbg)(1)&builder=Webkit+Mac10.5+(dbg)(2)&builder=Webkit+Mac10.5+(dbg)(3)"
-            var modules = "builder=Modules+XP&builder=Modules+XP+(dbg)&builder=Modules+Vista&builder=Modules+Vista+(dbg)&builder=Modules+Linux&builder=Modules+Linux+(dbg)&builder=Modules+Mac10.5&builder=Modules+Mac10.5+(dbg)&builder=Modules+Mac10.6&builder=Modules+Mac10.6+(dbg)&builder=Linux+Builder+(Views+dbg)&builder=Linux+Builder+(ChromiumOS)"
+            var chrome = "builder=Win&builder=Win+Reliability&builder=Mac&builder=Linux&builder=Linux+x64&builder=Arm&builder=Win+Builder&builder=XP+Tests&builder=Vista+Tests&builder=NACL+Tests&builder=NACL+Tests+(x64)&builder=Chrome+Frame+Tests+(ie6)&builder=Chrome+Frame+Tests+(ie7)&builder=Chrome+Frame+Tests+(ie8)&builder=Win+Builder+(dbg)&builder=XP+Tests+(dbg)(1)&builder=XP+Tests+(dbg)(2)&builder=XP+Tests+(dbg)(3)&builder=XP+Tests+(dbg)(4)&builder=Vista+Tests+(dbg)(1)&builder=Vista+Tests+(dbg)(2)&builder=Vista+Tests+(dbg)(3)&builder=Vista+Tests+(dbg)(4)&builder=Interactive+Tests+(dbg)&builder=Mac+Builder&builder=Mac10.5+Tests&builder=Mac10.6+Tests&builder=Mac+Builder+(dbg)&builder=Mac+10.5+Tests+(dbg)(1)&builder=Mac+10.5+Tests+(dbg)(2)&builder=Mac+10.5+Tests+(dbg)(3)&builder=Mac+10.6+Tests+(dbg)(1)&builder=Mac+10.6+Tests+(dbg)(2)&builder=Mac+10.6+Tests+(dbg)(3)&builder=Linux+Builder+x64&builder=Linux+Tests+x64&builder=Linux+Builder+(dbg)&builder=Linux+Tests+(dbg)(1)&builder=Linux+Tests+(dbg)(2)&builder=Linux+Builder+(dbg-shlib)&builder=Linux+Tests+(dbg-shlib)&builder=Webkit+Win+Builder&builder=Linux+Builder+(ChromiumOS)&builder=Linux+Builder+(ChromiumOS+dbg)&builder=Linux+Builder+(Views+dbg)&builder=Arm+(dbg)"
+            var webkit = "builder=Webkit+Win+Builder&builder=Webkit+Win&builder=Webkit+Win+Builder+(dbg)&builder=Webkit+Win+(dbg)(1)&builder=Webkit+Win+(dbg)(2)&builder=Webkit+Win+(dbg)(3)&builder=Webkit+Mac+Builder&builder=Webkit+Mac10.5&builder=Webkit+Mac+Builder+(dbg)&builder=Webkit+Mac10.5+(dbg)(1)&builder=Webkit+Mac10.5+(dbg)(2)&builder=Webkit+Mac10.5+(dbg)(3)&builder=Webkit+Linux&builder=Webkit+Linux+Builder+(dbg)&builder=Webkit+Linux+Tests+(dbg)(1)&builder=Webkit+Linux+Tests+(dbg)(2)&builder=Webkit+Linux+Tests+(dbg)(3)"
             var memory = ""
-            var fyi = "builder=Google+Chrome+XP&builder=Google+Chrome+Linux&builder=Google+Chrome+Linux+x64&builder=Google+Chrome+ChromeOS&builder=Google+Chrome+Mac"
+            var perf = ""
+            var chrome = ""
 
-            var bar = "http://build.chromium.org/buildbot/waterfall/horizontal_one_box_per_builder"
-            var bar_memory = "http://build.chromium.org/buildbot/memory/horizontal_one_box_per_builder"
-            var bar_fyi = "http://build.chromium.org/buildbot/waterfall.fyi/horizontal_one_box_per_builder"
+            var bar = "http://build.chromium.org/p/chromium/horizontal_one_box_per_builder"
+            var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder"
+            var bar_perf = "http://build.chromium.org/p/chromium.perf/horizontal_one_box_per_builder"
+            var bar_chrome = "http://build.chromium.org/p/chromium.chrome/horizontal_one_box_per_builder"
 
-            var waterfall
-            var waterfall_memory
-            var waterfall_fyi
-
-            if (document.location.port != 80  && document.location.port) {
-              // Internal
-              waterfall = 'http://' + document.location.hostname + ':8010/waterfall'
-              waterfall_memory = 'http://' + document.location.hostname + ':8014/waterfall'
-              waterfall_fyi = 'http://' + document.location.hostname + ':8016/waterfall'
-            } else {
-              // External
-              waterfall = '../waterfall/waterfall'
-              waterfall_memory = '../memory/waterfall'
-              waterfall_fyi = '../waterfall.fyi/waterfall'
-            }
+            var waterfall = "../chromium/waterfall"
+            var waterfall_memory = "../chromium.memory/watefall"
+            var waterfall_chrome = "../chromium.chrome/waterfall"
+            var waterfall_perf = "../chromium.perf/waterfall"
 
             function GetUrl(type, content) {
               return type + "?" + content;
@@ -138,9 +114,9 @@
 
             DisplayBar(waterfall, bar, chrome, "Chromium");
             DisplayBar(waterfall, bar, webkit, "Webkit");
-            DisplayBar(waterfall, bar, modules, "Modules");
+            DisplayBar(waterfall_perf, bar_perf, perf, "Perf");
 
-            document.write("<tr><td><a href='" + GetUrl(waterfall_fyi, fyi) + "'>" + "Official"+ "</a></td><td width='24%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_fyi, fyi) + "'></iframe></td> <td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='74%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
+            document.write("<tr><td><a href='" + GetUrl(waterfall_chrome, chrome) + "'>" + "Official"+ "</a></td><td width='24%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_chrome, chrome) + "'></iframe></td> <td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='74%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
           </script>
         </table>
       </td>
