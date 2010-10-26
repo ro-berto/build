@@ -62,15 +62,8 @@
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
               <a href="./waterfall/help">customize</a> |
-              <script>
-                if (document.location.port == 8022) {
-                  document.write('<a href="http://' + document.location.hostname + ':8022/waterfall">waterfall</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8022/console">console</a>');
-                } else {
-                  document.write('<a href="../naclports/waterfall">waterfall</a> | ');
-                  document.write('<a href="../naclports/console">console</a>');
-                }
-              </script>
+              <a href="../client.nacl.ports/waterfall">waterfall</a> | 
+              <a href="../client.nacl.ports/console">console</a>
             </td>
           </tr>
         </table>
@@ -107,13 +100,8 @@
             var bar = "./horizontal_one_box_per_builder"
             var waterfall = "./waterfall"
 
-            if (document.location.port == 8022) {
-              bar = 'http://' + document.location.hostname + ':8022/' + bar
-              waterfall = 'http://' + document.location.hostname + ':8022/' + waterfall
-            } else {
-              bar = '../naclports/' + bar
-              waterfall = '../naclports/' + waterfall
-            }
+            bar = '../client.nacl.ports/' + bar
+            waterfall = '../client.naclp.orts/' + waterfall
 
             function GetUrl(type, content) {
               return type + "?" + content + "&reload=30";

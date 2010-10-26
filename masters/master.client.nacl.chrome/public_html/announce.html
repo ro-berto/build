@@ -62,15 +62,8 @@
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
               <a href="./waterfall/help">customize</a> |
-              <script>
-                if (document.location.port == 8025) {
-                  document.write('<a href="http://' + document.location.hostname + ':8025/waterfall">waterfall</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8025/console">console</a>');
-                } else {
-                  document.write('<a href="waterfall">waterfall</a> | ');
-                  document.write('<a href="console">console</a>');
-                }
-              </script>
+              <a href="./waterfall">waterfall</a> |
+              <a href="./console">console</a>
             </td>
           </tr>
         </table>
@@ -104,11 +97,6 @@
 
             var bar = "./horizontal_one_box_per_builder"
             var waterfall = "./waterfall"
-
-            if (document.location.port == 8025) {
-              bar = 'http://' + document.location.hostname + ':8025/' + bar
-              waterfall = 'http://' + document.location.hostname + ':8025/' + waterfall
-            }
 
             function GetUrl(type, content) {
               return type + "?" + content + "&reload=30";

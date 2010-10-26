@@ -62,15 +62,8 @@
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
               <a href="./waterfall/help">customize</a> |
-              <script>
-                if (document.location.port == 8025) {
-                  document.write('<a href="http://' + document.location.hostname + ':8025/waterfall">waterfall</a> | ');
-                  document.write('<a href="http://' + document.location.hostname + ':8025/console">console</a>');
-                } else {
-                  document.write('<a href="../nacl/waterfall">waterfall</a> | ');
-                  document.write('<a href="../nacl/console">console</a>');
-                }
-              </script>
+              <a href="../client.nacl/waterfall">waterfall</a> | 
+              <a href="../client.nacl/console">console</a>
             </td>
           </tr>
         </table>
@@ -124,13 +117,8 @@
             var bar = "./horizontal_one_box_per_builder"
             var waterfall = "./waterfall"
 
-            if (document.location.port == 8025) {
-              bar = 'http://' + document.location.hostname + ':8025/' + bar
-              waterfall = 'http://' + document.location.hostname + ':8025/' + waterfall
-            } else {
-              bar = '../nacl/' + bar
-              waterfall = '../nacl/' + waterfall
-            }
+            bar = '../client.nacl/' + bar
+            waterfall = '../client.nacl/' + waterfall
 
             function GetUrl(type, content) {
               return type + "?" + content + "&reload=30";
@@ -175,8 +163,8 @@
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
 
-            waterfall = "../nacl-toolchain/waterfall";
-            bar = "../nacl-toolchain/horizontal_one_box_per_builder";
+            waterfall = "../client.nacl.toolchain/waterfall";
+            bar = "../client.nacl.toolchain/horizontal_one_box_per_builder";
             for(var i in flavors) {
               DisplayBar(flavors[i][1], flavors[i][0]);
             }
@@ -206,8 +194,8 @@
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
 
-            waterfall = "../nacl-chrome/waterfall";
-            bar = "../nacl-chrome/horizontal_one_box_per_builder";
+            waterfall = "../client.nacl.chrome/waterfall";
+            bar = "../client.nacl.chrome/horizontal_one_box_per_builder";
             for(var i in flavors) {
               DisplayBar(flavors[i][1], flavors[i][0]);
             }
@@ -227,8 +215,8 @@
                           "linux-ports"]],
             ];
 
-            waterfall = "../naclports/waterfall";
-            bar = "../naclports/horizontal_one_box_per_builder";
+            waterfall = "../client.nacl.ports/waterfall";
+            bar = "../client.nacl.ports/horizontal_one_box_per_builder";
             for(var i in flavors) {
               DisplayBar(flavors[i][1], flavors[i][0]);
             }
@@ -248,8 +236,8 @@
                         "linux-sdk"]],
             ];
 
-            waterfall = "../nacl-sdk/waterfall";
-            bar = "../nacl-sdk/horizontal_one_box_per_builder";
+            waterfall = "../client.nacl.sdk/waterfall";
+            bar = "../client.nacl.sdk/horizontal_one_box_per_builder";
             for(var i in flavors) {
               DisplayBar(flavors[i][1], flavors[i][0]);
             }
