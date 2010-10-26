@@ -60,7 +60,7 @@ F('rel_unit', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Vista Tests', 'rel_unit', 'testers|windows', 'win_rel_dep')
+B('Vista Tests', 'rel_unit', 'testers|windows', 'win_rel_dep', auto_reboot=True)
 
 B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_dep')
 F('rel_nacl', win().ChromiumFactory(
@@ -166,10 +166,14 @@ F('dbg_unit_4', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Vista Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep')
-B('Vista Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep')
-B('Vista Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep')
-B('Vista Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep')
+B('Vista Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
+B('Vista Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
+B('Vista Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
+B('Vista Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
 
 #
 # Win Dbg Interactive Tests

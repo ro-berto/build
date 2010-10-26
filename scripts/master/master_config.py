@@ -24,14 +24,15 @@ class Helper(object):
     self._schedulers = {}
 
   def Builder(self, name, factory, gatekeeper=None, scheduler=None,
-              builddir=None):
+              builddir=None, auto_reboot=False):
     category = self._defaults.get('category')
     self._builders.append({'name': name,
                            'factory': factory,
                            'gatekeeper': gatekeeper,
                            'schedulers': scheduler.split('|'),
                            'builddir': builddir,
-                           'category': category})
+                           'category': category,
+                           'auto_reboot': auto_reboot})
 
   def Dependent(self, name, parent):
     if name in self._schedulers:
@@ -77,7 +78,8 @@ class Helper(object):
       # Append the builder to the list.
       new_builder = {'name': builder['name'],
                      'factory': self._factories[builder['factory']],
-                     'category': category}
+                     'category': category,
+                     'auto_reboot': builder['auto_reboot']}
       if builder['builddir']:
         new_builder['builddir'] =  builder['builddir']
       c['builders'].append(new_builder)
