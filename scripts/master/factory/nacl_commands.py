@@ -44,8 +44,6 @@ class NativeClientCommands(commands.FactoryCommands):
     self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
     self._gsutil_dir = self.PathJoin(self._script_dir, '..', '..',
                                      'third_party', 'gsutil')
-    self._depot_tools = self.PathJoin(self._script_dir, '..', '..', '..',
-        'depot_tools')
 
     self._build_dir = self.PathJoin('build', build_dir)
     self._toolchain_build_dir = self.PathJoin('build', build_dir, 'tools')
@@ -55,9 +53,10 @@ class NativeClientCommands(commands.FactoryCommands):
         r'c:\cygwin\bin;'
         r'c:\cygwin\usr\bin;'
         r'c:\WINDOWS\system32;'
-        r'c:\WINDOWS;') +
-        self._depot_tools + ';' +
-        self.PathJoin(self._depot_tools, 'python_bin;'),
+        r'c:\WINDOWS;'
+        r'e:\b\depot_tools;'
+        r'e:\b\depot_tools\python_bin;'
+      ),
     }
     self._runhooks_env = None
     self._build_compile_name = 'compile'
@@ -177,10 +176,10 @@ class NativeClientCommands(commands.FactoryCommands):
       self._build_env = {
         'PATH': (
           r'c:\WINDOWS\system32;'
-          r'c:\WINDOWS;') +
-          self._depot_tools + ';' +
-          self.PathJoin(self._depot_tools, 'python_bin;') +
-          (r'c:\Program Files\Microsoft Visual Studio 9.0\VC;'
+          r'c:\WINDOWS;'
+          r'e:\b\depot_tools;'
+          r'e:\b\depot_tools\python_bin;'
+          r'c:\Program Files\Microsoft Visual Studio 9.0\VC;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC;'
           r'c:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools;'
@@ -644,10 +643,10 @@ class NativeClientCommands(commands.FactoryCommands):
 
     env = self._build_env.copy()
     if self._target_platform.startswith('win'):
-      env['GSUTIL'] = self.PathJoin(self._script_dir, r'gsutil.bat')
+      env['GSUTIL'] = r'e:\b\build\scripts\slave\gsutil.bat'
       env['HOME'] = r'c:\Users\chrome-bot'
 
-    cmd = [self._python, self.PathJoin(self._script_dir, 'gsutil_cp_dir.py'),
+    cmd = [self._python, '/b/build/scripts/slave/gsutil_cp_dir.py',
            '--message', url, src, dst]
     cmd = WithProperties(' '.join(cmd))
     self._factory.addStep(AnnotatedCommand,
@@ -671,13 +670,11 @@ class NativeClientCommands(commands.FactoryCommands):
     full_dst = WithProperties(
         'gs://nativeclient-archive/%s/%s' % (dst_base, dst))
 
-    cmd = [self._python, self.PathJoin(self._script_dir, '..',
-                                       'command_wrapper', 'bin',
-                                       'command_wrapper.py'),
+    cmd = [self._python,
+           '/b/build/scripts/command_wrapper/bin/command_wrapper.py',
            '--', self._python, self._gsutil_tool, 'cp', src, full_dst]
-    cmd2 = [self._python, self.PathJoin(self._script_dir, '..',
-                                        'command_wrapper', 'bin',
-                                        'command_wrapper.py'),
+    cmd2 = [self._python,
+            '/b/build/scripts/command_wrapper/bin/command_wrapper.py',
             '--', self._python, self._gsutil_tool,
             'setacl', 'public-read', full_dst]
 
@@ -688,7 +685,7 @@ class NativeClientCommands(commands.FactoryCommands):
                      command2=None):
     if self._target_platform.startswith('win'):
       env = self._cygwin_env.copy()
-      env['PATH'] = self._depot_tools + ';' + env['PATH']
+      env['PATH'] = r'e:\b\depot_tools;' + env['PATH']
       env['HOME'] = r'c:\Users\chrome-bot'
     else:
       env = self._build_env

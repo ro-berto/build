@@ -32,16 +32,15 @@ class NativeClientSDKCommands(commands.FactoryCommands):
     self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
 
     self._build_dir = self.PathJoin('build', build_dir)
-    self._depot_tools = self.PathJoin(self._script_dir, '..', '..', '..',
-        'depot_tools')
 
     self._cygwin_env = {
       'PATH': (
         'c:\\cygwin\\bin;'
         'c:\\cygwin\\usr\\bin;'
         'c:\\WINDOWS\\system32;'
-        'c:\\WINDOWS;') +
-        self._depot_tools + ';',
+        'c:\\WINDOWS;'
+        'e:\\b\depot_tools;'
+      ),
     }
     self._runhooks_env = None
     self._build_compile_name = 'compile'
@@ -51,9 +50,9 @@ class NativeClientSDKCommands(commands.FactoryCommands):
     if target_platform.startswith('win'):
       self._build_env['PATH'] = (
           r'c:\WINDOWS\system32;'
-          r'c:\WINDOWS;') + (
-          self._depot_tools + ';' +
-          self.PathJoin(self._depot_tools, 'python_bin;')) + (
+          r'c:\WINDOWS;'
+          r'e:\b\depot_tools;'
+          r'e:\b\depot_tools\python_bin;'
           r'c:\Program Files\Microsoft Visual Studio 8\VC;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8\VC;'
           r'c:\Program Files\Microsoft Visual Studio 8\Common7\Tools;'
@@ -110,7 +109,7 @@ class NativeClientSDKCommands(commands.FactoryCommands):
   def AddArchiveStep(self, data_description, base_url, link_text, command):
     if self._target_platform.startswith('win'):
       env = self._cygwin_env.copy()
-      env['PATH'] = self._depot_tools + ';' + env['PATH']
+      env['PATH'] = r'e:\b\depot_tools;' + env['PATH']
     else:
       env = self._build_env
     step_name = ('archive_%s' % data_description).replace(' ', '_')
