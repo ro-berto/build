@@ -123,7 +123,7 @@ F('dbg_unit_2', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['unit', 'ui', 'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox',
-           'net', 'plugin_tests',],
+           'net', 'plugin',],
     factory_properties={'ui_total_shards': 2,
                         'ui_shard_index': 2,
                         'generate_gtest_json': True}))
