@@ -80,10 +80,10 @@ class ChromeOSCommands(commands.FactoryCommands):
                           description=msg)
 
   def AddChromeOSCopyConfigStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
-    # TODO: don't hard-code script path, but _private_script_dir above doesn't
-    # seem to be working...
-    cmd = ['/b/scripts/private/chromeos_dev_config.sh', self._identifier]
+                                timeout=1200):
+    # TODO(scottz): don't hard-code script path, but _private_script_dir above
+    # doesn't work because workdir is not the default value.
+    cmd = ['/b/build/scripts/private/chromeos_dev_config.sh', self._identifier]
     self._factory.addStep(shell.ShellCommand,
                           name='configure build',
                           description='configure build',
@@ -98,7 +98,7 @@ class ChromeOSCommands(commands.FactoryCommands):
     # XXX: If I can ever figure out how to symlink cbuild.log to a buildbot
     # viewable/accessible URL, I can turn -v off and add this link here to
     # the full log and let the main log just be a summary.
-    cmd = ['/b/scripts/crostools/cbuild', '-v', '--clean', '--chromeos',
+    cmd = ['/b/build/scripts/crostools/cbuild', '-v', '--clean', '--chromeos',
            '--buildroot=../../../..',
            WithProperties("--buildnumber=%(buildnumber)s")]
 
@@ -399,8 +399,8 @@ class ChromeOSCommands(commands.FactoryCommands):
         '--acl', '/home/chrome-bot/slave_archive_acl',
         '--gsutil_archive', gsutil_archive,
         '--gsd_gen_index',
-          '/b/scripts/gsd_generate_index/gsd_generate_index.py',
-        '--gsutil', '/b/scripts/slave/gsutil',
+          '/b/build/scripts/gsd_generate_index/gsd_generate_index.py',
+        '--gsutil', '/b/build/scripts/slave/gsutil',
     ]
     if options and options.get('lasercats'):
       cmd += ['' + options.get('lasercats_testmod', ''),
