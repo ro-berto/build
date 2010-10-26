@@ -8,6 +8,8 @@ All the utility functions to add steps to a build factory here are not
 project-specific. See the other *_commands.py for project-specific commands.
 """
 
+import ntpath
+import posixpath
 import re
 
 from buildbot.locks import SlaveLock
@@ -190,9 +192,9 @@ class FactoryCommands(object):
 
   def PathJoin(self, *args):
     if self._target_platform == 'win32':
-      return '\\'.join(args)
+      return ntpath.normpath(ntpath.join(args))
     else:
-      return '/'.join(args)
+      return posixpath.normpath(posixpath.join(args))
 
 
   # Basic commands
