@@ -183,15 +183,14 @@ class NativeClientCommands(commands.FactoryCommands):
           r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC;'
           r'c:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools;'
-          r'c:\Program Files\Microsoft Visual Studio 8;'
           r'c:\Program Files\Microsoft Visual Studio 8\VC;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8\VC;'
           r'c:\Program Files\Microsoft Visual Studio 8\Common7\Tools;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8\Common7\Tools;'
           r'c:\Program Files\Microsoft Visual Studio 8'
-          r'\Team Tools\Performance Tools;'
+             r'\Team Tools\Performance Tools;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8'
-          r'\Team Tools\Performance Tools;'
+              r'\Team Tools\Performance Tools;'
         ),
       }
       self._gyp_build_env = self._build_env

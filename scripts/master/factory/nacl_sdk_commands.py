@@ -53,10 +53,14 @@ class NativeClientSDKCommands(commands.FactoryCommands):
           r'c:\WINDOWS;'
           r'e:\b\depot_tools;'
           r'e:\b\depot_tools\python_bin;'
+          r'c:\Program Files\Microsoft Visual Studio 9.0\VC;'
+          r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC;'
+          r'c:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools;'
+          r'c:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Tools;'
           r'c:\Program Files\Microsoft Visual Studio 8\VC;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8\VC;'
           r'c:\Program Files\Microsoft Visual Studio 8\Common7\Tools;'
-          r'c:\Program Files (x86)\Microsoft Visual Studio 8\Common7\Tools'
+          r'c:\Program Files (x86)\Microsoft Visual Studio 8\Common7\Tools;'
       )
 
     # Create smaller name for the functions and vars to siplify the code below.
