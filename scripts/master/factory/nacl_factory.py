@@ -58,13 +58,6 @@ hardy64_m64_n64_options = {
     'scons_opts': 'platform=x86-64 --disable_hardy64_vmware_failures',
 }
 
-linux_m32_narm_options = {
-    'partial_sdk':
-        'bash -c " ./scons --download --help platform=arm bitcode=1"',
-    'scons_opts':
-        'targetplatform=arm bitcode=1 sdl=none ',
-}
-
 arm_emu_partial_sdk = (
      'bash -c " '
      './scons --verbose --download --mode=nacl_extra_sdk '
