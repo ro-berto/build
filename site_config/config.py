@@ -68,7 +68,7 @@ class Master(config_private.Master):
   project_url = 'http://www.chromium.org'
 
   # Base URL for perf test results.
-  perf_base_url = 'http://build.chromium.org/buildbot/perf'
+  perf_base_url = 'http://build.chromium.org/f/chromium/perf'
 
   # Suffix for perf URL.
   perf_report_url_suffix = 'report.html?history=150'
