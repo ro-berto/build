@@ -88,7 +88,7 @@ arm_tester_hand_tests = (
 )
 arm_emu_options = {
     'scons_opts':
-        ('platform=arm bitcode=1 sdl=none '),
+        ('-j 8 platform=arm bitcode=1 sdl=none '),
 }
 arm_tester_options = {
     'scons_prefix': 'ARM_CC=gcc ARM_CXX=g++ ARM_LIB_DIR=/usr/lib ',
