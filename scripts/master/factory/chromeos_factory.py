@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -75,18 +75,6 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
         target_platform=self._target_platform,
         official_build=self._official_build)
 
-    # Ensures that we clean up a previous fail of a temporary commit from a
-    # previous run.
-    if 'pre_flight_queue' in steps:
-      chromeos_cmd_obj.AddChromeOSPreFlightStep('clean',
-          clobber, mode=mode, options=options, timeout=compile_timeout)
-
-    # Do straight cbuild
-    if 'cbuild' in steps:
-      chromeos_cmd_obj.AddcbuildStep(
-          clobber, mode=mode, options=options, timeout=compile_timeout,
-          base_url=factory_properties.get('archive_url'))
-
     # TODO(sosa) - Remove steps once we switch to cbuildbot. 
     chromeos_cmd_obj.AddChromeOSCrosUtilsStep()
 
@@ -94,18 +82,10 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
                                                options=options,
                                                timeout=compile_timeout)
 
-    # Add official overlay step if needed
-    if 'overlay_official' in steps:
-      chromeos_cmd_obj.AddOverlayOfficialStep(
-          clobber, mode=mode, options=options, timeout=compile_timeout)
-
     # Add the compile steps if needed.
     if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
         slave_type == 'Trybot'):
 
-      if 'publish_repo' in steps:
-        chromeos_cmd_obj.AddChromeOSPublishRepoStep(
-            clobber, mode=mode, options=options, timeout=compile_timeout)
       if 'make_chroot' in steps:
         chromeos_cmd_obj.AddChromeOSMakeChrootStep(
             clobber, mode=mode, options=options, timeout=compile_timeout+1800)
@@ -124,20 +104,12 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     chromeos_cmd_obj.AddChromeOSCopyConfigStep(
         clobber, mode=mode, options=options, timeout=compile_timeout)
 
-    # Temporarily marks new changes as stable.
-    if 'pre_flight_queue' in steps:
-      chromeos_cmd_obj.AddChromeOSPreFlightStep('commit',
-          clobber, mode=mode, options=options, timeout=compile_timeout)
-
     if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
         slave_type == 'Trybot'):
 
       if 'platform' in steps:
         chromeos_cmd_obj.AddChromeOSPackagesStep(
             clobber, mode=mode, options=options, timeout=compile_timeout+2000)
-      if 'kernel' in steps:
-        chromeos_cmd_obj.AddChromeOSKernelStep(
-            clobber, mode=mode, options=options, timeout=compile_timeout)
       if 'image' in steps:
         chromeos_cmd_obj.AddChromeOSImageStep(
             clobber, mode=mode, options=options, timeout=compile_timeout)
@@ -145,6 +117,7 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     # Add test steps if needed.
     chromeos_cmd_obj.AddChromeOSTestSteps(
         tests, clobber, mode=mode, options=options, timeout=compile_timeout)
+
     # Archive the full output directory if the machine is a builder.
     if slave_type == 'Builder':
       chromeos_cmd_obj.AddZipBuild()
@@ -157,16 +130,6 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     if 'cache' in steps:
       chromeos_cmd_obj.AddCachePackages(options=options)
 
-    # Add this cbuild link step.
-    if factory_properties.get('download_link'):
-      chromeos_cmd_obj.AddcbuildDownloadLinkStep(
-          base_url=factory_properties.get('archive_url'))
-
-    # Add this cbuild triagelink step.
-    if factory_properties.get('triagelog_link'):
-      chromeos_cmd_obj.AddcbuildTriageLogLinkStep(
-          base_url=factory_properties.get('archive_url'))
-
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       chromeos_cmd_obj.AddArchiveBuild(
@@ -175,27 +138,12 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
           gsutil_archive=factory_properties.get('gsutil_archive', ''),
           options=options)
 
-    # Pushes temporary stable chagnes to git repo.
-    # TODO(sosa) - Move to master bot once logic is complete to have it control
-    # this step.
-    if 'pre_flight_queue' in steps:
-      chromeos_cmd_obj.AddChromeOSPreFlightStep('push',
-          clobber, mode=mode, options=options, timeout=compile_timeout)
-
     # Do we need to trigger the Build Verification Test slave?
     if 'bvt' in steps:
       factory.addStep(trigger.Trigger(schedulerNames=['x86_full_bvt'],
                                       waitForFinish=False,
                                       set_properties={'main_buildnumber':
                                           WithProperties("%(buildnumber)s")}))
-
-    # Revert official overlay if needed
-    if 'overlay_official' in steps:
-      chromeos_cmd_obj.AddRevertOfficialStep(
-          clobber, mode=mode, options=options, timeout=compile_timeout)
-
-    if 'note_success' in steps:
-      chromeos_cmd_obj.AddNoteSuccess(options=options)
 
     return factory
 
@@ -234,8 +182,6 @@ class CbuildbotFactory(object):
       crosutils_repo: git repo for crosutils toolset.
   """
 
-  # type is aliasing builtin.
-  # pylint: disable=W0622
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
                triagelog=None, params='', timeout=9000, variant=None,
                is_master=False,

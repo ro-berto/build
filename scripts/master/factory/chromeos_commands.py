@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,13 +12,8 @@ from buildbot.process.properties import WithProperties
 from master.factory import commands
 from master.log_parser import archive_command
 
-
-def BoardName(options):
-  if options.get('lasercats_variant'):
-    return '%s_%s' % (options['lasercats_board'],
-                      options['lasercats_variant'])
-  else:
-    return options['lasercats_board']
+import chromium_utils
+import config
 
 
 class ChromeOSCommands(commands.FactoryCommands):
@@ -51,6 +46,8 @@ class ChromeOSCommands(commands.FactoryCommands):
       self._enter_chroot += ['--official_build']
       self._archive_build += ['--official_build']
 
+    self._enter_chroot += ['--']
+
   def AddChromeOSRepoUpdateStep(self, clobber=False, mode=None, options=None,
                                 timeout=2400):
     cmd = ['crosutils/bin/cros_repo_sync_all']
@@ -65,6 +62,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                           command=cmd,
                           name='Repo Sync',
                           description='Repo Sync',
+                          haltOnFailure=True,
                           timeout=timeout)
 
   def AddChromeOSCrosUtilsStep(self,
@@ -80,9 +78,9 @@ class ChromeOSCommands(commands.FactoryCommands):
                           description=msg)
 
   def AddChromeOSCopyConfigStep(self, clobber=False, mode=None, options=None,
-                                timeout=1200):
-    # TODO(scottz): don't hard-code script path, but _private_script_dir above
-    # doesn't work because workdir is not the default value.
+                            timeout=1200):
+    # TODO: don't hard-code script path, but _private_script_dir above doesn't
+    # seem to be working...
     cmd = ['/b/scripts/private/chromeos_dev_config.sh', self._identifier]
     self._factory.addStep(shell.ShellCommand,
                           name='configure build',
@@ -92,91 +90,29 @@ class ChromeOSCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd)
 
-  # 5 hour timeout
-  def AddcbuildStep(self, clobber=False, mode=None, options=None,
-                    timeout=18000, base_url=None):
-    # XXX: If I can ever figure out how to symlink cbuild.log to a buildbot
-    # viewable/accessible URL, I can turn -v off and add this link here to
-    # the full log and let the main log just be a summary.
-    cmd = ['/b/scripts/crostools/cbuild', '-v', '--clean', '--chromeos',
-           '--buildroot=../../../..',
-           WithProperties("--buildnumber=%(buildnumber)s")]
-
-    self._factory.addStep(shell.ShellCommand,
-                          name='cbuild',
-                          description='cbuild',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
-
-  def AddcbuildDownloadLinkStep(self, options=None, base_url=None):
-    """Adds a step to the factory to archive a build."""
-    cmd = ['sudo']
-    self._factory.addStep(shell.ShellCommand,
-                          name='Download Link',
-                          description='Download Link',
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
-
-
-  def AddcbuildTriageLogLinkStep(self, timeout=120, options=None,
-                                 base_url=None):
-    """Adds a step to the factory to archive a build."""
-    cmd = ['sudo']
-    self._factory.addStep(shell.ShellCommand,
-                          name='Error Summary',
-                          description='Error Summary',
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
-
-  def AddChromeOSMakeRepoStep(self, clobber=False, mode=None, options=None,
-                             timeout=1200):
-    cmd = ['./make_local_repo.sh',
-           '--mirror=http://chromeos-deb.corp.google.com/ubuntu',
-           '--suite=karmic']
-    self._factory.addStep(shell.ShellCommand,
-                          name='update local repo',
-                          description='update local repo',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
-
-  def AddChromeOSPublishRepoStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
-
-    cmd = ['scp', '-r', 'db', 'dists', 'pool',
-           'chrome-web.corp.google.com:/home/chrome-bot/www/packages']
-    self._factory.addStep(shell.ShellCommand,
-                          name='publish local repo',
-                          description='publish local repo',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir='build/chromeos/repo/apt',
-                          command=cmd)
+  def BoardName(self, options):
+    if options.get('lasercats_variant'):
+      return '%s_%s' % (options['lasercats_board'],
+                        options['lasercats_variant'])
+    else:
+      return options['lasercats_board']
 
   def AddChromeOSMakeChrootStep(self, clobber=False, mode=None, options=None,
                                 timeout=3000):
-    if options and options.get('lasercats'):
-      # Temporary workaround to use local mirror (and avoid blocked ftp sites).
-      setup_cmd = 'cp ~/thirdpartymirrors ../third_party/portage/profiles'
-      self._factory.addStep(shell.ShellCommand,
-                            name='setup mirrors',
-                            description='setup mirrors',
-                            timeout=timeout,
-                            haltOnFailure=True,
-                            workdir=self._build_dir,
-                            command=setup_cmd)
-      cmd = ['./make_chroot',
-             options.get('lasercats_replace',
-                         WithProperties('%s', 'clobber:+--replace'))]
-      if options.get('lasercats_fast'):
-        cmd += [options.get('lasercats_fast')]
-    else:
-      cmd = ['./make_chroot.sh', '--replace', '--nousepkg']
+    # Temporary workaround to use local mirror (and avoid blocked ftp sites).
+    setup_cmd = 'cp ~/thirdpartymirrors ../third_party/portage/profiles'
+    self._factory.addStep(shell.ShellCommand,
+                          name='setup mirrors',
+                          description='setup mirrors',
+                          timeout=timeout,
+                          haltOnFailure=True,
+                          workdir=self._build_dir,
+                          command=setup_cmd)
+    cmd = ['./make_chroot',
+           options.get('lasercats_replace',
+                       WithProperties('%s', 'clobber:+--replace')),
+           options.get('lasercats_fast', '')
+    ]
     self._factory.addStep(shell.ShellCommand,
                           name='update chroot',
                           description='update chroot',
@@ -187,56 +123,40 @@ class ChromeOSCommands(commands.FactoryCommands):
 
   def AddChromeOSSetupBoardStep(self, clobber=False, mode=None, options=None,
                                 timeout=1200):
-    if options and options.get('lasercats'):
-      if options.get('lasercats_variant'):
-        variant = ' --variant %s' % options['lasercats_variant']
-      else:
-        variant = ''
-      cmd = self._enter_chroot + [
-          './setup_board --force --board %s' % options.get('lasercats_board') +
-          variant,
-      ]
-      self._factory.addStep(shell.ShellCommand,
-                            name='setup board',
-                            description='setup board',
-                            timeout=timeout,
-                            haltOnFailure=True,
-                            workdir=self._build_dir,
-                            command=cmd)
+    if options.get('lasercats_variant'):
+      variant = '--variant %s' % options['lasercats_variant']
+    else:
+      variant = ''
+    cmd = self._enter_chroot + [
+        './setup_board',
+        '--force',
+        '--board=%s' % options.get('lasercats_board'),
+        variant
+    ]
+    self._factory.addStep(shell.ShellCommand,
+                          name='setup board',
+                          description='setup board',
+                          timeout=timeout,
+                          haltOnFailure=True,
+                          workdir=self._build_dir,
+                          command=cmd)
 
   def AddChromeOSPackagesStep(self, clobber=False, mode=None, options=None,
                               timeout=1200):
 
-    if options and options.get('lasercats'):
-      pass
-    else:
-      cmd = self._enter_chroot + ['rm -f ../build/x86/local_packages/*']
-      self._factory.addStep(shell.ShellCommand,
-                            name='clean local packages',
-                            description='clean local packages',
-                            timeout=timeout,
-                            haltOnFailure=True,
-                            workdir=self._build_dir,
-                            command=cmd)
+    cmd = self._enter_chroot + [
+        './build_packages',
+        '--showoutput',
+        '--retries 3',
+        '--chromefromsource',
+        '--board=%s' % self.BoardName(options),
+        options.get('lasercats_jobs', ''),
+        options.get('lasercats_chromebase', ''),
+        options.get('lasercats_extra', ''),
+        options.get('lasercats_autotest', ''),
+        options.get('lasercats_fast', '')
+    ]
 
-    if options and options.get('lasercats'):
-      if options.get('lasercats_fast'):
-        fast = ' ' + options.get('lasercats_fast')
-      else:
-        fast = ''
-      buildbot_base_cmd = ('./build_packages --showoutput --retries 3 '
-                           '--chromefromsource --board ')
-      cmd = self._enter_chroot + [
-            buildbot_base_cmd,
-            BoardName(options) +
-            ' ' + options.get('lasercats_jobs', '') +
-            ' ' + options.get('lasercats_chromebase', '') +
-            ' ' + options.get('lasercats_extra', '') +
-            ' ' + options.get('lasercats_autotest', '') +
-            fast
-      ]
-    else:
-      cmd = self._enter_chroot + ['./build_platform_packages.sh']
     self._factory.addStep(shell.ShellCommand,
                           name='build packages',
                           description='build packages',
@@ -245,43 +165,14 @@ class ChromeOSCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd)
 
-  def AddChromeOSKernelStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
-
-    cmd = self._enter_chroot + ['./build_kernel.sh']
-    self._factory.addStep(shell.ShellCommand,
-                          name='build kernel',
-                          description='build kernel',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
-
   def AddChromeOSImageStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
-
-    if options and options.get('lasercats'):
-      pass
-    else:
-      cmd = self._enter_chroot + ['sudo rm -rf ../build/images/*']
-      self._factory.addStep(shell.ShellCommand,
-                            name='clean image',
-                            description='clean image',
-                            timeout=timeout,
-                            haltOnFailure=True,
-                            workdir=self._build_dir,
-                            command=cmd)
-
-    if options and options.get('lasercats'):
-      if options.get('lasercats_fast'):
-        fast = ' ' + options.get('lasercats_fast')
-      else:
-        fast = ''
-      cmd = self._enter_chroot + [
-            './build_image --replace --board ' + BoardName(options) + fast
-      ]
-    else:
-      cmd = self._enter_chroot + ['./build_image.sh']
+                           timeout=1200):
+    cmd = self._enter_chroot + [
+        './build_image',
+        '--replace',
+        '--board=%s' % self.BoardName(options),
+        options.get('lasercats_fast', '')
+    ]
     self._factory.addStep(shell.ShellCommand,
                           name='build image',
                           description='build image',
@@ -290,15 +181,14 @@ class ChromeOSCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd)
 
-
   def AddChromeOSFactoryInstallStep(self, clobber=False, mode=None,
                                     options=None, timeout=1200):
-    board = BoardName(options)
+    board = self.BoardName(options)
     cmd = self._enter_chroot + [
-        './image_to_usb.sh ',
+        './image_to_usb.sh',
         '--factory_install',
         '-y',
-        ' --force_copy',
+        '--force_copy',
         '--from=../build/images/%s/foo/' % board,
         '-i chromiumos_base_image.bin',
         '--to=../build/images/%s/foo/chromiumos_factory_install_image.bin' %
@@ -315,57 +205,51 @@ class ChromeOSCommands(commands.FactoryCommands):
   def AddChromeOSTestSteps(self, tests, clobber=False, mode=None, options=None,
                           timeout=1200):
     if 'platform' in tests:
-
-      cmd = self._enter_chroot + [
-          './cros_run_unit_tests --board ' + BoardName(options)]
+      unittest_cmd = self._enter_chroot + [
+          './cros_run_unit_tests',
+          '--board=%s' % self.BoardName(options)
+      ]
       self._factory.addStep(shell.ShellCommand,
                             name='run tests',
                             description='run tests',
                             timeout=timeout,
                             haltOnFailure=True,
                             workdir=self._build_dir,
-                            command=cmd)
+                            command=unittest_cmd)
 
-  def AddChromeOSPreFlightStep(self, command, clobber=False, mode=None,
-                                options=None, timeout=300):
-    """Adds pre-flight steps for the slaves"""
+    if 'target' in tests:
+      image_cmd = self._enter_chroot + [
+          './image_to_vm.sh',
+          ' --board=%s' % self.BoardName(options),
+          ' --test_image',
+          ' --full',
+          ' --vdisk_size=6074',
+          ' --statefulfs_size=3072'
+      ]
 
-    if command == 'clean':
-      cmd = self._enter_chroot + [
-            './cros_mark_as_stable clean']
-
-      self._factory.addStep(shell.ShellCommand,
-                            name='preflight clean',
-                            description='preflight clean',
-                            timeout=timeout,
-                            haltOnFailure=False,
-                            workdir=self._build_dir,
-                            command=cmd)
-    elif command == 'commit':
-      cmd = self._enter_chroot + [
-            './cros_mark_all_as_stable --board %s' % BoardName(options)]
+      test_cmd = ['bin/cros_run_vm_test',
+          '--board=%s' % self.BoardName(options),
+          '--no_graphics',
+          '--test_case=suite_Smoke'
+      ]
 
       self._factory.addStep(shell.ShellCommand,
-                            name='preflight all commit',
-                            description='preflight all commit',
+                            name='create qemu image',
+                            description='create qemu image',
                             timeout=timeout,
                             haltOnFailure=True,
                             workdir=self._build_dir,
-                            command=cmd)
-    elif command == 'push':
-      cmd = self._enter_chroot + [
-        './cros_mark_as_stable --push_options "--bypass-hooks -f" push']
+                            command=image_cmd)
 
       self._factory.addStep(shell.ShellCommand,
-                            name='preflight push',
-                            description='preflight push',
-                            timeout=timeout,
+                            name='run smoke bvt',
+                            description='run smoke bvt',
+                            timeout=timeout+2000,
                             haltOnFailure=True,
                             workdir=self._build_dir,
-                            command=cmd)
+                            command=test_cmd)
 
-
-  def AddArchiveStep(self, data_description, base_url, link_text, command):
+  def _AddArchiveStep(self, data_description, base_url, link_text, command):
     step_name = ('archive_%s' % data_description).replace(' ', '_')
     self._factory.addStep(archive_command.ArchiveCommand,
                           name=step_name,
@@ -402,50 +286,14 @@ class ChromeOSCommands(commands.FactoryCommands):
           '/b/scripts/gsd_generate_index/gsd_generate_index.py',
         '--gsutil', '/b/scripts/slave/gsutil',
     ]
-    if options and options.get('lasercats'):
-      cmd += ['' + options.get('lasercats_testmod', ''),
-              '' + options.get('lasercats_factory1', ''),
-              '' + options.get('lasercats_factory2', ''),
-              '--board', BoardName(options)]
-    self.AddArchiveStep(data_description='build', base_url=url,
+    cmd += [
+        options.get('lasercats_testmod', ''),
+        options.get('lasercats_factory1', ''),
+        options.get('lasercats_factory2', ''),
+        '--board=%s' % self.BoardName(options)
+    ]
+    self._AddArchiveStep(data_description='build', base_url=url,
                         link_text=text, command=cmd)
-
-  def AddOverlayOfficialStep(self, clobber=False, mode=None, options=None,
-                             timeout=1200):
-    cmd = ['./overlay_official.sh']
-    self._factory.addStep(shell.ShellCommand,
-                          name='overlay official repo',
-                          description='overlay official repo',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir=self.PathJoin('build', 'official/scripts'),
-                          command=cmd)
-
-  def AddRevertOfficialStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
-    cmd = ['gclient', 'revert']
-    self._factory.addStep(shell.ShellCommand,
-                          name='revert official overlay',
-                          description='revert official overlay',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
-
-  def AddNoteSuccess(self, options=None):
-    board = BoardName(options)
-    cmd = ['./save_pinned_deps',
-           '--commit',
-           '--substitute',
-           '--depfile',
-           board + '/build-full.gclient']
-    self._factory.addStep(shell.ShellCommand,
-                          name='save_pinned_deps',
-                          description='save_pinned_deps',
-                          timeout=300,
-                          haltOnFailure=True,
-                          workdir=self._build_dir,
-                          command=cmd)
 
   def AddCachePackages(self, options):
     cmd = ['sudo', 'chmod', 'a+rwx', '../../chroot/var/lib/portage/pkgs']
@@ -457,7 +305,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd)
 
-    board = BoardName(options)
+    board = self.BoardName(options)
     board_cache_dir = '/var/buildbot-package-cache/%s' % board
     host_cache_dir = '/var/buildbot-package-cache/host'
     # create cache dirs
@@ -513,7 +361,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                           command=cmd)
 
     # Restore board packages.
-    board = BoardName(options)
+    board = self.BoardName(options)
     cmd = ['sudo', 'mkdir', '-p', '../../chroot/build/%s/packages' % board]
     self._factory.addStep(shell.ShellCommand,
                           name='mkdir board packages',
@@ -522,7 +370,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           workdir=self._build_dir,
                           command=cmd)
-    board = BoardName(options)
+    board = self.BoardName(options)
     cmd = ['sudo', 'chown', '-R', 'chrome-bot:chrome-bot', '../../chroot/build']
     self._factory.addStep(shell.ShellCommand,
                           name='chown board packages',
@@ -533,7 +381,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                           command=cmd)
     cmd = ['sudo', 'rsync', '-avz',
            '/var/buildbot-package-cache/%s/' % board,
-          '../../chroot/build/%s/packages' % board]
+           '../../chroot/build/%s/packages' % board]
     self._factory.addStep(shell.ShellCommand,
                           name='restore board packages',
                           description='restore board packages',
@@ -558,6 +406,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                           link_text='dashboard',
                           base_url='http://cautotest/results/dashboard/',
                           command=cmd)
+
 
 class LinkShellCommand(shell.ShellCommand):
   """Basic ShellCommand with support for adding a link for display."""
