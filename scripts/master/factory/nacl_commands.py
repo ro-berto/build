@@ -169,7 +169,7 @@ class NativeClientCommands(commands.FactoryCommands):
           'devenv.com build\\all.sln /build ' + configuration)
       scons = (
           'vcvarsall ' + subarch + ' && '
-          'scons DOXYGEN=..\\third_party\\doxygen\\win\\doxygen')
+          'scons -j 8 DOXYGEN=..\\third_party\\doxygen\\win\\doxygen')
       scons_test = (
           'scons DOXYGEN=..\\third_party\\doxygen\\win\\doxygen'
           ' built_elsewhere=1')
@@ -209,12 +209,12 @@ class NativeClientCommands(commands.FactoryCommands):
       if self._target_platform == 'darwin':
         gyp_build = ('xcodebuild -project build/all.xcodeproj '
                      '-configuration ' + configuration)
-        scons = './scons DOXYGEN=../third_party/doxygen/osx/doxygen'
-        scons_test = scons
+        scons = './scons -j 8 DOXYGEN=../third_party/doxygen/osx/doxygen'
+        scons_test = './scons DOXYGEN=../third_party/doxygen/osx/doxygen'
       elif self._target_platform == 'arm':
         gyp_build = 'cd .. ; make -k -j4 V=1 BUILDTYPE=' + configuration
-        scons = './scons DOXYGEN=../third_party/doxygen/linux/doxygen'
-        scons_test = scons
+        scons = './scons -j 8 DOXYGEN=../third_party/doxygen/linux/doxygen'
+        scons_test = './scons DOXYGEN=../third_party/doxygen/linux/doxygen'
         # For now we will assume a fixed toolchain location on the builders.
         crosstool_prefix = (
             'native_client/toolchain/linux_arm-trusted/arm-2009q3/'
@@ -243,8 +243,8 @@ class NativeClientCommands(commands.FactoryCommands):
       elif self._target_platform == 'linux2':
         gyp_build = ('cd .. && '
                      'make -k -j12 V=1 BUILDTYPE=' + configuration)
-        scons = './scons DOXYGEN=../third_party/doxygen/linux/doxygen'
-        scons_test = scons
+        scons = './scons -j 8 DOXYGEN=../third_party/doxygen/linux/doxygen'
+        scons_test = './scons DOXYGEN=../third_party/doxygen/linux/doxygen'
       else:
         assert False
       self._clobber_tool = (
