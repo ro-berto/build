@@ -221,7 +221,7 @@ class ArchiveTest(unittest.TestCase):
     zip_file = zipfile.ZipFile(zip_file_path)
     # The extractall method is supported from V2.6
     if hasattr(zip_file, 'extractall'):
-      zip_file.extractall(extract_dir)
+      zip_file.extractall(extract_dir)  # pylint: disable-msg=E1101
       # Check that all expected files are there
       extracted_files = os.listdir(os.path.join(extract_dir, archive_name))
       self.assertEquals(len(expected_files), len(extracted_files))

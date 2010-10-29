@@ -32,5 +32,5 @@ class GYPFactory(gclient_factory.GClientFactory):
           '--chdir', self._build_dir,
           '--path', '../scons'
       ]
-      f.addStep(ShellCommand, description=format, command=cmd)
+      f.addStep(ShellCommand, description=format_val, command=cmd)
     return f
