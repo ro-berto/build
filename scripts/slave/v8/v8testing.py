@@ -9,12 +9,14 @@
 """
 
 import optparse
+import os
+import shutil
 import sys
 
-from common import chromium_utils
 
+import chromium_utils
 
-def test(options, args):
+def main(options, args):
   simultaneous = '-j3'
   if (options.platform == 'win'):
     simultaneous = ''
@@ -33,6 +35,7 @@ def test(options, args):
            simultaneous, options.testname,
            '--progress=verbose',
            '--no-build',
+           '--arch=' + options.arch,
            '--mode=' + options.target]
   elif(options.simulator):
     cmd = ['python', 'tools/test.py',
@@ -40,6 +43,7 @@ def test(options, args):
            '--simulator', options.simulator,
            '--progress=verbose',
            '--no-build',
+           '--arch=' + options.arch,
            '--mode=' + options.target]
   else:
     cmd = ['python', 'tools/test.py',
@@ -47,11 +51,12 @@ def test(options, args):
            '--timeout=180',
            '--progress=verbose',
            '--no-build',
+           '--arch=' + options.arch,
            '--mode=' + options.target]
   return chromium_utils.RunCommand(cmd)
 
 
-def main():
+if '__main__' == __name__:
   if sys.platform in ('win32', 'cygwin'):
     default_platform = 'win'
   elif sys.platform.startswith('darwin'):
@@ -75,6 +80,10 @@ def main():
                            default='debug',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
+  option_parser.add_option('', '--arch',
+                           default='ia32',
+                           help='Architecture (ia32, x64, arm) '
+                                '[default: ia32]')
   option_parser.add_option('', '--build-dir',
                            default='bleeding_edge/obj',
                            metavar='DIR',
@@ -85,7 +94,8 @@ def main():
                            help='specify platform [default: %%default]')
 
   options, args = option_parser.parse_args()
-  return test(options, args)
 
-if '__main__' == __name__:
+  sys.exit(main(options, args))
+
+if __name__ == '__main__':
   sys.exit(main())
