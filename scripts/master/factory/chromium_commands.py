@@ -576,10 +576,11 @@ class ChromiumCommands(commands.FactoryCommands):
                      workdir=workdir,
                      timeout=timeout)
 
-  def AddWebkitTests(self, factory_properties=None):
+  def AddWebkitTests(self, gpu, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
 
     Args:
+      gpu: if True, run the GPU-acclerated variant of the tests.
       with_pageheap: if True, page-heap checking will be enabled for test_shell
       test_timeout: buildbot timeout for the test step
       archive_timeout: buildbot timeout for archiving the test results and
@@ -597,11 +598,24 @@ class ChromiumCommands(commands.FactoryCommands):
     test_results_server = factory_properties.get('test_results_server')
     platform = factory_properties.get('layout_test_platform')
 
+    if gpu:
+      if platform:
+        platform = platform.replace('chromium', 'chromium-gpu')
+      else:
+        platform = 'chromium-gpu'
+      result_dir_basename = 'layout-test-results-gpu'
+      result_str = 'gpu results'
+      test_name = 'webkit_gpu_tests'
+    else:
+      result_dir_basename = 'layout-test-results'
+      result_str = 'results'
+      test_name = 'webkit_tests'
+
     pageheap_description = ''
     if with_pageheap:
       pageheap_description = ' (--enable-pageheap)'
 
-    webkit_result_dir = '/'.join(['..', '..', 'layout-test-results'])
+    webkit_result_dir = '/'.join(['..', '..', result_dir_basename])
 
     cmd = [self._python, self._layout_test_tool,
            '--target', self._target,
@@ -623,12 +637,12 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--platform', platform])
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
-                     test_name='webkit_tests',
+                     test_name=test_name,
                      test_description=pageheap_description,
                      test_command=cmd)
 
     if archive_results:
-      url = '%s/%s/%s' % (self._archive_url, 'layout_test_results',
+      url = '%s/%s/%s' % (self._archive_url, result_dir_basename,
                           self._identifier)
 
       cmd = [self._python, self._layout_archive_tool,
@@ -638,9 +652,9 @@ class ChromiumCommands(commands.FactoryCommands):
              '--builder-name', WithProperties("%(buildername)s"),]
 
       self.AddArchiveStep(
-          data_description='webkit_tests results',
+          data_description='webkit_tests ' + result_str,
           base_url=url,
-          link_text='layout test results',
+          link_text='layout test ' + result_str,
           command=cmd)
 
   def AddRunCrashHandler(self, build_dir=None, target=None):

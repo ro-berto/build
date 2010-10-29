@@ -214,7 +214,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # WebKit-related tests:
     if R('webkit_unit'):    f.AddBasicGTestTestStep('webkit_unit_tests', fp)
-    if R('webkit'):         f.AddWebkitTests(fp)
+    if R('webkit'):         f.AddWebkitTests(gpu=False,
+                                             factory_properties=fp)
+    if R('webkit_gpu'):     f.AddWebkitTests(gpu=True,
+                                             factory_properties=fp)
 
     # Benchmark tests:
     if R('page_cycler'):    f.AddPageCyclerTests(fp)
