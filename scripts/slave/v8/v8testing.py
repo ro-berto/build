@@ -9,12 +9,9 @@
 """
 
 import optparse
-import os
-import shutil
 import sys
 
-
-import chromium_utils
+from common import chromium_utils
 
 def main(options, args):
   simultaneous = '-j3'
