@@ -20,7 +20,7 @@ def chromeos(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '8chromeos'
+defaults['category'] = '8chromiumos'
 
 #
 # Main debug scheduler for src/

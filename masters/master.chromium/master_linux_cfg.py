@@ -58,7 +58,8 @@ F('rel_unit', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive_x64,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
-           'browser_tests', 'unit', 'gpu', 'base', 'net']))
+           'browser_tests', 'unit', 'gpu', 'base', 'net'],
+    factory_properties={'generate_gtest_json': True}))
 
 
 
@@ -152,7 +153,8 @@ F('dbg_shlib_unit', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_shlib_archive,
     tests=['base', 'browser_tests', 'check_deps', 'googleurl', 'media', 'net',
-           'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit']))
+           'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit'],
+    factory_properties={'generate_gtest_json': True}))
 
 
 def Update(config, active_master, c):
