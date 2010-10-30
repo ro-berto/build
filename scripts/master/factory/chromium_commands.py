@@ -569,6 +569,10 @@ class ChromiumCommands(commands.FactoryCommands):
       pyauto_functional_cmd = ['cmd', '/C'] + [py24, pyauto_script, '-v']
     elif self._target_platform == 'darwin':
       pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']
+    elif self._target_platform == 'linux2':
+      # Run thru runtest.py on linux to launch virtual x server
+      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
+                                                  [pyauto_script, '-v'])
     self.AddTestStep(retcode_command.ReturnCodeCommand,
                      test_name,
                      pyauto_functional_cmd,
