@@ -50,6 +50,8 @@ def main(options, args):
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
+  if(options.arch == 'arm'):
+    cmd.extend(['--timeout=600'])
   return chromium_utils.RunCommand(cmd)
 
 
