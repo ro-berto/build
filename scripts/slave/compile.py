@@ -295,8 +295,21 @@ def main_scons_v8(options, args):
     chromium_utils.RemoveDirectory(build_output_dir)
 
   os.chdir(options.build_dir)
-
-  command = ['python', '../third_party/scons/scons.py']
+  if sys.platform == 'win32':
+   command = ['python',
+              '../third_party/scons/scons.py',
+              'env=PATH:'\
+              'C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin;' \
+              'C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE;' \
+              'C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\Tools' \
+              ',INCLUDE:' \
+              'C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\include;' \
+              'C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Include' \
+              ',LIB:' \
+              'C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\lib;' \
+              'C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Lib']
+  else:
+    command = ['python', '../third_party/scons/scons.py']
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
