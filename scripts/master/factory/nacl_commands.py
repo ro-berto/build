@@ -634,7 +634,7 @@ class NativeClientCommands(commands.FactoryCommands):
            'revs/%(got_revision:-other)s/' + coverage_dir + '/html/index.html')
 
     src = 'native_client/scons-out/%s/coverage' % coverage_dir
-    dst_path = ('nativeclient-coverage/revs/%(got_revision:-other)s/' +
+    dst_path = ('nativeclient-coverage2/revs/%(got_revision:-other)s/' +
                 coverage_dir)
     dst = 'gs://' + dst_path
     index_path = '/html/index.html'
@@ -667,7 +667,7 @@ class NativeClientCommands(commands.FactoryCommands):
       text = None
 
     full_dst = WithProperties(
-        'gs://nativeclient-archive/%s/%s' % (dst_base, dst))
+        'gs://nativeclient-archive2/%s/%s' % (dst_base, dst))
 
     cmd = [self._python,
            '/b/build/scripts/command_wrapper/bin/command_wrapper.py',
