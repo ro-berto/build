@@ -532,8 +532,10 @@ class NativeClientCommands(commands.FactoryCommands):
         locks=[self.slave_exclusive_lock])
 
   def AddTrigger(self, trigger_who):
+    # TODO(nsylvain): Switch back waitForFinish to True once all the netbook
+    # and arm boards are online.
     self._factory.addStep(trigger.Trigger(schedulerNames=[trigger_who],
-                                          waitForFinish=True))
+                                          waitForFinish=False))
 
   def AddSizedTests(self, test_size, full_name=None, options=None, timeout=300):
     """Add a build step to run tests of a given size."""
