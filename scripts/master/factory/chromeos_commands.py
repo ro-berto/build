@@ -285,6 +285,7 @@ class ChromeOSCommands(commands.FactoryCommands):
         '--gsd_gen_index',
           '/b/scripts/gsd_generate_index/gsd_generate_index.py',
         '--gsutil', '/b/scripts/slave/gsutil',
+        '--prebuilt_upload',
     ]
     cmd += [
         options.get('lasercats_testmod', ''),
