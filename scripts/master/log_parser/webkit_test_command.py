@@ -56,7 +56,7 @@ class TestObserver(buildstep.LogLineObserver):
     self._test_path_line = re.compile('  (\S+)')
 
     self._summary_start = re.compile(
-        '=> Tests to be fixed for the current release \((\d+)\):')
+        '=> Tests to be fixed \((\d+)\):')
     self._summary_skipped = re.compile('(\d+) skipped')
 
     self._builder_name_re = re.compile('--builder-name "([^"]*)"')
