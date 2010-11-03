@@ -36,4 +36,5 @@ Makefile = svn:eol-style=LF
 *.txt = svn:eol-style=LF
 *.png = svn:mime-type=image/png
 *.jpg = svn:mime-type=image/jpeg
+*.webp = svn:mime-type=image/webp
 *.pdf = svn:mime-type=application/pdf
