@@ -170,8 +170,10 @@
           </script>
         </table>
 <table><tr><td height="1"> </td></tr></table>
+        <table width="100%"><tr>
+        <td width="50%">
         <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
-          <tr><th>integration</th></tr>
+          <tr><th>chrome integration</th></tr>
           <script language="javascript">
             var raw_flavors = [
                ["Integration", ["xp-nacl-chrome",
@@ -200,6 +202,36 @@
             }
           </script>
         </table>
+        </td><td width="50%">
+        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
+          <tr><th>ppapi integration</th></tr>
+          <script language="javascript">
+            var raw_flavors = [
+               ["Lucid", ["lucid64-m32-n32"]],
+            ];
+            var flavors = [];
+            for(var i in raw_flavors) {
+              var row = Array();
+              for(var j in raw_flavors[i][1]) {
+                if(raw_flavors[i][0] == "Toolchain" ||
+                   raw_flavors[i][0] == "Integration") {
+                  row.push("builder=" + raw_flavors[i][1][j]);
+                } else {
+                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
+                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
+                }
+              }
+              flavors.push([raw_flavors[i][0], row.join("&")]);
+            }
+
+            waterfall = "../client.nacl.ppapi/waterfall";
+            bar = "../client.nacl.ppapi/horizontal_one_box_per_builder";
+            for(var i in flavors) {
+              DisplayBar(flavors[i][1], flavors[i][0]);
+            }
+          </script>
+        </table>
+        </td></table>
         <table width="100%"><tr>
         <td width="50%">
         <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
