@@ -54,6 +54,8 @@ class NativeClientCommands(commands.FactoryCommands):
         r'c:\cygwin\usr\bin;'
         r'c:\WINDOWS\system32;'
         r'c:\WINDOWS;'
+        r'c:\b\depot_tools;'
+        r'c:\b\depot_tools\python_bin;'
         r'e:\b\depot_tools;'
         r'e:\b\depot_tools\python_bin;'
       ),
@@ -177,6 +179,8 @@ class NativeClientCommands(commands.FactoryCommands):
         'PATH': (
           r'c:\WINDOWS\system32;'
           r'c:\WINDOWS;'
+          r'c:\b\depot_tools;'
+          r'c:\b\depot_tools\python_bin;'
           r'e:\b\depot_tools;'
           r'e:\b\depot_tools\python_bin;'
           r'c:\Program Files\Microsoft Visual Studio 9.0\VC;'
@@ -686,7 +690,7 @@ class NativeClientCommands(commands.FactoryCommands):
                      command2=None):
     if self._target_platform.startswith('win'):
       env = self._cygwin_env.copy()
-      env['PATH'] = r'e:\b\depot_tools;' + env['PATH']
+      env['PATH'] = r'e:\b\depot_tools;' + r'c:\b\depot_tools;' + env['PATH']
       env['HOME'] = r'c:\Users\chrome-bot'
     else:
       env = self._build_env
