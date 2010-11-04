@@ -75,7 +75,7 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
         target_platform=self._target_platform,
         official_build=self._official_build)
 
-    # TODO(sosa) - Remove steps once we switch to cbuildbot. 
+    # TODO(sosa) - Remove steps once we switch to cbuildbot.
     chromeos_cmd_obj.AddChromeOSCrosUtilsStep()
 
     chromeos_cmd_obj.AddChromeOSRepoUpdateStep(clobber, mode=mode,
@@ -181,7 +181,8 @@ class CbuildbotFactory(object):
       crostools_repo: git repo for crostools toolset.
       crosutils_repo: git repo for crosutils toolset.
   """
-
+  # Redefining built-in 'type'
+  # pylint: disable=W0622
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
                triagelog=None, params='', timeout=9000, variant=None,
                is_master=False,

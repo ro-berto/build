@@ -12,9 +12,6 @@ from buildbot.process.properties import WithProperties
 from master.factory import commands
 from master.log_parser import archive_command
 
-import chromium_utils
-import config
-
 
 class ChromeOSCommands(commands.FactoryCommands):
   """Encapsulates methods to add ChromeOS commands to a buildbot factory."""
@@ -90,7 +87,8 @@ class ChromeOSCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd)
 
-  def BoardName(self, options):
+  @staticmethod
+  def BoardName(options):
     if options.get('lasercats_variant'):
       return '%s_%s' % (options['lasercats_board'],
                         options['lasercats_variant'])

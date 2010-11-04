@@ -13,7 +13,47 @@ import sys
 
 from common import chromium_utils
 
-def main(options, args):
+def main():
+  if sys.platform in ('win32', 'cygwin'):
+    default_platform = 'win'
+  elif sys.platform.startswith('darwin'):
+    default_platform = 'mac'
+  elif sys.platform == 'linux2':
+    default_platform = 'linux'
+  else:
+    default_platform = None
+
+  option_parser = optparse.OptionParser()
+
+  option_parser.add_option('', '--simulator',
+                           default=None,
+                           help='The simulator to run'
+                                '[default: %default]')
+  option_parser.add_option('', '--testname',
+                           default=None,
+                           help='The test to run'
+                                '[default: %default]')
+  option_parser.add_option('', '--target',
+                           default='debug',
+                           help='build target (Debug, Release) '
+                                '[default: %default]')
+  option_parser.add_option('', '--arch',
+                           default='ia32',
+                           help='Architecture (ia32, x64, arm) '
+                                '[default: ia32]')
+  option_parser.add_option('', '--build-dir',
+                           default='bleeding_edge/obj',
+                           metavar='DIR',
+                           help='directory in which build was run '
+                                '[default: %default]')
+  option_parser.add_option('', '--platform',
+                           default=default_platform,
+                           help='specify platform [default: %%default]')
+
+  options, args = option_parser.parse_args()
+  if args:
+    option_parser.error('Unsupported arguments: %s' % args)
+
   simultaneous = '-j3'
   if (options.platform == 'win'):
     simultaneous = ''
@@ -54,47 +94,6 @@ def main(options, args):
     cmd.extend(['--timeout=600'])
   return chromium_utils.RunCommand(cmd)
 
-
-if '__main__' == __name__:
-  if sys.platform in ('win32', 'cygwin'):
-    default_platform = 'win'
-  elif sys.platform.startswith('darwin'):
-    default_platform = 'mac'
-  elif sys.platform == 'linux2':
-    default_platform = 'linux'
-  else:
-    default_platform = None
-
-  option_parser = optparse.OptionParser()
-
-  option_parser.add_option('', '--simulator',
-                           default=None,
-                           help='The simulator to run'
-                                '[default: %default]')
-  option_parser.add_option('', '--testname',
-                           default=None,
-                           help='The test to run'
-                                '[default: %default]')
-  option_parser.add_option('', '--target',
-                           default='debug',
-                           help='build target (Debug, Release) '
-                                '[default: %default]')
-  option_parser.add_option('', '--arch',
-                           default='ia32',
-                           help='Architecture (ia32, x64, arm) '
-                                '[default: ia32]')
-  option_parser.add_option('', '--build-dir',
-                           default='bleeding_edge/obj',
-                           metavar='DIR',
-                           help='directory in which build was run '
-                                '[default: %default]')
-  option_parser.add_option('', '--platform',
-                           default=default_platform,
-                           help='specify platform [default: %%default]')
-
-  options, args = option_parser.parse_args()
-
-  sys.exit(main(options, args))
 
 if __name__ == '__main__':
   sys.exit(main())
