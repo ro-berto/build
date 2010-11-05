@@ -89,6 +89,7 @@ def archive_layout(options, args):
                              ' %(levelname)s %(message)s',
                       datefmt='%y%m%d %H:%M:%S')
   chrome_dir = os.path.abspath(options.build_dir)
+  results_dir_basename = os.path.basename(options.results_dir)
   if options.results_dir is not None:
     options.results_dir = os.path.abspath(os.path.join(options.build_dir,
                                                        options.results_dir))
@@ -100,7 +101,7 @@ def archive_layout(options, args):
 
   (actual_file_list, diff_file_list) = _CollectArchiveFiles(options.results_dir)
   zip_file = chromium_utils.MakeZip(staging_dir,
-                                    'layout-test-results',
+                                    results_dir_basename,
                                     actual_file_list,
                                     options.results_dir)[1]
 
@@ -115,7 +116,7 @@ def archive_layout(options, args):
 
   # Where to save layout test results.
   dest_parent_dir = os.path.join(config.Archive.www_dir_base,
-      'layout_test_results', build_name)
+      results_dir_basename, build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
   slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
   slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
