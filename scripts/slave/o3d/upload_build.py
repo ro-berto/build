@@ -10,9 +10,9 @@ the archive_file script with the correct source and target.
 import os
 import sys
 
-import chromium_utils
-import chromium.archive_file as archive_file
-import slave_utils
+from common import chromium_utils
+from slave.chromium import archive_file
+from slave import slave_utils
 
 def main(argv):
   o3d_dir = os.path.join(os.getcwd(), 'o3d')
