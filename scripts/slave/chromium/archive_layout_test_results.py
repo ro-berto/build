@@ -116,7 +116,7 @@ def archive_layout(options, args):
 
   # Where to save layout test results.
   dest_parent_dir = os.path.join(config.Archive.www_dir_base,
-      results_dir_basename, build_name)
+      results_dir_basename.replace('-','_'), build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
   slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
   slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
