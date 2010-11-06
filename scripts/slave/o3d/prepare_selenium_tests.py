@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -14,9 +14,10 @@ import shutil
 import subprocess
 import sys
 
-import chromium_config as config
-import chromium_utils as utils
-import slave_utils
+from common import chromium_utils as utils
+from slave import slave_utils
+
+import config
 
 ARCHIVE_CONFIG_NAME = 'o3d_test_archive.txt'
 

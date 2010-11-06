@@ -1,4 +1,4 @@
-import chromium_utils
+from common import chromium_utils
 
 if chromium_utils.IsWindows():
   BUILD = "o3d/build"

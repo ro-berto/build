@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -22,8 +22,9 @@ import sys
 import urllib
 import urlparse
 
-import chromium_config as config
-import chromium_utils as utils
+from common import chromium_utils as utils
+
+import config
 
 if utils.IsWindows():
   AUTO_PATH = 'C:\\auto'
