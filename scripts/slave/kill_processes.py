@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2010 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -7,14 +7,32 @@
 
 Only works on Windows."""
 
+import os
 import subprocess
 import sys
 
 
 def KillAll(process_names):
   """Tries to kill all copies of each process in the processes list."""
+  retcode = True
   for process_name in process_names:
-    Kill(process_name)
+    if ProcessExists(process_name):
+      Kill(process_name)
+
+      # Check if the process is still running.  If it is, it can't easily be
+      # killed and something is broken.  Return this error in our exit code.
+      retcode = (retcode and not ProcessExists(process_name))
+  return retcode
+
+
+def ProcessExists(process_name):
+  """Return whether process_name is found in tasklist output."""
+  # Use tasklist.exe to find if a given process_name is running.
+  command = ('tasklist.exe /fi "imagename eq %s" | findstr.exe "K"' %
+             process_name)
+  # findstr.exe exits with code 0 if the given string is found.
+  return os.system(command) == 0
+
 
 def Kill(process_name):
   command = ['taskkill.exe', '/f', '/t', '/im']
@@ -86,4 +104,7 @@ processes = [
 ]
 
 if '__main__' == __name__:
-  sys.exit(KillAll(processes))
+  if KillAll(processes):
+    sys.exit(0)
+  # Some processes were not killed, exit with non-zero status.
+  sys.exit(1)
