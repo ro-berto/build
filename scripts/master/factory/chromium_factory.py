@@ -39,6 +39,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'win_debug_Optimization=1 '
     'win_debug_RuntimeChecks=0 '
     'win_debug_InlineFunctionExpansion=0 '
+    'win_debug_disable_iterator_debugging=1 '
 
     'linux_use_tcmalloc=1 '
     'release_valgrind_build=1 '
