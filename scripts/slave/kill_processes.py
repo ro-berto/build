@@ -10,17 +10,26 @@ Only works on Windows."""
 import os
 import subprocess
 import sys
+import time
 
 
 def KillAll(process_names):
   """Tries to kill all copies of each process in the processes list."""
-  retcode = True
+  killed_processes = []
+
   for process_name in process_names:
     if ProcessExists(process_name):
       Kill(process_name)
+      killed_processes.append(process_name)
 
-      # Check if the process is still running.  If it is, it can't easily be
-      # killed and something is broken.  Return this error in our exit code.
+  retcode = True
+  if killed_processes:
+    # Sleep for 5 seconds to give any killed processes time to shut down.
+    time.sleep(5)
+
+    # Check if the process is still running.  If it is, it can't easily be
+    # killed and something is broken.  Return this error in our exit code.
+    for process_name in killed_processes:
       retcode = (retcode and not ProcessExists(process_name))
   return retcode
 
