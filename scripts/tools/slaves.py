@@ -29,7 +29,15 @@ def SubRun(enabled, names, cmd, options):
       min_index = 1
     for index in range(min_index, max_index + 1):
       host = names[index - 1]
-      command = [item % {'index': index, 'host': host} for item in cmd]
+      replacements = {
+          'index': index,
+          'host': host,
+          'number': index,
+      }
+      m = re.match(r'^(mini|vm)(\d+)-.*', host)
+      if m:
+        replacements['number'] = m.group(2)
+      command = [item % replacements for item in cmd]
       print "> %s" % " ".join(command)
       if not options.print_only:
         retcode = subprocess.call(command)
