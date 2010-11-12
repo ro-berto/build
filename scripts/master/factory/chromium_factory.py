@@ -132,6 +132,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     PYAUTO_DEPS.append(('src/chrome/test/data/plugin',
                         config.Master.trunk_internal_url +
                         '/data/chrome_plugin_tests'))
+    PYAUTO_DEPS.append(('src/chrome/test/data/pyauto_private',
+                        config.Master.trunk_internal_url +
+                        '/data/pyauto_private'))
 
   def __init__(self, build_dir, target_platform=None):
     main = gclient_factory.GClientSolution(config.Master.trunk_url_src,
