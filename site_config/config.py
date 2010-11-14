@@ -177,6 +177,9 @@ class Archive(config_private.Archive):
   # Installer to archive.
   installer_exe = Installer.installer_exe
 
+  # Archive file containing the ADM/ADMX/ADML/other policy templates.
+  policy_templates_zip = 'policy_templates.zip'
+
   # Test files to archive.
   # TODO(jungshik): make the name of icudt dll independent of the ICU version.
   # For now, we list both icudt{38,42}.dll because this script is used by
