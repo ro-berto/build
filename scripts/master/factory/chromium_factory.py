@@ -485,7 +485,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Make sure the solution is not already there.
     if 'cros_deps' not in [s.name for s in self._solutions]:
       self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.trunk_url + '/cros_deps', name='cros_deps'))
+          config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
 
     return self.ChromiumFactory(identifier, target, clobber, tests, mode,
                                 slave_type, options, compile_timeout,
