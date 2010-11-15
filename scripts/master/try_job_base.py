@@ -98,39 +98,42 @@ class TryJobBase(TryBase):
       props.setProperty('testfilters', testfilters, 'Scheduler')
     return builder_names, jobstamp, buildset_id, props
 
-  def CancelJobsMatching(self, build_set, builder_names):
+  def CancelJobsMatching(self, source_stamp, builder_name):
     """Cancels any jobs with the same job and owner."""
 
-    if (not isinstance(build_set.source, TryJobStamp) or
-        len(build_set.source.changes) != 1):
+    if (not isinstance(source_stamp, TryJobStamp) or
+        len(source_stamp.changes) != 1):
       # Not a try job.
       return
 
-    for builder_name in builder_names:
-      # pylint: disable=E1101
-      # TODO(maruel): remove once pylint improves its type inference.
-      builder = self.parent.botmaster.builders[builder_name]
-      # Cancel any jobs that haven't yet started.
-      for buildable in builder.buildable:
-        if build_set.source.canReplace(buildable.source):
-          builder.cancelBuildRequest(buildable)
-          log.msg('Canceling job %s on %s' % (build_set.source.job_name,
-                                              builder.name))
-          break # There should only be one try with a given name.
+    # TODO(maruel): remove once pylint improves its type inference.
+    # pylint: disable=E1101
+    builder = self.parent.botmaster.builders.get(builder_name, None)
+    if not builder:
+      # TODO(maruel): Send an email to the user. There's no reference to a
+      # mail notifier here.
+      return
+    # Cancel any pending jobs on this builder that haven't yet started.
+    for buildable in builder.buildable:
+      if source_stamp.canReplace(buildable.source):
+        builder.cancelBuildRequest(buildable)
+        log.msg('Canceling job %s on %s' % (source_stamp.job_name,
+                                            builder.name))
+        break # There should only be one try with a given name.
 
-      # Mark any running builds as canceled. In theory we could cancel these too
-      # in practice cancelling might leave the bot in a weird state. Instead we
-      # set canceled to true so that after the current step finishes the builder
-      # doesn't execute any more steps.
-      for build in builder.building:
-        for request in build.requests:
-          if build_set.source.canReplace(request.source):
-            # The request copies the stamp. Set the stamp for both so
-            # that the canceled state is reflected in both places.
-            build.source.canceled = True
-            request.source.canceled = True
-            log.msg('Marking %s as canceled on %s' %
-                    (build_set.source.job_name, builder_name))
+    # Mark any running builds as canceled. In theory we could cancel these too
+    # in practice cancelling might leave the bot in a weird state. Instead we
+    # set canceled to true so that after the current step finishes the builder
+    # doesn't execute any more steps.
+    for build in builder.building:
+      for request in build.requests:
+        if source_stamp.canReplace(request.source):
+          # The request copies the stamp. Set the stamp for both so
+          # that the canceled state is reflected in both places.
+          build.source.canceled = True
+          request.source.canceled = True
+          log.msg('Marking %s as canceled on %s' %
+                  (source_stamp.job_name, builder_name))
 
   def SubmitJob(self, options):
     """Queues the buildset.
@@ -154,9 +157,20 @@ class TryJobBase(TryBase):
       log.err()
       return http.BAD_REQUEST
     reason = "'%s' try job" % buildset_id
-    bs = buildset.BuildSet(builder_names, jobstamp, reason=reason,
-                           bsid=buildset_id, properties=props)
-    # pylint: disable=E1101
-    self.CancelJobsMatching(bs, builder_names)
-    self.parent.submitBuildSet(bs)
+    # Send one build request per builder, otherwise the cancelation logic
+    # doesn't work.
+    build_sets = []
+    for builder_name in builder_names:
+      build_set = buildset.BuildSet(
+          [builder_name],
+          jobstamp,
+          reason=reason,
+          bsid=buildset_id,
+          properties=props)
+      build_sets.append(build_set)
+      self.CancelJobsMatching(build_set, builder_name)
+    for build_set in build_sets:
+      # Type inference error.
+      # pylint: disable=E1101
+      self.parent.submitBuildSet(build_set)
     return http.OK
