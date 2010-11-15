@@ -48,7 +48,7 @@ F('rel', win().ChromiumFactory(
 #
 # Win Rel testers
 #
-B('XP Tests', 'rel_unit', 'testers|windows', 'win_rel_dep')
+B('XP Tests', 'rel_unit', 'testers|windows', 'win_rel_dep', auto_reboot=True)
 F('rel_unit', win().ChromiumFactory(
     'chromium-win-rel',
     slave_type='Tester',
@@ -73,7 +73,8 @@ F('rel_nacl', win().ChromiumFactory(
 
 B('NACL Tests (x64)', 'rel_nacl', 'testers|windows', 'win_rel_dep')
 
-B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_dep')
+B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_dep',
+  auto_reboot=True)
 F('rel_cf', win().ChromiumFactory(
     'chromium-win-rel',
     slave_type='Tester',
@@ -82,8 +83,10 @@ F('rel_cf', win().ChromiumFactory(
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 
-B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_dep')
-B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_dep')
+B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_dep',
+  auto_reboot=True)
+B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_dep',
+  auto_reboot=True)
 
 ################################################################################
 ## Debug
@@ -116,7 +119,8 @@ F('dbg', win().ChromiumFactory(
 #
 # Win Dbg Unit testers
 #
-B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep')
+B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
 F('dbg_unit_1', win().ChromiumFactory(
     'chromium-win-dbg',
     target='Debug',
@@ -130,7 +134,8 @@ F('dbg_unit_1', win().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 
-B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep')
+B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
 F('dbg_unit_2', win().ChromiumFactory(
     'chromium-win-dbg',
     target='Debug',
@@ -142,7 +147,8 @@ F('dbg_unit_2', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep')
+B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
 F('dbg_unit_3', win().ChromiumFactory(
       'chromium-win-dbg',
       target='Debug',
@@ -154,7 +160,8 @@ F('dbg_unit_3', win().ChromiumFactory(
                           'start_crash_handler': True,
                           'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep')
+B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep',
+  auto_reboot=True)
 F('dbg_unit_4', win().ChromiumFactory(
     'chromium-win-dbg',
     target='Debug',
