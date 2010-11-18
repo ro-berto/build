@@ -93,10 +93,13 @@ class V8Commands(commands.FactoryCommands):
       self.AddTaskkillStep()
     if (self._arch):
       cmd += ['--arch', self._arch]
-    if (simulator):
+    # Running tests in the arm simulator may take longer than 600 ms.
+    mozilla_timeout = 600
+    if simulator:
+      mozilla_timeout = 1200
       cmd += ['--simulator', simulator]
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
-                     workdir='build/bleeding_edge/')
+                     timeout=mozilla_timeout, workdir='build/bleeding_edge/')
 
   def AddV8Sputnik(self, properties=None, simulator=None):
     cmd = [self._python, self._v8testing_tool,
