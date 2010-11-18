@@ -77,41 +77,55 @@
         <table width="100%">
           <script language="javascript">
             var raw_flavors = [
-               ["Windows", ["xp-m32-n32",
-                            "vista64-m64-n64",
-                            "win7atom64-m64-n64-test"]],
-               ["Mac", ["mac-m32-n32"]],
-               ["Hardy", ["hardy32-m32-n32",
-                          "hardy64-m32-n32",
-                          "hardy64-m64-n64"]],
-               ["Lucid", ["lucid32-m32-n32",
-                           "lucid64-m32-n32",
-                           "lucid64-m64-n64"]],
-               ["Arm", ["hardy64-marm-narm",
-                        "arm-marm-narm-test"]],
-               ["Other", ["karmic64-valgrind",
-                          "lucid64-spec-arm",
-                          "lucid64-spec-x86",
-                          "lucid64-pnacl-translator"]],
-               ["Coverage", ["mac-m32-n32-coverage",
-                             "hardy64-m32-n32-coverage",
-                             "hardy64-m64-n64-coverage",
-                             "hardy64-marm-narm-coverage",
-                             "xp-m32-n32-coverage"]],
+              ["Windows", [
+                "xp-m32-n32-opt",
+                "vista64-m64-n64-dbg",
+                "vista64-m64-n64-opt",
+                "win7atom64-m64-n64-test-dbg",
+                "win7atom64-m64-n64-test-opt"
+              ]],
+              ["Mac", [
+                "mac-m32-n32"
+              ]],
+              ["Hardy", [
+                "hardy32-m32-n32-opt",
+                "hardy64-m32-n32-opt",
+                "hardy64-m64-n64-opt"
+              ]],
+              ["Lucid", [
+                "lucid32-m32-n32-dbg",
+                "lucid32-m32-n32-opt",
+                "lucid64-m32-n32-opt",
+                "lucid64-m64-n64-dbg",
+                "lucid64-m64-n64-opt"
+              ]],
+              ["Arm", [
+                "hardy64-marm-narm-dbg",
+                "hardy64-marm-narm-opt",
+                "arm-marm-narm-test-dbg",
+                "arm-marm-narm-test-opt"
+              ]],
+              ["Other", [
+                "karmic64-valgrind",
+                "lucid64-spec-arm",
+                "lucid64-spec-x86",
+                "lucid64-pnacl-translator"
+              ]],
+              ["Coverage", [
+                "mac-m32-n32-coverage",
+                "hardy64-m32-n32-coverage",
+                "hardy64-m64-n64-coverage",
+                "hardy64-marm-narm-coverage",
+                "xp-m32-n32-coverage"
+              ]],
             ];
             var flavors = [];
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Other" ||
-                   raw_flavors[i][0] == "Coverage") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + flavors[i][1][j]);
               }
-              flavors.push([raw_flavors[i][0], row.join("&")]);
+              flavors.push([flavors[i][0], row.join("&")]);
             }
 
             var bar = "./horizontal_one_box_per_builder"
@@ -136,7 +150,7 @@
         <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
           <tr><th>toolchain</th></tr>
           <script language="javascript">
-            var raw_flavors = [
+            var flavors = [
                ["Toolchain", ["win7-toolchain_x86",
                               "vista-toolchain_x86",
                               "win2003-toolchain_x86",
