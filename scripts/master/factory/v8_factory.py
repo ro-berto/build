@@ -28,9 +28,10 @@ class V8Factory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_SPUTNIK = ('bleeding_edge/test/sputnik/sputniktests',
                          'http://sputniktests.googlecode.com/svn/trunk@28')
 
+  # Pinned at revision 65044 to allow scons to be removed from repository.
   CUSTOM_DEPS_SCONS = ('third_party/scons',
                        config.Master.trunk_url +
-                       '/src/third_party/scons')
+                       '/src/third_party/scons@65044')
 
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
                           config.Master.trunk_url +
