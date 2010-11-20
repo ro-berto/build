@@ -13,7 +13,7 @@ import sys
 import time
 
 
-def KillAll(process_names):
+def KillAll(process_names, must_die=True):
   """Tries to kill all copies of each process in the processes list."""
   killed_processes = []
 
@@ -21,6 +21,14 @@ def KillAll(process_names):
     if ProcessExists(process_name):
       Kill(process_name)
       killed_processes.append(process_name)
+
+  # If we allow any processes to continue after trying to kill them, return
+  # now.
+  if not must_die:
+    return True
+
+  # We require that all processes we tried to kill must be killed.  Let's
+  # verify that.
 
   retcode = True
   if killed_processes:
@@ -72,9 +80,6 @@ processes = [
     #'ieuser.exe',
     'acrord32.exe',
 
-    # When VC crashes during compilation, this process which manages the .pdb
-    # file generation sometime hangs.
-    'mspdbsrv.exe',
     # The JIT debugger may start when devenv.exe crashes.
     'vsjitdebugger.exe',
     # This process is also crashing once in a while during compile.
@@ -116,8 +121,26 @@ processes = [
     'wow_helper.exe',
 ]
 
+# Some processes may be present occasionally unrelated to the current build.
+# For these, it's not an error if we attempt to kill them and they don't go
+# away.
+lingering_processes = [
+    # When VC crashes during compilation, this process which manages the .pdb
+    # file generation sometime hangs.  However, Incredibuild will spawn
+    # mspdbsrv.exe, so don't trigger an error if it is still present after
+    # we attempt to kill it.
+    'mspdbsrv.exe',
+]
+
 if '__main__' == __name__:
-  if KillAll(processes):
+  # Kill all lingering processes.  It's okay if these aren't killed or end up
+  # reappearing.
+  KillAll(lingering_processes, must_die=False)
+
+  # Kill all regular processes.  We must guarantee that these are killed since
+  # we exit with an error code if they're not.
+  if KillAll(processes, must_die=True):
     sys.exit(0)
+
   # Some processes were not killed, exit with non-zero status.
   sys.exit(1)
