@@ -101,7 +101,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
          'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox', 'base'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
+B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_dep')
 F('dbg_unit_2', mac().ChromiumFactory(
   'chromium-mac-dbg',
   slave_type='Tester',
@@ -110,7 +110,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
   tests=['ui', 'net'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
+B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_dep')
 F('dbg_unit_3', mac().ChromiumFactory(
   'chromium-mac-dbg',
   slave_type='Tester',
@@ -120,8 +120,8 @@ F('dbg_unit_3', mac().ChromiumFactory(
   factory_properties={'generate_gtest_json': True}))
 
 B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
-B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
-B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
+B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_dep')
+B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_dep')
 
 def Update(config, active_master, c):
   return helper.Update(c)
