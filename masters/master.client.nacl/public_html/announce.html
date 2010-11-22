@@ -85,7 +85,7 @@
                 "win7atom64-m64-n64-test-opt"
               ]],
               ["Mac", [
-                "mac-m32-n32"
+                "mac-m32-n32-opt"
               ]],
               ["Hardy", [
                 "hardy32-m32-n32-opt",
@@ -123,9 +123,9 @@
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                row.push("builder=" + flavors[i][1][j]);
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
-              flavors.push([flavors[i][0], row.join("&")]);
+              flavors.push([raw_flavors[i][0], row.join("&")]);
             }
 
             var bar = "./horizontal_one_box_per_builder"
@@ -150,7 +150,7 @@
         <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
           <tr><th>toolchain</th></tr>
           <script language="javascript">
-            var flavors = [
+            var raw_flavors = [
                ["Toolchain", ["win7-toolchain_x86",
                               "vista-toolchain_x86",
                               "win2003-toolchain_x86",
@@ -166,13 +166,7 @@
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Toolchain" ||
-                   raw_flavors[i][0] == "Integration") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
@@ -199,13 +193,7 @@
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Toolchain" ||
-                   raw_flavors[i][0] == "Integration") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
@@ -222,19 +210,16 @@
           <tr><th>ppapi integration</th></tr>
           <script language="javascript">
             var raw_flavors = [
-               ["Lucid", ["lucid64-m32-n32"]],
+               ["Lucid", [
+                  "lucid64-m32-n32-dbg",
+                  "lucid64-m32-n32-opt"
+               ]],
             ];
             var flavors = [];
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Toolchain" ||
-                   raw_flavors[i][0] == "Integration") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
