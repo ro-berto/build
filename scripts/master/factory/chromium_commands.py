@@ -418,6 +418,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('sync_unit_tests', factory_properties)
     self.AddBasicGTestTestStep('unit_tests', factory_properties)
     self.AddBasicGTestTestStep('app_unittests', factory_properties)
+    if self._target_platform == 'win32':
+      self.AddBasicGTestTestStep('views_unittests', factory_properties)
 
   def AddSyncIntegrationTests(self, factory_properties):
     password_path = self.PathJoin('..', 'sync_password')
