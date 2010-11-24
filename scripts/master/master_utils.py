@@ -156,7 +156,7 @@ class FilterDomain(util.ComparableMixin):
 
 
 def AutoSetupMaster(c, active_master, mail_notifier=False,
-                    public_html=None):
+                    public_html=None, order_console_by_time=False):
   """Add common settings and status services to a master.
 
   If you wonder what all these mean, PLEASE go check the official doc!
@@ -187,6 +187,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   kwargs = {}
   if public_html:
     kwargs['public_html'] = public_html
+  kwargs['order_console_by_time'] = order_console_by_time
   if active_master.master_port:
     c['status'].append(WebStatus(active_master.master_port, allowForce=True,
                                  **kwargs))
