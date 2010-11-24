@@ -124,8 +124,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'http://src.chromium.org/svn/trunk/src/chrome/test/functional'),
        ('src/third_party/simplejson',
         'http://src.chromium.org/svn/trunk/src/third_party/simplejson'),
-       ('src/third_party/python_24',
-        'http://src.chromium.org/svn/trunk/deps/third_party/python_24')]
+       ('src/third_party/python_26',
+        'http://src.chromium.org/svn/trunk/tools/third_party/python_26')]
   # Extend if we can.
   # pylint: disable=E1101
   if config.Master.trunk_internal_url:

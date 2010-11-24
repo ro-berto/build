@@ -565,10 +565,10 @@ class ChromiumCommands(commands.FactoryCommands):
 
     pyauto_functional_cmd = ['python', pyauto_script, '-v']
     if self._target_platform == 'win32':  # win needs python26
-      py24 = J('src', 'third_party', 'python_26', 'python_slave.exe')
+      py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')
       if src_base:
-        py24 = J(src_base, py24)
-      pyauto_functional_cmd = ['cmd', '/C'] + [py24, pyauto_script, '-v']
+        py26 = J(src_base, py26)
+      pyauto_functional_cmd = ['cmd', '/C'] + [py26, pyauto_script, '-v']
     elif self._target_platform == 'darwin':
       pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']
     elif self._target_platform == 'linux2':
