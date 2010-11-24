@@ -35,7 +35,8 @@ B('Webkit Linux', 'webkit_linux_rel', 'compile|testers', 'webkit_linux_rel',
 F('webkit_linux_rel', linux().ChromiumFactory(
     'webkit-linux-rel',
     tests=['webkit', 'test_shell', 'webkit_unit'],
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests'],
+    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
+             'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
@@ -67,7 +68,8 @@ B('Webkit Linux Builder (dbg)', 'dbg', 'compile', 'webkit_linux_dbg',
 F('dbg', linux().ChromiumFactory(
     'webkit-linux-dbg',
     slave_type='Builder',
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests']))
+    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
+             'DumpRenderTree']))
 
 #
 # Linux Dbg Unit testers
