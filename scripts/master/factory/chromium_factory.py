@@ -83,7 +83,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/memory_test', None)],
     'page_cycler':
       [('src/data/page_cycler', None)],
-    'selenium':
+    '(selenium|chrome_frame)':
       [('src/data/selenium_core', None)],
     'tab_switching':
       [('src/data/tab_switching', None)],
