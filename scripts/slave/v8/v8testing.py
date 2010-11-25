@@ -54,8 +54,10 @@ def main():
   if args:
     option_parser.error('Unsupported arguments: %s' % args)
 
-  simultaneous = '-j3'
+  simultaneous = '-j8'
   if (options.platform == 'win'):
+    simultaneous = ''
+  if (options.platform == 'arm'):
     simultaneous = ''
 
   if (options.testname == 'leak'):
