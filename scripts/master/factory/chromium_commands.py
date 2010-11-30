@@ -199,6 +199,7 @@ class ChromiumCommands(commands.FactoryCommands):
       {'name': 'bloat', 'http': True, 'target': 'Release'},
       {'name': 'dhtml', 'http': False, 'target': 'Release'},
       {'name': 'database', 'http': False, 'title': 'Database*'},
+      {'name': 'indexeddb', 'http': False, 'title': 'IndexedDB*'},
     ]
 
     factory_properties = factory_properties or {}
