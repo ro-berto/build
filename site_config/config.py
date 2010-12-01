@@ -79,9 +79,6 @@ class Master(config_private.Master):
   # URL pointing to builds and test results.
   archive_url = 'http://build.chromium.org/buildbot'
 
-  # The test results server to upload our test results.
-  test_results_server = 'test-results.appspot.com'
-
   # File in which to save a list of graph names.
   perf_graph_list = 'graphs.dat'
 
