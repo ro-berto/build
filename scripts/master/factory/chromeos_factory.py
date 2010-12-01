@@ -181,13 +181,18 @@ class CbuildbotFactory(object):
       crostools_repo: git repo for crostools toolset.
       crosutils_repo: git repo for crosutils toolset.
   """
+
+  _default_git_base = 'ssh://git@gitrw.chromium.org:9222'
+  _default_crostools = _default_git_base + '/crostools'
+  _default_crosutils = _default_git_base + '/crosutils'
+
   # Redefining built-in 'type'
   # pylint: disable=W0622
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
                triagelog=None, params='', timeout=9000, variant=None,
                is_master=False,
-               crostools_repo='ssh://git@gitrw.chromium.org:9222/crostools',
-               crosutils_repo='ssh://git@gitrw.chromium.org:9222/crosutils'):
+               crostools_repo=_default_crostools,
+               crosutils_repo=_default_crosutils):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.crosutils_repo = crosutils_repo
@@ -242,10 +247,13 @@ class CbuildbotFactory(object):
     self._git_clear_and_checkout(self.crosutils_repo)
     self._git_clear_and_checkout(self.crostools_repo)
 
-  def cbuildbot_type(self, params):
+  def cbuildbot_type(self, params, sync=True):
     # Gathers queued commits and drops them for cbuildbot to pick up.
-    self.f_cbuild.addStep(chromeos_revision_source.GitRevisionDropper,
-                          timeout=self.timeout)
+    if sync:
+      self.f_cbuild.addStep(chromeos_revision_source.GitRevisionDropper,
+                            timeout=self.timeout)
+    else:
+      params = '--nosync ' + params
 
     # Triggered cbuildbots (pfq slaves) have this property set.
     if self.is_master:
@@ -325,3 +333,36 @@ class CbuildbotFactory(object):
         a buildbot factory object
     """
     return self.f_cbuild
+
+
+class ChromeCbuildbotFactory(CbuildbotFactory):
+  """
+  Create a cbuildbot build factory for chrome.
+
+  Attributes:
+      board: What board to build (x86-generic x86-agz etc).
+      buildroot: --buildroot to pass to cbuild.
+      params: string of parameters to pass to the cbuildbot type
+      timeout: Timeout in seconds for the main command
+          (i.e. the type command). Default 9000 seconds.
+      is_master: Whether or not this pfq manages others.
+      chrome_rev_stages:  Array of strings designating chrome rev steps to run
+        in cbuildbot tot, latest_release, etc.
+      crostools_repo: git repo for crostools toolset.
+      crosutils_repo: git repo for crosutils toolset.
+  """
+  def __init__(self, buildroot='/b/cbuild', params='', timeout=9000,
+               is_master=False, branch='master', chrome_rev_stages=None,
+               crostools_repo=CbuildbotFactory._default_crostools,
+               crosutils_repo=CbuildbotFactory._default_crosutils):
+    CbuildbotFactory.__init__(self, type='chrome-cbuildbot', board=None,
+                              buildroot=buildroot, is_master=is_master,
+                              crostools_repo=crostools_repo,
+                              crosutils_repo=crosutils_repo)
+
+    # Only sync for first stage.
+    sync = True
+    for chrome_rev in chrome_rev_stages:
+      bot_params = 'chrome-rev=%s %s' % (chrome_rev, params)
+      self.cbuildbot_type(bot_params, sync)
+      sync = False
