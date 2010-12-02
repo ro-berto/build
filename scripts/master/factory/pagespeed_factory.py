@@ -64,3 +64,15 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     self._AddTests(pagespeed_cmd_obj, tests, mode, factory_properties)
 
     return factory
+
+  def FirefoxAddOnFactory(self, identifier, target='Release', clobber=False,
+                       tests=None, mode=None, slave_type='BuilderTester',
+                       options=None, compile_timeout=1200, build_url=None,
+                       project=None, factory_properties=None):
+    # For firefox addon we don't use the default DEPS file.
+    self._solutions[0] = gclient_factory.GClientSolution(
+        "http://page-speed.googlecode.com/svn/firefox_addon/trunk/src")
+    return self.PageSpeedFactory(identifier, target, clobber, tests, mode,
+                                 slave_type, options, compile_timeout, build_url,
+                                 project, factory_properties)
+
