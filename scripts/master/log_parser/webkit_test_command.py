@@ -162,7 +162,7 @@ class WebKitCommand(shell.ShellCommand):
     full_desc = ['%s %d' % (description, len(tests))]
     full_desc.append('<div class="BuildResultInfo">')
 
-    full_desc.append('<a href="%s#referringMaster=%s&tests=%s">' % (
+    full_desc.append('<a href="%s#master=%s&tests=%s">' % (
         self._LAYOUT_TEST_DASHBOARD_BASE, self.test_observer.master_name,
         ','.join(tests)))
 
