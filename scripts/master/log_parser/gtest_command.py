@@ -270,6 +270,8 @@ class GTestCommand(shell.ShellCommand):
       if self.test_observer.builder_name:
         # Include the link to the flakiness dashboard
         failure_text.append('<div class="BuildResultInfo">')
+        # TODO(ojan): Once we pass --master-name to the gtest builders,
+        # s/referringBuilder/referringMaster like in webkit_test_command.py.
         failure_text.append('<a href="%s#referringBuilder=%s&testType=%s'
                             '&tests=%s">' % (
             self._GTEST_DASHBOARD_BASE, self.test_observer.builder_name,
