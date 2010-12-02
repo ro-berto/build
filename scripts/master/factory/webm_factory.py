@@ -6,8 +6,6 @@
 
 Based on gclient_factory.py and adds webm-specific steps."""
 
-import os
-
 from master.factory import gclient_factory
 from master.factory import webm_commands
 from master.factory.build_factory import BuildFactory
@@ -27,6 +25,8 @@ class WebMFactory(object):
   def _AddTests(self, factory_cmd_obj, tests, mode=None,
                 factory_properties=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
+    # TODO: Remove the following line once you've added tests.
+    # pylint: disable=R0201,W0612
     factory_properties = factory_properties or {}
 
     # This function is too crowded, try to simplify it a little.
@@ -53,7 +53,7 @@ class WebMFactory(object):
                                               target,
                                               self._build_dir,
                                               self._target_platform)
-                                                             
+
     # First kill any svn.exe tasks so we can update in peace, and
     # afterwards use the checked-out script to kill everything else.
     if self._target_platform == 'win32':
@@ -63,7 +63,7 @@ class WebMFactory(object):
     # run can be killed.
     if self._target_platform == 'win32':
       webm_cmd_obj.AddTaskkillStep()
-      
+
     # ADD UPDATE AND COMPILE STEP HERE.
 
     # Add all the tests.

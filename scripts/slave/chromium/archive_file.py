@@ -17,7 +17,7 @@ from common import chromium_utils
 import config
 
 
-def _UploadFile(src, dst, force_ssh=False):
+def UploadFile(src, dst, force_ssh=False):
   www_base = config.Archive.www_dir_base
   full_dst = os.path.join(www_base, dst)
   dst_dir = os.path.dirname(full_dst)
@@ -51,8 +51,8 @@ def main():
   if not options.target:
     option_parser.error('No target specified')
 
-  _UploadFile(options.source, options.target,
-              force_ssh=options.force_ssh)
+  UploadFile(options.source, options.target,
+             force_ssh=options.force_ssh)
   return 0
 
 

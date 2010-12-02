@@ -6,8 +6,6 @@
 
 This is based on commands.py and adds pagespeed-specific commands."""
 
-import config
-
 from master.factory import commands
 
 class PageSpeedCommands(commands.FactoryCommands):

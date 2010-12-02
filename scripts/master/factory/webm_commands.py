@@ -6,8 +6,6 @@
 
 This is based on commands.py and adds webm-specific commands."""
 
-import config
-
 from master.factory import commands
 
 class WebMCommands(commands.FactoryCommands):

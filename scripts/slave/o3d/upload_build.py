@@ -3,8 +3,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""A script to upload the archived O3D build to chrome-web. Simply calls
-the archive_file script with the correct source and target.
+"""Uploads the archived O3D build to chrome-web.
+
+Simply calls the archive_file script with the correct source and target.
 """
 
 import os
@@ -13,6 +14,7 @@ import sys
 from common import chromium_utils
 from slave.chromium import archive_file
 from slave import slave_utils
+
 
 def main(argv):
   o3d_dir = os.path.join(os.getcwd(), 'o3d')
@@ -28,8 +30,9 @@ def main(argv):
                            'full-build-' + platform + '_' + o3d_rev + '.zip')
   remote_zip = 'snapshots/o3d/' + o3d_rev + '/' + builder_name + '.zip'
 
-  archive_file._UploadFile(local_zip, remote_zip)
+  archive_file.UploadFile(local_zip, remote_zip)
   return 0
+
 
 if __name__ == '__main__':
   sys.exit(main(sys.argv))

@@ -11,7 +11,7 @@ Usage:
 
 Command Arguments:
   archive_url:  the url of a zipped O3D test archive.
-  builder_name:  the name of an O3D builder. 
+  builder_name:  the name of an O3D builder.
 """
 
 
@@ -28,7 +28,7 @@ import config
 
 if utils.IsWindows():
   AUTO_PATH = 'C:\\auto'
-  
+
 elif utils.IsMac():
   AUTO_PATH = '/Users/testing/auto'
 
@@ -38,8 +38,8 @@ else:
 
 O3D_PATH = os.path.join(AUTO_PATH, 'o3d')
 SCRIPTS_PATH = os.path.join(AUTO_PATH, 'scripts')
-O3D_SRC_AUTO_PATH = os.path.join(O3D_PATH, 'o3d', 'tests', 'lab') 
-ARCHIVE_BASE_URL = ('http://' + config.Archive.archive_host + 
+O3D_SRC_AUTO_PATH = os.path.join(O3D_PATH, 'o3d', 'tests', 'lab')
+ARCHIVE_BASE_URL = ('http://' + config.Archive.archive_host +
                     '/buildbot/snapshots/o3d/test_packages/')
 
 class StagingError(Exception): pass
@@ -53,11 +53,10 @@ def DownloadTestArchive(archive_url):
   Returns:
     path to local test archive
   """
-   
+
   if archive_url.startswith('file:'):
     # File already on disk.
     local_path = urlparse.urlparse(archive_url)[2]
-    
   else:
     # Download test archive from url.
     local_path = os.path.join(AUTO_PATH, 'o3d.zip')
@@ -66,17 +65,18 @@ def DownloadTestArchive(archive_url):
 
   return local_path
 
-def main(options, args):
+
+def unpack(options):
   if not options.url and not options.builder:
     raise StagingError('Either a test url or builder name is required.')
-   
+
   # Remove existing test archive.
   if os.path.exists(AUTO_PATH):
     print 'Removing existing directory at', AUTO_PATH
     shutil.rmtree(AUTO_PATH)
-    
+
   os.mkdir(AUTO_PATH)
-    
+
   # Download archive.
   if options.url:
     url = options.url
@@ -85,11 +85,11 @@ def main(options, args):
     branch = 'o3d'
     latest_path = branch + '/latest_' + options.builder
     latest_url = ARCHIVE_BASE_URL + latest_path
-    
+
     local_latest = os.path.join(AUTO_PATH, 'latest')
     print 'Downloading latest file from', latest_url
     urllib.urlretrieve(latest_url, local_latest)
-    
+
     latest_file = file(local_latest, 'r')
     url = ARCHIVE_BASE_URL + branch + '/' + latest_file.readline()
   try:
@@ -97,20 +97,19 @@ def main(options, args):
   except IOError:
     print 'IOError while downloading test archive from', url
     return 2
-  
+
   # Unzip archive.
   output_dir = os.path.normpath(os.path.join(O3D_PATH, '..'))
   print 'Extracting test archive to', output_dir
   utils.ExtractZip(local_archive_path, output_dir, False)
-    
-  # Copy archive's automation scripts into auto directory.   
+
+  # Copy archive's automation scripts into auto directory.
   print 'Copying automation scripts from', O3D_SRC_AUTO_PATH, 'to', SCRIPTS_PATH
   shutil.copytree(O3D_SRC_AUTO_PATH, SCRIPTS_PATH)
-  
   return 0
 
 
-if '__main__' == __name__:
+def main():
   option_parser = optparse.OptionParser()
 
   option_parser.add_option('', '--url',
@@ -119,4 +118,10 @@ if '__main__' == __name__:
       help='name of builder to grab archive from')
 
   options, args = option_parser.parse_args()
-  sys.exit(main(options, args))
+  if args:
+    option_parser.error('Unsupported arguments: %s' % args)
+  return unpack(options)
+
+
+if '__main__' == __name__:
+  sys.exit(main())
