@@ -759,23 +759,15 @@ class NativeClientCommands(commands.FactoryCommands):
                           workdir='build/native_client',
                           command=cmd)
 
-  def AddModularBuildStep(self, mode, clobber=False,
-                          options=None, timeout=1200):
-    if clobber:
-      self._factory.addStep(shell.ShellCommand,
-                            name='clobber_modular_build',
-                            description='clobber_modular_build',
-                            timeout=timeout,
-                            haltOnFailure=True,
-                            workdir='build/native_client/tools/modular-build',
-                            command='rm -rf out')
+  def AddModularBuildStep(self, mode, options=None, timeout=1200):
     self._factory.addStep(shell.ShellCommand,
                           name='modular_build',
                           description='modular_build',
                           timeout=timeout,
                           haltOnFailure=True,
                           workdir='build/native_client/tools/modular-build',
-                          command='python build.py -b')
+                          command='python build_for_buildbot.py '
+                            'buildbot_from_scratch')
 
   def AddAnnotatedStep(self, name, command, timeout=1200,
                        workdir='build/native_client', haltOnFailure=True,

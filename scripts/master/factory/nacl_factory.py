@@ -291,7 +291,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
 
     return factory
 
-  def ModularBuildFactory(self, identifier, target='Release', clobber=False,
+  def ModularBuildFactory(self, identifier, target='Release',
                           tests=None, mode=None, slave_type='BuilderTester',
                           options=None, compile_timeout=1200,
                           official_release=False, factory_properties=None,
@@ -313,8 +313,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                                       test_target=test_target)
 
     nacl_cmd_obj.AddModularBuildStep(
-        mode=mode, clobber=clobber, options=options,
-        timeout=compile_timeout)
+        mode=mode, options=options, timeout=compile_timeout)
 
     return factory
 
