@@ -59,7 +59,7 @@ class TestObserver(buildstep.LogLineObserver):
         '=> Tests to be fixed \((\d+)\):')
     self._summary_skipped = re.compile('(\d+) skipped')
 
-    self._master_name_re = re.compile('--master-name ([^"]*)')
+    self._master_name_re = re.compile('--master-name ([^ ]*)')
     self.master_name = ''
 
   def outLineReceived(self, line):
