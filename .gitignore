@@ -2,6 +2,7 @@
 .manhole
 changes.pck
 events_*
+state.sqlite
 twistd.log*
 twistd.pid
 /masters/master.chromium/Arm
