@@ -48,7 +48,10 @@ def main():
   if not os.path.exists(exe_path):
     raise chromium_utils.PathNotFound('Unable to find %s' % exe_path)
 
-  print '\n' + exe_path + '\n',
+  # crash_service's window can interfere with interactive ui tests.
+  cmd = exe_path + ' --no-window'
+
+  print '\n' + cmd + '\n',
 
   # We cannot use Popen or os.spawn here because buildbot will wait until
   # the process terminates before going to the next step. Since we want to
@@ -56,7 +59,7 @@ def main():
   # process to be detached and that we don't want to inherit handles from
   # the parent process.
   si = win32process.STARTUPINFO()
-  details = win32process.CreateProcess(None, exe_path, None, None, 0,
+  details = win32process.CreateProcess(None, cmd, None, None, 0,
                                        win32process.DETACHED_PROCESS, None,
                                        None, si)
   print '\nCreated with process id %d\n' % details[2]
