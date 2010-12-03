@@ -363,6 +363,6 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
     # Only sync for first stage.
     sync = True
     for chrome_rev in chrome_rev_stages:
-      bot_params = 'chrome-rev=%s %s' % (chrome_rev, params)
+      bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
       self.cbuildbot_type(bot_params, sync)
       sync = False
