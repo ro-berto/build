@@ -54,17 +54,15 @@ class WebMFactory(object):
                                               self._build_dir,
                                               self._target_platform)
 
-    # First kill any svn.exe tasks so we can update in peace, and
-    # afterwards use the checked-out script to kill everything else.
-    if self._target_platform == 'win32':
-      webm_cmd_obj.AddSvnKillStep()
     webm_cmd_obj.AddUpdateScriptStep()
-    # Once the script is updated, the zombie processes left by the previous
-    # run can be killed.
-    if self._target_platform == 'win32':
-      webm_cmd_obj.AddTaskkillStep()
 
     # ADD UPDATE AND COMPILE STEP HERE.
+    url = 'git://review.webmproject.org/libvpx.git'
+    webm_cmd_obj.AddCloneOrFetchRepositoryStep(url, checkout_dir='libvpx')
+    webm_cmd_obj.AddCheckoutRevisionStep(url, checkout_dir='libvpx')
+    webm_cmd_obj.AddConfigureStep(checkout_dir='libvpx')
+    webm_cmd_obj.AddMakeStep(checkout_dir='libvpx')
+    webm_cmd_obj.AddInstallStep(checkout_dir='libvpx')
 
     # Add all the tests.
     self._AddTests(webm_cmd_obj, tests, mode, factory_properties)
