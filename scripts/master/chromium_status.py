@@ -14,7 +14,6 @@ import buildbot.process as process
 import buildbot.status.web.base as base
 import buildbot.status.web.baseweb as baseweb
 import buildbot.status.web.console as console
-import buildbot.status.web.stats as stats
 import buildbot.status.web.waterfall as waterfall
 import buildbot.status.web.changes as changes
 import buildbot.status.web.builder as builder
@@ -27,6 +26,8 @@ from twisted.python import components
 from twisted.web.util import Redirect
 from twisted.web import html
 from zope.interface import declarations
+
+from master.third_party import stats
 
 
 class BuildBox(waterfall.BuildBox):
