@@ -291,13 +291,12 @@ class NativeClientFactory(gclient_factory.GClientFactory):
 
     return factory
 
-  def ModularBuildFactory(self, identifier, target='Release',
-                          tests=None, mode=None, slave_type='BuilderTester',
-                          options=None, compile_timeout=1200,
-                          official_release=False, factory_properties=None,
-                          test_target=None):
+  def ModularBuildFactory(self, identifier, modular_build_type,
+                          target='Release',
+                          tests=None, slave_type='BuilderTester',
+                          compile_timeout=1200,
+                          official_release=False, factory_properties=None):
     factory_properties = factory_properties or {}
-    options = options or {}
     tests = tests or []
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
@@ -309,11 +308,10 @@ class NativeClientFactory(gclient_factory.GClientFactory):
     nacl_cmd_obj = nacl_commands.NativeClientCommands(factory, identifier,
                                                       target,
                                                       self._build_dir,
-                                                      self._target_platform,
-                                                      test_target=test_target)
+                                                      self._target_platform)
 
-    nacl_cmd_obj.AddModularBuildStep(
-        mode=mode, options=options, timeout=compile_timeout)
+    nacl_cmd_obj.AddModularBuildStep(modular_build_type,
+                                     timeout=compile_timeout)
 
     return factory
 
