@@ -15,7 +15,6 @@ import copy
 import logging
 import optparse
 import os
-import re
 import sys
 
 # sys.path needs to be modified here because python2.6 automatically adds the
@@ -35,6 +34,7 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 # pylint: disable=E0611
 # pylint: disable=E1101
 from common import chromium_utils
+from slave import gtest_slave_utils
 from slave import slave_utils
 import config
 
@@ -46,77 +46,6 @@ import google.platform_utils
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
 DEST_DIR = 'gtest_results'
-
-
-class GTestUnexpectedDeathTracker(object):
-  """A lightweight version of log parser that keeps track of running tests
-  for unexpected timeout or crash."""
-
-  def __init__(self):
-    self._current_test = None
-    self._test_start   = re.compile('\[\s+RUN\s+\] (\w+\.\w+)')
-    self._test_ok      = re.compile('\[\s+OK\s+\] (\w+\.\w+)')
-    self._test_fail    = re.compile('\[\s+FAILED\s+\] (\w+\.\w+)')
-
-    self.failed_tests = set()
-
-  def OnReceiveLine(self, line):
-    results = self._test_start.search(line)
-    if results:
-      self._current_test = results.group(1)
-      return
-
-    results = self._test_ok.search(line)
-    if results:
-      self._current_test = ''
-      return
-
-    results = self._test_fail.search(line)
-    if results:
-      self.failed_tests.add(results.group(1))
-      self._current_test = ''
-      return
-
-  def GenerateXML(self, path):
-    """Generates a minimal XML file that includes failed tests that may
-    have crashed or hung for an unexpected reason.  Returns False if no
-    current test has been recorded or if it fails to open a file.
-    """
-    if not self._current_test:
-      return False
-    self.failed_tests.add(self._current_test)
-
-    if not os.path.exists(os.path.dirname(path)):
-      os.makedirs(os.path.dirname(path))
-    fout = open(path, "w")
-    if not fout:
-      return False
-    try:
-      fout.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-      fout.write('<testsuites name="AllTests">\n')
-
-      last_test_suite = None
-      for test in sorted(self.failed_tests):
-        test_name = test.split('.')
-        if len(test_name) != 2:
-          continue
-        if last_test_suite != test_name[0]:
-          if last_test_suite:
-            fout.write('</testsuite>\n')
-          fout.write('<testsuite name="%s">\n' % test_name[0])
-          last_test_suite = test_name[0]
-
-        fout.write('<testcase name="%s" status="run" time="0" classname="%s">'
-                  % (test_name[1], test_name[0]))
-        fout.write('<failure message="" type=""></failure>')
-        fout.write('</testcase>\n')
-
-      if last_test_suite:
-        fout.write('</testsuite>\n')
-      fout.write('</testsuites>\n')
-    finally:
-      fout.close()
-    return True
 
 
 def _RunGTestCommand(command, results_tracker):
@@ -132,48 +61,62 @@ def _GenerateJSONForTestResults(options, results_tracker):
   upload the file to the archive server.
   The archived JSON file will be placed at:
   www-dir/DEST_DIR/buildname/testname/results.json
-  on the archive server.
-  Note that it adds slave's webkit/tools/layout_tests to the PYTHONPATH
+  on the archive server (NOTE: this is to be deprecated).
+  Note that it adds slave's WebKit/WebKitTools/Scripts to the PYTHONPATH
   to run the JSON generator.
 
   Args:
     options: command-line options that are supposed to have build_dir,
         results_directory, builder_name, build_name and test_output_xml values.
   """
-  if not os.path.exists(options.test_output_xml):
-    # The file did not get generated. Try if we can generate a XML file
-    # from the log output.
-    try:
-      results_tracker.GenerateXML(options.test_output_xml)
-    except (OSError, IOError), e:
-      print 'Unexpected error while generating XML: ', e
-      return
-    if not os.path.exists(options.test_output_xml):
-      print 'ERROR: %s not get generated.' % options.test_output_xml
-      return
+  # pylint: disable=W0703
+  results_map = None
+  try:
+    if os.path.exists(options.test_output_xml):
+      results_map = gtest_slave_utils.GetResultsMapFromXML(
+          options.test_output_xml)
+    else:
+      # The file did not get generated. See if we can generate a results map
+      # from the log output.
+      results_map = results_tracker.GetResultsMap()
+  except Exception, e:
+    # This error will be caught by the following 'not results_map' statement.
+    print 'Error: ', e
+
+  if not results_map:
+    print 'No data was available to update the JSON results'
+    return
 
   build_dir = os.path.abspath(options.build_dir)
   slave_name = slave_utils.SlaveBuildName(build_dir)
-  postproc_options = copy.copy(options)
-  postproc_options.build_name = slave_name
-  postproc_options.input_results_xml = options.test_output_xml
-  postproc_options.builder_base_url = '%s/%s/%s/%s' % (
+
+  generate_json_options = copy.copy(options)
+  generate_json_options.build_name = slave_name
+  generate_json_options.input_results_xml = options.test_output_xml
+  generate_json_options.builder_base_url = '%s/%s/%s/%s' % (
       config.Master.archive_url, DEST_DIR, slave_name, options.test_type)
+  generate_json_options.master_name = slave_utils.GetActiveMaster()
+  generate_json_options.test_results_server = config.Master.test_results_server
 
   try:
-    sys.path.append(chromium_utils.FindUpward(
-        build_dir, 'webkit', 'tools', 'layout_tests', 'webkitpy',
-        'layout_tests'))
-    import test_output_xml_to_json
-    test_output_xml_to_json.JSONGeneratorFromXML(postproc_options)
+    generate_json_options.webkit_dir = chromium_utils.FindUpward(
+        build_dir, 'third_party', 'WebKit', 'WebKitTools')
+    generate_json_options.chrome_dir = chromium_utils.FindUpward(
+        build_dir, 'webkit', 'tools', 'layout_tests')
 
+    # Generate results JSON file and upload it to the appspot server.
+    gtest_slave_utils.GenerateAndUploadJSONResults(
+        results_map, generate_json_options)
+
+    # TODO(kinuko): Stop copying results to the archive server once we
+    # finished migrating to the appspot results server.
     dest_dir = os.path.join(config.Archive.www_dir_base, DEST_DIR, slave_name)
     dest_dir = os.path.join(dest_dir, options.test_type)
     src_full_path = os.path.join(options.results_directory, 'results.json')
-
     print 'copying dashboard file %s to %s' % (src_full_path, dest_dir)
     slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
     slave_utils.CopyFileToArchiveHost(src_full_path, dest_dir)
+
   except (OSError, IOError), e:
     print 'Unexpected error while generating JSON: ', e
 
@@ -232,7 +175,7 @@ def main_mac(options, args):
 
   results_tracker = None
   if options.generate_json_file:
-    results_tracker = GTestUnexpectedDeathTracker()
+    results_tracker = gtest_slave_utils.GTestUnexpectedDeathTracker()
 
     if os.path.exists(options.test_output_xml):
       # remove the old XML output file.
@@ -345,7 +288,7 @@ def main_linux(options, args):
 
   results_tracker = None
   if options.generate_json_file:
-    results_tracker = GTestUnexpectedDeathTracker()
+    results_tracker = gtest_slave_utils.GTestUnexpectedDeathTracker()
 
     if os.path.exists(options.test_output_xml):
       # remove the old XML output file.
@@ -423,7 +366,7 @@ def main_win(options, args):
 
   results_tracker = None
   if options.generate_json_file:
-    results_tracker = GTestUnexpectedDeathTracker()
+    results_tracker = gtest_slave_utils.GTestUnexpectedDeathTracker()
 
     if os.path.exists(options.test_output_xml):
       # remove the old XML output file.
@@ -495,10 +438,10 @@ def main():
   option_parser.add_option("", "--test-type", default='',
                            help="The test name that identifies the test, "
                                 "e.g. 'unit-tests'")
+  option_parser.add_option("", "--test-results-server", default='',
+                           help="The test results server to upload the "
+                                "results.")
   options, args = option_parser.parse_args()
-
-  # Print out builder name for log_parser
-  print '[Running on builder: "%s"]' % options.builder_name
 
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
