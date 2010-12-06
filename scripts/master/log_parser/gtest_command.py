@@ -52,8 +52,8 @@ class TestObserver(buildstep.LogLineObserver):
     self._disabled     = re.compile('  YOU HAVE (\d+) DISABLED TEST')
     self._flaky        = re.compile('  YOU HAVE (\d+) FLAKY TEST')
 
-    self._builder_name_re = re.compile('\[Running on builder: "([^"]*)"')
-    self.builder_name = ''
+    self._master_name_re = re.compile('\[Running for master: "([^"]*)"')
+    self.master_name = ''
 
   def _StatusOfTest(self, test):
     """Returns the status code for the given test, or 'not known'."""
@@ -125,10 +125,10 @@ class TestObserver(buildstep.LogLineObserver):
     # Track line number for error messages.
     self._line_number += 1
 
-    if not self.builder_name:
-      results = self._builder_name_re.search(line)
+    if not self.master_name:
+      results = self._master_name_re.search(line)
       if results:
-        self.builder_name = results.group(1)
+        self.master_name = results.group(1)
 
     # Is it a line reporting disabled tests?
     results = self._disabled.search(line)
@@ -267,14 +267,12 @@ class GTestCommand(shell.ShellCommand):
 
     if failed_test_count:
       failure_text = ['failed %d' % failed_test_count]
-      if self.test_observer.builder_name:
+      if self.test_observer.master_name:
         # Include the link to the flakiness dashboard
         failure_text.append('<div class="BuildResultInfo">')
-        # TODO(ojan): Once we pass --master-name to the gtest builders,
-        # s/referringBuilder/master like in webkit_test_command.py.
-        failure_text.append('<a href="%s#referringBuilder=%s&testType=%s'
+        failure_text.append('<a href="%s#master=%s&testType=%s'
                             '&tests=%s">' % (
-            self._GTEST_DASHBOARD_BASE, self.test_observer.builder_name,
+            self._GTEST_DASHBOARD_BASE, self.test_observer.master_name,
             self.describe(True)[0],
             ','.join(self.test_observer.FailedTests())))
         failure_text.append('Flakiness dashboard')

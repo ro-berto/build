@@ -98,6 +98,9 @@ def _GenerateJSONForTestResults(options, results_tracker):
   generate_json_options.master_name = slave_utils.GetActiveMaster()
   generate_json_options.test_results_server = config.Master.test_results_server
 
+  # Print out master name for log_parser
+  print '[Running for master: "%s"]' % generate_json_options.master_name
+
   try:
     generate_json_options.webkit_dir = chromium_utils.FindUpward(
         build_dir, 'third_party', 'WebKit', 'WebKitTools')
