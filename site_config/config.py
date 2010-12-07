@@ -76,6 +76,9 @@ class Master(config_private.Master):
   # Directory in which to save perf-test output data files.
   perf_output_dir = '~/www/perf'
 
+  # URL pointing to builds and test results.
+  archive_url = 'http://build.chromium.org/buildbot'
+
   # The test results server to upload our test results.
   test_results_server = 'test-results.appspot.com'
 
