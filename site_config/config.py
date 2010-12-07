@@ -77,7 +77,8 @@ class Master(config_private.Master):
   perf_output_dir = '~/www/perf'
 
   # URL pointing to builds and test results.
-  archive_url = 'http://build.chromium.org/buildbot'
+  archive_base_url = 'http://build.chromium.org/f'
+  archive_url = archive_base_url + '/chromium'
 
   # The test results server to upload our test results.
   test_results_server = 'test-results.appspot.com'
