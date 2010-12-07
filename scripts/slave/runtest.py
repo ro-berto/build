@@ -446,6 +446,9 @@ def main():
                                 "results.")
   options, args = option_parser.parse_args()
 
+  # Print out builder name for log_parser
+  print '[Running on builder: "%s"]' % options.builder_name
+
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
