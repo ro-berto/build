@@ -40,7 +40,7 @@ F('win_full', win().ChromiumFactory(
            'browser_tests', 'courgette', 'check_bins', 'webkit_unit',
            'chrome_frame_unittests', 'gpu', 'installer'],
     factory_properties={'archive_build': True,
-                        'extra_archive_paths': 'chrome_frame',
+                        'extra_archive_paths': 'ceee, chrome_frame',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-xp',
                         'process_dumps': True,
