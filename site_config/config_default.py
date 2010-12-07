@@ -40,6 +40,10 @@ class Master(object):
   # Your smtp server to enable mail notifications.
   smtp = 'smtp'
 
+  # URL pointing to builds and test results.
+  archive_base_url = 'http://example.com'
+  archive_url = archive_base_url + '/chromium'
+
   class _Base(object):
     # If set to True, the master will do nasty stuff like closing the tree,
     # sending emails or other similar behaviors. Don't change this value unless
