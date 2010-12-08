@@ -246,6 +246,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
 
+    # GPU tests:
+    if R('gpu_tests'):      f.AddBasicGTestTestStep(
+                                'gpu_tests', fp,
+                                arg_list=['--use-gpu-in-tests'])
+
     # ChromeFrame tests:
     if R('chrome_frame_unittests'):
       f.AddBasicGTestTestStep('chrome_frame_unittests', fp)
