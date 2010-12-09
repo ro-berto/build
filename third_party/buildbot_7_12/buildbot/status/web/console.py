@@ -450,8 +450,15 @@ class ConsoleStatusResource(HtmlResource):
                 builds.append(devBuild)
 
                 # Now break if we have enough builds.
-                if int(got_rev) < int(revision):
-                    break;
+                if self.comparator.getSortingKey() == "when":
+                    current_revision = self.getChangeForBuild(
+                        builder.getBuild(-1), revision)
+                    if self.comparator.isRevisionEarlier(
+                        devBuild, current_revision):
+                        break
+                else:
+                    if int(got_rev) < int(revision):
+                        break;
 
 
             build = build.getPreviousBuild()
@@ -1052,4 +1059,3 @@ class IntegerRevisionComparator(RevisionComparator):
 
     def getSortingKey(self):
         return "revision"
-

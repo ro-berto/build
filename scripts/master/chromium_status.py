@@ -452,7 +452,8 @@ class WebStatus(baseweb.WebStatus):
     # custom ones.
     baseweb.WebStatus.setupUsualPages(self, *args, **kwargs)
     self.putChild("waterfall", WaterfallStatusResource())
-    self.putChild("console", ConsoleStatusResource())
+    self.putChild("console", ConsoleStatusResource(
+        orderByTime=self.orderConsoleByTime))
     self.putChild("bot_status.json", console.ConsoleStatusResource())
     self.putChild("stats", stats.StatsStatusResource())
     self.putChild("grid", ConsoleStatusResource())

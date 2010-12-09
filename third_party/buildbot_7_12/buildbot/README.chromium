@@ -27,3 +27,27 @@ a newer version of the upstream repository.
 +                    break;
 
 
+Then made the following embelishment to allow the old behavior for
+time based comparators.
+
+--- third_party/buildbot_7_12/buildbot/status/web/console.py    (revision 68693)
++++ third_party/buildbot_7_12/buildbot/status/web/console.py    (working copy)
+@@ -450,8 +450,15 @@
+                 builds.append(devBuild)
+
+                 # Now break if we have enough builds.
+-                if int(got_rev) < int(revision):
+-                    break;
++                if self.comparator.getSortingKey() == "when":
++                    current_revision = self.getChangeForBuild(
++                        builder.getBuild(-1), revision)
++                    if self.comparator.isRevisionEarlier(
++                        devBuild, current_revision):
++                        break
++                else:
++                    if int(got_rev) < int(revision):
++                        break;
+
+
+             build = build.getPreviousBuild()
+
