@@ -699,7 +699,9 @@ def RemoveChromeTemporaryFiles():
     kLogRegex = '^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
   elif IsLinux():
+    kLogRegexHeapcheck = '\.(sym|heap)$'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
+    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegexHeapcheck)
     LogAndRemoveFiles('/dev/shm', kLogRegex)
   elif IsMac():
     nstempdir_path = '/usr/local/libexec/nstempdir'
