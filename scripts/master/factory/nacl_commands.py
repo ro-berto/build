@@ -199,6 +199,10 @@ class NativeClientCommands(commands.FactoryCommands):
              r'\Team Tools\Performance Tools;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8'
               r'\Team Tools\Performance Tools;'
+          r'c:\Program Files\Microsoft Visual Studio 9.0'
+             r'\Team Tools\Performance Tools;'
+          r'c:\Program Files (x86)\Microsoft Visual Studio 9.0'
+              r'\Team Tools\Performance Tools;'
         ),
       }
       self._gyp_build_env = self._build_env
@@ -748,8 +752,8 @@ class NativeClientCommands(commands.FactoryCommands):
       env = self._cygwin_env
     else:
       env = self._build_env
-    cmd = ('curl -L %s -o build.tgz && '
-           'tar xvfz build.tgz --no-same-owner') % url
+    cmd = WithProperties(('curl -L %s -o build.tgz && '
+                         'tar xvfz build.tgz --no-same-owner') % url)
     self._factory.addStep(shell.ShellCommand,
                           name='extract_archive',
                           description='extract archive',

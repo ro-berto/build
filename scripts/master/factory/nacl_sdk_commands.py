@@ -25,7 +25,7 @@ class NativeClientSDKCommands(commands.FactoryCommands):
                                       target, build_dir, target_platform)
 
     # Where to point waterfall links for builds and test results.
-    self._archive_url = config.Master.archive_url
+    self._archive_url = 'http://build.chromium.org/f/client'
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
