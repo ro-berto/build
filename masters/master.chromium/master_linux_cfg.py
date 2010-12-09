@@ -47,7 +47,8 @@ F('rel', linux().ChromiumFactory(
              'gpu_unittests', 'ipc_tests', 'media_unittests', 'memory_test',
              'page_cycler_tests', 'printing_unittests', 'remoting_unittests',
              'startup_tests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
-             'url_fetch_test', 'base_unittests', 'net_unittests']))
+             'url_fetch_test', 'base_unittests', 'net_unittests',
+             'safe_browsing_tests']))
 
 #
 # Linux Rel testers
@@ -58,7 +59,7 @@ F('rel_unit', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive_x64,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
-           'browser_tests', 'unit', 'gpu', 'base', 'net'],
+           'browser_tests', 'unit', 'gpu', 'base', 'net', 'safe_browsing'],
     factory_properties={'generate_gtest_json': True}))
 
 
@@ -99,7 +100,8 @@ F('dbg', linux().ChromiumFactory(
              'gpu_unittests', 'interactive_ui_tests', 'ipc_tests',
              'media_unittests', 'nacl_ui_tests', 'printing_unittests',
              'remoting_unittests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
-             'nacl_sandbox_tests', 'base_unittests', 'net_unittests']))
+             'nacl_sandbox_tests', 'base_unittests', 'net_unittests',
+             'safe_browsing_tests']))
 
 #
 # Linux Dbg Unit testers
@@ -112,7 +114,7 @@ F('dbg_unit_1', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
-           'browser_tests', 'base'],
+           'browser_tests', 'base', 'safe_browsing'],
     factory_properties={'ui_total_shards': 2,
                         'ui_shard_index': 1,
                         'generate_gtest_json': True}))
