@@ -546,7 +546,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                                           target,
                                                           self._build_dir,
                                                           self._target_platform)
-    chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(identifier)
+
+    if factory_properties and factory_properties.get('branch'):
+      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(
+          identifier, factory_properties['branch'])
+    else:
+      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(identifier)
 
     # crash_service.exe doesn't fire up on its own because we have the
     # binaries in chrome-win32 dir (not in the default src/chrome/Release).

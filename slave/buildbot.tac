@@ -21,11 +21,12 @@ import config
 
 
 # Determines the slave type:
-ActiveMaster = None
+#ActiveMaster = None
+ActiveMaster = config.Master.Experimental
 
 
 # Slave properties:
-slavename = None
+slavename = 'chromium-linux-experimental'
 password = config.Master.GetBotPassword()
 host = None
 port = None

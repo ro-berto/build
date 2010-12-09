@@ -728,7 +728,7 @@ class ChromiumCommands(commands.FactoryCommands):
            platform]
     self.AddTestStep(shell.ShellCommand, 'upload test parity', cmd)
 
-  def AddDownloadAndExtractOfficialBuild(self, identifier):
+  def AddDownloadAndExtractOfficialBuild(self, identifier, branch=None):
     """Download and extract an official build.
 
     Assumes the zip file has e.g. "Google Chrome.app" in the top level
@@ -741,6 +741,8 @@ class ChromiumCommands(commands.FactoryCommands):
            # presence of new build and pass that info down for a
            # --build N arg.
            '--latest']
+    if branch:  # Fetch latest on given branch
+      cmd += ['--branch', str(branch)]
     self.AddTestStep(commands.WaterfallLoggingShellCommand,
                      'Download and extract official build', cmd,
                      halt_on_failure=True)
