@@ -1,5 +1,6 @@
 *.pyc
 .manhole
+.status_password
 changes.pck
 events_*
 state.sqlite
@@ -107,3 +108,6 @@ twistd.pid
 /masters/master.experimental/chromium-mac-experimental
 /masters/master.experimental/chromium-win-experimental
 /site_config/.bot_password
+/slave/chromium-linux-experimental
+/slave/chromium-mac-experimental
+/slave/chromium-win-experimental
