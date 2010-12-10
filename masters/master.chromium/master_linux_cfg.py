@@ -101,7 +101,7 @@ F('dbg', linux().ChromiumFactory(
              'media_unittests', 'nacl_ui_tests', 'printing_unittests',
              'remoting_unittests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
              'nacl_sandbox_tests', 'base_unittests', 'net_unittests',
-             'safe_browsing_tests']))
+             'plugin_tests', 'safe_browsing_tests']))
 
 #
 # Linux Dbg Unit testers
