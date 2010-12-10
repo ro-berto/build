@@ -13,7 +13,6 @@ from buildbot.steps import shell
 from master.factory import commands
 from master.log_parser import archive_command
 
-import config
 
 class NativeClientSDKCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""

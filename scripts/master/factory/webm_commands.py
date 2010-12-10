@@ -11,9 +11,8 @@ import os
 from buildbot.steps import shell
 from buildbot.process.properties import WithProperties
 
-import config
-
 from master.factory import commands
+
 
 class WebMCommands(commands.FactoryCommands):
   """Encapsulates methods to add chromium commands to a buildbot factory."""
