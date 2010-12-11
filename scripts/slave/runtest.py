@@ -111,15 +111,6 @@ def _GenerateJSONForTestResults(options, results_tracker):
     gtest_slave_utils.GenerateAndUploadJSONResults(
         results_map, generate_json_options)
 
-    # TODO(kinuko): Stop copying results to the archive server once we
-    # finished migrating to the appspot results server.
-    dest_dir = os.path.join(config.Archive.www_dir_base, DEST_DIR, slave_name)
-    dest_dir = os.path.join(dest_dir, options.test_type)
-    src_full_path = os.path.join(options.results_directory, 'results.json')
-    print 'copying dashboard file %s to %s' % (src_full_path, dest_dir)
-    slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
-    slave_utils.CopyFileToArchiveHost(src_full_path, dest_dir)
-
   except (OSError, IOError), e:
     print 'Unexpected error while generating JSON: ', e
 
