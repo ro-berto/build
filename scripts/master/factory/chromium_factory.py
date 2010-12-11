@@ -528,9 +528,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Clear existing solutions so by default we don't sync the universe.
     self._solutions = []
-
+    # When syncing on a branch, don't sync these components on a branch.
+    avoid_branch_sync_component = ['python_26', 'chrome_plugin_tests',
+                                   'pyauto_private']
     # Sync only what we need (e.g. PyAuto test files).
     for name, url in self.PYAUTO_DEPS:
+      # If branch is available, replace 'trunk' to 'branches/<BRANCH>'
+      # in a url.
+      if factory_properties and factory_properties.get('branch'):
+        if not url.split('/')[-1] in avoid_branch_sync_component: 
+          url = url.replace('trunk',
+                            'branches/' + str(factory_properties['branch']))
+          
       # Yes, url goes first, which is different from how most people
       # lay out their .gclient.
       # Prepend to make sure chrome/src is not created by a DEPS pull.
