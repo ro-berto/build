@@ -140,6 +140,50 @@ TEST_DATA_CRASH = """
 Oops, this test crashed!
 """
 
+VALGRIND_HASH = 'B254345E4D3B6A00'
+
+VALGRIND_SUPPRESSION = """
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:_Znw*
+   fun:_ZN31NavigationControllerTest_Reload8TestBodyEv
+}"""
+
+VALGRIND_ERROR = """
+Suppression (error hash=#%(hash)s#):
+%(suppression)s
+""" % {'hash'       : VALGRIND_HASH,
+       'suppression': VALGRIND_SUPPRESSION}
+
+TEST_DATA_VALGRIND = """
+[==========] Running 5 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from HunspellTest
+[ RUN      ] HunspellTest.All
+[       OK ] HunspellTest.All (62 ms)
+[----------] 1 test from HunspellTest (62 ms total)
+
+[----------] 4 tests from NavigationControllerTest
+[ RUN      ] NavigationControllerTest.Defaults
+[       OK ] NavigationControllerTest.Defaults (48 ms)
+[ RUN      ] NavigationControllerTest.Reload
+[       OK ] NavigationControllerTest.Reload (2 ms)
+[ RUN      ] NavigationControllerTest.Reload_GeneratesNewPage
+[       OK ] NavigationControllerTest.Reload_GeneratesNewPage (22 ms)
+[ RUN      ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0
+[       OK ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0 (2 ms)
+[----------] 4 tests from NavigationControllerTest (74 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 1 test cases ran. (136 ms total)
+[  PASSED  ] 5 tests.
+
+%(suppression)s
+program finished with exit code 255
+""" % {'suppression': VALGRIND_ERROR}
+
+
 class TestObserverTests(unittest.TestCase):
   def testLogLineObserver(self):
     observer = gtest_command.TestObserver()
@@ -195,6 +239,17 @@ class TestObserverTests(unittest.TestCase):
     test_name = 'HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),
                      '\n'.join(observer.FailureDescription(test_name)))
+
+    observer = gtest_command.TestObserver()
+    for line in TEST_DATA_VALGRIND.splitlines():
+      observer.outLineReceived(line)
+
+    self.assertEqual(0, len(observer.internal_error_lines))
+    self.assertFalse(observer.RunningTests())
+    self.assertFalse(observer.FailedTests())
+    self.assertEqual([VALGRIND_HASH], observer.SuppressionHashes())
+    self.assertEqual(VALGRIND_SUPPRESSION,
+                     '\n'.join(observer.Suppression(VALGRIND_HASH)))
 
 
 if __name__ == '__main__':

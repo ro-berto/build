@@ -21,6 +21,8 @@ class TestObserver(buildstep.LogLineObserver):
     # State tracking for log parsing
     self._current_test = ''
     self._failure_description = []
+    self._current_suppression_hash = ''
+    self._current_suppression = []
 
     # Line number currently being processed.
     self._line_number = 0
@@ -33,6 +35,9 @@ class TestObserver(buildstep.LogLineObserver):
     # description is a list of lines detailing the test's error, as reported
     # in the log.
     self._test_status = {}
+
+    # Suppressions are stored here as 'hash': [suppression].
+    self._suppressions = {}
 
     # This may be either text or a number. It will be used in the phrase
     # '%s disabled' or '%s flaky' on the waterfall display.
@@ -51,6 +56,10 @@ class TestObserver(buildstep.LogLineObserver):
         'Test timeout \([0-9]+ ms\) exceeded for ' + test_name_regexp)
     self._disabled     = re.compile('  YOU HAVE (\d+) DISABLED TEST')
     self._flaky        = re.compile('  YOU HAVE (\d+) FLAKY TEST')
+
+    self._suppression_start = re.compile(
+        'Suppression \(error hash=#([0-9A-F]+)#\):')
+    self._suppression_end   = re.compile('^}\s*$')
 
     self._master_name_re = re.compile('\[Running for master: "([^"]*)"')
     self.master_name = ''
@@ -118,6 +127,17 @@ class TestObserver(buildstep.LogLineObserver):
     """
     test_status = self._test_status.get(test, ('', []))
     return ["%s: " % test] + test_status[1]
+
+  def SuppressionHashes(self):
+    """Returns list of suppression hashes found in the log."""
+    return self._suppressions.keys()
+
+  def Suppression(self, suppression_hash):
+    """Returns a list containing the suppression for a given hash.
+
+    If the suppression hash doesn't exist, returns [].
+    """
+    return self._suppressions.get(suppression_hash, [])
 
   def outLineReceived(self, line):
     """This is called once with each line of the test log."""
@@ -212,6 +232,34 @@ class TestObserver(buildstep.LogLineObserver):
       self._current_test = ''
       return
 
+    # Is it the start of a new valgrind suppression?
+    results = self._suppression_start.search(line)
+    if results:
+      suppression_hash = results.group(1)
+      if suppression_hash in self._suppressions:
+        self._RecordError(line, 'suppression reported more than once')
+      self._suppressions[suppression_hash] = []
+      self._current_suppression_hash = suppression_hash
+      self._current_suppression = []
+      return
+
+    # Is it the end of a valgrind suppression?
+    results = self._suppression_end.search(line)
+    if results and self._current_suppression_hash:
+      self._current_suppression.append(line)
+      self._suppressions[self._current_suppression_hash] = (
+          self._current_suppression)
+      self._current_suppression_hash = ''
+      self._current_suppression = []
+      return
+
+    # Random line: if we're in a suppression, collect it. Suppressions are
+    # generated after all tests are finished, so this should always belong to
+    # the current suppression hash.
+    if self._current_suppression_hash:
+      self._current_suppression.append(line)
+      return
+
     # Random line: if we're in a test, collect it for the failure description.
     # Tests may run simultaneously, so this might be off, but it's worth a try.
     if self._current_test:
@@ -234,8 +282,9 @@ class GTestCommand(shell.ShellCommand):
   def evaluateCommand(self, cmd):
     shell_result = shell.ShellCommand.evaluateCommand(self, cmd)
     if shell_result is builder.SUCCESS:
-      if (len(self.test_observer.internal_error_lines) > 0 or
-          len(self.test_observer.FailedTests()) > 0):
+      if (len(self.test_observer.internal_error_lines) or
+          len(self.test_observer.FailedTests()) or
+          len(self.test_observer.SuppressionHashes())):
         return builder.WARNINGS
     return shell_result
 
@@ -297,6 +346,9 @@ class GTestCommand(shell.ShellCommand):
       # HTML tags such as <abbr> in it.
       self.addCompleteLog(self.TestAbbrFromTestID(failure),
                           '\n'.join(observer.FailureDescription(failure)))
+    for suppression_hash in sorted(observer.SuppressionHashes()):
+      self.addCompleteLog(suppression_hash,
+                          '\n'.join(observer.Suppression(suppression_hash)))
 
 
 class GTestFullCommand(GTestCommand):
