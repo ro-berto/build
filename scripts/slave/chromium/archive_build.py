@@ -190,7 +190,8 @@ class StagerBase(object):
       path = path.strip()
       source_file = os.path.join(self._src_dir, path, source_file_name)
       if os.path.exists(source_file):
-        extra_files_list = open(source_file).readlines()
+        new_files_list = open(source_file).readlines()
+        extra_files_list.extend(new_files_list)
 
     extra_files_list = [e.strip() for e in extra_files_list]
     extra_files_list = ExpandWildcards(self._build_dir, extra_files_list)
