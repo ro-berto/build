@@ -22,6 +22,14 @@ def getAllRevisions(build):
   source_stamp = build.getSourceStamp()
   if source_stamp and source_stamp.changes:
     return [change.revision for change in source_stamp.changes]
+  try:
+    return build.getProperty('got_revision')
+  except KeyError:
+    pass
+  try:
+    return build.getProperty('revision')
+  except KeyError:
+    pass
 
 
 def getLatestRevision(build):
