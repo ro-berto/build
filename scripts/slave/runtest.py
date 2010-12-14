@@ -38,11 +38,6 @@ from slave import gtest_slave_utils
 from slave import slave_utils
 import config
 
-# pylint: disable=F0401
-import google.httpd_utils
-import google.platform_utils
-
-
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
 DEST_DIR = 'gtest_results'
@@ -131,6 +126,9 @@ def main_mac(options, args):
 
   http_server = None
   if options.document_root:
+    # pylint: disable=F0401
+    import google.httpd_utils
+    import google.platform_utils
     platform_util = google.platform_utils.PlatformUtility(build_dir)
 
     # Name the output directory for the exe, without its path or suffix.
@@ -232,6 +230,9 @@ def main_linux(options, args):
 
   http_server = None
   if options.document_root:
+    # pylint: disable=F0401
+    import google.httpd_utils
+    import google.platform_utils
     platform_util = google.platform_utils.PlatformUtility(build_dir)
 
     # Name the output directory for the exe, without its path or suffix.
@@ -316,6 +317,9 @@ def main_win(options, args):
 
   http_server = None
   if options.document_root:
+    # pylint: disable=F0401
+    import google.httpd_utils
+    import google.platform_utils
     platform_util = google.platform_utils.PlatformUtility(build_dir)
 
     # Name the output directory for the exe, without its path or suffix.
@@ -402,6 +406,7 @@ def main():
   option_parser.add_option('', '--enable-pageheap', action='store_true',
                            default=False,
                            help='enable pageheap checking for chrome.exe')
+  # --with-httpd assumes a chromium checkout with src/tools/python.
   option_parser.add_option('', '--with-httpd', dest='document_root',
                            default=None, metavar='DOC_ROOT',
                            help='Start a local httpd server using the given '
