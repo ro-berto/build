@@ -93,6 +93,7 @@ processes = [
     'chrome_launcher.exe',
     'crash_service.exe',
     'debug_message.exe',
+    'DumpRenderTree.exe',
     'flush_cache.exe',
     'ie_unittests.exe',
     'image_diff.exe',
