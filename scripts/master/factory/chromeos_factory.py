@@ -247,7 +247,19 @@ class CbuildbotFactory(object):
     self._git_clear_and_checkout(self.crosutils_repo)
     self._git_clear_and_checkout(self.crostools_repo)
 
-  def cbuildbot_type(self, params, sync=True):
+  def cbuildbot_type(self, params, sync=True, haltOnFailure=True):
+    """Adds cbuildbot steps for pre flight queue builders.
+
+    Cbuildbot includes the steps for syncing and building pre flight queue
+    builders.  This includes both chrome and standard pfq builders.
+
+    Args:
+      params:  Extra parameters for cbuildbot.
+      sync: To sync the code or not in the pfq step.
+      haltOnFailure: To halt build because of failure of cbuildbot step.  Useful
+        for setting to False for case of Chrome pfq where multiple cbuildbot
+        steps are invoked.
+    """
     # Gathers queued commits and drops them for cbuildbot to pick up.
     if sync:
       self.f_cbuild.addStep(chromeos_revision_source.GitRevisionDropper,
@@ -276,7 +288,7 @@ class CbuildbotFactory(object):
                           timeout=self.timeout,
                           name='cbuildbot',
                           description='cbuildbot',
-                          haltOnFailure=True)
+                          haltOnFailure=haltOnFailure)
 
   def oneoff_type(self):
     """
@@ -364,5 +376,5 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
     sync = True
     for chrome_rev in chrome_rev_stages:
       bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
-      self.cbuildbot_type(bot_params, sync)
+      self.cbuildbot_type(bot_params, sync, haltOnFailure=False)
       sync = False
