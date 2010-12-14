@@ -5,7 +5,9 @@
 """Retrieve the list of the current build sheriffs."""
 
 import datetime
+import os
 import re
+
 
 class BuildSheriffs(object):
   # File that contains the string containing the build sheriff names.
@@ -31,22 +33,22 @@ class BuildSheriffs(object):
       BuildSheriffs.last_check_ = now
       # Initialize in case nothing is found.
       BuildSheriffs.sheriffs_ = []
+      if os.path.isfile(BuildSheriffs.sheriff_file_):
+        try:
+          f = open(BuildSheriffs.sheriff_file_, 'r')
+          line = f.readlines()[0]
+          f.close()
+          usernames_match = BuildSheriffs.usernames_matcher_.match(line)
+          if usernames_match:
+            usernames_str = usernames_match.group(1)
+            if usernames_str == 'None (channel is sheriff)':
+              return BuildSheriffs.sheriffs_
 
-      try:
-        f = open(BuildSheriffs.sheriff_file_, 'r')
-        line = f.readlines()[0]
-        f.close()
-        usernames_match = BuildSheriffs.usernames_matcher_.match(line)
-        if usernames_match:
-          usernames_str = usernames_match.group(1)
-          if usernames_str == 'None (channel is sheriff)':
-            return BuildSheriffs.sheriffs_
-
-          for sheriff in usernames_str.split(', '):
-            if sheriff.count('@') == 0:
-              sheriff += '@google.com'
-            BuildSheriffs.sheriffs_.append(sheriff)
-      except ValueError:
-        pass
+            for sheriff in usernames_str.split(', '):
+              if sheriff.count('@') == 0:
+                sheriff += '@google.com'
+              BuildSheriffs.sheriffs_.append(sheriff)
+        except (IOError, ValueError):
+          pass
 
     return BuildSheriffs.sheriffs_
