@@ -35,7 +35,8 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     f = factory_cmd_obj
     fp = factory_properties
 
-    if R('unit'):           f.AddBasicGTestTestStep('pagespeed_test', fp)
+    if R('unit'):          f.AddBasicGTestTestStep('pagespeed_test', fp)
+    if R('firefox'):       f.AddBasicGTestTestStep('pagespeed_firefox_test', fp)
 
 
   def PageSpeedFactory(self, identifier, target='Release', clobber=False,
