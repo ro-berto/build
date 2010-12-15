@@ -73,7 +73,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # The map key is the test name. The map value is an array containing the
   # dependencies that are not needed when this test is not run.
   NEEDED_COMPONENTS = {
-    '^(webkit|valgrind_layout)$':
+    '^(webkit|webkit_gpu|valgrind_layout)$':
       [('src/webkit/data/layout_tests/LayoutTests', None),
        ('src/third_party/WebKit/LayoutTests', None),]
   }
