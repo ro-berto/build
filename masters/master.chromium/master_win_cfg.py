@@ -101,14 +101,19 @@ dbg_archive = master_config.GetArchiveUrl('Chromium', 'Win Builder (dbg)',
 S('win_dbg', branch='src', treeStableTimer=60)
 
 #
+# Debug scheduler used to trigger the dependent dbg scheduler.
+#
+S('win_dbg_for_dep', branch='src', treeStableTimer=60)
+
+#
 # Dependent scheduler for the dbg builder
 #
-D('win_dbg_dep', 'win_dbg')
+D('win_dbg_dep', 'win_dbg_for_dep')
 
 #
 # Win Dbg Builder
 #
-B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg',
+B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg_for_dep',
   builddir='cr-win-dbg')
 F('dbg', win().ChromiumFactory(
     'chromium-win-dbg',
@@ -195,6 +200,18 @@ F('dbg_int', win().ChromiumFactory(
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
+
+#
+# Dbg Shared builder
+#
+B('Win Builder (dbg)(shared)', 'dbg_shared', 'compile|windows', 'win_dbg')
+F('dbg_shared', win().ChromiumFactory(
+    'chromium-win-dbg-shared',
+    target='Debug',
+    slave_type='Builder',
+    project='all.sln',
+    factory_properties={'gclient_env':
+                            {'GYP_DEFINES' : 'component=shared_library'}}))
 
 def Update(config, active_master, c):
   return helper.Update(c)
