@@ -354,7 +354,8 @@ class FactoryCommands(object):
                           command=command)
 
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,
-                    sudo_for_remove=False, gclient_deps=None):
+                    sudo_for_remove=False, gclient_deps=None,
+                    gclient_nohooks=False):
     """Adds a step to the factory to update the workspace."""
     if env is None:
       env = {}
@@ -365,6 +366,7 @@ class FactoryCommands(object):
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,
+                          gclient_nohooks=gclient_nohooks,
                           workdir=self.working_dir,
                           mode='update',
                           env=env,

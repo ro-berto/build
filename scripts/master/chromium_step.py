@@ -18,7 +18,8 @@ class GClient(source.Source):
   name = 'gclient'
 
   def __init__(self, svnurl=None, rm_timeout=None, gclient_spec=None, env=None,
-               sudo_for_remove=False, gclient_deps=None, **kwargs):
+               sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False, 
+               **kwargs):
     source.Source.__init__(self, **kwargs)
     if env:
       self.args['env'] = env.copy()
@@ -29,6 +30,7 @@ class GClient(source.Source):
     # This doesn't matter for the format of the DEPS file.
     self.args['gclient_spec'] = gclient_spec.replace(' ', '')
     self.args['gclient_deps'] = gclient_deps
+    self.args['gclient_nohooks'] = gclient_nohooks
 
   def computeSourceRevision(self, changes):
     """Finds the latest revision number from the changeset that have

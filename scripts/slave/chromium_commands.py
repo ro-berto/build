@@ -123,6 +123,7 @@ class GClient(commands.SourceBase):
     self.gclient_spec = None
     self.gclient_deps = None
     self.rm_timeout = None
+    self.gclient_nohooks = False
     commands.SourceBase.__init__(self, *args, **kwargs)
 
   def setup(self, args):
@@ -142,6 +143,7 @@ class GClient(commands.SourceBase):
     self.sourcedata = '%s\n' % self.svnurl
     self.rm_timeout = args.get('rm_timeout', self.timeout)
     self.env = args.get('env')
+    self.gclient_nohooks = args.get('gclient_nohooks', False)
     self.env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
 
   def start(self):
@@ -218,6 +220,9 @@ class GClient(commands.SourceBase):
     command = [chromium_utils.GetGClientCommand(),
                'sync', '--verbose', '--reset', '--manually_grab_svn_rev',
                '--delete_unversioned_trees']
+    # If nohooks is required, make sure gclient calls it.
+    if self.gclient_nohooks:
+      command.append('--nohooks')
     # GClient accepts --revision argument of two types 'module@rev' and 'rev'.
     if self.revision:
       command.append('--revision')

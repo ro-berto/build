@@ -125,10 +125,12 @@ class GClientSolution(object):
 class GClientFactory(object):
   """Encapsulates data and methods common to both (all) master.cfg files."""
 
-  def __init__(self, build_dir, solutions, project=None, target_platform=None):
+  def __init__(self, build_dir, solutions, project=None, target_platform=None,
+               nohooks_on_update=False):
     self._build_dir = build_dir
     self._solutions = solutions
     self._target_platform = target_platform or 'win32'
+    self._nohooks_on_update = nohooks_on_update
 
     if self._target_platform == 'win32':
       # Look for a solution named for its enclosing directory.
@@ -223,4 +225,5 @@ class GClientFactory(object):
 
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove,
-                                  gclient_deps=gclient_deps)
+                                  gclient_deps=gclient_deps,
+                                  gclient_nohooks=self._nohooks_on_update)
