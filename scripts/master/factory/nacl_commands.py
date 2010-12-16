@@ -171,7 +171,9 @@ class NativeClientCommands(commands.FactoryCommands):
       scons = (
           'vcvarsall ' + subarch + ' && '
           'scons -j 8 DOXYGEN=..\\third_party\\doxygen\\win\\doxygen')
-      scons_test = 'scons DOXYGEN=..\\third_party\\doxygen\\win\\doxygen'
+      scons_test = (
+          'vcvarsall ' + subarch + ' && '
+          'scons DOXYGEN=..\\third_party\\doxygen\\win\\doxygen')
       self._build_env = {
         'PATH': (
           r'c:\WINDOWS\system32;'
