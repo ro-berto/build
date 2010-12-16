@@ -185,6 +185,7 @@ class Master(object):
     tree_status_url = base_app_url + '/status'
     store_revisions_url = base_app_url + '/revisions'
     last_good_url = 'http://nativeclient-status.appspot.com/lkgr'
+    perf_base_url = 'http://build.chromium.org/f/client/perf'
 
   class NativeClient(_NaClBase):
     project_name = 'NativeClient'
