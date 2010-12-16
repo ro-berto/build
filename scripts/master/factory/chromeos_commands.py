@@ -217,11 +217,11 @@ class ChromeOSCommands(commands.FactoryCommands):
     if 'target' in tests:
       image_cmd = self._enter_chroot + [
           './image_to_vm.sh',
-          ' --board=%s' % self.BoardName(options),
-          ' --test_image',
-          ' --full',
-          ' --vdisk_size=6074',
-          ' --statefulfs_size=3072'
+           '--board=%s' % self.BoardName(options),
+           '--test_image',
+           '--full',
+           '--vdisk_size=6074',
+           '--statefulfs_size=3072'
       ]
 
       test_cmd = ['bin/cros_run_vm_test',
