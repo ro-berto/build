@@ -171,9 +171,7 @@ class NativeClientCommands(commands.FactoryCommands):
       scons = (
           'vcvarsall ' + subarch + ' && '
           'scons -j 8 DOXYGEN=..\\third_party\\doxygen\\win\\doxygen')
-      scons_test = (
-          'scons DOXYGEN=..\\third_party\\doxygen\\win\\doxygen'
-          ' built_elsewhere=1')
+      scons_test = 'scons DOXYGEN=..\\third_party\\doxygen\\win\\doxygen'
       self._build_env = {
         'PATH': (
           r'c:\WINDOWS\system32;'
@@ -453,15 +451,6 @@ class NativeClientCommands(commands.FactoryCommands):
                             workdir='build/native_client_sdk/packages',
                             env=pack_env,
                             command=pack_cmd)
-
-  def AddHandTests(self, mode, clobber=False, options=None, timeout=1200):
-    if options and options.get('hand_tests'):
-      self._factory.addStep(shell.ShellCommand,
-                            description='hand_tests',
-                            timeout=timeout,
-                            workdir=self._build_dir,
-                            env=self._build_env,
-                            command=options['hand_tests'])
 
   def AddSeleniumTests(self, clobber=False, options=None,
                        timeout=1200):

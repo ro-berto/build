@@ -67,25 +67,6 @@ arm_emu_partial_sdk = (
      ' "'
 )
 
-arm_emu_hand_tests = (
-    'bash -c " '
-    './scons -k --verbose --mode=%(mode)s,nacl '
-    'platform=arm bitcode=1 sdl=none '
-    'naclsdk_mode=manual naclsdk_validate=0 '
-    'run_test_exit '
-    'run_test_hello '
-    ' "'
-)
-arm_tester_hand_tests = (
-    'bash -c " '
-    './scons -k --verbose --mode=%(mode)s,nacl '
-    'platform=arm bitcode=1 sdl=none '
-    'naclsdk_mode=manual naclsdk_validate=0 '
-    'built_elsewhere=1 '
-    'run_test_exit '
-    'run_test_hello '
-    ' "'
-)
 arm_emu_options = {
     'scons_opts':
         ('platform=arm bitcode=1 sdl=none '),
@@ -104,20 +85,14 @@ for build_mode in ('dbg', 'opt'):
   linux_marm_narm_options[build_mode] = arm_emu_options.copy()
   linux_marm_narm_options[build_mode]['partial_sdk'] = (
     arm_emu_partial_sdk % {'mode': '%s-linux' % build_mode})
-  linux_marm_narm_options[build_mode]['hand_tests'] = (
-    arm_emu_hand_tests % {'mode': '%s-linux' % build_mode})
 
   # For ARM tests.
   linux_marm_narm_options[build_mode + '-arm'] = arm_tester_options.copy()
-  linux_marm_narm_options[build_mode + '-arm']['hand_tests'] = (
-    arm_tester_hand_tests % {'mode': '%s-linux' % build_mode})
 
   # For ARM trybot.
   linux_marm_narm_options[build_mode + '-arm-try'] = arm_emu_options.copy()
   linux_marm_narm_options[build_mode + '-arm-try']['partial_sdk'] = (
     arm_emu_partial_sdk % {'mode': '%s-linux' % build_mode})
-  linux_marm_narm_options[build_mode + '-arm-try']['hand_tests'] = (
-    arm_emu_hand_tests % {'mode': '%s-linux' % build_mode})
 
 
 class NativeClientFactory(gclient_factory.GClientFactory):
@@ -171,9 +146,6 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       return gclient_factory.ShouldRunTest(tests, test)
     f = factory_cmd_obj
 
-    if R('nacl_hand_tests'):
-      f.AddHandTests(mode, options=options)
-
     for test_size in ['small', 'medium', 'large', 'smoke']:
       if R('nacl_%s_tests' % test_size):
         if test_size == 'large':
@@ -188,12 +160,6 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       f.AddThreadSanitizer(trusted=True, options=options)
       f.AddThreadSanitizer(trusted=True, hybrid=True, race_verifier=True,
                            options=options)
-
-    if R('nacl_arm_hw'):
-      for test_size in ['small']:
-        f.AddSizedTests(test_size,
-                        full_name='%s_tests_arm_hw_only' % test_size,
-                        options=options)
 
     if R('nacl_utman_arm_tests'):
       f.AddUtmanTests('arm', options=options)
