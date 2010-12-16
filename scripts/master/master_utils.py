@@ -47,23 +47,31 @@ class InvalidConfig(Exception):
   pass
 
 
-def AutoSetupSlaves(builders, bot_password, max_builds=1):
+def AutoSetupSlaves(builders, bot_password, max_builds=1,
+                    missing_recipients=None, missing_timeout=300):
   """Helper function for master.cfg to quickly setup c['slaves']."""
   slaves_dict = {}
   for builder in builders:
-    if builder.get('slavename'):
-      slaves_dict.setdefault(builder['slavename'],
-                             builder.get('auto_reboot', False))
-    if builder.get('slavenames'):
-      for slavename in builder['slavenames']:
-        slaves_dict.setdefault(slavename, builder.get('auto_reboot', False))
+    auto_reboot = builder.get('auto_reboot', False)
+    notify_on_missing = builder.get('notify_on_missing', False)
+    slavenames = builder.get('slavenames', [])[:]
+    if 'slavename' in builder:
+      slavenames.append(builder['slavename'])
+    for slavename in slavenames:
+      slaves_dict[slavename] = (auto_reboot, notify_on_missing)
   slaves = []
-  for (slavename, auto_reboot) in slaves_dict.iteritems():
+  for (slavename, (auto_reboot, notify_on_missing)) in slaves_dict.iteritems():
     if auto_reboot:
       slave_class = AutoRebootBuildSlave
     else:
       slave_class = BuildSlave
-    slaves.append(slave_class(slavename, bot_password, max_builds=max_builds))
+      
+    if notify_on_missing:
+      slaves.append(slave_class(slavename, bot_password, max_builds=max_builds,
+                                notify_on_missing=missing_recipients,
+                                missing_timeout=missing_timeout))
+    else:
+      slaves.append(slave_class(slavename, bot_password, max_builds=max_builds))
   return slaves
 
 

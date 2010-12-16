@@ -24,7 +24,7 @@ class Helper(object):
     self._schedulers = {}
 
   def Builder(self, name, factory, gatekeeper=None, scheduler=None,
-              builddir=None, auto_reboot=False):
+              builddir=None, auto_reboot=False, notify_on_missing=False):
     category = self._defaults.get('category')
     self._builders.append({'name': name,
                            'factory': factory,
@@ -32,7 +32,8 @@ class Helper(object):
                            'schedulers': scheduler.split('|'),
                            'builddir': builddir,
                            'category': category,
-                           'auto_reboot': auto_reboot})
+                           'auto_reboot': auto_reboot,
+                           'notify_on_missing': notify_on_missing})
 
   def Dependent(self, name, parent):
     if name in self._schedulers:
