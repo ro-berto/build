@@ -41,7 +41,6 @@ D('win_rel_dep', 'win_rel')
 #
 B('Win Builder', 'rel', 'compile|windows', 'win_rel', builddir='cr-win-rel')
 F('rel', win().ChromiumFactory(
-    'chromium-win-rel',
     slave_type='Builder',
     project='all.sln;chromium_builder_tests'))
 
@@ -50,7 +49,6 @@ F('rel', win().ChromiumFactory(
 #
 B('XP Tests', 'rel_unit', 'testers|windows', 'win_rel_dep', auto_reboot=True)
 F('rel_unit', win().ChromiumFactory(
-    'chromium-win-rel',
     slave_type='Tester',
     build_url=rel_archive,
     tests=['unit', 'ui', 'media', 'printing', 'remoting', 'gpu',
@@ -64,7 +62,6 @@ B('Vista Tests', 'rel_unit', 'testers|windows', 'win_rel_dep', auto_reboot=True)
 
 B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_dep')
 F('rel_nacl', win().ChromiumFactory(
-    'chromium-win-rel',
     slave_type='Tester',
     build_url=rel_archive,
     tests=['nacl_ui', 'nacl_sandbox'],
@@ -76,7 +73,6 @@ B('NACL Tests (x64)', 'rel_nacl', 'testers|windows', 'win_rel_dep')
 B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_dep',
   auto_reboot=True)
 F('rel_cf', win().ChromiumFactory(
-    'chromium-win-rel',
     slave_type='Tester',
     build_url=rel_archive,
     tests=['chrome_frame'],
@@ -116,7 +112,6 @@ D('win_dbg_dep', 'win_dbg_for_dep')
 B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg_for_dep',
   builddir='cr-win-dbg')
 F('dbg', win().ChromiumFactory(
-    'chromium-win-dbg',
     target='Debug',
     slave_type='Builder',
     project='all.sln;chromium_builder_tests'))
@@ -127,7 +122,6 @@ F('dbg', win().ChromiumFactory(
 B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep',
   auto_reboot=True)
 F('dbg_unit_1', win().ChromiumFactory(
-    'chromium-win-dbg',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -142,7 +136,6 @@ F('dbg_unit_1', win().ChromiumFactory(
 B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep',
   auto_reboot=True)
 F('dbg_unit_2', win().ChromiumFactory(
-    'chromium-win-dbg',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -155,7 +148,6 @@ F('dbg_unit_2', win().ChromiumFactory(
 B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep',
   auto_reboot=True)
 F('dbg_unit_3', win().ChromiumFactory(
-      'chromium-win-dbg',
       target='Debug',
       slave_type='Tester',
       build_url=dbg_archive,
@@ -168,7 +160,6 @@ F('dbg_unit_3', win().ChromiumFactory(
 B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep',
   auto_reboot=True)
 F('dbg_unit_4', win().ChromiumFactory(
-    'chromium-win-dbg',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -192,7 +183,6 @@ B('Vista Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep',
 #
 B('Interactive Tests (dbg)', 'dbg_int', 'testers|windows', 'win_dbg_dep')
 F('dbg_int', win().ChromiumFactory(
-    'chromium-win-dbg',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -206,7 +196,6 @@ F('dbg_int', win().ChromiumFactory(
 #
 B('Win Builder (dbg)(shared)', 'dbg_shared', 'compile|windows', 'win_dbg')
 F('dbg_shared', win().ChromiumFactory(
-    'chromium-win-dbg-shared',
     target='Debug',
     slave_type='Builder',
     project='all.sln',

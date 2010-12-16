@@ -18,11 +18,11 @@ import config
 class NativeClientPortsCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None):
 
-    commands.FactoryCommands.__init__(self, factory, identifier,
-                                      target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir,
+                                      target_platform)
 
     # Where to point waterfall links for builds and test results.
     self._archive_url = config.Master.archive_url

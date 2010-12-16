@@ -38,10 +38,10 @@ class WebMFactory(object):
     # ADD TESTS HERE. Example:
     # if R('unit_tests'):  f.AddUnitTests()
 
-  def WebMFactory(self, identifier, target='Release', clobber=False,
-                       tests=None, mode=None, slave_type='BuilderTester',
-                       options=None, compile_timeout=1200, build_url=None,
-                       project=None, factory_properties=None):
+  def WebMFactory(self, target='Release', clobber=False,
+                  tests=None, mode=None, slave_type='BuilderTester',
+                  options=None, compile_timeout=1200, build_url=None,
+                  project=None, factory_properties=None):
     factory_properties = factory_properties or {}
     tests = tests or []
 
@@ -49,7 +49,6 @@ class WebMFactory(object):
 
     # Get the factory command object to create new steps to the factory.
     webm_cmd_obj = webm_commands.WebMCommands(factory,
-                                              identifier,
                                               target,
                                               self._build_dir,
                                               self._target_platform)

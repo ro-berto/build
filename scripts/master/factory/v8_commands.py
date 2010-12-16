@@ -16,11 +16,10 @@ import config
 class V8Commands(commands.FactoryCommands):
   """Encapsulates methods to add v8 commands to a buildbot factory."""
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None, target_arch=None):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None, target_arch=None):
 
-    commands.FactoryCommands.__init__(self, factory, identifier,
-                                      target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir, target_platform)
 
     # Override _script_dir - one below because we run our build inside
     # the bleeding_edge directory.

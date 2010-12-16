@@ -41,7 +41,6 @@ D('linux_rel_dep', 'linux_rel')
 #
 B('Linux Builder x64', 'rel', 'compile', 'linux_rel', builddir='cr-linux-rel-x64')
 F('rel', linux().ChromiumFactory(
-    'chromium-linux-rel-64',
     slave_type='Builder',
     options=['app_unittests', 'browser_tests', 'googleurl_unittests',
              'gpu_unittests', 'ipc_tests', 'media_unittests', 'memory_test',
@@ -55,7 +54,6 @@ F('rel', linux().ChromiumFactory(
 #
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_dep')
 F('rel_unit', linux().ChromiumFactory(
-    'chromium-linux-rel-64',
     slave_type='Tester',
     build_url=rel_archive_x64,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
@@ -93,7 +91,6 @@ D('linux_dbg_shlib_dep', 'linux_dbg_shlib')
 #
 B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', builddir='cr-linux-dbg')
 F('dbg', linux().ChromiumFactory(
-    'chromium-linux-dbg',
     slave_type='Builder',
     target='Debug',
     options=['app_unittests', 'browser_tests', 'googleurl_unittests',
@@ -109,7 +106,6 @@ F('dbg', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_dep')
 F('dbg_unit_1', linux().ChromiumFactory(
-    'chromium-linux-dbg',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -121,7 +117,6 @@ F('dbg_unit_1', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_dep')
 F('dbg_unit_2', linux().ChromiumFactory(
-    'chromium-linux-dbg',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -137,7 +132,6 @@ F('dbg_unit_2', linux().ChromiumFactory(
 B('Linux Builder (dbg-shlib)', 'dbg_shlib', 'compile', 'linux_dbg_shlib',
    builddir='cr-linux-dbg-shlib')
 F('dbg_shlib', linux().ChromiumFactory(
-    'chromium-linux-dbg-shlib',
     slave_type='Builder',
     target='Debug',
     options=['--build-tool=make'],
@@ -150,7 +144,6 @@ F('dbg_shlib', linux().ChromiumFactory(
 
 B('Linux Tests (dbg-shlib)', 'dbg_shlib_unit', 'testers', 'linux_dbg_shlib_dep')
 F('dbg_shlib_unit', linux().ChromiumFactory(
-    'chromium-linux-dbg-shlib',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_shlib_archive,

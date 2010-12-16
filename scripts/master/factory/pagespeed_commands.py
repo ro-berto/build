@@ -11,8 +11,8 @@ from master.factory import commands
 class PageSpeedCommands(commands.FactoryCommands):
   """Encapsulates methods to add chromium commands to a buildbot factory."""
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None):
 
-    commands.FactoryCommands.__init__(self, factory, identifier,
-                                      target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir,
+                                      target_platform)

@@ -45,10 +45,9 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     self._target_arch = target_arch
 
   def ChromeOSFactory(
-      self, identifier, target='Release', clobber=False, tests=None,
-      steps=None, mode=None, slave_type='BuilderTester', options=None,
-      compile_timeout=1200, build_url=None, factory_properties=None,
-      custom_deps_list=None):
+      self, target='Release', clobber=False, tests=None, steps=None, mode=None,
+      slave_type='BuilderTester', options=None, compile_timeout=1200,
+      build_url=None, factory_properties=None, custom_deps_list=None):
     # Defaults which are mutable objects
     steps = steps or ['platform']
     tests = tests or []
@@ -69,7 +68,6 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     # Get the factory command object to create new steps to the factory.
     chromeos_cmd_obj = chromeos_commands.ChromeOSCommands(
         factory=factory,
-        identifier=identifier,
         target=target,
         build_dir=self._build_dir,
         target_platform=self._target_platform,
@@ -101,8 +99,9 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     # Everyone currently needs copy config step
     # This has to happen after the chroot step because a file gets dropped in
     # there.
-    chromeos_cmd_obj.AddChromeOSCopyConfigStep(
-        clobber, mode=mode, options=options, timeout=compile_timeout)
+    bot_id = factory_properties.get('bot_id')
+    chromeos_cmd_obj.AddChromeOSCopyConfigStep(bot_id, clobber, mode=mode,
+        options=options, timeout=compile_timeout)
 
     if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
         slave_type == 'Trybot'):
@@ -133,6 +132,7 @@ class ChromeOSFactory(gclient_factory.GClientFactory):
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       chromeos_cmd_obj.AddArchiveBuild(
+          bot_id=bot_id,
           base_url=factory_properties.get('archive_url'),
           keep_max=factory_properties.get('archive_max', 0),
           gsutil_archive=factory_properties.get('gsutil_archive', ''),

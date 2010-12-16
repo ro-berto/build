@@ -130,13 +130,11 @@ class FactoryCommands(object):
     },
   }
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None):
     """Initializes the SlaveCommands class.
     Args:
       factory: BuildFactory to configure.
-      identifier: full identifier for this build.  Typically the builder name
-          (e.g., 'chrome-release').
       target: Build configuration, case-sensitive; probably 'Debug' or
           'Release'
       build_dir: name of the directory within the buildbot working directory
@@ -145,7 +143,6 @@ class FactoryCommands(object):
     """
 
     self._factory = factory
-    self._identifier = identifier
     self._target = target
     self._build_dir = build_dir
     self._target_platform = target_platform

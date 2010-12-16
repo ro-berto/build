@@ -41,16 +41,13 @@ D('webkit_win_rel_dep', 'webkit_win_rel')
 #
 B('Webkit Win Builder', 'webkit_win_rel', 'compile', 'webkit_win_rel',
   builddir='webkit-win-rel')
-F('webkit_win_rel', win().ChromiumFactory(
-    'webkit-win-rel',
-    slave_type='Builder'))
+F('webkit_win_rel', win().ChromiumFactory(slave_type='Builder'))
 
 #
 # Win Rel Webkit testers
 #
 B('Webkit Win', 'webkit_rel_tests', 'testers', 'webkit_win_rel_dep')
 F('webkit_rel_tests', win().ChromiumFactory(
-    'webkit-win-rel',
     slave_type='Tester',
     build_url=rel_archive,
     tests=['test_shell', 'webkit', 'webkit_unit'],
@@ -81,7 +78,6 @@ D('webkit_win_dbg_dep', 'webkit_win_dbg')
 B('Webkit Win Builder (dbg)', 'webkit_win_dbg', 'compile', 'webkit_win_dbg',
   builddir='webkit-win-dbg')
 F('webkit_win_dbg', win().ChromiumFactory(
-    'webkit-win-dbg',
     target='Debug',
     slave_type='Builder'))
 
@@ -91,7 +87,6 @@ F('webkit_win_dbg', win().ChromiumFactory(
 
 B('Webkit Win (dbg)(1)', 'webkit_dbg_tests_1', 'testers', 'webkit_win_rel_dep')
 F('webkit_dbg_tests_1', win().ChromiumFactory(
-    'webkit-win-dbg',
     slave_type='Tester',
     target='Debug',
     build_url=dbg_archive,
@@ -102,7 +97,6 @@ F('webkit_dbg_tests_1', win().ChromiumFactory(
 
 B('Webkit Win (dbg)(2)', 'webkit_dbg_tests_2', 'testers', 'webkit_win_rel_dep')
 F('webkit_dbg_tests_2', win().ChromiumFactory(
-    'webkit-win-dbg',
     slave_type='Tester',
     target='Debug',
     build_url=dbg_archive,
@@ -113,7 +107,6 @@ F('webkit_dbg_tests_2', win().ChromiumFactory(
 
 B('Webkit Win (dbg)(3)', 'webkit_dbg_tests_3', 'testers', 'webkit_win_rel_dep')
 F('webkit_dbg_tests_3', win().ChromiumFactory(
-    'webkit-win-dbg',
     slave_type='Tester',
     target='Debug',
     build_url=dbg_archive,

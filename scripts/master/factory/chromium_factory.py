@@ -323,8 +323,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddProcessCoverage(fp)
 
 
-  def ChromiumFactory(self, identifier, target='Release', clobber=False,
-                      tests=None, mode=None, slave_type='BuilderTester',
+  def ChromiumFactory(self, target='Release', clobber=False, tests=None,
+                      mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
                       project=None, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -340,12 +340,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get("lkgr"):
       self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
 
-    factory = self.BuildFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout, build_url,
-                                project, factory_properties)
+    factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
     # Get the factory command object to create new steps to the factory.
-    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory, identifier,
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
                                                           target,
                                                           self._build_dir,
                                                           self._target_platform)
@@ -386,41 +386,36 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                          factory_properties=None):
     factory = self.BaseFactory()
     cmd_obj = chromium_commands.ChromiumCommands(factory,
-                                                 'chromium-targets',
                                                  'Release', '',
                                                  self._target_platform)
     cmd_obj.AddTargetTests(timeout, verbose, factory_properties)
     return factory
 
-  def ReliabilityTestsFactory(self, identifier='chromium-reliability',
-                              platform='win'):
+  def ReliabilityTestsFactory(self, platform='win'):
     """Create a BuildFactory to run a reliability slave."""
     factory = BuildFactory({})
     cmd_obj = chromium_commands.ChromiumCommands(factory,
-                                                 identifier,
                                                  'Release', '',
                                                  self._target_platform)
     cmd_obj.AddUpdateScriptStep()
     cmd_obj.AddReliabilityTests(platform=platform)
     return factory
 
-  def ChromiumV8LatestFactory(self, identifier, target='Release', clobber=False,
-                              tests=None, mode=None, slave_type='BuilderTester',
+  def ChromiumV8LatestFactory(self, target='Release', clobber=False, tests=None,
+                              mode=None, slave_type='BuilderTester',
                               options=None, compile_timeout=1200,
                               build_url=None, project=None,
                               factory_properties=None):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_V8_LATEST]
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
   def ChromiumNativeClientLatestFactory(
-      self, identifier, target='Release', clobber=False,
-      tests=None, mode=None, slave_type='BuilderTester',
-      options=None, compile_timeout=1200,
-      build_url=None, project=None,
-      factory_properties=None, on_nacl_waterfall=True,
-      use_chrome_lkgr=True):
+      self, target='Release', clobber=False, tests=None, mode=None,
+      slave_type='BuilderTester', options=None, compile_timeout=1200,
+      build_url=None, project=None, factory_properties=None,
+      on_nacl_waterfall=True, use_chrome_lkgr=True):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_NACL_LATEST]
     self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
     # Add an extra frivilous checkout of part of NativeClient when it is built
@@ -430,26 +425,25 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions.insert(0, gclient_factory.GClientSolution(
           self.CUSTOM_DEPS_NACL_LATEST[1] + '/build',
           name='build'))
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def ChromiumWebkitLatestFactory(self, identifier, target='Release',
-                                  clobber=False, tests=None, mode=None,
+  def ChromiumWebkitLatestFactory(self, target='Release', clobber=False,
+                                  tests=None, mode=None,
                                   slave_type='BuilderTester', options=None,
                                   compile_timeout=1200, build_url=None,
                                   project=None, factory_properties=None):
     self._solutions[0].custom_vars_list = self.CUSTOM_VARS_WEBKIT_LATEST
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def ChromiumGYPLatestFactory(self, identifier, target='Debug',
-                               clobber=False, tests=None, mode=None,
-                               slave_type='BuilderTester', options=None,
-                               compile_timeout=1200, build_url=None,
-                               project=None, factory_properties=None,
-                               gyp_format=None):
+  def ChromiumGYPLatestFactory(self, target='Debug', clobber=False, tests=None,
+                               mode=None, slave_type='BuilderTester',
+                               options=None, compile_timeout=1200,
+                               build_url=None, project=None,
+                               factory_properties=None, gyp_format=None):
 
     if tests is None:
       tests = ['unit']
@@ -469,62 +463,61 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       options.append('--build-tool=' + gyp_format)
 
     self._solutions[0].custom_deps_list = self.CUSTOM_DEPS_GYP
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def ChromiumArmuFactory(self, identifier, target='Release', clobber=False,
-                          tests=None, mode=None, slave_type='BuilderTester',
-                          options=None, compile_timeout=1200, build_url=None,
-                          project=None, factory_properties=None):
+  def ChromiumArmuFactory(self, target='Release', clobber=False, tests=None,
+                          mode=None, slave_type='BuilderTester', options=None,
+                          compile_timeout=1200, build_url=None, project=None,
+                          factory_properties=None):
     self._project = 'webkit_armu.sln'
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_V8_LATEST]
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def ChromiumOSFactory(self, identifier, target='Release', clobber=False,
-                        tests=None, mode=None, slave_type='BuilderTester',
-                        options=None, compile_timeout=1200, build_url=None,
-                        project=None, factory_properties=None):
+  def ChromiumOSFactory(self, target='Release', clobber=False, tests=None,
+                        mode=None, slave_type='BuilderTester', options=None,
+                        compile_timeout=1200, build_url=None, project=None,
+                        factory_properties=None):
     # Make sure the solution is not already there.
     if 'cros_deps' not in [s.name for s in self._solutions]:
       self._solutions.append(gclient_factory.GClientSolution(
           config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
 
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def ChromiumWineFactory(self, identifier, target='Debug', clobber=False,
-                          tests=None, mode=None, slave_type='Tester',
-                          options=None, compile_timeout=1200, build_url=None,
-                          project=None, factory_properties=None):
+  def ChromiumWineFactory(self, target='Debug', clobber=False, tests=None,
+                          mode=None, slave_type='Tester', options=None,
+                          compile_timeout=1200, build_url=None, project=None,
+                          factory_properties=None):
     # Make sure the solution is not already there.
     if 'src/third_party/python_24' not in [s.name for s in self._solutions]:
       CUSTOM_DEPS_PYTHON = ('src/third_party/python_24',
                             config.Master.trunk_url +
                             '/deps/third_party/python_24')
       self._solutions[0].custom_deps_list.append(CUSTOM_DEPS_PYTHON)
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def CEFFactory(self, identifier, target='Release', clobber=False,
-                 tests=None, mode=None, slave_type='BuilderTester',
-                 options=None, compile_timeout=1200, build_url=None,
-                 project=None, factory_properties=None):
+  def CEFFactory(self, target='Release', clobber=False, tests=None, mode=None,
+                 slave_type='BuilderTester', options=None, compile_timeout=1200,
+                 build_url=None, project=None, factory_properties=None):
     self._solutions.append(gclient_factory.GClientSolution(
         'http://chromiumembedded.googlecode.com/svn/trunk',
         'src/cef'))
-    return self.ChromiumFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout,
-                                build_url, project, factory_properties)
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
 
-  def ChromiumQAFactory(self, identifier, target='Release', clobber=False,
-                        tests=None, mode=None, slave_type='Tester',
-                        options=None, compile_timeout=1200, build_url=None,
-                        project=None, factory_properties=None):
+  def ChromiumQAFactory(self, target='Release', clobber=False, tests=None,
+                        mode=None, slave_type='Tester', options=None,
+                        compile_timeout=1200, build_url=None, project=None,
+                        factory_properties=None):
 
     # Clear existing solutions so by default we don't sync the universe.
     self._solutions = []
@@ -548,19 +541,20 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Instead of calling self.ChromiumFactory(), we copy a few of it's
     # lines (e.g. everything from here on other than
     # AddDownloadAndExtractOfficialBuild()).
-    factory = self.BuildFactory(identifier, target, clobber, tests, mode,
-                                slave_type, options, compile_timeout, build_url,
-                                project, factory_properties)
-    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory, identifier,
+    factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
                                                           target,
                                                           self._build_dir,
                                                           self._target_platform)
 
-    if factory_properties and factory_properties.get('branch'):
-      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(
-          identifier, factory_properties['branch'])
+    qa_identifier = factory_properties.get('qa_identifier')
+    if factory_properties.get('branch'):
+      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(qa_identifier,
+          factory_properties['branch'])
     else:
-      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(identifier)
+      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(qa_identifier)
 
     # crash_service.exe doesn't fire up on its own because we have the
     # binaries in chrome-win32 dir (not in the default src/chrome/Release).

@@ -27,11 +27,11 @@ from master.log_parser import webkit_test_command
 class ChromiumCommands(commands.FactoryCommands):
   """Encapsulates methods to add chromium commands to a buildbot factory."""
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None):
 
-    commands.FactoryCommands.__init__(self, factory, identifier,
-                                      target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir,
+                                      target_platform)
 
     # Where to point waterfall links for builds and test results.
     self._archive_url = config.Master.archive_url
@@ -39,7 +39,8 @@ class ChromiumCommands(commands.FactoryCommands):
     # Where the chromium slave scritps are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
     self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
-                                             'build_internal', 'scripts', 'slave')
+                                             'build_internal', 'scripts',
+                                             'slave')
 
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
@@ -125,7 +126,8 @@ class ChromiumCommands(commands.FactoryCommands):
                       extra_archive_paths=None, use_build_number=False):
     """Adds a step to the factory to archive a build."""
     if show_url:
-      url = '%s/%s/%s' %  (self._archive_url, 'snapshots', self._identifier)
+      # TODO(nsylvain): Change the url to include the right subdir.
+      url = '%s/%s' %  (self._archive_url, 'snapshots')
       text = 'download'
     else:
       url = None
@@ -649,8 +651,8 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd)
 
     if archive_results:
-      url = '%s/%s/%s' % (self._archive_url, result_dir_basename,
-                          self._identifier)
+      # TODO(nsylvain): Change the url to include the right subdir.
+      url = '%s/%s' % (self._archive_url, result_dir_basename)
 
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
@@ -728,14 +730,14 @@ class ChromiumCommands(commands.FactoryCommands):
            platform]
     self.AddTestStep(shell.ShellCommand, 'upload test parity', cmd)
 
-  def AddDownloadAndExtractOfficialBuild(self, identifier, branch=None):
+  def AddDownloadAndExtractOfficialBuild(self, qa_identifier, branch=None):
     """Download and extract an official build.
 
     Assumes the zip file has e.g. "Google Chrome.app" in the top level
     directory of the zip file.
     """
     cmd = [self._python, self._download_and_extract_official_tool,
-           '--identifier', identifier,
+           '--identifier', qa_identifier,
            # TODO(jrg): for now we are triggered on a timer and always
            # use the latest build.  Instead we should trigger on the
            # presence of new build and pass that info down for a

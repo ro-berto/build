@@ -81,10 +81,10 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8Sputnik(simulator='arm')
 
 
-  def V8Factory(self, identifier, target='release', clobber=False,
-                      tests=None, mode=None, slave_type='BuilderTester',
-                      options=None, compile_timeout=1200, build_url=None,
-                      project=None, factory_properties=None, target_arch=None):
+  def V8Factory(self, target='release', clobber=False, tests=None, mode=None,
+                slave_type='BuilderTester', options=None, compile_timeout=1200,
+                build_url=None, project=None, factory_properties=None,
+                target_arch=None):
     tests = tests or []
     factory_properties = factory_properties or {}
 
@@ -113,13 +113,13 @@ class V8Factory(gclient_factory.GClientFactory):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_SPUTNIK)
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_ES5CONFORM)
 
-    factory = self.BuildFactory(identifier, target, clobber, tests, mode,
+    factory = self.BuildFactory(target, clobber, tests, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties)
 
     # Get the factory command object to create new steps to the factory.
     # Note - we give '' as build_dir as we use our own build in test tools
-    v8_cmd_obj = v8_commands.V8Commands(factory, identifier,
+    v8_cmd_obj = v8_commands.V8Commands(factory,
                                         target,
                                         '',
                                         self._target_platform,

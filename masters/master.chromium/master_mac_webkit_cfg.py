@@ -42,7 +42,6 @@ D('webkit_mac_rel_dep', 'webkit_mac_rel')
 B('Webkit Mac Builder', 'webkit_mac_rel', 'compile', 'webkit_mac_rel',
   builddir='webkit-mac-rel')
 F('webkit_mac_rel', mac().ChromiumFactory(
-    'webkit-mac-rel',
     slave_type='Builder',
     options=['--', '-project', '../webkit/webkit.xcodeproj']))
 
@@ -51,7 +50,6 @@ F('webkit_mac_rel', mac().ChromiumFactory(
 #
 B('Webkit Mac10.5', 'webkit_rel_tests', 'testers', 'webkit_mac_rel_dep')
 F('webkit_rel_tests', mac().ChromiumFactory(
-    'webkit-mac-rel',
     slave_type='Tester',
     build_url=rel_archive,
     tests=['test_shell', 'webkit', 'webkit_unit'],
@@ -82,7 +80,6 @@ D('webkit_mac_dbg_dep', 'webkit_mac_dbg')
 B('Webkit Mac Builder (dbg)', 'webkit_mac_dbg', 'compile', 'webkit_mac_dbg',
   builddir='webkit-mac-dbg')
 F('webkit_mac_dbg', mac().ChromiumFactory(
-    'webkit-mac-dbg',
     target='Debug',
     slave_type='Builder',
     options=['--', '-project', '../webkit/webkit.xcodeproj']))
@@ -94,7 +91,6 @@ F('webkit_mac_dbg', mac().ChromiumFactory(
 B('Webkit Mac10.5 (dbg)(1)', 'webkit_dbg_tests_1', 'testers',
   'webkit_mac_rel_dep')
 F('webkit_dbg_tests_1', mac().ChromiumFactory(
-    'webkit-mac-dbg',
     slave_type='Tester',
     target='Debug',
     build_url=dbg_archive,
@@ -106,7 +102,6 @@ F('webkit_dbg_tests_1', mac().ChromiumFactory(
 B('Webkit Mac10.5 (dbg)(2)', 'webkit_dbg_tests_2', 'testers',
   'webkit_mac_rel_dep')
 F('webkit_dbg_tests_2', mac().ChromiumFactory(
-    'webkit-mac-dbg',
     slave_type='Tester',
     target='Debug',
     build_url=dbg_archive,
@@ -118,7 +113,6 @@ F('webkit_dbg_tests_2', mac().ChromiumFactory(
 B('Webkit Mac10.5 (dbg)(3)', 'webkit_dbg_tests_3', 'testers',
   'webkit_mac_rel_dep')
 F('webkit_dbg_tests_3', mac().ChromiumFactory(
-    'webkit-mac-dbg',
     slave_type='Tester',
     target='Debug',
     build_url=dbg_archive,

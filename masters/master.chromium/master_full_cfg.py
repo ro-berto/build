@@ -32,7 +32,6 @@ T('reliability')
 
 B('Win', 'win_full', 'compile|windows', 'chromium')
 F('win_full', win().ChromiumFactory(
-    'chromium-win-rel',
     clobber=True,
     project='all.sln',
     tests=['sizes', 'selenium', 'unit', 'ui', 'test_shell', 'memory',
@@ -56,7 +55,6 @@ F('win_reliability', linux().ReliabilityTestsFactory())
 
 B('Mac', 'mac_full', 'compile|testers', 'chromium')
 F('mac_full', mac().ChromiumFactory(
-    'chromium-mac-rel',
     clobber=True,
     tests=['sizes', 'unit', 'ui', 'dom_checker', 'test_shell', 'memory',
            'printing', 'remoting', 'browser_tests', 'webkit_unit', 'gpu'],
@@ -96,7 +94,6 @@ arm_gclient_env = {
 
 B('Linux', 'linux_full', 'compile|testers', 'chromium')
 F('linux_full', linux().ChromiumFactory(
-    'chromium-linux-rel',
     clobber=True,
     tests=['unit', 'ui', 'dom_checker', 'googleurl', 'media', 'printing',
            'remoting', 'sizes', 'test_shell', 'memory', 'browser_tests',
@@ -108,7 +105,6 @@ F('linux_full', linux().ChromiumFactory(
 
 B('Linux x64', 'linux64_full', 'compile|testers', 'chromium')
 F('linux64_full', linux().ChromiumFactory(
-    'chromium-linux64-rel',
     clobber=True,
     tests=['base', 'net', 'unit', 'ui', 'dom_checker', 'googleurl', 'media',
            'printing', 'remoting', 'sizes', 'test_shell', 'memory',
@@ -122,7 +118,6 @@ F('linux64_full', linux().ChromiumFactory(
 
 B('Arm', 'arm_full', 'compile|testers', 'chromium')
 F('arm_full', linux().ChromiumOSFactory(
-    'chromium-arm-rel',
     clobber=True,
     target='Release',
     tests=[],

@@ -33,7 +33,6 @@ S('webkit_linux_rel', branch='src', treeStableTimer=60)
 B('Webkit Linux', 'webkit_linux_rel', 'compile|testers', 'webkit_linux_rel',
    builddir='webkit-linux-rel-x64')
 F('webkit_linux_rel', linux().ChromiumFactory(
-    'webkit-linux-rel',
     tests=['webkit', 'test_shell', 'webkit_unit'],
     options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
              'DumpRenderTree'],
@@ -66,7 +65,6 @@ D('webkit_linux_dbg_dep', 'webkit_linux_dbg')
 B('Webkit Linux Builder (dbg)', 'dbg', 'compile', 'webkit_linux_dbg',
   builddir='webkit-linux-dbg')
 F('dbg', linux().ChromiumFactory(
-    'webkit-linux-dbg',
     slave_type='Builder',
     options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
              'DumpRenderTree']))
@@ -78,7 +76,6 @@ F('dbg', linux().ChromiumFactory(
 B('Webkit Linux Tests (dbg)(1)', 'dbg_webkit_1', 'testers',
   'webkit_linux_dbg_dep')
 F('dbg_webkit_1', linux().ChromiumFactory(
-    'webkit-dbg-linux-1',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -90,7 +87,6 @@ F('dbg_webkit_1', linux().ChromiumFactory(
 B('Webkit Linux Tests (dbg)(2)', 'dbg_webkit_2', 'testers',
   'webkit_linux_dbg_dep')
 F('dbg_webkit_2', linux().ChromiumFactory(
-    'webkit-dbg-linux-2',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -102,7 +98,6 @@ F('dbg_webkit_2', linux().ChromiumFactory(
 B('Webkit Linux Tests (dbg)(3)', 'dbg_webkit_3', 'testers',
   'webkit_linux_dbg_dep')
 F('dbg_webkit_3', linux().ChromiumFactory(
-    'webkit-dbg-linux-3',
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,

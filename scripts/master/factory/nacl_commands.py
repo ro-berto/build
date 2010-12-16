@@ -24,17 +24,16 @@ import config
 class NativeClientCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None, options=None,
-               test_target=None):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None, options=None, test_target=None):
     if not options:
       options = {}
 
     if not test_target:
       test_target = target
 
-    commands.FactoryCommands.__init__(self, factory, identifier,
-                                      target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir,
+                                      target_platform)
 
     # Where to point waterfall links for builds and test results.
     self._archive_url = config.Master.archive_url
@@ -773,7 +772,7 @@ class NativeClientCommands(commands.FactoryCommands):
                           command='python build_for_buildbot.py %s' %
                             modular_build_type)
 
-  def AddAnnotatedStep(self, name, command, timeout=1200,
+  def AddAnnotatedStep(self, command, timeout=1200,
                        workdir='build/native_client', haltOnFailure=True,
                        factory_properties=None):
     factory_properties = factory_properties or {}
@@ -785,8 +784,8 @@ class NativeClientCommands(commands.FactoryCommands):
                                          process_log.GraphingLogProcessor,
                                          command_class=AnnotatedCommand)
     self._factory.addStep(test_class,
-                          name=name,
-                          description=name,
+                          name='annotate',
+                          description='annotate',
                           timeout=timeout,
                           haltOnFailure=haltOnFailure,
                           workdir=workdir,

@@ -41,7 +41,6 @@ D('mac_rel_dep', 'mac_rel')
 #
 B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel')
 F('rel', mac().ChromiumFactory(
-    'chromium-mac-rel',
     slave_type='Builder',
     options=['--', '-target', 'chromium_builder_tests']))
 
@@ -50,7 +49,6 @@ F('rel', mac().ChromiumFactory(
 #
 B('Mac10.5 Tests', 'rel_unit', 'testers', 'mac_rel_dep')
 F('rel_unit', mac().ChromiumFactory(
-  'chromium-mac-rel',
   slave_type='Tester',
   build_url=rel_archive,
   tests=['unit', 'ui', 'media', 'printing', 'remoting', 'gpu', 'browser_tests',
@@ -83,7 +81,6 @@ D('mac_dbg_dep', 'mac_dbg')
 #
 B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', builddir='cr-mac-dbg')
 F('dbg', mac().ChromiumFactory(
-    'chromium-mac-dbg',
     target='Debug',
     slave_type='Builder',
     options=['--', '-target', 'chromium_builder_tests']))
@@ -94,7 +91,6 @@ F('dbg', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
 F('dbg_unit_1', mac().ChromiumFactory(
-  'chromium-mac-dbg',
   slave_type='Tester',
   target='Debug',
   build_url=dbg_archive,
@@ -105,7 +101,6 @@ F('dbg_unit_1', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_dep')
 F('dbg_unit_2', mac().ChromiumFactory(
-  'chromium-mac-dbg',
   slave_type='Tester',
   target='Debug',
   build_url=dbg_archive,
@@ -114,7 +109,6 @@ F('dbg_unit_2', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_dep')
 F('dbg_unit_3', mac().ChromiumFactory(
-  'chromium-mac-dbg',
   slave_type='Tester',
   target='Debug',
   build_url=dbg_archive,

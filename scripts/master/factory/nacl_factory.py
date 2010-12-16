@@ -223,8 +223,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       if R('nacl_trigger_win7atom64_hw_%s' % mode):
         f.AddTrigger('win7atom64_%s_hw_tests' % mode)
 
-  def NativeClientFactory(self, identifier, target='Release', clobber=False,
-                          tests=None, mode=None, slave_type='BuilderTester',
+  def NativeClientFactory(self, target='Release', clobber=False, tests=None,
+                          mode=None, slave_type='BuilderTester',
                           options=None, compile_timeout=1200, build_url=None,
                           official_release=False, factory_properties=None,
                           build_toolchain=False, just_trusted=False,
@@ -246,7 +246,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                official_release=official_release,
                                factory_properties=factory_properties)
     # Get the factory command object to create new steps to the factory.
-    nacl_cmd_obj = nacl_commands.NativeClientCommands(factory, identifier,
+    nacl_cmd_obj = nacl_commands.NativeClientCommands(factory,
                                                       target,
                                                       self._build_dir,
                                                       self._target_platform,
@@ -291,7 +291,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
 
     return factory
 
-  def ModularBuildFactory(self, identifier, modular_build_type,
+  def ModularBuildFactory(self, modular_build_type,
                           target='Release',
                           tests=None, slave_type='BuilderTester',
                           compile_timeout=1200,
@@ -305,7 +305,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                official_release=official_release,
                                factory_properties=factory_properties)
     # Get the factory command object to create new steps to the factory.
-    nacl_cmd_obj = nacl_commands.NativeClientCommands(factory, identifier,
+    nacl_cmd_obj = nacl_commands.NativeClientCommands(factory,
                                                       target,
                                                       self._build_dir,
                                                       self._target_platform)
@@ -315,10 +315,9 @@ class NativeClientFactory(gclient_factory.GClientFactory):
 
     return factory
 
-  def AnnotatedFactory(self, identifier, command,
-                       target='Release', workdir='build/native_client',
-                       official_release=False, factory_properties=None,
-                       test_target=None):
+  def AnnotatedFactory(self, command, target='Release',
+                       workdir='build/native_client', official_release=False,
+                       factory_properties=None, test_target=None):
     factory_properties = factory_properties or {}
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec([])
@@ -327,13 +326,13 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                official_release=official_release,
                                factory_properties=factory_properties)
     # Get the factory command object to create new steps to the factory.
-    nacl_cmd_obj = nacl_commands.NativeClientCommands(factory, identifier,
+    nacl_cmd_obj = nacl_commands.NativeClientCommands(factory,
                                                       target,
                                                       self._build_dir,
                                                       self._target_platform)
 
     # Single build action.
-    nacl_cmd_obj.AddAnnotatedStep(identifier, command, timeout=9000,
+    nacl_cmd_obj.AddAnnotatedStep(command, timeout=9000,
                                   factory_properties=factory_properties)
 
     return factory

@@ -49,8 +49,8 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
     # no tests yet
     pass
 
-  def NativeClientSDKFactory(self, identifier, target='Release', clobber=False,
-                             tests=None, mode=None, slave_type='BuilderTester',
+  def NativeClientSDKFactory(self, target='Release', clobber=False, tests=None,
+                             mode=None, slave_type='BuilderTester',
                              options=None, compile_timeout=1200, build_url=None,
                              factory_properties=None, official_release=True):
     factory_properties = factory_properties or {}
@@ -63,7 +63,7 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
                                factory_properties=factory_properties)
     # Get the factory command object to create new steps to the factory.
     nacl_sdk_cmd_obj = nacl_sdk_commands.NativeClientSDKCommands(
-        factory, identifier,
+        factory,
         target,
         self._build_dir,
         self._target_platform)

@@ -32,7 +32,6 @@ S('chromeos_rel', branch='src', treeStableTimer=60)
 #
 B('Linux Builder (ChromiumOS)', 'rel', 'compile', 'chromeos_rel')
 F('rel', chromeos().ChromiumOSFactory(
-    'chromium-chromiumos-rel',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui'],
     options=['chromeos_builder'],
@@ -57,7 +56,6 @@ S('chromeos_dbg', branch='src', treeStableTimer=60)
 #
 B('Linux Builder (ChromiumOS dbg)', 'cros_dbg', 'compile', 'chromeos_dbg')
 F('cros_dbg', chromeos().ChromiumOSFactory(
-    'chromium-chromiumos-dbg',
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui'],
@@ -68,7 +66,6 @@ F('cros_dbg', chromeos().ChromiumOSFactory(
 
 B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
 F('view_dbg', chromeos().ChromiumOSFactory(
-    'chromium-views-dbg',
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui'],
@@ -110,7 +107,6 @@ arm_dbg_factory_properties = {
 
 B('Arm (dbg)', 'arm_dbg', 'compile', 'chromeos_dbg')
 F('arm_dbg', chromeos().ChromiumOSFactory(
-    'chromium-arm-dbg',
     clobber=True,
     target='Debug',
     tests=[],

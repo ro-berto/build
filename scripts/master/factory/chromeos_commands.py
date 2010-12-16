@@ -16,12 +16,11 @@ from master.log_parser import archive_command
 class ChromeOSCommands(commands.FactoryCommands):
   """Encapsulates methods to add ChromeOS commands to a buildbot factory."""
 
-  def __init__(self, factory=None, identifier=None, target=None,
-               build_dir=None, target_platform=None, target_arch=None,
-               official_build=False):
+  def __init__(self, factory=None, target=None, build_dir=None,
+               target_platform=None, target_arch=None, official_build=False):
 
-    commands.FactoryCommands.__init__(self, factory, identifier,
-                                      target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir,
+                                      target_platform)
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
@@ -74,11 +73,11 @@ class ChromeOSCommands(commands.FactoryCommands):
                           name=msg,
                           description=msg)
 
-  def AddChromeOSCopyConfigStep(self, clobber=False, mode=None, options=None,
-                            timeout=1200):
+  def AddChromeOSCopyConfigStep(self, bot_id, clobber=False, mode=None,
+                                options=None, timeout=1200):
     # TODO: don't hard-code script path, but _private_script_dir above doesn't
     # seem to be working...
-    cmd = ['/b/scripts/private/chromeos_dev_config.sh', self._identifier]
+    cmd = ['/b/scripts/private/chromeos_dev_config.sh', bot_id]
     self._factory.addStep(shell.ShellCommand,
                           name='configure build',
                           description='configure build',
@@ -261,11 +260,11 @@ class ChromeOSCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=command)
 
-  def AddArchiveBuild(self, base_url=None, keep_max=0, gsutil_archive='',
-                      options=None):
+  def AddArchiveBuild(self, bot_id, base_url=None, keep_max=0,
+                      gsutil_archive='', options=None):
     """Adds a step to the factory to archive a build."""
     if base_url:
-      url = base_url + '/' + self._identifier
+      url = base_url + '/' + bot_id
       text = 'download'
     else:
       url = None
@@ -276,7 +275,7 @@ class ChromeOSCommands(commands.FactoryCommands):
     # results on chrome-web (after open source release), this needs
     # refactoring.
     cmd = self._archive_build + [
-        '--to', '/var/www/archive/' + self._identifier,
+        '--to', '/var/www/archive/' + bot_id,
         '--keep_max', str(keep_max),
         '--acl', '/home/chrome-bot/slave_archive_acl',
         '--gsutil_archive', gsutil_archive,

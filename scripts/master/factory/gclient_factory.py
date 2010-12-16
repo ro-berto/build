@@ -176,10 +176,10 @@ class GClientFactory(object):
                          sudo_for_remove, gclient_deps=gclient_deps)
     return factory
 
-  def BuildFactory(self, identifier, target='Release', clobber=False,
-                   tests=None, mode=None, slave_type='BuilderTester',
-                   options=None, compile_timeout=1200, build_url=None,
-                    project=None, factory_properties=None):
+  def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
+                   slave_type='BuilderTester', options=None,
+                   compile_timeout=1200, build_url=None, project=None,
+                   factory_properties=None):
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
 
@@ -188,7 +188,7 @@ class GClientFactory(object):
                                factory_properties=factory_properties)
 
     # Get the factory command object to create new steps to the factory.
-    factory_cmd_obj = commands.FactoryCommands(factory, identifier, target,
+    factory_cmd_obj = commands.FactoryCommands(factory, target,
                                                self._build_dir,
                                                self._target_platform)
 
