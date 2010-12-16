@@ -122,7 +122,7 @@ class ChromeOSCommands(commands.FactoryCommands):
   def AddChromeOSSetupBoardStep(self, clobber=False, mode=None, options=None,
                                 timeout=1200):
     if options.get('lasercats_variant'):
-      variant = '--variant %s' % options['lasercats_variant']
+      variant = '--variant=%s' % options['lasercats_variant']
     else:
       variant = ''
     cmd = self._enter_chroot + [
@@ -145,7 +145,7 @@ class ChromeOSCommands(commands.FactoryCommands):
     cmd = self._enter_chroot + [
         './build_packages',
         '--showoutput',
-        '--retries 3',
+        '--retries=3',
         '--chromefromsource',
         '--board=%s' % self.BoardName(options),
         options.get('lasercats_jobs', ''),
@@ -188,7 +188,7 @@ class ChromeOSCommands(commands.FactoryCommands):
         '-y',
         '--force_copy',
         '--from=../build/images/%s/foo/' % board,
-        '-i chromiumos_base_image.bin',
+        '-i', 'chromiumos_base_image.bin',
         '--to=../build/images/%s/foo/chromiumos_factory_install_image.bin' %
             board,
     ]
