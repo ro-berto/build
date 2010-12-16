@@ -110,6 +110,7 @@ processes = [
     'reliability_tests.exe',
     'selenium_tests.exe',
     'startup_tests.exe',
+    'sync_integration_tests.exe',
     'tab_switching_test.exe',
     'test_shell.exe',
     'test_shell_tests.exe',
