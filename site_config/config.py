@@ -137,15 +137,20 @@ class Archive(config_private.Archive):
   # to the official build scripts. Remove this as soon as
   # those changes land.
   symbols_to_archive = ['chrome_dll.pdb', 'chrome_exe.pdb',
-                        'mini_installer.pdb', 'setup.pdb']
+                        'mini_installer.pdb', 'setup.pdb',
+                        'ceee_broker.pdb', 'ceee_ie.pdb',
+                        'ceee_installer_helper.pdb']
 
   # TODO(thestig) Add 64-bit symbols once we get there.
   symbols_to_archive_linux = ['chrome.breakpad.ia32']
 
-  # Binary to archive on the source server with the sourcified symbols.
+  # Binaries to archive on the source server with the sourcified symbols.
   symsrc_binaries = ['chrome.exe', 'chrome.dll',
                      'servers\\npchrome_frame.dll',
-                     'servers\\chrome_launcher.exe']
+                     'servers\\chrome_launcher.exe',
+                     'servers\\ceee_broker.exe',
+                     'servers\\ceee_ie.dll',
+                     'servers\\ceee_installer_helper.dll']
 
   # List of symbol files to save, but not to upload to the symbol server
   # (generally because they have no symbols and thus would produce an error).
