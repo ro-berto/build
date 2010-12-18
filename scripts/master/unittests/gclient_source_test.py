@@ -123,7 +123,7 @@ solutions=[{"name":"src","url":"http://src.chromium.org/svn/trunk/src","custom_d
 50>
 50>________ running 'svn update .../build/src/third_party/WebKit/WebKit/chromium --revision 69169' in '.../build'
 52>
-52>________ running 'svn update .../build/src/third_party/WebKit/WebKitTools/Scripts --revision 69169' in '.../build'
+52>________ running 'svn update .../build/src/third_party/WebKit/Tools/Scripts --revision 69169' in '.../build'
 50>At revision 69169.
 52>Updated to revision 69169.
 51>
@@ -159,7 +159,7 @@ solutions=[{"name":"src","url":"http://src.chromium.org/svn/trunk/src","custom_d
 46>________ running 'svn update .../build/src/third_party/WebKit/WebKit/chromium --revision 69168' in '.../build'
 46>
 48>
-48>________ running 'svn update .../build/src/third_party/WebKit/WebKitTools/Scripts --revision 69168' in '.../build'
+48>________ running 'svn update .../build/src/third_party/WebKit/Tools/Scripts --revision 69168' in '.../build'
 46>At revision 69168.
 46>
 48>
@@ -289,7 +289,7 @@ class GClientSourceTest(unittest.TestCase):
                       'At revision 69169.',
                       '________ running \'svn update .../build/src/third_party/WebKit/WebCore --revision 69169\' in \'.../build\'',
                       'At revision 69169.',
-                      '________ running \'svn update .../build/src/third_party/WebKit/WebKitTools/Scripts --revision 69169\' in \'.../build\'',
+                      '________ running \'svn update .../build/src/third_party/WebKit/Tools/Scripts --revision 69169\' in \'.../build\'',
                       'Updated to revision 69169.',
                       '________ running \'/usr/bin/python src/build/gyp_chromium\' in \'.../build\'',
                       'Updating projects from gyp files...',
@@ -305,7 +305,7 @@ class GClientSourceTest(unittest.TestCase):
                       'At revision 69168.',
                       '________ running \'svn update .../build/src/third_party/WebKit/WebCore --revision 69168\' in \'.../build\'',
                       'At revision 69168.',
-                      '________ running \'svn update .../build/src/third_party/WebKit/WebKitTools/Scripts --revision 69168\' in \'.../build\'',
+                      '________ running \'svn update .../build/src/third_party/WebKit/Tools/Scripts --revision 69168\' in \'.../build\'',
                       'Updated to revision 69168.',
                       '________ running \'/usr/bin/python src/build/gyp_chromium\' in \'.../build\'',
                       'Updating projects from gyp files...',

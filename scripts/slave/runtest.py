@@ -57,7 +57,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   The archived JSON file will be placed at:
   www-dir/DEST_DIR/buildname/testname/results.json
   on the archive server (NOTE: this is to be deprecated).
-  Note that it adds slave's WebKit/WebKitTools/Scripts to the PYTHONPATH
+  Note that it adds slave's WebKit/Tools/Scripts to the PYTHONPATH
   to run the JSON generator.
 
   Args:
@@ -98,7 +98,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
 
   try:
     generate_json_options.webkit_dir = chromium_utils.FindUpward(
-        build_dir, 'third_party', 'WebKit', 'WebKitTools')
+        build_dir, 'third_party', 'WebKit', 'Tools')
     generate_json_options.chrome_dir = chromium_utils.FindUpward(
         build_dir, 'webkit', 'tools', 'layout_tests')
 

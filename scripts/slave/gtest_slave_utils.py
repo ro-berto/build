@@ -125,7 +125,7 @@ def GenerateAndUploadJSONResults(gtest_results_map, options):
   from common import chromium_utils
   try:
     script_dir = chromium_utils.FindUpward(
-        options.webkit_dir, 'WebKit', 'WebKitTools', 'Scripts')
+        options.webkit_dir, 'WebKit', 'Tools', 'Scripts')
     sys.path.append(script_dir)
   except chromium_utils.PathNotFound, e:
     logging.error("Valid options.webkit_dir (--webkit-dir) must be "
