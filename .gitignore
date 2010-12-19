@@ -98,12 +98,14 @@ twistd.pid
 /masters/master.tryserver.chromium/mac_layout
 /masters/master.tryserver.chromium/mac_layout_rel
 /masters/master.tryserver.chromium/mac_rel
+/masters/master.tryserver.chromium/mac_sync
 /masters/master.tryserver.chromium/mac_valgrind
 /masters/master.tryserver.chromium/win
 /masters/master.tryserver.chromium/win_layout
 /masters/master.tryserver.chromium/win_layout_7
 /masters/master.tryserver.chromium/win_layout_rel
 /masters/master.tryserver.chromium/win_rel
+/masters/master.tryserver.chromium/win_sync
 /masters/master.experimental/chromium-linux-experimental
 /masters/master.experimental/chromium-mac-experimental
 /masters/master.experimental/chromium-win-experimental
@@ -111,3 +113,6 @@ twistd.pid
 /slave/chromium-linux-experimental
 /slave/chromium-mac-experimental
 /slave/chromium-win-experimental
+/slave/linux
+/slave/mac
+/slave/win
