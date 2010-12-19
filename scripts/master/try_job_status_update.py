@@ -83,7 +83,7 @@ class TryJobStatusUpdate(base.StatusReceiverMultiService):
       return
 
     # Is None for a starting or a ending job.
-    if step:
+    if step and self.important_steps:
       # Example of step.getText() value: ['unit_tests', '16 disabled']
       step_text = step.getText()[0]
       if not step_text in self.important_steps:
