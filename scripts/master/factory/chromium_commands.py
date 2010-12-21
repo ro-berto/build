@@ -612,11 +612,11 @@ class ChromiumCommands(commands.FactoryCommands):
         platform = platform.replace('chromium', 'chromium-gpu')
       else:
         platform = 'chromium-gpu'
-      result_dir_basename = 'layout-test-results-gpu'
+      builder_name = '%(buildername)s - GPU'
       result_str = 'gpu results'
       test_name = 'webkit_gpu_tests'
     else:
-      result_dir_basename = 'layout-test-results'
+      builder_name = '%(buildername)'
       result_str = 'results'
       test_name = 'webkit_tests'
 
@@ -624,7 +624,7 @@ class ChromiumCommands(commands.FactoryCommands):
     if with_pageheap:
       pageheap_description = ' (--enable-pageheap)'
 
-    webkit_result_dir = '/'.join(['..', '..', result_dir_basename])
+    webkit_result_dir = '/'.join(['..', '..', 'layout-test-results'])
 
     cmd = [self._python, self._layout_test_tool,
            '--target', self._target,
@@ -632,7 +632,7 @@ class ChromiumCommands(commands.FactoryCommands):
            '-o', webkit_result_dir,
            '--build-dir', self._build_dir,
            '--build-number', WithProperties("%(buildnumber)s"),
-           '--builder-name', WithProperties("%(buildername)s"),]
+           '--builder-name', WithProperties(builder_name),]
 
     if layout_part:
       cmd.extend(['--run-part', layout_part])
@@ -658,7 +658,7 @@ class ChromiumCommands(commands.FactoryCommands):
              '--results-dir', webkit_result_dir,
              '--build-dir', self._build_dir,
              '--build-number', WithProperties("%(buildnumber)s"),
-             '--builder-name', WithProperties("%(buildername)s"),]
+             '--builder-name', WithProperties(buildername),]
 
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
