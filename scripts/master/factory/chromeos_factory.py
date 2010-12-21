@@ -202,9 +202,14 @@ class CbuildbotFactory(object):
     self.f_cbuild = chromeos_build_factory.BuildFactory()
     self.add_boiler_plate_steps()
     self.is_master = is_master
+    self.type = type
 
     if type == 'cbuildbot':
-      self.cbuildbot_type(params)
+      description_suffix = ''
+      if self.is_master:
+        description_suffix = 'master'
+
+      self.cbuildbot_type(params, description_suffix=description_suffix)
     elif type == 'cbuild':
       self.cbuild_type(params)
     elif type == 'oneoff':
@@ -247,7 +252,7 @@ class CbuildbotFactory(object):
     self._git_clear_and_checkout(self.crosutils_repo)
     self._git_clear_and_checkout(self.crostools_repo)
 
-  def cbuildbot_type(self, params, sync=True, haltOnFailure=True):
+  def cbuildbot_type(self, params, description_suffix='', haltOnFailure=True):
     """Adds cbuildbot steps for pre flight queue builders.
 
     Cbuildbot includes the steps for syncing and building pre flight queue
@@ -255,17 +260,15 @@ class CbuildbotFactory(object):
 
     Args:
       params:  Extra parameters for cbuildbot.
-      sync: To sync the code or not in the pfq step.
+      description_suffix:  Optional suffix to add to description that shows up
+        on dashboard.
       haltOnFailure: To halt build because of failure of cbuildbot step.  Useful
         for setting to False for case of Chrome pfq where multiple cbuildbot
         steps are invoked.
     """
     # Gathers queued commits and drops them for cbuildbot to pick up.
-    if sync:
-      self.f_cbuild.addStep(chromeos_revision_source.GitRevisionDropper,
-                            timeout=self.timeout)
-    else:
-      params = '--nosync ' + params
+    self.f_cbuild.addStep(chromeos_revision_source.GitRevisionDropper,
+                          timeout=self.timeout)
 
     # Triggered cbuildbots (pfq slaves) have this property set.
     if self.is_master:
@@ -282,12 +285,18 @@ class CbuildbotFactory(object):
     if clobber_string:
       cbuild_cmd.append(clobber_string)
 
+    name = self.type
+    if description_suffix:
+      description = '%s_%s' % (name, description_suffix)
+    else:
+      description = name
+
     cbuild_cmd += params.split()
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=cbuild_cmd,
                           timeout=self.timeout,
-                          name='cbuildbot',
-                          description='cbuildbot',
+                          name=name,
+                          description=description,
                           haltOnFailure=haltOnFailure)
 
   def oneoff_type(self):
@@ -367,14 +376,12 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                is_master=False, branch='master', chrome_rev_stages=None,
                crostools_repo=CbuildbotFactory._default_crostools,
                crosutils_repo=CbuildbotFactory._default_crosutils):
-    CbuildbotFactory.__init__(self, type='chrome-cbuildbot', board=None,
+    CbuildbotFactory.__init__(self, type='cbuildbot_chrome', board=None,
                               buildroot=buildroot, is_master=is_master,
                               crostools_repo=crostools_repo,
                               crosutils_repo=crosutils_repo)
 
-    # Only sync for first stage.
-    sync = True
     for chrome_rev in chrome_rev_stages:
       bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
-      self.cbuildbot_type(bot_params, sync, haltOnFailure=False)
-      sync = False
+      self.cbuildbot_type(bot_params, description_suffix=chrome_rev,
+                          haltOnFailure=False)
