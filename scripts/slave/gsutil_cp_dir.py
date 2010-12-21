@@ -12,11 +12,11 @@ import sys
 import time
 
 
-def MassCopy(src_dir, dst_uri, jobs):
+def MassCopy(src_path, dst_uri, jobs):
   """Copy a directory to Google Storage in parallel.
 
   Args:
-    src_dir: directory to copy.
+    src_path: path to copy.
     dst_uri: gs://... type uri.
     jobs: maximum concurrent copies.
   Returns:
@@ -25,11 +25,15 @@ def MassCopy(src_dir, dst_uri, jobs):
   # Pick gsutil.
   gsutil = os.environ.get('GSUTIL', 'gsutil')
   # Find base path.
-  base = os.path.abspath(src_dir)
+  base = os.path.abspath(src_path)
   # Get the list of objects.
-  objects = []
-  for root, _, files in os.walk(src_dir):
-    objects.extend((os.path.join(root, name) for name in files))
+  if os.path.isfile(src_path):
+    # Handle individual files as a special case (as walk returns []).
+    objects = [src_path]
+  else:
+    objects = []
+    for root, _, files in os.walk(src_path):
+      objects.extend((os.path.join(root, name) for name in files))
   # Start running copies, limiting how many at once.
   running = []
   try:
@@ -68,7 +72,7 @@ def main(argv):
   for m in options.message:
     print m
 
-  return MassCopy(src_dir=args[0], dst_uri=args[1], jobs=options.jobs)
+  return MassCopy(src_path=args[0], dst_uri=args[1], jobs=options.jobs)
 
 
 if __name__ == '__main__':
