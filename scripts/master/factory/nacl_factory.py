@@ -163,10 +163,16 @@ class NativeClientFactory(gclient_factory.GClientFactory):
 
     if R('nacl_utman_arm_tests'):
       f.AddUtmanTests('arm', options=options)
+    if R('nacl_utman_arm_pic_tests'):
+      f.AddUtmanTests('arm-pic', options=options)
     if R('nacl_utman_x86_32_tests'):
       f.AddUtmanTests('x86-32', options=options)
+    if R('nacl_utman_x86_32_pic_tests'):
+      f.AddUtmanTests('x86-32-pic', options=options)
     if R('nacl_utman_x86_64_tests'):
       f.AddUtmanTests('x86-64', options=options)
+    if R('nacl_utman_x86_64_pic_tests'):
+      f.AddUtmanTests('x86-64-pic', options=options)
 
     if R('nacl_coverage'):
       f.AddCoverageTests(options=options)
