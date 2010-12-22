@@ -121,6 +121,8 @@ class FactoryCommands(object):
       'chrome-linux64-stable': 'linux64-stable',
       'chrome-mac-stable': 'mac-stable',
       'nacl-lucid64-spec-x86': 'nacl-lucid64-spec-x86',
+      'nacl-lucid64-spec-arm': 'nacl-lucid64-spec-arm',
+      'nacl-lucid64-spec-trans': 'nacl-lucid64-spec-trans',
     },
     'Debug': {
       'chromium-dbg-linux': 'linux-debug',
