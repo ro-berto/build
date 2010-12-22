@@ -170,7 +170,8 @@ class GClientFactory(object):
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
       factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
-                                         gclient_deps=gclient_deps)
+                                         gclient_deps=gclient_deps,
+                                         gclient_nohooks=self._nohooks_on_update)
     elif not delay_compile_step:
       self.AddUpdateStep(gclient_spec, factory_properties, factory,
                          sudo_for_remove, gclient_deps=gclient_deps)

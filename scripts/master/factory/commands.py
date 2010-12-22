@@ -376,7 +376,7 @@ class FactoryCommands(object):
                           rm_timeout=60*15) # The step can take a long time.
 
   def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
-                         gclient_deps=None):
+                         gclient_deps=None, gclient_nohooks=False):
     """ This is not for pressing 'clobber' on the waterfall UI page. This is
         for clobbering all the sources. Using mode='clobber' causes the entire
         working directory to get moved aside (to build.dead) --OR-- if
@@ -405,6 +405,7 @@ class FactoryCommands(object):
     self._factory.addStep(chromium_step.GClient,
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,
+                          gclient_nohooks=gclient_nohooks,
                           workdir=self.working_dir,
                           mode='clobber',
                           env=env,
