@@ -652,13 +652,13 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if archive_results:
       # TODO(nsylvain): Change the url to include the right subdir.
-      url = '%s/%s' % (self._archive_url, result_dir_basename)
+      url = '%s/%s' % (self._archive_url, 'layout-test-results')
 
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
              '--build-dir', self._build_dir,
              '--build-number', WithProperties("%(buildnumber)s"),
-             '--builder-name', WithProperties(buildername),]
+             '--builder-name', WithProperties(builder_name),]
 
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
