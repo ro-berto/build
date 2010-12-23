@@ -811,9 +811,13 @@ class ConsoleStatusResource(HtmlResource):
         subs = dict()
         subs["projectUrl"] = status.getProjectURL() or ""
         subs["projectName"] = status.getProjectName() or ""
-        subs["branch"] = branch or 'trunk'
+        safe_branch = branch
+        if safe_branch and safe_branch != ANYBRANCH:
+          safe_branch = urllib.quote(safe_branch)
+        subs["branch"] = safe_branch or 'trunk'
         if categories:
-            subs["categories"] = ' '.join(categories)
+            subs["categories"] = urllib.quote(' '.join(categories)).replace(
+                                     '%20', ' ')
         subs["welcomeUrl"] = self.path_to_root(request) + "index.html"
         subs["version"] = version
         subs["time"] = time.strftime("%a %d %b %Y %H:%M:%S",
