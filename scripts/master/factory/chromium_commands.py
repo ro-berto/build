@@ -578,6 +578,7 @@ class ChromiumCommands(commands.FactoryCommands):
       # Run thru runtest.py on linux to launch virtual x server
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
                                                   [pyauto_script, '-v'])
+    pyauto_functional_cmd.append('--suite=CONTINUOUS')
     self.AddTestStep(retcode_command.ReturnCodeCommand,
                      test_name,
                      pyauto_functional_cmd,
