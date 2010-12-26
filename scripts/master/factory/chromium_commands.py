@@ -617,7 +617,7 @@ class ChromiumCommands(commands.FactoryCommands):
       result_str = 'gpu results'
       test_name = 'webkit_gpu_tests'
     else:
-      builder_name = '%(buildername)'
+      builder_name = '%(buildername)s'
       result_str = 'results'
       test_name = 'webkit_tests'
 
