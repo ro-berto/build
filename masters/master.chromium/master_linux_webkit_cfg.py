@@ -39,7 +39,6 @@ F('webkit_linux_rel', linux().ChromiumFactory(
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
-
 ################################################################################
 ## Debug
 ################################################################################
@@ -65,6 +64,7 @@ D('webkit_linux_dbg_dep', 'webkit_linux_dbg')
 B('Webkit Linux Builder (dbg)', 'dbg', 'compile', 'webkit_linux_dbg',
   builddir='webkit-linux-dbg')
 F('dbg', linux().ChromiumFactory(
+    target='Debug',
     slave_type='Builder',
     options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
              'DumpRenderTree']))
