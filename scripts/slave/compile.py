@@ -195,8 +195,8 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     cpp = 'ccache ' + cpp
 
   # Export our settings into our copy of the environment.
-  print('ENV[\"CC\"] = \"%s\"', cc)
-  print('ENV[\"CXX\"] = \"%s\"', cpp)
+  print('ENV[\"CC\"] = \"%s\"' % cc)
+  print('ENV[\"CXX\"] = \"%s\"' % cpp)
   env['CC'] = cc
   env['CXX'] = cpp
   command.append('-j%d' % jobs)
