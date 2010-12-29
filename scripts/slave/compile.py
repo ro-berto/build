@@ -162,21 +162,41 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     command.extend(['base_unittests', 'chrome'])
     return
 
+  # Use gcc and g++ by default.
   cc = 'gcc'
   cpp = 'g++'
-  distcc_hosts_file = os.path.join(os.path.expanduser('~'), '.distcc/hosts')
+
+  # Test if we can use distcc.
+  this_directory = os.path.dirname(os.path.abspath(__file__))
+  distcc_hosts_file = os.path.join(this_directory, 'linux_distcc_hosts',
+                                   'hosts')
   if os.path.exists('/usr/bin/distcc') and os.path.exists(distcc_hosts_file):
-    cc = 'distcc ' + cc
-    cpp = 'distcc ' + cpp
-    distcc_jobs = 12
-    if jobs < distcc_jobs:
-      jobs = distcc_jobs
+    uname_tuple = os.uname()
+    full_hostname = uname_tuple[1]
+    split_full_hostname = full_hostname.split('.', 2)
+    if len(split_full_hostname) >= 3:
+      hostname_only = split_full_hostname[0]
+      name_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname_only)
+      if name_match:
+        env['DISTCC_DIR'] = os.path.dirname(distcc_hosts_file)
+
+        cc = 'distcc ' + cc
+        cpp = 'distcc ' + cpp
+        distcc_jobs = 12
+        if jobs < distcc_jobs:
+          jobs = distcc_jobs
+
+  # Test if we can use ccache.
   if os.path.exists('/usr/bin/ccache'):
     # The default CCACHE_DIR is $HOME/.ccache which, on some of our
     # bots, is over NFS.  This is intentional.  Talk to thestig or
     # mmoss if you have questions.
     cc = 'ccache ' + cc
     cpp = 'ccache ' + cpp
+
+  # Export our settings into our copy of the environment.
+  print('ENV[\"CC\"] = \"%s\"', cc)
+  print('ENV[\"CXX\"] = \"%s\"', cpp)
   env['CC'] = cc
   env['CXX'] = cpp
   command.append('-j%d' % jobs)
