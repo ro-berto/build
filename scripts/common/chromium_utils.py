@@ -266,6 +266,38 @@ def RemoveDirectory(*path):
   else:
     remove_with_retry = RemoveWithRetry_non_win
 
+  def RmTreeOnError(function, path, excinfo):
+    """This works around a problem whereby python 2.x on Windows has no ability
+    to check for symbolic links.  os.path.islink always returns False.  But
+    shutil.rmtree will fail if invoked on a symbolic link whose target was
+    deleted before the link.  E.g., reproduce like this:
+    > mkdir test
+    > mkdir test\1
+    > mklink /D test\current test\1
+    > python -c "import chromium_utils; chromium_utils.RemoveDirectory('test')"
+    To avoid this issue, we pass this error-handling function to rmtree.  If
+    we see the exact sort of failure, we ignore it.  All other failures we re-
+    raise.
+    """
+ 
+    exception_type = excinfo[0]
+    exception_value = excinfo[1]
+    # If shutil.rmtree encounters a symbolic link on Windows, os.listdir will
+    # fail with a WindowsError exception with an ENOENT errno (i.e., file not
+    # found).  We'll ignore that error.  Note that WindowsError is not defined
+    # for non-Windows platforms, so we use OSError (of which it is a subclass)
+    # to avoid lint complaints about an undefined global on non-Windows
+    # platforms.
+    if (function is os.listdir) and issubclass(exception_type, OSError):
+      if exception_value.errno == errno.ENOENT:
+        # File does not exist, and we're trying to delete, so we can ignore the
+        # failure.
+        print "WARNING:  Failed to list %s during rmtree.  Ignoring.\n" % path
+      else:
+        raise
+    else:
+      raise
+
   for root, dirs, files in os.walk(file_path, topdown=False):
     # For POSIX:  making the directory writable guarantees removability.
     # Windows will ignore the non-read-only bits in the chmod value.
@@ -273,7 +305,8 @@ def RemoveDirectory(*path):
     for name in files:
       remove_with_retry(os.remove, os.path.join(root, name))
     for name in dirs:
-      remove_with_retry(shutil.rmtree, os.path.join(root, name))
+      remove_with_retry(lambda p: shutil.rmtree(p, onerror=RmTreeOnError),
+                        os.path.join(root, name))
 
   remove_with_retry(os.rmdir, file_path)
 
