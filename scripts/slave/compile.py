@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -15,10 +15,14 @@ import optparse
 import os
 import re
 import shutil
+import socket
 import sys
 
 from common import chromium_utils
 from slave import slave_utils
+
+
+COMPILE_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def ReadHKLMValue(path, value):
@@ -73,7 +77,7 @@ def main_xcode(options, args):
   # of gcc and the SDKs, so a different set of hosts is needed for each
   # toolchain.
   uname_tuple = os.uname()
-  full_hostname = uname_tuple[1]
+  full_hostname = socket.getfqdn()
   os_revision = uname_tuple[2]
   split_full_hostname = full_hostname.split('.', 2)
   env = os.environ.copy()
@@ -167,12 +171,10 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   cpp = 'g++'
 
   # Test if we can use distcc.
-  this_directory = os.path.dirname(os.path.abspath(__file__))
-  distcc_hosts_file = os.path.join(this_directory, 'linux_distcc_hosts',
+  distcc_hosts_file = os.path.join(COMPILE_SCRIPT_DIR, 'linux_distcc_hosts',
                                    'hosts')
   if os.path.exists('/usr/bin/distcc') and os.path.exists(distcc_hosts_file):
-    uname_tuple = os.uname()
-    full_hostname = uname_tuple[1]
+    full_hostname = socket.getfqdn()
     split_full_hostname = full_hostname.split('.', 2)
     if len(split_full_hostname) >= 3:
       hostname_only = split_full_hostname[0]
