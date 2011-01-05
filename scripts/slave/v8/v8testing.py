@@ -49,6 +49,10 @@ def main():
   option_parser.add_option('', '--platform',
                            default=default_platform,
                            help='specify platform [default: %%default]')
+  option_parser.add_option('', '--crankshaft',
+                           default=None,
+                           help='Run tests with --crankshaft flag '
+                                '[default: %default]')
 
   options, args = option_parser.parse_args()
   if args:
@@ -76,7 +80,7 @@ def main():
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
-  elif(options.simulator):
+  elif (options.simulator):
     cmd = ['python', 'tools/test.py',
            simultaneous,
            '--simulator', options.simulator,
@@ -92,8 +96,10 @@ def main():
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
-  if(options.arch == 'arm'):
+  if (options.arch == 'arm'):
     cmd.extend(['--timeout=600'])
+  if (options.crankshaft):
+    cmd.extend(['--crankshaft'])
   return chromium_utils.RunCommand(cmd)
 
 
