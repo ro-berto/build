@@ -550,7 +550,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
-                              src_base=None):
+                              src_base=None,
+                              suite=None):
     """Adds a step to run PyAuto functional tests.
 
     Args:
@@ -578,7 +579,8 @@ class ChromiumCommands(commands.FactoryCommands):
       # Run thru runtest.py on linux to launch virtual x server
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
                                                   [pyauto_script, '-v'])
-    pyauto_functional_cmd.append('--suite=CONTINUOUS')
+    if suite:
+      pyauto_functional_cmd.append('--suite=%s' % suite)
     self.AddTestStep(retcode_command.ReturnCodeCommand,
                      test_name,
                      pyauto_functional_cmd,

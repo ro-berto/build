@@ -300,7 +300,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # PyAuto functional tests.
     if R('pyauto_functional_tests'):
-      f.AddPyAutoFunctionalTest('pyauto_functional_tests')
+      f.AddPyAutoFunctionalTest('pyauto_functional_tests', suite='CONTINUOUS')
     elif R('pyauto_official_tests'):
       # Mapping from self._target_platform to a chrome-*.zip
       platmap = {'win32': 'win32',
