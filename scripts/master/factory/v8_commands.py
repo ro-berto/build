@@ -17,7 +17,7 @@ class V8Commands(commands.FactoryCommands):
   """Encapsulates methods to add v8 commands to a buildbot factory."""
 
   def __init__(self, factory=None, target=None, build_dir=None,
-               target_platform=None, target_arch=None):
+               target_platform=None, target_arch=None, crankshaft=False):
 
     commands.FactoryCommands.__init__(self, factory, target, build_dir, target_platform)
 
@@ -38,6 +38,11 @@ class V8Commands(commands.FactoryCommands):
     self._arch = None
     if target_arch:
       self._arch = target_arch
+
+    if crankshaft:
+      self._crankshaft = crankshaft
+    else:
+      self._crankshaft = None
 
     if self._target_platform == 'win32':
       # Override to use the right python
@@ -65,6 +70,8 @@ class V8Commands(commands.FactoryCommands):
       cmd += ['--simulator', simulator]
     if (self._arch):
       cmd += ['--arch', self._arch]
+    if (self._crankshaft):
+      cmd += ['--crankshaft', 'on']
     self.AddTestStep(shell.ShellCommand,
                      'Check', cmd,
                      workdir='build/bleeding_edge/')
@@ -79,6 +86,8 @@ class V8Commands(commands.FactoryCommands):
       cmd += ['--arch', self._arch]
     if (simulator):
       cmd += ['--simulator', simulator]
+    if (self._crankshaft):
+      cmd += ['--crankshaft', 'on']
     self.AddTestStep(shell.ShellCommand,
                      'ES5-Conform',
                      cmd,
@@ -97,6 +106,8 @@ class V8Commands(commands.FactoryCommands):
     if simulator:
       mozilla_timeout = 1200
       cmd += ['--simulator', simulator]
+    if (self._crankshaft):
+      cmd += ['--crankshaft', 'on']
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
                      timeout=mozilla_timeout, workdir='build/bleeding_edge/')
 
@@ -110,6 +121,8 @@ class V8Commands(commands.FactoryCommands):
       cmd += ['--arch', self._arch]
     if (simulator):
       cmd += ['--simulator', simulator]
+    if (self._crankshaft):
+      cmd += ['--crankshaft', 'on']
     self.AddTestStep(shell.ShellCommand, 'Sputnik', cmd,
                      workdir='build/bleeding_edge/')
 

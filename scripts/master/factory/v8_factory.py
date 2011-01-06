@@ -54,7 +54,8 @@ class V8Factory(gclient_factory.GClientFactory):
                                             target_platform=target_platform)
 
   @staticmethod
-  def _AddTests(factory_cmd_obj, tests, mode=None, factory_properties=None):
+  def _AddTests(factory_cmd_obj, tests, mode=None, factory_properties=None,
+                target_arch=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
     factory_properties = factory_properties or {}
 
@@ -74,17 +75,21 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8Mozilla()
 
     if R('sputnik'): f.AddV8Sputnik()
-    if R('arm'):
-      f.AddV8Testing(simulator='arm')
-      f.AddV8ES5Conform(simulator='arm')
-      f.AddV8Mozilla(simulator='arm')
-      f.AddV8Sputnik(simulator='arm')
+    if target_arch == 'arm':
+      if R('v8testing'):
+        f.AddV8Testing(simulator='arm')
+      if R('v8_es5conform'):
+        f.AddV8ES5Conform(simulator='arm')
+      if R('mozilla'):
+        f.AddV8Mozilla(simulator='arm')
+      if R('sputnik'):
+        f.AddV8Sputnik(simulator='arm')
 
 
   def V8Factory(self, target='release', clobber=False, tests=None, mode=None,
                 slave_type='BuilderTester', options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
-                target_arch=None):
+                target_arch=None, crankshaft=False):
     tests = tests or []
     factory_properties = factory_properties or {}
 
@@ -123,7 +128,8 @@ class V8Factory(gclient_factory.GClientFactory):
                                         target,
                                         '',
                                         self._target_platform,
-                                        target_arch)
+                                        target_arch,
+                                        crankshaft)
     if factory_properties.get('archive_build'):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))
