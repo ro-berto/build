@@ -23,12 +23,16 @@ class ChromeOSCommands(commands.FactoryCommands):
                                       target_platform)
 
     # Where the chromium slave scripts are.
-    self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
-    self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
+    self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
+                                             'build_internal', 'scripts',
+                                             'slave')
     self._build_tool = '/bin/bash'
     self._build_dir = self.PathJoin('build', build_dir)
     self._target_arch = target_arch
     self._official_build = official_build
+                                     
+    self._wait_for_bvt_tool = self.PathJoin(self._private_script_dir,
+                                            'wait_for_bvt.sh')
 
     # If official build, change enter_chroot command line
     self._enter_chroot = ['./enter_chroot.sh']
@@ -75,9 +79,10 @@ class ChromeOSCommands(commands.FactoryCommands):
 
   def AddChromeOSCopyConfigStep(self, bot_id, clobber=False, mode=None,
                                 options=None, timeout=1200):
-    # TODO: don't hard-code script path, but _private_script_dir above doesn't
-    # seem to be working...
-    cmd = ['/b/scripts/private/chromeos_dev_config.sh', bot_id]
+    # Using full path because the workdir is set to something else than build,
+    # so all our relative paths are broken.
+    # TODO: Modify script to accept a build_dir param and "cd" to it instead.
+    cmd = ['/b/build_internal/scripts/slave/chromeos_dev_config.sh', bot_id]
     self._factory.addStep(shell.ShellCommand,
                           name='configure build',
                           description='configure build',
@@ -392,8 +397,7 @@ class ChromeOSCommands(commands.FactoryCommands):
                                    timeout=5400):
     # Add step to execute wait for bvt script, timeout is set at 1.5hrs,
     # imaging + bvt should average around an hour, 30 mins for padding.
-    cmd = [self._private_script_dir + '/wait_for_bvt.sh',
-           WithProperties("%(main_buildnumber)s")]
+    cmd = [self._wait_for_bvt_tool, WithProperties("%(main_buildnumber)s")]
 
     self._factory.addStep(LinkShellCommand,
                           name='bvt',
