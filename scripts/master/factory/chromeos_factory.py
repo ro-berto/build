@@ -190,7 +190,7 @@ class CbuildbotFactory(object):
   # pylint: disable=W0622
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
                triagelog=None, params='', timeout=9000, variant=None,
-               is_master=False,
+               is_master=False, branch='master',
                crostools_repo=_default_crostools,
                crosutils_repo=_default_crosutils):
     self.buildroot = buildroot
@@ -199,6 +199,7 @@ class CbuildbotFactory(object):
     self.timeout = timeout
     self.variant = variant
     self.board = board
+    self.branch = branch
     self.f_cbuild = chromeos_build_factory.BuildFactory()
     self.add_boiler_plate_steps()
     self.is_master = is_master
@@ -225,9 +226,10 @@ class CbuildbotFactory(object):
     Args:
       repo: ssh: uri for the repo to be checked out
     """
+    print self.branch
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
     clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
-    clear_and_clone_cmd += '/usr/bin/git clone %s' % repo
+    clear_and_clone_cmd += '/usr/bin/git clone %s -b %s' % (repo, self.branch)
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=clear_and_clone_cmd,
