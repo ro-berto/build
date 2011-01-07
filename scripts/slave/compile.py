@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -15,10 +15,14 @@ import optparse
 import os
 import re
 import shutil
+import socket
 import sys
 
 from common import chromium_utils
 from slave import slave_utils
+
+
+COMPILE_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def ReadHKLMValue(path, value):
@@ -73,7 +77,7 @@ def main_xcode(options, args):
   # of gcc and the SDKs, so a different set of hosts is needed for each
   # toolchain.
   uname_tuple = os.uname()
-  full_hostname = uname_tuple[1]
+  full_hostname = socket.getfqdn()
   os_revision = uname_tuple[2]
   split_full_hostname = full_hostname.split('.', 2)
   env = os.environ.copy()
@@ -166,25 +170,30 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   cc = 'gcc'
   cpp = 'g++'
 
-  # Test if we can use distcc.
-  this_directory = os.path.dirname(os.path.abspath(__file__))
-  distcc_hosts_file = os.path.join(this_directory, 'linux_distcc_hosts',
-                                   'hosts')
-  if os.path.exists('/usr/bin/distcc') and os.path.exists(distcc_hosts_file):
-    uname_tuple = os.uname()
-    full_hostname = uname_tuple[1]
-    split_full_hostname = full_hostname.split('.', 2)
-    if len(split_full_hostname) >= 3:
-      hostname_only = split_full_hostname[0]
-      name_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname_only)
-      if name_match:
-        env['DISTCC_DIR'] = os.path.dirname(distcc_hosts_file)
+  # Test if we can use distcc.  Fastbuild servers currently support uname()
+  # machine results of i686 or x86_64.
+  distcc_bin_exists = os.path.exists('/usr/bin/distcc')
+  machine = os.uname()[4]
+  distcc_hosts_path = os.path.join(COMPILE_SCRIPT_DIR, 'linux_distcc_hosts',
+                                   machine)
+  hostname = socket.getfqdn().split('.')[0]
+  hostname_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname)
+  if (distcc_bin_exists and os.path.exists(distcc_hosts_path) and
+      hostname_match):
+    distcc_file = open(distcc_hosts_path, 'r')
+    distcc_text = distcc_file.read().strip()
+    distcc_file.close()
+    env['DISTCC_HOSTS'] = ' '.join(distcc_text.splitlines())
+    print('Distcc enabled: ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
 
-        cc = 'distcc ' + cc
-        cpp = 'distcc ' + cpp
-        distcc_jobs = 12
-        if jobs < distcc_jobs:
-          jobs = distcc_jobs
+    cc = 'distcc ' + cc
+    cpp = 'distcc ' + cpp
+    distcc_jobs = 12
+    if jobs < distcc_jobs:
+      jobs = distcc_jobs
+  else:
+    print('Distcc disabled... distcc exists: %s; machine: %s, hostname: %s' % (
+        distcc_bin_exists, machine, hostname))
 
   # Test if we can use ccache.
   if os.path.exists('/usr/bin/ccache'):
