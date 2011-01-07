@@ -88,10 +88,11 @@
       <td width="72%">
         <table width="100%">
           <script language="javascript">
-            var chrome = "builder=Win&builder=Win+Reliability&builder=Mac&builder=Linux&builder=Linux+x64&builder=Arm&builder=Win+Builder&builder=XP+Tests&builder=Vista+Tests&builder=NACL+Tests&builder=NACL+Tests+%28x64%29&builder=Chrome+Frame+Tests+%28ie6%29&builder=Chrome+Frame+Tests+%28ie7%29&builder=Chrome+Frame+Tests+%28ie8%29&builder=Win+Builder+%28dbg%29&builder=XP+Tests+%28dbg%29%281%29&builder=XP+Tests+%28dbg%29%282%29&builder=XP+Tests+%28dbg%29%283%29&builder=XP+Tests+%28dbg%29%284%29&builder=Vista+Tests+%28dbg%29%281%29&builder=Vista+Tests+%28dbg%29%282%29&builder=Vista+Tests+%28dbg%29%283%29&builder=Vista+Tests+%28dbg%29%284%29&builder=Interactive+Tests+%28dbg%29&builder=Win+Builder+%28dbg%29%28shared%29&builder=Mac+Builder&builder=Mac10.5+Tests&builder=Mac10.6+Tests&builder=Mac+Builder+%28dbg%29&builder=Mac+10.5+Tests+%28dbg%29%281%29&builder=Mac+10.5+Tests+%28dbg%29%283%29&builder=Mac+10.6+Tests+%28dbg%29%281%29&builder=Mac+10.6+Tests+%28dbg%29%282%29&builder=Mac+10.6+Tests+%28dbg%29%283%29&builder=Linux+Builder+x64&builder=Linux+Tests+x64&builder=Linux+Builder+%28dbg%29&builder=Linux+Tests+%28dbg%29%281%29&builder=Linux+Tests+%28dbg%29%282%29&builder=Linux+Builder+%28dbg-shlib%29&builder=Linux+Tests+%28dbg-shlib%29&builder=Linux+Builder+%28ChromiumOS%29&builder=Linux+Builder+%28ChromiumOS+dbg%29&builder=Linux+Builder+%28Views+dbg%29&builder=Arm+%28dbg%29"
+            var chromium = "builder=Win&builder=Win+Reliability&builder=Mac&builder=Linux&builder=Linux+x64&builder=Arm&builder=Win+Builder&builder=XP+Tests&builder=Vista+Tests&builder=NACL+Tests&builder=NACL+Tests+%28x64%29&builder=Chrome+Frame+Tests+%28ie6%29&builder=Chrome+Frame+Tests+%28ie7%29&builder=Chrome+Frame+Tests+%28ie8%29&builder=Win+Builder+%28dbg%29&builder=XP+Tests+%28dbg%29%281%29&builder=XP+Tests+%28dbg%29%282%29&builder=XP+Tests+%28dbg%29%283%29&builder=XP+Tests+%28dbg%29%284%29&builder=Vista+Tests+%28dbg%29%281%29&builder=Vista+Tests+%28dbg%29%282%29&builder=Vista+Tests+%28dbg%29%283%29&builder=Vista+Tests+%28dbg%29%284%29&builder=Interactive+Tests+%28dbg%29&builder=Win+Builder+%28dbg%29%28shared%29&builder=Mac+Builder&builder=Mac10.5+Tests&builder=Mac10.6+Tests&builder=Mac+Builder+%28dbg%29&builder=Mac+10.5+Tests+%28dbg%29%281%29&builder=Mac+10.5+Tests+%28dbg%29%283%29&builder=Mac+10.6+Tests+%28dbg%29%281%29&builder=Mac+10.6+Tests+%28dbg%29%282%29&builder=Mac+10.6+Tests+%28dbg%29%283%29&builder=Linux+Builder+x64&builder=Linux+Tests+x64&builder=Linux+Builder+%28dbg%29&builder=Linux+Tests+%28dbg%29%281%29&builder=Linux+Tests+%28dbg%29%282%29&builder=Linux+Builder+%28dbg-shlib%29&builder=Linux+Tests+%28dbg-shlib%29&builder=Linux+Builder+%28ChromiumOS%29&builder=Linux+Builder+%28ChromiumOS+dbg%29&builder=Linux+Builder+%28Views+dbg%29&builder=Arm+%28dbg%29"
             var webkit = "builder=Webkit+Win+Builder&builder=Webkit+Win&builder=Webkit+Win+Builder+(dbg)&builder=Webkit+Win+(dbg)(1)&builder=Webkit+Win+(dbg)(2)&builder=Webkit+Win+(dbg)(3)&builder=Webkit+Mac+Builder&builder=Webkit+Mac10.5&builder=Webkit+Mac+Builder+(dbg)&builder=Webkit+Mac10.5+(dbg)(1)&builder=Webkit+Mac10.5+(dbg)(2)&builder=Webkit+Mac10.5+(dbg)(3)&builder=Webkit+Linux&builder=Webkit+Linux+Builder+(dbg)&builder=Webkit+Linux+Tests+(dbg)(1)&builder=Webkit+Linux+Tests+(dbg)(2)&builder=Webkit+Linux+Tests+(dbg)(3)"
             var memory = ""
             var perf = ""
+            var chrome = ""
 
             var bar = "http://build.chromium.org/p/chromium/horizontal_one_box_per_builder"
             var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder"
@@ -111,7 +112,7 @@
               document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td  colspan=3 width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
 
-            DisplayBar(waterfall, bar, chrome, "Chromium");
+            DisplayBar(waterfall, bar, chromium, "Chromium");
             DisplayBar(waterfall, bar, webkit, "Webkit");
             DisplayBar(waterfall_perf, bar_perf, perf, "Perf");
 
