@@ -594,8 +594,9 @@ class WebStatus(service.MultiService):
             root.putChild(name, child_resource)
 
         status = self.getStatus()
-        root.putChild("rss", Rss20StatusResource(status))
-        root.putChild("atom", Atom10StatusResource(status))
+        # Disabled from Chromium.
+        # root.putChild("rss", Rss20StatusResource(status))
+        # root.putChild("atom", Atom10StatusResource(status))
         root.putChild("json", JsonStatusResource(status))
 
         self.site.resource = root
