@@ -142,19 +142,13 @@ Oops, this test crashed!
 
 VALGRIND_HASH = 'B254345E4D3B6A00'
 
-VALGRIND_SUPPRESSION = """
+VALGRIND_SUPPRESSION = """Suppression (error hash=#%(hash)s#):
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
    fun:_Znw*
    fun:_ZN31NavigationControllerTest_Reload8TestBodyEv
-}"""
-
-VALGRIND_ERROR = """
-Suppression (error hash=#%(hash)s#):
-%(suppression)s
-""" % {'hash'       : VALGRIND_HASH,
-       'suppression': VALGRIND_SUPPRESSION}
+}""" % {'hash' : VALGRIND_HASH}
 
 TEST_DATA_VALGRIND = """
 [==========] Running 5 tests from 2 test cases.
@@ -181,7 +175,7 @@ TEST_DATA_VALGRIND = """
 
 %(suppression)s
 program finished with exit code 255
-""" % {'suppression': VALGRIND_ERROR}
+""" % {'suppression': VALGRIND_SUPPRESSION}
 
 
 class TestObserverTests(unittest.TestCase):

@@ -240,7 +240,7 @@ class TestObserver(buildstep.LogLineObserver):
         self._RecordError(line, 'suppression reported more than once')
       self._suppressions[suppression_hash] = []
       self._current_suppression_hash = suppression_hash
-      self._current_suppression = []
+      self._current_suppression = [line]
       return
 
     # Is it the end of a valgrind suppression?

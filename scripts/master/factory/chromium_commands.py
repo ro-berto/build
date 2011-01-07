@@ -511,7 +511,7 @@ class ChromiumCommands(commands.FactoryCommands):
                 '--tool', tool_name])
 
     test_name = 'memory test: %s' % test_name
-    self.AddTestStep(gtest_command.GTestCommand, test_name, cmd,
+    self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
                      timeout=timeout)
 
   def AddHeapcheckTest(self, test_name, timeout=1200):
