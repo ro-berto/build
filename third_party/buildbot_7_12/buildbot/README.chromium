@@ -81,3 +81,21 @@ the JSON output.
          result['eta'] = self.getETA()
          result['steps'] = [bss.asDict() for bss in self.steps]
          if self.getCurrentStep():
+
+
+The following patch disables rss and atom output.
+
+--- a/third_party/buildbot_7_12/buildbot/status/web/baseweb.py
++++ b/third_party/buildbot_7_12/buildbot/status/web/baseweb.py
+@@ -594,8 +594,9 @@ class WebStatus(service.MultiService):
+             root.putChild(name, child_resource)
+
+         status = self.getStatus()
+-        root.putChild("rss", Rss20StatusResource(status))
+-        root.putChild("atom", Atom10StatusResource(status))
++        # Disabled from Chromium.
++        # root.putChild("rss", Rss20StatusResource(status))
++        # root.putChild("atom", Atom10StatusResource(status))
+         root.putChild("json", JsonStatusResource(status))
+
+         self.site.resource = root
