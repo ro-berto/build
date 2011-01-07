@@ -184,7 +184,8 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     distcc_text = distcc_file.read().strip()
     distcc_file.close()
     env['DISTCC_HOSTS'] = ' '.join(distcc_text.splitlines())
-    print('Distcc enabled: ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
+    print('Distcc enabled')
+    print('ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
 
     cc = 'distcc ' + cc
     cpp = 'distcc ' + cpp
@@ -192,7 +193,7 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     if jobs < distcc_jobs:
       jobs = distcc_jobs
   else:
-    print('Distcc disabled... distcc exists: %s; machine: %s, hostname: %s' % (
+    print('Distcc disabled -- distcc exists: %s; machine: %s, hostname: %s' % (
         distcc_bin_exists, machine, hostname))
 
   # Test if we can use ccache.
