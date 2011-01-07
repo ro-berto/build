@@ -6,11 +6,9 @@
 
 This is based on commands.py and adds chromium-specific commands."""
 
-import datetime
 import logging
 import os
 import re
-import uuid
 
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
@@ -764,24 +762,21 @@ class ChromiumCommands(commands.FactoryCommands):
                                arg_list=['--use-gpu-in-tests'])
 
     # Setup environment for running gsutil, a Google Storage utility.
-    gsutil = 'gsutil.bat' if chromium_utils.IsWindows() else 'gsutil'
+    gsutil = 'gsutil'
+    if self._target_platform.startswith('win'):
+      gsutil = 'gsutil.bat'
     env = {}
     env['GSUTIL'] = os.path.join(self._script_dir, gsutil)
 
-    # Create a random unique ID, prefixed with month and day to allow for
-    # deletion by age.
-    run_id = datetime.date.today().strftime('%m%d') + '/'
-    run_id += str(uuid.uuid4())
     gpu_data = self.PathJoin('src', 'chrome', 'test', 'data', 'gpu')
-
     cmd = [self._python,
            self._gpu_archive_tool,
            '--run-id',
-           run_id,
+           WithProperties('%(got_revision)s'),
            '--generated-dir',
            self.PathJoin(gpu_data, 'generated'),
            '--gpu-reference-dir',
            self.PathJoin(gpu_data, 'gpu_reference'),
            '--sw-reference-dir',
            self.PathJoin(gpu_data, 'sw_reference')]
-    self.AddTestStep(shell.ShellCommand, 'Archive Test Results', cmd, env=env)
+    self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)

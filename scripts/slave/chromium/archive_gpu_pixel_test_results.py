@@ -29,11 +29,11 @@ def CopyToGoogleStorage(src, dst):
     src: path to file to be copied
     dst: Google Storage destination url (i.e., gs://...)
   Returns:
-    error code for system
+    whether the copy was successful
   """
   if not os.path.exists(src):
     print 'No such file', src
-    return 2
+    return False
   gsutil = os.environ.get('GSUTIL', 'gsutil')
   # gsutil will look in the $HOME directory for the config file. Set the
   # environment variable if needed.
@@ -42,7 +42,9 @@ def CopyToGoogleStorage(src, dst):
     os.environ['HOME'] = os.path.expanduser('~')
   retcode = subprocess.call([gsutil, 'cp', '-a', 'public-read', src, dst])
   os.environ = old_env
-  return retcode
+  if retcode == 0:
+    return True
+  return False
 
 
 def Archive(run_id, gen_dir, gpu_ref_dir, sw_ref_dir):
@@ -116,10 +118,13 @@ def main():
     print 'All command options are required. Use --help.'
     return 1
 
-  retcode = Archive(options.run_id,
-                    options.generated_dir,
-                    options.gpu_reference_dir,
-                    options.sw_reference_dir)
+  if Archive(options.run_id,
+             options.generated_dir,
+             options.gpu_reference_dir,
+             options.sw_reference_dir):
+    retcode = 0
+  else:
+    retcode = 2
   chromium_utils.RemoveDirectory(options.generated_dir)
   return retcode
 
