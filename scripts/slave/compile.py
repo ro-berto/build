@@ -162,8 +162,6 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     # as they don't work with clang.
     command.append('-j%d' % jobs)
     command.append('-r')
-    # For now only build targets we know work.
-    command.extend(['base_unittests', 'chrome'])
     return
 
   # Use gcc and g++ by default.
