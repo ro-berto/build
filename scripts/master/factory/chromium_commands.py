@@ -766,7 +766,7 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_platform.startswith('win'):
       gsutil = 'gsutil.bat'
     env = {}
-    env['GSUTIL'] = os.path.join(self._script_dir, gsutil)
+    env['GSUTIL'] = self.PathJoin(self._script_dir, gsutil)
 
     gpu_data = self.PathJoin('src', 'chrome', 'test', 'data', 'gpu')
     cmd = [self._python,
