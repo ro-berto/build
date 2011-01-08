@@ -568,10 +568,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                          mode=None, slave_type='Tester', options=None,
                          compile_timeout=1200, build_url=None, project=None,
                          factory_properties=None):
-    self._solutions.append(gclient_factory.GClientSolution(
-        'http://src.chromium.org/svn/trunk/deps/gpu_reference/' +
-            'gpu_reference.DEPS',
-        'gpu_reference.DEPS'))
+    # Make sure the solution is not already there.
+    if 'gpu_reference.DEPS' not in [s.name for s in self._solutions]:
+      self._solutions.append(gclient_factory.GClientSolution(
+          'http://src.chromium.org/svn/trunk/deps/gpu_reference/' +
+              'gpu_reference.DEPS',
+          'gpu_reference.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
