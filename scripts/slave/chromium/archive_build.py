@@ -113,8 +113,11 @@ class StagerBase(object):
     self.options = options
     self._src_dir = os.path.abspath(options.src_dir)
     self._chrome_dir = os.path.join(self._src_dir, 'chrome')
+    # TODO: This scode should not be grabbing so deeply into WebKit.
+    #       Worse, this code ends up looking at top-of-tree WebKit
+    #       instead of the revision in DEPS.
     self._webkit_dir = os.path.join(self._src_dir, 'third_party', 'WebKit',
-                                    'WebCore')
+                                    'Source', 'WebCore')
     self._v8_dir = os.path.join(self._src_dir, 'v8')
     # TODO: need to get the build *output* directory passed in instead so Linux
     # and Mac don't have to walk up a directory to get to the right directory.
