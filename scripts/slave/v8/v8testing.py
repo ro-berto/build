@@ -49,6 +49,12 @@ def main():
   option_parser.add_option('', '--platform',
                            default=default_platform,
                            help='specify platform [default: %%default]')
+  option_parser.add_option('', '--shard_count',
+                           default=1,
+                           help='Specify shard count [default: %%default]')
+  option_parser.add_option('', '--shard_run',
+                           default=1,
+                           help='Specify shard count [default: %%default]')
   option_parser.add_option('', '--crankshaft',
                            default=None,
                            help='Run tests with --crankshaft flag '
@@ -59,28 +65,26 @@ def main():
     option_parser.error('Unsupported arguments: %s' % args)
 
   simultaneous = '-j8'
-  if (options.platform == 'win'):
-    simultaneous = ''
-  if (options.platform == 'arm'):
+  if options.platform in ('win' 'arm'):
     simultaneous = ''
 
-  if (options.testname == 'leak'):
+  if options.testname == 'leak':
     cmd = ['python', 'tools/test.py', '--no-build', '--mode',
            'debug', '--progress', 'verbose', '--timeout', '180',
            '--time', '-Snapshot=on', '--special-command',
            '"@ --nopreallocate-message-memory"',
            '--valgrind', 'mjsunit/leakcheck',
            'mjsunit/regress/regress-1134697', 'mjsunit/number-tostring-small']
-  elif (options.testname == 'presubmit'):
+  elif options.testname == 'presubmit':
     cmd = ['python', 'tools/presubmit.py']
-  elif (options.testname):
+  elif options.testname:
     cmd = ['python', 'tools/test.py',
            simultaneous, options.testname,
            '--progress=verbose',
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
-  elif (options.simulator):
+  elif options.simulator:
     cmd = ['python', 'tools/test.py',
            simultaneous,
            '--simulator', options.simulator,
@@ -96,10 +100,14 @@ def main():
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
-  if (options.arch == 'arm'):
+  if options.arch == 'arm':
     cmd.extend(['--timeout=600'])
-  if (options.crankshaft):
+  if options.crankshaft:
     cmd.extend(['--crankshaft'])
+  if options.shard_count > 1:
+    cmd.extend(['--shard-count', options.shard_count,
+                '--shard-run', options.shard_run])
+
   return chromium_utils.RunCommand(cmd)
 
 

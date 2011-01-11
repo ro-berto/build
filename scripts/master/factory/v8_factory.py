@@ -89,7 +89,8 @@ class V8Factory(gclient_factory.GClientFactory):
   def V8Factory(self, target='release', clobber=False, tests=None, mode=None,
                 slave_type='BuilderTester', options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
-                target_arch=None, crankshaft=False):
+                target_arch=None, crankshaft=False, shard_count=1,
+                shard_run=1):
     tests = tests or []
     factory_properties = factory_properties or {}
 
@@ -129,7 +130,9 @@ class V8Factory(gclient_factory.GClientFactory):
                                         '',
                                         self._target_platform,
                                         target_arch,
-                                        crankshaft)
+                                        crankshaft,
+                                        shard_count,
+                                        shard_run)
     if factory_properties.get('archive_build'):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))
