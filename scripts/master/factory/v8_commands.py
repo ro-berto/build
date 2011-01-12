@@ -82,7 +82,7 @@ class V8Commands(commands.FactoryCommands):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
     cmd = self.GetV8TestingCommand(simulator)
-    cmd += ['-testname', 'es5conform']
+    cmd += ['--testname', 'es5conform']
     self.AddTestStep(shell.ShellCommand,
                      'ES5-Conform',
                      cmd,
