@@ -535,7 +535,7 @@ class ChromiumCommands(commands.FactoryCommands):
                 '--test', test_name])
 
     test_name = 'heapcheck test: %s' % test_name
-    self.AddTestStep(retcode_command.ReturnCodeCommand, test_name, cmd,
+    self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
                      timeout=timeout)
 
   def AddWineValgrindTest(self, test_name, timeout=1200):
