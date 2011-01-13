@@ -226,13 +226,14 @@ class CbuildbotFactory(object):
     Args:
       repo: ssh: uri for the repo to be checked out
     """
-    print self.branch
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
     clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
-    clear_and_clone_cmd += '/usr/bin/git clone %s -b %s' % (repo, self.branch)
+    clear_and_clone_cmd += '/usr/bin/git clone %s;cd %s;' % (repo,
+                                                             git_checkout_dir)
+    clear_and_clone_cmd += 'git checkout %(branch)s' 
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
-                          command=clear_and_clone_cmd,
+                          command=WithProperties(clear_and_clone_cmd),
                           name=msg,
                           description=msg)
 
