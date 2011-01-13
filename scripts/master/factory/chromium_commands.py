@@ -426,9 +426,7 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddBasicGTestTestStep('views_unittests', factory_properties)
 
   def AddSyncIntegrationTests(self, factory_properties):
-    password_path = self.PathJoin('..', 'sync_password')
-    options = ['--test-terminate-timeout=300000',
-               '--password-file-for-test=%s' % password_path]
+    options = ['--test-terminate-timeout=120000']
 
     self.AddBasicGTestTestStep('sync_integration_tests', factory_properties, '',
                                options)
