@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -139,8 +139,9 @@ F('dbg_unit_2', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['ui', 'net'],
+    tests=['ui', 'net', 'browser_tests'],
     factory_properties={'ui_total_shards': 3, 'ui_shard_index': 1,
+                        'browser_total_shards': 3, 'browser_shard_index': 1,
                         'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
@@ -151,8 +152,9 @@ F('dbg_unit_3', win().ChromiumFactory(
       target='Debug',
       slave_type='Tester',
       build_url=dbg_archive,
-      tests=['ui', 'sandbox'],
+      tests=['ui', 'sandbox', 'browser_tests'],
       factory_properties={'ui_total_shards': 3, 'ui_shard_index': 2,
+                          'browser_total_shards': 3, 'browser_shard_index': 2,
                           'process_dumps': True,
                           'start_crash_handler': True,
                           'generate_gtest_json': True}))
@@ -165,6 +167,7 @@ F('dbg_unit_4', win().ChromiumFactory(
     build_url=dbg_archive,
     tests=['ui', 'browser_tests'],
     factory_properties={'ui_total_shards': 3, 'ui_shard_index': 3,
+                        'browser_total_shards': 3, 'browser_shard_index': 3,
                         'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))

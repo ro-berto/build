@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -431,6 +431,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('sync_integration_tests', factory_properties, '',
                                options)
 
+  def AddBrowserTests(self, factory_properties=None):
+    description = ''
+    options = ['--lib=browser_tests']
+
+    total_shards = factory_properties.get('browser_total_shards')
+    shard_index = factory_properties.get('browser_shard_index')
+
+    self.AddBasicGTestTestStep('browser_tests', factory_properties,
+                               description, options, total_shards=total_shards,
+                               shard_index=shard_index)
+
   def AddUITests(self, single_process, factory_properties=None):
     description = ''
     options = []
@@ -443,7 +454,7 @@ class ChromiumCommands(commands.FactoryCommands):
     shard_index = factory_properties.get('ui_shard_index')
 
     self.AddBasicGTestTestStep('ui_tests', factory_properties,
-                               description, options,  total_shards=total_shards,
+                               description, options, total_shards=total_shards,
                                shard_index=shard_index)
 
   def AddOmniboxTests(self, factory_properties=None):

@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -271,7 +271,7 @@ class FactoryCommands(object):
 
     Args:
       total_shards: Number of shards to split this test into.
-      shard_index: Shard to run.  Must be between 1 and ui_total_shards.
+      shard_index: Shard to run.  Must be between 1 and total_shards.
       generate_gtest_json: generate JSON results file after running the tests.
     """
     factory_properties = factory_properties or {}
