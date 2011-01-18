@@ -447,14 +447,8 @@ def main():
 
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
-    if options.test_type == 'browser_tests':
-      if options.shard_index != 3:
-        print 'browser_test on this host is disabled'
-        return
-      print 'browser_test sharding disabled, running all tests'
-    else:
-      os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
-      os.environ['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
+    os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
+    os.environ['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
 
   if options.results_directory:
     options.test_output_xml = os.path.normpath(os.path.join(
