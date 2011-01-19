@@ -509,6 +509,7 @@ twistd.pid
 /masters/master.tryserver.chromium/linux
 /masters/master.tryserver.chromium/linux_chromeos
 /masters/master.tryserver.chromium/linux_chromeos_valgrind
+/masters/master.tryserver.chromium/linux_clang
 /masters/master.tryserver.chromium/linux_coverage
 /masters/master.tryserver.chromium/linux_layout
 /masters/master.tryserver.chromium/linux_layout_rel
