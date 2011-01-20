@@ -106,8 +106,8 @@ def archive_layout(options, args):
                                     options.results_dir)[1]
 
   # Extract the build name of this slave (e.g., 'chrome-release') from its
-  # configuration file.
-  build_name = slave_utils.SlaveBuildName(chrome_dir)
+  # configuration file if not provided as a param.
+  build_name = options.builder_name or slave_utils.SlaveBuildName(chrome_dir)
 
   last_change = str(slave_utils.SubversionRevision(chrome_dir))
   print 'last change: %s' % last_change
