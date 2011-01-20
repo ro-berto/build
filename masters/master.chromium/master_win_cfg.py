@@ -60,6 +60,14 @@ F('rel_unit', win().ChromiumFactory(
 
 B('Vista Tests', 'rel_unit', 'testers|windows', 'win_rel_dep', auto_reboot=True)
 
+B('Win7 Sync', 'rel_sync', 'testers|windows', 'win_rel_dep')
+F('rel_sync', win().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=['sync_integration'],
+    factory_properties={'process_dumps': True,
+                        'start_crash_handler': True,}))
+
 B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_dep')
 F('rel_nacl', win().ChromiumFactory(
     slave_type='Tester',

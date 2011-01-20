@@ -59,6 +59,13 @@ F('rel_unit', mac().ChromiumFactory(
 
 B('Mac10.6 Tests', 'rel_unit', 'testers', 'mac_rel_dep')
 
+B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_dep')
+F('rel_sync', mac().ChromiumFactory(
+  slave_type='Tester',
+  build_url=rel_archive,
+  tests=['sync_integration'])
+)
+
 ################################################################################
 ## Debug
 ################################################################################
