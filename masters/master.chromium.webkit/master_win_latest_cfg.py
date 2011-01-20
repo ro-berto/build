@@ -127,7 +127,10 @@ B('Win Builder (dbg)', 'f_win_dbg',
 F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
-    project='all.sln;chromium_builder'))
+    project='all.sln;chromium_builder',
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+
 
 B('Win Shared Builder (dbg)', 'f_win_shared_dbg',
   scheduler='s7_chromium_dbg|s7_webkit_dbg')
