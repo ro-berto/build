@@ -156,7 +156,9 @@ def GenerateAndUploadJSONResults(gtest_results_map, options):
          options.test_results_server, options.test_type,
          options.master_name))
 
-  generator = JSONResultsGeneratorBase(
+  from webkitpy.layout_tests import port
+  port_obj = port.get()
+  generator = JSONResultsGeneratorBase(port_obj,
       options.builder_name, options.build_name, options.build_number,
       options.results_directory, options.builder_base_url,
       test_results_map,
