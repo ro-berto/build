@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -47,7 +47,7 @@ F('rel', linux().ChromiumFactory(
              'page_cycler_tests', 'printing_unittests', 'remoting_unittests',
              'startup_tests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
              'url_fetch_test', 'base_unittests', 'net_unittests',
-             'safe_browsing_tests']))
+             'safe_browsing_tests', 'sync_integration_tests']))
 
 #
 # Linux Rel testers
