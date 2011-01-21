@@ -344,6 +344,20 @@ class HelpResource(HtmlResource):
         return self.text
 
 
+class BuilderPendingBuildsJsonResource(JsonResource):
+    help = """Describe pending builds for a builder.
+"""
+    title = 'Builder'
+
+    def __init__(self, status, builder_status):
+        JsonResource.__init__(self, status)
+        self.builder_status = builder_status
+
+    def asDict(self, request):
+        # buildbot.status.builder.BuilderStatus
+        return [b.asDict() for b in self.builder_status.getPendingBuilds()]
+
+
 class BuilderJsonResource(JsonResource):
     help = """Describe a single builder.
 """
@@ -355,6 +369,9 @@ class BuilderJsonResource(JsonResource):
         self.putChild('builds', BuildsJsonResource(status, builder_status))
         self.putChild('slaves', BuilderSlavesJsonResources(status,
                                                            builder_status))
+        self.putChild(
+                'pendingBuilds',
+                BuilderPendingBuildsJsonResource(status, builder_status))
 
     def asDict(self, request):
         # buildbot.status.builder.BuilderStatus

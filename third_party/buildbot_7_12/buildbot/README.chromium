@@ -169,3 +169,56 @@ Add extra parameters to HttpStatusPush as a very basic authentication mechanism.
 
          def Success(result):
              """Queue up next push."""
+
+
+Add pendingBuilds
+--- a/third_party/buildbot_7_12/buildbot/status/builder.py
++++ b/third_party/buildbot_7_12/buildbot/status/builder.py
+@@ -2171,10 +2171,7 @@ class BuilderStatus(styles.Versioned):
+         result['cachedBuilds'] = cached_builds
+         result['currentBuilds'] = current_builds
+         result['state'] = self.getState()[0]
+-        # BuildRequestStatus doesn't have a number so display the SourceStamp.
+-        result['pendingBuilds'] = [
+-            b.getSourceStamp().asDict() for b in self.getPendingBuilds()
+-        ]
++        result['pendingBuilds'] = len(self.getPendingBuilds())
+         return result
+
+
+diff --git a/third_party/buildbot_7_12/buildbot/status/web/status_json.py b/third_party/buildbot_7_12/buildbot/status/web/status_json.
+index e3aaafe..6c272a6 100644
+--- a/third_party/buildbot_7_12/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_7_12/buildbot/status/web/status_json.py
+@@ -344,6 +344,20 @@ class HelpResource(HtmlResource):
+         return self.text
+
+
++class BuilderPendingBuildsJsonResource(JsonResource):
++    help = """Describe pending builds for a builder.
++"""
++    title = 'Builder'
++
++    def __init__(self, status, builder_status):
++        JsonResource.__init__(self, status)
++        self.builder_status = builder_status
++
++    def asDict(self, request):
++        # buildbot.status.builder.BuilderStatus
++        return [b.asDict() for b in self.builder_status.getPendingBuilds()]
++
++
+ class BuilderJsonResource(JsonResource):
+     help = """Describe a single builder.
+ """
+@@ -355,6 +369,9 @@ class BuilderJsonResource(JsonResource):
+         self.putChild('builds', BuildsJsonResource(status, builder_status))
+         self.putChild('slaves', BuilderSlavesJsonResources(status,
+                                                            builder_status))
++        self.putChild(
++                'pendingBuilds',
++                BuilderPendingBuildsJsonResource(status, builder_status))
+
+     def asDict(self, request):
+         # buildbot.status.builder.BuilderStatus
+
