@@ -122,7 +122,8 @@ B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg_for_dep',
 F('dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    project='all.sln;chromium_builder_tests'))
+    project='all.sln;chromium_builder_tests',
+    factory_properties={'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 #
 # Win Dbg Unit testers
