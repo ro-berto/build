@@ -115,7 +115,7 @@ def archive(options, args):
     if x in zip_file_list:
       zip_file_list.remove(x)
 
-  if chromium_utils.IsWindows():
+  if chromium_utils.IsWindows() and options.target is 'Release':
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.
