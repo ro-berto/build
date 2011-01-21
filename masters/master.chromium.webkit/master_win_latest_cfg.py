@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -62,7 +62,7 @@ B('Win Reliability Builder', 'f_win_reliability_rel',
   scheduler='s7_chromium_rel|s7_webkit_rel')
 F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
     clobber=True,
-    tests=['automated_ui', 'reliability'],
+    tests=['reliability'],
     project='all.sln',
     factory_properties={'archive_build': True,
                         'use_build_number': True}))
@@ -94,7 +94,7 @@ F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
 B('Win Reliability', 'win_reliability', scheduler='reliability')
 # The Windows reliability bot runs on Linux because it only needs to transfer
 # the build from one part of the network to another, and it is easier on Linux.
-F('win_reliability', linux().ReliabilityTestsFactory())
+F('win_reliability', linux().ReliabilityTestsFactory('win_webkit_canary'))
 
 ################################################################################
 ## Debug
