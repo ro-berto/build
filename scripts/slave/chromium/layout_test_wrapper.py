@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -79,6 +79,7 @@ def layout_test(options, args):
     command.extend(['--build-number', options.build_number])
   command.extend(['--master-name', slave_utils.GetActiveMaster()])
   command.extend(['--build-name', slave_name])
+  command.extend(['--build-directory', build_dir])
   if options.test_results_server:
     command.extend(['--test-results-server', options.test_results_server])
 
