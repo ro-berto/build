@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -20,7 +20,7 @@ def win(): return chromium_factory.ChromiumFactory('src/webkit', 'win32')
 ## Release
 ################################################################################
 
-defaults['category'] = '1webkit win pinned'
+defaults['category'] = '1webkit win deps'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
