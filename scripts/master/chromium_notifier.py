@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -115,6 +115,11 @@ class ChromiumNotifier(MailNotifier):
     @type builder: L{buildbot.status.builder.BuilderStatus} which implements
                    L{buildbot.interfaces.IBuilderStatus}
     """
+    # Verify that MailNotifier would subscribe to this builder.
+    if not MailNotifier.builderAdded(self, builder_name, builder_status):
+      return None
+
+    # Next check that ChromiumNotifier would subscribe.
     if self.isInterestingBuilder(builder_status):
       return self  # subscribe to this builder
 
