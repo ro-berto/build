@@ -59,7 +59,7 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder'))
 
 B('Win Reliability Builder', 'f_win_reliability_rel',
-  scheduler='s7_chromium_rel|s7_webkit_rel')
+  scheduler='s7_chromium_rel|s7_webkit_rel', builddir='Win_Webkit_Latest')
 F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
     clobber=True,
     tests=['reliability'],
