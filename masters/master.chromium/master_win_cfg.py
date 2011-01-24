@@ -212,7 +212,7 @@ F('dbg_shared', win().ChromiumFactory(
     slave_type='Builder',
     project='all.sln',
     factory_properties={'gclient_env':
-                            {'GYP_DEFINES' : 'component=shared_library'}}))
+        {'GYP_DEFINES' : 'component=shared_library fastbuild=1'}}))
 
 def Update(config, active_master, c):
   return helper.Update(c)
