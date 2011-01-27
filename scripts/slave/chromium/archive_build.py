@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -582,7 +582,7 @@ class StagerBase(object):
   def ArchiveBuild(self):
     """Zips build files and uploads them, their symbols, and a change log."""
     result = 0
-    if not self._build_revision:
+    if self._build_revision is None:
       raise StagingError('No build revision was provided')
     print 'Staging in %s' % self._staging_dir
 
@@ -758,7 +758,7 @@ def main(argv):
   else:
     raise StagingError('Invalid options mode %s' % options.mode)
 
-  if options.build_number:
+  if options.build_number is not None:
     s = StagerByBuildNumber(options)
   else:
     s = StagerByChromiumRevision(options)
