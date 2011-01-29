@@ -188,7 +188,7 @@ class ChromiumCommands(commands.FactoryCommands):
     else:
       test_type = 'File'
     cmd.extend([self.GetExecutableName('page_cycler_tests'),
-                '--gtest_filter=PageCycler*.%s%s,PageCycler*.*_%s%s' % (
+                '--gtest_filter=PageCycler*.%s%s:PageCycler*.*_%s%s' % (
                     test_name, test_type, test_name, test_type)])
     return cmd
 
