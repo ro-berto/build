@@ -120,6 +120,21 @@ def main_xcode(options, args):
   return result
 
 
+DISTRIBUTION_FILE = '/etc/lsb-release'
+def get_ubuntu_codename():
+  if not os.path.exists(DISTRIBUTION_FILE):
+    return None
+  dist_file = open(DISTRIBUTION_FILE, 'r')
+  dist_text = dist_file.read().strip()
+  dist_file.close()
+  codename = None
+  for line in dist_text.splitlines():
+    match_data = re.match(r'^DISTRIB_CODENAME=(\w+)$', line)
+    if match_data:
+      codename = match_data.group(1)
+  return codename
+
+
 def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   """
   Sets desirable Linux environment variables and command-line options
@@ -171,18 +186,19 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   # Test if we can use distcc.  Fastbuild servers currently support uname()
   # machine results of i686 or x86_64.
   distcc_bin_exists = os.path.exists('/usr/bin/distcc')
+  codename = get_ubuntu_codename()
   machine = os.uname()[4]
   distcc_hosts_path = os.path.join(COMPILE_SCRIPT_DIR, 'linux_distcc_hosts',
-                                   machine)
+                                   '%s-%s' % (codename, machine))
   hostname = socket.getfqdn().split('.')[0]
   hostname_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname)
-  if (distcc_bin_exists and os.path.exists(distcc_hosts_path) and
-      hostname_match):
+  if (distcc_bin_exists and codename and machine and
+      os.path.exists(distcc_hosts_path) and hostname_match):
     distcc_file = open(distcc_hosts_path, 'r')
     distcc_text = distcc_file.read().strip()
     distcc_file.close()
     env['DISTCC_HOSTS'] = ' '.join(distcc_text.splitlines())
-    print('Distcc enabled')
+    print('Distcc enabled:')
     print('ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
 
     cc = 'distcc ' + cc
@@ -191,8 +207,12 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     if jobs < distcc_jobs:
       jobs = distcc_jobs
   else:
-    print('Distcc disabled -- distcc exists: %s; machine: %s, hostname: %s' % (
-        distcc_bin_exists, machine, hostname))
+    print('Distcc disabled:')
+    print('  distcc_bin_exists: %s' % distcc_bin_exists)
+    print('  codename: %s' % codename)
+    print('  machine: %s' % machine)
+    print('  distcc_hosts_path: %s' % distcc_hosts_path)
+    print('  hostname: %s' % hostname)
 
   # Test if we can use ccache.
   if os.path.exists('/usr/bin/ccache'):
