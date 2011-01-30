@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -44,12 +44,13 @@ good_revision_steps = {
   ],
   # Dependent on 'Linux Builder (dbg)'
   'Linux Tests (dbg)(1)': [
-    'check deps', 'base_unittests', 'googleurl_unittests', 'media_unittests',
-    'printing_unittests', 'remoting_unittests', 'browser_tests', 'ui_tests',
+    'check deps',  'browser_tests', 'ui_tests',
   ],
   'Linux Tests (dbg)(2)': [
     'net_unittests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
     'app_unittests', 'ui_tests', 'interactive_ui_tests',
+    'base_unittests', 'googleurl_unittests', 'media_unittests',
+    'printing_unittests', 'remoting_unittests',
   ],
   'Linux Builder (ChromiumOS)': [
     'compile',

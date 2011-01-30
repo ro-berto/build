@@ -88,7 +88,6 @@ S('linux_dbg_shlib', branch='src', treeStableTimer=60)
 #
 # Dependent scheduler for the dbg builder
 #
-D('linux_dbg_dep', 'linux_dbg')
 D('linux_dbg_shlib_dep', 'linux_dbg_shlib')
 
 #
@@ -109,24 +108,27 @@ F('dbg', linux().ChromiumFactory(
 # Linux Dbg Unit testers
 #
 
-B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_dep')
+B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg')
 F('dbg_unit_1', linux().ChromiumFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
-    tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
-           'browser_tests', 'base', 'safe_browsing'],
+    tests=['check_deps', 'ui', 'browser_tests'],
+    options=['browser_tests',  'ui_tests'],
     factory_properties={'ui_total_shards': 2,
                         'ui_shard_index': 1,
                         'generate_gtest_json': True}))
 
-B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_dep')
+B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg')
 F('dbg_unit_2', linux().ChromiumFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
     tests=['unit', 'ui', 'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox',
-           'net', 'plugin',],
+           'net', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
+           'base', 'safe_browsing'],
+    options=['app_unittests', 'googleurl_unittests', 'gpu_unittests',
+             'interactive_ui_tests', 'ipc_tests', 'media_unittests',
+             'nacl_ui_tests', 'printing_unittests', 'remoting_unittests',
+             'sync_unit_tests', 'ui_tests', 'unit_tests', 'nacl_sandbox_tests',
+             'base_unittests', 'net_unittests', 'plugin_tests',
+             'safe_browsing_tests'],
     factory_properties={'ui_total_shards': 2,
                         'ui_shard_index': 2,
                         'generate_gtest_json': True}))
