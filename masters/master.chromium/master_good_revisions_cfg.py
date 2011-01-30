@@ -9,22 +9,22 @@ from master import goodrevisions
 # in any of the steps of any of the builders will mark the revision as failed.
 good_revision_steps = {
   # Dependent on 'Win Builder (dbg)'
-  'XP Tests (dbg)(1)': [
+  'Vista Tests (dbg)(1)': [
     'check deps', 'base_unittests', 'courgette_unittests',
     'googleurl_unittests', 'media_unittests', 'printing_unittests',
     'remoting_unittests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
     'app_unittests', 'installer_util_unittests',
   ],
-  'XP Tests (dbg)(2)': [
+  'Vista Tests (dbg)(2)': [
     'net_unittests', 'ui_tests', 'browser_tests',
   ],
-  'XP Tests (dbg)(3)': [
+  'Vista Tests (dbg)(3)': [
     'ui_tests', 'browser_tests',
   ],
-  'XP Tests (dbg)(4)': [
+  'Vista Tests (dbg)(4)': [
     'ui_tests', 'browser_tests',
   ],
-  'XP Tests (dbg)(5)': [
+  'Vista Tests (dbg)(5)': [
     'ui_tests', 'browser_tests',
   ],
   'Interactive Tests (dbg)': [
