@@ -48,9 +48,9 @@ good_revision_steps = {
   ],
   'Linux Tests (dbg)(2)': [
     'net_unittests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
-    'app_unittests', 'ui_tests', 'interactive_ui_tests',
-    'base_unittests', 'googleurl_unittests', 'media_unittests',
-    'printing_unittests', 'remoting_unittests',
+    'app_unittests', 'interactive_ui_tests', 'base_unittests',
+    'googleurl_unittests', 'media_unittests', 'printing_unittests',
+    'remoting_unittests',
   ],
   'Linux Builder (ChromiumOS)': [
     'compile',

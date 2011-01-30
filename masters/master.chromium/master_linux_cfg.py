@@ -113,25 +113,21 @@ F('dbg_unit_1', linux().ChromiumFactory(
     target='Debug',
     tests=['check_deps', 'ui', 'browser_tests'],
     options=['browser_tests',  'ui_tests'],
-    factory_properties={'ui_total_shards': 2,
-                        'ui_shard_index': 1,
-                        'generate_gtest_json': True}))
+    factory_properties={'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg')
 F('dbg_unit_2', linux().ChromiumFactory(
     target='Debug',
-    tests=['unit', 'ui', 'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox',
+    tests=['unit', 'nacl_ui', 'gpu', 'interactive_ui', 'nacl_sandbox',
            'net', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
            'base', 'safe_browsing'],
     options=['app_unittests', 'googleurl_unittests', 'gpu_unittests',
              'interactive_ui_tests', 'ipc_tests', 'media_unittests',
              'nacl_ui_tests', 'printing_unittests', 'remoting_unittests',
-             'sync_unit_tests', 'ui_tests', 'unit_tests', 'nacl_sandbox_tests',
+             'sync_unit_tests', 'unit_tests', 'nacl_sandbox_tests',
              'base_unittests', 'net_unittests', 'plugin_tests',
              'safe_browsing_tests'],
-    factory_properties={'ui_total_shards': 2,
-                        'ui_shard_index': 2,
-                        'generate_gtest_json': True}))
+    factory_properties={'generate_gtest_json': True}))
 
 #
 # Linux Dbg Shared Builder
