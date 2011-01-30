@@ -47,17 +47,25 @@ F('rel', mac().ChromiumFactory(
 #
 # Mac Rel testers
 #
-B('Mac10.5 Tests', 'rel_unit', 'testers', 'mac_rel_dep')
-F('rel_unit', mac().ChromiumFactory(
+B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_dep')
+F('rel_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['unit', 'ui', 'media', 'printing', 'remoting', 'gpu', 'browser_tests',
-         'googleurl', 'nacl_ui', 'nacl_sandbox', 'base', 'net',
-         'safe_browsing'],
+  tests=['ui', 'media', 'printing', 'remoting', 'gpu', 'googleurl', 'nacl_ui',
+         'nacl_sandbox', 'base', 'net', 'safe_browsing'],
   factory_properties={'generate_gtest_json': True})
 )
 
-B('Mac10.6 Tests', 'rel_unit', 'testers', 'mac_rel_dep')
+B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_dep')
+F('rel_unit_2', mac().ChromiumFactory(
+  slave_type='Tester',
+  build_url=rel_archive,
+  tests=['unit', 'browser_tests'],
+  factory_properties={'generate_gtest_json': True})
+)
+
+B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_dep')
+B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_dep')
 
 B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_dep')
 F('rel_sync', mac().ChromiumFactory(
