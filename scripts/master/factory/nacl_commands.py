@@ -458,8 +458,8 @@ class NativeClientCommands(commands.FactoryCommands):
                             env=pack_env,
                             command=pack_cmd)
 
-  def AddSeleniumTests(self, clobber=False, options=None,
-                       timeout=1200):
+  def AddBrowserTests(self, clobber=False, options=None,
+                      timeout=1200):
     """Adds a step archiving samples and installers to run on QA machines."""
     cmd = '%s SILENT=1' % self._test_tool
     if options and options.get('scons_prefix'):
@@ -473,13 +473,6 @@ class NativeClientCommands(commands.FactoryCommands):
         workdir='build/native_client',
         env=self._build_env,
         locks=[self.slave_exclusive_lock])
-    self.AddTestStep(
-        shell.ShellCommand,
-        test_name='install_plugin', timeout=1500,
-        test_command='%s firefox_install' % cmd,
-        workdir='build/native_client',
-        env=self._build_env,
-        locks=[self.slave_exclusive_lock])
     if self._target_platform in ['arm', 'linux2']:
       self.AddTestStep(
           shell.ShellCommand,
@@ -487,21 +480,41 @@ class NativeClientCommands(commands.FactoryCommands):
           test_command=(
               'vncserver -kill :20 ; '
               'sleep 2 ; '
-              'vncserver :20 -geometry 1500x1000 -depth 24'),
+              'vncserver :20 -geometry 1500x1000 -depth 24 ; '
+              'sleep 10'),
           workdir='build/native_client',
           env=self._build_env,
           locks=[self.slave_exclusive_lock])
-      selenium_prefix = (
-        'sleep 20 ; '
+      gui_prefix = (
         'DISPLAY=localhost:20 '
-        'XAUTHORITY=/home/chrome-bot/.Xauthority '
-      )
+        'XAUTHORITY=/home/chrome-bot/.Xauthority ')
     else:
-      selenium_prefix = ''
+      gui_prefix = ''
+    self.AddTestStep(
+        shell.ShellCommand,
+        test_name='chrome_browser_tests', timeout=1500,
+        test_command=gui_prefix + '%s chrome_browser_tests' % cmd,
+        workdir='build/native_client',
+        env=self._build_env,
+        locks=[self.slave_exclusive_lock])
+    self.AddTestStep(
+        shell.ShellCommand,
+        test_name='install_plugin', timeout=1500,
+        test_command='%s firefox_install' % cmd,
+        workdir='build/native_client',
+        env=self._build_env,
+        locks=[self.slave_exclusive_lock])
     self.AddTestStep(
         shell.ShellCommand,
         test_name='selenium', timeout=1500,
-        test_command=selenium_prefix + '%s browser_tests' % cmd,
+        test_command=gui_prefix + '%s browser_tests' % cmd,
+        workdir='build/native_client',
+        env=self._build_env,
+        locks=[self.slave_exclusive_lock])
+    self.AddTestStep(
+        shell.ShellCommand,
+        test_name='restore_plugin', timeout=1500,
+        test_command='%s firefox_install_restore' % cmd,
         workdir='build/native_client',
         env=self._build_env,
         locks=[self.slave_exclusive_lock])
@@ -513,13 +526,6 @@ class NativeClientCommands(commands.FactoryCommands):
           workdir='build/native_client',
           env=self._build_env,
           locks=[self.slave_exclusive_lock])
-    self.AddTestStep(
-        shell.ShellCommand,
-        test_name='restore_plugin', timeout=1500,
-        test_command='%s firefox_install_restore' % cmd,
-        workdir='build/native_client',
-        env=self._build_env,
-        locks=[self.slave_exclusive_lock])
 
   def AddCoverageTests(self, clobber=False, options=None,
                        timeout=1200):
