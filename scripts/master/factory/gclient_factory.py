@@ -202,7 +202,7 @@ class GClientFactory(object):
 
     # Archive the full output directory if the machine is a builder.
     if slave_type == 'Builder':
-      factory_cmd_obj.AddZipBuild()
+      factory_cmd_obj.AddZipBuild(halt_on_failure=True)
 
     # Download the full output directory if the machine is a tester.
     if slave_type == 'Tester':

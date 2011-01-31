@@ -354,6 +354,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           extra_archive_paths=factory_properties.get('extra_archive_paths'),
           use_build_number=factory_properties.get('use_build_number', False))
 
+    # Trigger any schedulers waiting on the build to complete.
+    if factory_properties.get('trigger'):
+      trigger_name = factory_properties.get('trigger')
+      factory.addStep(trigger.Trigger(schedulerNames=[trigger_name],
+                                      waitForFinish=False))
+
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and
          self._build_dir == 'src/chrome') or

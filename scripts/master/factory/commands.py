@@ -423,7 +423,8 @@ class FactoryCommands(object):
 
 
   # Zip / Extract commands.
-  def AddZipBuild(self, src_dir=None, include_files=None):
+  def AddZipBuild(self, src_dir=None, include_files=None,
+                  halt_on_failure=False):
     cmd = [self._python, self._zip_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
@@ -442,6 +443,7 @@ class FactoryCommands(object):
                           timeout=600,
                           description='packaging build',
                           descriptionDone='packaged build',
+                          haltOnFailure=halt_on_failure,
                           command=cmd)
 
   def AddExtractBuild(self, build_url):
