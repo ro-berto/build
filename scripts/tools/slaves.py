@@ -177,7 +177,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   group.add_option('-b', '--bits', help='Slave os bitness')
   group.add_option('--version', help='Slave os version')
   group.add_option('--builder',
-                   help='Only slaves attached to a specfic builder')
+                   help='Only slaves attached to a specific builder')
   group.add_option('--min', type='int')
   group.add_option('--max', type='int', help='Inclusive')
   group.add_option('--index', type='int', help='execute on only one slave')

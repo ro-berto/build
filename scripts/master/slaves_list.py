@@ -1,54 +1,51 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
-
-def _EntryHasValueInField(entry, field, value):
-  """Checks whether a slave has a particular value for a field listed."""
-  # Trap the event where no entry was found.
-  if entry is None:
-    return False
-  entry_value = entry.get(field)
-  if not entry_value:
-    return False
-  if type(entry_value) in (tuple, list):
-    return value.lower() in [i.lower() for i in entry_value]
-  else:
-    return value.lower() == entry_value.lower()
 
 
 def EntryToSlaveName(entry):
   """Extracts the buildbot slave name from the slaves list entry.
 
   The slave list entry is a dict."""
-  # Trap the event where no entry was found.
-  if entry is None:
-    return None
-  if entry.get('slavename'):
-    return entry.get('slavename')
-  if entry.get('hostname'):
-    return entry.get('hostname')
-  return None
+  return entry.get('slavename', None) or entry.get('hostname', None)
 
 
-def _FilterValue(slaves, value, name):
+def _obj_as_list(obj):
+  """Converts strings as 1 entry list."""
+  if not isinstance(obj, (tuple, list)):
+    return [obj]
+  return obj
+
+
+def _lower_values(s):
+  """Returns a list of strings lower()'ed.
+
+  If a string is passed, a one item list is returned.
+  """
+  return [x.lower() for x in _obj_as_list(s)]
+
+
+def _Filter(slaves, key, value):
+  """Filters slaves to keep only those with value in key,
+  slaves[key] being a list or converted to a list.
+  """
   if not value:
     return slaves
   value = value.lower()
-  return [s for s in slaves if s.get(name) and s.get(name).lower() == value]
 
-
-def _FilterField(slaves, value, name):
-  if not value:
-    return slaves
-  return [s for s in slaves if _EntryHasValueInField(s, name, value)]
+  if value.startswith('~') or value.startswith('!'):
+    value = value[1:]
+    return [s for s in slaves if value not in _lower_values(s.get(key, []))]
+  else:
+    return [s for s in slaves if value in _lower_values(s.get(key, []))]
 
 
 def _CheckDupes(items):
   dupes = set()
   while items:
     x = items.pop()
+    assert x
     if x in items:
       dupes.add(x)
   if dupes:
@@ -68,12 +65,13 @@ class BaseSlavesList(object):
 
     Optionally filter with master, builder, os, tester and bitness type.
     """
-    slaves = _FilterValue(self.slaves, master or self.default_master, 'master')
-    slaves = _FilterValue(slaves, os, 'os')
-    slaves = _FilterValue(slaves, bits, 'bits')
-    slaves = _FilterValue(slaves, version, 'version')
-    slaves = _FilterField(slaves, builder, 'builder')
-    slaves = _FilterField(slaves, tester, 'tester')
+    slaves = self.slaves
+    slaves = _Filter(slaves, 'master', master or self.default_master)
+    slaves = _Filter(slaves, 'os', os)
+    slaves = _Filter(slaves, 'bits', bits)
+    slaves = _Filter(slaves, 'version', version)
+    slaves = _Filter(slaves, 'builder', builder)
+    slaves = _Filter(slaves, 'tester', tester)
     return slaves
 
   def GetSlave(self, master=None, builder=None, os=None, tester=None, bits=None,
@@ -87,15 +85,16 @@ class BaseSlavesList(object):
   def GetSlavesName(self, master=None, builder=None, os=None, tester=None,
                     bits=None, version=None):
     """Similar to GetSlaves() except that it only returns the slave names."""
-    return [EntryToSlaveName(e) for e in self.GetSlaves(master, builder, os,
-                                                        tester, bits, version)]
+    return [
+        EntryToSlaveName(e)
+        for e in self.GetSlaves(master, builder, os, tester, bits, version)
+    ]
 
   def GetSlaveName(self, master=None, builder=None, os=None, tester=None,
                    bits=None, version=None):
     """Similar to GetSlave() except that it only returns the slave name."""
-    slave_name = EntryToSlaveName(self.GetSlave(master, builder, os, tester,
-                                                bits, version))
-    return slave_name
+    return EntryToSlaveName(
+        self.GetSlave(master, builder, os, tester, bits, version))
 
 
 class SlavesList(BaseSlavesList):
