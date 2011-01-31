@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -23,11 +23,11 @@ def getAllRevisions(build):
   if source_stamp and source_stamp.changes:
     return [change.revision for change in source_stamp.changes]
   try:
-    return build.getProperty('got_revision')
+    return [build.getProperty('got_revision')]
   except KeyError:
     pass
   try:
-    return build.getProperty('revision')
+    return [build.getProperty('revision')]
   except KeyError:
     pass
 
