@@ -358,6 +358,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get('trigger'):
       trigger_name = factory_properties.get('trigger')
       factory.addStep(trigger.Trigger(schedulerNames=[trigger_name],
+                                      updateSourceStamp=False,
                                       waitForFinish=False))
 
     # Start the crash handler process.
