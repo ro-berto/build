@@ -459,7 +459,7 @@ class NativeClientCommands(commands.FactoryCommands):
                             command=pack_cmd)
 
   def AddBrowserTests(self, clobber=False, options=None,
-                      timeout=1200):
+                      timeout=1200, run_selenium=True):
     """Adds a step archiving samples and installers to run on QA machines."""
     cmd = '%s SILENT=1' % self._test_tool
     if options and options.get('scons_prefix'):
@@ -497,27 +497,28 @@ class NativeClientCommands(commands.FactoryCommands):
         workdir='build/native_client',
         env=self._build_env,
         locks=[self.slave_exclusive_lock])
-    self.AddTestStep(
-        shell.ShellCommand,
-        test_name='install_plugin', timeout=1500,
-        test_command='%s firefox_install' % cmd,
-        workdir='build/native_client',
-        env=self._build_env,
-        locks=[self.slave_exclusive_lock])
-    self.AddTestStep(
-        shell.ShellCommand,
-        test_name='selenium', timeout=1500,
-        test_command=gui_prefix + '%s browser_tests' % cmd,
-        workdir='build/native_client',
-        env=self._build_env,
-        locks=[self.slave_exclusive_lock])
-    self.AddTestStep(
-        shell.ShellCommand,
-        test_name='restore_plugin', timeout=1500,
-        test_command='%s firefox_install_restore' % cmd,
-        workdir='build/native_client',
-        env=self._build_env,
-        locks=[self.slave_exclusive_lock])
+    if run_selenium:
+      self.AddTestStep(
+          shell.ShellCommand,
+          test_name='install_plugin', timeout=1500,
+          test_command='%s firefox_install' % cmd,
+          workdir='build/native_client',
+          env=self._build_env,
+          locks=[self.slave_exclusive_lock])
+      self.AddTestStep(
+          shell.ShellCommand,
+          test_name='selenium', timeout=1500,
+          test_command=gui_prefix + '%s browser_tests' % cmd,
+          workdir='build/native_client',
+          env=self._build_env,
+          locks=[self.slave_exclusive_lock])
+      self.AddTestStep(
+          shell.ShellCommand,
+          test_name='restore_plugin', timeout=1500,
+          test_command='%s firefox_install_restore' % cmd,
+          workdir='build/native_client',
+          env=self._build_env,
+          locks=[self.slave_exclusive_lock])
     if self._target_platform in ['arm', 'linux2']:
       self.AddTestStep(
           shell.ShellCommand,

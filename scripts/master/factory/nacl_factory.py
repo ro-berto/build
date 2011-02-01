@@ -178,7 +178,9 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       f.AddCoverageTests(options=options)
 
     if R('nacl_selenium'):
-      f.AddBrowserTests(options=options)
+      f.AddBrowserTests(options=options, run_selenium=True)
+    elif R('nacl_browser_tests'):
+      f.AddBrowserTests(options=options, run_selenium=False)
 
   @staticmethod
   def _AddTriggerTests(factory_cmd_obj, tests, target,
