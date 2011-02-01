@@ -466,13 +466,6 @@ class NativeClientCommands(commands.FactoryCommands):
       cmd = options['scons_prefix'] + cmd
     if options and options.get('scons_opts'):
       cmd = cmd + ' ' + options['scons_opts']
-    self.AddTestStep(
-        shell.ShellCommand,
-        test_name='backup_plugin', timeout=1500,
-        test_command='%s firefox_install_backup' % cmd,
-        workdir='build/native_client',
-        env=self._build_env,
-        locks=[self.slave_exclusive_lock])
     if self._target_platform in ['arm', 'linux2']:
       self.AddTestStep(
           shell.ShellCommand,
@@ -498,6 +491,13 @@ class NativeClientCommands(commands.FactoryCommands):
         env=self._build_env,
         locks=[self.slave_exclusive_lock])
     if run_selenium:
+      self.AddTestStep(
+          shell.ShellCommand,
+          test_name='backup_plugin', timeout=1500,
+          test_command='%s firefox_install_backup' % cmd,
+          workdir='build/native_client',
+          env=self._build_env,
+          locks=[self.slave_exclusive_lock])
       self.AddTestStep(
           shell.ShellCommand,
           test_name='install_plugin', timeout=1500,
