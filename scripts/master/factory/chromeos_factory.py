@@ -190,12 +190,17 @@ class CbuildbotFactory(object):
   # pylint: disable=W0622
   def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
                triagelog=None, params='', timeout=9000, variant=None,
-               is_master=False, branch='master',
+               is_master=False, branch='master', old_style=False,
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
-    self.chromite_repo = chromite_repo
+    self.old_style = old_style
+    if self.old_style:
+      self.chromite_repo = CbuildbotFactory._default_git_base + '/crosutils'
+    else:
+      self.chromite_repo = chromite_repo
+
     self.timeout = timeout
     self.variant = variant
     self.board = board
@@ -230,7 +235,7 @@ class CbuildbotFactory(object):
     clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
     clear_and_clone_cmd += '/usr/bin/git clone %s;cd %s;' % (repo,
                                                              git_checkout_dir)
-    clear_and_clone_cmd += 'git checkout %(branch)s' 
+    clear_and_clone_cmd += 'git checkout %(branch)s'
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=WithProperties(clear_and_clone_cmd),
@@ -279,8 +284,13 @@ class CbuildbotFactory(object):
           trigger.Trigger(schedulerNames=['pre_flight_queue_slaves'],
                           waitForFinish=False))
 
-    cbuild_cmd = ['chromite/buildbot/cbuildbot',
-                  shell.WithProperties("--buildnumber=%(buildnumber)s")]
+    if self.old_style:
+      cbuild_cmd = ['crosutils/bin/cbuildbot',
+                    shell.WithProperties("--buildnumber=%(buildnumber)s")]
+    else:
+      cbuild_cmd = ['chromite/buildbot/cbuildbot',
+                    shell.WithProperties("--buildnumber=%(buildnumber)s")]
+
     cbuild_cmd += ['--buildroot=%s' % self.buildroot]
     cbuild_cmd += [('--revisionfile=%s' %
                    chromeos_revision_source.PFQ_REVISION_FILE)]
