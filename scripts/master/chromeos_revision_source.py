@@ -10,7 +10,7 @@ from buildbot.steps import source
 from buildbot.process import buildstep
 
 # Relative path to revision file for cbuildbot.
-PFQ_REVISION_FILE = 'crosutils/bin/revisions.pfq'
+PFQ_REVISION_FILE = 'chromite/buildbot/revisions.pfq'
 
 class GitRevisionDropper(source.Source):
   """Drops a list of revisions from multiple git repositories."""

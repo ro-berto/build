@@ -50,7 +50,7 @@ class ChromeOSCommands(commands.FactoryCommands):
 
   def AddChromeOSRepoUpdateStep(self, clobber=False, mode=None, options=None,
                                 timeout=2400):
-    cmd = ['crosutils/bin/cros_repo_sync_all']
+    cmd = ['chromite/buildbot/cros_repo_sync_all']
     # chromiumos set up by master.cfg.
     cmd += ['--buildroot=%s' % 'chromiumos']
     if clobber:
@@ -66,11 +66,11 @@ class ChromeOSCommands(commands.FactoryCommands):
                           timeout=timeout)
 
   def AddChromeOSCrosUtilsStep(self,
-      crosutils_repo='ssh://git@gitrw.chromium.org:9222/crosutils'):
+      chromite_repo='ssh://git@gitrw.chromium.org:9222/chromite'):
     # Done in slave directory.
-    git_checkout_dir = os.path.basename(crosutils_repo)
+    git_checkout_dir = os.path.basename(chromite_repo)
     clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
-    clear_and_clone_cmd += '/usr/bin/git clone %s' % crosutils_repo
+    clear_and_clone_cmd += '/usr/bin/git clone %s' % chromite_repo
     msg = 'Clear and Clone %s' % git_checkout_dir
     self._factory.addStep(shell.ShellCommand,
                           command=clear_and_clone_cmd,

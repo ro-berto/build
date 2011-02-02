@@ -179,12 +179,12 @@ class CbuildbotFactory(object):
       timeout: Timeout in seconds for the main command
           (i.e. the type command). Default 9000 seconds.
       crostools_repo: git repo for crostools toolset.
-      crosutils_repo: git repo for crosutils toolset.
+      chromite_repo: git repo for chromite toolset.
   """
 
   _default_git_base = 'ssh://git@gitrw.chromium.org:9222'
   _default_crostools = _default_git_base + '/crostools'
-  _default_crosutils = _default_git_base + '/crosutils'
+  _default_chromite = _default_git_base + '/chromite'
 
   # Redefining built-in 'type'
   # pylint: disable=W0622
@@ -192,10 +192,10 @@ class CbuildbotFactory(object):
                triagelog=None, params='', timeout=9000, variant=None,
                is_master=False, branch='master',
                crostools_repo=_default_crostools,
-               crosutils_repo=_default_crosutils):
+               chromite_repo=_default_chromite):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
-    self.crosutils_repo = crosutils_repo
+    self.chromite_repo = chromite_repo
     self.timeout = timeout
     self.variant = variant
     self.board = board
@@ -242,8 +242,8 @@ class CbuildbotFactory(object):
     Add the following boiler plate steps to the factory.
 
     * gclient sync of /b
-    * clearing of crostools/crosutils
-    * clean checkout of crostools/crosutils
+    * clearing of crostools/chromite
+    * clean checkout of crostools/chromite
     """
     build_slave_sync = ['gclient', 'sync']
     self.f_cbuild.addStep(shell.ShellCommand,
@@ -252,7 +252,7 @@ class CbuildbotFactory(object):
                           workdir='/b',
                           timeout=300)
 
-    self._git_clear_and_checkout(self.crosutils_repo)
+    self._git_clear_and_checkout(self.chromite_repo)
     self._git_clear_and_checkout(self.crostools_repo)
 
   def cbuildbot_type(self, params, description_suffix='', haltOnFailure=True):
@@ -279,7 +279,7 @@ class CbuildbotFactory(object):
           trigger.Trigger(schedulerNames=['pre_flight_queue_slaves'],
                           waitForFinish=False))
 
-    cbuild_cmd = ['crosutils/bin/cbuildbot',
+    cbuild_cmd = ['chromite/buildbot/cbuildbot',
                   shell.WithProperties("--buildnumber=%(buildnumber)s")]
     cbuild_cmd += ['--buildroot=%s' % self.buildroot]
     cbuild_cmd += [('--revisionfile=%s' %
@@ -373,16 +373,16 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
       chrome_rev_stages:  Array of strings designating chrome rev steps to run
         in cbuildbot tot, latest_release, etc.
       crostools_repo: git repo for crostools toolset.
-      crosutils_repo: git repo for crosutils toolset.
+      chromite_repo: git repo for chromite toolset.
   """
   def __init__(self, buildroot='/b/cbuild', params='', timeout=9000,
                is_master=False, branch='master', chrome_rev_stages=None,
                crostools_repo=CbuildbotFactory._default_crostools,
-               crosutils_repo=CbuildbotFactory._default_crosutils):
+               chromite_repo=CbuildbotFactory._default_chromite):
     CbuildbotFactory.__init__(self, type='cbuildbot_chrome', board=None,
                               buildroot=buildroot, is_master=is_master,
                               crostools_repo=crostools_repo,
-                              crosutils_repo=crosutils_repo)
+                              chromite_repo=chromite_repo)
 
     for chrome_rev in chrome_rev_stages:
       bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
