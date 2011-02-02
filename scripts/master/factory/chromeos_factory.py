@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -284,9 +284,12 @@ class CbuildbotFactory(object):
     cbuild_cmd += ['--buildroot=%s' % self.buildroot]
     cbuild_cmd += [('--revisionfile=%s' %
                    chromeos_revision_source.PFQ_REVISION_FILE)]
-    clobber_string = WithProperties('%s', 'clobber:+--clobber')
-    if clobber_string:
-      cbuild_cmd.append(clobber_string)
+    # Below, WithProperties is appended to cbuild_cmd and rendered into a string
+    # for each specific build at build-time.  When clobber is None, it renders
+    # to an empty string.  When clobber is not None, it renders to the string
+    # --clobber.  Note: the :+ after clobber controls this behavior and is not
+    # a typo.
+    cbuild_cmd.append(WithProperties('%s', 'clobber:+--clobber'))
 
     name = self.type
     if description_suffix:
@@ -320,6 +323,11 @@ class CbuildbotFactory(object):
                   shell.WithProperties("--buildnumber=%(buildnumber)s")]
     cbuild_cmd += ['--board=%s' % self.board,
                    '--buildroot=%s' % self.buildroot]
+    # Below, WithProperties is appended to cbuild_cmd and rendered into a string
+    # for each specific build at build-time.  When clobber is None, it renders
+    # to an empty string.  When clobber is not None, it renders to the string
+    # --clobber.  Note: the :+ after clobber controls this behavior and is not
+    # a typo.
     cbuild_cmd.append(WithProperties('%s', 'clobber:+--clobber'))
     cbuild_cmd.append(WithProperties('%(branch)s'))
     if self.variant:

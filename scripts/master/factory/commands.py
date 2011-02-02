@@ -459,11 +459,18 @@ class FactoryCommands(object):
            '--target', self._target,
            '--build-url', build_url]
     if factory_properties.get('halt_on_missing_build', False):
-      # If revision is None or blank, the 'force build' button was pressed.  In
-      # other cases where halt_on_missing_build is True, we want to halt at
-      # extract build when a build is missing.
-      if WithProperties('%(revision)s') not in [None, 'None', '']:
-        cmd.append('--halt-on-missing-build')
+      # Below, WithProperties is appended to the cmd and rendered into a string
+      # for each specific build at build-time.  When revision is None, it
+      # renders to an empty string.  When revision is not None, it renders to
+      # the string --halt-on-missing-build.  Note: the :- after revision
+      # controls this behavior and is not a typo.
+      #
+      # revision will be None if 'force build' is pressed from the Buildbot.  In
+      # those cases, we don't want to append --halt-on-missing-build since it's
+      # acceptable if there is no build that exists at the latest available
+      # revision at that time.  Otherwise, append --halt-on-missing-build and
+      # stop the build if the requested build doesn't exist.
+      cmd.append(WithProperties('%s', 'revision:---halt-on-missing-build'))
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract build', cmd,
                      halt_on_failure=True)
 
@@ -488,7 +495,11 @@ class FactoryCommands(object):
     if clobber:
       cmd.append('--clobber')
     else:
-      # See properties.PropertyMap.__getitem__() to understand the behavior.
+      # Below, WithProperties is appended to the cmd and rendered into a string
+      # for each specific build at build-time.  When clobber is None, it renders
+      # to an empty string.  When clobber is not None, it renders to the string
+      # --clobber.  Note: the :+ after clobber controls this behavior and is not
+      # a typo.
       cmd.append(WithProperties('%s', 'clobber:+--clobber'))
     if options:
       cmd.extend(options)

@@ -1,4 +1,4 @@
-# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -56,6 +56,11 @@ class ChromeOSCommands(commands.FactoryCommands):
     if clobber:
       cmd += ['--clobber']
     else:
+      # Below, WithProperties is appended to the cmd and rendered into a string
+      # for each specific build at build-time.  When clobber is None, it renders
+      # to an empty string.  When clobber is not None, it renders to the string
+      # --clobber.  Note: the :+ after clobber controls this behavior and is not
+      # a typo.
       cmd.append(WithProperties('%s', 'clobber:+--clobber'))
 
     self._factory.addStep(shell.ShellCommand,
