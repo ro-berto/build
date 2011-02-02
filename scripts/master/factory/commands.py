@@ -446,7 +446,7 @@ class FactoryCommands(object):
                           haltOnFailure=halt_on_failure,
                           command=cmd)
 
-  def AddExtractBuild(self, build_url, factory_properties=None)
+  def AddExtractBuild(self, build_url, factory_properties=None):
     """Extract a build.
 
     Assumes the zip file has a directory like src/xcodebuild which
