@@ -446,16 +446,24 @@ class FactoryCommands(object):
                           haltOnFailure=halt_on_failure,
                           command=cmd)
 
-  def AddExtractBuild(self, build_url):
+  def AddExtractBuild(self, build_url, factory_properties=None)
     """Extract a build.
 
     Assumes the zip file has a directory like src/xcodebuild which
     contains the actual build.
     """
+    factory_properties = factory_properties or {}
+
     cmd = [self._python, self._extract_tool,
            '--build-dir', self._build_dir,
            '--target', self._target,
            '--build-url', build_url]
+    if factory_properties.get('halt_on_missing_build', False):
+      # If revision is None or blank, the 'force build' button was pressed.  In
+      # other cases where halt_on_missing_build is True, we want to halt at
+      # extract build when a build is missing.
+      if WithProperties('%(revision)s') not in [None, 'None', '']:
+        cmd.append('--halt-on-missing-build')
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract build', cmd,
                      halt_on_failure=True)
 

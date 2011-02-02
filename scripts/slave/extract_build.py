@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -80,6 +80,8 @@ def real_main(options, args):
       content.close()
     except urllib2.HTTPError:
       print '%s is not found' % url
+      if options.halt_on_missing_build:
+        return -1
       failure = True
 
     # If the url is valid, we download the file.
@@ -143,9 +145,11 @@ def main():
   option_parser.add_option('', '--build-dir',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
-
   option_parser.add_option('', '--build-url',
                            help='url where to find the build to extract')
+  option_parser.add_option('--halt-on-missing-build', action='store_true',
+                           default=False,
+                           help='whether to halt on a missing build')
 
   options, args = option_parser.parse_args()
   return real_main(options, args)

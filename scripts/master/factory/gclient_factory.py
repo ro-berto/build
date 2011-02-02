@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -181,6 +181,8 @@ class GClientFactory(object):
                    slave_type='BuilderTester', options=None,
                    compile_timeout=1200, build_url=None, project=None,
                    factory_properties=None):
+    factory_properties = factory_properties or {}
+
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
 
@@ -206,7 +208,8 @@ class GClientFactory(object):
 
     # Download the full output directory if the machine is a tester.
     if slave_type == 'Tester':
-      factory_cmd_obj.AddExtractBuild(build_url)
+      factory_cmd_obj.AddExtractBuild(build_url,
+                                      factory_properties=factory_properties)
 
     return factory
 
