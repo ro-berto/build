@@ -160,7 +160,7 @@ class Archive(config_private.Archive):
   # pre-ICU 4.2 builds as well.
   symbols_to_skip_upload = [
       'icudt38.dll', 'icudt42.dll', 'rlz.dll', 'avcodec-52.dll',
-      'avformat-52.dll', 'avutil-50.dll', 'gcswf32.dll', 'd3dx9_42.dll',
+      'avformat-52.dll', 'avutil-50.dll', 'd3dx9_42.dll',
       'D3DCompiler_42.dll',]
 
   if os.environ.get('CHROMIUM_BUILD', '') == '_google_chrome':
