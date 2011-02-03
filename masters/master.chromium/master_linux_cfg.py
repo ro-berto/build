@@ -47,7 +47,7 @@ F('rel', linux().ChromiumFactory(
              'page_cycler_tests', 'printing_unittests', 'remoting_unittests',
              'startup_tests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
              'url_fetch_test', 'base_unittests', 'net_unittests',
-             'safe_browsing_tests', 'sync_integration_tests']))
+             'gfx_unittests', 'safe_browsing_tests', 'sync_integration_tests']))
 
 #
 # Linux Rel testers
@@ -102,7 +102,7 @@ F('dbg', linux().ChromiumFactory(
              'media_unittests', 'nacl_ui_tests', 'printing_unittests',
              'remoting_unittests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
              'nacl_sandbox_tests', 'base_unittests', 'net_unittests',
-             'plugin_tests', 'safe_browsing_tests']))
+             'gfx_unittests', 'plugin_tests', 'safe_browsing_tests']))
 
 #
 # Linux Dbg Unit testers
@@ -126,7 +126,7 @@ F('dbg_unit_2', linux().ChromiumFactory(
              'nacl_ui_tests', 'printing_unittests', 'remoting_unittests',
              'sync_unit_tests', 'unit_tests', 'nacl_sandbox_tests',
              'base_unittests', 'net_unittests', 'plugin_tests',
-             'safe_browsing_tests'],
+             'safe_browsing_tests', 'gfx_unittests'],
     factory_properties={'generate_gtest_json': True}))
 
 #

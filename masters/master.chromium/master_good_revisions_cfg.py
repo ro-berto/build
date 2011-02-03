@@ -13,7 +13,7 @@ good_revision_steps = {
     'check deps', 'base_unittests', 'courgette_unittests',
     'googleurl_unittests', 'media_unittests', 'printing_unittests',
     'remoting_unittests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
-    'app_unittests', 'installer_util_unittests',
+    'app_unittests', 'installer_util_unittests', 'gfx_unittests',
   ],
   'Vista Tests (dbg)(2)': [
     'net_unittests', 'ui_tests', 'browser_tests',
@@ -34,7 +34,7 @@ good_revision_steps = {
   'Mac 10.5 Tests (dbg)(1)': [
     'check deps', 'base_unittests', 'googleurl_unittests', 'media_unittests',
     'printing_unittests', 'remoting_unittests', 'ipc_tests', 'sync_unit_tests',
-    'unit_tests', 'app_unittests', 'interactive_ui_tests',
+    'unit_tests', 'app_unittests', 'interactive_ui_tests', 'gfx_unittests',
   ],
   'Mac 10.5 Tests (dbg)(2)': [
     'net_unittests', 'ui_tests',
@@ -50,13 +50,14 @@ good_revision_steps = {
     'net_unittests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
     'app_unittests', 'interactive_ui_tests', 'base_unittests',
     'googleurl_unittests', 'media_unittests', 'printing_unittests',
-    'remoting_unittests',
+    'remoting_unittests', 'gfx_unittests',
   ],
   'Linux Builder (ChromiumOS)': [
     'compile',
     'base_unittests', 'googleurl_unittests', 'media_unittests',
     'net_unittests', 'printing_unittests', 'remoting_unittests',
     'ipc_tests', 'sync_unit_tests', 'unit_tests', 'app_unittests',
+    'gfx_unittests',
   ],
   # Disabled - It takes an hour to cycle.
   #'Linux Builder (ChromiumOS dbg)': [

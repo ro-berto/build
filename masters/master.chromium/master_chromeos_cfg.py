@@ -73,7 +73,7 @@ F('view_dbg', chromeos().ChromiumOSFactory(
              'interactive_ui_tests', 'ipc_tests', 'googleurl_unittests',
              'media_unittests', 'net_unittests', 'printing_unittests',
              'remoting_unittests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
-             'views_unittests'],
+             'views_unittests', 'gfx_unittests'],
     factory_properties={'gclient_env': { 'GYP_DEFINES':'toolkit_views=1'},
                         'generate_gtest_json': True}))
 
