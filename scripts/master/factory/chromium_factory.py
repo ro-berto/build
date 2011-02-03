@@ -124,6 +124,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'http://src.chromium.org/svn/trunk/src/chrome/test/functional'),
        ('src/third_party/simplejson',
         'http://src.chromium.org/svn/trunk/src/third_party/simplejson'),
+       ('src/net/tools/testserver',
+        'http://src.chromium.org/svn/trunk/src/net/tools/testserver'),
+       ('src/third_party/pyftpdlib',
+        'http://src.chromium.org/svn/trunk/src/third_party/pyftpdlib'),
+       ('src/third_party/tlslite',
+        'http://src.chromium.org/svn/trunk/src/src/third_party/tlslite'),
        ('src/third_party/python_26',
         'http://src.chromium.org/svn/trunk/tools/third_party/python_26')]
   # Extend if we can.
