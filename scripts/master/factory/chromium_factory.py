@@ -129,7 +129,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/third_party/pyftpdlib',
         'http://src.chromium.org/svn/trunk/src/third_party/pyftpdlib'),
        ('src/third_party/tlslite',
-        'http://src.chromium.org/svn/trunk/src/src/third_party/tlslite'),
+        'http://src.chromium.org/svn/trunk/src/third_party/tlslite'),
        ('src/third_party/python_26',
         'http://src.chromium.org/svn/trunk/tools/third_party/python_26')]
   # Extend if we can.
