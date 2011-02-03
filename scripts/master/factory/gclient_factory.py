@@ -195,6 +195,11 @@ class GClientFactory(object):
                                                self._build_dir,
                                                self._target_platform)
 
+    # Update clang if necessary.
+    gclient_env = factory_properties.get('gclient_env', {})
+    if 'clang=1' in gclient_env.get('GYP_DEFINES', ''):
+      factory_cmd_obj.AddUpdateClangStep()
+
     # Add the compile step if needed.
     if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
         slave_type == 'Trybot'):

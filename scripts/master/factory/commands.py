@@ -178,6 +178,8 @@ class FactoryCommands(object):
                                            'distribute.py')
     self._resource_sizes_tool = self.PathJoin(self._script_dir,
                                               'resource_sizes.py')
+    self._update_clang_tool = self.PathJoin(
+        self._repository_root, 'tools', 'clang', 'scripts', 'update.sh')
 
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
@@ -559,6 +561,16 @@ class FactoryCommands(object):
                report_link=report_link, output_dir=output_dir,
                factory_properties=factory_properties, perf_name=perf_name,
                test_name=test_name, command_class=command_class)
+
+  # Checks out and builds clang
+  def AddUpdateClangStep(self):
+    cmd = [self._update_clang_tool]
+    self._factory.addStep(shell.ShellCommand,
+                          name='update_clang',
+                          timeout=600,
+                          description='Updating and building clang and plugins',
+                          descriptionDone='clang updated',
+                          command=cmd)
 
 
 class CanCancelBuildShellCommand(shell.ShellCommand):
