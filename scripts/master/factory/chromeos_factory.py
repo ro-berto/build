@@ -235,7 +235,7 @@ class CbuildbotFactory(object):
     clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
     clear_and_clone_cmd += '/usr/bin/git clone %s;cd %s;' % (repo,
                                                              git_checkout_dir)
-    clear_and_clone_cmd += 'git checkout %(branch)s'
+    clear_and_clone_cmd += 'git checkout %s' % self.branch
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=WithProperties(clear_and_clone_cmd),
