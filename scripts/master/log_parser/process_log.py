@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -526,7 +526,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
   RESULTS_REGEX = re.compile(
       r'(?P<IMPORTANT>\*)?RESULT '
        '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
-       '(?P<VALUE>[\{\[]?[\d\., ]+[\}\]]?)( ?(?P<UNITS>.+))?')
+       '(?P<VALUE>[\{\[]?[-\d\., ]+[\}\]]?)( ?(?P<UNITS>.+))?')
 
   def __init__(self, *args, **kwargs):
     PerformanceLogProcessor.__init__(self, *args, **kwargs)
