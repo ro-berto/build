@@ -316,6 +316,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 src_base='..',
                                 workdir=workdir)
 
+    # ChromeDriver tests.
+    if R('chromedriver_tests'):
+      f.AddChromeDriverTest()
+    if R('webdriver_tests'):
+      f.AddWebDriverTest()
+
     # When adding a test that uses a new executable, update kill_processes.py.
 
     # Coverage tests.  Add coverage processing absoluely last, after

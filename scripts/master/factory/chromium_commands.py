@@ -560,6 +560,35 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(retcode_command.ReturnCodeCommand, test_name, cmd,
                      timeout=timeout)
 
+  def _AddBasicPythonTest(self, test_name, script, args=[], timeout=1200):
+    J = self.PathJoin
+    if self._target_platform == 'win32':
+      py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')
+      test_cmd = ['cmd', '/C'] + [py26, script] + args
+    elif self._target_platform == 'darwin':
+      test_cmd = ['python2.5', script] + args
+    elif self._target_platform == 'linux2':
+      # Run thru runtest.py on linux to launch virtual x server
+      test_cmd = self.GetTestCommand('/usr/bin/python',
+                                     [script] + args)
+
+    self.AddTestStep(retcode_command.ReturnCodeCommand,
+                     test_name,
+                     test_cmd,
+                     timeout=timeout)
+
+  def AddChromeDriverTest(self, timeout=1200):
+    J = self.PathJoin
+    script = J('src', 'chrome', 'test', 'webdriver',
+               'chromedriver_tests.py')
+    self._AddBasicPythonTest('chromedriver_tests', script, timeout=timeout)
+
+  def AddWebDriverTest(self, timeout=1200):
+    J = self.PathJoin
+    script = J('src', 'chrome', 'test', 'webdriver',
+               'run_webdriver_tests.py')
+    self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
+
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
                               src_base=None,
