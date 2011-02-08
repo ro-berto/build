@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,7 +12,11 @@ from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
-from master.chromium_status import WebStatus
+try:
+  from master.chromium_status import WebStatus
+except ImportError:
+  from buildbot.status.web.baseweb import WebStatus
+
 from master import slaves_list
 import config
 
