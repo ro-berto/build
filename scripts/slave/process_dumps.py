@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2008 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -106,12 +106,12 @@ def main():
     return config.Master.retcode_warnings
 
   symbol_path = os.path.join(options.build_dir, options.target)
-  dll_symbol = os.path.join(symbol_path, 'chrome_dll.pdb')
+  dll_path = os.path.join(symbol_path, 'chrome.dll')
 
-  if not os.path.exists(dll_symbol):
-    print 'Cannot find symbols.'
+  if not os.path.exists(dll_path):
+    print 'Cannot find chrome.dll.'
     return 0
-  symbol_time = os.path.getmtime(dll_symbol)
+  dll_time = os.path.getmtime(dll_path)
 
   dump_dir = options.dump_dir
   if not dump_dir:
@@ -119,8 +119,10 @@ def main():
   dump_count = 0
   for dump_file in chromium_utils.LocateFiles(pattern='*.dmp', root=dump_dir):
     file_time = os.path.getmtime(dump_file)
-    if file_time < symbol_time:
-      # Ignore dumps older than symbol file.
+    if file_time < dll_time:
+      # Ignore dumps older than dll file.
+      print 'Deleting old dump: %s' % dump_file
+      os.remove(dump_file)
       continue
     print '-------------------------'
     print os.path.basename(dump_file)
