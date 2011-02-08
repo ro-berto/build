@@ -33,9 +33,6 @@ class ChromiumCommands(commands.FactoryCommands):
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
 
-    # Where to point waterfall links for builds and test results.
-    self._archive_url = config.Master.archive_url
-
     # Where the chromium slave scritps are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
     self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
@@ -127,8 +124,7 @@ class ChromiumCommands(commands.FactoryCommands):
                       extra_archive_paths=None, use_build_number=False):
     """Adds a step to the factory to archive a build."""
     if show_url:
-      # TODO(nsylvain): Change the url to include the right subdir.
-      url = '%s/%s' %  (self._archive_url, 'snapshots')
+      url = self._GetArchiveUrl('snapshots')
       text = 'download'
     else:
       url = None
@@ -695,8 +691,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd)
 
     if archive_results:
-      # TODO(nsylvain): Change the url to include the right subdir.
-      url = '%s/%s' % (self._archive_url, 'layout-test-results')
+      url = self._GetArchiveUrl('layout_test_results', builder_name)
 
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
@@ -754,7 +749,7 @@ class ChromiumCommands(commands.FactoryCommands):
     perf_id = factory_properties.get('perf_id')
     perf_subdir = perf_mapping.get(perf_id)
 
-    url = '%s/%s/%s' %  (self._archive_url, 'coverage', perf_subdir)
+    url = self._GetArchiveUrl('coverage', perf_subdir)
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
            '--target', self._target,
@@ -820,3 +815,8 @@ class ChromiumCommands(commands.FactoryCommands):
            '--sw-reference-dir',
            self.PathJoin(gpu_data, 'sw_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
+
+  def _GetArchiveUrl(self, archive_type, builder_name='%(buildername)s'):
+    url_builder_name = re.sub('[ .()]', '_', WithProperties(builder_name))
+    return '%s/%s/%s' % (
+        config.Master.archive_url, archive_type, url_builder_name)
