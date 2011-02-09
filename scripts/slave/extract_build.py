@@ -6,7 +6,6 @@
 """A tool to extract a build, executed by a buildbot slave.
 """
 
-import json
 import optparse
 import os
 import shutil
@@ -81,15 +80,9 @@ def real_main(options, args):
       content.close()
     except urllib2.HTTPError:
       print '%s is not found' % url
-      failure = True
-
-      # If 'revision' is set in build properties, we assume the build is
-      # triggered automatically and so we halt on a missing build zip.  The
-      # other case is if the build is forced, in which case we keep trying
-      # later by looking for the latest build that's available.
-      if ('revision' in options.build_properties and
-          options.build_properties['revision'] != ''):
+      if options.halt_on_missing_build:
         return -1
+      failure = True
 
     # If the url is valid, we download the file.
     if not failure:
@@ -144,11 +137,6 @@ def real_main(options, args):
   return -1
 
 
-def convert_json(option, opt, value, parser):
-  """Provide an OptionParser callback to unmarshal a JSON string."""
-  setattr(parser.values, option.dest, json.loads(value))
-
-
 def main():
   option_parser = optparse.OptionParser()
 
@@ -159,18 +147,9 @@ def main():
                                 'the Release or Debug directory)')
   option_parser.add_option('', '--build-url',
                            help='url where to find the build to extract')
-  # TODO(cmp): Remove --halt-on-missing-build when the buildbots are upgraded
-  #            to not use this argument.
   option_parser.add_option('--halt-on-missing-build', action='store_true',
                            default=False,
                            help='whether to halt on a missing build')
-  option_parser.add_option('--build-properties', action='callback',
-                           callback=convert_json, type='string', nargs=1,
-                           default={}, help='build properties in JSON format')
-  option_parser.add_option('--factory-properties', action='callback',
-                           callback=convert_json, type='string', nargs=1,
-                           default='{}', help='factory properties in JSON '
-                           'format')
 
   options, args = option_parser.parse_args()
   return real_main(options, args)
