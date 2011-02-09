@@ -3,6 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import sys
+
 
 def EntryToSlaveName(entry):
   """Extracts the buildbot slave name from the slaves list entry.
@@ -126,6 +128,6 @@ def Main(argv=None):
     print slave
   return 0
 
+
 if __name__ == '__main__':
-  import sys
   sys.exit(Main())
