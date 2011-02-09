@@ -7,6 +7,8 @@
 
 Based on gclient_factory.py."""
 
+import posixpath
+
 from master.factory import gclient_factory
 from master.factory import nacl_sdk_commands
 
@@ -28,10 +30,11 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
   }
 
   def __init__(self, build_dir, target_platform=None, use_supplement=False,
-               alternate_url=None):
+               alternate_url=None, branch='trunk'):
     solutions = []
     self.target_platform = target_platform
-    nacl_sdk_url = config.Master.nacl_sdk_url
+    nacl_sdk_url = posixpath.join(config.Master.nacl_sdk_root_url,
+                                  branch, 'src')
     if alternate_url:
       nacl_sdk_url = alternate_url
     main = gclient_factory.GClientSolution(

@@ -62,9 +62,9 @@
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
               <a href="./waterfall/help">customize</a> |
-              <a href="../client.nacl.sdk/waterfall">waterfall</a> |
-              <a href="../client.nacl.sdk/waterfall?show_events=true&failures_only=true">failures</a> |
-              <a href="../client.nacl.sdk/console">console</a>
+              <a href="./waterfall">waterfall</a> |
+              <a href="./waterfall?show_events=true&failures_only=true">failures</a> |
+              <a href="./console">console</a>
             </td>
           </tr>
         </table>
@@ -77,32 +77,24 @@
         <table width="100%">
           <script language="javascript">
             var raw_flavors = [
-               ["SDK", ["windows-sdk",
-                        "mac-sdk",
-                        "linux-sdk"]],
+               ["trunk", ["windows-sdk",
+                          "mac-sdk",
+                          "linux-sdk"]],
+               ["ArcticSea", ["windows-sdk-ArcticSea",
+                              "mac-sdk-ArcticSea",
+                              "linux-sdk-ArcticSea"]],
             ];
             var flavors = [];
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "SDK" ||
-                   raw_flavors[i][0] == "Tarballs" ||
-                   raw_flavors[i][0] == "Integration" ||
-                   raw_flavors[i][0] == "Packages") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
 
             var bar = "./horizontal_one_box_per_builder"
             var waterfall = "./waterfall"
-
-            bar = '../client.nacl.sdk/' + bar
-            waterfall = '../client.nacl.sdk/' + waterfall
 
             function GetUrl(type, content) {
               return type + "?" + content + "&reload=30";

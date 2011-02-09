@@ -8,6 +8,8 @@ import re
 
 from twisted.python import log
 from buildbot.status.web.base import IBox
+from buildbot.steps import trigger
+from buildbot.status.builder import SUCCESS
 
 
 def getAllRevisions(build):
@@ -130,3 +132,64 @@ def EmailableBuildTable(build_status, waterfall_url, styles=None):
            'padding: 3px 0px 3px 0px; text-align: center;">\n') +
           table_content +
           '</table>\n')
+
+
+class FakeBuild(object):
+  """Fake build object which spits back a canned set of properties.
+
+  Used to allow digestion of all steps from a set of factories.
+  """
+
+  def __init__(self, properties):
+     self.properties = properties
+
+  def getProperty(self, key):
+    return self.properties[key]
+
+  def getProperties(self):
+    return self
+
+  def render(self, words):
+    return words
+
+
+def ExtractFactoriesSteps(factories):
+  """Extract a dictionary mapping factory names to all steps (minus triggers).
+
+  Arguments:
+    factories: a list of pairs of buildbot (name, factory) pairs.
+  Returns:
+    A dictionary mapping factory names to steps.
+  """
+  builder_steps = {}
+  for f in factories:
+    name = f[0]
+    steps = []
+    for s in f[1].steps:
+      # BuildFactory.steps is a list of pairs of BuildStep + constructor args.
+      # Invoke the constructor (with the supplied args) for each step.
+      nstep = s[0](**s[1])
+      nstep.build = FakeBuild({'got_revision': '???'})
+      # Skip triggers.
+      if nstep.__class__ == trigger.Trigger:
+        continue
+      step_name = nstep.getText('', SUCCESS)[0]
+      steps.append(step_name)
+    builder_steps[name] = steps
+
+  return builder_steps
+
+def AllFactoriesSteps(factories):
+  """Extract a list of all unique step names.
+
+  Arguments:
+    factories: a list of pairs of buildbot (name, factory) pairs.
+  Returns:
+    A list of unique step names.
+  """
+  builder_steps = ExtractFactoriesSteps(factories)
+  # For each value (build step name) under each factory name, pull out that
+  # element. ['factory1_step1', 'factory1_step2', 'factory2_step1' ... ]
+  all_steps = [item for sublist in builder_steps.values() for item in sublist]
+  # Eliminate duplicates.
+  return list(set(all_steps))
