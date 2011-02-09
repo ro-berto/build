@@ -25,10 +25,10 @@ ActiveMaster = None
 
 
 # Slave properties:
-slavename = None
+slavename = 'cr-mac10_6-qa'
 password = config.Master.GetBotPassword()
-host = None
-port = None
+host = 'nirnimesh'
+port = 8111
 basedir = None
 keepalive = 600
 usepty = 1

@@ -304,17 +304,19 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # PyAuto functional tests.
     if R('pyauto_functional_tests'):
-      f.AddPyAutoFunctionalTest('pyauto_functional_tests', suite='CONTINUOUS')
+      f.AddPyAutoFunctionalTest('pyauto_functional_tests', suite='CONTINUOUS',
+                                factory_properties=fp)
     elif R('pyauto_official_tests'):
       # Mapping from self._target_platform to a chrome-*.zip
       platmap = {'win32': 'win32',
                  'darwin': 'mac',
-                 'linux2': 'linux' }
+                 'linux2': 'linux64bit' }
       zip_plat = platmap[self._target_platform]
       workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
       f.AddPyAutoFunctionalTest('pyauto_functional_tests',
                                 src_base='..',
-                                workdir=workdir)
+                                workdir=workdir,
+                                factory_properties=fp)
 
     # ChromeDriver tests.
     if R('chromedriver_tests'):

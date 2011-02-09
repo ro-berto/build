@@ -588,7 +588,8 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
                               src_base=None,
-                              suite=None):
+                              suite=None,
+                              factory_properties=None):
     """Adds a step to run PyAuto functional tests.
 
     Args:
@@ -597,6 +598,7 @@ class ChromiumCommands(commands.FactoryCommands):
                 'build' (the default)
 
     """
+    factory_properties = factory_properties or {}
     J = self.PathJoin
     pyauto_script = J('src', 'chrome', 'test', 'functional',
                       'pyauto_functional.py')
@@ -612,7 +614,8 @@ class ChromiumCommands(commands.FactoryCommands):
       pyauto_functional_cmd = ['cmd', '/C'] + [py26, pyauto_script, '-v']
     elif self._target_platform == 'darwin':
       pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']
-    elif self._target_platform == 'linux2':
+    elif (self._target_platform == 'linux2' and
+          factory_properties.get('use_xvfb_on_linux')):
       # Run thru runtest.py on linux to launch virtual x server
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
                                                   [pyauto_script, '-v'])
