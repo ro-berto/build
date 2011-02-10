@@ -8,6 +8,8 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts for
 details on the presubmit API built into gcl.
 """
 
+import sys
+
 def CommonChecks(input_api, output_api):
   output = []
 
@@ -17,7 +19,6 @@ def CommonChecks(input_api, output_api):
   black_list = list(input_api.DEFAULT_BLACK_LIST) + [
       r'.*slave/.*/build/.*', r'.*depot_tools/.*', r'.*unittests/.*']
 
-  import sys
   sys_path_backup = sys.path
   try:
     sys.path = [
