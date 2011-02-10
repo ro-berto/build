@@ -61,6 +61,8 @@ class Master(config_private.Master):
   es5conform_root_url =  "https://es5conform.svn.codeplex.com/svn/"
   es5conform_revision = 62998
 
+  skia_url = 'http://skia.googlecode.com/svn/'
+
   # Default target platform if none was given to the factory.
   default_platform = 'win32'
 
