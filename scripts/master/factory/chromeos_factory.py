@@ -231,11 +231,24 @@ class CbuildbotFactory(object):
     Args:
       repo: ssh: uri for the repo to be checked out
     """
+    git_bin = '/usr/bin/git'
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
     clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
-    clear_and_clone_cmd += '/usr/bin/git clone %s;cd %s;' % (repo,
-                                                             git_checkout_dir)
-    clear_and_clone_cmd += 'git checkout %s' % self.branch
+    clear_and_clone_cmd += '%s clone %s;cd %s;' % (git_bin, repo,
+                                                   git_checkout_dir)
+    #It's possible that branch can be coming from WithProperites set
+    #If the branch is master, then even if the branch is empty, it amounts
+    #to the same 'git checkout' or 'git checkout master'
+    #If self.branch is set to something otherthan master, that means, branch
+    #has been passed in and we want to honor the explicitly passed in branch
+
+    clear_and_clone_cmd += '%s checkout ' % git_bin
+
+    if self.branch == 'master':
+      clear_and_clone_cmd += '%(branch)s'
+    else:
+      clear_and_clone_cmd +=  self.branch
+
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=WithProperties(clear_and_clone_cmd),
