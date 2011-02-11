@@ -33,9 +33,6 @@ class ChromiumCommands(commands.FactoryCommands):
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
 
-    # Where to point waterfall links for builds and test results.
-    self._archive_url = config.Master.archive_url
-
     # Where the chromium slave scritps are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
     self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
@@ -127,8 +124,7 @@ class ChromiumCommands(commands.FactoryCommands):
                       extra_archive_paths=None, use_build_number=False):
     """Adds a step to the factory to archive a build."""
     if show_url:
-      # TODO(nsylvain): Change the url to include the right subdir.
-      url = '%s/%s' %  (self._archive_url, 'snapshots')
+      url = _ArchiveUrlProperty('snapshots')
       text = 'download'
     else:
       url = None
@@ -660,10 +656,12 @@ class ChromiumCommands(commands.FactoryCommands):
       else:
         platform = 'chromium-gpu'
       builder_name = '%(buildername)s - GPU'
+      builder_name_suffix = ' - GPU'
       result_str = 'gpu results'
       test_name = 'webkit_gpu_tests'
     else:
       builder_name = '%(buildername)s'
+      builder_name_suffix = ''
       result_str = 'results'
       test_name = 'webkit_tests'
 
@@ -698,9 +696,6 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd)
 
     if archive_results:
-      # TODO(nsylvain): Change the url to include the right subdir.
-      url = '%s/%s' % (self._archive_url, 'layout-test-results')
-
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
              '--build-dir', self._build_dir,
@@ -709,7 +704,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
-          base_url=url,
+          base_url=_ArchiveUrlProperty('layout_test_results',
+                                       builder_name_suffix),
           link_text='layout test ' + result_str,
           command=cmd)
 
@@ -757,7 +753,7 @@ class ChromiumCommands(commands.FactoryCommands):
     perf_id = factory_properties.get('perf_id')
     perf_subdir = perf_mapping.get(perf_id)
 
-    url = '%s/%s/%s' %  (self._archive_url, 'coverage', perf_subdir)
+    url = _GetArchiveUrlForBuilder('coverage', perf_subdir)
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
            '--target', self._target,
@@ -823,3 +819,23 @@ class ChromiumCommands(commands.FactoryCommands):
            '--sw-reference-dir',
            self.PathJoin(gpu_data, 'sw_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
+
+class _ArchiveUrlProperty(WithProperties):
+  """Lazily-evaluated (WithProperties-compatible) archive URL for the current
+  builder.
+  """
+  def __init__(self, archive_type, builder_name_suffix=''):
+    # We completely override the render() behavior of WithProperties, thus its
+    # constructor parameters can be ignored.
+    WithProperties.__init__(self, '')
+    self.archive_type = archive_type
+    self.builder_name_suffix = builder_name_suffix
+
+  def render(self, pmap):
+    builder_name = pmap['buildername'] + self.builder_name_suffix
+    return _GetArchiveUrlForBuilder(self.archive_type, builder_name)
+
+def _GetArchiveUrlForBuilder(archive_type, builder_name):
+  url_builder_name = re.sub('[ .()]', '_', builder_name)
+  return '%s/%s/%s' % (
+      config.Master.archive_url, archive_type, url_builder_name)
