@@ -161,12 +161,20 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   # Set jobs parallelization based on number of cores.
   jobs = os.sysconf('SC_NPROCESSORS_ONLN')
 
+  # Test if we can use ccache.
+  ccache = ''
+  if os.path.exists('/usr/bin/ccache'):
+    # The default CCACHE_DIR is $HOME/.ccache which, on some of our
+    # bots, is over NFS.  This is intentional.  Talk to thestig or
+    # mmoss if you have questions.
+    ccache = 'ccache '
+
   # Setup crosstool environment variables.
   if crosstool:
     env['AR'] = crosstool + '-ar'
     env['AS'] = crosstool + '-as'
-    env['CC'] = crosstool + '-gcc'
-    env['CXX'] = crosstool + '-g++'
+    env['CC'] = ccache + crosstool + '-gcc'
+    env['CXX'] = ccache + crosstool + '-g++'
     env['LD'] = crosstool + '-ld'
     env['RANLIB'] = crosstool + '-ranlib'
     command.append('-j%d' % jobs)
@@ -190,7 +198,7 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
       env['CC'] = 'clang'
       env['CXX'] = 'clang++'
 
-    # We intentionally don't reuse the ccache/distcc modifications seen below,
+    # We intentionally don't reuse the ccache/distcc modifications,
     # as they don't work with clang.
     command.append('-j%d' % jobs)
     command.append('-r')
@@ -231,13 +239,8 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     print('  distcc_hosts_path: %s' % distcc_hosts_path)
     print('  hostname: %s' % hostname)
 
-  # Test if we can use ccache.
-  if os.path.exists('/usr/bin/ccache'):
-    # The default CCACHE_DIR is $HOME/.ccache which, on some of our
-    # bots, is over NFS.  This is intentional.  Talk to thestig or
-    # mmoss if you have questions.
-    cc = 'ccache ' + cc
-    cpp = 'ccache ' + cpp
+  cc = ccache + cc
+  cpp = ccache + cpp
 
   # Export our settings into our copy of the environment.
   print('ENV[\"CC\"] = \"%s\"' % cc)
