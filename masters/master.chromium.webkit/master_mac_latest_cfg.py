@@ -67,7 +67,9 @@ F('f_mac_clang_dbg', mac().ChromiumWebkitLatestFactory(
     options=['--compiler=clang',
              '--', '-project', '../webkit/webkit.xcodeproj',],
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
+        'gclient_env': {
+            'GYP_DEFINES': 'clang=1 clang_use_chrome_plugins=1'
+    }}))
 
 def Update(config, active_master, c):
   return helper.Update(c)
