@@ -222,9 +222,9 @@ class FactoryCommands(object):
     wp_strings = []
     for prop in ['branch', 'buildername', 'buildnumber', 'got_revision',
                  'revision', 'scheduler', 'slavename']:
-      wp_strings.append('\'%s\': \'%%(%s)s\'' % (prop, prop))
-    cmd.append(WithProperties('--build-properties="{' + ', '.join(wp_strings) +
-                              '}"'))
+      wp_strings.append('"%s": "%%(%s:-)s"' % (prop, prop))
+    cmd.append(WithProperties('--build-properties={' + ', '.join(wp_strings) +
+                              '}'))
     return cmd
 
   def AddFactoryProperties(self, cmd=None, factory_properties=None):
@@ -238,9 +238,9 @@ class FactoryCommands(object):
     fp_strings = []
     for prop in fpkeys:
       value = str(factory_properties[prop])
-      value = value.replace('\'', '\\\'')
-      fp_strings.append('\'%s\': \'%s\'' % (prop, value))
-    cmd.append('--factory-properties="{' + ', '.join(fp_strings) + '}"')
+      value = value.replace('"', '\\"')
+      fp_strings.append('"%s": "%s"' % (prop, value))
+    cmd.append('--factory-properties={' + ', '.join(fp_strings) + '}')
     return cmd
 
   def AddTestStep(self, command_class, test_name, test_command,
