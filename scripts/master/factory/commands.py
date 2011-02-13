@@ -237,7 +237,7 @@ class FactoryCommands(object):
     fpkeys.sort()
     fp_strings = []
     for prop in fpkeys:
-      value = factory_properties[prop]
+      value = str(factory_properties[prop])
       value = value.replace('\'', '\\\'')
       fp_strings.append('\'%s\': \'%s\'' % (prop, value))
     cmd.append('--factory-properties="{' + ', '.join(fp_strings) + '}"')
