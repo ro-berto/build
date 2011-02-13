@@ -9,9 +9,9 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
+T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 
@@ -32,9 +32,9 @@ rel_archive = master_config.GetArchiveUrl('Chromium', 'Win Builder',
 S('win_rel', branch='src', treeStableTimer=60)
 
 #
-# Dependent scheduler for the dbg builder
+# Triggerable scheduler for the rel builder
 #
-D('win_rel_dep', 'win_rel')
+T('win_rel_trigger')
 
 #
 # Win Rel Builder
@@ -42,12 +42,13 @@ D('win_rel_dep', 'win_rel')
 B('Win Builder', 'rel', 'compile|windows', 'win_rel', builddir='cr-win-rel')
 F('rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;chromium_builder_tests'))
+    project='all.sln;chromium_builder_tests',
+    factory_properties={'trigger': 'win_rel_trigger'}))
 
 #
 # Win Rel testers
 #
-B('XP Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_dep',
+B('XP Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
 F('rel_unit_1', win().ChromiumFactory(
     slave_type='Tester',
@@ -58,7 +59,7 @@ F('rel_unit_1', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_dep',
+B('XP Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
 F('rel_unit_2', win().ChromiumFactory(
     slave_type='Tester',
@@ -68,12 +69,12 @@ F('rel_unit_2', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Vista Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_dep',
+B('Vista Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
-B('Vista Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_dep',
+B('Vista Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
 
-B('Win7 Sync', 'rel_sync', 'testers|windows', 'win_rel_dep')
+B('Win7 Sync', 'rel_sync', 'testers|windows', 'win_rel_trigger')
 F('rel_sync', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -81,7 +82,7 @@ F('rel_sync', win().ChromiumFactory(
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 
-B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_dep')
+B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_trigger')
 F('rel_nacl', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -89,9 +90,9 @@ F('rel_nacl', win().ChromiumFactory(
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 
-B('NACL Tests (x64)', 'rel_nacl', 'testers|windows', 'win_rel_dep')
+B('NACL Tests (x64)', 'rel_nacl', 'testers|windows', 'win_rel_trigger')
 
-B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_dep',
+B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
 F('rel_cf', win().ChromiumFactory(
     slave_type='Tester',
@@ -100,9 +101,9 @@ F('rel_cf', win().ChromiumFactory(
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 
-B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_dep',
+B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
-B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_dep',
+B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True)
 
 ################################################################################
@@ -118,30 +119,26 @@ dbg_archive = master_config.GetArchiveUrl('Chromium', 'Win Builder (dbg)',
 S('win_dbg', branch='src', treeStableTimer=60)
 
 #
-# Debug scheduler used to trigger the dependent dbg scheduler.
+# Triggerable scheduler for the dbg builder
 #
-S('win_dbg_for_dep', branch='src', treeStableTimer=60)
-
-#
-# Dependent scheduler for the dbg builder
-#
-D('win_dbg_dep', 'win_dbg_for_dep')
+T('win_dbg_trigger')
 
 #
 # Win Dbg Builder
 #
-B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg_for_dep',
+B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg',
   builddir='cr-win-dbg')
 F('dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     project='all.sln;chromium_builder_tests',
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+    factory_properties={'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+                        'trigger': 'win_dbg_trigger'}))
 
 #
 # Win Dbg Unit testers
 #
-B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep',
+B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_1', win().ChromiumFactory(
     target='Debug',
@@ -155,7 +152,7 @@ F('dbg_unit_1', win().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 
-B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep',
+B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_2', win().ChromiumFactory(
     target='Debug',
@@ -168,7 +165,7 @@ F('dbg_unit_2', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep',
+B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_3', win().ChromiumFactory(
       target='Debug',
@@ -181,7 +178,7 @@ F('dbg_unit_3', win().ChromiumFactory(
                           'start_crash_handler': True,
                           'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep',
+B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_4', win().ChromiumFactory(
     target='Debug',
@@ -194,7 +191,7 @@ F('dbg_unit_4', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_dep',
+B('XP Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_5', win().ChromiumFactory(
     target='Debug',
@@ -207,21 +204,21 @@ F('dbg_unit_5', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Vista Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_dep',
+B('Vista Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
-B('Vista Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_dep',
+B('Vista Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
-B('Vista Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_dep',
+B('Vista Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
-B('Vista Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_dep',
+B('Vista Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
-B('Vista Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_dep',
+B('Vista Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True)
 
 #
 # Win Dbg Interactive Tests
 #
-B('Interactive Tests (dbg)', 'dbg_int', 'testers|windows', 'win_dbg_dep')
+B('Interactive Tests (dbg)', 'dbg_int', 'testers|windows', 'win_dbg_trigger')
 F('dbg_int', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',

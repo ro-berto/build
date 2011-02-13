@@ -9,9 +9,9 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
+T = helper.Triggerable
 
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
@@ -32,14 +32,15 @@ rel_archive_x64 = master_config.GetArchiveUrl('Chromium', 'Linux Builder x64',
 S('linux_rel', branch='src', treeStableTimer=60)
 
 #
-# Dependent scheduler for the dbg builder
+# Triggerable scheduler for the rel builder
 #
-D('linux_rel_dep', 'linux_rel')
+T('linux_rel_trigger')
 
 #
 # Linux Rel Builder
 #
-B('Linux Builder x64', 'rel', 'compile', 'linux_rel', builddir='cr-linux-rel-x64')
+B('Linux Builder x64', 'rel', 'compile', 'linux_rel',
+  builddir='cr-linux-rel-x64')
 F('rel', linux().ChromiumFactory(
     slave_type='Builder',
     options=['app_unittests', 'browser_tests', 'googleurl_unittests',
@@ -47,12 +48,13 @@ F('rel', linux().ChromiumFactory(
              'page_cycler_tests', 'printing_unittests', 'remoting_unittests',
              'startup_tests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
              'url_fetch_test', 'base_unittests', 'net_unittests',
-             'gfx_unittests', 'safe_browsing_tests', 'sync_integration_tests']))
+             'gfx_unittests', 'safe_browsing_tests', 'sync_integration_tests'],
+    factory_properties={'trigger': 'linux_rel_trigger'}))
 
 #
 # Linux Rel testers
 #
-B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_dep')
+B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger')
 F('rel_unit', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive_x64,
@@ -60,7 +62,7 @@ F('rel_unit', linux().ChromiumFactory(
            'browser_tests', 'unit', 'gpu', 'base', 'net', 'safe_browsing'],
     factory_properties={'generate_gtest_json': True}))
 
-B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_dep')
+B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger')
 F('rel_sync', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive_x64,
@@ -83,12 +85,11 @@ dbg_shlib_archive = master_config.GetArchiveUrl('Chromium',
 # Main debug scheduler for src/
 #
 S('linux_dbg', branch='src', treeStableTimer=60)
-S('linux_dbg_shlib', branch='src', treeStableTimer=60)
 
 #
-# Dependent scheduler for the dbg builder
+# Triggerable scheduler for the dbg shlib builder
 #
-D('linux_dbg_shlib_dep', 'linux_dbg_shlib')
+T('linux_dbg_shlib_trigger')
 
 #
 # Linux Dbg Builder
@@ -132,20 +133,22 @@ F('dbg_unit_2', linux().ChromiumFactory(
 #
 # Linux Dbg Shared Builder
 #
-B('Linux Builder (dbg-shlib)', 'dbg_shlib', 'compile', 'linux_dbg_shlib',
+B('Linux Builder (dbg-shlib)', 'dbg_shlib', 'compile', 'linux_dbg',
    builddir='cr-linux-dbg-shlib')
 F('dbg_shlib', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
     options=['--build-tool=make'],
     factory_properties={
-        'gclient_env': {'GYP_DEFINES':'library=shared_library'}}))
+        'gclient_env': {'GYP_DEFINES':'library=shared_library'},
+        'trigger': 'linux_dbg_shlib_trigger'}))
 
 #
 # Linux Dbg Shared Unit testers
 #
 
-B('Linux Tests (dbg-shlib)', 'dbg_shlib_unit', 'testers', 'linux_dbg_shlib_dep')
+B('Linux Tests (dbg-shlib)', 'dbg_shlib_unit', 'testers',
+  'linux_dbg_shlib_trigger')
 F('dbg_shlib_unit', linux().ChromiumFactory(
     target='Debug',
     slave_type='Tester',

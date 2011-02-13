@@ -9,9 +9,9 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
+T = helper.Triggerable
 
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
@@ -32,9 +32,9 @@ rel_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder',
 S('mac_rel', branch='src', treeStableTimer=60)
 
 #
-# Dependent scheduler for the dbg builder
+# Triggerable scheduler for the dbg builder
 #
-D('mac_rel_dep', 'mac_rel')
+T('mac_rel_trigger')
 
 #
 # Mac Rel Builder
@@ -42,12 +42,13 @@ D('mac_rel_dep', 'mac_rel')
 B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel')
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_tests']))
+    options=['--', '-target', 'chromium_builder_tests'],
+    factory_properties={'trigger': 'mac_rel_trigger'}))
 
 #
 # Mac Rel testers
 #
-B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_dep')
+B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
 F('rel_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -56,7 +57,7 @@ F('rel_unit_1', mac().ChromiumFactory(
   factory_properties={'generate_gtest_json': True})
 )
 
-B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_dep')
+B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
 F('rel_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -64,10 +65,10 @@ F('rel_unit_2', mac().ChromiumFactory(
   factory_properties={'generate_gtest_json': True})
 )
 
-B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_dep')
-B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_dep')
+B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
+B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
 
-B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_dep')
+B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger')
 F('rel_sync', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -87,9 +88,9 @@ dbg_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder (dbg)',
 S('mac_dbg', branch='src', treeStableTimer=60)
 
 #
-# Dependent scheduler for the dbg builder
+# Triggerable scheduler for the dbg builder
 #
-D('mac_dbg_dep', 'mac_dbg')
+T('mac_dbg_trigger')
 
 #
 # Mac Dbg Builder
@@ -98,13 +99,14 @@ B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', builddir='cr-mac-dbg')
 F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_tests']))
+    options=['--', '-target', 'chromium_builder_tests'],
+    factory_properties={'trigger': 'mac_dbg_trigger'}))
 
 #
 # Mac Dbg Unit testers
 #
 
-B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
+B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger')
 F('dbg_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   target='Debug',
@@ -114,7 +116,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
          'safe_browsing'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_dep')
+B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger')
 F('dbg_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   target='Debug',
@@ -122,7 +124,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
   tests=['ui', 'net'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_dep')
+B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger')
 F('dbg_unit_3', mac().ChromiumFactory(
   slave_type='Tester',
   target='Debug',
@@ -130,9 +132,9 @@ F('dbg_unit_3', mac().ChromiumFactory(
   tests=['browser_tests'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_dep')
-B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_dep')
-B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_dep')
+B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger')
+B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger')
+B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger')
 
 def Update(config, active_master, c):
   return helper.Update(c)
