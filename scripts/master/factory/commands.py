@@ -210,6 +210,39 @@ class FactoryCommands(object):
       cmd.extend(arg_list)
     return cmd
 
+  def AddBuildProperties(self, cmd=None):
+    """Adds a WithProperties() call with build properties to cmd."""
+    # pylint: disable=R0201
+    cmd = cmd or []
+
+    # Create a WithProperties format string that includes build properties.
+    # Don't add blamelist since it can contain single quotes and we don't have
+    # access to the rendered string to convert it to the correct JSON format
+    # before sending it to the slave.
+    wp_strings = []
+    for prop in ['branch', 'buildername', 'buildnumber', 'got_revision',
+                 'revision', 'scheduler', 'slavename']:
+      wp_strings.append('\'%s\': \'%%(%s)s\'' % (prop, prop))
+    cmd.append(WithProperties('--build-properties="{' + ', '.join(wp_strings) +
+                              '}"'))
+    return cmd
+
+  def AddFactoryProperties(self, cmd=None, factory_properties=None):
+    """Adds factory properties to cmd."""
+    # pylint: disable=R0201
+    cmd = cmd or []
+    factory_properties = factory_properties or {}
+
+    fpkeys = factory_properties.keys()
+    fpkeys.sort()
+    fp_strings = []
+    for prop in fpkeys:
+      value = factory_properties[prop]
+      value = value.replace('\'', '\\\'')
+      fp_strings.append('\'%s\': \'%s\'' % (prop, value))
+    cmd.append('--factory-properties="{' + ', '.join(fp_strings) + '}"')
+    return cmd
+
   def AddTestStep(self, command_class, test_name, test_command,
                   test_description='', timeout=600, workdir=None, env=None,
                   locks=None, halt_on_failure=False, do_step_if=True):
@@ -460,19 +493,8 @@ class FactoryCommands(object):
            '--build-dir', self._build_dir,
            '--target', self._target,
            '--build-url', build_url]
-    if factory_properties.get('halt_on_missing_build', False):
-      # Below, WithProperties is appended to the cmd and rendered into a string
-      # for each specific build at build-time.  When revision is None, it
-      # renders to an empty string.  When revision is not None, it renders to
-      # the string --halt-on-missing-build.  Note: the :- after revision
-      # controls this behavior and is not a typo.
-      #
-      # revision will be None if 'force build' is pressed from the Buildbot.  In
-      # those cases, we don't want to append --halt-on-missing-build since it's
-      # acceptable if there is no build that exists at the latest available
-      # revision at that time.  Otherwise, append --halt-on-missing-build and
-      # stop the build if the requested build doesn't exist.
-      cmd.append(WithProperties('%s', 'revision:---halt-on-missing-build'))
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(cmd, factory_properties)
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract build', cmd,
                      halt_on_failure=True)
 
