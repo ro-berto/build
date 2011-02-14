@@ -141,7 +141,7 @@ class FakeBuild(object):
   """
 
   def __init__(self, properties):
-     self.properties = properties
+    self.properties = properties
 
   def getProperty(self, key):
     return self.properties[key]
@@ -150,6 +150,7 @@ class FakeBuild(object):
     return self
 
   def render(self, words):
+    # pylint: disable-msg=R0201
     return words
 
 
