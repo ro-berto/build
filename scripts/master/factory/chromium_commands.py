@@ -124,7 +124,7 @@ class ChromiumCommands(commands.FactoryCommands):
                       extra_archive_paths=None, use_build_number=False):
     """Adds a step to the factory to archive a build."""
     if show_url:
-      url = _ArchiveUrlProperty('snapshots')
+      url = _GetArchiveUrl('snapshots')
       text = 'download'
     else:
       url = None
@@ -656,12 +656,10 @@ class ChromiumCommands(commands.FactoryCommands):
       else:
         platform = 'chromium-gpu'
       builder_name = '%(buildername)s - GPU'
-      builder_name_suffix = ' - GPU'
       result_str = 'gpu results'
       test_name = 'webkit_gpu_tests'
     else:
       builder_name = '%(buildername)s'
-      builder_name_suffix = ''
       result_str = 'results'
       test_name = 'webkit_tests'
 
@@ -704,8 +702,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
-          base_url=_ArchiveUrlProperty('layout_test_results',
-                                       builder_name_suffix),
+          base_url=_GetArchiveUrl('layout_test_results'),
           link_text='layout test ' + result_str,
           command=cmd)
 
@@ -753,7 +750,7 @@ class ChromiumCommands(commands.FactoryCommands):
     perf_id = factory_properties.get('perf_id')
     perf_subdir = perf_mapping.get(perf_id)
 
-    url = _GetArchiveUrlForBuilder('coverage', perf_subdir)
+    url = _GetArchiveUrl('coverage', perf_subdir)
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
            '--target', self._target,
@@ -820,22 +817,7 @@ class ChromiumCommands(commands.FactoryCommands):
            self.PathJoin(gpu_data, 'sw_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
 
-class _ArchiveUrlProperty(WithProperties):
-  """Lazily-evaluated (WithProperties-compatible) archive URL for the current
-  builder.
-  """
-  def __init__(self, archive_type, builder_name_suffix=''):
-    # We completely override the render() behavior of WithProperties, thus its
-    # constructor parameters can be ignored.
-    WithProperties.__init__(self, '')
-    self.archive_type = archive_type
-    self.builder_name_suffix = builder_name_suffix
-
-  def render(self, pmap):
-    builder_name = pmap['buildername'] + self.builder_name_suffix
-    return _GetArchiveUrlForBuilder(self.archive_type, builder_name)
-
-def _GetArchiveUrlForBuilder(archive_type, builder_name):
-  url_builder_name = re.sub('[ .()]', '_', builder_name)
-  return '%s/%s/%s' % (
-      config.Master.archive_url, archive_type, url_builder_name)
+def _GetArchiveUrl(archive_type, builder_name='%(builder_name)s'):
+  # The default builder name is dynamically filled in by
+  # ArchiveCommand.createSummary.
+  return '%s/%s/%s' % (config.Master.archive_url, archive_type, builder_name)

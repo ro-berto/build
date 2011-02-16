@@ -10,12 +10,14 @@ from buildbot.steps import shell
 from buildbot.process import buildstep
 
 class ScriptObserver(buildstep.LogLineObserver):
-  """This class knows how to understand build_archive.py test output."""
+  """This class knows how to understand archive_build/coverage/
+  layout_test_results.py test output."""
 
   def __init__(self):
     buildstep.LogLineObserver.__init__(self)
     self.last_change = ''
     self.build_number = ''
+    self.build_name = ''
 
   def outLineReceived(self, line):
     """This is called once with each line of the test log."""
@@ -23,9 +25,12 @@ class ScriptObserver(buildstep.LogLineObserver):
       self.last_change = line.split(' ')[2]
     elif line.startswith('build number: '):
       self.build_number = line.split(' ')[2]
+    elif line.startswith('build name: '):
+      self.build_name = line.split(' ',  2)[2]
 
 class ArchiveCommand(shell.ShellCommand):
-  """Buildbot command that knows how to display build_archive.py output."""
+  """Buildbot command that knows how to display archive_build/coverage/
+  layout_test_results.py test output."""
 
   def __init__(self, **kwargs):
     shell.ShellCommand.__init__(self, **kwargs)
@@ -37,13 +42,14 @@ class ArchiveCommand(shell.ShellCommand):
 
   def createSummary(self, log):
     if (self.base_url and self.link_text):
+      base_url = self.base_url % {'build_name': self.script_observer.build_name}
       if self.script_observer.build_number:
-        url = ('%s/%s/%s%s' % (self.base_url,
+        url = ('%s/%s/%s%s' % (base_url,
                                self.script_observer.build_number,
                                self.script_observer.last_change,
                                self.index_suffix))
       else:
-        url = ('%s/%s%s' % (self.base_url,
+        url = ('%s/%s%s' % (base_url,
                             self.script_observer.last_change,
                             self.index_suffix))
       self.addURL(self.link_text, url)

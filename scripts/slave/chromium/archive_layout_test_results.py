@@ -18,6 +18,7 @@ For a list of command-line options, call this script with '--help'.
 import logging
 import optparse
 import os
+import re
 import socket
 import sys
 
@@ -108,8 +109,7 @@ def archive_layout(options, args):
   # Extract the build name of this slave (e.g., 'chrome-release') from its
   # configuration file if not provided as a param.
   build_name = options.builder_name or slave_utils.SlaveBuildName(chrome_dir)
-  build_name = (build_name.replace(' ', '_').replace('.', '_')
-                          .replace('(', '_').replace(')', '_'))
+  build_name = re.sub('[ .()]', '_', build_name)
 
   last_change = str(slave_utils.SubversionRevision(chrome_dir))
   print 'last change: %s' % last_change

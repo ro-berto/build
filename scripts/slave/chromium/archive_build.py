@@ -141,9 +141,10 @@ class StagerBase(object):
 
     self._symbol_dir_base = options.dirs['symbol_dir_base']
     self._www_dir_base = options.dirs['www_dir_base']
-    build_name = slave_utils.SlaveBuildName(self._src_dir)
-    self._symbol_dir_base = os.path.join(self._symbol_dir_base, build_name)
-    self._www_dir_base = os.path.join(self._www_dir_base, build_name)
+    self._build_name = slave_utils.SlaveBuildName(self._src_dir)
+    self._symbol_dir_base = os.path.join(self._symbol_dir_base,
+                                         self._build_name)
+    self._www_dir_base = os.path.join(self._www_dir_base, self._build_name)
 
     self._version_file = os.path.join(self._chrome_dir, 'VERSION')
     self._installer_file = os.path.join(self._build_dir,
@@ -596,6 +597,8 @@ class StagerBase(object):
       print 'No changes since last build (r%d <= r%d)' % (self._build_revision,
                                                           previous_revision)
       return 0
+
+    print 'build name: %s' % self._build_name
 
     archive_base_name = 'chrome-%s' % chromium_utils.PlatformName()
     archive_file = self.CreateArchiveFile(archive_base_name,
