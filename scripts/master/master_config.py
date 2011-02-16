@@ -53,13 +53,14 @@ class Helper(object):
       raise ValueError('Factory %s already exist' % name)
     self._factories[name] = factory
 
-  def Scheduler(self, name, branch, treeStableTimer=60):
+  def Scheduler(self, name, branch, treeStableTimer=60, categories=None):
     if name in self._schedulers:
       raise ValueError('Scheduler %s already exist' % name)
     self._schedulers[name] = {'type': 'Scheduler',
                               'branch': branch,
                               'treeStableTimer': treeStableTimer,
-                              'builders': []}
+                              'builders': [],
+                              'categories': categories}
 
   def Update(self, c):
     for builder in self._builders:
@@ -93,7 +94,8 @@ class Helper(object):
         instance = Scheduler(name=s_name,
                              branch=scheduler['branch'],
                              treeStableTimer=scheduler['treeStableTimer'],
-                             builderNames=scheduler['builders'])
+                             builderNames=scheduler['builders'],
+                             categories=scheduler['categories'])
         scheduler['instance'] = instance
         c['schedulers'].append(instance)
 

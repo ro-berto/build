@@ -20,6 +20,7 @@ def TriggerBot(revision):
               '--revision', revision,
               '--branch', 'src',
               '--username', 'lkgr',
+              '--category', 'lkgr',
               'no file information']
   runner.run()
 
