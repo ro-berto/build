@@ -103,6 +103,69 @@ def Write(file_path, data):
   finally:
     f.close()
 
+# Copy a file to Google Storage.
+def GSUtilCopyFile(filename, gs_base, subdir):
+  source = 'file://' + filename
+  dest = gs_base
+  if subdir:
+    # HACK(nsylvain): We can't use normpath here because it will break the
+    # slashes on Windows.
+    if subdir == '..':
+      dest = os.path.dirname(gs_base)
+    else:
+      dest = '/'.join([gs_base, subdir])
+  dest = '/'.join([dest, os.path.basename(filename)])
+
+  # Get the path to the gsutil script.
+  gsutil = os.path.join(os.path.dirname(__file__), '..', 'gsutil')
+  gsutil = os.path.normpath(gsutil)
+  if chromium_utils.IsWindows():
+    gsutil = gsutil + '.bat'
+
+  # Get the path to the boto file containing the password.
+  boto_file = os.path.join(os.path.dirname(__file__), '..', '..', '..',
+                           'site_config', '.boto')
+
+  # Make sure gsutil uses this boto file.
+  os.environ['AWS_CREDENTIAL_FILE'] = boto_file
+
+  # Run the gsutil command. gsutil internally calls command_wrapper, which
+  # will try to run the command 10 times if it fails.
+  command = [gsutil, 'cp', '-a', 'public-read', source, dest]
+  return chromium_utils.RunCommand(command)
+
+def MyCopyFileToDir(filename, destination, gs_base, gs_subdir=None):
+  if gs_base:
+    return GSUtilCopyFile(filename, gs_base, gs_subdir)
+
+  return chromium_utils.CopyFileToDir(filename, destination)
+
+def MyMaybeMakeDirectory(destination, gs_base):
+  if gs_base:
+    # No Op.
+    return True
+
+  return chromium_utils.MaybeMakeDirectory(destination)
+
+def MyMakeWorldReadable(destination, gs_base):
+  if gs_base:
+    # No Op.
+    return True
+
+  return chromium_utils.MakeWorldReadable(destination)
+
+def MySshMakeDirectory(host, destination, gs_base):
+  if gs_base:
+    # No Op.
+    return True
+
+  return chromium_utils.SshMakeDirectory(host, destination)
+
+def MySshCopyFiles(filename, host, destination, gs_base, gs_subdir=None):
+  if gs_base:
+    return GSUtilCopyFile(filename, gs_base, gs_subdir)
+
+  return chromium_utils.SshCopyFiles(filename, host, destination)
 
 class StagerBase(object):
   """Handles archiving a build. Call the public ArchiveBuild() method."""
@@ -364,7 +427,7 @@ class StagerBase(object):
       raise StagingError('Failed to make zip package %s' % zip_file)
     return (zip_dir, zip_file)
 
-  def _UploadSymbols(self, www_dir):
+  def _UploadSymbols(self, www_dir, gs_base):
     """Upload symbols to a share. It does not appear to upload symbols to a
        crash server.
        TODO(robertshield): Figure out if this should be uploading symbols to
@@ -383,11 +446,11 @@ class StagerBase(object):
       # doesn't understand C:/ and incorrectly concatenates the absolute paths.
       symbol_dir = os.path.join(self._symbol_dir_base,
                                 str(self._build_revision))
-      print 'os.makedirs(%s)' % symbol_dir
+      print 'chromium_utils.MaybeMakeDirectory(%s)' % symbol_dir
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (sym_zip_file, symbol_dir)
       if not self.options.dry_run:
-        chromium_utils.MaybeMakeDirectory(symbol_dir)
-        chromium_utils.CopyFileToDir(sym_zip_file, symbol_dir)
+        MyMaybeMakeDirectory(symbol_dir, gs_base)
+        MyCopyFileToDir(sym_zip_file, symbol_dir, gs_base)
     elif chromium_utils.IsLinux():
       # If there are no symbol files, then sym_zip_file will be an empty string.
       sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
@@ -399,10 +462,10 @@ class StagerBase(object):
       if not self.options.dry_run:
         print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
-        chromium_utils.SshMakeDirectory(self.options.archive_host, www_dir)
-        chromium_utils.MakeWorldReadable(sym_zip_file)
-        chromium_utils.SshCopyFiles(sym_zip_file, self.options.archive_host,
-                                    www_dir)
+        MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
+        MyMakeWorldReadable(sym_zip_file, gs_base)
+        MySshCopyFiles(sym_zip_file, self.options.archive_host, www_dir,
+                       gs_base)
         os.unlink(sym_zip_file)
     elif chromium_utils.IsMac():
       # A Mac build makes fake dSYMs, so there is no point in collecting them.
@@ -412,32 +475,25 @@ class StagerBase(object):
           'Platform "%s" is not currently supported.' % sys.platform)
 
   def _UploadBuild(self, www_dir, changelog_path, revisions_path,
-                   archive_files):
+                   archive_files, gs_base):
     if chromium_utils.IsWindows():
       installer_destination_file = os.path.join(www_dir,
           self.options.installer)
-      incremental_installer = self._GetDifferentialInstallerFile(
-          str(self._chromium_revision))
       print 'os.makedirs(%s)' % www_dir
       print ('shutil.copyfile(%s, %s)' %
           (self._installer_file, installer_destination_file))
-      if incremental_installer:
-        print ('chromium_utils.CopyFileToDir(%s, %s)' % (incremental_installer,
-                                                        www_dir))
       for archive in archive_files:
         print 'chromium_utils.CopyFileToDir(%s, %s)' % (archive, www_dir)
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (changelog_path, www_dir)
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (revisions_path, www_dir)
 
       if not self.options.dry_run:
-        chromium_utils.MaybeMakeDirectory(www_dir)
+        MyMaybeMakeDirectory(www_dir, gs_base)
         shutil.copyfile(self._installer_file, installer_destination_file)
-        if incremental_installer:
-          chromium_utils.CopyFileToDir(incremental_installer, www_dir)
         for archive in archive_files:
-          chromium_utils.CopyFileToDir(archive, www_dir)
-        chromium_utils.CopyFileToDir(changelog_path, www_dir)
-        chromium_utils.CopyFileToDir(revisions_path, www_dir)
+          MyCopyFileToDir(archive, www_dir)
+        MyCopyFileToDir(changelog_path, www_dir, gs_base)
+        MyCopyFileToDir(revisions_path, www_dir, gs_base)
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       for archive in archive_files:
         print 'SshCopyFiles(%s, %s, %s)' % (archive,
@@ -450,25 +506,24 @@ class StagerBase(object):
       if not self.options.dry_run:
         print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
-        chromium_utils.SshMakeDirectory(self.options.archive_host, www_dir)
+        MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
         for archive in archive_files:
-          chromium_utils.MakeWorldReadable(archive)
-          chromium_utils.SshCopyFiles(archive, self.options.archive_host,
-                                      www_dir)
+          MyMakeWorldReadable(archive, gs_base)
+          MySshCopyFiles(archive, self.options.archive_host, www_dir, gs_base)
           os.unlink(archive)
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
-        chromium_utils.MakeWorldReadable(changelog_path)
-        chromium_utils.SshCopyFiles(changelog_path, self.options.archive_host,
-                                    www_dir)
-        chromium_utils.MakeWorldReadable(revisions_path)
-        chromium_utils.SshCopyFiles(revisions_path, self.options.archive_host,
-                                    www_dir)
+        MyMakeWorldReadable(changelog_path, gs_base)
+        MySshCopyFiles(changelog_path, self.options.archive_host, www_dir,
+                       gs_base)
+        MyMakeWorldReadable(revisions_path, gs_base)
+        MySshCopyFiles(revisions_path, self.options.archive_host, www_dir,
+                      gs_base)
     else:
       raise NotImplementedError(
           'Platform "%s" is not currently supported.' % sys.platform)
 
-  def UploadTests(self, www_dir):
+  def UploadTests(self, www_dir, gs_base):
     # Build up the list of files to save from the tools TESTS file as well
     # as any extras we've been given.
     try:
@@ -515,29 +570,29 @@ class StagerBase(object):
     if not self.options.dry_run:
       if chromium_utils.IsWindows():
         # Use Samba on Windows.
-        chromium_utils.MaybeMakeDirectory(root_test_dir)
+        MyMaybeMakeDirectory(root_test_dir, gs_base)
         for test_dir in test_dirs:
-          chromium_utils.MaybeMakeDirectory(test_dir)
+          MyMaybeMakeDirectory(test_dir, gs_base)
         for test_file in test_file_list:
           # TODO(robertshield): binaries and symbols are stored in a zip file
           # via CreateArchiveFile. Tests should be too.
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
           test_dir = os.path.join(www_dir, UPLOAD_DIR, relative_dir)
-          chromium_utils.CopyFileToDir(test_file, test_dir)
+          MyCopyFileToDir(test_file, test_dir, gs_base,
+                          '/'.join([UPLOAD_DIR, relative_dir]))
       else:
         # Otherwise use scp.
-        chromium_utils.SshMakeDirectory(self.options.archive_host,
-                                        root_test_dir)
+        MySshMakeDirectory(self.options.archive_host, root_test_dir, gs_base)
         for test_dir in test_dirs:
-          chromium_utils.SshMakeDirectory(self.options.archive_host, test_dir)
+          MySshMakeDirectory(self.options.archive_host, test_dir, gs_base)
         for test_file in test_file_list:
-          chromium_utils.MakeWorldReadable(test_file)
+          MyMakeWorldReadable(test_file, gs_base)
           # TODO(robertshield): binaries and symbols are stored in a zip file
           # via CreateArchiveFile. Tests should be too.
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
           test_dir = os.path.join(www_dir, UPLOAD_DIR, relative_dir)
-          chromium_utils.SshCopyFiles(test_file, self.options.archive_host,
-                                      test_dir)
+          MySshCopyFiles(test_file, self.options.archive_host, test_dir,
+                        gs_base, '/'.join([UPLOAD_DIR, relative_dir]))
 
   def _GenerateChangeLog(self, previous_revision, changelog_path):
     """We need to generate change log for both chrome and webkit repository."""
@@ -614,9 +669,13 @@ class StagerBase(object):
     self.GenerateRevisionFile()
 
     www_dir = os.path.join(self._www_dir_base, str(self._build_revision))
-    self._UploadSymbols(www_dir)
+    gs_base = None
+    if self.options.gs_bucket:
+      gs_base = '/'.join([self.options.gs_bucket, self._build_name,
+                          str(self._build_revision)])
+    self._UploadSymbols(www_dir, gs_base)
     self._UploadBuild(www_dir, changelog_path, self.revisions_path,
-                      [archive_file])
+                      [archive_file], gs_base)
 
     # Archive Linux packages (if any -- only created for Chrome builds).
     if chromium_utils.IsLinux():
@@ -631,16 +690,16 @@ class StagerBase(object):
       if not self.options.dry_run:
         print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
-        chromium_utils.SshMakeDirectory(self.options.archive_host, www_dir)
+        MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
         for package_file in linux_packages:
-          chromium_utils.MakeWorldReadable(package_file)
-          chromium_utils.SshCopyFiles(package_file, self.options.archive_host,
-                                      www_dir)
+          MyMakeWorldReadable(package_file, gs_base)
+          MySshCopyFiles(package_file, self.options.archive_host,
+                         www_dir, gs_base)
           # Cleanup archived packages, otherwise they keep accumlating since
           # they have different filenames with each build.
           os.unlink(package_file)
 
-    self.UploadTests(www_dir)
+    self.UploadTests(www_dir, gs_base)
 
     if not self.options.dry_run:
       # Save the current build revision locally so we can compute a changelog
@@ -655,12 +714,11 @@ class StagerBase(object):
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
-        chromium_utils.MakeWorldReadable(self.last_change_file)
+        MyMakeWorldReadable(self.last_change_file, gs_base)
         print 'Saving revision to %s:%s' % (self.options.archive_host,
                                             latest_file_path)
-        chromium_utils.SshCopyFiles(self.last_change_file,
-                                    self.options.archive_host,
-                                    latest_file_path)
+        MySshCopyFiles(self.last_change_file, self.options.archive_host,
+                       latest_file_path, gs_base, '..')
       else:
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
@@ -713,19 +771,19 @@ def main(argv):
                                 'files contain lists of extra files to be '
                                 'that will be archived. The paths are relative '
                                 'to the directory given in --src-dir.')
-  option_parser.add_option('--build-number', type=int,
+  option_parser.add_option('--build-number', type='int',
                            help='The build number of the builder running '
                                 'this script. we use it as the name of build '
                                 'archive directory')
-  option_parser.add_option('--default-chromium-revision', type=int,
+  option_parser.add_option('--default-chromium-revision', type='int',
                            help='The default chromium revision so far is only '
                                 'used by archive_build unittest to set valid '
                                 'chromium revision in test')
-  option_parser.add_option('--default-webkit-revision', type=int,
+  option_parser.add_option('--default-webkit-revision', type='int',
                            help='The default webkit revision so far is only '
                                 'used by archive_build unittest to set valid '
                                 'webkit revision in test')
-  option_parser.add_option('--default-v8-revision', type=int,
+  option_parser.add_option('--default-v8-revision', type='int',
                            help='The default v8 revision so far is only '
                                 'used by archive_build unittest to set valid '
                                 'v8 revision in test')
@@ -737,6 +795,8 @@ def main(argv):
                            help='Files to ignore')
   option_parser.add_option('--archive_host',
                            default=config.Archive.archive_host)
+  option_parser.add_option('--gs_bucket', type='string',
+                           help='Google Storage Bucket to upload to')
   options, args = option_parser.parse_args()
   if args:
     raise StagingError('Unknown arguments: %s' % args)
