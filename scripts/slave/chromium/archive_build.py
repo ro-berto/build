@@ -669,9 +669,10 @@ class StagerBase(object):
     self.GenerateRevisionFile()
 
     www_dir = os.path.join(self._www_dir_base, str(self._build_revision))
+    gs_bucket = self.options.factory_properties.get('gs_bucket', None)
     gs_base = None
-    if self.options.gs_bucket:
-      gs_base = '/'.join([self.options.gs_bucket, self._build_name,
+    if gs_bucket:
+      gs_base = '/'.join([gs_bucket, self._build_name,
                           str(self._build_revision)])
     self._UploadSymbols(www_dir, gs_base)
     self._UploadBuild(www_dir, changelog_path, self.revisions_path,
@@ -795,8 +796,14 @@ def main(argv):
                            help='Files to ignore')
   option_parser.add_option('--archive_host',
                            default=config.Archive.archive_host)
-  option_parser.add_option('--gs_bucket', type='string',
-                           help='Google Storage Bucket to upload to')
+  option_parser.add_option('--build-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
+  option_parser.add_option('--factory-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
   options, args = option_parser.parse_args()
   if args:
     raise StagingError('Unknown arguments: %s' % args)

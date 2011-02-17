@@ -120,9 +120,12 @@ class ChromiumCommands(commands.FactoryCommands):
     self._factory.addStep(FileUpload(slavesrc=slavesrc,
                                      masterdest=masterdest))
 
-  def AddArchiveBuild(self, mode='dev', show_url=True,
-                      extra_archive_paths=None, use_build_number=False):
+  def AddArchiveBuild(self, mode='dev', show_url=True, factory_properties=None):
     """Adds a step to the factory to archive a build."""
+
+    extra_archive_paths = factory_properties.get('extra_archive_paths')
+    use_build_number = factory_properties.get('use_build_number', False)
+
     if show_url:
       url = _GetArchiveUrl('snapshots')
       text = 'download'
@@ -138,6 +141,9 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--extra-archive-paths', extra_archive_paths])
     if use_build_number:
       cmd.extend(['--build-number', WithProperties("%(buildnumber)s")])
+
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     self.AddArchiveStep(data_description='build', base_url=url, link_text=text,
                         command=cmd)

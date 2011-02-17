@@ -149,11 +149,6 @@ def real_main(options, args):
   return -1
 
 
-def convert_json(option, opt, value, parser):
-  """Provide an OptionParser callback to unmarshal a JSON string."""
-  setattr(parser.values, option.dest, json.loads(value))
-
-
 def main():
   option_parser = optparse.OptionParser()
 
@@ -170,12 +165,13 @@ def main():
                            default=False,
                            help='whether to halt on a missing build')
   option_parser.add_option('--build-properties', action='callback',
-                           callback=convert_json, type='string', nargs=1,
-                           default={}, help='build properties in JSON format')
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
   option_parser.add_option('--factory-properties', action='callback',
-                           callback=convert_json, type='string', nargs=1,
-                           default='{}', help='factory properties in JSON '
-                           'format')
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
 
   options, args = option_parser.parse_args()
   return real_main(options, args)

@@ -364,9 +364,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):
-      chromium_cmd_obj.AddArchiveBuild(
-          extra_archive_paths=factory_properties.get('extra_archive_paths'),
-          use_build_number=factory_properties.get('use_build_number', False))
+      chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)
 
     # Trigger any schedulers waiting on the build to complete.
     if factory_properties.get('trigger'):

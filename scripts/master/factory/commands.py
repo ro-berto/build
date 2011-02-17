@@ -227,7 +227,7 @@ class FactoryCommands(object):
                               '}'))
     return cmd
 
-  def AddFactoryProperties(self, cmd=None, factory_properties=None):
+  def AddFactoryProperties(self, factory_properties, cmd=None):
     """Adds factory properties to cmd."""
     # pylint: disable=R0201
     cmd = cmd or []
@@ -494,7 +494,7 @@ class FactoryCommands(object):
            '--target', self._target,
            '--build-url', build_url]
     cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(cmd, factory_properties)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract build', cmd,
                      halt_on_failure=True)
 

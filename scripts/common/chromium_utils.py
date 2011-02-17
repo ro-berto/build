@@ -756,3 +756,8 @@ def ListMasters():
       'masters/*/master.cfg')
   filenames = glob.glob(path_internal) + glob.glob(path)
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
+
+
+def convert_json(option, opt, value, parser):
+  """Provide an OptionParser callback to unmarshal a JSON string."""
+  setattr(parser.values, option.dest, json.loads(value))
