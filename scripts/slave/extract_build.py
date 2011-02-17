@@ -14,13 +14,6 @@ import traceback
 import urllib
 import urllib2
 
-
-try:
-  import json
-except ImportError:
-  import simplejson as json
-
-
 from common import chromium_utils
 from slave import slave_utils
 

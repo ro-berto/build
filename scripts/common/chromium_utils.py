@@ -20,6 +20,11 @@ import threading
 import time
 import zipfile
 
+try:
+  import json
+except ImportError:
+  import simplejson as json
+
 # Local errors.
 class MissingArgument(Exception): pass
 class PathNotFound(Exception): pass
