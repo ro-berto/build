@@ -491,7 +491,7 @@ class StagerBase(object):
         MyMaybeMakeDirectory(www_dir, gs_base)
         shutil.copyfile(self._installer_file, installer_destination_file)
         for archive in archive_files:
-          MyCopyFileToDir(archive, www_dir)
+          MyCopyFileToDir(archive, www_dir, gs_base)
         MyCopyFileToDir(changelog_path, www_dir, gs_base)
         MyCopyFileToDir(revisions_path, www_dir, gs_base)
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
