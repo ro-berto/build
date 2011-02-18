@@ -140,8 +140,8 @@ class Archive(config_private.Archive):
   # those changes land.
   symbols_to_archive = ['chrome_dll.pdb', 'chrome_exe.pdb',
                         'mini_installer.pdb', 'setup.pdb',
-                        'ceee_broker.pdb', 'ceee_ie.pdb',
-                        'ceee_installer_helper.pdb']
+                        'npchrome_frame.pdb', 'chrome_launcher.pdb',
+                        'chrome_frame_helper.pdb', 'chrome_frame_helper.pdb']
 
   # TODO(thestig) Add 64-bit symbols once we get there.
   symbols_to_archive_linux = ['chrome.breakpad.ia32']
@@ -150,9 +150,9 @@ class Archive(config_private.Archive):
   symsrc_binaries = ['chrome.exe', 'chrome.dll',
                      'servers\\npchrome_frame.dll',
                      'servers\\chrome_launcher.exe',
-                     'servers\\ceee_broker.exe',
-                     'servers\\ceee_ie.dll',
-                     'servers\\ceee_installer_helper.dll']
+                     'chrome_frame_helper.dll',
+                     'chrome_frame_helper.exe',
+                     'setup.exe']
 
   # List of symbol files to save, but not to upload to the symbol server
   # (generally because they have no symbols and thus would produce an error).
@@ -162,7 +162,7 @@ class Archive(config_private.Archive):
   symbols_to_skip_upload = [
       'icudt38.dll', 'icudt42.dll', 'rlz.dll', 'avcodec-52.dll',
       'avformat-52.dll', 'avutil-50.dll', 'd3dx9_42.dll',
-      'D3DCompiler_42.dll',]
+      'D3DCompiler_42.dll', 'gcswf32.dll',]
 
   if os.environ.get('CHROMIUM_BUILD', '') == '_google_chrome':
     exes_to_skip_entirely = []
