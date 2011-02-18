@@ -40,11 +40,6 @@ def IsLinux():
 def IsMac():
   return sys.platform.startswith('darwin')
 
-def IsWine():
-  return (os.environ.get('WINE') and
-          os.environ.get('WINEPREFIX') and
-          os.environ.get('WINESERVER'))
-
 # For chromeos we need to end up with a different platform name, but the
 # scripts use the values like sys.platform for both the build target and
 # and the running OS, so this gives us a back door that can be hit to

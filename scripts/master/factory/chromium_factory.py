@@ -295,11 +295,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         test_name = test[len(prefix):]
         f.AddHeapcheckTest(test_name)
         continue
-      prefix = 'wine_valgrind_'
-      if test.startswith(prefix):
-        test_name = test[len(prefix):]
-        f.AddWineValgrindTest(test_name)
-        continue
 
 
     # PyAuto functional tests.
@@ -503,20 +498,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions.append(gclient_factory.GClientSolution(
           config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
 
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumWineFactory(self, target='Debug', clobber=False, tests=None,
-                          mode=None, slave_type='Tester', options=None,
-                          compile_timeout=1200, build_url=None, project=None,
-                          factory_properties=None):
-    # Make sure the solution is not already there.
-    if 'src/third_party/python_24' not in [s.name for s in self._solutions]:
-      CUSTOM_DEPS_PYTHON = ('src/third_party/python_24',
-                            config.Master.trunk_url +
-                            '/deps/third_party/python_24')
-      self._solutions[0].custom_deps_list.append(CUSTOM_DEPS_PYTHON)
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)

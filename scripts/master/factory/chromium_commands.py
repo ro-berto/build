@@ -79,8 +79,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._win_memory_tests_runner = J('src', 'tools', 'valgrind',
                                       'chrome_tests.bat')
     self._heapcheck_tool = J('src', 'tools', 'heapcheck', 'chrome_tests.sh')
-    self._wine_valgrind_tool = J('src', 'tools', 'wine_valgrind',
-                                 'chrome_tests.sh')
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
@@ -488,8 +486,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'dom_checker_tests', cmd)
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200):
-    # TODO(timurrrr): merge this with Heapcheck and Wine/Valgrind runner
-    #                 http://crbug.com/45482
+    # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     build_dir = os.path.join(self._build_dir, self._target)
     if self._target_platform == 'darwin':  # Mac bins reside in src/xcodebuild
       build_dir = os.path.join(os.path.dirname(self._build_dir), 'xcodebuild',
@@ -549,17 +546,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     test_name = 'heapcheck test: %s' % test_name
     self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
-                     timeout=timeout)
-
-  def AddWineValgrindTest(self, test_name, timeout=1200):
-    cmd = [self._wine_valgrind_tool,
-           '--target', self._target,
-           '--valgrind',
-           '--vnc', '6',  # DISPLAY to run VNC on.
-           test_name]
-
-    test_name = 'wine valgrind test: %s' % test_name
-    self.AddTestStep(retcode_command.ReturnCodeCommand, test_name, cmd,
                      timeout=timeout)
 
   def _AddBasicPythonTest(self, test_name, script, args=[], timeout=1200):

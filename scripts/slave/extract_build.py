@@ -34,7 +34,7 @@ def real_main(options, args):
   # TODO: need to get the build *output* directory passed in also so Linux
   # and Mac don't have to walk up a directory to get to the right directory.
   build_output_dir = None
-  if chromium_utils.IsWindows() or chromium_utils.IsWine():
+  if chromium_utils.IsWindows():
     build_output_dir = options.build_dir
   elif chromium_utils.IsLinux():
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
@@ -53,12 +53,7 @@ def real_main(options, args):
   current_revision = slave_utils.SubversionRevision(abs_build_dir)
 
   # Generic name for the archive.
-  # TODO(thestig) We could use OverridePlatformName, but this is really the
-  # only place where we need it right now.
-  if chromium_utils.IsWine():
-    archive_name = 'full-build-win32.zip'
-  else:
-    archive_name = 'full-build-%s.zip' % chromium_utils.PlatformName()
+  archive_name = 'full-build-%s.zip' % chromium_utils.PlatformName()
 
   # Just take the zip off the name for the output directory name.
   output_dir = os.path.join(abs_build_output_dir,

@@ -144,9 +144,6 @@ def main():
         'SSH_TTY',
         'USER',
         'USERNAME',
-        'WINE',
-        'WINEPREFIX',
-        'WINESERVER',
     ]
 
     remove_all_vars_except(os.environ, env_var)
