@@ -76,11 +76,13 @@ def real_main(options, args):
       print '%s is not found' % url
       failure = True
 
-      # If 'revision' is set in build properties, we assume the build is
+      # When 'halt_on_missing_build' is present in factory_properties and if
+      # 'revision' is set in build properties, we assume the build is
       # triggered automatically and so we halt on a missing build zip.  The
       # other case is if the build is forced, in which case we keep trying
       # later by looking for the latest build that's available.
-      if ('revision' in options.build_properties and
+      if (options.factory_properties.get('halt_on_missing_build', False) and
+          'revision' in options.build_properties and
           options.build_properties['revision'] != ''):
         return -1
 
