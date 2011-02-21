@@ -140,8 +140,9 @@ class NativeClientSDKCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           command=cmd)
 
-  def AddExtractBuild(self, url):
+  def AddExtractBuild(self, url, factory_properties=None):
     """Adds a step to download and extract a previously archived build."""
+    factory_properties = factory_properties or {}
     # TODO(bradnelson): make this work places besides linux.
     cmd = ('curl %s -o build.tgz && '
            'tar xfvz build.tgz') % url

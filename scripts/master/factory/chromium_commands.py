@@ -548,7 +548,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
                      timeout=timeout)
 
-  def _AddBasicPythonTest(self, test_name, script, args=[], timeout=1200):
+  def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
+    args = args or []
     J = self.PathJoin
     if self._target_platform == 'win32':
       py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')

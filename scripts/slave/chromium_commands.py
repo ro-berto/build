@@ -146,7 +146,7 @@ class GClient(sourcebase):
     sourcebase.__init__(self, *args, **kwargs)
 
   if bbver == 7.12:
-    def getCommand(self, arg):
+    def getCommand(self, arg): # pylint: disable=R0201
       """In BB 8.3, this function is inherited"""
       return commands.getCommand(arg)
 

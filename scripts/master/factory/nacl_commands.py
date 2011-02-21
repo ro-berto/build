@@ -745,8 +745,9 @@ class NativeClientCommands(commands.FactoryCommands):
                          'nacl_archive/nacl_tarballs/latest',
                          name + ext)
 
-  def AddExtractBuild(self, url):
+  def AddExtractBuild(self, url, factory_properties=None):
     """Adds a step to download and extract a previously archived build."""
+    factory_properties = factory_properties or {}
     if self._target_platform.startswith('win'):
       env = self._cygwin_env
     else:
