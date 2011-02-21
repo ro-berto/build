@@ -810,7 +810,7 @@ class ChromiumCommands(commands.FactoryCommands):
            self.PathJoin(gpu_data, 'sw_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
 
-def _GetArchiveUrl(archive_type, builder_name='%(builder_name)s'):
+def _GetArchiveUrl(archive_type, builder_name='%(buildername)s'):
   # The default builder name is dynamically filled in by
   # ArchiveCommand.createSummary.
   return '%s/%s/%s' % (config.Master.archive_url, archive_type, builder_name)
