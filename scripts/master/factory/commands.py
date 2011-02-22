@@ -367,8 +367,8 @@ class FactoryCommands(object):
   # GClient related commands.
   def AddSvnKillStep(self):
     """Adds a step to the factory to kill svn.exe. Windows-only."""
-    self._factory.addStep(shell.ShellCommand, name='svnkill',
-                          description='svnkill', timeout=60,
+    self._factory.addStep(shell.ShellCommand, description='svnkill',
+                          timeout=60,
                           workdir='',  # The build subdir may not exist yet.
                           command=[r'%WINDIR%\system32\taskkill',
                                    '/f', '/im', 'svn.exe',
@@ -381,7 +381,6 @@ class FactoryCommands(object):
     command = [chromium_utils.GetGClientCommand(self._target_platform),
                'sync', '--verbose']
     self._factory.addStep(shell.ShellCommand,
-                          name='update_scripts',
                           description='update scripts',
                           locks=[self.slave_exclusive_lock],
                           timeout=60,
@@ -451,7 +450,7 @@ class FactoryCommands(object):
   def AddTaskkillStep(self):
     """Adds a step to kill the running processes before a build."""
     # Use ReturnCodeCommand so we can indicate a "warning" status (orange).
-    self._factory.addStep(retcode_command.ReturnCodeCommand, name='taskkill',
+    self._factory.addStep(retcode_command.ReturnCodeCommand,
                           description='taskkill',
                           timeout=60,
                           workdir='',  # Doesn't really matter where we are.
@@ -496,7 +495,7 @@ class FactoryCommands(object):
            '--build-url', build_url]
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract_build', cmd,
+    self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract build', cmd,
                      halt_on_failure=True)
 
   # Build commands.

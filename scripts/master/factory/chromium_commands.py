@@ -705,13 +705,13 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._crash_handler_tool,
            '--build-dir', build_dir,
            '--target', target]
-    self.AddTestStep(shell.ShellCommand, 'start_crash_handler', cmd)
+    self.AddTestStep(shell.ShellCommand, 'Start Crash Handler', cmd)
 
   def AddProcessDumps(self):
     cmd = [self._python, self._process_dumps_tool,
            '--build-dir', self._build_dir,
            '--target', self._target]
-    self.AddTestStep(shell.ShellCommand, 'process_dumps', cmd)
+    self.AddTestStep(shell.ShellCommand, 'Process Dumps', cmd)
 
   def AddRunCoverageBundles(self, factory_properties=None):
     # If updating this command, update the mirror of it in chrome_tests.gypi.
@@ -724,7 +724,7 @@ class ChromiumCommands(commands.FactoryCommands):
            '--src_root',
            '.',
            '--bundles', 'coverage_bundles.py']
-    self.AddTestStep(shell.ShellCommand, 'run_coverage_bundles', cmd)
+    self.AddTestStep(shell.ShellCommand, 'Run Coverage Bundles', cmd)
 
   def AddProcessCoverage(self, factory_properties=None):
     factory_properties = factory_properties or {}
