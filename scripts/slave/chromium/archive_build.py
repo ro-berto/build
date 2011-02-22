@@ -477,11 +477,9 @@ class StagerBase(object):
   def _UploadBuild(self, www_dir, changelog_path, revisions_path,
                    archive_files, gs_base):
     if chromium_utils.IsWindows():
-      installer_destination_file = os.path.join(www_dir,
-          self.options.installer)
       print 'os.makedirs(%s)' % www_dir
-      print ('shutil.copyfile(%s, %s)' %
-          (self._installer_file, installer_destination_file))
+      print 'chromium_utils.CopyFileToDir(%s, %s)' % (self._installer_file,
+                                                      www_dir)
       for archive in archive_files:
         print 'chromium_utils.CopyFileToDir(%s, %s)' % (archive, www_dir)
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (changelog_path, www_dir)
@@ -489,7 +487,7 @@ class StagerBase(object):
 
       if not self.options.dry_run:
         MyMaybeMakeDirectory(www_dir, gs_base)
-        shutil.copyfile(self._installer_file, installer_destination_file)
+        MyCopyFileToDir(self._installer_file, www_dir, gs_base)
         for archive in archive_files:
           MyCopyFileToDir(archive, www_dir, gs_base)
         MyCopyFileToDir(changelog_path, www_dir, gs_base)
