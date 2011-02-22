@@ -147,6 +147,7 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   Sets desirable Linux environment variables and command-line options
   that are common to the Make and SCons builds.
   """
+  assert compiler in (None, 'clang', 'goma')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -184,7 +185,17 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     command.append('chrome')
     return
 
-  assert compiler in (None, 'clang')
+  if compiler == 'goma':
+    print 'using goma'
+    env['CC'] = 'gcc'
+    env['CXX'] = 'g++'
+    env['PATH'] = options.goma_dir + ':' + env['PATH']
+    goma_jobs = 100
+    if jobs < goma_jobs:
+      jobs = goma_jobs
+    command.append('-j%d' % jobs)
+    return
+
   if compiler == 'clang':
     clang_dir = os.path.abspath(os.path.join(
         slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
@@ -271,6 +282,8 @@ def main_make(options, args):
     # build from the top-level Makefile.
     working_dir = src_dir
 
+  if not options.goma_dir:
+    options.goma_dir = os.path.join(COMPILE_SCRIPT_DIR, '..', '..', 'goma')
   if options.clobber:
     build_output_dir = os.path.join(working_dir, 'out', options.target)
     chromium_utils.RemoveDirectory(build_output_dir)
@@ -307,7 +320,31 @@ def main_make(options, args):
   # Force serial linking, otherwise too many links make bots run out of memory
   # (scons does this with 'scons_variable_settings' in common.gypi).
   env['LINK'] = 'flock %s/linker.lock \$(CXX)' % sconsbuild
-  return chromium_utils.RunCommand(command, env=env)
+
+  # If using the Goma compiler, first stop/start the proxy to ensure it is
+  # available.
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+  goma_stop_cmd = goma_ctl_cmd + ['stop']
+  goma_start_cmd = goma_ctl_cmd + ['start']
+  if options.compiler == 'goma':
+    # TODO: Produce an error if these steps do not work.  Need goma_ctl.sh
+    #       option.
+    # TODO: Only restart the proxy on clobber (ensure_start otherwise) once
+    #       daemonize and ensure_start/restart become available.
+    chromium_utils.RunCommand(goma_stop_cmd)
+    chromium_utils.RunCommand(goma_start_cmd)
+
+  # Run the build.
+  rc = chromium_utils.RunCommand(command, env=env)
+
+  # If the Goma proxy is running, stop it.
+  # TODO: Don't stop the proxy each time once daemonize and ensure_start
+  #       become available.
+  if (options.compiler == 'goma' and
+      chromium_utils.RunCommand(goma_stop_cmd) != 0):
+    print 'ERROR: Could not stop goma proxy'
+    return 1
+  return rc
 
 
 def main_scons(options, args):
@@ -558,6 +595,8 @@ def real_main():
     # For linux to arm cross compile.
     option_parser.add_option('', '--crosstool', default=None,
                              help='optional path to crosstool toolset')
+    option_parser.add_option('', '--goma-dir', default=None,
+                             help='specify goma directory')
   if chromium_utils.IsMac():
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
