@@ -100,10 +100,9 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # about this step.
     previous_build_status = build_status.getPreviousBuild()
     if previous_build_status:
-      # TODO(maruel): Use step_status.getName() once all steps have names.
-      step_name = step_status.getText()[0]
+      step_name = self.getName(step_status)
       previous_steps = [step for step in previous_build_status.getSteps()
-                        if step.getText() and step.getText()[0] == step_name]
+                        if self.getName(step) == step_name]
       if len(previous_steps) == 1:
         if previous_steps[0].getResults()[0] == FAILURE:
           # The previous exact same step failed on the previous build. Ignore.

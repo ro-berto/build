@@ -13,7 +13,7 @@ from master import master_utils
 categories_steps = {
   '': ['update'],
   'testers': [
-    'Start Crash Handler',
+    'start_crash_handler',
     'sizes',
     # Unit tests
     'app_unittests',
@@ -40,7 +40,7 @@ categories_steps = {
     #'webkit_tests',
    ],
   'windows': ['svnkill', 'taskkill'],
-  'compile': ['check deps', 'compile', 'archived build']
+  'compile': ['check_deps', 'compile', 'archive_build']
 }
 
 exclusions = {
@@ -48,8 +48,8 @@ exclusions = {
     'Chromium Arm (dbg)': None,
 }
 
-forgiving_steps = ['update scripts', 'update', 'svnkill', 'taskkill',
-                   'archived build', 'Start Crash Handler']
+forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
+                   'archive_build', 'start_crash_handler']
 
 def Update(config, active_master, c):
   c['status'].append(gatekeeper.GateKeeper(
@@ -62,4 +62,5 @@ def Update(config, active_master, c):
       extraRecipients=active_master.tree_closing_notification_recipients,
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
-      tree_status_url=active_master.tree_status_url))
+      tree_status_url=active_master.tree_status_url),
+      use_getname=True)

@@ -46,7 +46,7 @@ class ChromiumNotifier(MailNotifier):
 
   def __init__(self, reply_to=None, categories_steps=None,
       exclusions=None, forgiving_steps=None, status_header=None,
-      send_to_sheriffs=False, **kwargs):
+      send_to_sheriffs=False, use_getname=False, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type categories_steps: Dictionary of category string mapped to a list of
@@ -73,6 +73,10 @@ class ChromiumNotifier(MailNotifier):
 
     @type send_to_sheriffs: Boolean.
     @param send_to_sheriffs: If true, build sheriffs are copied on emails.
+
+    @type use_getname: Boolean.
+    @param use_getname: If true, step name is taken from getName(), otherwise
+                        the step name is taken from getText().
     """
     # Change the default.
     kwargs.setdefault('sendToInterestedUsers', False)
@@ -85,6 +89,7 @@ class ChromiumNotifier(MailNotifier):
     self.status_header = status_header
     assert self.status_header
     self.send_to_sheriffs = send_to_sheriffs
+    self.use_getname = use_getname
     self._last_time_mail_sent = None
 
   def isInterestingBuilder(self, builder_status):
@@ -137,6 +142,12 @@ class ChromiumNotifier(MailNotifier):
     """Must be overloaded to avoid the base class sending email."""
     pass
 
+  def getName(self, step_status):
+    if self.use_getname:
+      return step_status.getName()
+    else:
+      return step_status.getText()[0]
+
   def stepFinished(self, build_status, step_status, results):
     """A build step has just finished.
 
@@ -151,16 +162,14 @@ class ChromiumNotifier(MailNotifier):
 
     builder_status = build_status.getBuilder()
     builder_name = builder_status.getName()
-    steps_text = step_status.getText()
+    step_name = self.getName(step_status)
     if builder_name in self.exclusions:
-      for step_text in steps_text:
-        # TODO(maruel): This is wrong. We should use step_status.getName().
-        if step_text in self.exclusions[builder_name]:
-          return
+      if step_name in self.exclusions[builder_name]:
+        return
 
     if not self.categories_steps:
       # No filtering on steps.
-      return self.buildMessage(builder_name, build_status, results, steps_text)
+      return self.buildMessage(builder_name, build_status, results, step_name)
 
     # Now get all the steps we must check for this builder.
     steps_to_check = []
@@ -170,29 +179,26 @@ class ChromiumNotifier(MailNotifier):
     if '' in self.categories_steps:
       steps_to_check += self.categories_steps['']
 
-    for step_text in steps_text:
-      if step_text in steps_to_check:
-        return self.buildMessage(builder_name, build_status, results,
-                                 [step_text])
+    if step_name in steps_to_check:
+      return self.buildMessage(builder_name, build_status, results, step_name)
 
-  def getFinishedMessage(self, dummy, builder_name, build_status, steps_text):
+  def getFinishedMessage(self, dummy, builder_name, build_status, step_name):
     """Called after being done sending the email."""
     return defer.succeed(0)
 
-  def shouldBlameCommitters(self, steps_text):
-    for step_text in steps_text:
-      if step_text not in self.forgiving_steps:
-        return True
+  def shouldBlameCommitters(self, step_name):
+    if step_name not in self.forgiving_steps:
+      return True
     return False
 
-  def buildMessage(self, builder_name, build_status, results, steps_text):
+  def buildMessage(self, builder_name, build_status, results, step_name):
     """Send an email about the tree closing.
 
     Don't attach the patch as MailNotifier.buildMessage do.
 
     @type builder_name: string
     @type build_status: L{buildbot.status.builder.BuildStatus}
-    @type steps_text: list of string
+    @type step_name: name of this step
     """
     log.msg('About to email')
     if (self._last_time_mail_sent and self._last_time_mail_sent >
@@ -201,14 +207,14 @@ class ChromiumNotifier(MailNotifier):
       return
     self._last_time_mail_sent = time.time()
 
-    blame_interested_users = self.shouldBlameCommitters(steps_text)
+    blame_interested_users = self.shouldBlameCommitters(step_name)
     project_name = self.master_status.getProjectName()
     revisions_list = build_utils.getAllRevisions(build_status)
     build_url = self.master_status.getURLForThing(build_status)
     waterfall_url = self.master_status.getBuildbotURL()
     status_text = self.status_header % {
         'builder': builder_name,
-        'steps': ', '.join(steps_text)
+        'steps': step_name,
     }
     blame_list = ','.join(build_status.getResponsibleUsers())
     revisions_string = ''
@@ -301,5 +307,5 @@ Buildbot waterfall: http://build.chromium.org/
     defered_object = defer.DeferredList(dl)
     defered_object.addCallback(self._gotRecipients, recipients, m)
     defered_object.addCallback(self.getFinishedMessage, builder_name,
-                               build_status, steps_text)
+                               build_status, step_name)
     return defered_object
