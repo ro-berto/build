@@ -709,7 +709,15 @@ class StagerBase(object):
       latest_file_path = os.path.join(self._www_dir_base, 'LATEST')
       if chromium_utils.IsWindows():
         print 'Saving revision to %s' % latest_file_path
-        self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
+        if gs_base:
+          # The filename on Google Storage needs to match the filename locally.
+          # Create a LATEST file locally.
+          local_latest = os.path.join(os.path.dirname(self.last_change_file),
+                                      'LATEST')
+          self.SaveBuildRevisionToSpecifiedFile(local_latest)
+          GSUtilCopyFile(local_latest, gs_base, '..')
+        else:
+          self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
