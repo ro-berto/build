@@ -109,7 +109,7 @@ class Master(object):
     master_port_alt = 9019
 
   class ChromiumMemory(_ChromiumBase):
-    project_name = 'Chromium Meomry'
+    project_name = 'Chromium Memory'
     master_port = 9014
     slave_port = 9019
     master_port_alt = 9047
