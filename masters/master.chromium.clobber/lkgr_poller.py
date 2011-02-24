@@ -53,7 +53,7 @@ def main():
         TriggerBot(revision)
 
     except urllib2.HTTPError, e:
-      print "Failed to read LKGR - HTTP error " + e.code
+      print "Failed to read LKGR - HTTP error " + str(e.code)
 
     except urllib2.URLError, e:
       print "Failed to read LKGR - URL error " + e.reason
