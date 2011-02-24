@@ -47,8 +47,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._process_dumps_tool = self.PathJoin(self._script_dir,
                                              'process_dumps.py')
 
-    # Scripts in the chromium scripts dir.  This list is sorted by decreasing
-    # line length just because it looks pretty.
+    # Scripts in the chromium scripts dir.
     self._differential_installer_tool = J(s_dir,  'differential_installer.py')
     self._process_coverage_tool = J(s_dir, 'process_coverage.py')
     self._layout_archive_tool = J(s_dir, 'archive_layout_test_results.py')
@@ -63,6 +62,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
+    self._nacl_integration_tester_tool = J(
+        s_dir, 'native_client', 'build', 'buildbot_chrome_nacl_stage.py')
 
     # Scripts in the private dir.
     self._reliability_tool = J(p_dir, 'reliability_tests.py')
@@ -813,6 +814,13 @@ class ChromiumCommands(commands.FactoryCommands):
            '--sw-reference-dir',
            self.PathJoin(gpu_data, 'sw_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
+
+  def AddNaClIntegrationTestStep(self, factory_properties, target=None):
+    target = target or self._target
+    cmd = [self._python, self._nacl_integration_tester_tool,
+           '--mode', target]
+    self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd)
+
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by
