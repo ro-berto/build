@@ -684,14 +684,14 @@ class NativeClientCommands(commands.FactoryCommands):
 
     cmd = [self._python,
            '/b/build/scripts/command_wrapper/bin/command_wrapper.py',
-           '--', self._python, self._gsutil_tool, 'cp', src, full_dst]
-    cmd2 = [self._python,
-            '/b/build/scripts/command_wrapper/bin/command_wrapper.py',
-            '--', self._python, self._gsutil_tool,
-            'setacl', 'public-read', full_dst]
+           '--', self._python, self._gsutil_tool,
+           'cp', '-a', 'public-read',
+           # This is required so that builders don't get stale cached copies.
+           '-h', '"Cache-Control:no-cache"',
+           src, full_dst]
 
     self.AddArchiveStep(data_description='build', base_url=url,
-                        link_text=text, command=cmd, command2=cmd2)
+                        link_text=text, command=cmd)
 
   def AddArchiveStep(self, data_description, base_url, link_text, command,
                      command2=None):
@@ -712,14 +712,6 @@ class NativeClientCommands(commands.FactoryCommands):
                           env=env,
                           link_text=link_text,
                           command=command)
-    if command2:
-      self._factory.addStep(shell.ShellCommand,
-                            name='setting_acls',
-                            timeout=600,
-                            haltOnFailure=True,
-                            description='setting_acls',
-                            env=env,
-                            command=command2)
 
   def AddTarballStep(self, name, show_url=True):
     """Adds a step to create a release tarball."""
