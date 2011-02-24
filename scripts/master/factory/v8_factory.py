@@ -26,7 +26,7 @@ class V8Factory(gclient_factory.GClientFactory):
                             'https://es5conform.svn.codeplex.com/svn@71525')
 
   CUSTOM_DEPS_SPUTNIK = ('bleeding_edge/test/sputnik/sputniktests',
-                         'http://sputniktests.googlecode.com/svn/trunk@28')
+                         'http://sputniktests.googlecode.com/svn/trunk@94')
 
   # Pinned at revision 65044 to allow scons to be removed from repository.
   CUSTOM_DEPS_SCONS = ('third_party/scons',
