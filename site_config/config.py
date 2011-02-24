@@ -160,7 +160,7 @@ class Archive(config_private.Archive):
   # For now, we list both icudt{38,42}.dll because this script is used by
   # pre-ICU 4.2 builds as well.
   symbols_to_skip_upload = [
-      'icudt38.dll', 'icudt42.dll', 'rlz.dll', 'avcodec-52.dll',
+      'icudt38.dll', 'icudt42.dll', 'icudt46.dll', 'rlz.dll', 'avcodec-52.dll',
       'avformat-52.dll', 'avutil-50.dll', 'd3dx9_42.dll',
       'D3DCompiler_42.dll', 'gcswf32.dll',]
 
@@ -192,13 +192,14 @@ class Archive(config_private.Archive):
 
   # Test files to archive.
   # TODO(jungshik): make the name of icudt dll independent of the ICU version.
-  # For now, we list both icudt{38,42}.dll because this script is used by
-  # pre-ICU 4.2 builds as well.
+  # For now, we list both icudt{38,42,46}.dll because this script is used by
+  # different ICU builds as well.
   tests_to_archive = ['reliability_tests.exe',
                       'test_shell.exe',
                       'automated_ui_tests.exe',
                       'icudt38.dll',
                       'icudt42.dll',
+                      'icudt46.dll',
                       'plugins\\npapi_layout_test_plugin.dll',
                      ]
 
