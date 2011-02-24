@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,18 +10,20 @@ can find its data/ directory.
 
 """
 
+import mock
 import os
 import shutil
 import stat
 import unittest
 
-import pmock
 import simplejson
 
-import chromium_step
-import chromium_utils
-from log_parser import process_log
+from master import chromium_step
+from common import chromium_utils
+from master.log_parser import process_log
+
 import runtests
+
 
 class GoogleLoggingStepTest(unittest.TestCase):
   """ Logging testcases superclass
@@ -72,18 +74,44 @@ class GoogleLoggingStepTest(unittest.TestCase):
     return chromium_step.ProcessLogShellStep(log_processor_class)
 
   def _SetupBuild(self, step, revision, log_file):
-    build_mock = pmock.Mock()
-    build_mock.stubs().getProperty(
-        pmock.eq('got_revision')).will(pmock.return_value(self._revision))
-    build_mock.expects(
-        pmock.once()).getLogs().will(pmock.return_value([log_file]))
+    class BuildMock(mock.Mock):
+      def __init__(self, revision, log_files):
+        mock.Mock.__init__(self)
+        self._revision = revision
+        self._getLogsCalled = 0
+        self._log_files = log_files
+
+      def getProperty(self, property_name):
+        mock.Mock.__getattr__(self, 'getProperty')
+        if property_name == 'got_revision':
+          return self._revision
+        return None
+
+      def getLogs(self):
+        mock.Mock.__getattr__(self, 'getLogs')
+        self._getLogsCalled += 1
+        if self._getLogsCalled > 1:
+          raise Exception('getLogs called more than once')
+        return self._log_files
+
+    build_mock = BuildMock(revision, [log_file])
     step.step_status = build_mock
     step.build = build_mock
 
   def _LogFile(self, name, content):
-    log_file_mock = pmock.Mock()
-    log_file_mock.stubs().getName().will(pmock.return_value(name))
-    log_file_mock.stubs().getText().will(pmock.return_value(content))
+    class LogMock(mock.Mock):
+      def __init__(self, name, content):
+        mock.Mock.__init__(self)
+        self._name = name
+        self._content = content
+
+      def getName(self):
+        return self._name
+
+      def getText(self):
+        return self._content
+
+    log_file_mock = LogMock(name, content)
     return log_file_mock
 
   def _JoinWithSpaces(self, array):
@@ -130,20 +158,34 @@ class BenchpressPerformanceTestStepTest(GoogleLoggingStepTest):
     self.assertEqual(expected, actual)
 
   def testCreateReportLink(self):
+    class StepMock(mock.Mock):
+      def __init__(self, urltype, reportlink):
+        mock.Mock.__init__(self)
+        self._urltype = urltype
+        self._reportlink = reportlink
+        self._addURLCalled = 0
+
+      def addURL(self, urltype, link):
+        mock.Mock.__getattr__(self, 'addURL')
+        self._addURLCalled += 1
+        if self._addURLCalled > 1:
+          raise Exception('getLogs called more than once')
+        if urltype != self._urltype:
+          raise Exception('url_type should be \'%s\'' % self._urltype)
+        if link != self._reportlink:
+          raise Exception('link should have been \'%s\'' % self._reportlink)
+
     log_processor_class = chromium_utils.InitializePartiallyWithArguments(
         process_log.BenchpressLogProcessor, report_link=self._report_link,
         output_dir=self._output_dir)
     step = chromium_step.ProcessLogShellStep(log_processor_class)
-    build_mock = pmock.Mock()
-    source_mock = pmock.Mock()
-    change_mock = pmock.Mock()
+    build_mock = mock.Mock()
+    source_mock = mock.Mock()
+    change_mock = mock.Mock()
     change_mock.revision = self._revision
     source_mock.changes = [change_mock]
     build_mock.source = source_mock
-    step_status = pmock.Mock()
-    step_status.expects(pmock.once()) \
-        .addURL(pmock.eq('results'), pmock.eq(
-                                          log_processor_class().ReportLink()))
+    step_status = StepMock('results', log_processor_class().ReportLink())
     step.build = build_mock
     step.step_status = step_status
     step._CreateReportLinkIfNeccessary()

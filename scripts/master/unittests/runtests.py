@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -13,18 +13,19 @@ Usage:
 
 import os
 import sys
+
+RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
+
+sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'third_party',
+                                'buildbot_7_12'))
+sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..'))
+sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'site_config'))
+
+import optparse
 import types
 import unittest
-import optparse
 
-DATA_PATH = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data')
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../log_parser'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../common'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../private'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../slave'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../pylibs'))
 
 parser = optparse.OptionParser()
 parser.add_option('-f', '--file',

@@ -1,16 +1,15 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """ Source file for chromium_commands testcases."""
 
-import pmock
 import unittest
 
-from factory.chromium_commands import ChromiumCommands
-from factory.chromium_commands import CreatePerformanceStepClass
-from log_parser import process_log
+from master.factory.chromium_commands import ChromiumCommands
+from master.factory.commands import CreatePerformanceStepClass
+from master.log_parser import process_log
 
 
 class ChromiumCommandsTest(unittest.TestCase):
