@@ -642,6 +642,7 @@ class ChromiumCommands(commands.FactoryCommands):
     layout_part = factory_properties.get('layout_part')
     test_results_server = factory_properties.get('test_results_server')
     platform = factory_properties.get('layout_test_platform')
+    enable_hardware_gpu = factory_properties.get('enable_hardware_gpu')
 
     if gpu:
       if platform:
@@ -680,6 +681,9 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--test-results-server', test_results_server])
     if platform:
       cmd.extend(['--platform', platform])
+
+    if enable_hardware_gpu:
+      cmd.extend(['--options=--enable-hardware-gpu'])
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
