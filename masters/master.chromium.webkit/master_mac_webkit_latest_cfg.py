@@ -9,7 +9,6 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
@@ -22,22 +21,11 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
 defaults['category'] = '5webkit mac latest'
 
-# Archive location
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Mac Builder',
-                                          'webkit-mac-latest-rel', 'mac')
-
 #
 # Main release schedulers for chromium and webkit
 #
 S('s5_chromium_rel', branch='src', treeStableTimer=60)
 S('s5_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
-# Dependent schedulers for the release builder
-#
-D('s5_chromium_rel_dep', 's5_chromium_rel')
-D('s5_webkit_rel_dep', 's5_webkit_rel')
 
 #
 # Mac Rel Builder
@@ -52,10 +40,9 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
 # Mac Rel Webkit testers
 #
 B('Webkit Mac10.5', 'f_webkit_rel_tests',
-  scheduler='s5_chromium_rel_dep|s5_webkit_rel_dep')
+  scheduler='s5_chromium_rel|s5_webkit_rel')
 F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
+    options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
@@ -64,21 +51,11 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
 ## Debug
 ################################################################################
 
-dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Mac Builder (dbg)',
-                                          'webkit-mac-latest-dbg', 'mac')
-
 #
 # Main debug schedulers for chromium and webkit
 #
 S('s5_chromium_dbg', branch='src', treeStableTimer=60)
 S('s5_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
-# Dependent schedulers for the dbg builder
-#
-D('s5_chromium_dbg_dep', 's5_chromium_dbg')
-D('s5_webkit_dbg_dep', 's5_webkit_dbg')
 
 #
 # Mac Dbg Builder
@@ -95,22 +72,20 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
 #
 
 B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler='s5_chromium_dbg_dep|s5_webkit_dbg_dep')
+  scheduler='s5_chromium_dbg|s5_webkit_dbg')
 F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
+    options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
 B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler='s5_chromium_dbg_dep|s5_webkit_dbg_dep')
+  scheduler='s5_chromium_dbg|s5_webkit_dbg')
 F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
+    options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['webkit', 'webkit_gpu'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',

@@ -9,7 +9,6 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
@@ -44,21 +43,11 @@ F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
 ## Debug
 ################################################################################
 
-dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Linux Builder (dbg)',
-                                          'webkit-linux-latest-dbg', 'linux')
-
 #
 # Main debug schedulers for chromium and webkit
 #
 S('s6_chromium_dbg', branch='src', treeStableTimer=60)
 S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
-# Dependent schedulers for the dbg builder
-#
-D('s6_chromium_dbg_dep', 's6_chromium_dbg')
-D('s6_webkit_dbg_dep', 's6_webkit_dbg')
 
 #
 # Linux Dbg Builder
@@ -76,23 +65,22 @@ F('f_webkit_linux_dbg', linux().ChromiumWebkitLatestFactory(
 #
 
 B('Webkit Linux (dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler='s6_chromium_dbg_dep|s6_webkit_dbg_dep')
+  scheduler='s6_chromium_dbg|s6_webkit_dbg')
 F('f_webkit_dbg_tests_1', linux().ChromiumWebkitLatestFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
+             'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
 B('Webkit Linux (dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler='s6_chromium_dbg_dep|s6_webkit_dbg_dep')
+  scheduler='s6_chromium_dbg|s6_webkit_dbg')
 F('f_webkit_dbg_tests_2', linux().ChromiumWebkitLatestFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
     tests=['webkit', 'webkit_gpu'],
+    options=['test_shell', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))

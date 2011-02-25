@@ -9,7 +9,6 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
@@ -24,13 +23,6 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 defaults['category'] = '7win latest'
 
-# Archive location
-rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Win Builder',
-                                          'win-latest-rel', 'win32')
-rel_perf_archive = 'http://master.chromium.org:8801/b/build/slave' \
-                   '/win-latest-rel/chrome_staging/full-build-win32.zip'
-
 #
 # Main release schedulers for chromium and webkit
 #
@@ -38,12 +30,6 @@ S('s7_chromium_builder_rel', branch='src', treeStableTimer=60)
 S('s7_chromium_rel', branch='src', treeStableTimer=60)
 S('s7_webkit_builder_rel', branch='trunk', treeStableTimer=60)
 S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
-# Dependent schedulers for the release builder
-#
-D('s7_chromium_builder_rel_dep', 's7_chromium_builder_rel')
-D('s7_webkit_builder_rel_dep', 's7_webkit_builder_rel')
 
 # Create the triggerable scheduler for the reliability tests.
 T('reliability')
@@ -71,20 +57,18 @@ F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
 # Win Rel testers
 #
 B('Vista Perf', 'f_win_rel_perf',
-  scheduler='s7_chromium_builder_rel_dep|s7_webkit_builder_rel_dep')
+  scheduler='s7_chromium_builder_rel|s7_webkit_builder_rel')
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
-    slave_type='Tester',
-    build_url=rel_perf_archive,
+    project='all.sln;chromium_builder',
     tests=['dom_perf', 'page_cycler', 'selenium', 'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True}))
 
 B('Vista Tests', 'f_win_rel_tests',
-  scheduler='s7_chromium_builder_rel_dep|s7_webkit_builder_rel_dep')
+  scheduler='s7_chromium_builder_rel|s7_webkit_builder_rel')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
+    project='all.sln;chromium_builder',
     tests=['installer', 'nacl_ui', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
@@ -100,10 +84,6 @@ F('win_reliability', linux().ReliabilityTestsFactory('win_webkit_canary'))
 ## Debug
 ################################################################################
 
-dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Win Builder (dbg)',
-                                          'win-latest-dbg', 'win32')
-
 #
 # Main debug schedulers for chromium and webkit
 #
@@ -111,12 +91,6 @@ S('s7_chromium_builder_dbg', branch='src', treeStableTimer=60)
 S('s7_chromium_dbg', branch='src', treeStableTimer=60)
 S('s7_webkit_builder_dbg', branch='trunk', treeStableTimer=60)
 S('s7_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
-# Dependent schedulers for the dbg builder
-#
-D('s7_chromium_builder_dbg_dep', 's7_chromium_builder_dbg')
-D('s7_webkit_builder_dbg_dep', 's7_webkit_builder_dbg')
 
 #
 # Win Dbg Builder
@@ -145,11 +119,10 @@ F('f_win_shared_dbg', win().ChromiumWebkitLatestFactory(
 #
 
 B('XP Tests (dbg)', 'f_win_dbg_tests',
-  scheduler='s7_chromium_builder_dbg_dep|s7_webkit_builder_dbg_dep')
+  scheduler='s7_chromium_builder_dbg|s7_webkit_builder_dbg')
 F('f_win_dbg_tests', win().ChromiumWebkitLatestFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
+    project='all.sln;chromium_builder',
     tests=['browser_tests', 'interactive_ui', 'nacl_ui', 'unit', 'ui'],
     factory_properties={'start_crash_handler': True,
                         'generate_gtest_json': True}))
