@@ -971,10 +971,10 @@ class ConsoleStatusResource(HtmlResource):
         # Keep only the revisions we care about.
         # By default we process the last 40 revisions.
         # If a dev name is passed, we look for the changes by this person in the
-        # last 80 revisions.
+        # last 160 revisions.
         numRevs = 40
         if devName:
-          numRevs *= 2
+          numRevs *= 4
         numBuilds = numRevs
 
 
