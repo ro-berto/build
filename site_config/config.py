@@ -180,6 +180,7 @@ class Archive(config_private.Archive):
       ['patch.packed.7z'],
       ['obj', 'mini_installer', 'mini_installer_exe_version.rc'],
       ['courgette.exe'],
+      ['courgette64.exe'],
     ]
   else:
     official_extras = []
