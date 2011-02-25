@@ -62,8 +62,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
-    self._nacl_integration_tester_tool = J(
-        s_dir, 'native_client', 'build', 'buildbot_chrome_nacl_stage.py')
 
     # Scripts in the private dir.
     self._reliability_tool = J(p_dir, 'reliability_tests.py')
@@ -80,6 +78,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self._win_memory_tests_runner = J('src', 'tools', 'valgrind',
                                       'chrome_tests.bat')
     self._heapcheck_tool = J('src', 'tools', 'heapcheck', 'chrome_tests.sh')
+    self._nacl_integration_tester_tool = J(
+        'src', 'native_client', 'build', 'buildbot_chrome_nacl_stage.py')
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
