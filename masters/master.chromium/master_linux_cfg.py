@@ -157,6 +157,21 @@ F('dbg_shlib_unit', linux().ChromiumFactory(
            'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit'],
     factory_properties={'generate_gtest_json': True}))
 
+#
+# Linux Dbg Clang bot
+#
+
+B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
+  builddir='cr-linux-clang-x64')
+F('dbg_linux_clang', linux().ChromiumFactory(
+    target='Debug',
+    options=['--build-tool=make', '--compiler=clang'],
+    tests=['base', 'gfx', 'unit'],
+    factory_properties={
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 fastbuild=1'
+    }}))
+
 
 def Update(config, active_master, c):
   return helper.Update(c)
