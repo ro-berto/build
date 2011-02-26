@@ -15,7 +15,7 @@ from buildbot.status import builder
 class GClient(source.Source):
   """Check out a source tree using gclient."""
 
-  name = 'gclient'
+  name = 'update'
 
   def __init__(self, svnurl=None, rm_timeout=None, gclient_spec=None, env=None,
                sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False, 

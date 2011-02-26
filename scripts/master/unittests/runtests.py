@@ -18,6 +18,8 @@ RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
 
 sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'third_party',
+                                'twisted_10_2'))
+sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'third_party',
                                 'buildbot_7_12'))
 sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..'))
 sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'site_config'))

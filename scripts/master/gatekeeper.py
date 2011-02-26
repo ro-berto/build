@@ -43,6 +43,9 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
     @type tree_message: String.
     @param tree_message: Message posted to the tree status site when closed.
+
+    @type password: String.
+    @param password: Password for service.  If None, look in .status_password.
     """
     # Set defaults.
     kwargs.setdefault('send_to_sheriffs', True)
@@ -58,6 +61,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         tree_message or
         'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
     self._last_closure_revision = 0
+
     self.password = get_password.Password('.status_password').GetPassword()
 
 
@@ -100,10 +104,9 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # about this step.
     previous_build_status = build_status.getPreviousBuild()
     if previous_build_status:
-      # TODO(maruel): Use step_status.getName() once all steps have names.
-      step_name = step_status.getText()[0]
+      step_name = self.getName(step_status)
       previous_steps = [step for step in previous_build_status.getSteps()
-                        if step.getText() and step.getText()[0] == step_name]
+                        if self.getName(step) == step_name]
       if len(previous_steps) == 1:
         if previous_steps[0].getResults()[0] == FAILURE:
           # The previous exact same step failed on the previous build. Ignore.
