@@ -120,7 +120,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # tree.
     return True
 
-  def buildMessage(self, builder_name, build_status, results, steps_text):
+  def buildMessage(self, builder_name, build_status, results, step_name):
     """Check for the tree status before sending a job failure email.
 
     Asynchronously check for the tree status and return a defered."""
@@ -131,33 +131,33 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         return False
       # Call the parent function to build the email.
       return chromium_notifier.ChromiumNotifier.buildMessage(
-                 self, builder_name, build_status, results, steps_text)
+                 self, builder_name, build_status, results, step_name)
 
     def Failure(result):
       # AppEngine dropped us. We should still send an email but not close the
       # tree.
       return chromium_notifier.ChromiumNotifier.buildMessage(
-                 self, builder_name, build_status, results, steps_text)
+                 self, builder_name, build_status, results, step_name)
 
     connection = client.getPage(self.tree_status_url, agent='buildbot')
     connection.addCallbacks(Success, Failure)
     return connection
 
-  def getFinishedMessage(self, result, builder_name, build_status, steps_text):
+  def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
     # isInterestingStep verified that latest_revision has expected properties.
     latest_revision = build_utils.getLatestRevision(build_status)
 
     # Don't blame last committers if they are not to blame.
     blame_text = ''
-    if self.shouldBlameCommitters(steps_text):
+    if self.shouldBlameCommitters(step_name):
       blame_text = (' from %s: %s' %
                     (str(latest_revision),
                      ', '.join(build_status.getResponsibleUsers())))
 
     # Post a request to close the tree.
     tree_message = self.tree_message % {
-        'steps': ', '.join(steps_text),
+        'steps': step_name,
         'builder': builder_name,
         'blame': blame_text
     }
