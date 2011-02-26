@@ -31,7 +31,7 @@ GRAPH_LIST = config.Master.perf_graph_list
 # perf_expectations.json holds performance expectations.  See
 # http://dev.chromium.org/developers/testing/chromium-build-infrastructure/performance-test-plots
 # for more info.
-PERF_EXPECTATIONS_PATH = '../scripts/master/log_parser/perf_expectations/'
+PERF_EXPECTATIONS_PATH = '../../scripts/master/log_parser/perf_expectations/'
 
 def FormatFloat(number):
   """Formats float with two decimal points."""
