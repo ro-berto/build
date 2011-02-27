@@ -698,6 +698,9 @@ class ChromiumCommands(commands.FactoryCommands):
              '--build-number', WithProperties("%(buildnumber)s"),
              '--builder-name', WithProperties(builder_name),]
 
+      cmd = self.AddBuildProperties(cmd)
+      cmd = self.AddFactoryProperties(factory_properties, cmd)
+
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
           base_url=_GetArchiveUrl('layout_test_results'),
