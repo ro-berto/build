@@ -343,3 +343,34 @@ def MaybeMakeDirectoryOnArchiveHost(dest_dir):
   else:
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
+
+# Copy a file to Google Storage.
+def GSUtilCopyFile(filename, gs_base, subdir=None):
+  source = 'file://' + filename
+  dest = gs_base
+  if subdir:
+    # HACK(nsylvain): We can't use normpath here because it will break the
+    # slashes on Windows.
+    if subdir == '..':
+      dest = os.path.dirname(gs_base)
+    else:
+      dest = '/'.join([gs_base, subdir])
+  dest = '/'.join([dest, os.path.basename(filename)])
+
+  # Get the path to the gsutil script.
+  gsutil = os.path.join(os.path.dirname(__file__), 'gsutil')
+  gsutil = os.path.normpath(gsutil)
+  if chromium_utils.IsWindows():
+    gsutil = gsutil + '.bat'
+
+  # Get the path to the boto file containing the password.
+  boto_file = os.path.join(os.path.dirname(__file__), '..', '..', 'site_config',
+                           '.boto')
+
+  # Make sure gsutil uses this boto file.
+  os.environ['AWS_CREDENTIAL_FILE'] = boto_file
+
+  # Run the gsutil command. gsutil internally calls command_wrapper, which
+  # will try to run the command 10 times if it fails.
+  command = [gsutil, 'cp', '-a', 'public-read', source, dest]
+  return chromium_utils.RunCommand(command)

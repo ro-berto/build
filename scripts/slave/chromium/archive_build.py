@@ -103,40 +103,9 @@ def Write(file_path, data):
   finally:
     f.close()
 
-# Copy a file to Google Storage.
-def GSUtilCopyFile(filename, gs_base, subdir):
-  source = 'file://' + filename
-  dest = gs_base
-  if subdir:
-    # HACK(nsylvain): We can't use normpath here because it will break the
-    # slashes on Windows.
-    if subdir == '..':
-      dest = os.path.dirname(gs_base)
-    else:
-      dest = '/'.join([gs_base, subdir])
-  dest = '/'.join([dest, os.path.basename(filename)])
-
-  # Get the path to the gsutil script.
-  gsutil = os.path.join(os.path.dirname(__file__), '..', 'gsutil')
-  gsutil = os.path.normpath(gsutil)
-  if chromium_utils.IsWindows():
-    gsutil = gsutil + '.bat'
-
-  # Get the path to the boto file containing the password.
-  boto_file = os.path.join(os.path.dirname(__file__), '..', '..', '..',
-                           'site_config', '.boto')
-
-  # Make sure gsutil uses this boto file.
-  os.environ['AWS_CREDENTIAL_FILE'] = boto_file
-
-  # Run the gsutil command. gsutil internally calls command_wrapper, which
-  # will try to run the command 10 times if it fails.
-  command = [gsutil, 'cp', '-a', 'public-read', source, dest]
-  return chromium_utils.RunCommand(command)
-
 def MyCopyFileToDir(filename, destination, gs_base, gs_subdir=None):
   if gs_base:
-    return GSUtilCopyFile(filename, gs_base, gs_subdir)
+    return slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir)
 
   return chromium_utils.CopyFileToDir(filename, destination)
 
@@ -163,7 +132,7 @@ def MySshMakeDirectory(host, destination, gs_base):
 
 def MySshCopyFiles(filename, host, destination, gs_base, gs_subdir=None):
   if gs_base:
-    return GSUtilCopyFile(filename, gs_base, gs_subdir)
+    return slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir)
 
   return chromium_utils.SshCopyFiles(filename, host, destination)
 
@@ -715,7 +684,7 @@ class StagerBase(object):
           local_latest = os.path.join(os.path.dirname(self.last_change_file),
                                       'LATEST')
           self.SaveBuildRevisionToSpecifiedFile(local_latest)
-          GSUtilCopyFile(local_latest, gs_base, '..')
+          slave_utils.GSUtilCopyFile(local_latest, gs_base, '..')
         else:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():

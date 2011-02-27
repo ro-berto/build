@@ -120,11 +120,17 @@ def archive_layout(options, args):
   dest_parent_dir = os.path.join(config.Archive.www_dir_base,
       results_dir_basename.replace('-','_'), build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
-  slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
-  slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
-
-  _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
-      options)
+  
+  gs_bucket = options.factory_properties.get('gs_bucket', None)
+  if gs_bucket:
+    gs_base = '/'.join([gs_bucket, build_name, last_change])
+    slave_utils.GSUtilCopyFile(zip_file, gs_base)
+  else:
+    slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
+    slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
+    # Not supported on Google Storage yet.
+    _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
+                                  options)
   return 0
 
 
@@ -143,6 +149,14 @@ def main():
                            default=None,
                            help=('The build number of the builder running'
                                  'this script.'))
+  option_parser.add_option('--build-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
+  option_parser.add_option('--factory-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
   options, args = option_parser.parse_args()
   return archive_layout(options, args)
 
