@@ -44,6 +44,12 @@ F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
+B('Webkit Vista', 'f_webkit_rel_tests',
+  scheduler='s4_chromium_rel|s4_webkit_rel')
+
+B('Webkit Win7', 'f_webkit_rel_tests',
+  scheduler='s4_chromium_rel|s4_webkit_rel')
+
 ################################################################################
 ## Debug
 ################################################################################

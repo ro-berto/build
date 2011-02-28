@@ -47,6 +47,9 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
+B('Webkit Mac10.6', 'f_webkit_rel_tests',
+  scheduler='s5_chromium_rel|s5_webkit_rel')
+
 ################################################################################
 ## Debug
 ################################################################################

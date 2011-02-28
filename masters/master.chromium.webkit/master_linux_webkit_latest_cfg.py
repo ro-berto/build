@@ -39,6 +39,9 @@ F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
+B('Webkit Linux 64', 'f_webkit_linux_rel',
+  scheduler='s6_chromium_rel|s6_webkit_rel')
+
 ################################################################################
 ## Debug
 ################################################################################
