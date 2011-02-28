@@ -1,15 +1,19 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Subclasses of various slave command classes."""
 
 import copy
+import re
+import time
 
-from buildbot.steps import source
+
+from buildbot import util
 from buildbot.process import buildstep
-from buildbot.steps import shell
 from buildbot.status import builder
+from buildbot.steps import shell
+from buildbot.steps import source
 
 
 class GClient(source.Source):
@@ -207,3 +211,101 @@ class ProcessLogShellStep(shell.ShellCommand):
   def _CreateReportLinkIfNeccessary(self):
     if self._log_processor and self._log_processor.ReportLink():
       self.addURL('results', "%s" % self._log_processor.ReportLink())
+
+
+class AnnotationObserver(buildstep.LogLineObserver):
+  """This class knows how to understand annotations."""
+
+  def __init__(self, command):
+    buildstep.LogLineObserver.__init__(self)
+    self.command = command
+    self.sections = []
+
+  def fixupLast(self, status=None):
+    if not self.sections:
+      return
+    last = self.sections[-1]
+    # Add timing info.
+    (start, end) = self.command.step_status.getTimes()
+    msg = '\n\n' + '-' * 80 + '\n'
+    if not start:
+      msg += 'Not Started\n'
+    else:
+      if not end:
+        end = util.now()
+      msg += (
+          'started: %s\n' % time.ctime(start) +
+          'ended: %s\n' % time.ctime(end) +
+          'duration: %s\n' % util.formatInterval(end - start)
+      )
+    last['log'].addStdout(msg)
+    # Change status.
+    if not status:
+      status = last['status']
+    last['step'].stepFinished(status)
+    # Finish log.
+    last['log'].finish()
+
+  def outLineReceived(self, line):
+    """This is called once with each line of the test log."""
+    # Handle normal lines.
+    if not line.startswith('@@@'):
+      # Add to the current secondary log, if any.
+      if self.sections:
+        self.sections[-1]['log'].addStdout(line)
+      return
+    # Support: @@@link@<name>@<url>@@@ (emit link)
+    if line.startswith('@@@link@'):
+      if self.sections:
+        link = line.strip()[8:].split('@')
+        self.sections[-1]['links'].append(link)
+        self.sections[-1]['step'].addUrl(link[0], link[1])
+    # Support: @@@BUILD_FAILED@@@ (fail a stage)
+    if line.startswith('@@@BUILD_FAILED@@@'):
+      self.command.failed(builder.FAILURE)
+      if self.sections:
+        self.sections[-1]['status'] = builder.FAILURE
+    # Support: @@@BUILD_WARNINGS@@@ (warn on a stage)
+    if line.startswith('@@@BUILD_WARNINGS@@@'):
+      self.command.failed(builder.WARNINGS)
+      if self.sections:
+        self.sections[-1]['status'] = builder.WARNINGS
+    # Support: @@@BUILD_EXCEPTION@@@ (exception on a stage)
+    if line.startswith('@@@BUILD_EXCEPTION@@@'):
+      self.command.failed(builder.EXCEPTION)
+      if self.sections:
+        self.sections[-1]['status'] = builder.EXCEPTION
+    # Support: @@@BUILD_STEP <step_name>@@@ (start a new section)
+    m = re.match('^@@@BUILD_STEP (.*)@@@[\n\r]*', line)
+    if m:
+      step_name = m.group(1)
+      # Finish up last section.
+      self.fixupLast()
+      # Add new one.
+      step = self.command.step_status.getBuild().addStepWithName(step_name)
+      step.stepStarted()
+      step.setText([step_name])
+      log = step.addLog('stdio')
+      self.sections.append({
+          'name': step_name,
+          'step': step,
+          'log': log,
+          'status': builder.SUCCESS,
+          'links': [],
+      })
+
+
+class AnnotatedCommand(ProcessLogShellStep):
+  """Buildbot command that knows how to display annotations."""
+
+  def __init__(self, **kwargs):
+    ProcessLogShellStep.__init__(self, **kwargs)
+    self.script_observer = AnnotationObserver(self)
+    self.addLogObserver('stdio', self.script_observer)
+
+  def interrupt(self, reason):
+    self.script_observer.fixupLast(builder.EXCEPTION)
+    return ProcessLogShellStep.interrupt(self, reason)
+
+  def commandComplete(self, cmd):
+    self.script_observer.fixupLast()

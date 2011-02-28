@@ -7,11 +7,9 @@
 
 Contains the Native Client specific commands. Based on commands.py"""
 
-from buildbot.process import buildstep
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from buildbot.steps import trigger
-from buildbot.status.builder import FAILURE
 
 from master import chromium_step
 from master.factory import commands
@@ -661,7 +659,7 @@ class NativeClientCommands(commands.FactoryCommands):
     cmd = [self._python, '/b/build/scripts/slave/gsutil_cp_dir.py',
            '--message', url, src, dst]
     cmd = WithProperties(' '.join(cmd))
-    self._factory.addStep(AnnotatedCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='archive_coverage',
                           timeout=600,
                           haltOnFailure=True,
@@ -770,12 +768,12 @@ class NativeClientCommands(commands.FactoryCommands):
                        factory_properties=None):
     factory_properties = factory_properties or {}
     if 'test_name' not in factory_properties:
-      test_class = AnnotatedCommand
+      test_class = chromium_step.AnnotatedCommand
     else:
       test_name = factory_properties.get('test_name')
-      test_class = self.GetPerfStepClass(factory_properties, test_name,
-                                         process_log.GraphingLogProcessor,
-                                         command_class=AnnotatedCommand)
+      test_class = self.GetPerfStepClass(
+          factory_properties, test_name, process_log.GraphingLogProcessor,
+          command_class=chromium_step.AnnotatedCommand)
     self._factory.addStep(test_class,
                           name='annotate',
                           description='annotate',
@@ -783,32 +781,3 @@ class NativeClientCommands(commands.FactoryCommands):
                           haltOnFailure=haltOnFailure,
                           workdir=workdir,
                           command=command)
-
-
-class AnnotationObserver(buildstep.LogLineObserver):
-  """This class knows how to understand annotations."""
-
-  def __init__(self, command):
-    buildstep.LogLineObserver.__init__(self)
-    self.command = command
-    self.links = []
-
-  def outLineReceived(self, line):
-    """This is called once with each line of the test log."""
-    if line.startswith('@@@link@'):
-      self.links.append(line.strip()[8:].split('@'))
-    if line.startswith('@@@BUILD_FAILED@@@'):
-      self.command.failed(FAILURE)
-
-
-class AnnotatedCommand(chromium_step.ProcessLogShellStep):
-  """Buildbot command that knows how to display annotations."""
-
-  def __init__(self, **kwargs):
-    chromium_step.ProcessLogShellStep.__init__(self, **kwargs)
-    self.script_observer = AnnotationObserver(self)
-    self.addLogObserver('stdio', self.script_observer)
-
-  def createSummary(self, log):
-    for link in self.script_observer.links:
-      self.addURL(link[0], link[1])
