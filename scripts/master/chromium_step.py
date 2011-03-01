@@ -60,6 +60,9 @@ class GClient(source.Source):
     args = copy.copy(self.args)
     args['revision'] = revision
     args['branch'] = branch
+    if args.get('gclient_spec'):
+      args['gclient_spec'] = args['gclient_spec'] % {'revision':
+                                                     revision or ''}
     if patch:
       args['patch'] = patch
     elif args.get('patch') is None:
