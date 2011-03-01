@@ -216,6 +216,8 @@ class ChromiumNotifier(MailNotifier):
         'builder': builder_name,
         'steps': step_name,
     }
+    # Use the first line as a title.
+    status_title = status_text.split('\n', 1)[0]
     blame_list = ','.join(build_status.getResponsibleUsers())
     revisions_string = ''
     latest_revision = 0
@@ -241,7 +243,8 @@ class ChromiumNotifier(MailNotifier):
   %s<p>
   <a href="%s">%s</a><p>
   Revision: %s<br>
-""" % (status_text, waterfall_url, waterfall_url, status_text, build_url,
+""" % (status_title, waterfall_url, waterfall_url,
+       status_text.replace('\n', "<br>\n"), build_url,
        build_url, revisions_string))
 
     # Only include the blame list if relevant.
@@ -270,7 +273,7 @@ Revision: %s
 Blame list: %s
 
 Buildbot waterfall: http://build.chromium.org/
-""" % (status_text,
+""" % (status_title,
        build_url,
        urllib.quote(waterfall_url, '/:'),
        urllib.quote(builder_name),

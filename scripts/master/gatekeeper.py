@@ -56,13 +56,13 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     chromium_notifier.ChromiumNotifier.__init__(self, **kwargs)
 
     self.tree_status_url = tree_status_url
-    assert self.tree_status_url
     self.tree_message = (
         tree_message or
         'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
     self._last_closure_revision = 0
 
-    self.password = get_password.Password('.status_password').GetPassword()
+    if tree_status_url:
+      self.password = get_password.Password('.status_password').GetPassword()
 
 
   def isInterestingStep(self, build_status, step_status, results):
@@ -127,7 +127,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # If the tree is already closed, we don't care about this failure.
     # Check only at this moment because this is the slowest call.
     def Success(result):
-      if result.find('0') != -1:
+      if result and result.find('0') != -1:
         return False
       # Call the parent function to build the email.
       return chromium_notifier.ChromiumNotifier.buildMessage(
@@ -139,12 +139,18 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       return chromium_notifier.ChromiumNotifier.buildMessage(
                  self, builder_name, build_status, results, step_name)
 
-    connection = client.getPage(self.tree_status_url, agent='buildbot')
-    connection.addCallbacks(Success, Failure)
-    return connection
+    if self.tree_status_url:
+      connection = client.getPage(self.tree_status_url, agent='buildbot')
+      connection.addCallbacks(Success, Failure)
+      return connection
+    else:
+      return Success(None)
 
   def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
+    if not self.tree_status_url:
+      return defer.succeed(0)
+
     # isInterestingStep verified that latest_revision has expected properties.
     latest_revision = build_utils.getLatestRevision(build_status)
 
