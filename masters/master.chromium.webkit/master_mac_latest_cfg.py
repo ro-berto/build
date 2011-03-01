@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -23,23 +23,20 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 defaults['category'] = '8mac latest'
 
 #
-# Main release schedulers for chromium and webkit
+# Main release scheduler for webkit
 #
-S('s8_chromium_rel', branch='src', treeStableTimer=60)
 S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
 # Mac Rel Builder
 #
-B('Mac10.6 Tests', 'f_mac_tests_rel',
-  scheduler='s8_chromium_rel|s8_webkit_rel')
+B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
     options=['--', '-target', 'chromium_builder_tests'],
     tests=['browser_tests', 'interactive_ui', 'nacl_ui', 'unit', 'ui'],
     factory_properties={'generate_gtest_json': True}))
 
-B('Mac10.6 Perf', 'f_mac_perf6_rel',
-  scheduler='s8_chromium_rel|s8_webkit_rel')
+B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     options=['--', '-target', 'chromium_builder_rel'],
     tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler', 'page_cycler_http',
@@ -52,16 +49,15 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
 ################################################################################
 
 #
-# Main debug schedulers for chromium and webkit
+# Main debug scheduler for webkit
 #
-S('s8_chromium_dbg', branch='src', treeStableTimer=60)
 S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 #
 # Mac Dbg Builder
 #
 B('Mac Clang Builder (dbg)', 'f_mac_clang_dbg',
-  scheduler='s8_chromium_dbg|s8_webkit_dbg')
+  scheduler='s8_webkit_dbg')
 F('f_mac_clang_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--compiler=clang',

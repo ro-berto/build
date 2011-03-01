@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -22,16 +22,14 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 defaults['category'] = '6webkit linux latest'
 
 #
-# Main release scheduler for chromium and webkit
+# Main release scheduler for webkit
 #
-S('s6_chromium_rel', branch='src', treeStableTimer=60)
 S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
 # Linux Rel Builder
 #
-B('Webkit Linux', 'f_webkit_linux_rel',
-  scheduler='s6_chromium_rel|s6_webkit_rel')
+B('Webkit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
@@ -39,24 +37,22 @@ F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
-B('Webkit Linux 64', 'f_webkit_linux_rel',
-  scheduler='s6_chromium_rel|s6_webkit_rel')
+B('Webkit Linux 64', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 
 ################################################################################
 ## Debug
 ################################################################################
 
 #
-# Main debug schedulers for chromium and webkit
+# Main debug scheduler for webkit
 #
-S('s6_chromium_dbg', branch='src', treeStableTimer=60)
 S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 #
 # Linux Dbg Builder
 #
-B('Webkit Linux Builder (dbg)', 'f_webkit_linux_dbg',
-  scheduler='s6_chromium_dbg|s6_webkit_dbg', builddir='webkit-linux-latest-dbg')
+B('Webkit Linux Builder (dbg)', 'f_webkit_linux_dbg', scheduler='s6_webkit_dbg',
+   builddir='webkit-linux-latest-dbg')
 F('f_webkit_linux_dbg', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
@@ -67,8 +63,7 @@ F('f_webkit_linux_dbg', linux().ChromiumWebkitLatestFactory(
 # Linux Dbg Webkit testers
 #
 
-B('Webkit Linux (dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler='s6_chromium_dbg|s6_webkit_dbg')
+B('Webkit Linux (dbg)(1)', 'f_webkit_dbg_tests_1', scheduler='s6_webkit_dbg')
 F('f_webkit_dbg_tests_1', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
@@ -78,8 +73,7 @@ F('f_webkit_dbg_tests_1', linux().ChromiumWebkitLatestFactory(
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
-B('Webkit Linux (dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler='s6_chromium_dbg|s6_webkit_dbg')
+B('Webkit Linux (dbg)(2)', 'f_webkit_dbg_tests_2', scheduler='s6_webkit_dbg')
 F('f_webkit_dbg_tests_2', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=['webkit', 'webkit_gpu'],

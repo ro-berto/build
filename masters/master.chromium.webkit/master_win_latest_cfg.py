@@ -24,10 +24,8 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 defaults['category'] = '7win latest'
 
 #
-# Main release schedulers for chromium and webkit
+# Main release scheduler for webkit
 #
-S('s7_chromium_builder_rel', branch='src', treeStableTimer=60)
-S('s7_chromium_rel', branch='src', treeStableTimer=60)
 S('s7_webkit_builder_rel', branch='trunk', treeStableTimer=60)
 S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
 
@@ -37,15 +35,14 @@ T('reliability')
 #
 # Win Rel Builders
 #
-B('Win Builder', 'f_win_rel',
-  scheduler='s7_chromium_builder_rel|s7_webkit_builder_rel',
+B('Win Builder', 'f_win_rel', scheduler='s7_webkit_builder_rel',
   builddir='win-latest-rel')
 F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder'))
 
-B('Win Reliability Builder', 'f_win_reliability_rel',
-  scheduler='s7_chromium_rel|s7_webkit_rel', builddir='Win_Webkit_Latest')
+B('Win Reliability Builder', 'f_win_reliability_rel', scheduler='s7_webkit_rel',
+  builddir='Win_Webkit_Latest')
 F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
     clobber=True,
     tests=['reliability'],
@@ -56,8 +53,7 @@ F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
 #
 # Win Rel testers
 #
-B('Vista Perf', 'f_win_rel_perf',
-  scheduler='s7_chromium_builder_rel|s7_webkit_builder_rel')
+B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
     tests=['dom_perf', 'page_cycler', 'selenium', 'sunspider'],
@@ -65,8 +61,7 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
                         'show_perf_results': True,
                         'start_crash_handler': True}))
 
-B('Vista Tests', 'f_win_rel_tests',
-  scheduler='s7_chromium_builder_rel|s7_webkit_builder_rel')
+B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
     tests=['installer', 'nacl_ui', 'unit', 'ui'],
@@ -85,18 +80,15 @@ F('win_reliability', linux().ReliabilityTestsFactory('win_webkit_canary'))
 ################################################################################
 
 #
-# Main debug schedulers for chromium and webkit
+# Main debug scheduler for webkit
 #
-S('s7_chromium_builder_dbg', branch='src', treeStableTimer=60)
-S('s7_chromium_dbg', branch='src', treeStableTimer=60)
 S('s7_webkit_builder_dbg', branch='trunk', treeStableTimer=60)
 S('s7_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 #
 # Win Dbg Builder
 #
-B('Win Builder (dbg)', 'f_win_dbg',
-  scheduler='s7_chromium_builder_dbg|s7_webkit_builder_dbg',
+B('Win Builder (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
   builddir='win-latest-dbg')
 F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
@@ -106,8 +98,7 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 
-B('Win Shared Builder (dbg)', 'f_win_shared_dbg',
-  scheduler='s7_chromium_dbg|s7_webkit_dbg')
+B('Win Shared Builder (dbg)', 'f_win_shared_dbg', scheduler='s7_webkit_dbg')
 F('f_win_shared_dbg', win().ChromiumWebkitLatestFactory(
     project='all.sln',
     compile_timeout=2400,
@@ -118,8 +109,7 @@ F('f_win_shared_dbg', win().ChromiumWebkitLatestFactory(
 # Win Dbg testers
 #
 
-B('XP Tests (dbg)', 'f_win_dbg_tests',
-  scheduler='s7_chromium_builder_dbg|s7_webkit_builder_dbg')
+B('XP Tests (dbg)', 'f_win_dbg_tests', scheduler='s7_webkit_builder_dbg')
 F('f_win_dbg_tests', win().ChromiumWebkitLatestFactory(
     target='Debug',
     project='all.sln;chromium_builder',
