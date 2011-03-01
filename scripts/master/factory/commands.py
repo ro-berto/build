@@ -382,7 +382,7 @@ class FactoryCommands(object):
                'sync', '--verbose']
     self._factory.addStep(shell.ShellCommand,
                           name='update_scripts',
-                          description='update scripts',
+                          description='update_scripts',
                           locks=[self.slave_exclusive_lock],
                           timeout=60,
                           workdir='..',

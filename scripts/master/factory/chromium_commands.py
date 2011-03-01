@@ -150,17 +150,17 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
            '--root', self._repository_root]
-    self.AddTestStep(shell.ShellCommand, 'check deps', cmd)
+    self.AddTestStep(shell.ShellCommand, 'check_deps', cmd)
 
   def AddCheckBinsStep(self):
     build_dir = os.path.join(self._build_dir, self._target)
     cmd = [self._python, self._check_bins_tool, build_dir]
-    self.AddTestStep(shell.ShellCommand, 'check bins', cmd)
+    self.AddTestStep(shell.ShellCommand, 'check_bins', cmd)
 
   def AddCheckPermsStep(self):
     cmd = [self._python, self._check_perms_tool,
            '--root', self._repository_root]
-    self.AddTestStep(shell.ShellCommand, 'check perms', cmd)
+    self.AddTestStep(shell.ShellCommand, 'check_perms', cmd)
 
   def AddCheckLKGRStep(self):
     """Check LKGR; if unchanged, cancel the build.

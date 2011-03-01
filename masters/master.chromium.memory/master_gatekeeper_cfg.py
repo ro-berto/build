@@ -1,4 +1,4 @@
- # Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -13,7 +13,7 @@ from master import master_utils
 categories_steps = {
   '': ['update'],
   'memory_tester': [
-    'Start Crash Handler',
+    'start_crash_handler',
     'memory test: googleurl',
     'memory test: printing',
     'memory test: media',
@@ -50,14 +50,14 @@ categories_steps = {
     'heapcheck test: test_shell',
   ],
   'windows': ['svnkill', 'taskkill'],
-  'compile': ['check deps', 'compile', 'archived build']
+  'compile': ['check_deps', 'compile', 'archive_build']
 }
 
 exclusions = {
 }
 
-forgiving_steps = ['update scripts', 'update', 'svnkill', 'taskkill',
-                   'archived build', 'Start Crash Handler']
+forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
+                   'archive_build', 'start_crash_handler']
 
 def Update(config, active_master, c):
   c['status'].append(gatekeeper.GateKeeper(
