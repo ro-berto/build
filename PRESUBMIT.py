@@ -25,6 +25,8 @@ def CommonChecks(input_api, output_api):
         join('third_party'),
         join('third_party', 'buildbot_7_12'),
         join('third_party', 'twisted_8_1'),
+        #join('third_party', 'buildbot_8_3p1', 'buildbot'),
+        #join('third_party', 'twisted_10_2'),
         join('scripts'),
         join('site_config'),
     ] + sys.path

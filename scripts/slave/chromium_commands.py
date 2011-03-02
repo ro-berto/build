@@ -17,6 +17,8 @@ from common import chromium_utils
 
 try:
   # Buildbot 0.8.3
+  # Unable to import 'XX'
+  # pylint: disable=F0401
   from buildslave.commands.base import SourceBaseCommand
   from buildslave.commands.registry import commandRegistry
   from buildslave import runprocess
@@ -123,6 +125,9 @@ class GClient(sourcebase):
   # doClobber has a weird extra argument in the base class, generating a pylint
   # warning.
   # pylint: disable=W0221
+  # TODO(maruel): Figure out why super() doesn't work.
+  # __init__ method from base class 'SourceBase' is not called
+  # pylint: disable=W0231
 
   header = 'gclient'
 
