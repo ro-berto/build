@@ -143,7 +143,7 @@ class GClient(sourcebase):
     self.gclient_deps = None
     self.rm_timeout = None
     self.gclient_nohooks = False
-    sourcebase.__init__(self, *args, **kwargs)
+    super(GClient, self).__init__(*args, **kwargs)
 
   if bbver == 7.12:
     def getCommand(self, arg): # pylint: disable=R0201
