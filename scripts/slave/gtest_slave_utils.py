@@ -17,6 +17,9 @@ GENERATE_JSON_RESULTS_OPTIONS = [
     'test_type', 'master_name']
 
 INCREMENTAL_RESULTS_FILENAME = "incremental_results.json"
+# This name is chosen to match the layout tests version of this file.
+# For gtests, this only has test runtimes, but for all the tests.
+FULL_RESULTS_FILENAME = "full_results.json"
 
 
 class GTestResult(object):
@@ -169,7 +172,8 @@ def GenerateAndUploadJSONResults(gtest_results_map, options):
       test_type=options.test_type,
       master_name=options.master_name)
   generator.generate_json_output()
-  generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME])
+  generator.generate_full_results_file()
+  generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME, FULL_RESULTS_FILENAME])
 
 
 # For command-line testing.
