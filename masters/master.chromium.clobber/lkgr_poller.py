@@ -9,20 +9,23 @@ import sys
 import time
 import urllib2
 
-from buildbot.scripts import runner
+from common import chromium_utils
 
 PID_PATH = os.path.realpath(__file__) + '.pid'
 
 # Trigger the buildbot when LKGR is updated.
 def TriggerBot(revision):
-  sys.argv = ['buildbot', 'sendchange',
-              '--master', 'localhost:8118',
-              '--revision', revision,
-              '--branch', 'src',
-              '--username', 'lkgr',
-              '--category', 'lkgr',
-              'no file information']
-  runner.run()
+  buildbot_runner = os.path.join(os.path.dirname(PID_PATH), 'buildbot')
+  cmd = ['python', buildbot_runner, 'sendchange',
+         '--master', 'localhost:8118',
+         '--revision', revision,
+         '--branch', 'src',
+         '--username', 'lkgr',
+         '--category', 'lkgr',
+         'no file information']
+  print cmd
+  ret = chromium_utils.RunCommand(cmd)
+  print "Returned %d" % ret
 
 def main():
   # Make sure the master can kill us by writing a pid file.
