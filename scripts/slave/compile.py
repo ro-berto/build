@@ -611,14 +611,7 @@ def real_main():
     elif chromium_utils.IsMac():
       main = main_xcode
     elif chromium_utils.IsLinux():
-      # Check for a Makefile before using the make build, in case we're running
-      # an older version of gyp (as some official builders still do) when scons
-      # was the default.
-      if os.path.exists(os.path.join(os.path.dirname(options.build_dir),
-                                     'Makefile')):
-        main = main_make
-      else:
-        main = main_scons
+      main = main_make
     else:
       print('Please specify --build-tool.')
       return 1
