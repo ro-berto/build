@@ -202,10 +202,10 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   kwargs['order_console_by_time'] = order_console_by_time
   if active_master.master_port:
     c['status'].append(WebStatus(active_master.master_port, allowForce=True,
-                                 **kwargs))
+                                 num_events_max=3000, **kwargs))
   if active_master.master_port_alt:
     c['status'].append(WebStatus(active_master.master_port_alt,
-                                 allowForce=False,
+                                 allowForce=False, num_events_max=3000,
                                  **kwargs))
 
   # Keep last build logs, the default is too low.
