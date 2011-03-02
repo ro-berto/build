@@ -43,8 +43,7 @@ class CheckLKGR(object):
   def Save(self):
     """Save the new LKGR."""
     print 'Saving LKGR %d in %s' % (self.new_lkgr, self.filename)
-    if os.path.exists(self.filename):
-      os.unlink(self.filename)
+    os.path.exists(self.filename) and os.unlink(self.filename)
     f = open(self.filename, 'w')
     f.write('%d\n' % self.new_lkgr)
     f.close()

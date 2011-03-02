@@ -16,6 +16,7 @@
 import glob
 import optparse
 import os
+import shutil
 import simplejson
 import sys
 import re
