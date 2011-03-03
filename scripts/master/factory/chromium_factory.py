@@ -49,8 +49,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # gclient custom vars
   CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
   CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
+  # $$WK_REV$$ below will be substituted with the revision that triggered the
+  # build in chromium_step.py@GClient.startVC. Use this only with builds
+  # triggered by a webkit poller.
   CUSTOM_VARS_WEBKIT_LATEST = [('webkit_trunk', config.Master.webkit_trunk_url),
-                               ('webkit_revision','')]
+                               ('webkit_revision', '$$WK_REV$$')]
   # safe sync urls
   SAFESYNC_URL_CHROMIUM = 'http://chromium-status.appspot.com/lkgr'
 
