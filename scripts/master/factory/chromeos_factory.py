@@ -53,15 +53,15 @@ class CbuildbotFactory(object):
       self.chromite_repo = CbuildbotFactory._default_git_base + '/crosutils'
     else:
       self.chromite_repo = chromite_repo
-
     self.timeout = timeout
     self.variant = variant
     self.board = board
     self.branch = branch
+    self.type = type
+    self.is_master = is_master
+
     self.f_cbuild = chromeos_build_factory.BuildFactory()
     self.add_boiler_plate_steps()
-    self.is_master = is_master
-    self.type = type
 
     if type == 'cbuildbot':
       description_suffix = ''
@@ -96,9 +96,22 @@ class CbuildbotFactory(object):
     #has been passed in and we want to honor the explicitly passed in branch
 
     clear_and_clone_cmd += '%s checkout ' % git_bin
-
+    
     if self.branch == 'master':
-      clear_and_clone_cmd += '%(branch)s'
+      # Whitelist top of tree chrome PFQ builds to always use master
+      # as the branch checkout, this avoids us trying to clone a SVN
+      # revision that is passed to the builder. We are doing this in this
+      # fashion to avoid having to write a script that wraps our git call
+      # to confirm the hash we are passed. While technically we have access to
+      # branch/revision unfortunately the only way it is available is via 
+      # WithProperties which is only transferred to something usable in a shell
+      # step.
+      if self.type and ('cbuildbot_chrome' == self.type):
+        clear_and_clone_cmd += 'master'
+      else:
+        # If branch is passed by the change source and we are not chrome pfq use
+        # use it.
+        clear_and_clone_cmd += '%(branch)s'
     else:
       clear_and_clone_cmd +=  self.branch
 
