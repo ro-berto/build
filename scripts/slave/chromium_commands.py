@@ -122,11 +122,10 @@ class GClient(sourcebase):
   ['env']:
     Augment os.environ.
   """
-  # doClobber has a weird extra argument in the base class, generating a pylint
-  # warning.
-  # pylint: disable=W0221
-  # TODO(maruel): Figure out why super() doesn't work.
-  # __init__ method from base class 'SourceBase' is not called
+
+  # pylint complains that __init__ in GClient's parent isn't called.  This is
+  # because it doesn't realize we call it through GetParentClass().  Disable
+  # that warning next.
   # pylint: disable=W0231
 
   header = 'gclient'
@@ -148,7 +147,7 @@ class GClient(sourcebase):
     self.gclient_deps = None
     self.rm_timeout = None
     self.gclient_nohooks = False
-    sourcebase.__init__(self, *args, **kwargs)
+    chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
   if bbver == 7.12:
     def getCommand(self, arg): # pylint: disable=R0201

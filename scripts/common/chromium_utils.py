@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -78,7 +78,10 @@ def PlatformName():
 #
 def GetParentClass(obj, n=1):
   import inspect
-  return inspect.getmro(obj.__class__)[n]
+  if inspect.isclass(obj):
+    return inspect.getmro(obj)[n]
+  else:
+    return inspect.getmro(obj.__class__)[n]
 
 
 def MeanAndStandardDeviation(data):
