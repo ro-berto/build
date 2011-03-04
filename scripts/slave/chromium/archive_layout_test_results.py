@@ -56,6 +56,8 @@ def _CollectArchiveFiles(output_dir):
             name.endswith('-diff.txt') or
             name.endswith('-diff.png')):
         diff_file_list.append(os.path.join(rel_path, name))
+      elif name.endswith('.json'):
+        actual_file_list.append(os.path.join(rel_path, name))
   if os.path.exists(os.path.join(output_dir, 'results.html')):
     actual_file_list.append('results.html')
   return (actual_file_list, diff_file_list)
