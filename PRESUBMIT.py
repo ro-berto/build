@@ -17,7 +17,8 @@ def CommonChecks(input_api, output_api):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
   black_list = list(input_api.DEFAULT_BLACK_LIST) + [
-      r'.*slave/.*/build/.*', r'.*depot_tools/.*', r'.*unittests/.*']
+      r'.*slave/.*/build.*/.*', r'.*depot_tools/.*', r'.*unittests/.*',
+      r'.*scripts/release/.*']
 
   sys_path_backup = sys.path
   try:
