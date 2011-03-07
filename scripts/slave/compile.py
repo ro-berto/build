@@ -321,27 +321,29 @@ def main_make(options, args):
   # (scons does this with 'scons_variable_settings' in common.gypi).
   env['LINK'] = 'flock %s/linker.lock \$(CXX)' % sconsbuild
 
-  # If using the Goma compiler, first stop/start the proxy to ensure it is
-  # available.
+  # If using the Goma compiler, first call goma_ctl with ensure_start
+  # (or restart in clobber mode) to ensure the proxy is available.
   goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-  goma_stop_cmd = goma_ctl_cmd + ['stop']
-  goma_start_cmd = goma_ctl_cmd + ['start']
+
   if options.compiler == 'goma':
-    # TODO: Produce an error if these steps do not work.  Need goma_ctl.sh
-    #       option.
-    # TODO: Only restart the proxy on clobber (ensure_start otherwise) once
-    #       daemonize and ensure_start/restart become available.
-    chromium_utils.RunCommand(goma_stop_cmd)
-    chromium_utils.RunCommand(goma_start_cmd)
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
+    env = os.environ.copy()
+    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
+    if options.clobber:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+    else:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
   rc = chromium_utils.RunCommand(command, env=env)
 
   # If the Goma proxy is running, stop it.
-  # TODO: Don't stop the proxy each time once daemonize and ensure_start
-  #       become available.
+  # TODO: remove this once made sure we've restarted compiler_proxy
+  # in daemon mode.
   if (options.compiler == 'goma' and
-      chromium_utils.RunCommand(goma_stop_cmd) != 0):
+      chromium_utils.RunCommand(goma_ctl_cmd + ['stop']) != 0):
     print 'ERROR: Could not stop goma proxy'
     return 1
   return rc
