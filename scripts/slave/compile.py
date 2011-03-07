@@ -337,16 +337,7 @@ def main_make(options, args):
       chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
-  rc = chromium_utils.RunCommand(command, env=env)
-
-  # If the Goma proxy is running, stop it.
-  # TODO: remove this once made sure we've restarted compiler_proxy
-  # in daemon mode.
-  if (options.compiler == 'goma' and
-      chromium_utils.RunCommand(goma_ctl_cmd + ['stop']) != 0):
-    print 'ERROR: Could not stop goma proxy'
-    return 1
-  return rc
+  return chromium_utils.RunCommand(command, env=env)
 
 
 def main_scons(options, args):
