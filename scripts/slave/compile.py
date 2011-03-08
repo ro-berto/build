@@ -22,7 +22,12 @@ from common import chromium_utils
 from slave import slave_utils
 
 
-COMPILE_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+# Path of the scripts/slave/ checkout on the slave, found by looking at the
+# current compile.py script's path's dirname().
+SLAVE_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+# Path of the build/ checkout on the slave, found relative to the
+# scripts/slave/ directory.
+BUILD_DIR = os.path.dirname(os.path.dirname(SLAVE_SCRIPTS_DIR))
 
 
 def ReadHKLMValue(path, value):
@@ -41,31 +46,30 @@ def ReadHKLMValue(path, value):
     return None
 
 
-def main_xcode(options, args):
-  """Interprets options, clobbers object files, and calls xcodebuild.
+def common_mac_settings(command, options, env, compiler=None):
+  """
+  Sets desirable Mac environment variables and command-line options
+  that are common to the Xcode builds.
   """
   compiler = options.compiler
-  assert compiler in (None, 'clang')
+  assert compiler in (None, 'clang', 'goma')
 
-  # Note: this clobbers all targets, not just Debug or Release.
-  if options.clobber:
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-        'xcodebuild')
-    chromium_utils.RemoveDirectory(build_output_dir)
+  if compiler == 'goma':
+    print 'using goma'
+    env['PATH'] = options.goma_dir + ':' + env['PATH']
+    command.insert(0, 'goma-xcodebuild')
+    return
 
-  # If the project isn't in args, add all.xcodeproj to simplify configuration.
-  command = ['xcodebuild', '-configuration', options.target]
-
-  # TODO(mmoss) Support the old 'args' usage until we're confident the master is
-  # switched to passing '--solution' everywhere.
-  if not '-project' in args:
-    # TODO(mmoss) Temporary hack to ignore the Windows --solution flag that is
-    # passed to all builders. This can be taken out once the master scripts are
-    # updated to only pass platform-appropriate --solution values.
-    if (not options.solution or
-        os.path.splitext(options.solution)[1] != '.xcodeproj'):
-      options.solution = 'all.xcodeproj'
-    command.extend(['-project', options.solution])
+  if compiler == 'clang':
+    clang_binary = os.path.join(os.path.dirname(options.build_dir),
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang++')
+    clang_binary = os.path.abspath(clang_binary)
+    # TODO(thakis): Remove this once the webkit canary waterfall has been
+    #               restarted.
+    if not os.path.isfile(clang_binary):
+      clang_binary = 'clang++'
+    env['CC'] = clang_binary
+    return
 
   # Most of the bot hostnames are in one of two patterns:
   #   base###.subnet.domain
@@ -80,7 +84,6 @@ def main_xcode(options, args):
   full_hostname = socket.getfqdn()
   os_revision = uname_tuple[2]
   split_full_hostname = full_hostname.split('.', 2)
-  env = os.environ.copy()
   if len(split_full_hostname) >= 3:
     hostname_only = split_full_hostname[0]
     hostname_subnet = split_full_hostname[1]
@@ -106,25 +109,61 @@ def main_xcode(options, args):
           env['DISTCC_HOSTS'] = 'dummy,cpp,lzo'
           command.insert(0, "pump")
 
-  if compiler == 'clang':
-    clang_binary = os.path.join(os.path.dirname(options.build_dir),
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang++')
-    clang_binary = os.path.abspath(clang_binary)
-    # TODO(thakis): Remove this once the webkit canary waterfall has been
-    #               restarted.
-    if not os.path.isfile(clang_binary):
-      clang_binary = 'clang++'
-    env['CC'] = clang_binary
+
+def main_xcode(options, args):
+  """Interprets options, clobbers object files, and calls xcodebuild.
+  """
+  # If the project isn't in args, add all.xcodeproj to simplify configuration.
+  command = ['xcodebuild', '-configuration', options.target]
+
+  # TODO(mmoss) Support the old 'args' usage until we're confident the master is
+  # switched to passing '--solution' everywhere.
+  if not '-project' in args:
+    # TODO(mmoss) Temporary hack to ignore the Windows --solution flag that is
+    # passed to all builders. This can be taken out once the master scripts are
+    # updated to only pass platform-appropriate --solution values.
+    if (not options.solution or
+        os.path.splitext(options.solution)[1] != '.xcodeproj'):
+      options.solution = 'all.xcodeproj'
+    command.extend(['-project', options.solution])
 
   if options.xcode_target:
     command.extend(['-target', options.xcode_target])
+
+  if not options.goma_dir:
+    options.goma_dir = os.path.join(BUILD_DIR, 'goma', 'mac10.6')
+
+  # Note: this clobbers all targets, not just Debug or Release.
+  if options.clobber:
+    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
+        'xcodebuild')
+    chromium_utils.RemoveDirectory(build_output_dir)
+
+  env = os.environ.copy()
+  common_mac_settings(command, options, env, options.compiler)
 
   # Add on any remaining args
   command.extend(args)
 
   os.chdir(options.build_dir)
-  result = chromium_utils.RunCommand(command, env=env)
-  return result
+
+  # If using the Goma compiler, first call goma_ctl with ensure_start
+  # (or restart in clobber mode) to ensure the proxy is available.
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+
+  if options.compiler == 'goma':
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
+    env = os.environ.copy()
+    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
+    if options.clobber:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+    else:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+
+  # Run the build.
+  return chromium_utils.RunCommand(command, env=env)
 
 
 DISTRIBUTION_FILE = '/etc/lsb-release'
@@ -224,7 +263,7 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   distcc_bin_exists = os.path.exists('/usr/bin/distcc')
   codename = get_ubuntu_codename()
   machine = os.uname()[4]
-  distcc_hosts_path = os.path.join(COMPILE_SCRIPT_DIR, 'linux_distcc_hosts',
+  distcc_hosts_path = os.path.join(SLAVE_SCRIPTS_DIR, 'linux_distcc_hosts',
                                    '%s-%s' % (codename, machine))
   hostname = socket.getfqdn().split('.')[0]
   hostname_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname)
@@ -283,7 +322,7 @@ def main_make(options, args):
     working_dir = src_dir
 
   if not options.goma_dir:
-    options.goma_dir = os.path.join(COMPILE_SCRIPT_DIR, '..', '..', 'goma')
+    options.goma_dir = os.path.join(BUILD_DIR, 'goma')
   if options.clobber:
     build_output_dir = os.path.join(working_dir, 'out', options.target)
     chromium_utils.RemoveDirectory(build_output_dir)
