@@ -373,7 +373,7 @@ class HttpStatusPush(StatusPush):
             else:
                 packets = json.dumps(items, separators=(',',':'))
             params = {'packets': packets}
-            params.update(self.extra_post)
+            params.update(self.extra_post_params)
             data = urllib.urlencode(params)
             if (not self.maxHttpRequestSize or
                 len(data) < self.maxHttpRequestSize):
