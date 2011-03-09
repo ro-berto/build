@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -35,7 +35,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
   parameters type."""
 
 
-  def __init__(self, tree_status_url=None, tree_message=None, **kwargs):
+  def __init__(self, tree_status_url=None, tree_message=None,
+               check_revisions=True, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type tree_status_url: String.
@@ -43,6 +44,9 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
     @type tree_message: String.
     @param tree_message: Message posted to the tree status site when closed.
+
+    @type check_revisions: Boolean, default to True.
+    @param check_revisions: Check revisions and users for closing the tree.
 
     @type password: String.
     @param password: Password for service.  If None, look in .status_password.
@@ -56,6 +60,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     chromium_notifier.ChromiumNotifier.__init__(self, **kwargs)
 
     self.tree_status_url = tree_status_url
+    self.check_revisions = check_revisions
     self.tree_message = (
         tree_message or
         'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
@@ -86,20 +91,6 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         log.msg('Slave %s was disconnected, not closing the tree' % slave_name)
         return False
 
-    # If we don't have a version stamp nor a blame list, then this is most
-    # likely a build started manually, and we don't want to close the
-    # tree.
-    latest_revision = build_utils.getLatestRevision(build_status)
-    if not latest_revision or not build_status.getResponsibleUsers():
-      return False
-
-    # If the tree is open, we don't want to close it again for the same
-    # revision, or an earlier one in case the build that just finished is a
-    # slow one and we already fixed the problem and manually opened the tree.
-    # TODO(maruel): This is not git-friendly.
-    if latest_revision <= self._last_closure_revision:
-      return False
-
     # If the previous build step failed with the same result, we don't care
     # about this step.
     previous_build_status = build_status.getPreviousBuild()
@@ -114,6 +105,26 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       else:
         log.msg('len(previous_steps) == %d which is weird' %
                     len(previous_steps))
+
+    # If check_revisions=False that means that the tree closure request is
+    # coming from nightly scheduled bots, that need not necessarily have the 
+    # revision info. 
+    if not self.check_revisions:
+      return True
+
+    # If we don't have a version stamp nor a blame list, then this is most
+    # likely a build started manually, and we don't want to close the
+    # tree.
+    latest_revision = build_utils.getLatestRevision(build_status)
+    if not latest_revision or not build_status.getResponsibleUsers():
+      return False
+
+    # If the tree is open, we don't want to close it again for the same
+    # revision, or an earlier one in case the build that just finished is a
+    # slow one and we already fixed the problem and manually opened the tree.
+    # TODO(maruel): This is not git-friendly.
+    if latest_revision <= self._last_closure_revision:
+      return False
 
     # Up to here, in theory we'd check if the tree is closed but this is too
     # slow to check here. Instead, take a look only when we want to close the
