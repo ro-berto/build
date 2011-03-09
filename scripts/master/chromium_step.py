@@ -22,7 +22,7 @@ class GClient(source.Source):
   name = 'update'
 
   def __init__(self, svnurl=None, rm_timeout=None, gclient_spec=None, env=None,
-               sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False, 
+               sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False,
                **kwargs):
     source.Source.__init__(self, **kwargs)
     if env:
@@ -217,69 +217,212 @@ class ProcessLogShellStep(shell.ShellCommand):
 
 
 class AnnotationObserver(buildstep.LogLineObserver):
-  """This class knows how to understand annotations."""
+  """This class knows how to understand annotations.
 
-  def __init__(self, command):
-    buildstep.LogLineObserver.__init__(self)
+  Here are a list of the currently supported annotations:
+
+  @@@BUILD_STEP <stepname>@@@
+  Add a new step <stepname>. End the current step, marking with last available
+  status.
+
+  @@@STEP_LINK@<label>@<url>@@@
+  Add a link with label <label> linking to <url> to the current stage.
+
+  @@@STEP_WARNINGS@@@
+  Mark the current step as having warnings (oragnge).
+
+  @@@STEP_FAILURE@@@
+  Mark the current step as having failed (red).
+
+  @@@STEP_EXCEPTION@@@
+  Mark the current step as having exceptions (magenta).
+
+  @@@STEP_CLEAR@@@
+  Reset the text description of the current step.
+
+  @@@STEP_SUMMARY_CLEAR@@@
+  Reset the text summary of the current step.
+
+  @@@STEP_TEXT@<msg>@@@
+  Append <msg> to the current step text.
+
+  @@@STEP_SUMMARY_TEXT@<msg>@@@
+  Append <msg> to the step summary (appears on top of the waterfall).
+
+  @@@HALT_ON_FAILURE@@@
+  Halt if exception or failure steps are encountered (default is not).
+
+  @@@HONOR_ZERO_RETURN_CODE@@@
+  Honor the return code being zero (success), even if steps have other results.
+
+  Deprecated annotations:
+  TODO(bradnelson): drop these when all users have been tracked down.
+
+  @@@BUILD_WARNINGS@@@
+  Equivalent to @@@STEP_WARNINGS@@@
+
+  @@@BUILD_FAILED@@@
+  Equivalent to @@@STEP_FAILURE@@@
+
+  @@@BUILD_EXCEPTION@@@
+  Equivalent to @@@STEP_EXCEPTION@@@
+
+  @@@link@<label>@<url>@@@
+  Equivalent to @@@STEP_LINK@<label>@<url>@@@
+  """
+
+  def __init__(self, command=None, *args, **kwargs):
+    buildstep.LogLineObserver.__init__(self, *args, **kwargs)
     self.command = command
     self.sections = []
+    self.annotate_status = builder.SUCCESS
+    self.halt_on_failure = False
+    self.honor_zero_return_code = False
+
+  # Order in asceding severity.
+  BUILD_STATUS_ORDERING = [
+      builder.SUCCESS,
+      builder.WARNINGS,
+      builder.FAILURE,
+      builder.EXCEPTION,
+  ]
+
+  def combineStatuses(self, a, b):
+    """Combine two status, favoring the more severe."""
+    a_rank = self.BUILD_STATUS_ORDERING.index(a)
+    b_rank = self.BUILD_STATUS_ORDERING.index(b)
+    pick = max(a_rank, b_rank)
+    return self.BUILD_STATUS_ORDERING[pick]
+
+  def initialSection(self):
+    if self.sections:
+      return
+    # Add a log section for output before the first section heading.
+    log = self.command.addLog('preamble')
+    self.sections.append({
+        'name': 'preamble',
+        'step': self.command.step_status.getBuild().steps[-1],
+        'log': log,
+        'status': builder.SUCCESS,
+        'links': [],
+        'step_summary_text': [],
+        'step_text': [],
+    })
 
   def fixupLast(self, status=None):
-    if not self.sections:
-      return
     last = self.sections[-1]
+    # Final update of text.
+    self.updateText()
     # Add timing info.
     (start, end) = self.command.step_status.getTimes()
     msg = '\n\n' + '-' * 80 + '\n'
-    if not start:
+    if start is None:
       msg += 'Not Started\n'
     else:
-      if not end:
+      if end is None:
         end = util.now()
-      msg += (
-          'started: %s\n' % time.ctime(start) +
-          'ended: %s\n' % time.ctime(end) +
-          'duration: %s\n' % util.formatInterval(end - start)
-      )
+      msg += '\n'.join([
+          'started: %s' % time.ctime(start),
+          'ended: %s' % time.ctime(end),
+          'duration: %s' % util.formatInterval(end - start),
+          '',  # So we get a final \n
+      ])
     last['log'].addStdout(msg)
-    # Change status.
-    if not status:
-      status = last['status']
-    last['step'].stepFinished(status)
+    # Change status (unless handling the preamble).
+    if len(self.sections) != 1:
+      if not status:
+        status = last['status']
+      last['step'].stepFinished(status)
     # Finish log.
     last['log'].finish()
 
+  def errLineReceived(self, line):
+    self.outLineReceived(line)
+
+  def updateStepStatus(self, status):
+    """Update current step status and annotation status based on a new event."""
+    self.annotate_status = self.combineStatuses(self.annotate_status, status)
+    last = self.sections[-1]
+    last['status'] = self.combineStatuses(last['status'], status)
+    if self.halt_on_failure and last['status'] in [
+        builder.FAILURE, builder.EXCEPTION]:
+      self.fixupLast()
+      self.command.finished(last['status'])
+
+  def updateText(self):
+    # Don't update the main phase's text.
+    if len(self.sections) == 1:
+      return
+
+    last = self.sections[-1]
+
+    # Reflect step status in text2.
+    if last['status'] == builder.EXCEPTION:
+      result = ['exception', last['name']]
+    elif last['status'] == builder.FAILURE:
+      result = ['failed', last['name']]
+    else:
+      result = []
+
+    last['step'].setText([last['name']] + last['step_text'])
+    last['step'].setText2(result + last['step_summary_text'])
+
   def outLineReceived(self, line):
     """This is called once with each line of the test log."""
-    # Handle normal lines.
-    if not line.startswith('@@@'):
-      # Add to the current secondary log, if any.
-      if self.sections:
-        self.sections[-1]['log'].addStdout(line)
-      return
-    # Support: @@@link@<name>@<url>@@@ (emit link)
-    if line.startswith('@@@link@'):
-      if self.sections:
-        link = line.strip()[8:].split('@')
-        self.sections[-1]['links'].append(link)
-        self.sections[-1]['step'].addUrl(link[0], link[1])
-    # Support: @@@BUILD_FAILED@@@ (fail a stage)
-    if line.startswith('@@@BUILD_FAILED@@@'):
-      self.command.failed(builder.FAILURE)
-      if self.sections:
-        self.sections[-1]['status'] = builder.FAILURE
-    # Support: @@@BUILD_WARNINGS@@@ (warn on a stage)
-    if line.startswith('@@@BUILD_WARNINGS@@@'):
-      self.command.failed(builder.WARNINGS)
-      if self.sections:
-        self.sections[-1]['status'] = builder.WARNINGS
-    # Support: @@@BUILD_EXCEPTION@@@ (exception on a stage)
-    if line.startswith('@@@BUILD_EXCEPTION@@@'):
-      self.command.failed(builder.EXCEPTION)
-      if self.sections:
-        self.sections[-1]['status'] = builder.EXCEPTION
+    # Handle initial setup here, as step_status might not exist yet at init.
+    self.initialSection()
+    # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
+    # Also support depreceated @@@link@<name>@<url>@@@
+    m = re.match('^@@@STEP_LINK@(.*)@(.*)@@@', line)
+    if not m:
+      m = re.match('^@@@link@(.*)@(.*)@@@', line)
+    if m:
+      link_label = m.group(1)
+      link_url = m.group(2)
+      self.sections[-1]['links'].append((link_label, link_url))
+      self.sections[-1]['step'].addURL(link_label, link_url)
+    # Support: @@@STEP_WARNINGS@@@ (warn on a stage)
+    # Also support deprecated @@@BUILD_WARNINGS@@@
+    if (line.startswith('@@@STEP_WARNINGS@@@') or
+        line.startswith('@@@BUILD_WARNINGS@@@')):
+      self.updateStepStatus(builder.WARNINGS)
+    # Support: @@@STEP_FAILURE@@@ (fail a stage)
+    # Also support deprecated @@@BUILD_FAILED@@@
+    if (line.startswith('@@@STEP_FAILURE@@@') or
+        line.startswith('@@@BUILD_FAILED@@@')):
+      self.updateStepStatus(builder.FAILURE)
+    # Support: @@@STEP_EXCEPTION@@@ (exception on a stage)
+    # Also support deprecated @@@BUILD_FAILED@@@
+    if (line.startswith('@@@STEP_EXCEPTION@@@') or
+        line.startswith('@@@BUILD_EXCEPTION@@@')):
+      self.updateStepStatus(builder.EXCEPTION)
+    # Support: @@@HALT_ON_FAILURE@@@ (halt if a step fails immediately)
+    if line.startswith('@@@HALT_ON_FAILURE@@@'):
+      self.halt_on_failure = True
+    # Support: @@@HONOR_ZERO_RETURN_CODE@@@ (succeed on 0 return, even if some
+    #     steps have failed)
+    if line.startswith('@@@HONOR_ZERO_RETURN_CODE@@@'):
+      self.honor_zero_return_code = True
+    # Support: @@@STEP_CLEAR@@@ (reset step description)
+    if line.startswith('@@@STEP_CLEAR@@@'):
+      self.sections[-1]['step_text'] = []
+      self.updateText()
+    # Support: @@@STEP_SUMMARY_CLEAR@@@ (reset step summary)
+    if line.startswith('@@@STEP_SUMMARY_CLEAR@@@'):
+      self.sections[-1]['step_summary_text'] = []
+      self.updateText()
+    # Support: @@@STEP_TEXT@<msg>@@@
+    m = re.match('^@@@STEP_TEXT@(.*)@@@', line)
+    if m:
+      self.sections[-1]['step_text'].append(m.group(1))
+      self.updateText()
+    # Support: @@@STEP_SUMMARY_TEXT@<msg>@@@
+    m = re.match('^@@@STEP_SUMMARY_TEXT@(.*)@@@', line)
+    if m:
+      self.sections[-1]['step_summary_text'].append(m.group(1))
+      self.updateText()
     # Support: @@@BUILD_STEP <step_name>@@@ (start a new section)
-    m = re.match('^@@@BUILD_STEP (.*)@@@[\n\r]*', line)
+    m = re.match('^@@@BUILD_STEP (.*)@@@', line)
     if m:
       step_name = m.group(1)
       # Finish up last section.
@@ -295,14 +438,33 @@ class AnnotationObserver(buildstep.LogLineObserver):
           'log': log,
           'status': builder.SUCCESS,
           'links': [],
+          'step_summary_text': [],
+          'step_text': [],
       })
+    # Add to the current secondary log.
+    # Doing this last so that @@@BUILD_STEP... occurs in the log of the new
+    # step.
+    self.sections[-1]['log'].addStdout(line)
+
+  def handleReturnCode(self, return_code):
+    # Treat all non-zero return codes as failure.
+    # We could have a special return code for warnings/exceptions, however,
+    # this might conflict with some existing use of a return code.
+    # Besides, applications can always intercept return codes and emit
+    # STEP_* tags.
+    if return_code == 0:
+      self.fixupLast()
+      if self.honor_zero_return_code:
+        self.annotate_status = builder.SUCCESS
+    else:
+      self.fixupLast(builder.FAILURE)
 
 
 class AnnotatedCommand(ProcessLogShellStep):
   """Buildbot command that knows how to display annotations."""
 
-  def __init__(self, **kwargs):
-    ProcessLogShellStep.__init__(self, **kwargs)
+  def __init__(self, *args, **kwargs):
+    ProcessLogShellStep.__init__(self, *args, **kwargs)
     self.script_observer = AnnotationObserver(self)
     self.addLogObserver('stdio', self.script_observer)
 
@@ -310,5 +472,9 @@ class AnnotatedCommand(ProcessLogShellStep):
     self.script_observer.fixupLast(builder.EXCEPTION)
     return ProcessLogShellStep.interrupt(self, reason)
 
+  def evaluateCommand(self, cmd):
+    return self.script_observer.annotate_status
+
   def commandComplete(self, cmd):
-    self.script_observer.fixupLast()
+    self.script_observer.handleReturnCode(cmd.rc)
+    return ProcessLogShellStep.commandComplete(self, cmd)
