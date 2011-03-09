@@ -311,6 +311,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def fixupLast(self, status=None):
     last = self.sections[-1]
+    # Update status if set as an argument.
+    if status is not None:
+      last['status'] = status
     # Final update of text.
     self.updateText()
     # Add timing info.
@@ -330,9 +333,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     last['log'].addStdout(msg)
     # Change status (unless handling the preamble).
     if len(self.sections) != 1:
-      if not status:
-        status = last['status']
-      last['step'].stepFinished(status)
+      last['step'].stepFinished(last['status'])
     # Finish log.
     last['log'].finish()
 
@@ -457,6 +458,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
       if self.honor_zero_return_code:
         self.annotate_status = builder.SUCCESS
     else:
+      self.annotate_status = builder.FAILURE
       self.fixupLast(builder.FAILURE)
 
 
