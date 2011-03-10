@@ -10,6 +10,7 @@ Contains the Native Client Ports specific commands. Based on commands.py"""
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
+from master import chromium_step
 from master.factory import commands
 from master.log_parser import archive_command
 
@@ -111,7 +112,7 @@ class NativeClientPortsCommands(commands.FactoryCommands):
     if clobber:
       clean_script = '%sbuildbot_cleanup_packages%s' % (
           self.script_prefix, self.script_suffix)
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='cleanup-packages',
                             timeout=1500,
                             workdir='build/src/build_tools',
@@ -120,7 +121,7 @@ class NativeClientPortsCommands(commands.FactoryCommands):
                             command=clean_script)
     build_script = '%sbuildbot_build_packages%s' % (
         self.script_prefix, self.script_suffix)
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           description='build-packages',
                           timeout=1500,
                           workdir='build/src/build_tools',
