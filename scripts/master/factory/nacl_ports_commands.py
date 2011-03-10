@@ -7,12 +7,8 @@
 
 Contains the Native Client Ports specific commands. Based on commands.py"""
 
-from buildbot.process.properties import WithProperties
-from buildbot.steps import shell
-
 from master import chromium_step
 from master.factory import commands
-from master.log_parser import archive_command
 
 import config
 
@@ -98,7 +94,7 @@ class NativeClientPortsCommands(commands.FactoryCommands):
     download_script = 'build_tools/buildbot_sdk_setup.py'
     if self._target_platform.startswith('win'):
       download_script = 'python.bat ' + download_script
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           description='setup-sdk',
                           timeout=1500,
                           workdir='build/src',
@@ -128,66 +124,3 @@ class NativeClientPortsCommands(commands.FactoryCommands):
                           env=self._build_env,
                           haltOnFailure=True,
                           command=build_script)
-
-  def AddArchiveBuild(self, src, dst_base, dst,
-                      data_description='build', mode='dev', show_url=True):
-    """Adds a step to the factory to archive a build."""
-    if show_url:
-      url = '%s/%s' %  (self._archive_url, dst_base)
-      text = 'download'
-    else:
-      url = None
-      text = None
-
-    cmd = [self._python, self._archive_file_tool,
-           '--source', src,
-           '--target', WithProperties('%s/%s' % (dst_base, dst))]
-
-    if 'Ports' in self._target:
-      cmd.append('--force-ssh')
-
-    self.AddArchiveStep(data_description=data_description, base_url=url,
-                        link_text=text, command=cmd)
-
-  def AddArchiveStep(self, data_description, base_url, link_text, command):
-    if self._target_platform.startswith('win'):
-      env = self._cygwin_env.copy()
-      env['PATH'] = r'e:\b\depot_tools;' + env['PATH']
-    else:
-      env = self._build_env
-    step_name = ('archive_%s' % data_description).replace(' ', '_')
-    self._factory.addStep(archive_command.ArchiveCommand,
-                          name=step_name,
-                          timeout=600,
-                          description='archiving %s' % data_description,
-                          descriptionDone='archived %s' % data_description,
-                          base_url=base_url,
-                          env=env,
-                          link_text=link_text,
-                          command=command)
-
-  def AddTarballStep(self):
-    """Adds a step to create a release tarball."""
-
-    cmd = ' '.join([self._python, 'src/build_tools/generate_installers.py'])
-    if self._target_platform.startswith('win'):
-      cmd = 'vcvarsall x86 && ' + cmd
-    self._factory.addStep(shell.ShellCommand,
-                          description='cooking_tarball',
-                          timeout=1500,
-                          workdir='build',
-                          env=self._build_env,
-                          haltOnFailure=True,
-                          command=cmd)
-
-  def AddExtractBuild(self, url, factory_properties=None):
-    """Adds a step to download and extract a previously archived build."""
-    factory_properties = factory_properties or {}
-    # TODO(bradnelson): make this work places besides linux.
-    cmd = ('curl %s -o build.tgz && '
-           'tar xfvz build.tgz') % url
-    self._factory.addStep(shell.ShellCommand,
-                          name='extract archive',
-                          timeout=600,
-                          workdir='build/native_client',
-                          command=cmd)

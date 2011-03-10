@@ -77,25 +77,4 @@ class NativeClientPortsFactory(gclient_factory.GClientFactory):
                                         clobber=clobber, options=options,
                                         timeout=compile_timeout)
 
-    # Add this archive build step.
-    if factory_properties.get('archive_build'):
-      nacl_ports_cmd_obj.AddArchiveBuild(
-          factory_properties['archive_src'],
-          factory_properties['archive_dst_base'],
-          factory_properties['archive_dst'],
-          data_description='to revision')
-      if factory_properties.get('archive_dst_latest'):
-        nacl_ports_cmd_obj.AddArchiveBuild(
-            factory_properties['archive_src'],
-            factory_properties['archive_dst_base'],
-            factory_properties['archive_dst_latest'],
-            data_description='to latest')
-
-    # Download the full output directory if the machine is a tester.
-    if slave_type == 'Tester':
-      nacl_ports_cmd_obj.AddExtractBuild(factory_properties.get('archive_url'))
-
-    # Add all the tests.
-    self._AddTests(nacl_ports_cmd_obj, tests, target, mode, factory_properties,
-                   options)
     return factory

@@ -374,6 +374,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def outLineReceived(self, line):
     """This is called once with each line of the test log."""
+    # Add \n if not there, which seems to be the case for log lines from
+    # windows agents, but not others.
+    if not line.endswith('\n'):
+      line += '\n'
     # Handle initial setup here, as step_status might not exist yet at init.
     self.initialSection()
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
