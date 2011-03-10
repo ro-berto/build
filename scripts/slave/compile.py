@@ -130,7 +130,7 @@ def main_xcode(options, args):
     command.extend(['-target', options.xcode_target])
 
   if not options.goma_dir:
-    options.goma_dir = os.path.join(BUILD_DIR, 'goma', 'mac10.6')
+    options.goma_dir = os.path.join(BUILD_DIR, 'goma')
 
   # Note: this clobbers all targets, not just Debug or Release.
   if options.clobber:
