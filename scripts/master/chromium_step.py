@@ -310,6 +310,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
     })
 
   def fixupLast(self, status=None):
+    # Potentially start initial section here, as initial section might have
+    # no output at all.
+    self.initialSection()
+
     last = self.sections[-1]
     # Update status if set as an argument.
     if status is not None:
