@@ -156,12 +156,12 @@ class Archive(config_private.Archive):
 
   # List of symbol files to save, but not to upload to the symbol server
   # (generally because they have no symbols and thus would produce an error).
-  # TODO(jungshik): make the name of icudt dll independent of the ICU version.
-  # For now, we list both icudt{38,42}.dll because this script is used by
-  # pre-ICU 4.2 builds as well.
+  # We have to list all the previous names of icudt*.dll. Now that we
+  # use icudt.dll, we don't need to update this file any more next time
+  # we pull in a new version of ICU.
   symbols_to_skip_upload = [
-      'icudt38.dll', 'icudt42.dll', 'icudt46.dll', 'rlz.dll', 'avcodec-52.dll',
-      'avformat-52.dll', 'avutil-50.dll', 'd3dx9_42.dll',
+      'icudt38.dll', 'icudt42.dll', 'icudt46.dll', 'icudt.dll', 'rlz.dll',
+      'avcodec-52.dll', 'avformat-52.dll', 'avutil-50.dll', 'd3dx9_42.dll',
       'D3DCompiler_42.dll', 'gcswf32.dll',]
 
   if os.environ.get('CHROMIUM_BUILD', '') == '_google_chrome':
@@ -192,12 +192,10 @@ class Archive(config_private.Archive):
   policy_templates_zip = 'policy_templates.zip'
 
   # Test files to archive.
-  # TODO(jungshik): make the name of icudt dll independent of the ICU version.
-  # For now, we list both icudt{38,42,46}.dll because this script is used by
-  # different ICU builds as well.
   tests_to_archive = ['reliability_tests.exe',
                       'test_shell.exe',
                       'automated_ui_tests.exe',
+                      'icudt.dll',
                       'icudt38.dll',
                       'icudt42.dll',
                       'icudt46.dll',
