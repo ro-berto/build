@@ -57,7 +57,7 @@ def common_mac_settings(command, options, env, compiler=None):
   if compiler == 'goma':
     print 'using goma'
     env['PATH'] = options.goma_dir + ':' + env['PATH']
-    command.insert(0, 'goma-xcodebuild')
+    command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
     return
 
   if compiler == 'clang':
