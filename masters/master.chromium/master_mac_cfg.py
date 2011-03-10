@@ -137,11 +137,10 @@ B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger')
 B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger')
 
 #
-# Linux Dbg Clang bot
+# Mac Dbg Clang bot
 #
 
-B('Mac Clang (dbg)', 'dbg_mac_clang', 'compile', 'mac_dbg',
-  builddir='cr-mac-clang-x64')
+B('Mac Clang (dbg)', 'dbg_mac_clang', 'compile', 'mac_dbg')
 F('dbg_mac_clang', mac().ChromiumFactory(
     target='Debug',
     options=['--compiler=clang'],

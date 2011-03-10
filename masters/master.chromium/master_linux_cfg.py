@@ -158,11 +158,10 @@ F('dbg_shlib_unit', linux().ChromiumFactory(
     factory_properties={'generate_gtest_json': True}))
 
 #
-# Linux Dbg Clang bot
+# Linux Dbg Clang bots
 #
 
-B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
-  builddir='cr-linux-clang-x64')
+B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg')
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=make', '--compiler=clang'],
@@ -170,6 +169,21 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 fastbuild=1'
+    }}))
+
+#
+# Linux Views Dbg Clang bot
+#
+
+B('Linux Views Clang (dbg)', 'dbg_linux_views_clang', 'compile', 'linux_dbg')
+F('dbg_linux_views_clang', linux().ChromiumFactory(
+    target='Debug',
+    options=['--build-tool=make', '--compiler=clang'],
+    tests=['base', 'ui_base', 'gfx', 'unit'],
+    factory_properties={
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 ' + 
+                          'toolkit_views=1 fastbuild=1'
     }}))
 
 
