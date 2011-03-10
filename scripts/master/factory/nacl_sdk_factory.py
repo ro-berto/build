@@ -92,11 +92,4 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
             factory_properties['archive_dst_latest'],
             data_description='to latest')
 
-    # Download the full output directory if the machine is a tester.
-    if slave_type == 'Tester':
-      nacl_sdk_cmd_obj.AddExtractBuild(factory_properties.get('archive_url'))
-
-    # Add all the tests.
-    self._AddTests(nacl_sdk_cmd_obj, tests, target, mode, factory_properties,
-                   options)
     return factory

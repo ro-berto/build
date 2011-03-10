@@ -8,8 +8,7 @@
 Contains the Native Client SDK specific commands. Based on commands.py"""
 
 from buildbot.process.properties import WithProperties
-from buildbot.steps import shell
-
+from master import chromium_step
 from master.factory import commands
 from master.log_parser import archive_command
 
@@ -132,22 +131,10 @@ class NativeClientSDKCommands(commands.FactoryCommands):
     cmd = ' '.join([self._python, 'src/build_tools/generate_installers.py'])
     if self._target_platform.startswith('win'):
       cmd = 'vcvarsall x86 && ' + cmd
-    self._factory.addStep(shell.ShellCommand,
-                          description='cooking_tarball',
+    self._factory.addStep(chromium_step.AnnotatedCommand,
+                          description='prepare_sdk',
                           timeout=1500,
                           workdir='build',
                           env=self._build_env,
                           haltOnFailure=True,
-                          command=cmd)
-
-  def AddExtractBuild(self, url, factory_properties=None):
-    """Adds a step to download and extract a previously archived build."""
-    factory_properties = factory_properties or {}
-    # TODO(bradnelson): make this work places besides linux.
-    cmd = ('curl %s -o build.tgz && '
-           'tar xfvz build.tgz') % url
-    self._factory.addStep(shell.ShellCommand,
-                          name='extract archive',
-                          timeout=600,
-                          workdir='build/native_client',
                           command=cmd)
