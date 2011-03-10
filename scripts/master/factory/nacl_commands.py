@@ -8,7 +8,6 @@
 Contains the Native Client specific commands. Based on commands.py"""
 
 from buildbot.process.properties import WithProperties
-from buildbot.steps import shell
 from buildbot.steps import trigger
 
 from master import chromium_step
@@ -303,7 +302,7 @@ class NativeClientCommands(commands.FactoryCommands):
     self._build_env['GSUTIL'] = self._gsutil_tool
 
   def GClientRunHooks(self, mode, options=None, timeout=1200):
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='gclient_runhooks',
                           description='gclient_runhooks',
                           timeout=timeout,
@@ -353,14 +352,14 @@ class NativeClientCommands(commands.FactoryCommands):
 
     if clobber:
       if build_toolchain:
-        self._factory.addStep(shell.ShellCommand,
+        self._factory.addStep(chromium_step.AnnotatedCommand,
                               description='clobber_toolchain',
                               timeout=timeout,
                               haltOnFailure=True,
                               workdir=self._toolchain_build_dir,
                               env=self._toolchain_build_env,
                               command=self._toolchain_clobber_tool)
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='clobber',
                             timeout=timeout,
                             haltOnFailure=True,
@@ -368,7 +367,7 @@ class NativeClientCommands(commands.FactoryCommands):
                             env=self._build_env,
                             command=self._clobber_tool)
     if clobber and options.get('build_packages'):
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='clobber_packages',
                             timeout=timeout,
                             haltOnFailure=True,
@@ -378,28 +377,28 @@ class NativeClientCommands(commands.FactoryCommands):
     partial_sdk = options.get('partial_sdk')
     if build_toolchain:
       if options.get('git_toolchain'):
-        self._factory.addStep(shell.ShellCommand,
+        self._factory.addStep(chromium_step.AnnotatedCommand,
                               description='sync_from_git',
                               timeout=timeout,
                               haltOnFailure=True,
                               workdir=self._toolchain_build_dir,
                               env=self._toolchain_build_env,
                               command=toolchain_sync_cmd)
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='compile_toolchain',
                             timeout=timeout,
                             haltOnFailure=True,
                             workdir=self._toolchain_build_dir,
                             env=self._toolchain_build_env,
                             command=toolchain_cmd)
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='tar_toolchain',
                             timeout=timeout,
                             haltOnFailure=True,
                             workdir=self._toolchain_build_dir,
                             env=self._toolchain_build_env,
                             command=toolchain_tar_cmd)
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='untar_toolchain',
                             timeout=timeout,
                             haltOnFailure=True,
@@ -407,7 +406,7 @@ class NativeClientCommands(commands.FactoryCommands):
                             env=self._toolchain_build_env,
                             command=toolchain_untar_cmd)
     if partial_sdk and not build_toolchain:
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             name='partial_sdk',
                             description='partial_sdk',
                             timeout=timeout,
@@ -416,7 +415,7 @@ class NativeClientCommands(commands.FactoryCommands):
                             env=self._build_env,
                             command=options['partial_sdk'])
     if self._gyp_build_tool:
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             name='gyp_compile',
                             description='gyp_compile',
                             timeout=timeout,
@@ -424,7 +423,7 @@ class NativeClientCommands(commands.FactoryCommands):
                             workdir=self._build_dir,
                             env=self._gyp_build_env,
                             command=self._gyp_build_tool)
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             name='gyp_tests',
                             description='gyp_tests',
                             timeout=timeout,
@@ -433,7 +432,7 @@ class NativeClientCommands(commands.FactoryCommands):
                             env=self._gyp_build_env,
                             command=self._gyp_test_tool)
     if self._target_platform != 'arm' or not build_toolchain:
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             name=self._build_compile_name,
                             description=self._build_compile_name,
                             timeout=timeout,
@@ -448,7 +447,7 @@ class NativeClientCommands(commands.FactoryCommands):
       else:
         pack_cmd = './nacl-install-all.sh'
         pack_env = self._build_env
-      self._factory.addStep(shell.ShellCommand,
+      self._factory.addStep(chromium_step.AnnotatedCommand,
                             description='build_packages',
                             timeout=timeout,
                             haltOnFailure=True,
@@ -466,7 +465,7 @@ class NativeClientCommands(commands.FactoryCommands):
       cmd = cmd + ' ' + options['scons_opts']
     if self._target_platform in ['arm', 'linux2']:
       self.AddTestStep(
-          shell.ShellCommand,
+          chromium_step.AnnotatedCommand,
           test_name='start_vncserver', timeout=1500,
           test_command=(
               'vncserver -kill :20 ; '
@@ -482,7 +481,7 @@ class NativeClientCommands(commands.FactoryCommands):
     else:
       gui_prefix = ''
     self.AddTestStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         test_name='chrome_browser_tests', timeout=1500,
         test_command=gui_prefix + '%s chrome_browser_tests' % cmd,
         workdir='build/native_client',
@@ -490,28 +489,28 @@ class NativeClientCommands(commands.FactoryCommands):
         locks=[self.slave_exclusive_lock])
     if run_selenium:
       self.AddTestStep(
-          shell.ShellCommand,
+          chromium_step.AnnotatedCommand,
           test_name='backup_plugin', timeout=1500,
           test_command='%s firefox_install_backup' % cmd,
           workdir='build/native_client',
           env=self._build_env,
           locks=[self.slave_exclusive_lock])
       self.AddTestStep(
-          shell.ShellCommand,
+          chromium_step.AnnotatedCommand,
           test_name='install_plugin', timeout=1500,
           test_command='%s firefox_install' % cmd,
           workdir='build/native_client',
           env=self._build_env,
           locks=[self.slave_exclusive_lock])
       self.AddTestStep(
-          shell.ShellCommand,
+          chromium_step.AnnotatedCommand,
           test_name='selenium', timeout=1500,
           test_command=gui_prefix + '%s browser_tests' % cmd,
           workdir='build/native_client',
           env=self._build_env,
           locks=[self.slave_exclusive_lock])
       self.AddTestStep(
-          shell.ShellCommand,
+          chromium_step.AnnotatedCommand,
           test_name='restore_plugin', timeout=1500,
           test_command='%s firefox_install_restore' % cmd,
           workdir='build/native_client',
@@ -519,7 +518,7 @@ class NativeClientCommands(commands.FactoryCommands):
           locks=[self.slave_exclusive_lock])
     if self._target_platform in ['arm', 'linux2']:
       self.AddTestStep(
-          shell.ShellCommand,
+          chromium_step.AnnotatedCommand,
           test_name='stop_vncserver', timeout=1500,
           test_command='vncserver -kill :20',
           workdir='build/native_client',
@@ -535,7 +534,7 @@ class NativeClientCommands(commands.FactoryCommands):
     if options and options.get('scons_opts'):
       cmd = cmd + ' ' + options['scons_opts']
     self.AddTestStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         test_name='coverage', timeout=1500,
         test_command='%s coverage' % cmd,
         workdir='build/native_client',
@@ -559,7 +558,7 @@ class NativeClientCommands(commands.FactoryCommands):
     if not self._target_platform.startswith('win'):
       cmd = 'bash -c " ' + cmd + ' "'
     self.AddTestStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         test_name=test_name, timeout=timeout,
         test_command=cmd,
         workdir='build/native_client',
@@ -569,7 +568,7 @@ class NativeClientCommands(commands.FactoryCommands):
   def AddUtmanTests(self, platform, options=None, timeout=300):
     """Add a build step to run utman tests."""
     self.AddTestStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         test_name='test-' + platform, timeout=timeout,
         test_command='UTMAN_DEBUG=true tools/llvm/utman.sh test-' + platform,
         workdir='build/native_client',
@@ -581,7 +580,7 @@ class NativeClientCommands(commands.FactoryCommands):
     cmd = ('%s platform=x86-64 sdl=none '
            'buildbot=memcheck memcheck_bot_tests') % self._test_tool
     self.AddTestStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         test_name='memcheck', timeout=10000,
         test_command=cmd,
         workdir='build/native_client',
@@ -619,7 +618,7 @@ class NativeClientCommands(commands.FactoryCommands):
     if race_verifier:
       test_name.append('RV')
     self.AddTestStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         test_name='tsan(' + ', '.join(test_name) + ')',
         timeout=20000,
         test_command=cmd,
@@ -634,7 +633,7 @@ class NativeClientCommands(commands.FactoryCommands):
              'rmdir /q /s ..\\doxygen.DEPS & echo nop')
     else:
       cmd = 'rm -rf ../third_party/doxygen ../doxygen.DEPS'
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='drop doxygen',
                           timeout=600,
                           command=cmd)
@@ -724,7 +723,7 @@ class NativeClientCommands(commands.FactoryCommands):
     cmd = ' '.join([prefix, self._python, 'cook_tarball.py',
                     name, self._target])
 
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           description='cooking_tarball',
                           timeout=1500,
                           workdir='build/native_client/build',
@@ -744,7 +743,7 @@ class NativeClientCommands(commands.FactoryCommands):
       env = self._build_env
     cmd = WithProperties(('curl -L %s -o build.tgz && '
                          'tar xvfz build.tgz --no-same-owner') % url)
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='extract_archive',
                           description='extract archive',
                           timeout=600,
@@ -754,7 +753,7 @@ class NativeClientCommands(commands.FactoryCommands):
                           command=cmd)
 
   def AddModularBuildStep(self, modular_build_type, timeout=1200):
-    self._factory.addStep(shell.ShellCommand,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='modular_build',
                           description='modular_build',
                           timeout=timeout,
