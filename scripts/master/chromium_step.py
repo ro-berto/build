@@ -62,7 +62,7 @@ class GClient(source.Source):
     args['branch'] = branch
     if args.get('gclient_spec'):
       args['gclient_spec'] = args['gclient_spec'].replace('$$WK_REV$$',
-                                                          revision or '')
+                                                          str(revision or ''))
     if patch:
       args['patch'] = patch
     elif args.get('patch') is None:
