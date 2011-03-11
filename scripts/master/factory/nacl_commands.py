@@ -42,8 +42,6 @@ class NativeClientCommands(commands.FactoryCommands):
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
     self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
-    self._gsutil_dir = self.PathJoin(self._script_dir, '..', '..',
-                                     'third_party', 'gsutil')
 
     self._build_dir = self.PathJoin('build', build_dir)
     self._toolchain_build_dir = self.PathJoin('build', build_dir, 'tools')
@@ -295,7 +293,7 @@ class NativeClientCommands(commands.FactoryCommands):
     self._dom_perf_tool = J(s_dir, 'dom_perf.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._archive_file_tool = J(s_dir, 'archive_file.py')
-    self._gsutil_tool = J(self._gsutil_dir, 'gsutil')
+    self._gsutil_tool = J(self._script_dir, 'gsutil')
     self._sizes_tool = J(s_dir, 'sizes.py')
 
     # Setup gsutil path.
@@ -679,12 +677,10 @@ class NativeClientCommands(commands.FactoryCommands):
     full_dst = WithProperties(
         'gs://nativeclient-archive2/%s/%s' % (dst_base, dst))
 
-    cmd = [self._python,
-           '/b/build/scripts/command_wrapper/bin/command_wrapper.py',
-           '--', self._python, self._gsutil_tool,
-           'cp', '-a', 'public-read',
+    cmd = [self._gsutil_tool,
            # This is required so that builders don't get stale cached copies.
-           '-h', '"Cache-Control:no-cache"',
+           '-h', 'Cache-Control:no-cache',
+           'cp', '-a', 'public-read',
            src, full_dst]
 
     self.AddArchiveStep(data_description='build', base_url=url,
