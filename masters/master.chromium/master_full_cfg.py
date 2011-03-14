@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -42,6 +42,7 @@ F('win_full', win().ChromiumFactory(
                         'extra_archive_paths': 'ceee,chrome_frame',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-xp',
+                        'expectations': True,
                         'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
@@ -61,6 +62,7 @@ F('mac_full', mac().ChromiumFactory(
     factory_properties={'archive_build': True,
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-mac',
+                        'expectations': True,
                         'generate_gtest_json': True}))
 
 ################################################################################
@@ -101,6 +103,7 @@ F('linux_full', linux().ChromiumFactory(
     factory_properties={'archive_build': True,
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-linux',
+                        'expectations': True,
                         'generate_gtest_json': True,}))
 
 B('Linux x64', 'linux64_full', 'compile|testers', 'chromium')
@@ -114,6 +117,7 @@ F('linux64_full', linux().ChromiumFactory(
         'show_perf_results': True,
         'generate_gtest_json': True,
         'perf_id': 'chromium-rel-linux-64',
+        'expectations': True,
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
 B('Arm', 'arm_full', 'compile|testers', 'chromium')
