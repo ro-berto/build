@@ -195,6 +195,7 @@ class Archive(config_private.Archive):
   tests_to_archive = ['reliability_tests.exe',
                       'test_shell.exe',
                       'automated_ui_tests.exe',
+                      'ui_tests.exe',  # For syzygy (binary reorder) test bot
                       'icudt.dll',
                       'icudt38.dll',
                       'icudt42.dll',
