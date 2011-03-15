@@ -235,6 +235,9 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       else:
         cmd = 'buildbot/buildbot_selector.py'
       nacl_cmd_obj.AddAnnotatedStep([cmd], timeout=9000, usePython=True)
+      # Trigger tests on other builders.
+      self._AddTriggerTests(nacl_cmd_obj, tests, target,
+                            mode, factory_properties, options)
       return factory
 
     # Add the compile step if needed.
