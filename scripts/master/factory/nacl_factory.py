@@ -110,9 +110,11 @@ class NativeClientFactory(gclient_factory.GClientFactory):
   }
 
   def __init__(self, build_dir, target_platform=None, use_supplement=False,
-               alternate_url=None, custom_deps_list=None):
+               alternate_url=None, custom_deps_list=None,
+               switched_to_annotations=False):
     solutions = []
     self.target_platform = target_platform
+    self.switched_to_annotations = switched_to_annotations
     nacl_url = config.Master.nacl_url
     if alternate_url:
       nacl_url = alternate_url
@@ -225,6 +227,15 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                                       self._build_dir,
                                                       self._target_platform,
                                                       test_target=test_target)
+
+    # If just annotation mode, just do that.
+    if self.switched_to_annotations:
+      if slave_type == 'Trybot':
+        cmd = 'buildbot/trybot_selector.py'
+      else:
+        cmd = 'buildbot/buildbot_selector.py'
+      nacl_cmd_obj.AddAnnotatedStep([cmd], timeout=9000, usePython=True)
+      return factory
 
     # Add the compile step if needed.
     if (slave_type == 'BuilderTester' or slave_type == 'Builder' or

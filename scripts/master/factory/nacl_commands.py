@@ -760,7 +760,7 @@ class NativeClientCommands(commands.FactoryCommands):
 
   def AddAnnotatedStep(self, command, timeout=1200,
                        workdir='build/native_client', haltOnFailure=True,
-                       factory_properties=None):
+                       factory_properties=None, usePython=False):
     factory_properties = factory_properties or {}
     if 'test_name' not in factory_properties:
       test_class = chromium_step.AnnotatedCommand
@@ -769,6 +769,8 @@ class NativeClientCommands(commands.FactoryCommands):
       test_class = self.GetPerfStepClass(
           factory_properties, test_name, process_log.GraphingLogProcessor,
           command_class=chromium_step.AnnotatedCommand)
+    if usePython:
+      command = [self._python] + command
     self._factory.addStep(test_class,
                           name='annotate',
                           description='annotate',
