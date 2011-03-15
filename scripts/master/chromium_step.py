@@ -11,6 +11,7 @@ import time
 
 from buildbot import util
 from buildbot.process import buildstep
+from buildbot.process.properties import WithProperties
 from buildbot.status import builder
 from buildbot.steps import shell
 from buildbot.steps import source
@@ -474,6 +475,26 @@ class AnnotatedCommand(ProcessLogShellStep):
   """Buildbot command that knows how to display annotations."""
 
   def __init__(self, *args, **kwargs):
+    # Inject standard tags into the environment.
+    env = {
+        'BUILDBOT_BLAMELIST': WithProperties('%(blamelist:-[])s'),
+        'BUILDBOT_BRANCH': WithProperties('%(branch:-None)s'),
+        'BUILDBOT_BUILDERNAME': WithProperties('%(buildername:-None)s'),
+        'BUILDBOT_BUILDNUMBER': WithProperties('%(buildnumber:-None)s'),
+        'BUILDBOT_CLOBBER': WithProperties('%(clobber:+1)s'),
+        'BUILDBOT_GOT_REVISION': WithProperties('%(got_revision:-None)s'),
+        'BUILDBOT_REVISION': WithProperties('%(revision:-None)s'),
+        'BUILDBOT_SCHEDULER': WithProperties('%(scheduler:-None)s'),
+        'BUILDBOT_SLAVENAME': WithProperties('%(slavename:-None)s'),
+    }
+    # Apply the passed in environment on top.
+    old_env = kwargs.get('env')
+    if not old_env:
+      old_env = {}
+    env.update(old_env)
+    # Change passed in args (ok as a copy is made internally).
+    kwargs['env'] = env
+
     ProcessLogShellStep.__init__(self, *args, **kwargs)
     self.script_observer = AnnotationObserver(self)
     self.addLogObserver('stdio', self.script_observer)
