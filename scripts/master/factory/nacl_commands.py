@@ -760,8 +760,9 @@ class NativeClientCommands(commands.FactoryCommands):
 
   def AddAnnotatedStep(self, command, timeout=1200,
                        workdir='build/native_client', haltOnFailure=True,
-                       factory_properties=None, usePython=False):
+                       factory_properties=None, usePython=False, env=None):
     factory_properties = factory_properties or {}
+    env = env or {}
     if 'test_name' not in factory_properties:
       test_class = chromium_step.AnnotatedCommand
     else:
@@ -776,5 +777,6 @@ class NativeClientCommands(commands.FactoryCommands):
                           description='annotate',
                           timeout=timeout,
                           haltOnFailure=haltOnFailure,
+                          env=env,
                           workdir=workdir,
                           command=command)

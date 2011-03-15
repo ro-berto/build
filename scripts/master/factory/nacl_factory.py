@@ -230,11 +230,9 @@ class NativeClientFactory(gclient_factory.GClientFactory):
 
     # If just annotation mode, just do that.
     if self.switched_to_annotations:
-      if slave_type == 'Trybot':
-        cmd = 'buildbot/trybot_selector.py'
-      else:
-        cmd = 'buildbot/buildbot_selector.py'
-      nacl_cmd_obj.AddAnnotatedStep([cmd], timeout=9000, usePython=True)
+      nacl_cmd_obj.AddAnnotatedStep(
+          ['buildbot/buildbot_selector.py'], timeout=1500, usePython=True,
+          env={'BUILDBOT_SLAVE_TYPE': slave_type})
       # Trigger tests on other builders.
       self._AddTriggerTests(nacl_cmd_obj, tests, target,
                             mode, factory_properties, options)
