@@ -128,7 +128,7 @@ class NativeClientSDKCommands(commands.FactoryCommands):
   def AddTarballStep(self):
     """Adds a step to create a release tarball."""
 
-    cmd = ' '.join([self._python, 'src/build_tools/generate_installers.py'])
+    cmd = ' '.join([self._python, 'src/build_tools/buildbot_run.py'])
     if self._target_platform.startswith('win'):
       cmd = 'vcvarsall x86 && ' + cmd
     self._factory.addStep(chromium_step.AnnotatedCommand,
