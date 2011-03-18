@@ -86,7 +86,7 @@
                                     "lucid32-toolchain_arm-untrusted",
                                     "hardy64-toolchain_arm-untrusted"]],
                ["glibc", ["lucid64-glibc",
-                          "win6-glibc",
+                          "win7-glibc",
                           "mac-glibc"]],
                ["mbuild", ["hardy64-mbuild-glibc",
                            "hardy32-mbuild-glibc-incr",
@@ -97,13 +97,7 @@
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Toolchain" ||
-                   raw_flavors[i][0] == "Integration") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
