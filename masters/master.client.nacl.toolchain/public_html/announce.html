@@ -84,8 +84,14 @@
                                   "hardy32-toolchain_x86"]],
                ["Toolchain Other", ["hardy32-toolchain_arm-trusted",
                                     "lucid32-toolchain_arm-untrusted",
-                                    "hardy64-toolchain_arm-untrusted",
-                                    "hardy64-glibc"]],
+                                    "hardy64-toolchain_arm-untrusted"]],
+               ["glibc", ["lucid64-glibc",
+                          "win6-glibc",
+                          "mac-glibc"]],
+               ["mbuild", ["hardy64-mbuild-glibc",
+                           "hardy32-mbuild-glibc-incr",
+                           "hardy64-mbuild-glibc-incr",
+                           "mac-mbuild-glibc-incr"]],
             ];
             var flavors = [];
             for(var i in raw_flavors) {
