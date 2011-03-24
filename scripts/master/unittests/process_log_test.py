@@ -42,12 +42,14 @@ class GoogleLoggingStepTest(unittest.TestCase):
       for filename in directoryListing:
         file_stats = os.stat(os.path.join(self._output_dir, filename))
         self._assertReadable(file_stats)
+    self._RemoveOutputDir()
 
   def _assertReadable(self, file_stats):
     mode = file_stats[stat.ST_MODE]
     self.assertEqual(4, mode & stat.S_IROTH)
 
-  def _ConstructStep(self, log_processor_class, logfile):
+  def _ConstructStep(self, log_processor_class, logfile,
+                     factory_properties=None, perf_expectations_path=None):
     """ Common approach to construct chromium_step.ProcessLogTestStep
     type instance with LogFile instance set.
     Args:
@@ -55,10 +57,13 @@ class GoogleLoggingStepTest(unittest.TestCase):
         that is going to be constructed. E.g. PagecyclerTestStep
       logfile: filename with setup process log output.
     """
-    log_processor_class = chromium_utils.InitializePartiallyWithArguments(
-        log_processor_class, report_link=self._report_link,
-        output_dir=self._output_dir)
-    step = self._CreateStep(log_processor_class)
+    factory_properties = factory_properties or {}
+    self._log_processor_class = chromium_utils.InitializePartiallyWithArguments(
+        log_processor_class, factory_properties=factory_properties,
+        report_link=self._report_link, output_dir=self._output_dir,
+        perf_name='test-system', test_name='test-name',
+        perf_filename=perf_expectations_path)
+    step = self._CreateStep(self._log_processor_class)
     log_file = self._LogFile(
         'stdio', open(os.path.join(runtests.DATA_PATH, logfile)).read())
     self._SetupBuild(step, self._revision, log_file)
@@ -278,6 +283,23 @@ class PlaybackLogProcessorTest(GoogleLoggingStepTest):
 
 class GraphingLogProcessorTest(GoogleLoggingStepTest):
 
+  def _TestPerfExpectations(self, perf_expectations_file):
+    perf_expectations_path = os.path.join(
+        runtests.DATA_PATH, perf_expectations_file)
+    step = self._ConstructStep(process_log.GraphingLogProcessor,
+                               'graphing_processor.log',
+                               factory_properties={'expectations': True,
+                                                   'perf_id': 'tester'},
+                               perf_expectations_path=perf_expectations_path)
+    step.commandComplete('mycommand')
+    actual_file = os.path.join('output_dir', 'graphs.dat')
+    self.assert_(os.path.exists(actual_file))
+    actual = simplejson.load(open(actual_file))
+    expected = simplejson.load(open(
+        os.path.join(runtests.DATA_PATH, 'graphing_processor-graphs.dat')))
+    self.assertEqual(expected, actual)
+    return step
+
   def testSummary(self):
     step = self._ConstructStep(process_log.GraphingLogProcessor,
                                'graphing_processor.log')
@@ -304,6 +326,41 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
         os.path.join(runtests.DATA_PATH, 'graphing_processor-graphs.dat')))
     self.assertEqual(expected, actual)
 
+  def testPerfExpectationsImproveRelative(self):
+    step = self._TestPerfExpectations('perf_improve_relative.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsRegressRelative(self):
+    step = self._TestPerfExpectations('perf_regress_relative.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsRegressAbsolute(self):
+    step = self._TestPerfExpectations('perf_regress_absolute.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsImproveAbsolute(self):
+    step = self._TestPerfExpectations('perf_improve_absolute.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsNochangeRelative(self):
+    step = self._TestPerfExpectations('perf_nochange_relative.json')
+    expected = ('12t_cc: 50.2k')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsNochangeAbsolute(self):
+    step = self._TestPerfExpectations('perf_nochange_absolute.json')
+    expected = ('12t_cc: 50.2k')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
 
 if __name__ == '__main__':
   unittest.main()

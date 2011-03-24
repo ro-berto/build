@@ -85,7 +85,7 @@ class PerformanceLogProcessor(object):
   """ Parent class for performance log parsers. """
 
   def __init__(self, report_link=None, output_dir=None, factory_properties=None,
-               perf_name=None, test_name=None):
+               perf_name=None, test_name=None, perf_filename=None):
     self._report_link = report_link
     if output_dir is None:
       output_dir = os.getcwd()
@@ -100,7 +100,7 @@ class PerformanceLogProcessor(object):
     self._perf_id = factory_properties.get('perf_id')
     self._perf_name = perf_name
     self._test_name = test_name
-    self._perf_filename = None
+    self._perf_filename = perf_filename
     self._perf_data = {}
     self._perf_test_keys = {}
     self._perf_ref_keys = {}
@@ -110,6 +110,9 @@ class PerformanceLogProcessor(object):
     # Enable expectations if the local configuration supports it.
     self._expectations = (factory_properties.get('expectations')
                           and self._perf_id and self._perf_name)
+    if self._expectations and not self._perf_filename:
+      self._perf_filename = os.path.join(PERF_EXPECTATIONS_PATH,
+                                         self._perf_id + ".json")
 
     # The revision isn't known until the Process() call.
     self._revision = -1
@@ -137,7 +140,11 @@ class PerformanceLogProcessor(object):
       graph = m.group(1)
       trace = m.group(2)
 
-      if 'ref' not in perf_data:
+      # By default, all perf data is type=relative.
+      perf_data.setdefault('type', 'relative')
+
+      # By default, relative perf data is compare against the fqtn+'_ref'.
+      if perf_data['type'] == 'relative' and 'ref' not in perf_data:
         perf_data['ref'] = "%s/%s/%s/%s_ref" % (
             self._perf_name, self._test_name, graph, trace)
 
@@ -146,8 +153,9 @@ class PerformanceLogProcessor(object):
       self._perf_test_keys[perf_key].append(perf_data)
 
       # For each ref key, we add a reference in _perf_ref_keys to perf_data.
-      self._perf_ref_keys.setdefault(perf_data['ref'], [])
-      self._perf_ref_keys[perf_data['ref']].append(perf_data)
+      if 'ref' in perf_data:
+        self._perf_ref_keys.setdefault(perf_data['ref'], [])
+        self._perf_ref_keys[perf_data['ref']].append(perf_data)
 
       self._perf_data.setdefault(graph, {})
       self._perf_data[graph][trace] = perf_data
@@ -157,8 +165,6 @@ class PerformanceLogProcessor(object):
       # self._expectations is false when a given factory doesn't enable
       # expectations, or doesn't have both perf_id and perf_name set.
       return
-    self._perf_filename = os.path.join(PERF_EXPECTATIONS_PATH,
-                                       self._perf_id + ".json")
     try:
       perf_file = open(self._perf_filename, 'r')
     except IOError, e:
@@ -202,9 +208,13 @@ class PerformanceLogProcessor(object):
         perf_data['actual_test'] = value
         perf_data['actual_var'] = stddev
 
-        if 'actual_test' in perf_data and 'actual_ref' in perf_data:
-          perf_data['actual_delta'] = (
-              perf_data['actual_test'] - perf_data['actual_ref'])
+        if perf_data['type'] == 'absolute' and 'actual_test' in perf_data:
+          perf_data['actual_delta'] = perf_data['actual_test']
+
+        elif perf_data['type'] == 'relative':
+          if 'actual_test' in perf_data and 'actual_ref' in perf_data:
+            perf_data['actual_delta'] = (
+                perf_data['actual_test'] - perf_data['actual_ref'])
 
     if fqtn in self._perf_ref_keys:
       for perf_data in self._perf_ref_keys[fqtn]:
