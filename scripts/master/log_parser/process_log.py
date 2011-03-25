@@ -250,33 +250,26 @@ class PerformanceLogProcessor(object):
     if not 'actual_delta' in perfdata:
       return
 
+    # Skip result types that don't have regress/improve values.
+    if 'regress' not in perfdata or 'improve' not in perfdata:
+      return
+
     # Set the high and low performance tests.
-    if 'regress' in perfdata and 'improve' in perfdata:
-      # The actual delta needs to be within this range to keep the perf test
-      # green.  If the results fall above or below this range, the test will go
-      # red (signaling a regression) or orange (signaling a speedup).
-      if perfdata['regress'] > perfdata['improve']:
-        # The "lower is better" case.  (ie. time results)
-        if perfdata['actual_delta'] < perfdata['improve']:
-          self._perf_improve.append(graph_result)
-        elif perfdata['actual_delta'] > perfdata['regress']:
-          self._perf_regress.append(graph_result)
-      else:
-        # The "higher is better" case.  (ie. score results)
-        if perfdata['actual_delta'] > perfdata['improve']:
-          self._perf_improve.append(graph_result)
-        elif perfdata['actual_delta'] < perfdata['regress']:
-          self._perf_regress.append(graph_result)
-    else:
-      # Deprecated.  This path is similar to the above path, except a delta and
-      # var are given.  It assumes the actual var needs a 50% increase before a
-      # regression or improvement is found.
-      high_perf = (perfdata['delta'] + 1.5*perfdata['var'])
-      low_perf = (perfdata['delta'] - 1.5*perfdata['var'])
-      if perfdata['actual_delta'] > high_perf:
-        self._perf_regress.append(graph_result)
-      elif perfdata['actual_delta'] < low_perf:
+    # The actual delta needs to be within this range to keep the perf test
+    # green.  If the results fall above or below this range, the test will go
+    # red (signaling a regression) or orange (signaling a speedup).
+    if perfdata['regress'] > perfdata['improve']:
+      # The "lower is better" case.  (ie. time results)
+      if perfdata['actual_delta'] < perfdata['improve']:
         self._perf_improve.append(graph_result)
+      elif perfdata['actual_delta'] > perfdata['regress']:
+        self._perf_regress.append(graph_result)
+    else:
+      # The "higher is better" case.  (ie. score results)
+      if perfdata['actual_delta'] > perfdata['improve']:
+        self._perf_improve.append(graph_result)
+      elif perfdata['actual_delta'] < perfdata['regress']:
+        self._perf_regress.append(graph_result)
 
   def PerformanceChanges(self):
     # Compare actual and expected results.
