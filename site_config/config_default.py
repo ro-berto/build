@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -177,6 +177,7 @@ class Master(object):
     master_port_alt = 9043
     server_url = 'http://v8.googlecode.com'
     project_url = 'http://v8.googlecode.com'
+    perf_base_url = 'http://build.chromium.org/f/client/perf'
 
   ## Native Client related
 
