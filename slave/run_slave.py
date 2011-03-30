@@ -57,6 +57,7 @@ def main():
   python_path = [
     os.path.join(parent_dir, 'site_config'),
     os.path.join(parent_dir, 'scripts'),
+    os.path.join(parent_dir, 'scripts', 'release'),
     os.path.join(parent_dir, 'third_party'),
     os.path.join(root, 'build_internal', 'site_config'),
   ]
