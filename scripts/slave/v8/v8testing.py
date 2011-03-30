@@ -25,10 +25,6 @@ def main():
 
   option_parser = optparse.OptionParser()
 
-  option_parser.add_option('', '--simulator',
-                           default=None,
-                           help='The simulator to run'
-                                '[default: %default]')
   option_parser.add_option('', '--testname',
                            default=None,
                            help='The test to run'
@@ -55,10 +51,13 @@ def main():
   option_parser.add_option('', '--shard_run',
                            default=1,
                            help='Specify shard count [default: %%default]')
-  option_parser.add_option('', '--crankshaft',
+  option_parser.add_option('--shell_flags',
                            default=None,
-                           help='Run tests with --crankshaft flag '
-                                '[default: %default]')
+                           help="Specify shell flags passed tools/test.py")
+  option_parser.add_option('--isolates',
+                           default=None,
+                           help="Run isolates tests")
+
 
   options, args = option_parser.parse_args()
   if args:
@@ -77,33 +76,26 @@ def main():
            'mjsunit/regress/regress-1134697', 'mjsunit/number-tostring-small']
   elif options.testname == 'presubmit':
     cmd = ['python', 'tools/presubmit.py']
-  elif options.testname:
-    cmd = ['python', 'tools/test.py',
-           simultaneous, options.testname,
-           '--progress=verbose',
-           '--no-build',
-           '--arch=' + options.arch,
-           '--mode=' + options.target]
-  elif options.simulator:
-    cmd = ['python', 'tools/test.py',
-           simultaneous,
-           '--simulator', options.simulator,
-           '--progress=verbose',
-           '--no-build',
-           '--arch=' + options.arch,
-           '--mode=' + options.target]
   else:
     cmd = ['python', 'tools/test.py',
            simultaneous,
-           '--timeout=180',
            '--progress=verbose',
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
-  if options.arch == 'arm':
-    cmd.extend(['--timeout=600'])
-  if options.crankshaft:
-    cmd.extend(['--crankshaft'])
+    if options.testname:
+      cmd.extend([options.testname])
+    if options.arch == 'arm':
+      cmd.extend(['--timeout=600'])
+    else:
+      cmd.extend(['--timeout=180'])
+    if options.isolates:
+      cmd.extend(['--isolates'])
+    if options.shell_flags:
+      cmd.extend(["--special-command", options.shell_flags.replace("\"", "")])
+
+
+
   if options.shard_count > 1:
     cmd.extend(['--shard-count', options.shard_count,
                 '--shard-run', options.shard_run])

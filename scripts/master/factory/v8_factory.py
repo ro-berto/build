@@ -64,33 +64,20 @@ class V8Factory(gclient_factory.GClientFactory):
       return gclient_factory.ShouldRunTest(tests, test)
 
     f = factory_cmd_obj
-
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8testing'): f.AddV8Testing()
     if R('v8_es5conform'): f.AddV8ES5Conform()
     if R('fuzz'): f.AddFuzzer()
-
-    # Mozilla tests should be moved to v8 repo
-    if R('mozilla'):
-      f.AddV8Mozilla()
-
+    if R('mozilla'): f.AddV8Mozilla()
     if R('sputnik'): f.AddV8Sputnik()
-    if target_arch == 'arm':
-      if R('v8testing'):
-        f.AddV8Testing(simulator='arm')
-      if R('v8_es5conform'):
-        f.AddV8ES5Conform(simulator='arm')
-      if R('mozilla'):
-        f.AddV8Mozilla(simulator='arm')
-      if R('sputnik'):
-        f.AddV8Sputnik(simulator='arm')
+
 
 
   def V8Factory(self, target='release', clobber=False, tests=None, mode=None,
                 slave_type='BuilderTester', options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
-                target_arch=None, crankshaft=False, shard_count=1,
-                shard_run=1):
+                target_arch=None, shard_count=1,
+                shard_run=1, shell_flags=None, isolates=False):
     tests = tests or []
     factory_properties = factory_properties or {}
 
@@ -130,13 +117,15 @@ class V8Factory(gclient_factory.GClientFactory):
                                         '',
                                         self._target_platform,
                                         target_arch,
-                                        crankshaft,
                                         shard_count,
-                                        shard_run)
+                                        shard_run,
+                                        shell_flags,
+                                        isolates)
     if factory_properties.get('archive_build'):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))
 
+    # This is for the arm tester board (we don't have other pure tester slaves).
     if (slave_type == 'Tester'):
       v8_cmd_obj.AddMoveExtracted()
 

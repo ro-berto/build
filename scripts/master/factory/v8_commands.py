@@ -21,8 +21,8 @@ class V8Commands(commands.FactoryCommands):
   PERF_BASE_URL = config.Master.V8.perf_base_url
 
   def __init__(self, factory=None, target=None, build_dir=None,
-               target_platform=None, target_arch=None, crankshaft=False,
-               shard_count=1, shard_run=1):
+               target_platform=None, target_arch=None,
+               shard_count=1, shard_run=1, shell_flags=None, isolates=False):
 
     commands.FactoryCommands.__init__(self, factory, target, build_dir, target_platform)
 
@@ -44,7 +44,8 @@ class V8Commands(commands.FactoryCommands):
     self._arch = target_arch
     self._shard_count = shard_count
     self._shard_run = shard_run
-    self._crankshaft = crankshaft
+    self._shell_flags = shell_flags
+    self._isolates = isolates
 
     if self._target_platform == 'win32':
       # Override to use the right python
@@ -60,54 +61,54 @@ class V8Commands(commands.FactoryCommands):
     # Scripts in the v8 scripts dir.
     self._v8testing_tool = J(self._v8_script_dir, 'v8testing.py')
 
-  def GetV8TestingCommand(self, simulator):
+  def GetV8TestingCommand(self):
     cmd = [self._python, self._v8testing_tool,
            '--target', self._target]
-    if simulator:
-      cmd += ['--simulator', simulator]
     if self._arch:
       cmd += ['--arch', self._arch]
-    if self._crankshaft:
-      cmd += ['--crankshaft', 'on']
     if self._shard_count > 1:
       cmd += ['--shard_count', self._shard_count,
               '--shard_run', self._shard_run]
+    if self._shell_flags:
+      cmd += ['--shell_flags="'+ self._shell_flags +'"']
+    if self._isolates:
+      cmd += ['--isolates', 'on']
     return cmd
 
-  def AddV8Testing(self, properties=None, simulator=None):
+  def AddV8Testing(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand(simulator)
+    cmd = self.GetV8TestingCommand()
     self.AddTestStep(shell.ShellCommand,
                      'Check', cmd,
                      workdir='build/bleeding_edge/')
 
-  def AddV8ES5Conform(self, properties=None, simulator=None):
+  def AddV8ES5Conform(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand(simulator)
+    cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'es5conform']
     self.AddTestStep(shell.ShellCommand,
                      'ES5-Conform',
                      cmd,
                      workdir='build/bleeding_edge/')
 
-  def AddV8Mozilla(self, properties=None, simulator=None):
+  def AddV8Mozilla(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand(simulator)
+    cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'mozilla']
     # Running tests in the arm simulator may take longer than 600 ms.
     mozilla_timeout = 600
-    if simulator:
+    if self._arch == 'arm':
       mozilla_timeout = 1200
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
                      timeout=mozilla_timeout, workdir='build/bleeding_edge/')
 
-  def AddV8Sputnik(self, properties=None, simulator=None):
+  def AddV8Sputnik(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand(simulator)
+    cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'sputnik']
     self.AddTestStep(shell.ShellCommand, 'Sputnik', cmd,
                      workdir='build/bleeding_edge/')
