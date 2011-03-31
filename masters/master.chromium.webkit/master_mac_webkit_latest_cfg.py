@@ -88,5 +88,13 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))
 
+B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests', scheduler='s5_webkit_dbg')
+F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
+    target='Debug',
+    options=['--', '-project', '../webkit/webkit.xcodeproj'],
+    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    factory_properties={'archive_webkit_results': True,
+                        'test_results_server': 'test-results.appspot.com'}))
+
 def Update(config, active_master, c):
   return helper.Update(c)
