@@ -85,10 +85,13 @@ def main():
            '--mode=' + options.target]
     if options.testname:
       cmd.extend([options.testname])
-    if options.arch == 'arm':
+    if options.testname == 'mozilla':
+      # Mozilla tests requires a number of tests to timeout, set it a bit lower.
+      cmd.extend(['--timeout=100'])
+    elif options.arch == 'arm':
       cmd.extend(['--timeout=600'])
     else:
-      cmd.extend(['--timeout=180'])
+      cmd.extend(['--timeout=149'])
     if options.isolates:
       cmd.extend(['--isolates'])
     if options.shell_flags:

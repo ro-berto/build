@@ -81,6 +81,7 @@ class V8Commands(commands.FactoryCommands):
     cmd = self.GetV8TestingCommand()
     self.AddTestStep(shell.ShellCommand,
                      'Check', cmd,
+                     timeout=3600,
                      workdir='build/bleeding_edge/')
 
   def AddV8ES5Conform(self, properties=None):
@@ -98,12 +99,8 @@ class V8Commands(commands.FactoryCommands):
       self.AddTaskkillStep()
     cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'mozilla']
-    # Running tests in the arm simulator may take longer than 600 ms.
-    mozilla_timeout = 600
-    if self._arch == 'arm':
-      mozilla_timeout = 1200
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
-                     timeout=mozilla_timeout, workdir='build/bleeding_edge/')
+                     timeout=3600, workdir='build/bleeding_edge/')
 
   def AddV8Sputnik(self, properties=None):
     if self._target_platform == 'win32':
