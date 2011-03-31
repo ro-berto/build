@@ -161,8 +161,7 @@ class Archive(config_private.Archive):
   symbols_to_skip_upload = [
       'icudt38.dll', 'icudt42.dll', 'icudt46.dll', 'icudt.dll', 'rlz.dll',
       'avcodec-52.dll', 'avformat-52.dll', 'avutil-50.dll', 'd3dx9_42.dll',
-      'd3dx9_43.dll', 'D3DCompiler_42.dll', 'D3DCompiler_43.dll',
-      'gcswf32.dll',]
+      'd3dx9_43.dll', 'D3DCompiler_42.dll', 'D3DCompiler_43.dll',]
 
   if os.environ.get('CHROMIUM_BUILD', '') == '_google_chrome':
     exes_to_skip_entirely = []
