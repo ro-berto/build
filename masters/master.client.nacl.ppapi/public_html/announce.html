@@ -77,19 +77,16 @@
         <table width="100%">
           <script language="javascript">
             var raw_flavors = [
-               ["Lucid", ["lucid64-m32-n32"]],
+                ["Lucid", [
+                     "lucid64-m64-n64-dbg",
+                     "lucid64-m32-n32-opt",
+                ],
             ];
             var flavors = [];
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Other" ||
-                   raw_flavors[i][0] == "Coverage") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
