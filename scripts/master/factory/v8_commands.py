@@ -75,6 +75,13 @@ class V8Commands(commands.FactoryCommands):
       cmd += ['--isolates', 'on']
     return cmd
 
+  def AddV8GCMole(self):
+    cmd = ['lua', '../../../gcmole/gcmole.lua']
+    self.AddTestStep(shell.ShellCommand,
+                     'GCMole', cmd,
+                     timeout=3600,
+                     workdir='build/bleeding_edge/')
+
   def AddV8Testing(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()

@@ -70,6 +70,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('fuzz'): f.AddFuzzer()
     if R('mozilla'): f.AddV8Mozilla()
     if R('sputnik'): f.AddV8Sputnik()
+    if R('gcmole'): f.AddV8GCMole()
 
 
 
