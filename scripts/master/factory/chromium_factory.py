@@ -7,6 +7,7 @@
 Based on gclient_factory.py and adds chromium-specific steps."""
 
 import os
+import re
 
 from buildbot.steps import trigger
 
@@ -76,7 +77,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # The map key is the test name. The map value is an array containing the
   # dependencies that are not needed when this test is not run.
   NEEDED_COMPONENTS = {
-    '^(webkit|webkit_gpu|valgrind_layout)$':
+    '^(webkit|webkit_gpu)$':
       [('src/webkit/data/layout_tests/LayoutTests', None),
        ('src/third_party/WebKit/LayoutTests', None),]
   }
@@ -90,7 +91,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/selenium_core', None)],
     'tab_switching':
       [('src/data/tab_switching', None)],
-    '^(ui|valgrind_ui)$':
+    'ui':
       [('src/chrome/test/data/firefox2_profile/searchplugins', None),
        ('src/chrome/test/data/firefox2_searchplugins', None),
        ('src/chrome/test/data/firefox3_profile/searchplugins', None),
@@ -98,9 +99,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/chrome/test/data/ssl/certs', None)],
     '(plugin|pyauto_functional_tests)':
       [('src/chrome/test/data/plugin', None)],
-    '^(unit|valgrind_unit)$':
+    'unit':
       [('src/chrome/test/data/osdd', None)],
-    '^(webkit|test_shell|valgrind_webkit|valgrind_test_shell)$':
+    '^(webkit|test_shell)$':
       [('src/webkit/data/bmp_decoder', None),
        ('src/webkit/data/ico_decoder', None),
        ('src/webkit/data/test_shell/plugins', None),
@@ -351,9 +352,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get("lkgr"):
       self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
 
-    factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
+    tests_for_build = [
+        re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
+    factory = self.BuildFactory(target, clobber, tests_for_build, mode,
+                                slave_type, options, compile_timeout, build_url,
+                                project, factory_properties)
 
     # Get the factory command object to create new steps to the factory.
     chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
