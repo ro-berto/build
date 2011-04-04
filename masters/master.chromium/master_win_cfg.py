@@ -136,6 +136,19 @@ F('dbg', win().ChromiumFactory(
                         'trigger': 'win_dbg_trigger'}))
 
 #
+# Win Dbg 2010 Builder
+#
+B('Win Builder 2010 (dbg)', 'dbg_2010', 'compile|windows', 'win_dbg',
+  builddir='cr-win-2010-dbg')
+F('dbg_2010', win().ChromiumFactory(
+    target='Debug',
+    slave_type='Builder',
+    project='all.sln;chromium_2010_builder_tests',
+    factory_properties={'gclient_env': {
+        'GYP_MSVS_VERSION': '2010',
+        'GYP_DEFINES': 'fastbuild=1'}}))
+
+#
 # Win Dbg Unit testers
 #
 B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',

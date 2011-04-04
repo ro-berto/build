@@ -476,7 +476,9 @@ def main_win(options, args):
     sln = open(os.path.join(options.build_dir, options.solution), 'rU')
     header = sln.readline().strip()
     sln.close()
-    if header.endswith('10.00'):
+    if header.endswith('11.00'):
+      options.msvs_version = '10'
+    elif header.endswith('10.00'):
       options.msvs_version = '9'
     elif header.endswith('9.00'):
       options.msvs_version = '8'
