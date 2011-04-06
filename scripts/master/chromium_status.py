@@ -457,6 +457,7 @@ class WebStatus(baseweb.WebStatus):
     self.putChild("bot_status.json", console.ConsoleStatusResource())
     self.putChild("stats", stats.StatsStatusResource())
     self.putChild("grid", ConsoleStatusResource())
+    self.putChild("tgrid", ConsoleStatusResource())
     self.putChild("builders", BuildersResource())
     self.putChild("horizontal_one_box_per_builder",
                   HorizontalOneBoxPerBuilder())
