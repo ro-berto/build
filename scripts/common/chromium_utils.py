@@ -21,7 +21,7 @@ import time
 import zipfile
 
 try:
-  import json
+  import json  # pylint: disable=F0401
 except ImportError:
   import simplejson as json
 

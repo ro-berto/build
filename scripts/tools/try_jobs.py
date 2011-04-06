@@ -5,6 +5,7 @@
 
 """Cleans up the windows try slaves every night."""
 
+from __future__ import with_statement
 import os
 import subprocess
 import sys
