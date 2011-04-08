@@ -474,7 +474,7 @@ class GClient(sourcebase):
 
     WEBKIT_UPDATE_RE = re.compile(
         r'svn (checkout|update) .*%s ' %
-            os.path.join('src', 'third_party', 'WebKit', 'WebCore'))
+            os.path.join('src', 'third_party', 'WebKit', 'Source'))
     def findWebKitUpdate(line):
       return WEBKIT_UPDATE_RE.search(line)
 
@@ -514,7 +514,7 @@ class GClient(sourcebase):
         chromium_revision = findRevisionNumberFromGclient('src', line)
       if not webkit_revision:
         webkit_revision = findRevisionNumberFromGclient(
-            os.path.join('src', 'third_party', 'WebKit', 'WebCore'), line)
+            os.path.join('src', 'third_party', 'WebKit', 'Source'), line)
 
       # Exit if we're done.
       if chromium_revision and webkit_revision:

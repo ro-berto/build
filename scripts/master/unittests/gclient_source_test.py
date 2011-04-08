@@ -8,6 +8,7 @@
 import unittest
 
 from slave.chromium_commands import GClient
+from slave.chromium_commands import untangle
 
 
 class TestableGClient(GClient):
@@ -38,8 +39,8 @@ ________ running 'svn checkout http://src.chromium.org/svn/trunk/src .../build/s
  U   .../build/src
 Checked out revision 12345.
 
-________ running 'svn checkout http://svn.webkit.org/repository/webkit/trunk/WebCore@66952 .../build/src/third_party/WebKit/WebCore --revision 66952' in '.../build'
- U   .../build/src/third_party/WebKit/WebCore
+________ running 'svn checkout http://svn.webkit.org/repository/webkit/trunk/Source@66952 .../build/src/third_party/WebKit/Source --revision 66952' in '.../build'
+ U   .../build/src/third_party/WebKit/Source
 Checked out revision 67890."""
 
 SVN_UPDATE_STDOUT = """solutions=[...]
@@ -48,8 +49,8 @@ ________ running 'svn update http://src.chromium.org/svn/trunk/src .../build/src
  U   .../build/src
 Updated to revision 12345.
 
-________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/WebCore@66952 .../build/src/third_party/WebKit/WebCore --revision 66952' in '.../build'
- U   .../build/src/third_party/WebKit/WebCore
+________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/Source@66952 .../build/src/third_party/WebKit/Source --revision 66952' in '.../build'
+ U   .../build/src/third_party/WebKit/Source
 Updated to revision 67890."""
 
 SVN_UPDATE_NO_CHANGE_STDOUT = """solutions=[...]
@@ -57,7 +58,7 @@ SVN_UPDATE_NO_CHANGE_STDOUT = """solutions=[...]
 ________ running 'svn update http://src.chromium.org/svn/trunk/src .../build/src' in '.../build'
 At revision 12345.
 
-________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/WebCore@66952 .../build/src/third_party/WebKit/WebCore --revision 66952' in '.../build'
+________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/Source@66952 .../build/src/third_party/WebKit/Source --revision 66952' in '.../build'
 At revision 67890."""
 
 GCLIENT_SYNC_NO_CHANGE_STDOUT = """solutions=[...]
@@ -66,7 +67,7 @@ Syncing projects:  0% (0/2)
 _____ src at 12345
 
 Syncing projects:  77% (45/58)
-_____ src/third_party/WebKit/WebCore at 67890"""
+_____ src/third_party/WebKit/Source at 67890"""
 
 GCLIENT_SYNC_MULTI_JOB_STDOUT = """solutions=[...]
 1>
@@ -99,7 +100,7 @@ At revision 61624.
 
 Syncing projects:  76% (46/60)
 
-________ running 'svn update --revision BASE' in '.../build/src/third_party/WebKit/WebCore'
+________ running 'svn update --revision BASE' in '.../build/src/third_party/WebKit/Source'
 At revision 69168.
 
 Syncing projects: 100% (60/60)
@@ -127,7 +128,7 @@ solutions=[{"name":"src","url":"http://src.chromium.org/svn/trunk/src","custom_d
 50>At revision 69169.
 52>Updated to revision 69169.
 51>
-51>________ running 'svn update .../build/src/third_party/WebKit/WebCore --revision 69169' in '.../build'
+51>________ running 'svn update .../build/src/third_party/WebKit/Source --revision 69169' in '.../build'
 50>
 51>
 52>
@@ -164,7 +165,7 @@ solutions=[{"name":"src","url":"http://src.chromium.org/svn/trunk/src","custom_d
 46>
 48>
 47>
-47>________ running 'svn update .../build/src/third_party/WebKit/WebCore --revision 69168' in '.../build'
+47>________ running 'svn update .../build/src/third_party/WebKit/Source --revision 69168' in '.../build'
 48>Updated to revision 69168.
 47>At revision 69168.
 47>
@@ -227,7 +228,7 @@ class GClientSourceTest(unittest.TestCase):
                     '10>ten', '7>seven', '5>five', '8>eight', '2>two']
     self.assertEqual(['one', 'two', 'three', 'four', 'five',
                       'six', 'seven', 'eight', 'nine', 'ten'],
-                     gclient._untangle(stdout_lines))
+                     untangle(stdout_lines))
 
   def testUntangle_MultiplesAndUnMatchingLines(self):
     gclient = TestableGClient()
@@ -251,7 +252,7 @@ class GClientSourceTest(unittest.TestCase):
                       'second set, first 1',
                       'second set, second 1',
                       'second set, first 2'],
-                     gclient._untangle(stdout_lines))
+                     untangle(stdout_lines))
 
   def testUntangle_GClientSync(self):
     gclient = TestableGClient()
@@ -265,7 +266,7 @@ class GClientSourceTest(unittest.TestCase):
                       '_____ src/third_party/ots at 35',
                       '_____ src/third_party/libvpx/lib at 59445',
                       '...'],
-                     gclient._untangle(stdout_lines))
+                     untangle(stdout_lines))
 
   def testUntangle_GClientSyncForDepsTrybot(self):
     gclient = TestableGClient()
@@ -275,7 +276,7 @@ class GClientSourceTest(unittest.TestCase):
                       'Restored \'DEPS\'',
                       'At revision 61624.',
                       'Syncing projects:  76% (46/60)',
-                      '________ running \'svn update --revision BASE\' in \'.../build/src/third_party/WebKit/WebCore\'',
+                      '________ running \'svn update --revision BASE\' in \'.../build/src/third_party/WebKit/Source\'',
                       'At revision 69168.',
                       'Syncing projects: 100% (60/60)',
                       'Syncing projects: 100% (60/60), done.',
@@ -287,7 +288,7 @@ class GClientSourceTest(unittest.TestCase):
                       'At revision 69169.',
                       '________ running \'svn update .../build/src/third_party/WebKit/WebKit/chromium --revision 69169\' in \'.../build\'',
                       'At revision 69169.',
-                      '________ running \'svn update .../build/src/third_party/WebKit/WebCore --revision 69169\' in \'.../build\'',
+                      '________ running \'svn update .../build/src/third_party/WebKit/Source --revision 69169\' in \'.../build\'',
                       'At revision 69169.',
                       '________ running \'svn update .../build/src/third_party/WebKit/Tools/Scripts --revision 69169\' in \'.../build\'',
                       'Updated to revision 69169.',
@@ -303,11 +304,11 @@ class GClientSourceTest(unittest.TestCase):
                       'At revision 69168.',
                       '________ running \'svn update .../build/src/third_party/WebKit/WebKit/chromium --revision 69168\' in \'.../build\'',
                       'At revision 69168.',
-                      '________ running \'svn update .../build/src/third_party/WebKit/WebCore --revision 69168\' in \'.../build\'',
+                      '________ running \'svn update .../build/src/third_party/WebKit/Source --revision 69168\' in \'.../build\'',
                       'At revision 69168.',
                       '________ running \'svn update .../build/src/third_party/WebKit/Tools/Scripts --revision 69168\' in \'.../build\'',
                       'Updated to revision 69168.',
                       '________ running \'/usr/bin/python src/build/gyp_chromium\' in \'.../build\'',
                       'Updating projects from gyp files...',
                       'Generating .../build/src/sandbox/sandbox.Makefile'],
-                     gclient._untangle(stdout_lines))
+                     untangle(stdout_lines))
