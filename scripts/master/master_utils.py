@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import os
+import re
 
 from buildbot import interfaces, util
 from buildbot.buildslave import BuildSlave
@@ -183,6 +184,10 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   c['slavePortnum'] = active_master.slave_port
   c['projectName'] = active_master.project_name
   c['projectURL'] = config.Master.project_url
+  
+  # Get the master name from the directory name. Remove leading "master.".
+  mastername = re.sub('^master.', '', os.path.basename(os.getcwd()))
+  c['properties'] = {'mastername': mastername}
 
   # 'status' is a list of Status Targets. The results of each build will be
   # pushed to these targets. buildbot/status/*.py has a variety to choose from,
