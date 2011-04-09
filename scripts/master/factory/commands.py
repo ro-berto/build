@@ -222,7 +222,8 @@ class FactoryCommands(object):
     # before sending it to the slave.
     wp_strings = []
     for prop in ['branch', 'buildername', 'buildnumber', 'got_revision',
-                 'revision', 'scheduler', 'slavename']:
+                 'mastername', 'revision', 'scheduler', 'slavename',
+                 'snapshot']:
       wp_strings.append('"%s": "%%(%s:-)s"' % (prop, prop))
     cmd.append(WithProperties('--build-properties={' + ', '.join(wp_strings) +
                               '}'))
