@@ -371,9 +371,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Trigger any schedulers waiting on the build to complete.
     if factory_properties.get('trigger'):
       trigger_name = factory_properties.get('trigger')
+      # Propagate properties to the children if this is set in the factory.
+      trigger_properties = factory_properties.get('trigger_properties', None)
       factory.addStep(trigger.Trigger(schedulerNames=[trigger_name],
                                       updateSourceStamp=False,
-                                      waitForFinish=False))
+                                      waitForFinish=False,
+                                      copy_properties=trigger_properties))
 
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and
