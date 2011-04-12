@@ -616,18 +616,24 @@ def RunCommand(command, parser_func=None, **kwargs):
   return proc.returncode
 
 
-def GetCommandOutput(command):
-  """Runs the command list, returning its output.
-
-  Prints the given command (which should be a list of one or more strings),
-  then runs it and returns its output (stdout and stderr) as a string.
-
-  If the command exits with an error, raises ExternalError.
-  """
+def GetStatusOutput(command):
+  """Runs the command list, returning its result and output."""
   proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                           stderr=subprocess.STDOUT, bufsize=1)
   output = proc.communicate()[0]
   result = proc.returncode
+  
+  return (result, output)
+
+
+def GetCommandOutput(command):
+  """Runs the command list, returning its output.
+
+  Run the command and returns its output (stdout and stderr) as a string.
+
+  If the command exits with an error, raises ExternalError.
+  """
+  (result, output) = GetStatusOutput(command)
   if result:
     raise ExternalError('%s: %s' % (subprocess.list2cmdline(command), output))
   return output
