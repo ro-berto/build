@@ -153,6 +153,9 @@ class FactoryCommands(object):
     # Starting from e.g. C:\b\build\slave\build_slave_path\build, find
     # C:\b\build\scripts\slave.
     self._script_dir = self.PathJoin('..', '..', '..', 'scripts', 'slave')
+    self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
+                                             'build_internal', 'scripts',
+                                             'slave')
 
     self._perl = self.GetExecutableName('perl')
 
@@ -184,6 +187,12 @@ class FactoryCommands(object):
 
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
+
+    # Site-Specific script to snapshot and clone a NAS slave directory.
+    self._nas_snapshot_tool = self.PathJoin(self._private_script_dir,
+                                            'nas_snapshot.py')
+    self._nas_clone_tool = self.PathJoin(self._private_script_dir,
+                                         'nas_clone.py')
 
   # Util methods.
   def GetExecutableName(self, executable):
@@ -222,8 +231,8 @@ class FactoryCommands(object):
     # before sending it to the slave.
     wp_strings = []
     for prop in ['branch', 'buildername', 'buildnumber', 'got_revision',
-                 'mastername', 'revision', 'scheduler', 'slavename',
-                 'snapshot']:
+                 'mastername', 'parentname', 'revision', 'scheduler',
+                 'slavename', 'snapshot']:
       wp_strings.append('"%s": "%%(%s:-)s"' % (prop, prop))
     cmd.append(WithProperties('--build-properties={' + ', '.join(wp_strings) +
                               '}'))
@@ -449,6 +458,39 @@ class FactoryCommands(object):
                           env=env,
                           timeout=timeout,
                           rm_timeout=60*60) # We don't care how long it takes.
+
+  def AddSnapshotStep(self, factory_properties):
+    """Adds a step to the factory to snapshot the slave dir."""
+    def ParseOutput(rc, stdout, stderr):
+      """Parses the output and return a dict containing the snapshot name."""
+      if rc == 0:
+        search = re.search('Snapshot: ([a-zA-Z0-9_]*)', stdout)
+        if search and search.groups():
+          return {'snapshot' : search.group(1)}
+      return {}
+
+    cmd = [self._python, self._nas_snapshot_tool]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    self._factory.addStep(shell.SetProperty,
+                          halt_on_failure=True,
+                          name='snapshot_build',
+                          description='snapshot_build',
+                          timeout=60,
+                          command=cmd,
+                          extract_fn=ParseOutput)
+
+  def AddCloneStep(self, factory_properties):
+    """Adds a step to the factory to clone and mount the slave dir."""
+    cmd = [self._python, self._nas_clone_tool]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    self._factory.addStep(shell.ShellCommand,
+                          halt_on_failure=True,
+                          name='clone_build',
+                          description='clone_build',
+                          timeout=60,
+                          command=cmd)
 
   def AddTaskkillStep(self):
     """Adds a step to kill the running processes before a build."""

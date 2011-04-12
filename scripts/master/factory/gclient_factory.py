@@ -149,7 +149,7 @@ class GClientFactory(object):
   def BaseFactory(self, gclient_spec=None, official_release=False,
                   factory_properties=None, build_properties=None,
                   delay_compile_step=False, sudo_for_remove=False,
-                  gclient_deps=None):
+                  gclient_deps=None, slave_type=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -172,6 +172,8 @@ class GClientFactory(object):
       factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
                                          gclient_deps=gclient_deps,
                                          gclient_nohooks=self._nohooks_on_update)
+    elif slave_type == 'NASTester':
+      factory_cmd_obj.AddCloneStep(factory_properties)
     elif not delay_compile_step:
       self.AddUpdateStep(gclient_spec, factory_properties, factory,
                          sudo_for_remove, gclient_deps=gclient_deps)
@@ -194,7 +196,8 @@ class GClientFactory(object):
 
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
-                               factory_properties=factory_properties)
+                               factory_properties=factory_properties,
+                               slave_type=slave_type)
 
     # Get the factory command object to create new steps to the factory.
     factory_cmd_obj = commands.FactoryCommands(factory, target,
@@ -221,6 +224,10 @@ class GClientFactory(object):
     if slave_type == 'Tester':
       factory_cmd_obj.AddExtractBuild(build_url,
                                       factory_properties=factory_properties)
+
+    # Snapshot the outpout directory if this machine is a NAS builder.
+    if slave_type == 'NASBuilder':
+      factory_cmd_obj.AddSnapshotStep(factory_properties=factory_properties)
 
     return factory
 

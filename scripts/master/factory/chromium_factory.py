@@ -9,6 +9,7 @@ Based on gclient_factory.py and adds chromium-specific steps."""
 import os
 import re
 
+from buildbot.process.properties import WithProperties
 from buildbot.steps import trigger
 
 from master.factory import chromium_commands
@@ -372,11 +373,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get('trigger'):
       trigger_name = factory_properties.get('trigger')
       # Propagate properties to the children if this is set in the factory.
-      trigger_properties = factory_properties.get('trigger_properties', None)
-      factory.addStep(trigger.Trigger(schedulerNames=[trigger_name],
-                                      updateSourceStamp=False,
-                                      waitForFinish=False,
-                                      copy_properties=trigger_properties))
+      trigger_properties = factory_properties.get('trigger_properties', [])
+      # Add an additional property if the type of the slave is NASBuilder. The
+      # testers need to receive the snapshot name.
+      if slave_type == 'NASBuilder':
+        trigger_properties.append('snapshot')
+      factory.addStep(trigger.Trigger(
+          schedulerNames=[trigger_name],
+          updateSourceStamp=False,
+          waitForFinish=False,
+          set_properties={'parentname': WithProperties('%(buildername)s')},
+          copy_properties=trigger_properties))
+
 
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and
