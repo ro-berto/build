@@ -166,6 +166,9 @@ class GClientFactory(object):
     if self._target_platform == 'win32':
       factory_cmd_obj.AddTaskkillStep()
     env = factory_properties.get('gclient_env', {})
+    # Allow gclient_deps to also come from the factory_properties.
+    if gclient_deps == None:
+      gclient_deps = factory_properties.get('gclient_deps', None)
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
