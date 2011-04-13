@@ -339,7 +339,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
-                      project=None, factory_properties=None):
+                      project=None, factory_properties=None, gclient_deps=None):
     factory_properties = factory_properties or {}
     tests = tests or []
 
@@ -357,7 +357,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
-                                project, factory_properties)
+                                project, factory_properties,
+                                gclient_deps=gclient_deps)
 
     # Get the factory command object to create new steps to the factory.
     chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
@@ -555,10 +556,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       # If branch is available, replace 'trunk' to 'branches/<BRANCH>'
       # in a url.
       if factory_properties and factory_properties.get('branch'):
-        if not url.split('/')[-1] in avoid_branch_sync_component: 
+        if not url.split('/')[-1] in avoid_branch_sync_component:
           url = url.replace('trunk',
                             'branches/' + str(factory_properties['branch']))
-          
+
       # Yes, url goes first, which is different from how most people
       # lay out their .gclient.
       # Prepend to make sure chrome/src is not created by a DEPS pull.

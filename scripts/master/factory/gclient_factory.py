@@ -182,7 +182,7 @@ class GClientFactory(object):
   def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
                    slave_type='BuilderTester', options=None,
                    compile_timeout=1200, build_url=None, project=None,
-                   factory_properties=None):
+                   factory_properties=None, gclient_deps=None):
     factory_properties = factory_properties or {}
 
     # Create the spec for the solutions
@@ -197,7 +197,8 @@ class GClientFactory(object):
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
                                factory_properties=factory_properties,
-                               slave_type=slave_type)
+                               slave_type=slave_type,
+                               gclient_deps=gclient_deps)
 
     # Get the factory command object to create new steps to the factory.
     factory_cmd_obj = commands.FactoryCommands(factory, target,
