@@ -77,6 +77,41 @@ class CbuildbotFactory(object):
     if triagelog:
       self.add_triagelog_step(triagelog)
 
+
+  def _branchAtOrAbove(self, version):
+    """See if the current branch is at or above some cutoff point.
+
+       This is intended to help with backwards compatibility with older
+       branches.
+
+       '0.12.123.456' > '0.12'
+       '0.11.123.456' < '0.12'
+       
+       Note that this method can break with some version strings out there:
+       '0.11.241.B'. In this case, if you don't specify enough detail
+       reach the 'B' it's fine. If that's a problem, the method will
+       have to be improved.
+    """
+
+    # Master is assumed to be past the cut off point.
+    if self.branch == 'master':
+      return True
+
+    # '0.12.123.456' -> ['0', '12', '123', '456']
+    branch_parts = self.branch.split('.')
+    version_parts = version.split('.')
+
+    # The first different section tells which is newer
+    for b, v in zip(branch_parts, version_parts):
+      if int(b) > int(v):
+        return True
+
+      if int(b) < int(v):
+        return False
+
+    # If all sections matched, see if zip truncated a difference
+    return len(branch_parts) >= len(version_parts)
+
   def _git_clear_and_checkout(self, repo):
     """
     rm -rf and clone the basename of the repo passed without .git
@@ -169,6 +204,9 @@ class CbuildbotFactory(object):
     else:
       cbuild_cmd = ['chromite/buildbot/cbuildbot',
                     shell.WithProperties("--buildnumber=%(buildnumber)s")]
+
+    if self._branchAtOrAbove('0.12'):
+      cbuild_cmd += ['--buildbot']
 
     cbuild_cmd += ['--buildroot=%s' % self.buildroot]
     cbuild_cmd += [('--revisionfile=%s' %
