@@ -48,12 +48,20 @@ def layout_test(options, args):
             ]
 
   if options.results_directory:
-    # run_webkit_tests expects the results directory to be either an absolute
-    # path (starting with '/') or relative to Debug or Release.  We expect it
-    # to be relative to the build_dir, which is a parent of Debug or Release.
-    # Thus if it's a relative path, we need to move it out one level.
-    if not options.results_directory.startswith('/'):
-      options.results_directory = os.path.join('..', options.results_directory)
+    # Prior to the fix in https://bugs.webkit.org/show_bug.cgi?id=58272,
+    # run_webkit_tests expects the results directory to be relative to
+    # the configuration directory (e.g., src/webkit/Release). The
+    # parameter is given to us relative to build_dir, which is where we
+    # will run the command from.
+    #
+    # When 58272 is landed, run_webkit_tests will support absolute file
+    # paths as well as paths relative to CWD for non-Chromium ports and
+    # paths relative to the configuration dir for Chromium ports. As
+    # a transitional fix, we convert to an absolute dir, but once the
+    # hack in 58272 is removed, we can use results_dir as-is.
+    if not os.path.isabs(options.results_directory):
+      options.results_directory = os.path.abspath(
+          os.path.join(os.getcwd(), options.results_directory))
     chromium_utils.RemoveDirectory(options.results_directory)
     command.extend(['--results-directory', options.results_directory])
 
