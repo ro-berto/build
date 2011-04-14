@@ -18,9 +18,9 @@ class V8Factory(gclient_factory.GClientFactory):
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
 
 
-  CUSTOM_DEPS_PYTHON = ('src/third_party/python_24',
+  CUSTOM_DEPS_PYTHON = ('src/third_party/python_26',
                         config.Master.trunk_url +
-                        '/deps/third_party/python_24')
+                        '/tools/third_party/python_26')
 
   CUSTOM_DEPS_ES5CONFORM = ('bleeding_edge/test/es5conform/data',
                             'https://es5conform.svn.codeplex.com/svn@71525')

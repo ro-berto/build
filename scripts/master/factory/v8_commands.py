@@ -49,7 +49,7 @@ class V8Commands(commands.FactoryCommands):
 
     if self._target_platform == 'win32':
       # Override to use the right python
-      python_path = self.PathJoin('..', 'src', 'third_party', 'python_24')
+      python_path = self.PathJoin('..', 'src', 'third_party', 'python_26')
       self._python = self.PathJoin(python_path, 'python_slave')
 
     # Create smaller name for the functions and vars to siplify the code below.
