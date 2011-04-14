@@ -12,7 +12,7 @@ def SkiaFileSplitter(path):
   return build_utils.SplitPath(projects, path)
 
 def Update(config, active_master, c):
-  skia_url = config.Master.skia_url + 'trunk/'
+  skia_url = config.Master.skia_url
   skia_revlinktmpl = config.Master.googlecode_revlinktmpl % ('skia', '%s')
 
   skia_poller = svnpoller.SVNPoller(svnurl=skia_url,
