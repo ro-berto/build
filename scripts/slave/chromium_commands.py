@@ -479,7 +479,7 @@ class GClient(sourcebase):
       return WEBKIT_UPDATE_RE.search(line)
 
     def findRevisionNumberFromGclient(repo, line):
-      m = re.match(r'_____ %s at ([0-9]+)' % repo, line)
+      m = re.match(r'_____ %s at ([0-9]+)$' % repo, line)
       if m:
         return int(m.group(1))
       return None
