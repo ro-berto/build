@@ -38,7 +38,7 @@ def main():
                            help='Architecture (ia32, x64, arm) '
                                 '[default: ia32]')
   option_parser.add_option('', '--build-dir',
-                           default='bleeding_edge/obj',
+                           default='v8/obj',
                            metavar='DIR',
                            help='directory in which build was run '
                                 '[default: %default]')
@@ -65,7 +65,7 @@ def main():
 
   simultaneous = '-j8'
   if options.platform in ('win' 'arm'):
-    simultaneous = ''
+    simultaneous = '-j1'
 
   if options.testname == 'leak':
     cmd = ['python', 'tools/test.py', '--no-build', '--mode',
