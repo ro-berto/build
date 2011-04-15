@@ -37,10 +37,6 @@ class V8Commands(commands.FactoryCommands):
     self._v8_script_dir = self.PathJoin(self._script_dir, 'v8')
     self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
 
-    self._es5conform_dir = self.PathJoin('bleeding_edge/test/es5conform/data')
-    self._es5conform_url = config.Master.es5conform_root_url
-    self._es5conform_revision = config.Master.es5conform_revision
-
     self._arch = target_arch
     self._shard_count = shard_count
     self._shard_run = shard_run
@@ -80,7 +76,7 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand,
                      'GCMole', cmd,
                      timeout=3600,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddV8Testing(self, properties=None):
     if self._target_platform == 'win32':
@@ -89,7 +85,7 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand,
                      'Check', cmd,
                      timeout=3600,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddV8ES5Conform(self, properties=None):
     if self._target_platform == 'win32':
@@ -99,7 +95,7 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand,
                      'ES5-Conform',
                      cmd,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddV8Mozilla(self, properties=None):
     if self._target_platform == 'win32':
@@ -107,7 +103,7 @@ class V8Commands(commands.FactoryCommands):
     cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'mozilla']
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
-                     timeout=3600, workdir='build/bleeding_edge/')
+                     timeout=3600, workdir='build/v8/')
 
   def AddV8Sputnik(self, properties=None):
     if self._target_platform == 'win32':
@@ -115,18 +111,18 @@ class V8Commands(commands.FactoryCommands):
     cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'sputnik']
     self.AddTestStep(shell.ShellCommand, 'Sputnik', cmd,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddPresubmitTest(self, properties=None):
     cmd = [self._python, self._v8testing_tool,
            '--testname', 'presubmit']
     self.AddTestStep(shell.ShellCommand, 'Presubmit', cmd,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddFuzzer(self, properties=None):
     cmd = ['./fuzz-v8.sh']
     self.AddTestStep(shell.ShellCommand, 'Fuzz', cmd,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddLeakTests(self, properties=None):
     cmd = [self._python, self._v8testing_tool,
@@ -141,18 +137,18 @@ class V8Commands(commands.FactoryCommands):
     }
     self.AddTestStep(shell.ShellCommand, 'leak', cmd,
                      env=env,
-                     workdir='build/bleeding_edge/')
+                     workdir='build/v8/')
 
   def AddArchiveBuild(self, mode='dev', show_url=True,
       extra_archive_paths=None):
     """Adds a step to the factory to archive a build."""
     cmd = [self._python, self._archive_tool, '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'Archiving', cmd,
-                 workdir='build/bleeding_edge')
+                 workdir='build/v8')
 
   def AddMoveExtracted(self):
     """Adds a step to download and extract a previously archived build."""
-    cmd = ('cp -R sconsbuild/release/* bleeding_edge/.')
+    cmd = ('cp -R sconsbuild/release/* v8/.')
     self._factory.addStep(shell.ShellCommand,
                           description='Move extracted to bleeding',
                           timeout=600,

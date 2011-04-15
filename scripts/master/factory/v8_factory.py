@@ -22,10 +22,10 @@ class V8Factory(gclient_factory.GClientFactory):
                         config.Master.trunk_url +
                         '/tools/third_party/python_26')
 
-  CUSTOM_DEPS_ES5CONFORM = ('bleeding_edge/test/es5conform/data',
+  CUSTOM_DEPS_ES5CONFORM = ('v8/test/es5conform/data',
                             'https://es5conform.svn.codeplex.com/svn@71525')
 
-  CUSTOM_DEPS_SPUTNIK = ('bleeding_edge/test/sputnik/sputniktests',
+  CUSTOM_DEPS_SPUTNIK = ('v8/test/sputnik/sputniktests',
                          'http://sputniktests.googlecode.com/svn/trunk@94')
 
   # Pinned at revision 65044 to allow scons to be removed from repository.
@@ -41,12 +41,15 @@ class V8Factory(gclient_factory.GClientFactory):
                          config.Master.trunk_internal_url +
                          '/third_party/platformsdk_win7/files')
 
-  CUSTOM_DEPS_MOZILLA = ('bleeding_edge/test/mozilla/data',
+  CUSTOM_DEPS_MOZILLA = ('v8/test/mozilla/data',
                           config.Master.trunk_url +
                           '/deps/third_party/mozilla-tests')
 
-  def __init__(self, build_dir, target_platform=None):
-    main = gclient_factory.GClientSolution(config.Master.v8_bleeding_edge)
+  def __init__(self, build_dir, target_platform=None,
+               branch='branches/bleeding_edge'):
+    self.checkout_url = config.Master.v8_url + '/' + branch
+    main = gclient_factory.GClientSolution(self.checkout_url,
+                                           name='v8')
 
     custom_deps_list = [main]
 
