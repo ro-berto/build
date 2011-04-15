@@ -60,6 +60,8 @@ def layout_test(options, args):
     # a transitional fix, we convert to an absolute dir, but once the
     # hack in 58272 is removed, we can use results_dir as-is.
     if not os.path.isabs(options.results_directory):
+      if options.results_directory.startswith('../../'):
+        options.results_directory = options.results_directory[6:]
       options.results_directory = os.path.abspath(
           os.path.join(os.getcwd(), options.results_directory))
     chromium_utils.RemoveDirectory(options.results_directory)
