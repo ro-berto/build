@@ -824,6 +824,75 @@ class ChromiumCommands(commands.FactoryCommands):
            '--mode', target]
     self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd)
 
+  def _GetPyAutoCmd(self, src_base=None, script=None, factory_properties=None,
+                    argv=None):
+    """Get PyAuto Command line using arguments
+
+    Args:
+      src_base: relative path (from workdir) to src. Not needed if workdir is
+                'build' (the default). Needed when workdir is not 'build' (like
+                parent of 'build')
+      script: script name that contain main function for test
+      factory_properties: factory properties
+      argv: argument list passed to the script
+
+    Returns:
+      a commandline list that can be executed
+    """
+    factory_properties = factory_properties or {}
+    J = self.PathJoin
+    pyauto_script = J('src', 'chrome', 'test', 'functional', script)
+    # in case a '..' prefix is needed
+    if src_base:
+      pyauto_script = J(src_base, pyauto_script)
+
+    pyauto_functional_cmd = ['python', pyauto_script] + argv
+    if self._target_platform == 'win32':  # win needs python26
+      py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')
+      if src_base:
+        py26 = J(src_base, py26)
+      pyauto_functional_cmd = ['cmd', '/C'] + [py26, pyauto_script, '-v']
+    elif self._target_platform == 'darwin':
+      pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']
+    elif (self._target_platform == 'linux2' and
+          factory_properties.get('use_xvfb_on_linux')):
+      # Run through runtest.py on linux to launch virtual X server.
+      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
+                                                  [pyauto_script] + argv)
+      # Adjust runtest.py location.
+      pyauto_functional_cmd[1] = os.path.join(os.path.pardir,
+                                              pyauto_functional_cmd[1])
+    return pyauto_functional_cmd
+
+  def AddMediaPerfTests(self, timeout=1200, workdir=None, src_base=None,
+                        factory_properties=None):
+    """Add media performance tests.
+
+    This method calls media_test_runner.py which runs media tests (including
+    performance tests) with appropriate parameters (such as input data file
+    name).
+    """
+    J = self.PathJoin
+    media_perf_script = J('src', 'chrome', 'test', 'functional',
+                          'media_perf.py')
+
+    dataset = J('src', 'chrome', 'test', 'data', 'media', 'csv',
+                'media_list_data.csv')
+    # in case a '..' prefix is needed.
+    if src_base:
+      media_perf_script = J(src_base, media_perf_script)
+      dataset = J(src_base, dataset)
+    # Adding appropriate parameters for perf script execution.
+    argv = ['-p ' + media_perf_script, '-i' + dataset]
+    pyauto_functional_cmd = self._GetPyAutoCmd(
+        src_base=src_base, script='media_test_runner.py', argv=argv,
+        factory_properties=factory_properties)
+
+    c = self.GetPerfStepClass(factory_properties, 'media_perf',
+                              process_log.GraphingLogProcessor)
+
+    self.AddTestStep(c, 'media_perf', pyauto_functional_cmd,
+                     workdir=workdir, timeout=timeout)
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by

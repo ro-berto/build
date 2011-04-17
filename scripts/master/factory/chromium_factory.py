@@ -319,6 +319,21 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 workdir=workdir,
                                 factory_properties=fp)
 
+    # HTML5 media tag performance test using PyAuto.
+    if R('media_perf'):
+      platform_mapping = {
+        'win32': 'win32',
+        'darwin': 'mac',
+        'linux2': 'linux64bit',
+      }
+
+      zip_platform = platform_mapping[self._target_platform]
+      workdir = os.path.join(f.working_dir, 'chrome-' + zip_platform)
+      # Performance test should be run on virtual X buffer.
+      fp['use_xvfb_on_linux'] = True
+      f.AddMediaPerfTests(factory_properties=fp, src_base='..',
+                          workdir=workdir)
+
     # ChromeDriver tests.
     if R('chromedriver_tests'):
       f.AddChromeDriverTest()
