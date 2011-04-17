@@ -192,6 +192,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Small ("module") unit tests:
     if R('base'):           f.AddBasicGTestTestStep('base_unittests', fp)
     if R('courgette'):      f.AddBasicGTestTestStep('courgette_unittests', fp)
+    if R('crypto'):         f.AddBasicGTestTestStep('crypto_unittests', fp)
     if R('gfx'):            f.AddBasicGTestTestStep('gfx_unittests', fp)
     if R('googleurl'):      f.AddBasicGTestTestStep('googleurl_unittests', fp)
     if R('gpu'):            f.AddBasicGTestTestStep(

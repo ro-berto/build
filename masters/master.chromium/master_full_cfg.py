@@ -112,7 +112,7 @@ F('linux64_full', linux().ChromiumFactory(
     clobber=True,
     tests=['base', 'net', 'unit', 'ui', 'dom_checker', 'googleurl', 'media',
            'printing', 'remoting', 'sizes', 'test_shell', 'memory',
-           'browser_tests', 'webkit_unit', 'gpu'],
+           'browser_tests', 'webkit_unit', 'gpu', 'crypto'],
     factory_properties={
         'archive_build': True,
         'show_perf_results': True,

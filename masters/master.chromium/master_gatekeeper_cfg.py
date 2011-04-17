@@ -20,6 +20,7 @@ categories_steps = {
     'base_unittests',
     #'browser_tests',
     'courgette_unittests',
+    'crypto_unittests',
     'googleurl_unittests',
     #'interactive_ui_tests',
     'ipc_tests',

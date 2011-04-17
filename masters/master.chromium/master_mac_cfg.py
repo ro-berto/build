@@ -54,7 +54,7 @@ F('rel_unit_1', mac().ChromiumFactory(
   build_url=rel_archive,
   tests=['ui', 'media', 'printing', 'remoting', 'gpu', 'googleurl',
          'nacl_ui', 'nacl_integration', 'nacl_sandbox',
-         'base', 'net', 'safe_browsing'],
+         'base', 'net', 'safe_browsing', 'crypto'],
   factory_properties={'generate_gtest_json': True})
 )
 
@@ -113,9 +113,8 @@ F('dbg_unit_1', mac().ChromiumFactory(
   target='Debug',
   build_url=dbg_archive,
   tests=['check_deps', 'media', 'printing', 'remoting', 'unit', 'googleurl',
-         'nacl_ui', 'nacl_integration', 'nacl_sandbox',
-         'gpu', 'interactive_ui', 'base',
-         'safe_browsing'],
+         'nacl_ui', 'nacl_integration', 'nacl_sandbox', 'gpu', 'interactive_ui',
+         'base', 'crypto', 'safe_browsing'],
   factory_properties={'generate_gtest_json': True}))
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger')
@@ -149,8 +148,7 @@ F('dbg_mac_clang', mac().ChromiumFactory(
     # Only include test binaries that run reasonably fast and that don't contain
     # many flaky tests.
     tests=[
-        'base',
-        'gfx',
+        'base', 'gfx', 'crypto',
         # Adds ipc_tests, sync_unit_tests, unit_tests, and app_unittests
         # unit_tests is very flaky due to http://crbug.com/60426
         # TODO(thakis): Re-add this once the bug is fixed.

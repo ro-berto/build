@@ -33,7 +33,7 @@ S('chromeos_rel', branch='src', treeStableTimer=60)
 B('Linux Builder (ChromiumOS)', 'rel', 'compile', 'chromeos_rel')
 F('rel', chromeos().ChromiumOSFactory(
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
-           'remoting', 'browser_tests', 'interactive_ui', 'views'],
+           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
     options=['chromeos_builder'],
     factory_properties={
         'archive_build': True,
@@ -58,7 +58,7 @@ B('Linux Builder (ChromiumOS dbg)', 'cros_dbg', 'compile', 'chromeos_dbg')
 F('cros_dbg', chromeos().ChromiumOSFactory(
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
-           'remoting', 'browser_tests', 'interactive_ui', 'views'],
+           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
     options=['chromeos_builder'],
     factory_properties={
         'gclient_env': { 'GYP_DEFINES':'chromeos=1'},
@@ -68,12 +68,12 @@ B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
 F('view_dbg', chromeos().ChromiumOSFactory(
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
-           'remoting', 'browser_tests', 'interactive_ui', 'views'],
+           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
     options=['app_unittests', 'base_unittests', 'browser_tests',
              'interactive_ui_tests', 'ipc_tests', 'googleurl_unittests',
              'media_unittests', 'net_unittests', 'printing_unittests',
              'remoting_unittests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
-             'views_unittests', 'gfx_unittests'],
+             'views_unittests', 'gfx_unittests', 'crypto_unittests'],
     factory_properties={'gclient_env': { 'GYP_DEFINES':'toolkit_views=1'},
                         'generate_gtest_json': True}))
 

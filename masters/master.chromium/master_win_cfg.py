@@ -64,7 +64,7 @@ B('XP Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
 F('rel_unit_2', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['ui', 'installer', 'base', 'net'],
+    tests=['ui', 'installer', 'base', 'net', 'crypto'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
@@ -159,7 +159,7 @@ F('dbg_unit_1', win().ChromiumFactory(
     build_url=dbg_archive,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting',
            'courgette', 'unit', 'gpu', 'installer', 'safe_browsing',
-           'base'],
+           'base', 'crypto'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))

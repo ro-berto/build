@@ -48,7 +48,8 @@ F('rel', linux().ChromiumFactory(
              'page_cycler_tests', 'printing_unittests', 'remoting_unittests',
              'startup_tests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
              'url_fetch_test', 'base_unittests', 'net_unittests',
-             'gfx_unittests', 'safe_browsing_tests', 'sync_integration_tests'],
+             'gfx_unittests', 'safe_browsing_tests', 'sync_integration_tests',
+             'crypto_unittests'],
     factory_properties={'trigger': 'linux_rel_trigger'}))
 
 #
@@ -59,7 +60,8 @@ F('rel_unit', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive_x64,
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
-           'browser_tests', 'unit', 'gpu', 'base', 'net', 'safe_browsing'],
+           'browser_tests', 'unit', 'gpu', 'base', 'net', 'safe_browsing',
+           'crypto'],
     factory_properties={'generate_gtest_json': True}))
 
 B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger')
@@ -104,7 +106,7 @@ F('dbg', linux().ChromiumFactory(
              'nacl_ui_tests', 'nacl_sandbox_tests',
              'printing_unittests', 'remoting_unittests', 'sync_unit_tests',
              'ui_tests', 'unit_tests',
-             'base_unittests', 'net_unittests',
+             'base_unittests', 'net_unittests', 'crypto_unittests',
              'gfx_unittests', 'plugin_tests', 'safe_browsing_tests']))
 
 #
@@ -124,14 +126,14 @@ F('dbg_unit_2', linux().ChromiumFactory(
     tests=['unit', 'nacl_ui', 'nacl_integration', 'nacl_sandbox',
            'gpu', 'interactive_ui',
            'net', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
-           'base', 'safe_browsing'],
+           'base', 'safe_browsing', 'crypto'],
     options=['app_unittests', 'googleurl_unittests', 'gpu_unittests',
              'interactive_ui_tests', 'ipc_tests', 'media_unittests',
              'nacl_ui_tests', 'nacl_sandbox_tests',
              'printing_unittests', 'remoting_unittests',
              'sync_unit_tests', 'unit_tests',
              'base_unittests', 'net_unittests', 'plugin_tests',
-             'safe_browsing_tests', 'gfx_unittests'],
+             'safe_browsing_tests', 'gfx_unittests', 'crypto_unittests'],
     factory_properties={'generate_gtest_json': True}))
 
 #
@@ -158,7 +160,8 @@ F('dbg_shlib_unit', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_shlib_archive,
     tests=['base', 'browser_tests', 'check_deps', 'googleurl', 'media', 'net',
-           'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit'],
+           'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit',
+           'crypto'],
     factory_properties={'generate_gtest_json': True}))
 
 #
@@ -169,7 +172,7 @@ B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg')
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=make', '--compiler=clang'],
-    tests=['base', 'gfx', 'unit'],
+    tests=['base', 'gfx', 'unit', 'crypto'],
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 fastbuild=1'
@@ -183,7 +186,7 @@ B('Linux Views Clang (dbg)', 'dbg_linux_views_clang', 'compile', 'linux_dbg')
 F('dbg_linux_views_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=make', '--compiler=clang'],
-    tests=['base', 'ui_base', 'gfx', 'unit'],
+    tests=['base', 'ui_base', 'gfx', 'unit', 'crypto'],
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 ' + 
