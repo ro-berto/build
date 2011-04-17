@@ -79,7 +79,8 @@ class ChromiumCommands(commands.FactoryCommands):
                                       'chrome_tests.bat')
     self._heapcheck_tool = J('src', 'tools', 'heapcheck', 'chrome_tests.sh')
     self._nacl_integration_tester_tool = J(
-        'src', 'native_client', 'build', 'buildbot_chrome_nacl_stage.py')
+        'src', 'chrome', 'test', 'nacl_test_injection',
+        'buildbot_nacl_integration.py')
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 

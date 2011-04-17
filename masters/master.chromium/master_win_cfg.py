@@ -86,7 +86,7 @@ B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_trigger')
 F('rel_nacl', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['nacl_ui', 'nacl_sandbox'],
+    tests=['nacl_ui', 'nacl_integration', 'nacl_sandbox'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 
