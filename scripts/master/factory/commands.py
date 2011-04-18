@@ -614,12 +614,11 @@ class FactoryCommands(object):
     output_dir = None
     perf_name = None
 
-    if show_results and self._target in self.PERF_TEST_MAPPINGS:
-      mapping = self.PERF_TEST_MAPPINGS[self._target]
-      perf_name = mapping.get(perf_id)
-      if not perf_name:
-        raise Exception, ('There is no mapping for identifier %s in %s' %
-                            (perf_id, self._target))
+    if show_results:
+      perf_name = perf_id
+      if (self._target in self.PERF_TEST_MAPPINGS and
+          perf_id in self.PERF_TEST_MAPPINGS[self._target]):
+        perf_name = self.PERF_TEST_MAPPINGS[self._target][perf_id]
       report_link = '%s/%s/%s/%s' % (self.PERF_BASE_URL, perf_name, test_name,
                                      self.PERF_REPORT_URL_SUFFIX)
       output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
