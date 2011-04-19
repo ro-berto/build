@@ -66,17 +66,19 @@ class GClientSolution(object):
     if not self.name:
       self.name = svn_url.split('/')[-1]
 
-  def GetSpec(self, tests=None):
+  def GetSpec(self, tests=None, skip_exclude=False):
     """Returns the specs for this solution.
     Params:
       tests: List of tests to run. This is required only when needed_components
              is not None.
+      skip_exclude: If set to True we don't try to set the dependencies list
+                    based on needed_components and the tests.
     """
 
     final_custom_deps_list = self.custom_deps_list[:]
     # Extend the custom deps with everything that is not going to be used
     # in this factory
-    if self.needed_components:
+    if self.needed_components and not skip_exclude:
       for test, dependencies in self.needed_components.iteritems():
         if ShouldRunMatchingTest(tests, test):
           continue
@@ -138,10 +140,10 @@ class GClientFactory(object):
     else:
       self._project = project
 
-  def BuildGClientSpec(self, tests=None):
+  def BuildGClientSpec(self, tests=None, skip_exclude=False):
     spec = 'solutions = ['
     for solution in self._solutions:
-      spec += solution.GetSpec(tests)
+      spec += solution.GetSpec(tests, skip_exclude)
     spec += ']'
 
     return spec
@@ -189,7 +191,14 @@ class GClientFactory(object):
     factory_properties = factory_properties or {}
 
     # Create the spec for the solutions
-    gclient_spec = self.BuildGClientSpec(tests)
+    skip_exclude = False
+    if slave_type == 'NABuilder':
+        # We will eventually snapshot and clone our filesystem to our
+        # dependent slaves. Since we don't have any way to know at this
+        # point what they want to run, we need to make sure we fetch
+        # all the files.
+        skip_exclude = True
+    gclient_spec = self.BuildGClientSpec(tests, skip_exclude)
 
     # If this is a trybot, runhooks will need to be called again manually after
     # the patch is applied. Save ~70 seconds by not calling it when doing the
