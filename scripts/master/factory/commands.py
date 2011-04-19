@@ -278,6 +278,7 @@ class FactoryCommands(object):
       locks: any locks to acquire for this test
       halt_on_failure: whether the current build should halt if this step fails
     """
+    do_step_if = do_step_if or self.TestStepFilter
     self._factory.addStep(
         command_class,
         name=test_name,
@@ -293,7 +294,7 @@ class FactoryCommands(object):
         command=test_command)
 
   @staticmethod
-  def GTestStepFilter(bStep):
+  def TestStepFilter(bStep):
     """Examines the 'testfilters' property of the build and determines if
     the step should run; True for yes."""
     bStep.setProperty('gtest_filter', None, "Factory")
@@ -305,6 +306,7 @@ class FactoryCommands(object):
       if testfilter == bStep.name:
         return True
       if testfilter.startswith("%s:" % bStep.name):
+        # This is gtest specific, but other test types can safely ignore it.
         bStep.setProperty('gtest_filter', "--gtest_filter=%s" %
                           testfilter.split(':', 1)[1], "Scheduler")
         return True
@@ -355,7 +357,7 @@ class FactoryCommands(object):
     cmd.extend(arg_list)
 
     self.AddTestStep(gtest_command.GTestCommand, test_name, ListProperties(cmd),
-                     description, do_step_if=self.GTestStepFilter)
+                     description, do_step_if=self.TestStepFilter)
 
   def AddSlavelasticTestStep(self, test_name, factory_properties=None,
                              timeout=300):
