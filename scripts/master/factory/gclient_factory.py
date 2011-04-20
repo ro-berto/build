@@ -223,8 +223,7 @@ class GClientFactory(object):
       factory_cmd_obj.AddUpdateClangStep()
 
     # Add the compile step if needed.
-    if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
-        slave_type == 'Trybot'):
+    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'NASBuilder']:
       factory_cmd_obj.AddCompileStep(project or self._project, clobber,
                                      mode=mode, options=options,
                                      timeout=compile_timeout)
