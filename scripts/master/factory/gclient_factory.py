@@ -192,7 +192,7 @@ class GClientFactory(object):
 
     # Create the spec for the solutions
     skip_exclude = False
-    if slave_type == 'NABuilder':
+    if slave_type == 'NASBuilder':
       # We will eventually snapshot and clone our filesystem to our
       # dependent slaves. Since we don't have any way to know at this
       # point what they want to run, we need to make sure we fetch
