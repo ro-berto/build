@@ -152,7 +152,6 @@ def main_xcode(options, args):
 
   if options.compiler == 'goma':
     goma_key = os.path.join(options.goma_dir, 'goma.key')
-    env = os.environ.copy()
     env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
     if os.path.exists(goma_key):
       env['GOMA_API_KEY_FILE'] = goma_key
