@@ -770,3 +770,15 @@ def ListMasters():
 def convert_json(option, opt, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))
+
+def SafeTranslate(str):
+  """Convert a free form string to one that can be used in a path.
+  
+  This is similar to the safeTranslate function in buildbot.
+  """
+
+  badchars_map = string.maketrans("\t !#$%&'()*+,./:;<=>?@[\\]^{|}~",
+                                  "______________________________")
+  if isinstance(str, unicode):
+    str = str.encode('utf8')
+  return str.translate(badchars_map)
