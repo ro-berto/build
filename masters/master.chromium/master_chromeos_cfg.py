@@ -34,7 +34,7 @@ B('Linux Builder (ChromiumOS)', 'rel', 'compile', 'chromeos_rel')
 F('rel', chromeos().ChromiumOSFactory(
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
-    options=['chromeos_builder'],
+    options=['--compiler=goma', 'chromeos_builder'],
     factory_properties={
         'archive_build': True,
         'extra_archive_paths': 'chrome/tools/build/chromeos',
@@ -59,7 +59,7 @@ F('cros_dbg', chromeos().ChromiumOSFactory(
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
-    options=['chromeos_builder'],
+    options=['--compiler=goma', 'chromeos_builder'],
     factory_properties={
         'gclient_env': { 'GYP_DEFINES':'chromeos=1'},
         'generate_gtest_json': True}))
@@ -69,11 +69,12 @@ F('view_dbg', chromeos().ChromiumOSFactory(
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
-    options=['app_unittests', 'base_unittests', 'browser_tests',
-             'interactive_ui_tests', 'ipc_tests', 'googleurl_unittests',
-             'media_unittests', 'net_unittests', 'printing_unittests',
-             'remoting_unittests', 'sync_unit_tests', 'ui_tests', 'unit_tests',
-             'views_unittests', 'gfx_unittests', 'crypto_unittests'],
+    options=['--compiler=goma', 'app_unittests', 'base_unittests',
+             'browser_tests', 'interactive_ui_tests', 'ipc_tests',
+             'googleurl_unittests', 'media_unittests', 'net_unittests',
+             'printing_unittests', 'remoting_unittests', 'sync_unit_tests',
+             'ui_tests', 'unit_tests', 'views_unittests', 'gfx_unittests',
+             'crypto_unittests'],
     factory_properties={'gclient_env': { 'GYP_DEFINES':'toolkit_views=1'},
                         'generate_gtest_json': True}))
 

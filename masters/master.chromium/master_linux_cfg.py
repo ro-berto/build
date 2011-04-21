@@ -117,7 +117,7 @@ B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg')
 F('dbg_unit_1', linux().ChromiumFactory(
     target='Debug',
     tests=['check_deps', 'ui', 'browser_tests'],
-    options=['browser_tests',  'ui_tests'],
+    options=['--compiler=goma', 'browser_tests',  'ui_tests'],
     factory_properties={'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg')
@@ -127,9 +127,9 @@ F('dbg_unit_2', linux().ChromiumFactory(
            'gpu', 'interactive_ui',
            'net', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
            'base', 'safe_browsing', 'crypto'],
-    options=['app_unittests', 'googleurl_unittests', 'gpu_unittests',
-             'interactive_ui_tests', 'ipc_tests', 'media_unittests',
-             'nacl_ui_tests', 'nacl_sandbox_tests',
+    options=['--compiler=goma', 'app_unittests', 'googleurl_unittests',
+             'gpu_unittests', 'interactive_ui_tests', 'ipc_tests',
+             'media_unittests', 'nacl_ui_tests', 'nacl_sandbox_tests',
              'printing_unittests', 'remoting_unittests',
              'sync_unit_tests', 'unit_tests',
              'base_unittests', 'net_unittests', 'plugin_tests',
