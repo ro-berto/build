@@ -33,6 +33,7 @@ class CbuildbotFactory(object):
           (i.e. the type command). Default 9000 seconds.
       crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
+      dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
   """
 
   _default_git_base = 'ssh://git@gitrw.chromium.org:9222'
@@ -45,7 +46,8 @@ class CbuildbotFactory(object):
                triagelog=None, params='', timeout=9000, variant=None,
                is_master=False, branch='master', old_style=False,
                crostools_repo=_default_crostools,
-               chromite_repo=_default_chromite):
+               chromite_repo=_default_chromite,
+               dry_run=False):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.old_style = old_style
@@ -59,6 +61,7 @@ class CbuildbotFactory(object):
     self.branch = branch
     self.type = type
     self.is_master = is_master
+    self.dry_run = dry_run
 
     self.f_cbuild = chromeos_build_factory.BuildFactory()
     self.add_boiler_plate_steps()
@@ -208,6 +211,9 @@ class CbuildbotFactory(object):
     if self._branchAtOrAbove('0.12'):
       cbuild_cmd += ['--buildbot']
 
+    if self.dry_run:
+      cbuild_cmd += ['--debug']
+
     cbuild_cmd += ['--buildroot=%s' % self.buildroot]
     cbuild_cmd += [('--revisionfile=%s' %
                    chromeos_revision_source.PFQ_REVISION_FILE)]
@@ -309,15 +315,18 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
         in cbuildbot tot, latest_release, etc.
       crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
+      dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
   """
   def __init__(self, buildroot='/b/cbuild', params='', timeout=9000,
                is_master=False, branch='master', chrome_rev_stages=None,
                crostools_repo=CbuildbotFactory._default_crostools,
-               chromite_repo=CbuildbotFactory._default_chromite):
+               chromite_repo=CbuildbotFactory._default_chromite,
+               dry_run=False):
     CbuildbotFactory.__init__(self, type='cbuildbot_chrome', board=None,
                               buildroot=buildroot, is_master=is_master,
                               crostools_repo=crostools_repo,
-                              chromite_repo=chromite_repo)
+                              chromite_repo=chromite_repo,
+                              dry_run=dry_run)
 
     for chrome_rev in chrome_rev_stages:
       bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
