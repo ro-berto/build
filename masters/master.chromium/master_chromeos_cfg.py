@@ -34,7 +34,7 @@ B('Linux Builder (ChromiumOS)', 'rel', 'compile', 'chromeos_rel')
 F('rel', chromeos().ChromiumOSFactory(
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
-    options=['--compiler=goma', 'chromeos_builder'],
+    options=['chromeos_builder'],
     factory_properties={
         'archive_build': True,
         'extra_archive_paths': 'chrome/tools/build/chromeos',
