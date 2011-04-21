@@ -53,6 +53,7 @@ def _CollectArchiveFiles(output_dir):
            '-jsfilt-actual.' not in name)):
         actual_file_list.append(os.path.join(rel_path, name))
       elif ('-wdiff.' in name or
+            '-expected.' in name or
             name.endswith('-diff.txt') or
             name.endswith('-diff.png')):
         diff_file_list.append(os.path.join(rel_path, name))
