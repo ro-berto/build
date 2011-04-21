@@ -80,7 +80,8 @@ F('rel_sync', win().ChromiumFactory(
     build_url=rel_archive,
     tests=['sync_integration'],
     factory_properties={'process_dumps': True,
-                        'start_crash_handler': True,}))
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
 
 B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_trigger')
 F('rel_nacl', win().ChromiumFactory(
