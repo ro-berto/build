@@ -475,7 +475,7 @@ class FactoryCommands(object):
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self._factory.addStep(shell.SetProperty,
-                          halt_on_failure=True,
+                          haltOnFailure=True,
                           name='snapshot_build',
                           description='snapshot_build',
                           timeout=60,
@@ -488,7 +488,7 @@ class FactoryCommands(object):
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self._factory.addStep(shell.ShellCommand,
-                          halt_on_failure=True,
+                          haltOnFailure=True,
                           name='clone_build',
                           description='clone_build',
                           timeout=60,
