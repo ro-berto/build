@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -60,6 +60,7 @@ def main():
     os.path.join(parent_dir, 'scripts', 'release'),
     os.path.join(parent_dir, 'third_party'),
     os.path.join(root, 'build_internal', 'site_config'),
+    '.',  # Include the current working directory by default.
   ]
   os.environ['PYTHONPATH'] += os.pathsep.join(python_path)
 

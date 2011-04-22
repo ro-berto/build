@@ -13,6 +13,7 @@ import os
 import re
 import shutil
 import stat
+import string  # pylint: disable=W0402
 import subprocess
 import sys
 import tempfile
@@ -771,7 +772,7 @@ def convert_json(option, opt, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))
 
-def SafeTranslate(str):
+def SafeTranslate(inputstr):
   """Convert a free form string to one that can be used in a path.
   
   This is similar to the safeTranslate function in buildbot.
@@ -779,6 +780,6 @@ def SafeTranslate(str):
 
   badchars_map = string.maketrans("\t !#$%&'()*+,./:;<=>?@[\\]^{|}~",
                                   "______________________________")
-  if isinstance(str, unicode):
-    str = str.encode('utf8')
-  return str.translate(badchars_map)
+  if isinstance(inputstr, unicode):
+    inputstr = inputstr.encode('utf8')
+  return inputstr.translate(badchars_map)
