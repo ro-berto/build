@@ -73,7 +73,8 @@ B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger')
 F('rel_sync', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['sync_integration'])
+  tests=['sync_integration'],
+  factory_properties={'generate_gtest_json': True}))
 )
 
 ################################################################################

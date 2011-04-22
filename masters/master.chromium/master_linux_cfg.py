@@ -68,7 +68,8 @@ B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger')
 F('rel_sync', linux().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive_x64,
-    tests=['sync_integration']))
+    tests=['sync_integration'],
+    factory_properties={'generate_gtest_json': True}))
 
 
 ################################################################################
