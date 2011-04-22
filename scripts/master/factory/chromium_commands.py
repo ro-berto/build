@@ -842,7 +842,7 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     factory_properties = factory_properties or {}
     J = self.PathJoin
-    pyauto_script = J('src', 'chrome', 'test', 'functional', script)
+    pyauto_script = J('src', 'chrome', 'test', 'functional', 'media', script)
     # in case a '..' prefix is needed
     if src_base:
       pyauto_script = J(src_base, pyauto_script)
@@ -874,17 +874,13 @@ class ChromiumCommands(commands.FactoryCommands):
     name).
     """
     J = self.PathJoin
-    media_perf_script = J('src', 'chrome', 'test', 'functional',
-                          'media_perf.py')
-
     dataset = J('src', 'chrome', 'test', 'data', 'media', 'csv',
                 'media_list_data.csv')
     # in case a '..' prefix is needed.
     if src_base:
-      media_perf_script = J(src_base, media_perf_script)
       dataset = J(src_base, dataset)
     # Adding appropriate parameters for perf script execution.
-    argv = ['-p ' + media_perf_script, '-i' + dataset]
+    argv = ['-i' + dataset]
     pyauto_functional_cmd = self._GetPyAutoCmd(
         src_base=src_base, script='media_test_runner.py', argv=argv,
         factory_properties=factory_properties)
