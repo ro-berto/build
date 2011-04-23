@@ -113,6 +113,7 @@ F('linux64_full', linux().ChromiumFactory(
     tests=['base', 'net', 'unit', 'ui', 'dom_checker', 'googleurl', 'media',
            'printing', 'remoting', 'sizes', 'test_shell', 'memory',
            'browser_tests', 'webkit_unit', 'gpu', 'crypto'],
+    options=['--compiler=goma'],
     factory_properties={
         'archive_build': True,
         'show_perf_results': True,
