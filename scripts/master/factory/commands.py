@@ -491,7 +491,7 @@ class FactoryCommands(object):
                           haltOnFailure=True,
                           name='clone_build',
                           description='clone_build',
-                          timeout=60,
+                          timeout=300,
                           command=cmd)
 
   def AddTaskkillStep(self):
