@@ -101,6 +101,7 @@ F('linux_full', linux().ChromiumFactory(
            'remoting', 'sizes', 'test_shell', 'memory', 'browser_tests',
            'webkit_unit', 'nacl_ui', 'nacl_integration', 'nacl_sandbox',
            'gpu', 'check_perms'],
+    options=['--compiler=goma'],
     factory_properties={'archive_build': True,
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-linux',
