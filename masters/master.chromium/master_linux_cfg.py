@@ -77,9 +77,6 @@ F('rel_sync', linux().ChromiumFactory(
 ## Debug
 ################################################################################
 
-dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
-                                          'cr-linux-dbg', 'linux')
-
 dbg_shlib_archive = master_config.GetArchiveUrl('Chromium',
                                                 'Linux Builder (dbg-shlib)',
                                                 'cr-linux-dbg-shlib',
@@ -91,16 +88,17 @@ dbg_shlib_archive = master_config.GetArchiveUrl('Chromium',
 S('linux_dbg', branch='src', treeStableTimer=60)
 
 #
-# Triggerable scheduler for the dbg shlib builder
+# Triggerable scheduler for the dbg builders
 #
+T('linux_dbg_trigger')
 T('linux_dbg_shlib_trigger')
 
 #
 # Linux Dbg Builder
 #
-B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', builddir='cr-linux-dbg')
+B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg')
 F('dbg', linux().ChromiumFactory(
-    slave_type='Builder',
+    slave_type='NASBuilder',
     target='Debug',
     options=['--compiler=goma', 'app_unittests', 'browser_tests',
              'googleurl_unittests', 'gpu_unittests', 'interactive_ui_tests',
@@ -109,33 +107,28 @@ F('dbg', linux().ChromiumFactory(
              'printing_unittests', 'remoting_unittests', 'sync_unit_tests',
              'ui_tests', 'unit_tests',
              'base_unittests', 'net_unittests', 'crypto_unittests',
-             'gfx_unittests', 'plugin_tests', 'safe_browsing_tests']))
+             'gfx_unittests', 'plugin_tests', 'safe_browsing_tests'],
+    factory_properties={'trigger': 'linux_dbg_trigger'}))
 
 #
 # Linux Dbg Unit testers
 #
 
-B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg')
+B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger')
 F('dbg_unit_1', linux().ChromiumFactory(
+    slave_type='NASTester',
     target='Debug',
     tests=['check_deps', 'ui', 'browser_tests'],
-    options=['--compiler=goma', 'browser_tests',  'ui_tests'],
     factory_properties={'generate_gtest_json': True}))
 
-B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg')
+B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger')
 F('dbg_unit_2', linux().ChromiumFactory(
+    slave_type='NASTester',
     target='Debug',
     tests=['unit', 'nacl_ui', 'nacl_integration', 'nacl_sandbox',
            'gpu', 'interactive_ui',
            'net', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
            'base', 'safe_browsing', 'crypto'],
-    options=['--compiler=goma', 'app_unittests', 'googleurl_unittests',
-             'gpu_unittests', 'interactive_ui_tests', 'ipc_tests',
-             'media_unittests', 'nacl_ui_tests', 'nacl_sandbox_tests',
-             'printing_unittests', 'remoting_unittests',
-             'sync_unit_tests', 'unit_tests',
-             'base_unittests', 'net_unittests', 'plugin_tests',
-             'safe_browsing_tests', 'gfx_unittests', 'crypto_unittests'],
     factory_properties={'generate_gtest_json': True}))
 
 #
