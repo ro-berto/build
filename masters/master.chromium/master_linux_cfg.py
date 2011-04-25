@@ -118,7 +118,7 @@ B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger')
 F('dbg_unit_1', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
-    tests=['check_deps', 'ui', 'browser_tests'],
+    tests=['check_deps', 'net', 'browser_tests'],
     factory_properties={'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger')
@@ -127,7 +127,7 @@ F('dbg_unit_2', linux().ChromiumFactory(
     target='Debug',
     tests=['unit', 'nacl_ui', 'nacl_integration', 'nacl_sandbox',
            'gpu', 'interactive_ui',
-           'net', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
+           'ui', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
            'base', 'safe_browsing', 'crypto'],
     factory_properties={'generate_gtest_json': True}))
 
