@@ -45,10 +45,10 @@ good_revision_steps = {
   ],
   # Dependent on 'Linux Builder (dbg)'
   'Linux Tests (dbg)(1)': [
-    'check_deps',  'browser_tests', 'ui_tests',
+    'check_deps',  'browser_tests', 'net_unittests',
   ],
   'Linux Tests (dbg)(2)': [
-    'net_unittests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
+    'ui_tests', 'ipc_tests', 'sync_unit_tests', 'unit_tests',
     'app_unittests', 'interactive_ui_tests', 'base_unittests',
     'googleurl_unittests', 'media_unittests', 'printing_unittests',
     'remoting_unittests', 'gfx_unittests',
