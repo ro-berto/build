@@ -283,7 +283,7 @@ def RemoveDirectory(*path):
     we see the exact sort of failure, we ignore it.  All other failures we re-
     raise.
     """
- 
+
     exception_type = excinfo[0]
     exception_value = excinfo[1]
     # If shutil.rmtree encounters a symbolic link on Windows, os.listdir will
@@ -623,7 +623,7 @@ def GetStatusOutput(command):
                           stderr=subprocess.STDOUT, bufsize=1)
   output = proc.communicate()[0]
   result = proc.returncode
-  
+
   return (result, output)
 
 
@@ -737,7 +737,8 @@ def RemoveChromeTemporaryFiles():
   # NOTE: print out what is cleaned up so the bots don't timeout if
   # there is a lot to cleanup and also se we see the leaks in the
   # build logs.
-  kLogRegex = '^(com\.google\.chrome|org\.chromium|\.org\.chromium)\.'
+  # At some point a leading dot got added, support with and without it.
+  kLogRegex = '^\.?(com\.google\.chrome|org\.chromium)\.'
   if IsWindows():
     kLogRegex = '^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
@@ -774,7 +775,7 @@ def convert_json(option, opt, value, parser):
 
 def SafeTranslate(inputstr):
   """Convert a free form string to one that can be used in a path.
-  
+
   This is similar to the safeTranslate function in buildbot.
   """
 
