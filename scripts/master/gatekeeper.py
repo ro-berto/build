@@ -88,7 +88,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       # @rtype getSlave(): L{buildbot.status.builder.SlaveStatus}
       slave_status = self.master_status.getSlave(slave_name)
       if slave_status and not slave_status.isConnected():
-        log.msg('Slave %s was disconnected, not closing the tree' % slave_name)
+        log.msg('[gatekeeper] Slave %s was disconnected, '
+                'not closing the tree' % slave_name)
         return False
 
     # If the previous build step failed with the same result, we don't care
@@ -101,14 +102,17 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       if len(previous_steps) == 1:
         if previous_steps[0].getResults()[0] == FAILURE:
           # The previous exact same step failed on the previous build. Ignore.
+          log.msg('[gatekeeper] Slave %s failed, but previously failed on '
+                  'the same step (%s). So not closing tree.' % (
+                      (step_name, slave_name)))
           return False
       else:
-        log.msg('len(previous_steps) == %d which is weird' %
-                    len(previous_steps))
+        log.msg('[gatekeeper] len(previous_steps) == %d which is weird' %
+                len(previous_steps))
 
     # If check_revisions=False that means that the tree closure request is
-    # coming from nightly scheduled bots, that need not necessarily have the 
-    # revision info. 
+    # coming from nightly scheduled bots, that need not necessarily have the
+    # revision info.
     if not self.check_revisions:
       return True
 
@@ -117,6 +121,8 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # tree.
     latest_revision = build_utils.getLatestRevision(build_status)
     if not latest_revision or not build_status.getResponsibleUsers():
+      log.msg('[gatekeeper] Slave %s failed, but no version stamp, '
+              'so skipping.' % slave_name)
       return False
 
     # If the tree is open, we don't want to close it again for the same
@@ -124,7 +130,14 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     # slow one and we already fixed the problem and manually opened the tree.
     # TODO(maruel): This is not git-friendly.
     if latest_revision <= self._last_closure_revision:
+      log.msg('[gatekeeper] Slave %s failed, but we already closed it '
+              'for a previous revision (old=%s, new=%s)' % (
+                  slave_name, str(self._last_closure_revision),
+                  str(latest_revision)))
       return False
+
+    log.msg('[gatekeeper] Decided to close tree because of slave %s '
+            'on revision %s' % (slave_name, str(latest_revision)))
 
     # Up to here, in theory we'd check if the tree is closed but this is too
     # slow to check here. Instead, take a look only when we want to close the
@@ -186,12 +199,14 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         })
 
     def Success(result):
-      log.msg('Tree closed successfully at rev ' + str(latest_revision))
+      log.msg('[gatekeeper] Tree closed successfully at rev %s' %
+              str(latest_revision))
       self._last_closure_revision = latest_revision
       return defer.succeed(0)
 
     def Failure(result):
-      log.msg('Failed to close the tree at rev ' + str(latest_revision))
+      log.msg('[gatekeeper] Failed to close the tree at rev %s' %
+              str(latest_revision))
 
     # Trigger the HTTP POST request to update the tree status.
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
