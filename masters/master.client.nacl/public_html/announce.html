@@ -20,6 +20,7 @@
     <tr>
       <td width="23%">
         <table valign="top" width="100%">
+          <tr><td><h3>NativeClient (main)</h3></td></tr>
           <tr>
             <td style="text-align: right;">
               <b>Controls:</b>
@@ -31,19 +32,25 @@
           </tr>
           <tr>
             <td style="text-align: right;">
-              <b>Development:</b>
+              <b>Dashboards:</b>
             </td>
             <td>
-              <a href="http://code.google.com/p/nativeclient/source/browse/#svn/trunk/nacl">source</a> |
-              <a href="http://codereview.chromium.org/">reviews</a> |
-              <a href="http://code.google.com/p/nativeclient/issues/list">bugs</a>
+              <a href="http://build.chromium.org/p/client.nacl/stats">
+                stats</a> |
+              <a href="http://nativeclient-status.appspot.com/status_viewer">
+                tree status history</a>
             </td>
           </tr>
           <tr>
             <td style="text-align: right;">
-              <b>NativeClient:</b>
+              <b>Development:</b>
             </td>
             <td>
+              <a href="http://src.chromium.org/viewvc/native_client/trunk/">
+                source</a> |
+              <a href="http://codereview.chromium.org/">reviews</a> |
+              <a href="http://code.google.com/p/nativeclient/issues/list">
+                bugs</a> |
               <a href="http://code.google.com/p/nativeclient">www</a>
             </td>
           </tr>
@@ -66,7 +73,7 @@
           </tr>
           <tr>
             <td style="text-align: right;">
-               <b>Navigate:</b>
+               <b>Buildbot:</b>
             </td>
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
@@ -74,6 +81,20 @@
               <a href="../client.nacl/waterfall">waterfall</a> |
               <a href="../client.nacl/waterfall?show_events=true&failures_only=true">failures</a> |
               <a href="../client.nacl/console">console</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
+               <b>Waterfalls:</b>
+            </td>
+            <td colspan="2">
+              <a>NativeClient</a> |
+              <a href="../client.nacl.toolchain/">Toolchain</a> |
+              <a href="../client.nacl.chrome/">Chrome Integration</a> |
+              <a href="../client.nacl.ppapi/">PPAPI Integration</a> |
+              <a href="../client.nacl.naclports/">NaCl Ports</a> |
+              <a href="../client.nacl.sdk/">SDK</a> |
+              <a href="../client.tryserver.nacl/">Trybots</a>
             </td>
           </tr>
         </table>
@@ -162,136 +183,6 @@
 
             for(var i in flavors) {
               DisplayBar(flavors[i][1], flavors[i][0]);
-            }
-          </script>
-        </table>
-        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
-          <tr><th>toolchain</th></tr>
-          <script language="javascript">
-            var raw_flavors = [
-               ["Toolchain X86", ["win7-toolchain_x86",
-                                  "mac-toolchain_x86",
-                                  "hardy32-toolchain_x86"]],
-               ["glibc", ["lucid64-glibc",
-                          "win7-glibc",
-                          "mac-glibc"]],
-               ["Toolchain Other", ["hardy32-toolchain_arm-trusted",
-                                    "lucid32-toolchain_arm-untrusted",
-                                    "hardy64-toolchain_arm-untrusted"]],
-               ["mbuild", ["hardy64-modular-build-glibc",
-                          "hardy32-modular-build-glibc-incr",
-                          "hardy64-modular-build-glibc-incr",
-                          "mac-modular-build-glibc-incr"]],
-            ];
-            var flavors = [];
-            for(var i in raw_flavors) {
-              var row = Array();
-              for(var j in raw_flavors[i][1]) {
-                row.push("builder=" + raw_flavors[i][1][j]);
-              }
-              flavors.push([raw_flavors[i][0], row.join("&")]);
-            }
-
-            waterfall = "../client.nacl.toolchain/waterfall";
-            bar = "../client.nacl.toolchain/horizontal_one_box_per_builder";
-            for(var i in flavors) {
-              DisplayBarAll(flavors[i][1], flavors[i][0]);
-            }
-          </script>
-        </table>
-<table><tr><td height="1"> </td></tr></table>
-        <table width="100%"><tr>
-        <td width="50%">
-        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
-          <tr><th>chrome integration</th></tr>
-          <script language="javascript">
-            var raw_flavors = [
-               ["Integration", ["xp-nacl-chrome",
-                                "mac-nacl-chrome",
-                                "hardy64-nacl-chrome"]],
-            ];
-            var flavors = [];
-            for(var i in raw_flavors) {
-              var row = Array();
-              for(var j in raw_flavors[i][1]) {
-                row.push("builder=" + raw_flavors[i][1][j]);
-              }
-              flavors.push([raw_flavors[i][0], row.join("&")]);
-            }
-
-            waterfall = "../client.nacl.chrome/waterfall";
-            bar = "../client.nacl.chrome/horizontal_one_box_per_builder";
-            for(var i in flavors) {
-              DisplayBarAll(flavors[i][1], flavors[i][0]);
-            }
-          </script>
-        </table>
-        </td><td width="50%">
-        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
-          <tr><th>ppapi integration</th></tr>
-          <script language="javascript">
-            var raw_flavors = [
-               ["Lucid", [
-                  "lucid64-m64-n64-dbg-ppapi",
-                  "lucid64-m32-n32-opt-ppapi"
-               ]],
-            ];
-            var flavors = [];
-            for(var i in raw_flavors) {
-              var row = Array();
-              for(var j in raw_flavors[i][1]) {
-                row.push("builder=" + raw_flavors[i][1][j]);
-              }
-              flavors.push([raw_flavors[i][0], row.join("&")]);
-            }
-
-            waterfall = "../client.nacl.ppapi/waterfall";
-            bar = "../client.nacl.ppapi/horizontal_one_box_per_builder";
-            for(var i in flavors) {
-              DisplayBarAll(flavors[i][1], flavors[i][0]);
-            }
-          </script>
-        </table>
-        </td></table>
-        <table width="100%"><tr>
-        <td width="50%">
-        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 5px;  -webkit-border-top-right-radius: 5px;  -webkit-border-bottom-left-radius: 5px;  -webkit-border-bottom-right-radius: 5px; ">
-          <tr><th>naclports</th>
-<th width="100%">
-<iframe name="naclports_status" id="naclports_status" width="100%" height="44" frameborder="0" scrolling="no" src="http://naclports-status.appspot.com/current"></iframe>
-</th></tr>
-          <script language="javascript">
-            var flavors = [
-               ["ports", ["windows-ports",
-                          "mac-ports",
-                          "linux-ports"]],
-            ];
-
-            waterfall = "../client.nacl.ports/waterfall";
-            bar = "../client.nacl.ports/horizontal_one_box_per_builder";
-            for(var i in flavors) {
-              DisplayBarAll(flavors[i][1], flavors[i][0]);
-            }
-          </script>
-        </table>
-        </td>
-        <td width="50%">
-        <table width="100%" valign="top" bgcolor="#ccdddd" style="border-top-left-radius: 10px; -webkit-border-top-left-radius: 10px;  -webkit-border-top-right-radius: 10px;  -webkit-border-bottom-left-radius: 10px;  -webkit-border-bottom-right-radius: 10px;">
-          <tr><th>SDK</th>
-<th width="100%">
-<iframe name="naclsdk_status" id="naclsdk_status" width="100%" height="44" frameborder="0" scrolling="no" src="http://naclsdk-status.appspot.com/current"></iframe>
-</th></tr>
-          <script language="javascript">
-            var flavors = [
-               ["SDK", ["windows-sdk",
-                        "mac-sdk",
-                        "linux-sdk"]],
-            ];
-
-            waterfall = "../client.nacl.sdk/waterfall";
-            bar = "../client.nacl.sdk/horizontal_one_box_per_builder";
-            for(var i in flavors) {
-              DisplayBarAll(flavors[i][1], flavors[i][0]);
             }
           </script>
         </table>
