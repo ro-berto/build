@@ -72,7 +72,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
     # Whole build in one step.
     nacl_cmd_obj.AddAnnotatedStep(
         ['buildbot/buildbot_selector.py'], timeout=1500, usePython=True,
-        env={'BUILDBOT_SLAVE_TYPE': slave_type})
+        env={'BUILDBOT_SLAVE_TYPE': slave_type},
+        factory_properties=factory_properties)
 
     # Trigger tests on other builders.
     self._AddTriggerTests(nacl_cmd_obj, tests)
