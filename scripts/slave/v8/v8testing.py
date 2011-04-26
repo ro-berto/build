@@ -91,7 +91,7 @@ def main():
     elif options.arch == 'arm':
       cmd.extend(['--timeout=600'])
     else:
-      cmd.extend(['--timeout=180'])
+      cmd.extend(['--timeout=200'])
     if options.isolates:
       cmd.extend(['--isolates'])
     if options.shell_flags:
