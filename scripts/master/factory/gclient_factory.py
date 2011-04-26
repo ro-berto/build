@@ -243,6 +243,19 @@ class GClientFactory(object):
 
     return factory
 
+  def PostBuildFactory(self, factory, target='Release',
+                       slave_type='BuilderTester', factory_properties=None):
+    """Add post steps on a build created by BuildFactory."""
+    if slave_type != 'NASTester':
+      # There is no post step to add.
+      return
+
+    factory_properties = factory_properties or {}
+    factory_cmd_obj = commands.FactoryCommands(factory, target,
+                                               self._build_dir,
+                                               self._target_platform)
+    factory_cmd_obj.AddDestroyCloneStep(factory_properties=factory_properties)
+
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
                     sudo_for_remove=False, gclient_deps=None):
     if gclient_spec is None:

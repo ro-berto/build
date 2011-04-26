@@ -193,6 +193,8 @@ class FactoryCommands(object):
                                             'nas_snapshot.py')
     self._nas_clone_tool = self.PathJoin(self._private_script_dir,
                                          'nas_clone.py')
+    self._nas_destroy_clone_tool = self.PathJoin(self._private_script_dir,
+                                                 'nas_destroy_clone.py')
 
   # Util methods.
   def GetExecutableName(self, executable):
@@ -491,6 +493,17 @@ class FactoryCommands(object):
                           haltOnFailure=True,
                           name='clone_build',
                           description='clone_build',
+                          timeout=300,
+                          command=cmd)
+
+  def AddDestroyCloneStep(self, factory_properties):
+    """Adds a step to the factory to unmount and destroy the cloned volume."""
+    cmd = [self._python, self._nas_destroy_clone_tool]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    self._factory.addStep(shell.ShellCommand,
+                          name='destroy_clone',
+                          description='destroy_clone',
                           timeout=300,
                           command=cmd)
 

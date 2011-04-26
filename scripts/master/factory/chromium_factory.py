@@ -427,6 +427,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if test_parity_platform:
       chromium_cmd_obj.AddSendTestParityStep(test_parity_platform)
 
+    # Append any post steps needed by the BuildFactory.
+    self.PostBuildFactory(factory, target=target, slave_type=slave_type,
+                          factory_properties=factory_properties)
     return factory
 
   def TargetTestsFactory(self, timeout=60*60, verbose=False,
