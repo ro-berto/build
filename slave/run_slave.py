@@ -60,6 +60,7 @@ def main():
     os.path.join(parent_dir, 'scripts', 'release'),
     os.path.join(parent_dir, 'third_party'),
     os.path.join(root, 'build_internal', 'site_config'),
+    os.path.join(root, 'build_internal', 'symsrc'),
     '.',  # Include the current working directory by default.
   ]
   os.environ['PYTHONPATH'] += os.pathsep.join(python_path)
