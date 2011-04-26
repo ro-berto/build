@@ -22,10 +22,6 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 defaults['category'] = '4linux'
 
-# Archive location
-rel_archive_x64 = master_config.GetArchiveUrl('Chromium', 'Linux Builder x64',
-                                              'cr-linux-rel-x64', 'linux')
-
 #
 # Main debug scheduler for src/
 #
@@ -39,10 +35,9 @@ T('linux_rel_trigger')
 #
 # Linux Rel Builder
 #
-B('Linux Builder x64', 'rel', 'compile', 'linux_rel',
-  builddir='cr-linux-rel-x64')
+B('Linux Builder x64', 'rel', 'compile', 'linux_rel')
 F('rel', linux().ChromiumFactory(
-    slave_type='Builder',
+    slave_type='NASBuilder',
     options=['--compiler=goma', 'app_unittests', 'browser_tests',
              'googleurl_unittests', 'gpu_unittests', 'ipc_tests',
              'media_unittests', 'memory_test', 'page_cycler_tests',
@@ -58,8 +53,7 @@ F('rel', linux().ChromiumFactory(
 #
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger')
 F('rel_unit', linux().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive_x64,
+    slave_type='NASTester',
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
            'browser_tests', 'unit', 'gpu', 'base', 'net', 'safe_browsing',
            'crypto'],
@@ -67,8 +61,7 @@ F('rel_unit', linux().ChromiumFactory(
 
 B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger')
 F('rel_sync', linux().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive_x64,
+    slave_type='NASTester',
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
 
@@ -76,11 +69,6 @@ F('rel_sync', linux().ChromiumFactory(
 ################################################################################
 ## Debug
 ################################################################################
-
-dbg_shlib_archive = master_config.GetArchiveUrl('Chromium',
-                                                'Linux Builder (dbg-shlib)',
-                                                'cr-linux-dbg-shlib',
-                                                'linux')
 
 #
 # Main debug scheduler for src/
@@ -134,10 +122,9 @@ F('dbg_unit_2', linux().ChromiumFactory(
 #
 # Linux Dbg Shared Builder
 #
-B('Linux Builder (dbg-shlib)', 'dbg_shlib', 'compile', 'linux_dbg',
-   builddir='cr-linux-dbg-shlib')
+B('Linux Builder (dbg)(shlib)', 'dbg_shlib', 'compile', 'linux_dbg')
 F('dbg_shlib', linux().ChromiumFactory(
-    slave_type='Builder',
+    slave_type='NASBuilder',
     target='Debug',
     options=['--build-tool=make'],
     factory_properties={
@@ -148,12 +135,11 @@ F('dbg_shlib', linux().ChromiumFactory(
 # Linux Dbg Shared Unit testers
 #
 
-B('Linux Tests (dbg-shlib)', 'dbg_shlib_unit', 'testers',
+B('Linux Tests (dbg)(shlib)', 'dbg_shlib_unit', 'testers',
   'linux_dbg_shlib_trigger')
 F('dbg_shlib_unit', linux().ChromiumFactory(
     target='Debug',
-    slave_type='Tester',
-    build_url=dbg_shlib_archive,
+    slave_type='NASTester',
     tests=['base', 'browser_tests', 'check_deps', 'googleurl', 'media', 'net',
            'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit',
            'crypto'],
