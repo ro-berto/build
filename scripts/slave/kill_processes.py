@@ -76,7 +76,7 @@ processes = [
     # It may occur that they are left dangling if a test crashes, so we kill
     # them here too.
     'firefox.exe',
-    #'iexplore.exe',
+    'iexplore.exe',
     #'ieuser.exe',
     'acrord32.exe',
 
@@ -90,7 +90,11 @@ processes = [
     'ceee_broker.exe',
     'ceee_common_unittests.exe',
     'chrome.exe',
+    'chrome_frame_helper.exe',
+    'chrome_frame_net_tests.exe',
+    'chrome_frame_tests.exe',
     'chrome_launcher.exe',
+    'chrome_frame_unittests.exe',
     'crash_service.exe',
     'debug_message.exe',
     'DumpRenderTree.exe',
