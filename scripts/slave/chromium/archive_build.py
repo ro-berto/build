@@ -560,6 +560,21 @@ class StagerBase(object):
           MySshCopyFiles(test_file, self.options.archive_host, test_dir,
                         gs_base, '/'.join([UPLOAD_DIR, relative_dir]))
 
+  def _UploadDevtoolsFrontendZip(self, www_dir, gs_base):
+    zipfile = os.path.join(self._build_dir, 'devtools_frontend.zip')
+    if not os.path.exists(zipfile):
+      return
+    if chromium_utils.IsWindows():
+      print 'chromium_utils.CopyFileToDir(%s, %s)' % (zipfile, www_dir)
+      if not self.options.dry_run:
+        MyCopyFileToDir(zipfile, www_dir, gs_base)
+    elif chromium_utils.IsLinux() or chromium_utils.IsMac():
+      print 'SshCopyFiles(%s, %s, %s)' % (zipfile, self.options.archive_host,
+                                          www_dir)
+      if not self.options.dry_run:
+        MyMakeWorldReadable(zipfile, gs_base)
+        MySshCopyFiles(zipfile, self.options.archive_host, www_dir, gs_base)
+
   def _GenerateChangeLog(self, previous_revision, changelog_path):
     """We need to generate change log for both chrome and webkit repository."""
     regex = re.compile(r'<\?xml.*\?>')
@@ -692,6 +707,8 @@ class StagerBase(object):
       else:
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
+
+    self._UploadDevtoolsFrontendZip(www_dir, gs_base)
 
     if len(not_found):
       sys.stderr.write('\n\nWARNING: File(s) not found: %s\n' %
