@@ -136,6 +136,7 @@ def main_xcode(options, args):
   if options.clobber:
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
         'xcodebuild')
+    print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
 
   env = os.environ.copy()
@@ -323,6 +324,7 @@ def main_make(options, args):
     options.goma_dir = os.path.join(BUILD_DIR, 'goma')
   if options.clobber:
     build_output_dir = os.path.join(working_dir, 'out', options.target)
+    print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
 
   # Lots of test-execution scripts hard-code 'sconsbuild' as the output
@@ -383,6 +385,7 @@ def main_scons(options, args):
   if options.clobber:
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
                                     'sconsbuild', options.target)
+    print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
 
   os.chdir(options.build_dir)
@@ -424,8 +427,8 @@ def main_scons_v8(options, args):
   """
   options.build_dir = os.path.abspath(options.build_dir)
   if options.clobber:
-    build_output_dir = os.path.join(options.build_dir,
-                                    'obj')
+    build_output_dir = os.path.join(options.build_dir, 'obj')
+    print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
 
   os.chdir(options.build_dir)
@@ -511,7 +514,7 @@ def main_win(options, args):
   options.build_dir = os.path.abspath(options.build_dir)
   build_output_dir = os.path.join(options.build_dir, options.target)
   if options.clobber:
-    print('Deleting %s...' % build_output_dir)
+    print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
   else:
     # Remove the log file so it doesn't grow without limit,
@@ -583,7 +586,7 @@ def main_win(options, args):
   if errors:
     print('Retrying a clobber build because of:')
     print('\n'.join(('  ' + l for l in errors)))
-    print('Deleting %s...' % build_output_dir)
+    print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
     result = chromium_utils.RunCommand(command, env=env)
   return result
