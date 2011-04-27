@@ -521,13 +521,16 @@ twistd.pid
 /masters/master.client.nacl.sdk/windows-sdk
 /masters/master.client.nacl.sdk/windows-sdk-trout
 /masters/master.client.nacl.toolchain/hardy32-modular-build-glibc-incr
+/masters/master.client.nacl.toolchain/hardy32-toolchain_arm-trusted/
 /masters/master.client.nacl.toolchain/hardy32-toolchain_x86
 /masters/master.client.nacl.toolchain/hardy64-glibc
 /masters/master.client.nacl.toolchain/hardy64-modular-build-glibc
 /masters/master.client.nacl.toolchain/hardy64-modular-build-glibc-incr
+/masters/master.client.nacl.toolchain/hardy64-toolchain_arm-untrusted/
 /masters/master.client.nacl.toolchain/linux-armtools-x86_32
 /masters/master.client.nacl.toolchain/linux-pnacl-x86_32
 /masters/master.client.nacl.toolchain/linux-pnacl-x86_64
+/masters/master.client.nacl.toolchain/lucid32-toolchain_arm-untrusted/
 /masters/master.client.nacl.toolchain/lucid64-glibc
 /masters/master.client.nacl.toolchain/mac-glibc
 /masters/master.client.nacl.toolchain/mac-modular-build-glibc-incr
@@ -659,6 +662,7 @@ twistd.pid
 /masters/master.tryserver.chromium/win_layout_7
 /masters/master.tryserver.chromium/win_layout_rel
 /masters/master.tryserver.chromium/win_rel
+/masters/master.tryserver.chromium/win_shared
 /masters/master.tryserver.chromium/win_sync
 /masters/master.tryserver.nacl/.code_review_password
 /masters/master.tryserver.nacl/gyp-linux
