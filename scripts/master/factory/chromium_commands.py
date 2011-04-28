@@ -560,7 +560,7 @@ class ChromiumCommands(commands.FactoryCommands):
       test_cmd = ['python2.6', script] + args
     elif self._target_platform == 'linux2':
       # Run thru runtest.py on linux to launch virtual x server
-      test_cmd = self.GetTestCommand('/usr/bin/python',
+      test_cmd = self.GetTestCommand('/usr/local/bin/python2.6',
                                      [script] + args)
 
     self.AddTestStep(retcode_command.ReturnCodeCommand,
