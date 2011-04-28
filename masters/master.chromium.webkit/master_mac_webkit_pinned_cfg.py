@@ -49,7 +49,7 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
 #
 # Mac Rel Webkit testers
 #
-B('Webkit Mac10.5 (deps)', 'f_webkit_rel_tests',
+B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests',
   scheduler='s2_chromium_rel_dep')
 F('f_webkit_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
@@ -90,7 +90,7 @@ F('f_webkit_mac_dbg', mac().ChromiumFactory(
 # Mac Dbg Webkit testers
 #
 
-B('Webkit Mac10.5 (deps)(dbg)(1)', 'f_webkit_dbg_tests_1',
+B('Webkit Mac10.6 (deps)(dbg)(1)', 'f_webkit_dbg_tests_1',
   scheduler='s2_chromium_dbg_dep')
 F('f_webkit_dbg_tests_1', mac().ChromiumFactory(
     target='Debug',
@@ -101,7 +101,7 @@ F('f_webkit_dbg_tests_1', mac().ChromiumFactory(
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
-B('Webkit Mac10.5 (deps)(dbg)(2)', 'f_webkit_dbg_tests_2',
+B('Webkit Mac10.6 (deps)(dbg)(2)', 'f_webkit_dbg_tests_2',
   scheduler='s2_chromium_dbg_dep')
 F('f_webkit_dbg_tests_2', mac().ChromiumFactory(
     target='Debug',
