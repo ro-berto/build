@@ -557,7 +557,7 @@ class ChromiumCommands(commands.FactoryCommands):
       py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')
       test_cmd = ['cmd', '/C'] + [py26, script] + args
     elif self._target_platform == 'darwin':
-      test_cmd = ['python2.5', script] + args
+      test_cmd = ['python2.6', script] + args
     elif self._target_platform == 'linux2':
       # Run thru runtest.py on linux to launch virtual x server
       test_cmd = self.GetTestCommand('/usr/bin/python',
