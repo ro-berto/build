@@ -157,13 +157,11 @@ class StagerBase(object):
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
     elif chromium_utils.IsLinux():
       self._build_dir = os.path.join(os.path.dirname(options.build_dir),
-                                     'sconsbuild',
-                                     options.target)
+                                     'out', options.target)
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'linux')
     elif chromium_utils.IsMac():
       self._build_dir = os.path.join(os.path.dirname(options.build_dir),
-                                     'xcodebuild',
-                                     options.target)
+                                     'xcodebuild', options.target)
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'mac')
     else:
       raise NotImplementedError(
