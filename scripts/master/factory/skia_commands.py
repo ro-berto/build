@@ -24,10 +24,34 @@ class SkiaCommands(commands.FactoryCommands):
     self._arch = target_arch
     self._factory = factory
 
+  def AddClean(self):
+    """Does a 'make clean'"""
+    cmd = 'make -C Skia clean'
+    self._factory.addStep(shell.ShellCommand,
+                          description='Clean',
+                          timeout=600,
+                          command=cmd)
+
   def AddBuild(self):
     """Adds a compile step to the build."""
     cmd = 'make -C Skia'
     self._factory.addStep(shell.ShellCommand,
                           description='Build',
+                          timeout=600,
+                          command=cmd)
+
+  def AddBuildTests(self):
+    """Builds the skia tests."""
+    cmd = 'make -C Skia tests'
+    self._factory.addStep(shell.ShellCommand,
+                          description='BuildTests',
+                          timeout=600,
+                          command=cmd)
+
+  def AddRunTests(self):
+    """Runs the skia tests."""
+    cmd = './Skia/out/tests/tests'
+    self._factory.addStep(shell.ShellCommand,
+                          description='RunTests',
                           timeout=600,
                           command=cmd)

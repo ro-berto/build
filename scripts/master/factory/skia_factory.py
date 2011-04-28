@@ -35,6 +35,9 @@ class SkiaFactory(gclient_factory.GClientFactory):
                                               self.target_platform,
                                               target_arch)
 
+    skia_cmd_obj.AddClean()
     skia_cmd_obj.AddBuild()
+    skia_cmd_obj.AddBuildTests()
+    skia_cmd_obj.AddRunTests()
 
     return factory
