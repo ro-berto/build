@@ -170,8 +170,8 @@ def GenerateAndUploadJSONResults(gtest_results_map, options):
       test_type=options.test_type,
       master_name=options.master_name)
   generator.generate_json_output()
-  generator.generate_full_results_file()
-  generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME])
+  generator.generate_times_ms_file()
+  generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME, TIMES_MS_FILENAME])
 
 
 # For command-line testing.
