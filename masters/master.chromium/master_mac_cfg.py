@@ -80,9 +80,6 @@ F('rel_sync', mac().ChromiumFactory(
 ## Debug
 ################################################################################
 
-dbg_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder (dbg)',
-                                          'cr-mac-dbg', 'mac')
-
 #
 # Main debug scheduler for src/
 #
@@ -96,10 +93,10 @@ T('mac_dbg_trigger')
 #
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', builddir='cr-mac-dbg')
+B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg')
 F('dbg', mac().ChromiumFactory(
     target='Debug',
-    slave_type='Builder',
+    slave_type='NASBuilder',
     options=['--', '-target', 'chromium_builder_tests'],
     factory_properties={'trigger': 'mac_dbg_trigger'}))
 
@@ -107,35 +104,38 @@ F('dbg', mac().ChromiumFactory(
 # Mac Dbg Unit testers
 #
 
-B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger')
+B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
 F('dbg_unit_1', mac().ChromiumFactory(
-  slave_type='Tester',
+  slave_type='NASTester',
   target='Debug',
-  build_url=dbg_archive,
   tests=['check_deps', 'media', 'printing', 'remoting', 'unit', 'googleurl',
          'nacl_ui', 'nacl_integration', 'nacl_sandbox', 'gpu', 'interactive_ui',
          'base', 'crypto', 'safe_browsing'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger')
+B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
 F('dbg_unit_2', mac().ChromiumFactory(
-  slave_type='Tester',
+  slave_type='NASTester',
   target='Debug',
-  build_url=dbg_archive,
   tests=['ui', 'net'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger')
+B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
 F('dbg_unit_3', mac().ChromiumFactory(
-  slave_type='Tester',
+  slave_type='NASTester',
   target='Debug',
-  build_url=dbg_archive,
   tests=['browser_tests'],
   factory_properties={'generate_gtest_json': True}))
 
-B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger')
-B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger')
-B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger')
+B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
+B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
+B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
 
 #
 # Mac Dbg Clang bot
