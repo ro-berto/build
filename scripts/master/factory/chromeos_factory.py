@@ -35,9 +35,8 @@ class CbuildbotFactory(object):
       chromite_repo: git repo for chromite toolset.
       dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
   """
-
-  _default_git_base = 'ssh://git@gitrw.chromium.org:9222'
-  _default_crostools = _default_git_base + '/crostools'
+  _default_git_base = 'http://gerrit.chromium.org/gerrit/p/chromiumos'
+  _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
   _default_chromite = _default_git_base + '/chromite'
 
   # Redefining built-in 'type'
