@@ -51,7 +51,8 @@ F('rel', linux().ChromiumFactory(
 #
 # Linux Rel testers
 #
-B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger')
+B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
+  auto_reboot=True)
 F('rel_unit', linux().ChromiumFactory(
     slave_type='NASTester',
     tests=['check_deps', 'googleurl', 'media', 'printing', 'remoting', 'ui',
@@ -59,7 +60,7 @@ F('rel_unit', linux().ChromiumFactory(
            'crypto'],
     factory_properties={'generate_gtest_json': True}))
 
-B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger')
+B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True)
 F('rel_sync', linux().ChromiumFactory(
     slave_type='NASTester',
     tests=['sync_integration'],
@@ -102,14 +103,16 @@ F('dbg', linux().ChromiumFactory(
 # Linux Dbg Unit testers
 #
 
-B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger')
+B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
+  auto_reboot=True)
 F('dbg_unit_1', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
     tests=['check_deps', 'net', 'browser_tests'],
     factory_properties={'generate_gtest_json': True}))
 
-B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger')
+B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
+  auto_reboot=True)
 F('dbg_unit_2', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
@@ -136,7 +139,7 @@ F('dbg_shlib', linux().ChromiumFactory(
 #
 
 B('Linux Tests (dbg)(shlib)', 'dbg_shlib_unit', 'testers',
-  'linux_dbg_shlib_trigger')
+  'linux_dbg_shlib_trigger', auto_reboot=True)
 F('dbg_shlib_unit', linux().ChromiumFactory(
     target='Debug',
     slave_type='NASTester',
