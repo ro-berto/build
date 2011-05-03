@@ -111,7 +111,7 @@ class V8Commands(commands.FactoryCommands):
     cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'sputnik']
     self.AddTestStep(shell.ShellCommand, 'Sputnik', cmd,
-                     workdir='build/v8/')
+                     timeout=3600, workdir='build/v8/')
 
   def AddPresubmitTest(self, properties=None):
     cmd = [self._python, self._v8testing_tool,
