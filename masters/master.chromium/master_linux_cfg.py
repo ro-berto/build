@@ -77,10 +77,9 @@ F('rel_sync', linux().ChromiumFactory(
 S('linux_dbg', branch='src', treeStableTimer=60)
 
 #
-# Triggerable scheduler for the dbg builders
+# Triggerable scheduler for the dbg builder
 #
 T('linux_dbg_trigger')
-T('linux_dbg_shlib_trigger')
 
 #
 # Linux Dbg Builder
@@ -120,32 +119,6 @@ F('dbg_unit_2', linux().ChromiumFactory(
            'gpu', 'interactive_ui',
            'ui', 'plugin', 'googleurl', 'media', 'printing', 'remoting',
            'base', 'safe_browsing', 'crypto'],
-    factory_properties={'generate_gtest_json': True}))
-
-#
-# Linux Dbg Shared Builder
-#
-B('Linux Builder (dbg)(shlib)', 'dbg_shlib', 'compile', 'linux_dbg')
-F('dbg_shlib', linux().ChromiumFactory(
-    slave_type='NASBuilder',
-    target='Debug',
-    options=['--build-tool=make'],
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES':'library=shared_library'},
-        'trigger': 'linux_dbg_shlib_trigger'}))
-
-#
-# Linux Dbg Shared Unit testers
-#
-
-B('Linux Tests (dbg)(shlib)', 'dbg_shlib_unit', 'testers',
-  'linux_dbg_shlib_trigger', auto_reboot=True)
-F('dbg_shlib_unit', linux().ChromiumFactory(
-    target='Debug',
-    slave_type='NASTester',
-    tests=['base', 'browser_tests', 'check_deps', 'googleurl', 'media', 'net',
-           'printing', 'remoting', 'sizes', 'test_shell', 'ui', 'unit',
-           'crypto'],
     factory_properties={'generate_gtest_json': True}))
 
 #
