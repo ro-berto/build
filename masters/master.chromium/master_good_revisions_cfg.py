@@ -28,6 +28,9 @@ good_revision_steps = {
   'Vista Tests (dbg)(5)': [
     'ui_tests', 'browser_tests',
   ],
+  'Vista Tests (dbg)(6)': [
+    'ui_tests', 'browser_tests',
+  ],
   'Interactive Tests (dbg)': [
     'interactive_ui_tests',
   ],
