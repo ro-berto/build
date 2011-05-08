@@ -7,27 +7,6 @@ from master import build_utils
 from buildbot.changes.pb import PBChangeSource
 from buildbot.changes import svnpoller
 
-def ChromeTreeFileSplitter(path):
-  """split_file for the 'src' project in the trunk."""
-
-  # Exclude o3d from triggering builds on chrome for now.
-  if path.startswith('src/o3d/'):
-    return None
-
-  # List of projects we are interested in. The project names must exactly
-  # match paths in the Subversion repository, relative to the 'path' URL
-  # argument. build_utils.SplitPath() will use them as branch names to
-  # kick off the Schedulers for different projects.
-  projects = ['src']
-  return build_utils.SplitPath(projects, path)
-
 def Update(config, active_master, c):
   # Polls config.Master.trunk_url for changes
-  viewvc_url = "http://src.chromium.org/viewvc/chrome?view=rev&revision=%s"
-  poller = svnpoller.SVNPoller(svnurl=config.Master.trunk_url,
-                               split_file=ChromeTreeFileSplitter,
-                               pollinterval=10,
-                               revlinktmpl=viewvc_url,
-                               category='svnpoller')
-  c['change_source'].append(poller)
   c['change_source'].append(PBChangeSource())
