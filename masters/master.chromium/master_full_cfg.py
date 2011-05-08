@@ -18,7 +18,7 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
-defaults['category'] = '1full'
+defaults['category'] = '1clobber'
 
 # Global scheduler
 S('chromium', branch='src', treeStableTimer=60)
@@ -30,14 +30,11 @@ T('reliability')
 ## Windows
 ################################################################################
 
-B('Win', 'win_full', 'compile|windows', 'chromium')
-F('win_full', win().ChromiumFactory(
+B('Win', 'win_clobber', 'compile|windows', 'chromium')
+F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
-    tests=['sizes', 'selenium', 'unit', 'ui', 'test_shell', 'memory',
-           'reliability', 'printing', 'remoting', 'check_deps',
-           'browser_tests', 'courgette', 'check_bins', 'webkit_unit',
-           'chrome_frame_unittests', 'gpu', 'installer'],
+    tests=['sizes', 'selenium', 'memory', 'reliability', 'check_bins'],
     factory_properties={'archive_build': True,
                         'extra_archive_paths': 'ceee,chrome_frame',
                         'show_perf_results': True,
@@ -54,11 +51,10 @@ F('win_reliability', linux().ReliabilityTestsFactory())
 ## Mac
 ################################################################################
 
-B('Mac', 'mac_full', 'compile|testers', 'chromium')
-F('mac_full', mac().ChromiumFactory(
+B('Mac', 'mac_clobber', 'compile|testers', 'chromium')
+F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
-    tests=['sizes', 'unit', 'ui', 'dom_checker', 'test_shell', 'memory',
-           'printing', 'remoting', 'browser_tests', 'webkit_unit', 'gpu'],
+    tests=['sizes', 'dom_checker', 'memory'],
     factory_properties={'archive_build': True,
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-mac',
@@ -94,13 +90,10 @@ arm_gclient_env = {
   ),
 }
 
-B('Linux', 'linux_full', 'compile|testers', 'chromium')
-F('linux_full', linux().ChromiumFactory(
+B('Linux', 'linux_clobber', 'compile|testers', 'chromium')
+F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['unit', 'ui', 'dom_checker', 'googleurl', 'media', 'printing',
-           'remoting', 'sizes', 'test_shell', 'memory', 'browser_tests',
-           'webkit_unit', 'nacl_ui', 'nacl_integration', 'nacl_sandbox',
-           'gpu', 'check_perms'],
+    tests=['dom_checker', 'sizes', 'memory', 'check_perms'],
     options=['--compiler=goma'],
     factory_properties={'archive_build': True,
                         'show_perf_results': True,
@@ -108,12 +101,10 @@ F('linux_full', linux().ChromiumFactory(
                         'expectations': True,
                         'generate_gtest_json': True,}))
 
-B('Linux x64', 'linux64_full', 'compile|testers', 'chromium')
-F('linux64_full', linux().ChromiumFactory(
+B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium')
+F('linux64_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['base', 'net', 'unit', 'ui', 'dom_checker', 'googleurl', 'media',
-           'printing', 'remoting', 'sizes', 'test_shell', 'memory',
-           'browser_tests', 'webkit_unit', 'gpu', 'crypto'],
+    tests=['dom_checker', 'sizes', 'memory'],
     options=['--compiler=goma'],
     factory_properties={
         'archive_build': True,
@@ -123,8 +114,8 @@ F('linux64_full', linux().ChromiumFactory(
         'expectations': True,
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-B('Arm', 'arm_full', 'compile|testers', 'chromium')
-F('arm_full', linux().ChromiumOSFactory(
+B('Arm', 'arm_clobber', 'compile|testers', 'chromium')
+F('arm_clobber', linux().ChromiumOSFactory(
     clobber=True,
     target='Release',
     tests=[],
