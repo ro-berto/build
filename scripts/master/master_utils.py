@@ -70,7 +70,7 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
       slave_class = AutoRebootBuildSlave
     else:
       slave_class = BuildSlave
-      
+
     if notify_on_missing:
       slaves.append(slave_class(slavename, bot_password, max_builds=max_builds,
                                 notify_on_missing=missing_recipients,
@@ -131,6 +131,18 @@ def VerifySetup(c, slaves):
       if not b in builders_name:
         raise InvalidConfig('Slave %s uses non-existent builder %s' % (name,
                                                                        b))
+
+class UsersAreEmails(util.ComparableMixin):
+  """Chromium already uses email addresses as user name so no need to do
+  anything.
+  """
+  # Class has no __init__ method
+  # pylint: disable=W0232
+  implements(interfaces.IEmailLookup)
+
+  @staticmethod
+  def getAddress(name):
+    return name
 
 
 class FilterDomain(util.ComparableMixin):
