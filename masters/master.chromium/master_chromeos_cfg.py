@@ -109,7 +109,6 @@ arm_dbg_factory_properties = {
 
 B('Arm (dbg)', 'arm_dbg', 'compile', 'chromeos_dbg')
 F('arm_dbg', chromeos().ChromiumOSFactory(
-    clobber=True,
     target='Debug',
     tests=[],
     compile_timeout=14400,
