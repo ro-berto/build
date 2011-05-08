@@ -12,6 +12,7 @@ B = helper.Builder
 D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
+T = helper.Triggerable
 
 def chromeos(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
@@ -52,23 +53,36 @@ F('rel', chromeos().ChromiumOSFactory(
 S('chromeos_dbg', branch='src', treeStableTimer=60)
 
 #
-# ChromeOS Dbg Builder
+# Triggerable scheduler for the builders
+#
+T('linux_cros_dbg_trigger')
+T('linux_views_dbg_trigger')
+
+#
+# ChromeOS Dbg Builders and Testers
 #
 B('Linux Builder (ChromiumOS dbg)', 'cros_dbg', 'compile', 'chromeos_dbg')
 F('cros_dbg', chromeos().ChromiumOSFactory(
+    slave_type='NASBuilder',
     target='Debug',
-    tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
-           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
     options=['--compiler=goma', 'chromeos_builder'],
     factory_properties={
         'gclient_env': { 'GYP_DEFINES':'chromeos=1'},
-        'generate_gtest_json': True}))
+        'trigger': 'linux_cros_dbg_trigger'}))
 
-B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
-F('view_dbg', chromeos().ChromiumOSFactory(
+B('Linux Tester (ChromiumOS dbg)', 'cros_dbg_tests', 'testers',
+  'linux_cros_dbg_trigger')
+F('cros_dbg_tests', chromeos().ChromiumOSFactory(
+    slave_type='NASTester',
     target='Debug',
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
+    factory_properties={'generate_gtest_json': True}))
+
+B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
+F('view_dbg', chromeos().ChromiumOSFactory(
+    slave_type='NASBuilder',
+    target='Debug',
     options=['--compiler=goma', 'app_unittests', 'base_unittests',
              'browser_tests', 'interactive_ui_tests', 'ipc_tests',
              'googleurl_unittests', 'media_unittests', 'net_unittests',
@@ -76,7 +90,16 @@ F('view_dbg', chromeos().ChromiumOSFactory(
              'ui_tests', 'unit_tests', 'views_unittests', 'gfx_unittests',
              'crypto_unittests'],
     factory_properties={'gclient_env': { 'GYP_DEFINES':'toolkit_views=1'},
-                        'generate_gtest_json': True}))
+                        'trigger': 'linux_views_dbg_trigger'}))
+
+B('Linux Tester (Views dbg)', 'view_dbg_tests', 'testers',
+  'linux_views_dbg_trigger')
+F('view_dbg_tests', chromeos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
+           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
+    factory_properties={'generate_gtest_json': True}))
 
 
 crosstool_prefix = (
