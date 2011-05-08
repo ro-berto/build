@@ -36,6 +36,9 @@ TEST_FILE_NAME = 'TESTS'
 
 class StagingError(Exception):
   pass
+  
+class GSUtilError(Exception):
+  pass
 
 
 def ExpandWildcards(base_dir, path_list):
@@ -104,36 +107,32 @@ def Write(file_path, data):
 
 def MyCopyFileToDir(filename, destination, gs_base, gs_subdir=None):
   if gs_base:
-    return slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir)
-
-  return chromium_utils.CopyFileToDir(filename, destination)
+    status = slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir)
+    if status != 0:
+      dest = gs_base + '/' + gs_subdir
+      raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
+                                                                   filename,
+                                                                   dest))
+  else:
+    chromium_utils.CopyFileToDir(filename, destination)
 
 def MyMaybeMakeDirectory(destination, gs_base):
-  if gs_base:
-    # No Op.
-    return True
-
-  return chromium_utils.MaybeMakeDirectory(destination)
+  if not gs_base:
+    chromium_utils.MaybeMakeDirectory(destination)
 
 def MyMakeWorldReadable(destination, gs_base):
-  if gs_base:
-    # No Op.
-    return True
-
-  return chromium_utils.MakeWorldReadable(destination)
+  if not gs_base:
+    chromium_utils.MakeWorldReadable(destination)
 
 def MySshMakeDirectory(host, destination, gs_base):
-  if gs_base:
-    # No Op.
-    return True
-
-  return chromium_utils.SshMakeDirectory(host, destination)
+  if not gs_base:
+    chromium_utils.SshMakeDirectory(host, destination)
 
 def MySshCopyFiles(filename, host, destination, gs_base, gs_subdir=None):
   if gs_base:
-    return slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir)
-
-  return chromium_utils.SshCopyFiles(filename, host, destination)
+    MyCopyFileToDir(filename, destination, gs_base, gs_subdir)
+  else:
+    chromium_utils.SshCopyFiles(filename, host, destination)
 
 class StagerBase(object):
   """Handles archiving a build. Call the public ArchiveBuild() method."""
