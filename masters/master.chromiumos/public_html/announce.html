@@ -70,16 +70,21 @@
       <td width="72%">
         <table width="100%">
           <script language="javascript">
+            var chrome = [
+                "builder=x86+generic+tot+chrome+pre+flight+queue",
+                "builder=x86+generic+chrome+pre+flight+queue",
+            ].join("&");
             var arm = [
-                "builder=arm+generic+bin",
+                "builder=arm+generic+binary",
                 "builder=arm+generic+full",
-                "builder=arm+tegra2+bin",
+                "builder=arm+tegra2+binary",
                 "builder=arm+tegra2+full",
+                "builder=arm+tegra2+seaboard+full",
             ].join("&");
             var x86 = [
-                "builder=x86+generic+bin",
+                "builder=x86+generic+pre+flight+queue",
                 "builder=x86+generic+full",
-                "builder=x86+pineview+bin",
+                "builder=x86+pineview+binary",
                 "builder=x86+pineview+full",
             ].join("&");
 
@@ -100,9 +105,9 @@
             function DisplayBar(content, name) {
               document.write("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
             }
-
-            DisplayBar(arm, "arm");
             DisplayBar(x86, "x86");
+            DisplayBar(arm, "arm");
+            DisplayBar(chrome, "chrome");
           </script>
         </table>
       </td>
