@@ -116,36 +116,43 @@
         <table width="100%">
           <script language="javascript">
             var chromium = ""
-            var webkit = "builder=Webkit+Win+Builder+%28deps%29&builder=Webkit+Win+%28deps%29&builder=Webkit+Win+Builder+%28deps%29%28dbg%29&builder=Webkit+Win+%28deps%29%28dbg%29%281%29&builder=Webkit+Win+%28deps%29%28dbg%29%282%29&builder=Webkit+Mac+Builder+%28deps%29&builder=Webkit+Mac10.5+%28deps%29&builder=Webkit+Mac+Builder+%28deps%29%28dbg%29&builder=Webkit+Mac10.5+%28deps%29%28dbg%29%281%29&builder=Webkit+Mac10.5+%28deps%29%28dbg%29%282%29&builder=Webkit+Linux+%28deps%29&builder=Webkit+Linux+Builder+%28deps%29%28dbg%29&builder=Webkit+Linux+%28deps%29%28dbg%29%281%29&builder=Webkit+Linux+%28deps%29%28dbg%29%282%29"
+            var webkit = "builder=Webkit%20Win%20Builder%20%28deps%29&builder=Webkit%20Win%20%28deps%29&builder=Webkit%20Win%20Builder%20%28deps%29%28dbg%29&builder=Webkit%20Win%20%28deps%29%28dbg%29%281%29&builder=Webkit%20Win%20%28deps%29%28dbg%29%282%29&builder=Webkit%20Mac%20Builder%20%28deps%29&builder=Webkit%20Mac10.6%20%28deps%29&builder=Webkit%20Mac%20Builder%20%28deps%29%28dbg%29&builder=Webkit%20Mac10.6%20%28deps%29%28dbg%29%281%29&builder=Webkit%20Mac10.6%20%28deps%29%28dbg%29%282%29&builder=Webkit%20Linux%20%28deps%29&builder=Webkit%20Linux%20Builder%20%28deps%29%28dbg%29&builder=Webkit%20Linux%20%28deps%29%28dbg%29%281%29&builder=Webkit%20Linux%20%28deps%29%28dbg%29%282%29"
             var memory = ""
             var perf = ""
             var chrome = ""
+            var lkgr = ""
 
             var bar = "http://build.chromium.org/p/chromium/horizontal_one_box_per_builder"
             var bar_webkit = "http://build.chromium.org/p/chromium.webkit/horizontal_one_box_per_builder"
             var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder"
             var bar_perf = "http://build.chromium.org/p/chromium.perf/horizontal_one_box_per_builder"
             var bar_chrome = "http://build.chromium.org/p/chromium.chrome/horizontal_one_box_per_builder"
+            var bar_lkgr = "http://build.chromium.org/p/chromium.lkgr/horizontal_one_box_per_builder"
 
             var waterfall = "../chromium/waterfall"
             var waterfall_webkit = "../chromium.webkit/waterfall"
             var waterfall_memory = "../chromium.memory/waterfall"
             var waterfall_chrome = "../chromium.chrome/waterfall"
             var waterfall_perf = "../chromium.perf/waterfall"
+            var waterfall_lkgr = "../chromium.lkgr/waterfall"
 
             function GetUrl(type, content) {
               return type + "?" + content;
             }
 
             function DisplayBar(waterfall_url, bar_url, content, name) {
-              document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td  colspan=3 width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
+              document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td  colspan=5 width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
 
             DisplayBar(waterfall, bar, chromium, "Chromium");
             DisplayBar(waterfall_webkit, bar_webkit, webkit, "Webkit");
             DisplayBar(waterfall_perf, bar_perf, perf, "Perf");
 
-            document.write("<tr><td><a href='" + GetUrl(waterfall_chrome, chrome) + "'>" + "Official"+ "</a></td><td width='24%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_chrome, chrome) + "'></iframe></td> <td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='74%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
+            document.write("<tr>");
+            document.write("<td><a href='" + GetUrl(waterfall_chrome, chrome) + "'>" + "Official"+ "</a></td><td width='15%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_chrome, chrome) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_lkgr, lkgr) + "'>" + "LKGR"+ "</a></td><td width='12%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_lkgr, lkgr) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='73%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
+            document.write("</tr>");
           </script>
         </table>
       </td>
