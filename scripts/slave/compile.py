@@ -356,10 +356,6 @@ def main_make(options, args):
     command.extend(['V=1'])
   command.extend(options.build_args + args)
 
-  # Force serial linking, otherwise too many links make bots run out of memory
-  # (scons does this with 'scons_variable_settings' in common.gypi).
-  env['LINK'] = 'flock %s/linker.lock \$(CXX)' % sconsbuild
-
   # If using the Goma compiler, first call goma_ctl with ensure_start
   # (or restart in clobber mode) to ensure the proxy is available.
   goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
