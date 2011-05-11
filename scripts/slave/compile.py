@@ -162,7 +162,13 @@ def main_xcode(options, args):
       chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
-  return chromium_utils.RunCommand(command, env=env)
+  result = chromium_utils.RunCommand(command, env=env)
+
+  if options.compiler == 'goma':
+    # Always stop the proxy for now to allow in-place update.
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+
+  return result
 
 
 DISTRIBUTION_FILE = '/etc/lsb-release'
@@ -371,7 +377,13 @@ def main_make(options, args):
       chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
-  return chromium_utils.RunCommand(command, env=env)
+  result = chromium_utils.RunCommand(command, env=env)
+
+  if options.compiler == 'goma':
+    # Always stop the proxy for now to allow in-place update.
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+
+  return result
 
 
 def main_scons(options, args):
