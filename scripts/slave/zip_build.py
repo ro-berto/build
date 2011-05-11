@@ -22,6 +22,49 @@ class StagingError(Exception): pass
 
 WARNING_EXIT_CODE = 88
 
+
+def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext):
+  # Build an ordered list of build numbers we have zip files for.
+  regexp = re.compile(zip_base + '_([0-9]+)(_old)?' + zip_ext)
+  build_list = []
+  for x in zip_list:
+    regexp_match = regexp.match(os.path.basename(x))
+    if regexp_match:
+      build_list.append(int(regexp_match.group(1)))
+  # Since we match both ###.zip and ###_old.zip, bounce through a set and back
+  # to a list to get an order list of build numbers.
+  build_list = list(set(build_list))
+  build_list.sort()
+  # Only keep the last 10 number (that means we could have 20 due to _old files
+  # if someone forced a respin of every single one)
+  saved_build_list = build_list[-10:]
+  ordered_asc_by_build_number_list = []
+  for saved_build in saved_build_list:
+    recent_name = zip_base + ('_%d' % saved_build) + zip_ext
+    ordered_asc_by_build_number_list.append(recent_name)
+    ordered_asc_by_build_number_list.append(
+        recent_name.replace(zip_ext, '_old' + zip_ext))
+  return ordered_asc_by_build_number_list
+
+
+def GetRecentBuildsByModificationTime(zip_list):
+  """Return the 10 most recent builds by modification time."""
+  # Get the modification times for all of the entries in zip_list.
+  mtimes_to_files = {}
+  for zip_file in zip_list:
+    mtime = int(os.stat(zip_file).st_mtime)
+    mtimes_to_files.setdefault(mtime, [])
+    mtimes_to_files[mtime].append(zip_file)
+  # Order all files in our list by modification time.
+  mtimes_to_files_keys = mtimes_to_files.keys()
+  mtimes_to_files_keys.sort()
+  ordered_asc_by_mtime_list = []
+  for key in mtimes_to_files_keys:
+    ordered_asc_by_mtime_list.extend(mtimes_to_files[key])
+  # Return the most recent 10 builds.
+  return ordered_asc_by_mtime_list[-10:]
+
+
 def archive(options, args):
   # Create some variables
   src_dir = os.path.abspath(options.src_dir)
@@ -176,56 +219,19 @@ def archive(options, args):
 
   # Now before we finish, trim out old builds to make sure we don't
   # fill the disk completely.
-
   stage_dir = os.path.dirname(zip_file)
-  regexp = re.compile(zip_base + '_([0-9]+)(_old)?' + zip_ext)
   zip_list = glob.glob(os.path.join(stage_dir, zip_base + '_*' + zip_ext))
-  # Build an ordered list of build numbers we have zip files for.
-  build_list = []
-  for x in zip_list:
-    regexp_match = regexp.match(os.path.basename(x))
-    if regexp_match:
-      build_list.append(int(regexp_match.group(1)))
-  # Since we match both ###.zip and ###_old.zip, bounce through a set and back
-  # to a list to get an order list of build numbers.
-  build_list = list(set(build_list))
-  build_list.sort()
-  # Only keep the last 15 number (that means we could have 30 due to _old files
-  # if someone forced a respin of every single one)
-  trim_build_list = build_list[:-15]
-  for x in trim_build_list:
-    prune_name = zip_base + ('_%d' % x) + zip_ext
-    print 'Pruning build %d' % x
-    chromium_utils.RemoveFile(stage_dir, prune_name)
-    chromium_utils.RemoveFile(stage_dir,
-                              prune_name.replace(zip_ext, '_old' + zip_ext))
+  saved_zip_list = GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext)
+  saved_mtime_list = GetRecentBuildsByModificationTime(zip_list)
 
-  # Make sure there is enough disk space left for the next run (a rough estimate
-  # is that 5X the last zip file size is enough to hold the next staging_dir and
-  # zip_file). If disk space is running low, trim more old builds.
-  # TODO(mmoss): Does this work on other platforms? I'm mainly worried about
-  # Chromium Linux Builder (dbg), since that's always low on space, but there's
-  # no reason this shouldn't run everywhere if it can.
-  if chromium_utils.IsLinux():
-    # Keep at least three old builds for lagging testers. If disk space gets too
-    # low even to allow that, then it's time to resize the bots.
-    min_space = zip_size * 5
-    bonus_build_list = build_list[-15:-3]
-    disk_stat = os.statvfs(zip_file)
-    disk_space = disk_stat.f_bsize * disk_stat.f_bavail
-    while (disk_space < min_space) and bonus_build_list:
-      x = bonus_build_list.pop(0)
-      prune_name = zip_base + ('_%d' % x) + zip_ext
-      print 'Low disk space: Pruning build %d' % x
-      chromium_utils.RemoveFile(stage_dir, prune_name)
-      chromium_utils.RemoveFile(stage_dir,
-                                prune_name.replace(zip_ext, '_old' + zip_ext))
-      disk_stat = os.statvfs(zip_file)
-      disk_space = disk_stat.f_bsize * disk_stat.f_bavail
-    if (disk_space < min_space) and not bonus_build_list:
-      print ('Disk space is very low (%.1fGB) with no builds to prune.' %
-             (disk_space / float(1000000000)))
-      return WARNING_EXIT_CODE
+  # Trim old builds.
+  trim_zip_list = []
+  for zip_file in zip_list:
+    if zip_file not in saved_zip_list and zip_file not in saved_mtime_list:
+      trim_zip_list.append(zip_file)
+  for trim_zip in trim_zip_list:
+    print 'Pruning zip %s.' % trim_zip
+    chromium_utils.RemoveFile(stage_dir, trim_zip)
   return 0
 
 
