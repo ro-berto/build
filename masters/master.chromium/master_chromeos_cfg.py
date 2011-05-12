@@ -102,45 +102,5 @@ F('view_dbg_tests', chromeos().ChromiumOSFactory(
     factory_properties={'generate_gtest_json': True}))
 
 
-crosstool_prefix = (
-    '/usr/local/crosstool-trusted/arm-2009q3/bin/arm-none-linux-gnueabi')
-# Factory properties to use for an arm build.
-arm_gclient_env = {
-  'AR': crosstool_prefix + '-ar',
-  'AS': crosstool_prefix + '-as',
-  'CC': crosstool_prefix + '-gcc',
-  'CXX': crosstool_prefix + '-g++',
-  'LD': crosstool_prefix + '-ld',
-  'RANLIB': crosstool_prefix + '-ranlib',
-  'GYP_GENERATORS': 'make',
-  'GYP_DEFINES': (
-      'target_arch=arm '
-      'sysroot=/usr/local/arm-rootfs '
-      'disable_nacl=1 '
-      'linux_use_tcmalloc=0 '
-      'armv7=1 '
-      'arm_thumb=1 '
-      'arm_neon=0 '
-      'arm_fpu=vfpv3-d16 '
-      'chromeos=1 '  # Since this is the intersting variation.
-  ),
-}
-arm_dbg_factory_properties = {
-  'archive_build': False,
-  'gclient_env': arm_gclient_env,
-}
-
-B('Arm (dbg)', 'arm_dbg', 'compile', 'chromeos_dbg')
-F('arm_dbg', chromeos().ChromiumOSFactory(
-    target='Debug',
-    tests=[],
-    compile_timeout=14400,
-    options=[
-      '--build-tool=make',
-      '--crosstool=' + crosstool_prefix,
-      'chromeos_builder',
-    ],
-    factory_properties=arm_dbg_factory_properties))
-
 def Update(config, active_master, c):
   return helper.Update(c)
