@@ -17,6 +17,7 @@ import re
 import shutil
 import socket
 import sys
+import time
 
 from common import chromium_utils
 from slave import slave_utils
@@ -578,10 +579,17 @@ def main_win(options, args):
   #        Debug\chrome.dll':
   #     No handles found.
   #     (xgHandle utility returned code: 0x00000000)
+  #
+  # webkit.lib(WebGeolocationError.obj) : fatalerror LNK1318: Unexpected PDB
+  # error; OK (0) ''
+  #
+  # Error executing link.exe (tool returned code: 1318)
+
   known_toolset_bugs = [
     '\\c2.dll',
     'Midl.Exe (tool returned code: 1282)',
     'LINK : fatal error LNK1102: out of memory',
+    'fatal error LNK1318: Unexpected PDB error',
   ]
   def scan(line):
     for known_line in known_toolset_bugs:
@@ -592,10 +600,20 @@ def main_win(options, args):
   result = chromium_utils.RunCommand(
       command, parser_func=scan, env=env, universal_newlines=True)
   if errors:
-    print('Retrying a clobber build because of:')
+    print('\n\nRetrying a clobber build because of:')
     print('\n'.join(('  ' + l for l in errors)))
     print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
+    for _ in range(3):
+      try:
+        chromium_utils.RemoveDirectory(build_output_dir)
+        break
+      except OSError, e:
+        print(e)
+        print('\nSleeping 15 seconds. Lovely windows file locks.')
+        time.sleep(15)
+    else:
+      print('Failed to delete a file 3 times in a row, aborting.')
+      return 1
     result = chromium_utils.RunCommand(command, env=env)
   return result
 
