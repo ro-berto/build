@@ -563,8 +563,12 @@ def main_win(options, args):
   # Error executing C:\PROGRA~2\MICROS~1\Common7\Tools\Bin\Midl.Exe (tool
   #    returned code: 1282)
   #
+  # ---
+  #
   # cl : Command line error D8027 : cannot execute 'C:\Program Files
   #    (x86)\Microsoft Visual Studio 8\VC\bin\c2.dll'
+  #
+  # ---
   #
   # Warning: Could not delete file "c:\b\slave\win\build\src\build\Debug\
   #    chrome.dll" : Access is denied
@@ -580,16 +584,25 @@ def main_win(options, args):
   #     No handles found.
   #     (xgHandle utility returned code: 0x00000000)
   #
-  # webkit.lib(WebGeolocationError.obj) : fatalerror LNK1318: Unexpected PDB
+  # ---
+  #
+  # webkit.lib(WebGeolocationError.obj) : fatal error LNK1318: Unexpected PDB
   # error; OK (0) ''
   #
   # Error executing link.exe (tool returned code: 1318)
+  #
+  # ---
+  #
+  # browser.lib(background_application_list_model.obj) : fatal error LNK1000:
+  # Internal error during IMAGE::Pass2
+  # (along with a register dump)
 
   known_toolset_bugs = [
     '\\c2.dll',
     'Midl.Exe (tool returned code: 1282)',
     'LINK : fatal error LNK1102: out of memory',
     'fatal error LNK1318: Unexpected PDB error',
+    'fatal error LNK1000: Internal error during IMAGE::Pass2',
   ]
   def scan(line):
     for known_line in known_toolset_bugs:
