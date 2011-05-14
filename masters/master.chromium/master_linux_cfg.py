@@ -23,7 +23,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 defaults['category'] = '4linux'
 
 #
-# Main debug scheduler for src/
+# Main release scheduler for src/
 #
 S('linux_rel', branch='src', treeStableTimer=60)
 
@@ -122,7 +122,7 @@ F('dbg_unit_2', linux().ChromiumFactory(
     factory_properties={'generate_gtest_json': True}))
 
 #
-# Linux Dbg Clang bots
+# Linux Dbg Clang bot
 #
 
 B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg')
@@ -133,21 +133,6 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 fastbuild=1'
-    }}))
-
-#
-# Linux Views Dbg Clang bot
-#
-
-B('Linux Views Clang (dbg)', 'dbg_linux_views_clang', 'compile', 'linux_dbg')
-F('dbg_linux_views_clang', linux().ChromiumFactory(
-    target='Debug',
-    options=['--build-tool=make', '--compiler=clang'],
-    tests=['base', 'ui_base', 'gfx', 'unit', 'crypto'],
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 ' + 
-                          'toolkit_views=1 fastbuild=1'
     }}))
 
 

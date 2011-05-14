@@ -24,7 +24,7 @@ def chromeos(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 defaults['category'] = '8chromiumos'
 
 #
-# Main debug scheduler for src/
+# Main release scheduler for src/
 #
 S('chromeos_rel', branch='src', treeStableTimer=60)
 
@@ -67,7 +67,7 @@ F('cros_dbg', chromeos().ChromiumOSFactory(
     target='Debug',
     options=['--compiler=goma', 'chromeos_builder'],
     factory_properties={
-        'gclient_env': { 'GYP_DEFINES':'chromeos=1'},
+        'gclient_env': { 'GYP_DEFINES':'chromeos=1 target_arch=ia32'},
         'trigger': 'linux_cros_dbg_trigger'}))
 
 B('Linux Tester (ChromiumOS dbg)', 'cros_dbg_tests', 'testers',
@@ -100,6 +100,22 @@ F('view_dbg_tests', chromeos().ChromiumOSFactory(
     tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
            'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
     factory_properties={'generate_gtest_json': True}))
+
+#
+# Linux ChromiumOS Dbg Clang bot
+#
+
+B('Linux Clang (ChromiumOS dbg)',
+    'dbg_linux_chromeos_clang', 'compile', 'chromeos_dbg')
+F('dbg_linux_chromeos_clang', chromeos().ChromiumOSFactory(
+    target='Debug',
+    options=['--build-tool=make', '--compiler=clang'],
+    tests=['base', 'ui_base', 'gfx', 'unit', 'crypto'],
+    factory_properties={
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 ' + 
+                          'chromeos=1 fastbuild=1 target_arch=ia32'
+    }}))
 
 
 def Update(config, active_master, c):
