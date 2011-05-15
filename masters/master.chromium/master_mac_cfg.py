@@ -52,22 +52,37 @@ B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
 F('rel_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['ui', 'media', 'printing', 'remoting', 'gpu', 'googleurl',
-         'nacl_ui', 'nacl_integration', 'nacl_sandbox',
-         'base', 'net', 'safe_browsing', 'crypto'],
-  factory_properties={'generate_gtest_json': True})
+  tests=['base', 'browser_tests', 'crypto', 'googleurl', 'gpu', 'media',
+         'nacl_integration', 'nacl_sandbox', 'nacl_ui' 'printing', 'remoting',
+         'safe_browsing', 'ui'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 3, 'ui_shard_index': 1,
+                      'browser_total_shards': 3, 'browser_shard_index': 1,})
 )
 
 B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
 F('rel_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['unit', 'browser_tests'],
-  factory_properties={'generate_gtest_json': True})
+  tests=['browser_tests', 'ui', 'unit'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 3, 'ui_shard_index': 2,
+                      'browser_total_shards': 3, 'browser_shard_index': 2,})
+)
+
+B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger')
+F('rel_unit_3', mac().ChromiumFactory(
+  slave_type='Tester',
+  build_url=rel_archive,
+  tests=['browser_tests', 'net', 'ui'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 3, 'ui_shard_index': 3,
+                      'browser_total_shards': 3, 'browser_shard_index': 3,})
 )
 
 B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
 B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
+B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger')
 
 B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger')
 F('rel_sync', mac().ChromiumFactory(
@@ -109,32 +124,50 @@ B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
 F('dbg_unit_1', mac().ChromiumFactory(
   slave_type='NASTester',
   target='Debug',
-  tests=['check_deps', 'media', 'printing', 'remoting', 'unit', 'googleurl',
-         'nacl_ui', 'nacl_integration', 'nacl_sandbox', 'gpu', 'interactive_ui',
-         'base', 'crypto', 'safe_browsing'],
-  factory_properties={'generate_gtest_json': True}))
+  tests=['browser_tests', 'check_deps', 'crypto', 'googleurl', 'gpu',
+         'interactive_ui', 'media', 'nacl_integration', 'nacl_sandbox',
+         'nacl_ui', 'printing', 'remoting',  'safe_browsing', 'ui'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 4, 'ui_shard_index': 1,
+                      'browser_total_shards': 4, 'browser_shard_index': 1,}))
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_2', mac().ChromiumFactory(
   slave_type='NASTester',
   target='Debug',
-  tests=['ui', 'net'],
-  factory_properties={'generate_gtest_json': True}))
+  tests=['browser_tests', 'net', 'ui'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 4, 'ui_shard_index': 2,
+                      'browser_total_shards': 4, 'browser_shard_index': 2,}))
 
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_3', mac().ChromiumFactory(
   slave_type='NASTester',
   target='Debug',
-  tests=['browser_tests'],
-  factory_properties={'generate_gtest_json': True}))
+  tests=['base', 'browser_tests', 'ui'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 4, 'ui_shard_index': 3,
+                      'browser_total_shards': 4, 'browser_shard_index': 3,}))
+
+B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
+F('dbg_unit_4', mac().ChromiumFactory(
+  slave_type='NASTester',
+  target='Debug',
+  tests=['browser_tests', 'ui', 'unit'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 4, 'ui_shard_index': 4,
+                      'browser_total_shards': 4, 'browser_shard_index': 4,}))
 
 B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True)
+B('Mac 10.6 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 
 #

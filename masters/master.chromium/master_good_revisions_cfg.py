@@ -36,15 +36,19 @@ good_revision_steps = {
   ],
   # Dependent on 'Mac Builder (dbg)'
   'Mac 10.5 Tests (dbg)(1)': [
-    'check_deps', 'base_unittests', 'googleurl_unittests', 'media_unittests',
-    'printing_unittests', 'remoting_unittests', 'ipc_tests', 'sync_unit_tests',
-    'unit_tests', 'app_unittests', 'interactive_ui_tests', 'gfx_unittests',
+    'browser_tests', 'check_deps', 'googleurl_unittests', 'media_unittests',
+    'printing_unittests', 'remoting_unittests', 'interactive_ui_tests',
+    'ui_tests',
   ],
   'Mac 10.5 Tests (dbg)(2)': [
-    'net_unittests', 'ui_tests',
+    'browser_tests', 'net_unittests', 'ui_tests',
   ],
   'Mac 10.5 Tests (dbg)(3)': [
-    'browser_tests',
+    'base_unittests', 'browser_tests', 'ui_tests',
+  ],
+  'Mac 10.5 Tests (dbg)(4)': [
+    'app_unittests', 'browser_tests', 'gfx_unittests', 'ipc_tests',
+    'sync_unit_tests', 'ui_tests', 'unit_tests',
   ],
   # Dependent on 'Linux Builder (dbg)'
   'Linux Tests (dbg)(1)': [
