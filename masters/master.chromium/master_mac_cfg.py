@@ -111,7 +111,7 @@ T('mac_dbg_trigger')
 B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg')
 F('dbg', mac().ChromiumFactory(
     target='Debug',
-    slave_type='NASBuilder',
+    slave_type='Builder',
     options=['--', '-target', 'chromium_builder_tests'],
     factory_properties={'trigger': 'mac_dbg_trigger'}))
 
@@ -122,7 +122,7 @@ F('dbg', mac().ChromiumFactory(
 B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_1', mac().ChromiumFactory(
-  slave_type='NASTester',
+  slave_type='Tester',
   target='Debug',
   tests=['browser_tests', 'check_deps', 'crypto', 'googleurl', 'gpu',
          'interactive_ui', 'media', 'nacl_integration', 'nacl_sandbox',
@@ -134,7 +134,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_2', mac().ChromiumFactory(
-  slave_type='NASTester',
+  slave_type='Tester',
   target='Debug',
   tests=['browser_tests', 'net', 'ui'],
   factory_properties={'generate_gtest_json': True,
@@ -144,7 +144,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_3', mac().ChromiumFactory(
-  slave_type='NASTester',
+  slave_type='Tester',
   target='Debug',
   tests=['base', 'browser_tests', 'ui'],
   factory_properties={'generate_gtest_json': True,
@@ -154,7 +154,7 @@ F('dbg_unit_3', mac().ChromiumFactory(
 B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_4', mac().ChromiumFactory(
-  slave_type='NASTester',
+  slave_type='Tester',
   target='Debug',
   tests=['browser_tests', 'ui', 'unit'],
   factory_properties={'generate_gtest_json': True,
