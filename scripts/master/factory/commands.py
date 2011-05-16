@@ -222,6 +222,18 @@ class FactoryCommands(object):
       cmd.extend(arg_list)
     return cmd
 
+  def GetPythonTestCommand(self, py_script, arg_list=None):
+    cmd = [self._python,
+           self._test_tool,
+           '--run-python-script',
+           '--target=',
+           '--build-dir=',
+           py_script]
+
+    if arg_list is not None:
+      cmd.extend(arg_list)
+    return cmd
+
   def AddBuildProperties(self, cmd=None):
     """Adds a WithProperties() call with build properties to cmd."""
     # pylint: disable=R0201

@@ -602,13 +602,11 @@ class ChromiumCommands(commands.FactoryCommands):
       pyauto_script = J(src_base, pyauto_script)
 
     pyauto_functional_cmd = ['python', pyauto_script, '-v']
-    if self._target_platform == 'win32':  # win needs python26
-      py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')
-      if src_base:
-        py26 = J(src_base, py26)
-      pyauto_functional_cmd = ['cmd', '/C'] + [py26, pyauto_script, '-v']
+    if self._target_platform == 'win32':
+      pyauto_functional_cmd = self.GetPythonTestCommand(pyauto_script, ['-v'])
     elif self._target_platform == 'darwin':
-      pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']
+      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python2.5',
+                                                  [pyauto_script, '-v'])
     elif (self._target_platform == 'linux2' and
           factory_properties.get('use_xvfb_on_linux')):
       # Run thru runtest.py on linux to launch virtual x server

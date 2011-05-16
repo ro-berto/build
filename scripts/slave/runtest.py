@@ -161,6 +161,8 @@ def main_mac(options, args):
 
   if options.run_shell_script:
     command = ['sh', test_exe_path]
+  elif options.run_python_script:
+    command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
   command.extend(args[1:])
@@ -277,6 +279,8 @@ def main_linux(options, args):
                                                                bin_dir)
   if options.run_shell_script:
     command = ['sh', test_exe_path]
+  elif options.run_python_script:
+    command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
   command.extend(args[1:])
@@ -354,6 +358,8 @@ def main_win(options, args):
     launcher_path = os.path.join(build_dir, '..', 'tools',
                                  'parallel_launcher', 'parallel_launcher.py')
     command = ['python.exe', launcher_path, test_exe_path]
+  elif options.run_python_script:
+    command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
   command.extend(args[1:])
@@ -422,6 +428,10 @@ def main():
                            default=False,
                            help='treat first argument as the shell script'
                                 'to run.')
+  option_parser.add_option('', '--run-python-script', action='store_true',
+                           default=False,
+                           help='treat first argument as a python script'
+                                'to run.')
   option_parser.add_option('', '--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
@@ -441,6 +451,11 @@ def main():
                            help="The test results server to upload the "
                                 "results.")
   options, args = option_parser.parse_args()
+
+  if options.run_shell_script and options.run_python_script:
+    sys.stderr.write('Use either --run-shell-script OR --run-python-script, '
+                     'not both.')
+    return 1
 
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
