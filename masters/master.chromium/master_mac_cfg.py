@@ -95,6 +95,10 @@ F('rel_sync', mac().ChromiumFactory(
 ## Debug
 ################################################################################
 
+# Archive location
+dbg_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder (dbg)',
+                                          'Mac_Builder__dbg_', 'mac')
+
 #
 # Main debug scheduler for src/
 #
@@ -123,6 +127,7 @@ B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
+  build_url=dbg_archive,
   target='Debug',
   tests=['browser_tests', 'check_deps', 'crypto', 'googleurl', 'gpu',
          'interactive_ui', 'media', 'nacl_integration', 'nacl_sandbox',
@@ -135,6 +140,7 @@ B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
+  build_url=dbg_archive,
   target='Debug',
   tests=['browser_tests', 'net', 'ui'],
   factory_properties={'generate_gtest_json': True,
@@ -145,6 +151,7 @@ B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_3', mac().ChromiumFactory(
   slave_type='Tester',
+  build_url=dbg_archive,
   target='Debug',
   tests=['base', 'browser_tests', 'ui'],
   factory_properties={'generate_gtest_json': True,
@@ -155,6 +162,7 @@ B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
   auto_reboot=True)
 F('dbg_unit_4', mac().ChromiumFactory(
   slave_type='Tester',
+  build_url=dbg_archive,
   target='Debug',
   tests=['browser_tests', 'ui', 'unit'],
   factory_properties={'generate_gtest_json': True,
