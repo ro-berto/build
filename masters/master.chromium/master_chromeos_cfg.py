@@ -70,14 +70,36 @@ F('cros_dbg', chromeos().ChromiumOSFactory(
         'gclient_env': { 'GYP_DEFINES':'chromeos=1 target_arch=ia32'},
         'trigger': 'linux_cros_dbg_trigger'}))
 
-B('Linux Tester (ChromiumOS dbg)', 'cros_dbg_tests', 'testers',
+B('Linux Tests (ChromiumOS dbg)(1)', 'cros_dbg_tests_1', 'testers',
   'linux_cros_dbg_trigger')
-F('cros_dbg_tests', chromeos().ChromiumOSFactory(
+F('cros_dbg_tests_1', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
-    tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
-           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
-    factory_properties={'generate_gtest_json': True}))
+    tests=['base', 'browser_tests', 'crypto', 'googleurl', 'interactive_ui',
+           'media', 'printing', 'remoting', 'ui', 'views',],
+    factory_properties={'generate_gtest_json': True,
+                        'ui_total_shards': 3, 'ui_shard_index': 1,
+                        'browser_total_shards': 3, 'browser_shard_index': 1,}))
+
+B('Linux Tests (ChromiumOS dbg)(2)', 'cros_dbg_tests_2', 'testers',
+  'linux_cros_dbg_trigger')
+F('cros_dbg_tests_2', chromeos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=['browser_tests', 'ui', 'unit',],
+    factory_properties={'generate_gtest_json': True,
+                        'ui_total_shards': 3, 'ui_shard_index': 2,
+                        'browser_total_shards': 3, 'browser_shard_index': 2,}))
+
+B('Linux Tests (ChromiumOS dbg)(3)', 'cros_dbg_tests_3', 'testers',
+  'linux_cros_dbg_trigger')
+F('cros_dbg_tests_3', chromeos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=['browser_tests', 'net', 'ui',],
+    factory_properties={'generate_gtest_json': True,
+                        'ui_total_shards': 3, 'ui_shard_index': 3,
+                        'browser_total_shards': 3, 'browser_shard_index': 3,}))
 
 B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
 F('view_dbg', chromeos().ChromiumOSFactory(
@@ -92,14 +114,36 @@ F('view_dbg', chromeos().ChromiumOSFactory(
     factory_properties={'gclient_env': { 'GYP_DEFINES':'toolkit_views=1'},
                         'trigger': 'linux_views_dbg_trigger'}))
 
-B('Linux Tester (Views dbg)', 'view_dbg_tests', 'testers',
+B('Linux Tests (Views dbg)(1)', 'view_dbg_tests_1', 'testers',
   'linux_views_dbg_trigger')
-F('view_dbg_tests', chromeos().ChromiumOSFactory(
+F('view_dbg_tests_1', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
-    tests=['unit', 'base', 'net', 'googleurl', 'media', 'ui', 'printing',
-           'remoting', 'browser_tests', 'interactive_ui', 'views', 'crypto'],
-    factory_properties={'generate_gtest_json': True}))
+    tests=['base', 'browser_tests', 'crypto', 'googleurl', 'interactive_ui',
+           'media', 'printing', 'remoting', 'ui', 'views',],
+    factory_properties={'generate_gtest_json': True,
+                        'ui_total_shards': 3, 'ui_shard_index': 1,
+                        'browser_total_shards': 3, 'browser_shard_index': 1,}))
+
+B('Linux Tests (Views dbg)(2)', 'view_dbg_tests_2', 'testers',
+  'linux_views_dbg_trigger')
+F('view_dbg_tests_2', chromeos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=['browser_tests', 'ui', 'unit',],
+    factory_properties={'generate_gtest_json': True,
+                        'ui_total_shards': 3, 'ui_shard_index': 2,
+                        'browser_total_shards': 3, 'browser_shard_index': 2,}))
+
+B('Linux Tests (Views dbg)(3)', 'view_dbg_tests_3', 'testers',
+  'linux_views_dbg_trigger')
+F('view_dbg_tests_3', chromeos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=['browser_tests', 'net', 'ui',],
+    factory_properties={'generate_gtest_json': True,
+                        'ui_total_shards': 3, 'ui_shard_index': 3,
+                        'browser_total_shards': 3, 'browser_shard_index': 3,}))
 
 #
 # Linux ChromiumOS Dbg Clang bot
