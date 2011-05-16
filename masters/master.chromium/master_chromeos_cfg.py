@@ -39,7 +39,7 @@ F('rel', chromeos().ChromiumOSFactory(
     factory_properties={
         'archive_build': True,
         'extra_archive_paths': 'chrome/tools/build/chromeos',
-        'gclient_env': { 'GYP_DEFINES':'chromeos=1'},
+        'gclient_env': { 'GYP_DEFINES':'chromeos=1 target_arch=ia32'},
         'generate_gtest_json': True}))
 
 

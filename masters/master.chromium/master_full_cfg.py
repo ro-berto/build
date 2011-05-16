@@ -99,7 +99,8 @@ F('linux_clobber', linux().ChromiumFactory(
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-linux',
                         'expectations': True,
-                        'generate_gtest_json': True,}))
+                        'generate_gtest_json': True,
+                        'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium')
 F('linux64_clobber', linux().ChromiumFactory(

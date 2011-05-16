@@ -96,7 +96,8 @@ F('dbg', linux().ChromiumFactory(
              'ui_tests', 'unit_tests',
              'base_unittests', 'net_unittests', 'crypto_unittests',
              'gfx_unittests', 'plugin_tests', 'safe_browsing_tests'],
-    factory_properties={'trigger': 'linux_dbg_trigger'}))
+    factory_properties={'trigger': 'linux_dbg_trigger',
+                        'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
 
 #
 # Linux Dbg Unit testers
