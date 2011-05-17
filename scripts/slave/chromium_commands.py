@@ -471,6 +471,13 @@ class GClient(sourcebase):
       if m:
         return int(m.group(2))
       return None
+    GIT_REVISION_RE = re.compile(
+        r'^Checked out revision ([0-9a-fA-F]{40})$')
+    def findRevisionNumberFromGit(line):
+      m = GIT_REVISION_RE.search(line)
+      if m:
+        return m.group(1)
+      return None
 
     WEBKIT_CHECKOUT_PATH = os.path.join(
         'src', 'third_party', 'WebKit', 'Source').replace('\\', '\\\\')
@@ -499,8 +506,12 @@ class GClient(sourcebase):
         untangled_stdout = untangled_stdout[-i-1:]
         break
 
+    # http://crbug.com/82939: This is very fragile, see the bug for the
+    # details.
     for line in untangled_stdout:
       revision = findRevisionNumberFromSvn(line)
+      if not revision:
+        revision = findRevisionNumberFromGit(line)
       if revision:
         if not found_webkit_update and not chromium_revision:
           chromium_revision = revision
