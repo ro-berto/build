@@ -16,6 +16,7 @@ from buildbot.steps.transfer import FileUpload
 
 import config
 from common import chromium_utils
+from master import chromium_step
 from master.factory import commands
 
 from master.log_parser import archive_command
@@ -78,6 +79,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._win_memory_tests_runner = J('src', 'tools', 'valgrind',
                                       'chrome_tests.bat')
     self._heapcheck_tool = J('src', 'tools', 'heapcheck', 'chrome_tests.sh')
+    self._annotated_steps = J('src', 'build', 'buildbot_annotated_steps.py')
     self._nacl_integration_tester_tool = J(
         'src', 'chrome', 'test', 'nacl_test_injection',
         'buildbot_nacl_integration.py')
@@ -822,6 +824,16 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._nacl_integration_tester_tool,
            '--mode', target]
     self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd)
+
+  def AddAnnotatedSteps(self, factory_properties, timeout=1200):
+    factory_properties = factory_properties or {}
+    cmd = [self._python, self._annotated_steps]
+    self._factory.addStep(chromium_step.AnnotatedCommand,
+                          name='annotated_steps',
+                          description='annotated_steps',
+                          timeout=timeout,
+                          haltOnFailure=True,
+                          command=cmd)
 
   def _GetPyAutoCmd(self, src_base=None, script=None, factory_properties=None,
                     argv=None):

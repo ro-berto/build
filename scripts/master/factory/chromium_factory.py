@@ -353,6 +353,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('process_coverage'):
       f.AddProcessCoverage(fp)
 
+    # Add an optional set of annotated steps.
+    # NOTE: This really should go last as it can be confusing if the annotator
+    # isn't the last thing to run.
+    if R('annotated_steps'): f.AddAnnotatedSteps(fp)
+
 
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
