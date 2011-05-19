@@ -30,20 +30,9 @@ USE_LAUNCHD := \
 
 export PYTHONPATH=../third_party/buildbot_7_12:../third_party/twisted_8_1
 
-ifneq ($(USE_LAUNCHD),1)
-KERNEL := $(shell uname -m)
-DEB_HOST_GNU_TYPE := $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-ifneq ($(KERNEL),$(DEB_HOST_GNU_TYPE))
-LINUX32 := linux32
-endif
-else
-LINUX32 :=
-endif
-
-
 start:
 ifneq ($(USE_LAUNCHD),1)
-	$(LINUX32) python run_slave.py --no_save -y buildbot.tac
+	python run_slave.py --no_save -y buildbot.tac
 else
 	launchctl start org.chromium.buildbot.slave
 endif
