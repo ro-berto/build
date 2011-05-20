@@ -48,7 +48,7 @@ F('f_webkit_win_rel', win().ChromiumFactory(slave_type='Builder'))
 # Win Rel Webkit testers
 #
 B('Webkit Win (deps)', 'f_webkit_rel_tests',
-  scheduler='s1_chromium_rel_dep')
+  scheduler='s1_chromium_rel_dep', auto_reboot=True)
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -88,7 +88,7 @@ F('f_webkit_win_dbg', win().ChromiumFactory(
 #
 
 B('Webkit Win (deps)(dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler='s1_chromium_dbg_dep')
+  scheduler='s1_chromium_dbg_dep', auto_reboot=True)
 F('f_webkit_dbg_tests_1', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -99,7 +99,7 @@ F('f_webkit_dbg_tests_1', win().ChromiumFactory(
                         'layout_part': '1:2'}))
 
 B('Webkit Win (deps)(dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler='s1_chromium_dbg_dep')
+  scheduler='s1_chromium_dbg_dep', auto_reboot=True)
 F('f_webkit_dbg_tests_2', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
