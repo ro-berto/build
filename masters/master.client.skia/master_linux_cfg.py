@@ -13,9 +13,6 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-def linux(): return skia_factory.SkiaFactory('trunk', target_platform='linux')
-
-
 defaults['category'] = 'linux'
 
 
@@ -28,8 +25,38 @@ S('skia_rel', branch='trunk', treeStableTimer=60)
 #
 # Linux Release Builder
 #
-B('Skia Linux', 'f_skia_linux_rel', scheduler='skia_rel')
-F('f_skia_linux_rel', linux().SkiaFactory()) 
+B('Skia Linux Fixed Debug', 'f_skia_linux_fixed_debug',
+  scheduler='skia_rel')
+F('f_skia_linux_fixed_debug', skia_factory.SkiaFactory(
+    build_subdir='Skia', target_platform='linux',
+    environment_variables={
+        'SKIA_DEBUG': 'true',
+        'SKIA_SCALAR': 'fixed',
+        }).Build())
+B('Skia Linux Fixed NoDebug', 'f_skia_linux_fixed_nodebug',
+  scheduler='skia_rel')
+F('f_skia_linux_fixed_nodebug', skia_factory.SkiaFactory(
+    build_subdir='Skia', target_platform='linux',
+    environment_variables={
+        'SKIA_DEBUG': 'false',
+        'SKIA_SCALAR': 'fixed',
+        }).Build())
+B('Skia Linux Float Debug', 'f_skia_linux_float_debug',
+  scheduler='skia_rel')
+F('f_skia_linux_float_debug', skia_factory.SkiaFactory(
+    build_subdir='Skia', target_platform='linux',
+    environment_variables={
+        'SKIA_DEBUG': 'true',
+        'SKIA_SCALAR': 'float',
+        }).Build())
+B('Skia Linux Float NoDebug', 'f_skia_linux_float_nodebug',
+  scheduler='skia_rel')
+F('f_skia_linux_float_nodebug', skia_factory.SkiaFactory(
+    build_subdir='Skia', target_platform='linux',
+    environment_variables={
+        'SKIA_DEBUG': 'false',
+        'SKIA_SCALAR': 'float',
+        }).Build())
 
 
 def Update(config, active_master, c):

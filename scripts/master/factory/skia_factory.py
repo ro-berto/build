@@ -15,29 +15,48 @@ import config
 class SkiaFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Skia master.cfg files."""
 
-  def __init__(self, build_dir, target_platform=None):
-    main = gclient_factory.GClientSolution(config.Master.skia_url + 'trunk',
-                                           name='Skia')
-    self.target_platform = target_platform
+  def __init__(self, build_subdir, target_platform=None, default_timeout=600,
+               environment_variables=None):
+    """Instantiates a SkiaFactory as appropriate for this target_platform.
 
-    custom_deps_list = [main]
+    build_subdir: string indicating path within slave directory
+    target_platform: a string such as skia_commands.TARGET_PLATFORM_LINUX
+    default_timeout: default timeout for each command, in seconds
+    environment_variables: dictionary of environment variables that should
+        be passed to all commands
+    """
+    # The only thing we use the BaseFactory for is to deal with gclient.
+    gclient_solution = gclient_factory.GClientSolution(
+        svn_url=config.Master.skia_url + 'trunk', name=build_subdir)
+    gclient_factory.GClientFactory.__init__(
+        self, build_dir='', solutions=[gclient_solution],
+        target_platform=target_platform)
+    self._factory = self.BaseFactory(factory_properties=None)
 
-    gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,
-                                            target_platform=target_platform)
+    # Get an implementation of SkiaCommands as appropriate for
+    # this target_platform.
+    self._skia_cmd_obj = skia_commands.CreateSkiaCommands(
+        target_platform=target_platform, factory=self._factory,
+        target='release', build_subdir=build_subdir, target_arch=None,
+        default_timeout=default_timeout,
+        environment_variables=environment_variables)
 
-  def SkiaFactory(self, target='release', clobber=False, tests=None,
-                  mode=None, slave_type='BuilderTester', options=None,
-                  compile_timeout=1200, build_url=None, project=None,
-                  factory_properties=None, target_arch=None):
-    factory = self.BaseFactory(factory_properties=factory_properties)
+  def Build(self, clobber=True):
+    """Build and return the complete BuildFactory.
 
-    skia_cmd_obj = skia_commands.SkiaCommands(factory, target, '',
-                                              self.target_platform,
-                                              target_arch)
-
-    skia_cmd_obj.AddClean()
-    skia_cmd_obj.AddBuild()
-    skia_cmd_obj.AddBuildTests()
-    skia_cmd_obj.AddRunTests()
-
-    return factory
+    clobber: boolean indicating whether we should clean before building
+        (Skia makefiles do not map dependencies quite right, so we always clean)
+    """
+    if clobber:
+      self._skia_cmd_obj.AddClean()
+    self._skia_cmd_obj.AddBuild(build_target='out/libskia.a',
+                                description='BuildLibrary')
+    self._skia_cmd_obj.AddBuild(build_target='tests',
+                                description='BuildTests')
+    self._skia_cmd_obj.AddRun(run_command='out/tests/tests',
+                              description='RunTests')
+    self._skia_cmd_obj.AddBuild(build_target='gm',
+                                description='BuildGM')
+    self._skia_cmd_obj.AddRun(run_command='out/gm/gm -r gm/base-linux',
+                              description='RunGM')
+    return self._factory
