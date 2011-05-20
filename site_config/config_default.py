@@ -28,6 +28,7 @@ class Master(object):
   o3d_url_internal = None
   nacl_trunk_url_internal = None
   nacl_url_internal = None
+  syzygy_url = None
 
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'
