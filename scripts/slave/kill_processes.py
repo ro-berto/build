@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -96,6 +96,7 @@ processes = [
     'chrome_launcher.exe',
     'chrome_frame_unittests.exe',
     'crash_service.exe',
+    'crypto_unittests.exe',
     'debug_message.exe',
     'DumpRenderTree.exe',
     'flush_cache.exe',
