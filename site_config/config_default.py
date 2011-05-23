@@ -253,6 +253,15 @@ class Master(object):
     slave_port = 9011
     master_port_alt = 9012
 
+  # Used for perf testing
+  # TODO: Remove this when performance testing with clang is done, but no
+  # later than EOQ2 2011.
+  class ChromiumPerfClang(_ChromiumBase):
+    project_name = 'Chromium Perf Clang'
+    master_port = 9040
+    slave_port = 9041
+    master_port_alt = 9042
+
 
 class Installer(object):
   # A file containing information about the last release.
