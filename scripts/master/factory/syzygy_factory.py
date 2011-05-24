@@ -17,7 +17,8 @@ class SyzygyFactory(gclient_factory.GClientFactory):
 
   def __init__(self, build_dir, target_platform=None):
     main = gclient_factory.GClientSolution(config.Master.syzygy_url + 'trunk',
-                                           name='src')
+                                           name='src',
+                                           build_dir=build_dir)
     self.target_platform = target_platform
 
     custom_deps_list = [main]
@@ -31,9 +32,11 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                   factory_properties=None, target_arch=None):
     factory = self.BaseFactory(factory_properties=factory_properties)
 
-    syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory, target, '',
-                                              self.target_platform,
-                                              target_arch)
+    syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory,
+                                                    target,
+                                                    self._build_dir,
+                                                    self.target_platform,
+                                                    target_arch)
     
     # Compile the build_all project of the Syzygy solution.
     syzygy_cmd_obj.AddCompileStep('src/syzygy/syzygy.sln;build_all')
