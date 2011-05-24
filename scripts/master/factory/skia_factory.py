@@ -16,7 +16,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Skia master.cfg files."""
 
   def __init__(self, build_subdir, target_platform=None, default_timeout=600,
-               environment_variables=None):
+               environment_variables=None, gm_image_subdir=None):
     """Instantiates a SkiaFactory as appropriate for this target_platform.
 
     build_subdir: string indicating path within slave directory
@@ -24,6 +24,8 @@ class SkiaFactory(gclient_factory.GClientFactory):
     default_timeout: default timeout for each command, in seconds
     environment_variables: dictionary of environment variables that should
         be passed to all commands
+    gm_image_subdir: directory containing images for comparison against results
+        of gm tool
     """
     # The only thing we use the BaseFactory for is to deal with gclient.
     gclient_solution = gclient_factory.GClientSolution(
@@ -32,6 +34,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
         self, build_dir='', solutions=[gclient_solution],
         target_platform=target_platform)
     self._factory = self.BaseFactory(factory_properties=None)
+    self._gm_image_subdir = gm_image_subdir
 
     # Get an implementation of SkiaCommands as appropriate for
     # this target_platform.
@@ -57,6 +60,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
                               description='RunTests')
     self._skia_cmd_obj.AddBuild(build_target='gm',
                                 description='BuildGM')
-    self._skia_cmd_obj.AddRun(run_command='out/gm/gm -r gm/base-linux',
+    gm_command = 'out/gm/gm -r gm/%s' % self._gm_image_subdir
+    self._skia_cmd_obj.AddRun(run_command=gm_command,
                               description='RunGM')
     return self._factory
