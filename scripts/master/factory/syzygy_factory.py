@@ -17,8 +17,7 @@ class SyzygyFactory(gclient_factory.GClientFactory):
 
   def __init__(self, build_dir, target_platform=None):
     main = gclient_factory.GClientSolution(config.Master.syzygy_url + 'trunk',
-                                           name='src',
-                                           build_dir=build_dir)
+                                           name='src')
     self.target_platform = target_platform
 
     custom_deps_list = [main]
