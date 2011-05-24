@@ -13,7 +13,7 @@ def SyzygyFileSplitter(path):
 
 def Update(config, active_master, c):
   syzygy_url = config.Master.syzygy_url
-  syzygy_revlinktmpl = config.Master.googlecode_revlinktmpl % ('syzygy', '%s')
+  syzygy_revlinktmpl = config.Master.googlecode_revlinktmpl % ('sawbuck', '%s')
 
   syzygy_poller = svnpoller.SVNPoller(svnurl=syzygy_url,
                                       split_file=SyzygyFileSplitter,
