@@ -34,8 +34,8 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory, target, '',
                                               self.target_platform,
                                               target_arch)
-
-    syzygy_cmd_obj.AddClean()
-    syzygy_cmd_obj.AddBuild()
+    
+    # Compile the build_all project of the Syzygy solution.
+    syzygy_cmd_obj.AddCompileStep('src/syzygy/syzygy.sln;build_all')
 
     return factory
