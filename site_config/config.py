@@ -62,6 +62,9 @@ class Master(config_private.Master):
 
   skia_url = 'http://skia.googlecode.com/svn/'
 
+  syzygy_url = 'http://sawbuck.googlecode.com/svn/'
+  syzygy_internal_url = None
+  
   # Default target platform if none was given to the factory.
   default_platform = 'win32'
 

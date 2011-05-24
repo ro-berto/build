@@ -16,11 +16,16 @@ class SyzygyFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Syzygy master.cfg files."""
 
   def __init__(self, build_dir, target_platform=None):
+    self.target_platform = target_platform
     main = gclient_factory.GClientSolution(config.Master.syzygy_url + 'trunk',
                                            name='src')
-    self.target_platform = target_platform
 
     custom_deps_list = [main]
+    if config.Master.syzygy_internal_url:
+      internal = gclient_factory.GClientSolution(
+                     config.Master.syzygy_internal_url,
+                     name='syzygy')
+      custom_deps_list.append(internal)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,
                                             target_platform=target_platform)
