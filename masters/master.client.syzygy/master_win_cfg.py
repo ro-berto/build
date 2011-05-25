@@ -14,7 +14,7 @@ F = helper.Factory
 S = helper.Scheduler
 
 def win():
-  return syzygy_factory.SyzygyFactory('src',
+  return syzygy_factory.SyzygyFactory('src/syzygy',
                                       target_platform='win32')
 
 defaults['category'] = 'windows'
