@@ -12,6 +12,18 @@ from master.factory import syzygy_commands
 
 import config
 
+
+# A list of unittests to run after each build.
+_UNITTESTS = [
+  'call_trace_unittests',
+  'core_unittests',
+  'instrument_unittests',
+  'pdb_unittests',
+  'pe_unittests',
+  'relink_unittests',
+]
+
+
 class SyzygyFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Syzygy master.cfg files."""
 
@@ -45,4 +57,8 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     # Compile the build_all project of the Syzygy solution.
     syzygy_cmd_obj.AddCompileStep('syzygy/syzygy.sln;build_all')
 
+    # Run the unittests.
+    for test_name in _UNITTESTS:
+      syzygy_cmd_obj.AddBasicGTestTestStep(test_name)
+    
     return factory
