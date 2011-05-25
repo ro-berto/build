@@ -21,16 +21,22 @@ defaults['category'] = 'windows'
 
 
 #
-# Main Scheduler for Syzygy
+# Continous build scheduler for Syzygy
 #
-S('syzygy_rel', branch='trunk', treeStableTimer=60)
+S('syzygy_cont', branch='trunk', treeStableTimer=60)
 
 
 #
-# Linux Release Builder
+# Windows Release Builder
 #
-B('Syzygy Windows', 'f_syzygy_win_rel', scheduler='syzygy_rel')
+B('Syzygy Release', 'f_syzygy_win_rel', scheduler='syzygy_cont')
 F('f_syzygy_win_rel', win().SyzygyFactory())
+
+#
+# Windows Debug Builder
+#
+B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont')
+F('f_syzygy_win_dbg', win().SyzygyFactory(target='debug'))
 
 
 def Update(config, active_master, c):
