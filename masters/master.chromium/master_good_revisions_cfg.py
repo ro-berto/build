@@ -59,6 +59,7 @@ good_revision_steps = {
     'app_unittests', 'interactive_ui_tests', 'base_unittests',
     'googleurl_unittests', 'media_unittests', 'printing_unittests',
     'remoting_unittests', 'gfx_unittests',
+    'nacl_integration', 'nacl_ui_tests', 'nacl_sandbox_tests',
   ],
   'Linux Builder (ChromiumOS)': [
     'compile',
