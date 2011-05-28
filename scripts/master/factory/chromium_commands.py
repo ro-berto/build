@@ -823,7 +823,8 @@ class ChromiumCommands(commands.FactoryCommands):
     target = target or self._target
     cmd = [self._python, self._nacl_integration_tester_tool,
            '--mode', target]
-    self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd)
+    self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd,
+        do_step_if=self.TestStepFilter)
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
     factory_properties = factory_properties or {}
