@@ -149,13 +149,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         config.Master.trunk_internal_url +
                         '/data/pyauto_private'))
 
-  def __init__(self, build_dir, target_platform=None):
+  def __init__(self, build_dir, target_platform=None, pull_internal=True):
     main = gclient_factory.GClientSolution(config.Master.trunk_url_src,
                needed_components=self.NEEDED_COMPONENTS,
                custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
                                  self.CUSTOM_VARS_GOOGLECODE_URL])
     custom_deps_list = [main]
-    if config.Master.trunk_internal_url_src:
+    if config.Master.trunk_internal_url_src and pull_internal:
       internal = gclient_factory.GClientSolution(
                      config.Master.trunk_internal_url_src,
                      needed_components=self.NEEDED_COMPONENTS_INTERNAL)
@@ -392,6 +392,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)
+
+    # Add the package source step.
+    if slave_type == 'Updater':
+      chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
 
     # Trigger any schedulers waiting on the build to complete.
     if factory_properties.get('trigger'):

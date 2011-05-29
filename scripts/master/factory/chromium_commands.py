@@ -52,6 +52,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._differential_installer_tool = J(s_dir,  'differential_installer.py')
     self._process_coverage_tool = J(s_dir, 'process_coverage.py')
     self._layout_archive_tool = J(s_dir, 'archive_layout_test_results.py')
+    self._package_source_tool = J(s_dir, 'package_source.py')
     self._crash_handler_tool = J(s_dir, 'run_crash_handler.py')
     self._upload_parity_tool = J(s_dir, 'upload_parity_data.py')
     self._target_tests_tool = J(s_dir, 'target-tests.py')
@@ -149,6 +150,26 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddArchiveStep(data_description='build', base_url=url, link_text=text,
                         command=cmd)
+
+  def AddPackageSource(self, factory_properties=None):
+    """Adds a step to the factory to package and upload the source directory."""
+
+    cmd = [self._python, self._package_source_tool,
+           '--build-dir', self._build_dir]
+
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+
+    self._factory.addStep(archive_command.ArchiveCommand,
+                          name='package_source',
+                          timeout=600,
+                          description='packaging source',
+                          descriptionDone='packaged source',
+                          base_url=None,
+                          link_text=None,
+                          more_link_url=None,
+                          more_link_text=None,
+                          command=cmd)
 
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
