@@ -24,12 +24,14 @@ class SyzygyCommands(commands.FactoryCommands):
   
   def AddRandomizeChromeStep(self, timeout=600):
     # Randomization script path.
-    script_path = self.PathJoin('internal', 'build', 'randomize_chrome.py')
+    script_path = self.PathJoin(self._build_dir, 'internal', 'build',
+                                'randomize_chrome.py')
     command = [self._python, script_path,
                '--build-dir=%s' % self._build_dir,
-               '--target=%s' % self._target]
-    self.factory.addStep(shell.ShellCommand,
+               '--target=%s' % self._target,
+               '--verbose']
+    self._factory.addStep(shell.ShellCommand,
         name='randomize',
         description=['Randomly', 'Reordering', 'Chrome'],
-        command=cmd,
+        command=command,
         timeout=timeout)
