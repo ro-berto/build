@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -61,4 +60,7 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     for test_name in _UNITTESTS:
       syzygy_cmd_obj.AddBasicGTestTestStep(test_name)
     
+    if target == 'release':
+      syzygy_cmd_obj.AddRandomizeChromeStep()
+      
     return factory

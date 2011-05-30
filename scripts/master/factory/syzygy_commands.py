@@ -1,14 +1,12 @@
-#!/usr/bin/python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Set of utilities to add commands to a buildbot factory.
 
-This is based on commands.py and adds chromium-specific commands."""
+This is based on commands.py and adds Syzygy-specific commands."""
 
 from buildbot.steps import shell
-
 
 from master.factory import commands
 
@@ -23,19 +21,15 @@ class SyzygyCommands(commands.FactoryCommands):
 
     self._arch = target_arch
     self._factory = factory
-
-  def AddClean(self):
-    """Does a 'make clean'"""
-    cmd = 'make -C Syzygy clean'
-    self._factory.addStep(shell.ShellCommand,
-                          description='Clean',
-                          timeout=600,
-                          command=cmd)
-
-  def AddBuild(self):
-    """Adds a compile step to the build."""
-    cmd = 'make -C Syzygy'
-    self._factory.addStep(shell.ShellCommand,
-                          description='Build',
-                          timeout=600,
-                          command=cmd)
+  
+  def AddRandomizeChromeStep(self, timeout=600):
+    # Randomization script path.
+    script_path = self.PathJoin('internal', 'build', 'randomize_chrome.py')
+    command = [self._python, script_path,
+               '--build-dir=%s' % self._build_dir,
+               '--target=%s' % self._target]
+    self.factory.addStep(shell.ShellCommand,
+        name='randomize',
+        description=['Randomly', 'Reordering', 'Chrome'],
+        command=cmd,
+        timeout=timeout)
