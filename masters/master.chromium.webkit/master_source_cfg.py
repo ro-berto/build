@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -9,8 +9,8 @@ from master import build_utils
 def ChromeTreeFileSplitter(path):
   """split_file for the 'src' project in the trunk."""
 
-  # Exclude o3d from triggering builds on chrome for now.
-  if path.startswith('src/o3d/'):
+  # Exclude .DEPS.git from triggering builds on chrome.
+  if path == 'src/.DEPS.git':
     return None
 
   # List of projects we are interested in. The project names must exactly
