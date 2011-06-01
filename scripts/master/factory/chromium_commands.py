@@ -635,6 +635,9 @@ class ChromiumCommands(commands.FactoryCommands):
       # Run thru runtest.py on linux to launch virtual x server
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
                                                   [pyauto_script, '-v'])
+
+    if src_base:  # Adjust runtest.py path if needed.
+      pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
     if suite:
       pyauto_functional_cmd.append('--suite=%s' % suite)
     self.AddTestStep(retcode_command.ReturnCodeCommand,

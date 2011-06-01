@@ -327,7 +327,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       platform_mapping = {
         'win32': 'win32',
         'darwin': 'mac',
-        'linux2': 'linux64bit',
+        'linux2': 'lucid64bit',
       }
 
       zip_platform = platform_mapping[self._target_platform]
