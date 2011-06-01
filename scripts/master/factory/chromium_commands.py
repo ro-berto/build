@@ -627,17 +627,19 @@ class ChromiumCommands(commands.FactoryCommands):
     pyauto_functional_cmd = ['python', pyauto_script, '-v']
     if self._target_platform == 'win32':
       pyauto_functional_cmd = self.GetPythonTestCommand(pyauto_script, ['-v'])
+      if src_base:  # Adjust runtest.py path if needed.
+        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
     elif self._target_platform == 'darwin':
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python2.5',
                                                   [pyauto_script, '-v'])
+      if src_base:  # Adjust runtest.py path if needed.
+        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
     elif (self._target_platform == 'linux2' and
           factory_properties.get('use_xvfb_on_linux')):
       # Run thru runtest.py on linux to launch virtual x server
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
                                                   [pyauto_script, '-v'])
 
-    if src_base:  # Adjust runtest.py path if needed.
-      pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
     if suite:
       pyauto_functional_cmd.append('--suite=%s' % suite)
     self.AddTestStep(retcode_command.ReturnCodeCommand,
