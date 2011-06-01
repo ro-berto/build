@@ -314,7 +314,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       # Mapping from self._target_platform to a chrome-*.zip
       platmap = {'win32': 'win32',
                  'darwin': 'mac',
-                 'linux2': 'linux64bit' }
+                 'linux2': 'lucid64bit' }
       zip_plat = platmap[self._target_platform]
       workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
       f.AddPyAutoFunctionalTest('pyauto_functional_tests',
