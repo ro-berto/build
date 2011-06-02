@@ -484,17 +484,6 @@ class ChromiumCommands(commands.FactoryCommands):
                                description, options, total_shards=total_shards,
                                shard_index=shard_index)
 
-  def AddOmniboxTests(self, factory_properties=None):
-    # This is not a UI unit test.  Rather, it is a long-running test that
-    # scores Omnibox results.  It's part of ui_tests because it uses much
-    # of the UI test framework, so putting it there made more sense than
-    # creating a new project.  This test needs a special command-line switch
-    # in order to run, which prevents it from running by default.
-    options = ['--gtest_filter=OmniboxTest.Measure',
-               '--run_omnibox_test']
-    self.AddBasicGTestTestStep('ui_tests', factory_properties,
-                               'omnibox_tests', options)
-
   def AddDomCheckerTests(self):
     cmd = [self._python, self._test_tool,
            '--target', self._target,
