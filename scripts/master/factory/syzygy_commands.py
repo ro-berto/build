@@ -33,5 +33,21 @@ class SyzygyCommands(commands.FactoryCommands):
     self._factory.addStep(shell.ShellCommand,
         name='randomize',
         description=['Randomly', 'Reordering', 'Chrome'],
+        descriptionDone=['Randomly', 'Reordered', 'Chrome'],
+        command=command,
+        timeout=timeout)
+
+  def AddBenchmarkChromeStep(self, timeout=600):
+    # Benchmark script path.
+    script_path = self.PathJoin(self._build_dir, 'internal', 'build',
+                                'benchmark_chrome.py')
+    command = [self._python, script_path,
+               '--build-dir=%s' % self._build_dir,
+               '--target=%s' % self._target,
+               '--verbose']
+    self._factory.addStep(shell.ShellCommand,
+        name='benchmark',
+        description=['Benchmark', 'Chrome'],
+        descriptionDone=['Benchmarked', 'Chrome'],
         command=command,
         timeout=timeout)
