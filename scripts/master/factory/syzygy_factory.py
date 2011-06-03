@@ -62,6 +62,6 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     
     if target == 'release':
       syzygy_cmd_obj.AddRandomizeChromeStep()
-      syzygy_cmd_obj.AddBenchmarkChromeStep(factory_properties)
+      syzygy_cmd_obj.AddBenchmarkChromeStep()
       
     return factory
