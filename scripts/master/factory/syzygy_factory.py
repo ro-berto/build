@@ -42,9 +42,9 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                             target_platform=target_platform)
 
   def SyzygyFactory(self, target='release', clobber=False, tests=None,
-                  mode=None, slave_type='BuilderTester', options=None,
-                  compile_timeout=1200, build_url=None, project=None,
-                  factory_properties=None, target_arch=None):
+                    mode=None, slave_type='BuilderTester', options=None,
+                    compile_timeout=1200, build_url=None, project=None,
+                    factory_properties=None, target_arch=None):
     factory = self.BaseFactory(factory_properties=factory_properties)
 
     syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory,
@@ -62,6 +62,6 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     
     if target == 'release':
       syzygy_cmd_obj.AddRandomizeChromeStep()
-      syzygy_cmd_obj.AddBenchmarkChromeStep()
+      syzygy_cmd_obj.AddBenchmarkChromeStep(factory_properties)
       
     return factory
