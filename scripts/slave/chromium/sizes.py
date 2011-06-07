@@ -11,6 +11,7 @@
   For a list of command-line options, call this script with '--help'.
 """
 
+import errno
 import optparse
 import os
 import re
@@ -108,7 +109,6 @@ def main_linux(options, args):
   target_dir = os.path.join(os.path.dirname(options.build_dir),
                             'sconsbuild', options.target)
   chrome = os.path.join(target_dir, 'chrome')
-  chrome_pak = os.path.join(target_dir, 'chrome.pak')
 
   result = 0
 
@@ -122,8 +122,6 @@ def main_linux(options, args):
   print "RESULT chrome-text: text= %s bytes" % text
   print "RESULT chrome-data: data= %s bytes" % data
   print "RESULT chrome-bss: bss= %s bytes" % bss
-
-  print "*RESULT chrome.pak: chrome.pak= %s bytes" % get_size(chrome_pak)
 
   # Find the number of files with at least one static initializer.
   # First determine if we're 32 or 64 bit
@@ -146,6 +144,26 @@ def main_linux(options, args):
   # So subtract 2 from the count.
   count = (size / word_size) - 2
   print "*RESULT chrome-si: initializers= %s files" % count
+
+  files = [
+    'chrome.pak',
+    'libffmpegsumo.so',
+    'libgcflashplayer.so',
+    'libpdf.so',
+    'libppGoogleNaClPluginChrome.so',
+    'nacl_irt_x86_64.nexe',
+  ]
+
+  for filename in files:
+    path = os.path.join(target_dir, filename)
+    try:
+      size = get_size(path)
+    except OSError, e:
+      if e.errno == errno.ENOENT:
+        continue  # Don't print anything for missing files.
+      raise
+    print "*RESULT %s: %s= %s bytes" % (filename, filename, get_size(path))
+
   return result
 
 
