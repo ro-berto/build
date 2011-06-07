@@ -453,7 +453,7 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddBasicGTestTestStep('views_unittests', factory_properties)
 
   def AddSyncIntegrationTests(self, factory_properties):
-    options = ['--test-terminate-timeout=120000']
+    options = ['--ui-test-action-max-timeout=120000']
 
     self.AddBasicGTestTestStep('sync_integration_tests', factory_properties, '',
                                options)

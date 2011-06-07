@@ -208,7 +208,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('test_shell'):     f.AddBasicGTestTestStep('test_shell_tests', fp)
     if R('safe_browsing'):  f.AddBasicGTestTestStep(
                                 'safe_browsing_tests', fp,
-                                arg_list=['--test-terminate-timeout=40000'])
+                                arg_list=['--ui-test-action-max-timeout=40000'])
     if R('sandbox'):
       f.AddBasicGTestTestStep('sbox_unittests', fp)
       f.AddBasicGTestTestStep('sbox_integration_tests', fp)
