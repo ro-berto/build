@@ -10,6 +10,7 @@ from buildbot.steps import trigger, shell
 from buildbot.process.properties import WithProperties
 
 from master import chromeos_revision_source
+from master import chromium_step
 from master.factory import chromeos_build_factory
 
 class CbuildbotFactory(object):
@@ -230,7 +231,7 @@ class CbuildbotFactory(object):
       description = name
 
     cbuild_cmd += params.split()
-    self.f_cbuild.addStep(shell.ShellCommand,
+    self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
                           command=cbuild_cmd,
                           timeout=self.timeout,
                           name=name,
