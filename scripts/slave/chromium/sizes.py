@@ -162,7 +162,7 @@ def main_linux(options, args):
       if e.errno == errno.ENOENT:
         continue  # Don't print anything for missing files.
       raise
-    print "*RESULT %s: %s= %s bytes" % (filename, filename, get_size(path))
+    print "*RESULT %s: %s= %s bytes" % (filename, filename, size)
 
   return result
 
