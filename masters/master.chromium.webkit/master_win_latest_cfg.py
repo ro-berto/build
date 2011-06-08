@@ -41,8 +41,6 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder'))
 
-B('Win Builder (vs2005)', 'f_win_rel', scheduler='s7_webkit_builder_rel')
-
 B('Win Reliability Builder', 'f_win_reliability_rel', scheduler='s7_webkit_rel',
   builddir='Win_Webkit_Latest')
 F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
