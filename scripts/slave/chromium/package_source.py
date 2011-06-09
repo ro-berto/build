@@ -7,6 +7,7 @@
 
 
 import os
+import re
 import sys
 
 from common import chromium_utils
@@ -14,7 +15,7 @@ from slave import slave_utils
 
 
 FILENAME = 'chromium-src.tgz'
-GSBASE = 'chromium-browser-csindex'
+GSBASE = 'gs://chromium-browser-csindex'
 
 
 def main(argv):
@@ -25,13 +26,27 @@ def main(argv):
   if os.path.exists(FILENAME):
     raise Exception('ERROR: %s cannot be removed, exiting' % FILENAME)
 
-  if chromium_utils.RunCommand(['tar', 'czf', FILENAME, 'src/']) != 0:
+  if chromium_utils.RunCommand(['tar', 'czvf', FILENAME, '--exclude=.svn',
+                                'src/']) != 0:
     raise Exception('ERROR: failed to create %s, exiting' % FILENAME)
 
   status = slave_utils.GSUtilCopyFile(FILENAME, GSBASE)
   if status != 0:
     raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
         status, FILENAME, GSBASE))
+
+  (status, output) = slave_utils.GSUtilListBucket(GSBASE)
+  if status != 0:
+    raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
+
+  regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, FILENAME))
+  match_data = regex.match(output)
+  modified_time = None
+  if match_data:
+    modified_time = match_data.group(1)
+  if not modified_time:
+    raise Exception('ERROR: could not get modified_time, exiting')
+  print 'Last modified time: %s' % modified_time
 
   return 0
 

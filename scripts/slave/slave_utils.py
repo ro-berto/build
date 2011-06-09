@@ -344,19 +344,7 @@ def MaybeMakeDirectoryOnArchiveHost(dest_dir):
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
 
-# Copy a file to Google Storage.
-def GSUtilCopyFile(filename, gs_base, subdir=None):
-  source = 'file://' + filename
-  dest = gs_base
-  if subdir:
-    # HACK(nsylvain): We can't use normpath here because it will break the
-    # slashes on Windows.
-    if subdir == '..':
-      dest = os.path.dirname(gs_base)
-    else:
-      dest = '/'.join([gs_base, subdir])
-  dest = '/'.join([dest, os.path.basename(filename)])
-
+def GSUtilSetup():
   # Get the path to the gsutil script.
   gsutil = os.path.join(os.path.dirname(__file__), 'gsutil')
   gsutil = os.path.normpath(gsutil)
@@ -369,8 +357,45 @@ def GSUtilCopyFile(filename, gs_base, subdir=None):
 
   # Make sure gsutil uses this boto file.
   os.environ['AWS_CREDENTIAL_FILE'] = boto_file
+  return gsutil
+
+def GSUtilCopyFile(filename, gs_base, subdir=None):
+  """Copy a file to Google Storage."""
+
+  source = 'file://' + filename
+  dest = gs_base
+  if subdir:
+    # HACK(nsylvain): We can't use normpath here because it will break the
+    # slashes on Windows.
+    if subdir == '..':
+      dest = os.path.dirname(gs_base)
+    else:
+      dest = '/'.join([gs_base, subdir])
+  dest = '/'.join([dest, os.path.basename(filename)])
+
+  gsutil = GSUtilSetup()
 
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = [gsutil, 'cp', '-a', 'public-read', source, dest]
   return chromium_utils.RunCommand(command)
+
+# Python doesn't support the type of variable scope in nested methods needed
+# to avoid the global output variable.  This variable should only ever be used
+# by GSUtilListBucket.
+command_output = ''
+def GSUtilListBucket(gs_base):
+  """List the contents of a Google Storage bucket."""
+
+  gsutil = GSUtilSetup()
+
+  # Run the gsutil command. gsutil internally calls command_wrapper, which
+  # will try to run the command 10 times if it fails.
+  global command_output
+  command_output = ''
+  def GatherOutput(line):
+    global command_output
+    command_output += line + '\n'
+  command = [gsutil, 'ls', '-l', gs_base]
+  status = chromium_utils.RunCommand(command, parser_func=GatherOutput)
+  return (status, command_output)
