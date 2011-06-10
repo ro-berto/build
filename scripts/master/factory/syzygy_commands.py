@@ -36,7 +36,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddBenchmarkChromeStep(self, factory_properties=None):
     factory_properties = factory_properties or {}
-    command_class = self.GetPerfStep(
+    command_class = self.GetPerfStepClass(
         factory_properties, 'benchmark', process_log.GraphingLogProcessor)
     # Benchmark script path.
     script_path = self.PathJoin(self._build_dir, 'internal', 'build',
