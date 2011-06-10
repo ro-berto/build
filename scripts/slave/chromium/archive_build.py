@@ -73,7 +73,7 @@ def ExtractDirsFromPaths(path_list):
   returns a list of the directories therein (e.g. ['baz']). Does not
   include duplicates in the list.
   """
-  dirs = set([])
+  dirs = set()
   for path in path_list:
     dir_name = os.path.dirname(path)
     if dir_name:
@@ -712,6 +712,7 @@ class StagerBase(object):
                        ', '.join(not_found))
     return result
 
+
 class StagerByChromiumRevision(StagerBase):
   """Handles archiving a build. Call the public ArchiveBuild() method.
   Archive a build according to its chromium revision if it is because of
@@ -799,7 +800,7 @@ def main(argv):
     options.ignore = config.Archive.exes_to_skip_entirely
 
   if options.mode == 'official':
-    raise StagingError('Official mode is not supported here')
+    option_parser.error('Official mode is not supported here')
   elif options.mode == 'dev':
     options.dirs = {
       # Built files are stored here, in a subdir. named for the build version.
@@ -809,7 +810,7 @@ def main(argv):
       'symbol_dir_base': config.Archive.www_dir_base + 'snapshots',
     }
   else:
-    raise StagingError('Invalid options mode %s' % options.mode)
+    option_parser.error('Invalid options mode %s' % options.mode)
 
   if options.build_number is not None:
     s = StagerByBuildNumber(options)

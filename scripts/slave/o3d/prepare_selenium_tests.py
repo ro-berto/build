@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -63,7 +63,6 @@ def GetFilesFromDirectory(directory, excludes=None, only_these_types=None):
 
   # Walk directory, add all non-excluded files.
   for root, _, files in os.walk(directory):
-
     # Ignore files with .svn in the path.
     if '.svn' in root:
       continue
@@ -156,10 +155,7 @@ def GetO3DArchiveFiles(source_root, config_file):
           types = item['types']
         else:
           types = None
-
         file_list += GetFilesFromDirectory(path, excludes, types)
-
-
   return file_list
 
 
@@ -172,9 +168,7 @@ def BuildChangeResolution(sourcedir):
   Args:
     sourcedir: path to source code for O3D.
   """
-
   build_dir = os.path.join(sourcedir, 'o3d', 'tests', 'lab', 'ChangeResolution')
-
   print 'Build dir:"%s"' % build_dir
   os.chdir(build_dir)
 

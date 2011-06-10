@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -29,6 +29,7 @@ import config
 # Directory name, above the build directory, in which test results can be
 # found if no --results-dir option is given.
 RESULT_DIR = 'layout-test-results'
+
 
 def _CollectArchiveFiles(output_dir):
   """Returns a tuple containing two lists list of file paths to archive,
