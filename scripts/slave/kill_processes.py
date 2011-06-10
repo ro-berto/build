@@ -87,6 +87,7 @@ processes = [
 
     # Things built by/for Chromium.
     'base_unittests.exe',
+    'cacheinvalidation_unittests.exe',
     'ceee_broker.exe',
     'ceee_common_unittests.exe',
     'chrome.exe',
@@ -106,6 +107,7 @@ processes = [
     'installer_util_unittests.exe',
     'interactive_ui_tests.exe',
     'ipc_tests.exe',
+    'jingle_unittests.exe',
     'mediumtest_ie.exe',
     'memory_test.exe',
     'net_unittests.exe',
