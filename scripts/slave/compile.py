@@ -596,6 +596,11 @@ def main_win(options, args):
   # browser.lib(background_application_list_model.obj) : fatal error LNK1000:
   # Internal error during IMAGE::Pass2
   # (along with a register dump)
+  #
+  # ---
+  #
+  # ...\browser\history\download_create_info.cc : fatal error C1033: cannot open
+  #   program database '...\src\build\debug\obj\browser\browser\vc80_ib_2.idb'
 
   known_toolset_bugs = [
     '\\c2.dll',
@@ -603,6 +608,7 @@ def main_win(options, args):
     'LINK : fatal error LNK1102: out of memory',
     'fatal error LNK1318: Unexpected PDB error',
     'fatal error LNK1000: Internal error during IMAGE::Pass2',
+    'fatal error C1033',
   ]
   def scan(line):
     for known_line in known_toolset_bugs:
