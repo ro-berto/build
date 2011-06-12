@@ -94,6 +94,28 @@ F('rel_sync', linux().ChromiumFactory(
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
 
+B('Linux Touch', 'rel_touch', 'compile', 'linux_rel')
+F('rel_touch', linux().ChromiumFactory(
+    slave_type='BuilderTester',
+    options=['--compiler=goma', 
+             'base_unittests',
+             'crypto_unittests',
+             'googleurl_unittests', 
+             'gpu_unittests', 
+             'ipc_tests',  # from unit
+             'sync_unit_tests',  # from unit
+             'unit_tests',  # from unit
+             'app_unittests',  # from unit
+             'gfx_unittests',  # from unit
+             'media_unittests', 
+             'net_unittests', 
+             'printing_unittests',
+             'remoting_unittests',
+             'safe_browsing_tests',
+    ],
+    tests=['check_deps', 'base', 'crypto', 'googleurl', 'gpu', 'media', 'net',
+           'printing', 'remoting', 'safe_browsing', 'unit' ],
+    factory_properties={'gclient_env': {'GYP_DEFINES':'touchui=1'}}))
 
 ################################################################################
 ## Debug
