@@ -193,6 +193,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Small ("module") unit tests:
     if R('base'):           f.AddBasicGTestTestStep('base_unittests', fp)
+    if R('cacheinvalidation'):
+      f.AddBasicGTestTestStep('cacheinvalidation_unittests', fp)
     if R('courgette'):      f.AddBasicGTestTestStep('courgette_unittests', fp)
     if R('crypto'):         f.AddBasicGTestTestStep('crypto_unittests', fp)
     if R('gfx'):            f.AddBasicGTestTestStep('gfx_unittests', fp)
@@ -200,6 +202,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gpu'):            f.AddBasicGTestTestStep(
                                 'gpu_unittests', fp,
                                 arg_list=['--gmock_verbose=error'])
+    if R('jingle'):         f.AddBasicGTestTestStep('jingle_unittests', fp)
     if R('media'):          f.AddBasicGTestTestStep('media_unittests', fp)
     if R('net'):            f.AddBasicGTestTestStep('net_unittests', fp)
     if R('plugin'):         f.AddBasicGTestTestStep('plugin_tests', fp)
