@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -359,7 +359,7 @@ def GSUtilSetup():
   os.environ['AWS_CREDENTIAL_FILE'] = boto_file
   return gsutil
 
-def GSUtilCopyFile(filename, gs_base, subdir=None):
+def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None):
   """Copy a file to Google Storage."""
 
   source = 'file://' + filename
@@ -377,7 +377,10 @@ def GSUtilCopyFile(filename, gs_base, subdir=None):
 
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
-  command = [gsutil, 'cp', '-a', 'public-read', source, dest]
+  command = [gsutil]
+  if mimetype :
+    command.extend(['-h', 'Content-type:%s' % mimetype])
+  command.extend(['cp', '-a', 'public-read', source, dest])
   return chromium_utils.RunCommand(command)
 
 # Python doesn't support the type of variable scope in nested methods needed

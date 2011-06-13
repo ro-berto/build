@@ -105,9 +105,10 @@ def Write(file_path, data):
   finally:
     f.close()
 
-def MyCopyFileToDir(filename, destination, gs_base, gs_subdir=None):
+def MyCopyFileToDir(filename, destination, gs_base, gs_subdir=None,
+                    mimetype=None):
   if gs_base:
-    status = slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir)
+    status = slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir, mimetype)
     if status != 0:
       dest = gs_base + '/' + gs_subdir
       raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
@@ -128,9 +129,10 @@ def MySshMakeDirectory(host, destination, gs_base):
   if not gs_base:
     chromium_utils.SshMakeDirectory(host, destination)
 
-def MySshCopyFiles(filename, host, destination, gs_base, gs_subdir=None):
+def MySshCopyFiles(filename, host, destination, gs_base,
+                   gs_subdir=None, mimetype=None):
   if gs_base:
-    MyCopyFileToDir(filename, destination, gs_base, gs_subdir)
+    MyCopyFileToDir(filename, destination, gs_base, gs_subdir, mimetype)
   else:
     chromium_utils.SshCopyFiles(filename, host, destination)
 
@@ -690,7 +692,8 @@ class StagerBase(object):
       if chromium_utils.IsWindows():
         print 'Saving revision to %s' % latest_file_path
         if gs_base:
-          slave_utils.GSUtilCopyFile(self.last_change_file, gs_base, '..')
+          slave_utils.GSUtilCopyFile(self.last_change_file, gs_base, '..',
+                                     mimetype='text/plain')
         else:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
@@ -700,7 +703,7 @@ class StagerBase(object):
         print 'Saving revision to %s:%s' % (self.options.archive_host,
                                             latest_file_path)
         MySshCopyFiles(self.last_change_file, self.options.archive_host,
-                       latest_file_path, gs_base, '..')
+                       latest_file_path, gs_base, '..', mimetype='text/plain')
       else:
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
