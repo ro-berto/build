@@ -379,7 +379,7 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None):
   # will try to run the command 10 times if it fails.
   command = [gsutil]
   if mimetype :
-    command.extend(['-h', 'Content-type:%s' % mimetype])
+    command.extend(['-h', 'Content-Type:%s' % mimetype])
   command.extend(['cp', '-a', 'public-read', source, dest])
   return chromium_utils.RunCommand(command)
 
