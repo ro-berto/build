@@ -174,17 +174,20 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
            '--root', self._repository_root]
-    self.AddTestStep(shell.ShellCommand, 'check_deps', cmd)
+    self.AddTestStep(shell.ShellCommand, 'check_deps', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddCheckBinsStep(self):
     build_dir = os.path.join(self._build_dir, self._target)
     cmd = [self._python, self._check_bins_tool, build_dir]
-    self.AddTestStep(shell.ShellCommand, 'check_bins', cmd)
+    self.AddTestStep(shell.ShellCommand, 'check_bins', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddCheckPermsStep(self):
     cmd = [self._python, self._check_perms_tool,
            '--root', self._repository_root]
-    self.AddTestStep(shell.ShellCommand, 'check_perms', cmd)
+    self.AddTestStep(shell.ShellCommand, 'check_perms', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddCheckLKGRStep(self):
     """Check LKGR; if unchanged, cancel the build.
@@ -266,7 +269,8 @@ class ChromiumCommands(commands.FactoryCommands):
                 test.get('title', test['command_name']), http_page_cyclers)
 
       # Add the test step to the factory.
-      self.AddTestStep(test['class'], test['step_name'], cmd)
+      self.AddTestStep(test['class'], test['step_name'], cmd,
+                       do_step_if=self.TestStepFilter)
 
   def AddStartupTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -280,14 +284,16 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=%s' % test_list]
 
     cmd = self.GetTestCommand('startup_tests', options)
-    self.AddTestStep(c, 'startup_test', cmd)
+    self.AddTestStep(c, 'startup_test', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddMemoryTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'memory',
                               process_log.GraphingLogProcessor)
 
-    self.AddTestStep(c, 'memory_test', self.GetTestCommand('memory_test'))
+    self.AddTestStep(c, 'memory_test', self.GetTestCommand('memory_test'),
+                     do_step_if=self.TestStepFilter)
 
   def AddNewTabUITests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -298,7 +304,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Cold']
     cmd = self.GetTestCommand('startup_tests', options)
-    self.AddTestStep(c, 'new_tab_ui_cold_test', cmd)
+    self.AddTestStep(c, 'new_tab_ui_cold_test', cmd,
+                     do_step_if=self.TestStepFilter)
 
     # Warm tests
     c = self.GetPerfStepClass(factory_properties, 'new-tab-ui-warm',
@@ -306,7 +313,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Warm']
     cmd = self.GetTestCommand('startup_tests', options)
-    self.AddTestStep(c, 'new_tab_ui_warm_test', cmd)
+    self.AddTestStep(c, 'new_tab_ui_warm_test', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddTabSwitchingTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -317,7 +325,8 @@ class ChromiumCommands(commands.FactoryCommands):
                '-dump-histograms-on-exit', '-log-level=0']
 
     cmd = self.GetTestCommand('tab_switching_test', options)
-    self.AddTestStep(c, 'tab_switching_test', cmd)
+    self.AddTestStep(c, 'tab_switching_test', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddSizesTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -327,7 +336,8 @@ class ChromiumCommands(commands.FactoryCommands):
            '--target', self._target,
            '--build-dir', self._build_dir]
 
-    self.AddTestStep(c, 'sizes', cmd)
+    self.AddTestStep(c, 'sizes', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddTargetTests(self, timeout=None, verbose=None, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -362,7 +372,8 @@ class ChromiumCommands(commands.FactoryCommands):
     if timeout is None:
       # One hour default, sufficient for all target builds as of July 2009.
       timeout = 60 * 60
-    self.AddTestStep(c, 'targets', command, timeout=timeout)
+    self.AddTestStep(c, 'targets', command, timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
   def AddSunSpiderTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -372,7 +383,8 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=SunSpider*.*', '--gtest_print_time',
                '--run-sunspider']
     cmd = self.GetTestCommand('ui_tests', arg_list=options)
-    self.AddTestStep(c, 'sunspider_test', cmd)
+    self.AddTestStep(c, 'sunspider_test', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddV8BenchmarkTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -382,7 +394,8 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=V8Benchmark*.*', '--gtest_print_time',
                '--run-v8-benchmark']
     cmd = self.GetTestCommand('ui_tests', arg_list=options)
-    self.AddTestStep(c, 'v8_benchmark_test', cmd)
+    self.AddTestStep(c, 'v8_benchmark_test', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddDromaeoTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -394,7 +407,8 @@ class ChromiumCommands(commands.FactoryCommands):
       options = ['--gtest_filter=Dromaeo*Test.%sPerf' % test,
                  '--gtest_print_time', '--run-dromaeo-benchmark']
       cmd = self.GetTestCommand('ui_tests', arg_list=options)
-      self.AddTestStep(cls, 'dromaeo_%s_test' % test.lower(), cmd)
+      self.AddTestStep(cls, 'dromaeo_%s_test' % test.lower(), cmd,
+                       do_step_if=self.TestStepFilter)
 
   def AddDomPerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
@@ -404,7 +418,8 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._dom_perf_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
-    self.AddTestStep(c, 'dom_perf', cmd)
+    self.AddTestStep(c, 'dom_perf', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddChromeFramePerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
@@ -412,7 +427,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     cmd = self.GetTestCommand('chrome_frame_perftests')
-    self.AddTestStep(c, 'chrome_frame_perf', cmd)
+    self.AddTestStep(c, 'chrome_frame_perf', cmd,
+                     do_step_if=self.TestStepFilter)
 
   # Reliability sanity tests.
   def AddAutomatedUiTests(self, factory_properties=None):
@@ -497,7 +513,8 @@ class ChromiumCommands(commands.FactoryCommands):
                 '--gtest_print_time',
                 '--run-dom-checker-test'])
 
-    self.AddTestStep(shell.ShellCommand, 'dom_checker_tests', cmd)
+    self.AddTestStep(shell.ShellCommand, 'dom_checker_tests', cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200):
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
@@ -534,7 +551,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     test_name = 'memory test: %s' % test_name
     self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
-                     timeout=timeout)
+                     timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
   def AddHeapcheckTest(self, test_name, timeout=1200):
     build_dir = os.path.join(self._build_dir, self._target)
@@ -560,7 +578,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     test_name = 'heapcheck test: %s' % test_name
     self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
-                     timeout=timeout)
+                     timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
   def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
     args = args or []
@@ -578,7 +597,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(retcode_command.ReturnCodeCommand,
                      test_name,
                      test_cmd,
-                     timeout=timeout)
+                     timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
   def AddChromeDriverTest(self, timeout=1200):
     J = self.PathJoin
@@ -706,7 +726,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
                      test_description=pageheap_description,
-                     test_command=cmd)
+                     test_command=cmd,
+                     do_step_if=self.TestStepFilter)
 
     if archive_results:
       cmd = [self._python, self._layout_archive_tool,
@@ -916,7 +937,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     self.AddTestStep(c, 'media_perf', pyauto_functional_cmd,
-                     workdir=workdir, timeout=timeout)
+                     workdir=workdir, timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by
