@@ -623,7 +623,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                                   [pyauto_script, '-v'])
       if src_base:  # Adjust runtest.py path if needed.
         pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
-    elif (self._target_platform == 'linux2' and
+    elif (self._target_platform.startswith('linux') and
           factory_properties.get('use_xvfb_on_linux')):
       # Run thru runtest.py on linux to launch virtual x server
       pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
@@ -636,7 +636,8 @@ class ChromiumCommands(commands.FactoryCommands):
                      pyauto_functional_cmd,
                      env={'PYTHONPATH': '.'},
                      workdir=workdir,
-                     timeout=timeout)
+                     timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
   def AddWebkitTests(self, gpu, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
