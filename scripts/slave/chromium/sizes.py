@@ -97,7 +97,14 @@ RESULT %(framework_name)s-__DATA: __DATA= %(framework_data)s bytes
 RESULT %(framework_name)s-__OBJC: __OBJC= %(framework_objc)s bytes
 *RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes""") % (
         print_dict)
+    # Temp logging code to figure out official builder problems.
+    else:
+      print "For basename '%s', didn't find '%s'" % \
+        (base_name, chromium_executable)
+    # Found a match, don't check the other base_names.
     return result
+  # If no base_names matched, fail script.
+  return 66
 
 
 def main_linux(options, args):
