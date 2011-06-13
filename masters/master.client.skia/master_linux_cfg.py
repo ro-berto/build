@@ -29,38 +29,30 @@ B('Skia Linux Fixed Debug', 'f_skia_linux_fixed_debug',
   scheduler='skia_rel')
 F('f_skia_linux_fixed_debug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform='linux',
+    buildtype='Debug', additional_gyp_args='-Dskia_scalar=fixed',
     gm_image_subdir='base-linux-fixed',
-    environment_variables={
-        'SKIA_DEBUG': 'true',
-        'SKIA_SCALAR': 'fixed',
-        }).Build())
+    ).Build())
 B('Skia Linux Fixed NoDebug', 'f_skia_linux_fixed_nodebug',
   scheduler='skia_rel')
 F('f_skia_linux_fixed_nodebug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform='linux',
+    buildtype='Release', additional_gyp_args='-Dskia_scalar=fixed',
     gm_image_subdir='base-linux-fixed',
-    environment_variables={
-        'SKIA_DEBUG': 'false',
-        'SKIA_SCALAR': 'fixed',
-        }).Build())
+    ).Build())
 B('Skia Linux Float Debug', 'f_skia_linux_float_debug',
   scheduler='skia_rel')
 F('f_skia_linux_float_debug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform='linux',
+    buildtype='Debug', additional_gyp_args='-Dskia_scalar=float',
     gm_image_subdir='base-linux',
-    environment_variables={
-        'SKIA_DEBUG': 'true',
-        'SKIA_SCALAR': 'float',
-        }).Build())
+    ).Build())
 B('Skia Linux Float NoDebug', 'f_skia_linux_float_nodebug',
   scheduler='skia_rel')
 F('f_skia_linux_float_nodebug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform='linux',
+    buildtype='Release', additional_gyp_args='-Dskia_scalar=float',
     gm_image_subdir='base-linux',
-    environment_variables={
-        'SKIA_DEBUG': 'false',
-        'SKIA_SCALAR': 'float',
-        }).Build())
+    ).Build())
 
 
 def Update(config, active_master, c):
