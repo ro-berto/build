@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -16,9 +16,9 @@ def CommonChecks(input_api, output_api):
   def join(*args):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
-  black_list = list(input_api.DEFAULT_BLACK_LIST) + [
+  black_list = input_api.DEFAULT_BLACK_LIST + (
       r'.*slave/.*/build.*/.*', r'.*depot_tools/.*', r'.*unittests/.*',
-      r'.*scripts/release/.*']
+      r'.*scripts/release/.*')
 
   sys_path_backup = sys.path
   try:
@@ -38,6 +38,10 @@ def CommonChecks(input_api, output_api):
         black_list=black_list))
   finally:
     sys.path = sys_path_backup
+
+  if input_api.is_committing:
+    output.extend(input_api.canned_checks.PanProjectChecks(
+      input_api, output_api, excluded_paths=black_list))
   return output
 
 
