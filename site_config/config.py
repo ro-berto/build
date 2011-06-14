@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -41,6 +41,8 @@ class Master(config_private.Master):
   webkit_trunk_url = (config_private.Master.webkit_root_url + '/trunk')
 
   trunk_url_src = trunk_url + '/src'
+  trunk_url_tools = trunk_url + '/tools'
+  trunk_url_o3d = trunk_url + '/o3d'
   nacl_trunk_url = 'svn://svn.chromium.org/native_client/trunk'
   nacl_url = nacl_trunk_url + '/src/native_client'
   nacl_sdk_root_url = 'https://nativeclient-sdk.googlecode.com/svn'
