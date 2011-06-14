@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -146,7 +146,8 @@ F('view_dbg', chromeos().ChromiumOSFactory(
              'crypto_unittests',
              'cacheinvalidation_unittests',
              'jingle_unittests'],
-    factory_properties={'gclient_env': { 'GYP_DEFINES':'toolkit_views=1'},
+    factory_properties={'gclient_env':
+                            {'GYP_DEFINES':'toolkit_views=1 chromeos=1'},
                         'trigger': 'linux_views_dbg_trigger'}))
 
 B('Linux Tests (Views dbg)(1)', 'view_dbg_tests_1', 'testers',
