@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -99,10 +99,6 @@ RESULT %(framework_name)s-__OBJC: __OBJC= %(framework_objc)s bytes
         print_dict)
       # Found a match, don't check the other base_names.
       return result
-    # Temp logging code to figure out official builder problems.
-    else:
-      print "For basename '%s', didn't find '%s'" % \
-        (base_name, chromium_executable)
   # If no base_names matched, fail script.
   return 66
 
