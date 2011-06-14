@@ -49,17 +49,6 @@ B('Webkit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 #
-# Linux Dbg Builder
-#
-B('Webkit Linux Builder (dbg)', 'f_webkit_linux_dbg', scheduler='s6_webkit_dbg',
-   builddir='webkit-linux-latest-dbg')
-F('f_webkit_linux_dbg', linux().ChromiumWebkitLatestFactory(
-    target='Debug',
-    slave_type='Builder',
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
-             'DumpRenderTree']))
-
-#
 # Linux Dbg Webkit testers
 #
 

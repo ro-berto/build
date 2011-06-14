@@ -88,13 +88,15 @@ S('s7_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Win Dbg Builder
 #
-B('Win Builder (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
+B('Win (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
   builddir='win-latest-dbg')
 F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
-    slave_type='Builder',
     project='all.sln;chromium_builder',
+    tests=['browser_tests', 'interactive_ui', 'nacl_ui', 'unit', 'ui'],
     factory_properties={
+        'start_crash_handler': True,
+        'generate_gtest_json': True,
         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 
@@ -105,17 +107,6 @@ F('f_win_shared_dbg', win().ChromiumWebkitLatestFactory(
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'component=shared_library'}}))
 
-#
-# Win Dbg testers
-#
-
-B('XP Tests (dbg)', 'f_win_dbg_tests', scheduler='s7_webkit_builder_dbg')
-F('f_win_dbg_tests', win().ChromiumWebkitLatestFactory(
-    target='Debug',
-    project='all.sln;chromium_builder',
-    tests=['browser_tests', 'interactive_ui', 'nacl_ui', 'unit', 'ui'],
-    factory_properties={'start_crash_handler': True,
-                        'generate_gtest_json': True}))
 
 def Update(config, active_master, c):
   return helper.Update(c)
