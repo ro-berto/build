@@ -65,7 +65,6 @@ good_revision_steps = {
     'sync_unit_tests',
     'ui_tests',
     'unit_tests',
-    'cacheinvalidation_unittests',
     'jingle_unittests',
   ],
   # Dependent on 'Linux Builder (dbg)'
