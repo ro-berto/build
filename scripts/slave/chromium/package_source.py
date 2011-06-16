@@ -27,7 +27,7 @@ def main(argv):
     raise Exception('ERROR: %s cannot be removed, exiting' % FILENAME)
 
   if chromium_utils.RunCommand(['tar', 'czvf', FILENAME, '--exclude=.svn',
-                                'src/']) != 0:
+                                'src/', 'tools/', 'o3d/']) != 0:
     raise Exception('ERROR: failed to create %s, exiting' % FILENAME)
 
   status = slave_utils.GSUtilCopyFile(FILENAME, GSBASE)
