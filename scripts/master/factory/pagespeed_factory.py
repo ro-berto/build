@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -16,6 +16,9 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the pagespeed master.cfg file."""
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
+  REL_SRC_ROOT = 'src'
+  TEST_ARG_LIST = [ '--srcroot', REL_SRC_ROOT ]
+
 
   def __init__(self, build_dir, target_platform=None):
     main = gclient_factory.GClientSolution(
@@ -36,8 +39,12 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     f = factory_cmd_obj
     fp = factory_properties
 
-    if R('unit'):          f.AddBasicGTestTestStep('pagespeed_test', fp)
-    if R('firefox'):       f.AddBasicGTestTestStep('pagespeed_firefox_test', fp)
+    if R('unit'):
+      f.AddBasicGTestTestStep('pagespeed_test', fp,
+                              arg_list=PageSpeedFactory.TEST_ARG_LIST)
+    if R('firefox'):
+      f.AddBasicGTestTestStep('pagespeed_firefox_test', fp,
+                              arg_list=PageSpeedFactory.TEST_ARG_LIST)
 
 
   def PageSpeedFactory(self, target='Release', clobber=False, tests=None,
