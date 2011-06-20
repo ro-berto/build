@@ -71,16 +71,14 @@ class BuildFactory(util.ComparableMixin):
         b.setStepFactories(self.steps)
         return b
 
+    # TODO(jeffbailey): http://crbug.com/86819
     def addStep(self, step_or_factory, **kwargs):
         if isinstance(step_or_factory, BuildStep):
             if kwargs:
                 raise ArgumentsInTheWrongPlace()
             s = step_or_factory.getStepFactory()
-        elif type(step_or_factory) == type(BuildStep) and \
-                issubclass(step_or_factory, BuildStep):
-            s = (step_or_factory, dict(kwargs))
         else:
-            raise ValueError('%r is not a BuildStep nor BuildStep subclass' % step_or_factory)
+            s = (step_or_factory, dict(kwargs))
         self.steps.append(s)
 
     def addSteps(self, steps):
