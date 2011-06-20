@@ -42,8 +42,13 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     if R('unit'):
       f.AddBasicGTestTestStep('pagespeed_test', fp,
                               arg_list=PageSpeedFactory.TEST_ARG_LIST)
+      f.AddBasicGTestTestStep('pagespeed_image_test', fp,
+                              arg_list=PageSpeedFactory.TEST_ARG_LIST)
     if R('firefox'):
       f.AddBasicGTestTestStep('pagespeed_firefox_test', fp,
+                              arg_list=PageSpeedFactory.TEST_ARG_LIST)
+    if R('chromium'):
+      f.AddBasicGTestTestStep('pagespeed_chromium_test', fp,
                               arg_list=PageSpeedFactory.TEST_ARG_LIST)
 
 
@@ -71,12 +76,36 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     return factory
 
   def FirefoxAddOnFactory(self, target='Release', clobber=False,
-                       tests=None, mode=None, slave_type='BuilderTester',
-                       options=None, compile_timeout=1200, build_url=None,
-                       project=None, factory_properties=None):
+                          tests=None, mode=None, slave_type='BuilderTester',
+                          options=None, compile_timeout=1200, build_url=None,
+                          project=None, factory_properties=None):
     # For firefox addon we don't use the default DEPS file.
     self._solutions[0] = gclient_factory.GClientSolution(
         "http://page-speed.googlecode.com/svn/firefox_addon/trunk/src")
+    return self.PageSpeedFactory(target, clobber, tests, mode, slave_type,
+                                 options, compile_timeout, build_url, project,
+                                 factory_properties)
+
+  def ChromiumExtensionFactory(self, target='Release', clobber=False,
+                               tests=None, mode=None,
+                               slave_type='BuilderTester', options=None,
+                               compile_timeout=1200, build_url=None,
+                               project=None, factory_properties=None):
+    # For chromium extension we don't use the default DEPS file.
+    self._solutions[0] = gclient_factory.GClientSolution(
+        "http://page-speed.googlecode.com/svn/chromium_extension/trunk/src")
+    return self.PageSpeedFactory(target, clobber, tests, mode, slave_type,
+                                 options, compile_timeout, build_url, project,
+                                 factory_properties)
+
+  def ModPageSpeedFactory(self, target='Release', clobber=False,
+                          tests=None, mode=None,
+                          slave_type='BuilderTester', options=None,
+                          compile_timeout=1200, build_url=None,
+                          project=None, factory_properties=None):
+    # For mod_pagespeed we don't use the default DEPS file.
+    self._solutions[0] = gclient_factory.GClientSolution(
+        "http://modpagespeed.googlecode.com/svn/trunk/src")
     return self.PageSpeedFactory(target, clobber, tests, mode, slave_type,
                                  options, compile_timeout, build_url, project,
                                  factory_properties)
