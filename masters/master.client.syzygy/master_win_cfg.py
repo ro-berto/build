@@ -5,7 +5,7 @@
 from master import master_config
 from master.factory import syzygy_factory
 
-defaults = {}
+defaults = { 'category': 'continous' }
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
@@ -27,16 +27,22 @@ S('syzygy_cont', branch='trunk', treeStableTimer=60)
 
 
 #
-# Windows Release Builder
+# Windows continuous Release builder
 #
 B('Syzygy Release', 'f_syzygy_win_rel', scheduler='syzygy_cont')
 F('f_syzygy_win_rel', win().SyzygyFactory())
 
 #
-# Windows Debug Builder
+# Windows continuous Debug builder
 #
 B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont')
 F('f_syzygy_win_dbg', win().SyzygyFactory(target='debug'))
+
+#
+# Windows continuous code coverage builder
+#
+B('Syzygy Coverage', 'f_syzygy_win_cov', scheduler='syzygy_cont')
+F('f_syzygy_win_cov', win().SyzygyCoverageFactory(target='release'))
 
 
 def Update(config, active_master, c):

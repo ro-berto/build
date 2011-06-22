@@ -6,6 +6,7 @@
 
 This is based on commands.py and adds Syzygy-specific commands."""
 
+from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
 from master.factory import commands
@@ -30,8 +31,7 @@ class SyzygyCommands(commands.FactoryCommands):
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
                '--verbose']
-    self.AddTestStep(shell.ShellCommand, 'randomize', command,
-                     'Randomly Reorder Chrome')
+    self.AddTestStep(shell.ShellCommand, 'Randomly Reorder Chrome', command)
 
   def AddBenchmarkChromeStep(self):
     # Benchmark script path.
@@ -41,5 +41,25 @@ class SyzygyCommands(commands.FactoryCommands):
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
                '--verbose']
-    self.AddTestStep(shell.ShellCommand, 'benchmark', command,
-                     'Benchmark Chrome')
+    self.AddTestStep(shell.ShellCommand, 'Benchmark Chrome', command)
+
+  def AddGenerateCoverage(self):
+    # Coverage script path.
+    script_path = self.PathJoin(self._build_dir, 'build',
+                                'generate_coverage.py')
+    command = [self._python,
+               script_path,
+               '--verbose',
+               '--build-dir',
+               self.PathJoin(self._build_dir, self._target)]
+    self.AddTestStep(shell.ShellCommand, 'Capture Unittest Coverage', command)
+
+    # Store the coverage results by the checkout revision.
+    dst_path = 'gs://syzygy-archive/builds/coverage/%(got_revision)s/'
+    command = [self.PathJoin(self._script_dir, 'gsutil.bat'),
+               'cp', '-R', '-t', '-a', 'public-read',
+               self.PathJoin(self._build_dir, self._target, 'cov'),
+               WithProperties(dst_path), ]
+    self._factory.addStep(shell.ShellCommand, name='archive',
+                          description='Archive Coverage Report',
+                          command=command)
