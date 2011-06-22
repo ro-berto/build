@@ -795,6 +795,12 @@ def main(argv):
   if args:
     raise StagingError('Unknown arguments: %s' % args)
 
+  # Temporary: disable archiving full builds to gs, so we can restart the master
+  # without immediately turning this feature on.
+  gs_bucket = options.factory_properties.get('gs_bucket', None)
+  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
+    options.factory_properties.pop('gs_bucket', None)
+
   if not options.ignore:
     # Independent of any other configuration, these exes and any symbol files
     # derived from them (i.e., any filename starting with these strings) will
