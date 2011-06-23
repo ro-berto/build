@@ -138,7 +138,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/third_party/tlslite',
         'http://src.chromium.org/svn/trunk/src/third_party/tlslite'),
        ('src/third_party/python_26',
-        'http://src.chromium.org/svn/trunk/tools/third_party/python_26')]
+        'http://src.chromium.org/svn/trunk/tools/third_party/python_26'),
+       ('src/chrome/test/data/media/avperf',
+        'http://src.chromium.org/svn/trunk/deps/avperf'),
+       ('src/chrome/test/tools/reference_build/',
+        'http://src.chromium.org/svn/trunk/deps/reference_builds'),
+        ]
   # Extend if we can.
   # pylint: disable=E1101
   if config.Master.trunk_internal_url:
@@ -334,8 +339,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 workdir=workdir,
                                 factory_properties=fp)
 
-    # HTML5 media tag performance test using PyAuto.
-    if R('media_perf'):
+    # HTML5 media tag performance/functional test using PyAuto.
+    if R('avperf'):
       platform_mapping = {
         'win32': 'win32',
         'darwin': 'mac',
@@ -346,10 +351,19 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       workdir = os.path.join(f.working_dir, 'chrome-' + zip_platform)
       # Performance test should be run on virtual X buffer.
       fp['use_xvfb_on_linux'] = True
-      f.AddMediaPerfTests(factory_properties=fp, src_base='..',
-                          workdir=workdir)
+      # Run test with matrix form input file.
+      f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
+                       matrix=True, number_of_media_files=1,
+                       suite_name='AV_PERF')
+      # Run test with list form input file.
+      f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
+                       matrix=False, number_of_media_files=1,
+                       suite_name='AV_PERF')
 
-    # ChromeDriver tests.
+      # Run functional tests.
+      f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
+                       matrix=False, number_of_media_files=1,
+                       suite_name='AV_FUNC')
     if R('chromedriver_tests'):
       f.AddChromeDriverTest()
     if R('webdriver_tests'):
