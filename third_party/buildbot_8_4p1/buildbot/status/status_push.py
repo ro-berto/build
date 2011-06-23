@@ -328,7 +328,7 @@ class HttpStatusPush(StatusPush):
 
     def __init__(self, serverUrl, debug=None, maxMemoryItems=None,
                  maxDiskItems=None, chunkSize=200, maxHttpRequestSize=2**20,
-                 **kwargs):
+                 extra_post_params=None, **kwargs):
         """
         @serverUrl: Base URL to be used to push events notifications.
         @maxMemoryItems: Maximum number of items to keep queued in memory.
@@ -341,6 +341,7 @@ class HttpStatusPush(StatusPush):
         """
         # Parameters.
         self.serverUrl = serverUrl
+        self.extra_post_params = extra_post_params or {}
         self.debug = debug
         self.chunkSize = chunkSize
         self.lastPushWasSuccessful = True
@@ -378,7 +379,9 @@ class HttpStatusPush(StatusPush):
                 packets = json.dumps(items, indent=2, sort_keys=True)
             else:
                 packets = json.dumps(items, separators=(',',':'))
-            data = urllib.urlencode({'packets': packets})
+            params = {'packets': packets}
+            params.update(self.extra_post_params)
+            data = urllib.urlencode(params)
             if (not self.maxHttpRequestSize or
                 len(data) < self.maxHttpRequestSize):
                 return (data, items)
@@ -395,6 +398,8 @@ class HttpStatusPush(StatusPush):
 
     def pushHttp(self):
         """Do the HTTP POST to the server."""
+        if not self.serverUrl:
+            return
         (encoded_packets, items) = self.popChunk()
 
         def Success(result):
