@@ -61,9 +61,9 @@ class ANYBRANCH: pass # a flag value, used below
 
 class CachedStatusBox(object):
     """Basic data class to remember the information for a box on the console."""
-    def __init__(self, color, title, details, url, tag):
+    def __init__(self, color, pageTitle, details, url, tag):
         self.color = color
-        self.title = title
+        self.pageTitle = pageTitle
         self.details = details
         self.url = url
         self.tag = tag
@@ -88,9 +88,9 @@ class CacheStatus(object):
                                        self.allBoxes[builder][revision].color)
         return data
 
-    def insert(self, builderName, revision, color, title, details, url, tag):
+    def insert(self, builderName, revision, color, pageTitle, details, url, tag):
         """Insert a new build into the cache."""
-        box = CachedStatusBox(color, title, details, url, tag)
+        box = CachedStatusBox(color, pageTitle, details, url, tag)
         if not self.allBoxes.get(builderName):
             self.allBoxes[builderName] = {}
 
@@ -518,7 +518,7 @@ class ConsoleStatusResource(HtmlResource):
 
                     b = {}
                     b["url"] = cached_value.url
-                    b["title"] = cached_value.title
+                    b["pageTitle"] = cached_value.pageTitle
                     b["color"] = cached_value.color
                     b["tag"] = cached_value.tag
 
@@ -590,7 +590,7 @@ class ConsoleStatusResource(HtmlResource):
                 if resultsClass not in ("running", "notstarted"):
                   debugInfo["added_blocks"] += 1
                   self.cache.insert(builder, revision.revision, resultsClass,
-                                    title, current_details, url, tag)
+                                    pageTitle, current_details, url, tag)
 
         return (builds, details)
 
