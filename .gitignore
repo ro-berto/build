@@ -606,7 +606,6 @@ twistd.pid
 /masters/master.client.pagespeed/Windows_XP
 /masters/master.client.pagespeed/Windows_XP_Fx
 /masters/master.client.pagespeed/Windows_XP_Lib
-/masters/master.client.skia/templates
 /masters/master.client.v8/chromium-dbg-linux-interactive-v8
 /masters/master.client.v8/chromium-dbg-xp-interactive-v8
 /masters/master.client.v8/chromium-rel-mac5-perf-v8
