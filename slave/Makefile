@@ -29,6 +29,8 @@ USE_LAUNCHD := \
           echo 1)
 
 export PYTHONPATH=../third_party/buildbot_7_12:../third_party/twisted_8_1
+# TODO(cmp): Uncomment when ready to upgrade slaves to Buildbot 0.8.4p1.
+# export PYTHONPATH=../third_party/buildbot_slave_8_4:../third_party/twisted_10_2
 
 start:
 ifneq ($(USE_LAUNCHD),1)
