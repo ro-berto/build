@@ -40,21 +40,20 @@ class CbuildbotFactory(object):
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
   _default_chromite = _default_git_base + '/chromite'
 
+  DEFAULT_CBUILDBOT_TYPE = 'cbuildbot'
+  CHROME_CBUILDBOT_TYPE = 'cbuildbot_chrome'
+
   # Redefining built-in 'type'
   # pylint: disable=W0622
-  def __init__(self, type=None, board='x86-generic', buildroot='/b/cbuild',
-               triagelog=None, params='', timeout=9000, variant=None,
-               is_master=False, branch='master', old_style=False,
+  def __init__(self, type=DEFAULT_CBUILDBOT_TYPE, board='x86-generic',
+               buildroot='/b/cbuild', triagelog=None, params='', timeout=9000,
+               variant=None, is_master=False, branch='master', old_style=False,
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite,
                dry_run=False):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
-    self.old_style = old_style
-    if self.old_style:
-      self.chromite_repo = CbuildbotFactory._default_git_base + '/crosutils'
-    else:
-      self.chromite_repo = chromite_repo
+    self.chromite_repo = chromite_repo
     self.timeout = timeout
     self.variant = variant
     self.board = board
@@ -134,7 +133,7 @@ class CbuildbotFactory(object):
     #has been passed in and we want to honor the explicitly passed in branch
 
     clear_and_clone_cmd += '%s checkout ' % git_bin
-    
+
     if self.branch == 'master':
       # Whitelist top of tree chrome PFQ builds to always use master
       # as the branch checkout, this avoids us trying to clone a SVN
@@ -144,14 +143,14 @@ class CbuildbotFactory(object):
       # branch/revision unfortunately the only way it is available is via 
       # WithProperties which is only transferred to something usable in a shell
       # step.
-      if self.type and ('cbuildbot_chrome' == self.type):
+      if self.type and ('CHROME_CBUILDBOT_TYPE' == self.type):
         clear_and_clone_cmd += 'master'
       else:
         # If branch is passed by the change source and we are not chrome pfq use
         # use it.
         clear_and_clone_cmd += '%(branch)s'
     else:
-      clear_and_clone_cmd +=  self.branch
+      clear_and_clone_cmd += self.branch
 
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
@@ -197,16 +196,17 @@ class CbuildbotFactory(object):
 
     # Triggered cbuildbots (pfq slaves) have this property set.
     if self.is_master:
-      self.f_cbuild.addStep(
+      if self.type == self.CHROME_CBUILDBOT_TYPE:
+        self.f_cbuild.addStep(
+          trigger.Trigger(schedulerNames=['chrome_pre_flight_queue_slaves'],
+                          waitForFinish=False))
+      else:
+        self.f_cbuild.addStep(
           trigger.Trigger(schedulerNames=['pre_flight_queue_slaves'],
                           waitForFinish=False))
 
-    if self.old_style:
-      cbuild_cmd = ['crosutils/bin/cbuildbot',
-                    shell.WithProperties("--buildnumber=%(buildnumber)s")]
-    else:
-      cbuild_cmd = ['chromite/buildbot/cbuildbot',
-                    shell.WithProperties("--buildnumber=%(buildnumber)s")]
+    cbuild_cmd = ['chromite/buildbot/cbuildbot',
+                  shell.WithProperties("--buildnumber=%(buildnumber)s")]
 
     if self._branchAtOrAbove('0.12'):
       cbuild_cmd += ['--buildbot']
@@ -322,7 +322,8 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                crostools_repo=CbuildbotFactory._default_crostools,
                chromite_repo=CbuildbotFactory._default_chromite,
                dry_run=False):
-    CbuildbotFactory.__init__(self, type='cbuildbot_chrome', board=None,
+    CbuildbotFactory.__init__(self, type=CbuildbotFactory.CHROME_CBUILDBOT_TYPE,
+                              board=None,
                               buildroot=buildroot, is_master=is_master,
                               crostools_repo=crostools_repo,
                               chromite_repo=chromite_repo,
