@@ -5,6 +5,7 @@
 import os
 import re
 
+import buildbot
 from buildbot import interfaces, util
 from buildbot.buildslave import BuildSlave
 from buildbot.status import mail
@@ -219,7 +220,8 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   kwargs['order_console_by_time'] = order_console_by_time
   # In Buildbot 0.8.4p1, pass provide_feeds as a list to signal what extra
   # services Buildbot should be able to provide over HTTP.
-  kwargs['provide_feeds'] = ['json']
+  if buildbot.version == '0.8.4p1':
+    kwargs['provide_feeds'] = ['json']
   if active_master.master_port:
     c['status'].append(WebStatus(active_master.master_port, allowForce=True,
                                  num_events_max=3000, **kwargs))
