@@ -55,9 +55,9 @@ class SyzygyCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Capture Unittest Coverage', command)
 
     # Store the coverage results by the checkout revision.
-    dst_path = 'gs://syzygy-archive/builds/coverage/%(got_revision)s/'
-    command = [self.PathJoin(self._script_dir, 'gsutil.bat'),
-               'cp', '-R', '-t', '-a', 'public-read',
+    dst_path = 'gs://syzygy-archive/builds/coverage/%(got_revision)s'
+    command = [self._python,
+               self.PathJoin(self._script_dir, 'syzygy/gsutil_cp_dir.py'),
                self.PathJoin(self._build_dir, self._target, 'cov'),
                WithProperties(dst_path), ]
     self._factory.addStep(shell.ShellCommand, name='archive',
