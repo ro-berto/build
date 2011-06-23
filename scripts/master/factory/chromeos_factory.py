@@ -88,7 +88,7 @@ class CbuildbotFactory(object):
 
        '0.12.123.456' > '0.12'
        '0.11.123.456' < '0.12'
-       
+
        Note that this method can break with some version strings out there:
        '0.11.241.B'. In this case, if you don't specify enough detail
        reach the 'B' it's fine. If that's a problem, the method will
@@ -140,10 +140,10 @@ class CbuildbotFactory(object):
       # revision that is passed to the builder. We are doing this in this
       # fashion to avoid having to write a script that wraps our git call
       # to confirm the hash we are passed. While technically we have access to
-      # branch/revision unfortunately the only way it is available is via 
+      # branch/revision unfortunately the only way it is available is via
       # WithProperties which is only transferred to something usable in a shell
       # step.
-      if self.type and ('CHROME_CBUILDBOT_TYPE' == self.type):
+      if self.type and (self.CHROME_CBUILDBOT_TYPE == self.type):
         clear_and_clone_cmd += 'master'
       else:
         # If branch is passed by the change source and we are not chrome pfq use
