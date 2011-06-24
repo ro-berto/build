@@ -36,7 +36,7 @@ F('win_clobber', win().ChromiumFactory(
     project='all.sln',
     tests=['sizes', 'selenium', 'memory', 'reliability', 'check_bins'],
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshot',
+                        'gs_bucket': 'gs://chromium-browser-snapshots',
                         'extra_archive_paths': 'ceee,chrome_frame',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-xp',
@@ -57,7 +57,7 @@ F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=['sizes', 'dom_checker', 'memory'],
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshot',
+                        'gs_bucket': 'gs://chromium-browser-snapshots',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-mac',
                         'expectations': True,
@@ -98,7 +98,7 @@ F('linux_clobber', linux().ChromiumFactory(
     tests=['dom_checker', 'sizes', 'memory', 'check_perms'],
     options=['--compiler=goma'],
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshot',
+                        'gs_bucket': 'gs://chromium-browser-snapshots',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-linux',
                         'expectations': True,
@@ -112,7 +112,7 @@ F('linux64_clobber', linux().ChromiumFactory(
     options=['--compiler=goma'],
     factory_properties={
         'archive_build': True,
-        'gs_bucket': 'gs://chromium-browser-snapshot',
+        'gs_bucket': 'gs://chromium-browser-snapshots',
         'show_perf_results': True,
         'generate_gtest_json': True,
         'perf_id': 'chromium-rel-linux-64',
@@ -129,7 +129,7 @@ F('arm_clobber', linux().ChromiumOSFactory(
              '--crosstool=' + crosstool_prefix,
              'chromeos_builder'],
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshot',
+                        'gs_bucket': 'gs://chromium-browser-snapshots',
                         'gclient_env': arm_gclient_env}))
 
 def Update(config, active_master, c):

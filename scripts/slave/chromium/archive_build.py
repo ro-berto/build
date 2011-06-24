@@ -105,7 +105,7 @@ def Write(file_path, data):
   finally:
     f.close()
 
-def MyCopyFileToDir(filename, destination, gs_base, gs_subdir=None,
+def MyCopyFileToDir(filename, destination, gs_base, gs_subdir='',
                     mimetype=None):
   if gs_base:
     status = slave_utils.GSUtilCopyFile(filename, gs_base, gs_subdir, mimetype)
@@ -797,10 +797,15 @@ def main(argv):
   if args:
     raise StagingError('Unknown arguments: %s' % args)
 
-  # Temporary: disable archiving full builds to gs, so we can restart the master
-  # without immediately turning this feature on.
+  # Two temporary hacks:
+  #   - Fix typo in master.chromium/master_full_cfg.py: snapshot -> snapshots
+  #   - Disable archiving full builds to gs, so we can restart the master
+  #     without immediately turning this feature on.
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
+    gs_bucket += 's'
+    options.factory_properties['gs_bucket'] = gs_bucket
+  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshots':
     options.factory_properties.pop('gs_bucket', None)
 
   if not options.ignore:
