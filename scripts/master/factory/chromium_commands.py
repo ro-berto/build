@@ -951,6 +951,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                               pyauto_functional_cmd[1])
     return pyauto_functional_cmd
 
+  # pylint: disable=R0201
   def _GetTestAvPerfFileNames(self, matrix=True):
     """Generates AVPerf file names needed for testing.
 
