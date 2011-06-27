@@ -12,6 +12,29 @@ from buildbot.steps import shell
 from master.factory import commands
 
 
+class _UrlStatusCommand(shell.ShellCommand):
+  """A ShellCommand subclass that adorns its build status with a URL on success.
+  """
+  def __init__(self, extra_text=None, **kw):
+    """Initialize the buildstep.
+
+    Args:
+         extra_text: a tuple of (name, url) to pass to addUrl on successful
+            completion.
+    """
+    self._extra_text = extra_text
+    shell.ShellCommand.__init__(self, **kw)
+
+    # Record our argument for the factory.
+    self.addFactoryArguments(extra_text=extra_text)
+
+  def commandComplete(self, cmd):
+    """On success, add the URL provided to our status."""
+    if cmd.rc == 0 and self._extra_text:
+      (name, url) = self._extra_text
+      self.addURL(self.build.render(name), self.build.render(url))
+
+
 class SyzygyCommands(commands.FactoryCommands):
   """Encapsulates methods to add Syzygy commands to a buildbot factory."""
 
@@ -22,7 +45,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
     self._arch = target_arch
     self._factory = factory
-  
+
   def AddRandomizeChromeStep(self):
     # Randomization script path.
     script_path = self.PathJoin(self._build_dir, 'internal', 'build',
@@ -55,11 +78,20 @@ class SyzygyCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Capture Unittest Coverage', command)
 
     # Store the coverage results by the checkout revision.
-    dst_path = 'gs://syzygy-archive/builds/coverage/%(got_revision)s'
+    src_dir = self.PathJoin(self._build_dir, self._target, 'cov')
+    dst_gs_url = WithProperties(
+        'gs://syzygy-archive/builds/coverage/%(got_revision)s')
+    url = WithProperties(
+        'http://syzygy-archive.commondatastorage.googleapis.com/builds/'
+           'coverage/%(got_revision)s/index.html')
+
     command = [self._python,
                self.PathJoin(self._script_dir, 'syzygy/gsutil_cp_dir.py'),
-               self.PathJoin(self._build_dir, self._target, 'cov'),
-               WithProperties(dst_path), ]
-    self._factory.addStep(shell.ShellCommand, name='archive',
-                          description='Archive Coverage Report',
-                          command=command)
+               src_dir,
+               dst_gs_url,]
+
+    self._factory.addStep(_UrlStatusCommand,
+                          command=command,
+                          extra_text=('Coverage Report', url),
+                          name='archive',
+                          description='Archive Coverage Report')
