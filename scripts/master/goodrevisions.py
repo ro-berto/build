@@ -176,7 +176,7 @@ class GoodRevisions(base.StatusReceiverMultiService):
     self.succeeded_steps.setdefault(latest_revision, {})
     revision_status = self.succeeded_steps[latest_revision]
     revision_status.setdefault(builder_name, [])
-    revision_status[builder_name].extend(step_text)
+    revision_status[builder_name].append(step_text)
 
     # We must complete all the requested steps for all builds, before we can
     # store this revision as a successful one and then forget about all
