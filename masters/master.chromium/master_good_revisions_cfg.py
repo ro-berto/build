@@ -50,9 +50,15 @@ good_revision_steps = {
   ],
   # Dependent on 'Mac Builder (dbg)'
   'Mac 10.5 Tests (dbg)(1)': [
-    'browser_tests', 'check_deps', 'googleurl_unittests', 'media_unittests',
-    'printing_unittests', 'remoting_unittests', 'interactive_ui_tests',
+    'browser_tests',
+    'check_deps',
+    'googleurl_unittests',
+    'media_unittests',
+    'printing_unittests',
+    'remoting_unittests',
+    'interactive_ui_tests',
     'ui_tests',
+    'jingle_unittests',
   ],
   'Mac 10.5 Tests (dbg)(2)': [
     'browser_tests', 'net_unittests', 'ui_tests',
@@ -68,7 +74,6 @@ good_revision_steps = {
     'sync_unit_tests',
     'ui_tests',
     'unit_tests',
-    'jingle_unittests',
   ],
   # Dependent on 'Linux Builder (dbg)'
   'Linux Tests (dbg)(1)': [
@@ -91,7 +96,7 @@ good_revision_steps = {
     'nacl_ui_tests',
     'nacl_sandbox_tests',
     'cacheinvalidation_unittests',
-    'jingle_unittests'
+    'jingle_unittests',
   ],
   'Linux Builder (ChromiumOS)': [
     'compile',
@@ -106,7 +111,7 @@ good_revision_steps = {
     'unit_tests',
     'app_unittests',
     'gfx_unittests',
-    'jingle_unittests'
+    'jingle_unittests',
   ],
   # Disabled - It takes an hour to cycle.
   #'Linux Builder (ChromiumOS dbg)': [
