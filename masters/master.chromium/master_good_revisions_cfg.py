@@ -42,6 +42,9 @@ good_revision_steps = {
   'Vista Tests (dbg)(6)': [
     'ui_tests', 'browser_tests',
   ],
+  'Chrome Frame Tests (ie8)': [
+    'chrome_frame_net_tests', 'chrome_frame_unittests',
+  ],
   'Interactive Tests (dbg)': [
     'interactive_ui_tests',
   ],
