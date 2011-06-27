@@ -290,6 +290,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('chrome_frame_net_tests', fp)
       f.AddBasicGTestTestStep('chrome_frame_unittests', fp)
       f.AddBasicGTestTestStep('chrome_frame_tests', fp)
+    elif R('chrome_frame_net_tests'):
+      # Also support adding only the chrome_frame_net_tests if 'chrome_frame'
+      # is not specified.
+      f.AddBasicGTestTestStep('chrome_frame_net_tests', fp)
 
     # Valgrind tests:
     for test in tests:
