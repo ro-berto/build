@@ -80,7 +80,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS = {
     '^(webkit|webkit_gpu)$':
       [('src/webkit/data/layout_tests/LayoutTests', None),
-       ('src/third_party/WebKit/LayoutTests', None),]
+       ('src/third_party/WebKit/LayoutTests', None),],
+    'avperf': [('src/chrome/test/data/media/avperf',
+                config.Master.trunk_url + '/deps/avperf')]
   }
 
   NEEDED_COMPONENTS_INTERNAL = {
