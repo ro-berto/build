@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -8,6 +8,7 @@ import os
 import re
 import urllib
 
+import buildbot
 from buildbot import interfaces
 from buildbot import util
 import buildbot.process as process
@@ -17,7 +18,22 @@ import buildbot.status.web.console as console
 import buildbot.status.web.waterfall as waterfall
 import buildbot.status.web.changes as changes
 import buildbot.status.web.builder as builder
-from buildbot.status.web.base import make_row
+
+if buildbot.version == '0.7.12':
+  from buildbot.status.web.base import make_row
+else:
+  ROW_TEMPLATE = '''
+  <div class="row">
+    <span class="label">%(label)s</span>
+    <span class="field">%(field)s</span>
+  </div>
+  '''
+  from twisted.web import html
+  def make_row(label, field):
+    """Imported from Buildbot 0.7.12."""
+    label = html.escape(label)
+    return ROW_TEMPLATE % {"label": label, "field": field}
+
 import buildbot.status.builder as statusbuilder
 import buildbot.sourcestamp as sourcestamp
 
@@ -121,7 +137,11 @@ def HookChangeHtmlBox():
     changes.Change.get_HTML_box_hooked = True
 
 
-HookChangeHtmlBox()
+# In Buildbot 0.7.12, hook get_HTML_box to add the revision number to the change
+# revision to the waterfall.  In 0.8.4p1, modify Buildbot directly to add the
+# change revision.
+if buildbot.version == '0.7.12':
+  HookChangeHtmlBox()
 
 
 def GetAnnounce(public_html):

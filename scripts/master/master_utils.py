@@ -14,10 +14,7 @@ from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
-try:
-  from master.chromium_status import WebStatus
-except ImportError:
-  from buildbot.status.web.baseweb import WebStatus
+from master.chromium_status import WebStatus
 
 from master import slaves_list
 import config

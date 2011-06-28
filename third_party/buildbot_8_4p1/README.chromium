@@ -340,3 +340,34 @@ index 59cbc0e..c95ac7f 100644
              return data
          d.addCallback(got_changes)
          return d
+
+
+Add revision to changes in the waterfall.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/changes.py b/third_party/buildbo
+index 415e781..a15dff8 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/changes.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/changes.py
+@@ -63,7 +63,8 @@ class ChangeBox(components.Adapter):
+         template = req.site.buildbot_service.templates.get_template("change_macros.html")
+         text = template.module.box_contents(url=url,
+                                             who=self.original.getShortAuthor(),
+-                                            pageTitle=self.original.comments)
++                                            pageTitle=self.original.comments,
++                                            revision=self.original.revision)
+         return Box([text], class_="Change")
+ components.registerAdapter(ChangeBox, Change, IBox)
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/templates/change_macros.html b/t
+index b9b7780..9a37b47 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/templates/change_macros.html
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/templates/change_macros.html
+@@ -67,6 +67,6 @@
+ {% endif %}
+ {%- endmacro %}
+
+-{% macro box_contents(who, url, pageTitle) -%}
+-<a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a>
++{% macro box_contents(who, url, pageTitle, revision) -%}
++<a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a><br>r{{ revision }}
+ {%- endmacro %}
