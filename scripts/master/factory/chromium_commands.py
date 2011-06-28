@@ -162,7 +162,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self._factory.addStep(archive_command.ArchiveCommand,
                           name='package_source',
-                          timeout=600,
+                          timeout=1200,
                           description='packaging source',
                           descriptionDone='packaged source',
                           base_url=None,
