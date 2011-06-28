@@ -206,9 +206,12 @@ class StatsStatusResource(HtmlResource):
 
     def getTitle(self, request):
         status = self.getStatus(request)
-        projectName = status.getProjectName()
-        if projectName:
-            return "BuildBot: %s" % projectName
+        if status.getTitle:
+          title = status.getTitle()
+        else:
+          title = status.getProjectName()
+        if title:
+            return "BuildBot: %s" % title
         else:
             return "BuildBot"
 
@@ -274,9 +277,6 @@ class StatsStatusResource(HtmlResource):
     def body(self, request):
         # and the data we want to render
         status = self.getStatus(request)
-
-        projectURL = status.getProjectURL()
-        projectName = status.getProjectName()
 
         # Get all revisions we can find.
         source = self.getChangemaster(request)
