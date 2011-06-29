@@ -41,7 +41,8 @@ def layout_test(options, args):
   slave_name = slave_utils.SlaveBuildName(build_dir)
 
   command = [run_webkit_tests,
-             '--noshow-results',
+             '--no-show-results',
+             '--no-new-test-results',
              '--verbose',  # Verbose output is enabled to support the dashboard.
              '--full-results-html',  # To make debugging failures easier.
              '--clobber-old-results',  # Clobber test results before each run.
