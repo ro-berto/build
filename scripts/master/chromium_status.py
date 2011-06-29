@@ -97,6 +97,7 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
   def body(self, request):
     status = self.getStatus(request)
     builders = request.args.get("builder", status.getBuilderNames())
+    titles = request.args.get("titles", "off")
 
     data = "<table style='width:100%'><tr>"
 
@@ -111,8 +112,8 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
 
       url = (self.path_to_root(request) + "waterfall?builder=" +
               urllib.quote(builder_name, safe=''))
-      link = '<a href="%s" class="%s" title="%s" \
-          target=_blank> </a>' % (url, classname, title)
+      link = '<a href="%s" class="%s" title="%s" target=_blank>%s </a>' % (
+          url, classname, title, '' if titles == "off" else title)
       data += '<td valign=bottom class=mini-box>%s</td>' % link
 
     data += "</tr></table>"
