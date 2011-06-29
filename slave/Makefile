@@ -32,9 +32,13 @@ export PYTHONPATH=../third_party/buildbot_7_12:../third_party/twisted_8_1
 # TODO(cmp): Uncomment when ready to upgrade slaves to Buildbot 0.8.4p1.
 # export PYTHONPATH=../third_party/buildbot_slave_8_4:../third_party/twisted_10_2
 
+# Note that initscripts and make can conspire to leave child processes with
+# an unlimited maximum stack size. This causes the Linux kernel to use a
+# strange VM layout.
+# We therefore explicitly set a (typical) stack limit.
 start:
 ifneq ($(USE_LAUNCHD),1)
-	python run_slave.py --no_save -y buildbot.tac
+	sh -c 'ulimit -s 8192; python run_slave.py --no_save -y buildbot.tac'
 else
 	launchctl start org.chromium.buildbot.slave
 endif
