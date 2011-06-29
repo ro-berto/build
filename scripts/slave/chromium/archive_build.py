@@ -208,6 +208,7 @@ class StagerBase(object):
                                              SYMBOL_FILE_NAME)
     self._extra_tests = self.GetExtraFiles(options.extra_archive_paths,
                                            TEST_FILE_NAME)
+    self._dual_upload = options.factory_properties.get('dual_upload', False)
 
   def GetExtraFiles(self, extra_archive_paths, source_file_name):
     """Returns a list of extra files to package in the build output directory.
@@ -657,6 +658,10 @@ class StagerBase(object):
     self._UploadSymbols(www_dir, gs_base)
     self._UploadBuild(www_dir, changelog_path, self.revisions_path,
                       [archive_file], gs_base)
+    if gs_base and self._dual_upload:
+      self._UploadSymbols(www_dir, None)
+      self._UploadBuild(www_dir, changelog_path, self.revisions_path,
+                        [archive_file], None)
 
     # Archive Linux packages (if any -- only created for Chrome builds).
     if chromium_utils.IsLinux():
@@ -672,15 +677,24 @@ class StagerBase(object):
         print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
                                             www_dir)
         MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
+        if self._dual_upload:
+          MySshMakeDirectory(self.options.archive_host, www_dir, None)
+
         for package_file in linux_packages:
           MyMakeWorldReadable(package_file, gs_base)
           MySshCopyFiles(package_file, self.options.archive_host,
                          www_dir, gs_base)
+          if self._dual_upload:
+            MyMakeWorldReadable(package_file, None)
+            MySshCopyFiles(package_file, self.options.archive_host,
+                           www_dir, None)
           # Cleanup archived packages, otherwise they keep accumlating since
           # they have different filenames with each build.
           os.unlink(package_file)
 
     self.UploadTests(www_dir, gs_base)
+    if self._dual_upload:
+      self.UploadTests(www_dir, None)
 
     if not self.options.dry_run:
       # Save the current build revision locally so we can compute a changelog
@@ -694,16 +708,25 @@ class StagerBase(object):
         if gs_base:
           slave_utils.GSUtilCopyFile(self.last_change_file, gs_base, '..',
                                      mimetype='text/plain')
+          if self._dual_upload:
+            slave_utils.GSUtilCopyFile(self.last_change_file, None, '..',
+                                       mimetype='text/plain')
+
         else:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
         MyMakeWorldReadable(self.last_change_file, gs_base)
+        if self._dual_upload:
+          MyMakeWorldReadable(self.last_change_file, None)
         print 'Saving revision to %s:%s' % (self.options.archive_host,
                                             latest_file_path)
         MySshCopyFiles(self.last_change_file, self.options.archive_host,
                        latest_file_path, gs_base, '..', mimetype='text/plain')
+        if self._dual_upload:
+          MySshCopyFiles(self.last_change_file, self.options.archive_host,
+                         latest_file_path, None, '..', mimetype='text/plain')
       else:
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
@@ -711,6 +734,9 @@ class StagerBase(object):
     # Upload extra build artifacts.
     self._UploadFile('devtools_frontend.zip', www_dir, gs_base)
     self._UploadFile('remoting-it2me.zip', www_dir, gs_base)
+    if self._dual_upload:
+      self._UploadFile('devtools_frontend.zip', www_dir, None)
+      self._UploadFile('remoting-it2me.zip', www_dir, None)
 
     if len(not_found):
       sys.stderr.write('\n\nWARNING: File(s) not found: %s\n' %
@@ -797,12 +823,16 @@ def main(argv):
   if args:
     raise StagingError('Unknown arguments: %s' % args)
 
-  # Temporary hack:
+  # Temporary hacks:
   #   - Fix typo in master.chromium/master_full_cfg.py: snapshot -> snapshots
+  #   - Upload to old and new locations until everything is updated to look at
+  #     google storage.
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
     gs_bucket += 's'
     options.factory_properties['gs_bucket'] = gs_bucket
+  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
+    options.factory_properties['dual_upload'] = True
 
   if not options.ignore:
     # Independent of any other configuration, these exes and any symbol files
