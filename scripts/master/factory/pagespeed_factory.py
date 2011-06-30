@@ -50,6 +50,8 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     if R('chromium'):
       f.AddBasicGTestTestStep('pagespeed_chromium_test', fp,
                               arg_list=PageSpeedFactory.TEST_ARG_LIST)
+    if R('modpagespeed'):
+      f.AddBasicGTestTestStep('pagespeed_automatic_test', fp)
 
 
   def PageSpeedFactory(self, target='Release', clobber=False, tests=None,
