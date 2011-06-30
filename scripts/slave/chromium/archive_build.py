@@ -106,6 +106,18 @@ def Write(file_path, data):
     f.close()
 
 
+def MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=None):
+  status = slave_utils.GSUtilCopyFile(filename,
+                                      gs_base,
+                                      gs_subdir,
+                                      mimetype)
+  if status != 0:
+    dest = gs_base + '/' + gs_subdir
+    raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
+                                                                 filename,
+                                                                 dest))
+
+
 class StagerBase(object):
   """Handles archiving a build. Call the public ArchiveBuild() method."""
 
@@ -183,15 +195,8 @@ class StagerBase(object):
   def MyCopyFileToDir(self, filename, destination, gs_base, gs_subdir='',
                       mimetype=None):
     if gs_base:
-      status = slave_utils.GSUtilCopyFile(filename,
-                                          gs_base,
-                                          gs_subdir,
-                                          mimetype)
-      if status != 0:
-        dest = gs_base + '/' + gs_subdir
-        raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
-                                                                     filename,
-                                                                     dest))
+      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype)
+
     if not gs_base or self._dual_upload:
       chromium_utils.CopyFileToDir(filename, destination)
 
@@ -210,7 +215,7 @@ class StagerBase(object):
   def MySshCopyFiles(self, filename, host, destination, gs_base,
                      gs_subdir=None, mimetype=None):
     if gs_base:
-      self.MyCopyFileToDir(filename, destination, gs_base, gs_subdir, mimetype)
+      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype)
     if not gs_base or self._dual_upload:
       chromium_utils.SshCopyFiles(filename, host, destination)
 
@@ -813,8 +818,8 @@ def main(argv):
   if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
     gs_bucket += 's'
     options.factory_properties['gs_bucket'] = gs_bucket
-  #if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshots':
-  #  options.factory_properties['dual_upload'] = True
+  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshots':
+    options.factory_properties['dual_upload'] = True
 
   if not options.ignore:
     # Independent of any other configuration, these exes and any symbol files
