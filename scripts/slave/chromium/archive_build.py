@@ -831,7 +831,7 @@ def main(argv):
   if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
     gs_bucket += 's'
     options.factory_properties['gs_bucket'] = gs_bucket
-  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshots':
+  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
     options.factory_properties['dual_upload'] = True
 
   if not options.ignore:
