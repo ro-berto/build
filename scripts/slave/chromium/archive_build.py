@@ -442,7 +442,7 @@ class StagerBase(object):
         self.MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
         self.MyMakeWorldReadable(sym_zip_file, gs_base)
         self.MySshCopyFiles(sym_zip_file, self.options.archive_host, www_dir,
-                       gs_base)
+                            gs_base)
         os.unlink(sym_zip_file)
     elif chromium_utils.IsMac():
       # A Mac build makes fake dSYMs, so there is no point in collecting them.
@@ -490,10 +490,10 @@ class StagerBase(object):
         # before pushing to web server.
         self.MyMakeWorldReadable(changelog_path, gs_base)
         self.MySshCopyFiles(changelog_path, self.options.archive_host, www_dir,
-                       gs_base)
+                            gs_base)
         self.MyMakeWorldReadable(revisions_path, gs_base)
         self.MySshCopyFiles(revisions_path, self.options.archive_host, www_dir,
-                      gs_base)
+                            gs_base)
     else:
       raise NotImplementedError(
           'Platform "%s" is not currently supported.' % sys.platform)
@@ -569,7 +569,7 @@ class StagerBase(object):
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
           test_dir = os.path.join(www_dir, UPLOAD_DIR, relative_dir)
           self.MySshCopyFiles(test_file, self.options.archive_host, test_dir,
-                        gs_base, '/'.join([UPLOAD_DIR, relative_dir]))
+                              gs_base, '/'.join([UPLOAD_DIR, relative_dir]))
 
   def _UploadFile(self, filename, www_dir, gs_base):
     path = os.path.join(self._build_dir, filename)
@@ -707,7 +707,7 @@ class StagerBase(object):
         if gs_base:
           slave_utils.GSUtilCopyFile(self.last_change_file, gs_base, '..',
                                      mimetype='text/plain')
-        else:
+        if not gs_base or self._dual_upload:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
         # Files are created umask 077 by default, so make it world-readable
@@ -716,7 +716,8 @@ class StagerBase(object):
         print 'Saving revision to %s:%s' % (self.options.archive_host,
                                             latest_file_path)
         self.MySshCopyFiles(self.last_change_file, self.options.archive_host,
-                       latest_file_path, gs_base, '..', mimetype='text/plain')
+                            latest_file_path, gs_base, '..',
+                            mimetype='text/plain')
       else:
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
