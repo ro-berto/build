@@ -14,7 +14,10 @@ from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
-from master.chromium_status import WebStatus
+if buildbot.version == '0.7.12':
+  from master.chromium_status import WebStatus
+else:
+  from buildbot.status.web.baseweb import WebStatus
 
 from master import slaves_list
 import config
