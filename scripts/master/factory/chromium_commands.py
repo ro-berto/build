@@ -215,7 +215,7 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--with-httpd', self.PathJoin('src', 'data', 'page_cycler')])
     else:
       test_type = 'File'
-    cmd.extend([self.GetExecutableName('page_cycler_tests'),
+    cmd.extend([self.GetExecutableName('performance_ui_tests'),
                 '--gtest_filter=PageCycler*.%s%s:PageCycler*.*_%s%s' % (
                     test_name, test_type, test_name, test_type)])
     return cmd
@@ -238,7 +238,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # If 'http_page_cyclers' is set to True in factory_properties, launch an
     # httpd server and run the Httpd tests. Otherwise, run the File tests.
     # (These names are used in the GTest filters and correspond to test names
-    # in page_cycler_tests.)
+    # in page_cycler_tests.cc.)
     http_page_cyclers = factory_properties.get('http_page_cyclers')
 
     for test in tests:
@@ -283,7 +283,7 @@ class ChromiumCommands(commands.FactoryCommands):
       test_list += ':-*.*Ref*'
     options = ['--gtest_filter=%s' % test_list]
 
-    cmd = self.GetTestCommand('startup_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options)
     self.AddTestStep(c, 'startup_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -292,7 +292,8 @@ class ChromiumCommands(commands.FactoryCommands):
     c = self.GetPerfStepClass(factory_properties, 'memory',
                               process_log.GraphingLogProcessor)
 
-    self.AddTestStep(c, 'memory_test', self.GetTestCommand('memory_test'),
+    self.AddTestStep(c, 'memory_test',
+                     self.GetTestCommand('performance_ui_tests'),
                      do_step_if=self.TestStepFilter)
 
   def AddNewTabUITests(self, factory_properties=None):
@@ -303,7 +304,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Cold']
-    cmd = self.GetTestCommand('startup_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options)
     self.AddTestStep(c, 'new_tab_ui_cold_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -312,7 +313,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Warm']
-    cmd = self.GetTestCommand('startup_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options)
     self.AddTestStep(c, 'new_tab_ui_warm_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -324,7 +325,7 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=TabSwitchingUITest.*', '-enable-logging',
                '-dump-histograms-on-exit', '-log-level=0']
 
-    cmd = self.GetTestCommand('tab_switching_test', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options)
     self.AddTestStep(c, 'tab_switching_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -382,7 +383,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=SunSpider*.*', '--gtest_print_time',
                '--run-sunspider']
-    cmd = self.GetTestCommand('ui_tests', arg_list=options)
+    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
     self.AddTestStep(c, 'sunspider_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -393,7 +394,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=V8Benchmark*.*', '--gtest_print_time',
                '--run-v8-benchmark']
-    cmd = self.GetTestCommand('ui_tests', arg_list=options)
+    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
     self.AddTestStep(c, 'v8_benchmark_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -406,7 +407,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                   process_log.GraphingLogProcessor)
       options = ['--gtest_filter=Dromaeo*Test.%sPerf' % test,
                  '--gtest_print_time', '--run-dromaeo-benchmark']
-      cmd = self.GetTestCommand('ui_tests', arg_list=options)
+      cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
       self.AddTestStep(cls, 'dromaeo_%s_test' % test.lower(), cmd,
                        do_step_if=self.TestStepFilter)
 

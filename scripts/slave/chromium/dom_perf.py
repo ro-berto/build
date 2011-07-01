@@ -76,9 +76,9 @@ def dom_perf(options, args):
 
   build_dir = os.path.abspath(options.build_dir)
   if chromium_utils.IsWindows():
-    test_exe_name = 'url_fetch_test.exe'
+    test_exe_name = 'performance_ui_tests.exe'
   else:
-    test_exe_name = 'url_fetch_test'
+    test_exe_name = 'performance_ui_tests'
   if chromium_utils.IsMac():
     build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
   elif chromium_utils.IsLinux():
