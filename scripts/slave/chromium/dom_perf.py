@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -82,7 +82,7 @@ def dom_perf(options, args):
   if chromium_utils.IsMac():
     build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
   elif chromium_utils.IsLinux():
-    build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
+    build_dir = os.path.join(os.path.dirname(build_dir), 'out')
     slave_utils.StartVirtualX(options.target,
                               os.path.join(build_dir, options.target))
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)

@@ -251,8 +251,8 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
 
   if sys.platform == 'linux2':
     slave_name = SlaveBuildName(build_dir)
-    StartVirtualX(slave_name,
-                  os.path.join(build_dir, '..', 'sconsbuild', target))
+    StartVirtualX(slave_name, os.path.join(build_dir, '..', 'out', target))
+
 
   if sys.platform == 'darwin':
     # CrashReporter/ReportCrash take forever to walk through all of the
