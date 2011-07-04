@@ -109,8 +109,8 @@ def main_linux(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  target_dir = os.path.join(os.path.dirname(options.build_dir), 'out',
-                            options.target)
+  target_dir = os.path.join(os.path.dirname(options.build_dir),
+                            'sconsbuild', options.target)
   chrome = os.path.join(target_dir, 'chrome')
 
   result = 0
