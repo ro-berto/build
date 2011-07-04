@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -23,6 +23,7 @@ class ListProperties(WithProperties):
     WithProperties.__init__(self, '')
     self.items = items
 
+  # For buildbot 8.4 and below.
   def render(self, pmap):
     results = []
     # For each optional item, look up the corresponding property in the
@@ -30,6 +31,19 @@ class ListProperties(WithProperties):
     for item in self.items:
       if isinstance(item, WithProperties):
         item = item.render(pmap)
+      # Skip over None items.
+      if item is not None and item != '':
+        results.append(item)
+    return results
+
+  # For buildbot 8.4p1 and above.
+  def getRenderingFor(self, build):
+    results = []
+    # For each optional item, look up the corresponding property in the
+    # PropertyMap.
+    for item in self.items:
+      if isinstance(item, WithProperties):
+        item = item.getRenderingFor(build)
       # Skip over None items.
       if item is not None and item != '':
         results.append(item)
