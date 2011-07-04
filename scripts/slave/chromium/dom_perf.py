@@ -121,6 +121,7 @@ def dom_perf(options, args):
                  '--wait_cookie_name=__domperf_finished',
                  '--jsvar=__domperf_result',
                  '--jsvar_output=%s' % output_file,
+                 '--gtest_filter=UrlFetchTest.UrlFetch',
                  url_flag]
       if use_refbuild:
         command.append('--reference_build')
