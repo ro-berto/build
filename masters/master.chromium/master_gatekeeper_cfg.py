@@ -17,7 +17,6 @@ categories_steps = {
     'sizes',
     # Unit tests
     'base_unittests',
-    'sql_unittests',
     #'browser_tests',
     'cacheinvalidation_unittests',
     'courgette_unittests',
@@ -40,6 +39,7 @@ categories_steps = {
     'sbox_integration_tests',
     'sbox_validation_tests',
     'selenium_tests',
+    'sql_unittests',
     'test_shell_tests',
     'unit_tests',
     #'ui_tests',

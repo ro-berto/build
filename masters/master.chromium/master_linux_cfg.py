@@ -39,7 +39,6 @@ B('Linux Builder x64', 'rel', 'compile', 'linux_rel')
 F('rel', linux().ChromiumFactory(
     slave_type='NASBuilder',
     options=['--compiler=goma',
-             'sql_unittests',
              'browser_tests',
              'googleurl_unittests',
              'gpu_unittests',
@@ -58,6 +57,7 @@ F('rel', linux().ChromiumFactory(
              'net_unittests',
              'gfx_unittests',
              'safe_browsing_tests',
+             'sql_unittests',
              'sync_integration_tests',
              'crypto_unittests',
              'cacheinvalidation_unittests',
