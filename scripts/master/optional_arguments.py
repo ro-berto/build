@@ -4,7 +4,7 @@
 
 """Utility classes to enhance process.properties.Properties usefulness."""
 
-
+import buildbot
 from buildbot.process.properties import WithProperties
 
 
@@ -23,28 +23,30 @@ class ListProperties(WithProperties):
     WithProperties.__init__(self, '')
     self.items = items
 
-  # For buildbot 8.4 and below.
-  def render(self, pmap):
-    results = []
-    # For each optional item, look up the corresponding property in the
-    # PropertyMap.
-    for item in self.items:
-      if isinstance(item, WithProperties):
-        item = item.render(pmap)
-      # Skip over None items.
-      if item is not None and item != '':
-        results.append(item)
-    return results
+  # For buildbot 8.3 and below.
+  if buildbot.version == '0.7.12':
+    def render(self, pmap):
+      results = []
+      # For each optional item, look up the corresponding property in the
+      # PropertyMap.
+      for item in self.items:
+        if isinstance(item, WithProperties):
+          item = item.render(pmap)
+        # Skip over None items.
+        if item is not None and item != '':
+          results.append(item)
+      return results
 
-  # For buildbot 8.4p1 and above.
-  def getRenderingFor(self, build):
-    results = []
-    # For each optional item, look up the corresponding property in the
-    # PropertyMap.
-    for item in self.items:
-      if isinstance(item, WithProperties):
-        item = item.getRenderingFor(build)
-      # Skip over None items.
-      if item is not None and item != '':
-        results.append(item)
-    return results
+  # For buildbot 8.4 and above.
+  if buildbot.version == '0.8.4p1':
+    def getRenderingFor(self, build):
+      results = []
+      # For each optional item, look up the corresponding property in the
+      # PropertyMap.
+      for item in self.items:
+        if isinstance(item, WithProperties):
+          item = item.getRenderingFor(build)
+        # Skip over None items.
+        if item is not None and item != '':
+          results.append(item)
+      return results
