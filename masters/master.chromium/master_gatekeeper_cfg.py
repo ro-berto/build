@@ -16,8 +16,8 @@ categories_steps = {
     'start_crash_handler',
     'sizes',
     # Unit tests
-    'app_unittests',
     'base_unittests',
+    'sql_unittests',
     #'browser_tests',
     'cacheinvalidation_unittests',
     'courgette_unittests',

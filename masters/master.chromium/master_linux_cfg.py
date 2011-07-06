@@ -39,7 +39,7 @@ B('Linux Builder x64', 'rel', 'compile', 'linux_rel')
 F('rel', linux().ChromiumFactory(
     slave_type='NASBuilder',
     options=['--compiler=goma',
-             'app_unittests',
+             'sql_unittests',
              'browser_tests',
              'googleurl_unittests',
              'gpu_unittests',
@@ -105,7 +105,7 @@ F('rel_touch', linux().ChromiumFactory(
              'ipc_tests',  # from unit
              'sync_unit_tests',  # from unit
              'unit_tests',  # from unit
-             'app_unittests',  # from unit
+             'sql_unittests',  # from unit
              'gfx_unittests',  # from unit
              'media_unittests', 
              'net_unittests', 
@@ -140,7 +140,7 @@ F('dbg', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
     options=['--compiler=goma',
-             'app_unittests',
+             'sql_unittests',
              'browser_tests',
              'googleurl_unittests',
              'gpu_unittests',

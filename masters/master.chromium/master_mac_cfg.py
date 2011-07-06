@@ -215,7 +215,7 @@ F('dbg_mac_clang', mac().ChromiumFactory(
     # many flaky tests.
     tests=[
         'base', 'gfx', 'crypto',
-        # Adds ipc_tests, sync_unit_tests, unit_tests, and app_unittests
+        # Adds ipc_tests, sync_unit_tests, unit_tests, and sql_unittests
         # unit_tests is very flaky due to http://crbug.com/60426
         # TODO(thakis): Re-add this once the bug is fixed.
         #'unit',
