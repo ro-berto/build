@@ -130,7 +130,7 @@ class ChromiumCommands(commands.FactoryCommands):
     use_build_number = factory_properties.get('use_build_number', False)
 
     if show_url:
-      url = _GetArchiveUrl('snapshots')
+      url = _GetSnapshotUrl(factory_properties)
       text = 'download'
     else:
       url = None
@@ -1120,3 +1120,11 @@ def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by
   # ArchiveCommand.createSummary.
   return '%s/%s/%s' % (config.Master.archive_url, archive_type, builder_name)
+
+def _GetSnapshotUrl(factory_properties=None, builder_name='%(build_name)s'):
+  if not factory_properties or 'gs_bucket' not in factory_properties:
+    return _GetArchiveUrl('snapshots', builder_name)
+  gs_bucket = factory_properties['gs_bucket']
+  gs_bucket = re.sub(r'^gs://', 'http://commondatastorage.googleapis.com/',
+                     gs_bucket)
+  return '%s/index.html?path=%s/' % (gs_bucket, builder_name)
