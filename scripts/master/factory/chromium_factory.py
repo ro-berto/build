@@ -666,3 +666,16 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
+
+  def ChromiumGITFactory(self, target='Release', clobber=False, tests=None,
+                         mode=None, slave_type='Tester', options=None,
+                         compile_timeout=1200, build_url=None, project=None,
+                         factory_properties=None):
+    main = gclient_factory.GClientSolution(
+        svn_url='http://git.chromium.org/chromium/src.git',
+        name='src',
+        custom_deps_file='.DEPS.git')
+    self._solutions = [main]
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)

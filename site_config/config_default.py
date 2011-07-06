@@ -140,6 +140,12 @@ class Master(object):
     slave_port = 9060
     master_port_alt = 9061
 
+  class ChromiumGIT(_ChromiumBase):
+    project_name = 'Chromium Git'
+    master_port = 9062
+    slave_port = 9063
+    master_port_alt = 9064
+
   class TryServer(_ChromiumBase):
     project_name = 'Chromium Try Server'
     master_port = 9011
