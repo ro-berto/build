@@ -46,6 +46,7 @@ def _CollectArchiveFiles(output_dir):
     rel_path = path[len(output_dir + '\\'):]
     for name in files:
       if ('-stack.' in name or
+          '-crash-log.' in name or
           ('-actual.' in name and
            (name.endswith('.txt') or
             name.endswith('.png') or
