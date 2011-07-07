@@ -47,7 +47,7 @@ class V8Factory(gclient_factory.GClientFactory):
                branch='branches/bleeding_edge', sputnik_revision=None):
     self.checkout_url = config.Master.v8_url + '/' + branch
     self.CUSTOM_DEPS_SPUTNIK = ('v8/test/sputnik/sputniktests',
-                           'http://sputniktests.googlecode.com/svn/trunk' +
+                           'http://sputniktests.googlecode.com/svn/trunk@' +
                            sputnik_revision)
 
     main = gclient_factory.GClientSolution(self.checkout_url,
