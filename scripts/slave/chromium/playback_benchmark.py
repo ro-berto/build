@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -62,7 +62,7 @@ def run_benchmark(options, use_refbuild, benchmark_results):
     elif chromium_utils.IsLinux():
       build_dir = os.path.join(build_dir, 'chrome_linux')
     else:
-      build_dir = os.path.join(build_dir, 'chrome')
+      build_dir = os.path.join(build_dir, 'chrome_win')
 
   if chromium_utils.IsWindows():
     chrome_exe_name = 'chrome.exe'
