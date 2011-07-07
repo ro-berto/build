@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -281,6 +281,16 @@ def main_linux(options, args):
     command = ['sh', test_exe_path]
   elif options.run_python_script:
     command = [sys.executable, test_exe]
+  elif options.parallel:
+    supervisor_path = os.path.join(build_dir, '..', 'tools',
+                                   'sharding_supervisor',
+                                   'sharding_supervisor.py')
+    supervisor_args = ['--no-color']
+    if options.sharding_args:
+      supervisor_args.extend(options.sharding_args.split())
+    command = [sys.executable, supervisor_path]
+    command.extend(supervisor_args)
+    command.append(test_exe_path)
   else:
     command = [test_exe_path]
   command.extend(args[1:])
@@ -435,8 +445,12 @@ def main():
   option_parser.add_option('', '--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
-  option_parser.add_option('--parallel', action='store_true',
-                           help='run tests in parallel for speed')
+  option_parser.add_option('', '--parallel', action='store_true',
+                           help='Shard and run tests in parallel for speed '
+                                'with sharding_supervisor.')
+  option_parser.add_option('', '--sharding-args', dest='sharding_args',
+                           default=None,
+                           help='Options to pass to sharding_supervisor.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
   option_parser.add_option("", "--builder-name", default=None,
