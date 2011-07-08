@@ -603,13 +603,13 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddChromeDriverTest(self, timeout=1200):
     J = self.PathJoin
-    script = J('src', 'chrome', 'test', 'webdriver',
-               'chromedriver_tests.py')
+    script = J('src', 'chrome', 'test', 'webdriver', 'test',
+               'run_chromedriver_tests.py')
     self._AddBasicPythonTest('chromedriver_tests', script, timeout=timeout)
 
   def AddWebDriverTest(self, timeout=1200):
     J = self.PathJoin
-    script = J('src', 'chrome', 'test', 'webdriver',
+    script = J('src', 'chrome', 'test', 'webdriver', 'test',
                'run_webdriver_tests.py')
     self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
 
