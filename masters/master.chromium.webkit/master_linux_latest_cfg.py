@@ -39,7 +39,7 @@ F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
 B('Linux Perf', 'f_linux_perf_rel',
   scheduler='s9_webkit_rel')
 F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
-    options=['page_cycler_tests',  'startup_tests', 'ui_tests',],
+    options=['--', 'chromium_builder_perf'],
     tests=['startup', 'page_cycler', 'dromaeo', 'page_cycler_http'],
     factory_properties={'perf_id': 'chromium-rel-linux-webkit',
                         'show_perf_results': True,}))

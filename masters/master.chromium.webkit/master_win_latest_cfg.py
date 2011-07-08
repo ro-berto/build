@@ -55,8 +55,8 @@ F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
 #
 B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
-    project='all.sln;chromium_builder',
-    tests=['dom_perf', 'page_cycler', 'selenium', 'sunspider'],
+    project='all.sln;chromium_builder_perf',
+    tests=['dom_perf', 'page_cycler', 'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True}))
@@ -64,7 +64,7 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
 B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
-    tests=['installer', 'nacl_ui', 'unit', 'ui'],
+    tests=['installer', 'nacl_ui', 'selenium', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
