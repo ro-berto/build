@@ -292,8 +292,9 @@ class ChromiumCommands(commands.FactoryCommands):
     c = self.GetPerfStepClass(factory_properties, 'memory',
                               process_log.GraphingLogProcessor)
 
-    self.AddTestStep(c, 'memory_test',
-                     self.GetTestCommand('performance_ui_tests'),
+    options = ['--gtest_filter=GeneralMix*MemoryTest.*']
+    cmd = self.GetTestCommand('performance_ui_tests', options)
+    self.AddTestStep(c, 'memory_test', cmd,
                      do_step_if=self.TestStepFilter)
 
   def AddNewTabUITests(self, factory_properties=None):

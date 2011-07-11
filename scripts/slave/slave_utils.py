@@ -6,7 +6,6 @@
 """Functions specific to build slaves, shared by several buildbot scripts.
 """
 
-import commands
 import os
 import re
 import signal
@@ -211,11 +210,15 @@ def StartVirtualX(slave_build_name, build_dir):
     xdisplaycheck_path = os.path.join(build_dir, 'xdisplaycheck')
     if os.path.exists(xdisplaycheck_path):
       print "Verifying Xvfb has started..."
-      status, output = commands.getstatusoutput(xdisplaycheck_path)
-      if status != 0:
+      xdisplayproc = subprocess.Popen([xdisplaycheck_path],
+                                      stdout=subprocess.PIPE,
+                                      stderr=subprocess.STDOUT)
+      # Wait for xdisplaycheck to exit.
+      xdisplayproc.communicate()
+      if xdisplayproc.poll() != 0:
         print "Xvfb return code (None if still running):", proc.poll()
         print "Xvfb stdout and stderr:", proc.communicate()
-        raise Exception(output)
+        raise Exception(xdisplayproc.communicate()[0])
       print "...OK"
   # Some ChromeOS tests need a window manager.
   subprocess.Popen("icewm", stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
