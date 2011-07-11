@@ -48,7 +48,8 @@ F('rel', mac().ChromiumFactory(
 #
 # Mac Rel testers
 #
-B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
+B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
 F('rel_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -72,7 +73,8 @@ F('rel_unit_1', mac().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 1,})
 )
 
-B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
+B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
 F('rel_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -82,7 +84,8 @@ F('rel_unit_2', mac().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 2,})
 )
 
-B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger')
+B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
 F('rel_unit_3', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -92,11 +95,15 @@ F('rel_unit_3', mac().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 3,})
 )
 
-B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
-B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
-B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger')
+B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
+B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
+B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
 
-B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger')
+B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger',
+  auto_reboot=True)
 F('rel_sync', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
