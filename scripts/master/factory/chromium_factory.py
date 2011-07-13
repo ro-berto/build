@@ -268,6 +268,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('sunspider'):      f.AddSunSpiderTests(fp)
     if R('v8_benchmark'):   f.AddV8BenchmarkTests(fp)
     if R('dromaeo'):        f.AddDromaeoTests(fp)
+    if R('frame_rate'):     f.AddFrameRateTests(fp)
     if R('dom_perf'):       f.AddDomPerfTests(fp)
     if R('page_cycler_http'):
       fp['http_page_cyclers'] = True
