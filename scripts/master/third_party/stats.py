@@ -206,7 +206,7 @@ class StatsStatusResource(HtmlResource):
 
     def getTitle(self, request):
         status = self.getStatus(request)
-        if status.getTitle:
+        if hasattr(status, 'getTitle'):
           title = status.getTitle()
         else:
           title = status.getProjectName()
