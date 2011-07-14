@@ -63,12 +63,7 @@ def common_mac_settings(command, options, env, compiler=None):
   if compiler == 'clang':
     clang_binary = os.path.join(os.path.dirname(options.build_dir),
         'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang++')
-    clang_binary = os.path.abspath(clang_binary)
-    # TODO(thakis): Remove this once the webkit canary waterfall has been
-    #               restarted.
-    if not os.path.isfile(clang_binary):
-      clang_binary = 'clang++'
-    env['CC'] = clang_binary
+    env['CC'] = os.path.abspath(clang_binary)
     return
 
   # Most of the bot hostnames are in one of two patterns:
@@ -245,14 +240,8 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     clang_dir = os.path.abspath(os.path.join(
         slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
         'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-    if os.path.isdir(clang_dir):
-      env['CC'] = os.path.join(clang_dir, 'clang')
-      env['CXX'] = os.path.join(clang_dir, 'clang++')
-    else:
-      # TODO(thakis): Remove this branch once the FYI waterfall has been
-      #               restarted.
-      env['CC'] = 'clang'
-      env['CXX'] = 'clang++'
+    env['CC'] = os.path.join(clang_dir, 'clang')
+    env['CXX'] = os.path.join(clang_dir, 'clang++')
 
     # We intentionally don't reuse the ccache/distcc modifications,
     # as they don't work with clang.
