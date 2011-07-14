@@ -99,22 +99,14 @@
           <script language="javascript">
             var raw_flavors = [
                ["Windows", ["windows-ports"],
-               ["Mac", ["mac-ports"],
+               ["Mac", ["mac-ports-0", "mac-ports-1", "mac-ports-2"],
                ["Linux", ["linux-ports-0", "linux-ports-1", "linux-ports-2"],
             ];
             var flavors = [];
             for(var i in raw_flavors) {
               var row = Array();
               for(var j in raw_flavors[i][1]) {
-                if(raw_flavors[i][0] == "Ports" ||
-                   raw_flavors[i][0] == "Tarballs" ||
-                   raw_flavors[i][0] == "Integration" ||
-                   raw_flavors[i][0] == "Packages") {
-                  row.push("builder=" + raw_flavors[i][1][j]);
-                } else {
-                  row.push("builder=" + raw_flavors[i][1][j] + "-dbg");
-                  row.push("builder=" + raw_flavors[i][1][j] + "-opt");
-                }
+                row.push("builder=" + raw_flavors[i][1][j]);
               }
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
