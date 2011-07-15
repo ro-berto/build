@@ -143,6 +143,25 @@
               return type + "?" + content;
             }
 
+            function DisplayLKGR() {
+              var xmlHttp = new XMLHttpRequest();
+              var lkgrPath = '../chromium.lkgr/json/builders/Linux%20x64' + 
+                             '/builds/-1?as_text=1';
+              var lkgrLink = document.getElementById('LKGRLink');
+              xmlHttp.open('GET', lkgrPath, false);
+              xmlHttp.send(null);
+              if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                var buildData = parseJSON(xmlHttp.responseText);
+                var properties = buildData['properties'];
+                for (var i = 0; i < properties.length; i++) {
+                  if (properties[i][0] == 'got_revision') {
+                    lkgrLink.innerHTML = 'LKGR (' + properties[i][1] + ')';
+                    return;
+                  }
+                }
+              }
+            }
+
             function DisplayBar(waterfall_url, bar_url, content, name) {
               document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td  colspan=7 width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
@@ -153,10 +172,11 @@
 
             document.write("<tr>");
             document.write("<td><a href='" + GetUrl(waterfall_chrome, chrome) + "'>" + "Official"+ "</a></td><td width='13%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_chrome, chrome) + "'></iframe></td>");
-            document.write("<td><a href='" + GetUrl(waterfall_lkgr, lkgr) + "'>" + "LKGR"+ "</a></td><td width='10%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_lkgr, lkgr) + "'></iframe></td>");
-            document.write("<td><a href='" + GetUrl(waterfall_pyauto, pyauto) + "'>" + "PyAuto" + "</a></td><td width='15%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_pyauto, pyauto) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_lkgr, lkgr) + "' id='LKGRLink'>" + "LKGR (loading)"+ "</a></td><td width='10%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_lkgr, lkgr) + "'></iframe></td>");
+document.write("<td><a href='" + GetUrl(waterfall_pyauto, pyauto) + "'>" + "PyAuto" + "</a></td><td width='15%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_pyauto, pyauto) + "'></iframe></td>");
             document.write("<td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='62%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
             document.write("</tr>");
+            setTimeout("DisplayLKGR()", 100)
           </script>
         </table>
       </td>
