@@ -83,7 +83,7 @@ F('cros_dbg', chromeos().ChromiumOSFactory(
         'trigger': 'linux_cros_dbg_trigger'}))
 
 B('Linux Tests (ChromiumOS dbg)(1)', 'cros_dbg_tests_1', 'testers',
-  'linux_cros_dbg_trigger')
+  'linux_cros_dbg_trigger', auto_reboot=True)
 F('cros_dbg_tests_1', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -104,7 +104,7 @@ F('cros_dbg_tests_1', chromeos().ChromiumOSFactory(
                         'browser_total_shards': 3, 'browser_shard_index': 1,}))
 
 B('Linux Tests (ChromiumOS dbg)(2)', 'cros_dbg_tests_2', 'testers',
-  'linux_cros_dbg_trigger')
+  'linux_cros_dbg_trigger', auto_reboot=True)
 F('cros_dbg_tests_2', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -114,7 +114,7 @@ F('cros_dbg_tests_2', chromeos().ChromiumOSFactory(
                         'browser_total_shards': 3, 'browser_shard_index': 2,}))
 
 B('Linux Tests (ChromiumOS dbg)(3)', 'cros_dbg_tests_3', 'testers',
-  'linux_cros_dbg_trigger')
+  'linux_cros_dbg_trigger', auto_reboot=True)
 F('cros_dbg_tests_3', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -151,7 +151,7 @@ F('view_dbg', chromeos().ChromiumOSFactory(
                         'trigger': 'linux_views_dbg_trigger'}))
 
 B('Linux Tests (Views dbg)(1)', 'view_dbg_tests_1', 'testers',
-  'linux_views_dbg_trigger')
+  'linux_views_dbg_trigger', auto_reboot=True)
 F('view_dbg_tests_1', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -172,7 +172,7 @@ F('view_dbg_tests_1', chromeos().ChromiumOSFactory(
                         'browser_total_shards': 3, 'browser_shard_index': 1,}))
 
 B('Linux Tests (Views dbg)(2)', 'view_dbg_tests_2', 'testers',
-  'linux_views_dbg_trigger')
+  'linux_views_dbg_trigger', auto_reboot=True)
 F('view_dbg_tests_2', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -182,7 +182,7 @@ F('view_dbg_tests_2', chromeos().ChromiumOSFactory(
                         'browser_total_shards': 3, 'browser_shard_index': 2,}))
 
 B('Linux Tests (Views dbg)(3)', 'view_dbg_tests_3', 'testers',
-  'linux_views_dbg_trigger')
+  'linux_views_dbg_trigger', auto_reboot=True)
 F('view_dbg_tests_3', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
