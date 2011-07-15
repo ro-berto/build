@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -9,6 +9,8 @@ import re
 import sys
 
 from xml.dom import minidom
+from slave.gtest.json_results_generator import JSONResultsGenerator
+from slave.gtest.test_result import TestResult
 
 
 GENERATE_JSON_RESULTS_OPTIONS = [
@@ -18,13 +20,6 @@ GENERATE_JSON_RESULTS_OPTIONS = [
 
 INCREMENTAL_RESULTS_FILENAME = "incremental_results.json"
 TIMES_MS_FILENAME = "times_ms.json"
-
-
-class GTestResult(object):
-  """A class that represents a single test result."""
-  def __init__(self, failed=False, time=0):
-    self.failed = failed
-    self.time = time
 
 
 class GTestUnexpectedDeathTracker(object):
@@ -57,22 +52,23 @@ class GTestUnexpectedDeathTracker(object):
       return
 
   def GetResultsMap(self):
-    """Returns a map of GTestResults.  Returns an empty map if no current test
+    """Returns a map of TestResults.  Returns an empty map if no current test
     has been recorded."""
 
     if not self._current_test:
       return dict()
 
-    gtest_results_map = dict()
-    for test in self._failed_tests:
-      gtest_results_map[test] = GTestResult(failed=True)
-    gtest_results_map[self._current_test] = GTestResult(failed=True)
+    self._failed_tests.add(self._current_test)
 
-    return gtest_results_map
+    test_results_map = dict()
+    for test in self._failed_tests:
+      test_results_map[test] = TestResult(test, failed=True)
+
+    return test_results_map
 
 
 def GetResultsMapFromXML(results_xml):
-  """Parse the given results XML file and returns a map of GTestResults."""
+  """Parse the given results XML file and returns a map of TestResults."""
 
   results_xml_file = None
   try:
@@ -83,7 +79,7 @@ def GetResultsMapFromXML(results_xml):
   node = minidom.parse(results_xml_file).documentElement
   results_xml_file.close()
 
-  gtest_results_map = dict()
+  test_results_map = dict()
   testcases = node.getElementsByTagName('testcase')
 
   for testcase in testcases:
@@ -93,23 +89,24 @@ def GetResultsMapFromXML(results_xml):
 
     failures = testcase.getElementsByTagName('failure')
     elapsed = float(testcase.getAttribute('time'))
-    gtest_results_map[test_name] = GTestResult(failed=bool(failures),
-                                               time=elapsed)
-  return gtest_results_map
+    test_results_map[test_name] = TestResult(test_name,
+                                             failed=bool(failures),
+                                             elapsed_time=elapsed)
+  return test_results_map
 
 
-def GenerateAndUploadJSONResults(gtest_results_map, options):
-  """Generates a JSON results file from the given gtest_results_map and
+def GenerateAndUploadJSONResults(test_results_map, options):
+  """Generates a JSON results file from the given test_results_map and
   upload it to the results server if options.test_results_server is given.
 
   Args:
-    gtest_results_map: A map of GTestResult.
+    test_results_map: A map of TestResult.
     options: options for json generation. See GENERATE_JSON_RESULTS_OPTIONS
         and OptionParser's help messages below for expected options and their
         details.
   """
 
-  if not gtest_results_map:
+  if not test_results_map:
     logging.warn("No input results map was given.")
     return
 
@@ -123,28 +120,15 @@ def GenerateAndUploadJSONResults(gtest_results_map, options):
       logging.warn("No value is given for option %s", opt)
       setattr(options, opt, '')
 
-  from common import chromium_utils
   try:
-    script_dir = chromium_utils.FindUpward(
-        options.webkit_dir, 'WebKit', 'Tools', 'Scripts')
-    sys.path.append(script_dir)
-  except chromium_utils.PathNotFound, e:
-    logging.error("Valid options.webkit_dir (--webkit-dir) must be "
-                  "provided: %s", e)
-    sys.exit(1)
-
-  # pylint: disable=F0401
-  from webkitpy.layout_tests.layout_package.json_results_generator \
-      import JSONResultsGeneratorBase, TestResult
+    int(options.build_number)
+  except ValueError:
+    logging.error("options.build_number needs to be a number: %s",
+                  options.build_number)
+    return
 
   if not os.path.exists(options.results_directory):
     os.makedirs(options.results_directory)
-
-  test_results_map = dict()
-  for (name, r) in gtest_results_map.iteritems():
-    test_results_map[name] = TestResult(name,
-                                        failed=r.failed,
-                                        elapsed_time=r.time)
 
   print("Generating json: "
         "builder_name:%s, build_name:%s, build_number:%s, "
@@ -157,15 +141,12 @@ def GenerateAndUploadJSONResults(gtest_results_map, options):
          options.test_results_server, options.test_type,
          options.master_name))
 
-  from webkitpy.layout_tests import port
-  port_obj = port.get()
-  generator = JSONResultsGeneratorBase(port_obj,
+  generator = JSONResultsGenerator(
       options.builder_name, options.build_name, options.build_number,
       options.results_directory, options.builder_base_url,
       test_results_map,
       svn_repositories=(('webkit', options.webkit_dir),
                         ('chrome', options.chrome_dir)),
-      generate_incremental_results=True,
       test_results_server=options.test_results_server,
       test_type=options.test_type,
       master_name=options.master_name)
@@ -203,8 +184,7 @@ def main():
                            default="DUMMY_BUILD_NAME",
                            help="The name of the builder used in its path, "
                                 "e.g. webkit-rel.")
-  option_parser.add_option("", "--build-number",
-                           default="DUMMY_BUILD_NUMBER",
+  option_parser.add_option("", "--build-number", default="",
                            help="The build number of the builder running"
                                 "this script.")
   option_parser.add_option("", "--test-results-server",
