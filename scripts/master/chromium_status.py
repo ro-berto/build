@@ -179,8 +179,8 @@ class WaterfallStatusResource(waterfall.WaterfallStatusResource):
         last_time < earliest_accepted_time and
         not request.args.get('force', [False])[0]):
       return """To prevent DOS of the waterfall, heavy request like this
-are blocked. If you know what you are doing, ask a Chromium Buildbot
-administrator how to bypass the protection."""
+are blocked. If you know what you are doing, ask a Chromium trooper
+how to bypass the protection."""
     else:
       data = waterfall.WaterfallStatusResource.body(self, request)
       return "%s %s" % (GetAnnounce(request.site.resource), data)
