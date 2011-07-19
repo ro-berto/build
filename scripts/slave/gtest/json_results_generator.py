@@ -87,17 +87,19 @@ def _get_svn_revision(in_directory):
   if not os.path.exists(os.path.join(in_directory, '.svn')):
     if _is_git_directory(in_directory):
       command_line = ["git"] + command_line
-
-    # Note: Not thread safe: http://bugs.python.org/issue2320
-    output = subprocess.Popen(command_line,
-                  cwd=in_directory,
-                  shell=(sys.platform == 'win32'),
-                  stdout=subprocess.PIPE).communicate()[0]
-    try:
-      rev = (l[10:] for l in output.split('\n') if l.startswith('Revision: '))
-      return rev.next()
-    except StopIteration:
+    else:
       return ""
+
+  # Note: Not thread safe: http://bugs.python.org/issue2320
+  output = subprocess.Popen(command_line,
+                cwd=in_directory,
+                shell=(sys.platform == 'win32'),
+                stdout=subprocess.PIPE).communicate()[0]
+  try:
+    rev = (l[10:] for l in output.split('\n') if l.startswith('Revision: '))
+    return rev.next()
+  except StopIteration:
+    return ""
   return ""
 
 

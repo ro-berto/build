@@ -97,10 +97,11 @@ def _GenerateJSONForTestResults(options, results_tracker):
   print '[Running for master: "%s"]' % generate_json_options.master_name
 
   try:
+    # Set webkit and chrome directory (they are used only to get the
+    # repository revisions).
     generate_json_options.webkit_dir = chromium_utils.FindUpward(
-        build_dir, 'third_party', 'WebKit', 'Tools')
-    generate_json_options.chrome_dir = chromium_utils.FindUpward(
-        build_dir, 'webkit', 'tools', 'layout_tests')
+        build_dir, 'third_party', 'WebKit', 'Source')
+    generate_json_options.chrome_dir = build_dir
 
     # Generate results JSON file and upload it to the appspot server.
     gtest_slave_utils.GenerateAndUploadJSONResults(
