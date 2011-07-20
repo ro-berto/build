@@ -868,10 +868,14 @@ class ChromiumCommands(commands.FactoryCommands):
            self.PathJoin(gpu_data, 'sw_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
 
-  def AddNaClIntegrationTestStep(self, factory_properties, target=None):
+  def AddNaClIntegrationTestStep(self, factory_properties, target=None,
+                                 buildbot_preset=None):
     target = target or self._target
     cmd = [self._python, self._nacl_integration_tester_tool,
            '--mode', target]
+    if buildbot_preset is not None:
+      cmd.extend(['--buildbot', buildbot_preset])
+
     self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd,
         do_step_if=self.TestStepFilter)
 

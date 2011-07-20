@@ -245,6 +245,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('ui-single'):      f.AddUITests(True, fp)
     if R('nacl_ui'):        f.AddBasicGTestTestStep('nacl_ui_tests', fp)
     if R('nacl_integration'): f.AddNaClIntegrationTestStep(fp)
+    if R('nacl_integration_memcheck'):
+      f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')
+    if R('nacl_integration_tsan'):
+      f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
     if R('nacl_sandbox'):   f.AddBasicGTestTestStep('nacl_sandbox_tests', fp)
     if R('automated_ui'):   f.AddAutomatedUiTests(fp)
     if R('interactive_ui'): f.AddBasicGTestTestStep('interactive_ui_tests', fp)
