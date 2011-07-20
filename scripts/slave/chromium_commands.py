@@ -305,7 +305,7 @@ class GClient(sourcebase):
   def doVCFull(self):
     """Setup the .gclient file and then sync
     """
-    chromium_utils.MaybeCreateDirectory(self.builder.basedir, self.srcdir)
+    chromium_utils.MaybeMakeDirectory(self.builder.basedir, self.srcdir)
 
     c = self.getGclientConfigCommand()
     self.command = c
