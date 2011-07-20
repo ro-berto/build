@@ -33,11 +33,12 @@ class NativeClientSDKCommands(commands.FactoryCommands):
 
     self._cygwin_env = {
       'PATH': (
-        'c:\\cygwin\\bin;'
-        'c:\\cygwin\\usr\\bin;'
-        'c:\\WINDOWS\\system32;'
-        'c:\\WINDOWS;'
-        'e:\\b\depot_tools;'
+        r'c:\cygwin\bin;'
+        r'c:\cygwin\usr\bin;'
+        r'c:\WINDOWS\system32;'
+        r'c:\WINDOWS;'
+        r'e:\b\depot_tools;'
+        r'e:\b\depot_tools\python_bin;'
       ),
     }
     self._runhooks_env = None
