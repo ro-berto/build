@@ -6,7 +6,7 @@
     }
   }
 
-  window.onload = function() { 
+  window.onload = function() {
     autoLink('.DevComment');
   }
 </script>
@@ -98,20 +98,24 @@
         <table width="100%">
           <script language="javascript">
             var raw_flavors = [
-               ["Windows", ["windows-ports-0", "windows-ports-1",
-                            "windows-ports-2", "windows-ports-3",
-                            "windows-ports-4", "windows-ports-5",
-                            "windows-ports-6"]],
+               ["WindowsA", ["windows-ports-0", "windows-ports-1",
+                             "windows-ports-2", "windows-ports-3"]],
+               ["WindowsB", ["windows-ports-4", "windows-ports-5",
+                             "windows-ports-6"]],
                ["Mac", ["mac-ports-0", "mac-ports-1", "mac-ports-2"]],
                ["Linux", ["linux-ports-0", "linux-ports-1", "linux-ports-2"]],
             ];
             var flavors = [];
-            for(var i in raw_flavors) {
-              var row = Array();
-              for(var j in raw_flavors[i][1]) {
-                row.push("builder=" + raw_flavors[i][1][j]);
+            var triggers = ["", "periodic-"];
+            for (var when in triggers) {
+              for (var i in raw_flavors) {
+                var row = Array();
+                for (var j in raw_flavors[i][1]) {
+                  row.push("builder=" + triggers[when] + raw_flavors[i][1][j]);
+                }
+                flavors.push([triggers[when] + raw_flavors[i][0],
+                              row.join("&")]);
               }
-              flavors.push([raw_flavors[i][0], row.join("&")]);
             }
 
             var bar = "./horizontal_one_box_per_builder"
