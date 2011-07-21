@@ -107,8 +107,8 @@ def _GenerateJSONForTestResults(options, results_tracker):
     gtest_slave_utils.GenerateAndUploadJSONResults(
         results_map, generate_json_options)
 
-  except (OSError, IOError), e:
-    print 'Unexpected error while generating JSON: ', e
+  except:
+    print 'Unexpected error while generating JSON'
 
 def main_mac(options, args):
   if len(args) < 1:
