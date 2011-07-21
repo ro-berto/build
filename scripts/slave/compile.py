@@ -241,8 +241,8 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
     clang_dir = os.path.abspath(os.path.join(
         slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
         'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-    env['CC'] = os.path.join(clang_dir, 'clang')
-    env['CXX'] = os.path.join(clang_dir, 'clang++')
+    env['CC.host'] = env['CC'] = os.path.join(clang_dir, 'clang')
+    env['CXX.host'] = env['CXX'] = os.path.join(clang_dir, 'clang++')
 
     # We intentionally don't reuse the ccache/distcc modifications,
     # as they don't work with clang.
