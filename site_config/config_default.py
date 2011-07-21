@@ -146,6 +146,12 @@ class Master(object):
     slave_port = 9063
     master_port_alt = 9064
 
+  class ChromiumFlaky(_ChromiumBase):
+    project_name = 'Chromium Flaky'
+    master_port = 9065
+    slave_port = 9066
+    master_port_alt = 9067
+
   class TryServer(_ChromiumBase):
     project_name = 'Chromium Try Server'
     master_port = 9011
