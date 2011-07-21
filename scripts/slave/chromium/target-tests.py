@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -217,7 +217,7 @@ class targetTextTestRunner(object):
   def __init__(self, number_of_targets, number_of_tests,
                      stream=sys.stderr, *args, **kw):
     # Access to a protected member
-    # pylint: disable=W0212
+    # pylint: disable=E1101,W0212
     self.stream = unittest._WritelnDecorator(stream)
     self.number_of_targets = number_of_targets
     self.number_of_tests = number_of_tests

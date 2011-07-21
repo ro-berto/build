@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,7 +10,7 @@
 import BaseHTTPServer
 import binascii
 import cgi
-import hashlib
+from hashlib import md5 # pylint: disable=E0611
 from optparse import OptionParser
 import os
 import re
@@ -94,7 +94,7 @@ class ProxyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
   def __ProcessRequest(self):
     browserstring = self.__BrowserString()
     path = __RemoveCacheBusters(self.path)[1:]
-    key = hashlib.md5(path).hexdigest()
+    key = md5(path).hexdigest()
     try:
       cachedresponse = self.benchmark.GetResponse(browserstring, key)
     except KeyError:
