@@ -358,6 +358,7 @@ def main():
   lkgr_url = '%s/lkgr' % REVISIONS_URL
   try:
     url_fh = urllib2.urlopen(lkgr_url, None, 60)
+    # Fix for git
     lkgr = int(url_fh.read())
     url_fh.close()
   except urllib2.URLError:
@@ -373,7 +374,8 @@ def main():
   VerbosePrint('-' * 80)
   VerbosePrint('LKGR=%d' % lkgr)
   VerbosePrint('-' * 80)
-  if candidate != -1 and candidate > lkgr:
+  # Fix for git
+  if candidate != -1 and int(candidate) > lkgr:
     VerbosePrint('Revision %s is new LKGR' % candidate)
     formdata = ['builder=%s' % urllib2.quote(x) for x in LKGR_STEPS.keys()]
     formdata = '&'.join(formdata)
