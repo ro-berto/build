@@ -204,26 +204,27 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
 
   # Test if we can use ccache.
   ccache = ''
-  if os.path.exists('/usr/bin/ccache'):
-    # The default CCACHE_DIR is $HOME/.ccache which, on some of our
-    # bots, is over NFS.  This is intentional.  Talk to thestig or
-    # mmoss if you have questions.
-    ccache = 'ccache '
+  if chromium_utils.IsLinux():
+    if os.path.exists('/usr/bin/ccache'):
+      # The default CCACHE_DIR is $HOME/.ccache which, on some of our
+      # bots, is over NFS.  This is intentional.  Talk to thestig or
+      # mmoss if you have questions.
+      ccache = 'ccache '
 
-  # Setup crosstool environment variables.
-  if crosstool:
-    env['AR'] = crosstool + '-ar'
-    env['AS'] = crosstool + '-as'
-    env['CC'] = ccache + crosstool + '-gcc'
-    env['CXX'] = ccache + crosstool + '-g++'
-    env['LD'] = crosstool + '-ld'
-    env['RANLIB'] = crosstool + '-ranlib'
-    command.append('-j%d' % jobs)
-    # Don't use build-in rules.
-    command.append('-r')
-    # For now only build chrome, as other things will break.
-    command.append('chrome')
-    return
+    # Setup crosstool environment variables.
+    if crosstool:
+      env['AR'] = crosstool + '-ar'
+      env['AS'] = crosstool + '-as'
+      env['CC'] = ccache + crosstool + '-gcc'
+      env['CXX'] = ccache + crosstool + '-g++'
+      env['LD'] = crosstool + '-ld'
+      env['RANLIB'] = crosstool + '-ranlib'
+      command.append('-j%d' % jobs)
+      # Don't use build-in rules.
+      command.append('-r')
+      # For now only build chrome, as other things will break.
+      command.append('chrome')
+      return
 
   if compiler == 'goma':
     print 'using goma'
@@ -253,36 +254,37 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
   cc = 'gcc'
   cpp = 'g++'
 
-  # Test if we can use distcc.  Fastbuild servers currently support uname()
-  # machine results of i686 or x86_64.
-  distcc_bin_exists = os.path.exists('/usr/bin/distcc')
-  codename = get_ubuntu_codename()
-  machine = os.uname()[4]
-  distcc_hosts_path = os.path.join(SLAVE_SCRIPTS_DIR, 'linux_distcc_hosts',
-                                   '%s-%s' % (codename, machine))
-  hostname = socket.getfqdn().split('.')[0]
-  hostname_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname)
-  if (distcc_bin_exists and codename and machine and
-      os.path.exists(distcc_hosts_path) and hostname_match):
-    distcc_file = open(distcc_hosts_path, 'r')
-    distcc_text = distcc_file.read().strip()
-    distcc_file.close()
-    env['DISTCC_HOSTS'] = ' '.join(distcc_text.splitlines())
-    print('Distcc enabled:')
-    print('ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
+  if chromium_utils.IsLinux():
+    # Test if we can use distcc.  Fastbuild servers currently support uname()
+    # machine results of i686 or x86_64.
+    distcc_bin_exists = os.path.exists('/usr/bin/distcc')
+    codename = get_ubuntu_codename()
+    machine = os.uname()[4]
+    distcc_hosts_path = os.path.join(SLAVE_SCRIPTS_DIR, 'linux_distcc_hosts',
+                                     '%s-%s' % (codename, machine))
+    hostname = socket.getfqdn().split('.')[0]
+    hostname_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname)
+    if (distcc_bin_exists and codename and machine and
+        os.path.exists(distcc_hosts_path) and hostname_match):
+      distcc_file = open(distcc_hosts_path, 'r')
+      distcc_text = distcc_file.read().strip()
+      distcc_file.close()
+      env['DISTCC_HOSTS'] = ' '.join(distcc_text.splitlines())
+      print('Distcc enabled:')
+      print('ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
 
-    cc = 'distcc ' + cc
-    cpp = 'distcc ' + cpp
-    distcc_jobs = 12
-    if jobs < distcc_jobs:
-      jobs = distcc_jobs
-  else:
-    print('Distcc disabled:')
-    print('  distcc_bin_exists: %s' % distcc_bin_exists)
-    print('  codename: %s' % codename)
-    print('  machine: %s' % machine)
-    print('  distcc_hosts_path: %s' % distcc_hosts_path)
-    print('  hostname: %s' % hostname)
+      cc = 'distcc ' + cc
+      cpp = 'distcc ' + cpp
+      distcc_jobs = 12
+      if jobs < distcc_jobs:
+        jobs = distcc_jobs
+    else:
+      print('Distcc disabled:')
+      print('  distcc_bin_exists: %s' % distcc_bin_exists)
+      print('  codename: %s' % codename)
+      print('  machine: %s' % machine)
+      print('  distcc_hosts_path: %s' % distcc_hosts_path)
+      print('  hostname: %s' % hostname)
 
   cc = ccache + cc
   cpp = ccache + cpp
@@ -659,10 +661,9 @@ def real_main():
                              help='use Visual Studio instead of IncrediBuild')
     option_parser.add_option('', '--msvs_version',
                              help='VisualStudio version to use')
-  if chromium_utils.IsLinux():
-    # For linux to arm cross compile.
-    option_parser.add_option('', '--crosstool', default=None,
-                             help='optional path to crosstool toolset')
+  # For linux to arm cross compile.
+  option_parser.add_option('', '--crosstool', default=None,
+                           help='optional path to crosstool toolset')
   if chromium_utils.IsMac():
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
