@@ -62,8 +62,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # gclient additional custom deps
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
-  CUSTOM_DEPS_NACL_LATEST = ('src/native_client',
-    'http://src.chromium.org/native_client/trunk/src/native_client')
+  CUSTOM_DEPS_NACL_LATEST = [
+    ('src/native_client',
+     'http://src.chromium.org/native_client/trunk/src/native_client'),
+    ('src/native_client/src/third_party/ppapi',
+     'http://src.chromium.org/chrome/trunk/src/ppapi'),
+  ]
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
   CUSTOM_DEPS_TSAN_WIN = ('src/third_party/tsan',
@@ -514,14 +518,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       slave_type='BuilderTester', options=None, compile_timeout=1200,
       build_url=None, project=None, factory_properties=None,
       on_nacl_waterfall=True, use_chrome_lkgr=True):
-    self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_NACL_LATEST]
+    self._solutions[0].custom_deps_list = self.CUSTOM_DEPS_NACL_LATEST
     self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
     # Add an extra frivilous checkout of part of NativeClient when it is built
     # on the # NativeClient waterfall. This way, console view gets revision
     # numbers that it can make sense of.
     if on_nacl_waterfall:
       self._solutions.insert(0, gclient_factory.GClientSolution(
-          self.CUSTOM_DEPS_NACL_LATEST[1] + '/build',
+          self.CUSTOM_DEPS_NACL_LATEST[0][1] + '/build',
           name='build'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
