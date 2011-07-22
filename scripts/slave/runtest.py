@@ -107,7 +107,9 @@ def _GenerateJSONForTestResults(options, results_tracker):
     gtest_slave_utils.GenerateAndUploadJSONResults(
         results_map, generate_json_options)
 
-  except:
+    # The code can throw all sorts of exceptions, including
+    # slave.gtest.networktransaction.NetworkTimeout so just trap everything.
+  except:  # pylint: disable=W0702
     print 'Unexpected error while generating JSON'
 
 def main_mac(options, args):
