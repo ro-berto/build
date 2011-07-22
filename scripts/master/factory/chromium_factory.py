@@ -66,7 +66,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     ('src/native_client',
      'http://src.chromium.org/native_client/trunk/src/native_client'),
     ('src/native_client/src/third_party/ppapi',
-     'http://src.chromium.org/chrome/trunk/src/ppapi'),
+     'http://src.chromium.org/svn/trunk/src/ppapi'),
   ]
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
