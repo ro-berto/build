@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -19,8 +19,11 @@ class TestObserver(buildstep.LogLineObserver):
     buildstep.LogLineObserver.__init__(self)
 
     # State tracking for log parsing
-    self._current_test = ''
-    self._failure_description = []
+    # Dict of test names indexed by shard number.
+    self._current_test = {}
+
+    # Dict of string lists indexed by shard number.
+    self._failure_description = {}
     self._current_suppression_hash = ''
     self._current_suppression = []
 
@@ -49,6 +52,10 @@ class TestObserver(buildstep.LogLineObserver):
     #   SomeName/SomeTestCase.SomeTest/1
     # This regexp also matches SomeName.SomeTest/1, which should be harmless.
     test_name_regexp = r'((\w+/)?\w+\.\w+(/\d+)?)'
+
+    # Regular expression for parsing sharding_supervisor shard numbers.
+    # No harm done if not using sharding_supervisor.
+    self._shard_num    = re.compile(r'(^\d+>)')
     self._test_start   = re.compile('\[\s+RUN\s+\] ' + test_name_regexp)
     self._test_ok      = re.compile('\[\s+OK\s+\] ' + test_name_regexp)
     self._test_fail    = re.compile('\[\s+FAILED\s+\] ' + test_name_regexp)
@@ -150,6 +157,18 @@ class TestObserver(buildstep.LogLineObserver):
       if results:
         self.master_name = results.group(1)
 
+    # Get the shard number and initialize the info for this shard if needed.
+    results = self._shard_num.search(line)
+    if results:
+      shard_num = results.group(1)
+    else:
+      shard_num = ''
+    self._failure_description.setdefault(shard_num, [])
+
+    # Note: When sharding, the number of disabled and flaky tests will be read
+    # multiple times, so this will only show the most recent values (but they
+    # should all be the same anyway).
+
     # Is it a line reporting disabled tests?
     results = self._disabled.search(line)
     if results:
@@ -158,7 +177,7 @@ class TestObserver(buildstep.LogLineObserver):
       except ValueError:
         disabled = 0
       if disabled > 0 and isinstance(self.disabled_tests, int):
-        self.disabled_tests += disabled
+        self.disabled_tests = disabled
       else:
         # If we can't parse the line, at least give a heads-up. This is a
         # safety net for a case that shouldn't happen but isn't a fatal error.
@@ -183,30 +202,30 @@ class TestObserver(buildstep.LogLineObserver):
     # Is it the start of a test?
     results = self._test_start.search(line)
     if results:
-      test_name = results.group(1)
+      test_name = shard_num + results.group(1)
       if test_name in self._test_status:
         self._RecordError(line, 'test started more than once')
       self._test_status[test_name] = ('started', ['Did not complete.'])
-      self._current_test = test_name
-      self._failure_description = []
+      self._current_test[shard_num] = test_name
+      self._failure_description[shard_num] = []
       return
 
     # Is it a test success line?
     results = self._test_ok.search(line)
     if results:
-      test_name = results.group(1)
+      test_name = shard_num + results.group(1)
       status = self._StatusOfTest(test_name)
       if status != 'started':
         self._RecordError(line, 'success while in status %s' % status)
       self._test_status[test_name] = ('OK', [])
-      self._failure_description = []
-      self._current_test = ''
+      self._failure_description[shard_num] = []
+      self._current_test[shard_num] = ''
       return
 
     # Is it a test failure line?
     results = self._test_fail.search(line)
     if results:
-      test_name = results.group(1)
+      test_name = shard_num + results.group(1)
       status = self._StatusOfTest(test_name)
       if status not in ('started', 'failed', 'timeout'):
         self._RecordError(line, 'failure while in status %s' % status)
@@ -214,22 +233,24 @@ class TestObserver(buildstep.LogLineObserver):
       # second time in the summary, or if it was already recorded as timing
       # out.
       if status not in ('failed', 'timeout'):
-        self._test_status[test_name] = ('failed', self._failure_description)
-      self._failure_description = []
-      self._current_test = ''
+        self._test_status[test_name] = (
+            'failed', self._failure_description.get(shard_num))
+      self._failure_description[shard_num] = []
+      self._current_test[shard_num] = ''
       return
 
     # Is it a test timeout line?
     results = self._test_timeout.search(line)
     if results:
-      test_name = results.group(1)
+      test_name = shard_num + results.group(1)
       status = self._StatusOfTest(test_name)
       if status not in ('started', 'failed'):
         self._RecordError(line, 'timeout while in status %s' % status)
       self._test_status[test_name] = ('timeout',
-        self._failure_description + ['Killed (timed out).'])
-      self._failure_description = []
-      self._current_test = ''
+        self._failure_description.get(
+            shard_num, []) + ['Killed (timed out).'])
+      self._failure_description[shard_num] = []
+      self._current_test[shard_num] = ''
       return
 
     # Is it the start of a new valgrind suppression?
@@ -261,9 +282,8 @@ class TestObserver(buildstep.LogLineObserver):
       return
 
     # Random line: if we're in a test, collect it for the failure description.
-    # Tests may run simultaneously, so this might be off, but it's worth a try.
     if self._current_test:
-      self._failure_description.append(line)
+      self._failure_description[shard_num].append(line)
 
 
 class GTestCommand(shell.ShellCommand):
@@ -339,13 +359,16 @@ class GTestCommand(shell.ShellCommand):
 
   def createSummary(self, log):
     observer = self.test_observer
+    sharded_description = re.compile(r'(?:^\d+>)?(.*)')
     for failure in sorted(observer.FailedTests()):
       # GTest test identifiers are of the form TestCase.TestName. We display
       # the test names only.  Unfortunately, addCompleteLog uses the name as
       # both link text and part of the text file name, so we can't incude
       # HTML tags such as <abbr> in it.
-      self.addCompleteLog(self.TestAbbrFromTestID(failure),
-                          '\n'.join(observer.FailureDescription(failure)))
+      sharded_log = observer.FailureDescription(failure)
+      log = [sharded_description.search(line).group(1)
+             for line in sharded_log]
+      self.addCompleteLog(self.TestAbbrFromTestID(failure), '\n'.join(log))
     for suppression_hash in sorted(observer.SuppressionHashes()):
       self.addCompleteLog(suppression_hash,
                           '\n'.join(observer.Suppression(suppression_hash)))
