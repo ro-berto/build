@@ -243,8 +243,8 @@ def common_linux_settings(command, options, env, crosstool=None, compiler=None):
         'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
     env['CC'] = os.path.join(clang_dir, 'clang')
     env['CXX'] = os.path.join(clang_dir, 'clang++')
-    command.append('CC.host=$CC')
-    command.append('CXX.host=$CXX')
+    command.append('CC.host=' + env['CC'])
+    command.append('CXX.host=' + env['CXX'])
 
     # We intentionally don't reuse the ccache/distcc modifications,
     # as they don't work with clang.
