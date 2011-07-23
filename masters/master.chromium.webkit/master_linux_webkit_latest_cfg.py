@@ -32,8 +32,8 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Webkit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
-             'DumpRenderTree'],
+    options=['--compiler=goma', 'test_shell', 'test_shell_tests',
+             'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
@@ -56,8 +56,8 @@ B('Webkit Linux (dbg)(1)', 'f_webkit_dbg_tests_1', scheduler='s6_webkit_dbg')
 F('f_webkit_dbg_tests_1', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
-             'DumpRenderTree'],
+    options=['--compiler=goma', 'test_shell', 'test_shell_tests',
+             'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
@@ -66,7 +66,7 @@ B('Webkit Linux (dbg)(2)', 'f_webkit_dbg_tests_2', scheduler='s6_webkit_dbg')
 F('f_webkit_dbg_tests_2', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=['webkit', 'webkit_gpu'],
-    options=['test_shell', 'DumpRenderTree'],
+    options=['--compiler=goma', 'test_shell', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))

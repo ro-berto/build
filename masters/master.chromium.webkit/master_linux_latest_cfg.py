@@ -34,12 +34,13 @@ B('Linux Tests', 'f_linux_tests_rel',
   scheduler='s9_webkit_rel')
 F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
     tests=['ui', 'unit', 'browser_tests', 'interactive_ui', 'nacl_ui'],
+    options=['--compiler=goma'],
     factory_properties={'generate_gtest_json': True}))
 
 B('Linux Perf', 'f_linux_perf_rel',
   scheduler='s9_webkit_rel')
 F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
-    options=['--', 'chromium_builder_perf'],
+    options=['--compiler=goma', 'chromium_builder_perf'],
     tests=['startup', 'page_cycler', 'dromaeo', 'page_cycler_http'],
     factory_properties={'perf_id': 'chromium-rel-linux-webkit',
                         'show_perf_results': True,}))
@@ -48,7 +49,7 @@ valgrind_gyp_defines = chromium_factory.ChromiumFactory.MEMORY_TOOLS_GYP_DEFINES
 B('Linux Valgrind', 'f_linux_valgrind_rel',
   scheduler='s9_webkit_rel')
 F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
-    options=['test_shell', 'test_shell_tests'],
+    options=['--compiler=goma', 'test_shell', 'test_shell_tests'],
     tests=['valgrind_test_shell'],
     factory_properties={
         'needs_valgrind': True,

@@ -33,8 +33,8 @@ S('s3_chromium_rel', branch='src', treeStableTimer=60)
 B('Webkit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=['test_shell', 'webkit', 'webkit_unit'],
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
-             'DumpRenderTree'],
+    options=['--compiler=goma', 'test_shell', 'test_shell_tests',
+	         'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
@@ -64,8 +64,8 @@ B('Webkit Linux Builder (deps)(dbg)', 'f_webkit_linux_dbg',
 F('f_webkit_linux_dbg', linux().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=['test_shell', 'test_shell_tests', 'webkit_unit_tests',
-             'DumpRenderTree']))
+    options=['--compiler=goma', 'test_shell', 'test_shell_tests',
+	         'webkit_unit_tests', 'DumpRenderTree']))
 
 #
 # Linux Dbg Webkit testers
