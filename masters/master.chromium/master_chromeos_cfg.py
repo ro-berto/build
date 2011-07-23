@@ -47,7 +47,7 @@ F('rel', chromeos().ChromiumOSFactory(
            'crypto',
            'cacheinvalidation',
            'jingle'],
-    options=['chromeos_builder'],
+    options=['--compiler=goma', 'chromeos_builder'],
     factory_properties={
         'archive_build': True,
         'extra_archive_paths': 'chrome/tools/build/chromeos',

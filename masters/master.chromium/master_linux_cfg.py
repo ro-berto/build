@@ -208,7 +208,7 @@ B('Linux Builder (dbg)(shared)', 'dbg_shared', 'compile', 'linux_dbg')
 F('dbg_shared', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
-    options=['--build-tool=make'],
+    options=['--compiler=goma'],
     factory_properties={
         'gclient_env': {'GYP_DEFINES':'component=shared_library'},
         'trigger': 'linux_dbg_shared_trigger'}))
