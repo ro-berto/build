@@ -39,7 +39,9 @@ B('Win Builder', 'f_win_rel', scheduler='s7_webkit_builder_rel',
   builddir='win-latest-rel')
 F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
-    project='all.sln;chromium_builder'))
+    project='all.sln;chromium_builder',
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 B('Win Reliability Builder', 'f_win_reliability_rel', scheduler='s7_webkit_rel',
   builddir='Win_Webkit_Latest')
@@ -59,7 +61,8 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     tests=['dom_perf', 'page_cycler', 'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
-                        'start_crash_handler': True}))
+                        'start_crash_handler': True,
+                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
@@ -68,7 +71,8 @@ F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
-                        'test_results_server': 'test-results.appspot.com'}))
+                        'test_results_server': 'test-results.appspot.com',
+                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 B('Win Reliability', 'win_reliability', scheduler='reliability')
 # The Windows reliability bot runs on Linux because it only needs to transfer
@@ -105,7 +109,8 @@ F('f_win_shared_dbg', win().ChromiumWebkitLatestFactory(
     project='all.sln',
     compile_timeout=2400,
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'component=shared_library'}}))
+        'gclient_env': {'GYP_DEFINES':
+                            'component=shared_library fastbuild=1'}}))
 
 
 def Update(config, active_master, c):
