@@ -69,7 +69,7 @@ F('mac_clobber', mac().ChromiumFactory(
 
 # For now we will assume a fixed toolchain location on the builders.
 crosstool_prefix = (
-    '/usr/local/crosstool-trusted/arm-2009q3/bin/arm-none-linux-gnueabi')
+    '/usr/local/crosstool-trusted/arm-crosstool/bin/arm-none-linux-gnueabi')
 # Factory properties to use for an arm build.
 arm_gclient_env = {
   'AR': crosstool_prefix + '-ar',
