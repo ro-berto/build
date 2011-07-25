@@ -627,7 +627,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       # If branch is available, replace 'trunk' to 'branches/<BRANCH>'
       # in a url.
       if factory_properties and factory_properties.get('branch'):
-        if not url.split('/')[-1] in avoid_branch_sync_component:
+        if (not url.split('/')[-1] in avoid_branch_sync_component and
+            'pyftpdlib' not in url):
           url = url.replace('trunk',
                             'branches/' + str(factory_properties['branch']))
 
