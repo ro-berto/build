@@ -371,3 +371,60 @@ index b9b7780..9a37b47 100644
 +{% macro box_contents(who, url, pageTitle, revision) -%}
 +<a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a><br>r{{ revision }}
  {%- endmacro %}
+
+
+
+
+commit e6b9fad4373d6e55f7957ee8312d58cf0461d98c
+Author: Chase Phillips <cmp@google.com>
+Date:   Mon Jul 25 10:46:54 2011 -0700
+
+    Import upstream fix: set journal mode.
+
+    SQLite database fix from buildbot.net to increase
+    concurrency.  This is 4050c5e7a:
+    https://github.com/buildbot/buildbot/commit/4050c5e7a2641df56f792b06fc1aea6c16221e8f#diff-0
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py b/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py
+index 7be9196..3d05cb6 100644
+--- a/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py
++++ b/third_party/buildbot_8_4p1/buildbot/db/enginestrategy.py
+@@ -25,6 +25,7 @@ special cases that Buildbot needs.  Those include:
+
+ import os
+ import sqlalchemy
++from twisted.python import log
+ from sqlalchemy.engine import strategies, url
+ from sqlalchemy.pool import NullPool
+
+@@ -83,6 +84,16 @@ class BuildbotEngineStrategy(strategies.ThreadLocalEngineStrategy):
+
+         return u, kwargs, max_conns
+
++    def set_up_sqlite_engine(self, u, engine):
++        """Special setup for sqlite engines"""
++        # try to enable WAL logging
++        if u.database:
++            log.msg("setting database journal mode to 'wal'")
++            try:
++                engine.execute("pragma journal_mode = wal")
++            except:
++                log.msg("failed to set journal mode - database may fail")
++
+     def special_case_mysql(self, u, kwargs):
+         """For mysql, take max_idle out of the query arguments, and
+         use its value for pool_recycle.  Also, force use_unicode and
+@@ -148,9 +159,12 @@ class BuildbotEngineStrategy(strategies.ThreadLocalEngineStrategy):
+         # by DBConnector to configure the surrounding thread pool
+         engine.optimal_thread_pool_size = max_conns
+
+-        # and keep the basedir
++        # keep the basedir
+         engine.buildbot_basedir = basedir
+
++        if u.drivername.startswith('sqlite'):
++            self.set_up_sqlite_engine(u, engine)
++
+         return engine
+
+ BuildbotEngineStrategy()
