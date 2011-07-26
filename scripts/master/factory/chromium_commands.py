@@ -95,7 +95,8 @@ class ChromiumCommands(commands.FactoryCommands):
         'sync', '--verbose']
 
   def AddArchiveStep(self, data_description, base_url, link_text, command,
-                     more_link_url = None, more_link_text = None):
+                     more_link_url=None, more_link_text=None,
+                     index_suffix=None):
     step_name = ('archive_%s' % data_description).replace(' ', '_')
     self._factory.addStep(archive_command.ArchiveCommand,
                           name=step_name,
@@ -106,7 +107,8 @@ class ChromiumCommands(commands.FactoryCommands):
                           link_text=link_text,
                           more_link_url=more_link_url,
                           more_link_text=more_link_text,
-                          command=command)
+                          command=command,
+                          index_suffix=index_suffix)
 
   def AddUploadPerfExpectations(self, factory_properties=None):
     """Adds a step to the factory to upload perf_expectations.json to the
@@ -130,10 +132,11 @@ class ChromiumCommands(commands.FactoryCommands):
     use_build_number = factory_properties.get('use_build_number', False)
 
     if show_url:
-      url = _GetSnapshotUrl(factory_properties)
+      (url, index_suffix) = _GetSnapshotUrl(factory_properties)
       text = 'download'
     else:
       url = None
+      index_suffix = None
       text = None
 
     cmd = [self._python, self._archive_tool,
@@ -149,7 +152,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     self.AddArchiveStep(data_description='build', base_url=url, link_text=text,
-                        command=cmd)
+                        command=cmd, index_suffix=index_suffix)
 
   def AddPackageSource(self, factory_properties=None):
     """Adds a step to the factory to package and upload the source directory."""
@@ -1138,8 +1141,8 @@ def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
 
 def _GetSnapshotUrl(factory_properties=None, builder_name='%(build_name)s'):
   if not factory_properties or 'gs_bucket' not in factory_properties:
-    return _GetArchiveUrl('snapshots', builder_name)
+    return (_GetArchiveUrl('snapshots', builder_name), None)
   gs_bucket = factory_properties['gs_bucket']
   gs_bucket = re.sub(r'^gs://', 'http://commondatastorage.googleapis.com/',
                      gs_bucket)
-  return '%s/index.html?path=%s/' % (gs_bucket, builder_name)
+  return ('%s/index.html?path=%s' % (gs_bucket, builder_name), '/')
