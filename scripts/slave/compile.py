@@ -459,9 +459,8 @@ def main_scons_v8(options, args):
     command.extend(['-k'])
 
   command.extend([
-      # Force scons to always check for dependency changes.
       'mode=' + options.target,
-      'sample=shell'
+      'd8'
   ])
 
   command.extend(options.build_args + args)
