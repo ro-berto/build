@@ -52,9 +52,8 @@ class NativeClientCommands(commands.FactoryCommands):
     if not perf_id:
       logging.error("Error: cannot upload perf expectations: perf_id is unset")
       return
-    nacl_base = 'build/native_client'
-    slavesrc = \
-      nacl_base + '/tools/nacl_perf_expectations/nacl_perf_expectations.json'
+    slavesrc = ('native_client/tools/nacl_perf_expectations/'
+                'nacl_perf_expectations.json')
     masterdest = ('../../scripts/master/log_parser/perf_expectations/%s.json' %
                   perf_id)
     self._factory.addStep(FileUpload(slavesrc=slavesrc,
