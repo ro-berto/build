@@ -236,7 +236,8 @@ class CbuildbotFactory(object):
                           timeout=self.timeout,
                           name=name,
                           description=description,
-                          haltOnFailure=haltOnFailure)
+                          haltOnFailure=haltOnFailure,
+                          usePTY=Fals)
 
   def oneoff_type(self):
     """
