@@ -74,6 +74,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.trunk_url + '/deps/third_party/tsan')
   CUSTOM_DEPS_DRMEMORY = ('src/third_party/drmemory',
      config.Master.trunk_url + '/deps/third_party/drmemory')
+  CUSTOM_DEPS_NACL_VALGRIND = ('src/native_client/src/third_party/valgrind/bin',
+     'http://src.chromium.org/native_client/trunk/src/third_party/valgrind/bin')
 
   CUSTOM_DEPS_GYP = [
     ('src/tools/gyp', 'http://gyp.googlecode.com/svn/trunk')]
@@ -519,6 +521,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       slave_type='BuilderTester', options=None, compile_timeout=1200,
       build_url=None, project=None, factory_properties=None,
       on_nacl_waterfall=True, use_chrome_lkgr=True):
+    factory_properties = factory_properties or {}
     self._solutions[0].custom_deps_list = self.CUSTOM_DEPS_NACL_LATEST
     self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
     # Add an extra frivilous checkout of part of NativeClient when it is built
@@ -528,6 +531,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions.insert(0, gclient_factory.GClientSolution(
           self.CUSTOM_DEPS_NACL_LATEST[0][1] + '/build',
           name='build'))
+    if factory_properties.get('needs_nacl_valgrind'):
+      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_NACL_VALGRIND)
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
