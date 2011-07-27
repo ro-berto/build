@@ -285,6 +285,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
     if R('sizes'):          f.AddSizesTests(fp)
+    if R('sync'):           f.AddSyncPerfTests(fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)

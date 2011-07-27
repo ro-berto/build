@@ -321,6 +321,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'new_tab_ui_warm_test', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddSyncPerfTests(self, factory_properties=None):
+    factory_properties = factory_properties or {}
+    c = self.GetPerfStepClass(factory_properties, 'sync',
+                              process_log.GraphingLogProcessor)
+
+    options = ['--gtest_filter=*SyncPerfTest.*',
+               '--ui-test-action-max-timeout=120000',]
+    cmd = self.GetTestCommand('sync_performance_tests', options)
+    self.AddTestStep(c, 'sync', cmd,
+                     do_step_if=self.TestStepFilter)
+
   def AddTabSwitchingTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'tab-switching',
