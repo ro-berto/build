@@ -14,7 +14,7 @@ from common import chromium_utils
 from slave import slave_utils
 
 
-FILENAME = 'chromium-src.tgz'
+FILENAME = 'chromium-src.tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
 
 
@@ -26,7 +26,7 @@ def main(argv):
   if os.path.exists(FILENAME):
     raise Exception('ERROR: %s cannot be removed, exiting' % FILENAME)
 
-  if chromium_utils.RunCommand(['tar', 'czvf', FILENAME, '--exclude=.svn',
+  if chromium_utils.RunCommand(['tar', 'cjvf', FILENAME, '--exclude=.svn',
                                 'src/', 'tools/', 'o3d/']) != 0:
     raise Exception('ERROR: failed to create %s, exiting' % FILENAME)
 
