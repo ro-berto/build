@@ -34,7 +34,7 @@ B('Win', 'win_clobber', 'compile|windows', 'chromium')
 F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
-    tests=['sizes', 'selenium', 'memory', 'reliability', 'check_bins'],
+    tests=['sizes', 'selenium', 'reliability', 'check_bins'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',
                         'extra_archive_paths': 'ceee,chrome_frame',
@@ -55,7 +55,7 @@ F('win_reliability', linux().ReliabilityTestsFactory())
 B('Mac', 'mac_clobber', 'compile|testers', 'chromium')
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
-    tests=['sizes', 'dom_checker', 'memory'],
+    tests=['sizes'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',
                         'show_perf_results': True,
@@ -95,7 +95,7 @@ arm_gclient_env = {
 B('Linux', 'linux_clobber', 'compile|testers', 'chromium')
 F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['dom_checker', 'sizes', 'memory', 'check_perms'],
+    tests=['sizes', 'check_perms'],
     options=['--compiler=goma'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -108,7 +108,7 @@ F('linux_clobber', linux().ChromiumFactory(
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium')
 F('linux64_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['dom_checker', 'sizes', 'memory'],
+    tests=['sizes'],
     options=['--compiler=goma'],
     factory_properties={
         'archive_build': True,
