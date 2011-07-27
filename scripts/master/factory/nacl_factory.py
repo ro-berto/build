@@ -75,6 +75,9 @@ class NativeClientFactory(gclient_factory.GClientFactory):
         env={'BUILDBOT_SLAVE_TYPE': slave_type},
         factory_properties=factory_properties)
 
+    if factory_properties.get('expectations'):
+      nacl_cmd_obj.AddUploadPerfExpectations(factory_properties)
+
     # Trigger tests on other builders.
     self._AddTriggerTests(nacl_cmd_obj, tests)
 

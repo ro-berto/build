@@ -9,6 +9,7 @@ import re
 from twisted.python import log
 from buildbot.status.web.base import IBox
 from buildbot.steps import trigger
+from buildbot.steps.transfer import FileUpload
 from buildbot.status.builder import SUCCESS
 
 
@@ -171,8 +172,9 @@ def ExtractFactoriesSteps(factories):
       # Invoke the constructor (with the supplied args) for each step.
       nstep = s[0](**s[1])
       nstep.build = FakeBuild({'got_revision': '???'})
-      # Skip triggers.
-      if nstep.__class__ == trigger.Trigger:
+      # Skip triggers and FileUpload steps.
+      if (nstep.__class__ == trigger.Trigger
+          or nstep.__class__ == FileUpload):
         continue
       step_name = nstep.getText('', SUCCESS)[0]
       steps.append(step_name)
