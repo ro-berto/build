@@ -428,3 +428,48 @@ index 7be9196..3d05cb6 100644
          return engine
 
  BuildbotEngineStrategy()
+
+
+
+commit a2a0d76cbd2b016b628decf36ef8e298a9b1e4e8
+Author: Chase Phillips <cmp@google.com>
+Date:   Thu Jul 28 16:24:09 2011 -0700
+
+    Backport postgres fix from Buildbot trunk.
+
+    This fixes http://trac.buildbot.net/ticket/2010.
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/db/buildrequests.py b/third_party/buildbot_8_4p1/buildbot/db/buildrequests.py
+index 650ac5d..b7d2b08 100644
+--- a/third_party/buildbot_8_4p1/buildbot/db/buildrequests.py
++++ b/third_party/buildbot_8_4p1/buildbot/db/buildrequests.py
+@@ -206,8 +206,6 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
+             master_incarnation = self.db.master.master_incarnation
+             tbl = self.db.model.buildrequests
+
+-            transaction = conn.begin()
+-
+             # first, create a temporary table containing all of the ID's
+             # we want to claim
+             tmp_meta = sa.MetaData(bind=conn)
+@@ -216,6 +214,8 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
+                     prefixes=['TEMPORARY'])
+             tmp.create()
+
++            transaction = conn.begin()
++
+             try:
+                 q = tmp.insert()
+                 conn.execute(q, [ dict(brid=id) for id in brids ])
+@@ -268,8 +268,10 @@ class BuildRequestsConnectorComponent(base.DBConnectorComponent):
+                         raise AlreadyClaimedError
+                 res.close()
+             finally:
+-                # clean up after ourselves, even though it's a temporary table
+-                tmp.drop(checkfirst=True)
++                # clean up after ourselves, even though it's a temporary table;
++                # note that checkfirst=True does not work here for Postgres
++                # (#2010).
++                tmp.drop()
+
+         return self.db.pool.do(thd)
