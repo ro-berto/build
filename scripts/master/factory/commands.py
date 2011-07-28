@@ -361,7 +361,8 @@ class FactoryCommands(object):
       cmd.extend(['--total-shards', str(total_shards),
                   '--shard-index', str(shard_index)])
 
-    if parallel or factory_properties.get('sharding_supervisor'):
+    if ((parallel or factory_properties.get('sharding_supervisor')) and
+        test_name not in factory_properties.get('unsharded_tests', [])):
       cmd.append('--parallel')
       sharding_args = factory_properties.get('sharding_args')
       if sharding_args:
