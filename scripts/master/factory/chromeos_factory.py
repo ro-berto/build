@@ -237,7 +237,7 @@ class CbuildbotFactory(object):
                           name=name,
                           description=description,
                           haltOnFailure=haltOnFailure,
-                          usePTY=Fals)
+                          usePTY=False)
 
   def oneoff_type(self):
     """
