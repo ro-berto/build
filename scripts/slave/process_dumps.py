@@ -20,7 +20,7 @@ def GetCrashDumpDir():
   if not local_app_data:
     user_profile = os.environ.get('USERPROFILE')
     if not user_profile:
-      return ''
+      raise AssertionError("Cannot find Chromium's crash dump directory")
     local_app_data = '%s\\Local Settings\\Application Data' % user_profile
   return '%s\\Chromium\\User Data\\Crash Reports' % local_app_data
 
@@ -117,18 +117,19 @@ def main():
   if not dump_dir:
     dump_dir = GetCrashDumpDir()
   dump_count = 0
-  for dump_file in chromium_utils.LocateFiles(pattern='*.dmp', root=dump_dir):
+  for dump_basename in os.listdir(dump_dir):
+    dump_file = os.path.join(dump_dir, dump_basename)
     file_time = os.path.getmtime(dump_file)
-    if file_time < dll_time:
+    if file_time < dll_time and os.path.isfile(dump_file):
       # Ignore dumps older than dll file.
       print 'Deleting old dump: %s' % dump_file
       os.remove(dump_file)
-      continue
-    print '-------------------------'
-    print os.path.basename(dump_file)
-    stack = GetStackTrace(debugger_dir, symbol_path, dump_file)
-    print stack
-    dump_count += 1
+    elif dump_basename.endswith('.dmp'):
+      print '-------------------------'
+      print dump_basename
+      stack = GetStackTrace(debugger_dir, symbol_path, dump_file)
+      print stack
+      dump_count += 1
 
   print '%s dumps found' % dump_count
 
