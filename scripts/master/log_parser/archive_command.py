@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -31,6 +31,19 @@ class ScriptObserver(buildstep.LogLineObserver):
 class ArchiveCommand(shell.ShellCommand):
   """Buildbot command that knows how to display archive_build/coverage/
   layout_test_results.py test output."""
+
+  # 'parms' is used in buildbot.steps.shell.ShellCommand.__init__ to separate
+  # kwargs that should be passed to the BuildStep constructor from kwargs
+  # that should be passed to the RemoteShellCommand constructor.  It's
+  # harmless to omit 'parms' in buildbot7, but in buildbot8, extra kwargs
+  # that aren't listed in 'parms' will cause the RemoteShellCommand
+  # constructor to throw an exception.
+  parms = ['base_url',
+           'link_text',
+           'more_link_url',
+           'more_link_text',
+           'name',
+           'index_suffix']
 
   def __init__(self, **kwargs):
     shell.ShellCommand.__init__(self, **kwargs)
