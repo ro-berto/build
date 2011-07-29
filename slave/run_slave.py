@@ -31,6 +31,7 @@ def HotPatchSlaveBuilder():
   """We could override the SlaveBuilder class but it's way simpler to just
   hotpatch it."""
   # python module paths changed from buildbot-7 to buildbot-8; support both
+  # pylint: disable=F0401
   try:
     from buildbot.slave.bot import SlaveBuilder
   except ImportError:
