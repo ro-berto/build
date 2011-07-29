@@ -511,13 +511,9 @@ class ChromiumCommands(commands.FactoryCommands):
                                description, options, total_shards=total_shards,
                                shard_index=shard_index)
 
-  def AddUITests(self, single_process, factory_properties=None):
+  def AddUITests(self, factory_properties=None):
     description = ''
     options = []
-
-    if single_process:
-      options = ['--single-process']
-      description = ' (--single-process)'
 
     total_shards = factory_properties.get('ui_total_shards')
     shard_index = factory_properties.get('ui_shard_index')

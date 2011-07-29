@@ -247,8 +247,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('browser_tests'):  f.AddBrowserTests(fp)
 
     # Big, UI tests:
-    if R('ui'):             f.AddUITests(False, fp)
-    if R('ui-single'):      f.AddUITests(True, fp)
+    if R('ui'):             f.AddUITests(fp)
     if R('nacl_ui'):        f.AddBasicGTestTestStep('nacl_ui_tests', fp)
     if R('nacl_integration'): f.AddNaClIntegrationTestStep(fp)
     if R('nacl_integration_memcheck'):
