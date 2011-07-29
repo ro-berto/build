@@ -258,6 +258,16 @@ class Master(object):
     store_revisions_url = base_app_url + '/revisions'
     last_good_url = 'http://o3d-status.appspot.com/lkgr'
 
+  class Skia(_Base):
+    project_name = 'Skia'
+    master_host = 'localhost'
+    master_port = 9068
+    slave_port = 9069
+    master_port_alt = 9070
+    server_url = 'http://skia.googlecode.com'
+    project_url = 'http://skia.googlecode.com'
+    is_production_host = False
+
   # Used for testing on a local machine
   class Experimental(Chromium):
     project_name = 'Chromium Experimental'
