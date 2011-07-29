@@ -435,22 +435,24 @@ class AnnotationObserver(buildstep.LogLineObserver):
     m = re.match('^@@@BUILD_STEP (.*)@@@', line)
     if m:
       step_name = m.group(1)
-      # Finish up last section.
-      self.fixupLast()
-      # Add new one.
-      step = self.command.step_status.getBuild().addStepWithName(step_name)
-      step.stepStarted()
-      step.setText([step_name])
-      log = step.addLog('stdio')
-      self.sections.append({
-          'name': step_name,
-          'step': step,
-          'log': log,
-          'status': builder.SUCCESS,
-          'links': [],
-          'step_summary_text': [],
-          'step_text': [],
-      })
+      # Ignore duplicate consecutive step labels (for robustness).
+      if step_name != self.sections[-1]['name']:
+        # Finish up last section.
+        self.fixupLast()
+        # Add new one.
+        step = self.command.step_status.getBuild().addStepWithName(step_name)
+        step.stepStarted()
+        step.setText([step_name])
+        log = step.addLog('stdio')
+        self.sections.append({
+            'name': step_name,
+            'step': step,
+            'log': log,
+            'status': builder.SUCCESS,
+            'links': [],
+            'step_summary_text': [],
+            'step_text': [],
+        })
     # Add to the current secondary log.
     # Doing this last so that @@@BUILD_STEP... occurs in the log of the new
     # step.
