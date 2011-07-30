@@ -20,7 +20,7 @@ def GetCrashDumpDir():
   if not local_app_data:
     user_profile = os.environ.get('USERPROFILE')
     if not user_profile:
-      raise AssertionError("Cannot find Chromium's crash dump directory")
+      sys.exit(0)
     local_app_data = '%s\\Local Settings\\Application Data' % user_profile
   return '%s\\Chromium\\User Data\\Crash Reports' % local_app_data
 
