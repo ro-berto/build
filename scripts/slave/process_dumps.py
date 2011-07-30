@@ -116,6 +116,11 @@ def main():
   dump_dir = options.dump_dir
   if not dump_dir:
     dump_dir = GetCrashDumpDir()
+
+  if not os.path.exists(dump_dir):
+    print 'The crash dump directory does not exist'
+    return 0
+
   dump_count = 0
   for dump_basename in os.listdir(dump_dir):
     dump_file = os.path.join(dump_dir, dump_basename)
