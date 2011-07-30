@@ -163,28 +163,32 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         '/data/pyauto_private'))
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
-               full_checkout=False, additional_svn_urls=None):
+               full_checkout=False, additional_svn_urls=None, name=None,
+               custom_deps_list=None):
     if full_checkout:
       needed_components = None
     else:
       needed_components = self.NEEDED_COMPONENTS
     main = gclient_factory.GClientSolution(config.Master.trunk_url_src,
                needed_components=needed_components,
+               name=name,
+               custom_deps_list=custom_deps_list,
                custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
                                  self.CUSTOM_VARS_GOOGLECODE_URL])
-    custom_deps_list = [main]
+    internal_custom_deps_list = [main]
     if config.Master.trunk_internal_url_src and pull_internal:
       internal = gclient_factory.GClientSolution(
                      config.Master.trunk_internal_url_src,
                      needed_components=self.NEEDED_COMPONENTS_INTERNAL)
-      custom_deps_list.append(internal)
+      internal_custom_deps_list.append(internal)
 
     additional_svn_urls = additional_svn_urls or []
     for svn_url in additional_svn_urls:
       solution = gclient_factory.GClientSolution(svn_url)
-      custom_deps_list.append(solution)
+      internal_custom_deps_list.append(solution)
 
-    gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,
+    gclient_factory.GClientFactory.__init__(self, build_dir,
+                                            internal_custom_deps_list,
                                             target_platform=target_platform)
 
   def _AddTests(self, factory_cmd_obj, tests, mode=None,
