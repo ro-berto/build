@@ -26,7 +26,7 @@ defaults['category'] = '4linux'
 rel_archive = master_config.GetArchiveUrl('ChromiumGIT',
                                           'Linux Builder x64 (git)',
                                           'Linux_Builder_x64__git_',
-                                          'linux2')
+                                          'linux')
 
 #
 # Main release scheduler for src/
