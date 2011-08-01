@@ -218,13 +218,13 @@ def main_linux(options, args):
     else:
       bin_dir = os.path.join(build_dir, '..', 'out', options.target)
 
-  slave_utils.StartVirtualX(slave_name, bin_dir)
-
   test_exe = args[0]
   test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
+
+  slave_utils.StartVirtualX(slave_name, bin_dir)
 
   # Don't use a sandbox when running tests. Ideally we _would_ use a sandbox,
   # but since the sandbox needs to be suid and owned by root, the one from the
