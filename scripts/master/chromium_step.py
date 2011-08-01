@@ -122,6 +122,24 @@ class GClient(source.Source):
                          'Source')
 
 
+class BuilderStatus(object):
+  # Order in asceding severity.
+  BUILD_STATUS_ORDERING = [
+      builder.SUCCESS,
+      builder.WARNINGS,
+      builder.FAILURE,
+      builder.EXCEPTION,
+  ]
+
+  @classmethod
+  def combine(cls, a, b):
+    """Combine two status, favoring the more severe."""
+    a_rank = cls.BUILD_STATUS_ORDERING.index(a)
+    b_rank = cls.BUILD_STATUS_ORDERING.index(b)
+    pick = max(a_rank, b_rank)
+    return cls.BUILD_STATUS_ORDERING[pick]
+
+
 class ProcessLogShellStep(shell.ShellCommand):
   """ Step that can process log files.
 
@@ -206,11 +224,7 @@ class ProcessLogShellStep(shell.ShellCommand):
     log_result = None
     if self._log_processor and 'evaluateCommand' in dir(self._log_processor):
       log_result = self._log_processor.evaluateCommand(cmd)
-    if shell_result is builder.FAILURE or log_result is builder.FAILURE:
-      return builder.FAILURE
-    if shell_result is builder.WARNINGS or log_result is builder.WARNINGS:
-      return builder.WARNINGS
-    return builder.SUCCESS
+    return BuilderStatus.combine(shell_result, log_result)
 
   def _CreateReportLinkIfNeccessary(self):
     if self._log_processor and self._log_processor.ReportLink():
@@ -280,21 +294,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.halt_on_failure = False
     self.honor_zero_return_code = False
 
-  # Order in asceding severity.
-  BUILD_STATUS_ORDERING = [
-      builder.SUCCESS,
-      builder.WARNINGS,
-      builder.FAILURE,
-      builder.EXCEPTION,
-  ]
-
-  def combineStatuses(self, a, b):
-    """Combine two status, favoring the more severe."""
-    a_rank = self.BUILD_STATUS_ORDERING.index(a)
-    b_rank = self.BUILD_STATUS_ORDERING.index(b)
-    pick = max(a_rank, b_rank)
-    return self.BUILD_STATUS_ORDERING[pick]
-
   def initialSection(self):
     if self.sections:
       return
@@ -347,9 +346,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def updateStepStatus(self, status):
     """Update current step status and annotation status based on a new event."""
-    self.annotate_status = self.combineStatuses(self.annotate_status, status)
+    self.annotate_status = BuilderStatus.combine(self.annotate_status, status)
     last = self.sections[-1]
-    last['status'] = self.combineStatuses(last['status'], status)
+    last['status'] = BuilderStatus.combine(last['status'], status)
     if self.halt_on_failure and last['status'] in [
         builder.FAILURE, builder.EXCEPTION]:
       self.fixupLast()
@@ -506,7 +505,10 @@ class AnnotatedCommand(ProcessLogShellStep):
     return ProcessLogShellStep.interrupt(self, reason)
 
   def evaluateCommand(self, cmd):
-    return self.script_observer.annotate_status
+    observer_result = self.script_observer.annotate_status
+    # Check if ProcessLogShellStep detected a failure or warning also.
+    log_processor_result = ProcessLogShellStep.evaluateCommand(self, cmd)
+    return BuilderStatus.combine(observer_result, log_processor_result)
 
   def commandComplete(self, cmd):
     self.script_observer.handleReturnCode(cmd.rc)
