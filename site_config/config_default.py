@@ -42,6 +42,10 @@ class Master(object):
   # Your smtp server to enable mail notifications.
   smtp = 'smtp'
 
+  # By default, bot_password will be filled in by config.GetBotPassword();
+  # if the private config wants to override this, it can do so.
+  bot_password = None
+
   class _Base(object):
     # If set to True, the master will do nasty stuff like closing the tree,
     # sending emails or other similar behaviors. Don't change this value unless

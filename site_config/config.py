@@ -94,8 +94,6 @@ class Master(config_private.Master):
   # Magic step return code inidicating "warning(s)" rather than "error".
   retcode_warnings = 88
 
-  bot_password = None
-
   @staticmethod
   def GetBotPassword():
     """Returns the slave password retrieved from a local file, or None.
