@@ -15,6 +15,28 @@ T = helper.Triggerable
 
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
+# These are the common targets to most of the builders
+linux_all_test_targets = [
+  'base_unittests',
+  'crypto_unittests',
+  'googleurl_unittests',
+  'gpu_unittests',
+  'media_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'net_unittests',
+  'safe_browsing_tests',
+  'cacheinvalidation_unittests',
+  'jingle_unittests',
+  'sql_unittests',         # from test target unit
+  'ipc_tests',             # from test target unit
+  'sync_unit_tests',       # from test target unit
+  'unit_tests',            # from test target unit
+  'gfx_unittests',         # from test target unit
+  'browser_tests',
+  'ui_tests',
+]
+
 
 ################################################################################
 ## Release
@@ -38,26 +60,8 @@ T('linux_rel_trigger')
 B('Linux Builder x64', 'rel', 'compile', 'linux_rel')
 F('rel', linux().ChromiumFactory(
     slave_type='NASBuilder',
-    options=['--compiler=goma',
-             'browser_tests',
-             'googleurl_unittests',
-             'gpu_unittests',
-             'ipc_tests',
-             'media_unittests',
-             'printing_unittests',
-             'remoting_unittests',
-             'sync_unit_tests',
-             'ui_tests',
-             'unit_tests',
-             'base_unittests',
-             'net_unittests',
-             'gfx_unittests',
-             'safe_browsing_tests',
-             'sql_unittests',
-             'sync_integration_tests',
-             'crypto_unittests',
-             'cacheinvalidation_unittests',
-             'jingle_unittests'],
+    options=['--compiler=goma',] + linux_all_test_targets +
+            ['sync_integration_tests'],
     factory_properties={'trigger': 'linux_rel_trigger'}))
 
 #
@@ -90,27 +94,36 @@ F('rel_sync', linux().ChromiumFactory(
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
 
+linux_touch_test_targets = linux_all_test_targets + [
+  'webkit_unit',
+  'sizes',
+]
+# now disable the known broken tests
+for target in linux_touch_test_targets:
+  if target in [ 'browser_tests', 'unit_tests']:
+    linux_touch_test_targets.remove(target)
+
 B('Linux Touch', 'rel_touch', 'compile', 'linux_rel')
 F('rel_touch', linux().ChromiumFactory(
     slave_type='BuilderTester',
-    options=['--compiler=goma', 
-             'base_unittests',
-             'crypto_unittests',
-             'googleurl_unittests', 
-             'gpu_unittests', 
-             'ipc_tests',  # from unit
-             'sync_unit_tests',  # from unit
-             'unit_tests',  # from unit
-             'sql_unittests',  # from unit
-             'gfx_unittests',  # from unit
-             'media_unittests', 
-             'net_unittests', 
-             'printing_unittests',
-             'remoting_unittests',
-             'safe_browsing_tests',
-    ],
-    tests=['check_deps', 'base', 'crypto', 'googleurl', 'gpu', 'media', 'net',
-           'printing', 'remoting', 'safe_browsing', 'unit' ],
+    options=['--compiler=goma',] + linux_touch_test_targets,
+    tests=['webkit_unit',
+           'sizes', ] +
+          ['check_deps',
+           'googleurl',
+           'media',
+           'printing',
+           'remoting',
+           #'ui',
+           #'browser_tests',
+           'unit',
+           'gpu',
+           'base',
+           #'net',
+           'safe_browsing',
+           'crypto',
+           'cacheinvalidation',
+           'jingle'],
     factory_properties={'gclient_env': {'GYP_DEFINES':'touchui=1'}}))
 
 ################################################################################
@@ -135,29 +148,12 @@ B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg')
 F('dbg', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
-    options=['--compiler=goma',
-             'sql_unittests',
-             'browser_tests',
-             'googleurl_unittests',
-             'gpu_unittests',
-             'interactive_ui_tests',
-             'ipc_tests',
-             'media_unittests',
+    options=['--compiler=goma',] + linux_all_test_targets + [
              'nacl_ui_tests',
              'nacl_sandbox_tests',
-             'printing_unittests',
-             'remoting_unittests',
-             'sync_unit_tests',
-             'ui_tests',
-             'unit_tests',
-             'base_unittests',
-             'net_unittests',
-             'crypto_unittests',
-             'gfx_unittests',
              'plugin_tests',
-             'safe_browsing_tests',
-             'cacheinvalidation_unittests',
-             'jingle_unittests'],
+             'interactive_ui_tests',
+           ],
     factory_properties={'trigger': 'linux_dbg_trigger',
                         'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
 
