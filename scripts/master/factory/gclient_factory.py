@@ -160,12 +160,14 @@ class GClientFactory(object):
         target_platform=self._target_platform)
     # First kill any svn.exe tasks so we can update in peace, and
     # afterwards use the checked-out script to kill everything else.
-    if self._target_platform == 'win32':
+    if (self._target_platform == 'win32' and
+        not factory_properties.get('no_kill')):
       factory_cmd_obj.AddSvnKillStep()
     factory_cmd_obj.AddUpdateScriptStep()
     # Once the script is updated, the zombie processes left by the previous
     # run can be killed.
-    if self._target_platform == 'win32':
+    if (self._target_platform == 'win32' and
+        not factory_properties.get('no_kill')):
       factory_cmd_obj.AddTaskkillStep()
     env = factory_properties.get('gclient_env', {})
     # Allow gclient_deps to also come from the factory_properties.
