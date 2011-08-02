@@ -134,6 +134,10 @@ class BuilderStatus(object):
   @classmethod
   def combine(cls, a, b):
     """Combine two status, favoring the more severe."""
+    if a not in cls.BUILD_STATUS_ORDERING:
+      return b
+    if b not in cls.BUILD_STATUS_ORDERING:
+      return a
     a_rank = cls.BUILD_STATUS_ORDERING.index(a)
     b_rank = cls.BUILD_STATUS_ORDERING.index(b)
     pick = max(a_rank, b_rank)
