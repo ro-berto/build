@@ -69,14 +69,16 @@ class NativeClientFactory(gclient_factory.GClientFactory):
                                                       self._build_dir,
                                                       self._target_platform)
 
+    # Upload expectations before running the tests to check against
+    # the latest expectations.
+    if factory_properties.get('expectations'):
+      nacl_cmd_obj.AddUploadPerfExpectations(factory_properties)
+
     # Whole build in one step.
     nacl_cmd_obj.AddAnnotatedStep(
         ['buildbot/buildbot_selector.py'], timeout=1500, usePython=True,
         env={'BUILDBOT_SLAVE_TYPE': slave_type},
         factory_properties=factory_properties)
-
-    if factory_properties.get('expectations'):
-      nacl_cmd_obj.AddUploadPerfExpectations(factory_properties)
 
     # Trigger tests on other builders.
     self._AddTriggerTests(nacl_cmd_obj, tests)
