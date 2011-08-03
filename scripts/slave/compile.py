@@ -458,10 +458,7 @@ def main_scons_v8(options, args):
   else:
     command.extend(['-k'])
 
-  command.extend([
-      'mode=' + options.target,
-      'd8'
-  ])
+  command.extend(['mode=' + options.target])
 
   command.extend(options.build_args + args)
   return chromium_utils.RunCommand(command, env=env)
