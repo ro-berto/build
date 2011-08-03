@@ -31,6 +31,7 @@ linux_all_test_targets = [
   'sql_unittests',         # from test target unit
   'ipc_tests',             # from test target unit
   'sync_unit_tests',       # from test target unit
+  'content_unittests',     # from test target unit
   'unit_tests',            # from test target unit
   'gfx_unittests',         # from test target unit
   'browser_tests',

@@ -96,6 +96,7 @@ processes = [
     'chrome_frame_tests.exe',
     'chrome_launcher.exe',
     'chrome_frame_unittests.exe',
+    'content_unittests.exe',
     'crash_service.exe',
     'crypto_unittests.exe',
     'debug_message.exe',

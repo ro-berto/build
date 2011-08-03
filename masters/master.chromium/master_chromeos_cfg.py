@@ -130,6 +130,7 @@ F('view_dbg', chromeos().ChromiumOSFactory(
     options=['--compiler=goma',
              'base_unittests',
              'browser_tests',
+             'content_unittests',
              'interactive_ui_tests',
              'ipc_tests',
              'googleurl_unittests',

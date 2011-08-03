@@ -19,6 +19,7 @@ categories_steps = {
     'base_unittests',
     #'browser_tests',
     'cacheinvalidation_unittests',
+    'content_unittests',
     'courgette_unittests',
     'crypto_unittests',
     'googleurl_unittests',
