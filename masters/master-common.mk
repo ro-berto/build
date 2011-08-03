@@ -34,9 +34,23 @@ USE_LAUNCHD := \
           [ "$$(pwd -P)" = "/b/build/masters/$(MASTERPATH)" ] && \
           echo 1)
 
+# Elements used to construct PYTHONPATH. These may be overridden by the
+# including Makefile.
+#
+# For example: while we transition from buildbot 0.7.12 to buildbot 0.8.x ,
+# some masters will override BUILDBOT_PATH in their local Makefiles.
+TOPLEVEL_DIR ?= ../..
+THIRDPARTY_DIR ?= $(TOPLEVEL_DIR)/third_party
+SCRIPTS_DIR ?= $(TOPLEVEL_DIR)/scripts
+PUBLICCONFIG_DIR ?= $(TOPLEVEL_DIR)/site_config
+PRIVATECONFIG_DIR ?= $(TOPLEVEL_DIR)/../build_internal/site_config
+BUILDBOT_PATH ?= $(THIRDPARTY_DIR)/buildbot_7_12:$(THIRDPARTY_DIR)/twisted_8_1
+
+PYTHONPATH := $(BUILDBOT_PATH):$(SCRIPTS_DIR):$(THIRDPARTY_DIR):$(PUBLICCONFIG_DIR):$(PRIVATECONFIG_DIR):.
+
 start:
 ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 else
 	launchctl start org.chromium.buildbot.$(MASTERPATH)
 endif
@@ -58,3 +72,7 @@ wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
 restart: stop wait start log
+
+# This target is only known to work on 0.8.x masters.
+upgrade:
+	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
