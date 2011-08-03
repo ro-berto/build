@@ -10,6 +10,7 @@ can find its data/ directory.
 
 """
 
+import filecmp
 import mock
 import os
 import shutil
@@ -314,6 +315,32 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
       expected = simplejson.load(open(os.path.join(runtests.DATA_PATH,
                                                    filename)))
       self.assertEqual(expected, actual)
+
+  def testFrameRateSummary(self):
+    step = self._ConstructStep(process_log.GraphingFrameRateLogProcessor,
+                               'frame_rate_graphing_processor.log')
+    step.commandComplete('mycommand')
+    for graph in ('blank', 'googleblog'):
+      filename = '%s-summary.dat' % graph
+      self.assert_(os.path.exists(os.path.join('output_dir', filename)))
+      # Since the output files are JSON-encoded, they may differ in form, but
+      # represent the same data. Therefore, we decode them before comparing.
+      actual = simplejson.load(open(os.path.join('output_dir', filename)))
+      expected = simplejson.load(
+          open(os.path.join(runtests.DATA_PATH, 'frame_rate', filename)))
+      self.assertEqual(expected, actual)
+
+  def testFrameRateGestureList(self):
+    step = self._ConstructStep(process_log.GraphingFrameRateLogProcessor,
+                               'frame_rate_graphing_processor.log')
+    step.commandComplete('mycommand')
+    for graph in ('blank', 'googleblog'):
+      for trace in ('fps', 'fps_ref'):
+        filename = "%s_%s_%s.dat" % (self._revision, graph, trace)
+        self.assert_(os.path.exists(os.path.join('output_dir', filename)))
+        actual = os.path.join('output_dir', filename)
+        expected = os.path.join(runtests.DATA_PATH, 'frame_rate', filename)
+        self.assert_(filecmp.cmp(actual, expected))
 
   def testGraphList(self):
     step = self._ConstructStep(process_log.GraphingLogProcessor,

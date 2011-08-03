@@ -750,6 +750,56 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     graph_file.close()
     os.chmod(graph_filename, EXECUTABLE_FILE_PERMISSIONS)
 
+class GraphingFrameRateLogProcessor(GraphingLogProcessor):
+  """Handles additional processing for frame rate gesture data."""
+
+  GESTURES_REGEXP = re.compile(
+      r'^GESTURES '
+       '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
+       '\[(?P<GESTURES>.*)\] '
+       '\[(?P<MEANS>.*)\] '
+       '\[(?P<SIGMAS>.*)\]')
+
+  def _ProcessLine(self, line):
+    """Also looks for the Gestures: line to find the individual results."""
+    # super() should be used instead of GetParentClass().
+    # pylint: disable=W0212
+    line_match = self.GESTURES_REGEXP.match(line)
+    if line_match:
+      match_dict = line_match.groupdict()
+      graph_name = match_dict['GRAPH'].strip()
+      trace_name = match_dict['TRACE'].strip()
+      gestures = match_dict['GESTURES'].strip().split(',')
+      means = [float(x) for x in match_dict['MEANS'].strip().split(',')]
+      sigmas = [float(x) for x in match_dict['SIGMAS'].strip().split(',')]
+      if len(gestures) > 0:
+        self.__SaveGestureData(graph_name, trace_name, gestures, means, sigmas)
+    else:
+      chromium_utils.GetParentClass(self)._ProcessLine(self, line)
+
+  def __SaveGestureData(self, graph_name, trace_name, gestures, means, sigmas):
+    """Save a file holding the frame rate data for each gesture.
+
+    Args:
+      gestures: list of gesture names.
+      means: list of mean values.
+      sigmas: list of standard deviation values.
+    """
+    file_data = []
+    for gesture, mean, sigma in zip(gestures, means, sigmas):
+      file_data.append("%s (%s+/-%s)\n" % (gesture,
+           FormatFloat(mean),
+           FormatFloat(sigma)))
+
+    filename = os.path.join(self._output_dir,
+                            '%s_%s_%s.dat' % (self._revision,
+                                              graph_name,
+                                              trace_name))
+    fileobj = open(filename, 'w')
+    fileobj.write(''.join(file_data))
+    fileobj.close()
+    os.chmod(filename, READABLE_FILE_PERMISSIONS)
+
 class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
   """Handles additional processing for page-cycler timing data."""
 
