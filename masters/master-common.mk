@@ -38,14 +38,14 @@ start:
 ifneq ($(USE_LAUNCHD),1)
 	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
 else
-	echo launchctl start org.chromium.buildbot.$(MASTERPATH)
+	launchctl start org.chromium.buildbot.$(MASTERPATH)
 endif
 
 stop:
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
 else
-	echo launchctl stop org.chromium.buildbot.$(MASTERPATH)
+	launchctl stop org.chromium.buildbot.$(MASTERPATH)
 endif
 
 reconfig:
