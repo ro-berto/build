@@ -329,8 +329,11 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                               crostools_repo=crostools_repo,
                               chromite_repo=chromite_repo,
                               dry_run=dry_run)
-
-    for chrome_rev in chrome_rev_stages:
-      bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
-      self.cbuildbot_type(bot_params, description_suffix=chrome_rev,
-                          haltOnFailure=False)
+    # TODO(sosa): Remove legacy support.
+    if chrome_rev_stages:
+      for chrome_rev in chrome_rev_stages:
+        bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
+        self.cbuildbot_type(bot_params, description_suffix=chrome_rev,
+                            haltOnFailure=False)
+    else:
+      self.cbuildbot_type(params, haltOnFailure=False)
