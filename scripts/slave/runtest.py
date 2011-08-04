@@ -224,7 +224,8 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
-  slave_utils.StartVirtualX(slave_name, bin_dir)
+  if not options.no_xvfb:
+    slave_utils.StartVirtualX(slave_name, bin_dir)
 
   # Don't use a sandbox when running tests. Ideally we _would_ use a sandbox,
   # but since the sandbox needs to be suid and owned by root, the one from the
@@ -311,7 +312,8 @@ def main_linux(options, args):
   if options.document_root:
     http_server.StopServer()
 
-  slave_utils.StopVirtualX(slave_name)
+  if not options.no_xvfb:
+    slave_utils.StopVirtualX(slave_name)
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -451,6 +453,9 @@ def main():
   option_parser.add_option('', '--parallel', action='store_true',
                            help='Shard and run tests in parallel for speed '
                                 'with sharding_supervisor.')
+  option_parser.add_option('', '--no-xvfb', action='store_true', dest='no_xvfb',
+                           default=False,
+                           help='Do not start virtual X server on Linux.')
   option_parser.add_option('', '--sharding-args', dest='sharding_args',
                            default=None,
                            help='Options to pass to sharding_supervisor.')
