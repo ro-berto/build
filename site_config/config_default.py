@@ -156,6 +156,12 @@ class Master(object):
     slave_port = 9066
     master_port_alt = 9067
 
+  class ChromiumSwarm(_ChromiumBase):
+    project_name = 'Chromium Swarm'
+    master_port = 9068
+    slave_port = 9069
+    master_port_alt = 9070
+
   class TryServer(_ChromiumBase):
     project_name = 'Chromium Try Server'
     master_port = 9011
