@@ -307,14 +307,17 @@ class FactoryCommands(object):
         haltOnFailure=halt_on_failure,
         command=test_command)
 
+  def TestStepFilter(self, bStep):
+    return self.TestStepFilterImpl(bStep, True)
+
   @staticmethod
-  def TestStepFilter(bStep):
+  def TestStepFilterImpl(bStep, default):
     """Examines the 'testfilters' property of the build and determines if
     the step should run; True for yes."""
     bStep.setProperty('gtest_filter', None, "Factory")
     filters = bStep.build.getProperties().getProperty('testfilters')
     if not filters:
-      return True
+      return default
 
     for testfilter in filters:
       if testfilter == bStep.name:
@@ -325,6 +328,14 @@ class FactoryCommands(object):
                           testfilter.split(':', 1)[1], "Scheduler")
         return True
     return False
+
+  def GetTestStepFilter(self, factory_properties):
+    """Returns a TestStepFilter lambda with the right default according to
+    non_default factory property.
+    """
+    return lambda bStep: self.TestStepFilterImpl(
+        bStep,
+        bStep.name not in factory_properties.get('non_default', []))
 
   def AddBasicGTestTestStep(self, test_name, factory_properties=None,
                             description='', arg_list=None, total_shards=None,

@@ -679,7 +679,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      env={'PYTHONPATH': '.'},
                      workdir=workdir,
                      timeout=timeout,
-                     do_step_if=self.TestStepFilter)
+                     do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddWebkitTests(self, gpu, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
