@@ -202,12 +202,6 @@ class GClientFactory(object):
       skip_exclude = True
     gclient_spec = self.BuildGClientSpec(tests, skip_exclude)
 
-    # If this is a trybot, runhooks will need to be called again manually after
-    # the patch is applied. Save ~70 seconds by not calling it when doing the
-    # initial update.
-    if slave_type == 'Trybot':
-      self._nohooks_on_update = True
-
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
                                factory_properties=factory_properties,

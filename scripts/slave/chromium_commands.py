@@ -147,6 +147,7 @@ class GClient(sourcebase):
     self.gclient_deps = None
     self.rm_timeout = None
     self.gclient_nohooks = False
+    self.was_patched = False
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
   if bbver == 7.12:
@@ -200,7 +201,6 @@ class GClient(sourcebase):
     # Do we need to clobber anything?
     if self.mode in ("copy", "clobber", "export"):
       d.addCallback(self.doClobber, self.workdir)
-    was_patched = False
     if not (self.sourcedirIsUpdateable() and self.sourcedataMatches()):
       # the directory cannot be updated, so we have to clobber it.
       # Perhaps the master just changed modes from 'export' to
@@ -209,7 +209,7 @@ class GClient(sourcebase):
     elif self.sourcedirIsPatched():
       # The directory is patched. Revert the sources.
       d.addCallback(self.doRevert)
-      was_patched = True
+      self.was_patched = True
 
     d.addCallback(self.doVC)
 
@@ -217,7 +217,9 @@ class GClient(sourcebase):
       d.addCallback(self.doCopy)
     if self.patch:
       d.addCallback(self.doPatch)
-    if self.patch or was_patched:
+    if self.patch or self.was_patched:
+      # If gclient_nohooks is set, runhooks needs to be always run manually,
+      # even if there was no patch.
       # Always run doRunHooks if there *is* or there *was* a patch because
       # revert is run with --nohooks and `gclient sync` will not regenerate the
       # output files if the input files weren't updated..
@@ -252,8 +254,9 @@ class GClient(sourcebase):
     command = [chromium_utils.GetGClientCommand(),
                'sync', '--verbose', '--reset', '--manually_grab_svn_rev',
                '--delete_unversioned_trees']
-    # If nohooks is required, make sure gclient calls it.
-    if self.gclient_nohooks:
+    # Don't run hooks if it was patched or there is a patch since runhooks will
+    # be run after.
+    if self.gclient_nohooks or self.patch or self.was_patched:
       command.append('--nohooks')
     # GClient accepts --revision argument of two types 'module@rev' and 'rev'.
     if self.revision:
