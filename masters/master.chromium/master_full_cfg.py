@@ -34,7 +34,7 @@ B('Win', 'win_clobber', 'compile|windows', 'chromium')
 F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
-    tests=['sizes', 'selenium', 'reliability', 'check_bins'],
+    tests=['sizes', 'reliability', 'check_bins'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',
                         'extra_archive_paths': 'ceee,chrome_frame',

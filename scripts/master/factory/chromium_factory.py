@@ -261,7 +261,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('nacl_sandbox'):   f.AddBasicGTestTestStep('nacl_sandbox_tests', fp)
     if R('automated_ui'):   f.AddAutomatedUiTests(fp)
     if R('interactive_ui'): f.AddBasicGTestTestStep('interactive_ui_tests', fp)
-    if R('selenium'):       f.AddBasicShellStep('selenium_tests')
     if R('dom_checker'):    f.AddDomCheckerTests()
     if R('page_load'):      f.AddPageLoadTests(fp)
 

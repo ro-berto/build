@@ -67,7 +67,7 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
 B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
-    tests=['installer', 'nacl_ui', 'selenium', 'unit', 'ui'],
+    tests=['installer', 'nacl_ui', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,

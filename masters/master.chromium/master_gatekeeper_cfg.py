@@ -39,7 +39,6 @@ categories_steps = {
     'sbox_unittests',
     'sbox_integration_tests',
     'sbox_validation_tests',
-    'selenium_tests',
     'sql_unittests',
     'test_shell_tests',
     'unit_tests',
