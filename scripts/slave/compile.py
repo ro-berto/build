@@ -61,10 +61,17 @@ def common_mac_settings(command, options, env, compiler=None):
     return
 
   if compiler == 'clang':
-    clang_binary = os.path.join(os.path.dirname(options.build_dir),
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang++')
-    env['CC'] = os.path.abspath(clang_binary)
-    return
+    # The official release builder wobbles across release branches.
+    # Chromes prior to m15 were built with gcc and we want to keep it
+    # that way, so only enable clang on m15 and up.
+    exec(open('src/chrome/VERSION').read())
+    if int(MAJOR) >= 15:
+      clang_binary = os.path.join(os.path.dirname(options.build_dir),
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin', 'clang++')
+      env['CC'] = os.path.abspath(clang_binary)
+      return
+    else:
+      print 'Not using clang for version', MAJOR
 
   # Most of the bot hostnames are in one of two patterns:
   #   base###.subnet.domain
