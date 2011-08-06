@@ -678,6 +678,7 @@ class FactoryCommands(object):
                           timeout=600,
                           description='Updating and building clang and plugins',
                           descriptionDone='clang updated',
+                          env={'LLVM_URL': config.Master.llvm_url},
                           command=cmd)
 
 

@@ -20,6 +20,8 @@ class Master(object):
   # Directly fetches from anonymous webkit svn server.
   webkit_root_url = 'http://svn.webkit.org/repository/webkit'
 
+  llvm_url = 'http://llvm.org/svn/llvm-project'
+
   # Other non-redistributable repositories.
   repo_root_internal = None
   trunk_internal_url = None
