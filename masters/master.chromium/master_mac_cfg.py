@@ -42,8 +42,13 @@ T('mac_rel_trigger')
 B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel')
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_tests'],
-    factory_properties={'trigger': 'mac_rel_trigger'}))
+    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
+    factory_properties={
+        'trigger': 'mac_rel_trigger',
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
+    }))
 
 #
 # Mac Rel testers
@@ -135,8 +140,13 @@ B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg')
 F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_tests'],
-    factory_properties={'trigger': 'mac_dbg_trigger'}))
+    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
+    factory_properties={
+        'trigger': 'mac_dbg_trigger',
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
+    }))
 
 #
 # Mac Dbg Unit testers
@@ -214,10 +224,9 @@ B('Mac 10.6 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
 # Mac Dbg Clang bot
 #
 
-B('Mac Clang (dbg)', 'dbg_mac_clang', 'compile', 'mac_dbg')
-F('dbg_mac_clang', mac().ChromiumFactory(
+B('Mac Gcc (dbg)', 'dbg_mac_gcc', 'compile', 'mac_dbg')
+F('dbg_mac_gcc', mac().ChromiumFactory(
     target='Debug',
-    options=['--compiler=clang'],
     # Only include test binaries that run reasonably fast and that don't contain
     # many flaky tests.
     tests=[
@@ -226,11 +235,7 @@ F('dbg_mac_clang', mac().ChromiumFactory(
         # unit_tests is very flaky due to http://crbug.com/60426
         # TODO(thakis): Re-add this once the bug is fixed.
         #'unit',
-    ],
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
-    }}))
+    ]))
 
 
 def Update(config, active_master, c):

@@ -44,7 +44,13 @@ B('Webkit Mac Builder (deps)', 'f_webkit_mac_rel',
   scheduler='s2_chromium_rel', builddir='webkit-mac-pinned-rel')
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=['--', '-project', '../webkit/webkit.xcodeproj']))
+    options=[
+        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    factory_properties={
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
+    }))
 
 #
 # Mac Rel Webkit testers
@@ -84,7 +90,13 @@ B('Webkit Mac Builder (deps)(dbg)', 'f_webkit_mac_dbg',
 F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=['--', '-project', '../webkit/webkit.xcodeproj']))
+    options=[
+        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    factory_properties={
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
+    }))
 
 #
 # Mac Dbg Webkit testers

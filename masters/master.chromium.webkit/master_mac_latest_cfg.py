@@ -32,17 +32,27 @@ S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--', '-target', 'chromium_builder_tests'],
+    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
     tests=['browser_tests', 'interactive_ui', 'nacl_ui', 'unit', 'ui'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={
+        'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
+    }))
 
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--', '-target', 'chromium_builder_perf'],
+    options=['--compiler=clang', '--', '-target', 'chromium_builder_perf'],
     tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler', 'page_cycler_http',
            'startup', 'sunspider', 'tab_switching', 'v8_benchmark'],
-    factory_properties={'show_perf_results': True,
-                        'perf_id': 'chromium-rel-mac6-webkit'}))
+    factory_properties={
+        'show_perf_results': True,
+        'perf_id': 'chromium-rel-mac6-webkit',
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
+    }))
 
 ################################################################################
 ## Debug
@@ -56,16 +66,11 @@ S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Mac Dbg Builder
 #
-B('Mac Clang Builder (dbg)', 'f_mac_clang_dbg',
+B('Mac Gcc Builder (dbg)', 'f_mac_gcc_dbg',
   scheduler='s8_webkit_dbg')
-F('f_mac_clang_dbg', mac().ChromiumWebkitLatestFactory(
+F('f_mac_gcc_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    options=['--compiler=clang',
-             '--', '-project', '../webkit/webkit.xcodeproj',],
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES': 'clang=1 clang_use_chrome_plugins=1'
-    }}))
+    options=['--', '-project', '../webkit/webkit.xcodeproj',]))
 
 def Update(config, active_master, c):
   return helper.Update(c)
