@@ -56,11 +56,15 @@ B('Mac', 'mac_clobber', 'compile|testers', 'chromium')
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=['sizes'],
+    options=['--compiler=clang'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-mac',
                         'expectations': True,
+                        'gclient_env': {
+                            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+                         },
                         'generate_gtest_json': True}))
 
 ################################################################################
