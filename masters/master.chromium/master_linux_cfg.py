@@ -96,8 +96,7 @@ F('rel_sync', linux().ChromiumFactory(
     factory_properties={'generate_gtest_json': True}))
 
 linux_touch_test_targets = linux_all_test_targets + [
-  'webkit_unit',
-  'sizes',
+  'webkit_unit_tests',
 ]
 # now disable the known broken tests
 for target in linux_touch_test_targets:
