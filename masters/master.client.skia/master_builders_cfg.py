@@ -142,7 +142,7 @@ F('f_skia_win32_fixed_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-win-fixed',
-    perf_output_basedir=perf_output_basedir_windows,
+    perf_output_basedir=None, # TODO(epoger): disabled perf capture for Windows
     builder_name='Skia_Win32_Fixed_NoDebug',
     ).Build())
 B('Skia_Win32_Float_Debug', 'f_skia_win32_float_debug',
@@ -162,7 +162,7 @@ F('f_skia_win32_float_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base-win',
-    perf_output_basedir=perf_output_basedir_windows,
+    perf_output_basedir=None, # TODO(epoger): disabled perf capture for Windows
     builder_name='Skia_Win32_Float_NoDebug',
     ).Build())
 
