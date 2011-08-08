@@ -98,10 +98,6 @@ F('rel_sync', linux().ChromiumFactory(
 linux_touch_test_targets = linux_all_test_targets + [
   'webkit_unit_tests',
 ]
-# now disable the known broken tests
-for target in linux_touch_test_targets:
-  if target in [ 'browser_tests', 'unit_tests']:
-    linux_touch_test_targets.remove(target)
 
 B('Linux Touch', 'rel_touch', 'compile', 'linux_rel')
 F('rel_touch', linux().ChromiumFactory(
