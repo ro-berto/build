@@ -224,7 +224,7 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
-  if not options.no_xvfb:
+  if options.xvfb:
     slave_utils.StartVirtualX(slave_name, bin_dir)
 
   # Don't use a sandbox when running tests. Ideally we _would_ use a sandbox,
@@ -312,7 +312,7 @@ def main_linux(options, args):
   if options.document_root:
     http_server.StopServer()
 
-  if not options.no_xvfb:
+  if options.xvfb:
     slave_utils.StopVirtualX(slave_name)
 
   if options.generate_json_file:
@@ -453,8 +453,10 @@ def main():
   option_parser.add_option('', '--parallel', action='store_true',
                            help='Shard and run tests in parallel for speed '
                                 'with sharding_supervisor.')
-  option_parser.add_option('', '--no-xvfb', action='store_true', dest='no_xvfb',
-                           default=False,
+  option_parser.add_option('', '--xvfb', action='store_true', dest='xvfb',
+                           default=True,
+                           help='Start virtual X server on Linux.')
+  option_parser.add_option('', '--no-xvfb', action='store_false', dest='xvfb',
                            help='Do not start virtual X server on Linux.')
   option_parser.add_option('', '--sharding-args', dest='sharding_args',
                            default=None,

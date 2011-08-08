@@ -339,7 +339,8 @@ class FactoryCommands(object):
 
   def AddBasicGTestTestStep(self, test_name, factory_properties=None,
                             description='', arg_list=None, total_shards=None,
-                            shard_index=None, parallel=False):
+                            shard_index=None, parallel=False,
+                            test_tool_arg_list=None):
     """Adds a step to the factory to run the gtest tests.
 
     Args:
@@ -357,6 +358,10 @@ class FactoryCommands(object):
     cmd = [self._python, self._test_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
+
+    # Must add test tool arg list before test arg list.
+    if test_tool_arg_list:
+      cmd.extend(test_tool_arg_list)
 
     if generate_json:
       # test_result_dir (-o) specifies where we put the JSON output locally

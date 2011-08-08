@@ -856,7 +856,8 @@ class ChromiumCommands(commands.FactoryCommands):
     This binary contains all the tests that should be run on the gpu bots.
     """
     self.AddBasicGTestTestStep('gpu_tests', factory_properties,
-                               arg_list=['--use-gpu-in-tests', '--no-xvfb'])
+                               arg_list=['--use-gpu-in-tests'],
+                               test_tool_arg_list=['--no-xvfb'])
 
     # Setup environment for running gsutil, a Google Storage utility.
     gsutil = 'gsutil'
