@@ -4,8 +4,6 @@
 
 # Sets up all the builders we want this buildbot master to run.
 
-import os
-
 from master import master_config
 from master.factory.skia import factory as skia_factory
 
@@ -41,10 +39,6 @@ S('skia_rel', branch='trunk', treeStableTimer=60)
 # Don't put spaces or 'funny characters' within the builder names, so that
 # we can safely use the builder name as part of a filepath.
 #
-# TODO(epoger): for now, I am manually adding the builder name to each
-# perf_output_dir below. This should be automatic, because when we generate
-# the graphs we require that they were assembled with builder name.
-#
 
 # Linux...
 B('Skia_Linux_Fixed_Debug', 'f_skia_linux_fixed_debug',
@@ -54,7 +48,8 @@ F('f_skia_linux_fixed_debug', skia_factory.SkiaFactory(
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-linux-fixed',
-    perf_output_dir=None, # no perf measurement for debug builds
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_Linux_Fixed_Debug',
     ).Build())
 B('Skia_Linux_Fixed_NoDebug', 'f_skia_linux_fixed_nodebug',
   scheduler='skia_rel')
@@ -63,8 +58,8 @@ F('f_skia_linux_fixed_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-linux-fixed',
-    perf_output_dir=os.path.join(
-        perf_output_basedir_linux, 'Skia_Linux_Fixed_NoDebug'),
+    perf_output_basedir=perf_output_basedir_linux,
+    builder_name='Skia_Linux_Fixed_NoDebug',
     ).Build())
 B('Skia_Linux_Float_Debug', 'f_skia_linux_float_debug',
   scheduler='skia_rel')
@@ -73,7 +68,8 @@ F('f_skia_linux_float_debug', skia_factory.SkiaFactory(
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base-linux',
-    perf_output_dir=None, # no perf measurement for debug builds
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_Linux_Float_Debug',
     ).Build())
 B('Skia_Linux_Float_NoDebug', 'f_skia_linux_float_nodebug',
   scheduler='skia_rel')
@@ -82,8 +78,8 @@ F('f_skia_linux_float_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base-linux',
-    perf_output_dir=os.path.join(
-        perf_output_basedir_linux, 'Skia_Linux_Float_NoDebug'),
+    perf_output_basedir=perf_output_basedir_linux,
+    builder_name='Skia_Linux_Float_NoDebug',
     ).Build())
 
 # Mac...
@@ -94,7 +90,8 @@ F('f_skia_mac_fixed_debug', skia_factory.SkiaFactory(
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-MacPro-fixed',
-    perf_output_dir=None, # no perf measurement for debug builds
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_Mac_Fixed_Debug',
     ).Build())
 B('Skia_Mac_Fixed_NoDebug', 'f_skia_mac_fixed_nodebug',
   scheduler='skia_rel')
@@ -103,8 +100,8 @@ F('f_skia_mac_fixed_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-MacPro-fixed',
-    perf_output_dir=os.path.join(
-        perf_output_basedir_mac, 'Skia_Mac_Fixed_NoDebug'),
+    perf_output_basedir=perf_output_basedir_mac,
+    builder_name='Skia_Mac_Fixed_NoDebug',
     ).Build())
 B('Skia_Mac_Float_Debug', 'f_skia_mac_float_debug',
   scheduler='skia_rel')
@@ -113,7 +110,8 @@ F('f_skia_mac_float_debug', skia_factory.SkiaFactory(
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base',
-    perf_output_dir=None, # no perf measurement for debug builds
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_Mac_Float_Debug',
     ).Build())
 B('Skia_Mac_Float_NoDebug', 'f_skia_mac_float_nodebug',
   scheduler='skia_rel')
@@ -122,12 +120,11 @@ F('f_skia_mac_float_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base',
-    perf_output_dir=os.path.join(
-        perf_output_basedir_mac, 'Skia_Mac_Float_NoDebug'),
+    perf_output_basedir=perf_output_basedir_mac,
+    builder_name='Skia_Mac_Float_NoDebug',
     ).Build())
 
 # Windows...
-# TODO(epoger): for now, we don't do any perf measurement on Windows. Fix that.
 B('Skia_Win32_Fixed_Debug', 'f_skia_win32_fixed_debug',
   scheduler='skia_rel')
 F('f_skia_win32_fixed_debug', skia_factory.SkiaFactory(
@@ -135,7 +132,8 @@ F('f_skia_win32_fixed_debug', skia_factory.SkiaFactory(
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-win-fixed',
-    perf_output_dir=None, # no perf measurement for debug builds
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_Win32_Fixed_Debug',
     ).Build())
 B('Skia_Win32_Fixed_NoDebug', 'f_skia_win32_fixed_nodebug',
   scheduler='skia_rel')
@@ -144,7 +142,8 @@ F('f_skia_win32_fixed_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
     gm_image_subdir='base-win-fixed',
-    perf_output_dir=None, # TODO(epoger): no perf measurement for Windows builds
+    perf_output_basedir=perf_output_basedir_windows,
+    builder_name='Skia_Win32_Fixed_NoDebug',
     ).Build())
 B('Skia_Win32_Float_Debug', 'f_skia_win32_float_debug',
   scheduler='skia_rel')
@@ -153,7 +152,8 @@ F('f_skia_win32_float_debug', skia_factory.SkiaFactory(
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base-win',
-    perf_output_dir=None, # no perf measurement for debug builds
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_Win32_Float_Debug',
     ).Build())
 B('Skia_Win32_Float_NoDebug', 'f_skia_win32_float_nodebug',
   scheduler='skia_rel')
@@ -162,7 +162,8 @@ F('f_skia_win32_float_nodebug', skia_factory.SkiaFactory(
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
     gm_image_subdir='base-win',
-    perf_output_dir=None, # TODO(epoger): no perf measurement for Windows builds
+    perf_output_basedir=perf_output_basedir_windows,
+    builder_name='Skia_Win32_Float_NoDebug',
     ).Build())
 
 

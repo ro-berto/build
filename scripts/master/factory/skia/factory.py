@@ -18,7 +18,7 @@ from master.factory.skia import commands as skia_commands
 import config
 
 BENCH_REPEAT_COUNT = 20
-BENCH_GRAPH_FIRST_REVISION = 1642
+BENCH_GRAPH_NUM_REVISIONS = 150
 BENCH_GRAPH_X = 1024
 BENCH_GRAPH_Y = 768
 
@@ -37,7 +37,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
   def __init__(self, build_subdir, target_platform=None, configuration='Debug',
                default_timeout=600,
                environment_variables=None, gm_image_subdir=None,
-               perf_output_dir=None):
+               perf_output_basedir=None, builder_name=None):
     """Instantiates a SkiaFactory as appropriate for this target_platform.
 
     build_subdir: string indicating path within slave directory
@@ -48,8 +48,9 @@ class SkiaFactory(gclient_factory.GClientFactory):
         be passed to all commands
     gm_image_subdir: directory containing images for comparison against results
         of gm tool
-    perf_output_dir: path to directory where we store performance data,
-        or None if we don't want to store performance data
+    perf_output_basedir: path to directory under which to store performance
+        data, or None if we don't want to store performance data
+    builder_name: name of the builder associated with this factory
     """
     # The only thing we use the BaseFactory for is to deal with gclient.
     gclient_solution = gclient_factory.GClientSolution(
@@ -60,6 +61,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
     self._configuration = configuration
     self._factory = self.BaseFactory(factory_properties=None)
     self._gm_image_subdir = gm_image_subdir
+    self._builder_name = builder_name
 
     # Determine which join() implementation to use for this target_platform.
     if target_platform == TARGET_PLATFORM_WIN32:
@@ -68,9 +70,11 @@ class SkiaFactory(gclient_factory.GClientFactory):
       self.TargetPathJoin = posixpath.join
 
     # Figure out where we are going to store performance output.
-    if perf_output_dir:
-      self._perf_data_dir = self.TargetPathJoin(perf_output_dir, 'data')
-      self._perf_graphs_dir = self.TargetPathJoin(perf_output_dir, 'graphs')
+    if perf_output_basedir:
+      self._perf_data_dir = self.TargetPathJoin(
+          perf_output_basedir, builder_name, 'data')
+      self._perf_graphs_dir = self.TargetPathJoin(
+          perf_output_basedir, builder_name, 'graphs')
     else:
       self._perf_data_dir = None
       self._perf_graphs_dir = None
@@ -160,10 +164,11 @@ class SkiaFactory(gclient_factory.GClientFactory):
     if self._perf_data_dir:
       path_to_bench_graph_svg = self.TargetPathJoin(
           'bench', 'bench_graph_svg.py')
-      command = 'python %s -d %s -r %d -f %d -x %d -y %d > %s' % (
+      graph_title = 'Bench Performance for %s' % self._builder_name
+      command = 'python "%s" -d "%s" -r -%d -f -%d -x %d -y %d -l "%s"> "%s"' % (
           path_to_bench_graph_svg, self._perf_data_dir,
-          BENCH_GRAPH_FIRST_REVISION, BENCH_GRAPH_FIRST_REVISION,
-          BENCH_GRAPH_X, BENCH_GRAPH_Y,
+          BENCH_GRAPH_NUM_REVISIONS, BENCH_GRAPH_NUM_REVISIONS,
+          BENCH_GRAPH_X, BENCH_GRAPH_Y, graph_title,
           self.TargetPathJoin(self._perf_graphs_dir, 'graph.xhtml'))
       self._skia_cmd_obj.AddRun(
           run_command=command, description='GenerateBenchGraphs')
