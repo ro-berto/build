@@ -47,24 +47,20 @@ def ReadHKLMValue(path, value):
     return None
 
 
-def common_mac_settings(command, options, env):
+def common_mac_settings(command, options, env, compiler=None):
   """
   Sets desirable Mac environment variables and command-line options
   that are common to the Xcode builds.
   """
-  assert options.compiler in (None, 'clang', 'goma')
+  compiler = options.compiler
+  assert compiler in (None, 'clang', 'goma')
 
-  if options.compiler == 'goma' and not os.path.isdir(options.goma_dir):
-    print >> sys.stderr, (
-        'Not using goma since %s doesn\'t exist' % options.goma_dir)
-    options.compiler = None
-
-  if options.compiler == 'goma':
+  if compiler == 'goma':
     print 'using goma'
     command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
     return
 
-  if options.compiler == 'clang':
+  if compiler == 'clang':
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
     # that way, so only enable clang on m15 and up.
@@ -150,7 +146,7 @@ def main_xcode(options, args):
     chromium_utils.RemoveDirectory(build_output_dir)
 
   env = os.environ.copy()
-  common_mac_settings(command, options, env)
+  common_mac_settings(command, options, env, options.compiler)
 
   # Add on any remaining args
   command.extend(args)
@@ -159,9 +155,7 @@ def main_xcode(options, args):
 
   # If using the Goma compiler, first call goma_ctl with ensure_start
   # (or restart in clobber mode) to ensure the proxy is available.
-  goma_ctl_cmd = os.path.join(options.goma_dir, 'goma_ctl.sh')
-  if options.compiler == 'goma' and not os.path.isdir(goma_ctl_cmd):
-    options.compiler = None
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
 
   if options.compiler == 'goma':
     goma_key = os.path.join(options.goma_dir, 'goma.key')
@@ -169,16 +163,16 @@ def main_xcode(options, args):
     if os.path.exists(goma_key):
       env['GOMA_API_KEY_FILE'] = goma_key
     if options.clobber:
-      chromium_utils.RunCommand([goma_ctl_cmd] + ['restart'], env=env)
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
     else:
-      chromium_utils.RunCommand([goma_ctl_cmd] + ['ensure_start'], env=env)
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
   result = chromium_utils.RunCommand(command, env=env)
 
   if options.compiler == 'goma':
     # Always stop the proxy for now to allow in-place update.
-    chromium_utils.RunCommand([goma_ctl_cmd] + ['stop'], env=env)
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
   return result
 
@@ -374,9 +368,7 @@ def main_make(options, args):
 
   # If using the Goma compiler, first call goma_ctl with ensure_start
   # (or restart in clobber mode) to ensure the proxy is available.
-  goma_ctl_cmd = os.path.join(options.goma_dir, 'goma_ctl.sh')
-  if options.compiler == 'goma' and not os.path.isdir(goma_ctl_cmd):
-    options.compiler = None
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
 
   if options.compiler == 'goma':
     goma_key = os.path.join(options.goma_dir, 'goma.key')
@@ -384,16 +376,16 @@ def main_make(options, args):
     if os.path.exists(goma_key):
       env['GOMA_API_KEY_FILE'] = goma_key
     if options.clobber:
-      chromium_utils.RunCommand([goma_ctl_cmd] + ['restart'], env=env)
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
     else:
-      chromium_utils.RunCommand([goma_ctl_cmd] + ['ensure_start'], env=env)
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
   result = chromium_utils.RunCommand(command, env=env)
 
   if options.compiler == 'goma':
     # Always stop the proxy for now to allow in-place update.
-    chromium_utils.RunCommand([goma_ctl_cmd] + ['stop'], env=env)
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
   return result
 
@@ -441,7 +433,6 @@ def main_scons(options, args):
   #command.extend(['--debug=explain', 'VERBOSE=1'])
   command.extend(options.build_args + args)
   return chromium_utils.RunCommand(command, env=env)
-
 
 def main_scons_v8(options, args):
   """Interprets options, clobbers object files, and calls scons.
