@@ -62,6 +62,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
     self._factory = self.BaseFactory(factory_properties=None)
     self._gm_image_subdir = gm_image_subdir
     self._builder_name = builder_name
+    self._target_platform = target_platform
 
     # Determine which join() implementation to use for this target_platform.
     if target_platform == TARGET_PLATFORM_WIN32:
@@ -143,14 +144,15 @@ class SkiaFactory(gclient_factory.GClientFactory):
       # The WithProperties() stuff is very touchy and mysterious.
       # With trial and error, I was able to get it to assemble a filename
       # including the revision as follows...
-      #
-      # TODO(epoger): added ugly chmod to make the data files world-readable
-      # TODO(epoger): this only works on Unix
-      command = WithProperties(
-          '%s | tee %s/bench_r%%(%s:-)s_data ' \
-          '&& chmod a+r %s/bench_r%%(%s:-)s_data' % (
-              base_command, self._perf_data_dir, 'revision',
-              self._perf_data_dir, 'revision'))
+      data_dir = self.TargetPathJoin(
+          self._perf_data_dir, 'bench_r%%(%s:-)s_data' % 'revision')
+
+      if self._target_platform == TARGET_PLATFORM_WIN32:
+        command = WithProperties('%s > %s' % (base_command, data_dir))
+      else:
+        # TODO(epoger): added ugly chmod to make the data files world-readable
+        command = WithProperties(
+            '%s | tee %s && chmod a+r %s' % (base_command, data_dir, data_dir))
     else:
       command = base_command
     self._skia_cmd_obj.AddRun(
@@ -158,14 +160,11 @@ class SkiaFactory(gclient_factory.GClientFactory):
 
     # Generate bench performance graphs (but only if we have been recording
     # bench output for this build type).
-    #
-    # TODO(epoger): Ben notes that we should probably make the -r and -f values
-    # something like current_revision-100 and current_revision-20, respectively.
     if self._perf_data_dir:
       path_to_bench_graph_svg = self.TargetPathJoin(
           'bench', 'bench_graph_svg.py')
       graph_title = 'Bench Performance for %s' % self._builder_name
-      command = 'python "%s" -d "%s" -r -%d -f -%d -x %d -y %d -l "%s"> "%s"' % (
+      command = 'python %s -d %s -r -%d -f -%d -x %d -y %d -l %s > %s' % (
           path_to_bench_graph_svg, self._perf_data_dir,
           BENCH_GRAPH_NUM_REVISIONS, BENCH_GRAPH_NUM_REVISIONS,
           BENCH_GRAPH_X, BENCH_GRAPH_Y, graph_title,
