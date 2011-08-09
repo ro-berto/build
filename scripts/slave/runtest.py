@@ -162,7 +162,17 @@ def main_mac(options, args):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   chromium_utils.RemoveChromeTemporaryFiles()
 
-  if options.run_shell_script:
+  if options.parallel:
+    supervisor_path = os.path.join(build_dir, '..', 'tools',
+                                   'sharding_supervisor',
+                                   'sharding_supervisor.py')
+    supervisor_args = ['--no-color']
+    if options.sharding_args:
+      supervisor_args.extend(options.sharding_args.split())
+    command = [sys.executable, supervisor_path]
+    command.extend(supervisor_args)
+    command.append(test_exe_path)
+  elif options.run_shell_script:
     command = ['sh', test_exe_path]
   elif options.run_python_script:
     command = [sys.executable, test_exe]
@@ -281,11 +291,7 @@ def main_linux(options, args):
 
   os.environ['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
                                                                bin_dir)
-  if options.run_shell_script:
-    command = ['sh', test_exe_path]
-  elif options.run_python_script:
-    command = [sys.executable, test_exe]
-  elif options.parallel:
+  if options.parallel:
     supervisor_path = os.path.join(build_dir, '..', 'tools',
                                    'sharding_supervisor',
                                    'sharding_supervisor.py')
@@ -295,6 +301,10 @@ def main_linux(options, args):
     command = [sys.executable, supervisor_path]
     command.extend(supervisor_args)
     command.append(test_exe_path)
+  elif options.run_shell_script:
+    command = ['sh', test_exe_path]
+  elif options.run_python_script:
+    command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
   command.extend(args[1:])
@@ -370,9 +380,15 @@ def main_win(options, args):
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', True)
 
   if options.parallel:
-    launcher_path = os.path.join(build_dir, '..', 'tools',
-                                 'parallel_launcher', 'parallel_launcher.py')
-    command = ['python.exe', launcher_path, test_exe_path]
+    supervisor_path = os.path.join(build_dir, '..', 'tools',
+                                   'sharding_supervisor',
+                                   'sharding_supervisor.py')
+    supervisor_args = ['--no-color']
+    if options.sharding_args:
+      supervisor_args.extend(options.sharding_args.split())
+    command = [sys.executable, supervisor_path]
+    command.extend(supervisor_args)
+    command.append(test_exe_path)
   elif options.run_python_script:
     command = [sys.executable, test_exe]
   else:
