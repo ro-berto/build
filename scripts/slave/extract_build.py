@@ -49,6 +49,10 @@ def real_main(options, args):
   abs_build_output_dir = os.path.abspath(build_output_dir)
   target_build_output_dir = os.path.join(abs_build_output_dir, options.target)
 
+  # First, delete the directory to remove stale files. Otherwise it could mask
+  # old stale executables that aren't zipped anymore.
+  chromium_utils.RemoveDirectory(abs_build_output_dir)
+
   # Find the revision that we need to download.
   current_revision = slave_utils.SubversionRevision(abs_build_dir)
 
