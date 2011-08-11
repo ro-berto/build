@@ -491,6 +491,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('unit_tests', factory_properties)
     self.AddBasicGTestTestStep('sql_unittests', factory_properties)
     self.AddBasicGTestTestStep('gfx_unittests', factory_properties)
+    self.AddBasicGTestTestStep('content_unittests', factory_properties)
     if self._target_platform == 'win32':
       self.AddBasicGTestTestStep('views_unittests', factory_properties)
 
