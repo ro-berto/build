@@ -159,12 +159,36 @@ def MakeWorldReadable(path):
   """Change the permissions of the given path to make it world-readable.
   This is often needed for archived files, so they can be served by web servers
   or accessed by unprivileged network users."""
+
+  # No need to do anything special on Windows.
+  if IsWindows():
+    return
+
   perms = stat.S_IMODE(os.stat(path)[stat.ST_MODE])
   if os.path.isdir(path):
     # Directories need read and exec.
     os.chmod(path, perms | 0555)
   else:
     os.chmod(path, perms | 0444)
+
+
+def MakeParentDirectoriesWorldReadable(path):
+  """Changes the permissions of the given path and its parent directories
+  to make them world-readable. Stops on first directory which is
+  world-readable. This is often needed for archive staging directories,
+  so that they can be served by web servers or accessed by unprivileged
+  network users."""
+
+  # No need to do anything special on Windows.
+  if IsWindows():
+    return
+
+  while path != os.path.dirname(path):
+    current_permissions = stat.S_IMODE(os.stat(path)[stat.ST_MODE])
+    if current_permissions & 0555 == 0555:
+      break
+    os.chmod(path, current_permissions | 0555)
+    path = os.path.dirname(path)
 
 
 def MaybeMakeDirectory(*path):

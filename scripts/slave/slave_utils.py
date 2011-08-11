@@ -317,12 +317,10 @@ def CopyFileToArchiveHost(src, dest_dir):
   host = config.Archive.archive_host
   if not os.path.exists(src):
     raise chromium_utils.ExternalError('Source path "%s" does not exist' % src)
+  chromium_utils.MakeWorldReadable(src)
   if chromium_utils.IsWindows():
     chromium_utils.CopyFileToDir(src, dest_dir)
   elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    # Files are created umask 077 by default, so make it world-readable before
-    # pushing to web server.
-    chromium_utils.MakeWorldReadable(src)
     chromium_utils.SshCopyFiles(src, host, dest_dir)
   else:
     raise NotImplementedError(

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -84,19 +84,7 @@ def archive(options, args):
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
   build_revision = slave_utils.SubversionRevision(src_dir)
-
-  if chromium_utils.IsMac() or chromium_utils.IsLinux():
-    # Files are created umask 077 by default, we need to make sure the staging
-    # dir can be fetch from, do this by recursively chmoding back up to the root
-    # before pushing to web server.
-    a_path = staging_dir
-    while a_path != '/':
-      current_permissions = os.stat(a_path)[0]
-      if current_permissions & 0555 == 0555:
-        break
-      print 'Fixing permissions (%o) for \'%s\'' % (current_permissions, a_path)
-      os.chmod(a_path, current_permissions | 0555)
-      a_path = os.path.dirname(a_path)
+  chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
   print 'Full Staging in %s' % build_dir
 
@@ -180,8 +168,7 @@ def archive(options, args):
     build_revision_file = open(build_revision_path, 'w')
     build_revision_file.write('%d' % build_revision)
     build_revision_file.close()
-    if chromium_utils.IsMac() or chromium_utils.IsLinux():
-      chromium_utils.MakeWorldReadable(build_revision_path)
+    chromium_utils.MakeWorldReadable(build_revision_path)
     zip_file_list.append(build_revision_file_name)
   except IOError:
     print 'Writing to revision file %s failed ' % build_revision_path
@@ -195,8 +182,7 @@ def archive(options, args):
   chromium_utils.RemoveDirectory(zip_dir)
   if not os.path.exists(zip_file):
     raise StagingError('Failed to make zip package %s' % zip_file)
-  if chromium_utils.IsMac() or chromium_utils.IsLinux():
-    chromium_utils.MakeWorldReadable(zip_file)
+  chromium_utils.MakeWorldReadable(zip_file)
 
   # Report the size of the zip file to help catch when it gets too big and
   # can cause bot failures from timeouts during downloads to testers.
@@ -214,8 +200,7 @@ def archive(options, args):
     old_file = versioned_file.replace(zip_ext, '_old' + zip_ext)
     chromium_utils.MoveFile(versioned_file, old_file)
   shutil.copyfile(zip_file, versioned_file)
-  if chromium_utils.IsMac() or chromium_utils.IsLinux():
-    chromium_utils.MakeWorldReadable(versioned_file)
+  chromium_utils.MakeWorldReadable(versioned_file)
 
   # Now before we finish, trim out old builds to make sure we don't
   # fill the disk completely.
