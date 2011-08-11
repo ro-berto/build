@@ -48,12 +48,17 @@ the revisions and run the same algorithm.  Since we are only interested in the
 backward.
 """
 
-import optparse
 import json
+import multiprocessing
+import optparse
+import os
+import signal
 import sys
 import threading
 import urllib
 import urllib2
+
+import buildbot.scripts.runner
 
 VERBOSE = True
 
@@ -321,6 +326,28 @@ def PostLKGR(lkgr, password_file, dry):
     request.close()
   VerbosePrint('Done!')
 
+def NotifyMaster(master, lkgr, dry=False):
+  def _NotifyMain():
+    sys.argv = [
+        'buildbot', 'sendchange',
+        '--master', master,
+        '--revision', lkgr,
+        '--branch', 'src',
+        '--user', 'lkgr',
+        '--category', 'lkgr',
+        'no file information']
+    if dry:
+      return
+    buildbot.scripts.runner.run()
+
+  p = multiprocessing.Process(None, _NotifyMain, 'notify-%s' % master)
+  p.start()
+  p.join(5)
+  if p.is_alive():
+    print >> sys.stdout, 'Timeout while notifying %s' % master
+    # p.terminate() can hang; just obliterate the sucker.
+    os.kill(p.pid, signal.SIGKILL)
+
 def main():
   opt_parser = optparse.OptionParser()
   opt_parser.add_option('-q', '--quiet', default=False,
@@ -333,8 +360,11 @@ def main():
                         dest='post', action='store_true',
                         help='Upload new LKGR to chromium-status app')
   opt_parser.add_option('--password-file', default=REVISIONS_PASSWORD_FILE,
-                        dest='pwfile',
+                        dest='pwfile', metavar='FILE',
                         help='File containing password for chromium-status app')
+  opt_parser.add_option('--notify', default=[],
+                        action='append', metavar='HOST:PORT',
+                        help='Notify this master when a new LKGR is found')
   options, args = opt_parser.parse_args()
 
   if args:
@@ -384,6 +414,8 @@ def main():
     VerbosePrint(waterfall)
     if options.post:
       PostLKGR(candidate, options.pwfile, options.dry)
+    for master in options.notify:
+      NotifyMaster(master, candidate, options.dry)
   else:
     VerbosePrint('No newer LKGR found than current %s' % lkgr)
   VerbosePrint('-' * 80)
