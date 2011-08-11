@@ -1,7 +1,8 @@
 # -*- test-case-name: twisted.test.test_sslverify -*-
 # Copyright 2005 Divmod, Inc.  See LICENSE file for details
 
-import itertools, md5
+import hashlib
+import itertools
 from OpenSSL import SSL, crypto
 
 from twisted.python import reflect, util
@@ -666,7 +667,7 @@ class PublicKey:
         MD5 hex digest of signature on an empty certificate request with this
         key.
         """
-        return md5.md5(self._emptyReq).hexdigest()
+        return hashlib.md5(self._emptyReq).hexdigest()
 
 
     def inspect(self):
@@ -942,7 +943,7 @@ class OpenSSLCertificateOptions(object):
             ctx.set_options(self._OP_ALL)
 
         if self.enableSessions:
-            sessionName = md5.md5("%s-%d" % (reflect.qual(self.__class__), _sessionCounter())).hexdigest()
+            sessionName = hashlib.md5("%s-%d" % (reflect.qual(self.__class__), _sessionCounter())).hexdigest()
             ctx.set_session_id(sessionName)
 
         return ctx

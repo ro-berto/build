@@ -9,7 +9,8 @@ Save and load Small OBjects to and from files, using various formats.
 Maintainer: U{Moshe Zadka<mailto:moshez@twistedmatrix.com>}
 """
 
-import os, md5, sys
+import hashlib
+import os, sys
 try:
     import cPickle as pickle
 except ImportError:
@@ -31,11 +32,11 @@ def _encrypt(passphrase, data):
     leftover = len(data) % cipher.block_size
     if leftover:
         data += ' '*(cipher.block_size - leftover)
-    return cipher.new(md5.new(passphrase).digest()[:16]).encrypt(data)
+    return cipher.new(hashlib.md5(passphrase).digest()[:16]).encrypt(data)
 
 def _decrypt(passphrase, data):
     from Crypto.Cipher import AES
-    return AES.new(md5.new(passphrase).digest()[:16]).decrypt(data)
+    return AES.new(hashlib.md5(passphrase).digest()[:16]).decrypt(data)
 
 
 class IPersistable(Interface):

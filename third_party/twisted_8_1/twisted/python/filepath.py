@@ -8,8 +8,8 @@ Object-oriented filesystem path representation.
 
 import os
 import errno
+import hashlib
 import random
-import sha
 import base64
 
 from os.path import isabs, exists, normpath, abspath, splitext
@@ -109,7 +109,7 @@ def _secureEnoughString():
     """
     Create a pseudorandom, 16-character string for use in secure filenames.
     """
-    return armor(sha.new(randomBytes(64)).digest())[:16]
+    return armor(hashlib.sha1(randomBytes(64)).digest())[:16]
 
 class _PathHelper:
     """
