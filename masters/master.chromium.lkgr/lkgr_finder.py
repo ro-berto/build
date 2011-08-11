@@ -74,6 +74,7 @@ LKGR_STEPS = {
     'check_deps',
     'base_unittests',
     'cacheinvalidation_unittests',
+    'content_unittests',
     'courgette_unittests',
     'googleurl_unittests',
     'jingle_unittests',
@@ -131,6 +132,7 @@ LKGR_STEPS = {
   ],
   'Mac 10.5 Tests (dbg)(4)': [
     'browser_tests',
+    'content_unittests',
     'gfx_unittests',
     'ipc_tests',
     'sql_unittests',
@@ -146,6 +148,7 @@ LKGR_STEPS = {
   ],
   'Linux Tests (dbg)(2)': [
     'ui_tests',
+    'content_unittests',
     'ipc_tests',
     'sync_unit_tests',
     'unit_tests',
@@ -166,6 +169,7 @@ LKGR_STEPS = {
   'Linux Builder (ChromiumOS)': [
     'compile',
     'base_unittests',
+    'content_unittests',
     'googleurl_unittests',
     'media_unittests',
     'net_unittests',
