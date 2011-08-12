@@ -60,7 +60,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
     return
 
-  cc = '/Developer/usr/bin/gcc-4.2'
+  cc = None
   if compiler == 'clang':
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
@@ -77,6 +77,8 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
       print 'Not using clang for version, dict was %r' % variables
 
   if ccache_base:
+    if cc is None:
+      cc = '/Developer/usr/bin/gcc-4.2'
     ccache_symlink_path = os.path.join(ccache_base, os.path.basename(cc))
     if os.path.islink(ccache_symlink_path):
       env['CC'] = ccache_symlink_path
@@ -87,7 +89,8 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
       print 'Using CCache for %s' % cc
     else:
       print '%s is not a symlink' % ccache_symlink_path
-  else:
+  elif cc:
+    print 'Forcing CC = %s' % cc
     env['CC'] = cc
 
   if compiler:
