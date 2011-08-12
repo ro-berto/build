@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
 from master import master_config
 from master.factory import chromium_factory
 
@@ -33,7 +34,7 @@ S('s9_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Linux Tests', 'f_linux_tests_rel',
   scheduler='s9_webkit_rel')
 F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
-    tests=['ui', 'unit', 'browser_tests', 'interactive_ui', 'nacl_ui'],
+    tests=['ui', 'unit', 'browser_tests', 'interactive_ui'],
     options=['--compiler=goma'],
     factory_properties={'generate_gtest_json': True}))
 

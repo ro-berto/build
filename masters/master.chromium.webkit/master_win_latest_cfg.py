@@ -67,7 +67,7 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
 B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
-    tests=['installer', 'nacl_ui', 'unit', 'ui'],
+    tests=['installer', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
@@ -97,7 +97,7 @@ B('Win (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
 F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     project='all.sln;chromium_builder',
-    tests=['browser_tests', 'interactive_ui', 'nacl_ui', 'unit', 'ui'],
+    tests=['browser_tests', 'interactive_ui', 'unit', 'ui'],
     factory_properties={
         'start_crash_handler': True,
         'generate_gtest_json': True,

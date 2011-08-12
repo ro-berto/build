@@ -145,8 +145,6 @@ F('dbg', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
     options=['--compiler=goma',] + linux_all_test_targets + [
-             'nacl_ui_tests',
-             'nacl_sandbox_tests',
              'plugin_tests',
              'interactive_ui_tests',
            ],
@@ -171,9 +169,7 @@ F('dbg_unit_2', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
     tests=['unit',
-           'nacl_ui',
            'nacl_integration',
-           'nacl_sandbox',
            'gpu',
            'interactive_ui',
            'ui',
