@@ -32,7 +32,7 @@ rel_archive = master_config.GetArchiveUrl('ChromiumGIT',
 #
 # Main debug scheduler for src/
 #
-S('mac_rel', branch='src', treeStableTimer=60)
+S('mac_rel', branch='master', treeStableTimer=60)
 
 #
 # Triggerable scheduler for the dbg builder
