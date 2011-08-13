@@ -707,11 +707,6 @@ def real_main():
 
   options, args = option_parser.parse_args()
 
-  # Disabled for now, fails on some objc++ files.
-  if chromium_utils.IsMac() and options.ccache_symlinks:
-    print('--ccache-symlinks causes failures on Mac, disabling for now')
-    options.ccache_symlinks = None
-
   if options.build_tool is None:
     if chromium_utils.IsWindows():
       main = main_win
