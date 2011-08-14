@@ -31,7 +31,6 @@ USE_LAUNCHD := \
 start:
 ifneq ($(USE_LAUNCHD),1)
 	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
-	( PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party python lkgr_poller.py >> lkgr_poller.log 2>&1 ) &
 else
 	launchctl start org.chromium.buildbot.master.chromium.clobber
 endif
@@ -39,16 +38,12 @@ endif
 stop:
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
-	if `test -f lkgr_poller.py.pid`; then kill `cat lkgr_poller.py.pid`; fi;
 else
 	launchctl stop org.chromium.buildbot.master.chromium.clobber
-	echo "lkgr_poller.py needs to be started manually"
 endif
 
 reconfig:
 	kill -HUP `cat twistd.pid`
-	if `test -f lkgr_poller.py.pid`; then kill `cat lkgr_poller.py.pid`; fi;
-	( PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party python lkgr_poller.py >> lkgr_poller.log 2>&1 ) &
 
 log:
 	tail -F twistd.log
