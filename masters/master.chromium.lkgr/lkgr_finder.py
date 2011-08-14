@@ -163,8 +163,6 @@ LKGR_STEPS = {
     'remoting_unittests',
     'gfx_unittests',
     'nacl_integration',
-    'nacl_ui_tests',
-    'nacl_sandbox_tests',
     'cacheinvalidation_unittests',
     'jingle_unittests',
   ],
