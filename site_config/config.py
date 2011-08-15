@@ -174,9 +174,14 @@ class Archive(config_private.Archive):
     exes_to_skip_entirely = ['rlz']
 
   # Extra files to archive in official mode.
-  official_extras = [
-    ['remoting-it2me.zip'],
-  ]
+  if chromium_utils.PlatformName() == 'ChromeOS':
+    # Remoting web-app is not built for ChromeOS.
+    official_extras = []
+  else:
+    official_extras = [
+      ['remoting-it2me.zip'],
+    ]
+
   if chromium_utils.IsWindows():
     official_extras.extend([
       ['setup.exe'],
