@@ -65,28 +65,32 @@ def GetRecentBuildsByModificationTime(zip_list):
   return ordered_asc_by_mtime_list[-10:]
 
 
-def archive(options, args):
-  # Create some variables
-  src_dir = os.path.abspath(options.src_dir)
-
-  # TODO: need to get the build *output* directory passed in instead so Linux
-  # and Mac don't have to walk up a directory to get to the right directory.
+def GetRealBuildDirectory(build_dir, target):
+  """Return the build directory."""
   if chromium_utils.IsWindows():
-    build_dir = os.path.join(options.build_dir, options.target)
-  elif chromium_utils.IsLinux():
-    build_dir = os.path.join(os.path.dirname(options.build_dir), 'out',
-                             options.target)
-  elif chromium_utils.IsMac():
-    build_dir = os.path.join(os.path.dirname(options.build_dir), 'xcodebuild',
-                             options.target)
-  else:
-    raise NotImplementedError('%s is not supported.' % sys.platform)
+    return os.path.join(build_dir, target)
 
-  staging_dir = slave_utils.GetStagingDir(src_dir)
-  build_revision = slave_utils.SubversionRevision(src_dir)
-  chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
+  if chromium_utils.IsLinux():
+    return os.path.join(os.path.dirname(build_dir), 'out', target)
 
-  print 'Full Staging in %s' % build_dir
+  if chromium_utils.IsMac():
+    return os.path.join(os.path.dirname(build_dir), 'xcodebuild', target)
+
+  raise NotImplementedError('%s is not supported.' % sys.platform)
+
+
+def ShouldPackageFile(filename, target):
+  """Returns true if the file should be a part of the resulting archive."""
+  if chromium_utils.IsWindows() and target is 'Release':
+    # Special case for chrome. Add back all the chrome*.pdb files to the list.
+    # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
+    # TODO(nsylvain): This should really be defined somewhere else.
+    expression = (r"^(chrome_dll|chrome_exe"
+    #             r"|browser_test.+|unit_tests"
+    #             r"|chrome_frame_.*tests"
+                  r")\.pdb$")
+    if re.match(expression, filename):
+      return True
 
   file_filter = '$NO_FILTER^'
   if chromium_utils.IsWindows():
@@ -100,9 +104,8 @@ def archive(options, args):
     # object files, archives, and gcc (make build) dependency info.
     file_filter = '^.+\.(o|a|d)$'
 
-  # Build the list of files to archive
-  zip_file_list = [f for f in os.listdir(build_dir)
-                   if not re.match(file_filter, f)]
+  if re.match(file_filter, filename):
+    return False
 
   # Skip files that the testers don't care about. Mostly directories.
   things_to_skip = []
@@ -140,23 +143,26 @@ def archive(options, args):
       # build helper, not needed on testers
       'mksnapshot',
     ]
-  # Depending on what the build target was, the unwanted files may or may not be
-  # in the output dir, so we have to test before removing them.
-  for x in things_to_skip:
-    if x in zip_file_list:
-      zip_file_list.remove(x)
 
-  if chromium_utils.IsWindows() and options.target is 'Release':
-    # Special case for chrome. Add back all the chrome*.pdb files to the list.
-    # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
-    # TODO(nsylvain): This should really be defined somewhere else.
-    expression = (r"^(chrome_dll|chrome_exe"
-    #             r"|browser_test.+|unit_tests"
-    #             r"|chrome_frame_.*tests"
-                  r")\.pdb$")
-    zip_file_list.extend([f for f in os.listdir(build_dir)
-                          if re.match(expression, f)])
+  if filename in things_to_skip:
+    return False
 
+  return True
+
+
+def archive(options, args):
+  src_dir = os.path.abspath(options.src_dir)
+  build_dir = GetRealBuildDirectory(options.build_dir, options.target)
+
+  staging_dir = slave_utils.GetStagingDir(src_dir)
+  build_revision = slave_utils.SubversionRevision(src_dir)
+  chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
+
+  print 'Full Staging in %s' % build_dir
+
+  # Build the list of files to archive.
+  zip_file_list = [f for f in os.listdir(build_dir)
+                   if ShouldPackageFile(f, options.target)]
   if options.include_files is not None:
     zip_file_list.extend([f for f in os.listdir(build_dir)
                           if f in options.include_files])
