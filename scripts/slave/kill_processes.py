@@ -27,19 +27,15 @@ def KillAll(process_names, must_die=True):
   if not must_die:
     return True
 
+  # Give our processes time to exit.
+  for retries in range(60):
+    if not AnyProcessExists(killed_processes):
+      break
+    time.sleep(1)
+
   # We require that all processes we tried to kill must be killed.  Let's
   # verify that.
-
-  retcode = True
-  if killed_processes:
-    # Sleep for 5 seconds to give any killed processes time to shut down.
-    time.sleep(5)
-
-    # Check if the process is still running.  If it is, it can't easily be
-    # killed and something is broken.  Return this error in our exit code.
-    for process_name in killed_processes:
-      retcode = (retcode and not ProcessExists(process_name))
-  return retcode
+  return not AnyProcessExists(killed_processes)
 
 
 def ProcessExists(process_name):
@@ -49,6 +45,11 @@ def ProcessExists(process_name):
              process_name)
   # findstr.exe exits with code 0 if the given string is found.
   return os.system(command) == 0
+
+
+def AnyProcessExists(process_list):
+  """Return whether any process from the list is still running."""
+  return any(ProcessExists(process) for process in process_list)
 
 
 def Kill(process_name):
