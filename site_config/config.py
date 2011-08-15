@@ -106,7 +106,7 @@ class Master(config_private.Master):
     <metaclass, which is overkill for this usage.
     """
     # Note: could be overriden by config_private.
-    if not Master.bot_password:
+    if not getattr(Master, 'bot_password', None):
       # If the bot_password has been requested, the file is required to exist
       # if not overriden in config_private.
       bot_password_path = os.path.join(os.path.dirname(__file__),
