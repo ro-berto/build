@@ -266,7 +266,10 @@ class GClientFactory(object):
     env = factory_properties.get('gclient_env', {})
     timeout = factory_properties.get('gclient_timeout')
 
+    no_gclient_branch = factory_properties.get('no_gclient_branch', False)
+
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove,
                                   gclient_deps=gclient_deps,
-                                  gclient_nohooks=self._nohooks_on_update)
+                                  gclient_nohooks=self._nohooks_on_update,
+                                  no_gclient_branch=no_gclient_branch)

@@ -121,6 +121,11 @@ class GClient(sourcebase):
 
   ['env']:
     Augment os.environ.
+
+  ['no_gclient_branch']:
+    If --revision is specified, don't prepend it with <branch>@.  This is
+    necessary for git, where the solution name is 'src' and the branch name
+    is 'master'.
   """
 
   # pylint complains that __init__ in GClient's parent isn't called.  This is
@@ -148,6 +153,7 @@ class GClient(sourcebase):
     self.rm_timeout = None
     self.gclient_nohooks = False
     self.was_patched = False
+    self.no_gclient_branch = False
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
   if bbver == 7.12:
@@ -178,6 +184,7 @@ class GClient(sourcebase):
     self.env = args.get('env')
     self.gclient_nohooks = args.get('gclient_nohooks', False)
     self.env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
+    self.no_gclient_branch = args.get('no_gclient_branch')
 
   def start(self):
     """Start the update process.
@@ -262,7 +269,7 @@ class GClient(sourcebase):
     if self.revision:
       command.append('--revision')
       branch = self.branch
-      if not branch:
+      if not branch or self.no_gclient_branch:
         command.append(str(self.revision))
       else:
         # Make the revision look like branch@revision.

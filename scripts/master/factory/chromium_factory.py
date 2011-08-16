@@ -689,6 +689,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                          mode=None, slave_type='Tester', options=None,
                          compile_timeout=1200, build_url=None, project=None,
                          factory_properties=None):
+    if not factory_properties:
+      factory_properties = {}
+    factory_properties['no_gclient_branch'] = True
     main = gclient_factory.GClientSolution(
         svn_url='http://git.chromium.org/chromium/src.git',
         name='src',

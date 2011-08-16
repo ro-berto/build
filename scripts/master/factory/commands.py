@@ -437,7 +437,7 @@ class FactoryCommands(object):
 
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,
                     sudo_for_remove=False, gclient_deps=None,
-                    gclient_nohooks=False):
+                    gclient_nohooks=False, no_gclient_branch=False):
     """Adds a step to the factory to update the workspace."""
     if env is None:
       env = {}
@@ -456,7 +456,8 @@ class FactoryCommands(object):
                           retry=(60*5, 4),  # Try 4+1=5 more times, 5 min apart
                           timeout=timeout,
                           sudo_for_remove=sudo_for_remove,
-                          rm_timeout=60*15) # The step can take a long time.
+                          rm_timeout=60*15,  # The step can take a long time.
+                          no_gclient_branch=no_gclient_branch)
 
   def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
                          gclient_deps=None, gclient_nohooks=False):
