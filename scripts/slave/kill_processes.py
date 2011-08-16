@@ -28,7 +28,7 @@ def KillAll(process_names, must_die=True):
     return True
 
   # Give our processes time to exit.
-  for retries in range(60):
+  for _ in range(60):
     if not AnyProcessExists(killed_processes):
       break
     time.sleep(1)
