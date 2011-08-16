@@ -83,9 +83,6 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     if os.path.islink(ccache_symlink_path):
       env['CC'] = ccache_symlink_path
       env['CCACHE_CC'] = cc
-      # Tells CCache to include the compiler in the hash, to deal with compiler
-      # updates.
-      env['CCACHE_COMPILERCHECK'] = 'content'
       print 'Using CCache for %s' % cc
     else:
       print '%s is not a symlink' % ccache_symlink_path
