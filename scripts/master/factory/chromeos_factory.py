@@ -5,6 +5,7 @@
 """Set of utilities to build the chromium master."""
 
 import os
+import re
 
 from buildbot.steps import trigger, shell
 from buildbot.process.properties import WithProperties
@@ -97,6 +98,9 @@ class CbuildbotFactory(object):
 
     # Master is assumed to be past the cut off point.
     if self.branch == 'master':
+      return True
+
+    if not re.match('\d+\.\d+\.\d+\.(\d+|B)', self.branch):
       return True
 
     # '0.12.123.456' -> ['0', '12', '123', '456']
