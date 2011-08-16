@@ -44,26 +44,32 @@ class SyzygyFactory(gclient_factory.GClientFactory):
   def SyzygyFactory(self, target='release', clobber=False, tests=None,
                     mode=None, slave_type='BuilderTester', options=None,
                     compile_timeout=1200, build_url=None, project=None,
-                    factory_properties=None, target_arch=None):
-    factory = self.BaseFactory(factory_properties=factory_properties)
+                    factory_properties=None, target_arch=None,
+                    official_release=False):
+    factory = self.BaseFactory(factory_properties=factory_properties,
+                               official_release=official_release)
 
     syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory,
                                                     target,
                                                     self._build_dir,
                                                     self.target_platform,
                                                     target_arch)
-    
+
     # Compile the build_all project of the Syzygy solution.
     syzygy_cmd_obj.AddCompileStep('syzygy.sln;build_all')
 
     # Run the unittests.
     for test_name in _UNITTESTS:
       syzygy_cmd_obj.AddBasicGTestTestStep(test_name)
-    
+
     if target == 'release':
       syzygy_cmd_obj.AddRandomizeChromeStep()
       syzygy_cmd_obj.AddBenchmarkChromeStep()
-      
+
+    if official_release:
+      # Archive official build output.
+      syzygy_cmd_obj.AddArchival()
+
     return factory
 
   def SyzygyCoverageFactory(self, target='release', clobber=False, tests=None,

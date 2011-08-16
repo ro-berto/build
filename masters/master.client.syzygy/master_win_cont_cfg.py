@@ -17,13 +17,10 @@ def win():
   return syzygy_factory.SyzygyFactory('src/syzygy',
                                       target_platform='win32')
 
-defaults['category'] = 'windows'
-
-
 #
 # Continous build scheduler for Syzygy
 #
-S('syzygy_cont', branch='trunk', treeStableTimer=60)
+S('syzygy_cont', branch='trunk', treeStableTimer=60, categories=['continuous'])
 
 
 #

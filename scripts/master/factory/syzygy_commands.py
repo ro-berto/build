@@ -95,3 +95,26 @@ class SyzygyCommands(commands.FactoryCommands):
                           extra_text=('Coverage Report', url),
                           name='archive',
                           description='Archive Coverage Report')
+
+  def AddArchival(self):
+    '''Adds steps to archive the build output for official builds.'''
+    # Store the coverage results by the checkout revision.
+    src_archive = self.PathJoin(self._build_dir, self._target, 'benchmark.zip')
+    dst_gs_url = WithProperties(
+        'gs://syzygy-archive/builds/official/%(got_revision)s')
+    url = WithProperties(
+        'http://syzygy-archive.commondatastorage.googleapis.com/builds/'
+           'official/%(got_revision)s/benchmark.zip')
+
+    command = [self._python,
+               self.PathJoin(self._script_dir, 'syzygy/gsutil_cp_dir.py'),
+               src_archive,
+               dst_gs_url,]
+
+    self._factory.addStep(_UrlStatusCommand,
+                          command=command,
+                          extra_text=('Build archive', url),
+                          name='archive',
+                          description='Build archive')
+
+
