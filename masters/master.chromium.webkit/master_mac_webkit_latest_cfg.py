@@ -27,11 +27,11 @@ defaults['category'] = '5webkit mac latest'
 S('s5_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
-# Mac Rel Builder
+# Mac Rel Builder using Core Graphics
 #
-B('Webkit Mac Builder', 'f_webkit_mac_rel', scheduler='s5_webkit_rel',
-  builddir='webkit-mac-latest-rel')
-F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac Builder (CG)', 'f_webkit_mac_cg_rel', scheduler='s5_webkit_rel',
+  builddir='webkit-mac-cg-latest-rel')
+F('f_webkit_mac_cg_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     options=[
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
@@ -42,16 +42,16 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     }))
 
 #
-# Mac Rel Webkit testers
+# Mac Rel Webkit testers using Core Graphics
 #
-B('Webkit Mac10.5', 'f_webkit_rel_tests', scheduler='s5_webkit_rel')
-F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.5 (CG)', 'f_webkit_cg_rel_tests', scheduler='s5_webkit_rel')
+F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
-B('Webkit Mac10.6', 'f_webkit_rel_tests', scheduler='s5_webkit_rel')
+B('Webkit Mac10.6 (CG)', 'f_webkit_cg_rel_tests', scheduler='s5_webkit_rel')
 
 ################################################################################
 ## Debug
@@ -63,11 +63,11 @@ B('Webkit Mac10.6', 'f_webkit_rel_tests', scheduler='s5_webkit_rel')
 S('s5_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 #
-# Mac Dbg Builder
+# Mac Dbg Builder using Core Graphics
 #
-B('Webkit Mac Builder (dbg)', 'f_webkit_mac_dbg', scheduler='s5_webkit_dbg',
-  builddir='webkit-mac-latest-dbg')
-F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac Builder (CG)(dbg)', 'f_webkit_mac_cg_dbg', scheduler='s5_webkit_dbg',
+  builddir='webkit-mac-cg-latest-dbg')
+F('f_webkit_mac_cg_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
     options=[
@@ -79,11 +79,12 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     }))
 
 #
-# Mac Dbg Webkit testers
+# Mac Dbg Webkit testers using Core Graphics
 #
 
-B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1', scheduler='s5_webkit_dbg')
-F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.5 (CG)(dbg)(1)', 'f_webkit_cg_dbg_tests_1',
+  scheduler='s5_webkit_dbg')
+F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
@@ -91,8 +92,9 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
-B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2', scheduler='s5_webkit_dbg')
-F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.5 (CG)(dbg)(2)', 'f_webkit_cg_dbg_tests_2',
+  scheduler='s5_webkit_dbg')
+F('f_webkit_cg_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['webkit', 'webkit_gpu'],
@@ -100,8 +102,9 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))
 
-B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests', scheduler='s5_webkit_dbg')
-F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.6 (CG)(dbg)', 'f_webkit_cg_dbg_tests',
+  scheduler='s5_webkit_dbg')
+F('f_webkit_cg_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],

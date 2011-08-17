@@ -24,8 +24,8 @@ defaults['category'] = '2webkit mac deps'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Mac Builder (deps)',
-                                          'webkit-mac-pinned-rel', 'mac')
+                                          'Webkit Mac Builder (CG)(deps)',
+                                          'webkit-mac-pinned-cg-rel', 'mac')
 
 #
 # Main release scheduler for chromium
@@ -38,11 +38,11 @@ S('s2_chromium_rel', branch='src', treeStableTimer=60)
 D('s2_chromium_rel_dep', 's2_chromium_rel')
 
 #
-# Mac Rel Builder
+# Mac Rel Builder using Core Graphics
 #
-B('Webkit Mac Builder (deps)', 'f_webkit_mac_rel',
-  scheduler='s2_chromium_rel', builddir='webkit-mac-pinned-rel')
-F('f_webkit_mac_rel', mac().ChromiumFactory(
+B('Webkit Mac Builder (CG)(deps)', 'f_webkit_mac_cg_rel',
+  scheduler='s2_chromium_rel', builddir='webkit-mac-pinned-cg-rel')
+F('f_webkit_mac_cg_rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=[
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
@@ -53,11 +53,11 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
     }))
 
 #
-# Mac Rel Webkit testers
+# Mac Rel Webkit testers using Core Graphics
 #
-B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests',
+B('Webkit Mac10.6 (CG)(deps)', 'f_webkit_cg_rel_tests',
   scheduler='s2_chromium_rel_dep')
-F('f_webkit_rel_tests', mac().ChromiumFactory(
+F('f_webkit_cg_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=['test_shell', 'webkit', 'webkit_unit'],
@@ -69,8 +69,8 @@ F('f_webkit_rel_tests', mac().ChromiumFactory(
 ################################################################################
 
 dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Mac Builder (deps)(dbg)',
-                                          'webkit-mac-pinned-dbg', 'mac')
+                                          'Webkit Mac Builder (CG)(deps)(dbg)',
+                                          'webkit-mac-pinned-cg-dbg', 'mac')
 
 #
 # Main debug scheduler for chromium
@@ -83,11 +83,11 @@ S('s2_chromium_dbg', branch='src', treeStableTimer=60)
 D('s2_chromium_dbg_dep', 's2_chromium_dbg')
 
 #
-# Mac Dbg Builder
+# Mac Dbg Builder using Core Graphics
 #
-B('Webkit Mac Builder (deps)(dbg)', 'f_webkit_mac_dbg',
-  scheduler='s2_chromium_dbg', builddir='webkit-mac-pinned-dbg')
-F('f_webkit_mac_dbg', mac().ChromiumFactory(
+B('Webkit Mac Builder (CG)(deps)(dbg)', 'f_webkit_mac_cg_dbg',
+  scheduler='s2_chromium_dbg', builddir='webkit-mac-pinned-cg-dbg')
+F('f_webkit_mac_cg_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=[
@@ -99,12 +99,12 @@ F('f_webkit_mac_dbg', mac().ChromiumFactory(
     }))
 
 #
-# Mac Dbg Webkit testers
+# Mac Dbg Webkit testers using Core Graphics
 #
 
-B('Webkit Mac10.6 (deps)(dbg)(1)', 'f_webkit_dbg_tests_1',
+B('Webkit Mac10.6 (CG)(deps)(dbg)(1)', 'f_webkit_cg_dbg_tests_1',
   scheduler='s2_chromium_dbg_dep')
-F('f_webkit_dbg_tests_1', mac().ChromiumFactory(
+F('f_webkit_cg_dbg_tests_1', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -113,9 +113,9 @@ F('f_webkit_dbg_tests_1', mac().ChromiumFactory(
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
-B('Webkit Mac10.6 (deps)(dbg)(2)', 'f_webkit_dbg_tests_2',
+B('Webkit Mac10.6 (CG)(deps)(dbg)(2)', 'f_webkit_cg_dbg_tests_2',
   scheduler='s2_chromium_dbg_dep')
-F('f_webkit_dbg_tests_2', mac().ChromiumFactory(
+F('f_webkit_cg_dbg_tests_2', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
