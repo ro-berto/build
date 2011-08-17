@@ -20,7 +20,7 @@ def win():
 #
 # Continous build scheduler for Syzygy
 #
-S('syzygy_cont', branch='trunk', treeStableTimer=60, categories=['continuous'])
+S('syzygy_cont', branch='trunk', treeStableTimer=60)
 
 
 #
@@ -29,11 +29,13 @@ S('syzygy_cont', branch='trunk', treeStableTimer=60, categories=['continuous'])
 B('Syzygy Release', 'f_syzygy_win_rel', scheduler='syzygy_cont')
 F('f_syzygy_win_rel', win().SyzygyFactory())
 
+
 #
 # Windows continuous Debug builder
 #
 B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont')
 F('f_syzygy_win_dbg', win().SyzygyFactory(target='debug'))
+
 
 #
 # Windows continuous code coverage builder
