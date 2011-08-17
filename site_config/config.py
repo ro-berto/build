@@ -179,7 +179,8 @@ class Archive(config_private.Archive):
     official_extras = []
   else:
     official_extras = [
-      ['remoting-it2me.zip'],
+# TODO(lambroslambrou): reenable when we understand this better.
+#      ['remoting-it2me.zip'],
     ]
 
   if chromium_utils.IsWindows():
