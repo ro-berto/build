@@ -5,7 +5,7 @@
 from master import master_config
 from master.factory import syzygy_factory
 
-defaults = { 'category': 'continous' }
+defaults = { 'category': 'continuous' }
 
 helper = master_config.Helper(defaults)
 B = helper.Builder

@@ -7,7 +7,6 @@ from buildbot.changes.filter import ChangeFilter
 
 from master.factory import syzygy_factory
 
-defaults = { 'category': 'official' }
 
 def win():
   return syzygy_factory.SyzygyFactory('src/syzygy',
@@ -42,6 +41,7 @@ official_builder = {
     'factory': official_factory,
     'schedulers': 'syzygy_version',
     'auto_reboot': False,
+    'category': 'official',
     }
 
 

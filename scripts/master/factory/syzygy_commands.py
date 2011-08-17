@@ -101,7 +101,7 @@ class SyzygyCommands(commands.FactoryCommands):
     # Store the coverage results by the checkout revision.
     src_archive = self.PathJoin(self._build_dir, self._target, 'benchmark.zip')
     dst_gs_url = WithProperties(
-        'gs://syzygy-archive/builds/official/%(got_revision)s')
+        'gs://syzygy-archive/builds/official/%(got_revision)s/benchmark.zip')
     url = WithProperties(
         'http://syzygy-archive.commondatastorage.googleapis.com/builds/'
            'official/%(got_revision)s/benchmark.zip')
