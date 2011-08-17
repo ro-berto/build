@@ -122,8 +122,8 @@ def real_main(options, args):
     if failure:
       print "Trying to determine the latest build's revision number..."
       try:
-        build_revision_file_name = os.path.join(target_build_output_dir,
-                                                'FULL_BUILD_REVISION')
+        build_revision_file_name = os.path.join(
+            target_build_output_dir, slave_utils.FULL_BUILD_REVISION_FILENAME)
         build_revision_file = open(build_revision_file_name, 'r')
         print 'Latest build is revision: %s' % build_revision_file.read()
         build_revision_file.close()

@@ -150,34 +150,25 @@ def ShouldPackageFile(filename, target):
   return True
 
 
-def archive(options, args):
-  src_dir = os.path.abspath(options.src_dir)
-  build_dir = GetRealBuildDirectory(options.build_dir, options.target)
-
-  staging_dir = slave_utils.GetStagingDir(src_dir)
-  build_revision = slave_utils.SubversionRevision(src_dir)
-  chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
-
-  print 'Full Staging in %s' % build_dir
-
-  # Build the list of files to archive.
-  zip_file_list = [f for f in os.listdir(build_dir)
-                   if ShouldPackageFile(f, options.target)]
-  if options.include_files is not None:
-    zip_file_list.extend([f for f in os.listdir(build_dir)
-                          if f in options.include_files])
-
-  # Write out the revision number so we can figure it out in extract_build.py.
-  build_revision_file_name = 'FULL_BUILD_REVISION'
-  build_revision_path = os.path.join(build_dir, build_revision_file_name)
+def WriteRevisionFile(path, build_revision):
+  """Writes a file containing revision number to given path."""
   try:
-    build_revision_file = open(build_revision_path, 'w')
+    build_revision_file = open(path, 'w')
     build_revision_file.write('%d' % build_revision)
     build_revision_file.close()
-    chromium_utils.MakeWorldReadable(build_revision_path)
-    zip_file_list.append(build_revision_file_name)
+    chromium_utils.MakeWorldReadable(path)
   except IOError:
-    print 'Writing to revision file %s failed ' % build_revision_path
+    print 'Writing to revision file %s failed ' % path
+
+
+def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
+                           zip_file_list):
+  """Creates an unversioned full build archive.
+  Returns the path of the created archive."""
+  # Write out the revision number so we can figure it out in extract_build.py.
+  build_revision_path = os.path.join(build_dir,
+                                     slave_utils.FULL_BUILD_REVISION_FILENAME)
+  WriteRevisionFile(build_revision_path, build_revision)
 
   zip_file_name = 'full-build-%s' % chromium_utils.PlatformName()
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
@@ -195,6 +186,12 @@ def archive(options, args):
   zip_size = os.stat(zip_file)[stat.ST_SIZE]
   print 'Zip file is %ld bytes' % zip_size
 
+  return zip_file
+
+
+def MakeVersionedArchive(zip_file, build_revision):
+  """Ensures that a versioned archive exists corresponding
+  to given unversioned archive."""
   zip_template = os.path.basename(zip_file)
   zip_base, zip_ext = os.path.splitext(zip_template)
   # Create a versioned copy of the file.
@@ -208,21 +205,44 @@ def archive(options, args):
   shutil.copyfile(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
 
-  # Now before we finish, trim out old builds to make sure we don't
-  # fill the disk completely.
-  stage_dir = os.path.dirname(zip_file)
-  zip_list = glob.glob(os.path.join(stage_dir, zip_base + '_*' + zip_ext))
+  return (zip_base, zip_ext)
+
+
+def PruneOldArchives(staging_dir, zip_base, zip_ext):
+  """Removes old archives so that we don't exceed disk space."""
+  zip_list = glob.glob(os.path.join(staging_dir, zip_base + '_*' + zip_ext))
   saved_zip_list = GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext)
   saved_mtime_list = GetRecentBuildsByModificationTime(zip_list)
 
-  # Trim old builds.
-  trim_zip_list = []
+  # Prune zip files not matched by the whitelists above.
   for zip_file in zip_list:
     if zip_file not in saved_zip_list and zip_file not in saved_mtime_list:
-      trim_zip_list.append(zip_file)
-  for trim_zip in trim_zip_list:
-    print 'Pruning zip %s.' % trim_zip
-    chromium_utils.RemoveFile(stage_dir, trim_zip)
+      print 'Pruning zip %s.' % zip_file
+      chromium_utils.RemoveFile(staging_dir, zip_file)
+
+
+def archive(options, args):
+  src_dir = os.path.abspath(options.src_dir)
+  build_dir = GetRealBuildDirectory(options.build_dir, options.target)
+
+  staging_dir = slave_utils.GetStagingDir(src_dir)
+  build_revision = slave_utils.SubversionRevision(src_dir)
+  chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
+
+  print 'Full Staging in %s' % build_dir
+
+  # Build the list of files to archive.
+  zip_file_list = [f for f in os.listdir(build_dir)
+                   if ShouldPackageFile(f, options.target)]
+  if options.include_files is not None:
+    zip_file_list.extend([f for f in os.listdir(build_dir)
+                          if f in options.include_files])
+
+  zip_file = MakeUnversionedArchive(build_dir, staging_dir,
+                                    build_revision, zip_file_list)
+  (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision)
+  PruneOldArchives(staging_dir, zip_base, zip_ext)
+
   return 0
 
 
