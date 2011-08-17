@@ -20,7 +20,7 @@ def _VersionFileFilter(change):
   Args:
       change: a buildbot Change object.
   """
-  return change.branch == 'trunk' and 'src/syzygy/VERSION' in change.files
+  return change.branch == 'trunk' and 'syzygy/VERSION' in change.files
 
 #
 # Official build scheduler for Syzygy
