@@ -64,6 +64,9 @@ class SkiaFactory(gclient_factory.GClientFactory):
     self._builder_name = builder_name
     self._target_platform = target_platform
 
+    # Set _default_clobber based on config.Master
+    self._default_clobber = getattr(config.Master, 'default_clobber', False)
+
     # Determine which join() implementation to use for this target_platform.
     if target_platform == TARGET_PLATFORM_WIN32:
       self.TargetPathJoin = ntpath.join
@@ -89,11 +92,13 @@ class SkiaFactory(gclient_factory.GClientFactory):
         target_arch=None, default_timeout=default_timeout,
         environment_variables=environment_variables)
 
-  def Build(self, clobber=False):
+  def Build(self, clobber=None):
     """Build and return the complete BuildFactory.
 
     clobber: boolean indicating whether we should clean before building
     """
+    if clobber is None:
+      clobber = self._default_clobber
     if clobber:
       self._skia_cmd_obj.AddClean()
 
