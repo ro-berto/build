@@ -3,7 +3,8 @@
 # found in the LICENSE file.
 
 from buildbot.scheduler import Scheduler
-from buildbot.changes.filter import ChangeFilter
+# This is due to buildbot 0.7.12 being used for the presubmit check.
+from buildbot.changes.filter import ChangeFilter  # pylint: disable=E0611,F0401
 
 from master.factory import syzygy_factory
 
