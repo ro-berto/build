@@ -60,7 +60,7 @@ B('Webkit Mac10.6 (CG)(deps)', 'f_webkit_cg_rel_tests',
 F('f_webkit_cg_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit', 'webkit_unit'],
+    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
@@ -108,7 +108,7 @@ F('f_webkit_cg_dbg_tests_1', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit', 'webkit_unit'],
+    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
@@ -119,7 +119,7 @@ F('f_webkit_cg_dbg_tests_2', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['webkit'],
+    tests=['webkit', 'webkit_gpu'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))

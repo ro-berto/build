@@ -32,7 +32,7 @@ S('s3_chromium_rel', branch='src', treeStableTimer=60)
 #
 B('Webkit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
-    tests=['test_shell', 'webkit', 'webkit_unit'],
+    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     options=['--compiler=goma', 'test_shell', 'test_shell_tests',
 	         'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
@@ -77,7 +77,7 @@ F('f_webkit_dbg_tests_1', linux().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit', 'webkit_unit'],
+    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
@@ -88,7 +88,7 @@ F('f_webkit_dbg_tests_2', linux().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['webkit'],
+    tests=['webkit', 'webkit_gpu'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))
