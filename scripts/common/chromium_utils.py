@@ -793,6 +793,18 @@ def ListMasters():
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
 
 
+def RunSlavesCfg(slaves_cfg):
+  """Runs slaves.cfg in a consistent way."""
+  old_path = os.getcwd()
+  try:
+    os.chdir(os.path.dirname(os.path.abspath(slaves_cfg)))
+    local_vars = {}
+    execfile(os.path.join(slaves_cfg), local_vars)
+    return local_vars['slaves']
+  finally:
+    os.chdir(old_path)
+
+
 def convert_json(option, opt, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))

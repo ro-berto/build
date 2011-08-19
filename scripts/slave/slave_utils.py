@@ -295,11 +295,10 @@ def GetActiveMaster():
   determined by the host name. Returns None otherwise."""
   hostname = socket.getfqdn().split('.', 1)[0].lower()
   for master in chromium_utils.ListMasters():
-    slaves = {}
-    execfile(os.path.join(master, 'slaves.cfg'), slaves)
-    for i in slaves['slaves']:
-      if i.get('hostname', None) == hostname:
-        return i['master']
+    path = os.path.join(master, 'slaves.cfg')
+    for slave in chromium_utils.RunSlavesCfg(path):
+      if slave.get('hostname', None) == hostname:
+        return slave['master']
 
 
 def GetActiveMasterConfig():

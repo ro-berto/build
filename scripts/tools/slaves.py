@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -169,7 +169,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   group = optparse.OptionGroup(parser, 'Slaves to process')
   group.add_option('-x', '--master',
       help=('Master to use to load the slaves list. If omitted, all masters '
-            'that were started at least once are included. Choices are: %s.') %
+            'that were started at least once are included. If \'all\', all '
+            'masters are selected. Choices are: %s.') %
               ', '.join(masters))
   group.add_option('-w', '--win', action='store_true')
   group.add_option('-l', '--linux', action='store_true')
@@ -232,9 +233,14 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
       slaves = []
       for m_p in masters_path:
         if os.path.isfile(os.path.join(m_p, 'twistd.pid')):
-          local_vars = {}
-          execfile(os.path.join(m_p, 'slaves.cfg'), local_vars)
-          slaves.extend(local_vars['slaves'])
+          slaves.extend(
+              chromium_utils.RunSlavesCfg(os.path.join(m_p, 'slaves.cfg')))
+      slaves = slaves_list.BaseSlavesList(slaves)
+    elif options.master == 'all':
+      slaves = []
+      for m_p in masters_path:
+        slaves.extend(
+            chromium_utils.RunSlavesCfg(os.path.join(m_p, 'slaves.cfg')))
       slaves = slaves_list.BaseSlavesList(slaves)
     else:
       if not options.master in masters:

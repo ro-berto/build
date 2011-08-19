@@ -9,6 +9,7 @@ from buildbot.scheduler import Triggerable
 from master import slaves_list
 
 def GetArchiveUrl(project, machine_name, builder_name, zip_os_name):
+  # This is slightly tricky since it depends on os.getcwd() being right.
   slaves = slaves_list.SlavesList('slaves.cfg', project)
   host = slaves.GetSlaveName(project, machine_name)
   if not host:

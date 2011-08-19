@@ -5,6 +5,8 @@
 
 import sys
 
+from common import chromium_utils
+
 
 def EntryToSlaveName(entry):
   """Extracts the buildbot slave name from the slaves list entry.
@@ -101,9 +103,8 @@ class BaseSlavesList(object):
 
 class SlavesList(BaseSlavesList):
   def __init__(self, filename, default_master=None):
-    local_vars = {}
-    execfile(filename, local_vars)
-    BaseSlavesList.__init__(self, local_vars['slaves'], default_master)
+    super(SlavesList, self).__init__(
+        chromium_utils.RunSlavesCfg(filename), default_master)
 
 
 def Main(argv=None):
