@@ -61,6 +61,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     return
 
   cc = None
+  ldplusplus = None
   if compiler == 'clang':
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
@@ -69,10 +70,10 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     variables = {}
     execfile(os.path.join(src_path, 'chrome', 'VERSION'), variables)
     if int(variables['MAJOR']) >= 15:
-      clang_binary = os.path.join(
-          src_path, 'third_party', 'llvm-build', 'Release+Asserts', 'bin',
-          'clang++')
-      cc = os.path.abspath(clang_binary)
+      clang_bin_dir = os.path.abspath(os.path.join(
+          src_path, 'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+      cc = os.path.join(clang_bin_dir, 'clang')
+      ldplusplus = os.path.join(clang_bin_dir, 'clang++')
     else:
       print 'Not using clang for version, dict was %r' % variables
 
@@ -89,6 +90,10 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
   elif cc:
     print 'Forcing CC = %s' % cc
     env['CC'] = cc
+
+  if ldplusplus:
+    print 'Forcing LDPLUSPLUS = %s' % ldplusplus
+    env['LDPLUSPLUS'] = ldplusplus
 
   if compiler:
     return
