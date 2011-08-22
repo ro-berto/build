@@ -15,6 +15,20 @@ S = helper.Scheduler
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
 
+# Note that we use the builder vs tester role separation differently
+# here than in our other buildbot configurations.
+#
+# In this configuration, the testers build the tests themselves rather than
+# extracting them from the builder.  That's because these testers always
+# fetch from webkit HEAD, and by the time the tester runs, webkit HEAD may
+# point at a different revision than it did when the builder fetched webkit.
+#
+# Even though the testers don't extract the build package from the builder,
+# the builder is still useful because it can cycle more quickly than the
+# builder+tester can, and can alert us more quickly to build breakages.
+#
+# If you have questions about this, you can ask nsylvain.
+
 ################################################################################
 ## Release
 ################################################################################
