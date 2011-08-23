@@ -297,6 +297,12 @@ class Master(object):
     slave_port = 9041
     master_port_alt = 9042
 
+  class Sfntly(_Base):
+    project_name = 'Sfntly'
+    project_url = 'http://code.google.com/p/sfntly/'
+    master_port = 9048
+    slave_port = 9148
+    master_port_alt = 9248
 
 class Installer(object):
   # A file containing information about the last release.
