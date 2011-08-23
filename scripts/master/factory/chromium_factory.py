@@ -693,10 +693,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       factory_properties = {}
     factory_properties['no_gclient_branch'] = True
     main = gclient_factory.GClientSolution(
-        svn_url='http://git.chromium.org/chromium/src.git',
+        svn_url='%s/chromium/src.git' % config.Master.git_server_url,
         name='src',
         custom_deps_file='.DEPS.git')
-    self._solutions = [main]
+    self._solutions[0] = main
+    if (len(self._solutions) > 1 and
+        self._solutions[1].svn_url == config.Master.trunk_internal_url_src):
+      svn_url = 'ssh://gerrit-int.chromium.org:29419/chrome/src-internal'
+      self._solutions[1] = gclient_factory.GClientSolution(
+          svn_url=svn_url,
+          name='src-internal',
+          custom_deps_file='.DEPS.git',
+          needed_components=self.NEEDED_COMPONENTS_INTERNAL)
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
