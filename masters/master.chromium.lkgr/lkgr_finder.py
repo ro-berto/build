@@ -169,22 +169,6 @@ LKGR_STEPS = {
     'cacheinvalidation_unittests',
     'jingle_unittests',
   ],
-  'Linux Builder (ChromiumOS)': [
-    'compile',
-    'base_unittests',
-    'content_unittests',
-    'googleurl_unittests',
-    'media_unittests',
-    'net_unittests',
-    'printing_unittests',
-    'remoting_unittests',
-    'ipc_tests',
-    'sync_unit_tests',
-    'unit_tests',
-    'sql_unittests',
-    'gfx_unittests',
-    'jingle_unittests',
-  ]
 }
 
 #-------------------------------------------------------------------------------
