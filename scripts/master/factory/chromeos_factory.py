@@ -19,7 +19,7 @@ class CbuildbotFactory(object):
   Create a cbuildbot build factory.
 
   This is designed mainly to utilize build scripts directly hosted in
-  crostools.git.
+  chromite.git.
 
   Attributes:
       type: The type of cbuildbot setup to produce. If none is specified you
@@ -167,8 +167,8 @@ class CbuildbotFactory(object):
     Add the following boiler plate steps to the factory.
 
     * gclient sync of /b
-    * clearing of crostools/chromite
-    * clean checkout of crostools/chromite
+    * clearing of chromite[& crostools]
+    * clean checkout of chromite[& crostools]
     """
     build_slave_sync = ['gclient', 'sync']
     self.f_cbuild.addStep(shell.ShellCommand,
@@ -178,7 +178,8 @@ class CbuildbotFactory(object):
                           timeout=300)
 
     self._git_clear_and_checkout(self.chromite_repo)
-    self._git_clear_and_checkout(self.crostools_repo)
+    if self.crostools_repo:
+      self._git_clear_and_checkout(self.crostools_repo)
 
   def cbuildbot_type(self, params, description_suffix='', haltOnFailure=True):
     """Adds cbuildbot steps for pre flight queue builders.
