@@ -53,7 +53,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
   that are common to the Xcode builds.
   """
   compiler = options.compiler
-  assert compiler in (None, 'clang', 'goma')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang')
 
   if compiler == 'goma':
     print 'using goma'
@@ -62,7 +62,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
 
   cc = None
   ldplusplus = None
-  if compiler == 'clang':
+  if compiler in ('clang', 'goma-clang'):
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
     # that way, so only enable clang on m15 and up.
@@ -76,6 +76,10 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
       ldplusplus = os.path.join(clang_bin_dir, 'clang++')
     else:
       print 'Not using clang for version, dict was %r' % variables
+
+    if compiler == 'goma-clang':
+      print 'using goma'
+      command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
   if ccache_base:
     if cc is None:
@@ -215,11 +219,14 @@ def get_ubuntu_codename():
   return codename
 
 
-def common_linux_settings(command, options, env, crosstool=None, compiler=None):
+def common_make_scons_settings(
+    command, options, env, crosstool=None, compiler=None):
   """
-  Sets desirable Linux environment variables and command-line options
-  that are common to the Make and SCons builds.
+  Sets desirable environment variables and command-line options
+  that are common to the Make and SCons builds. Used on Linux
+  and for the mac make build.
   """
+  # TODO(thakis): Add goma-clang support to the make build.
   assert compiler in (None, 'clang', 'goma')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
@@ -379,7 +386,7 @@ def main_make(options, args):
 
   os.chdir(working_dir)
   env = os.environ.copy()
-  common_linux_settings(command, options, env, options.crosstool,
+  common_make_scons_settings(command, options, env, options.crosstool,
       options.compiler)
 
   command.append('BUILDTYPE=' + options.target)
@@ -432,7 +439,7 @@ def main_scons(options, args):
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_linux_settings(command, options, env)
+    common_make_scons_settings(command, options, env)
   else:
     command.extend(['-k'])
 
@@ -487,7 +494,7 @@ def main_scons_v8(options, args):
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_linux_settings(command, options, env)
+    common_make_scons_settings(command, options, env)
   else:
     command.extend(['-k'])
 
