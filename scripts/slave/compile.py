@@ -184,7 +184,7 @@ def main_xcode(options, args):
   # (or restart in clobber mode) to ensure the proxy is available.
   goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
 
-  if options.compiler == 'goma':
+  if options.compiler in ('goma', 'goma-clang'):
     goma_key = os.path.join(options.goma_dir, 'goma.key')
     env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
     if os.path.exists(goma_key):
@@ -197,7 +197,7 @@ def main_xcode(options, args):
   # Run the build.
   result = chromium_utils.RunCommand(command, env=env)
 
-  if options.compiler == 'goma':
+  if options.compiler in ('goma', 'goma-clang'):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
