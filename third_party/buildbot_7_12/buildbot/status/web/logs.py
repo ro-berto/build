@@ -9,6 +9,7 @@ from twisted.web.error import NoResource
 from buildbot import interfaces
 from buildbot.status import builder
 from buildbot.status.web.base import IHTMLLog, HtmlResource
+from buildbot.status.web.ansi2html import Ansi2HTML
 
 
 textlog_stylesheet = """
@@ -59,7 +60,7 @@ class TextLog(Resource):
     # it, so we can afford to track the request in the Resource.
     implements(IHTMLLog)
 
-    asText = False
+    printAs = "html"
     subscribed = False
 
     def __init__(self, original):
@@ -67,9 +68,13 @@ class TextLog(Resource):
         self.original = original
 
     def getChild(self, path, req):
-        if path == "text":
-            self.asText = True
+        if path == "ansi":
+            self.ansiParser = Ansi2HTML()
+
+        if path == "text" or path == "ansi":
+            self.printAs = path
             return self
+
         return HtmlResource.getChild(self, path, req)
 
     def htmlHeader(self, request):
@@ -80,6 +85,8 @@ class TextLog(Resource):
         data += "<body vlink=\"#800080\">\n"
         texturl = request.childLink("text")
         data += '<a href="%s">(view as text)</a><br />\n' % texturl
+        ansiurl = request.childLink("ansi")
+        data += '<a href="%s">(view as ansi)</a><br />\n' % ansiurl
         data += "<pre>\n"
         return data
 
@@ -90,9 +97,12 @@ class TextLog(Resource):
             if type >= len(builder.ChunkTypes) or type < 0:
                 # non-std channel, don't display
                 continue
-            if self.asText:
+            if self.printAs == "text":
                 if type != builder.HEADER:
                     data += entry
+            elif self.printAs == "ansi":
+                if type != builder.HEADER:
+                    data += self.ansiParser.parseBlock(entry)
             else:
                 data += spanfmt % (builder.ChunkTypes[type],
                                    html.escape(entry))
@@ -104,7 +114,7 @@ class TextLog(Resource):
         return data
 
     def render_HEAD(self, request):
-        if self.asText:
+        if self.printAs == "text":
             request.setHeader("content-type", "text/plain")
         else:
             request.setHeader("content-type", "text/html")
@@ -116,13 +126,16 @@ class TextLog(Resource):
     def render_GET(self, req):
         self.req = req
 
-        if self.asText:
+        if self.printAs == "text":
             req.setHeader("content-type", "text/plain")
         else:
             req.setHeader("content-type", "text/html")
 
-        if not self.asText:
+        if self.printAs == "html":
             req.write(self.htmlHeader(req))
+        if self.printAs == "ansi":
+            req.write(self.ansiParser.printHtmlHeader("Log File Contents"))
+            req.write(self.ansiParser.printHeader())
 
         self.original.subscribeConsumer(ChunkConsumer(req, self))
         return server.NOT_DONE_YET
@@ -131,8 +144,11 @@ class TextLog(Resource):
         if not self.req:
             return
         try:
-            if not self.asText:
+            if self.printAs == "html":
                 self.req.write(self.htmlFooter())
+            if self.printAs == "ansi":
+                self.req.write(self.ansiParser.printFooter())
+                self.req.write(self.ansiParser.printHtmlFooter())
             self.req.finish()
         except pb.DeadReferenceError:
             pass
