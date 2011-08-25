@@ -97,6 +97,7 @@ F('rel_sync', linux().ChromiumFactory(
 
 linux_touch_test_targets = linux_all_test_targets + [
   'webkit_unit_tests',
+  'views_unittests',
 ]
 
 B('Linux Touch', 'rel_touch', 'compile', 'linux_rel')
@@ -104,6 +105,7 @@ F('rel_touch', linux().ChromiumFactory(
     slave_type='BuilderTester',
     options=['--compiler=goma',] + linux_touch_test_targets,
     tests=['webkit_unit',
+           'views',
            'sizes', ] +
           ['check_deps',
            'googleurl',
