@@ -219,7 +219,7 @@ def get_ubuntu_codename():
   return codename
 
 
-def common_make_scons_settings(
+def common_make_settings(
     command, options, env, crosstool=None, compiler=None):
   """
   Sets desirable environment variables and command-line options
@@ -386,7 +386,7 @@ def main_make(options, args):
 
   os.chdir(working_dir)
   env = os.environ.copy()
-  common_make_scons_settings(command, options, env, options.crosstool,
+  common_make_settings(command, options, env, options.crosstool,
       options.compiler)
 
   command.append('BUILDTYPE=' + options.target)
@@ -439,7 +439,7 @@ def main_scons(options, args):
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_make_scons_settings(command, options, env)
+    common_make_settings(command, options, env)
   else:
     command.extend(['-k'])
 
@@ -494,7 +494,7 @@ def main_scons_v8(options, args):
 
   env = os.environ.copy()
   if sys.platform == 'linux2':
-    common_make_scons_settings(command, options, env)
+    common_make_settings(command, options, env)
   else:
     command.extend(['-k'])
 
