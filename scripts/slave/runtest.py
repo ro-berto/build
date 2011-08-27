@@ -121,7 +121,13 @@ def main_mac(options, args):
   test_exe_path = os.path.join(build_dir, options.target, test_exe)
   if not os.path.exists(test_exe_path):
     pre = 'Unable to find %s\n' % test_exe_path
-    build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
+
+    build_dir = os.path.dirname(build_dir)
+    outdir = 'xcodebuild'
+    if os.path.exists(os.path.join(build_dir, 'out')):
+      outdir = 'out'
+
+    build_dir = os.path.join(build_dir, outdir)
     test_exe_path = os.path.join(build_dir, options.target, test_exe)
     if not os.path.exists(test_exe_path):
       msg = pre + 'Unable to find %s' % test_exe_path
