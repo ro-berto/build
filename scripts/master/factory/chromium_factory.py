@@ -685,6 +685,19 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
+  def ChromiumASANFactory(self, target='Release', clobber=False, tests=None,
+                          mode=None, slave_type='Tester', options=None,
+                          compile_timeout=1200, build_url=None, project=None,
+                          factory_properties=None):
+    # Make sure the solution is not already there.
+    if 'asan.DEPS' not in [s.name for s in self._solutions]:
+      self._solutions.append(gclient_factory.GClientSolution(
+          'http://src.chromium.org/svn/trunk/deps/asan.DEPS',
+          'asan.DEPS'))
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
+
   def ChromiumGITFactory(self, target='Release', clobber=False, tests=None,
                          mode=None, slave_type='Tester', options=None,
                          compile_timeout=1200, build_url=None, project=None,
