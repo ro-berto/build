@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Webkit test builders using the Skia graphics library.
+# Webkit test builders using the Core Graphics library.
 #
 # Note that we use the builder vs tester role separation differently
 # here than in our other buildbot configurations.
@@ -39,39 +39,38 @@ defaults['category'] = '5webkit mac latest'
 #
 # Main release scheduler for webkit
 #
-S('s5_webkit_rel', branch='trunk', treeStableTimer=60)
+S('s5_webkit_cg_rel', branch='trunk', treeStableTimer=60)
 
 #
 # Mac Rel Builder
 #
-B('Webkit Mac Builder', 'f_webkit_mac_rel',
-  scheduler='s5_webkit_rel', builddir='webkit-mac-latest-rel')
-F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac Builder (CG)', 'f_webkit_mac_cg_rel',
+  scheduler='s5_webkit_cg_rel', builddir='webkit-mac-cg-latest-rel')
+F('f_webkit_mac_cg_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     options=[
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
         },
     }))
 
 #
 # Mac Rel Webkit builder+testers
 #
-B('Webkit Mac10.5', 'f_webkit_rel_tests',
-  scheduler='s5_webkit_rel')
-F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.5 (CG)', 'f_webkit_cg_rel_tests',
+  scheduler='s5_webkit_cg_rel')
+F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.6', 'f_webkit_rel_tests',
-  scheduler='s5_webkit_rel')
+B('Webkit Mac10.6 (CG)', 'f_webkit_cg_rel_tests',
+  scheduler='s5_webkit_cg_rel')
 
 ################################################################################
 ## Debug
@@ -80,21 +79,21 @@ B('Webkit Mac10.6', 'f_webkit_rel_tests',
 #
 # Main debug scheduler for webkit
 #
-S('s5_webkit_dbg', branch='trunk', treeStableTimer=60)
+S('s5_webkit_cg_dbg', branch='trunk', treeStableTimer=60)
 
 #
 # Mac Dbg Builder
 #
-B('Webkit Mac Builder (dbg)', 'f_webkit_mac_dbg',
-  scheduler='s5_webkit_dbg', builddir='webkit-mac-latest-dbg')
-F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac Builder (CG)(dbg)', 'f_webkit_mac_cg_dbg',
+  scheduler='s5_webkit_cg_dbg', builddir='webkit-mac-cg-latest-dbg')
+F('f_webkit_mac_cg_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
     options=[
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
         },
     }))
 
@@ -102,41 +101,38 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
 # Mac Dbg Webkit builder+testers
 #
 
-B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler='s5_webkit_dbg')
-F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.5 (CG)(dbg)(1)', 'f_webkit_cg_dbg_tests_1',
+  scheduler='s5_webkit_cg_dbg')
+F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
         'layout_part': '1:2',
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler='s5_webkit_dbg')
-F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.5 (CG)(dbg)(2)', 'f_webkit_cg_dbg_tests_2',
+  scheduler='s5_webkit_cg_dbg')
+F('f_webkit_cg_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['webkit', 'webkit_gpu'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
         'layout_part': '2:2',
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
-  scheduler='s5_webkit_dbg')
-F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
+B('Webkit Mac10.6 (CG)(dbg)', 'f_webkit_cg_dbg_tests',
+  scheduler='s5_webkit_cg_dbg')
+F('f_webkit_cg_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
         'test_results_server': 'test-results.appspot.com',
     }))
 
