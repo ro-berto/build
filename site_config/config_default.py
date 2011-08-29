@@ -304,6 +304,12 @@ class Master(object):
     slave_port = 9148
     master_port_alt = 9248
 
+  class ChromiumPerfAv(_ChromiumBase):
+    project_name = 'Chromium Perf Av'
+    master_port = 9050
+    slave_port = 9051
+    master_port_alt = 9052
+
 class Installer(object):
   # A file containing information about the last release.
   last_release_info = "."
