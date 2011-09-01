@@ -14,6 +14,7 @@ import re
 import shutil
 import stat
 import sys
+import tempfile
 
 from common import chromium_utils
 from slave import slave_utils
@@ -151,11 +152,14 @@ def ShouldPackageFile(filename, target):
 
 
 def WriteRevisionFile(path, build_revision):
-  """Writes a file containing revision number to given path."""
+  """Writes a file containing revision number to given path.
+  Replaces the target file in place."""
   try:
-    build_revision_file = open(path, 'w')
-    build_revision_file.write('%d' % build_revision)
-    build_revision_file.close()
+    tmp_revision_file = tempfile.NamedTemporaryFile(
+        mode='w', dir=os.path.dirname(path), delete=False)
+    tmp_revision_file.write('%d' % build_revision)
+    tmp_revision_file.close()
+    shutil.move(tmp_revision_file.name, path)
     chromium_utils.MakeWorldReadable(path)
   except IOError:
     print 'Writing to revision file %s failed ' % path
@@ -242,6 +246,13 @@ def archive(options, args):
                                     build_revision, zip_file_list)
   (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision)
   PruneOldArchives(staging_dir, zip_base, zip_ext)
+
+  # Update the latest revision file in the staging directory
+  # to allow testers to figure out the latest packaged revision
+  # without downloading tarballs.
+  latest_revision_path = os.path.join(staging_dir,
+                                      slave_utils.FULL_BUILD_REVISION_FILENAME)
+  WriteRevisionFile(latest_revision_path, build_revision)
 
   return 0
 
