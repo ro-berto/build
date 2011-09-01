@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2006-2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -9,6 +9,7 @@
 """
 
 import optparse
+import os
 import sys
 
 from common import chromium_utils
@@ -67,6 +68,8 @@ def main():
   if options.platform in ('win' 'arm'):
     simultaneous = '-j1'
 
+  os.environ['LD_LIBRARY_PATH'] = os.environ.get('PWD')
+
   if options.testname == 'leak':
     cmd = ['python', 'tools/test.py', '--no-build', '--mode',
            'debug', '--progress', 'verbose', '--timeout', '180',
@@ -77,8 +80,7 @@ def main():
   elif options.testname == 'presubmit':
     cmd = ['python', 'tools/presubmit.py']
   else:
-    cmd = ['LD_LIBRARY_PATH=.',
-           'python', 'tools/test.py',
+    cmd = ['python', 'tools/test.py',
            simultaneous,
            '--progress=verbose',
            '--no-build',
