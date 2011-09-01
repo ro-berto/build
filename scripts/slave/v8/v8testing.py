@@ -77,7 +77,8 @@ def main():
   elif options.testname == 'presubmit':
     cmd = ['python', 'tools/presubmit.py']
   else:
-    cmd = ['python', 'tools/test.py',
+    cmd = ['LD_LIBRARY_PATH=.',
+           'python', 'tools/test.py',
            simultaneous,
            '--progress=verbose',
            '--no-build',
