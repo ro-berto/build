@@ -13,21 +13,22 @@
 
 <div class="Announcement">
 
-<iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://nativeclient-status.appspot.com/current"></iframe>
+<iframe id="tree_status" width="100%" height="44" frameborder="0" scrolling="no" src="http://nativeclient-status.appspot.com/current"></iframe>
 
 <center style="padding: 0 7px">
   <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
     <tr>
       <td width="23%">
         <table valign="top" width="100%">
-          <tr><td><h3>NativeClient (main)</h3></td></tr>
+          <tr><td><h3 id="project_title">NativeClient</h3></td></tr>
           <tr>
             <td style="text-align: right;">
               <b>Controls:</b>
             </td>
             <td>
-              <a href="http://nativeclient-status.appspot.com">tree status</a> |
-              <a href="one_line_per_build">manage all</a>
+              <a id="tree_status_link"
+                 href="http://nativeclient-status.appspot.com">tree status</a> |
+              <a href="./one_line_per_build">manage all</a>
             </td>
           </tr>
           <tr>
@@ -35,9 +36,10 @@
               <b>Dashboards:</b>
             </td>
             <td>
-              <a href="http://build.chromium.org/p/client.nacl/stats">
+              <a href="./stats">
                 stats</a> |
-              <a href="http://nativeclient-status.appspot.com/status_viewer">
+              <a id="status_viewer"
+                 href="http://nativeclient-status.appspot.com/status_viewer">
                 tree status history</a>
             </td>
           </tr>
@@ -46,12 +48,14 @@
               <b>Development:</b>
             </td>
             <td>
-              <a href="http://src.chromium.org/viewvc/native_client/trunk/">
+              <a id="source_link"
+                 href="http://src.chromium.org/viewvc/native_client/trunk/">
                 source</a> |
               <a href="http://codereview.chromium.org/">reviews</a> |
               <a href="http://code.google.com/p/nativeclient/issues/list">
                 bugs</a> |
-              <a href="http://code.google.com/p/nativeclient">www</a>
+              <a id="www_link"
+                 href="http://code.google.com/p/nativeclient">www</a>
             </td>
           </tr>
           <tr>
@@ -78,9 +82,9 @@
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
               <a href="./waterfall/help">customize</a> |
-              <a href="../client.nacl/waterfall">waterfall</a> |
-              <a href="../client.nacl/waterfall?show_events=true&failures_only=true">failures</a> |
-              <a href="../client.nacl/console">console</a>
+              <a href="./waterfall">waterfall</a> |
+              <a href="./waterfall?show_events=true&failures_only=true">failures</a> |
+              <a href="./console">console</a>
             </td>
           </tr>
           <tr>
@@ -88,14 +92,22 @@
                <b>Waterfalls:</b>
             </td>
             <td colspan="2">
-              <a>NativeClient</a> |
-              <a href="../client.nacl.toolchain/">Toolchain</a> |
-              <a href="../client.nacl.chrome/">Chrome&nbsp;Integration</a> |
-              <a href="../client.nacl.ppapi/">PPAPI&nbsp;Integration</a> |
-              <a href="../client.nacl.ports/">NaCl&nbsp;Ports</a> |
-              <a href="../client.nacl.sdk/">SDK</a> |
-              <a href="../tryserver.nacl/">Trybots</a> |
-              <a href="../client.nacl.branch.irt/">Branch&nbsp;IRT</a>
+              <a name="menu1" id="NativeClient"
+                 href="../client.nacl/">NativeClient</a> |
+              <a name="menu1" id="NativeClientToolchain"
+                 href="../client.nacl.toolchain/">Toolchain</a> |
+              <a name="menu1" id="NativeClientChrome"
+                 href="../client.nacl.chrome/">Chrome&nbsp;Integration</a> |
+              <a name="menu1" id="NativeClientPPAPI"
+                 href="../client.nacl.ppapi/">PPAPI&nbsp;Integration</a> |
+              <a name="menu1" id="NativeClientPorts"
+                 href="../client.nacl.ports/">NaCl&nbsp;Ports</a> |
+              <a name="menu1" id="NaitveClientSDK"
+                 href="../client.nacl.sdk/">SDK</a> |
+              <a name="menu1" id="NativeClientTryServer"
+                 href="../tryserver.nacl/">Trybots</a> |
+              <a name="menu1" id="NativeClientBranchIRT"
+                 href="../client.nacl.branch.irt/">Branch&nbsp;IRT</a>
             </td>
           </tr>
         </table>
@@ -105,102 +117,81 @@
       <td>
       </td>
       <td width="72%">
-        <table width="100%">
+        <table width="100%" id ="dashboard">
           <script language="javascript">
-            var raw_flavors = [
-              ["Windows newlib", [
-                "xp-newlib-opt",
-                "vista-64-newlib-dbg",
-                "vista-64-newlib-opt",
-                "xp-bare-newlib-opt",
-                "win7-32-bare-newlib-opt",
-                "win7-64-bare-newlib-opt",
-              ]],
-              ["Windows glibc", [
-                "xp-glibc-opt",
-                "win7-64-glibc-dbg",
-                "win7-64-glibc-opt",
-                "xp-bare-glibc-opt",
-                "win7-32-bare-glibc-opt",
-                "win7-64-bare-glibc-opt",
-              ]],
-              ["Mac", [
-                "mac10.5-newlib-opt",
-                "mac10.5-glibc-opt",
-                "mac10.6-newlib-opt",
-                "mac10.6-glibc-opt"
-              ]],
-              ["Lucid-32", [
-                "lucid-32-newlib-dbg",
-                "lucid-32-newlib-opt",
-                "lucid-32-glibc-dbg",
-                "lucid-32-glibc-opt",
-                "lucid-32-bare-newlib-opt",
-              ]],
-              ["Lucid-64", [
-                "lucid-64-newlib-dbg",
-                "lucid-64-newlib-opt",
-                "lucid-64-glibc-dbg",
-                "lucid-64-glibc-opt",
-                "lucid-64-bare-newlib-opt"
-              ]],
-              ["Arm", [
-                "lucid_64-newlib-arm_qemu-pnacl-dbg",
-                "lucid_64-newlib-arm_qemu-pnacl-opt",
-                "jaunty_32-newlib-arm_hw-pnacl-dbg",
-                "jaunty_32-newlib-arm_hw-pnacl-opt"
-              ]],
-              ["PNaCl", [
-                "lucid_64-newlib-x86_32-pnacl",
-                "lucid_64-newlib-x86_64-pnacl",
-                "lucid_64-newlib-arm_qemu-pnacl-spec",
-                "lucid_64-newlib-x86_32-pnacl-spec",
-                "lucid_64-newlib-x86_64-pnacl-spec",
-              ]],
-              ["Other", [
-                "karmic64-valgrind",
-                "lucid-64-newlib-dbg-valgrind",
-                "lucid-64-glibc-dbg-valgrind",
-                "lucid_64-newlib-x86_32-spec",
-                "lucid_64-newlib-x86_64-spec",
-              ]],
-              ["Coverage", [
-                "mac10.6-newlib-coverage",
-                "lucid-64-32-newlib-coverage",
-                "lucid-64-64-newlib-coverage",
-                "xp-newlib-coverage"
-              ]],
-            ];
-            var flavors = [];
-            for(var i in raw_flavors) {
-              var row = Array();
-              for(var j in raw_flavors[i][1]) {
-                row.push("builder=" + raw_flavors[i][1][j]);
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+              if (request.readyState != 4) return;
+              if (request.status !=200) alert('Unable to load watefall json!');
+              var data = eval('(' + request.responseText + ')');
+
+              // Setup waterfall name.
+              document.getElementById(
+                  'project_title').innerHTML = data.project.projectName;
+
+              // Disable waterfall links to this page.
+              var waterfall_links = document.getElementsByName('menu1');
+              for (var i = 0; i < waterfall_links.length; i++) {
+                if (waterfall_links[i].id == data.project.projectName) {
+                  waterfall_links[i].href = null;
+                  waterfall_links[i].style.color = 'gray';
+                }
               }
-              flavors.push([raw_flavors[i][0], row.join("&")]);
-            }
 
-            var bar = "./horizontal_one_box_per_builder"
-            var waterfall = "./waterfall"
+              // Switch tree status to the relevant instance.
+              var tree_status_link = document.getElementById('tree_status_link');
+              var source_link = document.getElementById('source_link');
+              var www_link = document.getElementById('www_link');
+              if (data.project.projectName == 'NativeClientPorts') {
+                tree_status_link.href = 'https://naclports-status.appspot.com/';
+                source_link.href = 'http://code.google.com/p/naclports/source/browse/#svn/trunk';
+                www_link.href = 'http://code.google.com/p/naclports';
+              } else if (data.project.projectName == 'NativeClientSDK') {
+                tree_status_link.href = 'https://naclsdk-status.appspot.com/';
+                source_link.href = 'http://code.google.com/p/nativeclient-sdk/source/browse/#svn/trunk';
+                www_link.href = 'http://code.google.com/p/nativeclient-sdk';
+              } else if (data.project.projectName == 'NativeClientPPAPI') {
+                tree_status_link.href = 'https://nativeclient-status.appspot.com/';
+                source_link.href = 'http://src.chromium.org/viewvc/chrome/trunk/src/ppapi/';
+                www_link.href = 'http://code.google.com/p/nativeclient';
+              } else {
+                tree_status_link.href = 'https://nativeclient-status.appspot.com/';
+                source_link.href = 'http://src.chromium.org/viewvc/native_client/trunk/';
+                www_link.href = 'http://code.google.com/p/nativeclient';
+              }
+              document.getElementById(
+                  'tree_status').src = tree_status_link.href + 'current';
+              document.getElementById(
+                  'status_viewer').href = tree_status_link.href + 'status_viewer';
 
-            bar = '../client.nacl/' + bar
-            waterfall = '../client.nacl/' + waterfall
-
-            function GetUrl(type, content) {
-              return type + "?" + content + "&reload=30";
-            }
-
-            function DisplayBar(content, name) {
-              document.write("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
-            }
-
-            function DisplayBarAll(content, name) {
-              document.write("<tr><td><a href='" + waterfall + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
-            }
-
-            for(var i in flavors) {
-              DisplayBar(flavors[i][1], flavors[i][0]);
-            }
+              // Add dashboard.
+              var flavors = {};
+              for (var i in data.builders) {
+                var category = data.builders[i].category.split('|')[0];
+                if (!(category in flavors)) flavors[category] = [];
+                flavors[category].push('builder=' + i);
+              }
+              var bar = "./horizontal_one_box_per_builder"
+              var waterfall = "./waterfall"
+              function GetUrl(type, content) {
+                return type + "?" + content + "&reload=30";
+              }
+              function DisplayBar(content, name) {
+                var dash = document.getElementById('dashboard');
+                dash.innerHTML += ("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
+              }
+              var order = [];
+              for (var i in flavors) {
+                order.push(i);
+              }
+              order.sort();
+              for (var i = 0; i < order.length; i++) {
+                DisplayBar(flavors[order[i]].join('&'),
+                           order[i].replace(/^[0-9]+/, ''));
+              }
+            };
+            request.open('GET', './json', true);
+            request.send(null);
           </script>
         </table>
         </td></tr></table>
