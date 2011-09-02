@@ -170,8 +170,8 @@ def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
   # Write out the revision number so we can figure it out in extract_build.py.
-  build_revision_path = os.path.join(build_dir,
-                                     slave_utils.FULL_BUILD_REVISION_FILENAME)
+  build_revision_path = os.path.join(
+      build_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME)
   WriteRevisionFile(build_revision_path, build_revision)
 
   zip_file_name = 'full-build-%s' % chromium_utils.PlatformName()
@@ -250,8 +250,8 @@ def archive(options, args):
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision
   # without downloading tarballs.
-  latest_revision_path = os.path.join(staging_dir,
-                                      slave_utils.FULL_BUILD_REVISION_FILENAME)
+  latest_revision_path = os.path.join(
+      staging_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME)
   WriteRevisionFile(latest_revision_path, build_revision)
 
   return 0

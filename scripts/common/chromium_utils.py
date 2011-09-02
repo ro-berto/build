@@ -68,6 +68,11 @@ def PlatformName():
   raise NotImplementedError('Unknown platform "%s".' % sys.platform)
 
 
+# Name of the file (inside the packaged build) containing revision number
+# of that build. Also used for determining the latest packaged build.
+FULL_BUILD_REVISION_FILENAME = 'FULL_BUILD_REVISION'
+
+
 # GetParentClass allows a class instance to find its parent class using Python's
 # inspect module.  This allows a class instantiated from a module to access
 # their parent class's methods even after the containing module has been

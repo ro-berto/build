@@ -23,11 +23,6 @@ import config
 class PageHeapError(Exception): pass
 
 
-# Name of the file (inside the packaged build) containing revision number
-# of that build.
-FULL_BUILD_REVISION_FILENAME = 'FULL_BUILD_REVISION'
-
-
 # Cache the path to gflags.exe.
 _gflags_exe = None
 

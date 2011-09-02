@@ -418,7 +418,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     elif factory_properties.get("needs_drmemory"):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_DRMEMORY]
 
-    if factory_properties.get("lkgr"):
+    if factory_properties.get("safesync_url"):
+      self._solutions[0].safesync_url = factory_properties.get("safesync_url")
+    elif factory_properties.get("lkgr"):
       self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
 
     tests_for_build = [
