@@ -258,6 +258,18 @@ class Master(object):
     try_job_port = 9023
     svn_url = None
 
+  class NativeClientLLVM(_NaClBase):
+    project_name = 'NativeClientLLVM'
+    master_port = 9022
+    slave_port = 9048
+    master_port_alt = 9049
+
+  class NativeClientLLVMMerge(_NaClBase):
+    project_name = 'NativeClientLLVMMerge'
+    master_port = 9022
+    slave_port = 9048
+    master_port_alt = 9049
+
   ## Others
 
   class O3D(_Base):
