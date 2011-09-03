@@ -36,6 +36,8 @@ class CbuildbotFactory(object):
       crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
       dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
+      factory: a factory with pre-existing steps to extend rather than start
+          fresh.  Allows composing.
   """
   _default_git_base = 'http://gerrit.chromium.org/gerrit/p/chromiumos'
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
@@ -51,7 +53,8 @@ class CbuildbotFactory(object):
                variant=None, is_master=False, branch='master', old_style=False,
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite,
-               dry_run=False):
+               dry_run=False, chrome_root=None, factory=None,
+               slave_manager=True):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -62,8 +65,13 @@ class CbuildbotFactory(object):
     self.type = type
     self.is_master = is_master
     self.dry_run = dry_run
+    self.chrome_root = chrome_root
+    self.slave_manager = slave_manager
 
-    self.f_cbuild = chromeos_build_factory.BuildFactory()
+    if factory:
+      self.f_cbuild = factory
+    else:
+      self.f_cbuild = chromeos_build_factory.BuildFactory()
     self.add_boiler_plate_steps()
 
     if type == 'cbuildbot':
@@ -170,12 +178,13 @@ class CbuildbotFactory(object):
     * clearing of chromite[& crostools]
     * clean checkout of chromite[& crostools]
     """
-    build_slave_sync = ['gclient', 'sync']
-    self.f_cbuild.addStep(shell.ShellCommand,
-                          command=build_slave_sync,
-                          description='Sync buildbot slave files',
-                          workdir='/b',
-                          timeout=300)
+    if self.slave_manager:
+      build_slave_sync = ['gclient', 'sync']
+      self.f_cbuild.addStep(shell.ShellCommand,
+                            command=build_slave_sync,
+                            description='Sync buildbot slave files',
+                            workdir='/b',
+                            timeout=300)
 
     self._git_clear_and_checkout(self.chromite_repo)
     if self.crostools_repo:
@@ -234,6 +243,9 @@ class CbuildbotFactory(object):
       description = '%s_%s' % (name, description_suffix)
     else:
       description = name
+
+    if self.chrome_root:
+      cbuild_cmd.append('--chrome_root=%s' % self.chrome_root)
 
     cbuild_cmd += params.split()
     self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
@@ -322,18 +334,25 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
       crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
       dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
+      chrome_root: directory to use for chrome.
+      factory: a factory with pre-existing steps to extend rather than start
+          fresh.  Allows composing.
   """
   def __init__(self, buildroot='/b/cbuild', params='', timeout=9000,
                is_master=False, branch='master', chrome_rev_stages=None,
                crostools_repo=CbuildbotFactory._default_crostools,
                chromite_repo=CbuildbotFactory._default_chromite,
-               dry_run=False):
+               dry_run=False, chrome_root=None, factory=None,
+               slave_manager=True):
     CbuildbotFactory.__init__(self, type=CbuildbotFactory.CHROME_CBUILDBOT_TYPE,
                               board=None,
                               buildroot=buildroot, is_master=is_master,
                               crostools_repo=crostools_repo,
                               chromite_repo=chromite_repo,
-                              dry_run=dry_run)
+                              dry_run=dry_run,
+                              chrome_root=chrome_root,
+                              factory=factory,
+                              slave_manager=slave_manager)
     # TODO(sosa): Remove legacy support.
     if chrome_rev_stages:
       for chrome_rev in chrome_rev_stages:

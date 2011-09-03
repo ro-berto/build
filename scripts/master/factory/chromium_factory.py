@@ -341,7 +341,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         f.AddHeapcheckTest(test_name)
         continue
 
-
     # PyAuto functional tests.
     if R('pyauto_functional_tests'):
       f.AddPyAutoFunctionalTest('pyauto_functional_tests', suite='CONTINUOUS',
@@ -403,6 +402,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # isn't the last thing to run.
     if R('annotated_steps'): f.AddAnnotatedSteps(fp)
 
+  @property
+  def build_dir(self):
+    return self._build_dir
 
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
