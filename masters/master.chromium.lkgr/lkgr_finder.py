@@ -216,7 +216,7 @@ def CollateRevisionHistory(builds):
           result = steps[step]['results'][0]
           if type(result) == list:
             result = result[0]
-          if result and str(result) != '0':
+          if result and str(result) not in ('0', '1'):
             reasons.append('Step %s failed' % step)
       revision_history.setdefault(revision, {})
       if reasons:
