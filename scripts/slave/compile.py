@@ -171,6 +171,7 @@ def set_up_xcodebuild_filter(options, bot_directory):
     'PBXCp',
     'PhaseScriptExecution',
     'ProcessInfoPlistFile',
+    'Preprocess',
     'ProcessPCH',
     'ProcessPCH++',
     'Strip',
