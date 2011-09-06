@@ -89,7 +89,7 @@ F('f_skia_mac_fixed_debug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform=skia_factory.TARGET_PLATFORM_MAC,
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
-    gm_image_subdir='base-MacPro-fixed',
+    gm_image_subdir='base-macmini-fixed',
     perf_output_basedir=None, # no perf measurement for debug builds
     builder_name='Skia_Mac_Fixed_Debug',
     ).Build())
@@ -99,7 +99,7 @@ F('f_skia_mac_fixed_nodebug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform=skia_factory.TARGET_PLATFORM_MAC,
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
-    gm_image_subdir='base-MacPro-fixed',
+    gm_image_subdir='base-macmini-fixed',
     perf_output_basedir=perf_output_basedir_mac,
     builder_name='Skia_Mac_Fixed_NoDebug',
     ).Build())
@@ -109,7 +109,7 @@ F('f_skia_mac_float_debug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform=skia_factory.TARGET_PLATFORM_MAC,
     configuration='Debug',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
-    gm_image_subdir='base',
+    gm_image_subdir='base-macmini',
     perf_output_basedir=None, # no perf measurement for debug builds
     builder_name='Skia_Mac_Float_Debug',
     ).Build())
@@ -119,7 +119,7 @@ F('f_skia_mac_float_nodebug', skia_factory.SkiaFactory(
     build_subdir='Skia', target_platform=skia_factory.TARGET_PLATFORM_MAC,
     configuration='Release',
     environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
-    gm_image_subdir='base',
+    gm_image_subdir='base-macmini',
     perf_output_basedir=perf_output_basedir_mac,
     builder_name='Skia_Mac_Float_NoDebug',
     ).Build())
