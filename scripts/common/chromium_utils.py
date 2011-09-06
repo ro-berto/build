@@ -572,7 +572,7 @@ def RunAndPrintDots(function):
   return Hook
 
 
-def RunCommand(command, parser_func=None, **kwargs):
+def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
   """Runs the command list, printing its output and returning its exit status.
 
   Prints the given command (which should be a list of one or more strings),
@@ -582,6 +582,10 @@ def RunCommand(command, parser_func=None, **kwargs):
   and stderr directly.  If the func is given, each line of the subprocess's
   stdout/stderr is passed to the func and then written to stdout.
 
+  If filter_func is given, all output is run through the filter a line
+  at a time before it is written to stdout.  The filter_func should return what
+  is to be written. None can be returned to suppress the line.
+
   We do not currently support parsing stdout and stderr independent of
   each other.  In previous attempts, this led to output ordering issues.
   By merging them when either needs to be parsed, we avoid those ordering
@@ -590,7 +594,7 @@ def RunCommand(command, parser_func=None, **kwargs):
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
-  def ProcessRead(readfh, writefh, parser_func=None):
+  def ProcessRead(readfh, writefh, parser_func=None, filter_func=None):
     last_flushed_at = time.time()
     writefh.flush()
 
@@ -605,26 +609,34 @@ def RunCommand(command, parser_func=None, **kwargs):
       if in_byte == '\n':
         if parser_func:
           parser_func(in_line.strip())
+        if filter_func:
+          in_line = filter_func(in_line)
         # Python on Windows writes the buffer only when it reaches 4k.  This is
         # not fast enough.  Flush each 10 seconds instead.  Also, we only write
         # and flush no more often than 10 seconds to avoid flooding the master
         # with network traffic from unbuffered output.
-        writefh.write(in_line)
-        if (time.time() - last_flushed_at) > 10:
-          last_flushed_at = time.time()
-          writefh.flush()
+        if not in_line is None:
+          writefh.write(in_line)
+          if (time.time() - last_flushed_at) > 10:
+            last_flushed_at = time.time()
+            writefh.flush()
         in_line = ''
       in_byte = readfh.read(1)
 
     # Write remaining data and flush on EOF.
-    writefh.write(in_line)
+    if parser_func:
+      parser_func(in_line.strip())
+    if filter_func:
+      in_line = filter_func(in_line)
+    if not in_line is None:
+      writefh.write(in_line)
     writefh.flush()
 
   # Print the given command (which should be a list of one or more strings).
   print '\n' + subprocess.list2cmdline(command) + '\n',
   sys.stdout.flush()
   sys.stderr.flush()
-  if not parser_func:
+  if not (parser_func or filter_func):
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
@@ -636,7 +648,8 @@ def RunCommand(command, parser_func=None, **kwargs):
                             stderr=subprocess.STDOUT, bufsize=0, **kwargs)
     # Launch and start the reader thread.
     thread = threading.Thread(target=ProcessRead,
-                              args=(proc.stdout, sys.stdout, parser_func))
+                              args=(proc.stdout, sys.stdout,
+                                    parser_func, filter_func))
     thread.start()
     # Wait for the reader thread to complete (implies EOF reached on stdout/
     # stderr pipes).
