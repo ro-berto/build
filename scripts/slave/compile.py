@@ -352,7 +352,7 @@ def common_make_settings(
   and for the mac make build.
   """
   # TODO(thakis): Add goma-clang support to the make build.
-  assert compiler in (None, 'clang', 'goma')
+  assert compiler in (None, 'clang', 'goma', 'asan')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -375,6 +375,25 @@ def common_make_settings(
       # bots, is over NFS.  This is intentional.  Talk to thestig or
       # mmoss if you have questions.
       ccache = 'ccache '
+
+    if compiler == 'asan':
+      asan_dir = os.path.abspath(os.path.join(
+          slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
+          'third_party', 'asan'))
+      asan_bin = os.path.join(asan_dir, 'asan_clang_Linux', 'bin')
+      clang = os.path.join(asan_bin, 'clang')
+      clangpp = os.path.join(asan_bin, 'clang++')
+      env['ASAN'] = asan_dir
+      env['ASAN_BIN'] = asan_bin
+      env['CC'] = '%s -fasan -w' % clang
+      env['CXX'] = '%s -fasan -w' % clangpp
+      command.append('CC=' + env['CC'])
+      command.append('CXX=' + env['CXX'])
+      command.append('CC.host=' + env['CC'])
+      command.append('CXX.host=' + env['CXX'])
+      command.append('LINK.host=' + env['CXX'])
+      command.append('-j%d' % jobs)
+      return
 
     # Setup crosstool environment variables.
     if crosstool:
