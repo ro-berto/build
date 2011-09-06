@@ -193,6 +193,7 @@ def set_up_xcodebuild_filter(options, bot_directory):
     prefixes_to_suppress = (
       'clang: warning: argument unused during compilation: \'-F',
       'clang: warning: argument unused during compilation: \'-I',
+      'clang: warning: argument unused during compilation: \'-include ',
       'clang: warning: argument unused during compilation: \'-isysroot /Developer/SDKs/MacOSX10.5.sdk\'',
     )
 
