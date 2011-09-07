@@ -215,10 +215,8 @@ class FactoryCommands(object):
   def GetTestCommand(self, executable, arg_list=None):
     cmd = [self._python, self._test_tool,
            '--target', self._target,
-           '--build-dir', self._build_dir]
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    cmd.append(self.GetExecutableName(executable))
+           '--build-dir', self._build_dir,
+           self.GetExecutableName(executable)]
     if arg_list is not None:
       cmd.extend(arg_list)
     return cmd
