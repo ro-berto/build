@@ -86,7 +86,7 @@ def _get_svn_revision(in_directory):
   command_line = ["svn", "info"]
   if not os.path.exists(os.path.join(in_directory, '.svn')):
     if _is_git_directory(in_directory):
-      command_line = ["git"] + command_line
+      return _get_git_revision(in_directory)
     else:
       return ""
 
@@ -101,6 +101,20 @@ def _get_svn_revision(in_directory):
   except StopIteration:
     return ""
   return ""
+
+
+def _get_git_revision(in_directory):
+  """Returns the git hash tag for the given directory.
+
+  Args:
+    in_directory: The directory where git is to be run.
+  """
+  command_line = ['git', 'log', '-1', '--pretty=oneline']
+  output = subprocess.Popen(command_line,
+                            cwd=in_directory,
+                            shell=(sys.platform == 'win32'),
+                            stdout=subprocess.PIPE).communicate()[0]
+  return output[0:40]
 
 
 def generate_test_timings_trie(individual_test_timings):
