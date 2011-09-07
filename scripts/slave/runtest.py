@@ -496,6 +496,14 @@ def main():
   option_parser.add_option("", "--test-results-server", default='',
                            help="The test results server to upload the "
                                 "results.")
+  option_parser.add_option('--build-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
+  option_parser.add_option('--factory-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
   options, args = option_parser.parse_args()
 
   if options.run_shell_script and options.run_python_script:
@@ -506,6 +514,9 @@ def main():
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
 
+  # Instruct GTK to use malloc while running ASAN tests.
+  if options.factory_properties.get('asan', False):
+    os.environ['G_SLICE'] = 'always-malloc'
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
