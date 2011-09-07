@@ -188,7 +188,7 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
     'clang: warning: argument unused during compilation: \'-F',
     'clang: warning: argument unused during compilation: \'-I',
     'clang: warning: argument unused during compilation: \'-include ',
-    'clang: warning: argument unused during compilation: \'-isysroot /Developer/SDKs/MacOSX10.5.sdk\'',
+    'clang: warning: argument unused during compilation: \'-isysroot ',
   )
 
   def __init__(self, full_log_file=None):
