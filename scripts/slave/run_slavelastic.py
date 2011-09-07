@@ -128,7 +128,12 @@ class Manifest():
     elif os.name == 'nt':
       dest_zip = zipfile.ZipFile(self.zipfile_name, 'w')
       for filename in self.files:
-        dest_zip.write(filename)
+        if os.path.isdir(filename):
+          for root, dirs, files in os.walk(filename):
+            for subfile in files:
+              dest_zip.write(subfile)
+        else:
+          dest_zip.write(filename)
       dest_zip.close()
 
   @staticmethod
@@ -139,7 +144,7 @@ class Manifest():
       remove_command = ['del']
     else:
       raise Exception('Unknown OS: %s' % os.name)  # Unreachable
-    p = subprocess.Popen(remove_command + ['swarm_tempfile_*.zip'])
+    p = subprocess.Popen(remove_command + ['swarm_tempfile_*.zip'], shell=True)
     p.wait()
 
   def to_json(self):
@@ -196,7 +201,7 @@ class Manifest():
       # Kill off the x server, just incase
       test_case['tests'].append({
             'test_name': 'Stop X Server forcefully',
-            'action': ['killall', 'Xvfb']
+            'action': ['killall', '-q', 'Xvfb']
       })
       # Start up the x server again
       test_case['tests'].append({
