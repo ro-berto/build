@@ -11,9 +11,11 @@
   For a list of command-line options, call this script with '--help'.
 """
 
+import datetime
 import optparse
 import os
 import re
+import shlex
 import shutil
 import socket
 import sys
@@ -141,16 +143,9 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
           command.insert(0, "pump")
 
 
-def set_up_xcodebuild_filter(options, bot_directory):
-  """Set up the filter for xcodebuild and return it.
-  """
-  no_filter_path = os.path.join(bot_directory, 'no_xcodebuild_filter')
-  if os.path.exists(no_filter_path):
-    print 'NOTE: "%s" exists, output is unfiltered' % no_filter_path
-    return None
-
-  import datetime
-  import shlex
+# RunCommandFilter for xcodebuild
+class XcodebuildFilter(chromium_utils.RunCommandFilter):
+  """xcodebuild filter"""
 
   section_headers = (
     '=== BUILD AGGREGATE TARGET',
@@ -189,41 +184,32 @@ def set_up_xcodebuild_filter(options, bot_directory):
 
   # clang + ccache cause extra noise, kill that off.
   # TODO: When clang/ccache interactions are fixed, drop this.
-  prefixes_to_suppress = None
-  if options.compiler == 'clang' and options.ccache_symlinks:
-    prefixes_to_suppress = (
-      'clang: warning: argument unused during compilation: \'-F',
-      'clang: warning: argument unused during compilation: \'-I',
-      'clang: warning: argument unused during compilation: \'-include ',
-      'clang: warning: argument unused during compilation: \'-isysroot /Developer/SDKs/MacOSX10.5.sdk\'',
-    )
+  prefixes_to_suppress = (
+    'clang: warning: argument unused during compilation: \'-F',
+    'clang: warning: argument unused during compilation: \'-I',
+    'clang: warning: argument unused during compilation: \'-include ',
+    'clang: warning: argument unused during compilation: \'-isysroot /Developer/SDKs/MacOSX10.5.sdk\'',
+  )
 
-  # Write the complete log to disk in case it's needed.
-  full_log_path = os.path.join(bot_directory, 'full_xcodebuild_log.txt')
-  full_log = open(full_log_path, 'w')
-  now = datetime.datetime.now()
-  full_log.write('Build started ' + now.isoformat() + '\n\n\n')
-  print 'NOTE: xcodebuild output filtered, full log at: "%s"' % full_log_path
+  def __init__(self, full_log_file=None):
+    # super
+    chromium_utils.RunCommandFilter.__init__(self)
+    self.awaiting_blank = False
+    self.last_lines_dropped = ''
+    self.full_log_file = full_log_file
 
-  global awaiting_blank
-  awaiting_blank = False
-  global last_lines_dropped
-  last_lines_dropped = ''
-
-  # The actual filter function.
-  def xcodebuild_filter(a_line):
-    global awaiting_blank
-    global last_lines_dropped
+  def FilterLine(self, a_line):
     # Log it
-    full_log.write(a_line)
+    if self.full_log_file:
+      self.full_log_file.write(a_line)
     # Look for headers.
-    if a_line.startswith(section_headers):
-      awaiting_blank = False
-      last_lines_dropped = ''
+    if a_line.startswith(self.section_headers):
+      self.awaiting_blank = False
+      self.last_lines_dropped = ''
       return a_line
-    if a_line.startswith(step_headers):
-      awaiting_blank = True
-      last_lines_dropped = ''
+    if a_line.startswith(self.step_headers):
+      self.awaiting_blank = True
+      self.last_lines_dropped = ''
       # Just report the step and the output file (first two things), helps
       # makes the warnings/errors stick out more.
       parsed = shlex.split(a_line)
@@ -231,34 +217,31 @@ def set_up_xcodebuild_filter(options, bot_directory):
         return '____%s %s\n' % (parsed[0], parsed[1])
       return '____' + a_line
     # Time to stop throwing things away?
-    if awaiting_blank:
+    if self.awaiting_blank:
       if a_line == '\n':
-        awaiting_blank = False
+        self.awaiting_blank = False
       else:
-        last_lines_dropped += a_line
+        self.last_lines_dropped += a_line
       return None
     # Is it a line that is just noise in the logs?
-    if prefixes_to_suppress and a_line.startswith(prefixes_to_suppress):
+    if a_line.startswith(self.prefixes_to_suppress):
       # These don't go into last_lines_dropped because they are the stupid
       # clang+ccache lines, and this keeps the actual tool invoked in
       # last_lines_dropped.
       return None
-    if a_line in lines_to_eat:
+    if a_line in self.lines_to_eat:
       return None
     # Eat blank lines at this point, they don't help and mess up the last
     # line dropped tracking if real output is triggered.
     if a_line == '\n':
       return None
     # It's a keeper!
-    if last_lines_dropped != '':
+    if self.last_lines_dropped != '':
       # Glue together the last lines dropped and this line. This should get the
       # actual tool invoked with all its arguments into the log.
-      a_line = last_lines_dropped + a_line
-      last_lines_dropped = ''
+      a_line = self.last_lines_dropped + a_line
+      self.last_lines_dropped = ''
     return a_line
-
-  # Return the filter function.
-  return xcodebuild_filter
 
 
 def main_xcode(options, args):
@@ -298,9 +281,19 @@ def main_xcode(options, args):
   # Add on any remaining args
   command.extend(args)
 
-  # Collect the filter before changing directories so we know
-  # where to write out the log file.
-  xcodebuild_filter = set_up_xcodebuild_filter(options, os.getcwd())
+  # Set up the filter before changing directories so the raw build log can
+  # be recorded.
+  xcodebuild_filter = None
+  no_filter_path = os.path.join(os.getcwd(), 'no_xcodebuild_filter')
+  if os.path.exists(no_filter_path):
+    print 'NOTE: "%s" exists, output is unfiltered' % no_filter_path
+  else:
+    full_log_path = os.path.join(os.getcwd(), 'full_xcodebuild_log.txt')
+    full_log = open(full_log_path, 'w')
+    now = datetime.datetime.now()
+    full_log.write('Build started ' + now.isoformat() + '\n\n\n')
+    print 'NOTE: xcodebuild output filtered, full log at: "%s"' % full_log_path
+    xcodebuild_filter = XcodebuildFilter(full_log)
 
   os.chdir(options.build_dir)
 
@@ -320,7 +313,7 @@ def main_xcode(options, args):
 
   # Run the build.
   result = chromium_utils.RunCommand(command, env=env,
-                                     filter_func=xcodebuild_filter)
+                                     filter_obj=xcodebuild_filter)
 
   if options.compiler in ('goma', 'goma-clang'):
     # Always stop the proxy for now to allow in-place update.

@@ -572,7 +572,24 @@ def RunAndPrintDots(function):
   return Hook
 
 
-def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
+class RunCommandFilter(object):
+  """Class that should be subclassed to provide a filter for RunCommand."""
+  def __init__(self):
+    pass
+
+  def FilterLine(self, a_line):
+    """Called for each line of input.  The \n is included on a_line.  Should
+    return what is to be recorded as the output for this line.  A result of
+    None suppresses the line."""
+    return a_line
+
+  def FilterDone(self):
+    """Called when the RunCommand is done to allow anything that needs to be
+    done when the command completes."""
+    pass
+
+
+def RunCommand(command, parser_func=None, filter_obj=None, **kwargs):
   """Runs the command list, printing its output and returning its exit status.
 
   Prints the given command (which should be a list of one or more strings),
@@ -582,9 +599,8 @@ def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
   and stderr directly.  If the func is given, each line of the subprocess's
   stdout/stderr is passed to the func and then written to stdout.
 
-  If filter_func is given, all output is run through the filter a line
-  at a time before it is written to stdout.  The filter_func should return what
-  is to be written. None can be returned to suppress the line.
+  If filter_obj is given, all output is run through the filter a line
+  at a time before it is written to stdout.
 
   We do not currently support parsing stdout and stderr independent of
   each other.  In previous attempts, this led to output ordering issues.
@@ -594,7 +610,7 @@ def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
-  def ProcessRead(readfh, writefh, parser_func=None, filter_func=None):
+  def ProcessRead(readfh, writefh, parser_func=None, filter_obj=None):
     last_flushed_at = time.time()
     writefh.flush()
 
@@ -609,8 +625,8 @@ def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
       if in_byte == '\n':
         if parser_func:
           parser_func(in_line.strip())
-        if filter_func:
-          in_line = filter_func(in_line)
+        if filter_obj:
+          in_line = filter_obj.FilterLine(in_line)
         # Python on Windows writes the buffer only when it reaches 4k.  This is
         # not fast enough.  Flush each 10 seconds instead.  Also, we only write
         # and flush no more often than 10 seconds to avoid flooding the master
@@ -626,8 +642,10 @@ def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
     # Write remaining data and flush on EOF.
     if parser_func:
       parser_func(in_line.strip())
-    if filter_func:
-      in_line = filter_func(in_line)
+    if filter_obj:
+      if in_line != '':
+        in_line = filter_obj.FilterLine(in_line)
+      filter_obj.FilterDone()
     if not in_line is None:
       writefh.write(in_line)
     writefh.flush()
@@ -636,7 +654,7 @@ def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
   print '\n' + subprocess.list2cmdline(command) + '\n',
   sys.stdout.flush()
   sys.stderr.flush()
-  if not (parser_func or filter_func):
+  if not (parser_func or filter_obj):
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
@@ -649,7 +667,7 @@ def RunCommand(command, parser_func=None, filter_func=None, **kwargs):
     # Launch and start the reader thread.
     thread = threading.Thread(target=ProcessRead,
                               args=(proc.stdout, sys.stdout,
-                                    parser_func, filter_func))
+                                    parser_func, filter_obj))
     thread.start()
     # Wait for the reader thread to complete (implies EOF reached on stdout/
     # stderr pipes).
