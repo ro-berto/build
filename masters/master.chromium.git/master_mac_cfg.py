@@ -48,33 +48,33 @@ F('rel', mac().ChromiumGITFactory(
     options=['--', '-target', 'chromium_builder_tests'],
     factory_properties={'trigger': 'mac_rel_trigger'}))
 
-##
-## Mac Rel testers
-##
-#B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
-#F('rel_unit_1', mac().ChromiumGITFactory(
-#  slave_type='Tester',
-#  build_url=rel_archive,
-#  tests=['base',
-#         'browser_tests',
-#         'cacheinvalidation',
-#         'crypto',
-#         'googleurl',
-#         'gpu',
-#         'jingle',
-#         'media',
-#         'nacl_integration',
-#         'nacl_sandbox',
-#         'nacl_ui',
-#         'printing',
-#         'remoting',
-#         'safe_browsing',
-#         'ui'],
-#  factory_properties={'generate_gtest_json': True,
-#                      'ui_total_shards': 3, 'ui_shard_index': 1,
-#                      'browser_total_shards': 3, 'browser_shard_index': 1,})
-#)
 #
+# Mac Rel testers
+#
+B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
+F('rel_unit_1', mac().ChromiumGITFactory(
+  slave_type='Tester',
+  build_url=rel_archive,
+  tests=['base',
+         'browser_tests',
+         'cacheinvalidation',
+         'crypto',
+         'googleurl',
+         'gpu',
+         'jingle',
+         'media',
+         'nacl_integration',
+         'nacl_sandbox',
+         'nacl_ui',
+         'printing',
+         'remoting',
+         'safe_browsing',
+         'ui'],
+  factory_properties={'generate_gtest_json': True,
+                      'ui_total_shards': 3, 'ui_shard_index': 1,
+                      'browser_total_shards': 3, 'browser_shard_index': 1,})
+)
+
 #B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger')
 #F('rel_unit_2', mac().ChromiumGITFactory(
 #  slave_type='Tester',
