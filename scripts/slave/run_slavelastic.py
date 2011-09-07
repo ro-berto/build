@@ -129,10 +129,12 @@ class Manifest():
       dest_zip = zipfile.ZipFile(self.zipfile_name, 'w')
       for filename in self.files:
         if os.path.isdir(filename):
-          for root, dirs, files in os.walk(filename):
+          for root, _, files in os.walk(filename):
             for subfile in files:
-              dest_zip.write(subfile)
+              print 'Zipping %s' % os.path.join(root, subfile)
+              dest_zip.write(os.path.join(root, subfile))
         else:
+          print 'Zipping %s' % filename
           dest_zip.write(filename)
       dest_zip.close()
 
