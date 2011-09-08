@@ -38,6 +38,9 @@ class CbuildbotFactory(object):
       dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
       factory: a factory with pre-existing steps to extend rather than start
           fresh.  Allows composing.
+      chromite_patch: a url and ref pair (dict) to patch the checked out
+          chromite. Fits well with a single change from a codereview, to use
+          on one or more builders for realistic testing, or experiments.
   """
   _default_git_base = 'http://gerrit.chromium.org/gerrit/p/chromiumos'
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
@@ -54,10 +57,13 @@ class CbuildbotFactory(object):
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite,
                dry_run=False, chrome_root=None, factory=None,
-               slave_manager=True):
+               slave_manager=True, chromite_patch=None):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
+    self.chromite_patch = chromite_patch
+    if chromite_patch:
+      assert ('url' in chromite_patch and 'ref' in chromite_patch)
     self.timeout = timeout
     self.variant = variant
     self.board = board
@@ -126,12 +132,13 @@ class CbuildbotFactory(object):
     # If all sections matched, see if zip truncated a difference
     return len(branch_parts) >= len(version_parts)
 
-  def _git_clear_and_checkout(self, repo):
+  def _git_clear_and_checkout(self, repo, patch=None):
     """
     rm -rf and clone the basename of the repo passed without .git
 
     Args:
       repo: ssh: uri for the repo to be checked out
+      patch: object with url and ref to patch on top
     """
     git_bin = '/usr/bin/git'
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
@@ -164,6 +171,10 @@ class CbuildbotFactory(object):
     else:
       clear_and_clone_cmd += self.branch
 
+    if patch:
+      clear_and_clone_cmd += ('; %s pull %s %s' %
+                              (git_bin, patch['url'], patch['ref']))
+
     msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=WithProperties(clear_and_clone_cmd),
@@ -186,7 +197,7 @@ class CbuildbotFactory(object):
                             workdir='/b',
                             timeout=300)
 
-    self._git_clear_and_checkout(self.chromite_repo)
+    self._git_clear_and_checkout(self.chromite_repo, self.chromite_patch)
     if self.crostools_repo:
       self._git_clear_and_checkout(self.crostools_repo)
 
@@ -343,7 +354,7 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                crostools_repo=CbuildbotFactory._default_crostools,
                chromite_repo=CbuildbotFactory._default_chromite,
                dry_run=False, chrome_root=None, factory=None,
-               slave_manager=True):
+               slave_manager=True, chromite_patch=None):
     CbuildbotFactory.__init__(self, type=CbuildbotFactory.CHROME_CBUILDBOT_TYPE,
                               board=None,
                               buildroot=buildroot, is_master=is_master,
@@ -352,7 +363,8 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                               dry_run=dry_run,
                               chrome_root=chrome_root,
                               factory=factory,
-                              slave_manager=slave_manager)
+                              slave_manager=slave_manager,
+                              chromite_patch=chromite_patch)
     # TODO(sosa): Remove legacy support.
     if chrome_rev_stages:
       for chrome_rev in chrome_rev_stages:
