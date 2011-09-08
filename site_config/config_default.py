@@ -264,12 +264,6 @@ class Master(object):
     slave_port = 9048
     master_port_alt = 9049
 
-  class NativeClientLLVMMerge(_NaClBase):
-    project_name = 'NativeClientLLVMMerge'
-    master_port = 9022
-    slave_port = 9048
-    master_port_alt = 9049
-
   ## Others
 
   class O3D(_Base):

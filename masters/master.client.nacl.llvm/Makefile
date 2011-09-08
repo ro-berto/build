@@ -1,4 +1,4 @@
 # -*- makefile -*-
 
-MASTERPATH := master.client.nacl.llvm.merge
+MASTERPATH := master.client.nacl.llvm
 include ../master-common.mk
