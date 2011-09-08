@@ -52,6 +52,26 @@ time based comparators.
              build = build.getPreviousBuild()
 
 
+Ignore invalid utf-8 strings in logs.
+
+--- third_party/buildbot_7_12/buildbot/status/web/console.py
++++ third_party/buildbot_7_12/buildbot/status/web/console.py
+@@ -891,8 +891,11 @@ class ConsoleStatusResource(HtmlResource):
+             subs["date"] = revision.date
+             comment = revision.comments or ""
+             subs["comments"] = comment.replace('<', '&lt;').replace('>', '&gt;')
+-            comment_quoted = urllib.quote(subs["comments"].encode("utf-8"))
+-
++            # Re-encode to make sure it doesn't throw an encoding error on the
++            # server.
++            comment_quoted = urllib.quote(
++                subs["comments"].decode("utf-8", "ignore").encode(
++                    "ascii", "xmlcharrefreplace"))
+             json += ( "{'revision': '%s', 'date': '%s', 'comments': '%s',"
+                       "'results' : " ) % (subs["revision"], subs["date"],
+                                           comment_quoted)
+
+
 The following patch was ported back from upstream adding log names and URLs to
 the JSON output.
 

@@ -891,8 +891,11 @@ class ConsoleStatusResource(HtmlResource):
             subs["date"] = revision.date
             comment = revision.comments or ""
             subs["comments"] = comment.replace('<', '&lt;').replace('>', '&gt;')
-            comment_quoted = urllib.quote(subs["comments"].encode("utf-8"))
-
+            # Re-encode to make sure it doesn't throw an encoding error on the
+            # server.
+            comment_quoted = urllib.quote(
+                subs["comments"].decode("utf-8", "ignore").encode(
+                    "ascii", "xmlcharrefreplace"))
             json += ( "{'revision': '%s', 'date': '%s', 'comments': '%s',"
                       "'results' : " ) % (subs["revision"], subs["date"],
                                           comment_quoted)
