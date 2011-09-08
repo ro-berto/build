@@ -147,10 +147,10 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
 class XcodebuildFilter(chromium_utils.RunCommandFilter):
   """xcodebuild filter"""
 
-  section_headers = (
-    '=== BUILD AGGREGATE TARGET',
-    '=== BUILD NATIVE TARGET',
-  )
+  section_regex = re.compile('^=== BUILD (NATIVE|AGGREGATE) TARGET (.+) OF '
+                             'PROJECT (.+) WITH CONFIGURATION (.+) ===$')
+  section_replacement = r'====Building \3:\2 (\4)\n'
+
   step_headers = (
     'CompileC',
     'CompileXIB',
@@ -175,7 +175,6 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
   )
   # Put an space on the end of the headers since that is how they should
   # actually appear in the output line.
-  section_headers = tuple([x + ' ' for x in section_headers])
   step_headers = tuple([x + ' ' for x in step_headers])
 
   lines_to_eat = (
@@ -203,10 +202,11 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
     if self.full_log_file:
       self.full_log_file.write(a_line)
     # Look for headers.
-    if a_line.startswith(self.section_headers):
+    section_match = self.section_regex.match(a_line)
+    if section_match:
       self.awaiting_blank = False
       self.last_lines_dropped = ''
-      return a_line
+      return section_match.expand(self.section_replacement)
     if a_line.startswith(self.step_headers):
       self.awaiting_blank = True
       self.last_lines_dropped = ''
