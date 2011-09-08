@@ -48,6 +48,8 @@ the revisions and run the same algorithm.  Since we are only interested in the
 backward.
 """
 
+# The 2 following modules are not present on python 2.5
+# pylint: disable=F0401
 import json
 import multiprocessing
 import optparse
@@ -180,6 +182,8 @@ def VerbosePrint(s):
 def FetchBuildsMain(builder, builds):
   url = '%s/builders/%s/builds/_all' % (BUILDER_URL, urllib2.quote(builder))
   try:
+    # Requires python 2.6
+    # pylint: disable=E1121
     url_fh = urllib2.urlopen(url, None, 60)
     builder_history = json.load(url_fh)
     url_fh.close()
@@ -308,6 +312,8 @@ def PostLKGR(lkgr, password_file, dry):
   params = urllib.urlencode(params)
   print params
   if not dry:
+    # Requires python 2.6
+    # pylint: disable=E1121
     request = urllib2.urlopen(url, params)
     request.close()
   VerbosePrint('Done!')
@@ -373,6 +379,8 @@ def main():
 
   lkgr_url = '%s/lkgr' % REVISIONS_URL
   try:
+    # Requires python 2.6
+    # pylint: disable=E1121
     url_fh = urllib2.urlopen(lkgr_url, None, 60)
     # Fix for git
     lkgr = int(url_fh.read())

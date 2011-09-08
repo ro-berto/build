@@ -4,10 +4,10 @@
 # found in the LICENSE file.
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
-
+from __future__ import with_statement
 import BaseHTTPServer
 import cStringIO
-import json
+import json  # pylint: disable=F0401
 import optparse
 import os
 import platform
@@ -21,6 +21,7 @@ import threading
 import time
 import urllib
 import zipfile
+
 
 DESCRIPTION = """This script takes a slavelastic manifest file, packages it,
 and sends a swarm manifest file to the swarm server.  This is expected to be
@@ -152,6 +153,8 @@ class Manifest():
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
     hostname = socket.gethostbyname(socket.gethostname())
+    # require python 2.6
+    # pylint: disable=E1103
     filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
     startvxfb_filepath = os.path.relpath('startvx_fb.zip', '../..').replace(
         '\\', '/')

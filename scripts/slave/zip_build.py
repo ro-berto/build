@@ -155,8 +155,11 @@ def WriteRevisionFile(path, build_revision):
   """Writes a file containing revision number to given path.
   Replaces the target file in place."""
   try:
+    # Script only works on python 2.6
+    # pylint: disable=E1123
     tmp_revision_file = tempfile.NamedTemporaryFile(
-        mode='w', dir=os.path.dirname(path), delete=False)
+        mode='w', dir=os.path.dirname(path),
+        delete=False)
     tmp_revision_file.write('%d' % build_revision)
     tmp_revision_file.close()
     shutil.move(tmp_revision_file.name, path)

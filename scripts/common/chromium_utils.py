@@ -574,9 +574,8 @@ def RunAndPrintDots(function):
 
 class RunCommandFilter(object):
   """Class that should be subclassed to provide a filter for RunCommand."""
-  def __init__(self):
-    pass
-
+  # Method could be a function
+  # pylint: disable=R0201
   def FilterLine(self, a_line):
     """Called for each line of input.  The \n is included on a_line.  Should
     return what is to be recorded as the output for this line.  A result of
