@@ -124,6 +124,9 @@ class FactoryCommands(object):
       'nacl-lucid64-spec-x86': 'nacl-lucid64-spec-x86',
       'nacl-lucid64-spec-arm': 'nacl-lucid64-spec-arm',
       'nacl-lucid64-spec-trans': 'nacl-lucid64-spec-trans',
+      'chromium-gpu-win7-rel': 'gpu-win7-rel',
+      'chromium-gpu-mac-rel': 'gpu-mac-rel',
+      'chromium-gpu-linux-rel': 'gpu-linux-rel',
     },
     'Debug': {
       'chromium-dbg-linux': 'linux-debug',
