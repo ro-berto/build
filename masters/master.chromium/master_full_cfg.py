@@ -56,8 +56,7 @@ B('Mac', 'mac_clobber', 'compile|testers', 'chromium')
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=['sizes'],
-    options=['--compiler=clang',
-             '--ccache-symlinks=/usr/local/bin/ccache_symlinks'],
+    options=['--compiler=gomaclang'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',
                         'show_perf_results': True,
