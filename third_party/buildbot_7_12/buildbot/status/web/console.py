@@ -893,9 +893,13 @@ class ConsoleStatusResource(HtmlResource):
             subs["comments"] = comment.replace('<', '&lt;').replace('>', '&gt;')
             # Re-encode to make sure it doesn't throw an encoding error on the
             # server.
-            comment_quoted = urllib.quote(
-                subs["comments"].decode("utf-8", "ignore").encode(
-                    "ascii", "xmlcharrefreplace"))
+            try:
+                comment_quoted = urllib.quote(
+                    subs["comments"].decode("utf-8", "ignore").encode(
+                        "ascii", "xmlcharrefreplace"))
+            except UnicodeEncodeError:
+                # TODO(maruel): Figure out what's happening.
+                comment_quoted = urllib.quote(subs["comments"].encode("utf-8"))
             json += ( "{'revision': '%s', 'date': '%s', 'comments': '%s',"
                       "'results' : " ) % (subs["revision"], subs["date"],
                                           comment_quoted)
