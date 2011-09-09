@@ -171,11 +171,12 @@ class CbuildbotFactory(object):
     else:
       clear_and_clone_cmd += self.branch
 
+    msg = 'Clear and Clone %s' % git_checkout_dir
     if patch:
       clear_and_clone_cmd += ('; %s pull %s %s' %
                               (git_bin, patch['url'], patch['ref']))
+      msg = 'Clear, Clone and Patch %s' % git_checkout_dir
 
-    msg = 'Clear and Clone %s' % git_checkout_dir
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=WithProperties(clear_and_clone_cmd),
                           name=msg,
