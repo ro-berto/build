@@ -588,7 +588,8 @@ class RunCommandFilter(object):
     return last_bits
 
 
-def RunCommand(command, parser_func=None, filter_obj=None, **kwargs):
+def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
+               **kwargs):
   """Runs the command list, printing its output and returning its exit status.
 
   Prints the given command (which should be a list of one or more strings),
@@ -605,6 +606,13 @@ def RunCommand(command, parser_func=None, filter_obj=None, **kwargs):
   each other.  In previous attempts, this led to output ordering issues.
   By merging them when either needs to be parsed, we avoid those ordering
   issues completely.
+
+  pipes is a list of commands (also a list) that will receive the output of
+  the intial command. For example, if you want to run "python a | python b | c",
+  the "command" will be set to ['python', 'a'], while pipes will be set to
+  [['python', 'b'],['c']]
+  NOTE: If pipes is used, filter_obj or parser_func cannot be used and the
+  stderr will automatically be redirected to stdout.
   """
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
@@ -648,16 +656,49 @@ def RunCommand(command, parser_func=None, filter_obj=None, **kwargs):
       writefh.write(in_line)
     writefh.flush()
 
+  pipes = pipes or []
+  if pipes and (parser_func or filter_obj):
+    raise NotImplementedError('RunCommand cannot be called with pipes and a'
+                              ' parser/filter')
+
   # Print the given command (which should be a list of one or more strings).
   print '\n' + subprocess.list2cmdline(command) + '\n',
+  for pipe in pipes:
+    print '     | ' + subprocess.list2cmdline(pipe) + '\n',
+
   sys.stdout.flush()
   sys.stderr.flush()
-  if not (parser_func or filter_obj):
+  if not (parser_func or filter_obj or pipes):
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
+  elif pipes:
+    # Start the initial process.
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT, bufsize=0, **kwargs)
+    proc_handles = [proc]
+    pipe_number = 0
+    for pipe in pipes:
+      pipe_number = pipe_number + 1
+      if pipe_number == len(pipes):
+        # The last pipe process needs to output to sys.stdout.
+        stdout = sys.stdout
+      else:
+        # Output to a pipe, since another pipe is on top of us.
+        stdout = subprocess.PIPE
+      pipe_proc = subprocess.Popen(pipe, stdin=proc_handles[0].stdout,
+                                   stdout=stdout, stderr=subprocess.STDOUT)
+      proc_handles.insert(0, pipe_proc)
+
+    # Allow proc to receive a SIGPIPE if the piped process exits.
+    for handle in proc_handles[1:]:
+      handle.stdout.close()
+
+    # Wait for the commands to terminate.
+    for handle in proc_handles:
+      handle.wait()
   else:
     # Run the command.
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
