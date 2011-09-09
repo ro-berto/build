@@ -308,7 +308,7 @@ def main_linux(options, args):
     command.extend(supervisor_args)
     command.append(test_exe_path)
   elif options.run_shell_script:
-    command = ['sh', test_exe_path]
+    command = ['bash', test_exe_path]
   elif options.run_python_script:
     command = [sys.executable, test_exe]
   else:
