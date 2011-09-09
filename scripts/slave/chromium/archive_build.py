@@ -811,17 +811,6 @@ def main(argv):
   if args:
     raise StagingError('Unknown arguments: %s' % args)
 
-  # Temporary hacks:
-  #   - Fix typo in master.chromium/master_full_cfg.py: snapshot -> snapshots
-  #   - Upload to old and new locations until everything is updated to look at
-  #     google storage.
-  gs_bucket = options.factory_properties.get('gs_bucket', None)
-  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshot':
-    gs_bucket += 's'
-    options.factory_properties['gs_bucket'] = gs_bucket
-  if gs_bucket and gs_bucket == 'gs://chromium-browser-snapshots':
-    options.factory_properties['dual_upload'] = True
-
   if not options.ignore:
     # Independent of any other configuration, these exes and any symbol files
     # derived from them (i.e., any filename starting with these strings) will
