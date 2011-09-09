@@ -62,6 +62,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # gclient additional custom deps
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
+  CUSTOM_DEPS_AVPERF = ('src/chrome/test/data/media/avperf',
+    'http://src.chromium.org/svn/trunk/deps/avperf')  
   CUSTOM_DEPS_NACL_LATEST = [
     ('src/native_client',
      'http://src.chromium.org/native_client/trunk/src/native_client'),
@@ -87,8 +89,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     '^(webkit|webkit_gpu)$':
       [('src/webkit/data/layout_tests/LayoutTests', None),
        ('src/third_party/WebKit/LayoutTests', None),],
-    'avperf': [('src/chrome/test/data/media/avperf',
-                config.Master.trunk_url + '/deps/avperf')]
   }
 
   NEEDED_COMPONENTS_INTERNAL = {
@@ -521,6 +521,16 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
+  def ChromiumAVPerfFactory(self, target='Release', clobber=False, tests=None,
+                              mode=None, slave_type='BuilderTester',
+                              options=None, compile_timeout=1200,
+                              build_url=None, project=None,
+                              factory_properties=None):
+    self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_AVPERF]
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
+    
   def ChromiumNativeClientLatestFactory(
       self, target='Release', clobber=False, tests=None, mode=None,
       slave_type='BuilderTester', options=None, compile_timeout=1200,
