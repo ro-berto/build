@@ -55,7 +55,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
   that are common to the Xcode builds.
   """
   compiler = options.compiler
-  assert compiler in (None, 'clang', 'goma', 'goma-clang')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'gomaclang')
 
   if compiler == 'goma':
     print 'using goma'
@@ -64,7 +64,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
 
   cc = None
   ldplusplus = None
-  if compiler in ('clang', 'goma-clang'):
+  if compiler in ('clang', 'goma-clang', 'gomaclang'):
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
     # that way, so only enable clang on m15 and up.
@@ -79,7 +79,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     else:
       print 'Not using clang for version, dict was %r' % variables
 
-    if compiler == 'goma-clang':
+    if compiler in ('goma-clang', 'gomaclang'):
       print 'using goma'
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
@@ -419,7 +419,7 @@ def main_xcode(options, args):
   # (or restart in clobber mode) to ensure the proxy is available.
   goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
 
-  if options.compiler in ('goma', 'goma-clang'):
+  if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
     goma_key = os.path.join(options.goma_dir, 'goma.key')
     env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
     if os.path.exists(goma_key):
@@ -433,7 +433,7 @@ def main_xcode(options, args):
   result = chromium_utils.RunCommand(command, env=env,
                                      filter_obj=xcodebuild_filter)
 
-  if options.compiler in ('goma', 'goma-clang'):
+  if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
