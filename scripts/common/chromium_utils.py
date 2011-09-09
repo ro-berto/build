@@ -582,10 +582,10 @@ class RunCommandFilter(object):
     None suppresses the line."""
     return a_line
 
-  def FilterDone(self):
-    """Called when the RunCommand is done to allow anything that needs to be
-    done when the command completes."""
-    pass
+  def FilterDone(self, last_bits):
+    """Acts just like FilterLine, but is called with any data collected after
+    the last newline of the command."""
+    return last_bits
 
 
 def RunCommand(command, parser_func=None, filter_obj=None, **kwargs):
@@ -643,8 +643,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, **kwargs):
       parser_func(in_line.strip())
     if filter_obj:
       if in_line != '':
-        in_line = filter_obj.FilterLine(in_line)
-      filter_obj.FilterDone()
+        in_line = filter_obj.FilterDone(in_line)
     if not in_line is None:
       writefh.write(in_line)
     writefh.flush()

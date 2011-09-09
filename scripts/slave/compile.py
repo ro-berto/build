@@ -147,8 +147,41 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
 class XcodebuildFilter(chromium_utils.RunCommandFilter):
   """xcodebuild filter"""
 
+  # This isn't a full on state machine because there are some builds that
+  # invoke xcodebuild as part of a target action.  Instead it relies on
+  # the consistent format that Xcode uses for its steps.  The output follows
+  # the pattern of:
+  #   1. a section line for the target
+  #   2. a "header" for each thing done (Compile, PhaseScriptExecution, etc.)
+  #   3. all the commands under that step (cd, setenv, /Developer/usr/bin/gcc,
+  #      etc.)
+  #   4. a blank line
+  #   5. any raw output from the command for the step
+  #   [loop to 2 for each thing on this target]
+  #   [loop to 1 for each target]
+  #   6. "** BUILD SUCCEEDED **" or "** BUILD FAILED **".  If the build failed,
+  #      an epilog of:
+  #         "The following build commands failed:"
+  #         [target_name]:
+  #            [header(s) from #3, but with a full path in some cases]
+  #         "(## failure[s])"
+  # So this filter works by watching for some common strings that mark the
+  # start of a "section" and buffers or sending on as needed.
+
+  # Enum for the current mode.
+  class LineMode:
+    # Class has no __init__ method
+    # pylint: disable=W0232
+    BufferAsCommand, Unbuffered, DroppingFailures = range(3)
+
+  # Enum for output types.
+  class LineType:
+    # Class has no __init__ method
+    # pylint: disable=W0232
+    Header, Command, Info, Raw = range(4)
+
   section_regex = re.compile('^=== BUILD (NATIVE|AGGREGATE) TARGET (.+) OF '
-                             'PROJECT (.+) WITH CONFIGURATION (.+) ===$')
+                             'PROJECT (.+) WITH CONFIGURATION (.+) ===\n$')
   section_replacement = r'====Building \3:\2 (\4)\n'
 
   step_headers = (
@@ -177,71 +210,156 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
   # actually appear in the output line.
   step_headers = tuple([x + ' ' for x in step_headers])
 
-  lines_to_eat = (
+  lines_to_drop = (
     'Check dependencies\n',
   )
 
   # clang + ccache cause extra noise, kill that off.
   # TODO: When clang/ccache interactions are fixed, drop this.
-  prefixes_to_suppress = (
+  prefixes_to_drop = (
     'clang: warning: argument unused during compilation: \'-F',
     'clang: warning: argument unused during compilation: \'-I',
     'clang: warning: argument unused during compilation: \'-include ',
     'clang: warning: argument unused during compilation: \'-isysroot ',
   )
 
+  gyp_info_lines = (
+    # GYP rules use make for inputs/outputs, so if no work is done, this is
+    # output.  If this all that shows up, not much point in showing the command
+    # in the log, just show this to show the rules did nothing.
+    'make: Nothing to be done for `all\'.\n',
+  )
+  gyp_info_prefixes = (
+    # These are for Xcode's ui to show while work is being done, if this is
+    # the only output, don't bother showing the command.
+    'note: ',
+  )
+
+  failures_start = 'The following build commands failed:\n'
+  failures_end_regex = re.compile('^\\([0-9]+ failures?\\)\n$')
+
+
   def __init__(self, full_log_file=None):
     # super
     chromium_utils.RunCommandFilter.__init__(self)
-    self.awaiting_blank = False
-    self.last_lines_dropped = ''
+    self.line_mode = XcodebuildFilter.LineMode.Unbuffered
     self.full_log_file = full_log_file
+    # self.ResetPushed() does the real rest, by pylint doesn't like them being
+    # 'defined' outside of __init__.
+    self.pushed_commands = None
+    self.pushed_infos = None
+    self.to_go = None
+    self.ResetPushed()
 
-  def FilterLine(self, a_line):
-    # Log it
-    if self.full_log_file:
-      self.full_log_file.write(a_line)
-    # Look for headers.
+  def ResetPushed(self):
+    """Clear out all pushed output"""
+    self.pushed_commands = ''
+    self.pushed_infos = ''
+    self.to_go = None
+
+  def PushLine(self, line_type, a_line):
+    """Queues up a line for output into the right buffer."""
+    # Only expect one push per line filtered/processed, so to_go should always
+    # be empty anytime this is called.
+    assert self.to_go is None
+    if line_type == XcodebuildFilter.LineType.Header:
+      self.to_go = a_line
+      # Anything in commands or infos was from previous block, so clear the
+      # commands but leave the infos, that way they the shortened output will
+      # be returned for this step.
+      self.pushed_commands = ''
+    elif line_type == XcodebuildFilter.LineType.Command:
+      # Infos should never come before commands.
+      assert self.pushed_infos == ''
+      self.pushed_commands += a_line
+    elif line_type == XcodebuildFilter.LineType.Info:
+      self.pushed_infos += a_line
+    elif line_type == XcodebuildFilter.LineType.Raw:
+      self.to_go = a_line
+
+  def AssembleOutput(self):
+    """If there is any output ready to go, all the buffered bits are glued
+    together and returned."""
+    if self.to_go is None:
+      return None
+    result = self.pushed_commands + self.pushed_infos + self.to_go
+    self.ResetPushed()
+    return result
+
+  def ProcessLine(self, a_line):
+    """Looks at the line and current mode, pushing anything needed into the
+    pipeline for output."""
+    # Look for section or step headers.
     section_match = self.section_regex.match(a_line)
     if section_match:
-      self.awaiting_blank = False
-      self.last_lines_dropped = ''
-      return section_match.expand(self.section_replacement)
+      self.line_mode = XcodebuildFilter.LineMode.Unbuffered
+      self.PushLine(XcodebuildFilter.LineType.Header,
+                    section_match.expand(self.section_replacement))
+      return
     if a_line.startswith(self.step_headers):
-      self.awaiting_blank = True
-      self.last_lines_dropped = ''
+      self.line_mode = XcodebuildFilter.LineMode.BufferAsCommand
       # Just report the step and the output file (first two things), helps
       # makes the warnings/errors stick out more.
       parsed = shlex.split(a_line)
       if len(parsed) >= 2:
-        return '____%s %s\n' % (parsed[0], parsed[1])
-      return '____' + a_line
-    # Time to stop throwing things away?
-    if self.awaiting_blank:
+        a_line = '%s %s\n' % (parsed[0], parsed[1])
+      self.PushLine(XcodebuildFilter.LineType.Header, '____' + a_line)
+      return
+
+    # Remove the ending summary about failures since that seems to confuse some
+    # folks looking at logs (the data is all inline when it happened).
+    if self.line_mode == XcodebuildFilter.LineMode.Unbuffered and \
+        a_line == self.failures_start:
+      self.line_mode = XcodebuildFilter.LineMode.DroppingFailures
+      # Push an empty string for output to flush any info lines.
+      self.PushLine(XcodebuildFilter.LineType.Raw, '')
+      return
+    if self.line_mode == XcodebuildFilter.LineMode.DroppingFailures:
+      if self.failures_end_regex.match(a_line):
+        self.line_mode = XcodebuildFilter.LineMode.Unbuffered
+      return
+
+    # Wasn't a header, direct the line based on the mode the filter is in.
+    if self.line_mode == XcodebuildFilter.LineMode.BufferAsCommand:
+      # Blank line moves to unbuffered.
       if a_line == '\n':
-        self.awaiting_blank = False
+        self.line_mode = XcodebuildFilter.LineMode.Unbuffered
       else:
-        self.last_lines_dropped += a_line
-      return None
-    # Is it a line that is just noise in the logs?
-    if a_line.startswith(self.prefixes_to_suppress):
-      # These don't go into last_lines_dropped because they are the stupid
-      # clang+ccache lines, and this keeps the actual tool invoked in
-      # last_lines_dropped.
-      return None
-    if a_line in self.lines_to_eat:
-      return None
-    # Eat blank lines at this point, they don't help and mess up the last
-    # line dropped tracking if real output is triggered.
-    if a_line == '\n':
-      return None
+        self.PushLine(XcodebuildFilter.LineType.Command, a_line)
+      return
+
+    # By design, GYP generates some lines of output all the time. Save them
+    # off as info lines so if they are the only output the command lines can
+    # be skipped.
+    if (a_line in self.gyp_info_lines) or \
+       a_line.startswith(self.gyp_info_prefixes):
+      self.PushLine(XcodebuildFilter.LineType.Info, a_line)
+      return
+
+    # Drop lines that are pure noise in the logs and never wanted.
+    if (a_line == '\n') or (a_line in self.lines_to_drop) or \
+       a_line.startswith(self.prefixes_to_drop):
+      return
+
     # It's a keeper!
-    if self.last_lines_dropped != '':
-      # Glue together the last lines dropped and this line. This should get the
-      # actual tool invoked with all its arguments into the log.
-      a_line = self.last_lines_dropped + a_line
-      self.last_lines_dropped = ''
-    return a_line
+    self.PushLine(XcodebuildFilter.LineType.Raw, a_line)
+
+  def FilterLine(self, a_line):
+    """Called by RunCommand for each line of output."""
+    # Log it
+    if self.full_log_file:
+      self.full_log_file.write(a_line)
+    # Process it
+    self.ProcessLine(a_line)
+    # Return what ever we've got
+    return self.AssembleOutput()
+
+  def FilterDone(self, last_bits):
+    """Called by RunCommand when the command is done."""
+    # last_bits will be anything after the last newline, send it on raw to
+    # flush out anything.
+    self.PushLine(XcodebuildFilter.LineType.Raw, last_bits)
+    return self.AssembleOutput()
 
 
 def main_xcode(options, args):
