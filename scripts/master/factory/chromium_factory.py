@@ -151,6 +151,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'http://src.chromium.org/svn/trunk/deps/avperf'),
        ('src/chrome/test/tools/reference_build/',
         'http://src.chromium.org/svn/trunk/deps/reference_builds'),
+       ('webdriver.DEPS',
+        'http://src.chromium.org/svn/trunk/src/chrome/test/pyautolib/' +
+            'webdriver.DEPS'),
         ]
   # Extend if we can.
   # pylint: disable=E1101
@@ -649,10 +652,17 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       # If branch is available, replace 'trunk' to 'branches/<BRANCH>'
       # in a url.
       if factory_properties and factory_properties.get('branch'):
-        if (not url.split('/')[-1] in avoid_branch_sync_component and
+        branch = factory_properties.get('branch')
+        component = url.split('/')[-1]
+
+        # webdriver.DEPS does not exist before 878.
+        # TODO(kkania): Remove this clause when 878+ is stable.
+        if int(branch) < 878 and component == 'webdriver.DEPS':
+          continue
+
+        if (not component in avoid_branch_sync_component and
             'pyftpdlib' not in url):
-          url = url.replace('trunk',
-                            'branches/' + str(factory_properties['branch']))
+          url = url.replace('trunk', 'branches/' + str(branch))
 
       # Yes, url goes first, which is different from how most people
       # lay out their .gclient.
