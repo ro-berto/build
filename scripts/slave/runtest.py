@@ -172,7 +172,7 @@ def main_mac(options, args):
     supervisor_path = os.path.join(build_dir, '..', 'tools',
                                    'sharding_supervisor',
                                    'sharding_supervisor.py')
-    supervisor_args = ['--no-color']
+    supervisor_args = ['--no-color', '--retry-failed']
     if options.sharding_args:
       supervisor_args.extend(options.sharding_args.split())
     command = [sys.executable, supervisor_path]
@@ -301,7 +301,7 @@ def main_linux(options, args):
     supervisor_path = os.path.join(build_dir, '..', 'tools',
                                    'sharding_supervisor',
                                    'sharding_supervisor.py')
-    supervisor_args = ['--no-color']
+    supervisor_args = ['--no-color', '--retry-failed']
     if options.sharding_args:
       supervisor_args.extend(options.sharding_args.split())
     command = [sys.executable, supervisor_path]
@@ -389,7 +389,7 @@ def main_win(options, args):
     supervisor_path = os.path.join(build_dir, '..', 'tools',
                                    'sharding_supervisor',
                                    'sharding_supervisor.py')
-    supervisor_args = ['--no-color']
+    supervisor_args = ['--no-color', '--retry-failed']
     if options.sharding_args:
       supervisor_args.extend(options.sharding_args.split())
     command = [sys.executable, supervisor_path]
