@@ -43,12 +43,16 @@ USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 DEST_DIR = 'gtest_results'
 
 
-def _RunGTestCommand(command, results_tracker):
+def _RunGTestCommand(command, results_tracker=None, pipes=None):
+  if results_tracker and pipes:
+    # This is not supported by RunCommand.
+    print 'Invalid test invocation. (results_tracker and pipes)'
+    return 1
   if results_tracker:
     return chromium_utils.RunCommand(
         command, parser_func=results_tracker.OnReceiveLine)
   else:
-    return chromium_utils.RunCommand(command)
+    return chromium_utils.RunCommand(command, pipes=pipes)
 
 
 def _GenerateJSONForTestResults(options, results_tracker):
@@ -323,7 +327,13 @@ def main_linux(options, args):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
 
-  result = _RunGTestCommand(command, results_tracker)
+  if options.factory_properties.get('asan', False):
+    symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
+                                             'scripts', 'asan_symbolize.py'))
+    pipes = [[sys.executable, symbolize], ['c++filt']]
+    result = _RunGTestCommand(command, pipes=pipes)
+  else:
+    result = _RunGTestCommand(command, results_tracker)
 
   if options.document_root:
     http_server.StopServer()
