@@ -55,6 +55,8 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
   that are common to the Xcode builds.
   """
   compiler = options.compiler
+  # TODO(thakis): Remove 'gomaclang' once the main master has been restarted
+  # or hotpatched with http://codereview.chromium.org/7780021/.
   assert compiler in (None, 'clang', 'goma', 'goma-clang', 'gomaclang')
 
   if compiler == 'goma':
