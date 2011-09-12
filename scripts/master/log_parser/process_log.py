@@ -40,6 +40,8 @@ def FormatFloat(number):
   else:
     return '0.00'
 
+def FormatPercentage(ratio):
+  return '%s%%' % FormatFloat(100 * ratio)
 
 METRIC_SUFFIX = {-3: 'm', 0: '', 3: 'k', 6: 'M'}
 
@@ -70,7 +72,6 @@ def FormatHumanReadable(number):
     digits = int(digits)
   # Exponent is now divisible by 3, between -3 and 6 inclusive: (-3, 0, 3, 6).
   return '%s%s' % (digits, METRIC_SUFFIX[exponent])
-
 
 def Prepend(filename, data):
   chromium_utils.Prepend(filename, data)
@@ -258,18 +259,29 @@ class PerformanceLogProcessor(object):
     # The actual delta needs to be within this range to keep the perf test
     # green.  If the results fall above or below this range, the test will go
     # red (signaling a regression) or orange (signaling a speedup).
-    if perfdata['regress'] > perfdata['improve']:
+    actual = perfdata['actual_delta']
+    regress = perfdata['regress']
+    improve = perfdata['improve']
+    if regress > improve:
       # The "lower is better" case.  (ie. time results)
-      if perfdata['actual_delta'] < perfdata['improve']:
-        self._perf_improve.append(graph_result)
-      elif perfdata['actual_delta'] > perfdata['regress']:
-        self._perf_regress.append(graph_result)
+      if actual < improve:
+        ratio = 1 - (float(actual) / improve)
+        self._perf_improve.append('%s (%s)' % (graph_result,
+                                               FormatPercentage(ratio)))
+      elif actual > regress:
+        ratio = (float(actual) / regress) - 1
+        self._perf_regress.append('%s (%s)' % (graph_result,
+                                               FormatPercentage(ratio)))
     else:
       # The "higher is better" case.  (ie. score results)
-      if perfdata['actual_delta'] > perfdata['improve']:
-        self._perf_improve.append(graph_result)
-      elif perfdata['actual_delta'] < perfdata['regress']:
-        self._perf_regress.append(graph_result)
+      if actual > improve:
+        ratio = (float(actual) / improve) - 1
+        self._perf_improve.append('%s (%s)' % (graph_result,
+                                               FormatPercentage(ratio)))
+      elif actual < regress:
+        ratio = 1 - (float(actual) / regress)
+        self._perf_regress.append('%s (%s)' % (graph_result,
+                                               FormatPercentage(ratio)))
 
   def PerformanceChanges(self):
     # Compare actual and expected results.
