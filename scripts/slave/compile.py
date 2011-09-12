@@ -463,7 +463,7 @@ def common_make_settings(
   and for the mac make build.
   """
   # TODO(thakis): Add goma-clang support to the make build.
-  assert compiler in (None, 'clang', 'goma', 'asan')
+  assert compiler in (None, 'clang', 'goma', 'asan', 'tsan_gcc')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -546,6 +546,28 @@ def common_make_settings(
     command.append('-j%d' % jobs)
     command.append('-r')
     return
+
+  if compiler == 'tsan_gcc':
+    tsan_base = os.path.abspath(os.path.join(
+        slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
+        'third_party', 'compiler-tsan'))
+    tsan_gcc_dir = os.path.abspath(os.path.join(
+        tsan_base, 'gcc-4.5.3', 'bin'))
+
+    if os.path.isdir(tsan_gcc_dir):
+      env['CC'] = os.path.join(tsan_gcc_dir, 'gcc')
+      env['CXX'] = os.path.join(tsan_gcc_dir, 'g++')
+      if not os.path.exists(env['CC']):
+        # Extract gcc from a tarball.
+        tar_path = os.path.abspath(os.path.join(tsan_base, 'gcc-4.5.3.tar'))
+        untar_command = ['tar', '-xf', tar_path]
+        chromium_utils.RunCommand(untar_command)
+
+      # We intentionally don't reuse the ccache/distcc modifications,
+      # as they don't work with tsan-gcc.
+      command.append('-j%d' % jobs)
+      command.append('-r')
+      return
 
   # Use gcc and g++ by default.
   cc = 'gcc'
