@@ -112,6 +112,7 @@ processes = [
     'jingle_unittests.exe',
     'mediumtest_ie.exe',
     'memory_test.exe',
+    'nacl64.exe',
     'net_unittests.exe',
     'page_cycler_tests.exe',
     'perf_tests.exe',
