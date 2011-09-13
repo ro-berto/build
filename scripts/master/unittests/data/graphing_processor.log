@@ -40,3 +40,10 @@ RESULT processes: 12t_proc= 3
 [----------] Global test environment tear-down
 [==========] 4 tests from 1 test case ran.
 [  PASSED  ] 4 tests.
+
+# Artificial log output to test the [] syntax.
+
+RESULT artificial_graph: trace_with_one_sample= [177.0] you-nits
+RESULT artificial_graph: trace_with_one_sample_comma= [177.0,] you-nits
+RESULT artificial_graph: trace_with_three_samples= [100.0,120.0,200.0] you-nits
+RESULT artificial_graph: trace_with_three_samples_comma= [100.0,120.0,200.0,] you-nits

@@ -109,7 +109,7 @@ def MeanAndStandardDeviation(data):
 
 def FilteredMeanAndStandardDeviation(data):
   """Calculates mean and standard deviation for the values in the list
-  ignoring first occurence of max value.
+  ignoring first occurence of max value (unless there was only one sample).
 
     Args:
       data: list of numbers
@@ -120,7 +120,8 @@ def FilteredMeanAndStandardDeviation(data):
   """
   def _FilterMax(array):
     new_array = copy.copy(array) # making sure we are not creating side-effects
-    new_array.remove(max(new_array))
+    if len(new_array) != 1:
+      new_array.remove(max(new_array))
     return new_array
   return MeanAndStandardDeviation(_FilterMax(data))
 

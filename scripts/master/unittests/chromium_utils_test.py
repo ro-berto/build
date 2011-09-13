@@ -28,7 +28,13 @@ class PartiallyInitializeTest(unittest.TestCase):
 class FilteredMeanAndStandardDeviationTest(unittest.TestCase):
 
   def testFilteredMeanAndStandardDeviation(self):
-    sample_data = [4, 4, 6, 12345, 100, 20] # max should be ignored
+    sample_data = [4, 4, 6, 12345, 100, 20]  # max should be ignored
     mean, stdd = chromium_utils.FilteredMeanAndStandardDeviation(sample_data)
     self.assertEqual(26.8, mean)
     self.assertAlmostEqual(37.08585, stdd, 5)
+
+  def testFilteredMeanAndStandardDeviationOne(self):
+    sample_data = [4]  # Should not filter max in this case.
+    mean, stdd = chromium_utils.FilteredMeanAndStandardDeviation(sample_data)
+    self.assertEqual(4, mean)
+    self.assertEqual(0, stdd)

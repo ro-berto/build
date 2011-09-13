@@ -306,7 +306,8 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
                                'graphing_processor.log')
     step.commandComplete('mycommand')
     for graph in ('commit_charge', 'ws_final_total', 'vm_final_browser',
-                  'vm_final_total', 'ws_final_browser', 'processes'):
+                  'vm_final_total', 'ws_final_browser', 'processes',
+                  'artificial_graph'):
       filename = '%s-summary.dat' % graph
       self.assert_(os.path.exists(os.path.join('output_dir', filename)))
       # Since the output files are JSON-encoded, they may differ in form, but
