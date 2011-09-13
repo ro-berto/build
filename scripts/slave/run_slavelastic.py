@@ -6,7 +6,9 @@
 
 from __future__ import with_statement
 import BaseHTTPServer
+import ConfigParser
 import cStringIO
+import glob
 import json  # pylint: disable=F0401
 import optparse
 import os
@@ -36,7 +38,15 @@ class ThreadedHTTPServer(SocketServer.ThreadingMixIn,
                          BaseHTTPServer.HTTPServer):
   pass
 
+
+class ParseManifestError(Exception):
+  """Raise when theres a parsing error with the manifest file."""
+  pass
+
 class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+  """Handler that is called to process incoming POST connections
+  from swarm slaves.
+  """
   def log_message(self, _format, *args):
     pass
 
@@ -88,6 +98,10 @@ class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     shard.write(output)
 
 
+class ManifestParsingError(Exception):
+  pass
+
+
 class Manifest():
   def __init__(self, filename, switches):
     """Populates a manifest object.
@@ -95,18 +109,44 @@ class Manifest():
         name - Name of the running test.
         files - A list of files to zip up and transfer over.
     """
-    manifest_file = sys.stdin
-    if filename != '-':
-      manifest_file = open(filename)
+    current_platform = {
+      'win32': 'Windows',
+      'cygwin': 'Windows',
+      'linux2': 'Linux',
+      'darwin': 'Mac'
+    }[sys.platform]
     switches_dict = {
       'target': switches.target,
       'num_shards': switches.num_shards,
       'os_image': switches.os_image,
     }
-    self.data = eval(manifest_file.read() % switches_dict)
-    manifest_file.close()
-    self.name = self.data['name']
-    self.files = self.data['files']
+    # Parse manifest file
+    self.config = ConfigParser.RawConfigParser()
+    self.config.read(filename)
+    if not self.config.has_section(current_platform):
+      raise ManifestParsingError('Section %s not found in %s' %
+          (current_platform, filename))
+    if self.config.has_option('Header', 'name'):
+      self.name = self.config.get('Header', 'name')
+    else:
+      self.name = os.path.splitext(os.path.basename(filename))[0]
+    if not self.config.has_option(current_platform, 'executable'):
+      raise ManifestParsingError('Executable not found in %s' % filename)
+    self.files = [self.config.get(current_platform,
+        'executable') % switches_dict]
+    if self.config.has_option(current_platform, 'files'):
+      files = self.config.get(current_platform, 'files').strip()
+      for testfile in files.split('\n'):
+        expanded_file = testfile % switches_dict
+        # Resolve wildcards
+        print 'Expanding %s' % expanded_file
+        wildcard_expanded_files = glob.glob(expanded_file)
+        for wildcard_expanded_file in wildcard_expanded_files:
+          print '  Expanded %s' % wildcard_expanded_file
+          if os.path.exists(wildcard_expanded_file):
+            self.files.append(wildcard_expanded_file)
+          else:
+            print >> sys.stderr, '  File %s not found, ignoring' % expanded_file
     self.g_shards = switches.num_shards
     self.target = switches.target
     # Random name for the output zip file
@@ -116,17 +156,27 @@ class Manifest():
     # once the HTTP server is initiated and a free port is found
     self.port = None
     self.switches = switches
+    self.tasks = []
+    self.current_platform = current_platform
+
+  def add_task(self, task_name, actions):
+    """Appends a new task to the swarm manifest file."""
+    self.tasks.append({
+          'test_name': task_name,
+          'action': actions,
+    })
 
   def zip(self):
     """Zip up all the files in self.files"""
-    if os.name == 'posix':
+    start_time = time.time()
+    if self.current_platform == 'Linux':
       zip_args = ['zip', '-r', '-1', self.zipfile_name]
       zip_args.extend(self.files)
       p = subprocess.Popen(zip_args)
       p.wait()
       p = subprocess.Popen(['chmod', '755', self.zipfile_name])
       p.wait()
-    elif os.name == 'nt':
+    elif self.current_platform == 'Windows':
       dest_zip = zipfile.ZipFile(self.zipfile_name, 'w')
       for filename in self.files:
         if os.path.isdir(filename):
@@ -138,12 +188,14 @@ class Manifest():
           print 'Zipping %s' % filename
           dest_zip.write(filename)
       dest_zip.close()
+    elif self.current_platform == 'Mac':
+      print >> sys.stderr, "I don't know what to do with Macs yet"
+    print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
 
-  @staticmethod
-  def cleanup():
-    if os.name == 'posix':
+  def cleanup(self):
+    if self.current_platform == 'Linux' or self.current_platform == 'Mac':
       remove_command = ['rm', '-rf']
-    elif os.name == 'nt':
+    elif self.current_platform == 'Windows':
       remove_command = ['del']
     else:
       raise Exception('Unknown OS: %s' % os.name)  # Unreachable
@@ -158,17 +210,55 @@ class Manifest():
     filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
     startvxfb_filepath = os.path.relpath('startvx_fb.zip', '../..').replace(
         '\\', '/')
+
+    # Gclient sync
+    self.add_task('Gclient Sync', ['gclient', 'sync'])
+
+    # Linux specific stuff
+    if self.current_platform == 'Linux':
+      # Chmod the executables, since zip don't preserve permissions
+      self.add_task('Change permissions', ['chmod', '+x'] + self.files)
+      self.add_task('Start X Server and Frame Buffer', ['python',
+          'start_vxfb.py', os.path.basename(os.path.abspath('..')), '.'])
+
+    if self.current_platform == 'Windows':
+      self.add_task('Run Test',
+          ['python', '..\\b\\build\\scripts\\slave\\runtest.py', '--target',
+           self.switches.target, '--build-dir', 'src/build',
+           os.path.split(self.files[0])[1]])
+    elif self.current_platform == 'Linux' or self.current_platform == 'Mac':
+      # Run the tests.  We assume the first file is the executable.
+      self.add_task('Run Test', [self.files[0]])
+
+    # Clean up
+    if self.current_platform == 'Linux' or self.current_platform == 'Mac':
+      cleanup_commands = ['rm', '-rf']
+    elif self.current_platform == 'Windows':
+      cleanup_commands = ['del']
+    self.add_task('Clean Up', cleanup_commands + ['swarm_tempfile*.zip'])
+
+    # Call kill_processes.py if on windows
+    if self.current_platform == 'Windows':
+      self.add_task('Kill Processes',
+          ['python', '..\\b\\build\\scripts\\slave\\kill_processes.py'])
+
+    # Construct test case
     test_case = {
       'test_case_name': self.name,
       'data': [
         'http://%s/%s' % (hostname, filepath),
         'http://%s/%s' % (hostname, startvxfb_filepath)
       ],
-      'tests': [],
+      'tests': self.tasks,
       'env_vars': {
         'GTEST_TOTAL_SHARDS': '%(num_instances)s',
         'GTEST_SHARD_INDEX': '%(instance_index)s',
-        'DISPLAY': ':9'
+        'DISPLAY': ':9',
+        'PYTHONPATH': 'E:\\b\\build\\third_party\\buildbot_7_12;'\
+           'E:\\b\\build\\third_party\\twisted_8_1;E:\\b\\build\\site_config;'\
+           'E:\\b\\build\\scripts;'\
+           'E:\\b\\build\\scripts\\release;E:\\b\\build\\third_party;'\
+           'E:\\b\\build_internal\\site_config;E:\\b\\build_internal\\symsrc;.'
       },
       'configurations': [
         {
@@ -189,53 +279,6 @@ class Manifest():
       'working_dir': self.switches.working_dir,
       'cleanup': 'data'
     }
-
-    # Gclient Sync
-    test_case['tests'].append({
-          'test_name': 'Gclient Sync',
-          'action': ['gclient', 'sync'],
-    })
-
-    # Linux specific stuff
-    if os.name == 'posix':
-      # Chmod the executables, since zip don't preserve permissions
-      test_case['tests'].append({
-            'test_name': 'Change permissions',
-            'action': ['chmod', '+x'] + self.data['files'],
-      })
-      # Kill off the x server, just incase
-      test_case['tests'].append({
-            'test_name': 'Stop X Server forcefully',
-            'action': ['killall', '-q', 'Xvfb']
-      })
-      # Start up the x server again
-      test_case['tests'].append({
-          'test_name': 'Start X Server and Frame Buffer',
-          'action': ['python', 'start_vxfb.py',
-                     os.path.basename(os.path.abspath('..')), '.']
-      })
-
-    # Run the tests
-    test_case['tests'].append({
-          'test_name': 'Run Test',
-          'action': [self.files[0]],
-    })
-
-    # Clean up
-    if os.name == 'posix':
-      test_case['tests'].append({
-            'test_name': 'Clean Up',
-            'action': [
-              'rm', '-rf', 'swarm_tempfile*.zip',
-            ] + self.files
-      })
-    elif os.name == 'nt':
-      test_case['tests'].append({
-            'test_name': 'Clean Up',
-            'action': [
-              'del', 'swarm_tempfile*.zip',
-            ] + self.files
-    })
 
     return json.dumps(test_case)
 
@@ -371,7 +414,9 @@ def main():
                         '-n', options.hostname, '-p', str(options.port), '-v'],
                         stdin=subprocess.PIPE, stdout=sys.stdout,
                         stderr=sys.stderr)
-  p.stdin.write(manifest.to_json())
+  manifest_text = manifest.to_json()
+  print 'Sending manifest: %s' % manifest_text
+  p.stdin.write(manifest_text)
   p.stdin.close()
   exit_code = p.wait()
   start_time = time.time()
