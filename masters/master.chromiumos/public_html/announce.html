@@ -55,10 +55,11 @@
             </td>
             <td colspan="2">
               <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
-              <a href="./waterfall/help">customize</a>
+              <a href="./waterfall/help">customize</a> |
               <a href="./waterfall">waterfall</a> |
               <a href="./waterfall?show_events=true&failures_only=true">failures</a> |
-              <a href="./console">console</a>
+              <a href="./console">console</a> |
+              <a href="../chromium.fyi/waterfall?builder=ChromiumOS+%28x86%29&builder=ChromiumOS+%28arm%29&builder=ChromiumOS+%28tegra2%29">chromium.fyi</a>
             </td>
           </tr>
         </table>
@@ -85,11 +86,17 @@
                 "builder=chromiumos+sdk",
             ].join("&");
             var chrome = [
-                "builder=x86+generic+TOT+PFQ",
                 "builder=x86+generic+chrome+PFQ",
                 "builder=arm+generic+chrome+PFQ",
                 "builder=tegra2+chrome+PFQ",
             ].join("&");
+            var chromefyi = [
+                "builder=ChromiumOS+(x86)",
+                "builder=ChromiumOS+(arm)",
+                "builder=ChromiumOS+(tegra2)",
+                "titles=on",
+            ].join("&");
+
             var arm = [
                 "builder=arm+generic+PFQ",
                 "builder=tegra2+PFQ",
@@ -103,20 +110,29 @@
                 "builder=x86+pineview+full",
             ].join("&");
 
+            var memory = ""
+
+
             var bar = "http://build.chromium.org/p/chromiumos/horizontal_one_box_per_builder"
+            var bar_chromefyi = "http://build.chromium.org/p/chromium.fyi/horizontal_one_box_per_builder"
+            var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder";
+
             var waterfall = '../chromiumos/waterfall'
+            var waterfall_chromefyi = '../chromium.fyi/waterfall'
+            var waterfall_memory = "../chromium.memory/waterfall"
 
             function GetUrl(type, content) {
               return type + "?" + content + "&reload=30";
             }
 
-            function DisplayBar(content, name) {
-              document.write("<tr><td><a href='" + GetUrl(waterfall, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar, content) + "'></iframe></td></tr>\n");
+            function DisplayBar(waterfall_url, bar_url, content, name) {
+              document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
-            DisplayBar(important, "important");
-            DisplayBar(x86, "x86");
-            DisplayBar(arm, "arm");
-            DisplayBar(chrome, "chrome");
+            DisplayBar(waterfall, bar, important, "important");
+            DisplayBar(waterfall, bar, x86, "x86");
+            DisplayBar(waterfall, bar, arm, "arm");
+            DisplayBar(waterfall, bar, chrome, "chrome");
+            DisplayBar(waterfall_chromefyi, bar_chromefyi, chromefyi, "chrome.fyi")
           </script>
         </table>
       </td>
