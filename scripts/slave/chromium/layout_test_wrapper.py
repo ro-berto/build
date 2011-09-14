@@ -29,7 +29,7 @@ def layout_test(options, args):
 
   # Disable the page heap in case it got left enabled by some previous process.
   try:
-    slave_utils.SetPageHeap(build_dir, 'test_shell.exe', False)
+    slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', False)
   except chromium_utils.PathNotFound:
     # If we don't have gflags.exe, report it but don't worry about it.
     print 'Warning: Couldn\'t disable page heap, if it was already enabled.'
@@ -97,9 +97,6 @@ def layout_test(options, args):
     command.extend(['--test-results-server', options.test_results_server])
 
   if options.enable_pageheap:
-    # If we're actually requesting pageheap checking, complain if we don't have
-    # gflags.exe.
-    slave_utils.SetPageHeap(build_dir, 'test_shell.exe', True)
     command.append('--time-out-ms=120000')
 
   # The list of tests is given as arguments.
@@ -110,14 +107,15 @@ def layout_test(options, args):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   chromium_utils.RemoveChromeTemporaryFiles()
 
-  # Run the the tests
-  result = slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
+  try:
+    if options.enable_pageheap:
+      slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', True)
+    # Run the the tests
+    return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
                                                   command)
-
-  if options.enable_pageheap:
-    slave_utils.SetPageHeap(build_dir, 'test_shell.exe', False)
-
-  return result
+  finally:
+    if options.enable_pageheap:
+      slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', False)
 
 
 def main():
@@ -128,7 +126,7 @@ def main():
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
   option_parser.add_option('', '--target', default='',
-      help='test_shell build configuration (Release or Debug)')
+      help='DumpRenderTree build configuration (Release or Debug)')
   option_parser.add_option('', '--build-type', default='',
       help='build identifier, for custom results and test lists (v8 or kjs)')
   option_parser.add_option('', '--options', default='',
