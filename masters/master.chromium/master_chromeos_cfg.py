@@ -33,7 +33,8 @@ S('chromeos_dbg', branch='src', treeStableTimer=60)
 #
 T('linux_views_dbg_trigger')
 
-B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg')
+B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'chromeos_dbg',
+  notify_on_missing=True)
 F('view_dbg', chromeos().ChromiumOSFactory(
     slave_type='NASBuilder',
     target='Debug',
@@ -62,7 +63,7 @@ F('view_dbg', chromeos().ChromiumOSFactory(
                         'trigger': 'linux_views_dbg_trigger'}))
 
 B('Linux Tests (Views dbg)(1)', 'view_dbg_tests_1', 'testers',
-  'linux_views_dbg_trigger', auto_reboot=True)
+  'linux_views_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('view_dbg_tests_1', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -83,7 +84,7 @@ F('view_dbg_tests_1', chromeos().ChromiumOSFactory(
                         'browser_total_shards': 3, 'browser_shard_index': 1,}))
 
 B('Linux Tests (Views dbg)(2)', 'view_dbg_tests_2', 'testers',
-  'linux_views_dbg_trigger', auto_reboot=True)
+  'linux_views_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('view_dbg_tests_2', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -93,7 +94,7 @@ F('view_dbg_tests_2', chromeos().ChromiumOSFactory(
                         'browser_total_shards': 3, 'browser_shard_index': 2,}))
 
 B('Linux Tests (Views dbg)(3)', 'view_dbg_tests_3', 'testers',
-  'linux_views_dbg_trigger', auto_reboot=True)
+  'linux_views_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('view_dbg_tests_3', chromeos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
@@ -107,7 +108,8 @@ F('view_dbg_tests_3', chromeos().ChromiumOSFactory(
 #
 
 B('Linux Clang (ChromiumOS dbg)',
-    'dbg_linux_chromeos_clang', 'compile', 'chromeos_dbg')
+    'dbg_linux_chromeos_clang', 'compile', 'chromeos_dbg',
+    notify_on_missing=True)
 F('dbg_linux_chromeos_clang', chromeos().ChromiumOSFactory(
     target='Debug',
     options=['--build-tool=make', '--compiler=clang'],

@@ -30,7 +30,7 @@ T('reliability')
 ## Windows
 ################################################################################
 
-B('Win', 'win_clobber', 'compile|windows', 'chromium')
+B('Win', 'win_clobber', 'compile|windows', 'chromium', notify_on_missing=True)
 F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
@@ -45,14 +45,15 @@ F('win_clobber', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Win Reliability', 'win_reliability', '', 'reliability')
+B('Win Reliability', 'win_reliability', '', 'reliability',
+  notify_on_missing=True)
 F('win_reliability', linux().ReliabilityTestsFactory())
 
 ################################################################################
 ## Mac
 ################################################################################
 
-B('Mac', 'mac_clobber', 'compile|testers', 'chromium')
+B('Mac', 'mac_clobber', 'compile|testers', 'chromium', notify_on_missing=True)
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=['sizes'],
@@ -96,7 +97,8 @@ arm_gclient_env = {
   ),
 }
 
-B('Linux', 'linux_clobber', 'compile|testers', 'chromium')
+B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
+  notify_on_missing=True)
 F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=['sizes', 'check_perms'],
@@ -109,7 +111,8 @@ F('linux_clobber', linux().ChromiumFactory(
                         'generate_gtest_json': True,
                         'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
 
-B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium')
+B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
+  notify_on_missing=True)
 F('linux64_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=['sizes'],
@@ -123,7 +126,7 @@ F('linux64_clobber', linux().ChromiumFactory(
         'expectations': True,
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-B('Arm', 'arm_clobber', 'compile|testers', 'chromium')
+B('Arm', 'arm_clobber', 'compile|testers', 'chromium', notify_on_missing=True)
 F('arm_clobber', linux().ChromiumOSFactory(
     clobber=True,
     target='Release',

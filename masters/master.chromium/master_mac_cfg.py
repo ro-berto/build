@@ -39,7 +39,8 @@ T('mac_rel_trigger')
 #
 # Mac Rel Builder
 #
-B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel')
+B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
+  notify_on_missing=True)
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
@@ -54,7 +55,7 @@ F('rel', mac().ChromiumFactory(
 # Mac Rel testers
 #
 B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('rel_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -77,7 +78,7 @@ F('rel_unit_1', mac().ChromiumFactory(
 )
 
 B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('rel_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -88,7 +89,7 @@ F('rel_unit_2', mac().ChromiumFactory(
 )
 
 B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('rel_unit_3', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -99,14 +100,14 @@ F('rel_unit_3', mac().ChromiumFactory(
 )
 
 B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 
 B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('rel_sync', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
@@ -134,7 +135,7 @@ T('mac_dbg_trigger')
 #
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg')
+B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', notify_on_missing=True)
 F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
@@ -151,7 +152,7 @@ F('dbg', mac().ChromiumFactory(
 #
 
 B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_1', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
@@ -175,7 +176,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
                       'browser_total_shards': 4, 'browser_shard_index': 1,}))
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_2', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
@@ -186,7 +187,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
                       'browser_total_shards': 4, 'browser_shard_index': 2,}))
 
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_3', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
@@ -197,7 +198,7 @@ F('dbg_unit_3', mac().ChromiumFactory(
                       'browser_total_shards': 4, 'browser_shard_index': 3,}))
 
 B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_4', mac().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
@@ -208,19 +209,19 @@ F('dbg_unit_4', mac().ChromiumFactory(
                       'browser_total_shards': 4, 'browser_shard_index': 4,}))
 
 B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 B('Mac 10.6 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 
 #
 # Mac Dbg Clang bot
 #
 
-B('Mac Gcc (dbg)', 'dbg_mac_gcc', 'compile', 'mac_dbg')
+B('Mac Gcc (dbg)', 'dbg_mac_gcc', 'compile', 'mac_dbg', notify_on_missing=True)
 F('dbg_mac_gcc', mac().ChromiumFactory(
     target='Debug',
     # Only include test binaries that run reasonably fast and that don't contain

@@ -58,7 +58,7 @@ T('linux_rel_trigger')
 #
 # Linux Rel Builder
 #
-B('Linux Builder x64', 'rel', 'compile', 'linux_rel')
+B('Linux Builder x64', 'rel', 'compile', 'linux_rel', notify_on_missing=True)
 F('rel', linux().ChromiumFactory(
     slave_type='NASBuilder',
     options=['--compiler=goma',] + linux_all_test_targets +
@@ -69,7 +69,7 @@ F('rel', linux().ChromiumFactory(
 # Linux Rel testers
 #
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('rel_unit', linux().ChromiumFactory(
     slave_type='NASTester',
     tests=['check_deps',
@@ -89,7 +89,8 @@ F('rel_unit', linux().ChromiumFactory(
            'jingle'],
     factory_properties={'generate_gtest_json': True}))
 
-B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True)
+B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
+  notify_on_missing=True)
 F('rel_sync', linux().ChromiumFactory(
     slave_type='NASTester',
     tests=['sync_integration'],
@@ -100,7 +101,7 @@ linux_touch_test_targets = linux_all_test_targets + [
   'views_unittests',
 ]
 
-B('Linux Touch', 'rel_touch', 'compile', 'linux_rel')
+B('Linux Touch', 'rel_touch', 'compile', 'linux_rel', notify_on_missing=True)
 F('rel_touch', linux().ChromiumFactory(
     slave_type='BuilderTester',
     options=['--compiler=goma',] + linux_touch_test_targets,
@@ -142,7 +143,7 @@ T('linux_dbg_shared_trigger')
 #
 # Linux Dbg Builder
 #
-B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg')
+B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', notify_on_missing=True)
 F('dbg', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
@@ -158,7 +159,7 @@ F('dbg', linux().ChromiumFactory(
 #
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_1', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
@@ -166,7 +167,7 @@ F('dbg_unit_1', linux().ChromiumFactory(
     factory_properties={'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
-  auto_reboot=True)
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_2', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
@@ -190,7 +191,8 @@ F('dbg_unit_2', linux().ChromiumFactory(
 #
 # Linux Dbg Component Builder
 #
-B('Linux Builder (dbg)(shared)', 'dbg_shared', 'compile', 'linux_dbg')
+B('Linux Builder (dbg)(shared)', 'dbg_shared', 'compile', 'linux_dbg',
+  notify_on_missing=True)
 F('dbg_shared', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
@@ -204,7 +206,7 @@ F('dbg_shared', linux().ChromiumFactory(
 #
 
 B('Linux Tests (dbg)(shared)', 'dbg_shared_unit', 'testers',
-  'linux_dbg_shared_trigger', auto_reboot=True)
+  'linux_dbg_shared_trigger', auto_reboot=True, notify_on_missing=True)
 F('dbg_shared_unit', linux().ChromiumFactory(
     target='Debug',
     slave_type='NASTester',
@@ -226,7 +228,8 @@ F('dbg_shared_unit', linux().ChromiumFactory(
 # Linux Dbg Clang bot
 #
 
-B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg')
+B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
+  notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=make', '--compiler=clang'],
