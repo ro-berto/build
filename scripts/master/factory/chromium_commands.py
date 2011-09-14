@@ -726,7 +726,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = [self._python, self._layout_test_tool,
            '--target', self._target,
-           '--build-type', 'v8',
            '-o', webkit_result_dir,
            '--build-dir', self._build_dir,
            '--build-number', WithProperties("%(buildnumber)s"),
