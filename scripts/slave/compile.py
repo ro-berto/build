@@ -855,11 +855,6 @@ def main_win(options, args):
   if not options.solution:
     options.solution = 'all.sln'
 
-  # jsc builds need another environment variable.
-  # TODO(nsylvain): We should have --js-engine option instead.
-  if options.solution.find('_kjs') != -1:
-    env['JS_ENGINE_TYPE'] = '_kjs'
-
   result = -1
   solution = os.path.join(options.build_dir, options.solution)
   command = [tool, solution] + tool_options + args
