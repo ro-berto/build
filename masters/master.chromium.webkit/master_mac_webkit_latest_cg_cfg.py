@@ -67,10 +67,22 @@ F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'archive_webkit_results': True,
         'test_results_server': 'test-results.appspot.com',
+        'gclient_env': {'GYP_DEFINES':'clang=0'},
     }))
 
-B('Webkit Mac10.6 (CG)', 'f_webkit_cg_rel_tests',
+B('Webkit Mac10.6 (CG)', 'f_webkit_cg_rel_tests_106',
   scheduler='s5_webkit_cg_rel')
+F('f_webkit_cg_rel_tests_106', mac().ChromiumWebkitLatestFactory(
+    options=[
+        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
+    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    factory_properties={
+        'archive_webkit_results': True,
+        'test_results_server': 'test-results.appspot.com',
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1',
+        },
+    }))
 
 ################################################################################
 ## Debug
@@ -111,6 +123,7 @@ F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
         'archive_webkit_results': True,
         'layout_part': '1:2',
         'test_results_server': 'test-results.appspot.com',
+        'gclient_env': {'GYP_DEFINES':'clang=0'},
     }))
 
 B('Webkit Mac10.5 (CG)(dbg)(2)', 'f_webkit_cg_dbg_tests_2',
@@ -123,17 +136,22 @@ F('f_webkit_cg_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
         'archive_webkit_results': True,
         'layout_part': '2:2',
         'test_results_server': 'test-results.appspot.com',
+        'gclient_env': {'GYP_DEFINES':'clang=0'},
     }))
 
 B('Webkit Mac10.6 (CG)(dbg)', 'f_webkit_cg_dbg_tests',
   scheduler='s5_webkit_cg_dbg')
 F('f_webkit_cg_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    options=['--', '-project', '../webkit/webkit.xcodeproj'],
+    options=[
+        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'test_results_server': 'test-results.appspot.com',
+        'gclient_env': {
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1',
+        },
     }))
 
 ################################################################################

@@ -66,7 +66,7 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
+        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'test_results_server': 'test-results.appspot.com',
     }))
 
@@ -121,7 +121,7 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
+        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '1:2',
         'test_results_server': 'test-results.appspot.com',
     }))
@@ -134,7 +134,7 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     tests=['webkit', 'webkit_gpu'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1'},
+        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '2:2',
         'test_results_server': 'test-results.appspot.com',
     }))
