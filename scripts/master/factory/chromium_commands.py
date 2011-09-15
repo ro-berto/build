@@ -75,6 +75,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self._check_deps_tool = J('src', 'tools', 'checkdeps', 'checkdeps.py')
     self._check_bins_tool = J('src', 'tools', 'checkbins', 'checkbins.py')
     self._check_perms_tool = J('src', 'tools', 'checkperms', 'checkperms.py')
+    self._check_licenses_tool = J('src', 'tools', 'checklicenses',
+                                  'checklicenses.py')
     self._posix_memory_tests_runner = J('src', 'tools', 'valgrind',
                                         'chrome_tests.sh')
     self._win_memory_tests_runner = J('src', 'tools', 'valgrind',
@@ -190,6 +192,12 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._check_perms_tool,
            '--root', self._repository_root]
     self.AddTestStep(shell.ShellCommand, 'check_perms', cmd,
+                     do_step_if=self.TestStepFilter)
+
+  def AddCheckLicensesStep(self):
+    cmd = [self._python, self._check_licenses_tool,
+           '--root', self._repository_root]
+    self.AddTestStep(shell.ShellCommand, 'check_licenses', cmd,
                      do_step_if=self.TestStepFilter)
 
   def AddCheckLKGRStep(self):
