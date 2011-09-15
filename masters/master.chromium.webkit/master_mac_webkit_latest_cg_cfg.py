@@ -52,8 +52,9 @@ F('f_webkit_mac_cg_rel', mac().ChromiumWebkitLatestFactory(
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0'
         },
+        'layout_test_platform': 'chromium-cg-mac',
     }))
 
 #
@@ -66,8 +67,9 @@ F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
+        'gclient_env': {'GYP_DEFINES':'clang=0 use_skia=0'},
+        'layout_test_platform': 'chromium-cg-mac',
         'test_results_server': 'test-results.appspot.com',
-        'gclient_env': {'GYP_DEFINES':'clang=0'},
     }))
 
 B('Webkit Mac10.6 (CG)', 'f_webkit_cg_rel_tests_106',
@@ -78,10 +80,11 @@ F('f_webkit_cg_rel_tests_106', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'test_results_server': 'test-results.appspot.com',
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1',
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0',
         },
+        'layout_test_platform': 'chromium-cg-mac',
+        'test_results_server': 'test-results.appspot.com',
     }))
 
 ################################################################################
@@ -105,8 +108,9 @@ F('f_webkit_mac_cg_dbg', mac().ChromiumWebkitLatestFactory(
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0'
         },
+        'layout_test_platform': 'chromium-cg-mac',
     }))
 
 #
@@ -121,9 +125,10 @@ F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
+        'gclient_env': {'GYP_DEFINES':'clang=0 use_skia=0'},
         'layout_part': '1:2',
+        'layout_test_platform': 'chromium-cg-mac',
         'test_results_server': 'test-results.appspot.com',
-        'gclient_env': {'GYP_DEFINES':'clang=0'},
     }))
 
 B('Webkit Mac10.5 (CG)(dbg)(2)', 'f_webkit_cg_dbg_tests_2',
@@ -134,9 +139,10 @@ F('f_webkit_cg_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     tests=['webkit', 'webkit_gpu'],
     factory_properties={
         'archive_webkit_results': True,
+        'gclient_env': {'GYP_DEFINES':'clang=0 use_skia=0'},
         'layout_part': '2:2',
+        'layout_test_platform': 'chromium-cg-mac',
         'test_results_server': 'test-results.appspot.com',
-        'gclient_env': {'GYP_DEFINES':'clang=0'},
     }))
 
 B('Webkit Mac10.6 (CG)(dbg)', 'f_webkit_cg_dbg_tests',
@@ -148,10 +154,11 @@ F('f_webkit_cg_dbg_tests', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'test_results_server': 'test-results.appspot.com',
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1',
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0',
         },
+        'layout_test_platform': 'chromium-cg-mac',
+        'test_results_server': 'test-results.appspot.com',
     }))
 
 ################################################################################

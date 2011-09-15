@@ -54,6 +54,7 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
         },
+        'layout_test_platform': 'chromium-mac',
     }))
 
 #
@@ -67,6 +68,7 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'archive_webkit_results': True,
         'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
+        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
 
@@ -78,10 +80,11 @@ F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'test_results_server': 'test-results.appspot.com',
         'gclient_env': {
             'GYP_DEFINES':'use_skia=1 clang=1 clang_use_chrome_plugins=1',
         },
+        'layout_test_platform': 'chromium-mac',
+        'test_results_server': 'test-results.appspot.com',
     }))
 
 ################################################################################
@@ -107,6 +110,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
         },
+        'layout_test_platform': 'chromium-mac',
     }))
 
 #
@@ -123,6 +127,7 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
         'archive_webkit_results': True,
         'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '1:2',
+        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
 
@@ -136,6 +141,7 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
         'archive_webkit_results': True,
         'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '2:2',
+        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
 
@@ -148,10 +154,11 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'test_results_server': 'test-results.appspot.com',
         'gclient_env': {
             'GYP_DEFINES':'use_skia=1 clang=1 clang_use_chrome_plugins=1',
         },
+        'layout_test_platform': 'chromium-mac',
+        'test_results_server': 'test-results.appspot.com',
     }))
 
 ################################################################################
