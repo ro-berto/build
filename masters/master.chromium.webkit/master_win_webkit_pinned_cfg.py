@@ -13,7 +13,7 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-def win(): return chromium_factory.ChromiumFactory('src/webkit', 'win32')
+def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 
 ################################################################################
@@ -42,7 +42,9 @@ D('s1_chromium_rel_dep', 's1_chromium_rel')
 #
 B('Webkit Win Builder (deps)', 'f_webkit_win_rel',
   scheduler='s1_chromium_rel', builddir='webkit-win-pinned-rel')
-F('f_webkit_win_rel', win().ChromiumFactory(slave_type='Builder'))
+F('f_webkit_win_rel', win().ChromiumFactory(
+    slave_type='Builder',
+    project='all.sln;webkit_builder_win'))
 
 #
 # Win Rel Webkit testers
@@ -81,7 +83,8 @@ B('Webkit Win Builder (deps)(dbg)', 'f_webkit_win_dbg',
   scheduler='s1_chromium_dbg', builddir='webkit-win-pinned-dbg')
 F('f_webkit_win_dbg', win().ChromiumFactory(
     target='Debug',
-    slave_type='Builder'))
+    slave_type='Builder',
+    project='all.sln;webkit_builder_win'))
 
 #
 # Win Dbg Webkit testers
