@@ -202,7 +202,8 @@ class CbuildbotFactory(object):
     if self.crostools_repo:
       self._git_clear_and_checkout(self.crostools_repo)
 
-  def cbuildbot_type(self, params, description_suffix='', haltOnFailure=True):
+  def cbuildbot_type(self, params, description_suffix='', haltOnFailure=True,
+                     pass_revision=False):
     """Adds cbuildbot steps for pre flight queue builders.
 
     Cbuildbot includes the steps for syncing and building pre flight queue
@@ -212,6 +213,7 @@ class CbuildbotFactory(object):
       params:  Extra parameters for cbuildbot.
       description_suffix:  Optional suffix to add to description that shows up
         on dashboard.
+      pass_revision: To pass the chrome revision desired into the build.
       haltOnFailure: To halt build because of failure of cbuildbot step.  Useful
         for setting to False for case of Chrome pfq where multiple cbuildbot
         steps are invoked.
@@ -233,6 +235,8 @@ class CbuildbotFactory(object):
 
     cbuild_cmd = ['chromite/buildbot/cbuildbot',
                   shell.WithProperties("--buildnumber=%(buildnumber)s")]
+    if pass_revision:
+      cbuild_cmd.append(shell.WithProperties('--chrome_version=%(revision)s'))
 
     if self._branchAtOrAbove('0.12'):
       cbuild_cmd += ['--buildbot']
@@ -347,6 +351,7 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
       chromite_repo: git repo for chromite toolset.
       dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
       chrome_root: directory to use for chrome.
+      pass_revision: to pass the chrome revision desired into the build.
       factory: a factory with pre-existing steps to extend rather than start
           fresh.  Allows composing.
   """
@@ -355,7 +360,7 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                crostools_repo=CbuildbotFactory._default_crostools,
                chromite_repo=CbuildbotFactory._default_chromite,
                dry_run=False, chrome_root=None, factory=None,
-               slave_manager=True, chromite_patch=None):
+               slave_manager=True, chromite_patch=None, pass_revision=False):
     CbuildbotFactory.__init__(self, type=CbuildbotFactory.CHROME_CBUILDBOT_TYPE,
                               board=None,
                               buildroot=buildroot, is_master=is_master,
@@ -371,6 +376,7 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
       for chrome_rev in chrome_rev_stages:
         bot_params = '--chrome_rev=%s %s' % (chrome_rev, params)
         self.cbuildbot_type(bot_params, description_suffix=chrome_rev,
-                            haltOnFailure=False)
+                            pass_revision=pass_revision, haltOnFailure=False)
     else:
-      self.cbuildbot_type(params, haltOnFailure=False)
+      self.cbuildbot_type(params, haltOnFailure=False,
+                          pass_revision=pass_revision)
