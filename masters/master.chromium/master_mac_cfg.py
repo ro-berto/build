@@ -217,23 +217,6 @@ B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
 B('Mac 10.6 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
 
-#
-# Mac Dbg Clang bot
-#
-
-B('Mac Gcc (dbg)', 'dbg_mac_gcc', 'compile', 'mac_dbg', notify_on_missing=True)
-F('dbg_mac_gcc', mac().ChromiumFactory(
-    target='Debug',
-    # Only include test binaries that run reasonably fast and that don't contain
-    # many flaky tests.
-    tests=[
-        'base', 'gfx', 'crypto',
-        # Adds ipc_tests, sync_unit_tests, unit_tests, and sql_unittests
-        # unit_tests is very flaky due to http://crbug.com/60426
-        # TODO(thakis): Re-add this once the bug is fixed.
-        #'unit',
-    ]))
-
 
 def Update(config, active_master, c):
   return helper.Update(c)
