@@ -7,6 +7,7 @@
 """
 
 import os
+import shutil
 import subprocess
 import sys
 
@@ -43,6 +44,14 @@ def HotPatchSlaveBuilder():
     Reboot()
 
   SlaveBuilder.remote_shutdown = rebooting_remote_shutdown
+
+
+def FixSubversionConfig():
+  if sys.platform == 'win32':
+    dest = os.path.join(os.environ['APPDATA'], 'Subversion', 'config')
+  else:
+    dest = os.path.join(os.environ['HOME'], '.subversion', 'config')
+  shutil.copyfile('config', dest)
 
 
 def main():
@@ -167,6 +176,8 @@ def main():
     pass
   else:
     raise NotImplementedError('Unknown platform')
+
+  FixSubversionConfig()
 
   # Run the slave.
   HotPatchSlaveBuilder()
