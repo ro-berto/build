@@ -8,6 +8,7 @@
 Only works on Windows."""
 
 import os
+import re
 import subprocess
 import sys
 import time
@@ -47,14 +48,83 @@ def ProcessExists(process_name):
   return os.system(command) == 0
 
 
+def ProcessExistsByPid(pid):
+  """Return whether pid is found in tasklist output."""
+  # Use tasklist.exe to find if a given process_name is running.
+  command = ('tasklist.exe /fi "pid eq %d" | findstr.exe "K"' %
+             pid)
+  # findstr.exe exits with code 0 if the given string is found.
+  return os.system(command) == 0
+
+
 def AnyProcessExists(process_list):
   """Return whether any process from the list is still running."""
   return any(ProcessExists(process) for process in process_list)
 
 
+def AnyProcessExistsByPid(pid_list):
+  """Return whether any process from the list is still running."""
+  return any(ProcessExistsByPid(pid) for pid in pid_list)
+
+
 def Kill(process_name):
   command = ['taskkill.exe', '/f', '/t', '/im']
   subprocess.call(command + [process_name])
+
+
+def KillByPid(pid):
+  command = ['taskkill.exe', '/f', '/t', '/pid']
+  subprocess.call(command + [str(pid)])
+
+
+def KillProcessesUsingCurrentDirectory():
+  handle_exe = os.path.join(os.getcwd(), '..', '..', '..',
+                            'third_party', 'psutils', 'handle.exe')
+  if not os.path.exists(handle_exe):
+    return False
+  try:
+    handle = subprocess.Popen([handle_exe,
+                               os.path.join(os.getcwd(), 'src'),
+                               '/accepteula'],
+                              stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE)
+  except WindowsError, e:
+    print e
+    return False
+  stdout, stderr = handle.communicate()
+
+  # Do a basic sanity check to make sure the tool is working fine.
+  if stderr or ('.exe' not in stdout and
+                'No matching handles found' not in stdout):
+    print 'Error running handle.exe: ' + repr((stdout, stderr))
+    return False
+
+  pid_list = []
+  for line in stdout.splitlines():
+    # Killing explorer.exe would hose the bot, don't do that.
+    if 'explorer.exe' in line:
+      continue
+
+    if '.exe' in line:
+      match = re.match('.*pid: (\d+).*', line)
+      if match:
+        pid = int(match.group(1))
+
+        # Do not kill self.
+        if int(pid) == int(os.getpid()):
+          continue
+
+        print 'Killing: ' + line
+        pid_list.append(pid)
+        KillByPid(pid)
+
+  # Give our processes time to exit.
+  for _ in range(60):
+    if not AnyProcessExistsByPid(pid_list):
+      break
+    time.sleep(1)
+
+  return True
 
 
 # rdpclip.exe is part of Remote Desktop.  It has a bug that sometimes causes
@@ -151,10 +221,14 @@ if '__main__' == __name__:
   # reappearing.
   KillAll(lingering_processes, must_die=False)
 
+  rc = 0
+  if not KillProcessesUsingCurrentDirectory():
+    rc = 88
+
   # Kill all regular processes.  We must guarantee that these are killed since
   # we exit with an error code if they're not.
   if KillAll(processes, must_die=True):
-    sys.exit(0)
+    sys.exit(rc)
 
   # Some processes were not killed, exit with non-zero status.
   sys.exit(1)
