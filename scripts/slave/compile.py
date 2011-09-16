@@ -571,10 +571,6 @@ def common_make_settings(
       command.append('-r')
       return
 
-  # Use gcc and g++ by default.
-  cc = 'gcc'
-  cpp = 'g++'
-
   if chromium_utils.IsLinux():
     # Test if we can use distcc.  Fastbuild servers currently support uname()
     # machine results of i686 or x86_64.
@@ -594,8 +590,14 @@ def common_make_settings(
       print('Distcc enabled:')
       print('ENV["DISTCC_HOSTS"] = "%s"' % env['DISTCC_HOSTS'])
 
-      cc = 'distcc ' + cc
-      cpp = 'distcc ' + cpp
+      # Export our settings into our copy of the environment.
+      cc = 'distcc gcc'
+      cpp = 'distcc g++'
+      print('ENV["CC"] = "%s"' % cc)
+      print('ENV["CXX"] = "%s"' % cpp)
+      env['CC'] = cc
+      env['CXX'] = cpp
+
       distcc_jobs = 12
       if jobs < distcc_jobs:
         jobs = distcc_jobs
@@ -607,14 +609,6 @@ def common_make_settings(
       print('  distcc_hosts_path: %s' % distcc_hosts_path)
       print('  hostname: %s' % hostname)
 
-  cc = ccache + cc
-  cpp = ccache + cpp
-
-  # Export our settings into our copy of the environment.
-  print('ENV[\"CC\"] = \"%s\"' % cc)
-  print('ENV[\"CXX\"] = \"%s\"' % cpp)
-  env['CC'] = cc
-  env['CXX'] = cpp
   command.append('-j%d' % jobs)
 
 
