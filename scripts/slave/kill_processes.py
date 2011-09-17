@@ -88,7 +88,7 @@ def KillProcessesUsingCurrentDirectory():
                                '/accepteula'],
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)
-  except WindowsError, e:
+  except WindowsError, e:  # pylint: disable=E0602
     print e
     return False
   stdout, stderr = handle.communicate()
@@ -100,7 +100,7 @@ def KillProcessesUsingCurrentDirectory():
     return False
 
   pid_list = []
-  for line in stdout.splitlines():
+  for line in stdout.splitlines():  # pylint: disable=E1103
     # Killing explorer.exe would hose the bot, don't do that.
     if 'explorer.exe' in line:
       continue
