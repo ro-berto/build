@@ -396,7 +396,8 @@ class FactoryCommands(object):
     cmd.extend(arg_list)
 
     self.AddTestStep(gtest_command.GTestCommand, test_name, ListProperties(cmd),
-                     description, do_step_if=self.TestStepFilter)
+                     description,
+                     do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddSlavelasticTestStep(self, test_name, factory_properties=None,
                              timeout=300):
