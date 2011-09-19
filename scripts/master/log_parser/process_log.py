@@ -262,7 +262,8 @@ class PerformanceLogProcessor(object):
     actual = perfdata['actual_delta']
     regress = perfdata['regress']
     improve = perfdata['improve']
-    if regress > improve:
+    if (('better' in perfdata and perfdata['better'] == 'lower') or
+        ('better' not in perfdata and regress > improve)):
       # The "lower is better" case.  (ie. time results)
       if actual < improve:
         ratio = 1 - (float(actual) / improve)
