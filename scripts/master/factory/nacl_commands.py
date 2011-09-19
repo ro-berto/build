@@ -11,6 +11,7 @@ import logging
 
 from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
+from buildbot.process.properties import WithProperties
 
 from master import chromium_step
 from master.factory import commands
@@ -31,8 +32,17 @@ class NativeClientCommands(commands.FactoryCommands):
                                       target_platform)
 
   def AddTrigger(self, trigger_who):
-    self._factory.addStep(trigger.Trigger(schedulerNames=[trigger_who],
-                                          waitForFinish=True))
+    self._factory.addStep(trigger.Trigger(
+        schedulerNames=[trigger_who],
+        waitForFinish=True,
+        set_properties={
+            'triggered_by_buildername': WithProperties(
+                '%(buildername:-None)s'),
+            'triggered_by_buildnumber': WithProperties(
+                '%(buildnumber:-None)s'),
+            'triggered_by_slavename': WithProperties(
+                '%(slavename:-None)s'),
+        }))
 
   def AddModularBuildStep(self, modular_build_type, timeout=1200):
     self._factory.addStep(chromium_step.AnnotatedCommand,
@@ -64,6 +74,13 @@ class NativeClientCommands(commands.FactoryCommands):
                        factory_properties=None, usePython=False, env=None):
     factory_properties = factory_properties or {}
     env = env or {}
+    env = dict(env)
+    env['BUILDBOT_TRIGGERED_BY_BUILDERNAME'] = WithProperties(
+        '%(triggered_by_buildername:-None)s'),
+    env['BUILDBOT_TRIGGERED_BY_BUILDNUMBER'] = WithProperties(
+        '%(triggered_by_buildnumber:-None)s'),
+    env['BUILDBOT_TRIGGERED_BY_SLAVENAME'] = WithProperties(
+        '%(triggered_by_slavename:-None)s'),
     if 'test_name' not in factory_properties:
       test_class = chromium_step.AnnotatedCommand
     else:

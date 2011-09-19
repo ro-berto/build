@@ -46,7 +46,7 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       return gclient_factory.ShouldRunTest(tests, test)
     f = factory_cmd_obj
 
-    for mode in ['dbg', 'opt']:
+    for mode in ['dbg', 'opt', 'opt_panda', 'perf_panda']:
       if R('nacl_trigger_arm_hw_%s' % mode):
         f.AddTrigger('arm_%s_hw_tests' % mode)
       if R('nacl_trigger_win7atom64_hw_%s' % mode):
