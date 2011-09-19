@@ -76,11 +76,11 @@ class NativeClientCommands(commands.FactoryCommands):
     env = env or {}
     env = dict(env)
     env['BUILDBOT_TRIGGERED_BY_BUILDERNAME'] = WithProperties(
-        '%(triggered_by_buildername:-None)s'),
+        '%(triggered_by_buildername:-None)s')
     env['BUILDBOT_TRIGGERED_BY_BUILDNUMBER'] = WithProperties(
-        '%(triggered_by_buildnumber:-None)s'),
+        '%(triggered_by_buildnumber:-None)s')
     env['BUILDBOT_TRIGGERED_BY_SLAVENAME'] = WithProperties(
-        '%(triggered_by_slavename:-None)s'),
+        '%(triggered_by_slavename:-None)s')
     if 'test_name' not in factory_properties:
       test_class = chromium_step.AnnotatedCommand
     else:
