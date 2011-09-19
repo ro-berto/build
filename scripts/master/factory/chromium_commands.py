@@ -562,6 +562,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = [self._python, self._test_tool, '--run-shell-script',
            '--target', self._target, '--build-dir', self._build_dir]
+    do_step_if = self.TestStepFilter
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
       test_name = test_name[0:matched.start()]
@@ -569,6 +570,9 @@ class ChromiumCommands(commands.FactoryCommands):
       numshards = int(matched.group(2))
       cmd.extend(['--shard-index', str(shard),
                   '--total-shards', str(numshards)])
+    elif test_name.endswith('_gtest_filter_required'):
+      test_name = test_name[0:-len('_gtest_filter_required')]
+      do_step_if = self.TestStepFilterGTestFilterRequired
 
     # Memory tests runner script path is relative to build_dir.
     if self._target_platform != 'win32':
@@ -578,12 +582,13 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd.extend([runner,
                 '--build_dir', build_dir,
                 '--test', test_name,
-                '--tool', tool_name])
+                '--tool', tool_name,
+                WithProperties("%(gtest_filter)s")])
 
     test_name = 'memory test: %s' % test_name
     self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,
                      timeout=timeout,
-                     do_step_if=self.TestStepFilter)
+                     do_step_if=do_step_if)
 
   def AddHeapcheckTest(self, test_name, timeout=1200):
     build_dir = os.path.join(self._build_dir, self._target)

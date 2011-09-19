@@ -312,6 +312,9 @@ class FactoryCommands(object):
   def TestStepFilter(self, bStep):
     return self.TestStepFilterImpl(bStep, True)
 
+  def TestStepFilterGTestFilterRequired(self, bStep):
+    return self.TestStepFilterImpl(bStep, False)
+
   @staticmethod
   def TestStepFilterImpl(bStep, default):
     """Examines the 'testfilters' property of the build and determines if
@@ -321,10 +324,13 @@ class FactoryCommands(object):
     if not filters:
       return default
 
+    name = bStep.name
+    if name.startswith('memory test: '):
+      name = name[len('memory test: '):]
     for testfilter in filters:
-      if testfilter == bStep.name:
+      if testfilter == name:
         return True
-      if testfilter.startswith("%s:" % bStep.name):
+      if testfilter.startswith("%s:" % name):
         # This is gtest specific, but other test types can safely ignore it.
         bStep.setProperty('gtest_filter', "--gtest_filter=%s" %
                           testfilter.split(':', 1)[1], "Scheduler")
