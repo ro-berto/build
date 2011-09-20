@@ -377,11 +377,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
                        matrix=True, number_of_media_files=1,
                        suite_name='AV_PERF')
-      # Run test with list form input file.
-      f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
-                       matrix=False, number_of_media_files=1,
-                       suite_name='AV_PERF')
-
       # Run functional tests.
       f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
                        matrix=False, number_of_media_files=1,
