@@ -14,10 +14,12 @@ from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
-if buildbot.version == '0.7.12':
-  from master.chromium_status import WebStatus
+from buildbot.status.web.baseweb import WebStatus
+
+if int(buildbot.version.split('.')[1]) == 7:
+  from master import chromium_status
 else:
-  from buildbot.status.web.baseweb import WebStatus
+  import master.chromium_status_bb8 as chromium_status
 
 from master import slaves_list
 import config
@@ -223,12 +225,16 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   if buildbot.version == '0.8.4p1':
     kwargs['provide_feeds'] = ['json']
   if active_master.master_port:
-    c['status'].append(WebStatus(active_master.master_port, allowForce=True,
-                                 num_events_max=3000, **kwargs))
+    webstatus = WebStatus(active_master.master_port, allowForce=True,
+                          num_events_max=3000, **kwargs)
+    chromium_status.SetupChromiumPages(webstatus)
+    c['status'].append(webstatus)
   if active_master.master_port_alt:
-    c['status'].append(WebStatus(active_master.master_port_alt,
-                                 allowForce=False, num_events_max=3000,
-                                 **kwargs))
+    webstatus = WebStatus(active_master.master_port_alt,
+                          allowForce=False, num_events_max=3000,
+                          **kwargs)
+    chromium_status.SetupChromiumPages(webstatus)
+    c['status'].append(webstatus)
 
   # Keep last build logs, the default is too low.
   c['buildHorizon'] = 1000

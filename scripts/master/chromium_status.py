@@ -8,32 +8,15 @@ import os
 import re
 import urllib
 
-import buildbot
 from buildbot import interfaces
 from buildbot import util
 import buildbot.process as process
 import buildbot.status.web.base as base
-import buildbot.status.web.baseweb as baseweb
 import buildbot.status.web.console as console
 import buildbot.status.web.waterfall as waterfall
 import buildbot.status.web.changes as changes
 import buildbot.status.web.builder as builder
-
-if buildbot.version == '0.7.12':
-  from buildbot.status.web.base import make_row
-else:
-  ROW_TEMPLATE = '''
-  <div class="row">
-    <span class="label">%(label)s</span>
-    <span class="field">%(field)s</span>
-  </div>
-  '''
-  from twisted.web import html
-  def make_row(label, field):
-    """Imported from Buildbot 0.7.12."""
-    label = html.escape(label)
-    return ROW_TEMPLATE % {"label": label, "field": field}
-
+from buildbot.status.web.base import make_row
 import buildbot.status.builder as statusbuilder
 import buildbot.sourcestamp as sourcestamp
 
@@ -141,8 +124,7 @@ def HookChangeHtmlBox():
 # In Buildbot 0.7.12, hook get_HTML_box to add the revision number to the change
 # revision to the waterfall.  In 0.8.4p1, modify Buildbot directly to add the
 # change revision.
-if buildbot.version == '0.7.12':
-  HookChangeHtmlBox()
+HookChangeHtmlBox()
 
 
 def GetAnnounce(public_html):
@@ -450,35 +432,17 @@ class BuildersResource(builder.BuildersResource):
     return base.HtmlResource.getChild(self, path, req)
 
 
-class WebStatus(baseweb.WebStatus):
-  """Class that provides hook to modify default behavior of
-  baseweb.WebStatus.
-
-  If you wish to override web status classes, this is the place
-  to instantiate them.
+def SetupChromiumPages(webstatus):
+  """Register custom web reporting classes.
+  @param webstatus -- An instance of baseweb.WebStatus.
   """
-  # pylint parsing bug.
-  # pylint: disable=W0221
-
-  def setupUsualPages(self, *args, **kwargs):
-    """ The method that defines resources to expose.
-
-    We are supplying our modified WaterfallStatusResource and BuildersResource
-    instances.
-    """
-    # baseweb.putChild() just records the putChild() calls and doesn't
-    # actually add them to the server until initialization is complete.
-    # So call the superclass to get the default pages supplied by
-    # the current version of buildbot, and then just override our
-    # custom ones.
-    baseweb.WebStatus.setupUsualPages(self, *args, **kwargs)
-    self.putChild("waterfall", WaterfallStatusResource())
-    self.putChild("console", ConsoleStatusResource(
-        orderByTime=self.orderConsoleByTime))
-    self.putChild("bot_status.json", console.ConsoleStatusResource())
-    self.putChild("stats", stats.StatsStatusResource())
-    self.putChild("grid", ConsoleStatusResource())
-    self.putChild("tgrid", ConsoleStatusResource())
-    self.putChild("builders", BuildersResource())
-    self.putChild("horizontal_one_box_per_builder",
-                  HorizontalOneBoxPerBuilder())
+  webstatus.putChild("waterfall", WaterfallStatusResource())
+  webstatus.putChild("console", ConsoleStatusResource(
+      orderByTime=webstatus.orderConsoleByTime))
+  webstatus.putChild("bot_status.json", console.ConsoleStatusResource())
+  webstatus.putChild("stats", stats.StatsStatusResource())
+  webstatus.putChild("grid", ConsoleStatusResource())
+  webstatus.putChild("tgrid", ConsoleStatusResource())
+  webstatus.putChild("builders", BuildersResource())
+  webstatus.putChild("horizontal_one_box_per_builder",
+      HorizontalOneBoxPerBuilder())
