@@ -32,6 +32,13 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
 defaults['category'] = '5webkit mac latest'
 
+# Temporarily define these in a single place for easier local override of
+# build options.
+# As noted in http://crbug.com/97423 , this should be reverted by 31 Oct 2011.
+builder_options = [
+    '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj']
+gyp_defines = 'clang=1 clang_use_chrome_plugins=1 use_skia=0'
+
 ################################################################################
 ## Release
 ################################################################################
@@ -48,11 +55,10 @@ B('Webkit Mac Builder (CG)', 'f_webkit_mac_cg_rel',
   scheduler='s5_webkit_cg_rel', builddir='webkit-mac-cg-latest-rel')
 F('f_webkit_mac_cg_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
-    options=[
-        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    options=builder_options,
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0'
+            'GYP_DEFINES':gyp_defines,
         },
         'layout_test_platform': 'chromium-cg-mac',
     }))
@@ -60,6 +66,8 @@ F('f_webkit_mac_cg_rel', mac().ChromiumWebkitLatestFactory(
 #
 # Mac Rel Webkit builder+testers
 #
+
+# For now, we force clang off for 10.5.  See http://crbug.com/96724
 B('Webkit Mac10.5 (CG)', 'f_webkit_cg_rel_tests',
   scheduler='s5_webkit_cg_rel')
 F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
@@ -75,13 +83,12 @@ F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
 B('Webkit Mac10.6 (CG)', 'f_webkit_cg_rel_tests_106',
   scheduler='s5_webkit_cg_rel')
 F('f_webkit_cg_rel_tests_106', mac().ChromiumWebkitLatestFactory(
-    options=[
-        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
+    options=builder_options,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0',
+            'GYP_DEFINES':gyp_defines,
         },
         'layout_test_platform': 'chromium-cg-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -104,11 +111,10 @@ B('Webkit Mac Builder (CG)(dbg)', 'f_webkit_mac_cg_dbg',
 F('f_webkit_mac_cg_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
-    options=[
-        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    options=builder_options,
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0'
+            'GYP_DEFINES':gyp_defines,
         },
         'layout_test_platform': 'chromium-cg-mac',
     }))
@@ -117,6 +123,7 @@ F('f_webkit_mac_cg_dbg', mac().ChromiumWebkitLatestFactory(
 # Mac Dbg Webkit builder+testers
 #
 
+# For now, we force clang off for 10.5.  See http://crbug.com/96724
 B('Webkit Mac10.5 (CG)(dbg)(1)', 'f_webkit_cg_dbg_tests_1',
   scheduler='s5_webkit_cg_dbg')
 F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
@@ -131,6 +138,7 @@ F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
+# For now, we force clang off for 10.5.  See http://crbug.com/96724
 B('Webkit Mac10.5 (CG)(dbg)(2)', 'f_webkit_cg_dbg_tests_2',
   scheduler='s5_webkit_cg_dbg')
 F('f_webkit_cg_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
@@ -149,13 +157,12 @@ B('Webkit Mac10.6 (CG)(dbg)', 'f_webkit_cg_dbg_tests',
   scheduler='s5_webkit_cg_dbg')
 F('f_webkit_cg_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    options=[
-        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
+    options=builder_options,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0',
+            'GYP_DEFINES':gyp_defines,
         },
         'layout_test_platform': 'chromium-cg-mac',
         'test_results_server': 'test-results.appspot.com',
