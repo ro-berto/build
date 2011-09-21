@@ -14,6 +14,7 @@ from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
+from master.status_push import HttpStatusPush
 from buildbot.status.web.baseweb import WebStatus
 
 if int(buildbot.version.split('.')[1]) == 7:
@@ -221,6 +222,11 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         mode='problem',
         relayhost=config.Master.smtp,
         lookup=FilterDomain()))
+
+  # For all production masters, notify our health-monitoring webapp.
+  if active_master.is_production_host:
+    c['status'].append(HttpStatusPush(
+        'https://chromium-build-health.appspot.com/status_receiver'))
 
   kwargs = {}
   if public_html:
