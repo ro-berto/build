@@ -838,7 +838,7 @@ def RemoveChromeTemporaryFiles():
   # there is a lot to cleanup and also se we see the leaks in the
   # build logs.
   # At some point a leading dot got added, support with and without it.
-  kLogRegex = '^\.?(com\.google\.chrome|org\.chromium)\.'
+  kLogRegex = '^\.?(com\.google\.Chrome|org\.chromium)\.'
   if IsWindows():
     kLogRegex = '^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
