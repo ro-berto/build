@@ -206,3 +206,4 @@ def SetupChromiumPages(webstatus):
   webstatus.putChild("tgrid", ConsoleStatusResource())
   webstatus.putChild("horizontal_one_box_per_builder",
                      HorizontalOneBoxPerBuilder())
+  return webstatus

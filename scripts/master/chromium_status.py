@@ -446,3 +446,4 @@ def SetupChromiumPages(webstatus):
   webstatus.putChild("builders", BuildersResource())
   webstatus.putChild("horizontal_one_box_per_builder",
       HorizontalOneBoxPerBuilder())
+  return webstatus
