@@ -183,6 +183,12 @@ class FilterDomain(util.ComparableMixin):
     return result
 
 
+def CreateWebStatus(port, **kwargs):
+  webstatus = WebStatus(port, **kwargs)
+  chromium_status.SetupChromiumPages(webstatus)
+  return webstatus
+
+
 def AutoSetupMaster(c, active_master, mail_notifier=False,
                     public_html=None, order_console_by_time=False):
   """Add common settings and status services to a master.
@@ -225,16 +231,15 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   if buildbot.version == '0.8.4p1':
     kwargs['provide_feeds'] = ['json']
   if active_master.master_port:
-    webstatus = WebStatus(active_master.master_port, allowForce=True,
-                          num_events_max=3000, **kwargs)
-    chromium_status.SetupChromiumPages(webstatus)
-    c['status'].append(webstatus)
+    c['status'].append(CreateWebStatus(active_master.master_port,
+                                       allowForce=True,
+                                       num_events_max=3000,
+                                       **kwargs))
   if active_master.master_port_alt:
-    webstatus = WebStatus(active_master.master_port_alt,
-                          allowForce=False, num_events_max=3000,
-                          **kwargs)
-    chromium_status.SetupChromiumPages(webstatus)
-    c['status'].append(webstatus)
+    c['status'].append(CreateWebStatus(active_master.master_port_alt,
+                                       allowForce=False,
+                                       num_events_max=3000,
+                                       **kwargs))
 
   # Keep last build logs, the default is too low.
   c['buildHorizon'] = 1000
