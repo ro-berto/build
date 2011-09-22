@@ -103,47 +103,6 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     print 'Forcing LDPLUSPLUS = %s' % ldplusplus
     env['LDPLUSPLUS'] = ldplusplus
 
-  if compiler:
-    return
-
-  # Most of the bot hostnames are in one of two patterns:
-  #   base###.subnet.domain
-  #   base###-m##.subnet.domain
-  # The "base" and "subnet" are used to pull a list of distccd servers for
-  # compilation.  That way, the files can easily be tweaked to affect all of
-  # the bots in a given location.
-  # 10.5 and 10.6 get different Xcode versions with slightly different versions
-  # of gcc and the SDKs, so a different set of hosts is needed for each
-  # toolchain.
-  uname_tuple = os.uname()
-  full_hostname = socket.getfqdn()
-  os_revision = uname_tuple[2]
-  split_full_hostname = full_hostname.split('.', 2)
-  if len(split_full_hostname) >= 3:
-    hostname_only = split_full_hostname[0]
-    hostname_subnet = split_full_hostname[1]
-    name_match = re.match('([a-zA-Z]+)(\d+)(-m\d+)?$', hostname_only)
-    if name_match:
-      base_hostname = name_match.groups()[0]
-      os_names = { '9': '10_5', '10': '10_6' }
-      os_name = os_names[os_revision.split('.', 1)[0]]
-      distcc_hosts_filename = '%s_%s-%s' % \
-          ( hostname_subnet, base_hostname, os_name )
-      this_directory = os.path.dirname(os.path.abspath(__file__))
-      distcc_hosts_file_path = \
-          os.path.join(this_directory, 'mac_distcc_hosts',
-                       distcc_hosts_filename)
-      if os.path.exists(distcc_hosts_file_path):
-        command.extend(['-buildhostsfile', distcc_hosts_file_path])
-        if os_name == '10_6':
-          # pump --startup will bail if there DISTCC_HOSTS doesn't have valid
-          # ,cpp entries.  Xcode 3.2.x can fall into this trap because it
-          # tries to collect real host status for this step.  Work around this
-          # by manually invoking pump around xcodebuild with enough of
-          # a DISTCC_HOSTS so it always starts. (radr://8151956)
-          env['DISTCC_HOSTS'] = 'dummy,cpp,lzo'
-          command.insert(0, "pump")
-
 
 # RunCommandFilter for xcodebuild
 class XcodebuildFilter(chromium_utils.RunCommandFilter):
