@@ -21,6 +21,8 @@ from zope.interface import declarations
 # pylint: disable=F0401
 import jinja2
 
+from master.third_party import stats
+
 def _ShortRev(rev):
   """A simplified version of the default 'shortrev' macro used in some jinja
   templates.  This version isn't actually used for template processing; rather,
@@ -197,8 +199,10 @@ def SetupChromiumPages(webstatus):
   """Add customizations to default web reporting."""
 
   webstatus.templates.filters.update(
-      { 'longrev': lambda x, y: jinja2.escape(unicode(x)) })
+      { 'longrev': lambda x, y: jinja2.escape(unicode(x)),
+        'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))) })
 
+  webstatus.putChild("stats", stats.StatsStatusResource())
   webstatus.putChild("waterfall", WaterfallStatusResource())
   webstatus.putChild("console", ConsoleStatusResource(
       orderByTime=webstatus.orderConsoleByTime))

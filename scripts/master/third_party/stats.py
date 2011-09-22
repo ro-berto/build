@@ -37,10 +37,9 @@ def DisplayGraph(name, layout, width, height, color, data_variable, options):
 
 
 class StatsBuilderStatusResource(HtmlResource):
-    def __init__(self, builder_status, builder_control):
+    def __init__(self, builder_status):
         HtmlResource.__init__(self)
         self.builder_status = builder_status
-        self.builder_control = builder_control
 
     def getBuilderVariables(self, builderObj):
         # 1. build time over 300 builds or average 5 weeks
@@ -272,7 +271,7 @@ class StatsStatusResource(HtmlResource):
         return data
 
     def getChild(self, path, req):
-        return StatsBuilderStatusResource(self.getStatus(req).getBuilder(path), self.getControl(req))
+        return StatsBuilderStatusResource(self.getStatus(req).getBuilder(path))
 
     def body(self, request):
         # and the data we want to render

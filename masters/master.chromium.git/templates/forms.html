@@ -165,11 +165,13 @@
   </tr>
   <tr>
     <td>Slave to use:</td>
-    <td><input type='text' name='slavename' /></td>
+    <td><input type='hidden' name='property1name' value='slavename' />
+        <input type='text' name='property1value' /></td>
   </tr>
   <tr>
     <td>Clobber:</td>
-    <td><input type='checkbox' name='clobber' /></td>
+    <td><input type='hidden' name='property2name' value='clobber' />
+        <input type='checkbox' name='property2value' value='1' /></td>
   </tr>
   
   <tr><td><input type="submit" value="Force Build" /></td></tr>
