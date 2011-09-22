@@ -125,6 +125,7 @@
             var chrome = ""
             var lkgr = ""
             var pyauto = ""
+            var asan = "builder=ASAN+Builder&builder=ASAN+Tests+%281%29&builder=ASAN+Tests+%282%29"
 
             var bar = "http://build.chromium.org/p/chromium/horizontal_one_box_per_builder";
             var bar_webkit = "http://build.chromium.org/p/chromium.webkit/horizontal_one_box_per_builder";
@@ -133,6 +134,7 @@
             var bar_chrome = "http://build.chromium.org/p/chromium.chrome/horizontal_one_box_per_builder";
             var bar_lkgr = "http://build.chromium.org/p/chromium.lkgr/horizontal_one_box_per_builder";
             var bar_pyauto = "http://build.chromium.org/p/chromium.pyauto/horizontal_one_box_per_builder";
+            var bar_asan = "http://build.chromium.org/p/chromium.fyi/horizontal_one_box_per_builder"
 
             var waterfall = "../chromium/waterfall"
             var waterfall_webkit = "../chromium.webkit/waterfall"
@@ -141,6 +143,7 @@
             var waterfall_perf = "../chromium.perf/waterfall"
             var waterfall_lkgr = "../chromium.lkgr/waterfall"
             var waterfall_pyauto = "../chromium.pyauto/waterfall"
+            var waterfall_asan = "../chromium.fyi/waterfall"
 
             function GetUrl(type, content) {
               return type + "?" + content;
@@ -166,7 +169,7 @@
             }
 
             function DisplayBar(waterfall_url, bar_url, content, name) {
-              document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td  colspan=7 width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
+              document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td  colspan=9 width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
 
             DisplayBar(waterfall, bar, chromium, "Chromium");
@@ -176,8 +179,9 @@
             document.write("<tr>");
             document.write("<td><a href='" + GetUrl(waterfall_chrome, chrome) + "'>" + "Official"+ "</a></td><td width='13%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_chrome, chrome) + "'></iframe></td>");
             document.write("<td><a href='" + GetUrl(waterfall_lkgr, lkgr) + "' id='LKGRLink'>" + "LKGR (loading)"+ "</a></td><td width='10%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_lkgr, lkgr) + "'></iframe></td>");
-document.write("<td><a href='" + GetUrl(waterfall_pyauto, pyauto) + "'>" + "PyAuto" + "</a></td><td width='15%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_pyauto, pyauto) + "'></iframe></td>");
-            document.write("<td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='62%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_pyauto, pyauto) + "'>" + "PyAuto" + "</a></td><td width='15%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_pyauto, pyauto) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_asan, asan) + "'>" + "ASAN" + "</a></td><td width='8%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_asan, asan) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='54%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
             document.write("</tr>");
             setTimeout("DisplayLKGR()", 100);
           </script>
