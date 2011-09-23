@@ -120,24 +120,25 @@ LKGR_STEPS = {
   'Mac Builder (dbg)': [
     'compile',
   ],
-  'Mac 10.5 Tests (dbg)(1)': [
+  'Mac 10.6 Tests (dbg)(1)': [
     'browser_tests',
-    'check_deps',
     'googleurl_unittests',
-    'media_unittests',
     'printing_unittests',
     'remoting_unittests',
-    'interactive_ui_tests',
     'ui_tests',
     'jingle_unittests',
   ],
-  'Mac 10.5 Tests (dbg)(2)': [
-    'browser_tests', 'net_unittests', 'ui_tests',
+  'Mac 10.6 Tests (dbg)(2)': [
+    'browser_tests',
+    'check_deps',
+    'media_unittests',
+    'net_unittests',
+    'ui_tests',
   ],
-  'Mac 10.5 Tests (dbg)(3)': [
-    'base_unittests', 'browser_tests', 'ui_tests',
+  'Mac 10.6 Tests (dbg)(3)': [
+    'base_unittests', 'browser_tests', 'interactive_ui_tests', 'ui_tests',
   ],
-  'Mac 10.5 Tests (dbg)(4)': [
+  'Mac 10.6 Tests (dbg)(4)': [
     'browser_tests',
     'content_unittests',
     'gfx_unittests',

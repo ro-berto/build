@@ -44,7 +44,8 @@ B('Win Builder', 'rel', 'compile|windows', 'win_rel', builddir='cr-win-rel',
 F('rel', win().ChromiumFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder_tests',
-    factory_properties={'trigger': 'win_rel_trigger'}))
+    factory_properties={'trigger': 'win_rel_trigger',
+                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 #
 # Win Rel testers
