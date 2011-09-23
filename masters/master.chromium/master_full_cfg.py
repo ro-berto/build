@@ -101,7 +101,7 @@ B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
 F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['sizes', 'check_perms'],
+    tests=['sizes', 'check_perms', 'check_licenses'],
     options=['--compiler=goma'],
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-snapshots',

@@ -73,7 +73,6 @@ B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
 F('rel_unit', linux().ChromiumFactory(
     slave_type='NASTester',
     tests=['check_deps',
-           'check_licenses',
            'googleurl',
            'media',
            'printing',
@@ -164,7 +163,7 @@ B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
 F('dbg_unit_1', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
-    tests=['check_deps', 'check_licenses', 'net', 'browser_tests'],
+    tests=['check_deps', 'net', 'browser_tests'],
     factory_properties={'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',

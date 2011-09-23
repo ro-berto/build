@@ -153,7 +153,6 @@ LKGR_STEPS = {
   ],
   'Linux Tests (dbg)(1)': [
     'check_deps',
-    'check_licenses',
     'browser_tests',
     'net_unittests',
   ],
