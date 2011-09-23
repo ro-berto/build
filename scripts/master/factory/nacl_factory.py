@@ -51,6 +51,8 @@ class NativeClientFactory(gclient_factory.GClientFactory):
         f.AddTrigger('arm_%s_hw_tests' % mode)
       if R('nacl_trigger_win7atom64_hw_%s' % mode):
         f.AddTrigger('win7atom64_%s_hw_tests' % mode)
+    if R('nacl_trigger_llvm'):
+      f.AddTrigger('llvm_trigger')
 
   def NativeClientFactory(self, tests=None, slave_type='BuilderTester',
                           official_release=False,
