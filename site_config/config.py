@@ -196,8 +196,6 @@ class Archive(config_private.Archive):
     official_extras.extend([
       ['setup.exe'],
       ['chrome.packed.7z'],
-      ['chrome_frame.packed.7z'],
-      ['patch.packed.7z'],
       ['obj', 'mini_installer', 'mini_installer_exe_version.rc'],
       ['courgette.exe'],
       ['courgette64.exe'],
