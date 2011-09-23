@@ -191,7 +191,8 @@ def CreateWebStatus(port, **kwargs):
 
 
 def AutoSetupMaster(c, active_master, mail_notifier=False,
-                    public_html=None, order_console_by_time=False):
+                    public_html=None, order_console_by_time=False,
+                    enable_http_status_push=False):
   """Add common settings and status services to a master.
 
   If you wonder what all these mean, PLEASE go check the official doc!
@@ -224,9 +225,9 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
         lookup=FilterDomain()))
 
   # For all production masters, notify our health-monitoring webapp.
-  if active_master.is_production_host:
+  if enable_http_status_push:
     c['status'].append(HttpStatusPush(
-        'https://chromium-build-health.appspot.com/status_receiver'))
+        'https://chromium-build-logs.appspot.com/status_receiver'))
 
   kwargs = {}
   if public_html:
