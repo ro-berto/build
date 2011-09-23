@@ -198,10 +198,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                 factory_properties=None):
     """Add the tests listed in 'tests' to the factory_cmd_obj."""
     factory_properties = factory_properties or {}
+    tests = (tests or [])[:]
 
     # This function is too crowded, try to simplify it a little.
     def R(test):
-      return gclient_factory.ShouldRunTest(tests, test)
+      if gclient_factory.ShouldRunTest(tests, test):
+        tests.pop(test)
+        return True
     f = factory_cmd_obj
     fp = factory_properties
 
@@ -319,35 +322,31 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       # is not specified.
       f.AddBasicGTestTestStep('chrome_frame_net_tests', fp)
 
+    def S(test, prefix, add_functor):
+      if test.startswith(prefix):
+        test_name = test[len(prefix):]
+        tests.remove(test)
+        add_functor(test_name)
+        return True
+
+    def M(test, prefix, test_type):
+      return S(
+          test, prefix, lambda test_name: f.AddMemoryTest(test_name, test_type))
+
     # Valgrind tests:
-    for test in tests:
+    for test in tests[:]:
       # TODO(timurrrr): replace 'valgrind' with 'memcheck'
       #                 below and in master.chromium/master.cfg
-      prefix = 'valgrind_'
-      if test.startswith(prefix):
-        test_name = test[len(prefix):]
-        f.AddMemoryTest(test_name, "memcheck")
+      if M(test, 'valgrind_', 'memcheck'):
         continue
       # Run TSan in two-stage RaceVerifier mode.
-      prefix = 'tsan_rv_'
-      if test.startswith(prefix):
-        test_name = test[len(prefix):]
-        f.AddMemoryTest(test_name, "tsan_rv")
+      if M(test, 'tsan_rv_', 'tsan_rv'):
         continue
-      prefix = 'tsan_'
-      if test.startswith(prefix):
-        test_name = test[len(prefix):]
-        f.AddMemoryTest(test_name, "tsan")
+      if M(test, 'tsan_', 'tsan'):
         continue
-      prefix = 'drmemory_'
-      if test.startswith(prefix):
-        test_name = test[len(prefix):]
-        f.AddMemoryTest(test_name, "drmemory")
+      if M(test, 'drmemory_', 'drmemory'):
         continue
-      prefix = 'heapcheck_'
-      if test.startswith(prefix):
-        test_name = test[len(prefix):]
-        f.AddHeapcheckTest(test_name)
+      if M(test, 'heapcheck_', f.AddHeapcheckTest):
         continue
 
     # PyAuto functional tests.
@@ -405,6 +404,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # NOTE: This really should go last as it can be confusing if the annotator
     # isn't the last thing to run.
     if R('annotated_steps'): f.AddAnnotatedSteps(fp)
+
+    assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
 
   @property
   def build_dir(self):
