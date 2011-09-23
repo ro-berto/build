@@ -49,7 +49,7 @@ def ReadHKLMValue(path, value):
     return None
 
 
-def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
+def common_mac_settings(command, options, env, compiler=None):
   """
   Sets desirable Mac environment variables and command-line options
   that are common to the Xcode builds.
@@ -66,7 +66,7 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
 
   cc = None
   ldplusplus = None
-  if compiler in ('clang', 'goma-clang', 'gomaclang'):
+  if compiler in ('clang', 'goma', 'goma-clang', 'gomaclang'):
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
     # that way, so only enable clang on m15 and up.
@@ -81,21 +81,11 @@ def common_mac_settings(command, options, env, compiler=None, ccache_base=None):
     else:
       print 'Not using clang for version, dict was %r' % variables
 
-    if compiler in ('goma-clang', 'gomaclang'):
+    if compiler in ('goma', 'goma-clang', 'gomaclang'):
       print 'using goma'
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
-  if ccache_base:
-    if cc is None:
-      cc = '/Developer/usr/bin/gcc-4.2'
-    ccache_symlink_path = os.path.join(ccache_base, os.path.basename(cc))
-    if os.path.islink(ccache_symlink_path):
-      env['CC'] = ccache_symlink_path
-      env['CCACHE_CC'] = cc
-      print 'Using CCache for %s' % cc
-    else:
-      print '%s is not a symlink' % ccache_symlink_path
-  elif cc:
+  if cc:
     print 'Forcing CC = %s' % cc
     env['CC'] = cc
 
@@ -354,8 +344,7 @@ def main_xcode(options, args):
     chromium_utils.RemoveDirectory(build_output_dir)
 
   env = os.environ.copy()
-  common_mac_settings(command, options, env, options.compiler,
-                      options.ccache_symlinks)
+  common_mac_settings(command, options, env, options.compiler)
 
   # Add on any remaining args
   command.extend(args)
@@ -933,9 +922,6 @@ def real_main():
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
                              help='Target from the xcodeproj file')
-    option_parser.add_option('', '--ccache-symlinks', default=None,
-                             help='Base directory for symlinks to the CCache'
-                                  'binary')
   if chromium_utils.IsLinux() or chromium_utils.IsMac():
     option_parser.add_option('', '--goma-dir', default=None,
                              help='specify goma directory')
