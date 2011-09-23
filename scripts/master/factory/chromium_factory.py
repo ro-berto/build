@@ -203,7 +203,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # This function is too crowded, try to simplify it a little.
     def R(test):
       if gclient_factory.ShouldRunTest(tests, test):
-        tests.pop(test)
+        tests.remove(test)
         return True
     f = factory_cmd_obj
     fp = factory_properties
