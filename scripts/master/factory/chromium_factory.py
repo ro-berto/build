@@ -250,6 +250,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('sbox_validation_tests', fp)
 
     if R('views'):          f.AddBasicGTestTestStep('views_unittests', fp)
+    if R('aura'):           f.AddBasicGTestTestStep('aura_unittests', fp)
+    if R('aura_shell'):
+      f.AddBasicGTestTestStep('aura_shell_unittests', fp)
+    if R('compositor'):
+      f.AddBasicGTestTestStep('compositor_unittests', fp)
 
     # Medium-sized tests (unit and browser):
     if R('unit'):           f.AddChromeUnitTests(fp)
