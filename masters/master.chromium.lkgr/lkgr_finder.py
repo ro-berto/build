@@ -361,6 +361,7 @@ def main():
   opt_parser.add_option('--notify', default=[],
                         action='append', metavar='HOST:PORT',
                         help='Notify this master when a new LKGR is found')
+  opt_parser.add_option('--manual', help='Set LKGR manually')
   options, args = opt_parser.parse_args()
 
   if args:
@@ -369,6 +370,12 @@ def main():
 
   global VERBOSE
   VERBOSE = not options.quiet
+
+  if options.manual:
+    PostLKGR(options.manual, options.pwfile, options.dry)
+    for master in options.notify:
+      NotifyMaster(master, options.manual, options.dry)
+    return 0
 
   builds = {}
   fetch_threads = []
