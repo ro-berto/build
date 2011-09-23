@@ -57,7 +57,7 @@ def common_mac_settings(command, options, env, compiler=None):
   compiler = options.compiler
   # TODO(thakis): Remove 'gomaclang' once the main master has been restarted
   # or hotpatched with http://codereview.chromium.org/7780021/.
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'gomaclang')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'gomaclang', 'asan')
 
   if compiler == 'goma':
     print 'using goma'
@@ -66,11 +66,11 @@ def common_mac_settings(command, options, env, compiler=None):
 
   cc = None
   ldplusplus = None
+  src_path = os.path.dirname(options.build_dir)
   if compiler in ('clang', 'goma', 'goma-clang', 'gomaclang'):
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
     # that way, so only enable clang on m15 and up.
-    src_path = os.path.dirname(options.build_dir)
     variables = {}
     execfile(os.path.join(src_path, 'chrome', 'VERSION'), variables)
     if int(variables['MAJOR']) >= 15:
@@ -84,6 +84,19 @@ def common_mac_settings(command, options, env, compiler=None):
     if compiler in ('goma', 'goma-clang', 'gomaclang'):
       print 'using goma'
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
+
+  if compiler == 'asan':
+    asan_dir = os.path.abspath(os.path.join(
+        src_path, 'third_party', 'asan'))
+    asan_bin = os.path.join(asan_dir, 'asan_clang_Darwin', 'bin')
+    clang = os.path.join(asan_bin, 'clang_fasan')
+    clangpp = os.path.join(asan_bin, 'clang++_fasan')
+    # Disallow dyld to randomize the load address of executables.
+    # Some of them are compiled with ASan and will hang otherwise.
+    env['DYLD_NO_PIE'] = '1'
+    command.append('CC=' + clang)
+    command.append('LDPLUSPLUS=' + clangpp)
+    return
 
   if cc:
     print 'Forcing CC = %s' % cc
