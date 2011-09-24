@@ -21,7 +21,7 @@ from zope.interface import declarations
 # pylint: disable=F0401
 import jinja2
 
-from master.third_party import stats
+from master.third_party import stats_bb8 as stats
 
 def _ShortRev(rev):
   """A simplified version of the default 'shortrev' macro used in some jinja
@@ -198,9 +198,17 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
 def SetupChromiumPages(webstatus):
   """Add customizations to default web reporting."""
 
+  def _tick_filter(n, stride):
+    n = ((n / stride) + 1) * stride
+    return filter(lambda x: x % (n/stride) == 0, range(n+1))
+
   webstatus.templates.filters.update(
       { 'longrev': lambda x, y: jinja2.escape(unicode(x)),
-        'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))) })
+        'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))),
+        'max': max,
+        'average': lambda x: float(sum(x)) / float(min(len(x), 1)),
+        'ticks': lambda x: ['{v:%d}' % y for y in _tick_filter(x, 12)],
+        'fixname': lambda x: x.translate(None, ' -():') })
 
   webstatus.putChild("stats", stats.StatsStatusResource())
   webstatus.putChild("waterfall", WaterfallStatusResource())
