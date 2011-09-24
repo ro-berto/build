@@ -405,7 +405,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # isn't the last thing to run.
     if R('annotated_steps'): f.AddAnnotatedSteps(fp)
 
-    assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
+    # TODO(maruel): Need to fix all masters first.
+    # assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
 
   @property
   def build_dir(self):
