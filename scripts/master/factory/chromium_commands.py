@@ -231,57 +231,27 @@ class ChromiumCommands(commands.FactoryCommands):
                     test_name, test_type, test_name, test_type)])
     return cmd
 
-  def AddPageCyclerTests(self, factory_properties=None):
-    """Adds a step to the factory to run the page-cycler tests."""
+  def AddPageCyclerTest(self, test, factory_properties=None, suite=None):
+    """Adds a step to the factory to run a page cycler test."""
 
-    tests = [
-      {'name': 'moz'},
-      {'name': 'morejs', 'http': False},
-      {'name': 'intl1', 'http': False, 'target': 'Release'},
-      {'name': 'intl2', 'http': False, 'target': 'Release'},
-      {'name': 'bloat', 'http': True, 'target': 'Release'},
-      {'name': 'dhtml', 'http': False, 'target': 'Release'},
-      {'name': 'database', 'http': False, 'title': 'Database*'},
-      {'name': 'indexeddb', 'http': False, 'title': 'IndexedDB*'},
-    ]
+    enable_http = test.endswith('-http')
+    perf_dashboard_name = test.lstrip('page_cycler_')
 
-    factory_properties = factory_properties or {}
-    # If 'http_page_cyclers' is set to True in factory_properties, launch an
-    # httpd server and run the Httpd tests. Otherwise, run the File tests.
-    # (These names are used in the GTest filters and correspond to test names
-    # in page_cycler_tests.cc.)
-    http_page_cyclers = factory_properties.get('http_page_cyclers')
+    if suite:
+      command_name = suite
+    else:
+      command_name = perf_dashboard_name.rstrip('-http').capitalize()
 
-    for test in tests:
-      # Some tests should only be run in http or file mode.
-      if test.get('http', False) and not http_page_cyclers:
-        continue
-      if not test.get('http', True) and http_page_cyclers:
-        continue
+    # Derive the class from the factory, name, and log processor.
+    test_class = self.GetPerfStepClass(
+                     factory_properties, perf_dashboard_name,
+                     process_log.GraphingPageCyclerLogProcessor)
 
-      # Some tests should only be run for a specific target.
-      if test.get('target', self._target) != self._target:
-        continue
+    # Get the test's command.
+    cmd = self.GetPageCyclerCommand(command_name, enable_http)
 
-      # Set the different names for this test.
-      test['command_name'] = test['name'].capitalize()
-      test['perf_name'] = test['name']
-      if http_page_cyclers:
-        test['perf_name'] += '-http'
-      test['step_name'] = 'page_cycler_%s' % test['perf_name']
-
-      # Derive the class from the factory, name, and log processor.
-      test['class'] = self.GetPerfStepClass(
-                          factory_properties, test['perf_name'],
-                          process_log.GraphingPageCyclerLogProcessor)
-
-      # Get the test's command.
-      cmd = self.GetPageCyclerCommand(
-                test.get('title', test['command_name']), http_page_cyclers)
-
-      # Add the test step to the factory.
-      self.AddTestStep(test['class'], test['step_name'], cmd,
-                       do_step_if=self.TestStepFilter)
+    # Add the test step to the factory.
+    self.AddTestStep(test_class, test, cmd, do_step_if=self.TestStepFilter)
 
   def AddStartupTests(self, factory_properties=None):
     factory_properties = factory_properties or {}

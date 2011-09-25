@@ -285,7 +285,23 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                              factory_properties=fp)
 
     # Benchmark tests:
-    if R('page_cycler'):    f.AddPageCyclerTests(fp)
+    if R('page_cycler_moz'):
+      f.AddPageCyclerTest('page_cycler_moz', fp)
+    if R('page_cycler_morejs'):
+      f.AddPageCyclerTest('page_cycler_morejs', fp)
+    if R('page_cycler_intl1'):
+      f.AddPageCyclerTest('page_cycler_intl1', fp)
+    if R('page_cycler_intl2'):
+      f.AddPageCyclerTest('page_cycler_intl2', fp)
+    if R('page_cycler_bloat'):
+      f.AddPageCyclerTest('page_cycler_bloat', fp)
+    if R('page_cycler_dhtml'):
+      f.AddPageCyclerTest('page_cycler_dhtml', fp)
+    if R('page_cycler_database'):
+      f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*')
+    if R('page_cycler_indexeddb'):
+      f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
+
     if R('memory'):         f.AddMemoryTests(fp)
     if R('tab_switching'):  f.AddTabSwitchingTests(fp)
     if R('sunspider'):      f.AddSunSpiderTests(fp)
@@ -293,9 +309,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('dromaeo'):        f.AddDromaeoTests(fp)
     if R('frame_rate'):     f.AddFrameRateTests(fp)
     if R('dom_perf'):       f.AddDomPerfTests(fp)
-    if R('page_cycler_http'):
-      fp['http_page_cyclers'] = True
-      f.AddPageCyclerTests(factory_properties=fp)
+    if R('page_cycler_moz-http'):
+      f.AddPageCyclerTest('page_cycler_moz-http', fp)
+    if R('page_cycler_bloat-http'):
+      f.AddPageCyclerTest('page_cycler_bloat-http', fp)
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
