@@ -87,7 +87,52 @@ class StatsStatusResource(HtmlResource):
     self.allowForce = allowForce
     self.css = css
 
+  def getMainVariables(self, status, cxt):
+    builderNames = []
+    builderTimes = []
+    builderFailures = []
+
+    for builderName in status.getBuilderNames():
+      if (builderName == "Win Target Builds" or
+          builderName == "Linux Target Builds"):
+        continue
+      builderNames.append(builderName)
+      builderObj = status.getBuilder(builderName)
+
+      # Get the latest build.  If it's still in progress, it will be skipped.
+      build = builderObj.getBuild(-1) or builderObj.getBuild(-2)
+
+      goodCount = 0
+      badCount = 0
+      buildTimes = []
+
+      while build and goodCount + badCount < 50:
+        if not build.isFinished():
+          build = build.getPreviousBuild()
+          continue
+        if (build.getResults() == builder.SUCCESS or
+            build.getResults() == builder.WARNINGS):
+          (start, end) = build.getTimes()
+          buildTimes.append(end - start)
+          goodCount += 1
+        else:
+          badCount += 1
+        build = build.getPreviousBuild()
+
+      # Get the average time per build in minutes
+      avg = float(sum(buildTimes)) / float(max(len(buildTimes), 1))
+      builderTimes.append(avg / 60.0)
+
+      # Get the proportion of failed builds.
+      avg = float(badCount) / float(max(goodCount + badCount, 1))
+      builderFailures.append(avg)
+
+    cxt['builderNames'] = builderNames
+    cxt['builderTimes'] = builderTimes
+    cxt['builderFailures'] = builderFailures
+
   def content(self, request, cxt):
+    self.getMainVariables(self.getStatus(request), cxt)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("stats.html")
     return template.render(cxt)

@@ -20,6 +20,7 @@ from zope.interface import declarations
 
 # pylint: disable=F0401
 import jinja2
+import urllib
 
 from master.third_party import stats_bb8 as stats
 
@@ -205,9 +206,10 @@ def SetupChromiumPages(webstatus):
   webstatus.templates.filters.update(
       { 'longrev': lambda x, y: jinja2.escape(unicode(x)),
         'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))),
-        'max': max,
-        'average': lambda x: float(sum(x)) / float(min(len(x), 1)),
-        'ticks': lambda x: ['{v:%d}' % y for y in _tick_filter(x, 12)],
+        'quote': urllib.quote,
+        'max': lambda x: reduce(max, x, 0),
+        'average': lambda x: float(sum(x)) / float(max(len(x), 1)),
+        'ticks': lambda x: ["{v:%d}" % y for y in _tick_filter(x, 12)],
         'fixname': lambda x: x.translate(None, ' -():') })
 
   webstatus.putChild("stats", stats.StatsStatusResource())
