@@ -36,6 +36,9 @@ categories_steps = {
   'compile': ['compile']
 }
 
+exclusions = {
+}
+
 forgiving_steps = ['update_scripts', 'update']
 
 def Update(config, active_master, c):
