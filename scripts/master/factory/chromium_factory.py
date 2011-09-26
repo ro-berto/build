@@ -363,7 +363,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         continue
       if M(test, 'drmemory_', 'drmemory'):
         continue
-      if M(test, 'heapcheck_', f.AddHeapcheckTest):
+      if S(test, 'heapcheck_', f.AddHeapcheckTest):
         continue
 
     # PyAuto functional tests.
