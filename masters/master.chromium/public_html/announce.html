@@ -77,7 +77,8 @@
               <a href="../chromium/waterfall">waterfall</a> | 
               <a href="../chromium/waterfall?show_events=true&failures_only=true">failures</a> |
               <a href="../chromium/console">console</a> |
-              <a href="../chromium.memory.fyi/console">memory</a> | 
+              <a href="../chromium.memory/console">memory</a> | 
+              <a href="../chromium.memory.fyi/console">memory fyi</a> | 
               <a href="../chromiumos/waterfall">chromiumos</a> |
               <a href="../client.nacl/console">NaCl</a>
             </td>
@@ -121,29 +122,29 @@
             var chromium = ""
             var webkit = "builder=Webkit%20Win%20Builder%20%28deps%29&builder=Webkit%20Win%20%28deps%29&builder=Webkit%20Win%20Builder%20%28deps%29%28dbg%29&builder=Webkit%20Win%20%28deps%29%28dbg%29%281%29&builder=Webkit%20Win%20%28deps%29%28dbg%29%282%29&builder=Webkit%20Mac%20Builder%20%28CG%29%28deps%29&builder=Webkit%20Mac10.6%20%28CG%29%28deps%29&builder=Webkit%20Mac%20Builder%20%28CG%29%28deps%29%28dbg%29&builder=Webkit%20Mac10.6%20%28CG%29%28deps%29%28dbg%29%281%29&builder=Webkit%20Mac10.6%20%28CG%29%28deps%29%28dbg%29%282%29&builder=Webkit%20Mac%20Builder%20%28deps%29&builder=Webkit%20Mac10.6%20%28deps%29&builder=Webkit%20Mac%20Builder%20%28deps%29%28dbg%29&builder=Webkit%20Mac10.6%20%28deps%29%28dbg%29%281%29&builder=Webkit%20Mac10.6%20%28deps%29%28dbg%29%282%29&builder=Webkit%20Linux%20%28deps%29&builder=Webkit%20Linux%20Builder%20%28deps%29%28dbg%29&builder=Webkit%20Linux%20%28deps%29%28dbg%29%281%29&builder=Webkit%20Linux%20%28deps%29%28dbg%29%282%29"
             var memory = ""
+            var memory_fyi = ""
             var perf = ""
             var chrome = ""
             var lkgr = ""
             var pyauto = ""
-            var asan = "builder=ASAN+Builder&builder=ASAN+Tests+%281%29&builder=ASAN+Tests+%282%29"
 
             var bar = "http://build.chromium.org/p/chromium/horizontal_one_box_per_builder";
             var bar_webkit = "http://build.chromium.org/p/chromium.webkit/horizontal_one_box_per_builder";
-            var bar_memory = "http://build.chromium.org/p/chromium.memory.fyi/horizontal_one_box_per_builder";
+            var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder"
+            var bar_memory_fyi = "http://build.chromium.org/p/chromium.memory.fyi/horizontal_one_box_per_builder";
             var bar_perf = "http://build.chromium.org/p/chromium.perf/horizontal_one_box_per_builder";
             var bar_chrome = "http://build.chromium.org/p/chromium.chrome/horizontal_one_box_per_builder";
             var bar_lkgr = "http://build.chromium.org/p/chromium.lkgr/horizontal_one_box_per_builder";
             var bar_pyauto = "http://build.chromium.org/p/chromium.pyauto/horizontal_one_box_per_builder";
-            var bar_asan = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder"
 
             var waterfall = "../chromium/waterfall"
             var waterfall_webkit = "../chromium.webkit/waterfall"
-            var waterfall_memory = "../chromium.memory.fyi/waterfall"
+            var waterfall_memory = "../chromium.memory/waterfall"
+            var waterfall_memory_fyi = "../chromium.memory.fyi/waterfall"
             var waterfall_chrome = "../chromium.chrome/waterfall"
             var waterfall_perf = "../chromium.perf/waterfall"
             var waterfall_lkgr = "../chromium.lkgr/waterfall"
             var waterfall_pyauto = "../chromium.pyauto/waterfall"
-            var waterfall_asan = "../chromium.memory/waterfall"
 
             function GetUrl(type, content) {
               return type + "?" + content;
@@ -180,8 +181,8 @@
             document.write("<td><a href='" + GetUrl(waterfall_chrome, chrome) + "'>" + "Official"+ "</a></td><td width='13%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_chrome, chrome) + "'></iframe></td>");
             document.write("<td><a href='" + GetUrl(waterfall_lkgr, lkgr) + "' id='LKGRLink'>" + "LKGR (loading)"+ "</a></td><td width='10%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_lkgr, lkgr) + "'></iframe></td>");
             document.write("<td><a href='" + GetUrl(waterfall_pyauto, pyauto) + "'>" + "PyAuto" + "</a></td><td width='15%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_pyauto, pyauto) + "'></iframe></td>");
-            document.write("<td><a href='" + GetUrl(waterfall_asan, asan) + "'>" + "ASAN" + "</a></td><td width='8%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_asan, asan) + "'></iframe></td>");
-            document.write("<td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory"+ "</a></td><td width='54%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_memory, memory) + "'>" + "Memory" + "</a></td><td width='8%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory, memory) + "'></iframe></td>");
+            document.write("<td><a href='" + GetUrl(waterfall_memory_fyi, memory_fyi) + "'>" + "Memory FYI"+ "</a></td><td width='54%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_memory_fyi, memory_fyi) + "'></iframe></td>");
             document.write("</tr>");
             setTimeout("DisplayLKGR()", 100);
           </script>
