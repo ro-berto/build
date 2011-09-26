@@ -175,9 +175,9 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   group.add_option('-w', '--win', action='store_true')
   group.add_option('-l', '--linux', action='store_true')
   group.add_option('-m', '--mac', action='store_true')
-  group.add_option('-b', '--bits', help='Slave os bitness')
+  group.add_option('--bits', help='Slave os bitness', type='int')
   group.add_option('--version', help='Slave os version')
-  group.add_option('--builder',
+  group.add_option('-b', '--builder',
                    help='Only slaves attached to a specific builder')
   group.add_option('--min', type='int')
   group.add_option('--max', type='int', help='Inclusive')

@@ -8,6 +8,9 @@ import sys
 from common import chromium_utils
 
 
+START_WITH_LETTER, NUMBER_ONLY = range(2)
+
+
 def EntryToSlaveName(entry):
   """Extracts the buildbot slave name from the slaves list entry.
 
@@ -30,16 +33,27 @@ def _lower_values(s):
   return [x.lower() for x in _obj_as_list(s)]
 
 
-def _Filter(slaves, key, value):
+def _Filter(slaves, key, value, acceptable):
   """Filters slaves to keep only those with value in key,
   slaves[key] being a list or converted to a list.
+
+  Prefix value with - to filter negatively.
   """
   if not value:
     return slaves
+  if isinstance(value, int):
+    value = str(value)
   value = value.lower()
-
-  if value.startswith('~') or value.startswith('!'):
+  negative = value.startswith('-')
+  if negative:
     value = value[1:]
+  if acceptable is START_WITH_LETTER:
+    assert value[0].isalpha(), value
+  elif acceptable is NUMBER_ONLY:
+    assert value.isdigit(), value
+  else:
+    assert acceptable is None
+  if negative:
     return [s for s in slaves if value not in _lower_values(s.get(key, []))]
   else:
     return [s for s in slaves if value in _lower_values(s.get(key, []))]
@@ -54,7 +68,7 @@ def _CheckDupes(items):
       dupes.add(x)
   if dupes:
     print >> sys.stderr, 'Found slave dupes!\n  %s' % ', '.join(dupes)
-    assert False
+    assert False, ', '.join(dupes)
 
 
 class BaseSlavesList(object):
@@ -70,12 +84,13 @@ class BaseSlavesList(object):
     Optionally filter with master, builder, os, tester and bitness type.
     """
     slaves = self.slaves
-    slaves = _Filter(slaves, 'master', master or self.default_master)
-    slaves = _Filter(slaves, 'os', os)
-    slaves = _Filter(slaves, 'bits', bits)
-    slaves = _Filter(slaves, 'version', version)
-    slaves = _Filter(slaves, 'builder', builder)
-    slaves = _Filter(slaves, 'tester', tester)
+    slaves = _Filter(
+        slaves, 'master', master or self.default_master, START_WITH_LETTER)
+    slaves = _Filter(slaves, 'os', os, START_WITH_LETTER)
+    slaves = _Filter(slaves, 'bits', bits, NUMBER_ONLY)
+    slaves = _Filter(slaves, 'version', version, None)
+    slaves = _Filter(slaves, 'builder', builder, START_WITH_LETTER)
+    slaves = _Filter(slaves, 'tester', tester, START_WITH_LETTER)
     return slaves
 
   def GetSlave(self, master=None, builder=None, os=None, tester=None, bits=None,
@@ -116,7 +131,7 @@ def Main(argv=None):
   parser.add_option('-o', '--os', help='OS to filter')
   parser.add_option('-t', '--tester', help='Tester to filter')
   parser.add_option('-v', '--version', help='OS\'s version to filter')
-  parser.add_option('--bits', help='OS bitness to filter')
+  parser.add_option('--bits', help='OS bitness to filter', type='int')
   options, _ = parser.parse_args(argv)
   if not options.filename:
     parser.print_help()
