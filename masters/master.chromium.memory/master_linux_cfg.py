@@ -34,7 +34,7 @@ asan_archive = master_config.GetArchiveUrl('ChromiumMemory', 'ASAN Builder',
 #
 B('ASAN Builder', 'asan_rel', 'compile', 'linux_asan_rel',
   notify_on_missing=True)
-F('asan_rel', linux().ChromiumFactory(
+F('asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
     options=['--compiler=asan', 'base_unittests', 'crypto_unittests',
              'googleurl_unittests', 'gpu_unittests', 'media_unittests',
@@ -55,7 +55,7 @@ F('asan_rel', linux().ChromiumFactory(
 #
 B('ASAN Tests (1)', 'asan_rel_tests_1', 'testers', 'linux_asan_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('asan_rel_tests_1', linux().ChromiumFactory(
+F('asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
        build_url=asan_archive,
     tests=['unit', 'gpu', 'base', 'net', 'safe_browsing', 'crypto',
@@ -64,7 +64,7 @@ F('asan_rel_tests_1', linux().ChromiumFactory(
 
 B('ASAN Tests (2)', 'asan_rel_tests_2', 'testers', 'linux_asan_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('asan_rel_tests_2', linux().ChromiumFactory(
+F('asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
        build_url=asan_archive,
     tests=['googleurl', 'media', 'printing', 'remoting', 'browser_tests'],
