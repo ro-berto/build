@@ -45,9 +45,21 @@ def CommonChecks(input_api, output_api):
   return output
 
 
+def RunTests(input_api, output_api):
+  tests = [input_api.os_path.join('test', 'masters_test.py')]
+  internal_path = input_api.os_path.join(
+      '..', 'build_internal', 'test', 'internal_masters_test.py')
+  if input_api.os_path.isfile(internal_path):
+    tests.append(internal_path)
+  return input_api.canned_checks.RunUnitTests(input_api, output_api, tests)
+
+
 def CheckChangeOnUpload(input_api, output_api):
   return CommonChecks(input_api, output_api)
 
 
 def CheckChangeOnCommit(input_api, output_api):
-  return CommonChecks(input_api, output_api)
+  output = []
+  output.extend(CommonChecks(input_api, output_api))
+  output.extend(RunTests(input_api, output_api))
+  return output
