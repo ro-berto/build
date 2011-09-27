@@ -126,18 +126,5 @@ F('linux64_clobber', linux().ChromiumFactory(
         'expectations': True,
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-B('Arm', 'arm_clobber', 'compile|testers', 'chromium', notify_on_missing=True)
-F('arm_clobber', linux().ChromiumOSFactory(
-    clobber=True,
-    target='Release',
-    tests=[],
-    compile_timeout=3600,
-    options=['--build-tool=make',
-             '--crosstool=' + crosstool_prefix,
-             'chromeos_builder'],
-    factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshots',
-                        'gclient_env': arm_gclient_env}))
-
 def Update(config, active_master, c):
   return helper.Update(c)

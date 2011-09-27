@@ -48,8 +48,6 @@ categories_steps = {
 }
 
 exclusions = {
-    'Chromium Arm': None,
-    'Chromium Arm (dbg)': None,
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
