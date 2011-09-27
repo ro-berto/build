@@ -110,6 +110,7 @@ def archive_layout(options, args):
                                     results_dir_basename,
                                     actual_file_list,
                                     options.results_dir)[1]
+  full_results_json = os.path.join(options.results_dir, 'full_results.json')
 
   # Extract the build name of this slave (e.g., 'chrome-release') from its
   # configuration file if not provided as a param.
@@ -130,9 +131,11 @@ def archive_layout(options, args):
   if gs_bucket:
     gs_base = '/'.join([gs_bucket, build_name, last_change])
     slave_utils.GSUtilCopyFile(zip_file, gs_base)
+    slave_utils.GSUtilCopyFile(full_results_json, gs_base)
   else:
     slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
     slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
+    slave_utils.CopyFileToArchiveHost(full_results_json, dest_dir)
     # Not supported on Google Storage yet.
     _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
                                   options)
