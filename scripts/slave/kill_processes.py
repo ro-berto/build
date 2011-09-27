@@ -95,6 +95,7 @@ def KillProcessesUsingCurrentDirectory():
 
   # Do a basic sanity check to make sure the tool is working fine.
   if stderr or ('.exe' not in stdout and
+                'Non-existant Process' not in stdout and
                 'No matching handles found' not in stdout):
     print 'Error running handle.exe: ' + repr((stdout, stderr))
     return False
