@@ -68,6 +68,10 @@ twistd.pid
 /masters/master.chromium.chrome/webkit-rel-reliability-builder
 /masters/master.chromium.chrome/webkit-rel-webkit-org
 /masters/master.chromium.chrome/webkit-reliability-tester
+/masters/master.chromium.chromiumos/chromium-rel-linux-chromeos
+/masters/master.chromium.chromiumos/chromium-tot-chromeos-arm-generic
+/masters/master.chromium.chromiumos/chromium-tot-chromeos-tegra2
+/masters/master.chromium.chromiumos/chromium-tot-chromeos-x86-generic
 /masters/master.chromium.clobber
 /masters/master.chromium.clobber/lkgr_poller.log
 /masters/master.chromium.fyi/ASAN_Tests__1_
