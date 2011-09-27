@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -35,9 +35,10 @@ class V8Factory(gclient_factory.GClientFactory):
                           config.Master.trunk_url +
                           '/deps/third_party/valgrind/binaries')
 
-  CUSTOM_DEPS_WIN7SDK = ('third_party/win7sdk',
-                         config.Master.trunk_internal_url +
-                         '/third_party/platformsdk_win7/files')
+  CUSTOM_DEPS_WIN7SDK = (
+      'third_party/win7sdk',
+      '%s/third_party/platformsdk_win7/files' %
+      config.Master.trunk_internal_url)
 
   CUSTOM_DEPS_MOZILLA = ('v8/test/mozilla/data',
                           config.Master.trunk_url +

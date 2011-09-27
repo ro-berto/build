@@ -6,6 +6,7 @@
 """Starts all masters and verify they can server /json/project fine.
 """
 
+from __future__ import with_statement
 import logging
 import optparse
 import os
@@ -43,37 +44,61 @@ def test_master(master, name, path):
   start = time.time()
   if not stop_master(master, path):
     return False
-  ports = range(8000, 8050) + range(8200, 8240) + range(9000, 9050)
+  # Try to backup twistd.log
+  twistd_log = os.path.join(path, 'twistd.log')
+  had_twistd_log = os.path.isfile(twistd_log)
   try:
+    if had_twistd_log:
+      os.rename(twistd_log, twistd_log + '_')
+    ports = range(8000, 8080) + range(8200, 8240) + range(9000, 9080)
     try:
-      subprocess2.check_call(
-          ['make', 'start'], timeout=60, cwd=path,
-          stderr=subprocess2.STDOUT)
-    except subprocess2.CalledProcessError:
-      return False
+      try:
+        subprocess2.check_call(
+            ['make', 'start'], timeout=60, cwd=path,
+            stderr=subprocess2.STDOUT)
+      except subprocess2.CalledProcessError:
+        return False
 
-    # It has ~10 seconds to boot.
-    for _ in range(100):
-      for p in ports:
-        try:
-          data = json.load(
-              urllib.urlopen('http://localhost:%d/json/project' % p))
-          if not data or not 'projectName' in data:
-            logging.warning('Didn\'t get valid data from %s' % master)
-            continue
-          if data['projectName'] != name:
-            logging.error('Wrong %s name, expected %s, got %s' % (master, name,
-              data['projectName']))
+      # It has ~10 seconds to boot.
+      for _ in range(100):
+        for p in ports:
+          try:
+            data = json.load(
+                urllib.urlopen('http://localhost:%d/json/project' % p))
+            if not data or not 'projectName' in data:
+              logging.warning('Didn\'t get valid data from %s' % master)
+              continue
+            if data['projectName'] != name:
+              logging.error(
+                  'Wrong %s name, expected %s, got %s' %
+                  (master, name, data['projectName']))
+              return False
+            logging.info('Success in %1.1fs' % (time.time() - start))
+            return True
+          except IOError:
+            pass
+        # Look in twistd.log for an exception:
+
+        # TODO(maruel): Search for 'exception' in twistd.log.
+        with open(twistd_log) as f:
+          lines = f.readlines()
+          stripped_lines = [l.strip() for l in lines]
+          try:
+            i = stripped_lines.index('--- <exception caught here> ---')
+            # Found an exception!
+            print ''.join(lines[max(i-15, 0):i+10])
             return False
-          logging.info('Success in %1.1fs' % (time.time() - start))
-          return True
-        except IOError:
-          pass
-      time.sleep(0.1)
-    logging.info('Didn\'t find open port for %s' % master)
-    return False
+          except ValueError:
+            pass
+
+        time.sleep(0.1)
+      logging.error('Didn\'t find open port for %s' % master)
+      return False
+    finally:
+      stop_master(master, path)
   finally:
-    stop_master(master, path)
+    if had_twistd_log:
+      os.rename(twistd_log + '_', twistd_log)
 
 
 def real_main(base_dir, expected):
@@ -97,33 +122,54 @@ def real_main(base_dir, expected):
   skipped = 0
   success = 0
 
-  for master in masters[:]:
-    if not master in expected:
-      continue
-    masters.remove(master)
-    name = expected.pop(master)
-    if not name:
-      skipped += 1
-      continue
-    if not test_master(master, name, os.path.join(base, master)):
-      failed.add(master)
-    else:
-      success += 1
+  # First make sure no master is started. Otherwise it could interfere with
+  # conflicting port binding.
+  for master in masters:
+    pid_path = os.path.join(base, master, 'twistd.pid')
+    if os.path.isfile(pid_path):
+      print >> sys.stderr, (
+          '%s is still running as pid %s.' %
+          (master, open(pid_path).read().strip()))
+      print >> sys.stderr, 'Please stop it before running the test.'
+      return 1
+
+  bot_pwd_path = os.path.join(
+      base_dir, '..', 'build', 'site_config', '.bot_password')
+  need_bot_pwd = not os.path.isfile(bot_pwd_path)
+  try:
+    if need_bot_pwd:
+      with open(bot_pwd_path, 'w') as f:
+        f.write('foo\n')
+    for master in masters[:]:
+      if not master in expected:
+        continue
+      masters.remove(master)
+      name = expected.pop(master)
+      if not name:
+        skipped += 1
+        continue
+      if not test_master(master, name, os.path.join(base, master)):
+        failed.add(master)
+      else:
+        success += 1
+  finally:
+    if need_bot_pwd:
+      os.remove(bot_pwd_path)
 
   if failed:
     print >> sys.stderr, (
-        'The following masters failed:\n%s' % '\n'.join(sorted(failed)))
+        '%d masters failed:\n%s' % (len(failed), '\n'.join(sorted(failed))))
   if masters:
     print >> sys.stderr, (
-        'The following masters were not expected:\n%s' %
-        '\n'.join(sorted(masters)))
+        '%d masters were not expected:\n%s' %
+        (len(masters), '\n'.join(sorted(masters))))
   if expected:
     print >> sys.stderr, (
-        'The following masters were expected but not found:\n%s' %
-        '\n'.join(sorted(expected)))
+        '%d masters were expected but not found:\n%s' %
+        (len(expected), '\n'.join(sorted(expected))))
   print >> sys.stderr, (
-      '%s masters successed, %d skipped in %1.1fs.' % (
-        success, skipped, time.time() - start))
+      '%s masters succeeded, %d failed, %d skipped in %1.1fs.' % (
+        success, len(failed), skipped, time.time() - start))
   return int(bool(masters or expected or failed))
 
 
@@ -133,6 +179,7 @@ def main():
   expected = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'Chromium Chrome',
+      'master.chromium.chromiumos': None,
       'master.chromium.flaky': None,
       'master.chromium.fyi': 'Chromium FYI',
       'master.chromium.git': None,

@@ -135,16 +135,28 @@ class Master(object):
     master_port_alt = 9055
 
   class ChromiumChrome(_ChromiumBase):
-    project_name = 'Chromium Webkit'
+    project_name = 'Chromium Chrome'
     master_port = 9056
     slave_port = 9057
     master_port_alt = 9058
 
+  class ChromiumPyauto(_ChromiumBase):
+    project_name = 'Chromium PyAuto'
+    master_port = 9016
+    slave_port = 9116
+    master_port_alt = 9216
+
   class ChromiumGPU(_ChromiumBase):
-    project_name = 'ChromiumGPU'
+    project_name = 'Chromium GPU'
     master_port = 9059
     slave_port = 9060
     master_port_alt = 9061
+
+  class ChromiumLKGR(_ChromiumBase):
+    project_name = 'Chromium LKGR'
+    master_port = 9018
+    slave_port = 9118
+    master_port_alt = 9218
 
   class ChromiumGIT(_ChromiumBase):
     project_name = 'Chromium Git'
@@ -190,7 +202,7 @@ class Master(object):
   ## ChromiumOS related
 
   class ChromiumOS(_Base):
-    project_name = 'ChromeOS'
+    project_name = 'ChromiumOS'
     master_port = 9030
     slave_port = 9027
     master_port_alt = 9043
@@ -264,6 +276,12 @@ class Master(object):
     try_job_port = 9023
     svn_url = None
 
+  class NativeClientBranchIRT(_NaClBase):
+    project_name = 'NativeClientBranchIRT'
+    master_port = 9045
+    slave_port = 9145
+    master_port_alt = 9245
+
   class NativeClientLLVM(_NaClBase):
     project_name = 'NativeClientLLVM'
     master_port = 9022
@@ -281,6 +299,24 @@ class Master(object):
     tree_status_url = base_app_url + '/status'
     store_revisions_url = base_app_url + '/revisions'
     last_good_url = 'http://o3d-status.appspot.com/lkgr'
+
+  class PageSpeed(_Base):
+    project_name = 'PageSpeed'
+    master_port = 9038
+    slave_port = 9138
+    master_port_alt = 9238
+    tree_closing_notification_recipients = []
+    # Select tree status urls and codereview location.
+    base_app_url = 'https://page-speed-status.appspot.com'
+    tree_status_url = base_app_url + '/status'
+    store_revisions_url = base_app_url + '/revisions'
+    last_good_url = base_app_url + '/lkgr'
+
+  class WebM(_Base):
+    project_name = 'WebM'
+    master_port = 9039
+    slave_port = 9139
+    master_port_alt = 9239
 
   class Skia(_Base):
     project_name = 'Skia'
