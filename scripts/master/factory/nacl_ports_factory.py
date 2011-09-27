@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -42,22 +42,12 @@ class NativeClientPortsFactory(gclient_factory.GClientFactory):
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
                                             target_platform=target_platform)
 
-
-  def _AddTests(self, factory_cmd_obj, tests, target,
-                mode=None, factory_properties=None, options=None):
-    """Add the tests listed in 'tests' to the factory_cmd_obj."""
-    # no tests yet
-    pass
-
-  def NativeClientPortsFactory(self, target='Release', clobber=False,
-                               tests=None, mode=None,
-                               slave_type='BuilderTester', options=None,
-                               compile_timeout=1200, build_url=None,
+  def NativeClientPortsFactory(self, slave_type='BuilderTester',
+                               timeout=1200, target='Release',
                                factory_properties=None, official_release=True):
     factory_properties = factory_properties or {}
-    tests = tests or []
     # Create the spec for the solutions
-    gclient_spec = self.BuildGClientSpec(tests)
+    gclient_spec = self.BuildGClientSpec()
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
                                official_release=official_release,
@@ -69,12 +59,7 @@ class NativeClientPortsFactory(gclient_factory.GClientFactory):
         self._build_dir,
         self._target_platform)
 
-    # Add the compile step if needed.
-    if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
-        slave_type == 'Trybot'):
-      nacl_ports_cmd_obj.AddSdkSetup()
-      nacl_ports_cmd_obj.AddCompileStep(solution=None, mode=mode,
-                                        clobber=clobber, options=options,
-                                        timeout=compile_timeout)
+    # Add one annotate step and do everything in the annotator.
+    nacl_ports_cmd_obj.AddAnnotatedStep(timeout=timeout)
 
     return factory

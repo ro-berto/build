@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -90,36 +90,13 @@ class NativeClientPortsCommands(commands.FactoryCommands):
       self.script_prefix = './'
       self.script_suffix = '.sh'
 
-  def AddSdkSetup(self):
-    download_script = 'build_tools/buildbot_sdk_setup.py'
-    if self._target_platform.startswith('win'):
-      download_script = 'python.bat ' + download_script
-    self._factory.addStep(chromium_step.AnnotatedCommand,
-                          description='setup-sdk',
-                          timeout=1500,
-                          workdir='build/src',
-                          env=self._build_env,
-                          haltOnFailure=True,
-                          command=download_script)
-
-  def AddCompileStep(self, solution, clobber=False, description='compiling',
-                     descriptionDone='compile', timeout=1200, mode=None,
-                     options=None):
-    if clobber:
-      clean_script = '%sbuildbot_cleanup_packages%s' % (
-          self.script_prefix, self.script_suffix)
-      self._factory.addStep(chromium_step.AnnotatedCommand,
-                            description='cleanup-packages',
-                            timeout=1500,
-                            workdir='build/src/build_tools',
-                            env=self._build_env,
-                            haltOnFailure=True,
-                            command=clean_script)
-    build_script = '%sbuildbot_build_packages%s' % (
+  def AddAnnotatedStep(self, timeout=1200):
+    build_script = '%sbuildbot_selector%s' % (
         self.script_prefix, self.script_suffix)
     self._factory.addStep(chromium_step.AnnotatedCommand,
-                          description='build-packages',
-                          timeout=1500,
+                          name='annotate',
+                          description='annotate',
+                          timeout=timeout,
                           workdir='build/src/build_tools',
                           env=self._build_env,
                           haltOnFailure=True,
