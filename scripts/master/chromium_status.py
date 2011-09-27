@@ -92,6 +92,8 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
         continue
       classname = base.ITopBox(builder_status).getBox(request).class_
       title = builder_name
+      if len(re.split(' ', classname)) <= 1:
+        classname += ' never'
 
       url = (self.path_to_root(request) + "waterfall?builder=" +
               urllib.quote(builder_name, safe=''))
