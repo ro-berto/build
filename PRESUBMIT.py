@@ -46,7 +46,15 @@ def CommonChecks(input_api, output_api):
 
 
 def RunTests(input_api, output_api):
-  tests = [input_api.os_path.join('test', 'masters_test.py')]
+  tests = [
+      input_api.os_path.join('test', 'masters_test.py'),
+      # TODO(maruel): Broken.
+      #input_api.os_path.join(
+      #  'scripts', 'slave', 'chromium', 'archive_build_unittest.py'),
+      # TODO(maruel): Throws, needing 'mock'.
+      #input_api.os_path.join(
+      #  'scripts', 'master', 'unittests', 'runtests.py'),
+  ]
   internal_path = input_api.os_path.join(
       '..', 'build_internal', 'test', 'internal_masters_test.py')
   if input_api.os_path.isfile(internal_path):

@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2009 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,11 +12,14 @@ import unittest
 import sys
 import zipfile
 
-sys.path.append("..")
-sys.path.append("../..")
+BASE_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), '..', '..', '..')
+sys.path.append(os.path.join(BASE_DIR, 'scripts'))
+sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
 from slave.chromium import archive_build
 from common import chromium_utils
+import config
 
 
 TEMP_FILES = ['foo.txt',
@@ -79,9 +82,13 @@ class MockOptions(object):
     self.default_chromium_revision = default_chromium_revision
     self.default_webkit_revision = default_webkit_revision
     self.default_v8_revision = default_v8_revision
+    self.installer = config.Archive.installer_exe
+    self.factory_properties = {}
+
 
 class PlatformError(Exception): pass
 class InternalStateError(Exception): pass
+
 
 class ArchiveTest(unittest.TestCase):
   # Attribute '' defined outside __init__
@@ -407,6 +414,7 @@ class ArchiveTest(unittest.TestCase):
     self.assertEquals(expect_last_change_file_contents, fp.read())
     fp.close()
     self.assertEquals(build_number, self.stager.GetLastBuildRevision())
+
 
 if __name__ == '__main__':
   unittest.main()

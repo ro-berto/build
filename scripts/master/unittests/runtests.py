@@ -13,58 +13,36 @@ Usage:
 
 import os
 import sys
-
-RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
-
-sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'third_party',
-                                'twisted_10_2'))
-sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'third_party',
-                                'buildbot_7_12'))
-sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..'))
-sys.path.insert(0, os.path.join(RUNTESTS_DIR, '..', '..', '..', 'site_config'))
-
 import optparse
 import types
 import unittest
 
+RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
+BASE_DIR = os.path.join(RUNTESTS_DIR, '..', '..', '..')
+sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'twisted_10_2'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'buildbot_7_12'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
 
-parser = optparse.OptionParser()
-parser.add_option('-f', '--file',
-                  type='string',
-                  action='store',
-                  help="""Specify test file name. 'all' runs everything.""")
 
-parser.add_option('-t', '--testcase',
-                  type='string',
-                  action='store',
-                  help="""Specify testcase name.""")
-
-opts, args = parser.parse_args()
-
-if not opts.file:
-  print """Please specify testcase file using '-f all|testfile' option."""
-  sys.exit(-1)
-
-if opts.testcase:
-  test_name_prefix = opts.testcase
-else:
-  test_name_prefix = 'test'
-
-def IsTestFile(entry):
-  if opts.file == 'all':
+def IsTestFile(options, entry):
+  if options.file == 'all':
     return entry.endswith('_test.py')
   else:
-    return entry == opts.file
+    return entry == options.file
+
 
 def IsTestCase(obj):
-  return isinstance(obj, types.TypeType) and issubclass(obj, unittest.TestCase)
+  return (isinstance(obj, types.TypeType) and
+      issubclass(obj, unittest.TestCase))
 
-def main():
+
+def run_tests(options, test_name_prefix):
   suite = unittest.TestSuite()
   testmodules = []
   for entry in os.listdir(os.path.abspath(os.path.dirname(__file__))):
-    if IsTestFile(entry):
+    if IsTestFile(options, entry):
       # remove .py to convert filename to module name
       testmodules.append(entry[0:-3])
 
@@ -74,8 +52,31 @@ def main():
       if IsTestCase(module_attribute):
         suite.addTest(unittest.makeSuite(module_attribute,
                                          prefix=test_name_prefix))
-
   unittest.TextTestRunner().run(suite)
 
+
+def main():
+  parser = optparse.OptionParser()
+  parser.add_option('-f', '--file',
+                    type='string',
+                    action='store',
+                    default='all',
+                    help="Specify test file name. 'all' runs everything.")
+  parser.add_option('-t', '--testcase',
+                    type='string',
+                    action='store',
+                    help="Specify testcase name.")
+  options, args = parser.parse_args()
+  if args:
+    parser.error('No unsupported args please')
+  if not options.file:
+    parser.error("Please specify testcase file using '-f all|testfile' option.")
+  if options.testcase:
+    test_name_prefix = options.testcase
+  else:
+    test_name_prefix = 'test'
+  return run_tests(options, test_name_prefix)
+
+
 if __name__ == '__main__':
-  main()
+  sys.exit(main())
