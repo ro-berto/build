@@ -39,14 +39,16 @@ def stop_master(master, path):
 
 
 def test_master(master, name, path):
-  logging.info('Trying %s' % master)
+  print('Trying %s' % master)
   start = time.time()
   if not stop_master(master, path):
     return False
   ports = range(8000, 8050) + range(8200, 8240) + range(9000, 9050)
   try:
     try:
-      subprocess2.check_call(['make', 'start'], timeout=60, cwd=path)
+      subprocess2.check_call(
+          ['make', 'start'], timeout=60, cwd=path,
+          stderr=subprocess2.STDOUT)
     except subprocess2.CalledProcessError:
       return False
 
@@ -88,7 +90,7 @@ def real_main(base_dir, expected):
   base = os.path.join(base_dir, 'masters')
   masters = sorted(
       p for p in os.listdir(base)
-      if os.path.isdir(os.path.join(base, p))
+      if os.path.isdir(os.path.join(base, p)) and not p.startswith('.')
   )
 
   failed = set()
@@ -131,7 +133,6 @@ def main():
   expected = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'Chromium Chrome',
-      'master.chromium.clobber': None,  # make start fails
       'master.chromium.flaky': None,
       'master.chromium.fyi': 'Chromium FYI',
       'master.chromium.git': None,
