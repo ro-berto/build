@@ -25,6 +25,29 @@ table td {
   text-align: center;
 }
 
+.closerbox {
+  border: 1px solid #aaa;
+  background-color: #eef;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+
+.closerbox table {
+  padding: 0 4px;
+}
+
+.closerbox .title {
+  background-color: #ccc;
+  border-top-left-radius: 8px;
+  -webkit-border-top-left-radius: 8px;
+  -moz-border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-top-right-radius: 8px;
+  padding: 0 0 2px;
+}
+
 .Project {
   width: 100px;
 }
