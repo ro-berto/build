@@ -184,14 +184,26 @@ class FilterDomain(util.ComparableMixin):
     return result
 
 
-def CreateWebStatus(port, **kwargs):
+def CreateWebStatus(port, templates=None, **kwargs):
   webstatus = WebStatus(port, **kwargs)
+  if templates:
+    # Manipulate the search path for jinja templates
+    # pylint: disable=F0401
+    import jinja2
+    # pylint: disable=E1101
+    old_loaders = webstatus.templates.loader.loaders
+    # pylint: disable=E1101
+    new_loaders = old_loaders[:1]
+    new_loaders.extend([jinja2.FileSystemLoader(x) for x in templates])
+    new_loaders.extend(old_loaders[1:])
+    webstatus.templates.loader.loaders = new_loaders
   chromium_status.SetupChromiumPages(webstatus)
   return webstatus
 
 
 def AutoSetupMaster(c, active_master, mail_notifier=False,
-                    public_html=None, order_console_by_time=False,
+                    public_html=None, templates=None,
+                    order_console_by_time=False,
                     enable_http_status_push=False):
   """Add common settings and status services to a master.
 
@@ -241,11 +253,13 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     c['status'].append(CreateWebStatus(active_master.master_port,
                                        allowForce=True,
                                        num_events_max=3000,
+                                       templates=templates,
                                        **kwargs))
   if active_master.master_port_alt:
     c['status'].append(CreateWebStatus(active_master.master_port_alt,
                                        allowForce=False,
                                        num_events_max=3000,
+                                       templates=templates,
                                        **kwargs))
 
   # Keep last build logs, the default is too low.
