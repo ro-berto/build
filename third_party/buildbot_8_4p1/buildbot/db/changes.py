@@ -53,7 +53,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
       string)
     """
 
-    def addChange(self, author=None, files=None, comments=None, is_dir=0,
+    def addChange(self, author=None, files=None, comments='', is_dir=0,
             links=None, revision=None, when_timestamp=None, branch=None,
             category=None, revlink='', properties={}, repository='',
             project='', _reactor=reactor):
@@ -130,7 +130,7 @@ class ChangesConnectorComponent(base.DBConnectorComponent):
             ins = self.db.model.changes.insert()
             r = conn.execute(ins, dict(
                 author=author,
-                comments=comments,
+                comments=comments[:1024],
                 is_dir=is_dir,
                 branch=branch,
                 revision=revision,
