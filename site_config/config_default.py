@@ -87,7 +87,7 @@ class Master(object):
 
   class _ChromiumBase(_Base):
     # Tree status urls. You should fork the code from tools/chromium-status/ and
-    # setup your own AppEngine instance (or use directly Djando to create a
+    # setup your own AppEngine instance (or use directly Django to create a
     # local instance).
     # Defaulting urls that are used to POST data to 'localhost' so a local dev
     # server can be used for testing and to make sure nobody updates the tree
@@ -200,6 +200,12 @@ class Master(object):
     from_address = 'nobody@example.com'
 
   ## ChromiumOS related
+
+  class ChromiumChromiumOS(_ChromiumBase):
+    project_name = 'Chromium ChromiumOS'
+    master_port = 9035
+    slave_port = 9027
+    master_port_alt = 9037
 
   class ChromiumOS(_Base):
     project_name = 'ChromiumOS'
