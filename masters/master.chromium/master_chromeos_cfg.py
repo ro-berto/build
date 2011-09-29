@@ -103,29 +103,5 @@ F('view_dbg_tests_3', chromeos().ChromiumOSFactory(
                         'ui_total_shards': 3, 'ui_shard_index': 3,
                         'browser_total_shards': 3, 'browser_shard_index': 3,}))
 
-#
-# Linux ChromiumOS Dbg Clang bot
-#
-
-B('Linux Clang (ChromiumOS dbg)',
-    'dbg_linux_chromeos_clang', 'compile', 'chromeos_dbg',
-    notify_on_missing=True)
-F('dbg_linux_chromeos_clang', chromeos().ChromiumOSFactory(
-    target='Debug',
-    options=['--build-tool=make', '--compiler=clang'],
-    tests=['base',
-           'ui_base',
-           'gfx',
-           'unit',
-           'crypto',
-           'cacheinvalidation',
-           'jingle'],
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 ' + 
-                          'chromeos=1 fastbuild=1 target_arch=ia32'
-    }}))
-
-
 def Update(config, active_master, c):
   return helper.Update(c)
