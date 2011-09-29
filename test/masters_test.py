@@ -75,8 +75,10 @@ def test_master(master, name, path):
               return False
             logging.info('Success in %1.1fs' % (time.time() - start))
             return True
+          except ValueError:
+            logging.warning('Didn\'t get valid data from %s' % master)
           except IOError:
-            pass
+            logging.warning('Didn\'t get data from %s' % master)
         # Look in twistd.log for an exception:
 
         # TODO(maruel): Search for 'exception' in twistd.log.
@@ -179,7 +181,7 @@ def main():
   expected = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'Chromium Chrome',
-      'master.chromium.chromiumos': None,
+      'master.chromium.chromiumos': 'Chromium ChromiumOS',
       'master.chromium.flaky': None,
       'master.chromium.fyi': 'Chromium FYI',
       'master.chromium.git': None,
