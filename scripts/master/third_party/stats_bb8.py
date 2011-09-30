@@ -43,8 +43,6 @@ class StatsBuilderStatusResource(HtmlResource):
         if result == builder.SUCCESS or result == builder.WARNINGS:
           (start, end) = step.getTimes()
           elapsed = end - start
-          if elapsed > 200:
-            elapsed = 100
           stepTime.append(elapsed)
         if result == builder.FAILURE:
           failingSteps[stepName] = failCount + 1
