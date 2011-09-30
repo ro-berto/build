@@ -328,7 +328,7 @@ def NotifyMaster(master, lkgr, dry=False):
         '--master', master,
         '--revision', lkgr,
         '--branch', 'src',
-        '--user', 'lkgr',
+        '--who', 'lkgr',
         '--category', 'lkgr',
         'no file information']
     if dry:
