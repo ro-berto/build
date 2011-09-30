@@ -149,11 +149,6 @@
             var chrome = "";
             var lkgr = "";
             var pyauto = "";
-            var asan = [
-                "builder=ASAN Builder",
-                "builder=ASAN Tests (1)",
-                "builder=ASAN Tests (2)"
-            ].join("&").replace(" ","+").replace("(","%28").replace(")","%29")
 
             function BarUrl(x) {
               return "http://build.chromium.org/p/" + x +
@@ -172,7 +167,7 @@
             var waterfall = "../chromium/waterfall";
             var waterfall_cros = "../chromium.chromiumos/waterfall";
             var waterfall_webkit = "../chromium.webkit/waterfall";
-            var waterfall_memory = "../chromium.memory.fyi/waterfall";
+            var waterfall_memory = "../chromium.memory/waterfall";
             var waterfall_memory_fyi = "../chromium.memory.fyi/waterfall";
             var waterfall_chrome = "../chromium.chrome/waterfall";
             var waterfall_perf = "../chromium.perf/waterfall";
@@ -212,7 +207,9 @@
             function Div(p, x) { return "<div " + p + ">" + x + "</div>"; }
             function Tr(x) { return "<tr>" + x + "</tr>\n"; }
             function Td(p, x) { return "<td " + p + ">" + x + "</td>"; }
-            function A(u, x) { return "<a href='"+ u + "'>" + x + "</a>"; }
+            function A(u, x, p) {
+                return "<a href='"+ u + "' " + p + ">" + x + "</a>"; 
+            }
             function IFrame(p, u) {
                 return "<iframe "+ p + " src='" + u + "'></iframe>";
             }
@@ -225,9 +222,10 @@
             ].join(" ");
 
             function HTMLBaseBar(waterfall_url, bar_url, content, name,
-                                 bar_properties, name_properties) {
-              return Td(name_properties,
-                        A(GetUrl(waterfall_url, content), name)) +
+                                 bar_properties, link_properties) {
+              return Td("",
+                        A(GetUrl(waterfall_url, content), name,
+                          link_properties)) +
                      Td(bar_properties,
                         IFrame(iframe_properties, GetUrl(bar_url, content)));
             }

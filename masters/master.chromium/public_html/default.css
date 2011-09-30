@@ -25,6 +25,29 @@ table td {
   text-align: center;
 }
 
+.closerbox {
+  border: 1px solid #aaa;
+  background-color: #eef;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+}
+
+.closerbox table {
+  padding: 0 4px;
+}
+
+.closerbox .title {
+  background-color: #ccc;
+  border-top-left-radius: 8px;
+  -webkit-border-top-left-radius: 8px;
+  -moz-border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-top-right-radius: 8px;
+  padding: 0 0 2px;
+}
+
 .Project {
   width: 100px;
 }
@@ -98,11 +121,17 @@ td.Event {
 }
 
 td.Activity {
+  border-top-left-radius: 10px;
+  -webkit-border-top-left-radius: 10px;
+  -moz-border-radius-topleft: 10px;
+  min-height: 20px;
   padding: 2px 0 2px 0;
 }
 
-table.info td {
-  padding: 2px 10px;
+td.idle, td.waiting, td.offline, td.building {
+  border-top-left-radius: 0px;
+  -webkit-border-top-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
 }
 
 .LastBuild {
@@ -176,9 +205,6 @@ td.DevStatusCollapse {
   border-bottom-right-radius: 5px;
   -webkit-border-bottom-right-radius: 5px;
   -moz-border-radius-bottomright: 5px;
-  border-top-right-radius: 5px;
-  -webkit-border-top-right-radius: 5px;
-  -moz-border-radius-topright: 5px;
 }
 
 td.DevDetails {
@@ -333,7 +359,7 @@ div.BuildWaterfall {
 }
 
 /* LastBuild, BuildStep states */
-.LastBuild, .success {
+.success {
   color: #FFFFFF;
   background-color: #8fdf5f;
   border-color: #4F8530;
@@ -351,7 +377,13 @@ div.BuildWaterfall {
   border-color: #C29D46;
 }
 
-.exception, .retry, td.offline {
+.never {
+  color: #FFFFFF;
+  background-color: #f0f0e0;
+  border-color: #A77272;
+}
+
+.exception, td.offline {
   color: #FFFFFF;
   background-color: #e0b0ff;
   border-color: #ACA0B3;
