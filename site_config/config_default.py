@@ -107,37 +107,37 @@ class Master(object):
     # Used by the waterfall display.
     project_name = 'Chromium'
     master_port = 9010
-    slave_port = 9012
+    slave_port = 9112
     master_port_alt = 9014
 
   class ChromiumFYI(_ChromiumBase):
     project_name = 'Chromium FYI'
     master_port = 9016
-    slave_port = 9017
+    slave_port = 9117
     master_port_alt = 9019
 
   class ChromiumMemory(_ChromiumBase):
     project_name = 'Chromium Memory'
     master_port = 9014
-    slave_port = 9019
+    slave_port = 9119
     master_port_alt = 9047
 
   class ChromiumPerf(_ChromiumBase):
     project_name = 'Chromium Perf'
     master_port = 9050
-    slave_port = 9051
+    slave_port = 9151
     master_port_alt = 9052
 
   class ChromiumWebkit(_ChromiumBase):
     project_name = 'Chromium Webkit'
     master_port = 9053
-    slave_port = 9054
+    slave_port = 9154
     master_port_alt = 9055
 
   class ChromiumChrome(_ChromiumBase):
     project_name = 'Chromium Chrome'
     master_port = 9056
-    slave_port = 9057
+    slave_port = 9157
     master_port_alt = 9058
 
   class ChromiumPyauto(_ChromiumBase):
@@ -149,7 +149,7 @@ class Master(object):
   class ChromiumGPU(_ChromiumBase):
     project_name = 'Chromium GPU'
     master_port = 9059
-    slave_port = 9060
+    slave_port = 9160
     master_port_alt = 9061
 
   class ChromiumLKGR(_ChromiumBase):
@@ -161,31 +161,31 @@ class Master(object):
   class ChromiumGIT(_ChromiumBase):
     project_name = 'Chromium Git'
     master_port = 9062
-    slave_port = 9063
+    slave_port = 9163
     master_port_alt = 9064
 
   class ChromiumFlaky(_ChromiumBase):
     project_name = 'Chromium Flaky'
     master_port = 9065
-    slave_port = 9066
+    slave_port = 9166
     master_port_alt = 9067
 
   class ChromiumSwarm(_ChromiumBase):
     project_name = 'Chromium Swarm'
     master_port = 9068
-    slave_port = 9069
+    slave_port = 9169
     master_port_alt = 9070
 
   class ChromiumMemoryFYI(_ChromiumBase):
     project_name = 'Chromium Memory FYI'
     master_port = 9071
-    slave_port = 9072
+    slave_port = 9172
     master_port_alt = 9073
 
   class TryServer(_ChromiumBase):
     project_name = 'Chromium Try Server'
     master_port = 9011
-    slave_port = 9013
+    slave_port = 9113
     master_port_alt = 9015
     try_job_port = 9018
     # The svn repository to poll to grab try patches. For chrome, we use a
@@ -196,7 +196,7 @@ class Master(object):
     # Place your continuous build fork settings here.
     project_name = 'My Forked Chrome'
     master_port = 9010
-    slave_port = 9011
+    slave_port = 9111
     from_address = 'nobody@example.com'
 
   ## ChromiumOS related
@@ -204,13 +204,13 @@ class Master(object):
   class ChromiumChromiumOS(_ChromiumBase):
     project_name = 'Chromium ChromiumOS'
     master_port = 9035
-    slave_port = 9027
+    slave_port = 9127
     master_port_alt = 9037
 
   class ChromiumOS(_Base):
     project_name = 'ChromiumOS'
     master_port = 9030
-    slave_port = 9027
+    slave_port = 9127
     master_port_alt = 9043
     base_app_url = 'http://localhost:8080'
     tree_status_url = base_app_url + '/status'
@@ -223,7 +223,7 @@ class Master(object):
     project_name = 'V8'
     master_host = 'localhost'
     master_port = 9030
-    slave_port = 9031
+    slave_port = 9131
     master_port_alt = 9043
     server_url = 'http://v8.googlecode.com'
     project_url = 'http://v8.googlecode.com'
@@ -241,43 +241,43 @@ class Master(object):
   class NativeClient(_NaClBase):
     project_name = 'NativeClient'
     master_port = 9025
-    slave_port = 9026
+    slave_port = 9126
     master_port_alt = 9041
 
   class NativeClientToolchain(_NaClBase):
     project_name = 'NativeClientToolchain'
     master_port = 9025
-    slave_port = 9026
+    slave_port = 9126
     master_port_alt = 9041
 
   class NativeClientChrome(_NaClBase):
     project_name = 'NativeClientChrome'
     master_port = 9025
-    slave_port = 9026
+    slave_port = 9126
     master_port_alt = 9041
 
   class NativeClientPPAPI(_NaClBase):
     project_name = 'NativeClientPPAPI'
     master_port = 9025
-    slave_port = 9026
+    slave_port = 9126
     master_port_alt = 9041
 
   class NativeClientSDK(_NaClBase):
     project_name = 'NativeClientSDK'
     master_port = 9022
-    slave_port = 9048
+    slave_port = 9148
     master_port_alt = 9049
 
   class NativeClientPorts(_NaClBase):
     project_name = 'NativeClientPorts'
     master_port = 9022
-    slave_port = 9048
+    slave_port = 9148
     master_port_alt = 9049
 
   class NativeClientTryServer(_Base):
     project_name = 'NativeClient-Try'
     master_port = 9020
-    slave_port = 9021
+    slave_port = 9121
     master_port_alt = 9022
     try_job_port = 9023
     svn_url = None
@@ -291,7 +291,7 @@ class Master(object):
   class NativeClientLLVM(_NaClBase):
     project_name = 'NativeClientLLVM'
     master_port = 9022
-    slave_port = 9048
+    slave_port = 9148
     master_port_alt = 9049
 
   ## Others
@@ -299,7 +299,7 @@ class Master(object):
   class O3D(_Base):
     project_name = 'O3D'
     master_port = 9028
-    slave_port = 9029
+    slave_port = 9129
     master_port_alt = 9042
     base_app_url = 'http://localhost:8080'
     tree_status_url = base_app_url + '/status'
@@ -328,7 +328,7 @@ class Master(object):
     project_name = 'Skia'
     master_host = 'localhost'
     master_port = 9068
-    slave_port = 9069
+    slave_port = 9169
     master_port_alt = 9070
     server_url = 'http://skia.googlecode.com'
     project_url = 'http://skia.googlecode.com'
@@ -339,7 +339,7 @@ class Master(object):
     project_name = 'Chromium Experimental'
     master_host = 'localhost'
     master_port = 9010
-    slave_port = 9011
+    slave_port = 9111
     master_port_alt = 9012
 
   # Used for perf testing
@@ -348,7 +348,7 @@ class Master(object):
   class ChromiumPerfClang(_ChromiumBase):
     project_name = 'Chromium Perf Clang'
     master_port = 9040
-    slave_port = 9041
+    slave_port = 9141
     master_port_alt = 9042
 
   class Sfntly(_Base):
@@ -361,7 +361,7 @@ class Master(object):
   class ChromiumPerfAv(_ChromiumBase):
     project_name = 'Chromium Perf Av'
     master_port = 9050
-    slave_port = 9051
+    slave_port = 9151
     master_port_alt = 9052
 
 class Installer(object):

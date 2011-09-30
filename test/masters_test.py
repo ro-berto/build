@@ -54,9 +54,17 @@ def test_master(master, name, path):
     try:
       try:
         subprocess2.check_call(
+            ['make', 'upgrade'], timeout=60, cwd=path,
+            stderr=subprocess2.STDOUT)
+      except subprocess2.CalledProcessError:
+        logging.warning('Warning: cannot run make upgrade for %s' % name)
+
+      try:
+        subprocess2.check_call(
             ['make', 'start'], timeout=60, cwd=path,
             stderr=subprocess2.STDOUT)
       except subprocess2.CalledProcessError:
+        logging.error('Error: cannot start %s' % name)
         return False
 
       # It has ~10 seconds to boot.
@@ -64,14 +72,15 @@ def test_master(master, name, path):
         for p in ports:
           try:
             data = json.load(
-                urllib.urlopen('http://localhost:%d/json/project' % p))
-            if not data or not 'projectName' in data:
+                urllib.urlopen('http://localhost:%d/json/project' % p)) or {}
+            if not data or (not 'projectName' in data and not 'title' in data):
               logging.warning('Didn\'t get valid data from %s' % master)
               continue
-            if data['projectName'] != name:
+            got_name = data.get('projectName', data.get('title'))
+            if got_name != name:
               logging.error(
                   'Wrong %s name, expected %s, got %s' %
-                  (master, name, data['projectName']))
+                  (master, name, got_name))
               return False
             logging.info('Success in %1.1fs' % (time.time() - start))
             return True
@@ -182,9 +191,9 @@ def main():
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'Chromium Chrome',
       'master.chromium.chromiumos': 'Chromium ChromiumOS',
-      'master.chromium.flaky': None,
+      'master.chromium.flaky': 'Chromium Flaky',
       'master.chromium.fyi': 'Chromium FYI',
-      'master.chromium.git': None,
+      'master.chromium.git': 'Chromium Git',
       'master.chromium.gpu': 'Chromium GPU',
       'master.chromium.lkgr': 'Chromium LKGR',
       'master.chromium.memory': None,
@@ -192,7 +201,7 @@ def main():
       'master.chromium.perf': 'Chromium Perf',
       'master.chromium.perf_av': 'Chromium Perf Av',
       'master.chromium.pyauto': 'Chromium PyAuto',
-      'master.chromium.swarm': None,
+      'master.chromium.swarm': 'Chromium Swarm',
       'master.chromium.webkit': 'Chromium Webkit',
       'master.chromiumos': 'ChromiumOS',
       'master.client.drmemory': None,  # make start fails
