@@ -28,9 +28,25 @@ USE_LAUNCHD := \
           [ "$$(pwd -P)" = "/b/build/masters/master.chromium.clobber" ] && \
           echo 1)
 
+# make hocus-pocus: http://www.gnu.org/software/make/manual/make.html#Flavors
+nullstring :=
+space := $(nullstring) #
+
+THIRDPARTY_DIR := ../../third_party
+THIRDPARTY_PACKAGES :=          \
+    buildbot_8_4p1              \
+    twisted_10_2                \
+    jinja2                      \
+    sqlalchemy_0_7_1            \
+    sqlalchemy_migrate_0_7_1    \
+    tempita_0_5                 \
+    decorator_3_3_1
+
+THIRDPARTY_PATH = $(subst $(space),:,$(THIRDPARTY_PACKAGES:%=$(THIRDPARTY_DIR)/%) $(THIRDPARTY_DIR))
+
 start:
 ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=../../third_party/buildbot_7_12:../../third_party/twisted_8_1:../../scripts:../../third_party:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
+	PYTHONPATH=$(THIRDPARTY_PATH):../../scripts:../../site_config:../../../build_internal/site_config:. python ../../scripts/common/twistd --no_save -y buildbot.tac
 else
 	launchctl start org.chromium.buildbot.master.chromium.clobber
 endif
@@ -52,3 +68,8 @@ wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
 restart: stop wait start log
+
+setup:
+	@echo export PYTHONPATH=$(THIRDPARTY_PATH):../../scripts:../../site_config:../../../build_internal/site_config:.
+upgrade:
+	PYTHONPATH=$(THIRDPARTY_PATH):../../scripts:../../site_config:../../../build_internal/site_config:. python buildbot upgrade-master .

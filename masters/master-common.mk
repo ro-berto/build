@@ -76,3 +76,5 @@ restart: stop wait start log
 # This target is only known to work on 0.8.x masters.
 upgrade:
 	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
+setup:
+	@echo export PYTHONPATH=$(PYTHONPATH)
