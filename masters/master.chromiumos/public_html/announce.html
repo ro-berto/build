@@ -87,13 +87,15 @@
                 "builder=arm-tegra2-seaboard-toolchain",
                 "builder=x86-generic-gcc_46",
                 "builder=arm-tegra2-seaboard-gcc_46",
+                "reload=30",
             ].join("&");
             var chrome = [
                 "builder=x86+generic+chrome+PFQ",
                 "builder=arm+generic+chrome+PFQ",
                 "builder=tegra2+chrome+PFQ",
+                "reload=30",
             ].join("&");
-            var chromefyi = [
+            var chromium_chromiumos = [
                 "builder=ChromiumOS+(x86)",
                 "builder=ChromiumOS+(arm)",
                 "builder=ChromiumOS+(tegra2)",
@@ -106,26 +108,28 @@
                 "builder=arm+generic+full",
                 "builder=tegra2+full",
                 "builder=tegra2+seaboard+full",
+                "reload=30",
             ].join("&");
             var x86 = [
                 "builder=x86+generic+PFQ",
                 "builder=x86+generic+full",
                 "builder=x86+pineview+full",
+                "reload=30",
             ].join("&");
 
             var memory = ""
 
 
             var bar = "http://build.chromium.org/p/chromiumos/horizontal_one_box_per_builder"
-            var bar_chromefyi = "http://build.chromium.org/p/chromium.fyi/horizontal_one_box_per_builder"
+            var bar_chromium_chromiumos = "http://build.chromium.org/p/chromium.chromiumos/horizontal_one_box_per_builder"
             var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder";
 
             var waterfall = '../chromiumos/waterfall'
-            var waterfall_chromefyi = '../chromium.fyi/waterfall'
+            var waterfall_chromium_chromiumos = '../chromium.chromiumos/waterfall'
             var waterfall_memory = "../chromium.memory/waterfall"
 
             function GetUrl(type, content) {
-              return type + "?" + content + "&reload=30";
+              return type + "?" + content;
             }
 
             function DisplayBar(waterfall_url, bar_url, content, name) {
@@ -135,7 +139,7 @@
             DisplayBar(waterfall, bar, x86, "x86");
             DisplayBar(waterfall, bar, arm, "arm");
             DisplayBar(waterfall, bar, chrome, "chrome");
-            DisplayBar(waterfall_chromefyi, bar_chromefyi, chromefyi, "chrome.fyi")
+            DisplayBar(waterfall_chromium_chromiumos, bar_chromium_chromiumos, chromium_chromiumos, "chromium.chromiumos")
           </script>
         </table>
       </td>
