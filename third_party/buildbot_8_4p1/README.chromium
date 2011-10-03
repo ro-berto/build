@@ -498,3 +498,22 @@ db schema (see buildbot/db/model.py:181).
                  is_dir=is_dir,
                  branch=branch,
                  revision=revision,
+
+
+Fix inheritance bug.
+
+http://trac.buildbot.net/ticket/2120
+
+Index: buildbot/status/web/logs.py
+===================================================================
+--- buildbot/status/web/logs.py	(revision 103214)
++++ buildbot/status/web/logs.py	(working copy)
+@@ -65,7 +65,7 @@
+         if path == "text":
+             self.asText = True
+             return self
+-        return HtmlResource.getChild(self, path, req)
++        return Resource.getChild(self, path, req)
+ 
+     def content(self, entries):
+         html_entries = []
