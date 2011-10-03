@@ -44,7 +44,27 @@ THIRDPARTY_DIR ?= $(TOPLEVEL_DIR)/third_party
 SCRIPTS_DIR ?= $(TOPLEVEL_DIR)/scripts
 PUBLICCONFIG_DIR ?= $(TOPLEVEL_DIR)/site_config
 PRIVATECONFIG_DIR ?= $(TOPLEVEL_DIR)/../build_internal/site_config
-BUILDBOT_PATH ?= $(THIRDPARTY_DIR)/buildbot_7_12:$(THIRDPARTY_DIR)/twisted_8_1
+
+# Packages needed by buildbot7
+BUILDBOT7_PATH = $(THIRDPARTY_DIR)/buildbot_7_12:$(THIRDPARTY_DIR)/twisted_8_1
+
+# Packages needed by buildbot8
+BUILDBOT8_DEPS :=               \
+    buildbot_8_4p1              \
+    twisted_10_2                \
+    jinja2                      \
+    sqlalchemy_0_7_1            \
+    sqlalchemy_migrate_0_7_1    \
+    tempita_0_5                 \
+    decorator_3_3_1
+
+nullstring :=
+space := $(nullstring) #
+BUILDBOT8_PATH = $(subst $(space),:,$(BUILDBOT8_DEPS:%=$(THIRDPARTY_DIR)/%))
+
+# Default to buildbot7.  To override, put this in the master's Makefile:
+#   BUILDBOT_PATH = $(BUILDBOT8_PATH)
+BUILDBOT_PATH ?= $(BUILDBOT7_PATH)
 
 PYTHONPATH := $(BUILDBOT_PATH):$(SCRIPTS_DIR):$(THIRDPARTY_DIR):$(PUBLICCONFIG_DIR):$(PRIVATECONFIG_DIR):.
 
@@ -76,5 +96,6 @@ restart: stop wait start log
 # This target is only known to work on 0.8.x masters.
 upgrade:
 	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
+
 setup:
 	@echo export PYTHONPATH=$(PYTHONPATH)
