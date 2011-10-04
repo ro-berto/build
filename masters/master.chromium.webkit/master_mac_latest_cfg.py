@@ -47,7 +47,7 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler_moz',
            'page_cycler_morejs', 'page_cycler_intl1', 'page_cycler_intl2',
            'page_cycler_dhtml', 'page_cycler_database', 'page_cycler_indexeddb',
-           'page_cycler_moz-http', 'page_cycler_bloat-http' 'startup',
+           'page_cycler_moz-http', 'page_cycler_bloat-http', 'startup',
            'sunspider', 'tab_switching', 'v8_benchmark'],
     factory_properties={
         'show_perf_results': True,
