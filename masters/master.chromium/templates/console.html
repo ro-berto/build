@@ -187,6 +187,14 @@ function unmerge() {
     // Hide the "unmerge" button.
     document.querySelectorAll('.unmerge')[0].style.display = 'none'
 }
+
+function SetupView() {
+    if (readCookie('merged')) {
+        merge();
+    }
+}
+
+document.addEventListener("DOMContentLoaded", SetupView, false);
 {% endif %}
 
 // ]]> 
@@ -324,13 +332,12 @@ function unmerge() {
   {% endfor %}
   </tr>
    
-  {% if not collapse %}
+{% if not collapse %}
   <tr>
     <td colspan="{{ r.span }}" class='DevComment {{ alt }}'> 
       {{ r.comments|changecomment(r.project or None)|replace('\n', '<br/>')|replace('  ','&nbsp; ') }}
     </td>
   </tr>
-  {% endif %}
  
   {% if r.details %}
   <tr>
@@ -347,8 +354,7 @@ function unmerge() {
     </td>
   </tr>    
   {% endif %} 
-  
-{% if not collapse %}
+
   <tr class='DevStatusSpacing'>
     <td>
     </td>
