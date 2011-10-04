@@ -42,7 +42,10 @@ B('Linux Perf', 'f_linux_perf_rel',
   scheduler='s9_webkit_rel')
 F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
     options=['--compiler=goma', 'chromium_builder_perf'],
-    tests=['startup', 'page_cycler', 'dromaeo', 'page_cycler_http'],
+    tests=['startup', 'page_cycler_moz', 'page_cycler_morejs',
+           'page_cycler_intl1', 'page_cycler_intl2', 'page_cycler_dhtml',
+           'page_cycler_database', 'page_cycler_indexeddb', 'dromaeo',
+           'page_cycler_moz-http', 'page_cycler_bloat-http'],
     factory_properties={'perf_id': 'chromium-rel-linux-webkit',
                         'show_perf_results': True,}))
 

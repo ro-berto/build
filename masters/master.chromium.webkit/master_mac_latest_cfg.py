@@ -44,8 +44,11 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     options=['--compiler=clang', '--', '-target', 'chromium_builder_perf'],
-    tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler', 'page_cycler_http',
-           'startup', 'sunspider', 'tab_switching', 'v8_benchmark'],
+    tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler_moz',
+           'page_cycler_morejs', 'page_cycler_intl1', 'page_cycler_intl2',
+           'page_cycler_dhtml', 'page_cycler_database', 'page_cycler_indexeddb',
+           'page_cycler_moz-http', 'page_cycler_bloat-http' 'startup',
+           'sunspider', 'tab_switching', 'v8_benchmark'],
     factory_properties={
         'show_perf_results': True,
         'perf_id': 'chromium-rel-mac6-webkit',
