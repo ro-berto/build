@@ -428,7 +428,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
     {% for d in r.details %}
         <li>{{ d.buildername }}: {{ d.status }} - &nbsp;
       {%- for l in d.logs -%}
-            <a href="{{ l.url }}">{{ l.name }}</a>
+            <a href="{{ l.url }}"> {{ l.name }} </a>{% if not loop.last	%} - {%	endif %}
       {%- endfor -%}
         </li>
     {% endfor %}
