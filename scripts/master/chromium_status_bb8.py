@@ -187,14 +187,6 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
       revision['who'] = '@'.join(revision['who'].split('@')[0:2])
     return result
 
-  # pylint: disable=W0221
-  def content(self, request, cxt):
-    """Interpret the 'collapse' parameter in the request."""
-    if request.args.get('collapse', False):
-      cxt['collapse'] = 1
-    # pylint: disable=E1121
-    return console.ConsoleStatusResource.content(self, request, cxt)
-
 
 def SetupChromiumPages(webstatus):
   """Add customizations to default web reporting."""

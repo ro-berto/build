@@ -71,7 +71,6 @@ function checkMouseLeave(element, event) {
   }
 }
 
-{% if collapse %}
 // Creates a new cookie.
 function createCookie(name, value, day) {
     var date = new Date();
@@ -100,8 +99,89 @@ function eraseCookie(name) {
     createCookie(name, "", -1);
 }
 
+// Hides all "details" and "comments" section.
+function collapse() {
+    // Hide all Comments sections.
+    var comments = document.querySelectorAll('.DevComment');
+    for(var i = 0; i < comments.length; i++) {
+        comments[i].style.display = "none";
+    }
+
+    // Hide all details sections.
+    var details = document.querySelectorAll('.DevDetails');
+    for(var i = 0; i < details.length; i++) {
+        details[i].style.display = "none";
+    }
+
+    // Fix the rounding on the Revision box. (Lower right corner must be round)
+    var revisions = document.querySelectorAll('.DevRev');
+    for(var i = 0; i < revisions.length; i++) {
+      revisions[i].className = revisions[i].className + ' DevRevCollapse';
+    }
+
+    // Fix the rounding on the last category box. (Lower left corner must be round)
+    var status = document.querySelectorAll('.last');
+    for(var i = 0; i < status.length; i++) {
+        status[i].className = status[i].className + ' DevStatusCollapse';
+    }
+
+    // Create a cookie to remember that we want the view to be collapsed.
+    createCookie('collapsed', 'true', 30)
+
+    // Hide the collapse and the unmerge buttons.
+    document.querySelectorAll('.collapse')[0].style.display = 'none'
+    document.querySelectorAll('.unmerge')[0].style.display = 'none'
+
+    // Activate the merge and expand buttons.
+    document.querySelectorAll('.uncollapse')[0].style.display = 'inline'
+    document.querySelectorAll('.merge')[0].style.display = 'inline'
+}
+
+// Expands the view. This is the opposite of "Collapse"
+function uncollapse() {
+    unmerge();
+
+    // Make the comments visible.
+    var comments = document.querySelectorAll('.DevComment');
+    for(var i = 0; i < comments.length; i++) {
+        comments[i].style.display = "";
+    }
+
+    // Make the details visible.
+    var details = document.querySelectorAll('.DevDetails');
+    for(var i = 0; i < details.length; i++) {
+        details[i].style.display = "";
+    }
+
+    // Remove the round corner (lower right) for the Revision box.
+    var revisions = document.querySelectorAll('.DevRev');
+    for(var i = 0; i < revisions.length; i++) {
+        revisions[i].className = revisions[i].className.replace('DevRevCollapse', '');
+    }
+
+    // Remoe the round corner (lower left) for the last category box.
+    var status = document.querySelectorAll('.DevStatus');
+    for(var i = 0; i < status.length; i++) {
+        status[i].className = status[i].className.replace('DevStatusCollapse', '');
+    }
+
+    // Delete the cookies that say that we want to be collapsed or merged.
+    eraseCookie('collapsed')
+    eraseCookie('merged')
+
+    // Display the "collapse" and "merge" buttons.
+    document.querySelectorAll('.collapse')[0].style.display = 'inline'
+    document.querySelectorAll('.merge')[0].style.display = 'inline'
+
+    // Remove the "uncollapse" and "unmerge" buttons.
+    document.querySelectorAll('.uncollapse')[0].style.display = 'none'
+    document.querySelectorAll('.unmerge')[0].style.display = 'none'
+}
+
 // Merge all the status boxes together.
 function merge() {
+    collapse();
+
     // Hide all the spacing.
     var spacing = document.querySelectorAll('.DevStatusSpacing');
     for(var i = 0; i < spacing.length; i++) {
@@ -154,8 +234,10 @@ function merge() {
 
     // Display the "unmerge" button.
     document.querySelectorAll('.unmerge')[0].style.display = 'inline'
+    document.querySelectorAll('.uncollapse')[0].style.display = 'inline'
 
     // Remove the "merge" button.
+    document.querySelectorAll('.collapse')[0].style.display = 'none'
     document.querySelectorAll('.merge')[0].style.display = 'none'
 
     // Create a cookie to remember that we want to be merged.
@@ -191,11 +273,12 @@ function unmerge() {
 function SetupView() {
     if (readCookie('merged')) {
         merge();
+    } else if (readCookie('collapsed')) {
+        collapse();
     }
 }
 
 document.addEventListener("DOMContentLoaded", SetupView, false);
-{% endif %}
 
 // ]]> 
 </script>
@@ -308,7 +391,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
   {% set last = "last" if loop.last else "" %}
 
   <tr>
-    <td class='DevRev {{ alt }} {% if collapse %}DevRevCollapse{% endif %}' width="1%">
+    <td class='DevRev {{ alt }} DevRevCollapse' width="1%">
       {{ r.id|shortrev(r.repository) }}
     </td>
     <td class='DevName {{ alt }}' width="1%">
@@ -316,7 +399,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
     </td>
 
   {% for c in categories %}
-    <td class='DevStatus {{ alt }} {% if collapse and loop.last %}DevStatusCollapse{% endif %}'>
+    <td class='DevStatus {{ alt }} {% if loop.last %}DevStatusCollapse{% endif %}'>
       <table width="100%">
         <tr>    
     {% for b in r.builds[c.name] %}
@@ -332,7 +415,6 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
   {% endfor %}
   </tr>
    
-{% if not collapse %}
   <tr>
     <td colspan="{{ r.span }}" class='DevComment {{ alt }}'> 
       {{ r.comments|changecomment(r.project or None)|replace('\n', '<br/>')|replace('  ','&nbsp; ') }}
@@ -359,7 +441,6 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
     <td>
     </td>
   </tr>  
-{% endif %}
 {% else %}
  <tr><td>No revisions available</td></tr>
 {% endfor %}
@@ -389,11 +470,9 @@ window.onload = function() {
 {% block footer %}
 <div class="footer" style="clear:both">
   <hr/>
-{% if collapse %}
-  [ <a class='merge' href="#" OnClick="merge(); return false;">merge</a>
+  [ <a class='collapse' href='#' OnClick='collapse(); return false;'>collapse</a>
+  <a class='uncollapse' href='#' OnClick='uncollapse(); return false;'>un-collapse</a>
+  <a class='merge' href="#" OnClick="merge(); return false;">merge</a>
   <a class='unmerge' style='display: none' href="#" OnClick="unmerge(); return false;">un-merge</a> ]
-{% else %}
-  [ <a class='collapse' href="?collapse=1">collapse</a> ]
-{% endif %}
 </div>
 {% endblock %}
