@@ -292,9 +292,6 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
   <table width="95%" class="Grid" border="0" cellspacing="0">
     <tr>
       <td width="33%" align="left" class="left_align">
-{% if categories|length > 1 %}
-        <br><b>Categories:</b> {% for c in categories %}{{ c.name|numstrip }} {% endfor %}
-{% endif %}
 {% if repository %}
         <br><b>Repository:</b> {{ repository|e }}
 {% endif %}
@@ -392,7 +389,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
 
   <tr>
     <td class='DevRev {{ alt }} DevRevCollapse' width="1%">
-      {{ r.id|shortrev(r.repository) }}
+      <a href="{{ r.link }}">{{ r.id|shortrev(r.repository) }}</a>
     </td>
     <td class='DevName {{ alt }}' width="1%">
       {{ r.who|user }}
