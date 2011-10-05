@@ -48,9 +48,8 @@ def _CollectArchiveFiles(output_dir):
       if ('-stack.' in name or
           '-crash-log.' in name or
           ('-actual.' in name and
-           (name.endswith('.txt') or
-            name.endswith('.png') or
-            name.endswith('.checksum')) and
+           (os.path.splitext(name)[1] in
+            ('.txt', '.png', '.checksum', '.wav')) and
            '-simp-actual.' not in name and
            '-jsfilt-actual.' not in name)):
         actual_file_list.append(os.path.join(rel_path, name))
@@ -126,7 +125,7 @@ def archive_layout(options, args):
   dest_parent_dir = os.path.join(config.Archive.www_dir_base,
       results_dir_basename.replace('-','_'), build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
-  
+
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   if gs_bucket:
     gs_base = '/'.join([gs_bucket, build_name, last_change])
