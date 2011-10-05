@@ -45,7 +45,7 @@ F('asan_rel', linux().ChromiumASANFactory(
              'gfx_unittests', 'browser_tests', 'ui_tests'],
     factory_properties={
            'gclient_env': {'GYP_DEFINES':
-                              ('clang=1 '
+                              ('asan=1 '
                                'linux_use_tcmalloc=0 '
                                'disable_nacl=1 '
                                'release_extra_cflags="-g" ')},

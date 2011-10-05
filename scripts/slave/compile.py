@@ -459,8 +459,8 @@ def common_make_settings(
       clangpp = os.path.join(asan_bin, 'clang++')
       env['ASAN'] = asan_dir
       env['ASAN_BIN'] = asan_bin
-      env['CC'] = '%s -fasan -w' % clang
-      env['CXX'] = '%s -fasan -w' % clangpp
+      env['CC'] = clang
+      env['CXX'] = clangpp
       command.append('CC=' + env['CC'])
       command.append('CXX=' + env['CXX'])
       command.append('CC.host=' + env['CC'])
