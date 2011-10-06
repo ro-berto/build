@@ -154,6 +154,7 @@ class GClient(sourcebase):
     self.gclient_nohooks = False
     self.was_patched = False
     self.no_gclient_branch = False
+    self.gclient_transitive = False
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
   if bbver == 7.12:
@@ -185,6 +186,7 @@ class GClient(sourcebase):
     self.gclient_nohooks = args.get('gclient_nohooks', False)
     self.env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     self.no_gclient_branch = args.get('no_gclient_branch')
+    self.gclient_transitive = args.get('gclient_transitive')
 
   def start(self):
     """Start the update process.
@@ -274,6 +276,10 @@ class GClient(sourcebase):
       else:
         # Make the revision look like branch@revision.
         command.append('%s@%s' % (branch, self.revision))
+      # We only add the transitive flag if we have a revision, otherwise it is
+      # meaningless.
+      if self.gclient_transitive:
+        command.append('--transitive')
 
     if self.gclient_deps:
       command.append('--deps=' + self.gclient_deps)

@@ -24,7 +24,7 @@ class GClient(source.Source):
 
   def __init__(self, svnurl=None, rm_timeout=None, gclient_spec=None, env=None,
                sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False,
-               no_gclient_branch=False, **kwargs):
+               no_gclient_branch=False, gclient_transitive=False, **kwargs):
     source.Source.__init__(self, **kwargs)
     if env:
       self.args['env'] = env.copy()
@@ -37,6 +37,7 @@ class GClient(source.Source):
     self.args['gclient_deps'] = gclient_deps
     self.args['gclient_nohooks'] = gclient_nohooks
     self.args['no_gclient_branch'] = no_gclient_branch
+    self.args['gclient_transitive'] = gclient_transitive
 
   def computeSourceRevision(self, changes):
     """Finds the latest revision number from the changeset that have

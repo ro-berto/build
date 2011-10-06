@@ -268,8 +268,11 @@ class GClientFactory(object):
 
     no_gclient_branch = factory_properties.get('no_gclient_branch', False)
 
+    gclient_transitive = factory_properties.get('gclient_transitive', False)
+
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove,
                                   gclient_deps=gclient_deps,
                                   gclient_nohooks=self._nohooks_on_update,
-                                  no_gclient_branch=no_gclient_branch)
+                                  no_gclient_branch=no_gclient_branch,
+                                  gclient_transitive=gclient_transitive)
