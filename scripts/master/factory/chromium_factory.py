@@ -636,16 +636,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
-  def CEFFactory(self, target='Release', clobber=False, tests=None, mode=None,
-                 slave_type='BuilderTester', options=None, compile_timeout=1200,
-                 build_url=None, project=None, factory_properties=None):
-    self._solutions.append(gclient_factory.GClientSolution(
-        'http://chromiumembedded.googlecode.com/svn/trunk',
-        'src/cef'))
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
   def ChromiumBranchFactory(
       self, target='Release', clobber=False, tests=None, mode=None,
       slave_type='BuilderTester', options=None, compile_timeout=1200,
