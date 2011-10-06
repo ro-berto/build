@@ -223,7 +223,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('check_deps'):     f.AddCheckDepsStep()
     if R('check_bins'):     f.AddCheckBinsStep()
     if R('check_perms'):    f.AddCheckPermsStep()
-    if R('check_licenses'): f.AddCheckLicensesStep()
+    if R('check_licenses'): f.AddCheckLicensesStep(fp)
 
     # Small ("module") unit tests:
     if R('base'):           f.AddBasicGTestTestStep('base_unittests', fp)

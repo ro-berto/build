@@ -194,11 +194,11 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'check_perms', cmd,
                      do_step_if=self.TestStepFilter)
 
-  def AddCheckLicensesStep(self):
+  def AddCheckLicensesStep(self, factory_properties):
     cmd = [self._python, self._check_licenses_tool,
            '--root', self._repository_root]
     self.AddTestStep(shell.ShellCommand, 'check_licenses', cmd,
-                     do_step_if=self.TestStepFilter)
+                     do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddCheckLKGRStep(self):
     """Check LKGR; if unchanged, cancel the build.
