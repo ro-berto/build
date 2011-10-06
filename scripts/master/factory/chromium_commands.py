@@ -333,42 +333,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'sizes', cmd,
                      do_step_if=self.TestStepFilter)
 
-  def AddTargetTests(self, timeout=None, verbose=None, factory_properties=None):
-    factory_properties = factory_properties or {}
-
-    class PerformanceGTestLogProcessor:
-      """
-      A shotgun-marriage class to get test results graphed by perf
-      but log failures analyzed like GTest with "GTestFullCommand"
-      test abbreviations.
-      """
-      def __init__(self, *args, **kw):
-        self.graphing = process_log.GraphingLogProcessor(*args, **kw)
-        self.gtest = gtest_command.GTestFullCommand(*args, **kw)
-
-      def ReportLink(self, *args, **kw):
-        return self.graphing.ReportLink(*args, **kw)
-      def Process(self, *args, **kw):
-        return self.graphing.Process(*args, **kw)
-
-      def TestAbbrFromTestID(self, *args, **kw):
-        return self.gtest.TestAbbrFromTestID(*args, **kw)
-      def createSummary(self, *args, **kw):
-        return self.gtest.createSummary(*args, **kw)
-
-
-    c = self.GetPerfStepClass(factory_properties, 'targets',
-                              PerformanceGTestLogProcessor)
-
-    command = [self._python, self._target_tests_tool]
-    if verbose:
-      command.append('-v')
-    if timeout is None:
-      # One hour default, sufficient for all target builds as of July 2009.
-      timeout = 60 * 60
-    self.AddTestStep(c, 'targets', command, timeout=timeout,
-                     do_step_if=self.TestStepFilter)
-
   def AddSunSpiderTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'sunspider',

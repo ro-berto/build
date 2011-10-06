@@ -515,15 +515,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                           factory_properties=factory_properties)
     return factory
 
-  def TargetTestsFactory(self, timeout=60*60, verbose=False,
-                         factory_properties=None):
-    factory = self.BaseFactory()
-    cmd_obj = chromium_commands.ChromiumCommands(factory,
-                                                 'Release', '',
-                                                 self._target_platform)
-    cmd_obj.AddTargetTests(timeout, verbose, factory_properties)
-    return factory
-
   def ReliabilityTestsFactory(self, platform='win'):
     """Create a BuildFactory to run a reliability slave."""
     factory = BuildFactory({})

@@ -91,9 +91,6 @@ class StatsStatusResource(HtmlResource):
     builderFailures = []
 
     for builderName in status.getBuilderNames():
-      if (builderName == "Win Target Builds" or
-          builderName == "Linux Target Builds"):
-        continue
       builderNames.append(builderName)
       builderObj = status.getBuilder(builderName)
 
