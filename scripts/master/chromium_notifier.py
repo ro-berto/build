@@ -208,7 +208,12 @@ class ChromiumNotifier(MailNotifier):
     self._last_time_mail_sent = time.time()
 
     blame_interested_users = self.shouldBlameCommitters(step_name)
-    project_name = self.master_status.getProjectName()
+    try:
+      # 0.7.x
+      project_name = self.master_status.getProjectName()
+    except AttributeError:
+      # 0.8.x
+      project_name = self.master_status.getTitle()
     revisions_list = build_utils.getAllRevisions(build_status)
     build_url = self.master_status.getURLForThing(build_status)
     waterfall_url = self.master_status.getBuildbotURL()

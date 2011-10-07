@@ -173,7 +173,10 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
   def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
     if not self.tree_status_url:
+      log.msg('[gatekeeper] No tree status url, not closing the tree.')
       return defer.succeed(0)
+    log.msg(
+        '[gatekeeper] Trying to close the tree at %s.' % self.tree_status_url)
 
     # isInterestingStep verified that latest_revision has expected properties.
     latest_revision = build_utils.getLatestRevision(build_status)
