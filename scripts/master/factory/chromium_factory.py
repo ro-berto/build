@@ -42,6 +42,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'win_debug_RuntimeChecks=0 '
     'win_debug_InlineFunctionExpansion=0 '
     'win_debug_disable_iterator_debugging=1 '
+    'win_release_InlineFunctionExpansion=0 '
+    # TODO(timurrrr): add more win_release_ flags, see http://crbug.com/99446
 
     'linux_use_tcmalloc=1 '
     'release_valgrind_build=1 '
