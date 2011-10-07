@@ -5,6 +5,11 @@
 <script>
   var redirect_to = "/console";
 
+  // Redirect to waterfall for tryserver.
+  if (/tryserver\.nacl/.test(location.href)) {
+    redirect_to = "/waterfall";
+  }
+  
   function create_redirect_url(url) {
     var url_no_index = url.replace(/\/index.html$/, "");
     var args = "";
