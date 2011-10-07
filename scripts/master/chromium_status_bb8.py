@@ -187,6 +187,12 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
       revision['who'] = '@'.join(revision['who'].split('@')[0:2])
     return result
 
+  def content(self, request, cxt):
+    """Override default reload setting"""
+    if 'reload' not in request.args:
+      request.args['reload'] = ['0']
+    # pylint: disable=E1121
+    return ConsoleStatusResource.content(self, request, cxt)
 
 def SetupChromiumPages(webstatus):
   """Add customizations to default web reporting."""
