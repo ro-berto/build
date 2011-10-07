@@ -642,3 +642,21 @@ index 1c7b4ab..7474c0d 100644
 +
 +# for tests
 +inv_failed = False
+
+
+
+Truncate comments to maximum length during migration.
+
+Index: db/migrate/versions/001_initial.py
+===================================================================
+--- db/migrate/versions/001_initial.py	(revision 104114)
++++ db/migrate/versions/001_initial.py	(working copy)
+@@ -216,7 +216,7 @@
+             values = dict(
+                     changeid=c.number,
+                     author=c.who,
+-                    comments=c.comments,
++                    comments=c.comments[:1024],
+                     is_dir=c.isdir,
+                     branch=c.branch,
+                     revision=c.revision,

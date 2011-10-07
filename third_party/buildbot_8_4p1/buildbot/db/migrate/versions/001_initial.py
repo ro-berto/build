@@ -216,7 +216,7 @@ def import_changes(migrate_engine):
             values = dict(
                     changeid=c.number,
                     author=c.who,
-                    comments=c.comments,
+                    comments=c.comments[:1024],
                     is_dir=c.isdir,
                     branch=c.branch,
                     revision=c.revision,
