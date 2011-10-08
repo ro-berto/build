@@ -163,6 +163,7 @@ processes = [
     'ceee_broker.exe',
     'ceee_common_unittests.exe',
     'chrome.exe',
+    'chromedriver.exe',
     'chrome_frame_helper.exe',
     'chrome_frame_net_tests.exe',
     'chrome_frame_tests.exe',
