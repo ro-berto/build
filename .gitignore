@@ -3,6 +3,7 @@
 .status_password
 changes.pck
 events_*
+master.cfg.sample
 state.sqlite
 twistd.log*
 twistd.pid
@@ -238,6 +239,9 @@ twistd.pid
 /masters/master.chromium.memory.fyi/webkit-rel-linux-valgrind
 /masters/master.chromium.memory.fyi/webkit-rel-linux-valgrind-layout
 /masters/master.chromium.memory.fyi/webkit-rel-mac-valgrind
+/masters/master.chromium.memory/ASAN_Builder
+/masters/master.chromium.memory/ASAN_Tests__1_
+/masters/master.chromium.memory/ASAN_Tests__2_
 /masters/master.chromium.memory/chromium-dbg-chromeos-heapcheck/builder
 /masters/master.chromium.memory/chromium-dbg-linux-heapcheck
 /masters/master.chromium.memory/chromium-dbg-mac-tsan
@@ -270,7 +274,7 @@ twistd.pid
 /masters/master.chromium.memory/chromium-rel-mac-valgrind-ui-2
 /masters/master.chromium.memory/chromium-rel-mac-valgrind-ui-3
 /masters/master.chromium.memory/chromium-rel-mac-valgrind-ui-4
-/masters/master.chromium.memory/events_chromium-status.appspot.com
+/masters/master.chromium.memory/public_html
 /masters/master.chromium.memory/webkit-rel-linux-valgrind
 /masters/master.chromium.memory/webkit-rel-linux-valgrind-layout
 /masters/master.chromium.memory/webkit-rel-mac-valgrind
@@ -1119,6 +1123,7 @@ twistd.pid
 /scripts/common/.bot_password
 /scripts/master/log_parser/perf_expectations
 /site_config/.bot_password
+/slave/ASAN_Builder
 /slave/chromium-linux-experimental
 /slave/chromium-mac-experimental
 /slave/chromium-win-experimental
