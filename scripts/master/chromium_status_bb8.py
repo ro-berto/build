@@ -187,7 +187,7 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
       revision['who'] = '@'.join(revision['who'].split('@')[0:2])
     return result
 
-  def content(self, request, cxt):
+  def content(self, request, cxt):  # pylint: disable=W0221
     """Override default reload setting"""
     if 'reload' not in request.args:
       request.args['reload'] = ['0']
