@@ -92,7 +92,10 @@ class GClient(source.Source):
       except KeyError:
         pass  # neither exist, go on without revision
     if revision:
-      revision = 'r%s' % revision
+      # TODO: Right now, 'no_gclient_branch' is a euphemism for 'git', but we
+      # probably ought to be explicit about this switch.
+      if not self.args['no_gclient_branch']:
+        revision = 'r%s' % revision
       # Only append revision if it's not already there.
       if not revision in description:
         description.append(revision)
