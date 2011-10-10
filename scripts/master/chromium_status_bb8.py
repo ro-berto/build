@@ -192,7 +192,7 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
     if 'reload' not in request.args:
       request.args['reload'] = ['0']
     # pylint: disable=E1121
-    return ConsoleStatusResource.content(self, request, cxt)
+    return console.ConsoleStatusResource.content(self, request, cxt)
 
 def SetupChromiumPages(webstatus):
   """Add customizations to default web reporting."""
