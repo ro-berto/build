@@ -2,7 +2,9 @@
 .manhole
 .status_password
 changes.pck
+changes.pck.old
 events_*
+http.log
 master.cfg.sample
 state.sqlite
 twistd.log*
@@ -76,6 +78,15 @@ twistd.pid
 /masters/master.chromium.chromiumos/chromium-tot-chromeos-x86-generic
 /masters/master.chromium.clobber
 /masters/master.chromium.clobber/lkgr_poller.log
+/masters/master.chromium.flaky/chromium-linux-flaky-builder-dbg
+/masters/master.chromium.flaky/chromium-linux-flaky-tester1
+/masters/master.chromium.flaky/chromium-linux-flaky-tester2
+/masters/master.chromium.flaky/chromium-mac-flaky-builder-dbg
+/masters/master.chromium.flaky/chromium-mac-flaky-tester1
+/masters/master.chromium.flaky/chromium-mac-flaky-tester2
+/masters/master.chromium.flaky/chromium-win-flaky-builder-dbg
+/masters/master.chromium.flaky/chromium-win-flaky-tester1
+/masters/master.chromium.flaky/chromium-win-flaky-tester2
 /masters/master.chromium.fyi/ASAN_Tests__1_
 /masters/master.chromium.fyi/ASAN_Tests__1_/builder
 /masters/master.chromium.fyi/ASAN_Tests__2_
@@ -113,6 +124,7 @@ twistd.pid
 /masters/master.chromium.fyi/chromium-dbg-mac-unit-tsan
 /masters/master.chromium.fyi/chromium-dbg-shared
 /masters/master.chromium.fyi/chromium-dbg-win-drmemory
+/masters/master.chromium.fyi/chromium-dbg-win-drmemory-ui
 /masters/master.chromium.fyi/chromium-dbg-win-drmemory-vista
 /masters/master.chromium.fyi/chromium-dbg-win-drmemory-win-7
 /masters/master.chromium.fyi/chromium-dbg-win-drmemory-win-7/builder
@@ -125,6 +137,7 @@ twistd.pid
 /masters/master.chromium.fyi/chromium-linux-targets
 /masters/master.chromium.fyi/chromium-mac-gyp
 /masters/master.chromium.fyi/chromium-mac-targets
+/masters/master.chromium.fyi/chromium-memory-builder
 /masters/master.chromium.fyi/chromium-rel-builder
 /masters/master.chromium.fyi/chromium-rel-chromeos-tsan-ui
 /masters/master.chromium.fyi/chromium-rel-linux-hardy-lowmem
@@ -145,6 +158,7 @@ twistd.pid
 /masters/master.chromium.fyi/chromium-rel-vista-memory
 /masters/master.chromium.fyi/chromium-rel-vista-perf-single
 /masters/master.chromium.fyi/chromium-rel-vista64
+/masters/master.chromium.fyi/chromium-rel-win-drmemory
 /masters/master.chromium.fyi/chromium-rel-win7
 /masters/master.chromium.fyi/chromium-rel-xp-cef
 /masters/master.chromium.fyi/chromium-rel-xp-memory
@@ -183,6 +197,12 @@ twistd.pid
 /masters/master.chromium.fyi/webkit-rel-reliability-builder
 /masters/master.chromium.fyi/webkit-rel-webkit-org
 /masters/master.chromium.fyi/webkit-reliability-tester
+/masters/master.chromium.git/Linux_Builder_x64__git_
+/masters/master.chromium.git/Linux_Tests_x64__git_
+/masters/master.chromium.git/Mac10_5_Tests__1_
+/masters/master.chromium.git/XP_Tests__1_
+/masters/master.chromium.git/cr-mac-rel-git
+/masters/master.chromium.git/cr-win-rel-git
 /masters/master.chromium.gpu/GPU_Linux_Tests__dbg__1_
 /masters/master.chromium.gpu/GPU_Linux_Tests__dbg__2_
 /masters/master.chromium.gpu/GPU_Mac_10_5_Tests__dbg_
@@ -202,6 +222,7 @@ twistd.pid
 /masters/master.chromium.gpu/gpu-win-dbg
 /masters/master.chromium.gpu/gpu-win-rel
 /masters/master.chromium.lkgr/Linux
+/masters/master.chromium.lkgr/Linux_Touch
 /masters/master.chromium.lkgr/Linux_x64
 /masters/master.chromium.lkgr/Mac
 /masters/master.chromium.lkgr/Win
@@ -385,6 +406,8 @@ twistd.pid
 /masters/master.chromium.pyauto/Win_Vista
 /masters/master.chromium.pyauto/Win_XP
 /masters/master.chromium.pyauto/pyauto_mac_10_6
+/masters/master.chromium.swarm/chromium-linux-swarm-1
+/masters/master.chromium.swarm/chromium-win-swarm-1
 /masters/master.chromium.webkit/Linux_Perf
 /masters/master.chromium.webkit/Linux_Tests
 /masters/master.chromium.webkit/Linux_Valgrind
@@ -847,6 +870,7 @@ twistd.pid
 /masters/master.client.nacl/lucid_64-newlib-arm_qemu-pnacl-dbg
 /masters/master.client.nacl/lucid_64-newlib-arm_qemu-pnacl-opt
 /masters/master.client.nacl/lucid_64-newlib-arm_qemu-pnacl-spec
+/masters/master.client.nacl/lucid_64-newlib-dbg-asan
 /masters/master.client.nacl/lucid_64-newlib-dbg-clang
 /masters/master.client.nacl/lucid_64-newlib-x86_32-pnacl
 /masters/master.client.nacl/lucid_64-newlib-x86_32-pnacl-spec
@@ -863,6 +887,7 @@ twistd.pid
 /masters/master.client.nacl/mac10.6-glibc-opt
 /masters/master.client.nacl/mac10.6-m32-n32-opt
 /masters/master.client.nacl/mac10.6-newlib-coverage
+/masters/master.client.nacl/mac10.6-newlib-dbg-asan
 /masters/master.client.nacl/mac10.6-newlib-dbg-clang
 /masters/master.client.nacl/mac10.6-newlib-opt
 /masters/master.client.nacl/vista-64-newlib-dbg
