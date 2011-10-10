@@ -24,16 +24,11 @@ import urllib
 
 from master.third_party import stats_bb8 as stats
 
-def _ShortRev(rev):
-  """A simplified version of the default 'shortrev' macro used in some jinja
-  templates.  This version isn't actually used for template processing; rather,
-  it's used to shorten revision names in the waterfall view, which doesn't make
-  much use of jinja templates."""
-
-  shortrev = rev[:12]
-  if len(shortrev) < len(rev):
-    shortrev += '...'
-  return shortrev
+# A simplified version of the default 'shortrev' macro used in some jinja
+# templates.  This version isn't actually used for template processing; rather,
+# it's used to shorten revision names in the waterfall view, which doesn't make
+# much use of jinja templates.
+_ShortRev = lambda x: x[:12]
 
 
 class BuildBox(waterfall.BuildBox):
@@ -201,8 +196,11 @@ def SetupChromiumPages(webstatus):
     n = ((n / stride) + 1) * stride
     return filter(lambda x: x % (n/stride) == 0, range(n+1))
 
+  orig_shortrev = webstatus.templates.filters['shortrev']
+
   webstatus.templates.filters.update(
-      { 'longrev': lambda x, y: jinja2.escape(unicode(x)),
+      { 'shortrev': lambda rev, repo: orig_shortrev(rev, repo).rstrip('.'),
+        'longrev': lambda x, y: jinja2.escape(unicode(x)),
         'numstrip': lambda x: jinja2.escape(unicode(x.lstrip('0123456789'))),
         'quote': urllib.quote,
         'max': lambda x: reduce(max, x, 0),
