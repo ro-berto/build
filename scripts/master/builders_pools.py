@@ -1,10 +1,16 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Implement builder selection algorithm."""
 
-from buildbot.scheduler import BadJobfile
+try:
+  # 0.7.12
+  from buildbot.scheduler import BadJobfile
+except ImportError:
+  # 0.8.x
+  # pylint: disable=E0611,F0401
+  from buildbot.schedulers.trysched import BadJobfile
 
 
 class BuildersPools(object):
