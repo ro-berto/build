@@ -185,7 +185,7 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
   def content(self, request, cxt):  # pylint: disable=W0221
     """Override default reload setting"""
     if 'reload' not in request.args:
-      request.args['reload'] = ['0']
+      request.args['reload'] = ['9999999999']
     # pylint: disable=E1121
     return console.ConsoleStatusResource.content(self, request, cxt)
 
