@@ -43,7 +43,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'win_debug_InlineFunctionExpansion=0 '
     'win_debug_disable_iterator_debugging=1 '
     'win_release_InlineFunctionExpansion=0 '
-    'win_release_OmitFramePointers=false '
+    'win_release_OmitFramePointers=0 '
 
     'linux_use_tcmalloc=1 '
     'release_valgrind_build=1 '
