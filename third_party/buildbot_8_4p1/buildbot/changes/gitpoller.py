@@ -16,6 +16,7 @@
 import time
 import tempfile
 import os
+import urllib
 from twisted.python import log
 from twisted.internet import defer, utils
 
@@ -36,7 +37,7 @@ class GitPoller(base.PollingChangeSource):
                  gitbin='git', usetimestamps=True,
                  category=None, project=None,
                  pollinterval=-2, fetch_refspec=None,
-                 encoding='utf-8'):
+                 encoding='utf-8', revlinktmpl=''):
         # for backward compatibility; the parameter used to be spelled with 'i'
         if pollinterval != -2:
             pollInterval = pollinterval
@@ -57,6 +58,7 @@ class GitPoller(base.PollingChangeSource):
         self.changeCount = 0
         self.commitInfo  = {}
         self.initLock = defer.DeferredLock()
+        self.revlinktmpl = revlinktmpl
         
         if self.workdir == None:
             self.workdir = tempfile.gettempdir() + '/gitpoller_work'
@@ -273,6 +275,10 @@ class GitPoller(base.PollingChangeSource):
                 # just fail on the first error; they're probably all related!
                 raise failures[0]
 
+            revlink = ''
+            if self.revlinktmpl and rev:
+              revlink = self.revlinktmpl % urllib.quote_plus(rev)
+
             timestamp, name, files, comments = [ r[1] for r in results ]
             d = self.master.addChange(
                    author=name,
@@ -283,7 +289,8 @@ class GitPoller(base.PollingChangeSource):
                    branch=self.branch,
                    category=self.category,
                    project=self.project,
-                   repository=self.repourl)
+                   repository=self.repourl,
+                   revlink=revlink)
             wfd = defer.waitForDeferred(d)
             yield wfd
             results = wfd.getResult()

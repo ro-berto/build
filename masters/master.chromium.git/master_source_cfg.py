@@ -10,5 +10,6 @@ def Update(config, active_master, c):
   poller = gitpoller.GitPoller(
       repourl='http://git.chromium.org/chromium/src.git',
       branch='master',
-      pollinterval=10)
+      pollinterval=10,
+      revlinktmpl='http://git.chromium.org/gitweb/?p=chromium/src.git;a=commit;h=%s')
   c['change_source'].append(poller)
