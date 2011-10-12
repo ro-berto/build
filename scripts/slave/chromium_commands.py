@@ -15,8 +15,11 @@ from twisted.internet import defer
 
 from common import chromium_utils
 
+# TODO(maruel): REMOVE as soon as conversion to buildbot 0.8.4p1 is done.
+# pylint: disable=E1101
+
 try:
-  # Buildbot 0.8.3
+  # Buildbot 0.8.x
   # Unable to import 'XX'
   # pylint: disable=F0401
   from buildslave.commands.base import SourceBaseCommand
@@ -24,9 +27,11 @@ try:
   from buildslave import runprocess
   sourcebase = SourceBaseCommand
   runprocesscmd = runprocess.RunProcess
-  bbver = 8.3
+  bbver = 8.4
 except ImportError:
   # Buildbot 0.7.12
+  # Unable to import 'XX'
+  # pylint: disable=E0611,E1101,F0401
   from buildbot.slave import commands
   from buildbot.slave.registry import registerSlaveCommand
   sourcebase = commands.SourceBase
@@ -155,6 +160,8 @@ class GClient(sourcebase):
     self.was_patched = False
     self.no_gclient_branch = False
     self.gclient_transitive = False
+    # TODO(maruel): Remove once buildbot 0.8.4p1 conversion is complete.
+    self.sourcedata = None
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
   if bbver == 7.12:

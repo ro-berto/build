@@ -31,11 +31,12 @@ def Reboot():
 def HotPatchSlaveBuilder():
   """We could override the SlaveBuilder class but it's way simpler to just
   hotpatch it."""
-  # python module paths changed from buildbot-7 to buildbot-8; support both
-  # pylint: disable=F0401
+  # pylint: disable=E0611,F0401
   try:
+    # buildbot 0.7.12
     from buildbot.slave.bot import SlaveBuilder
   except ImportError:
+    # buildbot 0.8.x
     from buildslave.bot import SlaveBuilder
   old_remote_shutdown = SlaveBuilder.remote_shutdown
 

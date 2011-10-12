@@ -18,16 +18,19 @@ def CommonChecks(input_api, output_api):
 
   black_list = input_api.DEFAULT_BLACK_LIST + (
       r'.*slave/.*/build.*/.*', r'.*depot_tools/.*', r'.*unittests/.*',
-      r'.*scripts/release/.*')
+      r'.*scripts/release/.*', r'.+_bb7\.py$')
 
   sys_path_backup = sys.path
   try:
     sys.path = [
         join('third_party'),
-        join('third_party', 'buildbot_7_12'),
-        join('third_party', 'twisted_8_1'),
-        #join('third_party', 'buildbot_8_3p1', 'buildbot'),
-        #join('third_party', 'twisted_10_2'),
+        join('third_party', 'buildbot_8_4p1'),
+        join('third_party', 'decorator_3_3_1'),
+        join('third_party', 'jinja2'),
+        join('third_party', 'sqlalchemy_0_7_1'),
+        join('third_party', 'sqlalchemy_migrate_0_7_1'),
+        join('third_party', 'tempita_0_5'),
+        join('third_party', 'twisted_10_2'),
         join('scripts'),
         join('site_config'),
     ] + sys.path

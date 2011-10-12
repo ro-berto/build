@@ -6,6 +6,7 @@
 
 try:
   # 0.7.12
+  # pylint: disable=E0611,F0401
   from buildbot.scheduler import BadJobfile
 except ImportError:
   # 0.8.x

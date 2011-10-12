@@ -86,6 +86,8 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     Initialize with the Scheduler's base properties.
     """
     props = Properties()
+    # TODO(maruel): BROKEN ON BULDBOT 0.8.4p1
+    # pylint: disable=E1101
     props.updateFromProperties(self.properties)
     props.setProperty('clobber', options['clobber'], 'Scheduler')
     if options['testfilter']:

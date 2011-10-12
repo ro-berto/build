@@ -18,7 +18,7 @@ from master.status_push import HttpStatusPush
 from buildbot.status.web.baseweb import WebStatus
 
 if int(buildbot.version.split('.')[1]) == 7:
-  from master import chromium_status
+  from master import chromium_status_bb7 as chromium_status
 else:
   import master.chromium_status_bb8 as chromium_status
 

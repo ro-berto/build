@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -57,6 +57,8 @@ class TryJobHTTP(TryJobBase):
     """Utility method for tests: figure out which TCP port we just opened."""
     # Access to a protected member
     # pylint: disable=W0212
+    # TODO(maruel): BROKEN ON BULDBOT 0.8.4p1
+    # pylint: disable=E1101
     return self.services[0]._port.getHost().port
 
   def messageReceived(self, socket):
