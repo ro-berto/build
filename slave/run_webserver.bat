@@ -12,5 +12,7 @@ xcopy /D %lighttpd_dir%\..\no_dll\CygWin1.dll %lighttpd_dir%
 
 REM Start the server, using the conf file in the slave directory.
 
-@echo on
+:RESTART
+echo Starting %lighttpd_dir%\lighttpd_server.exe -f %~dp0\lighttpd.conf -m %lighttpd_dir%\lib
 %lighttpd_dir%\lighttpd_server.exe -f %~dp0\lighttpd.conf -m %lighttpd_dir%\lib
+goto :RESTART
