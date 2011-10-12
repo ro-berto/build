@@ -194,6 +194,7 @@ class CbuildbotFactory(object):
       build_slave_sync = ['gclient', 'sync']
       self.f_cbuild.addStep(shell.ShellCommand,
                             command=build_slave_sync,
+                            name='update_scripts',
                             description='Sync buildbot slave files',
                             workdir='/b',
                             timeout=300)
