@@ -715,3 +715,21 @@ Index: buildbot/changes/gitpoller.py
              wfd = defer.waitForDeferred(d)
              yield wfd
              results = wfd.getResult()
+
+Add limit query argument to /console
+
+
+--- buildbot/status/web/console.py
++++ buildbot/status/web/console.py
+@@ -228,9 +228,9 @@ class ConsoleStatusResource(HtmlResource):
+     @defer.deferredGenerator
+     def getAllChanges(self, request, status, debugInfo):
+         master = request.site.buildbot_service.master
+-
++        limit = min(100, max(1, int(request.args.get('limit', [25])[0])))
+         wfd = defer.waitForDeferred(
+-                master.db.changes.getRecentChanges(25))
++                master.db.changes.getRecentChanges(limit))
+         yield wfd
+         chdicts = wfd.getResult()
+ 
