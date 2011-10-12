@@ -5,8 +5,12 @@
 """Mixed bag of anything."""
 
 import re
+import urllib
 
 from twisted.python import log
+from twisted.web import html
+import buildbot
+from buildbot.status.web.base import build_get_class
 from buildbot.status.web.base import IBox
 from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
@@ -93,8 +97,11 @@ DEFAULT_STYLES = {
 
 def EmailableBuildTable(build_status, waterfall_url, styles=None):
   """Convert a build_status into a html table that can be sent by email.
-
   That means the CSS style must be inline."""
+
+  if int(buildbot.version.split('.')[1]) > 7:
+    return EmailableBuildTable_bb8(build_status, waterfall_url, styles)
+
   class DummyObject(object):
     prepath = None
 
@@ -127,6 +134,63 @@ def EmailableBuildTable(build_status, waterfall_url, styles=None):
   # With a hack to fix the url root.
   build_boxes = [GenBox(build_status)]
   build_boxes.extend([GenBox(step) for step in build_status.getSteps()
+                      if step.isStarted() and step.getText()])
+  table_content = ''.join(build_boxes)
+  return (('<table style="border-spacing: 1px 1px; font-weight: bold; '
+           'padding: 3px 0px 3px 0px; text-align: center;">\n') +
+          table_content +
+          '</table>\n')
+
+
+def EmailableBuildTable_bb8(build_status, waterfall_url, styles=None):
+  """Uses new web reporting API in buildbot8."""
+
+  styles = styles or DEFAULT_STYLES
+
+  def GenBuildBox(buildstatus):
+    """Generates a box for one build."""
+    class_ = build_get_class(buildstatus)
+    style = ''
+    if class_ and class_ in styles:
+      style = styles[class_]
+    reason = html.escape(buildstatus.getReason())
+    url = '%sbuilders/%s/builds/%d' % (
+        waterfall_url,
+        urllib.quote(buildstatus.getBuilder().getName(), safe=''),
+        buildstatus.getNumber())
+    fmt = ('<tr><td style="%s"><a title="Reason: %s" href="%s">'
+           'Build %d'
+           '</a></td></tr>')
+    return fmt % (style, reason, url, buildstatus.getNumber())
+
+  def GenStepBox(stepstatus):
+    """Generates a box for one step."""
+    class_ = build_get_class(stepstatus)
+    style = ''
+    if class_ and class_ in styles:
+      style = styles[class_]
+    stepname = stepstatus.getName()
+    text = stepstatus.getText() or []
+    text = text[:]
+    base_url = '%sbuilders/%s/builds/%d/steps' % (
+        waterfall_url,
+        urllib.quote(stepstatus.getBuild().getBuilder().getName(), safe=''),
+        stepstatus.getBuild().getNumber())
+    for steplog in stepstatus.getLogs():
+      name = steplog.getName()
+      log.msg('name = %s' % name)
+      url = '%s/%s/logs/%s' % (
+          base_url,
+          urllib.quote(stepname, safe=''),
+          urllib.quote(name))
+      text.append('<a href="%s">%s</a>' % (url, html.escape(name)))
+    for name, target in stepstatus.getURLs().iteritems():
+      text.append('<a href="%s">%s</a>' % (target, html.escape(name)))
+    fmt = '<tr><td style="%s">%s</td></tr>'
+    return fmt % (style, '<br/>'.join(text))
+
+  build_boxes = [GenBuildBox(build_status)]
+  build_boxes.extend([GenStepBox(step) for step in build_status.getSteps()
                       if step.isStarted() and step.getText()])
   table_content = ''.join(build_boxes)
   return (('<table style="border-spacing: 1px 1px; font-weight: bold; '
