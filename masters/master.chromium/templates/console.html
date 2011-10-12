@@ -389,7 +389,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
 
   <tr>
     <td class='DevRev {{ alt }} DevRevCollapse' width="1%">
-      <a href="{{ r.link }}">{{ r.id|shortrev(r.repository) }}</a>
+      <a href="{{ r.link }}" target="_blank">{{ r.id|shortrev(r.repository) }}</a>
     </td>
     <td class='DevName {{ alt }}' width="1%">
       {{ r.who|user }}
