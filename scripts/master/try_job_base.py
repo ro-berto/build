@@ -32,71 +32,84 @@ class TryJobBase(TryBase):
     self.last_good_urls = last_good_urls
     self.code_review_sites = code_review_sites
 
-  def ParseJob(self, options):
-    """Grab try job settings."""
-    job_name = options.get('name', 'Unnamed')
-    user = options.get('user', 'John Doe')
-    emails = options.get('email', '').split(',')
-    # Email sanitization.
-    for email in emails:
+  def parse_options(self, options):
+    """Converts try job settings into a dict."""
+    # Flush None and '' keys.
+    options = dict(
+        (k, v) for k, v in options.iteritems() if v not in (None, ''))
+
+    options.setdefault('name', 'Unnamed')
+    options.setdefault('user', 'John Doe')
+    options['email'] = [e for e in options.get('email', '').split(',') if e]
+    for email in options['email']:
       if not TryJobBase._EMAIL_VALIDATOR.match(email):
         log.msg("'%s' is an invalid email address!" % email)
         raise BadJobfile("'%s' is an invalid email address!" % email)
 
-    diff = options.get('patch', None)
-    root = options.get('root', None)
-    clobber = options.get('clobber')
+    options.setdefault('patch', None)
+    options.setdefault('root', None)
+    options.setdefault('clobber', False)
     # -pN argument to patch.
-    patchlevel = int(options.get('patchlevel', 0))
-    branch = options.get('branch', None)
-    revision = options.get('revision', None)
-    buildset_id = options.get('reason', '%s: %s' % (user, job_name))
-    testfilters = [item for item in options.get('testfilter', '').split(',')
-                   if item]
-    project = options.get('project', self.pools.default_pool_name)
-
+    options['patchlevel'] = int(options.get('patchlevel', 0))
+    options.setdefault('branch', None)
+    options.setdefault('revision', None)
+    options.setdefault('reason', '%s: %s' % (options['user'], options['name']))
+    options['testfilter'] = [
+        i for i in options.get('testfilter', '').split(',') if i
+    ]
+    options.setdefault('project', self.pools.default_pool_name)
+    options.setdefault('repository', None)
     # Code review infos. Enforce numbers.
-    patchset = options.get('patchset', None)
-    if patchset:
-      patchset = int(patchset)
-    issue = options.get('issue', None)
-    if issue:
-      issue = int(issue)
+    def try_int(key):
+      if options.setdefault(key, None) is None:
+        return
+      options[key] = int(options[key])
+    try_int('patchset')
+    try_int('issue')
 
     builder_names = []
     if 'bot' in options:
-      builder_names = options['bot'].split(',')
-    # TODO(maruel): Don't select the builders right now if not specified.
-    builder_names = self.pools.Select(builder_names, project)
-    log.msg('Choose %s for job %s' % (','.join(builder_names), buildset_id))
-    if diff:
-      patch = (patchlevel, diff, root)
-    else:
-      patch = None
+      builder_names = options.get('bot', '').split(',')
+    options['bot'] = self.pools.Select(builder_names, options['project'])
+    log.msg(
+        'Choose %s for job %s' % (','.join(options['bot']), options['reason']))
+    return options
 
+  def ParseJob(self, options):
+    """Grab try job settings."""
+    options = self.parse_options(options)
     # There can be only one to blame per change.
-    fake_changes = [Change(email, [''], '',
-                           revision=revision) for email in emails]
-    last_good_url = None
-    if self.last_good_urls:
-      last_good_url = self.last_good_urls.get(project)
-    code_review_site = None
-    if self.code_review_sites:
-      code_review_site = self.code_review_sites.get(project)
-    jobstamp = TryJobStamp(branch=branch, revision=revision, patch=patch,
-                           changes=fake_changes,
-                           last_good_url=last_good_url,
-                           code_review_site=code_review_site,
-                           job_name=job_name, patchset=patchset, issue=issue)
-    # Current job extra properties that are not related to the source stamp.
-    # Initialize with the Scheduler's base properties.
+    fake_changes = [
+        Change(email, [''], '', revision=options['revision'])
+        for email in options['email']
+    ]
+    patch = None
+    if options['patch']:
+      patch = (options['patchlevel'], options['patch'], options['root'])
+    last_good_url = (self.last_good_urls or {}).get(options['project'])
+    code_review_site = (self.code_review_sites or {}).get(options['project'])
+    jobstamp = TryJobStamp(
+        branch=options['branch'],
+        revision=options['revision'],
+        patch=patch,
+        changes=fake_changes,
+        last_good_url=last_good_url,
+        code_review_site=code_review_site,
+        job_name=options['name'],
+        patchset=options['patchset'],
+        issue=options['issue'])
+    return options['bot'], jobstamp, options['name'], self.get_props(options)
+
+  def get_props(self, options):
+    """Current job extra properties that are not related to the source stamp.
+    Initialize with the Scheduler's base properties.
+    """
     props = Properties()
     props.updateFromProperties(self.properties)
-    if clobber:
-      props.setProperty('clobber', True, 'Scheduler')
-    if testfilters:
-      props.setProperty('testfilters', testfilters, 'Scheduler')
-    return builder_names, jobstamp, buildset_id, props
+    props.setProperty('clobber', options['clobber'], 'Scheduler')
+    if options['testfilter']:
+      props.setProperty('testfilters', options['testfilter'], 'Scheduler')
+    return props
 
   def CancelJobsMatching(self, source_stamp, builder_name):
     """Cancels any jobs with the same job and owner."""

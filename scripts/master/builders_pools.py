@@ -66,6 +66,6 @@ class BuildersPools(object):
     if not builder_names:
       # If no builder are available, throw a BadJobfile exception since we
       # can't select a group.
-      raise BadJobfile
+      raise BadJobfile('No builder could be found to run the try job')
 
     return builder_names
