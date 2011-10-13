@@ -46,8 +46,7 @@ F('asan_rel', linux().ChromiumASANFactory(
     factory_properties={
            'gclient_env': {'GYP_DEFINES':
                               ('asan=1 '
-                               'linux_use_tcmalloc=0 '
-                               'disable_nacl=1 ')},
+                               'linux_use_tcmalloc=0 ')},
             'trigger': 'linux_asan_rel_trigger' }))
 
 #
