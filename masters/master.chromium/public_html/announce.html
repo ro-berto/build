@@ -1,14 +1,128 @@
 <script>
+  /**
+   * Pseudo namespace for chromium - keep it short because we are in a very
+   * narrow scope for this file.
+   * @type {Object}
+   */
+  var c = {};
+
+  /**
+   * Replaces html references with anchor tags to the same.
+   * @param {String} className CSS class to operate on.
+   */
   function autoLink(className) {
     var comments = document.querySelectorAll(className);
     for(var i = 0; i < comments.length; i++) {
-      comments[i].innerHTML = comments[i].innerHTML.replace(/http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
+      comments[i].innerHTML = comments[i].innerHTML.replace(
+          /http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
     }
-  }
+  };
 
   window.onload = function() {
     autoLink('.DevComment');
-  }
+  };
+
+  /**
+   * This is the indicator for whether we are in console or waterfall
+   * mode, or some future resource.
+   * @type {String}
+   */
+  c.viewtype = location.pathname.split('/').slice(-1);
+
+  /**
+   * Returns a search string portion including marker, or an empty string.
+   * optional.
+   * @param {String} opt_s A search string, or some form of emptiness.
+   * @returns {!String}
+   */
+  function search(opt_s) {
+    return opt_s ? '?' + opt_s.replace(/^[?]/, '') : '';
+  };
+
+  /**
+   * Replicates a string.
+   * @param {Number} i A whole number of repetitions.
+   * @param {String} x The string to be repeated.
+   * @returns {!String}
+   */
+  function repeat(i, x){
+    var t = ''
+    for (j = 0; j < i; j++) { t += x; }
+    return t;
+  };
+
+  /**
+   * A simple HTML table string.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function table(attributes, contents) {
+      return '<table ' + attributes + '>' + contents + '</table>\n';
+  };
+
+  /**
+   * A simple HTML div string.
+   * @param {String} attributes A set of HTML attributes for the div.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function div(attributes, contents) {
+    return '<div ' + p + '>' + contents + '</div>';
+  };
+
+  /**
+   * A simple HTML table row string.
+   * @param {String} attributes A set of HTML attributes for the table row.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function tr(contents) {
+    return '<tr>' + contents + '</tr>\n';
+  };
+
+  /**
+   * A simple HTML table cell string.
+   * @param {String} attributes A set of HTML attributes for the table cell.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function td(attributes, contents) {
+    return '<td ' + attributes + '>' + contents + '</td>';
+  };
+
+  /**
+   * A simple HTML anchor string.
+   * @param {String} url The value for the href.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} contents The contents.
+   * @returns {!String}
+   */
+  function a(url, contents, attributes) {
+    return '<a href="' + url + '" ' + attributes + '>' + contents + '</a>';
+  };
+
+  /**
+   * Gives an HTML anchor string to the specified URL, but of the same view
+   * type as the current page.
+   * @param {String} url The URL portion up to the view.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} contents The contents for the tag.
+   * @returns {!String}
+   */
+  function aView(url, search, contents) {
+      return a(url + '/' + c.viewtype + search(search), contents, '')
+  };
+
+  /**
+   * A simple HTML iframe string.
+   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} url The source of the iframe.
+   * @returns {!String}
+   */
+  function iFrame(attributes, url) {
+      return '<iframe ' + attributes + ' src="' + url + '"></iframe>';
+  };
 </script>
 
 <div class="Announcement">
@@ -16,7 +130,7 @@
 <iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://chromium-status.appspot.com/current"></iframe>
 
 <center style="padding: 0 7px">
-  <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -moz-box-shadow: 2px 2px 6px rgba(0,0,0,0.6); -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,0.6);">
+  <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);">
     <tr>
       <td width="23%">
         <table valign="top" width="100%">
@@ -60,8 +174,12 @@
                <b>Sheriffs:</b>
             </td>
             <td>
-              <script src='./sheriff.js'></script>, <script src='./sheriff_webkit.js'></script>(WebKit), <script src='./sheriff_memory.js'></script>(Memory),
-              <script src='./sheriff_nacl.js'></script>(NaCl),
+              <script src='./sheriff.js'></script>,<br>
+              <script src='./sheriff_webkit.js'></script>(WebKit),
+              <script src='./sheriff_memory.js'></script>(Memory),
+              <script src='./sheriff_nacl.js'></script>(NaCl),<br>
+              <script src='./sheriff_cros_mtv.js'></script>,
+              <script src='./sheriff_cros_nonmtv.js'></script>(CrOS),<br>
               <a href="https://www.google.com/calendar/render?cid=google.com_iqfka4i9asiva67vlqqf1es094%40group.calendar.google.com">trooper schedule</a>
             </td>
           </tr>
@@ -70,17 +188,21 @@
                <b>Navigate:</b>
             </td>
             <td colspan="2">
-              <a href="http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot">about</a> |
-              <a href="./waterfall/help">customize</a> |
-              <a href="../tryserver.chromium">try</a> |
-              <a href="../chromium.fyi/waterfall">experimental</a> |
-              <a href="../chromium/waterfall">waterfall</a> |
-              <a href="../chromium/waterfall?show_events=true&failures_only=true">failures</a> |
-              <a href="../chromium/console">console</a> |
-              <a href="../chromium.memory/console">memory</a> |
-              <a href="../chromium.memory.fyi/console">memory fyi</a> | 
-              <a href="../chromiumos/waterfall">chromiumos</a> |
-              <a href="../client.nacl/console">NaCl</a>
+              <script>
+              document.write([
+                a("http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot", "about", ""),
+                a("waterfall/help", "customize", ""),
+                a("waterfall", "waterfall", ""),
+                a("console", "console", ""),
+                aView("../tryserver.chromium", "", "try"),
+                aView("../chromium.fyi", "", "experimental"),
+                aView("", "show_events=true&failures_only=true", "failures"),
+                aView("../chromium.memory", "", "memory"),
+                aView("../chromium.memory.fyi", "", "memory fyi"),
+                aView("../chromium.chromiumos", "", "chromiumos chrome"),
+                aView("../chromiumos", "", "chromiumos team"),
+                aView("../client.nacl", "", "NaCl")].join(' | '));
+              </script>
             </td>
           </tr>
         </table>
@@ -119,69 +241,66 @@
       <td width="70%">
         <table width="100%">
           <script language="javascript">
-            var chromium = ""
-            var chromium_chromiumos = ""
-            var webkit = [
-                "builder=Webkit Win Builder (deps)",
-                "builder=Webkit Win (deps)",
-                "builder=Webkit Win Builder (deps)(dbg)",
-                "builder=Webkit Win (deps)(dbg)(1)",
-                "builder=Webkit Win (deps)(dbg)(2)",
-                "builder=Webkit Mac Builder (CG)(deps)",
-                "builder=Webkit Mac10.6 (CG)(deps)",
-                "builder=Webkit Mac Builder (CG)(deps)(dbg)",
-                "builder=Webkit Mac10.6 (CG)(deps)(dbg)(1)",
-                "builder=Webkit Mac10.6 (CG)(deps)(dbg)(2)",
-                "builder=Webkit Mac Builder (deps)",
-                "builder=Webkit Mac10.6 (deps)",
-                "builder=Webkit Mac Builder (deps)(dbg)",
-                "builder=Webkit Mac10.6 (deps)(dbg)(1)",
-                "builder=Webkit Mac10.6 (deps)(dbg)(2)",
-                "builder=Webkit Linux (deps)",
-                "builder=Webkit Linux Builder (deps)(dbg)",
-                "builder=Webkit Linux (deps)(dbg)(1)",
-                "builder=Webkit Linux (deps)(dbg)(2)",
-            ].join("&").replace(" ","+").replace("(","%28").replace(")","%29");
-            var memory = "";
-            var memory_fyi = "";
-            var perf = "";
-            var cros = "";
-            var chrome = "";
-            var lkgr = "";
-            var pyauto = "";
+            c.chromium = '';
+            c.chromium_chromiumos = '';
+            c.webkit = [
+                'builder=Webkit Win Builder (deps)',
+                'builder=Webkit Win (deps)',
+                'builder=Webkit Win Builder (deps)(dbg)',
+                'builder=Webkit Win (deps)(dbg)(1)',
+                'builder=Webkit Win (deps)(dbg)(2)',
+                'builder=Webkit Mac Builder (CG)(deps)',
+                'builder=Webkit Mac10.6 (CG)(deps)',
+                'builder=Webkit Mac Builder (CG)(deps)(dbg)',
+                'builder=Webkit Mac10.6 (CG)(deps)(dbg)(1)',
+                'builder=Webkit Mac10.6 (CG)(deps)(dbg)(2)',
+                'builder=Webkit Mac Builder (deps)',
+                'builder=Webkit Mac10.6 (deps)',
+                'builder=Webkit Mac Builder (deps)(dbg)',
+                'builder=Webkit Mac10.6 (deps)(dbg)(1)',
+                'builder=Webkit Mac10.6 (deps)(dbg)(2)',
+                'builder=Webkit Linux (deps)',
+                'builder=Webkit Linux Builder (deps)(dbg)',
+                'builder=Webkit Linux (deps)(dbg)(1)',
+                'builder=Webkit Linux (deps)(dbg)(2)',
+            ].join('&').replace(' ', '+').replace('(', '%28').replace(')', '%29');
+            c.memory = '';
+            c.memory_fyi = '';
+            c.perf = '';
+            c.cros = '';
+            c.chrome = '';
+            c.lkgr = '';
+            c.pyauto = '';
 
-            function BarUrl(x) {
-              return "http://build.chromium.org/p/" + x +
-                     "/horizontal_one_box_per_builder";
-            }
-            var bar = BarUrl("chromium")
-            var bar_webkit = BarUrl("chromium.webkit");
-            var bar_memory = BarUrl("chromium.memory");
-            var bar_memory_fyi = BarUrl("chromium.memory.fyi");
-            var bar_perf = BarUrl("chromium.perf");
-            var bar_chrome = BarUrl("chromium.chrome");
-            var bar_lkgr = BarUrl("chromium.lkgr");
-            var bar_pyauto = BarUrl("chromium.pyauto");
-            var bar_cros = BarUrl("chromium.chromiumos");
+            c.status = '../chromium';
+            c.status_cros = '../chromium.chromiumos';
+            c.status_webkit = '../chromium.webkit';
+            c.status_memory = '../chromium.memory';
+            c.status_memory_fyi = '../chromium.memory.fyi';
+            c.status_chrome = '../chromium.chrome';
+            c.status_perf = '../chromium.perf';
+            c.status_lkgr = '../chromium.lkgr';
+            c.status_pyauto = '../chromium.pyautoview';
 
-            var waterfall = "../chromium/waterfall";
-            var waterfall_cros = "../chromium.chromiumos/waterfall";
-            var waterfall_webkit = "../chromium.webkit/waterfall";
-            var waterfall_memory = "../chromium.memory/waterfall";
-            var waterfall_memory_fyi = "../chromium.memory.fyi/waterfall";
-            var waterfall_chrome = "../chromium.chrome/waterfall";
-            var waterfall_perf = "../chromium.perf/waterfall";
-            var waterfall_lkgr = "../chromium.lkgr/waterfall";
-            var waterfall_pyauto = "../chromium.pyauto/waterfall";
-
+            /**
+             * Joins URL and search terms.
+             * @param {String} type The Url without the cgi search portion.
+             * @param {String} content The parameters for the sub-selection
+             *                         inside the master.  Optional.
+             * @returns {String} A completed URL.
+             */
             function GetUrl(type, content) {
-              return type + (content ? "?" + content : "");
+              return type + search(content);
             }
 
+            /**
+             * Callback to replace the LKGR link with one that identifies
+             * the current revision for the LKGR.
+             */
             function DisplayLKGR() {
               var xmlHttp = new XMLHttpRequest();
-              var lkgrPath = '../chromium.lkgr/json/builders/Linux%20x64' +
-                             '/builds/-1?as_text=1';
+              var lkgrPath = c.status_lkgr +
+                             '/json/builders/Linux%20x64/builds/-1?as_text=1';
               var lkgrLink = document.getElementById('LKGRLink');
               xmlHttp.open('GET', lkgrPath, false);
               xmlHttp.send(null);
@@ -196,83 +315,99 @@
                 }
               }
             }
-            function Repeat(i,x){
-              var t = ""
-              for (j = 0; j < i; j++) { t += x; }
-              return t;
-            }
-            function Table(p,x) {
-                return "<table " + p + ">" + x + "</table>\n";
-            }
-            function Div(p, x) { return "<div " + p + ">" + x + "</div>"; }
-            function Tr(x) { return "<tr>" + x + "</tr>\n"; }
-            function Td(p, x) { return "<td " + p + ">" + x + "</td>"; }
-            function A(u, x, p) {
-                return "<a href='"+ u + "' " + p + ">" + x + "</a>"; 
-            }
-            function IFrame(p, u) {
-                return "<iframe "+ p + " src='" + u + "'></iframe>";
-            }
 
-            var iframe_properties = [
-                "width='100%'",
-                "height='20'",
-                "frameborder='0'",
-                "scrolling='no'",
-            ].join(" ");
+            c.default_iframe_properties = [
+                'width="100%"',
+                'height="20"',
+                'frameborder="0"',
+                'scrolling="no"',
+            ].join(' ');
 
-            function HTMLBaseBar(waterfall_url, bar_url, content, name,
+            /**
+             * The most detailed specification of a builder bar with boxes.
+             * Reutrns an HTMLstring with 2 <td>s
+             * @param {String} status_url URL portion for the title link.
+             * @param {String} bar_url URL portion for the array of boxes.
+             * @param {String} content specification for the references, e.g..
+             * @param {String} name what to call this bar.
+             * @param {String} bar_properties extra attributes for the array
+             *                 of boxes portion.
+             * @param {String} link_properties extra attributes for the name
+             *                 portion that is a link.
+             * @returns {String}
+             */
+            function HTMLBaseBar(status_url, bar_url, content, name,
                                  bar_properties, link_properties) {
-              return Td("",
-                        A(GetUrl(waterfall_url, content), name,
+              return td('',
+                        a(GetViewUrl(status_url, content), name,
                           link_properties)) +
-                     Td(bar_properties,
-                        IFrame(iframe_properties, GetUrl(bar_url, content)));
+                     td(bar_properties,
+                        iFrame(c.default_iframe_properties,
+                               GetUrl(bar_url, content)));
             }
 
-            function HTMLBar(waterfall_url, bar_url, content, name) {
-              return Tr(HTMLBaseBar(waterfall_url, bar_url, content, name,
-                                    "width='99%' colspan=9",""));
+            /**
+             * The more common specification of a builder bar with boxes.
+             * Presume to take an entire row.
+             * @param {String} status_url URL portion for the title link.
+             * @param {String} bar_url URL portion for the array of boxes.
+             * @param {String} content specification for the references, e.g..
+             * @param {String} name what to call this bar.
+             * @returns {String}
+             */
+            function HTMLBar(status_url, bar_url, content, name) {
+              return tr(HTMLBaseBar(status_url, bar_url, content, name,
+                                    'width="99%" colspan=9', ''));
             }
 
-            function HTMLSubBar(waterfall_url, bar_url, content, name, pc) {
-              return HTMLBaseBar(waterfall_url, bar_url, content, name,
-                                 "width='" + pc + "'", "");
+            /**
+             * A specification of a builder bar with boxes, which is one of
+             * multiple in a row.
+             * Note that since these are elements of a table, percents
+             * can be irrelevant to the final layout.
+             * @param {String} status_url URL portion for the title link.
+             * @param {String} bar_url URL portion for the array of boxes.
+             * @param {String} content specification for the references, e.g..
+             * @param {String} name what to call this bar.
+             * @param {String} pc percent of the line to allocat to the boxes.
+             * @returns {String}
+             */
+            function HTMLSubBar(status_url, bar_url, content, name, pc) {
+              return HTMLBaseBar(status_url, bar_url, content, name,
+                                 'width="' + pc + '"', '');
             }
 
-            // Set up logical columns.
-            //document.write(Tr(Repeat(10, Td("height=0 width='10%'", ""))));
-            document.write(Tr(Td(
-                "colspan=10 width='99%'",
-                Div(
-                  "class='closerbox' width='100%'",
-                  Div("class='title' width='100%' height='10px'",
-                      A("http://chromium-status.appspot.com","Tree closers")) +
-                  Table(
-                    "width='100%'",
-                    HTMLBar(waterfall, bar, chromium, "Chromium") +
-                    Tr(HTMLSubBar(waterfall_cros, bar_cros, cros,
-                                  "ChromiumOS", "30%") +
-                       HTMLSubBar(waterfall_chrome, bar_chrome, chrome,
-                                  "Official", "35%") +
-                       HTMLSubBar(waterfall_memory, bar_memory, memory,
-                                  "Memory", "25%")))))));
+            document.write(tr(td(
+                'colspan=10 width="99%"',
+                div(
+                  'class="closerbox" width="100%"',
+                  div('class="title" width="100%" height="10px"',
+                      a('http://chromium-status.appspot.com', 'Tree closers')) +
+                  table(
+                    'width="100%"',
+                    HTMLBar(c.status, c.bar, c.chromium, 'Chromium') +
+                    tr(HTMLSubBar(c.status_cros, c.bar_cros, c.cros,
+                                  'ChromiumOS', '30%') +
+                       HTMLSubBar(c.status_chrome, c.bar_chrome, c.chrome,
+                                  'Official', '35%') +
+                       HTMLSubBar(c.status_memory, c.bar_memory, c.memory,
+                                  'Memory', '25%')))))));
 
-            document.write(Tr(
-                HTMLBaseBar(waterfall_webkit, bar_webkit, webkit,
-                           "Webkit", "colspan=3", "") +
-                HTMLBaseBar(waterfall_perf, bar_perf, perf,
-                            "Perf", "colspan=5", "")));
+            document.write(tr(
+                HTMLBaseBar(c.status_webkit, c.bar_webkit, c.webkit,
+                           'Webkit', 'colspan=3', '') +
+                HTMLBaseBar(c.status_perf, c.bar_perf, c.perf,
+                            'Perf', 'colspan=5', '')));
 
-            document.write(Tr(
-                HTMLBaseBar(waterfall_lkgr, bar_lkgr, lkgr,
-                            "LKGR", "width='10%'", "id='LKGRLink'") +
-                HTMLBaseBar(waterfall_pyauto, bar_pyauto, pyauto,
-                           "PyAuto", "width='15%'", "") +
-                HTMLBaseBar(waterfall_memory_fyi, bar_memory_fyi, memory_fyi,
-                           "Memory<br>FYI", "width='50%' colspan=5", "")));
+            document.write(tr(
+                HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
+                            'LKGR', 'width="10%"', 'id="LKGRLink"') +
+                HTMLBaseBar(c.status_pyauto, c.bar_pyauto, c.pyauto,
+                           'PyAuto', 'width="15%"', '') +
+                HTMLBaseBar(c.status_memory_fyi, c.bar_memory_fyi, c.memory_fyi,
+                           'Memory<br>FYI', 'width="50%" colspan=5', '')));
 
-            setTimeout("DisplayLKGR()", 100);
+            setTimeout('DisplayLKGR()', 100);
           </script>
         </table>
       </td>
