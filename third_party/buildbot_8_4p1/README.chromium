@@ -788,3 +788,87 @@ Index: buildbot/status/web/console.py
 +                b["builderName"] = builder
 
                  builds[category].append(b)
+
+
+
+
+Re-add support for asHTML to Buildbot (used by ChromiumNotifier).
+
+Index: buildbot/changes/changes.py
+===================================================================
+--- buildbot/changes/changes.py
++++ buildbot/changes/changes.py
+@@ -25,6 +25,25 @@ from buildbot.util import datetime2epoch
+ from buildbot import interfaces, util
+ from buildbot.process.properties import Properties
+ 
++html_tmpl = """
++<p>Changed by: <b>%(who)s</b><br />
++Changed at: <b>%(at)s</b><br />
++%(repository)s
++%(branch)s
++%(revision)s
++<br />
++
++Changed files:
++%(files)s
++
++Comments:
++%(comments)s
++
++Properties:
++%(properties)s
++</p>
++"""
++
+ class Change:
+     """I represent a single change to the source tree. This may involve several
+     files, but they are all changed by the same person, and there is a change
+@@ -181,6 +200,47 @@ class Change:
+         result['project'] = getattr(self, 'project', None)
+         return result
+ 
++    def asHTML(self):
++        info = self.asDict()
++        links = []
++        for file in info['files']:
++            if file['url'] is not None:
++                # could get confused
++                links.append('<a href="%s"><b>%s</b></a>' % (file['url'], file['name']))
++            else:
++                links.append('<b>%s</b>' % file['name'])
++        if info['revision']:
++            if getattr(self, 'revlink', ""):
++                revision = 'Revision: <a href="%s"><b>%s</b></a>\n' % (
++                        info['revlink'], info['revision'])
++            else:
++                revision = "Revision: <b>%s</b><br />\n" % info['revision']
++        else:
++            revision = ''
++
++        if self.repository:
++          repository = "Repository: <b>%s</b><br />\n" % info['repository']
++        else:
++          repository = ''
++
++        branch = ""
++        if info['branch']:
++            branch = "Branch: <b>%s</b><br />\n" % info['branch']
++
++        properties = []
++        for prop in info['properties']:
++            properties.append("%s: %s<br />" % (prop[0], prop[1]))
++
++        kwargs = { 'who'       : html.escape(info['who']),
++                   'at'        : info['at'],
++                   'files'     : html.UL(links) + '\n',
++                   'repository': repository,
++                   'revision'  : revision,
++                   'branch'    : branch,
++                   'comments'  : html.PRE(info['comments']),
++                   'properties': html.UL(properties) + '\n' }
++        return html_tmpl % kwargs
++
+     def getShortAuthor(self):
+         return self.who
+ 
