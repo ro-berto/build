@@ -12,6 +12,7 @@ import buildbot.status.web.base as base
 import buildbot.status.web.console as console
 import buildbot.status.web.waterfall as waterfall
 import buildbot.status.builder as statusbuilder
+import buildbot.status.web.changes
 
 from twisted.python import log
 from twisted.python import components
@@ -182,8 +183,54 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
       revision['who'] = '@'.join(revision['who'].split('@')[0:2])
     return result
 
+  def BestRevisionJson(self, request, cxt):
+    data_fmt = '<html><head></head><body>\n%s</body></html>\n'
+    revision_fmt = '{\'revision\': \'%s\',\'results\' : [%s]}'
+    build_fmt = '{\'url\':\'color\': \'%s\', \'name\': \'%s\'}'
+    status = self.getStatus(request)
+    debugInfo = {}
+    d = self.getAllChanges(request, status, debugInfo)
+    def got_changes(allChanges):
+      debugInfo["source_all"] = len(allChanges)
+      revisions = list(self.filterRevisions(allChanges, max_revs=40,
+                                            filter={}))
+      debugInfo["revision_final"] = len(revisions)
+
+      # Fetch all the builds for all builders until we get the next build
+      # after lastRevision.
+      revision_text = []
+      if revisions:
+        lastRevision = revisions[-1].revision
+        debugInfo["last_revision"] = lastRevision
+
+        (builderList, allBuilds) = self.getAllBuildsForRevision(status,
+                                            request,
+                                            lastRevision,
+                                            40,
+                                            [],
+                                            [],
+                                            debugInfo)
+
+        for revision in revisions:
+          builds = self.displayStatusLine(builderList,
+                                          allBuilds,
+                                          revision,
+                                          debugInfo)[0]
+          build_text = []
+          for builder, builder_builds in builds.iteritems():
+            for build in builder_builds:
+              build_text.append(build_fmt % (build['color'], builder))
+          revision_text = revision_fmt % (
+              revision.revision, ''.join(build_text))
+
+      return data_fmt % ''.join(revision_text)
+    d.addCallback(got_changes)
+    return d
+
   def content(self, request, cxt):  # pylint: disable=W0221
     """Override default reload setting"""
+    if 'json' in request.args and '213' in request.args['json']:
+      return self.BestRevisionJson(request, cxt)
     if 'reload' not in request.args:
       request.args['reload'] = ['9999999999']
     # pylint: disable=E1121
