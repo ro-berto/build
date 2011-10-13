@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -32,7 +32,16 @@ class TryMailNotifier(mail.MailNotifier):
   def buildMessage(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
     log.msg('Building try job email')
-    projectName = self.master_status.getProjectName()
+    try:
+      # 0.7.x
+      projectName = self.master_status.getProjectName()
+    except AttributeError:
+      # 0.8.x
+      projectName = self.master_status.getTitle()
+
+    if isinstance(build, list):
+      # buildbot 0.8.4p1
+      build = build[0]
     job_stamp = build.getSourceStamp()
     build_url = self.master_status.getURLForThing(build)
     waterfall_url = self.master_status.getBuildbotURL()

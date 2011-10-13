@@ -11,8 +11,6 @@ from twisted.python import log
 
 buildbot_0_8 = int(buildbot.version.split('.')[1]) >= 8
 if buildbot_0_8:
-  # TODO(maruel): IMPLEMENT ME!
-  # pylint: disable=E0611,F0401
   from master.try_job_base_bb8 import BadJobfile, TryBase, TryJobBaseMixIn
 else:
   from master.try_job_base_bb7 import BadJobfile, TryBase, TryJobBaseMixIn
@@ -37,6 +35,9 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     pools.SetParent(self)
     self.last_good_urls = last_good_urls
     self.code_review_sites = code_review_sites
+
+  def gotChange(self, change, important):  # pylint: disable=R0201
+    log.msg('ERROR: gotChange was unexpectedly called.')
 
   def parse_options(self, options):
     """Converts try job settings into a dict."""

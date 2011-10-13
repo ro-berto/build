@@ -22,11 +22,10 @@ class TryJobHTTPRequest(http.Request):
         return
 
       try:
-        # The arguments values are embedded in a list.
-        tmp_args = {}
-        for key, value in self.args.iteritems():
-          tmp_args[key] = value[0]
-        self.code = self.channel.factory.parent.messageReceived(tmp_args)
+        # The values are embedded in a list.
+        options = dict((k, v[0]) for k, v in self.args.iteritems())
+        self.channel.factory.parent.messageReceived(options)
+        self.code = 200
       except:
         self.code = http.INTERNAL_SERVER_ERROR
         raise
@@ -52,6 +51,7 @@ class TryJobHTTP(TryJobBase):
     f.parent = self
     s = strports.service(port, f)
     s.setServiceParent(self)
+    log.msg('TryJobHTTP listening on port %s' % self.port)
 
   def getPort(self):
     """Utility method for tests: figure out which TCP port we just opened."""
