@@ -30,6 +30,8 @@ def getResultsClass(results, prevResults, inProgress):
     by the css to display the right color for a box."""
 
     if inProgress:
+        if inProgressResults == builder.FAILURE:
+            return "running_failure"
         return "running"
 
     if results is None:
@@ -591,7 +593,8 @@ class ConsoleStatusResource(HtmlResource):
 
                 # Add this box to the cache if it's completed so we don't have
                 # to compute it again.
-                if resultsClass not in ("running", "notstarted"):
+                if resultsClass not in ("running", "running_failure",
+                                        "notstarted"):
                   debugInfo["added_blocks"] += 1
                   self.cache.insert(builder, revision.revision, resultsClass,
                                     pageTitle, current_details, url, tag)
