@@ -2,12 +2,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# gitpoller does not exist in 0.7.12.
-# pylint: disable=E0611
-from buildbot.changes import gitpoller
+from master.chromium_git_poller_bb8 import ChromiumGitPoller
 
 def Update(config, active_master, c):
-  poller = gitpoller.GitPoller(
+  poller = ChromiumGitPoller(
       repourl='http://git.chromium.org/chromium/src.git',
       branch='master',
       pollinterval=10,
