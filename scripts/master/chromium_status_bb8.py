@@ -191,6 +191,8 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
     debugInfo = {}
     d = self.getAllChanges(request, status, debugInfo)
     def got_changes(allChanges):
+      debugInfo["from_cache"] = 0
+      debugInfo["added_blocks"] = 0
       debugInfo["source_all"] = len(allChanges)
       revisions = list(self.filterRevisions(allChanges, max_revs=40,
                                             filter={}))
@@ -217,11 +219,12 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
                                           revision,
                                           debugInfo)[0]
           build_text = []
-          for builder, builder_builds in builds.iteritems():
+          for builder_builds in builds.values():
             for build in builder_builds:
-              build_text.append(build_fmt % (build['color'], builder))
-          revision_text = revision_fmt % (
-              revision.revision, ''.join(build_text))
+              build_text.append(build_fmt % (
+                  build['color'], urllib.quote(build['builderName'])))
+          revision_text.append(revision_fmt % (
+              revision.revision, ''.join(build_text)))
 
       return data_fmt % ''.join(revision_text)
     d.addCallback(got_changes)

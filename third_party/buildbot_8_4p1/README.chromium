@@ -733,3 +733,58 @@ Add limit query argument to /console
          yield wfd
          chdicts = wfd.getResult()
  
+
+
+Also cache builderName used in console json-like data.
+
+Index: buildbot/status/web/console.py
+===================================================================
+--- buildbot/status/web/console.py
++++ buildbot/status/web/console.py
+@@ -61,12 +61,13 @@ class ANYBRANCH: pass # a flag value, used below
+
+ class CachedStatusBox(object):
+     """Basic data class to remember the information for a box on the console."""
+-    def __init__(self, color, pageTitle, details, url, tag):
++    def __init__(self, color, pageTitle, details, url, tag, builderName):
+         self.color = color
+         self.pageTitle = pageTitle
+         self.details = details
+         self.url = url
+         self.tag = tag
++        self.builderName = builderName
+
+
+ class CacheStatus(object):
+@@ -90,7 +91,7 @@ class CacheStatus(object):
+
+     def insert(self, builderName, revision, color, pageTitle, details, url, tag):
+         """Insert a new build into the cache."""
+-        box = CachedStatusBox(color, pageTitle, details, url, tag)
++        box = CachedStatusBox(color, pageTitle, details, url, tag, builderName)
+         if not self.allBoxes.get(builderName):
+             self.allBoxes[builderName] = {}
+
+@@ -467,6 +468,7 @@ class ConsoleStatusResource(HtmlResource):
+                 s["color"] = "notstarted"
+                 s["pageTitle"] = builder
+                 s["url"] = "./builders/%s" % urllib.quote(builder)
++                s["builderName"] = builder
+                 state, builds = status.getBuilder(builder).getState()
+                 # Check if it's offline, if so, the box is purple.
+                 if state == "offline":
+@@ -521,6 +523,7 @@ class ConsoleStatusResource(HtmlResource):
+                     b["pageTitle"] = cached_value.pageTitle
+                     b["color"] = cached_value.color
+                     b["tag"] = cached_value.tag
++                    b["builderName"] = cached_value.builderName
+
+                     builds[category].append(b)
+
+@@ -577,6 +580,7 @@ class ConsoleStatusResource(HtmlResource):
+                 b["pageTitle"] = pageTitle
+                 b["color"] = resultsClass
+                 b["tag"] = tag
++                b["builderName"] = builder
+
+                 builds[category].append(b)
