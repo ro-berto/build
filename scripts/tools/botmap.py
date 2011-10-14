@@ -1,10 +1,15 @@
 #!/usr/bin/env python
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+"""Dumps a list of known slaves, along with their OS and master."""
 
 import os
 import sys
-path = os.path.join(os.path.dirname(__file__), os.path.pardir, 'common')
+path = os.path.join(os.path.dirname(__file__), os.path.pardir)
 sys.path.append(path)
-import chromium_utils
+from common import chromium_utils
 
 slaves = []
 for master in chromium_utils.ListMasters():
