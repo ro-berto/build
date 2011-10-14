@@ -55,9 +55,7 @@ def common_mac_settings(command, options, env, compiler=None):
   that are common to the Xcode builds.
   """
   compiler = options.compiler
-  # TODO(thakis): Remove 'gomaclang' once the main master has been restarted
-  # or hotpatched with http://codereview.chromium.org/7780021/.
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'gomaclang', 'asan')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'asan')
 
   if compiler == 'goma':
     print 'using goma'
@@ -67,7 +65,7 @@ def common_mac_settings(command, options, env, compiler=None):
   cc = None
   ldplusplus = None
   src_path = os.path.dirname(options.build_dir)
-  if compiler in ('clang', 'goma', 'goma-clang', 'gomaclang'):
+  if compiler in ('clang', 'goma', 'goma-clang'):
     # The official release builder wobbles across release branches.
     # Chromes prior to m15 were built with gcc and we want to keep it
     # that way, so only enable clang on m15 and up.
@@ -81,7 +79,7 @@ def common_mac_settings(command, options, env, compiler=None):
     else:
       print 'Not using clang for version, dict was %r' % variables
 
-    if compiler in ('goma', 'goma-clang', 'gomaclang'):
+    if compiler in ('goma', 'goma-clang'):
       print 'using goma'
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
@@ -176,15 +174,6 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
 
   lines_to_drop = (
     'Check dependencies\n',
-  )
-
-  # clang + ccache cause extra noise, kill that off.
-  # TODO: When clang/ccache interactions are fixed, drop this.
-  prefixes_to_drop = (
-    'clang: warning: argument unused during compilation: \'-F',
-    'clang: warning: argument unused during compilation: \'-I',
-    'clang: warning: argument unused during compilation: \'-include ',
-    'clang: warning: argument unused during compilation: \'-isysroot ',
   )
 
   gyp_info_lines = (
@@ -301,8 +290,7 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
       return
 
     # Drop lines that are pure noise in the logs and never wanted.
-    if (a_line == '\n') or (a_line in self.lines_to_drop) or \
-       a_line.startswith(self.prefixes_to_drop):
+    if (a_line == '\n') or (a_line in self.lines_to_drop):
       return
 
     # It's a keeper!
