@@ -68,7 +68,7 @@
    * @returns {!String}
    */
   function div(attributes, contents) {
-    return '<div ' + p + '>' + contents + '</div>';
+    return '<div ' + attributes + '>' + contents + '</div>';
   };
 
   /**
@@ -106,12 +106,12 @@
    * Gives an HTML anchor string to the specified URL, but of the same view
    * type as the current page.
    * @param {String} url The URL portion up to the view.
-   * @param {String} attributes A set of HTML attributes for the table.
+   * @param {String} search_opt A the query portion.
    * @param {String} contents The contents for the tag.
    * @returns {!String}
    */
-  function aView(url, search, contents) {
-      return a(url + '/' + c.viewtype + search(search), contents, '')
+  function aView(url, search_opt, contents) {
+      return a(url + '/' + c.viewtype + search(search_opt), contents, '')
   };
 
   /**
@@ -178,6 +178,7 @@
               <script src='./sheriff_webkit.js'></script>(WebKit),
               <script src='./sheriff_memory.js'></script>(Memory),
               <script src='./sheriff_nacl.js'></script>(NaCl),<br>
+              <script src='./sheriff_perf.js'></script>(Perf),
               <script src='./sheriff_cros_mtv.js'></script>,
               <script src='./sheriff_cros_nonmtv.js'></script>(CrOS),<br>
               <a href="https://www.google.com/calendar/render?cid=google.com_iqfka4i9asiva67vlqqf1es094%40group.calendar.google.com">trooper schedule</a>
@@ -283,6 +284,26 @@
             c.status_pyauto = '../chromium.pyautoview';
 
             /**
+             * Builds a reference for the iframe with boxes.
+             * @param {String} x the name of the waterfall.
+             * @returns {String} The URL.
+             */
+            function BarUrl(x) {
+              return 'http://build.chromium.org/p/' + x +
+                     '/horizontal_one_box_per_builder';
+            }
+            c.bar = BarUrl('chromium')
+            c.bar_webkit = BarUrl('chromium.webkit');
+            c.bar_memory = BarUrl('chromium.memory');
+            c.bar_memory_fyi = BarUrl('chromium.memory.fyi');
+            c.bar_perf = BarUrl('chromium.perf');
+            c.bar_chrome = BarUrl('chromium.chrome');
+            c.bar_lkgr = BarUrl('chromium.lkgr');
+            c.bar_pyauto = BarUrl('chromium.pyauto');
+            c.bar_cros = BarUrl('chromium.chromiumos');
+
+
+            /**
              * Joins URL and search terms.
              * @param {String} type The Url without the cgi search portion.
              * @param {String} content The parameters for the sub-selection
@@ -339,7 +360,7 @@
             function HTMLBaseBar(status_url, bar_url, content, name,
                                  bar_properties, link_properties) {
               return td('',
-                        a(GetViewUrl(status_url, content), name,
+                        a(GetUrl(status_url, content), name,
                           link_properties)) +
                      td(bar_properties,
                         iFrame(c.default_iframe_properties,
