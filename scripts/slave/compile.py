@@ -413,8 +413,7 @@ def common_make_settings(
   that are common to the Make and SCons builds. Used on Linux
   and for the mac make build.
   """
-  # TODO(thakis): Add goma-clang support to the make build.
-  assert compiler in (None, 'clang', 'goma', 'asan', 'tsan_gcc')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'asan', 'tsan_gcc')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -472,12 +471,31 @@ def common_make_settings(
       command.append('chrome')
       return
 
-  if compiler == 'goma':
-    print 'using goma'
-    env['CC'] = 'gcc'
-    env['CXX'] = 'g++'
-    env['PATH'] = options.goma_dir + ':' + env['PATH']
-    goma_jobs = 100
+  if compiler in ('goma', 'goma-clang'):
+    print 'using', compiler
+    if compiler == 'goma':
+      env['CC'] = 'gcc'
+      env['CXX'] = 'g++'
+      env['PATH'] = ':'.join([options.goma_dir, env['PATH']])
+    else:  # goma-clang
+      env['CC'] = 'clang'
+      env['CXX'] = 'clang++'
+      clang_dir = os.path.abspath(os.path.join(
+          slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+      env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
+
+    command.append('CC.host=' + env['CC'])
+    command.append('CXX.host=' + env['CXX'])
+
+    if chromium_utils.IsMac():
+      # The default process limit on 10.6 is 266 (`sysctl kern.maxprocperuid`),
+      # and about 100 processes are used by the system. The webkit bindings
+      # generation scripts open a preprocessor child process, so building at
+      # -j100 runs into the process limit. For now, just build with -j50.
+      goma_jobs = 50
+    else:
+      goma_jobs = 100
     if jobs < goma_jobs:
       jobs = goma_jobs
     command.append('-j%d' % jobs)
@@ -622,7 +640,7 @@ def main_make(options, args):
   # (or restart in clobber mode) to ensure the proxy is available.
   goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
 
-  if options.compiler == 'goma':
+  if options.compiler in ('goma', 'goma-clang'):
     goma_key = os.path.join(options.goma_dir, 'goma.key')
     env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
     if os.path.exists(goma_key):
@@ -635,7 +653,7 @@ def main_make(options, args):
   # Run the build.
   result = chromium_utils.RunCommand(command, env=env)
 
-  if options.compiler == 'goma':
+  if options.compiler in ('goma', 'goma-clang'):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
