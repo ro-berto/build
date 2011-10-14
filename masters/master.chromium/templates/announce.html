@@ -365,7 +365,7 @@
             function HTMLBaseBar(status_url, bar_url, content, name,
                                  bar_properties, link_properties) {
               return td('',
-                        a(GetViewUrl(status_url, content), name,
+                        a(GetUrl(status_url, content), name,
                           link_properties)) +
                      td(bar_properties,
                         iFrame(c.default_iframe_properties,
