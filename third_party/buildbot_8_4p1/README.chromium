@@ -877,21 +877,90 @@ Index: buildbot/changes/changes.py
 
 Add running_failure build status.
 
-Index: buildbot/status/web/console.py
+Index: third_party/buildbot_8_4p1/buildbot/status/web/console.py
 ===================================================================
---- buildbot/status/web/console.py
-+++ buildbot/status/web/console.py
-@@ -30,6 +30,8 @@ def getResultsClass(results, prevResults, inProgress):
+--- third_party/buildbot_8_4p1/buildbot/status/web/console.py	(revision 105249)
++++ third_party/buildbot_8_4p1/buildbot/status/web/console.py	(working copy)
+@@ -25,11 +25,27 @@
+ 
+ class DoesNotPassFilter(Exception): pass # Used for filtering revs
+ 
+-def getResultsClass(results, prevResults, inProgress):
++def isBuildGoingToFail(build):
++    """Returns True if one of the step in the running build has failed."""
++    for step in build.getSteps():
++        if step.getResults()[0] == builder.FAILURE:
++            return True
++    return False
++
++def getInProgressResults(build):
++    """Returns build status expectation for an incomplete build."""
++    if not build.isFinished() and isBuildGoingToFail(build):
++        return builder.FAILURE
++
++    return build.getResults()
++
++def getResultsClass(results, prevResults, inProgress, inProgressResults=None):
+     """Given the current and past results, return the class that will be used
      by the css to display the right color for a box."""
-
+ 
      if inProgress:
 +        if inProgressResults == builder.FAILURE:
 +            return "running_failure"
          return "running"
-
+ 
      if results is None:
-@@ -591,7 +593,8 @@ class ConsoleStatusResource(HtmlResource):
-
+@@ -139,7 +155,7 @@
+ class DevBuild:
+     """Helper class that contains all the information we need for a build."""
+ 
+-    def __init__(self, revision, build, details):
++    def __init__(self, revision, build, details, inProgressResults=None):
+         self.revision = revision
+         self.results =  build.getResults()
+         self.number = build.getNumber()
+@@ -149,6 +165,7 @@
+         self.details = details
+         self.when = build.getTimes()[0]
+         self.source = build.getSourceStamp()
++        self.inProgressResults = inProgressResults
+ 
+ 
+ class ConsoleStatusResource(HtmlResource):
+@@ -331,7 +348,8 @@
+             # user that his change might have broken the source update.
+             if got_rev and got_rev != -1:
+                 details = self.getBuildDetails(request, builderName, build)
+-                devBuild = DevBuild(got_rev, build, details)
++                devBuild = DevBuild(got_rev, build, details,
++                                    getInProgressResults(build))
+                 builds.append(devBuild)
+ 
+                 # Now break if we have enough builds.
+@@ -543,9 +561,11 @@
+                 # Get the results of the first build with the revision, and the
+                 # first build that does not include the revision.
+                 results = None
++                inProgressResults = None
+                 previousResults = None
+                 if introducedIn:
+                     results = introducedIn.results
++                    inProgressResults = introducedIn.inProgressResults
+                 if firstNotIn:
+                     previousResults = firstNotIn.results
+ 
+@@ -573,7 +593,8 @@
+                 if isRunning:
+                     pageTitle += ' ETA: %ds' % (introducedIn.eta or 0)
+                     
+-                resultsClass = getResultsClass(results, previousResults, isRunning)
++                resultsClass = getResultsClass(results, previousResults, isRunning,
++                                               inProgressResults)
+ 
+                 b = {}                
+                 b["url"] = url
+@@ -591,7 +612,8 @@
+ 
                  # Add this box to the cache if it's completed so we don't have
                  # to compute it again.
 -                if resultsClass not in ("running", "notstarted"):
@@ -900,3 +969,8 @@ Index: buildbot/status/web/console.py
                    debugInfo["added_blocks"] += 1
                    self.cache.insert(builder, revision.revision, resultsClass,
                                      pageTitle, current_details, url, tag)
+@@ -840,4 +862,3 @@
+ 
+     def getSortingKey(self):
+         return operator.attrgetter('revision')
+-

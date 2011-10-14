@@ -25,7 +25,21 @@ from buildbot.changes import changes
 
 class DoesNotPassFilter(Exception): pass # Used for filtering revs
 
-def getResultsClass(results, prevResults, inProgress):
+def isBuildGoingToFail(build):
+    """Returns True if one of the step in the running build has failed."""
+    for step in build.getSteps():
+        if step.getResults()[0] == builder.FAILURE:
+            return True
+    return False
+
+def getInProgressResults(build):
+    """Returns build status expectation for an incomplete build."""
+    if not build.isFinished() and isBuildGoingToFail(build):
+        return builder.FAILURE
+
+    return build.getResults()
+
+def getResultsClass(results, prevResults, inProgress, inProgressResults=None):
     """Given the current and past results, return the class that will be used
     by the css to display the right color for a box."""
 
@@ -141,7 +155,7 @@ class DevRevision:
 class DevBuild:
     """Helper class that contains all the information we need for a build."""
 
-    def __init__(self, revision, build, details):
+    def __init__(self, revision, build, details, inProgressResults=None):
         self.revision = revision
         self.results =  build.getResults()
         self.number = build.getNumber()
@@ -151,6 +165,7 @@ class DevBuild:
         self.details = details
         self.when = build.getTimes()[0]
         self.source = build.getSourceStamp()
+        self.inProgressResults = inProgressResults
 
 
 class ConsoleStatusResource(HtmlResource):
@@ -333,7 +348,8 @@ class ConsoleStatusResource(HtmlResource):
             # user that his change might have broken the source update.
             if got_rev and got_rev != -1:
                 details = self.getBuildDetails(request, builderName, build)
-                devBuild = DevBuild(got_rev, build, details)
+                devBuild = DevBuild(got_rev, build, details,
+                                    getInProgressResults(build))
                 builds.append(devBuild)
 
                 # Now break if we have enough builds.
@@ -545,9 +561,11 @@ class ConsoleStatusResource(HtmlResource):
                 # Get the results of the first build with the revision, and the
                 # first build that does not include the revision.
                 results = None
+                inProgressResults = None
                 previousResults = None
                 if introducedIn:
                     results = introducedIn.results
+                    inProgressResults = introducedIn.inProgressResults
                 if firstNotIn:
                     previousResults = firstNotIn.results
 
@@ -575,7 +593,8 @@ class ConsoleStatusResource(HtmlResource):
                 if isRunning:
                     pageTitle += ' ETA: %ds' % (introducedIn.eta or 0)
                     
-                resultsClass = getResultsClass(results, previousResults, isRunning)
+                resultsClass = getResultsClass(results, previousResults, isRunning,
+                                               inProgressResults)
 
                 b = {}                
                 b["url"] = url
@@ -843,4 +862,3 @@ class IntegerRevisionComparator(RevisionComparator):
 
     def getSortingKey(self):
         return operator.attrgetter('revision')
-
