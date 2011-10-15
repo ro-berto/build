@@ -55,7 +55,7 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
 
     options.setdefault('patch', None)
     options.setdefault('root', None)
-    options.setdefault('clobber', False)
+    options.setdefault('clobber', None)
     # -pN argument to patch.
     options['patchlevel'] = int(options.get('patchlevel', 0))
     options.setdefault('branch', None)
@@ -90,7 +90,8 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     # TODO(maruel): BROKEN ON BULDBOT 0.8.4p1
     # pylint: disable=E1101
     props.updateFromProperties(self.properties)
-    props.setProperty('clobber', options['clobber'], 'Scheduler')
+    if options['clobber'] is not None:
+      props.setProperty('clobber', options['clobber'], 'Scheduler')
     if options['testfilter']:
       props.setProperty('testfilters', options['testfilter'], 'Scheduler')
     return props

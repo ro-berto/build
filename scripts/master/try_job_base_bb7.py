@@ -40,7 +40,7 @@ class TryJobBaseMixIn:
         job_name=options['name'],
         patchset=options['patchset'],
         issue=options['issue'])
-    return options['bot'], jobstamp, options['name'], self.get_props(options)
+    return options['bot'], jobstamp, options['reason'], self.get_props(options)
 
   def CancelJobsMatching(self, source_stamp, builder_name):
     """Cancels any jobs with the same job and owner."""

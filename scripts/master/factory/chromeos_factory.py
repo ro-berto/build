@@ -57,7 +57,7 @@ class CbuildbotFactory(object):
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite,
                dry_run=False, chrome_root=None, factory=None,
-               slave_manager=True, chromite_patch=None):
+               slave_manager=True, chromite_patch=None, trybot=False):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -73,6 +73,7 @@ class CbuildbotFactory(object):
     self.dry_run = dry_run
     self.chrome_root = chrome_root
     self.slave_manager = slave_manager
+    self.trybot = trybot
 
     if factory:
       self.f_cbuild = factory
@@ -239,7 +240,7 @@ class CbuildbotFactory(object):
     if pass_revision:
       cbuild_cmd.append(shell.WithProperties('--chrome_version=%(revision)s'))
 
-    if self._branchAtOrAbove('0.12'):
+    if self._branchAtOrAbove('0.12') and not self.trybot:
       cbuild_cmd += ['--buildbot']
 
     if self.dry_run:
@@ -254,6 +255,8 @@ class CbuildbotFactory(object):
     # --clobber.  Note: the :+ after clobber controls this behavior and is not
     # a typo.
     cbuild_cmd.append(WithProperties('%s', 'clobber:+--clobber'))
+
+    cbuild_cmd.append(WithProperties("--gerrit-patches='%(gerrit_patches)s'"))
 
     name = self.type
     if description_suffix:

@@ -217,6 +217,13 @@ class Master(object):
     store_revisions_url = base_app_url + '/revisions'
     last_good_url = 'http://chromiumos-status.appspot.com/lkgr'
 
+  class ChromiumOSTryServer(_Base):
+    project_name = 'ChromiumOS Try Server'
+    master_port = 9051
+    slave_port = 9153
+    master_port_alt = 9063
+    repo_url = 'http://git.chromium.org/chromiumos/tryjobs.git'
+
   ## V8
 
   class V8(_Base):
