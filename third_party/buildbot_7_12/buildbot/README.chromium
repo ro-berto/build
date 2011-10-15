@@ -533,3 +533,32 @@ Index: status/web/logs.py
              self.req.finish()
          except pb.DeadReferenceError:
              pass
+
+
+
+Fix chrome-bot mis-syncs.
+
+Index: buildbot/changes/svnpoller.py
+===================================================================
+--- buildbot/changes/svnpoller.py
++++ buildbot/changes/svnpoller.py
+@@ -367,6 +367,19 @@ class SVNPoller(base.ChangeSource, util.ComparableMixin):
+                 break
+             new_logentries.append(el)
+         new_logentries.reverse() # return oldest first
++
++        # If the newest commit's author is chrome-bot, skip this commit.  This
++        # is a guard to ensure that we don't poll on our mirror while it could
++        # be mid-sync.  In that case, the author data could be wrong and would
++        # look like it was a commit by chrome-bot@google.com.  A downside: the
++        # chrome-bot account may have a legitimate commit.  This should not
++        # happen generally, so we're okay waiting to see it until there's a
++        # later commit with a non-chrome-bot author.
++        if len(new_logentries) > 0:
++          if new_logentries[-1].getAttribute("author") == 'chrome-bot@google.com':
++            new_logentries.pop(-1)
++            mostRecent = int(logentries[1].getAttribute("revision"))
++
+         return (mostRecent, new_logentries)
+
+     def get_new_logentries(self, logentries):
