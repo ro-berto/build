@@ -52,7 +52,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     @param password: Password for service.  If None, look in .status_password.
     """
     # Set defaults.
-    kwargs.setdefault('send_to_sheriffs', True)
+    kwargs.setdefault('sheriffs', ['sheriff'])
     kwargs.setdefault('sendToInterestedUsers', True)
     kwargs.setdefault(
         'status_header',

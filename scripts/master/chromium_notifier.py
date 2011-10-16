@@ -8,6 +8,7 @@ Since the behavior is very similar to the MainNotifier, we simply inherit from
 it and also reuse some of its methods to send emails.
 """
 
+import logging
 import time
 import urllib
 try:
@@ -46,7 +47,8 @@ class ChromiumNotifier(MailNotifier):
 
   def __init__(self, reply_to=None, categories_steps=None,
       exclusions=None, forgiving_steps=None, status_header=None,
-      send_to_sheriffs=False, use_getname=False, **kwargs):
+      use_getname=False, send_to_sheriffs=None, sheriffs=None,
+      public_html='public_html', **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type categories_steps: Dictionary of category string mapped to a list of
@@ -71,8 +73,17 @@ class ChromiumNotifier(MailNotifier):
     @type status_header: String.
     @param status_header: Formatted header used in mail message.
 
-    @type send_to_sheriffs: Boolean.
-    @param send_to_sheriffs: If true, build sheriffs are copied on emails.
+    @type send_to_sheriffs: Boolean or None.
+    @param send_to_sheriffs: Force the list of sheriffes to either ['sheriff']
+                             or [].  Deprecated, backwards compatability only.
+
+    @type sheriffs: List of strings.
+    @param sheriffs: The list of sheriff type names to be used for the set of
+                     sheriffs.  The final destination changes over time.
+
+    @type public_html: String.
+    @param public_html: Directory from which any additional configuration is
+                        read.  E.g. sheriff classes.
 
     @type use_getname: Boolean.
     @param use_getname: If true, step name is taken from getName(), otherwise
@@ -88,7 +99,21 @@ class ChromiumNotifier(MailNotifier):
     self.forgiving_steps = forgiving_steps or []
     self.status_header = status_header
     assert self.status_header
-    self.send_to_sheriffs = send_to_sheriffs
+    #TODO(petermayo) Remove send_to_sheriffs one day soon.
+    if send_to_sheriffs is None:
+      self.sheriffs = sheriffs or []
+    elif send_to_sheriffs:
+      log.msg(
+          'Do not use send_to_sheriffs=True, please use sheriffs=["sheriff"]',
+          logLevel=logging.ERROR)
+      self.sheriffs = ['sheriff']
+    else:
+      log.msg(
+          'Do not use send_to_sheriffs=False, if you must: use sheriffs=[]',
+          logLevel=logging.ERROR)
+      self.sheriffs = []
+
+    self.public_html = public_html
     self.use_getname = use_getname
     self._last_time_mail_sent = None
 
@@ -304,8 +329,10 @@ Buildbot waterfall: http://build.chromium.org/
       m['Reply-To'] = self.reply_to
 
     recipients = list(self.extraRecipients[:])
-    if self.send_to_sheriffs:
-      recipients.extend(BuildSheriffs.GetSheriffs())
+    if self.sheriffs:
+      recipients.extend(BuildSheriffs.GetSheriffs(classes=self.sheriffs,
+                                                  data_dir=self.public_html))
+
     dl = []
     if self.sendToInterestedUsers and self.lookup and blame_interested_users:
       for u in build_status.getInterestedUsers():
