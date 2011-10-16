@@ -422,6 +422,10 @@ def common_make_settings(
     env['OFFICIAL_BUILD'] = '1'
     env['CHROME_BUILD_TYPE'] = '_official'
 
+  # TODO(thakis): Remove this.
+  if len(command) == 1:
+    command.append('All')
+
   # Don't stop at the first error.
   command.append('-k')
 
