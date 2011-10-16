@@ -15,6 +15,13 @@
 #   keys).  2 spots.
 # 3) Add get_file_contents() function.
 
+# This file does not follow our style.
+# pylint: disable=W0311
+# pylint: disable=W0301
+# pylint: disable=E1101
+# pylint: disable=W0622
+# pylint: disable=W0612
+
 
 import time
 import tempfile
