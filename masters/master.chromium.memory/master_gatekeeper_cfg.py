@@ -52,5 +52,7 @@ def Update(config, active_master, c):
       extraRecipients=active_master.tree_closing_notification_recipients,
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
+      public_html='../master.chromium/public_html',
+      sheriffs=['sheriff'],
       tree_status_url=active_master.tree_status_url,
       use_getname=True))

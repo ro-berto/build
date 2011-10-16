@@ -78,6 +78,8 @@ def Update(config, active_master, c):
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
       use_getname=True,
+      public_html='../master.chromium/public_html',
+      sheriffs=['sheriff_memory'],
       status_header='Failure notification for "%(steps)s" on "%(builder)s".\n'
           'Please see if the failures are related to your commit and take '
           'appropriate actions (e.g. revert, update suppressions, notify '
