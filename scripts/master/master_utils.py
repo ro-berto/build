@@ -238,8 +238,30 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
 
   # For all production masters, notify our health-monitoring webapp.
   if enable_http_status_push:
+    blacklist = (
+        'buildETAUpdate',
+        #'buildFinished',
+        'buildStarted',
+        'buildedRemoved',
+        'builderAdded',
+        'builderChangedState',
+        'buildsetSubmitted',
+        'changeAdded',
+        'logFinished',
+        'logStarted',
+        'requestCancelled',
+        'requestSubmitted',
+        'slaveConnected',
+        'slaveDisconnected',
+        'stepETAUpdate',
+        'stepFinished',
+        'stepStarted',
+        'stepText2Changed',
+        'stepTextChanged',
+    )
     c['status'].append(HttpStatusPush(
-        'https://chromium-build-logs.appspot.com/status_receiver'))
+        'https://chromium-build-logs.appspot.com/status_receiver',
+        blackList=blacklist))
 
   kwargs = {}
   if public_html:
