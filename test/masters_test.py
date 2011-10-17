@@ -96,8 +96,16 @@ def test_master(master, name, path):
           stripped_lines = [l.strip() for l in lines]
           try:
             i = stripped_lines.index('--- <exception caught here> ---')
-            # Found an exception!
-            print ''.join(lines[max(i-15, 0):i+10])
+            # Found an exception at line 'i'!  Now find line 'j', the number
+            # of lines from 'i' where there's a blank line.  If we cannot find
+            # a blank line, then we will show up to 10 lines from i.
+            try:
+              j = stripped_lines[i:-1].index('')
+            except ValueError:
+              j = 10
+            # Print from either 15 lines back from i or the start of the log
+            # text to j lines after i.
+            print ''.join(lines[max(i-15, 0):i+j])
             return False
           except ValueError:
             pass
