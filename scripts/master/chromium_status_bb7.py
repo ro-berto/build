@@ -434,7 +434,7 @@ class BuildersResource(builder.BuildersResource):
     return base.HtmlResource.getChild(self, path, req)
 
 
-def SetupChromiumPages(webstatus):
+def SetupChromiumPages(webstatus, tagComparator=None):
   """Register custom web reporting classes.
   @param webstatus -- An instance of baseweb.WebStatus.
   """

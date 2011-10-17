@@ -184,7 +184,7 @@ class FilterDomain(util.ComparableMixin):
     return result
 
 
-def CreateWebStatus(port, templates=None, **kwargs):
+def CreateWebStatus(port, templates=None, tagComparator=None, **kwargs):
   webstatus = WebStatus(port, **kwargs)
   if templates:
     # Manipulate the search path for jinja templates
@@ -197,13 +197,14 @@ def CreateWebStatus(port, templates=None, **kwargs):
     new_loaders.extend([jinja2.FileSystemLoader(x) for x in templates])
     new_loaders.extend(old_loaders[1:])
     webstatus.templates.loader.loaders = new_loaders
-  chromium_status.SetupChromiumPages(webstatus)
+  chromium_status.SetupChromiumPages(webstatus, tagComparator)
   return webstatus
 
 
 def AutoSetupMaster(c, active_master, mail_notifier=False,
                     public_html=None, templates=None,
                     order_console_by_time=False,
+                    tagComparator=None,
                     enable_http_status_push=False):
   """Add common settings and status services to a master.
 
@@ -219,7 +220,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   c['slavePortnum'] = active_master.slave_port
   c['projectName'] = active_master.project_name
   c['projectURL'] = config.Master.project_url
-  
+
   # Get the master name from the directory name. Remove leading "master.".
   mastername = re.sub('^master.', '', os.path.basename(os.getcwd()))
   c['properties'] = {'mastername': mastername}
@@ -273,12 +274,14 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     kwargs['provide_feeds'] = ['json']
   if active_master.master_port:
     c['status'].append(CreateWebStatus(active_master.master_port,
+                                       tagComparator=tagComparator,
                                        allowForce=True,
                                        num_events_max=3000,
                                        templates=templates,
                                        **kwargs))
   if active_master.master_port_alt:
     c['status'].append(CreateWebStatus(active_master.master_port_alt,
+                                       tagComparator=tagComparator,
                                        allowForce=False,
                                        num_events_max=3000,
                                        templates=templates,

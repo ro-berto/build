@@ -3,34 +3,66 @@
 # found in the LICENSE file.
 
 from buildbot.changes import gitpoller
+from buildbot.status.web.console import RevisionComparator
 from buildbot.util import deferredLocked
 from twisted.python import log
 from twisted.internet import defer, utils
 
 import os
 
-class ChromiumGitPoller(gitpoller.GitPoller):
-  """A git poller which keeps track of commit tag order.
-  This class has the same outward behavior as GitPoller, but it also keeps
-  track of the commit order of git tags.  The tagcmp method can be used as a
-  comparator function when comparing git tags."""
 
-  def __init__(self, *args, **kwargs):
-    gitpoller.GitPoller.__init__(self, *args, **kwargs)
+class GitTagComparator(RevisionComparator):
+  """Tracks the commit order of tags in a git repository.
+  This class explicitly does NOT support any kind of branching; it assumes
+  a strictly linear commit history."""
+
+  def __init__(self):
+    """Set up two data structures:
+         self.tag_order is an in-order list of all commit tags in the repo.
+         self.tag_lookup maps tags to their index in self.tag_order."""
+    super(GitTagComparator, self).__init__()
     self.tag_order = []
     self.tag_lookup = {}
 
+  def addRevision(self, revision):
+    assert revision not in self.tag_lookup
+    self.tag_lookup[revision] = len(self.tag_order)
+    self.tag_order.append(revision)
+
+  def tagcmp(self, x, y):
+    """A general-purpose sorting comparator for git tags
+    based on commit order."""
+    try:
+      return cmp(self.tag_lookup[x], self.tag_lookup[y])
+    except KeyError, e:
+      msg = 'GitTagComparator doesn\'t know anything about git tag %s' % str(e)
+      raise RuntimeError(msg)
+
+  def isRevisionEarlier(self, first, second):
+    return self.tagcmp(first.revision, second.revision)
+
+  def isValidRevision(self, revision):
+    return revision in self.tag_lookup
+
+  def getSortingKey(self):
+    return lambda x: self.tag_lookup[x.revision]
+
+
+class ChromiumGitPoller(gitpoller.GitPoller):
+  """A git poller which keeps track of commit tag order.
+  This class has the same outward behavior as GitPoller, but it also keeps
+  track of the commit order of git tags."""
+
+  def __init__(self, *args, **kwargs):
+    gitpoller.GitPoller.__init__(self, *args, **kwargs)
+    self.comparator = GitTagComparator()
+
   def _parse_history(self, res):
-    """Populate two data structures from the repo log:
-         self.tag_order is an in-order list of all commit tags in the repo.
-         self.tag_lookup maps tags to their index in self.tag_order."""
     new_history = [line[0:40] for line in res[0].splitlines()]
     log.msg("Parsing %d new git tags" % len(new_history))
     new_history.reverse()  # We want earliest -> latest
-    old_len = len(self.tag_order)
-    self.tag_order.extend(new_history)
-    for i, value in enumerate(new_history):
-      self.tag_lookup[value] = old_len + i
+    for revision in new_history:
+      self.comparator.addRevision(revision)
 
   @deferredLocked('initLock')
   def _init_history(self, _):
@@ -63,15 +95,6 @@ class ChromiumGitPoller(gitpoller.GitPoller):
     log.msg('ChromiumGitPoller: repo log failed')
     log.err(res)
     return None
-
-  def tagcmp(self, x, y):
-    """A general-purpose sorting comparator for git tags
-    based on commit order."""
-    try:
-      return cmp(self.tag_lookup[x], self.tag_lookup[y])
-    except KeyError, e:
-      msg = 'ChromiumGitPoller doesn\'t know anything about git tag %s' % str(e)
-      raise RuntimeError(msg)
 
   def startService(self):
     gitpoller.GitPoller.startService(self)

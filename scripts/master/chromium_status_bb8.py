@@ -174,6 +174,13 @@ how to bypass the protection.</p></body></html>
 class ConsoleStatusResource(console.ConsoleStatusResource):
   """Class that overrides default behavior of console.ConsoleStatusResource."""
 
+  def __init__(self, tagComparator=None, **kwargs):
+    """buildbot's TimeRevisionComparator doesn't work exactly right for git.
+    Allow it to be overridden with the tagComparator parameter."""
+    super(ConsoleStatusResource, self).__init__(**kwargs)
+    if tagComparator:
+      self.comparator = tagComparator
+
   def displayPage(self, *args, **kwargs):
     """Strip the 'who' parameter down to a valid e-mail address."""
     result = console.ConsoleStatusResource.displayPage(self, *args, **kwargs)
@@ -239,7 +246,8 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
     # pylint: disable=E1121
     return console.ConsoleStatusResource.content(self, request, cxt)
 
-def SetupChromiumPages(webstatus):
+
+def SetupChromiumPages(webstatus, tagComparator=None):
   """Add customizations to default web reporting."""
 
   def _tick_filter(n, stride):
@@ -258,12 +266,15 @@ def SetupChromiumPages(webstatus):
         'ticks': lambda x: ["{v:%d}" % y for y in _tick_filter(x, 12)],
         'fixname': lambda x: x.translate(None, ' -():') })
 
+  console_ = ConsoleStatusResource(
+      orderByTime=webstatus.orderConsoleByTime,
+      tagComparator=tagComparator)
+
   webstatus.putChild("stats", stats.StatsStatusResource())
   webstatus.putChild("waterfall", WaterfallStatusResource())
-  webstatus.putChild("console", ConsoleStatusResource(
-      orderByTime=webstatus.orderConsoleByTime))
-  webstatus.putChild("grid", ConsoleStatusResource())
-  webstatus.putChild("tgrid", ConsoleStatusResource())
+  webstatus.putChild("console", console_)
+  webstatus.putChild("grid", console_)
+  webstatus.putChild("tgrid", console_)
   webstatus.putChild("horizontal_one_box_per_builder",
                      HorizontalOneBoxPerBuilder())
   return webstatus
