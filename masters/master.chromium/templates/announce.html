@@ -304,7 +304,13 @@
               xmlHttp.open('GET', lkgrPath, false);
               xmlHttp.send(null);
               if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                var buildData = parseJSON(xmlHttp.responseText);
+                var buildData;
+                if (typeof (JSON) !== 'undefined' &&
+                    typeof (JSON.parse) === 'function') {
+                  buildData = JSON.parse(xmlHttp.responseText);
+                } else {
+                  buildData = eval('(' + xmlHttp.responseText + ')');
+                }
                 var properties = buildData['properties'];
                 for (var i = 0; i < properties.length; i++) {
                   if (properties[i][0] == 'got_revision') {
