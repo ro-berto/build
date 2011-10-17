@@ -484,3 +484,21 @@ table.Grid tr td.builder {
 table.Grid tr td.build {
   border: 1px gray solid;
 }
+
+div.data {
+  font-family: "Courier New", courier, monotype;
+}
+
+span.stdout, span.stderr, span.header {
+  font-family: "Courier New", courier, monotype;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+span.stderr {
+  color: red;
+}
+
+span.header {
+  color: blue;
+}

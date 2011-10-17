@@ -45,8 +45,13 @@ T('mac_rel_trigger')
 B('Mac Builder (git)', 'rel', 'compile', 'mac_rel', builddir=builddir)
 F('rel', mac().ChromiumGITFactory(
     slave_type='Builder',
-    options=['--', '-target', 'chromium_builder_tests'],
-    factory_properties={'trigger': 'mac_rel_trigger'}))
+    options=['--compiler=goma-clang',
+             '--',
+             '-target', 'chromium_builder_tests'],
+    factory_properties={
+      'trigger': 'mac_rel_trigger',
+      'gclient_env': {
+        'GYP_DEFINES': 'clang=1 clang_use_chrome_plugins=1' }}))
 
 #
 # Mac Rel testers
