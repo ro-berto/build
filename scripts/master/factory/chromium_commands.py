@@ -98,7 +98,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddArchiveStep(self, data_description, base_url, link_text, command,
                      more_link_url=None, more_link_text=None,
-                     index_suffix=None):
+                     index_suffix=''):
     step_name = ('archive_%s' % data_description).replace(' ', '_')
     self._factory.addStep(archive_command.ArchiveCommand,
                           name=step_name,
