@@ -39,7 +39,7 @@ class GitTagComparator(RevisionComparator):
       raise RuntimeError(msg)
 
   def isRevisionEarlier(self, first, second):
-    return self.tagcmp(first.revision, second.revision)
+    return self.tagcmp(first.revision, second.revision) < 0
 
   def isValidRevision(self, revision):
     return revision in self.tag_lookup
