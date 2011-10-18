@@ -16,7 +16,7 @@ class Master(object):
 
   # External repos.
   googlecode_url = 'http://%s.googlecode.com/svn'
-  sourceforge_url = 'https://%s.svn.sourceforge.net/svnroot'
+  sourceforge_url = 'https://%(repo)s.svn.sourceforge.net/svnroot/%(repo)s'
 
   # Directly fetches from anonymous webkit svn server.
   webkit_root_url = 'http://svn.webkit.org/repository/webkit'
