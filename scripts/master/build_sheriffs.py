@@ -55,6 +55,6 @@ class BuildSheriffs(object):
             BuildSheriffs.good_until_[name] = (now +
                 datetime.timedelta(minutes=2))
 
-      sheriffs.append(BuildSheriffs.sheriffs_[name])
+      sheriffs.extend(BuildSheriffs.sheriffs_[name])
 
     return sheriffs
