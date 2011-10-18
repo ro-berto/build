@@ -10,7 +10,7 @@ from master import master_utils
 # automatically.
 # Note: don't include 'update scripts' since we can't do much about it when
 # it's failing and the tree is still technically fine.
-categories_steps = {
+chromium_categories_steps = {
   '': ['update'],
   'testers': [
     'start_crash_handler',
@@ -43,8 +43,8 @@ categories_steps = {
     #'ui_tests',
     #'webkit_tests',
    ],
-  'windows': ['svnkill', 'taskkill'],
-  'compile': ['check_deps', 'compile', 'archive_build']
+  'compile': ['check_deps', 'compile', 'archive_build'],
+  'closer': ['BuildTarget'],
 }
 
 exclusions = {
@@ -53,16 +53,60 @@ exclusions = {
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'archive_build', 'start_crash_handler']
 
-def Update(config, active_master, c):
+close_chromiumos_categories_steps = {
+  'closer': [
+    'LKGMSync',
+    'BuildBoard',
+    'BuildTarget',
+    'UnitTest',
+  ],
+}
+
+warn_chromiumos_categories_steps = {
+  'watch': [
+    'LKGMSync',
+    'UploadPrebuilts',
+    'Archive',
+  ],
+}
+
+subject = ('buildbot %(result)s in %(projectName)s on %(builder)s, '
+           'revision %(revision)s')
+
+def Update(config, active_master, alternate_master, c):
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,
-      categories_steps=categories_steps,
+      categories_steps=chromium_categories_steps,
       exclusions=exclusions,
       relayhost=config.Master.smtp,
-      subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
-              'revision %(revision)s',
+      subject=subject,
       extraRecipients=active_master.tree_closing_notification_recipients,
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=active_master.tree_status_url,
+      sheriffs=['sheriff'],
+      use_getname=True))
+  c['status'].append(gatekeeper.GateKeeper(
+      fromaddr=active_master.from_address,
+      categories_steps=close_chromiumos_categories_steps,
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='Closer ' + subject,
+      extraRecipients=alternate_master.tree_closing_notification_recipients,
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      tree_status_url=alternate_master.tree_status_url,
+      sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
+      use_getname=True))
+  c['status'].append(gatekeeper.GateKeeper(
+      fromaddr=active_master.from_address,
+      categories_steps=warn_chromiumos_categories_steps,
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='Warning ' + subject,
+      extraRecipients=alternate_master.tree_closing_notification_recipients,
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      tree_status_url=None,
+      sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
       use_getname=True))
