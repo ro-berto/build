@@ -82,6 +82,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.trunk_url + '/deps/third_party/drmemory')
   CUSTOM_DEPS_NACL_VALGRIND = ('src/native_client/src/third_party/valgrind/bin',
      'http://src.chromium.org/native_client/trunk/src/third_party/valgrind/bin')
+  CUSTOM_DEPS_TSAN_GCC = ('src/third_party/compiler-tsan',
+     config.Master.trunk_url + '/deps/third_party/compiler-tsan')
 
   CUSTOM_DEPS_GYP = [
     ('src/tools/gyp', 'http://gyp.googlecode.com/svn/trunk')]
@@ -361,6 +363,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       #                 below and in master.chromium/master.cfg
       if M(test, 'valgrind_', 'memcheck'):
         continue
+      if M(test, 'tsan_gcc_', 'tsan_gcc'):
+        continue
       # Run TSan in two-stage RaceVerifier mode.
       if M(test, 'tsan_rv_', 'tsan_rv'):
         continue
@@ -447,6 +451,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_WIN]
     elif factory_properties.get("needs_drmemory"):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_DRMEMORY]
+    elif factory_properties.get("needs_tsan_gcc"):
+      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
 
     if factory_properties.get("safesync_url"):
       self._solutions[0].safesync_url = factory_properties.get("safesync_url")

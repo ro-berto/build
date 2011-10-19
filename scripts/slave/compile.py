@@ -521,26 +521,48 @@ def common_make_settings(
     return
 
   if compiler == 'tsan_gcc':
+    # See
+    # http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer/gcc-tsan
+    # for build instructions.
     tsan_base = os.path.abspath(os.path.join(
         slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
         'third_party', 'compiler-tsan'))
-    tsan_gcc_dir = os.path.abspath(os.path.join(
-        tsan_base, 'gcc-4.5.3', 'bin'))
 
-    if os.path.isdir(tsan_gcc_dir):
-      env['CC'] = os.path.join(tsan_gcc_dir, 'gcc')
-      env['CXX'] = os.path.join(tsan_gcc_dir, 'g++')
-      if not os.path.exists(env['CC']):
-        # Extract gcc from a tarball.
-        tar_path = os.path.abspath(os.path.join(tsan_base, 'gcc-4.5.3.tar'))
-        untar_command = ['tar', '-xf', tar_path]
-        chromium_utils.RunCommand(untar_command)
+    gcctsan_gcc_ver = '4.5.3'
+    tsan_gcc_bin = os.path.abspath(os.path.join(
+        tsan_base, 'gcc-tsan', 'scripts'))
+    gcctsan_gcc_dir = os.path.abspath(os.path.join(
+        tsan_base, 'gcc-4.5.3'))
 
-      # We intentionally don't reuse the ccache/distcc modifications,
-      # as they don't work with tsan-gcc.
-      command.append('-j%d' % jobs)
-      command.append('-r')
-      return
+
+    if not os.path.isdir(gcctsan_gcc_dir):
+      # Extract gcc from the tarball.
+      extract_gcc_sh = os.path.abspath(os.path.join(
+          tsan_base, 'extract_gcc.sh'))
+      assert(os.path.exists(extract_gcc_sh))
+      chromium_utils.RunCommand([extract_gcc_sh])
+      assert(os.path.isdir(gcctsan_gcc_dir))
+
+    env['CC'] = os.path.join(tsan_gcc_bin, 'gcc')
+    env['CXX'] = os.path.join(tsan_gcc_bin, 'g++')
+    env['LD'] = os.path.join(tsan_gcc_bin, 'ld')
+    env['GCCTSAN_GCC_DIR'] = gcctsan_gcc_dir
+    env['GCCTSAN_GCC_VER'] = gcctsan_gcc_ver
+    env['GCCTSAN_IGNORE'] = os.path.abspath(os.path.join(
+        slave_utils.SlaveBaseDir(options.build_dir),
+        'build', 'src', 'tools', 'valgrind', 'tsan', 'ignores.txt'))
+    env['GCCTSAN_ARGS'] = (
+        '-DADDRESS_SANITIZER -DWTF_USE_DYNAMIC_ANNOTATIONS=1 '
+        '-DWTF_USE_DYNAMIC_ANNOTATIONS_NOIMPL=1' )
+    command.append('CC=' + env['CC'])
+    command.append('CXX=' + env['CXX'])
+    command.append('LD=' + env['LD'])
+
+    # We intentionally don't reuse the ccache/distcc modifications,
+    # as they don't work with tsan-gcc.
+    command.append('-j%d' % jobs)
+    command.append('-r')
+    return
 
   if chromium_utils.IsLinux():
     # Test if we can use distcc.  Fastbuild servers currently support uname()
