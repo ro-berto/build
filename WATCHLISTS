@@ -17,7 +17,7 @@
   },
 
   'WATCHLISTS': {
-    'build': ['maruel@chromium.org', 'nsylvain@chromium.org'],
+    'build': ['nsylvain@chromium.org'],
   },
 
 }
