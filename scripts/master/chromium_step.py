@@ -9,7 +9,7 @@ import re
 import time
 
 
-from buildbot import util
+from buildbot import interfaces, util
 from buildbot.process import buildstep
 from buildbot.process.properties import WithProperties
 from buildbot.status import builder
@@ -343,7 +343,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
           'duration: %s' % util.formatInterval(end - start),
           '',  # So we get a final \n
       ])
-    last['log'].addStdout(msg)
+    last['log'].addHeader(msg)
     # Change status (unless handling the preamble).
     if len(self.sections) != 1:
       last['step'].stepFinished(last['status'])
@@ -351,7 +351,36 @@ class AnnotationObserver(buildstep.LogLineObserver):
     last['log'].finish()
 
   def errLineReceived(self, line):
-    self.outLineReceived(line)
+    self.handleOutputLine(line)
+
+  def outLineReceived(self, line):
+    self.handleOutputLine(line)
+
+  # Override logChunk to intercept headers and to prevent more than one line's
+  # worth of data from being processed in a chunk, so we can direct incomplete
+  # chunks to the right sub-log (so we get output promptly and completely).
+  def logChunk(self, build, step, log, channel, text):
+    for line in text.splitlines(True):
+      if channel == interfaces.LOG_CHANNEL_STDOUT:
+        self.outReceived(line)
+      elif channel == interfaces.LOG_CHANNEL_STDERR:
+        self.errReceived(line)
+      elif channel == interfaces.LOG_CHANNEL_HEADER:
+        self.headerReceived(line)
+
+  def outReceived(self, data):
+    buildstep.LogLineObserver.outReceived(self, data)
+    if self.sections:
+      self.sections[-1]['log'].addStdout(data)
+
+  def errReceived(self, data):
+    buildstep.LogLineObserver.errReceived(self, data)
+    if self.sections:
+      self.sections[-1]['log'].addStderr(data)
+
+  def headerReceived(self, data):
+    if self.sections:
+      self.sections[-1]['log'].addHeader(data)
 
   def updateStepStatus(self, status):
     """Update current step status and annotation status based on a new event."""
@@ -381,7 +410,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     last['step'].setText([last['name']] + last['step_text'])
     last['step'].setText2(result + last['step_summary_text'])
 
-  def outLineReceived(self, line):
+  def handleOutputLine(self, line):
     """This is called once with each line of the test log."""
     # Add \n if not there, which seems to be the case for log lines from
     # windows agents, but not others.
@@ -461,10 +490,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
             'step_summary_text': [],
             'step_text': [],
         })
-    # Add to the current secondary log.
-    # Doing this last so that @@@BUILD_STEP... occurs in the log of the new
-    # step.
-    self.sections[-1]['log'].addStdout(line)
 
   def handleReturnCode(self, return_code):
     # Treat all non-zero return codes as failure.
