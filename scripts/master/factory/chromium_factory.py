@@ -726,7 +726,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 factory_properties)
 
   def ChromiumASANFactory(self, target='Release', clobber=False, tests=None,
-                          mode=None, slave_type='Tester', options=None,
+                          mode=None, slave_type=None, options=None,
                           compile_timeout=1200, build_url=None, project=None,
                           factory_properties=None):
     # Make sure the solution is not already there.
