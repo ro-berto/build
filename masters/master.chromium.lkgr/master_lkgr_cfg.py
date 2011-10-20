@@ -71,7 +71,7 @@ F('linux_touch_full', linux().ChromiumFactory(
 
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
-    slave_type='Builder',
+    clobber=True,
     options=['--compiler=asan', 'chrome', 'DumpRenderTree'],
     factory_properties={
        'asan_archive_build': True,
@@ -80,7 +80,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
 
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
-    slave_type='Builder',
+    clobber=True,
     target='Debug',
     options=['--compiler=asan', 'chrome', 'DumpRenderTree'],
     factory_properties={
