@@ -871,14 +871,20 @@ def ListMasters():
 
 def RunSlavesCfg(slaves_cfg):
   """Runs slaves.cfg in a consistent way."""
-  old_path = os.getcwd()
+  slaves_path = os.path.dirname(os.path.abspath(slaves_cfg))
+  old_sys_path = sys.path
+  sys.path = sys.path + [slaves_path]
   try:
-    os.chdir(os.path.dirname(os.path.abspath(slaves_cfg)))
-    local_vars = {}
-    execfile(os.path.join(slaves_cfg), local_vars)
-    return local_vars['slaves']
+    old_path = os.getcwd()
+    try:
+      os.chdir(slaves_path)
+      local_vars = {}
+      execfile(os.path.join(slaves_cfg), local_vars)
+      return local_vars['slaves']
+    finally:
+      os.chdir(old_path)
   finally:
-    os.chdir(old_path)
+    sys.path = old_sys_path
 
 
 def convert_json(option, opt, value, parser):
