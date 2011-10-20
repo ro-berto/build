@@ -21,6 +21,7 @@ from zope.interface import declarations
 
 # pylint: disable=F0401
 import jinja2
+import re
 import urllib
 
 from master.third_party import stats_bb8 as stats
@@ -264,6 +265,7 @@ def SetupChromiumPages(webstatus, tagComparator=None):
         'max': lambda x: reduce(max, x, 0),
         'average': lambda x: float(sum(x)) / float(max(len(x), 1)),
         'ticks': lambda x: ["{v:%d}" % y for y in _tick_filter(x, 12)],
+        'addlinks': lambda x: re.sub(r'(http://[^\s@]+)', r'<a href="\1">\1</a>', x),
         'fixname': lambda x: x.translate(None, ' -():') })
 
   console_ = ConsoleStatusResource(
