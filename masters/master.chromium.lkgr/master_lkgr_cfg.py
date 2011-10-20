@@ -69,6 +69,25 @@ F('linux_touch_full', linux().ChromiumFactory(
         'gs_bucket': 'gs://chromium-browser-continuous',
         'gclient_env': {'GYP_DEFINES':'touchui=1'}}))
 
+B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
+F('linux_asan_rel', linux().ChromiumASANFactory(
+    slave_type='Builder',
+    options=['--compiler=asan', 'chrome', 'DumpRenderTree'],
+    factory_properties={
+       'asan_archive_build': True,
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
+
+B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
+F('linux_asan_dbg', linux().ChromiumASANFactory(
+    slave_type='Builder',
+    target='Debug',
+    options=['--compiler=asan', 'chrome', 'DumpRenderTree'],
+    factory_properties={
+       'asan_archive_build': True,
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
+
 
 def Update(config, active_master, c):
   return helper.Update(c)

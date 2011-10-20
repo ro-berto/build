@@ -476,6 +476,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get('archive_build'):
       chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)
 
+    if factory_properties.get('asan_archive_build'):
+      chromium_cmd_obj.AddAsanArchiveBuild(
+          factory_properties=factory_properties)
+
     # Add the package source step.
     if slave_type == 'Updater':
       chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
