@@ -407,7 +407,7 @@ def get_ubuntu_codename():
 
 
 def common_make_settings(
-    command, options, env, crosstool=None, compiler=None):
+    command, options, env, crosstool=None, compiler=None, args=None):
   """
   Sets desirable environment variables and command-line options
   that are common to the Make and SCons builds. Used on Linux
@@ -423,7 +423,7 @@ def common_make_settings(
     env['CHROME_BUILD_TYPE'] = '_official'
 
   # TODO(thakis): Remove this, http://crbug.com/100510
-  if len(command) == 1 and chromium_utils.IsMac():
+  if len(command) == 1 and not args and chromium_utils.IsMac():
     command.append('All')
 
   # Don't stop at the first error.
@@ -653,7 +653,7 @@ def main_make(options, args):
   os.chdir(working_dir)
   env = os.environ.copy()
   common_make_settings(command, options, env, options.crosstool,
-      options.compiler)
+      options.compiler, args)
 
   command.append('BUILDTYPE=' + options.target)
 

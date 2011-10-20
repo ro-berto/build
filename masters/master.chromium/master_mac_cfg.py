@@ -21,7 +21,7 @@ defaults['category'] = '3mac'
 # build options.
 # As noted in http://crbug.com/97423 , this should be reverted by 31 Oct 2011.
 builder_options = [
-    '--compiler=clang', '--', '-target', 'chromium_builder_tests']
+    '--build-tool=make', '--compiler=clang', '--', 'chromium_builder_tests']
 gyp_defines = 'clang=1 clang_use_chrome_plugins=1'
 
 
@@ -55,6 +55,7 @@ F('rel', mac().ChromiumFactory(
         'trigger': 'mac_rel_trigger',
         'gclient_env': {
             'GYP_DEFINES':gyp_defines,
+            'GYP_GENERATORS':'make',
         },
     }))
 
@@ -151,6 +152,7 @@ F('dbg', mac().ChromiumFactory(
         'trigger': 'mac_dbg_trigger',
         'gclient_env': {
             'GYP_DEFINES':gyp_defines,
+            'GYP_GENERATORS':'make',
         },
     }))
 
