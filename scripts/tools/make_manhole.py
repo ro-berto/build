@@ -40,6 +40,8 @@ def main():
     parser.error('Run sudo apt-get install apg')
 
   for i in os.listdir(options.root):
+    if i.startswith('.'):
+      continue
     dirpath = os.path.join(options.root, i)
     if not os.path.isdir(dirpath):
       continue
