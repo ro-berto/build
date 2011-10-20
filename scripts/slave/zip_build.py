@@ -75,11 +75,7 @@ def GetRealBuildDirectory(build_dir, target):
     return os.path.join(os.path.dirname(build_dir), 'out', target)
 
   if chromium_utils.IsMac():
-    build_dir = os.path.dirname(build_dir)
-    outdir = 'xcodebuild'
-    if os.path.exists(os.path.join(build_dir, 'out')):
-      outdir = 'out'
-    return os.path.join(build_dir, outdir, target)
+    return os.path.join(os.path.dirname(build_dir), 'xcodebuild', target)
 
   raise NotImplementedError('%s is not supported.' % sys.platform)
 
