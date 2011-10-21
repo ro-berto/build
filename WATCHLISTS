@@ -17,7 +17,7 @@
   },
 
   'WATCHLISTS': {
-    'build': ['nsylvain@chromium.org'],
+    'build': ['cmp@chromium.org', 'nsylvain@chromium.org'],
   },
 
 }
