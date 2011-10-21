@@ -45,9 +45,10 @@ def ShouldPackageFile(filename, target):
 
 
 def archive(options, args):
-  src_dir = os.path.dirname(options.build_dir)
+  src_dir = os.path.abspath(os.path.dirname(options.build_dir))
   build_dir = os.path.join(src_dir, 'out', options.target)
   staging_dir = slave_utils.GetStagingDir(src_dir)
+  build_revision = slave_utils.SubversionRevision(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
   print 'Staging in %s' % build_dir
@@ -56,7 +57,10 @@ def archive(options, args):
   zip_file_list = [f for f in os.listdir(build_dir)
                    if ShouldPackageFile(f, options.target)]
 
-  zip_file_name = 'full-build-%s' % chromium_utils.PlatformName()
+  zip_file_name = 'asan-%s-%s-%d' % (chromium_utils.PlatformName(),
+                                     options.target.lower(),
+                                     build_revision)
+
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
                                                zip_file_list,
@@ -71,9 +75,13 @@ def archive(options, args):
   zip_size = os.stat(zip_file)[stat.ST_SIZE]
   print 'Zip file is %ld bytes' % zip_size
 
-  # TODO(nsylvain): Upload to google storage.
-
-  return 0
+  gs_bucket = options.factory_properties.get('gs_bucket', None)
+  status = slave_utils.GSUtilCopyFile(zip_file, gs_bucket)
+  if status:
+    raise StagingError('Failed to upload %s to %s. Error %d' % (zip_file,
+                                                                gs_bucket,
+                                                                status))
+  return status
 
 
 def main(argv):
