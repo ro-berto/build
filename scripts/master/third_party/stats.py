@@ -4,11 +4,11 @@ from buildbot.status import builder
 from buildbot.status.web.base import HtmlResource
 
 HEAD = """
-    <script type="text/javascript" src="/mochikit/MochiKit.js"></script>
-    <script type="text/javascript" src="/plotkit/Base.js"></script>
-    <script type="text/javascript" src="/plotkit/Layout.js"></script>
-    <script type="text/javascript" src="/plotkit/Canvas.js"></script>
-    <script type="text/javascript" src="/plotkit/SweetCanvas.js"></script>
+    <script type="text/javascript" src="%(path)s/mochikit/MochiKit.js"></script>
+    <script type="text/javascript" src="%(path)s/plotkit/Base.js"></script>
+    <script type="text/javascript" src="%(path)s/plotkit/Layout.js"></script>
+    <script type="text/javascript" src="%(path)s/plotkit/Canvas.js"></script>
+    <script type="text/javascript" src="%(path)s/plotkit/SweetCanvas.js"></script>
 """
 
 def DisplayGraph(name, layout, width, height, color, data_variable, options):
@@ -128,7 +128,7 @@ class StatsBuilderStatusResource(HtmlResource):
         return (data, stepTimes, slowestStep)
 
     def head(self, request):
-        return HEAD
+        return HEAD % {'path': '..'}
 
     def body(self, req):
         (variables, steps, slowestStep) = self.getBuilderVariables(self.builder_status)
@@ -218,7 +218,7 @@ class StatsStatusResource(HtmlResource):
         return request.site.buildbot_service.parent.change_svc
 
     def head(self, request):
-        return HEAD
+        return HEAD % {'path': '.'}
 
     def getMainVariables(self, status):
         averageTime = ""
