@@ -507,14 +507,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         factory_properties.get('start_crash_handler')):
       chromium_cmd_obj.AddRunCrashHandler()
 
-    # Trigger the reliability tests.
-    if 'reliability' in tests:
-      factory.addStep(trigger.Trigger(schedulerNames=['reliability'],
-                                      waitForFinish=False))
-    if 'reliability_linux' in tests:
-      factory.addStep(trigger.Trigger(schedulerNames=['reliability_linux'],
-                                      waitForFinish=False))
-
     # Add all the tests.
     self._AddTests(chromium_cmd_obj, tests, mode, factory_properties)
 

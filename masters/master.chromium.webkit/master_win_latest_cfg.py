@@ -47,9 +47,10 @@ B('Win Reliability Builder', 'f_win_reliability_rel', scheduler='s7_webkit_rel',
   builddir='Win_Webkit_Latest')
 F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
     clobber=True,
-    tests=['reliability'],
+    tests=[],
     project='all.sln',
     factory_properties={'archive_build': True,
+                        'trigger': 'reliability',
                         'use_build_number': True}))
 
 #
