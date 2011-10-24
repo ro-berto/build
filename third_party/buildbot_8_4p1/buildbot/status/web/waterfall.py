@@ -320,7 +320,7 @@ class ChangeEventSource(object):
                 continue
             if categories and change.category not in categories:
                 continue
-            if committers and change.author not in committers:
+            if committers and getattr(change, 'author', None) not in committers:
                 continue
             if minTime and change.when < minTime:
                 continue
