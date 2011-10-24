@@ -386,7 +386,7 @@ class ChromiumCommands(commands.FactoryCommands):
     c = self.GetPerfStepClass(factory_properties, 'frame_rate',
                               process_log.GraphingFrameRateLogProcessor)
 
-    options = ['--gtest_filter=FrameRateTest*.*']
+    options = ['--gtest_filter=FrameRate*Test*']
     cmd = self.GetTestCommand('performance_ui_tests', options)
     self.AddTestStep(c, 'frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
