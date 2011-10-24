@@ -131,7 +131,9 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
                 complete_at=_reactor.seconds())
 
             if res.rowcount != 1:
-                raise KeyError
+                raise KeyError(('"SELECT * FROM buildsets WHERE id=%d AND '
+                                'complete != 1;" returned %d rows') % (
+                                    bsid, res.rowcount))
         return self.db.pool.do(thd)
 
     def getBuildset(self, bsid):
@@ -291,4 +293,3 @@ class BuildsetsConnectorComponent(base.DBConnectorComponent):
                 complete=bool(row.complete),
                 complete_at=mkdt(row.complete_at), results=row.results,
                 bsid=row.id)
-

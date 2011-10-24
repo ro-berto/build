@@ -1001,3 +1001,28 @@ Index: buildbot/changes/svnpoller.py
          self.last_change = new_last_change
          log.msg('svnPoller: _process_changes %s .. %s' %
                  (old_last_change, new_last_change))
+
+
+
+Add diagnostic info for an error seen frequently in the wild.
+
+Index: buildbot/db/buildsets.py
+===================================================================
+--- buildbot/db/buildsets.py	(revision 106949)
++++ buildbot/db/buildsets.py	(working copy)
+@@ -131,7 +131,9 @@
+                 complete_at=_reactor.seconds())
+ 
+             if res.rowcount != 1:
+-                raise KeyError
++                raise KeyError(('"SELECT * FROM buildsets WHERE id=%d AND '
++                                'complete != 1;" returned %d rows') % (
++                                    bsid, res.rowcount))
+         return self.db.pool.do(thd)
+ 
+     def getBuildset(self, bsid):
+@@ -291,4 +293,3 @@
+                 complete=bool(row.complete),
+                 complete_at=mkdt(row.complete_at), results=row.results,
+                 bsid=row.id)
+-
