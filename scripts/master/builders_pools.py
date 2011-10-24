@@ -48,10 +48,12 @@ class BuildersPools(object):
     if builder_names:
       return builder_names
 
-    # self.parent is of type TryJob.
-    # self.parent.parent is of type buildbot.master.BuildMaster.
-    # botmaster is of type buildbot.master.BotMaster.
-    botmaster = self.parent.parent.botmaster
+    # TODO(maruel): Could do probably better.
+    botmaster = None
+    parent = self.parent
+    while botmaster is None and parent:
+      botmaster = getattr(parent, 'botmaster', None)
+      parent = getattr(parent, 'parent', None)
     # Collect the set of connected builders.
     available = set([name for name in self.ListBuilderNames()
                      if name in botmaster.builders])
