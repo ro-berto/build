@@ -55,7 +55,8 @@ F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
 #
 # Win Rel testers
 #
-B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel')
+B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel',
+  auto_reboot=True)
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder_perf',
     tests=['dom_perf', 'page_cycler_moz', 'page_cycler_morejs',
@@ -66,7 +67,8 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
                         'start_crash_handler': True,
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
-B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel')
+B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel',
+  auto_reboot=True)
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
     tests=['installer', 'unit', 'ui'],
