@@ -100,8 +100,8 @@ class SourceStamp(util.ComparableMixin, styles.Versioned):
 
         sourcestamp.patch = None
         if ssdict['patch_body']:
-            # note that this class does not store the patch_subdir
-            sourcestamp.patch = (ssdict['patch_level'], ssdict['patch_body'])
+            sourcestamp.patch = (ssdict['patch_level'], ssdict['patch_body'],
+                ssdict.get('patch_subdir'))
 
         if ssdict['changeids']:
             # sort the changeids in order, oldest to newest
@@ -129,7 +129,7 @@ class SourceStamp(util.ComparableMixin, styles.Versioned):
             return
 
         if patch is not None:
-            assert len(patch) == 2
+            assert 2 <= len(patch) <= 3
             assert int(patch[0]) != -1
         self.branch = branch
         self.patch = patch
@@ -258,12 +258,16 @@ class SourceStamp(util.ComparableMixin, styles.Versioned):
         patch_body = None
         patch_level = None
         if self.patch:
-            patch_level, patch_body = self.patch
+            patch_level = self.patch[0]
+            patch_body = self.patch[1]
+            patch_subdir = None
+            if len(self.patch) > 2:
+              patch_subdir = self.patch[2]
         d = master.db.sourcestamps.addSourceStamp(
                 branch=self.branch, revision=self.revision,
                 repository=self.repository, project=self.project,
                 patch_body=patch_body, patch_level=patch_level,
-                patch_subdir=None, changeids=[c.number for c in self.changes])
+                patch_subdir=patch_subdir, changeids=[c.number for c in self.changes])
         def set_ssid(ssid):
             self.ssid = ssid
             return ssid
