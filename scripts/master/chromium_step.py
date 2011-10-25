@@ -17,6 +17,14 @@ from buildbot.steps import shell
 from buildbot.steps import source
 
 
+def change_to_revision(c):
+  """Handle revision == None or any invalid value."""
+  try:
+    return int(str(c.revision).split('@')[-1])
+  except TypeError:
+    return 0
+
+
 class GClient(source.Source):
   """Check out a source tree using gclient."""
 
@@ -48,14 +56,9 @@ class GClient(source.Source):
     method is be used to set 'revsion' argument value for startVC() method."""
     if not changes:
       return None
-    def GrabRevision(c):
-      """Handle revision == None or any invalid value."""
-      try:
-        return int(c.revision)
-      except TypeError:
-        return 0
     # Change revision numbers can be invalid, for a try job for instance.
-    lastChange = max([GrabRevision(c) for c in changes])
+    # TODO(maruel): Make this work for git hash.
+    lastChange = max([change_to_revision(c) for c in changes])
     return lastChange
 
   def startVC(self, branch, revision, patch):
