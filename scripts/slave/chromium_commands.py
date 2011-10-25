@@ -278,7 +278,7 @@ class GClient(sourcebase):
     if self.revision:
       command.append('--revision')
       branch = self.branch
-      if not branch or self.no_gclient_branch:
+      if not branch or self.no_gclient_branch and '@' not in str(self.revision):
         command.append(str(self.revision))
       else:
         # Make the revision look like branch@revision.
@@ -443,6 +443,8 @@ class GClient(sourcebase):
     return d
 
   def doVCUpdateOnPatch(self, res):
+    if self.revision and not self.branch and '@' not in str(self.revision):
+      self.branch = 'src'
     return self.doVCUpdate()
 
   def doRunHooks(self, dummy):
