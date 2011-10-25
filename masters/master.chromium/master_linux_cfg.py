@@ -19,6 +19,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 linux_all_test_targets = [
   'base_unittests',
   'crypto_unittests',
+  'dbus_unittests',
   'googleurl_unittests',
   'gpu_unittests',
   'media_unittests',
@@ -73,6 +74,7 @@ B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
 F('rel_unit', linux().ChromiumFactory(
     slave_type='NASTester',
     tests=['check_deps',
+           'dbus',
            'googleurl',
            'media',
            'printing',
@@ -172,6 +174,7 @@ F('dbg_unit_2', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
     tests=['unit',
+           'dbus',
            'nacl_integration',
            'gpu',
            'interactive_ui',
