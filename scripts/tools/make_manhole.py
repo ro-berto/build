@@ -45,6 +45,9 @@ def main():
     dirpath = os.path.join(options.root, i)
     if not os.path.isdir(dirpath):
       continue
+    if not os.path.isfile(os.path.join(dirpath, 'buildbot.tac')):
+      print '%-30s has no buildbot config' % i
+      continue
     filepath = os.path.join(dirpath, '.manhole')
     if os.path.isfile(filepath):
       print '%-30s already had .manhole' % i
