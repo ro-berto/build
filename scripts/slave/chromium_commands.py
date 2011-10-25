@@ -443,8 +443,6 @@ class GClient(sourcebase):
     return d
 
   def doVCUpdateOnPatch(self, res):
-    if self.revision and not self.branch:
-      self.branch = 'src'
     return self.doVCUpdate()
 
   def doRunHooks(self, dummy):
