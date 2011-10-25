@@ -12,6 +12,7 @@ from buildbot.process.properties import WithProperties
 
 from master import chromeos_revision_source
 from master import chromium_step
+from master.factory import build_factory
 from master.factory import chromeos_build_factory
 
 class CbuildbotFactory(object):
@@ -366,6 +367,10 @@ class ChromeCbuildbotFactory(CbuildbotFactory):
                chromite_repo=CbuildbotFactory._default_chromite,
                dry_run=False, chrome_root=None, factory=None,
                slave_manager=True, chromite_patch=None, pass_revision=False):
+    # We don't inherit ChromeOS behavior for revisions.
+    if not factory:
+      factory = build_factory.BuildFactory()
+
     CbuildbotFactory.__init__(self, type=CbuildbotFactory.CHROME_CBUILDBOT_TYPE,
                               board=None,
                               buildroot=buildroot, is_master=is_master,
