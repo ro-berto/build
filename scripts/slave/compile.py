@@ -352,10 +352,15 @@ def main_xcode(options, args):
 
   # Set up the filter before changing directories so the raw build log can
   # be recorded.
+  # Support a local file blocking filters (for debugging).  Also check the
+  # darwin version to make sure this is not 10.5 (easier then checking the
+  # Xcode version), as Xcode 3.1.x has slightly different output.
   xcodebuild_filter = None
   no_filter_path = os.path.join(os.getcwd(), 'no_xcodebuild_filter')
   if os.path.exists(no_filter_path):
     print 'NOTE: "%s" exists, output is unfiltered' % no_filter_path
+  elif os.uname()[3].startswith('Darwin Kernel Version 9.'):
+    print 'NOTE: Filtering output not supported on Mac OS X 10.5'
   else:
     full_log_path = os.path.join(os.getcwd(), 'full_xcodebuild_log.txt')
     full_log = open(full_log_path, 'w')
