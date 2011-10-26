@@ -43,9 +43,9 @@ class CbuildbotFactory(object):
           chromite. Fits well with a single change from a codereview, to use
           on one or more builders for realistic testing, or experiments.
   """
-  _default_git_base = 'http://gerrit.chromium.org/gerrit/p/chromiumos'
+  _default_git_base = 'http://git.chromium.org/chromiumos'
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
-  _default_chromite = _default_git_base + '/chromite'
+  _default_chromite = _default_git_base + '/chromite.git'
 
   DEFAULT_CBUILDBOT_TYPE = 'cbuildbot'
   CHROME_CBUILDBOT_TYPE = 'cbuildbot_chrome'
