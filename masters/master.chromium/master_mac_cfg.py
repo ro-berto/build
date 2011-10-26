@@ -15,19 +15,12 @@ T = helper.Triggerable
 
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
-defaults['category'] = '3mac'
-
-# Temporarily define these in a single place for easier local override of
-# build options.
-# As noted in http://crbug.com/97423 , this should be reverted by 31 Oct 2011.
-builder_options = [
-    '--compiler=clang', '--', '-target', 'chromium_builder_tests']
-gyp_defines = 'clang=1 clang_use_chrome_plugins=1'
-
 
 ################################################################################
 ## Release
 ################################################################################
+
+defaults['category'] = '3mac'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('Chromium', 'Mac Builder',
@@ -50,11 +43,11 @@ B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
   notify_on_missing=True)
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=builder_options,
+    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_rel_trigger',
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
         },
     }))
 
@@ -146,11 +139,11 @@ B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', notify_on_missing=True)
 F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=builder_options,
+    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_dbg_trigger',
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
         },
     }))
 

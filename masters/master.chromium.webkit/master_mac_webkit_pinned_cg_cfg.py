@@ -19,13 +19,6 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
 defaults['category'] = '2webkit mac deps'
 
-# Temporarily define these in a single place for easier local override of
-# build options.
-# As noted in http://crbug.com/97423 , this should be reverted by 31 Oct 2011.
-builder_options = [
-    '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj']
-gyp_defines = 'clang=1 clang_use_chrome_plugins=1 use_skia=0'
-
 ################################################################################
 ## Release
 ################################################################################
@@ -55,10 +48,11 @@ B('Webkit Mac Builder (CG)(deps)', 'f_webkit_mac_cg_rel',
   scheduler=cg_rel_scheduler, builddir=cg_rel_builddir)
 F('f_webkit_mac_cg_rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=builder_options,
+    options=[
+        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0'
         },
         'layout_test_platform': 'chromium-cg-mac',
     }))
@@ -107,10 +101,11 @@ B('Webkit Mac Builder (CG)(deps)(dbg)', 'f_webkit_mac_cg_dbg',
 F('f_webkit_mac_cg_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=builder_options,
+    options=[
+        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=0'
         },
         'layout_test_platform': 'chromium-cg-mac',
     }))

@@ -32,13 +32,6 @@ def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
 defaults['category'] = '5webkit mac latest'
 
-# Temporarily define these in a single place for easier local override of
-# build options.
-# As noted in http://crbug.com/97423 , this should be reverted by 31 Oct 2011.
-builder_options = [
-    '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj']
-gyp_defines = 'clang=1 clang_use_chrome_plugins=1 use_skia=1'
-
 ################################################################################
 ## Release
 ################################################################################
@@ -55,10 +48,11 @@ B('Webkit Mac Builder', 'f_webkit_mac_rel',
   scheduler='s5_webkit_rel', builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
-    options=builder_options,
+    options=[
+        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
         },
         'layout_test_platform': 'chromium-mac',
     }))
@@ -75,7 +69,7 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'clang=0 use_skia=1'},
+        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
@@ -83,12 +77,13 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
 B('Webkit Mac10.6', 'f_webkit_rel_tests_106',
   scheduler='s5_webkit_rel')
 F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
-    options=builder_options,
+    options=[
+        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'use_skia=1 clang=1 clang_use_chrome_plugins=1',
         },
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -111,10 +106,11 @@ B('Webkit Mac Builder (dbg)', 'f_webkit_mac_dbg',
 F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
-    options=builder_options,
+    options=[
+        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
         },
         'layout_test_platform': 'chromium-mac',
     }))
@@ -132,7 +128,7 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'clang=0 use_skia=1'},
+        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '1:2',
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -147,7 +143,7 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     tests=['webkit', 'webkit_gpu'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'clang=0 use_skia=1'},
+        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '2:2',
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -157,12 +153,13 @@ B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
   scheduler='s5_webkit_dbg')
 F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    options=builder_options,
+    options=[
+        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'gclient_env': {
-            'GYP_DEFINES':gyp_defines,
+            'GYP_DEFINES':'use_skia=1 clang=1 clang_use_chrome_plugins=1',
         },
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
