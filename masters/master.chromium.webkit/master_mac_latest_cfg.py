@@ -36,9 +36,6 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
     tests=['browser_tests', 'interactive_ui', 'unit', 'ui'],
     factory_properties={
         'generate_gtest_json': True,
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
-        },
     }))
 
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
@@ -52,9 +49,6 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'show_perf_results': True,
         'perf_id': 'chromium-rel-mac6-webkit',
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
-        },
     }))
 
 ################################################################################
