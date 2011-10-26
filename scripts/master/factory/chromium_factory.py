@@ -33,9 +33,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'mac_release_optimization=1 '
     'release_optimize=1 '
     'no_gc_sections=1 '
-    'debug_extra_cflags="-g -fno-inline -fno-omit-frame-pointer -fno-builtin" '
+    'debug_extra_cflags="-g -fno-inline -fno-omit-frame-pointer '
+                        '-fno-builtin -fno-optimize-sibling-calls" '
     'release_extra_cflags="-g -fno-inline -fno-omit-frame-pointer '
-                          '-fno-builtin" '
+                          '-fno-builtin -fno-optimize-sibling-calls" '
 
     # MSVS flags
     'win_debug_Optimization=1 '
