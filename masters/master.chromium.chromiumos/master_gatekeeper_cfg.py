@@ -57,7 +57,6 @@ close_chromiumos_categories_steps = {
   'closer': [
     'LKGMSync',
     'BuildBoard',
-    'BuildTarget',
     'UnitTest',
   ],
 }
@@ -67,6 +66,7 @@ warn_chromiumos_categories_steps = {
     'LKGMSync',
     'UploadPrebuilts',
     'Archive',
+    'VMTest',
   ],
 }
 
