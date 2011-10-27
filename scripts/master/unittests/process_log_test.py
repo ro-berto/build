@@ -390,5 +390,42 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     self.assertEqual(expected, step._result_text[0])
     self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
 
+  def testPerfExpectationsBetterLowerSuccess(self):
+    step = self._TestPerfExpectations('perf_test_better_lower_success.json')
+    expected = ('12t_cc: 50.2k')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsBetterLowerImprove(self):
+    step = self._TestPerfExpectations('perf_test_better_lower_improve.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (0.01%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsBetterLowerRegress(self):
+    step = self._TestPerfExpectations('perf_test_better_lower_regress.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (0.01%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsBetterHigherSuccess(self):
+    step = self._TestPerfExpectations('perf_test_better_higher_success.json')
+    expected = ('12t_cc: 50.2k')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsBetterHigherImprove(self):
+    step = self._TestPerfExpectations('perf_test_better_higher_improve.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (0.01%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsBetterHigherRegress(self):
+    step = self._TestPerfExpectations('perf_test_better_higher_regress.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (0.01%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+
 if __name__ == '__main__':
   unittest.main()
