@@ -79,7 +79,7 @@ class TryJobBaseMixIn:
           log.msg('Marking %s as canceled on %s' %
                   (source_stamp.job_name, builder_name))
 
-  def SubmitJob(self, options):
+  def SubmitJob(self, options, _):
     """Queues the buildset.
 
     Args:
