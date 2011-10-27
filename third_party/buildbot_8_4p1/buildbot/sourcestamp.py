@@ -257,12 +257,12 @@ class SourceStamp(util.ComparableMixin, styles.Versioned):
         # add it to the DB
         patch_body = None
         patch_level = None
+        patch_subdir = None
         if self.patch:
             patch_level = self.patch[0]
             patch_body = self.patch[1]
-            patch_subdir = None
             if len(self.patch) > 2:
-              patch_subdir = self.patch[2]
+                patch_subdir = self.patch[2]
         d = master.db.sourcestamps.addSourceStamp(
                 branch=self.branch, revision=self.revision,
                 repository=self.repository, project=self.project,
