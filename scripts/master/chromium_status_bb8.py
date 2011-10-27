@@ -30,7 +30,7 @@ from master.third_party import stats_bb8 as stats
 # templates.  This version isn't actually used for template processing; rather,
 # it's used to shorten revision names in the waterfall view, which doesn't make
 # much use of jinja templates.
-_ShortRev = lambda x: 'None' if x is None else x[:12]
+_ShortRev = lambda x: x[:12]
 
 
 class BuildBox(waterfall.BuildBox):
