@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -66,24 +66,15 @@ class TryJobStatusUpdate(base.StatusReceiverMultiService):
 
     build is of type BuildStatus."""
     job_stamp = build.getSourceStamp()
-    if isinstance(job_stamp, TryJobStamp):
-      # buildbot 0.7.12
-      review_status_update_url = job_stamp.getCodeReviewStatusUrl()
-    else:
-      # buildbot 0.8.x
-      try:
-        review_status_update_url = build.getProperty('rietveld')
-      except KeyError:
-        review_status_update_url = None
+    if not isinstance(job_stamp, TryJobStamp):
+      return
+    review_status_update_url = job_stamp.getCodeReviewStatusUrl()
 
     # We only care about it if it contains a patchset.
     if not review_status_update_url:
       return
-    review_status_update_url = str(review_status_update_url)
 
     builder_name = build.getBuilder().getName()
-    if not hasattr(job_stamp, 'results'):
-      job_stamp.results = {}
     previous_result = job_stamp.results.get(builder_name)
     job_stamp.results.setdefault(builder_name, 'pending')
 

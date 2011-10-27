@@ -68,7 +68,7 @@ def _CheckDupes(items):
       dupes.add(x)
   if dupes:
     print >> sys.stderr, 'Found slave dupes!\n  %s' % ', '.join(dupes)
-    #assert False, ', '.join(dupes)
+    assert False, ', '.join(dupes)
 
 
 class BaseSlavesList(object):
