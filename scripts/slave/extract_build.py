@@ -52,6 +52,11 @@ def real_main(options, args):
   # Find the revision that we need to download.
   current_revision = slave_utils.SubversionRevision(abs_build_dir)
 
+  webkit_revision = None
+  if options.webkit_dir:
+    webkit_revision = slave_utils.SubversionRevision(
+        os.path.join(abs_build_dir, '..', options.webkit_dir))
+
   # Generic name for the archive.
   archive_name = 'full-build-%s.zip' % chromium_utils.PlatformName()
 
@@ -60,7 +65,11 @@ def real_main(options, args):
                             archive_name.replace('.zip', ''))
 
   # URL containing the version number.
-  url = options.build_url.replace('.zip', '_%d.zip' % current_revision)
+  if not webkit_revision:
+    url = options.build_url.replace('.zip', '_%d.zip' % current_revision)
+  else:
+    url = options.build_url.replace(
+        '.zip', '_wk%d_%d.zip' % (webkit_revision, current_revision))
 
   # We try to download and extract 3 times.
   for tries in range(1, 4):
@@ -163,6 +172,9 @@ def main():
                            callback=chromium_utils.convert_json, type='string',
                            nargs=1, default={},
                            help='factory properties in JSON format')
+  option_parser.add_option('', '--webkit-dir', default=None,
+                           help='webkit directory path, '
+                                'relative to --build-dir')
 
   options, args = option_parser.parse_args()
   return real_main(options, args)

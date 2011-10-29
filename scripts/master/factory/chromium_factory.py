@@ -500,7 +500,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           schedulerNames=[trigger_name],
           updateSourceStamp=False,
           waitForFinish=False,
-          set_properties={'parentname': WithProperties('%(buildername)s')},
+          set_properties={
+              'parent_cr_revision': WithProperties('%(got_revision:-)s'),
+              'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
+              'parentname': WithProperties('%(buildername)s')
+              },
           copy_properties=trigger_properties))
 
 

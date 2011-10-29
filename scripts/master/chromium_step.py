@@ -64,11 +64,24 @@ class GClient(source.Source):
   def startVC(self, branch, revision, patch):
     warnings = []
     args = copy.copy(self.args)
+    wk_revision = revision
+    try:
+      # parent_wk_revision might be set, but empty.
+      if self.getProperty('parent_wk_revision'):
+        wk_revision = self.getProperty('parent_wk_revision')
+    except KeyError:
+      pass
+    try:
+      # parent_cr_revision might be set, but empty.
+      if self.getProperty('parent_cr_revision'):
+        revision = 'src@' + self.getProperty('parent_cr_revision')
+    except KeyError:
+      pass
     args['revision'] = revision
     args['branch'] = branch
     if args.get('gclient_spec'):
-      args['gclient_spec'] = args['gclient_spec'].replace('$$WK_REV$$',
-                                                          str(revision or ''))
+      args['gclient_spec'] = args['gclient_spec'].replace(
+          '$$WK_REV$$', str(wk_revision or ''))
     if patch:
       args['patch'] = patch
     elif args.get('patch') is None:

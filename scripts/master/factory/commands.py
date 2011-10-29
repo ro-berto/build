@@ -566,10 +566,15 @@ class FactoryCommands(object):
 
   # Zip / Extract commands.
   def AddZipBuild(self, src_dir=None, include_files=None,
-                  halt_on_failure=False):
+                  halt_on_failure=False, factory_properties=None):
+    factory_properties = factory_properties or {}
+
     cmd = [self._python, self._zip_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
+
+    if 'webkit_dir' in factory_properties:
+      cmd += ['--webkit-dir', factory_properties['webkit_dir']]
 
     if src_dir is not None:
       cmd += ['--src-dir', src_dir]
@@ -600,6 +605,10 @@ class FactoryCommands(object):
            '--build-dir', self._build_dir,
            '--target', self._target,
            '--build-url', build_url]
+
+    if 'webkit_dir' in factory_properties:
+      cmd += ['--webkit-dir', factory_properties['webkit_dir']]
+
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract_build', cmd,

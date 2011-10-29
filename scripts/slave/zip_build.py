@@ -172,11 +172,6 @@ def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
                            zip_file_list):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
-  # Write out the revision number so we can figure it out in extract_build.py.
-  build_revision_path = os.path.join(
-      build_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME)
-  WriteRevisionFile(build_revision_path, build_revision)
-
   zip_file_name = 'full-build-%s' % chromium_utils.PlatformName()
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
@@ -196,14 +191,13 @@ def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
   return zip_file
 
 
-def MakeVersionedArchive(zip_file, build_revision):
-  """Ensures that a versioned archive exists corresponding
-  to given unversioned archive."""
+def _MakeVersionedArchive(zip_file, file_suffix):
+  """Takes a file name, e.g. /foo/bar.zip and an extra suffix, e.g. _baz,
+  and copies the file to /foo/bar_baz.zip."""
   zip_template = os.path.basename(zip_file)
   zip_base, zip_ext = os.path.splitext(zip_template)
   # Create a versioned copy of the file.
-  versioned_file = zip_file.replace(zip_ext, '_%d%s' % (build_revision,
-                                                        zip_ext))
+  versioned_file = zip_file.replace(zip_ext, file_suffix + zip_ext)
   if os.path.exists(versioned_file):
     # This file already exists. Maybe we are doing a clobber build at the same
     # revision. We can move this file away.
@@ -211,8 +205,21 @@ def MakeVersionedArchive(zip_file, build_revision):
     chromium_utils.MoveFile(versioned_file, old_file)
   shutil.copyfile(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
-
+  print 'Created versioned archive', versioned_file
   return (zip_base, zip_ext)
+
+
+def MakeVersionedArchive(zip_file, build_revision):
+  """Ensures that a versioned archive exists corresponding
+  to given unversioned archive."""
+  return _MakeVersionedArchive(zip_file, '_%d' % build_revision)
+
+
+def MakeWebKitVersionedArchive(zip_file, cr_revision, wk_revision):
+  """Ensures that a versioned archive exists corresponding
+  to given unversioned archive."""
+  return _MakeVersionedArchive(zip_file, '_wk%d_%d' %
+                                         (wk_revision, cr_revision))
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext):
@@ -236,6 +243,11 @@ def archive(options, args):
   build_revision = slave_utils.SubversionRevision(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
+  webkit_dir, webkit_revision = None, None
+  if options.webkit_dir:
+    webkit_dir = os.path.join(src_dir, options.webkit_dir)
+    webkit_revision = slave_utils.SubversionRevision(webkit_dir)
+
   print 'Full Staging in %s' % build_dir
 
   # Build the list of files to archive.
@@ -247,7 +259,11 @@ def archive(options, args):
 
   zip_file = MakeUnversionedArchive(build_dir, staging_dir,
                                     build_revision, zip_file_list)
-  (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision)
+  if not webkit_revision:
+    (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision)
+  else:
+    (zip_base, zip_ext) = MakeWebKitVersionedArchive(
+        zip_file, build_revision, webkit_revision)
   PruneOldArchives(staging_dir, zip_base, zip_ext)
 
   # Update the latest revision file in the staging directory
@@ -272,6 +288,8 @@ def main(argv):
   option_parser.add_option('', '--include-files', default=None,
                            help='files that should be included in the'
                                 'zip, regardless of any exclusion patterns')
+  option_parser.add_option('', '--webkit-dir', default=None,
+                           help='webkit directory path, relative to --src-dir')
 
   options, args = option_parser.parse_args(argv)
   return archive(options, args)
