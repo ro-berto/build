@@ -586,6 +586,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                   compile_timeout=1200, build_url=None,
                                   project=None, factory_properties=None):
     self._solutions[0].custom_vars_list = self.CUSTOM_VARS_WEBKIT_LATEST
+
+    # This will let builders embed their webkit revision in their output
+    # filename and will let testers look for zip files containing a webkit
+    # revision in their filename. For this to work correctly, the testers
+    # need to be on a Triggerable that's activated by their builder.
+    factory_properties = factory_properties or {}
+    factory_properties.setdefault('webkit_dir', 'third_party/WebKit/Source')
+
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)

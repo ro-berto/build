@@ -27,6 +27,7 @@ helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
+T = helper.Triggerable
 
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
@@ -36,10 +37,20 @@ defaults['category'] = '5webkit mac latest'
 ## Release
 ################################################################################
 
+# Archive location
+rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
+                                          'Webkit Mac Builder',
+                                          'webkit-mac-latest-rel', 'mac')
+
 #
 # Main release scheduler for webkit
 #
 S('s5_webkit_rel', branch='trunk', treeStableTimer=60)
+
+#
+# Triggerable scheduler for testers
+#
+T('s5_webkit_rel_trigger')
 
 #
 # Mac Rel Builder
@@ -51,6 +62,7 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     options=[
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
+        'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
         },
@@ -58,33 +70,29 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     }))
 
 #
-# Mac Rel Webkit builder+testers
+# Mac Rel Webkit testers
 #
 
-# For now, we force clang off for 10.5.  See http://crbug.com/96724
 B('Webkit Mac10.5', 'f_webkit_rel_tests',
-  scheduler='s5_webkit_rel')
+  scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
-    options=['--', '-project', '../webkit/webkit.xcodeproj'],
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
 
 B('Webkit Mac10.6', 'f_webkit_rel_tests_106',
-  scheduler='s5_webkit_rel')
+  scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
-    options=[
-        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {
-            'GYP_DEFINES':'use_skia=1 clang=1 clang_use_chrome_plugins=1',
-        },
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
@@ -93,10 +101,20 @@ F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
 ## Debug
 ################################################################################
 
+# Archive location
+dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
+                                          'Webkit Mac Builder (dbg)',
+                                          'webkit-mac-latest-dbg', 'mac')
+
 #
-# Main debug scheduler for webkit
+# Main debug scheduler for the builder
 #
 S('s5_webkit_dbg', branch='trunk', treeStableTimer=60)
+
+#
+# Triggerable scheduler for testers
+#
+T('s5_webkit_dbg_trigger')
 
 #
 # Mac Dbg Builder
@@ -109,6 +127,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     options=[
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
+        'trigger': 's5_webkit_dbg_trigger',
         'gclient_env': {
             'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
         },
@@ -116,51 +135,43 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     }))
 
 #
-# Mac Dbg Webkit builder+testers
+# Mac Dbg Webkit testers
 #
 
-# For now, we force clang off for 10.5.  See http://crbug.com/96724
 B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler='s5_webkit_dbg')
+  scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
-    target='Debug',
-    options=['--', '-project', '../webkit/webkit.xcodeproj'],
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '1:2',
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
 
-# For now, we force clang off for 10.5.  See http://crbug.com/96724
 B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler='s5_webkit_dbg')
+  scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
-    target='Debug',
-    options=['--', '-project', '../webkit/webkit.xcodeproj'],
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=['webkit', 'webkit_gpu'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {'GYP_DEFINES':'use_skia=1 clang=0'},
         'layout_part': '2:2',
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
 
 B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
-  scheduler='s5_webkit_dbg')
+  scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
-    target='Debug',
-    options=[
-        '--compiler=clang', '--', '-project', '../webkit/webkit.xcodeproj'],
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'gclient_env': {
-            'GYP_DEFINES':'use_skia=1 clang=1 clang_use_chrome_plugins=1',
-        },
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))

@@ -63,9 +63,9 @@ S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Mac Dbg Builder
 #
-B('Mac Gcc Builder (dbg)', 'f_mac_gcc_dbg',
+B('Mac Builder (dbg)', 'f_mac_dbg',
   scheduler='s8_webkit_dbg')
-F('f_mac_gcc_dbg', mac().ChromiumWebkitLatestFactory(
+F('f_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj',]))
 

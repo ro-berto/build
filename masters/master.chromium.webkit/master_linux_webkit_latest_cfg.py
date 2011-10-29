@@ -27,7 +27,7 @@ defaults['category'] = '6webkit linux latest'
 S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
-# Linux Rel Builder
+# Linux Rel Builder/Tester
 #
 B('Webkit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
@@ -49,7 +49,7 @@ B('Webkit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 #
-# Linux Dbg Webkit testers
+# Linux Dbg Webkit builders/testers
 #
 
 B('Webkit Linux (dbg)(1)', 'f_webkit_dbg_tests_1', scheduler='s6_webkit_dbg')

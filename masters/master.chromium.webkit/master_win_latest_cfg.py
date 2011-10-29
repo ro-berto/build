@@ -16,12 +16,16 @@ T = helper.Triggerable
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
+defaults['category'] = '7win latest'
 
 ################################################################################
 ## Release
 ################################################################################
 
-defaults['category'] = '7win latest'
+# Archive location
+rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
+                                          'Win Builder',
+                                          'win-latest-rel', 'win32')
 
 #
 # Main release scheduler for webkit
@@ -32,6 +36,10 @@ S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
 # Create the triggerable scheduler for the reliability tests.
 T('reliability')
 
+# Triggerable scheduler for testers
+T('s7_webkit_builder_rel_trigger')
+
+
 #
 # Win Rel Builders
 #
@@ -41,7 +49,9 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder',
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+        'trigger': 's7_webkit_builder_rel_trigger',
+        'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
+    }))
 
 B('Win Reliability Builder', 'f_win_reliability_rel', scheduler='s7_webkit_rel',
   builddir='Win_Webkit_Latest')
@@ -56,28 +66,30 @@ F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
 #
 # Win Rel testers
 #
-B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel',
+B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel_trigger',
   auto_reboot=True)
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
-    project='all.sln;chromium_builder_perf',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['dom_perf', 'page_cycler_moz', 'page_cycler_morejs',
            'page_cycler_intl1', 'page_cycler_intl2', 'page_cycler_dhtml',
            'page_cycler_database', 'page_cycler_indexeddb', 'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+                        }))
 
-B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel',
+B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger',
   auto_reboot=True)
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
-    project='all.sln;chromium_builder',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['installer', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
                         'test_results_server': 'test-results.appspot.com',
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+                        }))
 
 B('Win Reliability', 'win_reliability', scheduler='reliability')
 # The Windows reliability bot runs on Linux because it only needs to transfer
