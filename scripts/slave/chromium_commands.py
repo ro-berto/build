@@ -278,9 +278,11 @@ class GClient(sourcebase):
     if self.revision:
       command.append('--revision')
       branch = self.branch
-      if not branch or self.no_gclient_branch and '@' not in str(self.revision):
+      if (not branch or
+          self.no_gclient_branch and '@' not in str(self.revision) or
+          '@' not in str(self.revision)):
         command.append(str(self.revision))
-      elif '@' not in str(self.revision):
+      else:
         # Make the revision look like branch@revision.
         command.append('%s@%s' % (branch, self.revision))
       # We only add the transitive flag if we have a revision, otherwise it is
