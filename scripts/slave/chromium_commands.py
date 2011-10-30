@@ -280,7 +280,7 @@ class GClient(sourcebase):
       branch = self.branch
       if (not branch or
           self.no_gclient_branch and '@' not in str(self.revision) or
-          '@' not in str(self.revision)):
+          '@' in str(self.revision)):
         command.append(str(self.revision))
       else:
         # Make the revision look like branch@revision.
