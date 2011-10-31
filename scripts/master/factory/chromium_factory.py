@@ -101,7 +101,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
     'memory':
       [('src/data/memory_test', None)],
-    'frame_rate_test':
+    'frame_rate':
       [('src/chrome/test/data/perf/frame_rate/private', None)],
     'page_cycler':
       [('src/data/page_cycler', None)],
