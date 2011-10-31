@@ -141,6 +141,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
 B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1',
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
+    target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
@@ -154,6 +155,7 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
 B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2',
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
+    target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['webkit', 'webkit_gpu'],
@@ -167,6 +169,7 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
 B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
+    target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],

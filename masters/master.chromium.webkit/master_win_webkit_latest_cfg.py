@@ -103,6 +103,7 @@ F('f_webkit_win_dbg', win().ChromiumWebkitLatestFactory(
 B('Webkit Win (dbg)(1)', 'f_webkit_dbg_tests_1',
     scheduler='s4_webkit_dbg_trigger', auto_reboot=True)
 F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
+    target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
@@ -113,6 +114,7 @@ F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
 B('Webkit Win (dbg)(2)', 'f_webkit_dbg_tests_2',
     scheduler='s4_webkit_dbg_trigger', auto_reboot=True)
 F('f_webkit_dbg_tests_2', win().ChromiumWebkitLatestFactory(
+    target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['webkit', 'webkit_gpu'],
