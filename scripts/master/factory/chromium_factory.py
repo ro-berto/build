@@ -769,7 +769,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
-  def ChromiumOsASANFactory(self, target='Release', clobber=False, tests=None,
+  def ChromiumOSASANFactory(self, target='Release', clobber=False, tests=None,
                             mode=None, slave_type='BuilderTester', options=None,
                             compile_timeout=1200, build_url=None, project=None,
                             factory_properties=None):
