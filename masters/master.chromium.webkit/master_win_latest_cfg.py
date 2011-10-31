@@ -37,7 +37,8 @@ S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
 T('reliability')
 
 # Triggerable scheduler for testers
-T('s7_webkit_builder_rel_trigger')
+# TODO: Reenable, http://crbug.com/102331
+#T('s7_webkit_builder_rel_trigger')
 
 
 #
@@ -49,7 +50,7 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder',
     factory_properties={
-        'trigger': 's7_webkit_builder_rel_trigger',
+        #'trigger': 's7_webkit_builder_rel_trigger',
         'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
     }))
 
@@ -64,31 +65,41 @@ F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
                         'use_build_number': True}))
 
 #
-# Win Rel testers
+# Win Rel testers+builders
 #
-B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel_trigger',
+# TODO: Switch back to trigger, http://crbug.com/102331
+B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel',
   auto_reboot=True)
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
+    # TODO: undo, http://crbug.com/102331
+    #slave_type='Tester',
+    #build_url=rel_archive,
+    project='all.sln;chromium_builder_perf',
     tests=['dom_perf', 'page_cycler_moz', 'page_cycler_morejs',
            'page_cycler_intl1', 'page_cycler_intl2', 'page_cycler_dhtml',
            'page_cycler_database', 'page_cycler_indexeddb', 'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
+                        # TODO: Remove, http://crbug.com/102331
+                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
                         }))
 
-B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger',
+# TODO: Switch back to trigger, http://crbug.com/102331
+B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel',
   auto_reboot=True)
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
+    # TODO: undo, http://crbug.com/102331
+    #slave_type='Tester',
+    #build_url=rel_archive,
+    project='all.sln;chromium_builder',
     tests=['installer', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
                         'test_results_server': 'test-results.appspot.com',
+                        # TODO: Remove, http://crbug.com/102331
+                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
                         }))
 
 B('Win Reliability', 'win_reliability', scheduler='reliability')
