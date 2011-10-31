@@ -14,5 +14,5 @@ REM Start the server, using the conf file in the slave directory.
 
 :RESTART
 echo Starting %lighttpd_dir%\lighttpd_server.exe -f %~dp0\lighttpd.conf -m %lighttpd_dir%\lib
-%lighttpd_dir%\lighttpd_server.exe -f %~dp0\lighttpd.conf -m %lighttpd_dir%\lib
+%lighttpd_dir%\lighttpd_server.exe -f %~dp0\lighttpd.conf -m %lighttpd_dir%\lib -D
 goto :RESTART
