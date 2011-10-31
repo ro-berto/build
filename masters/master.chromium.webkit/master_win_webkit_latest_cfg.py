@@ -44,21 +44,17 @@ F('f_webkit_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;webkit_builder_win',
     factory_properties={
-        # TODO: Reenable, http://crbug.com/102331
-        #'trigger': 's4_webkit_rel_trigger',
+        'trigger': 's4_webkit_rel_trigger',
     }))
 
 #
-# Win Rel Webkit builders+testers
+# Win Rel Webkit testers
 #
-# TODO: Switch back to trigger, http://crbug.com/102331
-B('Webkit Win', 'f_webkit_rel_tests', scheduler='s4_webkit_rel',
+B('Webkit Win', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger',
   auto_reboot=True)
 F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
-    # TODO: Reenable, http://crbug.com/102331
-    #slave_type='Tester',
-    #build_url=rel_archive,
-    project='all.sln;webkit_builder_win',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
@@ -85,8 +81,7 @@ S('s4_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Triggerable scheduler for testers
 #
-# TODO: Reenable, http://crbug.com/102331
-#T('s4_webkit_dbg_trigger')
+T('s4_webkit_dbg_trigger')
 
 #
 # Win Dbg Builder
@@ -98,37 +93,30 @@ F('f_webkit_win_dbg', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;webkit_builder_win',
     factory_properties={
-        # TODO: Reenable, http://crbug.com/102331
-        #'trigger': 's4_webkit_dbg_trigger',
+        'trigger': 's4_webkit_dbg_trigger',
     }))
 
 #
-# Win Dbg Webkit builders+testers
+# Win Dbg Webkit testers
 #
 
 B('Webkit Win (dbg)(1)', 'f_webkit_dbg_tests_1',
-    # TODO: Switch back to trigger, http://crbug.com/102331
-    scheduler='s4_webkit_dbg', auto_reboot=True)
+    scheduler='s4_webkit_dbg_trigger', auto_reboot=True)
 F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
     target='Debug',
-    # TODO: Reenable, http://crbug.com/102331
-    #slave_type='Tester',
-    #build_url=dbg_archive,
-    project='all.sln;webkit_builder_win',
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 
 B('Webkit Win (dbg)(2)', 'f_webkit_dbg_tests_2',
-    # TODO: Switch back to trigger, http://crbug.com/102331
-    scheduler='s4_webkit_dbg', auto_reboot=True)
+    scheduler='s4_webkit_dbg_trigger', auto_reboot=True)
 F('f_webkit_dbg_tests_2', win().ChromiumWebkitLatestFactory(
     target='Debug',
-    # TODO: Reenable, http://crbug.com/102331
-    #slave_type='Tester',
-    #build_url=dbg_archive,
-    project='all.sln;webkit_builder_win',
+    slave_type='Tester',
+    build_url=dbg_archive,
     tests=['webkit', 'webkit_gpu'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',

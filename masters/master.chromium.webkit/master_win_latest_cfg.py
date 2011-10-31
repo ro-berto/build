@@ -37,8 +37,7 @@ S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
 T('reliability')
 
 # Triggerable scheduler for testers
-# TODO: Reenable, http://crbug.com/102331
-#T('s7_webkit_builder_rel_trigger')
+T('s7_webkit_builder_rel_trigger')
 
 
 #
@@ -50,7 +49,7 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder',
     factory_properties={
-        #'trigger': 's7_webkit_builder_rel_trigger',
+        'trigger': 's7_webkit_builder_rel_trigger',
         'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
     }))
 
@@ -85,21 +84,16 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
                         }))
 
-# TODO: Switch back to trigger, http://crbug.com/102331
-B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel',
+B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger',
   auto_reboot=True)
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
-    # TODO: undo, http://crbug.com/102331
-    #slave_type='Tester',
-    #build_url=rel_archive,
-    project='all.sln;chromium_builder',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['installer', 'unit', 'ui'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
                         'test_results_server': 'test-results.appspot.com',
-                        # TODO: Remove, http://crbug.com/102331
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
                         }))
 
 B('Win Reliability', 'win_reliability', scheduler='reliability')
