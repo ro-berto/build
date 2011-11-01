@@ -38,12 +38,15 @@ def SubRun(enabled, names, cmd, options):
       if m:
         replacements['number'] = m.group(2)
       command = [item % replacements for item in cmd]
-      print "> %s" % " ".join(command)
+      if not options.quiet:
+        print "> %s" % " ".join(command)
       if not options.print_only:
         retcode = subprocess.call(command)
         if retcode:
-          print 'Stopped at index %d' % index
-          print 'Returned %d' % retcode
+          if not options.ignore_failure:
+            print 'Stopped at index %d' % index
+          if not options.quiet:
+            print 'Returned %d' % retcode
           if not options.ignore_failure:
             return retcode
   return 0
@@ -55,35 +58,31 @@ def RunSSH(options):
     # Wrap up in cygwin's bash.
     win_cmd = 'c:\\cygwin\\bin\\bash --login -c "%s"' % (
         win_cmd.replace('"', '\\"'))
+
+  ssh = ['ssh', '-o ConnectTimeout=5']
+  quiet = ['-q'] if options.quiet else []
+  identity = ['chrome-bot@%(host)s']
+
   retcode = SubRun(options.win, options.win_names,
-                   ['ssh', '-o ConnectTimeout=5', 'chrome-bot@%(host)s',
-                    win_cmd],
-                   options)
+                   ssh + quiet + identity + [win_cmd], options)
   if not retcode:
     retcode = SubRun(options.linux, options.linux_names,
-                     ['ssh', '-o ConnectTimeout=5', '-t', 'chrome-bot@%(host)s',
-                      options.linux_cmd],
+                     ssh + ['-t'] + quiet + identity + [options.linux_cmd],
                      options)
   if not retcode:
     retcode = SubRun(options.mac, options.mac_names,
-                     ['ssh', '-o ConnectTimeout=5', '-t', 'chrome-bot@%(host)s',
-                      options.mac_cmd],
+                     ssh + ['-t'] + quiet + identity + [options.mac_cmd],
                      options)
   return retcode
 
 
 def RunSCP(options, src, dst):
-  retcode = SubRun(options.win, options.win_names,
-                   ['scp', src, 'chrome-bot@%(host)s:' + dst],
-                   options)
+  cmd = ['scp', src, 'chrome-bot@%(host)s:' + dst]
+  retcode = SubRun(options.win, options.win_names, cmd, options)
   if not retcode:
-    retcode = SubRun(options.linux, options.linux_names,
-                     ['scp', src, 'chrome-bot@%(host)s:' + dst],
-                     options)
+    retcode = SubRun(options.linux, options.linux_names, cmd, options)
   if not retcode:
-    retcode = SubRun(options.mac, options.mac_names,
-                     ['scp', src, 'chrome-bot@%(host)s:' + dst],
-                     options)
+    retcode = SubRun(options.mac, options.mac_names, cmd, options)
   return retcode
 
 
@@ -198,6 +197,8 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
   group.add_option('--taskkill', action='store_true')
   group.add_option('--scp', action='store_true',
                    help='with the source and dest files')
+  group.add_option('-q', '--quiet', action='store_true',
+                   help='Quiet mode - do not print the commands')
   group.add_option('-p', '--print_only', action='store_true',
                    help='Print which slaves would have been processed but do '
                         'nothing. With no command, just print the list of '
