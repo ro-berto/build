@@ -277,14 +277,13 @@ class GClient(sourcebase):
     # GClient accepts --revision argument of two types 'module@rev' and 'rev'.
     if self.revision:
       command.append('--revision')
-      branch = self.branch
-      if (not branch or
-          self.no_gclient_branch and '@' not in str(self.revision) or
+      if (not self.branch or
+          self.no_gclient_branch or
           '@' in str(self.revision)):
         command.append(str(self.revision))
       else:
         # Make the revision look like branch@revision.
-        command.append('%s@%s' % (branch, self.revision))
+        command.append('%s@%s' % (self.branch, self.revision))
       # We only add the transitive flag if we have a revision, otherwise it is
       # meaningless.
       if self.gclient_transitive:
