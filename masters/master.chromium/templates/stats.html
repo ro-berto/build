@@ -38,7 +38,7 @@
     {% endif %}{% endfor %}];
 
   var ratioFailures = [
-    {% for val in builderFailures %}[{{ loop.index0 }}, {{ val }}]{% if not loop.last %},
+    {% for val in builderFailures %}[{{ loop.index0 }}, {{ val*100.0 }}]{% if not loop.last %},
     {% endif %}{% endfor %}];
 
   var nameMapping = [
