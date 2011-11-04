@@ -143,10 +143,12 @@ class BuildRequestStatus:
         result = {}
 
         wfd = defer.waitForDeferred(
-                self.getSourceStamp())
+                self._getBuildRequest())
         yield wfd
-        ss = wfd.getResult()
+        br = wfd.getResult()
+        ss = br.source
         result['source'] = ss.asDict()
+        result['reason'] = br.reason
 
         result['builderName'] = self.getBuilderName()
 

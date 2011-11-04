@@ -1111,3 +1111,25 @@ Changes with a patch must never be merged.
          if self.revision == other.revision:
              # both builds are using the same specific revision, so they can
              # be merged. It might be the case that revision==None, so they're
+
+
+Add back 'reason' to json/builders/<builder>/pendingBuilds. It is necessary for
+the commit queue.
+
+--- buildbot/status/buildrequest.py
++++ buildbot/status/buildrequest.py
+@@ -143,10 +143,12 @@ class BuildRequestStatus:
+         result = {}
+ 
+         wfd = defer.waitForDeferred(
+-                self.getSourceStamp())
++                self._getBuildRequest())
+         yield wfd
+-        ss = wfd.getResult()
++        br = wfd.getResult()
++        ss = br.source
+         result['source'] = ss.asDict()
++        result['reason'] = br.reason
+ 
+         result['builderName'] = self.getBuilderName()
+ 
