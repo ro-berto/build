@@ -21,7 +21,7 @@ def change_to_revision(c):
   """Handle revision == None or any invalid value."""
   try:
     return int(str(c.revision).split('@')[-1])
-  except TypeError:
+  except (ValueError, TypeError):
     return 0
 
 
