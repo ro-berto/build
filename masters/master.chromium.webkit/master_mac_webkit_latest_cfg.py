@@ -73,7 +73,7 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
 # Mac Rel Webkit testers
 #
 
-B('Webkit Mac10.5', 'f_webkit_rel_tests',
+B('Webkit Mac10.5', 'f_webkit_rel_tests', auto_reboot=True,
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
@@ -85,7 +85,7 @@ F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.6', 'f_webkit_rel_tests_106',
+B('Webkit Mac10.6', 'f_webkit_rel_tests_106', auto_reboot=True,
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
@@ -138,7 +138,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
 # Mac Dbg Webkit testers
 #
 
-B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1',
+B('Webkit Mac10.5 (dbg)(1)', 'f_webkit_dbg_tests_1', auto_reboot=True,
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     target='Debug',
@@ -152,7 +152,7 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2',
+B('Webkit Mac10.5 (dbg)(2)', 'f_webkit_dbg_tests_2', auto_reboot=True,
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     target='Debug',
@@ -166,7 +166,7 @@ F('f_webkit_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
+B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests', auto_reboot=True,
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',

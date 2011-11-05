@@ -30,17 +30,25 @@ S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 # Mac Rel Builder
 #
-B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
+B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel',
+   auto_reboot=True)
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
+    options=['--build-tool=make', '--compiler=goma-clang', '--',
+             'chromium_builder_tests'],
     tests=['browser_tests', 'interactive_ui', 'unit', 'ui'],
     factory_properties={
         'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_GENERATORS':'make',
+            'GYP_DEFINES':'fastbuild=1',
+        },
     }))
 
-B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
+B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel',
+  auto_reboot=True)
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--compiler=clang', '--', '-target', 'chromium_builder_perf'],
+    options=['--build-tool=make', '--compiler=gomaclang', '--',
+             'chromium_builder_perf'],
     tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler_moz',
            'page_cycler_morejs', 'page_cycler_intl1', 'page_cycler_intl2',
            'page_cycler_dhtml', 'page_cycler_database', 'page_cycler_indexeddb',
@@ -49,6 +57,10 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'show_perf_results': True,
         'perf_id': 'chromium-rel-mac6-webkit',
+        'gclient_env': {
+            'GYP_GENERATORS':'make',
+            'GYP_DEFINES': 'fastbuild=1',
+        },
     }))
 
 ################################################################################
@@ -63,7 +75,7 @@ S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'f_mac_dbg',
+B('Mac Builder (dbg)', 'f_mac_dbg', auto_reboot=True,
   scheduler='s8_webkit_dbg')
 F('f_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',

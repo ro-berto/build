@@ -60,7 +60,7 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
 #
 # Mac Rel Webkit testers
 #
-B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests',
+B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests', auto_reboot=True,
   scheduler=rel_dep_scheduler)
 F('f_webkit_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
@@ -68,76 +68,6 @@ F('f_webkit_rel_tests', mac().ChromiumFactory(
     tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
-        'layout_test_platform': 'chromium-mac',
-        'test_results_server': 'test-results.appspot.com',
-    }))
-
-################################################################################
-## Debug
-################################################################################
-
-dbg_builddir = 'webkit-mac-pinned-dbg'
-dbg_archive = master_config.GetArchiveUrl(
-    'ChromiumWebkit', 'Webkit Mac Builder (deps)(dbg)',
-    dbg_builddir, 'mac')
-
-#
-# Main debug scheduler for chromium
-#
-dbg_scheduler = 's2_chromium_dbg'
-S(dbg_scheduler, branch='src', treeStableTimer=60)
-
-#
-# Dependent scheduler for the dbg builder
-#
-dbg_dep_scheduler = 's2_chromium_dbg_dep'
-D(dbg_dep_scheduler, dbg_scheduler)
-
-#
-# Mac Dbg Builder
-#
-B('Webkit Mac Builder (deps)(dbg)', 'f_webkit_mac_dbg',
-  scheduler=dbg_scheduler, builddir=dbg_builddir)
-F('f_webkit_mac_dbg', mac().ChromiumFactory(
-    target='Debug',
-    slave_type='Builder',
-    options=[
-        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
-    factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
-        },
-        'layout_test_platform': 'chromium-mac',
-    }))
-
-#
-# Mac Dbg Webkit testers
-#
-
-B('Webkit Mac10.6 (deps)(dbg)(1)', 'f_webkit_dbg_tests_1',
-  scheduler=dbg_dep_scheduler)
-F('f_webkit_dbg_tests_1', mac().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
-    factory_properties={
-        'archive_webkit_results': True,
-        'layout_part': '1:2',
-        'layout_test_platform': 'chromium-mac',
-        'test_results_server': 'test-results.appspot.com',
-    }))
-
-B('Webkit Mac10.6 (deps)(dbg)(2)', 'f_webkit_dbg_tests_2',
-  scheduler=dbg_dep_scheduler)
-F('f_webkit_dbg_tests_2', mac().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
-    tests=['webkit', 'webkit_gpu'],
-    factory_properties={
-        'archive_webkit_results': True,
-        'layout_part': '2:2',
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
