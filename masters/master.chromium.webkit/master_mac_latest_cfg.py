@@ -47,7 +47,7 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel',
   auto_reboot=True)
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--build-tool=make', '--compiler=gomaclang', '--',
+    options=['--build-tool=make', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
     tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler_moz',
            'page_cycler_morejs', 'page_cycler_intl1', 'page_cycler_intl2',
