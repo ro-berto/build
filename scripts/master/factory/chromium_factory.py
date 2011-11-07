@@ -81,7 +81,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.trunk_url + '/deps/third_party/tsan')
   CUSTOM_DEPS_DRMEMORY = ('src/third_party/drmemory',
      config.Master.trunk_url + '/deps/third_party/drmemory')
-  CUSTOM_DEPS_NACL_VALGRIND = ('src/native_client/src/third_party/valgrind/bin',
+  CUSTOM_DEPS_NACL_VALGRIND = ('src/third_party/valgrind/bin',
      'http://src.chromium.org/native_client/trunk/src/third_party/valgrind/bin')
   CUSTOM_DEPS_TSAN_GCC = ('src/third_party/compiler-tsan',
      config.Master.trunk_url + '/deps/third_party/compiler-tsan')
