@@ -72,6 +72,8 @@ warn_chromiumos_categories_steps = {
 
 subject = ('buildbot %(result)s in %(projectName)s on %(builder)s, '
            'revision %(revision)s')
+warning_header = ('Please look at failure in "%(steps)s" on "%(builder)s" '
+                  'and help out if you can')
 
 def Update(config, active_master, alternate_master, c):
   c['status'].append(gatekeeper.GateKeeper(
@@ -104,6 +106,7 @@ def Update(config, active_master, alternate_master, c):
       exclusions=exclusions,
       relayhost=config.Master.smtp,
       subject='Warning ' + subject,
+      status_header=warning_header,
       extraRecipients=alternate_master.tree_closing_notification_recipients,
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
