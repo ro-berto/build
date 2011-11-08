@@ -4,8 +4,6 @@
 
 from twisted.python import log
 
-# TODO(maruel): Remove me once we're switched to 0.8.x
-# pylint: disable=E0611,F0401
 from buildbot.schedulers.trysched import TryBase  # pylint: disable=W0611
 from buildbot.schedulers.trysched import BadJobfile
 from twisted.internet import defer
@@ -43,6 +41,7 @@ class TryJobBaseMixIn:
       return self.addBuildsetForSourceStamp(ssid=ssid,
           reason=parsed_job['name'],
           external_idstring=parsed_job['name'],
-          builderNames=parsed_job['bot'])
+          builderNames=parsed_job['bot'],
+          properties=self.get_props(parsed_job))
     d.addCallback(create_buildset)
     d.addErrback(log.err, "Failed to queue a try job!")

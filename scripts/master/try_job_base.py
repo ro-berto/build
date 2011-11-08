@@ -50,12 +50,10 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     options['email'] = [e for e in options.get('email', '').split(',') if e]
     for email in options['email']:
       if not TryJobBase._EMAIL_VALIDATOR.match(email):
-        log.msg("'%s' is an invalid email address!" % email)
         raise BadJobfile("'%s' is an invalid email address!" % email)
 
     options.setdefault('patch', None)
     options.setdefault('root', None)
-    options.setdefault('clobber', None)
     # -pN argument to patch.
     options['patchlevel'] = int(options.get('patchlevel', 0))
     options.setdefault('branch', None)
@@ -86,12 +84,11 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     """Current job extra properties that are not related to the source stamp.
     Initialize with the Scheduler's base properties.
     """
+    keys = ('clobber', 'issue', 'patchset', 'rietveld', 'testfilter')
+    # All these settings have no meaning when False or not set, so don't set
+    # them in that case.
+    properties = dict((i, options[i]) for i in keys if options.get(i))
     props = Properties()
-    # TODO(maruel): BROKEN ON BULDBOT 0.8.4p1
-    # pylint: disable=E1101
     props.updateFromProperties(self.properties)
-    if options['clobber'] is not None:
-      props.setProperty('clobber', options['clobber'], 'Scheduler')
-    if options['testfilter']:
-      props.setProperty('testfilters', options['testfilter'], 'Scheduler')
+    props.update(properties, 'Try job')
     return props
