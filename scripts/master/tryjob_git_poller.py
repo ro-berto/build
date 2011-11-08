@@ -13,7 +13,8 @@
 # 2) Do NOT clear the environment when doing git commands; it throws
 #   away permissions (perhaps by deleting HOME so we can't find our SSH
 #   keys).  2 spots.
-# 3) Add get_file_contents() function.
+
+# TODO(maruel): Remove me once migration to 0.8.4p1 is complete.
 
 # This file does not follow our style.
 # pylint: disable=W0311
@@ -145,20 +146,6 @@ class GitPoller(base.ChangeSource):
             d.addCallback(self._catch_up)
             d.addCallbacks(self._catch_up_finished_ok, self._catch_up__finished_failure)
         return
-
-    def get_file_contents(self, file_path):
-      log.msg('getting contents of file %s' % file_path)
-      # Need to catch up HEAD, since this can get called during the
-      # process_changes callback path.
-      p = subprocess.Popen(['git', 'reset', '--hard', 'FETCH_HEAD'],
-                           cwd=self.workdir)
-      p.communicate()
-
-      p = subprocess.Popen(['cat', file_path], cwd=self.workdir,
-                           stdout=subprocess.PIPE)
-      output, _ = p.communicate()
-
-      return output
 
     def _get_git_output(self, args):
         git_args = [self.gitbin] + args

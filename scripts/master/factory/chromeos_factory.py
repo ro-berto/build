@@ -258,7 +258,7 @@ class CbuildbotFactory(object):
     cbuild_cmd.append(WithProperties('%s', 'clobber:+--clobber'))
 
     if self.trybot:
-      cbuild_cmd.append(WithProperties("--gerrit-patches='%(gerrit_patches)s'"))
+      cbuild_cmd.append(WithProperties("--gerrit-patches='%(issue)s'"))
 
     name = self.type
     if description_suffix:
