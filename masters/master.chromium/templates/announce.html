@@ -116,7 +116,8 @@
    * @returns {!String}
    */
   function aView(url, search_opt, contents) {
-      return a(url + '/' + c.viewtype + search(search_opt), contents, '')
+      return a((url ? url + '/' : '') + c.viewtype + search(search_opt),
+               contents, '')
   };
 
   /**
