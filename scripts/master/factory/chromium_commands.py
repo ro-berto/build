@@ -253,7 +253,7 @@ class ChromiumCommands(commands.FactoryCommands):
     if suite:
       command_name = suite
     else:
-      command_name = perf_dashboard_name.rstrip('-http').capitalize()
+      command_name = perf_dashboard_name.partition('-http')[0].capitalize()
 
     # Derive the class from the factory, name, and log processor.
     test_class = self.GetPerfStepClass(
