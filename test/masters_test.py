@@ -12,37 +12,14 @@ import optparse
 import os
 import sys
 import time
-import urllib
 
-import find_depot_tools  # pylint: disable=W0611
-import subprocess2
-from rietveld import json
-
-
-def stop_master(master, path):
-  if not os.path.isfile(os.path.join(path, 'twistd.pid')):
-    return True
-  try:
-    subprocess2.check_output(
-        ['make', 'stop'], timeout=60, cwd=path,
-        stderr=subprocess2.STDOUT)
-    for _ in range(100):
-      if not os.path.isfile(os.path.join(path, 'twistd.pid')):
-        return True
-      time.sleep(0.1)
-    return False
-  except subprocess2.CalledProcessError, e:
-    if 'No such process' in e.stdout:
-      logging.warning('Flushed ghost twistd.pid for %s' % master)
-      os.remove(os.path.join(path, 'twistd.pid'))
-      return True
-    return False
+import masters_util
 
 
 def test_master(master, name, path):
   print('Trying %s' % master)
   start = time.time()
-  if not stop_master(master, path):
+  if not masters_util.stop_master(master, path):
     return False
   # Try to backup twistd.log
   twistd_log = os.path.join(path, 'twistd.log')
@@ -50,71 +27,16 @@ def test_master(master, name, path):
   try:
     if had_twistd_log:
       os.rename(twistd_log, twistd_log + '_')
-    ports = range(8000, 8080) + range(8200, 8240) + range(9000, 9080)
     try:
-      try:
-        subprocess2.check_call(
-            ['make', 'upgrade'], timeout=60, cwd=path,
-            stderr=subprocess2.STDOUT)
-      except subprocess2.CalledProcessError:
-        logging.warning('Warning: cannot run make upgrade for %s' % name)
-
-      try:
-        subprocess2.check_call(
-            ['make', 'start'], timeout=60, cwd=path,
-            stderr=subprocess2.STDOUT)
-      except subprocess2.CalledProcessError:
-        logging.error('Error: cannot start %s' % name)
+      if not masters_util.start_master(master, path):
         return False
 
-      # It has ~10 seconds to boot.
-      for _ in range(100):
-        for p in ports:
-          try:
-            data = json.load(
-                urllib.urlopen('http://localhost:%d/json/project' % p)) or {}
-            if not data or (not 'projectName' in data and not 'title' in data):
-              logging.warning('Didn\'t get valid data from %s' % master)
-              continue
-            got_name = data.get('projectName', data.get('title'))
-            if got_name != name:
-              logging.error(
-                  'Wrong %s name, expected %s, got %s' %
-                  (master, name, got_name))
-              return False
-            logging.info('Success in %1.1fs' % (time.time() - start))
-            return True
-          except ValueError:
-            logging.warning('Didn\'t get valid data from %s' % master)
-          except IOError:
-            logging.warning('Didn\'t get data from %s' % master)
-        # Look in twistd.log for an exception:
-
-        # TODO(maruel): Search for 'exception' in twistd.log.
-        with open(twistd_log) as f:
-          lines = f.readlines()
-          stripped_lines = [l.strip() for l in lines]
-          try:
-            i = stripped_lines.index('--- <exception caught here> ---')
-            # Found an exception at line 'i'!  Now find line 'j', the number
-            # of lines from 'i' where there's a blank line.  If we cannot find
-            # a blank line, then we will show up to 10 lines from i.
-            try:
-              j = stripped_lines[i:-1].index('')
-            except ValueError:
-              j = 10
-            # Print from either 15 lines back from i or the start of the log
-            # text to j lines after i.
-            print ''.join(lines[max(i-15, 0):i+j])
-            return False
-          except ValueError:
-            pass
-
-        time.sleep(0.1)
-      logging.error('Didn\'t find open port for %s' % master)
-      return False
+      res = masters_util.wait_for_start(master, name, path)
+      if res:
+        logging.info('Success in %1.1fs' % (time.time() - start))
+      return res
     finally:
-      stop_master(master, path)
+      masters_util.stop_master(master, path)
   finally:
     if had_twistd_log:
       os.rename(twistd_log + '_', twistd_log)
@@ -194,7 +116,6 @@ def real_main(base_dir, expected):
 
 def main():
   base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-  # TODO(maruel): Add support for buildbot 0.8.x masters.
   expected = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'Chromium Chrome',
