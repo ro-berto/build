@@ -27,9 +27,9 @@ _gflags_exe = None
 
 def SubversionExe():
   # TODO(pamg): move this into platform_utils to support Mac and Linux.
-  if sys.platform in ['cygwin', 'win32']:
+  if chromium_utils.IsWindows():
     return 'svn.bat' # Find it in the user's path.
-  elif sys.platform in ['linux', 'linux2', 'darwin']:
+  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
     return 'svn' # Find it in the user's path.
   else:
     raise NotImplementedError(
@@ -251,25 +251,9 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
         'tools', 'python') + ":" + os.environ.get('PYTHONPATH', ''))
     python_exe = 'python'
 
-  if sys.platform == 'linux2':
+  if chromium_utils.IsLinux():
     slave_name = SlaveBuildName(build_dir)
-    StartVirtualX(slave_name,
-                  os.path.join(build_dir, '..', 'sconsbuild', target))
-
-  if sys.platform == 'darwin':
-    # CrashReporter/ReportCrash take forever to walk through all of the
-    # debugging symbols.  Since we expect crashes, strip the debugging
-    # symbols so that ReportCrash doesn't have so much to chew on.
-    # TODO(mmentovai): instead of stripping symbols, come up with a better
-    # way to suppress ReportCrash from within the TestShell process.
-    test_shell_executable = chromium_utils.FindUpward(build_dir,
-                                                      'xcodebuild',
-                                                      target,
-                                                      'TestShell.app',
-                                                      'Contents',
-                                                      'MacOS',
-                                                      'TestShell')
-    chromium_utils.RunCommand(['strip', '-S', test_shell_executable])
+    StartVirtualX(slave_name, os.path.join(build_dir, '..', 'out', target))
 
   command = [python_exe]
 
@@ -278,7 +262,7 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
 
   result = chromium_utils.RunCommand(command)
 
-  if sys.platform == 'linux2':
+  if chromium_utils.IsLinux():
     StopVirtualX(slave_name)
 
   return result
