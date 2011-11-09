@@ -73,11 +73,6 @@ def layout_test(options, args):
   if options.platform:
     command.extend(['--platform', options.platform])
 
-  # Build type is no longer used.
-  # TODO(pamg): remove it from the buildbot config too.
-  #if options.build_type:
-  #  command.extend(['--build-type', options.build_type])
-
   if options.no_pixel_tests:
     command.append('--no-pixel-tests')
   if options.batch_size:
@@ -127,8 +122,6 @@ def main():
                                 'the Release or Debug directory)')
   option_parser.add_option('', '--target', default='',
       help='DumpRenderTree build configuration (Release or Debug)')
-  option_parser.add_option('', '--build-type', default='',
-      help='build identifier, for custom results and test lists (v8 or kjs)')
   option_parser.add_option('', '--options', default='',
       help='additional options to pass to run_webkit_tests.py')
   option_parser.add_option("", "--platform", default='',
