@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2008-2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,13 +12,69 @@ import sys
 import time
 
 
-def MassCopy(src_path, dst_uri, jobs):
+class ShellJob(object):
+  """A job to run thru the shell."""
+  def __init__(self, cmd, retries):
+    """Create a job.
+
+    Args:
+      cmd: command line to invoke.
+      retries: times to re-attempt the command on failure.
+    """
+    self.cmd = cmd
+    self.process = None
+    self.retries = retries
+    self.times_tried = 0
+    self.state = None
+
+  def Run(self):
+    """Run or re-run as needed.
+
+    Returns:
+      None if still in progress or return code (zero unless retry failed).
+    """
+    if self.state is not None:
+      return self.state
+    if self.process is not None:
+      retcode = self.process.poll()
+      if retcode is None:
+        return None
+      if retcode == 0:
+        self.state = 0
+        return 0
+      else:
+        print 'Command: %s, failed with return code %d, attempt %d of %d' % (
+            self.cmd, retcode, self.times_tried, self.retries + 1,
+        )
+    if self.times_tried <= self.retries:
+      self.times_tried += 1
+      print self.cmd
+      sys.stdout.flush()
+      self.process = subprocess.Popen(self.cmd, shell=True)
+      return None
+    else:
+      self.state = -1
+    return self.state
+
+
+def ShellEscape(s):
+  """Escape a string to be passed to the shell.
+  Args:
+    s: String to escape.
+  Returns:
+    Escaped string.
+  """
+  return "'" + s.replace("'", "'\\''") + "'"
+
+
+def MassCopy(src_path, dst_uri, jobs, retries):
   """Copy a directory to Google Storage in parallel.
 
   Args:
     src_path: path to copy.
     dst_uri: gs://... type uri.
     jobs: maximum concurrent copies.
+    retries:  times to re-attempt commands on failure.
   Returns:
     Error code for system.
   """
@@ -36,16 +92,30 @@ def MassCopy(src_path, dst_uri, jobs):
       objects.extend((os.path.join(root, name) for name in files))
   # Start running copies, limiting how many at once.
   running = []
+  total_result = 0
   try:
     while running or objects:
+      # Update the running set.
+      still_running = []
+      for job in running:
+        retcode = job.Run()
+        if retcode is None:
+          still_running.append(job)
+        else:
+          if retcode != 0:
+            # Return the first retcode.
+            if total_result == 0:
+              total_result = retcode
+      running = still_running
+
+      # Start running more if we can.
       while len(running) < jobs and objects:
         o = objects.pop(0)
         ot = os.path.abspath(o)[len(base):]
-        cmd = '%s cp -a public-read %s %s%s' % (gsutil, o, dst_uri, ot)
-        print cmd
-        p = subprocess.Popen(cmd, shell=True)
-        running.append(p)
-      running = [p for p in running if p.poll() is None]
+        cmd = '%s cp -a public-read %s %s' % (
+          ShellEscape(gsutil), ShellEscape(o), ShellEscape(dst_uri + ot))
+        running.append(ShellJob(cmd, retries))
+
       # Sad having to poll, but at least it behaves nicely in the presence
       # of KeyboardInterrupt.
       time.sleep(0.1)
@@ -53,7 +123,7 @@ def MassCopy(src_path, dst_uri, jobs):
     sys.stderr.write('Interrupt by keyboard, stopping...\n')
     return 2
 
-  return 0
+  return total_result
 
 
 def main(argv):
@@ -64,6 +134,8 @@ def main(argv):
                     help='maximum copies to run in parallel')
   parser.add_option('--message', action='append', default=[], dest='message',
                     help='message to print')
+  parser.add_option('-r', '--retries', type='int', default=3,
+                    dest='retries', help='times to retry')
   (options, args) = parser.parse_args(argv)
   if len(args) != 2:
     parser.print_help()
@@ -72,7 +144,8 @@ def main(argv):
   for m in options.message:
     print m
 
-  return MassCopy(src_path=args[0], dst_uri=args[1], jobs=options.jobs)
+  return MassCopy(src_path=args[0], dst_uri=args[1],
+                  jobs=options.jobs, retries=options.retries)
 
 
 if __name__ == '__main__':
