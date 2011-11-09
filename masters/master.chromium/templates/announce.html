@@ -124,10 +124,13 @@
    * A simple HTML iframe string.
    * @param {String} attributes A set of HTML attributes for the table.
    * @param {String} url The source of the iframe.
-   * @returns {!String}
+   * @returns {!String} the iframe or an empty string if noframe is specified.
    */
   function iFrame(attributes, url) {
-      return '<iframe ' + attributes + ' src="' + url + '"></iframe>';
+      if (window.location.href.search('noframe') == -1) {
+          return '<iframe ' + attributes + ' src="' + url + '"></iframe>';
+      }
+      return ''
   };
 </script>
 
