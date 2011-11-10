@@ -579,6 +579,8 @@ class FactoryCommands(object):
     if src_dir is not None:
       cmd += ['--src-dir', src_dir]
 
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+
     if include_files is not None:
       # Convert the include_files array into a quoted, comma-delimited list
       # for passing as a command-line argument.

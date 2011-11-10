@@ -80,9 +80,10 @@ def GetRealBuildDirectory(build_dir, target):
   raise NotImplementedError('%s is not supported.' % sys.platform)
 
 
-def ShouldPackageFile(filename, target):
+def ShouldPackageFile(filename, options):
   """Returns true if the file should be a part of the resulting archive."""
-  if chromium_utils.IsWindows() and target is 'Release':
+
+  if chromium_utils.IsWindows() and options.target is 'Release':
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.
@@ -95,8 +96,12 @@ def ShouldPackageFile(filename, target):
 
   file_filter = '$NO_FILTER^'
   if chromium_utils.IsWindows():
-    # Remove all .ilk/.pdb files
-    file_filter = '^.+\.(ilk|pdb|7z)$'
+    # Remove all .ilk/.7z and maybe PDB files
+    include_pdbs = options.factory_properties.get('package_pdb_files', False)
+    if include_pdbs:
+      file_filter = '^.+\.(ilk|7z)$'
+    else:
+      file_filter = '^.+\.(ilk|pdb|7z)$'
   elif chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers.
@@ -252,7 +257,7 @@ def archive(options, args):
 
   # Build the list of files to archive.
   zip_file_list = [f for f in os.listdir(build_dir)
-                   if ShouldPackageFile(f, options.target)]
+                   if ShouldPackageFile(f, options)]
   if options.include_files is not None:
     zip_file_list.extend([f for f in os.listdir(build_dir)
                           if f in options.include_files])
@@ -290,6 +295,10 @@ def main(argv):
                                 'zip, regardless of any exclusion patterns')
   option_parser.add_option('', '--webkit-dir', default=None,
                            help='webkit directory path, relative to --src-dir')
+  option_parser.add_option('--factory-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
 
   options, args = option_parser.parse_args(argv)
   return archive(options, args)
