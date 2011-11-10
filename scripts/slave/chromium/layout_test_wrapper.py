@@ -102,6 +102,12 @@ def layout_test(options, args):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   chromium_utils.RemoveChromeTemporaryFiles()
 
+  python_27_on_leopard = (
+      '/Library/Frameworks/Python.framework/Versions/2.7/bin')
+  if sys.platform == 'darwin' and os.path.exists(python_27_on_leopard):
+    os.environ['PATH'] = (python_27_on_leopard + ':' +
+        os.environ.get('PATH', ''))
+
   try:
     if options.enable_pageheap:
       slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', True)
