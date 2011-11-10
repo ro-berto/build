@@ -170,8 +170,12 @@ def main():
   option_parser.add_option('', '--build-dir', default='chrome',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
+  # pylint: disable=W0612
   options, args = option_parser.parse_args()
-  return dom_perf(options, args)
+  # Disabled for now, see http://crbug.com/103800.
+  # return dom_perf(options, args)
+  print 'DISABLED for now, see http://crbug.com/103800.'
+  return 0
 
 if '__main__' == __name__:
   sys.exit(main())
