@@ -857,7 +857,7 @@ class ChromiumCommands(commands.FactoryCommands):
     if buildbot_preset is not None:
       cmd.extend(['--buildbot', buildbot_preset])
 
-    self.AddTestStep(shell.ShellCommand, 'nacl_integration', cmd,
+    self.AddTestStep(gtest_command.GTestFullCommand, 'nacl_integration', cmd,
         do_step_if=self.TestStepFilter)
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
