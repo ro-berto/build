@@ -228,79 +228,70 @@ F('dbg_shared_unit', linux().ChromiumFactory(
     factory_properties={'generate_gtest_json': True}))
 
 #
-# Triggerable scheduler for the views builders
+# Triggerable scheduler for the aura builders
 #
-T('linux_views_dbg_trigger')
+T('linux_aura_dbg_trigger')
 
-B('Linux Builder (Views dbg)', 'view_dbg', 'compile', 'linux_dbg',
+B('Linux Builder (Aura dbg)', 'aura_dbg', 'compile', 'linux_dbg',
   notify_on_missing=True)
-F('view_dbg', linux().ChromiumFactory(
+F('aura_dbg', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
     options=['--compiler=goma',
+             'aura_builder',
              'base_unittests',
-             'browser_tests',
-             'content_unittests',
-             'interactive_ui_tests',
-             'ipc_tests',
-             'googleurl_unittests',
-             'media_unittests',
-             'net_unittests',
-             'printing_unittests',
-             'remoting_unittests',
-             'sql_unittests',
-             'sync_unit_tests',
-             'ui_tests',
-             'unit_tests',
-             'views_unittests',
-             'gfx_unittests',
-             'crypto_unittests',
              'cacheinvalidation_unittests',
-             'jingle_unittests'],
-    factory_properties={'gclient_env':
-                            {'GYP_DEFINES':'toolkit_views=1'},
-                        'trigger': 'linux_views_dbg_trigger'}))
+             'crypto_unittests',
+             'googleurl_unittests',
+             'jingle_unittests',
+             'media_unittests',
+             'printing_unittests',
+             'views_unittests',
+             'compositor_unittests',
+             'ipc_tests',
+             'sync_unit_tests',
+             'sql_unittests',
+             'gfx_unittests',
+             'content_unittests',
+             'browser_tests',
+             'ui_tests',
+             'interactive_ui_tests',
+             'net_unittests',
+             #'remoting_unittests',
+             'unit_tests',
+             ],
+    factory_properties={
+      'gclient_env': { 'GYP_DEFINES' : 'use_aura=1' },
+      'trigger': 'linux_aura_dbg_trigger',
+    }))
 
-B('Linux Tests (Views dbg)(1)', 'view_dbg_tests_1', 'testers',
-  'linux_views_dbg_trigger', auto_reboot=True, notify_on_missing=True)
-F('view_dbg_tests_1', linux().ChromiumFactory(
+B('Linux Tests (Aura dbg)', 'aura_dbg_tests_1', 'testers',
+  'linux_aura_dbg_trigger', auto_reboot=True, notify_on_missing=True)
+F('aura_dbg_tests_1', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
-    tests=['base',
-           'browser_tests',
+    tests=[#'base',
            'cacheinvalidation',
            'crypto',
            'googleurl',
-           'interactive_ui',
            'jingle',
            'media',
            'printing',
-           'remoting',
-           'ui',
-           'views'],
-    factory_properties={'generate_gtest_json': True,
-                        'ui_total_shards': 3, 'ui_shard_index': 1,
-                        'browser_total_shards': 3, 'browser_shard_index': 1,}))
-
-B('Linux Tests (Views dbg)(2)', 'view_dbg_tests_2', 'testers',
-  'linux_views_dbg_trigger', auto_reboot=True, notify_on_missing=True)
-F('view_dbg_tests_2', linux().ChromiumFactory(
-    slave_type='NASTester',
-    target='Debug',
-    tests=['browser_tests', 'ui', 'unit',],
-    factory_properties={'generate_gtest_json': True,
-                        'ui_total_shards': 3, 'ui_shard_index': 2,
-                        'browser_total_shards': 3, 'browser_shard_index': 2,}))
-
-B('Linux Tests (Views dbg)(3)', 'view_dbg_tests_3', 'testers',
-  'linux_views_dbg_trigger', auto_reboot=True, notify_on_missing=True)
-F('view_dbg_tests_3', linux().ChromiumFactory(
-    slave_type='NASTester',
-    target='Debug',
-    tests=['browser_tests', 'net', 'ui',],
-    factory_properties={'generate_gtest_json': True,
-                        'ui_total_shards': 3, 'ui_shard_index': 3,
-                        'browser_total_shards': 3, 'browser_shard_index': 3,}))
+           'views',
+           'aura',
+           'aura_shell',
+           'compositor',
+           'ipc',
+           'sync',
+           'sql',
+           'gfx',
+           'content',
+           #'remoting',
+           #'browser_tests',
+           #'ui'
+           #'interactive_ui',
+           ],
+    factory_properties={'generate_gtest_json': True,}))
 
 #
 # Linux Dbg Clang bot
