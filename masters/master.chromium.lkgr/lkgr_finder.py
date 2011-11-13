@@ -77,7 +77,7 @@ LKGR_STEPS = {
   'Win Builder (dbg)': [
     'compile',
   ],
-  'Vista Tests (dbg)(1)': [
+  'Win7 Tests (dbg)(1)': [
     'check_deps',
     'base_unittests',
     'cacheinvalidation_unittests',
@@ -96,19 +96,19 @@ LKGR_STEPS = {
     'gfx_unittests',
     'crypto_unittests',
   ],
-  'Vista Tests (dbg)(2)': [
+  'Win7 Tests (dbg)(2)': [
     'net_unittests', 'ui_tests', 'browser_tests',
   ],
-  'Vista Tests (dbg)(3)': [
+  'Win7 Tests (dbg)(3)': [
     'ui_tests', 'browser_tests',
   ],
-  'Vista Tests (dbg)(4)': [
+  'Win7 Tests (dbg)(4)': [
     'ui_tests', 'browser_tests',
   ],
-  'Vista Tests (dbg)(5)': [
+  'Win7 Tests (dbg)(5)': [
     'ui_tests', 'browser_tests',
   ],
-  'Vista Tests (dbg)(6)': [
+  'Win7 Tests (dbg)(6)': [
     'ui_tests', 'browser_tests',
   ],
   'Chrome Frame Tests (ie8)': [
