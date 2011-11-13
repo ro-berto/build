@@ -105,6 +105,12 @@ B('Vista Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
 B('Vista Tests (3)', 'rel_unit_3', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
+B('Win7 Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Win7 Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Win7 Tests (3)', 'rel_unit_3', 'testers|windows', 'win_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
 
 B('Win7 Sync', 'rel_sync', 'testers|windows', 'win_rel_trigger',
   notify_on_missing=True)
@@ -277,17 +283,17 @@ F('dbg_unit_6', win().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Vista Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
+B('Win7 Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-B('Vista Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
+B('Win7 Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-B('Vista Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
+B('Win7 Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-B('Vista Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
+B('Win7 Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-B('Vista Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
+B('Win7 Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-B('Vista Tests (dbg)(6)', 'dbg_unit_6', 'testers|windows', 'win_dbg_trigger',
+B('Win7 Tests (dbg)(6)', 'dbg_unit_6', 'testers|windows', 'win_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
 
 #
