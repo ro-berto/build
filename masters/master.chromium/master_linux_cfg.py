@@ -282,7 +282,7 @@ F('aura_dbg_tests_1', linux().ChromiumFactory(
            'aura_shell',
            'compositor',
            'ipc',
-           'sync',
+           #'sync',
            'sql',
            'gfx',
            'content',
