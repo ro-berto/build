@@ -331,7 +331,7 @@ F('dbg_aura', win().ChromiumFactory(
     target='Debug',
     slave_type='BuilderTester',
     tests=['aura', 'aura_shell', 'compositor', 'views'],
-    project='all.sln',
+    project='all.sln;aura_builder',
       factory_properties={'gclient_env': {
                             'GYP_DEFINES' : 'use_aura=1 fastbuild=1'},
                           'process_dumps': True,
