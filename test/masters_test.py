@@ -142,6 +142,7 @@ def main():
       'master.client.nacl.ppapi': 'NativeClientPPAPI',
       'master.client.nacl.sdk': 'NativeClientSDK',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
+      'master.client.omaha': 'Omaha',
       'master.client.pagespeed': 'PageSpeed',
       'master.client.sfntly': None,
       'master.client.skia': None,

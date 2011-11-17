@@ -342,6 +342,12 @@ class Master(object):
     project_url = 'http://skia.googlecode.com'
     is_production_host = False
 
+  class Omaha(_Base):
+    project_name = 'Omaha'
+    master_port = 9044
+    slave_port = 9144
+    master_port_alt = 9244
+
   # Used for testing on a local machine
   class Experimental(Chromium):
     project_name = 'Chromium Experimental'
