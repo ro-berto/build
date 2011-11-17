@@ -52,6 +52,7 @@ def CommonChecks(input_api, output_api):
 def RunTests(input_api, output_api):
   tests = [
       input_api.os_path.join('test', 'masters_test.py'),
+      input_api.os_path.join('test', 'masters_unittests.py'),
       # TODO(maruel): Broken.
       #input_api.os_path.join(
       #  'scripts', 'slave', 'chromium', 'archive_build_unittest.py'),
