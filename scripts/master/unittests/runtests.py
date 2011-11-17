@@ -19,8 +19,8 @@ import unittest
 
 RUNTESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(RUNTESTS_DIR, 'data')
-BASE_DIR = os.path.join(RUNTESTS_DIR, '..', '..', '..')
-sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'twisted_10_2'))
+BASE_DIR = os.path.abspath(os.path.join(RUNTESTS_DIR, '..', '..', '..'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'twisted_8_1'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'buildbot_7_12'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
