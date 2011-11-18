@@ -78,7 +78,7 @@ B('Webkit Mac10.5 (CG)', 'f_webkit_cg_rel_tests',
 F('f_webkit_cg_rel_tests', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'layout_test_platform': 'chromium-cg-mac',
@@ -144,7 +144,7 @@ F('f_webkit_cg_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit', 'webkit_unit'],
     factory_properties={
         'archive_webkit_results': True,
         'layout_part': '1:2',
@@ -158,7 +158,7 @@ F('f_webkit_cg_dbg_tests_2', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['webkit', 'webkit_gpu'],
+    tests=['webkit'],
     factory_properties={
         'archive_webkit_results': True,
         'layout_part': '2:2',
