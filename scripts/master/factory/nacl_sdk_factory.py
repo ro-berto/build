@@ -46,12 +46,6 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
                                             target_platform=target_platform)
 
 
-  def _AddTests(self, factory_cmd_obj, tests, target,
-                mode=None, factory_properties=None, options=None):
-    """Add the tests listed in 'tests' to the factory_cmd_obj."""
-    # no tests yet
-    pass
-
   def NativeClientSDKFactory(self, target='Release', clobber=False, tests=None,
                              mode=None, slave_type='BuilderTester',
                              options=None, compile_timeout=1200, build_url=None,
@@ -72,24 +66,6 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
         self._target_platform)
 
     # Add the compile step if needed.
-    if (slave_type == 'BuilderTester' or slave_type == 'Builder' or
-        slave_type == 'Trybot'):
-      nacl_sdk_cmd_obj.AddCompileStep(solution=None, mode=mode, clobber=clobber,
-                                      options=options, timeout=compile_timeout)
-      nacl_sdk_cmd_obj.AddTarballStep()
-
-    # Add this archive build step.
-    if factory_properties.get('archive_build'):
-      nacl_sdk_cmd_obj.AddArchiveBuild(
-          factory_properties['archive_src'],
-          factory_properties['archive_dst_base'],
-          factory_properties['archive_dst'],
-          data_description='to revision')
-      if factory_properties.get('archive_dst_latest'):
-        nacl_sdk_cmd_obj.AddArchiveBuild(
-            factory_properties['archive_src'],
-            factory_properties['archive_dst_base'],
-            factory_properties['archive_dst_latest'],
-            data_description='to latest')
+    nacl_sdk_cmd_obj.AddPrepareSDKStep()
 
     return factory

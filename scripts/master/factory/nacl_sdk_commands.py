@@ -83,51 +83,8 @@ class NativeClientSDKCommands(commands.FactoryCommands):
     self._archive_file_tool = J(s_dir, 'archive_file.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
 
-  def AddCompileStep(self, solution, clobber=False, description='compiling',
-                     descriptionDone='compile', timeout=1200, mode=None,
-                     options=None):
-    # TODO
-    pass
-
-  def AddArchiveBuild(self, src, dst_base, dst,
-                      data_description='build', mode='dev', show_url=True):
-    """Adds a step to the factory to archive a build."""
-    if show_url:
-      url = '%s/%s' %  (self._archive_url, dst_base)
-      text = 'download'
-    else:
-      url = None
-      text = None
-
-    cmd = [self._python, self._archive_file_tool,
-           '--source', src,
-           '--target', WithProperties('%s/%s' % (dst_base, dst))]
-
-    if 'SDK' in self._target:
-      cmd.append('--force-ssh')
-
-    self.AddArchiveStep(data_description=data_description, base_url=url,
-                        link_text=text, command=cmd)
-
-  def AddArchiveStep(self, data_description, base_url, link_text, command):
-    if self._target_platform.startswith('win'):
-      env = self._cygwin_env.copy()
-      env['PATH'] = r'e:\b\depot_tools;' + env['PATH']
-    else:
-      env = self._build_env
-    step_name = ('archive_%s' % data_description).replace(' ', '_')
-    self._factory.addStep(archive_command.ArchiveCommand,
-                          name=step_name,
-                          timeout=600,
-                          description='archiving %s' % data_description,
-                          descriptionDone='archived %s' % data_description,
-                          base_url=base_url,
-                          env=env,
-                          link_text=link_text,
-                          command=command)
-
-  def AddTarballStep(self):
-    """Adds a step to create a release tarball."""
+  def AddPrepareSDKStep(self):
+    """Adds a step to build the sdk."""
 
     cmd = ' '.join([self._python, 'src/build_tools/buildbot_run.py'])
     if self._target_platform.startswith('win'):
