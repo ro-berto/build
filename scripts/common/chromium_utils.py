@@ -463,10 +463,31 @@ def ExtractZip(filename, output_dir, verbose=True):
   """
   MaybeMakeDirectory(output_dir)
 
-  # On Windows we use the python zip module; on Linux and Mac, we use the zip
-  # command as it will handle links and file bits (executable).  Which is much
+  # On Linux and Mac, we use the unzip command as it will
+  # handle links and file bits (executable), which is much
   # easier then trying to do that with ZipInfo options.
-  if IsWindows():
+  #
+  # On Windows, try to use 7z if it is installed, otherwise fall back to python
+  # zip module and pray we don't have files larger than 512MB to unzip.
+  unzip_cmd = None
+  if IsMac() or IsLinux():
+    unzip_cmd = ['unzip', '-o']
+  elif IsWindows() and os.path.exists('C:\\Program Files\\7-Zip\\7z.exe'):
+    unzip_cmd = ['C:\\Program Files\\7-Zip\\7z.exe', 'x', '-y']
+
+  if unzip_cmd:
+    # Make sure path is absolute before changing directories.
+    filepath = os.path.abspath(filename)
+    saved_dir = os.getcwd()
+    os.chdir(output_dir)
+    command = unzip_cmd + [filepath]
+    result = RunCommand(command)
+    os.chdir(saved_dir)
+    if result:
+      raise ExternalError('unzip failed: %s => %s' %
+                          (str(command), result))
+  else:
+    assert IsWindows()
     zf = zipfile.ZipFile(filename)
 
     # Grabs all the directories in the zip structure. This is necessary
@@ -484,18 +505,6 @@ def ExtractZip(filename, output_dir, verbose=True):
       outfile = open(os.path.join(output_dir, name), 'wb')
       outfile.write(zf.read(name))
       outfile.close()
-  else:
-    assert IsMac() or IsLinux()
-    # Make sure path is absolute before changing directories.
-    filepath = os.path.abspath(filename)
-    saved_dir = os.getcwd()
-    os.chdir(output_dir)
-    command = ['unzip', '-o', filepath]
-    result = RunCommand(command)
-    os.chdir(saved_dir)
-    if result:
-      raise ExternalError('unzip failed: %s => %s' %
-                          (str(command), result))
 
 
 def WindowsPath(path):
