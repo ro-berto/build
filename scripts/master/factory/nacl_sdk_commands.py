@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -7,10 +7,8 @@
 
 Contains the Native Client SDK specific commands. Based on commands.py"""
 
-from buildbot.process.properties import WithProperties
 from master import chromium_step
 from master.factory import commands
-from master.log_parser import archive_command
 
 
 class NativeClientSDKCommands(commands.FactoryCommands):
