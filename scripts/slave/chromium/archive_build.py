@@ -16,6 +16,7 @@
 import glob
 import optparse
 import os
+import platform
 import simplejson
 import sys
 import re
@@ -184,13 +185,50 @@ class StagerBase(object):
     self.last_webkit_revision = None
     self.last_v8_revision = None
 
-    self._extra_files = self.GetExtraFiles(options.extra_archive_paths,
-                                           ARCHIVE_FILE_NAME)
-    self._extra_symbols = self.GetExtraFiles(options.extra_archive_paths,
-                                             SYMBOL_FILE_NAME)
-    self._extra_tests = self.GetExtraFiles(options.extra_archive_paths,
-                                           TEST_FILE_NAME)
+    self._symbol_files = self.BuildOldFilesList(SYMBOL_FILE_NAME)
+    self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
+
     self._dual_upload = options.factory_properties.get('dual_upload', False)
+
+  def BuildOldFilesList(self, source_file_name):
+    """Build list of files from the old "file of paths" style input.
+
+    Combine any source_file_name inputs found in the default tools dir and in
+    any dirs given with --extra-archive-paths.
+    """
+    default_source = os.path.join(self._tool_dir, source_file_name)
+    if os.path.exists(default_source):
+      file_list = open(default_source).readlines()
+    else:
+      print 'WARNING: No default %s list found at %s' % (source_file_name,
+                                                         default_source)
+      file_list = []
+    file_list = [f.strip() for f in file_list]
+    file_list.extend(self.GetExtraFiles(self.options.extra_archive_paths,
+                                        source_file_name))
+    file_list = ExpandWildcards(self._build_dir, file_list)
+    return file_list
+
+  def ParseFilesList(self, buildtype, arch):
+    """Determine the list of archive files for a given release.
+
+    NOTE: A version of this handling is also in
+    build-internal/scripts/slave-internal/branched/stage_build.py
+    so be sure to update that if this is updated.
+    """
+    files_file = os.path.join(self._tool_dir, 'FILES.cfg')
+    if not os.path.exists(files_file):
+      raise StagingError('Files list does not exist (%s).' % files_file)
+    exec_globals = {'__builtins__': None}
+
+    files_list = None
+    execfile(files_file, exec_globals)
+    files_list = [
+        fileobj['filename'] for fileobj in exec_globals['FILES']
+        if (buildtype in fileobj['buildtype'] and arch in fileobj['arch'] and
+            not fileobj.get('archive'))
+    ]
+    return files_list
 
   def MyCopyFileToDir(self, filename, destination, gs_base, gs_subdir='',
                       mimetype=None):
@@ -322,11 +360,9 @@ class StagerBase(object):
     Returns a list of any that are not available.
     """
     not_found = []
-    needed = open(os.path.join(self._tool_dir, ARCHIVE_FILE_NAME)).readlines()
+    needed = self._archive_files
     needed = [os.path.join(self._build_dir, x.rstrip()) for x in needed]
     needed.append(self._version_file)
-    # Append any extras from the --extra-archive-paths argument:
-    needed.extend(self._extra_files)
     # Add Windows installer.
     if chromium_utils.IsWindows():
       needed.append(self._installer_file)
@@ -365,13 +401,11 @@ class StagerBase(object):
       return False
     return [x for x in file_list if not _IgnoreFile(os.path.basename(x))]
 
-  def CreateArchiveFile(self, zip_base_name, archive_source_file,
-                        extra_file_list=None):
+  def CreateArchiveFile(self, zip_base_name, zip_file_list):
     """Put files into an archive dir as well as a zip of said archive dir.
 
-    This method takes the list of files described by the file in
-    archive_source file and appends to it the files in extra_file_list.
-    It then prunes non-existing files from that list.
+    This method takes the list of files to archive, then prunes non-existing
+    files from that list.
 
     If that list is empty CreateArchiveFile returns ('', '').
     Otherwise, this method returns the archive directory the files are
@@ -380,24 +414,18 @@ class StagerBase(object):
     TODO(robertshield): The returned zip_dir is never actually used -
     it seems like we could just get rid of it.
     """
-    zip_file_list = open(os.path.join(self._tool_dir,
-                                      archive_source_file)).readlines()
-    zip_file_list = ExpandWildcards(self._build_dir, zip_file_list)
-    if extra_file_list:
-      zip_file_list.extend(extra_file_list)
+    # Filter out files that don't exist.
+    filtered_file_list = [f.strip() for f in zip_file_list if
+                          os.path.exists(os.path.join(self._build_dir,
+                                                      f.strip()))]
 
-    # Now filter out files that don't exist.
-    zip_file_list = [f.strip() for f in zip_file_list
-                     if os.path.exists(os.path.join(self._build_dir,
-                                                    f.strip()))]
-
-    if not zip_file_list:
+    if not filtered_file_list:
       # We have no files to archive, don't create an empty zip file.
       return ('', '')
 
     (zip_dir, zip_file) = chromium_utils.MakeZip(self._staging_dir,
                                                  zip_base_name,
-                                                 zip_file_list,
+                                                 filtered_file_list,
                                                  self._build_dir,
                                                  raise_error=False)
     if not os.path.exists(zip_file):
@@ -414,8 +442,7 @@ class StagerBase(object):
       # Create a zip archive of the symbol files.  This must be done after the
       # main zip archive is created, or the latter will include this one too.
       sym_zip_file = self.CreateArchiveFile('chrome-win32-syms',
-                                            SYMBOL_FILE_NAME,
-                                            self._extra_symbols)[1]
+                                            self._symbols_files)[1]
 
       # symbols_copy should hold absolute paths at this point.
       # We avoid joining absolute paths because the version of python used by
@@ -431,8 +458,7 @@ class StagerBase(object):
     elif chromium_utils.IsLinux():
       # If there are no symbol files, then sym_zip_file will be an empty string.
       sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
-                                            SYMBOL_FILE_NAME,
-                                            self._extra_symbols)[1]
+                                            self._symbols_files)[1]
       if not sym_zip_file:
         print 'No symbols found, not uploading symbols'
         return 0
@@ -499,18 +525,7 @@ class StagerBase(object):
           'Platform "%s" is not currently supported.' % sys.platform)
 
   def UploadTests(self, www_dir, gs_base):
-    # Build up the list of files to save from the tools TESTS file as well
-    # as any extras we've been given.
-    try:
-      test_file = os.path.join(self._tool_dir, TEST_FILE_NAME)
-      test_file_list = open(test_file).readlines()
-    except IOError, e:
-      print e
-      test_file_list = []
-    test_file_list = [tf.strip() for tf in test_file_list]
-    test_file_list.extend(self._extra_tests)
-    test_file_list = ExpandWildcards(self._build_dir, test_file_list)
-
+    test_file_list = self._test_files
     if not test_file_list:
       return
 
@@ -634,6 +649,14 @@ class StagerBase(object):
       raise StagingError('No build revision was provided')
     print 'Staging in %s' % self._staging_dir
 
+    arch = platform.architecture(bits='unknown')[0]
+    if arch == 'unknown':
+      raise StagingError('Could not determine build architecture')
+    files_list = self.ParseFilesList(options.mode, arch)
+    files_list = ExpandWildcards(self._build_dir, files_list)
+    self._archive_files = files_list
+    self._archive_files.extend(self.GetExtraFiles(options.extra_archive_paths,
+                                                  ARCHIVE_FILE_NAME))
     # Check files and revision numbers.
     not_found = self._VerifyFiles()
     print 'last change: %d' % self._build_revision
@@ -649,8 +672,7 @@ class StagerBase(object):
 
     archive_base_name = 'chrome-%s' % chromium_utils.PlatformName()
     archive_file = self.CreateArchiveFile(archive_base_name,
-                                          ARCHIVE_FILE_NAME,
-                                          self._extra_files)[1]
+                                          self._archive_files)[1]
 
     # Generate a change log or an error message if no previous revision.
     changelog_path = os.path.join(self._staging_dir, 'changelog.xml')
@@ -723,6 +745,9 @@ class StagerBase(object):
               'Platform "%s" is not currently supported.' % sys.platform)
 
     # Upload extra build artifacts.
+    # TODO(mmoss): This should be pulled from FILES.cfg. remoting-it2me.zip is
+    # already in there. Need to add devtools_frontend.zip, then put in handling
+    # here based on the 'archive' field.
     self._UploadFile('devtools_frontend.zip', www_dir, gs_base)
     self._UploadFile('remoting-it2me.zip', www_dir, gs_base)
 

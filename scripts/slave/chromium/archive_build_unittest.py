@@ -44,6 +44,25 @@ TEMP_FILES_WITH_WILDCARDS = ['foo.txt',
                              os.path.join('fee', '*', 'fo'),
                              os.path.join('foo', 'fee', 'faa', 'boo.txt')]
 
+# Sample FILES.cfg-style contents.
+TEST_FILES_CFG = [
+  {
+    'filename': 'allany.txt',
+    'arch': ['32bit', '64bit'],
+    'buildtype': ['dev', 'official'],
+  },
+  {
+    'filename': 'official64.txt',
+    'arch': ['64bit'],
+    'buildtype': ['official'],
+  },
+  {
+    'filename': 'dev32.txt',
+    'arch': ['32bit'],
+    'buildtype': ['dev'],
+  },
+]
+
 ZIP_TEST_FILES = ['file1.txt',
                   'file2.txt',
                   'file3.txt']
@@ -114,7 +133,7 @@ class ArchiveTest(unittest.TestCase):
     if chromium_utils.IsWindows():
       self.build_dir = os.path.join(self.temp_dir, 'build')
     elif chromium_utils.IsLinux():
-      self.build_dir = os.path.join(self.temp_dir, 'sconsbuild')
+      self.build_dir = os.path.join(self.temp_dir, 'out')
     elif chromium_utils.IsMac():
       self.build_dir = os.path.join(self.temp_dir, 'xcodebuild')
     else:
@@ -187,15 +206,16 @@ class ArchiveTest(unittest.TestCase):
   def createZipFileTestDir(self):
     self.prepareToolDir()
 
-    self.FILES = os.path.join(self.tool_dir, 'FILES')
+    self.FILES = os.path.join(self.tool_dir, 'FILES.cfg')
     f = open(self.FILES, 'w')
-    f.write('\n'.join(ZIP_TEST_FILES))
+    f.write("FILES = %s" % str(TEST_FILES_CFG))
     f.close()
 
     self.EMPTY_FILES = os.path.join(self.tool_dir, 'EMPTY_FILES')
     f = open(self.EMPTY_FILES, 'a')
 
-    self.createFileSetInBuildDir(ZIP_TEST_FILES + EXTRA_ZIP_TEST_FILES)
+    self.createFileSetInBuildDir(ZIP_TEST_FILES + EXTRA_ZIP_TEST_FILES +
+                                 [i['filename'] for i in TEST_FILES_CFG])
 
   def createTestFiles(self, file_list):
     self.prepareToolDir()
@@ -275,12 +295,19 @@ class ArchiveTest(unittest.TestCase):
 
     self.initializeStager()
     archive_name = 'test'
+    arch = '64bit'
+    buildtype = 'official'
+    files_list = self.stager.ParseFilesList(buildtype, arch)
+    # Verify FILES.cfg was parsed correctly.
+    for i in TEST_FILES_CFG:
+      if arch in i['arch'] and buildtype in i['buildtype']:
+        self.assertTrue(i['filename'] in files_list)
     zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,
-        os.path.basename(self.FILES))
+                                                           files_list)
     self.assertTrue(zip_dir)
     self.assertTrue(zip_file_path)
     self.assertTrue(os.path.exists(zip_file_path))
-    self.verifyZipFile(zip_dir, zip_file_path, archive_name, ZIP_TEST_FILES)
+    self.verifyZipFile(zip_dir, zip_file_path, archive_name, files_list)
 
   def testCreateEmptyArchiveFile(self):
     self.createZipFileTestDir()
@@ -290,19 +317,6 @@ class ArchiveTest(unittest.TestCase):
     self.assertFalse(zip_dir)
     self.assertFalse(zip_file)
     self.assertFalse(os.path.exists(zip_file))
-
-  def testCreateArchiveFileWithExtras(self):
-    self.createZipFileTestDir()
-    self.initializeStager()
-    archive_name = 'test_with_extras'
-    zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,
-        os.path.basename(self.FILES), extra_file_list=EXTRA_ZIP_TEST_FILES)
-
-    self.assertTrue(zip_dir)
-    self.assertTrue(zip_file_path)
-    self.assertTrue(os.path.exists(zip_file_path))
-    self.verifyZipFile(zip_dir, zip_file_path, archive_name,
-                       ZIP_TEST_FILES + EXTRA_ZIP_TEST_FILES)
 
   def testUploadTests(self):
     # This test is currently only applicable on Windows.
@@ -417,4 +431,6 @@ class ArchiveTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-  unittest.main()
+  # Run with a bit more output.
+  suite = unittest.TestLoader().loadTestsFromTestCase(ArchiveTest)
+  unittest.TextTestRunner(verbosity=2).run(suite)
