@@ -24,7 +24,7 @@ class OmahaFactory(gclient_factory.GClientFactory):
                                             target_platform=target_platform)
 
 
-  def OmahaFactory(self, target='release', clobber=False, tests=None,
+  def OmahaFactory(self, target='opt-win', tests=None,
                    slave_type='BuilderTester', options=None,
                    factory_properties=None, target_arch=None):
     tests = tests or []
@@ -42,7 +42,7 @@ class OmahaFactory(gclient_factory.GClientFactory):
                                                  target_arch)
 
     if (slave_type in ['BuilderTester', 'Builder']):
-      omaha_cmd_obj.AddHammer(target, clobber, options)
+      omaha_cmd_obj.AddHammer(target, options)
 
     # We don't support running custom tests yet.
     assert(tests == [])

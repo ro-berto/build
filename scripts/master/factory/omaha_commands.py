@@ -26,14 +26,10 @@ class OmahaCommands(commands.FactoryCommands):
     self._hammer_tool = self.PathJoin(self._omaha_script_dir, 'hammer.py')
 
 
-  def AddHammer(self, target=None, clobber=False, options=None):
+  def AddHammer(self, target=None, options=None):
     options = options or []
     cmd = [self._hammer_tool,
-           'target', target,
-           'clobber', clobber]
+           '--target', target]
     cmd.extend(options)
-
-    # We don't support clobber build yet.
-    assert(clobber == False)
 
     self.AddTestStep(shell.ShellCommand, 'Hammer', cmd, timeout=3600)

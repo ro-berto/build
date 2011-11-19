@@ -14,22 +14,33 @@ S = helper.Scheduler
 
 def win(): return omaha_factory.OmahaFactory('win32')
 
+defaults['category'] = '1windows'
+
+# Main scheduler for the omaha trunk.
+#
+S('win_trunk', branch='trunk', treeStableTimer=60)
 
 ################################################################################
 ## Release
 ################################################################################
 
-defaults['category'] = '1windows'
-
-# Main debug scheduler for src/
-#
-S('win_rel', branch='trunk', treeStableTimer=60)
-
-#
-# Win Rel Builder
-#
-B('Win Release', 'rel', 'compile|windows', 'win_rel', notify_on_missing=True)
+B('Win7 Release', 'rel', 'compile|windows', 'win_trunk', notify_on_missing=True)
 F('rel', win().OmahaFactory())
+
+B('Vista Release', 'rel', 'compile|windows', 'win_trunk',
+  notify_on_missing=True)
+B('XP Release', 'rel', 'compile|windows', 'win_trunk', notify_on_missing=True)
+
+
+################################################################################
+## Release
+################################################################################
+
+B('Win7 Debug', 'dbg', 'compile|windows', 'win_trunk', notify_on_missing=True)
+F('dbg', win().OmahaFactory(target='dbg-win'))
+
+B('Vista Debug', 'dbg', 'compile|windows', 'win_trunk', notify_on_missing=True)
+B('XP Debug', 'dbg', 'compile|windows', 'win_trunk', notify_on_missing=True)
 
 
 def Update(config, active_master, c):
