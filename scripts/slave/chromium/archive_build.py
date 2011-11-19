@@ -650,6 +650,10 @@ class StagerBase(object):
     print 'Staging in %s' % self._staging_dir
 
     arch = platform.architecture(bits='unknown')[0]
+    # TODO(mmoss): This isn't supported on Windows? Oh, well, we only build
+    # 32-bit now anyhow, so just use that.
+    if chromium_utils.IsWindows():
+      arch = '32bit'
     if arch == 'unknown':
       raise StagingError('Could not determine build architecture')
     files_list = self.ParseFilesList(self.options.mode, arch)
