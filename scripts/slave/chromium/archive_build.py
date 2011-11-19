@@ -442,7 +442,7 @@ class StagerBase(object):
       # Create a zip archive of the symbol files.  This must be done after the
       # main zip archive is created, or the latter will include this one too.
       sym_zip_file = self.CreateArchiveFile('chrome-win32-syms',
-                                            self._symbols_files)[1]
+                                            self._symbol_files)[1]
 
       # symbols_copy should hold absolute paths at this point.
       # We avoid joining absolute paths because the version of python used by
@@ -458,7 +458,7 @@ class StagerBase(object):
     elif chromium_utils.IsLinux():
       # If there are no symbol files, then sym_zip_file will be an empty string.
       sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
-                                            self._symbols_files)[1]
+                                            self._symbol_files)[1]
       if not sym_zip_file:
         print 'No symbols found, not uploading symbols'
         return 0
