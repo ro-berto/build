@@ -652,11 +652,11 @@ class StagerBase(object):
     arch = platform.architecture(bits='unknown')[0]
     if arch == 'unknown':
       raise StagingError('Could not determine build architecture')
-    files_list = self.ParseFilesList(options.mode, arch)
+    files_list = self.ParseFilesList(self.options.mode, arch)
     files_list = ExpandWildcards(self._build_dir, files_list)
     self._archive_files = files_list
-    self._archive_files.extend(self.GetExtraFiles(options.extra_archive_paths,
-                                                  ARCHIVE_FILE_NAME))
+    self._archive_files.extend(self.GetExtraFiles(
+        self.options.extra_archive_paths, ARCHIVE_FILE_NAME))
     # Check files and revision numbers.
     not_found = self._VerifyFiles()
     print 'last change: %d' % self._build_revision
