@@ -61,14 +61,6 @@ F('linux64_full', linux().ChromiumFactory(
         'gs_bucket': 'gs://chromium-browser-continuous',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-B('Linux Touch', 'linux_touch_full', 'compile|testers', 'chromium_lkgr')
-F('linux_touch_full', linux().ChromiumFactory(
-    clobber=True,
-    factory_properties={
-        'archive_build': True,
-        'gs_bucket': 'gs://chromium-browser-continuous',
-        'gclient_env': {'GYP_DEFINES':'touchui=1'}}))
-
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
