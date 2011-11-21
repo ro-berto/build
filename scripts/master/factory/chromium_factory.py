@@ -176,7 +176,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
-               custom_deps_list=None):
+               custom_deps_list=None, nohooks_on_update=False):
     if full_checkout:
       needed_components = None
     else:
@@ -202,7 +202,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     gclient_factory.GClientFactory.__init__(self, build_dir,
                                             internal_custom_deps_list,
-                                            target_platform=target_platform)
+                                            target_platform=target_platform,
+                                            nohooks_on_update=nohooks_on_update)
 
   def _AddTests(self, factory_cmd_obj, tests, mode=None,
                 factory_properties=None):
@@ -529,6 +530,48 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self.PostBuildFactory(factory, target=target, slave_type=slave_type,
                           factory_properties=factory_properties)
     return factory
+
+  def ChromiumAnnotationFactory(self, annotation_script,
+                                branch='master',
+                                target='Release',
+                                slave_type='AnnotatedBuilderTester',
+                                clobber=False,
+                                compile_timeout=6000,
+                                build_url=None,
+                                project=None,
+                                factory_properties=None, options=None,
+                                tests=None,
+                                gclient_deps=None):
+    """Annotation-driven Chromium buildbot factory.
+
+    Line a ChromiumFactory, but non-sync steps (compile, run tests)
+    are specified in a script that uses @@@BUILD_STEP descriptive
+    text@@@ style annotations.
+
+    Note new slave type AnnotatedBuilderTester; we don't want a
+    compile step added.
+    TODO(jrg): is a new slave type the right direction?
+    """
+    # Setup factory.
+    factory_properties = factory_properties or {}
+    options = options or {}
+    factory = self.BuildFactory(target, clobber,
+                                None, None, # tests_for_build, mode,
+                                slave_type, options, compile_timeout, build_url,
+                                project, factory_properties,
+                                gclient_deps=gclient_deps)
+
+    # Get the factory command object to create new steps to the factory.
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
+                                                          target,
+                                                          self._build_dir,
+                                                          self._target_platform)
+
+    # Add the main build.
+    chromium_cmd_obj.AddAnnotationStep('build', annotation_script)
+
+    return factory
+
 
   def ReliabilityTestsFactory(self, platform='win'):
     """Create a BuildFactory to run a reliability slave."""

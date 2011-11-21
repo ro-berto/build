@@ -870,6 +870,23 @@ class ChromiumCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           command=cmd)
 
+  def AddAnnotationStep(self, name, cmd, timeout=6000):
+    """Add an @@@BUILD_STEP step@@@ annotation script build command.
+
+    This function allows the caller to specify the name of the
+    annotation script.  In contrast, AddAnnotatedSteps() simply adds
+    in a hard-coded annotation script that is not yet in the tree.
+    TODO(jrg): resolve this inconsistency with the
+    chrome-infrastrucure team; we shouldn't need two functions."""
+    self._factory.addStep(chromium_step.AnnotatedCommand,
+                          name=name,
+                          description=name,
+                          timeout=timeout,
+                          haltOnFailure=True,
+                          workdir=self._build_dir,
+                          command=cmd)
+
+
   def _GetPyAutoCmd(self, src_base=None, script=None, factory_properties=None,
                     dataset=None, matrix=True, media_home=None, test_name=None,
                     http=False, nocache=False, verbose=False, suite_name=None,
