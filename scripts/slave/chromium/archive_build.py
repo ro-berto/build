@@ -189,6 +189,7 @@ class StagerBase(object):
     self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
 
     self._dual_upload = options.factory_properties.get('dual_upload', False)
+    self._archive_files = None
 
   def BuildOldFilesList(self, source_file_name):
     """Build list of files from the old "file of paths" style input.

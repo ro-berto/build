@@ -54,6 +54,12 @@ class ChromiumGitPoller(gitpoller.GitPoller):
   track of the commit order of git tags."""
 
   def __init__(self, *args, **kwargs):
+    """Do not use /tmp as the default work dir, use the master checkout
+    directory.
+    """
+    if not kwargs.get('workdir'):
+      # Make it non-absolute so it's set relative to the master's directory.
+      kwargs['workdir'] = 'git_poller_%s' % os.path.basename(kwargs['repourl'])
     gitpoller.GitPoller.__init__(self, *args, **kwargs)
     self.comparator = GitTagComparator()
 
