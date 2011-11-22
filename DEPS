@@ -3,10 +3,10 @@ deps = {
     "/trunk/deps/third_party/lighttpd@58968",
 
   "build/third_party/gsutil":
-    "svn://svn.chromium.org/gsutil/trunk/src@133",
+    "svn://svn.chromium.org/gsutil/trunk/src@145",
 
   "build/third_party/gsutil/boto":
-    "svn://svn.chromium.org/boto@2",
+    "svn://svn.chromium.org/boto@3",
 
   "depot_tools":
     "/trunk/tools/depot_tools",
