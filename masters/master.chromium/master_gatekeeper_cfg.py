@@ -66,3 +66,18 @@ def Update(config, active_master, c):
       forgiving_steps=forgiving_steps,
       tree_status_url=active_master.tree_status_url,
       use_getname=True))
+
+  # Notify nacl-broke@google.com when nacl_integration fails.
+  c['status'].append(gatekeeper.GateKeeper(
+      fromaddr=active_master.from_address,
+      categories_steps=['nacl_integration'],
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
+              'revision %(revision)s',
+      sherriffs=None,
+      extraRecipients=['nacl-broke@google.com'],
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      tree_status_url=None,
+      use_getname=True))
