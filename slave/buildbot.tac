@@ -8,6 +8,7 @@
 # Chrome Buildbot slave configuration
 
 import os
+import socket
 import sys
 
 from twisted.application import service
@@ -41,26 +42,33 @@ umask = None
 
 if slavename is None:
     # Automatically determine the host name.
-    import socket
-    slavename = socket.getfqdn().split('.')[0].lower()
+    slavename = os.environ.get(
+        'TESTING_SLAVENAME', socket.getfqdn().split('.')[0].lower())
+print 'Using slave name %s' % slavename
 
 if password is None:
-    msg = '*** No password configured in %s.\n' % repr(__file__)
-    sys.stderr.write(msg)
+    print >> sys.stderr, '*** No password configured in %s.' % repr(__file__)
     sys.exit(1)
 
 if ActiveMaster is None:
-  ActiveMaster = slave_utils.GetActiveMasterConfig()
+    master_name = os.environ.get(
+        'TESTING_MASTER', slave_utils.GetActiveMaster())
+    if not master_name:
+        print >> sys.stderr, '*** Failed to detect the active master'
+        sys.exit(1)
+    print 'Using master %s' % master_name
+    ActiveMaster = getattr(config.Master, master_name)
 
 if host is None:
-    host = ActiveMaster.master_host
+    host = os.environ.get('TESTING_MASTER_HOST', ActiveMaster.master_host)
+print 'Using master host %s' % host
 
 if port is None:
     port = ActiveMaster.slave_port
+print 'Using master port %s' % port
 
 if basedir is None:
-    dir, _file = os.path.split(__file__)
-    basedir = os.path.abspath(dir)
+    basedir = os.path.dirname(os.path.abspath(__file__))
 
 
 application = service.Application('buildslave')

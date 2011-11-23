@@ -279,13 +279,6 @@ def GetActiveMaster():
         return slave['master']
 
 
-def GetActiveMasterConfig():
-  master = GetActiveMaster()
-  if not master:
-    return None
-  return getattr(config.Master, master, None)
-
-
 def CopyFileToArchiveHost(src, dest_dir):
   """A wrapper method to copy files to the archive host.
   It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
