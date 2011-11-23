@@ -35,7 +35,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
   parameters type."""
 
 
-  def __init__(self, tree_status_url=None, tree_message=None,
+  def __init__(self, tree_status_url, tree_message=None,
                check_revisions=True, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
@@ -66,8 +66,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
     self._last_closure_revision = 0
 
-    if tree_status_url:
-      self.password = get_password.Password('.status_password').GetPassword()
+    self.password = get_password.Password('.status_password').GetPassword()
 
 
   def isInterestingStep(self, build_status, step_status, results):
@@ -163,18 +162,12 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
       return chromium_notifier.ChromiumNotifier.buildMessage(
                  self, builder_name, build_status, results, step_name)
 
-    if self.tree_status_url:
-      connection = client.getPage(self.tree_status_url, agent='buildbot')
-      connection.addCallbacks(Success, Failure)
-      return connection
-    else:
-      return Success(None)
+    connection = client.getPage(self.tree_status_url, agent='buildbot')
+    connection.addCallbacks(Success, Failure)
+    return connection
 
   def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
-    if not self.tree_status_url:
-      log.msg('[gatekeeper] No tree status url, not closing the tree.')
-      return defer.succeed(0)
     log.msg(
         '[gatekeeper] Trying to close the tree at %s.' % self.tree_status_url)
 

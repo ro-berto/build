@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from master import gatekeeper
+from master import failures_notifier
 from master import master_utils
 
 # This is the list of the builder categories and the corresponding critical
@@ -65,8 +65,9 @@ exclusions = {
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'archive_build', 'start_crash_handler']
 
+# TODO(timurrrr): rename this file to notifier_cfg.py in a follow-up CL.
 def Update(config, active_master, c):
-  c['status'].append(gatekeeper.GateKeeper(
+  c['status'].append(failures_notifier.FailuresNotifier(
       fromaddr=active_master.from_address,
       categories_steps=categories_steps,
       exclusions=exclusions,
@@ -76,7 +77,6 @@ def Update(config, active_master, c):
       extraRecipients=active_master.tree_closing_notification_recipients,
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
-      tree_status_url=None,
       use_getname=True,
       public_html='../master.chromium/public_html',
       sheriffs=['sheriff_memory'],
