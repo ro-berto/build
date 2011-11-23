@@ -25,12 +25,19 @@ from slave.gtest.test_result import TestResult
 
 # A JSON results generator for generic tests.
 
-_JSON_PREFIX = "ADD_RESULTS("
-_JSON_SUFFIX = ");"
+JSON_PREFIX = "ADD_RESULTS("
+JSON_SUFFIX = ");"
+
+
+def has_json_wrapper(string):
+  return string.startswith(JSON_PREFIX) and string.endswith(JSON_SUFFIX)
 
 
 def strip_json_wrapper(json_content):
-  return json_content[len(_JSON_PREFIX):len(json_content) - len(_JSON_SUFFIX)]
+  # FIXME: Kill this code once the server returns json instead of jsonp.
+  if has_json_wrapper(json_content):
+    return json_content[len(JSON_PREFIX):-len(JSON_SUFFIX)]
+  return json_content
 
 
 def convert_trie_to_flat_paths(trie, prefix=None):
@@ -178,7 +185,7 @@ class JSONResultsGenerator(object):
   INCREMENTAL_RESULTS_FILENAME = "incremental_results.json"
 
   URL_FOR_TEST_LIST_JSON = \
-    "http://%s/testfile?builder=%s&name=%s&testlistjson=1&testtype=%s"
+    "http://%s/testfile?builder=%s&name=%s&testlistjson=1&testtype=%s&master=%s"
 
   def __init__(self, builder_name, build_name, build_number,
     results_file_base_path, builder_base_url,
@@ -309,7 +316,7 @@ class JSONResultsGenerator(object):
   def _write_json(self, json_object, file_path):
     # Specify separators in order to get compact encoding.
     json_data = simplejson.dumps(json_object, separators=(',', ':'))
-    json_string = _JSON_PREFIX + json_data + _JSON_SUFFIX
+    json_string = json_data
     if self._file_writer:
       self._file_writer(file_path, json_string)
     else:
@@ -379,7 +386,8 @@ class JSONResultsGenerator(object):
       (urllib2.quote(self._test_results_server),
        urllib2.quote(self._builder_name),
        self.RESULTS_FILENAME,
-       urllib2.quote(self._test_type)))
+       urllib2.quote(self._test_type),
+       urllib2.quote(self._master_name)))
 
     try:
       results_file = urllib2.urlopen(results_file_url)

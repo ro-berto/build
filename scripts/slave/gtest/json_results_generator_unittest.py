@@ -11,6 +11,7 @@
 
 import unittest
 
+from slave.gtest import json_results_generator
 from slave.gtest.json_results_generator import generate_test_timings_trie
 from slave.gtest.json_results_generator import JSONResultsGenerator
 from slave.gtest.test_result import TestResult
@@ -36,14 +37,24 @@ class JSONGeneratorTest(unittest.TestCase):
     self._FAILS_count = 0
     self._fixable_count = 0
 
+  def test_strip_json_wrapper(self):
+    json = "['contents']"
+    self.assertEqual(json_results_generator.strip_json_wrapper(
+        json_results_generator.JSON_PREFIX + json +
+        json_results_generator.JSON_SUFFIX),
+        json)
+    self.assertEqual(json_results_generator.strip_json_wrapper(json), json)
+
   def _test_json_generation(self, passed_tests_list, failed_tests_list):
     tests_set = set(passed_tests_list) | set(failed_tests_list)
 
     get_test_set = lambda ts, label: set([t for t in ts if t.startswith(label)])
     DISABLED_tests = get_test_set(tests_set, 'DISABLED_')
     FLAKY_tests = get_test_set(tests_set, 'FLAKY_')
+    MAYBE_tests = get_test_set(tests_set, 'MAYBE_')
     FAILS_tests = get_test_set(tests_set, 'FAILS_')
-    PASS_tests = tests_set - (DISABLED_tests | FLAKY_tests | FAILS_tests)
+    PASS_tests = tests_set - (DISABLED_tests | FLAKY_tests | FAILS_tests |
+        MAYBE_tests)
 
     failed_tests = set(failed_tests_list) - DISABLED_tests
     failed_count_map = dict([(t, 1) for t in failed_tests])
