@@ -1,2 +1,0 @@
-The compile.py script will look in this directory for distcc host files to
-determine where the Linux bots should distribute their compiles to.

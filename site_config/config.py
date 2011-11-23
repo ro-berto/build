@@ -145,9 +145,6 @@ class Archive(config_private.Archive):
                         'npchrome_frame.pdb', 'chrome_launcher.pdb',
                         'chrome_frame_helper.pdb', 'chrome_frame_helper.pdb']
 
-  # TODO(thestig) Add 64-bit symbols once we get there.
-  symbols_to_archive_linux = ['chrome.breakpad.ia32']
-
   # Binaries to archive on the source server with the sourcified symbols.
   symsrc_binaries = [
       'chrome.dll',
