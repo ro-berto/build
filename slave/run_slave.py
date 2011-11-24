@@ -11,6 +11,8 @@ import shutil
 import subprocess
 import sys
 
+SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 def remove_all_vars_except(dictionary, keep):
   """Remove all keys from the specified dictionary except those in !keep|"""
@@ -55,35 +57,38 @@ def FixSubversionConfig():
   shutil.copyfile('config', dest)
 
 
+def error(msg):
+  print >> sys.stderr, msg
+  sys.exit(1)
+
+
 def main():
-  # change the current directory to the directory of the script.
-  os.chdir(sys.path[0])
+  # Change the current directory to the directory of the script.
+  os.chdir(SCRIPT_PATH)
+  build_dir = os.path.dirname(SCRIPT_PATH)
+  # Directory containing build/slave/run_slave.py
+  root_dir = os.path.dirname(build_dir)
+  depot_tools = os.path.join(root_dir, 'depot_tools')
 
   # Make sure the current python path is absolute.
-  paths = os.environ['PYTHONPATH'].split(os.pathsep)
-  os.environ['PYTHONPATH'] = ''
-  for path in paths:
-    os.environ['PYTHONPATH'] += os.path.abspath(path)
-    os.environ['PYTHONPATH'] += os.pathsep
+  old_pythonpath, os.environ['PYTHONPATH'] = os.environ['PYTHONPATH'], ''
+  for path in old_pythonpath.split(os.pathsep):
+    os.environ['PYTHONPATH'] += os.path.abspath(path) + os.pathsep
 
   # Update the python path.
-  parent_dir = os.path.abspath(os.path.pardir)
-  root = os.path.dirname(parent_dir)
   python_path = [
-    os.path.join(parent_dir, 'site_config'),
-    os.path.join(parent_dir, 'scripts'),
-    os.path.join(parent_dir, 'scripts', 'release'),
-    os.path.join(parent_dir, 'third_party'),
-    os.path.join(root, 'build_internal', 'site_config'),
-    os.path.join(root, 'build_internal', 'symsrc'),
-    '.',  # Include the current working directory by default.
+    os.path.join(build_dir, 'site_config'),
+    os.path.join(build_dir, 'scripts'),
+    os.path.join(build_dir, 'scripts', 'release'),
+    os.path.join(build_dir, 'third_party'),
+    os.path.join(root_dir, 'build_internal', 'site_config'),
+    os.path.join(root_dir, 'build_internal', 'symsrc'),
+    SCRIPT_PATH,  # Include the current working directory by default.
   ]
   os.environ['PYTHONPATH'] += os.pathsep.join(python_path)
 
   # Add these in from of the PATH too.
-  new_path = python_path
-  new_path.extend(sys.path)
-  sys.path = new_path
+  sys.path = python_path + sys.path
 
   os.environ['CHROME_HEADLESS'] = '1'
   os.environ['PAGER'] = 'cat'
@@ -127,15 +132,16 @@ def main():
 
     remove_all_vars_except(os.environ, env_var)
 
-    # extend the env variables with the chrome-specific settings.
-    depot_tools = os.path.join(parent_dir, '..', 'depot_tools')
-    # Reuse the python executable used to start this script.
-    python = os.path.dirname(sys.executable)
-    system32 = os.path.join(os.environ['SYSTEMROOT'], 'system32')
-    wbem = os.path.join(system32, 'WBEM')
-    slave_path = [depot_tools, python, system32, wbem]
+    # Extend the env variables with the chrome-specific settings.
+    slave_path = [
+        depot_tools,
+        # Reuse the python executable used to start this script.
+        os.path.dirname(sys.executable),
+        os.path.join(os.environ['SYSTEMROOT'], 'system32'),
+        os.path.join(os.environ['SYSTEMROOT'], 'system32', 'WBEM'),
+    ]
     # build_internal/tools contains tools we can't redistribute.
-    tools = os.path.join(parent_dir, '..', 'build_internal', 'tools')
+    tools = os.path.join(root_dir, 'build_internal', 'tools')
     if os.path.isdir(tools):
       slave_path.append(os.path.abspath(tools))
     os.environ['PATH'] = os.pathsep.join(slave_path)
@@ -171,22 +177,17 @@ def main():
     ]
 
     remove_all_vars_except(os.environ, env_var)
-
-    depot_tools = os.path.join(parent_dir, '..', 'depot_tools')
-
-    slave_path = [depot_tools, '/usr/bin', '/bin',
-                  '/usr/sbin', '/sbin', '/usr/local/bin']
+    slave_path = [
+        depot_tools, '/usr/bin', '/bin',
+        '/usr/sbin', '/sbin', '/usr/local/bin'
+    ]
     os.environ['PATH'] = os.pathsep.join(slave_path)
 
-  elif sys.platform == 'cygwin':
-    #TODO(maruel): Implement me.
-    pass
   else:
-    raise NotImplementedError('Unknown platform')
+    error('Platform %s is not implemented yet' % sys.platform)
 
   FixSubversionConfig()
 
-  # Run the slave.
   HotPatchSlaveBuilder()
   import twisted.scripts.twistd as twistd
   twistd.run()
