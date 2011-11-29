@@ -527,12 +527,10 @@ def common_make_settings(
         slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
         'third_party', 'compiler-tsan'))
 
-    gcctsan_gcc_ver = '4.5.3'
     tsan_gcc_bin = os.path.abspath(os.path.join(
         tsan_base, 'gcc-tsan', 'scripts'))
     gcctsan_gcc_dir = os.path.abspath(os.path.join(
-        tsan_base, 'gcc-4.5.3'))
-
+        tsan_base, 'gcc-current'))
 
     if not os.path.isdir(gcctsan_gcc_dir):
       # Extract gcc from the tarball.
@@ -545,8 +543,11 @@ def common_make_settings(
     env['CC'] = os.path.join(tsan_gcc_bin, 'gcc')
     env['CXX'] = os.path.join(tsan_gcc_bin, 'g++')
     env['LD'] = os.path.join(tsan_gcc_bin, 'ld')
+    # GCCTSAN_GCC_DIR and GCCTSAN_GCC_VER point to the symlinks to the current
+    # versions of the compiler and the instrumentation plugin created by
+    # extract_gcc.sh
     env['GCCTSAN_GCC_DIR'] = gcctsan_gcc_dir
-    env['GCCTSAN_GCC_VER'] = gcctsan_gcc_ver
+    env['GCCTSAN_GCC_VER'] = 'current'
     env['GCCTSAN_IGNORE'] = os.path.abspath(os.path.join(
         slave_utils.SlaveBaseDir(options.build_dir),
         'build', 'src', 'tools', 'valgrind', 'tsan', 'ignores.txt'))
