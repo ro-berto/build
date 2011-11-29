@@ -375,7 +375,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         continue
       if M(test, 'tsan_', 'tsan'):
         continue
-      if M(test, 'drmemory_', 'drmemory'):
+      if M(test, 'drmemory_light_', 'drmemory_light'):
+        continue
+      if M(test, 'drmemory_full_', 'drmemory_full'):
         continue
       if S(test, 'heapcheck_', f.AddHeapcheckTest):
         continue
