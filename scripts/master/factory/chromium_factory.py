@@ -79,8 +79,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
   CUSTOM_DEPS_TSAN_WIN = ('src/third_party/tsan',
      config.Master.trunk_url + '/deps/third_party/tsan')
-  CUSTOM_DEPS_DRMEMORY = ('src/third_party/drmemory',
-     config.Master.trunk_url + '/deps/third_party/drmemory')
   CUSTOM_DEPS_NACL_VALGRIND = ('src/third_party/valgrind/bin',
      'http://src.chromium.org/native_client/trunk/src/third_party/valgrind/bin')
   CUSTOM_DEPS_TSAN_GCC = ('src/third_party/compiler-tsan',
@@ -457,7 +455,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     elif factory_properties.get("needs_tsan_win"):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_WIN]
     elif factory_properties.get("needs_drmemory"):
-      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_DRMEMORY]
+      if 'drmemory.DEPS' not in [s.name for s in self._solutions]:
+        self._solutions.append(gclient_factory.GClientSolution(
+            config.Master.trunk_url + '/deps/third_party/drmemory/DEPS',
+            'drmemory.DEPS'))
     elif factory_properties.get("needs_tsan_gcc"):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
 
