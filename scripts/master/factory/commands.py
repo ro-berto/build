@@ -317,10 +317,10 @@ class FactoryCommands(object):
 
   @staticmethod
   def TestStepFilterImpl(bStep, default):
-    """Examines the 'testfilters' property of the build and determines if
+    """Examines the 'testfilter' property of the build and determines if
     the step should run; True for yes."""
     bStep.setProperty('gtest_filter', None, "Factory")
-    filters = bStep.build.getProperties().getProperty('testfilters')
+    filters = bStep.build.getProperties().getProperty('testfilter')
     if not filters:
       return default
 
