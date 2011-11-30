@@ -65,7 +65,6 @@ exclusions = {
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'archive_build', 'start_crash_handler']
 
-# TODO(timurrrr): rename this file to notifier_cfg.py in a follow-up CL.
 def Update(config, active_master, c):
   c['status'].append(failures_notifier.FailuresNotifier(
       fromaddr=active_master.from_address,
