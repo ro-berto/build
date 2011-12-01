@@ -326,12 +326,6 @@ class Master(object):
     store_revisions_url = base_app_url + '/revisions'
     last_good_url = base_app_url + '/lkgr'
 
-  class WebM(_Base):
-    project_name = 'WebM'
-    master_port = 9039
-    slave_port = 9139
-    master_port_alt = 9239
-
   class Skia(_Base):
     project_name = 'Skia'
     master_host = 'localhost'
