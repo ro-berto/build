@@ -352,6 +352,8 @@ class FactoryCommands(object):
     """Adds a step to the factory to run the gtest tests.
 
     Args:
+      test_name: If prefixed with DISABLED_ the prefix is removed, and the
+                 step is flagged for not running, but is still added.
       total_shards: Number of shards to split this test into.
       shard_index: Shard to run.  Must be between 1 and total_shards.
       generate_gtest_json: generate JSON results file after running the tests.
@@ -362,6 +364,11 @@ class FactoryCommands(object):
     if not arg_list:
       arg_list = []
     arg_list = arg_list[:]
+
+    doStep = True
+    if test_name.startswith('DISABLED_'):
+      test_name = test_name[len('DISABLED_'):]
+      doStep = False
 
     cmd = [self._python, self._test_tool,
            '--target', self._target,
@@ -403,7 +410,8 @@ class FactoryCommands(object):
 
     self.AddTestStep(gtest_command.GTestCommand, test_name, ListProperties(cmd),
                      description,
-                     do_step_if=self.GetTestStepFilter(factory_properties))
+                     do_step_if=(self.GetTestStepFilter(factory_properties) and
+                                 doStep))
 
   def AddSlavelasticTestStep(self, test_name, factory_properties=None,
                              timeout=300):
