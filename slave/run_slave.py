@@ -70,6 +70,13 @@ def main():
   root_dir = os.path.dirname(build_dir)
   depot_tools = os.path.join(root_dir, 'depot_tools')
 
+  if not os.path.isdir(depot_tools):
+    error('You must put a copy of depot_tools in %s' % depot_tools)
+  bot_password_file = os.path.normpath(
+      os.path.join(build_dir, 'site_config', '.bot_password'))
+  if not os.path.isfile(bot_password_file):
+    error('You forgot to put the password at %s' % bot_password_file)
+
   # Make sure the current python path is absolute.
   old_pythonpath, os.environ['PYTHONPATH'] = os.environ['PYTHONPATH'], ''
   for path in old_pythonpath.split(os.pathsep):
@@ -85,7 +92,11 @@ def main():
     os.path.join(root_dir, 'build_internal', 'symsrc'),
     SCRIPT_PATH,  # Include the current working directory by default.
   ]
-  os.environ['PYTHONPATH'] += os.pathsep.join(python_path)
+  python_path.append(os.path.join(build_dir, 'third_party', 'buildbot_7_12'))
+  python_path.append(os.path.join(build_dir, 'third_party', 'twisted_8_1'))
+
+  os.environ['PYTHONPATH'] = (
+      os.pathsep.join(python_path) + os.pathsep + os.environ['PYTHONPATH'])
 
   # Add these in from of the PATH too.
   sys.path = python_path + sys.path
