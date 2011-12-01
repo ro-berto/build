@@ -78,9 +78,10 @@ def main():
     error('You forgot to put the password at %s' % bot_password_file)
 
   # Make sure the current python path is absolute.
-  old_pythonpath, os.environ['PYTHONPATH'] = os.environ['PYTHONPATH'], ''
+  old_pythonpath, os.environ['PYTHONPATH'] = os.environ.get('PYTHONPATH'), ''
   for path in old_pythonpath.split(os.pathsep):
-    os.environ['PYTHONPATH'] += os.path.abspath(path) + os.pathsep
+    if path:
+      os.environ['PYTHONPATH'] += os.path.abspath(path) + os.pathsep
 
   # Update the python path.
   python_path = [
