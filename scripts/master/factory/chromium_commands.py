@@ -57,6 +57,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._upload_parity_tool = J(s_dir, 'upload_parity_data.py')
     self._target_tests_tool = J(s_dir, 'target-tests.py')
     self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
+    self._devtools_perf_test_tool = J(s_dir, 'devtools_perf_test_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
     self._crash_dump_tool = J(s_dir, 'archive_crash_dumps.py')
@@ -651,6 +652,22 @@ class ChromiumCommands(commands.FactoryCommands):
                      workdir=workdir,
                      timeout=timeout,
                      do_step_if=self.GetTestStepFilter(factory_properties))
+
+  def AddDevToolsTests(self, factory_properties=None):
+    factory_properties = factory_properties or {}
+    c = self.GetPerfStepClass(factory_properties, 'devtools_perf',
+                              process_log.GraphingLogProcessor)
+
+    cmd = [self._python, self._devtools_perf_test_tool,
+           '--target', self._target,
+           '--build-dir', self._build_dir,
+           'inspector'
+    ]
+
+    self.AddTestStep(c,
+                     test_name='DevTools.PerfTest',
+                     test_command=cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddWebkitTests(self, gpu, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.

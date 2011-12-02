@@ -372,6 +372,13 @@ class Master(object):
     slave_port = 9151
     master_port_alt = 9052
 
+  class DevTools(Chromium):
+    project_name = 'Chromium DevTools'
+    master_host = 'localhost'
+    master_port = 9010
+    slave_port = 9111
+    master_port_alt = 9012
+
 class Installer(object):
   # A file containing information about the last release.
   last_release_info = "."

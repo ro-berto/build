@@ -77,6 +77,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   ]
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
+  CUSTOM_DEPS_DEVTOOLS_PERF = [
+    ('src/third_party/WebKit/PerformanceTests',
+     config.Master.webkit_trunk_url + '/PerformanceTests'),
+    ('src/third_party/WebKit/LayoutTests/http/tests/inspector',
+     config.Master.webkit_trunk_url + '/LayoutTests/http/tests/inspector'),
+  ]
   CUSTOM_DEPS_TSAN_WIN = ('src/third_party/tsan',
      config.Master.trunk_url + '/deps/third_party/tsan')
   CUSTOM_DEPS_NACL_VALGRIND = ('src/third_party/valgrind/bin',
@@ -290,6 +296,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('webkit_unit'):    f.AddBasicGTestTestStep('webkit_unit_tests', fp)
     if R('webkit'):         f.AddWebkitTests(gpu=False,
                                              factory_properties=fp)
+    if R('devtools_perf'):  f.AddDevToolsTests(factory_properties=fp)
     if R('webkit_gpu'):     f.AddWebkitTests(gpu=True,
                                              factory_properties=fp)
 
@@ -461,6 +468,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
             'drmemory.DEPS'))
     elif factory_properties.get("needs_tsan_gcc"):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
+
+    if 'devtools_perf' in tests:
+      self._solutions[0].custom_deps_list.extend(self.CUSTOM_DEPS_DEVTOOLS_PERF)
 
     if factory_properties.get("safesync_url"):
       self._solutions[0].safesync_url = factory_properties.get("safesync_url")
