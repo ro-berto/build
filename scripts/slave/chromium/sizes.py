@@ -19,6 +19,8 @@ import stat
 import subprocess
 import sys
 
+from common import chromium_utils
+
 
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
@@ -87,6 +89,21 @@ def main_mac(options, args):
         result = p.returncode
       print_dict['app_bundle_size'] = (int(du_s) * 1024)
 
+      # Count the number of files with at least one static initializer.
+      pipes = [['otool', '-l', chromium_framework_executable],
+               ['grep', '__mod_init_func', '-C', '5'],
+               ['grep', 'size']]
+      last_stdout = None
+      for pipe in pipes:
+        p = subprocess.Popen(pipe, stdin=last_stdout, stdout=subprocess.PIPE)
+        last_stdout = p.stdout
+      stdout = p.communicate()[0]
+      initializers_s = re.search('0x([0-9a-f]+)', stdout).group(1)
+      if result == 0:
+        result = p.returncode
+      word_size = 4  # Assume 32 bit
+      print_dict['initializers'] = int(initializers_s, 16) / word_size
+
       print ("""*RESULT %(app_name)s: %(app_name)s= %(app_size)s bytes
 RESULT %(app_name)s-__TEXT: __TEXT= %(app_text)s bytes
 RESULT %(app_name)s-__DATA: __DATA= %(app_data)s bytes
@@ -95,7 +112,9 @@ RESULT %(app_name)s-__OBJC: __OBJC= %(app_objc)s bytes
 RESULT %(framework_name)s-__TEXT: __TEXT= %(framework_text)s bytes
 RESULT %(framework_name)s-__DATA: __DATA= %(framework_data)s bytes
 RESULT %(framework_name)s-__OBJC: __OBJC= %(framework_objc)s bytes
-*RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes""") % (
+*RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes
+*RESULT chrome-si: initializers= %(initializers)d files
+""") % (
         print_dict)
       # Found a match, don't check the other base_names.
       return result
