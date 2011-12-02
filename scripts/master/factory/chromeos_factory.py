@@ -157,7 +157,7 @@ class CbuildbotFactory(object):
                                             waitForFinish=False))
       description = 'cbuildbot_master'
     else:
-      description = 'master'
+      description = 'cbuildbot'
 
     self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
                           command=cmd,
