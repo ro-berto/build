@@ -290,12 +290,6 @@ class Master(object):
     try_job_port = 9023
     svn_url = None
 
-  class NativeClientBranchIRT(_NaClBase):
-    project_name = 'NativeClientBranchIRT'
-    master_port = 9045
-    slave_port = 9145
-    master_port_alt = 9245
-
   class NativeClientLLVM(_NaClBase):
     project_name = 'NativeClientLLVM'
     master_port = 9022
