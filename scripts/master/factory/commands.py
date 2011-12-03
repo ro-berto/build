@@ -365,7 +365,7 @@ class FactoryCommands(object):
       arg_list = []
     arg_list = arg_list[:]
 
-    doStep = True
+    doStep = self.GetTestStepFilter(factory_properties)
     if test_name.startswith('DISABLED_'):
       test_name = test_name[len('DISABLED_'):]
       doStep = False
@@ -410,8 +410,7 @@ class FactoryCommands(object):
 
     self.AddTestStep(gtest_command.GTestCommand, test_name, ListProperties(cmd),
                      description,
-                     do_step_if=(self.GetTestStepFilter(factory_properties) and
-                                 doStep))
+                     do_step_if=doStep)
 
   def AddSlavelasticTestStep(self, test_name, factory_properties=None,
                              timeout=300):
