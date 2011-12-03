@@ -114,9 +114,9 @@ LKGR_STEPS = {
   'Chrome Frame Tests (ie8)': [
     'chrome_frame_net_tests', 'chrome_frame_unittests',
   ],
-  'Interactive Tests (dbg)': [
-    'interactive_ui_tests',
-  ],
+#  'Interactive Tests (dbg)': [
+#    'interactive_ui_tests',
+#  ],
   'Mac Builder (dbg)': [
     'compile',
   ],
