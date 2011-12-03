@@ -75,7 +75,7 @@ def Update(config, active_master, c):
       relayhost=config.Master.smtp,
       subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
               'revision %(revision)s',
-      sherriffs=None,
+      sheriffs=None,
       extraRecipients=['nacl-broke@google.com'],
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,

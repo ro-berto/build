@@ -257,7 +257,7 @@ F('aura_dbg_tests_1', linux().ChromiumFactory(
            'media',
            'printing',
            #'DISABLED_remoting',
-           'sql',
+           'DISABLED_sql',
            'DISABLED_sync',
            'DISABLED_ui'
            'DISABLED_unit',
