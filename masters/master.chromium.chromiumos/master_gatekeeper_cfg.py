@@ -75,12 +75,23 @@ warn_chromiumos_categories_steps = {
   ],
 }
 
+warn_aura_chromiumos_categories_steps = {
+  'aurawatch': [
+    'Archive',
+    'BuildTarget',
+    'BuildBoard',
+    'UnitTest',
+  ]
+}
+
 subject = ('buildbot %(result)s in %(projectName)s on %(builder)s, '
            'revision %(revision)s')
 warning_header = ('Please look at failure in "%(steps)s" on "%(builder)s" '
                   'and help out if you can')
 
 def Update(config, active_master, alternate_master, c):
+  # chrome likely/possible failures to the chrome sheriffs, closing the
+  # chrome tree
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,
       categories_steps=chromium_categories_steps,
@@ -93,6 +104,7 @@ def Update(config, active_master, alternate_master, c):
       tree_status_url=active_master.tree_status_url,
       sheriffs=['sheriff'],
       use_getname=True))
+  # chromium os failures close the chromeOS tree
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,
       categories_steps=close_chromiumos_categories_steps,
@@ -105,6 +117,7 @@ def Update(config, active_master, alternate_master, c):
       tree_status_url=alternate_master.tree_status_url,
       sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
       use_getname=True))
+  # chromium os buried failures/flakiness to chrome OS folk
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,
       categories_steps=warn_chromiumos_categories_steps,
@@ -112,9 +125,24 @@ def Update(config, active_master, alternate_master, c):
       relayhost=config.Master.smtp,
       subject='Warning ' + subject,
       status_header=warning_header,
-      extraRecipients=alternate_master.tree_closing_notification_recipients,
+      extraRecipients=[],
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
       sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
+      use_getname=True))
+  # while the Aura folk are in panic fast mode, let them know to help on
+  # failures that may be related to their special configs.
+  c['status'].append(gatekeeper.GateKeeper(
+      fromaddr=active_master.from_address,
+      categories_steps=warn_aura_chromiumos_categories_steps,
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='Warning ' + subject,
+      status_header=warning_header,
+      extraRecipients=[],
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      tree_status_url=None,
+      sheriffs=['sheriff_aura'],
       use_getname=True))
