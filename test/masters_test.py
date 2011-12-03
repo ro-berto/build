@@ -135,7 +135,6 @@ def main():
       'master.chromiumos': 'ChromiumOS',
       'master.client.drmemory': None,  # make start fails
       'master.client.nacl': 'NativeClient',
-      'master.client.nacl.branch.irt': 'NativeClientBranchIRT',
       'master.client.nacl.chrome': 'NativeClientChrome',
       'master.client.nacl.llvm': 'NativeClientLLVM',
       'master.client.nacl.ports': 'NativeClientPorts',
