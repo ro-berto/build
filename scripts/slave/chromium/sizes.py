@@ -19,8 +19,6 @@ import stat
 import subprocess
 import sys
 
-from common import chromium_utils
-
 
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
