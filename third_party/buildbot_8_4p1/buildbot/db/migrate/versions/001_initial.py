@@ -215,12 +215,12 @@ def import_changes(migrate_engine):
         try:
             values = dict(
                     changeid=c.number,
-                    author=c.who,
+                    author=c.who[:256],
                     comments=c.comments[:1024],
                     is_dir=c.isdir,
-                    branch=c.branch,
-                    revision=c.revision,
-                    revlink=c.revlink,
+                    branch=c.branch[:256],
+                    revision=c.revision[:256],
+                    revlink=c.revlink[:256],
                     when_timestamp=c.when,
                     category=c.category)
             values = dict([ (k, remove_none(v)) for k, v in values.iteritems() ])
