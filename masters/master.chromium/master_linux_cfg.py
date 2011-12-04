@@ -260,7 +260,7 @@ F('aura_dbg_tests_1', linux().ChromiumFactory(
            'DISABLED_sql',
            'DISABLED_sync',
            'DISABLED_ui'
-           'DISABLED_unit',
+           'unit',
            'views',
            ],
     factory_properties={'generate_gtest_json': True,}))
