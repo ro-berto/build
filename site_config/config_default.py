@@ -216,7 +216,7 @@ class Master(object):
     base_app_url = 'http://localhost:8080'
     tree_status_url = base_app_url + '/status'
     store_revisions_url = base_app_url + '/revisions'
-    last_good_url = 'http://chromiumos-status.appspot.com/lkgr'
+    last_good_url = 'https://chromiumos-status.appspot.com/lkgr'
 
   class ChromiumOSTryServer(_Base):
     project_name = 'ChromiumOS Try Server'
