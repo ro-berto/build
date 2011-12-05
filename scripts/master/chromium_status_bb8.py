@@ -137,11 +137,13 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
         continue
       classname = base.ITopBox(builder_status).getBox(request).class_
       title = builder_name
+      show_name = 'off' not in request.args.get('titles', ['off'])
       url = (base.path_to_root(request) + "waterfall?builder=" +
               urllib.quote(builder_name, safe=''))
       cxt_builders.append({'outcome': classname,
                            'name': title,
-                           'url': url })
+                           'url': url,
+                           'show_name': show_name})
     cxt['builders'] = cxt_builders
     templates = request.site.buildbot_service.templates
     template = templates.get_template("horizontal_one_box_per_build.html")
