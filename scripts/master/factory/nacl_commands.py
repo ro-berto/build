@@ -42,6 +42,8 @@ class NativeClientCommands(commands.FactoryCommands):
                 '%(buildnumber:-None)s'),
             'triggered_by_slavename': WithProperties(
                 '%(slavename:-None)s'),
+            'triggered_by_revision': WithProperties(
+                '%(revision:-None)s'),
         }))
 
   def AddModularBuildStep(self, modular_build_type, timeout=1200):
