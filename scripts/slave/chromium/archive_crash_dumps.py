@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -8,12 +8,15 @@
 
 import sys
 
+def main():
+  # The shell-script version of this tool, included below, doesn't work.  Rather
+  # than fixing it, we should rewrite it in Python when we want to re-enable it.
+  print "This tool needs to be rewritten before it can be enabled."
+  return 0
 
-# The shell-script version of this tool, included below, doesn't work.  Rather
-# than fixing it, we should rewrite it in Python when we want to re-enable it.
-print "This tool needs to be rewritten before it can be enabled."
 
-sys.exit(0)
+if __name__ == '__main__':
+  sys.exit(main())
 
 # String has no effect.
 # pylint: disable=W0105

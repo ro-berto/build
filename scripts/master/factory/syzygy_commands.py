@@ -116,5 +116,3 @@ class SyzygyCommands(commands.FactoryCommands):
                           extra_text=('Build archive', url),
                           name='archive',
                           description='Build archive')
-
-

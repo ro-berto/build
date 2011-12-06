@@ -111,4 +111,3 @@ class PageSpeedFactory(gclient_factory.GClientFactory):
     return self.PageSpeedFactory(target, clobber, tests, mode, slave_type,
                                  options, compile_timeout, build_url, project,
                                  factory_properties)
-

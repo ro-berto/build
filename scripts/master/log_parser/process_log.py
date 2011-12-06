@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -33,6 +32,9 @@ GRAPH_LIST = config.Master.perf_graph_list
 # for more info.
 PERF_EXPECTATIONS_PATH = '../../scripts/master/log_parser/perf_expectations/'
 
+METRIC_SUFFIX = {-3: 'm', 0: '', 3: 'k', 6: 'M'}
+
+
 def FormatFloat(number):
   """Formats float with two decimal points."""
   if number:
@@ -40,10 +42,10 @@ def FormatFloat(number):
   else:
     return '0.00'
 
+
 def FormatPercentage(ratio):
   return '%s%%' % FormatFloat(100 * ratio)
 
-METRIC_SUFFIX = {-3: 'm', 0: '', 3: 'k', 6: 'M'}
 
 def FormatHumanReadable(number):
   """Formats a float into three significant figures, using metric suffixes.
@@ -72,6 +74,7 @@ def FormatHumanReadable(number):
     digits = int(digits)
   # Exponent is now divisible by 3, between -3 and 6 inclusive: (-3, 0, 3, 6).
   return '%s%s' % (digits, METRIC_SUFFIX[exponent])
+
 
 def Prepend(filename, data):
   chromium_utils.Prepend(filename, data)
@@ -763,6 +766,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     graph_file.close()
     os.chmod(graph_filename, EXECUTABLE_FILE_PERMISSIONS)
 
+
 class GraphingFrameRateLogProcessor(GraphingLogProcessor):
   """Handles additional processing for frame rate gesture data."""
 
@@ -812,6 +816,7 @@ class GraphingFrameRateLogProcessor(GraphingLogProcessor):
     fileobj.write(''.join(file_data))
     fileobj.close()
     os.chmod(filename, READABLE_FILE_PERMISSIONS)
+
 
 class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
   """Handles additional processing for page-cycler timing data."""
