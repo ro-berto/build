@@ -10,11 +10,11 @@ from buildbot import interfaces, util
 from buildbot.buildslave import BuildSlave
 from buildbot.status import mail
 from buildbot.status.builder import BuildStatus
+from buildbot.status.status_push import HttpStatusPush
 from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
-from master.status_push import HttpStatusPush
 from buildbot.status.web.baseweb import WebStatus
 
 if int(buildbot.version.split('.')[1]) == 7:

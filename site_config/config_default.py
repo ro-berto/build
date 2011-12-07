@@ -65,12 +65,10 @@ class Master(object):
     # Code review site to upload results. You should setup your own Rietveld
     # instance with the code at
     # http://code.google.com/p/rietveld/source/browse/#svn/branches/chromium
-    # and put a url looking like this:
-    # 'http://codereview.chromium.org/%d/upload_build_result/%d'
     # You can host your own private rietveld instance on Django, see
     # http://code.google.com/p/google-app-engine-django and
     # http://code.google.com/appengine/articles/pure_django.html
-    code_review_site = None
+    code_review_site = 'https://chromiumcodereview.appspot.com/status_listener'
 
     # For the following values, they are used only if non-0. Do not set them
     # here, set them in the actual master configuration class.
