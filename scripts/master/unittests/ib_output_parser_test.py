@@ -4,12 +4,11 @@
 # found in the LICENSE file.
 
 import os
-import sys
 import unittest
 
-from master.log_parser import cl_command
+import test_env  # pylint: disable=W0611
 
-import runtests
+from master.log_parser import cl_command
 
 
 class IbOutputParserTest(unittest.TestCase):
@@ -23,10 +22,10 @@ class IbOutputParserTest(unittest.TestCase):
                    'c:\string_util_unittest.cc : warning C4819: Warning 2']
 
   def testFoundWarningsFalse(self):
-   self.assert_(not self.__parser('ok-log-compile-stdio').FoundWarnings())
+    self.assert_(not self.__parser('ok-log-compile-stdio').FoundWarnings())
 
   def testFoundWarningsTrue(self):
-   self.assert_(self.__parser('error-log-compile-stdio').FoundWarnings())
+    self.assert_(self.__parser('error-log-compile-stdio').FoundWarnings())
 
   def testFoundErrorsFalse(self):
     self.assert_(not self.__parser('ok-log-compile-stdio').FoundErrors())
@@ -71,18 +70,19 @@ class IbOutputParserTest(unittest.TestCase):
     self.assert_(found_expected_line)
 
   def testIsIbLog(self):
+    # pylint: disable=W0212
     self.assert_(self.__parser('error-log-compile-stdio').
                  _IsIbLog())
 
   def testIsIbLogFalse(self):
+    # pylint: disable=W0212
     self.assert_(not self.__parser('error-log-compile-stdio-devenv').
                  _IsIbLog())
 
-  def __parser(self, logfile):
-    file = open(os.path.join(runtests.DATA_PATH, logfile))
-    parser = cl_command.IbOutputParser(file.read())
-    file.close()
-    return parser
+  @staticmethod
+  def __parser(logfile):
+    with open(os.path.join(test_env.DATA_PATH, logfile)) as f:
+      return cl_command.IbOutputParser(f.read())
 
 
 if __name__ == '__main__':

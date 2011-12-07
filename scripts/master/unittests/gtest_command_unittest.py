@@ -7,7 +7,10 @@
 
 import unittest
 
-from log_parser import gtest_command
+import test_env  # pylint: disable=W0611
+
+from master.log_parser import gtest_command
+
 
 FAILURES = ['NavigationControllerTest.Reload',
             'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0',
@@ -390,7 +393,8 @@ TEST_DATA_OK_DUPLICATE_SHARD_0 = """0>Note: This is test shard 1 of 30.
 
 
 class TestObserverTests(unittest.TestCase):
-  def AlternateShards(self, shard_0, shard_1):
+  @staticmethod
+  def AlternateShards(shard_0, shard_1):
     # Returns a list of alternating lines from the two shards such that the
     # temporal order within shards is preserved.
     test_data_shard_0 = shard_0.split('\n')

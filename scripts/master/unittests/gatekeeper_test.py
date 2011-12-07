@@ -1,18 +1,21 @@
+#!/usr/bin/env python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """ Source file for gatekeeper testcases."""
 
-import mock
 import unittest
 
+import test_env  # pylint: disable=W0611
+
+import mock
 from master import gatekeeper
 
 
 class GateKeeperTest(unittest.TestCase):
   def setUp(self):
-    class PasswordMock(mock.Mock):
+    class PasswordMock(mock.Mock):  # pylint: disable=W0232
       def GetPassword(self):
         mock.Mock.__getattr__(self, 'GetPassword')
         return 'testpw'
@@ -32,3 +35,8 @@ class GateKeeperTest(unittest.TestCase):
         extraRecipients=['extra@test'],
         status_header='Failure on test.',
         tree_status_url='http://localhost/')
+    self.assertTrue(notifier)
+
+
+if __name__ == '__main__':
+  unittest.main()

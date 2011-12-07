@@ -6,7 +6,10 @@
 import time
 import unittest
 
+import test_env  # pylint: disable=W0611
+
 from master.failures_history import FailuresHistory
+
 
 class FailuresHistoryTest(unittest.TestCase):
   def setUp(self):

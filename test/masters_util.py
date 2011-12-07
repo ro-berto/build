@@ -89,7 +89,7 @@ def wait_for_start(master, name, path):
         data = json.load(
             urllib.urlopen('http://localhost:%d/json/project' % p)) or {}
         if not data or (not 'projectName' in data and not 'title' in data):
-          logging.warning('Didn\'t get valid data from %s' % master)
+          logging.debug('Didn\'t get valid data from %s' % master)
           continue
         got_name = data.get('projectName', data.get('title'))
         if got_name != name:
@@ -104,7 +104,7 @@ def wait_for_start(master, name, path):
       except ValueError:
         logging.warning('Didn\'t get valid data from %s' % master)
       except IOError:
-        logging.warning('Didn\'t get data from %s' % master)
+        logging.debug('Didn\'t get data from %s' % master)
       if search_for_exceptions(path):
         return False
     time.sleep(0.1)

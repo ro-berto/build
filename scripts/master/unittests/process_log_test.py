@@ -7,23 +7,30 @@
 
 These tests should be run from the directory in which the script lives, so it
 can find its data/ directory.
-
 """
 
 import filecmp
-import mock
+import json
 import os
 import shutil
 import stat
 import unittest
 
-import simplejson
+import test_env
 
 from master import chromium_step
 from common import chromium_utils
 from master.log_parser import process_log
 
-import runtests
+import mock
+
+
+# pylint: disable=W0212
+
+
+def _RemoveOutputDir():
+  if os.path.exists('output_dir'):
+    shutil.rmtree('output_dir')
 
 
 class GoogleLoggingStepTest(unittest.TestCase):
@@ -32,10 +39,12 @@ class GoogleLoggingStepTest(unittest.TestCase):
   The class provides some operations common for testcases.
   """
   def setUp(self):
-    self._RemoveOutputDir()
+    super(GoogleLoggingStepTest, self).setUp()
+    _RemoveOutputDir()
     self._revision = 12345
     self._report_link = 'http://localhost/~user/report.html'
     self._output_dir = 'output_dir'
+    self._log_processor_class = None
 
   def tearDown(self):
     if os.path.exists(self._output_dir):
@@ -43,7 +52,8 @@ class GoogleLoggingStepTest(unittest.TestCase):
       for filename in directoryListing:
         file_stats = os.stat(os.path.join(self._output_dir, filename))
         self._assertReadable(file_stats)
-    self._RemoveOutputDir()
+    _RemoveOutputDir()
+    super(GoogleLoggingStepTest, self).tearDown()
 
   def _assertReadable(self, file_stats):
     mode = file_stats[stat.ST_MODE]
@@ -64,20 +74,11 @@ class GoogleLoggingStepTest(unittest.TestCase):
         report_link=self._report_link, output_dir=self._output_dir,
         perf_name='test-system', test_name='test-name',
         perf_filename=perf_expectations_path)
-    step = self._CreateStep(self._log_processor_class)
+    step = chromium_step.ProcessLogShellStep(self._log_processor_class)
     log_file = self._LogFile(
-        'stdio', open(os.path.join(runtests.DATA_PATH, logfile)).read())
+        'stdio', open(os.path.join(test_env.DATA_PATH, logfile)).read())
     self._SetupBuild(step, self._revision, log_file)
     return step
-
-  def _CreateStep(self, log_processor_class):
-    """ Creates the appropriate step for this test case. This is in its
-    own function so it can be overridden by subclasses as needed.
-    Args:
-      log_processor_class: type/class of type chromium_step.ProcessLogTestStep
-        that is going to be constructed. E.g. PagecyclerTestStep
-    """
-    return chromium_step.ProcessLogShellStep(log_processor_class)
 
   def _SetupBuild(self, step, revision, log_file):
     class BuildMock(mock.Mock):
@@ -120,16 +121,6 @@ class GoogleLoggingStepTest(unittest.TestCase):
     log_file_mock = LogMock(name, content)
     return log_file_mock
 
-  def _JoinWithSpaces(self, array):
-    return ' '.join([str(x) for x in array])
-
-  def _JoinWithSpacesAndNewLine(self, array):
-    return '%s\n' % self._JoinWithSpaces(array)
-
-  def _RemoveOutputDir(self):
-    if os.path.exists('output_dir'):
-      shutil.rmtree('output_dir')
-
 
 class BenchpressPerformanceTestStepTest(GoogleLoggingStepTest):
 
@@ -138,10 +129,9 @@ class BenchpressPerformanceTestStepTest(GoogleLoggingStepTest):
     os.mkdir('output_dir')
     for filename in files_that_are_prepended:
       filename = os.path.join('output_dir', filename)
-      file = open(filename, 'w')
       control_line = 'this is a line one, should become line two'
-      file.write(control_line)
-      file.close()
+      with open(filename, 'w') as f:
+        f.write(control_line)
       step = self._ConstructStep(process_log.BenchpressLogProcessor,
                                 'benchpress_log')
       step.commandComplete('mycommand')
@@ -204,7 +194,7 @@ class PlaybackLogProcessorTest(GoogleLoggingStepTest):
                               'playback_log')
 
     step.commandComplete('mycommand')
-    expected = simplejson.dumps(
+    expected = json.dumps(
       {'12345':
         {
           'reference':
@@ -243,7 +233,7 @@ class PlaybackLogProcessorTest(GoogleLoggingStepTest):
                               'playback_log')
 
     step.commandComplete('mycommand')
-    expected = simplejson.dumps(
+    expected = json.dumps(
       {'12345':
         {
           'reference':
@@ -286,7 +276,7 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
 
   def _TestPerfExpectations(self, perf_expectations_file):
     perf_expectations_path = os.path.join(
-        runtests.DATA_PATH, perf_expectations_file)
+        test_env.DATA_PATH, perf_expectations_file)
     step = self._ConstructStep(process_log.GraphingLogProcessor,
                                'graphing_processor.log',
                                factory_properties={'expectations': True,
@@ -295,9 +285,9 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     step.commandComplete('mycommand')
     actual_file = os.path.join('output_dir', 'graphs.dat')
     self.assert_(os.path.exists(actual_file))
-    actual = simplejson.load(open(actual_file))
-    expected = simplejson.load(open(
-        os.path.join(runtests.DATA_PATH, 'graphing_processor-graphs.dat')))
+    actual = json.load(open(actual_file))
+    expected = json.load(open(
+        os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat')))
     self.assertEqual(expected, actual)
     return step
 
@@ -312,9 +302,8 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
       self.assert_(os.path.exists(os.path.join('output_dir', filename)))
       # Since the output files are JSON-encoded, they may differ in form, but
       # represent the same data. Therefore, we decode them before comparing.
-      actual = simplejson.load(open(os.path.join('output_dir', filename)))
-      expected = simplejson.load(open(os.path.join(runtests.DATA_PATH,
-                                                   filename)))
+      actual = json.load(open(os.path.join('output_dir', filename)))
+      expected = json.load(open(os.path.join(test_env.DATA_PATH, filename)))
       self.assertEqual(expected, actual)
 
   def testFrameRateSummary(self):
@@ -326,9 +315,9 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
       self.assert_(os.path.exists(os.path.join('output_dir', filename)))
       # Since the output files are JSON-encoded, they may differ in form, but
       # represent the same data. Therefore, we decode them before comparing.
-      actual = simplejson.load(open(os.path.join('output_dir', filename)))
-      expected = simplejson.load(
-          open(os.path.join(runtests.DATA_PATH, 'frame_rate', filename)))
+      actual = json.load(open(os.path.join('output_dir', filename)))
+      expected = json.load(
+          open(os.path.join(test_env.DATA_PATH, 'frame_rate', filename)))
       self.assertEqual(expected, actual)
 
   def testFrameRateGestureList(self):
@@ -340,7 +329,7 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
         filename = "%s_%s_%s.dat" % (self._revision, graph, trace)
         self.assert_(os.path.exists(os.path.join('output_dir', filename)))
         actual = os.path.join('output_dir', filename)
-        expected = os.path.join(runtests.DATA_PATH, 'frame_rate', filename)
+        expected = os.path.join(test_env.DATA_PATH, 'frame_rate', filename)
         self.assert_(filecmp.cmp(actual, expected))
 
   def testGraphList(self):
@@ -349,9 +338,9 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     step.commandComplete('mycommand')
     actual_file = os.path.join('output_dir', 'graphs.dat')
     self.assert_(os.path.exists(actual_file))
-    actual = simplejson.load(open(actual_file))
-    expected = simplejson.load(open(
-        os.path.join(runtests.DATA_PATH, 'graphing_processor-graphs.dat')))
+    actual = json.load(open(actual_file))
+    expected = json.load(open(
+        os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat')))
     self.assertEqual(expected, actual)
 
   def testPerfExpectationsImproveRelative(self):

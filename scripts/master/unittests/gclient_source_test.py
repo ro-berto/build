@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -5,6 +6,8 @@
 """Tests for GClient source in chromium_commands.py"""
 
 import unittest
+
+import test_env  # pylint: disable=W0611
 
 from slave.chromium_commands import GClient
 from slave.chromium_commands import untangle
@@ -90,7 +93,7 @@ GCLIENT_SYNC_MULTI_JOB_STDOUT = """solutions=[...]
 """
 
 # DEPS change webkit version from 69169 to 69168
-GCLIENT_SYNC_MULTI_JOB_DEPS_TRY_STDOUT ="""
+GCLIENT_SYNC_MULTI_JOB_DEPS_TRY_STDOUT = """
 .../build/src/DEPS
 
 ________ running 'svn update --revision BASE' in '.../build/src'
@@ -222,7 +225,6 @@ class GClientSourceTest(unittest.TestCase):
     self.assertEqual(69168, webkit_revision)
 
   def testUntangle_UpToDoubleDigits(self):
-    gclient = TestableGClient()
     stdout_lines = ['4>four', '9>nine', '1>one', '6>six', '3>three',
                     '10>ten', '7>seven', '5>five', '8>eight', '2>two']
     self.assertEqual(['one', 'two', 'three', 'four', 'five',
@@ -230,7 +232,6 @@ class GClientSourceTest(unittest.TestCase):
                      untangle(stdout_lines))
 
   def testUntangle_MultiplesAndUnMatchingLines(self):
-    gclient = TestableGClient()
     stdout_lines = ['unmatching (solutions...)',
                     '1>first set, first 1',
                     '2>first set, first 2',
@@ -254,7 +255,6 @@ class GClientSourceTest(unittest.TestCase):
                      untangle(stdout_lines))
 
   def testUntangle_GClientSync(self):
-    gclient = TestableGClient()
     stdout_lines = GCLIENT_SYNC_MULTI_JOB_STDOUT.splitlines(False)
     self.assertEqual(['solutions=[...]',
                       '_____ src at 59820',
@@ -268,7 +268,6 @@ class GClientSourceTest(unittest.TestCase):
                      untangle(stdout_lines))
 
   def testUntangle_GClientSyncForDepsTrybot(self):
-    gclient = TestableGClient()
     stdout_lines = GCLIENT_SYNC_MULTI_JOB_DEPS_TRY_STDOUT.splitlines(False)
     self.assertEqual(['.../build/src/DEPS',
                       '________ running \'svn update --revision BASE\' in \'.../build/src\'',
@@ -311,3 +310,7 @@ class GClientSourceTest(unittest.TestCase):
                       'Updating projects from gyp files...',
                       'Generating .../build/src/sandbox/sandbox.Makefile'],
                      untangle(stdout_lines))
+
+
+if __name__ == '__main__':
+  unittest.main()

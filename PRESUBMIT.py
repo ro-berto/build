@@ -16,9 +16,9 @@ def CommonChecks(input_api, output_api):
   def join(*args):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
-  black_list = input_api.DEFAULT_BLACK_LIST + (
+  black_list = list(input_api.DEFAULT_BLACK_LIST) + [
       r'.*slave/.*/build.*/.*', r'.*depot_tools/.*', r'.*unittests/.*',
-      r'.*scripts/release/.*', r'.+_bb7\.py$')
+      r'.*scripts/release/.*', r'.+_bb7\.py$']
 
   sys_path_backup = sys.path
   try:
@@ -27,6 +27,7 @@ def CommonChecks(input_api, output_api):
         join('third_party', 'buildbot_8_4p1'),
         join('third_party', 'decorator_3_3_1'),
         join('third_party', 'jinja2'),
+        join('third_party', 'mock-0.6.0'),
         join('third_party', 'sqlalchemy_0_7_1'),
         join('third_party', 'sqlalchemy_migrate_0_7_1'),
         join('third_party', 'tempita_0_5'),
@@ -40,6 +41,16 @@ def CommonChecks(input_api, output_api):
         input_api,
         output_api,
         black_list=black_list))
+
+    # Do a separate run with unit tests.
+    black_list.remove(r'.*unittests/.*')
+    white_list = (r'.*unittests/.+\.py$',)
+    sys.path.append(join('scripts', 'master', 'unittests'))
+    output.extend(input_api.canned_checks.RunPylint(
+        input_api,
+        output_api,
+        black_list=black_list,
+        white_list=white_list))
   finally:
     sys.path = sys_path_backup
 
@@ -50,21 +61,21 @@ def CommonChecks(input_api, output_api):
 
 
 def RunTests(input_api, output_api):
-  tests = [
-      input_api.os_path.join('test', 'masters_test.py'),
-      input_api.os_path.join('test', 'masters_unittests.py'),
-      # TODO(maruel): Broken.
-      #input_api.os_path.join(
-      #  'scripts', 'slave', 'chromium', 'archive_build_unittest.py'),
-      # TODO(maruel): Throws, needing 'mock'.
-      #input_api.os_path.join(
-      #  'scripts', 'master', 'unittests', 'runtests.py'),
-  ]
+  out = []
+  whitelist = [r'.+_test\.py$']
+  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+      input_api, output_api, 'test', whitelist))
+  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+      input_api,
+      output_api,
+      input_api.os_path.join('scripts', 'master', 'unittests'),
+      whitelist))
   internal_path = input_api.os_path.join(
       '..', 'build_internal', 'test', 'internal_masters_test.py')
   if input_api.os_path.isfile(internal_path):
-    tests.append(internal_path)
-  return input_api.canned_checks.RunUnitTests(input_api, output_api, tests)
+    out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+        input_api, output_api, internal_path, whitelist))
+  return out
 
 
 def CheckChangeOnUpload(input_api, output_api):

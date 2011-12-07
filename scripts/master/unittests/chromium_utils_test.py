@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -5,6 +6,9 @@
 """ Source file for chromium_utils testcases."""
 
 import unittest
+
+import test_env  # pylint: disable=W0611
+
 from common import chromium_utils
 
 
@@ -24,6 +28,7 @@ class PartiallyInitializeTest(unittest.TestCase):
     self.assertEqual('argument 1 value', complete_class.arg1)
     self.assertEqual('named argument 2 value', complete_class.named_arg2)
 
+
 class FilteredMeanAndStandardDeviationTest(unittest.TestCase):
 
   def testFilteredMeanAndStandardDeviation(self):
@@ -37,3 +42,7 @@ class FilteredMeanAndStandardDeviationTest(unittest.TestCase):
     mean, stdd = chromium_utils.FilteredMeanAndStandardDeviation(sample_data)
     self.assertEqual(4, mean)
     self.assertEqual(0, stdd)
+
+
+if __name__ == '__main__':
+  unittest.main()
