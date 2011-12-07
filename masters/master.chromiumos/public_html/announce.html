@@ -73,8 +73,8 @@
           <script language="javascript">
             var important = [
                 "builder=x86+generic+PFQ",
-                "builder=arm+generic+PFQ",
                 "builder=tegra2+PFQ",
+                "builder=amd64+corei7+PFQ",
                 "builder=x86+generic+full",
                 "builder=arm+generic+full",
                 "builder=tegra2+full",
@@ -83,15 +83,15 @@
                 "builder=amd64+generic+full",
                 "builder=amd64+corei7+full",
                 "builder=x86+generic+chrome+PFQ",
-                "builder=arm+generic+chrome+PFQ",
                 "builder=tegra2+chrome+PFQ",
+                "builder=amd64+corei7+chrome+PFQ",
                 "builder=chromiumos+sdk",
                 "reload=30",
             ].join("&");
             var chrome = [
                 "builder=x86+generic+chrome+PFQ",
-                "builder=arm+generic+chrome+PFQ",
                 "builder=tegra2+chrome+PFQ",
+                "builder=amd64+corei7+chrome+PFQ",
                 "reload=30",
             ].join("&");
             var chromium_chromiumos = [
@@ -102,7 +102,6 @@
             ].join("&");
 
             var arm = [
-                "builder=arm+generic+PFQ",
                 "builder=tegra2+PFQ",
                 "builder=arm+generic+full",
                 "builder=tegra2+full",
@@ -111,6 +110,7 @@
             ].join("&");
             var x86 = [
                 "builder=x86+generic+PFQ",
+                "builder=amd64+corei7+PFQ",
                 "builder=x86+generic+full",
                 "builder=x86+pineview+full",
                 "builder=amd64+generic+full",
