@@ -95,7 +95,7 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                                     target_arch)
 
     # Compile unittests only.
-    syzygy_cmd_obj.AddCompileStep('syzygy.sln;build_unittests')
+    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_unittests')
 
     # Then generate and upload a coverage report.
     syzygy_cmd_obj.AddGenerateCoverage()
