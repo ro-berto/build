@@ -26,7 +26,7 @@ class FailuresNotifier(chromium_notifier.ChromiumNotifier):
   # TODO(timurrrr): this is a hacky way to override the constant in the parent
   # class. Probably we just need to make it an optional/overridable
   # constructor argument.
-  _MINIMUM_DELAY_BETWEEN_ALERT = 120  # 2 minutes
+  _MINIMUM_DELAY_BETWEEN_ALERT = 30  # in seconds
 
   def __init__(self, **kwargs):
     # Set defaults.
