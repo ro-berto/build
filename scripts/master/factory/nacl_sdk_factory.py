@@ -38,6 +38,9 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
       nacl_sdk_url = alternate_url
     main = gclient_factory.GClientSolution(
         nacl_sdk_url,
+        custom_deps_list=[('src/pdf', None),
+                          ('src-pdf', None),
+                          ('src/third_party/WebKit/LayoutTests', None)],
         needed_components=self.NEEDED_COMPONENTS)
     solutions.append(main)
 
