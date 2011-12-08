@@ -48,8 +48,8 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddRandomizeChromeStep(self):
     # Randomization script path.
-    script_path = self.PathJoin(self._build_dir, 'internal', 'build',
-                                'randomize_chrome.py')
+    script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
+                                'internal', 'build', 'randomize_chrome.py')
     command = [self._python, script_path,
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
@@ -58,8 +58,8 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddBenchmarkChromeStep(self):
     # Benchmark script path.
-    script_path = self.PathJoin(self._build_dir, 'internal', 'build',
-                                'benchmark_chrome.py')
+    script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
+                                'internal', 'build', 'benchmark_chrome.py')
     command = [self._python, script_path,
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
@@ -68,7 +68,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddGenerateCoverage(self):
     # Coverage script path.
-    script_path = self.PathJoin(self._build_dir, 'build',
+    script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'build',
                                 'generate_coverage.py')
     command = [self._python,
                script_path,
