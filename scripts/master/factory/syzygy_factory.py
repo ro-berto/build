@@ -56,7 +56,7 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                                     target_arch)
 
     # Compile the build_all project of the Syzygy solution.
-    syzygy_cmd_obj.AddCompileStep('syzygy.sln;build_all')
+    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
 
     # Run the unittests.
     for test_name in _UNITTESTS:
