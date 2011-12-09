@@ -63,6 +63,12 @@ def error(msg):
 
 
 def main():
+  # Use adhoc argument parsing because of twisted's twisted argument parsing.
+  use_buildbot_8 = False
+  if '--use_buildbot_8' in sys.argv:
+    sys.argv.remove('--use_buildbot_8')
+    use_buildbot_8 = True
+
   # Change the current directory to the directory of the script.
   os.chdir(SCRIPT_PATH)
   build_dir = os.path.dirname(SCRIPT_PATH)
@@ -94,8 +100,14 @@ def main():
     os.path.join(root_dir, 'build_internal', 'symsrc'),
     SCRIPT_PATH,  # Include the current working directory by default.
   ]
-  python_path.append(os.path.join(build_dir, 'third_party', 'buildbot_7_12'))
-  python_path.append(os.path.join(build_dir, 'third_party', 'twisted_8_1'))
+
+  if use_buildbot_8:
+    python_path.append(
+        os.path.join(build_dir, 'third_party', 'buildbot_slave_8_4'))
+    python_path.append(os.path.join(build_dir, 'third_party', 'twisted_10_2'))
+  else:
+    python_path.append(os.path.join(build_dir, 'third_party', 'buildbot_7_12'))
+    python_path.append(os.path.join(build_dir, 'third_party', 'twisted_8_1'))
 
   os.environ['PYTHONPATH'] = (
       os.pathsep.join(python_path) + os.pathsep + os.environ['PYTHONPATH'])
