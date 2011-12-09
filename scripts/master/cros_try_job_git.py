@@ -25,11 +25,6 @@ class CrOSTryJobGit(TryJobBase):
         pollinterval=10)
     self.watcher.setServiceParent(self)
 
-  def ParseJob(self, stuff_tuple):
-    _, contents = stuff_tuple
-    options = dict(item.split('=') for item in contents.splitlines())
-    return TryJobBase.ParseJob(self, options)
-
   def get_file_contents(self, file_path):
     """Returns a Deferred to returns the file's content."""
     return utils.getProcessOutput(
@@ -46,7 +41,23 @@ class CrOSTryJobGit(TryJobBase):
       raise BadJobfile(
           'Try job with too many files %s' % (','.join(change.files)))
 
+    try:
+      options = dict(
+          i.split('=', 1) for i in change.comments.splitlines() if '=' in i)
+    except ValueError:
+      raise BadJobfile('Invalid meta data')
+    parsed = self.parse_options(options)
+    if not parsed.get('gerrit_patches', None):
+      if not parsed['issue']:
+        raise BadJobfile('No patches specified!')
+    else:
+      if parsed['issue']:
+        raise BadJobfile('Both issue and gerrit_patches specified!')
+      parsed['issue'] = parsed.pop('gerrit_patches')
+    if not options.get('bot'):
+      raise BadJobfile('No configs specified!')
+
     wfd = defer.waitForDeferred(self.get_file_contents(change.files[0]))
     yield wfd
-    # This is technically wrong, will be fixed in next change.
-    self.SubmitJob((change.comments, wfd.getResult()))
+    parsed['patch'] = wfd.getResult()
+    self.SubmitJob(parsed, [change.number])

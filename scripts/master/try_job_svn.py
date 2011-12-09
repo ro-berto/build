@@ -5,9 +5,53 @@
 import urllib
 
 from buildbot.changes import svnpoller
+from twisted.internet import defer
 from twisted.python import log
 
-from master.try_job_base import TryJobBase
+from master.try_job_base import buildbot_0_8, BadJobfile, TryJobBase
+
+
+if buildbot_0_8:
+  class SVNPoller(svnpoller.SVNPoller):
+    @defer.deferredGenerator
+    def submit_changes(self, changes):
+      """Instead of submitting the changes to the master, pass them to
+      TryJobSubversion. We don't want buildbot to see these changes.
+
+      Code used in Buildbot 0.8.x.
+      """
+      for chdict in changes:
+        # TODO(maruel): Clean up to not parse two times, trap the exception.
+        parsed = {'email': None}
+        good = False
+        try:
+          # pylint: disable=E1101
+          options = dict(
+              item.split('=', 1) for item in chdict['comments'].splitlines()
+              if '=' in item)
+          parsed = self.parent.parse_options(options)
+          good = True
+        except (TypeError, ValueError):
+          raise BadJobfile('Failed to parse the metadata')
+
+        # 'fix' revision.
+        # pylint: disable=E1101
+        wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
+        yield wfd
+        wfd.getResult()
+        assert parsed['revision']
+
+        wfd = defer.waitForDeferred(self.master.addChange(
+          author=','.join(parsed['email']),
+          revision=parsed['revision'],
+          comments=''))
+        yield wfd
+        change = wfd.getResult()
+
+        if good:
+          # pylint: disable=E1101
+          self.parent.addChangeInner(
+              chdict['files'], parsed, change.number)
 
 
 class TryJobSubversion(TryJobBase):
@@ -17,30 +61,46 @@ class TryJobSubversion(TryJobBase):
     TryJobBase.__init__(self, name, pools, properties,
                         last_good_urls, code_review_sites)
     self.svn_url = svn_url
-    self.watcher = svnpoller.SVNPoller(svnurl=svn_url, pollinterval=10)
-    self.watcher.setServiceParent(self)
+    if buildbot_0_8:
+      self.watcher = SVNPoller(svnurl=svn_url, pollinterval=10)
+    else:
+      self.watcher = svnpoller.SVNPoller(svnurl=svn_url, pollinterval=10)
+      self.watcher.setServiceParent(self)
 
-  def ParseJob(self, stuff_tuple):
-    comment, diff = stuff_tuple
-    # TODO: item.partition if python > 2.5.
-    options = dict(item.split('=') for item in comment.splitlines())
-    options['patch'] = diff
-    return TryJobBase.ParseJob(self, options)
+  if buildbot_0_8:
+    def setServiceParent(self, parent):
+      TryJobBase.setServiceParent(self, parent)
+      self.watcher.setServiceParent(self)
+      self.watcher.master = self.master
 
   def addChange(self, change):
+    """Used in Buildbot 0.7.12."""
+    try:
+      options = dict(
+          item.split('=', 1) for item in change.comments.splitlines()
+          if '=' in item)
+      parsed = self.parse_options(options)
+    except (TypeError, ValueError):
+      raise BadJobfile('Failed to parse the metadata')
+    return self.addChangeInner(change.files, parsed, None)
+
+  def addChangeInner(self, files, options, changeid):
     """Process the received data and send the queue buildset."""
     # Implicitly skips over non-files like directories.
-    files = [f for f in change.files if f.endswith(".diff")]
-    if len(files) != 1:
+    diffs = [f for f in files if f.endswith(".diff")]
+    if len(diffs) != 1:
       # We only accept changes with 1 diff file.
-      log.msg("Svn try with too many files %s" % (','.join(change.files)))
+      log.msg("Svn try with too many files %s" % (','.join(files)))
       return
 
-    command = ['cat', self.svn_url + '/' + urllib.quote(files[0]),
+    command = ['cat', self.svn_url + '/' + urllib.quote(diffs[0]),
         '--non-interactive']
     deferred = self.watcher.getProcessOutput(command)
-    deferred.addCallback(lambda output: self._OnDiffReceived(change, output))
+    deferred.addCallback(
+        lambda output: self._OnDiffReceived(options, output, changeid))
+    return deferred
 
-  def _OnDiffReceived(self, change, diff_content):
-    # Send it as a tuple.
-    self.SubmitJob((change.comments, diff_content))
+  def _OnDiffReceived(self, options, diff_content, changeid):
+    log.msg(options)
+    options['patch'] = diff_content
+    return self.SubmitJob(options, [changeid])

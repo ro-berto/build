@@ -18,9 +18,8 @@ class TryJobBaseMixIn:
   def __init__(self):
     pass
 
-  def ParseJob(self, options):
+  def GetSourceStamp(self, options):
     """Grab try job settings."""
-    options = self.parse_options(options)
     fake_changes = [
         Change(email, [''], '', revision=options['revision'])
         for email in options['email']
@@ -79,7 +78,7 @@ class TryJobBaseMixIn:
           log.msg('Marking %s as canceled on %s' %
                   (source_stamp.job_name, builder_name))
 
-  def SubmitJob(self, options):
+  def SubmitJob(self, options, _unused_changeids):
     """Queues the buildset.
 
     Args:
@@ -87,15 +86,15 @@ class TryJobBaseMixIn:
 
     Returns: an HTTP error code.
 
-    The content of options is decoded by ParseJob. If the file 'disable_try'
-    exists in the current directory, the try server is disabled.
+    If the file 'disable_try' exists in the current directory, the try server is
+    disabled.
     """
     if os.path.exists('disable_try'):
       log.msg('Try job cancelled because the server is disabled!')
       return http.SERVICE_UNAVAILABLE
 
     try:
-      builder_names, jobstamp, buildset_id, props = self.ParseJob(options)
+      builder_names, jobstamp, buildset_id, props = self.GetSourceStamp(options)
     except BadJobfile:
       log.msg('%s reports a bad job connection' % (self))
       log.err()
@@ -104,6 +103,7 @@ class TryJobBaseMixIn:
     # Send one build request per builder, otherwise the cancelation logic
     # doesn't work.
     build_sets = []
+    assert isinstance(builder_names, list)
     for builder_name in builder_names:
       build_set = buildset.BuildSet(
           [builder_name],

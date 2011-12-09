@@ -3,10 +3,11 @@
 # found in the LICENSE file.
 
 from twisted.application import strports
+from twisted.internet import defer
 from twisted.python import log
 from twisted.web import http
 
-from master.try_job_base import TryJobBase
+from master.try_job_base import buildbot_0_8, TryJobBase
 
 
 class TryJobHTTPRequest(http.Request):
@@ -26,7 +27,7 @@ class TryJobHTTPRequest(http.Request):
         options = dict((k, v[0]) for k, v in self.args.iteritems())
         self.channel.factory.parent.messageReceived(options)
         self.code = 200
-      except:
+      except (ValueError, TypeError):
         self.code = http.INTERNAL_SERVER_ERROR
         raise
     finally:
@@ -61,5 +62,20 @@ class TryJobHTTP(TryJobBase):
     # pylint: disable=E1101
     return self.services[0]._port.getHost().port
 
-  def messageReceived(self, socket):
-    return self.SubmitJob(socket)
+  @defer.deferredGenerator
+  def messageReceived(self, options):
+    parsed = self.parse_options(options)
+    changeids = None
+    if buildbot_0_8:
+      wfd = defer.waitForDeferred(self.get_lkgr(parsed))
+      yield wfd
+      wfd.getResult()
+
+      wfd = defer.waitForDeferred(self.master.addChange(
+        author=','.join(parsed['email']),
+        revision=parsed['revision'],
+        comments=''))
+      yield wfd
+      changeids = [wfd.getResult().number]
+
+    self.SubmitJob(parsed, changeids)

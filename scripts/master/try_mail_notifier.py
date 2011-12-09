@@ -21,6 +21,7 @@ from twisted.internet import defer
 from twisted.python import log
 
 from master import build_utils
+# TODO(maruel): Remove me.
 from master.try_job_stamp import TryJobStamp
 
 
@@ -45,6 +46,7 @@ class TryMailNotifier(mail.MailNotifier):
     job_stamp = build.getSourceStamp()
     build_url = self.master_status.getURLForThing(build)
     waterfall_url = self.master_status.getBuildbotURL()
+    # TODO(maruel): TryJobStamp is being deleted.
     if (isinstance(job_stamp, TryJobStamp) and
         (results == SKIPPED or job_stamp.canceled)):
       status_text_html = ("Incomplete try due to another try being submitted "

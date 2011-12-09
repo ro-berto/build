@@ -1,4 +1,4 @@
-# Copyright (c) 2010 The Chromium Authors. All rights reserved.
+# Copyright (c) 2011 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -12,6 +12,7 @@ from buildbot.sourcestamp import SourceStamp
 from twisted.python import log
 
 
+# TODO(maruel): Remove me once migration to 0.8.4p1 is complete.
 class TryJobStamp(SourceStamp):
   """Store additional information about a source specific run to execute. Just
   storing the actual patch (like SourceStamp does) is insufficient."""
@@ -56,7 +57,7 @@ class TryJobStamp(SourceStamp):
     # Print out debug info.
     patch_info = '(No patch)'
     if self.patch:
-      patch_info = "-p%d (%d bytes) (base: %s)" % (self.patch[0],
+      patch_info = "-p%s (%d bytes) (base: %s)" % (self.patch[0],
                                                    len(self.patch[1]),
                                                    self.patch[2])
     self.timestamp = datetime.datetime.utcnow()
