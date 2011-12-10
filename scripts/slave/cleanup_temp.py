@@ -39,7 +39,8 @@ def CleanupTempDirectory(temp_dir):
 def main_win():
   """Main function for Windows platform."""
   chromium_utils.RemoveChromeTemporaryFiles()
-  CleanupTempDirectory(os.environ['TEMP'])
+  # TODO(maruel): Temporary, add back.
+  #CleanupTempDirectory(os.environ['TEMP'])
   return 0
 
 
@@ -54,7 +55,8 @@ def main_mac():
 def main_linux():
   """Main function for linux platform."""
   chromium_utils.RemoveChromeTemporaryFiles()
-  CleanupTempDirectory('/tmp')
+  # TODO(maruel): Temporary, add back.
+  # CleanupTempDirectory('/tmp')
   return 0
 
 
