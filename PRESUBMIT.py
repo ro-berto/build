@@ -70,8 +70,7 @@ def RunTests(input_api, output_api):
       output_api,
       input_api.os_path.join('scripts', 'master', 'unittests'),
       whitelist))
-  internal_path = input_api.os_path.join(
-      '..', 'build_internal', 'test', 'internal_masters_test.py')
+  internal_path = input_api.os_path.join('..', 'build_internal', 'test')
   if input_api.os_path.isfile(internal_path):
     out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
         input_api, output_api, internal_path, whitelist))
