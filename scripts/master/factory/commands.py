@@ -178,6 +178,7 @@ class FactoryCommands(object):
     self._test_tool = self.PathJoin(self._script_dir, 'runtest.py')
     self._zip_tool = self.PathJoin(self._script_dir, 'zip_build.py')
     self._extract_tool = self.PathJoin(self._script_dir, 'extract_build.py')
+    self._cleanup_temp_tool = self.PathJoin(self._script_dir, 'cleanup_temp.py')
     # TODO(nsylvain): Fix redundant 'slavelastic' in path.
     self._slavelastic_tool = self.PathJoin(self._script_dir, '..',
                                            'slavelastic', 'slavelastic',
@@ -439,6 +440,16 @@ class FactoryCommands(object):
                           command=[r'%WINDIR%\system32\taskkill',
                                    '/f', '/im', 'svn.exe',
                                    '||', 'set', 'ERRORLEVEL=0'])
+
+  def AddTempCleanupStep(self):
+    """Runs script to cleanup acculumated cruft, including tmp directory."""
+    # Use ReturnCodeCommand so we can indicate a "warning" status (orange).
+    self._factory.addStep(retcode_command.ReturnCodeCommand,
+                          name='cleanup_temp',
+                          description='cleanup_temp',
+                          timeout=60,
+                          workdir='',  # Doesn't really matter where we are.
+                          command=['python', self._cleanup_temp_tool])
 
   def AddUpdateScriptStep(self):
     """Adds a step to the factory to update the script folder."""

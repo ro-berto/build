@@ -168,10 +168,6 @@ def main_mac(options, args):
       raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
                                                (e, output_dir))
 
-  # Nuke anything that appears to be stale chrome items in the temporary
-  # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  chromium_utils.RemoveChromeTemporaryFiles()
-
   if options.parallel:
     supervisor_path = os.path.join(build_dir, '..', 'tools',
                                    'sharding_supervisor',
@@ -295,10 +291,6 @@ def main_linux(options, args):
       raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
                                                (e, output_dir))
 
-  # Nuke anything that appears to be stale chrome items in the temporary
-  # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  chromium_utils.RemoveChromeTemporaryFiles()
-
   os.environ['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
                                                                bin_dir)
   if options.parallel:
@@ -410,10 +402,6 @@ def main_win(options, args):
   else:
     command = [test_exe_path]
   command.extend(args[1:])
-
-  # Nuke anything that appears to be stale chrome items in the temporary
-  # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  chromium_utils.RemoveChromeTemporaryFiles()
 
   results_tracker = None
   if options.generate_json_file:

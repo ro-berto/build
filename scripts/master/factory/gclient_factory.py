@@ -217,6 +217,10 @@ class GClientFactory(object):
     if 'clang=1' in gclient_env.get('GYP_DEFINES', ''):
       factory_cmd_obj.AddUpdateClangStep()
 
+    # Add a step to cleanup temporary files and data left from a previous run
+    # to prevent the drives from becoming full over time.
+    factory_cmd_obj.AddTempCleanupStep()
+
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'NASBuilder']:
       factory_cmd_obj.AddCompileStep(project or self._project, clobber,
