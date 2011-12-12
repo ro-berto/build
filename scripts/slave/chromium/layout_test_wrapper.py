@@ -98,6 +98,10 @@ def layout_test(options, args):
   command.extend(options.options.split(' '))
   command.extend(args)
 
+  # Nuke anything that appears to be stale chrome items in the temporary
+  # directory from previous test runs (i.e.- from crashes or unittest leaks).
+  chromium_utils.RemoveChromeTemporaryFiles()
+
   python_27_on_leopard = (
       '/Library/Frameworks/Python.framework/Versions/2.7/bin')
   if sys.platform == 'darwin' and os.path.exists(python_27_on_leopard):
