@@ -359,6 +359,46 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None):
   command.extend(['cp', '-a', 'public-read', source, dest])
   return chromium_utils.RunCommand(command)
 
+def GSUtilCopyDir(src_dir, gs_base, dest_dir=None):
+  """Create a list of files in a directory and pass each to GSUtilCopyFile."""
+
+  # Walk the source directory and find all the files.
+  # Alert if passed a file rather than a directory.
+  if os.path.isfile(src_dir):
+    assert os.path.isdir(src_dir), '%s must be a directory' % src_dir
+
+  # Get the list of all files in the source directory.
+  file_list = []
+  for root, _, files in os.walk(src_dir):
+    file_list.extend((os.path.join(root, name) for name in files))
+
+  # Find the absolute path of the source directory so we can use it below.
+  base = os.path.abspath(src_dir) + os.sep
+
+  for file in file_list:
+    # Strip the base path off so we just have the relative file path.
+    path = file.partition(base)[2]
+
+    # If we have been given a destination directory, add that to the path.
+    if dest_dir:
+        path = os.path.join(dest_dir, path)
+
+    # Trim the filename and last slash off to create a destination path.
+    path = path.rpartiton(os.sep + os.path.basename(path))[0]
+
+    # If we're on windows, we need to reverse slashes, gsutil wants posix paths.
+    if chromium_utils.IsWindows():
+      path = path.replace('\\', '/')
+
+    # Pass the file off to copy.
+    status = GSUtilCopyFile(file, gs_base, path)
+
+    # Bail out on any failure.
+    if status:
+      return status
+
+  return 0
+
 # Python doesn't support the type of variable scope in nested methods needed
 # to avoid the global output variable.  This variable should only ever be used
 # by GSUtilListBucket.
