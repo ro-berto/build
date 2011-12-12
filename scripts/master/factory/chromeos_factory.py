@@ -132,13 +132,13 @@ class CbuildbotFactory(object):
            shell.WithProperties('--buildnumber=%(buildnumber)s'),
            '--buildroot=%s' % self.buildroot]
 
-    if self.dry_run:
-      cmd += ['--debug']
-
     if self.trybot:
       cmd.append(WithProperties("--gerrit-patches='%(issue)s'"))
     else:
       cmd += ['--buildbot']
+
+    if self.dry_run:
+      cmd += ['--debug']
 
     if self.chrome_root:
       cmd.append('--chrome_root=%s' % self.chrome_root)
