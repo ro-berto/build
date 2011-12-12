@@ -187,18 +187,21 @@ class SkiaFactory(gclient_factory.GClientFactory):
     self._skia_cmd_obj.AddRun(
         run_command=command, description='RunBench')
 
-    # Generate bench performance graphs (but only if we have been recording
-    # bench output for this build type).
+    # Generate and upload bench performance graphs (but only if we have been
+    # recording bench output for this build type).
     if self._perf_data_dir:
       path_to_bench_graph_svg = self.TargetPathJoin(
           'bench', 'bench_graph_svg.py')
-      graph_title = 'Bench Performance for %s' % self._builder_name
-      command = 'python %s -d %s -r -%d -f -%d -x %d -y %d -l %s > %s' % (
+      graph_title = '"Bench Performance for %s"' % self._builder_name
+      graph_filepath = self.TargetPathJoin(
+          self._perf_graphs_dir, 'graph-%s.xhtml' % self._builder_name)
+      gen_command = 'python %s -d %s -r -%d -f -%d -x %d -y %d -l %s > %s' % (
           path_to_bench_graph_svg, self._perf_data_dir,
           BENCH_GRAPH_NUM_REVISIONS, BENCH_GRAPH_NUM_REVISIONS,
-          BENCH_GRAPH_X, BENCH_GRAPH_Y, graph_title,
-          self.TargetPathJoin(self._perf_graphs_dir, 'graph.xhtml'))
+          BENCH_GRAPH_X, BENCH_GRAPH_Y, graph_title, graph_filepath)
       self._skia_cmd_obj.AddRun(
-          run_command=command, description='GenerateBenchGraphs')
+          run_command=gen_command, description='GenerateBenchGraphs')
+      self._skia_cmd_obj.AddUploadToBucket(
+          source_filepath=graph_filepath, description='UploadBenchGraphs')
 
     return self._factory

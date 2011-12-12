@@ -56,6 +56,26 @@ class SkiaCommands(commands.FactoryCommands):
                          timeout=timeout, command=cmd, workdir=self.workdir,
                          env=self.environment_variables)
 
+  def AddUploadToBucket(self, source_filepath=None,
+                        dest_gsbase='gs://chromium-skia-gm',
+                        description='Upload', timeout=None):
+    """Adds a step that uploads a file to a Google Storage Bucket."""
+    if not source_filepath:
+      raise ValueError, 'source_filepath not set'
+    # TODO(epoger): this should use self._script_dir instead of the manually
+    # created path below, but I had trouble with that and didn't want it to
+    # block progress for now.
+    slave_script_dir = self.PathJoin('..', '..', '..', '..', 'scripts', 'slave')
+    path_to_upload_script = self.PathJoin(
+        slave_script_dir, 'skia', 'upload_to_bucket.py')
+    cmd = 'python %s --source_filepath=%s --dest_gsbase=%s' % (
+        path_to_upload_script, source_filepath, dest_gsbase)
+    if not timeout:
+      timeout = self.default_timeout
+    self.factory.addStep(shell.ShellCommand, description=description,
+                         timeout=timeout, command=cmd, workdir=self.workdir,
+                         env=self.environment_variables)
+
   def AddRun(self, run_command=None, description='Run', timeout=None):
     """Runs something we built."""
     if not run_command:
