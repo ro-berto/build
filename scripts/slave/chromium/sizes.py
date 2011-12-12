@@ -120,33 +120,37 @@ RESULT %(framework_name)s-__OBJC: __OBJC= %(framework_objc)s bytes
   return 66
 
 
-def main_linux(options, args):
-  """Print appropriate size information about built Linux targets.
+def check_linux_binary(target_dir, binary_name):
+  """Print appropriate size information about the built Linux binary given.
 
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            'sconsbuild', options.target)
-  chrome = os.path.join(target_dir, 'chrome')
+  binary_file = os.path.join(target_dir, binary_name)
 
   result = 0
 
-  print "*RESULT chrome: chrome= %s bytes" % get_size(chrome)
+  def run_process(result, command):
+    p = subprocess.Popen(command, stdout=subprocess.PIPE)
+    stdout = p.communicate()[0]
+    if p.returncode != 0:
+      print 'ERROR from command "%s": %d' % (' '.join(command), p.returncode)
+      if result != 0:
+        result = p.returncode
+    return result, stdout
 
-  p = subprocess.Popen(['size', chrome], stdout=subprocess.PIPE)
-  stdout = p.communicate()[0]
+  print "*RESULT %s: %s= %s bytes" % (binary_name, binary_name,
+                                      get_size(binary_file))
+
+  result, stdout = run_process(result, ['size', binary_file])
   text, data, bss = re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
-  if result == 0:
-    result = p.returncode
-  print "RESULT chrome-text: text= %s bytes" % text
-  print "RESULT chrome-data: data= %s bytes" % data
-  print "RESULT chrome-bss: bss= %s bytes" % bss
+  print "RESULT %s-text: text= %s bytes" % (binary_name, text)
+  print "RESULT %s-data: data= %s bytes" % (binary_name, data)
+  print "RESULT %s-bss: bss= %s bytes" % (binary_name, bss)
 
   # Find the number of files with at least one static initializer.
   # First determine if we're 32 or 64 bit
-  p = subprocess.Popen(['readelf', '-h', chrome], stdout=subprocess.PIPE)
-  stdout = p.communicate()[0]
+  result, stdout = run_process(result, ['readelf', '-h', binary_file])
   elf_class_line = re.search('Class:.*$', stdout, re.MULTILINE).group(0)
   elf_class = re.split('\W+', elf_class_line)[1]
   if elf_class == "ELF32":
@@ -155,15 +159,37 @@ def main_linux(options, args):
     word_size = 8
 
   # Then find the size of the .ctors section.
-  p = subprocess.Popen(['readelf', '-SW', chrome], stdout=subprocess.PIPE)
-  stdout = p.communicate()[0]
-  size_line = re.search('.ctors.*$', stdout, re.MULTILINE).group(0)
-  size = re.split('\W+', size_line)[5]
-  size = int(size, 16)
-  # The first entry is always 0 and the last is -1 as guards.
-  # So subtract 2 from the count.
-  count = (size / word_size) - 2
-  print "*RESULT chrome-si: initializers= %s files" % count
+  result, stdout = run_process(result, ['readelf', '-SW', binary_file])
+  size_match = re.search('.ctors.*$', stdout, re.MULTILINE)
+  if size_match is None:
+    count = 0
+  else:
+    size_line = re.search('.ctors.*$', stdout, re.MULTILINE).group(0)
+    size = re.split('\W+', size_line)[5]
+    size = int(size, 16)
+    # The first entry is always 0 and the last is -1 as guards.
+    # So subtract 2 from the count.
+    count = (size / word_size) - 2
+  print "*RESULT %s-si: initializers= %s files" % (binary_name, count)
+
+  return result
+
+
+def main_linux(options, args):
+  """Print appropriate size information about built Linux targets.
+
+  Returns the first non-zero exit status of any command it executes,
+  or zero on success.
+  """
+  target_dir = os.path.join(os.path.dirname(options.build_dir),
+                            'sconsbuild', options.target)
+
+  result = 0
+
+  for binary in ['chrome', 'nacl_helper', 'nacl_helper_bootstrap']:
+    this_result = check_linux_binary(target_dir, binary)
+    if result == 0:
+      result = this_result
 
   files = [
     'chrome.pak',
