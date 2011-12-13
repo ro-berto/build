@@ -19,12 +19,6 @@ from rietveld import json
 def start_master(master, path):
   try:
     subprocess2.check_call(
-        ['make', 'upgrade'], timeout=60, cwd=path,
-        stderr=subprocess2.STDOUT)
-  except subprocess2.CalledProcessError:
-    logging.warning('Warning: cannot run make upgrade for %s' % master)
-  try:
-    subprocess2.check_call(
         ['make', 'start'], timeout=60, cwd=path,
         stderr=subprocess2.STDOUT)
   except subprocess2.CalledProcessError:
