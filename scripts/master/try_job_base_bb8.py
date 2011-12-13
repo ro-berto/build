@@ -9,7 +9,6 @@ from buildbot.schedulers.trysched import TryBase  # pylint: disable=W0611
 from buildbot.schedulers.trysched import BadJobfile  # pylint: disable=W0611
 from twisted.internet import defer
 
-
 class TryJobBaseMixIn:
   _last_lkgr = None
 
@@ -31,12 +30,18 @@ class TryJobBaseMixIn:
         repository=parsed_job['repository'] or '',
         changeids=changeids)
     def create_buildset(ssid):
-      log.msg('Creating try job %s' % ssid)
-      return self.addBuildsetForSourceStamp(ssid=ssid,
-          reason=parsed_job['name'],
-          external_idstring=parsed_job['name'],
-          builderNames=parsed_job['bot'],
-          properties=self.get_props(parsed_job))
+      log.msg('Creating try job(s) %s' % ssid)
+      result = None
+      for build in parsed_job['bot']:
+        bot = build.split(':', 1)[0]
+        result = self.addBuildsetForSourceStamp(ssid=ssid,
+            reason=parsed_job['name'],
+            external_idstring=parsed_job['name'],
+            builderNames=[bot],
+            properties=self.parse_decoration(
+                self.get_props(parsed_job), ''.join(build.split(':', 1)[1:])))
+
+      return result
     d.addCallback(create_buildset)
     d.addErrback(log.err, "Failed to queue a try job!")
     return d

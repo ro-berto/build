@@ -106,11 +106,12 @@ class TryJobBaseMixIn:
     assert isinstance(builder_names, list)
     for builder_name in builder_names:
       build_set = buildset.BuildSet(
-          [builder_name],
+          builder_name.split(':', 1)[0:1],
           jobstamp,
           reason=reason,
           bsid=buildset_id,
-          properties=props)
+          properties=self.parse_decoration(props,
+              ''.join(builder_name.split(':', 1)[1:])))
       build_sets.append(build_set)
       self.CancelJobsMatching(build_set, builder_name)
     for build_set in build_sets:

@@ -92,3 +92,21 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     props.updateFromProperties(self.properties)
     props.update(properties, 'Try job')
     return props
+
+  # R0201: 96,0:TryJobBase.parse_decoration: Method could be a function
+  # No, this would disturb the finding of it from the MixIn classes.
+  # pylint: disable=R0201
+  def parse_decoration(self, properties, decorations):
+    """Returns properties extended by the meaning of decoration.
+    """
+
+    props = Properties()
+    props.updateFromProperties(properties)
+    for decoration in decorations.split(':'):
+      if decoration == 'compile':
+        testfilter = props.getProperty('testfilter') or 'None'
+        props.setProperty('testfilter', testfilter, 'Decoration')
+
+      #TODO(petermayo) Define a DSL of useful modifications to individual
+      # bots of a test run.
+    return props
