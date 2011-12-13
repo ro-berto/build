@@ -62,13 +62,17 @@ def check_free_space():
   """Returns 1 if there isn't enough free space left on the slave."""
   # 1 gb
   min_free_space = 1024*1024*1024
-  if sys.platform == 'win32':
+  if chromium_utils.IsWindows():
     if check_path('c:\\', min_free_space):
       return 1
     if os.path.isdir('e:\\'):
       if check_path('e:\\', min_free_space):
         return 1
-  else:
+  elif chromium_utils.IsMac():
+    if os.path.isdir('/b'):
+      if check_path('/b', min_free_space):
+        return 1
+  elif chromium_utils.IsLinux():
     if os.path.isdir('/b'):
       if check_path('/b', min_free_space):
         return 1
