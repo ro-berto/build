@@ -180,7 +180,7 @@ def _XvfbPidFilename(slave_build_name):
                       'xvfb-' + slave_build_name  + '.pid')
 
 
-def StartVirtualX(slave_build_name, build_dir):
+def StartVirtualX(slave_build_name, build_dir, with_wm=True):
   """Start a virtual X server and set the DISPLAY environment variable so sub
   processes will use the virtual X server.  Also start icewm. This only works
   on Linux and assumes that xvfb and icewm are installed.
@@ -191,6 +191,7 @@ def StartVirtualX(slave_build_name, build_dir):
     build_dir: The directory where binaries are produced.  If this is non-empty,
         we try running xdisplaycheck from |build_dir| to verify our X
         connection.
+    with_wm: Whether we add a window manager to the display too.
   """
   # We use a pid file to make sure we don't have any xvfb processes running
   # from a previous test run.
@@ -219,8 +220,10 @@ def StartVirtualX(slave_build_name, build_dir):
         print "Xvfb stdout and stderr:", proc.communicate()
         raise Exception(xdisplayproc.communicate()[0])
       print "...OK"
-  # Some ChromeOS tests need a window manager.
-  subprocess.Popen("icewm", stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+  if with_wm:
+    # Some ChromeOS tests need a window manager.
+    subprocess.Popen("icewm", stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 
 def StopVirtualX(slave_build_name):

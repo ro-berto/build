@@ -245,7 +245,9 @@ def main_linux(options, args):
     raise chromium_utils.PathNotFound(msg)
 
   if options.xvfb:
-    slave_utils.StartVirtualX(slave_name, bin_dir)
+    slave_utils.StartVirtualX(
+        slave_name, bin_dir,
+        with_wm=options.factory_properties.get('window_manager', True))
 
   # Don't use a sandbox when running tests. Ideally we _would_ use a sandbox,
   # but since the sandbox needs to be suid and owned by root, the one from the
