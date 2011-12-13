@@ -7,10 +7,12 @@
 
 import unittest
 
+import json
 import test_env  # pylint: disable=W0611
 
 from master.factory.chromium_commands import ChromiumCommands
 from master.factory.commands import CreatePerformanceStepClass
+from master.factory.commands import FactoryCommands
 from master.log_parser import process_log
 
 
@@ -41,6 +43,27 @@ class ChromiumCommandsTest(unittest.TestCase):
     self.assert_(not log_processor._report_link)
     self.assert_(log_processor._output_dir)
 
+  def testAddFactorySimple(self):
+    newcmd = FactoryCommands().AddFactoryProperties(None)
+    passed = json.loads(newcmd[-1].split('=', 1)[1])
+    self.assert_(passed == {})
+
+  def testAddFactoryComplex(self):
+    oldcmd = ['FOOBIE', 'BARBIE']
+    props = {
+        'B': True,
+        'A': 'Flarge',
+        'C': {'Noodle': '{"A":"B","C":"D"}', 'Soup': 'Nuts'},
+        'X': None}
+    newcmd = FactoryCommands().AddFactoryProperties(props, oldcmd)
+    # Check for side-effects
+    self.assert_(oldcmd == newcmd)
+    self.assert_(oldcmd[1] == 'BARBIE')
+    # Check for parameter name
+    self.assert_(newcmd[-1].startswith('--factory-properties'))
+    # Check for invertible encoding
+    passed = json.loads(newcmd[-1].split('=', 1)[1])
+    self.assert_(props == passed)
 
 if __name__ == '__main__':
   unittest.main()

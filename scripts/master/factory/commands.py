@@ -8,6 +8,7 @@ All the utility functions to add steps to a build factory here are not
 project-specific. See the other *_commands.py for project-specific commands.
 """
 
+import json
 import ntpath
 import posixpath
 import re
@@ -246,27 +247,23 @@ class FactoryCommands(object):
     # Don't add blamelist since it can contain single quotes and we don't have
     # access to the rendered string to convert it to the correct JSON format
     # before sending it to the slave.
-    wp_strings = []
-    for prop in ['branch', 'buildername', 'buildnumber', 'got_revision',
-                 'mastername', 'parentname', 'revision', 'scheduler',
-                 'slavename', 'snapshot']:
-      wp_strings.append('"%s": "%%(%s:-)s"' % (prop, prop))
-    cmd.append(WithProperties('--build-properties={' + ', '.join(wp_strings) +
-                              '}'))
+    # TODO(petermayo) If we had the buildProperties here we coudl create a more
+    # accurate JSON object.  Pass the build Properties someday.
+
+    build_properties = dict([(prop, "%%(%s:-)s" % prop) for prop in
+        ['branch', 'buildername', 'buildnumber', 'got_revision', 'mastername',
+         'parentname', 'revision', 'scheduler', 'slavename', 'snapshot']])
+
+    cmd.append(WithProperties(
+        '--build-properties=' + json.dumps(build_properties, sort_keys=True)))
     return cmd
 
   def AddFactoryProperties(self, factory_properties, cmd=None):
     """Adds factory properties to cmd."""
     # pylint: disable=R0201
     cmd = cmd or []
-    factory_properties = factory_properties or {}
-
-    fpkeys = factory_properties.keys()
-    fpkeys.sort()
-    fp_strings = []
-    for prop in fpkeys:
-      fp_strings.append('"%s": %r' % (prop, factory_properties[prop]))
-    cmd.append('--factory-properties={' + ', '.join(fp_strings) + '}')
+    cmd.append('--factory-properties=' +
+               json.dumps(factory_properties or {}, sort_keys=True))
     return cmd
 
   def AddTestStep(self, command_class, test_name, test_command,
