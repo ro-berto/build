@@ -69,6 +69,7 @@ def check_free_space():
       if check_path('e:\\', min_free_space):
         return 1
   elif chromium_utils.IsMac():
+    # Don't check /home on Macs because it always reports it as full.
     if os.path.isdir('/b'):
       if check_path('/b', min_free_space):
         return 1
