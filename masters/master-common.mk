@@ -68,7 +68,11 @@ BUILDBOT_PATH ?= $(BUILDBOT7_PATH)
 
 PYTHONPATH := $(BUILDBOT_PATH):$(SCRIPTS_DIR):$(THIRDPARTY_DIR):$(PUBLICCONFIG_DIR):$(PRIVATECONFIG_DIR):.
 
+ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
+start: upgrade
+else
 start:
+endif
 ifneq ($(USE_LAUNCHD),1)
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 else
@@ -95,7 +99,7 @@ restart: stop wait start log
 
 # This target is only known to work on 0.8.x masters.
 upgrade:
-	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
+	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
 
 setup:
 	@echo export PYTHONPATH=$(PYTHONPATH)

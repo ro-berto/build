@@ -32,6 +32,20 @@ from common import chromium_utils
 banana.SIZE_LIMIT = 100 * 1024 * 1024
 
 
+def DatabaseSetup(buildmaster_config, require_dbconfig=False):
+  if os.path.isfile('.dbconfig'):
+    values = {}
+    execfile('.dbconfig', values)
+    if 'password' not in values:
+      raise Exception('could not get db password')
+
+    buildmaster_config['db_url'] = 'postgresql://%s:%s@%s/%s' % (
+        values['username'], values['password'],
+        values.get('hostname', 'localhost'), values['dbname'])
+  else:
+    assert(not require_dbconfig)
+
+
 class Master(config_private.Master):
   """Buildbot master configuration options."""
 
