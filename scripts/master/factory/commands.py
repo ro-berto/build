@@ -265,9 +265,7 @@ class FactoryCommands(object):
     fpkeys.sort()
     fp_strings = []
     for prop in fpkeys:
-      value = str(factory_properties[prop])
-      value = value.replace('"', '\\"')
-      fp_strings.append('"%s": "%s"' % (prop, value))
+      fp_strings.append('"%s": %r' % (prop, factory_properties[prop]))
     cmd.append('--factory-properties={' + ', '.join(fp_strings) + '}')
     return cmd
 
