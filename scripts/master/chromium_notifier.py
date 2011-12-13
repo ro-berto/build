@@ -48,7 +48,9 @@ class ChromiumNotifier(MailNotifier):
   def __init__(self, reply_to=None, categories_steps=None,
       exclusions=None, forgiving_steps=None, status_header=None,
       use_getname=False, send_to_sheriffs=None, sheriffs=None,
-      public_html='public_html', **kwargs):
+      public_html='public_html',
+      subject='buildbot %(result)s in %(projectName)s on %(builder)s',
+      **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type categories_steps: Dictionary of category string mapped to a list of
