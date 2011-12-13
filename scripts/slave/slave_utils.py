@@ -375,13 +375,13 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None):
   # Find the absolute path of the source directory so we can use it below.
   base = os.path.abspath(src_dir) + os.sep
 
-  for file in file_list:
+  for filename in file_list:
     # Strip the base path off so we just have the relative file path.
-    path = file.partition(base)[2]
+    path = filename.partition(base)[2]
 
     # If we have been given a destination directory, add that to the path.
     if dest_dir:
-        path = os.path.join(dest_dir, path)
+      path = os.path.join(dest_dir, path)
 
     # Trim the filename and last slash off to create a destination path.
     path = path.rpartiton(os.sep + os.path.basename(path))[0]
@@ -391,7 +391,7 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None):
       path = path.replace('\\', '/')
 
     # Pass the file off to copy.
-    status = GSUtilCopyFile(file, gs_base, path)
+    status = GSUtilCopyFile(filename, gs_base, path)
 
     # Bail out on any failure.
     if status:
