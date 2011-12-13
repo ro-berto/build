@@ -5,6 +5,7 @@
 
 """Clean up acculumated cruft, including tmp directory."""
 
+import ctypes
 import os
 import sys
 
@@ -36,12 +37,52 @@ def CleanupTempDirectory(temp_dir):
   print 'Removed %d files from %s' % (removed_file_count, temp_dir)
 
 
+def get_free_space(path):
+  """Returns the number of free bytes."""
+  if sys.platform == 'win32':
+    free_bytes = ctypes.c_ulonglong(0)
+    ctypes.windll.kernel32.GetDiskFreeSpaceExW(
+        ctypes.c_wchar_p(path), None, None, ctypes.pointer(free_bytes))
+    return free_bytes.value
+  f = os.statvfs(path)
+  return f.f_bfree * f.f_frsize
+
+
+def check_path(path, min_free_space):
+  """Returns 1 if there isn't enough free space on |path|."""
+  free_space = get_free_space(path)
+  if free_space < min_free_space:
+    print >> sys.stderr, 'Not enough free space on %s: %d bytes left' % (
+        path, free_space)
+    return 1
+  return 0
+
+
+def check_free_space():
+  """Returns 1 if there isn't enough free space left on the slave."""
+  # 1 gb
+  min_free_space = 1024*1024*1024
+  if sys.platform == 'win32':
+    if check_path('c:\\', min_free_space):
+      return 1
+    if os.path.isdir('e:\\'):
+      if check_path('e:\\', min_free_space):
+        return 1
+  else:
+    if os.path.isdir('/b'):
+      if check_path('/b', min_free_space):
+        return 1
+    if check_path('/home', min_free_space):
+      return 1
+  return 0
+
+
 def main_win():
   """Main function for Windows platform."""
   chromium_utils.RemoveChromeTemporaryFiles()
   # TODO(maruel): Temporary, add back.
   #CleanupTempDirectory(os.environ['TEMP'])
-  return 0
+  return check_free_space()
 
 
 def main_mac():
@@ -49,7 +90,7 @@ def main_mac():
   chromium_utils.RemoveChromeTemporaryFiles()
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
-  return 0
+  return check_free_space()
 
 
 def main_linux():
@@ -57,7 +98,7 @@ def main_linux():
   chromium_utils.RemoveChromeTemporaryFiles()
   # TODO(maruel): Temporary, add back.
   # CleanupTempDirectory('/tmp')
-  return 0
+  return check_free_space()
 
 
 def main():
