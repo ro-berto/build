@@ -274,7 +274,7 @@ B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
   notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
-    options=['--build-tool=make', '--compiler=clang'],
+    options=['--build-tool=make', '--compiler=goma-clang'],
     tests=['base', 'gfx', 'unit', 'crypto'],
     factory_properties={
         'gclient_env': {
