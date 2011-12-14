@@ -234,6 +234,7 @@ F('aura_dbg', linux().ChromiumFactory(
     factory_properties={
       'gclient_env': { 'GYP_DEFINES' : 'use_aura=1' },
       'trigger': 'linux_aura_dbg_trigger',
+      'window_manager': False,
     }))
 
 B('Linux Tests (Aura dbg)', 'aura_dbg_tests_1', 'testers',
