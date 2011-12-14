@@ -16,6 +16,7 @@ import logging
 import optparse
 import os
 import sys
+import tempfile
 
 # sys.path needs to be modified here because python2.6 automatically adds the
 # system "google" module (/usr/lib/pymodules/python2.6/google) to sys.modules
@@ -41,6 +42,11 @@ import config
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
 DEST_DIR = 'gtest_results'
+
+
+def get_temp_count():
+  """Returns the number of files and directories inside the temporary dir."""
+  return len(os.listdir(tempfile.gettempdir()))
 
 
 def _RunGTestCommand(command, results_tracker=None, pipes=None):
@@ -539,15 +545,30 @@ def main():
         options.results_directory, '%s.xml' % options.test_type))
     args.append('--gtest_output=xml:' + options.test_output_xml)
 
+  temp_files = get_temp_count()
   if sys.platform.startswith('darwin'):
-    return main_mac(options, args)
+    result = main_mac(options, args)
   elif sys.platform == 'win32':
-    return main_win(options, args)
+    result = main_win(options, args)
   elif sys.platform == 'linux2':
-    return main_linux(options, args)
+    result = main_linux(options, args)
   else:
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
     return 1
+
+  new_temp_files = get_temp_count()
+  if temp_files > new_temp_files:
+    print >> sys.stderr, (
+        'Confused: %d files were deleted from %s during the test run') % (
+        (temp_files - new_temp_files), tempfile.gettempdir())
+  elif temp_files < new_temp_files:
+    print >> sys.stderr, (
+        '%d new files were left in %s: Fix the tests to clean up themselves.'
+        ) % ((new_temp_files - temp_files), tempfile.gettempdir())
+    # TODO(maruel): Make it an error soon. Not yet since I want to iron out all
+    # the remaining cases before.
+    #result = 1
+  return result
 
 
 if '__main__' == __name__:
