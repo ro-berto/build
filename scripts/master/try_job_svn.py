@@ -39,7 +39,6 @@ if buildbot_0_8:
         wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
         yield wfd
         wfd.getResult()
-        assert parsed['revision']
 
         wfd = defer.waitForDeferred(self.master.addChange(
           author=','.join(parsed['email']),
