@@ -106,20 +106,21 @@ class SkiaFactory(gclient_factory.GClientFactory):
 
     # Do all the build steps first, so we will find out about build breakages
     # as soon as possible.
+    make_cmd = 'make --jobs --max-load=4.0 BUILDTYPE=%s' % self._configuration
     self._skia_cmd_obj.AddRun(
-        run_command='make core BUILDTYPE=%s' % self._configuration,
+        run_command='%s core' % make_cmd,
         description='BuildCore')
     self._skia_cmd_obj.AddRun(
-        run_command='make tests BUILDTYPE=%s' % self._configuration,
+        run_command='%s tests' % make_cmd,
         description='BuildTests')
     self._skia_cmd_obj.AddRun(
-        run_command='make gm BUILDTYPE=%s' % self._configuration,
+        run_command='%s gm' % make_cmd,
         description='BuildGM')
     self._skia_cmd_obj.AddRun(
-        run_command='make bench BUILDTYPE=%s' % self._configuration,
+        run_command='%s bench' % make_cmd,
         description='BuildBench')
     self._skia_cmd_obj.AddRun(
-        run_command='make all BUILDTYPE=%s' % self._configuration,
+        run_command='%s all' % make_cmd,
         description='BuildAllOtherTargets')
 
     self._skia_cmd_obj.AddRun(
