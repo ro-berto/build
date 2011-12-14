@@ -23,15 +23,12 @@ class FailuresNotifier(chromium_notifier.ChromiumNotifier):
   # Ignore failures that happened more than this number of times recently.
   _IGNORE_FAILURES_THRESHOLD = 1
 
-  # TODO(timurrrr): this is a hacky way to override the constant in the parent
-  # class. Probably we just need to make it an optional/overridable
-  # constructor argument.
-  _MINIMUM_DELAY_BETWEEN_ALERT = 30  # in seconds
-
   def __init__(self, **kwargs):
     # Set defaults.
     kwargs.setdefault('sheriffs', ['sheriff'])
     kwargs.setdefault('sendToInterestedUsers', True)
+    if not kwargs.get('minimum_delay_between_alert'):
+      kwargs['minimum_delay_between_alert'] = 0
     kwargs.setdefault(
         'status_header',
         'Failure notification for "%(steps)s" on "%(builder)s".')

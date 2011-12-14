@@ -43,12 +43,11 @@ class ChromiumNotifier(MailNotifier):
   # pylint: disable=R0201,W0221
 
   _CATEGORY_SPLITTER = '|'
-  _MINIMUM_DELAY_BETWEEN_ALERT = 600  # 10 minutes in seconds
 
   def __init__(self, reply_to=None, categories_steps=None,
       exclusions=None, forgiving_steps=None, status_header=None,
       use_getname=False, send_to_sheriffs=None, sheriffs=None,
-      public_html='public_html', **kwargs):
+      public_html='public_html', minimum_delay_between_alert=600, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type categories_steps: Dictionary of category string mapped to a list of
@@ -72,6 +71,10 @@ class ChromiumNotifier(MailNotifier):
 
     @type status_header: String.
     @param status_header: Formatted header used in mail message.
+
+    @type minimum_delay_between_alert: Integer.
+    @param minimum_delay_between_alert: Don't send failure e-mails more often
+                                        than the given value (in seconds).
 
     @type send_to_sheriffs: Boolean or None.
     @param send_to_sheriffs: Force the list of sheriffes to either ['sheriff']
@@ -101,6 +104,7 @@ class ChromiumNotifier(MailNotifier):
     self.forgiving_steps = forgiving_steps or []
     self.status_header = status_header
     assert self.status_header
+    self.minimum_delay_between_alert = minimum_delay_between_alert
     #TODO(petermayo) Remove send_to_sheriffs one day soon.
     if send_to_sheriffs is None:
       self.sheriffs = sheriffs or []
@@ -229,7 +233,7 @@ class ChromiumNotifier(MailNotifier):
     """
     log.msg('About to email')
     if (self._last_time_mail_sent and self._last_time_mail_sent >
-        time.time() - self._MINIMUM_DELAY_BETWEEN_ALERT):
+        time.time() - self.minimum_delay_between_alert):
       # Rate limit tree alerts.
       return
     self._last_time_mail_sent = time.time()
