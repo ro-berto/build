@@ -16,8 +16,6 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-defaults['category'] = 'linux'
-
 
 # Directory where we want to record performance data
 #
@@ -42,6 +40,7 @@ S('skia_rel', branch='trunk', treeStableTimer=60)
 #
 
 # Linux...
+defaults['category'] = 'linux'
 B('Skia_Linux_Fixed_Debug', 'f_skia_linux_fixed_debug',
   scheduler='skia_rel')
 F('f_skia_linux_fixed_debug', skia_factory.SkiaFactory(
@@ -84,6 +83,7 @@ F('f_skia_linux_float_nodebug', skia_factory.SkiaFactory(
     ).Build())
 
 # Android (runs on a Linux buildbot slave)...
+defaults['category'] = 'android'
 B('Skia_Android_Float_Debug', 'f_skia_android_float_debug',
   scheduler='skia_rel')
 F('f_skia_android_float_debug', android_factory.AndroidFactory(
@@ -104,6 +104,7 @@ F('f_skia_android_float_nodebug', android_factory.AndroidFactory(
     ).Build())
 
 # Mac...
+defaults['category'] = 'mac'
 B('Skia_Mac_Fixed_Debug', 'f_skia_mac_fixed_debug',
   scheduler='skia_rel')
 F('f_skia_mac_fixed_debug', skia_factory.SkiaFactory(
@@ -146,6 +147,7 @@ F('f_skia_mac_float_nodebug', skia_factory.SkiaFactory(
     ).Build())
 
 # Windows...
+defaults['category'] = 'windows'
 B('Skia_Win32_Fixed_Debug', 'f_skia_win32_fixed_debug',
   scheduler='skia_rel')
 F('f_skia_win32_fixed_debug', skia_factory.SkiaFactory(
