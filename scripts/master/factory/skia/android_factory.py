@@ -22,8 +22,8 @@ class AndroidFactory(skia_factory.SkiaFactory):
       self._skia_cmd_obj.AddClean()
 
     self._skia_cmd_obj.AddRun(
-        run_command='%s -d xoom -j all BUILDTYPE=%s' % (
-            '../android/bin/android_make', self._configuration),
+        run_command='../android/bin/android_make all -d xoom %s' % (
+            self._make_flags),
         description='BuildAll')
 
     return self._factory

@@ -74,11 +74,14 @@ class SkiaFactory(gclient_factory.GClientFactory):
     # Set _default_clobber based on config.Master
     self._default_clobber = getattr(config.Master, 'default_clobber', False)
 
-    # Determine which join() implementation to use for this target_platform.
+    # Platform-specific stuff.
     if target_platform == TARGET_PLATFORM_WIN32:
       self.TargetPathJoin = ntpath.join
+      self._make_flags = 'BUILDTYPE=%s' % self._configuration
     else:
       self.TargetPathJoin = posixpath.join
+      self._make_flags = '--jobs --max-load=4.0 BUILDTYPE=%s' % (
+          self._configuration)
 
     # Figure out where we are going to store performance output.
     if perf_output_basedir:
@@ -114,21 +117,20 @@ class SkiaFactory(gclient_factory.GClientFactory):
 
     # Do all the build steps first, so we will find out about build breakages
     # as soon as possible.
-    make_cmd = 'make --jobs --max-load=4.0 BUILDTYPE=%s' % self._configuration
     self._skia_cmd_obj.AddRun(
-        run_command='%s core' % make_cmd,
+        run_command='make core %s' % self._make_flags,
         description='BuildCore')
     self._skia_cmd_obj.AddRun(
-        run_command='%s tests' % make_cmd,
+        run_command='make tests %s' % self._make_flags,
         description='BuildTests')
     self._skia_cmd_obj.AddRun(
-        run_command='%s gm' % make_cmd,
+        run_command='make gm %s' % self._make_flags,
         description='BuildGM')
     self._skia_cmd_obj.AddRun(
-        run_command='%s bench' % make_cmd,
+        run_command='make bench %s' % self._make_flags,
         description='BuildBench')
     self._skia_cmd_obj.AddRun(
-        run_command='%s all' % make_cmd,
+        run_command='make all %s' % self._make_flags,
         description='BuildAllOtherTargets')
 
     self._skia_cmd_obj.AddRun(
