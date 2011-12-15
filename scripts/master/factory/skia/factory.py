@@ -33,13 +33,15 @@ TARGET_PLATFORM_WIN32 = 'win32'
 class SkiaFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Skia master.cfg files."""
 
-  def __init__(self, build_subdir, target_platform=None, configuration='Debug',
+  def __init__(self, build_subdir='trunk', other_subdirs=None,
+               target_platform=None, configuration='Debug',
                default_timeout=600,
                environment_variables=None, gm_image_subdir=None,
                perf_output_basedir=None, builder_name=None):
     """Instantiates a SkiaFactory as appropriate for this target_platform.
 
-    build_subdir: string indicating path within slave directory
+    build_subdir: subdirectory to check out and then build within
+    other_subdirs: list of other subdirectories to also check out (or None)
     target_platform: a string such as TARGET_PLATFORM_LINUX
     configuration: 'Debug' or 'Release'
     default_timeout: default timeout for each command, in seconds
@@ -51,12 +53,18 @@ class SkiaFactory(gclient_factory.GClientFactory):
         data, or None if we don't want to store performance data
     builder_name: name of the builder associated with this factory
     """
-    # The only thing we use the BaseFactory for is to deal with gclient.
-    gclient_solution = gclient_factory.GClientSolution(
-        svn_url=config.Master.skia_url + 'trunk', name=build_subdir)
+    # Create gclient solutions corresponding to the main build_subdir
+    # and other directories we also wish to check out.
+    solutions = [gclient_factory.GClientSolution(
+        svn_url=config.Master.skia_url + build_subdir, name=build_subdir)]
+    if other_subdirs:
+      for other_subdir in other_subdirs:
+        solutions.append(gclient_factory.GClientSolution(
+            svn_url=config.Master.skia_url + other_subdir, name=other_subdir))
     gclient_factory.GClientFactory.__init__(
-        self, build_dir='', solutions=[gclient_solution],
+        self, build_dir='', solutions=solutions,
         target_platform=target_platform)
+
     self._configuration = configuration
     self._factory = self.BaseFactory(factory_properties=None)
     self._gm_image_subdir = gm_image_subdir
