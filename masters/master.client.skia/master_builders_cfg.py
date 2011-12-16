@@ -103,8 +103,8 @@ F('f_skia_android_float_nodebug', android_factory.AndroidFactory(
     builder_name='Skia_Android_Float_NoDebug',
     ).Build())
 
-# Mac...
-defaults['category'] = 'mac'
+# Mac 10.6 (SnowLeopard) ...
+defaults['category'] = 'mac-10.6'
 B('Skia_Mac_Fixed_Debug', 'f_skia_mac_fixed_debug',
   scheduler='skia_rel')
 F('f_skia_mac_fixed_debug', skia_factory.SkiaFactory(
@@ -144,6 +144,49 @@ F('f_skia_mac_float_nodebug', skia_factory.SkiaFactory(
     gm_image_subdir='base-macmini',
     perf_output_basedir=perf_output_basedir_mac,
     builder_name='Skia_Mac_Float_NoDebug',
+    ).Build())
+
+# Mac 10.7 (Lion) ...
+defaults['category'] = 'mac-10.7'
+B('Skia_MacMiniLion_Fixed_Debug', 'f_skia_MacMiniLion_fixed_debug',
+  scheduler='skia_rel')
+F('f_skia_MacMiniLion_fixed_debug', skia_factory.SkiaFactory(
+    target_platform=skia_factory.TARGET_PLATFORM_MAC,
+    configuration='Debug',
+    environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
+    gm_image_subdir='base-macmini-lion-fixed',
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_MacMiniLion_Fixed_Debug',
+    ).Build())
+B('Skia_MacMiniLion_Fixed_NoDebug', 'f_skia_MacMiniLion_fixed_nodebug',
+  scheduler='skia_rel')
+F('f_skia_MacMiniLion_fixed_nodebug', skia_factory.SkiaFactory(
+    target_platform=skia_factory.TARGET_PLATFORM_MAC,
+    configuration='Release',
+    environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
+    gm_image_subdir='base-macmini-lion-fixed',
+    perf_output_basedir=perf_output_basedir_mac,
+    builder_name='Skia_MacMiniLion_Fixed_NoDebug',
+    ).Build())
+B('Skia_MacMiniLion_Float_Debug', 'f_skia_MacMiniLion_float_debug',
+  scheduler='skia_rel')
+F('f_skia_MacMiniLion_float_debug', skia_factory.SkiaFactory(
+    target_platform=skia_factory.TARGET_PLATFORM_MAC,
+    configuration='Debug',
+    environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
+    gm_image_subdir='base-macmini-lion-float',
+    perf_output_basedir=None, # no perf measurement for debug builds
+    builder_name='Skia_MacMiniLion_Float_Debug',
+    ).Build())
+B('Skia_MacMiniLion_Float_NoDebug', 'f_skia_MacMiniLion_float_nodebug',
+  scheduler='skia_rel')
+F('f_skia_MacMiniLion_float_nodebug', skia_factory.SkiaFactory(
+    target_platform=skia_factory.TARGET_PLATFORM_MAC,
+    configuration='Release',
+    environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
+    gm_image_subdir='base-macmini-lion-float',
+    perf_output_basedir=perf_output_basedir_mac,
+    builder_name='Skia_MacMiniLion_Float_NoDebug',
     ).Build())
 
 # Windows...
