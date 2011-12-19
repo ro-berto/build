@@ -39,10 +39,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                           '-fno-builtin -fno-optimize-sibling-calls" '
 
     # MSVS flags
-    'win_debug_Optimization=1 '
     'win_debug_RuntimeChecks=0 '
-    'win_debug_InlineFunctionExpansion=0 '
     'win_debug_disable_iterator_debugging=1 '
+    'win_debug_Optimization=1 '
+    'win_debug_InlineFunctionExpansion=0 '
+    'win_debug_OmitFramePointers=0 '
     'win_release_InlineFunctionExpansion=0 '
     'win_release_OmitFramePointers=0 '
 
