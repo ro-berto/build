@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block header -%}
+{{ super() }}
+<hr/>
+<center>V8 BUILDBOT</center><BR>
+<font color=red><B>Current allowed redness:</b><br>
+Webkit64 - 16 test failures expected<br>
+Vista perf is flaky
+</font>
+{% endblock header %}
+
+{% block footer %}
+
+{{ super() }}
+{# <p>Debug info: {{ debuginfo }}</p> #}
+{% endblock %}
