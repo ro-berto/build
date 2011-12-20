@@ -171,6 +171,9 @@ class Archive(config_private.Archive):
       'npchrome_frame.dll',
       'ppGoogleNaClPluginChrome.dll',
       'setup.exe',
+      # Syzygy-optimized version of the binaries above.
+      'syzygy\\chrome.dll',
+      'syzygy\\mini_installer.exe',
       # Chrome Frame used to be built into a 'servers' directory,
       # but no more. Leave the old paths here while we transition
       # and hunt down robertshield@ if they remain here for very
