@@ -43,6 +43,11 @@ USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
 DEST_DIR = 'gtest_results'
 
+HTTPD_CONF = {
+    'linux': 'httpd2_linux.conf',
+    'mac': 'httpd2_mac.conf',
+    'win': 'httpd.conf'
+}
 
 def get_temp_count():
   """Returns the number of files and directories inside the temporary dir."""
@@ -122,6 +127,48 @@ def _GenerateJSONForTestResults(options, results_tracker):
   except:  # pylint: disable=W0702
     print 'Unexpected error while generating JSON'
 
+def start_http_server(platform, build_dir, test_exe_path, document_root):
+  # pylint: disable=F0401
+  import google.httpd_utils
+  import google.platform_utils
+  platform_util = google.platform_utils.PlatformUtility(build_dir)
+
+  # Name the output directory for the exe, without its path or suffix.
+  # e.g., chrome-release/httpd_logs/unit_tests/
+  test_exe_name = os.path.splitext(os.path.basename(test_exe_path))[0]
+  output_dir = os.path.join(slave_utils.SlaveBaseDir(build_dir),
+                            'httpd_logs',
+                            test_exe_name)
+
+  # Sanity checks for httpd2_linux.conf.
+  if platform == 'linux':
+    for ssl_file in ['ssl.conf', 'ssl.load']:
+      ssl_path = os.path.join('/etc/apache/mods-enabled', ssl_file)
+      if not os.path.exists(ssl_path):
+        sys.stderr.write('WARNING: %s missing, http server may not start\n' %
+                         ssl_path)
+    if not os.access('/var/run/apache2', os.W_OK):
+      sys.stderr.write('WARNING: cannot write to /var/run/apache2, '
+                       'http server may not start\n')
+
+  apache_config_dir = google.httpd_utils.ApacheConfigDir(build_dir)
+  httpd_conf_path = os.path.join(apache_config_dir, HTTPD_CONF[platform])
+  mime_types_path = os.path.join(apache_config_dir, 'mime.types')
+  document_root = os.path.abspath(document_root)
+
+  start_cmd = platform_util.GetStartHttpdCommand(output_dir,
+                                                 httpd_conf_path,
+                                                 mime_types_path,
+                                                 document_root)
+  stop_cmd = platform_util.GetStopHttpdCommand()
+  http_server = google.httpd_utils.ApacheHttpd(start_cmd, stop_cmd, [8000])
+  try:
+    http_server.StartServer()
+  except google.httpd_utils.HttpdNotStarted, e:
+    raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
+                                             (e, output_dir))
+  return http_server
+
 def main_mac(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
@@ -142,37 +189,6 @@ def main_mac(options, args):
     if not os.path.exists(test_exe_path):
       msg = pre + 'Unable to find %s' % test_exe_path
       raise chromium_utils.PathNotFound(msg)
-
-  http_server = None
-  if options.document_root:
-    # pylint: disable=F0401
-    import google.httpd_utils
-    import google.platform_utils
-    platform_util = google.platform_utils.PlatformUtility(build_dir)
-
-    # Name the output directory for the exe, without its path or suffix.
-    # e.g., chrome-release/httpd_logs/unit_tests/
-    test_exe_name = os.path.splitext(os.path.basename(test_exe_path))[0]
-    output_dir = os.path.join(slave_utils.SlaveBaseDir(build_dir),
-                              'httpd_logs',
-                              test_exe_name)
-
-    apache_config_dir = google.httpd_utils.ApacheConfigDir(build_dir)
-    httpd_conf_path = os.path.join(apache_config_dir, 'httpd2_mac.conf')
-    mime_types_path = os.path.join(apache_config_dir, 'mime.types')
-    document_root = os.path.abspath(options.document_root)
-
-    start_cmd = platform_util.GetStartHttpdCommand(output_dir,
-                                                   httpd_conf_path,
-                                                   mime_types_path,
-                                                   document_root)
-    stop_cmd = platform_util.GetStopHttpdCommand()
-    http_server = google.httpd_utils.ApacheHttpd(start_cmd, stop_cmd, [8000])
-    try:
-      http_server.StartServer()
-    except google.httpd_utils.HttpdNotStarted, e:
-      raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
-                                               (e, output_dir))
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -204,10 +220,16 @@ def main_mac(options, args):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
 
-  result = _RunGTestCommand(command, results_tracker)
-
-  if options.document_root:
-    http_server.StopServer()
+  try:
+    http_server = None
+    if options.document_root:
+      http_server = start_http_server('mac', build_dir=build_dir,
+                                      test_exe_path=test_exe_path,
+                                      document_root=options.document_root)
+    result = _RunGTestCommand(command, results_tracker)
+  finally:
+    if http_server:
+      http_server.StopServer()
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -250,58 +272,12 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
-  if options.xvfb:
-    slave_utils.StartVirtualX(
-        slave_name, bin_dir,
-        with_wm=options.factory_properties.get('window_manager', True))
-
   # Don't use a sandbox when running tests. Ideally we _would_ use a sandbox,
   # but since the sandbox needs to be suid and owned by root, the one from the
   # current build won't work (the buildbot would need sudo to set the proper
   # file attributes), and we'd rather have no sandbox than pull in an old
   # (possibly incompatible) one from the system.
   os.environ['CHROME_DEVEL_SANDBOX'] = ''
-
-  http_server = None
-  if options.document_root:
-    # pylint: disable=F0401
-    import google.httpd_utils
-    import google.platform_utils
-    platform_util = google.platform_utils.PlatformUtility(build_dir)
-
-    # Name the output directory for the exe, without its path or suffix.
-    # e.g., chrome-release/httpd_logs/unit_tests/
-    test_exe_name = os.path.splitext(os.path.basename(test_exe_path))[0]
-    output_dir = os.path.join(slave_utils.SlaveBaseDir(build_dir),
-                              'httpd_logs',
-                              test_exe_name)
-
-    # Sanity checks for httpd2_linux.conf.
-    for ssl_file in 'ssl.conf', 'ssl.load':
-      ssl_path = os.path.join('/etc/apache/mods-enabled', ssl_file)
-      if not os.path.exists(ssl_path):
-        sys.stderr.write('WARNING: %s missing, http server may not start\n' %
-                         ssl_path)
-    if not os.access('/var/run/apache2', os.W_OK):
-      sys.stderr.write('WARNING: cannot write to /var/run/apache2, '
-                       'http server may not start\n')
-
-    apache_config_dir = google.httpd_utils.ApacheConfigDir(build_dir)
-    httpd_conf_path = os.path.join(apache_config_dir, 'httpd2_linux.conf')
-    mime_types_path = os.path.join(apache_config_dir, 'mime.types')
-    document_root = os.path.abspath(options.document_root)
-
-    start_cmd = platform_util.GetStartHttpdCommand(output_dir,
-                                                   httpd_conf_path,
-                                                   mime_types_path,
-                                                   document_root)
-    stop_cmd = platform_util.GetStopHttpdCommand()
-    http_server = google.httpd_utils.ApacheHttpd(start_cmd, stop_cmd, [8000])
-    try:
-      http_server.StartServer()
-    except google.httpd_utils.HttpdNotStarted, e:
-      raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
-                                               (e, output_dir))
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -335,19 +311,28 @@ def main_linux(options, args):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
 
-  if options.factory_properties.get('asan', False):
-    symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
-                                             'scripts', 'asan_symbolize.py'))
-    pipes = [[sys.executable, symbolize], ['c++filt']]
-    result = _RunGTestCommand(command, pipes=pipes)
-  else:
-    result = _RunGTestCommand(command, results_tracker)
-
-  if options.document_root:
-    http_server.StopServer()
-
-  if options.xvfb:
-    slave_utils.StopVirtualX(slave_name)
+  try:
+    http_server = None
+    if options.document_root:
+      http_server = start_http_server('linux', build_dir=build_dir,
+                                      test_exe_path=test_exe_path,
+                                      document_root=options.document_root)
+    if options.xvfb:
+      slave_utils.StartVirtualX(
+          slave_name, bin_dir,
+          with_wm=options.factory_properties.get('window_manager', True))
+    if options.factory_properties.get('asan', False):
+      symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
+                                               'scripts', 'asan_symbolize.py'))
+      pipes = [[sys.executable, symbolize], ['c++filt']]
+      result = _RunGTestCommand(command, pipes=pipes)
+    else:
+      result = _RunGTestCommand(command, results_tracker)
+  finally:
+    if http_server:
+      http_server.StopServer()
+    if options.xvfb:
+      slave_utils.StopVirtualX(slave_name)
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -367,38 +352,6 @@ def main_win(options, args):
   test_exe_path = os.path.join(build_dir, options.target, test_exe)
   if not os.path.exists(test_exe_path):
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
-
-  http_server = None
-  if options.document_root:
-    # pylint: disable=F0401
-    import google.httpd_utils
-    import google.platform_utils
-    platform_util = google.platform_utils.PlatformUtility(build_dir)
-
-    # Name the output directory for the exe, without its path or suffix.
-    # e.g., chrome-release/httpd_logs/unit_tests/
-    test_exe_name = os.path.basename(test_exe_path).rsplit('.', 1)[0]
-    output_dir = os.path.join(slave_utils.SlaveBaseDir(build_dir),
-                              'httpd_logs',
-                              test_exe_name)
-
-    apache_config_dir = google.httpd_utils.ApacheConfigDir(build_dir)
-    httpd_conf_path = os.path.join(apache_config_dir, 'httpd.conf')
-    mime_types_path = os.path.join(apache_config_dir, 'mime.types')
-    document_root = os.path.abspath(options.document_root)
-
-    start_cmd = platform_util.GetStartHttpdCommand(output_dir,
-                                                   httpd_conf_path,
-                                                   mime_types_path,
-                                                   document_root)
-    stop_cmd = platform_util.GetStopHttpdCommand()
-    http_server = google.httpd_utils.ApacheHttpd(start_cmd, stop_cmd, [8000])
-    try:
-      http_server.StartServer()
-    except google.httpd_utils.HttpdNotStarted, e:
-      # Improve the error message.
-      raise google.httpd_utils.HttpdNotStarted('%s. See log file in %s' %
-                                               (e, output_dir))
 
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', True)
@@ -431,10 +384,16 @@ def main_win(options, args):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
 
-  result = _RunGTestCommand(command, results_tracker)
-
-  if options.document_root:
-    http_server.StopServer()
+  try:
+    http_server = None
+    if options.document_root:
+      http_server = start_http_server('win', build_dir=build_dir,
+                                      test_exe_path=test_exe_path,
+                                      document_root=options.document_root)
+    result = _RunGTestCommand(command, results_tracker)
+  finally:
+    if http_server:
+      http_server.StopServer()
 
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)
