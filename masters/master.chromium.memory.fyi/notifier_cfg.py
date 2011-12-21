@@ -84,7 +84,63 @@ def Update(config, active_master, c):
           'appropriate actions (e.g. revert, update suppressions, notify '
           'sheriff, etc.).\n\n'
           'For more info on the memory waterfall please see these links:\n'
-          'http://dev.chromium.org/developers/how-tos/using-valgrind\n'
           'http://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium/memory-sheriff'
+          'http://dev.chromium.org/developers/how-tos/using-valgrind\n'
+          'http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer\n'
+          'http://dev.chromium.org/developers/how-tos/using-the-heap-leak-checker\n'
           '\n\nBy the way, the current memory sheriff is on the CC list.'
+      ))
+
+  # Set up a separate notifier for the Dr.Memory bots.
+  # TODO(timurrrr); merge this with the main notifier once DrMemory is verified
+  # to send few e-mails.
+  drm_categories_steps = {
+    'drmemory_tester': [
+      'memory test: googleurl',
+      'memory test: printing',
+      'memory test: media',
+      'memory test: remoting',
+      'memory test: sql',
+      'memory test: sync',
+      'memory test: sync_unit_tests',
+      'memory test: ipc',
+      'memory test: base',
+      'memory test: content',
+      'memory test: crypto',
+      'memory test: net',
+      'memory test: gfx',
+      'memory test: unit',  # unit_tests might be sharded
+      'memory test: unit_1',
+      'memory test: unit_2',
+   ],
+  }
+  c['status'].append(failures_notifier.FailuresNotifier(
+      fromaddr=active_master.from_address,
+      categories_steps=drm_categories_steps,
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='drmemory buildbot %(result)s in %(projectName)s on '
+              '%(builder)s, revision %(revision)s',
+      sendToInterestedUsers=False,  # don't send e-mails to the committers.
+      extraRecipients=(
+          active_master.tree_closing_notification_recipients +
+          ['bruening+drmfailure@google.com',  # Do send e-mails to the DrM team
+           'rnk+drmfailure@google.com',
+           'timurrrr+drmfailure@google.com',
+           'zhaoqin+drmfailure@google.com',
+          ]),
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      use_getname=True,
+      public_html='../master.chromium/public_html',
+      sheriffs=['sheriff_memory'],
+      status_header='Failure notification for "%(steps)s" on "%(builder)s".\n\n'
+          'This bot is in testing mode, but most of the failures are expected '
+          'to indicate real bugs. The e-mails are not sent to the commiters '
+          'yet though.\n\n'
+          'Please see if the failures are related to the recent commits and '
+          'take appropriate actions (e.g. revert, update suppressions, notify '
+          'sheriff, etc.).\n\n'
+          'For more info on Dr.Memory waterfall please see these links:\n'
+          'http://dev.chromium.org/developers/how-tos/using-drmemory'
       ))
