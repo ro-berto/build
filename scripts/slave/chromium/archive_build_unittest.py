@@ -18,6 +18,8 @@ sys.path.append(os.path.join(BASE_DIR, 'scripts'))
 sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
 from slave.chromium import archive_build
+from common import archive_utils
+from common import archive_utils_unittest
 from common import chromium_utils
 import config
 
@@ -43,25 +45,6 @@ TEMP_FILES_WITH_WILDCARDS = ['foo.txt',
                              os.path.join('fee', '*', 'bar'),
                              os.path.join('fee', '*', 'fo'),
                              os.path.join('foo', 'fee', 'faa', 'boo.txt')]
-
-# Sample FILES.cfg-style contents.
-TEST_FILES_CFG = [
-  {
-    'filename': 'allany.txt',
-    'arch': ['32bit', '64bit'],
-    'buildtype': ['dev', 'official'],
-  },
-  {
-    'filename': 'official64.txt',
-    'arch': ['64bit'],
-    'buildtype': ['official'],
-  },
-  {
-    'filename': 'dev32.txt',
-    'arch': ['32bit'],
-    'buildtype': ['dev'],
-  },
-]
 
 ZIP_TEST_FILES = ['file1.txt',
                   'file2.txt',
@@ -206,16 +189,12 @@ class ArchiveTest(unittest.TestCase):
   def createZipFileTestDir(self):
     self.prepareToolDir()
 
-    self.FILES = os.path.join(self.tool_dir, 'FILES.cfg')
-    f = open(self.FILES, 'w')
-    f.write("FILES = %s" % str(TEST_FILES_CFG))
-    f.close()
-
+    self.FILES = archive_utils_unittest.CreateTestFilesCfg(self.tool_dir)
     self.EMPTY_FILES = os.path.join(self.tool_dir, 'EMPTY_FILES')
-    f = open(self.EMPTY_FILES, 'a')
 
     self.createFileSetInBuildDir(ZIP_TEST_FILES + EXTRA_ZIP_TEST_FILES +
-                                 [i['filename'] for i in TEST_FILES_CFG])
+                                 [i['filename'] for i in
+                                  archive_utils_unittest.TEST_FILES_CFG])
 
   def createTestFiles(self, file_list):
     self.prepareToolDir()
@@ -297,9 +276,9 @@ class ArchiveTest(unittest.TestCase):
     archive_name = 'test'
     arch = '64bit'
     buildtype = 'official'
-    files_list = self.stager.ParseFilesList(buildtype, arch)
+    files_list = archive_utils.ParseFilesList(self.FILES, buildtype, arch)
     # Verify FILES.cfg was parsed correctly.
-    for i in TEST_FILES_CFG:
+    for i in archive_utils_unittest.TEST_FILES_CFG:
       if arch in i['arch'] and buildtype in i['buildtype']:
         self.assertTrue(i['filename'] in files_list)
     zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,

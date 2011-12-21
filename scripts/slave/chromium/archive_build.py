@@ -21,6 +21,7 @@ import simplejson
 import sys
 import re
 
+from common import archive_utils
 from common import chromium_utils
 from slave import slave_utils
 
@@ -35,9 +36,6 @@ SYMBOL_FILE_NAME = 'SYMBOLS'
 TEST_FILE_NAME = 'TESTS'
 
 
-class StagingError(Exception):
-  pass
-  
 class GSUtilError(Exception):
   pass
 
@@ -209,27 +207,6 @@ class StagerBase(object):
                                         source_file_name))
     file_list = ExpandWildcards(self._build_dir, file_list)
     return file_list
-
-  def ParseFilesList(self, buildtype, arch):
-    """Determine the list of archive files for a given release.
-
-    NOTE: A version of this handling is also in
-    build-internal/scripts/slave-internal/branched/stage_build.py
-    so be sure to update that if this is updated.
-    """
-    files_file = os.path.join(self._tool_dir, 'FILES.cfg')
-    if not os.path.exists(files_file):
-      raise StagingError('Files list does not exist (%s).' % files_file)
-    exec_globals = {'__builtins__': None}
-
-    files_list = None
-    execfile(files_file, exec_globals)
-    files_list = [
-        fileobj['filename'] for fileobj in exec_globals['FILES']
-        if (buildtype in fileobj['buildtype'] and arch in fileobj['arch'] and
-            not fileobj.get('archive'))
-    ]
-    return files_list
 
   def MyCopyFileToDir(self, filename, destination, gs_base, gs_subdir='',
                       mimetype=None):
@@ -430,7 +407,8 @@ class StagerBase(object):
                                                  self._build_dir,
                                                  raise_error=False)
     if not os.path.exists(zip_file):
-      raise StagingError('Failed to make zip package %s' % zip_file)
+      raise archive_utils.StagingError('Failed to make zip package %s' %
+                                       zip_file)
     return (zip_dir, zip_file)
 
   def _UploadSymbols(self, www_dir, gs_base):
@@ -647,7 +625,7 @@ class StagerBase(object):
     """Zips build files and uploads them, their symbols, and a change log."""
     result = 0
     if self._build_revision is None:
-      raise StagingError('No build revision was provided')
+      raise archive_utils.StagingError('No build revision was provided')
     print 'Staging in %s' % self._staging_dir
 
     arch = platform.architecture(bits='unknown')[0]
@@ -656,8 +634,10 @@ class StagerBase(object):
     if chromium_utils.IsWindows():
       arch = '32bit'
     if arch == 'unknown':
-      raise StagingError('Could not determine build architecture')
-    files_list = self.ParseFilesList(self.options.mode, arch)
+      raise archive_utils.StagingError('Could not determine build architecture')
+    files_file = os.path.join(self._tool_dir, archive_utils.FILES_FILENAME)
+    files_list = archive_utils.ParseFilesList(files_file, self.options.mode,
+                                              arch)
     files_list = ExpandWildcards(self._build_dir, files_list)
     self._archive_files = files_list
     self._archive_files.extend(self.GetExtraFiles(
@@ -839,7 +819,7 @@ def main(argv):
                            help='factory properties in JSON format')
   options, args = option_parser.parse_args()
   if args:
-    raise StagingError('Unknown arguments: %s' % args)
+    raise archive_utils.StagingError('Unknown arguments: %s' % args)
 
   if not options.ignore:
     # Independent of any other configuration, these exes and any symbol files
