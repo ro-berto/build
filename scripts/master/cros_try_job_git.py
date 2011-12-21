@@ -6,12 +6,9 @@ import tempfile
 
 from twisted.internet import defer, utils
 
-from master.try_job_base import buildbot_0_8, BadJobfile, TryJobBase
+from master.try_job_base import BadJobfile, TryJobBase
 
-if buildbot_0_8:
-  from buildbot.changes.gitpoller import GitPoller
-else:
-  from master.tryjob_git_poller import GitPoller
+from buildbot.changes.gitpoller import GitPoller
 
 
 class CrOSTryJobGit(TryJobBase):

@@ -4,16 +4,11 @@
 
 import re
 
-import buildbot
 from buildbot.process.properties import Properties
 
 from twisted.python import log
 
-buildbot_0_8 = int(buildbot.version.split('.')[1]) >= 8
-if buildbot_0_8:
-  from master.try_job_base_bb8 import BadJobfile, TryBase, TryJobBaseMixIn
-else:
-  from master.try_job_base_bb7 import BadJobfile, TryBase, TryJobBaseMixIn
+from master.try_job_base_bb8 import BadJobfile, TryBase, TryJobBaseMixIn
 
 
 class TryJobBase(TryBase, TryJobBaseMixIn):

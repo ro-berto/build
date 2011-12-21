@@ -7,7 +7,7 @@ from twisted.internet import defer
 from twisted.python import log
 from twisted.web import http
 
-from master.try_job_base import buildbot_0_8, TryJobBase
+from master.try_job_base import TryJobBase
 
 
 class TryJobHTTPRequest(http.Request):
@@ -65,17 +65,15 @@ class TryJobHTTP(TryJobBase):
   @defer.deferredGenerator
   def messageReceived(self, options):
     parsed = self.parse_options(options)
-    changeids = None
-    if buildbot_0_8:
-      wfd = defer.waitForDeferred(self.get_lkgr(parsed))
-      yield wfd
-      wfd.getResult()
+    wfd = defer.waitForDeferred(self.get_lkgr(parsed))
+    yield wfd
+    wfd.getResult()
 
-      wfd = defer.waitForDeferred(self.master.addChange(
-        author=','.join(parsed['email']),
-        revision=parsed['revision'],
-        comments=''))
-      yield wfd
-      changeids = [wfd.getResult().number]
+    wfd = defer.waitForDeferred(self.master.addChange(
+      author=','.join(parsed['email']),
+      revision=parsed['revision'],
+      comments=''))
+    yield wfd
+    changeids = [wfd.getResult().number]
 
     self.SubmitJob(parsed, changeids)

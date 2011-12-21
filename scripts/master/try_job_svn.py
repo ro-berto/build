@@ -8,49 +8,46 @@ from buildbot.changes import svnpoller
 from twisted.internet import defer
 from twisted.python import log
 
-from master.try_job_base import buildbot_0_8, BadJobfile, TryJobBase
+from master.try_job_base import BadJobfile, TryJobBase
 
 
-if buildbot_0_8:
-  class SVNPoller(svnpoller.SVNPoller):
-    @defer.deferredGenerator
-    def submit_changes(self, changes):
-      """Instead of submitting the changes to the master, pass them to
-      TryJobSubversion. We don't want buildbot to see these changes.
-
-      Code used in Buildbot 0.8.x.
-      """
-      for chdict in changes:
-        # TODO(maruel): Clean up to not parse two times, trap the exception.
-        parsed = {'email': None}
-        good = False
-        try:
-          # pylint: disable=E1101
-          options = dict(
-              item.split('=', 1) for item in chdict['comments'].splitlines()
-              if '=' in item)
-          parsed = self.parent.parse_options(options)
-          good = True
-        except (TypeError, ValueError):
-          raise BadJobfile('Failed to parse the metadata')
-
-        # 'fix' revision.
+class SVNPoller(svnpoller.SVNPoller):
+  @defer.deferredGenerator
+  def submit_changes(self, changes):
+    """Instead of submitting the changes to the master, pass them to
+    TryJobSubversion. We don't want buildbot to see these changes.
+    """
+    for chdict in changes:
+      # TODO(maruel): Clean up to not parse two times, trap the exception.
+      parsed = {'email': None}
+      good = False
+      try:
         # pylint: disable=E1101
-        wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
-        yield wfd
-        wfd.getResult()
+        options = dict(
+            item.split('=', 1) for item in chdict['comments'].splitlines()
+            if '=' in item)
+        parsed = self.parent.parse_options(options)
+        good = True
+      except (TypeError, ValueError):
+        raise BadJobfile('Failed to parse the metadata')
 
-        wfd = defer.waitForDeferred(self.master.addChange(
-          author=','.join(parsed['email']),
-          revision=parsed['revision'],
-          comments=''))
-        yield wfd
-        change = wfd.getResult()
+      # 'fix' revision.
+      # pylint: disable=E1101
+      wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
+      yield wfd
+      wfd.getResult()
 
-        if good:
-          # pylint: disable=E1101
-          self.parent.addChangeInner(
-              chdict['files'], parsed, change.number)
+      wfd = defer.waitForDeferred(self.master.addChange(
+        author=','.join(parsed['email']),
+        revision=parsed['revision'],
+        comments=''))
+      yield wfd
+      change = wfd.getResult()
+
+      if good:
+        # pylint: disable=E1101
+        self.parent.addChangeInner(
+            chdict['files'], parsed, change.number)
 
 
 class TryJobSubversion(TryJobBase):
@@ -60,17 +57,12 @@ class TryJobSubversion(TryJobBase):
     TryJobBase.__init__(self, name, pools, properties,
                         last_good_urls, code_review_sites)
     self.svn_url = svn_url
-    if buildbot_0_8:
-      self.watcher = SVNPoller(svnurl=svn_url, pollinterval=10)
-    else:
-      self.watcher = svnpoller.SVNPoller(svnurl=svn_url, pollinterval=10)
-      self.watcher.setServiceParent(self)
+    self.watcher = SVNPoller(svnurl=svn_url, pollinterval=10)
 
-  if buildbot_0_8:
-    def setServiceParent(self, parent):
-      TryJobBase.setServiceParent(self, parent)
-      self.watcher.setServiceParent(self)
-      self.watcher.master = self.master
+  def setServiceParent(self, parent):
+    TryJobBase.setServiceParent(self, parent)
+    self.watcher.setServiceParent(self)
+    self.watcher.master = self.master
 
   def addChange(self, change):
     """Used in Buildbot 0.7.12."""
