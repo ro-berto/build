@@ -8,7 +8,7 @@ from buildbot.changes import svnpoller
 from twisted.internet import defer
 from twisted.python import log
 
-from master.try_job_base import BadJobfile, TryJobBase
+from master.try_job_base import TryJobBase
 
 
 class SVNPoller(svnpoller.SVNPoller):
@@ -18,21 +18,13 @@ class SVNPoller(svnpoller.SVNPoller):
     TryJobSubversion. We don't want buildbot to see these changes.
     """
     for chdict in changes:
-      # TODO(maruel): Clean up to not parse two times, trap the exception.
-      parsed = {'email': None}
-      good = False
-      try:
-        # pylint: disable=E1101
-        options = dict(
-            item.split('=', 1) for item in chdict['comments'].splitlines()
-            if '=' in item)
-        parsed = self.parent.parse_options(options)
-        good = True
-      except (TypeError, ValueError):
-        raise BadJobfile('Failed to parse the metadata')
+      # pylint: disable=E1101
+      parsed = dict(
+          item.split('=', 1) for item in chdict['comments'].splitlines()
+          if '=' in item)
+      parsed = self.parent.parse_options(parsed)
 
       # 'fix' revision.
-      # pylint: disable=E1101
       wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
       yield wfd
       wfd.getResult()
@@ -44,10 +36,7 @@ class SVNPoller(svnpoller.SVNPoller):
       yield wfd
       change = wfd.getResult()
 
-      if good:
-        # pylint: disable=E1101
-        self.parent.addChangeInner(
-            chdict['files'], parsed, change.number)
+      self.parent.addChangeInner(chdict['files'], parsed, change.number)
 
 
 class TryJobSubversion(TryJobBase):

@@ -38,12 +38,9 @@ class CrOSTryJobGit(TryJobBase):
       raise BadJobfile(
           'Try job with too many files %s' % (','.join(change.files)))
 
-    try:
-      options = dict(
-          i.split('=', 1) for i in change.comments.splitlines() if '=' in i)
-    except ValueError:
-      raise BadJobfile('Invalid meta data')
-    parsed = self.parse_options(options)
+    parsed = dict(
+        i.split('=', 1) for i in change.comments.splitlines() if '=' in i)
+    parsed = self.parse_options(parsed)
     if not parsed.get('gerrit_patches', None):
       if not parsed['issue']:
         raise BadJobfile('No patches specified!')
@@ -51,7 +48,7 @@ class CrOSTryJobGit(TryJobBase):
       if parsed['issue']:
         raise BadJobfile('Both issue and gerrit_patches specified!')
       parsed['issue'] = parsed.pop('gerrit_patches')
-    if not options.get('bot'):
+    if not parsed.get('bot'):
       raise BadJobfile('No configs specified!')
 
     wfd = defer.waitForDeferred(self.get_file_contents(change.files[0]))

@@ -22,14 +22,10 @@ class TryJobHTTPRequest(http.Request):
         self.code = http.NOT_FOUND
         return
 
-      try:
-        # The values are embedded in a list.
-        options = dict((k, v[0]) for k, v in self.args.iteritems())
-        self.channel.factory.parent.messageReceived(options)
-        self.code = 200
-      except (ValueError, TypeError):
-        self.code = http.INTERNAL_SERVER_ERROR
-        raise
+      # The values are embedded in a list.
+      options = dict((k, v[0]) for k, v in self.args.iteritems() if v)
+      self.channel.factory.parent.messageReceived(options)
+      self.code = 200
     finally:
       self.code_message = http.RESPONSES[self.code]
       self.write(self.code_message)
