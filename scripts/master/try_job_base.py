@@ -5,16 +5,16 @@
 import re
 
 from buildbot.process.properties import Properties
-
+from buildbot.schedulers.trysched import TryBase
+from buildbot.schedulers.trysched import BadJobfile
+from twisted.internet import defer
 from twisted.python import log
+from twisted.web import client
 
-from master.try_job_base_bb8 import BadJobfile, TryBase, TryJobBaseMixIn
 
-
-class TryJobBase(TryBase, TryJobBaseMixIn):
-  # 0.7.12 uses list and 0.8.x uses tuple...
-  compare_attrs = tuple(list(TryBase.compare_attrs) + [
-      'pools', 'last_good-urls', 'code_review_sites'])
+class TryJobBase(TryBase):
+  compare_attrs = TryBase.compare_attrs + (
+      'pools', 'last_good-urls', 'code_review_sites')
 
   # Simplistic email matching regexp.
   _EMAIL_VALIDATOR = re.compile(
@@ -22,14 +22,12 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
 
   def __init__(self, name, pools, properties,
                last_good_urls, code_review_sites):
-    # pylint has a false positive: it thinks base constructors aren't called.
-    # pylint: disable=W0231
     TryBase.__init__(self, name, pools.ListBuilderNames(), properties or {})
-    TryJobBaseMixIn.__init__(self)
     self.pools = pools
     pools.SetParent(self)
     self.last_good_urls = last_good_urls
     self.code_review_sites = code_review_sites
+    self._last_lkgr = None
 
   def gotChange(self, change, important):  # pylint: disable=R0201
     log.msg('ERROR: gotChange was unexpectedly called.')
@@ -88,10 +86,8 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
     props.update(properties, 'Try job')
     return props
 
-  # R0201: 96,0:TryJobBase.parse_decoration: Method could be a function
-  # No, this would disturb the finding of it from the MixIn classes.
-  # pylint: disable=R0201
-  def parse_decoration(self, properties, decorations):
+  @staticmethod
+  def parse_decoration(properties, decorations):
     """Returns properties extended by the meaning of decoration.
     """
 
@@ -105,3 +101,58 @@ class TryJobBase(TryBase, TryJobBaseMixIn):
       #TODO(petermayo) Define a DSL of useful modifications to individual
       # bots of a test run.
     return props
+
+  def SubmitJob(self, parsed_job, changeids):
+    if not parsed_job['bot']:
+      raise BadJobfile(
+          'incoming Try job did not specify any allowed builder names')
+
+    d = self.master.db.sourcestamps.addSourceStamp(
+        branch=parsed_job['branch'],
+        revision=parsed_job['revision'],
+        patch_body=parsed_job['patch'],
+        patch_level=parsed_job['patchlevel'],
+        patch_subdir=parsed_job['root'],
+        project=parsed_job['project'],
+        repository=parsed_job['repository'] or '',
+        changeids=changeids)
+
+    def create_buildset(ssid):
+      log.msg('Creating try job(s) %s' % ssid)
+      result = None
+      for build in parsed_job['bot']:
+        bot = build.split(':', 1)[0]
+        result = self.addBuildsetForSourceStamp(ssid=ssid,
+            reason=parsed_job['name'],
+            external_idstring=parsed_job['name'],
+            builderNames=[bot],
+            properties=self.parse_decoration(
+                self.get_props(parsed_job), ''.join(build.split(':', 1)[1:])))
+      return result
+
+    d.addCallback(create_buildset)
+    d.addErrback(log.err, "Failed to queue a try job!")
+    return d
+
+  def get_lkgr(self, options):
+    """Grabs last known good revision number if necessary."""
+    options['rietveld'] = (self.code_review_sites or {}).get(options['project'])
+    last_good_url = (self.last_good_urls or {}).get(options['project'])
+    if options['revision'] or not last_good_url:
+      return defer.succeed(0)
+
+    def Success(result):
+      try:
+        new_value = int(result.strip())
+      except (TypeError, ValueError):
+        new_value = None
+      if new_value and (not self._last_lkgr or new_value > self._last_lkgr):
+        self._last_lkgr = new_value
+      options['revision'] = self._last_lkgr or 'HEAD'
+
+    def Failure(result):
+      options['revision'] = self._last_lkgr or 'HEAD'
+
+    connection = client.getPage(last_good_url, agent='buildbot')
+    connection.addCallbacks(Success, Failure)
+    return connection
