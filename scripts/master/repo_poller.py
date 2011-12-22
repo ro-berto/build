@@ -186,7 +186,7 @@ class RepoPoller(PollingChangeSource):
                                path=os.path.join(self.workdir, project),
                                env=dict(PATH=os.environ['PATH']),
                                errortoo=False)
-    d.addCallback(lambda git_output: git_output.splitlines())
+    d.addCallback(lambda git_output: [x for x in git_output.splitlines() if x])
     return d
 
   def GetCommitName(self, project, rev):
