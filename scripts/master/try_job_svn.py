@@ -56,24 +56,12 @@ class TryJobSubversion(TryJobBase):
                last_good_urls=None, code_review_sites=None):
     TryJobBase.__init__(self, name, pools, properties,
                         last_good_urls, code_review_sites)
-    self.svn_url = svn_url
     self.watcher = SVNPoller(svnurl=svn_url, pollinterval=10)
 
   def setServiceParent(self, parent):
     TryJobBase.setServiceParent(self, parent)
     self.watcher.setServiceParent(self)
     self.watcher.master = self.master
-
-  def addChange(self, change):
-    """Used in Buildbot 0.7.12."""
-    try:
-      options = dict(
-          item.split('=', 1) for item in change.comments.splitlines()
-          if '=' in item)
-      parsed = self.parse_options(options)
-    except (TypeError, ValueError):
-      raise BadJobfile('Failed to parse the metadata')
-    return self.addChangeInner(change.files, parsed, None)
 
   def addChangeInner(self, files, options, changeid):
     """Process the received data and send the queue buildset."""
@@ -84,8 +72,10 @@ class TryJobSubversion(TryJobBase):
       log.msg("Svn try with too many files %s" % (','.join(files)))
       return
 
-    command = ['cat', self.svn_url + '/' + urllib.quote(diffs[0]),
-        '--non-interactive']
+    command = [
+        'cat', self.watcher.svnurl + '/' + urllib.quote(diffs[0]),
+        '--non-interactive'
+    ]
     deferred = self.watcher.getProcessOutput(command)
     deferred.addCallback(
         lambda output: self._OnDiffReceived(options, output, changeid))
