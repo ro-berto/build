@@ -57,9 +57,10 @@ def FormatHumanReadable(number):
     10866     => 10.8k
     682851200 => 683M
   """
-  scientific = '%.2e' % float(number)  # 6.83e+005
-  digits = float(scientific[:4])       # 6.83
-  exponent = int(scientific[5:])       # int('+005') = 5
+  scientific = '%.2e' % float(number)     # 6.83e+005
+  e_idx = scientific.find('e')            # 4, or 5 if negative
+  digits = float(scientific[:e_idx])      # 6.83
+  exponent = int(scientific[e_idx + 1:])  # int('+005') = 5
   while exponent % 3:
     digits *= 10
     exponent -= 1
