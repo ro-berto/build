@@ -34,44 +34,49 @@ class TryJobBase(TryBase):
 
   def parse_options(self, options):
     """Converts try job settings into a dict."""
-    # Flush None and '' keys.
-    options = dict(
-        (k, v) for k, v in options.iteritems() if v not in (None, ''))
+    try:
+      # Flush None and '' keys.
+      options = dict(
+          (k, v) for k, v in options.iteritems() if v not in (None, ''))
 
-    options.setdefault('name', 'Unnamed')
-    options.setdefault('user', 'John Doe')
-    options['email'] = [e for e in options.get('email', '').split(',') if e]
-    for email in options['email']:
-      if not TryJobBase._EMAIL_VALIDATOR.match(email):
-        raise BadJobfile("'%s' is an invalid email address!" % email)
+      options.setdefault('name', 'Unnamed')
+      options.setdefault('user', 'John Doe')
+      options['email'] = [e for e in options.get('email', '').split(',') if e]
+      for email in options['email']:
+        if not TryJobBase._EMAIL_VALIDATOR.match(email):
+          raise BadJobfile("'%s' is an invalid email address!" % email)
 
-    options.setdefault('patch', None)
-    options.setdefault('root', None)
-    # -pN argument to patch.
-    options['patchlevel'] = int(options.get('patchlevel', 0))
-    options.setdefault('branch', None)
-    options.setdefault('revision', None)
-    options.setdefault('reason', '%s: %s' % (options['user'], options['name']))
-    options['testfilter'] = [
-        i for i in options.get('testfilter', '').split(',') if i
-    ]
-    options.setdefault('project', self.pools.default_pool_name)
-    options.setdefault('repository', None)
-    # Code review infos. Enforce numbers.
-    def try_int(key):
-      if options.setdefault(key, None) is None:
-        return
-      options[key] = int(options[key])
-    try_int('patchset')
-    try_int('issue')
+      options.setdefault('patch', None)
+      options.setdefault('root', None)
+      # -pN argument to patch.
+      options['patchlevel'] = int(options.get('patchlevel', 0))
+      options.setdefault('branch', None)
+      options.setdefault('revision', None)
+      options.setdefault(
+          'reason', '%s: %s' % (options['user'], options['name']))
+      options['testfilter'] = [
+          i for i in options.get('testfilter', '').split(',') if i
+      ]
+      options.setdefault('project', self.pools.default_pool_name)
+      options.setdefault('repository', None)
+      # Code review infos. Enforce numbers.
+      def try_int(key):
+        if options.setdefault(key, None) is None:
+          return
+        options[key] = int(options[key])
+      try_int('patchset')
+      try_int('issue')
 
-    builder_names = []
-    if 'bot' in options:
-      builder_names = options.get('bot', '').split(',')
-    options['bot'] = self.pools.Select(builder_names, options['project'])
-    log.msg(
-        'Choose %s for job %s' % (','.join(options['bot']), options['reason']))
-    return options
+      builder_names = []
+      if 'bot' in options:
+        builder_names = options.get('bot', '').split(',')
+      options['bot'] = self.pools.Select(builder_names, options['project'])
+      log.msg(
+          'Choose %s for job %s' %
+          (','.join(options['bot']), options['reason']))
+      return options
+    except (TypeError, ValueError), e:
+      raise BadJobfile('Failed to parse the metadata: %r' % options, e)
 
   def get_props(self, options):
     """Current job extra properties that are not related to the source stamp.
