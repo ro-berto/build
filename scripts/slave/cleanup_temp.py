@@ -6,10 +6,42 @@
 """Clean up acculumated cruft, including tmp directory."""
 
 import ctypes
+import getpass
+import logging
 import os
+import socket
 import sys
+import urllib
 
 from common import chromium_utils
+
+
+class FullDriveException(Exception):
+  """A disk is almost full."""
+  pass
+
+
+def send_alert(path, left):
+  """Sends information about full drive to the breakpad server."""
+  url = 'https://chromium-status.appspot.com/breakpad'
+  try:
+    host = socket.getfqdn()
+    params = {
+        # args must not be empty.
+        'args': '-',
+        'stack': 'Only %d bytes left in %s on %s' % (left, path, host),
+        'user': getpass.getuser(),
+        'exception': 'FullDriveException',
+        'host': host,
+        'cwd': path,
+    }
+    request = urllib.urlopen(url, urllib.urlencode(params))
+    request.read()
+    request.close()
+  except IOError, e:
+    logging.error(
+        'There was a failure while trying to send the stack trace.\n%s' %
+            str(e))
 
 
 def CleanupTempDirectory(temp_dir):
@@ -48,38 +80,14 @@ def get_free_space(path):
   return f.f_bfree * f.f_frsize
 
 
-def check_path(path, min_free_space):
-  """Returns 1 if there isn't enough free space on |path|."""
+def check_free_space_path(path, min_free_space=1024*1024*1024):
+  """Returns 1 if there isn't enough free space on |path|.
+
+  Defaults to 1gb.
+  """
   free_space = get_free_space(path)
   if free_space < min_free_space:
-    print >> sys.stderr, 'Not enough free space on %s: %d bytes left' % (
-        path, free_space)
-    return 1
-  return 0
-
-
-def check_free_space():
-  """Returns 1 if there isn't enough free space left on the slave."""
-  # 1 gb
-  min_free_space = 1024*1024*1024
-  if chromium_utils.IsWindows():
-    if check_path('c:\\', min_free_space):
-      return 1
-    if os.path.isdir('e:\\'):
-      if check_path('e:\\', min_free_space):
-        return 1
-  elif chromium_utils.IsMac():
-    # Don't check /home on Macs because it always reports it as full.
-    if os.path.isdir('/b'):
-      if check_path('/b', min_free_space):
-        return 1
-  elif chromium_utils.IsLinux():
-    if os.path.isdir('/b'):
-      if check_path('/b', min_free_space):
-        return 1
-    if check_path('/home', min_free_space):
-      return 1
-  return 0
+    raise FullDriveException(path, free_space)
 
 
 def main_win():
@@ -87,7 +95,10 @@ def main_win():
   chromium_utils.RemoveChromeTemporaryFiles()
   # TODO(maruel): Temporary, add back.
   #CleanupTempDirectory(os.environ['TEMP'])
-  return check_free_space()
+  check_free_space_path('c:\\')
+  if os.path.isdir('e:\\'):
+    check_free_space_path('e:\\')
+  return 0
 
 
 def main_mac():
@@ -95,7 +106,11 @@ def main_mac():
   chromium_utils.RemoveChromeTemporaryFiles()
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
-  return check_free_space()
+
+  # Don't check /home on Macs because it always reports it as full.
+  if os.path.isdir('/b'):
+    check_free_space_path('/b')
+  return 0
 
 
 def main_linux():
@@ -103,19 +118,28 @@ def main_linux():
   chromium_utils.RemoveChromeTemporaryFiles()
   # TODO(maruel): Temporary, add back.
   # CleanupTempDirectory('/tmp')
-  return check_free_space()
+  if os.path.isdir('/b'):
+    check_free_space_path('/b')
+  check_free_space_path('/home')
+  return 0
 
 
 def main():
-  if chromium_utils.IsWindows():
-    return main_win()
-  elif chromium_utils.IsMac():
-    return main_mac()
-  elif chromium_utils.IsLinux():
-    return main_linux()
-  else:
-    print 'Unknown platform: ' + sys.platform
-    return 1
+  try:
+    if chromium_utils.IsWindows():
+      return main_win()
+    elif chromium_utils.IsMac():
+      return main_mac()
+    elif chromium_utils.IsLinux():
+      return main_linux()
+    else:
+      print 'Unknown platform: ' + sys.platform
+      return 1
+  except FullDriveException, e:
+    print >> sys.stderr, 'Not enough free space on %s: %d bytes left' % (
+        e.args[0], e.args[1])
+    send_alert(e.args[0], e.args[1])
+
 
 
 if '__main__' == __name__:
