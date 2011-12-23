@@ -820,10 +820,12 @@ def SshCopyTree(srctree, host, dst):
 
 
 def LogAndRemoveFiles(temp_dir, regex_pattern):
-  """Remove files in |temp_dir| that match |regex_pattern|.
+  """Removes files in |temp_dir| that match |regex_pattern|.
   This function prints out the name of each directory or filename before
   it deletes the file from disk."""
   regex = re.compile(regex_pattern)
+  if not os.path.isdir(temp_dir):
+    return
   for dir_item in os.listdir(temp_dir):
     if regex.search(dir_item):
       full_path = os.path.join(temp_dir, dir_item)
