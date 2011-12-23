@@ -84,11 +84,11 @@ def Update(config, active_master, c):
           'appropriate actions (e.g. revert, update suppressions, notify '
           'sheriff, etc.).\n\n'
           'For more info on the memory waterfall please see these links:\n'
-          'http://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium/memory-sheriff'
+          'http://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium/memory-sheriff\n'
           'http://dev.chromium.org/developers/how-tos/using-valgrind\n'
           'http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer\n'
           'http://dev.chromium.org/developers/how-tos/using-the-heap-leak-checker\n'
-          '\n\nBy the way, the current memory sheriff is on the CC list.'
+          '\nBy the way, the current memory sheriff is on the CC list.'
       ))
 
   # Set up a separate notifier for the Dr.Memory bots.
@@ -121,10 +121,11 @@ def Update(config, active_master, c):
       relayhost=config.Master.smtp,
       subject='drmemory buildbot %(result)s in %(projectName)s on '
               '%(builder)s, revision %(revision)s',
-      sendToInterestedUsers=False,  # don't send e-mails to the committers.
+      sendToInterestedUsers=True,
       extraRecipients=(
           active_master.tree_closing_notification_recipients +
-          ['bruening+drmfailure@google.com',  # Do send e-mails to the DrM team
+          # Also send e-mails to the Dr.Memory team.
+          ['bruening+drmfailure@google.com',
            'rnk+drmfailure@google.com',
            'timurrrr+drmfailure@google.com',
            'zhaoqin+drmfailure@google.com',
@@ -135,12 +136,13 @@ def Update(config, active_master, c):
       public_html='../master.chromium/public_html',
       sheriffs=['sheriff_memory'],
       status_header='Failure notification for "%(steps)s" on "%(builder)s".\n\n'
-          'This bot is in testing mode, but most of the failures are expected '
-          'to indicate real bugs. The e-mails are not sent to the commiters '
-          'yet though.\n\n'
-          'Please see if the failures are related to the recent commits and '
-          'take appropriate actions (e.g. revert, update suppressions, notify '
+          'NOTE: This bot is in testing mode, but most of the failures are '
+          'expected to indicate real bugs.\n\n'
+          'Please see if the failures are related to your commit and take '
+          'appropriate actions (e.g. revert, update suppressions, notify '
           'sheriff, etc.).\n\n'
           'For more info on Dr.Memory waterfall please see these links:\n'
-          'http://dev.chromium.org/developers/how-tos/using-drmemory'
+          'http://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium/memory-sheriff\n'
+          'http://dev.chromium.org/developers/how-tos/using-drmemory\n'
+          '\nBy the way, the current memory sheriff is on the CC list.'
       ))
