@@ -149,6 +149,13 @@ def InstallMsi(options):
   return RunSSH(options)
 
 
+def ProcessShortName(master):
+  """Substitutes shortcuts."""
+  master = re.sub(r'\bt\b', 'tryserver', master)
+  master = re.sub(r'\bc\b', 'chromium', master)
+  return re.sub(r'\bco\b', 'chromiumos', master)
+
+
 def Main(argv):
   usage = """%prog [options]
 
@@ -245,10 +252,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
       slaves = slaves_list.BaseSlavesList(slaves)
     else:
       if not options.master in masters:
-        # Try substitutions
-        options.master = re.sub(r'\bt\b', 'tryserver', options.master)
-        options.master = re.sub(r'\bc\b', 'chromium', options.master)
-        options.master = re.sub(r'\bco\b', 'chromiumos', options.master)
+        options.master = ProcessShortName(options.master)
         if not options.master in masters:
           parser.error('Unknown master \'%s\'.\nChoices are: %s' % (
             options.master, ', '.join(masters)))
