@@ -849,8 +849,10 @@ def RemoveChromeTemporaryFiles():
   # At some point a leading dot got added, support with and without it.
   kLogRegex = '^\.?(com\.google\.Chrome|org\.chromium)\.'
   if IsWindows():
-    kLogRegex = '^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
+    kLogRegex = r'^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
+    # Dump and temporary files.
+    LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
   elif IsLinux():
     kLogRegexHeapcheck = '\.(sym|heap)$'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
@@ -862,6 +864,11 @@ def RemoveChromeTemporaryFiles():
       ns_temp_dir = GetCommandOutput([nstempdir_path]).strip()
       if ns_temp_dir:
         LogAndRemoveFiles(ns_temp_dir, kLogRegex)
+    for i in ('Chromium', 'Google Chrome'):
+      # Remove dumps.
+      crash_path = '%s/Library/Application Support/%s/Crash Reports' % (
+          os.environ['HOME'], i)
+      LogAndRemoveFiles(crash_path, r'^.+\.dmp$')
   else:
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
