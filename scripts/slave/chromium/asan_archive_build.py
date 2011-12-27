@@ -57,9 +57,11 @@ def archive(options, args):
   zip_file_list = [f for f in os.listdir(build_dir)
                    if ShouldPackageFile(f, options.target)]
 
-  zip_file_name = 'asan-%s-%s-%d' % (chromium_utils.PlatformName(),
-                                     options.target.lower(),
-                                     build_revision)
+  prefix = options.factory_properties.get('asan_archive_name', 'asan')
+  zip_file_name = '%s-%s-%s-%d' % (prefix,
+                                   chromium_utils.PlatformName(),
+                                   options.target.lower(),
+                                   build_revision)
 
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
@@ -81,6 +83,10 @@ def archive(options, args):
     raise StagingError('Failed to upload %s to %s. Error %d' % (zip_file,
                                                                 gs_bucket,
                                                                 status))
+  else:
+    # Delete the file, it is not needed anymore.
+    os.remove(zip_file)
+
   return status
 
 

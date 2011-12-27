@@ -70,6 +70,19 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'gs_bucket': 'gs://chromium-browser-asan',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
 
+asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
+            'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
+
+B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
+F('linux_asan_rel_sym', linux().ChromiumASANFactory(
+    clobber=True,
+    options=['--compiler=asan', 'chrome', 'DumpRenderTree'],
+    factory_properties={
+       'asan_archive_build': True,
+       'asan_archive_name': 'asan-symbolized',
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gclient_env': {'GYP_DEFINES': asan_gyp}}))
+
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
