@@ -471,7 +471,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     elif factory_properties.get("needs_drmemory"):
       if 'drmemory.DEPS' not in [s.name for s in self._solutions]:
         self._solutions.append(gclient_factory.GClientSolution(
-            config.Master.trunk_url + '/deps/third_party/drmemory/DEPS',
+            config.Master.trunk_url +
+            '/deps/third_party/drmemory/drmemory.DEPS',
             'drmemory.DEPS'))
     elif factory_properties.get("needs_tsan_gcc"):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
