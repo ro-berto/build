@@ -574,20 +574,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      timeout=timeout,
                      do_step_if=self.TestStepFilter)
 
-  def _AddBasicPythonTest(self, test_name, script, args=None,
-                          command_class=retcode_command.ReturnCodeCommand,
-                          **kwargs):
-    """Adds a Python based test step.
-
-    Args:
-      test_name: A string describing the test, used to build its logfile
-        name and its descriptions in the waterfall display.
-      script: Path to the Python test to execute.
-      args: Arguments to pass on to the Python test command line.
-      command_class: The command type to run, such as shell.ShellCommand or
-        gtest_command.GTestCommand.
-      kwargs: Additional arguments to pass on to the AddTestStep function.
-    """
+  def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
     args = args or []
     J = self.PathJoin
     if self._target_platform == 'win32':
@@ -600,11 +587,11 @@ class ChromiumCommands(commands.FactoryCommands):
       test_cmd = self.GetTestCommand('/usr/local/bin/python2.6',
                                      [script] + args)
 
-    self.AddTestStep(command_class,
+    self.AddTestStep(retcode_command.ReturnCodeCommand,
                      test_name,
                      test_cmd,
-                     do_step_if=self.TestStepFilter,
-                     **kwargs)
+                     timeout=timeout,
+                     do_step_if=self.TestStepFilter)
 
   def AddChromeDriverTest(self, timeout=1200):
     J = self.PathJoin
@@ -622,39 +609,48 @@ class ChromiumCommands(commands.FactoryCommands):
                               workdir=None,
                               src_base=None,
                               suite=None,
-                              factory_properties=None,
-                              perf=False):
+                              factory_properties=None):
     """Adds a step to run PyAuto functional tests.
 
     Args:
       workdir: the working dir for this step
       src_base: relative path (from workdir) to src. Not needed if workdir is
                 'build' (the default)
-      suite: PyAuto suite to execute.
-      perf: Is this a perf test or not? Requires suite to be set.
+
     """
     factory_properties = factory_properties or {}
+    J = self.PathJoin
+    pyauto_script = J('src', 'chrome', 'test', 'functional',
+                      'pyauto_functional.py')
+    # in case a '..' prefix is needed
+    if src_base:
+      pyauto_script = J(src_base, pyauto_script)
 
-    src_base = src_base or ''
-    pyauto_script = self.PathJoin(
-        src_base, 'src', 'chrome', 'test', 'functional', 'pyauto_functional.py')
+    pyauto_functional_cmd = ['python', pyauto_script, '-v']
+    if self._target_platform == 'win32':
+      pyauto_functional_cmd = self.GetPythonTestCommand(pyauto_script, ['-v'])
+      if src_base:  # Adjust runtest.py path if needed.
+        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
+    elif self._target_platform == 'darwin':
+      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python2.5',
+                                                  [pyauto_script, '-v'])
+      if src_base:  # Adjust runtest.py path if needed.
+        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
+    elif (self._target_platform.startswith('linux') and
+          factory_properties.get('use_xvfb_on_linux')):
+      # Run thru runtest.py on linux to launch virtual x server
+      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
+                                                  [pyauto_script, '-v'])
 
-    args = ['-v']
     if suite:
-      args.append('--suite=%s' % suite)
-
-    # Python test step args applicable for all types of tests.
-    step_args = {'test_name': test_name, 'script': pyauto_script, 'args': args,
-                 'timeout': timeout, 'env': {'PYTHONPATH': '.'},
-                 'workdir': workdir}
-
-    # Use special command class for parsing perf values from output.
-    if perf and suite:
-      step_args['command_class'] = self.GetPerfStepClass(
-          factory_properties, suite.lower(),
-          process_log.GraphingLogProcessor)
-
-    self._AddBasicPythonTest(**step_args)
+      pyauto_functional_cmd.append('--suite=%s' % suite)
+    self.AddTestStep(retcode_command.ReturnCodeCommand,
+                     test_name,
+                     pyauto_functional_cmd,
+                     env={'PYTHONPATH': '.'},
+                     workdir=workdir,
+                     timeout=timeout,
+                     do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddDevToolsTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -906,18 +902,248 @@ class ChromiumCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd)
 
-  def AddMediaTests(self, test_groups, factory_properties=None, timeout=1200):
-    """Adds media test steps according to the specified test_groups.
+
+  def _GetPyAutoCmd(self, src_base=None, script=None, factory_properties=None,
+                    dataset=None, matrix=True, media_home=None, test_name=None,
+                    http=False, nocache=False, verbose=False, suite_name=None,
+                    reference_build_dir=None, track=False):
+    """Get PyAuto command line based on arguments.
 
     Args:
-      test_groups: List of (str:Name, bool:Perf?) tuples which should be
-        translated into test steps.
-    """
-    for group, is_perf in test_groups:
-      self.AddPyAutoFunctionalTest(
-          'media_tests_' + group.lower(), suite=group, timeout=timeout,
-          perf=is_perf, factory_properties=factory_properties)
+      src_base: relative path (from workdir) to src. Not needed if workdir is
+                'build' (the default). Needed when workdir is not 'build' (like
+                parent of 'build').
+      script: script name that contain main function for test.
+      factory_properties: factory properties.
+      dataset: data set file name for data.
+      matrix: if True, use matrix form test data. If False, use list form
+              test data.
+      media_home: media files home location.
+      test_name: test name to be used for testing.
+      http: if True, run test with http mode (media is served by http server).
+      nocache: if True, run test with media cache disabled.
+      verbose: if True, run test with verbose mode.
+      suite_name: the PYAUTO suite name (it is in PYAUTO_TESTS).
+      reference_build_dir: a directory with reference build binary.
+      track: if True, run test with track functionality.
 
+    Returns:
+      a commandline list that can be executed
+    """
+    factory_properties = factory_properties or {}
+    J = self.PathJoin
+    pyauto_script = J('src', 'chrome', 'test', 'functional', 'media', script)
+    # In case a '..' prefix is needed.
+    if src_base:
+      pyauto_script = J(src_base, pyauto_script)
+    if verbose:
+      argv = ['-v']
+    else:
+      argv = []
+    if suite_name:
+      argv.append('-s' + suite_name)
+    if matrix:
+      argv.append('-x' + dataset)
+    else:
+      argv.append('-i' + dataset)
+    if media_home and matrix:
+      argv.append('-r' + media_home)
+    if test_name:
+      argv.append('-t' + test_name)
+    if http:
+      # TODO (imasaki@): adding network test here. Currently, not used.
+      pass
+    if nocache:
+      # Disable cache.
+      argv.append('-c')
+    if reference_build_dir:
+      # Run the test with reference build
+      argv.append('-a')
+      # Set reference build directory.
+      argv.append('-k' + reference_build_dir)
+    if track:
+      argv.append('-j')
+    pyauto_functional_cmd = ['python', pyauto_script] + argv
+    if self._target_platform == 'win32':  # win needs python26
+      py26 = J('src', 'third_party', 'python_26', 'python_slave.exe')
+      if src_base:
+        py26 = J(src_base, py26)
+      pyauto_functional_cmd = ['cmd', '/C'] + [py26, pyauto_script, '-v']
+    elif self._target_platform == 'darwin':
+      pyauto_functional_cmd = ['python2.5', pyauto_script, '-v']
+    elif (self._target_platform == 'linux2' and
+          factory_properties.get('use_xvfb_on_linux')):
+      # Run through runtest.py on linux to launch virtual X server.
+      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
+                                                  [pyauto_script] + argv)
+      # Adjust runtest.py location.
+      pyauto_functional_cmd[1] = os.path.join(os.path.pardir,
+                                              pyauto_functional_cmd[1])
+    return pyauto_functional_cmd
+
+  # pylint: disable=R0201
+  def _GetTestAvPerfFileNames(self, matrix=True):
+    """Generates AVPerf file names needed for testing.
+
+    Args:
+      matrix: if True, use matrix form test data. If False, use list form
+              test data.
+
+    Returns:
+      a list of file names used for AVPerf tests.
+    """
+    file_names = []
+    if matrix:
+      # Matrix form input file. The corrensonding data is in
+      # chrome/test/data/media/csv/media_matrix_data_public.csv.
+      video_exts = ['webm', 'ogv', 'mp4']
+      audio_exts = ['wav', 'ogg', 'mp3']
+      av_titles = ['bear', 'tulip']
+      video_channels = [0, 1, 2]
+      audio_channels = [1, 2]
+      for av_title in av_titles:
+        for video_ext in video_exts:
+          for video_channel in video_channels:
+            file_names.append(''.join([av_title, str(video_channel), '.',
+                                       video_ext]))
+        for audio_ext in audio_exts:
+          for audio_channel in audio_channels:
+            file_names.append(''.join([av_title, str(audio_channel), '.',
+                                       audio_ext]))
+    else:
+      # List form input file. The corresponding data is in
+      # chrome/test/data/media/csv/media_list_data.csv.
+      file_names = ['bear_silent.ogv', 'bear.ogv', 'bear.wav', 'bear.webm']
+    return file_names
+
+  def _GenerateAvPerfTests(self, matrix=True,
+                           number_of_media_files=None,
+                           number_of_tests_per_media=None,
+                           suite_name=None):
+    """Generate tests based on AVPerf files and parameter configuration.
+
+    Args:
+      matrix: if True, use matrix form test data. If False, use list form
+          test data.
+      number_of_media_files: a integer to limit the number of media files
+          used. If None, use all media files avialble.
+      number_of_tests_per_media: a integer to limit the number of test case
+          per media file used. If None, use all tests avialble.
+      suite_name: the PYAUTO suite name (it is in PYAUTO_TESTS).
+
+    Returns:
+      a list of dictionaries, each dictionary containing the following keys:
+          perf_name, file_name, http, nocache, track. The value of
+          perf_name is a string for the the name of the performance
+          test. The value of file_name is a string for the name of media
+          file used for testing. The value of http is a boolean to indicate
+          whether if the media file is retrived via http (rather than local
+          file). The value of nocache is a boolean to indicate whether if
+          the test disables media cache. The value of track is a boolean to
+          indicate if the test uses track (caption).
+    """
+    suite_name_map = {'AV_PERF': 'avperf',
+                      'AV_FUNC': 'avfunc'}
+    # TODO (imasaki@chromium.org): add more parameters.
+    parameter_configration = [
+      {'name': suite_name_map[suite_name]},
+      {'suite': 'AV_PERF', 'name': suite_name_map[suite_name], 'nocache': True},
+      {'name': suite_name_map[suite_name], 'track': True},
+    ]
+    tests = []
+    for media_counter, file_name in (
+        enumerate(self._GetTestAvPerfFileNames(matrix))):
+      for test_counter, parameter in enumerate(parameter_configration):
+        if not parameter.get('suite', False) or (
+            (parameter.get('suite', False) and (
+                suite_name == parameter.get('suite')))):
+          simple_file_name = file_name.replace('.', '')
+          simple_file_name = simple_file_name.replace('_','')
+          name = '%s-%s' % (parameter.get('name',''), simple_file_name)
+          if parameter.get('http', False):
+            name += '-http'
+          if parameter.get('nocache', False):
+            name += '-nocache'
+          if parameter.get('track', False):
+            name += '-track'
+          tests.append({'perf_name': name,
+                        'file_name': file_name,
+                        'http': parameter.get('http', False),
+                        'nocache': parameter.get('nocache', False),
+                        'track': parameter.get('track', False)})
+        if number_of_tests_per_media and (
+            test_counter + 1 == number_of_tests_per_media):
+          break
+      if number_of_media_files and media_counter + 1 == number_of_media_files:
+        break
+    return tests
+
+  def AddAvPerfTests(self, timeout=1200, workdir=None, src_base=None,
+                     factory_properties=None, matrix=True,
+                     number_of_media_files=None,
+                     number_of_tests_per_media=None,
+                     suite_name=None):
+    """Add media performance tests.
+
+    This method calls media_test_runner.py which runs AVPerf tests (including
+    performance tests) with appropriate parameters (such as input data file
+    name).
+
+    Args:
+      timeout: timeout value.
+      workdir: working directory.
+      src_base: src base directory.
+      factory_properties:
+      matrix: if True, use matrix form test data. If False, use list form
+          test data.
+      number_of_media_files: a integer to limit the number of media files
+          used. If None, use all media files avialble.
+      number_of_tests_per_media: a integer to limit the number of test case
+          per media file used. If None, use all tests avialble.
+      suite_name: the PYAUTO suite name (it is in PYAUTO_TESTS).
+    """
+    reference_build_dir_name_mapping = {
+      'win32': 'win',
+      'darwin': 'mac',
+      'linux': 'linux',
+      'linux2': 'linux64',
+    }
+    reference_build_dir_name = 'chrome_%s' % (
+        reference_build_dir_name_mapping[self._target_platform])
+    J = self.PathJoin
+    reference_build_dir = J('src', 'chrome', 'test', 'tools',
+                            'reference_build', reference_build_dir_name)
+    matrix_dataset = J('src', 'chrome', 'test', 'data', 'media', 'csv',
+                       'media_matrix_data_public.csv')
+    list_dataset = J('src', 'chrome', 'test', 'data', 'media', 'csv',
+                     'media_list_data.csv')
+    media_home = J('avperf')
+    if matrix:
+      dataset = matrix_dataset
+    else:
+      dataset = list_dataset
+    # in case a '..' prefix is needed.
+    if src_base:
+      dataset = J(src_base, dataset)
+      media_home = J(src_base, media_home)
+      reference_build_dir = J(src_base, reference_build_dir)
+    for test in self._GenerateAvPerfTests(matrix, number_of_media_files,
+                                          number_of_tests_per_media,
+                                          suite_name):
+      # Use verbose mode to see which binary to use.
+      pyauto_functional_cmd = self._GetPyAutoCmd(
+          src_base=src_base, script='media_test_runner.py',
+          factory_properties=factory_properties,
+          dataset=dataset, matrix=matrix, media_home=media_home,
+          test_name=test['file_name'], http=test['http'],
+          nocache=test['nocache'], suite_name=suite_name,
+          reference_build_dir=reference_build_dir,
+          track=test['track'], verbose=True)
+      test['class'] = self.GetPerfStepClass(factory_properties, 'avperf',
+                                            process_log.GraphingLogProcessor)
+      test['step_name'] = test['perf_name']
+      self.AddTestStep(test['class'], test['step_name'], pyauto_functional_cmd,
+                       workdir=workdir, timeout=timeout)
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by
