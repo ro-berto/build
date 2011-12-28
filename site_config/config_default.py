@@ -371,10 +371,6 @@ class Master(object):
     slave_port = 9111
     master_port_alt = 9012
 
-class Installer(object):
-  # A file containing information about the last release.
-  last_release_info = "."
-
 
 class Archive(object):
   archive_host = 'localhost'

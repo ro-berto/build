@@ -70,7 +70,6 @@ class NativeClientPortsCommands(commands.FactoryCommands):
 
     # Scripts in the chromium scripts dir.  This list is sorted by decreasing
     # line length just because it looks pretty.
-    self._differential_installer_tool = J(s_dir,  'differential_installer.py')
     self._process_coverage_tool = J(s_dir, 'process_coverage.py')
     self._layout_archive_tool = J(s_dir, 'archive_layout_test_results.py')
     self._crash_handler_tool = J(s_dir, 'run_crash_handler.py')

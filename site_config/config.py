@@ -129,22 +129,6 @@ class Master(config_private.Master):
     return Master.bot_password
 
 
-class Installer(config_private.Installer):
-  """Installer configuration options."""
-
-  # Executable name.
-  installer_exe = 'mini_installer.exe'
-
-  # Section in that file containing applicable values.
-  file_section = 'CHROME'
-
-  # File holding current version information.
-  version_file = 'VERSION'
-
-  # Output of mini_installer project.
-  output_file = 'packed_files.txt'
-
-
 class Archive(config_private.Archive):
   """Build and data archival options."""
 
@@ -223,7 +207,7 @@ class Archive(config_private.Archive):
     ])
 
   # Installer to archive.
-  installer_exe = Installer.installer_exe
+  installer_exe = 'mini_installer.exe'
 
   # Archive file containing the ADM/ADMX/ADML/other policy templates.
   policy_templates_zip = 'policy_templates.zip'
@@ -253,4 +237,4 @@ class Archive(config_private.Archive):
 
 class Distributed(config_private.Distributed):
   # File holding current version information.
-  version_file = Installer.version_file
+  version_file = 'VERSION'
