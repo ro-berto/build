@@ -203,8 +203,10 @@ def main():
 
     remove_all_vars_except(os.environ, env_var)
     slave_path = [
-        depot_tools, '/usr/bin', '/bin',
-        '/usr/sbin', '/sbin', '/usr/local/bin'
+        depot_tools,
+        # Reuse the python executable used to start this script.
+        os.path.dirname(sys.executable),
+        '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin'
     ]
     os.environ['PATH'] = os.pathsep.join(slave_path)
 
