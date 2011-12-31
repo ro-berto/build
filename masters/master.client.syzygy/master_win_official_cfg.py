@@ -10,7 +10,7 @@ from master.factory import syzygy_factory
 
 
 def win():
-  return syzygy_factory.SyzygyFactory('src/syzygy',
+  return syzygy_factory.SyzygyFactory('src/build',
                                       target_platform='win32')
 
 
