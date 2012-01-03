@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -83,7 +83,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
   CUSTOM_DEPS_AVPERF = ('src/chrome/test/data/media/avperf',
-    'http://src.chromium.org/svn/trunk/deps/avperf')  
+    'http://src.chromium.org/svn/trunk/deps/avperf')
   CUSTOM_DEPS_NACL_LATEST = [
     ('src/native_client',
      'http://src.chromium.org/native_client/trunk/src/native_client'),
@@ -153,6 +153,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'mozilla_js':
       [('src/data/mozilla_js_tests', None)],
   }
+
+  # List of test groups for media tests.  Media tests generate a lot of data, so
+  # it's nice to separate them into different graphs.  Each tuple corresponds to
+  # a PyAuto test suite name and indicates if the suite contains perf tests.
+  MEDIA_TEST_GROUPS = [
+      ('AV_PERF', True),
+  ]
 
   # Minimal deps for running PyAuto.
   # http://dev.chromium.org/developers/pyauto
@@ -420,24 +427,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):
-      platform_mapping = {
-        'win32': 'win32',
-        'darwin': 'mac',
-        'linux2': 'lucid64bit',
-      }
-
-      zip_platform = platform_mapping[self._target_platform]
-      workdir = os.path.join(f.working_dir, 'chrome-' + zip_platform)
       # Performance test should be run on virtual X buffer.
       fp['use_xvfb_on_linux'] = True
-      # Run test with matrix form input file.
-      f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
-                       matrix=True, number_of_media_files=1,
-                       suite_name='AV_PERF')
-      # Run functional tests.
-      f.AddAvPerfTests(factory_properties=fp, src_base='..', workdir=workdir,
-                       matrix=False, number_of_media_files=1,
-                       suite_name='AV_FUNC')
+      f.AddMediaTests(factory_properties=fp, test_groups=self.MEDIA_TEST_GROUPS)
     if R('chromedriver_tests'):
       f.AddChromeDriverTest()
     if R('webdriver_tests'):
@@ -631,7 +623,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
-    
+
   def ChromiumNativeClientLatestFactory(
       self, target='Release', clobber=False, tests=None, mode=None,
       slave_type='BuilderTester', options=None, compile_timeout=1200,
