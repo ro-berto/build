@@ -136,7 +136,7 @@
 
               // Setup waterfall name.
               document.getElementById(
-                  'project_title').innerHTML = data.project.projectName;
+                  'project_title').innerHTML = data.project.title;
 
               // Disable waterfall links to this page.
               var waterfall_links = document.getElementsByName('menu1');
@@ -181,14 +181,7 @@
                 flavors[category].push('builder=' + i);
               }
               for (var category in flavors) {
-                var too_long = false;
-                for (var i = 0; i < flavors[category].length; i++) {
-                  if (flavors[category][i].length > 34) {
-	            too_long = true;
-                    break;
-                  }
-                }
-                if (!too_long) flavors[category].push('titles=on');
+                flavors[category].push('titles=on');
               }
               var bar = "./horizontal_one_box_per_builder"
               var waterfall = "./waterfall"
