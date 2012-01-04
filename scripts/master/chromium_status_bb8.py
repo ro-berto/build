@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -248,6 +248,13 @@ class ConsoleStatusResource(console.ConsoleStatusResource):
       return self.BestRevisionJson(request, cxt)
     if 'reload' not in request.args:
       request.args['reload'] = ['9999999999']
+    if not getattr(self.comparator, 'initialized', True):
+      return """
+<html><head></head><body>
+<h2>console unavailable</h2>
+<p>while buildbot master is starting up.  Please try again in a few seconds.</p>
+</body></html>
+"""
     # pylint: disable=E1121
     return console.ConsoleStatusResource.content(self, request, cxt)
 

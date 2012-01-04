@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -21,6 +21,7 @@ class GitTagComparator(RevisionComparator):
          self.tag_order is an in-order list of all commit tags in the repo.
          self.tag_lookup maps tags to their index in self.tag_order."""
     super(GitTagComparator, self).__init__()
+    self.initialized = False
     self.tag_order = []
     self.tag_lookup = {}
 
@@ -106,6 +107,9 @@ class ChromiumGitPoller(gitpoller.GitPoller):
     gitpoller.GitPoller.startService(self)
     d = defer.succeed(None)
     d.addCallback(self._init_history)
+    def _comparator_initialized(*unused_args):
+      self.comparator.initialized = True
+    d.addCallback(_comparator_initialized)
 
   @deferredLocked('initLock')
   def poll(self):
