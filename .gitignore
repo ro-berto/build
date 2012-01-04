@@ -45,6 +45,7 @@ twistd.pid
 /masters/master.chromium.fyi/Chromium_Linux_Redux
 /masters/master.chromium.fyi/Chromium_Linux_Strict__dbg_
 /masters/master.chromium.fyi/Chromium_Mac_10_6_Goma_Clang
+/masters/master.chromium.fyi/Chromium_Mac_10_7_Tests
 /masters/master.chromium.fyi/Chromium_Mac_Make
 /masters/master.chromium.fyi/Chromium_Mac_Skia
 /masters/master.chromium.fyi/Chromium_OS_ASAN_Tests__1_
@@ -82,6 +83,7 @@ twistd.pid
 /masters/master.chromium.fyi/chromium-rel-linux-valgrind-reliability
 /masters/master.chromium.fyi/chromium-rel-linux-valgrind-x64
 /masters/master.chromium.fyi/chromium-rel-mac-asan-builder
+/masters/master.chromium.fyi/chromium-rel-mac-builder
 /masters/master.chromium.fyi/chromium-rel-mac-memory
 /masters/master.chromium.fyi/chromium-rel-perf-frame
 /masters/master.chromium.fyi/chromium-rel-vista-memory
