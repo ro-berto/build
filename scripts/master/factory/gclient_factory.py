@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,6 +10,9 @@ first."""
 
 import os
 import re
+
+from buildbot.process.properties import WithProperties
+from buildbot.steps import trigger
 
 from master.factory.build_factory import BuildFactory
 from master.factory import commands
@@ -237,11 +240,38 @@ class GClientFactory(object):
       factory_cmd_obj.AddExtractBuild(build_url,
                                       factory_properties=factory_properties)
 
-    # Snapshot the outpout directory if this machine is a NAS builder.
+    # Snapshot the output directory if this machine is a NAS builder.
     if slave_type == 'NASBuilder':
       factory_cmd_obj.AddSnapshotStep(factory_properties=factory_properties)
 
     return factory
+
+  # pylint: disable=R0201
+  def TriggerFactory(self, factory, slave_type, factory_properties):
+    """Add post steps on a build created by BuildFactory."""
+    # Trigger any schedulers waiting on the build to complete.
+    factory_properties = factory_properties or {}
+    if factory_properties.get('trigger') is None:
+      return
+
+    trigger_name = factory_properties.get('trigger')
+    # Propagate properties to the children if this is set in the factory.
+    trigger_properties = factory_properties.get('trigger_properties', [])
+    # Add an additional property if the type of the slave is NASBuilder. The
+    # testers need to receive the snapshot name.
+    if slave_type == 'NASBuilder':
+      trigger_properties.append('snapshot')
+    factory.addStep(trigger.Trigger(
+        schedulerNames=[trigger_name],
+        updateSourceStamp=False,
+        waitForFinish=False,
+        set_properties={
+            'parent_cr_revision': WithProperties('%(got_revision:-)s'),
+            'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
+            'parentname': WithProperties('%(buildername)s'),
+            'parentslavename': WithProperties('%(slavename:-)s'),
+            },
+        copy_properties=trigger_properties))
 
   def PostBuildFactory(self, factory, target='Release',
                        slave_type='BuilderTester', factory_properties=None):

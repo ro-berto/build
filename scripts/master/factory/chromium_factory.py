@@ -9,9 +9,6 @@ Based on gclient_factory.py and adds chromium-specific steps."""
 import os
 import re
 
-from buildbot.process.properties import WithProperties
-from buildbot.steps import trigger
-
 from master.factory import chromium_commands
 from master.factory import gclient_factory
 from master.factory.build_factory import BuildFactory
@@ -510,27 +507,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if slave_type == 'Updater':
       chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
 
-    # Trigger any schedulers waiting on the build to complete.
-    if factory_properties.get('trigger'):
-      trigger_name = factory_properties.get('trigger')
-      # Propagate properties to the children if this is set in the factory.
-      trigger_properties = factory_properties.get('trigger_properties', [])
-      # Add an additional property if the type of the slave is NASBuilder. The
-      # testers need to receive the snapshot name.
-      if slave_type == 'NASBuilder':
-        trigger_properties.append('snapshot')
-      factory.addStep(trigger.Trigger(
-          schedulerNames=[trigger_name],
-          updateSourceStamp=False,
-          waitForFinish=False,
-          set_properties={
-              'parent_cr_revision': WithProperties('%(got_revision:-)s'),
-              'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
-              'parentname': WithProperties('%(buildername)s'),
-              'parentslavename': WithProperties('%(slavename:-)s'),
-              },
-          copy_properties=trigger_properties))
-
+    # Add a trigger step if needed.
+    self.TriggerFactory(factory, slave_type=slave_type,
+                        factory_properties=factory_properties)
 
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and
