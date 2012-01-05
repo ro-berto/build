@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -98,6 +98,7 @@ def main_win():
   check_free_space_path('c:\\')
   if os.path.isdir('e:\\'):
     check_free_space_path('e:\\')
+  check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
   return 0
 
 
@@ -106,10 +107,10 @@ def main_mac():
   chromium_utils.RemoveChromeTemporaryFiles()
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
-
-  # Don't check /home on Macs because it always reports it as full.
   if os.path.isdir('/b'):
     check_free_space_path('/b')
+  check_free_space_path(os.environ['HOME'])
+  check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
   return 0
 
 
@@ -120,7 +121,8 @@ def main_linux():
   # CleanupTempDirectory('/tmp')
   if os.path.isdir('/b'):
     check_free_space_path('/b')
-  check_free_space_path('/home')
+  check_free_space_path(os.environ['HOME'])
+  check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
   return 0
 
 
@@ -139,7 +141,6 @@ def main():
     print >> sys.stderr, 'Not enough free space on %s: %d bytes left' % (
         e.args[0], e.args[1])
     send_alert(e.args[0], e.args[1])
-
 
 
 if '__main__' == __name__:
