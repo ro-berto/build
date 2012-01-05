@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -188,6 +188,10 @@ def main_mac(options, args):
     test_exe_path = os.path.join(build_dir, options.target, test_exe)
     if not os.path.exists(test_exe_path):
       msg = pre + 'Unable to find %s' % test_exe_path
+      if options.factory_properties.get('succeed_on_missing_exe', False):
+        print '%s missing but succeed_on_missing_exe used, exiting' % (
+            test_exe_path)
+        return 0
       raise chromium_utils.PathNotFound(msg)
 
   # Nuke anything that appears to be stale chrome items in the temporary
@@ -269,6 +273,10 @@ def main_linux(options, args):
   test_exe = args[0]
   test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
+    if options.factory_properties.get('succeed_on_missing_exe', False):
+      print '%s missing but succeed_on_missing_exe used, exiting' % (
+          test_exe_path)
+      return 0
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
@@ -351,6 +359,10 @@ def main_win(options, args):
   build_dir = os.path.abspath(options.build_dir)
   test_exe_path = os.path.join(build_dir, options.target, test_exe)
   if not os.path.exists(test_exe_path):
+    if options.factory_properties.get('succeed_on_missing_exe', False):
+      print '%s missing but succeed_on_missing_exe used, exiting' % (
+          test_exe_path)
+      return 0
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
 
   if options.enable_pageheap:
