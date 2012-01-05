@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -63,6 +63,17 @@ def real_main(options, args):
   # Just take the zip off the name for the output directory name.
   output_dir = os.path.join(abs_build_output_dir,
                             archive_name.replace('.zip', ''))
+
+  # Insert parentslavename if it's present.
+  try:
+    options.build_url = options.build_url % {
+        'parentslavename': options.build_properties.get('parentslavename', '')
+    }
+  except KeyError:
+    # This condition is hit when a build_url is passed that does not contain
+    # the key 'parentslavename'.  We silently ignore this error.
+    pass
+  print 'Build URL: %s' % options.build_url
 
   # URL containing the version number.
   if not webkit_revision:

@@ -526,7 +526,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           set_properties={
               'parent_cr_revision': WithProperties('%(got_revision:-)s'),
               'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
-              'parentname': WithProperties('%(buildername)s')
+              'parentname': WithProperties('%(buildername)s'),
+              'parentslavename': WithProperties('%(slavename:-)s'),
               },
           copy_properties=trigger_properties))
 
