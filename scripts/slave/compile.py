@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -30,6 +30,25 @@ SLAVE_SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 # Path of the build/ checkout on the slave, found relative to the
 # scripts/slave/ directory.
 BUILD_DIR = os.path.dirname(os.path.dirname(SLAVE_SCRIPTS_DIR))
+
+
+class EchoDict(dict):
+  """Dict that remembers all assigned values."""
+  def __init__(self, *args, **kwargs):
+    self.overrides = {}
+    super(EchoDict, self).__init__(*args, **kwargs)
+  def __setitem__(self, key, val):
+    self.overrides[key] = True
+    super(EchoDict, self).__setitem__(key, val)
+  def print_overrides(self, fh=None):
+    if not self.overrides:
+      return
+    if not fh:
+      fh = sys.stdout
+    fh.write('Environment variables set in compile.py:\n')
+    for k in sorted(self.overrides.keys()):
+      fh.write('  %s=%s\n' % (k, self[k]))
+    fh.write('\n')
 
 
 def ReadHKLMValue(path, value):
@@ -343,7 +362,7 @@ def main_xcode(options, args):
     print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
 
-  env = os.environ.copy()
+  env = EchoDict(os.environ)
   common_mac_settings(command, options, env, options.compiler)
 
   # Add on any remaining args
@@ -385,6 +404,7 @@ def main_xcode(options, args):
       chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
+  env.print_overrides()
   result = chromium_utils.RunCommand(command, env=env,
                                      filter_obj=xcodebuild_filter)
 
@@ -608,7 +628,7 @@ def main_make(options, args):
     os.symlink('out', sconsbuild)
 
   os.chdir(working_dir)
-  env = os.environ.copy()
+  env = EchoDict(os.environ)
   common_make_settings(command, options, env, options.crosstool,
       options.compiler)
 
@@ -634,6 +654,7 @@ def main_make(options, args):
       chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
+  env.print_overrides()
   result = chromium_utils.RunCommand(command, env=env)
 
   if options.compiler in ('goma', 'goma-clang'):
@@ -660,7 +681,7 @@ def main_scons(options, args):
   else:
     command = ['hammer']
 
-  env = os.environ.copy()
+  env = EchoDict(os.environ)
   if sys.platform == 'linux2':
     common_make_settings(command, options, env)
   else:
@@ -685,6 +706,7 @@ def main_scons(options, args):
   #
   #command.extend(['--debug=explain', 'VERBOSE=1'])
   command.extend(options.build_args + args)
+  env.print_overrides()
   return chromium_utils.RunCommand(command, env=env)
 
 def main_scons_v8(options, args):
@@ -715,7 +737,7 @@ def main_scons_v8(options, args):
   else:
     command = ['python', '../third_party/scons/scons.py']
 
-  env = os.environ.copy()
+  env = EchoDict(os.environ)
   if sys.platform == 'linux2':
     common_make_settings(command, options, env)
   else:
@@ -724,6 +746,7 @@ def main_scons_v8(options, args):
   command.extend(['mode=' + options.target])
 
   command.extend(options.build_args + args)
+  env.print_overrides()
   return chromium_utils.RunCommand(command, env=env)
 
 
@@ -787,7 +810,7 @@ def main_win(options, args):
       chromium_utils.RemoveFile(build_output_dir, 'obj', 'chrome_dll',
                                 'chrome_dll_version.rc')
 
-  env = os.environ.copy()
+  env = EchoDict(os.environ)
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -863,6 +886,7 @@ def main_win(options, args):
         errors.append(line)
         break
 
+  env.print_overrides()
   result = chromium_utils.RunCommand(
       command, parser_func=scan, env=env, universal_newlines=True)
   if errors:
