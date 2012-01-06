@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -30,7 +30,6 @@ F('win_full', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
     factory_properties={'archive_build': True,
-                        'extra_archive_paths': 'chrome_frame',
                         'gs_bucket': 'gs://chromium-browser-continuous',}))
 
 ################################################################################
