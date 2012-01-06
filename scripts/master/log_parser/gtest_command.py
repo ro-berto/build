@@ -25,6 +25,7 @@ class TestObserver(buildstep.LogLineObserver):
     self._failure_description = []
     self._current_suppression_hash = ''
     self._current_suppression = []
+    self._parsing_failures = False
 
     # Line number currently being processed.
     self._line_number = 0
@@ -53,6 +54,7 @@ class TestObserver(buildstep.LogLineObserver):
     # This regexp also matches SomeName.SomeTest/1, which should be harmless.
     test_name_regexp = r'((\w+/)?\w+\.\w+(/\d+)?)'
 
+    self._test_name    = re.compile(test_name_regexp)
     self._test_start   = re.compile('\[\s+RUN\s+\] ' + test_name_regexp)
     self._test_ok      = re.compile('\[\s+OK\s+\] ' + test_name_regexp)
     self._test_fail    = re.compile('\[\s+FAILED\s+\] ' + test_name_regexp)
@@ -289,6 +291,21 @@ class TestObserver(buildstep.LogLineObserver):
     if self._current_test:
       self._failure_description.append(line)
 
+    # Parse the "Failing tests:" list at the end of the output, and add any
+    # additional failed tests to the list. For example, this includes tests
+    # that crash after the OK line.
+    if self._parsing_failures:
+      results = self._test_name.search(line)
+      if results:
+        test_name = results.group(1)
+        status = self._StatusOfTest(test_name)
+        if status in ('not known', 'OK'):
+          self._test_status[test_name] = (
+              'failed', ['Unknown error, see stdio log.'])
+      else:
+        self._parsing_failures = False
+    elif line.startswith('Failing tests:'):
+      self._parsing_failures = True
 
 class GTestCommand(shell.ShellCommand):
   """Buildbot command that knows how to display GTest output."""

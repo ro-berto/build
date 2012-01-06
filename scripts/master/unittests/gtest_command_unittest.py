@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -179,6 +179,16 @@ TEST_DATA_VALGRIND = """
 %(suppression)s
 program finished with exit code 255
 """ % {'suppression': VALGRIND_SUPPRESSION}
+
+
+FAILING_TESTS_OUTPUT = """
+Failing tests:
+ChromeRenderViewTest.FAILS_AllowDOMStorage
+PrerenderBrowserTest.PrerenderHTML5VideoJs
+"""
+
+FAILING_TESTS_EXPECTED = ['ChromeRenderViewTest.FAILS_AllowDOMStorage',
+                          'PrerenderBrowserTest.PrerenderHTML5VideoJs']
 
 
 FAILURES_SHARD = ['12>NavigationControllerTest.Reload',
@@ -478,6 +488,13 @@ class TestObserverTests(unittest.TestCase):
     self.assertEqual(VALGRIND_SUPPRESSION,
                      '\n'.join(observer.Suppression(VALGRIND_HASH)))
 
+    observer = gtest_command.TestObserver()
+    for line in FAILING_TESTS_OUTPUT.splitlines():
+      observer.outLineReceived(line)
+    self.assertEqual(FAILING_TESTS_EXPECTED,
+                     observer.FailedTests(True, True))
+
+  def DISABLED_testLogLineObserverSharding(self):
     # Same tests for log parsing with sharding_supervisor.
     observer = gtest_command.TestObserver()
     test_data_shard = self.AlternateShards(
