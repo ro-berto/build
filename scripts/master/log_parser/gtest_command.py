@@ -1,10 +1,13 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+#!/usr/bin/env python
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """A buildbot command for running and interpreting GTest tests."""
 
+import fileinput
 import re
+import sys
 from buildbot.steps import shell
 from buildbot.status import builder
 from buildbot.process import buildstep
@@ -378,3 +381,19 @@ class GTestFullCommand(GTestCommand):
     Return the full TestCase.TestName ID.
     """
     return testid
+
+
+def Main():
+  observer = TestObserver()
+  for line in fileinput.input():
+    observer.outLineReceived(line)
+  print 'Failed tests:\n'
+  for failed_test in observer.FailedTests(True, True):
+    for fail_line in observer.FailureDescription(failed_test):
+      print fail_line.strip()
+    print ''
+  return 0
+
+
+if '__main__' == __name__:
+  sys.exit(Main())
