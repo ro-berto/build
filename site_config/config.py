@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -131,17 +131,6 @@ class Master(config_private.Master):
 
 class Archive(config_private.Archive):
   """Build and data archival options."""
-
-  # List of symbol files archived by official and dev builds.
-  # It really sucks to have to hard-code these here.
-  # TODO(cpu): rlz_pdb.dll dropped from list. http://b/1716253
-  # TODO(robertshield): This is no longer used as of changes
-  # to the official build scripts. Remove this as soon as
-  # those changes land.
-  symbols_to_archive = ['chrome_dll.pdb', 'chrome_exe.pdb',
-                        'mini_installer.pdb', 'setup.pdb',
-                        'npchrome_frame.pdb', 'chrome_launcher.pdb',
-                        'chrome_frame_helper.pdb', 'chrome_frame_helper.pdb']
 
   # Binaries to archive on the source server with the sourcified symbols.
   symsrc_binaries = [
