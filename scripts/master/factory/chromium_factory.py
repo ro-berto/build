@@ -421,6 +421,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 src_base='..',
                                 workdir=workdir,
                                 factory_properties=fp)
+    elif R('chrome_endure_gmail_tests'):
+      tests = [
+        'perf_endure.ChromeEndureGmailTest',
+      ]
+      f.AddChromeEndureTest('chrome_endure_gmail_tests', tests, fp)
 
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):
