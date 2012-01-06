@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -171,6 +171,17 @@ def check_linux_binary(target_dir, binary_name):
     # So subtract 2 from the count.
     count = (size / word_size) - 2
   print "*RESULT %s-si: initializers= %s files" % (binary_name, count)
+
+  # Determine if the binary has the DT_TEXTREL marker.
+  result, stdout = run_process(result, ['readelf', '-Wd', binary_file])
+  if re.search(r'\bTEXTREL\b', stdout) is None:
+    # Nope, so the count is zero.
+    count = 0
+  else:
+    # There are some, so count them.
+    result, stdout = run_process(result, ['eu-findtextrel', binary_file])
+    count = stdout.count('\n')
+  print "*RESULT %s-textrel: textrel= %s relocs" % (binary_name, count)
 
   return result
 
