@@ -67,7 +67,7 @@ def ReadHKLMValue(path, value):
     return None
 
 
-def common_mac_settings(command, options, env, compiler=None):
+def common_xcode_settings(command, options, env, compiler=None):
   """
   Sets desirable Mac environment variables and command-line options
   that are common to the Xcode builds.
@@ -363,7 +363,7 @@ def main_xcode(options, args):
     chromium_utils.RemoveDirectory(build_output_dir)
 
   env = EchoDict(os.environ)
-  common_mac_settings(command, options, env, options.compiler)
+  common_xcode_settings(command, options, env, options.compiler)
 
   # Add on any remaining args
   command.extend(args)
@@ -522,6 +522,7 @@ def common_make_settings(
       # generation scripts open a preprocessor child process, so building at
       # -j100 runs into the process limit. For now, just build with -j50.
       goma_jobs = 50
+      env['GOMA_USE_LOCAL'] = '0'
     else:
       goma_jobs = 100
     if jobs < goma_jobs:
