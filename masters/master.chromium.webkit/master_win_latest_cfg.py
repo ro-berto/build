@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -74,9 +74,10 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     #slave_type='Tester',
     #build_url=rel_archive,
     project='all.sln;chromium_builder_perf',
-    tests=['dom_perf', 'page_cycler_moz', 'page_cycler_morejs',
+    tests=['dom_perf', 'dromaeo', 'page_cycler_moz', 'page_cycler_morejs',
            'page_cycler_intl1', 'page_cycler_intl2', 'page_cycler_dhtml',
-           'page_cycler_database', 'page_cycler_indexeddb', 'sunspider'],
+           'page_cycler_database', 'page_cycler_indexeddb', 'startup',
+           'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-vista-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,

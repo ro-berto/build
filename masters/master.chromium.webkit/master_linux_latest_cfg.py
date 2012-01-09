@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -42,10 +42,11 @@ B('Linux Perf', 'f_linux_perf_rel', auto_reboot=True,
   scheduler='s9_webkit_rel')
 F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
     options=['--compiler=goma', 'chromium_builder_perf'],
-    tests=['startup', 'page_cycler_moz', 'page_cycler_morejs',
+    tests=['dom_perf', 'dromaeo', 'page_cycler_moz', 'page_cycler_morejs',
            'page_cycler_intl1', 'page_cycler_intl2', 'page_cycler_dhtml',
-           'page_cycler_database', 'page_cycler_indexeddb', 'dromaeo',
-           'page_cycler_moz-http', 'page_cycler_bloat-http'],
+           'page_cycler_database', 'page_cycler_indexeddb',
+           'page_cycler_moz-http', 'page_cycler_bloat-http', 'startup',
+           'sunspider'],
     factory_properties={'perf_id': 'chromium-rel-linux-webkit',
                         'show_perf_results': True,}))
 
