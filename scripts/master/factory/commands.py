@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -252,7 +252,8 @@ class FactoryCommands(object):
 
     build_properties = dict([(prop, "%%(%s:-)s" % prop) for prop in
         ['branch', 'buildername', 'buildnumber', 'got_revision', 'mastername',
-         'parentname', 'revision', 'scheduler', 'slavename', 'snapshot']])
+         'parentname', 'parentslavename', 'revision', 'scheduler', 'slavename',
+         'snapshot']])
 
     cmd.append(WithProperties(
         '--build-properties=' + json.dumps(build_properties, sort_keys=True)))
