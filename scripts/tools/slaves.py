@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -54,10 +54,14 @@ def SubRun(enabled, names, cmd, options):
 
 def RunSSH(options):
   win_cmd = options.win_cmd
-  if not options.no_cygwin and win_cmd:
-    # Wrap up in cygwin's bash.
-    win_cmd = 'c:\\cygwin\\bin\\bash --login -c "%s"' % (
-        win_cmd.replace('"', '\\"'))
+  if win_cmd:
+    if options.no_cygwin:
+      # prepend with cmd.exe /c so PATH is correctly searched.
+      win_cmd = 'cmd.exe /c "%s"' % win_cmd
+    else:
+      # Wrap up in cygwin's bash.
+      win_cmd = 'c:\\cygwin\\bin\\bash --login -c "%s"' % (
+          win_cmd.replace('"', '\\"'))
 
   ssh = ['ssh', '-o ConnectTimeout=5']
   quiet = ['-q'] if options.quiet else []
@@ -104,10 +108,10 @@ def Clobber(options):
 def Revert(options):
   options.no_cygwin = False
   path = '/cygdrive/e/b/build/slave/*/build/src'
-  options.win_cmd = r'cd %s && gclient.bat revert --jobs 12' % path
+  options.win_cmd = r'cd %s && gclient.bat revert' % path
   path = '/b/build/slave/*/build/src'
-  options.linux_cmd = 'cd %s && gclient revert --jobs 12' % path
-  options.mac_cmd = 'cd %s && gclient revert --jobs 12' % path
+  options.linux_cmd = 'cd %s && gclient revert' % path
+  options.mac_cmd = 'cd %s && gclient revert' % path
   options.ignore_failure = True
   return RunSSH(options)
 
@@ -124,9 +128,9 @@ def Restart(options):
 
 def SyncScripts(options):
   options.no_cygwin = True
-  options.win_cmd = 'cmd /c cd /d E:\\b && depot_tools\\gclient sync --jobs 12'
-  options.linux_cmd = 'cd /b && ./depot_tools/gclient sync --jobs 12'
-  options.mac_cmd = 'cd /b && ./depot_tools/gclient sync --jobs 12'
+  options.win_cmd = 'cd /d E:\\b && depot_tools\\gclient sync'
+  options.linux_cmd = 'cd /b && ./depot_tools/gclient sync'
+  options.mac_cmd = 'cd /b && ./depot_tools/gclient sync'
   return RunSSH(options)
 
 
@@ -210,7 +214,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
                    help='Print which slaves would have been processed but do '
                         'nothing. With no command, just print the list of '
                         'slaves for the given platform(s).')
-  group.add_option('--no_cygwin', action='store_true',
+  group.add_option('-N', '--no_cygwin', action='store_true',
                    help='By default cygwin\'s bash is called to execute the '
                         'command')
   parser.add_option_group(group)
