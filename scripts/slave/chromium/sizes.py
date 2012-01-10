@@ -134,6 +134,10 @@ def check_linux_binary(target_dir, binary_name):
   """
   binary_file = os.path.join(target_dir, binary_name)
 
+  if not os.path.exists(binary_file):
+    # Don't print anything for missing files.
+    return 0, []
+
   result = 0
   sizes = []
 
@@ -204,11 +208,21 @@ def main_linux(options, args):
   target_dir = os.path.join(os.path.dirname(options.build_dir),
                             'sconsbuild', options.target)
 
+  binaries = [
+      'chrome',
+      'nacl_helper',
+      'nacl_helper_bootstrap',
+      'libffmpegsumo.so',
+      'libgcflashplayer.so',
+      'libpdf.so',
+      'libppGoogleNaClPluginChrome.so',
+  ]
+
   result = 0
 
   totals = {}
 
-  for binary in ['chrome', 'nacl_helper', 'nacl_helper_bootstrap']:
+  for binary in binaries:
     this_result, this_sizes = check_linux_binary(target_dir, binary)
     if result == 0:
       result = this_result
@@ -220,10 +234,6 @@ def main_linux(options, args):
 
   files = [
     'chrome.pak',
-    'libffmpegsumo.so',
-    'libgcflashplayer.so',
-    'libpdf.so',
-    'libppGoogleNaClPluginChrome.so',
     'nacl_irt_x86_64.nexe',
   ]
 
