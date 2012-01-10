@@ -560,7 +560,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 gclient_deps=None):
     """Annotation-driven Chromium buildbot factory.
 
-    Line a ChromiumFactory, but non-sync steps (compile, run tests)
+    Like a ChromiumFactory, but non-sync steps (compile, run tests)
     are specified in a script that uses @@@BUILD_STEP descriptive
     text@@@ style annotations.
 
@@ -584,7 +584,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                                           self._target_platform)
 
     # Add the main build.
-    chromium_cmd_obj.AddAnnotationStep('build', annotation_script)
+    env = factory_properties.get('annotation_env')
+    chromium_cmd_obj.AddAnnotationStep('build', annotation_script, env=env)
 
     return factory
 

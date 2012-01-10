@@ -927,7 +927,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           command=cmd)
 
-  def AddAnnotationStep(self, name, cmd, timeout=6000):
+  def AddAnnotationStep(self, name, cmd, env=None, timeout=6000):
     """Add an @@@BUILD_STEP step@@@ annotation script build command.
 
     This function allows the caller to specify the name of the
@@ -941,7 +941,8 @@ class ChromiumCommands(commands.FactoryCommands):
                           timeout=timeout,
                           haltOnFailure=True,
                           workdir=self._build_dir,
-                          command=cmd)
+                          command=cmd,
+                          env=env)
 
   def AddMediaTests(self, test_groups, factory_properties=None, timeout=1200):
     """Adds media test steps according to the specified test_groups.

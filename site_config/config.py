@@ -108,6 +108,11 @@ class Master(config_private.Master):
   # Magic step return code inidicating "warning(s)" rather than "error".
   retcode_warnings = 88
 
+  # Additional DEPS for Android builds; passed in a list to the
+  # additional_svn_urls arg of a chromium_factory.ChromiumFactory()
+  # ctor.
+  android_deps_url = 'http://git.chromium.org/chromium/tools/android.deps.git'
+
   @staticmethod
   def GetBotPassword():
     """Returns the slave password retrieved from a local file, or None.
