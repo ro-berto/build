@@ -3,22 +3,17 @@
 # found in the LICENSE file.
 
 import os
+import socket
 import tempfile
 import urllib
 
 from twisted.internet import defer, utils
+from twisted.mail import smtp
 from twisted.python import log
 from buildbot.changes.base import PollingChangeSource
 from buildbot.util import deferredLocked, epoch2datetime
 
 from master.chromium_git_poller_bb8 import GitTagComparator
-
-def ConvertNonZeroToFailure(res):
-  """Callback for twisted.internet.utils.getProcessOutputAndValue"""
-  (stdout, stderr, code) = res
-  if code != 0:
-    raise RuntimeError('command failed with exit code %d: %s' % (code, stderr))
-  return (stdout, stderr, code)
 
 
 class RepoTagComparator(GitTagComparator):
@@ -52,7 +47,8 @@ class RepoPoller(PollingChangeSource):
   def __init__(self, repo_url, repo_branch=None, workdir=None,
                pollInterval=5*60, repo_bin='repo', git_bin='git',
                category='', project='', revlinktmpl=None,
-               encoding='utf-8'):
+               encoding='utf-8', from_addr=None, to_addrs=None,
+               smtp_host=None):
     if not workdir:
       workdir = tempfile.mkdtemp(prefix='repo_poller')
       log.msg('RepoPoller: using new working dir %s' % workdir)
@@ -67,9 +63,13 @@ class RepoPoller(PollingChangeSource):
     self.project = project
     self.revlinktmpl = revlinktmpl
     self.encoding = encoding
+    self.from_addr = from_addr
+    self.to_addrs = to_addrs
+    self.smtp_host = smtp_host
     self.initLock = defer.DeferredLock()
     self.comparator = RepoTagComparator()
     self.changeCount = 0
+    self.errCount = 0
 
   def startService(self):
     if not os.path.isabs(self.workdir):
@@ -78,30 +78,34 @@ class RepoPoller(PollingChangeSource):
 
     if not os.path.exists(os.path.join(self.workdir, '.repo')):
       d = self.initRepository()
-      d.addErrback(log.err, 'while initializing RepoPoller repository')
+      log.msg('RepoPoller: creating new repo checkout in %s' % self.workdir)
     else:
       d = defer.succeed(None)
       log.msg('RepoPoller: using pre-existing repo checkout.')
 
     d.addCallback(self.initHistory)
-    def _comparator_initialized(*unused_args):
+    def _success(*unused_args):
       self.comparator.initialized = True
-    d.addCallback(_comparator_initialized)
+    d.addCallback(_success)
     PollingChangeSource.startService(self)
-
-  def StopOnFailure(self, f):
-    if self.running:
-      d = defer.maybeDeferred(self.stopService)
-      d.addErrback(log.err, 'while stopping broken RepoPoller service')
-    return f
+    def _failure(failure):
+      log.msg('RepoPoller: unable to start service.')
+      self.stopService()
+      return failure
+    d.addErrback(_failure)
 
   def RunRepoCmd(self, args):
     log.msg('RepoPoller: running "%s %s"' % (self.repo_bin, ' '.join(args)))
     d = utils.getProcessOutputAndValue(self.repo_bin, args,
                                        env=dict(PATH=os.environ['PATH']),
                                        path=self.workdir)
-    d.addCallback(ConvertNonZeroToFailure)
-    d.addErrback(self.StopOnFailure)
+    def _check_status(result):
+      (stdout, stderr, status) = result
+      if status != 0:
+        raise RuntimeError('failure #%d: "%s" failed with exit code %d: %s' % (
+            self.errCount+1, ' '.join([self.repo_bin] + args), status, stderr))
+      return (stdout, stderr, status)
+    d.addCallback(_check_status)
     return d
 
   def DoLog(self, *args):
@@ -166,7 +170,24 @@ class RepoPoller(PollingChangeSource):
     d.addCallback(self.DoTag)
     def _success(*args):
       log.msg('RepoPoller: finished polling.')
+      self.errCount = 0
+    def _failure(failure):
+      self.errCount += 1
+      if self.errCount % 3 == 0 and self.smtp_host and self.to_addrs:
+        msg = ('RepoPoller is having problems...\n\n'
+               'host: %s\n'
+               'repo checkout: %s\n'
+               'repo url: %s\n'
+               'repo branch: %s\n\n'
+               '%s') % (socket.gethostname(), self.workdir, self.repo_url,
+                       self.repo_branch, failure)
+        smtp.sendmail(smtphost=self.smtp_host,
+                      from_addr=self.from_addr,
+                      to_addrs=self.to_addrs,
+                      msg=msg)
+      return failure
     d.addCallback(_success)
+    d.addErrback(_failure)
     return d
 
   def GetCommitComments(self, project, rev):
@@ -218,7 +239,12 @@ class RepoPoller(PollingChangeSource):
       assert(project)
       (revision, timestamp) = line.split()
       allchanges.append((int(timestamp), project, revision))
-    allchanges.sort()  # Sorts by timestamp
+
+    # Put changes in forward commit order, earliest-to-latest.
+    allchanges.reverse()
+    # Sort by timestamp, project, commit order.
+    allchanges.sort(key=lambda x: x[0:1])
+
     for item in allchanges:
       self.comparator.addRevision(item[2])
     return allchanges
