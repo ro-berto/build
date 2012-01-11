@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -52,7 +52,7 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
         '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
+            'GYP_DEFINES':'use_skia=1'
         },
         'layout_test_platform': 'chromium-mac',
     }))

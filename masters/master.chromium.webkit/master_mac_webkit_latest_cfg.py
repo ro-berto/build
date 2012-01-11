@@ -64,7 +64,7 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
+            'GYP_DEFINES':'use_skia=1'
         },
         'layout_test_platform': 'chromium-mac',
     }))
@@ -141,7 +141,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'trigger': 's5_webkit_dbg_trigger',
         'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 use_skia=1'
+            'GYP_DEFINES':'use_skia=1'
         },
         'layout_test_platform': 'chromium-mac',
     }))

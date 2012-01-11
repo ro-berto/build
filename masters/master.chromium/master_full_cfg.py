@@ -63,9 +63,6 @@ F('mac_clobber', mac().ChromiumFactory(
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-mac',
                         'expectations': True,
-                        'gclient_env': {
-                            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
-                         },
                         'generate_gtest_json': True}))
 
 ################################################################################

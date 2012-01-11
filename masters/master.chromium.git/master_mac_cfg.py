@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -49,9 +49,7 @@ F('rel', mac().ChromiumGITFactory(
              '--',
              '-target', 'chromium_builder_tests'],
     factory_properties={
-      'trigger': 'mac_rel_trigger',
-      'gclient_env': {
-        'GYP_DEFINES': 'clang=1 clang_use_chrome_plugins=1' }}))
+      'trigger': 'mac_rel_trigger'}))
 
 #
 # Mac Rel testers
@@ -228,10 +226,7 @@ F('rel_unit_1', mac().ChromiumGITFactory(
 #        # TODO(thakis): Re-add this once the bug is fixed.
 #        #'unit',
 #    ],
-#    factory_properties={
-#        'gclient_env': {
-#            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
-#    }}))
+#    ))
 
 
 def Update(config, active_master, c):
