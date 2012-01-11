@@ -762,3 +762,24 @@ class WaterfallLoggingShellCommand(shell.ShellCommand):
 
   def getText(self, cmd, results):
     return self.describe(True) + self.messages
+
+
+class SetBuildPropertyShellCommand(shell.ShellCommand):
+  """A shell command that can set build property.
+
+  String on stdio from this shell command will be parsed for
+     BUILD_PROPERTY property_name=value
+  Property name and value will be set as build property.
+  """
+  def __init__(self, *args, **kwargs):
+    self.messages = []
+    shell.ShellCommand.__init__(self, *args, **kwargs)
+
+  def commandComplete(self, cmd):
+    out = cmd.logs['stdio'].getText()
+    build_properties = re.findall('BUILD_PROPERTY ([^=]*)=(.*)', out)
+    for propname, value in build_properties:
+      self.build.setProperty(propname, value, 'Step')
+
+  def getText(self, cmd, results):
+    return self.describe(True) + self.messages
