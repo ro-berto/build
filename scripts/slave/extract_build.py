@@ -130,7 +130,12 @@ def real_main(options, args):
     try:
       chromium_utils.RemoveDirectory(target_build_output_dir)
       chromium_utils.ExtractZip(archive_name, abs_build_output_dir)
-      shutil.move(output_dir, target_build_output_dir)
+      # For Chrome builds, the build will be stored in chrome-win32.
+      chrome_win32_dir = output_dir.replace('full-build-win32', 'chrome-win32')
+      if os.path.exists(chrome_win32_dir):
+        shutil.move(chrome_win32_dir, target_build_output_dir)
+      else:
+        shutil.move(output_dir, target_build_output_dir)
     except (OSError, IOError):
       print 'Failed to extract the build.'
       # Print out the traceback in a nice format
