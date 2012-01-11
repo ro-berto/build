@@ -401,6 +401,16 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'gpu_frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddGpuLatencyTests(self, factory_properties=None):
+    factory_properties = factory_properties or {}
+    c = self.GetPerfStepClass(factory_properties, 'gpu_latency',
+                              process_log.GraphingLogProcessor)
+
+    options = ['--gtest_filter=LatencyTest*', '--enable-gpu']
+    cmd = self.GetTestCommand('performance_browser_tests', options)
+    self.AddTestStep(c, 'gpu_latency_test', cmd,
+                     do_step_if=self.TestStepFilter)
+
   def AddDomPerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'dom_perf',

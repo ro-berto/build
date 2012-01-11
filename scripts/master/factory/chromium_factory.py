@@ -344,6 +344,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('dromaeo'):        f.AddDromaeoTests(fp)
     if R('frame_rate'):     f.AddFrameRateTests(fp)
     if R('gpu_frame_rate'): f.AddGpuFrameRateTests(fp)
+    if R('gpu_latency'):    f.AddGpuLatencyTests(fp)
     if R('dom_perf'):       f.AddDomPerfTests(fp)
     if R('page_cycler_moz-http'):
       f.AddPageCyclerTest('page_cycler_moz-http', fp)
