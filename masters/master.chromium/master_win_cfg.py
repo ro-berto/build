@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -139,7 +139,7 @@ B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
 F('rel_cf', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['chrome_frame'],
+    tests=['chrome_frame_unittests', 'chrome_frame_tests'],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 

@@ -363,18 +363,20 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gpu_tests'):      f.AddGpuTests(fp)
 
     # ChromeFrame tests:
-    if R('chrome_frame_unittests'):
-      f.AddBasicGTestTestStep('chrome_frame_unittests', fp)
     if R('chrome_frame_perftests'):
       f.AddChromeFramePerfTests(fp)
     if R('chrome_frame'):
+      # Add all major CF tests.
       f.AddBasicGTestTestStep('chrome_frame_net_tests', fp)
       f.AddBasicGTestTestStep('chrome_frame_unittests', fp)
       f.AddBasicGTestTestStep('chrome_frame_tests', fp)
-    elif R('chrome_frame_net_tests'):
-      # Also support adding only the chrome_frame_net_tests if 'chrome_frame'
-      # is not specified.
-      f.AddBasicGTestTestStep('chrome_frame_net_tests', fp)
+    else:
+      if R('chrome_frame_net_tests'):
+        f.AddBasicGTestTestStep('chrome_frame_net_tests', fp)
+      if R('chrome_frame_unittests'):
+        f.AddBasicGTestTestStep('chrome_frame_unittests', fp)
+      if R('chrome_frame_tests'):
+        f.AddBasicGTestTestStep('chrome_frame_tests', fp)
 
     def S(test, prefix, add_functor):
       if test.startswith(prefix):
