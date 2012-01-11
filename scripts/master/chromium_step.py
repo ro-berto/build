@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -229,12 +229,30 @@ class ProcessLogShellStep(shell.ShellCommand):
       revision = -1
     return revision
 
+  def _GetBuildProperty(self):
+    """Returns a dict with the channel and version."""
+    build_properties = {}
+    try:
+      channel = self.build.getProperty('channel')
+      if channel:
+        build_properties.setdefault('channel', channel)
+    except KeyError:
+      pass  # 'channel' doesn't exist.
+    try:
+      version = self.build.getProperty('version')
+      if version:
+        build_properties.setdefault('version', version)
+    except KeyError:
+      pass  # 'version' doesn't exist.
+    return build_properties
+
   def commandComplete(self, cmd):
     """Callback implementation that will use log process to parse 'stdio' data.
     """
     if self._log_processor:
       self._result_text = self._log_processor.Process(
-          self._GetRevision(), self.getLog('stdio').getText())
+          self._GetRevision(), self.getLog('stdio').getText(),
+          self._GetBuildProperty())
 
   def getText(self, cmd, results):
     text_list = self.describe(True)

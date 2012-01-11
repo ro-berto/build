@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -309,7 +309,7 @@ class PerformanceLogProcessor(object):
     # There was no change in performance, report success.
     return builder.SUCCESS
 
-  def Process(self, revision, data):
+  def Process(self, revision, data, build_property=None):
     """Invoked by the step with data from log file once it completes.
 
     Each subclass needs to override this method to provide custom logic,
@@ -317,6 +317,7 @@ class PerformanceLogProcessor(object):
     Args:
       revision: changeset revision number that triggered the build.
       data: content of the log file that needs to be processed.
+      build_property: property for this build.
 
     Returns:
       A list of strings to be added to the waterfall display for this step.
@@ -348,7 +349,7 @@ class BenchpressLogProcessor(PerformanceLogProcessor):
     # The text summary will be built by other methods as we go.
     self._text_summary = []
 
-  def Process(self, revision, data):
+  def Process(self, revision, data, build_property=None):
     # Revision may be -1, for a forced build.
     self._revision = revision
     self._text_summary = []
@@ -402,7 +403,7 @@ class PlaybackLogProcessor(PerformanceLogProcessor):
   # "c" is used to denote a counter, and "t" is used to denote a timer.
   RESULT_LINE = re.compile(r'^((?:c|t):[^:]+):\s*(\d+)')
 
-  def Process(self, revision, data):
+  def Process(self, revision, data, build_property=None):
     """Does the actual log data processing.
 
     The data format follows this rule:
@@ -555,12 +556,16 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
     # A dict of Graph objects, by name.
     self._graphs = {}
+    self._version = 'undefined'
+    self._channel = 'undefined'
 
-  def Process(self, revision, data):
+  def Process(self, revision, data, build_property=None):
     # Revision may be -1, for a forced build.
     self._revision = revision
     self._text_summary = []
     self._graphs = {}
+    self._version = build_property.get('version') or 'undefined'
+    self._channel = build_property.get('channel') or 'undefined'
 
     self._MakeOutputDirectory()
 
@@ -680,7 +685,8 @@ class GraphingLogProcessor(PerformanceLogProcessor):
         (x, graph.traces[x].value, graph.traces[x].stddev) for x in traces])
     if not self._revision:
       raise Exception("revision is None")
-    return '{"traces": {%s}, "rev": "%s"}' % (trace_json, self._revision)
+    return ('{"traces": {%s}, "rev": "%s", "ver": "%s", "chan": "%s"}'
+            % (trace_json, self._revision, self._version, self._channel))
 
   def __CreateSummaryOutput(self):
     """Write the summary data file and collect the waterfall display text.
