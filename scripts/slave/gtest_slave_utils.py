@@ -11,6 +11,7 @@ import sys
 from xml.dom import minidom
 from slave.gtest.json_results_generator import JSONResultsGenerator
 from slave.gtest.test_result import TestResult
+from slave.gtest.test_result import canonical_name
 
 
 GENERATE_JSON_RESULTS_OPTIONS = [
@@ -62,7 +63,7 @@ class GTestUnexpectedDeathTracker(object):
 
     test_results_map = dict()
     for test in self._failed_tests:
-      test_results_map[test] = TestResult(test, failed=True)
+      test_results_map[canonical_name(test)] = TestResult(test, failed=True)
 
     return test_results_map
 
@@ -88,10 +89,12 @@ def GetResultsMapFromXML(results_xml):
     test_name = "%s.%s" % (classname, name)
 
     failures = testcase.getElementsByTagName('failure')
+    not_run = testcase.getAttribute('status') == 'notrun'
     elapsed = float(testcase.getAttribute('time'))
-    test_results_map[test_name] = TestResult(test_name,
-                                             failed=bool(failures),
-                                             elapsed_time=elapsed)
+    test_results_map[canonical_name(test_name)] = TestResult(test_name,
+        failed=bool(failures),
+        not_run=not_run,
+        elapsed_time=elapsed)
   return test_results_map
 
 

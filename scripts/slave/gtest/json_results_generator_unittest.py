@@ -15,6 +15,7 @@ from slave.gtest import json_results_generator
 from slave.gtest.json_results_generator import generate_test_timings_trie
 from slave.gtest.json_results_generator import JSONResultsGenerator
 from slave.gtest.test_result import TestResult
+from slave.gtest.test_result import canonical_name
 import simplejson
 
 
@@ -45,7 +46,7 @@ class JSONGeneratorTest(unittest.TestCase):
         json)
     self.assertEqual(json_results_generator.strip_json_wrapper(json), json)
 
-  def _test_json_generation(self, passed_tests_list, failed_tests_list):
+  def _test_json_generation(self, passed_tests_list, failed_tests_list, expected_test_list=None):
     tests_set = set(passed_tests_list) | set(failed_tests_list)
 
     get_test_set = lambda ts, label: set([t for t in ts if t.startswith(label)])
@@ -61,15 +62,15 @@ class JSONGeneratorTest(unittest.TestCase):
 
     test_timings = {}
     i = 0
-    for test in tests_set:
-      test_timings[test] = float(self._num_runs * 100 + i)
-      i += 1
 
     test_results_map = dict()
     for test in tests_set:
-      test_results_map[test] = TestResult(test,
+      test_name = canonical_name(test)
+      test_timings[test_name] = float(self._num_runs * 100 + i)
+      i += 1
+      test_results_map[test_name] = TestResult(test,
         failed=(test in failed_tests),
-        elapsed_time=test_timings[test])
+        elapsed_time=test_timings[test_name])
 
     # Do not write to an actual file.
     mock_writer = lambda path, data: True
@@ -94,7 +95,8 @@ class JSONGeneratorTest(unittest.TestCase):
         len(FLAKY_tests),
         len(DISABLED_tests | failed_tests),
         incremental_json,
-        1)
+        1,
+        expected_test_list)
 
     # We don't verify the results here, but at least we make sure the code
     # runs without errors.
@@ -104,7 +106,7 @@ class JSONGeneratorTest(unittest.TestCase):
   def _verify_json_results(self, tests_set, test_timings, failed_count_map,
                            PASS_count, DISABLED_count, FLAKY_count,
                            fixable_count,
-                           json, num_runs):
+                           json, num_runs, expected_test_list):
     # Aliasing to a short name for better access to its constants.
     JRG = JSONResultsGenerator
 
@@ -133,7 +135,10 @@ class JSONGeneratorTest(unittest.TestCase):
     if failed_count_map:
       tests = buildinfo[JRG.TESTS]
       for test_name in failed_count_map.iterkeys():
-        test = self._find_test_in_trie(test_name, tests)
+        canonical = canonical_name(test_name)
+        if expected_test_list:
+          self.assertTrue(canonical in expected_test_list)
+        test = self._find_test_in_trie(canonical, tests)
 
         failed = 0
         for result in test[JRG.RESULTS]:
@@ -143,7 +148,7 @@ class JSONGeneratorTest(unittest.TestCase):
 
         timing_count = 0
         for timings in test[JRG.TIMES]:
-          if timings[1] == test_timings[test_name]:
+          if timings[1] == test_timings[canonical]:
             timing_count = timings[0]
         self.assertEqual(1, timing_count)
 
@@ -173,7 +178,8 @@ class JSONGeneratorTest(unittest.TestCase):
     # archived results must be updated appropriately.)
     self._test_json_generation(
       ['A', 'FLAKY_B', 'DISABLED_C'],
-      ['FAILS_D', 'FLAKY_E'])
+      ['FAILS_D', 'FLAKY_E'],
+      ['D', 'E'])
     self._test_json_generation(
       ['A', 'DISABLED_C', 'FLAKY_E'],
       ['FLAKY_B', 'FAILS_D'])
@@ -188,9 +194,9 @@ class JSONGeneratorTest(unittest.TestCase):
   def test_test_timings_trie(self):
     individual_test_timings = []
     individual_test_timings.append(
-        TestResult('foo/bar/baz.html', elapsed_time=1.2))
+        TestResult('foo/bar/baz.html', failed=False, elapsed_time=1.2))
     individual_test_timings.append(
-        TestResult('bar.html', elapsed_time=0.0001))
+        TestResult('bar.html', failed=False, elapsed_time=0.0001))
     trie = generate_test_timings_trie(individual_test_timings)
 
     expected_trie = {

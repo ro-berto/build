@@ -86,6 +86,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
       results_map = gtest_slave_utils.GetResultsMapFromXML(
           options.test_output_xml)
     else:
+      sys.stderr.write('Unable to generate JSON from XML, using log output.')
       # The file did not get generated. See if we can generate a results map
       # from the log output.
       results_map = results_tracker.GetResultsMap()
