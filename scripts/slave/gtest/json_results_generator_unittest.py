@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -80,6 +80,7 @@ class JSONGeneratorTest(unittest.TestCase):
       '',
       None,   # don't fetch past json results archive
       test_results_map,
+      svn_repositories=[('webkit', '.')],
       file_writer=mock_writer)
 
     failed_count_map = dict([(t, 1) for t in failed_tests])
