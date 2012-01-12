@@ -262,6 +262,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # Get the test's command.
     cmd = self.GetPageCyclerCommand(command_name, enable_http)
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     # Add the test step to the factory.
     self.AddTestStep(test_class, test, cmd, do_step_if=self.TestStepFilter)
@@ -278,6 +280,8 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=%s' % test_list]
 
     cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(c, 'startup_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -288,6 +292,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=GeneralMix*MemoryTest.*']
     cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(c, 'memory_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -354,6 +360,8 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=SunSpider*.*', '--gtest_print_time',
                '--run-sunspider']
     cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(c, 'sunspider_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -365,6 +373,8 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=V8Benchmark*.*', '--gtest_print_time',
                '--run-v8-benchmark']
     cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(c, 'v8_benchmark_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -378,6 +388,8 @@ class ChromiumCommands(commands.FactoryCommands):
       options = ['--gtest_filter=Dromaeo*Test.%sPerf' % test,
                  '--gtest_print_time', '--run-dromaeo-benchmark']
       cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
+      cmd = self.AddBuildProperties(cmd)
+      cmd = self.AddFactoryProperties(factory_properties, cmd)
       self.AddTestStep(cls, 'dromaeo_%s_test' % test.lower(), cmd,
                        do_step_if=self.TestStepFilter)
 
@@ -429,6 +441,8 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._dom_perf_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(c, 'dom_perf', cmd,
                      do_step_if=self.TestStepFilter)
 
