@@ -84,18 +84,10 @@ def common_xcode_settings(command, options, env, compiler=None):
   ldplusplus = None
   src_path = os.path.dirname(options.build_dir)
   if compiler in ('clang', 'goma', 'goma-clang'):
-    # The official release builder wobbles across release branches.
-    # Chromes prior to m15 were built with gcc and we want to keep it
-    # that way, so only enable clang on m15 and up.
-    variables = {}
-    execfile(os.path.join(src_path, 'chrome', 'VERSION'), variables)
-    if int(variables['MAJOR']) >= 15:
-      clang_bin_dir = os.path.abspath(os.path.join(
-          src_path, 'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-      cc = os.path.join(clang_bin_dir, 'clang')
-      ldplusplus = os.path.join(clang_bin_dir, 'clang++')
-    else:
-      print 'Not using clang for version, dict was %r' % variables
+    clang_bin_dir = os.path.abspath(os.path.join(
+        src_path, 'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+    cc = os.path.join(clang_bin_dir, 'clang')
+    ldplusplus = os.path.join(clang_bin_dir, 'clang++')
 
     if compiler in ('goma', 'goma-clang'):
       print 'using goma'
