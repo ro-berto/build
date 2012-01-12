@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -730,11 +730,11 @@ class StagerBase(object):
               'Platform "%s" is not currently supported.' % sys.platform)
 
     # Upload extra build artifacts.
-    # TODO(mmoss): This should be pulled from FILES.cfg. remoting-it2me.zip is
+    # TODO(mmoss): This should be pulled from FILES.cfg. remoting-webapp.zip is
     # already in there. Need to add devtools_frontend.zip, then put in handling
     # here based on the 'archive' field.
     self._UploadFile('devtools_frontend.zip', www_dir, gs_base)
-    self._UploadFile('remoting-it2me.zip', www_dir, gs_base)
+    self._UploadFile('remoting-webapp.zip', www_dir, gs_base)
 
     if len(not_found):
       sys.stderr.write('\n\nWARNING: File(s) not found: %s\n' %
