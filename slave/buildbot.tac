@@ -24,6 +24,7 @@ from slave import slave_utils
 # Load default settings.
 import config
 
+slave_utils.ImportMasterConfigs()
 
 # Determines the slave type:
 ActiveMaster = None
@@ -57,7 +58,13 @@ if ActiveMaster is None:
         print >> sys.stderr, '*** Failed to detect the active master'
         sys.exit(1)
     print 'Using master %s' % master_name
-    ActiveMaster = getattr(config.Master, master_name)
+    if hasattr(config.Master, 'active_master'):
+      ActiveMaster = config.Master.active_master
+    elif master_name and getattr(config.Master, master_name):
+      ActiveMaster = getattr(config.Master, master_name)
+    else:
+      print >> sys.stderr, '*** Failed to detect the active master'
+      sys.exit(1)
 
 if host is None:
     host = os.environ.get('TESTING_MASTER_HOST', ActiveMaster.master_host)

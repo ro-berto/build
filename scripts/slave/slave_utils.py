@@ -5,6 +5,7 @@
 """Functions specific to build slaves, shared by several buildbot scripts.
 """
 
+import inspect
 import os
 import re
 import signal
@@ -280,6 +281,35 @@ def GetActiveMaster():
     for slave in chromium_utils.RunSlavesCfg(path):
       if slave.get('hostname', None) == hostname:
         return slave['master']
+
+def ImportMasterConfigs(master_name=None):
+  """Import master configs.
+
+  Normally a slave can use GetActiveMaster() to find itself and
+  determine which ActiveMaster to use.  In that case, the active
+  master name is passed in as an arg, and we only load the
+  site_config.py that defines it.  When testing, the current "slave"
+  won't be found.  In that case, we don't know which config to use, so
+  load them all.  In either case, masters are assigned as attributes
+  to the config.Master object."""
+  for master in chromium_utils.ListMasters():
+    path = os.path.join(master, 'master_site_config.py')
+    if os.path.exists(path):
+      local_vars = {}
+      try:
+        execfile(path, local_vars)
+      except Exception as e:
+        # Naked exceptions are banned by the style guide but we are
+        # trying to be resilient here.
+        print >> sys.stderr, 'WARNING: cannot exec ' + path
+        print >> sys.stderr, e
+      for (symbol_name, symbol) in local_vars.items():
+        if inspect.isclass(local_vars[symbol_name]):
+          setattr(config.Master, symbol_name, symbol)
+          # If we have a master_name and it matches, set
+          # config.Master.active_master.
+          if master_name and master_name == symbol_name:
+            setattr(config.Master, 'active_master', symbol)
 
 
 def CopyFileToArchiveHost(src, dest_dir):
