@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -220,5 +220,21 @@ def main():
   twistd.run()
 
 
+def UpdateScripts():
+  if os.environ.get('RUN_SLAVE_UPDATED_SCRIPTS', None):
+    os.environ.pop('RUN_SLAVE_UPDATED_SCRIPTS')
+    return False
+  gclient_path = os.path.join(SCRIPT_PATH, '..', '..', 'depot_tools', 'gclient')
+  if sys.platform.startswith('win'):
+    gclient_path += '.bat'
+  if subprocess.call([gclient_path, 'sync']) != 0:
+    msg = '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0]
+    print >> sys.stderr, msg
+  os.environ['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
+  return True
+
+
 if '__main__' == __name__:
+  if UpdateScripts():
+    os.execv(sys.executable, [sys.executable] + sys.argv)
   main()
