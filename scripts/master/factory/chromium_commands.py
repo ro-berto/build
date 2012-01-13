@@ -227,7 +227,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      'check lkgr and stop build if unchanged',
                      cmd)
 
-  def GetPageCyclerCommand(self, test_name, http):
+  def GetPageCyclerCommand(self, test_name, http, factory_properties=None):
     """Returns a command list to call the _test_tool on the page_cycler
     executable, with the appropriate GTest filter and additional arguments.
     """
@@ -239,6 +239,8 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--with-httpd', self.PathJoin('src', 'data', 'page_cycler')])
     else:
       test_type = 'File'
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     cmd.extend([self.GetExecutableName('performance_ui_tests'),
                 '--gtest_filter=PageCycler*.%s%s:PageCycler*.*_%s%s' % (
                     test_name, test_type, test_name, test_type)])
@@ -261,9 +263,8 @@ class ChromiumCommands(commands.FactoryCommands):
                      process_log.GraphingPageCyclerLogProcessor)
 
     # Get the test's command.
-    cmd = self.GetPageCyclerCommand(command_name, enable_http)
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd = self.GetPageCyclerCommand(command_name, enable_http,
+                                    factory_properties=factory_properties)
 
     # Add the test step to the factory.
     self.AddTestStep(test_class, test, cmd, do_step_if=self.TestStepFilter)
@@ -279,9 +280,8 @@ class ChromiumCommands(commands.FactoryCommands):
       test_list += ':-*.*Ref*'
     options = ['--gtest_filter=%s' % test_list]
 
-    cmd = self.GetTestCommand('performance_ui_tests', options)
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'startup_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -291,9 +291,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=GeneralMix*MemoryTest.*']
-    cmd = self.GetTestCommand('performance_ui_tests', options)
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'memory_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -305,7 +304,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Cold']
-    cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'new_tab_ui_cold_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -314,7 +314,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=NewTabUIStartupTest.*Warm']
-    cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'new_tab_ui_warm_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -325,7 +326,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=*SyncPerfTest.*',
                '--ui-test-action-max-timeout=120000',]
-    cmd = self.GetTestCommand('sync_performance_tests', options)
+    cmd = self.GetTestCommand('sync_performance_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'sync', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -337,7 +339,8 @@ class ChromiumCommands(commands.FactoryCommands):
     options = ['--gtest_filter=TabSwitchingUITest.*', '-enable-logging',
                '-dump-histograms-on-exit', '-log-level=0']
 
-    cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'tab_switching_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -359,9 +362,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=SunSpider*.*', '--gtest_print_time',
                '--run-sunspider']
-    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'sunspider_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -372,9 +374,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=V8Benchmark*.*', '--gtest_print_time',
                '--run-v8-benchmark']
-    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'v8_benchmark_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -387,9 +388,8 @@ class ChromiumCommands(commands.FactoryCommands):
                                   process_log.GraphingLogProcessor)
       options = ['--gtest_filter=Dromaeo*Test.%sPerf' % test,
                  '--gtest_print_time', '--run-dromaeo-benchmark']
-      cmd = self.GetTestCommand('performance_ui_tests', arg_list=options)
-      cmd = self.AddBuildProperties(cmd)
-      cmd = self.AddFactoryProperties(factory_properties, cmd)
+      cmd = self.GetTestCommand('performance_ui_tests', arg_list=options,
+                                factory_properties=factory_properties)
       self.AddTestStep(cls, 'dromaeo_%s_test' % test.lower(), cmd,
                        do_step_if=self.TestStepFilter)
 
@@ -399,7 +399,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingFrameRateLogProcessor)
 
     options = ['--gtest_filter=FrameRate*Test*']
-    cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -409,7 +410,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingFrameRateLogProcessor)
 
     options = ['--gtest_filter=FrameRate*Test*', '--enable-gpu']
-    cmd = self.GetTestCommand('performance_ui_tests', options)
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
     self.AddTestStep(c, 'gpu_frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
 

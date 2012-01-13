@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -298,6 +298,7 @@ def ImportMasterConfigs(master_name=None):
       local_vars = {}
       try:
         execfile(path, local_vars)
+      # pylint: disable=W0703
       except Exception as e:
         # Naked exceptions are banned by the style guide but we are
         # trying to be resilient here.

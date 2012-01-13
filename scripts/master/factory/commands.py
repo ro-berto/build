@@ -217,11 +217,14 @@ class FactoryCommands(object):
 
 
   # Basic commands
-  def GetTestCommand(self, executable, arg_list=None):
+  def GetTestCommand(self, executable, arg_list=None, factory_properties=None):
     cmd = [self._python, self._test_tool,
            '--target', self._target,
-           '--build-dir', self._build_dir,
-           self.GetExecutableName(executable)]
+           '--build-dir', self._build_dir]
+    if executable in ('performance_ui_tests', 'sync_performance_tests'):
+      cmd = self.AddBuildProperties(cmd)
+      cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd.extend(self.GetExecutableName(executable))
     if arg_list is not None:
       cmd.extend(arg_list)
     return cmd
