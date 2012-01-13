@@ -14,12 +14,20 @@ import config
 
 # A list of unittests to run after each build.
 _UNITTESTS = [
-  'call_trace_unittests',
+  'agent_common_unittests',
+  'block_graph_unittests',
+  'common_unittests',
   'core_unittests',
   'instrument_unittests',
+  'parse_unittests',
   'pdb_unittests',
+  'pe_transforms_unittests',
   'pe_unittests',
+  'profile_unittests',
   'relink_unittests',
+  'reorder_unittests',
+  'rpc_service_unittests',
+  'wsdump_unittests',
 ]
 
 
