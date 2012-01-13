@@ -299,7 +299,7 @@ def ImportMasterConfigs(master_name=None):
       try:
         execfile(path, local_vars)
       # pylint: disable=W0703
-      except Exception as e:
+      except Exception, e:
         # Naked exceptions are banned by the style guide but we are
         # trying to be resilient here.
         print >> sys.stderr, 'WARNING: cannot exec ' + path
