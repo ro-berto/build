@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -45,10 +45,8 @@ class SkiaCommands(commands.FactoryCommands):
                          timeout=timeout, command=cmd, workdir=self.workdir,
                          env=self.environment_variables)
 
-  def AddBuild(self, build_target=None, description='Build', timeout=None):
+  def AddBuild(self, build_target, description='Build', timeout=None):
     """Adds a compile step to the build."""
-    if not build_target:
-      raise ValueError, 'build_target not set'
     cmd = 'make %s' % build_target
     if not timeout:
       timeout = self.default_timeout
@@ -56,12 +54,10 @@ class SkiaCommands(commands.FactoryCommands):
                          timeout=timeout, command=cmd, workdir=self.workdir,
                          env=self.environment_variables)
 
-  def AddUploadToBucket(self, source_filepath=None,
+  def AddUploadToBucket(self, source_filepath,
                         dest_gsbase='gs://chromium-skia-gm',
                         description='Upload', timeout=None):
     """Adds a step that uploads a file to a Google Storage Bucket."""
-    if not source_filepath:
-      raise ValueError, 'source_filepath not set'
     # TODO(epoger): this should use self._script_dir instead of the manually
     # created path below, but I had trouble with that and didn't want it to
     # block progress for now.
@@ -76,10 +72,35 @@ class SkiaCommands(commands.FactoryCommands):
                          timeout=timeout, command=cmd, workdir=self.workdir,
                          env=self.environment_variables)
 
-  def AddRun(self, run_command=None, description='Run', timeout=None):
+  def AddMergeIntoSvn(self, source_dir_path, dest_svn_url,
+                      svn_username_file, svn_password_file,
+                      commit_message=None, description='MergeIntoSvn',
+                      timeout=None):
+    """Adds a step that commits all files within a directory to a special
+    SVN repository."""
+    if not commit_message:
+      commit_message = 'automated svn commit of %s step' % description
+
+    # TODO(epoger): this should use self._script_dir instead of the manually
+    # created path below, but I had trouble with that and didn't want it to
+    # block progress for now.
+    slave_script_dir = self.PathJoin('..', '..', '..', '..', 'scripts', 'slave')
+    path_to_upload_script = self.PathJoin(
+        slave_script_dir, 'skia', 'merge_into_svn.py')
+    cmd = ['python', path_to_upload_script,
+           '--source_dir_path', source_dir_path,
+           '--dest_svn_url', dest_svn_url,
+           '--svn_username_file', svn_username_file,
+           '--svn_password_file', svn_password_file,
+           '--commit_message', commit_message]
+    if not timeout:
+      timeout = self.default_timeout
+    self.factory.addStep(shell.ShellCommand, description=description,
+                         timeout=timeout, command=cmd, workdir=self.workdir,
+                         env=self.environment_variables)
+
+  def AddRun(self, run_command, description='Run', timeout=None):
     """Runs something we built."""
-    if not run_command:
-      raise ValueError, 'run_command not set'
     if not timeout:
       timeout = self.default_timeout
     self.factory.addStep(shell.ShellCommand, description=description,
