@@ -10,6 +10,7 @@ from __future__ import with_statement
 import logging
 import optparse
 import os
+import subprocess
 import sys
 import time
 
@@ -24,9 +25,15 @@ def test_master(master, name, path):
   # Try to backup twistd.log
   twistd_log = os.path.join(path, 'twistd.log')
   had_twistd_log = os.path.isfile(twistd_log)
+  # Try to backup a Git workdir.
+  git_workdir = os.path.join(path, 'git_poller_src.git')
+  had_git_workdir = os.path.isdir(git_workdir)
   try:
     if had_twistd_log:
       os.rename(twistd_log, twistd_log + '_')
+    if had_git_workdir:
+      if subprocess.call(['mv', git_workdir, git_workdir + '_']) != 0:
+        print >> sys.stderr, 'ERROR: Failed to rename %s' % git_workdir
     try:
       if not masters_util.start_master(master, path):
         return False
@@ -40,6 +47,12 @@ def test_master(master, name, path):
   finally:
     if had_twistd_log:
       os.rename(twistd_log + '_', twistd_log)
+    if (os.path.isdir(git_workdir) and
+        subprocess.call(['rm', '-rf', git_workdir]) != 0):
+      print >> sys.stderr, 'ERROR: Failed to remove %s' % git_workdir
+    if had_git_workdir:
+      if subprocess.call(['mv', git_workdir + '_', git_workdir]) != 0:
+        print >> sys.stderr, 'ERROR: Failed to rename %s' % (git_workdir + '_')
 
 
 def real_main(base_dir, expected):
