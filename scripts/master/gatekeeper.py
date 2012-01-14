@@ -21,7 +21,6 @@ import urllib
 from buildbot.status.builder import FAILURE
 from twisted.internet import defer
 from twisted.python import log
-from twisted.python.failure import Failure
 from twisted.web import client
 
 from master import build_utils
@@ -148,25 +147,24 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     """Check for the tree status before sending a job failure email.
 
     Asynchronously check for the tree status and return a defered."""
-    def stop_if_closed(result):
-      """If the tree is already closed, we don't care about this failure."""
-      if result.strip() == '0':
-        return Failure()
-
-    def send_email(*args):
+    # If the tree is already closed, we don't care about this failure.
+    # Check only at this moment because this is the slowest call.
+    def Success(result):
+      if result and result.find('0') != -1:
+        return False
+      # Call the parent function to build the email.
       return chromium_notifier.ChromiumNotifier.buildMessage(
                  self, builder_name, build_status, results, step_name)
 
-    if self.tree_status_url:
-      d = client.getPage(self.tree_status_url, agent='buildbot')
-      d.addCallback(stop_if_closed)
-    else:
-      d = defer.Deferred()
+    def Failure(result):
+      # AppEngine dropped us. We should still send an email but not close the
+      # tree.
+      return chromium_notifier.ChromiumNotifier.buildMessage(
+                 self, builder_name, build_status, results, step_name)
 
-    # Even if the url request fails and AppEngine dropped us, we should still
-    # send an email but not close the tree.
-    d.addCallback(send_email)
-    return d
+    connection = client.getPage(self.tree_status_url, agent='buildbot')
+    connection.addCallbacks(Success, Failure)
+    return connection
 
   def getFinishedMessage(self, result, builder_name, build_status, step_name):
     """Closes the tree."""
@@ -196,12 +194,13 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
           'password': self.password,
         })
 
-    def success(result):
+    def Success(result):
       log.msg('[gatekeeper] Tree closed successfully at rev %s' %
               str(latest_revision))
       self._last_closure_revision = latest_revision
+      return defer.succeed(0)
 
-    def failure(result):
+    def Failure(result):
       log.msg('[gatekeeper] Failed to close the tree at rev %s' %
               str(latest_revision))
 
@@ -210,5 +209,5 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     connection = client.getPage(self.tree_status_url, method='POST',
                                 postdata=params, headers=headers,
                                 agent='buildbot')
-    connection.addCallbacks(success, failure)
+    connection.addCallbacks(Success, Failure)
     return connection
