@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -61,9 +61,10 @@ class TryMailNotifier(mail.MailNotifier):
     else:
       status_text_html = (
           'TRY FAILED<p>'
-          '<strong>If you think the try slave is broken (it happens!) or tests '
-          'are flaky, please REPLY to this email, don\'t ask on irc, mailing '
-          'list or IM.</strong><br>'
+          '<strong>If you think the try slave is broken (it happens!),'
+          'please REPLY to this email, don\'t ask on irc, mailing '
+          'list or IM.<br>'
+          'If you think the test is flaky, notify the sheriffs.</strong><br>'
           'Please use "rich text" replies so the links aren\'t lost.<br>'
           'It is possible that you get no reply, don\'t worry, the reply '
           'address isn\'t a blackhole.'
