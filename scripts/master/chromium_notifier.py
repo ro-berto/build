@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -238,13 +238,9 @@ class ChromiumNotifier(MailNotifier):
       return
     self._last_time_mail_sent = time.time()
 
+    # TODO(maruel): Use self.createEmail().
     blame_interested_users = self.shouldBlameCommitters(step_name)
-    try:
-      # 0.7.x
-      project_name = self.master_status.getProjectName()
-    except AttributeError:
-      # 0.8.x
-      project_name = self.master_status.getTitle()
+    project_name = self.master_status.getTitle()
     revisions_list = build_utils.getAllRevisions(build_status)
     build_url = self.master_status.getURLForThing(build_status)
     waterfall_url = self.master_status.getBuildbotURL()
