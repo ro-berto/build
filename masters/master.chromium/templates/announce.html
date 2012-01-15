@@ -226,27 +226,7 @@
           <script language="javascript">
             c.chromium = '';
             c.chromium_chromiumos = '';
-            c.webkit = [
-                'builder=Webkit Win Builder (deps)',
-                'builder=Webkit Win (deps)',
-                'builder=Webkit Win Builder (deps)(dbg)',
-                'builder=Webkit Win (deps)(dbg)(1)',
-                'builder=Webkit Win (deps)(dbg)(2)',
-                'builder=Webkit Mac Builder (CG)(deps)',
-                'builder=Webkit Mac10.6 (CG)(deps)',
-                'builder=Webkit Mac Builder (CG)(deps)(dbg)',
-                'builder=Webkit Mac10.6 (CG)(deps)(dbg)(1)',
-                'builder=Webkit Mac10.6 (CG)(deps)(dbg)(2)',
-                'builder=Webkit Mac Builder (deps)',
-                'builder=Webkit Mac10.6 (deps)',
-                'builder=Webkit Mac Builder (deps)(dbg)',
-                'builder=Webkit Mac10.6 (deps)(dbg)(1)',
-                'builder=Webkit Mac10.6 (deps)(dbg)(2)',
-                'builder=Webkit Linux (deps)',
-                'builder=Webkit Linux Builder (deps)(dbg)',
-                'builder=Webkit Linux (deps)(dbg)(1)',
-                'builder=Webkit Linux (deps)(dbg)(2)',
-            ].join('&').replace(' ', '+').replace('(', '%28').replace(')', '%29');
+            c.webkit = 'builder=Webkit+Win+Builder+%28deps%29&builder=Webkit+Win+%28deps%29&builder=Webkit+Mac+Builder+%28deps%29&builder=Webkit+Mac10.6+%28deps%29&builder=Webkit+Linux+%28deps%29';
             c.memory = '';
             c.memory_fyi = '';
             c.perf = '';
