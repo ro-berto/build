@@ -473,6 +473,16 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def build_dir(self):
     return self._build_dir
 
+  def ForceSharedDebugBuild(self, target, project, factory_properties):
+    # Force all Windows Debug bots building all.sln to build in "Shared" mode,
+    # unless it is already set.
+    if (target == 'Debug' and self._target_platform == 'win32' and
+        project and project.startswith('all.sln')):
+      gclient_env = factory_properties.setdefault('gclient_env', {})
+      gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
+      if 'component=' not in gyp_defines:
+        gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
+
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
@@ -503,6 +513,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     tests_for_build = [
         re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
+
+    # Force all Windows Debug bots building all.sln to build in "Shared" mode,
+    # unless it is already set.
+    self.ForceSharedDebugBuild(target, project, factory_properties)
+
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties,
@@ -575,6 +590,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Setup factory.
     factory_properties = factory_properties or {}
     options = options or {}
+
+    # Force all Windows Debug bots building all.sln to build in "Shared" mode,
+    # unless it is already set.
+    self.ForceSharedDebugBuild(target, project, factory_properties)
+
     factory = self.BuildFactory(target, clobber,
                                 None, None, # tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,

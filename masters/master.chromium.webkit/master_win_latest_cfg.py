@@ -127,14 +127,5 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 
-B('Win Shared Builder (dbg)', 'f_win_shared_dbg', scheduler='s7_webkit_dbg')
-F('f_win_shared_dbg', win().ChromiumWebkitLatestFactory(
-    project='all.sln',
-    compile_timeout=2400,
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES':
-                            'component=shared_library fastbuild=1'}}))
-
-
 def Update(config, active_master, c):
   return helper.Update(c)

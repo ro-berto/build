@@ -311,18 +311,6 @@ F('dbg_int', win().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 #
-# Dbg Shared builder
-#
-B('Win Builder (dbg)(shared)', 'dbg_shared', 'compile|windows', 'win_dbg',
-  notify_on_missing=True)
-F('dbg_shared', win().ChromiumFactory(
-    target='Debug',
-    slave_type='Builder',
-    project='all.sln',
-    factory_properties={'gclient_env':
-        {'GYP_DEFINES' : 'component=shared_library fastbuild=1'}}))
-
-#
 # Dbg Aura builder
 #
 B('Win Aura', 'dbg_aura', 'compile|testers|windows', 'win_dbg',
