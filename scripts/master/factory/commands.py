@@ -224,7 +224,7 @@ class FactoryCommands(object):
     if executable in ('performance_ui_tests', 'sync_performance_tests'):
       cmd = self.AddBuildProperties(cmd)
       cmd = self.AddFactoryProperties(factory_properties, cmd)
-    cmd.extend(self.GetExecutableName(executable))
+    cmd.append(self.GetExecutableName(executable))
     if arg_list is not None:
       cmd.extend(arg_list)
     return cmd
