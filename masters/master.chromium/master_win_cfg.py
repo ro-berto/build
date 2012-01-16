@@ -313,6 +313,7 @@ F('dbg_int', win().ChromiumFactory(
 #
 # Dbg Aura builder
 #
+aura_gyp_defines = 'component=static_library use_aura=1 fastbuild=1'
 B('Win Aura', 'dbg_aura', 'compile|testers|windows', 'win_dbg',
   notify_on_missing=True)
 F('dbg_aura', win().ChromiumFactory(
@@ -320,8 +321,7 @@ F('dbg_aura', win().ChromiumFactory(
     slave_type='BuilderTester',
     tests=['aura', 'aura_shell', 'compositor', 'views'],
     project='all.sln;aura_builder',
-      factory_properties={'gclient_env': {
-                            'GYP_DEFINES' : 'use_aura=1 fastbuild=1'},
+      factory_properties={'gclient_env': {'GYP_DEFINES': aura_gyp_defines},
                           'process_dumps': True,
                           'start_crash_handler': True,
                           'generate_gtest_json': True}))
