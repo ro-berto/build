@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -89,13 +89,10 @@ class GoogleLoggingStepTest(unittest.TestCase):
         self._log_files = log_files
 
       def getProperty(self, property_name):
-        mock.Mock.__getattr__(self, 'getProperty')
         if property_name == 'got_revision':
           return self._revision
-        return None
 
       def getLogs(self):
-        mock.Mock.__getattr__(self, 'getLogs')
         self._getLogsCalled += 1
         if self._getLogsCalled > 1:
           raise Exception('getLogs called more than once')
@@ -162,7 +159,6 @@ class BenchpressPerformanceTestStepTest(GoogleLoggingStepTest):
         self._addURLCalled = 0
 
       def addURL(self, urltype, link):
-        mock.Mock.__getattr__(self, 'addURL')
         self._addURLCalled += 1
         if self._addURLCalled > 1:
           raise Exception('getLogs called more than once')
