@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -170,6 +170,14 @@ def main():
   option_parser.add_option('', '--build-dir', default='chrome',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
+  option_parser.add_option('--build-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
+  option_parser.add_option('--factory-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
   options, args = option_parser.parse_args()
   return dom_perf(options, args)
 
