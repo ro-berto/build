@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -10,13 +10,11 @@ import fnmatch
 import glob
 import math
 import os
-import re
 import shutil
 import stat
 import string  # pylint: disable=W0402
 import subprocess
 import sys
-import tempfile
 import threading
 import time
 import zipfile
@@ -817,63 +815,6 @@ def SshCopyTree(srctree, host, dst):
   if result:
     raise ExternalError('Failed to scp "%s" to "%s" (%s)' %
                        (srctree, host + ':' + dst, result))
-
-
-def LogAndRemoveFiles(temp_dir, regex_pattern):
-  """Removes files in |temp_dir| that match |regex_pattern|.
-  This function prints out the name of each directory or filename before
-  it deletes the file from disk."""
-  regex = re.compile(regex_pattern)
-  if not os.path.isdir(temp_dir):
-    return
-  for dir_item in os.listdir(temp_dir):
-    if regex.search(dir_item):
-      full_path = os.path.join(temp_dir, dir_item)
-      print "Removing leaked temp item: %s" % full_path
-      try:
-        if os.path.islink(full_path) or os.path.isfile(full_path):
-          os.remove(full_path)
-        elif os.path.isdir(full_path):
-          RemoveDirectory(full_path)
-        else:
-          print "Temp item wasn't a file or directory?"
-      except OSError, e:
-        print >> sys.stderr, e
-        # Don't fail.
-
-
-def RemoveChromeTemporaryFiles():
-  """A large hammer to nuke what could be leaked files from unittests or
-  files left from a unittest that crashed, was killed, etc."""
-  # NOTE: print out what is cleaned up so the bots don't timeout if
-  # there is a lot to cleanup and also se we see the leaks in the
-  # build logs.
-  # At some point a leading dot got added, support with and without it.
-  kLogRegex = '^\.?(com\.google\.Chrome|org\.chromium)\.'
-  if IsWindows():
-    kLogRegex = r'^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
-    # Dump and temporary files.
-    LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
-  elif IsLinux():
-    kLogRegexHeapcheck = '\.(sym|heap)$'
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegexHeapcheck)
-    LogAndRemoveFiles('/dev/shm', kLogRegex)
-  elif IsMac():
-    nstempdir_path = '/usr/local/libexec/nstempdir'
-    if os.path.exists(nstempdir_path):
-      ns_temp_dir = GetCommandOutput([nstempdir_path]).strip()
-      if ns_temp_dir:
-        LogAndRemoveFiles(ns_temp_dir, kLogRegex)
-    for i in ('Chromium', 'Google Chrome'):
-      # Remove dumps.
-      crash_path = '%s/Library/Application Support/%s/Crash Reports' % (
-          os.environ['HOME'], i)
-      LogAndRemoveFiles(crash_path, r'^.+\.dmp$')
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
 
 
 def ListMasters():

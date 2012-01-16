@@ -14,6 +14,7 @@ import sys
 import urllib
 
 from common import chromium_utils
+from slave import slave_utils
 
 
 class FullDriveException(Exception):
@@ -92,7 +93,7 @@ def check_free_space_path(path, min_free_space=1024*1024*1024):
 
 def main_win():
   """Main function for Windows platform."""
-  chromium_utils.RemoveChromeTemporaryFiles()
+  slave_utils.RemoveChromeTemporaryFiles()
   # TODO(maruel): Temporary, add back.
   #CleanupTempDirectory(os.environ['TEMP'])
   check_free_space_path('c:\\')
@@ -104,7 +105,7 @@ def main_win():
 
 def main_mac():
   """Main function for Mac platform."""
-  chromium_utils.RemoveChromeTemporaryFiles()
+  slave_utils.RemoveChromeTemporaryFiles()
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
   if os.path.isdir('/b'):
@@ -116,7 +117,7 @@ def main_mac():
 
 def main_linux():
   """Main function for linux platform."""
-  chromium_utils.RemoveChromeTemporaryFiles()
+  slave_utils.RemoveChromeTemporaryFiles()
   # TODO(maruel): Temporary, add back.
   # CleanupTempDirectory('/tmp')
   if os.path.isdir('/b'):

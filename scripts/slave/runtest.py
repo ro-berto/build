@@ -197,7 +197,7 @@ def main_mac(options, args):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  chromium_utils.RemoveChromeTemporaryFiles()
+  slave_utils.RemoveChromeTemporaryFiles()
 
   if options.parallel:
     supervisor_path = os.path.join(build_dir, '..', 'tools',
@@ -290,7 +290,7 @@ def main_linux(options, args):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  chromium_utils.RemoveChromeTemporaryFiles()
+  slave_utils.RemoveChromeTemporaryFiles()
 
   os.environ['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
                                                                bin_dir)
@@ -387,7 +387,7 @@ def main_win(options, args):
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
-  chromium_utils.RemoveChromeTemporaryFiles()
+  slave_utils.RemoveChromeTemporaryFiles()
 
   results_tracker = None
   if options.generate_json_file:
