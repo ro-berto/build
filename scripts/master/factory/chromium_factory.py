@@ -61,6 +61,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'win_release_InlineFunctionExpansion=0 '
     'win_release_OmitFramePointers=0 '
     'release_valgrind_build=1 '  # Keep the code under #ifndef NVALGRIND
+    'component=static_library '
   )
 
   # gclient custom vars
