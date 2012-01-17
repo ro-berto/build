@@ -102,7 +102,10 @@ class GateKeeperTest(auto_stub.TestCase):
 
     self.assertTrue(isinstance(d, defer.Deferred))
     mn.isInterestingStep.assert_called_once_with(build, step, [FAILURE])
-    gatekeeper.client.getPage.assert_called_once_with('url', agent='buildbot')
+    if tree_status_url:
+      gatekeeper.client.getPage.assert_called_once_with('url', agent='buildbot')
+    else:
+      self.assertEquals(0, gatekeeper.client.getPage.call_count)
     if email_sent:
       self.assertEquals(1, mn.sendmail.call_count)
       mn.getFinishedMessage.assert_called_once_with(
@@ -150,6 +153,10 @@ class GateKeeperTest(auto_stub.TestCase):
     # Tree fetch failed.
     gatekeeper.client.getPage.return_value = defer.fail(IOError())
     self._check(True)
+
+  def test_no_url(self):
+    # An email is still sent if no url.
+    self._check(True, None)
 
 
 if __name__ == '__main__':
