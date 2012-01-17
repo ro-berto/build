@@ -74,7 +74,8 @@ class GClient(source.Source):
     try:
       # parent_cr_revision might be set, but empty.
       if self.getProperty('parent_cr_revision'):
-        revision = self.getProperty('parent_cr_revision')
+        revision = '%s@%s'% (str(branch),
+                             self.getProperty('parent_cr_revision'))
     except KeyError:
       pass
     args['revision'] = revision
