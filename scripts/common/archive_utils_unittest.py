@@ -16,29 +16,6 @@ sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
 from common import archive_utils
 
-
-DIR_LIST = ['foo',
-            os.path.join('fee', 'foo'),
-            os.path.join('fee', 'faa'),
-            os.path.join('fee', 'fie'),
-            os.path.join('foo', 'fee', 'faa')]
-
-TEMP_FILES = ['foo.txt',
-              'bar.txt',
-              os.path.join('foo', 'buzz.txt'),
-              os.path.join('foo', 'bing'),
-              os.path.join('fee', 'foo', 'bar'),
-              os.path.join('fee', 'faa', 'bar'),
-              os.path.join('fee', 'fie', 'fo'),
-              os.path.join('foo', 'fee', 'faa', 'boo.txt')]
-
-TEMP_FILES_WITH_WILDCARDS = ['foo.txt',
-                             'bar.txt',
-                             os.path.join('foo', '*'),
-                             os.path.join('fee', '*', 'bar'),
-                             os.path.join('fee', '*', 'fo'),
-                             os.path.join('foo', 'fee', 'faa', 'boo.txt')]
-
 # Sample FILES.cfg-style contents.
 TEST_FILES_CFG = [
   {
@@ -66,16 +43,6 @@ def CreateTestFilesCfg(path):
   f.close()
   return files_cfg
 
-def BuildTestFilesTree(test_path):
-  for temp_file in TEMP_FILES:
-    temp_path = os.path.join(test_path, temp_file)
-    dir_name = os.path.dirname(temp_path)
-
-    if not os.path.exists(temp_path):
-      relative_dir_name = os.path.dirname(temp_file)
-      if relative_dir_name and not os.path.exists(dir_name):
-        os.makedirs(dir_name)
-      open(temp_path, 'a')
 
 class ArchiveUtilsTest(unittest.TestCase):
 
@@ -99,26 +66,6 @@ class ArchiveUtilsTest(unittest.TestCase):
         self.assertEqual(files_list.count(i['filename']), 0)
     # No unexpected files.
     self.assertEqual(len(files_list), 0)
-
-  def testExtractDirsFromPaths(self):
-    path_list = TEMP_FILES[:]
-    expected_dir_list = DIR_LIST[:]
-    expected_dir_list.sort()
-
-    dir_list = archive_utils.ExtractDirsFromPaths(path_list)
-    dir_list.sort()
-    self.assertEquals(expected_dir_list, dir_list)
-
-  def testExpandWildcards(self):
-    path_list = TEMP_FILES_WITH_WILDCARDS[:]
-    expected_path_list = TEMP_FILES[:]
-    expected_path_list.sort()
-
-    BuildTestFilesTree(self.temp_dir)
-
-    expanded_path_list = archive_utils.ExpandWildcards(self.temp_dir, path_list)
-    expanded_path_list.sort()
-    self.assertEquals(expected_path_list, expanded_path_list)
 
 
 if __name__ == '__main__':

@@ -16,6 +16,7 @@
 import glob
 import optparse
 import os
+import platform
 import simplejson
 import sys
 import re
@@ -37,6 +38,46 @@ TEST_FILE_NAME = 'TESTS'
 
 class GSUtilError(Exception):
   pass
+
+
+def ExpandWildcards(base_dir, path_list):
+  """Accepts a list of paths relative to base_dir and replaces wildcards.
+
+  Uses glob to change all file paths containing wild cards into lists
+  of files present on the file system at time of calling.
+  """
+  if not path_list:
+    return []
+
+  regex = re.compile('[*?[]')
+
+  returned_paths = []
+  for path_fragment in path_list:
+    if regex.search(path_fragment):
+      globbed_paths = glob.glob(os.path.join(base_dir, path_fragment))
+      new_paths = [
+          globbed_path[len(base_dir)+1:] for globbed_path in globbed_paths
+          if not os.path.isdir(globbed_path) ]
+      returned_paths.extend(new_paths)
+    else:
+      returned_paths.append(path_fragment)
+
+  return returned_paths
+
+
+def ExtractDirsFromPaths(path_list):
+  """Extracts a list of unique directory names from a list of paths.
+
+  Given a list of relative paths, e.g. ['foo.txt', 'baz\\bar', 'baz\\bee.txt']
+  returns a list of the directories therein (e.g. ['baz']). Does not
+  include duplicates in the list.
+  """
+  dirs = set()
+  for path in path_list:
+    dir_name = os.path.dirname(path)
+    if dir_name:
+      dirs.add(dir_name)
+  return list(dirs)
 
 
 def _GetXMLChangeLogByModule(module_name, module_src_dir,
@@ -164,7 +205,7 @@ class StagerBase(object):
     file_list = [f.strip() for f in file_list]
     file_list.extend(self.GetExtraFiles(self.options.extra_archive_paths,
                                         source_file_name))
-    file_list = archive_utils.ExpandWildcards(self._build_dir, file_list)
+    file_list = ExpandWildcards(self._build_dir, file_list)
     return file_list
 
   def MyCopyFileToDir(self, filename, destination, gs_base, gs_subdir='',
@@ -213,8 +254,7 @@ class StagerBase(object):
         extra_files_list.extend(new_files_list)
 
     extra_files_list = [e.strip() for e in extra_files_list]
-    extra_files_list = archive_utils.ExpandWildcards(self._build_dir,
-                                                     extra_files_list)
+    extra_files_list = ExpandWildcards(self._build_dir, extra_files_list)
     return extra_files_list
 
   def GenerateRevisionFile(self):
@@ -272,9 +312,104 @@ class StagerBase(object):
     print 'Saving revision to %s' % file_path
     Write(file_path, '%d' % self._build_revision)
 
+  def _BuildVersion(self):
+    """Returns the full build version string constructed from information in
+    _version_file.  Any segment not found in that file will default to '0'.
+    """
+    major = 0
+    minor = 0
+    build = 0
+    patch = 0
+    for line in open(self._version_file, 'r'):
+      line = line.rstrip()
+      if line.startswith('MAJOR='):
+        major = line[6:]
+      elif line.startswith('MINOR='):
+        minor = line[6:]
+      elif line.startswith('BUILD='):
+        build = line[6:]
+      elif line.startswith('PATCH='):
+        patch = line[6:]
+    return '%s.%s.%s.%s' % (major, minor, build, patch)
+
+  def _VerifyFiles(self):
+    """Ensures that the needed directories and files are accessible.
+
+    Returns a list of any that are not available.
+    """
+    not_found = []
+    needed = self._archive_files
+    needed = [os.path.join(self._build_dir, x.rstrip()) for x in needed]
+    needed.append(self._version_file)
+    # Add Windows installer.
+    if chromium_utils.IsWindows():
+      needed.append(self._installer_file)
+    needed = self._RemoveIgnored(needed)
+    for needed_file in needed:
+      if not os.path.exists(needed_file):
+        not_found.append(needed_file)
+    return not_found
+
+  def _GetDifferentialInstallerFile(self, version):
+    """Returns the file path for incremental installer if present.
+
+    Checks for file name of format *_<current version>_mini_installer.exe and
+    returns the full path of first such file found.
+    """
+    path = os.path.join(self._build_dir,
+                        '*%s_%s' % (version, self.options.installer))
+    for f in glob.glob(path):
+      return f
+    return None
+
+  def _RemoveIgnored(self, file_list):
+    """Returns a list of the file paths in file_list whose filenames don't
+    start with any of the strings in self.options.ignore.
+
+    file_list may contain bare filenames or paths. For paths, only the base
+    filename will be compared to to self.options.ignore.
+    """
+    def _IgnoreFile(filename):
+      """Returns True if the filename starts with any of the strings in
+      self.options.ignore.
+      """
+      for ignore in self.options.ignore:
+        if filename.startswith(ignore):
+          return True
+      return False
+    return [x for x in file_list if not _IgnoreFile(os.path.basename(x))]
+
   def CreateArchiveFile(self, zip_base_name, zip_file_list):
-    return archive_utils.CreateArchive(self._build_dir, self._staging_dir,
-                                       zip_file_list, zip_base_name)
+    """Put files into an archive dir as well as a zip of said archive dir.
+
+    This method takes the list of files to archive, then prunes non-existing
+    files from that list.
+
+    If that list is empty CreateArchiveFile returns ('', '').
+    Otherwise, this method returns the archive directory the files are
+    copied to and the full path of the zip file in a tuple.
+
+    TODO(robertshield): The returned zip_dir is never actually used -
+    it seems like we could just get rid of it.
+    """
+    # Filter out files that don't exist.
+    filtered_file_list = [f.strip() for f in zip_file_list if
+                          os.path.exists(os.path.join(self._build_dir,
+                                                      f.strip()))]
+
+    if not filtered_file_list:
+      # We have no files to archive, don't create an empty zip file.
+      return ('', '')
+
+    (zip_dir, zip_file) = chromium_utils.MakeZip(self._staging_dir,
+                                                 zip_base_name,
+                                                 filtered_file_list,
+                                                 self._build_dir,
+                                                 raise_error=False)
+    if not os.path.exists(zip_file):
+      raise archive_utils.StagingError('Failed to make zip package %s' %
+                                       zip_file)
+    return (zip_dir, zip_file)
 
   def _UploadSymbols(self, www_dir, gs_base):
     """Upload symbols to a share. It does not appear to upload symbols to a
@@ -393,7 +528,7 @@ class StagerBase(object):
     # to be relative to the archive dir. We have to rebuild the relative
     # list from the now-pruned absolute test_file_list.
     relative_file_list = [tf[len(base_src_dir):] for tf in test_file_list]
-    test_dirs = archive_utils.ExtractDirsFromPaths(relative_file_list)
+    test_dirs = ExtractDirsFromPaths(relative_file_list)
     test_dirs = [os.path.join(www_dir, UPLOAD_DIR, d) for d in test_dirs]
 
     root_test_dir = os.path.join(www_dir, UPLOAD_DIR)
@@ -493,21 +628,22 @@ class StagerBase(object):
       raise archive_utils.StagingError('No build revision was provided')
     print 'Staging in %s' % self._staging_dir
 
-    arch = archive_utils.BuildArch()
+    arch = platform.architecture(bits='unknown')[0]
+    # TODO(mmoss): This isn't supported on Windows? Oh, well, we only build
+    # 32-bit now anyhow, so just use that.
+    if chromium_utils.IsWindows():
+      arch = '32bit'
+    if arch == 'unknown':
+      raise archive_utils.StagingError('Could not determine build architecture')
     files_file = os.path.join(self._tool_dir, archive_utils.FILES_FILENAME)
     files_list = archive_utils.ParseFilesList(files_file, self.options.mode,
                                               arch)
-    files_list = archive_utils.ExpandWildcards(self._build_dir, files_list)
+    files_list = ExpandWildcards(self._build_dir, files_list)
     self._archive_files = files_list
     self._archive_files.extend(self.GetExtraFiles(
         self.options.extra_archive_paths, ARCHIVE_FILE_NAME))
     # Check files and revision numbers.
-    all_files_list = list(self._archive_files)
-    all_files_list.append(self._version_file)
-    if chromium_utils.IsWindows():
-      all_files_list.append(self._installer_file)
-    not_found = archive_utils.VerifyFiles(all_files_list, self._build_dir,
-                                          self.options.ignore)
+    not_found = self._VerifyFiles()
     print 'last change: %d' % self._build_revision
     previous_revision = self.GetLastBuildRevision()
     if self._build_revision <= previous_revision:

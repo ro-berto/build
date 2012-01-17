@@ -24,6 +24,28 @@ from common import chromium_utils
 import config
 
 
+TEMP_FILES = ['foo.txt',
+              'bar.txt',
+              os.path.join('foo', 'buzz.txt'),
+              os.path.join('foo', 'bing'),
+              os.path.join('fee', 'foo', 'bar'),
+              os.path.join('fee', 'faa', 'bar'),
+              os.path.join('fee', 'fie', 'fo'),
+              os.path.join('foo', 'fee', 'faa', 'boo.txt')]
+
+DIR_LIST = ['foo',
+            os.path.join('fee', 'foo'),
+            os.path.join('fee', 'faa'),
+            os.path.join('fee', 'fie'),
+            os.path.join('foo', 'fee', 'faa')]
+
+TEMP_FILES_WITH_WILDCARDS = ['foo.txt',
+                             'bar.txt',
+                             os.path.join('foo', '*'),
+                             os.path.join('fee', '*', 'bar'),
+                             os.path.join('fee', '*', 'fo'),
+                             os.path.join('foo', 'fee', 'faa', 'boo.txt')]
+
 ZIP_TEST_FILES = ['file1.txt',
                   'file2.txt',
                   'file3.txt']
@@ -76,7 +98,18 @@ class ArchiveTest(unittest.TestCase):
 
   def setUp(self):
     self.temp_dir = tempfile.mkdtemp()
-    self.temp_files = archive_utils_unittest.BuildTestFilesTree(self.temp_dir)
+    self.temp_files = TEMP_FILES
+
+    # Build up the temp files
+    for temp_file in self.temp_files:
+      temp_path = os.path.join(self.temp_dir, temp_file)
+      dir_name = os.path.dirname(temp_path)
+
+      if not os.path.exists(temp_path):
+        relative_dir_name = os.path.dirname(temp_file)
+        if relative_dir_name and not os.path.exists(dir_name):
+          os.makedirs(dir_name)
+        open(temp_path, 'a')
 
     # Make some directories to make the stager happy.
     self.target = 'Test'
@@ -205,6 +238,26 @@ class ArchiveTest(unittest.TestCase):
       self.assertTrue(not test_result)
 
     zip_file.close()
+
+  def testExpandWildcards(self):
+    path_list = TEMP_FILES_WITH_WILDCARDS[:]
+    expected_path_list = TEMP_FILES[:]
+    expected_path_list.sort()
+
+    self.initializeStager()
+    expanded_path_list = archive_build.ExpandWildcards(self.temp_dir, path_list)
+    expanded_path_list.sort()
+    self.assertEquals(expected_path_list, expanded_path_list)
+
+  def testExtractDirsFromPaths(self):
+    path_list = TEMP_FILES[:]
+    expected_dir_list = DIR_LIST[:]
+    expected_dir_list.sort()
+
+    self.initializeStager()
+    dir_list = archive_build.ExtractDirsFromPaths(path_list)
+    dir_list.sort()
+    self.assertEquals(expected_dir_list, dir_list)
 
   def testGetExtraFiles(self):
     expected_extra_files_list = ZIP_TEST_FILES[:]
