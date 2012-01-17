@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -8,10 +8,14 @@
 from __future__ import with_statement
 import logging
 import os
+import sys
 import time
 import urllib
 
-import find_depot_tools  # pylint: disable=W0611
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
+
+from common import find_depot_tools  # pylint: disable=W0611
 import subprocess2
 from rietveld import json
 

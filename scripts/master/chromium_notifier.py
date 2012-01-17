@@ -231,6 +231,8 @@ class ChromiumNotifier(MailNotifier):
     @type build_status: L{buildbot.status.builder.BuildStatus}
     @type step_name: name of this step
     """
+    # TODO(maruel): Update function signature to match
+    # mail.MailNotifier.buildMessage().
     log.msg('About to email')
     if (self._last_time_mail_sent and self._last_time_mail_sent >
         time.time() - self.minimum_delay_between_alert):
