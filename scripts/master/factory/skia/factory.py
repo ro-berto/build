@@ -157,8 +157,12 @@ class SkiaFactory(gclient_factory.GClientFactory):
     # Then we can see which Skia revision number triggered the baseline changes.
     gm_output_dir = self.TargetPathJoin(
         self._gm_actual_dir, self._gm_image_subdir)
-    command = 'mkdir %s && %s -w %s' % (
-        gm_output_dir, path_to_gm, gm_output_dir)
+    if self._target_platform == TARGET_PLATFORM_WIN32:
+      command = 'rmdir /s /q %s && mkdir %s && %s -w %s' % (
+          gm_output_dir, gm_output_dir, path_to_gm, gm_output_dir)
+    else:
+      command = 'rm -rf %s && mkdir %s && %s -w %s' % (
+          gm_output_dir, gm_output_dir, path_to_gm, gm_output_dir)
     self._skia_cmd_obj.AddRun(
         run_command=command, description='GenerateGMResults')
     self._skia_cmd_obj.AddMergeIntoSvn(
