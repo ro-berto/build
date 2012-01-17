@@ -38,9 +38,10 @@ def _get_master_status():
   return ms
 
 
-def _get_gatekeeper():
+def _get_gatekeeper(tree_status_url, mock_interesting):
+  """Returns a partially mocked GateKeeper instance."""
   mn = gatekeeper.GateKeeper(
-      'url',
+      tree_status_url,
       fromaddr='from@example.org',
       mode='all',
       builders=['builder1'],
@@ -50,6 +51,10 @@ def _get_gatekeeper():
   # Nuke out sending emails.
   mn.sendmail = mock.Mock()
   mn.sendmail.return_value = 'email sent!'
+  if mock_interesting:
+    mn.isInterestingStep = mock.Mock()
+    mn.isInterestingStep.return_value = True
+    mn.getFinishedMessage = mock.Mock()
   return mn
 
 
@@ -86,6 +91,26 @@ class GateKeeperTest(auto_stub.TestCase):
     gatekeeper.build_utils.getAllRevisions.return_value = [23]
     gatekeeper.build_utils.EmailableBuildTable.return_value = 'end of table'
 
+  def _check(self, email_sent, tree_status_url='url'):
+    # Verify that an email was sent or not, as expected.
+    mn = _get_gatekeeper(tree_status_url=tree_status_url, mock_interesting=True)
+    build = _get_build()
+    step = _get_step()
+
+    # Trigger the code
+    d = mn.stepFinished(build, step, [FAILURE])
+
+    self.assertTrue(isinstance(d, defer.Deferred))
+    mn.isInterestingStep.assert_called_once_with(build, step, [FAILURE])
+    gatekeeper.client.getPage.assert_called_once_with('url', agent='buildbot')
+    if email_sent:
+      self.assertEquals(1, mn.sendmail.call_count)
+      mn.getFinishedMessage.assert_called_once_with(
+          'email sent!', 'builder1', build, 'step1')
+    else:
+      self.assertEquals(0, mn.sendmail.call_count)
+      self.assertEquals(0, mn.getFinishedMessage.call_count)
+
   def test_Creation(self):
     notifier = gatekeeper.GateKeeper(
         fromaddr='buildbot@test',
@@ -101,58 +126,30 @@ class GateKeeperTest(auto_stub.TestCase):
   def test_buildMessage(self):
     # Make sure the code flows up to buildMessage with isInterestingStep mocked
     # out.
-    mn = _get_gatekeeper()
-    mn.isInterestingStep = mock.Mock()
-    mn.isInterestingStep.return_value = True
+    mn = _get_gatekeeper('url', True)
     mn.buildMessage = mock.Mock()
-
     build = _get_build()
     step = _get_step()
+
     mn.stepFinished(build, step, [FAILURE])
     mn.buildMessage.assert_called_with('builder1', build, [FAILURE], 'step1')
     mn.isInterestingStep.assert_called_once_with(build, step, [FAILURE])
     self.assertEquals(0, mn.sendmail.call_count)
 
   def test_tree_open(self):
-    # Make sure the code flows up to buildMessage.
-    mn = _get_gatekeeper()
-    mn.isInterestingStep = mock.Mock()
-    mn.isInterestingStep.return_value = True
-    mn.getFinishedMessage = mock.Mock()
-
-    build = _get_build()
-    step = _get_step()
-
     # Tree is open.
     gatekeeper.client.getPage.return_value = defer.succeed('1')
-
-    d = mn.stepFinished(build, step, [FAILURE])
-    self.assertTrue(isinstance(d, defer.Deferred))
-    mn.isInterestingStep.assert_called_once_with(build, step, [FAILURE])
-    gatekeeper.client.getPage.assert_called_once_with('url', agent='buildbot')
-    self.assertEquals(1, mn.sendmail.call_count)
-    mn.getFinishedMessage.assert_called_once_with(
-        'email sent!', 'builder1', build, 'step1')
+    self._check(True)
 
   def test_tree_closed(self):
-    # Make sure the code flows up to buildMessage.
-    mn = _get_gatekeeper()
-    mn.isInterestingStep = mock.Mock()
-    mn.isInterestingStep.return_value = True
-    mn.getFinishedMessage = mock.Mock()
-
-    build = _get_build()
-    step = _get_step()
-
     # Tree is closed.
     gatekeeper.client.getPage.return_value = defer.succeed('0')
+    self._check(False)
 
-    d = mn.stepFinished(build, step, [FAILURE])
-    self.assertTrue(isinstance(d, defer.Deferred))
-    mn.isInterestingStep.assert_called_once_with(build, step, [FAILURE])
-    gatekeeper.client.getPage.assert_called_with('url', agent='buildbot')
-    self.assertEquals(0, mn.sendmail.call_count)
-    self.assertEquals(0, mn.getFinishedMessage.call_count)
+  def test_url_fetch_fail(self):
+    # Tree fetch failed.
+    gatekeeper.client.getPage.return_value = defer.fail(IOError())
+    self._check(True)
 
 
 if __name__ == '__main__':
