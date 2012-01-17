@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -23,28 +23,6 @@ from common import archive_utils_unittest
 from common import chromium_utils
 import config
 
-
-TEMP_FILES = ['foo.txt',
-              'bar.txt',
-              os.path.join('foo', 'buzz.txt'),
-              os.path.join('foo', 'bing'),
-              os.path.join('fee', 'foo', 'bar'),
-              os.path.join('fee', 'faa', 'bar'),
-              os.path.join('fee', 'fie', 'fo'),
-              os.path.join('foo', 'fee', 'faa', 'boo.txt')]
-
-DIR_LIST = ['foo',
-            os.path.join('fee', 'foo'),
-            os.path.join('fee', 'faa'),
-            os.path.join('fee', 'fie'),
-            os.path.join('foo', 'fee', 'faa')]
-
-TEMP_FILES_WITH_WILDCARDS = ['foo.txt',
-                             'bar.txt',
-                             os.path.join('foo', '*'),
-                             os.path.join('fee', '*', 'bar'),
-                             os.path.join('fee', '*', 'fo'),
-                             os.path.join('foo', 'fee', 'faa', 'boo.txt')]
 
 ZIP_TEST_FILES = ['file1.txt',
                   'file2.txt',
@@ -98,18 +76,7 @@ class ArchiveTest(unittest.TestCase):
 
   def setUp(self):
     self.temp_dir = tempfile.mkdtemp()
-    self.temp_files = TEMP_FILES
-
-    # Build up the temp files
-    for temp_file in self.temp_files:
-      temp_path = os.path.join(self.temp_dir, temp_file)
-      dir_name = os.path.dirname(temp_path)
-
-      if not os.path.exists(temp_path):
-        relative_dir_name = os.path.dirname(temp_file)
-        if relative_dir_name and not os.path.exists(dir_name):
-          os.makedirs(dir_name)
-        open(temp_path, 'a')
+    archive_utils_unittest.BuildTestFilesTree(self.temp_dir)
 
     # Make some directories to make the stager happy.
     self.target = 'Test'
@@ -180,7 +147,8 @@ class ArchiveTest(unittest.TestCase):
       dir_part = os.path.dirname(f)
       if (dir_part):
         dir_path = os.path.join(self.build_dir, self.target, dir_part)
-        os.makedirs(dir_path)
+        if not os.path.exists(dir_path):
+          os.makedirs(dir_path)
 
       temp_file = open(os.path.join(self.build_dir, self.target, f), 'w')
       temp_file.write('contents')
@@ -229,7 +197,13 @@ class ArchiveTest(unittest.TestCase):
     if hasattr(zip_file, 'extractall'):
       zip_file.extractall(extract_dir)  # pylint: disable=E1101
       # Check that all expected files are there
-      extracted_files = os.listdir(os.path.join(extract_dir, archive_name))
+      def FindFiles(arg, dirname, names):
+        subdir = dirname[len(arg):].strip(os.path.sep)
+        extracted_files.extend([os.path.join(subdir, name) for name in names if
+                                os.path.isfile(os.path.join(dirname, name))])
+      extracted_files = []
+      archive_path = os.path.join(extract_dir, archive_name)
+      os.path.walk(archive_path, FindFiles, archive_path)
       self.assertEquals(len(expected_files), len(extracted_files))
       for f in extracted_files:
         self.assertTrue(f in expected_files)
@@ -238,26 +212,6 @@ class ArchiveTest(unittest.TestCase):
       self.assertTrue(not test_result)
 
     zip_file.close()
-
-  def testExpandWildcards(self):
-    path_list = TEMP_FILES_WITH_WILDCARDS[:]
-    expected_path_list = TEMP_FILES[:]
-    expected_path_list.sort()
-
-    self.initializeStager()
-    expanded_path_list = archive_build.ExpandWildcards(self.temp_dir, path_list)
-    expanded_path_list.sort()
-    self.assertEquals(expected_path_list, expanded_path_list)
-
-  def testExtractDirsFromPaths(self):
-    path_list = TEMP_FILES[:]
-    expected_dir_list = DIR_LIST[:]
-    expected_dir_list.sort()
-
-    self.initializeStager()
-    dir_list = archive_build.ExtractDirsFromPaths(path_list)
-    dir_list.sort()
-    self.assertEquals(expected_dir_list, dir_list)
 
   def testGetExtraFiles(self):
     expected_extra_files_list = ZIP_TEST_FILES[:]
@@ -277,10 +231,17 @@ class ArchiveTest(unittest.TestCase):
     arch = '64bit'
     buildtype = 'official'
     files_list = archive_utils.ParseFilesList(self.FILES, buildtype, arch)
-    # Verify FILES.cfg was parsed correctly.
-    for i in archive_utils_unittest.TEST_FILES_CFG:
-      if arch in i['arch'] and buildtype in i['buildtype']:
-        self.assertTrue(i['filename'] in files_list)
+    zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,
+                                                           files_list)
+    self.assertTrue(zip_dir)
+    self.assertTrue(zip_file_path)
+    self.assertTrue(os.path.exists(zip_file_path))
+    self.verifyZipFile(zip_dir, zip_file_path, archive_name, files_list)
+
+    # Creating the archive twice is wasteful, but shouldn't fail (e.g. due to
+    # conflicts with existing zip_dir or zip_file_path). This also tests the
+    # condition on the bots where they don't clean up their staging directory
+    # between runs.
     zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,
                                                            files_list)
     self.assertTrue(zip_dir)
