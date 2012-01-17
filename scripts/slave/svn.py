@@ -11,6 +11,8 @@ import os
 import re
 import subprocess
 
+from slave import slave_utils
+
 def CreateCheckout(repo_url, local_dir, username, password):
   """Check out a local copy of an SVN repository and return an Svn object
   pointing at its root directory.
@@ -36,6 +38,7 @@ class Svn(object):
     self._directory = directory
     self._username = username
     self._password = password
+    self._svn_binary = slave_utils.SubversionExe()
 
   def _RunCommand(self, args):
     """Run a command (from self._directory) and return stdout as a single
@@ -61,7 +64,7 @@ class Svn(object):
     @param args a list of arguments
     """
     print 'running svn command %s in directory %s' % (args, self._directory)
-    return self._RunCommand(['svn', '--username', self._username,
+    return self._RunCommand([self._svn_binary, '--username', self._username,
                              '--password', self._password,
                              '--no-auth-cache', '--non-interactive'] + args)
 

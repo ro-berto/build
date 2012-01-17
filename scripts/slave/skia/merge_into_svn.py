@@ -69,8 +69,8 @@ def MergeIntoSvn(options):
   svn_password_path = os.path.join(site_config_path, options.svn_password_file)
 
   # Check out the SVN repository into a temporary dir.
-  svn_username = ReadFirstLineOfFileAsString(svn_username_path)
-  svn_password = ReadFirstLineOfFileAsString(svn_password_path)
+  svn_username = ReadFirstLineOfFileAsString(svn_username_path).rstrip()
+  svn_password = ReadFirstLineOfFileAsString(svn_password_path).rstrip()
   tempdir = tempfile.mkdtemp()
   repo = svn.CreateCheckout(repo_url=options.dest_svn_url, local_dir=tempdir,
                             username=svn_username, password=svn_password)
@@ -85,7 +85,7 @@ def MergeIntoSvn(options):
 
   # Commit changes to the SVN repository and clean up.
   print repo.Commit(message=options.commit_message)
-  shutil.rmtree(tempdir)
+  shutil.rmtree(tempdir, ignore_errors=True)
   return 0
 
 def ConfirmOptionsSet(name_value_dict):
