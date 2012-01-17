@@ -10,6 +10,8 @@ events_*
 http.log
 master.cfg.sample
 state.sqlite
+state.sqlite-shm
+state.sqlite-wal
 twistd.log*
 twistd.pid
 /masters/master.chromium.chrome/google-chrome-rel-chromeos
@@ -44,7 +46,10 @@ twistd.pid
 /masters/master.chromium.fyi/Chromium_Linux_Android
 /masters/master.chromium.fyi/Chromium_Linux_Redux
 /masters/master.chromium.fyi/Chromium_Linux_Strict__dbg_
+/masters/master.chromium.fyi/Chromium_Mac_10_5_Tests__vm_
 /masters/master.chromium.fyi/Chromium_Mac_10_6_Goma_Clang
+/masters/master.chromium.fyi/Chromium_Mac_10_6__vm_
+/masters/master.chromium.fyi/Chromium_Mac_10_6__vm__sharded_
 /masters/master.chromium.fyi/Chromium_Mac_10_7_Tests
 /masters/master.chromium.fyi/Chromium_Mac_Make
 /masters/master.chromium.fyi/Chromium_Mac_Skia
@@ -52,11 +57,19 @@ twistd.pid
 /masters/master.chromium.fyi/Chromium_OS_ASAN_Tests__2_
 /masters/master.chromium.fyi/Linux_Aura
 /masters/master.chromium.fyi/Linux_ChromeOS_Aura
+/masters/master.chromium.fyi/Linux_Main__r815_
+/masters/master.chromium.fyi/Linux_Main__r815__2_
+/masters/master.chromium.fyi/Linux_Try__r815_
+/masters/master.chromium.fyi/Linux_Try__r815__2_
 /masters/master.chromium.fyi/Linux__dbg__shared_
 /masters/master.chromium.fyi/Mac_Aura
 /masters/master.chromium.fyi/Vista_Tests__dbg__1_
 /masters/master.chromium.fyi/Vista_Tests__dbg__2_
 /masters/master.chromium.fyi/Vista_Tests__dbg__3_
+/masters/master.chromium.fyi/Win7__r815_
+/masters/master.chromium.fyi/Win7__r815__2_
+/masters/master.chromium.fyi/WinXP__r815_
+/masters/master.chromium.fyi/WinXP__r815__2_
 /masters/master.chromium.fyi/Win_Aura
 /masters/master.chromium.fyi/Win__dbg__shared_
 /masters/master.chromium.fyi/chrome-frame-reliability-tester
@@ -123,6 +136,7 @@ twistd.pid
 /masters/master.chromium.gpu/public_html
 /masters/master.chromium.lkgr/ASAN_Debug
 /masters/master.chromium.lkgr/ASAN_Release
+/masters/master.chromium.lkgr/ASAN_Release__symbolized_
 /masters/master.chromium.lkgr/Linux
 /masters/master.chromium.lkgr/Linux_Touch
 /masters/master.chromium.lkgr/Linux_x64
@@ -208,6 +222,9 @@ twistd.pid
 /masters/master.chromium.perf_av/chromium-rel-linux-builder
 /masters/master.chromium.perf_av/public_html
 /masters/master.chromium.pyauto/Linux__deb_
+/masters/master.chromium.pyauto/Linux__perf1_
+/masters/master.chromium.pyauto/Linux__perf2_
+/masters/master.chromium.pyauto/Linux__perf3_
 /masters/master.chromium.pyauto/Mac_10_5
 /masters/master.chromium.pyauto/Win7
 /masters/master.chromium.pyauto/Win_Vista
@@ -249,6 +266,7 @@ twistd.pid
 /masters/master.chromium.webkit/Webkit_Mac10_6__deps_
 /masters/master.chromium.webkit/Webkit_Mac10_6__deps__dbg__1_
 /masters/master.chromium.webkit/Webkit_Mac10_6__deps__dbg__2_
+/masters/master.chromium.webkit/Webkit_Mac10_7
 /masters/master.chromium.webkit/Webkit_Vista
 /masters/master.chromium.webkit/Webkit_Win
 /masters/master.chromium.webkit/Webkit_Win7
@@ -363,6 +381,7 @@ twistd.pid
 /masters/master.chromiumos/amd64-corei7-chrome-PFQ
 /masters/master.chromiumos/amd64-corei7-commit-queue
 /masters/master.chromiumos/amd64-corei7-full
+/masters/master.chromiumos/amd64-corei7-nightly-chrome-PFQ
 /masters/master.chromiumos/amd64-generic-full
 /masters/master.chromiumos/arm-generic-PFQ
 /masters/master.chromiumos/arm-generic-chrome-PFQ
@@ -371,6 +390,7 @@ twistd.pid
 /masters/master.chromiumos/arm-tegra2-seaboard-gcc_46
 /masters/master.chromiumos/arm-tegra2-seaboard-toolchain
 /masters/master.chromiumos/aura-chrome-PFQ
+/masters/master.chromiumos/aura-nightly-chrome-PFQ
 /masters/master.chromiumos/chromiumos-sdk
 /masters/master.chromiumos/public_html/bg_gradient.jpg
 /masters/master.chromiumos/public_html/default.css
@@ -381,6 +401,7 @@ twistd.pid
 /masters/master.chromiumos/tegra2-chrome-PFQ
 /masters/master.chromiumos/tegra2-commit-queue
 /masters/master.chromiumos/tegra2-full
+/masters/master.chromiumos/tegra2-nightly-chrome-PFQ
 /masters/master.chromiumos/tegra2-seaboard-full
 /masters/master.chromiumos/templates
 /masters/master.chromiumos/x86-generic-ASAN
@@ -389,6 +410,7 @@ twistd.pid
 /masters/master.chromiumos/x86-generic-commit-queue
 /masters/master.chromiumos/x86-generic-full
 /masters/master.chromiumos/x86-generic-gcc_46
+/masters/master.chromiumos/x86-generic-nightly-chrome-PFQ
 /masters/master.chromiumos/x86-pineview-full
 /masters/master.client.nacl.branch.irt/lucid-32-newlib-dbg
 /masters/master.client.nacl.branch.irt/lucid-64-newlib-dbg
@@ -484,17 +506,22 @@ twistd.pid
 /masters/master.client.nacl.sdk/windows-sdk-multirel
 /masters/master.client.nacl.sdk/windows-sdk-salmon
 /masters/master.client.nacl.sdk/windows-sdk-trout
+/masters/master.client.nacl.toolchain/linux-pnacl-x86_32
 /masters/master.client.nacl.toolchain/linux-pnacl-x86_32-newlib
+/masters/master.client.nacl.toolchain/linux-pnacl-x86_64
 /masters/master.client.nacl.toolchain/linux-pnacl-x86_64-glibc
 /masters/master.client.nacl.toolchain/linux-pnacl-x86_64-newlib
 /masters/master.client.nacl.toolchain/linux-pnacl-x86_64-newlib-tests
+/masters/master.client.nacl.toolchain/linux-pnacl-x86_64-tests
 /masters/master.client.nacl.toolchain/lucid64-glibc
 /masters/master.client.nacl.toolchain/lucid64-toolchain_x86
 /masters/master.client.nacl.toolchain/mac-glibc
+/masters/master.client.nacl.toolchain/mac-pnacl-x86_32
 /masters/master.client.nacl.toolchain/mac-pnacl-x86_32-newlib
 /masters/master.client.nacl.toolchain/mac-toolchain_x86
 /masters/master.client.nacl.toolchain/public_html
 /masters/master.client.nacl.toolchain/templates
+/masters/master.client.nacl.toolchain/win-pnacl-x86_32
 /masters/master.client.nacl.toolchain/win-pnacl-x86_32-newlib
 /masters/master.client.nacl.toolchain/win7-glibc
 /masters/master.client.nacl.toolchain/win7-toolchain_x86
@@ -534,6 +561,8 @@ twistd.pid
 /masters/master.client.nacl/mac10.6-newlib-dbg-asan
 /masters/master.client.nacl/mac10.6-newlib-dbg-clang
 /masters/master.client.nacl/mac10.6-newlib-opt
+/masters/master.client.nacl/mac10.7-glibc-opt
+/masters/master.client.nacl/mac10.7-newlib-opt
 /masters/master.client.nacl/public_html/bg_gradient.jpg
 /masters/master.client.nacl/public_html/default.css
 /masters/master.client.nacl/public_html/robots.txt
@@ -665,6 +694,7 @@ twistd.pid
 /masters/master.client.webm/templates
 /masters/master.devtools/Webkit_Linux_64
 /masters/master.devtools/public_html
+/masters/master.tryserver.chromium/android
 /masters/master.tryserver.chromium/cros_arm
 /masters/master.tryserver.chromium/cros_aura
 /masters/master.tryserver.chromium/cros_tegra2
@@ -757,6 +787,8 @@ twistd.pid
 /masters/master.tryserver.nacl/nacl-mac10.6-newlib-dbg-clang
 /masters/master.tryserver.nacl/nacl-mac10.6_glibc_opt
 /masters/master.tryserver.nacl/nacl-mac10.6_newlib_opt
+/masters/master.tryserver.nacl/nacl-mac10.7_glibc_opt
+/masters/master.tryserver.nacl/nacl-mac10.7_newlib_opt
 /masters/master.tryserver.nacl/nacl-modular-toolchain-32
 /masters/master.tryserver.nacl/nacl-modular-toolchain-64
 /masters/master.tryserver.nacl/nacl-modular-toolchain-mac
