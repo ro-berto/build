@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -6,7 +6,7 @@ import tempfile
 
 from twisted.internet import defer, utils
 
-from master.try_job_base import BadJobfile, TryJobBase
+from master.try_job_base import BadJobfile, TryJobBase, text_to_dict
 
 from buildbot.changes.gitpoller import GitPoller
 
@@ -38,9 +38,7 @@ class CrOSTryJobGit(TryJobBase):
       raise BadJobfile(
           'Try job with too many files %s' % (','.join(change.files)))
 
-    parsed = dict(
-        i.split('=', 1) for i in change.comments.splitlines() if '=' in i)
-    parsed = self.parse_options(parsed)
+    parsed = self.parse_options(text_to_dict(change.comments))
     if not parsed.get('gerrit_patches', None):
       if not parsed['issue']:
         raise BadJobfile('No patches specified!')

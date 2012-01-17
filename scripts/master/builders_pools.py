@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -63,11 +63,11 @@ class BuildersPools(object):
 
     # Now for the pool requested, select the available bots.
     pool_builders = self.pools.get(pool_name, [])
-    builder_names = [i for i in pool_builders if i in available]
+    builders = dict((i, []) for i in pool_builders if i in available)
 
-    if not builder_names:
+    if not builders:
       # If no builder are available, throw a BadJobfile exception since we
       # can't select a group.
       raise BadJobfile('No builder could be found to run the try job')
 
-    return builder_names
+    return builders

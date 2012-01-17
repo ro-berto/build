@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -8,7 +8,7 @@ from buildbot.changes import svnpoller
 from twisted.internet import defer
 from twisted.python import log
 
-from master.try_job_base import TryJobBase
+from master.try_job_base import TryJobBase, text_to_dict
 
 
 class SVNPoller(svnpoller.SVNPoller):
@@ -19,12 +19,10 @@ class SVNPoller(svnpoller.SVNPoller):
     """
     for chdict in changes:
       # pylint: disable=E1101
-      parsed = dict(
-          item.split('=', 1) for item in chdict['comments'].splitlines()
-          if '=' in item)
-      parsed = self.parent.parse_options(parsed)
+      parsed = self.parent.parse_options(text_to_dict(chdict['comments']))
 
       # 'fix' revision.
+      # LKGR must be known before creating the change object.
       wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
       yield wfd
       wfd.getResult()
