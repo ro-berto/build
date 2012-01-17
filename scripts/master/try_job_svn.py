@@ -8,7 +8,7 @@ from buildbot.changes import svnpoller
 from twisted.internet import defer
 from twisted.python import log
 
-from master.try_job_base import TryJobBase, text_to_dict
+from master.try_job_base import TryJobBase
 
 
 class SVNPoller(svnpoller.SVNPoller):
@@ -19,10 +19,12 @@ class SVNPoller(svnpoller.SVNPoller):
     """
     for chdict in changes:
       # pylint: disable=E1101
-      parsed = self.parent.parse_options(text_to_dict(chdict['comments']))
+      parsed = dict(
+          item.split('=', 1) for item in chdict['comments'].splitlines()
+          if '=' in item)
+      parsed = self.parent.parse_options(parsed)
 
       # 'fix' revision.
-      # LKGR must be known before creating the change object.
       wfd = defer.waitForDeferred(self.parent.get_lkgr(parsed))
       yield wfd
       wfd.getResult()

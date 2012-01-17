@@ -63,11 +63,11 @@ class BuildersPools(object):
 
     # Now for the pool requested, select the available bots.
     pool_builders = self.pools.get(pool_name, [])
-    builders = dict((i, []) for i in pool_builders if i in available)
+    builder_names = [i for i in pool_builders if i in available]
 
-    if not builders:
+    if not builder_names:
       # If no builder are available, throw a BadJobfile exception since we
       # can't select a group.
       raise BadJobfile('No builder could be found to run the try job')
 
-    return builders
+    return builder_names

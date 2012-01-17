@@ -22,7 +22,8 @@ class TryJobHTTPRequest(http.Request):
         self.code = http.NOT_FOUND
         return
 
-      options = dict((k, v) for k, v in self.args.iteritems() if v)
+      # The values are embedded in a list.
+      options = dict((k, v[0]) for k, v in self.args.iteritems() if v)
       self.channel.factory.parent.messageReceived(options)
       self.code = 200
     finally:

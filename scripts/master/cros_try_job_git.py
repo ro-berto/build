@@ -6,7 +6,7 @@ import tempfile
 
 from twisted.internet import defer, utils
 
-from master.try_job_base import BadJobfile, TryJobBase, text_to_dict
+from master.try_job_base import BadJobfile, TryJobBase
 
 from buildbot.changes.gitpoller import GitPoller
 
@@ -38,7 +38,9 @@ class CrOSTryJobGit(TryJobBase):
       raise BadJobfile(
           'Try job with too many files %s' % (','.join(change.files)))
 
-    parsed = self.parse_options(text_to_dict(change.comments))
+    parsed = dict(
+        i.split('=', 1) for i in change.comments.splitlines() if '=' in i)
+    parsed = self.parse_options(parsed)
     if not parsed.get('gerrit_patches', None):
       if not parsed['issue']:
         raise BadJobfile('No patches specified!')
