@@ -171,6 +171,8 @@ class SkiaFactory(gclient_factory.GClientFactory):
             self._gm_actual_svn_baseurl, self._gm_image_subdir),
         svn_username_file=self._autogen_svn_username_file,
         svn_password_file=self._autogen_svn_password_file,
+        commit_message=WithProperties('UploadGMResults of r%%(%s:-)s on %s' % (
+            'revision', self._builder_name)),
         description='UploadGMResults')
 
     # Run "bench", piping the output somewhere so we can graph
