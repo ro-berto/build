@@ -474,14 +474,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def build_dir(self):
     return self._build_dir
 
-  def ForceSharedDebugBuild(self, target, project, factory_properties):
-    # Force all Windows Debug bots building all.sln to build in "Shared" mode,
-    # unless it is already set.
-    if (target == 'Debug' and self._target_platform == 'win32' and
-        project and project.startswith('all.sln')):
-      gclient_env = factory_properties.setdefault('gclient_env', {})
-      gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
-      if 'component=' not in gyp_defines:
+  def ForceComponent(self, target, project, factory_properties):
+    # Force all bots to specify the "Component" gyp variables, unless it is
+    # already set.
+    gclient_env = factory_properties.setdefault('gclient_env', {})
+    gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
+    if 'component=' not in gyp_defines:
+      # Sets the default to static.
+      gclient_env['GYP_DEFINES'] = gyp_defines + ' component=static_library'
+
+      # For Win Dbg, we build in shared mode.
+      if (target == 'Debug' and self._target_platform == 'win32' and
+          project and project.startswith('all.sln')):
         gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
 
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
@@ -515,9 +519,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     tests_for_build = [
         re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
 
-    # Force all Windows Debug bots building all.sln to build in "Shared" mode,
-    # unless it is already set.
-    self.ForceSharedDebugBuild(target, project, factory_properties)
+    # Ensure that component is set correctly in the gyp defines.
+    self.ForceComponent(target, project, factory_properties)
 
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
@@ -592,9 +595,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties = factory_properties or {}
     options = options or {}
 
-    # Force all Windows Debug bots building all.sln to build in "Shared" mode,
-    # unless it is already set.
-    self.ForceSharedDebugBuild(target, project, factory_properties)
+    # Ensure that component is set correctly in the gyp defines.
+    self.ForceComponent(target, project, factory_properties)
 
     factory = self.BuildFactory(target, clobber,
                                 None, None, # tests_for_build, mode,
@@ -781,6 +783,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Instead of calling self.ChromiumFactory(), we copy a few of it's
     # lines (e.g. everything from here on other than
     # AddDownloadAndExtractOfficialBuild()).
+
+    # Ensure that component is set correctly in the gyp defines.
+    self.ForceComponent(target, project, factory_properties)
+
     factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
