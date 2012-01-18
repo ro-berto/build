@@ -30,8 +30,13 @@ def main_mac(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            'xcodebuild', options.target)
+  xcodebuild_dir = os.path.join(os.path.dirname(options.build_dir),
+                                'xcodebuild', options.target)
+  out_dir = os.path.join(os.path.dirname(options.build_dir),
+                         'out', options.target)
+  target_dir = xcodebuild_dir
+  if not os.path.isdir(target_dir) and os.path.isdir(out_dir):
+    target_dir = out_dir
 
   result = 0
   # Work with either build type.
