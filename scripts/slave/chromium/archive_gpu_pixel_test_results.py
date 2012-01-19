@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -16,6 +16,7 @@ import os
 import subprocess
 import sys
 
+from common import chromium_utils
 
 GOOGLE_STORAGE_BUCKET = 'chromium-browser-gpu-tests'
 
@@ -77,12 +78,10 @@ def Archive(run_id, gen_dir, gpu_ref_dir):
       if not CopyToGoogleStorage(full_path,
                                  run_url + 'diff/' + base_filename):
         success = False
-      os.remove(full_path)
     elif filename.startswith('FAIL_'):
       if not CopyToGoogleStorage(full_path,
                                  run_url + 'gen/' + base_filename):
         success = False
-      os.remove(full_path)
       # Copy the appropriate reference image.
       ref = os.path.join(gpu_ref_dir, base_filename)
       if not os.path.exists(ref):
@@ -121,6 +120,7 @@ def main():
     retcode = 0
   else:
     retcode = 2
+  chromium_utils.RemoveDirectory(options.generated_dir)
   return retcode
 
 
