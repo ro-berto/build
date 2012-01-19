@@ -266,6 +266,18 @@ class GClientFactory(object):
         updateSourceStamp=False,
         waitForFinish=False,
         set_properties={
+            # Here are the standard names of the parent build properties.
+            'parent_buildername': WithProperties('%(buildername:-)s'),
+            'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
+            'parent_branch': WithProperties('%(branch:-)s'),
+            'parent_got_revision': WithProperties('%(got_revision:-)s'),
+            'parent_got_webkit_revision':
+                WithProperties('%(got_webkit_revision:-)s'),
+            'parent_revision': WithProperties('%(revision:-)s'),
+            'parent_scheduler': WithProperties('%(scheduler:-)s'),
+            'parent_slavename': WithProperties('%(slavename:-)s'),
+
+            # And some scripts were written to use non-standard names.
             'parent_cr_revision': WithProperties('%(got_revision:-)s'),
             'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
             'parentname': WithProperties('%(buildername)s'),
