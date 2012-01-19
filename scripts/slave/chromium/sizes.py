@@ -107,16 +107,16 @@ def main_mac(options, args):
       word_size = 4  # Assume 32 bit
       print_dict['initializers'] = int(initializers_s, 16) / word_size
 
-      print ("""*RESULT %(app_name)s: %(app_name)s= %(app_size)s bytes
+      print ("""RESULT %(app_name)s: %(app_name)s= %(app_size)s bytes
 RESULT %(app_name)s-__TEXT: __TEXT= %(app_text)s bytes
 RESULT %(app_name)s-__DATA: __DATA= %(app_data)s bytes
 RESULT %(app_name)s-__OBJC: __OBJC= %(app_objc)s bytes
-*RESULT %(framework_name)s: %(framework_name)s= %(framework_size)s bytes
+RESULT %(framework_name)s: %(framework_name)s= %(framework_size)s bytes
 RESULT %(framework_name)s-__TEXT: __TEXT= %(framework_text)s bytes
 RESULT %(framework_name)s-__DATA: __DATA= %(framework_data)s bytes
 RESULT %(framework_name)s-__OBJC: __OBJC= %(framework_objc)s bytes
-*RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes
-*RESULT chrome-si: initializers= %(initializers)d files
+RESULT %(app_bundle)s: %(app_bundle)s= %(app_bundle_size)s bytes
+RESULT chrome-si: initializers= %(initializers)d files
 """) % (
         print_dict)
       # Found a match, don't check the other base_names.
@@ -130,9 +130,8 @@ def check_linux_binary(target_dir, binary_name):
 
   Returns a tuple (result, sizes).  result is the first non-zero exit
   status of any command it executes, or zero on success.  sizes is a list
-  of tuples (star_flag, name, identifier, totals_identifier, value, units).
-  star_flag is a Boolean that's true if this item prints as '*RESULT' rather
-  than 'RESULT'.  After that, the printed line looks like:
+  of tuples (name, identifier, totals_identifier, value, units).
+  The printed line looks like:
     name: identifier= value units
   When this same data is used for totals across all the binaries, then
   totals_identifier is the identifier to use, or '' to just use identifier.
@@ -155,15 +154,15 @@ def check_linux_binary(target_dir, binary_name):
         result = p.returncode
     return result, stdout
 
-  sizes.append((True, binary_name, binary_name, 'size',
+  sizes.append((binary_name, binary_name, 'size',
                 get_size(binary_file), 'bytes'))
 
   result, stdout = run_process(result, ['size', binary_file])
   text, data, bss = re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
   sizes += [
-      (False, binary_name + '-text', 'text', '', text, 'bytes'),
-      (False, binary_name + '-data', 'data', '', data, 'bytes'),
-      (False, binary_name + '-bss', 'bss', '', bss, 'bytes'),
+      (binary_name + '-text', 'text', '', text, 'bytes'),
+      (binary_name + '-data', 'data', '', data, 'bytes'),
+      (binary_name + '-bss', 'bss', '', bss, 'bytes'),
       ]
 
   # Find the number of files with at least one static initializer.
@@ -171,7 +170,7 @@ def check_linux_binary(target_dir, binary_name):
   result, stdout = run_process(result, ['readelf', '-h', binary_file])
   elf_class_line = re.search('Class:.*$', stdout, re.MULTILINE).group(0)
   elf_class = re.split('\W+', elf_class_line)[1]
-  if elf_class == "ELF32":
+  if elf_class == 'ELF32':
     word_size = 4
   else:
     word_size = 8
@@ -188,7 +187,7 @@ def check_linux_binary(target_dir, binary_name):
     # The first entry is always 0 and the last is -1 as guards.
     # So subtract 2 from the count.
     count = (size / word_size) - 2
-  sizes.append((True, binary_name + '-si', 'initializers', '', count, 'files'))
+  sizes.append((binary_name + '-si', 'initializers', '', count, 'files'))
 
   # Determine if the binary has the DT_TEXTREL marker.
   result, stdout = run_process(result, ['readelf', '-Wd', binary_file])
@@ -199,7 +198,7 @@ def check_linux_binary(target_dir, binary_name):
     # There are some, so count them.
     result, stdout = run_process(result, ['eu-findtextrel', binary_file])
     count = stdout.count('\n')
-  sizes.append((True, binary_name + '-textrel', 'textrel', '', count, 'relocs'))
+  sizes.append((binary_name + '-textrel', 'textrel', '', count, 'relocs'))
 
   return result, sizes
 
@@ -231,9 +230,8 @@ def main_linux(options, args):
     this_result, this_sizes = check_linux_binary(target_dir, binary)
     if result == 0:
       result = this_result
-    for starred, name, identifier, totals_id, value, units in this_sizes:
-      print "%sRESULT %s: %s= %s %s" % ('*' if starred else '',
-                                        name, identifier, value, units)
+    for name, identifier, totals_id, value, units in this_sizes:
+      print 'RESULT %s: %s= %s %s' % (name, identifier, value, units)
       totals_id = totals_id or identifier, units
       totals[totals_id] = totals.get(totals_id, 0) + int(value)
 
@@ -250,17 +248,15 @@ def main_linux(options, args):
       if e.errno == errno.ENOENT:
         continue  # Don't print anything for missing files.
       raise
-    print "*RESULT %s: %s= %s bytes" % (filename, filename, size)
+    print 'RESULT %s: %s= %s bytes' % (filename, filename, size)
     totals['size', 'bytes'] += size
 
   # TODO(mcgrathr): This should all be refactored so the mac and win flavors
   # also deliver data structures rather than printing, and the logic for
   # the printing and the summing totals is shared across all three flavors.
-  star = '*'
   for (identifier, units), value in sorted(totals.iteritems()):
-    print "%sRESULT totals-%s: %s= %s %s" % (star, identifier, identifier,
-                                             value, units)
-    star = ''
+    print 'RESULT totals-%s: %s= %s %s' % (identifier, identifier,
+                                           value, units)
 
   return result
 
@@ -279,14 +275,14 @@ def main_win(options, args):
 
   result = 0
 
-  print "*RESULT chrome.dll: chrome.dll= %s bytes" % get_size(chrome_dll)
+  print 'RESULT chrome.dll: chrome.dll= %s bytes' % get_size(chrome_dll)
 
-  print "*RESULT chrome.exe: chrome.exe= %s bytes" % get_size(chrome_exe)
+  print 'RESULT chrome.exe: chrome.exe= %s bytes' % get_size(chrome_exe)
 
-  fmt = "*RESULT mini_installer.exe: mini_installer.exe= %s bytes"
+  fmt = 'RESULT mini_installer.exe: mini_installer.exe= %s bytes'
   print fmt % get_size(mini_installer_exe)
 
-  print "*RESULT setup.exe: setup.exe= %s bytes" % get_size(setup_exe)
+  print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
 
   return result
 
