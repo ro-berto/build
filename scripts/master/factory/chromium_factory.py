@@ -46,6 +46,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'linux_use_tcmalloc=1 '
     'release_valgrind_build=1 '
     'werror= '
+    'component=static_library '
   )
 
   # TODO(timurrrr): investigate http://crbug.com/108155,
