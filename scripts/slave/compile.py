@@ -91,6 +91,10 @@ def common_xcode_settings(command, options, env, compiler=None):
 
     if compiler in ('goma', 'goma-clang'):
       print 'using goma'
+      if options.clobber:
+        # Disable compiles on local machine.  When the goma server-side object
+        # file cache is warm, this can speed up clobber builds by up to 30%.
+        env['GOMA_USE_LOCAL'] = '0'
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
   if compiler == 'asan':
@@ -510,7 +514,10 @@ def common_make_settings(
       # generation scripts open a preprocessor child process, so building at
       # -j100 runs into the process limit. For now, just build with -j50.
       goma_jobs = 50
-      env['GOMA_USE_LOCAL'] = '0'
+      if options.clobber:
+        # Disable compiles on local machine.  When the goma server-side object
+        # file cache is warm, this can speed up clobber builds by up to 30%.
+        env['GOMA_USE_LOCAL'] = '0'
     else:
       goma_jobs = 100
     if jobs < goma_jobs:
