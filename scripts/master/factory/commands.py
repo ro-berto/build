@@ -782,7 +782,8 @@ class SetBuildPropertyShellCommand(shell.ShellCommand):
     out = cmd.logs['stdio'].getText()
     build_properties = re.findall('BUILD_PROPERTY ([^=]*)=(.*)', out)
     for propname, value in build_properties:
-      self.build.setProperty(propname, value, 'Step')
+      # findall can return strings containing CR characters, remove with strip.
+      self.build.setProperty(propname, value.strip(), 'Step')
 
   def getText(self, cmd, results):
     return self.describe(True) + self.messages
