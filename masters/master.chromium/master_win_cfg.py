@@ -313,7 +313,7 @@ F('dbg_int', win().ChromiumFactory(
 #
 # Dbg Aura builder
 #
-aura_gyp_defines = 'component=static_library use_aura=1 fastbuild=1'
+aura_gyp_defines = 'use_aura=1 fastbuild=1'
 B('Win Aura', 'dbg_aura', 'compile|testers|windows', 'win_dbg',
   notify_on_missing=True)
 F('dbg_aura', win().ChromiumFactory(
