@@ -203,9 +203,6 @@ class Archive(config_private.Archive):
   # Installer to archive.
   installer_exe = 'mini_installer.exe'
 
-  # Archive file containing the ADM/ADMX/ADML/other policy templates.
-  policy_templates_zip = 'policy_templates.zip'
-
   # Test files to archive.
   tests_to_archive = ['reliability_tests.exe',
                       'test_shell.exe',
