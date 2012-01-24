@@ -23,8 +23,6 @@ except ImportError:
   # pylint: disable=W0403
   import config_default as config_private
 
-from common import chromium_utils
-
 # By default, the banana's string size limit is 640kb, which is unsufficient
 # when passing diff's around. Raise it to 100megs. Do this here since the limit
 # is enforced on both the server and the client so both need to raise the
@@ -180,25 +178,6 @@ class Archive(config_private.Archive):
     # Skip any filenames (exes, symbols, etc.) starting with these strings
     # entirely, typically because they're not built for this distribution.
     exes_to_skip_entirely = ['rlz']
-
-  # Extra files to archive in official mode.
-  if chromium_utils.PlatformName() == 'ChromeOS':
-    # Remoting web-app is not built for ChromeOS.
-    official_extras = []
-  else:
-    official_extras = [
-# TODO(lambroslambrou): reenable when we understand this better.
-#      ['remoting-webapp.zip'],
-    ]
-
-  if chromium_utils.IsWindows():
-    official_extras.extend([
-      ['setup.exe'],
-      ['chrome.packed.7z'],
-      ['obj', 'mini_installer', 'mini_installer_exe_version.rc'],
-      ['courgette.exe'],
-      ['courgette64.exe'],
-    ])
 
   # Installer to archive.
   installer_exe = 'mini_installer.exe'
