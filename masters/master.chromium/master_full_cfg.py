@@ -23,9 +23,6 @@ defaults['category'] = '1clobber'
 # Global scheduler
 S('chromium', branch='src', treeStableTimer=60)
 
-# Create the triggerable scheduler for the reliability tests.
-T('reliability')
-
 ################################################################################
 ## Windows
 ################################################################################
@@ -36,7 +33,6 @@ F('win_clobber', win().ChromiumFactory(
     project='all.sln',
     tests=['sizes', 'check_bins'],
     factory_properties={'archive_build': True,
-                        'trigger': 'reliability',
                         'gs_bucket': 'gs://chromium-browser-snapshots',
                         'show_perf_results': True,
                         'perf_id': 'chromium-rel-xp',
@@ -44,10 +40,6 @@ F('win_clobber', win().ChromiumFactory(
                         'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
-
-B('Win Reliability', 'win_reliability', '', 'reliability',
-  notify_on_missing=True)
-F('win_reliability', linux().ReliabilityTestsFactory())
 
 ################################################################################
 ## Mac
