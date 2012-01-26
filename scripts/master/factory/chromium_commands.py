@@ -56,6 +56,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._upload_parity_tool = J(s_dir, 'upload_parity_data.py')
     self._target_tests_tool = J(s_dir, 'target-tests.py')
     self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
+    self._lint_test_files_tool = J(s_dir, 'lint_test_files_wrapper.py')
     self._devtools_perf_test_tool = J(s_dir, 'devtools_perf_test_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
