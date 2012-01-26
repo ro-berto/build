@@ -770,6 +770,22 @@ def SshMakeDirectory(host, dest_path):
                         (dest_path, host, result))
 
 
+def SshMoveFile(host, src_path, dest_path):
+  """Moves src_path (if it exists) to dest_path on the remote host.
+  """
+  command = ['ssh', host, 'test', '-e', src_path]
+  result = RunCommand(command)
+  if result:
+    # Nothing to do if src_path doesn't exist.
+    return result
+
+  command = ['ssh', host, 'mv', src_path, dest_path]
+  result = RunCommand(command)
+  if result:
+    raise ExternalError('Failed to ssh mv "%s" -> "%s" on "%s" (%s)' %
+                        (src_path, dest_path, host, result))
+
+
 def SshCopyFiles(srcs, host, dst):
   """Copies the srcs file(s) to dst on the remote ssh host.
   dst is expected to exist.
