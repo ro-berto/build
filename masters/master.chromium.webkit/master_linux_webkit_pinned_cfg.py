@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -33,7 +33,7 @@ S('s3_chromium_rel', branch='src', treeStableTimer=60)
 B('Webkit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel',
   auto_reboot=True)
 F('f_webkit_linux_rel', linux().ChromiumFactory(
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_gpu', 'webkit_unit'],
     options=['--compiler=goma', 'test_shell', 'test_shell_tests',
 	         'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,

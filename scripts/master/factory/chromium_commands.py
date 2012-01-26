@@ -745,6 +745,15 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddWebkitLint(self, factory_properties=None):
+    """Adds a step to the factory to lint the test_expectations.txt file."""
+    cmd = [self._python, self._lint_test_files_tool,
+           '--build-dir', self._build_dir, '--target', self._target]
+    self.AddTestStep(shell.ShellCommand,
+                     test_name='webkit_lint',
+                     test_command=cmd,
+                     do_step_if=self.TestStepFilter)
+
   def AddWebkitTests(self, gpu, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
 

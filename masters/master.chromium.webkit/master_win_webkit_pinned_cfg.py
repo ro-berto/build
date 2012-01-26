@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -54,7 +54,7 @@ B('Webkit Win (deps)', 'f_webkit_rel_tests',
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_gpu', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 

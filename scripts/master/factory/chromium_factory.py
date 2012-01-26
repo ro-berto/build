@@ -315,6 +315,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # WebKit-related tests:
     if R('webkit_unit'):    f.AddBasicGTestTestStep('webkit_unit_tests', fp)
+    if R('webkit_lint'):    f.AddWebkitLint(factory_properties=fp)
     if R('webkit'):         f.AddWebkitTests(gpu=False,
                                              factory_properties=fp)
     if R('devtools_perf'):  f.AddDevToolsTests(factory_properties=fp)

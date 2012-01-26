@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -32,7 +32,7 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Webkit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel',
   auto_reboot=True)
 F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_gpu', 'webkit_unit'],
     options=['--compiler=goma', 'test_shell', 'test_shell_tests',
              'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
@@ -57,7 +57,7 @@ S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
 B('Webkit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='s6_webkit_dbg')
 F('f_webkit_dbg_tests', linux().ChromiumWebkitLatestFactory(
     target='Debug',
-    tests=['test_shell', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_gpu', 'webkit_unit'],
     options=['--compiler=goma', 'test_shell', 'test_shell_tests',
              'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={'archive_webkit_results': True,
