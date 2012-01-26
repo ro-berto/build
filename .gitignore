@@ -14,6 +14,7 @@ state.sqlite-shm
 state.sqlite-wal
 twistd.log*
 twistd.pid
+/goma
 /masters/master.chromium.chrome/google-chrome-rel-chromeos
 /masters/master.chromium.chrome/google-chrome-rel-linux
 /masters/master.chromium.chrome/google-chrome-rel-linux_64
@@ -818,8 +819,11 @@ twistd.pid
 /masters/master.tryserver.nacl/naclsdkm-windows64
 /masters/master.tryserver.nacl/public_html
 /masters/master.tryserver.nacl/templates
+/scripts/command_wrapper
 /scripts/common/.bot_password
+/scripts/gsd_generate_index
 /scripts/master/log_parser/perf_expectations
+/scripts/private
 /site_config/.bot_password
 /slave/ASAN_Builder
 /slave/Linux_x64
@@ -839,6 +843,7 @@ twistd.pid
 /slave/win
 /third_party/gsutil
 /third_party/lighttpd
+/third_party/psutils
 /third_party/twisted_10_2/twisted/internet/test/fake_CAs/empty
 /third_party/twisted_10_2/twisted/trial/test/directory
 /third_party/twisted_8_1/twisted/trial/test/directory
