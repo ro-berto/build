@@ -719,6 +719,7 @@ twistd.pid
 /masters/master.tryserver.chromium/linux_sync
 /masters/master.tryserver.chromium/linux_touch
 /masters/master.tryserver.chromium/linux_tsan
+/masters/master.tryserver.chromium/linux_ubuntu_latest_rel
 /masters/master.tryserver.chromium/linux_valgrind
 /masters/master.tryserver.chromium/linux_view
 /masters/master.tryserver.chromium/mac
