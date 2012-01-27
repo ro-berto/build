@@ -17,8 +17,11 @@ def CommonChecks(input_api, output_api):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
   black_list = list(input_api.DEFAULT_BLACK_LIST) + [
-      r'.*slave/.*/build.*/.*', r'.*depot_tools/.*', r'.*unittests/.*',
-      r'.*scripts/release/.*', r'.+_bb7\.py$']
+      r'.*slave/.*/build.*/.*',
+      r'.*depot_tools/.*',
+      r'.*scripts/release/.*',
+      r'.+_bb7\.py$',
+  ]
 
   sys_path_backup = sys.path
   try:
@@ -33,6 +36,10 @@ def CommonChecks(input_api, output_api):
         join('third_party', 'tempita_0_5'),
         join('third_party', 'twisted_10_2'),
         join('scripts'),
+        # Initially, a separate run was done for unit tests but now that
+        # pylint is fetched in memory with setuptools, it seems it caches
+        # sys.path so modifications to sys.path aren't kept.
+        join('scripts', 'master', 'unittests'),
         join('site_config'),
         join('test'),
     ] + sys.path
@@ -41,16 +48,6 @@ def CommonChecks(input_api, output_api):
         input_api,
         output_api,
         black_list=black_list))
-
-    # Do a separate run with unit tests.
-    black_list.remove(r'.*unittests/.*')
-    white_list = (r'.*unittests/.+\.py$',)
-    sys.path.append(join('scripts', 'master', 'unittests'))
-    output.extend(input_api.canned_checks.RunPylint(
-        input_api,
-        output_api,
-        black_list=black_list,
-        white_list=white_list))
   finally:
     sys.path = sys_path_backup
 
