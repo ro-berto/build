@@ -712,6 +712,7 @@ twistd.pid
 /masters/master.tryserver.chromium/linux_clang_goma
 /masters/master.tryserver.chromium/linux_clang_no_goma
 /masters/master.tryserver.chromium/linux_coverage
+/masters/master.tryserver.chromium/linux_gpu
 /masters/master.tryserver.chromium/linux_layout
 /masters/master.tryserver.chromium/linux_layout_rel
 /masters/master.tryserver.chromium/linux_redux
@@ -724,7 +725,9 @@ twistd.pid
 /masters/master.tryserver.chromium/linux_valgrind
 /masters/master.tryserver.chromium/linux_view
 /masters/master.tryserver.chromium/mac
+/masters/master.tryserver.chromium/mac_aura
 /masters/master.tryserver.chromium/mac_clang_no_goma
+/masters/master.tryserver.chromium/mac_gpu
 /masters/master.tryserver.chromium/mac_layout
 /masters/master.tryserver.chromium/mac_layout_rel
 /masters/master.tryserver.chromium/mac_no_goma
@@ -739,6 +742,7 @@ twistd.pid
 /masters/master.tryserver.chromium/win_aura
 /masters/master.tryserver.chromium/win_cf
 /masters/master.tryserver.chromium/win_drmemory
+/masters/master.tryserver.chromium/win_gpu
 /masters/master.tryserver.chromium/win_layout
 /masters/master.tryserver.chromium/win_layout_rel
 /masters/master.tryserver.chromium/win_rel
