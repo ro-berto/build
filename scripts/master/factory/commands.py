@@ -340,7 +340,7 @@ class FactoryCommands(object):
 
     # This is gtest specific, but other test types can safely ignore it.
     # Defaults to excluding FAILS and FLAKY test if none is specified.
-    flag = "--gtest_filter=%s" % (filters[name] or '*.FLAKY_*:*.FAILS_*')
+    flag = "--gtest_filter=%s" % (filters[name] or '-*.FLAKY_*:*.FAILS_*')
     bStep.setProperty('gtest_filter', flag, "Scheduler")
     return True
 
