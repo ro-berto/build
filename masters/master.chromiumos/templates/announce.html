@@ -19,13 +19,13 @@
     var comments = document.querySelectorAll(className);
     for(var i = 0; i < comments.length; i++) {
       comments[i].innerHTML = comments[i].innerHTML.replace(
-          /http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
+          /https?:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
     }
   };
 
-  window.onload = function() {
+  window.addEventListener("load", function() {
     autoLink('.DevComment');
-  };
+  }, false);
 
   /**
    * This is the indicator for whether we are in console or waterfall

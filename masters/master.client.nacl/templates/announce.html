@@ -7,13 +7,13 @@
   function autoLink(className) {
     var comments = document.querySelectorAll(className);
     for(var i = 0; i < comments.length; i++) {
-      comments[i].innerHTML = comments[i].innerHTML.replace(/http:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
+      comments[i].innerHTML = comments[i].innerHTML.replace(/https?:\/\/[^ \t\n<]*/g, '<a href="$&">$&</a>');
     }
   }
 
-  window.onload = function() {
+  window.addEventListener("load", function() {
     autoLink('.DevComment');
-  }
+  }, false);
 </script>
 
 <div class="Announcement">

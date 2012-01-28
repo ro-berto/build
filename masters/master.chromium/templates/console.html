@@ -452,11 +452,11 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
   
 <script type="text/javascript">
 // replace 'onload="updateDiv(event);" with this, as iframe doesn't have onload event in xhtml
-window.onload = function() {
+window.addEventListener("load", function() {
   document.getElementById('frameBox').onload = function(event) {
     updateDiv(event);
   };
-}; 
+}, false); 
 </script>
 
 {% endblock %}
