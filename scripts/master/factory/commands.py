@@ -320,22 +320,34 @@ class FactoryCommands(object):
     """Examines the 'testfilter' property of the build and determines if
     the step should run; True for yes."""
     bStep.setProperty('gtest_filter', None, "Factory")
+    if 'testfilter' not in bStep.build.getProperties():
+      # Not a try job.
+      return default
+
     filters = bStep.build.getProperties().getProperty('testfilter')
-    if not filters:
+    if not filters and not default:
       return default
 
     name = bStep.name
+    # TODO(maruel): Fix the step name.
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
-    for testfilter in filters:
-      if testfilter == name:
-        return True
-      if testfilter.startswith("%s:" % name):
-        # This is gtest specific, but other test types can safely ignore it.
-        bStep.setProperty('gtest_filter', "--gtest_filter=%s" %
-                          testfilter.split(':', 1)[1], "Scheduler")
-        return True
-    return False
+    filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
+    if name not in filters:
+      # Either default is False or the test is not in the list, in any case, the
+      # result is False.
+      return False
+
+    # This is gtest specific, but other test types can safely ignore it.
+    flag = "--gtest_filter=%s" % filters[name]
+    # Manual aggregation of glob filters:
+    if not '-' in filters[name]:
+      flag += '-'
+    elif filters[name]:
+      flag += ':'
+    flag += '*.FLAKY_*:*.FAILS_*'
+    bStep.setProperty('gtest_filter', flag, "Scheduler")
+    return True
 
   def GetTestStepFilter(self, factory_properties):
     """Returns a TestStepFilter lambda with the right default according to
