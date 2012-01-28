@@ -339,13 +339,8 @@ class FactoryCommands(object):
       return False
 
     # This is gtest specific, but other test types can safely ignore it.
-    flag = "--gtest_filter=%s" % filters[name]
-    # Manual aggregation of glob filters:
-    if not '-' in filters[name]:
-      flag += '-'
-    elif filters[name]:
-      flag += ':'
-    flag += '*.FLAKY_*:*.FAILS_*'
+    # Defaults to excluding FAILS and FLAKY test if none is specified.
+    flag = "--gtest_filter=%s" % (filters[name] or '*.FLAKY_*:*.FAILS_*')
     bStep.setProperty('gtest_filter', flag, "Scheduler")
     return True
 
