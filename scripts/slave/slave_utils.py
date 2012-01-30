@@ -477,6 +477,15 @@ def LogAndRemoveFiles(temp_dir, regex_pattern):
         # Don't fail.
 
 
+def RemoveChromeDesktopFiles():
+  """Removes Chrome files (i.e. shortcuts) from the desktop of the current user.
+  This does nothing if called on a non-Windows platform."""
+  if chromium_utils.IsWindows():
+    desktop_path = os.environ['USERPROFILE']
+    desktop_path = os.path.join(desktop_path, 'Desktop')
+    LogAndRemoveFiles(desktop_path, '^(Chromium|chrome) \(.+\)?\.lnk$')
+
+
 def RemoveChromeTemporaryFiles():
   """A large hammer to nuke what could be leaked files from unittests or
   files left from a unittest that crashed, was killed, etc."""
@@ -490,6 +499,7 @@ def RemoveChromeTemporaryFiles():
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
     # Dump and temporary files.
     LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
+    RemoveChromeDesktopFiles()
   elif chromium_utils.IsLinux():
     kLogRegexHeapcheck = '\.(sym|heap)$'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
