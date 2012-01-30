@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -78,7 +78,7 @@ class IbOutputParser(object):
     self.__lines_with_warnings = None
     # {projectname : [error lines]}
     self.project_errors = {}
-    self.project_name_being_processed = None
+    self.project_name_being_processed = '<Unknown>'
     if not self._IsIbLog():
       self.log_content = DevenvLogToIbLog(self.log_content).Convert()
 
@@ -134,7 +134,7 @@ class IbOutputParser(object):
 
   def _ResetState(self):
     self.project_errors = {}
-    self.project_name_being_processed = None
+    self.project_name_being_processed = '<Unknown>'
 
   def _ProcessLine(self, line):
     self._UpdateProjectName(line)
@@ -144,17 +144,13 @@ class IbOutputParser(object):
 
   def _ApplyPossibleErrorHtmlAttributes(self, content):
     if IbOutputParser.ERROR_LINE_MATCHER.match(content):
-      self._AddToProjectErrors(content)
+      self.project_errors.setdefault(
+          self.project_name_being_processed, []).append(content)
       return ("<div class='error'><a name='%s_%s'>%s</a></div>" %
                 (self.project_name_being_processed,
                  len(self.project_errors[self.project_name_being_processed]),
                  content))
     return content
-
-  def _AddToProjectErrors(self, content):
-    if not self.project_errors.has_key(self.project_name_being_processed):
-      self.project_errors[self.project_name_being_processed] = []
-    self.project_errors[self.project_name_being_processed].append(content)
 
   def _UpdateProjectName(self, line):
     match = IbOutputParser.NAME_MATCHER.match(line)
