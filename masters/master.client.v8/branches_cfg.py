@@ -1,7 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -9,9 +9,9 @@
 # Note that stable, beta and dev might not always correspond to what is
 # used in chromium, but here we simple use it to mean the last 3 branches.
 
-stable_branch = '3.5'
-beta_branch = '3.6'
-dev_branch = '3.7'
+stable_branch = '3.6'
+beta_branch = '3.7'
+dev_branch = '3.8'
 branch_names = {
     'stable': {'ia32': 'V8 Linux - ' + stable_branch + ' branch',
                'arm': 'V8 arm - sim - ' + stable_branch + ' branch',
