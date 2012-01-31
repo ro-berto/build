@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -360,9 +360,9 @@ class Master(object):
 
   class ChromiumPerfAv(_ChromiumBase):
     project_name = 'Chromium Perf Av'
-    master_port = 9050
-    slave_port = 9151
-    master_port_alt = 9052
+    master_port = 9075
+    slave_port = 9175
+    master_port_alt = 9275
 
   class DevTools(Chromium):
     project_name = 'Chromium DevTools'
