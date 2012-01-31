@@ -8,6 +8,7 @@ import copy
 import re
 import time
 
+from twisted.python import log
 
 from buildbot import interfaces, util
 from buildbot.process import buildstep
@@ -341,11 +342,11 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if self.sections:
       return
     # Add a log section for output before the first section heading.
-    log = self.command.addLog('preamble')
+    preamble = self.command.addLog('preamble')
     self.sections.append({
         'name': 'preamble',
         'step': self.command.step_status.getBuild().steps[-1],
-        'log': log,
+        'log': preamble,
         'status': builder.SUCCESS,
         'links': [],
         'step_summary_text': [],
@@ -393,7 +394,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
   # Override logChunk to intercept headers and to prevent more than one line's
   # worth of data from being processed in a chunk, so we can direct incomplete
   # chunks to the right sub-log (so we get output promptly and completely).
-  def logChunk(self, build, step, log, channel, text):
+  def logChunk(self, build, step, logmsg, channel, text):
     for line in text.splitlines(True):
       if channel == interfaces.LOG_CHANNEL_STDOUT:
         self.outReceived(line)
@@ -414,7 +415,14 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def headerReceived(self, data):
     if self.sections:
-      self.sections[-1]['log'].addHeader(data)
+      if self.sections[-1]['log'].finished:
+        # Silently discard message when a log is marked as finished.
+        # TODO(maruel): Fix race condition?
+        log.msg(
+            'Received data unexpectedly on a finished build step log: %r' %
+            data)
+      else:
+        self.sections[-1]['log'].addHeader(data)
 
   def updateStepStatus(self, status):
     """Update current step status and annotation status based on a new event."""
@@ -514,11 +522,11 @@ class AnnotationObserver(buildstep.LogLineObserver):
         step = self.command.step_status.getBuild().addStepWithName(step_name)
         step.stepStarted()
         step.setText([step_name])
-        log = step.addLog('stdio')
+        stdio = step.addLog('stdio')
         self.sections.append({
             'name': step_name,
             'step': step,
-            'log': log,
+            'log': stdio,
             'status': builder.SUCCESS,
             'links': [],
             'step_summary_text': [],
