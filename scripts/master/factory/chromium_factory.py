@@ -47,6 +47,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'release_valgrind_build=1 '
     'werror= '
     'component=static_library '
+    'use_system_zlib=0 '
   )
 
   # TODO(timurrrr): investigate http://crbug.com/108155,
