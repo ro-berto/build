@@ -247,27 +247,29 @@ class FactoryCommands(object):
     cmd = cmd or []
 
     # Create a WithProperties format string that includes build properties.
-    # Don't add blamelist since it can contain single quotes and we don't have
-    # access to the rendered string to convert it to the correct JSON format
-    # before sending it to the slave.
-    # TODO(petermayo) If we had the buildProperties here we coudl create a more
-    # accurate JSON object.  Pass the build Properties someday.
-
-    build_properties = dict([(prop, "%%(%s:-)s" % prop) for prop in
-        ['branch', 'buildername', 'buildnumber', 'got_revision', 'mastername',
-         'parentname', 'parentslavename', 'revision', 'scheduler', 'slavename',
-         'snapshot']])
-
-    cmd.append(WithProperties(
-        '--build-properties=' + json.dumps(build_properties, sort_keys=True)))
+    build_properties = dict(
+        (prop, "%%(%s:-)s" % prop)
+        for prop in (
+            'blamelist', 'branch', 'buildername', 'buildnumber', 'got_revision',
+            'mastername', 'parentname', 'parentslavename', 'revision',
+            'scheduler', 'slavename', 'snapshot',
+        )
+    )
+    def gen_blamelist_string(build):
+      return ','.join(build.getProperty('blamelist'))
+    # The |separators| argument is to densify the command line.
+    string = '--build-properties=' + json.dumps(
+          build_properties, sort_keys=True, separators=(',', ':'))
+    cmd.append(WithProperties(string, blamelist=gen_blamelist_string))
     return cmd
 
   def AddFactoryProperties(self, factory_properties, cmd=None):
     """Adds factory properties to cmd."""
     # pylint: disable=R0201
     cmd = cmd or []
-    cmd.append('--factory-properties=' +
-               json.dumps(factory_properties or {}, sort_keys=True))
+    cmd.append(
+        '--factory-properties=' + json.dumps(
+          factory_properties or {}, sort_keys=True, separators=(',', ':')))
     return cmd
 
   def AddTestStep(self, command_class, test_name, test_command,
