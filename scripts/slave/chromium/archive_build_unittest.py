@@ -10,7 +10,6 @@ import simplejson
 import tempfile
 import unittest
 import sys
-import zipfile
 
 BASE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), '..', '..', '..')
@@ -18,7 +17,6 @@ sys.path.append(os.path.join(BASE_DIR, 'scripts'))
 sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 
 from slave.chromium import archive_build
-from common import archive_utils
 from common import archive_utils_unittest
 from common import chromium_utils
 import config
@@ -27,10 +25,6 @@ import config
 ZIP_TEST_FILES = ['file1.txt',
                   'file2.txt',
                   'file3.txt']
-
-EXTRA_ZIP_TEST_FILES = ['extra1.txt',
-                        'extra2.txt',
-                        'extra3.txt']
 
 TEST_FILES = ['test1.exe',
               'test2.exe',
@@ -142,28 +136,6 @@ class ArchiveTest(unittest.TestCase):
     self.tool_dir = os.path.join(self.src_dir, self.tool_dir)
     os.makedirs(self.tool_dir)
 
-  def createFileSetInBuildDir(self, file_list):
-    for f in file_list:
-      dir_part = os.path.dirname(f)
-      if (dir_part):
-        dir_path = os.path.join(self.build_dir, self.target, dir_part)
-        if not os.path.exists(dir_path):
-          os.makedirs(dir_path)
-
-      temp_file = open(os.path.join(self.build_dir, self.target, f), 'w')
-      temp_file.write('contents')
-      temp_file.close()
-
-  def createZipFileTestDir(self):
-    self.prepareToolDir()
-
-    self.FILES = archive_utils_unittest.CreateTestFilesCfg(self.tool_dir)
-    self.EMPTY_FILES = os.path.join(self.tool_dir, 'EMPTY_FILES')
-
-    self.createFileSetInBuildDir(ZIP_TEST_FILES + EXTRA_ZIP_TEST_FILES +
-                                 [i['filename'] for i in
-                                  archive_utils_unittest.TEST_FILES_CFG])
-
   def createTestFiles(self, file_list):
     self.prepareToolDir()
 
@@ -172,7 +144,8 @@ class ArchiveTest(unittest.TestCase):
     f.write('\n'.join(file_list))
     f.close()
 
-    self.createFileSetInBuildDir(file_list)
+    archive_utils_unittest.CreateFileSetInDir(
+        os.path.join(self.build_dir, self.target), file_list)
 
   def createExtraTestFiles(self):
     if not self.tool_dir:
@@ -188,31 +161,6 @@ class ArchiveTest(unittest.TestCase):
       test_file.write('contents')
       test_file.close()
 
-  def verifyZipFile(self, zip_dir, zip_file_path, archive_name, expected_files):
-    # Extract the files from the archive
-    extract_dir = os.path.join(zip_dir, 'extract')
-    os.makedirs(extract_dir)
-    zip_file = zipfile.ZipFile(zip_file_path)
-    # The extractall method is supported from V2.6
-    if hasattr(zip_file, 'extractall'):
-      zip_file.extractall(extract_dir)  # pylint: disable=E1101
-      # Check that all expected files are there
-      def FindFiles(arg, dirname, names):
-        subdir = dirname[len(arg):].strip(os.path.sep)
-        extracted_files.extend([os.path.join(subdir, name) for name in names if
-                                os.path.isfile(os.path.join(dirname, name))])
-      extracted_files = []
-      archive_path = os.path.join(extract_dir, archive_name)
-      os.path.walk(archive_path, FindFiles, archive_path)
-      self.assertEquals(len(expected_files), len(extracted_files))
-      for f in extracted_files:
-        self.assertTrue(f in expected_files)
-    else:
-      test_result = zip_file.testzip()
-      self.assertTrue(not test_result)
-
-    zip_file.close()
-
   def testGetExtraFiles(self):
     expected_extra_files_list = ZIP_TEST_FILES[:]
     expected_extra_files_list.sort()
@@ -222,41 +170,6 @@ class ArchiveTest(unittest.TestCase):
     extra_files_list.sort()
 
     self.assertEquals(expected_extra_files_list, extra_files_list)
-
-  def testCreateArchiveFile(self):
-    self.createZipFileTestDir()
-
-    self.initializeStager()
-    archive_name = 'test'
-    arch = '64bit'
-    buildtype = 'official'
-    files_list = archive_utils.ParseFilesList(self.FILES, buildtype, arch)
-    zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,
-                                                           files_list)
-    self.assertTrue(zip_dir)
-    self.assertTrue(zip_file_path)
-    self.assertTrue(os.path.exists(zip_file_path))
-    self.verifyZipFile(zip_dir, zip_file_path, archive_name, files_list)
-
-    # Creating the archive twice is wasteful, but shouldn't fail (e.g. due to
-    # conflicts with existing zip_dir or zip_file_path). This also tests the
-    # condition on the bots where they don't clean up their staging directory
-    # between runs.
-    zip_dir, zip_file_path = self.stager.CreateArchiveFile(archive_name,
-                                                           files_list)
-    self.assertTrue(zip_dir)
-    self.assertTrue(zip_file_path)
-    self.assertTrue(os.path.exists(zip_file_path))
-    self.verifyZipFile(zip_dir, zip_file_path, archive_name, files_list)
-
-  def testCreateEmptyArchiveFile(self):
-    self.createZipFileTestDir()
-    self.initializeStager()
-    zip_dir, zip_file = self.stager.CreateArchiveFile('test_empty',
-        os.path.basename(self.EMPTY_FILES))
-    self.assertFalse(zip_dir)
-    self.assertFalse(zip_file)
-    self.assertFalse(os.path.exists(zip_file))
 
   def testUploadTests(self):
     # This test is currently only applicable on Windows.
