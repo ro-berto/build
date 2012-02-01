@@ -174,10 +174,12 @@ class ChromiumNotifier(MailNotifier):
     pass
 
   def getName(self, step_status):
-    if self.use_getname:
-      return step_status.getName()
-    else:
-      return step_status.getText()[0]
+    if not self.use_getname:
+      # TODO(maruel): This code needs to die.
+      texts = step_status.getText()
+      if texts:
+        return texts[0]
+    return step_status.getName()
 
   def stepFinished(self, build_status, step_status, results):
     """A build step has just finished.
