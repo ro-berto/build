@@ -228,6 +228,21 @@ class ChromiumCommands(commands.FactoryCommands):
                      'check lkgr and stop build if unchanged',
                      cmd)
 
+  def AddMachPortsTests(self, factory_properties=None):
+    """Adds the Mac-specific Mach ports count test."""
+    factory_properties = factory_properties or {}
+    c = self.GetPerfStepClass(factory_properties, 'mach_ports',
+                              process_log.GraphingLogProcessor)
+
+    options = ['--gtest_filter=MachPortsTest.*']
+    cmd = self.GetTestCommand('performance_ui_tests', options,
+                              factory_properties=factory_properties)
+
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+
+    self.AddTestStep(c, 'mach_ports', cmd, do_step_if=self.TestStepFilter)
+
   def GetPageCyclerCommand(self, test_name, http, factory_properties=None):
     """Returns a command list to call the _test_tool on the page_cycler
     executable, with the appropriate GTest filter and additional arguments.

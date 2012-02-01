@@ -143,6 +143,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/webkit/data/ico_decoder', None),
        ('src/webkit/data/test_shell/plugins', None),
        ('src/webkit/data/xbm_decoder', None)],
+    'mach_ports':
+      [('src/data/mach_ports', None)],
     # Unused stuff:
     'autodiscovery':
       [('src/data/autodiscovery', None)],
@@ -360,6 +362,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddNewTabUITests(fp)
     if R('sizes'):          f.AddSizesTests(fp)
     if R('sync'):           f.AddSyncPerfTests(fp)
+    if R('mach_ports'):     f.AddMachPortsTests(fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
