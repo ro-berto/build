@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import optparse
 import os
 import shutil
 import sys
@@ -226,7 +227,72 @@ class ArchiveUtilsTest(unittest.TestCase):
     self.assertFalse(os.path.exists(zip_file_path))
 
 
+class RealFilesCfgTest(unittest.TestCase):
+  """Basic sanity checks for the real FILES.cfg files."""
+
+  def setUp(self):
+    self.svnbase = 'svn://svn.chromium.org/chrome/trunk/src/'
+    f, self.files_cfg = tempfile.mkstemp()
+    os.close(f)
+    self.svn = pysvn.Client()
+
+  def tearDown(self):
+    os.unlink(self.files_cfg)
+
+  def ParseFilesCfg(self, svn_url):
+    f = open(self.files_cfg, 'w')
+    f.write(self.svn.cat(svn_url))
+    f.close()
+
+    # There should always be some 32bit, official and dev files (otherwise
+    # there's nothing to archive).
+    arch = '32bit'
+    buildtype = 'official'
+    files_list = archive_utils.ParseFilesList(self.files_cfg, buildtype, arch)
+    self.assertTrue(files_list)
+    arch = '32bit'
+    buildtype = 'dev'
+    files_list = archive_utils.ParseFilesList(self.files_cfg, buildtype, arch)
+    self.assertTrue(files_list)
+
+    # Arbitrary buildtype shouldn't return anything.
+    buildtype = 'bogus'
+    files_list = archive_utils.ParseFilesList(self.files_cfg, buildtype, arch)
+    self.assertFalse(files_list)
+
+    # TODO(mmoss): Check for incomplete settings (e.g. missing buildtype/arch).
+    # This needs a Parse method that returns the dict rather than the filtered
+    # list.
+
+  def testWinParse(self):
+    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/win/FILES.cfg')
+
+  def testMacParse(self):
+    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/mac/FILES.cfg')
+
+  def testLinuxParse(self):
+    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/linux/FILES.cfg')
+
+  def testChromeosParse(self):
+    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/chromeos/FILES.cfg')
+
+
 if __name__ == '__main__':
-  # Run with a bit more output.
-  suite = unittest.TestLoader().loadTestsFromTestCase(ArchiveUtilsTest)
-  unittest.TextTestRunner(verbosity=2).run(suite)
+  option_parser = optparse.OptionParser()
+  option_parser.add_option('--realfiles', action='store_true',
+      help='Also run tests on FILES.cfg files from chromium sources.')
+  option_parser.add_option('--realfiles-only', action='store_true',
+      help='Only run tests on FILES.cfg files from chromium sources.')
+  options, unused_args = option_parser.parse_args()
+
+  if not options.realfiles_only:
+    suite = unittest.TestLoader().loadTestsFromTestCase(ArchiveUtilsTest)
+    # Run with a bit more output.
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+  # These tests are a little slow due to the svn download, so only run them if
+  # explicitly requested.
+  if options.realfiles or options.realfiles_only:
+    import pysvn  # pylint: disable=F0401
+    suite = unittest.TestLoader().loadTestsFromTestCase(RealFilesCfgTest)
+    unittest.TextTestRunner(verbosity=2).run(suite)
