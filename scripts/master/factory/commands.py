@@ -256,7 +256,9 @@ class FactoryCommands(object):
         )
     )
     def gen_blamelist_string(build):
-      return ','.join(build.getProperty('blamelist'))
+      blame = ','.join(build.getProperty('blamelist'))
+      # Could be interpreted by the shell.
+      return re.sub(r'[\&\|\^]', '', blame.replace('<', '[').replace('>', ']'))
     # The |separators| argument is to densify the command line.
     string = '--build-properties=' + json.dumps(
           build_properties, sort_keys=True, separators=(',', ':'))
