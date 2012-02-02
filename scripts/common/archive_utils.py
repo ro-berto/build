@@ -20,21 +20,21 @@ class StagingError(Exception):
   pass
 
 
-def ParseFilesList(files_file, buildtype, arch):
-  """Determine the list of archive files for a given release.
-
-  NOTE: A version of this handling is also in
-  build-internal/scripts/slave-internal/branched/stage_build.py
-  so be sure to update that if this is updated.
-  """
+def ParseFilesDict(files_file):
+  """Return the dictionary of archive file info read from the given file."""
   if not os.path.exists(files_file):
     raise StagingError('Files list does not exist (%s).' % files_file)
   exec_globals = {'__builtins__': None}
 
-  files_list = None
   execfile(files_file, exec_globals)
+  return exec_globals['FILES']
+
+
+def ParseFilesList(files_file, buildtype, arch):
+  """Determine the list of archive files for a given release."""
+  files_dict = ParseFilesDict(files_file)
   files_list = [
-      fileobj['filename'] for fileobj in exec_globals['FILES']
+      fileobj['filename'] for fileobj in files_dict
       if (buildtype in fileobj['buildtype'] and arch in fileobj['arch'] and
           not fileobj.get('archive'))
   ]

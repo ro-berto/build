@@ -231,50 +231,58 @@ class RealFilesCfgTest(unittest.TestCase):
   """Basic sanity checks for the real FILES.cfg files."""
 
   def setUp(self):
-    self.svnbase = 'svn://svn.chromium.org/chrome/trunk/src/'
-    f, self.files_cfg = tempfile.mkstemp()
-    os.close(f)
+    self.files_cfg = None
     self.svn = pysvn.Client()
 
   def tearDown(self):
-    os.unlink(self.files_cfg)
+    if self.files_cfg:
+      os.unlink(self.files_cfg)
 
-  def ParseFilesCfg(self, svn_url):
-    f = open(self.files_cfg, 'w')
-    f.write(self.svn.cat(svn_url))
-    f.close()
+  def ParseFilesCfg(self, cfg_path):
+    if cfg_path.startswith('svn://'):
+      f, self.files_cfg = tempfile.mkstemp()
+      os.write(f, self.svn.cat(cfg_path))
+      os.close(f)
+      cfg_path = self.files_cfg
 
     # There should always be some 32bit, official and dev files (otherwise
     # there's nothing to archive).
     arch = '32bit'
     buildtype = 'official'
-    files_list = archive_utils.ParseFilesList(self.files_cfg, buildtype, arch)
+    files_list = archive_utils.ParseFilesList(cfg_path, buildtype, arch)
     self.assertTrue(files_list)
     arch = '32bit'
     buildtype = 'dev'
-    files_list = archive_utils.ParseFilesList(self.files_cfg, buildtype, arch)
+    files_list = archive_utils.ParseFilesList(cfg_path, buildtype, arch)
     self.assertTrue(files_list)
 
     # Arbitrary buildtype shouldn't return anything.
     buildtype = 'bogus'
-    files_list = archive_utils.ParseFilesList(self.files_cfg, buildtype, arch)
+    files_list = archive_utils.ParseFilesList(cfg_path, buildtype, arch)
     self.assertFalse(files_list)
 
-    # TODO(mmoss): Check for incomplete settings (e.g. missing buildtype/arch).
-    # This needs a Parse method that returns the dict rather than the filtered
-    # list.
+    # Check for incomplete/incorrect settings.
+    files_dict = archive_utils.ParseFilesDict(cfg_path)
+    # buildtype must exist and be in ['dev', 'official']
+    self.assertFalse([f for f in files_dict
+        if not f['buildtype']
+        or set(f['buildtype']) - set(['dev', 'official'])])
+    # arch must exist and be in ['32bit', '64bit']
+    self.assertFalse([f for f in files_dict
+        if not f['arch'] or set(f['arch']) - set(['32bit', '64bit'])])
 
   def testWinParse(self):
-    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/win/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + '/chrome/tools/build/win/FILES.cfg')
 
   def testMacParse(self):
-    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/mac/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + '/chrome/tools/build/mac/FILES.cfg')
 
   def testLinuxParse(self):
-    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/linux/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + '/chrome/tools/build/linux/FILES.cfg')
 
   def testChromeosParse(self):
-    self.ParseFilesCfg(self.svnbase + 'chrome/tools/build/chromeos/FILES.cfg')
+    self.ParseFilesCfg(options.src_base +
+                       '/chrome/tools/build/chromeos/FILES.cfg')
 
 
 if __name__ == '__main__':
@@ -283,6 +291,9 @@ if __name__ == '__main__':
       help='Also run tests on FILES.cfg files from chromium sources.')
   option_parser.add_option('--realfiles-only', action='store_true',
       help='Only run tests on FILES.cfg files from chromium sources.')
+  option_parser.add_option('--src-base',
+      default='svn://svn.chromium.org/chrome/trunk/src',
+      help='Base file or svn path to the chromium sources.')
   options, unused_args = option_parser.parse_args()
 
   if not options.realfiles_only:
