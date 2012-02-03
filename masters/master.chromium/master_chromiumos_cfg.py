@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -31,7 +31,7 @@ S('chromiumos_dbg', branch='src', treeStableTimer=60)
 #
 T('chromiumos_aura_dbg_trigger')
 
-B('Linux ChromiumOS Builder (Aura dbg)', 'aura_dbg', 'compile',
+B('Linux ChromiumOS Builder (dbg)', 'aura_dbg', 'compile',
   'chromiumos_dbg', notify_on_missing=True)
 F('aura_dbg', chromiumos().ChromiumOSFactory(
     slave_type='NASBuilder',
@@ -60,12 +60,12 @@ F('aura_dbg', chromiumos().ChromiumOSFactory(
              'unit_tests',
              ],
     factory_properties={
-      'gclient_env': { 'GYP_DEFINES' : 'use_aura=1 chromeos=1' },
+      'gclient_env': { 'GYP_DEFINES' : 'chromeos=1' },
       'trigger': 'chromiumos_aura_dbg_trigger',
       'window_manager': False,
     }))
 
-B('Linux ChromiumOS Tests (Aura dbg)', 'aura_dbg_tests_1', 'testers',
+B('Linux ChromiumOS Tests (dbg)', 'aura_dbg_tests_1', 'testers',
   'chromiumos_aura_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('aura_dbg_tests_1', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
