@@ -32,6 +32,7 @@ def main():
   configuration and process accordingly.
   """
   c = parse_master('master.tryserver.chromium')
+  print 'Parsing done.'
 
   # Create a mapping of slavebuilddir with each slaves connected to it.
   slavebuilddirs = {}
@@ -74,6 +75,7 @@ def main():
   # TODO(maruel): Use pssh.
   failed = []
   for command in commands:
+    print ' '.join(command[1:])
     if subprocess.call(command):
       failed.append(command[1])
 
