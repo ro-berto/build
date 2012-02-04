@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -13,9 +13,6 @@ from master import master_utils
 categories_steps = {
   '': ['update'],
   'testers': [
-    'start_crash_handler',
-    'sizes',
-    # Unit tests
     'base_unittests',
     #'browser_tests',
     'cacheinvalidation_unittests',
@@ -23,9 +20,9 @@ categories_steps = {
     'courgette_unittests',
     'crypto_unittests',
     'googleurl_unittests',
+    'installer_util_unittests',
     #'interactive_ui_tests',
     'ipc_tests',
-    'installer_util_unittests',
     'jingle_unittests',
     'media_unittests',
     'mini_installer_test',
@@ -34,13 +31,15 @@ categories_steps = {
     'plugin_tests',
     'printing_unittests',
     'remoting_unittests',
-    'sbox_unittests',
     'sbox_integration_tests',
+    'sbox_unittests',
     'sbox_validation_tests',
+    'sizes',
     'sql_unittests',
+    'start_crash_handler',
     'test_shell_tests',
-    'unit_tests',
     #'ui_tests',
+    'unit_tests',
     #'webkit_tests',
    ],
   'windows': ['svnkill', 'taskkill'],
