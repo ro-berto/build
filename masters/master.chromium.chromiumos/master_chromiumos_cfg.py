@@ -116,6 +116,75 @@ F('clang', chromiumos().ChromiumOSFactory(
                             ' fastbuild=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
                            )}}))
+#
+# Triggerable scheduler for the dbg builders
+#
+T('chromiumos_dbg_trigger')
+
+B('Linux ChromiumOS Builder (dbg)', 'dbg', 'compile',
+  'chromium_local', notify_on_missing=True)
+F('dbg', chromiumos().ChromiumOSFactory(
+    slave_type='NASBuilder',
+    target='Debug',
+    options=['--compiler=goma',
+             'aura_builder',
+             'base_unittests',
+             'cacheinvalidation_unittests',
+             'crypto_unittests',
+             'googleurl_unittests',
+             'jingle_unittests',
+             'media_unittests',
+             'printing_unittests',
+             'views_unittests',
+             'compositor_unittests',
+             'ipc_tests',
+             'sync_unit_tests',
+             'sql_unittests',
+             'gfx_unittests',
+             'content_unittests',
+             'browser_tests',
+             'ui_tests',
+             'interactive_ui_tests',
+             'net_unittests',
+             #'remoting_unittests',
+             'unit_tests',
+             ],
+    factory_properties={
+      'gclient_env': { 'GYP_DEFINES' : 'chromeos=1' },
+      'trigger': 'chromiumos_dbg_trigger',
+      'window_manager': False,
+    }))
+
+B('Linux ChromiumOS Tests (dbg)', 'dbg_tests_1', 'tester',
+  'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
+F('dbg_tests_1', chromiumos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=['aura',
+           'aura_shell',
+           'DISABLED_base',
+           'DISABLED_browser_tests',
+           'cacheinvalidation',
+           'compositor',
+           'content',
+           'crypto',
+           'gfx',
+           'googleurl',
+           'DISABLED_interactive_ui',
+           'ipc',
+           'jingle',
+           'media',
+           'printing',
+           #'DISABLED_remoting',
+           'DISABLED_sql',
+           'DISABLED_sync',
+           'DISABLED_ui'
+           'unit',
+           'views',
+           ],
+    factory_properties={'generate_gtest_json': True,}))
+
+
 
 def Update(config, active_master, c):
   return helper.Update(c)
