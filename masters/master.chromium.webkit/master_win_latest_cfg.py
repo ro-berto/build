@@ -33,9 +33,6 @@ rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
 S('s7_webkit_builder_rel', branch='trunk', treeStableTimer=60)
 S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
 
-# Create the triggerable scheduler for the reliability tests.
-T('reliability')
-
 # Triggerable scheduler for testers
 T('s7_webkit_builder_rel_trigger')
 
@@ -52,16 +49,6 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
         'trigger': 's7_webkit_builder_rel_trigger',
         'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
     }))
-
-B('Win Reliability Builder', 'f_win_reliability_rel', scheduler='s7_webkit_rel',
-  builddir='Win_Webkit_Latest')
-F('f_win_reliability_rel', win().ChromiumWebkitLatestFactory(
-    clobber=True,
-    tests=[],
-    project='all.sln',
-    factory_properties={'archive_build': True,
-                        'trigger': 'reliability',
-                        'use_build_number': True}))
 
 #
 # Win Rel testers+builders
@@ -96,11 +83,6 @@ F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
                         'start_crash_handler': True,
                         'test_results_server': 'test-results.appspot.com',
                         }))
-
-B('Win Reliability', 'win_reliability', scheduler='reliability')
-# The Windows reliability bot runs on Linux because it only needs to transfer
-# the build from one part of the network to another, and it is easier on Linux.
-F('win_reliability', linux().ReliabilityTestsFactory('win_webkit_canary'))
 
 ################################################################################
 ## Debug
