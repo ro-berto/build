@@ -56,7 +56,7 @@ F('tegra2', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.tegra2',
   crostools_repo=None,
   pass_revision=True,
-  params='arm-tegra2-generic-tot-chrome-pfq-informational').get_factory())
+  params='arm-tegra2-tot-chrome-pfq-informational').get_factory())
 
 
 def Update(config, active_master, c):
