@@ -1146,3 +1146,18 @@ Add " (CQ)" to the author name in the console if the commit-queue was used.
      </td>
    
    {% for c in categories %}
+
+
+Fix exception on a race condition with slave disconnecting during a build trigger.
+
+--- third_party/buildbot_8_4p1/buildbot/process/slavebuilder.py
++++ third_party/buildbot_8_4p1/buildbot/process/slavebuilder.py
+@@ -117,7 +117,7 @@ class AbstractSlaveBuilder(pb.Referenceable):
+         return d
+
+     def prepare(self, builder_status, build):
+-        if not self.slave.acquireLocks():
++        if not self.slave or not self.slave.acquireLocks():
+             return defer.succeed(False)
+         return defer.succeed(True)
+
