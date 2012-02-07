@@ -137,6 +137,9 @@ class FactoryCommands(object):
     },
   }
 
+  DEFAULT_GTEST_FILTER = ''
+  # TODO(maruel): DEFAULT_GTEST_FILTER = '-*.FLAKY_*:*.FAILS_*'
+
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None):
     """Initializes the SlaveCommands class.
@@ -319,8 +322,7 @@ class FactoryCommands(object):
   def TestStepFilterGTestFilterRequired(self, bStep):
     return self.TestStepFilterImpl(bStep, False)
 
-  @staticmethod
-  def TestStepFilterImpl(bStep, default):
+  def TestStepFilterImpl(self, bStep, default):
     """Examines the 'testfilter' property of the build and determines if
     the step should run; True for yes."""
     bStep.setProperty('gtest_filter', None, "Factory")
@@ -337,15 +339,15 @@ class FactoryCommands(object):
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
-    if name not in filters:
-      # Either default is False or the test is not in the list, in any case, the
-      # result is False.
+    if name not in filters and (filters or not default):
       return False
 
     # This is gtest specific, but other test types can safely ignore it.
     # Defaults to excluding FAILS and FLAKY test if none is specified.
-    flag = "--gtest_filter=%s" % (filters[name] or '-*.FLAKY_*:*.FAILS_*')
-    bStep.setProperty('gtest_filter', flag, "Scheduler")
+    gtest_filter = filters.get(name, '') or self.DEFAULT_GTEST_FILTER
+    if gtest_filter:
+      flag = "--gtest_filter=%s" % gtest_filter
+      bStep.setProperty('gtest_filter', flag, "Scheduler")
     return True
 
   def GetTestStepFilter(self, factory_properties):
