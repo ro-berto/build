@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -153,6 +153,7 @@ def main():
       'master.client.nacl.ports': 'NativeClientPorts',
       'master.client.nacl.ppapi': 'NativeClientPPAPI',
       'master.client.nacl.sdk': 'NativeClientSDK',
+      'master.client.nacl.sdk.mono': 'NativeClientSDKMono',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
       'master.client.omaha': 'Omaha',
       'master.client.pagespeed': 'PageSpeed',
@@ -161,6 +162,7 @@ def main():
       'master.client.syzygy': None,
       'master.client.tsan': None,  # make start fails
       'master.client.v8': 'V8',
+      'master.client.webm': None,  # make start fails
       'master.experimental': None,
       'master.reserved': None,  # make start fails
       'master.tryserver.chromium': 'Chromium Try Server',

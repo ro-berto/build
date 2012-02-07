@@ -246,53 +246,59 @@ class Master(object):
 
   class NativeClient(_NaClBase):
     project_name = 'NativeClient'
-    master_port = 9025
-    slave_port = 9126
-    master_port_alt = 9041
+    master_port = 9080
+    slave_port = 9180
+    master_port_alt = 9280
 
   class NativeClientToolchain(_NaClBase):
     project_name = 'NativeClientToolchain'
-    master_port = 9025
-    slave_port = 9126
-    master_port_alt = 9041
+    master_port = 9081
+    slave_port = 9181
+    master_port_alt = 9281
 
   class NativeClientChrome(_NaClBase):
     project_name = 'NativeClientChrome'
-    master_port = 9025
-    slave_port = 9126
-    master_port_alt = 9041
+    master_port = 9082
+    slave_port = 9182
+    master_port_alt = 9282
 
   class NativeClientPPAPI(_NaClBase):
     project_name = 'NativeClientPPAPI'
-    master_port = 9025
-    slave_port = 9126
-    master_port_alt = 9041
+    master_port = 9083
+    slave_port = 9183
+    master_port_alt = 9283
 
   class NativeClientSDK(_NaClBase):
     project_name = 'NativeClientSDK'
-    master_port = 9022
-    slave_port = 9148
-    master_port_alt = 9049
+    master_port = 9084
+    slave_port = 9184
+    master_port_alt = 9284
 
   class NativeClientPorts(_NaClBase):
     project_name = 'NativeClientPorts'
-    master_port = 9022
-    slave_port = 9148
-    master_port_alt = 9049
+    master_port = 9085
+    slave_port = 9185
+    master_port_alt = 9285
 
   class NativeClientTryServer(_Base):
     project_name = 'NativeClient-Try'
-    master_port = 9020
-    slave_port = 9121
-    master_port_alt = 9022
-    try_job_port = 9023
+    master_port = 9086
+    slave_port = 9186
+    master_port_alt = 9286
+    try_job_port = 9386
     svn_url = None
 
   class NativeClientLLVM(_NaClBase):
     project_name = 'NativeClientLLVM'
-    master_port = 9022
-    slave_port = 9148
-    master_port_alt = 9049
+    master_port = 9087
+    slave_port = 9187
+    master_port_alt = 9287
+
+  class NativeClientSDKMono(_NaClBase):
+    project_name = 'NativeClientSDKMono'
+    master_port = 9088
+    slave_port = 9188
+    master_port_alt = 9288
 
   ## Others
 

@@ -80,7 +80,7 @@ def search_for_exceptions(path):
 
 def wait_for_start(master, name, path):
   """Waits for ~10s for the masters to open its web server."""
-  ports = range(8000, 8080) + range(8200, 8240) + range(9000, 9080)
+  ports = range(8000, 8080) + range(8200, 8240) + range(9000, 9090)
   for _ in range(100):
     for p in ports:
       try:
