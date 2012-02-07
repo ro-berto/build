@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import datetime
 import os
 import socket
 import tempfile
@@ -11,7 +12,7 @@ from twisted.internet import defer, utils
 from twisted.mail import smtp
 from twisted.python import log
 from buildbot.changes.base import PollingChangeSource
-from buildbot.util import deferredLocked, epoch2datetime
+from buildbot.util import deferredLocked
 
 from master.chromium_git_poller_bb8 import GitTagComparator
 
@@ -110,7 +111,7 @@ class RepoPoller(PollingChangeSource):
 
   def DoLog(self, *args):
     return self.RunRepoCmd(['forall', '-p', '-c', self.git_bin, 'log',
-                            '--format=%H %ct', 'repo_poller..'])
+                            '--format=%H', 'repo_poller..'])
 
   def DoSync(self, *args):
     # TODO(szager): I pulled the number 4 out of thin air.  Better heuristic?
@@ -152,7 +153,7 @@ class RepoPoller(PollingChangeSource):
     d.addCallback(_logBranches)
     def _log(*args):
       return self.RunRepoCmd(['forall', '-p', '-c',
-                              self.git_bin, 'log', '--format=%H %ct'])
+                              self.git_bin, 'log', '--format=%H'])
     d.addCallback(_log)
     d.addCallback(self.ProcessInitialHistory)
     def _setChangeCount(*args):
@@ -228,8 +229,12 @@ class RepoPoller(PollingChangeSource):
     return d
 
   def ParseRepoGitLogs(self, stdout):
+    """Parse the output of `repo forall -c git log ...`
+
+    Collate new revisions by project, and sort by commit order.
+    """
+    changes = {}  # changes[project] = [commit, commit, ...]
     project = None
-    allchanges = []
     for line in stdout.splitlines():
       if not line:
         continue
@@ -237,17 +242,17 @@ class RepoPoller(PollingChangeSource):
         project = line[8:].rstrip('/')
         continue
       assert(project)
-      (revision, timestamp) = line.split()
-      allchanges.append((int(timestamp), project, revision))
+      changes.setdefault(project, []).append(line)
 
     # Put changes in forward commit order, earliest-to-latest.
-    allchanges.reverse()
-    # Sort by timestamp, project, commit order.
-    allchanges.sort(key=lambda x: x[0:1])
+    for project_changes in changes.itervalues():
+      project_changes.reverse()
 
-    for item in allchanges:
-      self.comparator.addRevision(item[2])
-    return allchanges
+    for project in sorted(changes):
+      for change in changes[project]:
+        self.comparator.addRevision(change)
+
+    return changes
 
   def ProcessInitialHistory(self, args):
     """Initialize comparator with existing commits."""
@@ -266,41 +271,49 @@ class RepoPoller(PollingChangeSource):
               'across repo projects failed: %s' % stderr)
       return
 
-    for timestamp, project, rev in self.ParseRepoGitLogs(stdout):
-      dl = defer.DeferredList([
-          self.GetCommitName(project, rev),
-          self.GetCommitFiles(project, rev),
-          self.GetCommitComments(project, rev),
-          ], consumeErrors=True)
+    # TODO(szager): In a perfect world, we would use the time these changes were
+    # merged into the main repository.  That time is not currently preserved,
+    # so we use 'now' instead.  In the future, it would be nice if gerrit were
+    # to run filter-branch to reset the committer timestamp to when the patch
+    # was applied.
+    timestamp = datetime.datetime.utcnow()
 
-      wfd = defer.waitForDeferred(dl)
-      yield wfd
-      results = wfd.getResult()
+    for project, revisions in self.ParseRepoGitLogs(stdout).iteritems():
+      for rev in revisions:
+        dl = defer.DeferredList([
+            self.GetCommitName(project, rev),
+            self.GetCommitFiles(project, rev),
+            self.GetCommitComments(project, rev),
+            ], consumeErrors=True)
 
-      # check for failures
-      failures = [r[1] for r in results if not r[0]]
-      if failures:
-        # just fail on the first error; they're probably all related!
-        raise failures[0]
+        wfd = defer.waitForDeferred(dl)
+        yield wfd
+        results = wfd.getResult()
 
-      revlink = ''
-      if self.revlinktmpl and rev:
-        revlink = self.revlinktmpl % (
-            urllib.quote_plus(project), urllib.quote_plus(rev))
+        # check for failures
+        failures = [r[1] for r in results if not r[0]]
+        if failures:
+          # just fail on the first error; they're probably all related!
+          raise failures[0]
 
-      name, files, comments = [r[1] for r in results]
-      d = self.master.addChange(
-          author=name,
-          revision=rev,
-          files=files,
-          comments=comments,
-          when_timestamp=epoch2datetime(timestamp),
-          branch=None,
-          category=self.category,
-          project=self.project,
-          repository='/'.join([self.repo_url, project]),
-          revlink=revlink)
-      wfd = defer.waitForDeferred(d)
-      yield wfd
-      results = wfd.getResult()
-      self.changeCount += 1
+        revlink = ''
+        if self.revlinktmpl and rev:
+          revlink = self.revlinktmpl % (
+              urllib.quote_plus(project), urllib.quote_plus(rev))
+
+        name, files, comments = [r[1] for r in results]
+        d = self.master.addChange(
+            author=name,
+            revision=rev,
+            files=files,
+            comments=comments,
+            when_timestamp=timestamp,
+            branch=None,
+            category=self.category,
+            project=self.project,
+            repository='/'.join([self.repo_url, project]),
+            revlink=revlink)
+        wfd = defer.waitForDeferred(d)
+        yield wfd
+        results = wfd.getResult()
+        self.changeCount += 1
