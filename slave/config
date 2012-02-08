@@ -10,7 +10,7 @@ enable-auto-props = yes
 *.c = svn:eol-style=LF
 *.cc = svn:eol-style=LF
 *.cpp = svn:eol-style=LF
-*.css = svn:eol-style=LF
+*.css = svn:eol-style=LF;svn:mime-type=text/css
 *.def = svn:eol-style=LF
 *.dll = svn:executable
 *.exe = svn:executable
@@ -18,11 +18,11 @@ enable-auto-props = yes
 *.gyp = svn:eol-style=LF
 *.gypi = svn:eol-style=LF
 *.h = svn:eol-style=LF
-*.htm = svn:eol-style=LF
-*.html = svn:eol-style=LF
+*.htm = svn:eol-style=LF;svn:mime-type=text/html
+*.html = svn:eol-style=LF;svn:mime-type=text/html
 *.idl = svn:eol-style=LF
 *.jpg = svn:mime-type=image/jpeg
-*.js = svn:eol-style=LF
+*.js = svn:eol-style=LF;svn:mime-type=text/javascript
 *.m = svn:eol-style=LF
 *.make = svn:eol-style=LF
 *.mm = svn:eol-style=LF
@@ -38,7 +38,7 @@ enable-auto-props = yes
 *.svg = svn:eol-style=LF
 *.txt = svn:eol-style=LF
 *.webp = svn:mime-type=image/webp
-*.xml = svn:eol-style=LF
+*.xml = svn:eol-style=LF;svn:mime-type=text/xml
 *.xtb = svn:eol-style=LF
 DEPS = svn:eol-style=LF
 Makefile = svn:eol-style=LF
