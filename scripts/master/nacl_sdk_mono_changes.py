@@ -109,12 +109,10 @@ def Trigger(version):
     version: The version number to trigger at.
   """
   def Done(*args):
-    # Pylint can't grok twisted's complex dynamic python.
-    reactor.stop() # pylint: disable=E1101
+    reactor.stop()
 
   def Err(*args):
-    # Pylint can't grok twisted's complex dynamic python.
-    reactor.stop() # pylint: disable=E1101
+    reactor.stop()
     assert False
 
   def SendChange(remote):
@@ -129,13 +127,11 @@ def Trigger(version):
 
   f = pb.PBClientFactory()
   d = f.login(credentials.UsernamePassword('change', 'changepw'))
-  # Pylint can't grok twisted's complex dynamic python.
-  reactor.connectTCP('localhost', 8150, f) # pylint: disable=E1101
+  reactor.connectTCP('localhost', 8150, f)
   # Use this for local testing:
   #reactor.connectTCP('localhost', 9148, f)
   d.addCallback(SendChange).addErrback(Err)
-  # Pylint can't grok twisted's complex dynamic python.
-  reactor.run() # pylint: disable=E1101
+  reactor.run()
 
 
 def Main():
