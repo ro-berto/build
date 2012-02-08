@@ -100,14 +100,7 @@ B('Linux ChromiumOS (Clang dbg)',
   notify_on_missing=True)
 F('clang', chromiumos().ChromiumOSFactory(
     target='Debug',
-    tests=['base',
-           'ui_base',
-           'gfx',
-           'unit',
-           'crypto',
-           'cacheinvalidation',
-           'jingle',
-           ],
+    tests=[],
     options=['--compiler=clang', 'aura_builder'],
     factory_properties={
         'gclient_env': {
