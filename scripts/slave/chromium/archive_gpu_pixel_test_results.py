@@ -34,11 +34,11 @@ def CopyToGoogleStorage(src, dst):
     print 'No such file', src
     return False
   gsutil = os.environ.get('GSUTIL', 'gsutil')
-  # gsutil will look in the $HOME directory for the config file. Set the
-  # environment variable if needed.
+  # gsutil will look in the $HOME directory for the config file.
+  # Set $HOME to /b/build/site_config/ temporarily where .boto stays.
   old_env = os.environ.copy()
-  if 'HOME' not in os.environ:
-    os.environ['HOME'] = os.path.expanduser('~')
+  # This script is under /b/build/scripts/slave/chromium/
+  os.environ['HOME'] = os.path.join('..', '..', '..', 'site_config')
   retcode = subprocess.call([gsutil, 'cp', '-a', 'public-read', src, dst])
   os.environ = old_env
   if retcode == 0:
