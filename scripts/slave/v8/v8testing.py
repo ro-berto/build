@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -90,11 +90,15 @@ def main():
       cmd.extend([options.testname])
     if options.testname == 'mozilla':
       # Mozilla tests requires a number of tests to timeout, set it a bit lower.
-      cmd.extend(['--timeout=120'])
-    elif options.arch == 'arm':
-      cmd.extend(['--timeout=600'])
+      if options.arch in ('arm', 'mips'):
+        cmd.extend(['--timeout=180'])
+      else:
+        cmd.extend(['--timeout=120'])
     else:
-      cmd.extend(['--timeout=200'])
+      if options.arch in ('arm', 'mips'):
+        cmd.extend(['--timeout=600'])
+      else:
+        cmd.extend(['--timeout=200'])
     if options.isolates:
       cmd.extend(['--isolates'])
     if options.shell_flags:
