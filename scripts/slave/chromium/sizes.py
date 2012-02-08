@@ -125,7 +125,7 @@ RESULT chrome-si: initializers= %(initializers)d files
   return 66
 
 
-def check_linux_binary(target_dir, binary_name):
+def check_linux_binary(target_dir, binary_name, options):
   """Collect appropriate size information about the built Linux binary given.
 
   Returns a tuple (result, sizes).  result is the first non-zero exit
@@ -189,6 +189,17 @@ def check_linux_binary(target_dir, binary_name):
     count = (size / word_size) - 2
   sizes.append((binary_name + '-si', 'initializers', '', count, 'files'))
 
+  # For Release builds only, use dump-static-initializers.py to print the list
+  # of static initializers.
+  if count and options.target == 'Release':
+    dump_static_initializers = os.path.join(options.build_dir,
+                                            'tools', 'linux',
+                                            'dump-static-initializers.py')
+    result, stdout = run_process(result, [dump_static_initializers,
+                                          '-d', binary_file])
+    print '\n# Static initializers in %s:' % binary_file
+    print stdout
+
   # Determine if the binary has the DT_TEXTREL marker.
   result, stdout = run_process(result, ['readelf', '-Wd', binary_file])
   if re.search(r'\bTEXTREL\b', stdout) is None:
@@ -227,7 +238,7 @@ def main_linux(options, args):
   totals = {}
 
   for binary in binaries:
-    this_result, this_sizes = check_linux_binary(target_dir, binary)
+    this_result, this_sizes = check_linux_binary(target_dir, binary, options)
     if result == 0:
       result = this_result
     for name, identifier, totals_id, value, units in this_sizes:
