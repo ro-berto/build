@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -110,13 +110,11 @@ def Trigger(version):
   """
   def Done(*args):
     # Pylint can't grok twisted's complex dynamic python.
-    # pylint: disable=E1101
-    reactor.stop()
+    reactor.stop() # pylint: disable=E1101
 
   def Err(*args):
     # Pylint can't grok twisted's complex dynamic python.
-    # pylint: disable=E1101
-    reactor.stop()
+    reactor.stop() # pylint: disable=E1101
     assert False
 
   def SendChange(remote):
@@ -132,12 +130,12 @@ def Trigger(version):
   f = pb.PBClientFactory()
   d = f.login(credentials.UsernamePassword('change', 'changepw'))
   # Pylint can't grok twisted's complex dynamic python.
-  # pylint: disable=E1101
-  reactor.connectTCP('localhost', 8150, f)
+  reactor.connectTCP('localhost', 8150, f) # pylint: disable=E1101
   # Use this for local testing:
   #reactor.connectTCP('localhost', 9148, f)
   d.addCallback(SendChange).addErrback(Err)
-  reactor.run()
+  # Pylint can't grok twisted's complex dynamic python.
+  reactor.run() # pylint: disable=E1101
 
 
 def Main():

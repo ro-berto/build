@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -37,7 +37,7 @@ def LatestSDKVersion():
       stdout=subprocess.PIPE)
   (p_stdout, _) = p.communicate()
   assert p.returncode == 0
-  versions = p_stdout.splitlines()
+  versions = str(p_stdout).splitlines()
   latest = None
   for version in versions:
     m = re.match('gs\:\/\/nativeclient\-mirror\/nacl\/nacl_sdk\/'
@@ -59,7 +59,7 @@ def LatestMonoRevision():
       'git', 'ls-remote', '--exit-code', MONO_GIT_URL, 'refs/heads/master'
   ], stdout=subprocess.PIPE)
   (p_stdout, _) = p.communicate()
-  parts = p_stdout.rstrip().split('\t')
+  parts = str(p_stdout).rstrip().split('\t')
   assert parts[1] == 'refs/heads/master'
   return parts[0]
 
