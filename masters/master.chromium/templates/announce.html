@@ -201,12 +201,12 @@
               <script>
               document.write([
                 a("http://dev.chromium.org/developers/testing/chromium-build-infrastructure/tour-of-the-chromium-buildbot", "about", ""),
-                a("waterfall/help", "customize", ""),
-                a("waterfall", "waterfall", ""),
-                a("console", "console", ""),
+                a("./waterfall/help", "customize", ""),
+                a("./waterfall", "waterfall", ""),
+                a("./console", "console", ""),
                 a("../tryserver.chromium/waterfall", "try", ""),
                 aView("../chromium.fyi", "", "experimental"),
-                aView("", "show_events=true&failures_only=true", "failures"),
+                a("./waterfall?show_events=true&failures_only=true", "failures", ""),
                 aView("../chromium.memory", "", "memory"),
                 aView("../chromium.memory.fyi", "", "memory fyi"),
                 aView("../chromium.chromiumos", "", "chromiumos chrome"),
