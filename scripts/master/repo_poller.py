@@ -103,8 +103,11 @@ class RepoPoller(PollingChangeSource):
     def _check_status(result):
       (stdout, stderr, status) = result
       if status != 0:
-        raise RuntimeError('failure #%d: "%s" failed with exit code %d: %s' % (
-            self.errCount+1, ' '.join([self.repo_bin] + args), status, stderr))
+        raise RuntimeError(('failure #%d: "%s" failed with exit code %d:\n'
+                            '%s\n%s') % (
+            self.errCount+1,
+            repr([self.repo_bin] + args),
+            status, stdout, stderr))
       return (stdout, stderr, status)
     d.addCallback(_check_status)
     return d
@@ -173,15 +176,16 @@ class RepoPoller(PollingChangeSource):
       log.msg('RepoPoller: finished polling.')
       self.errCount = 0
     def _failure(failure):
+      msg = ('RepoPoller is having problems...\n\n'
+             'host: %s\n'
+             'repo checkout: %s\n'
+             'repo url: %s\n'
+             'repo branch: %s\n\n'
+             '%s') % (socket.gethostname(), self.workdir, self.repo_url,
+                     self.repo_branch, failure)
+      log.err(msg)
       self.errCount += 1
       if self.errCount % 3 == 0 and self.smtp_host and self.to_addrs:
-        msg = ('RepoPoller is having problems...\n\n'
-               'host: %s\n'
-               'repo checkout: %s\n'
-               'repo url: %s\n'
-               'repo branch: %s\n\n'
-               '%s') % (socket.gethostname(), self.workdir, self.repo_url,
-                       self.repo_branch, failure)
         smtp.sendmail(smtphost=self.smtp_host,
                       from_addr=self.from_addr,
                       to_addrs=self.to_addrs,
