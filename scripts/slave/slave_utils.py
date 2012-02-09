@@ -7,6 +7,7 @@
 
 import inspect
 import os
+import platform
 import re
 import signal
 import socket
@@ -181,7 +182,7 @@ def _XvfbPidFilename(slave_build_name):
                       'xvfb-' + slave_build_name  + '.pid')
 
 
-def StartVirtualX(slave_build_name, build_dir, with_wm=True):
+def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   """Start a virtual X server and set the DISPLAY environment variable so sub
   processes will use the virtual X server.  Also start icewm. This only works
   on Linux and assumes that xvfb and icewm are installed.
@@ -193,14 +194,25 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True):
         we try running xdisplaycheck from |build_dir| to verify our X
         connection.
     with_wm: Whether we add a window manager to the display too.
+    server_dir: Directory to search for the server executable.
   """
   # We use a pid file to make sure we don't have any xvfb processes running
   # from a previous test run.
   StopVirtualX(slave_build_name)
 
+  # Figure out which X server to try.
+  cmd = "Xvfb"
+  if server_dir and os.path.exists(server_dir):
+    cmd = os.path.join(server_dir, 'Xvfb.' + platform.architecture()[0])
+    if not os.path.exists(cmd):
+      cmd = os.path.join(server_dir, 'Xvfb')
+    if not os.path.exists(cmd):
+      print "No Xvfb found in designated server path:", server_dir
+      raise Exception("No virtual server")
+
   # Start a virtual X server that we run the tests in.  This makes it so we can
   # run the tests even if we didn't start the tests from an X session.
-  proc = subprocess.Popen(["Xvfb", ":9", "-screen", "0", "1024x768x24", "-ac"],
+  proc = subprocess.Popen([cmd, ":9", "-screen", "0", "1024x768x24", "-ac"],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   open(xvfb_pid_filename, 'w').write(str(proc.pid))
@@ -240,7 +252,8 @@ def StopVirtualX(slave_build_name):
       pass
     os.remove(xvfb_pid_filename)
 
-def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
+def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
+                               server_dir=None):
   if sys.platform == 'win32':
     python_exe = 'python.exe'
 
@@ -257,7 +270,9 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
 
   if chromium_utils.IsLinux():
     slave_name = SlaveBuildName(build_dir)
-    StartVirtualX(slave_name, os.path.join(build_dir, '..', 'out', target))
+    StartVirtualX(slave_name,
+                  os.path.join(build_dir, '..', 'out', target),
+                  server_dir=server_dir)
 
   command = [python_exe]
 
@@ -270,6 +285,23 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args):
     StopVirtualX(slave_name)
 
   return result
+
+def GypFlagIsOn(options, flag):
+  value = GetGypFlag(options, flag, False)
+  # The values we understand as Off are False and a text zero.
+  if value is False or value == '0':
+    return False
+  return True
+
+
+def GetGypFlag(options, flag, default=None):
+  gclient = options.factory_properties.get('gclient_env', {})
+  defines = gclient.get('GYP_DEFINES', '')
+  gypflags = dict([(a, c if b == '=' else True) for (a, b, c) in
+                   [x.partition('=') for x in defines.split(' ')]])
+  if flag not in gypflags:
+    return default
+  return gypflags[flag]
 
 
 def GetActiveMaster():

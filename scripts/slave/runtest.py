@@ -271,6 +271,16 @@ def main_linux(options, args):
     else:
       bin_dir = os.path.join(build_dir, '..', 'out', options.target)
 
+  # Figure out what we want for a special frame buffer directory.
+  special_xvfb_dir = None
+  if options.special_xvfb == 'auto':
+    fp_special_xvfb = options.factory_properties.get('special_xvfb', None)
+    if fp_special_xvfb or (fp_special_xvfb is None and
+        slave_utils.GypFlagIsOn(options, 'chromeos')):
+      special_xvfb_dir = options.special_xvfb_dir
+  elif options.special_xvfb:
+    special_xvfb_dir = options.special_xvfb_dir
+
   test_exe = args[0]
   test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
@@ -329,7 +339,8 @@ def main_linux(options, args):
     if options.xvfb:
       slave_utils.StartVirtualX(
           slave_name, bin_dir,
-          with_wm=options.factory_properties.get('window_manager', True))
+          with_wm=options.factory_properties.get('window_manager', True),
+          server_dir=special_xvfb_dir)
     if options.factory_properties.get('asan', False):
       symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
                                                'scripts', 'asan_symbolize.py'))
@@ -465,6 +476,18 @@ def main():
   option_parser.add_option('', '--parallel', action='store_true',
                            help='Shard and run tests in parallel for speed '
                                 'with sharding_supervisor.')
+  option_parser.add_option('', '--special-xvfb-dir', default=os.path.join(
+                             os.path.dirname(sys.argv[0]), '..', '..', 'xvfb'),
+                           help='Path to virtual X server directory on Linux.')
+  option_parser.add_option('', '--special-xvfb', action='store_true',
+                           default='auto',
+                           help='use non-default virtual X server on Linux.')
+  option_parser.add_option('', '--no-special-xvfb', action='store_false',
+                           dest='special_xvfb',
+                           help='Use default virtual X server on Linux.')
+  option_parser.add_option('', '--auto-special-xvfb', action='store_const',
+                           const='auto', dest='special_xvfb',
+                           help='Guess as to virtual X server on Linux.')
   option_parser.add_option('', '--xvfb', action='store_true', dest='xvfb',
                            default=True,
                            help='Start virtual X server on Linux.')
