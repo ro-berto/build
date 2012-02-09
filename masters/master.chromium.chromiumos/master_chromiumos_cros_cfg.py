@@ -33,6 +33,20 @@ F('x86', chromeos_factory.CbuildbotFactory(
   params='x86-generic-tot-chrome-pfq-informational').get_factory())
 
 
+B('ChromiumOS (amd64)',
+  factory='amd64',
+  gatekeeper='watch',
+  #gatekeeper='closer|watch',
+  builddir='chromium-tot-chromeos-amd64',
+  scheduler='chromium_cros',
+  notify_on_missing=True)
+F('amd64', chromeos_factory.CbuildbotFactory(
+  buildroot='/b/cbuild.amd64',
+  crostools_repo=None,
+  pass_revision=True,
+  params='amd64-corei7-tot-chrome-pfq-informational').get_factory())
+
+
 B('ChromiumOS (arm)',
   factory='arm',
   gatekeeper='closer|watch',
