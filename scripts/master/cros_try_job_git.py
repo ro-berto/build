@@ -21,6 +21,7 @@ class CrOSTryJobGit(TryJobBase):
         workdir=tempfile.mkdtemp(prefix='gitpoller'),
         pollinterval=10)
     self.watcher.setServiceParent(self)
+    self.watcher.master = self
 
   def get_file_contents(self, file_path):
     """Returns a Deferred to returns the file's content."""
@@ -30,15 +31,18 @@ class CrOSTryJobGit(TryJobBase):
         path=self.watcher.workdir)
 
   @defer.deferredGenerator
-  def addChange(self, change):
+  def addChange(self, **kwargs):
     """Process the received data and send the queue buildset."""
     # Implicitly skips over non-files like directories.
-    if len(change.files) != 1:
+    files = kwargs['files']
+    if len(files) != 1:
       # We only accept changes with 1 diff file.
       raise BadJobfile(
-          'Try job with too many files %s' % (','.join(change.files)))
+          'Try job with too many files %s' % (','.join(files)))
 
-    parsed = self.parse_options(text_to_dict(change.comments))
+    wfd = defer.waitForDeferred(self.get_file_contents(files[0]))
+    yield wfd
+    parsed = self.parse_options(text_to_dict(wfd.getResult()))
     if not parsed.get('gerrit_patches', None):
       if not parsed['issue']:
         raise BadJobfile('No patches specified!')
@@ -49,7 +53,6 @@ class CrOSTryJobGit(TryJobBase):
     if not parsed.get('bot'):
       raise BadJobfile('No configs specified!')
 
-    wfd = defer.waitForDeferred(self.get_file_contents(change.files[0]))
-    yield wfd
-    parsed['patch'] = wfd.getResult()
-    self.SubmitJob(parsed, [change.number])
+    # ChromeOS trybots pull the patch directly from Gerrit.
+    parsed['patch'] = parsed.get('gerrit_patches', '')
+    self.SubmitJob(parsed, [kwargs['revision']])
