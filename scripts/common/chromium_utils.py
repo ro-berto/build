@@ -631,6 +631,7 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
     in_byte = readfh.read(1)
     in_line = ''
+    unwritten_characters = ''
     while in_byte:
       # Capture all characters except \r.
       if in_byte != '\r':
@@ -647,10 +648,12 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
         # flush no more often than 20 seconds to avoid flooding the master with
         # network traffic from unbuffered output.
         if not in_line is None:
-          writefh.write(in_line)
+          unwritten_characters += in_line
           if (time.time() - last_flushed_at) > 20:
             last_flushed_at = time.time()
+            writefh.write(unwritten_characters)
             writefh.flush()
+            unwritten_characters = ''
         in_line = ''
       in_byte = readfh.read(1)
 
@@ -660,9 +663,15 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     if filter_obj:
       if in_line != '':
         in_line = filter_obj.FilterDone(in_line)
-    if not in_line is None:
-      writefh.write(in_line)
-    writefh.flush()
+    # If unwritten_characters is added to multiple times and it has been 15
+    # seconds since the last write and a EOF is encountered, then we can
+    # have unwritten_characters contain text that hasn't yet been written.
+    # Write that text here before the final write of in_line and the flush.
+    if in_line:
+      unwritten_characters += in_line
+    if unwritten_characters:
+      writefh.write(unwritten_characters)
+      writefh.flush()
 
   pipes = pipes or []
   if pipes and (parser_func or filter_obj):
