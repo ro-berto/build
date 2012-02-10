@@ -65,7 +65,8 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     factory_properties={
         'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
-            'GYP_DEFINES':'use_skia=1'
+            'GYP_DEFINES':'use_skia=1 fastbuild=1',
+            'GYP_GENERATORS':'make',
         },
         'layout_test_platform': 'chromium-mac',
     }))
