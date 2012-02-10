@@ -642,10 +642,10 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
           parser_func(in_line.strip())
         if filter_obj:
           in_line = filter_obj.FilterLine(in_line)
-        # Python on Windows writes the buffer only when it reaches 4k.  This is
-        # not fast enough.  Flush a minium of each 10 seconds instead.  Also,
-        # we only write and flush no more often than 20 seconds to avoid
-        # flooding the master with network traffic from unbuffered output.
+        # Python on Windows writes the buffer only when it reaches 4k.  Ideally
+        # we would flush a minimum of 10 seconds.  However, we only write and
+        # flush no more often than 20 seconds to avoid flooding the master with
+        # network traffic from unbuffered output.
         if not in_line is None:
           writefh.write(in_line)
           if (time.time() - last_flushed_at) > 20:
