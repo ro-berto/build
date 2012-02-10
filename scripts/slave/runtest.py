@@ -275,8 +275,9 @@ def main_linux(options, args):
   special_xvfb_dir = None
   if options.special_xvfb == 'auto':
     fp_special_xvfb = options.factory_properties.get('special_xvfb', None)
-    if fp_special_xvfb or (fp_special_xvfb is None and
-        slave_utils.GypFlagIsOn(options, 'chromeos')):
+    fp_chromeos = options.factory_properties.get('chromeos', None)
+    if fp_special_xvfb or (fp_special_xvfb is None and (fp_chromeos or
+        slave_utils.GypFlagIsOn(options, 'chromeos'))):
       special_xvfb_dir = options.special_xvfb_dir
   elif options.special_xvfb:
     special_xvfb_dir = options.special_xvfb_dir
