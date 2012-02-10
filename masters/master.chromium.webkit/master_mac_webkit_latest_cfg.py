@@ -59,8 +59,9 @@ B('Webkit Mac Builder', 'f_webkit_mac_rel',
   scheduler='s5_webkit_rel', builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
-    options=[
-        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    options=['--build-tool=make', '--compiler=goma-clang', '--',
+        'test_shell', 'test_shell_tests', 'webkit_unit_tests',
+        'DumpRenderTree'],
     factory_properties={
         'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
