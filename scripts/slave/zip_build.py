@@ -66,7 +66,7 @@ def GetRecentBuildsByModificationTime(zip_list):
   return ordered_asc_by_mtime_list[-10:]
 
 
-def GetRealBuildDirectory(build_dir, target):
+def GetRealBuildDirectory(build_dir, target, factory_properties):
   """Return the build directory."""
   if chromium_utils.IsWindows():
     return os.path.join(build_dir, target)
@@ -75,6 +75,10 @@ def GetRealBuildDirectory(build_dir, target):
     return os.path.join(os.path.dirname(build_dir), 'out', target)
 
   if chromium_utils.IsMac():
+    is_make_or_ninja = (factory_properties.get("gclient_env", {})
+        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+    if is_make_or_ninja:
+      return os.path.join(os.path.dirname(build_dir), 'out', target)
     return os.path.join(os.path.dirname(build_dir), 'xcodebuild', target)
 
   raise NotImplementedError('%s is not supported.' % sys.platform)
@@ -138,6 +142,7 @@ def ShouldPackageFile(filename, options):
       # copy outside the app.
       'Chromium Helper.app',
       'Google Chrome Helper.app',
+      '.deps', 'obj', 'obj.host', 'obj.target',
     ]
   elif chromium_utils.IsLinux():
     things_to_skip = [
@@ -242,7 +247,8 @@ def PruneOldArchives(staging_dir, zip_base, zip_ext):
 
 def archive(options, args):
   src_dir = os.path.abspath(options.src_dir)
-  build_dir = GetRealBuildDirectory(options.build_dir, options.target)
+  build_dir = GetRealBuildDirectory(options.build_dir, options.target,
+                                    options.factory_properties)
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
   build_revision = slave_utils.SubversionRevision(src_dir)
