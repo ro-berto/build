@@ -954,17 +954,19 @@ class ChromiumCommands(commands.FactoryCommands):
     env = {}
     env['GSUTIL'] = self.PathJoin(self._script_dir, gsutil)
 
-    gpu_data = self.PathJoin('src', 'chrome', 'test', 'data', 'gpu')
+    # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
+    gpu_data = self.PathJoin('..', 'gpu_data')
+    run_id = '%s_%s' % (WithProperties('%(got_revision)s'),
+                        WithProperties('%(buildername)s'))
+    run_id = re.sub('\W+', '_', run_id)
     cmd = [self._python,
            self._gpu_archive_tool,
            '--run-id',
-           WithProperties('%(got_revision)s'),
+           run_id,
            '--generated-dir',
            self.PathJoin(gpu_data, 'generated'),
            '--gpu-reference-dir',
-           self.PathJoin(gpu_data, 'gpu_reference'),
-           '--sw-reference-dir',
-           self.PathJoin(gpu_data, 'sw_reference')]
+           self.PathJoin(gpu_data, 'gpu_reference')]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
 
   def AddNaClIntegrationTestStep(self, factory_properties, target=None,
