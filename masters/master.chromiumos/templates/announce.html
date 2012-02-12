@@ -194,10 +194,10 @@
       <td width="72%">
         <table width="100%">
           <script language="javascript">
-            var important = [
-                "builder=x86+generic+PFQ",
-                "builder=tegra2+PFQ",
-                "builder=amd64+corei7+PFQ",
+            var closer = [
+                "builder=x86+generic+incremental",
+                "builder=tegra2+incremental",
+                "builder=amd64+corei7+incremental",
                 "builder=x86+generic+full",
                 "builder=arm+generic+full",
                 "builder=tegra2+full",
@@ -205,9 +205,6 @@
                 "builder=x86+pineview+full",
                 "builder=amd64+generic+full",
                 "builder=amd64+corei7+full",
-                "builder=x86+generic+chrome+nightly+PFQ",
-                "builder=tegra2+nightly+chrome+PFQ",
-                "builder=amd64+corei7+nightly+chrome+PFQ",
                 "builder=chromiumos+sdk",
                 "reload=30",
             ].join("&");
@@ -225,30 +222,30 @@
                 "builder=ChromiumOS+(tegra2)",
                 "titles=on",
             ].join("&");
-
             var arm = [
-                "builder=tegra2+PFQ",
+                "builder=tegra2+incremental",
                 "builder=arm+generic+full",
                 "builder=tegra2+full",
                 "builder=tegra2+seaboard+full",
                 "reload=30",
             ].join("&");
             var x86 = [
-                "builder=x86+generic+PFQ",
-                "builder=amd64+corei7+PFQ",
+                "builder=x86+generic+incremental",
+                "builder=amd64+corei7+incremental",
                 "builder=x86+generic+full",
                 "builder=x86+pineview+full",
                 "builder=amd64+generic+full",
                 "builder=amd64+corei7+full",
                 "reload=30",
             ].join("&");
-
-            var memory = ""
-
+            var commit_queue = [
+                "builder=x86+generic+paladin",
+                "builder=tegra2+paladin",
+                "builder=amd64+corei7+paladin",
+            ].join("&");
 
             var bar = "http://build.chromium.org/p/chromiumos/horizontal_one_box_per_builder"
             var bar_chromium_chromiumos = "http://build.chromium.org/p/chromium.chromiumos/horizontal_one_box_per_builder"
-            var bar_memory = "http://build.chromium.org/p/chromium.memory/horizontal_one_box_per_builder";
 
             var waterfall = '../chromiumos/waterfall'
             var waterfall_chromium_chromiumos = '../chromium.chromiumos/waterfall'
@@ -261,10 +258,11 @@
             function DisplayBar(waterfall_url, bar_url, content, name) {
               document.write("<tr><td><a href='" + GetUrl(waterfall_url, content) + "'>" + name + "</a></td><td width='99%'><iframe width='100%' height='20' frameborder='0' scrolling='no' src='" + GetUrl(bar_url, content) + "'></iframe></td></tr>\n");
             }
-            DisplayBar(waterfall, bar, important, "important");
+            DisplayBar(waterfall, bar, closer, "closers");
             DisplayBar(waterfall, bar, x86, "x86");
             DisplayBar(waterfall, bar, arm, "arm");
             DisplayBar(waterfall, bar, chrome, "chrome");
+            DisplayBar(waterfall, bar, commit_queue, "commit queue");
             DisplayBar(waterfall_chromium_chromiumos, bar_chromium_chromiumos, chromium_chromiumos, "chromium.chromiumos")
           </script>
         </table>
