@@ -56,7 +56,7 @@ def LatestMonoRevision():
     The git hash of the latest revision from the mono repo.
   """
   p = subprocess.Popen([
-      'git', 'ls-remote', '--exit-code', MONO_GIT_URL, 'refs/heads/master'
+      'git', 'ls-remote', MONO_GIT_URL, 'refs/heads/master'
   ], stdout=subprocess.PIPE)
   p_stdout, _ = p.communicate()
   parts = str(p_stdout).rstrip().split('\t')

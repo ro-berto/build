@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -277,7 +277,11 @@ class GClient(sourcebase):
     # GClient accepts --revision argument of two types 'module@rev' and 'rev'.
     if self.revision:
       command.append('--revision')
-      if (not self.branch or
+      # Ignore non-svn part of compound revisions.
+      # Used for nacl.sdk.mono waterfall.
+      if ':' in self.revision:
+        command.append(self.revision.split(':')[0])
+      elif (not self.branch or
           self.no_gclient_branch or
           '@' in str(self.revision)):
         command.append(str(self.revision))
