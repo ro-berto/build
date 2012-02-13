@@ -340,7 +340,7 @@ document.addEventListener("DOMContentLoaded", SetupView, false);
 {% set alt_class = cycler('', 'Alt') %}
 
 <div align="center">
-<table width="96%">
+<table width="96%" class="ConsoleData">
   
 {% if categories|length > 1 %}
   <tr>
@@ -469,5 +469,6 @@ window.addEventListener("load", function() {
   <a class='uncollapse' href='#' OnClick='uncollapse(); return false;'>un-collapse</a>
   <a class='merge' href="#" OnClick="merge(); return false;">merge</a>
   <a class='unmerge' style='display: none' href="#" OnClick="unmerge(); return false;">un-merge</a> ]
+  <p>Debug info: {{ debuginfo }}</p>
 </div>
 {% endblock %}
