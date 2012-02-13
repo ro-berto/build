@@ -15,6 +15,7 @@ import optparse
 import os
 import subprocess
 import sys
+import urllib
 
 from common import chromium_utils
 
@@ -62,6 +63,8 @@ def Archive(run_id, gen_dir, gpu_ref_dir):
   if not os.path.exists(gen_dir):
     print 'No failing test images to archive'
     return True
+
+  run_id = urllib.quote(run_id)
 
   view_url = 'http://%s.commondatastorage.googleapis.com/' \
              'view_test_results.html?%s' % (GOOGLE_STORAGE_BUCKET, run_id)
