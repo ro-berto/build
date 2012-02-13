@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -15,12 +15,15 @@ import config
 # A list of unittests to run after each build.
 _UNITTESTS = [
   'agent_common_unittests',
+  'block_graph_orderers_unittests',
+  'block_graph_transforms_unittests',
   'block_graph_unittests',
   'common_unittests',
   'core_unittests',
   'instrument_unittests',
   'parse_unittests',
   'pdb_unittests',
+  'pe_orderers_unittests',
   'pe_transforms_unittests',
   'pe_unittests',
   'profile_unittests',
