@@ -944,7 +944,7 @@ class ChromiumCommands(commands.FactoryCommands):
     This binary contains all the tests that should be run on the gpu bots.
     """
     # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
-    gpu_data = self.PathJoin(self._build_dir, '..', 'gpu_data')
+    gpu_data = self.PathJoin('..', 'gpu_data')
     gen_dir = self.PathJoin(gpu_data, 'generated')
     ref_dir = self.PathJoin(gpu_data, 'reference')
 
