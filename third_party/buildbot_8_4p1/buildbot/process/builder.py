@@ -439,7 +439,8 @@ class Builder(pb.Referenceable, service.MultiService):
                     "request" % (build, slavebuilder))
 
             self.building.remove(build)
-            slavebuilder.slave.releaseLocks()
+            if slavebuilder.slave:
+                slavebuilder.slave.releaseLocks()
 
             # release the buildrequest claims
             wfd = defer.waitForDeferred(

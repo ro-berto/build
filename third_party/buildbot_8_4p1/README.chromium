@@ -1161,3 +1161,18 @@ Fix exception on a race condition with slave disconnecting during a build trigge
              return defer.succeed(False)
          return defer.succeed(True)
 
+
+Fix exception on a race condition with slave disconnecting during a build trigger.
+
+--- third_party/buildbot_8_4p1/buildbot/process/builder.py
++++ third_party/buildbot_8_4p1/buildbot/process/builder.py
+@@ -439,7 +439,8 @@ class Builder(pb.Referenceable, service.MultiService):
+                     "request" % (build, slavebuilder))
+ 
+             self.building.remove(build)
+-            slavebuilder.slave.releaseLocks()
++            if slavebuilder.slave:
++                slavebuilder.slave.releaseLocks()
+ 
+             # release the buildrequest claims
+             wfd = defer.waitForDeferred(
