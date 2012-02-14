@@ -531,14 +531,14 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddUITests(self, factory_properties=None):
     description = ''
-    options = []
 
     total_shards = factory_properties.get('ui_total_shards')
     shard_index = factory_properties.get('ui_shard_index')
+    arg_list = factory_properties.get('ui_tests_filter', [])
 
     self.AddBasicGTestTestStep('ui_tests', factory_properties,
-                               description, options, total_shards=total_shards,
-                               shard_index=shard_index)
+                               description, total_shards=total_shards,
+                               shard_index=shard_index, arg_list=arg_list)
 
   def AddDomCheckerTests(self):
     cmd = [self._python, self._test_tool,
