@@ -84,6 +84,16 @@ F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
                         'test_results_server': 'test-results.appspot.com',
                         }))
 
+B('Chrome Frame Tests', 'f_cf_rel_tests',
+  scheduler='s7_webkit_builder_rel_trigger', auto_reboot=True)
+F('f_cf_rel_tests', win().ChromiumWebkitLatestFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=['chrome_frame_unittests', 'chrome_frame_tests',
+           'chrome_frame_net_tests'],
+    factory_properties={'process_dumps': True,
+                        'start_crash_handler': True,}))
+
 ################################################################################
 ## Debug
 ################################################################################
