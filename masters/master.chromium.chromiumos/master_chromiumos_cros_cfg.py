@@ -44,7 +44,7 @@ F('amd64', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.amd64',
   crostools_repo=None,
   pass_revision=True,
-  params='amd64-corei7-tot-chrome-pfq-informational').get_factory())
+  params='amd64-generic-tot-chrome-pfq-informational').get_factory())
 
 
 B('ChromiumOS (arm)',
