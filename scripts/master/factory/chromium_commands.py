@@ -951,7 +951,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('gpu_tests', factory_properties,
                                arg_list=['--use-gpu-in-tests',
                                          '--generated-dir=%s' % gen_dir,
-                                         '--reference_dir=%s' % ref_dir],
+                                         '--reference-dir=%s' % ref_dir],
                                test_tool_arg_list=['--no-xvfb'])
 
     # Setup environment for running gsutil, a Google Storage utility.
