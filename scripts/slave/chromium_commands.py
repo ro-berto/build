@@ -269,7 +269,7 @@ class GClient(sourcebase):
     dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(),
                'sync', '--verbose', '--reset', '--manually_grab_svn_rev',
-               '--delete_unversioned_trees']
+               '--delete_unversioned_trees', '--force']
     # Don't run hooks if it was patched or there is a patch since runhooks will
     # be run after.
     if self.gclient_nohooks or self.patch or self.was_patched:
