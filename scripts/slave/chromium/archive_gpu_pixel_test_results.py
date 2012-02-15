@@ -13,9 +13,9 @@ For a list of command-line options, call this script with '--help'.
 
 import optparse
 import os
+import re
 import subprocess
 import sys
-import urllib
 
 from common import chromium_utils
 
@@ -64,7 +64,7 @@ def Archive(run_id, gen_dir, gpu_ref_dir):
     print 'No failing test images to archive'
     return True
 
-  run_id = urllib.quote(run_id)
+  run_id = re.sub('\W+', '_', run_id)
 
   view_url = 'http://%s.commondatastorage.googleapis.com/' \
              'view_test_results.html?%s' % (GOOGLE_STORAGE_BUCKET, run_id)
