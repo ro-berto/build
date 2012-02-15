@@ -133,7 +133,7 @@ class CbuildbotFactory(object):
            '--buildroot=%s' % self.buildroot]
 
     if self.trybot:
-      cmd.append(WithProperties("--gerrit-patches='%(gerrit_patches)s'"))
+      cmd.append(WithProperties("--gerrit-patches=%(gerrit_patches)s"))
     else:
       cmd += ['--buildbot']
 

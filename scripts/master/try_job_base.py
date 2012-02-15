@@ -130,6 +130,8 @@ class TryJobBase(TryBase):
   _EMAIL_VALIDATOR = re.compile(
       r'[a-zA-Z][a-zA-Z0-9\.\+\-\_]*@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,3}$')
 
+  _PROPERTY_SOURCE = 'Try job'
+
   def __init__(self, name, pools, properties,
                last_good_urls, code_review_sites):
     TryBase.__init__(self, name, pools.ListBuilderNames(), properties or {})
@@ -156,8 +158,19 @@ class TryJobBase(TryBase):
     properties['testfilter'] = options['bot'].get(builder, None)
     props = Properties()
     props.updateFromProperties(self.properties)
-    props.update(properties, 'Try job')
+    props.update(properties, self._PROPERTY_SOURCE)
     return props
+
+  def create_buildset(self, ssid, parsed_job):
+    log.msg('Creating try job(s) %s' % ssid)
+    result = None
+    for builder in parsed_job['bot']:
+      result = self.addBuildsetForSourceStamp(ssid=ssid,
+          reason=parsed_job['name'],
+          external_idstring=parsed_job['name'],
+          builderNames=[builder],
+          properties=self.get_props(builder, parsed_job))
+    return result
 
   def SubmitJob(self, parsed_job, changeids):
     if not parsed_job['bot']:
@@ -180,18 +193,7 @@ class TryJobBase(TryBase):
         repository=parsed_job['repository'] or '',
         changeids=changeids)
 
-    def create_buildset(ssid):
-      log.msg('Creating try job(s) %s' % ssid)
-      result = None
-      for builder in parsed_job['bot']:
-        result = self.addBuildsetForSourceStamp(ssid=ssid,
-            reason=parsed_job['name'],
-            external_idstring=parsed_job['name'],
-            builderNames=[builder],
-            properties=self.get_props(builder, parsed_job))
-      return result
-
-    d.addCallback(create_buildset)
+    d.addCallback(self.create_buildset, parsed_job)
     d.addErrback(log.err, "Failed to queue a try job!")
     return d
 
