@@ -37,6 +37,7 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 from common import chromium_utils
 from slave import gtest_slave_utils
 from slave import slave_utils
+from slave import xvfb
 import config
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
@@ -338,7 +339,7 @@ def main_linux(options, args):
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
     if options.xvfb:
-      slave_utils.StartVirtualX(
+      xvfb.StartVirtualX(
           slave_name, bin_dir,
           with_wm=options.factory_properties.get('window_manager', True),
           server_dir=special_xvfb_dir)
@@ -353,7 +354,7 @@ def main_linux(options, args):
     if http_server:
       http_server.StopServer()
     if options.xvfb:
-      slave_utils.StopVirtualX(slave_name)
+      xvfb.StopVirtualX(slave_name)
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)

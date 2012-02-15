@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -22,7 +22,7 @@ import tempfile
 import threading
 
 from common import chromium_utils
-from slave import slave_utils
+from slave import xvfb
 from slave.chromium import playback_benchmark_replay
 
 # So we can import google.*_utils below with native Pythons.
@@ -120,13 +120,13 @@ def playback_benchmark(options, args):
   server_thread.start()
 
   if chromium_utils.IsLinux():
-    slave_utils.StartVirtualX(options.target, '')
+    xvfb.StartVirtualX(options.target, '')
 
   result = run_benchmark(options, False, benchmark_results)
   result |= run_benchmark(options, True, benchmark_results)
 
   if chromium_utils.IsLinux():
-    slave_utils.StopVirtualX(options.target)
+    xvfb.StopVirtualX(options.target)
 
   return result
 

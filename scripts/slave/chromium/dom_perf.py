@@ -19,6 +19,7 @@ import sys
 
 from common import chromium_utils
 from slave import slave_utils
+from slave import xvfb
 import simplejson as json
 
 # So we can import google.*_utils below with native Pythons.
@@ -83,8 +84,8 @@ def dom_perf(options, args):
     build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
   elif chromium_utils.IsLinux():
     build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
-    slave_utils.StartVirtualX(options.target,
-                              os.path.join(build_dir, options.target))
+    xvfb.StartVirtualX(options.target,
+                       os.path.join(build_dir, options.target))
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)
   if not os.path.exists(test_exe_path):
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
@@ -150,7 +151,7 @@ def dom_perf(options, args):
   result |= run_and_print(True)
 
   if chromium_utils.IsLinux():
-    slave_utils.StopVirtualX(options.target)
+    xvfb.StopVirtualX(options.target)
 
   return result
 
