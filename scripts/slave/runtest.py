@@ -183,7 +183,9 @@ def main_mac(options, args):
 
     build_dir = os.path.dirname(build_dir)
     outdir = 'xcodebuild'
-    if os.path.exists(os.path.join(build_dir, 'out')):
+    is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
+        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+    if is_make_or_ninja:
       outdir = 'out'
 
     build_dir = os.path.join(build_dir, outdir)
