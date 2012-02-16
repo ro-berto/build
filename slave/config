@@ -22,6 +22,7 @@ enable-auto-props = yes
 *.html = svn:eol-style=LF;svn:mime-type=text/html
 *.idl = svn:eol-style=LF
 *.jpg = svn:mime-type=image/jpeg
+*.java = svn:eol-style=LF
 *.js = svn:eol-style=LF;svn:mime-type=text/javascript
 *.m = svn:eol-style=LF
 *.make = svn:eol-style=LF
