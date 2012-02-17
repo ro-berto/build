@@ -67,9 +67,14 @@ def real_main(base_dir, expected):
 
   start = time.time()
   base = os.path.join(base_dir, 'masters')
+  # Here we look for a slaves.cfg file in the directory to ensure that
+  # the directory actually contains a master, as opposed to having existed
+  # at one time but later having been removed.  In the latter case, it's
+  # no longer an actual master that should be 'discovered' by this test.
   masters = sorted(
       p for p in os.listdir(base)
-      if os.path.isdir(os.path.join(base, p)) and not p.startswith('.')
+      if (os.path.isfile(os.path.join(base, p, 'slaves.cfg')) and
+          not p.startswith('.'))
   )
 
   failed = set()
