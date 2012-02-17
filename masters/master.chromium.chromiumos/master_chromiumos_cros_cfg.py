@@ -25,6 +25,7 @@ B('ChromiumOS (x86)',
   gatekeeper='closer|watch',
   builddir='chromium-tot-chromeos-x86-generic',
   scheduler='chromium_cros',
+  auto_reboot=True,
   notify_on_missing=True)
 F('x86', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.x86',
@@ -39,6 +40,7 @@ B('ChromiumOS (amd64)',
   #gatekeeper='closer|watch',
   builddir='chromium-tot-chromeos-amd64',
   scheduler='chromium_cros',
+  auto_reboot=True,
   notify_on_missing=True)
 F('amd64', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.amd64',
@@ -52,6 +54,7 @@ B('ChromiumOS (arm)',
   gatekeeper='closer|watch',
   builddir='chromium-tot-chromeos-arm',
   scheduler='chromium_cros',
+  auto_reboot=True,
   notify_on_missing=True)
 F('arm', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.arm',
@@ -65,6 +68,7 @@ B('ChromiumOS (tegra2)',
   gatekeeper='closer|watch',
   builddir='chromium-tot-chromeos-tegra2',
   scheduler='chromium_cros',
+  auto_reboot=True,
   notify_on_missing=True)
 F('tegra2', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.tegra2',
