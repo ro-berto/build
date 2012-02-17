@@ -74,6 +74,8 @@ class Master(config_private.Master):
   es5conform_root_url =  "https://es5conform.svn.codeplex.com/svn/"
   es5conform_revision = 62998
 
+  dart_url = 'https://dart.googlecode.com/svn/branches/bleeding_edge'
+
   skia_url = 'http://skia.googlecode.com/svn/'
 
   syzygy_url = 'http://sawbuck.googlecode.com/svn/'
