@@ -98,6 +98,7 @@ F('f_cf_rel_tests', win().ChromiumWebkitLatestFactory(
 ## Debug
 ################################################################################
 
+
 #
 # Main debug scheduler for webkit
 #
@@ -117,6 +118,19 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
         'start_crash_handler': True,
         'generate_gtest_json': True,
         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+
+#
+# GPU Win
+#
+B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg', scheduler='s7_webkit_builder_dbg')
+F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
+    target='Debug',
+    slave_type='BuilderTester',
+    tests=['gpu_tests'],
+    options='all.sln:chromium_gpu_debug_builder',
+    factory_properties={'generate_gtest_json': True,
+                        'start_crash_handler': True,
+                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 
 def Update(config, active_master, c):

@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -80,6 +80,23 @@ B('Mac Builder (dbg)', 'f_mac_dbg', auto_reboot=True,
 F('f_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj',]))
+#
+# GPU Mac
+#
+B('GPU Mac (dbg)', 'f_gpu_mac_dbg', auto_reboot=True,
+  scheduler='s8_webkit_dbg')
+F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
+    target='Debug',
+    options=['--build-tool=make', '--compiler=goma-clang',
+             'chromium_gpu_debug_builder'],
+    tests=['gpu_tests'],
+    factory_properties={
+        'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_GENERATORS':'make',
+            'GYP_DEFINES':'fastbuild=1',
+        },
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)
