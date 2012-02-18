@@ -17,45 +17,18 @@ def chromiumos(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 defaults['category'] = '1linux'
 
-################################################################################
-## Debug
-################################################################################
-
 S(name='chromium_local', branch='src', treeStableTimer=60)
 
+T('chromiumos_rel_trigger')
 
-B('Linux ChromiumOS',
-  factory='basic',
-  gatekeeper='compile|tester',
+B('Linux ChromiumOS Builder',
+  factory='builder',
+  gatekeeper='compile',
   builddir='chromium-rel-linux-chromeos',
   scheduler='chromium_local',
   notify_on_missing=True)
-F('basic', chromiumos().ChromiumOSFactory(
-    tests=['aura',
-           'aura_shell',
-           'base',
-           'browser_tests',
-           'cacheinvalidation',
-           'content',
-           'compositor',
-           'crypto',
-           'dbus',
-           'gfx',
-           'googleurl',
-           'interactive_ui',
-           'ipc',
-           'jingle',
-           'media',
-           'net',
-           'printing',
-           #'remoting',
-           #'safe_browsing'
-           'sql',
-           'DISABLED_sync',
-           'ui',
-           'unit',
-           'views',
-           ],
+F('builder', chromiumos().ChromiumOSFactory(
+    slave_type='NASBuilder',
     options=['--compiler=goma',
              'aura_builder',
              'base_unittests',
@@ -84,12 +57,59 @@ F('basic', chromiumos().ChromiumOSFactory(
              ],
     factory_properties={
         'archive_build': False,
+        'trigger': 'chromiumos_rel_trigger',
         'extra_archive_paths': 'chrome/tools/build/chromeos',
         'gclient_env': {
             'GYP_DEFINES': ('chromeos=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1')},
-        'generate_gtest_json': True,
         'window_manager': False}))
+
+B('Linux ChromiumOS Tester (1)',
+  factory='tester_1',
+  scheduler='chromiumos_rel_trigger',
+  gatekeeper='tester',
+  auto_reboot=True,
+  notify_on_missing=True)
+F('tester_1', chromiumos().ChromiumOSFactory(
+    slave_type='NASTester',
+    tests=['aura',
+           'aura_shell',
+           'base',
+           'cacheinvalidation',
+           'content',
+           'compositor',
+           'crypto',
+           'dbus',
+           'gfx',
+           'googleurl',
+           'ipc',
+           'jingle',
+           'media',
+           'net',
+           'printing',
+           #'remoting',
+           #'safe_browsing'
+           'sql',
+           'DISABLED_sync',
+           'unit',
+           'views',
+           ],
+    factory_properties={'generate_gtest_json': True}))
+
+
+B('Linux ChromiumOS Tester (2)',
+  factory='tester_2',
+  scheduler='chromiumos_rel_trigger',
+  gatekeeper='tester',
+  auto_reboot=True,
+  notify_on_missing=True)
+F('tester_2', chromiumos().ChromiumOSFactory(
+    slave_type='NASTester',
+    tests=['browser_tests',
+           'interactive_ui',
+           'ui',
+           ],
+    factory_properties={'generate_gtest_json': True}))
 
 
 B('Linux ChromiumOS GTK',
