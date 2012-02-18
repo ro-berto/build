@@ -396,7 +396,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     def M(test, prefix, test_type, fp):
       return S(
           test, prefix, lambda test_name:
-          f.AddMemoryTest(test_name, test_type, fp))
+          f.AddMemoryTest(test_name, test_type, factory_properties=fp))
 
     # Valgrind tests:
     for test in tests[:]:
