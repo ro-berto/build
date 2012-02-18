@@ -556,7 +556,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'dom_checker_tests', cmd,
                      do_step_if=self.TestStepFilter)
 
-  def AddMemoryTest(self, test_name, tool_name, timeout=1200):
+  def AddMemoryTest(self, test_name, tool_name, timeout=1200,
+      factory_properties=None):
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     build_dir = os.path.join(self._build_dir, self._target)
     if self._target_platform == 'darwin':  # Mac bins reside in src/xcodebuild
@@ -568,17 +569,15 @@ class ChromiumCommands(commands.FactoryCommands):
     elif self._target_platform == 'win32':  # Windows binaries are in src/build
       build_dir = os.path.join(os.path.dirname(self._build_dir), 'build',
                                self._target)
-
-    cmd = [self._python, self._test_tool, '--run-shell-script',
-           '--target', self._target, '--build-dir', self._build_dir]
+    wrapper_args = []
     do_step_if = self.TestStepFilter
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
       test_name = test_name[0:matched.start()]
       shard = int(matched.group(1))
       numshards = int(matched.group(2))
-      cmd.extend(['--shard-index', str(shard),
-                  '--total-shards', str(numshards)])
+      wrapper_args.extend(['--shard-index', str(shard),
+          '--total-shards', str(numshards)])
     elif test_name.endswith('_gtest_filter_required'):
       test_name = test_name[0:-len('_gtest_filter_required')]
       do_step_if = self.TestStepFilterGTestFilterRequired
@@ -588,11 +587,13 @@ class ChromiumCommands(commands.FactoryCommands):
       runner = os.path.join('..', '..', '..', self._posix_memory_tests_runner)
     else:
       runner = os.path.join('..', '..', '..', self._win_memory_tests_runner)
-    cmd.extend([runner,
-                '--build_dir', build_dir,
-                '--test', test_name,
-                '--tool', tool_name,
-                WithProperties("%(gtest_filter)s")])
+    cmd = self.GetShellTestCommand(runner, arg_list=[
+        '--build_dir', build_dir,
+        '--test', test_name,
+        '--tool', tool_name,
+        WithProperties("%(gtest_filter)s")],
+        wrapper_args=wrapper_args,
+        factory_properties=factory_properties)
 
     test_name = 'memory test: %s' % test_name
     self.AddTestStep(gtest_command.GTestFullCommand, test_name, cmd,

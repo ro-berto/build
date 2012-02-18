@@ -244,6 +244,25 @@ class FactoryCommands(object):
       cmd.extend(arg_list)
     return cmd
 
+  def GetShellTestCommand(self, sh_script, arg_list=None, wrapper_args=None,
+      factory_properties=None):
+    """ As above, arg_list goes to the shell script, wrapper_args come
+        before the script so the test tool uses them.
+    """
+    cmd = [self._python,
+           self._test_tool,
+           '--run-shell-script',
+           '--target', self._target,
+           '--build-dir', self._build_dir]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    if wrapper_args is not None:
+      cmd.extend(wrapper_args)
+    cmd.append(sh_script)
+    if arg_list is not None:
+      cmd.extend(arg_list)
+    return cmd
+
   def AddBuildProperties(self, cmd=None):
     """Adds a WithProperties() call with build properties to cmd."""
     # pylint: disable=R0201

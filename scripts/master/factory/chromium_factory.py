@@ -393,26 +393,27 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         add_functor(test_name)
         return True
 
-    def M(test, prefix, test_type):
+    def M(test, prefix, test_type, fp):
       return S(
-          test, prefix, lambda test_name: f.AddMemoryTest(test_name, test_type))
+          test, prefix, lambda test_name:
+          f.AddMemoryTest(test_name, test_type, fp))
 
     # Valgrind tests:
     for test in tests[:]:
       # TODO(timurrrr): replace 'valgrind' with 'memcheck'
       #                 below and in master.chromium/master.cfg
-      if M(test, 'valgrind_', 'memcheck'):
+      if M(test, 'valgrind_', 'memcheck', fp):
         continue
-      if M(test, 'tsan_gcc_', 'tsan_gcc'):
+      if M(test, 'tsan_gcc_', 'tsan_gcc', fp):
         continue
       # Run TSan in two-stage RaceVerifier mode.
-      if M(test, 'tsan_rv_', 'tsan_rv'):
+      if M(test, 'tsan_rv_', 'tsan_rv', fp):
         continue
-      if M(test, 'tsan_', 'tsan'):
+      if M(test, 'tsan_', 'tsan', fp):
         continue
-      if M(test, 'drmemory_light_', 'drmemory_light'):
+      if M(test, 'drmemory_light_', 'drmemory_light', fp):
         continue
-      if M(test, 'drmemory_full_', 'drmemory_full'):
+      if M(test, 'drmemory_full_', 'drmemory_full', fp):
         continue
       if S(test, 'heapcheck_', f.AddHeapcheckTest):
         continue
