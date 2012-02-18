@@ -39,7 +39,7 @@ F('builder', chromiumos().ChromiumOSFactory(
              'crypto_unittests',
              'dbus_unittests',
              'gfx_unittests',
-             #'gpu_unittests',
+             'gpu_unittests',
              'googleurl_unittests',
              'interactive_ui_tests',
              'ipc_tests',
@@ -82,6 +82,7 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'dbus',
            'gfx',
            'googleurl',
+           'gpu',
            'ipc',
            'jingle',
            'media',
@@ -94,7 +95,7 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'unit',
            'views',
            ],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
 
 
 B('Linux ChromiumOS Tester (2)',
@@ -109,7 +110,7 @@ F('tester_2', chromiumos().ChromiumOSFactory(
            'interactive_ui',
            'ui',
            ],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
 
 
 B('Linux ChromiumOS GTK',
@@ -176,7 +177,7 @@ F('clang', chromiumos().ChromiumOSFactory(
     options=['--compiler=clang', 'aura_builder'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES': ('chromeos=1'
+            'GYP_DEFINES': ('chromeos=1 target_arch=ia32'
                             ' clang=1 clang_use_chrome_plugins=1'
                             ' fastbuild=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
@@ -201,6 +202,7 @@ F('dbg', chromiumos().ChromiumOSFactory(
              'crypto_unittests',
              'dbus',
              'gfx_unittests',
+             'gpu_unittests',
              'googleurl_unittests',
              'interactive_ui_tests',
              'ipc_tests',
@@ -209,6 +211,7 @@ F('dbg', chromiumos().ChromiumOSFactory(
              'net_unittests',
              'printing_unittests',
              #'remoting_unittests',
+             #'safe_browsing',
              'sync_unit_tests',
              'sql_unittests',
              'ui_tests',
@@ -236,6 +239,7 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
            'crypto',
            'gfx',
            'googleurl',
+           'gpu',
            'DISABLED_interactive_ui',
            'ipc',
            'jingle',
@@ -244,6 +248,7 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
            'printing',
            #'DISABLED_remoting',
            'DISABLED_sql',
+           #'DISABLED_safe_browsing',
            'DISABLED_sync',
            'DISABLED_ui'
            'unit',
