@@ -86,7 +86,7 @@ F('basic', chromiumos().ChromiumOSFactory(
         'archive_build': False,
         'extra_archive_paths': 'chrome/tools/build/chromeos',
         'gclient_env': {
-            'GYP_DEFINES': ('chromeos=1 target_arch=ia32'
+            'GYP_DEFINES': ('chromeos=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1')},
         'generate_gtest_json': True,
         'window_manager': False}))
@@ -156,7 +156,7 @@ F('clang', chromiumos().ChromiumOSFactory(
     options=['--compiler=clang', 'aura_builder'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES': ('chromeos=1 target_arch=ia32'
+            'GYP_DEFINES': ('chromeos=1'
                             ' clang=1 clang_use_chrome_plugins=1'
                             ' fastbuild=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
