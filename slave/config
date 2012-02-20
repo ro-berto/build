@@ -24,6 +24,7 @@ enable-auto-props = yes
 *.jpg = svn:mime-type=image/jpeg
 *.java = svn:eol-style=LF
 *.js = svn:eol-style=LF;svn:mime-type=text/javascript
+*.json = svn:eol-style=LF
 *.m = svn:eol-style=LF
 *.make = svn:eol-style=LF
 *.mm = svn:eol-style=LF
