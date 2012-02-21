@@ -127,7 +127,7 @@ F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='BuilderTester',
     tests=['gpu_tests'],
-    options='all.sln:chromium_gpu_debug_builder',
+    project='all.sln;chromium_gpu_debug_builder',
     factory_properties={'generate_gtest_json': True,
                         'start_crash_handler': True,
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
