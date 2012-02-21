@@ -1134,20 +1134,6 @@ the commit queue.
          result['builderName'] = self.getBuilderName()
  
 
-Add " (CQ)" to the author name in the console if the commit-queue was used.
-
---- buildbot/status/web/templates/console.html  (revision 113419)
-+++ buildbot/status/web/templates/console.html  (working copy)
-@@ -187,6 +187,7 @@
-     </td>
-     <td class='DevName {{ alt }}' width="1%">
-       {{ r.who|user }}
-+      {{ r.cq }}
-     </td>
-   
-   {% for c in categories %}
-
-
 Fix exception on a race condition with slave disconnecting during a build trigger.
 
 --- third_party/buildbot_8_4p1/buildbot/process/slavebuilder.py
