@@ -437,6 +437,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       tests = [
         'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
         'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscardSleep',
+        ('perf_endure.ChromeEndureGmailTest.'
+         'testGmailAlternateThreadlistConversation'),
+        'perf_endure.ChromeEndureGmailTest.testGmailAlternateTwoLabels',
+        'perf_endure.ChromeEndureGmailTest.testGmailExpandCollapseConversation',
       ]
       f.AddChromeEndureTest('chrome_endure_gmail_test', tests, fp)
     elif R('chrome_endure_docs_tests'):
