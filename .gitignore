@@ -21,9 +21,12 @@ twistd.pid
 /masters/master.chromium.chrome/google-chrome-rel-mac
 /masters/master.chromium.chrome/google-chrome-rel-win
 /masters/master.chromium.chrome/public_html
+/masters/master.chromium.chromiumos/Linux_ChromiumOS_Builder__dbg_
+/masters/master.chromium.chromiumos/Linux_ChromiumOS_Tests__dbg_
 /masters/master.chromium.chromiumos/chromium-dbg-linux-chromeos-clang
 /masters/master.chromium.chromiumos/chromium-rel-linux-chromeos
 /masters/master.chromium.chromiumos/chromium-rel-linux-chromeos-aura
+/masters/master.chromium.chromiumos/chromium-tot-chromeos-arm
 /masters/master.chromium.chromiumos/chromium-tot-chromeos-arm-generic
 /masters/master.chromium.chromiumos/chromium-tot-chromeos-aura
 /masters/master.chromium.chromiumos/chromium-tot-chromeos-tegra2
@@ -52,6 +55,7 @@ twistd.pid
 /masters/master.chromium.fyi/Chromium_Mac_10_6__vm_
 /masters/master.chromium.fyi/Chromium_Mac_10_6__vm__sharded_
 /masters/master.chromium.fyi/Chromium_Mac_10_7_Tests
+/masters/master.chromium.fyi/Chromium_Mac_10_7_Tests__vm_
 /masters/master.chromium.fyi/Chromium_Mac_Make
 /masters/master.chromium.fyi/Chromium_Mac_Skia
 /masters/master.chromium.fyi/Chromium_OS_ASAN_Tests__1_
@@ -128,6 +132,13 @@ twistd.pid
 /masters/master.chromium.gpu/GPU_Win7_Tests__dbg__2_
 /masters/master.chromium.gpu/GPU_Win7_x64_Tests__dbg__1_
 /masters/master.chromium.gpu/GPU_Win7_x64_Tests__dbg__2_
+/masters/master.chromium.gpu/Linux_Release__ATI_
+/masters/master.chromium.gpu/Linux_Release__Intel_
+/masters/master.chromium.gpu/Mac_Release__Intel_
+/masters/master.chromium.gpu/Win7_Release__ATI_
+/masters/master.chromium.gpu/Win7_Release__Intel_
+/masters/master.chromium.gpu/WinXP_Debug__NVIDIA_
+/masters/master.chromium.gpu/WinXP_Release__NVIDIA_
 /masters/master.chromium.gpu/gpu-linux-dbg
 /masters/master.chromium.gpu/gpu-linux-rel-x64
 /masters/master.chromium.gpu/gpu-mac-dbg
@@ -218,6 +229,8 @@ twistd.pid
 /masters/master.chromium.perf/chromium-rel-xp-perf-1
 /masters/master.chromium.perf/chromium-rel-xp-perf-2
 /masters/master.chromium.perf/chromium-rel-xp-perf-single
+/masters/master.chromium.perf/detect_bug1810.db
+/masters/master.chromium.perf/detect_bug1810.db-journal
 /masters/master.chromium.perf/public_html
 /masters/master.chromium.perf_av/chromium-rel-linux
 /masters/master.chromium.perf_av/chromium-rel-linux-builder
@@ -435,6 +448,7 @@ twistd.pid
 /masters/master.client.nacl.ports/linux-newlib-0
 /masters/master.client.nacl.ports/linux-newlib-1
 /masters/master.client.nacl.ports/linux-newlib-2
+/masters/master.client.nacl.ports/linux-pnacl_newlib-all
 /masters/master.client.nacl.ports/mac-glibc-0
 /masters/master.client.nacl.ports/mac-glibc-1
 /masters/master.client.nacl.ports/mac-glibc-2
@@ -447,6 +461,7 @@ twistd.pid
 /masters/master.client.nacl.ports/periodic-linux-newlib-0
 /masters/master.client.nacl.ports/periodic-linux-newlib-1
 /masters/master.client.nacl.ports/periodic-linux-newlib-2
+/masters/master.client.nacl.ports/periodic-linux-pnacl_newlib-all
 /masters/master.client.nacl.ports/periodic-mac-glibc-0
 /masters/master.client.nacl.ports/periodic-mac-glibc-1
 /masters/master.client.nacl.ports/periodic-mac-glibc-2
