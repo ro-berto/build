@@ -35,12 +35,14 @@ def Update(config, active_master, c):
   # Don't put spaces or 'funny characters' within the builder names, so that
   # we can safely use the builder name as part of a filepath.
   #
+  do_upload_results = active_master.is_production_host
 
   # Linux...
   defaults['category'] = 'linux'
   B('Skia_Linux_Fixed_Debug', 'f_skia_linux_fixed_debug',
       scheduler='skia_rel')
   F('f_skia_linux_fixed_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed skia_mesa=1'},
@@ -51,6 +53,7 @@ def Update(config, active_master, c):
   B('Skia_Linux_Fixed_NoDebug', 'f_skia_linux_fixed_nodebug',
       scheduler='skia_rel')
   F('f_skia_linux_fixed_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed skia_mesa=1'},
@@ -61,6 +64,7 @@ def Update(config, active_master, c):
   B('Skia_Linux_Float_Debug', 'f_skia_linux_float_debug',
       scheduler='skia_rel')
   F('f_skia_linux_float_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float skia_mesa=1'},
@@ -71,6 +75,7 @@ def Update(config, active_master, c):
   B('Skia_Linux_Float_NoDebug', 'f_skia_linux_float_nodebug',
       scheduler='skia_rel')
   F('f_skia_linux_float_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float skia_mesa=1'},
@@ -84,6 +89,7 @@ def Update(config, active_master, c):
   B('Skia_Android_Float_Debug', 'f_skia_android_float_debug',
       scheduler='skia_rel')
   F('f_skia_android_float_debug', android_factory.AndroidFactory(
+      do_upload_results=do_upload_results,
       other_subdirs=['android'],
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
       configuration='Debug',
@@ -93,6 +99,7 @@ def Update(config, active_master, c):
   B('Skia_Android_Float_NoDebug', 'f_skia_android_float_nodebug',
       scheduler='skia_rel')
   F('f_skia_android_float_nodebug', android_factory.AndroidFactory(
+      do_upload_results=do_upload_results,
       other_subdirs=['android'],
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
       configuration='Release',
@@ -105,6 +112,7 @@ def Update(config, active_master, c):
   B('Skia_Mac_Fixed_Debug', 'f_skia_mac_fixed_debug',
       scheduler='skia_rel')
   F('f_skia_mac_fixed_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed skia_mesa=1'},
@@ -115,6 +123,7 @@ def Update(config, active_master, c):
   B('Skia_Mac_Fixed_NoDebug', 'f_skia_mac_fixed_nodebug',
       scheduler='skia_rel')
   F('f_skia_mac_fixed_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed skia_mesa=1'},
@@ -125,6 +134,7 @@ def Update(config, active_master, c):
   B('Skia_Mac_Float_Debug', 'f_skia_mac_float_debug',
       scheduler='skia_rel')
   F('f_skia_mac_float_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float skia_mesa=1'},
@@ -135,6 +145,7 @@ def Update(config, active_master, c):
   B('Skia_Mac_Float_NoDebug', 'f_skia_mac_float_nodebug',
       scheduler='skia_rel')
   F('f_skia_mac_float_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float skia_mesa=1'},
@@ -148,6 +159,7 @@ def Update(config, active_master, c):
   B('Skia_MacMiniLion_Fixed_Debug', 'f_skia_MacMiniLion_fixed_debug',
       scheduler='skia_rel')
   F('f_skia_MacMiniLion_fixed_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed skia_mesa=1'},
@@ -158,6 +170,7 @@ def Update(config, active_master, c):
   B('Skia_MacMiniLion_Fixed_NoDebug', 'f_skia_MacMiniLion_fixed_nodebug',
       scheduler='skia_rel')
   F('f_skia_MacMiniLion_fixed_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed skia_mesa=1'},
@@ -168,6 +181,7 @@ def Update(config, active_master, c):
   B('Skia_MacMiniLion_Float_Debug', 'f_skia_MacMiniLion_float_debug',
       scheduler='skia_rel')
   F('f_skia_MacMiniLion_float_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float skia_mesa=1'},
@@ -178,6 +192,7 @@ def Update(config, active_master, c):
   B('Skia_MacMiniLion_Float_NoDebug', 'f_skia_MacMiniLion_float_nodebug',
       scheduler='skia_rel')
   F('f_skia_MacMiniLion_float_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float skia_mesa=1'},
@@ -191,6 +206,7 @@ def Update(config, active_master, c):
   B('Skia_Win32_Fixed_Debug', 'f_skia_win32_fixed_debug',
       scheduler='skia_rel')
   F('f_skia_win32_fixed_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
@@ -201,6 +217,7 @@ def Update(config, active_master, c):
   B('Skia_Win32_Fixed_NoDebug', 'f_skia_win32_fixed_nodebug',
       scheduler='skia_rel')
   F('f_skia_win32_fixed_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=fixed'},
@@ -211,6 +228,7 @@ def Update(config, active_master, c):
   B('Skia_Win32_Float_Debug', 'f_skia_win32_float_debug',
       scheduler='skia_rel')
   F('f_skia_win32_float_debug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
       configuration='Debug',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float'},
@@ -221,6 +239,7 @@ def Update(config, active_master, c):
   B('Skia_Win32_Float_NoDebug', 'f_skia_win32_float_nodebug',
       scheduler='skia_rel')
   F('f_skia_win32_float_nodebug', skia_factory.SkiaFactory(
+      do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
       configuration='Release',
       environment_variables={'GYP_DEFINES': 'skia_scalar=float'},

@@ -34,13 +34,15 @@ TARGET_PLATFORM_WIN32 = 'win32'
 class SkiaFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Skia master.cfg files."""
 
-  def __init__(self, build_subdir='trunk', other_subdirs=None,
+  def __init__(self, do_upload_results=False,
+               build_subdir='trunk', other_subdirs=None,
                target_platform=None, configuration='Debug',
                default_timeout=600,
                environment_variables=None, gm_image_subdir=None,
                perf_output_basedir=None, builder_name=None):
     """Instantiates a SkiaFactory as appropriate for this target_platform.
 
+    do_upload_results: whether we should upload bench/gm results
     build_subdir: subdirectory to check out and then build within
     other_subdirs: list of other subdirectories to also check out (or None)
     target_platform: a string such as TARGET_PLATFORM_LINUX
@@ -66,6 +68,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
         self, build_dir='', solutions=solutions,
         target_platform=target_platform)
 
+    self._do_upload_results = do_upload_results
     self._configuration = configuration
     self._factory = self.BaseFactory(factory_properties=None)
     self._gm_image_subdir = gm_image_subdir
@@ -165,15 +168,17 @@ class SkiaFactory(gclient_factory.GClientFactory):
           gm_output_dir, gm_output_dir, path_to_gm, gm_output_dir)
     self._skia_cmd_obj.AddRun(
         run_command=command, description='GenerateGMResults')
-    self._skia_cmd_obj.AddMergeIntoSvn(
-        source_dir_path=gm_output_dir,
-        dest_svn_url='%s/%s' % (
-            self._gm_actual_svn_baseurl, self._gm_image_subdir),
-        svn_username_file=self._autogen_svn_username_file,
-        svn_password_file=self._autogen_svn_password_file,
-        commit_message=WithProperties('UploadGMResults of r%%(%s:-)s on %s' % (
-            'revision', self._builder_name)),
-        description='UploadGMResults')
+    if self._do_upload_results:
+      self._skia_cmd_obj.AddMergeIntoSvn(
+          source_dir_path=gm_output_dir,
+          dest_svn_url='%s/%s' % (
+              self._gm_actual_svn_baseurl, self._gm_image_subdir),
+          svn_username_file=self._autogen_svn_username_file,
+          svn_password_file=self._autogen_svn_password_file,
+          commit_message=WithProperties(
+              'UploadGMResults of r%%(%s:-)s on %s' % (
+                  'revision', self._builder_name)),
+          description='UploadGMResults')
 
     # Run "bench", piping the output somewhere so we can graph
     # results over time.
@@ -223,7 +228,8 @@ class SkiaFactory(gclient_factory.GClientFactory):
           BENCH_GRAPH_X, BENCH_GRAPH_Y, graph_title, graph_filepath)
       self._skia_cmd_obj.AddRun(
           run_command=gen_command, description='GenerateBenchGraphs')
-      self._skia_cmd_obj.AddUploadToBucket(
-          source_filepath=graph_filepath, description='UploadBenchGraphs')
+      if self._do_upload_results:
+        self._skia_cmd_obj.AddUploadToBucket(
+            source_filepath=graph_filepath, description='UploadBenchGraphs')
 
     return self._factory
