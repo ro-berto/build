@@ -176,6 +176,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'http://src.chromium.org/svn/trunk/src/third_party/simplejson'),
        ('src/third_party/psutil',
         'http://src.chromium.org/svn/trunk/src/third_party/psutil'),
+       ('src/net/data/ssl/certificates',
+        'http://src.chromium.org/svn/trunk/src/net/data/ssl/certificates'),
        ('src/net/tools/testserver',
         'http://src.chromium.org/svn/trunk/src/net/tools/testserver'),
        ('src/third_party/pyftpdlib/src',
