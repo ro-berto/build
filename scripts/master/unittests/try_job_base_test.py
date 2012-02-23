@@ -22,6 +22,7 @@ class PaseOptionsTest(unittest.TestCase):
     return {
         'bot': {},
         'branch': None,
+        'clobber': False,
         'email': [],
         'issue': None,
         'name': 'Unnamed',
@@ -47,6 +48,23 @@ class PaseOptionsTest(unittest.TestCase):
       #   on a single line.
       'win': [try_job_base.DEFAULT_TESTS, 'foo'],
     }
+    self.assertEquals(
+        expected,
+        try_job_base.parse_options(values, self.VALID_KEYS, None))
+
+  def test_parse_options_clobber_true(self):
+    values = {'bot': ['win'], 'clobber': ['true']}
+    expected = self._get_default()
+    expected['bot'] = {'win': [try_job_base.DEFAULT_TESTS]}
+    expected['clobber'] = True
+    self.assertEquals(
+        expected,
+        try_job_base.parse_options(values, self.VALID_KEYS, None))
+
+  def test_parse_options_clobber_false(self):
+    values = {'bot': ['win'], 'clobber': ['false']}
+    expected = self._get_default()
+    expected['bot'] = {'win': [try_job_base.DEFAULT_TESTS]}
     self.assertEquals(
         expected,
         try_job_base.parse_options(values, self.VALID_KEYS, None))

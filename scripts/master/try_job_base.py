@@ -43,6 +43,18 @@ def try_int(options, key, default):
     options[key] = int(options[key])
 
 
+def try_bool(options, key, default):
+  """Expects a bool."""
+  flatten(options, key, default)
+  if options[key] != default:
+    if options[key].lower() in ('true', '1'):
+      options[key] = True
+    elif options[key].lower() in ('false', '0'):
+      options[key] = False
+    else:
+      raise ValueError('Expecting a bool, got non-bool', key, options[key])
+
+
 def comma_separated(options, key):
   """Splits comma separated strings into multiple values."""
   for i in options.setdefault(key, [])[:]:
@@ -168,6 +180,7 @@ def parse_options(options, builders, pools):
     flatten(options, 'branch', None)
     flatten(options, 'revision', None)
     flatten(options, 'reason', '%s: %s' % (options['user'], options['name']))
+    try_bool(options, 'clobber', False)
 
     flatten(options, 'project', pools.default_pool_name if pools else None)
     flatten(options, 'repository', None)
