@@ -13,6 +13,8 @@ from twisted.internet import defer
 from twisted.python import log
 from twisted.web import client
 
+from master.factory.commands import DEFAULT_TESTS
+
 
 def text_to_dict(text):
   """Converts a series of key=value lines in a string into a multi-value dict.
@@ -49,22 +51,99 @@ def comma_separated(options, key):
       options[key].extend(x for x in i.split(',') if x)
 
 
-def dict_comma(values):
+def dict_comma(values, valid_keys, default):
   """Splits comma separated strings with : to create a dict."""
   out = {}
   # See the unit test to understand all the supported formats. It's insane
   # for now.
   for value in values:
-    for item in value.split(','):
-      if ':' in item:
-        bot, test = item.split(':', 1)
-        out.setdefault(bot, []).extend(test.split(','))
-      else:
-        out.setdefault(item, [])
+    # Slowly process the line as a state machine.
+    # The inputs are:
+    #  A. The next symbol, a string and the one after.
+    #  B. The separator after: (',', ':', None).
+    #  C. The last processed bot name.
+    #  D. The last processed test name.
+    # There is 4 states:
+    #  1. Next item must be a bot: value='builder'. Next state can be 1 or 2.
+    #  2. Next item must be a test: value='builder:test' when the index is at
+    #     test. Next state can be 3 or 4.
+    #  3. Next item must be a test filter: builder:test:filter when the index is
+    #     at filter. Next state is 4.
+    #  4. Next item can be a bot or is a test: value='builder:test,not_sure' or
+    #     value='builder:test:filter,not_sure' when the index is at not_sure. It
+    #     depends on not_sure being in valid_keys or not. Next state is 2 or 4.
+    items = re.split(r'([\,\:])', value)
+    if not items or ((len(items) - 1) % 2) != 0:
+      raise BadJobfile('Failed to process value %s', value)
+
+    last_key = None  # A bot
+    last_value = None  # A test
+    state = 1  # The initial item is a last_key (bot).
+
+    while items:
+      # Eat two items at a time:
+      item = items.pop(0)
+      separator = items.pop(0) if items else None  # Technically, next_separator
+
+      # Refuse "foo,:bar"
+      if item in (',', ':') or separator not in (',', ':', None):
+        raise BadJobfile('Failed to process value %s', value)
+
+      if state == 1:
+        assert last_key is None
+        assert last_value is None
+        if item not in valid_keys:
+          raise BadJobfile('Failed to process value %s', value)
+        if separator == ':':
+          # Don't save it yet.
+          last_key = item
+          state = 2
+        else:
+          out.setdefault(item, set()).add(default)
+          state = 1
+
+      elif state == 2:
+        assert last_key is not None
+        assert last_value is None
+        if separator == ':':
+          last_value = item
+          state = 3
+        else:
+          out.setdefault(last_key, set()).add(item)
+          last_value = None
+          state = 4
+
+      elif state == 3:
+        assert last_key is not None
+        assert last_value is not None
+        if separator == ':':
+          raise BadJobfile('Failed to process value %s', value)
+        out.setdefault(last_key, set()).add('%s:%s' % (last_value, item))
+        last_value = None
+        state = 4
+
+      elif state == 4:
+        assert last_key is not None
+        assert last_value is None
+        if separator == ':':
+          if item not in valid_keys:
+            last_value = item
+            state = 3
+          else:
+            last_key = item
+            state = 2
+        else:
+          if item not in valid_keys:
+            # A value.
+            out.setdefault(last_key, set()).add(item)
+          else:
+            # A key.
+            out.setdefault(item, set()).add(default)
+
   return out
 
 
-def parse_options(options, pools):
+def parse_options(options, builders, pools):
   """Converts try job settings into a dict.
 
   The dict is received as dict(str, list(str)).
@@ -98,9 +177,10 @@ def parse_options(options, pools):
     try_int(options, 'issue', None)
 
     # Manages bot selection and test filtering. It is preferable to use
-    # multiple BOT=foo lines
-    # Create a dict out of it.
-    options['bot'] = dict_comma(options.get('bot', []))
+    # multiple bot=unit_tests:Gtest.Filter lines. DEFAULT_TESTS is a marker to
+    # specify that the default tests should be run for this builder.
+    options['bot'] = dict_comma(
+        options.get('bot', []), builders, DEFAULT_TESTS)
     if not options['bot'] and pools:
       options['bot'] = pools.Select(None, options['project'])
     if not options['bot']:
@@ -108,7 +188,10 @@ def parse_options(options, pools):
     comma_separated(options, 'testfilter')
     if options['testfilter']:
       for k in options['bot']:
-        options['bot'][k].extend(options['testfilter'])
+        options['bot'][k].update(options['testfilter'])
+    # Convert the set back to list.
+    for bot in options['bot']:
+      options['bot'][bot] = list(options['bot'][bot])
 
     log.msg(
         'Chose %s for job %s' %
@@ -140,12 +223,17 @@ class TryJobBase(TryBase):
     self.last_good_urls = last_good_urls
     self.code_review_sites = code_review_sites
     self._last_lkgr = None
+    self.valid_builders = []
+
+  def setServiceParent(self, parent):
+    TryBase.setServiceParent(self, parent)
+    self.valid_builders = self.master.botmaster.builders.keys()
 
   def gotChange(self, change, important):  # pylint: disable=R0201
     log.msg('ERROR: gotChange was unexpectedly called.')
 
   def parse_options(self, options):
-    return parse_options(options, self.pools)
+    return parse_options(options, self.valid_builders, self.pools)
 
   def get_props(self, builder, options):
     """Current job extra properties that are not related to the source stamp.

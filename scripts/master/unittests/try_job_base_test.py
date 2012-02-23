@@ -13,6 +13,10 @@ from master import try_job_base
 
 
 class PaseOptionsTest(unittest.TestCase):
+  def setUp(self):
+    self.DEFAULT = 'DEFAULT'
+    self.VALID_KEYS = ['linux', 'linux_chromeos',  'mac', 'win']
+
   @staticmethod
   def _get_default():
     return {
@@ -34,42 +38,153 @@ class PaseOptionsTest(unittest.TestCase):
     }
 
   def test_parse_options_defaults(self):
+    values = {'bot': ['win', 'win:foo']}
     expected = self._get_default()
-    expected.update({'bot': {'bot1': []}})
+    expected['bot'] = {
+      # It is important to note:
+      # - The set is converted into a list.
+      # - try_job_base.DEFAULT_TESTS was added because the builder was speficied
+      #   on a single line.
+      'win': [try_job_base.DEFAULT_TESTS, 'foo'],
+    }
     self.assertEquals(
         expected,
-        try_job_base.parse_options({'bot': ['bot1']}, None))
+        try_job_base.parse_options(values, self.VALID_KEYS, None))
 
-  def test_dict_comma1(self):
+  def test_dict_comma_not_key(self):
+    try:
+      try_job_base.dict_comma(['foo'], self.VALID_KEYS, self.DEFAULT)
+      self.fail()
+    except try_job_base.BadJobfile:
+      pass
+
+  def test_dict_comma_trailing_comma(self):
+    try:
+      try_job_base.dict_comma(['win,'], self.VALID_KEYS, self.DEFAULT)
+      self.fail()
+    except try_job_base.BadJobfile:
+      pass
+
+  def test_dict_comma_state_1(self):
+    values = ['win']
+    expected = {'win': set([self.DEFAULT])}
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_1(self):
+    values = ['win,linux']
+    expected = {
+        'linux': set([self.DEFAULT]),
+        'win': set([self.DEFAULT]),
+    }
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_1_bad(self):
+    try:
+      try_job_base.dict_comma(['win,bar'], self.VALID_KEYS, self.DEFAULT)
+      self.fail()
+    except try_job_base.BadJobfile:
+      pass
+
+  def test_dict_comma_state_1_2(self):
+    values = ['win:foo']
+    expected = {'win': set(['foo'])}
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_2_3(self):
+    values = ['win:foo:bar']
+    expected = {'win': set(['foo:bar'])}
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_2_3_bad(self):
+    try:
+      try_job_base.dict_comma(
+          ['win:foo:bar:baz'], self.VALID_KEYS, self.DEFAULT)
+      self.fail()
+    except try_job_base.BadJobfile:
+      pass
+
+  def test_dict_comma_state_1_2_3_4_key(self):
+    values = ['win:foo:bar,linux']
+    expected = {
+      'linux': set([self.DEFAULT]),
+      'win': set(['foo:bar']),
+    }
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_2_3_4_value(self):
+    values = ['win:foo:bar,baz']
+    expected = {
+      'win': set(['foo:bar', 'baz']),
+    }
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_2_3_4_3(self):
+    values = ['win:test1:-filter1.*,test2:*.filter2']
+    expected = {
+      'win': set(['test1:-filter1.*', 'test2:*.filter2']),
+    }
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_state_1_2_4_3(self):
+    values = ['win:test1,test2:*.filter2']
+    expected = {
+      'win': set(['test1', 'test2:*.filter2']),
+    }
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+
+  def test_dict_comma_merge(self):
     values = [
       # The currently supported formats are a bit messy while we transition
       # to something sane.
-      'bot1:test1,bot2',
-      'bot1:test2:foo.*',
-      'bot3,bot4',
+      'linux:test1,linux_chromeos',
+      'linux:test2:foo.*',
+      'mac,win',
+      'mac,win',
     ]
     expected = {
-      'bot1': ['test1', 'test2:foo.*'],
-      'bot2': [],
-      'bot3': [],
-      'bot4': [],
+      'linux': set(['test1', 'test2:foo.*']),
+      'linux_chromeos': set([self.DEFAULT]),
+      'mac': set([self.DEFAULT]),
+      'win': set([self.DEFAULT]),
     }
-    self.assertEquals(expected, try_job_base.dict_comma(values))
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
 
-  def test_dict_comma2(self):
+  def test_dict_comma_life_like(self):
     values = [
-      ('linux_chromeos,win_rel,linux_chromeos_aura:compile,linux_view,'
-       'mac_rel,linux_rel'),
+      # Many builders on one line, with one including a test.:
+      'win,linux_chromeos:aura_unittests:Foo.*Bar,another_test:-*.*,linux',
+      # Specify multiple tests on one line:
+      'mac:base_unittests,unit_tests',
+      # Append a test to self.DEFAULT:
+      'linux:slow_test_disabled_by_default',
     ]
     expected = {
-      'linux_chromeos': [],
-      'linux_chromeos_aura': ['compile'],
-      'linux_rel': [],
-      'linux_view': [],
-      'mac_rel': [],
-      'win_rel': [],
+      'linux': set([self.DEFAULT, 'slow_test_disabled_by_default']),
+      'linux_chromeos': set(['aura_unittests:Foo.*Bar', 'another_test:-*.*']),
+      'mac': set(['base_unittests', 'unit_tests']),
+      'win': set([self.DEFAULT]),
     }
-    self.assertEquals(expected, try_job_base.dict_comma(values))
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
 
   def testParseText(self):
     text = (

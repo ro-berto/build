@@ -28,6 +28,12 @@ from master.optional_arguments import ListProperties
 import config
 
 
+# DEFAULT_TESTS is a marker to specify that the default tests should be run for
+# this builder. It's mainly used for try job; this is implicit for non-try
+# builders that all steps are run.
+DEFAULT_TESTS = 'defaulttests'
+
+
 # Performance step utils.
 def CreatePerformanceStepClass(
     log_processor_class, report_link=None, output_dir=None,
@@ -350,16 +356,20 @@ class FactoryCommands(object):
       return default
 
     filters = bStep.build.getProperties().getProperty('testfilter')
-    if not filters and not default:
-      return default
+    # DEFAULT_TESTS is a marker to specify all tests should be run normally.
+    # Add it if no filter is explicitly specified.
+    filters = filters or [DEFAULT_TESTS]
 
     name = bStep.name
     # TODO(maruel): Fix the step name.
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
-    if name not in filters and (filters or not default):
-      return False
+    # The test is not specified, DEFAULT_TESTS is not specified and the step is
+    # not run by default, then return default, which is False/None by
+    # definition.
+    if name not in filters and DEFAULT_TESTS not in filters and not default:
+      return default
 
     # This is gtest specific, but other test types can safely ignore it.
     # Defaults to excluding FAILS and FLAKY test if none is specified.
