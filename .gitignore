@@ -711,6 +711,8 @@ twistd.pid
 /masters/master.devtools/Webkit_Linux_64
 /masters/master.devtools/public_html
 /masters/master.tryserver.chromium/android
+/masters/master.tryserver.chromium/android_test
+/masters/master.tryserver.chromium/cros_amd64
 /masters/master.tryserver.chromium/cros_arm
 /masters/master.tryserver.chromium/cros_aura
 /masters/master.tryserver.chromium/cros_tegra2
@@ -722,12 +724,14 @@ twistd.pid
 /masters/master.tryserver.chromium/linux_chromeos_arm
 /masters/master.tryserver.chromium/linux_chromeos_aura
 /masters/master.tryserver.chromium/linux_chromeos_clang
+/masters/master.tryserver.chromium/linux_chromeos_gtk
 /masters/master.tryserver.chromium/linux_chromeos_valgrind
 /masters/master.tryserver.chromium/linux_clang
 /masters/master.tryserver.chromium/linux_clang_goma
 /masters/master.tryserver.chromium/linux_clang_no_goma
 /masters/master.tryserver.chromium/linux_coverage
 /masters/master.tryserver.chromium/linux_gpu
+/masters/master.tryserver.chromium/linux_heapcheck
 /masters/master.tryserver.chromium/linux_layout
 /masters/master.tryserver.chromium/linux_layout_rel
 /masters/master.tryserver.chromium/linux_redux
