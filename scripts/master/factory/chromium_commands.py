@@ -427,7 +427,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = ['--gtest_filter=FrameRate*Test*', '--enable-gpu']
     cmd = self.GetTestCommand('performance_ui_tests', options,
-                              factory_properties=factory_properties)
+                              factory_properties=factory_properties,
+                              test_tool_arg_list=['--no-xvfb'])
     self.AddTestStep(c, 'gpu_frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -437,7 +438,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=LatencyTest*', '--enable-gpu']
-    cmd = self.GetTestCommand('performance_browser_tests', options)
+    cmd = self.GetTestCommand('performance_browser_tests', options,
+                              test_tool_arg_list=['--no-xvfb'])
     self.AddTestStep(c, 'gpu_latency_tests', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -447,7 +449,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=ThroughputTest*', '--enable-gpu']
-    cmd = self.GetTestCommand('performance_browser_tests', options)
+    cmd = self.GetTestCommand('performance_browser_tests', options,
+                              test_tool_arg_list=['--no-xvfb'])
     self.AddTestStep(c, 'gpu_throughput_tests', cmd,
                      do_step_if=self.TestStepFilter)
 
