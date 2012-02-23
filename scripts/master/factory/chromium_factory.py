@@ -186,8 +186,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'http://src.chromium.org/svn/trunk/tools/third_party/python_26'),
        ('src/chrome/test/data/media/avperf',
         'http://src.chromium.org/svn/trunk/deps/avperf'),
-       ('src/chrome/test/tools/reference_build/',
-        'http://src.chromium.org/svn/trunk/deps/reference_builds'),
        ('webdriver.DEPS',
         'http://src.chromium.org/svn/trunk/src/chrome/test/pyautolib/' +
             'webdriver.DEPS'),
@@ -768,8 +766,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self._solutions = []
     # When syncing on a branch, don't sync these components on a branch.
     avoid_branch_sync_component = ['python_26', 'chrome_plugin_tests',
-                                   'pyauto_private', 'avperf',
-                                   'reference_builds',]
+                                   'pyauto_private', 'avperf',]
     # Sync only what we need (e.g. PyAuto test files).
     for name, url in self.PYAUTO_DEPS:
       # If branch is available, replace 'trunk' to 'branches/<BRANCH>'
