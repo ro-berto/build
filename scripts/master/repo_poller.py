@@ -45,7 +45,7 @@ class RepoPoller(PollingChangeSource):
   collisions, ordering falls back to alphabetical ordering by repository name.
   """
 
-  def __init__(self, repo_url, repo_branch=None, workdir=None,
+  def __init__(self, repo_url, repo_branches=None, workdir=None,
                pollInterval=5*60, repo_bin='repo', git_bin='git',
                category='', project='', revlinktmpl=None,
                encoding='utf-8', from_addr=None, to_addrs=None,
@@ -55,7 +55,7 @@ class RepoPoller(PollingChangeSource):
       log.msg('RepoPoller: using new working dir %s' % workdir)
 
     self.repo_url = repo_url
-    self.repo_branch = repo_branch
+    self.repo_branches = repo_branches or ['master']
     self.workdir = workdir
     self.pollInterval = pollInterval
     self.repo_bin = repo_bin
@@ -96,44 +96,59 @@ class RepoPoller(PollingChangeSource):
     d.addErrback(_failure)
 
   def RunRepoCmd(self, args):
-    log.msg('RepoPoller: running "%s %s"' % (self.repo_bin, ' '.join(args)))
-    d = utils.getProcessOutputAndValue(self.repo_bin, args,
-                                       env=dict(PATH=os.environ['PATH']),
-                                       path=self.workdir)
+    return self.RunCmd(self.repo_bin, args, self.workdir)
+
+  def RunCmd(self, binary, args, path):
+    log.msg('RepoPoller: running "%s %s"' % (binary, ' '.join(args)))
+    d = utils.getProcessOutputAndValue(binary, args, path=path,
+                                       env=dict(PATH=os.environ['PATH']))
     def _check_status(result):
       (stdout, stderr, status) = result
       if status != 0:
         raise RuntimeError(('failure #%d: "%s" failed with exit code %d:\n'
                             '%s\n%s') % (
             self.errCount+1,
-            repr([self.repo_bin] + args),
+            repr([binary] + args),
             status, stdout, stderr))
       return (stdout, stderr, status)
     d.addCallback(_check_status)
     return d
 
-  def DoLog(self, *args):
+  @classmethod
+  def TagFor(cls, branch_name):
+    return 'repo_poller_' + branch_name
+
+  def DoLog(self, unused_result, branch_tag):
     return self.RunRepoCmd(['forall', '-p', '-c', self.git_bin, 'log',
-                            '--format=%H', 'repo_poller..'])
+                            '--format=%H', branch_tag + '..'])
 
-  def DoSync(self, *args):
+  def DoCheckoutRepoBranch(self, current_repo_branch):
+    # can't rely on "repo init" doing the right thing.
+    # See https://groups.google.com/a/google.com/d/topic/android-gerrit-team/3xQWb15T-xw/discussion
+    #init = waitForDeferred(self.RunRepoCmd(['init', '-b',
+    #                                        current_repo_branch]))
+    init = self.RunCmd(
+        self.git_bin, ['checkout', 'origin/' + current_repo_branch],
+        path=os.path.join(self.workdir, '.repo/manifests/'))
+
     # TODO(szager): I pulled the number 4 out of thin air.  Better heuristic?
-    return self.RunRepoCmd(['sync', '-j', '4'])
+    init.addCallback(lambda *unused: self.RunRepoCmd(['sync', '-j', '4', '-l']))
+    return init
 
-  def DoTag(self, *args):
+  def DoTag(self, unused_result, branch_tag):
     if self.changeCount == 0:
       return defer.succeed(0)
     self.changeCount = 0
     return self.RunRepoCmd(['forall', '-c', self.git_bin, 'tag', '-a', '-f',
-                            'repo_poller', '-m', '"repo poller sync"'])
+                            branch_tag, '-m', '"repo poller sync"'])
 
   @deferredLocked('initLock')
   def initRepository(self):
     if not os.path.exists(self.workdir):
       os.makedirs(self.workdir)
     repo_args = ['init', '-u', '/'.join([self.repo_url, 'manifest'])]
-    if self.repo_branch:
-      repo_args.extend(['-b', self.repo_branch])
+    if self.repo_branches:
+      repo_args.extend(['-b', self.repo_branches[0]])  # any branch will do
     d = self.RunRepoCmd(repo_args)
     def _success(*args):
       log.msg('RepoPoller: finished initializing.')
@@ -142,57 +157,53 @@ class RepoPoller(PollingChangeSource):
 
   @deferredLocked('initLock')
   def initHistory(self, *args):
-    log.msg('RepoPoller: initializing revision history')
-    d = self.DoSync()
-    def _getBranches(*args):
-      return self.RunRepoCmd(['forall', '-p', '-c',
-                              self.git_bin, 'branch'])
-    d.addCallback(_getBranches)
-    def _logBranches(args):
-      (stdout, stderr, code) = args
-      for line in stdout.splitlines():
-        log.msg(line)
-      return (stdout, stderr, code)
-    d.addCallback(_logBranches)
-    def _log(*args):
-      return self.RunRepoCmd(['forall', '-p', '-c',
-                              self.git_bin, 'log', '--format=%H'])
-    d.addCallback(_log)
-    d.addCallback(self.ProcessInitialHistory)
-    def _setChangeCount(*args):
-      self.changeCount = 1  # To force DoTag.
-    d.addCallback(_setChangeCount)
-    d.addCallback(self.DoTag)
+    d = self.RunRepoCmd(['sync', '-j', '10', '-n'])
+    for repo_branch in self.repo_branches:
+      log.msg('RepoPoller: initializing revision history for branch '
+              + repo_branch)
+      d.addCallback(lambda x, b=repo_branch: self.DoCheckoutRepoBranch(b))
+      def _log(*args):
+        return self.RunRepoCmd(['forall', '-p', '-c',
+                                self.git_bin, 'log', '--format=%H'])
+      d.addCallback(_log)
+      d.addCallback(self.ProcessInitialHistory)
+      def _setChangeCount(*args):
+        self.changeCount = 1  # To force DoTag.
+      d.addCallback(_setChangeCount)
+      d.addCallback(self.DoTag, RepoPoller.TagFor(repo_branch))
     return d
 
   @deferredLocked('initLock')
   def poll(self):
-    log.msg('RepoPoller: polling...')
-    d = self.DoSync()
-    d.addCallback(self.DoLog)
-    d.addCallback(self.ProcessChanges)
-    d.addCallback(self.DoTag)
-    def _success(*args):
-      log.msg('RepoPoller: finished polling.')
-      self.errCount = 0
-    def _failure(failure):
-      msg = ('RepoPoller is having problems...\n\n'
-             'host: %s\n'
-             'repo checkout: %s\n'
-             'repo url: %s\n'
-             'repo branch: %s\n\n'
-             '%s') % (socket.gethostname(), self.workdir, self.repo_url,
-                     self.repo_branch, failure)
-      log.err(msg)
-      self.errCount += 1
-      if self.errCount % 3 == 0 and self.smtp_host and self.to_addrs:
-        smtp.sendmail(smtphost=self.smtp_host,
-                      from_addr=self.from_addr,
-                      to_addrs=self.to_addrs,
-                      msg=msg)
-      return failure
-    d.addCallback(_success)
-    d.addErrback(_failure)
+    d = self.RunRepoCmd(['sync', '-j', '10', '-n'])
+    for repo_branch in self.repo_branches:
+      log.msg('RepoPoller: polling new changes for branch %s...'
+              % repo_branch)
+      d.addCallback(lambda x, b=repo_branch: self.DoCheckoutRepoBranch(b))
+      d.addCallback(self.DoLog, RepoPoller.TagFor(repo_branch))
+      d.addCallback(self.ProcessChanges, repo_branch)
+      d.addCallback(self.DoTag, RepoPoller.TagFor(repo_branch))
+      def _success(*args):
+        log.msg('RepoPoller: finished polling.')
+        self.errCount = 0
+      def _failure(failure):
+        msg = ('RepoPoller is having problems...\n\n'
+               'host: %s\n'
+               'repo checkout: %s\n'
+               'repo url: %s\n'
+               'repo branch: %s\n\n'
+               '%s') % (socket.gethostname(), self.workdir, self.repo_url,
+                       repo_branch, failure)
+        log.err(msg)
+        self.errCount += 1
+        if self.errCount % 3 == 0 and self.smtp_host and self.to_addrs:
+          smtp.sendmail(smtphost=self.smtp_host,
+                        from_addr=self.from_addr,
+                        to_addrs=self.to_addrs,
+                        msg=msg)
+        return failure
+      d.addCallback(_success)
+      d.addErrback(_failure)
     return d
 
   def GetCommitComments(self, project, rev):
@@ -268,7 +279,7 @@ class RepoPoller(PollingChangeSource):
     self.ParseRepoGitLogs(stdout)
 
   @defer.deferredGenerator
-  def ProcessChanges(self, args):
+  def ProcessChanges(self, args, current_repo_branch):
     (stdout, stderr, status) = args
     if status:
       log.msg('RepoPoller: running `git log` '
@@ -316,7 +327,9 @@ class RepoPoller(PollingChangeSource):
             category=self.category,
             project=self.project,
             repository='/'.join([self.repo_url, project]),
-            revlink=revlink)
+            revlink=revlink,
+            properties={'manifest_url': self.repo_url,
+                        'manifest_branch': current_repo_branch})
         wfd = defer.waitForDeferred(d)
         yield wfd
         results = wfd.getResult()
