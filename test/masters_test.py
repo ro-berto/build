@@ -141,7 +141,7 @@ def main():
       'master.chromium.flaky': 'Chromium Flaky',
       'master.chromium.fyi': 'Chromium FYI',
       'master.chromium.git': 'Chromium Git',
-      'master.chromium.gpu': 'Chromium GPU',
+      'master.chromium.gpu.fyi': 'Chromium GPU FYI',
       'master.chromium.lkgr': 'Chromium LKGR',
       'master.chromium.memory': None,
       'master.chromium.memory.fyi': 'Chromium Memory FYI',

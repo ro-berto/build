@@ -145,8 +145,8 @@ class Master(object):
     slave_port = 9116
     master_port_alt = 9216
 
-  class ChromiumGPU(_ChromiumBase):
-    project_name = 'Chromium GPU'
+  class ChromiumGPUFYI(_ChromiumBase):
+    project_name = 'Chromium GPU FYI'
     master_port = 9059
     slave_port = 9160
     master_port_alt = 9061
