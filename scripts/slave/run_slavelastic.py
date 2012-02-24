@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
@@ -122,7 +122,9 @@ class Manifest():
     }
     # Parse manifest file
     self.config = ConfigParser.RawConfigParser()
-    self.config.read(filename)
+    if not self.config.read(filename):
+      raise ManifestParsingError('Failed to read in file %s' %
+                                 filename)
     if not self.config.has_section(current_platform):
       raise ManifestParsingError('Section %s not found in %s' %
           (current_platform, filename))
@@ -170,12 +172,11 @@ class Manifest():
     """Zip up all the files in self.files"""
     start_time = time.time()
     if self.current_platform == 'Linux':
+      # TODO(csharp): use zipfile here.
       zip_args = ['zip', '-r', '-1', self.zipfile_name]
       zip_args.extend(self.files)
-      p = subprocess.Popen(zip_args)
-      p.wait()
-      p = subprocess.Popen(['chmod', '755', self.zipfile_name])
-      p.wait()
+      subprocess.check_call(zip_args)
+      os.chmod(self.zipfile_name, 0755)
     elif self.current_platform == 'Windows':
       dest_zip = zipfile.ZipFile(self.zipfile_name, 'w')
       for filename in self.files:
@@ -208,27 +209,47 @@ class Manifest():
     # require python 2.6
     # pylint: disable=E1103
     filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
-    startvxfb_filepath = os.path.relpath('startvx_fb.zip', '../..').replace(
+    runvxfb_filepath = os.path.relpath('run_xvfb.zip', '../..').replace(
         '\\', '/')
 
-    # Gclient sync
-    self.add_task('Gclient Sync', ['gclient', 'sync'])
-
     # Linux specific stuff
+    slavename = os.path.basename(os.path.abspath('..'))
     if self.current_platform == 'Linux':
+      # Zip up the scripts to run xvfb.
+      old_cwd = os.getcwd()
+      os.chdir('../../../scripts/slave')
+
+      try:
+        zip_file = zipfile.ZipFile('run_xvfb.zip', 'w')
+        zip_file.write('xvfb.py')
+        zip_file.write('test_x_server.py')
+        zip_file.close()
+
+        os.chmod('run_xvfb.zip', 0755)
+        os.rename('run_xvfb.zip', old_cwd + 'run_xvfb.zip')
+      finally:
+        os.chdir(old_cwd)
+
       # Chmod the executables, since zip don't preserve permissions
       self.add_task('Change permissions', ['chmod', '+x'] + self.files)
-      self.add_task('Start X Server and Frame Buffer', ['python',
-          'start_vxfb.py', os.path.basename(os.path.abspath('..')), '.'])
+      self.add_task('Start X Server and Frame Buffer',
+                    [sys.executable, 'test_x_server.py', '--start',
+                     '--build-dir', '.', slavename])
 
     if self.current_platform == 'Windows':
       self.add_task('Run Test',
-          ['python', '..\\b\\build\\scripts\\slave\\runtest.py', '--target',
+          [sys.executable,
+           '..\\b\\build\\scripts\\slave\\runtest.py', '--target',
            self.switches.target, '--build-dir', 'src/build',
            os.path.split(self.files[0])[1]])
     elif self.current_platform == 'Linux' or self.current_platform == 'Mac':
       # Run the tests.  We assume the first file is the executable.
       self.add_task('Run Test', [self.files[0]])
+
+    # Linux specific stuff
+    if self.current_platform == 'Linux':
+      self.add_task('Stop X Server and Frame Buffer',
+                    [sys.executable, 'test_x_server.py', '--stop', slavename])
 
     # Clean up
     if self.current_platform == 'Linux' or self.current_platform == 'Mac':
@@ -240,14 +261,13 @@ class Manifest():
     # Call kill_processes.py if on windows
     if self.current_platform == 'Windows':
       self.add_task('Kill Processes',
-          ['python', '..\\b\\build\\scripts\\slave\\kill_processes.py'])
+          [sys.executable, '..\\b\\build\\scripts\\slave\\kill_processes.py'])
 
     # Construct test case
     test_case = {
       'test_case_name': self.name,
       'data': [
         'http://%s/%s' % (hostname, filepath),
-        'http://%s/%s' % (hostname, startvxfb_filepath)
       ],
       'tests': self.tasks,
       'env_vars': {
@@ -266,8 +286,8 @@ class Manifest():
           'max_instances': self.switches.num_shards,
           'config_name': self.switches.os_image,
           'dimensions': {
-            'image': self.switches.os_image
-          }
+            'os': self.switches.os_image,
+          },
         },
       ],
       'result_url': 'http://%s:%d/result' % (hostname,
@@ -277,8 +297,12 @@ class Manifest():
         'size': self.switches.block_size,
       },
       'working_dir': self.switches.working_dir,
-      'cleanup': 'data'
+      'cleanup': 'data',
     }
+
+    # Linux specific data
+    if self.current_platform == 'Linux':
+      test_case['data'].append('http://%s/%s' % (hostname, runvxfb_filepath))
 
     return json.dumps(test_case)
 
@@ -350,29 +374,31 @@ def main():
   # Parses arguments
   parser = optparse.OptionParser(usage='%prog [options] [filename]',
                                  description=DESCRIPTION)
-  parser.add_option('-w', '--working_dir', dest='working_dir',
-                    default='/swarm_tests', help='Desired working direction on '
-                    'the swarm slave side.  Defaults to /swarm_tests or '
-                    'C:\swarm_tests.')
-  parser.add_option('-m', '--min_shards', dest='min_shards', type='int',
-                    default=1, help='Minimum number of shards to request.  '
-                    'CURRENTLY NOT SUPPORTED.')
-  parser.add_option('-s', '--num_shards', dest='num_shards', type='int',
-                    default=1, help='Desired number of shards to request.  '
-                    'Must be greater than or equal to min_shards.')
-  parser.add_option('-o', '--os_image', dest='os_image', help='Swarm OS image '
-                    'to request.  Defaults to the current platform.')
+  parser.add_option('-w', '--working_dir', default='/swarm_tests',
+                    help='Desired working direction on the swarm slave side. '
+                    'Defaults to %default.')
+  parser.add_option('-m', '--min_shards', type='int', default=1,
+                    help='Minimum number of shards to request. CURRENTLY NOT '
+                    'SUPPORTED.')
+  parser.add_option('-s', '--num_shards', type='int', default=1,
+                    help='Desired number of shards to request. Must be '
+                    'greater than or equal to min_shards.')
+  parser.add_option('-o', '--os_image',
+                    help='Swarm OS image to request.  Defaults to the '
+                    'current platform.')
   parser.add_option('-t', '--target', dest='target', default='Release',
-                    help='Compiled target, defaults to Release')
-  parser.add_option('-n', '--hostname', dest='hostname', default='localhost',
+                    help='Compiled target, defaults to %default')
+  parser.add_option('-n', '--hostname', default='localhost',
                     help='Specify the hostname of the Swarm server. '
-                    'Defaults to Localhost')
-  parser.add_option('-p', '--port', dest='port', type='int', default=8080,
+                    'Defaults to %default')
+  parser.add_option('-p', '--port', type='int', default=8080,
                     help='Specify the port of the Swarm server. '
-                    'Defaults to 8080')
-  parser.add_option('-b', '--block_size', dest='block_size', type='int',
-                    default=64, help='Specify the desired size of a stdout '
-                    'block.  Defaults to 64 bytes.')
+                    'Defaults to %default')
+  parser.add_option('-b', '--block_size', type='int', default=64,
+                    help='Specify the desired size of a stdout block. '
+                    'Defaults to %default bytes.')
+  parser.add_option('-v', '--verbose', action='store_true',
+                    help='Print verbose logging')
   (options, args) = parser.parse_args()
   if not args:
     args.append('-')
@@ -410,14 +436,23 @@ def main():
 
   # Call post_test.py
   print "Calling post test..."
-  p = subprocess.Popen(['python', '../../../scripts/tools/swarm/post_test.py',
+
+  if options.verbose:
+    process_stdout = sys.stdout
+    process_stderr = sys.stderr
+  else:
+    process_stdout = subprocess.PIPE
+    process_stderr = subprocess.PIPE
+
+  # TODO(csharp): Find a better way to store and call swarm.
+  p = subprocess.Popen([sys.executable,
+                        '../../../scripts/tools/swarm/post_test.py',
                         '-n', options.hostname, '-p', str(options.port), '-v'],
-                        stdin=subprocess.PIPE, stdout=sys.stdout,
-                        stderr=sys.stderr)
+                       stdin=subprocess.PIPE, stdout=process_stdout,
+                       stderr=process_stderr)
   manifest_text = manifest.to_json()
   print 'Sending manifest: %s' % manifest_text
-  p.stdin.write(manifest_text)
-  p.stdin.close()
+  p.communicate(manifest_text)
   exit_code = p.wait()
   start_time = time.time()
 
