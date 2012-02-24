@@ -16,13 +16,11 @@ except ImportError:
   raise
 
 from buildbot.status import mail
-from buildbot.status.builder import SUCCESS, WARNINGS, SKIPPED
+from buildbot.status.builder import SUCCESS, WARNINGS
 from twisted.internet import defer
 from twisted.python import log
 
 from master import build_utils
-# TODO(maruel): Remove me.
-from master.try_job_stamp import TryJobStamp
 
 
 class TryMailNotifier(mail.MailNotifier):
@@ -33,26 +31,16 @@ class TryMailNotifier(mail.MailNotifier):
   def buildMessage(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
     log.msg('Building try job email')
-    try:
-      # 0.7.x
-      projectName = self.master_status.getProjectName()
-    except AttributeError:
-      # 0.8.x
-      projectName = self.master_status.getTitle()
+    projectName = self.master_status.getTitle()
 
-    if isinstance(build, list):
-      # buildbot 0.8.4p1
-      build = build[0]
+    if len(build) != 1:
+      # TODO(maruel): Panic or process them all.
+      pass
+    build = build[0]
     job_stamp = build.getSourceStamp()
     build_url = self.master_status.getURLForThing(build)
     waterfall_url = self.master_status.getBuildbotURL()
-    # TODO(maruel): TryJobStamp is being deleted.
-    if (isinstance(job_stamp, TryJobStamp) and
-        (results == SKIPPED or job_stamp.canceled)):
-      status_text_html = ("Incomplete try due to another try being submitted "
-                          "with same name.")
-      res = "incomplete"
-    elif results == SUCCESS:
+    if results == SUCCESS:
       status_text_html = "You are awesome! Try succeeded!"
       res = "success"
     elif results == WARNINGS:
