@@ -235,7 +235,9 @@ class FactoryCommands(object):
     cmd = [self._python, self._test_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
-    if executable in ('performance_ui_tests', 'sync_performance_tests'):
+    if executable in ('performance_ui_tests',
+                      'performance_browser_tests',
+                      'sync_performance_tests'):
       cmd = self.AddBuildProperties(cmd)
       cmd = self.AddFactoryProperties(factory_properties, cmd)
 
