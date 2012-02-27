@@ -360,6 +360,9 @@ class FactoryCommands(object):
   def TestStepFilterImpl(self, bStep, default):
     """Examines the 'testfilter' property of the build and determines if
     the step should run; True for yes."""
+    # TODO(maruel): This is bad hygiene to modify the build properties on the
+    # fly like this. There should be another way to communicate the command line
+    # properly.
     bStep.setProperty('gtest_filter', None, "Factory")
     if 'testfilter' not in bStep.build.getProperties():
       # Not a try job.
@@ -375,11 +378,11 @@ class FactoryCommands(object):
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
-    # The test is not specified, DEFAULT_TESTS is not specified and the step is
-    # not run by default, then return default, which is False/None by
-    # definition.
-    if name not in filters and DEFAULT_TESTS not in filters and not default:
-      return default
+    # Continue if:
+    # - the test is specified in filters
+    # - DEFAULT_TESTS is listed and default is True
+    if not (name in filters or (DEFAULT_TESTS in filters and default)):
+      return False
 
     # This is gtest specific, but other test types can safely ignore it.
     # Defaults to excluding FAILS and FLAKY test if none is specified.
