@@ -50,11 +50,35 @@ class RepoPoller(PollingChangeSource):
                category='', project='', revlinktmpl=None,
                encoding='utf-8', from_addr=None, to_addrs=None,
                smtp_host=None):
+    """
+    Arguments:
+      repo_url: Location of the repo manifest repository.
+      repo_branches: List of branches in the manifest repository to poll.
+                     Must be a list, even if only one branch is being polled.
+      workdir: Directory where the repo checkout will reside.
+      pollInterval: Time, in seconds, between polling operations.
+      repo_bin: Name of or path to the repo executable.
+      git_bin: Name of or path to the git executable.
+      category: Optional string to store in the 'category' field of buildbot
+                Change instances.
+      project: Optional string to store in the 'project' field of buildbot
+                Change instances.
+      revlinktmpl: String template for code review URL's associated with code
+                   changes.  The template is expanded with two parameters: the
+                   repo project name and the git revision.
+      encoding: String encoding to use when processing git command output.
+      from_addr: 'from' address for nag emails sent when poller is misbehaving.
+      to_addrs: A string or list of email adresses to which nag emails will be
+                sent.
+      smtp_host: The SMTP host to use for sending nag emails.
+                 Defaults to localhost.
+    """
     if not workdir:
       workdir = tempfile.mkdtemp(prefix='repo_poller')
       log.msg('RepoPoller: using new working dir %s' % workdir)
 
     self.repo_url = repo_url
+    assert not repo_branches or issubclass(type(repo_branches), list)
     self.repo_branches = repo_branches or ['master']
     self.workdir = workdir
     self.pollInterval = pollInterval
