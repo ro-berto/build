@@ -26,4 +26,9 @@ deps_os = {
     "symsrc":
       "/trunk/src/tools/symsrc",
   }
+
+  "unix": {
+    "build/third_party/cbuildbot_chromite":
+      "https://git.chromium.org/chromiumos/chromite.git",
+  }
 }

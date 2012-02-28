@@ -2,39 +2,54 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import os
 import shutil
 
+from buildbot.process.properties import Properties
+from buildbot.schedulers.trysched import TryBase
 from twisted.internet import defer, utils
 from twisted.python import log
 
-import master.cros_builder_mapping as builder_mapping
-from master.try_job_base import BadJobfile, TryJobBase, text_to_dict
+from master.try_job_base import BadJobfile
 
 
 def validate_job(parsed_job):
-  if not parsed_job.get('gerrit_patches'):
-    if not parsed_job['issue']:
-      raise BadJobfile('No patches specified!')
-  elif parsed_job['issue']:
-    raise BadJobfile('Both issue and gerrit_patches specified!')
+  # A dictionary containing required fields and their type.
+  required = {'name' : basestring,
+              'user' : basestring,
+              'email' : list,
+              'gerrit_patches' : list,
+              'bot' : list}
 
-  if not parsed_job.get('bot'):
-    raise BadJobfile('No configs specified!')
-  else:
-    for bot in parsed_job['bot']:
-      if not builder_mapping.CONFIG_NAME_DICT.get(bot):
-        raise BadJobfile('Invalid config %s specified' % bot)
+  wrong = [
+      field for field, f_type in required.iteritems()
+      if not isinstance(parsed_job.get(field), f_type)
+  ]
+
+  if wrong:
+    raise BadJobfile('Option(s) %s missing or of wrong type!'
+                     % ','.join(wrong))
 
 
-class CrOSTryJobGit(TryJobBase):
+class CrOSTryJobGit(TryBase):
   """Poll a Git server to grab patches to try."""
-  def __init__(self, name, pools, poller, properties=None):
-    TryJobBase.__init__(self, name, pools, properties, None, None)
+
+  _PROPERTY_SOURCE = 'Try Job'
+
+  def __init__(self, name, poller, properties=None):
+    """Initialize the class.
+
+    Arguments:
+      name: See TryBase.__init__().
+      poller: The git poller that is watching the job repo.
+      properties: See TryBase.__init__()
+    """
+    TryBase.__init__(self, name, [], properties or {})
     self.watcher = poller
 
   def startService(self):
-    TryJobBase.startService(self)
+    TryBase.startService(self)
     self.startConsumingChanges()
 
   def stopService(self):
@@ -42,15 +57,15 @@ class CrOSTryJobGit(TryJobBase):
       if os.path.isdir(self.watcher.workdir):
         shutil.rmtree(self.watcher.workdir)
 
-    d = TryJobBase.stopService(self)
+    d = TryBase.stopService(self)
     d.addCallback(rm_temp_dir)
     d.addErrback(log.err)
     return d
 
   def get_props(self, bot, options):
     """Overriding base class method."""
-    props = TryJobBase.get_props(self, bot, options)
-    props.setProperty('gerrit_patches', ','.join(options['gerrit_patches']),
+    props = Properties()
+    props.setProperty('gerrit_patches', ' '.join(options['gerrit_patches']),
                       self._PROPERTY_SOURCE)
     props.setProperty('chromeos_config', bot, self._PROPERTY_SOURCE)
     return props
@@ -63,8 +78,9 @@ class CrOSTryJobGit(TryJobBase):
       result = self.addBuildsetForSourceStamp(ssid=ssid,
           reason=parsed_job['name'],
           external_idstring=parsed_job['name'],
-          builderNames=[builder_mapping.CONFIG_NAME_DICT[bot]],
+          builderNames=[bot],
           properties=self.get_props(bot, parsed_job))
+
     return result
 
   def get_file_contents(self, file_path):
@@ -86,8 +102,14 @@ class CrOSTryJobGit(TryJobBase):
 
     wfd = defer.waitForDeferred(self.get_file_contents(change.files[0]))
     yield wfd
-    parsed = self.parse_options(text_to_dict(wfd.getResult()))
-    # ChromeOS trybots pull the patch directly from Gerrit.
-    parsed['patch'] = ''
+    parsed = json.loads(wfd.getResult())
     validate_job(parsed)
-    self.SubmitJob(parsed, [change.number])
+
+    d = self.master.db.sourcestamps.addSourceStamp(
+        branch=change.branch,
+        revision=change.revision,
+        project=change.project,
+        repository=change.repository,
+        changeids=[change.number])
+    d.addCallback(self.create_buildset, parsed)
+    d.addErrback(log.err, "Failed to queue a try job!")

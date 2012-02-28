@@ -886,3 +886,35 @@ def SafeTranslate(inputstr):
   if isinstance(inputstr, unicode):
     inputstr = inputstr.encode('utf8')
   return inputstr.translate(badchars_map)
+
+
+def GetCBuildbotConfigs(chromite_path=None):
+  """Get the cbuildbot configs from cbuildbot_config.py.
+
+  Arguments:
+    chromite_path: The path to the chromite/ directory.
+
+  Returns:
+    A dictionary containing the configs indexed by config name.
+  """
+  try:
+    if chromite_path is None:
+      # Chromite is in the DEPS file, and pulled down as part of 'gclient sync'.
+      import cbuildbot_chromite as chromite  # pylint: disable=F0401
+      chromite_path = os.path.dirname(os.path.abspath(chromite.__file__))
+
+    chromite_path = os.path.abspath(chromite_path)
+    config_path = os.path.join(chromite_path, 'buildbot', 'cbuildbot_config.py')
+    proc = subprocess.Popen([config_path, '--dump'], stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE, close_fds=True,
+                            cwd=os.path.dirname(config_path))
+    output, error = proc.communicate()
+    if proc.returncode != 0:
+      raise ExternalError('%s failed with error %s\n' % (config_path, error))
+
+    return json.loads(output)
+  except ImportError:
+    # To get around CQ pylint failures, because CQ doesn't check out chromite.
+    # TODO(maruel): Remove this try block when this issue is resolved.
+    print 'cbuildbot_chromite not found!  Returning empty config dictionary.'
+    return {}

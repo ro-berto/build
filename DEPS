@@ -14,3 +14,10 @@ deps = {
   "depot_tools":
     "/trunk/tools/depot_tools",
 }
+
+deps_os = {
+  "unix": {
+    "build/third_party/cbuildbot_chromite":
+      "https://git.chromium.org/chromiumos/chromite.git",
+  },
+}
