@@ -71,6 +71,8 @@ twistd.pid
 /masters/master.chromium.fyi/Linux_Try__r815_
 /masters/master.chromium.fyi/Linux_Try__r815__2_
 /masters/master.chromium.fyi/Linux__dbg__shared_
+/masters/master.chromium.fyi/Mac_ASAN_Tests__1_
+/masters/master.chromium.fyi/Mac_ASAN_Tests__2_
 /masters/master.chromium.fyi/Mac_Aura
 /masters/master.chromium.fyi/Vista_Tests__dbg__1_
 /masters/master.chromium.fyi/Vista_Tests__dbg__2_
