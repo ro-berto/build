@@ -248,7 +248,7 @@ class Master(object):
     master_port = 8040
     slave_port = 8140
     # Enable when there's a public waterfall.
-    #master_port_alt = 8240
+    master_port_alt = 8240
 
   ## Native Client related
 
