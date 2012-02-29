@@ -75,19 +75,20 @@ class CrOSTryJobGit(TryBase):
     log.msg('Creating try job(s) %s' % ssid)
     result = None
     for bot in parsed_job['bot']:
+      buildset_name = '%s:%s' % (parsed_job['user'], parsed_job['name'])
       result = self.addBuildsetForSourceStamp(ssid=ssid,
-          reason=parsed_job['name'],
-          external_idstring=parsed_job['name'],
+          reason=buildset_name,
+          external_idstring=buildset_name,
           builderNames=[bot],
           properties=self.get_props(bot, parsed_job))
 
     return result
 
-  def get_file_contents(self, file_path):
+  def get_file_contents(self, branch, file_path):
     """Returns a Deferred to returns the file's content."""
     return utils.getProcessOutput(
         self.watcher.gitbin,
-        ['show', 'FETCH_HEAD:%s' % file_path],
+        ['show', 'origin/%s:%s' % (branch, file_path)],
         path=self.watcher.workdir,
         )
 
@@ -100,11 +101,13 @@ class CrOSTryJobGit(TryBase):
       raise BadJobfile(
           'Try job with too many files %s' % (','.join(change.files)))
 
-    wfd = defer.waitForDeferred(self.get_file_contents(change.files[0]))
+    wfd = defer.waitForDeferred(self.get_file_contents(change.branch,
+                                                       change.files[0]))
     yield wfd
     parsed = json.loads(wfd.getResult())
     validate_job(parsed)
 
+    # The sourcestamp/buildsets created will be merge-able.
     d = self.master.db.sourcestamps.addSourceStamp(
         branch=change.branch,
         revision=change.revision,
