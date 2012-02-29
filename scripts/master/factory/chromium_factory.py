@@ -275,6 +275,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 'gpu_unittests', fp,
                                 arg_list=['--gmock_verbose=error'])
     if R('jingle'):         f.AddBasicGTestTestStep('jingle_unittests', fp)
+    if R('content'):        f.AddBasicGTestTestStep('content_unittests', fp)
     if R('media'):          f.AddBasicGTestTestStep('media_unittests', fp)
     if R('net'):            f.AddBasicGTestTestStep('net_unittests', fp)
     if R('plugin'):         f.AddBasicGTestTestStep('plugin_tests', fp)
