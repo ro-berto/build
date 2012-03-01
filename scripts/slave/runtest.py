@@ -234,7 +234,13 @@ def main_mac(options, args):
       http_server = start_http_server('mac', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
-    result = _RunGTestCommand(command, results_tracker)
+    if options.factory_properties.get('asan', False):
+      symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
+                                               'scripts', 'asan_symbolize.py'))
+      pipes = [[sys.executable, symbolize], ['c++filt']]
+      result = _RunGTestCommand(command, pipes=pipes)
+    else:
+      result = _RunGTestCommand(command, results_tracker)
   finally:
     if http_server:
       http_server.StopServer()
@@ -531,9 +537,11 @@ def main():
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
 
-  # Instruct GTK to use malloc while running ASAN tests.
   if options.factory_properties.get('asan', False):
+    # Instruct GTK to use malloc while running ASAN tests.
     os.environ['G_SLICE'] = 'always-malloc'
+    # Disable ASLR on Mac when running ASAN tests.
+    os.environ['DYLD_NO_PIE'] = '1'
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
