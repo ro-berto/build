@@ -194,14 +194,11 @@ class Manifest():
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
 
   def cleanup(self):
-    if self.current_platform == 'Linux' or self.current_platform == 'Mac':
-      remove_command = ['rm', '-rf']
-    elif self.current_platform == 'Windows':
-      remove_command = ['del']
-    else:
-      raise Exception('Unknown OS: %s' % os.name)  # Unreachable
-    p = subprocess.Popen(remove_command + ['swarm_tempfile_*.zip'], shell=True)
-    p.wait()
+    os.remove(self.zipfile_name)
+
+    if self.current_platform == 'Linux':
+      os.remove('run_xvfb.zip')
+
 
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
@@ -226,7 +223,7 @@ class Manifest():
         zip_file.close()
 
         os.chmod('run_xvfb.zip', 0755)
-        os.rename('run_xvfb.zip', old_cwd + 'run_xvfb.zip')
+        os.rename('run_xvfb.zip', os.path.join(old_cwd, 'run_xvfb.zip'))
       finally:
         os.chdir(old_cwd)
 
@@ -256,7 +253,9 @@ class Manifest():
       cleanup_commands = ['rm', '-rf']
     elif self.current_platform == 'Windows':
       cleanup_commands = ['del']
-    self.add_task('Clean Up', cleanup_commands + ['swarm_tempfile*.zip'])
+    self.add_task('Clean Up',
+                  cleanup_commands +
+                  [self.zipfile_name, 'run_xvfb.zip', 'src/'])
 
     # Call kill_processes.py if on windows
     if self.current_platform == 'Windows':
