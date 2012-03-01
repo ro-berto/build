@@ -143,7 +143,7 @@
               // Disable waterfall links to this page.
               var waterfall_links = document.getElementsByName('menu1');
               for (var i = 0; i < waterfall_links.length; i++) {
-                if (waterfall_links[i].id == data.project.projectName) {
+                if (waterfall_links[i].id == data.project.title) {
                   waterfall_links[i].href = null;
                   waterfall_links[i].style.color = 'gray';
                 }
@@ -153,15 +153,15 @@
               var tree_status_link = document.getElementById('tree_status_link');
               var source_link = document.getElementById('source_link');
               var www_link = document.getElementById('www_link');
-              if (data.project.projectName == 'NativeClientPorts') {
+              if (data.project.title == 'NativeClientPorts') {
                 tree_status_link.href = 'https://naclports-status.appspot.com/';
                 source_link.href = 'http://code.google.com/p/naclports/source/browse/#svn/trunk';
                 www_link.href = 'http://code.google.com/p/naclports';
-              } else if (data.project.projectName == 'NativeClientSDK') {
+              } else if (data.project.title == 'NativeClientSDK') {
                 tree_status_link.href = 'https://naclsdk-status.appspot.com/';
                 source_link.href = 'http://code.google.com/p/nativeclient-sdk/source/browse/#svn/trunk';
                 www_link.href = 'http://code.google.com/p/nativeclient-sdk';
-              } else if (data.project.projectName == 'NativeClientPPAPI') {
+              } else if (data.project.title == 'NativeClientPPAPI') {
                 tree_status_link.href = 'https://nativeclient-status.appspot.com/';
                 source_link.href = 'http://src.chromium.org/viewvc/chrome/trunk/src/ppapi/';
                 www_link.href = 'http://code.google.com/p/nativeclient';
