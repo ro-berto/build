@@ -464,10 +464,6 @@ def common_make_settings(
       asan_bin = os.path.join(asan_dir, 'asan_clang_Linux', 'bin')
       clang = os.path.join(asan_bin, 'clang')
       clangpp = os.path.join(asan_bin, 'clang++')
-      if chromium_utils.IsMac():
-        # Disallow dyld to randomize the load address of executables.
-        # Some of them are compiled with ASan and will hang otherwise.
-        env['DYLD_NO_PIE'] = '1'
       env['ASAN'] = asan_dir
       env['ASAN_BIN'] = asan_bin
       env['CC'] = clang
@@ -494,6 +490,11 @@ def common_make_settings(
       # For now only build chrome, as other things will break.
       command.append('chrome')
       return
+
+  if chromium_utils.IsMac() and compiler == 'asan':
+    # Disallow dyld to randomize the load address of executables.
+    # Some of them are compiled with ASan and will hang otherwise.
+    env['DYLD_NO_PIE'] = '1'
 
   if compiler in ('goma', 'goma-clang'):
     print 'using', compiler
