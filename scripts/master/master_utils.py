@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -292,8 +292,14 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   c['logHorizon'] = 500
   # Must be at least 2x the number of slaves.
   c['eventHorizon'] = 200
-  # Must be at least 1x the number of builds listed in console.
-  c['buildCacheSize'] = 60
+  # Tune cache sizes to speed up web UI.
+  c['caches'] = {
+    'BuildRequests': 1000,
+    'Changes': 1000,
+    'SourceStamps': 1000,
+    'chdicts': 1000,
+    'ssdicts': 1000,
+  }
 
   # See http://buildbot.net/buildbot/docs/0.8.1/Debug-Options.html for more
   # details.
