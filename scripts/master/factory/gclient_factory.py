@@ -273,6 +273,8 @@ class GClientFactory(object):
             'parent_got_revision': WithProperties('%(got_revision:-)s'),
             'parent_got_webkit_revision':
                 WithProperties('%(got_webkit_revision:-)s'),
+            'parent_got_nacl_revision':
+                WithProperties('%(got_nacl_revision:-)s'),
             'parent_revision': WithProperties('%(revision:-)s'),
             'parent_scheduler': WithProperties('%(scheduler:-)s'),
             'parent_slavename': WithProperties('%(slavename:-)s'),

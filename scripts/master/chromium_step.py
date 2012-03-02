@@ -72,6 +72,13 @@ class GClient(source.Source):
         wk_revision = self.getProperty('parent_wk_revision')
     except KeyError:
       pass
+    nacl_revision = revision
+    try:
+      # parent_nacl_revision might be set, but empty.
+      if self.getProperty('parent_got_nacl_revision'):
+        nacl_revision = self.getProperty('parent_got_nacl_revision')
+    except KeyError:
+      pass
     try:
       # parent_cr_revision might be set, but empty.
       if self.getProperty('parent_cr_revision'):
@@ -83,6 +90,8 @@ class GClient(source.Source):
     if args.get('gclient_spec'):
       args['gclient_spec'] = args['gclient_spec'].replace(
           '$$WK_REV$$', str(wk_revision or ''))
+      args['gclient_spec'] = args['gclient_spec'].replace(
+          '$$NACL_REV$$', str(nacl_revision or ''))
     if patch:
       args['patch'] = patch
     elif args.get('patch') is None:
