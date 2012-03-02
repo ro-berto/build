@@ -18,4 +18,9 @@ if hasattr(os, "getuid") and os.getuid() != 0:
 
 from twisted.scripts.twistd import run
 
-run()
+prof = os.environ.get('TWISTD_PROFILE', None)
+if prof and prof != '0':
+  import cProfile
+  cProfile.run('run()', 'twistd.%d.prof' % os.getpid())
+else:
+  run()

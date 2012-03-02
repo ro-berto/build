@@ -79,6 +79,17 @@ else
 	launchctl start org.chromium.buildbot.$(MASTERPATH)
 endif
 
+ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
+start-prof: upgrade
+else
+start-prof:
+endif
+ifneq ($(USE_LAUNCHD),1)
+	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
+else
+	launchctl start org.chromium.buildbot.$(MASTERPATH)
+endif
+
 stop:
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
@@ -96,6 +107,8 @@ wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
 restart: stop wait start log
+
+restart-prof: stop wait start-prof log
 
 # This target is only known to work on 0.8.x masters.
 upgrade:
