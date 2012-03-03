@@ -889,13 +889,13 @@ def SafeTranslate(inputstr):
 
 
 def GetCBuildbotConfigs(chromite_path=None):
-  """Get the cbuildbot configs from cbuildbot_config.py.
+  """Get the sorted cbuildbot configs from cbuildbot_config.py.
 
   Arguments:
     chromite_path: The path to the chromite/ directory.
 
   Returns:
-    A dictionary containing the configs indexed by config name.
+    A list of config definition dictionaries sorted with left-most config first.
   """
   try:
     if chromite_path is None:
@@ -905,14 +905,16 @@ def GetCBuildbotConfigs(chromite_path=None):
 
     chromite_path = os.path.abspath(chromite_path)
     config_path = os.path.join(chromite_path, 'buildbot', 'cbuildbot_config.py')
-    proc = subprocess.Popen([config_path, '--dump'], stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, close_fds=True,
-                            cwd=os.path.dirname(config_path))
+    proc = subprocess.Popen([config_path, '--dump', '--for-buildbot'],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                            close_fds=True, cwd=os.path.dirname(config_path))
     output, error = proc.communicate()
     if proc.returncode != 0:
       raise ExternalError('%s failed with error %s\n' % (config_path, error))
 
-    return json.loads(output)
+    config_list = json.loads(output).values() # pylint: disable=E1103
+    config_list.sort(key=lambda cfg: cfg['display_position'])
+    return config_list
   except ImportError:
     # To get around CQ pylint failures, because CQ doesn't check out chromite.
     # TODO(maruel): Remove this try block when this issue is resolved.
