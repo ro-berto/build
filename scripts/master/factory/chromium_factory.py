@@ -429,6 +429,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 src_base='..',
                                 workdir=workdir,
                                 factory_properties=fp)
+    elif R('chrome_endure_control_tests'):
+      tests = [
+        'perf_endure.ChromeEndureControlTest.testControlAttachDetachDOMTree',
+      ]
+      f.AddChromeEndureTest('chrome_endure_control_test', tests, fp)
     elif R('chrome_endure_gmail_tests'):
       tests = [
         'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
