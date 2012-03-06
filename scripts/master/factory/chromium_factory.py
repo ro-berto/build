@@ -109,7 +109,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # The map key is the test name. The map value is an array containing the
   # dependencies that are not needed when this test is not run.
   NEEDED_COMPONENTS = {
-    '^(webkit|webkit_gpu)$':
+    '^(webkit)$':
       [('src/webkit/data/layout_tests/LayoutTests', None),
        ('src/third_party/WebKit/LayoutTests', None),],
   }
@@ -315,11 +315,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # WebKit-related tests:
     if R('webkit_unit'):    f.AddBasicGTestTestStep('webkit_unit_tests', fp)
     if R('webkit_lint'):    f.AddWebkitLint(factory_properties=fp)
-    if R('webkit'):         f.AddWebkitTests(gpu=False,
-                                             factory_properties=fp)
+    if R('webkit'):         f.AddWebkitTests(factory_properties=fp)
     if R('devtools_perf'):  f.AddDevToolsTests(factory_properties=fp)
-    if R('webkit_gpu'):     f.AddWebkitTests(gpu=True,
-                                             factory_properties=fp)
 
     # Benchmark tests:
     if R('page_cycler_moz'):

@@ -780,11 +780,10 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
-  def AddWebkitTests(self, gpu, factory_properties=None):
+  def AddWebkitTests(self, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
 
     Args:
-      gpu: if True, run the GPU-acclerated variant of the tests.
       with_pageheap: if True, page-heap checking will be enabled for test_shell
       test_timeout: buildbot timeout for the test step
       archive_timeout: buildbot timeout for archiving the test results and
@@ -803,18 +802,9 @@ class ChromiumCommands(commands.FactoryCommands):
     platform = factory_properties.get('layout_test_platform')
     enable_hardware_gpu = factory_properties.get('enable_hardware_gpu')
 
-    if gpu:
-      if platform:
-        platform = platform.replace('chromium', 'chromium-gpu')
-      else:
-        platform = 'chromium-gpu'
-      builder_name = '%(buildername)s - GPU'
-      result_str = 'gpu results'
-      test_name = 'webkit_gpu_tests'
-    else:
-      builder_name = '%(buildername)s'
-      result_str = 'results'
-      test_name = 'webkit_tests'
+    builder_name = '%(buildername)s'
+    result_str = 'results'
+    test_name = 'webkit_tests'
 
     pageheap_description = ''
     if with_pageheap:
