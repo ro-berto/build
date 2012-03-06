@@ -47,6 +47,12 @@ def FormatPercentage(ratio):
   return '%s%%' % FormatFloat(100 * ratio)
 
 
+def Divide(x, y):
+  if y == 0:
+    return float('inf')
+  return float(x) / y
+
+
 def FormatHumanReadable(number):
   """Formats a float into three significant figures, using metric suffixes.
 
@@ -270,21 +276,21 @@ class PerformanceLogProcessor(object):
         ('better' not in perfdata and regress > improve)):
       # The "lower is better" case.  (ie. time results)
       if actual < improve:
-        ratio = 1 - (float(actual) / improve)
+        ratio = 1 - Divide(actual, improve)
         self._perf_improve.append('%s (%s)' % (graph_result,
                                                FormatPercentage(ratio)))
       elif actual > regress:
-        ratio = (float(actual) / regress) - 1
+        ratio = Divide(actual, regress) - 1
         self._perf_regress.append('%s (%s)' % (graph_result,
                                                FormatPercentage(ratio)))
     else:
       # The "higher is better" case.  (ie. score results)
       if actual > improve:
-        ratio = (float(actual) / improve) - 1
+        ratio = Divide(actual, improve) - 1
         self._perf_improve.append('%s (%s)' % (graph_result,
                                                FormatPercentage(ratio)))
       elif actual < regress:
-        ratio = 1 - (float(actual) / regress)
+        ratio = 1 - Divide(actual, regress)
         self._perf_regress.append('%s (%s)' % (graph_result,
                                                FormatPercentage(ratio)))
 

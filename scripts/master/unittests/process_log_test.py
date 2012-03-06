@@ -411,6 +411,20 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     self.assertEqual(expected, step._result_text[0])
     self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
 
+  def testPerfExpectationsRegressZero(self):
+    step = self._TestPerfExpectations(
+        'perf_test_better_lower_regress_zero.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (inf%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsImproveZero(self):
+    step = self._TestPerfExpectations(
+        'perf_test_better_higher_improve_zero.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (inf%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
 
 if __name__ == '__main__':
   unittest.main()
