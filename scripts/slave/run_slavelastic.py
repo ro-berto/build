@@ -38,11 +38,6 @@ class ThreadedHTTPServer(SocketServer.ThreadingMixIn,
                          BaseHTTPServer.HTTPServer):
   pass
 
-
-class ParseManifestError(Exception):
-  """Raise when theres a parsing error with the manifest file."""
-  pass
-
 class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
   """Handler that is called to process incoming POST connections
   from swarm slaves.
@@ -80,14 +75,17 @@ class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     # Take care of 'result_url'
     if 'result' in self.path.split('/'):
-      shard.write('\nSwarm test completed, swarm results:\n')
-      data = data.replace('No output!', '')
       exit_codes = [int(code) if code else 0 for
           code in headers['x'].split(',')]
       code = max(exit_codes)
+
       # Need to write to shard before calling passed() or failed(), otherwise
       # a race condition is created and the output may not print.
-      shard.write(output)
+      if shard.verbose:
+        data = data.replace('No output!', '')
+        shard.write('\nSwarm test completed, swarm results:\n')
+        shard.write(output)
+
       if status == 'True':
         shard.passed()
       else:
@@ -99,10 +97,11 @@ class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 
 class ManifestParsingError(Exception):
+  """Raise when theres a parsing error with the manifest file."""
   pass
 
 
-class Manifest():
+class Manifest(object):
   def __init__(self, filename, switches):
     """Populates a manifest object.
       Args:
@@ -306,13 +305,13 @@ class Manifest():
     return json.dumps(test_case)
 
 
-class TestRunShard():
+class TestRunShard(object):
   """Instance of a shard running a test.  This object stores all output until it
   is ready to be printed out"""
   PENDING = 0
   PASSED = 1
   FAILED = 2
-  def __init__(self, manifest, index):
+  def __init__(self, manifest, index, verbose=False):
     self._buffer = cStringIO.StringIO()
     self._event = threading.Event()
     self._lock = threading.Lock()
@@ -324,6 +323,7 @@ class TestRunShard():
     self.end_time = None
     self.hostname = None
     self.index = index
+    self.verbose = verbose
 
   def get_hostname(self):
     while not self.hostname and self.status == TestRunShard.PENDING:
@@ -358,6 +358,52 @@ class TestRunShard():
     self.end_time = time.time()
     self.exit_code = 0
     self._event.set()
+
+
+def _get_first_number(line):
+  for part in line.split():
+    if part.isdigit():
+      return int(part)
+
+  print 'No number in :'
+  print line
+  return 0
+
+
+class TestSummary(object):
+  def __init__(self):
+    self.test_passed_count = 0
+    self.failed_tests = []
+    self.disabled_test_count  = 0
+    self.ignored_test_count = 0
+
+  def AddSummaryData(self, buf):
+    lines = buf.splitlines()
+
+    for line in lines:
+      if '[  PASSED  ]' in line:
+        self.test_passed_count += _get_first_number(line)
+      elif '[  FAILED  ]' in line:
+        if ', listed below' not in line:
+          self.failed_tests.append(line)
+      elif 'DISABLED' in line:
+        self.disabled_test_count += _get_first_number(line)
+      elif 'failures' in line:
+        self.ignored_test_count += _get_first_number(line)
+
+  def Output(self):
+    output = []
+
+    output.append('[  PASSED  ] %i tests.' % self.test_passed_count)
+    if self.failed_tests:
+      output.append('[  FAILED  ] failed tests listed below:')
+      output.extend(self.failed_tests)
+    output.append('%i FAILED TESTS' % len(self.failed_tests))
+    output.append('%i DISABLED TESTS' % self.disabled_test_count)
+    output.append('%i tests with ignored failures (FAILS prefix)' %
+                 self.ignored_test_count)
+
+    return output
 
 
 def main():
@@ -419,7 +465,7 @@ def main():
   print "Setting up listeners..."
   g_shards = []
   for shard_num in range(options.num_shards):
-    shard = TestRunShard(manifest, shard_num)
+    shard = TestRunShard(manifest, shard_num, options.verbose)
     g_shards.append(shard)
   server = ThreadedHTTPServer(('', 0), HttpHandler)
   server_done = threading.Event()
@@ -457,6 +503,7 @@ def main():
 
   # Listen to output_destination
   shard_times = []
+  summary_total = TestSummary()
   for shard in g_shards:
     print
     print '===================================================================='
@@ -464,10 +511,22 @@ def main():
                                                      shard.get_hostname())
     print '===================================================================='
     print
+    output_in_summary = False
     while True:
       buf = shard.read()
       if not buf:
         break
+
+      if output_in_summary:
+        summary_total.AddSummaryData(buf)
+        continue
+
+      summary_index = buf.rfind('[  PASSED  ]')
+      if summary_index >= 0:
+        output_in_summary = True
+        summary_total.AddSummaryData(buf[summary_index:])
+        buf = buf[:summary_index - 1]
+
       sys.stdout.write(buf)
     print
     print '===================================================================='
@@ -480,11 +539,16 @@ def main():
   # Exit with highest exit code
   server_done.set()
   manifest.cleanup()  # Delete temp zip file
-  print 'All tests completed, run times:'
-  for i in range(len(shard_times)):
-    print 'Shard index %d (%s): %3f s. (Exit code: %d)' % (i,
-        g_shards[i].hostname, shard_times[i], g_shards[i].exit_code)
-  print 'Total time: %f' % (time.time() - start_time)
+
+  print '\n'.join(summary_total.Output())
+  print
+
+  if options.verbose:
+    print 'All tests completed, run times:'
+    for i in range(len(shard_times)):
+      print 'Shard index %d (%s): %3f s. (Exit code: %d)' % (i,
+          g_shards[i].hostname, shard_times[i], g_shards[i].exit_code)
+      print 'Total time: %f' % (time.time() - start_time)
   return exit_code
 
 if __name__ == '__main__':
