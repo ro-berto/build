@@ -80,8 +80,14 @@ def dom_perf(options, args):
     test_exe_name = 'performance_ui_tests.exe'
   else:
     test_exe_name = 'performance_ui_tests'
+
   if chromium_utils.IsMac():
-    build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
+    is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
+        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+    if is_make_or_ninja:
+      build_dir = os.path.join(os.path.dirname(build_dir), 'out')
+    else:
+      build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
   elif chromium_utils.IsLinux():
     build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
     xvfb.StartVirtualX(options.target,
