@@ -197,27 +197,26 @@
             var closer = [
                 "builder=x86+generic+incremental",
                 "builder=tegra2+incremental",
-                "builder=amd64+corei7+incremental",
+                "builder=amd64+generic+incremental",
                 "builder=x86+generic+full",
                 "builder=arm+generic+full",
                 "builder=tegra2+full",
                 "builder=tegra2+seaboard+full",
                 "builder=x86+pineview+full",
                 "builder=amd64+generic+full",
-                "builder=amd64+corei7+full",
+                "builder=amd64+generic+full",
                 "builder=chromiumos+sdk",
                 "reload=30",
             ].join("&");
             var chrome = [
                 "builder=x86+generic+nightly+chrome+PFQ",
-                "builder=aura+nightly+chrome+PFQ",
                 "builder=tegra2+nightly+chrome+PFQ",
-                "builder=amd64+corei7+nightly+chrome+PFQ",
+                "builder=amd64+generic+nightly+chrome+PFQ",
                 "reload=30",
             ].join("&");
             var chromium_chromiumos = [
                 "builder=ChromiumOS+(x86)",
-                "builder=ChromiumOS+(aura)",
+                "builder=ChromiumOS+(amd64)",
                 "builder=ChromiumOS+(arm)",
                 "builder=ChromiumOS+(tegra2)",
                 "titles=on",
@@ -231,17 +230,16 @@
             ].join("&");
             var x86 = [
                 "builder=x86+generic+incremental",
-                "builder=amd64+corei7+incremental",
+                "builder=amd64+generic+incremental",
                 "builder=x86+generic+full",
                 "builder=x86+pineview+full",
                 "builder=amd64+generic+full",
-                "builder=amd64+corei7+full",
                 "reload=30",
             ].join("&");
             var commit_queue = [
                 "builder=x86+generic+paladin",
                 "builder=tegra2+paladin",
-                "builder=amd64+corei7+paladin",
+                "builder=amd64+generic+paladin",
             ].join("&");
 
             var bar = "http://build.chromium.org/p/chromiumos/horizontal_one_box_per_builder"
