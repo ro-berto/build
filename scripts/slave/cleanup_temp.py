@@ -103,13 +103,14 @@ def main_win():
   # Do not add the following cleanup in slaves_utils.py since we don't want to
   # clean them between each test, as the crash dumps may be processed by
   # 'process build' step.
-  crash_reports = os.path.join(
-      os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
-  if os.path.isdir(crash_reports):
-    for filename in os.listdir(crash_reports):
-      filepath = os.path.join(crash_reports, filename)
-      if os.path.isfile(filepath):
-        os.remove(filepath)
+  if 'LOCALAPPDATA' in os.environ:
+    crash_reports = os.path.join(
+        os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
+    if os.path.isdir(crash_reports):
+      for filename in os.listdir(crash_reports):
+        filepath = os.path.join(crash_reports, filename)
+        if os.path.isfile(filepath):
+          os.remove(filepath)
   return 0
 
 
