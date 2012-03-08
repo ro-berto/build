@@ -100,6 +100,15 @@ def main_win():
   if os.path.isdir('e:\\'):
     check_free_space_path('e:\\')
   check_free_space_path(os.path.dirname(os.path.abspath(__file__)))
+  # Do not add the following cleanup in slaves_utils.py since we don't want to
+  # clean them between each test, as the crash dumps may be processed by
+  # 'process build' step.
+  crash_reports = os.path.join(
+      os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
+  for filename in os.listdir(crash_reports):
+    filepath = os.path.join(crash_reports, filename)
+    if os.path.isfile(filepath):
+      os.remove(filepath)
   return 0
 
 
