@@ -105,10 +105,11 @@ def main_win():
   # 'process build' step.
   crash_reports = os.path.join(
       os.environ['LOCALAPPDATA'], 'Chromium', 'User Data', 'Crash Reports')
-  for filename in os.listdir(crash_reports):
-    filepath = os.path.join(crash_reports, filename)
-    if os.path.isfile(filepath):
-      os.remove(filepath)
+  if os.path.isdir(crash_reports):
+    for filename in os.listdir(crash_reports):
+      filepath = os.path.join(crash_reports, filename)
+      if os.path.isfile(filepath):
+        os.remove(filepath)
   return 0
 
 
