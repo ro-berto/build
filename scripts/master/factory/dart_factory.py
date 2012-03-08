@@ -31,12 +31,7 @@ class DartFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir, target_platform=None):
     solutions = []
     self.target_platform = target_platform
-    if target_platform in ['dart_client', 'dart-editor']:
-      deps_file = '/deps/all.deps'
-    elif target_platform == 'dartc-linux':
-      deps_file = '/deps/compiler.deps'
-    else:
-      deps_file = '/deps/standalone.deps'
+    deps_file = '/deps/all.deps'
     main = gclient_factory.GClientSolution(
         config.Master.dart_url + deps_file,
         needed_components=self.NEEDED_COMPONENTS)
