@@ -38,8 +38,8 @@ class DartCommands(commands.FactoryCommands):
                                             'slave', 'dart')
 
     self._dart_util = self.PathJoin(self._slave_dir, 'dart_util.py')
-    self._vm_build_dir = self.PathJoin('build', 'runtime')
-    self._dartc_build_dir = self.PathJoin('build', 'compiler')
+    self._vm_build_dir = self.PathJoin('build', 'dart', 'runtime')
+    self._dartc_build_dir = self.PathJoin('build', 'dart' 'compiler')
     self._repository_root = ''
     self._target_platform = target_platform
 
