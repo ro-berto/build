@@ -375,8 +375,11 @@ class GTestCommand(shell.ShellCommand):
   def TestAbbrFromTestID(self, testid):
     """Split the test's individual name from GTest's full identifier.
     The name is assumed to be everything after the final '.', if any.
+    The name-cleansing logic from:
+      buildbot.status.build.BuildStatus.generateLogfileName()
+    ... is pre-applied here to remove any URL-defeating '/' characters.
     """
-    return testid.split('.')[-1]
+    return re.sub(r'[^\w\.\-]', '_', testid.split('.')[-1])
 
   def createSummary(self, log):
     observer = self.test_observer
@@ -395,9 +398,11 @@ class GTestCommand(shell.ShellCommand):
 class GTestFullCommand(GTestCommand):
   def TestAbbrFromTestID(self, testid):
     """
-    Return the full TestCase.TestName ID.
+    Return the full TestCase.TestName ID, with the name-cleansing logic from:
+      buildbot.status.build.BuildStatus.generateLogfileName()
+    ... pre-applied here to remove any URL-defeating '/' characters.
     """
-    return testid
+    return re.sub(r'[^\w\.\-]', '_', testid)
 
 
 def Main():
