@@ -24,9 +24,10 @@ class DartCommands(commands.FactoryCommands):
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
 
-    # One additional directory up compared to normal chromium scripts due
-    # to using runtime or dartc as runtime dir inside build.
-    self._script_dir = self.PathJoin('..', self._script_dir)
+    # Two additional directories up compared to normal chromium scripts due
+    # to using runtime or dartc as runtime dir inside dart directory
+    # inside build directory.
+    self._script_dir = self.PathJoin('..', '..', self._script_dir)
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
