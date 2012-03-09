@@ -134,6 +134,7 @@ class CbuildbotFactory(object):
 
     if self.trybot:
       cmd.append(WithProperties("--gerrit-patches=%(gerrit_patches)s"))
+      cmd.append('--remote-trybot')
     else:
       cmd += ['--buildbot']
 
