@@ -70,8 +70,7 @@ F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
 #
 S('s9_webkit_dbg', branch='trunk', treeStableTimer=60)
 
-B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', auto_reboot=True,
-  scheduler='s9_webkit_dbg')
+B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', scheduler='s9_webkit_dbg')
 F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=['gpu_tests'],
