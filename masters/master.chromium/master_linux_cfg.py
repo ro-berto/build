@@ -111,6 +111,7 @@ S('linux_dbg', branch='src', treeStableTimer=60)
 # Triggerable scheduler for the dbg builders
 #
 T('linux_dbg_trigger')
+T('linux_dbg_shared_trigger')
 
 #
 # Linux Dbg Builder
@@ -161,6 +162,41 @@ F('dbg_unit_2', linux().ChromiumFactory(
            'jingle'],
     factory_properties={'generate_gtest_json': True}))
 
+#
+# Linux Dbg Component Builder
+#
+B('Linux Builder (dbg)(shared)', 'dbg_shared', 'compile', 'linux_dbg',
+  notify_on_missing=True)
+F('dbg_shared', linux().ChromiumFactory(
+    slave_type='NASBuilder',
+    target='Debug',
+    options=['--compiler=goma'],
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES':'component=shared_library'},
+        'trigger': 'linux_dbg_shared_trigger'}))
+
+#
+# Linux Dbg Component Unit testers
+#
+
+B('Linux Tests (dbg)(shared)', 'dbg_shared_unit', 'testers',
+  'linux_dbg_shared_trigger', auto_reboot=True, notify_on_missing=True)
+F('dbg_shared_unit', linux().ChromiumFactory(
+    target='Debug',
+    slave_type='NASTester',
+    tests=['base',
+           'browser_tests',
+           'check_deps',
+           'media',
+           'net', 'printing',
+           'remoting',
+           'sizes',
+           'test_shell',
+           'ui',
+           'unit', 'crypto',
+           'cacheinvalidation',
+           'jingle'],
+    factory_properties={'generate_gtest_json': True}))
 
 #
 # Linux Dbg Clang bot

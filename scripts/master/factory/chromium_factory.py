@@ -490,8 +490,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     gclient_env = factory_properties.setdefault('gclient_env', {})
     gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
     if 'component=' not in gyp_defines:
+      # Sets the default to shared.
       gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
-      if target != 'Debug' or self._target_platform not in ('linux2', 'win32'):
+
+      # For Release, Linux, and Mac, we build statically.
+      if target != 'Debug' or self._target_platform != 'win32':
         gclient_env['GYP_DEFINES'] = gyp_defines + ' component=static_library'
 
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
