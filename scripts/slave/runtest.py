@@ -286,6 +286,7 @@ def main_linux(options, args):
     fp_special_xvfb = options.factory_properties.get('special_xvfb', None)
     fp_chromeos = options.factory_properties.get('chromeos', None)
     if fp_special_xvfb or (fp_special_xvfb is None and (fp_chromeos or
+        slave_utils.GypFlagIsOn(options, 'use_aura') or
         slave_utils.GypFlagIsOn(options, 'chromeos'))):
       special_xvfb_dir = options.special_xvfb_dir
   elif options.special_xvfb:
