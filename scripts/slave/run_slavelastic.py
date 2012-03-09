@@ -108,16 +108,20 @@ class Manifest(object):
         name - Name of the running test.
         files - A list of files to zip up and transfer over.
     """
-    current_platform = {
+    platform_mapping =  {
       'win32': 'Windows',
       'cygwin': 'Windows',
       'linux2': 'Linux',
       'darwin': 'Mac'
-    }[sys.platform]
+      }
+
+    # This can cause problems when |current_platform| != requested_platform
+    # crbug.com/117442
+    current_platform = platform_mapping[sys.platform]
     switches_dict = {
       'target': switches.target,
       'num_shards': switches.num_shards,
-      'os_image': switches.os_image,
+      'os_image': current_platform,
     }
     # Parse manifest file
     self.config = ConfigParser.RawConfigParser()
@@ -156,9 +160,11 @@ class Manifest(object):
     # Port to listen to stdout coming from the swarm slave, will be set later
     # once the HTTP server is initiated and a free port is found
     self.port = None
-    self.switches = switches
     self.tasks = []
     self.current_platform = current_platform
+    self.target_platform = switches_dict['os_image']
+    self.working_dir = switches.working_dir
+    self.block_size = switches.block_size
 
   def add_task(self, task_name, actions):
     """Appends a new task to the swarm manifest file."""
@@ -236,7 +242,7 @@ class Manifest(object):
       self.add_task('Run Test',
           [sys.executable,
            '..\\b\\build\\scripts\\slave\\runtest.py', '--target',
-           self.switches.target, '--build-dir', 'src/build',
+           self.target, '--build-dir', 'src/build',
            os.path.split(self.files[0])[1]])
     elif self.current_platform == 'Linux' or self.current_platform == 'Mac':
       # Run the tests.  We assume the first file is the executable.
@@ -257,7 +263,7 @@ class Manifest(object):
                   [self.zipfile_name, 'run_xvfb.zip', 'src/'])
 
     # Call kill_processes.py if on windows
-    if self.current_platform == 'Windows':
+    if self.target_platform == 'Windows':
       self.add_task('Kill Processes',
           [sys.executable, '..\\b\\build\\scripts\\slave\\kill_processes.py'])
 
@@ -280,11 +286,11 @@ class Manifest(object):
       },
       'configurations': [
         {
-          'min_instances': self.switches.num_shards,
-          'max_instances': self.switches.num_shards,
-          'config_name': self.switches.os_image,
+          'min_instances': self.g_shards,
+          'max_instances': self.g_shards,
+          'config_name': self.target_platform,
           'dimensions': {
-            'os': self.switches.os_image,
+            'os': self.target_platform,
           },
         },
       ],
@@ -292,9 +298,9 @@ class Manifest(object):
                                              self.port),
       'output_destination': {
         'url': 'http://%s:%d' % (hostname, self.port),
-        'size': self.switches.block_size,
+        'size': self.block_size,
       },
-      'working_dir': self.switches.working_dir,
+      'working_dir': self.working_dir,
       'cleanup': 'data',
     }
 
@@ -317,7 +323,7 @@ class TestRunShard(object):
     self._lock = threading.Lock()
     self.manifest = manifest
     self.test_case_name = manifest.name
-    self.os_image = manifest.switches.os_image
+    self.os_image = manifest.target_platform
     self.status = TestRunShard.PENDING
     self.exit_code = 0
     self.end_time = None
@@ -419,7 +425,7 @@ def main():
   # Parses arguments
   parser = optparse.OptionParser(usage='%prog [options] [filename]',
                                  description=DESCRIPTION)
-  parser.add_option('-w', '--working_dir', default='/swarm_tests',
+  parser.add_option('-w', '--working_dir', default='swarm_tests',
                     help='Desired working direction on the swarm slave side. '
                     'Defaults to %default.')
   parser.add_option('-m', '--min_shards', type='int', default=1,
