@@ -490,13 +490,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     gclient_env = factory_properties.setdefault('gclient_env', {})
     gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
     if 'component=' not in gyp_defines:
-      # Sets the default to static.
-      gclient_env['GYP_DEFINES'] = gyp_defines + ' component=static_library'
+      # Sets the default to shared.
+      gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
 
-      # For Win Dbg, we build in shared mode.
-      if (target == 'Debug' and self._target_platform == 'win32' and
-          project and project.startswith('all.sln')):
-        gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
+      # For Release, Linux, and Mac, we build statically.
+      if target != 'Debug' or self._target_platform != 'win32':
+        gclient_env['GYP_DEFINES'] = gyp_defines + ' component=static_library'
 
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
