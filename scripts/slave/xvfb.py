@@ -73,6 +73,10 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   if with_wm:
     # Some ChromeOS tests need a window manager.
     subprocess.Popen("icewm", stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print "Window manager (icewm) started."
+  else:
+    print "No window manager required."
+
 
 
 def StopVirtualX(slave_build_name):
