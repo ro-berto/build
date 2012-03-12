@@ -513,12 +513,13 @@ class FactoryCommands(object):
     # checkout.
     command = [chromium_utils.GetGClientCommand(self._target_platform),
                'sync', '--verbose']
+    if gclient_jobs:
+      command.append('-j%d' % gclient_jobs)
     self._factory.addStep(shell.ShellCommand,
                           name='update_scripts',
                           description='update_scripts',
                           locks=[self.slave_exclusive_lock],
                           timeout=60,
-                          gclient_jobs=gclient_jobs,
                           workdir='..',
                           command=command)
 
