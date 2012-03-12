@@ -429,6 +429,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     elif R('chrome_endure_control_tests'):
       tests = [
         'perf_endure.ChromeEndureControlTest.testControlAttachDetachDOMTree',
+        ('perf_endure.ChromeEndureControlTest.'
+         'testControlAttachDetachDOMTreeWebDriver'),
       ]
       f.AddChromeEndureTest('chrome_endure_control_test', tests, fp)
     elif R('chrome_endure_gmail_tests'):
