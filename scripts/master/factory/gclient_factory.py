@@ -165,7 +165,8 @@ class GClientFactory(object):
     if (self._target_platform == 'win32' and
         not factory_properties.get('no_kill')):
       factory_cmd_obj.AddSvnKillStep()
-    factory_cmd_obj.AddUpdateScriptStep()
+    factory_cmd_obj.AddUpdateScriptStep(
+        gclient_jobs=factory_properties.get('update_scripts_gclient_jobs'))
     # Once the script is updated, the zombie processes left by the previous
     # run can be killed.
     if (self._target_platform == 'win32' and
@@ -317,10 +318,12 @@ class GClientFactory(object):
     no_gclient_branch = factory_properties.get('no_gclient_branch', False)
 
     gclient_transitive = factory_properties.get('gclient_transitive', False)
+    gclient_jobs = factory_properties.get('gclient_jobs')
 
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove,
                                   gclient_deps=gclient_deps,
                                   gclient_nohooks=self._nohooks_on_update,
                                   no_gclient_branch=no_gclient_branch,
-                                  gclient_transitive=gclient_transitive)
+                                  gclient_transitive=gclient_transitive,
+                                  gclient_jobs=gclient_jobs)

@@ -507,7 +507,7 @@ class FactoryCommands(object):
                           workdir='',  # Doesn't really matter where we are.
                           command=['python', self._cleanup_temp_tool])
 
-  def AddUpdateScriptStep(self):
+  def AddUpdateScriptStep(self, gclient_jobs=None):
     """Adds a step to the factory to update the script folder."""
     # This will be run in the '..' directory to udpate the slave's own script
     # checkout.
@@ -518,13 +518,14 @@ class FactoryCommands(object):
                           description='update_scripts',
                           locks=[self.slave_exclusive_lock],
                           timeout=60,
+                          gclient_jobs=gclient_jobs,
                           workdir='..',
                           command=command)
 
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,
                     sudo_for_remove=False, gclient_deps=None,
                     gclient_nohooks=False, no_gclient_branch=False,
-                    gclient_transitive=False):
+                    gclient_transitive=False, gclient_jobs=None):
     """Adds a step to the factory to update the workspace."""
     if env is None:
       env = {}
@@ -542,6 +543,7 @@ class FactoryCommands(object):
                           locks=[self.slave_exclusive_lock],
                           retry=(60*5, 4),  # Try 4+1=5 more times, 5 min apart
                           timeout=timeout,
+                          gclient_jobs=gclient_jobs,
                           sudo_for_remove=sudo_for_remove,
                           rm_timeout=60*15,  # The step can take a long time.
                           no_gclient_branch=no_gclient_branch,

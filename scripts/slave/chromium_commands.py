@@ -161,6 +161,7 @@ class GClient(sourcebase):
     self.no_gclient_branch = False
     self.gclient_transitive = False
     self.delete_unversioned_trees_when_updating = True
+    self.gclient_jobs = None
     # TODO(maruel): Remove once buildbot 0.8.4p1 conversion is complete.
     self.sourcedata = None
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
@@ -195,6 +196,7 @@ class GClient(sourcebase):
     self.env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     self.no_gclient_branch = args.get('no_gclient_branch')
     self.gclient_transitive = args.get('gclient_transitive')
+    self.gclient_jobs = args.get('gclient_jobs')
 
   def start(self):
     """Start the update process.
@@ -273,6 +275,8 @@ class GClient(sourcebase):
                '--force']
     if self.delete_unversioned_trees_when_updating:
       command.append('--delete_unversioned_trees')
+    if self.gclient_jobs:
+      command.append('-j%d' % self.gclient_jobs)
     # Don't run hooks if it was patched or there is a patch since runhooks will
     # be run after.
     if self.gclient_nohooks or self.patch or self.was_patched:
