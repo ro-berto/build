@@ -192,7 +192,8 @@ class GClientFactory(object):
   def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
                    slave_type='BuilderTester', options=None,
                    compile_timeout=1200, build_url=None, project=None,
-                   factory_properties=None, gclient_deps=None):
+                   factory_properties=None, gclient_deps=None,
+                   specific_cmd_obj=None):
     factory_properties = factory_properties or {}
 
     # Create the spec for the solutions
@@ -211,6 +212,11 @@ class GClientFactory(object):
                                slave_type=slave_type,
                                gclient_deps=gclient_deps)
 
+    # If a specific build factory has been passed, point it at the
+    # new factory.
+    if specific_cmd_obj:
+      specific_cmd_obj.SetFactory(factory)
+
     # Get the factory command object to create new steps to the factory.
     factory_cmd_obj = commands.FactoryCommands(factory, target,
                                                self._build_dir,
@@ -224,6 +230,10 @@ class GClientFactory(object):
     # Add a step to cleanup temporary files and data left from a previous run
     # to prevent the drives from becoming full over time.
     factory_cmd_obj.AddTempCleanupStep()
+
+    # Run any post-update tests if present
+    if hasattr(specific_cmd_obj, 'AddPostUpdateTests'):
+      specific_cmd_obj.AddPostUpdateTests()
 
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'NASBuilder']:

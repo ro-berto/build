@@ -43,7 +43,7 @@ categories_steps = {
     #'webkit_tests',
    ],
   'windows': ['svnkill', 'taskkill'],
-  'compile': ['check_deps', 'compile', 'archive_build'],
+  'compile': ['check_deps2git', 'check_deps', 'compile', 'archive_build'],
   # Annotator scripts are triggered as a 'build' step.
   # The gatekeeper currently does not recognize failure in a
   # @@@BUILD_STEP@@@, so we must match on the buildbot-defined step.
