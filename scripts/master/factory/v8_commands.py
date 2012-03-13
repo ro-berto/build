@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -75,6 +75,12 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand,
                      'GCMole', cmd,
                      timeout=3600,
+                     workdir='build/v8/')
+
+  def AddV8Initializers(self):
+    cmd = ['bash', './tools/check-static-initializers.sh']
+    self.AddTestStep(shell.ShellCommand,
+                     'Static-Initializers', cmd,
                      workdir='build/v8/')
 
   def AddV8Testing(self, properties=None):
