@@ -24,9 +24,12 @@ from master import build_utils
 
 
 class TryMailNotifier(mail.MailNotifier):
-  def __init__(self, reply_to=None, **kwargs):
+  def __init__(self, reply_to=None, failure_message=None,
+               footer=None, **kwargs):
     mail.MailNotifier.__init__(self, **kwargs)
     self.reply_to = reply_to
+    self.failure_message = failure_message
+    self.footer = footer
 
   def buildMessage(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
@@ -47,17 +50,20 @@ class TryMailNotifier(mail.MailNotifier):
       status_text_html = "Try Had Warnings"
       res = "warnings"
     else:
-      status_text_html = (
-          'TRY FAILED<p>'
-          '<strong>If you think the try slave is broken (it happens!),'
-          'please REPLY to this email, don\'t ask on irc, mailing '
-          'list or IM.<br>'
-          'If you think the test is flaky, notify the sheriffs.</strong><br>'
-          'Please use "rich text" replies so the links aren\'t lost.<br>'
-          'It is possible that you get no reply, don\'t worry, the reply '
-          'address isn\'t a blackhole.'
-          '<p>'
-          'Thanks!')
+      status_text_html = self.failure_message
+      if status_text_html is None:
+        status_text_html = (
+            'TRY FAILED<p>'
+            '<strong>If you think the try slave is broken (it happens!),'
+            'please REPLY to this email, don\'t ask on irc, mailing '
+            'list or IM.<br>'
+            'If you think the test is flaky, notify the sheriffs.</strong><br>'
+            'Please use "rich text" replies so the links aren\'t lost.<br>'
+            'It is possible that you get no reply, don\'t worry, the reply '
+            'address isn\'t a blackhole.'
+            '<p>'
+            'Thanks!')
+
       res = "failure"
 
     info = {
@@ -98,13 +104,15 @@ class TryMailNotifier(mail.MailNotifier):
     """) % html_params
 
     html_content += build_utils.EmailableBuildTable(build, waterfall_url)
-    html_content += """<br>
+    footer = self.footer
+    if self.footer is None:
+      footer = """<br>
 FAQ: <a href="http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage">
 http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage</a><br>
 </body>
 </html>
 """
-
+    html_content += footer
     m = MIMEMultipart()
     m.attach(MIMEText(html_content, 'html', 'iso-8859-1'))
     m['Date'] = formatdate(localtime=True)
