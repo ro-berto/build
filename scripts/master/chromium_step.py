@@ -34,7 +34,7 @@ class GClient(source.Source):
   def __init__(self, svnurl=None, rm_timeout=None, gclient_spec=None, env=None,
                sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False,
                no_gclient_branch=False, gclient_transitive=False,
-               gclient_jobs=None, **kwargs):
+               primary_repo=None, gclient_jobs=None, **kwargs):
     source.Source.__init__(self, **kwargs)
     if env:
       self.args['env'] = env.copy()
@@ -48,6 +48,7 @@ class GClient(source.Source):
     self.args['gclient_nohooks'] = gclient_nohooks
     self.args['no_gclient_branch'] = no_gclient_branch
     self.args['gclient_transitive'] = gclient_transitive
+    self.args['primary_repo'] = primary_repo or ''
     self.args['gclient_jobs'] = gclient_jobs
 
   def computeSourceRevision(self, changes):
@@ -87,6 +88,7 @@ class GClient(source.Source):
         revision = 'src@' + self.getProperty('parent_cr_revision')
     except KeyError:
       pass
+    self.setProperty('primary_repo', args['primary_repo'], 'Source')
     args['revision'] = revision
     args['branch'] = branch
     if args.get('gclient_spec'):
@@ -104,11 +106,12 @@ class GClient(source.Source):
   def describe(self, done=False):
     """Tries to append the revision number to the description."""
     description = source.Source.describe(self, done)
-    self.appendRevision(description)
+    self.appendChromeRevision(description)
     self.appendWebKitRevision(description)
+    self.appendNaClRevision(description)
     return description
 
-  def appendRevision(self, description):
+  def appendChromeRevision(self, description):
     """Tries to append the Chromium revision to the given description."""
     revision = None
     try:
@@ -141,6 +144,19 @@ class GClient(source.Source):
       if not webkit_revision in description:
         description.append(webkit_revision)
 
+  def appendNaClRevision(self, description):
+    """Tries to append the NaCl revision to the given description."""
+    nacl_revision = None
+    try:
+      nacl_revision = self.getProperty('got_nacl_revision')
+    except KeyError:
+      pass
+    if nacl_revision:
+      nacl_revision = 'nacl r%s' % nacl_revision
+      # Only append revision if it's not already there.
+      if not nacl_revision in description:
+        description.append(nacl_revision)
+
   def commandComplete(self, cmd):
     """Handles status updates from buildbot slave when the step is done.
 
@@ -152,6 +168,11 @@ class GClient(source.Source):
       got_webkit_revision = cmd.updates['got_webkit_revision'][-1]
       if got_webkit_revision:
         self.setProperty('got_webkit_revision', str(got_webkit_revision),
+                         'Source')
+    if cmd.updates.has_key('got_nacl_revision'):
+      got_nacl_revision = cmd.updates['got_nacl_revision'][-1]
+      if got_nacl_revision:
+        self.setProperty('got_nacl_revision', str(got_nacl_revision),
                          'Source')
 
 
@@ -227,9 +248,15 @@ class ProcessLogShellStep(shell.ShellCommand):
     then tries 'revision' (usually from forced build). If neither are
     found, will return -1 instead.
     """
+    try:
+      repo = self.build.getProperty('primary_repository')
+      if not repo:
+        repo = ''
+    except KeyError:
+      repo = ''
     revision = None
     try:
-      revision = self.build.getProperty('got_revision')
+      revision = self.build.getProperty('got_' + repo + 'revision')
     except KeyError:
       pass  # 'got_revision' doesn't exist (yet)
     if not revision:

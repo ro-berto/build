@@ -318,6 +318,7 @@ class GClientFactory(object):
     no_gclient_branch = factory_properties.get('no_gclient_branch', False)
 
     gclient_transitive = factory_properties.get('gclient_transitive', False)
+    primary_repo = factory_properties.get('primary_repo', '')
     gclient_jobs = factory_properties.get('gclient_jobs')
 
     # Add the update step.
@@ -326,4 +327,5 @@ class GClientFactory(object):
                                   gclient_nohooks=self._nohooks_on_update,
                                   no_gclient_branch=no_gclient_branch,
                                   gclient_transitive=gclient_transitive,
+                                  primary_repo=primary_repo,
                                   gclient_jobs=gclient_jobs)

@@ -664,16 +664,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       build_url=None, project=None, factory_properties=None,
       on_nacl_waterfall=True, use_chrome_lkgr=True):
     factory_properties = factory_properties or {}
+    if on_nacl_waterfall:
+      factory_properties['primary_repo'] = 'nacl_'
     self._solutions[0].custom_vars_list = self.CUSTOM_VARS_NACL_LATEST
     self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
-    # Add an extra frivilous checkout of part of NativeClient when it is built
-    # on the # NativeClient waterfall. This way, console view gets revision
-    # numbers that it can make sense of.
-    if on_nacl_waterfall:
-      self._solutions.insert(0, gclient_factory.GClientSolution(
-          'http://src.chromium.org/'
-          'native_client/trunk/src/native_client/build',
-          name='build'))
     if factory_properties.get('needs_nacl_valgrind'):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_NACL_VALGRIND)
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
