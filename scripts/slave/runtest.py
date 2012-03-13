@@ -315,6 +315,10 @@ def main_linux(options, args):
 
   os.environ['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
                                                                bin_dir)
+  # Figure out what we want for a special llvmpipe directory.
+  if (options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir)):
+    os.environ['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
+
   if options.parallel:
     supervisor_path = os.path.join(build_dir, '..', 'tools',
                                    'sharding_supervisor',
@@ -440,6 +444,11 @@ def main_win(options, args):
 
 
 def main():
+  import platform
+
+  xvfb_path = os.path.join(os.path.dirname(sys.argv[0]), '..', '..',
+                           'third_party', 'xvfb', platform.architecture()[0])
+
   # Initialize logging.
   log_level = logging.INFO
   logging.basicConfig(level=log_level,
@@ -487,8 +496,16 @@ def main():
   option_parser.add_option('', '--parallel', action='store_true',
                            help='Shard and run tests in parallel for speed '
                                 'with sharding_supervisor.')
-  option_parser.add_option('', '--special-xvfb-dir', default=os.path.join(
-                             os.path.dirname(sys.argv[0]), '..', '..', 'xvfb'),
+  option_parser.add_option('', '--llvmpipe', action='store_const',
+                           value=xvfb_path, dest='llvmpipe_dir',
+                           help='Use software gpu pipe directory.')
+  option_parser.add_option('', '--no-llvmpipe', action='store_false',
+                           value=None, dest='llvmpipe_dir',
+                           help='Do not use software gpu pipe directory.')
+  option_parser.add_option('', '--llvmpipe-dir',
+                           default=None, dest='llvmpipe_dir',
+                           help='Path to software gpu library directory.')
+  option_parser.add_option('', '--special-xvfb-dir', default=xvfb_path,
                            help='Path to virtual X server directory on Linux.')
   option_parser.add_option('', '--special-xvfb', action='store_true',
                            default='auto',
