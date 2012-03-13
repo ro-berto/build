@@ -13,12 +13,14 @@ from master.log_parser import gtest_command
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
 
-  def AddSwarmTestStep(self, target, target_platform, swarm_server, swarm_port,
+  def AddSwarmTestStep(self, target_platform, swarm_server, swarm_port,
                        min_shards, max_shards, manifest_file):
     script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
 
     command = [self._python, script_path, '-m', min_shards, '-s', max_shards,
-               '-o', target_platform, '-t', target, '-n', swarm_server,
+               '-o', target_platform, '-n', swarm_server,
                '-p', swarm_port, manifest_file]
 
-    self.AddTestStep(gtest_command.GTestCommand, 'Run Tests on Swarm', command)
+    self.AddTestStep(gtest_command.GTestCommand,
+                     'Run %s Tests on Swarm' % manifest_file,
+                     command)

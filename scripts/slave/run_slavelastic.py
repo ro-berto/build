@@ -6,9 +6,7 @@
 
 from __future__ import with_statement
 import BaseHTTPServer
-import ConfigParser
 import cStringIO
-import glob
 import json  # pylint: disable=F0401
 import optparse
 import os
@@ -27,7 +25,7 @@ import zipfile
 
 DESCRIPTION = """This script takes a slavelastic manifest file, packages it,
 and sends a swarm manifest file to the swarm server.  This is expected to be
-called by runtest.py with the cwd as the parent of the src/ directory.
+called as a build step with the cwd as the parent of the src/ directory.
 """
 
 # A global list of shards, used to hold the stdout buffer for each shard.
@@ -115,45 +113,23 @@ class Manifest(object):
       'darwin': 'Mac'
       }
 
-    # This can cause problems when |current_platform| != requested_platform
+    # This can cause problems when
+    # |current_platform| != |switches_dict['os_image']|
     # crbug.com/117442
     current_platform = platform_mapping[sys.platform]
     switches_dict = {
-      'target': switches.target,
       'num_shards': switches.num_shards,
       'os_image': current_platform,
     }
     # Parse manifest file
-    self.config = ConfigParser.RawConfigParser()
-    if not self.config.read(filename):
-      raise ManifestParsingError('Failed to read in file %s' %
-                                 filename)
-    if not self.config.has_section(current_platform):
-      raise ManifestParsingError('Section %s not found in %s' %
-          (current_platform, filename))
-    if self.config.has_option('Header', 'name'):
-      self.name = self.config.get('Header', 'name')
-    else:
-      self.name = os.path.splitext(os.path.basename(filename))[0]
-    if not self.config.has_option(current_platform, 'executable'):
-      raise ManifestParsingError('Executable not found in %s' % filename)
-    self.files = [self.config.get(current_platform,
-        'executable') % switches_dict]
-    if self.config.has_option(current_platform, 'files'):
-      files = self.config.get(current_platform, 'files').strip()
-      for testfile in files.split('\n'):
-        expanded_file = testfile % switches_dict
-        # Resolve wildcards
-        print 'Expanding %s' % expanded_file
-        wildcard_expanded_files = glob.glob(expanded_file)
-        for wildcard_expanded_file in wildcard_expanded_files:
-          print '  Expanded %s' % wildcard_expanded_file
-          if os.path.exists(wildcard_expanded_file):
-            self.files.append(wildcard_expanded_file)
-          else:
-            print >> sys.stderr, '  File %s not found, ignoring' % expanded_file
+    data = json.load(open(filename))
+    self.name = filename
+    self.files = data['files']
+    self.command = data['command']
+    self.relative_cwd = data['relative_cwd']
+    self.hashtable_dir = os.path.join('src', 'out', 'Release')
+
     self.g_shards = switches.num_shards
-    self.target = switches.target
     # Random name for the output zip file
     self.zipfile_name = 'swarm_tempfile_%s.zip' % ''.join(random.choice(
         'abcdefghijklmnopqrstuvwxyz0123456789') for x in range(10))
@@ -176,82 +152,44 @@ class Manifest(object):
   def zip(self):
     """Zip up all the files in self.files"""
     start_time = time.time()
-    if self.current_platform == 'Linux':
-      # TODO(csharp): use zipfile here.
-      zip_args = ['zip', '-r', '-1', self.zipfile_name]
-      zip_args.extend(self.files)
-      subprocess.check_call(zip_args)
-      os.chmod(self.zipfile_name, 0755)
-    elif self.current_platform == 'Windows':
-      dest_zip = zipfile.ZipFile(self.zipfile_name, 'w')
-      for filename in self.files:
-        if os.path.isdir(filename):
-          for root, _, files in os.walk(filename):
-            for subfile in files:
-              print 'Zipping %s' % os.path.join(root, subfile)
-              dest_zip.write(os.path.join(root, subfile))
-        else:
-          print 'Zipping %s' % filename
-          dest_zip.write(filename)
-      dest_zip.close()
-    elif self.current_platform == 'Mac':
-      print >> sys.stderr, "I don't know what to do with Macs yet"
+
+    zip_file = zipfile.ZipFile(self.zipfile_name, 'w')
+    for file_path, info in self.files.iteritems():
+      zip_file.write(os.path.join(self.hashtable_dir, info['sha-1']),
+                     os.path.join('src', file_path))
+    zip_file.close()
+
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
 
   def cleanup(self):
     os.remove(self.zipfile_name)
 
-    if self.current_platform == 'Linux':
-      os.remove('run_xvfb.zip')
-
-
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
     hostname = socket.gethostbyname(socket.gethostname())
-    # require python 2.6
     # pylint: disable=E1103
     filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
-    runvxfb_filepath = os.path.relpath('run_xvfb.zip', '../..').replace(
-        '\\', '/')
 
-    # Linux specific stuff
-    slavename = os.path.basename(os.path.abspath('..'))
-    if self.current_platform == 'Linux':
-      # Zip up the scripts to run xvfb.
-      old_cwd = os.getcwd()
-      os.chdir('../../../scripts/slave')
+    # The first path is the python location and doesn't need to be adjusted.
+    path_adjusted_command = [self.command[0]]
+    for path in self.command[1:]:
+      if os.path.isabs(path):
+        # TODO(csharp) remove once make bug is fixed where some paths
+        # were absolute
+        cut_absolute_at = 'out'
+        path_adjusted_command.append(path[path.find(cut_absolute_at):])
+      else:
+        adjusted_path = os.path.join(self.relative_cwd, path)
+        adjusted_path = os.path.normpath(adjusted_path)
+        path_adjusted_command.append(adjusted_path)
 
-      try:
-        zip_file = zipfile.ZipFile('run_xvfb.zip', 'w')
-        zip_file.write('xvfb.py')
-        zip_file.write('test_x_server.py')
-        zip_file.close()
+    # TODO(csharp) file attributes should be set from the manifest file.
+    # http://crbug.com/116251
+    if self.current_platform == 'Linux' or self.current_platform == 'Mac':
+      self.add_task('Change permissions',
+                    ['chmod', '+x'] + path_adjusted_command[1:])
 
-        os.chmod('run_xvfb.zip', 0755)
-        os.rename('run_xvfb.zip', os.path.join(old_cwd, 'run_xvfb.zip'))
-      finally:
-        os.chdir(old_cwd)
-
-      # Chmod the executables, since zip don't preserve permissions
-      self.add_task('Change permissions', ['chmod', '+x'] + self.files)
-      self.add_task('Start X Server and Frame Buffer',
-                    [sys.executable, 'test_x_server.py', '--start',
-                     '--build-dir', '.', slavename])
-
-    if self.current_platform == 'Windows':
-      self.add_task('Run Test',
-          [sys.executable,
-           '..\\b\\build\\scripts\\slave\\runtest.py', '--target',
-           self.target, '--build-dir', 'src/build',
-           os.path.split(self.files[0])[1]])
-    elif self.current_platform == 'Linux' or self.current_platform == 'Mac':
-      # Run the tests.  We assume the first file is the executable.
-      self.add_task('Run Test', [self.files[0]])
-
-    # Linux specific stuff
-    if self.current_platform == 'Linux':
-      self.add_task('Stop X Server and Frame Buffer',
-                    [sys.executable, 'test_x_server.py', '--stop', slavename])
+    self.add_task('Run Test', path_adjusted_command)
 
     # Clean up
     if self.current_platform == 'Linux' or self.current_platform == 'Mac':
@@ -259,8 +197,7 @@ class Manifest(object):
     elif self.current_platform == 'Windows':
       cleanup_commands = ['del']
     self.add_task('Clean Up',
-                  cleanup_commands +
-                  [self.zipfile_name, 'run_xvfb.zip', 'src/'])
+                  cleanup_commands + [self.zipfile_name, 'src/'])
 
     # Call kill_processes.py if on windows
     if self.target_platform == 'Windows':
@@ -277,12 +214,6 @@ class Manifest(object):
       'env_vars': {
         'GTEST_TOTAL_SHARDS': '%(num_instances)s',
         'GTEST_SHARD_INDEX': '%(instance_index)s',
-        'DISPLAY': ':9',
-        'PYTHONPATH': 'E:\\b\\build\\third_party\\buildbot_7_12;'\
-           'E:\\b\\build\\third_party\\twisted_8_1;E:\\b\\build\\site_config;'\
-           'E:\\b\\build\\scripts;'\
-           'E:\\b\\build\\scripts\\release;E:\\b\\build\\third_party;'\
-           'E:\\b\\build_internal\\site_config;E:\\b\\build_internal\\symsrc;.'
       },
       'configurations': [
         {
@@ -303,10 +234,6 @@ class Manifest(object):
       'working_dir': self.working_dir,
       'cleanup': 'data',
     }
-
-    # Linux specific data
-    if self.current_platform == 'Linux':
-      test_case['data'].append('http://%s/%s' % (hostname, runvxfb_filepath))
 
     return json.dumps(test_case)
 
@@ -437,8 +364,6 @@ def main():
   parser.add_option('-o', '--os_image',
                     help='Swarm OS image to request.  Defaults to the '
                     'current platform.')
-  parser.add_option('-t', '--target', dest='target', default='Release',
-                    help='Compiled target, defaults to %default')
   parser.add_option('-n', '--hostname', default='localhost',
                     help='Specify the hostname of the Swarm server. '
                     'Defaults to %default')
@@ -452,12 +377,12 @@ def main():
                     help='Print verbose logging')
   (options, args) = parser.parse_args()
   if not args:
-    args.append('-')
+    parser.error('Must specify one filename.')
   elif len(args) > 1:
     parser.error('Must specify only one filename.')
   filename = args[0]
   if not options.os_image:
-    options.os_image = '%s %d' % (platform.uname[0], 32)
+    options.os_image = '%s %d' % (platform.uname()[0], 32)
 
   # Parses manifest file
   print "Parsing file %s..." % filename

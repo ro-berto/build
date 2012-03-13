@@ -6,6 +6,8 @@
 
 Based on chromium_factory.py and adds chromium-specific steps."""
 
+import os
+
 from master.factory import chromium_factory
 from master.factory import swarm_commands
 
@@ -25,12 +27,13 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
     gclient_env = factory_properties.get("gclient_env")
     gyp_defines = gclient_env['GYP_DEFINES']
-    if 'test_run=hashtable' in gyp_defines:
-      swarm_command_obj.AddSwarmTestStep(target, self._target_platform,
-          factory_properties.get('swarm_server', 'localhost'),
-          factory_properties.get('swarm_port', '9001'),
-          factory_properties.get('min_swarm_shards', '1'),
-          factory_properties.get('max_swarm_shards', '1'),
-          './src/base/base_unittest.sl')
+    if 'tests_run=hashtable' in gyp_defines:
+      for test in tests:
+        swarm_command_obj.AddSwarmTestStep(self._target_platform,
+            factory_properties.get('swarm_server', 'localhost'),
+            factory_properties.get('swarm_port', '9001'),
+            factory_properties.get('min_swarm_shards', '1'),
+            factory_properties.get('max_swarm_shards', '1'),
+            os.path.join('src', 'out', target, test + '.results'))
 
     return factory
