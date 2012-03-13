@@ -289,7 +289,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     if R('views'):          f.AddBasicGTestTestStep('views_unittests', fp)
     if R('aura'):           f.AddBasicGTestTestStep('aura_unittests', fp)
-    if R('aura_shell'):
+    if R('aura_shell') or R('ash'):
       f.AddBasicGTestTestStep('aura_shell_unittests', fp)
     if R('compositor'):
       f.AddBasicGTestTestStep('compositor_unittests', fp)
@@ -362,7 +362,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # GPU tests:
     if R('gpu_tests'):      f.AddGpuTests(fp)
-    if R('soft_gpu_tests'): f.AddSoftGpuTests(fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
