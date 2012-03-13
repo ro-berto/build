@@ -28,12 +28,16 @@ class DartFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
   }
 
-  def __init__(self, build_dir, target_platform=None):
+  def __init__(self, build_dir, target_platform=None, trunk=False):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
+    dart_url = config.Master.dart_bleeding + deps_file
+    # If this is trunk use the deps file from there instead.
+    if trunk:
+      dart_url = config.Master.dart_trunk + deps_file
     main = gclient_factory.GClientSolution(
-        config.Master.dart_url + deps_file,
+        dart_url,
         needed_components=self.NEEDED_COMPONENTS)
     solutions.append(main)
 
