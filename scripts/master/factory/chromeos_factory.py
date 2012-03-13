@@ -7,7 +7,7 @@
 import os
 
 from buildbot.steps import trigger, shell
-from buildbot.process.properties import WithProperties
+from buildbot.process.properties import Property, WithProperties
 
 from master import chromium_step
 from master.factory import build_factory
@@ -133,8 +133,8 @@ class CbuildbotFactory(object):
            '--buildroot=%s' % self.buildroot]
 
     if self.trybot:
-      cmd.append(WithProperties("--gerrit-patches=%(gerrit_patches)s"))
       cmd.append('--remote-trybot')
+      cmd.append(Property('extra_args'))
     else:
       cmd += ['--buildbot']
 

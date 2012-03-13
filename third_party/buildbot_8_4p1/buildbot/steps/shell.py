@@ -222,6 +222,13 @@ class ShellCommand(LoggingBuildStep):
         # now prevent setupLogfiles() from adding them
         self.logfiles = {}
 
+    def _flattenList(self, mainlist, commands):
+        for x in commands:
+          if isinstance(x, (str, unicode)):
+             mainlist.append(x)
+          elif x != []:
+             self._flattenList(mainlist, x)
+
     def start(self):
         # this block is specific to ShellCommands. subclasses that don't need
         # to set up an argv array, an environment, or extra logfiles= (like
@@ -231,8 +238,13 @@ class ShellCommand(LoggingBuildStep):
 
         # create the actual RemoteShellCommand instance now
         kwargs = self.remote_kwargs
-        command = self.command
-        kwargs['command'] = command
+        tmp = []
+        if isinstance(self.command, list):
+           self._flattenList(tmp, self.command) 
+        else:
+           tmp = self.command
+
+        kwargs['command'] = tmp 
         kwargs['logfiles'] = self.logfiles
 
         # check for the usePTY flag

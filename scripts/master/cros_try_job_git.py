@@ -15,21 +15,24 @@ from master.try_job_base import BadJobfile
 
 
 def validate_job(parsed_job):
-  # A dictionary containing required fields and their type.
-  required = {'name' : basestring,
-              'user' : basestring,
-              'email' : list,
-              'gerrit_patches' : list,
-              'bot' : list}
+  # A list of field description tuples of the format:
+  # (name, type, required).
+  fields = [('name', basestring, True),
+            ('user', basestring, True),
+            ('email', list, True),
+            ('bot', list, True),
+            ('extra_args', list, False)]
 
-  wrong = [
-      field for field, f_type in required.iteritems()
-      if not isinstance(parsed_job.get(field), f_type)
-  ]
+  error_msgs = []
+  for name, f_type, required in fields:
+    val = parsed_job.get(name)
+    if val is None and required:
+      error_msgs.append('Option %s missing!' % name)
+    elif not isinstance(val, f_type):
+      error_msgs.append('Option %s of wrong type!' % name)
 
-  if wrong:
-    raise BadJobfile('Option(s) %s missing or of wrong type!'
-                     % ','.join(wrong))
+  if error_msgs:
+    raise BadJobfile('\n'.join(error_msgs))
 
 
 class CrOSTryJobGit(TryBase):
@@ -65,7 +68,7 @@ class CrOSTryJobGit(TryBase):
   def get_props(self, bot, options):
     """Overriding base class method."""
     props = Properties()
-    props.setProperty('gerrit_patches', ' '.join(options['gerrit_patches']),
+    props.setProperty('extra_args', options['extra_args'],
                       self._PROPERTY_SOURCE)
     props.setProperty('chromeos_config', bot, self._PROPERTY_SOURCE)
     return props

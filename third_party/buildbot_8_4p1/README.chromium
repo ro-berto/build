@@ -1162,3 +1162,40 @@ Fix exception on a race condition with slave disconnecting during a build trigge
  
              # release the buildrequest claims
              wfd = defer.waitForDeferred(
+
+
+Cherry-pick command list flattening functionality from upstream buildbot - 
+726e9f81c103939d22bd18d53ca65c66cfb8aed7.
+
+--- buildbot/steps/shell.py
++++ buildbot/steps/shell.py
+@@ -222,6 +222,13 @@
+         # now prevent setupLogfiles() from adding them
+         self.logfiles = {}
+ 
++    def _flattenList(self, mainlist, commands):
++        for x in commands:
++          if isinstance(x, (str, unicode)):
++             mainlist.append(x)
++          elif x != []:
++             self._flattenList(mainlist, x)
++
+     def start(self):
+         # this block is specific to ShellCommands. subclasses that don't need
+         # to set up an argv array, an environment, or extra logfiles= (like
+@@ -231,8 +238,13 @@
+ 
+         # create the actual RemoteShellCommand instance now
+         kwargs = self.remote_kwargs
+-        command = self.command
+-        kwargs['command'] = command
++        tmp = []
++        if isinstance(self.command, list):
++           self._flattenList(tmp, self.command) 
++        else:
++           tmp = self.command
++
++        kwargs['command'] = tmp 
+         kwargs['logfiles'] = self.logfiles
+ 
+         # check for the usePTY flag
