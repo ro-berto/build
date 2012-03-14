@@ -95,11 +95,12 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     previous_build_status = build_status.getPreviousBuild()
     if previous_build_status:
       step_name = self.getName(step_status)
+      step_type = self.getGenericName(step_name)
       previous_steps = [step for step in previous_build_status.getSteps()
-                        if self.getName(step) == step_name]
+                        if self.getGenericName(self.getName(step)) == step_type]
       if len(previous_steps) == 1:
         if previous_steps[0].getResults()[0] == FAILURE:
-          # The previous exact same step failed on the previous build. Ignore.
+          # The previous same step failed on the previous build. Ignore.
           log.msg('[gatekeeper] Slave %s failed, but previously failed on '
                   'the same step (%s). So not closing tree.' % (
                       (step_name, slave_name)))

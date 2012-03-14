@@ -9,6 +9,7 @@ it and also reuse some of its methods to send emails.
 """
 
 import logging
+import re
 import time
 import urllib
 try:
@@ -43,6 +44,8 @@ class ChromiumNotifier(MailNotifier):
   # pylint: disable=R0201,W0221
 
   _CATEGORY_SPLITTER = '|'
+
+  _NAME_UNDECORATOR = re.compile(r'(.*\S)\s*(\[([^\[\]]*)\])$')
 
   def __init__(self, reply_to=None, categories_steps=None,
       exclusions=None, forgiving_steps=None, status_header=None,
@@ -181,6 +184,13 @@ class ChromiumNotifier(MailNotifier):
         return texts[0]
     return step_status.getName()
 
+  def getGenericName(self, step_name):
+    reduced_name = self._NAME_UNDECORATOR.match(step_name.strip())
+    if reduced_name:
+      return reduced_name.group(1)
+    return step_name.strip()
+
+
   def stepFinished(self, build_status, step_status, results):
     """A build step has just finished.
 
@@ -196,8 +206,10 @@ class ChromiumNotifier(MailNotifier):
     builder_status = build_status.getBuilder()
     builder_name = builder_status.getName()
     step_name = self.getName(step_status)
+    step_class = self.getGenericName(step_name)
+
     if builder_name in self.exclusions:
-      if step_name in self.exclusions[builder_name]:
+      if step_class in self.exclusions[builder_name]:
         return
 
     if not self.categories_steps:
@@ -212,7 +224,7 @@ class ChromiumNotifier(MailNotifier):
     if '' in self.categories_steps:
       steps_to_check += self.categories_steps['']
 
-    if step_name in steps_to_check:
+    if step_class in steps_to_check:
       return self.buildMessage(builder_name, build_status, results, step_name)
 
   def getFinishedMessage(self, dummy, builder_name, build_status, step_name):
@@ -220,7 +232,7 @@ class ChromiumNotifier(MailNotifier):
     return defer.succeed(0)
 
   def shouldBlameCommitters(self, step_name):
-    if step_name not in self.forgiving_steps:
+    if self.getGenericName(step_name) not in self.forgiving_steps:
       return True
     return False
 
