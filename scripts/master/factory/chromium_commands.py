@@ -938,6 +938,22 @@ class ChromiumCommands(commands.FactoryCommands):
                      'Download and extract official build', cmd,
                      halt_on_failure=True)
 
+  def AddSoftGpuTests(self, factory_properties):
+    """Runs gpu_tests with software rendering and archives any results.
+    """
+    tests = ':'.join(['GpuPixelBrowserTest.*', 'GpuFeatureTest.*',
+                      'Canvas2DPixelTestSD.*', 'Canvas2DPixelTestHD.*'])
+    # 'GPUCrashTest.*', while interesting, fails.
+
+    # TODO(petermayo): Invoke the new executable when it is ready.
+    self.AddBasicGTestTestStep('gpu_tests', factory_properties,
+        description='(soft)',
+        arg_list=['--gtest_also_run_disabled_tests',
+                  '--gtest_filter=%s' % tests],
+        test_tool_arg_list=['--llvmpipe'])
+
+    # Note: we aren't archiving these for the moment.
+
   def AddGpuTests(self, factory_properties):
     """Runs gpu_tests binary and archives any results.
 
