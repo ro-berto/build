@@ -62,8 +62,8 @@ class V8Commands(commands.FactoryCommands):
     if self._arch:
       cmd += ['--arch', self._arch]
     if self._shard_count > 1:
-      cmd += ['--shard_count', self._shard_count,
-              '--shard_run', self._shard_run]
+      cmd += ['--shard_count=%s' % self._shard_count,
+              '--shard_run=%s' % self._shard_run]
     if self._shell_flags:
       cmd += ['--shell_flags="'+ self._shell_flags +'"']
     if self._isolates:
