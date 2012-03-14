@@ -389,6 +389,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'links': [],
         'step_summary_text': [],
         'step_text': [],
+        'started': util.now(),
     })
 
   def fixupLast(self, status=None):
@@ -403,19 +404,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Final update of text.
     self.updateText()
     # Add timing info.
-    (start, end) = self.command.step_status.getTimes()
+    last['ended'] = last.get('ended', util.now())
+    started = last['started']
+    ended = last['ended']
     msg = '\n\n' + '-' * 80 + '\n'
-    if start is None:
-      msg += 'Not Started\n'
-    else:
-      if end is None:
-        end = util.now()
-      msg += '\n'.join([
-          'started: %s' % time.ctime(start),
-          'ended: %s' % time.ctime(end),
-          'duration: %s' % util.formatInterval(end - start),
-          '',  # So we get a final \n
-      ])
+    msg += '\n'.join([
+        'started: %s' % time.ctime(started),
+        'ended: %s' % time.ctime(ended),
+        'duration: %s' % util.formatInterval(ended - started),
+        '',  # So we get a final \n
+    ])
     last['log'].addHeader(msg)
     # Change status (unless handling the preamble).
     if len(self.sections) != 1:
