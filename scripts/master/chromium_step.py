@@ -567,6 +567,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
             'links': [],
             'step_summary_text': [],
             'step_text': [],
+            'started': util.now(),
         })
 
   def handleReturnCode(self, return_code):
