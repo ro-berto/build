@@ -34,13 +34,13 @@ class ChromiumCommands(commands.FactoryCommands):
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
 
-    # Where the chromium slave scripts are.
+    # Where the chromium slave scritps are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
     self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
                                              'build_internal', 'scripts',
                                              'slave')
 
-    # Create smaller name for the functions and vars to simplify the code below.
+    # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
     s_dir = self._chromium_script_dir
     p_dir = self._private_script_dir
@@ -488,15 +488,6 @@ class ChromiumCommands(commands.FactoryCommands):
     arg_list = ['--gtest_filter=PageLoad.Reliability']
     self.AddBasicGTestTestStep('ui_tests', factory_properties,
                                arg_list=arg_list)
-
-  def AddPostUpdateTests(self):
-    J = self.PathJoin
-    deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
-
-    cmd = [self._python, deps2git_tool,
-           '-d', J(self._repository_root, 'DEPS'),
-           '-o', J(self._repository_root, '.DEPS.git')]
-    self.AddTestStep(shell.ShellCommand, 'check_deps2git', cmd)
 
   def AddReliabilityTests(self, platform='win'):
     cmd_1 = ['python', self._reliability_tool, '--platform', platform,
@@ -1026,18 +1017,6 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddPyAutoFunctionalTest(
           'media_tests_' + group.lower(), suite=group, timeout=timeout,
           perf=is_perf, factory_properties=factory_properties)
-
-  # Needed to resolve circular dependency between ChromiumCommands
-  # and FactoryCommands. This allows Chromium-specific commands
-  # to appear earlier (in the post-update step)
-  def SetFactory(self, factory):
-    # call __init__ just to be safe
-    commands.FactoryCommands.__init__(self,
-                                      factory,
-                                      self._target,
-                                      self._build_dir,
-                                      self._target_platform)
-
 
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
