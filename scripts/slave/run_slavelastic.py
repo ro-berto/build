@@ -93,12 +93,6 @@ class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     # Finally, write to stdout
     shard.write(output)
 
-
-class ManifestParsingError(Exception):
-  """Raise when theres a parsing error with the manifest file."""
-  pass
-
-
 class Manifest(object):
   def __init__(self, filename, switches):
     """Populates a manifest object.
@@ -174,10 +168,8 @@ class Manifest(object):
     path_adjusted_command = [self.command[0]]
     for path in self.command[1:]:
       if os.path.isabs(path):
-        # TODO(csharp) remove once make bug is fixed where some paths
-        # were absolute
-        cut_absolute_at = 'out'
-        path_adjusted_command.append(path[path.find(cut_absolute_at):])
+        raise Exception('Given an absolute path, unable to convert for swarm '
+                        ' bot:\n' + path)
       else:
         adjusted_path = os.path.join(self.relative_cwd, path)
         adjusted_path = os.path.normpath(adjusted_path)
