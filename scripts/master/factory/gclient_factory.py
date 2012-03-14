@@ -218,7 +218,8 @@ class GClientFactory(object):
 
     # Update clang if necessary.
     gclient_env = factory_properties.get('gclient_env', {})
-    if 'clang=1' in gclient_env.get('GYP_DEFINES', ''):
+    if ('clang=1' in gclient_env.get('GYP_DEFINES', '') or
+        'asan=1' in gclient_env.get('GYP_DEFINES', '')):
       factory_cmd_obj.AddUpdateClangStep()
 
     # Add a step to cleanup temporary files and data left from a previous run
