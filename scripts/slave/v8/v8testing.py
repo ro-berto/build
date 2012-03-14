@@ -107,8 +107,8 @@ def main():
 
 
   if options.shard_count > 1:
-    cmd.extend(['--shard-count', options.shard_count,
-                '--shard-run', options.shard_run])
+    cmd.extend(['--shard-count=%s' % options.shard_count,
+                '--shard-run=%s' % options.shard_run])
 
   return chromium_utils.RunCommand(cmd)
 
