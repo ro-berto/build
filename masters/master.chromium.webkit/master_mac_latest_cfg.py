@@ -63,6 +63,24 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
         },
     }))
 
+#
+# GPU Mac Release
+#
+B('GPU Mac', 'f_gpu_mac_rel', auto_reboot=True,
+  scheduler='s8_webkit_rel')
+F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
+    target='Release',
+    options=['--build-tool=make', '--compiler=goma-clang',
+             'chromium_gpu_builder'],
+    tests=['gpu_tests', 'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
+    factory_properties={
+        'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_GENERATORS':'make',
+            'GYP_DEFINES':'fastbuild=1',
+        },
+    }))
+
 ################################################################################
 ## Debug
 ################################################################################
@@ -80,8 +98,9 @@ B('Mac Builder (dbg)', 'f_mac_dbg', auto_reboot=True,
 F('f_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj',]))
+
 #
-# GPU Mac
+# GPU Mac Debug
 #
 B('GPU Mac (dbg)', 'f_gpu_mac_dbg', auto_reboot=True,
   scheduler='s8_webkit_dbg')
