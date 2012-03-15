@@ -212,7 +212,7 @@ class SkiaFactory(gclient_factory.GClientFactory):
     else:
       command = base_command
     self._skia_cmd_obj.AddRun(
-        run_command=command, description='RunBench')
+        run_command=command, description='RunBench', timeout=1200)
 
     # Generate and upload bench performance graphs (but only if we have been
     # recording bench output for this build type).
