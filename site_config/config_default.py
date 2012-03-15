@@ -227,7 +227,7 @@ class Master(object):
     master_port = 9051
     slave_port = 9153
     master_port_alt = 9063
-    repo_url = 'http://git.chromium.org/chromiumos/tryjobs.git'
+    repo_url = 'ssh://gerrit.chromium.org:29418/chromiumos/tryjobs.git'
 
   ## V8
 
