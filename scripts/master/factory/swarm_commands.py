@@ -14,7 +14,7 @@ class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
 
   def AddSwarmTestStep(self, target_platform, swarm_server, swarm_port,
-                       min_shards, max_shards, manifest_file):
+                       min_shards, max_shards, manifest_file, test_name):
     script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
 
     command = [self._python, script_path, '-m', min_shards, '-s', max_shards,
@@ -22,5 +22,5 @@ class SwarmCommands(commands.FactoryCommands):
                '-p', swarm_port, manifest_file]
 
     self.AddTestStep(gtest_command.GTestCommand,
-                     'Run %s Tests on Swarm' % manifest_file,
+                     '%s_swarm' % test_name,
                      command)

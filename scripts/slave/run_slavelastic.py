@@ -135,6 +135,7 @@ class Manifest(object):
     self.target_platform = switches_dict['os_image']
     self.working_dir = switches.working_dir
     self.block_size = switches.block_size
+    self.data_directory = 'data'
 
   def add_task(self, task_name, actions):
     """Appends a new task to the swarm manifest file."""
@@ -150,7 +151,7 @@ class Manifest(object):
     zip_file = zipfile.ZipFile(self.zipfile_name, 'w')
     for file_path, info in self.files.iteritems():
       zip_file.write(os.path.join(self.hashtable_dir, info['sha-1']),
-                     os.path.join('src', file_path))
+                     os.path.join(self.data_directory, file_path))
     zip_file.close()
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
@@ -173,13 +174,14 @@ class Manifest(object):
       else:
         adjusted_path = os.path.join(self.relative_cwd, path)
         adjusted_path = os.path.normpath(adjusted_path)
+        adjusted_path = os.path.join(self.data_directory, adjusted_path)
         path_adjusted_command.append(adjusted_path)
 
     # TODO(csharp) file attributes should be set from the manifest file.
     # http://crbug.com/116251
     if self.current_platform == 'Linux' or self.current_platform == 'Mac':
       self.add_task('Change permissions',
-                    ['chmod', '+x'] + path_adjusted_command[1:])
+                    ['chmod', '+x', '-R', self.data_directory])
 
     self.add_task('Run Test', path_adjusted_command)
 
@@ -189,7 +191,7 @@ class Manifest(object):
     elif self.current_platform == 'Windows':
       cleanup_commands = ['del']
     self.add_task('Clean Up',
-                  cleanup_commands + [self.zipfile_name, 'src/'])
+                  cleanup_commands + [self.zipfile_name, self.data_directory])
 
     # Call kill_processes.py if on windows
     if self.target_platform == 'Windows':
