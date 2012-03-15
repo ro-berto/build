@@ -57,10 +57,14 @@ REPO_MANIFEST = """<?xml version="1.0" encoding="UTF-8"?>
   <project name="git0" />
   <project name="git1" />
   <project name="git2" />
+  <project name="%(branch-unique-project)s" />
 </manifest>
 """
 
-PROJ_COUNT = 3
+# 3 projects present in all manifest branches + 1 unique to each branch
+PROJ_COUNT = 3 + 1
+
+BRANCH_UNIQUE_PROJ_NAME = '%s-unique_porject'
 
 # In the setup code, we create all REPO_BRANCHES by adding a new commit on top
 # of the one before, which yields a commit graph such that
@@ -82,6 +86,8 @@ class TestRepoPoller(unittest.TestCase):
     manifest_dir = os.path.join(self.repo_src, 'manifest')
     git_dir_base = os.path.join(self.repo_src, 'git')
     git_dirs = ['%s%d' % (git_dir_base, x) for x in range(PROJ_COUNT)]
+    git_dirs += [os.path.join(self.repo_src, BRANCH_UNIQUE_PROJ_NAME % br)
+                 for br in REPO_BRANCHES]
 
     for d in git_dirs + [manifest_dir, self.repo_work]:
       if not os.path.exists(d):
@@ -99,15 +105,23 @@ class TestRepoPoller(unittest.TestCase):
                             manifest_dir)
                        and n!=0)
       fh = open(os.path.join(manifest_dir, 'default.xml'), 'w')
-      fh.write((REPO_MANIFEST % {'branch': branch}))
+      fh.write(REPO_MANIFEST %
+               {'branch': branch,
+                'branch-unique-project': BRANCH_UNIQUE_PROJ_NAME % branch})
       fh.close()
       self.assertFalse(_cmd(['git', 'add', 'default.xml'], manifest_dir))
       self.assertFalse(_cmd(['git', 'commit', '-q', '-m', 'empty'],
                             manifest_dir))
+    # repo does something too smart with the commiter's email while switching
+    # branches within the manifest project that confuses it. We need to change
+    # it here before we try using the project from a repo client, else
+    # `repo init` fails
+    self.assertFalse(_cmd(['git', 'filter-branch', '-f', '--env-filter',
+                           'GIT_COMMITTER_EMAIL=no_one'] + REPO_BRANCHES,
+                          manifest_dir))
 
     for n, branch in enumerate(REPO_BRANCHES):
-      for x in range(PROJ_COUNT):
-        git_dir = git_dirs[x]
+      for x, git_dir in enumerate(git_dirs):
         # when n==0 we're creating master, and 'checkout -b' will fail
         self.assertFalse(_cmd(['git', 'checkout', '-q', '-b', branch], git_dir)
                          and n!=0)
@@ -116,6 +130,7 @@ class TestRepoPoller(unittest.TestCase):
         fh.close()
         self.assertFalse(_cmd(['git', 'add', 'file%d.txt' % x], git_dir))
         self.assertFalse(_cmd(['git', 'commit', '-q', '-m', 'empty'], git_dir))
+
 
     cmd = [REPO_BIN, 'init', '--no-repo-verify',
            '--repo-url', REPO_URL, '-u', manifest_dir]
