@@ -6,9 +6,22 @@ import json
 import os
 import shutil
 
+from StringIO import StringIO
+
+try:
+  # Create a block to work around evil sys.modules manipulation in
+  # email/__init__.py that triggers pylint false positives.
+  # pylint: disable=E0611,F0401
+  from email.Message import Message
+  from email.Utils import formatdate
+except ImportError:
+  raise
+
 from buildbot.process.properties import Properties
 from buildbot.schedulers.trysched import TryBase
-from twisted.internet import defer, utils
+
+from twisted.internet import defer, reactor, utils
+from twisted.mail.smtp import SMTPSenderFactory
 from twisted.python import log
 
 from master.try_job_base import BadJobfile
@@ -21,7 +34,8 @@ def validate_job(parsed_job):
             ('user', basestring, True),
             ('email', list, True),
             ('bot', list, True),
-            ('extra_args', list, False)]
+            ('extra_args', list, False),
+            ('version', int, True)]
 
   error_msgs = []
   for name, f_type, required in fields:
@@ -40,16 +54,25 @@ class CrOSTryJobGit(TryBase):
 
   _PROPERTY_SOURCE = 'Try Job'
 
-  def __init__(self, name, poller, properties=None):
+  def __init__(self, name, poller, smtp_host, from_addr, reply_to, email_footer,
+               properties=None):
     """Initialize the class.
 
     Arguments:
       name: See TryBase.__init__().
       poller: The git poller that is watching the job repo.
+      smtp_host: The smtp host for sending out error emails.
+      from_addr: The email address to display as being sent from.
+      reply_to: The email address to put in the 'Reply-To' email header field.
+      email_footer: The footer to append to any emails sent out.
       properties: See TryBase.__init__()
     """
     TryBase.__init__(self, name, [], properties or {})
     self.watcher = poller
+    self.smtp_host = smtp_host
+    self.from_addr = from_addr
+    self.reply_to = reply_to
+    self.email_footer = email_footer
 
   def startService(self):
     TryBase.startService(self)
@@ -95,6 +118,32 @@ class CrOSTryJobGit(TryBase):
         path=self.watcher.workdir,
         )
 
+  def send_validation_fail_email(self, emails, error):
+    """Notify the user via email about the tryjob error."""
+    html_content = []
+    html_content.append('<html><body>')
+    body = """
+Your tryjob failed the validation step.  This is most likely because <br>
+you are running an older version of cbuildbot.  Please run <br>
+<code>repo sync chromiumos/chromite</code> and try again.  If you still see<br>
+this message please contact chromeos-build@google.com.<br>
+"""
+    html_content.append(body)
+    html_content.append("Extra error information:")
+    html_content.append(error.replace('\n', '<br>\n'))
+    html_content.append(self.email_footer)
+    m = Message()
+    m.set_payload('<br><br>'.join(html_content), 'utf8')
+    m.set_type("text/html")
+    m['Date'] = formatdate(localtime=True)
+    m['Subject'] = 'Tryjob failed validation'
+    m['From'] = self.from_addr
+    m['Reply-To'] = self.reply_to
+    result = defer.Deferred()
+    sender_factory = SMTPSenderFactory(self.from_addr, emails,
+                                       StringIO(m.as_string()), result)
+    reactor.connectTCP(self.smtp_host, 25, sender_factory)
+
   @defer.deferredGenerator
   def gotChange(self, change, important):
     """Process the received data and send the queue buildset."""
@@ -108,7 +157,11 @@ class CrOSTryJobGit(TryBase):
                                                        change.files[0]))
     yield wfd
     parsed = json.loads(wfd.getResult())
-    validate_job(parsed)
+    try:
+      validate_job(parsed)
+    except BadJobfile as e:
+      self.send_validation_fail_email(parsed['email'], str(e))
+      raise
 
     # The sourcestamp/buildsets created will be merge-able.
     d = self.master.db.sourcestamps.addSourceStamp(

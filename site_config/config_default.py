@@ -228,6 +228,8 @@ class Master(object):
     slave_port = 9153
     master_port_alt = 9063
     repo_url = 'ssh://gerrit.chromium.org:29418/chromiumos/tryjobs.git'
+    # The reply-to address to set for emails sent from the server.
+    reply_to = 'nobody@example.com'
 
   ## V8
 
