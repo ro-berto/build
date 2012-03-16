@@ -102,6 +102,14 @@ class V8Commands(commands.FactoryCommands):
                      cmd,
                      workdir='build/v8/')
 
+  def AddV8Test262(self, properties=None):
+    if self._target_platform == 'win32':
+      self.AddTaskkillStep()
+    cmd = self.GetV8TestingCommand()
+    cmd += ['--testname', 'test262']
+    self.AddTestStep(shell.ShellCommand, 'Test262', cmd,
+                     timeout=3600, workdir='build/v8/')
+
   def AddV8Mozilla(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()

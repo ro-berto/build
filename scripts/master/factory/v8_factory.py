@@ -73,11 +73,10 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('v8testing'): f.AddV8Testing()
     if R('v8_es5conform'): f.AddV8ES5Conform()
     if R('fuzz'): f.AddFuzzer()
+    if R('test262'): f.AddV8Test262()
     if R('mozilla'): f.AddV8Mozilla()
     if R('sputnik'): f.AddV8Sputnik()
     if R('gcmole'): f.AddV8GCMole()
-
-
 
   def V8Factory(self, target='release', clobber=False, tests=None, mode=None,
                 slave_type='BuilderTester', options=None, compile_timeout=1200,

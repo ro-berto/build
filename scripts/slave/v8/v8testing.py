@@ -83,6 +83,7 @@ def main():
     cmd = ['python', 'tools/test.py',
            simultaneous,
            '--progress=verbose',
+           '--download-data',
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
