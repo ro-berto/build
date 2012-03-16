@@ -24,6 +24,7 @@ from twisted.python import log, runtime
 from twisted.persisted import styles
 from buildbot.process import metrics
 from buildbot import interfaces, util
+from buildbot.util.lru import SyncLRUCache
 from buildbot.status.event import Event
 from buildbot.status.build import BuildStatus
 from buildbot.status.buildrequest import BuildRequestStatus
@@ -86,8 +87,7 @@ class BuilderStatus(styles.Versioned):
         self.currentBuilds = []
         self.nextBuild = None
         self.watchers = []
-        self.buildCache = weakref.WeakValueDictionary()
-        self.buildCache_LRU = []
+        self.buildCache = SyncLRUCache(self.cacheMiss, self.buildCacheSize)
         self.logCompressionLimit = False # default to no compression for tests
         self.logCompressionMethod = "bz2"
         self.logMaxSize = None # No default limit
@@ -103,7 +103,6 @@ class BuilderStatus(styles.Versioned):
         d = styles.Versioned.__getstate__(self)
         d['watchers'] = []
         del d['buildCache']
-        del d['buildCache_LRU']
         for b in self.currentBuilds:
             b.saveYourself()
             # TODO: push a 'hey, build was interrupted' event
@@ -119,8 +118,7 @@ class BuilderStatus(styles.Versioned):
         # when loading, re-initialize the transient stuff. Remember that
         # upgradeToVersion1 and such will be called after this finishes.
         styles.Versioned.__setstate__(self, d)
-        self.buildCache = weakref.WeakValueDictionary()
-        self.buildCache_LRU = []
+        self.buildCache = SyncLRUCache(self.cacheMiss, self.buildCacheSize)
         self.currentBuilds = []
         self.watchers = []
         self.slavenames = []
@@ -132,6 +130,7 @@ class BuilderStatus(styles.Versioned):
         # gets pickled and unpickled.
         if buildmaster.buildCacheSize is not None:
             self.buildCacheSize = buildmaster.buildCacheSize
+            self.buildCache.set_max_size(buildmaster.buildCacheSize)
 
     def upgradeToVersion1(self):
         if hasattr(self, 'slavename'):
@@ -186,33 +185,17 @@ class BuilderStatus(styles.Versioned):
         except:
             log.msg("unable to save builder %s" % self.name)
             log.err()
-        
+
 
     # build cache management
 
     def makeBuildFilename(self, number):
         return os.path.join(self.basedir, "%d" % number)
 
-    def touchBuildCache(self, build):
-        self.buildCache[build.number] = build
-        if build in self.buildCache_LRU:
-            self.buildCache_LRU.remove(build)
-        self.buildCache_LRU = self.buildCache_LRU[-(self.buildCacheSize-1):] + [ build ]
-        return build
-
     def getBuildByNumber(self, number):
-        # first look in currentBuilds
-        for b in self.currentBuilds:
-            if b.number == number:
-                return self.touchBuildCache(b)
+        return self.buildCache.get(number)
 
-        # then in the buildCache
-        if number in self.buildCache:
-            metrics.MetricCountEvent.log("buildCache.hits", 1)
-            return self.touchBuildCache(self.buildCache[number])
-        metrics.MetricCountEvent.log("buildCache.misses", 1)
-
-        # then fall back to loading it from disk
+    def loadBuildFromFile(self, number):
         filename = self.makeBuildFilename(number)
         try:
             log.msg("Loading builder %s's build %d from on-disk pickle"
@@ -235,11 +218,19 @@ class BuilderStatus(styles.Versioned):
             build.upgradeLogfiles()
             # check that logfiles exist
             build.checkLogfiles()
-            return self.touchBuildCache(build)
+            return build
         except IOError:
             raise IndexError("no such build %d" % number)
         except EOFError:
             raise IndexError("corrupted build pickle %d" % number)
+
+    def cacheMiss(self, number):
+        # first look in currentBuilds
+        for b in self.currentBuilds:
+            if b.number == number:
+              return b
+        # then fall back to loading it from disk
+        return self.loadBuildFromFile(number)
 
     def prune(self, events_only=False):
         # begin by pruning our own events
@@ -287,7 +278,7 @@ class BuilderStatus(styles.Versioned):
                     is_logfile = True
 
             if num is None: continue
-            if num in self.buildCache: continue
+            if num in self.buildCache.cache: continue
 
             if (is_logfile and num < earliest_log) or num < earliest_build:
                 pathname = os.path.join(self.basedir, filename)
@@ -510,7 +501,7 @@ class BuilderStatus(styles.Versioned):
         assert s.number == self.nextBuildNumber - 1
         assert s not in self.currentBuilds
         self.currentBuilds.append(s)
-        self.touchBuildCache(s)
+        self.buildCache.put(s.number, s)
 
         # now that the BuildStatus is prepared to answer queries, we can
         # announce the new build to all our watchers
@@ -620,7 +611,7 @@ class BuilderStatus(styles.Versioned):
         # Collect build numbers.
         # Important: Only grab the *cached* builds numbers to reduce I/O.
         current_builds = [b.getNumber() for b in self.currentBuilds]
-        cached_builds = list(set(self.buildCache.keys() + current_builds))
+        cached_builds = list(set(self.buildCache.cache.keys() + current_builds))
         cached_builds.sort()
         result['cachedBuilds'] = cached_builds
         result['currentBuilds'] = current_builds

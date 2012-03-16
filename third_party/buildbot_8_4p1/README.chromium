@@ -1199,3 +1199,289 @@ Cherry-pick command list flattening functionality from upstream buildbot -
          kwargs['logfiles'] = self.logfiles
  
          # check for the usePTY flag
+
+
+Replace the simple (and very slow) LRU cache implementation in BuilderStatus
+with a better one.  Added SyncLRUCache to avoid the expensive concurrency
+protection in AsyncLRUCache.
+
+Index: buildbot/status/builder.py
+===================================================================
+--- buildbot/status/builder.py	(revision 127129)
++++ buildbot/status/builder.py	(working copy)
+@@ -86,8 +86,8 @@
+         self.currentBuilds = []
+         self.nextBuild = None
+         self.watchers = []
+-        self.buildCache = weakref.WeakValueDictionary()
+-        self.buildCache_LRU = []
++        self.buildCache = util.lru.SyncLRUCache(self.cacheMiss,
++                                                self.buildCacheSize)
+         self.logCompressionLimit = False # default to no compression for tests
+         self.logCompressionMethod = "bz2"
+         self.logMaxSize = None # No default limit
+@@ -103,7 +103,6 @@
+         d = styles.Versioned.__getstate__(self)
+         d['watchers'] = []
+         del d['buildCache']
+-        del d['buildCache_LRU']
+         for b in self.currentBuilds:
+             b.saveYourself()
+             # TODO: push a 'hey, build was interrupted' event
+@@ -119,8 +118,8 @@
+         # when loading, re-initialize the transient stuff. Remember that
+         # upgradeToVersion1 and such will be called after this finishes.
+         styles.Versioned.__setstate__(self, d)
+-        self.buildCache = weakref.WeakValueDictionary()
+-        self.buildCache_LRU = []
++        self.buildCache = util.lru.SyncLRUCache(self.cacheMiss,
++                                                self.buildCacheSize)
+         self.currentBuilds = []
+         self.watchers = []
+         self.slavenames = []
+@@ -132,6 +131,7 @@
+         # gets pickled and unpickled.
+         if buildmaster.buildCacheSize is not None:
+             self.buildCacheSize = buildmaster.buildCacheSize
++            self.buildCache.set_max_size(buildmaster.buildCacheSize)
+ 
+     def upgradeToVersion1(self):
+         if hasattr(self, 'slavename'):
+@@ -186,33 +186,17 @@
+         except:
+             log.msg("unable to save builder %s" % self.name)
+             log.err()
+-        
+ 
++
+     # build cache management
+ 
+     def makeBuildFilename(self, number):
+         return os.path.join(self.basedir, "%d" % number)
+ 
+-    def touchBuildCache(self, build):
+-        self.buildCache[build.number] = build
+-        if build in self.buildCache_LRU:
+-            self.buildCache_LRU.remove(build)
+-        self.buildCache_LRU = self.buildCache_LRU[-(self.buildCacheSize-1):] + [ build ]
+-        return build
+-
+     def getBuildByNumber(self, number):
+-        # first look in currentBuilds
+-        for b in self.currentBuilds:
+-            if b.number == number:
+-                return self.touchBuildCache(b)
++        return self.buildCache.get(number)
+ 
+-        # then in the buildCache
+-        if number in self.buildCache:
+-            metrics.MetricCountEvent.log("buildCache.hits", 1)
+-            return self.touchBuildCache(self.buildCache[number])
+-        metrics.MetricCountEvent.log("buildCache.misses", 1)
+-
+-        # then fall back to loading it from disk
++    def loadBuildFromFile(self, number):
+         filename = self.makeBuildFilename(number)
+         try:
+             log.msg("Loading builder %s's build %d from on-disk pickle"
+@@ -235,12 +219,20 @@
+             build.upgradeLogfiles()
+             # check that logfiles exist
+             build.checkLogfiles()
+-            return self.touchBuildCache(build)
++            return build
+         except IOError:
+             raise IndexError("no such build %d" % number)
+         except EOFError:
+             raise IndexError("corrupted build pickle %d" % number)
+ 
++    def cacheMiss(self, number):
++        # first look in currentBuilds
++        for b in self.currentBuilds:
++            if b.number == number:
++              return b
++        # then fall back to loading it from disk
++        return self.loadBuildFromFile(number)
++
+     def prune(self, events_only=False):
+         # begin by pruning our own events
+         self.events = self.events[-self.eventHorizon:]
+@@ -287,7 +279,7 @@
+                     is_logfile = True
+ 
+             if num is None: continue
+-            if num in self.buildCache: continue
++            if num in self.buildCache.cache: continue
+ 
+             if (is_logfile and num < earliest_log) or num < earliest_build:
+                 pathname = os.path.join(self.basedir, filename)
+@@ -510,7 +502,7 @@
+         assert s.number == self.nextBuildNumber - 1
+         assert s not in self.currentBuilds
+         self.currentBuilds.append(s)
+-        self.touchBuildCache(s)
++        self.buildCache.put(s.number, s)
+ 
+         # now that the BuildStatus is prepared to answer queries, we can
+         # announce the new build to all our watchers
+@@ -620,7 +612,7 @@
+         # Collect build numbers.
+         # Important: Only grab the *cached* builds numbers to reduce I/O.
+         current_builds = [b.getNumber() for b in self.currentBuilds]
+-        cached_builds = list(set(self.buildCache.keys() + current_builds))
++        cached_builds = list(set(self.buildCache.cache.keys() + current_builds))
+         cached_builds.sort()
+         result['cachedBuilds'] = cached_builds
+         result['currentBuilds'] = current_builds
+Index: buildbot/util/lru.py
+===================================================================
+--- buildbot/util/lru.py	(revision 127129)
++++ buildbot/util/lru.py	(working copy)
+@@ -244,5 +244,82 @@
+             log.msg("      got:", sorted(self.refcount.items()))
+             inv_failed = True
+ 
++
++class SyncLRUCache(AsyncLRUCache):
++    """
++
++    A least-recently-used cache using the same strategy as AsyncLRUCache,
++    minus the protections for concurrent access.  The motivation for this
++    class is to provide a speedier implementation for heavily-used caches
++    that don't need the concurrency protections.
++
++    The constructor takes the same arguments as the AsyncLRUCache
++    constructor, except C{miss_fn} must return the missing value, I{not} a
++    deferred.
++    """
++
++    # utility function to record recent use of this key
++    def _ref_key(key):
++        refcount = self.refcount
++        queue = self.queue
++
++        queue.append(key)
++        refcount[key] = refcount[key] + 1
++
++        # periodically compact the queue by eliminating duplicate keys
++        # while preserving order of most recent access.  Note that this
++        # is only required when the cache does not exceed its maximum
++        # size
++        if len(queue) > self.max_queue:
++            refcount.clear()
++            queue_appendleft = queue.appendleft
++            queue_appendleft(self.sentinel)
++            for k in ifilterfalse(refcount.__contains__,
++                                    iter(queue.pop, self.sentinel)):
++                queue_appendleft(k)
++                refcount[k] = 1
++
++    def get(self, key, **miss_fn_kwargs):
++        """
++        Fetch a value from the cache by key, invoking C{self.miss_fn(key)} if
++        the key is not in the cache.
++
++        No protection is provided against concurrent access.
++
++        @param key: cache key
++        @param **miss_fn_kwargs: keyword arguments to  the miss_fn
++        @returns: cache value
++        """
++        cache = self.cache
++        weakrefs = self.weakrefs
++
++        try:
++            result = cache[key]
++            self.hits += 1
++            self._ref_key(key)
++            return result
++        except KeyError:
++            try:
++                result = weakrefs[key]
++                self.refhits += 1
++                cache[key] = result
++                self._ref_key(key)
++                return result
++            except KeyError:
++                pass
++
++        # if we're here, we've missed and need to fetch
++        self.misses += 1
++
++        result = self.miss_fn(key, **miss_fn_kwargs)
++        if result is not None:
++            cache[key] = result
++            weakrefs[key] = result
++            self._ref_key(key)
++            self._purge()
++
++        return result
++
++
+ # for tests
+ inv_failed = False
+Index: buildbot/test/unit/test_status_builder_cache.py
+===================================================================
+--- buildbot/test/unit/test_status_builder_cache.py	(revision 0)
++++ buildbot/test/unit/test_status_builder_cache.py	(revision 0)
+@@ -0,0 +1,60 @@
++# This file is part of Buildbot.  Buildbot is free software: you can
++# redistribute it and/or modify it under the terms of the GNU General Public
++# License as published by the Free Software Foundation, version 2.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
++# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
++# details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++#
++# Copyright Buildbot Team Members
++
++import os
++from mock import Mock
++from twisted.trial import unittest
++from buildbot.status import builder, master
++
++class TestBuildStatus(unittest.TestCase):
++
++    # that buildstep.BuildStepStatus is never instantiated here should tell you
++    # that these classes are not well isolated!
++
++    def setupBuilder(self, buildername, category=None):
++        b = builder.BuilderStatus(buildername=buildername, category=category)
++        # Ackwardly, Status sets this member variable.
++        b.basedir = os.path.abspath(self.mktemp())
++        os.mkdir(b.basedir)
++        # Otherwise, builder.nextBuildNumber is not defined.
++        b.determineNextBuildNumber()
++        # Must initialize these fields before pickling.
++        b.currentBigState = 'idle'
++        b.status = 'idle'
++        return b
++
++    def setupStatus(self, b):
++        m = Mock()
++        m.buildbotURL = 'http://buildbot:8010/'
++        m.basedir = '/basedir'
++        s = master.Status(m)
++        b.status = s
++        return s
++
++    def testBuildCache(self):
++      b = self.setupBuilder('builder_1')
++      builds = []
++      for i in xrange(5):
++        build = b.newBuild()
++        build.setProperty('propkey', 'propval%d' % i, 'test')
++        builds.append(build)
++        build.buildStarted(build)
++        build.buildFinished()
++      for build in builds:
++        build2 = b.getBuild(build.number)
++        self.assertTrue(build2)
++        self.assertEqual(build2.number, build.number)
++        self.assertEqual(build.getProperty('propkey'),
++                         'propval%d' % build.number)

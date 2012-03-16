@@ -244,5 +244,82 @@ class AsyncLRUCache(object):
             log.msg("      got:", sorted(self.refcount.items()))
             inv_failed = True
 
+
+class SyncLRUCache(AsyncLRUCache):
+    """
+
+    A least-recently-used cache using the same strategy as AsyncLRUCache,
+    minus the protections for concurrent access.  The motivation for this
+    class is to provide a speedier implementation for heavily-used caches
+    that don't need the concurrency protections.
+
+    The constructor takes the same arguments as the AsyncLRUCache
+    constructor, except C{miss_fn} must return the missing value, I{not} a
+    deferred.
+    """
+
+    # utility function to record recent use of this key
+    def _ref_key(self, key):
+        refcount = self.refcount
+        queue = self.queue
+
+        queue.append(key)
+        refcount[key] = refcount[key] + 1
+
+        # periodically compact the queue by eliminating duplicate keys
+        # while preserving order of most recent access.  Note that this
+        # is only required when the cache does not exceed its maximum
+        # size
+        if len(queue) > self.max_queue:
+            refcount.clear()
+            queue_appendleft = queue.appendleft
+            queue_appendleft(self.sentinel)
+            for k in ifilterfalse(refcount.__contains__,
+                                    iter(queue.pop, self.sentinel)):
+                queue_appendleft(k)
+                refcount[k] = 1
+
+    def get(self, key, **miss_fn_kwargs):
+        """
+        Fetch a value from the cache by key, invoking C{self.miss_fn(key)} if
+        the key is not in the cache.
+
+        No protection is provided against concurrent access.
+
+        @param key: cache key
+        @param **miss_fn_kwargs: keyword arguments to  the miss_fn
+        @returns: cache value
+        """
+        cache = self.cache
+        weakrefs = self.weakrefs
+
+        try:
+            result = cache[key]
+            self.hits += 1
+            self._ref_key(key)
+            return result
+        except KeyError:
+            try:
+                result = weakrefs[key]
+                self.refhits += 1
+                cache[key] = result
+                self._ref_key(key)
+                return result
+            except KeyError:
+                pass
+
+        # if we're here, we've missed and need to fetch
+        self.misses += 1
+
+        result = self.miss_fn(key, **miss_fn_kwargs)
+        if result is not None:
+            cache[key] = result
+            weakrefs[key] = result
+            self._ref_key(key)
+            self._purge()
+
+        return result
+
+
 # for tests
 inv_failed = False
