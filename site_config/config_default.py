@@ -384,6 +384,8 @@ class Master(object):
     master_port = 9075
     slave_port = 9175
     master_port_alt = 9275
+    # Need @google name to enable post to google groups.
+    from_address = 'perf_av@google.com'
 
   class DevTools(Chromium):
     project_name = 'Chromium DevTools'
