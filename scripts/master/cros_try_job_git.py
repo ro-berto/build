@@ -40,8 +40,9 @@ def validate_job(parsed_job):
   error_msgs = []
   for name, f_type, required in fields:
     val = parsed_job.get(name)
-    if val is None and required:
-      error_msgs.append('Option %s missing!' % name)
+    if val is None:
+      if required:
+        error_msgs.append('Option %s missing!' % name)
     elif not isinstance(val, f_type):
       error_msgs.append('Option %s of wrong type!' % name)
 
