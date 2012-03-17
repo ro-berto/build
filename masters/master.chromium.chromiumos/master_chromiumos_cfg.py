@@ -112,58 +112,6 @@ F('tester_2', chromiumos().ChromiumOSFactory(
     factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
 
 
-B('Linux ChromiumOS GTK',
-  factory='gtk',
-  gatekeeper='compile|tester',
-  builddir='chromium-rel-linux-chromeos-gtk',
-  scheduler='chromium_local',
-  notify_on_missing=True)
-F('gtk', chromiumos().ChromiumOSFactory(
-    tests=[
-           'base',
-           'browser_tests',
-           'cacheinvalidation',
-           'crypto',
-           'dbus',
-           'googleurl',
-           'interactive_ui',
-           'jingle',
-           'media',
-           'net',
-           'printing',
-           'remoting',
-           'ui',
-           'unit',
-           'views',
-           ],
-    options=['--compiler=goma',
-             'base_unittests',
-             'browser_tests',
-             'cacheinvalidation_unittests',
-             'chromeos_builder',
-             'crypto_unittests',
-             'dbus_unittests',
-             'googleurl_unittests',
-             'interactive_ui_tests',
-             'jingle_unittests',
-             'media_unittests',
-             'net_unittests',
-             'printing_unittests',
-             'remoting_unittests',
-             'ui_tests',
-             'unit_tests',
-             'views_unittests',
-             ],
-    factory_properties={
-        'archive_build': False,
-        'extra_archive_paths': 'chrome/tools/build/chromeos',
-        'gclient_env': {
-            'GYP_DEFINES': ('chromeos=1 chromeos_gtk=1 target_arch=ia32'
-                            ' ffmpeg_branding=ChromeOS proprietary_codecs=1')},
-        'generate_gtest_json': True,
-        'window_manager': True}))
-
-
 B('Linux ChromiumOS (Clang dbg)',
   factory='clang',
   gatekeeper='compile|tester',
