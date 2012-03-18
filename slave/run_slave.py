@@ -36,10 +36,10 @@ def HotPatchSlaveBuilder():
   # pylint: disable=E0611,F0401
   try:
     # buildbot 0.7.12
-    from buildbot.slave.bot import SlaveBuilder
+    from buildbot.slave.bot import log, Bot, SlaveBuilder
   except ImportError:
     # buildbot 0.8.x
-    from buildslave.bot import SlaveBuilder
+    from buildslave.bot import log, Bot, SlaveBuilder
   old_remote_shutdown = SlaveBuilder.remote_shutdown
 
   def rebooting_remote_shutdown(self):
@@ -47,6 +47,21 @@ def HotPatchSlaveBuilder():
     Reboot()
 
   SlaveBuilder.remote_shutdown = rebooting_remote_shutdown
+
+  Bot.old_remote_setBuilderList = Bot.remote_setBuilderList
+  def cleanup(self, wanted):
+    retval = self.old_remote_setBuilderList(wanted)
+    wanted_dirs = ['info', 'cert'] + [r[1] for r in wanted]
+    for d in os.listdir(self.basedir):
+      if d not in wanted_dirs and os.path.isdir(os.path.join(self.basedir, d)):
+        log.msg("Deleting unwanted directory %s" % d)
+        try:
+          shutil.rmtree(os.path.join(self.basedir, d))
+        except OSError, e:
+          log.msg("Failed, giving up: %s" % e)
+    return retval
+  Bot.new_remote_setBuilderList = cleanup
+  Bot.remote_setBuilderList = Bot.new_remote_setBuilderList
 
 
 def FixSubversionConfig():
