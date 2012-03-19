@@ -56,7 +56,7 @@ class TestBuildStatus(unittest.TestCase):
         build2 = b.getBuild(build.number)
         self.assertTrue(build2)
         self.assertEqual(build2.number, build.number)
-        self.assertEqual(build.getProperty('propkey'),
+        self.assertEqual(build2.getProperty('propkey'),
                          'propval%d' % build.number)
       # Do another round, to make sure we're hitting the cache
       hits = b.buildCache.hits
@@ -64,7 +64,7 @@ class TestBuildStatus(unittest.TestCase):
         build2 = b.getBuild(build.number)
         self.assertTrue(build2)
         self.assertEqual(build2.number, build.number)
-        self.assertEqual(build.getProperty('propkey'),
+        self.assertEqual(build2.getProperty('propkey'),
                          'propval%d' % build.number)
         self.assertEqual(b.buildCache.hits, hits+1)
         hits = hits + 1
