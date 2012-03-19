@@ -51,7 +51,7 @@ def HotPatchSlaveBuilder():
   Bot.old_remote_setBuilderList = Bot.remote_setBuilderList
   def cleanup(self, wanted):
     retval = self.old_remote_setBuilderList(wanted)
-    wanted_dirs = ['info', 'cert'] + [r[1] for r in wanted]
+    wanted_dirs = ['info', 'cert', '.svn'] + [r[1] for r in wanted]
     for d in os.listdir(self.basedir):
       if d not in wanted_dirs and os.path.isdir(os.path.join(self.basedir, d)):
         log.msg("Deleting unwanted directory %s" % d)
