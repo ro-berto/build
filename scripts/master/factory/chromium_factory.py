@@ -197,6 +197,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         config.Master.trunk_internal_url +
                         '/data/pyauto_private'))
 
+  CHROMEBOT_DEPS = [
+    ('src/tools/chromebot', 'http://src.chromium.org/svn/trunk/tools/' +
+                            'chromebot')]
+
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
                custom_deps_list=None, nohooks_on_update=False):
@@ -882,3 +886,39 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
+
+  def ChromiumChromebotFactory(
+      self, target='Release', clobber=False, tests=None,
+      mode=None, slave_type='ChromebotClient', options=None,
+      compile_timeout=1200, build_url=None, project=None,
+      factory_properties=None):
+    factory_properties = factory_properties or {}
+    self._solutions = []
+
+    for name, url in self.CHROMEBOT_DEPS:
+      self._solutions.append(gclient_factory.GClientSolution(url, name))
+
+    # Ensure that component is set correctly in the gyp defines.
+    self.ForceComponent(target, project, factory_properties)
+
+    factory = self.BuildFactory(target, clobber, tests, mode,
+                                slave_type, options, compile_timeout, build_url,
+                                project, factory_properties)
+
+    # Get the factory command object to create new steps to the factory.
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
+                                                          target,
+                                                          self._build_dir,
+                                                          self._target_platform)
+
+    # Add steps.
+    client_os = factory_properties.get('client_os')
+    if slave_type == 'ChromebotServer':
+      chromium_cmd_obj.AddGetBuildForChromebot(client_os, extract=False)
+      chromium_cmd_obj.AddChromebotServer(factory_properties)
+    elif slave_type == 'ChromebotClient':
+      chromium_cmd_obj.AddGetBuildForChromebot(client_os, extract=True,
+                                               build_url=build_url)
+      chromium_cmd_obj.AddChromebotClient(factory_properties)
+
+    return factory

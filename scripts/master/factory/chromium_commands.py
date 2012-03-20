@@ -12,6 +12,7 @@ import re
 
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
+from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
 
 import config
@@ -1033,6 +1034,87 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddPyAutoFunctionalTest(
           'media_tests_' + group.lower(), suite=group, timeout=timeout,
           perf=is_perf, factory_properties=factory_properties)
+
+  def AddChromebotServer(self, factory_properties=None):
+    """Add steps to run Chromebot script for server.
+
+    This expects build property to be set with Chromium build number, which
+    is set by SetBuildPropertyShellCommand in GetBuildForChromebot step.
+
+    Args:
+      client_os: Target client OS (win or linux).
+      server_port: Port for client/server communication.
+      max_runtime: Max time (secs) to run Chromebot server script.
+      build_id: ID of the extracted Chrome build.
+    """
+    factory_properties = factory_properties or {}
+    client_os = factory_properties.get('client_os')
+    server_port = factory_properties.get('server_port')
+    max_runtime = factory_properties.get('max_runtime')
+    build_id = WithProperties('%(build_id)s')
+
+    # Chromebot script paths.
+    chromebot_path = self.PathJoin('src', 'tools', 'chromebot')
+    chromebot_script = self.PathJoin(chromebot_path, 'chromebot.py')
+    url_file = self.PathJoin(chromebot_path, 'top-million')
+
+    # Add trigger step.
+    self._factory.addStep(trigger.Trigger(
+        schedulerNames=[factory_properties.get('trigger')],
+        updateSourceStamp=False,
+        waitForFinish=False))
+
+    # Add step to run Chromebot server script.
+    cmd = [self._python,
+           chromebot_script,
+           url_file,
+           '--build-id', build_id,
+           '--build-type', 'chromium',
+           '--client-os', client_os,
+           '--log-level', 'INFO',
+           '--max-runtime', str(max_runtime),
+           '--mode', 'server',
+           '--server-port', str(server_port)]
+    self.AddTestStep(shell.ShellCommand, 'run_chromebot_server', cmd,
+                     do_step_if=self.TestStepFilter)
+
+  def AddChromebotClient(self, factory_properties=None):
+    """Add steps to run Chromebot script for server and client side.
+
+    This expects build property to be set with Chromium build number, which
+    is set by SetBuildPropertyShellCommand in GetBuildForChromebot step.
+
+    Args:
+      client_os: Target client OS (win or linux).
+      server_hostname: Hostname of Chromebot server machine.
+      server_port: Port for client/server communication.
+      build_id: ID of the extracted Chrome build.
+    """
+    factory_properties = factory_properties or {}
+    client_os = factory_properties.get('client_os')
+    server_hostname = factory_properties.get('server_hostname')
+    server_port = factory_properties.get('server_port')
+    build_id = WithProperties('%(build_id)s')
+
+    # Chromebot script paths.
+    chromebot_path = self.PathJoin('src', 'tools', 'chromebot')
+    chromebot_script = self.PathJoin(chromebot_path, 'chromebot.py')
+    symbol_path = self.PathJoin(self._build_dir, 'breakpad_syms')
+    target_path = self.PathJoin(self._build_dir, self._target)
+
+    # Add step to run Chromebot client script.
+    cmd = [self._python,
+           chromebot_script,
+           '--build-dir', target_path,
+           '--build-id', build_id,
+           '--client-os', client_os,
+           '--log-level', 'INFO',
+           '--mode', 'client',
+           '--server', server_hostname,
+           '--server-port', str(server_port),
+           '--symbols-dir', symbol_path]
+    self.AddTestStep(shell.ShellCommand, 'run_chromebot_client', cmd,
+                     do_step_if=self.TestStepFilter)
 
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
