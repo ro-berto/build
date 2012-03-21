@@ -20,6 +20,10 @@ TEST_STATUS_TEXT_COUNTER = (
     'media_tests_av_perf <div class="BuildResultInfo"> PERF_IMPROVE: time/t '
     '(44.07%) PERF_REGRESS: fps/video (3.0%) </div>')
 
+TEST_STATUS_TEXT_2 = (
+    'media_tests_av_perf <div class="BuildResultInfo"> PERF_REGRESS: time/t2 '
+    '(89.07%) PERF_IMPROVE: fps/video2 (5.40%) </div>')
+
 TEST_STATUS_TEXT_EXCEPTION = ('media_tests_av_perf exception')
 
 
@@ -138,6 +142,25 @@ class PerfCountNotifierTest(unittest.TestCase):
     self.assertTrue(self.notifier.isInterestingStep(
         build_status, step_status, results))
 
+  def testIsInterestingResetByOtherResults(self):
+    """Test isInsteresting resets after different results appear."""
+    build_status = None
+    step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
+    results = [FAILURE]
+    for _ in range(self.notifier.minimum_count - 1):
+      self.assertFalse(self.notifier.isInterestingStep(
+          build_status, step_status, results))
+    # Reset the counters by having other results.
+    step_status = BuildStepStatusMock(TEST_STATUS_TEXT_2)
+    self.assertFalse(self.notifier.isInterestingStep(
+        build_status, step_status, results))
+    # Now check that we need to count back from the start.
+    step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
+    for _ in range(self.notifier.minimum_count - 1):
+      self.assertFalse(self.notifier.isInterestingStep(
+          build_status, step_status, results))
+    self.assertTrue(self.notifier.isInterestingStep(
+        build_status, step_status, results))
 
 class BuildStepStatusMock:
   def __init__(self, text):

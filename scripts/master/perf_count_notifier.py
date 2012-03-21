@@ -49,6 +49,25 @@ class PerfCountNotifier(ChromiumNotifier):
     self.recent_results = FailuresHistory(expiration_time=_EXPIRATION_TIME,
                                           size_limit=1000)
 
+  def _UpdateResults(self, results):
+    """Updates the results by adding/removing from the history.
+
+    Args:
+      results: List of result tuples, each tuple is of the form
+          ('REGRESS|IMPROVE', 'value_name').
+    """
+    new_results_ids = [' '.join(result) for result in results]
+    # Delete the old results if the new results do not have them.
+    to_delete = [old_id for old_id in self.recent_results.failures
+                 if old_id not in new_results_ids]
+
+    for old_id in to_delete:
+      self._DeleteResult(old_id)
+
+    # Update the new results history
+    for new_id in results:
+      self._StoreResult(new_id)
+
   def _StoreResult(self, result):
     """Stores the result value and removes counter results.
 
@@ -64,14 +83,22 @@ class PerfCountNotifier(ChromiumNotifier):
     else:
       counter_id = 'REGRESS ' + result[1]
     # Reset counter_id count since this breaks the consecutive count of it.
-    num_counter_results = self.recent_results.GetCount(counter_id)
-    if num_counter_results > 0:
+    self._DeleteResult(counter_id)
+
+  def _DeleteResult(self, result_id):
+    """Removes the history of results identified by result_id.
+
+    Args:
+      result_id: The id of the history entry (see _StoreResult() for details).
+    """
+    num_results = self.recent_results.GetCount(result_id)
+    if num_results > 0:
       # This is a hack into FailuresHistory since it does not allow to delete
       # entries in its history unless they are expired.
       # FailuresHistory.failures_count is the total number of entries in the
       # history limitted by FailuresHistory.size_limit.
-      del self.recent_results.failures[counter_id]
-      self.recent_results.failures_count -= num_counter_results
+      del self.recent_results.failures[result_id]
+      self.recent_results.failures_count -= num_results
 
   def _IsPerfStep(self, step_status):
     """Checks if the step name is one of the defined perf tests names."""
@@ -122,15 +149,16 @@ class PerfCountNotifier(ChromiumNotifier):
         return False
 
     is_interesting = False
+    update_list = []
     for result in perf_results:
       if len(result) != 2:
         # We expect a tuple similar to ('REGRESS', 'time/t')
         continue
       result_id = ' '.join(result)
-      self._StoreResult(result)
+      update_list.append(result)
       log.msg('[PerfCountNotifier] Result: %s happened %d times in a row.' %
-              (result_id, self.recent_results.GetCount(result_id)))
-      if self.recent_results.GetCount(result_id) >= self.minimum_count:
+              (result_id, self.recent_results.GetCount(result_id) + 1))
+      if self.recent_results.GetCount(result_id) >= self.minimum_count - 1:
         # This is an interesting result! We got the minimum consecutive count of
         # this result, however we still need to check if its been notified.
         if not self.notifications.GetCount(result_id):
@@ -141,5 +169,7 @@ class PerfCountNotifier(ChromiumNotifier):
         else:
           log.msg('[PerfCountNotifier] Result: %s has already been notified.' %
                   result_id)
+
+    self._UpdateResults(update_list)
 
     return is_interesting
