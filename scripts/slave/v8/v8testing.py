@@ -83,13 +83,14 @@ def main():
     cmd = ['python', 'tools/test.py',
            simultaneous,
            '--progress=verbose',
-           '--download-data',
            '--no-build',
            '--arch=' + options.arch,
            '--mode=' + options.target]
     if options.testname:
       cmd.extend([options.testname])
-    if options.testname == 'mozilla':
+    if options.testname == 'test262':
+      cmd.extend(['--download-data'])
+    elif options.testname == 'mozilla':
       # Mozilla tests requires a number of tests to timeout, set it a bit lower.
       if options.arch in ('arm', 'mips'):
         cmd.extend(['--timeout=180'])
