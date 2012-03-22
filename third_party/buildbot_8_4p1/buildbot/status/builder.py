@@ -239,8 +239,6 @@ class BuilderStatus(styles.Versioned):
         if events_only:
             return
 
-        gc.collect()
-
         # get the horizons straight
         if self.buildHorizon is not None:
             earliest_build = self.nextBuildNumber - self.buildHorizon

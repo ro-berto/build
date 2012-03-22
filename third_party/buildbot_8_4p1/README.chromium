@@ -1495,3 +1495,20 @@ Index: buildbot/test/unit/test_status_builder_cache.py
 +                         'propval%d' % build.number)
 +        self.assertEqual(b.buildCache.hits, hits+1)
 +        hits = hits + 1
+
+Import patch from buildbot trunk to remove unnecessary calls to
+gc.collect, which cause synchronous hangs in the master.
+
+Index: buildbot/status/builder.py
+===================================================================
+--- buildbot/status/builder.py	(revision 128258)
++++ buildbot/status/builder.py	(working copy)
+@@ -239,8 +239,6 @@
+         if events_only:
+             return
+ 
+-        gc.collect()
+-
+         # get the horizons straight
+         if self.buildHorizon is not None:
+             earliest_build = self.nextBuildNumber - self.buildHorizon
