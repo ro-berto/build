@@ -80,8 +80,8 @@ class CbuildbotFactory(object):
     """
     git_bin = '/usr/bin/git'
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
-    clear_and_clone_cmd = 'rm -rf %s ; sleep 10 ;' % git_checkout_dir
-    clear_and_clone_cmd += '%s clone %s;cd %s;' % (git_bin, repo,
+    clear_and_clone_cmd = 'rm -rf %s; ' % git_checkout_dir
+    clear_and_clone_cmd += '%s clone %s; cd %s; ' % (git_bin, repo,
                                                    git_checkout_dir)
 
     # We ignore branches coming from buildbot triggers and rely on those in the
