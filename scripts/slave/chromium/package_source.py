@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -16,6 +16,7 @@ from slave import slave_utils
 
 FILENAME = 'chromium-src.tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
+GSACL = 'public-read'
 
 
 def main(argv):
@@ -30,7 +31,7 @@ def main(argv):
                                 'src/', 'tools/', 'o3d/']) != 0:
     raise Exception('ERROR: failed to create %s, exiting' % FILENAME)
 
-  status = slave_utils.GSUtilCopyFile(FILENAME, GSBASE)
+  status = slave_utils.GSUtilCopyFile(FILENAME, GSBASE, gs_acl=GSACL)
   if status != 0:
     raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
         status, FILENAME, GSBASE))

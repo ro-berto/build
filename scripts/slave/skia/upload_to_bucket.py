@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -24,7 +24,8 @@ def upload_to_bucket(source_filepath, dest_gsbase):
       source_filepath, abs_source_filepath)
   if not os.path.exists(abs_source_filepath):
     raise Exception('ERROR: file not found: %s' % abs_source_filepath)
-  status = slave_utils.GSUtilCopyFile(abs_source_filepath, dest_gsbase)
+  status = slave_utils.GSUtilCopyFile(abs_source_filepath, dest_gsbase,
+                                      gs_acl='public-read')
   if status != 0:
     raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
         status, abs_source_filepath, dest_gsbase))

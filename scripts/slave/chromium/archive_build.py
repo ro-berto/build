@@ -7,6 +7,22 @@
 
   This script is used for developer builds.
 
+  To archive files on Google Storage, set the 'gs_bucket' key in the
+  --factory-properties to 'gs://<bucket-name>'. To control access to archives,
+  set the 'gs_acl' key to the desired canned-acl (e.g. 'public-read', see
+  https://developers.google.com/storage/docs/accesscontrol#extension for other
+  supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
+  object ACL will be applied (see
+  https://developers.google.com/storage/docs/accesscontrol#defaultobjects).
+
+  TODO(lliabraa): If no 'gs_acl' is set this script currently defaults to using
+  the 'public-read' canned-acl because that is what existing clients of this
+  script expect. The master.cfg files of those clients have been updated to
+  set 'gs_acl' appropriately so that once the masters have been restarted, this
+  script can be updated to match the description above (i.e. use default object
+  ACL if 'gs_acl' is not set). There is a TODO below where this change needs
+  to be made.
+
   When this is run, the current directory (cwd) should be the outer build
   directory (e.g., chrome-release/build/).
 
@@ -64,11 +80,12 @@ def Write(file_path, data):
     f.close()
 
 
-def MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=None):
+def MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=None, gs_acl=None):
   status = slave_utils.GSUtilCopyFile(filename,
                                       gs_base,
                                       gs_subdir,
-                                      mimetype)
+                                      mimetype,
+                                      gs_acl)
   if status != 0:
     dest = gs_base + '/' + gs_subdir
     raise GSUtilError('GSUtilCopyFile error %d. "%s" -> "%s"' % (status,
@@ -168,9 +185,9 @@ class StagerBase(object):
     return file_list
 
   def MyCopyFileToDir(self, filename, destination, gs_base, gs_subdir='',
-                      mimetype=None):
+                      mimetype=None, gs_acl=None):
     if gs_base:
-      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype)
+      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype, gs_acl)
 
     if not gs_base or self._dual_upload:
       chromium_utils.CopyFileToDir(filename, destination)
@@ -188,9 +205,9 @@ class StagerBase(object):
       chromium_utils.SshMakeDirectory(host, destination)
 
   def MySshCopyFiles(self, filename, host, destination, gs_base,
-                     gs_subdir=None, mimetype=None):
+                     gs_subdir=None, mimetype=None, gs_acl=None):
     if gs_base:
-      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype)
+      MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype, gs_acl)
     if not gs_base or self._dual_upload:
       chromium_utils.SshCopyFiles(filename, host, destination)
 
@@ -276,7 +293,7 @@ class StagerBase(object):
     return archive_utils.CreateArchive(self._build_dir, self._staging_dir,
                                        zip_file_list, zip_base_name)
 
-  def _UploadSymbols(self, www_dir, gs_base):
+  def _UploadSymbols(self, www_dir, gs_base, gs_acl):
     """Upload symbols to a share. It does not appear to upload symbols to a
        crash server.
        TODO(robertshield): Figure out if this should be uploading symbols to
@@ -298,7 +315,7 @@ class StagerBase(object):
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (sym_zip_file, symbol_dir)
       if not self.options.dry_run:
         self.MyMaybeMakeDirectory(symbol_dir, gs_base)
-        self.MyCopyFileToDir(sym_zip_file, symbol_dir, gs_base)
+        self.MyCopyFileToDir(sym_zip_file, symbol_dir, gs_base, gs_acl)
     elif chromium_utils.IsLinux():
       # If there are no symbol files, then sym_zip_file will be an empty string.
       sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
@@ -312,7 +329,7 @@ class StagerBase(object):
         self.MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
         self.MyMakeWorldReadable(sym_zip_file, gs_base)
         self.MySshCopyFiles(sym_zip_file, self.options.archive_host, www_dir,
-                            gs_base)
+                            gs_base, gs_acl=gs_acl)
         os.unlink(sym_zip_file)
     elif chromium_utils.IsMac():
       # A Mac build makes fake dSYMs, so there is no point in collecting them.
@@ -322,7 +339,7 @@ class StagerBase(object):
           'Platform "%s" is not currently supported.' % sys.platform)
 
   def _UploadBuild(self, www_dir, changelog_path, revisions_path,
-                   archive_files, gs_base):
+                   archive_files, gs_base, gs_acl):
     if chromium_utils.IsWindows():
       print 'os.makedirs(%s)' % www_dir
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (self._installer_file,
@@ -334,11 +351,11 @@ class StagerBase(object):
 
       if not self.options.dry_run:
         self.MyMaybeMakeDirectory(www_dir, gs_base)
-        self.MyCopyFileToDir(self._installer_file, www_dir, gs_base)
+        self.MyCopyFileToDir(self._installer_file, www_dir, gs_base, gs_acl)
         for archive in archive_files:
-          self.MyCopyFileToDir(archive, www_dir, gs_base)
-        self.MyCopyFileToDir(changelog_path, www_dir, gs_base)
-        self.MyCopyFileToDir(revisions_path, www_dir, gs_base)
+          self.MyCopyFileToDir(archive, www_dir, gs_base, gs_acl)
+        self.MyCopyFileToDir(changelog_path, www_dir, gs_base, gs_acl)
+        self.MyCopyFileToDir(revisions_path, www_dir, gs_base, gs_acl)
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       for archive in archive_files:
         print 'SshCopyFiles(%s, %s, %s)' % (archive,
@@ -354,21 +371,22 @@ class StagerBase(object):
         self.MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
         for archive in archive_files:
           self.MyMakeWorldReadable(archive, gs_base)
-          self.MySshCopyFiles(archive, self.options.archive_host, www_dir, gs_base)
+          self.MySshCopyFiles(archive, self.options.archive_host, www_dir,
+                              gs_base, gs_acl=gs_acl)
           os.unlink(archive)
         # Files are created umask 077 by default, so make it world-readable
         # before pushing to web server.
         self.MyMakeWorldReadable(changelog_path, gs_base)
         self.MySshCopyFiles(changelog_path, self.options.archive_host, www_dir,
-                            gs_base)
+                            gs_base, gs_acl=gs_acl)
         self.MyMakeWorldReadable(revisions_path, gs_base)
         self.MySshCopyFiles(revisions_path, self.options.archive_host, www_dir,
-                            gs_base)
+                            gs_base, gs_acl=gs_acl)
     else:
       raise NotImplementedError(
           'Platform "%s" is not currently supported.' % sys.platform)
 
-  def UploadTests(self, www_dir, gs_base):
+  def UploadTests(self, www_dir, gs_base, gs_acl):
     test_file_list = self._test_files
     if not test_file_list:
       return
@@ -413,7 +431,7 @@ class StagerBase(object):
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
           test_dir = os.path.join(www_dir, UPLOAD_DIR, relative_dir)
           self.MyCopyFileToDir(test_file, test_dir, gs_base,
-                          '/'.join([UPLOAD_DIR, relative_dir]))
+                          '/'.join([UPLOAD_DIR, relative_dir]), gs_acl)
       else:
         # Otherwise use scp.
         self.MySshMakeDirectory(self.options.archive_host,
@@ -428,22 +446,24 @@ class StagerBase(object):
           relative_dir = os.path.dirname(test_file[len(base_src_dir):])
           test_dir = os.path.join(www_dir, UPLOAD_DIR, relative_dir)
           self.MySshCopyFiles(test_file, self.options.archive_host, test_dir,
-                              gs_base, '/'.join([UPLOAD_DIR, relative_dir]))
+                              gs_base, '/'.join([UPLOAD_DIR, relative_dir]),
+                              gs_acl=gs_acl)
 
-  def _UploadFile(self, filename, www_dir, gs_base):
+  def _UploadFile(self, filename, www_dir, gs_base, gs_acl):
     path = os.path.join(self._build_dir, filename)
     if not os.path.exists(path):
       return
     if chromium_utils.IsWindows():
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (path, www_dir)
       if not self.options.dry_run:
-        self.MyCopyFileToDir(path, www_dir, gs_base)
+        self.MyCopyFileToDir(path, www_dir, gs_base, gs_acl)
     elif chromium_utils.IsLinux() or chromium_utils.IsMac():
       print 'SshCopyFiles(%s, %s, %s)' % (path, self.options.archive_host,
                                           www_dir)
       if not self.options.dry_run:
         self.MyMakeWorldReadable(path, gs_base)
-        self.MySshCopyFiles(path, self.options.archive_host, www_dir, gs_base)
+        self.MySshCopyFiles(path, self.options.archive_host, www_dir, gs_base,
+                            gs_acl=gs_acl)
 
   def _GenerateChangeLog(self, previous_revision, changelog_path):
     """We need to generate change log for both chrome and webkit repository."""
@@ -533,13 +553,17 @@ class StagerBase(object):
 
     www_dir = os.path.join(self._www_dir_base, str(self._build_revision))
     gs_bucket = self.options.factory_properties.get('gs_bucket', None)
+    # TODO(lliabraa): For now, default to using the 'canned-acl' that will
+    # make archives on Google Storage publicly readable. Once the masters
+    # have been restarted, this should default to None.
+    gs_acl = self.options.factory_properties.get('gs_acl', 'public-read')
     gs_base = None
     if gs_bucket:
       gs_base = '/'.join([gs_bucket, self._build_name,
                           str(self._build_revision)])
-    self._UploadSymbols(www_dir, gs_base)
+    self._UploadSymbols(www_dir, gs_base, gs_acl)
     self._UploadBuild(www_dir, changelog_path, self.revisions_path,
-                      [archive_file], gs_base)
+                      [archive_file], gs_base, gs_acl)
 
     # Archive Linux packages (if any -- only created for Chrome builds).
     if chromium_utils.IsLinux():
@@ -559,12 +583,12 @@ class StagerBase(object):
         for package_file in linux_packages:
           self.MyMakeWorldReadable(package_file, gs_base)
           self.MySshCopyFiles(package_file, self.options.archive_host,
-                         www_dir, gs_base)
+                              www_dir, gs_base, gs_acl=gs_acl)
           # Cleanup archived packages, otherwise they keep accumlating since
           # they have different filenames with each build.
           os.unlink(package_file)
 
-    self.UploadTests(www_dir, gs_base)
+    self.UploadTests(www_dir, gs_base, gs_acl)
 
     if not self.options.dry_run:
       # Save the current build revision locally so we can compute a changelog
@@ -576,8 +600,8 @@ class StagerBase(object):
       if chromium_utils.IsWindows():
         print 'Saving revision to %s' % latest_file_path
         if gs_base:
-          slave_utils.GSUtilCopyFile(self.last_change_file, gs_base, '..',
-                                     mimetype='text/plain')
+          MyCopyFileToGS(self.last_change_file, gs_base, '..',
+                         mimetype='text/plain', gs_acl=gs_acl)
         if not gs_base or self._dual_upload:
           self.SaveBuildRevisionToSpecifiedFile(latest_file_path)
       elif chromium_utils.IsLinux() or chromium_utils.IsMac():
@@ -588,7 +612,7 @@ class StagerBase(object):
                                             latest_file_path)
         self.MySshCopyFiles(self.last_change_file, self.options.archive_host,
                             latest_file_path, gs_base, '..',
-                            mimetype='text/plain')
+                            mimetype='text/plain', gs_acl=gs_acl)
       else:
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
@@ -597,8 +621,8 @@ class StagerBase(object):
     # TODO(mmoss): This should be pulled from FILES.cfg. remoting-webapp.zip is
     # already in there. Need to add devtools_frontend.zip, then put in handling
     # here based on the 'archive' field.
-    self._UploadFile('devtools_frontend.zip', www_dir, gs_base)
-    self._UploadFile('remoting-webapp.zip', www_dir, gs_base)
+    self._UploadFile('devtools_frontend.zip', www_dir, gs_base, gs_acl)
+    self._UploadFile('remoting-webapp.zip', www_dir, gs_base, gs_acl)
 
     if len(not_found):
       sys.stderr.write('\n\nWARNING: File(s) not found: %s\n' %
