@@ -60,6 +60,12 @@ F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
         'needs_valgrind': True,
         'gclient_env': {'GYP_DEFINES' : valgrind_gyp_defines,}}))
 
+B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_webkit_rel')
+F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
+    target='Release',
+    tests=['gpu_tests', 'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
+    options=['--compiler=goma', 'chromium_gpu_builder'],
+    factory_properties={'generate_gtest_json': True}))
 
 ################################################################################
 ## Debug
