@@ -26,10 +26,12 @@ _UNITTESTS = [
   'pe_orderers_unittests',
   'pe_transforms_unittests',
   'pe_unittests',
+  'playback_unittests',
   'profile_unittests',
   'relink_unittests',
   'reorder_unittests',
   'rpc_service_unittests',
+  'simulate_unittests',
   'wsdump_unittests',
 ]
 
