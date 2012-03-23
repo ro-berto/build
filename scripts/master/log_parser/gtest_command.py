@@ -73,6 +73,10 @@ class TestObserver(buildstep.LogLineObserver):
     self._retry_message = re.compile('RETRYING FAILED TESTS:')
     self.retrying_failed = False
 
+    # Some of our log lines are now big (200K).  We need to do this
+    # or twisted will drop the connection and we'll misprocess the log.
+    self.setMaxLineLength(1024*1024)
+
   def _StatusOfTest(self, test):
     """Returns the status code for the given test, or 'not known'."""
     test_status = self._test_status.get(test, ('not known', []))
