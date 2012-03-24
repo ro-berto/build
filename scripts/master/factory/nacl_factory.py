@@ -14,6 +14,11 @@ import config
 class NativeClientFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the nacl master.cfg files."""
 
+  CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
+  CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url',
+                                 config.Master.sourceforge_url)
+  CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
+
   def __init__(self, build_dir, target_platform, use_supplement=False,
                alternate_url=None, custom_deps_list=None):
     solutions = []
@@ -22,7 +27,10 @@ class NativeClientFactory(gclient_factory.GClientFactory):
     if alternate_url:
       nacl_url = alternate_url
     main = gclient_factory.GClientSolution(
-        nacl_url, custom_deps_list=custom_deps_list)
+        nacl_url, custom_deps_list=custom_deps_list,
+        custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
+                          self.CUSTOM_VARS_GOOGLECODE_URL,
+                          self.CUSTOM_VARS_SOURCEFORGE_URL])
     solutions.append(main)
 
     if use_supplement:

@@ -18,6 +18,10 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the nacl.sdk master.cfg files."""
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
+  CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
+  CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url',
+                                 config.Master.sourceforge_url)
+  CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
 
   # A map used to skip dependencies when a test is not run.
   # The map key is the test name. The map value is an array containing the
@@ -38,6 +42,9 @@ class NativeClientSDKFactory(gclient_factory.GClientFactory):
       nacl_sdk_url = alternate_url
     main = gclient_factory.GClientSolution(
         nacl_sdk_url,
+        custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
+                          self.CUSTOM_VARS_GOOGLECODE_URL,
+                          self.CUSTOM_VARS_SOURCEFORGE_URL],
         custom_deps_list=[('src/pdf', None),
                           ('src-pdf', None),
                           ('src/third_party/WebKit/LayoutTests', None)],
