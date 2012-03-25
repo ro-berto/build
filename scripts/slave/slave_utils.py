@@ -321,22 +321,8 @@ def GSUtilSetup():
   os.environ['AWS_CREDENTIAL_FILE'] = boto_file
   return gsutil
 
-def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
-  """Copy a file to Google Storage.
-
-  Runs the following command:
-    gsutil -h Content-Type:<mimetype> \
-        cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<filename w/o path>
-
-  Args:
-    filename: the file to upload
-    gs_base: the bucket to upload the file to
-    subdir: optional subdirectory withing the bucket
-    mimetype: optional value to add as a Content-Type header
-    gs_acl: optional value to add as a canned-acl
-  Returns:
-    The status code returned from running the generated gsutil command.
-  """
+def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None):
+  """Copy a file to Google Storage."""
 
   source = 'file://' + filename
   dest = gs_base
@@ -354,15 +340,12 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = [gsutil]
-  if mimetype:
+  if mimetype :
     command.extend(['-h', 'Content-Type:%s' % mimetype])
-  command.extend(['cp'])
-  if gs_acl:
-    command.extend(['-a', gs_acl])
-  command.extend([source, dest])
+  command.extend(['cp', '-a', 'public-read', source, dest])
   return chromium_utils.RunCommand(command)
 
-def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
+def GSUtilCopyDir(src_dir, gs_base, dest_dir=None):
   """Create a list of files in a directory and pass each to GSUtilCopyFile."""
 
   # Walk the source directory and find all the files.
@@ -394,7 +377,7 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
       path = path.replace('\\', '/')
 
     # Pass the file off to copy.
-    status = GSUtilCopyFile(filename, gs_base, path, gs_acl=gs_acl)
+    status = GSUtilCopyFile(filename, gs_base, path)
 
     # Bail out on any failure.
     if status:
