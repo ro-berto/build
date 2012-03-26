@@ -151,6 +151,9 @@ LKGR_STEPS = {
   'Linux Builder (dbg)': [
     'compile',
   ],
+  # 'Linux Builder x64': [
+  #   'check_deps',
+  # ],
   'Linux Tests (dbg)(1)': [
     'check_deps',
     'browser_tests',
@@ -187,7 +190,7 @@ def FetchBuildsMain(builder, builds):
   try:
     # Requires python 2.6
     # pylint: disable=E1121
-    url_fh = urllib2.urlopen(url, None, 60)
+    url_fh = urllib2.urlopen(url, None, 600)
     builder_history = json.load(url_fh)
     url_fh.close()
     builds[builder] = builder_history
@@ -213,7 +216,8 @@ def CollateRevisionHistory(builds):
       for step in build_data['steps']:
         steps[step['name']] = step
       for step in LKGR_STEPS[builder]:
-        assert step in steps
+        if step not in steps:
+          raise Exception('builder %s step %s not in steps\n' % (builder, step))
         if ('isFinished' not in steps[step] or
            steps[step]['isFinished'] is not True):
           reasons.append('Step %s has not completed (%s)' % (
