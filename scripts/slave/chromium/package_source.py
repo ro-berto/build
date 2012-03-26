@@ -20,6 +20,22 @@ GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 
 
+def DeleteIfExists(filename):
+  """Deletes the file (relative to GSBASE), if it exists."""
+  (status, output) = slave_utils.GSUtilListBucket(GSBASE)
+  if status != 0:
+    raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
+
+  regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, filename))
+  if not regex.match(output):
+    return
+
+  status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, filename))
+  if status != 0:
+    raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
+        status, '%s/%s' % (GSBASE, filename)))
+
+
 def main(argv):
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
@@ -37,15 +53,8 @@ def main(argv):
                                 'o3d/']) != 0:
     raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
 
-  status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, completed_filename))
-  if status != 0:
-    raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
-        status, '%s/%s' % (GSBASE, completed_filename)))
-
-  status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, partial_filename))
-  if status != 0:
-    raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
-        status, '%s/%s' % (GSBASE, partial_filename)))
+  DeleteIfExists(completed_filename)
+  DeleteIfExists(partial_filename)
 
   status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE, gs_acl=GSACL)
   if status != 0:
