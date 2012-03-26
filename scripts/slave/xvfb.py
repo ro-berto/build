@@ -63,11 +63,21 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT)
       # Wait for xdisplaycheck to exit.
-      xdisplayproc.communicate()
-      if xdisplayproc.poll() != 0:
-        print "Xvfb return code (None if still running):", proc.poll()
-        print "Xvfb stdout and stderr:", proc.communicate()
-        raise Exception(xdisplayproc.communicate()[0])
+      logs = xdisplayproc.communicate()[0]
+      if xdisplayproc.returncode != 0:
+        print "xdisplaycheck failed."
+        print "xdisplaycheck output:"
+        for l in logs.splitlines():
+          print "> %s" % l
+        rc = proc.poll()
+        if rc is None:
+          print "Xvfb still running."
+        else:
+          print "Xvfb exited, code %d" % rc
+          print "Xvfb output:"
+          for l in proc.communicate()[0].splitlines():
+            print "> %s" % l
+        raise Exception(logs)
       print "...OK"
 
   if with_wm:
