@@ -50,6 +50,7 @@ backward.
 
 # The 2 following modules are not present on python 2.5
 # pylint: disable=F0401
+import datetime
 import json
 import multiprocessing
 import optparse
@@ -151,11 +152,10 @@ LKGR_STEPS = {
   'Linux Builder (dbg)': [
     'compile',
   ],
-  # 'Linux Builder x64': [
-  #   'check_deps',
-  # ],
-  'Linux Tests (dbg)(1)': [
+  'Linux Builder x64': [
     'check_deps',
+  ],
+  'Linux Tests (dbg)(1)': [
     'browser_tests',
     'net_unittests',
   ],
@@ -181,9 +181,12 @@ LKGR_STEPS = {
 
 #-------------------------------------------------------------------------------
 
+def Print(s):
+  print '%s: %s' % (datetime.datetime.now(), s)
+
 def VerbosePrint(s):
   if VERBOSE:
-    print s
+    Print(s)
 
 def FetchBuildsMain(builder, builds):
   url = '%s/builders/%s/builds/_all' % (BUILDER_URL, urllib2.quote(builder))
@@ -193,6 +196,13 @@ def FetchBuildsMain(builder, builds):
     url_fh = urllib2.urlopen(url, None, 600)
     builder_history = json.load(url_fh)
     url_fh.close()
+    # check_deps was moved to Linux Builder x64 at build 39789.  Ignore
+    # builds older than that.
+    if builder == 'Linux Builder x64':
+      for build in builder_history.keys():
+        if int(build) < 39789:
+          Print('removing build %s from Linux Build x64' % build)
+          del builder_history[build]
     builds[builder] = builder_history
   except urllib2.URLError:
     VerbosePrint('URLException while fetching %s' % url)
@@ -308,8 +318,8 @@ def PostLKGR(lkgr, password_file, dry):
     password = password_fh.read().strip()
     password_fh.close()
   except IOError:
-    print >> sys.stdout, 'Could not read password file %s' % password_file
-    print >> sys.stdout, 'Aborting upload'
+    Print('Could not read password file %s' % password_file)
+    Print('Aborting upload')
     return
   params = {
     'revision': lkgr,
@@ -317,7 +327,7 @@ def PostLKGR(lkgr, password_file, dry):
     'password': password
   }
   params = urllib.urlencode(params)
-  print params
+  Print(params)
   if not dry:
     # Requires python 2.6
     # pylint: disable=E1121
@@ -343,7 +353,7 @@ def NotifyMaster(master, lkgr, dry=False):
   p.start()
   p.join(5)
   if p.is_alive():
-    print >> sys.stdout, 'Timeout while notifying %s' % master
+    Print('Timeout while notifying %s' % master)
     # p.terminate() can hang; just obliterate the sucker.
     os.kill(p.pid, signal.SIGKILL)
 
