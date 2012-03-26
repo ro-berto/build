@@ -385,6 +385,28 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None):
 
   return 0
 
+def GSUtilMoveFile(source, dest):
+  """Move a file on Google Storage."""
+
+  gsutil = GSUtilSetup()
+
+  # Run the gsutil command. gsutil internally calls command_wrapper, which
+  # will try to run the command 10 times if it fails.
+  command = [gsutil]
+  command.extend(['mv', source, dest])
+  return chromium_utils.RunCommand(command)
+
+def GSUtilDeleteFile(filename):
+  """Delete a file on Google Storage."""
+
+  gsutil = GSUtilSetup()
+
+  # Run the gsutil command. gsutil internally calls command_wrapper, which
+  # will try to run the command 10 times if it fails.
+  command = [gsutil]
+  command.extend(['rm', filename])
+  return chromium_utils.RunCommand(command)
+
 # Python doesn't support the type of variable scope in nested methods needed
 # to avoid the global output variable.  This variable should only ever be used
 # by GSUtilListBucket.

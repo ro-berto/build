@@ -9,6 +9,7 @@
 import os
 import re
 import sys
+from time import strftime
 
 from common import chromium_utils
 from slave import slave_utils
@@ -22,24 +23,47 @@ def main(argv):
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
 
-  chromium_utils.RunCommand(['rm', '-f', FILENAME])
-  if os.path.exists(FILENAME):
-    raise Exception('ERROR: %s cannot be removed, exiting' % FILENAME)
+  completed_hour = strftime('%H')
+  completed_filename = '%s.%s' % (FILENAME, completed_hour)
+  partial_filename = '%s.partial' % completed_filename
 
-  if chromium_utils.RunCommand(['tar', 'cjvf', FILENAME, '--exclude=.svn',
-                                'src/', 'tools/', 'o3d/']) != 0:
-    raise Exception('ERROR: failed to create %s, exiting' % FILENAME)
+  chromium_utils.RunCommand(['rm', '-f', partial_filename])
+  if os.path.exists(partial_filename):
+    raise Exception('ERROR: %s cannot be removed, exiting' % partial_filename)
 
-  status = slave_utils.GSUtilCopyFile(FILENAME, GSBASE)
+  if chromium_utils.RunCommand(['tar', 'cjvf', partial_filename,
+                                '--exclude=.svn', 'src/', 'tools/',
+                                'o3d/']) != 0:
+    raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
+
+  status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, completed_filename))
+  if status != 0:
+    raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
+        status, '%s/%s' % (GSBASE, completed_filename)))
+
+  status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, partial_filename))
+  if status != 0:
+    raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
+        status, '%s/%s' % (GSBASE, partial_filename)))
+
+  status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE)
   if status != 0:
     raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
-        status, FILENAME, GSBASE))
+        status, partial_filename, GSBASE))
+
+  status = slave_utils.GSUtilMoveFile('%s/%s' % (GSBASE, partial_filename),
+                                      '%s/%s' % (GSBASE, completed_filename))
+  if status != 0:
+    raise Exception('ERROR: GSUtilMoveFile error %d. "%s" -> "%s"' % (
+        status, '%s/%s' % (GSBASE, partial_filename),
+        '%s/%s' % (GSBASE, completed_filename)))
 
   (status, output) = slave_utils.GSUtilListBucket(GSBASE)
   if status != 0:
     raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
 
-  regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, FILENAME))
+  regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
+                                                       completed_filename))
   match_data = regex.match(output)
   modified_time = None
   if match_data:
