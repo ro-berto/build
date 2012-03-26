@@ -538,16 +538,21 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Ensure that component is set correctly in the gyp defines.
     self.ForceComponent(target, project, factory_properties)
 
-    factory = self.BuildFactory(target, clobber, tests_for_build, mode,
-                                slave_type, options, compile_timeout, build_url,
-                                project, factory_properties,
-                                gclient_deps=gclient_deps)
+    # factory is set to 'None' below. BuildFactory will fill this in
+    # with ChromiumCommands.SetFactory to resolve circ. dependency.
 
     # Get the factory command object to create new steps to the factory.
-    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(None,
                                                           target,
                                                           self._build_dir,
                                                           self._target_platform)
+
+    factory = self.BuildFactory(target, clobber, tests_for_build, mode,
+                                slave_type, options, compile_timeout, build_url,
+                                project, factory_properties,
+                                gclient_deps=gclient_deps,
+                                specific_cmd_obj = chromium_cmd_obj)
+
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):
