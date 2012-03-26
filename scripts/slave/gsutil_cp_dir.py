@@ -67,7 +67,7 @@ def ShellEscape(s):
   return "'" + s.replace("'", "'\\''") + "'"
 
 
-def MassCopy(src_path, dst_uri, jobs, retries):
+def MassCopy(src_path, dst_uri, jobs, retries, acl):
   """Copy a directory to Google Storage in parallel.
 
   Args:
@@ -75,11 +75,16 @@ def MassCopy(src_path, dst_uri, jobs, retries):
     dst_uri: gs://... type uri.
     jobs: maximum concurrent copies.
     retries:  times to re-attempt commands on failure.
+    acl: value to pass for gsutil's -a parameter.
   Returns:
     Error code for system.
   """
   # Pick gsutil.
   gsutil = os.environ.get('GSUTIL', 'gsutil')
+  if acl:
+    acl_arg = '-a %s' % acl
+  else:
+    acl_arg = ''
   # Find base path.
   base = os.path.abspath(src_path)
   # Get the list of objects.
@@ -112,8 +117,11 @@ def MassCopy(src_path, dst_uri, jobs, retries):
       while len(running) < jobs and objects:
         o = objects.pop(0)
         ot = os.path.abspath(o)[len(base):]
-        cmd = '%s cp -a public-read %s %s' % (
-          ShellEscape(gsutil), ShellEscape(o), ShellEscape(dst_uri + ot))
+        cmd = '%s cp %s %s %s' % (
+          ShellEscape(gsutil),
+          ShellEscape(acl_arg),
+          ShellEscape(o),
+          ShellEscape(dst_uri + ot))
         running.append(ShellJob(cmd, retries))
 
       # Sad having to poll, but at least it behaves nicely in the presence
@@ -136,6 +144,11 @@ def main(argv):
                     help='message to print')
   parser.add_option('-r', '--retries', type='int', default=3,
                     dest='retries', help='times to retry')
+  # TODO(lliabraa): Legacy clients do not send the -a option and expect the
+  # default ACL to be 'public-read'.Fix these clients, then change the default
+  # to None (which will cause the default object ACL to be applied).
+  parser.add_option('-a', '--acl', default='public-read', dest='acl',
+                    help='value to pass to for -a argument of gsutil cp')
   (options, args) = parser.parse_args(argv)
   if len(args) != 2:
     parser.print_help()
@@ -145,7 +158,7 @@ def main(argv):
     print m
 
   return MassCopy(src_path=args[0], dst_uri=args[1],
-                  jobs=options.jobs, retries=options.retries)
+                  jobs=options.jobs, retries=options.retries, acl=options.acl)
 
 
 if __name__ == '__main__':

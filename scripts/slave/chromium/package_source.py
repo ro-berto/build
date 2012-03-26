@@ -17,6 +17,7 @@ from slave import slave_utils
 
 FILENAME = 'chromium-src.tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
+GSACL = 'public-read'
 
 
 def main(argv):
@@ -46,7 +47,7 @@ def main(argv):
     raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
         status, '%s/%s' % (GSBASE, partial_filename)))
 
-  status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE)
+  status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE, gs_acl=GSACL)
   if status != 0:
     raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
         status, partial_filename, GSBASE))

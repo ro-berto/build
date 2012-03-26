@@ -5,7 +5,23 @@
 
 """ Creates a zip file of a build and upload it to google storage.
 
-    This will be used by the ASAN security tests.
+This will be used by the ASAN security tests.
+
+To archive files on Google Storage, set the 'gs_bucket' key in the
+--factory-properties to 'gs://<bucket-name>'. To control access to archives,
+set the 'gs_acl' key to the desired canned-acl (e.g. 'public-read', see
+https://developers.google.com/storage/docs/accesscontrol#extension for other
+supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
+object ACL will be applied (see
+https://developers.google.com/storage/docs/accesscontrol#defaultobjects).
+
+TODO(lliabraa): If no 'gs_acl' is set this script currently defaults to using
+the 'public-read' canned-acl because that is what existing clients of this
+script expect. The master.cfg files of those clients have been updated to
+set 'gs_acl' appropriately so that once the masters have been restarted, this
+script can be updated to match the description above (i.e. use default object
+ACL if 'gs_acl' is not set). There is a TODO below where this change needs
+to be made.
 """
 
 import optparse
@@ -78,7 +94,11 @@ def archive(options, args):
   print 'Zip file is %ld bytes' % zip_size
 
   gs_bucket = options.factory_properties.get('gs_bucket', None)
-  status = slave_utils.GSUtilCopyFile(zip_file, gs_bucket)
+  # TODO(lliabraa): For now, default to using the 'canned-acl' that will
+  # make archives on Google Storage publicly readable. Once the masters
+  # have been restarted, this should default to None.
+  gs_acl = options.factory_properties.get('gs_acl', 'public-read')
+  status = slave_utils.GSUtilCopyFile(zip_file, gs_bucket, gs_acl=gs_acl)
   if status:
     raise StagingError('Failed to upload %s to %s. Error %d' % (zip_file,
                                                                 gs_bucket,

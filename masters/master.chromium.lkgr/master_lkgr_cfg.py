@@ -30,7 +30,8 @@ F('win_full', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-continuous',}))
+                        'gs_bucket': 'gs://chromium-browser-continuous',
+                        'gs_acl': 'public-read',}))
 
 ################################################################################
 ## Mac
@@ -40,7 +41,8 @@ B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
 F('mac_full', mac().ChromiumFactory(
     clobber=True,
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-continuous'}))
+                        'gs_bucket': 'gs://chromium-browser-continuous',
+                        'gs_acl': 'public-read',}))
 
 ################################################################################
 ## Linux
@@ -50,7 +52,8 @@ B('Linux', 'linux_full', 'compile|testers', 'chromium_lkgr')
 F('linux_full', linux().ChromiumFactory(
     clobber=True,
     factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-continuous'}))
+                        'gs_bucket': 'gs://chromium-browser-continuous',
+                        'gs_acl': 'public-read',}))
 
 B('Linux x64', 'linux64_full', 'compile|testers', 'chromium_lkgr')
 F('linux64_full', linux().ChromiumFactory(
@@ -58,6 +61,7 @@ F('linux64_full', linux().ChromiumFactory(
     factory_properties={
         'archive_build': True,
         'gs_bucket': 'gs://chromium-browser-continuous',
+        'gs_acl': 'public-read',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
@@ -67,6 +71,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
     factory_properties={
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
 
 asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
@@ -80,6 +85,7 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
        'asan_archive_build': True,
        'asan_archive_name': 'asan-symbolized',
        'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_gyp}}))
 
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
@@ -90,6 +96,7 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
     factory_properties={
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
 
 
