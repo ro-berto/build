@@ -60,7 +60,7 @@ class DartCommands(commands.FactoryCommands):
     options = options or {}
     clobber_cmd = [self._python, self._dart_util]
     clobber_cmd.append(WithProperties('%(clobber:+--clobber)s'))
-    if options.get('arch') == 'dartc':
+    if options.get('name') != None and options.get('name').startswith('dartc'):
       workdir = self._dartc_build_dir
     else:
       workdir = self._vm_build_dir
@@ -76,7 +76,7 @@ class DartCommands(commands.FactoryCommands):
   def AddCompileStep(self, options=None, timeout=1200):
     options = options or {}
     cmd = 'python ../tools/build.py --mode=%s' % (options['mode'])
-    if options.get('arch') == 'dartc':
+    if options.get('name') != None and options.get('name').startswith('dartc'):
       workdir = self._dartc_build_dir
     else:
       cmd += ' --arch=%s' % (options['arch'])
@@ -91,17 +91,19 @@ class DartCommands(commands.FactoryCommands):
 
   def AddTests(self, options=None, timeout=1200):
     options = options or {}
-    if options.get('arch') == 'dartc':
-      component = 'dartc'
-      arch = 'ia32'
+    if options.get('name') != None and options.get('name').startswith('dartc'):
+      compiler = 'dartc'
+      runtime = 'none'
     else:
-      component = 'vm'
-      arch = options.get('arch')
+      compiler = 'none'
+      runtime = 'vm'
+    arch = options.get('arch')
 
-    configuration = (options['mode'], arch, component)
+    configuration = (options['mode'], arch, compiler, runtime)
     base_cmd = ('python ../tools/test.py --progress=line --report'
-        ' --time --mode=%s --arch=%s --component=%s') % configuration
-    if options.get('arch') == 'dartc':
+        ' --time --mode=%s --arch=%s --compiler=%s --runtime=%s') % \
+        configuration
+    if options.get('name') != None and options.get('name').startswith('dartc'):
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
                             name='tests',
