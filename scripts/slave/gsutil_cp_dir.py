@@ -82,7 +82,7 @@ def MassCopy(src_path, dst_uri, jobs, retries, acl):
   # Pick gsutil.
   gsutil = os.environ.get('GSUTIL', 'gsutil')
   if acl:
-    acl_arg = '-a %s' % acl
+    acl_arg = '-a%s' % acl
   else:
     acl_arg = ''
   # Find base path.
