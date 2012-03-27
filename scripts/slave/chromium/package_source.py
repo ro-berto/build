@@ -27,7 +27,7 @@ def DeleteIfExists(filename):
     raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
 
   regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE, filename))
-  if not regex.match(output):
+  if not regex.search(output):
     return
 
   status = slave_utils.GSUtilDeleteFile('%s/%s' % (GSBASE, filename))
@@ -74,7 +74,7 @@ def main(argv):
 
   regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
                                                        completed_filename))
-  match_data = regex.match(output)
+  match_data = regex.search(output)
   modified_time = None
   if match_data:
     modified_time = match_data.group(1)
