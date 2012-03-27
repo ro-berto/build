@@ -318,8 +318,9 @@ class FactoryCommands(object):
     return cmd
 
   def AddTestStep(self, command_class, test_name, test_command,
-                  test_description='', timeout=600, workdir=None, env=None,
-                  locks=None, halt_on_failure=False, do_step_if=True):
+                  test_description='', timeout=10*60, max_time=8*60*60,
+                  workdir=None, env=None, locks=None, halt_on_failure=False,
+                  do_step_if=True):
     """Adds a step to the factory to run a test.
 
     Args:
@@ -330,6 +331,9 @@ class FactoryCommands(object):
       timeout: the buildbot timeout for the test, in seconds.  If it doesn't
           produce any output to stdout or stderr for this many seconds,
           buildbot will cancel it and call it a failure.
+      max_time: the maxiumum time the command can run, in seconds.  If the
+          command doesn't return in this many seconds, buildbot will cancel it
+          and call it a failure.
       test_command: the command list to run
       test_description: an auxiliary description to be appended to the
         test_name in the buildbot display; for example, ' (single process)'
@@ -341,11 +345,13 @@ class FactoryCommands(object):
       locks: any locks to acquire for this test
       halt_on_failure: whether the current build should halt if this step fails
     """
+    assert timeout <= max_time
     do_step_if = do_step_if or self.TestStepFilter
     self._factory.addStep(
         command_class,
         name=test_name,
         timeout=timeout,
+        maxTime=max_time,
         doStepIf=do_step_if,
         workdir=workdir,
         env=env,
