@@ -20,6 +20,7 @@ _UNITTESTS = [
   'block_graph_unittests',
   'common_unittests',
   'core_unittests',
+  'grinder_unittests',
   'instrument_unittests',
   'parse_unittests',
   'pdb_unittests',
