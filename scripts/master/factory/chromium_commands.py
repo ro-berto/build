@@ -539,6 +539,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     total_shards = factory_properties.get('browser_total_shards')
     shard_index = factory_properties.get('browser_shard_index')
+    options.append(factory_properties.get('browser_tests_filter', []))
 
     self.AddBasicGTestTestStep('browser_tests', factory_properties,
                                description, options, total_shards=total_shards,
