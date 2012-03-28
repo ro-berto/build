@@ -756,8 +756,8 @@ twistd.pid
 /masters/master.client.v8/v8-win64
 /masters/master.client.v8/w32-d-moz1
 /masters/master.client.v8/w32-d-moz2
-/masters/master.client.v8/w32-d-sput1
-/masters/master.client.v8/w32-d-sput2
+/masters/master.client.v8/w32-d-t2621
+/masters/master.client.v8/w32-d-t2622
 /masters/master.client.v8/webkit-dbg-linux-v8
 /masters/master.client.v8/webkit-dbg-mac-v8
 /masters/master.client.v8/webkit-rel-linux-v8
@@ -767,7 +767,7 @@ twistd.pid
 /masters/master.client.v8/win-dbg1
 /masters/master.client.v8/win-dbg2
 /masters/master.client.v8/win32-mozilla
-/masters/master.client.v8/win32-sputnik
+/masters/master.client.v8/win32-test262
 /masters/master.client.webm/Linux
 /masters/master.client.webm/Windows
 /masters/master.client.webm/public_html/bg_gradient.jpg
