@@ -24,10 +24,16 @@ class DartCommands(commands.FactoryCommands):
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
 
-    # Two additional directories up compared to normal chromium scripts due
-    # to using runtime or dartc as runtime dir inside dart directory
-    # inside build directory.
-    self._script_dir = self.PathJoin('..', '..', self._script_dir)
+    if target_platform != None and target_platform.startswith('dartc'):
+      # building inside the 'dart' directory
+      self._script_dir = self.PathJoin( '..', self._script_dir)
+      self._tools_dir = self.PathJoin('tools')
+    else:
+      # Two additional directories up compared to normal chromium scripts due
+      # to using runtime as runtime dir inside dart directory inside
+      # build directory.
+      self._script_dir = self.PathJoin('..', '..', self._script_dir)
+      self._tools_dir = self.PathJoin('..', 'tools')
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
@@ -40,7 +46,8 @@ class DartCommands(commands.FactoryCommands):
 
     self._dart_util = self.PathJoin(self._slave_dir, 'dart_util.py')
     self._vm_build_dir = self.PathJoin('build', 'dart', 'runtime')
-    self._dartc_build_dir = self.PathJoin('build', 'dart', 'compiler')
+    # dartc builds from the root of the dart tree
+    self._dartc_build_dir = self.PathJoin('build', 'dart')
     self._repository_root = ''
     self._target_platform = target_platform
 
@@ -75,7 +82,10 @@ class DartCommands(commands.FactoryCommands):
   # pylint: disable=W0221
   def AddCompileStep(self, options=None, timeout=1200):
     options = options or {}
-    cmd = 'python ../tools/build.py --mode=%s' % (options['mode'])
+
+
+    cmd = 'python ' + self._tools_dir + '/build.py --mode=%s' % \
+        (options['mode'])
     if options.get('name') != None and options.get('name').startswith('dartc'):
       workdir = self._dartc_build_dir
     else:
@@ -100,9 +110,9 @@ class DartCommands(commands.FactoryCommands):
     arch = options.get('arch')
 
     configuration = (options['mode'], arch, compiler, runtime)
-    base_cmd = ('python ../tools/test.py --progress=line --report'
-        ' --time --mode=%s --arch=%s --compiler=%s --runtime=%s') % \
-        configuration
+    base_cmd = ('python ' + self._tools_dir + '/test.py '
+        ' --progress=line --report --time --mode=%s --arch=%s '
+        ' --compiler=%s --runtime=%s') % configuration
     if options.get('name') != None and options.get('name').startswith('dartc'):
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
