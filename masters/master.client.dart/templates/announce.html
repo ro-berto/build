@@ -62,20 +62,24 @@
                 "vm-win32-release",
               ]],
               ["dart2js", [
-                "dart2js-linux-release",
-                "dart2js-linux-release-checked",
+                "dart2js-linux-release-1-4",
+                "dart2js-linux-release-2-4",
+                "dart2js-linux-release-3-4",
+                "dart2js-linux-release-4-4",
+                "dart2js-linux-release-checked-1-4",
+                "dart2js-linux-release-checked-2-4",
+                "dart2js-linux-release-checked-3-4",
+                "dart2js-linux-release-checked-4-4",
                 "dart2js-linux-debug",
                 "dart2js-linux-debug-checked",
-              ]],
-              ["dartc", [
-                "dartc-linux-debug",
-                "dartc-linux-release",
               ]],
               ["dart-editor", [
                 "dart-editor",
                 "dart-editor-win",
                 "dart-editor-mac",
                 "dart-editor-linux",
+                "dartc-linux-debug",
+                "dartc-linux-release",
               ]],
               ["dartium", [
                 "dartium-mac-full",
@@ -88,23 +92,15 @@
                 "dartium-win-inc",
                 "dartium-win-debug",
               ]],
-              ["firefox", [
-                "web-ff-linux",
-                "web-ff-win7",
-              ]],
-              ["chrome", [
+              ["browsers", [
                 "web-chrome-linux",
                 "web-chrome-win7",
                 "web-chrome-mac",
-              ]],
-              ["safari", [
+                "web-ff-linux",
+                "web-ff-win7",
                 "web-safari-mac",
-              ]],
-              ["ie", [
                 "web-ie-win7",
                 "web-ie-win7-2",
-              ]],
-              ["opera", [
                 "web-opera-linux",
               ]],
               ["frog", [
@@ -118,7 +114,6 @@
               for(var j in raw_flavors[i][1]) {
                 row.push("builder=" + raw_flavors[i][1][j]);
               }
-              row.push("titles=on");
               flavors.push([raw_flavors[i][0], row.join("&")]);
             }
 
