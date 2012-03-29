@@ -32,8 +32,8 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
         swarm_command_obj.AddSwarmTestStep(self._target_platform,
             factory_properties.get('swarm_server', 'localhost'),
             factory_properties.get('swarm_port', '9001'),
-            factory_properties.get('min_swarm_shards', '1'),
-            factory_properties.get('max_swarm_shards', '1'),
+            factory_properties.get('min_swarm_shards', '3'),
+            factory_properties.get('max_swarm_shards', '3'),
             os.path.join('src', 'out', target, test + '.results'),
             test)
 
