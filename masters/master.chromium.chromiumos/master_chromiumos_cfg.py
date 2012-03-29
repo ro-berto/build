@@ -21,6 +21,60 @@ S(name='chromium_local', branch='src', treeStableTimer=60)
 
 T('chromiumos_rel_trigger')
 
+linux_options = [
+    'aura_builder',
+    'base_unittests',
+    'browser_tests',
+    'cacheinvalidation_unittests',
+    'compositor_unittests',
+    'content_unittests',
+    'crypto_unittests',
+    'dbus_unittests',
+    'gfx_unittests',
+    'gpu_unittests',
+    'googleurl_unittests',
+    'interactive_ui_tests',
+    'ipc_tests',
+    'jingle_unittests',
+    'media_unittests',
+    'net_unittests',
+    'printing_unittests',
+    #'remoting_unittests',
+    #'safe_browsing_tests',
+    'sql_unittests',
+    'sync_unit_tests',
+    'ui_tests',
+    'unit_tests',
+    'views_unittests',
+]
+
+linux_tests_1 = [
+    'aura',
+    'aura_shell',
+    'base',
+    'cacheinvalidation',
+    'compositor',
+    'crypto',
+    'dbus',
+    'gfx',
+    'googleurl',
+    'gpu',
+    'ipc',
+    'jingle',
+    'media',
+    'net',
+    'printing',
+    #'remoting',
+    #'safe_browsing'
+    'sql',
+    'DISABLED_sync',
+    'unit',
+    'views',
+]
+
+linux_tests_2 = [ 'browser_tests' ]
+linux_tests_3 = [ 'ui', 'interactive_ui' ]
+
 B('Linux ChromiumOS Builder',
   factory='builder',
   gatekeeper='compile',
@@ -29,32 +83,7 @@ B('Linux ChromiumOS Builder',
   notify_on_missing=True)
 F('builder', chromiumos().ChromiumOSFactory(
     slave_type='NASBuilder',
-    options=['--compiler=goma',
-             'aura_builder',
-             'base_unittests',
-             'browser_tests',
-             'cacheinvalidation_unittests',
-             'compositor_unittests',
-             'content_unittests',
-             'crypto_unittests',
-             'dbus_unittests',
-             'gfx_unittests',
-             'gpu_unittests',
-             'googleurl_unittests',
-             'interactive_ui_tests',
-             'ipc_tests',
-             'jingle_unittests',
-             'media_unittests',
-             'net_unittests',
-             'printing_unittests',
-             #'remoting_unittests',
-             #'safe_browsing_tests',
-             'sql_unittests',
-             'sync_unit_tests',
-             'ui_tests',
-             'unit_tests',
-             'views_unittests',
-             ],
+    options=['--compiler=goma'] + linux_options,
     factory_properties={
         'archive_build': False,
         'trigger': 'chromiumos_rel_trigger',
@@ -105,10 +134,7 @@ B('Linux ChromiumOS Tester (2)',
   notify_on_missing=True)
 F('tester_2', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
-    tests=['browser_tests',
-           'interactive_ui',
-           'ui',
-           ],
+    tests=linux_tests_2 + linux_tests_3,
     factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
 
 
@@ -139,67 +165,37 @@ B('Linux ChromiumOS Builder (dbg)', 'dbg', 'compile',
 F('dbg', chromiumos().ChromiumOSFactory(
     slave_type='NASBuilder',
     target='Debug',
-    options=['--compiler=goma',
-             'aura_builder',
-             'base_unittests',
-             'browser_tests',
-             'cacheinvalidation_unittests',
-             'compositor_unittests',
-             'content_unittests',
-             'crypto_unittests',
-             'dbus',
-             'gfx_unittests',
-             'gpu_unittests',
-             'googleurl_unittests',
-             'interactive_ui_tests',
-             'ipc_tests',
-             'jingle_unittests',
-             'media_unittests',
-             'net_unittests',
-             'printing_unittests',
-             #'remoting_unittests',
-             #'safe_browsing',
-             'sync_unit_tests',
-             'sql_unittests',
-             'ui_tests',
-             'unit_tests',
-             'views_unittests',
-             ],
+    options=['--compiler=goma'] + linux_options,
     factory_properties={
       'gclient_env': { 'GYP_DEFINES' : 'chromeos=1' },
       'trigger': 'chromiumos_dbg_trigger',
       'window_manager': False,
     }))
 
-B('Linux ChromiumOS Tests (dbg)', 'dbg_tests_1', 'tester',
+B('Linux ChromiumOS Tests (dbg)(1)', 'dbg_tests_1', 'tester',
   'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('dbg_tests_1', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
-    tests=['aura',
-           'aura_shell',
-           'DISABLED_base',
-           'DISABLED_browser_tests',
-           'cacheinvalidation',
-           'compositor',
-           'crypto',
-           'gfx',
-           'googleurl',
-           'gpu',
-           'DISABLED_interactive_ui',
-           'ipc',
-           'jingle',
-           'media',
-           'net',
-           'printing',
-           #'DISABLED_remoting',
-           'DISABLED_sql',
-           #'DISABLED_safe_browsing',
-           'DISABLED_sync',
-           'DISABLED_ui'
-           'unit',
-           'views',
-           ],
+    tests=linux_tests_1,
+    factory_properties={'generate_gtest_json': True,}))
+
+
+B('Linux ChromiumOS Tests (dbg)(2)', 'dbg_tests_2', 'tester',
+  'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
+F('dbg_tests_2', chromiumos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=linux_tests_2,
+    factory_properties={'generate_gtest_json': True,}))
+
+
+B('Linux ChromiumOS Tests (dbg)(3)', 'dbg_tests_3', 'tester',
+  'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
+F('dbg_tests_3', chromiumos().ChromiumOSFactory(
+    slave_type='NASTester',
+    target='Debug',
+    tests=linux_tests_3,
     factory_properties={'generate_gtest_json': True,}))
 
 
