@@ -36,6 +36,7 @@ enable-auto-props = yes
 *.png = svn:mime-type=image/png
 *.py = svn:eol-style=LF
 *.pyd = svn:executable
+*.rc = svn:eol-style=LF
 *.sh = svn:eol-style=LF;svn:executable
 *.svg = svn:eol-style=LF
 *.txt = svn:eol-style=LF
