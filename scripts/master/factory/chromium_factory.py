@@ -300,6 +300,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Medium-sized tests (unit and browser):
     if R('unit'):           f.AddChromeUnitTests(fp)
+    # A snapshot of the "ChromeUnitTests" available for individual selection
+    if R('unit_ipc'):       f.AddBasicGTestTestStep('ipc_tests', fp)
+    if R('unit_sync'):      f.AddBasicGTestTestStep('sync_unit_tests', fp)
+    if R('unit_unit'):      f.AddBasicGTestTestStep('unit_tests', fp)
+    if R('unit_sql'):       f.AddBasicGTestTestStep('sql_unittests', fp)
+    if R('unit_gfx'):       f.AddBasicGTestTestStep('gfx_unittests', fp)
+    if R('unit_content'):   f.AddBasicGTestTestStep('content_unittests', fp)
+    if R('unit_views'):     f.AddBasicGTestTestStep('views_unittests', fp)
     if R('browser_tests'):  f.AddBrowserTests(fp)
 
     # Big, UI tests:
