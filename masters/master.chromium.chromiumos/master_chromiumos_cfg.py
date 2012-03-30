@@ -93,7 +93,7 @@ F('builder', chromiumos().ChromiumOSFactory(
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1')},
         'window_manager': False}))
 
-B('Linux ChromiumOS Tester (1)',
+B('Linux ChromiumOS Tests (1)',
   factory='tester_1',
   scheduler='chromiumos_rel_trigger',
   gatekeeper='tester',
@@ -126,7 +126,7 @@ F('tester_1', chromiumos().ChromiumOSFactory(
     factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
 
 
-B('Linux ChromiumOS Tester (2)',
+B('Linux ChromiumOS Tests (2)',
   factory='tester_2',
   scheduler='chromiumos_rel_trigger',
   gatekeeper='tester',
