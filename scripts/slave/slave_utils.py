@@ -321,6 +321,40 @@ def GSUtilSetup():
   os.environ['AWS_CREDENTIAL_FILE'] = boto_file
   return gsutil
 
+
+def GSUtilCopy(source, dest, mimetype=None, gs_acl=None):
+  """Copy a file to Google Storage.
+
+  Runs the following command:
+    gsutil -h Content-Type:<mimetype> \
+        cp -a <gs_acl> file://<filename> <gs_base>/<subdir>/<filename w/o path>
+
+  Args:
+    source: the source URI
+    dest: the destination URI
+    mimetype: optional value to add as a Content-Type header
+    gs_acl: optional value to add as a canned-acl
+  Returns:
+    The status code returned from running the generated gsutil command.
+  """
+
+  if not source.startswith('gs://') and not source.startswith('file://'):
+    source = 'file://' + source
+  if not dest.startswith('gs://') and not dest.startswith('file://'):
+    dest = 'file://' + dest
+  gsutil = GSUtilSetup()
+  # Run the gsutil command. gsutil internally calls command_wrapper, which
+  # will try to run the command 10 times if it fails.
+  command = [gsutil]
+  if mimetype:
+    command.extend(['-h', 'Content-Type:%s' % mimetype])
+  command.extend(['cp'])
+  if gs_acl:
+    command.extend(['-a', gs_acl])
+  command.extend([source, dest])
+  return chromium_utils.RunCommand(command)
+
+
 def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
   """Copy a file to Google Storage.
 
@@ -348,19 +382,7 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
     else:
       dest = '/'.join([gs_base, subdir])
   dest = '/'.join([dest, os.path.basename(filename)])
-
-  gsutil = GSUtilSetup()
-
-  # Run the gsutil command. gsutil internally calls command_wrapper, which
-  # will try to run the command 10 times if it fails.
-  command = [gsutil]
-  if mimetype:
-    command.extend(['-h', 'Content-Type:%s' % mimetype])
-  command.extend(['cp'])
-  if gs_acl:
-    command.extend(['-a', gs_acl])
-  command.extend([source, dest])
-  return chromium_utils.RunCommand(command)
+  return GSUtilCopy(source, dest, mimetype, gs_acl)
 
 def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
   """Create a list of files in a directory and pass each to GSUtilCopyFile."""

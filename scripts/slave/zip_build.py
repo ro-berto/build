@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -201,7 +201,7 @@ def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
   return zip_file
 
 
-def _MakeVersionedArchive(zip_file, file_suffix):
+def _MakeVersionedArchive(zip_file, file_suffix, options):
   """Takes a file name, e.g. /foo/bar.zip and an extra suffix, e.g. _baz,
   and copies the file to /foo/bar_baz.zip."""
   zip_template = os.path.basename(zip_file)
@@ -215,21 +215,27 @@ def _MakeVersionedArchive(zip_file, file_suffix):
     chromium_utils.MoveFile(versioned_file, old_file)
   shutil.copyfile(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
+  # For chromium.perf, upload the versioned file to a GS bucket.
+  if (options.build_properties.get('mastername') == 'chromium.perf' and
+      options.build_properties.get('buildername') in ('Win Builder')):
+    print 'Uploading to Google Storage...'
+    slave_utils.GSUtilCopyFile(versioned_file, 'gs://chrome-perf/',
+        options.build_properties['buildername'])
   print 'Created versioned archive', versioned_file
   return (zip_base, zip_ext)
 
 
-def MakeVersionedArchive(zip_file, build_revision):
+def MakeVersionedArchive(zip_file, build_revision, options):
   """Ensures that a versioned archive exists corresponding
   to given unversioned archive."""
-  return _MakeVersionedArchive(zip_file, '_%d' % build_revision)
+  return _MakeVersionedArchive(zip_file, '_%d' % build_revision, options)
 
 
-def MakeWebKitVersionedArchive(zip_file, cr_revision, wk_revision):
+def MakeWebKitVersionedArchive(zip_file, cr_revision, wk_revision, options):
   """Ensures that a versioned archive exists corresponding
   to given unversioned archive."""
   return _MakeVersionedArchive(zip_file, '_wk%d_%d' %
-                                         (wk_revision, cr_revision))
+                                         (wk_revision, cr_revision), options)
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext):
@@ -271,10 +277,11 @@ def archive(options, args):
   zip_file = MakeUnversionedArchive(build_dir, staging_dir,
                                     build_revision, zip_file_list)
   if not webkit_revision:
-    (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision)
+    (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision,
+                                               options)
   else:
     (zip_base, zip_ext) = MakeWebKitVersionedArchive(
-        zip_file, build_revision, webkit_revision)
+        zip_file, build_revision, webkit_revision, options)
   PruneOldArchives(staging_dir, zip_base, zip_ext)
 
   # Update the latest revision file in the staging directory
@@ -301,6 +308,10 @@ def main(argv):
                                 'zip, regardless of any exclusion patterns')
   option_parser.add_option('', '--webkit-dir', default=None,
                            help='webkit directory path, relative to --src-dir')
+  option_parser.add_option('--build-properties', action='callback',
+                           callback=chromium_utils.convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
   option_parser.add_option('--factory-properties', action='callback',
                            callback=chromium_utils.convert_json, type='string',
                            nargs=1, default={},
