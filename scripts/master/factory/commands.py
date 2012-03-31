@@ -667,7 +667,6 @@ class FactoryCommands(object):
     if src_dir is not None:
       cmd += ['--src-dir', src_dir]
 
-    cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     if include_files is not None:

@@ -22,41 +22,9 @@ from slave import slave_utils
 WARNING_EXIT_CODE = 88
 
 
-class ExtractHandler(object):
-  def __init__(self, url):
-    self.url = url
-
-  def update_url(self, url):
-    self.url = url
-
-
-class GSHandler(ExtractHandler):
-  def is_present(self):
-    return 0 == slave_utils.GSUtilListBucket(self.url)[0]
-
-  @chromium_utils.RunAndPrintDots
-  def download(self):
-    return 0 == slave_utils.GSUtilCopy(self.url, '.')[0]
-
-
-class WebHandler(ExtractHandler):
-  def is_present(self):
-    try:
-      content = urllib2.urlopen(self.url)
-      content.close()
-    except urllib2.HTTPError:
-      return False
-    return True
-
-  @chromium_utils.RunAndPrintDots
-  def download(self, *args, **kwargs):
-    try:
-      rc = urllib.urlretrieve(self.url, *args, **kwargs)
-      print '\nDownload complete'
-    except IOError:
-      print '\nFailed to download build'
-      return False
-    return rc
+@chromium_utils.RunAndPrintDots
+def urlretrieve(*args, **kwargs):
+  return urllib.urlretrieve(*args, **kwargs)
 
 
 def real_main(options, args):
@@ -114,11 +82,6 @@ def real_main(options, args):
     url = options.build_url.replace(
         '.zip', '_wk%d_%d.zip' % (webkit_revision, current_revision))
 
-  if url.startswith('gs://'):
-    handler = GSHandler(url)
-  else:
-    handler = WebHandler(url)
-
   # We try to download and extract 3 times.
   for tries in range(1, 4):
     print 'Try %d: Fetching build from %s...' % (tries, url)
@@ -126,7 +89,10 @@ def real_main(options, args):
     failure = False
 
     # Check if the url exists.
-    if not handler.is_present():
+    try:
+      content = urllib2.urlopen(url)
+      content.close()
+    except urllib2.HTTPError:
       print '%s is not found' % url
       failure = True
 
@@ -142,17 +108,24 @@ def real_main(options, args):
 
     # If the url is valid, we download the file.
     if not failure:
-      if not handler.download():
+      try:
+        urlretrieve(url, archive_name)
+        print '\nDownload complete'
+      except IOError:
+        print '\nFailed to download archived build'
         failure = True
 
     # If the versioned url failed, we try to get the latest build.
-    if failure and not url.startswith('gs://'):
+    if failure:
       print 'Fetching latest build...'
-      handler.update_url(options.build_url)
-      if not handler.download():
+      try:
+        urlretrieve(options.build_url, archive_name)
+        print '\nDownload complete'
+      except IOError:
+        print '\nFailed to download generic archived build'
+        # Try again...
         continue
 
-    shutil.move(os.path.basename(handler.url), archive_name)
     print 'Extracting build %s to %s...' % (archive_name, abs_build_output_dir)
     try:
       chromium_utils.RemoveDirectory(target_build_output_dir)
