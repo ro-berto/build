@@ -217,7 +217,7 @@ def _MakeVersionedArchive(zip_file, file_suffix, options):
   chromium_utils.MakeWorldReadable(versioned_file)
   # For chromium.perf, upload the versioned file to a GS bucket.
   if (options.build_properties.get('mastername') == 'chromium.perf' and
-      options.build_properties.get('buildername') in ('Win Builder')):
+      options.build_properties.get('buildername') == 'Win Builder'):
     print 'Uploading to Google Storage...'
     slave_utils.GSUtilCopyFile(versioned_file, 'gs://chrome-perf/',
         options.build_properties['buildername'])
@@ -234,8 +234,10 @@ def MakeVersionedArchive(zip_file, build_revision, options):
 def MakeWebKitVersionedArchive(zip_file, cr_revision, wk_revision, options):
   """Ensures that a versioned archive exists corresponding
   to given unversioned archive."""
-  return _MakeVersionedArchive(zip_file, '_wk%d_%d' %
-                                         (wk_revision, cr_revision), options)
+  return _MakeVersionedArchive(
+      zip_file,
+      '_wk%d_%d' % (wk_revision, cr_revision),
+      options)
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext):

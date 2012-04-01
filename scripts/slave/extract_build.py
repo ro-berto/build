@@ -32,9 +32,8 @@ class GSHandler(ExtractHandler):
   def is_present(self):
     return 0 == slave_utils.GSUtilListBucket(self.url)[0]
 
-  @chromium_utils.RunAndPrintDots
   def download(self):
-    status = slave_utils.GSUtilCopy(self.url, '.')[0]
+    status = slave_utils.GSUtilCopy(self.url, '.')
     if 0 != status:
       return False
     shutil.move(os.path.basename(self.url), self.archive_name)
