@@ -6,7 +6,7 @@ deps = {
     "svn://svn.chromium.org/gsutil/trunk/src@145",
 
   "build/third_party/gsutil/boto":
-    "svn://svn.chromium.org/boto@3",
+    "svn://svn.chromium.org/boto@4",
 
   "commit-queue":
     "/trunk/tools/commit-queue",
