@@ -209,6 +209,7 @@ class Manifest(object):
         'GTEST_TOTAL_SHARDS': '%(num_instances)s',
         'GTEST_SHARD_INDEX': '%(instance_index)s',
       },
+      'store_result': 'fail',
       'configurations': [
         {
           'min_instances': self.g_shards,
