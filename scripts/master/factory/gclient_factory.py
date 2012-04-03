@@ -237,7 +237,8 @@ class GClientFactory(object):
       specific_cmd_obj.AddPostUpdateTests(tests)
 
     # Add the compile step if needed.
-    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'NASBuilder']:
+    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'NASBuilder',
+                      'Indexer']:
       factory_cmd_obj.AddCompileStep(project or self._project, clobber,
                                      mode=mode, options=options,
                                      timeout=compile_timeout)

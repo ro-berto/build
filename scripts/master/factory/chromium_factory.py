@@ -571,7 +571,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           factory_properties=factory_properties)
 
     # Add the package source step.
-    if slave_type == 'Updater':
+    if slave_type == 'Indexer':
       chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
 
     # Add a trigger step if needed.
@@ -856,6 +856,20 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions.append(gclient_factory.GClientSolution(
           'http://src.chromium.org/svn/trunk/deps/asan.DEPS',
           'asan.DEPS'))
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
+
+  def ChromiumCodesearchFactory(self, target='Release', clobber=False,
+                                tests=None, mode=None,
+                                slave_type='BuilderTester', options=None,
+                                compile_timeout=1200, build_url=None,
+                                project=None, factory_properties=None):
+    # Make sure the solution is not already there.
+    assert 'clang_indexer.DEPS' not in [s.name for s in self._solutions]
+    self._solutions.append(gclient_factory.GClientSolution(
+        'svn://svn.chromium.org/chrome-internal/trunk/deps/'
+        'clang_indexer.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)

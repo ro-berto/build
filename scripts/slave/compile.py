@@ -433,7 +433,8 @@ def common_make_settings(
   that are common to the Make and SCons builds. Used on Linux
   and for the mac make build.
   """
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'asan', 'tsan_gcc')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'asan', 'tsan_gcc',
+                      'jsonclang')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -539,6 +540,19 @@ def common_make_settings(
     command.append('CC.host=' + env['CC'])
     command.append('CXX.host=' + env['CXX'])
     command.append('-r')
+
+  if compiler == 'jsonclang':
+    env['CC'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang')
+    env['CXX'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang++')
+    command.append('CC.host=' + env['CC'])
+    command.append('CXX.host=' + env['CXX'])
+    command.append('-r')
+    command.append('-k')
+    # 'jsonclang' assumes the clang binary is in the path.
+    clang_dir = os.path.abspath(os.path.join(
+        slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+    env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
 
   if compiler == 'tsan_gcc':
     # See
