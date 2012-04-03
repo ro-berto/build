@@ -65,7 +65,11 @@ F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
     tests=['gpu_tests', 'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
     options=['--compiler=goma', 'chromium_gpu_builder'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={
+        'generate_gtest_json': True,
+        'perf_id': 'gpu-webkit-linux-nvidia',
+        'show_perf_results': True,
+    }))
 
 ################################################################################
 ## Debug

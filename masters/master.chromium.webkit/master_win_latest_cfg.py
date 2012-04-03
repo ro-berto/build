@@ -106,6 +106,8 @@ F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_gpu_builder',
     factory_properties={'generate_gtest_json': True,
                         'start_crash_handler': True,
+                        'perf_id': 'gpu-webkit-win7-nvidia',
+                        'show_perf_results': True,
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 
 ################################################################################

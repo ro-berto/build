@@ -75,6 +75,8 @@ F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
     tests=['gpu_tests', 'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
     factory_properties={
         'generate_gtest_json': True,
+        'perf_id': 'gpu-webkit-mac',
+        'show_perf_results': True,
         'gclient_env': {
             'GYP_GENERATORS':'make',
             'GYP_DEFINES':'fastbuild=1',
