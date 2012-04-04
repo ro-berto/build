@@ -24,7 +24,7 @@ from slave import slave_utils
 FILENAME = 'chromium-src.tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
-CONCURRENT_TASKS = 4
+CONCURRENT_TASKS = 8
 UNIT_INDEXER = './clang_indexer/bin/external_corpus_compilation_indexer'
 
 
@@ -130,42 +130,50 @@ def main():
 
   find_command = ['find', 'src/', 'tools/', 'o3d/', '-type', 'f',
                   '(', '-regex', '^src/out/.*index$', '-o',
+                       '-regex', '^src/out/[^/]*/obj/gen/.*', '-o',
                   '!', '-regex', '^src/out/.*', ')', '-a',
-                  '!', '-regex', r'.*\.svn.*']
+                  '!', '-regex', r'.*\.svn.*', '-a',
+                  '!', '-regex', '^src/native_client/toolchain/.*', '-a',
+                  '!', '-regex', '^src/third_party/llvm-build/.*']
 
-  if chromium_utils.RunCommand(find_command,
-                               pipes=[['tar', '-T-', '-cjvf',
-                                       partial_filename]]) != 0:
-    raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
 
-  DeleteIfExists(completed_filename)
-  DeleteIfExists(partial_filename)
+  try:
+    if chromium_utils.RunCommand(find_command,
+                                 pipes=[['tar', '-T-', '-cjvf',
+                                         partial_filename]]) != 0:
+      raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
 
-  status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE, gs_acl=GSACL)
-  if status != 0:
-    raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
-        status, partial_filename, GSBASE))
+    DeleteIfExists(completed_filename)
+    DeleteIfExists(partial_filename)
 
-  status = slave_utils.GSUtilMoveFile('%s/%s' % (GSBASE, partial_filename),
-                                      '%s/%s' % (GSBASE, completed_filename))
-  if status != 0:
-    raise Exception('ERROR: GSUtilMoveFile error %d. "%s" -> "%s"' % (
-        status, '%s/%s' % (GSBASE, partial_filename),
-        '%s/%s' % (GSBASE, completed_filename)))
+    status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE, gs_acl=GSACL)
+    if status != 0:
+      raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
+          status, partial_filename, GSBASE))
 
-  (status, output) = slave_utils.GSUtilListBucket(GSBASE)
-  if status != 0:
-    raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
+    status = slave_utils.GSUtilMoveFile('%s/%s' % (GSBASE, partial_filename),
+                                        '%s/%s' % (GSBASE, completed_filename))
+    if status != 0:
+      raise Exception('ERROR: GSUtilMoveFile error %d. "%s" -> "%s"' % (
+          status, '%s/%s' % (GSBASE, partial_filename),
+          '%s/%s' % (GSBASE, completed_filename)))
 
-  regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
-                                                       completed_filename))
-  match_data = regex.search(output)
-  modified_time = None
-  if match_data:
-    modified_time = match_data.group(1)
-  if not modified_time:
-    raise Exception('ERROR: could not get modified_time, exiting')
-  print 'Last modified time: %s' % modified_time
+    (status, output) = slave_utils.GSUtilListBucket(GSBASE)
+    if status != 0:
+      raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
+
+    regex = re.compile('\s*\d+\s+([-:\w]+)\s+%s/%s\n' % (GSBASE,
+                                                         completed_filename))
+    match_data = regex.search(output)
+    modified_time = None
+    if match_data:
+      modified_time = match_data.group(1)
+    if not modified_time:
+      raise Exception('ERROR: could not get modified_time, exiting')
+    print 'Last modified time: %s' % modified_time
+
+  finally:
+    chromium_utils.RunCommand(['rm', '-f', partial_filename])
 
   if not indexing_successful:
     return 1
