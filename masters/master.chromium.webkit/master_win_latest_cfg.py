@@ -98,7 +98,7 @@ F('f_cf_rel_tests', win().ChromiumWebkitLatestFactory(
 # GPU Win Release
 #
 B('GPU Win7 (NVIDIA)', 'f_gpu_win_rel',
-  scheduler='s7_webkit_builder_rel_trigger')
+  scheduler='s7_webkit_builder_rel_trigger', auto_reboot=True)
 F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
     target='Release',
     slave_type='BuilderTester',
@@ -138,7 +138,8 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
 #
 # GPU Win Debug
 #
-B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg', scheduler='s7_webkit_builder_dbg')
+B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg',
+  scheduler='s7_webkit_builder_dbg', auto_reboot=True)
 F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='BuilderTester',
