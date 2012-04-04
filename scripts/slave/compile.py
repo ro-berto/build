@@ -497,15 +497,25 @@ def common_make_settings(
     # Some of them are compiled with ASan and will hang otherwise.
     env['DYLD_NO_PIE'] = '1'
 
-  if compiler in ('goma', 'goma-clang'):
+  if compiler in ('goma', 'goma-clang', 'jsonclang'):
     print 'using', compiler
     if compiler == 'goma':
       env['CC'] = 'gcc'
       env['CXX'] = 'g++'
       env['PATH'] = ':'.join([options.goma_dir, env['PATH']])
-    else:  # goma-clang
+    elif compiler == 'goma-clang':
       env['CC'] = 'clang'
       env['CXX'] = 'clang++'
+      clang_dir = os.path.abspath(os.path.join(
+          slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+      env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
+    else:  # jsonclang
+      env['CC'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang')
+      env['CXX'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang++')
+      command.append('-r')
+      command.append('-k')
+      # 'jsonclang' assumes the clang binary is in the path.
       clang_dir = os.path.abspath(os.path.join(
           slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
@@ -540,19 +550,6 @@ def common_make_settings(
     command.append('CC.host=' + env['CC'])
     command.append('CXX.host=' + env['CXX'])
     command.append('-r')
-
-  if compiler == 'jsonclang':
-    env['CC'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang')
-    env['CXX'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang++')
-    command.append('CC.host=' + env['CC'])
-    command.append('CXX.host=' + env['CXX'])
-    command.append('-r')
-    command.append('-k')
-    # 'jsonclang' assumes the clang binary is in the path.
-    clang_dir = os.path.abspath(os.path.join(
-        slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-    env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
 
   if compiler == 'tsan_gcc':
     # See
@@ -658,7 +655,7 @@ def main_make(options, args):
   # (or restart in clobber mode) to ensure the proxy is available.
   goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
 
-  if options.compiler in ('goma', 'goma-clang'):
+  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
     goma_key = os.path.join(options.goma_dir, 'goma.key')
     env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
     if os.path.exists(goma_key):
@@ -672,7 +669,7 @@ def main_make(options, args):
   env.print_overrides()
   result = chromium_utils.RunCommand(command, env=env)
 
-  if options.compiler in ('goma', 'goma-clang'):
+  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
