@@ -15,14 +15,6 @@
   object ACL will be applied (see
   https://developers.google.com/storage/docs/accesscontrol#defaultobjects).
 
-  TODO(lliabraa): If no 'gs_acl' is set this script currently defaults to using
-  the 'public-read' canned-acl because that is what existing clients of this
-  script expect. The master.cfg files of those clients have been updated to
-  set 'gs_acl' appropriately so that once the masters have been restarted, this
-  script can be updated to match the description above (i.e. use default object
-  ACL if 'gs_acl' is not set). There is a TODO below where this change needs
-  to be made.
-
   When this is run, the current directory (cwd) should be the outer build
   directory (e.g., chrome-release/build/).
 
@@ -559,10 +551,7 @@ class StagerBase(object):
 
     www_dir = os.path.join(self._www_dir_base, str(self._build_revision))
     gs_bucket = self.options.factory_properties.get('gs_bucket', None)
-    # TODO(lliabraa): For now, default to using the 'canned-acl' that will
-    # make archives on Google Storage publicly readable. Once the masters
-    # have been restarted, this should default to None.
-    gs_acl = self.options.factory_properties.get('gs_acl', 'public-read')
+    gs_acl = self.options.factory_properties.get('gs_acl', None)
     gs_base = None
     if gs_bucket:
       gs_base = '/'.join([gs_bucket, self._build_name,

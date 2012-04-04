@@ -144,10 +144,7 @@ def main(argv):
                     help='message to print')
   parser.add_option('-r', '--retries', type='int', default=3,
                     dest='retries', help='times to retry')
-  # TODO(lliabraa): Legacy clients do not send the -a option and expect the
-  # default ACL to be 'public-read'.Fix these clients, then change the default
-  # to None (which will cause the default object ACL to be applied).
-  parser.add_option('-a', '--acl', default='public-read', dest='acl',
+  parser.add_option('-a', '--acl', default=None, dest='acl',
                     help='value to pass to for -a argument of gsutil cp')
   (options, args) = parser.parse_args(argv)
   if len(args) != 2:

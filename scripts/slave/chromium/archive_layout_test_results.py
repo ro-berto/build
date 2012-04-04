@@ -17,14 +17,6 @@ supported canned-acl values). If no 'gs_acl' key is set, the bucket's default
 object ACL will be applied (see
 https://developers.google.com/storage/docs/accesscontrol#defaultobjects).
 
-TODO(lliabraa): If no 'gs_acl' is set this script currently defaults to using
-the 'public-read' canned-acl because that is what existing clients of this
-script expect. The master.cfg files of those clients have been updated to
-set 'gs_acl' appropriately so that once the masters have been restarted, this
-script can be updated to match the description above (i.e. use default object
-ACL if 'gs_acl' is not set). There is a TODO below where this change needs
-to be made.
-
 When this is run, the current directory (cwd) should be the outer build
 directory (e.g., chrome-release/build/).
 
@@ -145,10 +137,7 @@ def archive_layout(options, args):
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   if gs_bucket:
     gs_base = '/'.join([gs_bucket, build_name, last_change])
-    # TODO(lliabraa): For now, default to using the 'canned-acl' that will
-    # make archives on Google Storage publicly readable. Once the masters
-    # have been restarted, this should default to None.
-    gs_acl = options.factory_properties.get('gs_acl', 'public-read')
+    gs_acl = options.factory_properties.get('gs_acl', None)
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl)
     slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl)
   else:
