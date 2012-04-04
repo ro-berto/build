@@ -41,7 +41,7 @@ def CreateJSONCompileCommands():
     json_commands_file.close()
 
 
-class IndexResult:
+class IndexResult(object):
   def __init__(self):
     self.success = True
 
@@ -51,6 +51,13 @@ class IndexResult:
   def fail(self):
     self.success = False
 
+
+class IgnoreOutput(chromium_utils.RunCommandFilter):
+  def FilterLine(self, _):
+    return None
+
+  def FilterDone(self, _):
+    return None
 
 def GenerateIndex():
   CreateJSONCompileCommands()
@@ -75,11 +82,11 @@ def GenerateIndex():
 
       # Use str(command) as shlex does not support unicode.
       run = [indexer, '--gid=', '--uid=', '--loas_pwd_fallback_in_corp',
-             '--'] + shlex.split(str(command))
+             '--logtostderr', '--'] + shlex.split(str(command))
       try:
         # Ignore the result code - indexing success is monitored on a higher
         # level.
-        chromium_utils.RunCommand(run, cwd=directory)
+        chromium_utils.RunCommand(run, cwd=directory, filter_obj=IgnoreOutput())
       except OSError, e:
         print >> sys.stderr, 'Failed to run %s: %s' % (run, e)
         result.fail()
@@ -126,16 +133,25 @@ def main():
   if os.path.exists(partial_filename):
     raise Exception('ERROR: %s cannot be removed, exiting' % partial_filename)
 
+  if chromium_utils.RunCommand(['find', 'src/out', '-type', 'f',
+                               '(', '-name', '*.json-command', '-o',
+                                    '-name', '*.index', ')',
+                               '-exec', 'rm', '-f', '{}', ';']):
+    raise Exception('ERROR: failed to clean up indexer files')
+
   indexing_successful = GenerateIndex()
 
   find_command = ['find', 'src/', 'tools/', 'o3d/', '-type', 'f',
+                  # The only files under src/out we want to package up
+                  # are index files and generated sources.
                   '(', '-regex', '^src/out/.*index$', '-o',
                        '-regex', '^src/out/[^/]*/obj/gen/.*', '-o',
-                  '!', '-regex', '^src/out/.*', ')', '-a',
+                       '!', '-regex', '^src/out/.*', ')', '-a',
+                  # Exclude all .svn directories, the native client toolchain
+                  # and the llvm build directory.
                   '!', '-regex', r'.*\.svn.*', '-a',
                   '!', '-regex', '^src/native_client/toolchain/.*', '-a',
                   '!', '-regex', '^src/third_party/llvm-build/.*']
-
 
   try:
     if chromium_utils.RunCommand(find_command,
