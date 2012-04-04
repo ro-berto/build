@@ -333,6 +333,14 @@ class GTestCommand(shell.ShellCommand):
         return builder.WARNINGS
     return shell_result
 
+  def finished(self, results):
+    if self.test_observer.internal_error_lines:
+      # Generate a log file containing the list of errors.
+      self.addCompleteLog('log parsing error(s)',
+          '\n'.join(self.test_observer.internal_error_lines))
+      self.test_observer.internal_error_lines = ['Cleared.']
+    return shell.ShellCommand.finished(self, results)
+
   def getText(self, cmd, results):
     basic_info = self.describe(True)
     disabled = self.test_observer.disabled_tests
@@ -342,11 +350,6 @@ class GTestCommand(shell.ShellCommand):
     flaky = self.test_observer.flaky_tests
     if flaky:
       basic_info.append('%s flaky' % str(flaky))
-
-    if self.test_observer.internal_error_lines:
-      # Generate a log file containing the list of errors.
-      self.addCompleteLog('log parsing error(s)',
-          '\n'.join(self.test_observer.internal_error_lines))
 
     failed_test_count = len(self.test_observer.FailedTests())
 
