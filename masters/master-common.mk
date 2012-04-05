@@ -100,6 +100,9 @@ endif
 reconfig:
 	kill -HUP `cat twistd.pid`
 
+no-new-builds:
+	kill -USR1 `cat twistd.pid`
+
 log:
 	tail -F twistd.log
 

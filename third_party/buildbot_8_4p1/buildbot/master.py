@@ -161,6 +161,8 @@ class BuildMaster(service.MultiService):
             self.loadTheConfigFile()
         if hasattr(signal, "SIGHUP"):
             signal.signal(signal.SIGHUP, self._handleSIGHUP)
+        if hasattr(signal, "SIGUSR1"):
+            signal.signal(signal.SIGUSR1, self._handleSIGUSR1)
         for b in self.botmaster.builders.values():
             b.builder_status.addPointEvent(["master", "started"])
             b.builder_status.saveYourself()
@@ -168,11 +170,50 @@ class BuildMaster(service.MultiService):
     def _handleSIGHUP(self, *args):
         reactor.callLater(0, self.loadTheConfigFile)
 
+    def _handleSIGUSR1(self, *args):
+        reactor.callLater(0, self.noNewBuilds)
+
     def getStatus(self):
         """
         @rtype: L{buildbot.status.builder.Status}
         """
         return self.status
+
+    @defer.deferredGenerator
+    def cancelAllPendingBuilds(self):
+        log.msg("canceling pending builds")
+        c = interfaces.IControl(self)
+        for bname in self.botmaster.builders:
+            builder_control = c.getBuilder(bname)
+            wfd = defer.waitForDeferred(
+                    builder_control.getPendingBuildRequestControls())
+            yield wfd
+            brcontrols = wfd.getResult()
+            build_controls = dict((x.brid, x) for x in brcontrols)
+            builder_status = self.status.getBuilder(bname)
+            wfd = defer.waitForDeferred(
+                    builder_status.getPendingBuildRequestStatuses())
+            yield wfd
+            build_req_statuses = wfd.getResult()
+            number_cancelled_builds = 0
+            for build_req in build_req_statuses:
+                control = build_controls[build_req.brid]
+                control.cancel()
+                number_cancelled_builds += 1
+            log.msg("builder '%s' cancelled %d pending builds" % (
+                    bname, number_cancelled_builds))
+
+    def noNewBuilds(self):
+        log.msg("stopping schedulers")
+        self.loadConfig_Schedulers([])
+        log.msg("stopping sources")
+        self.loadConfig_Sources([])
+        d = self.cancelAllPendingBuilds()
+        def doneStopping(res):
+          log.msg("new builds stopped")
+          return res
+        d.addCallback(doneStopping)
+        return d
 
     def loadTheConfigFile(self, configFile=None):
         if not configFile:
