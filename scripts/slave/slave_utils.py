@@ -230,9 +230,10 @@ def GetActiveMaster():
   hostname = socket.getfqdn().split('.', 1)[0].lower()
   for master in chromium_utils.ListMasters():
     path = os.path.join(master, 'slaves.cfg')
-    for slave in chromium_utils.RunSlavesCfg(path):
-      if slave.get('hostname', None) == hostname:
-        return slave['master']
+    if os.path.exists(path):
+      for slave in chromium_utils.RunSlavesCfg(path):
+        if slave.get('hostname', None) == hostname:
+          return slave['master']
 
 def ImportMasterConfigs(master_name=None):
   """Import master configs.

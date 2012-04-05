@@ -855,6 +855,8 @@ def ListMasters():
 
 def RunSlavesCfg(slaves_cfg):
   """Runs slaves.cfg in a consistent way."""
+  if not os.path.exists(slaves_cfg):
+    return []
   slaves_path = os.path.dirname(os.path.abspath(slaves_cfg))
   old_sys_path = sys.path
   sys.path = sys.path + [slaves_path]
