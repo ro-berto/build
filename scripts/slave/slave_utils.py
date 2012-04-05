@@ -432,7 +432,7 @@ def GSUtilMoveFile(source, dest):
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = [gsutil]
-  command.extend(['mv', source, dest])
+  command.extend(['mv', '-p', source, dest])
   return chromium_utils.RunCommand(command)
 
 def GSUtilDeleteFile(filename):
