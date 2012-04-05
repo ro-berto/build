@@ -14,6 +14,7 @@ import Queue
 import shlex
 import shutil
 import sys
+import time
 import threading
 from time import strftime
 
@@ -21,7 +22,7 @@ from common import chromium_utils
 from slave import slave_utils
 
 
-FILENAME = 'chromium-src.tar.bz2'
+FILENAME = 'chromium-src.tar.gz'
 GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 CONCURRENT_TASKS = 8
@@ -133,14 +134,10 @@ def main():
   if os.path.exists(partial_filename):
     raise Exception('ERROR: %s cannot be removed, exiting' % partial_filename)
 
-  if chromium_utils.RunCommand(['find', 'src/out', '-type', 'f',
-                               '(', '-name', '*.json-command', '-o',
-                                    '-name', '*.index', ')',
-                               '-exec', 'rm', '-f', '{}', ';']):
-    raise Exception('ERROR: failed to clean up indexer files')
-
+  print '%s: Index generation...' % time.strftime('%X')
   indexing_successful = GenerateIndex()
 
+  print '%s: Creating tar file...' % time.strftime('%X')
   find_command = ['find', 'src/', 'tools/', 'o3d/', '-type', 'f',
                   # The only files under src/out we want to package up
                   # are index files and generated sources.
@@ -155,18 +152,21 @@ def main():
 
   try:
     if chromium_utils.RunCommand(find_command,
-                                 pipes=[['tar', '-T-', '-cjvf',
+                                 pipes=[['tar', '-T-', '-czvf',
                                          partial_filename]]) != 0:
       raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
 
+    print '%s: Cleaning up google storage...' % time.strftime('%X')
     DeleteIfExists(completed_filename)
     DeleteIfExists(partial_filename)
 
+    print '%s: Uploading...' % time.strftime('%X')
     status = slave_utils.GSUtilCopyFile(partial_filename, GSBASE, gs_acl=GSACL)
     if status != 0:
       raise Exception('ERROR: GSUtilCopyFile error %d. "%s" -> "%s"' % (
           status, partial_filename, GSBASE))
 
+    print '%s: Finalizing google storage...' % time.strftime('%X')
     status = slave_utils.GSUtilMoveFile('%s/%s' % (GSBASE, partial_filename),
                                         '%s/%s' % (GSBASE, completed_filename))
     if status != 0:
@@ -189,7 +189,17 @@ def main():
     print 'Last modified time: %s' % modified_time
 
   finally:
+    print '%s: Cleaning up locally...' % time.strftime('%X')
     chromium_utils.RunCommand(['rm', '-f', partial_filename])
+    # TODO(klimek): If this is not executed at the end of a run, we will
+    # use leftover data on the next run; add an extra build step that
+    # does this clean up before the build starts.
+    if chromium_utils.RunCommand(['find', 'src/out', '-type', 'f',
+                                 '(', '-name', '*.json-command', '-o',
+                                      '-name', '*.index', ')',
+                                 '-exec', 'rm', '-f', '{}', ';']):
+      raise Exception('ERROR: failed to clean up indexer files')
+    print '%s: Done.' % time.strftime('%X')
 
   if not indexing_successful:
     return 1
