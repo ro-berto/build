@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -16,6 +16,13 @@ def EntryToSlaveName(entry):
 
   The slave list entry is a dict."""
   return entry.get('slavename', None) or entry.get('hostname', None)
+
+
+def EntryToHostName(entry):
+  """Extracts the buildbot host name from the slaves list entry.
+
+  The slave list entry is a dict."""
+  return entry.get('hostname', None)
 
 
 def _obj_as_list(obj):
@@ -113,6 +120,12 @@ class BaseSlavesList(object):
                    bits=None, version=None):
     """Similar to GetSlave() except that it only returns the slave name."""
     return EntryToSlaveName(
+        self.GetSlave(master, builder, os, tester, bits, version))
+
+  def GetHostName(self, master=None, builder=None, os=None, tester=None,
+                   bits=None, version=None):
+    """Similar to GetSlave() except that it only returns the host name."""
+    return EntryToHostName(
         self.GetSlave(master, builder, os, tester, bits, version))
 
 
