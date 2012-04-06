@@ -36,12 +36,17 @@ def RemovePath(path):
 
 
 def MoveFile(path, new_path):
-  """Move all content in |path| to |new_path|, if it exists."""
-  for path, dirnames, fnames in os.walk(path):
+  """Move all content in |path| to |new_path|.
+
+  Create |new_path| if it doesn't exist.
+  """
+  if not os.path.isdir(new_path):
+    os.makedirs(new_path)
+  for root, dirnames, fnames in os.walk(path):
     for fname in fnames:
-      shutil.move(os.path.join(path, fname), new_path)
+      shutil.move(os.path.join(root, fname), new_path)
     for dirname in dirnames:
-      shutil.move(os.path.join(path, dirname), new_path)
+      shutil.move(os.path.join(root, dirname), new_path)
   RemovePath(path)
 
 
