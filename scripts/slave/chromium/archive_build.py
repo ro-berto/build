@@ -151,7 +151,22 @@ class StagerBase(object):
     self.last_webkit_revision = None
     self.last_v8_revision = None
 
-    self._symbol_files = self.BuildOldFilesList(SYMBOL_FILE_NAME)
+    self._files_file = os.path.join(self._tool_dir,
+                                    archive_utils.FILES_FILENAME)
+    # TODO(mmoss): SYMBOLS is moved to FILES.cfg just for Windows right now, so
+    # we can exclude the syzygy symbols. All platforms should be migrated to the
+    # same handling eventually.
+    if chromium_utils.IsWindows():
+      files_dict = archive_utils.ParseFilesDict(self._files_file)
+      arch = archive_utils.BuildArch()
+      self._symbol_files = [
+          fileobj['filename'] for fileobj in files_dict
+          if (self.options.mode == fileobj['buildtype'] and
+              arch in fileobj['arch'] and
+              fileobj.get('archive') == 'chrome-win32-syms.zip')
+      ]
+    else:
+      self._symbol_files = self.BuildOldFilesList(SYMBOL_FILE_NAME)
     self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
 
     self._dual_upload = options.factory_properties.get('dual_upload', False)
@@ -512,9 +527,8 @@ class StagerBase(object):
     print 'Staging in %s' % self._staging_dir
 
     arch = archive_utils.BuildArch()
-    files_file = os.path.join(self._tool_dir, archive_utils.FILES_FILENAME)
-    files_list = archive_utils.ParseFilesList(files_file, self.options.mode,
-                                              arch)
+    files_list = archive_utils.ParseFilesList(self._files_file,
+                                              self.options.mode, arch)
     files_list = archive_utils.ExpandWildcards(self._build_dir, files_list)
     self._archive_files = files_list
     self._archive_files.extend(self.GetExtraFiles(
