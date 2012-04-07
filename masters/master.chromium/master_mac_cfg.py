@@ -15,6 +15,14 @@ T = helper.Triggerable
 
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
+# Tests that are single-machine shard-safe. For now we only use the sharding
+# supervisor for long tests (more than 30 seconds) that are known to be stable.
+sharded_tests = [
+  'base_unittests',
+  'browser_tests',
+  'content_unittests',
+  'media_unittests',
+]
 
 ################################################################################
 ## Release
@@ -70,6 +78,7 @@ F('rel_unit_1', mac().ChromiumFactory(
          'safe_browsing',
          'ui'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 3, 'ui_shard_index': 1,
                       'browser_total_shards': 3, 'browser_shard_index': 1,})
 )
@@ -81,6 +90,7 @@ F('rel_unit_2', mac().ChromiumFactory(
   build_url=rel_archive,
   tests=['browser_tests', 'ui', 'unit'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 3, 'ui_shard_index': 2,
                       'browser_total_shards': 3, 'browser_shard_index': 2,})
 )
@@ -92,6 +102,7 @@ F('rel_unit_3', mac().ChromiumFactory(
   build_url=rel_archive,
   tests=['browser_tests', 'net', 'ui'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 3, 'ui_shard_index': 3,
                       'browser_total_shards': 3, 'browser_shard_index': 3,})
 )
@@ -166,6 +177,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
          'safe_browsing',
          'ui'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 4, 'ui_shard_index': 1,
                       'browser_total_shards': 4, 'browser_shard_index': 1,}))
 
@@ -177,6 +189,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
   target='Debug',
   tests=['browser_tests', 'check_deps', 'media', 'net', 'ui'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 4, 'ui_shard_index': 2,
                       'browser_total_shards': 4, 'browser_shard_index': 2,}))
 
@@ -188,6 +201,7 @@ F('dbg_unit_3', mac().ChromiumFactory(
   target='Debug',
   tests=['base', 'browser_tests', 'interactive_ui', 'ui'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 4, 'ui_shard_index': 3,
                       'browser_total_shards': 4, 'browser_shard_index': 3,}))
 
@@ -199,6 +213,7 @@ F('dbg_unit_4', mac().ChromiumFactory(
   target='Debug',
   tests=['browser_tests', 'ui', 'unit'],
   factory_properties={'generate_gtest_json': True,
+                      'sharded_tests': sharded_tests,
                       'ui_total_shards': 4, 'ui_shard_index': 4,
                       'browser_total_shards': 4, 'browser_shard_index': 4,}))
 

@@ -15,6 +15,16 @@ T = helper.Triggerable
 
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
+
+# Tests that are single-machine shard-safe. For now we only use the sharding
+# supervisor for long tests (more than 30 seconds) that are known to be stable.
+sharded_tests = [
+  'base_unittests',
+  'browser_tests',
+  'content_unittests',
+  'media_unittests',
+]
+
 # These are the common targets to most of the builders
 linux_all_test_targets = [
   'base_unittests',
@@ -89,7 +99,8 @@ F('rel_unit', linux().ChromiumFactory(
            'crypto',
            'cacheinvalidation',
            'jingle'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
 
 B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
   notify_on_missing=True)
@@ -137,7 +148,8 @@ F('dbg_unit_1', linux().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
     tests=['net', 'browser_tests'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
@@ -160,7 +172,8 @@ F('dbg_unit_2', linux().ChromiumFactory(
            'crypto',
            'cacheinvalidation',
            'jingle'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
 
 #
 # Linux Dbg Component Builder
@@ -195,7 +208,8 @@ F('dbg_shared_unit', linux().ChromiumFactory(
            'unit', 'crypto',
            'cacheinvalidation',
            'jingle'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
 
 #
 # Linux Dbg Clang bot

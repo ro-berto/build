@@ -413,8 +413,7 @@ class FactoryCommands(object):
 
   def AddBasicGTestTestStep(self, test_name, factory_properties=None,
                             description='', arg_list=None, total_shards=None,
-                            shard_index=None, parallel=False,
-                            test_tool_arg_list=None):
+                            shard_index=None, test_tool_arg_list=None):
     """Adds a step to the factory to run the gtest tests.
 
     Args:
@@ -461,8 +460,7 @@ class FactoryCommands(object):
       cmd.extend(['--total-shards', str(total_shards),
                   '--shard-index', str(shard_index)])
 
-    if ((parallel or factory_properties.get('sharding_supervisor')) and
-        test_name not in factory_properties.get('unsharded_tests', [])):
+    if (test_name in factory_properties.get('sharded_tests', [])):
       cmd.append('--parallel')
       sharding_args = factory_properties.get('sharding_args')
       if sharding_args:
