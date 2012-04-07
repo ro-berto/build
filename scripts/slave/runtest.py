@@ -208,8 +208,8 @@ def main_mac(options, args):
                                    'sharding_supervisor.py')
     supervisor_args = ['--no-color', '--retry-failed']
     if options.total_shards and options.shard_index:
-      supervisor_args.extend(['--total-slaves', options.total_shards,
-                              '--slave-index', options.shard_index - 1])
+      supervisor_args.extend(['--total-slaves', str(options.total_shards),
+                              '--slave-index', str(options.shard_index - 1)])
     if options.sharding_args:
       supervisor_args.extend(options.sharding_args.split())
     command = [sys.executable, supervisor_path]
@@ -328,8 +328,8 @@ def main_linux(options, args):
                                    'sharding_supervisor.py')
     supervisor_args = ['--no-color', '--retry-failed']
     if options.total_shards and options.shard_index:
-      supervisor_args.extend(['--total-slaves', options.total_shards,
-                              '--slave-index', options.shard_index - 1])
+      supervisor_args.extend(['--total-slaves', str(options.total_shards),
+                              '--slave-index', str(options.shard_index - 1)])
     if options.sharding_args:
       supervisor_args.extend(options.sharding_args.split())
     command = [sys.executable, supervisor_path]
@@ -407,8 +407,8 @@ def main_win(options, args):
                                    'sharding_supervisor.py')
     supervisor_args = ['--no-color', '--retry-failed']
     if options.total_shards and options.shard_index:
-      supervisor_args.extend(['--total-slaves', options.total_shards,
-                              '--slave-index', options.shard_index - 1])
+      supervisor_args.extend(['--total-slaves', str(options.total_shards),
+                              '--slave-index', str(options.shard_index - 1)])
     if options.sharding_args:
       supervisor_args.extend(options.sharding_args.split())
     command = [sys.executable, supervisor_path]
