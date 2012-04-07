@@ -30,6 +30,20 @@ def ParseFilesDict(files_file):
   return exec_globals['FILES']
 
 
+def ParseSymbolsList(files_dict, symbols_archive, buildtype, arch):
+  """Determine the list of symbol files for a given release.
+
+    TODO(mmoss): This is a temporary implementation to get things working on
+    Windows right now. It will probably change or may even go away before long.
+    Don't depend on it.
+  """
+  return [fileobj['filename'] for fileobj in files_dict
+      if (buildtype in fileobj['buildtype'] and
+          arch in fileobj['arch'] and
+          fileobj.get('archive') == symbols_archive)
+  ]
+
+
 def ParseFilesList(files_file, buildtype, arch):
   """Determine the list of archive files for a given release."""
   files_dict = ParseFilesDict(files_file)

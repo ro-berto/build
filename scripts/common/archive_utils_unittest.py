@@ -274,6 +274,27 @@ class RealFilesCfgTest(unittest.TestCase):
   def testWinParse(self):
     self.ParseFilesCfg(options.src_base + '/chrome/tools/build/win/FILES.cfg')
 
+  def testWinParseSymbols(self):
+    files_dict = archive_utils.ParseFilesDict(
+        options.src_base + '/chrome/tools/build/win/FILES.cfg')
+    symbols_list = archive_utils.ParseSymbolsList(files_dict,
+                                                  'chrome-win32-syms.zip',
+                                                  'dev', '32bit')
+    # There should be some symbols.
+    self.assertTrue(symbols_list)
+
+    # Windows symbols should be the same regardless of arch.
+    symbols64_list = archive_utils.ParseSymbolsList(files_dict,
+                                                    'chrome-win32-syms.zip',
+                                                    'dev', '64bit')
+    self.assertEqual(symbols64_list, symbols_list)
+
+    # TODO(mmoss): official builds don't use FILES.cfg for symbols yet.
+    official_list = archive_utils.ParseSymbolsList(files_dict,
+                                                   'chrome-win32-syms.zip',
+                                                   'official', '64bit')
+    self.assertEqual(len(official_list), 0)
+
   def testMacParse(self):
     self.ParseFilesCfg(options.src_base + '/chrome/tools/build/mac/FILES.cfg')
 
