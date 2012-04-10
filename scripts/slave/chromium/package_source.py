@@ -22,7 +22,7 @@ from common import chromium_utils
 from slave import slave_utils
 
 
-FILENAME = 'chromium-src.tar.gz'
+FILENAME = 'chromium-src.tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 CONCURRENT_TASKS = 8
@@ -152,7 +152,7 @@ def main():
 
   try:
     if chromium_utils.RunCommand(find_command,
-                                 pipes=[['tar', '-T-', '-czvf',
+                                 pipes=[['tar', '-T-', '-cjvf',
                                          partial_filename]]) != 0:
       raise Exception('ERROR: failed to create %s, exiting' % partial_filename)
 
