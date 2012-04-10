@@ -497,7 +497,8 @@ class ChromiumCommands(commands.FactoryCommands):
            '-d', J(self._repository_root, 'DEPS'),
            '-o', J(self._repository_root, '.DEPS.git')]
     if 'check_deps2git' in tests:
-      self.AddTestStep(shell.ShellCommand, 'check_deps2git', cmd)
+      self.AddTestStep(shell.ShellCommand, 'check_deps2git', cmd,
+                       do_step_if=self.TestStepFilter)
 
   def AddReliabilityTests(self, platform='win'):
     cmd_1 = ['python', self._reliability_tool, '--platform', platform,
