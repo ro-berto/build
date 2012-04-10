@@ -84,7 +84,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
   CUSTOM_DEPS_AVPERF = ('src/chrome/test/data/media/avperf',
-    'http://src.chromium.org/svn/trunk/deps/avperf')
+    config.Master.trunk_url + '/deps/avperf')
   CUSTOM_VARS_NACL_LATEST = [
     ('nacl_revision', '$$NACL_REV$$'),
   ]
@@ -99,7 +99,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_TSAN_WIN = ('src/third_party/tsan',
      config.Master.trunk_url + '/deps/third_party/tsan')
   CUSTOM_DEPS_NACL_VALGRIND = ('src/third_party/valgrind/bin',
-     'http://src.chromium.org/native_client/trunk/src/third_party/valgrind/bin')
+     config.Master.nacl_trunk_url + '/src/third_party/valgrind/bin')
   CUSTOM_DEPS_TSAN_GCC = ('src/third_party/compiler-tsan',
      config.Master.trunk_url + '/deps/third_party/compiler-tsan')
 
@@ -165,27 +165,27 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # http://dev.chromium.org/developers/pyauto
   PYAUTO_DEPS = \
       [('src/chrome/test/data',
-        'http://src.chromium.org/svn/trunk/src/chrome/test/data'),
+        config.Master.trunk_url + '/src/chrome/test/data'),
        ('src/chrome/test/pyautolib',
-        'http://src.chromium.org/svn/trunk/src/chrome/test/pyautolib'),
+        config.Master.trunk_url + '/src/chrome/test/pyautolib'),
        ('src/chrome/test/functional',
-        'http://src.chromium.org/svn/trunk/src/chrome/test/functional'),
+        config.Master.trunk_url + '/src/chrome/test/functional'),
        ('src/third_party/simplejson',
-        'http://src.chromium.org/svn/trunk/src/third_party/simplejson'),
+        config.Master.trunk_url + '/src/third_party/simplejson'),
        ('src/net/data/ssl/certificates',
-        'http://src.chromium.org/svn/trunk/src/net/data/ssl/certificates'),
+        config.Master.trunk_url + '/src/net/data/ssl/certificates'),
        ('src/net/tools/testserver',
-        'http://src.chromium.org/svn/trunk/src/net/tools/testserver'),
+        config.Master.trunk_url + '/src/net/tools/testserver'),
        ('src/third_party/pyftpdlib/src',
         'http://pyftpdlib.googlecode.com/svn/trunk'),
        ('src/third_party/tlslite',
-        'http://src.chromium.org/svn/trunk/src/third_party/tlslite'),
+        config.Master.trunk_url + '/src/third_party/tlslite'),
        ('src/third_party/python_26',
-        'http://src.chromium.org/svn/trunk/tools/third_party/python_26'),
+        config.Master.trunk_url + '/tools/third_party/python_26'),
        ('src/chrome/test/data/media/avperf',
-        'http://src.chromium.org/svn/trunk/deps/avperf'),
+        config.Master.trunk_url + '/deps/avperf'),
        ('webdriver.DEPS',
-        'http://src.chromium.org/svn/trunk/src/chrome/test/pyautolib/' +
+        config.Master.trunk_url + '/src/chrome/test/pyautolib/' +
             'webdriver.DEPS'),
         ]
   # Extend if we can.
@@ -199,8 +199,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         '/data/pyauto_private'))
 
   CHROMEBOT_DEPS = [
-    ('src/tools/chromebot', 'http://src.chromium.org/svn/trunk/tools/' +
-                            'chromebot')]
+    ('src/tools/chromebot', config.Master.trunk_url + '/tools/chromebot')]
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
@@ -842,8 +841,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Make sure the solution is not already there.
     if 'gpu_reference.DEPS' not in [s.name for s in self._solutions]:
       self._solutions.append(gclient_factory.GClientSolution(
-          'http://src.chromium.org/svn/trunk/deps/gpu_reference/' +
-              'gpu_reference.DEPS',
+          config.Master.trunk_url + '/deps/gpu_reference/gpu_reference.DEPS',
           'gpu_reference.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
@@ -856,7 +854,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Make sure the solution is not already there.
     if 'asan.DEPS' not in [s.name for s in self._solutions]:
       self._solutions.append(gclient_factory.GClientSolution(
-          'http://src.chromium.org/svn/trunk/deps/asan.DEPS',
+          config.Master.trunk_url + '/deps/asan.DEPS',
           'asan.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
@@ -910,7 +908,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
     if 'asan.DEPS' not in [s.name for s in self._solutions]:
       self._solutions.append(gclient_factory.GClientSolution(
-          'http://src.chromium.org/svn/trunk/deps/asan.DEPS',
+          config.Master.trunk_url + '/deps/asan.DEPS',
           'asan.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
