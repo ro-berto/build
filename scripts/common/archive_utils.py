@@ -20,39 +20,53 @@ class StagingError(Exception):
   pass
 
 
-def ParseFilesDict(files_file):
-  """Return the dictionary of archive file info read from the given file."""
-  if not os.path.exists(files_file):
-    raise StagingError('Files list does not exist (%s).' % files_file)
-  exec_globals = {'__builtins__': None}
+class FilesCfgParser(object):
+  """Class to process a FILES.cfg style listing of build files."""
 
-  execfile(files_file, exec_globals)
-  return exec_globals['FILES']
+  def __init__(self, files_file, buildtype, arch):
+    self._files_file = files_file
+    self._buildtype = buildtype
+    self._arch = arch
+    self.files_dict = self._ParseFilesDict()
 
+  def _ParseFilesDict(self):
+    """Return the dictionary of archive file info read from the given file."""
+    if not os.path.exists(self._files_file):
+      raise StagingError('Files list does not exist (%s).' % self._files_file)
+    exec_globals = {'__builtins__': None}
 
-def ParseSymbolsList(files_dict, symbols_archive, buildtype, arch):
-  """Determine the list of symbol files for a given release.
+    execfile(self._files_file, exec_globals)
+    return exec_globals['FILES']
 
-    TODO(mmoss): This is a temporary implementation to get things working on
-    Windows right now. It will probably change or may even go away before long.
-    Don't depend on it.
-  """
-  return [fileobj['filename'] for fileobj in files_dict
-      if (buildtype in fileobj['buildtype'] and
-          arch in fileobj['arch'] and
-          fileobj.get('archive') == symbols_archive)
-  ]
+  def ParseGroup(self, filegroup):
+    """Return the list of files in the given group (e.g. "symbols")."""
+    return [fileobj['filename'] for fileobj in self.files_dict
+        if (self._buildtype in fileobj['buildtype'] and
+            self._arch in fileobj['arch'] and
+            fileobj.get('filegroup') and filegroup in fileobj.get('filegroup'))
+    ]
+
+  def ParseLegacyList(self):
+    """Return the list of 'default' files.
+
+    Default files are either tagged as "default" filegroup or they have no
+    filegroup (i.e. legacy entries from before the filegroup field was added.)
+    """
+    files_list = [
+        fileobj['filename'] for fileobj in self.files_dict
+        if (self._buildtype in fileobj['buildtype'] and
+            self._arch in fileobj['arch'] and
+            not fileobj.get('archive') and
+            (not fileobj.get('filegroup') or 'default' in
+             fileobj.get('filegroup')))
+    ]
+    return files_list
 
 
 def ParseFilesList(files_file, buildtype, arch):
-  """Determine the list of archive files for a given release."""
-  files_dict = ParseFilesDict(files_file)
-  files_list = [
-      fileobj['filename'] for fileobj in files_dict
-      if (buildtype in fileobj['buildtype'] and arch in fileobj['arch'] and
-          not fileobj.get('archive'))
-  ]
-  return files_list
+  """DEPRECATED: Determine the list of archive files for a given release."""
+  fparser = FilesCfgParser(files_file, buildtype, arch)
+  return fparser.ParseLegacyList()
 
 
 def ExpandWildcards(base_dir, path_list):

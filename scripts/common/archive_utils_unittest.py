@@ -262,38 +262,35 @@ class RealFilesCfgTest(unittest.TestCase):
     self.assertFalse(files_list)
 
     # Check for incomplete/incorrect settings.
-    files_dict = archive_utils.ParseFilesDict(cfg_path)
+    fparser = archive_utils.FilesCfgParser(cfg_path, None, None)
     # buildtype must exist and be in ['dev', 'official']
-    self.assertFalse([f for f in files_dict
+    self.assertFalse([f for f in fparser.files_dict
         if not f['buildtype']
         or set(f['buildtype']) - set(['dev', 'official'])])
     # arch must exist and be in ['32bit', '64bit']
-    self.assertFalse([f for f in files_dict
+    self.assertFalse([f for f in fparser.files_dict
         if not f['arch'] or set(f['arch']) - set(['32bit', '64bit'])])
 
   def testWinParse(self):
     self.ParseFilesCfg(options.src_base + '/chrome/tools/build/win/FILES.cfg')
 
   def testWinParseSymbols(self):
-    files_dict = archive_utils.ParseFilesDict(
-        options.src_base + '/chrome/tools/build/win/FILES.cfg')
-    symbols_list = archive_utils.ParseSymbolsList(files_dict,
-                                                  'chrome-win32-syms.zip',
-                                                  'dev', '32bit')
-    # There should be some symbols.
+    files_cfg = options.src_base + '/chrome/tools/build/win/FILES.cfg'
+
+    # There should be some dev build symbols.
+    fparser = archive_utils.FilesCfgParser(files_cfg, 'dev', '32bit')
+    symbols_list = fparser.ParseGroup('symbols')
     self.assertTrue(symbols_list)
 
-    # Windows symbols should be the same regardless of arch.
-    symbols64_list = archive_utils.ParseSymbolsList(files_dict,
-                                                    'chrome-win32-syms.zip',
-                                                    'dev', '64bit')
-    self.assertEqual(symbols64_list, symbols_list)
+    # There should be some official build symbols.
+    fparser = archive_utils.FilesCfgParser(files_cfg, 'official', '32bit')
+    official_list = fparser.ParseGroup('symbols')
+    self.assertTrue(official_list)
 
-    # TODO(mmoss): official builds don't use FILES.cfg for symbols yet.
-    official_list = archive_utils.ParseSymbolsList(files_dict,
-                                                   'chrome-win32-syms.zip',
-                                                   'official', '64bit')
-    self.assertEqual(len(official_list), 0)
+    # Windows symbols should be the same regardless of arch.
+    fparser = archive_utils.FilesCfgParser(files_cfg, 'dev', '64bit')
+    symbols64_list = fparser.ParseGroup('symbols')
+    self.assertEqual(symbols64_list, symbols_list)
 
   def testMacParse(self):
     self.ParseFilesCfg(options.src_base + '/chrome/tools/build/mac/FILES.cfg')

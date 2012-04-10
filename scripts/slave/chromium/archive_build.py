@@ -157,10 +157,10 @@ class StagerBase(object):
     # we can exclude the syzygy symbols. All platforms should be migrated to the
     # same handling eventually.
     if chromium_utils.IsWindows():
-      files_dict = archive_utils.ParseFilesDict(self._files_file)
-      self._symbol_files = archive_utils.ParseSymbolsList(
-          files_dict, 'chrome-win32-syms.zip', self.options.mode,
-          archive_utils.BuildArch())
+      fparser = archive_utils.FilesCfgParser(self._files_file,
+                                             self.options.mode,
+                                             archive_utils.BuildArch())
+      self._symbol_files = fparser.ParseGroup('symbols')
     else:
       self._symbol_files = self.BuildOldFilesList(SYMBOL_FILE_NAME)
     self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
