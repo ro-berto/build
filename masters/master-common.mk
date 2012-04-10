@@ -14,6 +14,10 @@ ifeq ($(MASTERPATH),)
   $(error MASTERPATH not defined.)
 endif
 
+# Get the current host's short hostname.  We may use this in Makefiles that
+# include this file.
+SHORT_HOSTNAME := $(shell hostname -s)
+
 # On the Mac, the buildbot is started via the launchd mechanism as a
 # LaunchAgent to give the slave a proper Mac UI environment for tests.  In
 # order for this to work, the plist must be present and loaded by launchd, and
