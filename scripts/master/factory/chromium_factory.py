@@ -76,6 +76,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # triggered by a webkit poller.
   CUSTOM_VARS_WEBKIT_LATEST = [('webkit_trunk', config.Master.webkit_trunk_url),
                                ('webkit_revision', '$$WK_REV$$')]
+  CUSTOM_VARS_NACL_TRUNK_URL = ('nacl_trunk', config.Master.nacl_trunk_url)
   # safe sync urls
   SAFESYNC_URL_CHROMIUM = 'http://chromium-status.appspot.com/lkgr'
 
@@ -214,7 +215,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                custom_deps_list=custom_deps_list,
                custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
                                  self.CUSTOM_VARS_GOOGLECODE_URL,
-                                 self.CUSTOM_VARS_SOURCEFORGE_URL])
+                                 self.CUSTOM_VARS_SOURCEFORGE_URL,
+                                 self.CUSTOM_VARS_NACL_TRUNK_URL])
     internal_custom_deps_list = [main]
     if config.Master.trunk_internal_url_src and pull_internal:
       internal = gclient_factory.GClientSolution(
