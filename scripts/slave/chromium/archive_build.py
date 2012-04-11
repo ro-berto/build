@@ -153,16 +153,6 @@ class StagerBase(object):
 
     self._files_file = os.path.join(self._tool_dir,
                                     archive_utils.FILES_FILENAME)
-    # TODO(mmoss): SYMBOLS is moved to FILES.cfg just for Windows right now, so
-    # we can exclude the syzygy symbols. All platforms should be migrated to the
-    # same handling eventually.
-    if chromium_utils.IsWindows():
-      fparser = archive_utils.FilesCfgParser(self._files_file,
-                                             self.options.mode,
-                                             archive_utils.BuildArch())
-      self._symbol_files = fparser.ParseGroup('symbols')
-    else:
-      self._symbol_files = self.BuildOldFilesList(SYMBOL_FILE_NAME)
     self._test_files = self.BuildOldFilesList(TEST_FILE_NAME)
 
     self._dual_upload = options.factory_properties.get('dual_upload', False)
@@ -305,11 +295,15 @@ class StagerBase(object):
        TODO(robertshield): Figure out if this should be uploading symbols to
        a crash server.
     """
+    fparser = archive_utils.FilesCfgParser(self._files_file,
+                                           self.options.mode,
+                                           archive_utils.BuildArch())
+    symbol_files = fparser.ParseGroup('symbols')
     if chromium_utils.IsWindows():
       # Create a zip archive of the symbol files.  This must be done after the
       # main zip archive is created, or the latter will include this one too.
       sym_zip_file = self.CreateArchiveFile('chrome-win32-syms',
-                                            self._symbol_files)[1]
+                                            symbol_files)[1]
 
       # symbols_copy should hold absolute paths at this point.
       # We avoid joining absolute paths because the version of python used by
@@ -325,7 +319,7 @@ class StagerBase(object):
     elif chromium_utils.IsLinux():
       # If there are no symbol files, then sym_zip_file will be an empty string.
       sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
-                                            self._symbol_files)[1]
+                                            symbol_files)[1]
       if not sym_zip_file:
         print 'No symbols found, not uploading symbols'
         return 0
