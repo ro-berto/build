@@ -159,7 +159,7 @@ class Manifest(object):
     # pylint: disable=E1103
     filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
 
-    url = 'http://%s/' % hostname
+    url = 'http://%s/hashtable/' % hostname
     self.add_task(
         'Run Test',
         ['python', self.tree_creator_path, '-m', self.name, '-r', url])
