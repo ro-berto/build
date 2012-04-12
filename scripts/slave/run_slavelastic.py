@@ -94,7 +94,8 @@ class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     shard.write(output)
 
 class Manifest(object):
-  tree_creator_path = os.path.join('src', 'tools', 'isolate', 'tree_creator.py')
+  run_test_path = os.path.join(
+      'src', 'tools', 'isolate', 'run_test_from_archive.py')
 
   def __init__(self, filename, switches):
     """Populates a manifest object.
@@ -145,7 +146,7 @@ class Manifest(object):
 
     zip_file = zipfile.ZipFile(self.zipfile_name, 'w')
     zip_file.write(self.name)
-    zip_file.write(self.tree_creator_path)
+    zip_file.write(self.run_test_path)
     zip_file.close()
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
@@ -162,7 +163,7 @@ class Manifest(object):
     url = 'http://%s/hashtable/' % hostname
     self.add_task(
         'Run Test',
-        ['python', self.tree_creator_path, '-m', self.name, '-r', url])
+        ['python', self.run_test_path, '-m', self.name, '-r', url])
 
     # Clean up
     if self.current_platform == 'Linux' or self.current_platform == 'Mac':
