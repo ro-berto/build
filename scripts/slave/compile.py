@@ -367,7 +367,7 @@ def main_xcode(options, args):
   # Set up the filter before changing directories so the raw build log can
   # be recorded.
   # Support a local file blocking filters (for debugging).  Also check the
-  # darwin version to make sure this is not 10.5 (easier then checking the
+  # darwin version to make sure this is not 10.5 (easier than checking the
   # Xcode version), as Xcode 3.1.x has slightly different output.
   xcodebuild_filter = None
   no_filter_path = os.path.join(os.getcwd(), 'no_xcodebuild_filter')
@@ -676,6 +676,36 @@ def main_make(options, args):
   return result
 
 
+def main_ninja(options, args):
+  """Interprets options, clobbers object files, and calls ninja."""
+  # ninja is different from all the other build systems in that it requires
+  # most configuration to be done at gyp time. This is why this function does
+  # less than the other comparable functions in this file.
+  src_dir = os.path.join(
+      slave_utils.SlaveBaseDir(os.path.abspath(options.build_dir)),
+      'build',
+      'src')
+  print 'chdir to %s' % src_dir
+  os.chdir(src_dir)
+
+  output_dir = os.path.join('out', options.target)
+  command = ['ninja' '-C', output_dir]
+
+  if options.clobber:
+    print('Removing %s' % output_dir)
+    chromium_utils.RemoveDirectory(output_dir)
+
+  if options.verbose:
+    command.append('-v')
+  command.extend(options.build_args)
+  command.extend(args)
+
+  # Run the build.
+  env = EchoDict(os.environ)
+  env.print_overrides()
+  return chromium_utils.RunCommand(command, env=env)
+
+
 def main_scons(options, args):
   """Interprets options, clobbers object files, and calls scons.
   """
@@ -982,6 +1012,7 @@ def real_main():
         'ib' : main_win,
         'vs' : main_win,
         'make' : main_make,
+        'ninja' : main_ninja,
         'scons' : main_scons,
         'xcode' : main_xcode,
         'scons_v8' : main_scons_v8,
