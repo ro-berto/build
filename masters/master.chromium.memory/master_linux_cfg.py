@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -36,7 +36,7 @@ B('ASAN Builder', 'asan_rel', 'compile', 'linux_asan_rel',
   notify_on_missing=True)
 F('asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
-    options=['--compiler=asan', 'base_unittests', 'crypto_unittests',
+    options=['--compiler=clang', 'base_unittests', 'crypto_unittests',
              'googleurl_unittests', 'gpu_unittests', 'media_unittests',
              'printing_unittests', 'remoting_unittests', 'net_unittests',
              'safe_browsing_tests', 'cacheinvalidation_unittests',
