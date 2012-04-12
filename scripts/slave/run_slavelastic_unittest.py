@@ -41,6 +41,7 @@ class TestSummaryTest(unittest.TestCase):
       summary.AddSummaryData(data)
 
     self.assertEquals(expected_output, summary.Output())
+    self.assertEquals(1, summary.exit_code())
 
   def test_correct_all_pass(self):
     summary_output = [
@@ -56,6 +57,20 @@ class TestSummaryTest(unittest.TestCase):
 
     self.assertEquals(expected_output, summary.Output())
 
+  def test_test_run_output(self):
+    full_output = ('[==========] Running 1 tests from results test run.\n'
+                   '[ RUN      ] results.Run Test\n'
+                   'DONE\n'
+                   '[       OK ] results.Run Test (10 ms)\n\n'
+                   '[----------] results summary\n'
+                   '[==========] 1 tests ran. (10 ms total)\n'
+                   '[  PASSED  ] 1 tests.\n'
+                   '[  FAILED  ] 0 tests\n\n'
+                   ' 0 FAILED TESTS')
+
+    cleaned_output = slavelastic.TestRunOutput(full_output)
+
+    self.assertEquals('DONE', cleaned_output)
 
 if __name__ == '__main__':
   unittest.main()

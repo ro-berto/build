@@ -5,21 +5,15 @@
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
 from __future__ import with_statement
-import BaseHTTPServer
-import cStringIO
 import json  # pylint: disable=F0401
 import optparse
 import os
 import platform
 import random
-import SimpleHTTPServer
-import SocketServer
 import socket
-import subprocess
 import sys
-import threading
 import time
-import urllib
+import urllib2
 import zipfile
 
 
@@ -27,71 +21,6 @@ DESCRIPTION = """This script takes a slavelastic manifest file, packages it,
 and sends a swarm manifest file to the swarm server.  This is expected to be
 called as a build step with the cwd as the parent of the src/ directory.
 """
-
-# A global list of shards, used to hold the stdout buffer for each shard.
-# This is declared globally so that the HttpHandler would be able to access it.
-g_shards = []
-
-class ThreadedHTTPServer(SocketServer.ThreadingMixIn,
-                         BaseHTTPServer.HTTPServer):
-  pass
-
-class HttpHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
-  """Handler that is called to process incoming POST connections
-  from swarm slaves.
-  """
-  def log_message(self, _format, *args):
-    pass
-
-  def do_POST(self):
-    global g_shards  # pylint: disable=W0602
-    self.send_response(200)
-    self.send_header('Content-type', 'text/html')
-    self.end_headers()
-    data = self.rfile.read()
-
-    # Decode headers
-    headers = {}
-    for pair in data.split('&'):
-      key, value = pair.split('=')
-      headers[urllib.unquote(key)] = urllib.unquote_plus(value)
-
-    # Verbose names for headers
-    test_case_name = headers['n']
-    config_name = headers['c']
-    shard_number = int(headers['i'])
-    output = headers['r']
-    status = headers['s']
-
-    assert shard_number < len(g_shards), 'Invalid shard # %d' % shard_number
-    shard = g_shards[shard_number]
-    assert test_case_name == shard.test_case_name
-    assert config_name == shard.os_image
-
-    if not shard.hostname:
-      shard.hostname = self.client_address[0]
-
-    # Take care of 'result_url'
-    if 'result' in self.path.split('/'):
-      exit_codes = [int(code) if code else 0 for
-          code in headers['x'].split(',')]
-      code = max(exit_codes)
-
-      # Need to write to shard before calling passed() or failed(), otherwise
-      # a race condition is created and the output may not print.
-      if shard.verbose:
-        data = data.replace('No output!', '')
-        shard.write('\nSwarm test completed, swarm results:\n')
-        shard.write(output)
-
-      if status == 'True':
-        shard.passed()
-      else:
-        shard.failed(code)
-      return
-
-    # Finally, write to stdout
-    shard.write(output)
 
 class Manifest(object):
   run_test_path = os.path.join(
@@ -124,14 +53,10 @@ class Manifest(object):
     # Random name for the output zip file
     self.zipfile_name = 'swarm_tempfile_%s.zip' % ''.join(random.choice(
         'abcdefghijklmnopqrstuvwxyz0123456789') for x in range(10))
-    # Port to listen to stdout coming from the swarm slave, will be set later
-    # once the HTTP server is initiated and a free port is found
-    self.port = None
     self.tasks = []
     self.current_platform = current_platform
     self.target_platform = switches_dict['os_image']
     self.working_dir = switches.working_dir
-    self.block_size = switches.block_size
 
   def add_task(self, task_name, actions):
     """Appends a new task to the swarm manifest file."""
@@ -188,7 +113,6 @@ class Manifest(object):
         'GTEST_TOTAL_SHARDS': '%(num_instances)s',
         'GTEST_SHARD_INDEX': '%(instance_index)s',
       },
-      'store_result': 'fail',
       'configurations': [
         {
           'min_instances': self.g_shards,
@@ -199,72 +123,11 @@ class Manifest(object):
           },
         },
       ],
-      'result_url': 'http://%s:%d/result' % (hostname,
-                                             self.port),
-      'output_destination': {
-        'url': 'http://%s:%d' % (hostname, self.port),
-        'size': self.block_size,
-      },
       'working_dir': self.working_dir,
       'cleanup': 'data',
     }
 
     return json.dumps(test_case)
-
-
-class TestRunShard(object):
-  """Instance of a shard running a test.  This object stores all output until it
-  is ready to be printed out"""
-  PENDING = 0
-  PASSED = 1
-  FAILED = 2
-  def __init__(self, manifest, index, verbose=False):
-    self._buffer = cStringIO.StringIO()
-    self._event = threading.Event()
-    self._lock = threading.Lock()
-    self.manifest = manifest
-    self.test_case_name = manifest.name
-    self.os_image = manifest.target_platform
-    self.status = TestRunShard.PENDING
-    self.exit_code = 0
-    self.end_time = None
-    self.hostname = None
-    self.index = index
-    self.verbose = verbose
-
-  def get_hostname(self):
-    while not self.hostname and self.status == TestRunShard.PENDING:
-      self._event.wait()
-    return self.hostname
-
-  def read(self):
-    """Read stdout data out of the buffer.  Returns an empty string if EOF."""
-    if self.status == TestRunShard.PENDING:
-      self._event.wait()
-    with self._lock:
-      result = self._buffer.getvalue()
-      self._buffer = cStringIO.StringIO()
-      self._event.clear()
-    return result
-
-  def write(self, data):
-    """Write stdout data into the buffer."""
-    if data:
-      with self._lock:
-        self._buffer.write(data)
-        self._event.set()
-
-  def failed(self, code):
-    self.status = TestRunShard.FAILED
-    self.end_time = time.time()
-    self.exit_code = code if code else 42  # Make sure this is non-zero
-    self._event.set()
-
-  def passed(self):
-    self.status = TestRunShard.PASSED
-    self.end_time = time.time()
-    self.exit_code = 0
-    self._event.set()
 
 
 def _get_first_number(line):
@@ -316,6 +179,33 @@ class TestSummary(object):
 
     return output
 
+  def exit_code(self):
+    return int(bool(self.failed_tests))
+
+
+# TODO(csharp) The sharing_supervisor.py also has test parsing code, they should
+# be shared.
+def TestRunOutput(output):
+  """Go through the given output and only return the output from the Test Run
+     Step.
+  """
+  test_run_output = []
+
+  in_step = False
+  step_name = ''
+  for line in output.splitlines():
+    if in_step:
+      if '[       OK ] ' + step_name in line:
+        break
+      else:
+        test_run_output.append(line)
+    elif '[ RUN      ] ' in line and 'Run Test' in line:
+      in_step = True
+      i = len('[ RUN      ] ')
+      step_name = line[i:]
+
+  return '\n'.join(test_run_output)
+
 
 def main():
   """Packages up a Slavelastic test and send it to swarm.  Receive output from
@@ -326,7 +216,6 @@ def main():
     number of shards
     ...
   """
-  global g_shards
   # Parses arguments
   parser = optparse.OptionParser(usage='%prog [options] [filename]',
                                  description=DESCRIPTION)
@@ -348,9 +237,6 @@ def main():
   parser.add_option('-p', '--port', type='int', default=8080,
                     help='Specify the port of the Swarm server. '
                     'Defaults to %default')
-  parser.add_option('-b', '--block_size', type='int', default=64,
-                    help='Specify the desired size of a stdout block. '
-                    'Defaults to %default bytes.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Print verbose logging')
   (options, args) = parser.parse_args()
@@ -370,95 +256,73 @@ def main():
   print "Zipping up files..."
   manifest.zip()
 
-  # Set up HTTP listeners
-  print "Setting up listeners..."
-  g_shards = []
-  for shard_num in range(options.num_shards):
-    shard = TestRunShard(manifest, shard_num, options.verbose)
-    g_shards.append(shard)
-  server = ThreadedHTTPServer(('', 0), HttpHandler)
-  server_done = threading.Event()
-  def server_runner(server, server_done):
-    while not server_done.is_set():
-      server.handle_request()
-  server_thread = threading.Thread(target=server_runner,
-                                   args=[server, server_done])
-  server_thread.daemon = True
-  server_thread.start()
-  port = server.server_address[1]
-  manifest.port = port
-
-  # Call post_test.py
-  print "Calling post test..."
-
-  if options.verbose:
-    process_stdout = sys.stdout
-    process_stderr = sys.stderr
-  else:
-    process_stdout = subprocess.PIPE
-    process_stderr = subprocess.PIPE
-
-  # TODO(csharp): Find a better way to store and call swarm.
-  p = subprocess.Popen([sys.executable,
-                        '../../../scripts/tools/swarm/post_test.py',
-                        '-n', options.hostname, '-p', str(options.port), '-v'],
-                       stdin=subprocess.PIPE, stdout=process_stdout,
-                       stderr=process_stderr)
+  # Send test requests off to swarm.
+  print 'Sending test requests to swarm'
+  base_url = 'http://%s:%d' % (options.hostname, options.port)
+  test_url = base_url + '/test'
   manifest_text = manifest.to_json()
-  print 'Sending manifest: %s' % manifest_text
-  p.communicate(manifest_text)
-  exit_code = p.wait()
-  start_time = time.time()
+  result = urllib2.urlopen(test_url, manifest_text).read()
+
+  # Check that we can read the output as a JSON string
+  try:
+    test_keys = json.loads(result)
+  except (ValueError, TypeError), e:
+    print 'Request failed:'
+    print result
+    return 1
+
+  running_test_keys = test_keys['test_keys']
+
+  # TODO(csharp) Get hostnames from key through swarm
+  hostnames = ['localhost' for i in range(options.num_shards)]
+
+  # TODO(csharp) Get exit codes from key through swarm
+  exit_codes = [0 for i in range(options.num_shards)]
 
   # Listen to output_destination
-  shard_times = []
   summary_total = TestSummary()
-  for shard in g_shards:
+  for index in range(options.num_shards):
     print
     print '===================================================================='
-    print 'Begin output from shard index %d (%s)' % (shard.index,
-                                                     shard.get_hostname())
+    print 'Begin output from shard index %d (%s)' % (index, hostnames[i])
     print '===================================================================='
     print
-    output_in_summary = False
     while True:
-      buf = shard.read()
-      if not buf:
-        break
+      try:
+        key_url = '%s/get_result?r=%s' % (base_url,
+                                          running_test_keys[index]['test_key'])
+        output = urllib2.urlopen(key_url).read()
 
-      if output_in_summary:
-        summary_total.AddSummaryData(buf)
-        continue
-
-      summary_index = buf.rfind('[  PASSED  ]')
-      if summary_index >= 0:
-        output_in_summary = True
-        summary_total.AddSummaryData(buf[summary_index:])
-        buf = buf[:summary_index - 1]
-
-      sys.stdout.write(buf)
+        if output:
+          cleaned_output = TestRunOutput(output)
+          summary_index = cleaned_output.rfind('[  PASSED  ]')
+          summary_total.AddSummaryData(cleaned_output[summary_index:])
+          sys.stdout.write(cleaned_output[:summary_index - 1])
+          break
+        else:
+          # Test is not yet done, wait a bit before checking again.
+          time.sleep(0.5)
+      except urllib2.HTTPError, e:
+        print 'Calling %s threw %s' % (key_url, e)
     print
     print '===================================================================='
-    print 'End output from shard index %d (%s). Return %d' % (shard.index,
-        shard.get_hostname(), shard.exit_code)
+    print 'End output from shard index %d (%s). Return %d' % (index,
+        hostnames[i], exit_codes[i])
     print '===================================================================='
     print
-    exit_code = max(exit_code, shard.exit_code)
-    shard_times.append(shard.end_time - start_time)
-  # Exit with highest exit code
-  server_done.set()
   manifest.cleanup()  # Delete temp zip file
 
   print '\n'.join(summary_total.Output())
   print
 
   if options.verbose:
-    print 'All tests completed, run times:'
-    for i in range(len(shard_times)):
-      print 'Shard index %d (%s): %3f s. (Exit code: %d)' % (i,
-          g_shards[i].hostname, shard_times[i], g_shards[i].exit_code)
-      print 'Total time: %f' % (time.time() - start_time)
-  return exit_code
+    print 'All tests completed:'
+    for i in range(options.num_shards):
+      print 'Shard index %d (%s): Exit code: %d' % (i,
+          hostnames[i], exit_codes[i])
+
+  # TODO(csharp) replace with max exit code once exit_codes gets real values
+  return summary_total.exit_code()
 
 if __name__ == '__main__':
   sys.exit(main())
