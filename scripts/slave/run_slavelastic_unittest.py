@@ -42,6 +42,20 @@ class TestSummaryTest(unittest.TestCase):
 
     self.assertEquals(expected_output, summary.Output())
 
+  def test_correct_all_pass(self):
+    summary_output = [
+        ('[  PASSED  ] 10 tests.'),
+        ('[  PASSED  ] 10 tests')]
+
+    expected_output = ['[  PASSED  ] 20 tests.']
+
+    summary = slavelastic.TestSummary()
+
+    for data in summary_output:
+      summary.AddSummaryData(data)
+
+    self.assertEquals(expected_output, summary.Output())
+
 
 if __name__ == '__main__':
   unittest.main()

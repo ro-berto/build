@@ -305,10 +305,14 @@ class TestSummary(object):
     if self.failed_tests:
       output.append('[  FAILED  ] failed tests listed below:')
       output.extend(self.failed_tests)
-    output.append('%i FAILED TESTS' % len(self.failed_tests))
-    output.append('%i DISABLED TESTS' % self.disabled_test_count)
-    output.append('%i tests with ignored failures (FAILS prefix)' %
-                 self.ignored_test_count)
+      output.append('%i FAILED TESTS' % len(self.failed_tests))
+
+    if self.disabled_test_count:
+      output.append('%i DISABLED TESTS' % self.disabled_test_count)
+
+    if self.ignored_test_count:
+      output.append('%i tests with ignored failures (FAILS prefix)' %
+                    self.ignored_test_count)
 
     return output
 
