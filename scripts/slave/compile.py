@@ -689,7 +689,7 @@ def main_ninja(options, args):
   os.chdir(src_dir)
 
   output_dir = os.path.join('out', options.target)
-  command = ['ninja' '-C', output_dir]
+  command = ['ninja', '-C', output_dir]
 
   if options.clobber:
     print('Removing %s' % output_dir)
