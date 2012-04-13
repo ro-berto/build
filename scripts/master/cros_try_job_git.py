@@ -50,18 +50,27 @@ def validate_job(parsed_job):
     raise BadJobfile('\n'.join(error_msgs))
 
 
+def get_file_contents(poller, branch, file_path):
+  """Returns a Deferred to returns the file's content."""
+  return utils.getProcessOutput(
+      poller.gitbin,
+      ['show', 'origin/%s:%s' % (branch, file_path)],
+      path=poller.workdir,
+      )
+
+
 class CrOSTryJobGit(TryBase):
   """Poll a Git server to grab patches to try."""
 
   _PROPERTY_SOURCE = 'Try Job'
 
-  def __init__(self, name, poller, smtp_host, from_addr, reply_to, email_footer,
-               properties=None):
+  def __init__(self, name, pollers, smtp_host, from_addr, reply_to,
+               email_footer, properties=None):
     """Initialize the class.
 
     Arguments:
       name: See TryBase.__init__().
-      poller: The git poller that is watching the job repo.
+      pollers: A list of job repo git pit pollers.
       smtp_host: The smtp host for sending out error emails.
       from_addr: The email address to display as being sent from.
       reply_to: The email address to put in the 'Reply-To' email header field.
@@ -69,7 +78,7 @@ class CrOSTryJobGit(TryBase):
       properties: See TryBase.__init__()
     """
     TryBase.__init__(self, name, [], properties or {})
-    self.watcher = poller
+    self.pollers = pollers
     self.smtp_host = smtp_host
     self.from_addr = from_addr
     self.reply_to = reply_to
@@ -81,8 +90,9 @@ class CrOSTryJobGit(TryBase):
 
   def stopService(self):
     def rm_temp_dir(result):
-      if os.path.isdir(self.watcher.workdir):
-        shutil.rmtree(self.watcher.workdir)
+      for poller in self.pollers:
+        if os.path.isdir(poller.workdir):
+          shutil.rmtree(poller.workdir)
 
     d = TryBase.stopService(self)
     d.addCallback(rm_temp_dir)
@@ -110,14 +120,6 @@ class CrOSTryJobGit(TryBase):
           properties=self.get_props(bot, parsed_job))
 
     return result
-
-  def get_file_contents(self, branch, file_path):
-    """Returns a Deferred to returns the file's content."""
-    return utils.getProcessOutput(
-        self.watcher.gitbin,
-        ['show', 'origin/%s:%s' % (branch, file_path)],
-        path=self.watcher.workdir,
-        )
 
   def send_validation_fail_email(self, emails, error):
     """Notify the user via email about the tryjob error."""
@@ -154,8 +156,17 @@ this message please contact chromeos-build@google.com.<br>
       raise BadJobfile(
           'Try job with too many files %s' % (','.join(change.files)))
 
-    wfd = defer.waitForDeferred(self.get_file_contents(change.branch,
-                                                       change.files[0]))
+    # Find poller that this change came from.
+    for poller in self.pollers:
+      if poller.repourl == change.repository:
+        break
+    else:
+      raise BadJobfile(
+          'Received tryjob from unsupported repository %s' % change.repository)
+
+    # pylint: disable=W0631
+    wfd = defer.waitForDeferred(
+        get_file_contents(poller, change.branch, change.files[0]))
     yield wfd
     parsed = json.loads(wfd.getResult())
     try:
