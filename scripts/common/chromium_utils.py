@@ -397,7 +397,15 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
   if remove_archive_directory:
-    RemoveDirectory(archive_dir)
+    # Move it even if it's not a directory as expected. This can happen with
+    # FILES.cfg archive creation where we create an archive staging directory
+    # that is the same name as the ultimate archive name.
+    if not os.path.isdir(archive_dir):
+      print 'Moving old "%s" file to create same name directory.' % archive_dir
+      previous_archive_file  = '%s.old' % archive_dir
+      MoveFile(archive_dir, previous_archive_file)
+    else:
+      RemoveDirectory(archive_dir)
   MaybeMakeDirectory(archive_dir)
   for needed_file in file_list:
     needed_file = needed_file.rstrip()
