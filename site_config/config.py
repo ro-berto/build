@@ -138,32 +138,6 @@ class Master(config_private.Master):
 class Archive(config_private.Archive):
   """Build and data archival options."""
 
-  # Binaries to archive on the source server with the sourcified symbols.
-  symsrc_binaries = [
-      'chrome.dll',
-      'chrome.exe',
-      'chrome_frame_helper.dll',
-      'chrome_frame_helper.exe',
-      'chrome_launcher.exe',
-      'mini_installer.exe',
-      'nacl64.exe',
-      'npchrome_frame.dll',
-      'ppGoogleNaClPluginChrome.dll',
-      'setup.exe',
-      # Syzygy-optimized version of the binaries above.
-      'syzygy\\chrome.dll',
-      'syzygy\\mini_installer.exe',
-      # Chrome Frame used to be built into a 'servers' directory,
-      # but no more. Leave the old paths here while we transition
-      # and hunt down robertshield@ if they remain here for very
-      # long. Note that these paths are checked for existence
-      # before being used.
-      # TODO(robertshield): Remove the next two lines once M15 has passed into
-      #     oblivion.
-      'servers\\npchrome_frame.dll',
-      'servers\\chrome_launcher.exe',
-  ]
-
   # List of symbol files to save, but not to upload to the symbol server
   # (generally because they have no symbols and thus would produce an error).
   # We have to list all the previous names of icudt*.dll. Now that we
