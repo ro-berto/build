@@ -299,6 +299,11 @@ class StagerBase(object):
                                            self.options.mode,
                                            archive_utils.BuildArch())
     symbol_files = fparser.ParseGroup('symbols')
+    # TODO(mmoss): These archives should be generated like
+    # _ParseAlternateArchives() in the official build stage_build.py (which
+    # should be refactored into archive_utils.py). Once that is done, the
+    # 'symbols' filegroup won't be used anymore and can be removed from the
+    # FILES.cfg entries.
     if chromium_utils.IsWindows():
       # Create a zip archive of the symbol files.  This must be done after the
       # main zip archive is created, or the latter will include this one too.

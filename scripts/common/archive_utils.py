@@ -116,11 +116,9 @@ def BuildArch():
     # This assumes we either build natively or build (and run staging) in a
     # chroot, where the architecture of the python executable is the same as
     # the build target.
-    # TODO(mmoss): This appears to be true for the official builders, which is
-    # the only place this runs right now. If we migrate this to the public
-    # buildbot scripts, we'll need to verify that it still holds true.
-    # Alternately, we could modify the bots to pass in the build architecture
-    # when running this script.
+    # TODO(mmoss): This appears to be true for the current builders. If that
+    # changes, we might have to modify the bots to pass in the build
+    # architecture when running this script.
     arch = platform.architecture(bits='unknown')[0]
     if arch == 'unknown':
       raise StagingError('Could not determine build architecture')
