@@ -137,6 +137,7 @@ def main():
   expected = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'Chromium Chrome',
+      'master.chromium.chromebot': 'Chromium Chromebot',
       'master.chromium.chromiumos': 'Chromium ChromiumOS',
       'master.chromium.flaky': 'Chromium Flaky',
       'master.chromium.fyi': 'Chromium FYI',

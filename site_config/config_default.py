@@ -188,6 +188,12 @@ class Master(object):
     slave_port = 9172
     master_port_alt = 9073
 
+  class ChromiumChromebot(_ChromiumBase):
+    project_name = 'Chromium Chromebot'
+    master_port = 9090
+    slave_port = 9190
+    master_port_alt = 9290
+
   class TryServer(_ChromiumBase):
     project_name = 'Chromium Try Server'
     master_port = 9011
