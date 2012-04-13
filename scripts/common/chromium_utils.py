@@ -343,9 +343,11 @@ def RemoveDirectory(*path):
   remove_with_retry(os.rmdir, file_path)
 
 
-def CopyFileToDir(src_path, dest_dir):
-  """Copies the file found at src_path to the same filename within the
-  dest_dir directory.
+def CopyFileToDir(src_path, dest_dir, dest_fn=None):
+  """Copies the file found at src_path to the dest_dir directory.
+
+  If dest_fn is specified, the src_path is copied to that name in dest_dir,
+  otherwise it is copied to a file of the same name.
 
   Raises PathNotFound if either the file or the directory is not found.
   """
@@ -356,7 +358,10 @@ def CopyFileToDir(src_path, dest_dir):
   if not os.path.isdir(dest_dir):
     raise PathNotFound('Unable to find dir %s' % dest_dir)
   src_file = os.path.basename(src_path)
-  shutil.copy(src_path, os.path.join(dest_dir, src_file))
+  if dest_fn:
+    shutil.copy(src_path, os.path.join(dest_dir, dest_fn))
+  else:
+    shutil.copy(src_path, os.path.join(dest_dir, src_file))
 
 
 def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
