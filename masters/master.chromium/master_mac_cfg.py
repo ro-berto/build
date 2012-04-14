@@ -22,6 +22,7 @@ sharded_tests = [
   'browser_tests',
   'content_unittests',
   'media_unittests',
+  'unit_tests',
 ]
 
 ################################################################################
