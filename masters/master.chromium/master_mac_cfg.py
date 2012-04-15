@@ -51,7 +51,8 @@ B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
   notify_on_missing=True)
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
+    options=[
+        '--compiler=goma-clang', '--', '-target', 'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_rel_trigger',
     }))
@@ -147,7 +148,8 @@ B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', notify_on_missing=True)
 F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=['--compiler=clang', '--', '-target', 'chromium_builder_tests'],
+    options=[
+        '--compiler=goma-clang', '--', '-target', 'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_dbg_trigger',
         'gclient_env': {
