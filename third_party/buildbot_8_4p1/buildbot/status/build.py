@@ -13,7 +13,7 @@
 #
 # Copyright Buildbot Team Members
 
-import os, shutil, re
+import os, shutil, re, weakref
 from cPickle import dump
 from zope.interface import implements
 from twisted.python import log, runtime
@@ -361,7 +361,7 @@ class BuildStatus(styles.Versioned):
         styles.Versioned.__setstate__(self, d)
         # self.builder must be filled in by our parent when loading
         for step in self.steps:
-            step.build = self
+            step.build = weakref.ref(self)
         self.watchers = []
         self.updates = {}
         self.finishedWatchers = []
@@ -459,6 +459,3 @@ class BuildStatus(styles.Versioned):
         else:
             result['currentStep'] = None
         return result
-
-
-

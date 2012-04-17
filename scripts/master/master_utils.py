@@ -300,6 +300,8 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     'chdicts': 1000,
     'ssdicts': 1000,
   }
+  # Must be at least 2x the number of on-going builds.
+  c['buildCacheSize'] = 200
 
   # See http://buildbot.net/buildbot/docs/0.8.1/Debug-Options.html for more
   # details.

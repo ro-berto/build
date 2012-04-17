@@ -202,6 +202,10 @@ class BuilderStatus(styles.Versioned):
                 % (self.name, number))
             build = load(open(filename, "rb"))
             build.builder = self
+            for step in build.getSteps():
+                step.builder = self
+                for loog in step.getLogs():
+                    loog.builder = self
 
             # (bug #1068) if we need to upgrade, we probably need to rewrite
             # this pickle, too.  We determine this by looking at the list of

@@ -70,10 +70,6 @@ class BuildRequestStatus:
 
         yield self._buildrequest
 
-    def buildStarted(self, build):
-        self.status._buildrequest_buildStarted(build.status)
-        self.builds.append(build.status)
-
     # methods called by our clients
     @defer.deferredGenerator
     def getSourceStamp(self):

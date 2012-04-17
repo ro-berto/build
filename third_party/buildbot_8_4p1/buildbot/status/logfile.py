@@ -13,7 +13,7 @@
 #
 # Copyright Buildbot Team Members
 
-import os
+import os, weakref
 from cStringIO import StringIO
 from bz2 import BZ2File
 from gzip import GzipFile
@@ -216,7 +216,10 @@ class LogFile:
         @type  logfilename: string
         @param logfilename: the Builder-relative pathname for the saved entries
         """
-        self.step = parent
+        self.step = weakref.ref(parent)
+        self.step_number = parent.step_number
+        self.build_number = parent.getBuild().getNumber()
+        self.builder = parent.builder
         self.name = name
         self.filename = logfilename
         fn = self.getFilename()
@@ -236,7 +239,7 @@ class LogFile:
         self.tailBuffer = []
 
     def getFilename(self):
-        return os.path.join(self.step.build.builder.basedir, self.filename)
+        return os.path.join(self.builder.basedir, self.filename)
 
     def hasContents(self):
         return os.path.exists(self.getFilename() + '.bz2') or \
@@ -247,7 +250,13 @@ class LogFile:
         return self.name
 
     def getStep(self):
-        return self.step
+        result = self.step()
+        if result is not None:
+            return result
+        build = self.builder.getBuildByNumber(self.build_number)
+        result = build.getSteps()[self.step_number]
+        self.step = weakref.ref(result)
+        return result
 
     def isFinished(self):
         return self.finished
@@ -368,7 +377,7 @@ class LogFile:
         if catchup:
             for channel, text in self.getChunks():
                 # TODO: add logChunks(), to send over everything at once?
-                receiver.logChunk(self.step.build, self.step, self,
+                receiver.logChunk(self.getStep().getBuild(), self.getStep(), self,
                                   channel, text)
 
     def unsubscribe(self, receiver):
@@ -439,8 +448,10 @@ class LogFile:
         if self.runLength >= self.chunkSize:
             self.merge()
 
+        step = self.getStep()
+        build = step.getBuild()
         for w in self.watchers:
-            w.logChunk(self.step.build, self.step, self, channel, text)
+            w.logChunk(build, step, self, channel, text)
         self.length += len(text)
 
     def addStdout(self, text):
@@ -526,6 +537,7 @@ class LogFile:
     def __getstate__(self):
         d = self.__dict__.copy()
         del d['step'] # filled in upon unpickling
+        del d['builder'] # filled in upon unpickling
         del d['watchers']
         del d['finishedWatchers']
         d['entries'] = [] # let 0.6.4 tolerate the saved log. TODO: really?
@@ -539,7 +551,7 @@ class LogFile:
         self.__dict__ = d
         self.watchers = [] # probably not necessary
         self.finishedWatchers = [] # same
-        # self.step must be filled in by our parent
+        # self.step and self.builder must be filled in by our parent
         self.finished = True
 
     def upgrade(self, logfilename):
@@ -561,7 +573,10 @@ class HTMLLogFile:
     filename = None
 
     def __init__(self, parent, name, logfilename, html):
-        self.step = parent
+        self.step = weakref.ref(parent)
+        self.step_number = parent.step_number
+        self.build_number = parent.getBuild().getNumber()
+        self.builder = parent.builder
         self.name = name
         self.filename = logfilename
         self.html = html
@@ -569,7 +584,13 @@ class HTMLLogFile:
     def getName(self):
         return self.name # set in BuildStepStatus.addLog
     def getStep(self):
-        return self.step
+        result = self.step()
+        if result is not None:
+            return result
+        build = self.builder.getBuildByNumber(self.build_number)
+        result = build.getSteps()[self.step_number]
+        self.step = weakref.ref(result)
+        return result
 
     def isFinished(self):
         return True
@@ -596,6 +617,7 @@ class HTMLLogFile:
     def __getstate__(self):
         d = self.__dict__.copy()
         del d['step']
+        del d['builder']
         return d
 
     def upgrade(self, logfilename):
@@ -617,4 +639,3 @@ def _tryremove(filename, timeout, retries):
         else:
             log.msg("giving up on removing %s after over %d seconds" %
                     (filename, timeout))
-

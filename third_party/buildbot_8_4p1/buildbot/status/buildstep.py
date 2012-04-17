@@ -13,7 +13,7 @@
 #
 # Copyright Buildbot Team Members
 
-import os
+import os, weakref
 from zope.interface import implements
 from twisted.persisted import styles
 from twisted.python import log
@@ -63,7 +63,9 @@ class BuildStepStatus(styles.Versioned):
 
     def __init__(self, parent, step_number):
         assert interfaces.IBuildStatus(parent)
-        self.build = parent
+        self.build = weakref.ref(parent)
+        self.build_number = parent.getNumber()
+        self.builder = parent.getBuilder()
         self.step_number = step_number
         self.logs = []
         self.urls = {}
@@ -81,7 +83,12 @@ class BuildStepStatus(styles.Versioned):
         return self.name
 
     def getBuild(self):
-        return self.build
+        result = self.build()
+        if result is not None:
+            return result
+        result = self.builder.getBuildByNumber(self.build_number)
+        self.build = weakref.ref(result)
+        return result
 
     def getTimes(self):
         return (self.started, self.finished)
@@ -179,7 +186,7 @@ class BuildStepStatus(styles.Versioned):
     def sendETAUpdate(self, receiver, updateInterval):
         self.updates[receiver] = None
         # they might unsubscribe during stepETAUpdate
-        receiver.stepETAUpdate(self.build, self,
+        receiver.stepETAUpdate(self.getBuild(), self,
                            self.getETA(), self.getExpectations())
         if receiver in self.watchers:
             self.updates[receiver] = reactor.callLater(updateInterval,
@@ -209,19 +216,21 @@ class BuildStepStatus(styles.Versioned):
 
     def stepStarted(self):
         self.started = util.now()
-        if self.build:
-            self.build.stepStarted(self)
+        build = self.getBuild()
+        if build:
+            build.stepStarted(self)
 
     def addLog(self, name):
         assert self.started # addLog before stepStarted won't notify watchers
-        logfilename = self.build.generateLogfileName(self.name, name)
+        build = self.getBuild()
+        logfilename = build.generateLogfileName(self.name, name)
         log = LogFile(self, name, logfilename)
-        log.logMaxSize = self.build.builder.logMaxSize
-        log.logMaxTailSize = self.build.builder.logMaxTailSize
-        log.compressMethod = self.build.builder.logCompressionMethod
+        log.logMaxSize = self.builder.logMaxSize
+        log.logMaxTailSize = self.builder.logMaxTailSize
+        log.compressMethod = self.builder.logCompressionMethod
         self.logs.append(log)
         for w in self.watchers:
-            receiver = w.logStarted(self.build, self, log)
+            receiver = w.logStarted(build, self, log)
             if receiver:
                 log.subscribe(receiver, True)
                 d = log.waitUntilFinished()
@@ -232,28 +241,32 @@ class BuildStepStatus(styles.Versioned):
 
     def addHTMLLog(self, name, html):
         assert self.started # addLog before stepStarted won't notify watchers
-        logfilename = self.build.generateLogfileName(self.name, name)
+        build = self.getBuild()
+        logfilename = build.generateLogfileName(self.name, name)
         log = HTMLLogFile(self, name, logfilename, html)
         self.logs.append(log)
         for w in self.watchers:
-            w.logStarted(self.build, self, log)
-            w.logFinished(self.build, self, log)
+            w.logStarted(build, self, log)
+            w.logFinished(build, self, log)
 
     def logFinished(self, log):
+        build = self.getBuild()
         for w in self.watchers:
-            w.logFinished(self.build, self, log)
+            w.logFinished(build, self, log)
 
     def addURL(self, name, url):
         self.urls[name] = url
 
     def setText(self, text):
         self.text = text
+        build = self.getBuild()
         for w in self.watchers:
-            w.stepTextChanged(self.build, self, text)
+            w.stepTextChanged(build, self, text)
     def setText2(self, text):
         self.text2 = text
+        build = self.getBuild()
         for w in self.watchers:
-            w.stepText2Changed(self.build, self, text)
+            w.stepText2Changed(build, self, text)
 
     def setStatistic(self, name, value):
         """Set the given statistic.  Usually called by subclasses.
@@ -267,7 +280,7 @@ class BuildStepStatus(styles.Versioned):
         self.finished = util.now()
         self.results = results
         cld = [] # deferreds for log compression
-        logCompressionLimit = self.build.builder.logCompressionLimit
+        logCompressionLimit = self.builder.logCompressionLimit
         for loog in self.logs:
             if not loog.isFinished():
                 loog.finish()
@@ -307,6 +320,7 @@ class BuildStepStatus(styles.Versioned):
     def __getstate__(self):
         d = styles.Versioned.__getstate__(self)
         del d['build'] # filled in when loading
+        del d['builder'] # filled in when loading
         if d.has_key('progress'):
             del d['progress']
         del d['watchers']
@@ -316,11 +330,11 @@ class BuildStepStatus(styles.Versioned):
 
     def __setstate__(self, d):
         styles.Versioned.__setstate__(self, d)
-        # self.build must be filled in by our parent
+        # self.build and self.builder must be filled in by our parent
 
         # point the logs to this object
         for loog in self.logs:
-            loog.step = self
+            loog.step = weakref.ref(self)
         self.watchers = []
         self.finishedWatchers = []
         self.updates = {}
@@ -357,8 +371,6 @@ class BuildStepStatus(styles.Versioned):
         result['urls'] = self.getURLs()
         result['step_number'] = self.step_number
         result['logs'] = [[l.getName(),
-            self.build.builder.status.getURLForThing(l)]
+            self.builder.status.getURLForThing(l)]
                 for l in self.getLogs()]
         return result
-
-

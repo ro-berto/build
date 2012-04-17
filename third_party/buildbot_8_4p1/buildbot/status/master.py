@@ -124,7 +124,7 @@ class Status:
 
             logs = step.getLogs()
             for i in range(len(logs)):
-                if loog is logs[i]:
+                if loog.getName() == logs[i].getName():
                     break
             else:
                 return None
