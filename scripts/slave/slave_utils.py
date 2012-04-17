@@ -5,6 +5,8 @@
 """Functions specific to build slaves, shared by several buildbot scripts.
 """
 
+import datetime
+import glob
 import inspect
 import os
 import re
@@ -491,6 +493,26 @@ def LogAndRemoveFiles(temp_dir, regex_pattern):
         # Don't fail.
 
 
+def RemoveOldSnapshots(desktop):
+  """Removes ChromiumSnapshot files more than one day old. Such snapshots are
+  created when certain tests timeout (e.g., Chrome Frame integration tests)."""
+  # Compute the file prefix of a snapshot created one day ago.
+  yesterday = datetime.datetime.now() - datetime.timedelta(1)
+  old_snapshot = yesterday.strftime('ChromiumSnapshot%Y%m%d%H%M%S')
+  # Collect snapshots at least as old as that one created a day ago.
+  to_delete = []
+  for snapshot in glob.iglob(os.path.join(desktop, 'ChromiumSnapshot*.png')):
+    if os.path.basename(snapshot) < old_snapshot:
+      to_delete.append(snapshot)
+  # Delete the collected snapshots.
+  for snapshot in to_delete:
+    print "Removing old snapshot: %s" % snapshot
+    try:
+      os.remove(snapshot)
+    except OSError, e:
+      print >> sys.stderr, e
+
+
 def RemoveChromeDesktopFiles():
   """Removes Chrome files (i.e. shortcuts) from the desktop of the current user.
   This does nothing if called on a non-Windows platform."""
@@ -498,6 +520,7 @@ def RemoveChromeDesktopFiles():
     desktop_path = os.environ['USERPROFILE']
     desktop_path = os.path.join(desktop_path, 'Desktop')
     LogAndRemoveFiles(desktop_path, '^(Chromium|chrome) \(.+\)?\.lnk$')
+    RemoveOldSnapshots(desktop_path)
 
 
 def RemoveChromeTemporaryFiles():
