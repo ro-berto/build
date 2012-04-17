@@ -111,6 +111,72 @@ def BuildTestFilesTree(test_path):
       open(temp_path, 'a')
 
 
+def FetchSvn(cfg_path, svn=None):
+  if not svn:
+    svn = pysvn.Client()
+  f, files_cfg = tempfile.mkstemp()
+  os.write(f, svn.cat(cfg_path))
+  os.close(f)
+  return files_cfg
+
+
+def DiffFilesCfg(cfg_path, svn):
+  """Parse local FILES.cfg and show changes so they can be manually verified."""
+
+  print '\nDiff parsing "%s" ...' % cfg_path
+  d = difflib.Differ()
+  def CompareLists(svnlist, newlist, msg):
+    diffs = []
+    for x in d.compare(svnlist, newlist):
+      if x.startswith('- '):
+        diffs.append('  DELETION: %s' % x[2:])
+      elif x.startswith('+ '):
+        diffs.append('  ADDITION: %s' % x[2:])
+    if diffs:
+      print msg
+      print '\n'.join(diffs)
+
+  svn_cfg = FetchSvn(RealFilesCfgTest.SVNBASE + cfg_path, svn)
+  svnparser = archive_utils.FilesCfgParser(svn_cfg, None, None)
+  os.unlink(svn_cfg)
+  newparser = archive_utils.FilesCfgParser(options.src_base + cfg_path, None,
+                                           None)
+
+  # Determine the "parsable values" in the two versions.
+  archs = []
+  buildtypes = []
+  groups = []
+  for item in newparser.files_dict + svnparser.files_dict:
+    if item.get('arch'):
+      archs.extend(item['arch'])
+    if item.get('buildtype'):
+      buildtypes.extend(item['buildtype'])
+    if item.get('filegroup'):
+      groups.extend(item['filegroup'])
+  archs = set(archs)
+  buildtypes = set(buildtypes)
+  groups = set(groups)
+
+  # Legacy list handling (i.e. default filegroup).
+  print '\nChecking ParseLegacyList() ...'
+  for arch, buildtype in itertools.product(archs, buildtypes):
+    msg = '%s:%s' % (arch, buildtype)
+    newparser._arch = svnparser._arch = arch
+    newparser._buildtype = svnparser._buildtype = buildtype
+    svn_legacy_list = svnparser.ParseLegacyList()
+    new_legacy_list = newparser.ParseLegacyList()
+    CompareLists(svn_legacy_list, new_legacy_list, msg)
+
+  print '\nChecking ParseGroup() ...'
+  for group, arch, buildtype in itertools.product(groups, archs, buildtypes):
+    msg = '%s:%s:%s' % (group, arch, buildtype)
+    newparser._arch = svnparser._arch = arch
+    newparser._buildtype = svnparser._buildtype = buildtype
+    svn_group_list = svnparser.ParseGroup(group)
+    new_group_list = newparser.ParseGroup(group)
+    CompareLists(svn_group_list, new_group_list, msg)
+
+
 class ArchiveUtilsTest(unittest.TestCase):
 
   def setUp(self):
@@ -230,6 +296,12 @@ class ArchiveUtilsTest(unittest.TestCase):
 class RealFilesCfgTest(unittest.TestCase):
   """Basic sanity checks for the real FILES.cfg files."""
 
+  SVNBASE = 'svn://svn.chromium.org/chrome/trunk/src'
+  WIN_PATH = '/chrome/tools/build/win/FILES.cfg'
+  LINUX_PATH = '/chrome/tools/build/linux/FILES.cfg'
+  MAC_PATH = '/chrome/tools/build/mac/FILES.cfg'
+  CROS_PATH = '/chrome/tools/build/chromeos/FILES.cfg'
+
   def setUp(self):
     self.files_cfg = None
     self.svn = pysvn.Client()
@@ -240,9 +312,8 @@ class RealFilesCfgTest(unittest.TestCase):
 
   def ParseFilesCfg(self, cfg_path):
     if cfg_path.startswith('svn://'):
-      f, self.files_cfg = tempfile.mkstemp()
-      os.write(f, self.svn.cat(cfg_path))
-      os.close(f)
+      # Store the svn file so it will be automatically cleaned up in tearDown().
+      self.files_cfg = FetchSvn(cfg_path, self.svn)
       cfg_path = self.files_cfg
 
     # There should always be some 32bit, official and dev files (otherwise
@@ -272,10 +343,10 @@ class RealFilesCfgTest(unittest.TestCase):
         if not f['arch'] or set(f['arch']) - set(['32bit', '64bit'])])
 
   def testWinParse(self):
-    self.ParseFilesCfg(options.src_base + '/chrome/tools/build/win/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + RealFilesCfgTest.WIN_PATH)
 
   def testWinParseSymbols(self):
-    files_cfg = options.src_base + '/chrome/tools/build/win/FILES.cfg'
+    files_cfg = options.src_base + RealFilesCfgTest.WIN_PATH
 
     # There should be some dev build symbols.
     fparser = archive_utils.FilesCfgParser(files_cfg, 'dev', '32bit')
@@ -293,14 +364,13 @@ class RealFilesCfgTest(unittest.TestCase):
     self.assertEqual(symbols64_list, symbols_list)
 
   def testMacParse(self):
-    self.ParseFilesCfg(options.src_base + '/chrome/tools/build/mac/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + RealFilesCfgTest.MAC_PATH)
 
   def testLinuxParse(self):
-    self.ParseFilesCfg(options.src_base + '/chrome/tools/build/linux/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + RealFilesCfgTest.LINUX_PATH)
 
   def testChromeosParse(self):
-    self.ParseFilesCfg(options.src_base +
-                       '/chrome/tools/build/chromeos/FILES.cfg')
+    self.ParseFilesCfg(options.src_base + RealFilesCfgTest.CROS_PATH)
 
 
 if __name__ == '__main__':
@@ -309,19 +379,49 @@ if __name__ == '__main__':
       help='Also run tests on FILES.cfg files from chromium sources.')
   option_parser.add_option('--realfiles-only', action='store_true',
       help='Only run tests on FILES.cfg files from chromium sources.')
-  option_parser.add_option('--src-base',
-      default='svn://svn.chromium.org/chrome/trunk/src',
+  option_parser.add_option('--src-base', default=RealFilesCfgTest.SVNBASE,
       help='Base file or svn path to the chromium sources.')
+  option_parser.add_option('--diffparse', action='store_true',
+      help='Compare parsing local FILES.cfg and latest SVN version. '
+           '(Requires a --realfiles* and --src-base flag.) '
+           'Use this to make sure any changes in file groupings, archive '
+           'contents, etc. are intentional.')
   options, unused_args = option_parser.parse_args()
 
+  errors = False
   if not options.realfiles_only:
     suite = unittest.TestLoader().loadTestsFromTestCase(ArchiveUtilsTest)
     # Run with a bit more output.
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    if not errors:
+      errors = not result.wasSuccessful()
 
   # These tests are a little slow due to the svn download, so only run them if
   # explicitly requested.
   if options.realfiles or options.realfiles_only:
     import pysvn  # pylint: disable=F0401
     suite = unittest.TestLoader().loadTestsFromTestCase(RealFilesCfgTest)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    if not errors:
+      errors = not result.wasSuccessful()
+
+    if options.diffparse:
+      import difflib # pylint: disable=F0401
+      import itertools # pylint: disable=F0401
+      if options.src_base == RealFilesCfgTest.SVNBASE:
+        print ('WARNING: --diffparse requires --src-base set to your local src '
+               'path. Skipping because nothing to compare.')
+      else:
+        # Turn off stdout buffering to allow progress messages during slow svn.
+        sys.stdout.flush()
+        sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+        svn_client = pysvn.Client()
+        DiffFilesCfg(RealFilesCfgTest.WIN_PATH, svn_client)
+        DiffFilesCfg(RealFilesCfgTest.LINUX_PATH, svn_client)
+        DiffFilesCfg(RealFilesCfgTest.MAC_PATH, svn_client)
+        DiffFilesCfg(RealFilesCfgTest.CROS_PATH, svn_client)
+
+
+  # Specify error return so caller (e.g. shell script) can easily detect
+  # failures.
+  sys.exit(errors)
