@@ -46,6 +46,16 @@ class FilesCfgParser(object):
             fileobj.get('filegroup') and filegroup in fileobj.get('filegroup'))
     ]
 
+  def ParseArchiveLists(self):
+    """Generate a dict of all the items in all archives."""
+    archive_lists = {}
+    for fileobj in self.files_dict:
+      if (self._buildtype in fileobj['buildtype'] and
+          self._arch in fileobj['arch'] and
+          fileobj.get('archive')):
+        archive_lists.setdefault(fileobj['archive'], []).append(fileobj)
+    return archive_lists
+
   def ParseLegacyList(self):
     """Return the list of 'default' files.
 

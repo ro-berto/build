@@ -75,6 +75,12 @@ TEST_FILES_CFG = [
     'buildtype': ['dev', 'official'],
     'archive': 'static_archive.zip',
   },
+  {
+    'filename': 'subdirectory/archive_dev32.txt',
+    'arch': ['32bit'],
+    'buildtype': ['dev'],
+    'archive': 'static_archive.zip',
+  },
 ]
 
 
@@ -176,6 +182,19 @@ def DiffFilesCfg(cfg_path, svn):
     new_group_list = newparser.ParseGroup(group)
     CompareLists(svn_group_list, new_group_list, msg)
 
+  print '\nChecking Archives() ...'
+  for arch, buildtype in itertools.product(archs, buildtypes):
+    newparser._arch = svnparser._arch = arch
+    newparser._buildtype = svnparser._buildtype = buildtype
+    svn_archive_lists = svnparser.ParseArchiveLists()
+    new_archive_lists = newparser.ParseArchiveLists()
+    archives = set(svn_archive_lists.keys() + new_archive_lists.keys())
+    for archive in archives:
+      msg = '%s:%s:%s' % (archive, arch, buildtype)
+      CompareLists([x['filename'] for x in svn_archive_lists.get(archive, [])],
+                   [x['filename'] for x in new_archive_lists.get(archive, [])],
+                   msg)
+
 
 class ArchiveUtilsTest(unittest.TestCase):
 
@@ -234,6 +253,28 @@ class ArchiveUtilsTest(unittest.TestCase):
           self.assertEqual(files_list.count(i['filename']), 0)
     # No unexpected files.
     self.assertEqual(len(files_list), 0)
+
+  def testParseArchiveLists(self):
+    ARCHIVENAME = 'static_archive.zip'
+    files_cfg = CreateTestFilesCfg(self.temp_dir)
+    arch = '64bit'
+    buildtype = 'official'
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    archives = fparser.ParseArchiveLists()
+    self.assertEqual(archives.keys(), [ARCHIVENAME])
+    self.assertEqual([x['filename'] for x in archives[ARCHIVENAME]],
+                     ['archive_allany.txt', 'subdirectory/archive_allany.txt'])
+
+    # 32bit dev has additional files under the same archive name.
+    arch = '32bit'
+    buildtype = 'dev'
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    archives = fparser.ParseArchiveLists()
+    self.assertEqual(archives.keys(), [ARCHIVENAME])
+    self.assertEqual([x['filename'] for x in archives[ARCHIVENAME]],
+                     ['archive_allany.txt', 'subdirectory/archive_allany.txt',
+                      'subdirectory/archive_dev32.txt'])
+
 
   def testExtractDirsFromPaths(self):
     path_list = TEMP_FILES[:]
@@ -420,7 +461,6 @@ if __name__ == '__main__':
         DiffFilesCfg(RealFilesCfgTest.LINUX_PATH, svn_client)
         DiffFilesCfg(RealFilesCfgTest.MAC_PATH, svn_client)
         DiffFilesCfg(RealFilesCfgTest.CROS_PATH, svn_client)
-
 
   # Specify error return so caller (e.g. shell script) can easily detect
   # failures.
