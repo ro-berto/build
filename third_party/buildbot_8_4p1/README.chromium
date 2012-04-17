@@ -1581,3 +1581,364 @@ Index: buildbot/master.py
      def loadTheConfigFile(self, configFile=None):
          if not configFile:
              configFile = os.path.join(self.basedir, self.configFileName)
+
+
+Use weakrefs to avoid circular references between status objects.
+
+http://codereview.chromium.org/9991001/
+
+Index: buildbot/status/master.py
+===================================================================
+--- buildbot/status/master.py	(revision 132430)
++++ buildbot/status/master.py	(working copy)
+@@ -124,7 +124,7 @@
+ 
+             logs = step.getLogs()
+             for i in range(len(logs)):
+-                if loog is logs[i]:
++                if loog.getName() == logs[i].getName():
+                     break
+             else:
+                 return None
+Index: buildbot/status/buildstep.py
+===================================================================
+--- buildbot/status/buildstep.py	(revision 132430)
++++ buildbot/status/buildstep.py	(working copy)
+@@ -13,7 +13,7 @@
+ #
+ # Copyright Buildbot Team Members
+ 
+-import os
++import os, weakref
+ from zope.interface import implements
+ from twisted.persisted import styles
+ from twisted.python import log
+@@ -63,7 +63,9 @@
+ 
+     def __init__(self, parent, step_number):
+         assert interfaces.IBuildStatus(parent)
+-        self.build = parent
++        self.build = weakref.ref(parent)
++        self.build_number = parent.getNumber()
++        self.builder = parent.getBuilder()
+         self.step_number = step_number
+         self.logs = []
+         self.urls = {}
+@@ -81,7 +83,12 @@
+         return self.name
+ 
+     def getBuild(self):
+-        return self.build
++        result = self.build()
++        if result is not None:
++            return result
++        result = self.builder.getBuildByNumber(self.build_number)
++        self.build = weakref.ref(result)
++        return result
+ 
+     def getTimes(self):
+         return (self.started, self.finished)
+@@ -179,7 +186,7 @@
+     def sendETAUpdate(self, receiver, updateInterval):
+         self.updates[receiver] = None
+         # they might unsubscribe during stepETAUpdate
+-        receiver.stepETAUpdate(self.build, self,
++        receiver.stepETAUpdate(self.getBuild(), self,
+                            self.getETA(), self.getExpectations())
+         if receiver in self.watchers:
+             self.updates[receiver] = reactor.callLater(updateInterval,
+@@ -209,19 +216,21 @@
+ 
+     def stepStarted(self):
+         self.started = util.now()
+-        if self.build:
+-            self.build.stepStarted(self)
++        build = self.getBuild()
++        if build:
++            build.stepStarted(self)
+ 
+     def addLog(self, name):
+         assert self.started # addLog before stepStarted won't notify watchers
+-        logfilename = self.build.generateLogfileName(self.name, name)
++        build = self.getBuild()
++        logfilename = build.generateLogfileName(self.name, name)
+         log = LogFile(self, name, logfilename)
+-        log.logMaxSize = self.build.builder.logMaxSize
+-        log.logMaxTailSize = self.build.builder.logMaxTailSize
+-        log.compressMethod = self.build.builder.logCompressionMethod
++        log.logMaxSize = self.builder.logMaxSize
++        log.logMaxTailSize = self.builder.logMaxTailSize
++        log.compressMethod = self.builder.logCompressionMethod
+         self.logs.append(log)
+         for w in self.watchers:
+-            receiver = w.logStarted(self.build, self, log)
++            receiver = w.logStarted(build, self, log)
+             if receiver:
+                 log.subscribe(receiver, True)
+                 d = log.waitUntilFinished()
+@@ -232,28 +241,32 @@
+ 
+     def addHTMLLog(self, name, html):
+         assert self.started # addLog before stepStarted won't notify watchers
+-        logfilename = self.build.generateLogfileName(self.name, name)
++        build = self.getBuild()
++        logfilename = build.generateLogfileName(self.name, name)
+         log = HTMLLogFile(self, name, logfilename, html)
+         self.logs.append(log)
+         for w in self.watchers:
+-            w.logStarted(self.build, self, log)
+-            w.logFinished(self.build, self, log)
++            w.logStarted(build, self, log)
++            w.logFinished(build, self, log)
+ 
+     def logFinished(self, log):
++        build = self.getBuild()
+         for w in self.watchers:
+-            w.logFinished(self.build, self, log)
++            w.logFinished(build, self, log)
+ 
+     def addURL(self, name, url):
+         self.urls[name] = url
+ 
+     def setText(self, text):
+         self.text = text
++        build = self.getBuild()
+         for w in self.watchers:
+-            w.stepTextChanged(self.build, self, text)
++            w.stepTextChanged(build, self, text)
+     def setText2(self, text):
+         self.text2 = text
++        build = self.getBuild()
+         for w in self.watchers:
+-            w.stepText2Changed(self.build, self, text)
++            w.stepText2Changed(build, self, text)
+ 
+     def setStatistic(self, name, value):
+         """Set the given statistic.  Usually called by subclasses.
+@@ -267,7 +280,7 @@
+         self.finished = util.now()
+         self.results = results
+         cld = [] # deferreds for log compression
+-        logCompressionLimit = self.build.builder.logCompressionLimit
++        logCompressionLimit = self.builder.logCompressionLimit
+         for loog in self.logs:
+             if not loog.isFinished():
+                 loog.finish()
+@@ -307,6 +320,7 @@
+     def __getstate__(self):
+         d = styles.Versioned.__getstate__(self)
+         del d['build'] # filled in when loading
++        del d['builder'] # filled in when loading
+         if d.has_key('progress'):
+             del d['progress']
+         del d['watchers']
+@@ -316,11 +330,11 @@
+ 
+     def __setstate__(self, d):
+         styles.Versioned.__setstate__(self, d)
+-        # self.build must be filled in by our parent
++        # self.build and self.builder must be filled in by our parent
+ 
+         # point the logs to this object
+         for loog in self.logs:
+-            loog.step = self
++            loog.step = weakref.ref(self)
+         self.watchers = []
+         self.finishedWatchers = []
+         self.updates = {}
+@@ -357,8 +371,6 @@
+         result['urls'] = self.getURLs()
+         result['step_number'] = self.step_number
+         result['logs'] = [[l.getName(),
+-            self.build.builder.status.getURLForThing(l)]
++            self.builder.status.getURLForThing(l)]
+                 for l in self.getLogs()]
+         return result
+-
+-
+Index: buildbot/status/build.py
+===================================================================
+--- buildbot/status/build.py	(revision 132430)
++++ buildbot/status/build.py	(working copy)
+@@ -13,7 +13,7 @@
+ #
+ # Copyright Buildbot Team Members
+ 
+-import os, shutil, re
++import os, shutil, re, weakref
+ from cPickle import dump
+ from zope.interface import implements
+ from twisted.python import log, runtime
+@@ -361,7 +361,7 @@
+         styles.Versioned.__setstate__(self, d)
+         # self.builder must be filled in by our parent when loading
+         for step in self.steps:
+-            step.build = self
++            step.build = weakref.ref(self)
+         self.watchers = []
+         self.updates = {}
+         self.finishedWatchers = []
+@@ -459,6 +459,3 @@
+         else:
+             result['currentStep'] = None
+         return result
+-
+-
+-
+Index: buildbot/status/buildrequest.py
+===================================================================
+--- buildbot/status/buildrequest.py	(revision 132430)
++++ buildbot/status/buildrequest.py	(working copy)
+@@ -70,10 +70,6 @@
+ 
+         yield self._buildrequest
+ 
+-    def buildStarted(self, build):
+-        self.status._buildrequest_buildStarted(build.status)
+-        self.builds.append(build.status)
+-
+     # methods called by our clients
+     @defer.deferredGenerator
+     def getSourceStamp(self):
+Index: buildbot/status/logfile.py
+===================================================================
+--- buildbot/status/logfile.py	(revision 132430)
++++ buildbot/status/logfile.py	(working copy)
+@@ -13,7 +13,7 @@
+ #
+ # Copyright Buildbot Team Members
+ 
+-import os
++import os, weakref
+ from cStringIO import StringIO
+ from bz2 import BZ2File
+ from gzip import GzipFile
+@@ -216,7 +216,10 @@
+         @type  logfilename: string
+         @param logfilename: the Builder-relative pathname for the saved entries
+         """
+-        self.step = parent
++        self.step = weakref.ref(parent)
++        self.step_number = parent.step_number
++        self.build_number = parent.getBuild().getNumber()
++        self.builder = parent.builder
+         self.name = name
+         self.filename = logfilename
+         fn = self.getFilename()
+@@ -236,7 +239,7 @@
+         self.tailBuffer = []
+ 
+     def getFilename(self):
+-        return os.path.join(self.step.build.builder.basedir, self.filename)
++        return os.path.join(self.builder.basedir, self.filename)
+ 
+     def hasContents(self):
+         return os.path.exists(self.getFilename() + '.bz2') or \
+@@ -247,7 +250,13 @@
+         return self.name
+ 
+     def getStep(self):
+-        return self.step
++        result = self.step()
++        if result is not None:
++            return result
++        build = self.builder.getBuildByNumber(self.build_number)
++        result = build.getSteps()[self.step_number]
++        self.step = weakref.ref(result)
++        return result
+ 
+     def isFinished(self):
+         return self.finished
+@@ -368,7 +377,7 @@
+         if catchup:
+             for channel, text in self.getChunks():
+                 # TODO: add logChunks(), to send over everything at once?
+-                receiver.logChunk(self.step.build, self.step, self,
++                receiver.logChunk(self.getStep().getBuild(), self.getStep(), self,
+                                   channel, text)
+ 
+     def unsubscribe(self, receiver):
+@@ -439,8 +448,10 @@
+         if self.runLength >= self.chunkSize:
+             self.merge()
+ 
++        step = self.getStep()
++        build = step.getBuild()
+         for w in self.watchers:
+-            w.logChunk(self.step.build, self.step, self, channel, text)
++            w.logChunk(build, step, self, channel, text)
+         self.length += len(text)
+ 
+     def addStdout(self, text):
+@@ -526,6 +537,7 @@
+     def __getstate__(self):
+         d = self.__dict__.copy()
+         del d['step'] # filled in upon unpickling
++        del d['builder'] # filled in upon unpickling
+         del d['watchers']
+         del d['finishedWatchers']
+         d['entries'] = [] # let 0.6.4 tolerate the saved log. TODO: really?
+@@ -539,7 +551,7 @@
+         self.__dict__ = d
+         self.watchers = [] # probably not necessary
+         self.finishedWatchers = [] # same
+-        # self.step must be filled in by our parent
++        # self.step and self.builder must be filled in by our parent
+         self.finished = True
+ 
+     def upgrade(self, logfilename):
+@@ -561,7 +573,10 @@
+     filename = None
+ 
+     def __init__(self, parent, name, logfilename, html):
+-        self.step = parent
++        self.step = weakref.ref(parent)
++        self.step_number = parent.step_number
++        self.build_number = parent.getBuild().getNumber()
++        self.builder = parent.builder
+         self.name = name
+         self.filename = logfilename
+         self.html = html
+@@ -569,7 +584,13 @@
+     def getName(self):
+         return self.name # set in BuildStepStatus.addLog
+     def getStep(self):
+-        return self.step
++        result = self.step()
++        if result is not None:
++            return result
++        build = self.builder.getBuildByNumber(self.build_number)
++        result = build.getSteps()[self.step_number]
++        self.step = weakref.ref(result)
++        return result
+ 
+     def isFinished(self):
+         return True
+@@ -596,6 +617,7 @@
+     def __getstate__(self):
+         d = self.__dict__.copy()
+         del d['step']
++        del d['builder']
+         return d
+ 
+     def upgrade(self, logfilename):
+@@ -617,4 +639,3 @@
+         else:
+             log.msg("giving up on removing %s after over %d seconds" %
+                     (filename, timeout))
+-
+Index: buildbot/status/builder.py
+===================================================================
+--- buildbot/status/builder.py	(revision 132430)
++++ buildbot/status/builder.py	(working copy)
+@@ -202,6 +202,10 @@
+                 % (self.name, number))
+             build = load(open(filename, "rb"))
+             build.builder = self
++            for step in build.getSteps():
++                step.builder = self
++                for loog in step.getLogs():
++                    loog.builder = self
+ 
+             # (bug #1068) if we need to upgrade, we probably need to rewrite
+             # this pickle, too.  We determine this by looking at the list of
