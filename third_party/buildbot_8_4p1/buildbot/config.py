@@ -45,6 +45,7 @@ class BuilderConfig:
                 category=None,
                 nextSlave=None,
                 nextBuild=None,
+                nextSlaveAndBuild=None,
                 locks=None,
                 env=None,
                 properties=None,
@@ -95,6 +96,7 @@ class BuilderConfig:
         self.category = category
         self.nextSlave = nextSlave
         self.nextBuild = nextBuild
+        self.nextSlaveAndBuild = nextSlaveAndBuild
         self.locks = locks
         self.env = env
         self.properties = properties
@@ -114,6 +116,8 @@ class BuilderConfig:
             rv['nextSlave'] = self.nextSlave
         if self.nextBuild:
             rv['nextBuild'] = self.nextBuild
+        if self.nextSlaveAndBuild:
+            rv['nextSlaveAndBuild'] = self.nextSlaveAndBuild
         if self.locks:
             rv['locks'] = self.locks
         if self.env:

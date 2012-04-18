@@ -102,6 +102,14 @@ class Builder(pb.Referenceable, service.MultiService):
         self.nextBuild = setup.get('nextBuild')
         if self.nextBuild is not None and not callable(self.nextBuild):
             raise ValueError("nextBuild must be callable")
+        self.nextSlaveAndBuild = setup.get('nextSlaveAndBuild')
+        if self.nextSlaveAndBuild is not None:
+            if not callable(self.nextSlaveAndBuild):
+                raise ValueError("nextSlaveAndBuild must be callable")
+            if self.nextBuild or self.nextSlave:
+                raise ValueError("nextSlaveAndBuild cannot be specified"
+                                 " together with either nextSlave or nextBuild")
+
         self.buildHorizon = setup.get('buildHorizon')
         self.logHorizon = setup.get('logHorizon')
         self.eventHorizon = setup.get('eventHorizon')
@@ -178,6 +186,8 @@ class Builder(pb.Referenceable, service.MultiService):
             diffs.append('nextSlave changed from %s to %s' % (self.nextSlave, setup.get('nextSlave')))
         if setup.get('nextBuild') != self.nextBuild:
             diffs.append('nextBuild changed from %s to %s' % (self.nextBuild, setup.get('nextBuild')))
+        if setup.get('nextSlaveAndBuild') != self.nextSlaveAndBuild:
+            diffs.append('nextSlaveAndBuild changed from %s to %s' % (self.nextSlaveAndBuild, setup.get('nextSlaveAndBuild')))
         if setup.get('buildHorizon', None) != self.buildHorizon:
             diffs.append('buildHorizon changed from %s to %s' % (self.buildHorizon, setup['buildHorizon']))
         if setup.get('logHorizon', None) != self.logHorizon:
@@ -605,6 +615,26 @@ class Builder(pb.Referenceable, service.MultiService):
 
     # Build Creation
 
+    def _checkSlaveBuilder(self, slavebuilder, available_slavebuilders):
+        if slavebuilder not in available_slavebuilders:
+            next_func = 'nextSlave'
+            if self.nextSlaveAndBuild:
+                next_func = 'nextSlaveAndBuild'
+            log.msg("%s chose a nonexistent slave for builder '%s'; cannot"
+                    " start build" % (next_func, self.name))
+            return False
+        return True
+
+    def _checkBrDict(self, brdict, unclaimed_requests):
+        if brdict not in unclaimed_requests:
+            next_func = 'nextBuild'
+            if self.nextSlaveAndBuild:
+                next_func = 'nextSlaveAndBuild'
+            log.msg("%s chose a nonexistent request for builder '%s'; cannot"
+                    " start build" % (next_func, self.name))
+            return False
+        return True
+
     @defer.deferredGenerator
     def maybeStartBuild(self):
         # This method is called by the botmaster whenever this builder should
@@ -645,33 +675,52 @@ class Builder(pb.Referenceable, service.MultiService):
 
         # match them up until we're out of options
         while available_slavebuilders and unclaimed_requests:
-            # first, choose a slave (using nextSlave)
-            wfd = defer.waitForDeferred(
-                self._chooseSlave(available_slavebuilders))
-            yield wfd
-            slavebuilder = wfd.getResult()
+            brdict = None
+            if self.nextSlaveAndBuild:
+                # convert brdicts to BuildRequest objects
+                wfd = defer.waitForDeferred(
+                        defer.gatherResults([self._brdictToBuildRequest(brdict)
+                                             for brdict in unclaimed_requests]))
+                yield wfd
+                breqs = wfd.getResult()
 
-            if not slavebuilder:
-                break
+                wfd = defer.waitForDeferred(defer.maybeDeferred(
+                        self.nextSlaveAndBuild,
+                        available_slavebuilders,
+                        breqs))
+                yield wfd
+                slavebuilder, br = wfd.getResult()
 
-            if slavebuilder not in available_slavebuilders:
-                log.msg(("nextSlave chose a nonexistent slave for builder "
-                         "'%s'; cannot start build") % self.name)
-                break
+                # Find the corresponding brdict for the returned BuildRequest
+                if br:
+                    for brdict_i in unclaimed_requests:
+                       if brdict_i['brid'] == br.id:
+                           brdict = brdict_i
+                           break
 
-            # then choose a request (using nextBuild)
-            wfd = defer.waitForDeferred(
-                self._chooseBuild(unclaimed_requests))
-            yield wfd
-            brdict = wfd.getResult()
+                if (not self._checkSlaveBuilder(slavebuilder,
+                                                available_slavebuilders)
+                    or not self._checkBrDict(brdict, unclaimed_requests)):
+                    break
+            else:
+                # first, choose a slave (using nextSlave)
+                wfd = defer.waitForDeferred(
+                    self._chooseSlave(available_slavebuilders))
+                yield wfd
+                slavebuilder = wfd.getResult()
 
-            if not brdict:
-                break
+                if not self._checkSlaveBuilder(slavebuilder,
+                                               available_slavebuilders):
+                    break
 
-            if brdict not in unclaimed_requests:
-                log.msg(("nextBuild chose a nonexistent request for builder "
-                         "'%s'; cannot start build") % self.name)
-                break
+                # then choose a request (using nextBuild)
+                wfd = defer.waitForDeferred(
+                    self._chooseBuild(unclaimed_requests))
+                yield wfd
+                brdict = wfd.getResult()
+
+                if not self._checkBrDict(brdict, unclaimed_requests):
+                    break
 
             # merge the chosen request with any compatible requests in the
             # queue
