@@ -168,7 +168,8 @@ def main():
 
     print '%s: Finalizing google storage...' % time.strftime('%X')
     status = slave_utils.GSUtilMoveFile('%s/%s' % (GSBASE, partial_filename),
-                                        '%s/%s' % (GSBASE, completed_filename))
+                                        '%s/%s' % (GSBASE, completed_filename),
+                                        gs_acl=GSACL)
     if status != 0:
       raise Exception('ERROR: GSUtilMoveFile error %d. "%s" -> "%s"' % (
           status, '%s/%s' % (GSBASE, partial_filename),

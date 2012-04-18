@@ -427,7 +427,7 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
 
   return 0
 
-def GSUtilMoveFile(source, dest):
+def GSUtilMoveFile(source, dest, gs_acl=None):
   """Move a file on Google Storage."""
 
   gsutil = GSUtilSetup()
@@ -435,8 +435,18 @@ def GSUtilMoveFile(source, dest):
   # Run the gsutil command. gsutil internally calls command_wrapper, which
   # will try to run the command 10 times if it fails.
   command = [gsutil]
-  command.extend(['mv', '-p', source, dest])
-  return chromium_utils.RunCommand(command)
+  command.extend(['mv', source, dest])
+  status = chromium_utils.RunCommand(command)
+
+  if status:
+    return status
+
+  if gs_acl:
+    command = [gsutil]
+    command.extend(['setacl', gs_acl, dest])
+    status = chromium_utils.RunCommand(command)
+
+  return status
 
 def GSUtilDeleteFile(filename):
   """Delete a file on Google Storage."""
