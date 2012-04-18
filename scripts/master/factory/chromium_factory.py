@@ -467,6 +467,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
       ]
       f.AddChromeEndureTest('chrome_endure_plus_test', tests, fp)
+    elif R('chrome_endure_indexeddb_tests'):
+      tests = [
+        'perf_endure.IndexedDBOfflineTest.testOfflineOnline',
+      ]
+      f.AddChromeEndureTest('chrome_endure_indexeddb_test', tests, fp)
 
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):
