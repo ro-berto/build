@@ -13,7 +13,11 @@ import subprocess
 
 from slave import slave_utils
 
-def CreateCheckout(repo_url, local_dir, username, password):
+# workaround for the fact that default list arguments are dangerous in python
+DEFAULT_ADDITIONAL_SVN_FLAGS = ['--no-auth-cache', '--non-interactive']
+
+def CreateCheckout(repo_url, local_dir, username, password,
+                   additional_svn_flags=None):
   """Check out a local copy of an SVN repository and return an Svn object
   pointing at its root directory.
 
@@ -21,24 +25,34 @@ def CreateCheckout(repo_url, local_dir, username, password):
   @param local_dir directory within which to create the local copy
   @param username SVN username
   @param password SVN password
+  @param additional_svn_flags list of flags to pass to every svn operation
+         (if None, uses DEFAULT_ADDITIONAL_SVN_FLAGS)
   """
-  local_repo = Svn(directory=local_dir, username=username, password=password)
+  local_repo = Svn(directory=local_dir, username=username, password=password,
+                   additional_svn_flags=additional_svn_flags)
   local_repo.Checkout(repo_url, '.')
   return local_repo
 
 class Svn(object):
 
-  def __init__(self, directory, username, password):
+  def __init__(self, directory, username, password, additional_svn_flags=None):
     """Set up to manipulate SVN control within the given directory.
 
     @param directory directory within which to perform SVN operations
     @param username SVN username
     @param password SVN password
+    @param additional_svn_flags list of flags to pass to every svn operation
+           (if None, uses DEFAULT_ADDITIONAL_SVN_FLAGS)
     """
     self._directory = directory
     self._username = username
     self._password = password
     self._svn_binary = slave_utils.SubversionExe()
+    # workaround for the fact that default list args are dangerous in python
+    if additional_svn_flags is None:
+      self._additional_svn_flags = DEFAULT_ADDITIONAL_SVN_FLAGS
+    else:
+      self._additional_svn_flags = additional_svn_flags
 
   def _RunCommand(self, args):
     """Run a command (from self._directory) and return stdout as a single
@@ -65,8 +79,8 @@ class Svn(object):
     """
     print 'running svn command %s in directory %s' % (args, self._directory)
     return self._RunCommand([self._svn_binary, '--username', self._username,
-                             '--password', self._password,
-                             '--no-auth-cache', '--non-interactive'] + args)
+                             '--password', self._password]
+                            + self._additional_svn_flags + args)
 
   def Checkout(self, url, path):
     """Check out a working copy from a repository.
