@@ -26,11 +26,12 @@ class Manifest(object):
   run_test_path = os.path.join(
       'src', 'tools', 'isolate', 'run_test_from_archive.py')
 
-  def __init__(self, filename, switches):
+  def __init__(self, filename, test_name, switches):
     """Populates a manifest object.
       Args:
-        name - Name of the running test.
-        files - A list of files to zip up and transfer over.
+        filename - The manifest with the test details.
+        test_name - The name to give the test request.
+        switches - An object with properties to apply to the test request.
     """
     platform_mapping =  {
       'win32': 'Windows',
@@ -57,7 +58,7 @@ class Manifest(object):
     self.current_platform = current_platform
     self.target_platform = switches_dict['os_image']
     self.working_dir = switches.working_dir
-    self.test_name = switches.test_name
+    self.test_name = test_name
 
   def add_task(self, task_name, actions):
     """Appends a new task to the swarm manifest file."""
@@ -131,52 +132,16 @@ class Manifest(object):
     return json.dumps(test_case)
 
 
-def main():
-  """Packages up a Slavelastic test and send it to swarm.  Receive output from
-  all shards and print it to stdout.
-
-  Args
-    slavelastic manifest file
-    number of shards
-    ...
-  """
-  # Parses arguments
-  parser = optparse.OptionParser(usage='%prog [options] [filename]',
-                                 description=DESCRIPTION)
-  parser.add_option('-w', '--working_dir', default='swarm_tests',
-                    help='Desired working direction on the swarm slave side. '
-                    'Defaults to %default.')
-  parser.add_option('-m', '--min_shards', type='int', default=1,
-                    help='Minimum number of shards to request. CURRENTLY NOT '
-                    'SUPPORTED.')
-  parser.add_option('-s', '--num_shards', type='int', default=1,
-                    help='Desired number of shards to request. Must be '
-                    'greater than or equal to min_shards.')
-  parser.add_option('-o', '--os_image',
-                    help='Swarm OS image to request.  Defaults to the '
-                    'current platform.')
-  parser.add_option('-u', '--url', default='http://localhost:8080',
-                    help='Specify the url of the Swarm server. '
-                    'Defaults to %default')
-  parser.add_option('-t', '--test_name',
-                    help='Specify the name to give the swarm test request. '
-                    'Defaults to the given filename')
-  parser.add_option('-v', '--verbose', action='store_true',
-                    help='Print verbose logging')
-  (options, args) = parser.parse_args()
-  if not args:
-    parser.error('Must specify one filename.')
-  elif len(args) > 1:
-    parser.error('Must specify only one filename.')
-  filename = args[0]
-  if not options.os_image:
-    options.os_image = '%s %d' % (platform.uname()[0], 32)
-  if not options.test_name:
-    options.test_name = filename
-
+def ProcessManifest(filename, options):
+  """Process the manifest file and send off the swarm test request."""
   # Parses manifest file
   print "Parsing file %s..." % filename
-  manifest = Manifest(filename, options)
+
+  file_name_tail = os.path.split(filename)[1]
+  test_name = os.path.splitext(file_name_tail)[0]
+  test_full_name = options.test_name_prefix + test_name
+
+  manifest = Manifest(filename, test_full_name, options)
 
   # Zip up relevent files
   print "Zipping up files..."
@@ -192,12 +157,61 @@ def main():
   try:
     json.loads(result)
   except (ValueError, TypeError), e:
-    print 'Request failed:'
-    print result
+    print 'Failed to send test for ' + test_name
     print e
     return 1
 
   return 0
+
+
+def main():
+  """Packages up a Slavelastic test and send it to swarm.  Receive output from
+  all shards and print it to stdout.
+
+  Args
+    slavelastic manifest file
+    number of shards
+    ...
+  """
+  # Parses arguments
+  parser = optparse.OptionParser(
+      usage='%prog [options] [filenames]',
+      description=DESCRIPTION)
+  parser.add_option('-w', '--working_dir', default='swarm_tests',
+                    help='Desired working direction on the swarm slave side. '
+                    'Defaults to %default.')
+  parser.add_option('-m', '--min_shards', type='int', default=1,
+                    help='Minimum number of shards to request. CURRENTLY NOT '
+                    'SUPPORTED.')
+  parser.add_option('-s', '--num_shards', type='int', default=1,
+                    help='Desired number of shards to request. Must be '
+                    'greater than or equal to min_shards.')
+  parser.add_option('-o', '--os_image',
+                    help='Swarm OS image to request.  Defaults to the '
+                    'current platform.')
+  parser.add_option('-u', '--url', default='http://localhost:8080',
+                    help='Specify the url of the Swarm server. '
+                    'Defaults to %default')
+  parser.add_option('-t', '--test_name_prefix', default='',
+                    help='Specify the prefix to give the swarm test request. '
+                    'Defaults to %default')
+  parser.add_option('-v', '--verbose', action='store_true',
+                    help='Print verbose logging')
+  (options, args) = parser.parse_args()
+
+  if not args:
+    parser.error('Must specify at least one filename')
+
+  if not options.os_image:
+    options.os_image = '%s %d' % (platform.uname()[0], 32)
+
+  highest_exit_code = 0
+  for filename in args:
+    highest_exit_code = max(highest_exit_code,
+                            ProcessManifest(filename, options))
+
+  return highest_exit_code
+
 
 if __name__ == '__main__':
   sys.exit(main())

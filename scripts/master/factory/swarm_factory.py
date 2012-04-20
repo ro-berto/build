@@ -26,7 +26,8 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                                      self._target_platform)
 
     gclient_env = factory_properties.get("gclient_env")
-    swarm_server = factory_properties.get('swarm_server', 'http://localhost')
+    swarm_server = factory_properties.get('swarm_server',
+                                          'http://localhost:9001')
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'tests_run=hashtable' in gyp_defines:
       # Send of all the test requests as a single step.
@@ -36,8 +37,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
             swarm_server,
             factory_properties.get('min_swarm_shards', '3'),
             factory_properties.get('max_swarm_shards', '3'),
-            swarm_inputs,
-            tests)
+            swarm_inputs)
 
       # Each test has its output returned as its own step.
       for test in tests:

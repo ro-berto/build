@@ -17,22 +17,19 @@ class SwarmCommands(commands.FactoryCommands):
 
   def AddTriggerSwarmTestStep(self, target_platform, swarm_server,
                               min_shards, max_shards,
-                              manifest_files, test_names):
+                              manifest_files):
     script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
 
-    # TODO(csharp) Merge into a single command
-    for i in range(len(manifest_files)):
-      swarm_request_name = WithProperties('%s-%s-' + test_names[i],
-                                          'buildername:-None',
-                                          'buildnumber:-None')
+    swarm_request_name_prefix = WithProperties('%s-%s-',
+                                               'buildername:-None',
+                                               'buildnumber:-None')
 
-      command = [self._python, script_path, '-m', min_shards, '-s', max_shards,
-                 '-o', target_platform, '-u', swarm_server,
-                 '-t', swarm_request_name, manifest_files[i]]
+    command = [self._python, script_path, '-m', min_shards, '-s', max_shards,
+               '-o', target_platform, '-u', swarm_server,
+               '-t', swarm_request_name_prefix]
+    command.extend(manifest_files)
 
-      self.AddTestStep(shell.ShellCommand,
-                       '%s_swarm' % test_names[i],
-                       command)
+    self.AddTestStep(shell.ShellCommand, 'trigger_swarm_tests', command)
 
   def AddGetSwarmTestStep(self, swarm_server, test_name):
     script_path = self.PathJoin(self._script_dir, 'get_swarm_results.py')
