@@ -40,6 +40,7 @@ def CommonChecks(input_api, output_api):
         # pylint is fetched in memory with setuptools, it seems it caches
         # sys.path so modifications to sys.path aren't kept.
         join('scripts', 'master', 'unittests'),
+        join('scripts', 'slave', 'unittests'),
         join('site_config'),
         join('test'),
     ] + sys.path
@@ -66,6 +67,11 @@ def RunTests(input_api, output_api):
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'master', 'unittests'),
+      whitelist))
+  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+      input_api,
+      output_api,
+      input_api.os_path.join('scripts', 'slave', 'unittests'),
       whitelist))
   internal_path = input_api.os_path.join('..', 'build_internal', 'test')
   if input_api.os_path.isfile(internal_path):

@@ -3,19 +3,18 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import os
-import sys
+import test_env  # pylint: disable=W0403,W0611
+
+import StringIO
 import unittest
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, '..', '..', 'site_config'))
-sys.path.insert(0, os.path.join(HERE, '..'))
-sys.path.insert(0, HERE)
+from testing_support.super_mox import mox
+from testing_support.super_mox import SuperMoxTestBase
 
-import slave.run_slavelastic as slavelastic
+import slave.get_swarm_results as swarm_results
 
 
-class TestSummaryTest(unittest.TestCase):
+class TestRunSummaryTest(unittest.TestCase):
   def test_correct_output(self):
     summary_output = [
         ('[  PASSED  ] 10 tests.\n'
@@ -35,13 +34,12 @@ class TestSummaryTest(unittest.TestCase):
                        '3 DISABLED TESTS',
                        '3 tests with ignored failures (FAILS prefix)']
 
-    summary = slavelastic.TestSummary()
+    summary = swarm_results.TestRunSummary()
 
     for data in summary_output:
       summary.AddSummaryData(data)
 
     self.assertEquals(expected_output, summary.Output())
-    self.assertEquals(1, summary.exit_code())
 
   def test_correct_all_pass(self):
     summary_output = [
@@ -50,7 +48,7 @@ class TestSummaryTest(unittest.TestCase):
 
     expected_output = ['[  PASSED  ] 20 tests.']
 
-    summary = slavelastic.TestSummary()
+    summary = swarm_results.TestRunSummary()
 
     for data in summary_output:
       summary.AddSummaryData(data)
@@ -68,9 +66,40 @@ class TestSummaryTest(unittest.TestCase):
                    '[  FAILED  ] 0 tests\n\n'
                    ' 0 FAILED TESTS')
 
-    cleaned_output = slavelastic.TestRunOutput(full_output)
+    cleaned_output = swarm_results.TestRunOutput(full_output)
 
-    self.assertEquals('DONE', cleaned_output)
+    self.assertEquals('DONE\n', cleaned_output)
+
+
+class GetTestKetsTest(SuperMoxTestBase):
+  def test_no_keys(self):
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+    response = StringIO.StringIO('No matching Test Cases')
+    swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
+        response)
+    self.mox.ReplayAll()
+
+    self.assertEqual([], swarm_results.GetTestKeys('http://host:9001',
+                                                   'my_test'))
+    self.checkstdout('Error: Unable to find any tests with the name, '
+                     'my_test, on swarm server\n')
+
+    self.mox.VerifyAll()
+
+  def test_find_keys(self):
+    keys = ['key_1', 'key_2']
+
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+    response = StringIO.StringIO('\n'.join(keys))
+    swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
+        response)
+    self.mox.ReplayAll()
+
+    self.assertEqual(keys,
+                     swarm_results.GetTestKeys('http://host:9001', 'my_test'))
+
+    self.mox.VerifyAll()
+
 
 if __name__ == '__main__':
   unittest.main()

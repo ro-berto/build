@@ -3,15 +3,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import test_env  # pylint: disable=W0403,W0611
 
-import os
-import sys
 import unittest
-
-here = os.path.dirname(sys.argv[0])
-sys.path.insert(0, os.path.join(here, '..', '..', 'site_config'))
-sys.path.insert(0, os.path.join(here, '..'))
-sys.path.insert(0, here)
 
 import slave.slave_utils as slave_utils
 
