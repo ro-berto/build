@@ -21,6 +21,15 @@ S(name='chromium_local', branch='src', treeStableTimer=60)
 
 T('chromiumos_rel_trigger')
 
+# Tests that are single-machine shard-safe. For now we only use the sharding
+# supervisor for long tests (more than 30 seconds) that are known to be stable.
+sharded_tests = [
+  'base_unittests',
+  'browser_tests',
+  'content_unittests',
+  'media_unittests',
+]
+
 linux_options = [
     'aura_builder',
     'base_unittests',
@@ -123,7 +132,9 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'unit',
            'views',
            ],
-    factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True,
+                        'chromeos': 1}))
 
 
 B('Linux ChromiumOS Tests (2)',
@@ -135,7 +146,9 @@ B('Linux ChromiumOS Tests (2)',
 F('tester_2', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     tests=linux_tests_2 + linux_tests_3,
-    factory_properties={'generate_gtest_json': True, 'chromeos': 1}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True,
+                        'chromeos': 1}))
 
 
 B('Linux ChromiumOS (Clang dbg)',
@@ -178,7 +191,8 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
     tests=linux_tests_1,
-    factory_properties={'generate_gtest_json': True,}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True,}))
 
 
 B('Linux ChromiumOS Tests (dbg)(2)', 'dbg_tests_2', 'tester',
@@ -187,7 +201,8 @@ F('dbg_tests_2', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
     tests=linux_tests_2,
-    factory_properties={'generate_gtest_json': True,}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True,}))
 
 
 B('Linux ChromiumOS Tests (dbg)(3)', 'dbg_tests_3', 'tester',
@@ -196,7 +211,8 @@ F('dbg_tests_3', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
     tests=linux_tests_3,
-    factory_properties={'generate_gtest_json': True,}))
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True,}))
 
 
 
