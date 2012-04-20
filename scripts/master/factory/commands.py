@@ -560,7 +560,8 @@ class FactoryCommands(object):
                           primary_repo=primary_repo)
 
   def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
-                         gclient_deps=None, gclient_nohooks=False):
+                         gclient_deps=None, gclient_nohooks=False,
+                         no_gclient_branch=None):
     """ This is not for pressing 'clobber' on the waterfall UI page. This is
         for clobbering all the sources. Using mode='clobber' causes the entire
         working directory to get moved aside (to build.dead) --OR-- if
@@ -590,6 +591,7 @@ class FactoryCommands(object):
                           gclient_spec=gclient_spec,
                           gclient_deps=gclient_deps,
                           gclient_nohooks=gclient_nohooks,
+                          no_gclient_branch=no_gclient_branch,
                           workdir=self.working_dir,
                           mode='clobber',
                           env=env,

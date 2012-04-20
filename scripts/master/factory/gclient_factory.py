@@ -179,9 +179,10 @@ class GClientFactory(object):
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
+      no_gclient_branch = factory_properties.get('no_gclient_branch', False)
       factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
-                                         gclient_deps=gclient_deps,
-                                         gclient_nohooks=self._nohooks_on_update)
+          gclient_deps=gclient_deps, gclient_nohooks=self._nohooks_on_update,
+          no_gclient_branch=no_gclient_branch)
     elif slave_type == 'NASTester':
       factory_cmd_obj.AddCloneStep(factory_properties)
     elif not delay_compile_step:
