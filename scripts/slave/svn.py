@@ -6,8 +6,6 @@
 """Perform various operations on an SVN checkout.
 """
 
-import fnmatch
-import os
 import re
 import subprocess
 
@@ -149,6 +147,4 @@ class Svn(object):
     @param property_name property_name to set for each file
     @param property_value what to set the property_name to
     """
-    all_files = os.listdir(self._directory)
-    matching_files = fnmatch.filter(all_files, filename_pattern)
-    return self.SetProperty(matching_files, property_name, property_value)
+    return self.SetProperty([filename_pattern], property_name, property_value)
