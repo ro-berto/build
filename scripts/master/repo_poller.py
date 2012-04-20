@@ -148,6 +148,8 @@ class RepoPoller(PollingChangeSource):
     if self.repo_branches:
       repo_args.extend(['-b', self.repo_branches[0]])  # any branch will do
     d = self.RunRepoCmd(repo_args)
+    # Bug 124131
+    d.addCallback(lambda *unused: self.RunRepoCmd(['sync', '-j', '4']))
     def _success(*args):
       log.msg('RepoPoller: finished initializing.')
     d.addCallback(_success)
