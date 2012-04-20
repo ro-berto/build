@@ -492,9 +492,9 @@ def common_make_settings(
       command.append('chrome')
       return
 
-  if chromium_utils.IsMac() and compiler == 'asan':
-    # Disallow dyld to randomize the load address of executables.
-    # Some of them are compiled with ASan and will hang otherwise.
+  if chromium_utils.IsMac():
+    # Disallow dyld to randomize the load addresses of executables.
+    # If any of them is compiled with ASan it will hang otherwise.
     env['DYLD_NO_PIE'] = '1'
 
   if compiler in ('goma', 'goma-clang', 'jsonclang'):
