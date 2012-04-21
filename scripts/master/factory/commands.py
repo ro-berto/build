@@ -526,7 +526,7 @@ class FactoryCommands(object):
                           name='update_scripts',
                           description='update_scripts',
                           locks=[self.slave_exclusive_lock],
-                          timeout=60,
+                          timeout=60*5,
                           workdir='..',
                           command=command)
 
