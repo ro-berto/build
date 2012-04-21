@@ -215,12 +215,6 @@
                 "builder=chromiumos+sdk",
                 "reload=30",
             ].join("&");
-            var chrome = [
-                "builder=x86+generic+nightly+chrome+PFQ",
-                "builder=tegra2+nightly+chrome+PFQ",
-                "builder=amd64+generic+nightly+chrome+PFQ",
-                "reload=30",
-            ].join("&");
             var chromium_chromiumos = [
                 "builder=ChromiumOS+(x86)",
                 "builder=ChromiumOS+(amd64)",
@@ -265,7 +259,6 @@
             DisplayBar(waterfall, bar, closer, "closers");
             DisplayBar(waterfall, bar, x86, "x86");
             DisplayBar(waterfall, bar, arm, "arm");
-            DisplayBar(waterfall, bar, chrome, "chrome");
             DisplayBar(waterfall, bar, commit_queue, "commit queue");
             DisplayBar(waterfall_chromium_chromiumos, bar_chromium_chromiumos, chromium_chromiumos, "chromium.chromiumos")
           </script>
