@@ -99,7 +99,8 @@ F('builder', chromiumos().ChromiumOSFactory(
         'extra_archive_paths': 'chrome/tools/build/chromeos',
         'gclient_env': {
             'GYP_DEFINES': ('chromeos=1'
-                            ' ffmpeg_branding=ChromeOS proprietary_codecs=1')},
+                            ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
+                            ' component=shared_library')},
         'window_manager': False}))
 
 B('Linux ChromiumOS Tests (1)',
@@ -167,6 +168,7 @@ F('clang', chromiumos().ChromiumOSFactory(
                             ' clang=1 clang_use_chrome_plugins=1'
                             ' fastbuild=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
+                            ' component=shared_library'
                            )}}))
 #
 # Triggerable scheduler for the dbg builders
@@ -180,7 +182,7 @@ F('dbg', chromiumos().ChromiumOSFactory(
     target='Debug',
     options=['--compiler=goma'] + linux_options,
     factory_properties={
-      'gclient_env': { 'GYP_DEFINES' : 'chromeos=1' },
+      'gclient_env': { 'GYP_DEFINES' : 'chromeos=1 component=shared_library' },
       'trigger': 'chromiumos_dbg_trigger',
       'window_manager': False,
     }))
