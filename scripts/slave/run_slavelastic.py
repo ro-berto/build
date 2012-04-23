@@ -84,6 +84,12 @@ class Manifest(object):
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
     hostname = socket.gethostbyname(socket.gethostname())
+
+    # Adjust the port used to access the data via the python simpleserver.
+    # TODO(csharp): Remove this once file accesses between build and swarm bots
+    # has been fixed.
+    hostname += ':8080'
+
     # pylint: disable=E1103
     filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
 
