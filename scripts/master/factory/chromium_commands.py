@@ -969,7 +969,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddGpuTests(self, factory_properties):
     """Runs gpu_tests binary and archives any results.
 
-    This binary contains all the tests that should be run on the gpu bots.
+    This binary contains browser tests that should be run on the gpu bots.
     """
     # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
     gpu_data = self.PathJoin('..', 'gpu_data')
@@ -995,6 +995,16 @@ class ChromiumCommands(commands.FactoryCommands):
            '--generated-dir', gen_dir,
            '--gpu-reference-dir', ref_dir]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
+
+  def AddGLTests(self, factory_properties=None):
+    """Runs gl_tests binary.
+
+    This binary contains unit tests that should be run on the gpu bots.
+    """
+    factory_properties = factory_properties or {}
+
+    self.AddBasicGTestTestStep('gl_tests', factory_properties,
+                               test_tool_arg_list=['--no-xvfb'])
 
   def AddNaClIntegrationTestStep(self, factory_properties, target=None,
                                  buildbot_preset=None):

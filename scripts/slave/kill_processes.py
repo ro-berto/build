@@ -173,6 +173,7 @@ processes = [
     'debug_message.exe',
     'DumpRenderTree.exe',
     'flush_cache.exe',
+    'gl_tests.exe',
     'gpu_tests.exe',
     'ie_unittests.exe',
     'image_diff.exe',
