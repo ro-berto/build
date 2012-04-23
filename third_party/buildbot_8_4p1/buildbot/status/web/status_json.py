@@ -451,24 +451,16 @@ class AllBuildsJsonResource(JsonResource):
         if isinstance(path, int) or _IS_INT.match(path):
             build_status = self.builder_status.getBuild(int(path))
             if build_status:
-                build_status_number = str(build_status.getNumber())
-                # Happens with negative numbers.
-                child = self.children.get(build_status_number)
-                if child:
-                    return child
-                # Create it on-demand.
-                child = BuildJsonResource(self.status, build_status)
-                # Cache it. Never cache negative numbers.
-                # TODO(maruel): Cleanup the cache once it's too heavy!
-                self.putChild(build_status_number, child)
-                return child
+                # Don't cache BuildJsonResource; that would defeat the cache-ing
+                # mechanism in place for BuildStatus objects (in BuilderStatus).
+                return BuildJsonResource(self.status, build_status)
         return JsonResource.getChild(self, path, request)
 
     def asDict(self, request):
         results = {}
-        # If max > buildCacheSize, it'll trash the cache...
+        # If max is too big, it'll trash the cache...
         max = int(RequestArg(request, 'max',
-                             self.builder_status.buildCacheSize))
+                             self.builder_status.buildCacheSize/2))
         for i in range(0, max):
             child = self.getChildWithDefault(-i, request)
             if not isinstance(child, BuildJsonResource):
