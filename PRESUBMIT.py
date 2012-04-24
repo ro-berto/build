@@ -45,10 +45,16 @@ def CommonChecks(input_api, output_api):
         join('test'),
     ] + sys.path
 
+    disabled_warnings = [
+      'C0301',  # Line too long (NN/80)
+      'C0321',  # More than one statement on a single line
+      'W0613',  # Unused argument
+    ]
     output.extend(input_api.canned_checks.RunPylint(
         input_api,
         output_api,
-        black_list=black_list))
+        black_list=black_list,
+        disabled_warnings=disabled_warnings))
   finally:
     sys.path = sys_path_backup
 
