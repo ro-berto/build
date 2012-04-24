@@ -72,7 +72,8 @@ F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
     target='Release',
     options=['--build-tool=make', '--compiler=goma-clang',
              'chromium_gpu_builder'],
-    tests=['gpu_tests', 'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
+    tests=['gpu_tests', 'gl_tests',
+           'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
     factory_properties={
         'generate_gtest_json': True,
         'perf_id': 'gpu-webkit-mac',
@@ -110,7 +111,7 @@ F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--build-tool=make', '--compiler=goma-clang',
              'chromium_gpu_debug_builder'],
-    tests=['gpu_tests'],
+    tests=['gpu_tests', 'gl_tests'],
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {

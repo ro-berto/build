@@ -63,7 +63,8 @@ F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
 B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_webkit_rel')
 F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
-    tests=['gpu_tests', 'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
+    tests=['gpu_tests', 'gl_tests',
+           'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
     options=['--compiler=goma', 'chromium_gpu_builder'],
     factory_properties={
         'generate_gtest_json': True,
@@ -83,7 +84,7 @@ S('s9_webkit_dbg', branch='trunk', treeStableTimer=60)
 B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', scheduler='s9_webkit_dbg')
 F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     target='Debug',
-    tests=['gpu_tests'],
+    tests=['gpu_tests', 'gl_tests'],
     options=['--compiler=goma', 'chromium_gpu_debug_builder'],
     factory_properties={'generate_gtest_json': True}))
 
