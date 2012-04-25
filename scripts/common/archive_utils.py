@@ -182,20 +182,19 @@ def RemoveIgnored(file_list, ignore_list):
 def VerifyFiles(files_list, build_dir, ignore_list):
   """Ensures that the needed directories and files are accessible.
 
-  Returns a list of any that are not available.
+  Returns a list of file_list items that are not available.
   """
   needed = []
   not_found = []
-  # Assume incomplete paths are relative to the build dir.
-  for fn in files_list:
+  needed = RemoveIgnored(files_list, ignore_list)
+  for fn in needed:
+    # Assume incomplete paths are relative to the build dir.
     if os.path.isabs(fn):
-      needed.append(fn)
+      needed_file = fn
     else:
-      needed.append(os.path.join(build_dir, fn))
-  needed = RemoveIgnored(needed, ignore_list)
-  for needed_file in needed:
+      needed_file = os.path.join(build_dir, fn)
     if not os.path.exists(needed_file):
-      not_found.append(needed_file)
+      not_found.append(fn)
   return not_found
 
 
