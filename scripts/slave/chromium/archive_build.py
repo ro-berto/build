@@ -533,6 +533,8 @@ class StagerBase(object):
     all_files_list.append(self._version_file)
     if chromium_utils.IsWindows():
       all_files_list.append(self._installer_file)
+    # TODO(mmoss): FILES.cfg now has the 'optional' field, so should we only
+    # ignore those missing files, and fail on unexpected missing files?
     not_found = archive_utils.VerifyFiles(all_files_list, self._build_dir,
                                           self.options.ignore)
     print 'last change: %d' % self._build_revision

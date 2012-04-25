@@ -81,6 +81,12 @@ TEST_FILES_CFG = [
     'buildtype': ['dev'],
     'archive': 'static_archive.zip',
   },
+  {
+    'filename': 'allany_dev_optional.txt',
+    'arch': ['32bit', '64bit'],
+    'buildtype': ['dev', 'official'],
+    'optional': ['dev']
+  },
 ]
 
 
@@ -152,7 +158,7 @@ def DiffFilesCfg(cfg_path, svn):
   archs = []
   buildtypes = []
   groups = []
-  for item in newparser.files_dict + svnparser.files_dict:
+  for item in newparser._files_cfg + svnparser._files_cfg:
     if item.get('arch'):
       archs.extend(item['arch'])
     if item.get('buildtype'):
@@ -167,8 +173,8 @@ def DiffFilesCfg(cfg_path, svn):
   print '\nChecking ParseLegacyList() ...'
   for arch, buildtype in itertools.product(archs, buildtypes):
     msg = '%s:%s' % (arch, buildtype)
-    newparser._arch = svnparser._arch = arch
-    newparser._buildtype = svnparser._buildtype = buildtype
+    newparser.arch = svnparser.arch = arch
+    newparser.buildtype = svnparser.buildtype = buildtype
     svn_legacy_list = svnparser.ParseLegacyList()
     new_legacy_list = newparser.ParseLegacyList()
     CompareLists(svn_legacy_list, new_legacy_list, msg)
@@ -176,16 +182,16 @@ def DiffFilesCfg(cfg_path, svn):
   print '\nChecking ParseGroup() ...'
   for group, arch, buildtype in itertools.product(groups, archs, buildtypes):
     msg = '%s:%s:%s' % (group, arch, buildtype)
-    newparser._arch = svnparser._arch = arch
-    newparser._buildtype = svnparser._buildtype = buildtype
+    newparser.arch = svnparser.arch = arch
+    newparser.buildtype = svnparser.buildtype = buildtype
     svn_group_list = svnparser.ParseGroup(group)
     new_group_list = newparser.ParseGroup(group)
     CompareLists(svn_group_list, new_group_list, msg)
 
   print '\nChecking Archives() ...'
   for arch, buildtype in itertools.product(archs, buildtypes):
-    newparser._arch = svnparser._arch = arch
-    newparser._buildtype = svnparser._buildtype = buildtype
+    newparser.arch = svnparser.arch = arch
+    newparser.buildtype = svnparser.buildtype = buildtype
     svn_archive_lists = svnparser.ParseArchiveLists()
     new_archive_lists = newparser.ParseArchiveLists()
     archives = set(svn_archive_lists.keys() + new_archive_lists.keys())
@@ -275,6 +281,18 @@ class ArchiveUtilsTest(unittest.TestCase):
                      ['archive_allany.txt', 'subdirectory/archive_allany.txt',
                       'subdirectory/archive_dev32.txt'])
 
+  def testOptionalFiles(self):
+    files_cfg = CreateTestFilesCfg(self.temp_dir)
+    optional_fn = 'allany_dev_optional.txt'
+    arch = '64bit'
+    buildtype = 'dev'
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    self.assertTrue(fparser.IsOptional(optional_fn))
+
+    # It's only optional for 'dev' builds.
+    buildtype = 'official'
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    self.assertFalse(fparser.IsOptional(optional_fn))
 
   def testExtractDirsFromPaths(self):
     path_list = TEMP_FILES[:]
@@ -376,11 +394,11 @@ class RealFilesCfgTest(unittest.TestCase):
     # Check for incomplete/incorrect settings.
     fparser = archive_utils.FilesCfgParser(cfg_path, None, None)
     # buildtype must exist and be in ['dev', 'official']
-    self.assertFalse([f for f in fparser.files_dict
+    self.assertFalse([f for f in fparser._files_cfg
         if not f['buildtype']
         or set(f['buildtype']) - set(['dev', 'official'])])
     # arch must exist and be in ['32bit', '64bit']
-    self.assertFalse([f for f in fparser.files_dict
+    self.assertFalse([f for f in fparser._files_cfg
         if not f['arch'] or set(f['arch']) - set(['32bit', '64bit'])])
 
   def testWinParse(self):
@@ -396,7 +414,7 @@ class RealFilesCfgTest(unittest.TestCase):
 
     # There should be some official build symbols.
     fparser = archive_utils.FilesCfgParser(files_cfg, 'official', '32bit')
-    official_list = fparser.ParseGroup('symbols')
+    official_list = fparser.ParseGroup('symsrc')
     self.assertTrue(official_list)
 
     # Windows symbols should be the same regardless of arch.
