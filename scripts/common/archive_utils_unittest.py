@@ -158,7 +158,9 @@ def DiffFilesCfg(cfg_path, svn):
   archs = []
   buildtypes = []
   groups = []
+# pylint: disable=W0212
   for item in newparser._files_cfg + svnparser._files_cfg:
+# pylint: enable=W0212
     if item.get('arch'):
       archs.extend(item['arch'])
     if item.get('buildtype'):
@@ -394,11 +396,11 @@ class RealFilesCfgTest(unittest.TestCase):
     # Check for incomplete/incorrect settings.
     fparser = archive_utils.FilesCfgParser(cfg_path, None, None)
     # buildtype must exist and be in ['dev', 'official']
-    self.assertFalse([f for f in fparser._files_cfg
+    self.assertFalse([f for f in fparser._files_cfg # pylint: disable=W0212
         if not f['buildtype']
         or set(f['buildtype']) - set(['dev', 'official'])])
     # arch must exist and be in ['32bit', '64bit']
-    self.assertFalse([f for f in fparser._files_cfg
+    self.assertFalse([f for f in fparser._files_cfg # pylint: disable=W0212
         if not f['arch'] or set(f['arch']) - set(['32bit', '64bit'])])
 
   def testWinParse(self):
