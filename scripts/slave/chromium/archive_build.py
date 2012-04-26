@@ -35,11 +35,10 @@ from slave import slave_utils
 import config
 
 
-# The names of the files containing the list of files, symbols and tests to be
-# archived for the build. This file can be present in self._tool_dir as well
-# as in the path specifed by --extra-archive-paths.
-ARCHIVE_FILE_NAME = 'FILES'
-SYMBOL_FILE_NAME = 'SYMBOLS'
+# TODO(mmoss): tests should be added to FILES.cfg, then TESTS can go away.
+# The names of the files containing the list of tests to be archived for the
+# build. This file can be present in self._tool_dir as well as in the path
+# specifed by --extra-archive-paths.
 TEST_FILE_NAME = 'TESTS'
 
 
@@ -126,8 +125,6 @@ class StagerBase(object):
     self._www_dir_base = os.path.join(self._www_dir_base, self._build_name)
 
     self._version_file = os.path.join(self._chrome_dir, 'VERSION')
-    self._installer_file = os.path.join(self._build_dir,
-        self.options.installer)
 
     if options.default_chromium_revision:
       self._chromium_revision = options.default_chromium_revision
@@ -289,66 +286,16 @@ class StagerBase(object):
     return archive_utils.CreateArchive(self._build_dir, self._staging_dir,
                                        zip_file_list, zip_base_name)
 
-  def _UploadSymbols(self, www_dir, gs_base, gs_acl):
-    """Upload symbols to a share. It does not appear to upload symbols to a
-       crash server.
-       TODO(robertshield): Figure out if this should be uploading symbols to
-       a crash server.
-    """
-    fparser = archive_utils.FilesCfgParser(self._files_file,
-                                           self.options.mode,
-                                           archive_utils.BuildArch())
-    symbol_files = fparser.ParseGroup('symbols')
-    # TODO(mmoss): These archives should be generated like
-    # _ParseAlternateArchives() in the official build stage_build.py (which
-    # should be refactored into archive_utils.py). Once that is done, the
-    # 'symbols' filegroup won't be used anymore and can be removed from the
-    # FILES.cfg entries.
-    if chromium_utils.IsWindows():
-      # Create a zip archive of the symbol files.  This must be done after the
-      # main zip archive is created, or the latter will include this one too.
-      sym_zip_file = self.CreateArchiveFile('chrome-win32-syms',
-                                            symbol_files)[1]
-
-      # symbols_copy should hold absolute paths at this point.
-      # We avoid joining absolute paths because the version of python used by
-      # the buildbots doesn't have the correct Windows os.path.join(), so it
-      # doesn't understand C:/ and incorrectly concatenates the absolute paths.
-      symbol_dir = os.path.join(self._symbol_dir_base,
-                                str(self._build_revision))
-      print 'chromium_utils.MaybeMakeDirectory(%s)' % symbol_dir
-      print 'chromium_utils.CopyFileToDir(%s, %s)' % (sym_zip_file, symbol_dir)
-      if not self.options.dry_run:
-        self.MyMaybeMakeDirectory(symbol_dir, gs_base)
-        self.MyCopyFileToDir(sym_zip_file, symbol_dir, gs_base, gs_acl=gs_acl)
-    elif chromium_utils.IsLinux():
-      # If there are no symbol files, then sym_zip_file will be an empty string.
-      sym_zip_file = self.CreateArchiveFile('chrome-linux-syms',
-                                            symbol_files)[1]
-      if not sym_zip_file:
-        print 'No symbols found, not uploading symbols'
-        return 0
-      if not self.options.dry_run:
-        print 'SshMakeDirectory(%s, %s)' % (self.options.archive_host,
-                                            www_dir)
-        self.MySshMakeDirectory(self.options.archive_host, www_dir, gs_base)
-        self.MyMakeWorldReadable(sym_zip_file, gs_base)
-        self.MySshCopyFiles(sym_zip_file, self.options.archive_host, www_dir,
-                            gs_base, gs_acl=gs_acl)
-        os.unlink(sym_zip_file)
-    elif chromium_utils.IsMac():
-      # A Mac build makes fake dSYMs, so there is no point in collecting them.
-      return 0
-    else:
-      raise NotImplementedError(
-          'Platform "%s" is not currently supported.' % sys.platform)
-
+  # TODO(mmoss): This could be simplified a bit if changelog_path and
+  # revisions_path were added to archive_files. The only difference in handling
+  # seems to be that Linux/Mac unlink archives after upload, but don't unlink
+  # those two files. Any reason why deleting them would be a problem? They don't
+  # appear to be used elsewhere in this script.
   def _UploadBuild(self, www_dir, changelog_path, revisions_path,
                    archive_files, gs_base, gs_acl):
     if chromium_utils.IsWindows():
       print 'os.makedirs(%s)' % www_dir
-      print 'chromium_utils.CopyFileToDir(%s, %s)' % (self._installer_file,
-                                                      www_dir)
+
       for archive in archive_files:
         print 'chromium_utils.CopyFileToDir(%s, %s)' % (archive, www_dir)
       print 'chromium_utils.CopyFileToDir(%s, %s)' % (changelog_path, www_dir)
@@ -356,8 +303,6 @@ class StagerBase(object):
 
       if not self.options.dry_run:
         self.MyMaybeMakeDirectory(www_dir, gs_base)
-        self.MyCopyFileToDir(self._installer_file, www_dir, gs_base,
-                             gs_acl=gs_acl)
         for archive in archive_files:
           self.MyCopyFileToDir(archive, www_dir, gs_base, gs_acl=gs_acl)
         self.MyCopyFileToDir(changelog_path, www_dir, gs_base, gs_acl=gs_acl)
@@ -457,22 +402,6 @@ class StagerBase(object):
                               gs_subdir='/'.join([UPLOAD_DIR, relative_dir]),
                               gs_acl=gs_acl)
 
-  def _UploadFile(self, filename, www_dir, gs_base, gs_acl):
-    path = os.path.join(self._build_dir, filename)
-    if not os.path.exists(path):
-      return
-    if chromium_utils.IsWindows():
-      print 'chromium_utils.CopyFileToDir(%s, %s)' % (path, www_dir)
-      if not self.options.dry_run:
-        self.MyCopyFileToDir(path, www_dir, gs_base, gs_acl=gs_acl)
-    elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-      print 'SshCopyFiles(%s, %s, %s)' % (path, self.options.archive_host,
-                                          www_dir)
-      if not self.options.dry_run:
-        self.MyMakeWorldReadable(path, gs_base)
-        self.MySshCopyFiles(path, self.options.archive_host, www_dir, gs_base,
-                            gs_acl=gs_acl)
-
   def _GenerateChangeLog(self, previous_revision, changelog_path):
     """We need to generate change log for both chrome and webkit repository."""
     regex = re.compile(r'<\?xml.*\?>')
@@ -522,21 +451,33 @@ class StagerBase(object):
     print 'Staging in %s' % self._staging_dir
 
     arch = archive_utils.BuildArch()
-    files_list = archive_utils.ParseFilesList(self._files_file,
-                                              self.options.mode, arch)
-    files_list = archive_utils.ExpandWildcards(self._build_dir, files_list)
-    self._archive_files = files_list
-    self._archive_files.extend(self.GetExtraFiles(
-        self.options.extra_archive_paths, ARCHIVE_FILE_NAME))
+    fparser = archive_utils.FilesCfgParser(self._files_file, self.options.mode,
+                                           arch)
+    files_list = fparser.ParseLegacyList()
+    self._archive_files = archive_utils.ExpandWildcards(self._build_dir,
+                                                        files_list)
+    archives_list = fparser.ParseArchiveLists()
     # Check files and revision numbers.
-    all_files_list = list(self._archive_files)
+    all_files_list = self._archive_files + [item['filename'] for sublist in
+                                            archives_list.values() for item in
+                                            sublist]
     all_files_list.append(self._version_file)
-    if chromium_utils.IsWindows():
-      all_files_list.append(self._installer_file)
-    # TODO(mmoss): FILES.cfg now has the 'optional' field, so should we only
-    # ignore those missing files, and fail on unexpected missing files?
     not_found = archive_utils.VerifyFiles(all_files_list, self._build_dir,
                                           self.options.ignore)
+    not_found_optional = []
+    for bad_fn in not_found[:]:
+      if fparser.IsOptional(bad_fn):
+        not_found_optional.append(bad_fn)
+        not_found.remove(bad_fn)
+        # Remove it from all file lists so we don't try to process it.
+        if bad_fn in self._archive_files:
+          self._archive_files.remove(bad_fn)
+        for archive_list in archives_list.values():
+          archive_list[:] = [x for x in archive_list if bad_fn != x['filename']]
+    # TODO(mmoss): Now that we can declare files optional in FILES.cfg, should
+    # we only allow not_found_optional, and fail on any leftover not_found
+    # files?
+
     print 'last change: %d' % self._build_revision
     previous_revision = self.GetLastBuildRevision()
     if self._build_revision <= previous_revision:
@@ -551,6 +492,46 @@ class StagerBase(object):
     archive_base_name = 'chrome-%s' % chromium_utils.PlatformName()
     archive_file = self.CreateArchiveFile(archive_base_name,
                                           self._archive_files)[1]
+
+    # Handle any custom archives.
+    # TODO(mmoss): Largely copied from stage_build.py. Maybe refactor more of
+    # this into archive_utils.py.
+    archive_files = [archive_file]
+    for archive_name in archives_list:
+      if fparser.IsDirectArchive(archives_list[archive_name]):
+        fileobj = archives_list[archive_name][0]
+        # Copy the file to the path specified in archive_name, which might be
+        # different than the dirname or basename in 'filename' (allowed by
+        # 'direct_archive').
+        stage_subdir = os.path.dirname(archive_name)
+        stage_fn = os.path.basename(archive_name)
+        chromium_utils.MaybeMakeDirectory(os.path.join(self._staging_dir,
+                                                       stage_subdir))
+        print 'chromium_utils.CopyFileToDir(%s, %s, dest_fn=%s)' % (
+            os.path.join(self._build_dir, fileobj['filename']),
+            os.path.join(self._staging_dir, stage_subdir), stage_fn)
+        if not self.options.dry_run:
+          chromium_utils.CopyFileToDir(
+              os.path.join(self._build_dir, fileobj['filename']),
+              os.path.join(self._staging_dir, stage_subdir), dest_fn=stage_fn)
+        archive_files.append(os.path.join(self._staging_dir, archive_name))
+      else:
+        custom_dir, custom_archive = self.CreateArchiveFile(
+            archive_name, [f['filename'] for f in archives_list[archive_name]])
+        # CreateArchive() uses 'archive_name' as the base name of the generated
+        # archive file and dir (e.g. foo.zip becomes the directory foo.zip and
+        # the file foo.zip.zip), so remove the directory, then rename the
+        # archive to the correct name.
+        if os.path.basename(custom_archive) != archive_name:
+          chromium_utils.RemoveDirectory(custom_dir)
+          orig_archive = custom_archive
+          custom_archive = os.path.join(os.path.dirname(orig_archive),
+                                        archive_name)
+          print 'Renaming archive: "%s" -> "%s"' % (orig_archive,
+                                                    custom_archive)
+          chromium_utils.MoveFile(orig_archive, custom_archive)
+        print 'Adding %s to be archived.' % (custom_archive)
+        archive_files.append(custom_archive)
 
     # Generate a change log or an error message if no previous revision.
     changelog_path = os.path.join(self._staging_dir, 'changelog.xml')
@@ -567,9 +548,8 @@ class StagerBase(object):
     if gs_bucket:
       gs_base = '/'.join([gs_bucket, self._build_name,
                           str(self._build_revision)])
-    self._UploadSymbols(www_dir, gs_base, gs_acl)
     self._UploadBuild(www_dir, changelog_path, self.revisions_path,
-                      [archive_file], gs_base, gs_acl)
+                      archive_files, gs_base, gs_acl)
 
     # Archive Linux packages (if any -- only created for Chrome builds).
     if chromium_utils.IsLinux():
@@ -623,13 +603,9 @@ class StagerBase(object):
         raise NotImplementedError(
               'Platform "%s" is not currently supported.' % sys.platform)
 
-    # Upload extra build artifacts.
-    # TODO(mmoss): This should be pulled from FILES.cfg. remoting-webapp.zip is
-    # already in there. Need to add devtools_frontend.zip, then put in handling
-    # here based on the 'archive' field.
-    self._UploadFile('devtools_frontend.zip', www_dir, gs_base, gs_acl)
-    self._UploadFile('remoting-webapp.zip', www_dir, gs_base, gs_acl)
-
+    if len(not_found_optional):
+      sys.stderr.write('\n\nINFO: Optional File(s) not found: %s\n' %
+                       ', '.join(not_found_optional))
     if len(not_found):
       sys.stderr.write('\n\nWARNING: File(s) not found: %s\n' %
                        ', '.join(not_found))
@@ -697,8 +673,6 @@ def main(argv):
                                 'v8 revision in test')
   option_parser.add_option('--dry-run', action='store_true',
                            help='Avoid making changes, for testing')
-  option_parser.add_option('--installer', default=config.Archive.installer_exe,
-                           help='Installer executable name')
   option_parser.add_option('--ignore', default=[], action='append',
                            help='Files to ignore')
   option_parser.add_option('--archive_host',

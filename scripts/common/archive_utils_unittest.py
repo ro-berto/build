@@ -47,11 +47,13 @@ TEST_FILES_CFG = [
     'filename': 'allany.txt',
     'arch': ['32bit', '64bit'],
     'buildtype': ['dev', 'official'],
+    'filegroup': ['default', 'allany'],
   },
   {
     'filename': 'subdirectory/allany.txt',
     'arch': ['32bit', '64bit'],
     'buildtype': ['dev', 'official'],
+    'filegroup': ['default', 'allany'],
   },
   {
     'filename': 'official64.txt',
@@ -68,12 +70,14 @@ TEST_FILES_CFG = [
     'arch': ['32bit', '64bit'],
     'buildtype': ['dev', 'official'],
     'archive': 'static_archive.zip',
+    'filegroup': ['default', 'allany'],
   },
   {
     'filename': 'subdirectory/archive_allany.txt',
     'arch': ['32bit', '64bit'],
     'buildtype': ['dev', 'official'],
     'archive': 'static_archive.zip',
+    'filegroup': ['default', 'allany'],
   },
   {
     'filename': 'subdirectory/archive_dev32.txt',
@@ -85,7 +89,21 @@ TEST_FILES_CFG = [
     'filename': 'allany_dev_optional.txt',
     'arch': ['32bit', '64bit'],
     'buildtype': ['dev', 'official'],
-    'optional': ['dev']
+    'optional': ['dev'],
+    'filegroup': ['default', 'allany'],
+  },
+  {
+    'filename': 'dev64_direct_archive.txt',
+    'arch': ['64bit'],
+    'buildtype': ['dev'],
+    'archive': 'renamed_direct_archive.txt',
+    'direct_archive': 1,
+  },
+  {
+    'filename': 'dev64_implied_direct_archive.txt',
+    'arch': ['64bit'],
+    'buildtype': ['dev'],
+    'archive': 'dev64_implied_direct_archive.txt',
   },
 ]
 
@@ -243,11 +261,12 @@ class ArchiveUtilsTest(unittest.TestCase):
 
     zip_file.close()
 
-  def testParseFilesList(self):
+  def testParseLegacyList(self):
     files_cfg = CreateTestFilesCfg(self.temp_dir)
     arch = '64bit'
     buildtype = 'official'
-    files_list = archive_utils.ParseFilesList(files_cfg, buildtype, arch)
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    files_list = fparser.ParseLegacyList()
     # Verify FILES.cfg was parsed correctly.
     for i in TEST_FILES_CFG:
       if arch in i['arch'] and buildtype in i['buildtype']:
@@ -296,6 +315,39 @@ class ArchiveUtilsTest(unittest.TestCase):
     fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
     self.assertFalse(fparser.IsOptional(optional_fn))
 
+  def testDirectArchive(self):
+    files_cfg = CreateTestFilesCfg(self.temp_dir)
+    arch = '64bit'
+    buildtype = 'dev'
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    archives = fparser.ParseArchiveLists()
+    self.assertTrue(fparser.IsDirectArchive(
+        archives['renamed_direct_archive.txt']))
+    self.assertTrue(fparser.IsDirectArchive(
+        archives['dev64_implied_direct_archive.txt']))
+    self.assertFalse(fparser.IsDirectArchive(archives['static_archive.zip']))
+
+  def testParserChange(self):
+    """Changing parser criteria should be the same as creating a new one."""
+    files_cfg = CreateTestFilesCfg(self.temp_dir)
+    arch = '64bit'
+    buildtype = 'dev'
+    oldfparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    old_dev_list = oldfparser.ParseLegacyList()
+    buildtype = 'official'
+    oldfparser.buildtype = buildtype
+    old_official_list = oldfparser.ParseLegacyList()
+    # The changed parser should return different ParseLegacyList.
+    self.assertNotEqual(sorted(old_dev_list), sorted(old_official_list))
+
+    newfparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    new_official_list = newfparser.ParseLegacyList()
+    # The new parser and changed parser should return the same data.
+    self.assertEqual(sorted(old_official_list), sorted(new_official_list))
+    old_allany_list = oldfparser.ParseGroup('allany')
+    new_allany_list = oldfparser.ParseGroup('allany')
+    self.assertEqual(sorted(old_allany_list), sorted(new_allany_list))
+
   def testExtractDirsFromPaths(self):
     path_list = TEMP_FILES[:]
     expected_dir_list = DIR_LIST[:]
@@ -322,7 +374,8 @@ class ArchiveUtilsTest(unittest.TestCase):
     archive_name = 'test'
     arch = '64bit'
     buildtype = 'official'
-    files_list = archive_utils.ParseFilesList(files_cfg, buildtype, arch)
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    files_list = fparser.ParseLegacyList()
     zip_dir, zip_file_path = archive_utils.CreateArchive(
         self.build_dir , self.temp_dir, files_list, archive_name)
     self.assertTrue(zip_dir)
@@ -346,7 +399,8 @@ class ArchiveUtilsTest(unittest.TestCase):
     archive_name = 'test_empty'
     arch = '64bit'
     buildtype = 'nosuchtype'
-    files_list = archive_utils.ParseFilesList(files_cfg, buildtype, arch)
+    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
+    files_list = fparser.ParseLegacyList()
     zip_dir, zip_file_path = archive_utils.CreateArchive(
         self.build_dir , self.temp_dir, files_list, archive_name)
     self.assertFalse(zip_dir)
@@ -381,20 +435,19 @@ class RealFilesCfgTest(unittest.TestCase):
     # there's nothing to archive).
     arch = '32bit'
     buildtype = 'official'
-    files_list = archive_utils.ParseFilesList(cfg_path, buildtype, arch)
+    fparser = archive_utils.FilesCfgParser(cfg_path, buildtype, arch)
+    files_list = fparser.ParseLegacyList()
     self.assertTrue(files_list)
-    arch = '32bit'
-    buildtype = 'dev'
-    files_list = archive_utils.ParseFilesList(cfg_path, buildtype, arch)
+    fparser.buildtype = 'dev'
+    files_list = fparser.ParseLegacyList()
     self.assertTrue(files_list)
 
     # Arbitrary buildtype shouldn't return anything.
-    buildtype = 'bogus'
-    files_list = archive_utils.ParseFilesList(cfg_path, buildtype, arch)
+    fparser.buildtype = 'bogus'
+    files_list = fparser.ParseLegacyList()
     self.assertFalse(files_list)
 
     # Check for incomplete/incorrect settings.
-    fparser = archive_utils.FilesCfgParser(cfg_path, None, None)
     # buildtype must exist and be in ['dev', 'official']
     self.assertFalse([f for f in fparser._files_cfg # pylint: disable=W0212
         if not f['buildtype']
@@ -409,20 +462,15 @@ class RealFilesCfgTest(unittest.TestCase):
   def testWinParseSymbols(self):
     files_cfg = options.src_base + RealFilesCfgTest.WIN_PATH
 
-    # There should be some dev build symbols.
-    fparser = archive_utils.FilesCfgParser(files_cfg, 'dev', '32bit')
-    symbols_list = fparser.ParseGroup('symbols')
-    self.assertTrue(symbols_list)
-
     # There should be some official build symbols.
     fparser = archive_utils.FilesCfgParser(files_cfg, 'official', '32bit')
     official_list = fparser.ParseGroup('symsrc')
     self.assertTrue(official_list)
 
     # Windows symbols should be the same regardless of arch.
-    fparser = archive_utils.FilesCfgParser(files_cfg, 'dev', '64bit')
-    symbols64_list = fparser.ParseGroup('symbols')
-    self.assertEqual(symbols64_list, symbols_list)
+    fparser = archive_utils.FilesCfgParser(files_cfg, 'official', '64bit')
+    official64_list = fparser.ParseGroup('symsrc')
+    self.assertEqual(official64_list, official_list)
 
   def testMacParse(self):
     self.ParseFilesCfg(options.src_base + RealFilesCfgTest.MAC_PATH)

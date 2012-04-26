@@ -64,6 +64,21 @@ class FilesCfgParser(object):
     execfile(files_file, exec_globals)
     return exec_globals['FILES']
 
+  @classmethod
+  def IsDirectArchive(cls, archive_list):
+    """Determine if the given archive list should be archived as-is.
+
+      An archive list (from ParseArchiveLists) is archived as-is (not added to
+      another archive file) iff:
+      - There list contains a single file, and
+      - That file has the 'direct_archive' flag or its 'archive' name matches
+        its 'filename' (an implied 'direct_archive').
+    """
+    fileobj = archive_list[0]
+    return (len(archive_list) == 1 and
+            (fileobj['filename'] == fileobj['archive'] or
+             fileobj.get('direct_archive')))
+
   def IsOptional(self, filename):
     """Determine if the given filename is marked optional for this config."""
     return (self.files_dict.get(filename) and self._buildtype in
@@ -96,12 +111,6 @@ class FilesCfgParser(object):
              fileobj.get('filegroup')))
     ]
     return files_list
-
-
-def ParseFilesList(files_file, buildtype, arch):
-  """DEPRECATED: Determine the list of archive files for a given release."""
-  fparser = FilesCfgParser(files_file, buildtype, arch)
-  return fparser.ParseLegacyList()
 
 
 def ExpandWildcards(base_dir, path_list):
