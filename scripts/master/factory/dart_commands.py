@@ -32,8 +32,8 @@ class DartCommands(commands.FactoryCommands):
       # Two additional directories up compared to normal chromium scripts due
       # to using runtime as runtime dir inside dart directory inside
       # build directory.
-      self._script_dir = self.PathJoin('..', '..', self._script_dir)
-      self._tools_dir = self.PathJoin('..', 'tools')
+      self._script_dir = self.PathJoin('..', self._script_dir)
+      self._tools_dir = self.PathJoin('tools')
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
@@ -45,7 +45,7 @@ class DartCommands(commands.FactoryCommands):
                                             'slave', 'dart')
 
     self._dart_util = self.PathJoin(self._slave_dir, 'dart_util.py')
-    self._vm_build_dir = self.PathJoin('build', 'dart', 'runtime')
+    self._vm_build_dir = self.PathJoin('build', 'dart')
     # dartc builds from the root of the dart tree
     self._dartc_build_dir = self.PathJoin('build', 'dart')
     self._repository_root = ''
@@ -90,6 +90,7 @@ class DartCommands(commands.FactoryCommands):
       workdir = self._dartc_build_dir
     else:
       cmd += ' --arch=%s' % (options['arch'])
+      cmd += ' runtime'
       workdir = self._vm_build_dir
     self._factory.addStep(shell.ShellCommand,
                           name='build',
