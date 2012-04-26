@@ -20,7 +20,6 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 sharded_tests = [
   'base_unittests',
   'browser_tests',
-  'content_unittests',
   'media_unittests',
 ]
 
