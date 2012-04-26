@@ -32,12 +32,15 @@ UNIT_INDEXER = './clang_indexer/bin/external_corpus_compilation_indexer'
 def CreateJSONCompileCommands():
   with open('compile_commands.json', 'wb') as json_commands_file:
     json_commands_file.write('[\n')
+    commands_found = False
     for root, _, filenames in os.walk('src/out'):
       for filename in fnmatch.filter(filenames, '*.json-command'):
         shutil.copyfileobj(open(os.path.join(root, filename), 'rb'),
                            json_commands_file)
-    # Seek backwards 2 bytes to delete ",\n" from the last entry.
-    json_commands_file.seek(-2, 1)
+        commands_found = True
+    if commands_found:
+      # Seek backwards 2 bytes to delete ",\n" from the last entry.
+      json_commands_file.seek(-2, 1)
     json_commands_file.write('\n]\n')
     json_commands_file.close()
 
