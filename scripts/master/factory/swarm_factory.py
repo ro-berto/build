@@ -30,8 +30,15 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                           'http://localhost:9001')
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'tests_run=hashtable' in gyp_defines:
+      if self._target_platform == 'win32':
+        out_dir = ''
+      elif self._target_platform == 'darwin':
+        out_dir = 'xcodebuild'
+      else:
+        out_dir = 'out'
+
       # Send of all the test requests as a single step.
-      swarm_inputs = [os.path.join('src', 'out', target, test + '.results')
+      swarm_inputs = [os.path.join('src', out_dir, target, test + '.results')
                       for test in tests]
       swarm_command_obj.AddTriggerSwarmTestStep(self._target_platform,
             swarm_server,
