@@ -113,6 +113,16 @@ class FilesCfgParser(object):
     return files_list
 
 
+def ParseFilesList(files_file, buildtype, arch):
+  """DEPRECATED: Determine the list of archive files for a given release.
+
+  NOTE: This can be removed after 20.x goes stable (or after scripts/common/
+  gets versioned on the official builders like site_config is).
+  """
+  fparser = FilesCfgParser(files_file, buildtype, arch)
+  return fparser.ParseLegacyList()
+
+
 def ExpandWildcards(base_dir, path_list):
   """Accepts a list of paths relative to base_dir and replaces wildcards.
 
