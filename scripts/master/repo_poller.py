@@ -124,8 +124,14 @@ class RepoPoller(PollingChangeSource):
     return 'repo_poller_' + branch_name
 
   def DoLog(self, unused_result, branch_tag):
-    return self.RunRepoCmd(['forall', '-p', '-c', self.git_bin, 'log',
-                            '--format=%H', branch_tag + '..'])
+    # Make sure that all git repo's have the branch_tag.  Failure indicates the
+    # tag already exists on some repo's, which is expected.
+    d = self.RunRepoCmd(['forall', '-c', self.git_bin, 'tag', branch_tag])
+    d.addErrback(lambda *x: True)
+    cb = lambda *x: self.RunRepoCmd(['forall', '-v', '-p', '-c', self.git_bin,
+                                     'log', '--format=%H', branch_tag + '..'])
+    d.addCallback(cb)
+    return d
 
   def DoCheckoutRepoBranch(self, current_repo_branch):
     init = self.RunRepoCmd(['init', '-b', current_repo_branch])
@@ -137,8 +143,8 @@ class RepoPoller(PollingChangeSource):
     if self.changeCount == 0:
       return defer.succeed(0)
     self.changeCount = 0
-    return self.RunRepoCmd(['forall', '-c', self.git_bin, 'tag', '-a', '-f',
-                            branch_tag, '-m', '"repo poller sync"'])
+    return self.RunRepoCmd(['forall', '-v' '-c', self.git_bin, 'tag', '-a',
+                            '-f', branch_tag, '-m', '"repo poller sync"'])
 
   @deferredLocked('initLock')
   def initRepository(self):
@@ -163,7 +169,7 @@ class RepoPoller(PollingChangeSource):
               + repo_branch)
       d.addCallback(lambda x, b=repo_branch: self.DoCheckoutRepoBranch(b))
       def _log(*args):
-        return self.RunRepoCmd(['forall', '-p', '-c',
+        return self.RunRepoCmd(['forall', '-v', '-p', '-c',
                                 self.git_bin, 'log', '--format=%H'])
       d.addCallback(_log)
       d.addCallback(self.ProcessInitialHistory)
