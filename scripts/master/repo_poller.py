@@ -143,7 +143,7 @@ class RepoPoller(PollingChangeSource):
     if self.changeCount == 0:
       return defer.succeed(0)
     self.changeCount = 0
-    return self.RunRepoCmd(['forall', '-v' '-c', self.git_bin, 'tag', '-a',
+    return self.RunRepoCmd(['forall', '-v', '-c', self.git_bin, 'tag', '-a',
                             '-f', branch_tag, '-m', '"repo poller sync"'])
 
   @deferredLocked('initLock')
