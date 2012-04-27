@@ -883,14 +883,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def ChromiumGITFactory(self, target='Release', clobber=False, tests=None,
                          mode=None, slave_type='Tester', options=None,
                          compile_timeout=1200, build_url=None, project=None,
-                         factory_properties=None):
+                         git_url=None, factory_properties=None):
     if not factory_properties:
       factory_properties = {}
     factory_properties['no_gclient_branch'] = True
+    if git_url is None:
+      git_url = '%s/chromium/src.git' % config.Master.git_server_url
     main = gclient_factory.GClientSolution(
-        svn_url='%s/chromium/src.git' % config.Master.git_server_url,
-        name='src',
-        custom_deps_file='.DEPS.git')
+        svn_url=git_url, name='src', custom_deps_file='.DEPS.git')
     self._solutions[0] = main
     if (len(self._solutions) > 1 and
         self._solutions[1].svn_url == config.Master.trunk_internal_url_src):
