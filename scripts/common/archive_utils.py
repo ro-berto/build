@@ -217,26 +217,19 @@ def VerifyFiles(files_list, build_dir, ignore_list):
   return not_found
 
 
-def CreateArchive(build_dir, staging_dir, files_list, archive_name,
+def CreateArchive(build_dir, staging_dir, files_list, zip_base_name,
                   allow_missing=True):
   """Put files into an archive dir as well as a zip of said archive dir.
 
   This method takes the list of files to archive, then prunes non-existing
   files from that list.
 
-  archive_name is the desired name for the output zip file. It is also used as
-  the basis for the directory that the files are zipped into. For instance,
-  'foo.zip' creates the file foo.zip with the hierarchy foo/*. 'some_archive'
-  creates the file 'some_archive' with the hierarhy some_archive_unzipped/*
-  (the directory name is different to prevent name conflicts when extracting to
-  the directory containing 'some_archive').
-
-  If files_list is empty or has no existing CreateArchive returns ('', '').
+  If that list is empty CreateArchive returns ('', '').
   Otherwise, this method returns the archive directory the files are
   copied to and the full path of the zip file in a tuple.
   """
 
-  print 'Creating archive %s ...' % archive_name
+  print 'Creating archive %s ...' % zip_base_name
 
   if allow_missing:
     # Filter out files that don't exist.
@@ -247,25 +240,14 @@ def CreateArchive(build_dir, staging_dir, files_list, archive_name,
 
   if not filtered_file_list:
     # We have no files to archive, don't create an empty zip file.
-    print 'WARNING: No files to archive.'
     return ('', '')
 
-  if archive_name.endswith('.zip'):
-    archive_dirname = archive_name[:-4]
-  else:
-    archive_dirname = archive_name + '_unzipped'
-
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
-                                               archive_dirname,
+                                               zip_base_name,
                                                filtered_file_list,
                                                build_dir,
                                                raise_error=not allow_missing)
   if not os.path.exists(zip_file):
     raise StagingError('Failed to make zip package %s' % zip_file)
 
-  if os.path.basename(zip_file) != archive_name:
-    orig_zip = zip_file
-    zip_file = os.path.join(os.path.dirname(orig_zip), archive_name)
-    print 'Renaming archive: "%s" -> "%s"' % (orig_zip, zip_file)
-    chromium_utils.MoveFile(orig_zip, zip_file)
   return (zip_dir, zip_file)

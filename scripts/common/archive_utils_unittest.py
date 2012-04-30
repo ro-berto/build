@@ -400,9 +400,7 @@ class ArchiveUtilsTest(unittest.TestCase):
     self.assertTrue(zip_dir)
     self.assertTrue(zip_file_path)
     self.assertTrue(os.path.exists(zip_file_path))
-    self.assertEqual(os.path.basename(zip_file_path), archive_name)
-    self.verifyZipFile(zip_dir, zip_file_path, os.path.basename(zip_dir),
-                       files_list)
+    self.verifyZipFile(zip_dir, zip_file_path, archive_name, files_list)
 
     # Creating the archive twice is wasteful, but shouldn't fail (e.g. due to
     # conflicts with existing zip_dir or zip_file_path). This also tests the
@@ -413,37 +411,7 @@ class ArchiveUtilsTest(unittest.TestCase):
     self.assertTrue(zip_dir)
     self.assertTrue(zip_file_path)
     self.assertTrue(os.path.exists(zip_file_path))
-    self.verifyZipFile(zip_dir, zip_file_path, os.path.basename(zip_dir),
-                       files_list)
-
-  def testCreateZipExtArchive(self):
-    files_cfg = CreateTestFilesCfg(self.tool_dir)
-    CreateFileSetInDir(self.build_dir, [i['filename'] for i in TEST_FILES_CFG])
-    archive_name = 'test_with_ext.zip'
-    arch = '64bit'
-    buildtype = 'official'
-    fparser = archive_utils.FilesCfgParser(files_cfg, buildtype, arch)
-    files_list = fparser.ParseLegacyList()
-    zip_dir, zip_file_path = archive_utils.CreateArchive(
-        self.build_dir , self.temp_dir, files_list, archive_name)
-    self.assertTrue(zip_dir)
-    self.assertTrue(zip_file_path)
-    self.assertTrue(os.path.exists(zip_file_path))
-    self.assertEqual(os.path.basename(zip_file_path), archive_name)
-    self.verifyZipFile(zip_dir, zip_file_path, os.path.basename(zip_dir),
-                       files_list)
-
-    # Creating the archive twice is wasteful, but shouldn't fail (e.g. due to
-    # conflicts with existing zip_dir or zip_file_path). This also tests the
-    # condition on the bots where they don't clean up their staging directory
-    # between runs.
-    zip_dir, zip_file_path = archive_utils.CreateArchive(
-        self.build_dir, self.temp_dir, files_list, archive_name)
-    self.assertTrue(zip_dir)
-    self.assertTrue(zip_file_path)
-    self.assertTrue(os.path.exists(zip_file_path))
-    self.verifyZipFile(zip_dir, zip_file_path, os.path.basename(zip_dir),
-                       files_list)
+    self.verifyZipFile(zip_dir, zip_file_path, archive_name, files_list)
 
   def testCreateEmptyArchive(self):
     files_cfg = CreateTestFilesCfg(self.tool_dir)
