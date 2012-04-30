@@ -282,9 +282,9 @@ class StagerBase(object):
     print 'Saving revision to %s' % file_path
     Write(file_path, '%d' % self._build_revision)
 
-  def CreateArchiveFile(self, zip_base_name, zip_file_list):
+  def CreateArchiveFile(self, zip_name, zip_file_list):
     return archive_utils.CreateArchive(self._build_dir, self._staging_dir,
-                                       zip_file_list, zip_base_name)
+                                       zip_file_list, zip_name)
 
   # TODO(mmoss): This could be simplified a bit if changelog_path and
   # revisions_path were added to archive_files. The only difference in handling
@@ -489,8 +489,8 @@ class StagerBase(object):
 
     print 'build name: %s' % self._build_name
 
-    archive_base_name = 'chrome-%s' % chromium_utils.PlatformName()
-    archive_file = self.CreateArchiveFile(archive_base_name,
+    archive_name = 'chrome-%s.zip' % chromium_utils.PlatformName()
+    archive_file = self.CreateArchiveFile(archive_name,
                                           self._archive_files)[1]
 
     # Handle any custom archives.
@@ -516,20 +516,8 @@ class StagerBase(object):
               os.path.join(self._staging_dir, stage_subdir), dest_fn=stage_fn)
         archive_files.append(os.path.join(self._staging_dir, archive_name))
       else:
-        custom_dir, custom_archive = self.CreateArchiveFile(
-            archive_name, [f['filename'] for f in archives_list[archive_name]])
-        # CreateArchive() uses 'archive_name' as the base name of the generated
-        # archive file and dir (e.g. foo.zip becomes the directory foo.zip and
-        # the file foo.zip.zip), so remove the directory, then rename the
-        # archive to the correct name.
-        if os.path.basename(custom_archive) != archive_name:
-          chromium_utils.RemoveDirectory(custom_dir)
-          orig_archive = custom_archive
-          custom_archive = os.path.join(os.path.dirname(orig_archive),
-                                        archive_name)
-          print 'Renaming archive: "%s" -> "%s"' % (orig_archive,
-                                                    custom_archive)
-          chromium_utils.MoveFile(orig_archive, custom_archive)
+        custom_archive = self.CreateArchiveFile(archive_name,
+            [f['filename'] for f in archives_list[archive_name]])[1]
         print 'Adding %s to be archived.' % (custom_archive)
         archive_files.append(custom_archive)
 
