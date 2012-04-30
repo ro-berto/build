@@ -236,9 +236,7 @@ class GClient(sourcebase):
       d.addCallback(self.doCopy)
     if self.patch:
       d.addCallback(self.doPatch)
-    if self.patch or self.was_patched:
-      # If gclient_nohooks is set, runhooks needs to be always run manually,
-      # even if there was no patch.
+    if (self.patch or self.was_patched) and not self.gclient_nohooks:
       # Always run doRunHooks if there *is* or there *was* a patch because
       # revert is run with --nohooks and `gclient sync` will not regenerate the
       # output files if the input files weren't updated..

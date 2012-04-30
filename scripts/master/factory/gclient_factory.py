@@ -335,10 +335,16 @@ class GClientFactory(object):
     gclient_jobs = factory_properties.get('gclient_jobs')
 
     # Add the update step.
-    factory_cmd_obj.AddUpdateStep(gclient_spec, env, timeout, sudo_for_remove,
-                                  gclient_deps=gclient_deps,
-                                  gclient_nohooks=self._nohooks_on_update,
-                                  no_gclient_branch=no_gclient_branch,
-                                  gclient_transitive=gclient_transitive,
-                                  primary_repo=primary_repo,
-                                  gclient_jobs=gclient_jobs)
+    factory_cmd_obj.AddUpdateStep(
+        gclient_spec,
+        env=env,
+        timeout=timeout,
+        sudo_for_remove=sudo_for_remove,
+        gclient_deps=gclient_deps,
+        gclient_nohooks=True,
+        no_gclient_branch=no_gclient_branch,
+        gclient_transitive=gclient_transitive,
+        primary_repo=primary_repo,
+        gclient_jobs=gclient_jobs)
+    if not self._nohooks_on_update:
+      factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)

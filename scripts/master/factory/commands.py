@@ -536,28 +536,46 @@ class FactoryCommands(object):
                     gclient_transitive=False, primary_repo=None,
                     gclient_jobs=None):
     """Adds a step to the factory to update the workspace."""
-    if env is None:
-      env = {}
+    env = env or {}
     env['DEPOT_TOOLS_UPDATE'] = '0'
     if timeout is None:
       # svn timeout is 2 min; we allow 5
       timeout = 60*5
-    self._factory.addStep(chromium_step.GClient,
-                          gclient_spec=gclient_spec,
-                          gclient_deps=gclient_deps,
-                          gclient_nohooks=gclient_nohooks,
-                          workdir=self.working_dir,
-                          mode='update',
-                          env=env,
-                          locks=[self.slave_exclusive_lock],
-                          retry=(60*5, 4),  # Try 4+1=5 more times, 5 min apart
-                          timeout=timeout,
-                          gclient_jobs=gclient_jobs,
-                          sudo_for_remove=sudo_for_remove,
-                          rm_timeout=60*15,  # The step can take a long time.
-                          no_gclient_branch=no_gclient_branch,
-                          gclient_transitive=gclient_transitive,
-                          primary_repo=primary_repo)
+    self._factory.addStep(
+        chromium_step.GClient,
+        gclient_spec=gclient_spec,
+        gclient_deps=gclient_deps,
+        # TODO(maruel): Kept for compatibility but will be removed.
+        gclient_nohooks=gclient_nohooks,
+        workdir=self.working_dir,
+        mode='update',
+        env=env,
+        locks=[self.slave_exclusive_lock],
+        retry=(60*5, 4),  # Try 4+1=5 more times, 5 min apart
+        timeout=timeout,
+        gclient_jobs=gclient_jobs,
+        sudo_for_remove=sudo_for_remove,
+        rm_timeout=60*15,  # The step can take a long time.
+        no_gclient_branch=no_gclient_branch,
+        gclient_transitive=gclient_transitive,
+        primary_repo=primary_repo)
+
+  def AddRunHooksStep(self, env=None, timeout=None):
+    """Adds a step to the factory to run the gclient hooks."""
+    env = env or {}
+    env['DEPOT_TOOLS_UPDATE'] = '0'
+    if timeout is None:
+      # svn timeout is 2 min; we allow 5
+      timeout = 60*5
+    self._factory.addStep(
+        shell.ShellCommand,
+        haltOnFailure=True,
+        name='runhooks',
+        description='gclient hooks',
+        env=env,
+        locks=[self.slave_exclusive_lock],
+        timeout=timeout,
+        command=['gclient', 'runhooks'])
 
   def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
                          gclient_deps=None, gclient_nohooks=False,
