@@ -5,6 +5,7 @@
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
 from __future__ import with_statement
+import glob
 import json
 import optparse
 import os
@@ -78,9 +79,6 @@ class Manifest(object):
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
 
-  def cleanup(self):
-    os.remove(self.zipfile_name)
-
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
     hostname = socket.gethostbyname(socket.gethostname())
@@ -99,6 +97,8 @@ class Manifest(object):
         ['python', self.run_test_path, '-m', self.manifest_name, '-r', url])
 
     # Clean up
+    # TODO(csharp) This can be removed once the swarm cleanup parameter is
+    # properly handled.
     if self.current_platform == 'Linux' or self.current_platform == 'Mac':
       cleanup_commands = ['rm', '-rf']
     elif self.current_platform == 'Windows':
@@ -138,6 +138,12 @@ class Manifest(object):
     return json.dumps(test_case)
 
 
+def RemoveOldFiles():
+  """Removes older swarm zip files as they are no longer needed."""
+  for filename in glob.glob('swarm_tempfile_*.zip'):
+    os.remove(filename)
+
+
 def ProcessManifest(filename, options):
   """Process the manifest file and send off the swarm test request."""
   # Parses manifest file
@@ -148,6 +154,10 @@ def ProcessManifest(filename, options):
   test_full_name = options.test_name_prefix + test_name
 
   manifest = Manifest(filename, test_full_name, options)
+
+  # Clean up old files.
+  print 'Removing old swarm zip files...'
+  RemoveOldFiles()
 
   # Zip up relevent files
   print "Zipping up files..."
