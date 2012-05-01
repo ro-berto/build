@@ -222,8 +222,9 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     options=['--build-tool=make', '--compiler=goma-clang'],
     tests=['base', 'gfx', 'unit', 'crypto'],
     factory_properties={
-        'gclient_env': {
-            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1 fastbuild=1'
+      'gclient_env': {
+        'GYP_DEFINES':
+          'clang=1 clang_use_chrome_plugins=1 fastbuild=1 tests_run=noop',
     }}))
 
 

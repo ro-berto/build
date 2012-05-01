@@ -32,15 +32,20 @@ F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
     tests=['check_deps2git', 'sizes', 'check_bins'],
-    factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshots',
-                        'gs_acl': 'public-read',
-                        'show_perf_results': True,
-                        'perf_id': 'chromium-rel-xp',
-                        'expectations': True,
-                        'process_dumps': True,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
+    factory_properties={
+      'archive_build': True,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'show_perf_results': True,
+      'perf_id': 'chromium-rel-xp',
+      'expectations': True,
+      'process_dumps': True,
+      'start_crash_handler': True,
+      'generate_gtest_json': True,
+      'gclient_env': {
+        'GYP_DEFINES': 'tests_run=noop',
+      },
+    }))
 
 ################################################################################
 ## Mac
@@ -51,42 +56,22 @@ F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=['check_deps2git', 'sizes'],
     options=['--compiler=goma-clang'],
-    factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshots',
-                        'gs_acl': 'public-read',
-                        'show_perf_results': True,
-                        'perf_id': 'chromium-rel-mac',
-                        'expectations': True,
-                        'generate_gtest_json': True}))
+    factory_properties={
+      'archive_build': True,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'show_perf_results': True,
+      'perf_id': 'chromium-rel-mac',
+      'expectations': True,
+      'generate_gtest_json': True,
+      'gclient_env': {
+        'GYP_DEFINES': 'tests_run=noop',
+      },
+    }))
 
 ################################################################################
 ## Linux
 ################################################################################
-
-# For now we will assume a fixed toolchain location on the builders.
-crosstool_prefix = (
-    '/usr/local/crosstool-trusted/arm-crosstool/bin/arm-none-linux-gnueabi')
-# Factory properties to use for an arm build.
-arm_gclient_env = {
-  'AR': crosstool_prefix + '-ar',
-  'AS': crosstool_prefix + '-as',
-  'CC': crosstool_prefix + '-gcc',
-  'CXX': crosstool_prefix + '-g++',
-  'LD': crosstool_prefix + '-ld',
-  'RANLIB': crosstool_prefix + '-ranlib',
-  'GYP_GENERATORS': 'make',
-  'GYP_DEFINES': (
-      'target_arch=arm '
-      'sysroot=/usr/local/arm-rootfs '
-      'disable_nacl=1 '
-      'linux_use_tcmalloc=0 '
-      'armv7=1 '
-      'arm_thumb=1 '
-      'arm_neon=0 '
-      'arm_fpu=vfpv3-d16 '
-      'chromeos=1 '  # Since this is the intersting variation.
-  ),
-}
 
 B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
@@ -94,14 +79,18 @@ F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=['check_deps2git', 'sizes', 'check_perms', 'check_licenses'],
     options=['--compiler=goma'],
-    factory_properties={'archive_build': True,
-                        'gs_bucket': 'gs://chromium-browser-snapshots',
-                        'gs_acl': 'public-read',
-                        'show_perf_results': True,
-                        'perf_id': 'chromium-rel-linux',
-                        'expectations': True,
-                        'generate_gtest_json': True,
-                        'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
+    factory_properties={
+      'archive_build': True,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'show_perf_results': True,
+      'perf_id': 'chromium-rel-linux',
+      'expectations': True,
+      'generate_gtest_json': True,
+      'gclient_env': {
+        'GYP_DEFINES': 'target_arch=ia32 tests_run=noop',
+      },
+    }))
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
@@ -110,14 +99,17 @@ F('linux64_clobber', linux().ChromiumFactory(
     tests=['check_deps2git', 'sizes'],
     options=['--compiler=goma'],
     factory_properties={
-        'archive_build': True,
-        'gs_bucket': 'gs://chromium-browser-snapshots',
-        'gs_acl': 'public-read',
-        'show_perf_results': True,
-        'generate_gtest_json': True,
-        'perf_id': 'chromium-rel-linux-64',
-        'expectations': True,
-        'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
+      'archive_build': True,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'show_perf_results': True,
+      'generate_gtest_json': True,
+      'perf_id': 'chromium-rel-linux-64',
+      'expectations': True,
+      'gclient_env': {
+        'GYP_DEFINES': 'target_arch=x64 tests_run=noop',
+      },
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)
