@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -95,6 +95,22 @@ class SyzygyCommands(commands.FactoryCommands):
                           extra_text=('Coverage Report', url),
                           name='archive',
                           description='Archive Coverage Report')
+
+  def AddSmokeTest(self):
+    # Smoke-test script path.
+    script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'internal',
+                                'build', 'smoke_test.py')
+
+    # We pass in the root build directory to the smoke-test script. It will
+    # place its output in <build_dir>/smoke_test, alongside the various
+    # configuration sub-directories.
+    command = [self._python,
+               script_path,
+               '--verbose',
+               '--build-dir',
+               self._build_dir]
+
+    self._factory.addStep(shell.ShellCommand, 'Smoke Test', command)
 
   def AddArchival(self):
     '''Adds steps to archive the build output for official builds.'''

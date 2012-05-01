@@ -115,3 +115,19 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     syzygy_cmd_obj.AddGenerateCoverage()
 
     return factory
+
+  def SyzygySmokeTestFactory(self, target=None, clobber=False, tests=None,
+                             mode=None, slave_type='Tester',
+                             options=None, compile_timeout=1200,
+                             build_url=None, project=None,
+                             factory_properties=None, target_arch=None):
+    """Runs the smoke-test against the checked out version of the binaries."""
+    factory = self.BaseFactory(slave_type=slave_type,
+                               factory_properties=factory_properties)
+    syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory,
+                                                    target,
+                                                    self._build_dir,
+                                                    self.target_platform,
+                                                    target_arch)
+    syzygy_cmd_obj.AddSmokeTest()
+    return factory
