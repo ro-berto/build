@@ -128,8 +128,9 @@ def GetSwarmResults(swarm_base_url, test_keys):
         break
 
       if test_outputs['output']:
-        test_exit_codes = test_outputs['exit_codes'].split(',')
-        exit_codes[index] = int(max(test_exit_codes))
+        if test_outputs['exit_codes']:
+          test_exit_codes = test_outputs['exit_codes'].split(',')
+          exit_codes[index] = max(map(int, test_exit_codes))
         hostnames[index] = test_outputs['hostname']
 
         print
