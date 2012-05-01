@@ -5,7 +5,7 @@
 """Buildbot master utility functions.
 """
 
-from __future__ import with_statement
+import json
 import logging
 import os
 import sys
@@ -17,7 +17,6 @@ sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
 
 from common import find_depot_tools  # pylint: disable=W0611
 import subprocess2
-from rietveld import json
 
 
 def start_master(master, path):
