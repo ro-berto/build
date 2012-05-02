@@ -26,7 +26,7 @@ def _BinariesFilter(change):
   for path in change.files:
     if path.startswith('syzygy/binaries/'):
       return True
-  return True
+  return False
 
 
 # Binaries scheduler for Syzygy.

@@ -54,7 +54,7 @@ class SyzygyCommands(commands.FactoryCommands):
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
                '--verbose']
-    self.AddTestStep(shell.ShellCommand, 'Randomly Reorder Chrome', command)
+    self.AddTestStep(shell.ShellCommand, 'randomly_reorder_chrome', command)
 
   def AddBenchmarkChromeStep(self):
     # Benchmark script path.
@@ -64,7 +64,7 @@ class SyzygyCommands(commands.FactoryCommands):
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
                '--verbose']
-    self.AddTestStep(shell.ShellCommand, 'Benchmark Chrome', command)
+    self.AddTestStep(shell.ShellCommand, 'benchmark_chrome', command)
 
   def AddGenerateCoverage(self):
     # Coverage script path.
@@ -75,7 +75,7 @@ class SyzygyCommands(commands.FactoryCommands):
                '--verbose',
                '--build-dir',
                self.PathJoin(self._build_dir, self._target)]
-    self.AddTestStep(shell.ShellCommand, 'Capture Unittest Coverage', command)
+    self.AddTestStep(shell.ShellCommand, 'capture_unittest_coverage', command)
 
     # Store the coverage results by the checkout revision.
     src_dir = self.PathJoin(self._build_dir, self._target, 'cov')
@@ -92,8 +92,8 @@ class SyzygyCommands(commands.FactoryCommands):
 
     self._factory.addStep(_UrlStatusCommand,
                           command=command,
-                          extra_text=('Coverage Report', url),
-                          name='archive',
+                          extra_text=('coverage_report', url),
+                          name='archive_coverage',
                           description='Archive Coverage Report')
 
   def AddSmokeTest(self):
@@ -110,7 +110,7 @@ class SyzygyCommands(commands.FactoryCommands):
                '--build-dir',
                self._build_dir]
 
-    self._factory.addStep(shell.ShellCommand, 'Smoke Test', command)
+    self.AddTestStep(shell.ShellCommand, 'smoke_test', command)
 
   def AddArchival(self):
     '''Adds steps to archive the build output for official builds.'''
@@ -129,6 +129,6 @@ class SyzygyCommands(commands.FactoryCommands):
 
     self._factory.addStep(_UrlStatusCommand,
                           command=command,
-                          extra_text=('Build archive', url),
-                          name='archive',
-                          description='Build archive')
+                          extra_text=('archive', url),
+                          name='archive_binaries',
+                          description='Archive Binaries')
