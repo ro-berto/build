@@ -133,7 +133,6 @@ class CbuildbotFactory(object):
            '--buildroot=%s' % self.buildroot]
 
     if self.trybot:
-      cmd.append('--remote-trybot')
       cmd.append(Property('extra_args'))
     else:
       cmd += ['--buildbot']

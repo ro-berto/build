@@ -59,10 +59,34 @@ def get_file_contents(poller, branch, file_path):
       )
 
 
+def translate_v1_to_v2(parsed_job):
+  """Translate tryjob desc from V1 to V2."""
+  parsed_job['extra_args'].append('--remote-trybot')
+  parsed_job['version'] = 2
+
+
 class CrOSTryJobGit(TryBase):
   """Poll a Git server to grab patches to try."""
 
   _PROPERTY_SOURCE = 'Try Job'
+  # The version of tryjob that the master is expecting.
+  _TRYJOB_FORMAT_VERSION = 2
+
+  # Functions that translate from one tryjob version to another.
+  _TRANSLATION_FUNCS = {
+      1 : translate_v1_to_v2,
+  }
+
+  @classmethod
+  def updateJobDesc(cls, parsed_job):
+    """Ensure job description is in the format we expect."""
+    while parsed_job['version'] < cls._TRYJOB_FORMAT_VERSION:
+      prev_ver = parsed_job['version']
+      translation_func = cls._TRANSLATION_FUNCS[parsed_job['version']]
+      translation_func(parsed_job)
+      if parsed_job['version'] <= prev_ver:
+        raise AssertionError('translation function %s not incrementing version!'
+                             % str(translation_func))
 
   def __init__(self, name, pollers, smtp_host, from_addr, reply_to,
                email_footer, properties=None):
@@ -174,6 +198,8 @@ this message please contact chromeos-build@google.com.<br>
     except BadJobfile as e:
       self.send_validation_fail_email(parsed['email'], str(e))
       raise
+
+    self.updateJobDesc(parsed)
 
     # The sourcestamp/buildsets created will be merge-able.
     d = self.master.db.sourcestamps.addSourceStamp(
