@@ -569,8 +569,6 @@ def main():
     os.environ['G_SLICE'] = 'always-malloc'
     # Disable ASLR on Mac when running ASAN tests.
     os.environ['DYLD_NO_PIE'] = '1'
-    # Disable NaCl qualification tests under ASAN.
-    os.environ['NACL_DANGEROUS_SKIP_QUALIFICATION_TEST'] = '1'
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
