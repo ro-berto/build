@@ -155,10 +155,6 @@ def ProcessManifest(filename, options):
 
   manifest = Manifest(filename, test_full_name, options)
 
-  # Clean up old files.
-  print 'Removing old swarm zip files...'
-  RemoveOldFiles()
-
   # Zip up relevent files
   print "Zipping up files..."
   manifest.zip()
@@ -220,6 +216,10 @@ def main():
 
   if not options.os_image:
     options.os_image = '%s %d' % (platform.uname()[0], 32)
+
+  # Clean up old files.
+  print 'Removing old swarm zip files...'
+  RemoveOldFiles()
 
   highest_exit_code = 0
   for filename in args:
