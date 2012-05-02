@@ -617,7 +617,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      timeout=timeout,
                      do_step_if=do_step_if)
 
-  def AddHeapcheckTest(self, test_name, timeout=1200):
+  def AddHeapcheckTest(self, test_name, timeout, factory_properties):
     build_dir = os.path.join(self._build_dir, self._target)
     if self._target_platform == 'linux2':  # Linux bins in src/sconsbuild
       build_dir = os.path.join(os.path.dirname(self._build_dir), 'sconsbuild',
@@ -625,6 +625,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = [self._python, self._test_tool, '--run-shell-script',
            '--target', self._target, '--build-dir', self._build_dir]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
       test_name = test_name[0:matched.start()]
