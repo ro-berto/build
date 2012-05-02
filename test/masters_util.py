@@ -6,6 +6,8 @@
 """
 
 import json
+import errno
+import json
 import logging
 import os
 import sys
@@ -17,6 +19,18 @@ sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
 
 from common import find_depot_tools  # pylint: disable=W0611
 import subprocess2
+
+
+def pid_exists(pid):
+  try:
+    os.kill(pid, 0)
+  except OSError, error:
+    if error.errno == errno.EPERM:
+      return True
+    elif error.errno == errno.ESRCH:
+      return False
+    raise
+  return True
 
 
 def start_master(master, path):
@@ -77,33 +91,65 @@ def search_for_exceptions(path):
   return False
 
 
+def json_probe(sensitive):
+  """ Looks through the port range and finds a master listening.
+  sensitive: Indicates whether partial success should be reported.
+
+  Returns (port, name) or None.
+  """
+  ports = range(8000, 8099) + range(8200, 8299) + range(9000, 9099)
+  for port in ports:
+    try:
+      data = json.load(
+          urllib.urlopen('http://localhost:%d/json/project' % port)) or {}
+      if not data or (not 'projectName' in data and not 'title' in data):
+        logging.debug('Didn\'t get valid data from port %d' % port)
+        if sensitive:
+          return (port, None)
+        return None
+      name = data.get('projectName', data.get('title'))
+      return (port, name)
+    except ValueError:
+      logging.warning('Didn\'t get valid data from port %d' % port)
+      # presume this is some other type of server
+      #  E.g. X20 on a dev workstation.
+      continue
+    except IOError:
+      logging.debug('Didn\'t get data from port %d' % port)
+
+  return None
+
+
 def wait_for_start(master, name, path):
   """Waits for ~10s for the masters to open its web server."""
-  ports = range(8000, 8099) + range(8200, 8299) + range(9000, 9099)
   for _ in range(100):
-    for p in ports:
-      try:
-        data = json.load(
-            urllib.urlopen('http://localhost:%d/json/project' % p)) or {}
-        if not data or (not 'projectName' in data and not 'title' in data):
-          logging.debug('Didn\'t get valid data from %s' % master)
-          continue
-        got_name = data.get('projectName', data.get('title'))
-        if got_name != name:
-          logging.error(
-              'Wrong %s name, expected %s, got %s' %
-              (master, name, got_name))
-          return False
-        # The server is now answering /json requests. Check that the log file
-        # doesn't have any other exceptions just in case there was some other
-        # unexpected error.
-        return not search_for_exceptions(path)
-      except ValueError:
-        logging.warning('Didn\'t get valid data from %s' % master)
-      except IOError:
-        logging.debug('Didn\'t get data from %s' % master)
+    result = json_probe(False)
+    if result is None:
       if search_for_exceptions(path):
         return False
-    time.sleep(0.01)
+      time.sleep(0.01)
+      continue
+    (port, got_name) = result
+    if got_name != name:
+      logging.error('Wrong %s name, expected %s, got %s on port %d' %
+                    (master, name, got_name, port))
+      return False
+    # The server is now answering /json requests. Check that the log file
+    # doesn't have any other exceptions just in case there was some other
+    # unexpected error.
+    return not search_for_exceptions(path)
+
   logging.error('Didn\'t find open port for %s' % master)
+  return False
+
+
+def check_for_no_masters():
+  result = json_probe(True)
+  if result is None:
+    return True
+  if result[1] is None:
+    logging.error('Something is listening on port %d' % result[0])
+    return False
+  logging.error('Found unexpected master %s on port %d' %
+                (result[1], result[0]))
   return False

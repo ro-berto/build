@@ -83,14 +83,17 @@ def real_main(base_dir, expected):
 
   # First make sure no master is started. Otherwise it could interfere with
   # conflicting port binding.
+  if not masters_util.check_for_no_masters():
+    return 1
   for master in masters:
     pid_path = os.path.join(base, master, 'twistd.pid')
     if os.path.isfile(pid_path):
-      print >> sys.stderr, (
-          '%s is still running as pid %s.' %
-          (master, open(pid_path).read().strip()))
-      print >> sys.stderr, 'Please stop it before running the test.'
-      return 1
+      pid_value = int(open(pid_path).read().strip())
+      if masters_util.pid_exists(pid_value):
+        print >> sys.stderr, ('%s is still running as pid %d.' %
+            (master, pid_value))
+        print >> sys.stderr, 'Please stop it before running the test.'
+        return 1
 
   bot_pwd_path = os.path.join(
       base_dir, '..', 'build', 'site_config', '.bot_password')
