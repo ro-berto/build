@@ -13,8 +13,11 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
-
+def linux():
+  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux_tester():
+  return chromium_factory.ChromiumFactory(
+      'src/build', 'linux2', nohooks_on_update=True)
 
 # Tests that are single-machine shard-safe. For now we only use the sharding
 # supervisor for long tests (more than 30 seconds) that are known to be stable.
@@ -82,7 +85,7 @@ F('rel', linux().ChromiumFactory(
 #
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('rel_unit', linux().ChromiumFactory(
+F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='NASTester',
     tests=['dbus',
            'googleurl',
@@ -104,7 +107,7 @@ F('rel_unit', linux().ChromiumFactory(
 
 B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
   notify_on_missing=True)
-F('rel_sync', linux().ChromiumFactory(
+F('rel_sync', linux_tester().ChromiumFactory(
     slave_type='NASTester',
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
@@ -144,7 +147,7 @@ F('dbg', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('dbg_unit_1', linux().ChromiumFactory(
+F('dbg_unit_1', linux_tester().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
     tests=['net', 'browser_tests'],
@@ -153,7 +156,7 @@ F('dbg_unit_1', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('dbg_unit_2', linux().ChromiumFactory(
+F('dbg_unit_2', linux_tester().ChromiumFactory(
     slave_type='NASTester',
     target='Debug',
     tests=['unit',
@@ -194,7 +197,7 @@ F('dbg_shared', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(shared)', 'dbg_shared_unit', 'testers',
   'linux_dbg_shared_trigger', auto_reboot=True, notify_on_missing=True)
-F('dbg_shared_unit', linux().ChromiumFactory(
+F('dbg_shared_unit', linux_tester().ChromiumFactory(
     target='Debug',
     slave_type='NASTester',
     tests=['base',

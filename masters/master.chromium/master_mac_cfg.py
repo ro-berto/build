@@ -13,7 +13,11 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def mac():
+  return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def mac_tester():
+  return chromium_factory.ChromiumFactory(
+      'src/build', 'darwin', nohooks_on_update=True)
 
 # Tests that are single-machine shard-safe. For now we only use the sharding
 # supervisor for long tests (more than 30 seconds) that are known to be stable.
@@ -62,7 +66,7 @@ F('rel', mac().ChromiumFactory(
 #
 B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('rel_unit_1', mac().ChromiumFactory(
+F('rel_unit_1', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=['base',
@@ -86,7 +90,7 @@ F('rel_unit_1', mac().ChromiumFactory(
 
 B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('rel_unit_2', mac().ChromiumFactory(
+F('rel_unit_2', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=['browser_tests', 'ui', 'unit'],
@@ -98,7 +102,7 @@ F('rel_unit_2', mac().ChromiumFactory(
 
 B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('rel_unit_3', mac().ChromiumFactory(
+F('rel_unit_3', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=['browser_tests', 'net', 'ui'],
@@ -117,7 +121,7 @@ B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
 
 B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('rel_sync', mac().ChromiumFactory(
+F('rel_sync', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=['sync_integration'],
@@ -163,7 +167,7 @@ F('dbg', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('dbg_unit_1', mac().ChromiumFactory(
+F('dbg_unit_1', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
@@ -185,7 +189,7 @@ F('dbg_unit_1', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('dbg_unit_2', mac().ChromiumFactory(
+F('dbg_unit_2', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
@@ -197,7 +201,7 @@ F('dbg_unit_2', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('dbg_unit_3', mac().ChromiumFactory(
+F('dbg_unit_3', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
@@ -209,7 +213,7 @@ F('dbg_unit_3', mac().ChromiumFactory(
 
 B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
-F('dbg_unit_4', mac().ChromiumFactory(
+F('dbg_unit_4', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
