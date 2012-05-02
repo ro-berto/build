@@ -238,8 +238,8 @@ def main_mac(options, args):
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
     if options.factory_properties.get('asan', False):
-      symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
-                                               'scripts', 'asan_symbolize.py'))
+      symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
+                                               'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
       result = _RunGTestCommand(command, pipes=pipes)
     else:
@@ -363,8 +363,8 @@ def main_linux(options, args):
           with_wm=options.factory_properties.get('window_manager', True),
           server_dir=special_xvfb_dir)
     if options.factory_properties.get('asan', False):
-      symbolize = os.path.abspath(os.path.join('src', 'third_party', 'asan',
-                                               'scripts', 'asan_symbolize.py'))
+      symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
+                                               'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
       result = _RunGTestCommand(command, pipes=pipes)
     else:
@@ -569,6 +569,8 @@ def main():
     os.environ['G_SLICE'] = 'always-malloc'
     # Disable ASLR on Mac when running ASAN tests.
     os.environ['DYLD_NO_PIE'] = '1'
+    # Disable NaCl qualification tests under ASAN.
+    os.environ['NACL_DANGEROUS_SKIP_QUALIFICATION_TEST'] = '1'
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
