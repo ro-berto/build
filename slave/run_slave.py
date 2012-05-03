@@ -229,7 +229,10 @@ def main():
   else:
     error('Platform %s is not implemented yet' % sys.platform)
 
-  FixSubversionConfig()
+  # Don't overwrite the ~/.subversion/config file when TESTING_MASTER is set.
+  # This envrionment is defined only when testing the slave on a dev machine.
+  if 'TESTING_MASTER' not in os.environ:
+    FixSubversionConfig()
 
   HotPatchSlaveBuilder()
   import twisted.scripts.twistd as twistd
