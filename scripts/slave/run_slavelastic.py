@@ -10,7 +10,6 @@ import json
 import optparse
 import os
 import platform
-import random
 import socket
 import sys
 import time
@@ -53,8 +52,7 @@ class Manifest(object):
 
     self.g_shards = switches.num_shards
     # Random name for the output zip file
-    self.zipfile_name = 'swarm_tempfile_%s.zip' % ''.join(random.choice(
-        'abcdefghijklmnopqrstuvwxyz0123456789') for x in range(10))
+    self.zipfile_name = test_name + '.zip'
     self.tasks = []
     self.current_platform = current_platform
     self.target_platform = switches_dict['os_image']
