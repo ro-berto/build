@@ -193,7 +193,8 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
     tests=linux_tests_1,
-    factory_properties={'sharded_tests': sharded_tests,
+    factory_properties={'chromeos': 1,
+                        'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,}))
 
 
@@ -203,7 +204,8 @@ F('dbg_tests_2', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
     tests=linux_tests_2,
-    factory_properties={'sharded_tests': sharded_tests,
+    factory_properties={'chromeos': 1,
+                        'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,}))
 
 
@@ -213,7 +215,8 @@ F('dbg_tests_3', chromiumos().ChromiumOSFactory(
     slave_type='NASTester',
     target='Debug',
     tests=linux_tests_3,
-    factory_properties={'sharded_tests': sharded_tests,
+    factory_properties={'chromeos': 1,
+                        'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,}))
 
 
