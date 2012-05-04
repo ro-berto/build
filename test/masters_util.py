@@ -36,7 +36,7 @@ def pid_exists(pid):
 def start_master(master, path):
   try:
     subprocess2.check_output(
-        ['make', 'start'], timeout=60, cwd=path,
+        ['make', 'start'], timeout=120, cwd=path,
         stderr=subprocess2.STDOUT)
   except subprocess2.CalledProcessError, e:
     logging.error('Error: cannot start %s' % master)
