@@ -490,15 +490,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('ui_tests', factory_properties,
                                arg_list=arg_list)
 
-  def AddPostUpdateTests(self, tests):
+  def AddDeps2GitStep(self):
     J = self.PathJoin
     deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
     cmd = [self._python, deps2git_tool,
            '-d', J(self._repository_root, 'DEPS'),
            '-o', J(self._repository_root, '.DEPS.git')]
-    if 'check_deps2git' in tests:
-      self.AddTestStep(shell.ShellCommand, 'check_deps2git', cmd,
-                       do_step_if=self.TestStepFilter)
+    self.AddTestStep(
+        shell.ShellCommand,
+        'check_deps2git',
+        cmd,
+        do_step_if=self.TestStepFilter)
 
   def AddReliabilityTests(self, platform='win'):
     cmd_1 = ['python', self._reliability_tool, '--platform', platform,
@@ -1057,17 +1059,6 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddPyAutoFunctionalTest(
           'media_tests_' + group.lower(), suite=group, timeout=timeout,
           perf=is_perf, factory_properties=factory_properties)
-
-  # Needed to resolve circular dependency between ChromiumCommands
-  # and FactoryCommands. This allows Chromium-specific commands
-  # to appear earlier (in the post-update step)
-  def SetFactory(self, factory):
-    # call __init__ just to be safe
-    commands.FactoryCommands.__init__(self,
-                                      factory,
-                                      self._target,
-                                      self._build_dir,
-                                      self._target_platform)
 
   def AddChromebotServer(self, factory_properties=None):
     """Add steps to run Chromebot script for server.

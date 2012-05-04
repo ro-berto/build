@@ -259,6 +259,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('check_lkgr'):     f.AddCheckLKGRStep()
 
     # Scripted checks to verify various properties of the codebase:
+    if R('check_deps2git'): f.AddDeps2GitStep()
     if R('check_deps'):     f.AddCheckDepsStep()
     if R('check_bins'):     f.AddCheckBinsStep()
     if R('check_perms'):    f.AddCheckPermsStep()
@@ -556,21 +557,16 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Ensure that component is set correctly in the gyp defines.
     self.ForceComponent(target, project, factory_properties)
 
-    # factory is set to 'None' below. BuildFactory will fill this in
-    # with ChromiumCommands.SetFactory to resolve circ. dependency.
-
-    # Get the factory command object to create new steps to the factory.
-    chromium_cmd_obj = chromium_commands.ChromiumCommands(None,
-                                                          target,
-                                                          self._build_dir,
-                                                          self._target_platform)
-
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties,
-                                gclient_deps=gclient_deps,
-                                specific_cmd_obj = chromium_cmd_obj)
+                                gclient_deps=gclient_deps)
 
+    # Get the factory command object to create new steps to the factory.
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
+                                                          target,
+                                                          self._build_dir,
+                                                          self._target_platform)
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):
