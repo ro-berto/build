@@ -16,7 +16,8 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                    mode=None, slave_type='BuilderTester',
                    options=None, compile_timeout=1200, build_url=None,
                    project=None, factory_properties=None, gclient_deps=None):
-    factory = self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+    # Do not pass the tests to the ChromiumFactory, they'll be processed below.
+    factory = self.ChromiumFactory(target, clobber, [], mode, slave_type,
                                    options, compile_timeout, build_url, project,
                                    factory_properties, gclient_deps)
 

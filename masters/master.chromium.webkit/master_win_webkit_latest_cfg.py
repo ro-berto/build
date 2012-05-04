@@ -55,7 +55,7 @@ B('Webkit Win', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger',
 F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
@@ -106,7 +106,7 @@ F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_gpu', 'webkit_unit'],
+    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
@@ -117,7 +117,7 @@ F('f_webkit_dbg_tests_2', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['webkit', 'webkit_gpu'],
+    tests=['webkit'],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '2:2'}))

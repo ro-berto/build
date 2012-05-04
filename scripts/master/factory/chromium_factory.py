@@ -446,37 +446,49 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 workdir=workdir,
                                 factory_properties=fp)
     elif R('chrome_endure_control_tests'):
-      tests = [
-        'perf_endure.ChromeEndureControlTest.testControlAttachDetachDOMTree',
-        ('perf_endure.ChromeEndureControlTest.'
-         'testControlAttachDetachDOMTreeWebDriver'),
-      ]
-      f.AddChromeEndureTest('chrome_endure_control_test', tests, fp)
+      f.AddChromeEndureTest(
+          'chrome_endure_control_test',
+          [
+            'perf_endure.ChromeEndureControlTest.'
+              'testControlAttachDetachDOMTree',
+            'perf_endure.ChromeEndureControlTest.'
+              'testControlAttachDetachDOMTreeWebDriver',
+          ],
+          fp)
     elif R('chrome_endure_gmail_tests'):
-      tests = [
-        'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
-        'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscardSleep',
-        ('perf_endure.ChromeEndureGmailTest.'
-         'testGmailAlternateThreadlistConversation'),
-        'perf_endure.ChromeEndureGmailTest.testGmailAlternateTwoLabels',
-        'perf_endure.ChromeEndureGmailTest.testGmailExpandCollapseConversation',
-      ]
-      f.AddChromeEndureTest('chrome_endure_gmail_test', tests, fp)
+      f.AddChromeEndureTest(
+          'chrome_endure_gmail_test',
+          [
+            'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
+            'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscardSleep',
+            'perf_endure.ChromeEndureGmailTest.'
+              'testGmailAlternateThreadlistConversation',
+            'perf_endure.ChromeEndureGmailTest.testGmailAlternateTwoLabels',
+            'perf_endure.ChromeEndureGmailTest.'
+              'testGmailExpandCollapseConversation',
+          ],
+          fp)
     elif R('chrome_endure_docs_tests'):
-      tests = [
-        'perf_endure.ChromeEndureDocsTest.testDocsAlternatelyClickLists',
-      ]
-      f.AddChromeEndureTest('chrome_endure_docs_test', tests, fp)
+      f.AddChromeEndureTest(
+          'chrome_endure_docs_test',
+          [
+            'perf_endure.ChromeEndureDocsTest.testDocsAlternatelyClickLists',
+          ],
+          fp)
     elif R('chrome_endure_plus_tests'):
-      tests = [
-        'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
-      ]
-      f.AddChromeEndureTest('chrome_endure_plus_test', tests, fp)
+      f.AddChromeEndureTest(
+          'chrome_endure_plus_test',
+          [
+            'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
+          ],
+          fp)
     elif R('chrome_endure_indexeddb_tests'):
-      tests = [
-        'perf_endure.IndexedDBOfflineTest.testOfflineOnline',
-      ]
-      f.AddChromeEndureTest('chrome_endure_indexeddb_test', tests, fp)
+      f.AddChromeEndureTest(
+          'chrome_endure_indexeddb_test',
+          [
+            'perf_endure.IndexedDBOfflineTest.testOfflineOnline',
+          ],
+          fp)
 
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):
@@ -503,8 +515,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # isn't the last thing to run.
     if R('annotated_steps'): f.AddAnnotatedSteps(fp)
 
-    # TODO(maruel): Need to fix all masters first.
-    # assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
+    # If this assert triggers and the test name is valid, make sure R() is used.
+    # If you are using a subclass, make sure the tests list provided to
+    # _AddTests() had the factory-specific tests stripped off.
+    assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
 
   @property
   def build_dir(self):
