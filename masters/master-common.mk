@@ -1,43 +1,5 @@
 # -*- makefile -*-
 
-# This should be included by a makefile which lives in a buildmaster/buildslave
-# directory (next to the buildbot.tac file). That including makefile *must*
-# define MASTERPATH.
-
-# The 'start' and 'stop' targets start and stop the buildbot master.
-# The 'reconfig' target will tell a buildmaster to reload its config file.
-
-# Note that a relative PYTHONPATH entry is relative to the current directory.
-
-# Confirm that MASTERPATH has been defined.
-ifeq ($(MASTERPATH),)
-  $(error MASTERPATH not defined.)
-endif
-
-# Get the current host's short hostname.  We may use this in Makefiles that
-# include this file.
-SHORT_HOSTNAME := $(shell hostname -s)
-
-# On the Mac, the buildbot is started via the launchd mechanism as a
-# LaunchAgent to give the slave a proper Mac UI environment for tests.  In
-# order for this to work, the plist must be present and loaded by launchd, and
-# the user must be logged in to the UI.  The plist is loaded by launchd at user
-# login (and the job may have been initially started at that time too).  Our
-# Mac build slaves are all set up this way, and have auto-login enabled, so
-# "make start" should just work and do the right thing.
-#
-# When using launchd to start the job, it also needs to be used to stop the
-# job.  Otherwise, launchd might try to restart the job when stopped manually
-# by SIGTERM.  Using SIGHUP for reconfig is safe with launchd.
-#
-# Because it's possible to have more than one slave on a machine (for testing),
-# this tests to make sure that the slave is in the known slave location,
-# /b/slave, which is what the LaunchAgent operates on.
-USE_LAUNCHD := \
-  $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.$(MASTERPATH).plist ] && \
-          [ "$$(pwd -P)" = "/b/build/masters/$(MASTERPATH)" ] && \
-          echo 1)
-
 # Elements used to construct PYTHONPATH. These may be overridden by the
 # including Makefile.
 #
@@ -72,54 +34,4 @@ BUILDBOT_PATH ?= $(BUILDBOT7_PATH)
 
 PYTHONPATH := $(BUILDBOT_PATH):$(SCRIPTS_DIR):$(THIRDPARTY_DIR):$(PUBLICCONFIG_DIR):$(PRIVATECONFIG_DIR):.
 
-ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
-start: upgrade
-else
-start:
-endif
-ifneq ($(USE_LAUNCHD),1)
-	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
-else
-	launchctl start org.chromium.buildbot.$(MASTERPATH)
-endif
-
-ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
-start-prof: upgrade
-else
-start-prof:
-endif
-ifneq ($(USE_LAUNCHD),1)
-	TWISTD_PROFILE=1 PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
-else
-	launchctl start org.chromium.buildbot.$(MASTERPATH)
-endif
-
-stop:
-ifneq ($(USE_LAUNCHD),1)
-	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
-else
-	launchctl stop org.chromium.buildbot.$(MASTERPATH)
-endif
-
-reconfig:
-	kill -HUP `cat twistd.pid`
-
-no-new-builds:
-	kill -USR1 `cat twistd.pid`
-
-log:
-	tail -F twistd.log
-
-wait:
-	while `test -f twistd.pid`; do sleep 1; done;
-
-restart: stop wait start log
-
-restart-prof: stop wait start-prof log
-
-# This target is only known to work on 0.8.x masters.
-upgrade:
-	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
-
-setup:
-	@echo export PYTHONPATH=$(PYTHONPATH)
+include $(TOPLEVEL_DIR)/masters/master-common-rules.mk
