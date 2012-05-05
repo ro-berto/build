@@ -194,7 +194,7 @@ def VerbosePrint(s):
     Print(s)
 
 def FetchBuildsMain(master, builder, builds):
-  if 'master' not in MASTER_TO_BASE_URL:
+  if master not in MASTER_TO_BASE_URL:
     raise Exception('ERROR: master %s not in MASTER_TO_BASE_URL' % master)
   master_url = MASTER_TO_BASE_URL[master]
   url = '%s/json/builders/%s/builds/_all' % (master_url, urllib2.quote(builder))
@@ -224,7 +224,7 @@ def CollateRevisionHistory(builds):
   revision_history = {}
   for master in builds.keys():
     for (builder, builder_history) in builds[master].iteritems():
-      VerbosePrint('%s:' % builder)
+      VerbosePrint('%s/%s:' % (master, builder))
       for (build_num, build_data) in builder_history.iteritems():
         build_num = int(build_num)
         revision = build_data['sourceStamp']['revision']
@@ -250,7 +250,7 @@ def CollateRevisionHistory(builds):
             if result and str(result) not in ('0', '1'):
               reasons.append('Step %s failed' % step)
         revision_history.setdefault(revision, {})
-        revision_history.setdefault(revision[revision], {})
+        revision_history[revision].setdefault(master, {})
         if reasons:
           revision_history[revision][master][builder] = False
           VerbosePrint('  Build %s (rev %s) is bad or incomplete' % (
