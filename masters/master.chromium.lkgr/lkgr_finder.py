@@ -65,114 +65,123 @@ import buildbot.scripts.runner
 
 VERBOSE = True
 
-BUILDER_URL = 'http://build.chromium.org/p/chromium/json'
 REVISIONS_URL = 'https://chromium-status.appspot.com'
-WATERFALL_URL = 'http://build.chromium.org/p/chromium/console'
 REVISIONS_PASSWORD_FILE = '.status_password'
+MASTER_TO_BASE_URL = {
+  'chromium': 'http://build.chromium.org/p/chromium',
+  'chromium.chrome': 'http://build.chromium.org/p/chromium.chrome',
+}
 
 # LKGR_STEPS controls which steps must pass for a revision to be marked
 # as LKGR.
 #-------------------------------------------------------------------------------
 
 LKGR_STEPS = {
-  'Win Builder (dbg)': [
-    'compile',
-  ],
-  'Win7 Tests (dbg)(1)': [
-    'check_deps',
-    'base_unittests',
-    'cacheinvalidation_unittests',
-    'content_unittests',
-    'courgette_unittests',
-    'googleurl_unittests',
-    'jingle_unittests',
-    'media_unittests',
-    'printing_unittests',
-    'remoting_unittests',
-    'ipc_tests',
-    'sql_unittests',
-    'sync_unit_tests',
-    'unit_tests',
-    'installer_util_unittests',
-    'gfx_unittests',
-    'crypto_unittests',
-  ],
-  'Win7 Tests (dbg)(2)': [
-    'net_unittests', 'browser_tests',
-  ],
-  'Win7 Tests (dbg)(3)': [
-    'browser_tests',
-  ],
-  'Win7 Tests (dbg)(4)': [
-    'browser_tests',
-  ],
-  'Win7 Tests (dbg)(5)': [
-    'browser_tests',
-  ],
-  'Win7 Tests (dbg)(6)': [
-    'browser_tests',
-  ],
-  'Chrome Frame Tests (ie8)': [
-    'chrome_frame_unittests',
-  ],
-#  'Interactive Tests (dbg)': [
-#    'interactive_ui_tests',
-#  ],
-  'Mac Builder (dbg)': [
-    'compile',
-  ],
-  'Mac 10.6 Tests (dbg)(1)': [
-    'browser_tests',
-    'googleurl_unittests',
-    'printing_unittests',
-    'remoting_unittests',
-    'jingle_unittests',
-  ],
-  'Mac 10.6 Tests (dbg)(2)': [
-    'browser_tests',
-    'check_deps',
-    'media_unittests',
-    'net_unittests',
-  ],
-  'Mac 10.6 Tests (dbg)(3)': [
-    'base_unittests', 'browser_tests', 'interactive_ui_tests',
-  ],
-  'Mac 10.6 Tests (dbg)(4)': [
-    'browser_tests',
-    'content_unittests',
-    'gfx_unittests',
-    'ipc_tests',
-    'sql_unittests',
-    'sync_unit_tests',
-    'unit_tests',
-  ],
-  'Linux Builder (dbg)': [
-    'compile',
-  ],
-  'Linux Builder x64': [
-    'check_deps',
-  ],
-  'Linux Tests (dbg)(1)': [
-    'browser_tests',
-    'net_unittests',
-  ],
-  'Linux Tests (dbg)(2)': [
-    'content_unittests',
-    'ipc_tests',
-    'sync_unit_tests',
-    'unit_tests',
-    'sql_unittests',
-    'interactive_ui_tests',
-    'base_unittests',
-    'googleurl_unittests',
-    'media_unittests',
-    'printing_unittests',
-    'remoting_unittests',
-    'gfx_unittests',
-    'nacl_integration',
-    'cacheinvalidation_unittests',
-    'jingle_unittests',
-  ],
+  'chromium': {
+    'Win Builder (dbg)': [
+      'compile',
+    ],
+    'Win7 Tests (dbg)(1)': [
+      'check_deps',
+      'base_unittests',
+      'cacheinvalidation_unittests',
+      'content_unittests',
+      'courgette_unittests',
+      'googleurl_unittests',
+      'jingle_unittests',
+      'media_unittests',
+      'printing_unittests',
+      'remoting_unittests',
+      'ipc_tests',
+      'sql_unittests',
+      'sync_unit_tests',
+      'unit_tests',
+      'installer_util_unittests',
+      'gfx_unittests',
+      'crypto_unittests',
+    ],
+    'Win7 Tests (dbg)(2)': [
+      'net_unittests', 'browser_tests',
+    ],
+    'Win7 Tests (dbg)(3)': [
+      'browser_tests',
+    ],
+    'Win7 Tests (dbg)(4)': [
+      'browser_tests',
+    ],
+    'Win7 Tests (dbg)(5)': [
+      'browser_tests',
+    ],
+    'Win7 Tests (dbg)(6)': [
+      'browser_tests',
+    ],
+    'Chrome Frame Tests (ie8)': [
+      'chrome_frame_unittests',
+    ],
+    # 'Interactive Tests (dbg)': [
+    #   'interactive_ui_tests',
+    # ],
+    'Mac Builder (dbg)': [
+      'compile',
+    ],
+    'Mac 10.6 Tests (dbg)(1)': [
+      'browser_tests',
+      'googleurl_unittests',
+      'printing_unittests',
+      'remoting_unittests',
+      'jingle_unittests',
+    ],
+    'Mac 10.6 Tests (dbg)(2)': [
+      'browser_tests',
+      'check_deps',
+      'media_unittests',
+      'net_unittests',
+    ],
+    'Mac 10.6 Tests (dbg)(3)': [
+      'base_unittests', 'browser_tests', 'interactive_ui_tests',
+    ],
+    'Mac 10.6 Tests (dbg)(4)': [
+      'browser_tests',
+      'content_unittests',
+      'gfx_unittests',
+      'ipc_tests',
+      'sql_unittests',
+      'sync_unit_tests',
+      'unit_tests',
+    ],
+    'Linux Builder (dbg)': [
+      'compile',
+    ],
+    'Linux Builder x64': [
+      'check_deps',
+    ],
+    'Linux Tests (dbg)(1)': [
+      'browser_tests',
+      'net_unittests',
+    ],
+    'Linux Tests (dbg)(2)': [
+      'content_unittests',
+      'ipc_tests',
+      'sync_unit_tests',
+      'unit_tests',
+      'sql_unittests',
+      'interactive_ui_tests',
+      'base_unittests',
+      'googleurl_unittests',
+      'media_unittests',
+      'printing_unittests',
+      'remoting_unittests',
+      'gfx_unittests',
+      'nacl_integration',
+      'cacheinvalidation_unittests',
+      'jingle_unittests',
+    ],
+  },  # chromium
+  'chromium.chrome': {
+    'Google Chrome Linux x64': [  # cycle time is ~14 mins as of 5/5/2012
+      'compile',
+    ],
+  },  # chromium.chrome
 }
 
 #-------------------------------------------------------------------------------
@@ -184,8 +193,11 @@ def VerbosePrint(s):
   if VERBOSE:
     Print(s)
 
-def FetchBuildsMain(builder, builds):
-  url = '%s/builders/%s/builds/_all' % (BUILDER_URL, urllib2.quote(builder))
+def FetchBuildsMain(master, builder, builds):
+  if 'master' not in MASTER_TO_BASE_URL:
+    raise Exception('ERROR: master %s not in MASTER_TO_BASE_URL' % master)
+  master_url = MASTER_TO_BASE_URL[master]
+  url = '%s/json/builders/%s/builds/_all' % (master_url, urllib2.quote(builder))
   try:
     # Requires python 2.6
     # pylint: disable=E1121
@@ -199,7 +211,7 @@ def FetchBuildsMain(builder, builds):
         if int(build) < 39789:
           Print('removing build %s from Linux Build x64' % build)
           del builder_history[build]
-    builds[builder] = builder_history
+    builds[master][builder] = builder_history
   except urllib2.URLError:
     VerbosePrint('URLException while fetching %s' % url)
 
@@ -210,40 +222,43 @@ def CollateRevisionHistory(builds):
   """
   # revision_history[revision][builder] = True/False (success/failure)
   revision_history = {}
-  for (builder, builder_history) in builds.iteritems():
-    VerbosePrint('%s:' % builder)
-    for (build_num, build_data) in builder_history.iteritems():
-      build_num = int(build_num)
-      revision = build_data['sourceStamp']['revision']
-      if not revision:
-        continue
-      steps = {}
-      reasons = []
-      for step in build_data['steps']:
-        steps[step['name']] = step
-      for step in LKGR_STEPS[builder]:
-        if step not in steps:
-          raise Exception('builder %s step %s not in steps\n' % (builder, step))
-        if ('isFinished' not in steps[step] or
-           steps[step]['isFinished'] is not True):
-          reasons.append('Step %s has not completed (%s)' % (
-              step, steps[step]['isFinished']))
+  for master in builds.keys():
+    for (builder, builder_history) in builds[master].iteritems():
+      VerbosePrint('%s:' % builder)
+      for (build_num, build_data) in builder_history.iteritems():
+        build_num = int(build_num)
+        revision = build_data['sourceStamp']['revision']
+        if not revision:
           continue
-        if 'results' in steps[step]:
-          result = steps[step]['results'][0]
-          if type(result) == list:
-            result = result[0]
-          if result and str(result) not in ('0', '1'):
-            reasons.append('Step %s failed' % step)
-      revision_history.setdefault(revision, {})
-      if reasons:
-        revision_history[revision][builder] = False
-        VerbosePrint('  Build %s (rev %s) is bad or incomplete' % (
-            build_num, revision))
-        for reason in reasons:
-          VerbosePrint('    %s' % reason)
-      else:
-        revision_history[revision][builder] = True
+        steps = {}
+        reasons = []
+        for step in build_data['steps']:
+          steps[step['name']] = step
+        for step in LKGR_STEPS[master][builder]:
+          if step not in steps:
+            raise Exception('master %s builder %s step %s not in steps\n' % (
+                master, builder, step))
+          if ('isFinished' not in steps[step] or
+             steps[step]['isFinished'] is not True):
+            reasons.append('Step %s has not completed (%s)' % (
+                step, steps[step]['isFinished']))
+            continue
+          if 'results' in steps[step]:
+            result = steps[step]['results'][0]
+            if type(result) == list:
+              result = result[0]
+            if result and str(result) not in ('0', '1'):
+              reasons.append('Step %s failed' % step)
+        revision_history.setdefault(revision, {})
+        revision_history.setdefault(revision[revision], {})
+        if reasons:
+          revision_history[revision][master][builder] = False
+          VerbosePrint('  Build %s (rev %s) is bad or incomplete' % (
+              build_num, revision))
+          for reason in reasons:
+            VerbosePrint('    %s' % reason)
+        else:
+          revision_history[revision][master][builder] = True
 
   # Need to fix the sort for git
   # pylint: disable=W0108
@@ -261,7 +276,9 @@ def FindLKGRCandidate(build_history):
   candidate = -1
   green1 = {}
   green2 = {}
-  num_builders = len(LKGR_STEPS)
+  num_builders = 0
+  for master in LKGR_STEPS.keys():
+    num_builders += len(LKGR_STEPS[master])
 
   for entry in build_history:
     if len(green2) == num_builders:
@@ -269,24 +286,26 @@ def FindLKGRCandidate(build_history):
     revision = entry[0]
     history = entry[1]
     if candidate == -1:
-      for (builder, status) in history.iteritems():
+      for master in history.keys():
+        for (builder, status) in history[master].iteritems():
+          if not status:
+            candidate = -1
+            green1.clear()
+            break
+          green1[master + '/' + builder] = revision
+        if len(green1) == num_builders:
+          candidate = revision
+          for builder in history.keys():
+            green2[master + '/' + builder] = revision
+        continue
+    for master in history.keys():
+      for (builder, status) in history[master].iteritems():
         if not status:
           candidate = -1
           green1.clear()
+          green2.clear()
           break
-        green1[builder] = revision
-      if len(green1) == num_builders:
-        candidate = revision
-        for builder in history.keys():
-          green2[builder] = revision
-      continue
-    for (builder, status) in history.iteritems():
-      if not status:
-        candidate = -1
-        green1.clear()
-        green2.clear()
-        break
-      green2[builder] = revision
+        green2[master + '/' + builder] = revision
 
   if candidate != -1 and len(green2) == num_builders:
     VerbosePrint('-' * 80)
@@ -387,15 +406,19 @@ def main():
     return 0
 
   builds = {}
+  # Prime builds with the dictionaries it will need per master.
+  for master in MASTER_TO_BASE_URL.keys():
+    builds.setdefault(master, {})
   fetch_threads = []
   lkgr = -1
 
-  for builder in LKGR_STEPS.keys():
-    th = threading.Thread(target=FetchBuildsMain,
-                          name='Fetch %s' % builder,
-                          args=(builder, builds))
-    th.start()
-    fetch_threads.append(th)
+  for master in LKGR_STEPS.keys():
+    for builder in LKGR_STEPS[master].keys():
+      th = threading.Thread(target=FetchBuildsMain,
+                            name='Fetch %s' % builder,
+                            args=(master, builder, builds))
+      th.start()
+      fetch_threads.append(th)
 
   lkgr_url = '%s/lkgr' % REVISIONS_URL
   try:
@@ -421,11 +444,13 @@ def main():
   # Fix for git
   if candidate != -1 and int(candidate) > lkgr:
     VerbosePrint('Revision %s is new LKGR' % candidate)
-    formdata = ['builder=%s' % urllib2.quote(x) for x in LKGR_STEPS.keys()]
-    formdata = '&'.join(formdata)
-    waterfall = '%s?%s' % (WATERFALL_URL, formdata)
-    VerbosePrint('Waterfall URL:')
-    VerbosePrint(waterfall)
+    for master in LKGR_STEPS.keys():
+      formdata = ['builder=%s' % urllib2.quote(x)
+                  for x in LKGR_STEPS[master].keys()]
+      formdata = '&'.join(formdata)
+      waterfall = '%s?%s' % (MASTER_TO_BASE_URL[master] + '/console', formdata)
+      VerbosePrint('%s Waterfall URL:' % master)
+      VerbosePrint(waterfall)
     if options.post:
       PostLKGR(candidate, options.pwfile, options.dry)
     for master in options.notify:
