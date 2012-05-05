@@ -133,7 +133,6 @@ F('dbg', linux().ChromiumFactory(
     slave_type='NASBuilder',
     target='Debug',
     options=['--compiler=goma',] + linux_all_test_targets + [
-             'plugin_tests',
              'interactive_ui_tests',
            ],
     factory_properties={'trigger': 'linux_dbg_trigger',
@@ -162,7 +161,6 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
            'nacl_integration',
            'gpu',
            'interactive_ui',
-           'plugin',
            'googleurl',
            'media',
            'printing',

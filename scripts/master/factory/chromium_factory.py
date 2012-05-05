@@ -132,7 +132,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/chrome/test/data/firefox3_profile/searchplugins', None),
        ('src/chrome/test/data/firefox3_searchplugins', None),
        ('src/chrome/test/data/ssl/certs', None)],
-    '(plugin|pyauto_functional_tests)':
+    '(pyauto_functional_tests)':
       [('src/chrome/test/data/plugin', None)],
     'unit':
       [('src/chrome/test/data/osdd', None)],
@@ -281,7 +281,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('content'):        f.AddBasicGTestTestStep('content_unittests', fp)
     if R('media'):          f.AddBasicGTestTestStep('media_unittests', fp)
     if R('net'):            f.AddBasicGTestTestStep('net_unittests', fp)
-    if R('plugin'):         f.AddBasicGTestTestStep('plugin_tests', fp)
     if R('printing'):       f.AddBasicGTestTestStep('printing_unittests', fp)
     if R('remoting'):       f.AddBasicGTestTestStep('remoting_unittests', fp)
     if R('test_shell'):     f.AddBasicGTestTestStep('test_shell_tests', fp)

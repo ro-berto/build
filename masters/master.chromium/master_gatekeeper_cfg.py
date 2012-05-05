@@ -28,7 +28,6 @@ categories_steps = {
     'mini_installer_test',
     'nacl_integration',
     'net_unittests',
-    'plugin_tests',
     'printing_unittests',
     'remoting_unittests',
     'sbox_integration_tests',
