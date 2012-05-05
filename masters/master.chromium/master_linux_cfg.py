@@ -49,7 +49,6 @@ linux_all_test_targets = [
   'unit_tests',            # from test target unit
   'gfx_unittests',         # from test target unit
   'browser_tests',
-  'ui_tests',
 ]
 
 
@@ -92,7 +91,6 @@ F('rel_unit', linux_tester().ChromiumFactory(
            'media',
            'printing',
            'remoting',
-           'ui',
            'browser_tests',
            'unit',
            'gpu',
@@ -164,7 +162,6 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
            'nacl_integration',
            'gpu',
            'interactive_ui',
-           'ui',
            'plugin',
            'googleurl',
            'media',
@@ -207,7 +204,6 @@ F('dbg_shared_unit', linux_tester().ChromiumFactory(
            'remoting',
            'sizes',
            'test_shell',
-           'ui',
            'unit', 'crypto',
            'cacheinvalidation',
            'jingle'],

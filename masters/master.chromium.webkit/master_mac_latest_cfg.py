@@ -35,7 +35,7 @@ B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel',
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
     options=['--build-tool=make', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
-    tests=['browser_tests', 'interactive_ui', 'unit', 'ui'],
+    tests=['browser_tests', 'interactive_ui', 'unit'],
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {

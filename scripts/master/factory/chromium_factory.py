@@ -126,7 +126,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/selenium_core', None)],
     'tab_switching':
       [('src/data/tab_switching', None)],
-    'ui':
+    'browser_tests':
       [('src/chrome/test/data/firefox2_profile/searchplugins', None),
        ('src/chrome/test/data/firefox2_searchplugins', None),
        ('src/chrome/test/data/firefox3_profile/searchplugins', None),
@@ -313,7 +313,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('browser_tests'):  f.AddBrowserTests(fp)
 
     # Big, UI tests:
-    if R('ui'):             f.AddUITests(fp)
     if R('nacl_integration'): f.AddNaClIntegrationTestStep(fp)
     if R('nacl_integration_memcheck'):
       f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')

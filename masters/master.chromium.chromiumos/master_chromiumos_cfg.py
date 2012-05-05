@@ -52,7 +52,6 @@ linux_options = [
     #'safe_browsing_tests',
     'sql_unittests',
     'sync_unit_tests',
-    'ui_tests',
     'unit_tests',
     'views_unittests',
 ]
@@ -82,7 +81,7 @@ linux_tests_1 = [
 ]
 
 linux_tests_2 = [ 'browser_tests' ]
-linux_tests_3 = [ 'ui', 'interactive_ui' ]
+linux_tests_3 = [ 'interactive_ui' ]
 
 B('Linux ChromiumOS Builder',
   factory='builder',

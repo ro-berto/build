@@ -198,7 +198,6 @@ processes = [
     'test_shell.exe',
     'test_shell_tests.exe',
     'tld_cleanup.exe',
-    'ui_tests.exe',
     'unit_tests.exe',
     'v8_shell.exe',
     'v8_mksnapshot.exe',

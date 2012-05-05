@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -30,13 +30,6 @@ categories_steps = {
     'memory test: unit',
     'memory test: unit_1',  # it's sharded on Mac Valgrind and TSan Linux
    ],
-  'memory_ui_tester': [
-    # UI tests are flaky on the Mac Valgrind bots (http://crbug.com/51716),
-    # so we watch for UI tests only on Linux and CrOS.
-    # TODO(timurrrr): merge this with memory_tester when the issue is resolved.
-    'memory test: ui',
-    'memory test: ui_1',  # sharded too.
-  ],
   'heapcheck_tester': [
     'heapcheck test: googleurl',
     'heapcheck test: printing',

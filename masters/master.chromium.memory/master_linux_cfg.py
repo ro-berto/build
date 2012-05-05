@@ -42,7 +42,7 @@ F('asan_rel', linux().ChromiumASANFactory(
              'safe_browsing_tests', 'cacheinvalidation_unittests',
              'jingle_unittests', 'sql_unittests', 'ipc_tests',
              'sync_unit_tests', 'content_unittests', 'unit_tests',
-             'gfx_unittests', 'browser_tests', 'ui_tests'],
+             'gfx_unittests', 'browser_tests'],
     factory_properties={
            'gclient_env': {'GYP_DEFINES':
                               ('asan=1 '
@@ -58,7 +58,7 @@ F('asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
        build_url=asan_archive,
     tests=['unit', 'gpu', 'base', 'net', 'safe_browsing', 'crypto',
-           'cacheinvalidation', 'jingle', 'ui'],
+           'cacheinvalidation', 'jingle'],
     factory_properties={'asan': True}))
 
 B('ASAN Tests (2)', 'asan_rel_tests_2', 'testers', 'linux_asan_rel_trigger',

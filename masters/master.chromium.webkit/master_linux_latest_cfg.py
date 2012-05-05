@@ -34,7 +34,7 @@ S('s9_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Linux Tests', 'f_linux_tests_rel', auto_reboot=True,
   scheduler='s9_webkit_rel')
 F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
-    tests=['ui', 'unit', 'browser_tests', 'interactive_ui'],
+    tests=['unit', 'browser_tests', 'interactive_ui'],
     options=['--compiler=goma'],
     factory_properties={'generate_gtest_json': True}))
 

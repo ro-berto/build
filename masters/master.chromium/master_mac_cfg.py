@@ -80,11 +80,9 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
          'nacl_integration',
          'printing',
          'remoting',
-         'safe_browsing',
-         'ui'],
+         'safe_browsing'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 3, 'ui_shard_index': 1,
                       'browser_total_shards': 3, 'browser_shard_index': 1,})
 )
 
@@ -93,10 +91,9 @@ B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
 F('rel_unit_2', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['browser_tests', 'ui', 'unit'],
+  tests=['browser_tests', 'unit'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 3, 'ui_shard_index': 2,
                       'browser_total_shards': 3, 'browser_shard_index': 2,})
 )
 
@@ -105,10 +102,9 @@ B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
 F('rel_unit_3', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['browser_tests', 'net', 'ui'],
+  tests=['browser_tests', 'net'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 3, 'ui_shard_index': 3,
                       'browser_total_shards': 3, 'browser_shard_index': 3,})
 )
 
@@ -180,11 +176,9 @@ F('dbg_unit_1', mac_tester().ChromiumFactory(
          'nacl_integration',
          'printing',
          'remoting',
-         'safe_browsing',
-         'ui'],
+         'safe_browsing'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 4, 'ui_shard_index': 1,
                       'browser_total_shards': 4, 'browser_shard_index': 1,}))
 
 B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
@@ -193,10 +187,9 @@ F('dbg_unit_2', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
-  tests=['browser_tests', 'check_deps', 'media', 'net', 'ui'],
+  tests=['browser_tests', 'check_deps', 'media', 'net'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 4, 'ui_shard_index': 2,
                       'browser_total_shards': 4, 'browser_shard_index': 2,}))
 
 B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
@@ -205,10 +198,9 @@ F('dbg_unit_3', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
-  tests=['base', 'browser_tests', 'interactive_ui', 'ui'],
+  tests=['base', 'browser_tests', 'interactive_ui'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 4, 'ui_shard_index': 3,
                       'browser_total_shards': 4, 'browser_shard_index': 3,}))
 
 B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
@@ -217,10 +209,9 @@ F('dbg_unit_4', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=dbg_archive,
   target='Debug',
-  tests=['browser_tests', 'ui', 'unit'],
+  tests=['browser_tests', 'unit'],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
-                      'ui_total_shards': 4, 'ui_shard_index': 4,
                       'browser_total_shards': 4, 'browser_shard_index': 4,}))
 
 B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',

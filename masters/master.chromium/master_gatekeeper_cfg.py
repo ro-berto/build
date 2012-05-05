@@ -38,7 +38,6 @@ categories_steps = {
     'sql_unittests',
     'start_crash_handler',
     'test_shell_tests',
-    #'ui_tests',
     'unit_tests',
     #'webkit_tests',
    ],

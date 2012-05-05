@@ -487,7 +487,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddPageLoadTests(self, factory_properties=None):
     arg_list = ['--gtest_filter=PageLoad.Reliability']
-    self.AddBasicGTestTestStep('ui_tests', factory_properties,
+    self.AddBasicGTestTestStep('browser_tests', factory_properties,
                                arg_list=arg_list)
 
   def AddDeps2GitStep(self):
@@ -548,17 +548,6 @@ class ChromiumCommands(commands.FactoryCommands):
                                description, options, total_shards=total_shards,
                                shard_index=shard_index)
 
-  def AddUITests(self, factory_properties=None):
-    description = ''
-
-    total_shards = factory_properties.get('ui_total_shards')
-    shard_index = factory_properties.get('ui_shard_index')
-    arg_list = factory_properties.get('ui_tests_filter', [])
-
-    self.AddBasicGTestTestStep('ui_tests', factory_properties,
-                               description, total_shards=total_shards,
-                               shard_index=shard_index, arg_list=arg_list)
-
   def AddDomCheckerTests(self):
     cmd = [self._python, self._test_tool,
            '--target', self._target,
@@ -567,7 +556,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd.extend(['--with-httpd',
                 self.PathJoin('src', 'chrome', 'test', 'data')])
 
-    cmd.extend([self.GetExecutableName('ui_tests'),
+    cmd.extend([self.GetExecutableName('brower_tests'),
                 '--gtest_filter=DomCheckerTest.*',
                 '--gtest_print_time',
                 '--run-dom-checker-test'])
