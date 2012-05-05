@@ -108,8 +108,13 @@ def ShouldPackageFile(filename, options):
       file_filter = '^.+\.(ilk|pdb|7z)$'
   elif chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
-    # need to pull the dSYMs over to the testers.
-    file_filter = '^.+\.(a|dSYM)$'
+    # need to pull the dSYMs over to the testers most of the time (except for
+    # the memory tools).
+    include_dsyms = options.factory_properties.get('package_dsym_files', False)
+    if include_dsyms:
+      file_filter = '^.+\.(a)$'
+    else:
+      file_filter = '^.+\.(a|dSYM)$'
   elif chromium_utils.IsLinux():
     # object files, archives, and gcc (make build) dependency info.
     file_filter = '^.+\.(o|a|d)$'
