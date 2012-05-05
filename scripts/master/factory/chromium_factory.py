@@ -320,7 +320,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('automated_ui'):   f.AddAutomatedUiTests(fp)
     if R('interactive_ui'): f.AddBasicGTestTestStep('interactive_ui_tests', fp)
     if R('dom_checker'):    f.AddDomCheckerTests()
-    if R('page_load'):      f.AddPageLoadTests(fp)
 
     if R('installer'):      f.AddInstallerTests(fp)
 

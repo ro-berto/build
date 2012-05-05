@@ -485,11 +485,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('automated_ui_tests', factory_properties,
                                arg_list=arg_list)
 
-  def AddPageLoadTests(self, factory_properties=None):
-    arg_list = ['--gtest_filter=PageLoad.Reliability']
-    self.AddBasicGTestTestStep('browser_tests', factory_properties,
-                               arg_list=arg_list)
-
   def AddDeps2GitStep(self):
     J = self.PathJoin
     deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
@@ -556,7 +551,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd.extend(['--with-httpd',
                 self.PathJoin('src', 'chrome', 'test', 'data')])
 
-    cmd.extend([self.GetExecutableName('brower_tests'),
+    cmd.extend([self.GetExecutableName('performance_ui_tests'),
                 '--gtest_filter=DomCheckerTest.*',
                 '--gtest_print_time',
                 '--run-dom-checker-test'])
