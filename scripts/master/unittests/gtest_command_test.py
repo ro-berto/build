@@ -23,38 +23,41 @@ FLAKY_FAILURES = ['SomeOtherTest.FLAKY_Baz']
 
 TIMEOUT_MESSAGE = 'Killed (timed out).'
 
-RELOAD_ERRORS = """
-C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:381: Failure
+RELOAD_ERRORS = ('C:\b\slave\chrome-release-snappy\build\chrome\browser'
+'\navigation_controller_unittest.cc:381: Failure' + """
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
 Which is: 0
 
-"""
+""")
 
-SPDY_ERRORS = """
-C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:439: Failure
+SPDY_ERRORS = ('C:\b\slave\chrome-release-snappy\build\chrome\browser'
+'\navigation_controller_unittest.cc:439: Failure' + """
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
 Which is: 0
 
-"""
+""")
 
-SWITCH_ERRORS = """
-C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:615: Failure
+SWITCH_ERRORS = ('C:\b\slave\chrome-release-snappy\build\chrome\browser'
+'\navigation_controller_unittest.cc:615: Failure' + """
 Value of: -1
 Expected: contents->controller()->GetPendingEntryIndex()
 Which is: 0
 
-C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:617: Failure
+""" + 'C:\b\slave\chrome-release-snappy\build\chrome\browser'
+'\navigation_controller_unittest.cc:617: Failure' + """
 Value of: contents->controller()->GetPendingEntry()
   Actual: true
 Expected: false
 
-"""
+""")
 
-TIMEOUT_ERRORS = """
-[61613:263:0531/042613:2887943745568888:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/extensions/extension_error_reporter.cc(56)] Extension error: Could not load extension from 'extensions/api_test/geolocation/no_permission'. Manifest file is missing or unreadable.
-"""
+TIMEOUT_ERRORS = ('[61613:263:0531/042613:2887943745568888:ERROR:/b/slave'
+'/chromium-rel-mac-builder/build/src/chrome/browser/extensions'
+'/extension_error_reporter.cc(56)] Extension error: Could not load extension '
+'from \'extensions/api_test/geolocation/no_permission\'. Manifest file is '
+'missing or unreadable.')
 
 MOREBAD_ERRORS = """
 Value of: entry->page_type()
@@ -62,7 +65,7 @@ Value of: entry->page_type()
 Expected: NavigationEntry::NORMAL_PAGE
 """
 
-TEST_DATA = """
+TEST_DATA = ("""
 [==========] Running 7 tests from 3 test cases.
 [----------] Global test environment set-up.
 [----------] 1 test from HunspellTest
@@ -88,15 +91,26 @@ TEST_DATA = """
 [----------] 1 test from BadTest
 [ RUN      ] BadTest.TimesOut
 %(timeout_errors)s
-[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) exceeded for BadTest.TimesOut
+""" % {'reload_errors': RELOAD_ERRORS,
+       'spdy_errors': SPDY_ERRORS,
+       'timeout_errors': TIMEOUT_ERRORS} +
+'[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome'
+'/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) '
+'exceeded for BadTest.TimesOut' + """
 Handling SIGTERM.
 Successfully wrote to shutdown pipe, resetting signal handler.
-[61613:19971:0531/042642:2887973024284693:INFO:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/browser_main.cc(285)] Handling shutdown for signal 15.
+""" +
+'[61613:19971:0531/042642:2887973024284693:INFO:/b/slave/chromium-rel-mac-'
+'builder/build/src/chrome/browser/browser_main.cc(285)] Handling shutdown for '
+'signal 15.' + """
 
 [----------] 1 test from MoreBadTest
 [ RUN      ] MoreBadTest.TimesOutAndFails
 %(morebad_errors)s
-[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) exceeded for MoreBadTest.TimesOutAndFails
+""" % {'morebad_errors': MOREBAD_ERRORS} +
+'[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test'
+'/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) '
+'exceeded for MoreBadTest.TimesOutAndFails' + """
 Handling SIGTERM.
 Successfully wrote to shutdown pipe, resetting signal handler.
 [  FAILED  ] MoreBadTest.TimesOutAndFails (31000 ms)
@@ -129,11 +143,7 @@ Some error message for a flaky test.
   YOU HAVE 2 FLAKY TESTS
 
 program finished with exit code 1
-""" % {'reload_errors' : RELOAD_ERRORS,
-       'spdy_errors'   : SPDY_ERRORS,
-       'switch_errors' : SWITCH_ERRORS,
-       'timeout_errors': TIMEOUT_ERRORS,
-       'morebad_errors': MOREBAD_ERRORS}
+""" % {'switch_errors' : SWITCH_ERRORS})
 
 TEST_DATA_CRASH = """
 [==========] Running 7 tests from 3 test cases.
@@ -200,36 +210,45 @@ FAILURES_SHARD = ['12>NavigationControllerTest.Reload',
 FAILS_FAILURES_SHARD = ['0>SomeOtherTest.FAILS_Bar']
 FLAKY_FAILURES_SHARD = ['0>SomeOtherTest.FLAKY_Baz']
 
-RELOAD_ERRORS_SHARD = r"""12>C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:381: Failure
+RELOAD_ERRORS_SHARD =  ('12>C:\b\slave\chrome-release-snappy\build\chrome'
+'\browser\navigation_controller_unittest.cc:381: Failure' + """
 12>Value of: -1
 12>Expected: contents->controller()->GetPendingEntryIndex()
 12>Which is: 0
-12>"""
+12>""")
 
-SPDY_ERRORS_SHARD = r"""12>C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:439: Failure
+SPDY_ERRORS_SHARD = ('12>C:\b\slave\chrome-release-snappy\build\chrome\browser'
+'\navigation_controller_unittest.cc:439: Failure' + """
 12>Value of: -1
 12>Expected: contents->controller()->GetPendingEntryIndex()
 12>Which is: 0
-12>"""
+12>""")
 
-SWITCH_ERRORS_SHARD = r"""0>C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:615: Failure
+SWITCH_ERRORS_SHARD = ('0>C:\b\slave\chrome-release-snappy\build\chrome\browser'
+'\navigation_controller_unittest.cc:615: Failure' + """
 0>Value of: -1
 0>Expected: contents->controller()->GetPendingEntryIndex()
 0>Which is: 0
 0>
-0>C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_unittest.cc:617: Failure
+""" +
+'0>C:\b\slave\chrome-release-snappy\build\chrome\browser\navigation_controller_'
+'unittest.cc:617: Failure' + """
 0>Value of: contents->controller()->GetPendingEntry()
 0>  Actual: true
 0>Expected: false
-0>"""
+0>""")
 
-TIMEOUT_ERRORS_SHARD = """0>[61613:263:0531/042613:2887943745568888:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/extensions/extension_error_reporter.cc(56)] Extension error: Could not load extension from 'extensions/api_test/geolocation/no_permission'. Manifest file is missing or unreadable."""
+TIMEOUT_ERRORS_SHARD = ('0>[61613:263:0531/042613:2887943745568888:ERROR:/b'
+'/slave/chromium-rel-mac-builder/build/src/chrome/browser/extensions'
+'/extension_error_reporter.cc(56)] Extension error: Could not load extension '
+'from \'extensions/api_test/geolocation/no_permission\'. Manifest file is '
+'missing or unreadable.')
 
 MOREBAD_ERRORS_SHARD = """12>Value of: entry->page_type()
 12>  Actual: 2
 12>Expected: NavigationEntry::NORMAL_PAGE"""
 
-TEST_DATA_SHARD_0 = """0>Note: This is test shard 1 of 30.
+TEST_DATA_SHARD_0 = ("""0>Note: This is test shard 1 of 30.
 0>[==========] Running 6 tests from 3 test cases.
 0>[----------] Global test environment set-up.
 0>[----------] 1 test from HunspellTest
@@ -240,10 +259,16 @@ TEST_DATA_SHARD_0 = """0>Note: This is test shard 1 of 30.
 0>[----------] 1 test from BadTest
 0>[ RUN      ] BadTest.TimesOut
 %(timeout_errors)s
-0>[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) exceeded for BadTest.TimesOut
+""" % {'timeout_errors': TIMEOUT_ERRORS_SHARD} +
+'0>[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test'
+'/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) '
+'exceeded for BadTest.TimesOut' + """
 0>Handling SIGTERM.
 0>Successfully wrote to shutdown pipe, resetting signal handler.
-0>[61613:19971:0531/042642:2887973024284693:INFO:/b/slave/chromium-rel-mac-builder/build/src/chrome/browser/browser_main.cc(285)] Handling shutdown for signal 15.
+""" +
+'0>[61613:19971:0531/042642:2887973024284693:INFO:/b/slave/chromium-rel-mac-'
+'builder/build/src/chrome/browser/browser_main.cc(285)] Handling shutdown for '
+'signal 15.' + """
 0>
 0>[----------] 4 tests from SomeOtherTest
 0>[ RUN      ] SomeOtherTest.SwitchTypes
@@ -269,10 +294,9 @@ TEST_DATA_SHARD_0 = """0>Note: This is test shard 1 of 30.
 0>  YOU HAVE 10 DISABLED TESTS
 0>
 0>  YOU HAVE 2 FLAKY TESTS
-0>""" % {'switch_errors' : SWITCH_ERRORS_SHARD,
-       'timeout_errors': TIMEOUT_ERRORS_SHARD}
+0>""" % {'switch_errors' : SWITCH_ERRORS_SHARD})
 
-TEST_DATA_SHARD_1 = """12>Note: This is test shard 13 of 30.
+TEST_DATA_SHARD_1 = ("""12>Note: This is test shard 13 of 30.
 12>[==========] Running 5 tests from 2 test cases.
 12>[----------] Global test environment set-up.
 12>[----------] 4 tests from NavigationControllerTest
@@ -285,7 +309,10 @@ TEST_DATA_SHARD_1 = """12>Note: This is test shard 13 of 30.
 12>[       OK ] NavigationControllerTest.Reload_GeneratesNewPage (22 ms)
 12>[ RUN      ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0
 %(spdy_errors)s
-12>[  FAILED  ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0 (2 ms)
+""" % {'reload_errors' : RELOAD_ERRORS_SHARD,
+       'spdy_errors'   : SPDY_ERRORS_SHARD} +
+'12>[  FAILED  ] NavigationControllerTest/SpdyNetworkTransTest.Constructor'
+'/0 (2 ms)' + """
 12>[----------] 4 tests from NavigationControllerTest (74 ms total)
 12>
 12>  YOU HAVE 2 FLAKY TESTS
@@ -293,7 +320,10 @@ TEST_DATA_SHARD_1 = """12>Note: This is test shard 13 of 30.
 12>[----------] 1 test from MoreBadTest
 12>[ RUN      ] MoreBadTest.TimesOutAndFails
 %(morebad_errors)s
-12>[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) exceeded for MoreBadTest.TimesOutAndFails
+""" % {'morebad_errors': MOREBAD_ERRORS_SHARD} +
+'12>[0531/042642:ERROR:/b/slave/chromium-rel-mac-builder/build/src/chrome/test'
+'/test_launcher/out_of_proc_test_runner.cc(79)] Test timeout (30000 ms) '
+'exceeded for MoreBadTest.TimesOutAndFails' + """
 12>Handling SIGTERM.
 12>Successfully wrote to shutdown pipe, resetting signal handler.
 12>[  FAILED  ] MoreBadTest.TimesOutAndFails (31000 ms)
@@ -309,9 +339,7 @@ TEST_DATA_SHARD_1 = """12>Note: This is test shard 13 of 30.
 12>  YOU HAVE 10 DISABLED TESTS
 12>
 12>  YOU HAVE 2 FLAKY TESTS
-12>""" % {'reload_errors' : RELOAD_ERRORS_SHARD,
-       'spdy_errors'   : SPDY_ERRORS_SHARD,
-       'morebad_errors': MOREBAD_ERRORS_SHARD}
+12>""")
 
 TEST_DATA_SHARD_EXIT = 'program finished with exit code '
 
