@@ -9,7 +9,7 @@ import unittest
 
 import test_env  # pylint: disable=W0611
 
-from master.log_parser import gtest_command
+from common import gtest_utils
 
 
 FAILURES = ['NavigationControllerTest.Reload',
@@ -202,7 +202,8 @@ FAILING_TESTS_EXPECTED = ['ChromeRenderViewTest.FAILS_AllowDOMStorage',
 
 
 FAILURES_SHARD = ['12>NavigationControllerTest.Reload',
-                  '12>NavigationControllerTest/SpdyNetworkTransTest.Constructor/0',
+                  '12>NavigationControllerTest/SpdyNetworkTransTest.Constructor'
+                  '/0',
                   '0>BadTest.TimesOut',
                   '12>MoreBadTest.TimesOutAndFails',
                   '0>SomeOtherTest.SwitchTypes']
@@ -430,7 +431,7 @@ TEST_DATA_OK_DUPLICATE_SHARD_0 = """0>Note: This is test shard 1 of 30.
 0>"""
 
 
-class TestObserverTests(unittest.TestCase):
+class TestGTestLogParserTests(unittest.TestCase):
   @staticmethod
   def AlternateShards(shard_0, shard_1):
     # Returns a list of alternating lines from the two shards such that the
@@ -449,115 +450,115 @@ class TestObserverTests(unittest.TestCase):
       which += 1
     return test_data_shard
 
-  def testLogLineObserver(self):
+  def testGTestLogParser(self):
     # Tests for log parsing without sharding.
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA.splitlines():
-      observer.outLineReceived(line)
+      parser.ProcessLine(line)
 
-    self.assertEqual(0, len(observer.internal_error_lines))
-    self.assertFalse(observer.RunningTests())
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertFalse(parser.RunningTests())
 
-    self.assertEqual(sorted(FAILURES), sorted(observer.FailedTests()))
+    self.assertEqual(sorted(FAILURES), sorted(parser.FailedTests()))
     self.assertEqual(sorted(FAILURES + FAILS_FAILURES),
-                     sorted(observer.FailedTests(include_fails=True)))
+                     sorted(parser.FailedTests(include_fails=True)))
     self.assertEqual(sorted(FAILURES + FLAKY_FAILURES),
-                     sorted(observer.FailedTests(include_flaky=True)))
+                     sorted(parser.FailedTests(include_flaky=True)))
     self.assertEqual(sorted(FAILURES + FAILS_FAILURES + FLAKY_FAILURES),
-        sorted(observer.FailedTests(include_fails=True, include_flaky=True)))
+        sorted(parser.FailedTests(include_fails=True, include_flaky=True)))
 
-    self.assertEqual(10, observer.disabled_tests)
-    self.assertEqual(2, observer.flaky_tests)
+    self.assertEqual(10, parser.DisabledTests())
+    self.assertEqual(2, parser.FlakyTests())
 
     test_name = 'NavigationControllerTest.Reload'
     self.assertEqual('\n'.join(['%s: ' % test_name, RELOAD_ERRORS]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = 'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0'
     self.assertEqual('\n'.join(['%s: ' % test_name, SPDY_ERRORS]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = 'SomeOtherTest.SwitchTypes'
     self.assertEqual('\n'.join(['%s: ' % test_name, SWITCH_ERRORS]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = 'BadTest.TimesOut'
     self.assertEqual('\n'.join(['%s: ' % test_name,
                                 TIMEOUT_ERRORS, TIMEOUT_MESSAGE]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = 'MoreBadTest.TimesOutAndFails'
     self.assertEqual('\n'.join(['%s: ' % test_name,
                                 MOREBAD_ERRORS, TIMEOUT_MESSAGE]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA_CRASH.splitlines():
-      observer.outLineReceived(line)
+      parser.ProcessLine(line)
 
-    self.assertEqual(0, len(observer.internal_error_lines))
-    self.assertTrue(observer.RunningTests())
-    self.assertEqual(['HunspellTest.Crashes'], observer.FailedTests())
-    self.assertEqual(0, observer.disabled_tests)
-    self.assertEqual(0, observer.flaky_tests)
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertTrue(parser.RunningTests())
+    self.assertEqual(['HunspellTest.Crashes'], parser.FailedTests())
+    self.assertEqual(0, parser.DisabledTests())
+    self.assertEqual(0, parser.FlakyTests())
 
     test_name = 'HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA_VALGRIND.splitlines():
-      observer.outLineReceived(line)
+      parser.ProcessLine(line)
 
-    self.assertEqual(0, len(observer.internal_error_lines))
-    self.assertFalse(observer.RunningTests())
-    self.assertFalse(observer.FailedTests())
-    self.assertEqual([VALGRIND_HASH], observer.SuppressionHashes())
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertFalse(parser.RunningTests())
+    self.assertFalse(parser.FailedTests())
+    self.assertEqual([VALGRIND_HASH], parser.SuppressionHashes())
     self.assertEqual(VALGRIND_SUPPRESSION,
-                     '\n'.join(observer.Suppression(VALGRIND_HASH)))
+                     '\n'.join(parser.Suppression(VALGRIND_HASH)))
 
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     for line in FAILING_TESTS_OUTPUT.splitlines():
-      observer.outLineReceived(line)
+      parser.ProcessLine(line)
     self.assertEqual(FAILING_TESTS_EXPECTED,
-                     observer.FailedTests(True, True))
+                     parser.FailedTests(True, True))
 
-  def DISABLED_testLogLineObserverSharding(self):
+  def DISABLED_testLogLineParserSharding(self):
     # Same tests for log parsing with sharding_supervisor.
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     test_data_shard = self.AlternateShards(
         TEST_DATA_SHARD_0, TEST_DATA_SHARD_1)
     for line in test_data_shard:
-      observer.outLineReceived(line)
-    observer.outLineReceived(TEST_DATA_SHARD_EXIT + '2')
+      parser.ProcessLine(line)
+    parser.ProcessLine(TEST_DATA_SHARD_EXIT + '2')
 
-    self.assertEqual(0, len(observer.internal_error_lines))
-    self.assertFalse(observer.RunningTests())
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertFalse(parser.RunningTests())
 
-    self.assertEqual(sorted(FAILURES_SHARD), sorted(observer.FailedTests()))
+    self.assertEqual(sorted(FAILURES_SHARD), sorted(parser.FailedTests()))
     self.assertEqual(sorted(FAILURES_SHARD + FAILS_FAILURES_SHARD),
-                     sorted(observer.FailedTests(include_fails=True)))
+                     sorted(parser.FailedTests(include_fails=True)))
     self.assertEqual(sorted(FAILURES_SHARD + FLAKY_FAILURES_SHARD),
-                     sorted(observer.FailedTests(include_flaky=True)))
+                     sorted(parser.FailedTests(include_flaky=True)))
     self.assertEqual(sorted(
         FAILURES_SHARD + FAILS_FAILURES_SHARD + FLAKY_FAILURES_SHARD),
-        sorted(observer.FailedTests(include_fails=True, include_flaky=True)))
+        sorted(parser.FailedTests(include_fails=True, include_flaky=True)))
 
-    self.assertEqual(10, observer.disabled_tests)
-    self.assertEqual(2, observer.flaky_tests)
+    self.assertEqual(10, parser.DisabledTests())
+    self.assertEqual(2, parser.FlakyTests())
 
     test_name = '12>NavigationControllerTest.Reload'
     self.assertEqual('\n'.join(['%s: ' % test_name, RELOAD_ERRORS_SHARD]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = (
         '12>NavigationControllerTest/SpdyNetworkTransTest.Constructor/0')
     self.assertEqual('\n'.join(['%s: ' % test_name, SPDY_ERRORS_SHARD]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = '0>SomeOtherTest.SwitchTypes'
     self.assertEqual('\n'.join(['%s: ' % test_name, SWITCH_ERRORS_SHARD]),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     test_name = 'BadTest.TimesOut'
     test_shard = '0>'
@@ -565,7 +566,7 @@ class TestObserverTests(unittest.TestCase):
     self.assertEqual(
         '\n'.join(['%s: ' % test_sharded_name,
         TIMEOUT_ERRORS_SHARD, TIMEOUT_MESSAGE]),
-        '\n'.join(observer.FailureDescription(test_sharded_name)))
+        '\n'.join(parser.FailureDescription(test_sharded_name)))
 
     test_name = 'MoreBadTest.TimesOutAndFails'
     test_shard = '12>'
@@ -573,62 +574,62 @@ class TestObserverTests(unittest.TestCase):
     self.assertEqual(
         '\n'.join(['%s: ' % test_sharded_name,
         MOREBAD_ERRORS_SHARD, TIMEOUT_MESSAGE]),
-        '\n'.join(observer.FailureDescription(test_sharded_name)))
+        '\n'.join(parser.FailureDescription(test_sharded_name)))
 
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA_CRASH_SHARD.splitlines():
-      observer.outLineReceived(line)
+      parser.ProcessLine(line)
 
-    self.assertEqual(0, len(observer.internal_error_lines))
-    self.assertTrue(observer.RunningTests())
-    self.assertEqual(['4>HunspellTest.Crashes'], observer.FailedTests())
-    self.assertEqual(0, observer.disabled_tests)
-    self.assertEqual(0, observer.flaky_tests)
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertTrue(parser.RunningTests())
+    self.assertEqual(['4>HunspellTest.Crashes'], parser.FailedTests())
+    self.assertEqual(0, parser.DisabledTests())
+    self.assertEqual(0, parser.FlakyTests())
 
     test_name = '4>HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),
-                     '\n'.join(observer.FailureDescription(test_name)))
+                     '\n'.join(parser.FailureDescription(test_name)))
 
     # Test that duplicates are caught when not sharding.
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     for line in TEST_DATA_DUPLICATE.splitlines():
-      observer.outLineReceived(line)
+      parser.ProcessLine(line)
 
-    self.assertEqual(1, len(observer.internal_error_lines))
-    self.assertFalse(observer.RunningTests())
+    self.assertEqual(1, len(parser.ParsingErrors()))
+    self.assertFalse(parser.RunningTests())
 
     test_reasons = [line.split(': ')[1]
-                    for line in observer.internal_error_lines]
+                    for line in parser.ParsingErrors()]
     self.assertTrue(
         '%s [%s]' % (TEST_DUPLICATE_LINE, DUPLICATE_MESSAGE) in test_reasons)
 
     # Test that duplicates are caught when they are in the same shard.
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     test_data_shard = self.AlternateShards(
         TEST_DATA_BAD_DUPLICATE_SHARD_0, TEST_DATA_SHARD_1)
     for line in test_data_shard:
-      observer.outLineReceived(line)
-    observer.outLineReceived(TEST_DATA_SHARD_EXIT + '1')
+      parser.ProcessLine(line)
+    parser.ProcessLine(TEST_DATA_SHARD_EXIT + '1')
 
-    self.assertEqual(1, len(observer.internal_error_lines))
-    self.assertFalse(observer.RunningTests())
+    self.assertEqual(1, len(parser.ParsingErrors()))
+    self.assertFalse(parser.RunningTests())
 
     test_shard = '0>'
     test_reasons = [line.split(': ')[1]
-                    for line in observer.internal_error_lines]
+                    for line in parser.ParsingErrors()]
     self.assertTrue('%s%s [%s]' % (
         test_shard, TEST_DUPLICATE_LINE, DUPLICATE_MESSAGE) in test_reasons)
 
     # Test that duplicates are ignored when they are in different shards.
-    observer = gtest_command.TestObserver()
+    parser = gtest_utils.GTestLogParser()
     test_data_shard = self.AlternateShards(
         TEST_DATA_OK_DUPLICATE_SHARD_0, TEST_DATA_SHARD_1)
     for line in test_data_shard:
-      observer.outLineReceived(line)
-    observer.outLineReceived(TEST_DATA_SHARD_EXIT + '1')
+      parser.ProcessLine(line)
+    parser.ProcessLine(TEST_DATA_SHARD_EXIT + '1')
 
-    self.assertEqual(0, len(observer.internal_error_lines))
-    self.assertFalse(observer.RunningTests())
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertFalse(parser.RunningTests())
 
 
 if __name__ == '__main__':
