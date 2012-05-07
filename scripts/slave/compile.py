@@ -348,9 +348,6 @@ def main_xcode(options, args):
   if options.xcode_target:
     command.extend(['-target', options.xcode_target])
 
-  if not options.goma_dir:
-    options.goma_dir = os.path.join(BUILD_DIR, 'goma')
-
   # Note: this clobbers all targets, not just Debug or Release.
   if options.clobber:
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
@@ -616,8 +613,6 @@ def main_make(options, args):
     # build from the top-level Makefile.
     working_dir = src_dir
 
-  if not options.goma_dir:
-    options.goma_dir = os.path.join(BUILD_DIR, 'goma')
   if options.clobber:
     build_output_dir = os.path.join(working_dir, 'out', options.target)
     print('Removing %s' % build_output_dir)
@@ -701,8 +696,38 @@ def main_ninja(options, args):
   command.extend(options.build_args)
   command.extend(args)
 
-  # Run the build.
+  # Prepare environment.
   env = EchoDict(os.environ)
+
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+  if options.compiler in ('goma', 'goma-clang'):
+    # If using the Goma compiler, first call goma_ctl with ensure_start
+    # (or restart in clobber mode) to ensure the proxy is available.
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
+    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
+    if options.clobber:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+    else:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+
+    # CC and CXX are set at gyp time for ninja. PATH still needs to be adjusted.
+    print 'using', options.compiler
+    if options.compiler == 'goma':
+      env['PATH'] = ':'.join([options.goma_dir, env['PATH']])
+    elif options.compiler == 'goma-clang':
+      clang_dir = os.path.abspath(os.path.join(
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+      env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
+
+    goma_jobs = 100 if not chromium_utils.IsMac() else 50
+    command.append('-j%d' % goma_jobs)
+
+    if chromium_utils.IsMac() and options.clobber:
+      env['GOMA_USE_LOCAL'] = '0'
+
+  # Run the build.
   env.print_overrides()
   return chromium_utils.RunCommand(command, env=env)
 
@@ -992,7 +1017,8 @@ def real_main():
     option_parser.add_option('', '--xcode-target', default=None,
                              help='Target from the xcodeproj file')
   if chromium_utils.IsLinux() or chromium_utils.IsMac():
-    option_parser.add_option('', '--goma-dir', default=None,
+    option_parser.add_option('', '--goma-dir',
+                             default=os.path.join(BUILD_DIR, 'goma'),
                              help='specify goma directory')
   option_parser.add_option('--verbose', action='store_true')
 
