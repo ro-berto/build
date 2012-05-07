@@ -21,9 +21,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
 
-  # On valgrind bots, override the optimizer settings so we don't inline too
-  # much and make the stacks harder to figure out. Use the same settings
-  # on all buildbot masters to make it easier to move bots.
+  # TODO(rnk): crbug.com/109780, delete this once we've tested that
+  # build_for_tool= works on the FYI bots.
   MEMORY_TOOLS_GYP_DEFINES = (
     # gcc flags
     'mac_debug_optimization=1 '
@@ -526,7 +525,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # already set.
     gclient_env = factory_properties.setdefault('gclient_env', {})
     gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
-    if 'component=' not in gyp_defines:
+    if ('component=' not in gyp_defines and
+        'build_for_tool=' not in gyp_defines):
       # Sets the default to shared.
       gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
 
