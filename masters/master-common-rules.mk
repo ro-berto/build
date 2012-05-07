@@ -1,4 +1,7 @@
 # -*- makefile -*-
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
 
 # This should be included by a makefile which lives in a buildmaster/buildslave
 # directory (next to the buildbot.tac file). That including makefile *must*
