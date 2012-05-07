@@ -42,7 +42,7 @@ USE_LAUNCHD := \
           echo 1)
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
-start: upgrade
+start: bootstrap
 else
 start:
 endif
@@ -53,7 +53,7 @@ else
 endif
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
-start-prof: upgrade
+start-prof: bootstrap
 else
 start-prof:
 endif
@@ -88,7 +88,14 @@ restart-prof: stop wait start-prof log
 
 # This target is only known to work on 0.8.x masters.
 upgrade:
-	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
+	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || \
+	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
+
+# This target is only known to be useful on 0.8.x masters.
+bootstrap:
+	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || \
+	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/tools/state_create.py \
+	--restore --db='state.sqlite' --txt '../state-template.txt'
 
 setup:
 	@echo export PYTHONPATH=$(PYTHONPATH)
