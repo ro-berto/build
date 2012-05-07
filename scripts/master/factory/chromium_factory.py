@@ -254,6 +254,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # http://build.chromium.org/buildbot/waterfall/stats into account.
     # Tests that fail more often should be earlier in the queue.
 
+    # Run interactive_ui_tests first to make sure it does not fail if another
+    # test running before it leaks a window or a popup (crash dialog, etc).
+    if R('interactive_ui'): f.AddBasicGTestTestStep('interactive_ui_tests', fp)
+
     # Check for an early bail.  Do early since this may cancel other tests.
     if R('check_lkgr'):     f.AddCheckLKGRStep()
 
@@ -317,7 +321,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('nacl_integration_tsan'):
       f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
     if R('automated_ui'):   f.AddAutomatedUiTests(fp)
-    if R('interactive_ui'): f.AddBasicGTestTestStep('interactive_ui_tests', fp)
     if R('dom_checker'):    f.AddDomCheckerTests()
 
     if R('installer'):      f.AddInstallerTests(fp)
