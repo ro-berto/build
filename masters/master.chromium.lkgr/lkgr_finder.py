@@ -61,7 +61,6 @@ import threading
 import urllib
 import urllib2
 
-import buildbot.scripts.runner
 
 VERBOSE = True
 
@@ -215,9 +214,9 @@ def FetchBuildsMain(master, builder, builds):
   except urllib2.URLError:
     VerbosePrint('URLException while fetching %s' % url)
 
-def CollateRevisionHistory(builds):
+def CollateRevisionHistory(builds, lkgr_steps):
   """Organize builder data into:
-  build_history = [ (revision, {builder: True/False, ...}), ... ]
+  build_history = [ (revision, {master: {builder: True/False, ...}, ...}), ... ]
   ... and sort revisions chronologically, latest revision first
   """
   # revision_history[revision][builder] = True/False (success/failure)
@@ -234,7 +233,7 @@ def CollateRevisionHistory(builds):
         reasons = []
         for step in build_data['steps']:
           steps[step['name']] = step
-        for step in LKGR_STEPS[master][builder]:
+        for step in lkgr_steps[master][builder]:
           if step not in steps:
             raise Exception('master %s builder %s step %s not in steps\n' % (
                 master, builder, step))
@@ -267,7 +266,7 @@ def CollateRevisionHistory(builds):
 
   return build_history
 
-def FindLKGRCandidate(build_history):
+def FindLKGRCandidate(build_history, lkgr_steps):
   """Given a build_history of builds, run the algorithm for finding an LKGR
   candidate (refer to the algorithm description at the top of this script).
   green1 and green2 record the sequence of two successful builds that are
@@ -277,8 +276,8 @@ def FindLKGRCandidate(build_history):
   green1 = {}
   green2 = {}
   num_builders = 0
-  for master in LKGR_STEPS.keys():
-    num_builders += len(LKGR_STEPS[master])
+  for master in lkgr_steps.keys():
+    num_builders += len(lkgr_steps[master])
 
   for entry in build_history:
     if len(green2) == num_builders:
@@ -286,11 +285,15 @@ def FindLKGRCandidate(build_history):
     revision = entry[0]
     history = entry[1]
     if candidate == -1:
+      master_loop_must_break = False
       for master in history.keys():
+        if master_loop_must_break:
+          break
         for (builder, status) in history[master].iteritems():
           if not status:
             candidate = -1
             green1.clear()
+            master_loop_must_break = True
             break
           green1[master + '/' + builder] = revision
       if len(green1) == num_builders:
@@ -367,6 +370,7 @@ def NotifyMaster(master, lkgr, dry=False):
         'no file information']
     if dry:
       return
+    import buildbot.scripts.runner
     buildbot.scripts.runner.run()
 
   p = multiprocessing.Process(None, _NotifyMain, 'notify-%s' % master)
@@ -440,8 +444,8 @@ def main():
   for th in fetch_threads:
     th.join()
 
-  build_history = CollateRevisionHistory(builds)
-  candidate = FindLKGRCandidate(build_history)
+  build_history = CollateRevisionHistory(builds, LKGR_STEPS)
+  candidate = FindLKGRCandidate(build_history, LKGR_STEPS)
 
   VerbosePrint('-' * 80)
   VerbosePrint('LKGR=%d' % lkgr)
