@@ -63,18 +63,18 @@ F('arm', chromeos_factory.CbuildbotFactory(
   params='arm-generic-tot-chrome-pfq-informational').get_factory())
 
 
-B('ChromiumOS (daisy)',
-  factory='daisy',
+B('ChromiumOS (tegra2)',
+  factory='tegra2',
   gatekeeper='closer|watch',
-  builddir='chromium-tot-chromeos-daisy',
+  builddir='chromium-tot-chromeos-tegra2',
   scheduler='chromium_cros',
   auto_reboot=True,
   notify_on_missing=True)
-F('daisy', chromeos_factory.CbuildbotFactory(
-  buildroot='/b/cbuild.daisy',
+F('tegra2', chromeos_factory.CbuildbotFactory(
+  buildroot='/b/cbuild.tegra2',
   crostools_repo=None,
   pass_revision=True,
-  params='daisy-tot-chrome-pfq-informational').get_factory())
+  params='arm-tegra2-tot-chrome-pfq-informational').get_factory())
 
 
 def Update(config, active_master, c):
