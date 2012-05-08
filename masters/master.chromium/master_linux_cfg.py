@@ -24,7 +24,6 @@ def linux_tester():
 sharded_tests = [
   'base_unittests',
   'browser_tests',
-  'content_unittests',
   'media_unittests',
 ]
 
