@@ -293,17 +293,22 @@ def FindLKGRCandidate(build_history):
             green1.clear()
             break
           green1[master + '/' + builder] = revision
-        if len(green1) == num_builders:
-          candidate = revision
-          for builder in history.keys():
+      if len(green1) == num_builders:
+        candidate = revision
+        for master in history.keys():
+          for builder in history[master].keys():
             green2[master + '/' + builder] = revision
-        continue
+      continue
+    master_loop_must_break = False
     for master in history.keys():
+      if master_loop_must_break:
+        break
       for (builder, status) in history[master].iteritems():
         if not status:
           candidate = -1
           green1.clear()
           green2.clear()
+          master_loop_must_break = True
           break
         green2[master + '/' + builder] = revision
 
