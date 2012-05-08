@@ -13,6 +13,7 @@ import platform
 import socket
 import sys
 import time
+import urllib
 import urllib2
 import zipfile
 
@@ -112,7 +113,7 @@ class Manifest(object):
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        'http://%s/%s' % (hostname, filepath),
+        'http://%s/%s' % (hostname, urllib.quote(filepath)),
       ],
       'tests': self.tasks,
       'env_vars': {
