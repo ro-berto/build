@@ -41,22 +41,13 @@ class Manifest(object):
       'darwin': 'Mac'
       }
 
-    # This can cause problems when
-    # |current_platform| != |switches_dict['os_image']|
-    # crbug.com/117442
-    current_platform = platform_mapping[sys.platform]
-    switches_dict = {
-      'num_shards': switches.num_shards,
-      'os_image': current_platform,
-    }
     self.manifest_name = filename
 
     self.g_shards = switches.num_shards
     # Random name for the output zip file
     self.zipfile_name = test_name + '.zip'
     self.tasks = []
-    self.current_platform = current_platform
-    self.target_platform = switches_dict['os_image']
+    self.target_platform = platform_mapping[switches.os_image]
     self.working_dir = switches.working_dir
     self.test_name = test_name
 
@@ -87,20 +78,21 @@ class Manifest(object):
     # has been fixed.
     hostname += ':8080'
 
-    # pylint: disable=E1103
-    filepath = os.path.relpath(self.zipfile_name, '../..').replace('\\', '/')
+    filepath = os.path.relpath(self.zipfile_name, '../..')
+    filepath_url = urllib.pathname2url(filepath)
 
-    url = 'http://%s/hashtable/' % hostname
+    hashtable_url = 'http://%s/hashtable/' % hostname
     self.add_task(
         'Run Test',
-        ['python', self.run_test_path, '-m', self.manifest_name, '-r', url])
+        ['python', self.run_test_path, '-m', self.manifest_name,
+         '-r', hashtable_url])
 
     # Clean up
     # TODO(csharp) This can be removed once the swarm cleanup parameter is
     # properly handled.
-    if self.current_platform == 'Linux' or self.current_platform == 'Mac':
+    if self.target_platform == 'Linux' or self.target_platform == 'Mac':
       cleanup_commands = ['rm', '-rf']
-    elif self.current_platform == 'Windows':
+    elif self.target_platform == 'Windows':
       cleanup_commands = ['del']
     self.add_task('Clean Up', cleanup_commands + [self.zipfile_name])
 
@@ -113,7 +105,7 @@ class Manifest(object):
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        'http://%s/%s' % (hostname, urllib.quote(filepath)),
+        'http://%s/%s' % (hostname, filepath_url),
       ],
       'tests': self.tasks,
       'env_vars': {
