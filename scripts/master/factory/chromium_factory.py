@@ -551,6 +551,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties = (factory_properties or {}).copy()
     factory_properties['gclient_env'] = \
         factory_properties.get('gclient_env', {}).copy()
+    # Defaults gyp to VS2010.
+    if self._target_platform == 'win32':
+      factory_properties['gclient_env'].setdefault('GYP_MSVS_VERSION', '2010')
     tests = tests or []
 
     if factory_properties.get("needs_valgrind"):
