@@ -5,8 +5,10 @@
 
 import test_env  # pylint: disable=W0403,W0611
 
+import json
 import StringIO
 import unittest
+import urllib2
 
 from testing_support.super_mox import mox
 from testing_support.super_mox import SuperMoxTestBase
@@ -14,61 +16,103 @@ from testing_support.super_mox import SuperMoxTestBase
 import slave.get_swarm_results as swarm_results
 
 
-class TestRunSummaryTest(unittest.TestCase):
-  def test_correct_output(self):
-    summary_output = [
-        ('[  PASSED  ] 10 tests.\n'
-         'YOU HAVE 1 DISABLED TESTS\n'
-         'YOU HAVE 1 test with ignored failures (FAILS prefix)'),
-        ('[  PASSED  ] 10 tests\n'
-         '[  FAILED  ] 1 test, listed below:\n'
-         '[  FAILED  ] ObserverListThreadSafeTest.RemoveObserver\n'
-         '1 FAILED TEST\n'
-         'YOU HAVE 2 DISABLED TESTS\n'
-         'YOU HAVE 2 test with ignored failures (FAILS prefix)\n')]
+RUN_TEST_OUTPUT = (
+"""[----------] 2 tests from StaticCookiePolicyTest
+[ RUN      ] StaticCookiePolicyTest.AllowAllCookiesTest
+[       OK ] StaticCookiePolicyTest.AllowAllCookiesTest (0 ms)
+[ RUN      ] StaticCookiePolicyTest.BlockAllCookiesTest
+[       OK ] StaticCookiePolicyTest.BlockAllCookiesTest (0 ms)
+[----------] 2 tests from StaticCookiePolicyTest (0 ms total)
 
-    expected_output = ['[  PASSED  ] 20 tests.',
-                       '[  FAILED  ] failed tests listed below:',
-                       '[  FAILED  ] ObserverListThreadSafeTest.RemoveObserver',
-                       '1 FAILED TESTS',
-                       '3 DISABLED TESTS',
-                       '3 tests with ignored failures (FAILS prefix)']
+[----------] 1 test from TCPListenSocketTest
+[ RUN      ] TCPListenSocketTest.ServerSend
+[       OK ] TCPListenSocketTest.ServerSend (1 ms)
+[----------] 1 test from TCPListenSocketTest (1 ms total)
+""")
 
-    summary = swarm_results.TestRunSummary()
+RUN_TEST_OUTPUT_FAILURE = (
+"""[----------] 2 tests from StaticCookiePolicyTest
+[ RUN      ] StaticCookiePolicyTest.AllowAllCookiesTest
+[       OK ] StaticCookiePolicyTest.AllowAllCookiesTest (0 ms)
+[ RUN      ] StaticCookiePolicyTest.BlockAllCookiesTest
+E:\b\build\slave\win\build\src\chrome\test.cc: error: Value of: result()
+  Actual: false
+Expected: true
+[  FAILED  ] StaticCookiePolicyTest.BlockAllCookiesTest (0 ms)
+[----------] 2 tests from StaticCookiePolicyTest (0 ms total)
 
-    for data in summary_output:
-      summary.AddSummaryData(data)
+[----------] 1 test from TCPListenSocketTest
+[ RUN      ] TCPListenSocketTest.ServerSend
+[       OK ] TCPListenSocketTest.ServerSend (1 ms)
+[----------] 1 test from TCPListenSocketTest (1 ms total)
+""")
 
-    self.assertEquals(expected_output, summary.Output())
+SWARM_OUTPUT_WITHOUT_FAILURE = ("""
+[ RUN      ] unittests.Run Test
+""" +
+RUN_TEST_OUTPUT +
+"""[       OK ] unittests.Run Test (2549 ms)
+[ RUN      ] unittests.Clean Up
+No output!
+[       OK ] unittests.Clean Up (6 ms)
 
-  def test_correct_all_pass(self):
-    summary_output = [
-        ('[  PASSED  ] 10 tests.'),
-        ('[  PASSED  ] 10 tests')]
+[----------] unittests summary
+[==========] 2 tests ran. (2556 ms total)
+""")
 
-    expected_output = ['[  PASSED  ] 20 tests.']
+SWARM_OUTPUT_WITH_FAILURE = ("""
+[ RUN      ] unittests.Run Test
+""" +
+RUN_TEST_OUTPUT_FAILURE +
+"""[       OK ] unittests.Run Test (2549 ms)
+[ RUN      ] unittests.Clean Up
+No output!
+[       OK ] unittests.Clean Up (6 ms)
 
-    summary = swarm_results.TestRunSummary()
+[----------] unittests summary
+[==========] 2 tests ran. (2556 ms total)
+""")
 
-    for data in summary_output:
-      summary.AddSummaryData(data)
+BUILDBOT_OUTPUT = ("""
+================================================================
+Begin output from shard index 0 (host)
+================================================================
 
-    self.assertEquals(expected_output, summary.Output())
+""" + RUN_TEST_OUTPUT +
+"""
+================================================================
+End output from shard index 0 (host). Return 0
+================================================================
 
-  def test_test_run_output(self):
-    full_output = ('[==========] Running 1 tests from results test run.\n'
-                   '[ RUN      ] results.Run Test\n'
-                   'DONE\n'
-                   '[       OK ] results.Run Test (10 ms)\n\n'
-                   '[----------] results summary\n'
-                   '[==========] 1 tests ran. (10 ms total)\n'
-                   '[  PASSED  ] 1 tests.\n'
-                   '[  FAILED  ] 0 tests\n\n'
-                   ' 0 FAILED TESTS')
+Summary for all the shards:
+All tests passed.
+""")
 
-    cleaned_output = swarm_results.TestRunOutput(full_output)
+BUILDBOT_OUTPUT_FAILURE = ("""
+================================================================
+Begin output from shard index 0 (host)
+================================================================
 
-    self.assertEquals('DONE\n', cleaned_output)
+""" + RUN_TEST_OUTPUT_FAILURE +
+"""
+================================================================
+End output from shard index 0 (host). Return 1
+================================================================
+
+Summary for all the shards:
+1 test failed, listed below:
+[u'StaticCookiePolicyTest.BlockAllCookiesTest']
+""")
+
+
+class TestRunOutputTest(unittest.TestCase):
+  def test_correct_output_success(self):
+    self.assertEqual(RUN_TEST_OUTPUT,
+                     swarm_results.TestRunOutput(SWARM_OUTPUT_WITHOUT_FAILURE))
+
+  def test_correct_output_failure(self):
+    self.assertEqual(RUN_TEST_OUTPUT_FAILURE,
+                     swarm_results.TestRunOutput(SWARM_OUTPUT_WITH_FAILURE))
 
 
 class GetTestKetsTest(SuperMoxTestBase):
@@ -97,6 +141,57 @@ class GetTestKetsTest(SuperMoxTestBase):
 
     self.assertEqual(keys,
                      swarm_results.GetTestKeys('http://host:9001', 'my_test'))
+
+    self.mox.VerifyAll()
+
+class GetSwarmResults(SuperMoxTestBase):
+  def test_get_swarm_results_success(self):
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+
+    shard_output = json.dumps(
+      {'hostname': 'host',
+       'exit_codes': '0, 0',
+       'output': SWARM_OUTPUT_WITHOUT_FAILURE
+     }
+    )
+
+    url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
+                                     "mock message", 'host')
+    url_response.code = 200
+    url_response.msg = "OK"
+    swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
+                                  ).AndReturn(url_response)
+    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
+                                  mox.IgnoreArg())
+    self.mox.ReplayAll()
+
+    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+
+    self.checkstdout(BUILDBOT_OUTPUT)
+
+    self.mox.VerifyAll()
+
+  def test_get_swarm_results_failure(self):
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+
+    shard_output = json.dumps(
+      {'hostname': 'host',
+       'exit_codes': '0, 1',
+       'output': SWARM_OUTPUT_WITH_FAILURE
+     }
+    )
+
+    url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
+                                     "mock message", 'host')
+    url_response.code = 200
+    url_response.msg = "OK"
+    swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
+                                  ).AndReturn(url_response)
+    self.mox.ReplayAll()
+
+    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+
+    self.checkstdout(BUILDBOT_OUTPUT_FAILURE)
 
     self.mox.VerifyAll()
 

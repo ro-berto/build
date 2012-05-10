@@ -16,62 +16,12 @@ import time
 import urllib
 import urllib2
 
-
-def _get_first_number(line):
-  for part in line.split():
-    if part.isdigit():
-      return int(part)
-
-  print 'No number in :'
-  print line
-  return 0
+from common import gtest_utils
 
 
-class TestRunSummary(object):
-  def __init__(self):
-    self.test_passed_count = 0
-    self.failed_tests = []
-    self.disabled_test_count  = 0
-    self.ignored_test_count = 0
-
-  def AddSummaryData(self, buf):
-    lines = buf.splitlines()
-
-    for line in lines:
-      if '[  PASSED  ]' in line:
-        self.test_passed_count += _get_first_number(line)
-      elif '[  FAILED  ]' in line:
-        if ', listed below' not in line:
-          self.failed_tests.append(line)
-      elif 'DISABLED' in line:
-        self.disabled_test_count += _get_first_number(line)
-      elif 'failures' in line:
-        self.ignored_test_count += _get_first_number(line)
-
-  def Output(self):
-    output = []
-
-    output.append('[  PASSED  ] %i tests.' % self.test_passed_count)
-    if self.failed_tests:
-      output.append('[  FAILED  ] failed tests listed below:')
-      output.extend(self.failed_tests)
-      output.append('%i FAILED TESTS' % len(self.failed_tests))
-
-    if self.disabled_test_count:
-      output.append('%i DISABLED TESTS' % self.disabled_test_count)
-
-    if self.ignored_test_count:
-      output.append('%i tests with ignored failures (FAILS prefix)' %
-                    self.ignored_test_count)
-
-    return output
-
-
-# TODO(csharp) The sharing_supervisor.py also has test parsing code, they should
-# be shared.
 def TestRunOutput(output):
   """Go through the given output and only return the output from the Test Run
-     Step.
+     Step. This removes all the swarm specific output.
   """
   test_run_output = []
 
@@ -79,7 +29,8 @@ def TestRunOutput(output):
   step_name = ''
   for line in output.splitlines(True):
     if in_step:
-      if '[       OK ] ' + step_name in line:
+      if ('[       OK ] ' + step_name in line or
+          '[  FAILED  ] ' + step_name in line):
         break
       else:
         test_run_output.append(line)
@@ -106,7 +57,7 @@ def GetTestKeys(swarm_base_url, test_name):
 
 
 def GetSwarmResults(swarm_base_url, test_keys):
-  summary_total = TestRunSummary()
+  gtest_parser = gtest_utils.GTestLogParser()
   hostnames = ['unknown'] * len(test_keys)
   exit_codes = [1] * len(test_keys)
   for index in range(len(test_keys)):
@@ -141,9 +92,9 @@ def GetSwarmResults(swarm_base_url, test_keys):
         print
 
         cleaned_output = TestRunOutput(test_outputs['output'])
-        summary_index = cleaned_output.rfind('[  PASSED  ]')
-        summary_total.AddSummaryData(cleaned_output[summary_index:])
-        sys.stdout.write(cleaned_output[:summary_index - 1])
+        for line in cleaned_output.splitlines():
+          gtest_parser.ProcessLine(line)
+        sys.stdout.write(cleaned_output)
 
         print
         print '================================================================'
@@ -163,8 +114,15 @@ def GetSwarmResults(swarm_base_url, test_keys):
         # Test is not yet done, wait a bit before checking again.
         time.sleep(0.5)
 
-  print '\n'.join(summary_total.Output())
-  print
+  print 'Summary for all the shards:'
+
+  failed_tests = gtest_parser.FailedTests()
+  if len(failed_tests) > 0:
+    plural = 's' if len(failed_tests) > 1 else ''
+    print '%d test%s failed, listed below:' % (len(failed_tests), plural)
+    print failed_tests
+  else:
+    print 'All tests passed.'
 
   return max(exit_codes)
 
