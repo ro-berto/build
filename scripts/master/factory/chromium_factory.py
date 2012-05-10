@@ -523,10 +523,17 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def build_dir(self):
     return self._build_dir
 
-  def ForceComponent(self, target, project, factory_properties):
+  def ForceMissingFilesToBeFatal(self, project, gclient_env):
+    """Force Windows bots to fail GYPing if referenced files do not exist."""
+    gyp_generator_flags = gclient_env.setdefault('GYP_GENERATOR_FLAGS', '')
+    if (self._target_platform == 'win32' and
+        'msvs_error_on_missing_sources=' not in gyp_generator_flags):
+      gclient_env['GYP_GENERATOR_FLAGS'] = (
+          gyp_generator_flags + ' msvs_error_on_missing_sources=1')
+
+  def ForceComponent(self, target, project, gclient_env):
     # Force all bots to specify the "Component" gyp variables, unless it is
     # already set.
-    gclient_env = factory_properties.setdefault('gclient_env', {})
     gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
     if ('component=' not in gyp_defines and
         'build_for_tool=' not in gyp_defines):
@@ -541,7 +548,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
                       project=None, factory_properties=None, gclient_deps=None):
-    factory_properties = factory_properties or {}
+    factory_properties = (factory_properties or {}).copy()
+    factory_properties['gclient_env'] = \
+        factory_properties.get('gclient_env', {}).copy()
     tests = tests or []
 
     if factory_properties.get("needs_valgrind"):
@@ -569,7 +578,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
 
     # Ensure that component is set correctly in the gyp defines.
-    self.ForceComponent(target, project, factory_properties)
+    self.ForceComponent(target, project, factory_properties['gclient_env'])
+
+    # Ensure GYP errors out if files referenced in .gyp files are missing.
+    self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
 
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
