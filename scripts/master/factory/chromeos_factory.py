@@ -45,7 +45,7 @@ class CbuildbotFactory(object):
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite, dry_run=False, chrome_root=None,
                factory=None, pass_revision=False, slave_manager=True,
-               chromite_patch=None, trybot=False):
+               chromite_patch=None, trybot=False, sleep_sync=None):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -60,6 +60,7 @@ class CbuildbotFactory(object):
     self.chrome_root = chrome_root
     self.slave_manager = slave_manager
     self.trybot = trybot
+    self.sleep_sync = sleep_sync
 
     if factory:
       self.f_cbuild = factory
@@ -114,6 +115,17 @@ class CbuildbotFactory(object):
                             description='Sync buildbot slave files',
                             workdir='/b',
                             timeout=300)
+
+    if self.sleep_sync:
+      # We run a script from the script checkout above.
+      fuzz_start = ['python', 'scripts/slave/random_delay.py',
+                    '--max=%g' % self.sleep_sync,]
+      self.f_cbuild.addStep(shell.ShellCommand,
+                            command=fuzz_start,
+                            name='random_delay',
+                            description='Delay start of build',
+                            workdir='/b/build',
+                            timeout=int(self.sleep_sync) + 10)
 
     self._git_clear_and_checkout(self.chromite_repo, self.chromite_patch)
     if self.crostools_repo:
