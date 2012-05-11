@@ -5,16 +5,15 @@
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
 from __future__ import with_statement
-import glob
 import json
 import optparse
 import os
-import platform
 import socket
+import shutil
 import sys
 import time
-import urllib
 import urllib2
+import urlparse
 import zipfile
 
 
@@ -35,10 +34,10 @@ class Manifest(object):
         switches - An object with properties to apply to the test request.
     """
     platform_mapping =  {
-      'win32': 'Windows',
+      'darwin': 'Mac',
       'cygwin': 'Windows',
       'linux2': 'Linux',
-      'darwin': 'Mac'
+      'win32': 'Windows'
       }
 
     self.manifest_name = filename
@@ -50,6 +49,8 @@ class Manifest(object):
     self.target_platform = platform_mapping[switches.os_image]
     self.working_dir = switches.working_dir
     self.test_name = test_name
+    self.data_url = switches.data_url
+    self.data_dest_dir = switches.data_dest_dir
 
   def add_task(self, task_name, actions):
     """Appends a new task to the swarm manifest file."""
@@ -62,7 +63,9 @@ class Manifest(object):
     """Zip up all the files in self.files"""
     start_time = time.time()
 
-    zip_file = zipfile.ZipFile(self.zipfile_name, 'w')
+    zip_file = zipfile.ZipFile(
+        os.path.join(self.data_dest_dir, self.zipfile_name),
+        'w')
     zip_file.write(self.manifest_name)
     zip_file.write(self.run_test_path)
     zip_file.close()
@@ -71,17 +74,7 @@ class Manifest(object):
 
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
-    hostname = socket.gethostbyname(socket.gethostname())
-
-    # Adjust the port used to access the data via the python simpleserver.
-    # TODO(csharp): Remove this once file accesses between build and swarm bots
-    # has been fixed.
-    hostname += ':8080'
-
-    filepath = os.path.relpath(self.zipfile_name, '../..')
-    filepath_url = urllib.pathname2url(filepath)
-
-    hashtable_url = 'http://%s/hashtable/' % hostname
+    hashtable_url = urlparse.urljoin(self.data_url, 'hashtable')
     self.add_task(
         'Run Test',
         ['python', self.run_test_path, '-m', self.manifest_name,
@@ -105,7 +98,7 @@ class Manifest(object):
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        'http://%s/%s' % (hostname, filepath_url),
+        urlparse.urljoin(self.data_url, self.zipfile_name),
       ],
       'tests': self.tasks,
       'env_vars': {
@@ -129,12 +122,6 @@ class Manifest(object):
     return json.dumps(test_case)
 
 
-def RemoveOldFiles():
-  """Removes older swarm zip files as they are no longer needed."""
-  for filename in glob.glob('swarm_tempfile_*.zip'):
-    os.remove(filename)
-
-
 def ProcessManifest(filename, options):
   """Process the manifest file and send off the swarm test request."""
   # Parses manifest file
@@ -152,7 +139,7 @@ def ProcessManifest(filename, options):
 
   # Send test requests off to swarm.
   print 'Sending test requests to swarm'
-  test_url = options.url.rstrip('/') + '/test'
+  test_url = urlparse.urljoin(options.swarm_url, 'test')
   manifest_text = manifest.to_json()
   result = urllib2.urlopen(test_url, manifest_text).read()
 
@@ -190,12 +177,21 @@ def main():
                     help='Desired number of shards to request. Must be '
                     'greater than or equal to min_shards.')
   parser.add_option('-o', '--os_image',
-                    help='Swarm OS image to request.  Defaults to the '
-                    'current platform.')
-  parser.add_option('-u', '--url', default='http://localhost:8080',
+                    help='Swarm OS image to request.')
+  parser.add_option('-u', '--swarm-url', default='http://localhost:8080',
                     help='Specify the url of the Swarm server. '
                     'Defaults to %default')
-  parser.add_option('-t', '--test_name_prefix', default='',
+  parser.add_option('-d', '--data-url', default=('http://%s/' %
+                      socket.gethostbyname(socket.gethostname())),
+                    help='The url where the test data can be retrieved from. '
+                    'Defaults to %default')
+  parser.add_option('--hashtable-dir',
+                    help='The path to the hashtable directory storing the test '
+                    'data')
+  parser.add_option('--data-dest-dir',
+                    help='The directory where all the test data needs to be'
+                    'placed to get served to the swarm bots')
+  parser.add_option('-t', '--test-name-prefix', default='',
                     help='Specify the prefix to give the swarm test request. '
                     'Defaults to %default')
   parser.add_option('-v', '--verbose', action='store_true',
@@ -206,12 +202,21 @@ def main():
     parser.error('Must specify at least one filename')
 
   if not options.os_image:
-    options.os_image = '%s %d' % (platform.uname()[0], 32)
+    parser.error('Must specify an os image')
+  if not options.hastable_dir:
+    parser.error('Must specify the hashtable directory')
+  if not options.data_dest_dir:
+    parser.error('Must specify the server directory')
 
-  # Clean up old files.
-  print 'Removing old swarm zip files...'
-  RemoveOldFiles()
+  # Remove the old data
+  print 'Removing old swarm files...'
+  shutil.rmtree(options.data_dest_dir)
 
+  # Copy over the new data
+  print 'Moving hashtable files to server...'
+  shutil.copytree(options.hashtable_dir, options.data_path)
+
+  # Send off the swarm test requests.
   highest_exit_code = 0
   for filename in args:
     highest_exit_code = max(highest_exit_code,

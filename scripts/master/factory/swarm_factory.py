@@ -8,6 +8,8 @@ Based on chromium_factory.py and adds chromium-specific steps."""
 
 import os
 
+from buildbot.process.properties import WithProperties
+
 from master.factory import chromium_factory
 from master.factory import swarm_commands
 
@@ -26,9 +28,20 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                                      self._build_dir,
                                                      self._target_platform)
 
-    gclient_env = factory_properties.get("gclient_env")
+    gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',
                                           'http://localhost:9001')
+    data_server = factory_properties.get('data_server',
+                                         'http://localhost:8080')
+
+    data_dest_root = factory_properties.get('data_dest_dir')
+    if self._target_platform == 'win32':
+      data_dest_dir = WithProperties(data_dest_root + '\\%s',
+                                     'buildername:-slave')
+    else:
+      data_dest_dir = WithProperties(data_dest_root + '/%s',
+                                     'buildername:-slave')
+
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'tests_run=hashtable' in gyp_defines:
       if self._target_platform == 'win32':
@@ -41,8 +54,12 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
       # Send of all the test requests as a single step.
       swarm_inputs = [os.path.join('src', out_dir, target, test + '.results')
                       for test in tests]
+      hashtable_directory = os.path.join('src', out_dir, 'hashtable')
       swarm_command_obj.AddTriggerSwarmTestStep(self._target_platform,
             swarm_server,
+            data_server,
+            hashtable_directory,
+            data_dest_dir,
             factory_properties.get('min_swarm_shards', '3'),
             factory_properties.get('max_swarm_shards', '3'),
             swarm_inputs)
