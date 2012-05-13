@@ -696,6 +696,12 @@ def main_ninja(options, args):
   command.extend(options.build_args)
   command.extend(args)
 
+  # TODO(thakis): Change the gyp ninja generator to either make 'all' the
+  # default target or to only write targets that are part of all, and then
+  # remove this. http://crbug.com/127952
+  if not options.build_args and not args:
+    command.append('all')
+
   # Prepare environment.
   env = EchoDict(os.environ)
 
