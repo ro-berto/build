@@ -27,7 +27,7 @@ class SwarmCommands(commands.FactoryCommands):
 
     command = [self._python, script_path, '-m', min_shards, '-s', max_shards,
                '-o', target_platform, '-u', swarm_server, '-d', data_server,
-               '--hashtable_dir', hashtable_dir,
+               '--hashtable-dir', hashtable_dir,
                '--data-dest-dir', data_dest_dir,
                '-t', swarm_request_name_prefix]
     command.extend(manifest_files)
