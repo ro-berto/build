@@ -195,6 +195,13 @@ class GetSwarmResults(SuperMoxTestBase):
 
     self.mox.VerifyAll()
 
+  def test_get_swarm_results_no_keys(self):
+    swarm_results.GetSwarmResults('http://host:9001', [])
+
+    self.checkstdout('Error: No test keys to get results with\n')
+
+    self.mox.VerifyAll()
+
 
 if __name__ == '__main__':
   unittest.main()

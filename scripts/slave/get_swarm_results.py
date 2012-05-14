@@ -46,7 +46,15 @@ def GetTestKeys(swarm_base_url, test_name):
   key_data = urllib.urlencode([('name', test_name)])
   test_keys_url = '%s/get_matching_test_cases?%s' % (swarm_base_url.rstrip('/'),
                                                      key_data)
-  result = urllib2.urlopen(test_keys_url).read()
+
+  try:
+    result = urllib2.urlopen(test_keys_url).read()
+  except urllib2.URLError as e:
+    print 'Error: Unable to connect to swarm server'
+    print e
+    return []
+
+
   if 'No matching' in result:
     print ('Error: Unable to find any tests with the name, %s, on swarm server'
            % test_name)
@@ -57,6 +65,10 @@ def GetTestKeys(swarm_base_url, test_name):
 
 
 def GetSwarmResults(swarm_base_url, test_keys):
+  if not test_keys:
+    print 'Error: No test keys to get results with'
+    return 1
+
   gtest_parser = gtest_utils.GTestLogParser()
   hostnames = ['unknown'] * len(test_keys)
   exit_codes = [1] * len(test_keys)

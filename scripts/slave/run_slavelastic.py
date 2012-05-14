@@ -141,12 +141,12 @@ def ProcessManifest(filename, options):
   print 'Sending test requests to swarm'
   test_url = urlparse.urljoin(options.swarm_url, 'test')
   manifest_text = manifest.to_json()
-  result = urllib2.urlopen(test_url, manifest_text).read()
-
-  # Check that we can read the output as a JSON string
   try:
+    result = urllib2.urlopen(test_url, manifest_text).read()
+
+    # Check that we can read the output as a JSON string
     json.loads(result)
-  except (ValueError, TypeError), e:
+  except (ValueError, TypeError, urllib2.URLError) as e:
     print 'Failed to send test for ' + test_name
     print e
     return 1
@@ -219,7 +219,7 @@ def main():
     print ('ERROR: Given hashtable directory, %s, does not exist' %
            options.hashtable_dir)
     return 1
-  shutil.copytree(options.hashtable_dir, options.data_path)
+  shutil.copytree(options.hashtable_dir, options.data_dest_dir)
 
   # Send off the swarm test requests.
   highest_exit_code = 0

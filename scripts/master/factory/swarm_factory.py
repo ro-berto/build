@@ -54,7 +54,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
       # Send of all the test requests as a single step.
       swarm_inputs = [os.path.join('src', out_dir, target, test + '.results')
                       for test in tests]
-      hashtable_directory = os.path.join('src', out_dir, 'hashtable')
+      hashtable_directory = os.path.join('src', out_dir, target, 'hashtable')
       swarm_command_obj.AddTriggerSwarmTestStep(self._target_platform,
             swarm_server,
             data_server,
