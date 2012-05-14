@@ -696,8 +696,9 @@ def main_ninja(options, args):
     # remove all clobber handling from compile.py.
     def delete_objects(_, directory, files):
       for f in files:
-        if not f.endswith('.ninja'):
-          os.unlink(os.path.join(directory, f))
+        f = os.path.join(directory, f)
+        if not os.path.isdir(f) and not f.endswith('.ninja'):
+          os.unlink(f)
     os.path.walk(output_dir, delete_objects, None)
 
   if options.verbose:
