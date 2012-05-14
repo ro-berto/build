@@ -433,18 +433,30 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('pyauto_functional_tests'):
       f.AddPyAutoFunctionalTest('pyauto_functional_tests', suite='CONTINUOUS',
                                 factory_properties=fp)
-    elif R('pyauto_official_tests'):
+    if R('pyauto_official_tests'):
       # Mapping from self._target_platform to a chrome-*.zip
       platmap = {'win32': 'win32',
                  'darwin': 'mac',
-                 'linux2': 'lucid64bit' }
+                 'linux2': 'lucid64bit'}
       zip_plat = platmap[self._target_platform]
       workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
       f.AddPyAutoFunctionalTest('pyauto_functional_tests',
                                 src_base='..',
                                 workdir=workdir,
                                 factory_properties=fp)
-    elif R('chrome_endure_control_tests'):
+    if R('pyauto_perf_tests'):
+      # Mapping from self._target_platform to a chrome-*.zip
+      platmap = {'win32': 'win32',
+                 'darwin': 'mac',
+                 'linux2': 'lucid64bit'}
+      zip_plat = platmap[self._target_platform]
+      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
+      f.AddPyAutoFunctionalTest('pyauto_perf_tests',
+                                suite='PERFORMANCE',
+                                src_base='..',
+                                workdir=workdir,
+                                factory_properties=fp)
+    if R('chrome_endure_control_tests'):
       f.AddChromeEndureTest(
           'chrome_endure_control_test',
           [
@@ -454,7 +466,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
               'testControlAttachDetachDOMTreeWebDriver',
           ],
           fp)
-    elif R('chrome_endure_gmail_tests'):
+    if R('chrome_endure_gmail_tests'):
       f.AddChromeEndureTest(
           'chrome_endure_gmail_test',
           [
@@ -467,21 +479,21 @@ class ChromiumFactory(gclient_factory.GClientFactory):
               'testGmailExpandCollapseConversation',
           ],
           fp)
-    elif R('chrome_endure_docs_tests'):
+    if R('chrome_endure_docs_tests'):
       f.AddChromeEndureTest(
           'chrome_endure_docs_test',
           [
             'perf_endure.ChromeEndureDocsTest.testDocsAlternatelyClickLists',
           ],
           fp)
-    elif R('chrome_endure_plus_tests'):
+    if R('chrome_endure_plus_tests'):
       f.AddChromeEndureTest(
           'chrome_endure_plus_test',
           [
             'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
           ],
           fp)
-    elif R('chrome_endure_indexeddb_tests'):
+    if R('chrome_endure_indexeddb_tests'):
       f.AddChromeEndureTest(
           'chrome_endure_indexeddb_test',
           [
