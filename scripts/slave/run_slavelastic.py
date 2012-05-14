@@ -203,7 +203,7 @@ def main():
 
   if not options.os_image:
     parser.error('Must specify an os image')
-  if not options.hastable_dir:
+  if not options.hashtable_dir:
     parser.error('Must specify the hashtable directory')
   if not options.data_dest_dir:
     parser.error('Must specify the server directory')
