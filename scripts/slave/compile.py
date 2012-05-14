@@ -689,7 +689,16 @@ def main_ninja(options, args):
 
   if options.clobber:
     print('Removing %s' % output_dir)
-    chromium_utils.RemoveDirectory(output_dir)
+    # Deleting output_dir would also delete all the .ninja files necessary to
+    # build. Clobbering should run before runhooks (which creates .ninja files).
+    # For now, only delete all non-.ninja files. TODO(thakis): Make "clobber" a
+    # step that runs before "runhooks". Once the master has been restarted,
+    # remove all clobber handling from compile.py.
+    def delete_objects(_, directory, files):
+      for f in files:
+        if not f.endswith('.ninja'):
+          os.unlink(os.path.join(directory, f))
+    os.path.walk(output_dir, delete_objects, None)
 
   if options.verbose:
     command.append('-v')
