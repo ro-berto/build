@@ -696,8 +696,10 @@ def main_ninja(options, args):
     # remove all clobber handling from compile.py.
     def delete_objects(_, directory, files):
       for f in files:
+        if f.endswith('.ninja') or f == 'gyp-mac-tool':
+          continue
         f = os.path.join(directory, f)
-        if not os.path.isdir(f) and not f.endswith('.ninja'):
+        if not os.path.isdir(f):
           os.unlink(f)
     os.path.walk(output_dir, delete_objects, None)
 
