@@ -31,8 +31,10 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',
                                           'http://localhost:9001')
-    data_server = factory_properties.get('data_server',
-                                         'http://localhost:8080')
+    data_server_root = factory_properties.get('data_server',
+                                              'http://localhost:8080')
+    data_server = WithProperties(data_server_root + '/%s',
+                                 'buildername:-slave')
 
     data_dest_root = factory_properties.get('data_dest_dir')
     if self._target_platform == 'win32':

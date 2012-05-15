@@ -12,8 +12,8 @@ import socket
 import shutil
 import sys
 import time
+import urllib
 import urllib2
-import urlparse
 import zipfile
 
 
@@ -74,7 +74,7 @@ class Manifest(object):
 
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
-    hashtable_url = urlparse.urljoin(self.data_url, 'hashtable')
+    hashtable_url = self.data_url + '/hashtable'
     self.add_task(
         'Run Test',
         ['python', self.run_test_path, '-m', self.manifest_name,
@@ -98,7 +98,7 @@ class Manifest(object):
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        urlparse.urljoin(self.data_url, self.zipfile_name),
+        urllib.quote(self.data_url + '/' + self.zipfile_name, ':/'),
       ],
       'tests': self.tasks,
       'env_vars': {
@@ -139,7 +139,7 @@ def ProcessManifest(filename, options):
 
   # Send test requests off to swarm.
   print 'Sending test requests to swarm'
-  test_url = urlparse.urljoin(options.swarm_url, 'test')
+  test_url = options.swarm_url + '/test'
   manifest_text = manifest.to_json()
   try:
     result = urllib2.urlopen(test_url, manifest_text).read()

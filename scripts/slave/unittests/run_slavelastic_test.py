@@ -6,7 +6,6 @@
 import json
 import sys
 import unittest
-import urlparse
 
 import test_env  # pylint: disable=W0403,W0611
 
@@ -22,7 +21,8 @@ ENV_VARS = {'GTEST_TOTAL_SHARDS': '%(num_instances)s',
 class Options(object):
   def __init__(self, working_dir="swarm_tests", min_shards=1, num_shards=1,
                os_image='win32', url='http://localhost:8080',
-               data_url='http://www.google.com', data_dest_dir='temp_data'):
+               data_url='http://www.google.com/data',
+               data_dest_dir='temp_data'):
     self.working_dir = working_dir
     self.min_shards = min_shards
     self.num_shards = num_shards
@@ -42,13 +42,13 @@ def GenerateExpectedJSON(options):
 
   expected = {
     'test_case_name': TEST_NAME,
-    'data': [urlparse.urljoin(options.data_url, TEST_NAME + '.zip')],
+    'data': [options.data_url + '/' + TEST_NAME + '.zip'],
     'tests' : [
       {
         'action': [
           'python', 'src/tools/isolate/run_test_from_archive.py',
           '-m', FILE_NAME,
-          '-r', urlparse.urljoin(options.data_url, 'hashtable')
+          '-r', options.data_url + '/hashtable'
         ],
         'test_name': 'Run Test'
       }
