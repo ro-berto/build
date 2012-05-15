@@ -48,7 +48,7 @@ linux_options = [
     'media_unittests',
     'net_unittests',
     'printing_unittests',
-    #'remoting_unittests',
+    'remoting_unittests',
     #'safe_browsing_tests',
     'sql_unittests',
     'sync_unit_tests',
