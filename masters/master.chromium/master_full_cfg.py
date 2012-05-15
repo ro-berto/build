@@ -43,7 +43,7 @@ F('win_clobber', win().ChromiumFactory(
       'start_crash_handler': True,
       'generate_gtest_json': True,
       'gclient_env': {
-        'GYP_DEFINES': 'tests_run=noop',
+        'GYP_DEFINES': 'test_isolation_mode=noop',
       },
     }))
 
@@ -65,7 +65,7 @@ F('mac_clobber', mac().ChromiumFactory(
       'expectations': True,
       'generate_gtest_json': True,
       'gclient_env': {
-        'GYP_DEFINES': 'tests_run=noop',
+        'GYP_DEFINES': 'test_isolation_mode=noop',
       },
     }))
 
@@ -88,7 +88,7 @@ F('linux_clobber', linux().ChromiumFactory(
       'expectations': True,
       'generate_gtest_json': True,
       'gclient_env': {
-        'GYP_DEFINES': 'target_arch=ia32 tests_run=noop',
+        'GYP_DEFINES': 'target_arch=ia32 test_isolation_mode=noop',
       },
     }))
 
@@ -107,7 +107,7 @@ F('linux64_clobber', linux().ChromiumFactory(
       'perf_id': 'chromium-rel-linux-64',
       'expectations': True,
       'gclient_env': {
-        'GYP_DEFINES': 'target_arch=x64 tests_run=noop',
+        'GYP_DEFINES': 'target_arch=x64 test_isolation_mode=noop',
       },
     }))
 
