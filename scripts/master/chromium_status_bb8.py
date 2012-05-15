@@ -277,7 +277,8 @@ def SetupChromiumPages(webstatus, tagComparator=None):
         'average': lambda x: float(sum(x)) / float(max(len(x), 1)),
         'ticks': lambda x: ["{v:%d}" % y for y in _tick_filter(x, 12)],
         'addlinks': lambda x: re.sub(r'(http://[^\s@]+)', r'<a href="\1">\1</a>', x),
-        'fixname': lambda x: x.translate(None, ' -():') })
+        'fixname': lambda x: x.translate(None, ' -():'),
+        'extract_index': lambda x, i: [y[i] for y in x] })
 
   console_ = ConsoleStatusResource(
       orderByTime=webstatus.orderConsoleByTime,

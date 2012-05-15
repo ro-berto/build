@@ -34,9 +34,8 @@
 {% block content %}
 <script type='text/javascript'>
   var buildTimes = [
-    {% for t in buildTimes %}[{{ loop.index0 }}, {{ t[1] }}]{% if not loop.last %},
-    {% endif %}        // build {{ t[0] }}{% endfor %}
-  ];
+    {% for t in buildTimes %}[{{ loop.index0 }}, {{ t[1] }}]{% if not loop.last %},{% endif %}        // build {{ t[0] }}
+{% endfor %}  ];
 
   var failingSteps = [
     {% for count in failingSteps.values() %}[{{ loop.index0 }}, {{ count }}]{% if not loop.last %},
@@ -53,14 +52,13 @@
     {% endif %}{% endfor %}];
 
   var stepTimeAvg = [
-    {% for v in stepTimes.itervalues() %}[{{ loop.index0 }}, {{ v|last|average }}]{% if not loop.last %},
+    {% for v in stepTimes.itervalues() %}[{{ loop.index0 }}, {{ v|extract_index(1)|average }}]{% if not loop.last %},
     {% endif %}{% endfor %}];
 
 {% for k, v in stepTimes.iteritems() %}
   var stepTimes{{ k }} = [
-    {% for steptime in v %}[{{ loop.index0 }}, {{ steptime[1] }}]{% if not loop.last %},
-    {% endif %}        // build {{ steptime[0] }}{% endfor %}
-  ];
+    {% for steptime in v %}[{{ loop.index0 }}, {{ steptime[1] }}]{% if not loop.last %},{% endif %}        // build {{ steptime[0] }}
+{% endfor %}  ];
 
 {% endfor %}
 </script>
@@ -88,7 +86,7 @@
 {%- for k, v in stepTimes.iteritems() %}
   <td>
     <h3>Cycle time (seconds): {{ k }}</h3><br>
-    {{ DisplayGraph("stepsTime%sLine" % k|fixname, "line", 400, 300, colorMap.get(k|fixname, 0), "stepTimes%s" % k, {"drawXAxis": "false", "yAxis": "[0.00, %d.00]" % (v|max|int + 1), "yTicks": "[%s]" % ", ".join((v|max|int + 1)|ticks)}) }}
+    {{ DisplayGraph("stepsTime%sLine" % k|fixname, "line", 400, 300, colorMap.get(k|fixname, 0), "stepTimes%s" % k, {"drawXAxis": "false", "yAxis": "[0.00, %d.00]" % (v|extract_index(1)|max|int+1), "yTicks": "[%s]" % ", ".join((v|extract_index(1)|max|int + 1)|ticks)}) }}
   </td>
 {%- if not loop.index % 3 %}
 </tr><tr>
