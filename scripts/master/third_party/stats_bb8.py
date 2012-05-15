@@ -21,7 +21,7 @@ class StatsBuilderStatusResource(HtmlResource):
     failingSteps = {}
 
     lastBuild = self.builder_status.getLastFinishedBuild()
-    lastBuildNum = lastBuilder.getNumber() if lastBuild else -1
+    lastBuildNum = lastBuild.getNumber() if lastBuild else -1
     firstBuildNum = max(0, lastBuildNum - maxBuilds)
 
     for buildNum in range(firstBuildNum, lastBuildNum+1):
