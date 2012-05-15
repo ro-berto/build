@@ -34,8 +34,9 @@
 {% block content %}
 <script type='text/javascript'>
   var buildTimes = [
-    {% for t in buildTimes %}[{{ loop.index0 }}, {{ t }}]{% if not loop.last %},
-    {% endif %}{% endfor %}];
+    {% for t in buildTimes %}[{{ loop.index0 }}, {{ t[1] }}]{% if not loop.last %},
+    {% endif %}        // build {{ t[0] }}{% endfor %}
+  ];
 
   var failingSteps = [
     {% for count in failingSteps.values() %}[{{ loop.index0 }}, {{ count }}]{% if not loop.last %},
@@ -52,19 +53,20 @@
     {% endif %}{% endfor %}];
 
   var stepTimeAvg = [
-    {% for v in stepTimes.itervalues() %}[{{ loop.index0 }}, {{ v|average }}]{% if not loop.last %},
+    {% for v in stepTimes.itervalues() %}[{{ loop.index0 }}, {{ v|last|average }}]{% if not loop.last %},
     {% endif %}{% endfor %}];
 
 {% for k, v in stepTimes.iteritems() %}
   var stepTimes{{ k }} = [
-    {% for steptime in v %}[{{ loop.index0 }}, {{ steptime }}]{% if not loop.last %},
-    {% endif %}{% endfor %}];
+    {% for steptime in v %}[{{ loop.index0 }}, {{ steptime[1] }}]{% if not loop.last %},
+    {% endif %}        // build {{ steptime[0] }}{% endfor %}
+  ];
 
 {% endfor %}
 </script>
 <center>
 <h1> {{ builder_status.getName() }} </h1><br>
-<h2> Cycle time - Trend </h2>
+<h2> Cycle time (minutes)</h2>
   {{ DisplayGraph("cycleTimeBar", "line", 1200, 300, 0, "buildTimes", {"drawXAxis": "false"}) }}
 
 <table><tr>
@@ -85,7 +87,7 @@
 <table><tr>
 {%- for k, v in stepTimes.iteritems() %}
   <td>
-    <h3>Cycle time: {{ k }}</h3><br>
+    <h3>Cycle time (seconds): {{ k }}</h3><br>
     {{ DisplayGraph("stepsTime%sLine" % k|fixname, "line", 400, 300, colorMap.get(k|fixname, 0), "stepTimes%s" % k, {"drawXAxis": "false", "yAxis": "[0.00, %d.00]" % (v|max|int + 1), "yTicks": "[%s]" % ", ".join((v|max|int + 1)|ticks)}) }}
   </td>
 {%- if not loop.index % 3 %}

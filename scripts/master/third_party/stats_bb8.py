@@ -8,7 +8,7 @@ class StatsBuilderStatusResource(HtmlResource):
     HtmlResource.__init__(self)
     self.builder_status = builder_status
 
-  def getBuilderVariables(self, cxt):
+  def getBuilderVariables(self, cxt, maxBuilds):
     # 1. build time over 300 builds or average 5 weeks
     # 2. pie chart, success failures
     # 3. pie chart, which steps fails the most
@@ -20,17 +20,19 @@ class StatsBuilderStatusResource(HtmlResource):
     numberOfFailures = 0
     failingSteps = {}
 
-    build = self.builder_status.getBuild(-1) or self.builder_status.getBuild(-2)
+    lastBuild = self.builder_status.getLastFinishedBuild()
+    lastBuildNum = lastBuilder.getNumber() if lastBuild else -1
+    firstBuildNum = max(0, lastBuildNum - maxBuilds)
 
-    while build and numberOfSuccess + numberOfFailures < 300:
-      if not build.isFinished():
-        build = build.getPreviousBuild()
+    for buildNum in range(firstBuildNum, lastBuildNum+1):
+      build = self.builder_status.getBuild(buildNum)
+      if not build or not build.isFinished():
         continue
 
       if build.getResults() == builder.SUCCESS or \
          build.getResults() == builder.WARNINGS:
         (start, end) = build.getTimes()
-        buildTimes.append(end-start)
+        buildTimes.append((buildNum, float(end-start) / 60.0))
         numberOfSuccess += 1
       else:
         numberOfFailures += 1
@@ -43,23 +45,16 @@ class StatsBuilderStatusResource(HtmlResource):
         if result == builder.SUCCESS or result == builder.WARNINGS:
           (start, end) = step.getTimes()
           elapsed = end - start
-          stepTime.append(elapsed)
+          stepTime.append((buildNum, elapsed))
         if result == builder.FAILURE:
           failingSteps[stepName] = failCount + 1
 
-      build = build.getPreviousBuild()
-
-    # Iteration was latest->earliest; reverse data
-    buildTimes.reverse()
-    for v in stepTimes.itervalues():
-      v.reverse()
-
-    slowest = reduce(max, [ reduce(max, t, 0) for t in stepTimes.values() ], 0)
+    slowest = reduce(max, [reduce(max, t[1], 0) for t in stepTimes.values()], 0)
     timeRange = slowest + 1
     yTicks = '[%s]' % ', '.join(["{v:%d}" % i for i in range(timeRange+1)])
 
     cxt['builder_status'] = self.builder_status
-    cxt['buildTimes'] = [ float(i) / 60.0 for i in buildTimes ]
+    cxt['buildTimes'] = buildTimes
     cxt['failingSteps'] = failingSteps
     cxt['stepTimes'] = stepTimes
     cxt['numberOfSuccess'] = numberOfSuccess
@@ -69,7 +64,8 @@ class StatsBuilderStatusResource(HtmlResource):
     cxt['colorMap'] = { 'compile': 1, 'update': 1 };
 
   def content(self, request, cxt):
-    self.getBuilderVariables(cxt)
+    maxBuilds = request.args.get('max', self.builder_status.buildCacheSize/2)
+    self.getBuilderVariables(cxt, maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("builder_stats.html")
     return template.render(cxt)
@@ -85,7 +81,7 @@ class StatsStatusResource(HtmlResource):
     self.allowForce = allowForce
     self.css = css
 
-  def getMainVariables(self, status, cxt):
+  def getMainVariables(self, status, cxt, maxBuilds):
     builderNames = []
     builderTimes = []
     builderFailures = []
@@ -94,17 +90,19 @@ class StatsStatusResource(HtmlResource):
       builderNames.append(builderName)
       builderObj = status.getBuilder(builderName)
 
-      # Get the latest build.  If it's still in progress, it will be skipped.
-      build = builderObj.getBuild(-1) or builderObj.getBuild(-2)
+      lastBuild = builderObj.getLastFinishedBuild()
+      lastBuildNum = lastBuild.getNumber() if lastBuild else -1
+      firstBuildNum = max(0, lastBuildNum - maxBuilds)
 
       goodCount = 0
       badCount = 0
       buildTimes = []
 
-      while build and goodCount + badCount < 50:
-        if not build.isFinished():
-          build = build.getPreviousBuild()
+      for buildNum in range(firstBuildNum, lastBuildNum+1):
+        build = builderObj.getBuild(buildNum)
+        if not build or not build.isFinished():
           continue
+
         if (build.getResults() == builder.SUCCESS or
             build.getResults() == builder.WARNINGS):
           (start, end) = build.getTimes()
@@ -112,7 +110,6 @@ class StatsStatusResource(HtmlResource):
           goodCount += 1
         else:
           badCount += 1
-        build = build.getPreviousBuild()
 
       # Get the average time per build in minutes
       avg = float(sum(buildTimes)) / float(max(len(buildTimes), 1))
@@ -127,7 +124,8 @@ class StatsStatusResource(HtmlResource):
     cxt['builderFailures'] = builderFailures
 
   def content(self, request, cxt):
-    self.getMainVariables(self.getStatus(request), cxt)
+    maxBuilds = request.args.get("max", 50)
+    self.getMainVariables(self.getStatus(request), cxt, maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("stats.html")
     return template.render(cxt)
