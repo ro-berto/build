@@ -5,11 +5,11 @@
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
 from __future__ import with_statement
+import glob
 import json
 import optparse
 import os
 import socket
-import shutil
 import sys
 import time
 import urllib
@@ -210,7 +210,8 @@ def main():
   # Remove the old data if there is any
   if os.path.isdir(options.data_dest_dir):
     print 'Removing old swarm files...'
-    shutil.rmtree(options.data_dest_dir)
+    for filename in glob.glob('swarm_tempfile_*.zip'):
+      os.remove(filename)
 
   # Send off the swarm test requests.
   highest_exit_code = 0
