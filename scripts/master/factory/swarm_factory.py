@@ -8,8 +8,6 @@ Based on chromium_factory.py and adds chromium-specific steps."""
 
 import os
 
-from buildbot.process.properties import WithProperties
-
 from master.factory import chromium_factory
 from master.factory import swarm_commands
 
@@ -33,20 +31,11 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                           'http://localhost:9001')
     swarm_server = swarm_server.rstrip('/')
 
-    data_server_root = factory_properties.get('data_server',
+    data_server = factory_properties.get('data_server',
                                               'http://localhost:8080')
-    data_server_root = data_server_root.rstrip('/')
+    data_server = data_server.rstrip('/')
 
-    data_server = WithProperties(data_server_root + '/%s',
-                                 'buildername:-slave')
-
-    data_dest_root = factory_properties.get('data_dest_dir')
-    if self._target_platform == 'win32':
-      data_dest_dir = WithProperties(data_dest_root + '\\%s',
-                                     'buildername:-slave')
-    else:
-      data_dest_dir = WithProperties(data_dest_root + '/%s',
-                                     'buildername:-slave')
+    data_dest_dir = factory_properties.get('data_dest_dir')
 
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'test_isolation_mode=hashtable' in gyp_defines:

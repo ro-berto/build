@@ -74,11 +74,10 @@ class Manifest(object):
 
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
-    hashtable_url = self.data_url + '/hashtable'
     self.add_task(
         'Run Test',
         ['python', self.run_test_path, '-m', self.manifest_name,
-         '-r', hashtable_url])
+         '-r', self.data_url])
 
     # Clean up
     # TODO(csharp) This can be removed once the swarm cleanup parameter is
@@ -212,14 +211,6 @@ def main():
   if os.path.isdir(options.data_dest_dir):
     print 'Removing old swarm files...'
     shutil.rmtree(options.data_dest_dir)
-
-  # Copy over the new data
-  print 'Moving hashtable files to server...'
-  if not os.path.isdir(options.hashtable_dir):
-    print ('ERROR: Given hashtable directory, %s, does not exist' %
-           options.hashtable_dir)
-    return 1
-  shutil.copytree(options.hashtable_dir, options.data_dest_dir)
 
   # Send off the swarm test requests.
   highest_exit_code = 0
