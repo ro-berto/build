@@ -193,11 +193,6 @@ class FactoryCommands(object):
     self._zip_tool = self.PathJoin(self._script_dir, 'zip_build.py')
     self._extract_tool = self.PathJoin(self._script_dir, 'extract_build.py')
     self._cleanup_temp_tool = self.PathJoin(self._script_dir, 'cleanup_temp.py')
-    # TODO(nsylvain): Fix redundant 'slavelastic' in path.
-    self._slavelastic_tool = self.PathJoin(self._script_dir, '..',
-                                           'slavelastic', 'slavelastic',
-                                           'slavelastic', 'client',
-                                           'distribute.py')
     self._resource_sizes_tool = self.PathJoin(self._script_dir,
                                               'resource_sizes.py')
     # Get build for Chromebot.
@@ -475,16 +470,6 @@ class FactoryCommands(object):
     self.AddTestStep(gtest_command.GTestCommand, test_name, ListProperties(cmd),
                      description,
                      do_step_if=doStep)
-
-  def AddSlavelasticTestStep(self, test_name, factory_properties=None,
-                             timeout=300):
-    """Adds a step to the factory to run the slavelastic tests."""
-    manifest_file = '%s.%s.manifest' % (test_name, self._target_platform)
-    manifest_path = self.PathJoin('src', 'manifest', manifest_file)
-    cmd = [self._python, self._slavelastic_tool, manifest_path,
-           '--timeout', timeout]
-
-    self.AddTestStep(gtest_command.GTestCommand, test_name, test_command=cmd)
 
   def AddBasicShellStep(self, test_name, timeout=600, arg_list=None):
     """Adds a step to the factory to run a simple shell test with standard
