@@ -13,11 +13,13 @@ from master.factory import swarm_commands
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
   def SwarmFactory(self, target='Release', clobber=False, tests=None,
-                   mode=None, slave_type='BuilderTester',
-                   options=None, compile_timeout=1200, build_url=None,
-                   project=None, factory_properties=None, gclient_deps=None):
+                   mode=None, options=None, compile_timeout=1200,
+                   build_url=None, project=None, factory_properties=None,
+                   gclient_deps=None, network_path=None):
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
-    factory = self.ChromiumFactory(target, clobber, [], mode, slave_type,
+    # Set the slave_type to 'SwarmSlave' to prevent the factory from adding the
+    # compile step, so we can add other steps before the compile step.
+    factory = self.ChromiumFactory(target, clobber, [], mode, 'SwarmSlave',
                                    options, compile_timeout, build_url, project,
                                    factory_properties, gclient_deps)
 
@@ -26,16 +28,24 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                                      self._build_dir,
                                                      self._target_platform)
 
+    # Ensure the network drive is mapped on windows.
+    data_dest_dir = factory_properties.get('data_dest_dir')
+    if self._target_platform == 'win32':
+      swarm_command_obj.SetupWinNetworkDrive(data_dest_dir[:2], network_path)
+
+    # Now add the compile step.
+    swarm_command_obj.AddCompileStep(project or self._project, clobber,
+                                     mode=mode, options=options,
+                                     timeout=compile_timeout)
+
     gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',
                                           'http://localhost:9001')
     swarm_server = swarm_server.rstrip('/')
 
     data_server = factory_properties.get('data_server',
-                                              'http://localhost:8080')
+                                         'http://localhost:8080')
     data_server = data_server.rstrip('/')
-
-    data_dest_dir = factory_properties.get('data_dest_dir')
 
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'test_isolation_mode=hashtable' in gyp_defines:

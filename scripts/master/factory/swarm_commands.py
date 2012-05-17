@@ -47,3 +47,13 @@ class SwarmCommands(commands.FactoryCommands):
     self.AddTestStep(gtest_command.GTestCommand,
                      '%s_swarm' % test_name,
                      command)
+
+  def SetupWinNetworkDrive(self, drive, network_path):
+    script_path = self.PathJoin(self._script_dir, 'add_network_drive.py')
+
+    command = [self._python, script_path, '--drive', drive,
+               '--network_path', network_path]
+
+    self._factory.addStep(shell.ShellCommand,
+                         name='setup_windows_network_storage',
+                         command=command)
