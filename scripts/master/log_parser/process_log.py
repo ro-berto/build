@@ -315,7 +315,8 @@ class PerformanceLogProcessor(object):
     # There was no change in performance, report success.
     return builder.SUCCESS
 
-  def Process(self, revision, data, build_property=None):
+  def Process(self, revision, data, build_property=None,
+      webkit_revision='undefined'):
     """Invoked by the step with data from log file once it completes.
 
     Each subclass needs to override this method to provide custom logic,
@@ -355,7 +356,8 @@ class BenchpressLogProcessor(PerformanceLogProcessor):
     # The text summary will be built by other methods as we go.
     self._text_summary = []
 
-  def Process(self, revision, data, build_property=None):
+  def Process(self, revision, data, build_property=None,
+      webkit_revision='undefined'):
     # Revision may be -1, for a forced build.
     self._revision = revision
     self._text_summary = []
@@ -409,7 +411,8 @@ class PlaybackLogProcessor(PerformanceLogProcessor):
   # "c" is used to denote a counter, and "t" is used to denote a timer.
   RESULT_LINE = re.compile(r'^((?:c|t):[^:]+):\s*(\d+)')
 
-  def Process(self, revision, data, build_property=None):
+  def Process(self, revision, data, build_property=None,
+      webkit_revision='undefined'):
     """Does the actual log data processing.
 
     The data format follows this rule:
@@ -564,12 +567,16 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     self._graphs = {}
     self._version = 'undefined'
     self._channel = 'undefined'
+    self._webkit_revision = 'undefined'
 
-  def Process(self, revision, data, build_property=None):
+  def Process(self, revision, data, build_property=None,
+      webkit_revision='undefined'):
     # Revision may be -1, for a forced build.
     self._revision = revision
+    self._webkit_revision = webkit_revision
     self._text_summary = []
     self._graphs = {}
+
     self._version = build_property.get('version') or 'undefined'
     self._channel = build_property.get('channel') or 'undefined'
 
@@ -691,8 +698,10 @@ class GraphingLogProcessor(PerformanceLogProcessor):
         (x, graph.traces[x].value, graph.traces[x].stddev) for x in traces])
     if not self._revision:
       raise Exception("revision is None")
-    return ('{"traces": {%s}, "rev": "%s", "ver": "%s", "chan": "%s"}'
-            % (trace_json, self._revision, self._version, self._channel))
+    return ('{"traces": {%s}, "rev": "%s", "webkit_rev": "%s",'
+            ' "ver": "%s", "chan": "%s"}'
+            % (trace_json, self._revision, self._webkit_revision, self._version,
+                self._channel))
 
   def __CreateSummaryOutput(self):
     """Write the summary data file and collect the waterfall display text.

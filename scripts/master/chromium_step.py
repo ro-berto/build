@@ -268,6 +268,14 @@ class ProcessLogShellStep(shell.ShellCommand):
       revision = -1
     return revision
 
+  def _GetWebkitRevision(self):
+    """Returns the webkit revision number for the build.
+    """
+    try:
+      return self.build.getProperty('got_webkit_revision')
+    except KeyError:
+      return None
+
   def _GetBuildProperty(self):
     """Returns a dict with the channel and version."""
     build_properties = {}
@@ -291,7 +299,7 @@ class ProcessLogShellStep(shell.ShellCommand):
     if self._log_processor:
       self._result_text = self._log_processor.Process(
           self._GetRevision(), self.getLog('stdio').getText(),
-          self._GetBuildProperty())
+          self._GetBuildProperty(), webkit_revision=self._GetWebkitRevision())
 
   def getText(self, cmd, results):
     text_list = self.describe(True)

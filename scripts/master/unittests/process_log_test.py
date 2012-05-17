@@ -42,6 +42,7 @@ class GoogleLoggingStepTest(unittest.TestCase):
     super(GoogleLoggingStepTest, self).setUp()
     _RemoveOutputDir()
     self._revision = 12345
+    self._webkit_revision = 67890
     self._report_link = 'http://localhost/~user/report.html'
     self._output_dir = 'output_dir'
     self._log_processor_class = None
@@ -77,20 +78,23 @@ class GoogleLoggingStepTest(unittest.TestCase):
     step = chromium_step.ProcessLogShellStep(self._log_processor_class)
     log_file = self._LogFile(
         'stdio', open(os.path.join(test_env.DATA_PATH, logfile)).read())
-    self._SetupBuild(step, self._revision, log_file)
+    self._SetupBuild(step, self._revision, self._webkit_revision, log_file)
     return step
 
-  def _SetupBuild(self, step, revision, log_file):
+  def _SetupBuild(self, step, revision, webkit_revision, log_file):
     class BuildMock(mock.Mock):
-      def __init__(self, revision, log_files):
+      def __init__(self, revision, webkit_revision, log_files):
         mock.Mock.__init__(self)
         self._revision = revision
+        self._webkit_revision = webkit_revision
         self._getLogsCalled = 0
         self._log_files = log_files
 
       def getProperty(self, property_name):
         if property_name == 'got_revision':
           return self._revision
+        if property_name == 'got_webkit_revision':
+          return self._webkit_revision
 
       def getLogs(self):
         self._getLogsCalled += 1
@@ -98,7 +102,7 @@ class GoogleLoggingStepTest(unittest.TestCase):
           raise Exception('getLogs called more than once')
         return self._log_files
 
-    build_mock = BuildMock(revision, [log_file])
+    build_mock = BuildMock(revision, webkit_revision, [log_file])
     step.step_status = build_mock
     step.build = build_mock
 
