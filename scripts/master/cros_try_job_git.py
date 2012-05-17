@@ -65,16 +65,27 @@ def translate_v1_to_v2(parsed_job):
   parsed_job['version'] = 2
 
 
+def translate_v2_to_v3(parsed_job):
+  """Translate tryjob desc from V2 to V3."""
+  # V3 --remote-patches format is not backwards compatible.
+  if any(a.startswith('--remote-patches') for a in parsed_job['extra_args']):
+    raise BadJobfile('Cannot translate --remote-patches from tryjob v.2 to '
+                     'v.3.  Please run repo sync.')
+
+  parsed_job['version'] = 3
+
+
 class CrOSTryJobGit(TryBase):
   """Poll a Git server to grab patches to try."""
 
   _PROPERTY_SOURCE = 'Try Job'
   # The version of tryjob that the master is expecting.
-  _TRYJOB_FORMAT_VERSION = 2
+  _TRYJOB_FORMAT_VERSION = 3
 
   # Functions that translate from one tryjob version to another.
   _TRANSLATION_FUNCS = {
       1 : translate_v1_to_v2,
+      2 : translate_v2_to_v3,
   }
 
   @classmethod
@@ -145,17 +156,17 @@ class CrOSTryJobGit(TryBase):
 
     return result
 
-  def send_validation_fail_email(self, emails, error):
+  def send_validation_fail_email(self, name, emails, error):
     """Notify the user via email about the tryjob error."""
     html_content = []
     html_content.append('<html><body>')
     body = """
-Your tryjob failed the validation step.  This is most likely because <br>
-you are running an older version of cbuildbot.  Please run <br>
-<code>repo sync chromiumos/chromite</code> and try again.  If you still see<br>
-this message please contact chromeos-build@google.com.<br>
+Your tryjob with name '%(name)s' failed the validation step.  This is most
+likely because <br>you are running an older version of cbuildbot.  Please run
+<br><code>repo sync chromiumos/chromite</code> and try again.  If you still
+see<br>this message please contact chromeos-build@google.com.<br>
 """
-    html_content.append(body)
+    html_content.append(body % {'name': name})
     html_content.append("Extra error information:")
     html_content.append(error.replace('\n', '<br>\n'))
     html_content.append(self.email_footer)
@@ -195,11 +206,11 @@ this message please contact chromeos-build@google.com.<br>
     parsed = json.loads(wfd.getResult())
     try:
       validate_job(parsed)
+      self.updateJobDesc(parsed)
     except BadJobfile as e:
-      self.send_validation_fail_email(parsed['email'], str(e))
+      self.send_validation_fail_email(parsed.setdefault('name', ''),
+                                      parsed['email'], str(e))
       raise
-
-    self.updateJobDesc(parsed)
 
     # The sourcestamp/buildsets created will be merge-able.
     d = self.master.db.sourcestamps.addSourceStamp(
