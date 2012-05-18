@@ -15,6 +15,7 @@ import copy
 import logging
 import optparse
 import os
+import stat
 import sys
 import tempfile
 
@@ -42,6 +43,8 @@ import config
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
+CHROME_SANDBOX_PATH = '/opt/chromium/chrome_sandbox'
+
 DEST_DIR = 'gtest_results'
 
 HTTPD_CONF = {
@@ -49,6 +52,21 @@ HTTPD_CONF = {
     'mac': 'httpd2_mac.conf',
     'win': 'httpd.conf'
 }
+
+def should_enable_sandbox(sandbox_path):
+  """Return a boolean indicating that the current slave is capable of using the
+  sandbox and should enable it.  This should return True iff the slave is a
+  Linux host with the sandbox file present and configured correctly."""
+  if not (sys.platform.startswith('linux') and
+          os.path.exists(sandbox_path)):
+    return False
+  sandbox_stat = os.stat(sandbox_path)
+  if ((sandbox_stat.st_mode & stat.S_ISUID) and
+      (sandbox_stat.st_mode & stat.S_IRUSR) and
+      (sandbox_stat.st_mode & stat.S_IXUSR) and
+      (sandbox_stat.st_uid == 0)):
+    return True
+  return False
 
 def get_temp_count():
   """Returns the number of files and directories inside the temporary dir."""
@@ -305,12 +323,11 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
-  # Don't use a sandbox when running tests. Ideally we _would_ use a sandbox,
-  # but since the sandbox needs to be suid and owned by root, the one from the
-  # current build won't work (the buildbot would need sudo to set the proper
-  # file attributes), and we'd rather have no sandbox than pull in an old
-  # (possibly incompatible) one from the system.
-  os.environ['CHROME_DEVEL_SANDBOX'] = ''
+  # Decide whether to enable the suid sandbox for Chrome.
+  if should_enable_sandbox(CHROME_SANDBOX_PATH):
+    os.environ['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
+  else:
+    os.environ['CHROME_DEVEL_SANDBOX'] = ''
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
