@@ -334,12 +334,6 @@ def main_xcode(options, args):
   # If the project isn't in args, add all.xcodeproj to simplify configuration.
   command = ['xcodebuild', '-configuration', options.target]
 
-  def clobber():
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-        'xcodebuild')
-    print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
-
   # TODO(mmoss) Support the old 'args' usage until we're confident the master is
   # switched to passing '--solution' everywhere.
   if not '-project' in args:
@@ -356,7 +350,10 @@ def main_xcode(options, args):
 
   # Note: this clobbers all targets, not just Debug or Release.
   if options.clobber:
-    clobber()
+    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
+        'xcodebuild')
+    print('Removing %s' % build_output_dir)
+    chromium_utils.RemoveDirectory(build_output_dir)
 
   env = EchoDict(os.environ)
   common_xcode_settings(command, options, env, options.compiler)
@@ -408,9 +405,6 @@ def main_xcode(options, args):
   if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-
-  if result and not options.clobber:
-    clobber()
 
   return result
 
@@ -697,8 +691,9 @@ def main_ninja(options, args):
   os.chdir(src_dir)
 
   output_dir = os.path.join('out', options.target)
+  command = ['ninja', '-C', output_dir]
 
-  def clobber():
+  if options.clobber:
     print('Removing %s' % output_dir)
     # Deleting output_dir would also delete all the .ninja files necessary to
     # build. Clobbering should run before runhooks (which creates .ninja files).
@@ -714,10 +709,6 @@ def main_ninja(options, args):
           os.unlink(f)
     os.path.walk(output_dir, delete_objects, None)
 
-  if options.clobber:
-    clobber()
-
-  command = ['ninja', '-C', output_dir]
   if options.verbose:
     command.append('-v')
   command.extend(options.build_args)
@@ -762,12 +753,7 @@ def main_ninja(options, args):
 
   # Run the build.
   env.print_overrides()
-  result = chromium_utils.RunCommand(command, env=env)
-
-  if options.clobber:
-    clobber()
-
-  return result
+  return chromium_utils.RunCommand(command, env=env)
 
 
 def main_scons(options, args):
