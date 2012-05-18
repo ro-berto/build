@@ -455,7 +455,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 suite='PERFORMANCE',
                                 src_base='..',
                                 workdir=workdir,
-                                factory_properties=fp)
+                                factory_properties=fp,
+                                perf=True)
     if R('chrome_endure_control_tests'):
       f.AddChromeEndureTest(
           'chrome_endure_control_test',
@@ -817,68 +818,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
-
-  def ChromiumQAFactory(self, target='Release', clobber=False, tests=None,
-                        mode=None, slave_type='Tester', options=None,
-                        compile_timeout=1200, build_url=None, project=None,
-                        factory_properties=None):
-
-    # Clear existing solutions so by default we don't sync the universe.
-    self._solutions = []
-    # When syncing on a branch, don't sync these components on a branch.
-    avoid_branch_sync_component = ['python_26', 'chrome_plugin_tests',
-                                   'pyauto_private', 'avperf',]
-    # Sync only what we need (e.g. PyAuto test files).
-    for name, url in self.PYAUTO_DEPS:
-      # If branch is available, replace 'trunk' to 'branches/<BRANCH>'
-      # in a url.
-      if factory_properties and factory_properties.get('branch'):
-        branch = factory_properties.get('branch')
-        component = url.split('/')[-1]
-
-        # webdriver.DEPS does not exist before 878.
-        # TODO(kkania): Remove this clause when 878+ is stable.
-        if int(branch) < 878 and component == 'webdriver.DEPS':
-          continue
-
-        if (not component in avoid_branch_sync_component and
-            'pyftpdlib' not in url):
-          url = url.replace('trunk', 'branches/' + str(branch))
-
-      # Yes, url goes first, which is different from how most people
-      # lay out their .gclient.
-      # Prepend to make sure chrome/src is not created by a DEPS pull.
-      self._solutions.append(gclient_factory.GClientSolution(url, name))
-
-    # Instead of calling self.ChromiumFactory(), we copy a few of it's
-    # lines (e.g. everything from here on other than
-    # AddDownloadAndExtractOfficialBuild()).
-
-    # Ensure that component is set correctly in the gyp defines.
-    self.ForceComponent(target, project, factory_properties)
-
-    factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
-                                                          target,
-                                                          self._build_dir,
-                                                          self._target_platform)
-
-    qa_identifier = factory_properties.get('qa_identifier')
-    if factory_properties.get('branch'):
-      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(qa_identifier,
-          factory_properties['branch'])
-    else:
-      chromium_cmd_obj.AddDownloadAndExtractOfficialBuild(qa_identifier)
-
-    # crash_service.exe doesn't fire up on its own because we have the
-    # binaries in chrome-win32 dir (not in the default src/chrome/Release).
-    # Fire it by force.
-    if self._target_platform == 'win32':
-      chromium_cmd_obj.AddRunCrashHandler(build_dir='chrome-win32', target='.')
-    self._AddTests(chromium_cmd_obj, tests, mode, factory_properties)
-    return factory
 
   def ChromiumGPUFactory(self, target='Release', clobber=False, tests=None,
                          mode=None, slave_type='Tester', options=None,
