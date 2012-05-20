@@ -195,6 +195,11 @@ class GClientFactory(object):
                    compile_timeout=1200, build_url=None, project=None,
                    factory_properties=None, gclient_deps=None):
     factory_properties = factory_properties or {}
+    if (options and
+        '--build-tool=ninja' in options and '--compiler=goma-clang' in options):
+      # Ninja needs CC and CXX set at gyp time.
+      factory_properties['gclient_env']['CC'] = 'clang'
+      factory_properties['gclient_env']['CXX'] = 'clang++'
 
     # Create the spec for the solutions
     skip_exclude = False
