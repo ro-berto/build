@@ -33,13 +33,13 @@ S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel',
    auto_reboot=True)
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--build-tool=make', '--compiler=goma-clang', '--',
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
     tests=['browser_tests', 'interactive_ui', 'unit'],
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {
-            'GYP_GENERATORS':'make',
+            'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
     }))
@@ -47,7 +47,7 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel',
   auto_reboot=True)
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
-    options=['--build-tool=make', '--compiler=goma-clang', '--',
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
     tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler_moz',
            'page_cycler_morejs', 'page_cycler_intl1', 'page_cycler_intl2',
@@ -58,7 +58,7 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
         'show_perf_results': True,
         'perf_id': 'chromium-rel-mac6-webkit',
         'gclient_env': {
-            'GYP_GENERATORS':'make',
+            'GYP_GENERATORS':'ninja',
             'GYP_DEFINES': 'fastbuild=1',
         },
     }))
@@ -70,7 +70,7 @@ B('GPU Mac', 'f_gpu_mac_rel', auto_reboot=True,
   scheduler='s8_webkit_rel')
 F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
     target='Release',
-    options=['--build-tool=make', '--compiler=goma-clang',
+    options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_builder'],
     tests=['gpu_tests', 'gl_tests',
            'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
@@ -79,7 +79,7 @@ F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
         'perf_id': 'gpu-webkit-mac',
         'show_perf_results': True,
         'gclient_env': {
-            'GYP_GENERATORS':'make',
+            'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
     }))
@@ -109,13 +109,13 @@ B('GPU Mac (dbg)', 'f_gpu_mac_dbg', auto_reboot=True,
   scheduler='s8_webkit_dbg')
 F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
-    options=['--build-tool=make', '--compiler=goma-clang',
+    options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_debug_builder'],
     tests=['gpu_tests', 'gl_tests'],
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {
-            'GYP_GENERATORS':'make',
+            'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
     }))
