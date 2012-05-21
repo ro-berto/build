@@ -50,10 +50,10 @@ class V8Commands(commands.FactoryCommands):
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
 
-    self._archive_tool = J(self._v8_script_dir, 'archive_v8.py')
     self._v8_test_tool = J(self._build_dir, 'tools')
 
     # Scripts in the v8 scripts dir.
+    self._v8archive_tool = J(self._v8_script_dir, 'v8archive.py')
     self._v8testing_tool = J(self._v8_script_dir, 'v8testing.py')
 
   def GetV8TestingCommand(self):
@@ -155,7 +155,7 @@ class V8Commands(commands.FactoryCommands):
   def AddArchiveBuild(self, mode='dev', show_url=True,
       extra_archive_paths=None):
     """Adds a step to the factory to archive a build."""
-    cmd = [self._python, self._archive_tool, '--target', self._target]
+    cmd = [self._python, self._v8archive_tool, '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'Archiving', cmd,
                  workdir='build/v8')
 
