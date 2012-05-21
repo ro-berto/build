@@ -323,15 +323,10 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
-  # Decide whether to enable the suid sandbox for Chrome.
-  if should_enable_sandbox(CHROME_SANDBOX_PATH):
-    print 'Enabling sandbox.  Setting environment variable:'
-    print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
-    os.environ['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
-  else:
-    print 'Disabling sandbox.  Setting environment variable:'
-    print '  CHROME_DEVEL_SANDBOX=""'
-    os.environ['CHROME_DEVEL_SANDBOX'] = ''
+  # Keep sandbox disabled for now.
+  print 'Disabling sandbox.  Setting environment variable:'
+  print '  CHROME_DEVEL_SANDBOX=""'
+  os.environ['CHROME_DEVEL_SANDBOX'] = ''
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
