@@ -56,6 +56,7 @@ import sys
 import tempfile
 import threading
 
+from slave.slave_utils import GSUtilSetup
 
 # pylint: disable=W0232
 class TerminateMessageThread:
@@ -86,15 +87,15 @@ class GitZip(object):
     if workdir is None:
       workdir = self.workdir
     def _thread_main():
+      thr = threading.current_thread()
       try:
         proc = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=workdir)
         (stdout, stderr) = proc.communicate()
-        thr = threading.current_thread()
-      except Exception:
+      except Exception, e:
         thr.status = -1
         thr.stdout = ''
-        thr.stderr = ''
+        thr.stderr = repr(e)
       else:
         thr.status = proc.returncode
         thr.stdout = stdout
@@ -107,6 +108,7 @@ class GitZip(object):
     if thr.isAlive():
       raise RuntimeError('command "%s" in dir "%s" timed out' % (
           ' '.join(cmd), workdir))
+    # pylint: disable=E1101
     if raiseOnFailure and thr.status != 0:
       raise RuntimeError('command "%s" in dir "%s" exited with status %d:\n%s' %
                          (' '.join(cmd), workdir, thr.status, thr.stderr))
@@ -184,7 +186,9 @@ class GitZip(object):
         cmd = ['git', 'fetch', 'origin']
         workdir = clonedir
       elif url is not None:
-        self._run_cmd(['mkdir', '-p', os.path.dirname(clonedir)])
+        clonedir_parent = os.path.dirname(clonedir)
+        if clonedir_parent and not os.path.isdir(clonedir_parent):
+          self._run_cmd(['mkdir', '-p', clonedir_parent])
         cmd = ['git', 'clone', '-n', url, clonedir]
         workdir = self.workdir
       else:
@@ -210,10 +214,11 @@ class GitZip(object):
     try:
       if not self.gs_bucket:
         return
+      gsutil_exe = GSUtilSetup()
       gs_url = self.gs_bucket
       if not gs_url.startswith('gs://'):
         gs_url = 'gs://%s' % gs_url
-      cmd = ['gsutil', 'cp', '-a', self.gs_acl] + list(f) + [gs_url]
+      cmd = [gsutil_exe, 'cp', '-a', self.gs_acl] + list(f) + [gs_url]
       self._run_cmd(cmd)
     except Exception, e:
       threading.current_thread().err = e
@@ -256,10 +261,12 @@ class GitZip(object):
   def Run(self):
     message_thread = threading.Thread(target=self._pump_messages)
     message_thread.start()
-    self.DoFetch(os.path.join(self.workdir, self.base), self.url)
-    self.ZipAndUpload()
-    self.messages.put(TerminateMessageThread)
-    message_thread.join()
+    try:
+      self.DoFetch(self.base, self.url)
+      self.ZipAndUpload()
+    finally:
+      self.messages.put(TerminateMessageThread)
+      message_thread.join()
 
 
 if __name__ == '__main__':
