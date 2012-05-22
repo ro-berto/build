@@ -1009,7 +1009,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
     factory_properties = factory_properties or {}
-    cmd = [self._python, self._annotated_steps]
+    script = factory_properties.get('annotated_script', self._annotated_steps)
+    cmd = [self._python, script]
     self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='annotated_steps',
                           description='annotated_steps',
