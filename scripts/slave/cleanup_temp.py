@@ -7,6 +7,7 @@
 
 import ctypes
 import getpass
+import glob
 import logging
 import os
 import socket
@@ -45,17 +46,25 @@ def send_alert(path, left):
             str(e))
 
 
-def CleanupTempDirectory(temp_dir):
-  """Cleans up the TEMP directory.
+def safe_rmdir(path):
+  """Tries to delete a directory."""
+  try:
+    os.rmdir(path)
+  except OSError:
+    pass  # Ignore failures, this is best effort only
+
+
+def cleanup_directory(directory_to_clean):
+  """Cleans up a directory.
 
   This is a best effort attempt to clean up, since some files will be held
   open for some reason.
 
   Args:
-    temp_dir: A string representing the root of the temporary directory.
+    directory_to_clean: directory to clean, the directory itself is not deleted.
   """
   removed_file_count = 0
-  for root, dirs, files in os.walk(temp_dir, topdown=False):
+  for root, dirs, files in os.walk(directory_to_clean, topdown=False):
     for name in files:
       try:
         os.remove(os.path.join(root, name))
@@ -63,11 +72,18 @@ def CleanupTempDirectory(temp_dir):
       except OSError:
         pass  # Ignore failures, this is best effort only
     for name in dirs:
-      try:
-        os.rmdir(os.path.join(root, name))
-      except OSError:
-        pass  # Ignore failures, this is best effort only
-  print 'Removed %d files from %s' % (removed_file_count, temp_dir)
+      safe_rmdir(os.path.join(root, name))
+    sys.stdout.write('.')
+    sys.stdout.flush()
+  print '\nRemoved %d files from %s' % (removed_file_count, directory_to_clean)
+
+
+def remove_build_dead(slave_path):
+  """Removes all the build.dead directories."""
+  for path in glob.iglob(os.path.join(slave_path, '*', 'build.dead')):
+    print 'Removing %s' % path
+    cleanup_directory(path)
+    safe_rmdir(path)
 
 
 def get_free_space(path):
@@ -94,8 +110,12 @@ def check_free_space_path(path, min_free_space=1024*1024*1024):
 def main_win():
   """Main function for Windows platform."""
   slave_utils.RemoveChromeTemporaryFiles()
+  if os.path.isdir('e:\\'):
+    remove_build_dead('e:\\b\\build\\slave')
+  else:
+    remove_build_dead('c:\\b\\build\\slave')
   # TODO(maruel): Temporary, add back.
-  #CleanupTempDirectory(os.environ['TEMP'])
+  #cleanup_directory(os.environ['TEMP'])
   check_free_space_path('c:\\')
   if os.path.isdir('e:\\'):
     check_free_space_path('e:\\')
@@ -117,6 +137,7 @@ def main_win():
 def main_mac():
   """Main function for Mac platform."""
   slave_utils.RemoveChromeTemporaryFiles()
+  remove_build_dead('/b/build/slave')
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
   if os.path.isdir('/b'):
@@ -129,8 +150,9 @@ def main_mac():
 def main_linux():
   """Main function for linux platform."""
   slave_utils.RemoveChromeTemporaryFiles()
+  remove_build_dead('/b/build/slave')
   # TODO(maruel): Temporary, add back.
-  # CleanupTempDirectory('/tmp')
+  # cleanup_directory('/tmp')
   if os.path.isdir('/b'):
     check_free_space_path('/b')
   check_free_space_path(os.environ['HOME'])
