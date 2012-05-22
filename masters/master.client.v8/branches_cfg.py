@@ -9,9 +9,9 @@
 # Note that stable, beta and dev might not always correspond to what is
 # used in chromium, but here we simple use it to mean the last 3 branches.
 
-stable_branch = '3.7'
-beta_branch = '3.8'
-dev_branch = '3.9'
+stable_branch = '3.8'
+beta_branch = '3.9'
+dev_branch = '3.10'
 branch_names = {
     'stable': {'ia32': 'V8 Linux - ' + stable_branch + ' branch',
                'arm': 'V8 arm - sim - ' + stable_branch + ' branch',
