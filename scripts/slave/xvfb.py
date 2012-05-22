@@ -38,28 +38,28 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   StopVirtualX(slave_build_name)
 
   # Figure out which X server to try.
-  cmd = "Xvfb"
+  cmd = 'Xvfb'
   if server_dir and os.path.exists(server_dir):
     cmd = os.path.join(server_dir, 'Xvfb.' + platform.architecture()[0])
     if not os.path.exists(cmd):
       cmd = os.path.join(server_dir, 'Xvfb')
     if not os.path.exists(cmd):
-      print "No Xvfb found in designated server path:", server_dir
-      raise Exception("No virtual server")
+      print 'No Xvfb found in designated server path:', server_dir
+      raise Exception('No virtual server')
 
   # Start a virtual X server that we run the tests in.  This makes it so we can
   # run the tests even if we didn't start the tests from an X session.
-  proc = subprocess.Popen([cmd, ":9", "-screen", "0", "1024x768x24", "-ac"],
+  proc = subprocess.Popen([cmd, ':9', '-screen', '0', '1024x768x24', '-ac'],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   open(xvfb_pid_filename, 'w').write(str(proc.pid))
-  os.environ['DISPLAY'] = ":9"
+  os.environ['DISPLAY'] = ':9'
 
   # Verify that Xvfb has started by using xdisplaycheck.
   if build_dir:
     xdisplaycheck_path = os.path.join(build_dir, 'xdisplaycheck')
     if os.path.exists(xdisplaycheck_path):
-      print "Verifying Xvfb has started..."
+      print 'Verifying Xvfb has started...'
       checkstarttime = time.time()
       xdisplayproc = subprocess.Popen([xdisplaycheck_path],
                                       stdout=subprocess.PIPE,
@@ -68,34 +68,34 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
       logs = xdisplayproc.communicate()[0]
       checktime = time.time() - checkstarttime
       if xdisplayproc.returncode != 0:
-        print "xdisplaycheck failed after %d seconds." % checktime
-        print "xdisplaycheck output:"
+        print 'xdisplaycheck failed after %d seconds.' % checktime
+        print 'xdisplaycheck output:'
         for l in logs.splitlines():
-          print "> %s" % l
+          print '> %s' % l
         rc = proc.poll()
         if rc is None:
-          print "Xvfb still running, stopping."
+          print 'Xvfb still running, stopping.'
           proc.terminate()
         else:
-          print "Xvfb exited, code %d" % rc
+          print 'Xvfb exited, code %d' % rc
 
-        print "Xvfb output:"
+        print 'Xvfb output:'
         for l in proc.communicate()[0].splitlines():
-          print "> %s" % l
+          print '> %s' % l
         raise Exception(logs)
       else:
-        print "xdisplaycheck succeeded after %d seconds." % checktime
-        print "xdisplaycheck output:"
+        print 'xdisplaycheck succeeded after %d seconds.' % checktime
+        print 'xdisplaycheck output:'
         for l in logs.splitlines():
-          print "> %s" % l
-      print "...OK"
+          print '> %s' % l
+      print '...OK'
 
   if with_wm:
     # Some ChromeOS tests need a window manager.
-    subprocess.Popen("icewm", stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print "Window manager (icewm) started."
+    subprocess.Popen('icewm', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print 'Window manager (icewm) started.'
   else:
-    print "No window manager required."
+    print 'No window manager required.'
 
 
 
@@ -106,11 +106,11 @@ def StopVirtualX(slave_build_name):
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   if os.path.exists(xvfb_pid_filename):
     xvfb_pid = int(open(xvfb_pid_filename).read())
-    print "Stopping Xvfb with pid %d ..." % xvfb_pid
+    print 'Stopping Xvfb with pid %d ...' % xvfb_pid
     # If the process doesn't exist, we raise an exception that we can ignore.
     try:
       os.kill(xvfb_pid, signal.SIGKILL)
     except OSError:
-      print "... killing failed, presuming unnecessary."
+      print '... killing failed, presuming unnecessary.'
     os.remove(xvfb_pid_filename)
-    print "Xvfb pid file removed"
+    print 'Xvfb pid file removed'
