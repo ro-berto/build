@@ -35,7 +35,8 @@ def validate_job(parsed_job):
             ('email', list, True),
             ('bot', list, True),
             ('extra_args', list, False),
-            ('version', int, True)]
+            ('version', int, True),
+            ('slaves_request', list, False)]
 
   error_msgs = []
   for name, f_type, required in fields:
@@ -137,7 +138,9 @@ class CrOSTryJobGit(TryBase):
   def get_props(self, bot, options):
     """Overriding base class method."""
     props = Properties()
-    props.setProperty('extra_args', options['extra_args'],
+    props.setProperty('extra_args', options.get('extra_args', []),
+                      self._PROPERTY_SOURCE)
+    props.setProperty('slaves_request', options.get('slaves_request', []),
                       self._PROPERTY_SOURCE)
     props.setProperty('chromeos_config', bot, self._PROPERTY_SOURCE)
     return props
