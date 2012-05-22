@@ -133,7 +133,7 @@ class V8Commands(commands.FactoryCommands):
                      workdir='build/v8/')
 
   def AddFuzzer(self, properties=None):
-    cmd = ['./fuzz-v8.sh']
+    cmd = ['bash', './tools/fuzz-harness.sh']
     self.AddTestStep(shell.ShellCommand, 'Fuzz', cmd,
                      workdir='build/v8/')
 
