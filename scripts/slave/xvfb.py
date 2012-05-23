@@ -12,11 +12,14 @@ import subprocess
 import tempfile
 import time
 
+def _XvfbDisplayIndex(slave_build_name):
+  return '9'
+
 def _XvfbPidFilename(slave_build_name):
   """Returns the filename to the Xvfb pid file.  This name is unique for each
   builder. This is used by the linux builders."""
   return os.path.join(tempfile.gettempdir(),
-                      'xvfb-' + slave_build_name  + '.pid')
+                      'xvfb-' + _XvfbDisplayIndex(slave_build_name)  + '.pid')
 
 
 def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
@@ -37,6 +40,26 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   # from a previous test run.
   StopVirtualX(slave_build_name)
 
+  xdisplaycheck_path = None
+  if build_dir:
+    xdisplaycheck_path = os.path.join(build_dir, 'xdisplaycheck')
+
+  display = ':%s' % _XvfbDisplayIndex(slave_build_name)
+  # Note we don't add the optional screen here (+ '.0')
+  os.environ['DISPLAY'] = display
+
+  if xdisplaycheck_path and os.path.exists(xdisplaycheck_path):
+    print 'Verifying Xvfb is not running ...'
+    checkstarttime = time.time()
+    xdisplayproc = subprocess.Popen([xdisplaycheck_path, '--noserver'],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT)
+    # Wait for xdisplaycheck to exit.
+    logs = xdisplayproc.communicate()[0]
+    if xdisplayproc.returncode == 0:
+      print 'xdisplaycheck says there is a display still running, exiting...'
+      raise Exception('Display already present.')
+
   # Figure out which X server to try.
   cmd = 'Xvfb'
   if server_dir and os.path.exists(server_dir):
@@ -49,46 +72,43 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
 
   # Start a virtual X server that we run the tests in.  This makes it so we can
   # run the tests even if we didn't start the tests from an X session.
-  proc = subprocess.Popen([cmd, ':9', '-screen', '0', '1024x768x24', '-ac'],
+  proc = subprocess.Popen([cmd, display, '-screen', '0', '1024x768x24', '-ac'],
                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
   xvfb_pid_filename = _XvfbPidFilename(slave_build_name)
   open(xvfb_pid_filename, 'w').write(str(proc.pid))
-  os.environ['DISPLAY'] = ':9'
 
   # Verify that Xvfb has started by using xdisplaycheck.
-  if build_dir:
-    xdisplaycheck_path = os.path.join(build_dir, 'xdisplaycheck')
-    if os.path.exists(xdisplaycheck_path):
-      print 'Verifying Xvfb has started...'
-      checkstarttime = time.time()
-      xdisplayproc = subprocess.Popen([xdisplaycheck_path],
-                                      stdout=subprocess.PIPE,
-                                      stderr=subprocess.STDOUT)
-      # Wait for xdisplaycheck to exit.
-      logs = xdisplayproc.communicate()[0]
-      checktime = time.time() - checkstarttime
-      if xdisplayproc.returncode != 0:
-        print 'xdisplaycheck failed after %d seconds.' % checktime
-        print 'xdisplaycheck output:'
-        for l in logs.splitlines():
-          print '> %s' % l
-        rc = proc.poll()
-        if rc is None:
-          print 'Xvfb still running, stopping.'
-          proc.terminate()
-        else:
-          print 'Xvfb exited, code %d' % rc
-
-        print 'Xvfb output:'
-        for l in proc.communicate()[0].splitlines():
-          print '> %s' % l
-        raise Exception(logs)
+  if xdisplaycheck_path and os.path.exists(xdisplaycheck_path):
+    print 'Verifying Xvfb has started...'
+    checkstarttime = time.time()
+    xdisplayproc = subprocess.Popen([xdisplaycheck_path],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT)
+    # Wait for xdisplaycheck to exit.
+    logs = xdisplayproc.communicate()[0]
+    checktime = time.time() - checkstarttime
+    if xdisplayproc.returncode != 0:
+      print 'xdisplaycheck failed after %d seconds.' % checktime
+      print 'xdisplaycheck output:'
+      for l in logs.splitlines():
+        print '> %s' % l
+      rc = proc.poll()
+      if rc is None:
+        print 'Xvfb still running, stopping.'
+        proc.terminate()
       else:
-        print 'xdisplaycheck succeeded after %d seconds.' % checktime
-        print 'xdisplaycheck output:'
-        for l in logs.splitlines():
-          print '> %s' % l
-      print '...OK'
+        print 'Xvfb exited, code %d' % rc
+
+      print 'Xvfb output:'
+      for l in proc.communicate()[0].splitlines():
+        print '> %s' % l
+      raise Exception(logs)
+    else:
+      print 'xdisplaycheck succeeded after %d seconds.' % checktime
+      print 'xdisplaycheck output:'
+      for l in logs.splitlines():
+        print '> %s' % l
+    print '...OK'
 
   if with_wm:
     # Some ChromeOS tests need a window manager.
