@@ -875,10 +875,6 @@ def main_win(options, args):
   if ib:
     ib = os.path.join(ib, 'BuildConsole.exe')
 
-  # We enable IB only if it is present and we build using VS2008.
-  if options.msvs_version != 8:
-    options.no_ib = True
-
   if ib and os.path.exists(ib) and not options.no_ib:
     tool = ib
     tool_options = ['/Cfg=%s|Win32' % options.target]
