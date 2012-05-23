@@ -20,15 +20,9 @@ class StatsBuilderStatusResource(HtmlResource):
     numberOfFailures = 0
     failingSteps = {}
 
-    lastBuild = self.builder_status.getLastFinishedBuild()
-    lastBuildNum = lastBuild.getNumber() if lastBuild else -1
-    firstBuildNum = max(0, lastBuildNum - maxBuilds)
-
-    for buildNum in range(firstBuildNum, lastBuildNum+1):
-      build = self.builder_status.getBuild(buildNum)
-      if not build or not build.isFinished():
-        continue
-
+    for build in self.builder_status.generateFinishedBuilds(
+        max_search=maxBuilds):
+      buildNum = build.getNumber()
       if build.getResults() == builder.SUCCESS or \
          build.getResults() == builder.WARNINGS:
         (start, end) = build.getTimes()
@@ -64,7 +58,8 @@ class StatsBuilderStatusResource(HtmlResource):
     cxt['colorMap'] = { 'compile': 1, 'update': 1 };
 
   def content(self, request, cxt):
-    maxBuilds = request.args.get('max', self.builder_status.buildCacheSize/2)
+    maxBuilds = request.args.get(
+        'max', [self.builder_status.buildCacheSize/2])[0]
     self.getBuilderVariables(cxt, maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("builder_stats.html")
@@ -124,7 +119,7 @@ class StatsStatusResource(HtmlResource):
     cxt['builderFailures'] = builderFailures
 
   def content(self, request, cxt):
-    maxBuilds = request.args.get("max", 50)
+    maxBuilds = request.args.get("max", [50])[0]
     self.getMainVariables(self.getStatus(request), cxt, maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("stats.html")
