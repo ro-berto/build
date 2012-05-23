@@ -90,8 +90,6 @@ def dom_perf(options, args):
       build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
   elif chromium_utils.IsLinux():
     build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
-    xvfb.StartVirtualX(options.target,
-                       os.path.join(build_dir, options.target))
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)
   if not os.path.exists(test_exe_path):
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
@@ -153,11 +151,17 @@ def dom_perf(options, args):
 
     return result
 
-  result = run_and_print(False)
-  result |= run_and_print(True)
+  try:
+    if chromium_utils.IsLinux():
+      xvfb.StartVirtualX(options.target,
+                         os.path.join(build_dir, options.target))
 
-  if chromium_utils.IsLinux():
-    xvfb.StopVirtualX(options.target)
+    result = run_and_print(False)
+    result |= run_and_print(True)
+
+  finally:
+    if chromium_utils.IsLinux():
+      xvfb.StopVirtualX(options.target)
 
   return result
 
