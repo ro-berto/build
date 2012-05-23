@@ -313,22 +313,12 @@ class BuilderStatus(styles.Versioned):
         return self.currentBuilds
 
     def getLastFinishedBuild(self):
-        # The last finished build should be the build right after the number of
-        # currently running builds.  First, identify how many currently running
-        # builds there are.
-        num_of_running_builds = len(self.getState()[1])
-        # Now grab the oldest running build and last finished build.  We'll
-        # return the last finished build.  Before we do that, assert that what
-        # we have matches how we expect the system to work.
-        oldest_running_build = None
-        if num_of_running_builds > 0:
-          oldest_running_build = self.getBuild(-num_of_running_builds)
-        last_finished_build = self.getBuild(-num_of_running_builds-1)
-        if oldest_running_build:  # orb may be None when no builds are running.
-          assert not oldest_running_build.isFinished()
-        if last_finished_build:  # lfb may be None on a new master or builder.
-          assert last_finished_build.isFinished()
-        return last_finished_build
+        for build in self.generateFinishedBuilds(num_builds=1):
+            assert build and build.isFinished, \
+                   'builder %s build %s is not finished' % (
+                   self.getName(), build)
+            return build
+        return None
 
     def getCategory(self):
         return self.category
