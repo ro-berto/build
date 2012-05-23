@@ -34,9 +34,12 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
       swarm_command_obj.SetupWinNetworkDrive(data_dest_dir[:2], network_path)
 
     # Now add the compile step.
-    swarm_command_obj.AddCompileStep(project or self._project, clobber,
-                                     mode=mode, options=options,
-                                     timeout=compile_timeout)
+    swarm_command_obj.AddCompileStep(
+        project or self._project, clobber,
+        mode=mode,
+        options=options,
+        timeout=compile_timeout,
+        haltOnFailure=False)
 
     gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',

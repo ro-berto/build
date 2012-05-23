@@ -771,32 +771,31 @@ class FactoryCommands(object):
     return ListProperties(cmd)
 
 
-  def AddCompileStep(self, solution, clobber=False, description='compiling',
-                     descriptionDone='compile', timeout=600, mode=None,
-                     options=None):
+  def AddCompileStep(self, solution, clobber=False,
+                     timeout=600, mode=None,
+                     options=None, haltOnFailure=True):
     """Adds a step to the factory to compile the solution.
 
     Args:
       solution: the solution/sub-project file to build
       clobber: if True, clobber the build (that is, delete the build
           directory) before building
-      description: for the waterfall
-      descriptionDone: for the waterfall
       timeout: if no output is received in this many seconds, the compile step
           will be killed
       mode: if given, this will be passed as the --mode option to the compile
           command
       options: list of additional options to pass to the compile command
+      halfOnFailure: should stop the build if compile fails
     """
-    self._factory.addStep(cl_command.CLCommand,
-                          enable_warnings=0,
-                          timeout=timeout,
-                          description=description,
-                          descriptionDone=descriptionDone,
-                          command=self.GetBuildCommand(clobber,
-                                                       solution,
-                                                       mode,
-                                                       options))
+    self._factory.addStep(
+        cl_command.CLCommand,
+        name='compile',
+        enable_warnings=0,
+        timeout=timeout,
+        description='compiling',
+        descriptionDone='compile',
+        command=self.GetBuildCommand(clobber, solution, mode, options),
+        haltOnFailure=haltOnFailure)
 
   def GetPerfStepClass(self, factory_properties, test_name, log_processor_class,
                        command_class=None, **kwargs):
