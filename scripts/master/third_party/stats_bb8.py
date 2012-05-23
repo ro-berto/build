@@ -9,10 +9,10 @@ class StatsBuilderStatusResource(HtmlResource):
     self.builder_status = builder_status
 
   def getBuilderVariables(self, cxt, maxBuilds):
-    # 1. build time over 300 builds or average 5 weeks
+    # 1. build time over <maxBuilds> builds
     # 2. pie chart, success failures
     # 3. pie chart, which steps fails the most
-    # 4. 1 graph per step showing last 300 builds timing, or average 5 weeks.
+    # 4. 1 graph per step showing last <maxBuilds> builds
     # click on a graph makes it go bigger.
     buildTimes = []
     stepTimes = {}
@@ -76,7 +76,7 @@ class StatsStatusResource(HtmlResource):
     self.allowForce = allowForce
     self.css = css
 
-  def getMainVariables(self, status, cxt, maxBuilds):
+  def getMainVariables(self, status, cxt, maxBuilds=None):
     builderNames = []
     builderTimes = []
     builderFailures = []
@@ -84,20 +84,18 @@ class StatsStatusResource(HtmlResource):
     for builderName in status.getBuilderNames():
       builderNames.append(builderName)
       builderObj = status.getBuilder(builderName)
-
-      lastBuild = builderObj.getLastFinishedBuild()
-      lastBuildNum = lastBuild.getNumber() if lastBuild else -1
-      firstBuildNum = max(0, lastBuildNum - maxBuilds)
+      if maxBuilds is None:
+        builderMaxBuilds = builderObj.buildCacheSize/2
+      else:
+        builderMaxBuilds = maxBuilds
 
       goodCount = 0
       badCount = 0
       buildTimes = []
 
-      for buildNum in range(firstBuildNum, lastBuildNum+1):
-        build = builderObj.getBuild(buildNum)
-        if not build or not build.isFinished():
-          continue
-
+      for build in builderObj.generateFinishedBuilds(
+          max_search=builderMaxBuilds):
+        buildNum = build.getNumber()
         if (build.getResults() == builder.SUCCESS or
             build.getResults() == builder.WARNINGS):
           (start, end) = build.getTimes()
@@ -119,8 +117,8 @@ class StatsStatusResource(HtmlResource):
     cxt['builderFailures'] = builderFailures
 
   def content(self, request, cxt):
-    maxBuilds = request.args.get("max", [50])[0]
-    self.getMainVariables(self.getStatus(request), cxt, maxBuilds)
+    maxBuilds = request.args.get("max", [None])[0]
+    self.getMainVariables(self.getStatus(request), cxt, maxBuilds=maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("stats.html")
     return template.render(cxt)
