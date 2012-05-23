@@ -912,6 +912,8 @@ def GetCBuildbotConfigs(chromite_path=None):
   Returns:
     A list of config definition dictionaries sorted with left-most config first.
   """
+  if sys.platform == 'win32':
+    return {}
   try:
     if chromite_path is None:
       # Chromite is in the DEPS file, and pulled down as part of 'gclient sync'.
