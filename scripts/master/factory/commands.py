@@ -747,7 +747,7 @@ class FactoryCommands(object):
     """
     cmd = [self._python, self._compile_tool]
     if solution:
-      split_solution = solution.split(';')
+      split_solution = solution.split(';', 1)
       cmd.extend(['--solution', split_solution[0]])
       if len(split_solution) == 2:
         cmd.extend(['--project', split_solution[1]])

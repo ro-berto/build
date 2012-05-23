@@ -54,6 +54,9 @@ class SwarmCommands(commands.FactoryCommands):
     command = [self._python, script_path, '--drive', drive,
                '--network_path', network_path]
 
-    self._factory.addStep(shell.ShellCommand,
-                         name='setup_windows_network_storage',
-                         command=command)
+    self._factory.addStep(
+        shell.ShellCommand,
+        name='setup_windows_network_storage',
+        description='setup_windows_network_storage',
+        descriptionDone='setup_windows_network_storage',
+        command=command)
