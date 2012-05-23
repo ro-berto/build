@@ -47,12 +47,17 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                          'http://localhost:8080')
     data_server = data_server.rstrip('/')
 
+    ninja = '--build-tool=ninja' in (options or [])
+
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'test_isolation_mode=hashtable' in gyp_defines:
       if self._target_platform == 'win32':
         out_dir = 'build'
       elif self._target_platform == 'darwin':
-        out_dir = 'xcodebuild'
+        if ninja:
+          out_dir = 'out'
+        else:
+          out_dir = 'xcodebuild'
       else:
         out_dir = 'out'
 
