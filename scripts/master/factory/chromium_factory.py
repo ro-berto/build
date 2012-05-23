@@ -217,9 +217,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                  self.CUSTOM_VARS_NACL_TRUNK_URL])
     internal_custom_deps_list = [main]
     if config.Master.trunk_internal_url_src and pull_internal:
+      if full_checkout:
+        needed_components = None
+      else:
+        needed_components = self.NEEDED_COMPONENTS_INTERNAL
       internal = gclient_factory.GClientSolution(
                      config.Master.trunk_internal_url_src,
-                     needed_components=self.NEEDED_COMPONENTS_INTERNAL)
+                     needed_components=needed_components)
       internal_custom_deps_list.append(internal)
 
     additional_svn_urls = additional_svn_urls or []
