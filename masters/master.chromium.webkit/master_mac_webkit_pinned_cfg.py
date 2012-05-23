@@ -65,7 +65,12 @@ B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests', auto_reboot=True,
 F('f_webkit_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={
         'archive_webkit_results': True,
         'layout_test_platform': 'chromium-mac',

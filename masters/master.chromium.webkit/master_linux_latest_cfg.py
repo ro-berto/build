@@ -34,7 +34,11 @@ S('s9_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Linux Tests', 'f_linux_tests_rel', auto_reboot=True,
   scheduler='s9_webkit_rel')
 F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
-    tests=['unit', 'browser_tests', 'interactive_ui'],
+    tests=[
+      'browser_tests',
+      'interactive_ui',
+      'unit',
+    ],
     options=['--compiler=goma'],
     factory_properties={'generate_gtest_json': True}))
 
@@ -42,11 +46,21 @@ B('Linux Perf', 'f_linux_perf_rel', auto_reboot=True,
   scheduler='s9_webkit_rel')
 F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
     options=['--compiler=goma', 'chromium_builder_perf'],
-    tests=['dom_perf', 'dromaeo', 'page_cycler_moz', 'page_cycler_morejs',
-           'page_cycler_intl1', 'page_cycler_intl2', 'page_cycler_dhtml',
-           'page_cycler_database', 'page_cycler_indexeddb',
-           'page_cycler_moz-http', 'page_cycler_bloat-http', 'startup',
-           'sunspider'],
+    tests=[
+      'dom_perf',
+      'dromaeo',
+      'page_cycler_bloat-http',
+      'page_cycler_database',
+      'page_cycler_dhtml',
+      'page_cycler_indexeddb',
+      'page_cycler_intl1',
+      'page_cycler_intl2',
+      'page_cycler_morejs',
+      'page_cycler_moz',
+      'page_cycler_moz-http',
+      'startup',
+      'sunspider'
+    ],
     factory_properties={'perf_id': 'chromium-rel-linux-webkit',
                         'show_perf_results': True,}))
 
@@ -63,8 +77,13 @@ F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
 B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_webkit_rel')
 F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
-    tests=['gpu_tests', 'gl_tests',
-           'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
+    tests=[
+      'gl_tests',
+      'gpu_frame_rate',
+      'gpu_latency',
+      'gpu_tests',
+      'gpu_throughput',
+    ],
     options=['--compiler=goma', 'chromium_gpu_builder'],
     factory_properties={
         'generate_gtest_json': True,
@@ -84,7 +103,10 @@ S('s9_webkit_dbg', branch='trunk', treeStableTimer=60)
 B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', scheduler='s9_webkit_dbg')
 F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     target='Debug',
-    tests=['gpu_tests', 'gl_tests'],
+    tests=[
+      'gl_tests',
+      'gpu_tests',
+    ],
     options=['--compiler=goma', 'chromium_gpu_debug_builder'],
     factory_properties={'generate_gtest_json': True}))
 

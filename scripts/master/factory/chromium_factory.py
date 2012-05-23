@@ -256,80 +256,120 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Run interactive_ui_tests first to make sure it does not fail if another
     # test running before it leaks a window or a popup (crash dialog, etc).
-    if R('interactive_ui'): f.AddBasicGTestTestStep('interactive_ui_tests', fp)
+    if R('interactive_ui'):
+      f.AddBasicGTestTestStep('interactive_ui_tests', fp)
 
     # Check for an early bail.  Do early since this may cancel other tests.
-    if R('check_lkgr'):     f.AddCheckLKGRStep()
+    if R('check_lkgr'):
+      f.AddCheckLKGRStep()
 
     # Scripted checks to verify various properties of the codebase:
-    if R('check_deps2git'): f.AddDeps2GitStep()
-    if R('check_deps'):     f.AddCheckDepsStep()
-    if R('check_bins'):     f.AddCheckBinsStep()
-    if R('check_perms'):    f.AddCheckPermsStep()
-    if R('check_licenses'): f.AddCheckLicensesStep(fp)
+    if R('check_deps2git'):
+      f.AddDeps2GitStep()
+    if R('check_deps'):
+      f.AddCheckDepsStep()
+    if R('check_bins'):
+      f.AddCheckBinsStep()
+    if R('check_perms'):
+      f.AddCheckPermsStep()
+    if R('check_licenses'):
+      f.AddCheckLicensesStep(fp)
 
     # Small ("module") unit tests:
-    if R('base'):           f.AddBasicGTestTestStep('base_unittests', fp)
+    if R('base'):
+      f.AddBasicGTestTestStep('base_unittests', fp)
     if R('cacheinvalidation'):
       f.AddBasicGTestTestStep('cacheinvalidation_unittests', fp)
-    if R('courgette'):      f.AddBasicGTestTestStep('courgette_unittests', fp)
-    if R('crypto'):         f.AddBasicGTestTestStep('crypto_unittests', fp)
-    if R('dbus'):           f.AddBasicGTestTestStep('dbus_unittests', fp)
-    if R('gfx'):            f.AddBasicGTestTestStep('gfx_unittests', fp)
-    if R('googleurl'):      f.AddBasicGTestTestStep('googleurl_unittests', fp)
-    if R('gpu'):            f.AddBasicGTestTestStep(
-                                'gpu_unittests', fp,
-                                arg_list=['--gmock_verbose=error'])
-    if R('jingle'):         f.AddBasicGTestTestStep('jingle_unittests', fp)
-    if R('content'):        f.AddBasicGTestTestStep('content_unittests', fp)
-    if R('media'):          f.AddBasicGTestTestStep('media_unittests', fp)
-    if R('net'):            f.AddBasicGTestTestStep('net_unittests', fp)
-    if R('printing'):       f.AddBasicGTestTestStep('printing_unittests', fp)
-    if R('remoting'):       f.AddBasicGTestTestStep('remoting_unittests', fp)
-    if R('test_shell'):     f.AddBasicGTestTestStep('test_shell_tests', fp)
-    if R('safe_browsing'):  f.AddBasicGTestTestStep(
-                                'safe_browsing_tests', fp,
-                                arg_list=['--ui-test-action-max-timeout=40000'])
+    if R('courgette'):
+      f.AddBasicGTestTestStep('courgette_unittests', fp)
+    if R('crypto'):
+      f.AddBasicGTestTestStep('crypto_unittests', fp)
+    if R('dbus'):
+      f.AddBasicGTestTestStep('dbus_unittests', fp)
+    if R('gfx'):
+      f.AddBasicGTestTestStep('gfx_unittests', fp)
+    if R('googleurl'):
+      f.AddBasicGTestTestStep('googleurl_unittests', fp)
+    if R('gpu'):
+      f.AddBasicGTestTestStep(
+          'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
+    if R('jingle'):
+      f.AddBasicGTestTestStep('jingle_unittests', fp)
+    if R('content'):
+      f.AddBasicGTestTestStep('content_unittests', fp)
+    if R('media'):
+      f.AddBasicGTestTestStep('media_unittests', fp)
+    if R('net'):
+      f.AddBasicGTestTestStep('net_unittests', fp)
+    if R('printing'):
+      f.AddBasicGTestTestStep('printing_unittests', fp)
+    if R('remoting'):
+      f.AddBasicGTestTestStep('remoting_unittests', fp)
+    if R('test_shell'):
+      f.AddBasicGTestTestStep('test_shell_tests', fp)
+    if R('safe_browsing'):
+      f.AddBasicGTestTestStep(
+          'safe_browsing_tests', fp,
+          arg_list=['--ui-test-action-max-timeout=40000'])
     if R('sandbox'):
       f.AddBasicGTestTestStep('sbox_unittests', fp)
       f.AddBasicGTestTestStep('sbox_integration_tests', fp)
       f.AddBasicGTestTestStep('sbox_validation_tests', fp)
 
-    if R('views'):          f.AddBasicGTestTestStep('views_unittests', fp)
-    if R('aura'):           f.AddBasicGTestTestStep('aura_unittests', fp)
+    if R('views'):
+      f.AddBasicGTestTestStep('views_unittests', fp)
+    if R('aura'):
+      f.AddBasicGTestTestStep('aura_unittests', fp)
     if R('aura_shell') or R('ash'):
       f.AddBasicGTestTestStep('aura_shell_unittests', fp)
     if R('compositor'):
       f.AddBasicGTestTestStep('compositor_unittests', fp)
 
     # Medium-sized tests (unit and browser):
-    if R('unit'):           f.AddChromeUnitTests(fp)
+    if R('unit'):
+      f.AddChromeUnitTests(fp)
     # A snapshot of the "ChromeUnitTests" available for individual selection
-    if R('unit_ipc'):       f.AddBasicGTestTestStep('ipc_tests', fp)
-    if R('unit_sync'):      f.AddBasicGTestTestStep('sync_unit_tests', fp)
-    if R('unit_unit'):      f.AddBasicGTestTestStep('unit_tests', fp)
-    if R('unit_sql'):       f.AddBasicGTestTestStep('sql_unittests', fp)
-    if R('unit_gfx'):       f.AddBasicGTestTestStep('gfx_unittests', fp)
-    if R('unit_content'):   f.AddBasicGTestTestStep('content_unittests', fp)
-    if R('unit_views'):     f.AddBasicGTestTestStep('views_unittests', fp)
-    if R('browser_tests'):  f.AddBrowserTests(fp)
+    if R('unit_ipc'):
+      f.AddBasicGTestTestStep('ipc_tests', fp)
+    if R('unit_sync'):
+      f.AddBasicGTestTestStep('sync_unit_tests', fp)
+    if R('unit_unit'):
+      f.AddBasicGTestTestStep('unit_tests', fp)
+    if R('unit_sql'):
+      f.AddBasicGTestTestStep('sql_unittests', fp)
+    if R('unit_gfx'):
+      f.AddBasicGTestTestStep('gfx_unittests', fp)
+    if R('unit_content'):
+      f.AddBasicGTestTestStep('content_unittests', fp)
+    if R('unit_views'):
+      f.AddBasicGTestTestStep('views_unittests', fp)
+    if R('browser_tests'):
+      f.AddBrowserTests(fp)
 
     # Big, UI tests:
-    if R('nacl_integration'): f.AddNaClIntegrationTestStep(fp)
+    if R('nacl_integration'):
+      f.AddNaClIntegrationTestStep(fp)
     if R('nacl_integration_memcheck'):
       f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')
     if R('nacl_integration_tsan'):
       f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
-    if R('automated_ui'):   f.AddAutomatedUiTests(fp)
-    if R('dom_checker'):    f.AddDomCheckerTests()
+    if R('automated_ui'):
+      f.AddAutomatedUiTests(fp)
+    if R('dom_checker'):
+      f.AddDomCheckerTests()
 
-    if R('installer'):      f.AddInstallerTests(fp)
+    if R('installer'):
+      f.AddInstallerTests(fp)
 
     # WebKit-related tests:
-    if R('webkit_unit'):    f.AddBasicGTestTestStep('webkit_unit_tests', fp)
-    if R('webkit_lint'):    f.AddWebkitLint(factory_properties=fp)
-    if R('webkit'):         f.AddWebkitTests(factory_properties=fp)
-    if R('devtools_perf'):  f.AddDevToolsTests(factory_properties=fp)
+    if R('webkit_unit'):
+      f.AddBasicGTestTestStep('webkit_unit_tests', fp)
+    if R('webkit_lint'):
+      f.AddWebkitLint(factory_properties=fp)
+    if R('webkit'):
+      f.AddWebkitTests(factory_properties=fp)
+    if R('devtools_perf'):
+      f.AddDevToolsTests(factory_properties=fp)
 
     # Benchmark tests:
     if R('page_cycler_moz'):
@@ -349,16 +389,26 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('page_cycler_indexeddb'):
       f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
 
-    if R('memory'):         f.AddMemoryTests(fp)
-    if R('tab_switching'):  f.AddTabSwitchingTests(fp)
-    if R('sunspider'):      f.AddSunSpiderTests(fp)
-    if R('v8_benchmark'):   f.AddV8BenchmarkTests(fp)
-    if R('dromaeo'):        f.AddDromaeoTests(fp)
-    if R('frame_rate'):     f.AddFrameRateTests(fp)
-    if R('gpu_frame_rate'): f.AddGpuFrameRateTests(fp)
-    if R('gpu_latency'):    f.AddGpuLatencyTests(fp)
-    if R('gpu_throughput'): f.AddGpuThroughputTests(fp)
-    if R('dom_perf'):       f.AddDomPerfTests(fp)
+    if R('memory'):
+      f.AddMemoryTests(fp)
+    if R('tab_switching'):
+      f.AddTabSwitchingTests(fp)
+    if R('sunspider'):
+      f.AddSunSpiderTests(fp)
+    if R('v8_benchmark'):
+      f.AddV8BenchmarkTests(fp)
+    if R('dromaeo'):
+      f.AddDromaeoTests(fp)
+    if R('frame_rate'):
+      f.AddFrameRateTests(fp)
+    if R('gpu_frame_rate'):
+      f.AddGpuFrameRateTests(fp)
+    if R('gpu_latency'):
+      f.AddGpuLatencyTests(fp)
+    if R('gpu_throughput'):
+      f.AddGpuThroughputTests(fp)
+    if R('dom_perf'):
+      f.AddDomPerfTests(fp)
     if R('page_cycler_moz-http'):
       f.AddPageCyclerTest('page_cycler_moz-http', fp)
     if R('page_cycler_bloat-http'):
@@ -366,17 +416,23 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
-    if R('sizes'):          f.AddSizesTests(fp)
-    if R('sync'):           f.AddSyncPerfTests(fp)
-    if R('mach_ports'):     f.AddMachPortsTests(fp)
+    if R('sizes'):
+      f.AddSizesTests(fp)
+    if R('sync'):
+      f.AddSyncPerfTests(fp)
+    if R('mach_ports'):
+      f.AddMachPortsTests(fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
 
     # GPU tests:
-    if R('gl_tests'):       f.AddGLTests(fp)
-    if R('gpu_tests'):      f.AddGpuTests(fp)
-    if R('soft_gpu_tests'): f.AddSoftGpuTests(fp)
+    if R('gl_tests'):
+      f.AddGLTests(fp)
+    if R('gpu_tests'):
+      f.AddGpuTests(fp)
+    if R('soft_gpu_tests'):
+      f.AddSoftGpuTests(fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
@@ -525,7 +581,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add an optional set of annotated steps.
     # NOTE: This really should go last as it can be confusing if the annotator
     # isn't the last thing to run.
-    if R('annotated_steps'): f.AddAnnotatedSteps(fp)
+    if R('annotated_steps'):
+      f.AddAnnotatedSteps(fp)
 
     # If this assert triggers and the test name is valid, make sure R() is used.
     # If you are using a subclass, make sure the tests list provided to

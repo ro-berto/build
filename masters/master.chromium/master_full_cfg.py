@@ -31,7 +31,11 @@ B('Win', 'win_clobber', 'compile|windows', 'chromium', notify_on_missing=True)
 F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
-    tests=['check_deps2git', 'sizes', 'check_bins'],
+    tests=[
+      'check_bins',
+      'check_deps2git',
+      'sizes',
+    ],
     factory_properties={
       'archive_build': True,
       'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -54,7 +58,10 @@ F('win_clobber', win().ChromiumFactory(
 B('Mac', 'mac_clobber', 'compile|testers', 'chromium', notify_on_missing=True)
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
-    tests=['check_deps2git', 'sizes'],
+    tests=[
+      'check_deps2git',
+      'sizes',
+    ],
     options=['--compiler=goma-clang'],
     factory_properties={
       'archive_build': True,
@@ -77,7 +84,12 @@ B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
 F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['check_deps2git', 'sizes', 'check_perms', 'check_licenses'],
+    tests=[
+      'check_deps2git',
+      'check_licenses',
+      'check_perms',
+      'sizes',
+    ],
     options=['--compiler=goma'],
     factory_properties={
       'archive_build': True,
@@ -96,7 +108,10 @@ B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
   notify_on_missing=True)
 F('linux64_clobber', linux().ChromiumFactory(
     clobber=True,
-    tests=['check_deps2git', 'sizes'],
+    tests=[
+      'check_deps2git',
+      'sizes',
+    ],
     options=['--compiler=goma'],
     factory_properties={
       'archive_build': True,

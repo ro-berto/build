@@ -35,7 +35,11 @@ B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel',
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
-    tests=['browser_tests', 'interactive_ui', 'unit'],
+    tests=[
+      'browser_tests',
+      'interactive_ui',
+      'unit',
+    ],
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {
@@ -49,11 +53,24 @@ B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel',
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
-    tests=['dom_perf', 'dromaeo', 'memory', 'page_cycler_moz',
-           'page_cycler_morejs', 'page_cycler_intl1', 'page_cycler_intl2',
-           'page_cycler_dhtml', 'page_cycler_database', 'page_cycler_indexeddb',
-           'page_cycler_moz-http', 'page_cycler_bloat-http', 'startup',
-           'sunspider', 'tab_switching', 'v8_benchmark'],
+    tests=[
+      'dom_perf',
+      'dromaeo',
+      'memory',
+      'page_cycler_bloat-http',
+      'page_cycler_database',
+      'page_cycler_dhtml',
+      'page_cycler_indexeddb',
+      'page_cycler_intl1',
+      'page_cycler_intl2',
+      'page_cycler_morejs',
+      'page_cycler_moz',
+      'page_cycler_moz-http',
+      'startup',
+      'sunspider',
+      'tab_switching',
+      'v8_benchmark',
+    ],
     factory_properties={
         'show_perf_results': True,
         'perf_id': 'chromium-rel-mac6-webkit',
@@ -72,8 +89,13 @@ F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
     target='Release',
     options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_builder'],
-    tests=['gpu_tests', 'gl_tests',
-           'gpu_frame_rate', 'gpu_latency', 'gpu_throughput'],
+    tests=[
+      'gl_tests',
+      'gpu_frame_rate',
+      'gpu_latency',
+      'gpu_tests',
+      'gpu_throughput',
+    ],
     factory_properties={
         'generate_gtest_json': True,
         'perf_id': 'gpu-webkit-mac',
@@ -111,7 +133,10 @@ F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_debug_builder'],
-    tests=['gpu_tests', 'gl_tests'],
+    tests=[
+      'gl_tests',
+      'gpu_tests',
+    ],
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {

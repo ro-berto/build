@@ -36,13 +36,27 @@ B('ASAN Builder', 'asan_rel', 'compile', 'linux_asan_rel',
   notify_on_missing=True)
 F('asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
-    options=['--compiler=clang', 'base_unittests', 'crypto_unittests',
-             'googleurl_unittests', 'gpu_unittests', 'media_unittests',
-             'printing_unittests', 'remoting_unittests', 'net_unittests',
-             'safe_browsing_tests', 'cacheinvalidation_unittests',
-             'jingle_unittests', 'sql_unittests', 'ipc_tests',
-             'sync_unit_tests', 'content_unittests', 'unit_tests',
-             'gfx_unittests', 'browser_tests'],
+    options=[
+      '--compiler=clang',
+      'base_unittests',
+      'browser_tests',
+      'cacheinvalidation_unittests',
+      'content_unittests',
+      'crypto_unittests',
+      'gfx_unittests',
+      'googleurl_unittests',
+      'gpu_unittests',
+      'ipc_tests',
+      'jingle_unittests',
+      'media_unittests',
+      'net_unittests',
+      'printing_unittests',
+      'remoting_unittests',
+      'safe_browsing_tests',
+      'sql_unittests',
+      'sync_unit_tests',
+      'unit_tests',
+    ],
     factory_properties={
            'gclient_env': {'GYP_DEFINES':
                               ('asan=1 '
@@ -57,8 +71,16 @@ B('ASAN Tests (1)', 'asan_rel_tests_1', 'testers', 'linux_asan_rel_trigger',
 F('asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
        build_url=asan_archive,
-    tests=['unit', 'gpu', 'base', 'net', 'safe_browsing', 'crypto',
-           'cacheinvalidation', 'jingle'],
+    tests=[
+      'base',
+      'cacheinvalidation',
+      'crypto',
+      'gpu',
+      'jingle',
+      'net',
+      'safe_browsing',
+      'unit',
+    ],
     factory_properties={'asan': True}))
 
 B('ASAN Tests (2)', 'asan_rel_tests_2', 'testers', 'linux_asan_rel_trigger',
@@ -66,7 +88,13 @@ B('ASAN Tests (2)', 'asan_rel_tests_2', 'testers', 'linux_asan_rel_trigger',
 F('asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
        build_url=asan_archive,
-    tests=['googleurl', 'media', 'printing', 'remoting', 'browser_tests'],
+    tests=[
+      'browser_tests',
+      'googleurl',
+      'media',
+      'printing',
+      'remoting',
+    ],
     factory_properties={'asan': True}))
 
 def Update(config, active_master, c):

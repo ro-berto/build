@@ -80,7 +80,12 @@ B('Webkit Mac10.5', 'f_webkit_rel_tests', auto_reboot=True,
 F('f_webkit_rel_tests', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={
         'archive_webkit_results': True,
         'layout_test_platform': 'chromium-mac',
@@ -92,7 +97,12 @@ B('Webkit Mac10.6', 'f_webkit_rel_tests_106', auto_reboot=True,
 F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={
         'archive_webkit_results': True,
         'layout_test_platform': 'chromium-mac',
@@ -104,7 +114,12 @@ B('Webkit Mac10.7', 'f_webkit_rel_tests_107', auto_reboot=True,
 F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={
         'archive_webkit_results': True,
         'layout_test_platform': 'chromium-mac',
@@ -158,7 +173,12 @@ F('f_webkit_dbg_tests_1', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={
         'archive_webkit_results': True,
         'layout_part': '1:2',
@@ -186,7 +206,12 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={
         'archive_webkit_results': True,
         'layout_test_platform': 'chromium-mac',

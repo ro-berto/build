@@ -17,6 +17,13 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 defaults['category'] = '4webkit win latest'
 
+webkit_tests = [
+  'test_shell',
+  'webkit',
+  'webkit_lint',
+  'webkit_unit',
+]
+
 ################################################################################
 ## Release
 ################################################################################
@@ -55,7 +62,7 @@ B('Webkit Win', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger',
 F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=webkit_tests,
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
@@ -106,7 +113,7 @@ F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=webkit_tests,
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))

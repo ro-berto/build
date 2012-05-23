@@ -54,7 +54,12 @@ B('Webkit Win (deps)', 'f_webkit_rel_tests',
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['test_shell', 'webkit_lint', 'webkit', 'webkit_unit'],
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
     factory_properties={'archive_webkit_results': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
