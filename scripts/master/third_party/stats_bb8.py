@@ -59,8 +59,8 @@ class StatsBuilderStatusResource(HtmlResource):
     cxt['colorMap'] = { 'compile': 1, 'update': 1 };
 
   def content(self, request, cxt):
-    maxBuilds = request.args.get(
-        'max', [self.builder_status.buildCacheSize/2])[0]
+    maxBuilds = int(request.args.get(
+        'max', [self.builder_status.buildCacheSize/2])[0])
     self.getBuilderVariables(cxt, maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template("builder_stats.html")
@@ -118,10 +118,10 @@ class StatsStatusResource(HtmlResource):
     cxt['builderFailures'] = builderFailures
 
   def content(self, request, cxt):
-    maxBuilds = request.args.get("max", [None])[0]
+    maxBuilds = int(request.args.get('max', [None])[0])
     self.getMainVariables(self.getStatus(request), cxt, maxBuilds=maxBuilds)
     templates = request.site.buildbot_service.templates
-    template = templates.get_template("stats.html")
+    template = templates.get_template('stats.html')
     return template.render(cxt)
 
   def getChild(self, path, req):
