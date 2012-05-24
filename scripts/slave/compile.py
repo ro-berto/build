@@ -723,8 +723,8 @@ def main_ninja(options, args):
   # Prepare environment.
   env = EchoDict(os.environ)
 
-  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
   if options.compiler in ('goma', 'goma-clang'):
+    goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
     # If using the Goma compiler, first call goma_ctl with ensure_start
     # (or restart in clobber mode) to ensure the proxy is available.
     goma_key = os.path.join(options.goma_dir, 'goma.key')
@@ -753,7 +753,11 @@ def main_ninja(options, args):
 
   # Run the build.
   env.print_overrides()
-  return chromium_utils.RunCommand(command, env=env)
+  # TODO(maruel): Remove the shell argument as soon as ninja.exe is in PATH.
+  # At the moment of writing, ninja.bat in depot_tools wraps
+  # third_party\ninja.exe, which requires shell=True so it is found correctly.
+  return chromium_utils.RunCommand(
+      command, env=env, shell=sys.platform=='win32')
 
 
 def main_scons(options, args):
