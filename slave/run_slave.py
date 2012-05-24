@@ -194,6 +194,7 @@ def main():
         'CCACHE_DIR',
         'CHROME_ALLOCATOR',
         'CHROME_HEADLESS',
+        'CHROME_VALGRIND_NUMCPUS',
         'DISPLAY',
         'DISTCC_DIR',
         'HOME',

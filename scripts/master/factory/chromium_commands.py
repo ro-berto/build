@@ -561,6 +561,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200,
       factory_properties=None):
+    factory_properties = factory_properties or {}
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     build_dir = os.path.join(self._build_dir, self._target)
     if self._target_platform == 'darwin':  # Mac bins reside in src/xcodebuild
@@ -581,6 +582,11 @@ class ChromiumCommands(commands.FactoryCommands):
       numshards = int(matched.group(2))
       wrapper_args.extend(['--shard-index', str(shard),
           '--total-shards', str(numshards)])
+      if test_name in factory_properties.get('sharded_tests', []):
+        wrapper_args.append('--parallel')
+        sharding_args = factory_properties.get('sharding_args')
+        if sharding_args:
+          wrapper_args.extend(['--sharding-args', sharding_args])
     elif test_name.endswith('_gtest_filter_required'):
       test_name = test_name[0:-len('_gtest_filter_required')]
       do_step_if = self.TestStepFilterGTestFilterRequired
