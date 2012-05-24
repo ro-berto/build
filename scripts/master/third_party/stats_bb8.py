@@ -43,7 +43,8 @@ class StatsBuilderStatusResource(HtmlResource):
         if result == builder.FAILURE:
           failingSteps[stepName] = failCount + 1
 
-    slowest = reduce(max, [reduce(max, t[1], 0) for t in stepTimes.values()], 0)
+    slowest = reduce(
+        max, [reduce(max, [y[1] for y in x], 0) for x in stepTimes.values()], 0)
     timeRange = slowest + 1
     yTicks = '[%s]' % ', '.join(["{v:%d}" % i for i in range(timeRange+1)])
 
