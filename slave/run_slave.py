@@ -55,10 +55,8 @@ def HotPatchSlaveBuilder():
     for d in os.listdir(self.basedir):
       if d not in wanted_dirs and os.path.isdir(os.path.join(self.basedir, d)):
         log.msg("Deleting unwanted directory %s" % d)
-        try:
-          shutil.rmtree(os.path.join(self.basedir, d))
-        except OSError, e:
-          log.msg("Failed, giving up: %s" % e)
+        from common import chromium_utils
+        chromium_utils.RemoveDirectory(os.path.join(self.basedir, d))
     return retval
   Bot.new_remote_setBuilderList = cleanup
   Bot.remote_setBuilderList = Bot.new_remote_setBuilderList
