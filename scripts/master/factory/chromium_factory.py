@@ -273,6 +273,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Scripted checks to verify various properties of the codebase:
     if R('check_deps2git'):
       f.AddDeps2GitStep()
+    if R('check_deps2git_runner'):
+      f.AddBuildStep(
+        name='check_deps2git_runner',
+        factory_properties=fp)
     if R('check_deps'):
       f.AddCheckDepsStep()
     if R('check_bins'):

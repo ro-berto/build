@@ -92,6 +92,9 @@ class ChromiumCommands(commands.FactoryCommands):
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
+    # scripts in scripts/slave
+    self._runbuild = J(self._script_dir, 'runbuild.py')
+
     # The _update_scripts_command will be run in the _update_scripts_dir to
     # udpate the slave's own script checkout.
     self._update_scripts_dir = '..'
@@ -1040,6 +1043,25 @@ class ChromiumCommands(commands.FactoryCommands):
                           workdir=self._build_dir,
                           command=cmd,
                           env=env)
+
+  def AddBuildStep(self, factory_properties=None, name='build', env=None,
+                   timeout=1):
+    """Add annotated step to use the buildrunner to run steps on the slave."""
+
+    factory_properties = factory_properties or {}
+
+    cmd = [self._python, self._runbuild, '--annotate']
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+
+    self._factory.addStep(chromium_step.AnnotatedCommand,
+                          name=name,
+                          description=name,
+                          timeout=timeout,
+                          haltOnFailure=True,
+                          command=cmd,
+                          env=env)
+
 
   def AddMediaTests(self, test_groups, factory_properties=None, timeout=1200):
     """Adds media test steps according to the specified test_groups.

@@ -610,7 +610,7 @@ class RunCommandFilter(object):
 
 
 def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
-               **kwargs):
+               print_cmd=True, **kwargs):
   """Runs the command list, printing its output and returning its exit status.
 
   Prints the given command (which should be a list of one or more strings),
@@ -692,9 +692,10 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
                               ' parser/filter')
 
   # Print the given command (which should be a list of one or more strings).
-  print '\n' + subprocess.list2cmdline(command) + '\n',
-  for pipe in pipes:
-    print '     | ' + subprocess.list2cmdline(pipe) + '\n',
+  if print_cmd:
+    print '\n' + subprocess.list2cmdline(command) + '\n',
+    for pipe in pipes:
+      print '     | ' + subprocess.list2cmdline(pipe) + '\n',
 
   sys.stdout.flush()
   sys.stderr.flush()
