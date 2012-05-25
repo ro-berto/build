@@ -595,6 +595,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('annotated_steps'):
       f.AddAnnotatedSteps(fp)
 
+    if 'check_deps2git_runner' in tests:
+      tests.remove('check_deps2git_runner')
+
     # If this assert triggers and the test name is valid, make sure R() is used.
     # If you are using a subclass, make sure the tests list provided to
     # _AddTests() had the factory-specific tests stripped off.
