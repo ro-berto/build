@@ -232,60 +232,67 @@ class GClientSourceTest(unittest.TestCase):
   def testParseGotRevision_NoRevisions(self):
     gclient = TestableGClient("hello world!")
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(None, chromium_revision)
     self.assertEqual(None, webkit_revision)
     self.assertEqual(None, nacl_revision)
+    self.assertEqual(None, v8_revision)
 
   def testParseGotRevision_Checkout(self):
     gclient = TestableGClient(SVN_CHECKOUT_STDOUT)
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(12345, chromium_revision)
     self.assertEqual(67890, webkit_revision)
     self.assertEqual(98765, nacl_revision)
+    self.assertEqual(None, v8_revision)
 
   def testParseGotRevision_Update(self):
     gclient = TestableGClient(SVN_UPDATE_STDOUT)
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(12345, chromium_revision)
     self.assertEqual(67890, webkit_revision)
     self.assertEqual(98765, nacl_revision)
+    self.assertEqual(None, v8_revision)
 
   def testParseGotRevision_UpdateNoChange(self):
     gclient = TestableGClient(SVN_UPDATE_NO_CHANGE_STDOUT)
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(12345, chromium_revision)
     self.assertEqual(67890, webkit_revision)
     self.assertEqual(98765, nacl_revision)
+    self.assertEqual(None, v8_revision)
 
   def testParseGotRevision_GClientSyncNoChange(self):
     gclient = TestableGClient(GCLIENT_SYNC_NO_CHANGE_STDOUT)
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(12345, chromium_revision)
     self.assertEqual(67890, webkit_revision)
     self.assertEqual(98765, nacl_revision)
+    self.assertEqual(None, v8_revision)
 
   def testParseGotRevision_MulitJob(self):
     gclient = TestableGClient(stdout=GCLIENT_SYNC_MULTI_JOB_STDOUT)
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(59820, chromium_revision)
     self.assertEqual(None, webkit_revision)  # not in truncated stdout
     self.assertEqual(None, nacl_revision)  # not in truncated stdout
+    self.assertEqual(None, v8_revision)
 
   def testParseGotRevision_MultiJobDepsTry(self):
     gclient = TestableGClient(stdout=GCLIENT_SYNC_MULTI_JOB_DEPS_TRY_STDOUT)
     (chromium_revision, webkit_revision,
-     nacl_revision) = gclient.parseGotRevision()
+     nacl_revision, v8_revision) = gclient.parseGotRevision()
     self.assertEqual(61624, chromium_revision)
     # Finds the revision in the changed DEPS, not the one in the lkgr DEPS.
     self.assertEqual(69168, webkit_revision)
     # Nothing with nacl.
     self.assertEqual(None, nacl_revision)
+    self.assertEqual(None, v8_revision)
 
   def testUntangle_UpToDoubleDigits(self):
     stdout_lines = ['4>four', '9>nine', '1>one', '6>six', '3>three',

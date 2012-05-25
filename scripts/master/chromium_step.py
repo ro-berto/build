@@ -109,6 +109,7 @@ class GClient(source.Source):
     self.appendChromeRevision(description)
     self.appendWebKitRevision(description)
     self.appendNaClRevision(description)
+    self.appendV8Revision(description)
     return description
 
   def appendChromeRevision(self, description):
@@ -157,13 +158,33 @@ class GClient(source.Source):
       if not nacl_revision in description:
         description.append(nacl_revision)
 
+  def appendV8Revision(self, description):
+    """Tries to append the V8 revision to the given description."""
+    v8_revision = None
+    try:
+      v8_revision = self.getProperty('got_v8_revision')
+    except KeyError:
+      pass
+    if v8_revision:
+      v8_revision = 'v8 r%s' % v8_revision
+      # Only append revision if it's not already there.
+      if not v8_revision in description:
+        description.append(v8_revision)
+
   def commandComplete(self, cmd):
     """Handles status updates from buildbot slave when the step is done.
 
-    As a result both 'got_revision' and 'got_webkit_revision' properties will
-    be set, though either may be None if it couldn't be found.
+    As a result 'got_revision', 'got_webkit_revision', 'got_nacl_revision' as
+    well as 'got_v8_revision' properties will be set, though either may be None
+    if it couldn't be found.
     """
     source.Source.commandComplete(self, cmd)
+    primary_repo = self.args.get('primary_repo', '')
+    primary_revision_key = 'got_' + primary_repo + 'revision'
+    if cmd.updates.has_key(primary_revision_key):
+      got_revision = cmd.updates[primary_revision_key][-1]
+      if got_revision:
+        self.setProperty('got_revision', str(got_revision), 'Source')
     if cmd.updates.has_key('got_webkit_revision'):
       got_webkit_revision = cmd.updates['got_webkit_revision'][-1]
       if got_webkit_revision:
@@ -173,6 +194,11 @@ class GClient(source.Source):
       got_nacl_revision = cmd.updates['got_nacl_revision'][-1]
       if got_nacl_revision:
         self.setProperty('got_nacl_revision', str(got_nacl_revision),
+                         'Source')
+    if cmd.updates.has_key('got_v8_revision'):
+      got_v8_revision = cmd.updates['got_v8_revision'][-1]
+      if got_v8_revision:
+        self.setProperty('got_v8_revision', str(got_v8_revision),
                          'Source')
 
 

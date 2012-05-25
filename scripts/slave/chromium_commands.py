@@ -528,6 +528,12 @@ class GClient(sourcebase):
     def findNaClUpdate(line):
       return NACL_UPDATE_RE.search(line)
 
+    V8_CHECKOUT_PATH = os.path.join('src', 'v8').replace('\\', '\\\\')
+
+    V8_UPDATE_RE = re.compile(r'svn (checkout|update) .*%s ' % V8_CHECKOUT_PATH)
+    def findV8Update(line):
+      return V8_UPDATE_RE.search(line)
+
     def findRevisionNumberFromGclient(repo, line):
       m = re.match(r'_____ %s at ([0-9]+)$' % repo, line)
       if m:
@@ -537,8 +543,10 @@ class GClient(sourcebase):
     chromium_revision = None
     webkit_revision = None
     nacl_revision = None
+    v8_revision = None
     found_webkit_update = False
     found_nacl_update = False
+    found_v8_update = False
 
     untangled_stdout = untangle(self.command.stdout.splitlines(False))
     # We only care about the last sync which starts with "solutions=[...".
@@ -558,12 +566,15 @@ class GClient(sourcebase):
       if revision:
         if (not found_webkit_update and
             not found_nacl_update and
+            not found_v8_update and
             not chromium_revision):
           chromium_revision = revision
         elif found_webkit_update and not webkit_revision:
           webkit_revision = revision
         elif found_nacl_update and not nacl_revision:
           nacl_revision = revision
+        elif found_v8_update and not v8_revision:
+          v8_revision = revision
 
       # No revision number found, look for the svn update for WebKit.
       if not found_webkit_update:
@@ -572,6 +583,10 @@ class GClient(sourcebase):
       # No revision number found, look for the svn update for NaCl.
       if not found_nacl_update:
         found_nacl_update = findNaClUpdate(line)
+
+      # No revision number found, look for the svn update for V8.
+      if not found_v8_update:
+        found_v8_update = findV8Update(line)
 
       # Check for gclient output.
       if not chromium_revision:
@@ -582,21 +597,27 @@ class GClient(sourcebase):
       if not nacl_revision:
         nacl_revision = findRevisionNumberFromGclient(
             NACL_CHECKOUT_PATH, line)
+      if not v8_revision:
+        v8_revision = findRevisionNumberFromGclient(V8_CHECKOUT_PATH, line)
 
       # Exit if we're done.
-      if chromium_revision and webkit_revision and nacl_revision:
+      if (chromium_revision and
+          webkit_revision and
+          nacl_revision and
+          v8_revision):
         break
 
-    return chromium_revision, webkit_revision, nacl_revision
+    return chromium_revision, webkit_revision, nacl_revision, v8_revision
 
   def _handleGotRevision(self, res):
     """Send parseGotRevision() return values as status updates to the master."""
     d = defer.maybeDeferred(self.parseGotRevision)
     def sendStatusUpdatesToMaster(revisions):
-      chromium_revision, webkit_revision, nacl_revision = revisions
+      chromium_revision, webkit_revision, nacl_revision, v8_revision = revisions
       self.sendStatus({'got_revision': chromium_revision})
       self.sendStatus({'got_webkit_revision': webkit_revision})
       self.sendStatus({'got_nacl_revision': nacl_revision})
+      self.sendStatus({'got_v8_revision': v8_revision})
     d.addCallback(sendStatusUpdatesToMaster)
     return d
 
