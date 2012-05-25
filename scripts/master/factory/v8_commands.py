@@ -44,7 +44,7 @@ class V8Commands(commands.FactoryCommands):
 
     if self._target_platform == 'win32':
       # Override to use the right python
-      python_path = self.PathJoin('..', 'src', 'third_party', 'python_26')
+      python_path = self.PathJoin('third_party', 'python_26')
       self._python = self.PathJoin(python_path, 'python_slave')
 
     # Create smaller name for the functions and vars to siplify the code below.
@@ -78,7 +78,8 @@ class V8Commands(commands.FactoryCommands):
                      workdir='build/v8/')
 
   def AddV8Initializers(self):
-    cmd = ['bash', './tools/check-static-initializers.sh']
+    binary = 'out/' + self._target + '/d8'
+    cmd = ['bash', './tools/check-static-initializers.sh', binary]
     self.AddTestStep(shell.ShellCommand,
                      'Static-Initializers', cmd,
                      workdir='build/v8/')
@@ -133,7 +134,8 @@ class V8Commands(commands.FactoryCommands):
                      workdir='build/v8/')
 
   def AddFuzzer(self, properties=None):
-    cmd = ['bash', './tools/fuzz-harness.sh']
+    binary = 'out/' + self._target + '/d8'
+    cmd = ['bash', './tools/fuzz-harness.sh', binary]
     self.AddTestStep(shell.ShellCommand, 'Fuzz', cmd,
                      workdir='build/v8/')
 

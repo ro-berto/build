@@ -16,24 +16,14 @@ class V8Factory(gclient_factory.GClientFactory):
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
 
-
-  CUSTOM_DEPS_PYTHON = ('src/third_party/python_26',
-                        config.Master.trunk_url +
-                        '/tools/third_party/python_26')
-
   CUSTOM_DEPS_ES5CONFORM = ('v8/test/es5conform/data',
                             'https://es5conform.svn.codeplex.com/svn@71525')
-
-
-  # Pinned at revision 65044 to allow scons to be removed from repository.
-  CUSTOM_DEPS_SCONS = ('third_party/scons',
-                       config.Master.trunk_url +
-                       '/src/third_party/scons@65044')
 
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
                           config.Master.trunk_url +
                           '/deps/third_party/valgrind/binaries')
 
+  # TODO(jkummerow): Figure out if this is actually needed.
   CUSTOM_DEPS_WIN7SDK = (
       'third_party/win7sdk',
       '%s/third_party/platformsdk_win7/files' %
@@ -50,8 +40,7 @@ class V8Factory(gclient_factory.GClientFactory):
                            'http://sputniktests.googlecode.com/svn/trunk@' +
                            sputnik_revision)
 
-    main = gclient_factory.GClientSolution(self.checkout_url,
-                                           name='v8')
+    main = gclient_factory.GClientSolution(self.checkout_url, name='v8')
     custom_deps_list = [main]
 
     gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,
@@ -78,7 +67,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('sputnik'): f.AddV8Sputnik()
     if R('gcmole'): f.AddV8GCMole()
 
-  def V8Factory(self, target='release', clobber=False, tests=None, mode=None,
+  def V8Factory(self, target='Release', clobber=False, tests=None, mode=None,
                 slave_type='BuilderTester', options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
                 target_arch=None, shard_count=1,
@@ -86,12 +75,16 @@ class V8Factory(gclient_factory.GClientFactory):
     tests = tests or []
     factory_properties = factory_properties or {}
 
-    # Add scons which is not on a build slave by default
-    self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_SCONS)
+    # Automatically set v8_target_arch in GYP_DEFINES to target_arch.
+    if not 'gclient_env' in factory_properties:
+      factory_properties['gclient_env'] = {}
+    gclient_env = factory_properties['gclient_env']
+    if 'GYP_DEFINES' in gclient_env:
+      gclient_env['GYP_DEFINES'] += " v8_target_arch=%s" % target_arch
+    else:
+      gclient_env['GYP_DEFINES'] = "v8_target_arch=%s" % target_arch
 
-    # If we are on win32 add extra python executable
     if (self._target_platform == 'win32'):
-      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_PYTHON)
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_WIN7SDK)
 
     if (gclient_factory.ShouldRunTest(tests, 'v8_es5conform')):

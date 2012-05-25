@@ -17,10 +17,13 @@ from common import chromium_utils
 def main():
   if sys.platform in ('win32', 'cygwin'):
     default_platform = 'win'
+    outdir = 'build'
   elif sys.platform.startswith('darwin'):
     default_platform = 'mac'
+    outdir = 'xcodebuild'
   elif sys.platform == 'linux2':
     default_platform = 'linux'
+    outdir = 'out'
   else:
     default_platform = None
 
@@ -31,18 +34,13 @@ def main():
                            help='The test to run'
                                 '[default: %default]')
   option_parser.add_option('', '--target',
-                           default='debug',
+                           default='Debug',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
   option_parser.add_option('', '--arch',
                            default='ia32',
                            help='Architecture (ia32, x64, arm) '
                                 '[default: ia32]')
-  option_parser.add_option('', '--build-dir',
-                           default='v8/obj',
-                           metavar='DIR',
-                           help='directory in which build was run '
-                                '[default: %default]')
   option_parser.add_option('', '--platform',
                            default=default_platform,
                            help='specify platform [default: %%default]')
@@ -65,7 +63,7 @@ def main():
     option_parser.error('Unsupported arguments: %s' % args)
 
   simultaneous = '-j8'
-  if options.platform in ('win' 'arm'):
+  if options.platform in ('arm'):
     simultaneous = '-j1'
 
   os.environ['LD_LIBRARY_PATH'] = os.environ.get('PWD')
@@ -80,10 +78,11 @@ def main():
   elif options.testname == 'presubmit':
     cmd = ['python', 'tools/presubmit.py']
   else:
-    cmd = ['python', 'tools/test.py',
+    cmd = ['python', 'tools/test-wrapper-gypbuild.py',
            simultaneous,
            '--progress=verbose',
-           '--no-build',
+           '--buildbot',
+           '--outdir=' + outdir,
            '--arch=' + options.arch,
            '--mode=' + options.target]
     if options.testname:

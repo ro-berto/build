@@ -486,8 +486,6 @@ def common_make_settings(
       command.append('-j%d' % jobs)
       # Don't use build-in rules.
       command.append('-r')
-      # For now only build chrome, as other things will break.
-      command.append('chrome')
       return
 
   if chromium_utils.IsMac():
@@ -610,16 +608,12 @@ def main_make(options, args):
     working_dir = options.build_dir
   else:
     # If no solution file (i.e. sub-project *.Makefile) is specified, try to
-    # build from the top-level Makefile.
-    working_dir = src_dir
-
-  def clobber():
-    build_output_dir = os.path.join(working_dir, 'out', options.target)
-    print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
-
-  if options.clobber:
-    clobber()
+    # build from <build_dir>/Makefile, or if that doesn't exist, from
+    # the top-level Makefile.
+    if os.path.isfile(os.path.join(options.build_dir, 'Makefile')):
+      working_dir = options.build_dir
+    else:
+      working_dir = src_dir
 
   # Lots of test-execution scripts hard-code 'sconsbuild' as the output
   # directory.  Accomodate them.
@@ -643,8 +637,6 @@ def main_make(options, args):
   common_make_settings(command, options, env, options.crosstool,
       options.compiler)
 
-  command.append('BUILDTYPE=' + options.target)
-
   # V=1 prints the actual executed command
   if options.verbose:
     command.extend(['V=1'])
@@ -666,14 +658,28 @@ def main_make(options, args):
 
   # Run the build.
   env.print_overrides()
-  result = chromium_utils.RunCommand(command, env=env)
+  result = 0
+
+  def clobber(target):
+    build_output_dir = os.path.join(working_dir, 'out', target)
+    print('Removing %s' % build_output_dir)
+    chromium_utils.RemoveDirectory(build_output_dir)
+
+  for target in options.target.split(','):
+    if options.clobber:
+      clobber(target)
+
+    target_command = command + ['BUILDTYPE=' + target]
+    this_result = chromium_utils.RunCommand(target_command, env=env)
+    if this_result and not options.clobber:
+      clobber(target)
+    # Keep the first non-zero return code as overall result.
+    if this_result and not result:
+      result = this_result
 
   if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
     # Always stop the proxy for now to allow in-place update.
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-
-  if result and not options.clobber:
-    clobber()
 
   return result
 
@@ -801,46 +807,6 @@ def main_scons(options, args):
   #   which .h file(s) changed, etc.)
   #
   #command.extend(['--debug=explain', 'VERBOSE=1'])
-  command.extend(options.build_args + args)
-  env.print_overrides()
-  return chromium_utils.RunCommand(command, env=env)
-
-def main_scons_v8(options, args):
-  """Interprets options, clobbers object files, and calls scons.
-  """
-  options.build_dir = os.path.abspath(options.build_dir)
-  if options.clobber:
-    build_output_dir = os.path.join(options.build_dir, 'obj')
-    print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
-
-  os.chdir(options.build_dir)
-  if sys.platform == 'win32':
-    command = [
-        'python',
-        '../third_party/scons/scons.py',
-        ('env=PATH:'
-            'C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\bin;'
-            'C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE;'
-            'C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\Tools'
-            ',INCLUDE:'
-            'C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\include;'
-            'C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Include'
-            ',LIB:'
-            'C:\\Program Files\\Microsoft Visual Studio 9.0\\VC\\lib;'
-            'C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\Lib')
-    ]
-  else:
-    command = ['python', '../third_party/scons/scons.py']
-
-  env = EchoDict(os.environ)
-  if sys.platform == 'linux2':
-    common_make_settings(command, options, env)
-  else:
-    command.extend(['-k'])
-
-  command.extend(['mode=' + options.target])
-
   command.extend(options.build_args + args)
   env.print_overrides()
   return chromium_utils.RunCommand(command, env=env)
@@ -1077,7 +1043,6 @@ def real_main():
         'ninja' : main_ninja,
         'scons' : main_scons,
         'xcode' : main_xcode,
-        'scons_v8' : main_scons_v8,
     }
     main = build_tool_map.get(options.build_tool)
     if not main:

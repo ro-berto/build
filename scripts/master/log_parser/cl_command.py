@@ -229,7 +229,8 @@ class DevenvLogToIbLog:
     for output in self.__project_outputs.itervalues():
       if len(output) > 0:
         match = DevenvLogToIbLog.PROJECT_HEADER_REGEXP.match(output[0])
-        output[0] = (
+        if match:
+          output[0] = (
             '--------------------Configuration: %s - %s-----------------------'
               %(match.group(1), match.group(2))
             )

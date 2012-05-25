@@ -53,8 +53,9 @@ def main(options, args):
 
   print 'Full Staging in %s' % build_dir
 
-  zip_file_list = ['d8', 'obj/test/release/cctest',
-                   'obj/preparser/release/preparser']
+  zip_file_list = ['out/%s/d8' % options.target,
+                   'out/%s/cctest' % options.target,
+                   'out/%s/preparser' % options.target]
 
   # Write out the revision number so we can figure it out in extract_build.py.
   build_revision_file_name = 'FULL_BUILD_REVISION'
