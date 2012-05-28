@@ -71,7 +71,7 @@ linux_tests_1 = [
     'media',
     'net',
     'printing',
-    #'remoting',
+    'remoting',
     #'safe_browsing'
     'unit_ipc',
     'unit_sql',
@@ -124,7 +124,7 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'media',
            'net',
            'printing',
-           #'remoting',
+           'remoting',
            #'safe_browsing'
            'unit_ipc',
            'unit_sql',
