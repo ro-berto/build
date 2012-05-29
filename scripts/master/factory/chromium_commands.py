@@ -85,7 +85,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._win_memory_tests_runner = J('src', 'tools', 'valgrind',
                                       'chrome_tests.bat')
     self._heapcheck_tool = J('src', 'tools', 'heapcheck', 'chrome_tests.sh')
-    self._annotated_steps = J('src', 'build', 'buildbot_annotated_steps.py')
     self._nacl_integration_tester_tool = J(
         'src', 'chrome', 'test', 'nacl_test_injection',
         'buildbot_nacl_integration.py')
@@ -1018,8 +1017,11 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
     factory_properties = factory_properties or {}
-    script = factory_properties.get('annotated_script', self._annotated_steps)
+    script = self.PathJoin(self._chromium_script_dir,
+                           factory_properties['annotated_script'])
     cmd = [self._python, script]
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='annotated_steps',
                           description='annotated_steps',

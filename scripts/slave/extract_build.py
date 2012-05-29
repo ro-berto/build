@@ -207,17 +207,10 @@ def main():
   option_parser.add_option('--halt-on-missing-build', action='store_true',
                            default=False,
                            help='whether to halt on a missing build')
-  option_parser.add_option('--build-properties', action='callback',
-                           callback=chromium_utils.convert_json, type='string',
-                           nargs=1, default={},
-                           help='build properties in JSON format')
-  option_parser.add_option('--factory-properties', action='callback',
-                           callback=chromium_utils.convert_json, type='string',
-                           nargs=1, default={},
-                           help='factory properties in JSON format')
   option_parser.add_option('', '--webkit-dir', default=None,
                            help='webkit directory path, '
                                 'relative to --build-dir')
+  chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()
   return real_main(options, args)

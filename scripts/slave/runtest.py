@@ -562,14 +562,7 @@ def main():
   option_parser.add_option("", "--test-results-server", default='',
                            help="The test results server to upload the "
                                 "results.")
-  option_parser.add_option('--build-properties', action='callback',
-                           callback=chromium_utils.convert_json, type='string',
-                           nargs=1, default={},
-                           help='build properties in JSON format')
-  option_parser.add_option('--factory-properties', action='callback',
-                           callback=chromium_utils.convert_json, type='string',
-                           nargs=1, default={},
-                           help='factory properties in JSON format')
+  chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
   if options.run_shell_script and options.run_python_script:

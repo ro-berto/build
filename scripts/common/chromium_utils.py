@@ -907,7 +907,7 @@ def SafeTranslate(inputstr):
 def GetCBuildbotConfigs(chromite_path=None):
   """Get the sorted cbuildbot configs from cbuildbot_config.py.
 
-  Arguments:
+  Args:
     chromite_path: The path to the chromite/ directory.
 
   Returns:
@@ -938,3 +938,25 @@ def GetCBuildbotConfigs(chromite_path=None):
     # TODO(maruel): Remove this try block when this issue is resolved.
     print 'cbuildbot_chromite not found!  Returning empty config dictionary.'
     return {}
+
+
+def AddPropertiesOptions(option_parser):
+  """Registers command line options for parsing build and factory properties.
+
+  After parsing, the options object will have the 'build_properties' and
+  'factory_properties' attributes. The corresponding values will be python
+  dictionaries containing the properties. If the options are not given on
+  the command line, the dictionaries will be empty.
+
+  Args:
+    option_parser: An optparse.OptionParser to register command line options
+                   for build and factory properties.
+  """
+  option_parser.add_option('--build-properties', action='callback',
+                           callback=convert_json, type='string',
+                           nargs=1, default={},
+                           help='build properties in JSON format')
+  option_parser.add_option('--factory-properties', action='callback',
+                           callback=convert_json, type='string',
+                           nargs=1, default={},
+                           help='factory properties in JSON format')
