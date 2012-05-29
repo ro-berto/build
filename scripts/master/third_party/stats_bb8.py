@@ -118,7 +118,10 @@ class StatsStatusResource(HtmlResource):
     cxt['builderFailures'] = builderFailures
 
   def content(self, request, cxt):
-    maxBuilds = int(request.args.get('max', [None])[0])
+    try:
+      maxBuilds = int(request.args.get('max')[0])
+    except (TypeError, ValueError):
+      maxBuilds = None
     self.getMainVariables(self.getStatus(request), cxt, maxBuilds=maxBuilds)
     templates = request.site.buildbot_service.templates
     template = templates.get_template('stats.html')
