@@ -43,6 +43,10 @@ class StatsBuilderStatusResource(HtmlResource):
         if result == builder.FAILURE:
           failingSteps[stepName] = failCount + 1
 
+    # Put data in forward order
+    buildTimes.reverse()
+    map(list.reverse, stepTimes.values())
+
     slowest = reduce(
         max, [reduce(max, [y[1] for y in x], 0) for x in stepTimes.values()], 0)
     timeRange = slowest + 1
@@ -57,6 +61,7 @@ class StatsBuilderStatusResource(HtmlResource):
     cxt['yTicks'] = yTicks
     cxt['timeRange'] = timeRange
     cxt['colorMap'] = { 'compile': 1, 'update': 1 };
+    cxt['data_in_forward_order'] = '1'
 
   def content(self, request, cxt):
     maxBuilds = int(request.args.get(

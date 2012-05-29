@@ -34,7 +34,7 @@
 {% block content %}
 <script type='text/javascript'>
   var buildTimes = [
-    {% for t in buildTimes %}[{{ loop.index0 }}, {{ t[1] }}]{% if not loop.last %},{% endif %}        // build {{ t[0] }}
+    {% for t in buildTimes %}[{{ loop.index0 if data_in_forward_order is defined else loop.revindex0 }}, {{ t[1] }}]{% if not loop.last %},{% endif %}        // build {{ t[0] }}
 {% endfor %}  ];
 
   var failingSteps = [
@@ -57,7 +57,7 @@
 
 {% for k, v in stepTimes.iteritems() %}
   var stepTimes{{ k }} = [
-    {% for steptime in v %}[{{ loop.index0 }}, {{ steptime[1] }}]{% if not loop.last %},{% endif %}        // build {{ steptime[0] }}
+    {% for steptime in v %}[{{ loop.index0 if data_in_forward_order is defined else loop.revindex0 }}, {{ steptime[1] }}]{% if not loop.last %},{% endif %}        // build {{ steptime[0] }}
 {% endfor %}  ];
 
 {% endfor %}
