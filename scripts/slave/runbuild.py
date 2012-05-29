@@ -392,19 +392,22 @@ def args_ok(inoptions, pos_args):
           inoptions.logfile, errno, strerror)
       return False
 
-  if inoptions.build_properties and not inoptions.svn_rev:
+  if hasattr(inoptions, 'build_properties') and not hasattr(
+      inoptions, 'svn_rev'):
     if inoptions.build_properties['revision']:
       try:
-        inoptions.revision = int(inoptions.build_properties['revision'])
+        setattr(inoptions, 'revision', int(
+          inoptions.build_properties['revision']))
       except ValueError:
-        inoptions.revision = None
+        setattr(inoptions, 'revision', None)
 
     if not (hasattr(inoptions, 'revision') and inoptions.revision) and (
         inoptions.build_properties['got_revision']):
       try:
-        inoptions.revision = int(inoptions.build_properties['got_revision'])
+        setattr(inoptions, 'revision', int(
+          inoptions.build_properties['got_revision']))
       except ValueError:
-        inoptions.revision = None
+        setattr(inoptions, 'revision', None)
 
       if not inoptions.revision or inoptions.revision < 1:
         print >>sys.stderr, 'Error: revision must be a non-negative integer!'
