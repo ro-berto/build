@@ -1047,7 +1047,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           env=env)
 
   def AddBuildStep(self, factory_properties=None, name='build', env=None,
-                   timeout=1):
+                   timeout=6000):
     """Add annotated step to use the buildrunner to run steps on the slave."""
 
     factory_properties = factory_properties or {}
