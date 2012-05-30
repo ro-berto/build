@@ -487,12 +487,14 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('automated_ui_tests', factory_properties,
                                arg_list=arg_list)
 
-  def AddDeps2GitStep(self):
+  def AddDeps2GitStep(self, verify=True):
     J = self.PathJoin
     deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
     cmd = [self._python, deps2git_tool,
            '-d', J(self._repository_root, 'DEPS'),
            '-o', J(self._repository_root, '.DEPS.git')]
+    if verify:
+      cmd.append("--verify")
     self.AddTestStep(
         shell.ShellCommand,
         'check_deps2git',
