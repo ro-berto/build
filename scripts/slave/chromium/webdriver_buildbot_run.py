@@ -17,8 +17,8 @@ from common import chromium_utils
 
 def main():
   parser = optparse.OptionParser()
-  chromium_utils.AddPropertiesOptions(parser);
-  options, args = parser.parse_args()
+  chromium_utils.AddPropertiesOptions(parser)
+  options, _ = parser.parse_args()
   master_name = options.build_properties.get('mastername')
 
   if master_name == 'chromium.fyi':

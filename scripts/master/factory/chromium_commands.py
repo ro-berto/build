@@ -1018,7 +1018,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
     factory_properties = factory_properties or {}
     script = self.PathJoin(self._chromium_script_dir,
-                           factory_properties['annotated_script'])
+                           factory_properties.get('annotated_script', ''))
     cmd = [self._python, script]
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
