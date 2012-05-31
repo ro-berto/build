@@ -160,6 +160,7 @@ F('rel_cf', win_tester().ChromiumFactory(
     build_url=rel_archive,
     tests=[
       'chrome_frame_tests',
+      'chrome_frame_net_tests',
       'chrome_frame_unittests',
     ],
     factory_properties={'process_dumps': True,
