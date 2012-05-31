@@ -101,7 +101,7 @@ End output from shard index 0 (host). Return 1
 
 Summary for all the shards:
 1 test failed, listed below:
-[u'StaticCookiePolicyTest.BlockAllCookiesTest']
+  StaticCookiePolicyTest.BlockAllCookiesTest
 """)
 
 

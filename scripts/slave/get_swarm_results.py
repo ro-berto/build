@@ -132,7 +132,7 @@ def GetSwarmResults(swarm_base_url, test_keys):
   if len(failed_tests) > 0:
     plural = 's' if len(failed_tests) > 1 else ''
     print '%d test%s failed, listed below:' % (len(failed_tests), plural)
-    print failed_tests
+    print '\n'.join('  ' + test for test in failed_tests)
   else:
     print 'All tests passed.'
 
