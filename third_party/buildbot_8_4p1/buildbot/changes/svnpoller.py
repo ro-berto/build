@@ -256,6 +256,12 @@ class SVNPoller(base.PollingChangeSource, util.ComparableMixin):
         # chrome-bot account may have a legitimate commit.  This should not
         # happen generally, so we're okay waiting to see it until there's a
         # later commit with a non-chrome-bot author.
+        debug_change = []
+        for logentry in new_logentries:
+          rev = int(logentry.getAttribute("revision"))
+          author = logentry.getAttribute("author")
+          debug_change.append([rev, author])
+        log.msg('svnPoller: debug_change: %r' % debug_change)
         if len(new_logentries) > 0:
           if new_logentries[-1].getAttribute("author") == 'chrome-bot@google.com':
             new_logentries.pop(-1)
