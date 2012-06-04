@@ -3,7 +3,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""
+"""Execute buildsteps on the slave.
+
 This is the buildrunner, a script designed to run builds on the slave. It works
 by mocking out the structures of a Buildbot master, then running a slave under
 that 'fake' master. There are several benefits to this approach, the main one
@@ -35,6 +36,10 @@ pathjack('sqlalchemy_0_7_1')
 pathjack('sqlalchemy_migrate_0_7_1')
 pathjack('jinja2')
 pathjack('decorator_3_3_1')
+
+# this is required for master.cfg to be loaded properly, since setuptools
+# is only required by runbuild.py at the moment.
+pathjack('setuptools-0.6c11')
 
 from buildbot.process import base
 from buildbot.process import builder as real_builder
