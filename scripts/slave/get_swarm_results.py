@@ -11,6 +11,7 @@ build step."""
 
 import json
 import optparse
+import re
 import sys
 import time
 import urllib
@@ -64,6 +65,35 @@ def GetTestKeys(swarm_base_url, test_name):
   return result.split()
 
 
+class ShardWatcher(object):
+  """A simple class that monitors the gtest output from all the shards and
+     ensure all the required shards run and that there are no duplicates.
+  """
+
+  def __init__(self, shard_count):
+    # We add 1 to the shard indices because they will start at 1, not 0.
+    self.remaining_shards = map(str, range(1, shard_count + 1))
+    self.shard_line = re.compile(
+        r'Note: This is test shard ([0-9]+) of ([0-9]+)')
+    self.errors = False
+
+  def ProcessLine(self, line):
+    """Examine the line to see if it tells us which shard we are."""
+    match = self.shard_line.match(line)
+    if match:
+      shard_num = match.group(1)
+      if shard_num in self.remaining_shards:
+        self.remaining_shards.remove(shard_num)
+      else:
+        self.errors = True
+
+  def MissingShards(self):
+    return self.remaining_shards
+
+  def ShardsCompleted(self):
+    return not self.errors and not self.remaining_shards
+
+
 def GetSwarmResults(swarm_base_url, test_keys):
   if not test_keys:
     print 'Error: No test keys to get results with'
@@ -72,6 +102,7 @@ def GetSwarmResults(swarm_base_url, test_keys):
   gtest_parser = gtest_utils.GTestLogParser()
   hostnames = ['unknown'] * len(test_keys)
   exit_codes = [1] * len(test_keys)
+  shard_watcher = ShardWatcher(len(test_keys))
   for index in range(len(test_keys)):
     result_url = '%s/get_result?r=%s' % (swarm_base_url.rstrip('/'),
                                          test_keys[index])
@@ -106,6 +137,7 @@ def GetSwarmResults(swarm_base_url, test_keys):
         cleaned_output = TestRunOutput(test_outputs['output'])
         for line in cleaned_output.splitlines():
           gtest_parser.ProcessLine(line)
+          shard_watcher.ProcessLine(line)
         sys.stdout.write(cleaned_output)
 
         print
@@ -135,6 +167,14 @@ def GetSwarmResults(swarm_base_url, test_keys):
     print '\n'.join('  ' + test for test in failed_tests)
   else:
     print 'All tests passed.'
+
+  if len(test_keys) > 1 and shard_watcher.MissingShards():
+    print 'Not all shards were executed.'
+    print 'The following gtest shards weren\'t run:'
+    print '\n'.join('  ' + shard_id for shard_id in
+                    shard_watcher.MissingShards())
+    return 1
+
 
   return max(exit_codes)
 

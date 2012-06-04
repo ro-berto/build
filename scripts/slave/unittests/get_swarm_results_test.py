@@ -104,6 +104,10 @@ Summary for all the shards:
   StaticCookiePolicyTest.BlockAllCookiesTest
 """)
 
+TEST_SHARD_1 = 'Note: This is test shard 1 of 3.'
+TEST_SHARD_2 = 'Note: This is test shard 2 of 3.'
+TEST_SHARD_3 = 'Note: This is test shard 3 of 3.'
+
 
 class TestRunOutputTest(unittest.TestCase):
   def test_correct_output_success(self):
@@ -143,6 +147,29 @@ class GetTestKetsTest(SuperMoxTestBase):
                      swarm_results.GetTestKeys('http://host:9001', 'my_test'))
 
     self.mox.VerifyAll()
+
+
+class AllShardsRun(unittest.TestCase):
+  def testAllShardsRun(self):
+    shard_watcher = swarm_results.ShardWatcher(3)
+
+    shard_watcher.ProcessLine(TEST_SHARD_1)
+    shard_watcher.ProcessLine(TEST_SHARD_2)
+    shard_watcher.ProcessLine(TEST_SHARD_3)
+
+    self.assertEqual([], shard_watcher.MissingShards())
+    self.assertTrue(shard_watcher.ShardsCompleted())
+
+  def testShardRepeated(self):
+    shard_watcher = swarm_results.ShardWatcher(3)
+
+    shard_watcher.ProcessLine(TEST_SHARD_1)
+    shard_watcher.ProcessLine(TEST_SHARD_1)
+    shard_watcher.ProcessLine(TEST_SHARD_1)
+
+    self.assertEqual(['2', '3'], shard_watcher.MissingShards())
+    self.assertFalse(shard_watcher.ShardsCompleted())
+
 
 class GetSwarmResults(SuperMoxTestBase):
   def test_get_swarm_results_success(self):
