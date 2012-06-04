@@ -545,6 +545,37 @@ class FactoryCommands(object):
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo)
 
+  def AddApplyIssueStep(self):
+    """Adds a step to the factory to apply an issues from Rietveld.
+
+    It is a conditional step that is only run on the try server if the following
+    conditions are all true:
+    - There are both build properties issue and patchset
+    - There is no patch attached
+    """
+    def do_step_if(bStep):
+      build = bStep.build
+      properties = build.getProperties()
+      for prop in ('issue', 'patchset'):
+        if prop not in properties or not properties.getProperty(prop):
+          return False
+      if build.getSourceStamp().patch:
+        return False
+      return True
+
+    cmd = [
+      'apply_issue.py',
+      '-i', WithProperties('%(issue:-)s'),
+      '-p', WithProperties('%(patchset:-)s'),
+    ]
+    self._factory.addStep(
+        shell.ShellCommand,
+        haltOnFailure=True,
+        name='apply_issue',
+        description='apply patch',
+        command=cmd,
+        doStepIf=do_step_if)
+
   def AddRunHooksStep(self, env=None, timeout=None):
     """Adds a step to the factory to run the gclient hooks."""
     env = env or {}

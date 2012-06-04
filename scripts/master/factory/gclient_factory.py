@@ -187,7 +187,7 @@ class GClientFactory(object):
       factory_cmd_obj.AddCloneStep(factory_properties)
     elif not delay_compile_step:
       self.AddUpdateStep(gclient_spec, factory_properties, factory,
-                         sudo_for_remove, gclient_deps=gclient_deps)
+                         slave_type, sudo_for_remove, gclient_deps=gclient_deps)
     return factory
 
   def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
@@ -310,7 +310,7 @@ class GClientFactory(object):
     factory_cmd_obj.AddDestroyCloneStep(factory_properties=factory_properties)
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
-                    sudo_for_remove=False, gclient_deps=None):
+                    slave_type, sudo_for_remove=False, gclient_deps=None):
     if gclient_spec is None:
       gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
@@ -341,5 +341,9 @@ class GClientFactory(object):
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo,
         gclient_jobs=gclient_jobs)
+
+    if slave_type == 'Trybot':
+      factory_cmd_obj.AddApplyIssueStep()
+
     if not self._nohooks_on_update:
       factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)

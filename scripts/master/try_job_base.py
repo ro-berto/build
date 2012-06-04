@@ -279,10 +279,11 @@ class TryJobBase(TryBase):
           'incoming Try job did not specify any allowed builder names')
 
     # Verify the try job patch is not more than 20MB.
-    patchsize = len(parsed_job['patch'])
-    if patchsize > 20*1024*1024:  # 20MB
-      raise BadJobfile('incoming Try job patch is %s bytes, '
-                       'must be less than 20MB' % (patchsize))
+    if parsed_job.get('patch'):
+      patchsize = len(parsed_job['patch'])
+      if patchsize > 20*1024*1024:  # 20MB
+        raise BadJobfile('incoming Try job patch is %s bytes, '
+                        'must be less than 20MB' % (patchsize))
 
     d = self.master.db.sourcestamps.addSourceStamp(
         branch=parsed_job['branch'],
