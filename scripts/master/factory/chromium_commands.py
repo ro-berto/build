@@ -675,58 +675,58 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
-                              src_base=None,
+                              src_base='.',
                               suite=None,
+                              test_args=None,
                               factory_properties=None,
                               perf=False):
     """Adds a step to run PyAuto functional tests.
 
     Args:
+      test_name: a string describing the test, used to build its logfile name
+          and its descriptions in the waterfall display
+      timeout: The buildbot timeout for this step, in seconds.  The step will
+          fail if the test does not produce any output within this time.
       workdir: the working dir for this step
       src_base: relative path (from workdir) to src. Not needed if workdir is
-                'build' (the default)
+          'build' (the default)
       suite: PyAuto suite to execute.
-      perf: Is this a perf test or not? Requires suite to be set.
+      test_args: list of PyAuto test arguments.
+      factory_properties: A dictionary of factory property values.
+      perf: Is this a perf test or not? Requires suite or test_args to be set.
     """
     factory_properties = factory_properties or {}
     J = self.PathJoin
-    pyauto_script = J('src', 'chrome', 'test', 'functional',
+    pyauto_script = J(src_base, 'src', 'chrome', 'test', 'functional',
                       'pyauto_functional.py')
-    # in case a '..' prefix is needed
-    if src_base:
-      pyauto_script = J(src_base, pyauto_script)
-
-    pyauto_functional_cmd = ['python', pyauto_script, '-v']
+    pyauto_cmd = ['python', pyauto_script, '-v']
     if self._target_platform == 'win32':
-      pyauto_functional_cmd = self.GetPythonTestCommand(pyauto_script, ['-v'])
-      if src_base:  # Adjust runtest.py path if needed.
-        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
+      pyauto_cmd = self.GetPythonTestCommand(pyauto_script, ['-v'])
+      pyauto_cmd[1] = J(src_base, pyauto_cmd[1])  # adjust runtest.py if needed
     elif self._target_platform == 'darwin':
-      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python2.5',
-                                                  [pyauto_script, '-v'])
-      if src_base:  # Adjust runtest.py path if needed.
-        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
+      pyauto_cmd = self.GetTestCommand('/usr/bin/python2.5',
+                                       [pyauto_script, '-v'])
+      pyauto_cmd[1] = J(src_base, pyauto_cmd[1])  # adjust runtest.py if needed
     elif (self._target_platform.startswith('linux') and
           factory_properties.get('use_xvfb_on_linux')):
-      # Run thru runtest.py on linux to launch virtual x server
-      pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
-                                                  [pyauto_script, '-v'])
-      if src_base:  # Adjust runtest.py path if needed.
-        pyauto_functional_cmd[1] = J(src_base, pyauto_functional_cmd[1])
+      # On Linux, use runtest.py to launch virtual X server.
+      pyauto_cmd = self.GetTestCommand('/usr/bin/python', [pyauto_script, '-v'])
+      pyauto_cmd[1] = J(src_base, pyauto_cmd[1])  # adjust runtest.py if needed
 
     if suite:
-      pyauto_functional_cmd.append('--suite=%s' % suite)
+      pyauto_cmd.append('--suite=%s' % suite)
+    if test_args:
+      pyauto_cmd.extend(test_args)
 
-    # Use special command class for parsing perf values from output.
     command_class = retcode_command.ReturnCodeCommand
-    if perf and suite:
+    if perf and (suite or test_args):
+      # Use special command class for parsing perf values from output.
       command_class = self.GetPerfStepClass(
-          factory_properties, suite.lower(),
-          process_log.GraphingLogProcessor)
+          factory_properties, test_name, process_log.GraphingLogProcessor)
 
     self.AddTestStep(command_class,
                      test_name,
-                     pyauto_functional_cmd,
+                     pyauto_cmd,
                      env={'PYTHONPATH': '.'},
                      workdir=workdir,
                      timeout=timeout,
@@ -751,18 +751,17 @@ class ChromiumCommands(commands.FactoryCommands):
       return
 
     for pyauto_test_name in pyauto_test_list:
-      pyauto_functional_cmd = ['python', pyauto_script, '-v']
+      pyauto_cmd = ['python', pyauto_script, '-v']
       if factory_properties.get('use_xvfb_on_linux'):
         # Run through runtest.py on linux to launch virtual x server.
-        pyauto_functional_cmd = self.GetTestCommand('/usr/bin/python',
-                                                    [pyauto_script, '-v'])
-
-      pyauto_functional_cmd.append(pyauto_test_name)
+        pyauto_cmd = self.GetTestCommand('/usr/bin/python',
+                                         [pyauto_script, '-v'])
+      pyauto_cmd.append(pyauto_test_name)
       test_step_name = (test_class_name + ' ' +
                         pyauto_test_name[pyauto_test_name.rfind('.') + 1:])
       self.AddTestStep(retcode_command.ReturnCodeCommand,
                        test_step_name,
-                       pyauto_functional_cmd,
+                       pyauto_cmd,
                        env={'PYTHONPATH': '.'},
                        timeout=timeout,
                        do_step_if=self.GetTestStepFilter(factory_properties))

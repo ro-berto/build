@@ -399,6 +399,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*')
     if R('page_cycler_indexeddb'):
       f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
+    if R('page_cycler_2012Q2-netsim'):
+      f.AddPyAutoFunctionalTest(
+          'page_cycler_2012Q2-netsim',
+          test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
+          factory_properties=fp, perf=True)
 
     if R('memory'):
       f.AddMemoryTests(fp)
