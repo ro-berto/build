@@ -177,7 +177,8 @@ def main():
       'master.reserved': None,  # make start fails
       'master.tryserver.chromium': 'Chromium Try Server',
       'master.tryserver.nacl': 'NativeClient-Try',
-      'master.tryserver.chromiumos': None,  # Try to fetch from gerrit over ssh
+      'master.tryserver.chromiumos': 'ChromiumOS Try Server',
+      'master.chromiumos.tryserver': 'ChromiumOS Try Server Staging',
       'master.devtools': 'Chromium DevTools',
   }
   return real_main(base_dir, expected)

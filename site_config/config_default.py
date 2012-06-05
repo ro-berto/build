@@ -239,6 +239,9 @@ class Master(object):
     # The reply-to address to set for emails sent from the server.
     reply_to = 'nobody@example.com'
 
+  class ChromiumOSTryServerStaging(ChromiumOSTryServer):
+    project_name = 'ChromiumOS Try Server Staging'
+
   ## V8
 
   class V8(_Base):
