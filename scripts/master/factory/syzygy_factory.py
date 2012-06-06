@@ -69,8 +69,13 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                                     self.target_platform,
                                                     target_arch)
 
-    # Compile the build_all project of the Syzygy solution.
-    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
+    if official_release:
+      # Compile the official_build project of the "all" solution for
+      # official builds.
+      syzygy_cmd_obj.AddCompileStep('../syzygy/build/all.sln;official_build')
+    else:
+      # Compile the build_all project of the Syzygy solution.
+      syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
 
     # Run the unittests.
     for test_name in _UNITTESTS:
