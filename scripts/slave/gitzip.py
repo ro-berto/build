@@ -224,7 +224,8 @@ class GitZip(object):
     else:
       threading.current_thread().err = None
 
-  def CreateFirstCheckoutHook(self, clonedir):
+  @staticmethod
+  def CreateFirstCheckoutHook(clonedir):
     permissions = (stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR |
                    stat.S_IRGRP | stat.S_IXGRP|
                    stat.S_IROTH | stat.S_IXOTH)
