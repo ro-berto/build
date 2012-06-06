@@ -50,6 +50,12 @@ categories_steps = {
 }
 
 exclusions = {
+  # nacl_integration disabled on two Mac bots.
+  # http://crbug.com/131422
+  'Mac10.5 Tests (1)': ['nacl_integration'],
+  'Mac 10.5 Tests (dbg)(1)': ['nacl_integration'],
+  'Mac10.6 Tests (1)': ['nacl_integration'],
+  'Mac 10.6 Tests (dbg)(1)': ['nacl_integration'],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
