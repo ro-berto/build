@@ -51,12 +51,28 @@ try:
   from queue import Queue
 except ImportError:
   from Queue import Queue
+import stat
 import subprocess
 import sys
 import tempfile
 import threading
 
 from slave.slave_utils import GSUtilSetup
+
+FIRST_CHECKOUT_SH = """#!/bin/bash
+
+git checkout --force HEAD
+git submodule foreach git checkout --force HEAD
+git submodule update --init
+"""
+
+FIRST_CHECKOUT_BAT = """@echo off
+
+call git checkout --force HEAD
+call git submodule foreach git checkout --force HEAD
+call git submodule update --init
+"""
+
 
 # pylint: disable=W0232
 class TerminateMessageThread:
@@ -153,8 +169,10 @@ class GitZip(object):
     for submod_dict in submods.itervalues():
       if 'path' not in submod_dict or 'url' not in submod_dict:
         continue
-      submod_clonedir = os.path.join(clonedir, submod_dict['path'])
+      submod_path = submod_dict['path']
+      submod_clonedir = os.path.join(clonedir, submod_path)
       submod_url = submod_dict['url']
+      self._run_cmd(['git', 'checkout', 'HEAD', submod_path], clonedir)
       thr = threading.Thread(
           target=self.DoFetch, args=(submod_clonedir, submod_url))
       thr.start()
@@ -164,9 +182,17 @@ class GitZip(object):
     for thr in threads:
       if thr.err:
         raise thr.err
+    self._run_cmd(['git', 'submodule', 'init'], clonedir)
+    self._run_cmd(['git', 'submodule', 'foreach', 'git', 'config', '-f',
+                   '$toplevel/.git/config', 'submodule.$name.ignore', 'dirty'],
+                  clonedir)
 
   def PostFetch(self, clonedir):
     try:
+      # Set up git config
+      self._run_cmd(['git', 'config', 'core.autocrlf', 'false'], clonedir)
+      self._run_cmd(['git', 'config', 'core.filemode', 'false'], clonedir)
+
       # If there's a .gitmodules file, fetch submodules
       cmd = ['git', 'checkout', 'HEAD', '.gitmodules']
       (status, _, _) = self._run_cmd(cmd, clonedir, raiseOnFailure=False)
@@ -186,9 +212,6 @@ class GitZip(object):
         cmd = ['git', 'fetch', 'origin']
         workdir = clonedir
       elif url is not None:
-        clonedir_parent = os.path.dirname(clonedir)
-        if clonedir_parent and not os.path.isdir(clonedir_parent):
-          self._run_cmd(['mkdir', '-p', clonedir_parent])
         cmd = ['git', 'clone', '-n', url, clonedir]
         workdir = self.workdir
       else:
@@ -201,8 +224,24 @@ class GitZip(object):
     else:
       threading.current_thread().err = None
 
+  def CreateFirstCheckoutHook(self, clonedir):
+    permissions = (stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR |
+                   stat.S_IRGRP | stat.S_IXGRP|
+                   stat.S_IROTH | stat.S_IXOTH)
+    hook_path = os.path.join(clonedir, '.git', 'hooks', 'first-checkout.sh')
+    fh = open(hook_path, 'w')
+    fh.write(FIRST_CHECKOUT_SH)
+    fh.close()
+    os.chmod(hook_path, permissions)
+    hook_path = os.path.join(clonedir, '.git', 'hooks', 'first-checkout.bat')
+    fh = open(hook_path, 'w')
+    fh.write(FIRST_CHECKOUT_BAT)
+    fh.close()
+    os.chmod(hook_path, permissions)
+
   def CreateZipFile(self, zippath, zipfile, sha1_file):
-    cmd = ['zip', '-0', '-r', '-o', zipfile, zippath]
+    self._run_cmd(['rm', '-f', zipfile])
+    cmd = ['7z', 'a', '-tzip', '-mx=0', zipfile, zippath]
     self._run_cmd(cmd)
     cmd = ['sha1sum', os.path.basename(zipfile)]
     (_, stdout, _) = self._run_cmd(cmd, workdir=os.path.dirname(zipfile))
@@ -210,32 +249,43 @@ class GitZip(object):
     fh.write('%s' % stdout)
     fh.close()
 
-  def UploadFiles(self, *f):
+  def UploadFiles(self, *f, **kwargs):
     try:
+      threading.current_thread().err = None
       if not self.gs_bucket:
         return
       gsutil_exe = GSUtilSetup()
       gs_url = self.gs_bucket
       if not gs_url.startswith('gs://'):
         gs_url = 'gs://%s' % gs_url
-      cmd = [gsutil_exe, 'cp', '-a', self.gs_acl] + list(f) + [gs_url]
+      cmd = ([gsutil_exe] + kwargs.get('gsutil_args', []) +
+             ['cp', '-a', self.gs_acl] + list(f) + [gs_url])
       self._run_cmd(cmd)
     except Exception, e:
       threading.current_thread().err = e
       raise
-    else:
-      threading.current_thread().err = None
 
   def ZipAndUpload(self):
+    gs_threads = []
+
     # Create a zip file of everything
     full_zippath = self.base
     full_zipfile = os.path.join(self.workdir, '%s-full.zip' % self.base)
     full_sha1_file = '%s.sha1' % full_zipfile
     self.CreateZipFile(full_zippath, full_zipfile, full_sha1_file)
 
-    full_thr = threading.Thread(
-        target=self.UploadFiles, args=(full_zipfile, full_sha1_file))
-    full_thr.start()
+    thr = threading.Thread(
+        target=self.UploadFiles,
+        args=(full_zipfile,))
+    thr.start()
+    gs_threads.append(thr)
+
+    thr = threading.Thread(
+        target=self.UploadFiles,
+        args=(full_sha1_file,),
+        kwargs={'gsutil_args': ['-h', 'Content-Type:text/html']})
+    thr.start()
+    gs_threads.append(thr)
 
     # Create a zip file of just the top-level source without submodules
     bare_zippath = os.path.join(self.base, '.git')
@@ -243,26 +293,30 @@ class GitZip(object):
     bare_sha1_file = '%s.sha1' % bare_zipfile
     self.CreateZipFile(bare_zippath, bare_zipfile, bare_sha1_file)
 
-    bare_thr = threading.Thread(
-        target=self.UploadFiles, args=(bare_zipfile, bare_sha1_file))
-    bare_thr.start()
+    thr = threading.Thread(
+        target=self.UploadFiles,
+        args=(bare_zipfile,))
+    thr.start()
+    gs_threads.append(thr)
 
-    full_thr.join()
-    bare_thr.join()
-    # pylint: disable=E1101
-    if full_thr.err:
-      # pylint: disable=E1101
-      raise full_thr.err
-    # pylint: disable=E1101
-    if bare_thr.err:
-      # pylint: disable=E1101
-      raise bare_thr.err
+    thr = threading.Thread(
+        target=self.UploadFiles,
+        args=(bare_sha1_file,),
+        kwargs={'gsutil_args': ['-h', 'Content-Type:text/html']})
+    thr.start()
+    gs_threads.append(thr)
+
+    map(threading.Thread.join, gs_threads)
+    for thr in gs_threads:
+      if thr.err:
+        raise thr.err
 
   def Run(self):
     message_thread = threading.Thread(target=self._pump_messages)
     message_thread.start()
     try:
       self.DoFetch(self.base, self.url)
+      self.CreateFirstCheckoutHook(self.base)
       self.ZipAndUpload()
     finally:
       self.messages.put(TerminateMessageThread)
@@ -272,22 +326,23 @@ class GitZip(object):
 if __name__ == '__main__':
   parser = optparse.OptionParser()
   parser.add_option('-d', '--workdir', action='store', dest='workdir',
-                    help='Working directory in which to clone git repository')
+                    metavar='DIR', help='Working directory in which to clone '
+                    'the git repository')
   parser.add_option('-b', '--base', action='store', dest='base',
-                    help='The directory under <workdir> containing the '
-                    'pre-existing top-level source checkout')
-  parser.add_option('-u', '--url', action='store', dest='url', metavar='<url>',
+                    metavar='DIR', help='The directory under WORKDIR '
+                    'containing the pre-existing top-level source checkout')
+  parser.add_option('-u', '--url', action='store', dest='url', metavar='URL',
                     help='URL of top-level git repository')
   parser.add_option('-g', '--gs_bucket', action='store', dest='gs_bucket',
                     help='URL of Google Storage bucket to upload result')
   parser.add_option('-a', '--gs_acl', action='store', dest='gs_acl',
-                    default='public-read', help='Canned ACL for objects '
-                    'uploaded to Google Storage')
+                    metavar='URL', default='public-read', help='Canned ACL for '
+                    'objects uploaded to Google Storage')
   parser.add_option('-t', '--timeout', action='store', type=int, dest='timeout',
                     help='Timeout for individual commands', default=3600)
   parser.add_option('-s', '--stayalive', action='store', type=int,
                     dest='stayalive', help='Make sure this script produces '
-                    'terminal output at least every <stayalive> seconds, to '
+                    'terminal output at least every STAYALIVE seconds, to '
                     'prevent its parent process from timing out.', default=200)
   parser.add_option('-v', '--verbose', action='store_true', dest='verbose')
   options, args = parser.parse_args()
