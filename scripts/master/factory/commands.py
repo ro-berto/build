@@ -565,6 +565,7 @@ class FactoryCommands(object):
 
     cmd = [
       'apply_issue.py',
+      '-r', WithProperties('%(root:-)s'),
       '-i', WithProperties('%(issue:-)s'),
       '-p', WithProperties('%(patchset:-)s'),
     ]

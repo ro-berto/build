@@ -252,7 +252,7 @@ class TryJobBase(TryBase):
     """Current job extra properties that are not related to the source stamp.
     Initialize with the Scheduler's base properties.
     """
-    keys = ('clobber', 'issue', 'patchset', 'rietveld')
+    keys = ('clobber', 'issue', 'patchset', 'rietveld', 'root')
     # All these settings have no meaning when False or not set, so don't set
     # them in that case.
     properties = dict((i, options[i]) for i in keys if options.get(i))
