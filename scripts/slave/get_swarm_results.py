@@ -138,9 +138,8 @@ def GetSwarmResults(swarm_base_url, test_keys):
         for line in cleaned_output.splitlines():
           gtest_parser.ProcessLine(line)
           shard_watcher.ProcessLine(line)
-        sys.stdout.write(cleaned_output)
+        print cleaned_output
 
-        print
         print '================================================================'
         print 'End output from shard index %s (%s). Return %d' % (
             index, hostnames[index], exit_codes[index])
