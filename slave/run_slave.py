@@ -12,6 +12,7 @@ import subprocess
 import sys
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+needs_reboot = False
 
 
 def remove_all_vars_except(dictionary, keep):
@@ -23,9 +24,9 @@ def remove_all_vars_except(dictionary, keep):
 def Reboot():
   print "Rebooting..."
   if sys.platform.startswith('win'):
-    subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
+    subprocess.Popen(['shutdown', '-r', '-f', '-t', '1'])
   elif sys.platform in ('darwin', 'posix', 'linux2'):
-    subprocess.call(['sudo', 'shutdown', '-r', 'now'])
+    subprocess.Popen(['sudo', 'shutdown', '-r', 'now'])
   else:
     raise NotImplementedError('Implement Reboot function')
 
@@ -43,8 +44,23 @@ def HotPatchSlaveBuilder():
   old_remote_shutdown = SlaveBuilder.remote_shutdown
 
   def rebooting_remote_shutdown(self):
+    """Set a reboot flag and stop the reactor so when the slave exits we reboot.
+
+    Note that Buildbot masters >= 0.8.3 try to stop the slave in 2 ways.  First
+    they try the new way which works for slaves running based on Buildbot 0.8.3
+    or later.  If the slave is running something earlier than Buildbot 0.8.3,
+    the master will then try the old way which will be what actually restarts
+    those older slaves.
+
+    For older slaves, the new way is always run first, and this causes the
+    "No such method 'remote_shutdown'" message that is seen in the old slaves'
+    twistd.log files.  This error is safe to ignore since the master will have
+    immediately tried the old way and correctly restarted those slaves after
+    that error is caught.
+    """
+    global needs_reboot
+    needs_reboot = True
     old_remote_shutdown(self)
-    Reboot()
 
   SlaveBuilder.remote_shutdown = rebooting_remote_shutdown
 
@@ -238,6 +254,8 @@ def main():
 
   import twisted.scripts.twistd as twistd
   twistd.run()
+  if needs_reboot:
+    Reboot()
 
 
 def UpdateScripts():
