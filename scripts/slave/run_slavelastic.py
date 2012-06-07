@@ -86,7 +86,7 @@ class Manifest(object):
       cleanup_commands = ['rm', '-rf']
     elif self.target_platform == 'Windows':
       cleanup_commands = ['del']
-    self.add_task('Clean Up', cleanup_commands + [self.zipfile_name])
+    self.add_task('Clean Up', cleanup_commands + ['*.zip'])
 
     # Call kill_processes.py if on windows
     if self.target_platform == 'Windows':
@@ -210,7 +210,7 @@ def main():
   # Remove the old data if there is any
   if os.path.isdir(options.data_dest_dir):
     print 'Removing old swarm files...'
-    for filename in glob.glob('swarm_tempfile_*.zip'):
+    for filename in glob.glob('*.zip'):
       os.remove(filename)
 
   # Send off the swarm test requests.

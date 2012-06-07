@@ -70,10 +70,10 @@ def GenerateExpectedJSON(options):
 
   if options.os_image == 'win32':
     expected['tests'].append(
-        {'action': ['del', 'unit_tests.zip'], 'test_name': 'Clean Up'})
+        {'action': ['del', '*.zip'], 'test_name': 'Clean Up'})
   else:
     expected['tests'].append(
-        {'action': ['rm', '-rf', 'unit_tests.zip'], 'test_name': 'Clean Up'})
+        {'action': ['rm', '-rf', '*.zip'], 'test_name': 'Clean Up'})
 
   if options.os_image == 'win32':
     expected['tests'].append(
