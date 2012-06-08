@@ -400,6 +400,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('page_cycler_indexeddb'):
       f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
     if R('page_cycler_2012Q2-netsim'):
+      fp['use_xvfb_on_linux'] = True
       f.AddPyAutoFunctionalTest(
           'page_cycler_2012Q2-netsim',
           test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
