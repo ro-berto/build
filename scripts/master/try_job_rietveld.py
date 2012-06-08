@@ -151,6 +151,7 @@ class TryJobRietveld(TryJobBase):
       job['patchlevel'] = ''
       job['branch'] = None
       job['repository'] = None
+      job['try_job_key'] = job['key']
 
       try:
         self.SubmitJob(job, None)
