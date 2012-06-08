@@ -259,11 +259,12 @@ class SVNPoller(base.PollingChangeSource, util.ComparableMixin):
         debug_change = []
         for logentry in new_logentries:
           rev = int(logentry.getAttribute("revision"))
-          author = logentry.getAttribute("author")
+          author = self._get_text(logentry, "author")
           debug_change.append([rev, author])
         log.msg('svnPoller: debug_change: %r' % debug_change)
         if len(new_logentries) > 0:
-          if new_logentries[-1].getAttribute("author") == 'chrome-bot@google.com':
+          newest_rev_author = self._get_text(new_logentries[-1], "author")
+          if newest_rev_author == 'chrome-bot@google.com':
             new_logentries.pop(-1)
             new_last_change = int(logentries[1].getAttribute("revision"))
 
