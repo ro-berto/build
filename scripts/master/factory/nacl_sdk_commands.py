@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -89,7 +89,7 @@ class NativeClientSDKCommands(commands.FactoryCommands):
     self._factory.addStep(chromium_step.AnnotatedCommand,
                           description='prepare_sdk',
                           timeout=1500,
-                          workdir=self._build_dir,
+                          workdir='build',
                           env=self._build_env,
                           haltOnFailure=True,
                           command=cmd)
