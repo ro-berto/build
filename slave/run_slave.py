@@ -10,6 +10,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 needs_reboot = False
@@ -22,13 +23,40 @@ def remove_all_vars_except(dictionary, keep):
 
 
 def Reboot():
+  """Reboot system according to platform type.
+
+  On some platforms, like Mac, run_slave.py is launched by a system launcher
+  agent.  In those cases, any children of this process will get killed by the
+  agent if they're still running after we exit.  Our strategy to ensure our
+  system reboot command is issued without getting killed before sudo runs
+  shutdown for us is:
+
+  1. Only call Reboot() from run_slave.py, and not from within the
+     remote_shutdown method.  This allows us to avoid the possibility of
+     the sudo being executed and being interrupted by the Twisted service
+     as it shuts down due to a separate reactor.stop() call.  (This was just
+     the only theory available for why some bots would not reboot at times.)
+
+  2. Use subprocess.call() instead of Popen() to ensure that run_slave.py
+     doesn't exit at all when it calls Reboot().  This ensures that run_slave.py
+     won't exit and trigger any cleanup routines by whatever launched
+     run_slave.py.
+
+  Since our strategy depends on Reboot() never returning, raise an exception
+  if that should occur to make it clear in logs that an error condition is
+  occurring somewhere.
+  """
   print "Rebooting..."
   if sys.platform.startswith('win'):
-    subprocess.Popen(['shutdown', '-r', '-f', '-t', '1'])
+    subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
   elif sys.platform in ('darwin', 'posix', 'linux2'):
-    subprocess.Popen(['sudo', 'shutdown', '-r', 'now'])
+    subprocess.call(['sudo', 'shutdown', '-r', 'now'])
   else:
     raise NotImplementedError('Implement Reboot function')
+  print 'reboot requested, going to sleep...'
+  while True:
+    time.sleep(60)
+  raise Exception('run_slave.Reboot() should not return but would have')
 
 
 def HotPatchSlaveBuilder():
@@ -255,7 +283,9 @@ def main():
   import twisted.scripts.twistd as twistd
   twistd.run()
   if needs_reboot:
+    # Send the appropriate system shutdown command.
     Reboot()
+    # This line should not be reached.
 
 
 def UpdateScripts():
