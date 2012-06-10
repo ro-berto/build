@@ -188,7 +188,7 @@ dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
 
 dbg_shared_archive = master_config.GetArchiveUrl('Chromium',
                                                  'Linux Builder (dbg)(shared)',
-                                                 'Linux Builder__dbg__shared_',
+                                                 'Linux_Builder__dbg__shared_',
                                                  'linux')
 
 #
