@@ -137,7 +137,6 @@ linux_aura_tests = [
   'net',
   'printing',
   'remoting',
-  'safe_browsing',
   'views',
   'unit',
 ]
