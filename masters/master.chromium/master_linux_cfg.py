@@ -115,6 +115,65 @@ F('rel_sync', linux_tester().ChromiumFactory(
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
 
+#
+# Linux aura bot
+#
+
+# Interactive ui tests and browser tests disabled in this configuration; it's a
+# long term goal to support them, but that isn't happening on the order of
+# months due to manpower issues.
+linux_aura_tests = [
+  'aura',
+  'base',
+  #'browser_tests',
+  'cacheinvalidation',
+  'compositor',
+  'crypto',
+  'googleurl',
+  'gpu',
+  #'interactive_ui',
+  'jingle',
+  'media',
+  'net',
+  'printing',
+  'remoting',
+  'safe_browsing',
+  'views',
+  'unit',
+]
+
+linux_aura_options=[
+  'aura_builder',
+  'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'compositor_unittests',
+  'content_unittests',
+  'crypto_unittests',
+  'gfx_unittests',
+  'googleurl_unittests',
+  'gpu_unittests',
+  'interactive_ui_tests',
+  'ipc_tests',
+  'jingle_unittests',
+  'net_unittests',
+  'media_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'safe_browsing_tests',
+  'sql_unittests',
+]
+
+B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',
+  notify_on_missing=True)
+F('f_linux_rel_aura', linux().ChromiumFactory(
+    target='Release',
+    slave_type='BuilderTester',
+    options=['--compiler=goma'] + linux_aura_options,
+    tests=linux_aura_tests,
+    factory_properties={'gclient_env': {'GYP_DEFINES': 'use_aura=1'}}))
+
+
 ################################################################################
 ## Debug
 ################################################################################
