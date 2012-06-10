@@ -17,6 +17,11 @@ def chromiumos(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 defaults['category'] = '1linux'
 
+rel_archive = master_config.GetArchiveUrl('ChromiumChromiumOS',
+                                          'Linux ChromiumOS Builder',
+                                          'chromium-rel-linux-chromeos',
+                                          'linux2')
+
 S(name='chromium_local', branch='src', treeStableTimer=60)
 
 T('chromiumos_rel_trigger')
@@ -90,7 +95,7 @@ B('Linux ChromiumOS Builder',
   scheduler='chromium_local',
   notify_on_missing=True)
 F('builder', chromiumos().ChromiumOSFactory(
-    slave_type='NASBuilder',
+    slave_type='Builder',
     options=['--compiler=goma'] + linux_options,
     factory_properties={
         'archive_build': False,
@@ -109,7 +114,8 @@ B('Linux ChromiumOS Tests (1)',
   auto_reboot=True,
   notify_on_missing=True)
 F('tester_1', chromiumos().ChromiumOSFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['aura',
            'aura_shell',
            'base',
@@ -144,7 +150,8 @@ B('Linux ChromiumOS Tests (2)',
   auto_reboot=True,
   notify_on_missing=True)
 F('tester_2', chromiumos().ChromiumOSFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=linux_tests_2 + linux_tests_3,
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,
@@ -174,10 +181,15 @@ F('clang', chromiumos().ChromiumOSFactory(
 #
 T('chromiumos_dbg_trigger')
 
+dbg_archive = master_config.GetArchiveUrl('ChromiumChromiumOS',
+                                          'Linux ChromiumOS Builder (dbg)',
+                                          'Linux_ChromiumOS_Builder__dbg_',
+                                          'linux2')
+
 B('Linux ChromiumOS Builder (dbg)', 'dbg', 'compile',
   'chromium_local', notify_on_missing=True)
 F('dbg', chromiumos().ChromiumOSFactory(
-    slave_type='NASBuilder',
+    slave_type='Builder',
     target='Debug',
     options=['--compiler=goma'] + linux_options,
     factory_properties={
@@ -189,7 +201,8 @@ F('dbg', chromiumos().ChromiumOSFactory(
 B('Linux ChromiumOS Tests (dbg)(1)', 'dbg_tests_1', 'tester',
   'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('dbg_tests_1', chromiumos().ChromiumOSFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=dbg_archive,
     target='Debug',
     tests=linux_tests_1,
     factory_properties={'chromeos': 1,
@@ -200,7 +213,8 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
 B('Linux ChromiumOS Tests (dbg)(2)', 'dbg_tests_2', 'tester',
   'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('dbg_tests_2', chromiumos().ChromiumOSFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=dbg_archive,
     target='Debug',
     tests=linux_tests_2,
     factory_properties={'chromeos': 1,
@@ -211,7 +225,8 @@ F('dbg_tests_2', chromiumos().ChromiumOSFactory(
 B('Linux ChromiumOS Tests (dbg)(3)', 'dbg_tests_3', 'tester',
   'chromiumos_dbg_trigger', auto_reboot=True, notify_on_missing=True)
 F('dbg_tests_3', chromiumos().ChromiumOSFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=dbg_archive,
     target='Debug',
     tests=linux_tests_3,
     factory_properties={'chromeos': 1,

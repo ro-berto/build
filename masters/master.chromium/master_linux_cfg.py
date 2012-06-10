@@ -57,6 +57,8 @@ linux_all_test_targets = [
 
 defaults['category'] = '4linux'
 
+rel_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder x64',
+                                          'Linux_Builder_x64', 'linux2')
 #
 # Main release scheduler for src/
 #
@@ -72,7 +74,7 @@ T('linux_rel_trigger')
 #
 B('Linux Builder x64', 'rel', 'compile', 'linux_rel', notify_on_missing=True)
 F('rel', linux().ChromiumFactory(
-    slave_type='NASBuilder',
+    slave_type='Builder',
     options=['--compiler=goma',] + linux_all_test_targets +
             ['sync_integration_tests'],
     tests=['check_deps'],
@@ -84,7 +86,8 @@ F('rel', linux().ChromiumFactory(
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
 F('rel_unit', linux_tester().ChromiumFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=[
       'base',
       'browser_tests',
@@ -107,7 +110,8 @@ F('rel_unit', linux_tester().ChromiumFactory(
 B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
   notify_on_missing=True)
 F('rel_sync', linux_tester().ChromiumFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
 
@@ -120,6 +124,14 @@ F('rel_sync', linux_tester().ChromiumFactory(
 #
 S('linux_dbg', branch='src', treeStableTimer=60)
 
+dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
+                                          'Linux_Builder__dbg_', 'linux2')
+
+dbg_shared_archive = master_config.GetArchiveUrl('Chromium',
+                                                 'Linux Builder (dbg)(shared)',
+                                                 'Linux Builder__dbg__shared_',
+                                                 'linux2')
+
 #
 # Triggerable scheduler for the dbg builders
 #
@@ -131,7 +143,7 @@ T('linux_dbg_shared_trigger')
 #
 B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', notify_on_missing=True)
 F('dbg', linux().ChromiumFactory(
-    slave_type='NASBuilder',
+    slave_type='Builder',
     target='Debug',
     options=['--compiler=goma',] + linux_all_test_targets + [
              'interactive_ui_tests',
@@ -146,7 +158,8 @@ F('dbg', linux().ChromiumFactory(
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_1', linux_tester().ChromiumFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=dbg_archive,
     target='Debug',
     tests=[
       'browser_tests',
@@ -158,7 +171,8 @@ F('dbg_unit_1', linux_tester().ChromiumFactory(
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_2', linux_tester().ChromiumFactory(
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=dbg_archive,
     target='Debug',
     tests=[
       'base',
@@ -185,7 +199,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
 B('Linux Builder (dbg)(shared)', 'dbg_shared', 'compile', 'linux_dbg',
   notify_on_missing=True)
 F('dbg_shared', linux().ChromiumFactory(
-    slave_type='NASBuilder',
+    slave_type='Builder',
     target='Debug',
     options=['--compiler=goma'],
     factory_properties={
@@ -200,7 +214,8 @@ B('Linux Tests (dbg)(shared)', 'dbg_shared_unit', 'testers',
   'linux_dbg_shared_trigger', auto_reboot=True, notify_on_missing=True)
 F('dbg_shared_unit', linux_tester().ChromiumFactory(
     target='Debug',
-    slave_type='NASTester',
+    slave_type='Tester',
+    build_url=dbg_shared_archive,
     tests=[
       'base',
       'browser_tests',

@@ -68,19 +68,17 @@ class GClientSolution(object):
     if not self.name:
       self.name = svn_url.split('/')[-1]
 
-  def GetSpec(self, tests=None, skip_exclude=False):
+  def GetSpec(self, tests=None):
     """Returns the specs for this solution.
     Params:
       tests: List of tests to run. This is required only when needed_components
              is not None.
-      skip_exclude: If set to True we don't try to set the dependencies list
-                    based on needed_components and the tests.
     """
 
     final_custom_deps_list = self.custom_deps_list[:]
     # Extend the custom deps with everything that is not going to be used
     # in this factory
-    if self.needed_components and not skip_exclude:
+    if self.needed_components:
       for test, dependencies in self.needed_components.iteritems():
         if ShouldRunMatchingTest(tests, test):
           continue
@@ -142,10 +140,10 @@ class GClientFactory(object):
     else:
       self._project = project
 
-  def BuildGClientSpec(self, tests=None, skip_exclude=False):
+  def BuildGClientSpec(self, tests=None):
     spec = 'solutions = ['
     for solution in self._solutions:
-      spec += solution.GetSpec(tests, skip_exclude)
+      spec += solution.GetSpec(tests)
     spec += ']'
 
     return spec
@@ -183,8 +181,6 @@ class GClientFactory(object):
       factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
           gclient_deps=gclient_deps, gclient_nohooks=self._nohooks_on_update,
           no_gclient_branch=no_gclient_branch)
-    elif slave_type == 'NASTester':
-      factory_cmd_obj.AddCloneStep(factory_properties)
     elif not delay_compile_step:
       self.AddUpdateStep(gclient_spec, factory_properties, factory,
                          slave_type, sudo_for_remove, gclient_deps=gclient_deps)
@@ -202,14 +198,7 @@ class GClientFactory(object):
       factory_properties['gclient_env']['CXX'] = 'clang++'
 
     # Create the spec for the solutions
-    skip_exclude = False
-    if slave_type == 'NASBuilder':
-      # We will eventually snapshot and clone our filesystem to our
-      # dependent slaves. Since we don't have any way to know at this
-      # point what they want to run, we need to make sure we fetch
-      # all the files.
-      skip_exclude = True
-    gclient_spec = self.BuildGClientSpec(tests, skip_exclude)
+    gclient_spec = self.BuildGClientSpec(tests)
 
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
@@ -233,8 +222,7 @@ class GClientFactory(object):
     factory_cmd_obj.AddTempCleanupStep()
 
     # Add the compile step if needed.
-    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'NASBuilder',
-                      'Indexer']:
+    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer']:
       factory_cmd_obj.AddCompileStep(project or self._project, clobber,
                                      mode=mode, options=options,
                                      timeout=compile_timeout)
@@ -249,10 +237,6 @@ class GClientFactory(object):
       factory_cmd_obj.AddExtractBuild(build_url,
                                       factory_properties=factory_properties)
 
-    # Snapshot the output directory if this machine is a NAS builder.
-    if slave_type == 'NASBuilder':
-      factory_cmd_obj.AddSnapshotStep(factory_properties=factory_properties)
-
     return factory
 
   # pylint: disable=R0201
@@ -266,10 +250,6 @@ class GClientFactory(object):
     trigger_name = factory_properties.get('trigger')
     # Propagate properties to the children if this is set in the factory.
     trigger_properties = factory_properties.get('trigger_properties', [])
-    # Add an additional property if the type of the slave is NASBuilder. The
-    # testers need to receive the snapshot name.
-    if slave_type == 'NASBuilder':
-      trigger_properties.append('snapshot')
     factory.addStep(trigger.Trigger(
         schedulerNames=[trigger_name],
         updateSourceStamp=False,
@@ -295,19 +275,6 @@ class GClientFactory(object):
             'parentslavename': WithProperties('%(slavename:-)s'),
             },
         copy_properties=trigger_properties))
-
-  def PostBuildFactory(self, factory, target='Release',
-                       slave_type='BuilderTester', factory_properties=None):
-    """Add post steps on a build created by BuildFactory."""
-    if slave_type != 'NASTester':
-      # There is no post step to add.
-      return
-
-    factory_properties = factory_properties or {}
-    factory_cmd_obj = commands.FactoryCommands(factory, target,
-                                               self._build_dir,
-                                               self._target_platform)
-    factory_cmd_obj.AddDestroyCloneStep(factory_properties=factory_properties)
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
                     slave_type, sudo_for_remove=False, gclient_deps=None):

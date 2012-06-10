@@ -204,13 +204,6 @@ class FactoryCommands(object):
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
-    # Site-Specific script to snapshot and clone a NAS slave directory.
-    self._nas_snapshot_tool = self.PathJoin(self._private_script_dir,
-                                            'nas_snapshot.py')
-    self._nas_clone_tool = self.PathJoin(self._private_script_dir,
-                                         'nas_clone.py')
-    self._nas_destroy_clone_tool = self.PathJoin(self._private_script_dir,
-                                                 'nas_destroy_clone.py')
 
   # Util methods.
   def GetExecutableName(self, executable):
@@ -290,7 +283,7 @@ class FactoryCommands(object):
         for prop in (
             'blamelist', 'branch', 'buildername', 'buildnumber', 'got_revision',
             'mastername', 'parentname', 'parentslavename', 'revision',
-            'scheduler', 'slavename', 'snapshot',
+            'scheduler', 'slavename',
         )
     )
     def gen_blamelist_string(build):
@@ -633,49 +626,6 @@ class FactoryCommands(object):
                           timeout=timeout,
                           rm_timeout=60*60) # We don't care how long it takes.
 
-  def AddSnapshotStep(self, factory_properties):
-    """Adds a step to the factory to snapshot the slave dir."""
-    def ParseOutput(rc, stdout, stderr):
-      """Parses the output and return a dict containing the snapshot name."""
-      if rc == 0:
-        search = re.search('Snapshot: ([a-zA-Z0-9_]*)', stdout)
-        if search and search.groups():
-          return {'snapshot' : search.group(1)}
-      return {}
-
-    cmd = [self._python, self._nas_snapshot_tool]
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self._factory.addStep(shell.SetProperty,
-                          haltOnFailure=True,
-                          name='snapshot_build',
-                          description='snapshot_build',
-                          timeout=60,
-                          command=cmd,
-                          extract_fn=ParseOutput)
-
-  def AddCloneStep(self, factory_properties):
-    """Adds a step to the factory to clone and mount the slave dir."""
-    cmd = [self._python, self._nas_clone_tool]
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self._factory.addStep(shell.ShellCommand,
-                          haltOnFailure=True,
-                          name='clone_build',
-                          description='clone_build',
-                          timeout=300,
-                          command=cmd)
-
-  def AddDestroyCloneStep(self, factory_properties):
-    """Adds a step to the factory to unmount and destroy the cloned volume."""
-    cmd = [self._python, self._nas_destroy_clone_tool]
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self._factory.addStep(shell.ShellCommand,
-                          name='destroy_clone',
-                          description='destroy_clone',
-                          timeout=300,
-                          command=cmd)
 
   def AddTaskkillStep(self):
     """Adds a step to kill the running processes before a build."""
