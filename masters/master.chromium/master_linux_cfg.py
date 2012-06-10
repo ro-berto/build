@@ -58,7 +58,7 @@ linux_all_test_targets = [
 defaults['category'] = '4linux'
 
 rel_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder x64',
-                                          'Linux_Builder_x64', 'linux2')
+                                          'Linux_Builder_x64', 'linux')
 #
 # Main release scheduler for src/
 #
@@ -184,12 +184,12 @@ F('f_linux_rel_aura', linux().ChromiumFactory(
 S('linux_dbg', branch='src', treeStableTimer=60)
 
 dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
-                                          'Linux_Builder__dbg_', 'linux2')
+                                          'Linux_Builder__dbg_', 'linux')
 
 dbg_shared_archive = master_config.GetArchiveUrl('Chromium',
                                                  'Linux Builder (dbg)(shared)',
                                                  'Linux Builder__dbg__shared_',
-                                                 'linux2')
+                                                 'linux')
 
 #
 # Triggerable scheduler for the dbg builders

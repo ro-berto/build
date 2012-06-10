@@ -20,7 +20,7 @@ defaults['category'] = '1linux'
 rel_archive = master_config.GetArchiveUrl('ChromiumChromiumOS',
                                           'Linux ChromiumOS Builder',
                                           'chromium-rel-linux-chromeos',
-                                          'linux2')
+                                          'linux')
 
 S(name='chromium_local', branch='src', treeStableTimer=60)
 
@@ -184,7 +184,7 @@ T('chromiumos_dbg_trigger')
 dbg_archive = master_config.GetArchiveUrl('ChromiumChromiumOS',
                                           'Linux ChromiumOS Builder (dbg)',
                                           'Linux_ChromiumOS_Builder__dbg_',
-                                          'linux2')
+                                          'linux')
 
 B('Linux ChromiumOS Builder (dbg)', 'dbg', 'compile',
   'chromium_local', notify_on_missing=True)
