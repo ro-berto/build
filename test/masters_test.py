@@ -177,8 +177,7 @@ def main():
       'master.reserved': None,  # make start fails
       'master.tryserver.chromium': 'Chromium Try Server',
       'master.tryserver.nacl': 'NativeClient-Try',
-      'master.tryserver.chromiumos': 'ChromiumOS Try Server',
-      'master.chromiumos.tryserver': 'ChromiumOS Try Server Staging',
+      'master.chromiumos.tryserver': None,
       'master.devtools': 'Chromium DevTools',
   }
   return real_main(base_dir, expected)
