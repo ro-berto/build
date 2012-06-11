@@ -46,6 +46,8 @@ def layout_test(options, args):
              '--verbose',  # Verbose output is enabled to support the dashboard.
              '--full-results-html',  # To make debugging failures easier.
              '--clobber-old-results',  # Clobber test results before each run.
+             '--exit-after-n-failures', '5000',
+             '--exit-after-n-crashes-or-timeouts', '100',
             ]
 
   if options.results_directory:
