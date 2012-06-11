@@ -73,7 +73,7 @@ def common_xcode_settings(command, options, env, compiler=None):
   that are common to the Xcode builds.
   """
   compiler = options.compiler
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'asan')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang')
 
   if compiler == 'goma':
     print 'using goma'
@@ -96,19 +96,6 @@ def common_xcode_settings(command, options, env, compiler=None):
         # file cache is warm, this can speed up clobber builds by up to 30%.
         env['GOMA_USE_LOCAL'] = '0'
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
-
-  if compiler == 'asan':
-    asan_dir = os.path.abspath(os.path.join(
-        src_path, 'third_party', 'asan'))
-    asan_bin = os.path.join(asan_dir, 'asan_clang_Darwin', 'bin')
-    clang = os.path.join(asan_bin, 'clang_fasan')
-    clangpp = os.path.join(asan_bin, 'clang++_fasan')
-    # Disallow dyld to randomize the load address of executables.
-    # Some of them are compiled with ASan and will hang otherwise.
-    env['DYLD_NO_PIE'] = '1'
-    command.append('CC=' + clang)
-    command.append('LDPLUSPLUS=' + clangpp)
-    return
 
   if cc:
     print 'Forcing CC = %s' % cc
@@ -431,7 +418,7 @@ def common_make_settings(
   that are common to the Make and SCons builds. Used on Linux
   and for the mac make build.
   """
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'asan', 'tsan_gcc',
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'tsan_gcc',
                       'jsonclang')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
@@ -456,25 +443,6 @@ def common_make_settings(
       # mmoss if you have questions.
       ccache = 'ccache '
 
-    if compiler == 'asan':
-      asan_dir = os.path.abspath(os.path.join(
-          slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
-          'third_party', 'asan'))
-      asan_bin = os.path.join(asan_dir, 'asan_clang_Linux', 'bin')
-      clang = os.path.join(asan_bin, 'clang')
-      clangpp = os.path.join(asan_bin, 'clang++')
-      env['ASAN'] = asan_dir
-      env['ASAN_BIN'] = asan_bin
-      env['CC'] = clang
-      env['CXX'] = clangpp
-      command.append('CC=' + env['CC'])
-      command.append('CXX=' + env['CXX'])
-      command.append('CC.host=' + env['CC'])
-      command.append('CXX.host=' + env['CXX'])
-      command.append('LINK.host=' + env['CXX'])
-      command.append('-j%d' % jobs)
-      return
-
     # Setup crosstool environment variables.
     if crosstool:
       env['AR'] = crosstool + '-ar'
@@ -488,7 +456,7 @@ def common_make_settings(
       command.append('-r')
       return
 
-  if chromium_utils.IsMac():
+  if chromium_utils.IsMac() and options.disable_aslr:
     # Disallow dyld to randomize the load addresses of executables.
     # If any of them is compiled with ASan it will hang otherwise.
     env['DYLD_NO_PIE'] = '1'
@@ -728,6 +696,11 @@ def main_ninja(options, args):
 
   # Prepare environment.
   env = EchoDict(os.environ)
+
+  if chromium_utils.IsMac() and options.disable_aslr:
+    # Disallow dyld to randomize the load addresses of executables.
+    # If any of them is compiled with ASan it will hang otherwise.
+    env['DYLD_NO_PIE'] = '1'
 
   if options.compiler in ('goma', 'goma-clang'):
     goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
@@ -1017,6 +990,8 @@ def real_main():
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
                              help='Target from the xcodeproj file')
+    option_parser.add_option('', '--disable-aslr', action='store_true',
+                             default=False, help='disable ASLR on OS X 10.6')
   if chromium_utils.IsLinux() or chromium_utils.IsMac():
     option_parser.add_option('', '--goma-dir',
                              default=os.path.join(BUILD_DIR, 'goma'),
