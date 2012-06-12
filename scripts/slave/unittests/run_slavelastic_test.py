@@ -13,6 +13,7 @@ import slave.run_slavelastic as run_slavelastic
 
 FILE_NAME = "test.results"
 TEST_NAME = "unit_tests"
+CLEANUP_SCRIPT_NAME = 'swarm_cleanup.py'
 
 ENV_VARS = {'GTEST_TOTAL_SHARDS': '%(num_instances)s',
             'GTEST_SHARD_INDEX': '%(instance_index)s'}
@@ -51,6 +52,12 @@ def GenerateExpectedJSON(options):
           '-r', options.data_url
         ],
         'test_name': 'Run Test'
+      },
+      {
+        'action' : [
+            'python', CLEANUP_SCRIPT_NAME
+        ],
+        'test_name': 'Clean Up'
       }
     ],
     'env_vars': ENV_VARS,
@@ -67,13 +74,6 @@ def GenerateExpectedJSON(options):
     'working_dir': options.working_dir,
     'cleanup': 'data'
   }
-
-  if options.os_image == 'win32':
-    expected['tests'].append(
-        {'action': ['del', '*.zip'], 'test_name': 'Clean Up'})
-  else:
-    expected['tests'].append(
-        {'action': ['rm', '-rf', '*.zip'], 'test_name': 'Clean Up'})
 
   if options.os_image == 'win32':
     expected['tests'].append(

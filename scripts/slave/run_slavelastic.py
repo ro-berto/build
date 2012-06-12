@@ -22,8 +22,12 @@ and sends a swarm manifest file to the swarm server.  This is expected to be
 called as a build step with the cwd as the parent of the src/ directory.
 """
 
+CLEANUP_SCRIPT_NAME = 'swarm_cleanup.py'
+CLEANUP_SCRIPT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                   CLEANUP_SCRIPT_NAME)
+
 class Manifest(object):
-  run_test_path = os.path.join(
+  RUN_TEST_PATH = os.path.join(
       'src', 'tools', 'isolate', 'run_test_from_archive.py')
 
   def __init__(self, filename, test_name, switches):
@@ -67,7 +71,8 @@ class Manifest(object):
         os.path.join(self.data_dest_dir, self.zipfile_name),
         'w')
     zip_file.write(self.manifest_name)
-    zip_file.write(self.run_test_path)
+    zip_file.write(self.RUN_TEST_PATH)
+    zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
     zip_file.close()
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
@@ -76,17 +81,11 @@ class Manifest(object):
     """Export the current configuration into a swarm-readable manifest file"""
     self.add_task(
         'Run Test',
-        ['python', self.run_test_path, '-m', self.manifest_name,
+        ['python', self.RUN_TEST_PATH, '-m', self.manifest_name,
          '-r', self.data_url])
 
     # Clean up
-    # TODO(csharp) This can be removed once the swarm cleanup parameter is
-    # properly handled.
-    if self.target_platform == 'Linux' or self.target_platform == 'Mac':
-      cleanup_commands = ['rm', '-rf']
-    elif self.target_platform == 'Windows':
-      cleanup_commands = ['del']
-    self.add_task('Clean Up', cleanup_commands + ['*.zip'])
+    self.add_task('Clean Up', ['python', CLEANUP_SCRIPT_NAME])
 
     # Call kill_processes.py if on windows
     if self.target_platform == 'Windows':
