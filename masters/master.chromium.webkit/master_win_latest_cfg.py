@@ -18,6 +18,14 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 defaults['category'] = '7win latest'
 
+# Tests that are single-machine shard-safe. For now we only use the sharding
+# supervisor for long tests (more than 30 seconds) that are known to be stable.
+sharded_tests = [
+  'base_unittests',
+  'browser_tests',
+  'media_unittests',
+]
+
 ################################################################################
 ## Release
 ################################################################################
@@ -134,6 +142,7 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
       'unit',
     ],
     factory_properties={
+        'sharded_tests': sharded_tests,
         'start_crash_handler': True,
         'generate_gtest_json': True,
         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
