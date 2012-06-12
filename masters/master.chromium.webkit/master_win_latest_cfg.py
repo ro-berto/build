@@ -145,7 +145,8 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
         'sharded_tests': sharded_tests,
         'start_crash_handler': True,
         'generate_gtest_json': True,
-        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+        'gclient_env': {'GYP_DEFINES': 'fastbuild=1',
+                        'GYP_MSVS_VERSION': '2008'}}))
 
 def Update(config, active_master, c):
   return helper.Update(c)
