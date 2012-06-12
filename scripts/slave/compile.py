@@ -849,6 +849,11 @@ def main_win(options, args):
                                 'chrome_dll_version.rc')
 
   env = EchoDict(os.environ)
+  if options.compiler == 'goma':
+    env['CC'] = 'gomacc.exe cl'
+    env['CXX'] = 'gomacc.exe cl'
+    env['PATH'] = ';'.join([options.goma_dir, env['PATH']])
+
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
