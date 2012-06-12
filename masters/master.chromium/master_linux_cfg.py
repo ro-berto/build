@@ -185,16 +185,10 @@ S('linux_dbg', branch='src', treeStableTimer=60)
 dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
                                           'Linux_Builder__dbg_', 'linux')
 
-dbg_shared_archive = master_config.GetArchiveUrl('Chromium',
-                                                 'Linux Builder (dbg)(shared)',
-                                                 'Linux_Builder__dbg__shared_',
-                                                 'linux')
-
 #
 # Triggerable scheduler for the dbg builders
 #
 T('linux_dbg_trigger')
-T('linux_dbg_shared_trigger')
 
 #
 # Linux Dbg Builder
@@ -246,46 +240,6 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
       'printing',
       'remoting',
       'safe_browsing',
-      'unit',
-    ],
-    factory_properties={'sharded_tests': sharded_tests,
-                        'generate_gtest_json': True}))
-
-#
-# Linux Dbg Component Builder
-#
-B('Linux Builder (dbg)(shared)', 'dbg_shared', 'compile', 'linux_dbg',
-  notify_on_missing=True)
-F('dbg_shared', linux().ChromiumFactory(
-    slave_type='Builder',
-    target='Debug',
-    options=['--compiler=goma'],
-    factory_properties={
-        'gclient_env': {'GYP_DEFINES':'component=shared_library'},
-        'trigger': 'linux_dbg_shared_trigger'}))
-
-#
-# Linux Dbg Component Unit testers
-#
-
-B('Linux Tests (dbg)(shared)', 'dbg_shared_unit', 'testers',
-  'linux_dbg_shared_trigger', auto_reboot=True, notify_on_missing=True)
-F('dbg_shared_unit', linux_tester().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_shared_archive,
-    tests=[
-      'base',
-      'browser_tests',
-      'cacheinvalidation',
-      'crypto',
-      'jingle',
-      'media',
-      'net',
-      'printing',
-      'remoting',
-      'sizes',
-      'test_shell',
       'unit',
     ],
     factory_properties={'sharded_tests': sharded_tests,

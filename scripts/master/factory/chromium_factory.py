@@ -618,18 +618,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       gclient_env['GYP_GENERATOR_FLAGS'] = (
           gyp_generator_flags + ' msvs_error_on_missing_sources=1')
 
-  def ForceComponent(self, target, project, gclient_env):
+  @staticmethod
+  def ForceComponent(target, project, gclient_env):
     # Force all bots to specify the "Component" gyp variables, unless it is
     # already set.
     gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
     if ('component=' not in gyp_defines and
         'build_for_tool=' not in gyp_defines):
-      # Sets the default to shared.
-      gclient_env['GYP_DEFINES'] = gyp_defines + ' component=shared_library'
-
-      # For Release, Linux, and Mac, we build statically.
-      if target != 'Debug' or self._target_platform != 'win32':
-        gclient_env['GYP_DEFINES'] = gyp_defines + ' component=static_library'
+      if target == 'Debug':
+        component = 'shared_library'
+      else:
+        component = 'static_library'
+      gclient_env['GYP_DEFINES'] = gyp_defines + ' component=' + component
 
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
