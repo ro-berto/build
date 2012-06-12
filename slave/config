@@ -1,7 +1,7 @@
 # Chromium-specific config file to put at ~/.subversion/config or %USERPROFILE%\AppData\Roaming\Subversion\config
 
 [miscellany]
-global-ignores = *.pyc *.user *.suo *.bak *~ #*# *.ncb *.o *.lo *.la .*~ .#* .DS_Store .*.swp *.mk *.Makefile *.sln *.vcproj *.rules *.xcodeproj
+global-ignores = *.pyc *.user *.suo *.bak *~ #*# *.ncb *.o *.lo *.la .*~ .#* .DS_Store .*.swp *.mk *.Makefile *.sln *.vcproj *.vcxproj *.vcxproj.filters *.props *.targets *.rules *.xcodeproj
 enable-auto-props = yes
 
 [auto-props]
