@@ -109,28 +109,6 @@ F('f_cf_rel_tests', win().ChromiumWebkitLatestFactory(
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,}))
 
-#
-# GPU Win Release
-#
-B('GPU Win7 (NVIDIA)', 'f_gpu_win_rel',
-  scheduler='s7_webkit_builder_rel_trigger', auto_reboot=True)
-F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
-    target='Release',
-    slave_type='BuilderTester',
-    tests=[
-      'gl_tests',
-      'gpu_frame_rate',
-      'gpu_latency',
-      'gpu_tests',
-      'gpu_throughput',
-    ],
-    project='all.sln;chromium_gpu_builder',
-    factory_properties={'generate_gtest_json': True,
-                        'start_crash_handler': True,
-                        'perf_id': 'gpu-webkit-win7-nvidia',
-                        'show_perf_results': True,
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
-
 ################################################################################
 ## Debug
 ################################################################################
@@ -159,24 +137,6 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
         'start_crash_handler': True,
         'generate_gtest_json': True,
         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
-
-#
-# GPU Win Debug
-#
-B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg',
-  scheduler='s7_webkit_builder_dbg', auto_reboot=True)
-F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
-    target='Debug',
-    slave_type='BuilderTester',
-    tests=[
-      'gl_tests',
-      'gpu_tests',
-    ],
-    project='all.sln;chromium_gpu_debug_builder',
-    factory_properties={'generate_gtest_json': True,
-                        'start_crash_handler': True,
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
-
 
 def Update(config, active_master, c):
   return helper.Update(c)

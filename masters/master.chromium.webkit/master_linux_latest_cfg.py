@@ -74,42 +74,6 @@ F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
         'needs_valgrind': True,
         'gclient_env': {'GYP_DEFINES' : valgrind_gyp_defines,}}))
 
-B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_webkit_rel')
-F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
-    target='Release',
-    tests=[
-      'gl_tests',
-      'gpu_frame_rate',
-      'gpu_latency',
-      'gpu_tests',
-      'gpu_throughput',
-    ],
-    options=['--compiler=goma', 'chromium_gpu_builder'],
-    factory_properties={
-        'generate_gtest_json': True,
-        'perf_id': 'gpu-webkit-linux-nvidia',
-        'show_perf_results': True,
-    }))
-
-################################################################################
-## Debug
-################################################################################
-
-#
-# Main debug scheduler for webkit
-#
-S('s9_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', scheduler='s9_webkit_dbg')
-F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
-    target='Debug',
-    tests=[
-      'gl_tests',
-      'gpu_tests',
-    ],
-    options=['--compiler=goma', 'chromium_gpu_debug_builder'],
-    factory_properties={'generate_gtest_json': True}))
-
 
 def Update(config, active_master, c):
   return helper.Update(c)
