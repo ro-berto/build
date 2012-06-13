@@ -141,6 +141,8 @@ class TryJobRietveld(TryJobBase):
 
     exceptions = []
     for job in jobs:
+      if not job['user'].endswith('@chromium.org'):
+        continue
       # Add the 'project' property to each job based on the project of this
       # instance.
       job['project'] = self._project
