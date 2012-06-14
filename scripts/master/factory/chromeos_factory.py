@@ -81,24 +81,25 @@ class CbuildbotFactory(object):
     """
     git_bin = '/usr/bin/git'
     git_checkout_dir = os.path.basename(repo).replace('.git', '')
-    clear_and_clone_cmd = 'rm -rf %s; ' % git_checkout_dir
-    clear_and_clone_cmd += '%s clone %s; cd %s; ' % (git_bin, repo,
-                                                   git_checkout_dir)
+    clear_and_clone_cmd = 'rm -rf %s' % git_checkout_dir
+    clear_and_clone_cmd += ' && %s clone %s' % (git_bin, repo)
+    clear_and_clone_cmd += ' && cd %s' % git_checkout_dir
 
     # We ignore branches coming from buildbot triggers and rely on those in the
     # config.  This is because buildbot branch names do not match up with
     # cros builds.
-    clear_and_clone_cmd += '%s checkout %s' % (git_bin, self.branch)
+    clear_and_clone_cmd += ' && %s checkout %s' % (git_bin, self.branch)
     msg = 'Clear and Clone %s' % git_checkout_dir
     if patch:
-      clear_and_clone_cmd += ('; %s pull %s %s' %
+      clear_and_clone_cmd += (' && %s pull %s %s' %
                               (git_bin, patch['url'], patch['ref']))
       msg = 'Clear, Clone and Patch %s' % git_checkout_dir
 
     self.f_cbuild.addStep(shell.ShellCommand,
                           command=clear_and_clone_cmd,
                           name=msg,
-                          description=msg)
+                          description=msg,
+                          haltOnFailure=True)
 
   def add_bootstrap_steps(self):
     """Bootstraps Chromium OS Build by syncing pre-requisite repositories.
