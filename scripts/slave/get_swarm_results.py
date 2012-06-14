@@ -17,7 +17,11 @@ import time
 import urllib
 import urllib2
 
+from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
+
+# From the depot tools
+import fix_encoding
 
 
 def TestRunOutput(output):
@@ -206,4 +210,5 @@ def main():
 
 
 if __name__ == '__main__':
+  fix_encoding.fix_encoding()
   sys.exit(main())
