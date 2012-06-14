@@ -205,7 +205,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
-               custom_deps_list=None, nohooks_on_update=False):
+               custom_deps_list=None, nohooks_on_update=False, target_os=None):
     if full_checkout:
       needed_components = None
     else:
@@ -237,7 +237,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     gclient_factory.GClientFactory.__init__(self, build_dir,
                                             internal_custom_deps_list,
                                             target_platform=target_platform,
-                                            nohooks_on_update=nohooks_on_update)
+                                            nohooks_on_update=nohooks_on_update,
+                                            target_os=target_os)
 
   def _AddTests(self, factory_cmd_obj, tests, mode=None,
                 factory_properties=None):

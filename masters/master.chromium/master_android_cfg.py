@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import config
 from master import master_config
 from master.factory import chromium_factory
 
@@ -15,8 +14,7 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def linux_android(): return chromium_factory.ChromiumFactory(
-    '', 'linux2', nohooks_on_update=True,
-    additional_svn_urls=(config.Master.android_deps_url,))
+    '', 'linux2', nohooks_on_update=True, target_os='android')
 
 defaults['category'] = '5android'
 

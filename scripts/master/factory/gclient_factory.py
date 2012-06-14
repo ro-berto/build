@@ -128,10 +128,11 @@ class GClientFactory(object):
   """Encapsulates data and methods common to both (all) master.cfg files."""
 
   def __init__(self, build_dir, solutions, project=None, target_platform=None,
-               nohooks_on_update=False):
+               nohooks_on_update=False, target_os=None):
     self._build_dir = build_dir
     self._solutions = solutions
     self._target_platform = target_platform or 'win32'
+    self._target_os = target_os
     self._nohooks_on_update = nohooks_on_update
 
     if self._target_platform == 'win32':
@@ -145,6 +146,9 @@ class GClientFactory(object):
     for solution in self._solutions:
       spec += solution.GetSpec(tests)
     spec += ']'
+
+    if self._target_os:
+      spec += ';target_os = ["' + self._target_os + '"]'
 
     return spec
 
