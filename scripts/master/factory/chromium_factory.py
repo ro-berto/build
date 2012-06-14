@@ -812,19 +812,37 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
-  def ChromiumWebkitLatestFactory(self, target='Release', clobber=False,
-                                  tests=None, mode=None,
-                                  slave_type='BuilderTester', options=None,
-                                  compile_timeout=1200, build_url=None,
-                                  project=None, factory_properties=None):
+  def _InitWebkitLatestFactorySettings(self, factory_properties):
     self._solutions[0].custom_vars_list = self.CUSTOM_VARS_WEBKIT_LATEST
 
     # This will let builders embed their webkit revision in their output
     # filename and will let testers look for zip files containing a webkit
     # revision in their filename. For this to work correctly, the testers
     # need to be on a Triggerable that's activated by their builder.
-    factory_properties = factory_properties or {}
     factory_properties.setdefault('webkit_dir', 'third_party/WebKit/Source')
+
+  def ChromiumWebkitLatestAnnotationFactory(self, annotation_script,
+                                            branch='master', target='Release',
+                                            slave_type='AnnotatedBuilderTester',
+                                            clobber=False, compile_timeout=6000,
+                                            build_url=None, project=None,
+                                            factory_properties=None,
+                                            tests=None):
+    factory_properties = factory_properties or {}
+    self._InitWebkitLatestFactorySettings(factory_properties)
+
+    return self.ChromiumAnnotationFactory(annotation_script, branch, target,
+                                          slave_type, clobber, compile_timeout,
+                                          build_url, project,
+                                          factory_properties, tests)
+
+  def ChromiumWebkitLatestFactory(self, target='Release', clobber=False,
+                                  tests=None, mode=None,
+                                  slave_type='BuilderTester', options=None,
+                                  compile_timeout=1200, build_url=None,
+                                  project=None, factory_properties=None):
+    factory_properties = factory_properties or {}
+    self._InitWebkitLatestFactorySettings(factory_properties)
 
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
