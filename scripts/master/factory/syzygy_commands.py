@@ -10,7 +10,7 @@ from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
 from master.factory import commands
-
+from master.log_parser import gtest_command
 
 class _UrlStatusCommand(shell.ShellCommand):
   """A ShellCommand subclass that adorns its build status with a URL on success.
@@ -45,6 +45,14 @@ class SyzygyCommands(commands.FactoryCommands):
 
     self._arch = target_arch
     self._factory = factory
+
+  def AddAppVerifierGTestTestStep(self, test_name):
+    script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
+                                'build', 'app_verifier.py')
+    test_path = self.PathJoin(self._build_dir, test_name + '.exe')
+    command = [self._python, script_path, '--on-waterfall', test_path,
+               '--', '--gtest_print_time']
+    self.AddTestStep(gtest_command.GTestCommand, test_name, command)
 
   def AddRandomizeChromeStep(self):
     # Randomization script path.

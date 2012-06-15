@@ -79,7 +79,7 @@ class SyzygyFactory(gclient_factory.GClientFactory):
 
     # Run the unittests.
     for test_name in _UNITTESTS:
-      syzygy_cmd_obj.AddBasicGTestTestStep(test_name)
+      syzygy_cmd_obj.AddAppVerifierGTestTestStep(test_name)
 
     if target == 'release':
       syzygy_cmd_obj.AddRandomizeChromeStep()
