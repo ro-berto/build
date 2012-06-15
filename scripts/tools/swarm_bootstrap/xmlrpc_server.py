@@ -17,106 +17,6 @@ import threading
 import xmlrpclib
 
 
-def exists(self, os_path):
-  """Returns True if os_path exists.
-
-  Args:
-  os_path: The path to test existance of.
-
-    Returns:
-    True if os_path exists. False otherwise.
-    """
-  return os.path.exists(os_path)
-
-def makedirs(self, os_path):
-  """Creates all the inexistent dirs in os_path.
-
-  Args:
-  os_path: The path of dirs to make.
-
-  Returns:
-  0. Because the XmlRpcServer must return something, not None...
-  """
-  os.makedirs(os_path)
-  return 0
-
-def upload(self, os_path, content):
-  """Upload content to os_path.
-
-  Args:
-  os_path: The path where to upload content.
-  content: The content to upload to os_path. Can be of type xmlrpclib.Binary
-  or a string.
-
-  Returns:
-  The os_path where the content was uploaded.
-  """
-  new_file = open(os_path, 'wb')
-  if isinstance(content, xmlrpclib.Binary):
-    new_file.write(content.data)
-  else:
-    new_file.write(content.encode('utf8', 'replace'))
-    new_file.close()
-    return os_path
-
-def start(self, command, args,
-          unused_wait_for_completion, capture):
-  """Starts the command with the given args and potentially wait for results.
-
-  Args:
-  command: The command to execute.
-  args: The list of arguments to pass to the command.
-  unused_wait_for_completion: We don't use it, we only rely on capture.
-  capture: Specfifies if we should wait to capture all results.
-
-  Returns:
-  The identifier of the started process if we don't capture the results.
-  -1 in case of errors.
-  If the results are captured, we return a tuple containing the exit code
-  and stdout. (-1, <error text>) in case of errors.
-  """
-  logging.debug('starting process: %s', [command] + args)
-
-  if capture:
-    # Use a temporary file descriptor for the stdout pipe out of Popen so that
-    # we can read that file with another file object and not interfere. Also
-    # avoiding the known deadlock bugs with subprocess default PIPE.
-    (stdout_file_descriptor, stdout_file_name) = tempfile.mkstemp(text=True)
-    stdout_file = open(stdout_file_name)
-
-    def CleanupTempFiles():
-      os.close(stdout_file_descriptor)
-      stdout_file.close()
-      os.remove(stdout_file_name)
-
-  else:
-    stdout_file_descriptor = subprocess.PIPE
-
-  try:
-    proc = subprocess.Popen([command] + args, stdout=stdout_file_descriptor,
-                            bufsize=1, stderr=subprocess.STDOUT,
-                            stdin=subprocess.PIPE)
-  except OSError, e:
-    logging.exception('Execution of %s raised exception: %s.',
-                      str([command] + args), e)
-    if capture:
-      CleanupTempFiles()
-      return (-1, e)
-    else:
-      return -1
-
-  logging.debug('process id: %s', proc.pid)
-  if capture:
-    logging.debug('waiting to capture')
-    proc.wait()
-    logging.debug('done!')
-    stdout_text = stdout_file.read()
-    CleanupTempFiles()
-    return (proc.returncode, stdout_text)
-  else:
-    return proc.pid
-
-
 class _RemoteExecutor(object):
   """Implements all methods exposed by a remote machine."""
 
@@ -132,6 +32,106 @@ class _RemoteExecutor(object):
     self._sid = 1
     # The value that the autoupdate method should return.
     self._autoupdate = False
+
+  def exists(self, os_path):  # pylint: disable-msg=R0201
+    """Returns True if os_path exists.
+
+    Args:
+    os_path: The path to test existance of.
+
+    Returns:
+    True if os_path exists. False otherwise.
+    """
+    return os.path.exists(os_path)
+
+  def makedirs(self, os_path):  # pylint: disable-msg=R0201
+    """Creates all the inexistent dirs in os_path.
+
+    Args:
+    os_path: The path of dirs to make.
+
+    Returns:
+    0. Because the XmlRpcServer must return something, not None...
+    """
+    os.makedirs(os_path)
+    return 0
+
+  def upload(self, os_path, content):  # pylint: disable-msg=R0201
+    """Upload content to os_path.
+
+    Args:
+    os_path: The path where to upload content.
+    content: The content to upload to os_path. Can be of type xmlrpclib.Binary
+    or a string.
+
+    Returns:
+    The os_path where the content was uploaded.
+    """
+    new_file = open(os_path, 'wb')
+    if isinstance(content, xmlrpclib.Binary):
+      new_file.write(content.data)
+    else:
+      new_file.write(content.encode('utf8', 'replace'))
+      new_file.close()
+      return os_path
+
+  # pylint: disable-msg=R0201
+  def start(self, command, args,
+            unused_wait_for_completion, capture):
+    """Starts the command with the given args and potentially wait for results.
+
+    Args:
+    command: The command to execute.
+    args: The list of arguments to pass to the command.
+    unused_wait_for_completion: We don't use it, we only rely on capture.
+    capture: Specfifies if we should wait to capture all results.
+
+    Returns:
+    The identifier of the started process if we don't capture the results.
+    -1 in case of errors.
+    If the results are captured, we return a tuple containing the exit code
+    and stdout. (-1, <error text>) in case of errors.
+    """
+    logging.debug('starting process: %s', [command] + args)
+
+    if capture:
+      # Use a temporary file descriptor for the stdout pipe out of Popen so that
+      # we can read that file with another file object and not interfere. Also
+      # avoiding the known deadlock bugs with subprocess default PIPE.
+      (stdout_file_descriptor, stdout_file_name) = tempfile.mkstemp(text=True)
+      stdout_file = open(stdout_file_name)
+
+      def CleanupTempFiles():
+        os.close(stdout_file_descriptor)
+        stdout_file.close()
+        os.remove(stdout_file_name)
+
+    else:
+      stdout_file_descriptor = subprocess.PIPE
+
+    try:
+      proc = subprocess.Popen([command] + args, stdout=stdout_file_descriptor,
+                              bufsize=1, stderr=subprocess.STDOUT,
+                              stdin=subprocess.PIPE)
+    except OSError, e:
+      logging.exception('Execution of %s raised exception: %s.',
+                        str([command] + args), e)
+      if capture:
+        CleanupTempFiles()
+        return (-1, e)
+      else:
+        return -1
+
+    logging.debug('process id: %s', proc.pid)
+    if capture:
+      logging.debug('waiting to capture')
+      proc.wait()
+      logging.debug('done!')
+      stdout_text = stdout_file.read()
+      CleanupTempFiles()
+      return (proc.returncode, stdout_text)
+    else:
+      return proc.pid
 
   def sid(self):
     """Returns the server ID.
