@@ -49,7 +49,9 @@ class SyzygyCommands(commands.FactoryCommands):
   def AddAppVerifierGTestTestStep(self, test_name):
     script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
                                 'build', 'app_verifier.py')
-    test_path = self.PathJoin(self._build_dir, test_name + '.exe')
+    test_path = self.PathJoin(self._build_dir,
+                              self._target,
+                              test_name + '.exe')
     command = [self._python, script_path, '--on-waterfall', test_path,
                '--', '--gtest_print_time']
     self.AddTestStep(gtest_command.GTestCommand, test_name, command)
