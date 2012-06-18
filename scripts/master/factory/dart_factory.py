@@ -28,6 +28,11 @@ class DartFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
   }
 
+  if config.Master.trunk_internal_url:
+    CUSTOM_DEPS_JAVA = ('dart/third_party/java',
+                        config.Master.trunk_internal_url +
+                        '/third_party/openjdk')
+
   def __init__(self, build_dir, target_platform=None, trunk=False):
     solutions = []
     self.target_platform = target_platform
@@ -36,9 +41,15 @@ class DartFactory(gclient_factory.GClientFactory):
     # If this is trunk use the deps file from there instead.
     if trunk:
       dart_url = config.Master.dart_trunk + deps_file
+    custom_deps_list = []
+
+    if config.Master.trunk_internal_url:
+      custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
+
     main = gclient_factory.GClientSolution(
         dart_url,
-        needed_components=self.NEEDED_COMPONENTS)
+        needed_components=self.NEEDED_COMPONENTS,
+        custom_deps_list = custom_deps_list)
     solutions.append(main)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
