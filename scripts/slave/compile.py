@@ -51,15 +51,22 @@ class EchoDict(dict):
     fh.write('\n')
 
 
-def ReadHKLMValue(path, value):
+def ReadHKLMValue(path, value, opts):
   """Retrieve the install path from the registry for Visual Studio 8.0 and
   Incredibuild."""
   # Only available on Windows.
   # pylint: disable=F0401
   import win32api, win32con
   try:
-    regkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE,
-                                   path, 0, win32con.KEY_READ)
+    flags = win32con.KEY_READ
+    if opts.arch == 'x64':
+      # When this script is executed by a 32bit python installation but
+      # wants to compile x64 binaries, it must look up the location of
+      # the 64bit compiler from the 64bit hive of the registry. (The
+      # default behavior on Windows is to redirect 32bit apps to the
+      # 32bit registry hive.)
+      flags |= win32con.KEY_WOW64_64KEY
+    regkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE, path, 0, flags)
     value = win32api.RegQueryValueEx(regkey, value)[0]
     win32api.RegCloseKey(regkey)
     return value
@@ -806,7 +813,8 @@ def main_win(options, args):
       return 1
 
   REG_ROOT = 'SOFTWARE\\Microsoft\\VisualStudio\\'
-  devenv = ReadHKLMValue(REG_ROOT + options.msvs_version + '.0', 'InstallDir')
+  devenv = ReadHKLMValue(REG_ROOT + options.msvs_version + '.0',
+                         'InstallDir', options)
   if devenv:
     devenv = os.path.join(devenv, 'devenv.com')
   else:
@@ -814,7 +822,8 @@ def main_win(options, args):
         options.msvs_version)
     return 1
 
-  ib = ReadHKLMValue('SOFTWARE\\Xoreax\\IncrediBuild\\Builder', 'Folder')
+  ib = ReadHKLMValue('SOFTWARE\\Xoreax\\IncrediBuild\\Builder',
+                     'Folder', options)
   if ib:
     ib = os.path.join(ib, 'BuildConsole.exe')
 
@@ -966,6 +975,8 @@ def real_main():
                                 'used')
   option_parser.add_option('', '--target', default='Release',
                            help='build target (Debug or Release)')
+  option_parser.add_option('', '--arch', default=None,
+                           help='target architecture (ia32, x64, ...')
   option_parser.add_option('', '--solution', default=None,
                            help='name of solution/sub-project to build')
   option_parser.add_option('', '--project', default=None,

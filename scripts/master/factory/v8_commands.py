@@ -23,7 +23,8 @@ class V8Commands(commands.FactoryCommands):
                target_platform=None, target_arch=None,
                shard_count=1, shard_run=1, shell_flags=None, isolates=False):
 
-    commands.FactoryCommands.__init__(self, factory, target, build_dir, target_platform)
+    commands.FactoryCommands.__init__(self, factory, target, build_dir,
+                                      target_platform, target_arch)
 
     # Override _script_dir - one below because we run our build inside
     # the bleeding_edge directory.

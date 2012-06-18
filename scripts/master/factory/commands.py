@@ -151,7 +151,7 @@ class FactoryCommands(object):
   # TODO(maruel): DEFAULT_GTEST_FILTER = '-*.FLAKY_*:*.FAILS_*'
 
   def __init__(self, factory=None, target=None, build_dir=None,
-               target_platform=None):
+               target_platform=None, target_arch=None):
     """Initializes the SlaveCommands class.
     Args:
       factory: BuildFactory to configure.
@@ -166,6 +166,7 @@ class FactoryCommands(object):
     self._target = target
     self._build_dir = build_dir
     self._target_platform = target_platform
+    self._target_arch = target_arch
 
     # Starting from e.g. C:\b\build\slave\build_slave_path\build, find
     # C:\b\build\scripts\slave.
@@ -735,7 +736,9 @@ class FactoryCommands(object):
         cmd.extend(['--project', split_solution[1]])
     cmd.extend(['--target', self._target,
                 '--build-dir', self._build_dir])
-    if mode is not None:
+    if self._target_arch:
+      cmd.extend(['--arch', self._target_arch])
+    if mode:
       cmd.extend(['--mode', mode])
     if clobber:
       cmd.append('--clobber')
