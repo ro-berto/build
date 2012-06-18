@@ -533,6 +533,20 @@ def RemoveChromeDesktopFiles():
     RemoveOldSnapshots(desktop_path)
 
 
+def RemoveJumpListFiles():
+  """Removes the files storing jump list history.
+  This does nothing if called on a non-Windows platform."""
+  if chromium_utils.IsWindows():
+    custom_destination_path = os.path.join(os.environ['USERPROFILE'],
+                                           'AppData',
+                                           'Roaming',
+                                           'Microsoft',
+                                           'Windows',
+                                           'Recent',
+                                           'CustomDestinations')
+    LogAndRemoveFiles(custom_destination_path, '.+')
+
+
 def RemoveChromeTemporaryFiles():
   """A large hammer to nuke what could be leaked files from unittests or
   files left from a unittest that crashed, was killed, etc."""
@@ -547,6 +561,7 @@ def RemoveChromeTemporaryFiles():
     # Dump and temporary files.
     LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
     RemoveChromeDesktopFiles()
+    RemoveJumpListFiles()
   elif chromium_utils.IsLinux():
     kLogRegexHeapcheck = '\.(sym|heap)$'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
