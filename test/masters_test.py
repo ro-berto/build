@@ -147,7 +147,9 @@ def main():
       'master.chromium.git': 'Chromium Git',
       'master.chromium.gpu': 'Chromium GPU',
       'master.chromium.gpu.fyi': 'Chromium GPU FYI',
+      'master.chromium.linux': 'Chromium Linux',
       'master.chromium.lkgr': 'Chromium LKGR',
+      'master.chromium.mac': 'Chromium Mac',
       'master.chromium.memory': None,
       'master.chromium.memory.fyi': 'Chromium Memory FYI',
       'master.chromium.perf': 'Chromium Perf',
@@ -155,6 +157,7 @@ def main():
       'master.chromium.pyauto': 'Chromium PyAuto',
       'master.chromium.swarm': 'Chromium Swarm',
       'master.chromium.webkit': 'Chromium Webkit',
+      'master.chromium.win': 'Chromium Win',
       'master.chromiumos': 'ChromiumOS',
       'master.client.drmemory': None,  # make start fails
       'master.client.dart': 'Dart',  # make start fails
