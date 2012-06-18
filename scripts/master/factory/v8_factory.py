@@ -104,9 +104,15 @@ class V8Factory(gclient_factory.GClientFactory):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_SPUTNIK)
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_ES5CONFORM)
 
-    factory = self.BuildFactory(target, clobber, tests, mode,
-                                slave_type, options, compile_timeout, build_url,
-                                project, factory_properties)
+    factory = self.BuildFactory(target=target, clobber=clobber, tests=tests,
+                                mode=mode,
+                                slave_type=slave_type,
+                                options=options,
+                                compile_timeout=compile_timeout,
+                                build_url=build_url,
+                                project=project,
+                                factory_properties=factory_properties,
+                                target_arch=target_arch)
 
     # Get the factory command object to create new steps to the factory.
     # Note - we give '' as build_dir as we use our own build in test tools
