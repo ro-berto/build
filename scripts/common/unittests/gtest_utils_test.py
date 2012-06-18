@@ -16,7 +16,8 @@ FAILURES = ['NavigationControllerTest.Reload',
             'NavigationControllerTest/SpdyNetworkTransTest.Constructor/0',
             'BadTest.TimesOut',
             'MoreBadTest.TimesOutAndFails',
-            'SomeOtherTest.SwitchTypes']
+            'SomeOtherTest.SwitchTypes',
+            'SomeOtherTest.FAILS_ThisTestTimesOut']
 
 FAILS_FAILURES = ['SomeOtherTest.FAILS_Bar']
 FLAKY_FAILURES = ['SomeOtherTest.FLAKY_Baz']
@@ -115,7 +116,7 @@ Handling SIGTERM.
 Successfully wrote to shutdown pipe, resetting signal handler.
 [  FAILED  ] MoreBadTest.TimesOutAndFails (31000 ms)
 
-[----------] 4 tests from SomeOtherTest
+[----------] 5 tests from SomeOtherTest
 [ RUN      ] SomeOtherTest.SwitchTypes
 %(switch_errors)s
 [  FAILED  ] SomeOtherTest.SwitchTypes (40 ms)
@@ -124,18 +125,23 @@ Successfully wrote to shutdown pipe, resetting signal handler.
 [ RUN      ] SomeOtherTest.FAILS_Bar
 Some error message for a failing test.
 [  FAILED  ] SomeOtherTest.FAILS_Bar (40 ms)
+[ RUN      ] SomeOtherTest.FAILS_ThisTestTimesOut
+""" %  {'switch_errors' : SWITCH_ERRORS} +
+'[0521/041343:ERROR:test_launcher.cc(384)] Test timeout (5000 ms) '
+'exceeded for SomeOtherTest.FAILS_ThisTestTimesOut' + """
 [ RUN      ] SomeOtherTest.FLAKY_Baz
 Some error message for a flaky test.
 [  FAILED  ] SomeOtherTest.FLAKY_Baz (40 ms)
 [----------] 2 tests from SomeOtherTest (60 ms total)
 
 [----------] Global test environment tear-down
-[==========] 7 tests from 3 test cases ran. (3750 ms total)
+[==========] 8 tests from 3 test cases ran. (3750 ms total)
 [  PASSED  ] 4 tests.
-[  FAILED  ] 3 tests, listed below:
+[  FAILED  ] 4 tests, listed below:
 [  FAILED  ] NavigationControllerTest.Reload
 [  FAILED  ] NavigationControllerTest/SpdyNetworkTransTest.Constructor/0
 [  FAILED  ] SomeOtherTest.SwitchTypes
+[  FAILED  ] SomeOtherTest.FAILS_ThisTestTimesOut
 
  1 FAILED TEST
   YOU HAVE 10 DISABLED TESTS
@@ -143,7 +149,7 @@ Some error message for a flaky test.
   YOU HAVE 2 FLAKY TESTS
 
 program finished with exit code 1
-""" % {'switch_errors' : SWITCH_ERRORS})
+""")
 
 TEST_DATA_CRASH = """
 [==========] Running 7 tests from 3 test cases.
@@ -232,22 +238,27 @@ Successfully wrote to shutdown pipe, resetting signal handler.
 [ RUN      ] SomeOtherTest.FAILS_Bar
 Some error message for a failing test.
 [  FAILED  ] SomeOtherTest.FAILS_Bar (40 ms)
+[ RUN      ] SomeOtherTest.FAILS_ThisTestTimesOut
+"""  % {'switch_errors' : SWITCH_ERRORS} +
+'[0521/041343:ERROR:test_launcher.cc(384)] Test timeout (5000 ms) exceeded '
+'for SomeOtherTest.FAILS_ThisTestTimesOut' + """
 [ RUN      ] SomeOtherTest.FLAKY_Baz
 Some error message for a flaky test.
 [  FAILED  ] SomeOtherTest.FLAKY_Baz (40 ms)
 [----------] 2 tests from SomeOtherTest (60 ms total)
 
 [----------] Global test environment tear-down
-[==========] 6 tests from 3 test cases ran. (3750 ms total)
+[==========] 7 tests from 3 test cases ran. (3750 ms total)
 [  PASSED  ] 5 tests.
-[  FAILED  ] 1 test, listed below:
+[  FAILED  ] 2 test, listed below:
 [  FAILED  ] SomeOtherTest.SwitchTypes
+[  FAILED  ] SomeOtherTest.FAILS_ThisTestTimesOut
 
  1 FAILED TEST
   YOU HAVE 10 DISABLED TESTS
 
   YOU HAVE 2 FLAKY TESTS
-""" % {'switch_errors' : SWITCH_ERRORS})
+""")
 
 TEST_DATA_SHARD_1 = ("""Note: This is test shard 13 of 30.
 [==========] Running 5 tests from 2 test cases.

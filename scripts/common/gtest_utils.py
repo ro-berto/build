@@ -115,13 +115,15 @@ class GTestLogParser(object):
 
     Args:
       include_fails: If true, all failing tests with FAILS_ in their names will
-          be included. Otherwise, they will only be included if they crashed.
+          be included. Otherwise, they will only be included if they crashed or
+          timed out.
       include_flaky: If true, all failing tests with FLAKY_ in their names will
-          be included. Otherwise, they will only be included if they crashed.
+          be included. Otherwise, they will only be included if they crashed or
+          timed out.
 
     """
     return (self._TestsByStatus('failed', include_fails, include_flaky) +
-            self._TestsByStatus('timeout', include_fails, include_flaky) +
+            self._TestsByStatus('timeout', True, True) +
             self._TestsByStatus('warning', include_fails, include_flaky) +
             self.RunningTests())
 

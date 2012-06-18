@@ -52,9 +52,11 @@ class TestObserver(buildstep.LogLineObserver):
 
     Args:
       include_fails: If true, all failing tests with FAILS_ in their names will
-          be included. Otherwise, they will only be included if they crashed.
+          be included. Otherwise, they will only be included if they crashed or
+          timed out.
       include_flaky: If true, all failing tests with FLAKY_ in their names will
-          be included. Otherwise, they will only be included if they crashed.
+          be included. Otherwise, they will only be included if they crashed or
+          timed out.
 
     """
     return self.gtest_parser.FailedTests(include_fails=include_fails,
