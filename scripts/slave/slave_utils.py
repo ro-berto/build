@@ -542,7 +542,7 @@ def RemoveChromeTemporaryFiles():
   # At some point a leading dot got added, support with and without it.
   kLogRegex = '^\.?(com\.google\.Chrome|org\.chromium)\.'
   if chromium_utils.IsWindows():
-    kLogRegex = r'^(scoped_dir|nps|chrome_test|SafeBrowseringTest)'
+    kLogRegex = r'^(base_dir|scoped_dir|nps|chrome_test|SafeBrowseringTest)'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
     # Dump and temporary files.
     LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
