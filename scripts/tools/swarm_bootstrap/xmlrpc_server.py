@@ -37,10 +37,10 @@ class _RemoteExecutor(object):
     """Returns True if os_path exists.
 
     Args:
-    os_path: The path to test existance of.
+      os_path: The path to test existance of.
 
     Returns:
-    True if os_path exists. False otherwise.
+      True if os_path exists. False otherwise.
     """
     return os.path.exists(os_path)
 
@@ -48,10 +48,10 @@ class _RemoteExecutor(object):
     """Creates all the inexistent dirs in os_path.
 
     Args:
-    os_path: The path of dirs to make.
+      os_path: The path of dirs to make.
 
     Returns:
-    0. Because the XmlRpcServer must return something, not None...
+      0. Because the XmlRpcServer must return something, not None...
     """
     os.makedirs(os_path)
     return 0
@@ -60,20 +60,20 @@ class _RemoteExecutor(object):
     """Upload content to os_path.
 
     Args:
-    os_path: The path where to upload content.
-    content: The content to upload to os_path. Can be of type xmlrpclib.Binary
-    or a string.
+      os_path: The path where to upload content.
+      content: The content to upload to os_path. Can be of type xmlrpclib.Binary
+          or a string.
 
     Returns:
-    The os_path where the content was uploaded.
+      The os_path where the content was uploaded.
     """
     new_file = open(os_path, 'wb')
     if isinstance(content, xmlrpclib.Binary):
       new_file.write(content.data)
     else:
       new_file.write(content.encode('utf8', 'replace'))
-      new_file.close()
-      return os_path
+    new_file.close()
+    return os_path
 
   # pylint: disable-msg=R0201
   def start(self, command, args,
@@ -81,16 +81,16 @@ class _RemoteExecutor(object):
     """Starts the command with the given args and potentially wait for results.
 
     Args:
-    command: The command to execute.
-    args: The list of arguments to pass to the command.
-    unused_wait_for_completion: We don't use it, we only rely on capture.
-    capture: Specfifies if we should wait to capture all results.
+      command: The command to execute.
+      args: The list of arguments to pass to the command.
+      unused_wait_for_completion: We don't use it, we only rely on capture.
+      capture: Specfifies if we should wait to capture all results.
 
     Returns:
-    The identifier of the started process if we don't capture the results.
-    -1 in case of errors.
-    If the results are captured, we return a tuple containing the exit code
-    and stdout. (-1, <error text>) in case of errors.
+      The identifier of the started process if we don't capture the results.
+      -1 in case of errors.
+      If the results are captured, we return a tuple containing the exit code
+      and stdout. (-1, <error text>) in case of errors.
     """
     logging.debug('starting process: %s', [command] + args)
 
