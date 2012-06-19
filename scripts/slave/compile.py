@@ -695,12 +695,6 @@ def main_ninja(options, args):
   command.extend(options.build_args)
   command.extend(args)
 
-  # TODO(thakis): Change the gyp ninja generator to either make 'all' the
-  # default target or to only write targets that are part of all, and then
-  # remove this. http://crbug.com/127952
-  if not options.build_args and not args:
-    command.append('all')
-
   # Prepare environment.
   env = EchoDict(os.environ)
 
@@ -710,26 +704,30 @@ def main_ninja(options, args):
     env['DYLD_NO_PIE'] = '1'
 
   if options.compiler in ('goma', 'goma-clang'):
-    goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-    # If using the Goma compiler, first call goma_ctl with ensure_start
-    # (or restart in clobber mode) to ensure the proxy is available.
-    goma_key = os.path.join(options.goma_dir, 'goma.key')
-    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
-    if os.path.exists(goma_key):
-      env['GOMA_API_KEY_FILE'] = goma_key
-    if options.clobber:
-      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
-    else:
-      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+    if sys.platform != 'win32':
+      goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+      # If using the Goma compiler, first call goma_ctl with ensure_start
+      # (or restart in clobber mode) to ensure the proxy is available.
+      goma_key = os.path.join(options.goma_dir, 'goma.key')
+      env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+      if os.path.exists(goma_key):
+        env['GOMA_API_KEY_FILE'] = goma_key
+      if options.clobber:
+        chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+      else:
+        chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
     # CC and CXX are set at gyp time for ninja. PATH still needs to be adjusted.
     print 'using', options.compiler
     if options.compiler == 'goma':
-      env['PATH'] = ':'.join([options.goma_dir, env['PATH']])
+      env['PATH'] = os.pathsep.join([options.goma_dir, env['PATH']])
+      if sys.platform == 'win32':
+        env['CC'] = 'gomacc.exe cl'
+        env['CXX'] = 'gomacc.exe cl'
     elif options.compiler == 'goma-clang':
       clang_dir = os.path.abspath(os.path.join(
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-      env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
+      env['PATH'] = os.pathsep.join([options.goma_dir, clang_dir, env['PATH']])
 
     goma_jobs = 100 if not chromium_utils.IsMac() else 50
     command.append('-j%d' % goma_jobs)
