@@ -122,13 +122,17 @@ class Manifest(object):
 
 def ProcessManifest(filename, options):
   """Process the manifest file and send off the swarm test request."""
-  # Parses manifest file
-  print "Parsing file %s..." % filename
-
   file_name_tail = os.path.split(filename)[1]
   test_name = os.path.splitext(file_name_tail)[0]
   test_full_name = options.test_name_prefix + test_name
 
+  if not os.path.exists(filename):
+    print ("Manifest file, %s, not found. Unable to send swarm request "
+           "for %s" % (filename, test_full_name))
+    return 1
+
+  # Parses manifest file
+  print "Parsing file %s..." % filename
   manifest = Manifest(filename, test_full_name, options)
 
   # Zip up relevent files
