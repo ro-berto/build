@@ -724,7 +724,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 slave_type='AnnotatedBuilderTester',
                                 clobber=False,
                                 compile_timeout=6000,
-                                build_url=None,
                                 project=None,
                                 factory_properties=None, options=None,
                                 tests=None,
@@ -748,7 +747,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     factory = self.BuildFactory(target, clobber,
                                 None, None, # tests_for_build, mode,
-                                slave_type, options, compile_timeout, build_url,
+                                slave_type, options, compile_timeout, None,
                                 project, factory_properties,
                                 gclient_deps=gclient_deps)
 
@@ -760,7 +759,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Add the main build.
     env = factory_properties.get('annotation_env')
-    chromium_cmd_obj.AddAnnotationStep('build', annotation_script, env=env)
+    chromium_cmd_obj.AddAnnotationStep('build', annotation_script, env=env,
+                                       factory_properties=factory_properties)
+
+    # Add a trigger step if needed.
+    self.TriggerFactory(factory, slave_type=slave_type,
+                        factory_properties=factory_properties)
 
     return factory
 
