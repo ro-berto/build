@@ -58,7 +58,7 @@ class DartFactory(gclient_factory.GClientFactory):
   def DartFactory(self, target='Release', clobber=False, tests=None,
                   slave_type='BuilderTester', options=None,
                   compile_timeout=1200, build_url=None,
-                  factory_properties=None):
+                  factory_properties=None, env=None):
     factory_properties = factory_properties or {}
     tests = tests or []
     # Create the spec for the solutions
@@ -71,7 +71,8 @@ class DartFactory(gclient_factory.GClientFactory):
     dart_cmd_obj = dart_commands.DartCommands(factory,
                                               target,
                                               self._build_dir,
-                                              self._target_platform)
+                                              self._target_platform,
+                                              env=env)
 
     # We must always add the MaybeClobberStep, since this factory is
     # created at master start, but the choice of clobber or not may be
@@ -80,7 +81,8 @@ class DartFactory(gclient_factory.GClientFactory):
 
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot']:
-      dart_cmd_obj.AddCompileStep(options=options, timeout=compile_timeout)
+      dart_cmd_obj.AddCompileStep(options=options,
+                                  timeout=compile_timeout)
 
     # Add all the tests.
     if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
@@ -90,7 +92,8 @@ class DartFactory(gclient_factory.GClientFactory):
 
   def DartAnnotatedFactory(self, python_script,
                            target='Release', tests=None,
-                           timeout=1200, factory_properties=None):
+                           timeout=1200, factory_properties=None,
+                           env=None):
     factory_properties = factory_properties or {}
     tests = tests or []
     # Create the spec for the solutions
@@ -102,6 +105,7 @@ class DartFactory(gclient_factory.GClientFactory):
     dart_cmd_obj = dart_commands.DartCommands(factory,
                                               target,
                                               self._build_dir,
-                                              self._target_platform)
+                                              self._target_platform,
+                                              env=env)
     dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout)
     return factory

@@ -19,7 +19,7 @@ class DartCommands(commands.FactoryCommands):
   """Encapsulates methods to add dart commands to a buildbot factory."""
 
   def __init__(self, factory=None, target=None, build_dir=None,
-               target_platform=None):
+               target_platform=None, env=None):
 
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
@@ -50,6 +50,7 @@ class DartCommands(commands.FactoryCommands):
     self._dartc_build_dir = self.PathJoin('build', 'dart')
     self._repository_root = ''
     self._target_platform = target_platform
+    self._custom_env = env or {}
 
 
   def AddMaybeClobberStep(self, clobber, options=None, timeout=1200):
@@ -82,8 +83,6 @@ class DartCommands(commands.FactoryCommands):
   # pylint: disable=W0221
   def AddCompileStep(self, options=None, timeout=1200):
     options = options or {}
-
-
     cmd = 'python ' + self._tools_dir + '/build.py --mode=%s' % \
         (options['mode'])
     if options.get('name') != None and options.get('name').startswith('dartc'):
@@ -96,6 +95,7 @@ class DartCommands(commands.FactoryCommands):
                           name='build',
                           description='build',
                           timeout=timeout,
+                          env = self._custom_env,
                           haltOnFailure=True,
                           workdir=workdir,
                           command=cmd)
@@ -120,6 +120,7 @@ class DartCommands(commands.FactoryCommands):
                             name='tests',
                             description='tests',
                             timeout=timeout,
+                            env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dartc_build_dir,
                             command=cmd)
@@ -129,6 +130,7 @@ class DartCommands(commands.FactoryCommands):
                             name='tests',
                             description='tests',
                             timeout=timeout,
+                            env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._vm_build_dir,
                             command=cmd)
@@ -148,4 +150,6 @@ class DartCommands(commands.FactoryCommands):
                           description='annotated_steps',
                           timeout=timeout,
                           haltOnFailure=True,
+                          env = self._custom_env,
+                          workdir=self._vm_build_dir,
                           command=[self._python, python_script])
