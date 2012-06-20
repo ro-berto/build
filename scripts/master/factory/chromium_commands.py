@@ -1030,24 +1030,14 @@ class ChromiumCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           command=cmd)
 
-  def AddAnnotationStep(self, name, cmd, factory_properties=None, env=None,
-                        timeout=6000):
+  def AddAnnotationStep(self, name, cmd, env=None, timeout=6000):
     """Add an @@@BUILD_STEP step@@@ annotation script build command.
 
     This function allows the caller to specify the name of the
     annotation script.  In contrast, AddAnnotatedSteps() simply adds
     in a hard-coded annotation script that is not yet in the tree.
     TODO(jrg): resolve this inconsistency with the
-    chrome-infrastrucure team; we shouldn't need two functions.
-    """
-    factory_properties = factory_properties or {}
-
-    # Ensure cmd is a list, which is required for AddBuildProperties.
-    if not isinstance(cmd, list):
-      cmd = [cmd]
-
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    chrome-infrastrucure team; we shouldn't need two functions."""
     self._factory.addStep(chromium_step.AnnotatedCommand,
                           name=name,
                           description=name,

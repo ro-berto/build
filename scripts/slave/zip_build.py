@@ -158,8 +158,6 @@ def ShouldPackageFile(filename, options):
       '.sconsign.dblite',
       # build helper, not needed on testers
       'mksnapshot',
-      # from linux android build
-      'lib.target',
     ]
 
   if filename in things_to_skip:
@@ -168,23 +166,21 @@ def ShouldPackageFile(filename, options):
   return True
 
 
-def WriteRevisionFile(dirname, build_revision):
-  """Writes a file containing revision number to given directory.
+def WriteRevisionFile(path, build_revision):
+  """Writes a file containing revision number to given path.
   Replaces the target file in place."""
   try:
     # Script only works on python 2.6
     # pylint: disable=E1123
     tmp_revision_file = tempfile.NamedTemporaryFile(
-        mode='w', dir=dirname,
+        mode='w', dir=os.path.dirname(path),
         delete=False)
     tmp_revision_file.write('%d' % build_revision)
     tmp_revision_file.close()
-    chromium_utils.MakeWorldReadable(tmp_revision_file.name)
-    dest_path = os.path.join(dirname,
-                             chromium_utils.FULL_BUILD_REVISION_FILENAME)
-    shutil.move(tmp_revision_file.name, dest_path)
+    shutil.move(tmp_revision_file.name, path)
+    chromium_utils.MakeWorldReadable(path)
   except IOError:
-    print 'Writing to revision file in %s failed.' % dirname
+    print 'Writing to revision file %s failed ' % path
 
 
 def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
@@ -276,11 +272,7 @@ def archive(options, args):
     webkit_dir = os.path.join(src_dir, options.webkit_dir)
     webkit_revision = slave_utils.SubversionRevision(webkit_dir)
 
-  print 'Full Staging in %s' % staging_dir
-  print 'Build Directory %s' % build_dir
-
-  # Include the revision file in tarballs
-  WriteRevisionFile(build_dir, build_revision)
+  print 'Full Staging in %s' % build_dir
 
   # Build the list of files to archive.
   zip_file_list = [f for f in os.listdir(build_dir)
@@ -302,7 +294,9 @@ def archive(options, args):
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision
   # without downloading tarballs.
-  WriteRevisionFile(staging_dir, build_revision)
+  latest_revision_path = os.path.join(
+      staging_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME)
+  WriteRevisionFile(latest_revision_path, build_revision)
 
   return 0
 
