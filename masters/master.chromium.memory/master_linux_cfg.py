@@ -34,6 +34,8 @@ asan_archive = master_config.GetArchiveUrl('ChromiumMemory', 'ASAN Builder',
 #
 B('ASAN Builder', 'asan_rel', 'compile', 'linux_asan_rel',
   notify_on_missing=True)
+# Please do not add release_extra_cflags=-g here until the debug info section
+# produced by Clang on Linux is small enough.
 F('asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
     options=[
@@ -60,7 +62,6 @@ F('asan_rel', linux().ChromiumASANFactory(
     factory_properties={
            'gclient_env': {'GYP_DEFINES':
                               ('asan=1 '
-                               'release_extra_cflags=-g '
                                'linux_use_tcmalloc=0 ')},
             'trigger': 'linux_asan_rel_trigger' }))
 
