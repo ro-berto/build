@@ -26,6 +26,11 @@ CLEANUP_SCRIPT_NAME = 'swarm_cleanup.py'
 CLEANUP_SCRIPT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                    CLEANUP_SCRIPT_NAME)
 
+WINDOWS_SCRIPT_NAME = 'kill_processes.py'
+WINDOWS_SCRIPT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                   WINDOWS_SCRIPT_NAME)
+
+
 class Manifest(object):
   RUN_TEST_PATH = os.path.join(
       'src', 'tools', 'isolate', 'run_test_from_archive.py')
@@ -73,6 +78,10 @@ class Manifest(object):
     zip_file.write(self.manifest_name)
     zip_file.write(self.RUN_TEST_PATH)
     zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
+
+    if self.target_platform == 'Windows':
+      zip_file.write(WINDOWS_SCRIPT_PATH, WINDOWS_SCRIPT_NAME)
+
     zip_file.close()
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
@@ -90,7 +99,7 @@ class Manifest(object):
     # Call kill_processes.py if on windows
     if self.target_platform == 'Windows':
       self.add_task('Kill Processes',
-          [sys.executable, '..\\b\\build\\scripts\\slave\\kill_processes.py'])
+          ['python', WINDOWS_SCRIPT_NAME])
 
     # Construct test case
     test_case = {

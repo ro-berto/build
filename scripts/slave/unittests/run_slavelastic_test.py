@@ -4,7 +4,6 @@
 # found in the LICENSE file.
 
 import json
-import sys
 import unittest
 
 import test_env  # pylint: disable=W0403,W0611
@@ -79,8 +78,8 @@ def GenerateExpectedJSON(options):
     expected['tests'].append(
       {
         'action': [
-          sys.executable,
-          '..\\b\\build\\scripts\\slave\\kill_processes.py'
+          'python',
+          'kill_processes.py'
         ],
         'test_name': 'Kill Processes'
       }
