@@ -51,22 +51,15 @@ class EchoDict(dict):
     fh.write('\n')
 
 
-def ReadHKLMValue(path, value, opts):
+def ReadHKLMValue(path, value):
   """Retrieve the install path from the registry for Visual Studio 8.0 and
   Incredibuild."""
   # Only available on Windows.
   # pylint: disable=F0401
   import win32api, win32con
   try:
-    flags = win32con.KEY_READ
-    if opts.arch == 'x64':
-      # When this script is executed by a 32bit python installation but
-      # wants to compile x64 binaries, it must look up the location of
-      # the 64bit compiler from the 64bit hive of the registry. (The
-      # default behavior on Windows is to redirect 32bit apps to the
-      # 32bit registry hive.)
-      flags |= win32con.KEY_WOW64_64KEY
-    regkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE, path, 0, flags)
+    regkey = win32api.RegOpenKeyEx(win32con.HKEY_LOCAL_MACHINE, path, 0,
+                                   win32con.KEY_READ)
     value = win32api.RegQueryValueEx(regkey, value)[0]
     win32api.RegCloseKey(regkey)
     return value
@@ -811,8 +804,7 @@ def main_win(options, args):
       return 1
 
   REG_ROOT = 'SOFTWARE\\Microsoft\\VisualStudio\\'
-  devenv = ReadHKLMValue(REG_ROOT + options.msvs_version + '.0',
-                         'InstallDir', options)
+  devenv = ReadHKLMValue(REG_ROOT + options.msvs_version + '.0', 'InstallDir')
   if devenv:
     devenv = os.path.join(devenv, 'devenv.com')
   else:
@@ -820,19 +812,24 @@ def main_win(options, args):
         options.msvs_version)
     return 1
 
-  ib = ReadHKLMValue('SOFTWARE\\Xoreax\\IncrediBuild\\Builder',
-                     'Folder', options)
+  ib = ReadHKLMValue('SOFTWARE\\Xoreax\\IncrediBuild\\Builder', 'Folder')
   if ib:
     ib = os.path.join(ib, 'BuildConsole.exe')
 
   if ib and os.path.exists(ib) and not options.no_ib:
     tool = ib
-    tool_options = ['/Cfg=%s|Win32' % options.target]
+    if options.arch == 'x64':
+      tool_options = ['/Cfg=%s|x64' % options.target]
+    else:
+      tool_options = ['/Cfg=%s|Win32' % options.target]
     if options.project:
       tool_options.extend(['/Prj=%s' % options.project])
   else:
     tool = devenv
-    tool_options = ['/Build', options.target]
+    if options.arch == 'x64':
+      tool_options = ['/Build', '%s|x64' % options.target]
+    else:
+      tool_options = ['/Build', options.target]
     if options.project:
       tool_options.extend(['/Project', options.project])
 
