@@ -298,6 +298,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('crypto_unittests', fp)
     if R('dbus'):
       f.AddBasicGTestTestStep('dbus_unittests', fp)
+    # Remove 'gfx' once it is no longer referenced by the masters.
     if R('gfx'):
       f.AddBasicGTestTestStep('gfx_unittests', fp)
     if R('googleurl'):
@@ -327,7 +328,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('sbox_unittests', fp)
       f.AddBasicGTestTestStep('sbox_integration_tests', fp)
       f.AddBasicGTestTestStep('sbox_validation_tests', fp)
-
+    if R('ui_unittests'):
+      f.AddBasicGTestTestStep('ui_unittests', fp)
     if R('views'):
       f.AddBasicGTestTestStep('views_unittests', fp)
     if R('aura'):
@@ -349,6 +351,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('unit_tests', fp)
     if R('unit_sql'):
       f.AddBasicGTestTestStep('sql_unittests', fp)
+    # Remove 'unit_gfx' once it is no longer referenced by the masters.
     if R('unit_gfx'):
       f.AddBasicGTestTestStep('gfx_unittests', fp)
     if R('unit_content'):
