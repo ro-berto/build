@@ -368,6 +368,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@STEP_EXCEPTION@@@
   Mark the current step as having exceptions (magenta).
 
+  @@@STEP_LOG_LINE@<label>@<line>@@@
+  Add a log line to a log named <label>. Multiple lines can be added.
+
+  @@@STEP_LOG_END@<label>@@@
+  Finalizes a log added by STEP_LOG_LINE and calls addCompleteLog().
+
   @@@STEP_CLEAR@@@
   Reset the text description of the current step.
 
@@ -404,6 +410,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def __init__(self, command=None, *args, **kwargs):
     buildstep.LogLineObserver.__init__(self, *args, **kwargs)
+    self.annotated_logs = {}
     self.command = command
     self.sections = []
     self.annotate_status = builder.SUCCESS
@@ -530,6 +537,29 @@ class AnnotationObserver(buildstep.LogLineObserver):
       line += '\n'
     # Handle initial setup here, as step_status might not exist yet at init.
     self.initialSection()
+
+    # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
+    # Appends a line to the log's array. When STEP_LOG_END is called,
+    # that will finalize the log and call addCompleteLog().
+    m = re.match('^@@@STEP_LOG_LINE@(.*)@(.*)@@@', line)
+    if m:
+      log_label = m.group(1)
+      log_line = m.group(2)
+      if log_label in self.annotated_logs:
+        self.annotated_logs[log_label] += [log_line]
+      else:
+        self.annotated_logs[log_label] = [log_line]
+
+    # Support: @@@STEP_LOG_END@<label>@<line>@@@ (finalizes log to step)
+    m = re.match('^@@@STEP_LOG_END@(.*)@@@', line)
+    if m:
+      log_label = m.group(1)
+      if log_label in self.annotated_logs:
+        log_text = '\n'.join(self.annotated_logs[log_label])
+      else:
+        log_text = ''
+      self.command.addCompleteLog(log_label, log_text)
+
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
     # Also support depreceated @@@link@<name>@<url>@@@
     m = re.match('^@@@STEP_LINK@(.*)@(.*)@@@', line)

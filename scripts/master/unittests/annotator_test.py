@@ -56,10 +56,30 @@ class FakeBuildStep(mock.Mock):
     self.receivedStatus.append(status)
 
 
+class FakeLog(object):
+  def __init__(self, name):
+    self.text = ''
+    self.name = name
+    self.chunkSize = 1024
+
+  def addStdout(self, data):
+    self.text += data
+
+  def getName(self):
+    return self.name
+
+  def addHeader(self, msg):
+    pass
+
+  def finish(self):
+    pass
+
+
 class FakeBuildstepStatus(mock.Mock):
   def __init__(self):
     self.steps = [FakeBuildStep('init')]
     self.receivedStatus = []
+    self.logs = {}
     mock.Mock.__init__(self)
 
   def getBuild(self):
@@ -70,11 +90,19 @@ class FakeBuildstepStatus(mock.Mock):
     self.steps.append(newstep)
     return newstep
 
-  def addLog(self, ignored):
-    return mock.Mock()
+  def addLog(self, log):
+    l = FakeLog(log)
+    self.logs[log] = l
+    return l
 
   def getLogs(self):
-    return [mock.Mock()]
+    return self.logs.values()
+
+  def getLog(self, log):
+    if log in self.logs:
+      return self.logs[log]
+    else:
+      return None
 
   def stepFinished(self, status):
     self.receivedStatus.append(status)
@@ -215,6 +243,17 @@ class AnnotatorCommandsTest(unittest.TestCase):
 
     self.assertEquals(self.step.script_observer.annotate_status,
                       builder.SUCCESS)
+
+  def testLogLine(self):
+    self.handleOutputLine('@@@STEP_LOG_LINE@test_log@this is line one@@@')
+    self.handleOutputLine('@@@STEP_LOG_LINE@test_log@this is line two@@@')
+    self.handleOutputLine('@@@STEP_LOG_END@test_log@@@')
+
+    logs = self.step_status.getLogs()
+    self.assertEquals(len(logs), 2)
+    self.assertEquals(logs[1].getName(), 'test_log')
+    self.assertEquals(self.step_status.getLog('test_log').text,
+                      'this is line one\nthis is line two')
 
 
 if __name__ == '__main__':
