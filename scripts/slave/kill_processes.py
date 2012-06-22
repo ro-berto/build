@@ -7,6 +7,7 @@
 
 Only works on Windows."""
 
+import optparse
 import os
 import re
 import subprocess
@@ -77,9 +78,7 @@ def KillByPid(pid):
   subprocess.call(command + [str(pid)])
 
 
-def KillProcessesUsingCurrentDirectory():
-  handle_exe = os.path.join(os.getcwd(), '..', '..', '..',
-                            'third_party', 'psutils', 'handle.exe')
+def KillProcessesUsingCurrentDirectory(handle_exe):
   if not os.path.exists(handle_exe):
     return False
   try:
@@ -215,19 +214,35 @@ lingering_processes = [
     'mspdbsrv.exe',
 ]
 
-if '__main__' == __name__:
+def main():
+  handle_exe_default = os.path.join(os.getcwd(), '..', '..', '..',
+                                    'third_party', 'psutils', 'handle.exe')
+
+  parser = optparse.OptionParser(
+    usage='%prog [options]')
+  parser.add_option('--handle_exe', default=handle_exe_default,
+                    help='The path to handle.exe. Defaults to %default.')
+  (options, args) = parser.parse_args()
+
+  if args:
+    parser.error('Unknown arguments passed in, %s' % args)
+
   # Kill all lingering processes.  It's okay if these aren't killed or end up
   # reappearing.
   KillAll(lingering_processes, must_die=False)
 
   rc = 0
-  if not KillProcessesUsingCurrentDirectory():
+  if not KillProcessesUsingCurrentDirectory(options.handle_exe):
     rc = 88
 
   # Kill all regular processes.  We must guarantee that these are killed since
   # we exit with an error code if they're not.
   if KillAll(processes, must_die=True):
-    sys.exit(rc)
+    return rc
 
   # Some processes were not killed, exit with non-zero status.
-  sys.exit(1)
+  return 1
+
+
+if '__main__' == __name__:
+  sys.exit(main())
