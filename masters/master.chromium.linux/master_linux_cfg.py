@@ -30,24 +30,24 @@ sharded_tests = [
 # These are the common targets to most of the builders
 linux_all_test_targets = [
   'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'content_unittests',
   'crypto_unittests',
   'dbus_unittests',
   'googleurl_unittests',
   'gpu_unittests',
+  'ipc_tests',
+  'jingle_unittests',
   'media_unittests',
+  'net_unittests',
   'printing_unittests',
   'remoting_unittests',
-  'net_unittests',
   'safe_browsing_tests',
-  'cacheinvalidation_unittests',
-  'jingle_unittests',
-  'sql_unittests',         # from test target unit
-  'ipc_tests',             # from test target unit
-  'sync_unit_tests',       # from test target unit
-  'content_unittests',     # from test target unit
-  'unit_tests',            # from test target unit
-  'gfx_unittests',         # from test target unit
-  'browser_tests',
+  'sql_unittests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
 ]
 
 
@@ -150,7 +150,6 @@ linux_aura_options=[
   'compositor_unittests',
   'content_unittests',
   'crypto_unittests',
-  'gfx_unittests',
   'googleurl_unittests',
   'gpu_unittests',
   'interactive_ui_tests',
@@ -162,6 +161,7 @@ linux_aura_options=[
   'remoting_unittests',
   'safe_browsing_tests',
   'sql_unittests',
+  'ui_unittests',
 ]
 
 # B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',

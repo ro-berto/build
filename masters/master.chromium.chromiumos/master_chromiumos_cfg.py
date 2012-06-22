@@ -44,7 +44,6 @@ linux_options = [
     'content_unittests',
     'crypto_unittests',
     'dbus_unittests',
-    'gfx_unittests',
     'gpu_unittests',
     'googleurl_unittests',
     'interactive_ui_tests',
@@ -57,6 +56,7 @@ linux_options = [
     #'safe_browsing_tests',
     'sql_unittests',
     'sync_unit_tests',
+    'ui_unittests',
     'unit_tests',
     'views_unittests',
 ]
