@@ -22,7 +22,7 @@ import config
 class NativeClientCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
 
-  # pylint: disable-msg=W0212
+  # pylint: disable=W0212
   # (accessing protected member _NaClBase)
   PERF_BASE_URL = config.Master._NaClBase.perf_base_url
 

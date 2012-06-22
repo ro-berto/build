@@ -33,7 +33,7 @@ class _RemoteExecutor(object):
     # The value that the autoupdate method should return.
     self._autoupdate = False
 
-  def exists(self, os_path):  # pylint: disable-msg=R0201
+  def exists(self, os_path):  # pylint: disable=R0201
     """Returns True if os_path exists.
 
     Args:
@@ -44,7 +44,7 @@ class _RemoteExecutor(object):
     """
     return os.path.exists(os_path)
 
-  def makedirs(self, os_path):  # pylint: disable-msg=R0201
+  def makedirs(self, os_path):  # pylint: disable=R0201
     """Creates all the inexistent dirs in os_path.
 
     Args:
@@ -56,7 +56,7 @@ class _RemoteExecutor(object):
     os.makedirs(os_path)
     return 0
 
-  def upload(self, os_path, content):  # pylint: disable-msg=R0201
+  def upload(self, os_path, content):  # pylint: disable=R0201
     """Upload content to os_path.
 
     Args:
@@ -75,7 +75,7 @@ class _RemoteExecutor(object):
     new_file.close()
     return os_path
 
-  # pylint: disable-msg=R0201
+  # pylint: disable=R0201
   def start(self, command, args,
             unused_wait_for_completion, capture):
     """Starts the command with the given args and potentially wait for results.
