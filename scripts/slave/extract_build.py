@@ -60,14 +60,53 @@ class WebHandler(ExtractHandler):
     return rc
 
 
+def GetBuildUrl(abs_build_dir, options):
+  """Compute the url to download the build from.  This will use as a base
+     string, in order of preference:
+     1) options.build_url
+     2) options.factory_properties.build_url
+     3) build url constructed from build_properties
+
+     Args:
+       abs_build_dir: Full path to source directory.
+       options: options object as specified by parser below.
+   """
+  url = options.build_url or options.factory_properties.get('build_url')
+  if not url:
+    url = 'http://%s/b/build/slave/%s/chrome_staging/full-build-%s.zip' % (
+              options.build_properties.parent_slavename,
+              options.build_properties.parent_builddir,
+              chromium_utils.PlatformName())
+
+  if 'parentslavename' in url:
+    url = url.replace('parentslavename',
+                      options.build_properties.get('parentslavename', ''))
+
+  base_url = url
+  versioned_url = url
+
+  if options.webkit_dir:
+    webkit_revision = slave_utils.SubversionRevision(
+        os.path.join(abs_build_dir, '..', options.webkit_dir))
+    versioned_url = versioned_url.replace('.zip',
+                                          '_wk%d.zip' % webkit_revision)
+
+  # Find the revision that we need to download.
+  chromium_revision = slave_utils.SubversionRevision(abs_build_dir)
+  versioned_url = versioned_url.replace('.zip', '_%d.zip' % chromium_revision)
+
+  return base_url, versioned_url
+
+
 def real_main(options, args):
   """ Download a build, extract it to build\BuildDir\full-build-win32
       and rename it to build\BuildDir\Target
   """
   # TODO: need to get the build *output* directory passed in also so Linux
   # and Mac don't have to walk up a directory to get to the right directory.
-  build_output_dir = None
-  if chromium_utils.IsWindows():
+  if options.build_output_dir:
+    build_output_dir = os.path.join(options.build_dir, options.build_output_dir)
+  elif chromium_utils.IsWindows():
     build_output_dir = options.build_dir
   elif chromium_utils.IsLinux():
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
@@ -82,14 +121,6 @@ def real_main(options, args):
   abs_build_output_dir = os.path.abspath(build_output_dir)
   target_build_output_dir = os.path.join(abs_build_output_dir, options.target)
 
-  # Find the revision that we need to download.
-  current_revision = slave_utils.SubversionRevision(abs_build_dir)
-
-  webkit_revision = None
-  if options.webkit_dir:
-    webkit_revision = slave_utils.SubversionRevision(
-        os.path.join(abs_build_dir, '..', options.webkit_dir))
-
   # Generic name for the archive.
   archive_name = 'full-build-%s.zip' % chromium_utils.PlatformName()
 
@@ -97,23 +128,7 @@ def real_main(options, args):
   output_dir = os.path.join(abs_build_output_dir,
                             archive_name.replace('.zip', ''))
 
-  # Insert parentslavename if it's present.
-  try:
-    options.build_url = options.build_url % {
-        'parentslavename': options.build_properties.get('parentslavename', '')
-    }
-  except KeyError:
-    # This condition is hit when a build_url is passed that does not contain
-    # the key 'parentslavename'.  We silently ignore this error.
-    pass
-  print 'Build URL: %s' % options.build_url
-
-  # URL containing the version number.
-  if not webkit_revision:
-    url = options.build_url.replace('.zip', '_%d.zip' % current_revision)
-  else:
-    url = options.build_url.replace(
-        '.zip', '_wk%d_%d.zip' % (webkit_revision, current_revision))
+  base_url, url = GetBuildUrl(abs_build_dir, options)
 
   if url.startswith('gs://'):
     handler = GSHandler(url=url, archive_name=archive_name)
@@ -148,8 +163,8 @@ def real_main(options, args):
 
     # If the versioned url failed, we try to get the latest build.
     if failure and not url.startswith('gs://'):
-      print 'Fetching latest build...'
-      handler.url = options.build_url
+      print 'Fetching latest build at %s' % base_url
+      handler.url = base_url
       if not handler.download():
         continue
 
@@ -189,7 +204,7 @@ def real_main(options, args):
     return 0
 
   # If we get here, that means that it failed 3 times. We return a failure.
-  return -1
+  return 1
 
 
 def main():
@@ -210,6 +225,8 @@ def main():
   option_parser.add_option('', '--webkit-dir', default=None,
                            help='webkit directory path, '
                                 'relative to --build-dir')
+  option_parser.add_option('', '--build-output-dir',
+                           help='Output path relative to --build-dir.')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()

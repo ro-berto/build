@@ -123,12 +123,13 @@ def ShouldPackageFile(filename, options):
     return False
 
   # Skip files that the testers don't care about. Mostly directories.
-  things_to_skip = []
+  things_to_skip = options.exclude_files.split(',')
   if chromium_utils.IsWindows():
     # Remove obj or lib dir entries
-    things_to_skip = [ 'obj', 'lib', 'cfinstaller_archive', 'installer_archive']
+    things_to_skip += ['obj', 'lib', 'cfinstaller_archive',
+                       'installer_archive']
   elif chromium_utils.IsMac():
-    things_to_skip = [
+    things_to_skip += [
       # We don't need the arm bits v8 builds.
       'd8_arm', 'v8_shell_arm',
       # pdfsqueeze is a build helper, no need to copy it to testers.
@@ -150,7 +151,7 @@ def ShouldPackageFile(filename, options):
       '.deps', 'obj', 'obj.host', 'obj.target',
     ]
   elif chromium_utils.IsLinux():
-    things_to_skip = [
+    things_to_skip += [
       # intermediate build directories (full of .o, .d, etc.).
       'appcache', 'glue', 'googleurl', 'lib', 'lib.host', 'obj', 'obj.host',
       'obj.target', 'src', '.deps',
@@ -166,21 +167,23 @@ def ShouldPackageFile(filename, options):
   return True
 
 
-def WriteRevisionFile(path, build_revision):
-  """Writes a file containing revision number to given path.
+def WriteRevisionFile(dirname, build_revision):
+  """Writes a file containing revision number to given directory.
   Replaces the target file in place."""
   try:
     # Script only works on python 2.6
     # pylint: disable=E1123
     tmp_revision_file = tempfile.NamedTemporaryFile(
-        mode='w', dir=os.path.dirname(path),
+        mode='w', dir=dirname,
         delete=False)
     tmp_revision_file.write('%d' % build_revision)
     tmp_revision_file.close()
-    shutil.move(tmp_revision_file.name, path)
-    chromium_utils.MakeWorldReadable(path)
+    chromium_utils.MakeWorldReadable(tmp_revision_file.name)
+    dest_path = os.path.join(dirname,
+                             chromium_utils.FULL_BUILD_REVISION_FILENAME)
+    shutil.move(tmp_revision_file.name, dest_path)
   except IOError:
-    print 'Writing to revision file %s failed ' % path
+    print 'Writing to revision file in %s failed.' % dirname
 
 
 def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
@@ -272,7 +275,11 @@ def archive(options, args):
     webkit_dir = os.path.join(src_dir, options.webkit_dir)
     webkit_revision = slave_utils.SubversionRevision(webkit_dir)
 
-  print 'Full Staging in %s' % build_dir
+  print 'Full Staging in %s' % staging_dir
+  print 'Build Directory %s' % build_dir
+
+  # Include the revision file in tarballs
+  WriteRevisionFile(build_dir, build_revision)
 
   # Build the list of files to archive.
   zip_file_list = [f for f in os.listdir(build_dir)
@@ -294,9 +301,7 @@ def archive(options, args):
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision
   # without downloading tarballs.
-  latest_revision_path = os.path.join(
-      staging_dir, chromium_utils.FULL_BUILD_REVISION_FILENAME)
-  WriteRevisionFile(latest_revision_path, build_revision)
+  WriteRevisionFile(staging_dir, build_revision)
 
   return 0
 
@@ -310,9 +315,13 @@ def main(argv):
   option_parser.add_option('', '--build-dir', default='chrome',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
+  option_parser.add_option('', '--exclude-files', default='',
+                           help=('comma separated list of files that should '
+                                 'excluded from the zip, regardless of any'
+                                 'exclusion patterns'))
   option_parser.add_option('', '--include-files', default=None,
-                           help='files that should be included in the'
-                                'zip, regardless of any exclusion patterns')
+                           help=('files that should be included in the'
+                                 'zip, regardless of any exclusion patterns'))
   option_parser.add_option('', '--webkit-dir', default=None,
                            help='webkit directory path, relative to --src-dir')
   chromium_utils.AddPropertiesOptions(option_parser)
