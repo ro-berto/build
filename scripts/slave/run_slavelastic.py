@@ -30,6 +30,11 @@ WINDOWS_SCRIPT_NAME = 'kill_processes.py'
 WINDOWS_SCRIPT_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                    WINDOWS_SCRIPT_NAME)
 
+HANDLE_EXE = 'handle.exe'
+HANDLE_EXE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               '..', '..', 'third_party', 'psutils',
+                               HANDLE_EXE)
+
 
 class Manifest(object):
   RUN_TEST_PATH = os.path.join(
@@ -81,6 +86,7 @@ class Manifest(object):
 
     if self.target_platform == 'Windows':
       zip_file.write(WINDOWS_SCRIPT_PATH, WINDOWS_SCRIPT_NAME)
+      zip_file.write(HANDLE_EXE_PATH, HANDLE_EXE)
 
     zip_file.close()
 
@@ -99,7 +105,8 @@ class Manifest(object):
     # Call kill_processes.py if on windows
     if self.target_platform == 'Windows':
       self.add_task('Kill Processes',
-          ['python', WINDOWS_SCRIPT_NAME])
+          ['python', WINDOWS_SCRIPT_NAME,
+           '--handle_exe', HANDLE_EXE])
 
     # Construct test case
     test_case = {

@@ -79,7 +79,9 @@ def GenerateExpectedJSON(options):
       {
         'action': [
           'python',
-          'kill_processes.py'
+          'kill_processes.py',
+          '--handle_exe',
+          'handle.exe'
         ],
         'test_name': 'Kill Processes'
       }
