@@ -38,10 +38,10 @@ To bootstrap a source checkout from the uploaded zip file:
   $ wget http://commondatastorage.googleapis.com/<bucket>/<repobase>-full.zip
   $ unzip <repobase>-full.zip
   $ cd <repobase>
-  $ git checkout HEAD
-  # If there are submodules:
-  $ git submodule update --init --recursive
-  $ git submodule foreach --recursive git checkout HEAD
+
+  # One of the following:
+  $ ./.git/hooks/first-checkout.sh   # posix
+  > .\.git\hooks\first-checkout.bat  # windows
 """
 
 import optparse
@@ -61,16 +61,54 @@ from slave.slave_utils import GSUtilSetup
 
 FIRST_CHECKOUT_SH = """#!/bin/bash
 
+if -z "$1"; then
+  case `uname -s` in
+    "Linux")
+      os=unix
+      ;;
+    "Darwin")
+      os=mac
+      ;;
+    *)
+      echo "You didn't specify an OS (mac, win, unix, or android), \
+and I can't figure it out from 'uname -s'" 1>&2
+      exit 1
+      ;;
+  esac
+else
+  os=$1
+fi
+
+git config target.os $os
 git checkout --force HEAD
-git submodule foreach git checkout --force HEAD
-git submodule update --init
+git config -f .gitmodules --get-regexp '.os$' "(all|$os)" |
+sed 's/^submodule\.\(.*\)\.os .*$/\1/' |
+while read submodule; do
+  git config submodule.$submodule.update checkout
+  (cd $submodule && git checkout --force HEAD)
+done
+git submodule update
 """
 
 FIRST_CHECKOUT_BAT = """@echo off
+setlocal
 
+if "%1" == "" (
+  SET os=win
+) ELSE (
+  SET os=%1
+)
+
+call git config target.os %os%
 call git checkout --force HEAD
-call git submodule foreach git checkout --force HEAD
-call git submodule update --init
+
+FOR /F "delims=. tokens=2" %%x in ^
+    ('git config -f .gitmodules --get-regexp .os$ "(all|%os%)"') DO (
+  call git config submodule.%%x.update checkout
+  CMD /C "cd %%x & git checkout --force HEAD"
+)
+
+call git submodule update
 """
 
 
@@ -183,8 +221,12 @@ class GitZip(object):
       if thr.err:
         raise thr.err
     self._run_cmd(['git', 'submodule', 'init'], clonedir)
+    self._run_cmd(['git', 'config', 'diff.ignoreSubmodules', 'all'], clonedir)
     self._run_cmd(['git', 'submodule', 'foreach', 'git', 'config', '-f',
-                   '$toplevel/.git/config', 'submodule.$name.ignore', 'dirty'],
+                   '$toplevel/.git/config', 'submodule.$name.ignore', 'all'],
+                   clonedir)
+    self._run_cmd(['git', 'submodule', 'foreach', 'git', 'config', '-f',
+                   '$toplevel/.git/config', 'submodule.$name.update', 'none'],
                   clonedir)
 
   def PostFetch(self, clonedir):
@@ -217,6 +259,8 @@ class GitZip(object):
       else:
         raise RuntimeError('No existing checkout, and no url provided')
       self._run_cmd(cmd, workdir)
+      self._run_cmd(['git', 'update-ref', 'refs/heads/master', 'origin/master'],
+                    clonedir)
       self.PostFetch(clonedir)
     except Exception, e:
       threading.current_thread().err = e
