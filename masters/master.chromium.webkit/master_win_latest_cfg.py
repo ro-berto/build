@@ -62,7 +62,7 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
 # Win Rel testers+builders
 #
 # TODO: Switch back to trigger, http://crbug.com/102331
-B('Vista Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel',
+B('Win7 Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel',
   auto_reboot=True)
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     # TODO: undo, http://crbug.com/102331
@@ -82,7 +82,7 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
       'startup',
       'sunspider',
     ],
-    factory_properties={'perf_id': 'chromium-rel-vista-webkit',
+    factory_properties={'perf_id': 'chromium-rel-win7-webkit',
                         'show_perf_results': True,
                         'start_crash_handler': True,
                         # TODO: Remove, http://crbug.com/102331
