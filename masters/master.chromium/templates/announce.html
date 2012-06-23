@@ -237,7 +237,6 @@
           <script language="javascript">
             c.chromium = '';
             c.chromium_chromiumos = '';
-            c.webkit = 'builder=Webkit+Win+Builder+%28deps%29&builder=Webkit+Win+%28deps%29&builder=Webkit+Mac+Builder+%28deps%29&builder=Webkit+Mac10.6+%28deps%29&builder=Webkit+Linux+%28deps%29';
             c.memory = '';
             c.memory_fyi = '';
             c.perf = '';
@@ -248,7 +247,6 @@
 
             c.status = '../chromium';
             c.status_cros = '../chromium.chromiumos';
-            c.status_webkit = '../chromium.webkit';
             c.status_memory = '../chromium.memory';
             c.status_memory_fyi = '../chromium.memory.fyi';
             c.status_chrome = '../chromium.chrome';
@@ -266,7 +264,6 @@
                      '/horizontal_one_box_per_builder';
             }
             c.bar = BarUrl('chromium')
-            c.bar_webkit = 'http://build.chromium.org/p/chromium.webkit/horizontal_one_box_per_builder';
             c.bar_memory = BarUrl('chromium.memory');
             c.bar_memory_fyi = BarUrl('chromium.memory.fyi');
             c.bar_perf = BarUrl('chromium.perf');
@@ -394,18 +391,16 @@
                                   'Memory', '25%')))))));
 
             document.write(tr(
-                HTMLBaseBar(c.status_webkit, c.bar_webkit, c.webkit,
-                           'Webkit', 'colspan=3', '') +
+                HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
+                            'LKGR', 'width="25%"', 'id="LKGRLink"') +
                 HTMLBaseBar(c.status_perf, c.bar_perf, c.perf,
-                            'Perf', 'colspan=5', '')));
+                            'Perf', 'width="75%" colspan=5', '')));
 
             document.write(tr(
-                HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
-                            'LKGR', 'width="10%"', 'id="LKGRLink"') +
                 HTMLBaseBar(c.status_pyauto, c.bar_pyauto, c.pyauto,
-                           'PyAuto', 'width="15%"', '') +
+                           'PyAuto', 'width="25%"', '') +
                 HTMLBaseBar(c.status_memory_fyi, c.bar_memory_fyi, c.memory_fyi,
-                           'Memory<br>FYI', 'width="50%" colspan=5', '')));
+                           'Memory<br>FYI', 'width="75%" colspan=5', '')));
 
             setTimeout('DisplayLKGR()', 100);
           </script>
