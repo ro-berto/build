@@ -64,7 +64,7 @@ F('rel', mac().ChromiumFactory(
 #
 # Mac Rel testers
 #
-# B('Mac10.5 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
+# B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('rel_unit_1', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -88,7 +88,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 1,})
 )
 
-# B('Mac10.5 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
+# B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('rel_unit_2', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -102,7 +102,7 @@ F('rel_unit_2', mac_tester().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 2,})
 )
 
-# B('Mac10.5 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
+# B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('rel_unit_3', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -116,12 +116,12 @@ F('rel_unit_3', mac_tester().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 3,})
 )
 
-# B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
-#   auto_reboot=True, notify_on_missing=True)
-# B('Mac10.6 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
-#   auto_reboot=True, notify_on_missing=True)
-# B('Mac10.6 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
-#   auto_reboot=True, notify_on_missing=True)
+## B('Mac10.7 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
+##   auto_reboot=True, notify_on_missing=True)
+## B('Mac10.7 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
+##   auto_reboot=True, notify_on_missing=True)
+## B('Mac10.7 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
+##   auto_reboot=True, notify_on_missing=True)
 
 # B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger',
 #   auto_reboot=True, notify_on_missing=True)
@@ -172,7 +172,7 @@ F('dbg', mac().ChromiumFactory(
 # Mac Dbg Unit testers
 #
 
-# B('Mac 10.5 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
+# B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_1', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -194,7 +194,7 @@ F('dbg_unit_1', mac_tester().ChromiumFactory(
                       'sharded_tests': sharded_tests,
                       'browser_total_shards': 4, 'browser_shard_index': 1,}))
 
-# B('Mac 10.5 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
+# B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_2', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -210,7 +210,7 @@ F('dbg_unit_2', mac_tester().ChromiumFactory(
                       'sharded_tests': sharded_tests,
                       'browser_total_shards': 4, 'browser_shard_index': 2,}))
 
-# B('Mac 10.5 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
+# B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_3', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -225,7 +225,7 @@ F('dbg_unit_3', mac_tester().ChromiumFactory(
                       'sharded_tests': sharded_tests,
                       'browser_total_shards': 4, 'browser_shard_index': 3,}))
 
-# B('Mac 10.5 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
+# B('Mac 10.6 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
 #   auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_4', mac_tester().ChromiumFactory(
   slave_type='Tester',
@@ -239,14 +239,14 @@ F('dbg_unit_4', mac_tester().ChromiumFactory(
                       'sharded_tests': sharded_tests,
                       'browser_total_shards': 4, 'browser_shard_index': 4,}))
 
-# B('Mac 10.6 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
-#   auto_reboot=True, notify_on_missing=True)
-# B('Mac 10.6 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
-#   auto_reboot=True, notify_on_missing=True)
-# B('Mac 10.6 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
-#   auto_reboot=True, notify_on_missing=True)
-# B('Mac 10.6 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
-#   auto_reboot=True, notify_on_missing=True)
+## B('Mac 10.7 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
+##   auto_reboot=True, notify_on_missing=True)
+## B('Mac 10.7 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
+##   auto_reboot=True, notify_on_missing=True)
+## B('Mac 10.7 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
+##   auto_reboot=True, notify_on_missing=True)
+## B('Mac 10.7 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
+##   auto_reboot=True, notify_on_missing=True)
 
 
 def Update(config, active_master, c):
