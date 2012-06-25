@@ -147,6 +147,23 @@ def _GenerateJSONForTestResults(options, results_tracker):
   except:  # pylint: disable=W0702
     print 'Unexpected error while generating JSON'
 
+def _BuildParallelCommand(build_dir, test_exe_path, options):
+  supervisor_path = os.path.join(build_dir, '..', 'tools',
+                                 'sharding_supervisor',
+                                 'sharding_supervisor.py')
+  supervisor_args = ['--no-color']
+  if options.factory_properties.get('retry_failed', True):
+    supervisor_args.append('--retry-failed')
+  if options.total_shards and options.shard_index:
+    supervisor_args.extend(['--total-slaves', str(options.total_shards),
+                            '--slave-index', str(options.shard_index - 1)])
+  if options.sharding_args:
+    supervisor_args.extend(options.sharding_args.split())
+  command = [sys.executable, supervisor_path]
+  command.extend(supervisor_args)
+  command.append(test_exe_path)
+  return command
+
 def start_http_server(platform, build_dir, test_exe_path, document_root):
   # pylint: disable=F0401
   import google.httpd_utils
@@ -221,18 +238,7 @@ def main_mac(options, args):
   slave_utils.RemoveChromeTemporaryFiles()
 
   if options.parallel:
-    supervisor_path = os.path.join(build_dir, '..', 'tools',
-                                   'sharding_supervisor',
-                                   'sharding_supervisor.py')
-    supervisor_args = ['--no-color', '--retry-failed']
-    if options.total_shards and options.shard_index:
-      supervisor_args.extend(['--total-slaves', str(options.total_shards),
-                              '--slave-index', str(options.shard_index - 1)])
-    if options.sharding_args:
-      supervisor_args.extend(options.sharding_args.split())
-    command = [sys.executable, supervisor_path]
-    command.extend(supervisor_args)
-    command.append(test_exe_path)
+    command = _BuildParallelCommand(build_dir, test_exe_path, options)
   elif options.run_shell_script:
     command = ['bash', test_exe_path]
   elif options.run_python_script:
@@ -344,18 +350,7 @@ def main_linux(options, args):
     os.environ['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
 
   if options.parallel:
-    supervisor_path = os.path.join(build_dir, '..', 'tools',
-                                   'sharding_supervisor',
-                                   'sharding_supervisor.py')
-    supervisor_args = ['--no-color', '--retry-failed']
-    if options.total_shards and options.shard_index:
-      supervisor_args.extend(['--total-slaves', str(options.total_shards),
-                              '--slave-index', str(options.shard_index - 1)])
-    if options.sharding_args:
-      supervisor_args.extend(options.sharding_args.split())
-    command = [sys.executable, supervisor_path]
-    command.extend(supervisor_args)
-    command.append(test_exe_path)
+    command = _BuildParallelCommand(build_dir, test_exe_path, options)
   elif options.run_shell_script:
     command = ['bash', test_exe_path]
   elif options.run_python_script:
@@ -423,18 +418,7 @@ def main_win(options, args):
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', True)
 
   if options.parallel:
-    supervisor_path = os.path.join(build_dir, '..', 'tools',
-                                   'sharding_supervisor',
-                                   'sharding_supervisor.py')
-    supervisor_args = ['--no-color', '--retry-failed']
-    if options.total_shards and options.shard_index:
-      supervisor_args.extend(['--total-slaves', str(options.total_shards),
-                              '--slave-index', str(options.shard_index - 1)])
-    if options.sharding_args:
-      supervisor_args.extend(options.sharding_args.split())
-    command = [sys.executable, supervisor_path]
-    command.extend(supervisor_args)
-    command.append(test_exe_path)
+    command = _BuildParallelCommand(build_dir, test_exe_path, options)
   elif options.run_python_script:
     command = [sys.executable, test_exe]
   else:
