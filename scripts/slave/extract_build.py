@@ -173,11 +173,13 @@ def real_main(options, args):
       chromium_utils.RemoveDirectory(target_build_output_dir)
       chromium_utils.ExtractZip(archive_name, abs_build_output_dir)
       # For Chrome builds, the build will be stored in chrome-win32.
-      chrome_win32_dir = output_dir.replace('full-build-win32', 'chrome-win32')
-      if os.path.exists(chrome_win32_dir):
-        shutil.move(chrome_win32_dir, target_build_output_dir)
-      else:
-        shutil.move(output_dir, target_build_output_dir)
+      if 'full-build-win32' in output_dir:
+        chrome_dir = output_dir.replace('full-build-win32', 'chrome-win32')
+        if os.path.exists(chrome_dir):
+          output_dir = chrome_dir
+
+      print 'Moving build from %s to %s' % (output_dir, target_build_output_dir)
+      shutil.move(output_dir, target_build_output_dir)
     except (OSError, IOError):
       print 'Failed to extract the build.'
       # Print out the traceback in a nice format
@@ -222,7 +224,7 @@ def main():
   option_parser.add_option('--halt-on-missing-build', action='store_true',
                            default=False,
                            help='whether to halt on a missing build')
-  option_parser.add_option('', '--webkit-dir', default=None,
+  option_parser.add_option('', '--webkit-dir',
                            help='webkit directory path, '
                                 'relative to --build-dir')
   option_parser.add_option('', '--build-output-dir',

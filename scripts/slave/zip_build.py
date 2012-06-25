@@ -69,67 +69,66 @@ def GetRecentBuildsByModificationTime(zip_list):
 def GetRealBuildDirectory(build_dir, target, factory_properties):
   """Return the build directory."""
   if chromium_utils.IsWindows():
-    return os.path.join(build_dir, target)
-
-  if chromium_utils.IsLinux():
-    return os.path.join(os.path.dirname(build_dir), 'out', target)
-
-  if chromium_utils.IsMac():
-    is_make_or_ninja = (factory_properties.get("gclient_env", {})
-        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+    path_list = [build_dir, target]
+  elif chromium_utils.IsLinux():
+    path_list = [os.path.dirname(build_dir), 'out', target]
+  elif chromium_utils.IsMac():
+    is_make_or_ninja = (factory_properties.get('gclient_env', {})
+                        .get('GYP_GENERATORS') in ('ninja', 'make'))
     if is_make_or_ninja:
-      return os.path.join(os.path.dirname(build_dir), 'out', target)
-    return os.path.join(os.path.dirname(build_dir), 'xcodebuild', target)
+      path_list = [os.path.dirname(build_dir), 'out', target]
+    else:
+      path_list = [os.path.dirname(build_dir), 'xcodebuild', target]
+  else:
+    raise NotImplementedError('%s is not supported.' % sys.platform)
 
-  raise NotImplementedError('%s is not supported.' % sys.platform)
+  return os.path.abspath(os.path.join(*path_list))
 
 
-def ShouldPackageFile(filename, options):
-  """Returns true if the file should be a part of the resulting archive."""
-
+def FileRegexWhitelist(options):
   if chromium_utils.IsWindows() and options.target is 'Release':
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.
-    expression = (r"^(chrome_dll|chrome_exe"
-    #             r"|browser_test.+|unit_tests"
-    #             r"|chrome_frame_.*tests"
-                  r")\.pdb$")
-    if re.match(expression, filename):
-      return True
+    return (r'^(chrome_dll|chrome_exe'
+            # r'|browser_test.+|unit_tests'
+            # r'|chrome_frame_.*tests'
+            r')\.pdb$')
 
-  file_filter = '$NO_FILTER^'
+  return '$NO_FILTER^'
+
+
+def FileRegexBlacklist(options):
   if chromium_utils.IsWindows():
     # Remove all .ilk/.7z and maybe PDB files
     include_pdbs = options.factory_properties.get('package_pdb_files', False)
     if include_pdbs:
-      file_filter = '^.+\.(ilk|7z)$'
+      return r'^.+\.(ilk|7z)$'
     else:
-      file_filter = '^.+\.(ilk|pdb|7z)$'
-  elif chromium_utils.IsMac():
+      return r'^.+\.(ilk|pdb|7z)$'
+  if chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers most of the time (except for
     # the memory tools).
     include_dsyms = options.factory_properties.get('package_dsym_files', False)
     if include_dsyms:
-      file_filter = '^.+\.(a)$'
+      return r'^.+\.(a)$'
     else:
-      file_filter = '^.+\.(a|dSYM)$'
-  elif chromium_utils.IsLinux():
+      return r'^.+\.(a|dSYM)$'
+  if chromium_utils.IsLinux():
     # object files, archives, and gcc (make build) dependency info.
-    file_filter = '^.+\.(o|a|d)$'
+    return r'^.+\.(o|a|d)$'
 
-  if re.match(file_filter, filename):
-    return False
+  return '$NO_FILTER^'
 
+
+def FileExclusions():
   # Skip files that the testers don't care about. Mostly directories.
-  things_to_skip = options.exclude_files.split(',')
   if chromium_utils.IsWindows():
     # Remove obj or lib dir entries
-    things_to_skip += ['obj', 'lib', 'cfinstaller_archive',
-                       'installer_archive']
-  elif chromium_utils.IsMac():
-    things_to_skip += [
+    return ['obj', 'lib', 'cfinstaller_archive', 'installer_archive']
+  if chromium_utils.IsMac():
+    return [
       # We don't need the arm bits v8 builds.
       'd8_arm', 'v8_shell_arm',
       # pdfsqueeze is a build helper, no need to copy it to testers.
@@ -150,8 +149,8 @@ def ShouldPackageFile(filename, options):
       'Google Chrome Helper.app',
       '.deps', 'obj', 'obj.host', 'obj.target',
     ]
-  elif chromium_utils.IsLinux():
-    things_to_skip += [
+  if chromium_utils.IsLinux():
+    return [
       # intermediate build directories (full of .o, .d, etc.).
       'appcache', 'glue', 'googleurl', 'lib', 'lib.host', 'obj', 'obj.host',
       'obj.target', 'src', '.deps',
@@ -161,10 +160,7 @@ def ShouldPackageFile(filename, options):
       'mksnapshot',
     ]
 
-  if filename in things_to_skip:
-    return False
-
-  return True
+  return []
 
 
 def WriteRevisionFile(dirname, build_revision):
@@ -186,8 +182,7 @@ def WriteRevisionFile(dirname, build_revision):
     print 'Writing to revision file in %s failed.' % dirname
 
 
-def MakeUnversionedArchive(build_dir, staging_dir, build_revision,
-                           zip_file_list):
+def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
   zip_file_name = 'full-build-%s' % chromium_utils.PlatformName()
@@ -228,7 +223,7 @@ def _MakeVersionedArchive(zip_file, file_suffix, options):
       options.build_properties.get('buildername') == 'Win Builder'):
     print 'Uploading to Google Storage...'
     slave_utils.GSUtilCopyFile(versioned_file, 'gs://chrome-perf/',
-        options.build_properties['buildername'])
+                               options.build_properties['buildername'])
   print 'Created versioned archive', versioned_file
   return (zip_base, zip_ext)
 
@@ -242,10 +237,9 @@ def MakeVersionedArchive(zip_file, build_revision, options):
 def MakeWebKitVersionedArchive(zip_file, cr_revision, wk_revision, options):
   """Ensures that a versioned archive exists corresponding
   to given unversioned archive."""
-  return _MakeVersionedArchive(
-      zip_file,
-      '_wk%d_%d' % (wk_revision, cr_revision),
-      options)
+  return _MakeVersionedArchive(zip_file,
+                               '_wk%d_%d' % (wk_revision, cr_revision),
+                               options)
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext):
@@ -261,7 +255,35 @@ def PruneOldArchives(staging_dir, zip_base, zip_ext):
       chromium_utils.RemoveFile(staging_dir, zip_file)
 
 
-def archive(options, args):
+class PathMatcher(object):
+  """Generates a matcher which can be used to filter file paths."""
+
+  def __init__(self, options):
+    self.inclusions = [f.strip() for f in options.include_files.split(',')]
+    self.exclusions = options.exclude_files.split(',') + FileExclusions()
+    self.regex_whitelist = FileRegexWhitelist(options)
+    self.regex_blacklist = FileRegexBlacklist(options)
+
+  def __str__(self):
+    return "\n  ".join(['Zip rules',
+                        'Inclusions: %s' % self.inclusions,
+                        'Exclusions: %s' % self.exclusions,
+                        "Whitelist regex: '%s'" % self.regex_whitelist,
+                        "Blacklist regex: '%s'" % self.regex_blacklist])
+
+  def Match(self, filename):
+    if filename in self.inclusions:
+      return True
+    if filename in self.exclusions:
+      return False
+    if re.match(self.regex_whitelist, filename):
+      return True
+    if re.match(self.regex_blacklist, filename):
+      return False
+    return True
+
+
+def Archive(options):
   src_dir = os.path.abspath(options.src_dir)
   build_dir = GetRealBuildDirectory(options.build_dir, options.target,
                                     options.factory_properties)
@@ -282,20 +304,20 @@ def archive(options, args):
   WriteRevisionFile(build_dir, build_revision)
 
   # Build the list of files to archive.
-  zip_file_list = [f for f in os.listdir(build_dir)
-                   if ShouldPackageFile(f, options)]
-  if options.include_files is not None:
-    zip_file_list.extend([f for f in os.listdir(build_dir)
-                          if f in options.include_files])
+  root_files = os.listdir(build_dir)
+  path_filter = PathMatcher(options)
+  print path_filter
+  print ('\nActually excluded: %s' %
+         [f for f in root_files if not path_filter.Match(f)])
 
-  zip_file = MakeUnversionedArchive(build_dir, staging_dir,
-                                    build_revision, zip_file_list)
-  if not webkit_revision:
-    (zip_base, zip_ext) = MakeVersionedArchive(zip_file, build_revision,
-                                               options)
-  else:
+  zip_file_list = [f for f in root_files if path_filter.Match(f)]
+  zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list)
+  if webkit_revision:
     (zip_base, zip_ext) = MakeWebKitVersionedArchive(
         zip_file, build_revision, webkit_revision, options)
+  else:
+    (zip_base, zip_ext) = MakeVersionedArchive(
+        zip_file, build_revision, options)
   PruneOldArchives(staging_dir, zip_base, zip_ext)
 
   # Update the latest revision file in the staging directory
@@ -309,25 +331,31 @@ def archive(options, args):
 def main(argv):
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--target', default='Release',
-      help='build target to archive (Debug or Release)')
+                           help='build target to archive (Debug or Release)')
   option_parser.add_option('', '--src-dir', default='src',
                            help='path to the top-level sources directory')
   option_parser.add_option('', '--build-dir', default='chrome',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+                           help=('path to main build directory (the parent of '
+                                 'the Release or Debug directory)'))
   option_parser.add_option('', '--exclude-files', default='',
-                           help=('comma separated list of files that should '
-                                 'excluded from the zip, regardless of any'
-                                 'exclusion patterns'))
-  option_parser.add_option('', '--include-files', default=None,
-                           help=('files that should be included in the'
-                                 'zip, regardless of any exclusion patterns'))
+                           help=('Comma separated list of files that should '
+                                 'always be excluded from the zip.'))
+  option_parser.add_option('', '--include-files', default='',
+                           help=('Comma separated list of files that should '
+                                 'always be included in the zip.'))
   option_parser.add_option('', '--webkit-dir', default=None,
                            help='webkit directory path, relative to --src-dir')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
-  return archive(options, args)
+
+  # When option_parser is passed argv as a list, it can return the caller as
+  # first unknown arg.  So throw a warning if we have two or more unknown
+  # arguments.
+  if args[1:]:
+    print "Warning -- unknown arguments" % args[1:]
+
+  return Archive(options)
 
 if '__main__' == __name__:
   sys.exit(main(sys.argv))
