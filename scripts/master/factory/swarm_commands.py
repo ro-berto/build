@@ -44,9 +44,15 @@ class SwarmCommands(commands.FactoryCommands):
     command = [self._python, script_path, '-u', swarm_server,
                swarm_request_name]
 
+    # Swarm handles the timeouts due to no ouput being produced for 10 minutes,
+    # but we don't have access to the output until the whole test is done, which
+    # may take more than 10 minutes, so we increase the buildbot timeout.
+    timeout = 2 * 60 * 60
+
     self.AddTestStep(gtest_command.GTestCommand,
                      '%s_swarm' % test_name,
-                     command)
+                     command,
+                     timeout=timeout)
 
   def SetupWinNetworkDrive(self, drive, network_path):
     script_path = self.PathJoin(self._script_dir, 'add_network_drive.py')

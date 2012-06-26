@@ -66,11 +66,12 @@ class Manifest(object):
     self.data_url = switches.data_url
     self.data_dest_dir = switches.data_dest_dir
 
-  def add_task(self, task_name, actions):
+  def add_task(self, task_name, actions, time_out=600):
     """Appends a new task to the swarm manifest file."""
     self.tasks.append({
           'test_name': task_name,
           'action': actions,
+          'time_out': time_out
     })
 
   def zip(self):

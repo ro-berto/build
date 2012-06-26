@@ -50,13 +50,15 @@ def GenerateExpectedJSON(options):
           '-m', FILE_NAME,
           '-r', options.data_url
         ],
-        'test_name': 'Run Test'
+        'test_name': 'Run Test',
+        'time_out': 600
       },
       {
         'action' : [
             'python', CLEANUP_SCRIPT_NAME
         ],
-        'test_name': 'Clean Up'
+        'test_name': 'Clean Up',
+        'time_out': 600
       }
     ],
     'env_vars': ENV_VARS,
@@ -83,7 +85,8 @@ def GenerateExpectedJSON(options):
           '--handle_exe',
           'handle.exe'
         ],
-        'test_name': 'Kill Processes'
+        'test_name': 'Kill Processes',
+        'time_out': 600
       }
     )
 
