@@ -97,6 +97,14 @@ def HotPatchSlaveBuilder():
     retval = self.old_remote_setBuilderList(wanted)
     wanted_dirs = ['info', 'cert', '.svn'] + [r[1] for r in wanted]
     for d in os.listdir(self.basedir):
+      # Delete build.dead directories.
+      possible_build_dead = os.path.join(self.basedir, d, 'build.dead')
+      if os.path.isdir(possible_build_dead):
+        from common import chromium_utils
+        log.msg("Deleting unwanted directory %s" % possible_build_dead)
+        chromium_utils.RemoveDirectory(possible_build_dead)
+
+      # Delete old slave directories.
       if d not in wanted_dirs and os.path.isdir(os.path.join(self.basedir, d)):
         log.msg("Deleting unwanted directory %s" % d)
         from common import chromium_utils
