@@ -79,8 +79,8 @@ def GetBuildUrl(abs_build_dir, options):
               chromium_utils.PlatformName())
 
   if 'parentslavename' in url:
-    url = url.replace('parentslavename',
-                      options.build_properties.get('parentslavename', ''))
+    parentslavename = options.build_properties.get('parentslavename', '')
+    url = url % {'parentslavename': parentslavename}
 
   base_url = url
   versioned_url = url
