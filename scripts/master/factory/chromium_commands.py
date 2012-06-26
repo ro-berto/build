@@ -1097,13 +1097,15 @@ class ChromiumCommands(commands.FactoryCommands):
     Args:
       client_os: Target client OS (win or linux).
       server_port: Port for client/server communication.
-      max_runtime: Max time (secs) to run Chromebot server script.
+      timeout: Max time (secs) to run Chromebot server script.
+      build_type: Either 'official' or 'chromium'.
       build_id: ID of the extracted Chrome build.
     """
     factory_properties = factory_properties or {}
     client_os = factory_properties.get('client_os')
     server_port = factory_properties.get('server_port')
-    max_runtime = factory_properties.get('max_runtime')
+    timeout = factory_properties.get('timeout')
+    build_type = factory_properties.get('build_type')
     build_id = WithProperties('%(build_id)s')
 
     # Chromebot script paths.
@@ -1122,10 +1124,10 @@ class ChromiumCommands(commands.FactoryCommands):
            chromebot_script,
            url_file,
            '--build-id', build_id,
-           '--build-type', 'chromium',
+           '--build-type', build_type,
            '--client-os', client_os,
            '--log-level', 'INFO',
-           '--max-runtime', str(max_runtime),
+           '--timeout', str(timeout),
            '--mode', 'server',
            '--server-port', str(server_port)]
     self.AddTestStep(shell.ShellCommand, 'run_chromebot_server', cmd,
@@ -1147,6 +1149,7 @@ class ChromiumCommands(commands.FactoryCommands):
     client_os = factory_properties.get('client_os')
     server_hostname = factory_properties.get('server_hostname')
     server_port = factory_properties.get('server_port')
+    proxy_servers = factory_properties.get('proxy_servers')
     build_id = WithProperties('%(build_id)s')
 
     # Chromebot script paths.
@@ -1165,6 +1168,7 @@ class ChromiumCommands(commands.FactoryCommands):
            '--mode', 'client',
            '--server', server_hostname,
            '--server-port', str(server_port),
+           '--proxy-servers', ','.join(proxy_servers),
            '--symbols-dir', symbol_path]
     self.AddTestStep(shell.ShellCommand, 'run_chromebot_client', cmd,
                      do_step_if=self.TestStepFilter)

@@ -201,7 +201,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         '/data/page_cycler'))
 
   CHROMEBOT_DEPS = [
-    ('src/tools/chromebot', config.Master.trunk_url + '/tools/chromebot')]
+    ('src/tools/chromebot',
+     config.Master.trunk_url + '/tools/chromebot'),
+    ('src/chrome/tools/process_dumps',
+     config.Master.trunk_url + '/src/chrome/tools/process_dumps')]
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
@@ -1001,7 +1004,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self, target='Release', clobber=False, tests=None,
       mode=None, slave_type='ChromebotClient', options=None,
       compile_timeout=1200, build_url=None, project=None,
-      factory_properties=None):
+      factory_properties=None, web_build_dir=None):
     factory_properties = factory_properties or {}
     self._solutions = []
 
@@ -1024,10 +1027,15 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add steps.
     client_os = factory_properties.get('client_os')
     if slave_type == 'ChromebotServer':
-      chromium_cmd_obj.AddGetBuildForChromebot(client_os, extract=False)
+      chromium_cmd_obj.AddDownloadFileStep(factory_properties.get('config'),
+                                           'src/tools/chromebot/custom.cfg')
+      chromium_cmd_obj.AddGetBuildForChromebot(client_os,
+                                               archive_url=build_url,
+                                               build_dir=web_build_dir)
       chromium_cmd_obj.AddChromebotServer(factory_properties)
     elif slave_type == 'ChromebotClient':
-      chromium_cmd_obj.AddGetBuildForChromebot(client_os, extract=True,
+      chromium_cmd_obj.AddGetBuildForChromebot(client_os,
+                                               extract=True,
                                                build_url=build_url)
       chromium_cmd_obj.AddChromebotClient(factory_properties)
 

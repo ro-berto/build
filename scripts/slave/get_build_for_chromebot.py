@@ -3,17 +3,19 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Get a Chromium build, executed by buildbot slaves for Chromebot.
+"""Get official or chromium build, executed by buildbot slaves for Chromebot.
 
 This script will download Chrome build, test files, and breakpad symbol files
 with option to extract.
 
-If (--build) option is omitted, latest build will be downloaded instead.
-If (--build-url) option is ommited, a latest build will be downloaded from:
-  http://commondatastorage.googleapis.com/chromium-browser-snapshots/
+If (--build) is omitted, latest build will be fetched.
 
-Required option:
-  get_chromium_build.py --platform=PLATFORM
+Chromebot server bot will run:
+  get_build_for_chromebot.py --platform=PLATFORM  --archive-url=ARCHIVE_URL
+
+Chromebot client bot will run:
+  get_build_for_chromebot.py --platform=PLATFORM --extract
+    --build-url=BUILD_URL_ON_SERVER_BOT
 """
 
 import httplib
@@ -21,12 +23,12 @@ import optparse
 import os
 import shutil
 import sys
+import tarfile
+import tempfile
 import urlparse
 import urllib
 import urllib2
 import zipfile
-
-from common import chromium_utils
 
 
 def RemovePath(path):
@@ -50,21 +52,28 @@ def MoveFile(path, new_path):
   RemovePath(path)
 
 
-def UnzipAndRemove(zip_file, dest):
-  """Unzip and remove zip file."""
-  z = zipfile.ZipFile(zip_file)
-  for f in z.namelist():
-    if f.endswith('/'):
-      os.makedirs(os.path.join(dest, f))
-    else:
-      z.extract(f, dest)
-  z.close()
+def Extract(zip_file, dest):
+  """Extract to |dest|.  Remove zip file and remove top level directory."""
+  temppath = tempfile.mkdtemp()
+  try:
+    z = zipfile.ZipFile(zip_file)
+    z.extractall(temppath)
+    z.close()
+  except zipfile.BadZipfile:
+    t = tarfile.open(zip_file, 'r:bz2')
+    t.extractall(temppath)
   os.remove(zip_file)
+
+  # Remove the top level directory in the zip file.
+  entries = os.listdir(temppath)
+  if len(entries) == 1 and os.path.isdir(os.path.join(temppath, entries[0])):
+    temppath = os.path.join(temppath, entries[0])
+  MoveFile(temppath, dest)
 
 
 def DoesURLExist(url):
   """Determines whether a resource exists at the given URL."""
-  _, netloc, path, _, _, _ = urlparse.urlparse(url)
+  _, netloc, path, _, _, _ = urlparse.urlparse(url.replace(' ', '%20'))
   conn = httplib.HTTPConnection(netloc)
   try:
     conn.request('HEAD', path)
@@ -81,8 +90,8 @@ class GetBuild(object):
 
   def __init__(self, options):
     super(GetBuild, self).__init__()
-    self._build_dir = None
     self._build_id = None
+    self._archive_url = None
     self._chrome_zip_name = None
     self._chrome_zip_url = None
     self._options = options
@@ -92,51 +101,57 @@ class GetBuild(object):
     self._target_dir = None
     self._test_name = None
     self._test_url = None
-    self._urlmap = {}
 
-    self._base_url = ('http://commondatastorage.googleapis.com/'
-                      'chromium-browser-snapshots/')
+    self._chromium_archive = ('http://commondatastorage.googleapis.com/'
+                              'chromium-browser-snapshots/')
 
-    # Mapping from platform to build file name in
-    # .../PLATFORM/VERSION/
-    self.AddMapping(
-        key='mac',
-        chrome_zip='Mac/%s/chrome-mac.zip',
-        test='Mac/%s/chrome-mac.test/reliability_tests',
-        symbol='Mac/%s/chrome-mac-syms.zip',
-        lastchange='Mac/LAST_CHANGE')
+    # Mapping from platform to build file name for chromium archive.
+    # .../PLATFORM/REVISION/
+    self._urlmap = {
+      'mac': {
+        'chrome_zip': 'Mac/%s/chrome-mac.zip',
+        'test': 'Mac/%s/chrome-mac.test/reliability_tests',
+        'symbol': 'Mac/%s/chrome-mac-syms.zip',
+        'lastchange': 'Mac/LAST_CHANGE'
+      },
+      'win': {
+        'chrome_zip': 'Win/%s/chrome-win32.zip',
+        'test': 'Win/%s/chrome-win32.test/reliability_tests.exe',
+        'symbol': 'Win/%s/chrome-win32-syms.zip',
+        'lastchange': 'Win/LAST_CHANGE'
+      },
+      'linux': {
+        'chrome_zip': 'Linux/%s/chrome-linux.zip',
+        'test': 'Linux/%s/chrome-linux.test/reliability_tests',
+        'symbol': 'Linux/%s/chrome-lucid32bit-syms.zip',
+        'lastchange': 'Linux/LAST_CHANGE'
+      },
+      'linux64': {
+        'chrome_zip': 'Linux_x64/%s/chrome-linux.zip',
+        'test': 'Linux_x64/%s/chrome-linux.test/reliability_tests',
+        'symbol': 'Linux_x64/%s/chrome-lucid64bit-syms.zip',
+        'lastchange': 'Linux_x64/LAST_CHANGE'
+      },
+    }
 
-    self.AddMapping(
-        key='win',
-        chrome_zip='Win/%s/chrome-win32.zip',
-        test='Win/%s/chrome-win32.test/reliability_tests.exe',
-        symbol='Win/%s/chrome-win32-syms.zip',
-        lastchange='Win/LAST_CHANGE')
+  def GetLastChange(self, base_url):
+    """Get the latest revision number from web file."""
+    last_change_url = self.GetURL(base_url, 'lastchange')
+    try:
+      url_handler = urllib2.urlopen(last_change_url)
+      latest = url_handler.read()
+      return latest.strip()
+    except IOError:
+      print('Could not retrieve the latest revision.', last_change_url)
+      return None
 
-    self.AddMapping(
-        key='linux',
-        chrome_zip='Linux/%s/chrome-linux.zip',
-        test='Linux/%s/chrome-linux.test/reliability_tests',
-        symbol='Linux/%s/chrome-lucid32bit-syms.zip',
-        lastchange='Linux/LAST_CHANGE')
-
-    self.AddMapping(
-        key='linux64',
-        chrome_zip='Linux_x64/%s/chrome-linux.zip',
-        test='Linux_x64/%s/chrome-linux.test/reliability_tests',
-        symbol='Linux_x64/%s/chrome-lucid64bit-syms.zip',
-        lastchange='Linux_x64/LAST_CHANGE')
-
-  def AddMapping(self, key, **kwargs):
-    self._urlmap[key] = kwargs
-
-  def GetURL(self, file_type):
+  def GetURL(self, base_url, file_type):
     """Get full url path to file.
 
     Args:
       file_type: String ('chrome_zip', 'test', 'symbol', 'lastchange').
     """
-    url = self._base_url + self._urlmap[self._options.platform][file_type]
+    url = base_url + self._urlmap[self._options.platform][file_type]
     if file_type == 'lastchange':
       return url
     return url % self._build_id
@@ -145,49 +160,48 @@ class GetBuild(object):
     """Get file base name from |_urlmap|."""
     return os.path.basename(self._urlmap[self._options.platform][file_type])
 
-  def GetLastestRevision(self):
-    """Get the latest revision number from web file."""
-    last_change_url = self.GetURL('lastchange')
-    try:
-      url_handler = urllib2.urlopen(last_change_url)
-      latest = int(url_handler.read())
-      return latest
-    except IOError:
-      print('Could not retrieve the latest revision.', last_change_url)
-      return None
-
   def ProcessArgs(self):
     """Make sure we have proper args; setup download and extracting paths."""
-    if not self._options.platform in ('win', 'linux', 'linux64'):
+    if not self._options.platform in ('win', 'linux', 'linux64', 'mac'):
       print 'Unsupported platform.' % self._options.platform
       return False
 
     if self._options.build_url and not self._options.build_url.endswith('/'):
       self._options.build_url += '/'
+    if (self._options.archive_url and
+        not self._options.archive_url.endswith('/')):
+      self._options.archive_url += '/'
 
-    # Get latest build if no |build_url| and |build| is provided.
-    if not self._options.build_url and not self._options.build:
-      self._build_id = self.GetLastestRevision()
+    if self._options.archive_url:
+      self._archive_url = self._options.archive_url
+    elif not self._options.build_url:
+      self._archive_url = self._chromium_archive
+
+    # Get latest build if no |build| is provided.
+    if not self._options.build and not self._options.build_url:
+      self._build_id = self.GetLastChange(self._archive_url)
       if not self._build_id:
+        print 'Failed to get the latest build.'
         return False
 
-    self._build_dir = self._options.build_dir
-    self._target_dir = os.path.join(self._build_dir, self._options.target_dir)
-    self._symbol_dir = os.path.join(self._build_dir, 'breakpad_syms')
+    self._target_dir = os.path.join(self._options.build_dir,
+                                    self._options.target_dir)
+    self._symbol_dir = os.path.join(self._options.build_dir, 'breakpad_syms')
 
     self._chrome_zip_name = self.GetDownloadFileName('chrome_zip')
     self._test_name = self.GetDownloadFileName('test')
     self._symbol_name = self.GetDownloadFileName('symbol')
 
     # Set download URLs.
-    if self._options.build_url:
+    if self._archive_url:
+      self._chrome_zip_url = self.GetURL(self._archive_url, 'chrome_zip')
+      self._test_url = self.GetURL(self._archive_url, 'test')
+      self._symbol_url = self.GetURL(self._archive_url, 'symbol')
+    else:
       self._chrome_zip_url = self._options.build_url + self._chrome_zip_name
       self._test_url = self._options.build_url + self._test_name
       self._symbol_url = self._options.build_url + self._symbol_name
-    else:
-      self._chrome_zip_url = self.GetURL('chrome_zip')
-      self._test_url = self.GetURL('test')
-      self._symbol_url = self.GetURL('symbol')
+
     return True
 
   def CleanUp(self):
@@ -209,28 +223,22 @@ class GetBuild(object):
 
     # Download and extract Chrome zip.
     print 'Downloading URL: ' + self._chrome_zip_url
-    dest = os.path.join(self._target_dir, self._chrome_zip_name)
-    urllib.urlretrieve(self._chrome_zip_url, dest)
+    file_path = os.path.join(self._target_dir, self._chrome_zip_name)
+    urllib.urlretrieve(self._chrome_zip_url, file_path)
     if self._options.extract:
-      UnzipAndRemove(dest, self._build_dir)
-      extracted_dir = os.path.splitext(self._chrome_zip_name)[0]
-      MoveFile(os.path.join(self._build_dir, extracted_dir), self._target_dir)
+      Extract(file_path, self._target_dir)
 
     # Download test file.
     print 'Downloading URL: ' + self._test_url
-    urllib.urlretrieve(self._test_url,
-                       os.path.join(self._target_dir, self._test_name))
+    file_path = os.path.join(self._target_dir, self._test_name)
+    urllib.urlretrieve(self._test_url, file_path)
 
-    # Download and extract breakpad symbols.  Skip if doesn't exist.
-    if DoesURLExist(self._symbol_url):
-      print 'Downloading URL: ' + self._symbol_url
-      dest = os.path.join(self._target_dir, self._symbol_name)
-      urllib.urlretrieve(self._symbol_url, dest)
-      if self._options.extract:
-        UnzipAndRemove(dest, self._build_dir)
-        extracted_dir = os.path.splitext(self._symbol_name)[0]
-        MoveFile(os.path.join(self._build_dir, extracted_dir),
-                 self._symbol_dir)
+    # Download and extract breakpad symbols.
+    print 'Downloading URL: ' + self._symbol_url
+    file_path = os.path.join(self._target_dir, self._symbol_name)
+    urllib.urlretrieve(self._symbol_url, file_path)
+    if self._options.extract:
+      Extract(file_path, self._symbol_dir)
 
     # Set permissions.
     for path, _, fnames in os.walk(self._target_dir):
@@ -256,14 +264,15 @@ class GetBuild(object):
 
 def main():
   option_parser = optparse.OptionParser()
-
-  option_parser.add_option('--build-url',
-                           help='URL where to find the build to extract.  '
-                                'If ommited, default URL will be used.')
-  option_parser.add_option('--extract', action='store_true',
-                            help='Extract downloaded files.  Default: True.')
   option_parser.add_option('--platform',
                            help='builder platform. Required.')
+  option_parser.add_option('--build-url',
+                           help='URL where to find the build.')
+  option_parser.add_option('--archive-url',
+                           help='URL containing list of builds. '
+                                'If ommited, default archive will be used.')
+  option_parser.add_option('--extract', action='store_true',
+                            help='Extract downloaded files.')
   option_parser.add_option('--build',
                             help='Specify the build number we should download.'
                                  ' E.g. "45644"')
@@ -274,7 +283,6 @@ def main():
   target_dir = os.path.join(build_dir, 'Release')
   option_parser.add_option('--target-dir', default=target_dir,
                            help='Build target to archive (Release)')
-  chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()
   if args:

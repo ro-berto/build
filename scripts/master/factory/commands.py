@@ -17,6 +17,7 @@ from buildbot.locks import SlaveLock
 from buildbot.process.properties import WithProperties
 from buildbot.status.builder import SUCCESS
 from buildbot.steps import shell
+from buildbot.steps.transfer import FileDownload
 
 from common import chromium_utils
 from master import chromium_step
@@ -196,9 +197,10 @@ class FactoryCommands(object):
     self._cleanup_temp_tool = self.PathJoin(self._script_dir, 'cleanup_temp.py')
     self._resource_sizes_tool = self.PathJoin(self._script_dir,
                                               'resource_sizes.py')
-    # Get build for Chromebot.
-    self._get_chromium_build_tool = self.PathJoin(self._script_dir,
-                                                  'get_chromium_build.py')
+
+    self._get_build_for_chromebot_tool = self.PathJoin(
+        self._script_dir, 'get_build_for_chromebot.py')
+
     self._update_clang_tool = self.PathJoin(
         self._repository_root, 'tools', 'clang', 'scripts', 'update.sh')
 
@@ -691,32 +693,34 @@ class FactoryCommands(object):
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract_build', cmd,
                      halt_on_failure=True)
 
-  def AddGetBuildForChromebot(self, platform, extract=True, build_url=None,
-                              build_id=None, factory_properties=None):
+  def AddGetBuildForChromebot(self, platform, archive=False, extract=False,
+                              build_url=None, archive_url=None, build_id=None,
+                              build_dir=None):
     """Get a Chrome build for Chromebot.
 
     If |build_id| is omitted, latest build will be downloaded instead.
 
     Args:
       platform: The platform for Chrome build (win, linux, linux64).
+      archive: If the |build_url| contains a list of builds.
       extract: Whether to extract the downloaded files.
       build_url: URL to the build.  Default URL if None.
       build_id: Id of build.
     """
-    factory_properties = factory_properties or {}
-
-    cmd = [self._python, self._get_chromium_build_tool,
+    if not build_dir:
+      build_dir = self._build_dir
+    cmd = [self._python, self._get_build_for_chromebot_tool,
            '--platform', platform,
-           '--build-dir', self._build_dir,
-           '--target', self._target]
+           '--build-dir', build_dir,
+           '--target-dir', self._target]
 
     if extract:
       cmd += ['--extract']
     if build_url:
       cmd += ['--build-url', build_url]
+    if archive_url:
+      cmd += ['--archive-url', archive_url]
 
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(SetBuildPropertyShellCommand, 'get_build',
                      cmd, halt_on_failure=True)
 
@@ -820,6 +824,11 @@ class FactoryCommands(object):
                           descriptionDone='clang updated',
                           env={'LLVM_URL': config.Master.llvm_url},
                           command=cmd)
+
+  def AddDownloadFileStep(self, mastersrc, slavedest):
+    """Download a file from master."""
+    self._factory.addStep(FileDownload(mastersrc=mastersrc,
+                                       slavedest=slavedest))
 
 
 class CanCancelBuildShellCommand(shell.ShellCommand):
