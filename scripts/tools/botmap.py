@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -25,8 +25,16 @@ def main():
     slavename = slave.get('hostname')
     if not slavename:
       continue
+    master = slave.get('master', '?')
+    builder = slave.get('builder', '?')
+    if builder == []:
+      builder = '?'
     osname = slave.get('os', '?')
-    print '%-30s %-35s %-10s' % (slavename, slave.get('master', '?'), osname)
+    if type(builder) is list:
+      for b in sorted(builder):
+        print '%-30s %-35s %-35s %-10s' % (slavename, master, b, osname)
+    else:
+      print '%-30s %-35s %-35s %-10s' % (slavename, master, builder, osname)
 
 
 if __name__ == '__main__':
