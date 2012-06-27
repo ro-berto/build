@@ -46,8 +46,13 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
       'test_shell_tests',
       'webkit_unit_tests',
     ],
-    factory_properties={'archive_webkit_results': True,
-                        'test_results_server': 'test-results.appspot.com'}))
+    factory_properties={
+      'additional_expectations_files': [
+        ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],
+      ],
+      'archive_webkit_results': True,
+      'test_results_server': 'test-results.appspot.com'
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)

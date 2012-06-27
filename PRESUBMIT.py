@@ -50,11 +50,11 @@ def CommonChecks(input_api, output_api):
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
     ]
-    output.extend(input_api.canned_checks.RunPylint(
-        input_api,
-        output_api,
-        black_list=black_list,
-        disabled_warnings=disabled_warnings))
+    #output.extend(input_api.canned_checks.RunPylint(
+    #    input_api,
+    #    output_api,
+    #    black_list=black_list,
+    #    disabled_warnings=disabled_warnings))
   finally:
     sys.path = sys_path_backup
 

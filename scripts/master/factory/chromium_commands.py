@@ -830,6 +830,10 @@ class ChromiumCommands(commands.FactoryCommands):
            '--build-number', WithProperties("%(buildnumber)s"),
            '--builder-name', WithProperties(builder_name),]
 
+    for comps in factory_properties.get('additional_expectations_files', []):
+      cmd.append('--additional-expectations-file')
+      cmd.append(self.PathJoin('src', *comps))
+
     if layout_part:
       cmd.extend(['--run-part', layout_part])
 
