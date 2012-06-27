@@ -73,6 +73,10 @@ No output!
 [==========] 2 tests ran. (2556 ms total)
 """)
 
+SWARM_OUTPUT_WITH_NO_TEST_OUTPUT = """
+Unable to connection to swarm machine.
+"""
+
 BUILDBOT_OUTPUT = ("""
 ================================================================
 Begin output from shard index 0 (host)
@@ -103,6 +107,26 @@ Summary for all the shards:
 1 test failed, listed below:
   StaticCookiePolicyTest.BlockAllCookiesTest
 """)
+
+BUILDBOT_OUTPUT_NO_TEST_OUTPUT = ("""
+================================================================
+Begin output from shard index 0 (host)
+================================================================
+
+No output produced by the test, it may have failed to run.
+Showing all the output, including swarm specific output.
+
+""" + SWARM_OUTPUT_WITH_NO_TEST_OUTPUT +
+"""
+================================================================
+End output from shard index 0 (host). Return 1
+================================================================
+
+Summary for all the shards:
+All tests passed.
+""")
+
+
 
 TEST_SHARD_1 = 'Note: This is test shard 1 of 3.'
 TEST_SHARD_2 = 'Note: This is test shard 2 of 3.'
@@ -183,7 +207,7 @@ class GetSwarmResults(SuperMoxTestBase):
     )
 
     url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
-                                     "mock message", 'host')
+                                      "mock message", 'host')
     url_response.code = 200
     url_response.msg = "OK"
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
@@ -209,7 +233,7 @@ class GetSwarmResults(SuperMoxTestBase):
     )
 
     url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
-                                     "mock message", 'host')
+                                      "mock message", 'host')
     url_response.code = 200
     url_response.msg = "OK"
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
@@ -219,6 +243,30 @@ class GetSwarmResults(SuperMoxTestBase):
     swarm_results.GetSwarmResults('http://host:9001', ['key1'])
 
     self.checkstdout(BUILDBOT_OUTPUT_FAILURE)
+
+    self.mox.VerifyAll()
+
+  def test_get_swarm_results_no_test_output(self):
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+
+    shard_output = json.dumps(
+      {'hostname': 'host',
+       'exit_codes': '0, 0',
+       'output': SWARM_OUTPUT_WITH_NO_TEST_OUTPUT
+     }
+    )
+
+    url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
+                                      "mock message", 'host')
+    url_response.code = 200
+    url_response.msg = "OK"
+    swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
+                                  ).AndReturn(url_response)
+    self.mox.ReplayAll()
+
+    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+
+    self.checkstdout(BUILDBOT_OUTPUT_NO_TEST_OUTPUT)
 
     self.mox.VerifyAll()
 

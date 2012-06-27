@@ -139,10 +139,23 @@ def GetSwarmResults(swarm_base_url, test_keys):
         print
 
         cleaned_output = TestRunOutput(test_outputs['output'])
-        for line in cleaned_output.splitlines():
-          gtest_parser.ProcessLine(line)
-          shard_watcher.ProcessLine(line)
-        print cleaned_output
+        if cleaned_output:
+          for line in cleaned_output.splitlines():
+            gtest_parser.ProcessLine(line)
+            shard_watcher.ProcessLine(line)
+          print cleaned_output
+        else:
+          # We failed to get any test output which is an error, so we should
+          # show the swarm output since that is probably where the error is.
+          print 'No output produced by the test, it may have failed to run.'
+          print 'Showing all the output, including swarm specific output.'
+          print
+          print test_outputs['output']
+
+          # Ensure that we mark this as a failure, since we should always have
+          # output from the tests.
+          if not exit_codes[index]:
+            exit_codes[index] = 1
 
         print '================================================================'
         print 'End output from shard index %s (%s). Return %d' % (
