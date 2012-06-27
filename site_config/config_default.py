@@ -260,6 +260,14 @@ class Master(object):
     # Enable when there's a public waterfall.
     master_port_alt = 8240
 
+  class DartFYI(_Base):
+    project_name = 'Dart FYI'
+    master_port = 8051
+    slave_port = 8151
+    # Enable when there's a public waterfall.
+    master_port_alt = 8251
+
+
   ## Native Client related
 
   class _NaClBase(_Base):
