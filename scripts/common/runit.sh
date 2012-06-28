@@ -3,12 +3,17 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# runbuild.sh sets up PYTHONPATH to use runbuild.py straight from the CLI.
-# this makes it easy to run and test buildsteps and builders.
+# runit.sh sets up PYTHONPATH to use python scripts straight from the CLI.
+# try `scripts/common/runit.sh python -i`
+# or  `../common/runit.sh runtest.py --help`
 
-BUILD=`cd ../../; pwd` # canonicalize path
+# determine runit.sh's location, to find build directory regardless of where it
+# is called from.
+SCRIPTFILE=`[[ $0 == /* ]] && echo "$0" || echo "${PWD}/${0#./}"`
+SCRIPTDIR=${SCRIPTFILE%/*}
+BUILD=`cd $SCRIPTDIR/../../; pwd` # canonicalize path
 
-PYTHONPATH="$BUILD/third_party/buildbot_8_4p1"
+PYTHONPATH="$PYTHONPATH:$BUILD/third_party/buildbot_8_4p1"
 PYTHONPATH="$PYTHONPATH:$BUILD/third_party/buildbot_slave_8_4"
 PYTHONPATH="$PYTHONPATH:$BUILD/third_party/twisted_10_2"
 PYTHONPATH="$PYTHONPATH:$BUILD/third_party/jinja2"
@@ -20,5 +25,4 @@ PYTHONPATH="$PYTHONPATH:$BUILD/scripts"
 PYTHONPATH="$PYTHONPATH:$BUILD/third_party"
 PYTHONPATH="$PYTHONPATH:$BUILD/site_config"
 PYTHONPATH="$PYTHONPATH:$BUILD/../build_internal/site_config"
-PYTHONPATH="$PYTHONPATH:$BUILD/third_party/setuptools-0.6c11"
-PYTHONPATH="$PYTHONPATH:." python runbuild.py "$@"
+PYTHONPATH="$PYTHONPATH:." "$@"
