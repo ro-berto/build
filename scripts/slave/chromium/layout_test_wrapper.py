@@ -96,6 +96,9 @@ def layout_test(options, args):
   if options.enable_pageheap:
     command.append('--time-out-ms=120000')
 
+  for filename in options.additional_expectations:
+    command.append('--additional-expectations=%s' % filename)
+
   # The list of tests is given as arguments.
   command.extend(options.options.split(' '))
   command.extend(args)
@@ -151,6 +154,18 @@ def main():
   option_parser.add_option("", "--test-results-server",
                            help=("If specified, upload results json files to "
                                  "this appengine server."))
+  option_parser.add_option("--additional-expectations", action="append",
+                           default=[],
+                           help=("Path to a test_expectations file "
+                                 "that will override previous expectations. "
+                                 "Specify multiple times for multiple sets "
+                                 "of overrides."))
+  # TODO(dpranke): remove this after we fix the flag in the chromium command.
+  option_parser.add_option("--additional-expectation-file",
+                           dest='additional_expectations',
+                           action="append", default=[],
+                           help=("DEPRECATED. "
+                                 "Same as --additional-expectations"))
   options, args = option_parser.parse_args()
 
   # Disable pageheap checking except on Windows.
