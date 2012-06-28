@@ -161,7 +161,7 @@ def main():
                                  "Specify multiple times for multiple sets "
                                  "of overrides."))
   # TODO(dpranke): remove this after we fix the flag in the chromium command.
-  option_parser.add_option("--additional-expectation-file",
+  option_parser.add_option("--additional-expectations-file",
                            dest='additional_expectations',
                            action="append", default=[],
                            help=("DEPRECATED. "
