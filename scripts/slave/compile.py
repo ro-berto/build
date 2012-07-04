@@ -712,7 +712,7 @@ def main_ninja(options, args):
     else:
       goma_ctl_cmd = [sys.executable,
                       os.path.join(options.goma_dir, 'goma_ctl.py')]
-      chromium_util.RunCommand(goma_ctl_cmd + ['start'], env=env)
+      chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
 
     # CC and CXX are set at gyp time for ninja. PATH still needs to be adjusted.
     print 'using', options.compiler
@@ -723,8 +723,10 @@ def main_ninja(options, args):
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
       env['PATH'] = os.pathsep.join([options.goma_dir, clang_dir, env['PATH']])
 
-    goma_jobs = 100 if not chromium_utils.IsMac() else 50
-    command.append('-j%d' % goma_jobs)
+    if not chromium_utils.IsWindows():
+      # Set goma_jobs for windows, once we confirm goma+winja runs
+      goma_jobs = 100 if not chromium_utils.IsMac() else 50
+      command.append('-j%d' % goma_jobs)
 
     if chromium_utils.IsMac() and options.clobber:
       env['GOMA_USE_LOCAL'] = '0'
@@ -740,7 +742,7 @@ def main_ninja(options, args):
   if sys.platform != 'win32':
     return result
   else:
-    chromium_util.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
     return result
 
 
