@@ -19,13 +19,12 @@ ENV_VARS = {'GTEST_TOTAL_SHARDS': '%(num_instances)s',
 
 
 class Options(object):
-  def __init__(self, working_dir="swarm_tests", min_shards=1, num_shards=1,
+  def __init__(self, working_dir="swarm_tests", shards=1,
                os_image='win32', url='http://localhost:8080',
                data_url='http://www.google.com/data',
                data_dest_dir='temp_data'):
     self.working_dir = working_dir
-    self.min_shards = min_shards
-    self.num_shards = num_shards
+    self.shards = shards
     self.os_image = os_image
     self.url = url
     self.data_url = data_url
@@ -64,8 +63,7 @@ def GenerateExpectedJSON(options):
     'env_vars': ENV_VARS,
     'configurations': [
       {
-        'min_instances': 1,
-        'max_instances': 1,
+        'min_instances': options.shards,
         'config_name': platform_mapping[options.os_image],
         'dimensions': {
           'os': platform_mapping[options.os_image],
@@ -95,8 +93,9 @@ def GenerateExpectedJSON(options):
 
 class ManifestTest(unittest.TestCase):
   def test_basic_manifest(self):
-    options = Options()
-    manifest = run_slavelastic.Manifest(FILE_NAME, TEST_NAME, options)
+    options = Options(shards=2)
+    manifest = run_slavelastic.Manifest(FILE_NAME, TEST_NAME,
+                                        options.shards, options)
 
     manifest_json = json.loads(manifest.to_json())
 
@@ -109,7 +108,8 @@ class ManifestTest(unittest.TestCase):
     """
 
     options = Options(os_image='linux2')
-    manifest = run_slavelastic.Manifest(FILE_NAME, TEST_NAME, options)
+    manifest = run_slavelastic.Manifest(FILE_NAME, TEST_NAME,
+                                        options.shards, options)
 
     manifest_json = json.loads(manifest.to_json())
 

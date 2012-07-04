@@ -16,21 +16,25 @@ class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
 
   def AddTriggerSwarmTestStep(self, target_platform, swarm_server, data_server,
-                              hashtable_dir, data_dest_dir,
-                              min_shards, max_shards,
-                              manifest_files):
+                              hashtable_dir, data_dest_dir, manifest_directory,
+                              tests):
     script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
                                                'buildername:-None',
                                                'buildnumber:-None')
 
-    command = [self._python, script_path, '-m', min_shards, '-s', max_shards,
-               '-o', target_platform, '-u', swarm_server, '-d', data_server,
+    command = [self._python, script_path, '-o', target_platform,
+               '-u', swarm_server, '-d', data_server,
                '--hashtable-dir', hashtable_dir,
                '--data-dest-dir', data_dest_dir,
                '-t', swarm_request_name_prefix]
-    command.extend(manifest_files)
+
+    # Add the tests to run, along with the minimum and maximum number of
+    # shards to request.
+    for test in tests:
+      command.extend(['-n', self.PathJoin(manifest_directory, test.test_name),
+                      '-s', test.shards])
 
     self.AddTestStep(shell.ShellCommand, 'trigger_swarm_tests', command)
 

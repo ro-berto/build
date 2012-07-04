@@ -6,10 +6,18 @@
 
 Based on chromium_factory.py and adds chromium-specific steps."""
 
-import os
-
 from master.factory import chromium_factory
 from master.factory import swarm_commands
+
+
+class SwarmTest(object):
+  """A small helper class containing any required details to run a
+     swarm test.
+  """
+  def __init__(self, test_name, shards):
+    self.test_name = test_name
+    self.shards = shards
+
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
   def SwarmFactory(self, target='Release', clobber=False, tests=None,
@@ -64,20 +72,19 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
         out_dir = 'out'
 
       # Send of all the test requests as a single step.
-      swarm_inputs = [os.path.join('src', out_dir, target, test + '.results')
-                      for test in tests]
-      hashtable_directory = os.path.join('src', out_dir, target, 'hashtable')
+      manifest_directory = swarm_command_obj.PathJoin('src', out_dir, target)
+      hashtable_directory = swarm_command_obj.PathJoin('src', out_dir, target,
+                                                       'hashtable')
       swarm_command_obj.AddTriggerSwarmTestStep(self._target_platform,
             swarm_server,
             data_server,
             hashtable_directory,
             data_dest_dir,
-            factory_properties.get('min_swarm_shards', '3'),
-            factory_properties.get('max_swarm_shards', '3'),
-            swarm_inputs)
+            manifest_directory,
+            tests)
 
       # Each test has its output returned as its own step.
       for test in tests:
-        swarm_command_obj.AddGetSwarmTestStep(swarm_server, test)
+        swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name)
 
     return factory

@@ -40,10 +40,11 @@ class Manifest(object):
   RUN_TEST_PATH = os.path.join(
       'src', 'tools', 'isolate', 'run_test_from_archive.py')
 
-  def __init__(self, filename, test_name, switches):
+  def __init__(self, filename, test_name, shards, switches):
     """Populates a manifest object.
       Args:
         filename - The manifest with the test details.
+        shards - The number of swarm shards to request.
         test_name - The name to give the test request.
         switches - An object with properties to apply to the test request.
     """
@@ -55,8 +56,8 @@ class Manifest(object):
       }
 
     self.manifest_name = filename
+    self.shards = shards
 
-    self.g_shards = switches.num_shards
     # Random name for the output zip file
     self.zipfile_name = test_name + '.zip'
     self.tasks = []
@@ -122,8 +123,7 @@ class Manifest(object):
       },
       'configurations': [
         {
-          'min_instances': self.g_shards,
-          'max_instances': self.g_shards,
+          'min_instances': self.shards,
           'config_name': self.target_platform,
           'dimensions': {
             'os': self.target_platform,
@@ -184,17 +184,11 @@ def main():
   """
   # Parses arguments
   parser = optparse.OptionParser(
-      usage='%prog [options] [filenames]',
+      usage='%prog [options]',
       description=DESCRIPTION)
   parser.add_option('-w', '--working_dir', default='swarm_tests',
                     help='Desired working direction on the swarm slave side. '
                     'Defaults to %default.')
-  parser.add_option('-m', '--min_shards', type='int', default=1,
-                    help='Minimum number of shards to request. CURRENTLY NOT '
-                    'SUPPORTED.')
-  parser.add_option('-s', '--num_shards', type='int', default=1,
-                    help='Desired number of shards to request. Must be '
-                    'greater than or equal to min_shards.')
   parser.add_option('-o', '--os_image',
                     help='Swarm OS image to request.')
   parser.add_option('-u', '--swarm-url', default='http://localhost:8080',
@@ -213,12 +207,18 @@ def main():
   parser.add_option('-t', '--test-name-prefix', default='',
                     help='Specify the prefix to give the swarm test request. '
                     'Defaults to %default')
+  parser.add_option('-n', '--manifest_name', action='append',
+                    help='The name of a manifest to send to swarm. This may '
+                    'be given multiple times to send multiple manifests.')
+  parser.add_option('-s', '--shards', type='int', action='append',
+                    help='The number of shards to request for a manifest. '
+                    'This must be listed once for each -n.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Print verbose logging')
   (options, args) = parser.parse_args()
 
-  if not args:
-    parser.error('Must specify at least one filename')
+  if args:
+    parser.error('Unknown args, ' + args)
 
   if not options.os_image:
     parser.error('Must specify an os image')
@@ -226,6 +226,10 @@ def main():
     parser.error('Must specify the hashtable directory')
   if not options.data_dest_dir:
     parser.error('Must specify the server directory')
+
+  if len(options.manifest_name) != len(options.shards):
+    parser.error('Number of min shards given doesn\'t match the number '
+                 'of manifests')
 
   # Remove the old data if there is any
   if os.path.isdir(options.data_dest_dir):
@@ -235,9 +239,12 @@ def main():
 
   # Send off the swarm test requests.
   highest_exit_code = 0
-  for filename in args:
+  for i in range(len(options.manifest_name)):
     highest_exit_code = max(highest_exit_code,
-                            ProcessManifest(filename, options))
+                            ProcessManifest(options.manifest_name[i],
+                                            filename,
+                                            options.shards[i],
+                                            options))
 
   return highest_exit_code
 
