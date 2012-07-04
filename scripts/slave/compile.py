@@ -697,13 +697,13 @@ def main_ninja(options, args):
     env['DYLD_NO_PIE'] = '1'
 
   if options.compiler in ('goma', 'goma-clang'):
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
     if os.path.exists(goma_key):
       env['GOMA_API_KEY_FILE'] = goma_key
     if sys.platform != 'win32':
       goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
       # If using the Goma compiler, first call goma_ctl with ensure_start
       # (or restart in clobber mode) to ensure the proxy is available.
-      goma_key = os.path.join(options.goma_dir, 'goma.key')
       env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
       if options.clobber:
         chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
