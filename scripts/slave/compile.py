@@ -697,26 +697,27 @@ def main_ninja(options, args):
     env['DYLD_NO_PIE'] = '1'
 
   if options.compiler in ('goma', 'goma-clang'):
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
     if sys.platform != 'win32':
       goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
       # If using the Goma compiler, first call goma_ctl with ensure_start
       # (or restart in clobber mode) to ensure the proxy is available.
       goma_key = os.path.join(options.goma_dir, 'goma.key')
       env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
-      if os.path.exists(goma_key):
-        env['GOMA_API_KEY_FILE'] = goma_key
       if options.clobber:
         chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
       else:
         chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+    else:
+      goma_ctl_cmd = [sys.executable,
+                      os.path.join(options.goma_dir, 'goma_ctl.py')]
+      chromium_util.RunCommand(goma_ctl_cmd + ['start'], env=env)
 
     # CC and CXX are set at gyp time for ninja. PATH still needs to be adjusted.
     print 'using', options.compiler
     if options.compiler == 'goma':
       env['PATH'] = os.pathsep.join([options.goma_dir, env['PATH']])
-      if sys.platform == 'win32':
-        env['CC'] = 'gomacc.exe cl'
-        env['CXX'] = 'gomacc.exe cl'
     elif options.compiler == 'goma-clang':
       clang_dir = os.path.abspath(os.path.join(
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
@@ -733,8 +734,14 @@ def main_ninja(options, args):
   # TODO(maruel): Remove the shell argument as soon as ninja.exe is in PATH.
   # At the moment of writing, ninja.bat in depot_tools wraps
   # third_party\ninja.exe, which requires shell=True so it is found correctly.
-  return chromium_utils.RunCommand(
+  result = chromium_utils.RunCommand(
       command, env=env, shell=sys.platform=='win32')
+
+  if sys.platform != 'win32':
+    return result
+  else:
+    chromium_util.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+    return result
 
 
 def main_scons(options, args):
@@ -1003,10 +1010,9 @@ def real_main():
                              help='Target from the xcodeproj file')
     option_parser.add_option('', '--disable-aslr', action='store_true',
                              default=False, help='disable ASLR on OS X 10.6')
-  if chromium_utils.IsLinux() or chromium_utils.IsMac():
-    option_parser.add_option('', '--goma-dir',
-                             default=os.path.join(BUILD_DIR, 'goma'),
-                             help='specify goma directory')
+  option_parser.add_option('', '--goma-dir',
+                           default=os.path.join(BUILD_DIR, 'goma'),
+                           help='specify goma directory')
   option_parser.add_option('--verbose', action='store_true')
 
   options, args = option_parser.parse_args()
