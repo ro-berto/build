@@ -137,7 +137,7 @@ class Manifest(object):
     return json.dumps(test_case)
 
 
-def ProcessManifest(filename, options):
+def ProcessManifest(filename, shards, options):
   """Process the manifest file and send off the swarm test request."""
   file_name_tail = os.path.split(filename)[1]
   test_name = os.path.splitext(file_name_tail)[0]
@@ -150,7 +150,7 @@ def ProcessManifest(filename, options):
 
   # Parses manifest file
   print "Parsing file %s..." % filename
-  manifest = Manifest(filename, test_full_name, options)
+  manifest = Manifest(filename, test_full_name, shards, options)
 
   # Zip up relevent files
   print "Zipping up files..."
@@ -242,7 +242,6 @@ def main():
   for i in range(len(options.manifest_name)):
     highest_exit_code = max(highest_exit_code,
                             ProcessManifest(options.manifest_name[i],
-                                            filename,
                                             options.shards[i],
                                             options))
 
