@@ -33,7 +33,8 @@ class SwarmCommands(commands.FactoryCommands):
     # Add the tests to run, along with the minimum and maximum number of
     # shards to request.
     for test in tests:
-      command.extend(['-n', self.PathJoin(manifest_directory, test.test_name),
+      command.extend(['-n', self.PathJoin(manifest_directory,
+                                          test.test_name + '.results'),
                       '-s', '%d' % test.shards])
 
     self.AddTestStep(shell.ShellCommand, 'trigger_swarm_tests', command)
