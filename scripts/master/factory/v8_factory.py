@@ -16,9 +16,6 @@ class V8Factory(gclient_factory.GClientFactory):
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
 
-  CUSTOM_DEPS_ES5CONFORM = ('v8/test/es5conform/data',
-                            'https://es5conform.svn.codeplex.com/svn@71525')
-
   CUSTOM_DEPS_VALGRIND = ('src/third_party/valgrind',
                           config.Master.trunk_url +
                           '/deps/third_party/valgrind/binaries')
@@ -34,11 +31,8 @@ class V8Factory(gclient_factory.GClientFactory):
                           '/deps/third_party/mozilla-tests')
 
   def __init__(self, build_dir, target_platform=None,
-               branch='branches/bleeding_edge', sputnik_revision=None):
+               branch='branches/bleeding_edge'):
     self.checkout_url = config.Master.v8_url + '/' + branch
-    self.CUSTOM_DEPS_SPUTNIK = ('v8/test/sputnik/sputniktests',
-                           'http://sputniktests.googlecode.com/svn/trunk@' +
-                           sputnik_revision)
 
     main = gclient_factory.GClientSolution(self.checkout_url, name='v8')
     custom_deps_list = [main]
@@ -60,11 +54,9 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8initializers'): f.AddV8Initializers()
     if R('v8testing'): f.AddV8Testing()
-    if R('v8_es5conform'): f.AddV8ES5Conform()
     if R('fuzz'): f.AddFuzzer()
     if R('test262'): f.AddV8Test262()
     if R('mozilla'): f.AddV8Mozilla()
-    if R('sputnik'): f.AddV8Sputnik()
     if R('gcmole'): f.AddV8GCMole()
 
   def V8Factory(self, target='Release', clobber=False, tests=None, mode=None,
@@ -87,12 +79,6 @@ class V8Factory(gclient_factory.GClientFactory):
     if (self._target_platform == 'win32'):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_WIN7SDK)
 
-    if (gclient_factory.ShouldRunTest(tests, 'v8_es5conform')):
-      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_ES5CONFORM)
-
-    if (gclient_factory.ShouldRunTest(tests, 'sputnik')):
-      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_SPUTNIK)
-
     if (gclient_factory.ShouldRunTest(tests, 'leak')):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_VALGRIND)
 
@@ -101,8 +87,6 @@ class V8Factory(gclient_factory.GClientFactory):
 
     if (gclient_factory.ShouldRunTest(tests, 'arm')):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_MOZILLA)
-      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_SPUTNIK)
-      self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_ES5CONFORM)
 
     factory = self.BuildFactory(target=target, clobber=clobber, tests=tests,
                                 mode=mode,

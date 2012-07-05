@@ -94,16 +94,6 @@ class V8Commands(commands.FactoryCommands):
                      timeout=3600,
                      workdir='build/v8/')
 
-  def AddV8ES5Conform(self, properties=None):
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
-    cmd += ['--testname', 'es5conform']
-    self.AddTestStep(shell.ShellCommand,
-                     'ES5-Conform',
-                     cmd,
-                     workdir='build/v8/')
-
   def AddV8Test262(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
@@ -118,14 +108,6 @@ class V8Commands(commands.FactoryCommands):
     cmd = self.GetV8TestingCommand()
     cmd += ['--testname', 'mozilla']
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
-                     timeout=3600, workdir='build/v8/')
-
-  def AddV8Sputnik(self, properties=None):
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
-    cmd += ['--testname', 'sputnik']
-    self.AddTestStep(shell.ShellCommand, 'Sputnik', cmd,
                      timeout=3600, workdir='build/v8/')
 
   def AddPresubmitTest(self, properties=None):
