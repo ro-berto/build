@@ -150,7 +150,7 @@ class TryJobRietveld(TryJobBase):
       job['bot'] = {job['builder']: None}
       # Set some default values for properties not needed for this job.
       job['patch'] = ''
-      job['patchlevel'] = ''
+      job['patchlevel'] = -1  # Ignored, but must be an integer
       job['branch'] = None
       job['repository'] = None
       job['try_job_key'] = job['key']
