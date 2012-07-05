@@ -739,11 +739,9 @@ def main_ninja(options, args):
   result = chromium_utils.RunCommand(
       command, env=env, shell=sys.platform=='win32')
 
-  if sys.platform != 'win32':
-    return result
-  else:
+  if sys.platform == 'win32' and options.compiler in ('goma', 'goma-clang'):
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-    return result
+  return result
 
 
 def main_scons(options, args):
