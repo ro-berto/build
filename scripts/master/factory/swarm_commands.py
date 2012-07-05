@@ -34,7 +34,7 @@ class SwarmCommands(commands.FactoryCommands):
     # shards to request.
     for test in tests:
       command.extend(['-n', self.PathJoin(manifest_directory, test.test_name),
-                      '-s', test.shards])
+                      '-s', '%d' % test.shards])
 
     self.AddTestStep(shell.ShellCommand, 'trigger_swarm_tests', command)
 
