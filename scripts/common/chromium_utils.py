@@ -17,6 +17,7 @@ import subprocess
 import sys
 import threading
 import time
+import urllib
 import zipfile
 
 try:
@@ -960,3 +961,42 @@ def AddPropertiesOptions(option_parser):
                            callback=convert_json, type='string',
                            nargs=1, default={},
                            help='factory properties in JSON format')
+
+
+def AddThirdPartyLibToPath(lib, override=False):
+  """Adds the specified dir in build/third_party to sys.path.
+
+  Setting 'override' to true will place the directory in the beginning of
+  sys.path, useful for overriding previously set packages.
+  """
+  libpath = os.path.abspath(os.path.join(os.path.dirname( __file__),
+                                         '..','..', 'third_party', lib))
+  if override:
+    sys.path.insert(0, libpath)
+  else:
+    sys.path.append(libpath)
+
+
+def GetLKGR():
+  """Connect to chromium LKGR server and get LKGR revision.
+
+  On success, returns the LKGR and 'ok'. On error, returns None and the text of
+  the error message.
+  """
+
+  try:
+    conn = urllib.urlopen('https://chromium-status.appspot.com/lkgr')
+  except IOError:
+    return (None, 'Error connecting to LKGR server! Is your internet '
+            'connection working properly?')
+  try:
+    rev = int('\n'.join(conn.readlines()))
+  except IOError:
+    return (None, 'Error connecting to LKGR server! Is your internet '
+            'connection working properly?')
+  except ValueError:
+    return None, 'LKGR server returned malformed data! Aborting...'
+  finally:
+    conn.close()
+
+  return rev, 'ok'
