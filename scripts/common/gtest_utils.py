@@ -11,7 +11,6 @@ class GTestLogParser(object):
 
   def __init__(self):
     # State tracking for log parsing
-    self.completed = False
     self._current_test = ''
     self._failure_description = []
     self._current_suppression_hash = ''
@@ -45,14 +44,10 @@ class GTestLogParser(object):
     # This regexp also matches SomeName.SomeTest/1, which should be harmless.
     test_name_regexp = r'((\w+/)?\w+\.\w+(/\d+)?)'
 
-    self._master_name_re = re.compile('\[Running for master: "([^"]*)"')
-    self.master_name = ''
-
     self._test_name    = re.compile(test_name_regexp)
     self._test_start   = re.compile('\[\s+RUN\s+\] ' + test_name_regexp)
     self._test_ok      = re.compile('\[\s+OK\s+\] ' + test_name_regexp)
     self._test_fail    = re.compile('\[\s+FAILED\s+\] ' + test_name_regexp)
-    self._test_passed  = re.compile('\[\s+PASSED\s+\] \d+ tests?.')
     self._test_timeout = re.compile(
         'Test timeout \([0-9]+ ms\) exceeded for ' + test_name_regexp)
     self._disabled     = re.compile('  YOU HAVE (\d+) DISABLED TEST')
@@ -64,9 +59,6 @@ class GTestLogParser(object):
 
     self._retry_message = re.compile('RETRYING FAILED TESTS:')
     self.retrying_failed = False
-
-  def GetCurrentTest(self):
-    return self._current_test
 
   def _StatusOfTest(self, test):
     """Returns the status code for the given test, or 'not known'."""
@@ -166,10 +158,6 @@ class GTestLogParser(object):
     """
     return self._suppressions.get(suppression_hash, [])
 
-  def CompletedWithoutFailure(self):
-    """Returns True if all tests completed and no tests failed unexpectedly."""
-    return self.completed and not self.FailedTests()
-
   def ProcessLine(self, line):
     """This is called once with each line of the test log."""
 
@@ -179,19 +167,6 @@ class GTestLogParser(object):
     # Note: When sharding, the number of disabled and flaky tests will be read
     # multiple times, so this will only show the most recent values (but they
     # should all be the same anyway).
-
-    # Is it a line listing the master name?
-    if not self.master_name:
-      results = self._master_name_re.search(line)
-      if results:
-        self.master_name = results.group(1)
-
-    # Is it a line declaring all tests passed?
-    results =  self._test_passed.search(line)
-    if results:
-      self.completed = True
-      self._current_test = ''
-      return
 
     # Is it a line reporting disabled tests?
     results = self._disabled.search(line)

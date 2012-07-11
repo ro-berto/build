@@ -5,6 +5,7 @@
 
 import logging
 import os
+import re
 import sys
 
 from xml.dom import minidom
@@ -22,18 +23,71 @@ INCREMENTAL_RESULTS_FILENAME = "incremental_results.json"
 TIMES_MS_FILENAME = "times_ms.json"
 
 
-def GetResultsMap(observer):
-  """Returns a map of TestResults.  Returns an empty map if no current test
-  has been recorded."""
+class GTestUnexpectedDeathTracker(object):
+  """A lightweight version of log parser that keeps track of running tests
+  for unexpected timeout or crash."""
 
-  if not observer.GetCurrentTest():
-    return dict()
+  def __init__(self):
+    self._current_test = None
+    self._completed = False
+    self._test_start   = re.compile('\[\s+RUN\s+\] (\w+\.\w+)')
+    self._test_ok      = re.compile('\[\s+OK\s+\] (\w+\.\w+)')
+    self._test_fail    = re.compile('\[\s+FAILED\s+\] (\w+\.\w+)')
+    self._test_passed = re.compile('\[\s+PASSED\s+\] \d+ tests?.')
 
-  test_results_map = dict()
-  for test in observer.FailedTests(include_fails=True, include_flaky=True):
-    test_results_map[canonical_name(test)] = TestResult(test, failed=True)
+    self._failed_tests = set()
 
-  return test_results_map
+  def OnReceiveLine(self, line):
+    results = self._test_start.search(line)
+    if results:
+      self._current_test = results.group(1)
+      return
+
+    results = self._test_ok.search(line)
+    if results:
+      self._current_test = ''
+      return
+
+    results = self._test_fail.search(line)
+    if results:
+      self._failed_tests.add(results.group(1))
+      self._current_test = ''
+      return
+
+    results = self._test_passed.search(line)
+    if results:
+      self._completed = True
+      self._current_test = ''
+      return
+
+  def GetResultsMap(self):
+    """Returns a map of TestResults.  Returns an empty map if no current test
+    has been recorded."""
+
+    if not self._current_test:
+      return dict()
+
+    self._failed_tests.add(self._current_test)
+
+    test_results_map = dict()
+    for test in self._failed_tests:
+      test_results_map[canonical_name(test)] = TestResult(test, failed=True)
+
+    return test_results_map
+
+  def CompletedWithoutFailure(self):
+    """Returns True if all tests completed and no tests failed unexpectedly."""
+
+    if not self._completed:
+      return False
+
+    for test in self._failed_tests:
+      test_modifier = TestResult(test, failed=True).modifier
+      if test_modifier not in (TestResult.FAILS, TestResult.FLAKY):
+        return False
+
+    return True
+
 
 def GetResultsMapFromXML(results_xml):
   """Parse the given results XML file and returns a map of TestResults."""
