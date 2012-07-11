@@ -40,10 +40,10 @@ class Manifest(object):
   RUN_TEST_PATH = os.path.join(
       'src', 'tools', 'isolate', 'run_test_from_archive.py')
 
-  def __init__(self, filename, test_name, shards, switches):
+  def __init__(self, manifest_hash, test_name, shards, switches):
     """Populates a manifest object.
       Args:
-        filename - The manifest with the test details.
+        manifest_hash - The manifest's sha-1 that the slave is going to fetch.
         shards - The number of swarm shards to request.
         test_name - The name to give the test request.
         switches - An object with properties to apply to the test request.
@@ -55,7 +55,7 @@ class Manifest(object):
       'win32': 'Windows'
       }
 
-    self.manifest_name = filename
+    self.manifest_hash = manifest_hash
     self.shards = shards
 
     # Random name for the output zip file
@@ -76,13 +76,12 @@ class Manifest(object):
     })
 
   def zip(self):
-    """Zip up all the files in self.files"""
+    """Zip up all the files necessary to run a shard."""
     start_time = time.time()
 
     zip_file = zipfile.ZipFile(
         os.path.join(self.data_dest_dir, self.zipfile_name),
         'w')
-    zip_file.write(self.manifest_name)
     zip_file.write(self.RUN_TEST_PATH)
     zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
 
@@ -98,7 +97,7 @@ class Manifest(object):
     """Export the current configuration into a swarm-readable manifest file"""
     self.add_task(
         'Run Test',
-        ['python', self.RUN_TEST_PATH, '-m', self.manifest_name,
+        ['python', self.RUN_TEST_PATH, '-m', self.manifest_hash,
          '-r', self.data_url])
 
     # Clean up
@@ -137,20 +136,20 @@ class Manifest(object):
     return json.dumps(test_case)
 
 
-def ProcessManifest(filename, shards, options):
+def ProcessManifest(filepath, shards, options):
   """Process the manifest file and send off the swarm test request."""
-  file_name_tail = os.path.split(filename)[1]
-  test_name = os.path.splitext(file_name_tail)[0]
+  test_name = os.path.splitext(os.path.basename(filepath))[0]
   test_full_name = options.test_name_prefix + test_name
 
-  if not os.path.exists(filename):
+  if not os.path.exists(filepath):
     print ("Manifest file, %s, not found. Unable to send swarm request "
-           "for %s" % (filename, test_full_name))
+           "for %s" % (filepath, test_full_name))
     return 1
 
   # Parses manifest file
-  print "Parsing file %s..." % filename
-  manifest = Manifest(filename, test_full_name, shards, options)
+  print "Parsing file %s..." % filepath
+  file_sha1 = hashlib.sha1(open(filepath.read(), 'rb')).hexdigest()
+  manifest = Manifest(file_sha1, test_full_name, shards, options)
 
   # Zip up relevent files
   print "Zipping up files..."
