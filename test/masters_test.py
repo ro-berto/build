@@ -160,8 +160,8 @@ def main():
       'master.chromium.win': 'Chromium Win',
       'master.chromiumos': 'ChromiumOS',
       'master.client.drmemory': None,  # make start fails
-      'master.client.dart': 'Dart',  # make start fails
-      'master.client.dart.fyi': 'Dart FYI',  # make start fails
+      'master.client.dart': 'Dart',
+      'master.client.dart.fyi': 'Dart FYI',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.chrome': 'NativeClientChrome',
       'master.client.nacl.llvm': 'NativeClientLLVM',

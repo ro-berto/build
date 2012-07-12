@@ -129,12 +129,10 @@ def DeleteIfExists(filename):
 def main():
   option_parser = optparse.OptionParser()
   chromium_utils.AddPropertiesOptions(option_parser)
-  options, args = option_parser.parse_args()
+  options, _ = option_parser.parse_args()
 
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
-
-  filename = sys.argv[1]
 
   completed_hour = strftime('%H')
   completed_filename = '%s.%s' % (
