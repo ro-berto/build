@@ -4,8 +4,8 @@
 # found in the LICENSE file.
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
-from __future__ import with_statement
 import glob
+import hashlib
 import json
 import optparse
 import os
