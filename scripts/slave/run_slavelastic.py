@@ -148,7 +148,7 @@ def ProcessManifest(filepath, shards, options):
 
   # Parses manifest file
   print "Parsing file %s..." % filepath
-  file_sha1 = hashlib.sha1(open(filepath.read(), 'rb')).hexdigest()
+  file_sha1 = hashlib.sha1(open(filepath, 'rb').read()).hexdigest()
   manifest = Manifest(file_sha1, test_full_name, shards, options)
 
   # Zip up relevent files
