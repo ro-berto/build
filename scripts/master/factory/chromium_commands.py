@@ -175,6 +175,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddPackageSource(self, factory_properties=None):
     """Adds a step to the factory to package and upload the source directory."""
+    factory_properties = factory_properties or {}
+    factory_properties.setdefault('package_filename', 'chromium-src.tar.bz2')
 
     cmd = [self._python, self._package_source_tool,
            '--build-dir', self._build_dir]

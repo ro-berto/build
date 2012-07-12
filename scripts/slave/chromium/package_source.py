@@ -8,6 +8,7 @@
 
 import fnmatch
 import json
+import optparse
 import os
 import re
 import Queue
@@ -126,11 +127,19 @@ def DeleteIfExists(filename):
 
 
 def main():
+  option_parser = optparse.OptionParser()
+  chromium_utils.AddPropertiesOptions(option_parser)
+  options, args = option_parser.parse_args()
+
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
 
+  filename = sys.argv[1]
+
   completed_hour = strftime('%H')
-  completed_filename = '%s.%s' % (FILENAME, completed_hour)
+  completed_filename = '%s.%s' % (
+      options.factory_properties.get('package_filename', FILENAME),
+      completed_hour)
   partial_filename = '%s.partial' % completed_filename
 
   chromium_utils.RunCommand(['rm', '-f', partial_filename])
