@@ -180,6 +180,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = [self._python, self._package_source_tool]
 
+    cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     self._factory.addStep(archive_command.ArchiveCommand,
