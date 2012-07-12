@@ -178,10 +178,8 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties = factory_properties or {}
     factory_properties.setdefault('package_filename', 'chromium-src.tar.bz2')
 
-    cmd = [self._python, self._package_source_tool,
-           '--build-dir', self._build_dir]
+    cmd = [self._python, self._package_source_tool]
 
-    cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     self._factory.addStep(archive_command.ArchiveCommand,
