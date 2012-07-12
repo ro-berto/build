@@ -97,8 +97,8 @@ class Manifest(object):
     """Export the current configuration into a swarm-readable manifest file"""
     self.add_task(
         'Run Test',
-        ['python', self.RUN_TEST_PATH, '-h', self.manifest_hash,
-         '-r', self.data_url])
+        ['python', self.RUN_TEST_PATH, '--hash', self.manifest_hash,
+         '--remote', self.data_url])
 
     # Clean up
     self.add_task('Clean Up', ['python', CLEANUP_SCRIPT_NAME])

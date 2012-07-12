@@ -46,8 +46,8 @@ def GenerateExpectedJSON(options):
       {
         'action': [
           'python', 'src/tools/isolate/run_test_from_archive.py',
-          '-h', FILE_NAME,
-          '-r', options.data_url
+          '--hash', FILE_NAME,
+          '--remote', options.data_url
         ],
         'test_name': 'Run Test',
         'time_out': 600
