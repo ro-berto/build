@@ -710,9 +710,43 @@ def main_ninja(options, args):
       else:
         chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
     else:
+      env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
       goma_ctl_cmd = [sys.executable,
                       os.path.join(options.goma_dir, 'goma_ctl.py')]
       chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
+      # rewrite cc, cxx line in output_dir\build.ninja.
+      # in winja, ninja-deplist-helper is used to run $cc/$cxx to collect
+      # depepndency with "cl /showIncludes" and generates gcc-compatible
+      # depfile (*.d).
+      # ninja-deplist-helper uses environment in output_dir\environment.*,
+      # which is generated at gyp time (Note: gyp detect MSVC's path and set it
+      # to PATH.  This PATH doesn't include goma_dir.), and ignores PATH
+      # to run $cc/$cxx at run time.
+      # So modifying PATH in compile.py doesn't afffect to run $cc/$cxx
+      # under ninja-deplist-helper. (PATH is just ignored. Note PATH set/used
+      # in compile.py doesn't include MSVC's path).
+      # Hence, we'll got
+      # "CreateProcess failed: The system cannot find the file specified."
+      #
+      # So, rewrite cc, cxx line to "$goma_dir/gomacc cl".
+      #
+      # Note that, on other platform, ninja doesn't use ninja-deplist-helper,
+      # (it just simply run $cc/$cxx), so modifying PATH can work to run
+      # gomacc without this hack.
+      orig_build = open(os.path.join(output_dir, 'build.ninja'))
+      new_build = open(os.path.join(output_dir, 'build.ninja.goma'), 'w')
+      for line in orig_build:
+        if line.startswith('cc '):
+          new_build.write('cc = %s cl\n' % (
+              os.path.join(options.goma_dir, 'gomacc.exe')))
+        elif line.startswith('cxx '):
+          new_build.write('cxx = %s cl\n' % (
+              os.path.join(options.goma_dir, 'gomacc.exe')))
+        else:
+          new_build.write(line)
+      orig_build.close()
+      new_build.close()
+      command.extend(['-f', 'build.ninja.goma'])
 
     # CC and CXX are set at gyp time for ninja. PATH still needs to be adjusted.
     print 'using', options.compiler
