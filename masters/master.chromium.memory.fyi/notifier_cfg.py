@@ -26,7 +26,7 @@ categories_steps = {
     'memory test: content',
     'memory test: crypto',
     'memory test: net',
-    'memory test: gfx',
+    'memory test: ui_unittests',
     'memory test: unit',
     'memory test: unit_1',  # it's sharded on Mac Valgrind and TSan Linux
    ],
@@ -44,7 +44,7 @@ categories_steps = {
     'heapcheck test: base',
     'heapcheck test: crypto',
     'heapcheck test: net',
-    'heapcheck test: gfx',
+    'heapcheck test: ui_unittests',
     'heapcheck test: unit',
     'heapcheck test: test_shell',
   ],
@@ -101,7 +101,7 @@ def Update(config, active_master, c):
       'memory test: content',
       'memory test: crypto',
       'memory test: net',
-      'memory test: gfx',
+      'memory test: ui_unittests',
       'memory test: unit',  # unit_tests might be sharded
       'memory test: unit_1',
       'memory test: unit_2',
