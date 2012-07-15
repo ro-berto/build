@@ -88,6 +88,33 @@ linux_tests_1 = [
 linux_tests_2 = [ 'browser_tests' ]
 linux_tests_3 = [ 'interactive_ui' ]
 
+B('Linux ChromiumOS Full',
+  factory='fullbuilder',
+  gatekeeper='compile',
+  builddir='chromium-full-linux-chromeos',
+  scheduler='chromium_local',
+  notify_on_missing=True)
+F('fullbuilder', chromiumos().ChromiumOSFactory(
+    slave_type='BuilderTester',
+    clobber=True,
+    options=['--compiler=goma'] + linux_options,
+    tests=['check_deps2git',
+           'check_licenses',
+           'check_perms',],
+    factory_properties={
+        'archive_build': True,
+        'gs_bucket': 'gs://chromium-browser-snapshots',
+        'gs_acl': 'public-read',
+        'show_perf_results': False,
+        'generate_gtest_json': True,
+        'extra_archive_paths': 'chrome/tools/build/chromeos',
+        'gclient_env': {
+            'GYP_DEFINES': ('chromeos=1'
+                            ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
+                            ' component=shared_library')},
+        'window_manager': False}))
+
+
 B('Linux ChromiumOS Builder',
   factory='builder',
   gatekeeper='compile',
