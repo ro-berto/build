@@ -257,7 +257,7 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     tests=[
       'base',
       'crypto',
-      'gfx',
+      'ui_unittests',
       'unit',
     ],
     factory_properties={
