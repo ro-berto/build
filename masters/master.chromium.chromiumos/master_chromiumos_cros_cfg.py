@@ -49,20 +49,6 @@ F('amd64', chromeos_factory.CbuildbotFactory(
   params='amd64-generic-tot-chrome-pfq-informational').get_factory())
 
 
-B('ChromiumOS (arm)',
-  factory='arm',
-  gatekeeper='closer|watch',
-  builddir='chromium-tot-chromeos-arm',
-  scheduler='chromium_cros',
-  auto_reboot=True,
-  notify_on_missing=True)
-F('arm', chromeos_factory.CbuildbotFactory(
-  buildroot='/b/cbuild.arm',
-  crostools_repo=None,
-  pass_revision=True,
-  params='arm-generic-tot-chrome-pfq-informational').get_factory())
-
-
 B('ChromiumOS (tegra2)',
   factory='tegra2',
   gatekeeper='closer|watch',
