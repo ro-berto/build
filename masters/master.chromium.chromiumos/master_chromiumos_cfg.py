@@ -97,7 +97,7 @@ B('Linux ChromiumOS Full',
 F('fullbuilder', chromiumos().ChromiumOSFactory(
     slave_type='BuilderTester',
     clobber=True,
-    options=['--compiler=goma'] + linux_options,
+    options=['--compiler=goma', 'generate_devtools_zip'] + linux_options,
     tests=['check_deps2git',
            'check_licenses',
            'check_perms',],
