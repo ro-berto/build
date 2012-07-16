@@ -76,7 +76,7 @@ F('chromeos_asan_rel', linux().ChromiumASANFactory(
       '--compiler=goma-clang',
     ] + linux_aura_options,
     factory_properties=dict(fp_chromeos_asan,
-                            trigger='linux_asan_rel_trigger')))
+                            trigger='chromeos_asan_rel_trigger')))
 
 #
 # CrOS ASAN Rel testers
