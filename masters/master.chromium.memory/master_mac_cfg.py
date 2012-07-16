@@ -68,7 +68,7 @@ mac_asan_tests_2 = [
 mac_asan_archive = master_config.GetArchiveUrl(
     'ChromiumMemory',
     'Mac ASAN Builder',
-    'chromium-rel-mac-asan-builder',
+    'Mac_ASAN_Builder',
     'mac')
 
 #
