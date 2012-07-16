@@ -91,7 +91,8 @@ linux_tests_3 = [ 'interactive_ui' ]
 B('Linux ChromiumOS Full',
   factory='fullbuilder',
   gatekeeper='compile',
-  builddir='chromium-full-linux-chromeos',
+  # This shows up in the archived artifacts.
+  builddir='Linux_ChromiumOS',
   scheduler='chromium_local',
   notify_on_missing=True)
 F('fullbuilder', chromiumos().ChromiumOSFactory(
