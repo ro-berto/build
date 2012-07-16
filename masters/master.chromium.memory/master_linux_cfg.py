@@ -27,19 +27,22 @@ S('linux_asan_rel', branch='src', treeStableTimer=60)
 #
 T('linux_asan_rel_trigger')
 
-asan_archive = master_config.GetArchiveUrl('ChromiumMemory', 'ASAN Builder',
-                                           'ASAN_Builder', 'linux')
+linux_asan_archive = master_config.GetArchiveUrl('ChromiumMemory',
+                                                 'Linux ASAN Builder',
+                                                 'Linux_ASAN_Builder',
+                                                 'linux')
 #
 # Linux ASAN Rel Builder
 #
-B('ASAN Builder', 'asan_rel', 'compile', 'linux_asan_rel',
+B('Linux ASAN Builder', 'linux_asan_rel', 'compile', 'linux_asan_rel',
   notify_on_missing=True)
 # Please do not add release_extra_cflags=-g here until the debug info section
 # produced by Clang on Linux is small enough.
-F('asan_rel', linux().ChromiumASANFactory(
+F('linux_asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
     options=[
       '--compiler=goma-clang',
+      '--build-tool=ninja',
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
@@ -60,19 +63,20 @@ F('asan_rel', linux().ChromiumASANFactory(
       'unit_tests',
     ],
     factory_properties={
-           'gclient_env': {'GYP_DEFINES':
-                              ('asan=1 '
-                               'linux_use_tcmalloc=0 ')},
-            'trigger': 'linux_asan_rel_trigger' }))
+        'gclient_env': {
+            'GYP_DEFINES': ('asan=1 '
+                            'linux_use_tcmalloc=0 '),
+            'GYP_GENERATORS': 'ninja', },
+        'trigger': 'linux_asan_rel_trigger' }))
 
 #
 # Linux ASAN Rel testers
 #
-B('ASAN Tests (1)', 'asan_rel_tests_1', 'testers', 'linux_asan_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
-F('asan_rel_tests_1', linux().ChromiumASANFactory(
+B('Linux ASAN Tests (1)', 'linux_asan_rel_tests_1', 'testers',
+  'linux_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
-       build_url=asan_archive,
+    build_url=linux_asan_archive,
     tests=[
       'base',
       'cacheinvalidation',
@@ -85,11 +89,11 @@ F('asan_rel_tests_1', linux().ChromiumASANFactory(
     ],
     factory_properties={'asan': True}))
 
-B('ASAN Tests (2)', 'asan_rel_tests_2', 'testers', 'linux_asan_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
-F('asan_rel_tests_2', linux().ChromiumASANFactory(
+B('Linux ASAN Tests (2)', 'linux_asan_rel_tests_2', 'testers',
+  'linux_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
-       build_url=asan_archive,
+    build_url=linux_asan_archive,
     tests=[
       'browser_tests',
       'googleurl',
