@@ -2,16 +2,86 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import hashlib
 import json
+import time
+import urllib
 import urlparse
 
 from buildbot.changes import base
 from buildbot.schedulers.trysched import BadJobfile
+from twisted.application import internet
 from twisted.internet import defer
 from twisted.python import log
 from twisted.web import client
 
 from master.try_job_base import TryJobBase
+
+
+class _ValidUserPoller(internet.TimerService):
+  """Check chromium-access for users allowed to send jobs from Rietveld.
+  """
+  # The name of the file that contains the password for authenticating
+  # requests to chromium-access.
+  _PWD_FILE = '.try_job_rietveld_password'
+
+  def __init__(self, interval):
+    """
+    Args:
+      interval: Interval used to poll chromium-access, in seconds.
+    """
+    internet.TimerService.__init__(self, interval, _ValidUserPoller._poll, self)
+    self._users = frozenset()
+
+  def contains(self, email):
+    """Checks if the given email address is a valid user.
+
+    Args:
+      email: The email address to check against the internal list.
+
+    Returns:
+      True if the email address is allowed to send try jobs from rietveld.
+    """
+    return email in self._users
+
+  # base.PollingChangeSource overrides:
+  def _poll(self):
+    """Polls for valid user names.
+
+    Returns:
+      A deferred objects to be called once the operation completes.
+    """
+    log.msg('ValidUserPoller._poll')
+    d = defer.succeed(None)
+    d.addCallback(self._GetUsers)
+    d.addCallback(self._MakeSet)
+    d.addErrback(log.err, 'error in ValidUserPoller')
+    return d
+
+  def _GetUsers(self, _):
+    """Downloads list of valid users.
+
+    Returns:
+      A frozenset of string containing the email addresses of users allowed to
+      send jobs from Rietveld.
+    """
+    pwd = open(self._PWD_FILE).readline().strip()
+    now_string = str(int(time.time()))
+    params = {
+      'md5': hashlib.md5(pwd + now_string).hexdigest(),
+      'time': now_string
+    }
+
+    return client.getPage('https://chromium-access.appspot.com/auto/users',
+                          agent='buildbot',
+                          method='POST',
+                          postdata=urllib.urlencode(params))
+
+  def _MakeSet(self, data):
+    """Converts the input data string into a set of email addresses.
+    """
+    emails = (email.strip() for email in data.splitlines())
+    self._users = frozenset(email for email in emails if email)
 
 
 class _RietveldPoller(base.PollingChangeSource):
@@ -107,6 +177,7 @@ class TryJobRietveld(TryJobBase):
                         last_good_urls, code_review_sites)
     endpoint = self._GetRietveldEndPointForProject(code_review_sites, project)
     self._poller = _RietveldPoller(endpoint, interval=10)
+    self._valid_users = _ValidUserPoller(interval=12 * 60 * 60)
     self._project = project
     log.msg('TryJobRietveld created, get_pending_endpoint=%s '
             'project=%s' % (endpoint, project))
@@ -141,7 +212,7 @@ class TryJobRietveld(TryJobBase):
 
     exceptions = []
     for job in jobs:
-      if not job['user'].endswith('@chromium.org'):
+      if not self._valid_users.contains(job['user']):
         continue
       # Add the 'project' property to each job based on the project of this
       # instance.
@@ -168,3 +239,4 @@ class TryJobRietveld(TryJobBase):
     TryJobBase.setServiceParent(self, parent)
     self._poller.setServiceParent(self)
     self._poller.master = self.master
+    self._valid_users.setServiceParent(self)
