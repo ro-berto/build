@@ -50,7 +50,6 @@ mac_asan_tests_1 = [
   'cacheinvalidation',
   'content',
   'crypto',
-  'gfx',
   'googleurl',
   'jingle',
   'media',
