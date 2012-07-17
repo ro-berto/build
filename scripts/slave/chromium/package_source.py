@@ -148,7 +148,7 @@ def main():
   indexing_successful = GenerateIndex()
 
   print '%s: Creating tar file...' % time.strftime('%X')
-  find_command = ['find', 'src/', 'tools/', 'o3d/', '-type', 'f',
+  find_command = ['find', 'src/', 'tools/', '-type', 'f',
                   # The only files under src/out we want to package up
                   # are index files and generated sources.
                   '(', '-regex', '^src/out/.*index$', '-o',
