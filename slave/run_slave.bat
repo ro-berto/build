@@ -7,6 +7,7 @@ if not exist %~dp0..\..\depot_tools\. (
   goto :EOF
 )
 set PATH=%~dp0..\..\depot_tools;%PATH%
+cd /d %~dp0
 :: Running it once will make sure svn and python were downloaded.
 call gclient.bat > nul
 :: run_slave.py will overwrite the PATH and PYTHONPATH environment variables.
