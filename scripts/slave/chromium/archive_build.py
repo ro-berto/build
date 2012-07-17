@@ -107,7 +107,14 @@ class StagerBase(object):
     elif chromium_utils.IsLinux():
       self._build_dir = os.path.join(os.path.dirname(options.build_dir),
                                      'out', options.target)
-      self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'linux')
+      # On Linux, we might have built for chromeos.  Archive the same.
+      if (options.factory_properties.get('chromeos', None) or
+          slave_utils.GypFlagIsOn(options, 'chromeos')):
+        self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
+                                      'chromeos')
+      else:
+        self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
+                                      'linux')
     elif chromium_utils.IsMac():
       self._build_dir = os.path.join(os.path.dirname(options.build_dir),
                                      'xcodebuild', options.target)

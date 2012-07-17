@@ -98,7 +98,7 @@ B('Linux ChromiumOS Full',
 F('fullbuilder', chromiumos().ChromiumOSFactory(
     slave_type='BuilderTester',
     clobber=True,
-    options=['--compiler=goma', 'generate_devtools_zip'] + linux_options,
+    options=['--compiler=goma'] + linux_options,
     tests=['check_deps2git',
            'check_licenses',
            'check_perms',],
@@ -108,7 +108,6 @@ F('fullbuilder', chromiumos().ChromiumOSFactory(
         'gs_acl': 'public-read',
         'show_perf_results': False,
         'generate_gtest_json': True,
-        'extra_archive_paths': 'chrome/tools/build/chromeos',
         'gclient_env': {
             'GYP_DEFINES': ('chromeos=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
