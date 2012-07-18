@@ -330,7 +330,8 @@ def main_linux(options, args):
     raise chromium_utils.PathNotFound(msg)
 
   # Decide whether to enable the suid sandbox for Chrome.
-  if should_enable_sandbox(CHROME_SANDBOX_PATH):
+  if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
+      not options.factory_properties.get('asan', False)):
     print 'Enabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
     os.environ['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
