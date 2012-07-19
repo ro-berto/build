@@ -61,7 +61,7 @@ from slave.slave_utils import GSUtilSetup
 
 FIRST_CHECKOUT_SH = """#!/bin/bash
 
-if -z "$1"; then
+if [[ -z "$1" ]]; then
   case `uname -s` in
     "Linux")
       os=unix
@@ -82,7 +82,7 @@ fi
 git config target.os $os
 git checkout --force HEAD
 git config -f .gitmodules --get-regexp '.os$' "(all|$os)" |
-sed 's/^submodule\.\(.*\)\.os .*$/\1/' |
+sed 's/^submodule\.\(.*\)\.os .*$/\\1/' |
 while read submodule; do
   git config submodule.$submodule.update checkout
   (cd $submodule && git checkout --force HEAD)
