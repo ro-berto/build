@@ -4,6 +4,7 @@
 
 import hashlib
 import json
+import os
 import time
 import urllib
 import urlparse
@@ -62,19 +63,20 @@ class _ValidUserPoller(internet.TimerService):
     """Downloads list of valid users.
 
     Returns:
-      A frozenset of string containing the email addresses of users allowed to
+      A string of lines containing the email addresses of users allowed to
       send jobs from Rietveld.
     """
-    try:
-      pwd = open(self._PWD_FILE).readline().strip()
-    except IOError:
-      return frozenset([])
+    if not os.path.isfile(self._PWD_FILE):
+      log.msg("No password file %s; no valid users.")
+      return ""
 
+    pwd = open(self._PWD_FILE).readline().strip()
     now_string = str(int(time.time()))
     params = {
       'md5': hashlib.md5(pwd + now_string).hexdigest(),
       'time': now_string
     }
+
     return client.getPage('https://chromium-access.appspot.com/auto/users',
                           agent='buildbot',
                           method='POST',
