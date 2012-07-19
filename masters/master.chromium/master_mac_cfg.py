@@ -24,6 +24,7 @@ def mac_tester():
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'content_browsertests',
   'media_unittests',
 ]
 
@@ -72,6 +73,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
     'base',
     'browser_tests',
     'cacheinvalidation',
+    'content_browsertests',
     'crypto',
     'googleurl',
     'gpu',
@@ -179,6 +181,7 @@ F('dbg_unit_1', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'cacheinvalidation',
+    'content_browsertests',
     'crypto',
     'googleurl',
     'gpu',

@@ -357,12 +357,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Remove 'unit_gfx' once it is no longer referenced by the masters.
     if R('unit_gfx'):
       f.AddBasicGTestTestStep('gfx_unittests', fp)
-    if R('unit_content'):
-      f.AddBasicGTestTestStep('content_unittests', fp)
-    if R('unit_views'):
-      f.AddBasicGTestTestStep('views_unittests', fp)
     if R('browser_tests'):
       f.AddBrowserTests(fp)
+    if R('content_browsertests'):
+      f.AddBasicGTestTestStep('content_browsertests', fp)
 
     # Big, UI tests:
     if R('nacl_integration'):

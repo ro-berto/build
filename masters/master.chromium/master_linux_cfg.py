@@ -24,6 +24,7 @@ def linux_tester():
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'content_browsertests',
   'media_unittests',
 ]
 
@@ -32,6 +33,7 @@ linux_all_test_targets = [
   'base_unittests',
   'browser_tests',
   'cacheinvalidation_unittests',
+  'content_browsertests',
   'content_unittests',
   'crypto_unittests',
   'dbus_unittests',
@@ -92,6 +94,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'base',
       'browser_tests',
       'cacheinvalidation',
+      'content_browsertests',
       'crypto',
       'dbus',
       'googleurl',
@@ -128,6 +131,7 @@ linux_aura_tests = [
   #'browser_tests',
   'cacheinvalidation',
   'compositor',
+  'content_browsertests',
   'crypto',
   'googleurl',
   'gpu',
@@ -147,6 +151,7 @@ linux_aura_options=[
   'browser_tests',
   'cacheinvalidation_unittests',
   'compositor_unittests',
+  'content_browsertests',
   'content_unittests',
   'crypto_unittests',
   'googleurl_unittests',
@@ -215,6 +220,7 @@ F('dbg_unit_1', linux_tester().ChromiumFactory(
     target='Debug',
     tests=[
       'browser_tests',
+      'content_browsertests',
       'net',
     ],
     factory_properties={'sharded_tests': sharded_tests,

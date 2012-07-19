@@ -31,6 +31,7 @@ T('chromiumos_rel_trigger')
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'content_browsertests',
   'content_unittests',
   'media_unittests',
 ]
@@ -41,6 +42,7 @@ linux_options = [
     'browser_tests',
     'cacheinvalidation_unittests',
     'compositor_unittests',
+    'content_browsertests',
     'content_unittests',
     'crypto_unittests',
     'dbus_unittests',
@@ -67,6 +69,7 @@ linux_tests_1 = [
     'base',
     'cacheinvalidation',
     'compositor',
+    'content',
     'crypto',
     'dbus',
     'googleurl',
@@ -79,13 +82,17 @@ linux_tests_1 = [
     #'safe_browsing'
     'unit_ipc',
     'unit_sql',
-    #'sync',
+    'unit_sync',
+    'unit_unit',
     'ui_unittests',
-    'unit',
     'views',
 ]
 
-linux_tests_2 = [ 'browser_tests' ]
+linux_tests_2 = [
+    'browser_tests',
+    'content_browsertests',
+]
+
 linux_tests_3 = [ 'interactive_ui' ]
 
 B('Linux ChromiumOS Full',
@@ -148,6 +155,7 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'base',
            'cacheinvalidation',
            'compositor',
+           'content',
            'crypto',
            'dbus',
            'googleurl',
@@ -160,9 +168,9 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            #'safe_browsing'
            'unit_ipc',
            'unit_sql',
-           #'sync',
+           'unit_sync',
+           'unit_unit',
            'ui_unittests',
-           'unit',
            'views',
            ],
     factory_properties={'sharded_tests': sharded_tests,

@@ -36,6 +36,7 @@ B('Linux Tests', 'f_linux_tests_rel', auto_reboot=True,
 F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
     tests=[
       'browser_tests',
+      'content_browsertests',
       'interactive_ui',
       'unit',
     ],

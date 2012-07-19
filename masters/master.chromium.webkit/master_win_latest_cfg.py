@@ -23,6 +23,7 @@ defaults['category'] = '7win latest'
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'content_browsertests',
   'media_unittests',
 ]
 
@@ -138,6 +139,7 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     project='all.sln;chromium_builder',
     tests=[
       'browser_tests',
+      'content_browsertests',
       'interactive_ui',
       'unit',
     ],

@@ -37,6 +37,7 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
              'chromium_builder_tests'],
     tests=[
       'browser_tests',
+      'content_browsertests',
       'interactive_ui',
       'unit',
     ],

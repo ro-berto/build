@@ -24,6 +24,7 @@ def win_tester():
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'content_browsertests',
   'media_unittests',
 ]
 
@@ -69,6 +70,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
     tests=[
       'browser_tests',
       'cacheinvalidation',
+      'content_browsertests',
       'courgette',
       'crypto',
       'googleurl',
@@ -252,6 +254,7 @@ F('dbg_unit_2', win_tester().ChromiumFactory(
     build_url=dbg_archive,
     tests=[
       'browser_tests',
+      'content_browsertests',
       'net',
     ],
     factory_properties={'sharded_tests': sharded_tests,
