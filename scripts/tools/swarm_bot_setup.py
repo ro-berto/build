@@ -16,10 +16,13 @@ import sys
 SWARM_DIRECTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                     'swarm_bootstrap')
 
+SWARM_COPY_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'copy_swarm_sftp')
 
-def CopySwarmDirectory(user, host):
-  return ['sftp', '-obatchmode=no',
-          '-b', os.path.join(SWARM_DIRECTORY_PATH, 'swarm_sftp'),
+SWARM_CLEAN_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'clean_swarm_sftp')
+
+
+def BuildSFTPCommand(user, host, command_file):
+  return ['sftp', '-obatchmode=no', '-b', command_file,
           '%s@%s' % (user, host)]
 
 
@@ -48,11 +51,17 @@ def BuildSSHCommand(user, host, platform):
   return ssh + identity + bot_setup_commands
 
 
+def BuildCleanCommands(user, host):
+  return [
+      BuildSFTPCommand(user, host, SWARM_CLEAN_SFTP_PATH)
+      ]
+
+
 def BuildSetupCommands(user, host, platform):
   assert platform in ('linux', 'mac', 'win')
 
   return [
-      CopySwarmDirectory(user, host),
+      BuildSFTPCommand(user, host, SWARM_COPY_SFTP_PATH),
       BuildSSHCommand(user, host, platform)
       ]
 
@@ -61,6 +70,9 @@ def main():
   parser = optparse.OptionParser(usage='%prog [options]',
                                  description=sys.modules[__name__].__doc__)
   parser.add_option('-b', '--bot', help='The bot to setup as a swarm bot')
+  parser.add_option('-c', '--clean', action='store_true',
+                    help='Removes any old swarm files before setting '
+                    'up the bot.')
   parser.add_option('-u', '--user', default='chrome-bot',
                     help='The user to use when setting up the machine. '
                     'Defaults to %default')
@@ -88,7 +100,12 @@ def main():
   elif options.mac:
     platform = 'mac'
 
-  commands = BuildSetupCommands(options.user, options.bot, platform)
+  commands = []
+
+  if options.clean:
+    commands.extend(BuildCleanCommands(options.user, options.bot))
+
+  commands.extend(BuildSetupCommands(options.user, options.bot, platform))
 
   if options.print_only:
     print commands

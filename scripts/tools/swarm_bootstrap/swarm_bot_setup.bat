@@ -6,11 +6,19 @@
 :: python is already installed on this system and the required swarm files have
 :: been added.
 
+set DIMENSIONS_FILE="dimension.in"
+set SLAVE_ARGUMENTS="-a https://chromium-swarm.appspot.com -p 80 "%DIMENSIONS_FILE%
+set SLAVE_COMMAND="python slave_machine.py "%SLAVE_ARGUMENTS%
+
 :STARTUP_SCRIPT
+echo Generate the machine dimensions...
+cd C:\swarm\
+python dimensions_generator.py %DIMENSIONS_FILE%
+
 echo Setup up swarm script to run on startup...
 cd c:\Users\chrome-bot\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 echo @cd C:\swarm\ > run_swarm_bot.bat
-echo @python xmlrpc_server.py >> run_swarm_bot.bat
+echo @%SLAVE_COMMAND% >> run_swarm_bot.bat
 
 :: We are done.
 :END
