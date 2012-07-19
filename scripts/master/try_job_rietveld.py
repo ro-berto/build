@@ -65,13 +65,16 @@ class _ValidUserPoller(internet.TimerService):
       A frozenset of string containing the email addresses of users allowed to
       send jobs from Rietveld.
     """
-    pwd = open(self._PWD_FILE).readline().strip()
+    try:
+      pwd = open(self._PWD_FILE).readline().strip()
+    except IOError:
+      return frozenset([])
+
     now_string = str(int(time.time()))
     params = {
       'md5': hashlib.md5(pwd + now_string).hexdigest(),
       'time': now_string
     }
-
     return client.getPage('https://chromium-access.appspot.com/auto/users',
                           agent='buildbot',
                           method='POST',
