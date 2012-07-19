@@ -131,7 +131,7 @@ linux_aura_tests = [
   #'browser_tests',
   'cacheinvalidation',
   'compositor',
-  'content_browsertests',
+  #'content_browsertests',
   'crypto',
   'googleurl',
   'gpu',
