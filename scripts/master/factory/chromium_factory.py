@@ -337,8 +337,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('views_unittests', fp)
     if R('aura'):
       f.AddBasicGTestTestStep('aura_unittests', fp)
-    if R('aura_shell') or R('ash'):
-      f.AddBasicGTestTestStep('aura_shell_unittests', fp)
+    if R('aura_shell') or R('ash') or R('ash_unittests'):
+      f.AddBasicGTestTestStep('ash_unittests', fp)
     if R('compositor'):
       f.AddBasicGTestTestStep('compositor_unittests', fp)
 

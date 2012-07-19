@@ -354,8 +354,8 @@ F('dbg_aura', win().ChromiumFactory(
     target='Debug',
     slave_type='BuilderTester',
     tests=[
+      'ash_unittests',
       'aura',
-      'aura_shell',
       'compositor',
       'views',
     ],

@@ -64,8 +64,8 @@ linux_options = [
 ]
 
 linux_tests_1 = [
+    'ash_unittests',
     'aura',
-    'aura_shell',
     'base',
     'cacheinvalidation',
     'compositor',
@@ -150,8 +150,8 @@ B('Linux ChromiumOS Tests (1)',
 F('tester_1', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['aura',
-           'aura_shell',
+    tests=['ash_unittests',
+           'aura',
            'base',
            'cacheinvalidation',
            'compositor',
