@@ -23,6 +23,8 @@ INCREMENTAL_RESULTS_FILENAME = "incremental_results.json"
 TIMES_MS_FILENAME = "times_ms.json"
 
 
+# Note: GTestUnexpectedDeathTracker is being deprecated in favor of
+# common.gtest_utils.GTestLogParser. See scripts/slave/runtest.py for details.
 class GTestUnexpectedDeathTracker(object):
   """A lightweight version of log parser that keeps track of running tests
   for unexpected timeout or crash."""
@@ -87,6 +89,20 @@ class GTestUnexpectedDeathTracker(object):
         return False
 
     return True
+
+
+def GetResultsMap(observer):
+  """Returns a map of TestResults.  Returns an empty map if no current test
+  has been recorded."""
+
+  if not observer.GetCurrentTest():
+    return dict()
+
+  test_results_map = dict()
+  for test in observer.FailedTests(include_fails=True, include_flaky=True):
+    test_results_map[canonical_name(test)] = TestResult(test, failed=True)
+
+  return test_results_map
 
 
 def GetResultsMapFromXML(results_xml):

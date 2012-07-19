@@ -15,6 +15,7 @@ import copy
 import logging
 import optparse
 import os
+import re
 import stat
 import sys
 import tempfile
@@ -35,7 +36,10 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 # pylint checks.
 # pylint: disable=E0611
 # pylint: disable=E1101
+from buildbot.status import builder
+
 from common import chromium_utils
+from common import gtest_utils
 from slave import gtest_slave_utils
 from slave import slave_utils
 from slave import xvfb
@@ -53,6 +57,7 @@ HTTPD_CONF = {
     'win': 'httpd.conf'
 }
 
+
 def should_enable_sandbox(sandbox_path):
   """Return a boolean indicating that the current slave is capable of using the
   sandbox and should enable it.  This should return True iff the slave is a
@@ -68,6 +73,7 @@ def should_enable_sandbox(sandbox_path):
     return True
   return False
 
+
 def get_temp_count():
   """Returns the number of files and directories inside the temporary dir."""
   return len(os.listdir(tempfile.gettempdir()))
@@ -80,7 +86,7 @@ def _RunGTestCommand(command, results_tracker=None, pipes=None):
     return 1
   if results_tracker:
     return chromium_utils.RunCommand(
-        command, parser_func=results_tracker.OnReceiveLine)
+        command, parser_func=results_tracker.ProcessLine)
   else:
     return chromium_utils.RunCommand(command, pipes=pipes)
 
@@ -108,7 +114,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
       sys.stderr.write('Unable to generate JSON from XML, using log output.')
       # The file did not get generated. See if we can generate a results map
       # from the log output.
-      results_map = results_tracker.GetResultsMap()
+      results_map = gtest_slave_utils.GetResultsMap(results_tracker)
   except Exception, e:
     # This error will be caught by the following 'not results_map' statement.
     print 'Error: ', e
@@ -147,6 +153,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   except:  # pylint: disable=W0702
     print 'Unexpected error while generating JSON'
 
+
 def _BuildParallelCommand(build_dir, test_exe_path, options):
   supervisor_path = os.path.join(build_dir, '..', 'tools',
                                  'sharding_supervisor',
@@ -163,6 +170,7 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
   command.extend(supervisor_args)
   command.append(test_exe_path)
   return command
+
 
 def start_http_server(platform, build_dir, test_exe_path, document_root):
   # pylint: disable=F0401
@@ -206,6 +214,95 @@ def start_http_server(platform, build_dir, test_exe_path, document_root):
                                              (e, output_dir))
   return http_server
 
+
+def getText(result, observer, name):
+  """Generate a text summary for the waterfall.
+
+  Updates the waterfall with any unusual test output, with a link to logs of
+  failed test steps.
+  """
+  GTEST_DASHBOARD_BASE = ('http://test-results.appspot.com'
+    '/dashboards/flakiness_dashboard.html')
+
+  # basic_info is an array of lines to display on the waterfall
+  basic_info = [name]
+
+  disabled = observer.DisabledTests()
+  if disabled:
+    basic_info.append('%s disabled' % str(disabled))
+
+  flaky = observer.FlakyTests()
+  if flaky:
+    basic_info.append('%s flaky' % str(flaky))
+
+  failed_test_count = len(observer.FailedTests())
+
+  if failed_test_count == 0:
+    if result is builder.SUCCESS:
+      return basic_info
+    elif result is builder.WARNINGS:
+      return basic_info + ['warnings']
+
+  if observer.RunningTests():
+
+    basic_info += ['did not complete']
+
+  # TODO(xusydoc):  see if 'crashed or hung' should be tracked by RunningTests()
+  if failed_test_count:
+    failure_text = ['failed %d' % failed_test_count]
+    if observer.master_name:
+      # Include the link to the flakiness dashboard
+      failure_text.append('<div class="BuildResultInfo">')
+      failure_text.append('<a href="%s#master=%s&testType=%s'
+                          '&tests=%s">' % (
+          GTEST_DASHBOARD_BASE, observer.master_name,
+          name,
+          ','.join(observer.FailedTests())))
+      failure_text.append('Flakiness dashboard')
+      failure_text.append('</a>')
+      failure_text.append('</div>')
+  else:
+    failure_text = ['crashed or hung']
+  return basic_info + failure_text
+
+
+def annotate(test_name, result, results_tracker):
+  """Given a test result and tracker, update the waterfall with test results."""
+  get_text_result = builder.SUCCESS
+
+  for failure in sorted(results_tracker.FailedTests()):
+    testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
+    for line in results_tracker.FailureDescription(failure):
+      print '@@@STEP_LOG_LINE@%s@%s@@@' % (testabbr, line)
+    print '@@@STEP_LOG_END@%s@@@' % testabbr
+
+  for suppression_hash in sorted(results_tracker.SuppressionHashes()):
+    for line in results_tracker.Suppression(suppression_hash):
+      print '@@@STEP_LOG_LINE@%s@%s@@@' % (testabbr, line)
+    print '@@@STEP_LOG_END@%s@@@' % testabbr
+
+  if results_tracker.ParsingErrors():
+    # Generate a log file containing the list of errors.
+    for line in results_tracker.ParsingErrors():
+      print '@@@STEP_LOG_LINE@%s@%s@@@' % ('log parsing error(s)', line)
+
+    print '@@@STEP_LOG_END@%s@@@' % 'log parsing error(s)'
+    results_tracker.ClearParsingErrors()
+
+  if result is builder.SUCCESS:
+    if (len(results_tracker.ParsingErrors()) or
+        len(results_tracker.FailedTests()) or
+        len(results_tracker.SuppressionHashes())):
+      print '@@@STEP_WARNINGS@@@'
+      get_text_result = builder.WARNING
+  else:
+    print '@@@STEP_FAILURE@@@'
+    get_text_result = builder.FAILURE
+
+  for desc in getText(get_text_result, results_tracker, test_name):
+    print '@@@STEP_TEXT@%s@@@' % desc
+
+
 def main_mac(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
@@ -248,9 +345,10 @@ def main_mac(options, args):
   command.extend(args[1:])
 
   results_tracker = None
-  if options.generate_json_file:
-    results_tracker = gtest_slave_utils.GTestUnexpectedDeathTracker()
+  if options.generate_json_file or options.annotate:
+    results_tracker = gtest_utils.GTestLogParser()
 
+  if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
@@ -275,7 +373,11 @@ def main_mac(options, args):
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
 
+  if options.annotate:
+    annotate(options.test_type, result, results_tracker)
+
   return result
+
 
 def main_linux(options, args):
   if len(args) < 1:
@@ -361,9 +463,10 @@ def main_linux(options, args):
   command.extend(args[1:])
 
   results_tracker = None
-  if options.generate_json_file:
-    results_tracker = gtest_slave_utils.GTestUnexpectedDeathTracker()
+  if options.generate_json_file or options.annotate:
+    results_tracker = gtest_utils.GTestLogParser()
 
+  if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
@@ -395,7 +498,11 @@ def main_linux(options, args):
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
 
+  if options.annotate:
+    annotate(options.test_type, result, results_tracker)
+
   return result
+
 
 def main_win(options, args):
   """Using the target build configuration, run the executable given in the
@@ -431,9 +538,10 @@ def main_win(options, args):
   slave_utils.RemoveChromeTemporaryFiles()
 
   results_tracker = None
-  if options.generate_json_file:
-    results_tracker = gtest_slave_utils.GTestUnexpectedDeathTracker()
+  if options.generate_json_file or options.annotate:
+    results_tracker = gtest_utils.GTestLogParser()
 
+  if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
@@ -454,6 +562,9 @@ def main_win(options, args):
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
+
+  if options.annotate:
+    annotate(options.test_type, result, results_tracker)
 
   return result
 
@@ -552,6 +663,9 @@ def main():
   option_parser.add_option("", "--test-results-server", default='',
                            help="The test results server to upload the "
                                 "results.")
+  option_parser.add_option('', '--annotate', action='store_true',
+                           dest = 'annotate', default=False,
+                           help='Annotate output when run as a buildstep.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 

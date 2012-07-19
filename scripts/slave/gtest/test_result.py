@@ -1,4 +1,4 @@
-# Copyright (c) 2011 The Chromium Authors. All rights reserved.
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -26,7 +26,7 @@ class TestResult(object):
       pass
 
     if not_run:
-      self.modifier = self.DISABLED  
+      self.modifier = self.DISABLED
     elif test_name.startswith('FAILS_'):
       self.modifier = self.FAILS
     elif test_name.startswith('FLAKY_'):
