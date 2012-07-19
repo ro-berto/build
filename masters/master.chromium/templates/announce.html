@@ -245,6 +245,8 @@
             c.chrome = '';
             c.lkgr = '';
             c.pyauto = '';
+            c.gpu = '';
+            c.gpu_fyi = '';
 
             c.status = '../chromium';
             c.status_cros = '../chromium.chromiumos';
@@ -254,6 +256,8 @@
             c.status_perf = '../chromium.perf';
             c.status_lkgr = '../chromium.lkgr';
             c.status_pyauto = '../chromium.pyauto';
+            c.status_gpu = '../chromium.gpu';
+            c.status_gpu_fyi = '../chromium.gpu.fyi';
 
             /**
              * Builds a reference for the iframe with boxes.
@@ -272,6 +276,8 @@
             c.bar_lkgr = BarUrl('chromium.lkgr');
             c.bar_pyauto = BarUrl('chromium.pyauto');
             c.bar_cros = BarUrl('chromium.chromiumos');
+            c.bar_gpu = BarUrl('chromium.gpu');
+            c.bar_gpu_fyi = BarUrl('chromium.gpu.fyi');
 
 
             /**
@@ -402,6 +408,12 @@
                            'PyAuto', 'width="25%"', '') +
                 HTMLBaseBar(c.status_memory_fyi, c.bar_memory_fyi, c.memory_fyi,
                            'Memory<br>FYI', 'width="75%" colspan=5', '')));
+
+            document.write(tr(
+                HTMLBaseBar(c.status_gpu, c.bar_gpu, c.gpu,
+                           'GPU', 'width="25%"', '') +
+                HTMLBaseBar(c.status_gpu_fyi, c.bar_gpu_fyi, c.gpu_fyi,
+                           'GPU FYI', 'width="75%" colspan=5', '')));
 
             setTimeout('DisplayLKGR()', 100);
           </script>
