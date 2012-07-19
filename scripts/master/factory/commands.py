@@ -285,8 +285,8 @@ class FactoryCommands(object):
         (prop, "%%(%s:-)s" % prop)
         for prop in (
             'blamelist', 'branch', 'buildername', 'buildnumber', 'got_revision',
-            'mastername', 'parentname', 'parentslavename', 'revision',
-            'scheduler', 'slavename',
+            'mastername', 'parentname', 'parentslavename', 'parent_buildnumber',
+            'parent_builddir', 'revision', 'scheduler', 'slavename',
         )
     )
     def gen_blamelist_string(build):

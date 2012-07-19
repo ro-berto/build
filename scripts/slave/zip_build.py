@@ -182,10 +182,10 @@ def WriteRevisionFile(dirname, build_revision):
     print 'Writing to revision file in %s failed.' % dirname
 
 
-def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list):
+def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
+                           zip_file_name):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
-  zip_file_name = 'full-build-%s' % chromium_utils.PlatformName()
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
                                                zip_file_list,
@@ -204,7 +204,7 @@ def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list):
   return zip_file
 
 
-def _MakeVersionedArchive(zip_file, file_suffix, options):
+def MakeVersionedArchive(zip_file, file_suffix, options):
   """Takes a file name, e.g. /foo/bar.zip and an extra suffix, e.g. _baz,
   and copies the file to /foo/bar_baz.zip."""
   zip_template = os.path.basename(zip_file)
@@ -226,20 +226,6 @@ def _MakeVersionedArchive(zip_file, file_suffix, options):
                                options.build_properties['buildername'])
   print 'Created versioned archive', versioned_file
   return (zip_base, zip_ext)
-
-
-def MakeVersionedArchive(zip_file, build_revision, options):
-  """Ensures that a versioned archive exists corresponding
-  to given unversioned archive."""
-  return _MakeVersionedArchive(zip_file, '_%d' % build_revision, options)
-
-
-def MakeWebKitVersionedArchive(zip_file, cr_revision, wk_revision, options):
-  """Ensures that a versioned archive exists corresponding
-  to given unversioned archive."""
-  return _MakeVersionedArchive(zip_file,
-                               '_wk%d_%d' % (wk_revision, cr_revision),
-                               options)
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext):
@@ -265,7 +251,7 @@ class PathMatcher(object):
     self.regex_blacklist = FileRegexBlacklist(options)
 
   def __str__(self):
-    return "\n  ".join(['Zip rules',
+    return '\n  '.join(['Zip rules',
                         'Inclusions: %s' % self.inclusions,
                         'Exclusions: %s' % self.exclusions,
                         "Whitelist regex: '%s'" % self.regex_whitelist,
@@ -289,18 +275,20 @@ def Archive(options):
                                     options.factory_properties)
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
-  build_revision = slave_utils.SubversionRevision(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
-  webkit_dir, webkit_revision = None, None
+  webkit_dir = None
   if options.webkit_dir:
     webkit_dir = os.path.join(src_dir, options.webkit_dir)
-    webkit_revision = slave_utils.SubversionRevision(webkit_dir)
+
+  unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
+      options.build_properties, src_dir, webkit_dir)
 
   print 'Full Staging in %s' % staging_dir
   print 'Build Directory %s' % build_dir
 
   # Include the revision file in tarballs
+  build_revision = slave_utils.SubversionRevision(src_dir)
   WriteRevisionFile(build_dir, build_revision)
 
   # Build the list of files to archive.
@@ -311,13 +299,10 @@ def Archive(options):
          [f for f in root_files if not path_filter.Match(f)])
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
-  zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list)
-  if webkit_revision:
-    (zip_base, zip_ext) = MakeWebKitVersionedArchive(
-        zip_file, build_revision, webkit_revision, options)
-  else:
-    (zip_base, zip_ext) = MakeVersionedArchive(
-        zip_file, build_revision, options)
+  zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
+                                    unversioned_base_name)
+
+  zip_base, zip_ext = MakeVersionedArchive(zip_file, version_suffix, options)
   PruneOldArchives(staging_dir, zip_base, zip_ext)
 
   # Update the latest revision file in the staging directory
@@ -353,7 +338,7 @@ def main(argv):
   # first unknown arg.  So throw a warning if we have two or more unknown
   # arguments.
   if args[1:]:
-    print "Warning -- unknown arguments" % args[1:]
+    print 'Warning -- unknown arguments' % args[1:]
 
   return Archive(options)
 

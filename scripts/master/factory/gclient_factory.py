@@ -273,6 +273,7 @@ class GClientFactory(object):
             'parent_revision': WithProperties('%(revision:-)s'),
             'parent_scheduler': WithProperties('%(scheduler:-)s'),
             'parent_slavename': WithProperties('%(slavename:-)s'),
+            'parent_builddir': WithProperties('%(builddir:-)s'),
 
             # And some scripts were written to use non-standard names.
             'parent_cr_revision': WithProperties('%(got_revision:-)s'),

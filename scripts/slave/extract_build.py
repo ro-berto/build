@@ -65,40 +65,36 @@ def GetBuildUrl(abs_build_dir, options):
      string, in order of preference:
      1) options.build_url
      2) options.factory_properties.build_url
-     3) build url constructed from build_properties
+     3) build url constructed from build_properties.  This last type of
+        construction is not compatible with the 'force build' button.
 
      Args:
        abs_build_dir: Full path to source directory.
        options: options object as specified by parser below.
    """
+
+  abs_webkit_dir = None
+  if options.webkit_dir:
+    abs_webkit_dir = os.path.join(abs_build_dir, '..', options.webkit_dir)
+  base_filename, version_suffix = slave_utils.GetZipFileNames(
+      options.build_properties, abs_build_dir, abs_webkit_dir, extract=True)
+
   url = options.build_url or options.factory_properties.get('build_url')
   if not url:
-    url = 'http://%s/b/build/slave/%s/chrome_staging/full-build-%s.zip' % (
-              options.build_properties.parent_slavename,
-              options.build_properties.parent_builddir,
-              chromium_utils.PlatformName())
+    replace_dict = dict(options.build_properties)
+    # If builddir isn't specified, assume buildbot used the builder name
+    # as the root folder for the build.
+    if not replace_dict.get('parent_builddir'):
+      replace_dict['parent_builddir'] = replace_dict['parentname']
+    replace_dict['base_filename'] = base_filename
+    url = ('http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
+           'chrome_staging/%(base_filename)s.zip') % replace_dict
 
-  if 'parentslavename' in url:
-    parentslavename = options.build_properties.get('parentslavename', '')
-    url = url % {'parentslavename': parentslavename}
-
-  base_url = url
-  versioned_url = url
-
-  if options.webkit_dir:
-    webkit_revision = slave_utils.SubversionRevision(
-        os.path.join(abs_build_dir, '..', options.webkit_dir))
-    versioned_url = versioned_url.replace('.zip',
-                                          '_wk%d.zip' % webkit_revision)
-
-  # Find the revision that we need to download.
-  chromium_revision = slave_utils.SubversionRevision(abs_build_dir)
-  versioned_url = versioned_url.replace('.zip', '_%d.zip' % chromium_revision)
-
-  return base_url, versioned_url
+  versioned_url = url.replace('.zip', version_suffix + '.zip')
+  return url, versioned_url
 
 
-def real_main(options, args):
+def real_main(options):
   """ Download a build, extract it to build\BuildDir\full-build-win32
       and rename it to build\BuildDir\Target
   """
@@ -109,11 +105,11 @@ def real_main(options, args):
   elif chromium_utils.IsWindows():
     build_output_dir = options.build_dir
   elif chromium_utils.IsLinux():
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-                                   'sconsbuild')
+    build_output_dir = os.path.join(
+        os.path.dirname(options.build_dir), 'sconsbuild')
   elif chromium_utils.IsMac():
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-                                   'xcodebuild')
+    build_output_dir = os.path.join(
+        os.path.dirname(options.build_dir), 'xcodebuild')
   else:
     raise NotImplementedError('%s is not supported.' % sys.platform)
 
@@ -129,6 +125,7 @@ def real_main(options, args):
                             archive_name.replace('.zip', ''))
 
   base_url, url = GetBuildUrl(abs_build_dir, options)
+  archive_name = os.path.basename(base_url)
 
   if url.startswith('gs://'):
     handler = GSHandler(url=url, archive_name=archive_name)
@@ -180,7 +177,7 @@ def real_main(options, args):
 
       print 'Moving build from %s to %s' % (output_dir, target_build_output_dir)
       shutil.move(output_dir, target_build_output_dir)
-    except (OSError, IOError):
+    except (OSError, IOError, chromium_utils.ExternalError):
       print 'Failed to extract the build.'
       # Print out the traceback in a nice format
       traceback.print_exc()
@@ -232,7 +229,10 @@ def main():
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()
-  return real_main(options, args)
+  if args:
+    print 'Unknown options: %s' % args
+    return 1
+  return real_main(options)
 
 
 if '__main__' == __name__:

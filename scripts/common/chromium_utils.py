@@ -402,7 +402,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
 
   # Collect files into the archive directory.
   archive_dir = os.path.join(output_dir, archive_name)
-  if remove_archive_directory:
+  if remove_archive_directory and os.path.exists(archive_dir):
     # Move it even if it's not a directory as expected. This can happen with
     # FILES.cfg archive creation where we create an archive staging directory
     # that is the same name as the ultimate archive name.

@@ -79,6 +79,28 @@ def SubversionLastChangedRevision(wc_dir):
     return 0
 
 
+def GetZipFileNames(build_properties, build_dir, webkit_dir=None,
+                    extract=False):
+  base_name = 'full-build-%s' % chromium_utils.PlatformName()
+
+  chromium_revision = SubversionRevision(build_dir)
+  if 'try' in build_properties.get('mastername'):
+    if extract:
+      if not build_properties.get('parent_buildnumber'):
+        raise Exception('build_props does not have parent data: %s' %
+                        build_properties)
+      version_suffix = '_%(parent_buildnumber)s' % build_properties
+    else:
+      version_suffix = '_%(buildnumber)s' % build_properties
+  elif webkit_dir:
+    webkit_revision = SubversionRevision(webkit_dir)
+    version_suffix = '_wk%d_%d' % (webkit_revision, chromium_revision)
+  else:
+    version_suffix = '_%d' % chromium_revision
+
+  return base_name, version_suffix
+
+
 def SlaveBuildName(chrome_dir):
   """Extracts the build name of this slave (e.g., 'chrome-release') from the
   leaf subdir of its build directory.
