@@ -80,15 +80,17 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
     build_url=linux_asan_archive,
     tests=[
       'base',
+      'browser_tests',
       'cacheinvalidation',
       'crypto',
       'gpu',
       'jingle',
       'net',
       'safe_browsing',
-      'unit',
     ],
-    factory_properties={'asan': True}))
+    factory_properties={'asan': True,
+                        'browser_total_shards': 2,
+                        'browser_shard_index': 1 }))
 
 B('Linux ASAN Tests (2)', 'linux_asan_rel_tests_2', 'testers',
   'linux_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
@@ -102,8 +104,11 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
       'media',
       'printing',
       'remoting',
+      'unit',
     ],
-    factory_properties={'asan': True}))
+    factory_properties={'asan': True,
+                        'browser_total_shards': 2,
+                        'browser_shard_index': 2 }))
 
 def Update(config, active_master, c):
   return helper.Update(c)
