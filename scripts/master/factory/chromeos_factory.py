@@ -35,6 +35,11 @@ class CbuildbotFactory(object):
       chromite_patch: a url and ref pair (dict) to patch the checked out
           chromite. Fits well with a single change from a codereview, to use
           on one or more builders for realistic testing, or experiments.
+      trybot: Whether this is creating builders for the trybot waterfall.
+      sleep_sync: Whether to randomly delay the start of the cbuildbot step.
+      show_gclient_output: Set to False to hide the output of 'gclient sync'.
+          Used by external masters to prevent leaking sensitive information,
+          since both external and internal slaves use internal.DEPS/.
   """
   _default_git_base = 'http://git.chromium.org/chromiumos'
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
@@ -45,7 +50,8 @@ class CbuildbotFactory(object):
                crostools_repo=_default_crostools,
                chromite_repo=_default_chromite, dry_run=False, chrome_root=None,
                factory=None, pass_revision=False, slave_manager=True,
-               chromite_patch=None, trybot=False, sleep_sync=None):
+               chromite_patch=None, trybot=False, sleep_sync=None,
+               show_gclient_output=True):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -61,6 +67,7 @@ class CbuildbotFactory(object):
     self.slave_manager = slave_manager
     self.trybot = trybot
     self.sleep_sync = sleep_sync
+    self.show_gclient_output = show_gclient_output
 
     if factory:
       self.f_cbuild = factory
@@ -115,7 +122,9 @@ class CbuildbotFactory(object):
                             name='update_scripts',
                             description='Sync buildbot slave files',
                             workdir='/b',
-                            timeout=300)
+                            timeout=300,
+                            want_stdout=self.show_gclient_output,
+                            want_stderr=self.show_gclient_output)
 
     if self.sleep_sync:
       # We run a script from the script checkout above.
