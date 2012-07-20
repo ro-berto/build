@@ -12,6 +12,7 @@ it will write out the dimensions to that file.
 import json
 import logging
 import optparse
+import socket
 import sys
 
 
@@ -36,7 +37,10 @@ def GetDimensions():
                   'generate dimensions', sys.platform)
     return {}
 
-  return {'dimensions': {'os': PLATFORM_MAPPING[sys.platform]}}
+  return {
+      'tag': socket.gethostname(),
+      'dimensions': {'os': PLATFORM_MAPPING[sys.platform]}
+  }
 
 def WriteDimensionsToFile(filename):
   """Write out the dimensions to the given file.
