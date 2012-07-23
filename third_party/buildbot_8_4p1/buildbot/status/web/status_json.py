@@ -140,7 +140,9 @@ class JsonResource(resource.Resource):
             pageTitle = ''
             if self.pageTitle:
                 pageTitle = self.pageTitle + ' help'
-            return HelpResource(self.help, pageTitle=pageTitle, parent_node=self)
+            res = HelpResource(self.help, pageTitle=pageTitle, parent_node=self)
+            res.level = self.level + 1
+            return res
         # Equivalent to resource.Resource.getChildWithDefault()
         if self.children.has_key(path):
             return self.children[path]

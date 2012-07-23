@@ -2231,3 +2231,21 @@ Index: buildbot/status/builder.py
 
                    def getCategory(self):
                             return self.category
+
+Fix bug introduced in previous fix to status_json.py (line 2168 in this file).
+
+Index: buildbot/status/web/status_json.py
+===================================================================
+--- buildbot/status/web/status_json.py	(revision 147894)
++++ buildbot/status/web/status_json.py	(working copy)
+@@ -140,7 +140,9 @@
+             pageTitle = ''
+             if self.pageTitle:
+                 pageTitle = self.pageTitle + ' help'
+-            return HelpResource(self.help, pageTitle=pageTitle, parent_node=self)
++            res = HelpResource(self.help, pageTitle=pageTitle, parent_node=self)
++            res.level = self.level + 1
++            return res
+         # Equivalent to resource.Resource.getChildWithDefault()
+         if self.children.has_key(path):
+             return self.children[path]
