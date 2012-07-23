@@ -37,10 +37,6 @@ class NativeClientFactory(gclient_factory.GClientFactory):
       supplement = gclient_factory.GClientSolution(
           config.Master.nacl_trunk_url + '/deps/supplement.DEPS')
       solutions.append(supplement)
-    else:
-      doxygen = gclient_factory.GClientSolution(
-          config.Master.nacl_trunk_url + '/deps/doxygen.DEPS')
-      solutions.append(doxygen)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
                                             target_platform=target_platform)
