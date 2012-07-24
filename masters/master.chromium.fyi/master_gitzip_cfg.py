@@ -21,11 +21,11 @@ def Update(config, active_master, c):
          '--url', '%schromium/src.git' % config.Master.git_server_url,
          '--gs_bucket', 'gs://chromium-git-bundles',
          '--gs_acl', 'public-read',
-         '--timeout', '%d' % (20*60),
+         '--timeout', '%d' % (60*60),
          '--stayalive', '200',
          '--verbose']
   factory.addStep(shell.ShellCommand, name='gitzip', description='gitzip',
-                  timeout=3600, workdir='', command=cmd)
+                  timeout=7200, workdir='', command=cmd)
 
   builders = c.setdefault('builders', [])
   builders.append({
