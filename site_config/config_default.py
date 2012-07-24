@@ -35,6 +35,11 @@ class Master(object):
 
   syzygy_internal_url = None
 
+  swarm_server_internal_url = 'localhost'
+  swarm_unix_hashtable_internal = '/'
+  swarm_windows_hashtable_internal = 'C:\\'
+  swarm_windows_network_path_vm1_internal = '/'
+
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'
   chromeos_internal_url = None
