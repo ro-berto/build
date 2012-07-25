@@ -148,6 +148,7 @@ def main():
   indexing_successful = GenerateIndex()
 
   print '%s: Creating tar file...' % time.strftime('%X')
+  packaging_successful = True
   find_command = ['find', 'src/', 'tools/', '-type', 'f',
                   # The only files under src/out we want to package up
                   # are index files and generated sources.
@@ -200,6 +201,10 @@ def main():
       raise Exception('ERROR: could not get modified_time, exiting')
     print 'Last modified time: %s' % modified_time
 
+  except Exception, e:
+    print str(e)
+    packaging_successful = False
+
   finally:
     print '%s: Cleaning up locally...' % time.strftime('%X')
     chromium_utils.RunCommand(['rm', '-f', partial_filename])
@@ -213,7 +218,7 @@ def main():
       raise Exception('ERROR: failed to clean up indexer files')
     print '%s: Done.' % time.strftime('%X')
 
-  if not indexing_successful:
+  if not (indexing_successful and packaging_successful):
     return 1
 
   return 0
