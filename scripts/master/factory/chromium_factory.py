@@ -169,6 +169,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         config.Master.trunk_url + '/src/chrome/test/pyautolib'),
        ('src/chrome/test/functional',
         config.Master.trunk_url + '/src/chrome/test/functional'),
+       ('src/content/test/data',
+        config.Master.trunk_url + '/src/content/test/data'),
        ('src/third_party/simplejson',
         config.Master.trunk_url + '/src/third_party/simplejson'),
        ('src/net/data/ssl/certificates',
@@ -190,7 +192,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # Extend if we can.
   # pylint: disable=E1101
   if config.Master.trunk_internal_url:
-    PYAUTO_DEPS.append(('src/chrome/test/data/plugin',
+    PYAUTO_DEPS.append(('src/content/test/data/plugin',
                         config.Master.trunk_internal_url +
                         '/data/chrome_plugin_tests'))
     PYAUTO_DEPS.append(('src/chrome/test/data/pyauto_private',
