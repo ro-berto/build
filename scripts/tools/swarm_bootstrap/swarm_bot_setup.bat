@@ -1,3 +1,4 @@
+@echo off
 :: Copyright (c) 2012 The Chromium Authors. All rights reserved.
 :: Use of this source code is governed by a BSD-style license that can be
 :: found in the LICENSE file.
@@ -6,14 +7,14 @@
 :: python is already installed on this system and the required swarm files have
 :: been added.
 
-set DIMENSIONS_FILE="dimension.in"
-set SLAVE_ARGUMENTS="-a https://chromium-swarm.appspot.com -p 80 "%DIMENSIONS_FILE%
-set SLAVE_COMMAND="python slave_machine.py "%SLAVE_ARGUMENTS%
+set DIMENSIONS_FILE=dimension.in
+set SLAVE_ARGUMENTS=-a http://chromium-swarm.appspot.com -p 80 %DIMENSIONS_FILE%
+set SLAVE_COMMAND=python slave_machine.py %SLAVE_ARGUMENTS%
 
 :STARTUP_SCRIPT
 echo Generate the machine dimensions...
 cd C:\swarm\
-python dimensions_generator.py %DIMENSIONS_FILE%
+call python dimensions_generator.py %DIMENSIONS_FILE%
 
 echo Setup up swarm script to run on startup...
 cd c:\Users\chrome-bot\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup

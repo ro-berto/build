@@ -543,7 +543,7 @@ def main():
   source.close()
   attributes = json.loads(attributes_str)
 
-  url = 'http://'+options.address+':'+options.port
+  url = options.address+':'+options.port
   slave = SlaveMachine(url=url,
                        attributes=attributes)
 
