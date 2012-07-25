@@ -249,6 +249,8 @@ def main():
         'DISTCC_DIR',
         'HOME',
         'HOSTNAME',
+        'HTTP_PROXY',
+        'http_proxy',
         'LANG',
         'LOGNAME',
         'PAGER',
