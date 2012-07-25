@@ -39,6 +39,7 @@ class Master(object):
   swarm_unix_hashtable_internal = '/'
   swarm_windows_hashtable_internal = 'C:\\'
   swarm_windows_network_path_vm1_internal = '/'
+  swarm_data_server_vm1_internal = 'localhost'
 
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'
