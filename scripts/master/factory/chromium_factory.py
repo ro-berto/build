@@ -327,10 +327,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep(
           'safe_browsing_tests', fp,
           arg_list=['--ui-test-action-max-timeout=40000'])
+    # Windows sandbox
     if R('sandbox'):
       f.AddBasicGTestTestStep('sbox_unittests', fp)
       f.AddBasicGTestTestStep('sbox_integration_tests', fp)
       f.AddBasicGTestTestStep('sbox_validation_tests', fp)
+    # Linux sandbox
+    if R('sandbox_linux_unittests'):
+      f.AddBasicGTestTestStep('sandbox_linux_unittests', fp)
     if R('ui_unittests'):
       f.AddBasicGTestTestStep('ui_unittests', fp)
     if R('views'):
