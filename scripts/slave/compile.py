@@ -340,7 +340,21 @@ def main_xcode(options, args):
     build_output_dir = os.path.join(os.path.dirname(options.build_dir),
         'xcodebuild')
     print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
+    # Deleting output_dir would also delete all the .ninja files. iOS builds
+    # generates ninja configuration inside the xcodebuild directory to be able
+    # to run sub builds. crbug.com/138950 is tracking this issue.
+    # Moreover clobbering should run before runhooks (which creates
+    # .ninja files). For now, only delete all non-.ninja files.
+    # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
+    # master has been restarted, remove all clobber handling from compile.py.
+    def delete_objects(_, directory, files):
+      for f in files:
+        if f.endswith('.ninja') or f == 'gyp-mac-tool':
+          continue
+        f = os.path.join(directory, f)
+        if not os.path.isdir(f):
+          os.unlink(f)
+    os.path.walk(build_output_dir, delete_objects, None)
 
   env = EchoDict(os.environ)
   common_xcode_settings(command, options, env, options.compiler)
