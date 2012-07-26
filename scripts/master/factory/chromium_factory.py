@@ -219,7 +219,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     ('src/tools/chromebot',
      config.Master.trunk_url + '/tools/chromebot'),
     ('src/chrome/tools/process_dumps',
-     config.Master.trunk_url + '/src/chrome/tools/process_dumps')]
+     config.Master.trunk_url + '/src/chrome/tools/process_dumps'),
+    ('src/chrome/test/data/reliability',
+     config.Master.trunk_url + 'src/chrome/test/data/reliability')]
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
@@ -1044,6 +1046,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                                archive_url=build_url,
                                                build_dir=web_build_dir)
       chromium_cmd_obj.AddChromebotServer(factory_properties)
+      chromium_cmd_obj.AddReliabilityTests(client_os)
     elif slave_type == 'ChromebotClient':
       chromium_cmd_obj.AddGetBuildForChromebot(client_os,
                                                extract=True,

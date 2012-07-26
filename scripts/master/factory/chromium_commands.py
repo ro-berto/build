@@ -69,10 +69,12 @@ class ChromiumCommands(commands.FactoryCommands):
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
 
     # Scripts in the private dir.
-    self._reliability_tool = J(p_dir, 'reliability_tests.py')
-    self._reliability_data = J(p_dir, 'data', 'reliability')
     self._download_and_extract_official_tool = self.PathJoin(
         p_dir, 'get_official_build.py')
+
+    # Reliability paths.
+    self._reliability_tool = J(self._script_dir, 'reliability_tests.py')
+    self._reliability_data = J('src', 'chrome', 'test', 'data', 'reliability')
 
     # These scripts should be move to the script dir.
     self._check_deps_tool = J('src', 'tools', 'checkdeps', 'checkdeps.py')
@@ -502,15 +504,14 @@ class ChromiumCommands(commands.FactoryCommands):
         cmd,
         do_step_if=self.TestStepFilter)
 
-  def AddReliabilityTests(self, platform='win'):
-    cmd_1 = ['python', self._reliability_tool, '--platform', platform,
-             '--data-dir', self._reliability_data, '--mode', '0']
-    cmd_2 = ['python', self._reliability_tool, '--platform', platform,
-             '--data-dir', self._reliability_data, '--mode', '1']
+  def AddReliabilityTests(self, platform):
+    cmd = [self._python,
+           self._reliability_tool,
+           '--platform', platform,
+           '--data-dir', self._reliability_data,
+           '--build-id', WithProperties('%(build_id)s')]
     self.AddTestStep(retcode_command.ReturnCodeCommand,
-                     'reliability: complete result of previous build', cmd_1)
-    self.AddTestStep(retcode_command.ReturnCodeCommand,
-                     'reliability: partial result of current build', cmd_2)
+                     'reliability_tests', cmd)
 
   def AddInstallerTests(self, factory_properties):
     if self._target_platform == 'win32':
