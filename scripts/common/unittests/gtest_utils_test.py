@@ -314,6 +314,29 @@ TEST_DATA_CRASH_SHARD = """Note: This is test shard 5 of 5.
 [ RUN      ] HunspellTest.Crashes
 Oops, this test crashed!"""
 
+TEST_DATA_NESTED_RUNS = ("""
+[ 1/3] 1.0s Foo.Bar (45.5s)
+Note: Google Test filter = Foo.Bar
+[==========] Running 1 test from 1 test case.
+[----------] Global test environment set-up.
+[----------] 1 test from Foo, where TypeParam =
+[ RUN      ] Foo.Bar
+""" +
+'[0725/050653:ERROR:test_launcher.cc(380)] Test timeout (45000 ms) exceeded '
+'for Foo.Bar' + """
+Starting tests...
+IMPORTANT DEBUGGING NOTE: each test is run inside its own process.
+For debugging a test inside a debugger, use the
+--gtest_filter=<your_test_name> flag along with either
+--single_process (to run all tests in one launcher/browser process) or
+--single-process (to do the above, and also run Chrome in single-
+process mode).
+1 test run
+1 test failed (0 ignored)
+Failing tests:
+Foo.Bar
+[ 2/2] 2.00s Foo.Pass (1.0s)""")
+
 
 # Data generated with run_test_case.py
 TEST_DATA_RUN_TEST_CASE_FAIL = """
@@ -495,6 +518,11 @@ class TestGTestLogParserTests(unittest.TestCase):
         ['SUIDSandboxUITest.testSUIDSandboxEnabled: ', '(junk)'],
         parser.FailureDescription('SUIDSandboxUITest.testSUIDSandboxEnabled'))
 
+  def testNestedGtests(self):
+    parser = gtest_utils.GTestLogParser()
+    for line in TEST_DATA_NESTED_RUNS.splitlines():
+      parser.ProcessLine(line)
+    self.assertEqual(['Foo.Bar'], parser.FailedTests(True, True))
 
 
 if __name__ == '__main__':

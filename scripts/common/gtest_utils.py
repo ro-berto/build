@@ -184,7 +184,7 @@ class GTestLogParser(object):
 
     # Is it a line listing the master name?
     if not self.master_name:
-      results = self._master_name_re.search(line)
+      results = self._master_name_re.match(line)
       if results:
         self.master_name = results.group(1)
 
@@ -200,14 +200,14 @@ class GTestLogParser(object):
       return
 
     # Is it a line declaring all tests passed?
-    results = self._test_passed.search(line)
+    results = self._test_passed.match(line)
     if results:
       self.completed = True
       self._current_test = ''
       return
 
     # Is it a line reporting disabled tests?
-    results = self._disabled.search(line)
+    results = self._disabled.match(line)
     if results:
       try:
         disabled = int(results.group(1))
@@ -222,7 +222,7 @@ class GTestLogParser(object):
       return
 
     # Is it a line reporting flaky tests?
-    results = self._flaky.search(line)
+    results = self._flaky.match(line)
     if results:
       try:
         flaky = int(results.group(1))
@@ -237,7 +237,7 @@ class GTestLogParser(object):
       return
 
     # Is it the start of a test?
-    results = self._test_start.search(line)
+    results = self._test_start.match(line)
     if results:
       if self._current_test:
         if self._test_status[self._current_test][0] == 'started':
@@ -254,7 +254,7 @@ class GTestLogParser(object):
       return
 
     # Is it a test success line?
-    results = self._test_ok.search(line)
+    results = self._test_ok.match(line)
     if results:
       test_name = results.group(1)
       status = self._StatusOfTest(test_name)
@@ -269,7 +269,7 @@ class GTestLogParser(object):
       return
 
     # Is it a test failure line?
-    results = self._test_fail.search(line)
+    results = self._test_fail.match(line)
     if results:
       test_name = results.group(1)
       status = self._StatusOfTest(test_name)
@@ -298,7 +298,7 @@ class GTestLogParser(object):
       return
 
     # Is it the start of a new valgrind suppression?
-    results = self._suppression_start.search(line)
+    results = self._suppression_start.match(line)
     if results:
       suppression_hash = results.group(1)
       if suppression_hash in self._suppressions:
@@ -309,7 +309,7 @@ class GTestLogParser(object):
       return
 
     # Is it the end of a valgrind suppression?
-    results = self._suppression_end.search(line)
+    results = self._suppression_end.match(line)
     if results and self._current_suppression_hash:
       self._current_suppression.append(line)
       self._suppressions[self._current_suppression_hash] = (
@@ -319,7 +319,7 @@ class GTestLogParser(object):
       return
 
     # Is it the start of the retry tests?
-    results = self._retry_message.search(line)
+    results = self._retry_message.match(line)
     if results:
       self.retrying_failed = True
       return
@@ -341,7 +341,7 @@ class GTestLogParser(object):
     # additional failed tests to the list. For example, this includes tests
     # that crash after the OK line.
     if self._parsing_failures:
-      results = self._test_name.search(line)
+      results = self._test_name.match(line)
       if results:
         test_name = results.group(1)
         status = self._StatusOfTest(test_name)
