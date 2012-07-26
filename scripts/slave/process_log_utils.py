@@ -10,6 +10,7 @@ to help buildsteps parse these logs and identify if tests had anomalies.
 
 """
 
+import json
 import logging
 import os
 import re
@@ -17,7 +18,6 @@ import re
 from buildbot.status import builder
 from common import chromium_utils
 import config
-import simplejson
 
 
 READABLE_FILE_PERMISSIONS = int('644', 8)
@@ -90,7 +90,7 @@ def JoinWithSpacesAndNewLine(array):
 class PerformanceLogProcessor(object):
   """Parent class for performance log parsers."""
 
-  def __init__(self, revision=None, factory_properties=None, test_name=None,
+  def __init__(self, revision=None, factory_properties=None,
                build_property=None, webkit_revision='undefined'):
     if factory_properties is None:
       factory_properties = {}
@@ -220,7 +220,7 @@ class PerformanceLogProcessor(object):
     perf_data = {}
     if perf_file:
       try:
-        perf_data = simplejson.load(perf_file)
+        perf_data = json.load(perf_file)
       except ValueError:
         perf_file.seek(0)
         logging.error('Error parsing expectations %s: \'%s\'' %
@@ -456,28 +456,27 @@ class PlaybackLogProcessor(PerformanceLogProcessor):
 
         self.current_type_data[test_name]['data'].append(test_data)
 
-    def _FinalizeProcessing(self):
-      # Only proceed if they both passed.
-      if (self.summary_data.get('latest', {}) and
-          self.summary_data.get('reference', {})):
-        # Write the details file, which contains the raw results.
-        filename = 'details.dat'
-        data = simplejson.dumps({self._revision: self.summary_data})
-        self.AppendLog(filename, data)
+  def _FinalizeProcessing(self):
+    # Only proceed if they both passed.
+    if (self.summary_data.get('latest', {}) and
+        self.summary_data.get('reference', {})):
+      # Write the details file, which contains the raw results.
+      filename = 'details.dat'
+      data = json.dumps({self._revision: self.summary_data})
+      self.AppendLog(filename, data)
 
-        for summary in self.summary_data.itervalues():
-          for test in summary.itervalues():
-            mean, stdd = chromium_utils.MeanAndStandardDeviation(test['data'])
-            test['mean'] = str(FormatFloat(mean))
-            test['stdd'] = str(FormatFloat(stdd))
-            # Remove test data as it is not needed in the summary file.
-            del test['data']
+      for summary in self.summary_data.itervalues():
+        for test in summary.itervalues():
+          mean, stdd = chromium_utils.MeanAndStandardDeviation(test['data'])
+          test['mean'] = str(FormatFloat(mean))
+          test['stdd'] = str(FormatFloat(stdd))
+          # Remove test data as it is not needed in the summary file.
+          del test['data']
 
-        # Write the summary file, which contains the mean/stddev (data necessary
-        # to draw the graphs).
-        filename = 'summary.dat'
-        self.AppendLog(filename, simplejson.dumps({self._revision:
-                                                   self.summary_data}))
+      # Write the summary file, which contains the mean/stddev (data necessary
+      # to draw the graphs).
+      filename = 'summary.dat'
+      self.AppendLog(filename, json.dumps({self._revision: self.summary_data}))
 
 
 class Trace(object):
@@ -547,6 +546,9 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     PerformanceLogProcessor.__init__(self, *args, **kwargs)
     # A dict of Graph objects, by name.
     self._graphs = {}
+    build_property = kwargs.get('build_property') or {}
+    self._version = build_property.get('version') or 'undefined'
+    self._channel = build_property.get('channel') or 'undefined'
 
     # Load performance expectations for this test.
     self.LoadPerformanceExpectations()
@@ -723,7 +725,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
                                          (not y['important'], y['name'])))
 
     olddata = self._output.get(GRAPH_LIST, [])
-    self._output[GRAPH_LIST] = [str(new_graph_list)] + olddata
+    self._output[GRAPH_LIST] = [json.dumps(new_graph_list)] + olddata
 
 
 class GraphingFrameRateLogProcessor(GraphingLogProcessor):
@@ -767,7 +769,7 @@ class GraphingFrameRateLogProcessor(GraphingLogProcessor):
                                            FormatFloat(sigma)))
 
     filename = '%s_%s_%s.dat' % (self._revision, graph_name, trace_name)
-    self.AppendLog(filename, ''.join(file_data))
+    self.AppendLog(filename, file_data)
 
 
 class GraphingPageCyclerLogProcessor(GraphingLogProcessor):

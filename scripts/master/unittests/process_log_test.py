@@ -9,6 +9,10 @@ These tests should be run from the directory in which the script lives, so it
 can find its data/ directory.
 """
 
+# Note: log processing is being moved to the slave, please look at
+# scripts/slave/process_log_utils.py and
+# scripts/slave/unittests/runtest_annotator_test.py
+
 import filecmp
 import json
 import os
