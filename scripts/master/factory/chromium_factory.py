@@ -16,6 +16,19 @@ from master.factory.build_factory import BuildFactory
 import config
 
 
+def ForceComponent(target, project, gclient_env):
+  # Force all bots to specify the "Component" gyp variables, unless it is
+  # already set.
+  gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
+  if ('component=' not in gyp_defines and
+      'build_for_tool=' not in gyp_defines):
+    if target == 'Debug':
+      component = 'shared_library'
+    else:
+      component = 'static_library'
+    gclient_env['GYP_DEFINES'] = gyp_defines + ' component=' + component
+
+
 class ChromiumFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the chromium master.cfg files."""
 
@@ -637,18 +650,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       gclient_env['GYP_GENERATOR_FLAGS'] = (
           gyp_generator_flags + ' msvs_error_on_missing_sources=1')
 
-  def ForceComponent(self, target, project, gclient_env):
-    # Force all bots to specify the "Component" gyp variables, unless it is
-    # already set.
-    gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
-    if ('component=' not in gyp_defines and
-        'build_for_tool=' not in gyp_defines):
-      if target == 'Debug' and self._target_platform != 'darwin':
-        component = 'shared_library'
-      else:
-        component = 'static_library'
-      gclient_env['GYP_DEFINES'] = gyp_defines + ' component=' + component
-
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
@@ -686,7 +687,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
 
     # Ensure that component is set correctly in the gyp defines.
-    self.ForceComponent(target, project, factory_properties['gclient_env'])
+    ForceComponent(target, project, factory_properties['gclient_env'])
 
     # Ensure GYP errors out if files referenced in .gyp files are missing.
     self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
@@ -761,7 +762,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     options = options or {}
 
     # Ensure that component is set correctly in the gyp defines.
-    self.ForceComponent(target, project, factory_properties)
+    ForceComponent(target, project, factory_properties)
 
     factory = self.BuildFactory(target, clobber,
                                 None, None, # tests_for_build, mode,
@@ -1022,7 +1023,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions.append(gclient_factory.GClientSolution(url, name))
 
     # Ensure that component is set correctly in the gyp defines.
-    self.ForceComponent(target, project, factory_properties)
+    ForceComponent(target, project, factory_properties)
 
     factory = self.BuildFactory(target, clobber, tests, mode,
                                 slave_type, options, compile_timeout, build_url,
