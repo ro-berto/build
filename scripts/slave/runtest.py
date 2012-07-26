@@ -40,10 +40,12 @@ from buildbot.status import builder
 
 from common import chromium_utils
 from common import gtest_utils
+import config
 from slave import gtest_slave_utils
+from slave import process_log_utils
 from slave import slave_utils
 from slave import xvfb
-import config
+from slave.gtest.json_results_generator import GetSvnRevision
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
@@ -222,9 +224,12 @@ def getText(result, observer, name):
   failed test steps.
   """
   GTEST_DASHBOARD_BASE = ('http://test-results.appspot.com'
-    '/dashboards/flakiness_dashboard.html')
+                          '/dashboards/flakiness_dashboard.html')
 
-  # basic_info is an array of lines to display on the waterfall
+  if hasattr(observer, 'PerformanceSummary'):
+    return observer.PerformanceSummary()
+
+  # basic_info is an array of lines to display on the waterfall.
   basic_info = [name]
 
   disabled = observer.DisabledTests()
@@ -236,7 +241,6 @@ def getText(result, observer, name):
     basic_info.append('%s flaky' % str(flaky))
 
   failed_test_count = len(observer.FailedTests())
-
   if failed_test_count == 0:
     if result is builder.SUCCESS:
       return basic_info
@@ -244,20 +248,19 @@ def getText(result, observer, name):
       return basic_info + ['warnings']
 
   if observer.RunningTests():
-
     basic_info += ['did not complete']
 
-  # TODO(xusydoc):  see if 'crashed or hung' should be tracked by RunningTests()
+  # TODO(xusydoc): see if 'crashed or hung' should be tracked by RunningTests().
   if failed_test_count:
     failure_text = ['failed %d' % failed_test_count]
     if observer.master_name:
-      # Include the link to the flakiness dashboard
+      # Include the link to the flakiness dashboard.
       failure_text.append('<div class="BuildResultInfo">')
       failure_text.append('<a href="%s#master=%s&testType=%s'
-                          '&tests=%s">' % (
-          GTEST_DASHBOARD_BASE, observer.master_name,
-          name,
-          ','.join(observer.FailedTests())))
+                          '&tests=%s">' % (GTEST_DASHBOARD_BASE,
+                                           observer.master_name,
+                                           name,
+                                           ','.join(observer.FailedTests())))
       failure_text.append('Flakiness dashboard')
       failure_text.append('</a>')
       failure_text.append('</div>')
@@ -266,27 +269,78 @@ def getText(result, observer, name):
   return basic_info + failure_text
 
 
+def get_parsers():
+  parsers = {'gtest': gtest_utils.GTestLogParser,
+             'benchpress': process_log_utils.BenchpressLogProcessor,
+             'playback': process_log_utils.PlaybackLogProcessor,
+             'graphing': process_log_utils.GraphingLogProcessor,
+             'framerate': process_log_utils.GraphingFrameRateLogProcessor,
+             'pagecycler': process_log_utils.GraphingPageCyclerLogProcessor}
+  return parsers
+
+
+def list_parsers(selection):
+  parsers = get_parsers()
+  shouldlist = selection and selection == 'list'
+  if shouldlist:
+    print
+    print 'Available log parsers:'
+    for p in parsers:
+      print ' ', p, parsers[p].__name__
+
+  return shouldlist
+
+
+def select_results_tracker(selection, use_gtest):
+  parsers = get_parsers()
+  if selection:
+    if selection in parsers:
+      if use_gtest and selection != 'gtest':
+        raise NotImplementedError("'%s' doesn't make sense with "
+                                  "options.generate_json_file")
+      else:
+        return parsers[selection]
+    else:
+      raise KeyError("'%s' is not a valid GTest parser!!" % selection)
+  elif use_gtest:
+    return parsers['gtest']
+  return None
+
+
+def create_results_tracker(tracker_class, options):
+  if not tracker_class:
+    return None
+
+  if tracker_class.__name__ == 'GTestLogParser':
+    return tracker_class()
+
+  build_dir = os.path.abspath(options.build_dir)
+  webkit_dir = chromium_utils.FindUpward(build_dir, 'third_party', 'WebKit',
+                                         'Source')
+
+  return tracker_class(revision=GetSvnRevision(build_dir),
+                       build_property=options.build_properties,
+                       factory_properties=options.factory_properties,
+                       webkit_revision=GetSvnRevision(webkit_dir))
+
+
 def annotate(test_name, result, results_tracker):
   """Given a test result and tracker, update the waterfall with test results."""
   get_text_result = builder.SUCCESS
 
   for failure in sorted(results_tracker.FailedTests()):
     testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
-    for line in results_tracker.FailureDescription(failure):
-      print '@@@STEP_LOG_LINE@%s@%s@@@' % (testabbr, line)
-    print '@@@STEP_LOG_END@%s@@@' % testabbr
-
+    slave_utils.WriteLogLines(testabbr,
+                              results_tracker.FailureDescription(failure))
   for suppression_hash in sorted(results_tracker.SuppressionHashes()):
-    for line in results_tracker.Suppression(suppression_hash):
-      print '@@@STEP_LOG_LINE@%s@%s@@@' % (testabbr, line)
-    print '@@@STEP_LOG_END@%s@@@' % testabbr
+    slave_utils.WriteLogLines(testabbr,
+                              results_tracker.Suppression(suppression_hash))
 
   if results_tracker.ParsingErrors():
     # Generate a log file containing the list of errors.
-    for line in results_tracker.ParsingErrors():
-      print '@@@STEP_LOG_LINE@%s@%s@@@' % ('log parsing error(s)', line)
+    slave_utils.WriteLogLines('log parsing error(s)',
+                              results_tracker.ParsingErrors())
 
-    print '@@@STEP_LOG_END@%s@@@' % 'log parsing error(s)'
     results_tracker.ClearParsingErrors()
 
   if result is builder.SUCCESS:
@@ -302,6 +356,11 @@ def annotate(test_name, result, results_tracker):
   for desc in getText(get_text_result, results_tracker, test_name):
     print '@@@STEP_TEXT@%s@@@' % desc
 
+  if hasattr(results_tracker, 'PerformanceLogs'):
+    for logname, log in results_tracker.PerformanceLogs().iteritems():
+      lines = [str(l).rstrip() for l in log]
+      slave_utils.WriteLogLines(logname, lines)
+
 
 def main_mac(options, args):
   if len(args) < 1:
@@ -315,8 +374,8 @@ def main_mac(options, args):
 
     build_dir = os.path.dirname(build_dir)
     outdir = 'xcodebuild'
-    is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
-        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+    is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
+                        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
     if is_make_or_ninja:
       outdir = 'out'
 
@@ -344,9 +403,11 @@ def main_mac(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
 
-  results_tracker = None
-  if options.generate_json_file or options.annotate:
-    results_tracker = gtest_utils.GTestLogParser()
+  if list_parsers(options.annotate):
+    return 0
+  tracker_class = select_results_tracker(options.annotate,
+                                         options.generate_json_file)
+  results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -449,7 +510,7 @@ def main_linux(options, args):
   os.environ['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
                                                                bin_dir)
   # Figure out what we want for a special llvmpipe directory.
-  if (options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir)):
+  if options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir):
     os.environ['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
 
   if options.parallel:
@@ -462,9 +523,11 @@ def main_linux(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
 
-  results_tracker = None
-  if options.generate_json_file or options.annotate:
-    results_tracker = gtest_utils.GTestLogParser()
+  if list_parsers(options.annotate):
+    return 0
+  tracker_class = select_results_tracker(options.annotate,
+                                         options.generate_json_file)
+  results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -537,9 +600,11 @@ def main_win(options, args):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
-  results_tracker = None
-  if options.generate_json_file or options.annotate:
-    results_tracker = gtest_utils.GTestLogParser()
+  if list_parsers(options.annotate):
+    return 0
+  tracker_class = select_results_tracker(options.annotate,
+                                         options.generate_json_file)
+  results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
     if os.path.exists(options.test_output_xml):
@@ -602,10 +667,10 @@ def main():
                            help='Start a local httpd server using the given '
                                 'document root, relative to the current dir')
   option_parser.add_option('', '--total-shards', dest='total_shards',
-                           default=None, type="int",
+                           default=None, type='int',
                            help='Number of shards to split this test into.')
   option_parser.add_option('', '--shard-index', dest='shard_index',
-                           default=None, type="int",
+                           default=None, type='int',
                            help='Shard to run. Must be between 1 and '
                                 'total-shards.')
   option_parser.add_option('', '--run-shell-script', action='store_true',
@@ -652,20 +717,21 @@ def main():
                            help='Options to pass to sharding_supervisor.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
-  option_parser.add_option("", "--builder-name", default=None,
-                           help="The name of the builder running this script.")
-  option_parser.add_option("", "--build-number", default=None,
-                           help=("The build number of the builder running"
-                                 "this script."))
-  option_parser.add_option("", "--test-type", default='',
-                           help="The test name that identifies the test, "
-                                "e.g. 'unit-tests'")
-  option_parser.add_option("", "--test-results-server", default='',
-                           help="The test results server to upload the "
-                                "results.")
-  option_parser.add_option('', '--annotate', action='store_true',
-                           dest = 'annotate', default=False,
-                           help='Annotate output when run as a buildstep.')
+  option_parser.add_option('', '--builder-name', default=None,
+                           help='The name of the builder running this script.')
+  option_parser.add_option('', '--build-number', default=None,
+                           help=('The build number of the builder running'
+                                 'this script.'))
+  option_parser.add_option('', '--test-type', default='',
+                           help='The test name that identifies the test, '
+                                'e.g. \'unit-tests\'')
+  option_parser.add_option('', '--test-results-server', default='',
+                           help='The test results server to upload the '
+                                'results.')
+  option_parser.add_option('', '--annotate', default='',
+                           help='Annotate output when run as a buildstep. '
+                                'Specify which type of test to parse, available'
+                                ' types listed with --annotate=list.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
@@ -707,7 +773,7 @@ def main():
   if temp_files > new_temp_files:
     print >> sys.stderr, (
         'Confused: %d files were deleted from %s during the test run') % (
-        (temp_files - new_temp_files), tempfile.gettempdir())
+            (temp_files - new_temp_files), tempfile.gettempdir())
   elif temp_files < new_temp_files:
     print >> sys.stderr, (
         '%d new files were left in %s: Fix the tests to clean up themselves.'

@@ -99,15 +99,15 @@ class GTestLogParser(object):
       line: text of the line at which the error occurred
       reason: a string describing the error
     """
-    self._internal_error_lines.append("%s: %s [%s]" %
-                                     (self._line_number, line.strip(), reason))
+    self._internal_error_lines.append('%s: %s [%s]' %
+                                      (self._line_number, line.strip(), reason))
 
   def RunningTests(self):
     """Returns list of tests that appear to be currently running."""
     return self._TestsByStatus('started', True, True)
 
   def ParsingErrors(self):
-    """Returns a list of lines that have caused parsing errors"""
+    """Returns a list of lines that have caused parsing errors."""
     return self._internal_error_lines
 
   def ClearParsingErrors(self):
@@ -153,7 +153,7 @@ class GTestLogParser(object):
     If the test didn't fail or timeout, returns [].
     """
     test_status = self._test_status.get(test, ('', []))
-    return ["%s: " % test] + test_status[1]
+    return ['%s: ' % test] + test_status[1]
 
   def SuppressionHashes(self):
     """Returns list of suppression hashes found in the log."""
@@ -187,7 +187,7 @@ class GTestLogParser(object):
         self.master_name = results.group(1)
 
     # Is it a line declaring all tests passed?
-    results =  self._test_passed.search(line)
+    results = self._test_passed.search(line)
     if results:
       self.completed = True
       self._current_test = ''

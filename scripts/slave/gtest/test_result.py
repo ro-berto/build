@@ -2,11 +2,13 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+
 def canonical_name(name):
   new_name = name.replace('FLAKY_', '', 1)
   new_name = new_name.replace('FAILS_', '', 1)
   new_name = new_name.replace('DISABLED_', '', 1)
   return new_name
+
 
 class TestResult(object):
   """A simple class that represents a single test result."""

@@ -16,26 +16,29 @@ import tempfile
 import time
 
 from common import chromium_utils
-from slave import xvfb
 import config
+from slave import xvfb
 
 
 # Local errors.
-class PageHeapError(Exception): pass
+class PageHeapError(Exception):
+  pass
 
 
 # Cache the path to gflags.exe.
 _gflags_exe = None
 
+
 def SubversionExe():
   # TODO(pamg): move this into platform_utils to support Mac and Linux.
   if chromium_utils.IsWindows():
-    return 'svn.bat' # Find it in the user's path.
+    return 'svn.bat'  # Find it in the user's path.
   elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    return 'svn' # Find it in the user's path.
+    return 'svn'  # Find it in the user's path.
   else:
     raise NotImplementedError(
-          'Platform "%s" is not currently supported.' % sys.platform)
+        'Platform "%s" is not currently supported.' % sys.platform)
+
 
 def SubversionCat(wc_dir):
   """Output the content of specified files or URLs in SVN.
@@ -46,6 +49,7 @@ def SubversionCat(wc_dir):
   except chromium_utils.ExternalError:
     return None
 
+
 def SubversionRevision(wc_dir):
   """Finds the last svn revision of a working copy by running 'svn info',
   and returns it as an integer.
@@ -53,14 +57,15 @@ def SubversionRevision(wc_dir):
   svn_regexp = re.compile(r'.*Revision: (\d+).*', re.DOTALL)
   try:
     svn_info = chromium_utils.GetCommandOutput([SubversionExe(), 'info',
-                                               wc_dir])
+                                                wc_dir])
     return_value = re.sub(svn_regexp, r'\1', svn_info)
-    if (return_value.isalnum()):
+    if return_value.isalnum():
       return int(return_value)
     else:
       return 0
   except chromium_utils.ExternalError:
     return 0
+
 
 def SubversionLastChangedRevision(wc_dir):
   """Finds the svn revision where this file/dir was last edited by running
@@ -69,9 +74,9 @@ def SubversionLastChangedRevision(wc_dir):
   svn_regexp = re.compile(r'.*Last Changed Rev: (\d+).*', re.DOTALL)
   try:
     svn_info = chromium_utils.GetCommandOutput([SubversionExe(), 'info',
-                                               wc_dir])
+                                                wc_dir])
     return_value = re.sub(svn_regexp, r'\1', svn_info)
-    if (return_value.isalnum()):
+    if return_value.isalnum():
       return int(return_value)
     else:
       return 0
@@ -130,7 +135,7 @@ def SlaveBaseDir(chrome_dir):
     curr_dir = parent
   if not result:
     raise chromium_utils.PathNotFound('Unable to find slave base dir above %s' %
-                                    chrome_dir)
+                                      chrome_dir)
   return result
 
 
@@ -150,7 +155,7 @@ def SetPageHeap(chrome_dir, exe, enable):
   global _gflags_exe
   if _gflags_exe is None:
     _gflags_exe = chromium_utils.FindUpward(chrome_dir,
-                                          'tools', 'memory', 'gflags.exe')
+                                            'tools', 'memory', 'gflags.exe')
   command = [_gflags_exe]
   if enable:
     command.extend(['/p', '/enable', exe, '/full'])
@@ -158,7 +163,7 @@ def SetPageHeap(chrome_dir, exe, enable):
     command.extend(['/p', '/disable', exe])
   result = chromium_utils.RunCommand(command)
   if result:
-    description = {True: 'enable', False:'disable'}
+    description = {True: 'enable', False: 'disable'}
     raise PageHeapError('Unable to %s page heap for %s.' %
                         (description[enable], exe))
 
@@ -196,6 +201,7 @@ def LongSleep(secs):
 
   sys.stdout.write('\n')
 
+
 def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
                                server_dir=None):
   if sys.platform == 'win32':
@@ -208,8 +214,9 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
 
     chromium_utils.RunCommand([setup_mount])
   else:
-    os.environ['PYTHONPATH'] = (chromium_utils.FindUpward(build_dir,
-        'tools', 'python') + ":" + os.environ.get('PYTHONPATH', ''))
+    os.environ['PYTHONPATH'] = (chromium_utils.FindUpward(build_dir, 'tools',
+                                                          'python')
+                                + ':' +os.environ.get('PYTHONPATH', ''))
     python_exe = 'python'
 
   if chromium_utils.IsLinux():
@@ -229,6 +236,7 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
     xvfb.StopVirtualX(slave_name)
 
   return result
+
 
 def GypFlagIsOn(options, flag):
   value = GetGypFlag(options, flag, False)
@@ -258,6 +266,7 @@ def GetActiveMaster():
       for slave in chromium_utils.RunSlavesCfg(path):
         if slave.get('hostname', None) == hostname:
           return slave['master']
+
 
 def ImportMasterConfigs(master_name=None):
   """Import master configs.
@@ -331,12 +340,13 @@ def MaybeMakeDirectoryOnArchiveHost(dest_dir):
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
 
+
 def GSUtilSetup():
   # Get the path to the gsutil script.
   gsutil = os.path.join(os.path.dirname(__file__), 'gsutil')
   gsutil = os.path.normpath(gsutil)
   if chromium_utils.IsWindows():
-    gsutil = gsutil + '.bat'
+    gsutil += '.bat'
 
   # Get the path to the boto file containing the password.
   boto_file = os.path.join(os.path.dirname(__file__), '..', '..', 'site_config',
@@ -409,6 +419,7 @@ def GSUtilCopyFile(filename, gs_base, subdir=None, mimetype=None, gs_acl=None):
   dest = '/'.join([dest, os.path.basename(filename)])
   return GSUtilCopy(source, dest, mimetype, gs_acl)
 
+
 def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
   """Create a list of files in a directory and pass each to GSUtilCopyFile."""
 
@@ -449,6 +460,7 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
 
   return 0
 
+
 def GSUtilMoveFile(source, dest, gs_acl=None):
   """Move a file on Google Storage."""
 
@@ -470,6 +482,7 @@ def GSUtilMoveFile(source, dest, gs_acl=None):
 
   return status
 
+
 def GSUtilDeleteFile(filename):
   """Delete a file on Google Storage."""
 
@@ -485,6 +498,8 @@ def GSUtilDeleteFile(filename):
 # to avoid the global output variable.  This variable should only ever be used
 # by GSUtilListBucket.
 command_output = ''
+
+
 def GSUtilListBucket(gs_base):
   """List the contents of a Google Storage bucket."""
 
@@ -494,6 +509,7 @@ def GSUtilListBucket(gs_base):
   # will try to run the command 10 times if it fails.
   global command_output
   command_output = ''
+
   def GatherOutput(line):
     global command_output
     command_output += line + '\n'
@@ -512,14 +528,14 @@ def LogAndRemoveFiles(temp_dir, regex_pattern):
   for dir_item in os.listdir(temp_dir):
     if regex.search(dir_item):
       full_path = os.path.join(temp_dir, dir_item)
-      print "Removing leaked temp item: %s" % full_path
+      print 'Removing leaked temp item: %s' % full_path
       try:
         if os.path.islink(full_path) or os.path.isfile(full_path):
           os.remove(full_path)
         elif os.path.isdir(full_path):
           chromium_utils.RemoveDirectory(full_path)
         else:
-          print "Temp item wasn't a file or directory?"
+          print 'Temp item wasn\'t a file or directory?'
       except OSError, e:
         print >> sys.stderr, e
         # Don't fail.
@@ -538,7 +554,7 @@ def RemoveOldSnapshots(desktop):
       to_delete.append(snapshot)
   # Delete the collected snapshots.
   for snapshot in to_delete:
-    print "Removing old snapshot: %s" % snapshot
+    print 'Removing old snapshot: %s' % snapshot
     try:
       os.remove(snapshot)
     except OSError, e:
@@ -603,3 +619,9 @@ def RemoveChromeTemporaryFiles():
   else:
     raise NotImplementedError(
         'Platform "%s" is not currently supported.' % sys.platform)
+
+
+def WriteLogLines(logname, lines):
+  for line in lines:
+    print '@@@STEP_LOG_LINE@%s@%s@@@' % (logname, line)
+  print '@@@STEP_LOG_END@%s@@@' % logname
