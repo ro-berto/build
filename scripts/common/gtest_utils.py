@@ -53,6 +53,8 @@ class GTestLogParser(object):
     self._test_ok      = re.compile('\[\s+OK\s+\] ' + test_name_regexp)
     self._test_fail    = re.compile('\[\s+FAILED\s+\] ' + test_name_regexp)
     self._test_passed  = re.compile('\[\s+PASSED\s+\] \d+ tests?.')
+    self._run_test_cases_line = re.compile(
+        '\[\s*\d+\/\d+\]\s+[0-9\.]+s ' + test_name_regexp + ' .+')
     self._test_timeout = re.compile(
         'Test timeout \([0-9]+ ms\) exceeded for ' + test_name_regexp)
     self._disabled     = re.compile('  YOU HAVE (\d+) DISABLED TEST')
@@ -186,6 +188,17 @@ class GTestLogParser(object):
       if results:
         self.master_name = results.group(1)
 
+    results = self._run_test_cases_line.match(line)
+    if results:
+      # A run_test_cases.py output.
+      if self._current_test:
+        if self._test_status[self._current_test][0] == 'started':
+          self._test_status[self._current_test] = (
+              'timeout', self._failure_description)
+      self._current_test = ''
+      self._failure_description = []
+      return
+
     # Is it a line declaring all tests passed?
     results = self._test_passed.search(line)
     if results:
@@ -226,6 +239,10 @@ class GTestLogParser(object):
     # Is it the start of a test?
     results = self._test_start.search(line)
     if results:
+      if self._current_test:
+        if self._test_status[self._current_test][0] == 'started':
+          self._test_status[self._current_test] = (
+              'timeout', self._failure_description)
       test_name = results.group(1)
       self._test_status[test_name] = ('started', ['Did not complete.'])
       self._current_test = test_name

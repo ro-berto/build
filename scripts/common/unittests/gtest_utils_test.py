@@ -315,6 +315,22 @@ TEST_DATA_CRASH_SHARD = """Note: This is test shard 5 of 5.
 Oops, this test crashed!"""
 
 
+# Data generated with run_test_case.py
+TEST_DATA_RUN_TEST_CASE_FAIL = """
+[  6/422]   7.45s SUIDSandboxUITest.testSUIDSandboxEnabled (1.49s) - retry #2
+[ RUN      ] SUIDSandboxUITest.testSUIDSandboxEnabled
+[  FAILED  ] SUIDSandboxUITest.testSUIDSandboxEnabled (771 ms)
+[  8/422]   7.76s PrintPreviewWebUITest.SourceIsPDFShowFitToPageOption (1.67s)
+"""
+
+TEST_DATA_RUN_TEST_CASE_TIMEOUT = """
+[  6/422]   7.45s SUIDSandboxUITest.testSUIDSandboxEnabled (1.49s) - retry #2
+[ RUN      ] SUIDSandboxUITest.testSUIDSandboxEnabled
+(junk)
+[  8/422]   7.76s PrintPreviewWebUITest.SourceIsPDFShowFitToPageOption (1.67s)
+"""
+
+
 class TestGTestLogParserTests(unittest.TestCase):
 
   def testGTestLogParserNoSharing(self):
@@ -452,6 +468,33 @@ class TestGTestLogParserTests(unittest.TestCase):
       parser.ProcessLine(line)
     self.assertEqual(FAILING_TESTS_EXPECTED,
                      parser.FailedTests(True, True))
+
+  def testRunTestCaseFail(self):
+    parser = gtest_utils.GTestLogParser()
+    for line in TEST_DATA_RUN_TEST_CASE_FAIL.splitlines():
+      parser.ProcessLine(line)
+
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertEqual([], parser.RunningTests())
+    self.assertEqual(
+        ['SUIDSandboxUITest.testSUIDSandboxEnabled'], parser.FailedTests())
+    self.assertEqual(
+        ['SUIDSandboxUITest.testSUIDSandboxEnabled: '],
+        parser.FailureDescription('SUIDSandboxUITest.testSUIDSandboxEnabled'))
+
+  def testRunTestCaseTimeout(self):
+    parser = gtest_utils.GTestLogParser()
+    for line in TEST_DATA_RUN_TEST_CASE_TIMEOUT.splitlines():
+      parser.ProcessLine(line)
+
+    self.assertEqual(0, len(parser.ParsingErrors()))
+    self.assertEqual([], parser.RunningTests())
+    self.assertEqual(
+        ['SUIDSandboxUITest.testSUIDSandboxEnabled'], parser.FailedTests())
+    self.assertEqual(
+        ['SUIDSandboxUITest.testSUIDSandboxEnabled: ', '(junk)'],
+        parser.FailureDescription('SUIDSandboxUITest.testSUIDSandboxEnabled'))
+
 
 
 if __name__ == '__main__':
