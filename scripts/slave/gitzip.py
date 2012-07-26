@@ -47,8 +47,7 @@ To bootstrap a source checkout from the uploaded zip file:
 import optparse
 import os
 try:
-  # pylint: disable=F0401
-  from queue import Queue
+  from queue import Queue  # pylint: disable=F0401
 except ImportError:
   from Queue import Queue
 import stat
@@ -61,7 +60,7 @@ from slave.slave_utils import GSUtilSetup
 
 FIRST_CHECKOUT_SH = """#!/bin/bash
 
-if [[ -z "$1" ]]; then
+if test -z "$1"; then
   case `uname -s` in
     "Linux")
       os=unix
@@ -82,7 +81,7 @@ fi
 git config target.os $os
 git checkout --force HEAD
 git config -f .gitmodules --get-regexp '.os$' "(all|$os)" |
-sed 's/^submodule\.\(.*\)\.os .*$/\\1/' |
+sed 's/^submodule\\.\\(.*\\)\\.os .*$/\\1/' |
 while read submodule; do
   git config submodule.$submodule.update checkout
   (cd $submodule && git checkout --force HEAD)
@@ -102,8 +101,7 @@ if "%1" == "" (
 call git config target.os %os%
 call git checkout --force HEAD
 
-FOR /F "delims=. tokens=2" %%x in ^
-    ('git config -f .gitmodules --get-regexp .os$ "(all|%os%)"') DO (
+FOR /F "delims=. tokens=2" %%x in ('git config -f .gitmodules --get-regexp .os$ "(all|%os%)"') DO (
   call git config submodule.%%x.update checkout
   CMD /C "cd %%x & git checkout --force HEAD"
 )
@@ -112,12 +110,17 @@ call git submodule update
 """
 
 
-# pylint: disable=W0232
-class TerminateMessageThread:
+class TerminateMessageThread:  # pylint: disable=W0232
+  """Used as a semaphore to signal the message-printing loop to terminate."""
   pass
 
 
 class GitZip(object):
+  """
+  Encapsulates all the information needed to check out a git repository and
+  its submodules; compress the result into a zip archive; and upload the archive
+  to google storage.
+  """
   # pylint: disable=W0621
   def __init__(self, workdir, base=None, url=None, gs_bucket=None,
                gs_acl='public-read', timeout=900, stayalive=None,
@@ -138,6 +141,10 @@ class GitZip(object):
     self.messages = Queue()
 
   def _run_cmd(self, cmd, workdir=None, raiseOnFailure=True):
+    """
+    Run a subprocess in a separate thread, with a time limit.  Returns the exit
+    status, stdout, and stderr.
+    """
     if workdir is None:
       workdir = self.workdir
     def _thread_main():
@@ -147,10 +154,12 @@ class GitZip(object):
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=workdir)
         (stdout, stderr) = proc.communicate()
       except Exception, e:
+        # pylint: disable=E1101
         thr.status = -1
         thr.stdout = ''
         thr.stderr = repr(e)
       else:
+        # pylint: disable=E1101
         thr.status = proc.returncode
         thr.stdout = stdout
         thr.stderr = stderr
@@ -169,6 +178,12 @@ class GitZip(object):
     return (thr.status, thr.stdout, thr.stderr)
 
   def _pump_messages(self):
+    """
+    Print messages from threads sequentially to stdout, to avoid garbling.
+    Optionally print a "Still working..." message every self.stayalive seconds,
+    to prevent the top-level process from being killed if its parent expects
+    regular terminal output (as buildbot does).
+    """
     def _stayalive():
       print "Still working..."
       self.stayalive_timer = threading.Timer(self.stayalive, _stayalive)
@@ -186,12 +201,12 @@ class GitZip(object):
         return
       print msg
 
-  def FetchSubmodules(self, clonedir):
-    # Get path/url information for submodules
+  def GetSubmoduleInfo(self, clonedir):
+    """Get path/url information for submodules."""
+    submods = {}
+    submod_paths = {}
     config_cmd = ['git', 'config', '-f', '.gitmodules', '-l']
     (_, stdout, _) = self._run_cmd(config_cmd, clonedir)
-
-    submods = {}
     for line in stdout.splitlines():
       try:
         (key, val) = line.split('=')
@@ -200,9 +215,47 @@ class GitZip(object):
           continue
         submod_dict = submods.setdefault(mod_name, {})
         submod_dict[subkey] = val
+        if subkey == 'path':
+          submod_paths[val] = mod_name
+      except ValueError:
+        pass
+    return (submods, submod_paths)
+
+  def DeleteSubmoduleConfig(self, clonedir):
+    """
+    Delete all submodule sections in .git/config; they will be recreated from
+    scratch by `git submodule init`.
+    """
+    config_cmd = ['git', 'config', '-l']
+    (_, stdout, _) = self._run_cmd(config_cmd, clonedir)
+    for line in stdout.splitlines():
+      try:
+        (key, _) = line.split('=')
+        (header, mod_name, subkey) = key.split('.')
+        if header != 'submodule' or subkey != 'url':
+          continue
+        section = 'submodule.%s' % mod_name
+        self._run_cmd(['git', 'config', '--remove-section', section], clonedir)
       except ValueError:
         pass
 
+  def RemoveObsoleteCheckouts(self, clonedir, submod_paths):
+    """If a submodule has been dropped, delete the checkout."""
+    ls_cmd = ['git', 'ls-tree', '-r', 'HEAD']
+    grep_cmd = ['grep', '^160000']
+    ls_proc = subprocess.Popen(ls_cmd, stdout=subprocess.PIPE, cwd=clonedir)
+    grep_proc = subprocess.Popen(grep_cmd, stdin=ls_proc.stdout,
+                                 stdout=subprocess.PIPE)
+    (stdout, _) = grep_proc.communicate()
+    ls_proc.communicate()
+    for line in stdout.splitlines():  # pylint: disable=E1103
+      (_, _, _, mod_path) = line.split()
+      if (mod_path not in submod_paths and
+          os.path.isdir(os.path.join(clonedir, mod_path, '.git'))):
+        self._run_cmd('rm', '-rf', os.path.join(clonedir, mod_path))
+
+  def FetchSubmodules(self, clonedir, submods):
+    """Recursively, and in parallel threads, call DoFetch on submodules."""
     threads = []
     for submod_dict in submods.itervalues():
       if 'path' not in submod_dict or 'url' not in submod_dict:
@@ -211,6 +264,9 @@ class GitZip(object):
       submod_clonedir = os.path.join(clonedir, submod_path)
       submod_url = submod_dict['url']
       self._run_cmd(['git', 'checkout', 'HEAD', submod_path], clonedir)
+      self._run_cmd(['git', 'submodule', 'init', submod_path], clonedir)
+      if os.path.isdir(os.path.join(submod_clonedir, '.git')):
+        self._run_cmd(['git', 'submodule', 'sync', submod_path], clonedir)
       thr = threading.Thread(
           target=self.DoFetch, args=(submod_clonedir, submod_url))
       thr.start()
@@ -220,7 +276,6 @@ class GitZip(object):
     for thr in threads:
       if thr.err:
         raise thr.err
-    self._run_cmd(['git', 'submodule', 'init'], clonedir)
     self._run_cmd(['git', 'config', 'diff.ignoreSubmodules', 'all'], clonedir)
     self._run_cmd(['git', 'submodule', 'foreach', 'git', 'config', '-f',
                    '$toplevel/.git/config', 'submodule.$name.ignore', 'all'],
@@ -229,7 +284,15 @@ class GitZip(object):
                    '$toplevel/.git/config', 'submodule.$name.update', 'none'],
                   clonedir)
 
+  def UpdateSubmodules(self, clonedir):
+    """Update submodule config info and submodule checkouts."""
+    (submods, submod_paths) = self.GetSubmoduleInfo(clonedir)
+    self.DeleteSubmoduleConfig(clonedir)
+    self.RemoveObsoleteCheckouts(clonedir, submod_paths)
+    self.FetchSubmodules(clonedir, submods)
+
   def PostFetch(self, clonedir):
+    """After fetching, set basic config options and recurse into submodules."""
     try:
       # Set up git config
       self._run_cmd(['git', 'config', 'core.autocrlf', 'false'], clonedir)
@@ -240,7 +303,7 @@ class GitZip(object):
       (status, _, _) = self._run_cmd(cmd, clonedir, raiseOnFailure=False)
       if status != 0:
         return
-      self.FetchSubmodules(clonedir)
+      self.UpdateSubmodules(clonedir)
     except:
       raise
     finally:
@@ -249,6 +312,7 @@ class GitZip(object):
       self._run_cmd(cmd, clonedir)
 
   def DoFetch(self, clonedir, url=None):
+    """Fetch the latest changes from the upstream git repository."""
     try:
       if os.path.isdir(os.path.join(clonedir, '.git')):
         cmd = ['git', 'fetch', 'origin']
@@ -270,6 +334,7 @@ class GitZip(object):
 
   @staticmethod
   def CreateFirstCheckoutHook(clonedir):
+    """Create first-checkout scripts to be included in the zip archive."""
     permissions = (stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR |
                    stat.S_IRGRP | stat.S_IXGRP|
                    stat.S_IROTH | stat.S_IXOTH)
@@ -280,11 +345,12 @@ class GitZip(object):
     os.chmod(hook_path, permissions)
     hook_path = os.path.join(clonedir, '.git', 'hooks', 'first-checkout.bat')
     fh = open(hook_path, 'w')
-    fh.write(FIRST_CHECKOUT_BAT)
+    fh.write('\r\n'.join(FIRST_CHECKOUT_BAT.splitlines()))
     fh.close()
     os.chmod(hook_path, permissions)
 
   def CreateZipFile(self, zippath, zipfile, sha1_file):
+    """Create a zip archive of a git checkout, and calculate a sha1 sum."""
     self._run_cmd(['rm', '-f', zipfile])
     cmd = ['7z', 'a', '-tzip', '-mx=0', zipfile, zippath]
     self._run_cmd(cmd)
@@ -295,6 +361,7 @@ class GitZip(object):
     fh.close()
 
   def UploadFiles(self, *f, **kwargs):
+    """Upload files to google storage."""
     try:
       threading.current_thread().err = None
       if not self.gs_bucket:
@@ -311,6 +378,7 @@ class GitZip(object):
       raise
 
   def ZipAndUpload(self):
+    """Create zip archives and upload them to google storage."""
     gs_threads = []
 
     # Create a zip file of everything
@@ -357,6 +425,10 @@ class GitZip(object):
         raise thr.err
 
   def Run(self):
+    """
+    Fetch data from the upstream git repository, create a zip archive of
+    the checkout, and upload it to google storage.
+    """
     message_thread = threading.Thread(target=self._pump_messages)
     message_thread.start()
     try:
