@@ -200,7 +200,7 @@ class GetSwarmResults(SuperMoxTestBase):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
 
     shard_output = json.dumps(
-      {'hostname': 'host',
+      {'machine_id': 'host',
        'exit_codes': '0, 0',
        'output': SWARM_OUTPUT_WITHOUT_FAILURE
      }
@@ -226,7 +226,7 @@ class GetSwarmResults(SuperMoxTestBase):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
 
     shard_output = json.dumps(
-      {'hostname': 'host',
+      {'machine_id': 'host',
        'exit_codes': '0, 1',
        'output': SWARM_OUTPUT_WITH_FAILURE
      }
@@ -250,7 +250,7 @@ class GetSwarmResults(SuperMoxTestBase):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
 
     shard_output = json.dumps(
-      {'hostname': 'host',
+      {'machine_id': 'host',
        'exit_codes': '0, 0',
        'output': SWARM_OUTPUT_WITH_NO_TEST_OUTPUT
      }
