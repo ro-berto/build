@@ -221,7 +221,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     ('src/chrome/tools/process_dumps',
      config.Master.trunk_url + '/src/chrome/tools/process_dumps'),
     ('src/chrome/test/data/reliability',
-     config.Master.trunk_url + 'src/chrome/test/data/reliability')]
+     config.Master.trunk_url + '/src/chrome/test/data/reliability')]
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
