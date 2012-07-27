@@ -307,6 +307,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('check_licenses'):
       f.AddCheckLicensesStep(fp)
 
+    # Annotated base unittests to check GTest annotator
+    if R('base_annotated'):
+      f.AddAnnotatedGTestTestStep('base_unittests', fp)
+
     # Small ("module") unit tests:
     if R('base'):
       f.AddBasicGTestTestStep('base_unittests', fp)

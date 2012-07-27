@@ -404,7 +404,8 @@ class FactoryCommands(object):
 
   def AddBasicGTestTestStep(self, test_name, factory_properties=None,
                             description='', arg_list=None, total_shards=None,
-                            shard_index=None, test_tool_arg_list=None):
+                            shard_index=None, test_tool_arg_list=None,
+                            gtestcommand=gtest_command.GTestCommand):
     """Adds a step to the factory to run the gtest tests.
 
     Args:
@@ -463,9 +464,26 @@ class FactoryCommands(object):
     arg_list.append(WithProperties("%(gtest_filter)s"))
     cmd.extend(arg_list)
 
-    self.AddTestStep(gtest_command.GTestCommand, test_name, ListProperties(cmd),
-                     description,
-                     do_step_if=doStep)
+    self.AddTestStep(gtestcommand, test_name, ListProperties(cmd),
+                     description, do_step_if=doStep)
+
+  def AddAnnotatedGTestTestStep(self, test_name, factory_properties=None,
+                                description='', arg_list=None,
+                                total_shards=None, shard_index=None,
+                                test_tool_arg_list=None):
+    """Adds an annotated GTest step."""
+
+    test_tool_arg_list = test_tool_arg_list or []
+
+    test_tool_arg_list.append('--annotate=gtest')
+
+    self.AddBasicGTestTestStep(test_name,
+                               factory_properties=factory_properties,
+                               description=description, arg_list=arg_list,
+                               total_shards=total_shards,
+                               shard_index=shard_index,
+                               test_tool_arg_list=test_tool_arg_list,
+                               gtestcommand=chromium_step.AnnotatedCommand)
 
   def AddBasicShellStep(self, test_name, timeout=600, arg_list=None):
     """Adds a step to the factory to run a simple shell test with standard
