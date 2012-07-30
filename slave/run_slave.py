@@ -251,6 +251,7 @@ def main():
         'HOSTNAME',
         'HTTP_PROXY',
         'http_proxy',
+        'HTTPS_PROXY',
         'LANG',
         'LOGNAME',
         'PAGER',
