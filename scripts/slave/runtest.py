@@ -492,6 +492,11 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
+  # Unset http_proxy environment variable.  When set, this causes some tests to
+  # hang.  See http://crbug.com/139638 for more info.
+  if 'http_proxy' in os.environ:
+    del(os.environ['http_proxy'])
+
   # Decide whether to enable the suid sandbox for Chrome.
   if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
       not options.factory_properties.get('asan', False)):
