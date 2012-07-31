@@ -43,8 +43,8 @@ def layout_test(options, args):
   command = [run_webkit_tests,
              '--no-show-results',
              '--no-new-test-results',
-             '--verbose',  # Verbose output is enabled to support the dashboard.
-             '--full-results-html',  # To make debugging failures easier.
+             '--verbose', '--verbose', # Specify twice to get debugging info.
+             '--full-results-html',    # For the dashboards.
              '--clobber-old-results',  # Clobber test results before each run.
              '--exit-after-n-failures', '5000',
              '--exit-after-n-crashes-or-timeouts', '100',
