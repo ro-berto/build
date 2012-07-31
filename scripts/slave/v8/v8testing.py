@@ -91,12 +91,12 @@ def main():
       cmd.extend(['--download-data'])
     if options.testname == 'mozilla':
       # Mozilla tests requires a number of tests to timeout, set it a bit lower.
-      if options.arch in ('arm', 'mips'):
+      if options.arch in ('arm', 'mipsel'):
         cmd.extend(['--timeout=180'])
       else:
         cmd.extend(['--timeout=120'])
     else:
-      if options.arch in ('arm', 'mips'):
+      if options.arch in ('arm', 'mipsel'):
         cmd.extend(['--timeout=600'])
       else:
         cmd.extend(['--timeout=200'])
