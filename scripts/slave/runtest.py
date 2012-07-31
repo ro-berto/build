@@ -41,6 +41,7 @@ from buildbot.status import builder
 from common import chromium_utils
 from common import gtest_utils
 import config
+from slave import crash_utils
 from slave import gtest_slave_utils
 from slave import process_log_utils
 from slave import slave_utils
@@ -362,32 +363,48 @@ def annotate(test_name, result, results_tracker):
       slave_utils.WriteLogLines(logname, lines)
 
 
-def main_mac(options, args):
-  if len(args) < 1:
-    raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
+def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
+  """Returns a tuple of the build dir and path to the executable in the
+     specified target directory.
 
-  test_exe = args[0]
+     Args:
+       target_dir: the target directory where the executable should be found
+           (e.g. 'Debug' or 'Release-iphonesimulator').
+       exe_name: the name of the executable file in the target directory.
+  """
   build_dir = os.path.normpath(os.path.abspath(options.build_dir))
-  test_exe_path = os.path.join(build_dir, options.target, test_exe)
-  if not os.path.exists(test_exe_path):
-    pre = 'Unable to find %s\n' % test_exe_path
+  exe_path = os.path.join(build_dir, target_dir, exe_name)
+  if not os.path.exists(exe_path):
+    pre = 'Unable to find %s\n' % exe_path
 
     build_dir = os.path.dirname(build_dir)
     outdir = 'xcodebuild'
-    is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
+    is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
                         .get('GYP_GENERATORS', '') in ('ninja', 'make'))
     if is_make_or_ninja:
       outdir = 'out'
 
     build_dir = os.path.join(build_dir, outdir)
-    test_exe_path = os.path.join(build_dir, options.target, test_exe)
-    if not os.path.exists(test_exe_path):
-      msg = pre + 'Unable to find %s' % test_exe_path
+    exe_path = os.path.join(build_dir, target_dir, exe_name)
+    if not os.path.exists(exe_path):
+      msg = pre + 'Unable to find %s' % exe_path
       if options.factory_properties.get('succeed_on_missing_exe', False):
         print '%s missing but succeed_on_missing_exe used, exiting' % (
-            test_exe_path)
+            exe_path)
         return 0
       raise chromium_utils.PathNotFound(msg)
+
+  return build_dir, exe_path
+
+
+def main_mac(options, args):
+  if len(args) < 1:
+    raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
+
+  test_exe = args[0]
+  build_dir, test_exe_path = get_build_dir_and_exe_path_mac(options,
+                                                            options.target,
+                                                            test_exe)
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -436,6 +453,106 @@ def main_mac(options, args):
 
   if options.annotate:
     annotate(options.test_type, result, results_tracker)
+
+  return result
+
+
+def main_ios(options, args):
+  if len(args) < 1:
+    raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
+
+  def kill_simulator():
+    chromium_utils.RunCommand(['/usr/bin/killall', 'iPhone Simulator'])
+
+  # For iOS tests, the args come in in the following order:
+  #   [0] test display name formatted as 'test_name (device[ ios_version])'
+  #   [1:] gtest args (e.g. --gtest_print_time)
+
+  # Default to running on iPhone with iOS version 5.1.
+  device = 'iphone'
+  ios_version = '5.1'
+
+  # Parse the test_name and device from the test display name.
+  # The expected format is: <test_name> (<device>)
+  result = re.match(r'(.*) \((.*)\)$', args[0])
+  if result is not None:
+    test_name, device = result.groups()
+    # Check if the device has an iOS version. The expected format is:
+    # <device_name><space><ios_version>, where ios_version may have 2 or 3
+    # numerals (e.g. '4.3.11' or '5.0').
+    result = re.match(r'(.*) (\d+\.\d+(\.\d+)?)$', device)
+    if result is not None:
+      device = result.groups()[0]
+      ios_version = result.groups()[1]
+  else:
+    # If first argument is not in the correct format, log a warning but
+    # fall back to assuming the first arg is the test_name and just run
+    # on the iphone simulator.
+    test_name = args[0]
+    print ('Can\'t parse test name, device, and iOS version. '
+           'Running %s on %s %s' % (test_name, device, ios_version))
+
+  # Build the args for invoking iossim, which will install the app on the
+  # simulator and launch it, then dump the test results to stdout.
+
+  # Note that the first object (build_dir) returned from the following
+  # method invocations is ignored because only the app executable is needed.
+  _, app_exe_path = get_build_dir_and_exe_path_mac(
+      options,
+      options.target + '-iphonesimulator',
+      test_name + '.app')
+
+  _, test_exe_path = get_build_dir_and_exe_path_mac(options,
+                                                    options.target,
+                                                    'iossim')
+  command = [test_exe_path,
+      '-d', device,
+      '-s', ios_version,
+      app_exe_path, '--'
+  ]
+  command.extend(args[1:])
+
+  if list_parsers(options.annotate):
+    return 0
+  results_tracker = create_results_tracker(get_parsers()['gtest'], options)
+
+  # Make sure the simulator isn't running.
+  kill_simulator()
+
+  # Nuke anything that appears to be stale chrome items in the temporary
+  # directory from previous test runs (i.e.- from crashes or unittest leaks).
+  slave_utils.RemoveChromeTemporaryFiles()
+
+  dirs_to_cleanup = []
+  crash_files_before = set([])
+  crash_files_after = set([])
+  crash_files_before = set(crash_utils.list_crash_logs())
+
+  result = _RunGTestCommand(command, results_tracker)
+
+  # Because test apps kill themselves, iossim sometimes returns non-zero
+  # status even though all tests have passed.  Check the results_tracker to
+  # see if the test run was successful.
+  if results_tracker.CompletedWithoutFailure():
+    result = 0
+  else:
+    result = 1
+
+  if result != 0:
+    crash_utils.wait_for_crash_logs()
+  crash_files_after = set(crash_utils.list_crash_logs())
+
+  kill_simulator()
+
+  new_crash_files = crash_files_after.difference(crash_files_before)
+  crash_utils.print_new_crash_files(new_crash_files)
+
+  for a_dir in dirs_to_cleanup:
+    try:
+      chromium_utils.RemoveDirectory(a_dir)
+    except OSError, e:
+      print >> sys.stderr, e
+      # Don't fail.
 
   return result
 
@@ -769,7 +886,11 @@ def main():
 
   temp_files = get_temp_count()
   if sys.platform.startswith('darwin'):
-    result = main_mac(options, args)
+    test_platform = options.factory_properties.get('test_platform', '')
+    if test_platform in ('ios-simulator'):
+      result = main_ios(options, args)
+    else:
+      result = main_mac(options, args)
   elif sys.platform == 'win32':
     result = main_win(options, args)
   elif sys.platform == 'linux2':
