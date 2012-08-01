@@ -14,6 +14,10 @@ from master.failures_history import FailuresHistory
 # The history of results expire every day.
 _EXPIRATION_TIME = 24 * 3600
 
+# Perf results key words used in test result step.
+PERF_REGRESS = 'PERF_REGRESS'
+PERF_IMPROVE = 'PERF_IMPROVE'
+
 
 class PerfCountNotifier(ChromiumNotifier):
   """This is a status notifier that only alerts on consecutive perf changes.
@@ -135,7 +139,22 @@ class PerfCountNotifier(ChromiumNotifier):
     step_text = ' '.join(step_status.getText())
     log.msg('[PerfCountNotifier] Analyzing failure text: %s.' % step_text)
 
-    perf_results = re.findall('PERF_(REGRESS|IMPROVE): (\S+)', step_text)
+    perf_regress = perf_improve = ''
+    perf_results = []
+
+    if PERF_REGRESS in step_text:
+      perf_regress = step_text[step_text.find(PERF_REGRESS) + len(PERF_REGRESS)
+                               + 1: step_text.find(PERF_IMPROVE)]
+      perf_results.extend([('REGRESS', test_name) for test_name in
+                           re.findall('(\S+) (?=\(.+\))', perf_regress)])
+
+    if PERF_IMPROVE in step_text:
+      # Based on log_parser/process_log.py PerformanceChangesAsText() function,
+      # we assume that PERF_REGRESS (if any) appears before PERF_IMPROVE.
+      perf_improve = step_text[step_text.find(PERF_IMPROVE) + len(PERF_IMPROVE)
+                               + 1:]
+      perf_results.extend([('IMPROVE', test_name) for test_name in
+                           re.findall('(\S+) (?=\(.+\))', perf_improve)])
 
     # If there is no regress or improve then this could be warning or exception.
     if not perf_results:

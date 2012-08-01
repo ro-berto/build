@@ -11,20 +11,35 @@ from buildbot.status.builder import FAILURE, SUCCESS
 from master.chromium_notifier import ChromiumNotifier
 from master.perf_count_notifier import PerfCountNotifier
 
-
+# Sample test status results.
+# Based on log_parser/process_log.py PerformanceChangesAsText() function,
+# we assume that PERF_REGRESS (if any) appears before PERF_IMPROVE.
 TEST_STATUS_TEXT = (
     'media_tests_av_perf <div class="BuildResultInfo"> PERF_REGRESS: time/t '
     '(89.07%) PERF_IMPROVE: fps/video (5.40%) </div>')
 
 TEST_STATUS_TEXT_COUNTER = (
-    'media_tests_av_perf <div class="BuildResultInfo"> PERF_IMPROVE: time/t '
-    '(44.07%) PERF_REGRESS: fps/video (3.0%) </div>')
+    'media_tests_av_perf <div class="BuildResultInfo"> PERF_REGRESS: fps/video '
+    '(3.0%) PERF_IMPROVE: time/t (44.07%) </div>')
 
 TEST_STATUS_TEXT_2 = (
     'media_tests_av_perf <div class="BuildResultInfo"> PERF_REGRESS: time/t2 '
     '(89.07%) PERF_IMPROVE: fps/video2 (5.40%) </div>')
 
 TEST_STATUS_TEXT_EXCEPTION = ('media_tests_av_perf exception')
+
+TEST_STATUS_MULTI_REGRESS = (
+    'media_tests_av_perf <div class="BuildResultInfo"> PERF_REGRESS: time/t '
+    '(89.07%), fps/video (5.40%), fps/video2 (5.40%) </div>')
+
+TEST_STATUS_MULTI_IMPROVE = (
+    'media_tests_av_perf <div class="BuildResultInfo"> PERF_IMPROVE: time/t '
+    '(89.07%), fps/video (5.40%), fps/video2 (5.40%) </div>')
+
+TEST_STATUS_MULTI_REGRESS_IMPROVE = (
+    'media_tests_av_perf <div class="BuildResultInfo"> PERF_REGRESS: time/t '
+    '(89.07%), fps/video (5.40%), fps/video2 (5.40%) PERF_IMPROVE: cpu/t '
+    '(44.07%), cpu/t2 (3.0%) </div>')
 
 
 class PerfCountNotifierTest(unittest.TestCase):
@@ -161,6 +176,60 @@ class PerfCountNotifierTest(unittest.TestCase):
           build_status, step_status, results))
     self.assertTrue(self.notifier.isInterestingStep(
         build_status, step_status, results))
+
+  def testCountIsCorrectMultipleRegressOnly(self):
+    """Test count of multiple REGRESS only is correct."""
+    build_status = None
+    step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
+    results = [FAILURE]
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_status, step_status, results)
+
+    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS time/t'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS fps/video'),
+                     self.notifier.minimum_count)
+    self.assertEqual(
+        self.notifier.recent_results.GetCount('REGRESS fps/video2'),
+        self.notifier.minimum_count)
+
+  def testCountIsCorrectMultipleImproveOnly(self):
+    """Test count of multiple IMPROVE only is correct."""
+    build_status = None
+    step_status = BuildStepStatusMock(TEST_STATUS_MULTI_IMPROVE)
+    results = [FAILURE]
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_status, step_status, results)
+
+    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE time/t'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE fps/video'),
+                     self.notifier.minimum_count)
+    self.assertEqual(
+        self.notifier.recent_results.GetCount('IMPROVE fps/video2'),
+        self.notifier.minimum_count)
+
+  def testCountIsCorrectMultipleRegressImprove(self):
+    """Test count of multiple REGRESS and IMPROVE is correct."""
+    build_status = None
+    step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS_IMPROVE)
+    results = [FAILURE]
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_status, step_status, results)
+
+    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS time/t'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS fps/video'),
+                     self.notifier.minimum_count)
+    self.assertEqual(
+        self.notifier.recent_results.GetCount('REGRESS fps/video2'),
+        self.notifier.minimum_count)
+
+    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE cpu/t'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE cpu/t2'),
+                     self.notifier.minimum_count)
+
 
 class BuildStepStatusMock:
   def __init__(self, text):
