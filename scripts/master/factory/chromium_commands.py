@@ -1112,6 +1112,7 @@ class ChromiumCommands(commands.FactoryCommands):
     server_port = factory_properties.get('server_port')
     timeout = factory_properties.get('timeout')
     build_type = factory_properties.get('build_type')
+    max_time = timeout + 5 * 60  # Increase timeout by 5 minutes.
     build_id = WithProperties('%(build_id)s')
 
     # Chromebot script paths.
@@ -1137,7 +1138,7 @@ class ChromiumCommands(commands.FactoryCommands):
            '--mode', 'server',
            '--server-port', str(server_port)]
     self.AddTestStep(shell.ShellCommand, 'run_chromebot_server', cmd,
-                     do_step_if=self.TestStepFilter)
+                     max_time=max_time, do_step_if=self.TestStepFilter)
 
   def AddChromebotClient(self, factory_properties=None):
     """Add steps to run Chromebot script for server and client side.
@@ -1156,6 +1157,8 @@ class ChromiumCommands(commands.FactoryCommands):
     server_hostname = factory_properties.get('server_hostname')
     server_port = factory_properties.get('server_port')
     proxy_servers = factory_properties.get('proxy_servers')
+    timeout = factory_properties.get('timeout')
+    max_time = timeout + 5 * 60  # Increase timeout by 5 minutes.
     build_id = WithProperties('%(build_id)s')
 
     # Chromebot script paths.
@@ -1177,7 +1180,7 @@ class ChromiumCommands(commands.FactoryCommands):
            '--proxy-servers', ','.join(proxy_servers),
            '--symbols-dir', symbol_path]
     self.AddTestStep(shell.ShellCommand, 'run_chromebot_client', cmd,
-                     do_step_if=self.TestStepFilter)
+                     max_time=max_time, do_step_if=self.TestStepFilter)
 
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
