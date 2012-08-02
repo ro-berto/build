@@ -806,6 +806,7 @@ class ChromiumCommands(commands.FactoryCommands):
           tests
       test_results_server: If specified, upload results json files to test
           results server
+      layout_tests: List of layout tests to run. Space separated string.
     """
     factory_properties = factory_properties or {}
     with_pageheap = factory_properties.get('webkit_pageheap')
@@ -814,6 +815,7 @@ class ChromiumCommands(commands.FactoryCommands):
     test_results_server = factory_properties.get('test_results_server')
     platform = factory_properties.get('layout_test_platform')
     enable_hardware_gpu = factory_properties.get('enable_hardware_gpu')
+    layout_tests = factory_properties.get('layout_tests')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -849,6 +851,10 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if enable_hardware_gpu:
       cmd.extend(['--options=--enable-hardware-gpu'])
+
+    # The list of tests is given as arguments.
+    if layout_tests:
+      cmd.append(layout_tests)
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
