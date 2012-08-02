@@ -95,6 +95,12 @@ def main():
         cmd.extend(['--timeout=180'])
       else:
         cmd.extend(['--timeout=120'])
+    elif options.shell_flags and '--gc-interval' in options.shell_flags:
+      # GC Stress testing takes much longer, set generous timeout.
+      if options.arch in ('arm', 'mipsel'):
+        cmd.extend(['--timeout=900'])
+      else:
+        cmd.extend(['--timeout=600'])
     else:
       if options.arch in ('arm', 'mipsel'):
         cmd.extend(['--timeout=600'])
