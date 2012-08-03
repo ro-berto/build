@@ -106,6 +106,24 @@ def common_xcode_settings(command, options, env, compiler=None):
     env['LDPLUSPLUS'] = ldplusplus
 
 
+def ninja_clobber(build_output_dir):
+  """Removes everything but ninja files from a build directory."""
+  for root, _, files in os.walk(build_output_dir, topdown=False):
+    for f in files:
+      if f.endswith('.ninja') or f == 'gyp-mac-tool':
+        continue
+      os.unlink(os.path.join(root, f))
+    # Delete the directory if empty; this works because the walk is bottom-up.
+    try:
+      os.rmdir(root)
+    except OSError, e:
+      if e.errno == 66:
+        # If the directory isn't empty, ignore it.
+        pass
+      else:
+        raise
+
+
 # RunCommandFilter for xcodebuild
 class XcodebuildFilter(chromium_utils.RunCommandFilter):
   """xcodebuild filter"""
@@ -347,14 +365,7 @@ def main_xcode(options, args):
     # .ninja files). For now, only delete all non-.ninja files.
     # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
     # master has been restarted, remove all clobber handling from compile.py.
-    def delete_objects(_, directory, files):
-      for f in files:
-        if f.endswith('.ninja') or f == 'gyp-mac-tool':
-          continue
-        f = os.path.join(directory, f)
-        if not os.path.isdir(f):
-          os.unlink(f)
-    os.path.walk(build_output_dir, delete_objects, None)
+    ninja_clobber(build_output_dir)
 
   env = EchoDict(os.environ)
   common_xcode_settings(command, options, env, options.compiler)
@@ -688,14 +699,7 @@ def main_ninja(options, args):
     # For now, only delete all non-.ninja files. TODO(thakis): Make "clobber" a
     # step that runs before "runhooks". Once the master has been restarted,
     # remove all clobber handling from compile.py.
-    def delete_objects(_, directory, files):
-      for f in files:
-        if f.endswith('.ninja') or f == 'gyp-mac-tool':
-          continue
-        f = os.path.join(directory, f)
-        if not os.path.isdir(f):
-          os.unlink(f)
-    os.path.walk(output_dir, delete_objects, None)
+    ninja_clobber(output_dir)
 
   if options.verbose:
     command.append('-v')
