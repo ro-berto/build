@@ -258,7 +258,7 @@ class GitZip(object):
     """Recursively, and in parallel threads, call DoFetch on submodules."""
     threads = []
     for submod_dict in submods.itervalues():
-      if 'path' not in submod_dict or 'url' not in submod_dict:
+      if 'path' not in submod_dict or not submod_dict.get('url'):
         continue
       submod_path = submod_dict['path']
       submod_clonedir = os.path.join(clonedir, submod_path)
