@@ -521,6 +521,16 @@ class ChromiumCommands(commands.FactoryCommands):
         self.AddBasicGTestTestStep('mini_installer_test', factory_properties,
                                    arg_list=['-clean'])
 
+  def AddAnnotatedInstallerTests(self, factory_properties):
+    if self._target_platform == 'win32':
+      self.AddAnnotatedGTestTestStep('installer_util_unittests',
+                                     factory_properties)
+      if (self._target == 'Release' and
+          not factory_properties.get('disable_mini_installer_test')):
+        self.AddAnnotatedGTestTestStep('mini_installer_test',
+                                       factory_properties,
+                                       arg_list=['-clean'])
+
   def AddChromeUnitTests(self, factory_properties):
     self.AddBasicGTestTestStep('ipc_tests', factory_properties)
     self.AddBasicGTestTestStep('sync_unit_tests', factory_properties)
@@ -530,6 +540,16 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('content_unittests', factory_properties)
     if self._target_platform == 'win32':
       self.AddBasicGTestTestStep('views_unittests', factory_properties)
+
+  def AddAnnotatedChromeUnitTests(self, factory_properties):
+    self.AddAnnotatedGTestTestStep('ipc_tests', factory_properties)
+    self.AddAnnotatedGTestTestStep('sync_unit_tests', factory_properties)
+    self.AddAnnotatedGTestTestStep('unit_tests', factory_properties)
+    self.AddAnnotatedGTestTestStep('sql_unittests', factory_properties)
+    self.AddAnnotatedGTestTestStep('ui_unittests', factory_properties)
+    self.AddAnnotatedGTestTestStep('content_unittests', factory_properties)
+    if self._target_platform == 'win32':
+      self.AddAnnotatedGTestTestStep('views_unittests', factory_properties)
 
   def AddSyncIntegrationTests(self, factory_properties):
     options = ['--ui-test-action-max-timeout=120000']
@@ -546,6 +566,18 @@ class ChromiumCommands(commands.FactoryCommands):
     options.append(factory_properties.get('browser_tests_filter', []))
 
     self.AddBasicGTestTestStep('browser_tests', factory_properties,
+                               description, options, total_shards=total_shards,
+                               shard_index=shard_index)
+
+  def AddAnnotatedBrowserTests(self, factory_properties=None):
+    description = ''
+    options = ['--lib=browser_tests']
+
+    total_shards = factory_properties.get('browser_total_shards')
+    shard_index = factory_properties.get('browser_shard_index')
+    options.append(factory_properties.get('browser_tests_filter', []))
+
+    self.AddAnnotatedGTestTestStep('browser_tests', factory_properties,
                                description, options, total_shards=total_shards,
                                shard_index=shard_index)
 

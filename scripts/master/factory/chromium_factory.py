@@ -310,6 +310,47 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Annotated base unittests to check GTest annotator
     if R('base_annotated'):
       f.AddAnnotatedGTestTestStep('base_unittests', fp)
+    if R('browser_tests_annotated'):
+      f.AddAnnotatedBrowserTests(fp)
+    if R('cacheinvalidation_annotated'):
+      f.AddAnnotatedGTestTestStep('cacheinvalidation_unittests', fp)
+    if R('content_annotated'):
+      f.AddAnnotatedGTestTestStep('content_unittests', fp)
+    if R('courgette_annotated'):
+      f.AddAnnotatedGTestTestStep('courgette_unittests', fp)
+    if R('crypto_annotated'):
+      f.AddAnnotatedGTestTestStep('crypto_unittests', fp)
+    if R('googleurl_annotated'):
+      f.AddAnnotatedGTestTestStep('googleurl_unittests', fp)
+    if R('gpu_annotated'):
+      f.AddAnnotatedGTestTestStep(
+          'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
+    if R('installer_annotated'):
+      f.AddAnnotatedInstallerTests(fp)
+    if R('jingle_annotated'):
+      f.AddAnnotatedGTestTestStep('jingle_unittests', fp)
+    if R('media_annotated'):
+      f.AddAnnotatedGTestTestStep('media_unittests', fp)
+    if R('printing_annotated'):
+      f.AddAnnotatedGTestTestStep('printing_unittests', fp)
+    if R('remoting_annotated'):
+      f.AddAnnotatedGTestTestStep('remoting_unittests', fp)
+    if R('safe_browsing_annotated'):
+      f.AddAnnotatedGTestTestStep(
+          'safe_browsing_tests', fp,
+          arg_list=['--ui-test-action-max-timeout=40000'])
+    if R('sandbox_annotated'):
+      f.AddAnnotatedGTestTestStep('sbox_unittests', fp)
+      f.AddAnnotatedGTestTestStep('sbox_integration_tests', fp)
+      f.AddAnnotatedGTestTestStep('sbox_validation_tests', fp)
+    if R('content_browsertests_annotated'):
+      f.AddAnnotatedGTestTestStep('content_browsertests', fp)
+    if R('net_annotated'):
+      f.AddAnnotatedGTestTestStep('net_unittests', fp)
+    if R('unit_annotated'):
+      f.AddAnnotatedChromeUnitTests(fp)
+    if R('dbus_annotated'):
+      f.AddAnnotatedGTestTestStep('dbus_unittests', fp)
 
     # Small ("module") unit tests:
     if R('base'):
