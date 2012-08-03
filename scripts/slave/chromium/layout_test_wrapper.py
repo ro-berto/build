@@ -43,7 +43,7 @@ def layout_test(options, args):
   command = [run_webkit_tests,
              '--no-show-results',
              '--no-new-test-results',
-             '--verbose', '--verbose', # Specify twice to get debugging info.
+             '--debug-rwt-logging',
              '--full-results-html',    # For the dashboards.
              '--clobber-old-results',  # Clobber test results before each run.
              '--exit-after-n-failures', '5000',
