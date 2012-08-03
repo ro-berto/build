@@ -718,7 +718,7 @@ def main_ninja(options, args):
     goma_key = os.path.join(options.goma_dir, 'goma.key')
     if os.path.exists(goma_key):
       env['GOMA_API_KEY_FILE'] = goma_key
-    if sys.platform != 'win32':
+    if not chromium_utils.IsWindows():
       goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
       # If using the Goma compiler, first call goma_ctl with ensure_start
       # (or restart in clobber mode) to ensure the proxy is available.
@@ -775,7 +775,10 @@ def main_ninja(options, args):
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
       env['PATH'] = os.pathsep.join([options.goma_dir, clang_dir, env['PATH']])
 
-    goma_jobs = 100 if not chromium_utils.IsMac() else 50
+    if chromium_utils.IsMac() or chromium_utils.IsWindows():
+      goma_jobs = 50
+    else:
+      goma_jobs = 100
     command.append('-j%d' % goma_jobs)
 
     if chromium_utils.IsMac() and options.clobber:
@@ -789,7 +792,7 @@ def main_ninja(options, args):
   result = chromium_utils.RunCommand(
       command, env=env, shell=sys.platform=='win32')
 
-  if sys.platform == 'win32' and options.compiler in ('goma', 'goma-clang'):
+  if chromium_utils.IsWindows() and options.compiler in ('goma', 'goma-clang'):
     chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
   return result
 
