@@ -6,7 +6,7 @@
 
 import os
 
-from buildbot.steps import trigger, shell
+from buildbot.steps import shell
 from buildbot.process.properties import Property, WithProperties
 
 from master import chromium_step
@@ -27,7 +27,6 @@ class CbuildbotFactory(object):
           (i.e. the type command). Default 9000 seconds.
       crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
-      trigger_name: Name of the trigger to fire after starting.
       dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
       factory: a factory with pre-existing steps to extend rather than start
           fresh.  Allows composing.
@@ -46,8 +45,7 @@ class CbuildbotFactory(object):
   _default_chromite = _default_git_base + '/chromite.git'
 
   def __init__(self, params, buildroot='/b/cbuild', timeout=9000,
-               trigger_name=None, branch='master',
-               crostools_repo=_default_crostools,
+               branch='master', crostools_repo=_default_crostools,
                chromite_repo=_default_chromite, dry_run=False, chrome_root=None,
                factory=None, pass_revision=False, slave_manager=True,
                chromite_patch=None, trybot=False, sleep_sync=None,
@@ -61,7 +59,6 @@ class CbuildbotFactory(object):
 
     self.timeout = timeout
     self.branch = branch
-    self.trigger_name = trigger_name
     self.dry_run = dry_run
     self.chrome_root = chrome_root
     self.slave_manager = slave_manager
@@ -173,13 +170,7 @@ class CbuildbotFactory(object):
     # Add additional parameters.
     cmd += params.split()
 
-    # Trigger other slaves that should be run along with this builder.
-    if self.trigger_name:
-      self.f_cbuild.addStep(trigger.Trigger(schedulerNames=[self.trigger_name],
-                                            waitForFinish=False))
-      description = 'cbuildbot_master'
-    else:
-      description = 'cbuildbot'
+    description = 'cbuildbot'
 
     self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
                           command=cmd,
