@@ -109,6 +109,12 @@ class Manifest(object):
           ['python', WINDOWS_SCRIPT_NAME,
            '--handle_exe', HANDLE_EXE])
 
+    vlan = ''
+    if '-m1' in self.data_url:
+      vlan = 'm1'
+    elif '-m4' in self.data_url:
+      vlan = 'm4'
+
     # Construct test case
     test_case = {
       'test_case_name': self.test_name,
@@ -126,6 +132,7 @@ class Manifest(object):
           'config_name': self.target_platform,
           'dimensions': {
             'os': self.target_platform,
+            'vlan': vlan
           },
         },
       ],

@@ -37,9 +37,16 @@ def GetDimensions():
                   'generate dimensions', sys.platform)
     return {}
 
+  # Get the vlan of this machine from the hostname, since the
+  # hostname always contains the vlan name.
+  vlan = socket.gethostname().lower().split('-')[1]
+
   return {
       'tag': socket.gethostname(),
-      'dimensions': {'os': PLATFORM_MAPPING[sys.platform]}
+      'dimensions': {
+          'os': PLATFORM_MAPPING[sys.platform],
+          'vlan': vlan
+      }
   }
 
 def WriteDimensionsToFile(filename):
