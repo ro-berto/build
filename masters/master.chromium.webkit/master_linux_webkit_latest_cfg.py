@@ -55,7 +55,7 @@ asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
 
 B('Webkit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='s6_webkit_rel')
-F('f_webkit_linux_rel_asan', linux().ChromiumASANFactory(
+F('f_webkit_linux_rel_asan', linux().ChromiumWebkitLatestFactory(
     tests=['webkit'],
     options=['--compiler=goma-clang', 'DumpRenderTree'],
     factory_properties={
