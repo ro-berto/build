@@ -110,7 +110,9 @@ def ninja_clobber(build_output_dir):
   """Removes everything but ninja files from a build directory."""
   for root, _, files in os.walk(build_output_dir, topdown=False):
     for f in files:
-      if f.endswith('.ninja') or f == 'gyp-mac-tool':
+      if (f.endswith('.ninja') or
+          f in ('gyp-mac-tool', 'gyp-win-tool',
+                'environment.x86', 'environment.x64')):
         continue
       os.unlink(os.path.join(root, f))
     # Delete the directory if empty; this works because the walk is bottom-up.
