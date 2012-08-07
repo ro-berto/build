@@ -203,7 +203,7 @@ def LongSleep(secs):
 
 
 def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
-                               server_dir=None):
+                               server_dir=None, filter_obj=None):
   if sys.platform == 'win32':
     python_exe = 'python.exe'
 
@@ -230,12 +230,24 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
   # The list of tests is given as arguments.
   command.extend(command_line_args)
 
-  result = chromium_utils.RunCommand(command)
+  result = chromium_utils.RunCommand(command, filter_obj=filter_obj)
 
   if chromium_utils.IsLinux():
     xvfb.StopVirtualX(slave_name)
 
   return result
+
+
+class RunCommandCaptureFilter(object):
+  lines = []
+
+  def FilterLine(self, in_line):
+    self.lines.append(in_line)
+    return None
+
+  def FilterDone(self, last_bits):
+    self.lines.append(last_bits)
+    return None
 
 
 def GypFlagIsOn(options, flag):

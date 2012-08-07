@@ -43,12 +43,22 @@ def layout_test(options, args):
   command = [run_webkit_tests,
              '--no-show-results',
              '--no-new-test-results',
-             '--verbose', '--verbose', # Specify twice to get debugging info.
              '--full-results-html',    # For the dashboards.
              '--clobber-old-results',  # Clobber test results before each run.
              '--exit-after-n-failures', '5000',
              '--exit-after-n-crashes-or-timeouts', '100',
             ]
+
+  # TODO(dpranke): we can switch to always using --debug-rwt-logging
+  # after all the bots have WebKit r124789 or later.
+  capture_obj = slave_utils.RunCommandCaptureFilter()
+  slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
+                                         [run_webkit_tests, '--help'],
+                                         filter_obj=capture_obj)
+  if '--debug-rwt-logging' in ''.join(capture_obj.lines):
+    command.append('--debug-rwt-logging')
+  else:
+    command.append('--verbose')
 
   if options.results_directory:
     # Prior to the fix in https://bugs.webkit.org/show_bug.cgi?id=58272,
