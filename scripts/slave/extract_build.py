@@ -79,16 +79,17 @@ def GetBuildUrl(abs_build_dir, options):
   base_filename, version_suffix = slave_utils.GetZipFileNames(
       options.build_properties, abs_build_dir, abs_webkit_dir, extract=True)
 
+  replace_dict = dict(options.build_properties)
+  # If builddir isn't specified, assume buildbot used the builder name
+  # as the root folder for the build.
+  if not replace_dict.get('parent_builddir'):
+    replace_dict['parent_builddir'] = replace_dict['parentname']
+  replace_dict['base_filename'] = base_filename
   url = options.build_url or options.factory_properties.get('build_url')
   if not url:
-    replace_dict = dict(options.build_properties)
-    # If builddir isn't specified, assume buildbot used the builder name
-    # as the root folder for the build.
-    if not replace_dict.get('parent_builddir'):
-      replace_dict['parent_builddir'] = replace_dict['parentname']
-    replace_dict['base_filename'] = base_filename
     url = ('http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
-           'chrome_staging/%(base_filename)s.zip') % replace_dict
+           'chrome_staging/%(base_filename)s.zip')
+  url = url % replace_dict
 
   versioned_url = url.replace('.zip', version_suffix + '.zip')
   return url, versioned_url
