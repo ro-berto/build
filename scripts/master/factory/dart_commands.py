@@ -24,16 +24,11 @@ class DartCommands(commands.FactoryCommands):
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
 
-    if target_platform != None and target_platform.startswith('dartc'):
-      # building inside the 'dart' directory
-      self._script_dir = self.PathJoin( '..', self._script_dir)
-      self._tools_dir = self.PathJoin('tools')
-    else:
-      # Two additional directories up compared to normal chromium scripts due
-      # to using runtime as runtime dir inside dart directory inside
-      # build directory.
-      self._script_dir = self.PathJoin('..', self._script_dir)
-      self._tools_dir = self.PathJoin('tools')
+    # Two additional directories up compared to normal chromium scripts due
+    # to using runtime as runtime dir inside dart directory inside
+    # build directory.
+    self._script_dir = self.PathJoin('..', self._script_dir)
+    self._tools_dir = self.PathJoin('tools')
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
@@ -45,9 +40,7 @@ class DartCommands(commands.FactoryCommands):
                                             'slave', 'dart')
 
     self._dart_util = self.PathJoin(self._slave_dir, 'dart_util.py')
-    self._vm_build_dir = self.PathJoin('build', 'dart')
-    # dartc builds from the root of the dart tree
-    self._dartc_build_dir = self.PathJoin('build', 'dart')
+    self._dart_build_dir = self.PathJoin('build', 'dart')
     self._repository_root = ''
     self._target_platform = target_platform
     self._custom_env = env or {}
@@ -68,10 +61,7 @@ class DartCommands(commands.FactoryCommands):
     options = options or {}
     clobber_cmd = [self._python, self._dart_util]
     clobber_cmd.append(WithProperties('%(clobber:+--clobber)s'))
-    if options.get('name') != None and options.get('name').startswith('dartc'):
-      workdir = self._dartc_build_dir
-    else:
-      workdir = self._vm_build_dir
+    workdir = self._dart_build_dir
     self._factory.addStep(shell.ShellCommand,
                           name='maybe clobber',
                           description='maybe clobber',
@@ -85,12 +75,17 @@ class DartCommands(commands.FactoryCommands):
     options = options or {}
     cmd = 'python ' + self._tools_dir + '/build.py --mode=%s' % \
         (options['mode'])
-    if options.get('name') != None and options.get('name').startswith('dartc'):
-      workdir = self._dartc_build_dir
-    else:
+    workdir = self._dart_build_dir
+    is_dartc = (options.get('name') != None and
+                options.get('name').startswith('dartc'))
+    is_dart2dart = (options.get('name') != None and
+                    options.get('name').startswith('dart2dart'))
+    if not is_dartc and not is_dart2dart:
       cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
-      workdir = self._vm_build_dir
+
+    if is_dart2dart:
+      cmd += ' create_sdk'
     self._factory.addStep(shell.ShellCommand,
                           name='build',
                           description='build',
@@ -102,19 +97,35 @@ class DartCommands(commands.FactoryCommands):
 
   def AddTests(self, options=None, timeout=1200):
     options = options or {}
-    if options.get('name') != None and options.get('name').startswith('dartc'):
+    is_dartc = (options.get('name') != None and
+                options.get('name').startswith('dartc'))
+    is_dart2dart = (options.get('name') != None and
+                    options.get('name').startswith('dart2dart'))
+
+    arch = options.get('arch')
+    if is_dartc:
       compiler = 'dartc'
       runtime = 'none'
+      configuration = (options['mode'], arch, compiler, runtime)
+      base_cmd = ('python ' + self._tools_dir + '/test.py '
+                  ' --progress=line --report --time --mode=%s --arch=%s '
+                  ' --compiler=%s --runtime=%s') % configuration
+    elif is_dart2dart:
+      compiler = 'dart2dart'
+      runtime = 'vm'
+      configuration = (options['mode'], arch, compiler)
+      base_cmd = ('python ' + self._tools_dir + '/test.py '
+                  ' --progress=line --report --time --mode=%s --arch=%s '
+                  ' --compiler=%s') % configuration
     else:
       compiler = 'none'
       runtime = 'vm'
-    arch = options.get('arch')
+      configuration = (options['mode'], arch, compiler, runtime)
+      base_cmd = ('python ' + self._tools_dir + '/test.py '
+                  ' --progress=line --report --time --mode=%s --arch=%s '
+                  ' --compiler=%s --runtime=%s') % configuration
 
-    configuration = (options['mode'], arch, compiler, runtime)
-    base_cmd = ('python ' + self._tools_dir + '/test.py '
-        ' --progress=line --report --time --mode=%s --arch=%s '
-        ' --compiler=%s --runtime=%s') % configuration
-    if options.get('name') != None and options.get('name').startswith('dartc'):
+    if is_dartc or is_dart2dart:
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
                             name='tests',
@@ -122,9 +133,11 @@ class DartCommands(commands.FactoryCommands):
                             timeout=timeout,
                             env = self._custom_env,
                             haltOnFailure=True,
-                            workdir=self._dartc_build_dir,
+                            workdir=self._dart_build_dir,
                             command=cmd)
     else:
+      if options.get('flags') != None:
+        base_cmd += options.get('flags')
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
                             name='tests',
@@ -132,7 +145,7 @@ class DartCommands(commands.FactoryCommands):
                             timeout=timeout,
                             env = self._custom_env,
                             haltOnFailure=True,
-                            workdir=self._vm_build_dir,
+                            workdir=self._dart_build_dir,
                             command=cmd)
       # Rerun all tests in checked mode (assertions and type tests).
       cmd = base_cmd + ' --checked'
@@ -141,7 +154,7 @@ class DartCommands(commands.FactoryCommands):
                             description='checked_tests',
                             timeout=timeout,
                             haltOnFailure=True,
-                            workdir=self._vm_build_dir,
+                            workdir=self._dart_build_dir,
                             command=cmd)
 
   def AddAnnotatedSteps(self, python_script, timeout=1200):
@@ -151,5 +164,5 @@ class DartCommands(commands.FactoryCommands):
                           timeout=timeout,
                           haltOnFailure=True,
                           env = self._custom_env,
-                          workdir=self._vm_build_dir,
+                          workdir=self._dart_build_dir,
                           command=[self._python, python_script])
