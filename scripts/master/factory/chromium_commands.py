@@ -1049,6 +1049,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBasicGTestTestStep('gl_tests', factory_properties,
                                test_tool_arg_list=['--no-xvfb'])
 
+  def AddGLES2ConformTest(self, factory_properties=None):
+    """Runs gles2_conform_test binary.
+
+    This binary contains the OpenGL ES 2.0 Conformance tests to be run on the
+    gpu bots.
+    """
+    factory_properties = factory_properties or {}
+
+    self.AddBasicGTestTestStep('gles2_conform_test', factory_properties,
+                               test_tool_arg_list=['--no-xvfb'])
+
   def AddNaClIntegrationTestStep(self, factory_properties, target=None,
                                  buildbot_preset=None):
     target = target or self._target

@@ -511,6 +511,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # GPU tests:
     if R('gl_tests'):
       f.AddGLTests(fp)
+    if R('gles2_conform_test'):
+      f.AddGLES2ConformTest(fp)
     if R('gpu_tests'):
       f.AddGpuTests(fp)
     if R('soft_gpu_tests'):
