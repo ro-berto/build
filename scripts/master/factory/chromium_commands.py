@@ -15,8 +15,8 @@ from buildbot.steps import shell
 from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
 
-import config
 from common import chromium_utils
+import config
 from master import chromium_step
 from master.factory import commands
 
@@ -25,6 +25,7 @@ from master.log_parser import gtest_command
 from master.log_parser import process_log
 from master.log_parser import retcode_command
 from master.log_parser import webkit_test_command
+
 
 class ChromiumCommands(commands.FactoryCommands):
   """Encapsulates methods to add chromium commands to a buildbot factory."""
@@ -125,7 +126,7 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     perf_id = factory_properties.get('perf_id')
     if not perf_id:
-      logging.error("Error: cannot upload perf expectations: perf_id is unset")
+      logging.error('Error: cannot upload perf expectations: perf_id is unset')
       return
     slavesrc = 'src/tools/perf_expectations/perf_expectations.json'
     masterdest = ('../../scripts/master/log_parser/perf_expectations/%s.json' %
@@ -155,7 +156,7 @@ class ChromiumCommands(commands.FactoryCommands):
     if extra_archive_paths:
       cmd.extend(['--extra-archive-paths', extra_archive_paths])
     if use_build_number:
-      cmd.extend(['--build-number', WithProperties("%(buildnumber)s")])
+      cmd.extend(['--build-number', WithProperties('%(buildnumber)s')])
 
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
@@ -195,6 +196,77 @@ class ChromiumCommands(commands.FactoryCommands):
                           more_link_url=None,
                           more_link_text=None,
                           command=cmd)
+
+  def GetAnnotatedPerfCmd(self, gtest_filter, log_type, test_name,
+                          cmd_name='performance_ui_tests', tool_opts=None,
+                          options=None, factory_properties=None):
+    """Return a runtest command suitable for most perf test steps."""
+
+    tool_options = ['--annotate=' + log_type]
+    tool_options += tool_opts or []
+
+    arg_list = options or []
+    if gtest_filter:
+      arg_list += ['--gtest_filter=' + gtest_filter]
+
+    factory_properties = factory_properties or {}
+    factory_properties['test_name'] = test_name
+
+    perf_id = factory_properties.get('perf_id')
+    show_results = factory_properties.get('show_perf_results')
+
+    _, _, perf_name = self._PerfStepMappings(show_results,
+                                             perf_id,
+                                             test_name)
+    factory_properties['perf_name'] = perf_name
+
+    return self.GetTestCommand(cmd_name, test_tool_arg_list=tool_options,
+                               arg_list=arg_list,
+                               factory_properties=factory_properties)
+
+  def AddAnnotatedPerfStepCmd(self, test_name, step_name, cmd,
+                              factory_properties=None):
+    """Create a curried AnnotatedPerfStep and add it to the builder."""
+
+    step_class = self.GetAnnotatedPerfStepClass(factory_properties, test_name)
+    self.AddTestStep(step_class, step_name, cmd, do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
+                           cmd_name='performance_ui_tests', tool_opts=None,
+                           cmd_options=None, step_name=None,
+                           factory_properties=None):
+
+    """Add an annotated perf step to the builder.
+
+    Args:
+      test_name: name of the test given to runtest.py. If step_name is not
+        provided, a standard transform will be applied and the step on the
+        waterfall will be test_name_test.
+
+      gtest_filter: most steps use --gtest_filter to filter their output.
+
+      log_type: one of the log parsers in runtest.py --annotate=list, such
+        as 'graphing' or 'framerate'.
+
+      cmd_name: command to run, by default 'performance_ui_tests'.
+
+      tool_opts: additional options for runtest.py.
+
+      cmd_options: additional options for the test run under runtest.py.
+
+      step_name: the step name for the builder/waterfall.
+
+      factory_properties: additional properties from the factory.
+    """
+
+    cmd = self.GetAnnotatedPerfCmd(gtest_filter, log_type, test_name,
+                                   cmd_name=cmd_name, options=cmd_options,
+                                   tool_opts=tool_opts,
+                                   factory_properties=factory_properties)
+
+    step_name = step_name or test_name.replace('-', '_') + '_test'
+    self.AddAnnotatedPerfStepCmd(test_name, step_name, cmd,
+                                 factory_properties=factory_properties)
 
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
@@ -249,6 +321,11 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(c, 'mach_ports', cmd, do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedMachPortsTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('mach_ports', '--gtest_filter=MachPortsTest.*',
+                              'graphing', step_name='mach_ports',
+                              factory_properties=factory_properties)
+
   def GetPageCyclerCommand(self, test_name, http, factory_properties=None):
     """Returns a command list to call the _test_tool on the page_cycler
     executable, with the appropriate GTest filter and additional arguments.
@@ -281,8 +358,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # Derive the class from the factory, name, and log processor.
     test_class = self.GetPerfStepClass(
-                     factory_properties, perf_dashboard_name,
-                     process_log.GraphingPageCyclerLogProcessor)
+        factory_properties, perf_dashboard_name,
+        process_log.GraphingPageCyclerLogProcessor)
 
     # Get the test's command.
     cmd = self.GetPageCyclerCommand(command_name, enable_http,
@@ -290,6 +367,30 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # Add the test step to the factory.
     self.AddTestStep(test_class, test, cmd, do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedPageCyclerTest(self, test, factory_properties=None,
+                                 suite=None):
+    enable_http = test.endswith('-http')
+    perf_dashboard_name = test.lstrip('page_cycler_')
+
+    if suite:
+      test_name = suite
+    else:
+      test_name = perf_dashboard_name.partition('-http')[0].capitalize()
+
+    options = None
+    if enable_http:
+      test_type = 'Http'
+      options = ['--with-httpd', self.PathJoin('src', 'data', 'page_cycler')]
+    else:
+      test_type = 'File'
+
+    gtest_filter = 'PageCycler*.%s%s:PageCycler*.*_%s%s' % (
+        test_name, test_type, test_name, test_type)
+
+    self.AddAnnotatedPerfStep(perf_dashboard_name, gtest_filter, 'pagecycler',
+                              cmd_options=options, step_name=test,
+                              factory_properties=factory_properties)
 
   def AddStartupTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -307,6 +408,15 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'startup_test', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedStartupTests(self, factory_properties=None):
+    test_list = 'StartupTest.*:ShutdownTest.*'
+    # We don't need to run the Reference tests in debug mode.
+    if self._target == 'Debug':
+      test_list += ':-*.*Ref*'
+
+    self.AddAnnotatedPerfStep('startup', test_list, 'graphing',
+                              factory_properties=factory_properties)
+
   def AddMemoryTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'memory',
@@ -317,6 +427,10 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties)
     self.AddTestStep(c, 'memory_test', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedMemoryTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('memory', 'GeneralMix*MemoryTest.*', 'graphing',
+                              factory_properties=factory_properties)
 
   def AddNewTabUITests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -341,17 +455,30 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'new_tab_ui_warm_test', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedNewTabUITests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('new-tab-ui-cold', 'NewTabUIStartupTest.*Cold',
+                              'graphing', factory_properties=factory_properties)
+    self.AddAnnotatedPerfStep('new-tab-ui-warm', 'NewTabUIStartupTest.*Warm',
+                              'graphing', factory_properties=factory_properties)
+
   def AddSyncPerfTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'sync',
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=*SyncPerfTest.*',
-               '--ui-test-action-max-timeout=120000',]
+               '--ui-test-action-max-timeout=120000']
     cmd = self.GetTestCommand('sync_performance_tests', options,
                               factory_properties=factory_properties)
     self.AddTestStep(c, 'sync', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedSyncPerfTests(self, factory_properties):
+    options = ['--ui-test-action-max-timeout=120000']
+
+    self.AddAnnotatedPerfStep('sync', '*SyncPerfTest.*', 'graphing',
+                              cmd_options=options, step_name='sync',
+                              factory_properties=factory_properties)
 
   def AddTabSwitchingTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -365,6 +492,13 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties)
     self.AddTestStep(c, 'tab_switching_test', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedTabSwitchingTests(self, factory_properties=None):
+    options = ['-enable-logging', '-dump-histograms-on-exit', '-log-level=0']
+
+    self.AddAnnotatedPerfStep('tab-switching', 'TabSwitchingUITest.*',
+                              'graphing', cmd_options=options,
+                              factory_properties=factory_properties)
 
   def AddSizesTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -389,6 +523,13 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'sunspider_test', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddAnnoatedSunSpiderTests(self, factory_properties=None):
+    options = ['--gtest_print_time', '--run-sunspider']
+
+    self.AddAnnotatedPerfStep('sunspider', 'SunSpider*.*', 'graphing',
+                              cmd_options=options,
+                              factory_properties=factory_properties)
+
   def AddV8BenchmarkTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'v8_benchmark',
@@ -400,6 +541,13 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties)
     self.AddTestStep(c, 'v8_benchmark_test', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedV8BenchmarkTests(self, factory_properties=None):
+    options = ['--gtest_print_time', '--run-v8-benchmark']
+
+    self.AddAnnotatedPerfStep('v8_benchmark', 'V8Benchmark*.*', 'graphing',
+                              cmd_options=options,
+                              factory_properties=factory_properties)
 
   def AddDromaeoTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -415,6 +563,16 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddTestStep(cls, 'dromaeo_%s_test' % test.lower(), cmd,
                        do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedDromaeoTests(self, factory_properties=None):
+    options = ['--gtest_print_time', '--run-dromaeo-benchmark']
+
+    tests = ['DOMCore', 'JSLib']
+    for test in tests:
+      test_name = 'dromaeo_%s' % test.lower()
+      self.AddAnnotatedPerfStep(test_name, 'Dromaeo*Test.%sPerf' % test,
+                                'graphing', cmd_options=options,
+                                factory_properties=factory_properties)
+
   def AddFrameRateTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'frame_rate',
@@ -425,6 +583,10 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties)
     self.AddTestStep(c, 'frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedFrameRateTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
+                              factory_properties=factory_properties)
 
   def AddGpuFrameRateTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -438,6 +600,14 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'gpu_frame_rate_test', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedGpuFrameRateTests(self, factory_properties=None):
+    options = ['--enable-gpu']
+    tool_options = ['--no-xvfb']
+
+    self.AddAnnotatedPerfStep('gpu_frame_rate', 'FrameRate*Test*', 'framerate',
+                              cmd_options=options, tool_opts=tool_options,
+                              factory_properties=factory_properties)
+
   def AddGpuLatencyTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'gpu_latency',
@@ -450,6 +620,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'gpu_latency_tests', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedGpuLatencyTests(self, factory_properties=None):
+    options = ['--enable-gpu']
+    tool_options = ['--no-xvfb']
+
+    self.AddAnnotatedPerfStep('gpu_latency', 'LatencyTest*', 'graphing',
+                              cmd_name='performance_browser_tests',
+                              step_name='gpu_latency_tests',
+                              cmd_options=options,
+                              tool_opts=tool_options,
+                              factory_properties=factory_properties)
+
   def AddGpuThroughputTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'gpu_throughput',
@@ -461,6 +642,17 @@ class ChromiumCommands(commands.FactoryCommands):
                               test_tool_arg_list=['--no-xvfb'])
     self.AddTestStep(c, 'gpu_throughput_tests', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddAnnotatedGpuThroughputTests(self, factory_properties=None):
+    options = ['--enable-gpu']
+    tool_options = ['--no-xvfb']
+
+    self.AddAnnotatedPerfStep('gpu_throughput', 'ThroughputTest*', 'graphing',
+                              cmd_name='performance_browser_tests',
+                              step_name='gpu_throughput_tests',
+                              cmd_options=options,
+                              tool_opts=tool_options,
+                              factory_properties=factory_properties)
 
   def AddDomPerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
@@ -484,6 +676,12 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'chrome_frame_perf', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddAnnotatedChromeFramePerfTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('chrome_frame_perf', None, 'graphing',
+                              cmd_name='chrome_frame_perftests',
+                              step_name='chrome_frame_perf',
+                              factory_properties=factory_properties)
+
   # Reliability sanity tests.
   def AddAutomatedUiTests(self, factory_properties=None):
     arg_list = ['--gtest_filter=-AutomatedUITest.TheOneAndOnlyTest']
@@ -497,7 +695,7 @@ class ChromiumCommands(commands.FactoryCommands):
            '-d', J(self._repository_root, 'DEPS'),
            '-o', J(self._repository_root, '.DEPS.git')]
     if verify:
-      cmd.append("--verify")
+      cmd.append('--verify')
     self.AddTestStep(
         shell.ShellCommand,
         'check_deps2git',
@@ -598,7 +796,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.TestStepFilter)
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200,
-      factory_properties=None):
+                    factory_properties=None):
     factory_properties = factory_properties or {}
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     build_dir = os.path.join(self._build_dir, self._target)
@@ -619,7 +817,7 @@ class ChromiumCommands(commands.FactoryCommands):
       shard = int(matched.group(1))
       numshards = int(matched.group(2))
       wrapper_args.extend(['--shard-index', str(shard),
-          '--total-shards', str(numshards)])
+                           '--total-shards', str(numshards)])
       if test_name in factory_properties.get('sharded_tests', []):
         wrapper_args.append('--parallel')
         sharding_args = factory_properties.get('sharding_args')
@@ -638,7 +836,7 @@ class ChromiumCommands(commands.FactoryCommands):
         '--build_dir', build_dir,
         '--test', test_name,
         '--tool', tool_name,
-        WithProperties("%(gtest_filter)s")],
+        WithProperties('%(gtest_filter)s')],
         wrapper_args=wrapper_args,
         factory_properties=factory_properties)
 
@@ -863,8 +1061,8 @@ class ChromiumCommands(commands.FactoryCommands):
            '--target', self._target,
            '-o', webkit_result_dir,
            '--build-dir', self._build_dir,
-           '--build-number', WithProperties("%(buildnumber)s"),
-           '--builder-name', WithProperties(builder_name),]
+           '--build-number', WithProperties('%(buildnumber)s'),
+           '--builder-name', WithProperties(builder_name)]
 
     for comps in factory_properties.get('additional_expectations_files', []):
       cmd.append('--additional-expectations-file')
@@ -898,8 +1096,8 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
              '--build-dir', self._build_dir,
-             '--build-number', WithProperties("%(buildnumber)s"),
-             '--builder-name', WithProperties(builder_name),]
+             '--build-number', WithProperties('%(buildnumber)s'),
+             '--builder-name', WithProperties(builder_name)]
 
       cmd = self.AddBuildProperties(cmd)
       cmd = self.AddFactoryProperties(factory_properties, cmd)
@@ -957,11 +1155,11 @@ class ChromiumCommands(commands.FactoryCommands):
     url = _GetArchiveUrl('coverage', perf_subdir)
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
-           '--target', self._target,
-           '--build-dir', self._build_dir,
-           '--perf-subdir', perf_subdir]
+                   '--target', self._target,
+                   '--build-dir', self._build_dir,
+                   '--perf-subdir', perf_subdir]
     if factory_properties.get('use_build_number'):
-      cmd_archive.extend(['--build-number', WithProperties("%(buildnumber)s")])
+      cmd_archive.extend(['--build-number', WithProperties('%(buildnumber)s')])
 
     self.AddArchiveStep(data_description='coverage', base_url=url,
                         link_text=text, command=cmd_archive)
@@ -970,7 +1168,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python,
            self._upload_parity_tool,
            self._build_dir,
-           "http://chrome-test-parity.appspot.com/bulk_update",
+           'http://chrome-test-parity.appspot.com/bulk_update',
            platform]
     self.AddTestStep(shell.ShellCommand, 'upload test parity', cmd)
 
@@ -1069,7 +1267,7 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--buildbot', buildbot_preset])
 
     self.AddTestStep(gtest_command.GTestFullCommand, 'nacl_integration', cmd,
-        do_step_if=self.TestStepFilter)
+                     do_step_if=self.TestStepFilter)
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
     factory_properties = factory_properties or {}
@@ -1129,7 +1327,6 @@ class ChromiumCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           command=cmd,
                           env=env)
-
 
   def AddMediaTests(self, test_groups, factory_properties=None, timeout=1200):
     """Adds media test steps according to the specified test_groups.
@@ -1236,6 +1433,7 @@ def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by
   # ArchiveCommand.createSummary.
   return '%s/%s/%s' % (config.Master.archive_url, archive_type, builder_name)
+
 
 def _GetSnapshotUrl(factory_properties=None, builder_name='%(build_name)s'):
   if not factory_properties or 'gs_bucket' not in factory_properties:

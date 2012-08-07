@@ -20,13 +20,13 @@ from buildbot.steps import shell
 from buildbot.steps.transfer import FileDownload
 
 from common import chromium_utils
+import config
+
 from master import chromium_step
 from master.log_parser import cl_command
 from master.log_parser import gtest_command
 from master.log_parser import retcode_command
 from master.optional_arguments import ListProperties
-
-import config
 
 
 # DEFAULT_TESTS is a marker to specify that the default tests should be run for
@@ -207,7 +207,6 @@ class FactoryCommands(object):
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
-
   # Util methods.
   def GetExecutableName(self, executable):
     """The executable name must be executable plus '.exe' on Windows, or else
@@ -221,7 +220,6 @@ class FactoryCommands(object):
       return ntpath.normpath(ntpath.join(*args))
     else:
       return posixpath.normpath(posixpath.join(*args))
-
 
   # Basic commands
   def GetTestCommand(self, executable, arg_list=None, factory_properties=None,
@@ -257,7 +255,7 @@ class FactoryCommands(object):
     return cmd
 
   def GetShellTestCommand(self, sh_script, arg_list=None, wrapper_args=None,
-      factory_properties=None):
+                          factory_properties=None):
     """ As above, arg_list goes to the shell script, wrapper_args come
         before the script so the test tool uses them.
     """
@@ -282,20 +280,21 @@ class FactoryCommands(object):
 
     # Create a WithProperties format string that includes build properties.
     build_properties = dict(
-        (prop, "%%(%s:-)s" % prop)
+        (prop, '%%(%s:-)s' % prop)
         for prop in (
             'blamelist', 'branch', 'buildername', 'buildnumber', 'got_revision',
             'mastername', 'parentname', 'parentslavename', 'parent_buildnumber',
             'parent_builddir', 'revision', 'scheduler', 'slavename',
         )
     )
+
     def gen_blamelist_string(build):
       blame = ','.join(build.getProperty('blamelist'))
       # Could be interpreted by the shell.
       return re.sub(r'[\&\|\^]', '', blame.replace('<', '[').replace('>', ']'))
     # The |separators| argument is to densify the command line.
     string = '--build-properties=' + json.dumps(
-          build_properties, sort_keys=True, separators=(',', ':'))
+        build_properties, sort_keys=True, separators=(',', ':'))
     cmd.append(WithProperties(string, blamelist=gen_blamelist_string))
     return cmd
 
@@ -305,7 +304,7 @@ class FactoryCommands(object):
     cmd = cmd or []
     cmd.append(
         '--factory-properties=' + json.dumps(
-          factory_properties or {}, sort_keys=True, separators=(',', ':')))
+            factory_properties or {}, sort_keys=True, separators=(',', ':')))
     return cmd
 
   def AddTestStep(self, command_class, test_name, test_command,
@@ -365,7 +364,7 @@ class FactoryCommands(object):
     # TODO(maruel): This is bad hygiene to modify the build properties on the
     # fly like this. There should be another way to communicate the command line
     # properly.
-    bStep.setProperty('gtest_filter', None, "Factory")
+    bStep.setProperty('gtest_filter', None, 'Factory')
     if 'testfilter' not in bStep.build.getProperties():
       # Not a try job.
       return default
@@ -390,8 +389,8 @@ class FactoryCommands(object):
     # Defaults to excluding FAILS and FLAKY test if none is specified.
     gtest_filter = filters.get(name, '') or self.DEFAULT_GTEST_FILTER
     if gtest_filter:
-      flag = "--gtest_filter=%s" % gtest_filter
-      bStep.setProperty('gtest_filter', flag, "Scheduler")
+      flag = '--gtest_filter=%s' % gtest_filter
+      bStep.setProperty('gtest_filter', flag, 'Scheduler')
     return True
 
   def GetTestStepFilter(self, factory_properties):
@@ -445,8 +444,8 @@ class FactoryCommands(object):
       cmd.extend(['--generate-json-file',
                   '-o', test_result_dir,
                   '--test-type', test_name,
-                  '--build-number', WithProperties("%(buildnumber)s"),
-                  '--builder-name', WithProperties("%(buildername)s"),])
+                  '--build-number', WithProperties('%(buildnumber)s'),
+                  '--builder-name', WithProperties('%(buildername)s')])
 
     if total_shards and shard_index:
       cmd.extend(['--total-shards', str(total_shards),
@@ -461,7 +460,7 @@ class FactoryCommands(object):
     cmd.append(self.GetExecutableName(test_name))
 
     arg_list.append('--gtest_print_time')
-    arg_list.append(WithProperties("%(gtest_filter)s"))
+    arg_list.append(WithProperties('%(gtest_filter)s'))
     cmd.extend(arg_list)
 
     self.AddTestStep(gtestcommand, test_name, ListProperties(cmd),
@@ -567,6 +566,7 @@ class FactoryCommands(object):
     - There are both build properties issue and patchset
     - There is no patch attached
     """
+
     def do_step_if(bStep):
       build = bStep.build
       properties = build.getProperties()
@@ -583,11 +583,11 @@ class FactoryCommands(object):
     # @chromium.org account.  Use the form -e= instead of -e '' since windows
     # bots don't like the latter.
     cmd = [
-      'apply_issue.py',
-      '-r', WithProperties('%(root:-)s'),
-      '-i', WithProperties('%(issue:-)s'),
-      '-p', WithProperties('%(patchset:-)s'),
-      '-e=',
+        'apply_issue.py',
+        '-r', WithProperties('%(root:-)s'),
+        '-i', WithProperties('%(issue:-)s'),
+        '-p', WithProperties('%(patchset:-)s'),
+        '-e=',
     ]
     self._factory.addStep(
         shell.ShellCommand,
@@ -617,24 +617,24 @@ class FactoryCommands(object):
   def AddClobberTreeStep(self, gclient_spec, env=None, timeout=None,
                          gclient_deps=None, gclient_nohooks=False,
                          no_gclient_branch=None):
-    """ This is not for pressing 'clobber' on the waterfall UI page. This is
-        for clobbering all the sources. Using mode='clobber' causes the entire
-        working directory to get moved aside (to build.dead) --OR-- if
-        build.dead already exists, it deletes build.dead. Strange, but true.
-        See GClient.doClobber() (for move vs. delete logic) or Gclient.start()
-        (for mode='clobber' trigger) in chromium_commands.py.
+    """This is not for pressing 'clobber' on the waterfall UI page. This is
+       for clobbering all the sources. Using mode='clobber' causes the entire
+       working directory to get moved aside (to build.dead) --OR-- if
+       build.dead already exists, it deletes build.dead. Strange, but true.
+       See GClient.doClobber() (for move vs. delete logic) or Gclient.start()
+       (for mode='clobber' trigger) in chromium_commands.py.
 
-        In theory, this means we can have a ClobberTree step at the beginning of
-        a build to quickly move the existing workdir and do a full clean
-        checkout. Then, if we add the same step at the end of a build, it will
-        delete the moved-out-of-the-way directory. Presuming neither step fails
-        or times out, this allows a builder to pull a full, clean tree for
-        every build.
+       In theory, this means we can have a ClobberTree step at the beginning of
+       a build to quickly move the existing workdir and do a full clean
+       checkout. Then, if we add the same step at the end of a build, it will
+       delete the moved-out-of-the-way directory. Presuming neither step fails
+       or times out, this allows a builder to pull a full, clean tree for
+       every build.
 
-        This is exactly what we want for official release builds, so that the
-        builder can refresh its entire tree based on a new buildspec (which
-        might point to a completely different branch or an older revision than
-        the last build on the machine).
+       This is exactly what we want for official release builds, so that the
+       builder can refresh its entire tree based on a new buildspec (which
+       might point to a completely different branch or an older revision than
+       the last build on the machine).
     """
     if env is None:
       env = {}
@@ -651,8 +651,7 @@ class FactoryCommands(object):
                           mode='clobber',
                           env=env,
                           timeout=timeout,
-                          rm_timeout=60*60) # We don't care how long it takes.
-
+                          rm_timeout=60*60)  # We don't care how long it takes.
 
   def AddTaskkillStep(self):
     """Adds a step to kill the running processes before a build."""
@@ -662,7 +661,6 @@ class FactoryCommands(object):
                           timeout=60,
                           workdir='',  # Doesn't really matter where we are.
                           command=['python', self._kill_tool])
-
 
   # Zip / Extract commands.
   def AddZipBuild(self, src_dir=None, include_files=None,
@@ -783,7 +781,6 @@ class FactoryCommands(object):
     # otherwise posix platforms will fail.
     return ListProperties(cmd)
 
-
   def AddCompileStep(self, solution, clobber=False,
                      description='compiling',
                      descriptionDone='compile',
@@ -814,12 +811,8 @@ class FactoryCommands(object):
         command=self.GetBuildCommand(clobber, solution, mode, options),
         haltOnFailure=haltOnFailure)
 
-  def GetPerfStepClass(self, factory_properties, test_name, log_processor_class,
-                       command_class=None, **kwargs):
-    """Selects the right build step for the specified perf test."""
-    factory_properties = factory_properties or {}
-    perf_id = factory_properties.get('perf_id')
-    show_results = factory_properties.get('show_perf_results')
+  def _PerfStepMappings(self, show_results, perf_id, test_name):
+    """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""
     report_link = None
     output_dir = None
     perf_name = None
@@ -833,10 +826,40 @@ class FactoryCommands(object):
                                      self.PERF_REPORT_URL_SUFFIX)
       output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
 
+    return report_link, output_dir, perf_name
+
+  def GetPerfStepClass(self, factory_properties, test_name, log_processor_class,
+                       command_class=None):
+    """Selects the right build step for the specified perf test."""
+    factory_properties = factory_properties or {}
+    perf_id = factory_properties.get('perf_id')
+    show_results = factory_properties.get('show_perf_results')
+
+    report_link, output_dir, perf_name = self._PerfStepMappings(show_results,
+                                                                perf_id,
+                                                                test_name)
+
     return CreatePerformanceStepClass(log_processor_class,
-               report_link=report_link, output_dir=output_dir,
-               factory_properties=factory_properties, perf_name=perf_name,
-               test_name=test_name, command_class=command_class)
+        report_link=report_link, output_dir=output_dir,
+        factory_properties=factory_properties, perf_name=perf_name,
+        test_name=test_name, command_class=command_class)
+
+  def GetAnnotatedPerfStepClass(self, factory_properties, test_name,
+                                command_class=None):
+    """Creates an annotation step that will parse performance tests."""
+
+    factory_properties = factory_properties or {}
+    perf_id = factory_properties.get('perf_id')
+    show_results = factory_properties.get('show_perf_results')
+
+    report_link, output_dir, _ = self._PerfStepMappings(show_results,
+                                                        perf_id,
+                                                        test_name)
+
+    command_class = command_class or chromium_step.PerfStepAnnotatedCommand
+
+    return chromium_utils.InitializePartiallyWithArguments(command_class,
+        report_link=report_link, output_dir=output_dir)
 
   # Checks out and builds clang
   def AddUpdateClangStep(self):
@@ -862,11 +885,12 @@ class CanCancelBuildShellCommand(shell.ShellCommand):
   will fake a success but terminate the build.  This keeps the tree
   green but otherwise stops all action.
   """
+
   def evaluateCommand(self, cmd):
     if cmd.rc != 0:
       reason = 'Build has been cancelled without being a failure.'
       self.build.stopBuild(reason)
-      self.build.buildFinished(("Stopped Early", reason), SUCCESS)
+      self.build.buildFinished(('Stopped Early', reason), SUCCESS)
     return SUCCESS
 
 
@@ -878,6 +902,7 @@ class WaterfallLoggingShellCommand(shell.ShellCommand):
   pollution these should be limited and important, such as a summary
   number or version.
   """
+
   def __init__(self, *args, **kwargs):
     self.messages = []
     # Argh... not a new style class?
@@ -899,6 +924,7 @@ class SetBuildPropertyShellCommand(shell.ShellCommand):
      BUILD_PROPERTY property_name=value
   Property name and value will be set as build property.
   """
+
   def __init__(self, *args, **kwargs):
     self.messages = []
     shell.ShellCommand.__init__(self, *args, **kwargs)

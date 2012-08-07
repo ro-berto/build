@@ -25,6 +25,7 @@ try:
 except ImportError:
   import simplejson as json
 
+
 # Local errors.
 class MissingArgument(Exception): pass
 class PathNotFound(Exception): pass
@@ -117,8 +118,9 @@ def FilteredMeanAndStandardDeviation(data):
       Mean and standard deviation for the numbers in the list ignoring
       first occurence of max value.
   """
+
   def _FilterMax(array):
-    new_array = copy.copy(array) # making sure we are not creating side-effects
+    new_array = copy.copy(array)  # making sure we are not creating side-effects
     if len(new_array) != 1:
       new_array.remove(max(new_array))
     return new_array
@@ -132,6 +134,7 @@ class InitializePartiallyWithArguments:
   with some constructor arguments beings set ahead of actual initialization.
   Copy of an ASPN cookbook (#52549).
   """
+
   def __init__(self, clazz, *args, **kwargs):
     self.clazz = clazz
     self.pending = args[:]
@@ -215,6 +218,7 @@ def RemoveFile(*path):
     if e.errno != errno.ENOENT:
       raise
 
+
 def MoveFile(path, new_path):
   """Moves the file located at 'path' to 'new_path', if it exists."""
   try:
@@ -223,6 +227,7 @@ def MoveFile(path, new_path):
   except OSError, e:
     if e.errno != errno.ENOENT:
       raise
+
 
 def LocateFiles(pattern, root=os.curdir):
   """Yeilds files matching pattern found in root and its subdirectories.
@@ -325,7 +330,7 @@ def RemoveDirectory(*path):
       if exception_value.errno == errno.ENOENT:
         # File does not exist, and we're trying to delete, so we can ignore the
         # failure.
-        print "WARNING:  Failed to list %s during rmtree.  Ignoring.\n" % path
+        print 'WARNING:  Failed to list %s during rmtree.  Ignoring.\n' % path
       else:
         raise
     else:
@@ -408,7 +413,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     # that is the same name as the ultimate archive name.
     if not os.path.isdir(archive_dir):
       print 'Moving old "%s" file to create same name directory.' % archive_dir
-      previous_archive_file  = '%s.old' % archive_dir
+      previous_archive_file = '%s.old' % archive_dir
       MoveFile(archive_dir, previous_archive_file)
     else:
       RemoveDirectory(archive_dir)
@@ -442,6 +447,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   # easier then trying to do that with ZipInfo options.
   if IsWindows():
     print 'Creating %s' % output_file
+
     def _Addfiles(to_zip_file, dirname, files_to_add):
       for this_file in files_to_add:
         archive_name = this_file
@@ -573,8 +579,10 @@ def FindUpward(start_dir, *desired_list):
 
 def RunAndPrintDots(function):
   """Starts a background thread that prints dots while the function runs."""
+
   def Hook(*args, **kwargs):
     event = threading.Event()
+
     def PrintDots():
       counter = 0
       while not event.isSet():
@@ -598,6 +606,7 @@ class RunCommandFilter(object):
   """Class that should be subclassed to provide a filter for RunCommand."""
   # Method could be a function
   # pylint: disable=R0201
+
   def FilterLine(self, a_line):
     """Called for each line of input.  The \n is included on a_line.  Should
     return what is to be recorded as the output for this line.  A result of
@@ -847,14 +856,14 @@ def SshCopyTree(srctree, host, dst):
   result = RunCommand(command)
   if result:
     raise ExternalError('SshCopyTree destination directory "%s" already exists.'
-                       % host + ':' + dst)
+                        % host + ':' + dst)
 
   SshMakeDirectory(host, os.path.dirname(dst))
   command = ['scp', '-r', '-p', srctree, host + ':' + dst]
   result = RunCommand(command)
   if result:
     raise ExternalError('Failed to scp "%s" to "%s" (%s)' %
-                       (srctree, host + ':' + dst, result))
+                        (srctree, host + ':' + dst, result))
 
 
 def ListMasters():
@@ -892,14 +901,15 @@ def convert_json(option, opt, value, parser):
   """Provide an OptionParser callback to unmarshal a JSON string."""
   setattr(parser.values, option.dest, json.loads(value))
 
+
 def SafeTranslate(inputstr):
   """Convert a free form string to one that can be used in a path.
 
   This is similar to the safeTranslate function in buildbot.
   """
 
-  badchars_map = string.maketrans("\t !#$%&'()*+,./:;<=>?@[\\]^{|}~",
-                                  "______________________________")
+  badchars_map = string.maketrans('\t !#$%&\'()*+,./:;<=>?@[\\]^{|}~',
+                                  '______________________________')
   if isinstance(inputstr, unicode):
     inputstr = inputstr.encode('utf8')
   return inputstr.translate(badchars_map)
@@ -931,7 +941,7 @@ def GetCBuildbotConfigs(chromite_path=None):
     if proc.returncode != 0:
       raise ExternalError('%s failed with error %s\n' % (config_path, error))
 
-    config_list = json.loads(output).values() # pylint: disable=E1103
+    config_list = json.loads(output).values()  # pylint: disable=E1103
     config_list.sort(key=lambda cfg: cfg['display_position'])
     return config_list
   except ImportError:
@@ -969,8 +979,8 @@ def AddThirdPartyLibToPath(lib, override=False):
   Setting 'override' to true will place the directory in the beginning of
   sys.path, useful for overriding previously set packages.
   """
-  libpath = os.path.abspath(os.path.join(os.path.dirname( __file__),
-                                         '..','..', 'third_party', lib))
+  libpath = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                         '..', '..', 'third_party', lib))
   if override:
     sys.path.insert(0, libpath)
   else:
@@ -1000,3 +1010,10 @@ def GetLKGR():
     conn.close()
 
   return rev, 'ok'
+
+
+def AbsoluteCanonicalPath(*path):
+  """Return the most canonical path Python can provide."""
+
+  file_path = os.path.join(*path)
+  return os.path.realpath(os.path.abspath(os.path.expanduser(file_path)))
