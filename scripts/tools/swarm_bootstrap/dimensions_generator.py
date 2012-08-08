@@ -41,6 +41,10 @@ def GetDimensions():
   # hostname always contains the vlan name.
   vlan = socket.gethostname().lower().split('-')[1]
 
+  # Trim off any trailing parts of the address.
+  if '.' in vlan:
+    vlan = vlan.split('.')[0]
+
   return {
       'tag': socket.gethostname(),
       'dimensions': {
