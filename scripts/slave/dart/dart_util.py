@@ -15,10 +15,10 @@ from common import chromium_utils
 def clobber():
   print('Clobbereing platform: %s' % sys.platform)
   if sys.platform in ('win32'):
-    release_dir = os.path.abspath('Release_ia32')
+    release_dir = os.path.abspath('ReleaseIA32')
     print('Removing directory %s' % release_dir)
     chromium_utils.RemoveDirectory(release_dir)
-    debug_dir = os.path.abspath('Debug_ia32')
+    debug_dir = os.path.abspath('DebugIA32')
     print('Removing directory %s' % debug_dir)
     chromium_utils.RemoveDirectory(debug_dir)
   elif sys.platform in ('linux2'):
