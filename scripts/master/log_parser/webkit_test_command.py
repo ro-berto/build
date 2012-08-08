@@ -46,8 +46,8 @@ class TestObserver(buildstep.LogLineObserver):
     # Headers and regular expressions for parsing logs.  We don't
     # distinguish among failures, crashes, and hangs in the display.
     self._passing_start = re.compile('Expected to .+, but passed')
-    self._regressions_start = re.compile('Regressions: Unexpected .+')
-    self._flaky_start = re.compile('Unexpected flakiness: .+')
+    self._regressions_start = re.compile('Regressions: [Uu]nexpected .+')
+    self._flaky_start = re.compile('[Uu]nexpected flakiness: .+')
 
     self._section_end = '-' * 78
     self._summary_end = '=> Tests '
