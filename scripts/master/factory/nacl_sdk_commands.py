@@ -82,7 +82,8 @@ class NativeClientSDKCommands(commands.FactoryCommands):
   def AddPrepareSDKStep(self):
     """Adds a step to build the sdk."""
 
-    cmd = ' '.join([self._python, 'build_tools/nacl-mono-buildbot.py'])
+    cmd = ' '.join([self._python,
+        'src/native_client_sdk/src/build_tools/nacl-mono-buildbot.py'])
     if self._target_platform.startswith('win'):
       cmd = 'vcvarsall x86 && ' + cmd
     self._factory.addStep(chromium_step.AnnotatedCommand,
