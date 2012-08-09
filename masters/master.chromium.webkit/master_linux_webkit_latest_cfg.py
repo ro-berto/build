@@ -60,7 +60,8 @@ F('f_webkit_linux_rel_asan', linux().ChromiumWebkitLatestFactory(
     options=['--compiler=goma-clang', 'DumpRenderTree'],
     factory_properties={
        'gs_bucket': 'gs://webkit-asan',
-       'gclient_env': {'GYP_DEFINES': asan_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_gyp},
+       'time_out_ms': 18000}))
 
 
 ################################################################################

@@ -106,6 +106,9 @@ def layout_test(options, args):
   if options.enable_pageheap:
     command.append('--time-out-ms=120000')
 
+  if options.time_out_ms:
+    command.extend(['--time-out-ms', options.time_out_ms])
+
   for filename in options.additional_expectations:
     command.append('--additional-expectations=%s' % filename)
 
@@ -176,6 +179,9 @@ def main():
                            action="append", default=[],
                            help=("DEPRECATED. "
                                  "Same as --additional-expectations"))
+  option_parser.add_option("--time-out-ms",
+                           action="store", default=None,
+                           help="Set the timeout for each (non-SLOW) test")
   options, args = option_parser.parse_args()
 
   # Disable pageheap checking except on Windows.

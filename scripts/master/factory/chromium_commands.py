@@ -1046,6 +1046,7 @@ class ChromiumCommands(commands.FactoryCommands):
     platform = factory_properties.get('layout_test_platform')
     enable_hardware_gpu = factory_properties.get('enable_hardware_gpu')
     layout_tests = factory_properties.get('layout_tests')
+    time_out_ms = factory_properties.get('time_out_ms')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -1081,6 +1082,9 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if enable_hardware_gpu:
       cmd.extend(['--options=--enable-hardware-gpu'])
+
+    if time_out_ms:
+      cmd.extend(['--time-out-ms', time_out_ms])
 
     # The list of tests is given as arguments.
     if layout_tests:
