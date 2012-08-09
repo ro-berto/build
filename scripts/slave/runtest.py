@@ -397,10 +397,24 @@ def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
   return build_dir, exe_path
 
 
-def upload_profiling_data(options):
+def upload_profiling_data(options, args):
   """Using the target build configuration, archive the profiling data to Google
   Storage.
   """
+  # args[1] has --gtest-filter argument.
+  if len(args) < 2:
+    return 0
+
+  if (options.build_properties.get('buildername') != 'XP Perf (1)' or
+      options.build_properties.get('mastername') != 'chromium.perf' or
+      not options.build_properties.get('got_revision')):
+    return 0
+
+  gtest_filter = args[1]
+  if (gtest_filter is None or
+      gtest_filter.find('StartupTest.*:ShutdownTest.*') == -1):
+    return 0
+
   build_dir = os.path.normpath(os.path.abspath(options.build_dir))
 
   # archive_profiling_data.py is in
@@ -413,9 +427,9 @@ def upload_profiling_data(options):
   else:
     python = 'python'
 
-  run_id = '%s_%s_%s' % (options.build_properties['got_revision'],
-                         options.build_properties['buildername'],
-                         options.gtest_filter[0:12])
+  run_id = '%s_%s_%s' % (options.build_properties.get('got_revision'),
+                         options.build_properties.get('buildername'),
+                         gtest_filter[0:12])
   cmd = [python, profiling_archive_tool, '--run-id', run_id,
          '--build-dir', build_dir]
 
@@ -923,6 +937,8 @@ def main():
   else:
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
     return 1
+
+  upload_profiling_data(options, args)
 
   new_temp_files = get_temp_count()
   if temp_files > new_temp_files:
