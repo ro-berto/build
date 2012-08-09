@@ -924,11 +924,6 @@ def main():
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
     return 1
 
-  if (options.build_properties['buildername'] == 'XP Perf (1)' and
-      options.build_properties.get('mastername') == 'chromium.perf' and
-      options.gtest_filter == 'StartupTest.*:ShutdownTest.*'):
-    upload_profiling_data(options)
-
   new_temp_files = get_temp_count()
   if temp_files > new_temp_files:
     print >> sys.stderr, (
