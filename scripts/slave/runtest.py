@@ -397,6 +397,31 @@ def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
   return build_dir, exe_path
 
 
+def upload_profiling_data(options):
+  """Using the target build configuration, archive the profiling data to Google
+  Storage.
+  """
+  build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+
+  # archive_profiling_data.py is in
+  # /b/build/slave/SLAVE_NAME/build/src/build/scripts/slave
+  profiling_archive_tool = os.path.join(build_dir, 'src', 'build', 'scripts',
+                                        'slave', 'archive_profiling_data.py')
+
+  if sys.platform == 'win32':
+    python = 'python_slave'
+  else:
+    python = 'python'
+
+  run_id = '%s_%s_%s' % (options.build_properties['got_revision'],
+                         options.build_properties['buildername'],
+                         options.gtest_filter[0:12])
+  cmd = [python, profiling_archive_tool, '--run-id', run_id,
+         '--build-dir', build_dir]
+
+  return chromium_utils.RunCommand(cmd)
+
+
 def main_mac(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
@@ -898,6 +923,11 @@ def main():
   else:
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
     return 1
+
+  if (options.build_properties['buildername'] == 'XP Perf (1)' and
+      options.build_properties.get('mastername') == 'chromium.perf' and
+      options.gtest_filter == 'StartupTest.*:ShutdownTest.*'):
+    upload_profiling_data(options)
 
   new_temp_files = get_temp_count()
   if temp_files > new_temp_files:
