@@ -19,11 +19,9 @@ from master import chromium_step
 
 
 class FakeCommand(mock.Mock):
-  def addLog(self, ignored):
-    return mock.Mock()
-
-  def getLogs(self):
-    return [mock.Mock()]
+  def __init__(self):
+    self.rc = builder.SUCCESS
+    mock.Mock.__init__(self)
 
 
 class FakeBuildStep(mock.Mock):
@@ -31,20 +29,26 @@ class FakeBuildStep(mock.Mock):
     self.name = name
     self.text = None
     self.receivedStatus = []
-    self.urls = []
+    self.step_status = None
     mock.Mock.__init__(self)
 
+  def setStatus(self, status):
+    self.step_status = status
+
   def addURL(self, label, url):
-    self.urls.append((label, url))
+    self.step_status.addURL(label, url)
 
   def stepStarted(self):
     return mock.Mock()
 
-  def addLog(self, ignored):
-    return mock.Mock()
+  def addLog(self, logname):
+    return self.step_status.addLog(logname)
+
+  def getURLs(self):
+    return self.step_status.getURLs()
 
   def getLogs(self):
-    return [mock.Mock()]
+    return self.step_status.getLogs()
 
   def setText(self, text):
     self.text = text
@@ -78,8 +82,10 @@ class FakeLog(object):
 class FakeBuildstepStatus(mock.Mock):
   def __init__(self):
     self.steps = [FakeBuildStep('init')]
+    self.steps[0].setStatus(self)
     self.receivedStatus = []
-    self.logs = {}
+    self.logs = []
+    self.urls = {}
     mock.Mock.__init__(self)
 
   def getBuild(self):
@@ -87,20 +93,28 @@ class FakeBuildstepStatus(mock.Mock):
 
   def addStepWithName(self, step_name):
     newstep = FakeBuildStep(step_name)
+    newstep.setStatus(self)
     self.steps.append(newstep)
     return newstep
 
   def addLog(self, log):
     l = FakeLog(log)
-    self.logs[log] = l
+    self.logs.append(l)
     return l
 
+  def addURL(self, label, url):
+    self.urls[label] = url
+
+  def getURLs(self):
+    return self.urls.copy()
+
   def getLogs(self):
-    return self.logs.values()
+    return self.logs
 
   def getLog(self, log):
-    if log in self.logs:
-      return self.logs[log]
+    candidates = [x for x in self.logs if x.name == log]
+    if candidates:
+      return candidates[0]
     else:
       return None
 
@@ -110,9 +124,10 @@ class FakeBuildstepStatus(mock.Mock):
 
 class AnnotatorCommandsTest(unittest.TestCase):
   def setUp(self):
+    self.command = FakeCommand()
     self.step = chromium_step.AnnotatedCommand(name='annotated_steps',
                                                description='annotated_steps',
-                                               command=FakeCommand())
+                                               command=self.command)
 
     self.step_status = FakeBuildstepStatus()
     self.step.setStepStatus(self.step_status)
@@ -156,12 +171,14 @@ class AnnotatorCommandsTest(unittest.TestCase):
   def testStepLink(self):
     self.handleOutputLine('@@@STEP_LINK@label@http://localhost/@@@')
     testurls = [('label', 'http://localhost/')]
+    testurl_hash = {'label': 'http://localhost/'}
 
     annotatedLinks = [x['links'] for x in self.step.script_observer.sections]
-    stepLinks = [x['step'].urls for x in self.step.script_observer.sections]
+    stepLinks = [x['step'].getURLs() for x in
+                 self.step.script_observer.sections]
 
     self.assertEquals(annotatedLinks, [testurls])
-    self.assertEquals(stepLinks, [testurls])
+    self.assertEquals(stepLinks, [testurl_hash])
 
   def testStepWarning(self):
     self.handleOutputLine('@@@STEP_WARNINGS@@@')
@@ -255,6 +272,30 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.assertEquals(self.step_status.getLog('test_log').text,
                       'this is line one\nthis is line two')
 
+  def testForNoPreambleAfter1Step(self):
+    self.handleOutputLine('this line is part of the preamble')
+    self.step.commandComplete(self.command)
+    logs = self.step_status.getLogs()
+    # buildbot will append 'stdio' for the first non-annotated section
+    # but it won't show up in self.step_status.getLogs()
+    self.assertEquals(len(logs), 0)
+
+  def testForPreambleAfter2Steps(self):
+    self.handleOutputLine('this line is part of the preamble')
+    self.handleOutputLine('@@@BUILD_STEP step2@@@')
+    self.step.commandComplete(self.command)
+    logs = self.step_status.getLogs()
+    # annotator adds a stdio for each buildstep added
+    self.assertEquals([x.getName() for x in logs], ['preamble', 'stdio'])
+
+  def testForPreambleAfter3Steps(self):
+    self.handleOutputLine('this line is part of the preamble')
+    self.handleOutputLine('@@@BUILD_STEP step2@@@')
+    self.handleOutputLine('@@@BUILD_STEP step3@@@')
+    self.step.commandComplete(self.command)
+    logs = self.step_status.getLogs()
+    self.assertEquals([x.getName() for x in logs], ['preamble', 'stdio',
+                                                    'stdio'])
 
 if __name__ == '__main__':
   unittest.main()

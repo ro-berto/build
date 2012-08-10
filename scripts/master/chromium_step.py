@@ -685,8 +685,19 @@ class AnnotatedCommand(ProcessLogShellStep):
     self.script_observer = AnnotationObserver(self)
     self.addLogObserver('stdio', self.script_observer)
 
+  def _removePreamble(self):
+    """Remove preamble if there is only section.
+
+    'stdio' will be identical to 'preamble' if there is only one annotator
+    section, so it's redundant to show both on the waterfall.
+    """
+    if len(self.script_observer.sections) == 1:
+      self.step_status.logs = [x for x in self.step_status.logs if
+                               x.name != 'preamble']
+
   def interrupt(self, reason):
     self.script_observer.fixupLast(builder.EXCEPTION)
+    self._removePreamble()
     return ProcessLogShellStep.interrupt(self, reason)
 
   def evaluateCommand(self, cmd):
@@ -697,6 +708,7 @@ class AnnotatedCommand(ProcessLogShellStep):
 
   def commandComplete(self, cmd):
     self.script_observer.handleReturnCode(cmd.rc)
+    self._removePreamble()
     return ProcessLogShellStep.commandComplete(self, cmd)
 
 
