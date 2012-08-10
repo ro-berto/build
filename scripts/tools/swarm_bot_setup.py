@@ -69,7 +69,11 @@ def BuildSetupCommands(user, host, platform):
 def main():
   parser = optparse.OptionParser(usage='%prog [options]',
                                  description=sys.modules[__name__].__doc__)
-  parser.add_option('-b', '--bot', help='The bot to setup as a swarm bot')
+  parser.add_option('-b', '--bot', action='append', default=[],
+                    help='The bot to setup as a swarm bot')
+  parser.add_option('-r', '--raw',
+                    help='The name of a file containing line separated slaves '
+                    'to setup. The slaves must all be the same os.')
   parser.add_option('-c', '--clean', action='store_true',
                     help='Removes any old swarm files before setting '
                     'up the bot.')
@@ -88,8 +92,8 @@ def main():
 
   if len(args) > 0:
     parser.error('Unknown arguments, ' + str(args))
-  if not options.bot:
-    parser.error('Must specify a bot.')
+  if not options.bot and not options.raw:
+    parser.error('Must specify a bot or bot file.')
   if len([x for x in [options.win, options.linux, options.mac] if x]) != 1:
     parser.error('Must specify the bot\'s OS.')
 
@@ -100,18 +104,24 @@ def main():
   elif options.mac:
     platform = 'mac'
 
-  commands = []
+  bots = options.bot
+  if options.raw:
+    # Remove extra spaces and empty lines.
+    bots.extend(filter(None, (s.strip() for s in open(options.raw, 'r'))))
 
-  if options.clean:
-    commands.extend(BuildCleanCommands(options.user, options.bot))
+  for bot in bots:
+    commands = []
 
-  commands.extend(BuildSetupCommands(options.user, options.bot, platform))
+    if options.clean:
+      commands.extend(BuildCleanCommands(options.user, bot))
 
-  if options.print_only:
-    print commands
-  else:
-    for command in commands:
-      subprocess.check_call(command)
+    commands.extend(BuildSetupCommands(options.user, bot, platform))
+
+    if options.print_only:
+      print commands
+    else:
+      for command in commands:
+        subprocess.check_call(command)
 
 
 if __name__ == '__main__':
