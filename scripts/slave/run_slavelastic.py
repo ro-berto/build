@@ -240,7 +240,8 @@ def main():
   # Remove the old data if there is any
   if os.path.isdir(options.data_dest_dir):
     print 'Removing old swarm files...'
-    for filename in glob.glob(os.path.join(options.data_dest_dir, '*.zip')):
+    for filename in glob.glob(os.path.join(options.data_dest_dir,
+                                           options.test_name_prefix + '*.zip')):
       os.remove(filename)
 
   # Send off the swarm test requests.
