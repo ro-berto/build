@@ -107,7 +107,7 @@ def layout_test(options, args):
     command.append('--time-out-ms=120000')
 
   if options.time_out_ms:
-    command.extend(['--time-out-ms', options.time_out_ms])
+    command.extend(['--time-out-ms', str(options.time_out_ms)])
 
   for filename in options.additional_expectations:
     command.append('--additional-expectations=%s' % filename)
