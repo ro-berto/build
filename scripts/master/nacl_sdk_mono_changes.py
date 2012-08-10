@@ -33,7 +33,7 @@ def LatestSDKVersion():
   """
   p = subprocess.Popen([
       'gsutil', 'ls',
-      'gs://nativeclient-mirror/nacl/nacl_sdk/trunk.*/naclsdk_linux.bz2'],
+      'gs://nativeclient-mirror/nacl/nacl_sdk/trunk.*/naclsdk_linux.tar.bz2'],
       stdout=subprocess.PIPE)
   p_stdout, _ = p.communicate()
   assert p.returncode == 0
