@@ -51,7 +51,8 @@ def Archive(run_id, build_dir):
     return True
 
   # Profiling data is in /b/build/slave/SLAVE_NAME/build/src/chrome/test/data
-  profiling_data_dir = os.path.join(build_dir, 'src', 'chrome', 'test', 'data')
+  # and |build_dir| is /b/build/slave/SLAVE_NAME/build/src/build.
+  profiling_data_dir = os.path.join(build_dir, '..', 'chrome', 'test', 'data')
   if not os.path.exists(profiling_data_dir):
     print 'No profiling_data_dir: ', profiling_data_dir
     return True
