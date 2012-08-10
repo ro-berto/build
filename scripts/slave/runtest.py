@@ -417,10 +417,11 @@ def upload_profiling_data(options, args):
 
   build_dir = os.path.normpath(os.path.abspath(options.build_dir))
 
-  # archive_profiling_data.py is in
-  # /b/build/slave/SLAVE_NAME/build/src/build/scripts/slave
-  profiling_archive_tool = os.path.join(build_dir, 'src', 'build', 'scripts',
-                                        'slave', 'archive_profiling_data.py')
+  # archive_profiling_data.py is in /b/build/scripts/slave and
+  # build_dir is /b/build/slave/SLAVE_NAME/build/src/build.
+  profiling_archive_tool = os.path.join(build_dir, '..', '..', '..', '..', '..',
+                                        'scripts', 'slave',
+                                        'archive_profiling_data.py')
 
   if sys.platform == 'win32':
     python = 'python_slave'
