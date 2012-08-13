@@ -130,6 +130,7 @@ class FactoryCommands(object):
       'gpu-fyi-linux-release-ati': 'gpu-fyi-linux-release-ati',
       'gpu-fyi-linux-release-intel': 'gpu-fyi-linux-release-intel',
       'gpu-fyi-mac-release-ati': 'gpu-fyi-mac-release-ati',
+      'gpu-fyi-mac-retina-release': 'gpu-fyi-mac-retina-release',
       'gpu-fyi-win7-release-ati': 'gpu-fyi-win7-release-ati',
       'gpu-fyi-win7-release-intel': 'gpu-fyi-win7-release-intel',
       'gpu-fyi-winxp-release-nvidia': 'gpu-fyi-winxp-release-nvidia',
