@@ -237,11 +237,17 @@ def main():
     parser.error('Number of min shards given doesn\'t match the number '
                  'of manifests')
 
-  # Remove the old data if there is any
+  # Remove the old data from this builder if there is any.
   if os.path.isdir(options.data_dest_dir):
     print 'Removing old swarm files...'
+
+    # We want to extract and use the name of the builder from the test name
+    # prefix because the test name prefix contains the build number, which is
+    # different for older zip files (so they would fail to match the
+    # expression).
+    builder_name = options.test_name_prefix.split('-')
     for filename in glob.glob(os.path.join(options.data_dest_dir,
-                                           options.test_name_prefix + '*.zip')):
+                                           builder_name + '*.zip')):
       os.remove(filename)
 
   # Send off the swarm test requests.
