@@ -245,7 +245,7 @@ def main():
     # prefix because the test name prefix contains the build number, which is
     # different for older zip files (so they would fail to match the
     # expression).
-    builder_name = options.test_name_prefix.split('-')
+    builder_name = options.test_name_prefix.split('-')[0]
     for filename in glob.glob(os.path.join(options.data_dest_dir,
                                            builder_name + '*.zip')):
       os.remove(filename)
