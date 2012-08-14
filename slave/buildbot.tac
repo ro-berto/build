@@ -20,18 +20,15 @@ except ImportError:
 
 # Register the commands.
 from slave import chromium_commands
-from slave import slave_utils
 # Load default settings.
 import config
 
-slave_utils.ImportMasterConfigs()
-
-# Determines the slave type:
-ActiveMaster = None
-
+# config.Master.active_master and config.Master.active_slavename
+# are set in run_slave.py
+ActiveMaster = config.Master.active_master
+slavename = config.Master.active_slavename
 
 # Slave properties:
-slavename = None
 password = config.Master.GetBotPassword()
 host = None
 port = None
@@ -41,30 +38,11 @@ usepty = 1
 umask = None
 
 
-if slavename is None:
-    # Automatically determine the host name.
-    slavename = os.environ.get(
-        'TESTING_SLAVENAME', socket.getfqdn().split('.')[0].lower())
 print 'Using slave name %s' % slavename
 
 if password is None:
     print >> sys.stderr, '*** No password configured in %s.' % repr(__file__)
     sys.exit(1)
-
-if ActiveMaster is None:
-    master_name = os.environ.get(
-        'TESTING_MASTER', slave_utils.GetActiveMaster())
-    if not master_name:
-        print >> sys.stderr, '*** Failed to detect the active master'
-        sys.exit(1)
-    print 'Using master %s' % master_name
-    if hasattr(config.Master, 'active_master'):
-      ActiveMaster = config.Master.active_master
-    elif master_name and getattr(config.Master, master_name):
-      ActiveMaster = getattr(config.Master, master_name)
-    else:
-      print >> sys.stderr, '*** Failed to detect the active master'
-      sys.exit(1)
 
 if host is None:
     host = os.environ.get('TESTING_MASTER_HOST', ActiveMaster.master_host)
