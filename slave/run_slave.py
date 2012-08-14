@@ -8,6 +8,7 @@
 
 import os
 import shutil
+import socket
 import subprocess
 import sys
 import time
@@ -15,6 +16,9 @@ import time
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 needs_reboot = False
 
+# By default, the slave will identify itself to the master by its hostname.
+# To override that, explicitly set a slavename here.
+slavename = None
 
 def remove_all_vars_except(dictionary, keep):
   """Remove all keys from the specified dictionary except those in !keep|"""
@@ -130,6 +134,46 @@ def FixSubversionConfig():
   shutil.copyfile('config', dest)
 
 
+def GetActiveSlavename(config_bootstrap):
+  active_slavename = os.environ.get('TESTING_SLAVENAME', slavename)
+  if active_slavename:
+    setattr(config_bootstrap.Master, 'active_slavename', active_slavename)
+  else:
+    setattr(config_bootstrap.Master, 'active_slavename',
+            socket.getfqdn().split('.')[0].lower())
+  return active_slavename
+
+
+def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
+  master_name = os.environ.get(
+      'TESTING_MASTER', slave_bootstrap.GetActiveMaster(active_slavename))
+  if not master_name:
+    raise RuntimeError('*** Failed to detect the active master')
+  slave_bootstrap.ImportMasterConfigs(master_name)
+  if hasattr(config_bootstrap.Master, 'active_master'):
+    # pylint: disable=E1101
+    return config_bootstrap.Master.active_master
+  if master_name and getattr(config_bootstrap.Master, master_name):
+    master = getattr(config_bootstrap.Master, master_name)
+    setattr(config_bootstrap.Master, 'active_master', master)
+    return master
+  raise RuntimeError('*** Failed to detect the active master')
+
+
+def GetThirdPartyVersions(master):
+  """Checks whether the master to which this slave belongs specifies particular
+  versions of buildbot and twisted for its slaves to run.  If not specified,
+  this function returns default values.
+  """
+  bb_default = 'buildbot_7_12'
+  tw_default = 'twisted_8_1'
+  if not master:
+    return (bb_default, tw_default)
+  bb_ver = getattr(master, 'buildslave_version', bb_default)
+  tw_ver = getattr(master, 'twisted_version', tw_default)
+  return (bb_ver, tw_ver)
+
+
 def error(msg):
   print >> sys.stderr, msg
   sys.exit(1)
@@ -174,19 +218,25 @@ def main():
     SCRIPT_PATH,  # Include the current working directory by default.
   ]
 
+  # Need to update sys.path prior to the following imports.
+  sys.path = python_path + sys.path
+  import slave.bootstrap
+  import config_bootstrap
+  active_slavename = GetActiveSlavename(config_bootstrap)
+  active_master = GetActiveMaster(slave.bootstrap, config_bootstrap,
+                                  active_slavename)
+
   if use_buildbot_8:
-    python_path.append(
-        os.path.join(build_dir, 'third_party', 'buildbot_slave_8_4'))
-    python_path.append(os.path.join(build_dir, 'third_party', 'twisted_10_2'))
+    bb_ver = 'buildbot_slave_8_4'
+    tw_ver = 'twisted_10_2'
   else:
-    python_path.append(os.path.join(build_dir, 'third_party', 'buildbot_7_12'))
-    python_path.append(os.path.join(build_dir, 'third_party', 'twisted_8_1'))
+    bb_ver, tw_ver = GetThirdPartyVersions(active_master)
+  python_path.append(os.path.join(build_dir, 'third_party', bb_ver))
+  python_path.append(os.path.join(build_dir, 'third_party', tw_ver))
+  sys.path.extend(python_path[-2:])
 
   os.environ['PYTHONPATH'] = (
       os.pathsep.join(python_path) + os.pathsep + os.environ['PYTHONPATH'])
-
-  # Add these in from of the PATH too.
-  sys.path = python_path + sys.path
 
   os.environ['CHROME_HEADLESS'] = '1'
   os.environ['PAGER'] = 'cat'
