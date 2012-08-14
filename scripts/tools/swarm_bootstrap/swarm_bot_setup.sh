@@ -9,7 +9,7 @@
 # the required swarm files have been added.
 
 DIMENSIONS_FILE="dimension.in"
-SLAVE_ARGUMENTS="-a http://chromium-swarm.appspot.com -p 80 "$DIMENSIONS_FILE
+SLAVE_ARGUMENTS="-a http://chromium-swarm.appspot.com -p 80 -r 400 "$DIMENSIONS_FILE
 SLAVE_COMMAND="python slave_machine.py "$SLAVE_ARGUMENTS
 
 echo Generate the machine dimensions...

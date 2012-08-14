@@ -8,7 +8,7 @@
 :: been added.
 
 set DIMENSIONS_FILE=dimension.in
-set SLAVE_ARGUMENTS=-a http://chromium-swarm.appspot.com -p 80 %DIMENSIONS_FILE%
+set SLAVE_ARGUMENTS=-a http://chromium-swarm.appspot.com -p 80 -r 400 %DIMENSIONS_FILE%
 set SLAVE_COMMAND=python slave_machine.py %SLAVE_ARGUMENTS%
 
 :STARTUP_SCRIPT
