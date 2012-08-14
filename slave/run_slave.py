@@ -22,8 +22,19 @@ def remove_all_vars_except(dictionary, keep):
     dictionary.pop(key)
 
 
+def IssueReboot():
+  """Issue reboot command according to platform type."""
+  if sys.platform.startswith('win'):
+    subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
+  elif sys.platform in ('darwin', 'posix', 'linux2'):
+    subprocess.call(['sudo', 'shutdown', '-r', 'now'])
+  else:
+    raise NotImplementedError('Implement IssueReboot function '
+                              'for %s' % sys.platform)
+
+
 def Reboot():
-  """Reboot system according to platform type.
+  """Repeatedly try to reboot the system.
 
   On some platforms, like Mac, run_slave.py is launched by a system launcher
   agent.  In those cases, any children of this process will get killed by the
@@ -37,25 +48,22 @@ def Reboot():
      as it shuts down due to a separate reactor.stop() call.  (This was just
      the only theory available for why some bots would not reboot at times.)
 
-  2. Use subprocess.call() instead of Popen() to ensure that run_slave.py
-     doesn't exit at all when it calls Reboot().  This ensures that run_slave.py
-     won't exit and trigger any cleanup routines by whatever launched
-     run_slave.py.
+  2. In IssueReboot, use subprocess.call() instead of Popen() to ensure that
+     run_slave.py doesn't exit at all when it calls Reboot().  This ensures that
+     run_slave.py won't exit and trigger any cleanup routines by whatever
+     launched run_slave.py.
 
   Since our strategy depends on Reboot() never returning, raise an exception
   if that should occur to make it clear in logs that an error condition is
   occurring somewhere.
   """
-  print "Rebooting..."
-  if sys.platform.startswith('win'):
-    subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
-  elif sys.platform in ('darwin', 'posix', 'linux2'):
-    subprocess.call(['sudo', 'shutdown', '-r', 'now'])
-  else:
-    raise NotImplementedError('Implement Reboot function')
-  print 'reboot requested, going to sleep...'
+  IssueReboot()
+  i = 0
   while True:
+    print '\rRebooting then sleeping 60 seconds for the %dth time...' % i,
+    IssueReboot()
     time.sleep(60)
+    i += 1
   raise Exception('run_slave.Reboot() should not return but would have')
 
 
