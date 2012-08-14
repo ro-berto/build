@@ -1036,6 +1036,8 @@ class ChromiumCommands(commands.FactoryCommands):
           tests
       test_results_server: If specified, upload results json files to test
           results server
+      driver_name: If specified, alternate layout test driver to use.
+      additional_drt_flag: If specified, additional flag to pass to DRT.
       layout_tests: List of layout tests to run. Space separated string.
     """
     factory_properties = factory_properties or {}
@@ -1047,6 +1049,8 @@ class ChromiumCommands(commands.FactoryCommands):
     enable_hardware_gpu = factory_properties.get('enable_hardware_gpu')
     layout_tests = factory_properties.get('layout_tests')
     time_out_ms = factory_properties.get('time_out_ms')
+    driver_name = factory_properties.get('driver_name')
+    additional_drt_flag = factory_properties.get('additional_drt_flag')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -1085,6 +1089,12 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if time_out_ms:
       cmd.extend(['--time-out-ms', time_out_ms])
+
+    if driver_name:
+      cmd.extend(['--driver-name', driver_name])
+
+    if additional_drt_flag:
+      cmd.extend(['--additional-drt-flag', additional_drt_flag])
 
     # The list of tests is given as arguments.
     if layout_tests:
