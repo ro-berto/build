@@ -7,32 +7,15 @@
 """
 
 import optparse
-import os
+import subprocess
 import sys
 
-from common import chromium_utils
-
 def clobber():
-  print('Clobbereing platform: %s' % sys.platform)
-  if sys.platform in ('win32'):
-    release_dir = os.path.abspath('ReleaseIA32')
-    print('Removing directory %s' % release_dir)
-    chromium_utils.RemoveDirectory(release_dir)
-    debug_dir = os.path.abspath('DebugIA32')
-    print('Removing directory %s' % debug_dir)
-    chromium_utils.RemoveDirectory(debug_dir)
-  elif sys.platform in ('linux2'):
-    out_dir = os.path.abspath('out')
-    print('Removing directory %s' % out_dir)
-    chromium_utils.RemoveDirectory(out_dir)
-  elif sys.platform.startswith('darwin'):
-    xcode_dir = os.path.abspath('xcodebuild')
-    print('Removing directory %s' % xcode_dir)
-    chromium_utils.RemoveDirectory(xcode_dir)
-  else:
-    print("Platform not recognized")
-  return 0
-
+  cmd = [sys.executable,
+         './tools/clean_output_directory.py',
+         '--mode=all']
+  print 'Clobbering %s' % (' '.join(cmd))
+  return subprocess.call(cmd)
 
 def main():
   parser = optparse.OptionParser()
