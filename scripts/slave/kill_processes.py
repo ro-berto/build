@@ -189,6 +189,8 @@ processes = [
     'performance_ui_tests.exe',
     'printing_unittests.exe',
     'reliability_tests.exe',
+    'sel_ldr.exe',
+    'sel_ldr64.exe',
     'selenium_tests.exe',
     'startup_tests.exe',
     'sync_integration_tests.exe',
