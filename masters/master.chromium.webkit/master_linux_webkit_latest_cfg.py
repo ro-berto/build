@@ -46,6 +46,7 @@ F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
       'webkit_unit_tests',
     ],
     factory_properties={'archive_webkit_results': True,
+                        'generate_gtest_json': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
 B('Webkit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel',
@@ -94,6 +95,7 @@ F('f_webkit_dbg_tests', linux().ChromiumWebkitLatestFactory(
       'DumpRenderTree',
     ],
     factory_properties={'archive_webkit_results': True,
+                        'generate_gtest_json': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
 def Update(config, active_master, c):

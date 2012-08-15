@@ -64,6 +64,7 @@ F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
     build_url=rel_archive,
     tests=webkit_tests,
     factory_properties={'archive_webkit_results': True,
+                        'generate_gtest_json': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
 B('Webkit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger',
@@ -112,6 +113,7 @@ F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
     build_url=dbg_archive,
     tests=webkit_tests,
     factory_properties={'archive_webkit_results': True,
+                        'generate_gtest_json': True,
                         'test_results_server': 'test-results.appspot.com',
                         'layout_part': '1:2'}))
 

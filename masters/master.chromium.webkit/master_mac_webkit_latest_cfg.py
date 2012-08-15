@@ -88,6 +88,7 @@ F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
     ],
     factory_properties={
         'archive_webkit_results': True,
+        'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
@@ -105,6 +106,7 @@ F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
     ],
     factory_properties={
         'archive_webkit_results': True,
+        'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
@@ -164,6 +166,7 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
     ],
     factory_properties={
         'archive_webkit_results': True,
+        'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
     }))
@@ -182,6 +185,7 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
 #    ],
 #    factory_properties={
 #        'archive_webkit_results': True,
+#        'generate_gtest_json': True,
 #        'layout_test_platform': 'chromium-mac',
 #        'test_results_server': 'test-results.appspot.com',
 #    }))

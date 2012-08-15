@@ -51,6 +51,7 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],
       ],
       'archive_webkit_results': True,
+      'generate_gtest_json': True,
       'test_results_server': 'test-results.appspot.com'
     }))
 
