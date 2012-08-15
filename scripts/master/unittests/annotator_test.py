@@ -24,42 +24,6 @@ class FakeCommand(mock.Mock):
     mock.Mock.__init__(self)
 
 
-class FakeBuildStep(mock.Mock):
-  def __init__(self, name):
-    self.name = name
-    self.text = None
-    self.receivedStatus = []
-    self.step_status = None
-    mock.Mock.__init__(self)
-
-  def setStatus(self, status):
-    self.step_status = status
-
-  def addURL(self, label, url):
-    self.step_status.addURL(label, url)
-
-  def stepStarted(self):
-    return mock.Mock()
-
-  def addLog(self, logname):
-    return self.step_status.addLog(logname)
-
-  def getURLs(self):
-    return self.step_status.getURLs()
-
-  def getLogs(self):
-    return self.step_status.getLogs()
-
-  def setText(self, text):
-    self.text = text
-
-  def setText2(self, text):
-    self.text = text
-
-  def stepFinished(self, status):
-    self.receivedStatus.append(status)
-
-
 class FakeLog(object):
   def __init__(self, name):
     self.text = ''
@@ -80,33 +44,37 @@ class FakeLog(object):
 
 
 class FakeBuildstepStatus(mock.Mock):
-  def __init__(self):
-    self.steps = [FakeBuildStep('init')]
-    self.steps[0].setStatus(self)
-    self.receivedStatus = []
-    self.logs = []
+  def __init__(self, name, build):
+    self.name = name
     self.urls = {}
+    self.build = build
+    self.text = None
+    self.step = None
+    self.logs = []
     mock.Mock.__init__(self)
 
-  def getBuild(self):
-    return self
+  def stepStarted(self):
+    return mock.Mock()
 
-  def addStepWithName(self, step_name):
-    newstep = FakeBuildStep(step_name)
-    newstep.setStatus(self)
-    self.steps.append(newstep)
-    return newstep
+  def setText(self, text):
+    self.text = text
+
+  def setText2(self, text):
+    self.text = text
+
+  def getBuild(self):
+    return self.build
+
+  def getURLs(self):
+    return self.urls.copy()
+
+  def addURL(self, label, url):
+    self.urls[label] = url
 
   def addLog(self, log):
     l = FakeLog(log)
     self.logs.append(l)
     return l
-
-  def addURL(self, label, url):
-    self.urls[label] = url
-
-  def getURLs(self):
-    return self.urls.copy()
 
   def getLogs(self):
     return self.logs
@@ -119,17 +87,30 @@ class FakeBuildstepStatus(mock.Mock):
       return None
 
   def stepFinished(self, status):
-    self.receivedStatus.append(status)
+    self.getBuild().receivedStatus.append(status)
+
+
+class FakeBuildStatus(mock.Mock):
+  def __init__(self):
+    self.steps = []
+    self.receivedStatus = []
+    self.logs = []
+    mock.Mock.__init__(self)
+
+  def addStepWithName(self, step_name):
+    newstep = FakeBuildstepStatus(step_name, self)
+    self.steps.append(newstep)
+    return newstep
 
 
 class AnnotatorCommandsTest(unittest.TestCase):
   def setUp(self):
+    self.buildstatus = FakeBuildStatus()
     self.command = FakeCommand()
     self.step = chromium_step.AnnotatedCommand(name='annotated_steps',
                                                description='annotated_steps',
                                                command=self.command)
-
-    self.step_status = FakeBuildstepStatus()
+    self.step_status = self.buildstatus.addStepWithName('annotated_steps')
     self.step.setStepStatus(self.step_status)
     self.handleOutputLine = self.step.script_observer.handleOutputLine
 
@@ -142,7 +123,7 @@ class AnnotatorCommandsTest(unittest.TestCase):
     stepnames = [x['step'].name for x in self.step.script_observer.sections]
     statuses = [x['status'] for x in self.step.script_observer.sections]
 
-    self.assertEquals(stepnames, ['init', 'step', 'step2', 'done'])
+    self.assertEquals(stepnames, ['annotated_steps', 'step', 'step2', 'done'])
     self.assertEquals(statuses, 4 * [builder.SUCCESS])
     self.assertEquals(self.step.script_observer.annotate_status,
                       builder.SUCCESS)
@@ -239,8 +220,8 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.step.deferred = defer.Deferred()
     self.handleOutputLine('@@@HALT_ON_FAILURE@@@')
 
-    catchFailure = lambda r: self.assertEquals(self.step_status.receivedStatus,
-                                               [builder.FAILURE])
+    catchFailure = lambda r: self.assertEquals(
+        self.step_status.getBuild().receivedStatus, [builder.FAILURE])
     self.step.deferred.addBoth(catchFailure)
     self.handleOutputLine('@@@STEP_FAILURE@@@')
 
@@ -284,7 +265,7 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.handleOutputLine('this line is part of the preamble')
     self.handleOutputLine('@@@BUILD_STEP step2@@@')
     self.step.commandComplete(self.command)
-    logs = self.step_status.getLogs()
+    logs = [l for x in self.buildstatus.steps for l in x.getLogs()]
     # annotator adds a stdio for each buildstep added
     self.assertEquals([x.getName() for x in logs], ['preamble', 'stdio'])
 
@@ -293,7 +274,7 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.handleOutputLine('@@@BUILD_STEP step2@@@')
     self.handleOutputLine('@@@BUILD_STEP step3@@@')
     self.step.commandComplete(self.command)
-    logs = self.step_status.getLogs()
+    logs = [l for x in self.buildstatus.steps for l in x.getLogs()]
     self.assertEquals([x.getName() for x in logs], ['preamble', 'stdio',
                                                     'stdio'])
 

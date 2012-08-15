@@ -57,8 +57,8 @@ class GTestLogParser(object):
         '\[\s*\d+\/\d+\]\s+[0-9\.]+s ' + test_name_regexp + ' .+')
     self._test_timeout = re.compile(
         'Test timeout \([0-9]+ ms\) exceeded for ' + test_name_regexp)
-    self._disabled     = re.compile('  YOU HAVE (\d+) DISABLED TEST')
-    self._flaky        = re.compile('  YOU HAVE (\d+) FLAKY TEST')
+    self._disabled     = re.compile('\s*YOU HAVE (\d+) DISABLED TEST')
+    self._flaky        = re.compile('\s*YOU HAVE (\d+) FLAKY TEST')
 
     self._suppression_start = re.compile(
         'Suppression \(error hash=#([0-9A-F]+)#\):')

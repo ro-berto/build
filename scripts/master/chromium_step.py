@@ -340,7 +340,7 @@ class ProcessLogShellStep(shell.ShellCommand):
     if self._result_text:
       self._result_text.insert(0, '<div class="BuildResultInfo">')
       self._result_text.append('</div>')
-      text_list = text_list + self._result_text
+      text_list += self._result_text
     return text_list
 
   def evaluateCommand(self, cmd):
@@ -426,13 +426,19 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.honor_zero_return_code = False
 
   def initialSection(self):
+    """Initializes the annotator's sections.
+
+    Annotator uses a list of dictionaries which hold information stuch as status
+    and logs for each added step. This method populates the section list with an
+    entry referencing the original buildbot step."""
     if self.sections:
       return
     # Add a log section for output before the first section heading.
     preamble = self.command.addLog('preamble')
+
     self.sections.append({
-        'name': 'preamble',
-        'step': self.command.step_status.getBuild().steps[-1],
+        'name': self.command.name,
+        'step': self.command.step_status,
         'log': preamble,
         'status': builder.SUCCESS,
         'links': [],
@@ -440,6 +446,15 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'step_text': [],
         'started': util.now(),
     })
+
+  def describe(self):
+    """Used for the 'original' step, when updated by buildbot's getText().
+
+    This is needed to ensure any STEP_TEXT annotations don't get overwritten
+    when the step is finished and buildbot calls a final getText()."""
+    self.initialSection()
+
+    return self.sections[0]['step_text']
 
   def fixupLast(self, status=None):
     # Potentially start initial section here, as initial section might have
@@ -450,6 +465,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Update status if set as an argument.
     if status is not None:
       last['status'] = status
+
     # Final update of text.
     self.updateText()
     # Add timing info.
@@ -520,10 +536,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
       self.command.finished(last['status'])
 
   def updateText(self):
-    # Don't update the main phase's text.
-    if len(self.sections) == 1:
-      return
-
     last = self.sections[-1]
 
     # Reflect step status in text2.
@@ -684,6 +696,16 @@ class AnnotatedCommand(ProcessLogShellStep):
     ProcessLogShellStep.__init__(self, *args, **kwargs)
     self.script_observer = AnnotationObserver(self)
     self.addLogObserver('stdio', self.script_observer)
+
+  def describe(self, done=False):
+    if self.step_status and self.step_status.isStarted():
+      observer_text = self.script_observer.describe()
+    else:
+      observer_text = []
+    if observer_text:
+      return observer_text
+    else:
+      return ProcessLogShellStep.describe(self, done)
 
   def _removePreamble(self):
     """Remove preamble if there is only section.
