@@ -423,12 +423,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('content_browsertests', fp)
 
     # Big, UI tests:
-    if R('nacl_integration'):
-      f.AddNaClIntegrationTestStep(fp)
-    if R('nacl_integration_memcheck'):
-      f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')
-    if R('nacl_integration_tsan'):
-      f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
     if R('automated_ui'):
       f.AddAutomatedUiTests(fp)
     if R('dom_checker'):
@@ -670,6 +664,15 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddRunCoverageBundles(fp)
     if R('process_coverage'):
       f.AddProcessCoverage(fp)
+
+    # Add nacl integration tests (do these toward the end as they use the
+    # annotator).
+    if R('nacl_integration'):
+      f.AddNaClIntegrationTestStep(fp)
+    if R('nacl_integration_memcheck'):
+      f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')
+    if R('nacl_integration_tsan'):
+      f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
 
     # Add an optional set of annotated steps.
     # NOTE: This really should go last as it can be confusing if the annotator

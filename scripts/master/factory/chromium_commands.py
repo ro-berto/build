@@ -1273,14 +1273,15 @@ class ChromiumCommands(commands.FactoryCommands):
                                test_tool_arg_list=['--no-xvfb'])
 
   def AddNaClIntegrationTestStep(self, factory_properties, target=None,
-                                 buildbot_preset=None):
+                                 buildbot_preset=None, timeout=1200):
     target = target or self._target
     cmd = [self._python, self._nacl_integration_tester_tool,
            '--mode', target]
     if buildbot_preset is not None:
       cmd.extend(['--buildbot', buildbot_preset])
 
-    self.AddTestStep(gtest_command.GTestFullCommand, 'nacl_integration', cmd,
+    self.AddTestStep(chromium_step.AnnotatedCommand, 'nacl_integration', cmd,
+                     halt_on_failure=True, timeout=timeout,
                      do_step_if=self.TestStepFilter)
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
