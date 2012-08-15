@@ -190,6 +190,8 @@ class SlaveMachine(object):
                          'connect after %d attempts.'
                          % (url, self._max_url_tries))
 
+      logging.debug('Server response:\n' + response_str)
+
       response = None
       try:
         response = json.loads(response_str)
@@ -221,6 +223,7 @@ class SlaveMachine(object):
       assert self._come_back >= 0
       time.sleep(self._come_back)
     else:
+      logging.debug('Commands received, executing now')
       # Run the commands.
       for rpc in commands:
         function_name, args = ParseRPC(rpc)
@@ -541,7 +544,7 @@ def main():
   parser.add_option('-p', '--port', default='8080', type='int',
                     help='Port of the Swarm server. '
                     'Defaults to %default. ')
-  parser.add_option('-r', '--max_url_tries', default=20,
+  parser.add_option('-r', '--max_url_tries', default=20, type='int',
                     help='The maximum number of times url messages will '
                     'attempt to be sent before accepting failure. Defaults '
                     'to %default')
@@ -602,8 +605,17 @@ def main():
   # Change the working directory to specified path.
   os.chdir(options.directory)
 
-  # Start requesting jobs.
-  slave.Start(iterations=options.iterations)
+  terminated_normally = False
+  while not terminated_normally:
+    try:
+      # Start requesting jobs.
+      slave.Start(iterations=options.iterations)
+      terminated_normally = True
+    except SlaveError as e:
+      logging.exception('Slave start threw an exception:\n%s', str(e))
+
+  logging.debug('Slave machine shutting down.')
+
 
 
 if __name__ == '__main__':
