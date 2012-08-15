@@ -568,6 +568,7 @@ def RemoveChromeTemporaryFiles():
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
     # Dump and temporary files.
     LogAndRemoveFiles(tempfile.gettempdir(), r'^.+\.(dmp|tmp)$')
+    LogAndRemoveFiles(tempfile.gettempdir(), r'^_CL_.*$')
     RemoveChromeDesktopFiles()
     RemoveJumpListFiles()
   elif chromium_utils.IsLinux():
