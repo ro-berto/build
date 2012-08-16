@@ -172,6 +172,8 @@ B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
 B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
+B('Chrome Frame Tests (ie9)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
 
 ################################################################################
 ## Debug
