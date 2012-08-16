@@ -411,8 +411,12 @@ def upload_profiling_data(options, args):
     return 0
 
   gtest_filter = args[1]
-  if (gtest_filter is None or
-      gtest_filter.find('StartupTest.*:ShutdownTest.*') == -1):
+  if (gtest_filter is None):
+    return 0
+  gtest_name = ''
+  if (gtest_filter.find('StartupTest.*:ShutdownTest.*') > -1):
+    gtest_name = 'StartupTest'
+  else:
     return 0
 
   build_dir = os.path.normpath(os.path.abspath(options.build_dir))
@@ -428,11 +432,11 @@ def upload_profiling_data(options, args):
   else:
     python = 'python'
 
-  run_id = '%s_%s_%s' % (options.build_properties.get('got_revision'),
-                         options.build_properties.get('buildername'),
-                         gtest_filter[0:12])
-  cmd = [python, profiling_archive_tool, '--run-id', run_id,
-         '--build-dir', build_dir]
+  revision = options.build_properties.get('got_revision')
+  buildename = options.build_properties.get('buildername')
+  cmd = [python, profiling_archive_tool, '--revision', revision,
+         '--build-dir', build_dir, '--builder-name', buildename,
+         '--test-name', gtest_name]
 
   return chromium_utils.RunCommand(cmd)
 

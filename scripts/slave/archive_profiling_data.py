@@ -37,12 +37,14 @@ def CopyToGoogleStorage(src, dst):
   return slave_utils.GSUtilCopy(src, dst, None, 'public-read')
 
 
-def Archive(run_id, build_dir):
+def Archive(revision, build_dir, builder_name, test_name):
   """Archive the profiling data to Google Storage.
 
   Args:
-    run_id: the unique identifier of this run
+    revision: the unique identifier of this run
     build_dir: the path to the build directory
+    build_name: build machine name
+    test_name: test name
   Returns:
     whether profiling data correctly uploaded or not
   """
@@ -57,36 +59,44 @@ def Archive(run_id, build_dir):
     print 'No profiling_data_dir: ', profiling_data_dir
     return True
 
-  profiling_file = os.path.join(profiling_data_dir, 'task_profile.json')
-  if not os.path.exists(profiling_file):
-    print 'No profiling_file: ', profiling_file
+  src_profiling_file = os.path.join(profiling_data_dir, FILENAME)
+  if not os.path.exists(src_profiling_file):
+    print 'No profiling_file: ', src_profiling_file
     return True
 
-  run_id = re.sub('\W+', '_', run_id)
+  revision = re.sub('\W+', '_', revision)
+  builder_name = re.sub('\W+', '_', builder_name)
+  test_name = re.sub('\W+', '_', test_name)
 
-  view_url = 'http://%s.commondatastorage.googleapis.com/' \
-             'view_test_results.html?%s' % (GOOGLE_STORAGE_BUCKET, run_id)
+  view_url = 'https://commondatastorage.googleapis.com/' + GOOGLE_STORAGE_BUCKET
   print 'See %s for this run\'s test results' % view_url
-  run_url = 'gs://%s/runs/%s/' % (GOOGLE_STORAGE_BUCKET, run_id)
+  run_url = 'gs://%s/runs/%s/' % (GOOGLE_STORAGE_BUCKET, builder_name)
   print 'Pushing results to %s...' % run_url
 
-  if not CopyToGoogleStorage(profiling_file, run_url + FILENAME):
+  dest_profiling_file = run_url + test_name + "_" + revision + "_" + FILENAME
+  if not CopyToGoogleStorage(src_profiling_file, dest_profiling_file):
     return False
   return True
 
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--run-id', default=None,
+  option_parser.add_option('', '--revision', default=None,
                            help='unique id for this run')
   option_parser.add_option('', '--build-dir', default=None,
                            help=('path to the build directory'))
+  option_parser.add_option('', '--builder-name', default=None,
+                           help='name of the bulid machine')
+  option_parser.add_option('', '--test-name', default=None,
+                           help='name of the test')
   options = option_parser.parse_args()[0]
-  if (options.run_id is None or options.build_dir is None):
+  if (options.revision is None or options.build_dir is None or
+      options.builder_name is None or options.test_name is None):
     print 'All command options are required. Use --help.'
     return 1
 
-  if Archive(options.run_id, options.build_dir):
+  if Archive(options.revision, options.build_dir, options.builder_name,
+             options.test_name):
     return 0
   return 2
 
