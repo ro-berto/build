@@ -44,6 +44,29 @@ F('mac_full', mac().ChromiumFactory(
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
+B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
+F('mac_asan_rel', linux().ChromiumASANFactory(
+    clobber=True,
+    options=['--compiler=goma-clang', '--', '-target',
+             'chromium_builder_asan_mac'],
+    factory_properties={
+       'asan_archive_build': True,
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
+
+B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
+F('mac_asan_dbg', linux().ChromiumASANFactory(
+    clobber=True,
+    target='Debug',
+    options=['--compiler=goma-clang', '--', '-target',
+             'chromium_builder_asan_mac'],
+    factory_properties={
+       'asan_archive_build': True,
+       'gs_bucket': 'gs://chromium-browser-asan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
+
 ################################################################################
 ## Linux
 ################################################################################
