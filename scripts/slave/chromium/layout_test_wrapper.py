@@ -112,6 +112,12 @@ def layout_test(options, args):
   for filename in options.additional_expectations:
     command.append('--additional-expectations=%s' % filename)
 
+  if options.driver_name:
+    command.append('--driver-name=%s' % options.driver_name)
+
+  for additional_drt_flag in options.additional_drt_flag:
+    command.append('--additional-drt-flag=%s' % additional_drt_flag)
+
   # The list of tests is given as arguments.
   command.extend(options.options.split(' '))
   command.extend(args)
@@ -182,6 +188,14 @@ def main():
   option_parser.add_option("--time-out-ms",
                            action="store", default=None,
                            help="Set the timeout for each (non-SLOW) test")
+  option_parser.add_option("--driver-name",
+                           help=("If specified, alternative DumpRenderTree "
+                                 "binary to use"))
+  option_parser.add_option("--additional-drt-flag", action="append",
+                           default=[],
+                           help=("If specified, additional command line flag "
+                                 "to pass to DumpRenderTree. Specify multiple "
+                                 "times to add multiple flags."))
   options, args = option_parser.parse_args()
 
   # Disable pageheap checking except on Windows.
