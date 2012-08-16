@@ -24,6 +24,9 @@ from common import gtest_utils
 import fix_encoding
 
 
+MAX_RETRY_ATTEMPTS = 20
+
+
 def TestRunOutput(output):
   """Go through the given output and only return the output from the Test Run
      Step. This removes all the swarm specific output.
@@ -47,18 +50,30 @@ def TestRunOutput(output):
   return ''.join(test_run_output)
 
 
+def ConnectToSwarmServer(url):
+  """Try multiple times to connect to the swarm server and return the response,
+     or None if unable to connect.
+  """
+  for _ in range(MAX_RETRY_ATTEMPTS):
+    try:
+      return urllib2.urlopen(url).read()
+    except urllib2.URLError as e:
+      print 'Error: Calling %s threw %s' % (url, e)
+
+  # We were unable to connect to the url.
+  print ('Unable to connect to the given url, %s, after %d attempts. Aborting.'
+         % (url, MAX_RETRY_ATTEMPTS))
+  return None
+
+
 def GetTestKeys(swarm_base_url, test_name):
   key_data = urllib.urlencode([('name', test_name)])
   test_keys_url = '%s/get_matching_test_cases?%s' % (swarm_base_url.rstrip('/'),
                                                      key_data)
 
-  try:
-    result = urllib2.urlopen(test_keys_url).read()
-  except urllib2.URLError as e:
-    print 'Error: Unable to connect to swarm server'
-    print e
+  result = ConnectToSwarmServer(test_keys_url)
+  if result is None:
     return []
-
 
   if 'No matching' in result:
     print ('Error: Unable to find any tests with the name, %s, on swarm server'
@@ -111,11 +126,8 @@ def GetSwarmResults(swarm_base_url, test_keys):
     result_url = '%s/get_result?r=%s' % (swarm_base_url.rstrip('/'),
                                          test_keys[index])
     while True:
-      output = None
-      try:
-        output = urllib2.urlopen(result_url).read()
-      except urllib2.HTTPError, e:
-        print 'Calling %s threw %s' % (result_url, e)
+      output = ConnectToSwarmServer(result_url)
+      if output is None:
         break
 
       try:

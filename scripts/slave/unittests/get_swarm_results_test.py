@@ -277,6 +277,30 @@ class GetSwarmResults(SuperMoxTestBase):
 
     self.mox.VerifyAll()
 
+  def test_get_swarm_results_url_errors(self):
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+    url = 'http://host:9001/get_result?r=key1'
+    exception = urllib2.URLError('failed to connect')
+
+    for _ in range(swarm_results.MAX_RETRY_ATTEMPTS):
+      swarm_results.urllib2.urlopen(url).AndRaise(exception)
+    self.mox.ReplayAll()
+
+    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+
+    expected_output = []
+    for _ in range(swarm_results.MAX_RETRY_ATTEMPTS):
+      expected_output.append('Error: Calling %s threw %s' % (url, exception))
+    expected_output.append(
+        'Unable to connect to the given url, %s, after %d attempts. Aborting.' %
+        (url, swarm_results.MAX_RETRY_ATTEMPTS))
+    expected_output.append('Summary for all the shards:')
+    expected_output.append('All tests passed.')
+
+    self.checkstdout('\n'.join(expected_output) + '\n')
+
+    self.mox.VerifyAll()
+
 
 if __name__ == '__main__':
   unittest.main()
