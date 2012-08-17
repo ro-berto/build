@@ -433,9 +433,9 @@ def upload_profiling_data(options, args):
     python = 'python'
 
   revision = options.build_properties.get('got_revision')
-  buildename = options.build_properties.get('buildername')
+  builder_name = options.build_properties.get('buildername')
   cmd = [python, profiling_archive_tool, '--revision', revision,
-         '--build-dir', build_dir, '--builder-name', buildename,
+         '--build-dir', build_dir, '--slave-name', builder_name,
          '--test-name', gtest_name]
 
   return chromium_utils.RunCommand(cmd)
