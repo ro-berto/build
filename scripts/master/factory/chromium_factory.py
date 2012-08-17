@@ -21,7 +21,9 @@ def ForceComponent(target, project, gclient_env):
   # already set.
   gyp_defines = gclient_env.setdefault('GYP_DEFINES', '')
   if ('component=' not in gyp_defines and
-      'build_for_tool=' not in gyp_defines):
+      # build_for_tool=drmemory wants the component build (crbug.com/137180).
+      'build_for_tool=memcheck' not in gyp_defines and
+      'build_for_tool=tsan' not in gyp_defines):
     if target == 'Debug':
       component = 'shared_library'
     else:
