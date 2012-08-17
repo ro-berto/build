@@ -32,6 +32,7 @@ categories_steps = {
     'net_unittests',
     'printing_unittests',
     'remoting_unittests',
+    'sandbox_linux_unittests',
     'sbox_integration_tests',
     'sbox_unittests',
     'sbox_validation_tests',
