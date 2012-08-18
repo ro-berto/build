@@ -1038,7 +1038,7 @@ class ChromiumCommands(commands.FactoryCommands):
           results server
       driver_name: If specified, alternate layout test driver to use.
       additional_drt_flag: If specified, additional flag to pass to DRT.
-      layout_tests: List of layout tests to run. Space separated string.
+      layout_tests: List of layout tests to run.
     """
     factory_properties = factory_properties or {}
     with_pageheap = factory_properties.get('webkit_pageheap')
@@ -1098,7 +1098,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # The list of tests is given as arguments.
     if layout_tests:
-      cmd.append(layout_tests)
+      cmd.extend(layout_tests)
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
