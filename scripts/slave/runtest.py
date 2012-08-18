@@ -94,6 +94,14 @@ def _RunGTestCommand(command, results_tracker=None, pipes=None):
     return chromium_utils.RunCommand(command, pipes=pipes)
 
 
+def _GetMaster():
+  return slave_utils.GetActiveMaster()
+
+
+def _GetMasterString(master):
+  return '[Running for master: "%s"]' % master
+
+
 def _GenerateJSONForTestResults(options, results_tracker):
   """Generate (update) a JSON file from the gtest results XML and
   upload the file to the archive server.
@@ -134,11 +142,11 @@ def _GenerateJSONForTestResults(options, results_tracker):
   generate_json_options.input_results_xml = options.test_output_xml
   generate_json_options.builder_base_url = '%s/%s/%s/%s' % (
       config.Master.archive_url, DEST_DIR, slave_name, options.test_type)
-  generate_json_options.master_name = slave_utils.GetActiveMaster()
+  generate_json_options.master_name = _GetMaster()
   generate_json_options.test_results_server = config.Master.test_results_server
 
   # Print out master name for log_parser
-  print '[Running for master: "%s"]' % generate_json_options.master_name
+  print _GetMasterString(generate_json_options.master_name)
 
   try:
     # Set webkit and chrome directory (they are used only to get the
@@ -313,16 +321,21 @@ def create_results_tracker(tracker_class, options):
     return None
 
   if tracker_class.__name__ == 'GTestLogParser':
-    return tracker_class()
+    tracker_obj = tracker_class()
+  else:
+    build_dir = os.path.abspath(options.build_dir)
+    webkit_dir = chromium_utils.FindUpward(build_dir, 'third_party', 'WebKit',
+                                           'Source')
 
-  build_dir = os.path.abspath(options.build_dir)
-  webkit_dir = chromium_utils.FindUpward(build_dir, 'third_party', 'WebKit',
-                                         'Source')
+    tracker_obj = tracker_class(revision=GetSvnRevision(build_dir),
+                                build_property=options.build_properties,
+                                factory_properties=options.factory_properties,
+                                webkit_revision=GetSvnRevision(webkit_dir))
 
-  return tracker_class(revision=GetSvnRevision(build_dir),
-                       build_property=options.build_properties,
-                       factory_properties=options.factory_properties,
-                       webkit_revision=GetSvnRevision(webkit_dir))
+  if options.annotate and options.generate_json_file:
+    tracker_obj.ProcessLine(_GetMasterString(_GetMaster()))
+
+  return tracker_obj
 
 
 def annotate(test_name, result, results_tracker):
