@@ -804,7 +804,6 @@ class FactoryCommands(object):
     self._factory.addStep(
         shell.Compile,
         name='compile',
-        enable_warnings=0,
         timeout=timeout,
         description=description,
         descriptionDone=descriptionDone,
