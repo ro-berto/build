@@ -23,7 +23,6 @@ from common import chromium_utils
 import config
 
 from master import chromium_step
-from master.log_parser import cl_command
 from master.log_parser import gtest_command
 from master.log_parser import retcode_command
 from master.optional_arguments import ListProperties
@@ -803,7 +802,7 @@ class FactoryCommands(object):
       halfOnFailure: should stop the build if compile fails
     """
     self._factory.addStep(
-        cl_command.CLCommand,
+        shell.Compile,
         name='compile',
         enable_warnings=0,
         timeout=timeout,
