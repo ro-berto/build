@@ -206,20 +206,22 @@
                 "builder=x86+generic+incremental",
                 "builder=amd64+generic+incremental",
                 "builder=x86+generic+full",
-                "builder=arm+generic+full",
                 "builder=amd64+generic+full",
+                "builder=daisy+full",
+                "builder=arm+generic+full",
                 "builder=chromiumos+sdk",
                 "reload=30",
             ].join("&");
             var chromium_chromiumos = [
                 "builder=ChromiumOS+(x86)",
                 "builder=ChromiumOS+(amd64)",
-                "builder=ChromiumOS+(arm)",
                 "builder=ChromiumOS+(daisy)",
+                "builder=ChromiumOS+(arm)",
                 "titles=on",
             ].join("&");
             var arm = [
                 "builder=arm+generic+full",
+                "builder=daisy+full",
                 "reload=30",
             ].join("&");
             var x86 = [
