@@ -205,6 +205,7 @@
             var closer = [
                 "builder=x86+generic+incremental",
                 "builder=amd64+generic+incremental",
+                "builder=daisy+incremental",
                 "builder=x86+generic+full",
                 "builder=amd64+generic+full",
                 "builder=daisy+full",
@@ -220,6 +221,7 @@
                 "titles=on",
             ].join("&");
             var arm = [
+                "builder=daisy+incremental",
                 "builder=arm+generic+full",
                 "builder=daisy+full",
                 "reload=30",
