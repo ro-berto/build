@@ -362,7 +362,7 @@ def annotate(test_name, result, results_tracker):
         len(results_tracker.FailedTests()) or
         len(results_tracker.SuppressionHashes())):
       print '@@@STEP_WARNINGS@@@'
-      get_text_result = builder.WARNING
+      get_text_result = builder.WARNINGS
   else:
     print '@@@STEP_FAILURE@@@'
     get_text_result = builder.FAILURE
