@@ -117,12 +117,12 @@ F('rel_unit_3', mac_tester().ChromiumFactory(
                       'browser_total_shards': 3, 'browser_shard_index': 3,})
 )
 
-#B('Mac10.7 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
-#  auto_reboot=True, notify_on_missing=True)
-#B('Mac10.7 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
-#  auto_reboot=True, notify_on_missing=True)
-#B('Mac10.7 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
-#  auto_reboot=True, notify_on_missing=True)
+B('Mac10.7 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Mac10.7 Tests (2)', 'rel_unit_2', 'testers', 'mac_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Mac10.7 Tests (3)', 'rel_unit_3', 'testers', 'mac_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
 
 B('Mac10.6 Sync', 'rel_sync', 'testers', 'mac_rel_trigger',
   auto_reboot=True, notify_on_missing=True)
@@ -240,14 +240,14 @@ F('dbg_unit_4', mac_tester().ChromiumFactory(
                       'sharded_tests': sharded_tests,
                       'browser_total_shards': 4, 'browser_shard_index': 4,}))
 
-#B('Mac 10.7 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
-#  auto_reboot=True, notify_on_missing=True)
-#B('Mac 10.7 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
-#  auto_reboot=True, notify_on_missing=True)
-#B('Mac 10.7 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
-#  auto_reboot=True, notify_on_missing=True)
-#B('Mac 10.7 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
-#  auto_reboot=True, notify_on_missing=True)
+B('Mac 10.7 Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Mac 10.7 Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Mac 10.7 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
+B('Mac 10.7 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
 
 
 def Update(config, active_master, c):
