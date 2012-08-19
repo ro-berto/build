@@ -171,24 +171,8 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-#B('Webkit Mac10.7 (dbg)', 'f_webkit_dbg_tests', auto_reboot=True,
-#  scheduler='s5_webkit_dbg_trigger')
-#F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
-#    target='Debug',
-#    slave_type='Tester',
-#    build_url=dbg_archive,
-#    tests=[
-#      'test_shell',
-#      'webkit',
-#      'webkit_lint',
-#      'webkit_unit',
-#    ],
-#    factory_properties={
-#        'archive_webkit_results': True,
-#        'generate_gtest_json': True,
-#        'layout_test_platform': 'chromium-mac',
-#        'test_results_server': 'test-results.appspot.com',
-#    }))
+B('Webkit Mac10.7 (dbg)', 'f_webkit_dbg_tests', auto_reboot=True,
+  scheduler='s5_webkit_dbg_trigger')
 
 
 ################################################################################
