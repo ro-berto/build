@@ -261,7 +261,7 @@ B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
   notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
-    options=['--build-tool=make', '--compiler=goma-clang'],
+    options=['--build-tool=ninja', '--compiler=goma-clang'],
     tests=[
       'base',
       'crypto',
@@ -270,6 +270,7 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     ],
     factory_properties={
       'gclient_env': {
+        'GYP_GENERATORS':'ninja',
         'GYP_DEFINES':
           'clang=1 clang_use_chrome_plugins=1 fastbuild=1 '
             'test_isolation_mode=noop',
