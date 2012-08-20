@@ -41,7 +41,7 @@ class Master(object):
   swarm_windows_network_path_vm1_internal = '\\\\fake\\network\\path'
   swarm_windows_network_path_vm4_internal = '\\\\fake\\network\\path'
   swarm_data_server_vm1_internal = 'fake.swarm.data.server'
-  swarm_data_server_vm2_internal = 'fake.swarm.data.server'
+  swarm_data_server_vm4_internal = 'fake.swarm.data.server'
 
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'
