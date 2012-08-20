@@ -15,14 +15,20 @@ import sys
 import time
 
 
+def Log(message):
+  print '%s: %s' % (time.asctime(), message)
+
+
 def KillAll(process_names, must_die=True):
   """Tries to kill all copies of each process in the processes list."""
   killed_processes = []
 
+  Log('killing all processes in %r' % process_names)
   for process_name in process_names:
     if ProcessExists(process_name):
       Kill(process_name)
       killed_processes.append(process_name)
+  Log('process killed: %r' % killed_processes)
 
   # If we allow any processes to continue after trying to kill them, return
   # now.
@@ -43,6 +49,7 @@ def KillAll(process_names, must_die=True):
 def ProcessExists(process_name):
   """Return whether process_name is found in tasklist output."""
   # Use tasklist.exe to find if a given process_name is running.
+  Log('checking for process name %s' % process_name)
   command = ('tasklist.exe /fi "imagename eq %s" | findstr.exe "K"' %
              process_name)
   # findstr.exe exits with code 0 if the given string is found.
@@ -51,6 +58,7 @@ def ProcessExists(process_name):
 
 def ProcessExistsByPid(pid):
   """Return whether pid is found in tasklist output."""
+  Log('checking for process id %d' % pid)
   # Use tasklist.exe to find if a given process_name is running.
   command = ('tasklist.exe /fi "pid eq %d" | findstr.exe "K"' %
              pid)
@@ -82,6 +90,7 @@ def KillProcessesUsingCurrentDirectory(handle_exe):
   if not os.path.exists(handle_exe):
     return False
   try:
+    Log('running %s to look for running processes' % handle_exe)
     handle = subprocess.Popen([handle_exe,
                                os.path.join(os.getcwd(), 'src'),
                                '/accepteula'],
@@ -96,7 +105,7 @@ def KillProcessesUsingCurrentDirectory(handle_exe):
   if stderr or ('.exe' not in stdout and
                 'Non-existant Process' not in stdout and
                 'No matching handles found' not in stdout):
-    print 'Error running handle.exe: ' + repr((stdout, stderr))
+    Log('Error running handle.exe: ' + repr((stdout, stderr)))
     return False
 
   pid_list = []
@@ -114,7 +123,7 @@ def KillProcessesUsingCurrentDirectory(handle_exe):
         if int(pid) == int(os.getpid()):
           continue
 
-        print 'Killing: ' + line
+        Log('Killing: ' + line)
         pid_list.append(pid)
         KillByPid(pid)
 
