@@ -25,7 +25,7 @@
 # /b/slave, which is what the LaunchAgent operates on.
 USE_LAUNCHD := \
   $(shell [ -f ~/Library/LaunchAgents/org.chromium.buildbot.slave.plist ] && \
-          [ "$$(pwd -P)" = "/b/build/slave" ] && \
+          [[ "$$(pwd -P)" = */b/build/slave ]] && \
           echo 1)
 
 # Note that initscripts and make can conspire to leave child processes with
