@@ -79,9 +79,14 @@ class Manifest(object):
     """Zip up all the files necessary to run a shard."""
     start_time = time.time()
 
-    zip_file = zipfile.ZipFile(
-        os.path.join(self.data_dest_dir, self.zipfile_name),
-        'w')
+    try:
+      zip_file = zipfile.ZipFile(
+          os.path.join(self.data_dest_dir, self.zipfile_name),
+          'w')
+    except IOError as e:
+      print 'Error creating zip files %s' % str(e)
+      return False
+
     zip_file.write(self.RUN_TEST_PATH)
     zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
 
@@ -92,6 +97,7 @@ class Manifest(object):
     zip_file.close()
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
+    return True
 
   def to_json(self):
     """Export the current configuration into a swarm-readable manifest file"""
@@ -160,7 +166,8 @@ def ProcessManifest(filepath, shards, options):
 
   # Zip up relevent files
   print "Zipping up files..."
-  manifest.zip()
+  if not manifest.zip():
+    return 1
 
   # Send test requests off to swarm.
   print 'Sending test requests to swarm'

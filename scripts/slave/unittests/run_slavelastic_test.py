@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import json
+import StringIO
 import unittest
 
 import test_env  # pylint: disable=W0403,W0611
@@ -20,15 +21,16 @@ ENV_VARS = {'GTEST_TOTAL_SHARDS': '%(num_instances)s',
 
 class Options(object):
   def __init__(self, working_dir="swarm_tests", shards=1,
-               os_image='win32', url='http://localhost:8080',
+               os_image='win32', swarm_url='http://localhost:8080',
                data_url='http://www.google.com/data',
-               data_dest_dir='temp_data'):
+               data_dest_dir='temp_data', test_name_prefix='pr-'):
     self.working_dir = working_dir
     self.shards = shards
     self.os_image = os_image
-    self.url = url
+    self.swarm_url = swarm_url
     self.data_url = data_url
     self.data_dest_dir = data_dest_dir
+    self.test_name_prefix = test_name_prefix
 
 
 def GenerateExpectedJSON(options):
@@ -92,6 +94,21 @@ def GenerateExpectedJSON(options):
   return expected
 
 
+def RaiseIOError():
+  raise IOError('IOError')
+
+
+class MockZipFile(object):
+  def __init__(self, filename, mode):
+    pass
+
+  def write(self, source, dest=None):
+    pass
+
+  def close(self):
+    pass
+
+
 class ManifestTest(unittest.TestCase):
   def test_basic_manifest(self):
     options = Options(shards=2)
@@ -116,6 +133,25 @@ class ManifestTest(unittest.TestCase):
 
     expected = GenerateExpectedJSON(options)
     self.assertEqual(expected, manifest_json)
+
+  def test_process_manifest_success(self):
+    run_slavelastic.os.path.exists = lambda name: True
+    run_slavelastic.open = lambda name, mode: StringIO.StringIO('file')
+    run_slavelastic.zipfile.ZipFile = MockZipFile
+    run_slavelastic.urllib2.urlopen = lambda url, text: StringIO.StringIO('{}')
+
+    options = Options()
+    self.assertEqual(
+        0, run_slavelastic.ProcessManifest(FILE_NAME, options.shards, options))
+
+  def test_process_manifest_fail_zipping(self):
+    run_slavelastic.os.path.exists = lambda name: True
+    run_slavelastic.open = lambda name, mode: StringIO.StringIO('file')
+    run_slavelastic.zipfile.ZipFile = lambda name, mode: RaiseIOError()
+
+    options = Options()
+    self.assertEqual(
+        1, run_slavelastic.ProcessManifest(FILE_NAME, options.shards, options))
 
 
 if __name__ == '__main__':
