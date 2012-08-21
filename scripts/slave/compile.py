@@ -1017,7 +1017,7 @@ def main_win(options, args):
       return 1
     result = chromium_utils.RunCommand(command, env=env)
 
-  if result and not options.clobber:
+  if result and not options.clobber and options.clobber_post_fail:
     clobber()
 
   return result
@@ -1027,6 +1027,10 @@ def real_main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--clobber', action='store_true', default=False,
                            help='delete the output directory before compiling')
+  option_parser.add_option('', '--clobber-post-fail', action='store_true',
+                           default=False,
+                           help='delete the output directory after compiling '
+                                'only if it failed. Do not affect ninja.')
   option_parser.add_option('', '--keep-version-file', action='store_true',
                            default=False,
                            help='do not delete the chrome_dll_version.rc file '
