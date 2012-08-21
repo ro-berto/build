@@ -26,6 +26,35 @@ def remove_all_vars_except(dictionary, keep):
     dictionary.pop(key)
 
 
+log_imported = False
+def Log(message):
+  """Log a message using the Buildbot/Twisted log facility.
+
+  Logging via log.msg() will output messages to twistd.log.  We only modify
+  the path to pull in the correct Buildbot/Twisted after the slave script is
+  running, so we can only import this log facility in this scope versus
+  importing the log facility in the script's file scope.
+
+  The log module moved between Buildbot 0.7.12 and 0.8.4 from buildbot.slave.bot
+  to buildslave.bot.  We vary the import if the first fails so we can fall
+  back to the 0.8-style.
+
+  |log_imported| acts as a guard to ensure we only ever import the log module
+  once per run_slave.py script lifespan.
+  """
+  global log_imported
+  if not log_imported:
+    # pylint: disable=E0611,F0401
+    try:
+      # buildbot 0.7.12
+      from buildbot.slave.bot import log
+    except ImportError:
+      # buildbot 0.8.x
+      from buildslave.bot import log
+    log_imported = True
+  log.msg(message)
+
+
 def IssueReboot():
   """Issue reboot command according to platform type."""
   if sys.platform.startswith('win'):
@@ -35,6 +64,27 @@ def IssueReboot():
   else:
     raise NotImplementedError('Implement IssueReboot function '
                               'for %s' % sys.platform)
+
+
+def SigTerm(*args):
+  """Receive a SIGTERM and do nothing."""
+  Log('Received SIGTERM, doing nothing.')
+
+
+def UpdateSignals():
+  """Override the twisted SIGTERM handler with our own.
+
+  Ensure that the signal module is available and do nothing if it is not.
+  """
+  try:
+    import signal
+  except ImportError:
+    Log('Warning: signal module unavailable -- '
+        'not installing signal handlers.')
+    return
+  # Twisted installs a SIGTERM signal handler which tries to shut the system
+  # down.  Use our own handler instead.
+  signal.signal(signal.SIGTERM, SigTerm)
 
 
 def Reboot():
@@ -61,10 +111,10 @@ def Reboot():
   if that should occur to make it clear in logs that an error condition is
   occurring somewhere.
   """
-  IssueReboot()
+  UpdateSignals()
   i = 0
   while True:
-    print '\rRebooting then sleeping 60 seconds for the %dth time...' % i,
+    Log('Rebooting then sleeping 60 seconds for the %dth time...' % i)
     IssueReboot()
     time.sleep(60)
     i += 1
@@ -77,10 +127,10 @@ def HotPatchSlaveBuilder():
   # pylint: disable=E0611,F0401
   try:
     # buildbot 0.7.12
-    from buildbot.slave.bot import log, Bot, SlaveBuilder
+    from buildbot.slave.bot import Bot, SlaveBuilder
   except ImportError:
     # buildbot 0.8.x
-    from buildslave.bot import log, Bot, SlaveBuilder
+    from buildslave.bot import Bot, SlaveBuilder
   old_remote_shutdown = SlaveBuilder.remote_shutdown
 
   def rebooting_remote_shutdown(self):
@@ -113,12 +163,12 @@ def HotPatchSlaveBuilder():
       possible_build_dead = os.path.join(self.basedir, d, 'build.dead')
       if os.path.isdir(possible_build_dead):
         from common import chromium_utils
-        log.msg("Deleting unwanted directory %s" % possible_build_dead)
+        Log('Deleting unwanted directory %s' % possible_build_dead)
         chromium_utils.RemoveDirectory(possible_build_dead)
 
       # Delete old slave directories.
       if d not in wanted_dirs and os.path.isdir(os.path.join(self.basedir, d)):
-        log.msg("Deleting unwanted directory %s" % d)
+        Log('Deleting unwanted directory %s' % d)
         from common import chromium_utils
         chromium_utils.RemoveDirectory(os.path.join(self.basedir, d))
     return retval
