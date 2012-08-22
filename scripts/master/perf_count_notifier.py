@@ -17,6 +17,8 @@ _EXPIRATION_TIME = 24 * 3600
 # Perf results key words used in test result step.
 PERF_REGRESS = 'PERF_REGRESS'
 PERF_IMPROVE = 'PERF_IMPROVE'
+REGRESS = 'REGRESS'
+IMPROVE = 'IMPROVE'
 
 
 class PerfCountNotifier(ChromiumNotifier):
@@ -44,6 +46,8 @@ class PerfCountNotifier(ChromiumNotifier):
     self.minimum_count = minimum_count
     self.step_names = step_names
     self.recent_results = None
+    self.new_email_results = None
+    self._InitNewEmailResults()
     self._InitRecentResults()
     self.notifications = FailuresHistory(expiration_time=_EXPIRATION_TIME,
                                          size_limit=1000)
@@ -52,6 +56,10 @@ class PerfCountNotifier(ChromiumNotifier):
     """Initializes a new failures history object to store results."""
     self.recent_results = FailuresHistory(expiration_time=_EXPIRATION_TIME,
                                           size_limit=1000)
+
+  def _InitNewEmailResults(self):
+    """Initializes a new email results used by each email sent."""
+    self.new_email_results = {REGRESS: [], IMPROVE: []}
 
   def _UpdateResults(self, results):
     """Updates the results by adding/removing from the history.
@@ -82,10 +90,10 @@ class PerfCountNotifier(ChromiumNotifier):
       result: A tuple of the form ('REGRESS|IMPROVE', 'value_name').
     """
     self.recent_results.Put(' '.join(result))
-    if result[0] == 'REGRESS':
-      counter_id = 'IMPROVE ' + result[1]
+    if result[0] == REGRESS:
+      counter_id = IMPROVE + ' ' + result[1]
     else:
-      counter_id = 'REGRESS ' + result[1]
+      counter_id = REGRESS + ' ' + result[1]
     # Reset counter_id count since this breaks the consecutive count of it.
     self._DeleteResult(counter_id)
 
@@ -145,7 +153,7 @@ class PerfCountNotifier(ChromiumNotifier):
     if PERF_REGRESS in step_text:
       perf_regress = step_text[step_text.find(PERF_REGRESS) + len(PERF_REGRESS)
                                + 1: step_text.find(PERF_IMPROVE)]
-      perf_results.extend([('REGRESS', test_name) for test_name in
+      perf_results.extend([(REGRESS, test_name) for test_name in
                            re.findall('(\S+) (?=\(.+\))', perf_regress)])
 
     if PERF_IMPROVE in step_text:
@@ -153,7 +161,7 @@ class PerfCountNotifier(ChromiumNotifier):
       # we assume that PERF_REGRESS (if any) appears before PERF_IMPROVE.
       perf_improve = step_text[step_text.find(PERF_IMPROVE) + len(PERF_IMPROVE)
                                + 1:]
-      perf_results.extend([('IMPROVE', test_name) for test_name in
+      perf_results.extend([(IMPROVE, test_name) for test_name in
                            re.findall('(\S+) (?=\(.+\))', perf_improve)])
 
     # If there is no regress or improve then this could be warning or exception.
@@ -184,6 +192,8 @@ class PerfCountNotifier(ChromiumNotifier):
           log.msg('[PerfCountNotifier] Result: %s happened enough consecutive '
                   'times to be reported.' % result_id)
           self.notifications.Put(result_id)
+          # New results that cause email notifications.
+          self.new_email_results[result[0]].append(result[1])
           is_interesting = True
         else:
           log.msg('[PerfCountNotifier] Result: %s has already been notified.' %
@@ -192,3 +202,25 @@ class PerfCountNotifier(ChromiumNotifier):
     self._UpdateResults(update_list)
 
     return is_interesting
+
+  def buildMessage(self, builder_name, build_status, results, step_name):
+    """Send an email about this interesting step.
+
+    Add the perf regressions/improvements that resulted in this email if any.
+    """
+    original_header = self.status_header
+    msg = ''
+    if self.new_email_results[REGRESS]:
+      msg += '%s: %s.\n' % (PERF_REGRESS,
+                            ', '.join(self.new_email_results[REGRESS]))
+    if self.new_email_results[IMPROVE]:
+      msg += '%s: %s.\n' % (PERF_IMPROVE,
+                            ', '.join(self.new_email_results[IMPROVE]))
+    if msg:
+      self.status_header += ('\n\nNew perf results in this email:\n%s' % msg)
+    email_msg = ChromiumNotifier.buildMessage(self, builder_name, build_status,
+                                              results, step_name)
+    # Reset header and notification list.
+    self.status_header = original_header
+    self._InitNewEmailResults()
+    return email_msg

@@ -5,11 +5,15 @@
 
 import test_env  # pylint: disable=W0611
 import unittest
+import mock
 
 from buildbot.status.builder import FAILURE, SUCCESS
 
+from master import build_utils
 from master.chromium_notifier import ChromiumNotifier
 from master.perf_count_notifier import PerfCountNotifier
+
+import twisted.internet.defer
 
 # Sample test status results.
 # Based on log_parser/process_log.py PerformanceChangesAsText() function,
@@ -230,10 +234,60 @@ class PerfCountNotifierTest(unittest.TestCase):
     self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE cpu/t2'),
                      self.notifier.minimum_count)
 
+  def testEmailContext(self):
+    """Tests email context contains relative failures."""
+    # Needed so that callback details are retained after method call.
+    twisted.internet.defer.Deferred._startRunCallbacks = mock.Mock()
+    self.notifier.minimum_delay_between_alert = 0
 
-class BuildStepStatusMock:
+    step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
+    build_status = mock.Mock()
+    build_status.getSourceStamp.return_value = None
+    build_status.getResponsibleUsers.return_value = ''
+    build_status.getChanges.return_value = ''
+
+    self.notifier.master_status = mock.Mock()
+    self.notifier.master_status.getBuildbotURL.return_value = ''
+
+    build_utils.EmailableBuildTable = mock.Mock(return_value='')
+
+    results = [FAILURE]
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_status, step_status, results)
+    email = self.notifier.buildMessage(builder_name='',
+                                       build_status=build_status,
+                                       results=results, step_name='')
+    first_callback = email.callbacks[0]
+    callback_args = first_callback[0][1]  # Defer.addCallBacks implementation
+    email_content = callback_args[1].as_string()  # [0] is receipients
+    self.assertTrue('New perf results in this email' in email_content)
+    self.assertTrue('PERF_REGRESS: time/t, fps/video, fps/video2.' in
+                    email_content)
+    self.assertTrue('PERF_IMPROVE: cpu/t, cpu/t2.' not in email_content)
+
+    # Check that the previous regress/improve values do not show again and the
+    # new values are shown.
+    step_status = BuildStepStatusMock(TEST_STATUS_TEXT_2)
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_status, step_status, results)
+    email = self.notifier.buildMessage(builder_name='',
+                                       build_status=build_status,
+                                       results=results, step_name='')
+    first_callback = email.callbacks[0]
+    callback_args = first_callback[0][1]  # Defer.addCallBacks implementation
+    email_content = callback_args[1].as_string()  # [0] is receipients
+
+    self.assertTrue('New perf results in this email' in email_content)
+    self.assertTrue('PERF_REGRESS: time/t, fps/video, fps/video2.' not in
+                    email_content)
+    self.assertTrue('PERF_REGRESS: time/t2.' in email_content)
+    self.assertTrue('PERF_IMPROVE: fps/video2.' in email_content)
+
+
+class BuildStepStatusMock(mock.Mock):
   def __init__(self, text):
     self.text = text
+    mock.Mock.__init__(self)
 
   def getText(self):
     return [self.text]
