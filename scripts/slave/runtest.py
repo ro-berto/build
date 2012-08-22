@@ -36,8 +36,6 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 # pylint checks.
 # pylint: disable=E0611
 # pylint: disable=E1101
-from buildbot.status import builder
-
 from common import chromium_utils
 from common import gtest_utils
 import config
@@ -47,6 +45,8 @@ from slave import process_log_utils
 from slave import slave_utils
 from slave import xvfb
 from slave.gtest.json_results_generator import GetSvnRevision
+
+SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
@@ -251,9 +251,9 @@ def getText(result, observer, name):
 
   failed_test_count = len(observer.FailedTests())
   if failed_test_count == 0:
-    if result is builder.SUCCESS:
+    if result == SUCCESS:
       return basic_info
-    elif result is builder.WARNINGS:
+    elif result == WARNINGS:
       return basic_info + ['warnings']
 
   if observer.RunningTests():
@@ -340,7 +340,7 @@ def create_results_tracker(tracker_class, options):
 
 def annotate(test_name, result, results_tracker):
   """Given a test result and tracker, update the waterfall with test results."""
-  get_text_result = builder.SUCCESS
+  get_text_result = SUCCESS
 
   for failure in sorted(results_tracker.FailedTests()):
     testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
@@ -357,15 +357,15 @@ def annotate(test_name, result, results_tracker):
 
     results_tracker.ClearParsingErrors()
 
-  if result is builder.SUCCESS:
+  if result == SUCCESS:
     if (len(results_tracker.ParsingErrors()) or
         len(results_tracker.FailedTests()) or
         len(results_tracker.SuppressionHashes())):
       print '@@@STEP_WARNINGS@@@'
-      get_text_result = builder.WARNINGS
+      get_text_result = WARNINGS
   else:
     print '@@@STEP_FAILURE@@@'
-    get_text_result = builder.FAILURE
+    get_text_result = FAILURE
 
   for desc in getText(get_text_result, results_tracker, test_name):
     print '@@@STEP_TEXT@%s@@@' % desc
