@@ -15,10 +15,10 @@ import logging
 import os
 import re
 
-from buildbot.status import builder
 from common import chromium_utils
 import config
 
+SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 
 READABLE_FILE_PERMISSIONS = int('644', 8)
 EXECUTABLE_FILE_PERMISSIONS = int('755', 8)
@@ -338,16 +338,16 @@ class PerformanceLogProcessor(object):
 
   def evaluateCommand(self, cmd):
     if self._expectations and not self._read_expectations:
-      return builder.WARNINGS
+      return WARNINGS
 
     if self._perf_regress:
-      return builder.FAILURE
+      return FAILURE
 
     if self._perf_improve:
-      return builder.WARNINGS
+      return WARNINGS
 
     # There was no change in performance, report success.
-    return builder.SUCCESS
+    return SUCCESS
 
   def ProcessLine(self, line):
     # overridden by superclass
