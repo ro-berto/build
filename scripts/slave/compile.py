@@ -1017,7 +1017,9 @@ def main_win(options, args):
       return 1
     result = chromium_utils.RunCommand(command, env=env)
 
-  if result and not options.clobber and options.clobber_post_fail:
+  # TODO(maruel): As soon as the try server is restarted, replace with:
+  # if result and not options.clobber and options.clobber_post_fail:
+  if result and not options.clobber:
     clobber()
 
   return result
