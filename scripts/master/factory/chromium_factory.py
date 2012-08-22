@@ -64,22 +64,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     'use_system_zlib=0 '
   )
 
-  # TODO(timurrrr): investigate http://crbug.com/108155,
-  # uncomment and merge it with MEMORY_TOOLS_GYP_DEFINES.
-  # The commented parts of this list are wannabes but don't work yet.
-  DR_MEMORY_GYP_DEFINES = (
-    'win_debug_RuntimeChecks=0 '
-    'win_debug_disable_iterator_debugging=1 '
-    # 'win_debug_Optimization=1 '
-    # 'win_debug_InlineFunctionExpansion=0 '
-    # 'win_debug_OmitFramePointers=0 '
-
-    'win_release_InlineFunctionExpansion=0 '
-    'win_release_OmitFramePointers=0 '
-    'release_valgrind_build=1 '  # Keep the code under #ifndef NVALGRIND
-    'component=static_library '
-  )
-
   # gclient custom vars
   CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
   CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url',
