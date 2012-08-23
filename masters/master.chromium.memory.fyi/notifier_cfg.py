@@ -120,7 +120,6 @@ def Update(config, active_master, c):
           # Also send e-mails to the Dr.Memory team.
           ['bruening+drmfailure@google.com',
            'rnk+drmfailure@google.com',
-           'timurrrr+drmfailure@google.com',
            'zhaoqin+drmfailure@google.com',
           ]),
       lookup=master_utils.FilterDomain(),
