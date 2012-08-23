@@ -218,21 +218,29 @@ class TryJobRietveld(TryJobBase):
     exceptions = []
     for job in jobs:
       if not self._valid_users.contains(job['user']):
+        log.msg('TryJobRietveld rejecting job from %s' % job['email'])
         continue
-      # Add the 'project' property to each job based on the project of this
-      # instance.
-      job['project'] = self._project
-      # Add a 'bot' property which is a map of builder name to ?.
-      job['bot'] = {job['builder']: None}
-      # Set some default values for properties not needed for this job.
-      job['patch'] = ''
-      job['patchlevel'] = -1  # Ignored, but must be an integer
-      job['branch'] = None
-      job['repository'] = None
+
+      # Add some required properties that that not retrieved from Rietveld.
+      job['project'] = [self._project]
       job['try_job_key'] = job['key']
 
+      # Transform some properties as is expected by parse_options().
+      job['name'] = [job['name']]
+      job['user'] = [job['user']]
+      job['email'] = [job['email']]
+      job['root'] = [job['root']]
+      job['reason'] = [job['reason']]
+      job['clobber'] = [job['clobber']]
+      job['patchset'] = [job['patchset']]
+      job['issue'] = [job['issue']]
+      job['bot'] = {job['builder']: job['tests']}
+
+      # Now cleanup the job dictionary and submit it.
+      cleaned_job = self.parse_options(job)
+
       try:
-        self.SubmitJob(job, None)
+        self.SubmitJob(cleaned_job, None)
       except BadJobfile, ex:
         exceptions.append(ex)
 
