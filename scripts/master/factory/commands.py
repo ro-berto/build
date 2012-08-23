@@ -512,7 +512,7 @@ class FactoryCommands(object):
                           workdir='',  # Doesn't really matter where we are.
                           command=['python', self._cleanup_temp_tool])
 
-  def AddUpdateScriptStep(self, gclient_jobs=None):
+  def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):
     """Adds a step to the factory to update the script folder."""
     # This will be run in the '..' directory to udpate the slave's own script
     # checkout.
@@ -520,12 +520,16 @@ class FactoryCommands(object):
                'sync', '--verbose']
     if gclient_jobs:
       command.append('-j%d' % gclient_jobs)
+    if solutions:
+      spec = 'solutions=[%s]' % ''.join(s.GetSpec() for s in solutions)
+      spec = spec.replace(' ', '')
+      command.extend(['--spec', spec])
     self._factory.addStep(shell.ShellCommand,
                           name='update_scripts',
                           description='update_scripts',
                           locks=[self.slave_exclusive_lock],
                           timeout=60*5,
-                          workdir='..',
+                          workdir='../../..',
                           command=command)
 
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,

@@ -32,6 +32,7 @@ class Master(object):
   o3d_url_internal = None
   nacl_trunk_url_internal = None
   nacl_url_internal = None
+  slave_internal_url = None
 
   syzygy_internal_url = None
 

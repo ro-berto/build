@@ -167,8 +167,16 @@ class GClientFactory(object):
     if (self._target_platform == 'win32' and
         not factory_properties.get('no_kill')):
       factory_cmd_obj.AddSvnKillStep()
+    script_solutions = None
+    if (factory_properties.get('goma_canary') and
+        factory_properties.get('slave_internal_url')):
+      script_solutions = [GClientSolution(
+          factory_properties.get('slave_internal_url'),
+          name="slave.DEPS",
+          custom_vars_list=[("goma_revision", "HEAD")])]
     factory_cmd_obj.AddUpdateScriptStep(
-        gclient_jobs=factory_properties.get('update_scripts_gclient_jobs'))
+        gclient_jobs=factory_properties.get('update_scripts_gclient_jobs'),
+        solutions=script_solutions)
     # Once the script is updated, the zombie processes left by the previous
     # run can be killed.
     if (self._target_platform == 'win32' and
