@@ -332,16 +332,19 @@ def create_results_tracker(tracker_class, options):
   return tracker_obj
 
 
-def annotate(test_name, result, results_tracker):
+def annotate(test_name, result, results_tracker, full_name=False):
   """Given a test result and tracker, update the waterfall with test results."""
   get_text_result = process_log_utils.SUCCESS
 
   for failure in sorted(results_tracker.FailedTests()):
-    testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
+    if full_name:
+      testabbr = re.sub(r'[^\w\.\-]', '_', failure)
+    else:
+      testabbr = re.sub(r'[^\w\.\-]', '_', failure.split('.')[-1])
     slave_utils.WriteLogLines(testabbr,
                               results_tracker.FailureDescription(failure))
   for suppression_hash in sorted(results_tracker.SuppressionHashes()):
-    slave_utils.WriteLogLines(testabbr,
+    slave_utils.WriteLogLines(suppression_hash,
                               results_tracker.Suppression(suppression_hash))
 
   if results_tracker.ParsingErrors():
@@ -386,7 +389,7 @@ def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
 
     build_dir = os.path.dirname(build_dir)
     outdir = 'xcodebuild'
-    is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
+    is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
                         .get('GYP_GENERATORS', '') in ('ninja', 'make'))
     if is_make_or_ninja:
       outdir = 'out'
@@ -504,7 +507,8 @@ def main_mac(options, args):
     _GenerateJSONForTestResults(options, results_tracker)
 
   if options.annotate:
-    annotate(options.test_type, result, results_tracker)
+    annotate(options.test_type, result, results_tracker,
+             options.factory_properties.get('full_test_name'))
 
   return result
 
@@ -742,7 +746,8 @@ def main_linux(options, args):
     _GenerateJSONForTestResults(options, results_tracker)
 
   if options.annotate:
-    annotate(options.test_type, result, results_tracker)
+    annotate(options.test_type, result, results_tracker,
+             options.factory_properties.get('full_test_name'))
 
   return result
 
@@ -809,7 +814,8 @@ def main_win(options, args):
     _GenerateJSONForTestResults(options, results_tracker)
 
   if options.annotate:
-    annotate(options.test_type, result, results_tracker)
+    annotate(options.test_type, result, results_tracker,
+             options.factory_properties.get('full_test_name'))
 
   return result
 
