@@ -81,13 +81,9 @@ def get_temp_count():
 
 
 def _RunGTestCommand(command, results_tracker=None, pipes=None):
-  if results_tracker and pipes:
-    # This is not supported by RunCommand.
-    print 'Invalid test invocation. (results_tracker and pipes)'
-    return 1
   if results_tracker:
     return chromium_utils.RunCommand(
-        command, parser_func=results_tracker.ProcessLine)
+        command, pipes=pipes, parser_func=results_tracker.ProcessLine)
   else:
     return chromium_utils.RunCommand(command, pipes=pipes)
 
@@ -492,13 +488,14 @@ def main_mac(options, args):
       http_server = start_http_server('mac', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
+    pipes = []
     if options.factory_properties.get('asan', False):
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
-      result = _RunGTestCommand(command, pipes=pipes)
-    else:
-      result = _RunGTestCommand(command, results_tracker)
+
+    result = _RunGTestCommand(command, pipes=pipes,
+                              results_tracker=results_tracker)
   finally:
     if http_server:
       http_server.StopServer()
@@ -726,13 +723,15 @@ def main_linux(options, args):
           slave_name, bin_dir,
           with_wm=options.factory_properties.get('window_manager', True),
           server_dir=special_xvfb_dir)
+
+    pipes = []
     if options.factory_properties.get('asan', False):
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
-      result = _RunGTestCommand(command, pipes=pipes)
-    else:
-      result = _RunGTestCommand(command, results_tracker)
+
+    result = _RunGTestCommand(command, pipes=pipes,
+                              results_tracker=results_tracker)
   finally:
     if http_server:
       http_server.StopServer()

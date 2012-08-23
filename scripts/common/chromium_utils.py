@@ -697,9 +697,6 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       writefh.flush()
 
   pipes = pipes or []
-  if pipes and (parser_func or filter_obj):
-    raise NotImplementedError('RunCommand cannot be called with pipes and a'
-                              ' parser/filter')
 
   # Print the given command (which should be a list of one or more strings).
   if print_cmd:
@@ -715,43 +712,47 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     # the subprocess.
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
-  elif pipes:
+  else:
     # Start the initial process.
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, bufsize=0, **kwargs)
     proc_handles = [proc]
-    pipe_number = 0
-    for pipe in pipes:
-      pipe_number = pipe_number + 1
-      if pipe_number == len(pipes):
-        # The last pipe process needs to output to sys.stdout.
-        stdout = sys.stdout
-      else:
-        # Output to a pipe, since another pipe is on top of us.
-        stdout = subprocess.PIPE
-      pipe_proc = subprocess.Popen(pipe, stdin=proc_handles[0].stdout,
-                                   stdout=stdout, stderr=subprocess.STDOUT)
-      proc_handles.insert(0, pipe_proc)
 
-    # Allow proc to receive a SIGPIPE if the piped process exits.
-    for handle in proc_handles[1:]:
-      handle.stdout.close()
+    if pipes:
+      pipe_number = 0
+      for pipe in pipes:
+        pipe_number = pipe_number + 1
+        if pipe_number == len(pipes) and not (parser_func or filter_obj):
+          # The last pipe process needs to output to sys.stdout or filter
+          stdout = sys.stdout
+        else:
+          # Output to a pipe, since another pipe is on top of us.
+          stdout = subprocess.PIPE
+        pipe_proc = subprocess.Popen(pipe, stdin=proc_handles[0].stdout,
+                                     stdout=stdout, stderr=subprocess.STDOUT)
+        proc_handles.insert(0, pipe_proc)
+
+      # Allow proc to receive a SIGPIPE if the piped process exits.
+      for handle in proc_handles[1:]:
+        handle.stdout.close()
+
+    thread = None
+    if parser_func or filter_obj:
+      # Launch and start the reader thread.
+      thread = threading.Thread(target=ProcessRead,
+                                args=(proc_handles[0].stdout, sys.stdout,
+                                      parser_func, filter_obj))
+      thread.start()
 
     # Wait for the commands to terminate.
     for handle in proc_handles:
       handle.wait()
-  else:
-    # Run the command.
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT, bufsize=0, **kwargs)
-    # Launch and start the reader thread.
-    thread = threading.Thread(target=ProcessRead,
-                              args=(proc.stdout, sys.stdout,
-                                    parser_func, filter_obj))
-    thread.start()
-    # Wait for the reader thread to complete (implies EOF reached on stdout/
-    # stderr pipes).
-    thread.join()
+
+    if parser_func or filter_obj:
+      # Wait for the reader thread to complete (implies EOF reached on stdout/
+      # stderr pipes).
+      thread.join()
+
   # Wait for the command to terminate.
   proc.wait()
   return proc.returncode
