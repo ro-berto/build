@@ -44,7 +44,8 @@ def Log(message):
   """
   global log_imported
   if not log_imported:
-    # pylint: disable=E0611,F0401
+    # pylint: disable=E0611,F0401,W0602
+    global log
     try:
       # buildbot 0.7.12
       from buildbot.slave.bot import log
