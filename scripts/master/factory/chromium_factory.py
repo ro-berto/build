@@ -766,6 +766,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Add the main build.
     env = factory_properties.get('annotation_env')
+    factory_properties['target'] = target
     chromium_cmd_obj.AddAnnotationStep('build', annotation_script, env=env,
                                        factory_properties=factory_properties)
 

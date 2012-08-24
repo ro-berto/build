@@ -210,22 +210,20 @@ def real_main(options):
 def main():
   option_parser = optparse.OptionParser()
 
-  option_parser.add_option('', '--target',
+  option_parser.add_option('--target',
                            help='build target to archive (Debug or Release)')
-  option_parser.add_option('', '--build-dir',
+  option_parser.add_option('--build-dir',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
-  option_parser.add_option('', '--build-url',
+  option_parser.add_option('--build-url',
                            help='url where to find the build to extract')
   # TODO(cmp): Remove --halt-on-missing-build when the buildbots are upgraded
   #            to not use this argument.
   option_parser.add_option('--halt-on-missing-build', action='store_true',
-                           default=False,
                            help='whether to halt on a missing build')
-  option_parser.add_option('', '--webkit-dir',
-                           help='webkit directory path, '
-                                'relative to --build-dir')
-  option_parser.add_option('', '--build-output-dir',
+  option_parser.add_option('--webkit-dir', help='webkit directory path, '
+                                                'relative to --build-dir')
+  option_parser.add_option('--build-output-dir',
                            help='Output path relative to --build-dir.')
   chromium_utils.AddPropertiesOptions(option_parser)
 
@@ -233,6 +231,10 @@ def main():
   if args:
     print 'Unknown options: %s' % args
     return 1
+
+  if not options.target:
+    options.target = options.factory_properties.get('target', 'Release')
+
   return real_main(options)
 
 

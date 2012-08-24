@@ -315,24 +315,27 @@ def Archive(options):
 
 def main(argv):
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--target', default='Release',
+  option_parser.add_option('--target',
                            help='build target to archive (Debug or Release)')
-  option_parser.add_option('', '--src-dir', default='src',
+  option_parser.add_option('--src-dir', default='src',
                            help='path to the top-level sources directory')
-  option_parser.add_option('', '--build-dir', default='chrome',
+  option_parser.add_option('--build-dir', default='chrome',
                            help=('path to main build directory (the parent of '
                                  'the Release or Debug directory)'))
-  option_parser.add_option('', '--exclude-files', default='',
+  option_parser.add_option('--exclude-files', default='',
                            help=('Comma separated list of files that should '
                                  'always be excluded from the zip.'))
-  option_parser.add_option('', '--include-files', default='',
+  option_parser.add_option('--include-files', default='',
                            help=('Comma separated list of files that should '
                                  'always be included in the zip.'))
-  option_parser.add_option('', '--webkit-dir', default=None,
+  option_parser.add_option('--webkit-dir',
                            help='webkit directory path, relative to --src-dir')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
+
+  if not options.target:
+    options.target = options.factory_properties.get('target', 'Release')
 
   # When option_parser is passed argv as a list, it can return the caller as
   # first unknown arg.  So throw a warning if we have two or more unknown
