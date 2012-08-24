@@ -485,7 +485,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     def M(test, prefix, test_type, fp):
       return S(
           test, prefix, lambda test_name:
-          f.AddAnnotatedMemoryTest(test_name, test_type, factory_properties=fp))
+          f.AddMemoryTest(test_name, test_type, factory_properties=fp))
 
     # Valgrind tests:
     for test in tests[:]:
@@ -507,9 +507,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       if M(test, 'drmemory_pattern_', 'drmemory_pattern', fp):
         continue
       if S(test, 'heapcheck_',
-           lambda name: f.AddAnnotatedHeapcheckTest(name,
-                                                    timeout=1200,
-                                                    factory_properties=fp)):
+           lambda name: f.AddHeapcheckTest(name,
+                                           timeout=1200,
+                                           factory_properties=fp)):
         continue
 
     # PyAuto functional tests.

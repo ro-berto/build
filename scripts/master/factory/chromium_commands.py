@@ -859,13 +859,6 @@ class ChromiumCommands(commands.FactoryCommands):
                      timeout=timeout,
                      do_step_if=do_step_if)
 
-  def AddAnnotatedMemoryTest(self, test_name, tool_name, timeout=1200,
-                    factory_properties=None):
-    factory_properties = factory_properties or {}
-    factory_properties['full_test_name'] = True
-    self.AddMemoryTest(test_name, tool_name, timeout, factory_properties,
-                       command_class=chromium_step.AnnotatedCommand)
-
   def AddHeapcheckTest(self, test_name, timeout, factory_properties,
                        command_class=gtest_command.GTestFullCommand):
     build_dir = os.path.join(self._build_dir, self._target)
@@ -895,12 +888,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(command_class, test_name, cmd,
                      timeout=timeout,
                      do_step_if=self.TestStepFilter)
-
-  def AddAnnotatedHeapcheckTest(self, test_name, timeout, factory_properties):
-    factory_properties = factory_properties or {}
-    factory_properties['full_test_name'] = True
-    self.AddHeapcheckTest(test_name, timeout, factory_properties,
-                          command_class=chromium_step.AnnotatedCommand)
 
   def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
     args = args or []
