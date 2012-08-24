@@ -39,6 +39,8 @@ categories_steps = {
     'sizes',
     'sql_unittests',
     'start_crash_handler',
+    'sync_unit_tests',
+    'sync_integration_tests',
     'test_shell_tests',
     'unit_tests',
     #'webkit_tests',
