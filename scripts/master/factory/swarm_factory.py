@@ -9,6 +9,7 @@ Based on chromium_factory.py and adds chromium-specific steps."""
 from master.factory import chromium_factory
 from master.factory import swarm_commands
 
+import config
 
 class SwarmTest(object):
   """A small helper class containing any required details to run a
@@ -17,6 +18,47 @@ class SwarmTest(object):
   def __init__(self, test_name, shards):
     self.test_name = test_name
     self.shards = shards
+
+
+def SetupSwarmTests(machine, data_dest_dir, data_server, options=None,
+                    project=None, network_path=None, extra_gyp_defines='',
+                    ninja=False):
+  """This is a swarm builder."""
+  factory_properties = {
+    'gclient_env' : {
+      'GYP_DEFINES': (
+        'test_isolation_mode=hashtable '
+        'test_isolation_outdir=' + data_dest_dir +
+        ' ' + extra_gyp_defines +
+        ' disable_nacl=1'
+        ' fastbuild=1'
+      ),
+      'GYP_MSVS_VERSION': '2010',
+    },
+    'data_server': data_server,
+    'data_dest_dir': data_dest_dir,
+    'swarm_server': config.Master.swarm_server_internal_url
+  }
+  if ninja:
+    factory_properties['gclient_env']['GYP_GENERATORS'] = 'ninja'
+    # Build until death.
+    options = ['--build-tool=ninja'] + options + ['--', '-k', '0']
+
+  tests = [
+      # They must be in the reverse order of latency to get results, e.g. the
+      # slowest test should be last.
+      SwarmTest('base_unittests', 1),
+      SwarmTest('net_unittests', 3),
+      SwarmTest('unit_tests', 4),
+      SwarmTest('browser_tests', 5),
+      ]
+
+  return machine.SwarmFactory(
+      tests=tests,
+      options=options,
+      project=project,
+      factory_properties=factory_properties,
+      network_path=network_path)
 
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
