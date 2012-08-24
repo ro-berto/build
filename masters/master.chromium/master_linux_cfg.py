@@ -147,7 +147,7 @@ linux_aura_tests = [
   'unit',
 ]
 
-linux_aura_options = [
+linux_aura_options=[
   'aura_builder',
   'base_unittests',
   'browser_tests',
