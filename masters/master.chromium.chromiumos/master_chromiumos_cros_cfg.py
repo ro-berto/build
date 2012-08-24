@@ -49,20 +49,6 @@ F('amd64', chromeos_factory.CbuildbotFactory(
   params='amd64-generic-tot-chrome-pfq-informational').get_factory())
 
 
-B('ChromiumOS (tegra2)',
-  factory='tegra2',
-  gatekeeper='closer|watch',
-  builddir='chromium-tot-chromeos-tegra2',
-  scheduler='chromium_cros',
-  auto_reboot=True,
-  notify_on_missing=True)
-F('tegra2', chromeos_factory.CbuildbotFactory(
-  buildroot='/b/cbuild.tegra2',
-  crostools_repo=None,
-  pass_revision=True,
-  params='arm-tegra2-tot-chrome-pfq-informational').get_factory())
-
-
 B('ChromiumOS (daisy)',
   factory='daisy',
   gatekeeper='closer|watch',
