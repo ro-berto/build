@@ -104,7 +104,7 @@ class Manifest(object):
     self.add_task(
         'Run Test',
         ['python', self.RUN_TEST_PATH, '--hash', self.manifest_hash,
-         '--remote', self.data_url])
+         '--remote', self.data_url, '-v'])
 
     # Clean up
     self.add_task('Clean Up', ['python', CLEANUP_SCRIPT_NAME])
