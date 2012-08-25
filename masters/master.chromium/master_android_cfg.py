@@ -31,9 +31,9 @@ T('android_trigger')
 #
 # Android Builder
 #
-B('Android Builder', 'rel', 'android', 'android', notify_on_missing=True)
-F('rel', linux_android().ChromiumAnnotationFactory(
-    target='Release',
+B('Android Builder', 'dbg', 'android', 'android', notify_on_missing=True)
+F('dbg', linux_android().ChromiumAnnotationFactory(
+    target='Debug',
     annotation_script='src/build/android/buildbot_main.sh',
     factory_properties={'trigger': 'android_trigger'}))
 
