@@ -69,7 +69,7 @@ def IssueReboot():
 
 def SigTerm(*args):
   """Receive a SIGTERM and do nothing."""
-  Log('Received SIGTERM, doing nothing.')
+  Log('SigTerm: Received SIGTERM, doing nothing.')
 
 
 def UpdateSignals():
@@ -80,12 +80,38 @@ def UpdateSignals():
   try:
     import signal
   except ImportError:
-    Log('Warning: signal module unavailable -- '
+    Log('UpdateSignals: Warning: signal module unavailable -- '
         'not installing signal handlers.')
     return
   # Twisted installs a SIGTERM signal handler which tries to shut the system
   # down.  Use our own handler instead.
+  Log('UpdateSignals: installed new SIGTERM handler')
   signal.signal(signal.SIGTERM, SigTerm)
+
+
+def Sleep(desired_sleep):
+  """Sleep for |desired_sleep| seconds.
+
+  time.sleep() can return in less time than desired if the process receives
+  a signal.  We expect that to happen when the shutdown we run causes the system
+  to send a TERM signal to us.  When that happens, we need to ensure we go
+  back to sleep for the remainder of the time that's left."""
+  while True:
+    actual_sleep = 0
+    sleep_length = desired_sleep - actual_sleep
+    start_time = int(time.time())
+    Log('Sleep: Sleeping for %s seconds' % sleep_length)
+    time.sleep(sleep_length)
+    actual_sleep = int(time.time()) - start_time
+    Log('Sleep: Actually slept for %s seconds' % actual_sleep)
+    if actual_sleep < 0:
+      Log('Sleep: Error, actual_sleep was %d (less than zero)' % actual_sleep)
+      break
+    if actual_sleep >= desired_sleep:
+      Log('Sleep: Finished sleeping, returning' % actual_sleep)
+      break
+    desired_sleep -= actual_sleep
+    Log('Sleep: Awoke too early, reset sleep to %s seconds' % desired_sleep)
 
 
 def Reboot():
@@ -112,14 +138,15 @@ def Reboot():
   if that should occur to make it clear in logs that an error condition is
   occurring somewhere.
   """
+  Log('Reboot: Starting system reboot cycle')
   UpdateSignals()
   i = 0
   while True:
-    Log('Rebooting then sleeping 60 seconds for the %dth time...' % i)
+    Log('Reboot: Reboot cycle %d' % i)
     IssueReboot()
-    time.sleep(60)
+    Sleep(60)
     i += 1
-  raise Exception('run_slave.Reboot() should not return but would have')
+  raise Exception('Reboot: Should not return but would have')
 
 
 def HotPatchSlaveBuilder():
