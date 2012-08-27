@@ -217,7 +217,7 @@ class TryJobRietveld(TryJobBase):
 
     exceptions = []
     for job in jobs:
-      if not self._valid_users.contains(job['user']):
+      if not self._valid_users.contains(job['email']):
         log.msg('TryJobRietveld rejecting job from %s' % job['email'])
         continue
 
