@@ -67,7 +67,7 @@ class _ValidUserPoller(internet.TimerService):
       send jobs from Rietveld.
     """
     if not os.path.isfile(self._PWD_FILE):
-      log.msg("No password file %s; no valid users.")
+      log.msg("No password file '%s'; no valid users." % self._PWD_FILE)
       return ""
 
     pwd = open(self._PWD_FILE).readline().strip()
