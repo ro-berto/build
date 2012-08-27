@@ -119,10 +119,11 @@ def ninja_clobber(build_output_dir):
     try:
       os.rmdir(root)
     except OSError, e:
-      if e.errno == 66 or e.errno == 41:
+      if e.errno in (39, 41, 66):
         # If the directory isn't empty, ignore it.
         # On Windows, os.rmdir will raise WindowsError with winerror 145,
         # which e.errno is 41.
+        # On Linux, e.errno is 39.
         pass
       else:
         raise
