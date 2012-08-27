@@ -49,7 +49,7 @@ F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
     factory_properties={
       'additional_drt_flag': '--dump-render-tree',
       'archive_webkit_results': True,
-      'driver_name': 'content_shell',
+      'driver_name': 'Content Shell',
       'gclient_env': {
           'GYP_GENERATORS':'ninja',
           'GYP_DEFINES':'fastbuild=1',
