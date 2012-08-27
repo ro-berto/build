@@ -137,6 +137,7 @@ class ManifestTest(unittest.TestCase):
 
   def test_process_manifest_success(self):
     run_slavelastic.os.path.exists = lambda name: True
+    run_slavelastic.os.chmod = lambda name, mode: True
     run_slavelastic.open = lambda name, mode: StringIO.StringIO('file')
     run_slavelastic.zipfile.ZipFile = MockZipFile
     run_slavelastic.urllib2.urlopen = lambda url, text: StringIO.StringIO('{}')

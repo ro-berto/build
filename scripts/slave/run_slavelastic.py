@@ -9,6 +9,7 @@ import hashlib
 import json
 import optparse
 import os
+import stat
 import socket
 import sys
 import time
@@ -78,11 +79,10 @@ class Manifest(object):
   def zip(self):
     """Zip up all the files necessary to run a shard."""
     start_time = time.time()
+    zipfile_name = os.path.join(self.data_dest_dir, self.zipfile_name)
 
     try:
-      zip_file = zipfile.ZipFile(
-          os.path.join(self.data_dest_dir, self.zipfile_name),
-          'w')
+      zip_file = zipfile.ZipFile(zipfile_name, 'w')
     except IOError as e:
       print 'Error creating zip files %s' % str(e)
       return False
@@ -95,6 +95,9 @@ class Manifest(object):
       zip_file.write(HANDLE_EXE_PATH, HANDLE_EXE)
 
     zip_file.close()
+
+    # Ensure the files are readable by the server that is serving them.
+    os.chmod(zipfile_name, stat.S_IREAD | stat.S_IWRITE | stat.S_IROTH)
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
     return True
