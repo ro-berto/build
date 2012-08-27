@@ -105,6 +105,11 @@ def common_xcode_settings(command, options, env, compiler=None):
     print 'Forcing LDPLUSPLUS = %s' % ldplusplus
     env['LDPLUSPLUS'] = ldplusplus
 
+  if options.disable_aslr:
+    # Disallow dyld to randomize the load addresses of executables.
+    # If any of them is compiled with ASan it will hang otherwise.
+    env['DYLD_NO_PIE'] = '1'
+
 
 def ninja_clobber(build_output_dir):
   """Removes everything but ninja files from a build directory."""
