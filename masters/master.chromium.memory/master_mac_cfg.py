@@ -39,6 +39,7 @@ mac_asan_options = [
   'ipc_tests',
   'jingle_unittests',
   'media_unittests',
+  'net_unittests',
   'printing_unittests',
   'remoting_unittests',
   'sql_unittests',
@@ -63,6 +64,7 @@ mac_asan_tests_1 = [
 
 mac_asan_tests_2 = [
   'browser_tests',
+  'net',
   'interactive_ui',
 ]
 
