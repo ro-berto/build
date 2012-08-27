@@ -125,11 +125,30 @@ class DartCommands(commands.FactoryCommands):
                   ' --progress=line --report --time --mode=%s --arch=%s '
                   ' --compiler=%s --runtime=%s') % configuration
 
-    if is_dartc or is_dart2dart:
+    if is_dartc:
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
                             name='tests',
                             description='tests',
+                            timeout=timeout,
+                            env = self._custom_env,
+                            haltOnFailure=True,
+                            workdir=self._dart_build_dir,
+                            command=cmd)
+    elif is_dart2dart:
+      cmd = base_cmd
+      self._factory.addStep(shell.ShellCommand,
+                            name='tests',
+                            description='tests',
+                            timeout=timeout,
+                            env = self._custom_env,
+                            haltOnFailure=True,
+                            workdir=self._dart_build_dir,
+                            command=cmd)
+      cmd = base_cmd + '--additional-compiler-flags="--minify"'
+      self._factory.addStep(shell.ShellCommand,
+                            name='minified tests',
+                            description='minified tests',
                             timeout=timeout,
                             env = self._custom_env,
                             haltOnFailure=True,
