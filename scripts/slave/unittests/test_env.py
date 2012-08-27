@@ -17,7 +17,8 @@ BASE_DIR = os.path.abspath(os.path.join(RUNTESTS_DIR, '..', '..', '..'))
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
-sys.path.insert(0, os.path.join(BASE_DIR, '..', 'depot_tools'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'buildbot_8_4p1'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'third_party', 'twisted_10_2'))
+
+from common import find_depot_tools  # pylint: disable=W0611
