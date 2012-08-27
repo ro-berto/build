@@ -145,7 +145,7 @@ class DartCommands(commands.FactoryCommands):
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd)
-      cmd = base_cmd + '--additional-compiler-flags="--minify"'
+      cmd = base_cmd + ' --additional-compiler-flags="--minify"'
       self._factory.addStep(shell.ShellCommand,
                             name='minified tests',
                             description='minified tests',
