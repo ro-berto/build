@@ -31,7 +31,7 @@ S('s3_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 # Content Shell Layouttests
 #
 
-B('Win (Content Shell)',
+B('WebKit (Content Shell) Win',
   'f_contentshell_win_rel',
   scheduler='s3_contentshell_webkit_rel',
   auto_reboot=True)
@@ -48,7 +48,6 @@ F('f_contentshell_win_rel', win().ChromiumWebkitLatestFactory(
       'archive_webkit_results': True,
       'driver_name': 'content_shell',
       'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
-      'start_crash_handler': True,
       'test_results_server': 'test-results.appspot.com',
     }))
 

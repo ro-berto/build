@@ -31,7 +31,7 @@ S('s1_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 # Content Shell Layouttests
 #
 
-B('Linux (Content Shell)',
+B('WebKit (Content Shell) Linux',
   'f_contentshell_linux_rel',
   scheduler='s1_contentshell_webkit_rel',
   auto_reboot=True)
