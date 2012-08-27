@@ -13,7 +13,7 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 
 ################################################################################
@@ -25,31 +25,31 @@ defaults['category'] = '9content shell'
 #
 # Main release scheduler for webkit
 #
-S('s1_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
+S('s3_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
 # Content Shell Layouttests
 #
 
-B('Linux (Content Shell)',
-  'f_contentshell_linux_rel',
-  scheduler='s1_contentshell_webkit_rel',
+B('Win (Content Shell)',
+  'f_contentshell_win_rel',
+  scheduler='s3_contentshell_webkit_rel',
   auto_reboot=True)
 
-F('f_contentshell_linux_rel', linux().ChromiumWebkitLatestFactory(
+F('f_contentshell_win_rel', win().ChromiumWebkitLatestFactory(
     target='Release',
+    slave_type='BuilderTester',
     tests=[
       'webkit',
     ],
-    options=[
-      '--compiler=goma',
-      'content_shell_builder',
-    ],
+    project='all.sln;content_shell_builder',
     factory_properties={
       'additional_drt_flag': '--dump-render-tree',
       'archive_webkit_results': True,
+      'driver_name': 'content_shell',
+      'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+      'start_crash_handler': True,
       'test_results_server': 'test-results.appspot.com',
-      'driver_name': 'content_shell'
     }))
 
 

@@ -13,7 +13,7 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 
 
 ################################################################################
@@ -25,31 +25,36 @@ defaults['category'] = '9content shell'
 #
 # Main release scheduler for webkit
 #
-S('s1_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
+S('s2_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
 # Content Shell Layouttests
 #
 
-B('Linux (Content Shell)',
-  'f_contentshell_linux_rel',
-  scheduler='s1_contentshell_webkit_rel',
+B('Mac (Content Shell)',
+  'f_contentshell_mac_rel',
+  scheduler='s2_contentshell_webkit_rel',
   auto_reboot=True)
 
-F('f_contentshell_linux_rel', linux().ChromiumWebkitLatestFactory(
+F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
     target='Release',
     tests=[
       'webkit',
     ],
     options=[
-      '--compiler=goma',
+      '--build-tool=ninja',
+      '--compiler=goma-clang',
       'content_shell_builder',
     ],
     factory_properties={
       'additional_drt_flag': '--dump-render-tree',
       'archive_webkit_results': True,
+      'driver_name': 'content_shell',
+      'gclient_env': {
+          'GYP_GENERATORS':'ninja',
+          'GYP_DEFINES':'fastbuild=1',
+      },
       'test_results_server': 'test-results.appspot.com',
-      'driver_name': 'content_shell'
     }))
 
 
