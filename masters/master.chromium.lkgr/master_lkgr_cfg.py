@@ -65,7 +65,7 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
+       'gclient_env': {'GYP_DEFINES': 'asan=1 component=static_library '}}))
 
 ################################################################################
 ## Linux
