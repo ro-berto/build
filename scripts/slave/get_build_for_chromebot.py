@@ -101,6 +101,8 @@ class GetBuild(object):
     self._target_dir = None
     self._test_name = None
     self._test_url = None
+    self._ffmpegsumo_name = None
+    self._ffmpegsumo_url = None
 
     self._chromium_archive = ('http://commondatastorage.googleapis.com/'
                               'chromium-browser-snapshots/')
@@ -112,7 +114,8 @@ class GetBuild(object):
         'chrome_zip': 'Mac/%s/chrome-mac.zip',
         'test': 'Mac/%s/chrome-mac.test/reliability_tests',
         'symbol': 'Mac/%s/chrome-mac-syms.zip',
-        'lastchange': 'Mac/LAST_CHANGE'
+        'lastchange': 'Mac/LAST_CHANGE',
+        'ffmpegsumo': 'Mac/%s/chrome-mac.test/ffmpegsumo.so',
       },
       'win': {
         'chrome_zip': 'Win/%s/chrome-win32.zip',
@@ -202,6 +205,13 @@ class GetBuild(object):
       self._test_url = self._options.build_url + self._test_name
       self._symbol_url = self._options.build_url + self._symbol_name
 
+    if self._options.platform == 'mac':
+      self._ffmpegsumo_name = self.GetDownloadFileName('ffmpegsumo')
+      if self._archive_url:
+        self._ffmpegsumo_url = self.GetURL(self._archive_url, 'ffmpegsumo')
+      else:
+        self._ffmpegsumo_url = self._options.build_url + self._ffmpegsumo_name
+
     return True
 
   def CleanUp(self):
@@ -239,6 +249,11 @@ class GetBuild(object):
     urllib.urlretrieve(self._symbol_url, file_path)
     if self._options.extract:
       Extract(file_path, self._symbol_dir)
+
+    # Download ffmpegsumo.so.
+    if self._ffmpegsumo_name:
+      file_path = os.path.join(self._target_dir, self._ffmpegsumo_name)
+      urllib.urlretrieve(self._ffmpegsumo_url, file_path)
 
     # Set permissions.
     for path, _, fnames in os.walk(self._target_dir):
