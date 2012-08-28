@@ -25,27 +25,24 @@ import sys
 
 from common import chromium_utils
 from slave import slave_utils
+from slave import zip_build
 
 class StagingError(Exception): pass
 
 
 def ShouldPackageFile(filename, target):
   """Returns true if the file should be a part of the resulting archive."""
-  file_filter = '^.+\.(o|a|d)$'
-
+  if chromium_utils.IsMac():
+    file_filter = '^.+\.(a|dSYM)$'
+  elif chromium_utils.IsLinux():
+    file_filter = '^.+\.(o|a|d)$'
+  else:
+    raise NotImplementedError('%s is not supported.' % sys.platform)
   if re.match(file_filter, filename):
     return False
 
   # Skip files that we don't care about. Mostly directories.
-  things_to_skip = [
-    # intermediate build directories (full of .o, .d, etc.).
-    'appcache', 'glue', 'googleurl', 'lib', 'lib.host', 'obj', 'obj.host',
-    'obj.target', 'src', '.deps',
-    # scons build cruft
-    '.sconsign.dblite',
-    # build helper, not needed on testers
-    'mksnapshot',
-  ]
+  things_to_skip = zip_build.FileExclusions()
 
   if filename in things_to_skip:
     return False
@@ -55,7 +52,13 @@ def ShouldPackageFile(filename, target):
 
 def archive(options, args):
   src_dir = os.path.abspath(os.path.dirname(options.build_dir))
-  build_dir = os.path.join(src_dir, 'out', options.target)
+
+  if chromium_utils.IsMac():
+    build_dir = os.path.join(src_dir, 'xcodebuild', options.target)
+  elif chromium_utils.IsLinux():
+    build_dir = os.path.join(src_dir, 'out', options.target)
+  else:
+    raise NotImplementedError('%s is not supported.' % sys.platform)
   staging_dir = slave_utils.GetStagingDir(src_dir)
   build_revision = slave_utils.SubversionRevision(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
@@ -65,6 +68,14 @@ def archive(options, args):
   # Build the list of files to archive.
   zip_file_list = [f for f in os.listdir(build_dir)
                    if ShouldPackageFile(f, options.target)]
+
+  subdir = None
+
+  # TODO(nsylvain): We need to move linux to a subdir as well, but aarya is not
+  # ready with the server-side change.
+  if chromium_utils.IsMac():
+    subdir = '%s-%s' % (chromium_utils.PlatformName(),
+                        options.target.lower())
 
   prefix = options.factory_properties.get('asan_archive_name', 'asan')
   zip_file_name = '%s-%s-%s-%d' % (prefix,
@@ -88,7 +99,8 @@ def archive(options, args):
 
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   gs_acl = options.factory_properties.get('gs_acl', None)
-  status = slave_utils.GSUtilCopyFile(zip_file, gs_bucket, gs_acl=gs_acl)
+  status = slave_utils.GSUtilCopyFile(zip_file, gs_bucket, subdir=subdir,
+                                      gs_acl=gs_acl)
   if status:
     raise StagingError('Failed to upload %s to %s. Error %d' % (zip_file,
                                                                 gs_bucket,
