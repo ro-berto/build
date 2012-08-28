@@ -473,6 +473,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGpuThroughputTests(fp)
     if R('dom_perf'):
       f.AddDomPerfTests(fp)
+    if R('idb_perf'):
+      f.AddIDBPerfTests(fp)
     if R('page_cycler_moz-http'):
       f.AddPageCyclerTest('page_cycler_moz-http', fp)
     if R('page_cycler_bloat-http'):

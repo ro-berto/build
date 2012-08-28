@@ -667,6 +667,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'dom_perf', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddIDBPerfTests(self, factory_properties):
+    factory_properties = factory_properties or {}
+    c = self.GetPerfStepClass(factory_properties, 'sunspider',
+                              process_log.GraphingLogProcessor)
+
+    options = ['--gtest_filter=IndexedDBTest.Perf', '--gtest_print_time']
+    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options,
+                              factory_properties=factory_properties)
+    self.AddTestStep(c, 'idb_perf', cmd,
+                     do_step_if=self.TestStepFilter)
+
   def AddChromeFramePerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'chrome_frame_perf',
