@@ -9,8 +9,8 @@ import hashlib
 import json
 import optparse
 import os
-import stat
 import socket
+import stat
 import sys
 import time
 import urllib
@@ -96,8 +96,10 @@ class Manifest(object):
 
     zip_file.close()
 
+    # TODO(csharp): remove once the linux try bot is the server
     # Ensure the files are readable by the server that is serving them.
-    os.chmod(zipfile_name, stat.S_IREAD | stat.S_IWRITE | stat.S_IROTH)
+    if self.target_platform == 'Mac':
+      os.chmod(zipfile_name, stat.S_IREAD | stat.S_IWRITE | stat.S_IROTH)
 
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
     return True
