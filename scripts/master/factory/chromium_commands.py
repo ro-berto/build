@@ -1005,8 +1005,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = [self._python, self._devtools_perf_test_tool,
            '--target', self._target,
-           '--build-dir', self._build_dir,
-           'inspector'
+           '--build-dir', self._build_dir
     ]
 
     self.AddTestStep(c,

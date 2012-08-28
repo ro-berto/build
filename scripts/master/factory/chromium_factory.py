@@ -93,6 +93,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.webkit_trunk_url + '/PerformanceTests'),
     ('src/third_party/WebKit/LayoutTests/http/tests/inspector',
      config.Master.webkit_trunk_url + '/LayoutTests/http/tests/inspector'),
+    ('src/third_party/WebKit/LayoutTests/inspector',
+     config.Master.webkit_trunk_url + '/LayoutTests/inspector'),
   ]
   CUSTOM_DEPS_TSAN_WIN = ('src/third_party/tsan',
      config.Master.trunk_url + '/deps/third_party/tsan')
