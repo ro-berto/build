@@ -238,8 +238,8 @@ def CollateRevisionHistory(builds, lkgr_steps):
           steps[step['name']] = step
         for step in lkgr_steps[master][builder]:
           if step not in steps:
-            raise Exception('master %s builder %s step %s not in steps\n' % (
-                master, builder, step))
+            reasons.append('Step %s has not completed.' % step)
+            continue
           if ('isFinished' not in steps[step] or
              steps[step]['isFinished'] is not True):
             reasons.append('Step %s has not completed (%s)' % (
