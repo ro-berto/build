@@ -226,6 +226,11 @@ def main():
   parser.add_option('--data-dest-dir', help='Unused.')
   (options, args) = parser.parse_args()
 
+  # TODO(csharp): Remove after next try server restart
+  # The data_dir use to be called the data_dest_dir, so remap it if it exists
+  if options.data_dest_dir:
+    options.data_dir = options.data_dest_dir
+
   if args:
     parser.error('Unknown args, ' + args)
 
