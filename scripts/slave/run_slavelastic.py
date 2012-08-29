@@ -221,6 +221,9 @@ def main():
                     'This must be listed once for each -n.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Print verbose logging')
+  # TODO(csharp): Remove after the next try server restart.
+  parser.add_option('--hashtable-dir', help='Unused.')
+  parser.add_option('--data-dest-dir', help='Unused.')
   (options, args) = parser.parse_args()
 
   if args:
