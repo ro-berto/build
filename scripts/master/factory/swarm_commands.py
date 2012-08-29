@@ -15,9 +15,8 @@ from master.log_parser import gtest_command
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
 
-  def AddTriggerSwarmTestStep(self, target_platform, swarm_server, data_server,
-                              hashtable_dir, data_dest_dir, manifest_directory,
-                              tests):
+  def AddTriggerSwarmTestStep(self, target_platform, swarm_server, data_dir,
+                              manifest_directory, tests):
     script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
@@ -25,9 +24,7 @@ class SwarmCommands(commands.FactoryCommands):
                                                'buildnumber:-None')
 
     command = [self._python, script_path, '-o', target_platform,
-               '-u', swarm_server, '-d', data_server,
-               '--hashtable-dir', hashtable_dir,
-               '--data-dest-dir', data_dest_dir,
+               '-u', swarm_server, '-d', data_dir,
                '-t', swarm_request_name_prefix]
 
     # Add the tests to run, along with the minimum and maximum number of

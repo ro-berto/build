@@ -20,23 +20,21 @@ class SwarmTest(object):
     self.shards = shards
 
 
-def SetupSwarmTests(machine, data_dest_dir, data_server, options=None,
-                    project=None, network_path=None, extra_gyp_defines='',
-                    ninja=False):
+def SetupSwarmTests(machine, data_dir, options=None, project=None,
+                    network_path=None, extra_gyp_defines='', ninja=False):
   """This is a swarm builder."""
   factory_properties = {
     'gclient_env' : {
       'GYP_DEFINES': (
         'test_isolation_mode=hashtable '
-        'test_isolation_outdir=' + data_dest_dir +
+        'test_isolation_outdir=' + data_dir +
         ' ' + extra_gyp_defines +
         ' disable_nacl=1'
         ' fastbuild=1'
       ),
       'GYP_MSVS_VERSION': '2010',
     },
-    'data_server': data_server,
-    'data_dest_dir': data_dest_dir,
+    'data_dir': data_dir,
     'swarm_server': config.Master.swarm_server_internal_url
   }
   if ninja:
@@ -79,9 +77,9 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                                      self._target_platform)
 
     # Ensure the network drive is mapped on windows.
-    data_dest_dir = factory_properties.get('data_dest_dir')
+    data_dir = factory_properties.get('data_dir')
     if self._target_platform == 'win32':
-      swarm_command_obj.SetupWinNetworkDrive(data_dest_dir[:2], network_path)
+      swarm_command_obj.SetupWinNetworkDrive(data_dir[:2], network_path)
 
     # Now add the compile step.
     swarm_command_obj.AddCompileStep(
@@ -95,10 +93,6 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     swarm_server = factory_properties.get('swarm_server',
                                           'http://localhost:9001')
     swarm_server = swarm_server.rstrip('/')
-
-    data_server = factory_properties.get('data_server',
-                                         'http://localhost:8080')
-    data_server = data_server.rstrip('/')
 
     ninja = '--build-tool=ninja' in (options or [])
 
@@ -115,13 +109,9 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
       # Send of all the test requests as a single step.
       manifest_directory = swarm_command_obj.PathJoin('src', out_dir, target)
-      hashtable_directory = swarm_command_obj.PathJoin('src', out_dir, target,
-                                                       'hashtable')
       swarm_command_obj.AddTriggerSwarmTestStep(self._target_platform,
             swarm_server,
-            data_server,
-            hashtable_directory,
-            data_dest_dir,
+            data_dir,
             manifest_directory,
             tests)
 

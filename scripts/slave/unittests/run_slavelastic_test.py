@@ -22,14 +22,12 @@ ENV_VARS = {'GTEST_TOTAL_SHARDS': '%(num_instances)s',
 class Options(object):
   def __init__(self, working_dir="swarm_tests", shards=1,
                os_image='win32', swarm_url='http://localhost:8080',
-               data_url='http://www.google.com/data',
-               data_dest_dir='temp_data', test_name_prefix='pr-'):
+               data_dir='temp_data_dir', test_name_prefix='pr-'):
     self.working_dir = working_dir
     self.shards = shards
     self.os_image = os_image
     self.swarm_url = swarm_url
-    self.data_url = data_url
-    self.data_dest_dir = data_dest_dir
+    self.data_dir = data_dir
     self.test_name_prefix = test_name_prefix
 
 
@@ -43,13 +41,13 @@ def GenerateExpectedJSON(options):
 
   expected = {
     'test_case_name': TEST_NAME,
-    'data': [options.data_url + '/' + TEST_NAME + '.zip'],
+    'data': ['file://' + options.data_dir + '/' + TEST_NAME + '.zip'],
     'tests' : [
       {
         'action': [
           'python', 'src/tools/isolate/run_test_from_archive.py',
           '--hash', FILE_NAME,
-          '--remote', options.data_url,
+          '--remote', options.data_dir,
           '-v'
         ],
         'test_name': 'Run Test',

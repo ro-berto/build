@@ -10,7 +10,6 @@ import json
 import optparse
 import os
 import socket
-import stat
 import sys
 import time
 import urllib
@@ -59,14 +58,12 @@ class Manifest(object):
     self.manifest_hash = manifest_hash
     self.shards = shards
 
-    # Random name for the output zip file
-    self.zipfile_name = test_name + '.zip'
+    self.zipfile_fullpath = os.path.join(switches.data_dir, test_name + '.zip')
     self.tasks = []
     self.target_platform = platform_mapping[switches.os_image]
     self.working_dir = switches.working_dir
     self.test_name = test_name
-    self.data_url = switches.data_url
-    self.data_dest_dir = switches.data_dest_dir
+    self.data_dir = switches.data_dir
 
   def add_task(self, task_name, actions, time_out=600):
     """Appends a new task to the swarm manifest file."""
@@ -79,10 +76,9 @@ class Manifest(object):
   def zip(self):
     """Zip up all the files necessary to run a shard."""
     start_time = time.time()
-    zipfile_name = os.path.join(self.data_dest_dir, self.zipfile_name)
 
     try:
-      zip_file = zipfile.ZipFile(zipfile_name, 'w')
+      zip_file = zipfile.ZipFile(self.zipfile_fullpath, 'w')
     except IOError as e:
       print 'Error creating zip files %s' % str(e)
       return False
@@ -96,11 +92,6 @@ class Manifest(object):
 
     zip_file.close()
 
-    # TODO(csharp): remove once the linux try bot is the server
-    # Ensure the files are readable by the server that is serving them.
-    if self.target_platform == 'Mac':
-      os.chmod(zipfile_name, stat.S_IREAD | stat.S_IWRITE | stat.S_IROTH)
-
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
     return True
 
@@ -109,7 +100,7 @@ class Manifest(object):
     self.add_task(
         'Run Test',
         ['python', self.RUN_TEST_PATH, '--hash', self.manifest_hash,
-         '--remote', self.data_url, '-v'])
+         '--remote', self.data_dir, '-v'])
 
     # Clean up
     self.add_task('Clean Up', ['python', CLEANUP_SCRIPT_NAME])
@@ -120,17 +111,21 @@ class Manifest(object):
           ['python', WINDOWS_SCRIPT_NAME,
            '--handle_exe', HANDLE_EXE])
 
+    # This separation of vlans isn't required anymore, but it is
+    # still a useful separation to keep.
+    hostname = socket.gethostname().lower().split('.', 1)[0]
     vlan = ''
-    if '-m1' in self.data_url:
+    if hostname.endswith('-m1'):
       vlan = 'm1'
-    elif '-m4' in self.data_url:
+    elif hostname.endswith('m4'):
       vlan = 'm4'
 
     # Construct test case
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        urllib.quote(self.data_url + '/' + self.zipfile_name, ':/'),
+        urllib.quote('file://' + self.zipfile_fullpath.replace(os.sep, '/'),
+                     ':/'),
       ],
       'tests': self.tasks,
       'env_vars': {
@@ -212,16 +207,9 @@ def main():
   parser.add_option('-u', '--swarm-url', default='http://localhost:8080',
                     help='Specify the url of the Swarm server. '
                     'Defaults to %default')
-  parser.add_option('-d', '--data-url', default=('http://%s/' %
-                      socket.gethostbyname(socket.gethostname())),
-                    help='The url where the test data can be retrieved from. '
-                    'Defaults to %default')
-  parser.add_option('--hashtable-dir',
-                    help='The path to the hashtable directory storing the test '
-                    'data')
-  parser.add_option('--data-dest-dir',
-                    help='The directory where all the test data needs to be'
-                    'placed to get served to the swarm bots')
+  parser.add_option('-d', '--data-dir',
+                    help='The directory where all the test data is stored.'
+                    'This should path must be valid for all the swarm bots')
   parser.add_option('-t', '--test-name-prefix', default='',
                     help='Specify the prefix to give the swarm test request. '
                     'Defaults to %default')
@@ -240,10 +228,8 @@ def main():
 
   if not options.os_image:
     parser.error('Must specify an os image')
-  if not options.hashtable_dir:
-    parser.error('Must specify the hashtable directory')
-  if not options.data_dest_dir:
-    parser.error('Must specify the server directory')
+  if not options.data_dir:
+    parser.error('Must specify the data directory')
 
   if len(options.manifest_name) != len(options.shards):
     parser.error('Number of min shards given doesn\'t match the number '
