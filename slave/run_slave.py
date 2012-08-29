@@ -156,10 +156,12 @@ def HotPatchSlaveBuilder():
   try:
     # buildbot 0.7.12
     from buildbot.slave.bot import Bot, SlaveBuilder
+    RemoteShutdownClass = SlaveBuilder
   except ImportError:
     # buildbot 0.8.x
     from buildslave.bot import Bot, SlaveBuilder
-  old_remote_shutdown = SlaveBuilder.remote_shutdown
+    RemoteShutdownClass = Bot
+  old_remote_shutdown = RemoteShutdownClass.remote_shutdown
 
   def rebooting_remote_shutdown(self):
     """Set a reboot flag and stop the reactor so when the slave exits we reboot.
@@ -180,7 +182,7 @@ def HotPatchSlaveBuilder():
     needs_reboot = True
     old_remote_shutdown(self)
 
-  SlaveBuilder.remote_shutdown = rebooting_remote_shutdown
+  RemoteShutdownClass.remote_shutdown = rebooting_remote_shutdown
 
   Bot.old_remote_setBuilderList = Bot.remote_setBuilderList
   def cleanup(self, wanted):
