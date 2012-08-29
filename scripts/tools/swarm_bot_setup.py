@@ -27,21 +27,38 @@ def BuildSFTPCommand(user, host, command_file):
 
 
 def BuildSSHCommand(user, host, platform):
-  ssh = ['ssh', '-o ConnectTimeout=5']
+  ssh = ['ssh', '-o ConnectTimeout=5', '-t']
   identity = [user + '@' + host]
 
   bot_setup_commands = []
 
   if platform == 'win':
+    bot_setup_commands.append('cd c:\\swarm\\')
+  else:
+    bot_setup_commands.append('cd $HOME/swarm')
+  bot_setup_commands.append('&&')
+
+  if '-m1' in host:
+    network_drive = 'fas2-110'
+  elif '-m4' in host:
+    network_drive = 'fas2-140'
+
+  if platform == 'win':
+    bot_setup_commands.append(
+        'call swarm_windows_network_setup.bat %s %s' % ('Z:', network_drive))
+  else:
+    bot_setup_commands.append(
+        'sudo ./swarm_network_setup.sh %s' % network_drive)
+  bot_setup_commands.append('&&')
+
+  if platform == 'win':
+    # The path needs to be reset.
     bot_setup_commands.extend([
-        'cd c:\\swarm\\'
+        'cd c:\\swarm\\',
         '&&',
         'call swarm_bot_setup.bat'])
   else:
-    bot_setup_commands.extend([
-        'cd $HOME/swarm',
-        '&&',
-        './swarm_bot_setup.sh'])
+    bot_setup_commands.append('./swarm_bot_setup.sh')
 
   # On windows the command must be executed by cmd.exe
   if platform == 'win':
