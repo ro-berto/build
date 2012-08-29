@@ -584,14 +584,14 @@ class FactoryCommands(object):
     # TODO(rogerta): for now using an empty string for email address, so
     # that apply_issue does not prompt for an email address and password.
     # Eventually we may want to have the buildbot authenticate with some
-    # @chromium.org account.  Use the form -e= instead of -e '' since windows
-    # bots don't like the latter.
+    # @chromium.org account.  Use the form --email= instead of -e '' since
+    # windows bots don't like the latter.
     cmd = [
         'apply_issue.py',
         '-r', WithProperties('%(root:-)s'),
         '-i', WithProperties('%(issue:-)s'),
         '-p', WithProperties('%(patchset:-)s'),
-        '-e=',
+        '--email=',
     ]
     self._factory.addStep(
         shell.ShellCommand,
