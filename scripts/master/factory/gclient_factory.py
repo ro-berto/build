@@ -328,7 +328,7 @@ class GClientFactory(object):
         primary_repo=primary_repo,
         gclient_jobs=gclient_jobs)
 
-    if slave_type == 'Trybot':
+    if slave_type in ('AnnotatedTrybot', 'Trybot'):
       factory_cmd_obj.AddApplyIssueStep()
 
     if not self._nohooks_on_update:
