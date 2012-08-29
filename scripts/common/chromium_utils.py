@@ -271,18 +271,13 @@ def RemoveDirectory(*path):
   if not os.path.exists(file_path):
     return
 
-  def RemoveWithRetry_win(rmfunc, path):
-    os.chmod(path, stat.S_IWRITE)
-    if win32_api_avail:
-      win32api.SetFileAttributes(path, win32con.FILE_ATTRIBUTE_NORMAL)
-    try:
-      return rmfunc(path)
-    except EnvironmentError, e:
-      if e.errno != errno.EACCES:
-        raise
-      print 'Failed to delete %s: trying again' % repr(path)
-      time.sleep(0.1)
-      return rmfunc(path)
+  if sys.platform == 'win32':
+    # Give up and use cmd.exe's rd command.
+    for _ in xrange(3):
+      if not subprocess.call(['cmd.exe', '/c', 'rd', '/q', '/s', file_path]):
+        break
+      time.sleep(3)
+    return
 
   def RemoveWithRetry_non_win(rmfunc, path):
     if os.path.islink(path):
@@ -290,19 +285,7 @@ def RemoveDirectory(*path):
     else:
       return rmfunc(path)
 
-  win32_api_avail = False
-  remove_with_retry = None
-  if sys.platform.startswith('win'):
-    # Some people don't have the APIs installed. In that case we'll do without.
-    try:
-      win32api = __import__('win32api')
-      win32con = __import__('win32con')
-      win32_api_avail = True
-    except ImportError:
-      pass
-    remove_with_retry = RemoveWithRetry_win
-  else:
-    remove_with_retry = RemoveWithRetry_non_win
+  remove_with_retry = RemoveWithRetry_non_win
 
   def RmTreeOnError(function, path, excinfo):
     """This works around a problem whereby python 2.x on Windows has no ability
