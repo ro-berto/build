@@ -79,6 +79,10 @@ no-new-builds:
 log:
 	tail -F twistd.log
 
+exceptions:
+	# Searches for exception in the last 11 log files.
+	grep -A 10 "exception caught here" twistd.log twistd.log.?
+
 wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
