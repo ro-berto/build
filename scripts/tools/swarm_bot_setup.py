@@ -44,6 +44,7 @@ def BuildSSHCommand(user, host, platform):
     network_drive = 'fas2-140'
 
   if platform == 'win':
+    network_drive = '\\\\' + network_drive + '\\swarm_data'
     bot_setup_commands.append(
         'call swarm_windows_network_setup.bat %s %s' % ('Z:', network_drive))
   else:

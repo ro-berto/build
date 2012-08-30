@@ -7,4 +7,4 @@
 
 echo Setting up Network Drive on Startup...
 cd c:\Users\chrome-bot\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-echo @net use %0 %1 > setup_swarm_network_drive.bat
+echo @net use %1 %2 > setup_swarm_network_drive.bat
