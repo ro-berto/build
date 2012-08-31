@@ -120,11 +120,15 @@ class Manifest(object):
     elif hostname.endswith('m4'):
       vlan = 'm4'
 
+    data_scheme = 'file://'
+    if self.target_platform == 'Windows':
+      data_scheme += '/'
+
     # Construct test case
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        urllib.quote('file://' + self.zipfile_fullpath.replace(os.sep, '/'),
+        urllib.quote(data_scheme + self.zipfile_fullpath.replace(os.sep, '/'),
                      ':/'),
       ],
       'tests': self.tasks,

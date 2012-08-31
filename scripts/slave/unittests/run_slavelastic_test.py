@@ -39,9 +39,13 @@ def GenerateExpectedJSON(options):
     'win32': 'Windows'
   }
 
+  data_scheme = 'file://'
+  if options.os_image == 'win32':
+    data_scheme += '/'
+
   expected = {
     'test_case_name': TEST_NAME,
-    'data': ['file://' + options.data_dir + '/' + TEST_NAME + '.zip'],
+    'data': [data_scheme + options.data_dir + '/' + TEST_NAME + '.zip'],
     'tests' : [
       {
         'action': [
