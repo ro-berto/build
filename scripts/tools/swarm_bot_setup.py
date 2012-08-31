@@ -48,8 +48,11 @@ def BuildSSHCommand(user, host, platform):
     bot_setup_commands.append(
         'call swarm_windows_network_setup.bat %s %s' % ('Z:', network_drive))
   else:
+    mount_program = 'mount'
+    if platform == 'mac':
+      mount_program = '/sbin/' + mount_program
     bot_setup_commands.append(
-        'sudo ./swarm_network_setup.sh %s' % network_drive)
+        'sudo ./swarm_network_setup.sh %s %s' % (mount_program, network_drive))
   bot_setup_commands.append('&&')
 
   if platform == 'win':

@@ -5,12 +5,12 @@
 
 # Setup this mac machine to access the swarm network storage. This script must
 # be run as root.
-MAILTO=csharp@google.com
-MOUNT_COMMAND="mount "$1":/vol/swarm_data /mnt/swarm_data"
+MOUNT_COMMAND=$1" "$2":/vol/swarm_data /mnt/swarm_data"
 
 echo Adding Root Crontab to Mount Network Drive...
 mkdir -p /mnt/swarm_data
-echo "@reboot /bin/sleep 60 && "$MOUNT_COMMAND > mycron
+echo "MAILTO=csharp@google.com" > mycron
+echo "@reboot /bin/sleep 60 && "$MOUNT_COMMAND >> mycron
 crontab -r
 crontab mycron
 rm mycron
