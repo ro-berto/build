@@ -3,6 +3,7 @@
 .code_review_password
 .manhole
 .status_password
+.try_job_rietveld_password
 changes.pck
 changes.pck.old
 dropin.cache
@@ -975,6 +976,7 @@ twistd.pid
 /masters/master.tryserver.chromium/linux_redux
 /masters/master.tryserver.chromium/linux_rel
 /masters/master.tryserver.chromium/linux_rel_alt
+/masters/master.tryserver.chromium/linux_rel_naclmore/
 /masters/master.tryserver.chromium/linux_rel_precise/
 /masters/master.tryserver.chromium/linux_shared
 /masters/master.tryserver.chromium/linux_swarm/
@@ -996,13 +998,11 @@ twistd.pid
 /masters/master.tryserver.chromium/mac_no_goma
 /masters/master.tryserver.chromium/mac_perf/
 /masters/master.tryserver.chromium/mac_rel
+/masters/master.tryserver.chromium/mac_rel_naclmore/
 /masters/master.tryserver.chromium/mac_rel_vm
 /masters/master.tryserver.chromium/mac_swarm/
 /masters/master.tryserver.chromium/mac_sync
 /masters/master.tryserver.chromium/mac_valgrind
-/masters/master.tryserver.chromium/public_html/bg_gradient.jpg
-/masters/master.tryserver.chromium/public_html/default.css
-/masters/master.tryserver.chromium/public_html/robots.txt
 /masters/master.tryserver.chromium/templates
 /masters/master.tryserver.chromium/win
 /masters/master.tryserver.chromium/win_ash
@@ -1016,6 +1016,7 @@ twistd.pid
 /masters/master.tryserver.chromium/win_perf/
 /masters/master.tryserver.chromium/win_rel
 /masters/master.tryserver.chromium/win_rel_alt
+/masters/master.tryserver.chromium/win_rel_naclmore/
 /masters/master.tryserver.chromium/win_shared
 /masters/master.tryserver.chromium/win_swarm/
 /masters/master.tryserver.chromium/win_sync
@@ -1171,6 +1172,7 @@ twistd.pid
 /slave/ASAN_Builder
 /slave/Linux_x64
 /slave/android
+/slave/android_test/
 /slave/chromium-linux-experimental
 /slave/chromium-linux-swarm-1
 /slave/chromium-mac-experimental
