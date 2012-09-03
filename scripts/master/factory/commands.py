@@ -588,7 +588,7 @@ class FactoryCommands(object):
     # windows bots don't like the latter.
     cmd = [
         self._python,
-        'apply_issue.py',
+        self.PathJoin('..', '..', '..', '..', 'depot_tools', 'apply_issue.py'),
         '-r', WithProperties('%(root:-)s'),
         '-i', WithProperties('%(issue:-)s'),
         '-p', WithProperties('%(patchset:-)s'),
