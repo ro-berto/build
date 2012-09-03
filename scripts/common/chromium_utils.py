@@ -273,6 +273,7 @@ def RemoveDirectory(*path):
 
   if sys.platform == 'win32':
     # Give up and use cmd.exe's rd command.
+    file_path = os.path.normcase(file_path)
     for _ in xrange(3):
       if not subprocess.call(['cmd.exe', '/c', 'rd', '/q', '/s', file_path]):
         break
