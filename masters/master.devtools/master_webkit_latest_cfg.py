@@ -30,7 +30,7 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
     tests=['devtools_perf'],
-    options=['--compiler=goma', 'DumpRenderTree'],
+    options=['--compiler=goma', 'DumpRenderTree', 'pyautolib', 'chromedriver'],
     factory_properties={
       'perf_id': 'chromium-devtools-perf',
       'show_perf_results': True,

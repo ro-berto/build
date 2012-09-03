@@ -1024,6 +1024,12 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
+    cmd = [self._python,
+           os.path.join('src', 'chrome', 'test', 'functional',
+                        'devtools_native_memory_snapshot.py')]
+    self.AddTestStep(c, 'DevTools.NativeMemorySnapshot', cmd,
+                     do_step_if=self.TestStepFilter)
+
   def AddWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
     cmd = [self._python, self._lint_test_files_tool,
