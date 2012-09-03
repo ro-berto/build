@@ -587,6 +587,7 @@ class FactoryCommands(object):
     # @chromium.org account.  Use the form --email= instead of -e '' since
     # windows bots don't like the latter.
     cmd = [
+        self._python,
         'apply_issue.py',
         '-r', WithProperties('%(root:-)s'),
         '-i', WithProperties('%(issue:-)s'),
