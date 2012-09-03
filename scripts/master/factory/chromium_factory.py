@@ -202,6 +202,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     PYAUTO_DEPS.append(('src/data/page_cycler',
                         config.Master.trunk_internal_url +
                         '/data/page_cycler'))
+    CUSTOM_DEPS_DEVTOOLS_PERF.append(('src/data/devtools_test_pages',
+                                      config.Master.trunk_internal_url +
+                                      '/data/devtools_test_pages'))
 
   CHROMEBOT_DEPS = [
     ('src/tools/chromebot',
