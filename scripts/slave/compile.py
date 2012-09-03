@@ -988,6 +988,17 @@ def main_win(options, args):
   #
   # ...\browser\history\download_create_info.cc : fatal error C1033: cannot open
   #   program database '...\src\build\debug\obj\browser\browser\vc80_ib_2.idb'
+  #
+  # ---
+  #
+  # --------------------Build System Error (Agent 'Ib1 (CPU 1)')----------------
+  # Fatalerror:
+  #     Failed to execute command: extension_function_registry (ID 1591)
+  #     Failed to update directory: E:\b\build\slave\win\build\src\build\Release
+  #     File table management has failed.
+  #     Shared stream group lock abandoned, marking as corrupt
+  #     --------
+  #     Unable to complete operation (retried 10 times): cl: foo.cc -> foo.obj
 
   known_toolset_bugs = [
     '\\c2.dll',
@@ -996,6 +1007,7 @@ def main_win(options, args):
     'fatal error LNK1318: Unexpected PDB error',
     'fatal error LNK1000: Internal error during IMAGE::Pass2',
     'fatal error C1033',
+    'Build System Error',
   ]
   def scan(line):
     for known_line in known_toolset_bugs:
