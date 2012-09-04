@@ -11,6 +11,7 @@ import urlparse
 
 from buildbot.changes import base
 from buildbot.schedulers.trysched import BadJobfile
+from buildbot.status.builder import EXCEPTION
 from twisted.application import internet
 from twisted.internet import defer
 from twisted.python import log
@@ -87,6 +88,7 @@ class _ValidUserPoller(internet.TimerService):
     """
     emails = (email.strip() for email in data.splitlines())
     self._users = frozenset(email for email in emails if email)
+    log.msg('Found %d users' % len(self._users))
 
 
 class _RietveldPoller(base.PollingChangeSource):
@@ -158,7 +160,7 @@ class _RietveldPoller(base.PollingChangeSource):
     """
     data = json.loads(json_string)
     self._cursor = str(data['cursor'])
-    self._try_job_rietveld.SubmitJobs(data['jobs'])
+    return self._try_job_rietveld.SubmitJobs(data['jobs'])
 
 
 class TryJobRietveld(TryJobBase):
@@ -206,6 +208,7 @@ class TryJobRietveld(TryJobBase):
     return urlparse.urljoin(code_review_sites[project],
                             'get_pending_try_patchsets?limit=100')
 
+  @defer.deferredGenerator
   def SubmitJobs(self, jobs):
     """Submit pending try jobs to slaves for building.
 
@@ -214,38 +217,80 @@ class TryJobRietveld(TryJobBase):
           what to build.
     """
     log.msg('TryJobRietveld.SubmitJobs: %s' % json.dumps(jobs, indent=2))
-
-    exceptions = []
     for job in jobs:
-      if not self._valid_users.contains(job['email']):
-        log.msg('TryJobRietveld rejecting job from %s' % job['email'])
-        continue
-
-      # Add some required properties that that not retrieved from Rietveld.
-      job['project'] = [self._project]
-      job['try_job_key'] = job['key']
-
-      # Transform some properties as is expected by parse_options().
-      job['name'] = [job['name']]
-      job['user'] = [job['user']]
-      job['email'] = [job['email']]
-      job['root'] = [job['root']]
-      job['reason'] = [job['reason']]
-      job['clobber'] = [job['clobber']]
-      job['patchset'] = [job['patchset']]
-      job['issue'] = [job['issue']]
-      job['bot'] = {job['builder']: job['tests']}
-
-      # Now cleanup the job dictionary and submit it.
-      cleaned_job = self.parse_options(job)
-
       try:
-        self.SubmitJob(cleaned_job, None)
-      except BadJobfile, ex:
-        exceptions.append(ex)
+        # Gate the try job on the user that requested the job, not the one that
+        # authored the CL.
 
-    for ex in exceptions:
-      log.msg(ex)
+        requester = job['requester']
+        if requester == "None":
+          # TODO(maruel): Remove me once no stale try jobs are left.
+          requester = job['email']
+
+        if not self._valid_users.contains(requester):
+          raise BadJobfile(
+              'TryJobRietveld rejecting job from %s' % job['requester'])
+
+        emails = set([requester, job['email']])
+        # Discard the CQ if present, no need to spam it.
+        emails.discard('commit-bot@chromium.org')
+        options = {
+            'bot': {job['builder']: job['tests']},
+            'email': list(emails),
+            'project': [self._project],
+            'try_job_key': job['key'],
+        }
+        # Transform some properties as is expected by parse_options().
+        for key in (
+            'name', 'user', 'root', 'reason', 'clobber', 'patchset', 'issue',
+            'revision'):
+          options[key] = [job[key]]
+
+        # Now cleanup the job dictionary and submit it.
+        cleaned_job = self.parse_options(options)
+
+        wfd = defer.waitForDeferred(self.master.addChange(
+            author=','.join(cleaned_job['email']),
+            # TODO(maruel): Get patchset properties to get the list of files.
+            # files=[],
+            revision=cleaned_job['revision'] or 'HEAD',
+            comments=''))
+        yield wfd
+        changeids = [wfd.getResult().number]
+
+        wfd = defer.waitForDeferred(self.SubmitJob(cleaned_job, changeids))
+        yield wfd
+        wfd.getResult()
+      except BadJobfile, e:
+        # We need to mark it as failed otherwise it'll stay in the pending
+        # state. Simulate a buildFinished event on the build.
+        if not job.get('key'):
+          log.err(
+              'Got %s for issue %s but not key, not updating Rietveld' %
+              (e, job.get('issue')))
+          continue
+        log.err(
+            'Got %s for issue %s, updating Rietveld' % (e, job.get('issue')))
+        for service in self.master.services:
+          if service.__class__.__name__ == 'TryServerHttpStatusPush':
+            build = {
+              'properties': [
+                ('buildername', job.get('builder'), None),
+                ('buildnumber', -1, None),
+                ('issue', job['issue'], None),
+                ('patchset', job['patchset'], None),
+                ('project', self._project, None),
+                ('revision', '', None),
+                ('slavename', '', None),
+                ('try_job_key', job['key'], None),
+              ],
+              'reason': job.get('reason', ''),
+              # Use EXCEPTION until SKIPPED results in a non-green try job
+              # results on Rietveld.
+              'results': EXCEPTION,
+            }
+            service.push('buildFinished', build=build)
+            break
 
   # TryJobBase overrides:
   def setServiceParent(self, parent):

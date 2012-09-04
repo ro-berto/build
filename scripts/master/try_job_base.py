@@ -192,8 +192,9 @@ def parse_options(options, builders, pools):
     # Manages bot selection and test filtering. It is preferable to use
     # multiple bot=unit_tests:Gtest.Filter lines. DEFAULT_TESTS is a marker to
     # specify that the default tests should be run for this builder.
-    options['bot'] = dict_comma(
-        options.get('bot', []), builders, DEFAULT_TESTS)
+    if not isinstance(options.get('bot'), dict):
+      options['bot'] = dict_comma(
+          options.get('bot', []), builders, DEFAULT_TESTS)
     if not options['bot'] and pools:
       options['bot'] = pools.Select(None, options['project'])
     if not options['bot']:
