@@ -437,13 +437,14 @@ class FactoryCommands(object):
     if test_tool_arg_list:
       cmd.extend(test_tool_arg_list)
 
+    cmd.extend(['--test-type', test_name])
+
     if generate_json:
       # test_result_dir (-o) specifies where we put the JSON output locally
       # on slaves.
       test_result_dir = 'gtest-results/%s' % test_name
       cmd.extend(['--generate-json-file',
                   '-o', test_result_dir,
-                  '--test-type', test_name,
                   '--build-number', WithProperties('%(buildnumber)s'),
                   '--builder-name', WithProperties('%(buildername)s')])
 
