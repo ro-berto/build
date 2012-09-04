@@ -7,6 +7,7 @@
     It can be sent to other machines for testing.
 """
 
+import csv
 import glob
 import optparse
 import os
@@ -245,8 +246,11 @@ class PathMatcher(object):
   """Generates a matcher which can be used to filter file paths."""
 
   def __init__(self, options):
-    self.inclusions = [f.strip() for f in options.include_files.split(',')]
-    self.exclusions = options.exclude_files.split(',') + FileExclusions()
+    def CommaStrParser(val):
+      return [f.strip() for f in csv.reader([val]).next()]
+    self.inclusions = CommaStrParser(options.include_files)
+    self.exclusions = CommaStrParser(options.exclude_files) + FileExclusions()
+
     self.regex_whitelist = FileRegexWhitelist(options)
     self.regex_blacklist = FileRegexBlacklist(options)
 
