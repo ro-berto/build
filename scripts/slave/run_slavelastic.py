@@ -225,15 +225,7 @@ def main():
                     'This must be listed once for each -n.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Print verbose logging')
-  # TODO(csharp): Remove after the next try server restart.
-  parser.add_option('--hashtable-dir', help='Unused.')
-  parser.add_option('--data-dest-dir', help='Unused.')
   (options, args) = parser.parse_args()
-
-  # TODO(csharp): Remove after next try server restart
-  # The data_dir use to be called the data_dest_dir, so remap it if it exists
-  if options.data_dest_dir:
-    options.data_dir = options.data_dest_dir
 
   if args:
     parser.error('Unknown args, ' + args)
@@ -248,7 +240,7 @@ def main():
                  'of manifests')
 
   # Remove the old data from this builder if there is any.
-  if os.path.isdir(options.data_dest_dir):
+  if os.path.isdir(options.data_dir):
     print 'Removing old swarm files...'
 
     # We want to extract and use the name of the builder from the test name
@@ -256,7 +248,7 @@ def main():
     # different for older zip files (so they would fail to match the
     # expression).
     builder_name = options.test_name_prefix.split('-')[0]
-    for filename in glob.glob(os.path.join(options.data_dest_dir,
+    for filename in glob.glob(os.path.join(options.data_dir,
                                            builder_name + '*.zip')):
       os.remove(filename)
 
