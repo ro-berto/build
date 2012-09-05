@@ -249,11 +249,15 @@ class TryJobRietveld(TryJobBase):
         # Now cleanup the job dictionary and submit it.
         cleaned_job = self.parse_options(options)
 
+        wfd = defer.waitForDeferred(self.get_lkgr(cleaned_job))
+        yield wfd
+        wfd.getResult()
+
         wfd = defer.waitForDeferred(self.master.addChange(
             author=','.join(cleaned_job['email']),
             # TODO(maruel): Get patchset properties to get the list of files.
             # files=[],
-            revision=cleaned_job['revision'] or 'HEAD',
+            revision=cleaned_job['revision'],
             comments=''))
         yield wfd
         changeids = [wfd.getResult().number]
