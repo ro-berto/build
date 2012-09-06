@@ -37,13 +37,13 @@ def CopyToGoogleStorage(src, dst):
   return slave_utils.GSUtilCopy(src, dst, None, 'public-read')
 
 
-def Archive(revision, build_dir, slave_name, test_name):
+def Archive(revision, build_dir, builder_name, test_name):
   """Archive the profiling data to Google Storage.
 
   Args:
     revision: the unique identifier of this run
     build_dir: the path to the build directory
-    build_name: build machine name
+    builder_name: builder name
     test_name: test name
   Returns:
     whether profiling data correctly uploaded or not
@@ -65,12 +65,12 @@ def Archive(revision, build_dir, slave_name, test_name):
     return True
 
   revision = re.sub('\W+', '_', revision)
-  slave_name = re.sub('\W+', '_', slave_name)
+  builder_name = re.sub('\W+', '_', builder_name)
   test_name = re.sub('\W+', '_', test_name)
 
   view_url = 'https://commondatastorage.googleapis.com/' + GOOGLE_STORAGE_BUCKET
   print 'See %s for this run\'s test results' % view_url
-  run_url = 'gs://%s/runs/%s/' % (GOOGLE_STORAGE_BUCKET, slave_name)
+  run_url = 'gs://%s/runs/%s/' % (GOOGLE_STORAGE_BUCKET, builder_name)
   print 'Pushing results to %s...' % run_url
 
   dest_profiling_file = run_url + test_name + '_' + revision + '_' + FILENAME
@@ -85,17 +85,17 @@ def main():
                            help='unique id for this run')
   option_parser.add_option('', '--build-dir', default=None,
                            help=('path to the build directory'))
-  option_parser.add_option('', '--slave-name', default=None,
+  option_parser.add_option('', '--builder-name', default=None,
                            help='name of the build machine')
   option_parser.add_option('', '--test-name', default=None,
                            help='name of the test')
   options = option_parser.parse_args()[0]
   if (options.revision is None or options.build_dir is None or
-      options.slave_name is None or options.test_name is None):
+      options.builder_name is None or options.test_name is None):
     print 'All command options are required. Use --help.'
     return 1
 
-  if Archive(options.revision, options.build_dir, options.slave_name,
+  if Archive(options.revision, options.build_dir, options.builder_name,
              options.test_name):
     return 0
   return 2
