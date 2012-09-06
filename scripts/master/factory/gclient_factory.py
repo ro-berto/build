@@ -173,7 +173,9 @@ class GClientFactory(object):
       script_solutions = [GClientSolution(
           factory_properties.get('slave_internal_url'),
           name="slave.DEPS",
-          custom_vars_list=[("goma_revision", "HEAD")])]
+          custom_vars_list=[("goma_linux_revision", "HEAD"),
+                            ("goma_mac_revision", "HEAD"),
+                            ("goma_win_revision", "HEAD")])]
     factory_cmd_obj.AddUpdateScriptStep(
         gclient_jobs=factory_properties.get('update_scripts_gclient_jobs'),
         solutions=script_solutions)
