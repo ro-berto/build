@@ -1024,9 +1024,10 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
-    cmd = [self._python,
-           os.path.join('src', 'chrome', 'test', 'functional',
-                        'devtools_native_memory_snapshot.py')]
+    pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
+                                  'devtools_native_memory_snapshot.py')
+    # Run through runtest.py to launch virtual x server.
+    cmd = self.GetTestCommand('/usr/bin/python', [pyauto_script])
     self.AddTestStep(c, 'DevTools.NativeMemorySnapshot', cmd,
                      do_step_if=self.TestStepFilter)
 
