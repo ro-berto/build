@@ -76,6 +76,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
       'googleurl',
       'gpu',
       'installer',
+      'interactive_ui',
       'jingle',
       'media',
       'printing',

@@ -100,6 +100,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'dbus',
       'googleurl',
       'gpu',
+      'interactive_ui',
       'jingle',
       'media',
       'net',

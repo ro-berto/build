@@ -77,6 +77,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
     'crypto',
     'googleurl',
     'gpu',
+    'interactive_ui',
     'jingle',
     'media',
     'nacl_integration',
