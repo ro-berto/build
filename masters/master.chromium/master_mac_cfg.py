@@ -24,8 +24,10 @@ def mac_tester():
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'cc_unittests',
   'content_browsertests',
   'media_unittests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 ################################################################################
@@ -73,6 +75,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
     'base',
     'browser_tests',
     'cacheinvalidation',
+    'cc_unittests',
     'content_browsertests',
     'crypto',
     'googleurl',
@@ -84,6 +87,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
     'printing',
     'remoting',
     'safe_browsing',
+    'webkit_compositor_bindings_unittests',
   ],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
@@ -182,6 +186,7 @@ F('dbg_unit_1', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'cacheinvalidation',
+    'cc_unittests',
     'content_browsertests',
     'crypto',
     'googleurl',
@@ -191,6 +196,7 @@ F('dbg_unit_1', mac_tester().ChromiumFactory(
     'printing',
     'remoting',
     'safe_browsing',
+    'webkit_compositor_bindings_unittests',
   ],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,

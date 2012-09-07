@@ -25,7 +25,9 @@ sharded_tests = [
   'base_unittests',
   'browser_tests',
   'content_browsertests',
+  'cc_unittests',
   'media_unittests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 # These are the common targets to most of the builders
@@ -33,6 +35,7 @@ linux_all_test_targets = [
   'base_unittests',
   'browser_tests',
   'cacheinvalidation_unittests',
+  'cc_unittests',
   'content_browsertests',
   'content_unittests',
   'crypto_unittests',
@@ -51,6 +54,7 @@ linux_all_test_targets = [
   'sync_unit_tests',
   'ui_unittests',
   'unit_tests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 
@@ -95,6 +99,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'base',
       'browser_tests',
       'cacheinvalidation',
+      'cc_unittests',
       'content_browsertests',
       'crypto',
       'dbus',
@@ -109,6 +114,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'safe_browsing',
       'sandbox_linux_unittests',
       'unit',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
@@ -238,6 +244,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     tests=[
       'base',
       'cacheinvalidation',
+      'cc_unittests',
       'crypto',
       'dbus',
       'googleurl',
@@ -250,6 +257,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
       'remoting',
       'safe_browsing',
       'unit',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))

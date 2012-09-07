@@ -25,7 +25,9 @@ sharded_tests = [
   'base_unittests',
   'browser_tests',
   'content_browsertests',
+  'cc_unittests',
   'media_unittests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 ################################################################################
@@ -70,6 +72,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
     tests=[
       'browser_tests',
       'cacheinvalidation',
+      'cc_unittests',
       'content_browsertests',
       'courgette',
       'crypto',
@@ -83,6 +86,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
       'remoting',
       'safe_browsing',
       'sandbox',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'process_dumps': True,
                         'sharded_tests': sharded_tests,
@@ -230,6 +234,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
     tests=[
       'base',
       'cacheinvalidation',
+      'cc_unittests',
       'check_deps',
       'courgette',
       'crypto',
@@ -242,6 +247,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
       'remoting',
       'safe_browsing',
       'unit',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'process_dumps': True,
                         'sharded_tests': sharded_tests,

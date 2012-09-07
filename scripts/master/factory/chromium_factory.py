@@ -348,6 +348,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('base_unittests', fp)
     if R('cacheinvalidation'):
       f.AddBasicGTestTestStep('cacheinvalidation_unittests', fp)
+    if R('cc_unittests'):
+      f.AddBasicGTestTestStep('cc_unittests', fp)
     if R('courgette'):
       f.AddBasicGTestTestStep('courgette_unittests', fp)
     if R('crypto'):
@@ -423,6 +425,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddInstallerTests(fp)
 
     # WebKit-related tests:
+    if R('webkit_compositor_bindings_unittests'):
+      f.AddBasicGTestTestStep('webkit_compositor_bindings_unittests', fp)
     if R('webkit_unit'):
       f.AddBasicGTestTestStep('webkit_unit_tests', fp)
     if R('webkit_lint'):
