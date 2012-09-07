@@ -551,7 +551,11 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddDromaeoTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
-    tests = ['DOMCore', 'JSLib']
+    tests = ['DOMCoreAttr', 'DOMCoreModify', 'DOMCoreQuery', 'DOMCoreTraverse',
+             'JSLibAttrJquery', 'JSLibAttrPrototype', 'JSLibEventJquery',
+             'JSLibEventPrototype', 'JSLibModifyJquery', 'JSLibModifyPrototype',
+             'JSLibStyleJquery', 'JSLibStylePrototype', 'JSLibTraverseJquery',
+             'JSLibTraversePrototype']
     for test in tests:
       cls = self.GetPerfStepClass(factory_properties,
                                   'dromaeo_%s' % test.lower(),
