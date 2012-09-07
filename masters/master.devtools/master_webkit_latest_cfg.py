@@ -25,7 +25,7 @@ factory_release = linux().ChromiumWebkitLatestFactory(
              'pyautolib',
              'chromedriver'],
     factory_properties={
-      'perf_id': 'chromium-devtools-perf-debug',
+      'perf_id': 'chromium-devtools-perf',
       'show_perf_results': True,
     }
   )
