@@ -310,8 +310,11 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
       from buildbot import manhole
     except ImportError:
       log.msg('Using manhole has an implicit dependency on Crypto.Cipher. You '
-              'need to install it manually: sudo apt-get install python-crypto '
-              'on ubuntu.')
+              'need to install it manually:\n'
+              '  sudo apt-get install python-crypto\n'
+              'on ubuntu or run:\n'
+              '  pip install --user pycrypto\n'
+              '  pip install --user pyasn1\n')
       raise
 
     # If 'port' is defined, it uses the same valid keys as the current user.
