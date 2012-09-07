@@ -35,7 +35,7 @@ S('s9_android_webkit_rel', branch='trunk', treeStableTimer=60)
 B('Android Builder', 'f_android_rel', auto_reboot=True,
   scheduler='s9_android_webkit_rel')
 F('f_android_rel', linux_android().ChromiumWebkitLatestAnnotationFactory(
-    annotation_script='src/build/android/buildbot_webkit_main.sh'))
+    annotation_script='src/build/android/buildbot/bb_webkit_latest_builder.sh'))
 
 def Update(config, active_master, c):
   return helper.Update(c)
