@@ -312,6 +312,7 @@ class GClientFactory(object):
     timeout = factory_properties.get('gclient_timeout')
 
     no_gclient_branch = factory_properties.get('no_gclient_branch', False)
+    no_gclient_revision = factory_properties.get('no_gclient_revision', False)
 
     gclient_transitive = factory_properties.get('gclient_transitive', False)
     primary_repo = factory_properties.get('primary_repo', '')
@@ -326,6 +327,7 @@ class GClientFactory(object):
         gclient_deps=gclient_deps,
         gclient_nohooks=True,
         no_gclient_branch=no_gclient_branch,
+        no_gclient_revision=no_gclient_revision,
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo,
         gclient_jobs=gclient_jobs)

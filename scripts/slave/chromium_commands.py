@@ -131,6 +131,9 @@ class GClient(sourcebase):
     If --revision is specified, don't prepend it with <branch>@.  This is
     necessary for git, where the solution name is 'src' and the branch name
     is 'master'.
+
+  ['no_gclient_revision']:
+    Do not specify the --revision argument to gclient at all.
   """
 
   # pylint complains that __init__ in GClient's parent isn't called.  This is
@@ -159,6 +162,7 @@ class GClient(sourcebase):
     self.gclient_nohooks = False
     self.was_patched = False
     self.no_gclient_branch = False
+    self.no_gclient_revision = False
     self.gclient_transitive = False
     self.delete_unversioned_trees_when_updating = True
     self.gclient_jobs = None
@@ -195,6 +199,7 @@ class GClient(sourcebase):
     self.gclient_nohooks = args.get('gclient_nohooks', False)
     self.env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     self.no_gclient_branch = args.get('no_gclient_branch')
+    self.no_gclient_revision = args.get('no_gclient_revision', False)
     self.gclient_transitive = args.get('gclient_transitive')
     self.gclient_jobs = args.get('gclient_jobs')
 
@@ -280,7 +285,7 @@ class GClient(sourcebase):
     if self.gclient_nohooks or self.patch or self.was_patched:
       command.append('--nohooks')
     # GClient accepts --revision argument of two types 'module@rev' and 'rev'.
-    if self.revision:
+    if self.revision and not self.no_gclient_revision:
       command.append('--revision')
       # Ignore non-svn part of compound revisions.
       # Used for nacl.sdk.mono waterfall.

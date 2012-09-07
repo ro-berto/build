@@ -536,6 +536,7 @@ class FactoryCommands(object):
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,
                     sudo_for_remove=False, gclient_deps=None,
                     gclient_nohooks=False, no_gclient_branch=False,
+                    no_gclient_revision=False,
                     gclient_transitive=False, primary_repo=None,
                     gclient_jobs=None):
     """Adds a step to the factory to update the workspace."""
@@ -560,6 +561,7 @@ class FactoryCommands(object):
         sudo_for_remove=sudo_for_remove,
         rm_timeout=60*15,  # The step can take a long time.
         no_gclient_branch=no_gclient_branch,
+        no_gclient_revision=no_gclient_revision,
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo)
 
