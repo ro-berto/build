@@ -19,6 +19,10 @@ from slave.bootstrap import GetActiveMaster # pylint: disable=W0611
 import config
 from slave import xvfb
 
+# These codes used to distinguish true errors from script warnings.
+ERROR_EXIT_CODE = 1
+WARNING_EXIT_CODE = 88
+
 
 # Local errors.
 class PageHeapError(Exception):

@@ -22,8 +22,6 @@ from slave import slave_utils
 
 class StagingError(Exception): pass
 
-WARNING_EXIT_CODE = 88
-
 
 def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext):
   # Build an ordered list of build numbers we have zip files for.
@@ -219,12 +217,10 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
     chromium_utils.MoveFile(versioned_file, old_file)
   shutil.copyfile(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
-  # For chromium.perf, upload the versioned file to a GS bucket.
-  if (options.build_properties.get('mastername') == 'chromium.perf' and
-      options.build_properties.get('buildername') == 'Win Builder'):
-    print 'Uploading to Google Storage...'
-    slave_utils.GSUtilCopyFile(versioned_file, 'gs://chrome-perf/',
-                               options.build_properties['buildername'])
+  build_url = options.factory_properties.get('build_url', '')
+  if build_url.startswith('gs://'):
+    if slave_utils.GSUtilCopyFile(versioned_file, build_url):
+      raise chromium_utils.ExternalError('gsutil returned non-zero status!')
   print 'Created versioned archive', versioned_file
   return (zip_base, zip_ext)
 

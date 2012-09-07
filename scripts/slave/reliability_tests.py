@@ -19,14 +19,10 @@ import sys
 import time
 import urllib2
 
+from slave import slave_utils
 
 # Method could be a function
 # pylint: disable=R0201
-
-ERROR_EXIT_CODE = 1
-# Exit code to use for warnings, to distinguish script issues from reliability
-# crashes.
-WARNING_EXIT_CODE = 88
 
 # Return codes for the staging step.  The difference between warning and
 # failure is that the reliability tests will still work in case of a warning,
@@ -525,13 +521,13 @@ def reliability_tests(options):
     regression = True
   elif total == 0:
     print '\nRELIABILITY TEST FAILURE: No results found.'
-    return WARNING_EXIT_CODE
+    return slave_utils.WARNING_EXIT_CODE
   else:
     print '\nSuccess'
 
   if regression:
     print '\nACTION NEEDED: see %s to fix regressions.' % HOWTO_LINK
-    return ERROR_EXIT_CODE
+    return slave_utils.ERROR_EXIT_CODE
 
   return 0
 

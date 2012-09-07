@@ -17,11 +17,6 @@ import urllib2
 from common import chromium_utils
 from slave import slave_utils
 
-
-# Exit code to use for warnings, to distinguish script issues.
-WARNING_EXIT_CODE = 88
-
-
 class ExtractHandler(object):
   def __init__(self, url, archive_name):
     self.url = url
@@ -88,7 +83,9 @@ def GetBuildUrl(abs_build_dir, options):
   url = options.build_url or options.factory_properties.get('build_url')
   if not url:
     url = ('http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
-           'chrome_staging/%(base_filename)s.zip')
+           'chrome_staging')
+  if url[-4:] != '.zip': # assume filename not specified
+    url = os.path.join(url, '%(base_filename)s.zip')
   url = url % replace_dict
 
   versioned_url = url.replace('.zip', version_suffix + '.zip')
@@ -152,7 +149,7 @@ def real_main(options):
       if (options.factory_properties.get('halt_on_missing_build', False) and
           'revision' in options.build_properties and
           options.build_properties['revision'] != ''):
-        return -1
+        return slave_utils.ERROR_EXIT_CODE
 
     # If the url is valid, we download the file.
     if not failure:
@@ -160,11 +157,14 @@ def real_main(options):
         failure = True
 
     # If the versioned url failed, we try to get the latest build.
-    if failure and not url.startswith('gs://'):
-      print 'Fetching latest build at %s' % base_url
-      handler.url = base_url
-      if not handler.download():
+    if failure:
+      if url.startswith('gs://'):
         continue
+      else:
+        print 'Fetching latest build at %s' % base_url
+        handler.url = base_url
+        if not handler.download():
+          continue
 
     print 'Extracting build %s to %s...' % (archive_name, abs_build_output_dir)
     try:
@@ -200,11 +200,11 @@ def real_main(options):
 
     if failure:
       # We successfully extracted the archive, but it was the generic one.
-      return WARNING_EXIT_CODE
+      return slave_utils.WARNING_EXIT_CODE
     return 0
 
   # If we get here, that means that it failed 3 times. We return a failure.
-  return 1
+  return slave_utils.ERROR_EXIT_CODE
 
 
 def main():

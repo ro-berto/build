@@ -17,6 +17,9 @@ def GetArchiveUrl(project, machine_name, builder_name, zip_os_name):
   return ('http://%s/b/build/slave/%s/chrome_staging/full-build-%s.zip' % (
               host, builder_name, zip_os_name))
 
+def GetGSUtilUrl(gs_bucket, root_folder):
+  return 'gs://%s/%s' % (gs_bucket, root_folder)
+
 class Helper(object):
   def __init__(self, defaults):
     self._defaults = defaults
