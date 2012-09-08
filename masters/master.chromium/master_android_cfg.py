@@ -18,6 +18,10 @@ def linux_android(): return chromium_factory.ChromiumFactory(
 
 defaults['category'] = '5android'
 
+chromium_android_archive = master_config.GetArchiveUrl(
+    None, None, 'Chromium_Android_Builder__dbg_', 'linux',
+    static_host='master.chromium.org:8803')
+
 #
 # Main release scheduler for src/
 #
@@ -31,11 +35,19 @@ T('android_trigger')
 #
 # Android Builder
 #
-B('Android Builder', 'dbg', 'android', 'android', notify_on_missing=True)
-F('dbg', linux_android().ChromiumAnnotationFactory(
+B('Chromium Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
+  notify_on_missing=True)
+F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_main_builder.sh',
     factory_properties={'trigger': 'android_trigger'}))
+
+B('Chromium Android Tester (dbg)', 'f_android_dbg_tests', None,
+  'android_trigger', notify_on_missing=True)
+F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
+    target='Debug',
+    annotation_script='src/build/android/buildbot/bb_main_tester.sh',
+    factory_properties={'build_url': chromium_android_archive}))
 
 
 def Update(config_arg, active_master, c):
