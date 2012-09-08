@@ -175,7 +175,7 @@ LKGR_STEPS = {
       'ui_unittests',
       'unit_tests',
     ],
-    'Chromium Android Builder (dbg)': [
+    'Android Builder (dbg)': [
       'build',
     ],
   },  # chromium
