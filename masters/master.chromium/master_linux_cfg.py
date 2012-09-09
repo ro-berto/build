@@ -42,6 +42,7 @@ linux_all_test_targets = [
   'dbus_unittests',
   'googleurl_unittests',
   'gpu_unittests',
+  'interactive_ui_tests',
   'ipc_tests',
   'jingle_unittests',
   'media_unittests',
@@ -211,9 +212,7 @@ B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', notify_on_missing=True)
 F('dbg', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=['--compiler=goma',] + linux_all_test_targets + [
-             'interactive_ui_tests',
-           ],
+    options=['--compiler=goma'] + linux_all_test_targets,
     factory_properties={'trigger': 'linux_dbg_trigger',
                         'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
 
