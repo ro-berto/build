@@ -277,6 +277,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # test running before it leaks a window or a popup (crash dialog, etc).
     if R('interactive_ui'):
       f.AddBasicGTestTestStep('interactive_ui_tests', fp)
+    if R('interactive_ui_annotated'):
+      f.AddAnnotatedGTestTestStep('interactive_ui_tests', fp)
 
     # Check for an early bail.  Do early since this may cancel other tests.
     if R('check_lkgr'):
@@ -298,85 +300,75 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('check_licenses'):
       f.AddCheckLicensesStep(fp)
 
-    # Annotated base unittests to check GTest annotator
-    if R('base_annotated'):
-      f.AddAnnotatedGTestTestStep('base_unittests', fp)
-    if R('browser_tests_annotated'):
-      f.AddAnnotatedBrowserTests(fp)
-    if R('cacheinvalidation_annotated'):
-      f.AddAnnotatedGTestTestStep('cacheinvalidation_unittests', fp)
-    if R('content_annotated'):
-      f.AddAnnotatedGTestTestStep('content_unittests', fp)
-    if R('courgette_annotated'):
-      f.AddAnnotatedGTestTestStep('courgette_unittests', fp)
-    if R('crypto_annotated'):
-      f.AddAnnotatedGTestTestStep('crypto_unittests', fp)
-    if R('googleurl_annotated'):
-      f.AddAnnotatedGTestTestStep('googleurl_unittests', fp)
-    if R('gpu_annotated'):
-      f.AddAnnotatedGTestTestStep(
-          'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
-    if R('installer_annotated'):
-      f.AddAnnotatedInstallerTests(fp)
-    if R('jingle_annotated'):
-      f.AddAnnotatedGTestTestStep('jingle_unittests', fp)
-    if R('media_annotated'):
-      f.AddAnnotatedGTestTestStep('media_unittests', fp)
-    if R('printing_annotated'):
-      f.AddAnnotatedGTestTestStep('printing_unittests', fp)
-    if R('remoting_annotated'):
-      f.AddAnnotatedGTestTestStep('remoting_unittests', fp)
-    if R('safe_browsing_annotated'):
-      f.AddAnnotatedGTestTestStep(
-          'safe_browsing_tests', fp,
-          arg_list=['--ui-test-action-max-timeout=40000'])
-    if R('sandbox_annotated'):
-      f.AddAnnotatedGTestTestStep('sbox_unittests', fp)
-      f.AddAnnotatedGTestTestStep('sbox_integration_tests', fp)
-      f.AddAnnotatedGTestTestStep('sbox_validation_tests', fp)
-    if R('content_browsertests_annotated'):
-      f.AddAnnotatedGTestTestStep('content_browsertests', fp)
-    if R('net_annotated'):
-      f.AddAnnotatedGTestTestStep('net_unittests', fp)
-    if R('unit_annotated'):
-      f.AddAnnotatedChromeUnitTests(fp)
-    if R('dbus_annotated'):
-      f.AddAnnotatedGTestTestStep('dbus_unittests', fp)
-
     # Small ("module") unit tests:
     if R('base'):
       f.AddBasicGTestTestStep('base_unittests', fp)
+    if R('base_annotated'):
+      f.AddAnnotatedGTestTestStep('base_unittests', fp)
     if R('cacheinvalidation'):
       f.AddBasicGTestTestStep('cacheinvalidation_unittests', fp)
+    if R('cacheinvalidation_annotated'):
+      f.AddAnnotatedGTestTestStep('cacheinvalidation_unittests', fp)
     if R('cc_unittests'):
       f.AddBasicGTestTestStep('cc_unittests', fp)
+    if R('cc_unittests_annotated'):
+      f.AddAnnotatedGTestTestStep('cc_unittests', fp)
     if R('courgette'):
       f.AddBasicGTestTestStep('courgette_unittests', fp)
+    if R('courgette_annotated'):
+      f.AddAnnotatedGTestTestStep('courgette_unittests', fp)
     if R('crypto'):
       f.AddBasicGTestTestStep('crypto_unittests', fp)
+    if R('crypto_annotated'):
+      f.AddAnnotatedGTestTestStep('crypto_unittests', fp)
     if R('dbus'):
       f.AddBasicGTestTestStep('dbus_unittests', fp)
+    if R('dbus_annotated'):
+      f.AddAnnotatedGTestTestStep('dbus_unittests', fp)
     if R('googleurl'):
       f.AddBasicGTestTestStep('googleurl_unittests', fp)
+    if R('googleurl_annotated'):
+      f.AddAnnotatedGTestTestStep('googleurl_unittests', fp)
     if R('gpu'):
       f.AddBasicGTestTestStep(
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
+    if R('gpu_annotated'):
+      f.AddAnnotatedGTestTestStep(
+          'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
     if R('jingle'):
       f.AddBasicGTestTestStep('jingle_unittests', fp)
+    if R('jingle_annotated'):
+      f.AddAnnotatedGTestTestStep('jingle_unittests', fp)
     if R('content'):
       f.AddBasicGTestTestStep('content_unittests', fp)
+    if R('content_annotated'):
+      f.AddAnnotatedGTestTestStep('content_unittests', fp)
     if R('media'):
       f.AddBasicGTestTestStep('media_unittests', fp)
+    if R('media_annotated'):
+      f.AddAnnotatedGTestTestStep('media_unittests', fp)
     if R('net'):
       f.AddBasicGTestTestStep('net_unittests', fp)
+    if R('net_annotated'):
+      f.AddAnnotatedGTestTestStep('net_unittests', fp)
     if R('printing'):
       f.AddBasicGTestTestStep('printing_unittests', fp)
+    if R('printing_annotated'):
+      f.AddAnnotatedGTestTestStep('printing_unittests', fp)
     if R('remoting'):
       f.AddBasicGTestTestStep('remoting_unittests', fp)
+    if R('remoting_annotated'):
+      f.AddAnnotatedGTestTestStep('remoting_unittests', fp)
     if R('test_shell'):
       f.AddBasicGTestTestStep('test_shell_tests', fp)
+    if R('test_shell_annotated'):
+      f.AddAnnotatedGTestTestStep('test_shell_tests', fp)
     if R('safe_browsing'):
       f.AddBasicGTestTestStep(
+          'safe_browsing_tests', fp,
+          arg_list=['--ui-test-action-max-timeout=40000'])
+    if R('safe_browsing_annotated'):
+      f.AddAnnotatedGTestTestStep(
           'safe_browsing_tests', fp,
           arg_list=['--ui-test-action-max-timeout=40000'])
     # Windows sandbox
@@ -384,36 +376,67 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBasicGTestTestStep('sbox_unittests', fp)
       f.AddBasicGTestTestStep('sbox_integration_tests', fp)
       f.AddBasicGTestTestStep('sbox_validation_tests', fp)
+    if R('sandbox_annotated'):
+      f.AddAnnotatedGTestTestStep('sbox_unittests', fp)
+      f.AddAnnotatedGTestTestStep('sbox_integration_tests', fp)
+      f.AddAnnotatedGTestTestStep('sbox_validation_tests', fp)
     # Linux sandbox
     if R('sandbox_linux_unittests'):
       f.AddBasicGTestTestStep('sandbox_linux_unittests', fp)
+    if R('sandbox_linux_unittests_annotated'):
+      f.AddAnnotatedGTestTestStep('sandbox_linux_unittests', fp)
     if R('ui_unittests'):
       f.AddBasicGTestTestStep('ui_unittests', fp)
+    if R('ui_unittests_annotated'):
+      f.AddAnnotatedGTestTestStep('ui_unittests', fp)
     if R('views'):
       f.AddBasicGTestTestStep('views_unittests', fp)
+    if R('views_annotated'):
+      f.AddAnnotatedGTestTestStep('views_unittests', fp)
     if R('aura'):
       f.AddBasicGTestTestStep('aura_unittests', fp)
+    if R('aura_annotated'):
+      f.AddAnnotatedGTestTestStep('aura_unittests', fp)
     if R('aura_shell') or R('ash') or R('ash_unittests'):
       f.AddBasicGTestTestStep('ash_unittests', fp)
+    if R('aura_shell_annotated') or R('ash_annotated') or R(
+        'ash_unittests_annotated'):
+      f.AddAnnotatedGTestTestStep('ash_unittests', fp)
     if R('compositor'):
       f.AddBasicGTestTestStep('compositor_unittests', fp)
+    if R('compositor_annotated'):
+      f.AddAnnotatedGTestTestStep('compositor_unittests', fp)
 
     # Medium-sized tests (unit and browser):
     if R('unit'):
       f.AddChromeUnitTests(fp)
+    if R('unit_annotated'):
+      f.AddAnnotatedChromeUnitTests(fp)
     # A snapshot of the "ChromeUnitTests" available for individual selection
     if R('unit_ipc'):
       f.AddBasicGTestTestStep('ipc_tests', fp)
+    if R('unit_ipc_annotated'):
+      f.AddAnnotatedGTestTestStep('ipc_tests', fp)
     if R('unit_sync'):
       f.AddBasicGTestTestStep('sync_unit_tests', fp)
+    if R('unit_sync_annotated'):
+      f.AddAnnotatedGTestTestStep('sync_unit_tests', fp)
     if R('unit_unit'):
       f.AddBasicGTestTestStep('unit_tests', fp)
+    if R('unit_unit_annotated'):
+      f.AddAnnotatedGTestTestStep('unit_tests', fp)
     if R('unit_sql'):
       f.AddBasicGTestTestStep('sql_unittests', fp)
+    if R('unit_sql_annotated'):
+      f.AddAnnotatedGTestTestStep('sql_unittests', fp)
     if R('browser_tests'):
       f.AddBrowserTests(fp)
+    if R('browser_tests_annotated'):
+      f.AddAnnotatedBrowserTests(fp)
     if R('content_browsertests'):
       f.AddBasicGTestTestStep('content_browsertests', fp)
+    if R('content_browsertests_annotated'):
+      f.AddAnnotatedGTestTestStep('content_browsertests', fp)
 
     # Big, UI tests:
     if R('automated_ui'):
@@ -423,12 +446,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     if R('installer'):
       f.AddInstallerTests(fp)
+    if R('installer_annotated'):
+      f.AddAnnotatedInstallerTests(fp)
 
     # WebKit-related tests:
     if R('webkit_compositor_bindings_unittests'):
       f.AddBasicGTestTestStep('webkit_compositor_bindings_unittests', fp)
+    if R('webkit_compositor_bindings_unittests_annotated'):
+      f.AddAnnotatedGTestTestStep('webkit_compositor_bindings_unittests', fp)
     if R('webkit_unit'):
       f.AddBasicGTestTestStep('webkit_unit_tests', fp)
+    if R('webkit_unit_annotated'):
+      f.AddAnnotatedGTestTestStep('webkit_unit_tests', fp)
     if R('webkit_lint'):
       f.AddWebkitLint(factory_properties=fp)
     if R('webkit'):
@@ -530,6 +559,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         f.AddBasicGTestTestStep('chrome_frame_unittests', fp)
       if R('chrome_frame_tests'):
         f.AddBasicGTestTestStep('chrome_frame_tests', fp)
+    if R('chrome_frame_annotated'):
+      # Add all major CF tests.
+      f.AddAnnotatedGTestTestStep('chrome_frame_net_tests', fp)
+      f.AddAnnotatedGTestTestStep('chrome_frame_unittests', fp)
+      f.AddAnnotatedGTestTestStep('chrome_frame_tests', fp)
+    else:
+      if R('chrome_frame_net_tests_annotated'):
+        f.AddAnnotatedGTestTestStep('chrome_frame_net_tests', fp)
+      if R('chrome_frame_unittests_annotated'):
+        f.AddAnnotatedGTestTestStep('chrome_frame_unittests', fp)
+      if R('chrome_frame_tests_annotated'):
+        f.AddAnnotatedGTestTestStep('chrome_frame_tests', fp)
 
     def S(test, prefix, add_functor):
       if test.startswith(prefix):
@@ -706,25 +747,25 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       factory_properties['gclient_env'].setdefault('GYP_MSVS_VERSION', '2010')
     tests = tests or []
 
-    if factory_properties.get("needs_valgrind"):
+    if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
-    elif factory_properties.get("needs_tsan_win"):
+    elif factory_properties.get('needs_tsan_win'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_WIN]
-    elif factory_properties.get("needs_drmemory"):
+    elif factory_properties.get('needs_drmemory'):
       if 'drmemory.DEPS' not in [s.name for s in self._solutions]:
         self._solutions.append(gclient_factory.GClientSolution(
             config.Master.trunk_url +
             '/deps/third_party/drmemory/drmemory.DEPS',
             'drmemory.DEPS'))
-    elif factory_properties.get("needs_tsan_gcc"):
+    elif factory_properties.get('needs_tsan_gcc'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
 
     if 'devtools_perf' in tests:
       self._solutions[0].custom_deps_list.extend(self.CUSTOM_DEPS_DEVTOOLS_PERF)
 
-    if factory_properties.get("safesync_url"):
-      self._solutions[0].safesync_url = factory_properties.get("safesync_url")
-    elif factory_properties.get("lkgr"):
+    if factory_properties.get('safesync_url'):
+      self._solutions[0].safesync_url = factory_properties.get('safesync_url')
+    elif factory_properties.get('lkgr'):
       self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
 
     tests_for_build = [
