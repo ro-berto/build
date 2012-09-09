@@ -441,6 +441,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Big, UI tests:
     if R('automated_ui'):
       f.AddAutomatedUiTests(fp)
+    if R('automated_ui_annotated'):
+      f.AddAnnotatedAutomatedUiTests(fp)
     if R('dom_checker'):
       f.AddDomCheckerTests()
 
@@ -527,16 +529,26 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
+    if R('sync_integration_annotated'):
+      f.AddAnnotatedSyncIntegrationTests(fp)
 
     # GPU tests:
     if R('gl_tests'):
       f.AddGLTests(fp)
+    if R('gl_tests_annotated'):
+      f.AddAnnotatedGLTests(fp)
     if R('gles2_conform_test'):
       f.AddGLES2ConformTest(fp)
+    if R('gles2_conform_test_annotated'):
+      f.AddAnnotatedGLES2ConformTest(fp)
     if R('gpu_tests'):
       f.AddGpuTests(fp)
+    if R('gpu_tests_annotated'):
+      f.AddAnnotatedGpuTests(fp)
     if R('soft_gpu_tests'):
       f.AddSoftGpuTests(fp)
+    if R('soft_gpu_tests_annotated'):
+      f.AddAnnotatedSoftGpuTests(fp)
     if R('spaceport'):
       fp['use_xvfb_on_linux'] = True
       f.AddPyAutoFunctionalTest(
@@ -584,29 +596,53 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           test, prefix, lambda test_name:
           f.AddMemoryTest(test_name, test_type, factory_properties=fp))
 
+    def A_M(test, prefix, test_type, fp):
+      return S(
+          test, 'annotated_' + prefix, lambda test_name:
+          f.AddAnnotatedMemoryTest(test_name, test_type, factory_properties=fp))
+
     # Valgrind tests:
     for test in tests[:]:
       # TODO(timurrrr): replace 'valgrind' with 'memcheck'
       #                 below and in master.chromium/master.cfg
       if M(test, 'valgrind_', 'memcheck', fp):
         continue
+      if A_M(test, 'valgrind_', 'memcheck', fp):
+        continue
       if M(test, 'tsan_gcc_', 'tsan_gcc', fp):
+        continue
+      if A_M(test, 'tsan_gcc_', 'tsan_gcc', fp):
         continue
       # Run TSan in two-stage RaceVerifier mode.
       if M(test, 'tsan_rv_', 'tsan_rv', fp):
         continue
+      if A_M(test, 'tsan_rv_', 'tsan_rv', fp):
+        continue
       if M(test, 'tsan_', 'tsan', fp):
+        continue
+      if A_M(test, 'tsan_', 'tsan', fp):
         continue
       if M(test, 'drmemory_light_', 'drmemory_light', fp):
         continue
+      if A_M(test, 'drmemory_light_', 'drmemory_light', fp):
+        continue
       if M(test, 'drmemory_full_', 'drmemory_full', fp):
         continue
+      if A_M(test, 'drmemory_full_', 'drmemory_full', fp):
+        continue
       if M(test, 'drmemory_pattern_', 'drmemory_pattern', fp):
+        continue
+      if A_M(test, 'drmemory_pattern_', 'drmemory_pattern', fp):
         continue
       if S(test, 'heapcheck_',
            lambda name: f.AddHeapcheckTest(name,
                                            timeout=1200,
                                            factory_properties=fp)):
+        continue
+      if S(test, 'annotated_heapcheck_',
+           lambda name: f.AddAnnotatedHeapcheckTest(name,
+                                                    timeout=1200,
+                                                    factory_properties=fp)):
         continue
 
     # PyAuto functional tests.
