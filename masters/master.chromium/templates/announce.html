@@ -237,6 +237,7 @@
         <table width="100%">
           <script language="javascript">
             c.chromium = '';
+            c.linux = '';
             c.chromium_chromiumos = '';
             c.memory = '';
             c.memory_fyi = '';
@@ -249,6 +250,7 @@
             c.gpu_fyi = '';
 
             c.status = '../chromium';
+            c.status_linux = '../chromium.linux';
             c.status_cros = '../chromium.chromiumos';
             c.status_memory = '../chromium.memory';
             c.status_memory_fyi = '../chromium.memory.fyi';
@@ -269,6 +271,7 @@
                      '/horizontal_one_box_per_builder';
             }
             c.bar = BarUrl('chromium')
+            c.bar_linux = BarUrl('chromium.linux');
             c.bar_memory = BarUrl('chromium.memory');
             c.bar_memory_fyi = BarUrl('chromium.memory.fyi');
             c.bar_perf = BarUrl('chromium.perf');
@@ -389,13 +392,15 @@
                       a('http://chromium-status.appspot.com', 'Tree closers')) +
                   table(
                     'width="100%"',
-                    HTMLBar(c.status, c.bar, c.chromium, 'Chromium') +
+                    tr(
+                       HTMLBaseBar(c.status, c.bar, c.chromium, 'Chromium', 'width="70%" colspan=3') +
+                       HTMLBaseBar(c.status_linux, c.bar_linux, c.linux, 'Linux', 'width="30%"')) +
                     tr(HTMLSubBar(c.status_cros, c.bar_cros, c.cros,
-                                  'ChromiumOS', '30%') +
+                                  'ChromiumOS', '40%') +
                        HTMLSubBar(c.status_chrome, c.bar_chrome, c.chrome,
-                                  'Official', '35%') +
+                                  'Official', '30%') +
                        HTMLSubBar(c.status_memory, c.bar_memory, c.memory,
-                                  'Memory', '25%')))))));
+                                  'Memory', '30%')))))));
 
             document.write(tr(
                 HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
