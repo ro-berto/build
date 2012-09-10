@@ -96,22 +96,22 @@ def Sleep(desired_sleep):
   a signal.  We expect that to happen when the shutdown we run causes the system
   to send a TERM signal to us.  When that happens, we need to ensure we go
   back to sleep for the remainder of the time that's left."""
+  actual_sleep = 0
   while True:
-    actual_sleep = 0
     sleep_length = desired_sleep - actual_sleep
     start_time = int(time.time())
     Log('Sleep: Sleeping for %s seconds' % sleep_length)
     time.sleep(sleep_length)
-    actual_sleep = int(time.time()) - start_time
+    this_sleep = int(time.time()) - start_time
     Log('Sleep: Actually slept for %s seconds' % actual_sleep)
-    if actual_sleep < 0:
-      Log('Sleep: Error, actual_sleep was %d (less than zero)' % actual_sleep)
+    if this_sleep < 0:
+      Log('Sleep: Error, this_sleep was %d (less than zero)' % actual_sleep)
       break
+    actual_sleep += this_sleep
     if actual_sleep >= desired_sleep:
       Log('Sleep: Finished sleeping, returning' % actual_sleep)
       break
-    desired_sleep -= actual_sleep
-    Log('Sleep: Awoke too early, reset sleep to %s seconds' % desired_sleep)
+    Log('Sleep: Awoke too early, sleeping again')
 
 
 def Reboot():
