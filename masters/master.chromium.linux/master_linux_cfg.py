@@ -24,7 +24,10 @@ def linux_tester():
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'content_browsertests',
+  'cc_unittests',
   'media_unittests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 # These are the common targets to most of the builders
@@ -32,11 +35,14 @@ linux_all_test_targets = [
   'base_unittests',
   'browser_tests',
   'cacheinvalidation_unittests',
+  'cc_unittests',
+  'content_browsertests',
   'content_unittests',
   'crypto_unittests',
   'dbus_unittests',
   'googleurl_unittests',
   'gpu_unittests',
+  'interactive_ui_tests',
   'ipc_tests',
   'jingle_unittests',
   'media_unittests',
@@ -44,10 +50,12 @@ linux_all_test_targets = [
   'printing_unittests',
   'remoting_unittests',
   'safe_browsing_tests',
+  'sandbox_linux_unittests',
   'sql_unittests',
   'sync_unit_tests',
   'ui_unittests',
   'unit_tests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 
@@ -57,9 +65,8 @@ linux_all_test_targets = [
 
 defaults['category'] = '4linux'
 
-rel_archive = ''
-# rel_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder x64',
-#                                           'Linux_Builder_x64', 'linux')
+rel_archive = master_config.GetArchiveUrl('ChromiumLinux', 'Linux Builder x64',
+                                          'Linux_Builder_x64', 'linux')
 #
 # Main release scheduler for src/
 #
@@ -73,7 +80,7 @@ T('linux_rel_trigger')
 #
 # Linux Rel Builder
 #
-# B('Linux Builder x64', 'rel', 'compile', 'linux_rel', notify_on_missing=True)
+B('Linux Builder x64', 'rel', 'compile', 'linux_rel', notify_on_missing=True)
 F('rel', linux().ChromiumFactory(
     slave_type='Builder',
     options=['--compiler=goma',] + linux_all_test_targets +
@@ -84,8 +91,8 @@ F('rel', linux().ChromiumFactory(
 #
 # Linux Rel testers
 #
-# B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
-#   auto_reboot=True, notify_on_missing=True)
+B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
 F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -93,23 +100,28 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'base',
       'browser_tests',
       'cacheinvalidation',
+      'cc_unittests',
+      'content_browsertests',
       'crypto',
       'dbus',
       'googleurl',
       'gpu',
+      'interactive_ui',
       'jingle',
       'media',
       'net',
       'printing',
       'remoting',
       'safe_browsing',
+      'sandbox_linux_unittests',
       'unit',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
 
-# B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
-#   notify_on_missing=True)
+B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
+  notify_on_missing=True)
 F('rel_sync', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -129,6 +141,7 @@ linux_aura_tests = [
   #'browser_tests',
   'cacheinvalidation',
   'compositor',
+  #'content_browsertests',
   'crypto',
   'googleurl',
   'gpu',
@@ -148,6 +161,7 @@ linux_aura_options=[
   'browser_tests',
   'cacheinvalidation_unittests',
   'compositor_unittests',
+  'content_browsertests',
   'content_unittests',
   'crypto_unittests',
   'googleurl_unittests',
@@ -155,8 +169,8 @@ linux_aura_options=[
   'interactive_ui_tests',
   'ipc_tests',
   'jingle_unittests',
-  'net_unittests',
   'media_unittests',
+  'net_unittests',
   'printing_unittests',
   'remoting_unittests',
   'safe_browsing_tests',
@@ -164,8 +178,8 @@ linux_aura_options=[
   'ui_unittests',
 ]
 
-# B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',
-#   notify_on_missing=True)
+B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',
+  notify_on_missing=True)
 F('f_linux_rel_aura', linux().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
@@ -183,9 +197,9 @@ F('f_linux_rel_aura', linux().ChromiumFactory(
 #
 S('linux_dbg', branch='src', treeStableTimer=60)
 
-dbg_archive = ''
-# dbg_archive = master_config.GetArchiveUrl('Chromium', 'Linux Builder (dbg)',
-#                                           'Linux_Builder__dbg_', 'linux')
+dbg_archive = master_config.GetArchiveUrl('ChromiumLinux',
+                                          'Linux Builder (dbg)',
+                                          'Linux_Builder__dbg_', 'linux')
 
 #
 # Triggerable scheduler for the dbg builders
@@ -195,13 +209,11 @@ T('linux_dbg_trigger')
 #
 # Linux Dbg Builder
 #
-#B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', notify_on_missing=True)
+B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', notify_on_missing=True)
 F('dbg', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=['--compiler=goma',] + linux_all_test_targets + [
-             'interactive_ui_tests',
-           ],
+    options=['--compiler=goma'] + linux_all_test_targets,
     factory_properties={'trigger': 'linux_dbg_trigger',
                         'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
 
@@ -209,21 +221,22 @@ F('dbg', linux().ChromiumFactory(
 # Linux Dbg Unit testers
 #
 
-# B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
-#   auto_reboot=True, notify_on_missing=True)
+B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     target='Debug',
     tests=[
       'browser_tests',
+      'content_browsertests',
       'net',
     ],
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
 
-# B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
-#   auto_reboot=True, notify_on_missing=True)
+B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_unit_2', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -231,6 +244,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     tests=[
       'base',
       'cacheinvalidation',
+      'cc_unittests',
       'crypto',
       'dbus',
       'googleurl',
@@ -243,6 +257,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
       'remoting',
       'safe_browsing',
       'unit',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
@@ -251,11 +266,11 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
 # Linux Dbg Clang bot
 #
 
-# B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
-#   notify_on_missing=True)
+B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
+  auto_reboot=True, notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
-    options=['--build-tool=make', '--compiler=goma-clang'],
+    options=['--build-tool=ninja', '--compiler=goma-clang'],
     tests=[
       'base',
       'crypto',
@@ -264,6 +279,7 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     ],
     factory_properties={
       'gclient_env': {
+        'GYP_GENERATORS':'ninja',
         'GYP_DEFINES':
           'clang=1 clang_use_chrome_plugins=1 fastbuild=1 '
             'test_isolation_mode=noop',

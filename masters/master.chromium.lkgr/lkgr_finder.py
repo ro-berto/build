@@ -148,6 +148,8 @@ LKGR_STEPS = {
       'ui_unittests',
       'unit_tests',
     ],
+  },  # chromium
+  'chromium.linux': {
     'Linux Builder (dbg)': [
       'compile',
     ],
@@ -178,7 +180,7 @@ LKGR_STEPS = {
     'Android Builder (dbg)': [
       'build',
     ],
-  },  # chromium
+  },  # chromium.linux
   'chromium.chrome': {
     'Google Chrome Linux x64': [  # cycle time is ~14 mins as of 5/5/2012
       'compile',
