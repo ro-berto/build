@@ -69,6 +69,7 @@ REVISIONS_PASSWORD_FILE = '.status_password'
 MASTER_TO_BASE_URL = {
   'chromium': 'http://build.chromium.org/p/chromium',
   'chromium.chrome': 'http://build.chromium.org/p/chromium.chrome',
+  'chromium.linux': 'http://build.chromium.org/p/chromium.linux',
 }
 
 # LKGR_STEPS controls which steps must pass for a revision to be marked
