@@ -32,6 +32,10 @@ class DartFactory(gclient_factory.GClientFactory):
     CUSTOM_DEPS_JAVA = ('dart/third_party/java',
                         config.Master.trunk_internal_url +
                         '/third_party/openjdk')
+    # Fix broken ubuntu OpenJDK by importing windows TZ files
+    CUSTOM_TZ = ('dart/third_party/java/linux/j2sdk/jre/lib/zi',
+                 config.Master.trunk_internal_url +
+                 '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, build_dir, target_platform=None, trunk=False):
     solutions = []
@@ -45,6 +49,7 @@ class DartFactory(gclient_factory.GClientFactory):
 
     if config.Master.trunk_internal_url:
       custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
+      custom_deps_list.append(self.CUSTOM_TZ)
 
     main = gclient_factory.GClientSolution(
         dart_url,
