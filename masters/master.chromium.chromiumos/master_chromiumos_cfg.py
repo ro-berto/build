@@ -118,7 +118,7 @@ F('fullbuilder', chromiumos().ChromiumOSFactory(
         'gclient_env': {
             'GYP_DEFINES': ('chromeos=1'
                             ' ffmpeg_branding=ChromeOS proprietary_codecs=1'
-                            ' component=shared_library')},
+                            ' component=static_library')},
         'window_manager': False}))
 
 
