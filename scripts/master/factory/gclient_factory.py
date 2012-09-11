@@ -270,6 +270,7 @@ class GClientFactory(object):
     trigger_name = factory_properties.get('trigger')
     # Propagate properties to the children if this is set in the factory.
     trigger_properties = factory_properties.get('trigger_properties', [])
+    trigger_properties += ['issue', 'patchset', 'testfilter']
     factory.addStep(trigger.Trigger(
         schedulerNames=[trigger_name],
         updateSourceStamp=False,
@@ -288,6 +289,7 @@ class GClientFactory(object):
             'parent_scheduler': WithProperties('%(scheduler:-)s'),
             'parent_slavename': WithProperties('%(slavename:-)s'),
             'parent_builddir': WithProperties('%(builddir:-)s'),
+            'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
 
             # And some scripts were written to use non-standard names.
             'parent_cr_revision': WithProperties('%(got_revision:-)s'),
