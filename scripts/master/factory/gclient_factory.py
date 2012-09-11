@@ -288,6 +288,10 @@ class GClientFactory(object):
             'parent_scheduler': WithProperties('%(scheduler:-)s'),
             'parent_slavename': WithProperties('%(slavename:-)s'),
             'parent_builddir': WithProperties('%(builddir:-)s'),
+            'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
+            'issue': WithProperties('%(issue:-)s'),
+            'patchset': WithProperties('%(patchset:-)s'),
+            'testfilter': WithProperties('%(testfilter:-)s'),
 
             # And some scripts were written to use non-standard names.
             'parent_cr_revision': WithProperties('%(got_revision:-)s'),
