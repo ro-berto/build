@@ -16,6 +16,9 @@ import time
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 needs_reboot = False
 
+# Determines which version of buildslave is used. Set by main().
+USE_BUILDBOT_8 = False
+
 # By default, the slave will identify itself to the master by its hostname.
 # To override that, explicitly set a slavename here.
 slavename = None
@@ -130,18 +133,21 @@ def Reboot():
   raise Exception('Reboot: Should not return but would have')
 
 
-def HotPatchSlaveBuilder():
+def HotPatchSlaveBuilder(is_testing):
   """We could override the SlaveBuilder class but it's way simpler to just
   hotpatch it."""
+  Log('HotPatchSlaveBuilder(%s)' % is_testing)
   # pylint: disable=E0611,F0401
-  try:
+  if not USE_BUILDBOT_8:
     # buildbot 0.7.12
     from buildbot.slave.bot import Bot, SlaveBuilder
     RemoteShutdownClass = SlaveBuilder
-  except ImportError:
+    Log('Imported 0.7.x')
+  else:
     # buildbot 0.8.x
     from buildslave.bot import Bot, SlaveBuilder
     RemoteShutdownClass = Bot
+    Log('Imported 0.8.x')
   old_remote_shutdown = RemoteShutdownClass.remote_shutdown
 
   def rebooting_remote_shutdown(self):
@@ -160,28 +166,37 @@ def HotPatchSlaveBuilder():
     that error is caught.
     """
     global needs_reboot
-    needs_reboot = True
-    old_remote_shutdown(self)
+    if not is_testing:
+      needs_reboot = True
+      old_remote_shutdown(self)
+    else:
+      Log('Faking Reboot')
 
   RemoteShutdownClass.remote_shutdown = rebooting_remote_shutdown
 
   Bot.old_remote_setBuilderList = Bot.remote_setBuilderList
   def cleanup(self, wanted):
     retval = self.old_remote_setBuilderList(wanted)
-    wanted_dirs = ['info', 'cert', '.svn'] + [r[1] for r in wanted]
-    for d in os.listdir(self.basedir):
+    wanted_dirs = sorted(['info', 'cert', '.svn'] + [r[1] for r in wanted])
+    Log('Wanted directories: %s' % wanted_dirs)
+    actual_dirs = sorted(
+        i for i in os.listdir(self.basedir)
+        if os.path.isdir(os.path.join(self.basedir, i)))
+    Log('Actual directories: %s' % actual_dirs)
+    from common import chromium_utils
+    for d in actual_dirs:
       # Delete build.dead directories.
       possible_build_dead = os.path.join(self.basedir, d, 'build.dead')
       if os.path.isdir(possible_build_dead):
-        from common import chromium_utils
         Log('Deleting unwanted directory %s' % possible_build_dead)
-        chromium_utils.RemoveDirectory(possible_build_dead)
+        if not is_testing:
+          chromium_utils.RemoveDirectory(possible_build_dead)
 
       # Delete old slave directories.
-      if d not in wanted_dirs and os.path.isdir(os.path.join(self.basedir, d)):
+      if d not in wanted_dirs:
         Log('Deleting unwanted directory %s' % d)
-        from common import chromium_utils
-        chromium_utils.RemoveDirectory(os.path.join(self.basedir, d))
+        if not is_testing:
+          chromium_utils.RemoveDirectory(os.path.join(self.basedir, d))
     return retval
   Bot.new_remote_setBuilderList = cleanup
   Bot.remote_setBuilderList = Bot.new_remote_setBuilderList
@@ -226,12 +241,16 @@ def GetThirdPartyVersions(master):
   versions of buildbot and twisted for its slaves to run.  If not specified,
   this function returns default values.
   """
-  bb_default = 'buildbot_7_12'
-  tw_default = 'twisted_8_1'
-  if not master:
-    return (bb_default, tw_default)
-  bb_ver = getattr(master, 'buildslave_version', bb_default)
-  tw_ver = getattr(master, 'twisted_version', tw_default)
+  global USE_BUILDBOT_8
+  bb_ver = 'buildbot_7_12'
+  tw_ver = 'twisted_8_1'
+  if master:
+    bb_ver = getattr(master, 'buildslave_version', bb_ver)
+    tw_ver = getattr(master, 'twisted_version', tw_ver)
+  if '8' in bb_ver:
+    # Cheezy-hack.
+    USE_BUILDBOT_8 = True
+  print 'Using %s and %s' % (bb_ver, tw_ver)
   return (bb_ver, tw_ver)
 
 
@@ -242,11 +261,6 @@ def error(msg):
 
 def main():
   # Use adhoc argument parsing because of twisted's twisted argument parsing.
-  use_buildbot_8 = False
-  if '--use_buildbot_8' in sys.argv:
-    sys.argv.remove('--use_buildbot_8')
-    use_buildbot_8 = True
-
   # Change the current directory to the directory of the script.
   os.chdir(SCRIPT_PATH)
   build_dir = os.path.dirname(SCRIPT_PATH)
@@ -287,11 +301,7 @@ def main():
   active_master = GetActiveMaster(slave.bootstrap, config_bootstrap,
                                   active_slavename)
 
-  if use_buildbot_8:
-    bb_ver = 'buildbot_slave_8_4'
-    tw_ver = 'twisted_10_2'
-  else:
-    bb_ver, tw_ver = GetThirdPartyVersions(active_master)
+  bb_ver, tw_ver = GetThirdPartyVersions(active_master)
   python_path.append(os.path.join(build_dir, 'third_party', bb_ver))
   python_path.append(os.path.join(build_dir, 'third_party', tw_ver))
   sys.path.extend(python_path[-2:])
@@ -403,12 +413,11 @@ def main():
     error('Platform %s is not implemented yet' % sys.platform)
 
   # This envrionment is defined only when testing the slave on a dev machine.
-  if 'TESTING_MASTER' not in os.environ:
+  is_testing = 'TESTING_MASTER' in os.environ
+  if not is_testing:
     # Don't overwrite the ~/.subversion/config file when TESTING_MASTER is set.
     FixSubversionConfig()
-    # Do not reboot the workstation or delete unknown directories in the current
-    # directory.
-    HotPatchSlaveBuilder()
+  HotPatchSlaveBuilder(is_testing)
 
   import twisted.scripts.twistd as twistd
   twistd.run()
