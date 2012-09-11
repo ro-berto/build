@@ -652,7 +652,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   def ChromiumFactory(self, target='Release', clobber=False, tests=None,
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
-                      project=None, factory_properties=None, gclient_deps=None):
+                      project=None, factory_properties=None, gclient_deps=None,
+                      enable_swarm_tests=False):
     factory_properties = (factory_properties or {}).copy()
     factory_properties['gclient_env'] = \
         factory_properties.get('gclient_env', {}).copy()
@@ -717,6 +718,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add a trigger step if needed.
     self.TriggerFactory(factory, slave_type=slave_type,
                         factory_properties=factory_properties)
+
+    # Trigger swarm tests.
+    if enable_swarm_tests:
+      chromium_cmd_obj.AddTriggerSwarmTests(tests, factory_properties)
 
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and

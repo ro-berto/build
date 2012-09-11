@@ -6,11 +6,52 @@
 
 This is based on commands.py and adds swarm-specific commands."""
 
+import re
+
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
 from master.factory import commands
 from master.log_parser import gtest_command
+
+
+def TestStepFilterSwarm(bStep):
+  """Examines the 'testfilter' property of a build and determines if this
+  build has swarm steps and thus if the test should run.
+  It also adds a property, swarm_tests, which contains all the tests which will
+  run under swarm."""
+  bStep.setProperty('swarm_tests', '')
+  test_filters = bStep.build.getProperties().getProperty('testfilter')
+  test_filters = test_filters or commands.DEFAULT_TESTS
+
+  swarm_tests = ''
+  for test_filter in test_filters:
+    if '_swarm:' in test_filter:
+      swarm_tests += test_filter.replace('_swarm:', '') + ' '
+    elif test_filter.endswith('_swarm'):
+      swarm_tests += test_filter[:-len('_swarm')] + ' '
+
+  bStep.setProperty('swarm_tests', swarm_tests.strip())
+
+  return bool(swarm_tests)
+
+
+class SwarmShellForHashes(shell.ShellCommand):
+  """A basic swarm ShellCommand wrapper that assumes the script it runs will
+  output a list of property names and hashvalues, with each pair on its own
+  line."""
+  def commandComplete(self, cmd):
+    shell.ShellCommand.commandComplete(self, cmd)
+
+    re_hash_mapping = re.compile(r'^([a-z_]+) ([0-9a-f]+)')
+    swarm_hashes = {}
+    for line in self.stdio_log.readlines():
+      match = re_hash_mapping.match(line)
+      if match:
+        swarm_hashes[match.group(1)] = match.group(2)
+
+    self.setProperty('swarm_hashes', swarm_hashes)
+
 
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""

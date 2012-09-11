@@ -71,6 +71,26 @@ def CreatePerformanceStepClass(
       command_class, log_processor_class=log_processor_class)
 
 
+class RunHooksShell(shell.ShellCommand):
+  """A special run hooks shell command to allow modifying its environment
+  right before it starts up."""
+  def setupEnvironment(self, cmd):
+    test_filters = self.getProperty('testfilter')
+    test_filters = test_filters or DEFAULT_TESTS
+
+    # If swarm tests are present ensure that the hash output required
+    # by them is generated.
+    if any(test.endswith('_swarm') or '_swarm:' in test
+           for test in test_filters):
+      environ = cmd.args.get('env', {}).copy()
+      environ.setdefault('GYP_DEFINES', '')
+      environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
+
+      cmd.args['env'] = environ
+
+    shell.ShellCommand.setupEnvironment(self, cmd)
+
+
 class FactoryCommands(object):
   # Base URL for performance test results.
   PERF_BASE_URL = config.Master.perf_base_url
@@ -613,7 +633,7 @@ class FactoryCommands(object):
       # svn timeout is 2 min; we allow 5
       timeout = 60*5
     self._factory.addStep(
-        shell.ShellCommand,
+        RunHooksShell,
         haltOnFailure=True,
         name='runhooks',
         description='gclient hooks',

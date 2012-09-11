@@ -6,6 +6,8 @@
 
 Based on chromium_factory.py and adds chromium-specific steps."""
 
+from buildbot.process import factory
+
 from master.factory import chromium_factory
 from master.factory import swarm_commands
 
@@ -59,6 +61,17 @@ def SetupSwarmTests(machine, data_dir, options=None, project=None,
       network_path=network_path)
 
 
+def SwarmTestBuilder():
+  """Create a basic swarm builder that runs tests via swarm."""
+  f = factory.BuildFactory()
+
+  # TODO(csharp): Add the test steps to the swarm tester. It is also very
+  # important it doesn't use GClientFactory.
+  # swarm_command_obj = swarm_commands.SwarmCommands(factory=f)
+
+  return f
+
+
 class SwarmFactory(chromium_factory.ChromiumFactory):
   def SwarmFactory(self, target='Release', clobber=False, tests=None,
                    mode=None, options=None, compile_timeout=1200,
@@ -67,11 +80,11 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     # Set the slave_type to 'SwarmSlave' to prevent the factory from adding the
     # compile step, so we can add other steps before the compile step.
-    factory = self.ChromiumFactory(target, clobber, [], mode, 'SwarmSlave',
-                                   options, compile_timeout, build_url, project,
-                                   factory_properties, gclient_deps)
+    f = self.ChromiumFactory(target, clobber, [], mode, 'SwarmSlave',
+                             options, compile_timeout, build_url, project,
+                             factory_properties, gclient_deps)
 
-    swarm_command_obj = swarm_commands.SwarmCommands(factory,
+    swarm_command_obj = swarm_commands.SwarmCommands(f,
                                                      target,
                                                      self._build_dir,
                                                      self._target_platform)
@@ -119,4 +132,4 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
       for test in tests:
         swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name)
 
-    return factory
+    return f

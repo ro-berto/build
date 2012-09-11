@@ -14,11 +14,13 @@ from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
+from twisted.python import log
 
 from common import chromium_utils
 import config
 from master import chromium_step
 from master.factory import commands
+from master.factory import swarm_commands
 
 from master.log_parser import archive_command
 from master.log_parser import gtest_command
@@ -1540,6 +1542,59 @@ class ChromiumCommands(commands.FactoryCommands):
            '--symbols-dir', symbol_path]
     self.AddTestStep(shell.ShellCommand, 'run_chromebot_client', cmd,
                      max_time=max_time, do_step_if=self.TestStepFilter)
+
+  # TODO(csharp): Move this function into commands once swarm test can be added
+  # via AddTestStep.
+  def AddTriggerSwarmTests(self, tests, factory_properties):
+    """Generate the hash for each swarm result file and then trigger the swarm
+    tests."""
+    ninja = (
+        'ninja' in factory_properties['gclient_env'].get('GYP_GENERATORS', ''))
+
+    if ninja:
+      out_dir = 'out'
+    elif self._target_platform == 'win32':
+      out_dir = 'build'
+    elif self._target_platform == 'darwin':
+      out_dir = 'xcodebuild'
+    else:
+      out_dir = 'out'
+
+    if not self._target:
+      log.msg('No target specified, unable to find swarm result files to '
+              'trigger swarm tests')
+      return
+
+    # Calculate all result hashfiles
+    manifest_directory = self.PathJoin('src', out_dir, self._target)
+    script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
+
+    cmd = [script_path,
+           '--manifest_directory', manifest_directory]
+    cmd.append(WithProperties('%(swarm_tests:-)s'))
+
+    self._factory.addStep(swarm_commands.SwarmShellForHashes,
+                          name='manifests_to_hashes',
+                          command=cmd,
+                          doStepIf=swarm_commands.TestStepFilterSwarm)
+
+    # Trigger the swarm test builder.
+    properties = {
+        'issue': WithProperties('%(issue:-)s'),
+        'os': self._target_platform,
+        'parent_buildername': WithProperties('%(buildername:-)s'),
+        'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
+        'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
+        'patchset': WithProperties('%(patchset:-)s')
+    }
+    self._factory.addStep(
+        trigger.Trigger(
+            name='trigger_swarm_tests',
+            schedulerNames=['swarm'],
+            waitForFinish=False,
+            set_properties=properties,
+            copy_properties=['swarm_hashes', 'testfilter'],
+            doStepIf=swarm_commands.TestStepFilterSwarm))
 
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
