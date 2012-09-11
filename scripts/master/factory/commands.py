@@ -75,7 +75,10 @@ class RunHooksShell(shell.ShellCommand):
   """A special run hooks shell command to allow modifying its environment
   right before it starts up."""
   def setupEnvironment(self, cmd):
-    test_filters = self.getProperty('testfilter')
+    try:
+      test_filters = self.getProperty('testfilter')
+    except KeyError:
+      test_filters = None
     test_filters = test_filters or DEFAULT_TESTS
 
     # If swarm tests are present ensure that the hash output required
