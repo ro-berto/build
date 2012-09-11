@@ -15,3 +15,5 @@ class ChromiumMac(object):
   from_address = 'buildbot@chromium.org'
   master_host = 'master1a.golo.chromium.org'
   is_production_host = socket.getfqdn() == master_host
+  buildslave_version = 'buildbot_slave_8_4'
+  twisted_version = 'twisted_10_2'
