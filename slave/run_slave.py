@@ -26,34 +26,15 @@ def remove_all_vars_except(dictionary, keep):
     dictionary.pop(key)
 
 
-log_imported = False
 def Log(message):
-  """Log a message using the Buildbot/Twisted log facility.
-
-  Logging via log.msg() will output messages to twistd.log.  We only modify
-  the path to pull in the correct Buildbot/Twisted after the slave script is
-  running, so we can only import this log facility in this scope versus
-  importing the log facility in the script's file scope.
-
-  The log module moved between Buildbot 0.7.12 and 0.8.4 from buildbot.slave.bot
-  to buildslave.bot.  We vary the import if the first fails so we can fall
-  back to the 0.8-style.
-
-  |log_imported| acts as a guard to ensure we only ever import the log module
-  once per run_slave.py script lifespan.
+  """Log a message using the Buildbot/Twisted log facility but only if it
+  already imported.
   """
-  global log_imported
-  if not log_imported:
-    # pylint: disable=E0611,F0401,W0602
-    global log
-    try:
-      # buildbot 0.7.12
-      from buildbot.slave.bot import log
-    except ImportError:
-      # buildbot 0.8.x
-      from buildslave.bot import log
-    log_imported = True
-  log.msg(message)
+  log_mod = sys.modules.get('twisted.python.log')
+  if log_mod:
+    log_mod.msg(message)
+  else:
+    print message
 
 
 def IssueReboot():
