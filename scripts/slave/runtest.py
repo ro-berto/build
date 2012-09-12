@@ -676,7 +676,8 @@ def main_linux(options, args):
 
   # Decide whether to enable the suid sandbox for Chrome.
   if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
-      not options.factory_properties.get('asan', False)):
+      not options.factory_properties.get('asan', False) and
+      not options.factory_properties.get('tsan', False)):
     print 'Enabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
     os.environ['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
@@ -929,8 +930,9 @@ def main():
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
 
-  if options.factory_properties.get('asan', False):
-    # Instruct GTK to use malloc while running ASAN tests.
+  if (options.factory_properties.get('asan', False) or
+      options.factory_properties.get('tsan', False)):
+    # Instruct GTK to use malloc while running ASan or TSan tests.
     os.environ['G_SLICE'] = 'always-malloc'
     # Disable ASLR on Mac when running ASAN tests.
     os.environ['DYLD_NO_PIE'] = '1'
