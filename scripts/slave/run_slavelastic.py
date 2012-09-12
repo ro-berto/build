@@ -35,17 +35,18 @@ HANDLE_EXE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                '..', '..', 'third_party', 'psutils',
                                HANDLE_EXE)
 
+RUN_TEST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             'run_test_from_archive.py')
+
 
 class Manifest(object):
-  RUN_TEST_PATH = os.path.join(
-      'src', 'tools', 'isolate', 'run_test_from_archive.py')
-
-  def __init__(self, manifest_hash, test_name, shards, switches):
+  def __init__(self, manifest_hash, test_name, shards, test_filter, switches):
     """Populates a manifest object.
       Args:
         manifest_hash - The manifest's sha-1 that the slave is going to fetch.
-        shards - The number of swarm shards to request.
         test_name - The name to give the test request.
+        shards - The number of swarm shards to request.
+        test_filter - The gtest filter to apply when running the test.
         switches - An object with properties to apply to the test request.
     """
     platform_mapping =  {
@@ -56,9 +57,11 @@ class Manifest(object):
       }
 
     self.manifest_hash = manifest_hash
+    self.test_filter = test_filter
     self.shards = shards
 
-    self.zipfile_fullpath = os.path.join(switches.data_dir, test_name + '.zip')
+    self.zipfile_fullpath = os.path.join(switches.data_dir,
+                                         test_name + '.zip')
     self.tasks = []
     self.target_platform = platform_mapping[switches.os_image]
     self.working_dir = switches.working_dir
@@ -83,7 +86,7 @@ class Manifest(object):
       print 'Error creating zip files %s' % str(e)
       return False
 
-    zip_file.write(self.RUN_TEST_PATH)
+    zip_file.write(RUN_TEST_PATH)
     zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
 
     if self.target_platform == 'Windows':
@@ -99,7 +102,7 @@ class Manifest(object):
     """Export the current configuration into a swarm-readable manifest file"""
     self.add_task(
         'Run Test',
-        ['python', self.RUN_TEST_PATH, '--hash', self.manifest_hash,
+        ['python', RUN_TEST_PATH, '--hash', self.manifest_hash,
          '--remote', self.data_dir, '-v'])
 
     # Clean up
@@ -133,8 +136,9 @@ class Manifest(object):
       ],
       'tests': self.tasks,
       'env_vars': {
-        'GTEST_TOTAL_SHARDS': '%(num_instances)s',
+        'GTEST_FILTER': self.test_filter,
         'GTEST_SHARD_INDEX': '%(instance_index)s',
+        'GTEST_TOTAL_SHARDS': '%(num_instances)s',
       },
       'configurations': [
         {
@@ -153,20 +157,9 @@ class Manifest(object):
     return json.dumps(test_case)
 
 
-def ProcessManifest(filepath, shards, options):
+def ProcessManifest(file_sha1, test_name, shards, test_filter, options):
   """Process the manifest file and send off the swarm test request."""
-  test_name = os.path.splitext(os.path.basename(filepath))[0]
-  test_full_name = options.test_name_prefix + test_name
-
-  if not os.path.exists(filepath):
-    print ("Manifest file, %s, not found. Unable to send swarm request "
-           "for %s" % (filepath, test_full_name))
-    return 1
-
-  # Parses manifest file
-  print "Parsing file %s..." % filepath
-  file_sha1 = hashlib.sha1(open(filepath, 'rb').read()).hexdigest()
-  manifest = Manifest(file_sha1, test_full_name, shards, options)
+  manifest = Manifest(file_sha1, test_name, shards, test_filter, options)
 
   # Zip up relevent files
   print "Zipping up files..."
@@ -217,12 +210,15 @@ def main():
   parser.add_option('-t', '--test-name-prefix', default='',
                     help='Specify the prefix to give the swarm test request. '
                     'Defaults to %default')
-  parser.add_option('-n', '--manifest_name', action='append',
-                    help='The name of a manifest to send to swarm. This may '
-                    'be given multiple times to send multiple manifests.')
-  parser.add_option('-s', '--shards', type='int', action='append',
-                    help='The number of shards to request for a manifest. '
-                    'This must be listed once for each -n.')
+  parser.add_option('-n', '--run_from_manifest', nargs=3, action='append',
+                    default=[],
+                    help='Specify a manifest name to run on swarm. The format '
+                    'is (manifest_name, shards, test_filter). This may be used '
+                    'multiple times to send multiple manifests.')
+  parser.add_option('--run_from_hash', nargs=4, action='append', default=[],
+                    help='Specify a hash to run on swarm. The format is '
+                    '(hash, hash_test_name, shards, test_filter). This may be '
+                    'used multiple times to send multiple hashes.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Print verbose logging')
   (options, args) = parser.parse_args()
@@ -234,10 +230,6 @@ def main():
     parser.error('Must specify an os image')
   if not options.data_dir:
     parser.error('Must specify the data directory')
-
-  if len(options.manifest_name) != len(options.shards):
-    parser.error('Number of min shards given doesn\'t match the number '
-                 'of manifests')
 
   # Remove the old data from this builder if there is any.
   if os.path.isdir(options.data_dir):
@@ -252,13 +244,43 @@ def main():
                                            builder_name + '*.zip')):
       os.remove(filename)
 
-  # Send off the swarm test requests.
+  # Send off the manifest files.
   highest_exit_code = 0
-  for i in range(len(options.manifest_name)):
-    highest_exit_code = max(highest_exit_code,
-                            ProcessManifest(options.manifest_name[i],
-                                            options.shards[i],
-                                            options))
+  for (manifest_file, shards, testfilter) in options.run_from_manifest:
+    # Convert the manifest files to hashes.
+    test_name = os.path.splitext(os.path.basename(manifest_file))[0]
+    test_full_name = options.test_name_prefix + test_name
+
+    if not os.path.exists(manifest_file):
+      print ("Manifest file, %s, not found. Unable to send swarm request "
+             "for %s" % (manifest_file, test_full_name))
+      continue
+
+    file_sha1 = hashlib.sha1(open(manifest_file, 'rb').read()).hexdigest()
+
+    try:
+      highest_exit_code = max(highest_exit_code,
+                              ProcessManifest(file_sha1,
+                                              test_full_name,
+                                              int(shards),
+                                              testfilter,
+                                              options))
+    except ValueError:
+      print ('Unable to process %s because integer not given for shard count' %
+             test_name)
+
+  # Send off the hash swarm test requests.
+  for (file_sha1, test_name, shards, testfilter) in options.run_from_hash:
+    try:
+      highest_exit_code = max(highest_exit_code,
+                              ProcessManifest(file_sha1,
+                                              test_name,
+                                              int(shards),
+                                              testfilter,
+                                              options))
+    except ValueError:
+      print ('Unable to process %s because integer not given for shard count' %
+             test_name)
 
   return highest_exit_code
 

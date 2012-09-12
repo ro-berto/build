@@ -13,6 +13,7 @@ from master.factory import swarm_commands
 
 import config
 
+
 class SwarmTest(object):
   """A small helper class containing any required details to run a
      swarm test.
@@ -20,6 +21,16 @@ class SwarmTest(object):
   def __init__(self, test_name, shards):
     self.test_name = test_name
     self.shards = shards
+
+
+SWARM_TESTS = [
+    # They must be in the reverse order of latency to get results, e.g. the
+    # slowest test should be last.
+    SwarmTest('base_unittests', 1),
+    SwarmTest('net_unittests', 3),
+    SwarmTest('unit_tests', 4),
+    SwarmTest('browser_tests', 5),
+]
 
 
 def SetupSwarmTests(machine, data_dir, options=None, project=None,
@@ -44,30 +55,31 @@ def SetupSwarmTests(machine, data_dir, options=None, project=None,
     # Build until death.
     options = ['--build-tool=ninja'] + options + ['--', '-k', '0']
 
-  tests = [
-      # They must be in the reverse order of latency to get results, e.g. the
-      # slowest test should be last.
-      SwarmTest('base_unittests', 1),
-      SwarmTest('net_unittests', 3),
-      SwarmTest('unit_tests', 4),
-      SwarmTest('browser_tests', 5),
-      ]
-
   return machine.SwarmFactory(
-      tests=tests,
+      tests=SWARM_TESTS,
       options=options,
       project=project,
       factory_properties=factory_properties,
       network_path=network_path)
 
 
-def SwarmTestBuilder():
+def SwarmTestBuilder(swarm_server, unix_hashtable_data_dir,
+                     windows_hashtable_data_dir):
   """Create a basic swarm builder that runs tests via swarm."""
   f = factory.BuildFactory()
 
-  # TODO(csharp): Add the test steps to the swarm tester. It is also very
-  # important it doesn't use GClientFactory.
-  # swarm_command_obj = swarm_commands.SwarmCommands(factory=f)
+  swarm_command_obj = swarm_commands.SwarmCommands(f)
+
+  # Send the swarm tests to the swarm server.
+  swarm_command_obj.AddTriggerSwarmTestFromTestFilterStep(
+      swarm_server=swarm_server,
+      unix_data_dir=unix_hashtable_data_dir,
+      windows_data_dir=windows_hashtable_data_dir,
+      tests=SWARM_TESTS)
+
+  # Collect the results
+  for swarm_test in SWARM_TESTS:
+    swarm_command_obj.AddGetSwarmTestStep(swarm_server, swarm_test.test_name)
 
   return f
 
