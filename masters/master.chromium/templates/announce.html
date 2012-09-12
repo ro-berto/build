@@ -237,6 +237,8 @@
         <table width="100%">
           <script language="javascript">
             c.chromium = '';
+            c.win = '';
+            c.mac = '';
             c.linux = '';
             c.chromium_chromiumos = '';
             c.memory = '';
@@ -250,6 +252,8 @@
             c.gpu_fyi = '';
 
             c.status = '../chromium';
+            c.status_win = '../chromium.win';
+            c.status_mac = '../chromium.mac';
             c.status_linux = '../chromium.linux';
             c.status_cros = '../chromium.chromiumos';
             c.status_memory = '../chromium.memory';
@@ -271,6 +275,8 @@
                      '/horizontal_one_box_per_builder';
             }
             c.bar = BarUrl('chromium')
+            c.bar_win = BarUrl('chromium.win');
+            c.bar_mac = BarUrl('chromium.mac');
             c.bar_linux = BarUrl('chromium.linux');
             c.bar_memory = BarUrl('chromium.memory');
             c.bar_memory_fyi = BarUrl('chromium.memory.fyi');
@@ -393,14 +399,20 @@
                   table(
                     'width="100%"',
                     tr(
-                       HTMLBaseBar(c.status, c.bar, c.chromium, 'Chromium', 'width="70%" colspan=3') +
-                       HTMLBaseBar(c.status_linux, c.bar_linux, c.linux, 'Linux', 'width="30%"')) +
-                    tr(HTMLSubBar(c.status_cros, c.bar_cros, c.cros,
-                                  'ChromiumOS', '40%') +
+                       HTMLBaseBar(c.status, c.bar, c.chromium, 'Chromium',
+                                   'width="8%"') +
+                       HTMLBaseBar(c.status_win, c.bar_win, c.win, 'Win',
+                                   'width="42%"') +
+                       HTMLBaseBar(c.status_mac, c.bar_mac, c.mac, 'Mac',
+                                   'width="30%"') +
+                       HTMLBaseBar(c.status_linux, c.bar_linux, c.linux,
+                                   'Linux', 'width="20%"')) +
+                    tr(HTMLBaseBar(c.status_cros, c.bar_cros, c.cros,
+                                  'ChromiumOS', 'width="50%" colspan=3') +
                        HTMLSubBar(c.status_chrome, c.bar_chrome, c.chrome,
                                   'Official', '30%') +
                        HTMLSubBar(c.status_memory, c.bar_memory, c.memory,
-                                  'Memory', '30%')))))));
+                                  'Memory', '20%')))))));
 
             document.write(tr(
                 HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
