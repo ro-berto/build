@@ -14,15 +14,16 @@ categories_steps = {
   '': ['update'],
   'testers': [
     'base_unittests',
-    #'browser_tests',
+    'browser_tests',
     'cacheinvalidation_unittests',
     'chrome_frame_net_tests',
+    'content_browsertests',
     'content_unittests',
     'courgette_unittests',
     'crypto_unittests',
     'googleurl_unittests',
     'installer_util_unittests',
-    #'interactive_ui_tests',
+    'interactive_ui_tests',
     'ipc_tests',
     'jingle_unittests',
     'media_unittests',
@@ -31,12 +32,15 @@ categories_steps = {
     'net_unittests',
     'printing_unittests',
     'remoting_unittests',
+    'sandbox_linux_unittests',
     'sbox_integration_tests',
     'sbox_unittests',
     'sbox_validation_tests',
     'sizes',
     'sql_unittests',
     'start_crash_handler',
+    'sync_unit_tests',
+    'sync_integration_tests',
     'test_shell_tests',
     'unit_tests',
     #'webkit_tests',
@@ -49,6 +53,15 @@ categories_steps = {
   'android': ['build'],
 }
 
+exclusions = {
+  # nacl_integration disabled on two Mac bots.
+  # http://crbug.com/131422
+  'Mac10.6 Tests (1)': ['nacl_integration'],
+  'Mac 10.6 Tests (dbg)(1)': ['nacl_integration'],
+  #'Mac10.7 Tests (1)': ['nacl_integration'],
+  #'Mac 10.7 Tests (dbg)(1)': ['nacl_integration'],
+}
+
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'archive_build', 'start_crash_handler']
 
@@ -56,6 +69,7 @@ def Update(config, active_master, c):
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,
       categories_steps=categories_steps,
+      exclusions=exclusions,
       relayhost=config.Master.smtp,
       subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
               'revision %(revision)s',

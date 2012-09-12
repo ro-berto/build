@@ -70,6 +70,8 @@ MASTER_TO_BASE_URL = {
   'chromium': 'http://build.chromium.org/p/chromium',
   'chromium.chrome': 'http://build.chromium.org/p/chromium.chrome',
   'chromium.linux': 'http://build.chromium.org/p/chromium.linux',
+  'chromium.mac': 'http://build.chromium.org/p/chromium.mac',
+  'chromium.win': 'http://build.chromium.org/p/chromium.win',
 }
 
 # LKGR_STEPS controls which steps must pass for a revision to be marked
@@ -77,7 +79,7 @@ MASTER_TO_BASE_URL = {
 #-------------------------------------------------------------------------------
 
 LKGR_STEPS = {
-  'chromium': {
+  'chromium.win': {
     'Win Builder (dbg)': [
       'compile',
     ],
@@ -121,6 +123,8 @@ LKGR_STEPS = {
     # 'Interactive Tests (dbg)': [
     #   'interactive_ui_tests',
     # ],
+  },  # chromium.win
+  'chromium.mac': {
     'Mac Builder (dbg)': [
       'compile',
     ],
@@ -149,7 +153,7 @@ LKGR_STEPS = {
       'ui_unittests',
       'unit_tests',
     ],
-  },  # chromium
+  },  # chromium.mac
   'chromium.linux': {
     'Linux Builder (dbg)': [
       'compile',
