@@ -1590,7 +1590,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._factory.addStep(
         trigger.Trigger(
             name='trigger_swarm_tests',
-            schedulerNames=['swarm'],
+            schedulerNames=['swarm_triggered'],
             waitForFinish=False,
             set_properties=properties,
             copy_properties=['swarm_hashes', 'testfilter'],
