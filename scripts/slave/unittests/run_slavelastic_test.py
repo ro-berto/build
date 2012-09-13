@@ -53,7 +53,7 @@ def GenerateExpectedJSON(options):
     'tests' : [
       {
         'action': [
-          'python', run_slavelastic.RUN_TEST_PATH,
+          'python', run_slavelastic.RUN_TEST_NAME,
           '--hash', FILE_HASH,
           '--remote', options.data_dir,
           '-v'

@@ -35,8 +35,9 @@ HANDLE_EXE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                '..', '..', 'third_party', 'psutils',
                                HANDLE_EXE)
 
+RUN_TEST_NAME = 'run_test_from_archive.py'
 RUN_TEST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             'run_test_from_archive.py')
+                             RUN_TEST_NAME)
 
 
 class Manifest(object):
@@ -86,7 +87,7 @@ class Manifest(object):
       print 'Error creating zip files %s' % str(e)
       return False
 
-    zip_file.write(RUN_TEST_PATH)
+    zip_file.write(RUN_TEST_PATH, RUN_TEST_NAME)
     zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
 
     if self.target_platform == 'Windows':
@@ -102,7 +103,7 @@ class Manifest(object):
     """Export the current configuration into a swarm-readable manifest file"""
     self.add_task(
         'Run Test',
-        ['python', RUN_TEST_PATH, '--hash', self.manifest_hash,
+        ['python', RUN_TEST_NAME, '--hash', self.manifest_hash,
          '--remote', self.data_dir, '-v'])
 
     # Clean up
