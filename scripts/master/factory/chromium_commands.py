@@ -1575,6 +1575,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self._factory.addStep(swarm_commands.SwarmShellForHashes,
                           name='manifests_to_hashes',
+                          description='manifests_to_hashes',
                           command=cmd,
                           doStepIf=swarm_commands.TestStepFilterSwarm)
 
