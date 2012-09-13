@@ -47,6 +47,8 @@ def try_bool(options, key, default):
   """Expects a bool."""
   flatten(options, key, default)
   if options[key] != default:
+    if isinstance(options[key], bool):
+      pass
     if options[key].lower() in ('true', '1'):
       options[key] = True
     elif options[key].lower() in ('false', '0'):
