@@ -416,12 +416,8 @@ def upload_profiling_data(options, args):
     return 0
 
   builder_name = options.build_properties.get('buildername')
-  if ((builder_name != 'XP Interactive Perf' and
-       builder_name != 'Win7 Interactive Perf' and
-       builder_name != 'Win7 Perf (jank)' and
-       builder_name != 'Mac10.6 Perf(2)' and
-       builder_name != 'Linux Perf (1)' and
-       builder_name != 'Linux Perf (lowmem)') or
+  # Disabled uploading profile data (added a non-existing builder_name).
+  if (builder_name != 'XP Interactive Perf1' or
       options.build_properties.get('mastername') != 'chromium.perf' or
       not options.build_properties.get('got_revision')):
     return 0
