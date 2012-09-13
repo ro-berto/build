@@ -415,7 +415,13 @@ def upload_profiling_data(options, args):
   if len(args) < 2:
     return 0
 
-  if (options.build_properties.get('buildername') != 'XP Perf (dbg)' or
+  builder_name = options.build_properties.get('buildername')
+  if ((builder_name != 'XP Interactive Perf' and
+       builder_name != 'Win7 Interactive Perf' and
+       builder_name != 'Win7 Perf (jank)' and
+       builder_name != 'Mac10.6 Perf(2)' and
+       builder_name != 'Linux Perf (1)' and
+       builder_name != 'Linux Perf (lowmem)') or
       options.build_properties.get('mastername') != 'chromium.perf' or
       not options.build_properties.get('got_revision')):
     return 0
@@ -443,7 +449,6 @@ def upload_profiling_data(options, args):
     python = 'python'
 
   revision = options.build_properties.get('got_revision')
-  builder_name = options.build_properties.get('buildername')
   cmd = [python, profiling_archive_tool, '--revision', revision,
          '--build-dir', build_dir, '--builder-name', builder_name,
          '--test-name', gtest_name]
