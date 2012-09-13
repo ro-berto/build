@@ -65,8 +65,9 @@ def LoadConfig(basedir, config_file='master.cfg', suppress=False):
     localdict = ExecuteConfig(canonical_config)
   except IOError as err:
     errno, strerror = err
-    print >>sys.stderr, 'error %d opening %s: %s' % (errno,
-        canonical_config, strerror)
+    filename = err.filename
+    print >>sys.stderr, 'error %d executing %s: %s: %s' % (errno,
+        canonical_config, strerror, filename)
     return None
   except Exception as e:
     if not suppress:
