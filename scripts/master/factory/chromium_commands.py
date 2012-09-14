@@ -724,6 +724,15 @@ class ChromiumCommands(commands.FactoryCommands):
         cmd,
         do_step_if=self.TestStepFilter)
 
+    deps2submodules_tool = J(self._repository_root, 'tools', 'deps2git',
+                             'deps2submodules.py')
+    cmd = [self._python, deps2submodules_tool, '--gitless']
+    self.AddTestStep(
+        shell.ShellCommand,
+        'check_deps2submodules',
+        cmd,
+        do_step_if=self.TestStepFilter)
+
   def AddReliabilityTests(self, platform):
     cmd = [self._python,
            self._reliability_tool,
