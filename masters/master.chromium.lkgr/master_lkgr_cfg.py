@@ -90,7 +90,8 @@ F('linux64_full', linux().ChromiumFactory(
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
-    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree'],
+    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
+             'content_browsertests'],
     factory_properties={
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
@@ -103,7 +104,8 @@ asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     clobber=True,
-    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree'],
+    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
+             'content_browsertests'],
     factory_properties={
        'asan_archive_build': True,
        'asan_archive_name': 'asan-symbolized',
@@ -115,7 +117,8 @@ B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
-    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree'],
+    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
+             'content_browsertests'],
     factory_properties={
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
