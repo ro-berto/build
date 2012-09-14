@@ -622,7 +622,9 @@ class FactoryCommands(object):
     cmd = [
         self._python,
         self.PathJoin('..', '..', '..', '..', 'depot_tools', 'apply_issue.py'),
-        '-r', WithProperties('%(root:-)s'),
+        # Use 'src' as the root if the root property is undefined or empty.
+        # Note that the ~ is a directive to buildbot and not a typo.
+        '-r', WithProperties('%(root:~src)s'),
         '-i', WithProperties('%(issue:-)s'),
         '-p', WithProperties('%(patchset:-)s'),
         '--email=',
