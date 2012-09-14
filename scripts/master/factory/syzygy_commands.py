@@ -76,35 +76,60 @@ class SyzygyCommands(commands.FactoryCommands):
                '--verbose']
     self.AddTestStep(shell.ShellCommand, 'benchmark_chrome', command)
 
-  def AddGenerateCoverage(self):
+  def AddGenerateCoverage(self, use_syzygy=False):
+    """Creates a step for generating a coverage report, archiving the results.
+    Can use either the MSVS coverage profiler or our own coverage agent.
+
+    Args:
+      use_syzygy: If True causes the Syzygy coverage agent to be used.
+          Defaults to False.
+    """
+
+    subdir = ''
+    if use_syzygy:
+      subdir = '/syzygy'
+    suffix = ''
+    if use_syzygy:
+      suffix = '_syzygy'
+
     # Coverage script path.
     script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'build',
                                 'generate_coverage.py')
+
+    # Generate the appropriate command line.
     command = [self._python,
                script_path,
                '--verbose',
                '--build-dir',
                self.PathJoin(self._build_dir, self._target)]
-    self.AddTestStep(shell.ShellCommand, 'capture_unittest_coverage', command)
+    if use_syzygy:
+      command.append('--syzygy')
+
+    # Add the step.
+    step_name = 'capture_unittest_coverage' + suffix
+    self.AddTestStep(shell.ShellCommand, step_name, command)
 
     # Store the coverage results by the checkout revision.
     src_dir = self.PathJoin(self._build_dir, self._target, 'cov')
     dst_gs_url = WithProperties(
-        'gs://syzygy-archive/builds/coverage/%(got_revision)s')
+        'gs://syzygy-archive/builds/coverage' + subdir + '/%(got_revision)s')
     url = WithProperties(
         'http://syzygy-archive.commondatastorage.googleapis.com/builds/'
-           'coverage/%(got_revision)s/index.html')
+           'coverage' + subdir + '/%(got_revision)s/index.html')
 
     command = [self._python,
                self.PathJoin(self._script_dir, 'syzygy/gsutil_cp_dir.py'),
                src_dir,
                dst_gs_url,]
 
+    desc = 'Archive Coverage Report'
+    if use_syzygy:
+      desc = 'Archive Syzygy Coverage Report'
     self._factory.addStep(_UrlStatusCommand,
                           command=command,
-                          extra_text=('coverage_report', url),
-                          name='archive_coverage',
-                          description='Archive Coverage Report')
+                          extra_text=('coverage_report' + suffix, url),
+                          name='archive_coverage' + suffix
+                          description=desc)
 
   def AddSmokeTest(self):
     # Smoke-test script path.

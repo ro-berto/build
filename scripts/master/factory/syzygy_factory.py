@@ -14,7 +14,9 @@ import config
 
 # A list of unittests to run after each build.
 _UNITTESTS = [
+  'asan_rtl_unittests',
   'agent_common_unittests',
+  'basic_block_entry_unittests',
   'block_graph_orderers_unittests',
   'block_graph_transforms_unittests',
   'block_graph_unittests',
@@ -33,6 +35,7 @@ _UNITTESTS = [
   'protocol_unittests',
   'relink_unittests',
   'reorder_unittests',
+  'rpc_client_lib_unittests',
   'rpc_service_unittests',
   'simulate_unittests',
   'wsdump_unittests',
@@ -118,8 +121,10 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     # Compile unittests only.
     syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_unittests')
 
-    # Then generate and upload a coverage report.
+    # Then generate and upload a coverage report. We do this twice, once
+    # using the MSVS tools and once using the Syzygy tools.
     syzygy_cmd_obj.AddGenerateCoverage()
+    syzygy_cmd_obj.AddGenerateCoverage(use_syzygy=True)
 
     return factory
 
