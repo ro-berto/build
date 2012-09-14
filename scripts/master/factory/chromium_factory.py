@@ -852,16 +852,16 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                             branch='master', target='Release',
                                             slave_type='AnnotatedBuilderTester',
                                             clobber=False, compile_timeout=6000,
-                                            build_url=None, project=None,
+                                            project=None,
                                             factory_properties=None,
                                             tests=None):
     factory_properties = factory_properties or {}
     self._InitWebkitLatestFactorySettings(factory_properties)
 
-    return self.ChromiumAnnotationFactory(annotation_script, branch, target,
-                                          slave_type, clobber, compile_timeout,
-                                          build_url, project,
-                                          factory_properties, tests)
+    return self.ChromiumAnnotationFactory(
+        annotation_script=annotation_script, branch=branch, target=target,
+        slave_type=slave_type, clobber=clobber, compile_timeout=compile_timeout,
+        project=project, factory_properties=factory_properties, tests=tests)
 
   def ChromiumWebkitLatestFactory(self, target='Release', clobber=False,
                                   tests=None, mode=None,
