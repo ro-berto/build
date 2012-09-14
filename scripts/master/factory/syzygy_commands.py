@@ -128,7 +128,7 @@ class SyzygyCommands(commands.FactoryCommands):
     self._factory.addStep(_UrlStatusCommand,
                           command=command,
                           extra_text=('coverage_report' + suffix, url),
-                          name='archive_coverage' + suffix
+                          name='archive_coverage' + suffix,
                           description=desc)
 
   def AddSmokeTest(self):
