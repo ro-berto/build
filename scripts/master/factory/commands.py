@@ -723,7 +723,7 @@ class FactoryCommands(object):
     if include_files is not None:
       # Convert the include_files array into a quoted, comma-delimited list
       # for passing as a command-line argument.
-      include_arg = '"' + ', '.join(include_files) + '"'
+      include_arg = ','.join(include_files)
       cmd += ['--include-files', include_arg]
 
     self._factory.addStep(shell.ShellCommand,
