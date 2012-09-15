@@ -32,9 +32,6 @@ from master.build_sheriffs import BuildSheriffs
 from master import build_utils
 
 
-# TODO(chase): Notifier doesn't send email on step exception, only on step
-#              warnings and failures.  Email on exceptions would be really
-#              nice to have.
 class ChromiumNotifier(MailNotifier):
   """This is a status notifier which closes the tree upon failures.
 
