@@ -17,3 +17,5 @@ class ChromiumLinux(object):
   is_production_host = socket.getfqdn() == master_host
   buildslave_version = 'buildbot_slave_8_4'
   twisted_version = 'twisted_10_2'
+  base_app_url = 'https://chromium-status.appspot.com'
+  tree_status_url = base_app_url + '/status'
