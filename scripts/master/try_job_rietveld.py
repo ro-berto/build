@@ -221,22 +221,21 @@ class TryJobRietveld(TryJobBase):
       try:
         # Gate the try job on the user that requested the job, not the one that
         # authored the CL.
-
-        requester = job['requester']
-        if requester == "None":
-          # TODO(maruel): Remove me once no stale try jobs are left.
-          requester = job['email']
-
-        if not self._valid_users.contains(requester):
+        if not self._valid_users.contains(job['requester']):
           raise BadJobfile(
               'TryJobRietveld rejecting job from %s' % job['requester'])
 
-        emails = set([requester, job['email']])
-        # Discard the CQ if present, no need to spam it.
-        emails.discard('commit-bot@chromium.org')
+        if job['email'] != job['requester']:
+          # Note the fact the try job was requested by someone else in the
+          # 'reason'.
+          job['reason'] = job.get('reason') or ''
+          if job['reason']:
+            job['reason'] += '; '
+          job['reason'] += "This CL was triggered by %s" % job['requester']
+
         options = {
             'bot': {job['builder']: job['tests']},
-            'email': list(emails),
+            'email': [job['email']],
             'project': [self._project],
             'try_job_key': job['key'],
         }
