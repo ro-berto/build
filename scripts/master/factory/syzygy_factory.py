@@ -118,8 +118,9 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                                     self.target_platform,
                                                     target_arch)
 
-    # Compile unittests only.
-    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_unittests')
+    # Compile everything. We need the grinder, the instrumenter and the
+    # coverage agent as well as the unittests.
+    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
 
     # Then generate and upload a coverage report. We do this twice, once
     # using the MSVS tools and once using the Syzygy tools.
