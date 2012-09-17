@@ -551,50 +551,53 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 workdir=workdir,
                                 factory_properties=fp,
                                 perf=True)
-    if R('chrome_endure_control_tests'):
-      f.AddChromeEndureTest(
-          'chrome_endure_control_test',
-          [
-            'perf_endure.ChromeEndureControlTest.'
-              'testControlAttachDetachDOMTree',
-            'perf_endure.ChromeEndureControlTest.'
-              'testControlAttachDetachDOMTreeWebDriver',
-          ],
-          fp)
-    if R('chrome_endure_gmail_tests'):
-      f.AddChromeEndureTest(
-          'chrome_endure_gmail_test',
-          [
-            'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
-            'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscardSleep',
-            'perf_endure.ChromeEndureGmailTest.'
-              'testGmailAlternateThreadlistConversation',
-            'perf_endure.ChromeEndureGmailTest.testGmailAlternateTwoLabels',
-            'perf_endure.ChromeEndureGmailTest.'
-              'testGmailExpandCollapseConversation',
-          ],
-          fp)
-    if R('chrome_endure_docs_tests'):
-      f.AddChromeEndureTest(
-          'chrome_endure_docs_test',
-          [
-            'perf_endure.ChromeEndureDocsTest.testDocsAlternatelyClickLists',
-          ],
-          fp)
-    if R('chrome_endure_plus_tests'):
-      f.AddChromeEndureTest(
-          'chrome_endure_plus_test',
-          [
-            'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
-          ],
-          fp)
-    if R('chrome_endure_indexeddb_tests'):
-      f.AddChromeEndureTest(
-          'chrome_endure_indexeddb_test',
-          [
-            'perf_endure.IndexedDBOfflineTest.testOfflineOnline',
-          ],
-          fp)
+
+    # Endurance tests.
+    endure_tests = {
+      'control': [
+        'perf_endure.ChromeEndureControlTest.testControlAttachDetachDOMTree',
+        'perf_endure.ChromeEndureControlTest.'
+          'testControlAttachDetachDOMTreeWebDriver',
+      ],
+      'docs': [
+        'perf_endure.ChromeEndureDocsTest.testDocsAlternatelyClickLists',
+      ],
+      'gmail': [
+        'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
+        'perf_endure.ChromeEndureGmailTest.'
+          'testGmailAlternateThreadlistConversation',
+        'perf_endure.ChromeEndureGmailTest.testGmailAlternateTwoLabels',
+        'perf_endure.ChromeEndureGmailTest.testGmailExpandCollapseConversation',
+      ],
+      'indexeddb': [
+        'perf_endure.IndexedDBOfflineTest.testOfflineOnline',
+      ],
+      'plus': [
+        'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
+      ],
+    }
+    # Live sites.
+    if R('endure_control_tests'):
+      f.AddChromeEndureTest('endure_control_test', endure_tests['control'], fp)
+    if R('endure_docs_tests'):
+      f.AddChromeEndureTest('endure_docs_test', endure_tests['docs'], fp)
+    if R('endure_gmail_tests'):
+      f.AddChromeEndureTest('endure_gmail_test', endure_tests['gmail'], fp)
+    if R('endure_indexeddb_tests'):
+      f.AddChromeEndureTest('endure_indexeddb_test', endure_tests['indexeddb'],
+                            fp)
+    if R('endure_plus_tests'):
+      f.AddChromeEndureTest('endure_plus_test', endure_tests['plus'], fp)
+    # Web Page Replay.
+    if R('endure_docs_wpr_tests'):
+      f.AddChromeEndureTest('endure_docs_wpr_test', endure_tests['docs'], fp,
+                            wpr=True)
+    if R('endure_gmail_wpr_tests'):
+      f.AddChromeEndureTest('endure_gmail_wpr_test', endure_tests['gmail'], fp,
+                            wpr=True)
+    if R('endure_plus_wpr_tests'):
+      f.AddChromeEndureTest('endure_plus_wpr_test', endure_tests['plus'], fp,
+                            wpr=True)
 
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):

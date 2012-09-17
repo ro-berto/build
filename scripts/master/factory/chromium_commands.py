@@ -1031,22 +1031,29 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddChromeEndureTest(self, test_class_name, pyauto_test_list,
-                          factory_properties, timeout=1200):
+                          factory_properties, timeout=1200, wpr=False):
     """Adds a step to run PyAuto-based Chrome Endure tests.
 
     Args:
       test_class_name: A string name for this class of tests.
       pyauto_test_list: A list of strings, where each string is the full name
-                        of a pyauto test to run (file.class.test_name).
+          of a pyauto test to run (file.class.test_name).
       factory_properties: A dictionary of factory property values.
       timeout: The buildbot timeout for this step, in seconds.  The step will
-               fail if the test does not produce any output within this time.
+          fail if the test does not produce any output within this time.
+      wpr: A boolean indicating whether or not to run the test using Web Page
+          replay (WPR).  If using WPR, the test will replay webapp interactions
+          from a pre-recorded file, rather than using the live site.
     """
     pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
                                   'pyauto_functional.py')
     # Only run on linux for now.
     if not self._target_platform.startswith('linux'):
       return
+
+    env = {'PYTHONPATH': '.'}
+    if not wpr:
+      env['ENDURE_NO_WPR'] = '1'
 
     for pyauto_test_name in pyauto_test_list:
       pyauto_cmd = ['python', pyauto_script, '-v']
@@ -1060,7 +1067,7 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddTestStep(retcode_command.ReturnCodeCommand,
                        test_step_name,
                        pyauto_cmd,
-                       env={'PYTHONPATH': '.'},
+                       env=env,
                        timeout=timeout,
                        do_step_if=self.GetTestStepFilter(factory_properties))
 
