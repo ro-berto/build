@@ -112,7 +112,7 @@ def GenerateIndex():
 
 def DeleteIfExists(filename):
   """Deletes the file (relative to GSBASE), if it exists."""
-  (status, output) = slave_utils.GSUtilListBucket(GSBASE)
+  (status, output) = slave_utils.GSUtilListBucket(GSBASE, ['-l'])
   if status != 0:
     raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
 
@@ -187,7 +187,7 @@ def main():
           status, '%s/%s' % (GSBASE, partial_filename),
           '%s/%s' % (GSBASE, completed_filename)))
 
-    (status, output) = slave_utils.GSUtilListBucket(GSBASE)
+    (status, output) = slave_utils.GSUtilListBucket(GSBASE, ['-l'])
     if status != 0:
       raise Exception('ERROR: failed to get list of GSBASE, exiting' % GSBASE)
 

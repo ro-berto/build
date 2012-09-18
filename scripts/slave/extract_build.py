@@ -25,7 +25,7 @@ class ExtractHandler(object):
 
 class GSHandler(ExtractHandler):
   def is_present(self):
-    return 0 == slave_utils.GSUtilListBucket(self.url)[0]
+    return 0 == slave_utils.GSUtilListBucket(self.url, ['-l'])[0]
 
   def download(self):
     status = slave_utils.GSUtilCopy(self.url, '.')

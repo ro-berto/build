@@ -486,7 +486,7 @@ def GSUtilDeleteFile(filename):
 command_output = ''
 
 
-def GSUtilListBucket(gs_base):
+def GSUtilListBucket(gs_base, args):
   """List the contents of a Google Storage bucket."""
 
   gsutil = GSUtilSetup()
@@ -499,7 +499,7 @@ def GSUtilListBucket(gs_base):
   def GatherOutput(line):
     global command_output
     command_output += line + '\n'
-  command = [gsutil, 'ls', '-l', gs_base]
+  command = [gsutil, 'ls'] + args + [gs_base]
   status = chromium_utils.RunCommand(command, parser_func=GatherOutput)
   return (status, command_output)
 

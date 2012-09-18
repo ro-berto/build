@@ -23,7 +23,7 @@ def DownloadLatestFile(base_url, partial_name, dst):
     Exception: If unable to find or download a file.
   """
   base_url_glob = '%s/*' % base_url.rstrip('/')
-  result = slave_utils.GSUtilListBucket(base_url_glob)
+  result = slave_utils.GSUtilListBucket(base_url_glob, ['-l'])
 
   if not result or result[0]:
     raise Exception('Could not find any archived files.')
