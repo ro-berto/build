@@ -33,7 +33,7 @@ class Helper(object):
     self._schedulers = {}
 
   def Builder(self, name, factory, gatekeeper=None, scheduler=None,
-              builddir=None, auto_reboot=False, notify_on_missing=False):
+              builddir=None, auto_reboot=True, notify_on_missing=False):
     category = self._defaults.get('category')
     self._builders.append({'name': name,
                            'factory': factory,

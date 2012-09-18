@@ -61,7 +61,7 @@ def AutoSetupSlaves(builders, bot_password, max_builds=1,
   """Helper function for master.cfg to quickly setup c['slaves']."""
   slaves_dict = {}
   for builder in builders:
-    auto_reboot = builder.get('auto_reboot', False)
+    auto_reboot = builder.get('auto_reboot', True)
     notify_on_missing = builder.get('notify_on_missing', False)
     slavenames = builder.get('slavenames', [])[:]
     if 'slavename' in builder:
