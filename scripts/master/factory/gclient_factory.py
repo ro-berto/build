@@ -291,7 +291,6 @@ class GClientFactory(object):
             'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
             'issue': WithProperties('%(issue:-)s'),
             'patchset': WithProperties('%(patchset:-)s'),
-            'testfilter': WithProperties('%(testfilter:-)s'),
 
             # And some scripts were written to use non-standard names.
             'parent_cr_revision': WithProperties('%(got_revision:-)s'),
@@ -299,7 +298,7 @@ class GClientFactory(object):
             'parentname': WithProperties('%(buildername)s'),
             'parentslavename': WithProperties('%(slavename:-)s'),
             },
-        copy_properties=trigger_properties))
+        copy_properties=trigger_properties + ['testfilter']))
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
                     slave_type, sudo_for_remove=False, gclient_deps=None):
