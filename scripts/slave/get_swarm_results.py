@@ -12,6 +12,7 @@ build step."""
 import json
 import optparse
 import re
+import socket
 import sys
 import time
 import urllib
@@ -57,7 +58,7 @@ def ConnectToSwarmServer(url):
   for _ in range(MAX_RETRY_ATTEMPTS):
     try:
       return urllib2.urlopen(url).read()
-    except urllib2.URLError as e:
+    except (socket.error, urllib2.URLError) as e:
       print 'Error: Calling %s threw %s' % (url, e)
 
   # We were unable to connect to the url.
