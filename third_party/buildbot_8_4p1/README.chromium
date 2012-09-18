@@ -5,6 +5,9 @@ License: GNU General Public License (GPL) Version 2
 This is a forked copy of buildbot v0.8.4p1.
 
 
+Applied f591d3369270b7897989c242fa7b827ca58b07b7 from buildbot upstream.
+
+
 Add extra parameters to HttpStatusPush as a very basic authentication mechanism.
 
 diff --git a/third_party/buildbot_8_4p1/buildbot/status/status_push.py b/third_party/buildbot_8_4p1/buildbot/status/status_push.py
