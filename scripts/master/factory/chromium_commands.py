@@ -726,7 +726,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     deps2submodules_tool = J(self._repository_root, 'tools', 'deps2git',
                              'deps2submodules.py')
-    cmd = [self._python, deps2submodules_tool, '--gitless']
+    cmd = [self._python, deps2submodules_tool, '--gitless',
+           J(self._repository_root, '.DEPS.git')]
     self.AddTestStep(
         shell.ShellCommand,
         'check_deps2submodules',
