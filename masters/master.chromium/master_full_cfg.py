@@ -27,7 +27,8 @@ S('chromium', branch='src', treeStableTimer=60)
 ## Windows
 ################################################################################
 
-B('Win', 'win_clobber', 'compile|windows', 'chromium', notify_on_missing=True)
+B('Win', 'win_clobber', 'compile|windows', 'chromium',
+  auto_reboot=True, notify_on_missing=True)
 F('win_clobber', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
@@ -55,7 +56,8 @@ F('win_clobber', win().ChromiumFactory(
 ## Mac
 ################################################################################
 
-B('Mac', 'mac_clobber', 'compile|testers', 'chromium', notify_on_missing=True)
+B('Mac', 'mac_clobber', 'compile|testers', 'chromium',
+  auto_reboot=True, notify_on_missing=True)
 F('mac_clobber', mac().ChromiumFactory(
     clobber=True,
     tests=[
@@ -81,7 +83,7 @@ F('mac_clobber', mac().ChromiumFactory(
 ################################################################################
 
 B('Linux', 'linux_clobber', 'compile|testers', 'chromium',
-  notify_on_missing=True)
+  auto_reboot=True, notify_on_missing=True)
 F('linux_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=[
@@ -105,7 +107,7 @@ F('linux_clobber', linux().ChromiumFactory(
     }))
 
 B('Linux x64', 'linux64_clobber', 'compile|testers', 'chromium',
-  notify_on_missing=True)
+  auto_reboot=True, notify_on_missing=True)
 F('linux64_clobber', linux().ChromiumFactory(
     clobber=True,
     tests=[

@@ -44,7 +44,7 @@ D(rel_dep_scheduler, rel_scheduler)
 #
 # Mac Rel Builder
 #
-B('Webkit Mac Builder (deps)', 'f_webkit_mac_rel',
+B('Webkit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler=rel_scheduler, builddir=rel_builddir)
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',

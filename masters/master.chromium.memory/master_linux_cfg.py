@@ -35,7 +35,7 @@ linux_asan_archive = master_config.GetArchiveUrl('ChromiumMemory',
 # Linux ASAN Rel Builder
 #
 B('Linux ASAN Builder', 'linux_asan_rel', 'compile', 'linux_asan_rel',
-  notify_on_missing=True)
+  auto_reboot=False, notify_on_missing=True)
 # Please do not add release_extra_cflags=-g here until the debug info section
 # produced by Clang on Linux is small enough.
 F('linux_asan_rel', linux().ChromiumASANFactory(

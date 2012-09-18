@@ -78,7 +78,7 @@ mac_asan_archive = master_config.GetArchiveUrl(
 # Mac ASAN Rel Builder
 #
 B('Mac ASAN Builder', 'mac_asan_rel', 'compile', 'mac_asan_rel',
-  notify_on_missing=True)
+  auto_reboot=False, notify_on_missing=True)
 F('mac_asan_rel', mac().ChromiumASANFactory(
     target='Release',
     slave_type='Builder',

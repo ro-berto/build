@@ -69,7 +69,7 @@ fp_chromeos_asan = {
         'GYP_GENERATORS': 'ninja' }}
 
 B('Chromium OS ASAN Builder', 'chromeos_asan_rel', 'compile',
-  'chromeos_asan_rel', notify_on_missing=True)
+  'chromeos_asan_rel', auto_reboot=False, notify_on_missing=True)
 F('chromeos_asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
     options=[

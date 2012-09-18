@@ -26,21 +26,24 @@ S('syzygy_cont', branch='trunk', treeStableTimer=60)
 #
 # Windows continuous Release builder
 #
-B('Syzygy Release', 'f_syzygy_win_rel', scheduler='syzygy_cont')
+B('Syzygy Release', 'f_syzygy_win_rel', scheduler='syzygy_cont',
+  auto_reboot=False)
 F('f_syzygy_win_rel', win().SyzygyFactory())
 
 
 #
 # Windows continuous Debug builder
 #
-B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont')
+B('Syzygy Debug', 'f_syzygy_win_dbg', scheduler='syzygy_cont',
+  auto_reboot=False)
 F('f_syzygy_win_dbg', win().SyzygyFactory(target='debug'))
 
 
 #
 # Windows continuous code coverage builder
 #
-B('Syzygy Coverage', 'f_syzygy_win_cov', scheduler='syzygy_cont')
+B('Syzygy Coverage', 'f_syzygy_win_cov', scheduler='syzygy_cont',
+  auto_reboot=False)
 F('f_syzygy_win_cov', win().SyzygyCoverageFactory(target='coverage'))
 
 

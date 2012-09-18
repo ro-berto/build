@@ -34,7 +34,8 @@ builder_release = {
   'name': 'x64 Release',
   'builddir': 'DevTools_Release',
   'factory': factory_release,
-  'category': 'Linux'
+  'category': 'Linux',
+  'auto_reboot': False
 }
 
 
@@ -57,7 +58,8 @@ builder_debug = {
   'name': 'x64 Debug',
   'builddir': 'DevTools_Debug',
   'factory': factory_debug,
-  'category': 'Linux'
+  'category': 'Linux',
+  'auto_reboot': False
 }
 
 factory_release_clang = linux().ChromiumWebkitLatestFactory(
@@ -82,7 +84,8 @@ builder_release_clang = {
   'name': 'x64 Release Clang',
   'builddir': 'DevTools_Release_Clang',
   'factory': factory_release_clang,
-  'category': 'Linux'
+  'category': 'Linux',
+  'auto_reboot': False
 }
 
 

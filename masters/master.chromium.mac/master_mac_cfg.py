@@ -54,7 +54,7 @@ T('mac_rel_trigger')
 # Mac Rel Builder
 #
 B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
-  notify_on_missing=True)
+  auto_reboot=False, notify_on_missing=True)
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=[
@@ -158,7 +158,8 @@ T('mac_dbg_trigger')
 #
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg', notify_on_missing=True)
+B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg',
+  auto_reboot=False, notify_on_missing=True)
 F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',

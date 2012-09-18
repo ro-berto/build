@@ -42,7 +42,8 @@ T('win_rel_trigger')
 #
 # Win Rel Builder
 #
-B('Win Builder (git)', 'rel', 'compile|windows', 'win_rel', builddir=builddir)
+B('Win Builder (git)', 'rel', 'compile|windows', 'win_rel', builddir=builddir,
+  auto_reboot=False)
 F('rel', win().ChromiumGITFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder_tests',

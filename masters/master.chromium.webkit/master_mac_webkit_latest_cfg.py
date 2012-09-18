@@ -55,7 +55,7 @@ T('s5_webkit_rel_trigger')
 #
 # Mac Rel Builder
 #
-B('Webkit Mac Builder', 'f_webkit_mac_rel',
+B('Webkit Mac Builder', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler='s5_webkit_rel', builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
@@ -133,7 +133,7 @@ T('s5_webkit_dbg_trigger')
 #
 # Mac Dbg Builder
 #
-B('Webkit Mac Builder (dbg)', 'f_webkit_mac_dbg',
+B('Webkit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
   scheduler='s5_webkit_dbg', builddir='webkit-mac-latest-dbg')
 F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',

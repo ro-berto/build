@@ -32,7 +32,8 @@ S('s9_gpu_linux_webkit_rel', branch='trunk', treeStableTimer=60)
 # Linux Rel tests
 #
 
-B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_gpu_linux_webkit_rel')
+B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_gpu_linux_webkit_rel',
+  auto_reboot=False)
 F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
     tests=[
@@ -59,7 +60,7 @@ F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
 S('s9_gpu_linux_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg',
-  scheduler='s9_gpu_linux_webkit_dbg')
+  scheduler='s9_gpu_linux_webkit_dbg', auto_reboot=False)
 F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=[

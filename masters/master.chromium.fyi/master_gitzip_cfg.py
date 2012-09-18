@@ -31,7 +31,8 @@ def Update(config, active_master, c):
   builders.append({
       'name': 'Chromium Git Packager',
       'builddir': 'chromium-git-packager',
-      'factory': factory})
+      'factory': factory,
+      'auto_reboot': False})
 
   schedulers = c.setdefault('schedulers', [])
   schedulers.append(Nightly(name='gitzip_nightly',

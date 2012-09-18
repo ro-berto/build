@@ -101,6 +101,7 @@ B('Linux ChromiumOS Full',
   # This shows up in the archived artifacts.
   builddir='Linux_ChromiumOS',
   scheduler='chromium_local',
+  auto_reboot=False,
   notify_on_missing=True)
 F('fullbuilder', chromiumos().ChromiumOSFactory(
     slave_type='BuilderTester',
@@ -127,6 +128,7 @@ B('Linux ChromiumOS Builder',
   gatekeeper='compile',
   builddir='chromium-rel-linux-chromeos',
   scheduler='chromium_local',
+  auto_reboot=False,
   notify_on_missing=True)
 F('builder', chromiumos().ChromiumOSFactory(
     slave_type='Builder',
@@ -198,6 +200,7 @@ B('Linux ChromiumOS (Clang dbg)',
   gatekeeper='compile|tester',
   builddir='chromium-dbg-linux-chromeos-clang',
   scheduler='chromium_local',
+  auto_reboot=False,
   notify_on_missing=True)
 F('clang', chromiumos().ChromiumOSFactory(
     target='Debug',
@@ -222,7 +225,7 @@ dbg_archive = master_config.GetArchiveUrl('ChromiumChromiumOS',
                                           'linux')
 
 B('Linux ChromiumOS Builder (dbg)', 'dbg', 'compile',
-  'chromium_local', notify_on_missing=True)
+  'chromium_local', auto_reboot=False, notify_on_missing=True)
 F('dbg', chromiumos().ChromiumOSFactory(
     slave_type='Builder',
     target='Debug',

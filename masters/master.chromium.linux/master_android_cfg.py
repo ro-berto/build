@@ -36,14 +36,14 @@ T('android_trigger')
 # Android Builder
 #
 B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
-  notify_on_missing=True)
+  auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_main_builder.sh',
     factory_properties={'trigger': 'android_trigger'}))
 
-B('Android Tester (dbg)', 'f_android_dbg_tests', None,
-  'android_trigger', notify_on_missing=True)
+B('Android Tester (dbg)', 'f_android_dbg_tests', None, 'android_trigger',
+  auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_main_tester.sh',

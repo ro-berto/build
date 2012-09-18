@@ -41,7 +41,8 @@ T('linux_rel_trigger')
 #
 # Linux Rel Builder
 #
-B('Linux Builder x64 (git)', 'rel', 'compile', 'linux_rel')
+B('Linux Builder x64 (git)', 'rel', 'compile', 'linux_rel',
+  auto_reboot=False)
 F('rel', linux().ChromiumGITFactory(
     slave_type='Builder',
     options=['--compiler=goma', 'base_unittests', 'net_unittests'],

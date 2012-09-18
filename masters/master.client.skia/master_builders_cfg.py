@@ -40,7 +40,7 @@ def Update(config, active_master, c):
   # Linux...
   defaults['category'] = 'linux'
   B('Skia_Linux_Fixed_Debug', 'f_skia_linux_fixed_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_linux_fixed_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
@@ -51,7 +51,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Linux_Fixed_Debug',
       ).Build())
   B('Skia_Linux_Fixed_NoDebug', 'f_skia_linux_fixed_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_linux_fixed_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
@@ -62,7 +62,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Linux_Fixed_NoDebug',
       ).Build())
   B('Skia_Linux_Float_Debug', 'f_skia_linux_float_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_linux_float_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
@@ -73,7 +73,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Linux_Float_Debug',
       ).Build())
   B('Skia_Linux_Float_NoDebug', 'f_skia_linux_float_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_linux_float_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_LINUX,
@@ -87,7 +87,7 @@ def Update(config, active_master, c):
   # Android (runs on a Linux buildbot slave)...
   defaults['category'] = 'android'
   B('Skia_Android_Float_Debug', 'f_skia_android_float_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_android_float_debug', android_factory.AndroidFactory(
       do_upload_results=do_upload_results,
       other_subdirs=['android'],
@@ -97,7 +97,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Android_Float_Debug',
       ).Build())
   B('Skia_Android_Float_NoDebug', 'f_skia_android_float_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_android_float_nodebug', android_factory.AndroidFactory(
       do_upload_results=do_upload_results,
       other_subdirs=['android'],
@@ -110,7 +110,7 @@ def Update(config, active_master, c):
   # Mac 10.6 (SnowLeopard) ...
   defaults['category'] = 'mac-10.6'
   B('Skia_Mac_Fixed_Debug', 'f_skia_mac_fixed_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_mac_fixed_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -121,7 +121,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Mac_Fixed_Debug',
       ).Build())
   B('Skia_Mac_Fixed_NoDebug', 'f_skia_mac_fixed_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_mac_fixed_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -132,7 +132,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Mac_Fixed_NoDebug',
       ).Build())
   B('Skia_Mac_Float_Debug', 'f_skia_mac_float_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_mac_float_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -143,7 +143,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Mac_Float_Debug',
       ).Build())
   B('Skia_Mac_Float_NoDebug', 'f_skia_mac_float_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_mac_float_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -157,7 +157,7 @@ def Update(config, active_master, c):
   # Mac 10.7 (Lion) ...
   defaults['category'] = 'mac-10.7'
   B('Skia_MacMiniLion_Fixed_Debug', 'f_skia_MacMiniLion_fixed_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_MacMiniLion_fixed_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -168,7 +168,7 @@ def Update(config, active_master, c):
       builder_name='Skia_MacMiniLion_Fixed_Debug',
       ).Build())
   B('Skia_MacMiniLion_Fixed_NoDebug', 'f_skia_MacMiniLion_fixed_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_MacMiniLion_fixed_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -179,7 +179,7 @@ def Update(config, active_master, c):
       builder_name='Skia_MacMiniLion_Fixed_NoDebug',
       ).Build())
   B('Skia_MacMiniLion_Float_Debug', 'f_skia_MacMiniLion_float_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_MacMiniLion_float_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -190,7 +190,7 @@ def Update(config, active_master, c):
       builder_name='Skia_MacMiniLion_Float_Debug',
       ).Build())
   B('Skia_MacMiniLion_Float_NoDebug', 'f_skia_MacMiniLion_float_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_MacMiniLion_float_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_MAC,
@@ -204,7 +204,7 @@ def Update(config, active_master, c):
   # Windows...
   defaults['category'] = 'windows'
   B('Skia_Win32_Fixed_Debug', 'f_skia_win32_fixed_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_win32_fixed_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
@@ -215,7 +215,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Win32_Fixed_Debug',
       ).Build())
   B('Skia_Win32_Fixed_NoDebug', 'f_skia_win32_fixed_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_win32_fixed_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
@@ -226,7 +226,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Win32_Fixed_NoDebug',
       ).Build())
   B('Skia_Win32_Float_Debug', 'f_skia_win32_float_debug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_win32_float_debug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,
@@ -237,7 +237,7 @@ def Update(config, active_master, c):
       builder_name='Skia_Win32_Float_Debug',
       ).Build())
   B('Skia_Win32_Float_NoDebug', 'f_skia_win32_float_nodebug',
-      scheduler='skia_rel')
+      scheduler='skia_rel', auto_reboot=False)
   F('f_skia_win32_float_nodebug', skia_factory.SkiaFactory(
       do_upload_results=do_upload_results,
       target_platform=skia_factory.TARGET_PLATFORM_WIN32,

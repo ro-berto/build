@@ -24,23 +24,28 @@ S('win_trunk', branch='trunk', treeStableTimer=60)
 ## Release
 ################################################################################
 
-B('Win7 Release', 'rel', 'compile|windows', 'win_trunk', notify_on_missing=True)
+B('Win7 Release', 'rel', 'compile|windows', 'win_trunk',
+  auto_reboot=False, notify_on_missing=True)
 F('rel', win().OmahaFactory())
 
 B('Vista Release', 'rel', 'compile|windows', 'win_trunk',
-  notify_on_missing=True)
-B('XP Release', 'rel', 'compile|windows', 'win_trunk', notify_on_missing=True)
+  auto_reboot=False, notify_on_missing=True)
+B('XP Release', 'rel', 'compile|windows', 'win_trunk',
+  auto_reboot=False, notify_on_missing=True)
 
 
 ################################################################################
 ## Release
 ################################################################################
 
-B('Win7 Debug', 'dbg', 'compile|windows', 'win_trunk', notify_on_missing=True)
+B('Win7 Debug', 'dbg', 'compile|windows', 'win_trunk',
+  auto_reboot=False, notify_on_missing=True)
 F('dbg', win().OmahaFactory(target='dbg-win'))
 
-B('Vista Debug', 'dbg', 'compile|windows', 'win_trunk', notify_on_missing=True)
-B('XP Debug', 'dbg', 'compile|windows', 'win_trunk', notify_on_missing=True)
+B('Vista Debug', 'dbg', 'compile|windows', 'win_trunk',
+  auto_reboot=False, notify_on_missing=True)
+B('XP Debug', 'dbg', 'compile|windows', 'win_trunk',
+  auto_reboot=False, notify_on_missing=True)
 
 
 def Update(config, active_master, c):

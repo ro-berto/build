@@ -80,7 +80,8 @@ T('linux_rel_trigger')
 #
 # Linux Rel Builder
 #
-B('Linux Builder x64', 'rel', 'compile', 'linux_rel', notify_on_missing=True)
+B('Linux Builder x64', 'rel', 'compile', 'linux_rel',
+  auto_reboot=False, notify_on_missing=True)
 F('rel', linux().ChromiumFactory(
     slave_type='Builder',
     options=['--compiler=goma',] + linux_all_test_targets +
@@ -120,8 +121,8 @@ F('rel_unit', linux_tester().ChromiumFactory(
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
 
-B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger', auto_reboot=True,
-  notify_on_missing=True)
+B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
 F('rel_sync', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -179,7 +180,7 @@ linux_aura_options=[
 ]
 
 B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',
-  notify_on_missing=True)
+  auto_reboot=True, notify_on_missing=True)
 F('f_linux_rel_aura', linux().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
@@ -209,7 +210,8 @@ T('linux_dbg_trigger')
 #
 # Linux Dbg Builder
 #
-B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg', notify_on_missing=True)
+B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg',
+  auto_reboot=False, notify_on_missing=True)
 F('dbg', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',

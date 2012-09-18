@@ -42,7 +42,8 @@ T('mac_rel_trigger')
 #
 # Mac Rel Builder
 #
-B('Mac Builder (git)', 'rel', 'compile', 'mac_rel', builddir=builddir)
+B('Mac Builder (git)', 'rel', 'compile', 'mac_rel', builddir=builddir,
+  auto_reboot=False)
 F('rel', mac().ChromiumGITFactory(
     slave_type='Builder',
     options=['--compiler=goma-clang',

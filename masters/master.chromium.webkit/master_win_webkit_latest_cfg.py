@@ -46,7 +46,7 @@ T('s4_webkit_rel_trigger')
 # Win Rel Builder
 #
 B('Webkit Win Builder', 'f_webkit_win_rel', scheduler='s4_webkit_rel',
-  builddir='webkit-win-latest-rel')
+  builddir='webkit-win-latest-rel', auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;webkit_builder_win',
@@ -92,7 +92,7 @@ T('s4_webkit_dbg_trigger')
 # Win Dbg Builder
 #
 B('Webkit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='s4_webkit_dbg',
-  builddir='webkit-win-latest-dbg')
+  builddir='webkit-win-latest-dbg', auto_reboot=False)
 F('f_webkit_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',

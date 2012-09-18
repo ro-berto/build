@@ -25,7 +25,8 @@ S('chromium_lkgr', branch='src', treeStableTimer=1, categories=['lkgr'])
 ## Windows
 ################################################################################
 
-B('Win', 'win_full', 'compile|windows', 'chromium_lkgr')
+B('Win', 'win_full', 'compile|windows', 'chromium_lkgr',
+  auto_reboot=True)
 F('win_full', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
@@ -37,14 +38,16 @@ F('win_full', win().ChromiumFactory(
 ## Mac
 ################################################################################
 
-B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
+B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr',
+  auto_reboot=True)
 F('mac_full', mac().ChromiumFactory(
     clobber=True,
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
-B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
+B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr',
+  auto_reboot=True)
 F('mac_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
@@ -55,7 +58,8 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
 
-B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
+B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr',
+  auto_reboot=True)
 F('mac_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
@@ -71,14 +75,16 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
 ## Linux
 ################################################################################
 
-B('Linux', 'linux_full', 'compile|testers', 'chromium_lkgr')
+B('Linux', 'linux_full', 'compile|testers', 'chromium_lkgr',
+  auto_reboot=True)
 F('linux_full', linux().ChromiumFactory(
     clobber=True,
     factory_properties={'archive_build': True,
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
-B('Linux x64', 'linux64_full', 'compile|testers', 'chromium_lkgr')
+B('Linux x64', 'linux64_full', 'compile|testers', 'chromium_lkgr',
+  auto_reboot=True)
 F('linux64_full', linux().ChromiumFactory(
     clobber=True,
     factory_properties={
@@ -87,7 +93,8 @@ F('linux64_full', linux().ChromiumFactory(
         'gs_acl': 'public-read',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
-B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
+B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr',
+  auto_reboot=True)
 F('linux_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
@@ -101,7 +108,8 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
 asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
 
-B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
+B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr',
+  auto_reboot=True)
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
@@ -113,7 +121,8 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_gyp}}))
 
-B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
+B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr',
+  auto_reboot=True)
 F('linux_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',

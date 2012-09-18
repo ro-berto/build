@@ -50,7 +50,7 @@ T('s7_webkit_builder_rel_trigger')
 # Win Rel Builders
 #
 B('Win Builder', 'f_win_rel', scheduler='s7_webkit_builder_rel',
-  builddir='win-latest-rel')
+  builddir='win-latest-rel', auto_reboot=False)
 F('f_win_rel', win().ChromiumWebkitLatestFactory(
     slave_type='Builder',
     project='all.sln;chromium_builder',

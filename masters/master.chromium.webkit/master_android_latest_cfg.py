@@ -55,7 +55,8 @@ F('f_android_dbg', linux_android().ChromiumWebkitLatestAnnotationFactory(
         'build_url': chromium_android_archive,
         }))
 
-B('Android Tests (dbg)', 'f_android_dbg_tests', None, 'android_trigger')
+B('Android Tests (dbg)', 'f_android_dbg_tests', None, 'android_trigger',
+  auto_reboot=False)
 F('f_android_dbg_tests', linux_android().ChromiumWebkitLatestAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_webkit_latest_tester.sh',
