@@ -18,6 +18,7 @@ from buildbot.process.properties import WithProperties
 from buildbot.status.builder import SUCCESS
 from buildbot.steps import shell
 from buildbot.steps.transfer import FileDownload
+from twisted.python import log
 
 from common import chromium_utils
 import config
@@ -99,6 +100,20 @@ class RunHooksShell(shell.ShellCommand):
       cmd.args['env'] = environ
 
     shell.ShellCommand.setupEnvironment(self, cmd)
+
+
+class SwarmShellForHashes(shell.ShellCommand):
+  """A basic swarm ShellCommand wrapper that assumes the script it runs will
+  output a list of property names and hashvalues, with each pair on its own
+  line."""
+  def commandComplete(self, cmd):
+    shell.ShellCommand.commandComplete(self, cmd)
+
+    re_hash_mapping = re.compile(r'^([a-z_]+) ([0-9a-f]+)')
+    matches = (re_hash_mapping.match(l) for l in self.stdio_log.readlines())
+    swarm_hashes = dict(x.groups() for x in matches if x)
+
+    self.setProperty('swarm_hashes', swarm_hashes)
 
 
 class FactoryCommands(object):
@@ -899,6 +914,34 @@ class FactoryCommands(object):
 
     return chromium_utils.InitializePartiallyWithArguments(command_class,
         report_link=report_link, output_dir=output_dir)
+
+  def AddGenerateResultHashesStep(self, using_ninja, tests=None, doStepIf=True):
+    """Adds a step to generate the hashes for result files. This is used by
+    swarm."""
+    if using_ninja:
+      out_dir = 'out'
+    elif self._target_platform == 'win32':
+      out_dir = 'build'
+    elif self._target_platform == 'darwin':
+      out_dir = 'xcodebuild'
+    else:
+      out_dir = 'out'
+
+    if not self._target:
+      log.msg('No target specified, unable to find result files to '
+              'trigger swarm tests')
+      return
+    manifest_directory = self.PathJoin('src', out_dir, self._target)
+    script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
+
+    cmd = [script_path, '--manifest_directory', manifest_directory]
+    cmd.append(tests if tests else WithProperties('%(swarm_tests:-)s'))
+
+    self._factory.addStep(SwarmShellForHashes,
+                          name='manifests_to_hashes',
+                          description='manifests_to_hashes',
+                          command=cmd,
+                          doStepIf=doStepIf)
 
   # Checks out and builds clang
   def AddUpdateClangStep(self):

@@ -63,19 +63,17 @@ def SetupSwarmTests(machine, data_dir, options=None, project=None,
       network_path=network_path)
 
 
-def SwarmTestBuilder(swarm_server, unix_hashtable_data_dir,
-                     windows_hashtable_data_dir):
+def SwarmTestBuilder(swarm_server):
   """Create a basic swarm builder that runs tests via swarm."""
   f = factory.BuildFactory()
 
   swarm_command_obj = swarm_commands.SwarmCommands(f)
 
   # Send the swarm tests to the swarm server.
-  swarm_command_obj.AddTriggerSwarmTestFromTestFilterStep(
+  swarm_command_obj.AddTriggerSwarmTestStep(
       swarm_server=swarm_server,
-      unix_data_dir=unix_hashtable_data_dir,
-      windows_data_dir=windows_hashtable_data_dir,
-      tests=SWARM_TESTS)
+      tests=SWARM_TESTS,
+      doStepIf=swarm_commands.TestStepHasSwarmProperties)
 
   # Collect the results
   for swarm_test in SWARM_TESTS:
@@ -119,26 +117,16 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                           'http://localhost:9001')
     swarm_server = swarm_server.rstrip('/')
 
-    ninja = '--build-tool=ninja' in (options or [])
-
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'test_isolation_mode=hashtable' in gyp_defines:
-      if ninja:
-        out_dir = 'out'
-      elif self._target_platform == 'win32':
-        out_dir = 'build'
-      elif self._target_platform == 'darwin':
-        out_dir = 'xcodebuild'
-      else:
-        out_dir = 'out'
+      test_names = [test.test_name for test in tests]
+
+      swarm_command_obj.AddGenerateResultHashesStep(
+          using_ninja='--build-tool=ninja' in (options or []),
+          tests=test_names)
 
       # Send of all the test requests as a single step.
-      manifest_directory = swarm_command_obj.PathJoin('src', out_dir, target)
-      swarm_command_obj.AddTriggerSwarmTestStep(self._target_platform,
-            swarm_server,
-            data_dir,
-            manifest_directory,
-            tests)
+      swarm_command_obj.AddTriggerSwarmTestStep(swarm_server, tests)
 
       # Each test has its output returned as its own step.
       for test in tests:

@@ -6,12 +6,11 @@
 
 This is based on commands.py and adds swarm-specific commands."""
 
-import re
-
 from buildbot.process.properties import Property
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
+import config
 from master.factory import commands
 from master.log_parser import gtest_command
 
@@ -50,23 +49,6 @@ def TestStepHasSwarmProperties(bStep):
   return True
 
 
-class SwarmShellForHashes(shell.ShellCommand):
-  """A basic swarm ShellCommand wrapper that assumes the script it runs will
-  output a list of property names and hashvalues, with each pair on its own
-  line."""
-  def commandComplete(self, cmd):
-    shell.ShellCommand.commandComplete(self, cmd)
-
-    re_hash_mapping = re.compile(r'^([a-z_]+) ([0-9a-f]+)')
-    swarm_hashes = {}
-    for line in self.stdio_log.readlines():
-      match = re_hash_mapping.match(line)
-      if match:
-        swarm_hashes[match.group(1)] = match.group(2)
-
-    self.setProperty('swarm_hashes', swarm_hashes)
-
-
 class SwarmShellForTriggeringTests(shell.ShellCommand):
   """A simple swarm ShellCommand wrapper to ensue that all test that are sent
   to swarm and properly assigned a number of shards to run on."""
@@ -78,7 +60,10 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
-    test_filters = self.getProperty('testfilter')
+    try:
+      test_filters = self.getProperty('testfilter')
+    except KeyError:
+      test_filters = (test.test_name + '_swarm' for test in self.tests)
     swarm_tests_hash_mapping = self.getProperty('swarm_hashes')
 
     command = self.command
@@ -107,46 +92,24 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
 
-  def AddTriggerSwarmTestStep(self, target_platform, swarm_server, data_dir,
-                              manifest_directory, tests):
+  def AddTriggerSwarmTestStep(self, swarm_server, tests, doStepIf=True):
     script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
                                                'buildername:-None',
                                                'buildnumber:-None')
 
-    command = [self._python, script_path, '-o', target_platform,
-               '-u', swarm_server, '-d', data_dir,
-               '-t', swarm_request_name_prefix]
-
-    # Add the tests to run, along with the minimum and maximum number of
-    # shards to request.
-    for test in tests:
-      command.extend(['--run_from_manifest',
-                      self.PathJoin(manifest_directory,
-                                    test.test_name + '.results'),
-                      '%d' % test.shards, '*'])
-
-    self.AddTestStep(shell.ShellCommand, 'trigger_swarm_tests', command)
-
-  def AddTriggerSwarmTestFromTestFilterStep(self, swarm_server, unix_data_dir,
-                                            windows_data_dir, tests):
-    script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
-
-    swarm_request_name_prefix = WithProperties('%s-%s-',
-                                               'buildername:-None',
-                                               'buildnumber:-None')
-
-    command = [self._python, script_path, '-o', Property('os'),
+    command = [self._python, script_path, '-o', self._target_platform,
                '-u', swarm_server, '-t', swarm_request_name_prefix]
 
-    self._factory.addStep(SwarmShellForTriggeringTests,
-                          name='trigger_swarm_tests',
-                          command=command,
-                          unix_data_dir=unix_data_dir,
-                          windows_data_dir=windows_data_dir,
-                          tests=tests,
-                          doStepIf=TestStepHasSwarmProperties)
+    self._factory.addStep(
+        SwarmShellForTriggeringTests,
+        name='trigger_swarm_tests',
+        command=command,
+        unix_data_dir=config.Master.swarm_unix_hashtable_internal,
+        windows_data_dir=config.Master.swarm_windows_hashtable_internal,
+        tests=tests,
+        doStepIf=doStepIf)
 
   def AddGetSwarmTestStep(self, swarm_server, test_name):
     script_path = self.PathJoin(self._script_dir, 'get_swarm_results.py')

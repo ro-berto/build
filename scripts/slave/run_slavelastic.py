@@ -5,7 +5,6 @@
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
 import glob
-import hashlib
 import json
 import optparse
 import os
@@ -211,11 +210,6 @@ def main():
   parser.add_option('-t', '--test-name-prefix', default='',
                     help='Specify the prefix to give the swarm test request. '
                     'Defaults to %default')
-  parser.add_option('-n', '--run_from_manifest', nargs=3, action='append',
-                    default=[],
-                    help='Specify a manifest name to run on swarm. The format '
-                    'is (manifest_name, shards, test_filter). This may be used '
-                    'multiple times to send multiple manifests.')
   parser.add_option('--run_from_hash', nargs=4, action='append', default=[],
                     help='Specify a hash to run on swarm. The format is '
                     '(hash, hash_test_name, shards, test_filter). This may be '
@@ -245,32 +239,8 @@ def main():
                                            builder_name + '*.zip')):
       os.remove(filename)
 
-  # Send off the manifest files.
-  highest_exit_code = 0
-  for (manifest_file, shards, testfilter) in options.run_from_manifest:
-    # Convert the manifest files to hashes.
-    test_name = os.path.splitext(os.path.basename(manifest_file))[0]
-    test_full_name = options.test_name_prefix + test_name
-
-    if not os.path.exists(manifest_file):
-      print ("Manifest file, %s, not found. Unable to send swarm request "
-             "for %s" % (manifest_file, test_full_name))
-      continue
-
-    file_sha1 = hashlib.sha1(open(manifest_file, 'rb').read()).hexdigest()
-
-    try:
-      highest_exit_code = max(highest_exit_code,
-                              ProcessManifest(file_sha1,
-                                              test_full_name,
-                                              int(shards),
-                                              testfilter,
-                                              options))
-    except ValueError:
-      print ('Unable to process %s because integer not given for shard count' %
-             test_name)
-
   # Send off the hash swarm test requests.
+  highest_exit_code = 0
   for (file_sha1, test_name, shards, testfilter) in options.run_from_hash:
     try:
       highest_exit_code = max(highest_exit_code,

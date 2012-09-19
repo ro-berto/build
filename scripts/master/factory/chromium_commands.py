@@ -14,7 +14,6 @@ from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from buildbot.steps import trigger
 from buildbot.steps.transfer import FileUpload
-from twisted.python import log
 
 from common import chromium_utils
 import config
@@ -1565,36 +1564,11 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddTriggerSwarmTests(self, tests, factory_properties):
     """Generate the hash for each swarm result file and then trigger the swarm
     tests."""
-    ninja = (
+    using_ninja = (
         'ninja' in factory_properties['gclient_env'].get('GYP_GENERATORS', ''))
 
-    if ninja:
-      out_dir = 'out'
-    elif self._target_platform == 'win32':
-      out_dir = 'build'
-    elif self._target_platform == 'darwin':
-      out_dir = 'xcodebuild'
-    else:
-      out_dir = 'out'
-
-    if not self._target:
-      log.msg('No target specified, unable to find swarm result files to '
-              'trigger swarm tests')
-      return
-
-    # Calculate all result hashfiles
-    manifest_directory = self.PathJoin('src', out_dir, self._target)
-    script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
-
-    cmd = [script_path,
-           '--manifest_directory', manifest_directory]
-    cmd.append(WithProperties('%(swarm_tests:-)s'))
-
-    self._factory.addStep(swarm_commands.SwarmShellForHashes,
-                          name='manifests_to_hashes',
-                          description='manifests_to_hashes',
-                          command=cmd,
-                          doStepIf=swarm_commands.TestStepFilterSwarm)
+    self.AddGenerateResultHashesStep(using_ninja,
+                                     swarm_commands.TestStepFilterSwarm)
 
     # Trigger the swarm test builder.
     properties = {
