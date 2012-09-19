@@ -86,6 +86,7 @@ LKGR_STEPS = {
     'Win7 Tests (dbg)(1)': [
       'base_unittests',
       'cacheinvalidation_unittests',
+      'cc_unittests',
       'check_deps',
       'content_unittests',
       'courgette_unittests',
@@ -101,6 +102,7 @@ LKGR_STEPS = {
       'sync_unit_tests',
       'ui_unittests',
       'unit_tests',
+      'webkit_compositor_bindings_unittests',
     ],
     'Win7 Tests (dbg)(2)': [
       'net_unittests', 'browser_tests',
@@ -130,10 +132,12 @@ LKGR_STEPS = {
     ],
     'Mac 10.6 Tests (dbg)(1)': [
       'browser_tests',
+      'cc_unittests',
       'googleurl_unittests',
       'printing_unittests',
       'remoting_unittests',
       'jingle_unittests',
+      'webkit_compositor_bindings_unittests',
     ],
     'Mac 10.6 Tests (dbg)(2)': [
       'browser_tests',
@@ -168,6 +172,7 @@ LKGR_STEPS = {
     'Linux Tests (dbg)(2)': [
       'base_unittests',
       'cacheinvalidation_unittests',
+      'cc_unittests',
       'content_unittests',
       'googleurl_unittests',
       'interactive_ui_tests',
@@ -181,6 +186,7 @@ LKGR_STEPS = {
       'sync_unit_tests',
       'ui_unittests',
       'unit_tests',
+      'webkit_compositor_bindings_unittests',
     ],
     'Android Builder (dbg)': [
       'build',
