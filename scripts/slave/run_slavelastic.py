@@ -244,11 +244,12 @@ def main():
   for (file_sha1, test_name, shards, testfilter) in options.run_from_hash:
     try:
       highest_exit_code = max(highest_exit_code,
-                              ProcessManifest(file_sha1,
-                                              test_name,
-                                              int(shards),
-                                              testfilter,
-                                              options))
+                              ProcessManifest(
+                                  file_sha1,
+                                  options.test_name_prefix + test_name,
+                                  int(shards),
+                                  testfilter,
+                                  options))
     except ValueError:
       print ('Unable to process %s because integer not given for shard count' %
              test_name)
