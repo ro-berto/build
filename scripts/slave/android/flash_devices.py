@@ -265,13 +265,6 @@ def FlashSingleDeviceIfNecessary(device, image_file_name):
   FastbootCommand(['-s', device, '-w', 'update', image_file_name])
   logging.info('Flashed image %s onto device %s.', image_file_name, device)
 
-  # Wiping phones after flash
-  FastbootCommand(['-s', device, 'erase', 'userdata'])
-  FastbootCommand(['-s', device, 'erase', 'cache'])
-  logging.info('Wiped device %s.', device)
-
-  FastbootCommand(['-s', device, 'reboot'])
-
   return True
 
 
