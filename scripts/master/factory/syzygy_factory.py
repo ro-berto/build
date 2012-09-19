@@ -100,16 +100,6 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                             mode=None, slave_type='BuilderTester', options=None,
                             compile_timeout=1200, build_url=None, project=None,
                             factory_properties=None, target_arch=None):
-    """Generates the GYP solutions with "coverage=1", and performs code
-    coverage reporting."""
-    if not factory_properties:
-      factory_properties = {}
-
-    gclient_env = factory_properties.get('gclient_env', {})
-    # Make sure gclient generates coverage-enabled projects.
-    gclient_env['GYP_DEFINES'] = 'coverage=1'
-    factory_properties['gclient_env'] = gclient_env
-
     factory = self.BaseFactory(factory_properties=factory_properties)
 
     syzygy_cmd_obj = syzygy_commands.SyzygyCommands(factory,
