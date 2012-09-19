@@ -4,11 +4,12 @@
 # found in the LICENSE file.
 # run_slavelastic.py: Runs a test based off of a slavelastic manifest file.
 
-import glob
+import hashlib
 import json
 import optparse
 import os
 import socket
+import StringIO
 import sys
 import time
 import urllib
@@ -60,13 +61,15 @@ class Manifest(object):
     self.test_filter = test_filter
     self.shards = shards
 
-    self.zipfile_fullpath = os.path.join(switches.data_dir,
-                                         test_name + '.zip')
     self.tasks = []
     self.target_platform = platform_mapping[switches.os_image]
     self.working_dir = switches.working_dir
     self.test_name = test_name
-    self.data_dir = switches.data_dir
+    self.data_server_retrieval = (
+        switches.data_server.rstrip('/') + '/content/retrieve')
+    self.data_server_storage = (
+        switches.data_server.rstrip('/') + '/content/store')
+    self.zip_file_hash = ''
 
   def add_task(self, task_name, actions, time_out=600):
     """Appends a new task to the swarm manifest file."""
@@ -80,11 +83,8 @@ class Manifest(object):
     """Zip up all the files necessary to run a shard."""
     start_time = time.time()
 
-    try:
-      zip_file = zipfile.ZipFile(self.zipfile_fullpath, 'w')
-    except IOError as e:
-      print 'Error creating zip files %s' % str(e)
-      return False
+    zip_memory_file = StringIO.StringIO()
+    zip_file = zipfile.ZipFile(zip_memory_file, 'w')
 
     zip_file.write(RUN_TEST_PATH, RUN_TEST_NAME)
     zip_file.write(CLEANUP_SCRIPT_PATH, CLEANUP_SCRIPT_NAME)
@@ -94,8 +94,24 @@ class Manifest(object):
       zip_file.write(HANDLE_EXE_PATH, HANDLE_EXE)
 
     zip_file.close()
-
     print 'Zipping completed, time elapsed: %f' % (time.time() - start_time)
+
+    zip_memory_file.flush()
+    zip_contents = zip_memory_file.getvalue()
+    zip_memory_file.close()
+
+    try:
+      self.zip_file_hash = hashlib.sha1(zip_contents).hexdigest()
+      url = (self.data_server_storage + '?' +
+             urllib.urlencode({'hash_key': self.zip_file_hash}))
+
+      request = urllib2.Request(url, data=zip_contents)
+      request.add_header('Content-Type', 'application/octet-stream')
+      request.add_header('Content-Length', len(zip_contents))
+    except urllib2.URLError as e:
+      print 'Failed to upload the zip file\n%s' % str(e)
+      return False
+
     return True
 
   def to_json(self):
@@ -103,7 +119,7 @@ class Manifest(object):
     self.add_task(
         'Run Test',
         ['python', RUN_TEST_NAME, '--hash', self.manifest_hash,
-         '--remote', self.data_dir, '-v'])
+         '--remote', self.data_server_retrieval , '-v'])
 
     # Clean up
     self.add_task('Clean Up', ['python', CLEANUP_SCRIPT_NAME])
@@ -123,16 +139,11 @@ class Manifest(object):
     elif hostname.endswith('m4'):
       vlan = 'm4'
 
-    data_scheme = 'file://'
-    if self.target_platform == 'Windows':
-      data_scheme += '/'
-
     # Construct test case
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        urllib.quote(data_scheme + self.zipfile_fullpath.replace(os.sep, '/'),
-                     ':/'),
+        self.data_server_retrieval + '/' + self.zip_file_hash,
       ],
       'tests': self.tasks,
       'env_vars': {
@@ -204,9 +215,8 @@ def main():
   parser.add_option('-u', '--swarm-url', default='http://localhost:8080',
                     help='Specify the url of the Swarm server. '
                     'Defaults to %default')
-  parser.add_option('-d', '--data-dir',
-                    help='The directory where all the test data is stored.'
-                    'This should path must be valid for all the swarm bots')
+  parser.add_option('-d', '--data-server',
+                    help='The server where all the test data is stored.')
   parser.add_option('-t', '--test-name-prefix', default='',
                     help='Specify the prefix to give the swarm test request. '
                     'Defaults to %default')
@@ -223,21 +233,8 @@ def main():
 
   if not options.os_image:
     parser.error('Must specify an os image')
-  if not options.data_dir:
+  if not options.data_server:
     parser.error('Must specify the data directory')
-
-  # Remove the old data from this builder if there is any.
-  if os.path.isdir(options.data_dir):
-    print 'Removing old swarm files...'
-
-    # We want to extract and use the name of the builder from the test name
-    # prefix because the test name prefix contains the build number, which is
-    # different for older zip files (so they would fail to match the
-    # expression).
-    builder_name = options.test_name_prefix.split('-')[0]
-    for filename in glob.glob(os.path.join(options.data_dir,
-                                           builder_name + '*.zip')):
-      os.remove(filename)
 
   # Send off the hash swarm test requests.
   highest_exit_code = 0

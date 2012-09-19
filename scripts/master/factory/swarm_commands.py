@@ -6,7 +6,6 @@
 
 This is based on commands.py and adds swarm-specific commands."""
 
-from buildbot.process.properties import Property
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
@@ -54,8 +53,6 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
   to swarm and properly assigned a number of shards to run on."""
   def __init__(self, *args, **kwargs):
     self.tests = kwargs.pop('tests', [])
-    self.unix_data_dir = kwargs.pop('unix_data_dir', None)
-    self.windows_data_dir = kwargs.pop('windows_data_dir', None)
 
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
@@ -78,12 +75,6 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
                             gtest_filter])
             continue
 
-    # Set the hashtable directory.
-    if Property('os') == 'win32':
-      command.extend(['-d', self.windows_data_dir])
-    else:
-      command.extend(['-d', self.unix_data_dir])
-
     self.setCommand(command)
 
     shell.ShellCommand.start(self)
@@ -100,14 +91,13 @@ class SwarmCommands(commands.FactoryCommands):
                                                'buildnumber:-None')
 
     command = [self._python, script_path, '-o', self._target_platform,
-               '-u', swarm_server, '-t', swarm_request_name_prefix]
+               '-u', swarm_server, '-t', swarm_request_name_prefix,
+               '-d', config.Master.swarm_hashtable_server_internal]
 
     self._factory.addStep(
         SwarmShellForTriggeringTests,
         name='trigger_swarm_tests',
         command=command,
-        unix_data_dir=config.Master.swarm_unix_hashtable_internal,
-        windows_data_dir=config.Master.swarm_windows_hashtable_internal,
         tests=tests,
         doStepIf=doStepIf)
 

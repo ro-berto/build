@@ -33,21 +33,22 @@ SWARM_TESTS = [
 ]
 
 
-def SetupSwarmTests(machine, data_dir, options=None, project=None,
-                    network_path=None, extra_gyp_defines='', ninja=False):
+def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
+                    ninja=False):
   """This is a swarm builder."""
   factory_properties = {
     'gclient_env' : {
       'GYP_DEFINES': (
         'test_isolation_mode=hashtable '
-        'test_isolation_outdir=' + data_dir +
+        'test_isolation_outdir=' +
+        config.Master.swarm_hashtable_server_internal +
         ' ' + extra_gyp_defines +
         ' disable_nacl=1'
         ' fastbuild=1'
       ),
       'GYP_MSVS_VERSION': '2010',
     },
-    'data_dir': data_dir,
+    'data_dir': config.Master.swarm_hashtable_server_internal,
     'swarm_server': config.Master.swarm_server_internal_url
   }
   if ninja:
@@ -59,8 +60,7 @@ def SetupSwarmTests(machine, data_dir, options=None, project=None,
       tests=SWARM_TESTS,
       options=options,
       project=project,
-      factory_properties=factory_properties,
-      network_path=network_path)
+      factory_properties=factory_properties)
 
 
 def SwarmTestBuilder(swarm_server):
@@ -86,11 +86,11 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
   def SwarmFactory(self, target='Release', clobber=False, tests=None,
                    mode=None, options=None, compile_timeout=1200,
                    build_url=None, project=None, factory_properties=None,
-                   gclient_deps=None, network_path=None):
+                   gclient_deps=None):
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     # Set the slave_type to 'SwarmSlave' to prevent the factory from adding the
     # compile step, so we can add other steps before the compile step.
-    f = self.ChromiumFactory(target, clobber, [], mode, 'SwarmSlave',
+    f = self.ChromiumFactory(target, clobber, [], mode, 'BuilderTester',
                              options, compile_timeout, build_url, project,
                              factory_properties, gclient_deps)
 
@@ -98,19 +98,6 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                                      target,
                                                      self._build_dir,
                                                      self._target_platform)
-
-    # Ensure the network drive is mapped on windows.
-    data_dir = factory_properties.get('data_dir')
-    if self._target_platform == 'win32':
-      swarm_command_obj.SetupWinNetworkDrive(data_dir[:2], network_path)
-
-    # Now add the compile step.
-    swarm_command_obj.AddCompileStep(
-        project or self._project, clobber,
-        mode=mode,
-        options=options,
-        timeout=compile_timeout,
-        haltOnFailure=False)
 
     gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',

@@ -36,11 +36,8 @@ class Master(object):
 
   syzygy_internal_url = None
 
-  swarm_server_internal_url = 'fake.swarm.url.server'
-  swarm_unix_hashtable_internal = '/path/to/fake/directory'
-  swarm_windows_hashtable_internal = 'X:\\path\\to\\fake\\directory'
-  swarm_windows_network_path_vm1_internal = '\\\\fake\\network\\path'
-  swarm_windows_network_path_vm4_internal = '\\\\fake\\network\\path'
+  swarm_server_internal_url = 'http://fake.swarm.url.server.com'
+  swarm_hashtable_server_internal = 'http://fake.swarm.hashtable.server.com'
 
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'

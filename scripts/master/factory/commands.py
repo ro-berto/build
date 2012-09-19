@@ -89,12 +89,8 @@ class RunHooksShell(shell.ShellCommand):
       environ = cmd.args.get('env', {}).copy()
       environ.setdefault('GYP_DEFINES', '')
       environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
-
-      if 'win' in self.getProperty('buildername'):
-        out_dir = config.Master.swarm_windows_hashtable_internal
-      else:
-        out_dir = config.Master.swarm_unix_hashtable_internal
-      environ['GYP_DEFINES'] += ' test_isolation_outdir=' + out_dir
+      environ['GYP_DEFINES'] += (' test_isolation_outdir=' +
+                                 config.Master.swarm_hashtable_server_internal)
 
 
       cmd.args['env'] = environ

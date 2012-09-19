@@ -27,12 +27,12 @@ ENV_VARS = {
 class Options(object):
   def __init__(self, working_dir="swarm_tests", shards=1,
                os_image='win32', swarm_url='http://localhost:8080',
-               data_dir='temp_data_dir'):
+               data_server='http://localhost:8081'):
     self.working_dir = working_dir
     self.shards = shards
     self.os_image = os_image
     self.swarm_url = swarm_url
-    self.data_dir = data_dir
+    self.data_server = data_server
 
 
 def GenerateExpectedJSON(options):
@@ -43,19 +43,17 @@ def GenerateExpectedJSON(options):
     'win32': 'Windows'
   }
 
-  data_scheme = 'file://'
-  if options.os_image == 'win32':
-    data_scheme += '/'
+  retrieval_url = options.data_server + '/content/retrieve'
 
   expected = {
     'test_case_name': TEST_NAME,
-    'data': [data_scheme + options.data_dir + '/' + TEST_NAME + '.zip'],
+    'data': [retrieval_url + '/'],
     'tests' : [
       {
         'action': [
           'python', run_slavelastic.RUN_TEST_NAME,
           '--hash', FILE_HASH,
-          '--remote', options.data_dir,
+          '--remote', retrieval_url,
           '-v'
         ],
         'test_name': 'Run Test',
@@ -101,10 +99,6 @@ def GenerateExpectedJSON(options):
   return expected
 
 
-def RaiseIOError():
-  raise IOError('IOError')
-
-
 class MockZipFile(object):
   def __init__(self, filename, mode):
     pass
@@ -142,21 +136,12 @@ class ManifestTest(unittest.TestCase):
     self.assertEqual(expected, manifest_json)
 
   def test_process_manifest_success(self):
-    run_slavelastic.os.chmod = lambda name, mode: True
     run_slavelastic.zipfile.ZipFile = MockZipFile
     run_slavelastic.urllib2.urlopen = lambda url, text: StringIO.StringIO('{}')
 
     options = Options()
     self.assertEqual(
         0, run_slavelastic.ProcessManifest(FILE_HASH, TEST_NAME, options.shards,
-                                           '*', options))
-
-  def test_process_manifest_fail_zipping(self):
-    run_slavelastic.zipfile.ZipFile = lambda name, mode: RaiseIOError()
-
-    options = Options()
-    self.assertEqual(
-        1, run_slavelastic.ProcessManifest(FILE_HASH, TEST_NAME, options.shards,
                                            '*', options))
 
 
