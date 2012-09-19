@@ -674,7 +674,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddIDBPerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
-    c = self.GetPerfStepClass(factory_properties, 'sunspider',
+    c = self.GetPerfStepClass(factory_properties, 'idb_perf',
                               process_log.GraphingLogProcessor)
 
     options = ['--gtest_filter=IndexedDBTest.Perf', '--gtest_print_time']
