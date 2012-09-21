@@ -61,6 +61,9 @@ F('f_webkit_linux_rel_asan', linux().ChromiumWebkitLatestFactory(
     tests=['webkit'],
     options=['--compiler=goma-clang', 'DumpRenderTree'],
     factory_properties={
+       'additional_expectations_files': [
+         ['webkit', 'tools', 'layout_tests', 'test_expectations_asan.txt' ],
+       ],
        'gs_bucket': 'gs://webkit-asan',
        'gclient_env': {'GYP_DEFINES': asan_gyp},
        'time_out_ms': '18000'}))
