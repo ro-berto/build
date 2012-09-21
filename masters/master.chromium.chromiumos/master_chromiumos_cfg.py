@@ -53,6 +53,7 @@ linux_options = [
     'jingle_unittests',
     'media_unittests',
     'net_unittests',
+    'ppapi_unittests',
     'printing_unittests',
     'remoting_unittests',
     #'safe_browsing_tests',
@@ -77,6 +78,7 @@ linux_tests_1 = [
     'jingle',
     'media',
     'net',
+    'ppapi_unittests',
     'printing',
     'remoting',
     #'safe_browsing'
@@ -165,6 +167,7 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'jingle',
            'media',
            'net',
+           'ppapi_unittests',
            'printing',
            'remoting',
            #'safe_browsing'

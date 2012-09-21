@@ -30,6 +30,7 @@ categories_steps = {
     'mini_installer_test',
     'nacl_integration',
     'net_unittests',
+    'ppapi_unittests',
     'printing_unittests',
     'remoting_unittests',
     'sandbox_linux_unittests',

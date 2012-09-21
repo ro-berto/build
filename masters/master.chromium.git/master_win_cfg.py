@@ -66,6 +66,7 @@ F('rel_unit_1', win().ChromiumGITFactory(
            'installer',
            'jingle',
            'media',
+           'ppapi_unittests',
            'printing',
            'remoting',
            'safe_browsing',

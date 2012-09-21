@@ -324,6 +324,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('media_unittests', fp)
     if R('net'):
       f.AddAnnotatedGTestTestStep('net_unittests', fp)
+    if R('ppapi_unittests'):
+      f.AddAnnotatedGTestTestStep('ppapi_unittests', fp)
     if R('printing'):
       f.AddAnnotatedGTestTestStep('printing_unittests', fp)
     if R('remoting'):

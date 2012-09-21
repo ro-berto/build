@@ -68,6 +68,7 @@ F('rel_unit_1', mac().ChromiumGITFactory(
          'jingle',
          'media',
          'nacl_integration',
+         'ppapi_unittests',
          'printing',
          'remoting',
          'safe_browsing'],
