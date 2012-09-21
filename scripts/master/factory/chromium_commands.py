@@ -1567,8 +1567,10 @@ class ChromiumCommands(commands.FactoryCommands):
     using_ninja = (
         'ninja' in factory_properties['gclient_env'].get('GYP_GENERATORS', ''))
 
+    # TODO(csharp): Actually send the tests instead of just an empty list
+    # once all tests have result files.
     self.AddGenerateResultHashesStep(
-        using_ninja, tests, doStepIf=swarm_commands.TestStepFilterSwarm)
+        using_ninja, [], doStepIf=swarm_commands.TestStepFilterSwarm)
 
     # Trigger the swarm test builder.
     properties = {
