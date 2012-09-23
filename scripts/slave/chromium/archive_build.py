@@ -75,8 +75,9 @@ def MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=None, gs_acl=None):
   # normalize the subdir to remove duplicated slashes. This break newer versions
   # of gsutil. Also remove leading and ending slashes for the subdir, gsutil
   # adds them back autimatically and this can cause a double slash to be added.
-  gs_subdir = gs_subdir.replace('//', '/')
-  gs_subdir = gs_subdir.strip('/')
+  if gs_subdir:
+    gs_subdir = gs_subdir.replace('//', '/')
+    gs_subdir = gs_subdir.strip('/')
   status = slave_utils.GSUtilCopyFile(filename,
                                       gs_base,
                                       gs_subdir,
