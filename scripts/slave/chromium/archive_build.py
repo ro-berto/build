@@ -72,6 +72,9 @@ def Write(file_path, data):
 
 
 def MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=None, gs_acl=None):
+  # normalize the subdir to remove duplicated slashes. This break newer versions
+  # of gsutil.
+  gs_subdir = gs_subdir.replace('//', '/')
   status = slave_utils.GSUtilCopyFile(filename,
                                       gs_base,
                                       gs_subdir,
