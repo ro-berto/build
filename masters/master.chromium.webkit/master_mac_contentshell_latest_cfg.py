@@ -33,8 +33,7 @@ S('s2_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 
 B('WebKit (Content Shell) Mac',
   'f_contentshell_mac_rel',
-  scheduler='s2_contentshell_webkit_rel',
-  auto_reboot=True)
+  scheduler='s2_contentshell_webkit_rel')
 
 F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
     target='Release',

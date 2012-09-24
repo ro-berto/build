@@ -75,7 +75,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
 # Linux ASAN Rel testers
 #
 B('Linux ASAN Tests (1)', 'linux_asan_rel_tests_1', 'testers',
-  'linux_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+  'linux_asan_rel_trigger', notify_on_missing=True)
 F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
     build_url=linux_asan_archive,
@@ -94,7 +94,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
                         'browser_shard_index': 1 }))
 
 B('Linux ASAN Tests (2)', 'linux_asan_rel_tests_2', 'testers',
-  'linux_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+  'linux_asan_rel_trigger', notify_on_missing=True)
 F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
     build_url=linux_asan_archive,

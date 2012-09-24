@@ -65,7 +65,7 @@ F('rel', win().ChromiumFactory(
 # Win Rel testers
 #
 B('XP Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_unit_1', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -96,7 +96,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('XP Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_unit_2', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -112,7 +112,7 @@ F('rel_unit_2', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('XP Tests (3)', 'rel_unit_3', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_unit_3', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -127,20 +127,20 @@ F('rel_unit_3', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('Vista Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Vista Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Vista Tests (3)', 'rel_unit_3', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (2)', 'rel_unit_2', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (3)', 'rel_unit_3', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 
 B('Win7 Sync', 'rel_sync', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_sync', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -150,7 +150,7 @@ F('rel_sync', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('NACL Tests', 'rel_nacl', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_nacl', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -159,10 +159,10 @@ F('rel_nacl', win_tester().ChromiumFactory(
                         'start_crash_handler': True,}))
 
 B('NACL Tests (x64)', 'rel_nacl', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 
 B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_cf', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -175,11 +175,11 @@ F('rel_cf', win_tester().ChromiumFactory(
                         'start_crash_handler': True,}))
 
 B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Chrome Frame Tests (ie9)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 
 ################################################################################
 ## Debug
@@ -227,7 +227,7 @@ F('dbg', win().ChromiumFactory(
 # Win Dbg Unit testers
 #
 B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_1', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -258,7 +258,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
 
 
 B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_2', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -275,7 +275,7 @@ F('dbg_unit_2', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_3', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -291,7 +291,7 @@ F('dbg_unit_3', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_4', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -304,7 +304,7 @@ F('dbg_unit_4', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('XP Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_5', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -317,7 +317,7 @@ F('dbg_unit_5', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('XP Tests (dbg)(6)', 'dbg_unit_6', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_6', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -330,23 +330,23 @@ F('dbg_unit_6', win_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('Win7 Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 B('Win7 Tests (dbg)(6)', 'dbg_unit_6', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 
 #
 # Win Dbg Interactive Tests
 #
 B('Interactive Tests (dbg)', 'dbg_int', 'testers|windows', 'win_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_int', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -361,7 +361,7 @@ F('dbg_int', win_tester().ChromiumFactory(
 #
 aura_gyp_defines = 'use_aura=1 fastbuild=1'
 B('Win Aura', 'dbg_aura', 'compile|testers|windows', 'win_dbg',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_aura', win().ChromiumFactory(
     target='Debug',
     slave_type='BuilderTester',

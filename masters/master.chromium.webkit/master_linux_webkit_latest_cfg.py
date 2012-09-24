@@ -29,8 +29,7 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 # Linux Rel Builder/Tester
 #
-B('Webkit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel',
-  auto_reboot=True)
+B('Webkit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
     tests=[
       'test_shell',
@@ -49,8 +48,7 @@ F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
                         'generate_gtest_json': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
-B('Webkit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel',
-  auto_reboot=True)
+B('Webkit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 
 asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')

@@ -30,8 +30,7 @@ S('s3_chromium_rel', branch='src', treeStableTimer=60)
 #
 # Linux Rel Builder
 #
-B('Webkit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel',
-  auto_reboot=True)
+B('Webkit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
       'test_shell',

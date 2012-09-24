@@ -60,8 +60,7 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
 #
 # Mac Rel Webkit testers
 #
-B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests', auto_reboot=True,
-  scheduler=rel_dep_scheduler)
+B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests', scheduler=rel_dep_scheduler)
 F('f_webkit_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,

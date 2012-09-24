@@ -57,8 +57,7 @@ F('f_webkit_win_rel', win().ChromiumWebkitLatestFactory(
 #
 # Win Rel Webkit testers
 #
-B('Webkit Win', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger',
-  auto_reboot=True)
+B('Webkit Win', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -67,8 +66,7 @@ F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
                         'generate_gtest_json': True,
                         'test_results_server': 'test-results.appspot.com'}))
 
-B('Webkit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger',
-  auto_reboot=True)
+B('Webkit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 
 ################################################################################
 ## Debug
@@ -106,7 +104,7 @@ F('f_webkit_win_dbg', win().ChromiumWebkitLatestFactory(
 #
 
 B('Webkit Win (dbg)(1)', 'f_webkit_dbg_tests_1',
-    scheduler='s4_webkit_dbg_trigger', auto_reboot=True)
+    scheduler='s4_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',
@@ -118,7 +116,7 @@ F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
                         'layout_part': '1:2'}))
 
 B('Webkit Win (dbg)(2)', 'f_webkit_dbg_tests_2',
-    scheduler='s4_webkit_dbg_trigger', auto_reboot=True)
+    scheduler='s4_webkit_dbg_trigger')
 F('f_webkit_dbg_tests_2', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Tester',

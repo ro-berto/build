@@ -94,7 +94,7 @@ F('rel', linux().ChromiumFactory(
 # Linux Rel testers
 #
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -124,7 +124,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('rel_sync', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -184,7 +184,7 @@ linux_aura_options=[
 ]
 
 B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('f_linux_rel_aura', linux().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
@@ -228,7 +228,7 @@ F('dbg', linux().ChromiumFactory(
 #
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -242,7 +242,7 @@ F('dbg_unit_1', linux_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_unit_2', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -274,7 +274,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
 #
 
 B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
-  auto_reboot=True, notify_on_missing=True)
+  notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang'],

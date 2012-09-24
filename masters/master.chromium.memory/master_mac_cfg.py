@@ -102,7 +102,7 @@ F('mac_asan_rel', mac().ChromiumASANFactory(
 # Mac ASAN Rel testers
 #
 B('Mac ASAN Tests (1)', 'mac_asan_rel_tests_1', 'testers',
-  'mac_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+  'mac_asan_rel_trigger', notify_on_missing=True)
 F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
     slave_type='Tester',
     build_url=mac_asan_archive,
@@ -115,7 +115,7 @@ F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
 
 
 B('Mac ASAN Tests (2)', 'mac_asan_rel_tests_2', 'testers',
-  'mac_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+  'mac_asan_rel_trigger', notify_on_missing=True)
 F('mac_asan_rel_tests_2', mac().ChromiumASANFactory(
     slave_type='Tester',
     build_url=mac_asan_archive,

@@ -40,13 +40,11 @@ chromium_android_archive = master_config.GetGSUtilUrl(
 #
 # Linux Rel Builder
 #
-B('Android Builder', 'f_android_rel', auto_reboot=True,
-  scheduler='s9_android_webkit')
+B('Android Builder', 'f_android_rel', scheduler='s9_android_webkit')
 F('f_android_rel', linux_android().ChromiumWebkitLatestAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_webkit_latest_builder.sh'))
 
-B('Android Builder (dbg)', 'f_android_dbg', auto_reboot=True,
-  scheduler='s9_android_webkit')
+B('Android Builder (dbg)', 'f_android_dbg', scheduler='s9_android_webkit')
 F('f_android_dbg', linux_android().ChromiumWebkitLatestAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_webkit_latest_builder.sh',

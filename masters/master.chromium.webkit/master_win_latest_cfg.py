@@ -63,8 +63,7 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
 # Win Rel testers+builders
 #
 # TODO: Switch back to trigger, http://crbug.com/102331
-B('Win7 Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel',
-  auto_reboot=True)
+B('Win7 Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel')
 F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     # TODO: undo, http://crbug.com/102331
     #slave_type='Tester',
@@ -90,8 +89,7 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
                         }))
 
-B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger',
-  auto_reboot=True)
+B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger')
 F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -106,7 +104,7 @@ F('f_win_rel_tests', win().ChromiumWebkitLatestFactory(
                         }))
 
 B('Chrome Frame Tests', 'f_cf_rel_tests',
-  scheduler='s7_webkit_builder_rel_trigger', auto_reboot=True)
+  scheduler='s7_webkit_builder_rel_trigger')
 F('f_cf_rel_tests', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -133,7 +131,7 @@ S('s7_webkit_dbg', branch='trunk', treeStableTimer=60)
 # Win Dbg Builder
 #
 B('Win (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
-  auto_reboot=True, builddir='win-latest-dbg')
+  builddir='win-latest-dbg')
 F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     project='all.sln;chromium_builder',

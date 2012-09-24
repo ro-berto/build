@@ -30,8 +30,7 @@ S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 # Mac Rel Builder
 #
-B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel',
-   auto_reboot=True)
+B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
 F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
@@ -49,8 +48,7 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
         },
     }))
 
-B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel',
-  auto_reboot=True)
+B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
 F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
@@ -94,8 +92,7 @@ S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'f_mac_dbg', auto_reboot=True,
-  scheduler='s8_webkit_dbg')
+B('Mac Builder (dbg)', 'f_mac_dbg', scheduler='s8_webkit_dbg')
 F('f_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj',]))

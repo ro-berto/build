@@ -31,10 +31,8 @@ S('s1_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 # Content Shell Layouttests
 #
 
-B('WebKit (Content Shell) Linux',
-  'f_contentshell_linux_rel',
-  scheduler='s1_contentshell_webkit_rel',
-  auto_reboot=True)
+B('WebKit (Content Shell) Linux', 'f_contentshell_linux_rel',
+  scheduler='s1_contentshell_webkit_rel')
 
 F('f_contentshell_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',

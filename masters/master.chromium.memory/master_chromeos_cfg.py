@@ -111,7 +111,7 @@ asan_tests_2 = [
 ]
 
 B('Chromium OS ASAN Tests (1)', 'chromeos_asan_rel_tests_1', 'testers',
-  'chromeos_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+  'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
     build_url=chromeos_asan_archive,
@@ -121,7 +121,7 @@ F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
                             browser_shard_index='1')))
 
 B('Chromium OS ASAN Tests (2)', 'chromeos_asan_rel_tests_2', 'testers',
-  'chromeos_asan_rel_trigger', auto_reboot=True, notify_on_missing=True)
+  'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
     build_url=chromeos_asan_archive,

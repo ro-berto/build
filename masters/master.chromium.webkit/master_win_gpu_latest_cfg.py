@@ -29,7 +29,7 @@ S('s9_gpu_win_webkit_rel', branch='trunk', treeStableTimer=60)
 # GPU Win Release
 #
 B('GPU Win7 (NVIDIA)', 'f_gpu_win_rel',
-  scheduler='s9_gpu_win_webkit_rel', auto_reboot=True)
+  scheduler='s9_gpu_win_webkit_rel')
 F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
     target='Release',
     slave_type='BuilderTester',
@@ -61,7 +61,7 @@ S('s9_gpu_win_webkit_dbg', branch='trunk', treeStableTimer=60)
 # GPU Win Debug
 #
 B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg',
-  scheduler='s9_gpu_win_webkit_dbg', auto_reboot=True)
+  scheduler='s9_gpu_win_webkit_dbg')
 F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='BuilderTester',

@@ -40,7 +40,7 @@ D('s1_chromium_rel_dep', 's1_chromium_rel')
 #
 # Win Rel Builder
 #
-B('Webkit Win Builder (deps)', 'f_webkit_win_rel', auto_reboot=False,
+B('Webkit Win Builder (deps)', 'f_webkit_win_rel',
   scheduler='s1_chromium_rel', builddir='webkit-win-pinned-rel')
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
@@ -49,8 +49,7 @@ F('f_webkit_win_rel', win().ChromiumFactory(
 #
 # Win Rel Webkit testers
 #
-B('Webkit Win (deps)', 'f_webkit_rel_tests',
-  scheduler='s1_chromium_rel_dep', auto_reboot=True)
+B('Webkit Win (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_dep')
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,

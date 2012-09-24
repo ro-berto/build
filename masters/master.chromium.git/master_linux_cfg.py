@@ -51,8 +51,7 @@ F('rel', linux().ChromiumGITFactory(
 #
 # Linux Rel testers
 #
-B('Linux Tests x64 (git)', 'rel_unit', 'testers', 'linux_rel_trigger',
-  auto_reboot=True)
+B('Linux Tests x64 (git)', 'rel_unit', 'testers', 'linux_rel_trigger')
 F('rel_unit', linux().ChromiumGITFactory(
     slave_type='Tester',
     build_url=rel_archive,

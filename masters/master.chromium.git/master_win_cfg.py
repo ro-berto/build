@@ -52,8 +52,7 @@ F('rel', win().ChromiumGITFactory(
 #
 # Win Rel testers
 #
-B('XP Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger',
-  auto_reboot=True)
+B('XP Tests (1)', 'rel_unit_1', 'testers|windows', 'win_rel_trigger')
 F('rel_unit_1', win().ChromiumGITFactory(
     slave_type='Tester',
     build_url=rel_archive,
