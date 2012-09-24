@@ -25,14 +25,21 @@ from master import build_utils
 
 class TryMailNotifier(mail.MailNotifier):
   def __init__(self, reply_to=None, failure_message=None,
-               footer=None, **kwargs):
+               footer=None, no_email_on_success=None, **kwargs):
     mail.MailNotifier.__init__(self, **kwargs)
     self.reply_to = reply_to
     self.failure_message = failure_message
     self.footer = footer
+    # List of builders to NOT send email about if build was successful
+    self.no_email_on_success = no_email_on_success
 
   def buildMessage(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
+
+    if results == SUCCESS and name in self.no_email_on_success:
+      log.msg('Skipping success email for %s' % name)
+      return
+
     log.msg('Building try job email')
     projectName = self.master_status.getTitle()
 
@@ -78,12 +85,24 @@ class TryMailNotifier(mail.MailNotifier):
     first_line = (
         "try %(result)s for %(reason)s on %(builder)s @ r%(revision)s" % info)
 
+    build_props = build.getProperties()
+    parent_html = ''
+    if build_props:
+      parent_name = build_props.getProperty('parent_buildername')
+      parent_buildnum = build_props.getProperty('parent_buildnumber')
+      if parent_name and parent_buildnum:
+        parent_url = ('%s/builders/%s/builds/%s' %
+                      (waterfall_url.rstrip('/'), parent_name, parent_buildnum))
+        parent_html = ('<br>Parent builder: <a href="%(url)s">%(url)s</a><br>'
+                       % {'url': parent_url})
+
     html_params = {
         'subject': subject,
         'first_line': first_line,
         'waterfall_url': waterfall_url,
         'status_text_html': status_text_html,
         'build_url': build_url,
+        'parent_builder_html': parent_html,
         'slave': build.getSlavename(),
     }
 
@@ -98,7 +117,7 @@ class TryMailNotifier(mail.MailNotifier):
 <body style="font-family: Verdana, Cursor; font-size: 10px;">
   %(first_line)s<p>
   <a href="%(waterfall_url)s">%(waterfall_url)s</a><p>
-  %(status_text_html)s<p>
+  %(status_text_html)s<p> %(parent_builder_html)s
   <a href="%(build_url)s">%(build_url)s</a><br>
   slave: %(slave)s<br>
     """) % html_params
