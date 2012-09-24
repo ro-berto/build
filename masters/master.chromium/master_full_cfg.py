@@ -17,6 +17,8 @@ T = helper.Triggerable
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def linux_android(): return chromium_factory.ChromiumFactory(
+    '', 'linux2', nohooks_on_update=True, target_os='android')
 
 defaults['category'] = '1clobber'
 
@@ -127,6 +129,19 @@ F('linux64_clobber', linux().ChromiumFactory(
         'GYP_DEFINES': 'target_arch=x64 test_isolation_mode=noop',
       },
     }))
+
+################################################################################
+## Android
+################################################################################
+
+B('Android (dbg)', 'f_android_clobber_dbg', None, 'chromium',
+  notify_on_missing=True)
+F('f_android_clobber_dbg', linux_android().ChromiumAnnotationFactory(
+    clobber=True,
+    target='Debug',
+    annotation_script='src/build/android/buildbot/bb_main_builder.sh',
+    ))
+
 
 def Update(config, active_master, c):
   return helper.Update(c)

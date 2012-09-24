@@ -1439,7 +1439,8 @@ class ChromiumCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           workdir=self._build_dir,
                           command=cmd,
-                          env=env)
+                          env=env,
+                          factory_properties=factory_properties)
 
   def AddBuildStep(self, factory_properties=None, name='build', env=None,
                    timeout=6000):

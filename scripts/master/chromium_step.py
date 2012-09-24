@@ -675,22 +675,29 @@ class AnnotatedCommand(ProcessLogShellStep):
   """Buildbot command that knows how to display annotations."""
 
   def __init__(self, *args, **kwargs):
+    clobber = ''
+    if 'factory_properties' in kwargs:
+      if kwargs['factory_properties'].get('clobber'):
+        clobber = '1'
+      # kwargs is passed eventually to RemoteShellCommand(**kwargs).
+      # This constructor (in buildbot/process/buildstep.py) does not
+      # accept unknown arguments (like factory_properties)
+      del kwargs['factory_properties']
+
     # Inject standard tags into the environment.
     env = {
         'BUILDBOT_BLAMELIST': WithProperties('%(blamelist:-[])s'),
         'BUILDBOT_BRANCH': WithProperties('%(branch:-None)s'),
         'BUILDBOT_BUILDERNAME': WithProperties('%(buildername:-None)s'),
         'BUILDBOT_BUILDNUMBER': WithProperties('%(buildnumber:-None)s'),
-        'BUILDBOT_CLOBBER': WithProperties('%(clobber:+1)s'),
+        'BUILDBOT_CLOBBER': clobber or WithProperties('%(clobber:+1)s'),
         'BUILDBOT_GOT_REVISION': WithProperties('%(got_revision:-None)s'),
         'BUILDBOT_REVISION': WithProperties('%(revision:-None)s'),
         'BUILDBOT_SCHEDULER': WithProperties('%(scheduler:-None)s'),
         'BUILDBOT_SLAVENAME': WithProperties('%(slavename:-None)s'),
     }
     # Apply the passed in environment on top.
-    old_env = kwargs.get('env')
-    if not old_env:
-      old_env = {}
+    old_env = kwargs.get('env') or {}
     env.update(old_env)
     # Change passed in args (ok as a copy is made internally).
     kwargs['env'] = env
