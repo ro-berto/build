@@ -115,7 +115,7 @@ class DartCommands(commands.FactoryCommands):
       runtime = 'vm'
       configuration = (options['mode'], arch, compiler)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
-                  ' --progress=line --report --time --mode=%s --arch=%s '
+                  ' --progress=buildbot --report --time --mode=%s --arch=%s '
                   ' --compiler=%s') % configuration
     else:
       compiler = 'none'
