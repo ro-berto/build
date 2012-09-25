@@ -22,9 +22,11 @@ try:
   # Buildbot 0.8.x
   # Unable to import 'XX'
   # pylint: disable=F0401
+  from buildslave.commands.base import Command
   from buildslave.commands.base import SourceBaseCommand
   from buildslave.commands.registry import commandRegistry
   from buildslave import runprocess
+  commandbase = Command
   sourcebase = SourceBaseCommand
   runprocesscmd = runprocess.RunProcess
   bbver = 8.4
@@ -34,6 +36,7 @@ except ImportError:
   # pylint: disable=E0611,E1101,F0401
   from buildbot.slave import commands
   from buildbot.slave.registry import registerSlaveCommand
+  commandbase = commands.ShellCommand
   sourcebase = commands.SourceBase
   runprocesscmd = commands.ShellCommand
   bbver = 7.12
@@ -645,13 +648,63 @@ class GClient(sourcebase):
     return sourcebase.maybeDoVCRetry(self, res)
 
 
-def RegisterGclient():
+class ApplyIssue(commandbase):
+  """Command to run apple_issue.py on the checkbout."""
+
+  def __init__(self, *args, **kwargs):
+    log.msg('ApplyIssue.__init__')
+    self.root = None
+    self.issue = None
+    self.patchset = None
+    self.email = None
+    self.password = None
+    self.workdir = None
+    self.timeout = None
+    chromium_utils.GetParentClass(ApplyIssue).__init__(self, *args, **kwargs)
+
+  def _doApplyIssue(self, _):
+    """Run the apply_issue.py script in the source checkout directory."""
+    log.msg('ApplyIssue._doApplyIssue')
+    cmd = [
+        'apply_issue.bat' if chromium_utils.IsWindows() else 'apply_issue',
+        '-r', self.root,
+        '-i', self.issue,
+        '-p', self.patchset,
+        '-e', self.email,
+        '-w', '-',
+    ]
+
+    command = runprocesscmd(self.builder, cmd, self.workdir, sendRC=False,
+                            timeout=self.timeout, initialStdin=self.password)
+    return command.start()
+
+  # commandbase overrides:
+
+  def setup(self, args):
+    self.root = args['root']
+    self.issue = args['issue']
+    self.patchset = args['patchset']
+    self.email = args['email']
+    self.password = args['password']
+    self.workdir = args['workdir']
+    self.timeout = args['timeout']
+
+  def start(self):
+    log.msg('ApplyIssue.start')
+    d = defer.succeed(None)
+    d.addCallback(self._doApplyIssue)
+    return d
+
+
+def RegisterCommands():
+  """Registers all command objects defined in this file."""
   try:
     # This version should work on BB 8.3
 
     # We run this code in a try because it fails with an assertion if
     # the module is loaded twice.
     commandRegistry['gclient'] = 'slave.chromium_commands.GClient'
+    commandRegistry['apply_issue'] = 'slave.chromium_commands.ApplyIssue'
     return
   except (AssertionError, NameError):
     pass
@@ -662,8 +715,9 @@ def RegisterGclient():
     # We run this code in a try because it fails with an assertion if
     # the module is loaded twice.
     registerSlaveCommand('gclient', GClient, commands.command_version)
+    registerSlaveCommand('apply_issue', ApplyIssue, commands.command_version)
   except (AssertionError, NameError):
     pass
 
 
-RegisterGclient()
+RegisterCommands()
