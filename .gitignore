@@ -1280,7 +1280,6 @@ twistd.pid
 /scripts/master/log_parser/perf_expectations
 /scripts/private
 /site_config/.bot_password
-/site_config/config_private.py
 /slave/ASAN_Builder
 /slave/Linux_x64
 /slave/android

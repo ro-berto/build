@@ -11,7 +11,6 @@
   For a list of command-line options, call this script with '--help'.
 """
 
-import contextlib
 import datetime
 import optparse
 import os
@@ -68,48 +67,6 @@ def ReadHKLMValue(path, value):
     return None
 
 
-def goma_is_on(options):
-  return options.compiler in ('goma', 'goma-clang', 'jsonclang')
-
-
-@contextlib.contextmanager
-def conditional_goma_proxy(options, orig_env):
-  """Turns on the goma proxy for this context, if goma is selected by
-  options.compiler. Yields new env and a boolean which indicates if goma
-  is 'on' in the context."""
-
-  if goma_is_on(options):
-    env = EchoDict(orig_env)
-    # TODO(iannucci): Don't violate encapsulation here...
-    env.overrides = orig_env.overrides.copy()
-
-    goma_key = os.path.join(options.goma_dir, 'goma.key')
-    if os.path.exists(goma_key):
-      env['GOMA_API_KEY_FILE'] = goma_key
-
-    if not chromium_utils.IsWindows():
-      # If using the Goma compiler, first call goma_ctl with ensure_start
-      # (or restart in clobber mode) to ensure the proxy is available.
-      env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
-      goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-      if options.clobber:
-        chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
-      else:
-        chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
-    else:
-      env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
-      goma_ctl_cmd = [sys.executable,
-                      os.path.join(options.goma_dir, 'goma_ctl.py')]
-      chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
-
-  try:
-    yield env
-  finally:
-    if goma_is_on(options):
-      # Always stop the proxy for now to allow in-place update.
-      chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
-
-
 def common_xcode_settings(command, options, env, compiler=None):
   """
   Sets desirable Mac environment variables and command-line options
@@ -118,7 +75,7 @@ def common_xcode_settings(command, options, env, compiler=None):
   compiler = options.compiler
   assert compiler in (None, 'clang', 'goma', 'goma-clang')
 
-  if goma_is_on(options):
+  if compiler == 'goma':
     print 'using goma'
     command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
     return
@@ -132,7 +89,7 @@ def common_xcode_settings(command, options, env, compiler=None):
     cc = os.path.join(clang_bin_dir, 'clang')
     ldplusplus = os.path.join(clang_bin_dir, 'clang++')
 
-    if goma_is_on(options):
+    if compiler in ('goma', 'goma-clang'):
       print 'using goma'
       if options.clobber:
         # Disable compiles on local machine.  When the goma server-side object
@@ -448,11 +405,28 @@ def main_xcode(options, args):
 
   os.chdir(options.build_dir)
 
-  with conditional_goma_proxy(options, env) as goma_env:
-    # Run the build.
-    goma_env.print_overrides()
-    result = chromium_utils.RunCommand(command, env=goma_env,
-                                       filter_obj=xcodebuild_filter)
+  # If using the Goma compiler, first call goma_ctl with ensure_start
+  # (or restart in clobber mode) to ensure the proxy is available.
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+
+  if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
+    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
+    if options.clobber:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+    else:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+
+  # Run the build.
+  env.print_overrides()
+  result = chromium_utils.RunCommand(command, env=env,
+                                     filter_obj=xcodebuild_filter)
+
+  if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
+    # Always stop the proxy for now to allow in-place update.
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
   return result
 
@@ -522,7 +496,7 @@ def common_make_settings(
     # If any of them is compiled with ASan it will hang otherwise.
     env['DYLD_NO_PIE'] = '1'
 
-  if goma_is_on(options):
+  if compiler in ('goma', 'goma-clang', 'jsonclang'):
     print 'using', compiler
     if compiler == 'goma':
       env['CC'] = 'gcc'
@@ -671,26 +645,44 @@ def main_make(options, args):
     command.extend(['V=1'])
   command.extend(options.build_args + args)
 
+  # If using the Goma compiler, first call goma_ctl with ensure_start
+  # (or restart in clobber mode) to ensure the proxy is available.
+  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+
+  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
+    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
+    if options.clobber:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+    else:
+      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+
+  # Run the build.
+  env.print_overrides()
+  result = 0
+
   def clobber(target):
     build_output_dir = os.path.join(working_dir, 'out', target)
     print('Removing %s' % build_output_dir)
     chromium_utils.RemoveDirectory(build_output_dir)
 
-  with conditional_goma_proxy(options, env) as goma_env:
-    # Run the build.
-    goma_env.print_overrides()
-    result = 0
+  for target in options.target.split(','):
+    if options.clobber:
+      clobber(target)
 
-    for target in options.target.split(','):
-      if options.clobber:
-        clobber(target)
+    target_command = command + ['BUILDTYPE=' + target]
+    this_result = chromium_utils.RunCommand(target_command, env=env)
+    if this_result and not options.clobber:
+      clobber(target)
+    # Keep the first non-zero return code as overall result.
+    if this_result and not result:
+      result = this_result
 
-      target_command = command + ['BUILDTYPE=' + target]
-      this_result = chromium_utils.RunCommand(target_command, env=goma_env)
-      if this_result and not options.clobber:
-        clobber(target)
-      # Keep the first non-zero return code as overall result.
-      result = result or this_result
+  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
+    # Always stop the proxy for now to allow in-place update.
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
 
   return result
 
@@ -732,8 +724,24 @@ def main_ninja(options, args):
     # If any of them is compiled with ASan it will hang otherwise.
     env['DYLD_NO_PIE'] = '1'
 
-  if goma_is_on(options):
-    if chromium_utils.IsWindows():
+  if options.compiler in ('goma', 'goma-clang'):
+    goma_key = os.path.join(options.goma_dir, 'goma.key')
+    if os.path.exists(goma_key):
+      env['GOMA_API_KEY_FILE'] = goma_key
+    if not chromium_utils.IsWindows():
+      goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+      # If using the Goma compiler, first call goma_ctl with ensure_start
+      # (or restart in clobber mode) to ensure the proxy is available.
+      env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
+      if options.clobber:
+        chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
+      else:
+        chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
+    else:
+      env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
+      goma_ctl_cmd = [sys.executable,
+                      os.path.join(options.goma_dir, 'goma_ctl.py')]
+      chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
       # rewrite cc, cxx line in output_dir\build.ninja.
       # in winja, ninja-deplist-helper is used to run $cc/$cxx to collect
       # depepndency with "cl /showIncludes" and generates gcc-compatible
@@ -777,7 +785,7 @@ def main_ninja(options, args):
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
       env['PATH'] = os.pathsep.join([options.goma_dir, clang_dir, env['PATH']])
 
-    if chromium_utils.IsMac():
+    if chromium_utils.IsMac() or chromium_utils.IsWindows():
       goma_jobs = 50
     else:
       goma_jobs = 100
@@ -786,15 +794,16 @@ def main_ninja(options, args):
     if chromium_utils.IsMac() and options.clobber:
       env['GOMA_USE_LOCAL'] = '0'
 
-  with conditional_goma_proxy(options, env) as goma_env:
-    # Run the build.
-    goma_env.print_overrides()
-    # TODO(maruel): Remove the shell argument as soon as ninja.exe is in PATH.
-    # At the moment of writing, ninja.bat in depot_tools wraps
-    # third_party\ninja.exe, which requires shell=True so it is found correctly.
-    result = chromium_utils.RunCommand(
-        command, env=goma_env, shell=sys.platform=='win32')
+  # Run the build.
+  env.print_overrides()
+  # TODO(maruel): Remove the shell argument as soon as ninja.exe is in PATH.
+  # At the moment of writing, ninja.bat in depot_tools wraps
+  # third_party\ninja.exe, which requires shell=True so it is found correctly.
+  result = chromium_utils.RunCommand(
+      command, env=env, shell=sys.platform=='win32')
 
+  if chromium_utils.IsWindows() and options.compiler in ('goma', 'goma-clang'):
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
   return result
 
 
