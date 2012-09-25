@@ -66,7 +66,7 @@ class Manifest(object):
     self.working_dir = switches.working_dir
     self.test_name = test_name
     self.data_server_retrieval = (
-        switches.data_server.rstrip('/') + '/content/retrieve')
+        switches.data_server.rstrip('/') + '/content/retrieve?hash_key=')
     self.data_server_storage = (
         switches.data_server.rstrip('/') + '/content/store')
     self.zip_file_hash = ''
@@ -143,7 +143,7 @@ class Manifest(object):
     test_case = {
       'test_case_name': self.test_name,
       'data': [
-        self.data_server_retrieval + '/' + self.zip_file_hash,
+        self.data_server_retrieval + urllib.quote(self.zip_file_hash),
       ],
       'tests': self.tasks,
       'env_vars': {

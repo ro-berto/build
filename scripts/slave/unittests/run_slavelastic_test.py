@@ -43,11 +43,11 @@ def GenerateExpectedJSON(options):
     'win32': 'Windows'
   }
 
-  retrieval_url = options.data_server + '/content/retrieve'
+  retrieval_url = options.data_server + '/content/retrieve?hash_key='
 
   expected = {
     'test_case_name': TEST_NAME,
-    'data': [retrieval_url + '/'],
+    'data': [retrieval_url],
     'tests' : [
       {
         'action': [
