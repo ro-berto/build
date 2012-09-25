@@ -527,7 +527,7 @@ def main_ios(options, args):
 
   # Default to running on iPhone with iOS version 5.1.
   device = 'iphone'
-  ios_version = '5.1'
+  ios_version = '6.0'
 
   # Parse the test_name and device from the test display name.
   # The expected format is: <test_name> (<device>)
