@@ -67,6 +67,67 @@ def ReadHKLMValue(path, value):
     return None
 
 
+def goma_setup(options, env):
+  """Sets up goma if necessary.
+
+  If using the Goma compiler, first call goma_ctl with ensure_start
+  (or restart in clobber mode) to ensure the proxy is available, and returns
+  True.
+  If it failed to start up compiler_proxy, modify options.compiler and
+  options.goma_dir and returns False
+
+  """
+  if options.compiler not in ('goma', 'goma-clang', 'jsonclang'):
+    # Unset goma_dir to make sure we'll not use goma.
+    options.goma_dir = None
+    return False
+
+  # goma is requested.
+  goma_key = os.path.join(options.goma_dir, 'goma.key')
+  if os.path.exists(goma_key):
+    env['GOMA_API_KEY_FILE'] = goma_key
+  result = -1
+  if not chromium_utils.IsWindows():
+    goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+    goma_start_command = ['ensure_start']
+    if options.clobber:
+      goma_start_command = ['restart']
+    result = chromium_utils.RunCommand(goma_ctl_cmd + goma_start_command,
+                                       env=env)
+  else:
+    env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
+    goma_ctl_cmd = [sys.executable,
+                    os.path.join(options.goma_dir, 'goma_ctl.py')]
+    result = chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
+  if not result:
+    # goma started sucessfully.
+    return True
+
+  print 'warning: failed to start goma. falling back to non-goma'
+  # Drop goma from options.compiler
+  options.compiler = options.compiler.replace('goma-', '')
+  if options.compiler == 'goma':
+    options.compiler = None
+  # Reset options.goma_dir.
+  # options.goma_dir will be used to check if goma is ready
+  # when options.compiler=jsonclang.
+  options.goma_dir = None
+  return False
+
+
+def goma_teardown(options, env):
+  """Tears down goma if necessary. """
+  if (options.compiler in ('goma', 'goma-clang', 'jsonclang') and
+      options.goma_dir):
+    if not chromium_utils.IsWindows():
+      goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
+    else:
+      goma_ctl_cmd = [sys.executable,
+                      os.path.join(options.goma_dir, 'goma_ctl.py')]
+    # Always stop the proxy for now to allow in-place update.
+    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+
+
 def common_xcode_settings(command, options, env, compiler=None):
   """
   Sets desirable Mac environment variables and command-line options
@@ -77,24 +138,26 @@ def common_xcode_settings(command, options, env, compiler=None):
 
   if compiler == 'goma':
     print 'using goma'
+    assert options.goma_dir
     command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
     return
 
   cc = None
   ldplusplus = None
   src_path = os.path.dirname(options.build_dir)
-  if compiler in ('clang', 'goma', 'goma-clang'):
+  if compiler in ('clang', 'goma-clang'):
     clang_bin_dir = os.path.abspath(os.path.join(
         src_path, 'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
     cc = os.path.join(clang_bin_dir, 'clang')
     ldplusplus = os.path.join(clang_bin_dir, 'clang++')
 
-    if compiler in ('goma', 'goma-clang'):
-      print 'using goma'
+    if compiler == 'goma-clang':
+      print 'using goma-clang'
       if options.clobber:
         # Disable compiles on local machine.  When the goma server-side object
         # file cache is warm, this can speed up clobber builds by up to 30%.
         env['GOMA_USE_LOCAL'] = '0'
+      assert options.goma_dir
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
   if cc:
@@ -346,6 +409,13 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
 def main_xcode(options, args):
   """Interprets options, clobbers object files, and calls xcodebuild.
   """
+
+  env = EchoDict(os.environ)
+  goma_ready = goma_setup(options, env)
+  if not goma_ready:
+    assert options.compiler not in ('goma', 'goma-clang')
+    assert options.goma_dir is None
+
   # If the project isn't in args, add all.xcodeproj to simplify configuration.
   command = ['xcodebuild', '-configuration', options.target]
 
@@ -377,7 +447,6 @@ def main_xcode(options, args):
     # master has been restarted, remove all clobber handling from compile.py.
     ninja_clobber(build_output_dir)
 
-  env = EchoDict(os.environ)
   common_xcode_settings(command, options, env, options.compiler)
 
   # Add on any remaining args
@@ -405,28 +474,12 @@ def main_xcode(options, args):
 
   os.chdir(options.build_dir)
 
-  # If using the Goma compiler, first call goma_ctl with ensure_start
-  # (or restart in clobber mode) to ensure the proxy is available.
-  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-
-  if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
-    goma_key = os.path.join(options.goma_dir, 'goma.key')
-    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
-    if os.path.exists(goma_key):
-      env['GOMA_API_KEY_FILE'] = goma_key
-    if options.clobber:
-      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
-    else:
-      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
-
   # Run the build.
   env.print_overrides()
   result = chromium_utils.RunCommand(command, env=env,
                                      filter_obj=xcodebuild_filter)
 
-  if options.compiler in ('goma', 'goma-clang', 'gomaclang'):
-    # Always stop the proxy for now to allow in-place update.
-    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+  goma_teardown(options, env)
 
   return result
 
@@ -499,10 +552,12 @@ def common_make_settings(
   if compiler in ('goma', 'goma-clang', 'jsonclang'):
     print 'using', compiler
     if compiler == 'goma':
+      assert options.goma_dir
       env['CC'] = 'gcc'
       env['CXX'] = 'g++'
       env['PATH'] = ':'.join([options.goma_dir, env['PATH']])
     elif compiler == 'goma-clang':
+      assert options.goma_dir
       env['CC'] = 'clang'
       env['CXX'] = 'clang++'
       clang_dir = os.path.abspath(os.path.join(
@@ -518,7 +573,10 @@ def common_make_settings(
       clang_dir = os.path.abspath(os.path.join(
           slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
-      env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
+      if options.goma_dir:
+        env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
+      else:
+        env['PATH'] = ':'.join([clang_dir, env['PATH']])
 
     command.append('CC.host=' + env['CC'])
     command.append('CXX.host=' + env['CXX'])
@@ -596,6 +654,13 @@ def common_make_settings(
 def main_make(options, args):
   """Interprets options, clobbers object files, and calls make.
   """
+
+  env = EchoDict(os.environ)
+  goma_ready = goma_setup(options, env)
+  if not goma_ready:
+    assert options.compiler not in ('goma', 'goma-clang')
+    assert options.goma_dir is None
+
   options.build_dir = os.path.abspath(options.build_dir)
   src_dir = os.path.join(slave_utils.SlaveBaseDir(options.build_dir), 'build',
                          'src')
@@ -636,7 +701,6 @@ def main_make(options, args):
     os.symlink('out', sconsbuild)
 
   os.chdir(working_dir)
-  env = EchoDict(os.environ)
   common_make_settings(command, options, env, options.crosstool,
       options.compiler)
 
@@ -644,20 +708,6 @@ def main_make(options, args):
   if options.verbose:
     command.extend(['V=1'])
   command.extend(options.build_args + args)
-
-  # If using the Goma compiler, first call goma_ctl with ensure_start
-  # (or restart in clobber mode) to ensure the proxy is available.
-  goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-
-  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
-    goma_key = os.path.join(options.goma_dir, 'goma.key')
-    env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
-    if os.path.exists(goma_key):
-      env['GOMA_API_KEY_FILE'] = goma_key
-    if options.clobber:
-      chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
-    else:
-      chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
 
   # Run the build.
   env.print_overrides()
@@ -680,15 +730,22 @@ def main_make(options, args):
     if this_result and not result:
       result = this_result
 
-  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
-    # Always stop the proxy for now to allow in-place update.
-    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+  goma_teardown(options, env)
 
   return result
 
 
 def main_ninja(options, args):
   """Interprets options, clobbers object files, and calls ninja."""
+
+  # Prepare environment.
+  env = EchoDict(os.environ)
+  orig_compiler = options.compiler
+  goma_ready = goma_setup(options, env)
+  if not goma_ready:
+    assert options.compiler not in ('goma', 'goma-clang')
+    assert options.goma_dir is None
+
   # ninja is different from all the other build systems in that it requires
   # most configuration to be done at gyp time. This is why this function does
   # less than the other comparable functions in this file.
@@ -716,49 +773,30 @@ def main_ninja(options, args):
   command.extend(options.build_args)
   command.extend(args)
 
-  # Prepare environment.
-  env = EchoDict(os.environ)
-
   if chromium_utils.IsMac() and options.disable_aslr:
     # Disallow dyld to randomize the load addresses of executables.
     # If any of them is compiled with ASan it will hang otherwise.
     env['DYLD_NO_PIE'] = '1'
 
   if options.compiler in ('goma', 'goma-clang'):
-    goma_key = os.path.join(options.goma_dir, 'goma.key')
-    if os.path.exists(goma_key):
-      env['GOMA_API_KEY_FILE'] = goma_key
-    if not chromium_utils.IsWindows():
-      goma_ctl_cmd = [os.path.join(options.goma_dir, 'goma_ctl.sh')]
-      # If using the Goma compiler, first call goma_ctl with ensure_start
-      # (or restart in clobber mode) to ensure the proxy is available.
-      env['GOMA_COMPILER_PROXY_DAEMON_MODE'] = 'true'
-      if options.clobber:
-        chromium_utils.RunCommand(goma_ctl_cmd + ['restart'], env=env)
-      else:
-        chromium_utils.RunCommand(goma_ctl_cmd + ['ensure_start'], env=env)
-    else:
-      env['GOMA_RPC_EXTRA_PARAMS'] = '?win'
-      goma_ctl_cmd = [sys.executable,
-                      os.path.join(options.goma_dir, 'goma_ctl.py')]
-      chromium_utils.RunCommand(goma_ctl_cmd + ['start'], env=env)
+    assert options.goma_dir
+    if chromium_utils.IsWindows():
       # rewrite cc, cxx line in output_dir\build.ninja.
-      # in winja, ninja-deplist-helper is used to run $cc/$cxx to collect
-      # depepndency with "cl /showIncludes" and generates gcc-compatible
-      # depfile (*.d).
-      # ninja-deplist-helper uses environment in output_dir\environment.*,
+      # in winja, ninja -t msvc is used to run $cc/$cxx to collect
+      # depepndency with "cl /showIncludes" and generates dependency info.
+      # ninja -t msvc uses environment in output_dir\environment.*,
       # which is generated at gyp time (Note: gyp detect MSVC's path and set it
       # to PATH.  This PATH doesn't include goma_dir.), and ignores PATH
       # to run $cc/$cxx at run time.
       # So modifying PATH in compile.py doesn't afffect to run $cc/$cxx
-      # under ninja-deplist-helper. (PATH is just ignored. Note PATH set/used
+      # under ninja -t msvc. (PATH is just ignored. Note PATH set/used
       # in compile.py doesn't include MSVC's path).
       # Hence, we'll got
       # "CreateProcess failed: The system cannot find the file specified."
       #
       # So, rewrite cc, cxx line to "$goma_dir/gomacc cl".
       #
-      # Note that, on other platform, ninja doesn't use ninja-deplist-helper,
+      # Note that, on other platform, ninja doesn't use ninja -t msvc
       # (it just simply run $cc/$cxx), so modifying PATH can work to run
       # gomacc without this hack.
       orig_build = open(os.path.join(output_dir, 'build.ninja'))
@@ -794,6 +832,16 @@ def main_ninja(options, args):
     if chromium_utils.IsMac() and options.clobber:
       env['GOMA_USE_LOCAL'] = '0'
 
+  if orig_compiler == 'goma-clang' and options.compiler == 'clang':
+    # goma setup failed, fallback to local clang.
+    # Note that ninja.build was generated for goma, so need to set PATH
+    # to clang dir.
+    # If orig_compiler is not goma, gyp set this path in ninja.build.
+    print 'using', options.compiler
+    clang_dir = os.path.abspath(os.path.join(
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+    env['PATH'] = os.pathsep.join([clang_dir, env['PATH']])
+
   # Run the build.
   env.print_overrides()
   # TODO(maruel): Remove the shell argument as soon as ninja.exe is in PATH.
@@ -802,8 +850,7 @@ def main_ninja(options, args):
   result = chromium_utils.RunCommand(
       command, env=env, shell=sys.platform=='win32')
 
-  if chromium_utils.IsWindows() and options.compiler in ('goma', 'goma-clang'):
-    chromium_utils.RunCommand(goma_ctl_cmd + ['stop'], env=env)
+  goma_teardown(options, env)
   return result
 
 
@@ -923,10 +970,9 @@ def main_win(options, args):
                                 'chrome_dll_version.rc')
 
   env = EchoDict(os.environ)
-  if options.compiler == 'goma':
-    env['CC'] = 'gomacc.exe cl'
-    env['CXX'] = 'gomacc.exe cl'
-    env['PATH'] = ';'.join([options.goma_dir, env['PATH']])
+
+  # no goma support yet for this build tool.
+  assert options.compiler != 'goma'
 
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
