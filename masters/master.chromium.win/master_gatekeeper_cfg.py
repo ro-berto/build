@@ -74,6 +74,7 @@ def Update(config, active_master, c):
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=active_master.tree_status_url,
+      public_html='../master.chromium/public_html',
       use_getname=True))
 
   # Notify nacl-broke@google.com when nacl_integration fails.
@@ -89,4 +90,5 @@ def Update(config, active_master, c):
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
+      public_html='../master.chromium/public_html',
       use_getname=True))

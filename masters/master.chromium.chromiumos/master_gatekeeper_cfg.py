@@ -100,6 +100,7 @@ def Update(config, active_master, alternate_master, c):
       forgiving_steps=forgiving_steps,
       tree_status_url=active_master.tree_status_url,
       sheriffs=['sheriff'],
+      public_html='../master.chromium/public_html',
       use_getname=True))
   # chromium os failures close the chromeOS tree
   c['status'].append(gatekeeper.GateKeeper(
@@ -113,6 +114,7 @@ def Update(config, active_master, alternate_master, c):
       forgiving_steps=forgiving_steps,
       tree_status_url=alternate_master.tree_status_url,
       sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
+      public_html='../master.chromium/public_html',
       use_getname=True))
   # chromium os buried failures/flakiness to chrome OS folk
   c['status'].append(gatekeeper.GateKeeper(
@@ -127,6 +129,7 @@ def Update(config, active_master, alternate_master, c):
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
       sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
+      public_html='../master.chromium/public_html',
       use_getname=True))
   # while the Aura folk are in panic fast mode, let them know to help on
   # failures that may be related to their special configs.
@@ -142,4 +145,5 @@ def Update(config, active_master, alternate_master, c):
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
       sheriffs=['sheriff_aura'],
+      public_html='../master.chromium/public_html',
       use_getname=True))
