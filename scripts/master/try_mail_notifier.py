@@ -31,7 +31,7 @@ class TryMailNotifier(mail.MailNotifier):
     self.failure_message = failure_message
     self.footer = footer
     # List of builders to NOT send email about if build was successful
-    self.no_email_on_success = no_email_on_success
+    self.no_email_on_success = no_email_on_success or []
 
   def buildMessage(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
