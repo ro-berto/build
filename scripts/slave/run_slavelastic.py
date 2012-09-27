@@ -108,6 +108,8 @@ class Manifest(object):
       request = urllib2.Request(url, data=zip_contents)
       request.add_header('Content-Type', 'application/octet-stream')
       request.add_header('Content-Length', len(zip_contents))
+
+      urllib2.urlopen(request)
     except urllib2.URLError as e:
       print 'Failed to upload the zip file\n%s' % str(e)
       return False

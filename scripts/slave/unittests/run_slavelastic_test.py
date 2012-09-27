@@ -109,6 +109,9 @@ class MockZipFile(object):
   def close(self):
     pass
 
+def MockUrlOpen(url_or_request, body=None):
+  return StringIO.StringIO('{}')
+
 
 class ManifestTest(unittest.TestCase):
   def test_basic_manifest(self):
@@ -137,7 +140,7 @@ class ManifestTest(unittest.TestCase):
 
   def test_process_manifest_success(self):
     run_slavelastic.zipfile.ZipFile = MockZipFile
-    run_slavelastic.urllib2.urlopen = lambda url, text: StringIO.StringIO('{}')
+    run_slavelastic.urllib2.urlopen = MockUrlOpen
 
     options = Options()
     self.assertEqual(
