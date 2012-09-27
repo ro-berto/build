@@ -74,6 +74,9 @@ class Master(object):
     # http://code.google.com/p/google-app-engine-django and
     # http://code.google.com/appengine/articles/pure_django.html
     code_review_site = 'https://chromiumcodereview.appspot.com/status_listener'
+    # Versions of third_party twisted and buildbot libraries to run on slaves.
+    buildslave_version = 'buildbot_slave_8_4'
+    twisted_version = 'twisted_10_2'
 
     # For the following values, they are used only if non-0. Do not set them
     # here, set them in the actual master configuration class.
