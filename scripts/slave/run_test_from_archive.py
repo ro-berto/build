@@ -398,7 +398,8 @@ class Remote(object):
   def _get_remote_fetcher(file_or_url):
     """Returns a object to retrieve objects from a remote."""
     if re.match(r'^https?://.+$', file_or_url):
-      file_or_url = file_or_url.rstrip('/') + '/'
+      if not file_or_url.endswith('='):
+        file_or_url = file_or_url.rstrip('/') + '/'
       def download_file(item, dest):
         # TODO(maruel): Reuse HTTP connections. The stdlib doesn't make this
         # easy.
