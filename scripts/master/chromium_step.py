@@ -20,6 +20,7 @@ from buildbot.process.properties import WithProperties
 from buildbot.status import builder
 from buildbot.steps import shell
 from buildbot.steps import source
+from buildbot.process.buildstep import LoggingBuildStep
 
 from common import chromium_utils
 import config
@@ -209,6 +210,28 @@ class GClient(source.Source):
       if got_v8_revision:
         self.setProperty('got_v8_revision', str(got_v8_revision),
                          'Source')
+
+
+class ApplyIssue(LoggingBuildStep):
+  """Runs the apply_issue.py script on the slave."""
+
+  def __init__(self, root, issue, patchset, email, password, workdir, timeout,
+               **kwargs):
+    LoggingBuildStep.__init__(self, **kwargs)
+    self.args = {'root': root,
+                 'issue': issue,
+                 'patchset': patchset,
+                 'email': email,
+                 'password': password,
+                 'workdir': workdir,
+                 'timeout': timeout,
+                 }
+
+  def start(self):
+    args = dict((name, self.build.render(value))
+                for name, value in self.args.iteritems())
+    cmd = buildstep.LoggedRemoteCommand('apply_issue', args)
+    self.startCommand(cmd)
 
 
 class BuilderStatus(object):

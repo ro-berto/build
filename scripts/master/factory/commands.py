@@ -606,13 +606,16 @@ class FactoryCommands(object):
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo)
 
-  def AddApplyIssueStep(self):
+  def AddApplyIssueStep(self, timeout):
     """Adds a step to the factory to apply an issues from Rietveld.
 
     It is a conditional step that is only run on the try server if the following
     conditions are all true:
     - There are both build properties issue and patchset
     - There is no patch attached
+
+    Args:
+      timeout: Timeout to use on the slave when running apply_issue.py.
     """
 
     def do_step_if(bStep):
@@ -625,27 +628,18 @@ class FactoryCommands(object):
         return False
       return True
 
-    # TODO(rogerta): for now using an empty string for email address, so
-    # that apply_issue does not prompt for an email address and password.
-    # Eventually we may want to have the buildbot authenticate with some
-    # @chromium.org account.  Use the form --email= instead of -e '' since
-    # windows bots don't like the latter.
-    cmd = [
-        self._python,
-        self.PathJoin('..', '..', '..', '..', 'depot_tools', 'apply_issue.py'),
-        # Use 'src' as the root if the root property is undefined or empty.
-        # Note that the ~ is a directive to buildbot and not a typo.
-        '-r', WithProperties('%(root:~src)s'),
-        '-i', WithProperties('%(issue:-)s'),
-        '-p', WithProperties('%(patchset:-)s'),
-        '--email=',
-    ]
+    password = open('.apply_issue_password').readline().strip()
     self._factory.addStep(
-        shell.ShellCommand,
+        chromium_step.ApplyIssue,
+        root=WithProperties('%(root:~src)s'),
+        issue=WithProperties('%(issue:-)s'),
+        patchset=WithProperties('%(patchset:-)s'),
+        email='commit-bot@chromium.org',
+        password=password,
+        workdir=self.working_dir,
+        timeout=timeout or 120,
         haltOnFailure=True,
         name='apply_issue',
-        description='apply patch',
-        command=cmd,
         doStepIf=do_step_if)
 
   def AddRunHooksStep(self, env=None, timeout=None):

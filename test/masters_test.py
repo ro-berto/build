@@ -105,15 +105,25 @@ def real_main(base_dir, expected):
     for master in masters[:]:
       if not master in expected:
         continue
-      masters.remove(master)
-      name = expected.pop(master)
-      if not name:
-        skipped += 1
-        continue
-      if not test_master(master, name, os.path.join(base, master)):
-        failed.add(master)
-      else:
-        success += 1
+
+      apply_issue_pwd_path = os.path.join(base, master, '.apply_issue_password')
+      need_apply_issue_pwd = not os.path.isfile(apply_issue_pwd_path)
+      try:
+        if need_apply_issue_pwd:
+          with open(apply_issue_pwd_path, 'w') as f:
+            f.write('foo\n')
+        masters.remove(master)
+        name = expected.pop(master)
+        if not name:
+          skipped += 1
+          continue
+        if not test_master(master, name, os.path.join(base, master)):
+          failed.add(master)
+        else:
+          success += 1
+      finally:
+        if need_apply_issue_pwd:
+          os.remove(apply_issue_pwd_path)
   finally:
     if need_bot_pwd:
       os.remove(bot_pwd_path)

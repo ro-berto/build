@@ -336,7 +336,7 @@ class GClientFactory(object):
         gclient_jobs=gclient_jobs)
 
     if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot'):
-      factory_cmd_obj.AddApplyIssueStep()
+      factory_cmd_obj.AddApplyIssueStep(timeout=timeout)
 
     if not self._nohooks_on_update:
       factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)
