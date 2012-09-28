@@ -176,6 +176,7 @@ def main():
       'master.client.nacl.chrome': 'NativeClientChrome',
       'master.client.nacl.llvm': 'NativeClientLLVM',
       'master.client.nacl.ports': 'NativeClientPorts',
+      'master.client.nacl.ragel': 'NativeClientRagel',
       'master.client.nacl.sdk': 'NativeClientSDK',
       'master.client.nacl.sdk.mono': 'NativeClientSDKMono',
       'master.client.nacl.toolchain': 'NativeClientToolchain',
