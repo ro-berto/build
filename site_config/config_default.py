@@ -302,12 +302,6 @@ class Master(object):
     slave_port = 9182
     master_port_alt = 9282
 
-  class NativeClientPPAPI(_NaClBase):
-    project_name = 'NativeClientPPAPI'
-    master_port = 9083
-    slave_port = 9183
-    master_port_alt = 9283
-
   class NativeClientSDK(_NaClBase):
     project_name = 'NativeClientSDK'
     master_port = 9084
