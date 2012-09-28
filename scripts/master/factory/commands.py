@@ -922,7 +922,11 @@ class FactoryCommands(object):
               'trigger swarm tests')
       return
     manifest_directory = self.PathJoin('src', out_dir, self._target)
-    script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
+
+    if self._target_platform:
+      script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.bat')
+    else:
+      script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
 
     cmd = [script_path, '--manifest_directory', manifest_directory]
     cmd.append(tests if tests else WithProperties('%(swarm_tests:-)s'))

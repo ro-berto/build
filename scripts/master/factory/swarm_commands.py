@@ -8,6 +8,7 @@ This is based on commands.py and adds swarm-specific commands."""
 
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
+from twisted.python import log
 
 import config
 from master.factory import commands
@@ -68,11 +69,16 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
       if '_swarm:' in test_filter or test_filter.endswith('_swarm'):
         (test_name, _, gtest_filter) = test_filter.partition(':')
         for swarm_test in self.tests:
-          if swarm_test.test_name + '_swarm' == test_name:
-            command.extend(['--run_from_hash',
-                            swarm_tests_hash_mapping[swarm_test.test_name],
-                            swarm_test.test_name, '%d' % swarm_test.shards,
-                            gtest_filter])
+          if (swarm_test.test_name + '_swarm' == test_name):
+            if (swarm_tests_hash_mapping and
+                swarm_test.test_name in swarm_tests_hash_mapping):
+              command.extend(['--run_from_hash',
+                              swarm_tests_hash_mapping[swarm_test.test_name],
+                              swarm_test.test_name, '%d' % swarm_test.shards,
+                              gtest_filter])
+            else:
+              log.msg('Given a swarm test, %s, that has no matching hash' %
+                      test_name)
             continue
 
     self.setCommand(command)
