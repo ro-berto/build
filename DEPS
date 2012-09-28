@@ -8,6 +8,9 @@ deps = {
   "build/third_party/gsutil/boto":
     "svn://svn.chromium.org/boto@4",
 
+  "build/scripts/command_wrapper/bin":
+    "/trunk/tools/command_wrapper/bin",
+
   "commit-queue":
     "/trunk/tools/commit-queue",
 
