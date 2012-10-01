@@ -674,8 +674,9 @@ class ApplyIssue(commandbase):
         '-w', '-',
     ]
 
-    command = runprocesscmd(self.builder, cmd, self.workdir, sendRC=False,
-                            timeout=self.timeout, initialStdin=self.password)
+    command = runprocesscmd(
+        self.builder, cmd, os.path.join(self.builder.basedir, self.workdir),
+        timeout=self.timeout, initialStdin=self.password)
     return command.start()
 
   # commandbase overrides:
