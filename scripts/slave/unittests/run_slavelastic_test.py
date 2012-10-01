@@ -47,7 +47,7 @@ def GenerateExpectedJSON(options):
 
   expected = {
     'test_case_name': TEST_NAME,
-    'data': [retrieval_url],
+    'data': [[retrieval_url, 'swarm_data.zip']],
     'tests' : [
       {
         'action': [
