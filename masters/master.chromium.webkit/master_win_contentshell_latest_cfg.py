@@ -42,6 +42,9 @@ F('f_contentshell_win_rel', win().ChromiumWebkitLatestFactory(
     ],
     project='all.sln;content_shell_builder',
     factory_properties={
+      'additional_expectations_files': [
+        ['content', 'shell', 'layout_tests', 'TestExpectations' ],
+      ],
       'additional_drt_flag': '--dump-render-tree',
       'archive_webkit_results': True,
       'driver_name': 'content_shell',
