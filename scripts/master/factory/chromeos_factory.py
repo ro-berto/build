@@ -113,7 +113,8 @@ class CbuildbotFactory(object):
     * clean checkout of chromite[& crostools]
     """
     if self.slave_manager:
-      build_slave_sync = ['gclient', 'sync', '--delete_unversioned_trees']
+      build_slave_sync = ['gclient', 'sync', '--reset',
+                          '--delete_unversioned_trees']
       self.f_cbuild.addStep(shell.ShellCommand,
                             command=build_slave_sync,
                             name='update_scripts',
