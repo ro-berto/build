@@ -130,6 +130,7 @@ class PerformanceLogProcessor(object):
     if build_property:
       self._version = build_property.get('version') or 'undefined'
       self._channel = build_property.get('channel') or 'undefined'
+    self._percentiles = [.1, .25, .5, .75, .90, .95, .99]
 
   def PerformanceLogs(self):
     if not self._finalized:
@@ -541,6 +542,9 @@ class GraphingLogProcessor(PerformanceLogProcessor):
                              '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
                              '(?P<VALUE>[\{\[]?[-\d\., ]+[\}\]]?)('
                              ' ?(?P<UNITS>.+))?')
+  HISTOGRAM_REGEX = re.compile(r'(?P<IMPORTANT>\*)?HISTOGRAM '
+                               '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
+                               '(?P<VALUE_JSON>.*)')
 
   def __init__(self, *args, **kwargs):
     PerformanceLogProcessor.__init__(self, *args, **kwargs)
@@ -557,53 +561,101 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     return self.PerformanceChanges() + self._text_summary
 
   def ProcessLine(self, line):
-    line_match = self.RESULTS_REGEX.match(line)
-    if line_match:
-      match_dict = line_match.groupdict()
-      graph_name = match_dict['GRAPH'].strip()
-      trace_name = match_dict['TRACE'].strip()
+    results_match = self.RESULTS_REGEX.match(line)
+    histogram_match = self.HISTOGRAM_REGEX.match(line)
+    if results_match:
+      self._ProcessResultLine(results_match)
+    elif histogram_match:
+      self._ProcessHistogramLine(histogram_match)
 
-      graph = self._graphs.get(graph_name, Graph())
-      graph.units = match_dict['UNITS'] or ''
-      trace = graph.traces.get(trace_name, Trace())
-      trace.value = match_dict['VALUE']
-      trace.important = match_dict['IMPORTANT'] or False
+  def _ProcessResultLine(self, line_match):
+    match_dict = line_match.groupdict()
+    graph_name = match_dict['GRAPH'].strip()
+    trace_name = match_dict['TRACE'].strip()
 
-      # Compute the mean and standard deviation for a multiple-valued item,
-      # or the numerical value of a single-valued item.
-      if trace.value.startswith('['):
-        try:
-          value_list = [float(x) for x in trace.value.strip('[],').split(',')]
-        except ValueError:
-          # Report, but ignore, corrupted data lines. (Lines that are so badly
-          # broken that they don't even match the RESULTS_REGEX won't be
-          # detected.)
-          logging.warning("Bad test output: '%s'" % trace.value.strip())
-          return
-        trace.value, trace.stddev, filedata = self._CalculateStatistics(
-            value_list, trace_name)
-        for fn in filedata:
-          self.PrependLog(fn, filedata[fn])
-      elif trace.value.startswith('{'):
-        stripped = trace.value.strip('{},')
-        try:
-          trace.value, trace.stddev = [float(x) for x in stripped.split(',')]
-        except ValueError:
-          logging.warning("Bad test output: '%s'" % trace.value.strip())
-          return
-      else:
-        try:
-          trace.value = float(trace.value)
-        except ValueError:
-          logging.warning("Bad test output: '%s'" % trace.value.strip())
-          return
+    graph = self._graphs.get(graph_name, Graph())
+    graph.units = match_dict['UNITS'] or ''
+    trace = graph.traces.get(trace_name, Trace())
+    trace.value = match_dict['VALUE']
+    trace.important = match_dict['IMPORTANT'] or False
 
-      graph.traces[trace_name] = trace
-      self._graphs[graph_name] = graph
+    # Compute the mean and standard deviation for a multiple-valued item,
+    # or the numerical value of a single-valued item.
+    if trace.value.startswith('['):
+      try:
+        value_list = [float(x) for x in trace.value.strip('[],').split(',')]
+      except ValueError:
+        # Report, but ignore, corrupted data lines. (Lines that are so badly
+        # broken that they don't even match the RESULTS_REGEX won't be
+        # detected.)
+        logging.warning("Bad test output: '%s'" % trace.value.strip())
+        return
+      trace.value, trace.stddev, filedata = self._CalculateStatistics(
+          value_list, trace_name)
+      for fn in filedata:
+        self.PrependLog(fn, filedata[fn])
+    elif trace.value.startswith('{'):
+      stripped = trace.value.strip('{},')
+      try:
+        trace.value, trace.stddev = [float(x) for x in stripped.split(',')]
+      except ValueError:
+        logging.warning("Bad test output: '%s'" % trace.value.strip())
+        return
+    else:
+      try:
+        trace.value = float(trace.value)
+      except ValueError:
+        logging.warning("Bad test output: '%s'" % trace.value.strip())
+        return
 
-      # Store values in actual performance.
-      self.TrackActualPerformance(graph=graph_name, trace=trace_name,
-                                  value=trace.value, stddev=trace.stddev)
+    graph.traces[trace_name] = trace
+    self._graphs[graph_name] = graph
+
+    # Store values in actual performance.
+    self.TrackActualPerformance(graph=graph_name, trace=trace_name,
+                                value=trace.value, stddev=trace.stddev)
+
+  def _ProcessHistogramLine(self, line_match):
+    match_dict = line_match.groupdict()
+    graph_name = match_dict['GRAPH'].strip()
+    trace_name = match_dict['TRACE'].strip()
+    histogram_json = match_dict['VALUE_JSON']
+    important = match_dict['IMPORTANT'] or False
+    try:
+      histogram_data = json.loads(histogram_json)
+    except ValueError:
+      # Report, but ignore, corrupted data lines. (Lines that are so badly
+      # broken that they don't even match the HISTOGRAM_REGEX won't be
+      # detected.)
+      logging.warning("Bad test output: '%s'" % histogram_json.strip())
+      return
+
+    # Compute percentile data, create a graph for all percentile values.
+    percentiles = self._CalculatePercentiles(histogram_data, trace_name)
+    for i in percentiles:
+      percentile_graph_name = graph_name + "_" + str(i['percentile'])
+      graph = self._graphs.get(percentile_graph_name, Graph())
+      graph.units = ''
+      trace = graph.traces.get(percentile_graph_name, Trace())
+      trace.value = i['value']
+      trace.important = important
+      graph.traces[percentile_graph_name] = trace
+      self._graphs[percentile_graph_name] = graph
+      self.TrackActualPerformance(graph=percentile_graph_name,
+                                  trace=percentile_graph_name,
+                                  value=i['value'])
+
+    # Compute geometric mean and standard deviation.
+    graph = self._graphs.get(graph_name, Graph())
+    graph.units = ''
+    trace = graph.traces.get(trace_name, Trace())
+    trace.value, trace.stddev = self._CalculateHistogramStatistics(
+        histogram_data, trace_name)
+    trace.important = important
+    graph.traces[trace_name] = trace
+    self._graphs[graph_name] = graph
+    self.TrackActualPerformance(graph=graph_name, trace=trace_name,
+                                value=trace.value, stddev=trace.stddev)
 
   def _CalculateStatistics(self, value_list, trace_name):
     """Returns a tuple (mean, standard deviation) from a list of values.
@@ -618,6 +670,36 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     """
     val, stddev = chromium_utils.FilteredMeanAndStandardDeviation(value_list)
     return val, stddev, {}
+
+  def _CalculatePercentiles(self, histogram, trace_name):
+    """Returns a list of percentile values from a histogram.
+
+    Each value is a dictionary (relevant keys: "percentile" and "value").
+
+    This method may be overridden by subclasses.
+
+    Args:
+      histogram: histogram data (relevant keys: "buckets", and for each bucket,
+          "min", "max" and "count").
+      trace_name: the trace that produced the data (not used in the base
+          implementation, but subclasses may use it)
+    """
+    return chromium_utils.HistogramPercentiles(histogram, self._percentiles)
+
+  def _CalculateHistogramStatistics(self, histogram, trace_name):
+    """Returns the geometric mean and standard deviation for a histogram.
+
+    This method may be overridden by subclasses.
+
+    Args:
+      histogram: histogram data (relevant keys: "buckets", and for each bucket,
+          "min", "max" and "count").
+      trace_name: the trace that produced the data (not used in the base
+          implementation, but subclasses may use it)
+    """
+    geom_mean, stddev = chromium_utils.GeomMeanAndStdDevFromHistogram(
+        histogram)
+    return geom_mean, stddev
 
   def __BuildSummaryJSON(self, graph):
     """Sorts the traces and returns a summary JSON encoding of the graph.

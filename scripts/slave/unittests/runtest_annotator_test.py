@@ -18,6 +18,7 @@ import test_env  # pylint: disable=W0403,W0611
 
 from slave import process_log_utils
 
+TEST_PERCENTILES = [.05, .3, .8]
 
 class LoggingStepBase(unittest.TestCase):
   """Logging testcases superclass.
@@ -55,6 +56,9 @@ class LoggingStepBase(unittest.TestCase):
                                       log_processor_class, *args, **kwargs):
     parser = self._ConstructDefaultProcessor(log_processor_class, *args,
                                              **kwargs)
+    # Set custom percentiles if we're testing GraphingLogProcessor.
+    if hasattr(parser, "_percentiles"):
+      parser._percentiles = TEST_PERCENTILES
     for inputfile in inputfiles:
       self._ProcessLog(parser, inputfile)
 
@@ -168,6 +172,34 @@ class GraphingLogProcessorTest(LoggingStepBase):
     self.assertEqual(actual, expected, 'Filename %s did not contain expected '
         'data.' % graphfile)
 
+  def testHistogramGeometricMeanAndStandardDeviation(self):
+    input_files = ['graphing_processor.log']
+    summary_file = 'hist1-summary.dat'
+    output_files = [summary_file]
+
+    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
+        process_log_utils.GraphingLogProcessor)
+
+    actual = json.loads('\n'.join(logs[summary_file]))
+    expected = json.load(open(
+        os.path.join(test_env.DATA_PATH, summary_file)))
+
+    self.assertEqual(actual, expected, 'Filename %s did not contain expected '
+        'data.' % summary_file)
+
+  def testHistogramPercentiles(self):
+    input_files = ['graphing_processor.log']
+    summary_files = ['hist1_%s-summary.dat' % str(p) for p in TEST_PERCENTILES]
+    output_files = summary_files
+
+    logs = self._ConstructParseAndCheckLogfiles(input_files, output_files,
+        process_log_utils.GraphingLogProcessor)
+
+    for filename in output_files:
+      actual = json.loads('\n'.join(logs[filename]))
+      expected = json.load(open(os.path.join(test_env.DATA_PATH, filename)))
+      self.assertEqual(actual, expected, 'Filename %s did not contain expected '
+          'data.' % filename)
 
 if __name__ == '__main__':
   unittest.main()

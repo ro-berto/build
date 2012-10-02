@@ -31,7 +31,6 @@ class MissingArgument(Exception): pass
 class PathNotFound(Exception): pass
 class ExternalError(Exception): pass
 
-
 def IsWindows():
   return sys.platform == 'cygwin' or sys.platform.startswith('win')
 
@@ -126,6 +125,127 @@ def FilteredMeanAndStandardDeviation(data):
     return new_array
   return MeanAndStandardDeviation(_FilterMax(data))
 
+def HistogramPercentiles(histogram, percentiles):
+  computed_percentiles = _ComputePercentiles(histogram['buckets'],
+                                             histogram['count'],
+                                             percentiles)
+  output = []
+  for p in computed_percentiles:
+    output.append({'percentile': p, 'value': computed_percentiles[p]})
+  return output
+
+def GeomMeanAndStdDevFromHistogram(histogram):
+  count = 0
+  sum_of_logs = 0
+  for bucket in histogram['buckets']:
+    if 'high' in bucket:
+      bucket['mean'] = (bucket['low'] + bucket['high']) / 2.0
+    else:
+      bucket['mean'] = bucket['low']
+    if bucket['mean'] > 0:
+      sum_of_logs += math.log(bucket['mean']) * bucket['count']
+      count += bucket['count']
+
+  if count == 0:
+    return 0.0, 0.0
+
+  sum_of_squares = 0
+  geom_mean = math.exp(sum_of_logs / count)
+  for bucket in histogram['buckets']:
+    if bucket['mean'] > 0:
+      sum_of_squares += (bucket['mean'] - geom_mean) ** 2 * bucket['count']
+  return geom_mean, math.sqrt(sum_of_squares / count)
+
+def _LinearInterpolate(x0, target, x1, y0, y1):
+  """Perform linear interpolation to estimate an intermediate value.
+
+  We assume for some F, F(x0) == y0, and F(x1) == z1.
+
+  We return an estimate for what F(target) should be, using linear
+  interpolation.
+
+  Args:
+    x0: (Float) A location at which some function F() is known.
+    target: (Float) A location at which we need to estimate F().
+    x1: (Float) A second location at which F() is known.
+    y0: (Float) The value of F(x0).
+    y1: (Float) The value of F(x1).
+
+  Returns:
+    (Float) The estimated value of F(target).
+  """
+  if x0 == x1:
+    return (y0 + y1) / 2
+  return  (y1 - y0) * (target - x0) / (x1 - x0) + y0
+
+def _BucketInterpolate(last_percentage, target, next_percentage, bucket_min,
+                       bucket_max):
+  """Estimate a minimum which should have the target % of samples below it.
+
+  We do linear interpolation only if last_percentage and next_percentage are
+  adjacent, and hence we are in a linear section of a histogram. Once they
+  spread further apart we generally get exponentially broader buckets, and we
+  need to interpolate in the log domain (and exponentiate our result).
+
+  Args:
+    last_percentage: (Float) This is the percentage of samples below bucket_min.
+    target: (Float) A percentage for which we need an estimated bucket.
+    next_percentage: (Float) This is the percentage of samples below bucket_max.
+    bucket_min: (Float) This is the lower value for samples in a bucket.
+    bucket_max: (Float) This exceeds the upper value for samples.
+
+  Returns:
+    (Float) An estimate of what bucket cutoff would have probably had the target
+        percentage.
+  """
+  log_domain = False
+  if bucket_min + 1.5 < bucket_max and bucket_min > 0:
+    log_domain = True
+    bucket_min = math.log(bucket_min)
+    bucket_max = math.log(bucket_max)
+  result = _LinearInterpolate(
+      last_percentage, target, next_percentage, bucket_min, bucket_max)
+  if log_domain:
+    result = math.exp(result)
+  return result
+
+def _ComputePercentiles(buckets, total, percentiles):
+  """Compute percentiles for the given histogram.
+
+  Returns estimates for the bucket cutoffs that would probably have the taret
+  percentiles.
+
+  Args:
+    buckets: (List) A list of buckets representing the histogram to analyze.
+    total: (Float) The total number of samples in the histogram.
+    percentiles: (Tuple) The percentiles we are interested in.
+
+  Returns:
+    (Dictionary) Map from percentiles to bucket cutoffs.
+  """
+  if not percentiles:
+    return {}
+  current_count = 0
+  current_percentage = 0
+  next_percentile_index = 0
+  result = {}
+  for bucket in buckets:
+    if bucket['count'] > 0:
+      current_count += bucket['count']
+      old_percentage = current_percentage
+      current_percentage = float(current_count) / total
+
+      # Check whether we passed one of the percentiles we're interested in.
+      while (next_percentile_index < len(percentiles) and
+             current_percentage > percentiles[next_percentile_index]):
+        if not 'high' in bucket:
+          result[percentiles[next_percentile_index]] = bucket['low']
+        else:
+          result[percentiles[next_percentile_index]] = float(_BucketInterpolate(
+              old_percentage, percentiles[next_percentile_index],
+              current_percentage, bucket['low'], bucket['high']))
+        next_percentile_index += 1
+  return result
 
 class InitializePartiallyWithArguments:
   """Function currying implementation.
