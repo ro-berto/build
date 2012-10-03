@@ -89,6 +89,9 @@ class FakeBuildstepStatus(mock.Mock):
   def stepFinished(self, status):
     self.getBuild().receivedStatus.append(status)
 
+  def setHidden(self, hidden):
+    return None
+
 
 class FakeBuildStatus(mock.Mock):
   def __init__(self):

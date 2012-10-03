@@ -5,6 +5,198 @@ License: GNU General Public License (GPL) Version 2
 This is a forked copy of buildbot v0.8.4p1.
 
 
+Apply 2577dac35b39c4ee9c419681021d7971e8f1e5d2 and
+3db80d46d3c35d71591f033e5c3d0a2fa0001c59 from buildbot upstream.
+
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/process/buildstep.py b/third_party/buildbot_8_4p1/buildbot/process/buildstep.py
+index ea42207..4aa307d 100644
+--- a/third_party/buildbot_8_4p1/buildbot/process/buildstep.py
++++ b/third_party/buildbot_8_4p1/buildbot/process/buildstep.py
+@@ -620,6 +620,7 @@ class BuildStep:
+              'alwaysRun',
+              'progressMetrics',
+              'doStepIf',
++             'hideStepIf',
+              ]
+ 
+     name = "generic"
+@@ -631,6 +632,7 @@ class BuildStep:
+     progress = None
+     # doStepIf can be False, True, or a function that returns False or True
+     doStepIf = True
++    hideStepIf = False
+ 
+     def __init__(self, **kwargs):
+         self.factory = (self.__class__, dict(kwargs))
+@@ -920,6 +922,10 @@ class BuildStep:
+         if self.progress:
+             self.progress.finish()
+         self.step_status.stepFinished(results)
++
++        hidden = self._maybeEvaluate(self.hideStepIf, self.step_status)
++        self.step_status.setHidden(hidden)
++
+         self.releaseLocks()
+         self.deferred.callback(results)
+ 
+@@ -938,6 +944,9 @@ class BuildStep:
+             self.step_status.setText([self.name, "exception"])
+             self.step_status.setText2([self.name])
+             self.step_status.stepFinished(EXCEPTION)
++
++            hidden = self._maybeEvaluate(self.hideStepIf, EXCEPTION, self)
++            self.step_status.setHidden(hidden)
+         except:
+             log.msg("exception during failure processing")
+             log.err()
+@@ -1048,6 +1057,11 @@ class BuildStep:
+         d = c.run(self, self.remote)
+         return d
+ 
++    @staticmethod
++    def _maybeEvaluate(value, *args, **kwargs):
++        if callable(value):
++            value = value(*args, **kwargs)
++        return value
+ 
+ class OutputProgressObserver(LogObserver):
+     length = 0
+@@ -1294,4 +1308,3 @@ def regex_log_evaluator(cmd, step_status, regexes):
+ from buildbot.process.properties import WithProperties
+ _hush_pyflakes = [WithProperties]
+ del _hush_pyflakes
+-
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/buildstep.py b/third_party/buildbot_8_4p1/buildbot/status/buildstep.py
+index 781f7e8..264b599 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/buildstep.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/buildstep.py
+@@ -46,7 +46,7 @@ class BuildStepStatus(styles.Versioned):
+     # corresponding BuildStep has started.
+     implements(interfaces.IBuildStepStatus, interfaces.IStatusEvent)
+ 
+-    persistenceVersion = 3
++    persistenceVersion = 4
+     persistenceForgets = ( 'wasUpgraded', )
+ 
+     started = None
+@@ -60,6 +60,7 @@ class BuildStepStatus(styles.Versioned):
+     finishedWatchers = []
+     statistics = {}
+     step_number = None
++    hidden = False
+ 
+     def __init__(self, parent, step_number):
+         assert interfaces.IBuildStatus(parent)
+@@ -67,6 +68,7 @@ class BuildStepStatus(styles.Versioned):
+         self.build_number = parent.getNumber()
+         self.builder = parent.getBuilder()
+         self.step_number = step_number
++        self.hidden = False
+         self.logs = []
+         self.urls = {}
+         self.watchers = []
+@@ -120,6 +122,9 @@ class BuildStepStatus(styles.Versioned):
+     def isFinished(self):
+         return (self.finished is not None)
+ 
++    def isHidden(self):
++        return self.hidden
++
+     def waitUntilFinished(self):
+         if self.finished:
+             d = defer.succeed(self)
+@@ -214,6 +219,9 @@ class BuildStepStatus(styles.Versioned):
+     def setProgress(self, stepprogress):
+         self.progress = stepprogress
+ 
++    def setHidden(self, hidden):
++        self.hidden = hidden
++
+     def stepStarted(self):
+         self.started = util.now()
+         build = self.getBuild()
+@@ -354,6 +362,11 @@ class BuildStepStatus(styles.Versioned):
+             self.step_number = 0
+         self.wasUpgraded = True
+ 
++    def upgradeToVersion4(self):
++        if not hasattr(self, "hidden"):
++            self.hidden = False
++        self.wasUpgraded = True
++
+     def asDict(self):
+         result = {}
+         # Constant
+@@ -370,6 +383,7 @@ class BuildStepStatus(styles.Versioned):
+         result['eta'] = self.getETA()
+         result['urls'] = self.getURLs()
+         result['step_number'] = self.step_number
++        result['hidden'] = self.hidden
+         result['logs'] = [[l.getName(),
+             self.builder.status.getURLForThing(l)]
+                 for l in self.getLogs()]
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/build.py b/third_party/buildbot_8_4p1/buildbot/status/web/build.py
+index 907adc8..02e4b4d 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/build.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/build.py
+@@ -94,9 +94,11 @@ class StatusResourceBuild(HtmlResource):
+ 
+         for s in b.getSteps():
+             step = {'name': s.getName() }
+-            cxt['steps'].append(step)
+ 
+             if s.isFinished():
++                if s.isHidden():
++                    continue
++
+                 step['css_class'] = css_classes[s.getResults()[0]]
+                 (start, end) = s.getTimes()
+                 step['time_to_run'] = util.formatInterval(end - start)
+@@ -111,6 +113,8 @@ class StatusResourceBuild(HtmlResource):
+                 step['css_class'] = "not_started"
+                 step['time_to_run'] = ""
+ 
++            cxt['steps'].append(step)
++
+             step['link'] = req.childLink("steps/%s" % urllib.quote(s.getName()))
+             step['text'] = " ".join(s.getText())
+             step['urls'] = map(lambda x:dict(url=x[1],logname=x[0]), s.getURLs().items())
+@@ -255,4 +259,3 @@ class BuildsResource(HtmlResource):
+                 return StatusResourceBuild(build_status)
+ 
+         return HtmlResource.getChild(self, path, req)
+-
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/waterfall.py b/third_party/buildbot_8_4p1/buildbot/status/web/waterfall.py
+index 2c04824..923fe0d 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/waterfall.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/waterfall.py
+@@ -576,13 +576,19 @@ class WaterfallStatusResource(HtmlResource):
+             try:
+                 while True:
+                     e = g.next()
+-                    # e might be builder.BuildStepStatus,
++                    # e might be buildstep.BuildStepStatus,
+                     # builder.BuildStatus, builder.Event,
+                     # waterfall.Spacer(builder.Event), or changes.Change .
+                     # The showEvents=False flag means we should hide
+                     # builder.Event .
+                     if not showEvents and isinstance(e, builder.Event):
+                         continue
++
++                    if isinstance(e, buildstep.BuildStepStatus):
++                        # unfinished steps are always shown
++                        if e.isFinished() and e.isHidden():
++                            continue
++
+                     break
+                 event = interfaces.IStatusEvent(e)
+                 if debug:
+--
+
+
+
+
 Applied f591d3369270b7897989c242fa7b827ca58b07b7 from buildbot upstream.
 
 

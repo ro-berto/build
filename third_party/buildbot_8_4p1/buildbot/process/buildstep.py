@@ -620,6 +620,7 @@ class BuildStep:
              'alwaysRun',
              'progressMetrics',
              'doStepIf',
+             'hideStepIf',
              ]
 
     name = "generic"
@@ -631,6 +632,7 @@ class BuildStep:
     progress = None
     # doStepIf can be False, True, or a function that returns False or True
     doStepIf = True
+    hideStepIf = False
 
     def __init__(self, **kwargs):
         self.factory = (self.__class__, dict(kwargs))
@@ -920,6 +922,10 @@ class BuildStep:
         if self.progress:
             self.progress.finish()
         self.step_status.stepFinished(results)
+
+        hidden = self._maybeEvaluate(self.hideStepIf, self.step_status)
+        self.step_status.setHidden(hidden)
+
         self.releaseLocks()
         self.deferred.callback(results)
 
@@ -938,6 +944,9 @@ class BuildStep:
             self.step_status.setText([self.name, "exception"])
             self.step_status.setText2([self.name])
             self.step_status.stepFinished(EXCEPTION)
+
+            hidden = self._maybeEvaluate(self.hideStepIf, EXCEPTION, self)
+            self.step_status.setHidden(hidden)
         except:
             log.msg("exception during failure processing")
             log.err()
@@ -1048,6 +1057,11 @@ class BuildStep:
         d = c.run(self, self.remote)
         return d
 
+    @staticmethod
+    def _maybeEvaluate(value, *args, **kwargs):
+        if callable(value):
+            value = value(*args, **kwargs)
+        return value
 
 class OutputProgressObserver(LogObserver):
     length = 0
@@ -1294,4 +1308,3 @@ def regex_log_evaluator(cmd, step_status, regexes):
 from buildbot.process.properties import WithProperties
 _hush_pyflakes = [WithProperties]
 del _hush_pyflakes
-

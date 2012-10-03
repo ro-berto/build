@@ -46,7 +46,7 @@ class BuildStepStatus(styles.Versioned):
     # corresponding BuildStep has started.
     implements(interfaces.IBuildStepStatus, interfaces.IStatusEvent)
 
-    persistenceVersion = 3
+    persistenceVersion = 4
     persistenceForgets = ( 'wasUpgraded', )
 
     started = None
@@ -60,6 +60,7 @@ class BuildStepStatus(styles.Versioned):
     finishedWatchers = []
     statistics = {}
     step_number = None
+    hidden = False
 
     def __init__(self, parent, step_number):
         assert interfaces.IBuildStatus(parent)
@@ -67,6 +68,7 @@ class BuildStepStatus(styles.Versioned):
         self.build_number = parent.getNumber()
         self.builder = parent.getBuilder()
         self.step_number = step_number
+        self.hidden = False
         self.logs = []
         self.urls = {}
         self.watchers = []
@@ -119,6 +121,9 @@ class BuildStepStatus(styles.Versioned):
 
     def isFinished(self):
         return (self.finished is not None)
+
+    def isHidden(self):
+        return self.hidden
 
     def waitUntilFinished(self):
         if self.finished:
@@ -213,6 +218,9 @@ class BuildStepStatus(styles.Versioned):
 
     def setProgress(self, stepprogress):
         self.progress = stepprogress
+
+    def setHidden(self, hidden):
+        self.hidden = hidden
 
     def stepStarted(self):
         self.started = util.now()
@@ -354,6 +362,11 @@ class BuildStepStatus(styles.Versioned):
             self.step_number = 0
         self.wasUpgraded = True
 
+    def upgradeToVersion4(self):
+        if not hasattr(self, "hidden"):
+            self.hidden = False
+        self.wasUpgraded = True
+
     def asDict(self):
         result = {}
         # Constant
@@ -370,6 +383,7 @@ class BuildStepStatus(styles.Versioned):
         result['eta'] = self.getETA()
         result['urls'] = self.getURLs()
         result['step_number'] = self.step_number
+        result['hidden'] = self.hidden
         result['logs'] = [[l.getName(),
             self.builder.status.getURLForThing(l)]
                 for l in self.getLogs()]
