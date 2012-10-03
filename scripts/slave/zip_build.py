@@ -23,6 +23,17 @@ from slave import slave_utils
 class StagingError(Exception): pass
 
 
+def CopyDebugCRT(build_dir):
+  # Copy the relevant CRT DLLs to |build_dir|. We copy DLLs from all versions
+  # of VS installed to make sure we have the correct CRT version, unused DLLs
+  # should not conflict with the others anyways.
+  crt_dlls = glob.glob(
+      'C:\\Program Files (x86)\\Microsoft Visual Studio *\\VC\\redist\\'
+      'Debug_NonRedist\\x86\\Microsoft.*.DebugCRT\\*.dll')
+  for dll in crt_dlls:
+    shutil.copy(dll, build_dir)
+
+
 def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext):
   # Build an ordered list of build numbers we have zip files for.
   regexp = re.compile(zip_base + '_([0-9]+)(_old)?' + zip_ext)
@@ -290,6 +301,10 @@ def Archive(options):
   # Include the revision file in tarballs
   build_revision = slave_utils.SubversionRevision(src_dir)
   WriteRevisionFile(build_dir, build_revision)
+
+  # Copy the crt files if necessary.
+  if options.target == 'Debug' and chromium_utils.IsWindows():
+    CopyDebugCRT(build_dir)
 
   # Build the list of files to archive.
   root_files = os.listdir(build_dir)
