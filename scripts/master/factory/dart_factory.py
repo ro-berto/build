@@ -14,6 +14,14 @@ from master.factory import gclient_factory
 import config
 
 
+def AddGeneralGClientProperties(factory_properties=None):
+  """Adds the general gclient options to ensure we get the correct revisions"""
+  # Make sure that pulled in projects have the right revision based on date.
+  factory_properties['gclient_transitive'] = True
+  # Don't set branch part on the --revision flag - we don't use standard
+  # chromium layout and hence this is doing the wrong thing.
+  factory_properties['no_gclient_branch'] = True
+
 class DartFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the dart master.cfg files."""
 
@@ -65,12 +73,8 @@ class DartFactory(gclient_factory.GClientFactory):
                   compile_timeout=1200, build_url=None,
                   factory_properties=None, env=None):
     factory_properties = factory_properties or {}
+    AddGeneralGClientProperties(factory_properties)
     tests = tests or []
-    # Create the spec for the solutions
-    factory_properties['gclient_transitive'] = True
-    # Don't set branch part on the --revision flag - we don't use standard
-    # chromium layout and hence this is doing the wrong thing.
-    factory_properties['no_gclient_branch'] = True
     gclient_spec = self.BuildGClientSpec(tests)
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
@@ -103,6 +107,7 @@ class DartFactory(gclient_factory.GClientFactory):
                            timeout=1200, factory_properties=None,
                            env=None):
     factory_properties = factory_properties or {}
+    AddGeneralGClientProperties(factory_properties)
     tests = tests or []
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
