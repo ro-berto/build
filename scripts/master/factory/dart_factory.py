@@ -68,6 +68,9 @@ class DartFactory(gclient_factory.GClientFactory):
     tests = tests or []
     # Create the spec for the solutions
     factory_properties['gclient_transitive'] = True
+    # Don't set branch part on the --revision flag - we don't use standard
+    # chromium layout and hence this is doing the wrong thing.
+    factory_properties['no_gclient_branch'] = True
     gclient_spec = self.BuildGClientSpec(tests)
     # Initialize the factory with the basic steps.
     factory = self.BaseFactory(gclient_spec,
