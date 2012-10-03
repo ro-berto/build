@@ -113,10 +113,16 @@ class DartCommands(commands.FactoryCommands):
     elif is_dart2dart:
       compiler = 'dart2dart'
       runtime = 'vm'
-      configuration = (options['mode'], arch, compiler)
+      # TODO(ricow): Remove shard functionality when we move to annotated.
+      shards = 1
+      shard = 1
+      if options.get('shards') != None and options.get('shard') != None:
+        shards = options['shards']
+        shard = options['shard']
+      configuration = (options['mode'], arch, compiler, shards, shard)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
                   ' --progress=buildbot --report --time --mode=%s --arch=%s '
-                  ' --compiler=%s') % configuration
+                  ' --compiler=%s --shards=%s --shard=%s') % configuration
     else:
       compiler = 'none'
       runtime = 'vm'
