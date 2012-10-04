@@ -88,9 +88,13 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
 
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
+  def __init__(self, *args, **kwargs):
+    super(SwarmCommands, self).__init__(*args, **kwargs)
+    self._swarm_client_dir = self.PathJoin(
+        self._script_dir, '..', '..', 'third_party', 'swarm_client')
 
   def AddTriggerSwarmTestStep(self, swarm_server, tests, doStepIf=True):
-    script_path = self.PathJoin(self._script_dir, 'run_slavelastic.py')
+    script_path = self.PathJoin(self._swarm_client_dir, 'trigger_swarm_step.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
                                                'buildername:-None',

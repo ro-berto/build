@@ -16,7 +16,7 @@ ROOT_DIR = os.path.dirname(
 def main():
   real_script = os.path.join(
       ROOT_DIR, 'third_party', 'swarm_client', 'trigger_swarm_step.py')
-  return subprocess.call([sys.executable, real_script] + sys.argv[1:])
+  return subprocess.call([sys.executable, real_script] + sys.argv[2:])
 
 
 if __name__ == '__main__':
