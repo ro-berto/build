@@ -340,6 +340,12 @@ class Master(object):
     slave_port = 9188
     master_port_alt = 9288
 
+  class NativeClientSDKAddIn(_NaClBase):
+    project_name = 'NativeClientSDKAddIn'
+    master_port = 9089
+    slave_port = 9191
+    master_port_alt = 9289
+
   ## Others
 
   class O3D(_Base):
