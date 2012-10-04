@@ -44,7 +44,9 @@ class _ValidUserPoller(internet.TimerService):
     Returns:
       True if the email address is allowed to send try jobs from rietveld.
     """
-    return email in self._users
+    if email is None:
+      return False
+    return email in self._users or email.endswith('@google.com')
 
   # base.PollingChangeSource overrides:
   def _poll(self):
@@ -78,7 +80,7 @@ class _ValidUserPoller(internet.TimerService):
       'time': now_string
     }
 
-    return client.getPage('https://chromium-access.appspot.com/auto/users',
+    return client.getPage('https://chromium-access.appspot.com/auto/all_users',
                           agent='buildbot',
                           method='POST',
                           postdata=urllib.urlencode(params))
