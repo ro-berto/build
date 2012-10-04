@@ -24,7 +24,6 @@ from common import chromium_utils
 import config
 
 from master import chromium_step
-from master.log_parser import gtest_command
 from master.log_parser import retcode_command
 from master.optional_arguments import ListProperties
 
@@ -355,8 +354,7 @@ class FactoryCommands(object):
     """Adds a step to the factory to run a test.
 
     Args:
-      command_class: the command type to run, such as shell.ShellCommand or
-          gtest_command.GTestCommand
+      command_class: the command type to run, such as shell.ShellCommand
       test_name: a string describing the test, used to build its logfile name
           and its descriptions in the waterfall display
       timeout: the buildbot timeout for the test, in seconds.  If it doesn't
@@ -442,11 +440,11 @@ class FactoryCommands(object):
         bStep,
         bStep.name not in factory_properties.get('non_default', []))
 
-  def AddBasicGTestTestStep(self, test_name, factory_properties=None,
-                            description='', arg_list=None, total_shards=None,
-                            shard_index=None, test_tool_arg_list=None,
-                            gtestcommand=gtest_command.GTestCommand):
-    """Adds a step to the factory to run the gtest tests.
+  def AddAnnotatedGTestTestStep(self, test_name, factory_properties=None,
+                                description='', arg_list=None,
+                                total_shards=None, shard_index=None,
+                                test_tool_arg_list=None):
+    """Adds an Annotated step to the factory to run the gtest tests.
 
     Args:
       test_name: If prefixed with DISABLED_ the prefix is removed, and the
@@ -455,6 +453,11 @@ class FactoryCommands(object):
       shard_index: Shard to run.  Must be between 1 and total_shards.
       generate_gtest_json: generate JSON results file after running the tests.
     """
+
+    test_tool_arg_list = test_tool_arg_list or []
+
+    test_tool_arg_list.append('--annotate=gtest')
+
     factory_properties = factory_properties or {}
     generate_json = factory_properties.get('generate_gtest_json')
 
@@ -505,26 +508,8 @@ class FactoryCommands(object):
     arg_list.append(WithProperties('%(gtest_filter)s'))
     cmd.extend(arg_list)
 
-    self.AddTestStep(gtestcommand, test_name, ListProperties(cmd),
-                     description, do_step_if=doStep)
-
-  def AddAnnotatedGTestTestStep(self, test_name, factory_properties=None,
-                                description='', arg_list=None,
-                                total_shards=None, shard_index=None,
-                                test_tool_arg_list=None):
-    """Adds an annotated GTest step."""
-
-    test_tool_arg_list = test_tool_arg_list or []
-
-    test_tool_arg_list.append('--annotate=gtest')
-
-    self.AddBasicGTestTestStep(test_name,
-                               factory_properties=factory_properties,
-                               description=description, arg_list=arg_list,
-                               total_shards=total_shards,
-                               shard_index=shard_index,
-                               test_tool_arg_list=test_tool_arg_list,
-                               gtestcommand=chromium_step.AnnotatedCommand)
+    self.AddTestStep(chromium_step.AnnotatedCommand, test_name,
+                     ListProperties(cmd), description, do_step_if=doStep)
 
   def AddBasicShellStep(self, test_name, timeout=600, arg_list=None):
     """Adds a step to the factory to run a simple shell test with standard
