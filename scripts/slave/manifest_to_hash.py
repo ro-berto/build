@@ -33,7 +33,7 @@ def main():
     tests = arg.split()
     for test in tests:
       test_name = test.split(':', 1)[0] if ':' in test else test
-      manifests.append(test_name + '.swarm')
+      manifests.append(test_name + '.isolated')
 
   # Get the file hash values and output the pair.
   for filepath in manifests:
