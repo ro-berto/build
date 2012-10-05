@@ -815,7 +815,7 @@ class FactoryCommands(object):
                      description='compiling',
                      descriptionDone='compile',
                      timeout=600, mode=None,
-                     options=None, haltOnFailure=True):
+                     options=None, haltOnFailure=True, env=None):
     """Adds a step to the factory to compile the solution.
 
     Args:
@@ -838,7 +838,8 @@ class FactoryCommands(object):
         description=description,
         descriptionDone=descriptionDone,
         command=self.GetBuildCommand(clobber, solution, mode, options),
-        haltOnFailure=haltOnFailure)
+        haltOnFailure=haltOnFailure,
+        env=env)
 
   def _PerfStepMappings(self, show_results, perf_id, test_name):
     """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""

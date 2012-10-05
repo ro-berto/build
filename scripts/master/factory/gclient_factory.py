@@ -243,9 +243,13 @@ class GClientFactory(object):
 
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer']:
-      factory_cmd_obj.AddCompileStep(project or self._project, clobber,
-                                     mode=mode, options=options,
-                                     timeout=compile_timeout)
+      factory_cmd_obj.AddCompileStep(
+          project or self._project,
+          clobber,
+          mode=mode,
+          options=options,
+          timeout=compile_timeout,
+          env=factory_properties.get('compile_env'))
 
     # Archive the full output directory if the machine is a builder.
     if slave_type == 'Builder':
