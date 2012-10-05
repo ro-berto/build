@@ -2,8 +2,10 @@
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-# manifest_to_hash.py: Given a list of manifest, print a dictionary mapping them
-# to their hash values.
+
+"""Given a list of manifest, print a dictionary mapping them
+to their hash values.
+"""
 
 import hashlib
 import optparse
@@ -31,7 +33,7 @@ def main():
     tests = arg.split()
     for test in tests:
       test_name = test.split(':', 1)[0] if ':' in test else test
-      manifests.append(test_name + '.results')
+      manifests.append(test_name + '.swarm')
 
   # Get the file hash values and output the pair.
   for filepath in manifests:
