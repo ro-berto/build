@@ -47,9 +47,9 @@ def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
         ' fastbuild=1'
       ),
       'GYP_MSVS_VERSION': '2010',
-      'compile_env': {
-        'ISOLATE_DEBUG': '1',
-      },
+    },
+    'compile_env': {
+      'ISOLATE_DEBUG': '1',
     },
     'data_dir': config.Master.swarm_hashtable_server_internal,
     'swarm_server': config.Master.swarm_server_internal_url
