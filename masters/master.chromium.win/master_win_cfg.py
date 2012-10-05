@@ -369,6 +369,8 @@ F('dbg_aura', win().ChromiumFactory(
       'ash_unittests',
       'aura',
       'compositor',
+      'content_browsertests',
+      'content_unittests',
       'views',
     ],
     project='all.sln;aura_builder',

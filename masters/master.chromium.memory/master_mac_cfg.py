@@ -51,7 +51,7 @@ mac_asan_tests_1 = [
   'base',
   'browser_tests',
   'cacheinvalidation',
-  'content',
+  'content_unittests',
   'content_browsertests',
   'crypto',
   'googleurl',
