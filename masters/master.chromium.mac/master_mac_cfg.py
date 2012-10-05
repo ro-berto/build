@@ -259,6 +259,61 @@ B('Mac 10.7 Tests (dbg)(3)', 'dbg_unit_3', 'testers', 'mac_dbg_trigger',
 B('Mac 10.7 Tests (dbg)(4)', 'dbg_unit_4', 'testers', 'mac_dbg_trigger',
   notify_on_missing=True)
 
+################################################################################
+## iOS
+################################################################################
+
+#
+# Main scheduler for src/
+#
+S('ios', branch='src', treeStableTimer=60)
+
+#
+# iOS Release iphoneos BuilderTester
+#
+B('iOS Device', 'ios_rel', gatekeeper=None, scheduler='ios',
+  auto_reboot=True, notify_on_missing=True)
+F('ios_rel', mac().ChromiumFactory(
+  # TODO(lliabraa): Need to upstream support for running tests on devices
+  # before we can actually run any tests.
+  tests=[],
+  options = [
+    '--', '-project', '../build/all.xcodeproj', '-sdk',
+    'iphoneos6.0', '-target' , 'All'],
+  factory_properties={
+    'app_name': 'Chromium.app',
+    'gclient_deps': 'ios',
+    'gclient_env': {
+      'GYP_DEFINES': 'component=static_library OS=ios chromium_ios_signing=0',
+      'GYP_GENERATOR_FLAGS': 'xcode_project_version=3.2',
+    },
+  }))
+
+#
+# iOS Debug iphonesimulator BuilderTester
+#
+B('iOS Simulator (dbg)', 'ios_dbg', gatekeeper=None, scheduler='ios',
+  auto_reboot=True, notify_on_missing=True)
+F('ios_dbg', mac().ChromiumFactory(
+  target='Debug',
+  tests=[
+    'base',
+    'crypto',
+    'googleurl',
+    'unit_sql',
+  ],
+  options = [
+    '--', '-project', '../build/all.xcodeproj', '-sdk',
+    'iphonesimulator6.0', '-target', 'All',],
+  factory_properties={
+    'app_name': 'Chromium.app',
+    'test_platform': 'ios-simulator',
+    'gclient_deps': 'ios',
+    'gclient_env': {
+      'GYP_DEFINES': 'component=static_library OS=ios chromium_ios_signing=0',
+      'GYP_GENERATOR_FLAGS': 'xcode_project_version=3.2',
+    },
+  }))
 
 def Update(config, active_master, c):
   return helper.Update(c)
