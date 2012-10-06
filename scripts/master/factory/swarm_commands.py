@@ -98,7 +98,7 @@ class SwarmCommands(commands.FactoryCommands):
         self._script_dir, '..', '..', 'third_party', 'swarm_client')
 
   def AddTriggerSwarmTestStep(self, swarm_server, tests, doStepIf=True):
-    script_path = self.PathJoin(self._swarm_client_dir, 'trigger_swarm_step.py')
+    script_path = self.PathJoin(self._swarm_client_dir, 'swarm_trigger_step.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
                                                'buildername:-None',
@@ -115,7 +115,7 @@ class SwarmCommands(commands.FactoryCommands):
     assert all(i for i in command), command
     self._factory.addStep(
         SwarmShellForTriggeringTests,
-        name='trigger_swarm_tests',
+        name='swarm_trigger_tests',
         description='Trigger swarm steps',
         command=command,
         tests=tests,

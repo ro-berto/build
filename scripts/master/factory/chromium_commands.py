@@ -1506,7 +1506,7 @@ class ChromiumCommands(commands.FactoryCommands):
     }
     self._factory.addStep(
         trigger.Trigger(
-            name='trigger_swarm_tests',
+            name='trigger_swarm_triggered',
             schedulerNames=['swarm_triggered'],
             waitForFinish=False,
             set_properties=properties,
