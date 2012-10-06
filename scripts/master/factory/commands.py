@@ -104,9 +104,8 @@ class SwarmShellForHashes(shell.ShellCommand):
   def commandComplete(self, cmd):
     shell.ShellCommand.commandComplete(self, cmd)
 
-    re_hash_mapping = re.compile(r'^([a-z_]+) ([0-9a-f]{40})$')
-    matches = (
-        re_hash_mapping.match(l.strip()) for l in self.stdio_log.readlines())
+    re_hash_mapping = re.compile(r'^([a-z_]+) ([0-9a-f]+)')
+    matches = (re_hash_mapping.match(l) for l in self.stdio_log.readlines())
     swarm_hashes = dict(x.groups() for x in matches if x)
 
     self.setProperty('swarm_hashes', swarm_hashes)

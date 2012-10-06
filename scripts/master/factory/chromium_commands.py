@@ -1498,7 +1498,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # Trigger the swarm test builder.
     properties = {
         'issue': WithProperties('%(issue:-)s'),
-        'target_os': self._target_platform,
+        'os': self._target_platform,
         'parent_buildername': WithProperties('%(buildername:-)s'),
         'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
         'parent_try_job_key': WithProperties('%(try_job_key:-)s'),

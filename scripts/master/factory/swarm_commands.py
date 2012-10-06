@@ -62,7 +62,7 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
       test_filters = self.getProperty('testfilter')
     except KeyError:
       test_filters = (test.test_name + '_swarm' for test in self.tests)
-    swarm_tests_hash_mapping = self.getProperty('swarm_hashes') or {}
+    swarm_tests_hash_mapping = self.getProperty('swarm_hashes')
 
     command = self.command
     for test_filter in test_filters:
@@ -70,20 +70,16 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
         (test_name, _, gtest_filter) = test_filter.partition(':')
         for swarm_test in self.tests:
           if (swarm_test.test_name + '_swarm' == test_name):
-            if swarm_tests_hash_mapping.get(swarm_test.test_name):
-              command.extend(
-                  [
-                    '--run_from_hash',
-                    swarm_tests_hash_mapping[swarm_test.test_name],
-                    swarm_test.test_name,
-                    '%d' % swarm_test.shards,
-                    # It is necessary even if it is empty.
-                    gtest_filter,
-                    ])
+            if (swarm_tests_hash_mapping and
+                swarm_test.test_name in swarm_tests_hash_mapping):
+              command.extend(['--run_from_hash',
+                              swarm_tests_hash_mapping[swarm_test.test_name],
+                              swarm_test.test_name, '%d' % swarm_test.shards,
+                              gtest_filter])
             else:
               log.msg('Given a swarm test, %s, that has no matching hash' %
                       test_name)
-            break
+            continue
 
     self.setCommand(command)
 
@@ -104,19 +100,13 @@ class SwarmCommands(commands.FactoryCommands):
                                                'buildername:-None',
                                                'buildnumber:-None')
 
-    command = [
-      self._python,
-      script_path,
-      '-o', WithProperties('%s', 'target_os:-%s' % self._target_platform),
-      '-u', swarm_server,
-      '-t', swarm_request_name_prefix,
-      '-d', config.Master.swarm_hashtable_server_internal
-    ]
-    assert all(i for i in command), command
+    command = [self._python, script_path, '-o', self._target_platform,
+               '-u', swarm_server, '-t', swarm_request_name_prefix,
+               '-d', config.Master.swarm_hashtable_server_internal]
+
     self._factory.addStep(
         SwarmShellForTriggeringTests,
         name='trigger_swarm_tests',
-        description='Trigger swarm steps',
         command=command,
         tests=tests,
         doStepIf=doStepIf)
