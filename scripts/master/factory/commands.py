@@ -538,6 +538,7 @@ class FactoryCommands(object):
                           description='cleanup_temp',
                           timeout=60,
                           workdir='',  # Doesn't really matter where we are.
+                          alwaysRun=True, # Run this even on update failures
                           command=['python', self._cleanup_temp_tool])
 
   def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):
