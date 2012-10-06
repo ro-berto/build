@@ -99,8 +99,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
     swarm_command_obj = swarm_commands.SwarmCommands(f,
                                                      target,
-                                                     self._build_dir,
-                                                     self._target_platform)
+                                                     self._build_dir)
 
     gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',
