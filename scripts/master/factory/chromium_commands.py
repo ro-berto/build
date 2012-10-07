@@ -1508,6 +1508,7 @@ class ChromiumCommands(commands.FactoryCommands):
         trigger.Trigger(
             name='trigger_swarm_triggered',
             schedulerNames=['swarm_triggered'],
+            updateSourceStamp=False,
             waitForFinish=False,
             set_properties=properties,
             copy_properties=['swarm_hashes', 'testfilter'],
