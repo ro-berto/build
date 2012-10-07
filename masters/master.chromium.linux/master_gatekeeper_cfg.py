@@ -80,13 +80,30 @@ def Update(config, active_master, c):
   # Notify nacl-broke@google.com when nacl_integration fails.
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,
-      categories_steps=['nacl_integration'],
+      categories_steps={'': ['nacl_integration']},
       exclusions=exclusions,
       relayhost=config.Master.smtp,
       subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
               'revision %(revision)s',
       sheriffs=None,
       extraRecipients=['nacl-broke@google.com'],
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      tree_status_url=None,
+      public_html='../master.chromium/public_html',
+      use_getname=True))
+
+  # Notify Android sheriffs when bots fail.
+  c['status'].append(gatekeeper.GateKeeper(
+      fromaddr=active_master.from_address,
+      categories_steps={'android': '*'},
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
+              'revision %(revision)s',
+      # sheriffs=['sheriff_android'],
+      sheriffs=None,
+      extraRecipients=['cmp@google.com', 'ilevy@google.com'],
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=None,

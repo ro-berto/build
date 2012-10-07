@@ -215,13 +215,17 @@ class ChromiumNotifier(MailNotifier):
 
     # Now get all the steps we must check for this builder.
     steps_to_check = []
+    wildcard = False
     for category in builder_status.category.split(self._CATEGORY_SPLITTER):
+      if self.categories_steps.get(category) == '*':
+        wildcard = True
+        break
       if category in self.categories_steps:
         steps_to_check += self.categories_steps[category]
     if '' in self.categories_steps:
       steps_to_check += self.categories_steps['']
 
-    if step_class in steps_to_check:
+    if wildcard or step_class in steps_to_check:
       return self.buildMessage(builder_name, build_status, results, step_name)
 
   def getFinishedMessage(self, dummy, builder_name, build_status, step_name):
