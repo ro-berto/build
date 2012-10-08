@@ -425,6 +425,13 @@ class Master(object):
     slave_port = 9111
     master_port_alt = 9012
 
+  class DrMemory(_Base):
+    project_name = 'DrMemory'
+    master_host = 'localhost'
+    master_port = 9092
+    slave_port = 9192
+    master_port_alt = 9292
+
 
 class Archive(object):
   archive_host = 'localhost'

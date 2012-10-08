@@ -169,7 +169,7 @@ def main():
       'master.chromium.webkit': 'Chromium Webkit',
       'master.chromium.win': 'Chromium Win',
       'master.chromiumos': 'ChromiumOS',
-      'master.client.drmemory': None,  # make start fails
+      'master.client.drmemory': 'DrMemory',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'Dart FYI',
       'master.client.nacl': 'NativeClient',
