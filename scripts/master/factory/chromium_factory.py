@@ -396,20 +396,38 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Benchmark tests:
     if R('page_cycler_moz'):
       f.AddPageCyclerTest('page_cycler_moz', fp)
+    if R('page_cycler_moz_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_moz', fp)
     if R('page_cycler_morejs'):
       f.AddPageCyclerTest('page_cycler_morejs', fp)
+    if R('page_cycler_morejs_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_morejs', fp)
     if R('page_cycler_intl1'):
       f.AddPageCyclerTest('page_cycler_intl1', fp)
+    if R('page_cycler_intl1_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_intl1', fp)
     if R('page_cycler_intl2'):
       f.AddPageCyclerTest('page_cycler_intl2', fp)
+    if R('page_cycler_intl2_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_intl2', fp)
     if R('page_cycler_bloat'):
       f.AddPageCyclerTest('page_cycler_bloat', fp)
+    if R('page_cycler_bloat_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_bloat', fp)
     if R('page_cycler_dhtml'):
       f.AddPageCyclerTest('page_cycler_dhtml', fp)
+    if R('page_cycler_dhtml_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_dhtml', fp)
     if R('page_cycler_database'):
       f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*')
+    if R('page_cycler_database_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_database', fp,
+                                   suite='Database*')
     if R('page_cycler_indexeddb'):
       f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
+    if R('page_cycler_indexeddb_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_indexeddb', fp,
+                                   suite='IndexedDB*')
     if R('page_cycler_2012Q2-netsim'):
       fp['use_xvfb_on_linux'] = True
       f.AddPyAutoFunctionalTest(
@@ -419,39 +437,74 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     if R('memory'):
       f.AddMemoryTests(fp)
+    if R('memory_annotated'):
+      f.AddAnnotatedMemoryTests(fp)
     if R('tab_switching'):
       f.AddTabSwitchingTests(fp)
+    if R('tab_switching_annotated'):
+      f.AddAnnotatedTabSwitchingTests(fp)
     if R('sunspider'):
       f.AddSunSpiderTests(fp)
+    if R('sunspider_annotated'):
+      f.AddAnnotatedSunSpiderTests(fp)
     if R('v8_benchmark'):
       f.AddV8BenchmarkTests(fp)
+    if R('v8_benchmark_annotated'):
+      f.AddAnnotatedV8BenchmarkTests(fp)
     if R('dromaeo'):
       f.AddDromaeoTests(fp)
+    if R('dromaeo_annotated'):
+      f.AddAnnotatedDromaeoTests(fp)
     if R('frame_rate'):
       f.AddFrameRateTests(fp)
+    if R('frame_rate_annotated'):
+      f.AddAnnotatedFrameRateTests(fp)
     if R('gpu_frame_rate'):
       f.AddGpuFrameRateTests(fp)
+    if R('gpu_frame_rate_annotated'):
+      f.AddAnnotatedGpuFrameRateTests(fp)
     if R('gpu_latency'):
       f.AddGpuLatencyTests(fp)
+    if R('gpu_latency_annotated'):
+      f.AddAnnotatedGpuLatencyTests(fp)
     if R('gpu_throughput'):
       f.AddGpuThroughputTests(fp)
+    if R('gpu_throughput_annotated'):
+      f.AddAnnotatedGpuThroughputTests(fp)
     if R('dom_perf'):
       f.AddDomPerfTests(fp)
+    if R('dom_perf_annotated'):
+      f.AddAnnotatedDomPerfTests(fp)
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
+    if R('idb_perf_annotated'):
+      f.AddAnnotatedIDBPerfTests(fp)
     if R('page_cycler_moz-http'):
       f.AddPageCyclerTest('page_cycler_moz-http', fp)
+    if R('page_cycler_moz-http_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_moz-http', fp)
     if R('page_cycler_bloat-http'):
       f.AddPageCyclerTest('page_cycler_bloat-http', fp)
+    if R('page_cycler_bloat-http_annotated'):
+      f.AddAnnotatedPageCyclerTest('page_cycler_bloat-http', fp)
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
+    if R('startup_annotated'):
+      f.AddAnnotatedStartupTests(fp)
+      f.AddAnnotatedNewTabUITests(fp)
     if R('sizes'):
       f.AddSizesTests(fp)
+    if R('sizes_annotated'):
+      f.AddAnnotatedSizesTests(fp)
     if R('sync'):
       f.AddSyncPerfTests(fp)
+    if R('sync_annotated'):
+      f.AddAnnotatedSyncPerfTests(fp)
     if R('mach_ports'):
       f.AddMachPortsTests(fp)
+    if R('mach_ports_annotated'):
+      f.AddAnnotatedMachPortsTests(fp)
 
     if R('sync_integration'):
       f.AddAnnotatedSyncIntegrationTests(fp)
@@ -475,6 +528,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
       f.AddChromeFramePerfTests(fp)
+    if R('chrome_frame_perftests_annotated'):
+      f.AddAnnotatedChromeFramePerfTests(fp)
     if R('chrome_frame'):
       # Add all major CF tests.
       f.AddAnnotatedGTestTestStep('chrome_frame_net_tests', fp)
