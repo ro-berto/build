@@ -351,6 +351,8 @@ def main(argv):
 
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
+  if not options.webkit_dir:
+    options.webkit_dir = options.factory_properties.get('webkit_dir')
 
   # When option_parser is passed argv as a list, it can return the caller as
   # first unknown arg.  So throw a warning if we have two or more unknown

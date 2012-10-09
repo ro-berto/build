@@ -234,6 +234,8 @@ def main():
 
   if not options.target:
     options.target = options.factory_properties.get('target', 'Release')
+  if not options.webkit_dir:
+    options.webkit_dir = options.factory_properties.get('webkit_dir')
 
   return real_main(options)
 
