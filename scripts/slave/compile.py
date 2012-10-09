@@ -823,7 +823,7 @@ def main_ninja(options, args):
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
       env['PATH'] = os.pathsep.join([options.goma_dir, clang_dir, env['PATH']])
 
-    if chromium_utils.IsMac() or chromium_utils.IsWindows():
+    if chromium_utils.IsMac():
       goma_jobs = 50
     else:
       goma_jobs = 100
