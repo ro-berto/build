@@ -59,10 +59,14 @@ def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
     # Build until death.
     options = ['--build-tool=ninja'] + options + ['--', '-k', '0']
 
+  # Accessing machine._target_platform, this function should be a member of
+  # SwarmFactory.
+  # pylint: disable=W0212
   return machine.SwarmFactory(
       tests=SWARM_TESTS,
       options=options,
       project=project,
+      target_platform=machine._target_platform,
       factory_properties=factory_properties)
 
 
@@ -86,10 +90,11 @@ def SwarmTestBuilder(swarm_server):
 
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
-  def SwarmFactory(self, target='Release', clobber=False, tests=None,
-                   mode=None, options=None, compile_timeout=1200,
-                   build_url=None, project=None, factory_properties=None,
-                   gclient_deps=None):
+  def SwarmFactory(
+      self, target_platform, target='Release', clobber=False, tests=None,
+      mode=None, options=None, compile_timeout=1200,
+      build_url=None, project=None, factory_properties=None,
+      gclient_deps=None):
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     # Set the slave_type to 'SwarmSlave' to prevent the factory from adding the
     # compile step, so we can add other steps before the compile step.
@@ -97,9 +102,11 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                              options, compile_timeout, build_url, project,
                              factory_properties, gclient_deps)
 
-    swarm_command_obj = swarm_commands.SwarmCommands(f,
-                                                     target,
-                                                     self._build_dir)
+    swarm_command_obj = swarm_commands.SwarmCommands(
+        f,
+        target,
+        self._build_dir,
+        self._target_platform)
 
     gclient_env = factory_properties.get('gclient_env')
     swarm_server = factory_properties.get('swarm_server',

@@ -911,6 +911,7 @@ class FactoryCommands(object):
       return
     manifest_directory = self.PathJoin('src', out_dir, self._target)
 
+    assert self._target_platform
     if self._target_platform == 'win32':
       script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.bat')
     else:
