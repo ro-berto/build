@@ -271,6 +271,26 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 #
+# Linux Precise bot. Running Ubuntu 12.04, used for testing sandboxing with
+# seccomp-bpf.
+#
+
+B('Chromium Linux Precise', 'dbg_precise_1', 'testers', 'linux_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
+F('dbg_precise_1', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=dbg_archive,
+    target='Debug',
+    tests=[
+      'base',
+      'browser_tests',
+      'content_browsertests',
+      'sandbox_linux_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
+#
 # Linux Dbg Clang bot
 #
 
