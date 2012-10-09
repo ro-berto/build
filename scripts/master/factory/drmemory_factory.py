@@ -392,7 +392,7 @@ def CreateDrMPackageFactory(windows):
   package_name = 'DrMemory-package'
   # The default package name has the version and revision, so we override it
   # to something we can predict.
-  cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME \'%s\')' % package_name
+  cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
   ret.addStep(
       Compile(
           command=['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg],
