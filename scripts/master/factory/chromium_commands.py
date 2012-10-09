@@ -1010,7 +1010,9 @@ class ChromiumCommands(commands.FactoryCommands):
     if not self._target_platform.startswith('linux'):
       return
 
-    env = {'PYTHONPATH': '.'}
+    env = factory_properties.get('test_env', {})
+    if 'PYTHONPATH' not in env:
+      env['PYTHONPATH'] = '.'
     if not wpr:
       env['ENDURE_NO_WPR'] = '1'
 
