@@ -45,7 +45,7 @@ class Master(config_private.Master):
   es5conform_root_url =  "https://es5conform.svn.codeplex.com/svn/"
   es5conform_revision = 62998
 
-  dart_url = 'https://dart.googlecode.com/svn'
+  dart_url = 'http://dart.googlecode.com/svn'
   dart_bleeding = dart_url + '/branches/bleeding_edge'
   dart_trunk = dart_url + '/trunk'
 
