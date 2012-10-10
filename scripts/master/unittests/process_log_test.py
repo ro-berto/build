@@ -31,6 +31,7 @@ import mock
 
 # pylint: disable=W0212
 
+TEST_PERCENTILES = [.05, .3, .8]
 
 def _RemoveOutputDir():
   if os.path.exists('output_dir'):
@@ -191,13 +192,18 @@ class BenchpressPerformanceTestStepTest(GoogleLoggingStepTest):
     step._CreateReportLinkIfNeccessary()
     build_mock.verify()
 
+# A class for enabling setting different percentiles for GraphingLogProcessor.
+class TestGraphingLogProcessor(process_log.GraphingLogProcessor):
+  def __init__(self, *args, **kwargs):
+    process_log.GraphingLogProcessor.__init__(self, *args, **kwargs)
+    self._percentiles = TEST_PERCENTILES
 
 class GraphingLogProcessorTest(GoogleLoggingStepTest):
 
   def _TestPerfExpectations(self, perf_expectations_file):
     perf_expectations_path = os.path.join(
         test_env.DATA_PATH, perf_expectations_file)
-    step = self._ConstructStep(process_log.GraphingLogProcessor,
+    step = self._ConstructStep(TestGraphingLogProcessor,
                                'graphing_processor.log',
                                factory_properties={'expectations': True,
                                                    'perf_id': 'tester'},
@@ -212,7 +218,7 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     return step
 
   def testSummary(self):
-    step = self._ConstructStep(process_log.GraphingLogProcessor,
+    step = self._ConstructStep(TestGraphingLogProcessor,
                                'graphing_processor.log')
     step.commandComplete('mycommand')
     for graph in ('commit_charge', 'ws_final_total', 'vm_final_browser',
@@ -253,7 +259,7 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
         self.assert_(filecmp.cmp(actual, expected))
 
   def testGraphList(self):
-    step = self._ConstructStep(process_log.GraphingLogProcessor,
+    step = self._ConstructStep(TestGraphingLogProcessor,
                                'graphing_processor.log')
     step.commandComplete('mycommand')
     actual_file = os.path.join('output_dir', 'graphs.dat')
@@ -348,6 +354,32 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (inf%)')
     self.assertEqual(expected, step._result_text[0])
     self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testHistogramGeometricMeanAndStandardDeviation(self):
+    step = self._ConstructStep(TestGraphingLogProcessor,
+                               'graphing_processor.log')
+    step.commandComplete('mycommand')
+    filename = 'hist1-summary.dat'
+    self.assert_(os.path.exists(os.path.join('output_dir', filename)))
+    # Since the output files are JSON-encoded, they may differ in form, but
+    # represent the same data. Therefore, we decode them before comparing.
+    actual = json.load(open(os.path.join('output_dir', filename)))
+    expected = json.load(open(os.path.join(test_env.DATA_PATH, filename)))
+    self.assertEqual(expected, actual)
+
+  def testHistogramPercentiles(self):
+    step = self._ConstructStep(TestGraphingLogProcessor,
+                               'graphing_processor.log')
+    step.commandComplete('mycommand')
+    graphs = ['hist1_%s' % str(p) for p in TEST_PERCENTILES]
+    for graph in graphs:
+      filename = '%s-summary.dat' % graph
+      self.assert_(os.path.exists(os.path.join('output_dir', filename)))
+      # Since the output files are JSON-encoded, they may differ in form, but
+      # represent the same data. Therefore, we decode them before comparing.
+      actual = json.load(open(os.path.join('output_dir', filename)))
+      expected = json.load(open(os.path.join(test_env.DATA_PATH, filename)))
+      self.assertEqual(expected, actual)
 
 
 if __name__ == '__main__':
