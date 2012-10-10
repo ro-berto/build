@@ -275,7 +275,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
 # seccomp-bpf.
 #
 
-B('Chromium Linux Precise', 'dbg_precise_1', 'testers', 'linux_dbg_trigger',
+B('Linux (Precise)', 'dbg_precise_1', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
 F('dbg_precise_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
