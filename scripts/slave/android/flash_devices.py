@@ -6,10 +6,12 @@
 """Flashes attached unlocked devices with specified version of Android.
 
 The script will download an image from google storage (see _GS_IMAGES_URL) and
-flash that images on all attached (unlocked) devices. The script determines the
-URL for the specified build from three required arguments, the android version
-(e.g. ics, jb), device type (e.g. yakju, sojus) and the build number.
-Usage example: ./flash_devices.py jb yakju userdebug 398337
+flash that images on all attached (unlocked) devices. Before flashing, it will
+check the radio image on the device, and if needed, will flash the radio image.
+This part needs corp access as private radio images are not on google storage.
+The script determines the URL for the specified build from three required
+arguments, the android version (e.g. ics, jb), device type (e.g. yakju, sojus)
+and the build number. Usage example:./flash_devices.py jb yakju userdebug 398337
 The script will determine the URL for the specified image as the following URL:
 gs://android-build/builds/git_jb-release-linux-yakju-userdebug/398337/
    25fe19bc6ad28374e73f84ffbcc4e02b12269371d53750e93d04ce5930483242/
@@ -259,13 +261,127 @@ def FlashSingleDeviceIfNecessary(device, image_file_name):
     time.sleep(_INITIAL_WAIT_INTERVAL_SECS)
   if not devices:
     print 'ERROR: There are no devices attached to fastboot.'
-    sys.exit(1)
+    return False
 
   # Flash the downloaded image onto the device.
   FastbootCommand(['-s', device, '-w', 'update', image_file_name])
   logging.info('Flashed image %s onto device %s.', image_file_name, device)
 
   return True
+
+
+def ListBuildNumbers(android_version, device, build_type):
+  """List all build numbers for the specified type of build.
+
+  Args:
+    android_version: e.g. ics, jb
+    device: device type of build
+    build_type: e.g. userdebug, debug, etc.
+
+  Returns:
+    number of build_numbers returned (-1 upon error)
+  """
+  # Example of gs_path: For './flash_device -l jb yakju userdebug,'
+  # gsutil ls gs://android-build/builds/git_jb-release-linux-yakju-userdebug/*
+  #                 /*/yakju-img-*.zip
+  build_dir = GetBuildsDirectory(android_version, device,
+                                 build_type).rstrip('/')
+  gs_path = '%s/*/*/%s-img-*.zip' % (build_dir, device)
+
+  # Get the list of all build numbers
+  (status, output) = slave.slave_utils.GSUtilListBucket(gs_path, [])
+  if status != 0:
+    print 'Invalid android version and device type.'
+    return -1
+
+  # Format and print the list of all build numbers.
+  def HasBuildNum(line):
+    return line.find('%s-img-' % device) > -1
+
+  build_lines = filter(HasBuildNum, output.split('\n'))
+
+  def GetBuildNum(line):
+    return line.split('/')[5]
+
+  build_numbers = map(GetBuildNum, build_lines)
+  print 'build numbers: %s' % str(build_numbers)
+  return len(build_numbers)
+
+
+def DownloadImageForDevices(android_version, device_type, build_type,
+                            build_number):
+  """Determine which devices need to be flashed and download image.
+
+  If no devices that need to be flashed, the image will not be downloaded.
+
+  Args:
+    android_version: e.g. ics, jb
+    device_type: device type of build
+    build_type: e.g. userdebug, debug, etc.
+    build_number: build number to download
+
+  Raises:
+    RuntimeError: if no devices of the right type for the image are attached
+
+  Returns:
+    name of image zip file downloaded (None if list of devices empty)
+    list of devices that need to be flashed to the downloaded image
+  """
+  for _ in xrange(_INITIAL_WAIT_RETRIES):
+    devices = GetAttachedDevices()
+    if devices:
+      break
+    time.sleep(_INITIAL_WAIT_INTERVAL_SECS)
+  if not devices:
+    raise RuntimeError('ERROR: There are no devices attached.')
+
+  # Make sure there is at least one phone that can be flashed with the build
+  # that is not already on that build.
+  devices_to_flash = []
+
+  device_exists_to_flash = False
+  device_exists_needs_flash = False
+
+  for device in devices:
+    can_flash, needs_flash = FlashDeviceStatus(device, android_version,
+                                               device_type, build_number,
+                                               build_type)
+    if can_flash and needs_flash:
+      devices_to_flash.append(device)
+    device_exists_to_flash = device_exists_to_flash or can_flash
+    device_exists_needs_flash = device_exists_needs_flash or needs_flash
+
+  if not devices_to_flash:
+    print 'No devices to flash.'
+    if device_exists_to_flash:
+      print 'Device(s) already on image build.'
+      return (None, [])
+    else:
+      raise RuntimeError('ERROR: Devices are the wrong type for build.')
+
+  # At least one phone to flash.  Download the image file from gs.
+  img_zip = GSDownloadImage(android_version, device_type, build_number,
+                            build_type)
+  return (img_zip, devices_to_flash)
+
+
+def FlashDevices(img_zip, devices_to_flash):
+  """Flash build image on list of devices.
+
+  Args:
+    img_zip: image zip file
+    devices_to_flash: device list to flash
+
+  Returns:
+    true if all devices successfully flashed with the image, false otherwise
+  """
+  all_succeed = True
+  for device in devices_to_flash:
+    success = FlashSingleDeviceIfNecessary(device, img_zip)
+    if not success:
+      all_succeed = False
+      print 'ERROR: Failed to flash device %s.' % device
+  return all_succeed
 
 
 def main(argv):
@@ -292,103 +408,52 @@ def main(argv):
       print 'Usage (to show flash devices):'
       print 'e.g. --android-version=jb --device-type=yakju '
       print '     --build-type=userdebug --build_num=<n>'
-      sys.exit(1)
+      return 1
 
-    android_version = options.android_version
-    device = options.device_type
-    build_type = options.build_type
-
-    # Example of gs_path: For './flash_device -l jb yakju userdebug,'
-    # gsutil ls gs://android-build/builds/git_jb-release-linux-yakju-userdebug/*
-    #                 /*/yakju-img-*.zip
-    build_dir = GetBuildsDirectory(android_version, device,
-                                   build_type).rstrip('/')
-    gs_path = '%s/*/*/%s-img-*.zip' % (build_dir, device)
-    (status, output) = slave.slave_utils.GSUtilListBucket(gs_path, [])
-    if status != 0:
-      print 'Invalid android version and device type.'
-      sys.exit(1)
-
-    def HasBuildNum(line):
-      return line.find('%s-img-' % device) > -1
-
-    build_lines = filter(HasBuildNum, output.split('\n'))
-
-    def GetBuildNum(line):
-      return line.split('/')[5]
-
-    build_numbers = map(GetBuildNum, build_lines)
-    print 'build numbers: %s' % str(build_numbers)
-    sys.exit(0)
+    # List the build numbers for the specified build and exit with 0.
+    num_builds = ListBuildNumbers(options.android_version, options.device_type,
+                                  options.build_type)
+    if num_builds >= 0:
+      return 0
+    else:
+      return 1
   elif options.android_version is None or options.device_type is None or \
        options.build_type is None or options.build_number is None:
     print 'Invalid number of arguments'
     print '  --android=jb --device=yakju --build_type=userdebug --build_num=<n>'
-    sys.exit(1)
-
-  # The caller wants to download an image and flash.
-  android_version = options.android_version
-  device_type = options.device_type
-  build_type = options.build_type
-  build_number = options.build_number
+    return 1
 
   logging.basicConfig(level=logging.INFO,
                       format='# %(asctime)-15s: %(message)s')
 
-  for _ in xrange(_INITIAL_WAIT_RETRIES):
-    devices = GetAttachedDevices()
-    if devices:
-      break
-    time.sleep(_INITIAL_WAIT_INTERVAL_SECS)
-  if not devices:
-    print 'ERROR: There are no devices attached.'
-    sys.exit(1)
+  # Download build image and return the devices that need to be flashed to the
+  # image. If no devices need to be flashed call will not download the image.
+  (img_zip, devices_to_flash) = DownloadImageForDevices(options.android_version,
+                                                        options.device_type,
+                                                        options.build_type,
+                                                        options.build_number)
 
-  # Make sure there is at least one phone that can be flashed with the build
-  # that is not already on that build.
-  devices_to_flash = []
-
-  device_exists_to_flash = False
-  device_exists_needs_flash = False
-
-  for device in devices:
-    can_flash, needs_flash = FlashDeviceStatus(device, android_version,
-                                               device_type, build_number,
-                                               build_type)
-    if can_flash and needs_flash:
-      devices_to_flash.append(device)
-    device_exists_to_flash = device_exists_to_flash or can_flash
-    device_exists_needs_flash = device_exists_needs_flash or needs_flash
-
-  if not devices_to_flash:
-    print 'No devices to flash.'
-    if device_exists_to_flash:
-      print 'Device(s) already on image build.'
-      sys.exit(0)
-    else:
-      print 'Devices are the wrong type for build.'
-      sys.exit(1)
-
-  # At least one phone to flash.  Download the image file from gs.
-  image_zip = GSDownloadImage(android_version, device_type, build_number,
-                              build_type)
-
-  if not image_zip:
-    invalid_specs = '%s %s %s' % (android_version, device_type, build_number)
+  # If there are devices to flash but no build image, then error.
+  if len(devices_to_flash) > 0 and not img_zip:
+    invalid_specs = '%s %s %s' % (options.android_version, options.device_type,
+                                  options.build_number)
     print 'Invalid Android factory image for: %s.' % invalid_specs
-    sys.exit(1)
+    return 1
 
-  all_succeed = True
-  for device in devices_to_flash:
-    success = FlashSingleDeviceIfNecessary(device, image_zip)
-    if not success:
-      all_succeed = False
-      print 'ERROR: Failed to flash device %s.' % device
+  # TODO(navabi): Implement the following commented lines.
+  # Flash radio images on devices that need to update radio for build image.
+  # FlashRadioImage(img_zip, devices_to_flash)
 
-  os.remove(image_zip)
-  if not all_succeed:
-    sys.exit(1)
+  # Flash all devices that need to be flashed with image
+  all_succeed = FlashDevices(img_zip, devices_to_flash)
+  # Remove the img_zip file as it is no longer needed.
+  os.remove(img_zip)
+
+  if all_succeed:
+    return 0
+  else:
+    return 1
 
 
 if __name__ == '__main__':
-  main(sys.argv)
+  sys.exit(main(sys.argv))
