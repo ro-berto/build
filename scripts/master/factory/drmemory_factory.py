@@ -268,7 +268,7 @@ def CreateDRFactory(nightly=False, os='', os_version=''):
                   workdir='dynamorio',
                   mode='update',
                   name='Checkout DynamoRIO'))
-  AddDRSuite(ret, '../drmemory/dynamorio', nightly, os, os_version)
+  AddDRSuite(ret, '../dynamorio', nightly, os, os_version)
   if os == 'linux':
     ret.addStep(
         DirectoryUpload(
