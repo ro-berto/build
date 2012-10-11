@@ -170,6 +170,7 @@ def main():
       'master.chromium.win': 'Chromium Win',
       'master.chromiumos': 'ChromiumOS',
       'master.client.drmemory': 'DrMemory',
+      'master.client.dynamorio': 'DynamoRIO',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'Dart FYI',
       'master.client.nacl': 'NativeClient',

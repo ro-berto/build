@@ -432,6 +432,13 @@ class Master(object):
     slave_port = 9192
     master_port_alt = 9292
 
+  class DynamoRIO(_Base):
+    project_name = 'DynamoRIO'
+    master_host = 'localhost'
+    master_port = 9093
+    slave_port = 9193
+    master_port_alt = 9293
+
 
 class Archive(object):
   archive_host = 'localhost'
