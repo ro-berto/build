@@ -203,7 +203,7 @@ def CreateAppTest(windows, app_name, app_cmd, build_mode, run_mode,
                       **kwargs)
 
 
-def CreateDRFactory(nightly=False, os='', os_version=''):
+def CreateDRInDrMemoryFactory(nightly=False, os='', os_version=''):
   ret = factory.BuildFactory()
 
   # DR factory - we checkout Dr. Memory and *then* update drmemory/dynamorio,
@@ -226,32 +226,56 @@ def CreateDRFactory(nightly=False, os='', os_version=''):
         name='Get DR revision',
         descriptionDone='Get DR revision',
         description='DR revision'))
-  if nightly:
-    assert os
-    assert os_version
-    os_mapping = {'win' : 'Windows', 'linux' : 'Linux'}
-    site_name = '%s.%s.BuildBot' % (os_mapping[os], os_version.capitalize())
-    runsuite_cmd = ('../drmemory/dynamorio/suite/runsuite.cmake,nightly' +
-                    ';long;site=%s' % site_name)
-    step_name = 'Run DR nightly suite'
-    timeout = 20 * 60  # 20min w/o output.  10 is too short for Windows.
-  else:
-    runsuite_cmd = '../drmemory/dynamorio/suite/runsuite.cmake'
-    step_name = 'Build and test DR'
-    timeout = 10 * 60  # 10min w/o output
-  ret.addStep(
-    CTest(
-        command=['ctest', '--timeout', '120', '-VV',
-                 '-S', runsuite_cmd],
-        name=step_name,
-        descriptionDone=step_name,
-        timeout=timeout))
+  AddDRSuite(ret, '../drmemory/dynamorio', nightly, os, os_version)
   if os == 'linux':
     ret.addStep(
         DirectoryUpload(
             slavesrc='install/docs/html',
             masterdest='public_html/dr_docs'))
   return ret
+
+def AddDRSuite(f, dr_path, nightly, os, os_version):
+  if nightly:
+    assert os
+    assert os_version
+    os_mapping = {'win' : 'Windows', 'linux' : 'Linux'}
+    site_name = '%s.%s.BuildBot' % (os_mapping[os], os_version.capitalize())
+    suite_args = 'nightly;long;site=%s' % site_name
+    step_name = 'Run DR nightly suite'
+    timeout = 20 * 60  # 20min w/o output.  10 is too short for Windows.
+  else:
+    suite_args = ''  # TODO(rnk): Use a recent cmake so we can switch to ninja.
+    step_name = 'Build and test DR'
+    timeout = 10 * 60  # 10min w/o output
+  runsuite_cmd = '%s/suite/runsuite.cmake' % dr_path
+  if suite_args:
+    runsuite_cmd += ',' + suite_args
+  f.addStep(CTest(command=['ctest', '--timeout', '120', '-VV', '-S',
+                           runsuite_cmd],
+                  name=step_name,
+                  descriptionDone=step_name,
+                  timeout=timeout))
+
+def CreateDRFactory(nightly=False, os='', os_version=''):
+  """Create a factory to run the DR pre-commit suite.
+
+  Same as the above, except we just do a plain DR checkout instead of
+  DR-within-drmemory.  Used on the client.dynamorio waterfall.
+  """
+  ret = factory.BuildFactory()
+
+  ret.addStep(SVN(svnurl=dr_svnurl,
+                  workdir='dynamorio',
+                  mode='update',
+                  name='Checkout DynamoRIO'))
+  AddDRSuite(ret, '../drmemory/dynamorio', nightly, os, os_version)
+  if os == 'linux':
+    ret.addStep(
+        DirectoryUpload(
+            slavesrc='install/docs/html',
+            masterdest='public_html/dr_docs'))
+  return ret
+
 
 def CreateDrMFactory(windows):
   ret = factory.BuildFactory()
