@@ -626,6 +626,7 @@ class FactoryCommands(object):
         workdir=self.working_dir,
         timeout=timeout or 120,
         haltOnFailure=True,
+        flunkOnFailure=True,
         name='apply_issue',
         doStepIf=do_step_if)
 
