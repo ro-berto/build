@@ -141,7 +141,7 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
       title = builder_name
       show_name = 'off' not in request.args.get('titles', ['off'])
       url = (base.path_to_root(request) + "waterfall?builder=" +
-              urllib.quote(builder_name, safe=''))
+              urllib.quote(builder_name, safe='() '))
       cxt_builders.append({'outcome': classname,
                            'name': title,
                            'url': url,

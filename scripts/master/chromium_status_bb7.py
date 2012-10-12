@@ -96,7 +96,7 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
         classname += ' never'
 
       url = (self.path_to_root(request) + "waterfall?builder=" +
-              urllib.quote(builder_name, safe=''))
+              urllib.quote(builder_name, safe='() '))
       link = '<a href="%s" class="%s" title="%s" target=_blank>%s </a>' % (
           url, classname, title, '' if "off" in titles else title)
       data += '<td valign=bottom class=mini-box>%s</td>' % link

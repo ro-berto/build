@@ -2444,3 +2444,20 @@ Index: buildbot/status/web/status_json.py
          # Equivalent to resource.Resource.getChildWithDefault()
          if self.children.has_key(path):
              return self.children[path]
+
+
+Make buildbot names in urls from console more readable.
+
+Index: buildbot/status/web/console.py
+===================================================================
+--- a/scripts/master/chromium_status_bb8.py
++++ b/scripts/master/chromium_status_bb8.py
+@@ -141,7 +141,7 @@ class HorizontalOneBoxPerBuilder(base.HtmlResource):
+       title = builder_name
+       show_name = 'off' not in request.args.get('titles', ['off'])
+       url = (base.path_to_root(request) + "waterfall?builder=" +
+-              urllib.quote(builder_name, safe=''))
++              urllib.quote(builder_name, safe='() '))
+       cxt_builders.append({'outcome': classname,
+                            'name': title,
+                            'url': url,

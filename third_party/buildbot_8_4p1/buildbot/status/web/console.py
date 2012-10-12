@@ -485,7 +485,7 @@ class ConsoleStatusResource(HtmlResource):
                 s = {}
                 s["color"] = "notstarted"
                 s["pageTitle"] = builder
-                s["url"] = "./builders/%s" % urllib.quote(builder)
+                s["url"] = "./builders/%s" % urllib.quote(builder, safe='() ')
                 s["builderName"] = builder
                 state, builds = status.getBuilder(builder).getState()
                 # Check if it's offline, if so, the box is purple.
