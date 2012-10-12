@@ -109,6 +109,23 @@ F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
+B('Webkit Mac10.8', 'f_webkit_rel_tests_108', scheduler='s5_webkit_rel_trigger')
+F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=[
+      'test_shell',
+      'webkit',
+      'webkit_lint',
+      'webkit_unit',
+    ],
+    factory_properties={
+        'archive_webkit_results': True,
+        'generate_gtest_json': True,
+        'layout_test_platform': 'chromium-mac',
+        'test_results_server': 'test-results.appspot.com',
+    }))
+
 ################################################################################
 ## Debug
 ################################################################################

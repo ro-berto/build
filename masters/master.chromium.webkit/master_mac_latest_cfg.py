@@ -79,6 +79,24 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
         },
     }))
 
+B('Mac10.8 Tests', 'f_mac_tests_rel_108', scheduler='s8_webkit_rel')
+F('f_mac_tests_rel_108', mac().ChromiumWebkitLatestFactory(
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+             'chromium_builder_tests'],
+    tests=[
+      'browser_tests',
+      'content_browsertests',
+      'interactive_ui',
+      'unit',
+    ],
+    factory_properties={
+        'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+            'GYP_DEFINES':'fastbuild=1',
+        },
+    }))
+
 
 ################################################################################
 ## Debug
