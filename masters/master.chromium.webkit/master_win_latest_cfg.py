@@ -130,7 +130,7 @@ S('s7_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # Win Dbg Builder
 #
-B('Win (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
+B('Win7 (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
   builddir='win-latest-dbg')
 F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     target='Debug',

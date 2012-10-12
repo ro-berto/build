@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Webkit test builders using the Skia graphics library.
+# WebKit test builders using the Skia graphics library.
 
 from master import master_config
 from master.factory import chromium_factory
@@ -25,8 +25,8 @@ defaults['category'] = '2webkit mac deps'
 
 # Archive location
 rel_builddir = 'webkit-mac-pinned-rel'
-rel_archive = master_config.GetArchiveUrl(
-    'ChromiumWebkit', 'Webkit Mac Builder (deps)',
+rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
+    'WebKit Mac Builder (deps)',
     rel_builddir, 'mac')
 
 #
@@ -44,7 +44,7 @@ D(rel_dep_scheduler, rel_scheduler)
 #
 # Mac Rel Builder
 #
-B('Webkit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
+B('WebKit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler=rel_scheduler, builddir=rel_builddir)
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
@@ -58,9 +58,9 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
     }))
 
 #
-# Mac Rel Webkit testers
+# Mac Rel WebKit testers
 #
-B('Webkit Mac10.6 (deps)', 'f_webkit_rel_tests', scheduler=rel_dep_scheduler)
+B('WebKit Mac10.6 (deps)', 'f_webkit_rel_tests', scheduler=rel_dep_scheduler)
 F('f_webkit_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,

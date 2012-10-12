@@ -30,7 +30,7 @@ S('s9_gpu_mac_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 # GPU Mac Release
 #
-B('GPU Mac', 'f_gpu_mac_rel', scheduler='s9_gpu_mac_webkit_rel')
+B('GPU Mac10.7', 'f_gpu_mac_rel', scheduler='s9_gpu_mac_webkit_rel')
 F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
     target='Release',
     options=['--build-tool=ninja', '--compiler=goma-clang',
@@ -64,7 +64,7 @@ S('s9_gpu_mac_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 # GPU Mac Debug
 #
-B('GPU Mac (dbg)', 'f_gpu_mac_dbg', scheduler='s9_gpu_mac_webkit_dbg')
+B('GPU Mac10.7 (dbg)', 'f_gpu_mac_dbg', scheduler='s9_gpu_mac_webkit_dbg')
 F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang',

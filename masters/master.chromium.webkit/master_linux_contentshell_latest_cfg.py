@@ -23,7 +23,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 defaults['category'] = '9content shell'
 
 #
-# Main release scheduler for webkit
+# Main release scheduler for WebKit
 #
 S('s1_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 

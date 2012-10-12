@@ -24,7 +24,7 @@ defaults['category'] = '1webkit win deps'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Win Builder (deps)',
+                                          'WebKit Win Builder (deps)',
                                           'webkit-win-pinned-rel', 'win32')
 
 #
@@ -40,16 +40,16 @@ D('s1_chromium_rel_dep', 's1_chromium_rel')
 #
 # Win Rel Builder
 #
-B('Webkit Win Builder (deps)', 'f_webkit_win_rel',
+B('WebKit Win Builder (deps)', 'f_webkit_win_rel',
   scheduler='s1_chromium_rel', builddir='webkit-win-pinned-rel')
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
     project='all.sln;webkit_builder_win'))
 
 #
-# Win Rel Webkit testers
+# Win Rel WebKit testers
 #
-B('Webkit Win (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_dep')
+B('WebKit XP (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_dep')
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,

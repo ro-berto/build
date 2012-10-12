@@ -31,7 +31,7 @@ S('s2_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 # Content Shell Layouttests
 #
 
-B('WebKit (Content Shell) Mac',
+B('WebKit (Content Shell) Mac10.6',
   'f_contentshell_mac_rel',
   scheduler='s2_contentshell_webkit_rel')
 

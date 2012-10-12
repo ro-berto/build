@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# Webkit test builders using the Skia graphics library.
+# WebKit test builders using the Skia graphics library.
 #
 # Note that we use the builder vs tester role separation differently
 # here than in our other buildbot configurations.
@@ -39,7 +39,7 @@ defaults['category'] = '5webkit mac latest'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Mac Builder',
+                                          'WebKit Mac Builder',
                                           'webkit-mac-latest-rel', 'mac')
 
 #
@@ -55,7 +55,7 @@ T('s5_webkit_rel_trigger')
 #
 # Mac Rel Builder
 #
-B('Webkit Mac Builder', 'f_webkit_mac_rel', auto_reboot=False,
+B('WebKit Mac Builder', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler='s5_webkit_rel', builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     slave_type='Builder',
@@ -72,10 +72,10 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
     }))
 
 #
-# Mac Rel Webkit testers
+# Mac Rel WebKit testers
 #
 
-B('Webkit Mac10.6', 'f_webkit_rel_tests_106', scheduler='s5_webkit_rel_trigger')
+B('WebKit Mac10.6', 'f_webkit_rel_tests_106', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -92,7 +92,7 @@ F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.7', 'f_webkit_rel_tests_107', scheduler='s5_webkit_rel_trigger')
+B('WebKit Mac10.7', 'f_webkit_rel_tests_107', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -109,7 +109,7 @@ F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.8', 'f_webkit_rel_tests_108', scheduler='s5_webkit_rel_trigger')
+B('WebKit Mac10.8', 'f_webkit_rel_tests_108', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -132,7 +132,7 @@ F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
 
 # Archive location
 dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
-                                          'Webkit Mac Builder (dbg)',
+                                          'WebKit Mac Builder (dbg)',
                                           'webkit-mac-latest-dbg', 'mac')
 
 #
@@ -148,7 +148,7 @@ T('s5_webkit_dbg_trigger')
 #
 # Mac Dbg Builder
 #
-B('Webkit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
+B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
   scheduler='s5_webkit_dbg', builddir='webkit-mac-latest-dbg')
 F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
@@ -164,10 +164,10 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     }))
 
 #
-# Mac Dbg Webkit testers
+# Mac Dbg WebKit testers
 #
 
-B('Webkit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
+B('WebKit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
   scheduler='s5_webkit_dbg_trigger')
 F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
     target='Debug',
@@ -186,7 +186,7 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('Webkit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
+B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
   scheduler='s5_webkit_dbg_trigger')
 
 
