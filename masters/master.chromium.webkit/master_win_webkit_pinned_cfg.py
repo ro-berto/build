@@ -41,7 +41,8 @@ D('s1_chromium_rel_dep', 's1_chromium_rel')
 # Win Rel Builder
 #
 B('WebKit Win Builder (deps)', 'f_webkit_win_rel',
-  scheduler='s1_chromium_rel', builddir='webkit-win-pinned-rel')
+  scheduler='s1_chromium_rel', builddir='webkit-win-pinned-rel',
+  auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
     project='all.sln;webkit_builder_win'))
