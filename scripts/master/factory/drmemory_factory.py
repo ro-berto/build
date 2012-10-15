@@ -15,6 +15,8 @@ from buildbot.steps.transfer import FileUpload
 from buildbot.steps.transfer import FileDownload
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE
 
+from master.factory import v8_factory
+
 LATEST_WIN_BUILD = 'public_html/builds/drmemory-windows-latest-sfx.exe'
 
 dr_svnurl = 'http://dynamorio.googlecode.com/svn/trunk'
@@ -201,6 +203,54 @@ def CreateAppTest(windows, app_name, app_cmd, build_mode, run_mode,
                       descriptionDone=step_name,
                       description='run ' + step_name,
                       **kwargs)
+
+
+class V8DrFactory(v8_factory.V8Factory):
+
+  """Subclass of V8Factory to build DR alongside V8 for the same arch."""
+
+  @staticmethod
+  def _ArchToBits(arch):
+    """Takes a V8 architecture and returns its bitwidth for DR."""
+    if not arch:  # Default to x64, we don't have any real ia32 bots.
+      return 64
+    elif arch == 'x64':
+      return 64
+    elif arch == 'ia32':
+      return 32
+    assert False, 'Unsupported architecture'
+
+  def BuildFactory(self, target_arch=None, *args, **kwargs):
+    f = super(V8DrFactory, self).BuildFactory(*args,
+                                              target_arch=target_arch,
+                                              **kwargs)
+    # Add in a build of DR.
+    f.addStep(SVN(svnurl=dr_svnurl,
+                  workdir='dynamorio',
+                  mode='update',
+                  name='Checkout DynamoRIO'))
+    cflags = '-m%s' % self._ArchToBits(target_arch)
+    cmake_env = {'CFLAGS': cflags, 'CXXFLAGS': cflags}
+    # We use release DR on the bots because debug is too slow.
+    f.addStep(Compile(command=['cmake', '..', '-DDEBUG=OFF'],
+                      workdir='dynamorio/build',
+                      name='Configure release DynamoRIO',
+                      env=cmake_env))
+    f.addStep(Compile(command=['make', '-j5'],
+                      workdir='dynamorio/build',
+                      name='Compile release DynamoRIO'))
+    return f
+
+  def V8Factory(self, target_arch=None, *args, **kwargs):
+    assert 'shell_flags' not in kwargs
+    bits = self._ArchToBits(target_arch)
+    drrun = '../../dynamorio/build/bin%d/drrun' % bits
+    # TODO(rnk): V8 tests tend to do a lot of flushing, which trigger repeated
+    # resets that slow things down.  Pass "-reset_at_pending 0" to alleviate
+    # this once we can get quoted strings through V8's test scripts.
+    kwargs['shell_flags'] = '%s @' % drrun
+    return super(V8DrFactory, self).V8Factory(*args, target_arch=target_arch,
+                                              **kwargs)
 
 
 def CreateDRInDrMemoryFactory(nightly=False, os='', os_version=''):
