@@ -96,9 +96,10 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
+       'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '
+                                      'v8_enable_verify_heap=1 '}}))
 
-asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
+asan_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
 
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
