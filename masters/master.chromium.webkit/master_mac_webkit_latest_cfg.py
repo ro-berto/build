@@ -109,7 +109,8 @@ F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('WebKit Mac10.8', 'f_webkit_rel_tests_108', scheduler='s5_webkit_rel_trigger')
+B('WebKit Mac10.8', 'f_webkit_rel_tests_108', auto_reboot=False,
+  scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
