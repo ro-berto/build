@@ -49,7 +49,7 @@ F('f_android_rel', linux_android().ChromiumWebkitLatestAnnotationFactory(
         'build_url': android_rel_archive,
         }))
 
-B('WebKit Android Tests (GalaxyNexus)', 'f_webkit_android_tests', None,
+B('WebKit Android (GalaxyNexus)', 'f_webkit_android_tests', None,
   'android_rel_trigger', auto_reboot=False)
 F('f_webkit_android_tests',
   linux_android().ChromiumWebkitLatestAnnotationFactory(
