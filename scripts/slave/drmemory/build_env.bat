@@ -21,6 +21,10 @@ set PATH=%PROGRAMFILES%\CMake 2.8\bin;%PATH%
 :: Add 7z.exe to PATH.
 set PATH=%PROGRAMFILES%\7-Zip;%PATH%
 
+:: Add Cygwin to the *end* of PATH.  We don't want to override anything form
+:: depot_tools in particular.  We depend on perl, doxygen, and fig2dev.
+set PATH=%PATH%;C:\cygwin\bin
+
 echo Final PATH:
 echo %PATH%
 %*

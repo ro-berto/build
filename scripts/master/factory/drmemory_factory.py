@@ -453,12 +453,13 @@ def CreateDrMFactory(windows):
     testlog_dirs += ['xmlresults']
   else:
     testlog_dirs += ['xml:results']
-  ret.addStep(
-      ShellCommand(
-          command=(['7z', 'a', 'testlogs.7z'] + testlog_dirs),
-          haltOnFailure=True,
-          name='Pack test results',
-          description='pack results'))
+  cmd = ['7z', 'a', 'testlogs.7z'] + testlog_dirs
+  if windows:
+    cmd.insert(0, WIN_BUILD_ENV_PATH)
+  ret.addStep(ShellCommand(command=cmd,
+                           haltOnFailure=True,
+                           name='Pack test results',
+                           description='pack results'))
 
   ret.addStep(
      FileUpload(
@@ -469,6 +470,7 @@ def CreateDrMFactory(windows):
               '%(buildnumber)s.7z'),
           name='Upload test logs to the master'))
   return ret
+
 
 def CreateDrMPackageFactory(windows):
   ret = factory.BuildFactory()
@@ -484,10 +486,7 @@ def CreateDrMPackageFactory(windows):
   cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
   if windows:
     cmd.insert(0, WIN_BUILD_ENV_PATH)
-  ret.addStep(
-      Compile(
-          command=cmd,
-          name='Package Dr. Memory'))
+  ret.addStep(Compile(command=cmd, name='Package Dr. Memory'))
 
   if windows:
     OUTPUT_DIR = ('build_drmemory-debug-32\\' +
@@ -497,7 +496,8 @@ def CreateDrMPackageFactory(windows):
 
     ret.addStep(
         ShellCommand(
-            command=['7z', 'a', '-sfx', WithProperties(RES_FILE), '*'],
+            command=[WIN_BUILD_ENV_PATH, '7z', 'a', '-sfx',
+                     WithProperties(RES_FILE), '*'],
             workdir=WithProperties('build\\' + OUTPUT_DIR),
             haltOnFailure=True,
             name='Pack test results',
