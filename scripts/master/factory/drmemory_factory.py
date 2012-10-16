@@ -7,6 +7,7 @@ from buildbot.process import factory
 from buildbot.process.properties import WithProperties
 from buildbot.steps.source import SVN
 from buildbot.steps.shell import Compile
+from buildbot.steps.shell import Configure
 from buildbot.steps.shell import ShellCommand
 from buildbot.steps.shell import SetProperty
 from buildbot.steps.shell import Test
@@ -22,7 +23,16 @@ LATEST_WIN_BUILD = 'public_html/builds/drmemory-windows-latest-sfx.exe'
 dr_svnurl = 'http://dynamorio.googlecode.com/svn/trunk'
 drm_svnurl = 'http://drmemory.googlecode.com/svn/trunk'
 
+# TODO(rnk): Don't make assumptions about absolute path layout.  This won't work
+# on bare metal bots.  We can't use a relative path because we often configure
+# builds at different directory depths.
+WIN_BUILD_ENV_PATH = r'E:\b\build\scripts\slave\drmemory\build_env.bat'
+
+
 class CTest(Test):
+
+  """BuildStep that parses DR's runsuite output."""
+
   def __init__(self, **kwargs):
     self.__result = None
     Test.__init__(self, **kwargs)
@@ -232,10 +242,10 @@ class V8DrFactory(v8_factory.V8Factory):
     cflags = '-m%s' % self._ArchToBits(target_arch)
     cmake_env = {'CFLAGS': cflags, 'CXXFLAGS': cflags}
     # We use release DR on the bots because debug is too slow.
-    f.addStep(Compile(command=['cmake', '..', '-DDEBUG=OFF'],
-                      workdir='dynamorio/build',
-                      name='Configure release DynamoRIO',
-                      env=cmake_env))
+    f.addStep(Configure(command=['cmake', '..', '-DDEBUG=OFF'],
+                        workdir='dynamorio/build',
+                        name='Configure release DynamoRIO',
+                        env=cmake_env))
     f.addStep(Compile(command=['make', '-j5'],
                       workdir='dynamorio/build',
                       name='Compile release DynamoRIO'))
@@ -300,8 +310,10 @@ def AddDRSuite(f, dr_path, nightly, os, os_version):
   runsuite_cmd = '%s/suite/runsuite.cmake' % dr_path
   if suite_args:
     runsuite_cmd += ',' + suite_args
-  f.addStep(CTest(command=['ctest', '--timeout', '120', '-VV', '-S',
-                           runsuite_cmd],
+  cmd = ['ctest', '--timeout', '120', '-VV', '-S', runsuite_cmd]
+  if os.startswith('win'):
+    cmd.insert(0, WIN_BUILD_ENV_PATH)
+  f.addStep(CTest(command=cmd,
                   name=step_name,
                   descriptionDone=step_name,
                   timeout=timeout))
@@ -341,12 +353,14 @@ def CreateDrMFactory(windows):
           name='Get DR revision',
           descriptionDone='Get DR revision',
           description='DR revision'))
+  cmd = ['ctest', '--timeout', '60', '-VV', '-S',
+         WithProperties('../drmemory/tests/runsuite.cmake,' +
+                        'drmemory_only;build=%(buildnumber)s')]
+  if windows:
+    cmd.insert(0, WIN_BUILD_ENV_PATH)
   ret.addStep(
       CTest(
-          command=['ctest', '--timeout', '60', '-VV', '-S',
-          WithProperties('../drmemory/tests/runsuite.cmake,' +
-                         'drmemory_only;' +
-                         'build=%(buildnumber)s') ],
+          command=cmd,
           name='Dr. Memory ctest',
           descriptionDone='runsuite',
           flunkOnFailure=False, # failure doesn't mark the whole run as failure
@@ -467,9 +481,12 @@ def CreateDrMPackageFactory(windows):
   # The default package name has the version and revision, so we override it
   # to something we can predict.
   cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
+  cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
+  if windows:
+    cmd.insert(0, WIN_BUILD_ENV_PATH)
   ret.addStep(
       Compile(
-          command=['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg],
+          command=cmd,
           name='Package Dr. Memory'))
 
   if windows:
@@ -589,16 +606,12 @@ def CreateLinuxChromeFactory():
           name='Checkout DynamoRIO'))
 
   # If we need to execute 32-bit children, we'll need a full exports package.
-  ret.addStep(
-      Compile(
-          command=['cmake', '..', '-DDEBUG=OFF'],
-          workdir='dynamorio/build',
-          name='Configure release DynamoRIO'))
-  ret.addStep(
-      Compile(
-          command=['make', '-j5'],
-          workdir='dynamorio/build',
-          name='Compile release DynamoRIO'))
+  ret.addStep(Configure(command=['cmake', '..', '-DDEBUG=OFF'],
+                        workdir='dynamorio/build',
+                        name='Configure release DynamoRIO'))
+  ret.addStep(Compile(command=['make', '-j5'],
+                      workdir='dynamorio/build',
+                      name='Compile release DynamoRIO'))
 
   test = 'DRT'
   ret.addStep(
