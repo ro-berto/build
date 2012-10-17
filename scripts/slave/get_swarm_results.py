@@ -121,6 +121,7 @@ def GetSwarmResults(swarm_base_url, test_keys):
 
   gtest_parser = gtest_utils.GTestLogParser()
   machine_ids = ['unknown'] * len(test_keys)
+  machine_tags = ['unknown'] * len(test_keys)
   exit_codes = [1] * len(test_keys)
   shard_watcher = ShardWatcher(len(test_keys))
   for index in range(len(test_keys)):
@@ -143,11 +144,12 @@ def GetSwarmResults(swarm_base_url, test_keys):
           test_exit_codes = test_outputs['exit_codes'].split(',')
           exit_codes[index] = max(map(int, test_exit_codes))
         machine_ids[index] = test_outputs['machine_id']
+        machine_tags[index] = test_outputs.get('machine_tag', 'unknown')
 
         print
         print '================================================================'
-        print 'Begin output from shard index %s (%s)' % (index,
-                                                         machine_ids[index])
+        print 'Begin output from shard index %s (machine tag: %s, id: %s)' % (
+            index, machine_tags[index], machine_ids[index])
         print '================================================================'
         print
 
@@ -171,8 +173,9 @@ def GetSwarmResults(swarm_base_url, test_keys):
             exit_codes[index] = 1
 
         print '================================================================'
-        print 'End output from shard index %s (%s). Return %d' % (
-            index, machine_ids[index], exit_codes[index])
+        print ('End output from shard index %s (machine tag: %s, id: %s). '
+               'Return %d' % (index, machine_tags[index], machine_ids[index],
+                              exit_codes[index]))
         print '================================================================'
         print
 

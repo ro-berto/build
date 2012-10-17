@@ -79,13 +79,13 @@ Unable to connection to swarm machine.
 
 BUILDBOT_OUTPUT = ("""
 ================================================================
-Begin output from shard index 0 (host)
+Begin output from shard index 0 (machine tag: localhost, id: host)
 ================================================================
 
 """ + RUN_TEST_OUTPUT +
 """
 ================================================================
-End output from shard index 0 (host). Return 0
+End output from shard index 0 (machine tag: localhost, id: host). Return 0
 ================================================================
 
 Summary for all the shards:
@@ -94,13 +94,13 @@ All tests passed.
 
 BUILDBOT_OUTPUT_FAILURE = ("""
 ================================================================
-Begin output from shard index 0 (host)
+Begin output from shard index 0 (machine tag: localhost, id: host)
 ================================================================
 
 """ + RUN_TEST_OUTPUT_FAILURE +
 """
 ================================================================
-End output from shard index 0 (host). Return 1
+End output from shard index 0 (machine tag: localhost, id: host). Return 1
 ================================================================
 
 Summary for all the shards:
@@ -110,7 +110,7 @@ Summary for all the shards:
 
 BUILDBOT_OUTPUT_NO_TEST_OUTPUT = ("""
 ================================================================
-Begin output from shard index 0 (host)
+Begin output from shard index 0 (machine tag: localhost, id: host)
 ================================================================
 
 No output produced by the test, it may have failed to run.
@@ -119,7 +119,7 @@ Showing all the output, including swarm specific output.
 """ + SWARM_OUTPUT_WITH_NO_TEST_OUTPUT +
 """
 ================================================================
-End output from shard index 0 (host). Return 1
+End output from shard index 0 (machine tag: localhost, id: host). Return 1
 ================================================================
 
 Summary for all the shards:
@@ -201,6 +201,7 @@ class GetSwarmResults(SuperMoxTestBase):
 
     shard_output = json.dumps(
       {'machine_id': 'host',
+       'machine_tag': 'localhost',
        'exit_codes': '0, 0',
        'output': SWARM_OUTPUT_WITHOUT_FAILURE
      }
@@ -227,6 +228,7 @@ class GetSwarmResults(SuperMoxTestBase):
 
     shard_output = json.dumps(
       {'machine_id': 'host',
+       'machine_tag': 'localhost',
        'exit_codes': '0, 1',
        'output': SWARM_OUTPUT_WITH_FAILURE
      }
@@ -251,6 +253,7 @@ class GetSwarmResults(SuperMoxTestBase):
 
     shard_output = json.dumps(
       {'machine_id': 'host',
+       'machine_tag': 'localhost',
        'exit_codes': '0, 0',
        'output': SWARM_OUTPUT_WITH_NO_TEST_OUTPUT
      }
