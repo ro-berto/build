@@ -199,19 +199,6 @@ S('win_dbg', branch='src', treeStableTimer=60)
 T('win_dbg_trigger')
 
 #
-# Win Dbg 2008 Builder
-#
-B('Win Builder 2008 (dbg)', 'dbg_2008', 'compile|windows', 'win_dbg',
-  builddir='cr-win-2008-dbg', auto_reboot=False, notify_on_missing=True)
-F('dbg_2008', win().ChromiumFactory(
-    target='Debug',
-    slave_type='Builder',
-    project='all.sln;chromium_builder_tests',
-    factory_properties={'gclient_env': {
-        'GYP_MSVS_VERSION': '2008',
-        'GYP_DEFINES': 'fastbuild=1'}}))
-
-#
 # Win Dbg Builder
 #
 B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg',
