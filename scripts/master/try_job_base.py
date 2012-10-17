@@ -88,7 +88,7 @@ def dict_comma(values, valid_keys, default):
     #     depends on not_sure being in valid_keys or not. Next state is 2 or 4.
     items = re.split(r'([\,\:])', value)
     if not items or ((len(items) - 1) % 2) != 0:
-      raise BadJobfile('Failed to process value %s', value)
+      raise BadJobfile('Failed to process value %s' % value)
 
     last_key = None  # A bot
     last_value = None  # A test
@@ -101,13 +101,13 @@ def dict_comma(values, valid_keys, default):
 
       # Refuse "foo,:bar"
       if item in (',', ':') or separator not in (',', ':', None):
-        raise BadJobfile('Failed to process value %s', value)
+        raise BadJobfile('Failed to process value %s' % value)
 
       if state == 1:
         assert last_key is None
         assert last_value is None
         if item not in valid_keys:
-          raise BadJobfile('Failed to process value %s', value)
+          raise BadJobfile('Failed to process value %s' % value)
         if separator == ':':
           # Don't save it yet.
           last_key = item
@@ -131,7 +131,7 @@ def dict_comma(values, valid_keys, default):
         assert last_key is not None
         assert last_value is not None
         if separator == ':':
-          raise BadJobfile('Failed to process value %s', value)
+          raise BadJobfile('Failed to process value %s' % value)
         out.setdefault(last_key, set()).add('%s:%s' % (last_value, item))
         last_value = None
         state = 4
