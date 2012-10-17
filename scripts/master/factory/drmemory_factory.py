@@ -388,25 +388,9 @@ def CreateDrMFactory(windows):
             description='checkout tsan tests'))
     ret.addStep(
         Compile(
-            command=['make', '-C', '../tsan/unittest'],
-            env={
-                # We have to over-ride PATH to include cygwin (make, sed
-                # and uname) but can't add cygwin for all steps, see
-                # http://code.google.com/p/drmemory/issues/detail?id=366
-                'PATH':
-                    'e:\\b\\depot_tools\\svn_bin;' \
-                    + 'C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\' \
-                    + 'VC\\bin;' \
-                    + 'C:\\Program Files (x86)\\Microsoft Visual Studio 9.0\\' \
-                    + 'Common7\\IDE;' \
-                    + 'C:\\Program Files\\Microsoft Visual Studio 9.0\\' \
-                    + 'VC\\bin;' \
-                    + 'C:\\Program Files\\Microsoft Visual Studio 9.0\\' \
-                    + 'Common7\\IDE;' \
-                    + 'C:\\cygwin\\bin',
-                'CYGWIN':
-                    'nodosfilewarning',  # suppress cygwin 'MSDOS' warnings
-            },
+            command=[WIN_BUILD_ENV_PATH, 'make', '-C', '../tsan/unittest'],
+            # suppress cygwin 'MSDOS' warnings
+            env={'CYGWIN': 'nodosfilewarning'},
             name='Build TSan tests',
             descriptionDone='build tsan tests',
             description='build tsan tests'))
