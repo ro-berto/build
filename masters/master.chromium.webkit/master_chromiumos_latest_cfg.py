@@ -35,7 +35,12 @@ B('Linux ChromiumOS Builder', 'f_chromiumos_rel', scheduler='s10_webkit_rel',
 F('f_chromiumos_rel', linux().ChromiumOSWebkitLatestFactory(
     slave_type='Builder',
     tests=[],
-    options=['--compiler=goma'],
+    options=['--compiler=goma',
+      'DumpRenderTree',
+      'test_shell',
+      'test_shell_tests',
+      'webkit_unit_tests',
+    ],
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'chromeos=1'}
     }))
