@@ -3,9 +3,16 @@
 
 setlocal
 :: cmd for loops are really hard, so I hardcoded the list of MSVS paths.
+:: Alternatively we could 'reg query' this key:
+:: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\10.0\Setup\VS;ProductDir
 set vcvars="%PROGRAMFILES%\Microsoft Visual Studio 11.0\VC\bin\vcvars32.bat"
 if exist %vcvars% goto found_vcvars
 set vcvars="%PROGRAMFILES%\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat"
+if exist %vcvars% goto found_vcvars
+:: We've installed VS 2010 in E: on some of the slaves because C: was full.
+set vcvars="E:\Program Files\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat"
+if exist %vcvars% goto found_vcvars
+set vcvars="E:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\vcvars32.bat"
 if exist %vcvars% goto found_vcvars
 :: VS 2008 vcvars isn't standalone, it needs this env var.
 set VS90COMNTOOLS=%PROGRAMFILES%\Microsoft Visual Studio 9.0\Common7\Tools\
