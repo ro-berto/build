@@ -42,7 +42,7 @@ F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_main_builder.sh',
     factory_properties={'trigger': 'android_trigger'}))
 
-B('Android Tester (dbg)', 'f_android_dbg_tests', None, 'android_trigger',
+B('Android Tests (dbg)', 'f_android_dbg_tests', 'android', 'android_trigger',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     target='Debug',
