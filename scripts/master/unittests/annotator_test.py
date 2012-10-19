@@ -51,10 +51,15 @@ class FakeBuildstepStatus(mock.Mock):
     self.text = None
     self.step = None
     self.logs = []
+    self.started = False
+    self.finished = False
     mock.Mock.__init__(self)
 
   def stepStarted(self):
-    return mock.Mock()
+    self.started = True
+
+  def isStarted(self):
+    return self.started
 
   def setText(self, text):
     self.text = text
@@ -87,7 +92,11 @@ class FakeBuildstepStatus(mock.Mock):
       return None
 
   def stepFinished(self, status):
+    self.finished = True
     self.getBuild().receivedStatus.append(status)
+
+  def isFinished(self):
+    return self.finished
 
   def setHidden(self, hidden):
     return None
@@ -280,6 +289,87 @@ class AnnotatorCommandsTest(unittest.TestCase):
     logs = [l for x in self.buildstatus.steps for l in x.getLogs()]
     self.assertEquals([x.getName() for x in logs], ['preamble', 'stdio',
                                                     'stdio'])
+
+  def testSeed(self):
+    self.handleOutputLine('@@@BUILD_STEP step@@@')
+    self.handleOutputLine('@@@SEED_STEP step2@@@')
+    self.handleOutputLine('@@@SEED_STEP step3@@@')
+    self.handleOutputLine('@@@SEED_STEP step4@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step2@@@')
+    self.handleOutputLine('@@@STEP_STARTED@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step3@@@')
+    self.step.script_observer.handleReturnCode(0)
+
+    stepnames = [x['step'].name for x in self.step.script_observer.sections]
+    started = [x['step'].isStarted() for x
+               in self.step.script_observer.sections]
+    finished = [x['step'].isFinished() for x in
+                self.step.script_observer.sections]
+
+    self.assertEquals(stepnames, ['annotated_steps', 'step', 'step2', 'step3',
+                                  'step4'])
+    self.assertEquals(started, [True, True, True, True, False])
+    self.assertEquals(finished, [False, True, True, True, False])
+    self.assertEquals(self.step.script_observer.annotate_status,
+                      builder.SUCCESS)
+
+  def testCursor(self):
+    self.handleOutputLine('@@@BUILD_STEP step@@@')
+    self.handleOutputLine('@@@SEED_STEP step2@@@')
+    self.handleOutputLine('@@@SEED_STEP step3@@@')
+    self.handleOutputLine('@@@SEED_STEP step4@@@')
+    self.handleOutputLine('@@@SEED_STEP step5@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step2@@@')
+    self.handleOutputLine('@@@STEP_STARTED@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step4@@@')
+    self.handleOutputLine('@@@STEP_STARTED@@@')
+    self.handleOutputLine('@@@STEP_LOG_LINE@test_log@AAthis is line one@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step2@@@')
+    self.handleOutputLine('@@@STEP_LOG_LINE@test_log@BBthis is line one@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step4@@@')
+    self.handleOutputLine('@@@STEP_LOG_LINE@test_log@AAthis is line two@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step2@@@')
+    self.handleOutputLine('@@@STEP_LOG_LINE@test_log@BBthis is line two@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step4@@@')
+    self.handleOutputLine('@@@STEP_LOG_END@test_log@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step2@@@')
+    self.handleOutputLine('@@@STEP_LOG_END@test_log@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step4@@@')
+    self.handleOutputLine('@@@STEP_SUCCESS@@@')
+    self.handleOutputLine('@@@STEP_CURSOR step3@@@')
+    self.handleOutputLine('@@@STEP_STARTED@@@')
+    self.step.script_observer.handleReturnCode(0)
+
+    stepnames = [x['step'].name for x in self.step.script_observer.sections]
+    started = [x['step'].isStarted() for x
+               in self.step.script_observer.sections]
+    finished = [x['step'].isFinished() for x
+                in self.step.script_observer.sections]
+    logs = [x['step'].logs for x in self.step.script_observer.sections]
+
+    self.assertEquals(stepnames, ['annotated_steps', 'step', 'step2', 'step3',
+                                  'step4', 'step5'])
+    self.assertEquals(started, [True, True, True, True, True, False])
+    self.assertEquals(finished, [False, True, True, True, True, False])
+    self.assertEquals(self.step.script_observer.annotate_status,
+                      builder.SUCCESS)
+
+    lognames = [[x.getName() for x in l] for l in logs]
+    logtexts = [[x.text for x in l] for l in logs]
+
+    self.assertEquals(lognames, [['preamble'], ['stdio'],
+                                 ['stdio', 'test_log'],
+                                 ['stdio'],
+                                 ['stdio', 'test_log'],
+                                 []])
+    self.assertEquals(logtexts[1:], [
+        [''],
+        ['', 'BBthis is line one\nBBthis is line two'],
+        [''],
+        ['', 'AAthis is line one\nAAthis is line two'],
+        []
+    ])
+
 
 if __name__ == '__main__':
   unittest.main()
