@@ -1041,18 +1041,23 @@ class ChromiumCommands(commands.FactoryCommands):
            '--target', self._target,
            '--build-dir', self._build_dir
     ]
-
     self.AddTestStep(c,
                      test_name='DevTools.PerfTest',
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
-    pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
-                                  'devtools_native_memory_snapshot.py')
-    # Run through runtest.py to launch virtual x server.
-    cmd = self.GetTestCommand('/usr/bin/python', [pyauto_script])
-    self.AddTestStep(c, 'DevTools.NativeMemorySnapshot', cmd,
-                     do_step_if=self.TestStepFilter)
+    def AddFunctionalTest(test_name, script_name):
+      pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
+                                    script_name)
+      # Run through runtest.py to launch virtual x server.
+      cmd = self.GetTestCommand('/usr/bin/python', [pyauto_script])
+      self.AddTestStep(c, test_name, cmd, do_step_if=self.TestStepFilter)
+
+    AddFunctionalTest('DevTools.NativeSnapshotUnknownSize',
+                      'devtools_native_memory_snapshot.py')
+    if self._target == 'Release':
+      AddFunctionalTest('DevTools.CheckMemoryInstrumentation',
+                        'devtools_instrumented_objects_check.py')
 
   def AddWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
