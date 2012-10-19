@@ -2461,3 +2461,195 @@ Index: buildbot/status/web/console.py
        cxt_builders.append({'outcome': classname,
                             'name': title,
                             'url': url,
+diff --git a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+index e70b72d..5bf2725 100644
+--- a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
++++ b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+@@ -96,7 +96,7 @@ class GitPoller(base.PollingChangeSource):
+         def git_init(_):
+             log.msg('gitpoller: initializing working dir from %s' % self.repourl)
+             d = utils.getProcessOutputAndValue(self.gitbin,
+-                    ['init', self.workdir], env=dict(PATH=os.environ['PATH']))
++                    ['init', self.workdir], env=os.environ)
+             d.addCallback(self._convert_nonzero_to_failure)
+             d.addErrback(self._stop_on_failure)
+             return d
+@@ -105,7 +105,7 @@ class GitPoller(base.PollingChangeSource):
+         def git_remote_add(_):
+             d = utils.getProcessOutputAndValue(self.gitbin,
+                     ['remote', 'add', 'origin', self.repourl],
+-                    path=self.workdir, env=dict(PATH=os.environ['PATH']))
++                    path=self.workdir, env=os.environ)
+             d.addCallback(self._convert_nonzero_to_failure)
+             d.addErrback(self._stop_on_failure)
+             return d
+@@ -115,7 +115,7 @@ class GitPoller(base.PollingChangeSource):
+             args = ['fetch', 'origin']
+             self._extend_with_fetch_refspec(args)
+             d = utils.getProcessOutputAndValue(self.gitbin, args,
+-                    path=self.workdir, env=dict(PATH=os.environ['PATH']))
++                    path=self.workdir, env=os.environ)
+             d.addCallback(self._convert_nonzero_to_failure)
+             d.addErrback(self._stop_on_failure)
+             return d
+@@ -126,11 +126,11 @@ class GitPoller(base.PollingChangeSource):
+             if self.branch == 'master': # repo is already on branch 'master', so reset
+                 d = utils.getProcessOutputAndValue(self.gitbin,
+                         ['reset', '--hard', 'origin/%s' % self.branch],
+-                        path=self.workdir, env=dict(PATH=os.environ['PATH']))
++                        path=self.workdir, env=os.environ)
+             else:
+                 d = utils.getProcessOutputAndValue(self.gitbin,
+                         ['checkout', '-b', self.branch, 'origin/%s' % self.branch],
+-                        path=self.workdir, env=dict(PATH=os.environ['PATH']))
++                        path=self.workdir, env=os.environ)
+             d.addCallback(self._convert_nonzero_to_failure)
+             d.addErrback(self._stop_on_failure)
+             return d
+@@ -169,7 +169,7 @@ class GitPoller(base.PollingChangeSource):
+ 
+     def _get_commit_comments(self, rev):
+         args = ['log', rev, '--no-walk', r'--format=%s%n%b']
+-        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=dict(PATH=os.environ['PATH']), errortoo=False )
++        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
+         def process(git_output):
+             stripped_output = git_output.strip().decode(self.encoding)
+             if len(stripped_output) == 0:
+@@ -181,7 +181,7 @@ class GitPoller(base.PollingChangeSource):
+     def _get_commit_timestamp(self, rev):
+         # unix timestamp
+         args = ['log', rev, '--no-walk', r'--format=%ct']
+-        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=dict(PATH=os.environ['PATH']), errortoo=False )
++        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
+         def process(git_output):
+             stripped_output = git_output.strip()
+             if self.usetimestamps:
+@@ -198,7 +198,7 @@ class GitPoller(base.PollingChangeSource):
+ 
+     def _get_commit_files(self, rev):
+         args = ['log', rev, '--name-only', '--no-walk', r'--format=%n']
+-        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=dict(PATH=os.environ['PATH']), errortoo=False )
++        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
+         def process(git_output):
+             fileList = git_output.split()
+             return fileList
+@@ -207,7 +207,7 @@ class GitPoller(base.PollingChangeSource):
+             
+     def _get_commit_name(self, rev):
+         args = ['log', rev, '--no-walk', r'--format=%aE']
+-        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=dict(PATH=os.environ['PATH']), errortoo=False )
++        d = utils.getProcessOutput(self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False )
+         def process(git_output):
+             stripped_output = git_output.strip().decode(self.encoding)
+             if len(stripped_output) == 0:
+@@ -231,7 +231,7 @@ class GitPoller(base.PollingChangeSource):
+         # deferred will not use the response.
+         d = utils.getProcessOutput(self.gitbin, args,
+                     path=self.workdir,
+-                    env=dict(PATH=os.environ['PATH']), errortoo=True )
++                    env=os.environ, errortoo=True )
+ 
+         return d
+ 
+@@ -241,7 +241,7 @@ class GitPoller(base.PollingChangeSource):
+         revListArgs = ['log', '%s..origin/%s' % (self.branch, self.branch), r'--format=%H']
+         self.changeCount = 0
+         d = utils.getProcessOutput(self.gitbin, revListArgs, path=self.workdir,
+-                                   env=dict(PATH=os.environ['PATH']), errortoo=False )
++                                   env=os.environ, errortoo=False )
+         wfd = defer.waitForDeferred(d)
+         yield wfd
+         results = wfd.getResult()
+@@ -307,7 +307,7 @@ class GitPoller(base.PollingChangeSource):
+             return
+         log.msg('gitpoller: catching up tracking branch')
+         args = ['reset', '--hard', 'origin/%s' % (self.branch,)]
+-        d = utils.getProcessOutputAndValue(self.gitbin, args, path=self.workdir, env=dict(PATH=os.environ['PATH']))
++        d = utils.getProcessOutputAndValue(self.gitbin, args, path=self.workdir, env=os.environ)
+         d.addCallback(self._convert_nonzero_to_failure)
+         return d
+ 
+diff --git a/third_party/buildbot_8_4p1/buildbot/test/unit/test_changes_gitpoller.py b/third_party/buildbot_8_4p1/buildbot/test/unit/test_changes_gitpoller.py
+index 9a47d41..c5e1960 100644
+--- a/third_party/buildbot_8_4p1/buildbot/test/unit/test_changes_gitpoller.py
++++ b/third_party/buildbot_8_4p1/buildbot/test/unit/test_changes_gitpoller.py
+@@ -13,6 +13,7 @@
+ #
+ # Copyright Buildbot Team Members
+ 
++import os
+ from twisted.trial import unittest
+ from twisted.internet import defer
+ from exceptions import Exception
+@@ -20,6 +21,9 @@ from buildbot.changes import gitpoller
+ from buildbot.test.util import changesource, gpo
+ from buildbot.util import epoch2datetime
+ 
++# Test that environment variables get propagated to subprocesses (See #2116)
++os.environ['TEST_THAT_ENVIRONMENT_GETS_PASSED_TO_SUBPROCESSES'] = 'TRUE'
++
+ class GitOutputParsing(gpo.GetProcessOutputMixin, unittest.TestCase):
+     """Test GitPoller methods for parsing git output"""
+     def setUp(self):
+@@ -120,6 +124,11 @@ class TestGitPoller(gpo.GetProcessOutputMixin,
+         self.assertSubstring("GitPoller", self.poller.describe())
+ 
+     def test_poll(self):
++        # Test that environment variables get propagated to subprocesses (See #2116)
++        os.putenv('TEST_THAT_ENVIRONMENT_GETS_PASSED_TO_SUBPROCESSES', 'TRUE')
++        self.addGetProcessOutputExpectEnv({'TEST_THAT_ENVIRONMENT_GETS_PASSED_TO_SUBPROCESSES': 'TRUE'})
++        self.addGetProcessOutputAndValueExpectEnv({'TEST_THAT_ENVIRONMENT_GETS_PASSED_TO_SUBPROCESSES': 'TRUE'})
++
+         # patch out getProcessOutput and getProcessOutputAndValue for the
+         # benefit of the _get_changes method
+         self.addGetProcessOutputResult(
+diff --git a/third_party/buildbot_8_4p1/buildbot/test/util/gpo.py b/third_party/buildbot_8_4p1/buildbot/test/util/gpo.py
+index a23bdb2..c9daf0c 100644
+--- a/third_party/buildbot_8_4p1/buildbot/test/util/gpo.py
++++ b/third_party/buildbot_8_4p1/buildbot/test/util/gpo.py
+@@ -39,6 +39,8 @@ class GetProcessOutputMixin:
+         self._gpo_patched = False
+         self._gpo_patterns = []
+         self._gpoav_patterns = []
++        self._gpo_expect_env = {}
++        self._gpoav_expect_env = {}
+ 
+     def tearDownGetProcessOutput(self):
+         pass
+@@ -54,11 +56,23 @@ class GetProcessOutputMixin:
+ 
+     # these can be overridden if necessary
+     def patched_getProcessOutput(self, bin, args, env=None, **kwargs):
++        for var, value in self._gpo_expect_env.items():
++            if env.get(var) != value:
++                self._flag_error('Expected environment to have %s = %r' % (var, value))
++
+         return self._patched(self._gpo_patterns, bin, args, env=env, **kwargs)
+ 
+     def patched_getProcessOutputAndValue(self, bin, args, env=None, **kwargs):
++        for var, value in self._gpoav_expect_env.items():
++            if env.get(var) != value:
++                self._flag_error('Expected environment to have %s = %r' % (var, value))
++
+         return self._patched(self._gpoav_patterns, bin, args, env=env, **kwargs)
+ 
++    def _flag_error(self, msg):
++        # print msg
++        assert False, msg
++
+     def _patch_gpo(self):
+         if not self._gpo_patched:
+             self.patch(utils, "getProcessOutput",
+@@ -67,6 +81,12 @@ class GetProcessOutputMixin:
+                             self.patched_getProcessOutputAndValue)
+             self._gpo_patched = True
+ 
++    def addGetProcessOutputExpectEnv(self, d):
++        self._gpo_expect_env.update(d)
++
++    def addGetProcessOutputAndValueExpectEnv(self, d):
++        self._gpoav_expect_env.update(d)
++
+     def addGetProcessOutputResult(self, pattern, result):
+         self._patch_gpo()
+         self._gpo_patterns.append((pattern, result))
