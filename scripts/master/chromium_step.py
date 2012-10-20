@@ -34,29 +34,6 @@ def change_to_revision(c):
     return 0
 
 
-def updateText(section):
-  # Reflect step status in text2.
-  if section['status'] == builder.EXCEPTION:
-    result = ['exception', section['name']]
-  elif section['status'] == builder.FAILURE:
-    result = ['failed', section['name']]
-  else:
-    result = []
-
-  section['step'].setText([section['name']] + section['step_text'])
-  section['step'].setText2(result + section['step_summary_text'])
-
-
-# derived from addCompleteLog in process/buildstep.py
-def addLogToStep(step, name, text):
-  """Add a complete log to a step."""
-  loog = step.addLog(name)
-  size = loog.chunkSize
-  for start in range(0, len(text), size):
-    loog.addStdout(text[start:start+size])
-  loog.finish()
-
-
 class GClient(source.Source):
   """Check out a source tree using gclient."""
 
@@ -409,37 +386,20 @@ class AnnotationObserver(buildstep.LogLineObserver):
   Here are a list of the currently supported annotations:
 
   @@@BUILD_STEP <stepname>@@@
-  Add a new step <stepname> after the last step. End the step at the cursor,
-  marking with last available status. Advance the step cursor to the added step.
-
-  @@@SEED_STEP <stepname>@@@
-  Add a new step <stepname> after the last step. Do not end the step at the
-  cursor, don't advance the cursor to the seeded step.
-
-  @@@STEP_CURSOR <stepname>@@@
-  Set the cursor to the named step. All further commands apply to the current
-  cursor.
+  Add a new step <stepname>. End the current step, marking with last available
+  status.
 
   @@@STEP_LINK@<label>@<url>@@@
   Add a link with label <label> linking to <url> to the current stage.
 
-  @@@STEP_STARTED@@@
-  Start the step at the cursor location.
-
   @@@STEP_WARNINGS@@@
-  Mark the current step as having warnings (orange). Move the cursor to the
-  preamble.
+  Mark the current step as having warnings (oragnge).
 
   @@@STEP_FAILURE@@@
-  Mark the current step as having failed (red). Move the cursor to the preamble.
+  Mark the current step as having failed (red).
 
   @@@STEP_EXCEPTION@@@
-  Mark the current step as having exceptions (magenta). Move the cursor to the
-  preamble.
-
-  @@@STEP_SUCCESS@@@
-  Mark the current step as having finished successfully (only needed for closing
-  seeded steps). Move the cursor to the preamble.
+  Mark the current step as having exceptions (magenta).
 
   @@@STEP_LOG_LINE@<label>@<line>@@@
   Add a log line to a log named <label>. Multiple lines can be added.
@@ -483,12 +443,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def __init__(self, command=None, *args, **kwargs):
     buildstep.LogLineObserver.__init__(self, *args, **kwargs)
+    self.annotated_logs = {}
     self.command = command
     self.sections = []
     self.annotate_status = builder.SUCCESS
     self.halt_on_failure = False
     self.honor_zero_return_code = False
-    self.cursor = None
 
   def initialSection(self):
     """Initializes the annotator's sections.
@@ -501,10 +461,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Add a log section for output before the first section heading.
     preamble = self.command.addLog('preamble')
 
-    self.addSection(self.command.name, self.command.step_status)
-    self.sections[0]['log'] = preamble
-    self.sections[0]['started'] = util.now()
-    self.cursor = self.sections[0]
+    self.sections.append({
+        'name': self.command.name,
+        'step': self.command.step_status,
+        'log': preamble,
+        'status': builder.SUCCESS,
+        'links': [],
+        'step_summary_text': [],
+        'step_text': [],
+        'started': util.now(),
+    })
 
   def describe(self):
     """Used for the 'original' step, when updated by buildbot's getText().
@@ -515,30 +481,22 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     return self.sections[0]['step_text']
 
-  def cleanupSteps(self):
-    """Mark any unfinished steps as failure (except for parent step)."""
-    for section in self.sections[1:]:
-      if section['step'].isStarted() and not section['step'].isFinished():
-        self.finishStep(section, status=builder.FAILURE)
+  def fixupLast(self, status=None):
+    # Potentially start initial section here, as initial section might have
+    # no output at all.
+    self.initialSection()
 
-  def ensureStepIsStarted(self, section):
-    if not section['step'].isStarted():
-      self.startStep(section)
-
-  def finishStep(self, section, status=None):
-    """Mark the specified step as 'finished.'"""
+    last = self.sections[-1]
     # Update status if set as an argument.
     if status is not None:
-      section['status'] = status
+      last['status'] = status
 
-    self.ensureStepIsStarted(section)
     # Final update of text.
-    updateText(section)
+    self.updateText()
     # Add timing info.
-    section['ended'] = section.get('ended', util.now())
-    started = section['started']
-    ended = section['ended']
-
+    last['ended'] = last.get('ended', util.now())
+    started = last['started']
+    ended = last['ended']
     msg = '\n\n' + '-' * 80 + '\n'
     msg += '\n'.join([
         'started: %s' % time.ctime(started),
@@ -546,20 +504,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
         'duration: %s' % util.formatInterval(ended - started),
         '',  # So we get a final \n
     ])
-    section['log'].addHeader(msg)
+    last['log'].addHeader(msg)
     # Change status (unless handling the preamble).
     if len(self.sections) != 1:
-      section['step'].stepFinished(section['status'])
+      last['step'].stepFinished(last['status'])
     # Finish log.
-    section['log'].finish()
-
-  def finishCursor(self, status=None):
-    """Mark the step at the current cursor as finished."""
-    # Potentially start initial section here, as initial section might have
-    # no output at all.
-    self.initialSection()
-
-    self.finishStep(self.cursor, status)
+    last['log'].finish()
 
   def errLineReceived(self, line):
     self.handleOutputLine(line)
@@ -582,79 +532,47 @@ class AnnotationObserver(buildstep.LogLineObserver):
   def outReceived(self, data):
     buildstep.LogLineObserver.outReceived(self, data)
     if self.sections:
-      self.ensureStepIsStarted(self.cursor)
-      self.cursor['log'].addStdout(data)
+      self.sections[-1]['log'].addStdout(data)
 
   def errReceived(self, data):
     buildstep.LogLineObserver.errReceived(self, data)
     if self.sections:
-      self.ensureStepIsStarted(self.cursor)
-      self.cursor['log'].addStderr(data)
+      self.sections[-1]['log'].addStderr(data)
 
   def headerReceived(self, data):
     if self.sections:
-      self.ensureStepIsStarted(self.cursor)
-      if self.cursor['log'].finished:
+      if self.sections[-1]['log'].finished:
         # Silently discard message when a log is marked as finished.
         # TODO(maruel): Fix race condition?
         log.msg(
             'Received data unexpectedly on a finished build step log: %r' %
             data)
       else:
-        self.cursor['log'].addHeader(data)
+        self.sections[-1]['log'].addHeader(data)
 
   def updateStepStatus(self, status):
     """Update current step status and annotation status based on a new event."""
     self.annotate_status = BuilderStatus.combine(self.annotate_status, status)
-    self.cursor['status'] = BuilderStatus.combine(self.cursor['status'], status)
-    if self.halt_on_failure and self.cursor['status'] in [
+    last = self.sections[-1]
+    last['status'] = BuilderStatus.combine(last['status'], status)
+    if self.halt_on_failure and last['status'] in [
         builder.FAILURE, builder.EXCEPTION]:
-      self.finishCursor()
-      self.cleanupSteps()
-      self.command.finished(self.cursor['status'])
+      self.fixupLast()
+      self.command.finished(last['status'])
 
-  def lookupCursor(self, step_name):
-    """Given a step name, find the latest section with that name."""
-    if self.sections:
-      for section in self.sections[::-1]:  # loop backwards in case of dup steps
-        if section['name'] == step_name:
-          return section
+  def updateText(self):
+    last = self.sections[-1]
 
-    raise IndexError('step %s doesn\'t exist!' % step_name)
+    # Reflect step status in text2.
+    if last['status'] == builder.EXCEPTION:
+      result = ['exception', last['name']]
+    elif last['status'] == builder.FAILURE:
+      result = ['failed', last['name']]
+    else:
+      result = []
 
-  def updateCursorText(self):
-    """Update the text on the waterfall at the current cursor."""
-    updateText(self.cursor)
-
-  def startStep(self, section):
-    """Marks a section as started."""
-    step = section['step']
-    if not step.isStarted():
-      step.stepStarted()
-      section['started'] = util.now()
-      # parent step already has its logging set up by buildbot
-      if section != self.sections[0]:
-        stdio = step.addLog('stdio')
-        section['log'] = stdio
-
-  def addSection(self, step_name, step=None):
-    """Adds a new section to annotator sections, does not change cursor."""
-    if not step:
-      step = self.command.step_status.getBuild().addStepWithName(step_name)
-      step.setText([step_name])
-    self.sections.append({
-        'name': step_name,
-        'step': step,
-        'log': None,
-        'annotated_logs': {},
-        'status': builder.SUCCESS,
-        'links': [],
-        'step_summary_text': [],
-        'step_text': [],
-        'started': None,
-    })
-
-    return self.sections[-1]
+    last['step'].setText([last['name']] + last['step_text'])
+    last['step'].setText2(result + last['step_summary_text'])
 
   def handleOutputLine(self, line):
     """This is called once with each line of the test log."""
@@ -665,7 +583,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Handle initial setup here, as step_status might not exist yet at init.
     self.initialSection()
 
-
     # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
     # Appends a line to the log's array. When STEP_LOG_END is called,
     # that will finalize the log and call addCompleteLog().
@@ -673,16 +590,20 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if m:
       log_label = m.group(1)
       log_line = m.group(2)
-      current_logs = self.cursor['annotated_logs']
-      current_logs[log_label] = current_logs.get(log_label, []) + [log_line]
+      if log_label in self.annotated_logs:
+        self.annotated_logs[log_label] += [log_line]
+      else:
+        self.annotated_logs[log_label] = [log_line]
 
     # Support: @@@STEP_LOG_END@<label>@<line>@@@ (finalizes log to step)
     m = re.match('^@@@STEP_LOG_END@(.*)@@@', line)
     if m:
       log_label = m.group(1)
-      current_logs = self.cursor['annotated_logs']
-      log_text = '\n'.join(current_logs.get(log_label, []))
-      addLogToStep(self.cursor['step'], log_label, log_text)
+      if log_label in self.annotated_logs:
+        log_text = '\n'.join(self.annotated_logs[log_label])
+      else:
+        log_text = ''
+      self.command.addCompleteLog(log_label, log_text)
 
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
     # Also support depreceated @@@link@<name>@<url>@@@
@@ -692,37 +613,23 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if m:
       link_label = m.group(1)
       link_url = m.group(2)
-      self.cursor['links'].append((link_label, link_url))
-      self.cursor['step'].addURL(link_label, link_url)
-    # Support: @@@STEP_STARTED@@@ (start a step at cursor)
-    if line.startswith('@@@STEP_STARTED@@@'):
-      self.startStep(self.cursor)
-    # Support: @@@STEP_SUCCESS@@@
-    if line.startswith('@@@STEP_SUCCESS@@@'):
-      self.updateStepStatus(builder.SUCCESS)
-      self.finishCursor()
-      self.cursor = self.sections[0]
+      self.sections[-1]['links'].append((link_label, link_url))
+      self.sections[-1]['step'].addURL(link_label, link_url)
     # Support: @@@STEP_WARNINGS@@@ (warn on a stage)
     # Also support deprecated @@@BUILD_WARNINGS@@@
     if (line.startswith('@@@STEP_WARNINGS@@@') or
         line.startswith('@@@BUILD_WARNINGS@@@')):
       self.updateStepStatus(builder.WARNINGS)
-      self.finishCursor()
-      self.cursor = self.sections[0]
     # Support: @@@STEP_FAILURE@@@ (fail a stage)
     # Also support deprecated @@@BUILD_FAILED@@@
     if (line.startswith('@@@STEP_FAILURE@@@') or
         line.startswith('@@@BUILD_FAILED@@@')):
       self.updateStepStatus(builder.FAILURE)
-      self.finishCursor()
-      self.cursor = self.sections[0]
     # Support: @@@STEP_EXCEPTION@@@ (exception on a stage)
     # Also support deprecated @@@BUILD_FAILED@@@
     if (line.startswith('@@@STEP_EXCEPTION@@@') or
         line.startswith('@@@BUILD_EXCEPTION@@@')):
       self.updateStepStatus(builder.EXCEPTION)
-      self.finishCursor()
-      self.cursor = self.sections[0]
     # Support: @@@HALT_ON_FAILURE@@@ (halt if a step fails immediately)
     if line.startswith('@@@HALT_ON_FAILURE@@@'):
       self.halt_on_failure = True
@@ -732,33 +639,22 @@ class AnnotationObserver(buildstep.LogLineObserver):
       self.honor_zero_return_code = True
     # Support: @@@STEP_CLEAR@@@ (reset step description)
     if line.startswith('@@@STEP_CLEAR@@@'):
-      self.cursor['step_text'] = []
-      self.updateCursorText()
+      self.sections[-1]['step_text'] = []
+      self.updateText()
     # Support: @@@STEP_SUMMARY_CLEAR@@@ (reset step summary)
     if line.startswith('@@@STEP_SUMMARY_CLEAR@@@'):
-      self.cursor['step_summary_text'] = []
-      self.updateCursorText()
+      self.sections[-1]['step_summary_text'] = []
+      self.updateText()
     # Support: @@@STEP_TEXT@<msg>@@@
     m = re.match('^@@@STEP_TEXT@(.*)@@@', line)
     if m:
-      self.cursor['step_text'].append(m.group(1))
-      self.updateCursorText()
+      self.sections[-1]['step_text'].append(m.group(1))
+      self.updateText()
     # Support: @@@STEP_SUMMARY_TEXT@<msg>@@@
     m = re.match('^@@@STEP_SUMMARY_TEXT@(.*)@@@', line)
     if m:
-      self.cursor['step_summary_text'].append(m.group(1))
-      self.updateCursorText()
-    # Support: @@@SEED_STEP <stepname>@@@ (seed a new section)
-    m = re.match('^@@@SEED_STEP (.*)@@@', line)
-    if m:
-      step_name = m.group(1)
-      # Add new one.
-      self.addSection(step_name)
-    # Support: @@@STEP_CURSOR <stepname>@@@ (set cursor to specified section)
-    m = re.match('^@@@STEP_CURSOR (.*)@@@', line)
-    if m:
-      step_name = m.group(1)
-      self.cursor = self.lookupCursor(step_name)
+      self.sections[-1]['step_summary_text'].append(m.group(1))
+      self.updateText()
     # Support: @@@BUILD_STEP <step_name>@@@ (start a new section)
     m = re.match('^@@@BUILD_STEP (.*)@@@', line)
     if m:
@@ -766,10 +662,22 @@ class AnnotationObserver(buildstep.LogLineObserver):
       # Ignore duplicate consecutive step labels (for robustness).
       if step_name != self.sections[-1]['name']:
         # Finish up last section.
-        self.finishCursor()
-        section = self.addSection(step_name)
-        self.startStep(section)
-        self.cursor = section
+        self.fixupLast()
+        # Add new one.
+        step = self.command.step_status.getBuild().addStepWithName(step_name)
+        step.stepStarted()
+        step.setText([step_name])
+        stdio = step.addLog('stdio')
+        self.sections.append({
+            'name': step_name,
+            'step': step,
+            'log': stdio,
+            'status': builder.SUCCESS,
+            'links': [],
+            'step_summary_text': [],
+            'step_text': [],
+            'started': util.now(),
+        })
 
   def handleReturnCode(self, return_code):
     # Treat all non-zero return codes as failure.
@@ -778,13 +686,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Besides, applications can always intercept return codes and emit
     # STEP_* tags.
     if return_code == 0:
-      self.finishCursor()
+      self.fixupLast()
       if self.honor_zero_return_code:
         self.annotate_status = builder.SUCCESS
     else:
       self.annotate_status = builder.FAILURE
-      self.finishCursor(builder.FAILURE)
-    self.cleanupSteps()
+      self.fixupLast(builder.FAILURE)
 
 
 class AnnotatedCommand(ProcessLogShellStep):
@@ -843,8 +750,7 @@ class AnnotatedCommand(ProcessLogShellStep):
                                x.name != 'preamble']
 
   def interrupt(self, reason):
-    self.script_observer.finishCursor(builder.EXCEPTION)
-    self.script_observer.cleanupSteps()
+    self.script_observer.fixupLast(builder.EXCEPTION)
     self._removePreamble()
     return ProcessLogShellStep.interrupt(self, reason)
 
