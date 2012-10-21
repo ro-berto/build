@@ -162,11 +162,11 @@ linux_aura_tests = [
   'printing',
   'remoting',
   'views',
+  'ui_unittests',
   'unit_ipc',
   'unit_sql',
   'unit_sync',
   'unit_unit',
-  'ui_unittests',
 ]
 
 linux_aura_options=[
