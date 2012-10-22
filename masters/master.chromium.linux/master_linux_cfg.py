@@ -27,6 +27,7 @@ sharded_tests = [
   'content_browsertests',
   'cc_unittests',
   'media_unittests',
+  'sync_integration_tests',
   'webkit_compositor_bindings_unittests',
 ]
 
