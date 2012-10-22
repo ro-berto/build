@@ -947,7 +947,7 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_platform == 'win32':
       python_cmd = self.GetPythonTestCommand(script, ['-v'] + args)
     elif self._target_platform == 'darwin':
-      python_cmd = self.GetTestCommand('/usr/bin/python2.5',
+      python_cmd = self.GetTestCommand('/usr/bin/python2.6',
                                        [script, '-v'] + args)
     elif self._target_platform.startswith('linux'):
       python_cmd = self.GetTestCommand('/usr/bin/python', [script, '-v'] + args)
