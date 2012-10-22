@@ -434,6 +434,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           'page_cycler_2012Q2-netsim',
           test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
           factory_properties=fp, perf=True)
+    if R('scrolling_benchmark'):
+      f.AddChromeRemoteControlTest('scrolling_benchmark', 'top_25.json', fp)
 
     if R('memory'):
       f.AddMemoryTests(fp)

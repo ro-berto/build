@@ -930,6 +930,63 @@ class ChromiumCommands(commands.FactoryCommands):
                'run_webdriver_tests.py')
     self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
 
+  def _GetReferenceBuildPath(self):
+    J = self.PathJoin
+    ref_dir = J('src', 'chrome', 'tools', 'test', 'reference_build')
+    if self._target_platform == 'win32':
+      return J(ref_dir, 'chrome_win', 'chrome.exe')
+    elif self._target_platform == 'darwin':
+      return J(ref_dir, 'chrome_mac', 'Chromium.app', 'Contents', 'MacOS',
+               'Chromium')
+    elif self._target_platform.startswith('linux'):
+      return J(ref_dir, 'chrome_linux', 'chrome')
+    return None
+
+  def _GetPythonTestCommand(self, script, args, factory_properties):
+    python_cmd = ['python', script, '-v'] + args
+    if self._target_platform == 'win32':
+      python_cmd = self.GetPythonTestCommand(script, ['-v'] + args)
+    elif self._target_platform == 'darwin':
+      python_cmd = self.GetTestCommand('/usr/bin/python2.5',
+                                       [script, '-v'] + args)
+    elif self._target_platform.startswith('linux'):
+      python_cmd = self.GetTestCommand('/usr/bin/python', [script, '-v'] + args)
+    return python_cmd
+
+  def AddChromeRemoteControlTest(self, test_name, page_set,
+                                 factory_properties=None, timeout=1200):
+    """Adds a Chrome Remote Control performance test.
+
+    Args:
+      test_name: The name of the benchmark module to run.
+      page_set: The path to the page set to run the benchmark against. Must be
+        relative to src/tools/perf/page_sets/.
+      factory_properties: A dictionary of factory property values.
+    """
+    factory_properties = factory_properties or {}
+    J = self.PathJoin
+
+    script = J('src', 'tools', 'perf', 'run_multipage_benchmarks')
+    page_set = J('src', 'tools', 'perf', 'page_sets', page_set)
+
+    # Run the test against the target chrome build.
+    test_args = ['--browser=release', test_name, page_set]
+    test_cmd = self._GetPythonTestCommand(script, test_args, factory_properties)
+    cmd = ' '.join(test_cmd)
+
+    # Run the test against the reference build on platforms where it exists.
+    ref_build = self._GetReferenceBuildPath()
+    if ref_build:
+      ref_args = ['--browser=exact', '--browser-executable=%s' % ref_build,
+                  test_name, page_set]
+      ref_cmd = self._GetPythonTestCommand(script, ref_args, factory_properties)
+      cmd += ' && ' + ' '.join(ref_cmd)
+
+    command_class = self.GetPerfStepClass(
+        factory_properties, test_name, process_log.GraphingLogProcessor)
+    self.AddTestStep(command_class, test_name, cmd, timeout=timeout,
+                     do_step_if=self.TestStepFilter)
+
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
                               src_base='.',
