@@ -59,10 +59,10 @@ class GClientSolution(object):
     """
     self.svn_url = svn_url
     self.name = name
-    self.custom_deps_list = custom_deps_list or []
-    self.custom_vars_list = custom_vars_list or []
+    self.custom_deps_list = (custom_deps_list or [])[:]
+    self.custom_vars_list = (custom_vars_list or [])[:]
     self.custom_deps_file = custom_deps_file
-    self.needed_components = needed_components
+    self.needed_components = (needed_components or {}).copy()
     self.safesync_url = safesync_url
 
     if not self.name:

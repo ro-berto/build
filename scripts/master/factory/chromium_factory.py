@@ -72,8 +72,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # $$WK_REV$$ below will be substituted with the revision that triggered the
   # build in chromium_step.py@GClient.startVC. Use this only with builds
   # triggered by a webkit poller.
-  CUSTOM_VARS_WEBKIT_LATEST = [('webkit_trunk', config.Master.webkit_trunk_url),
-                               ('webkit_revision', '$$WK_REV$$')]
+  CUSTOM_VARS_WEBKIT_LATEST = [('webkit_revision', '$$WK_REV$$')]
   CUSTOM_VARS_NACL_TRUNK_URL = ('nacl_trunk', config.Master.nacl_trunk_url)
   # safe sync urls
   SAFESYNC_URL_CHROMIUM = 'http://chromium-status.appspot.com/lkgr'
@@ -895,7 +894,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties = factory_properties or {}
     if on_nacl_waterfall:
       factory_properties['primary_repo'] = 'nacl_'
-    self._solutions[0].custom_vars_list = self.CUSTOM_VARS_NACL_LATEST
+    # Remove nacl_trunk variable.
+    self._solutions[0].custom_vars_list = [
+      v for v in self._solutions[0].custom_vars_list if v[0] != 'nacl_trunk'
+    ]
+    self._solutions[0].custom_vars_list.extend(self.CUSTOM_VARS_NACL_LATEST)
     self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
     if factory_properties.get('needs_nacl_valgrind'):
       self._solutions[0].custom_deps_list.append(self.CUSTOM_DEPS_NACL_VALGRIND)
@@ -904,7 +907,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 factory_properties)
 
   def _InitWebkitLatestFactorySettings(self, factory_properties):
-    self._solutions[0].custom_vars_list = self.CUSTOM_VARS_WEBKIT_LATEST
+    self._solutions[0].custom_vars_list.extend(self.CUSTOM_VARS_WEBKIT_LATEST)
 
     # This will let builders embed their webkit revision in their output
     # filename and will let testers look for zip files containing a webkit
