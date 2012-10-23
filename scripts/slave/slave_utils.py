@@ -419,7 +419,7 @@ def GSUtilCopyDir(src_dir, gs_base, dest_dir=None, gs_acl=None):
       path = os.path.join(dest_dir, path)
 
     # Trim the filename and last slash off to create a destination path.
-    path = path.rpartiton(os.sep + os.path.basename(path))[0]
+    path = path.rpartition(os.sep + os.path.basename(path))[0]
 
     # If we're on windows, we need to reverse slashes, gsutil wants posix paths.
     if chromium_utils.IsWindows():
