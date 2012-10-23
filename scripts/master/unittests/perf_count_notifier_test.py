@@ -48,8 +48,11 @@ TEST_STATUS_MULTI_REGRESS_IMPROVE = (
 
 def getBuildStatusMock(name):
   """Mocks a build status with a name as the parameter."""
+  builder = mock.Mock()
+  builder.getName.return_value = name
+
   build_status = mock.Mock()
-  build_status.getName.return_value = name
+  build_status.getBuilder.return_value = builder
   build_status.getSourceStamp.return_value = None
   build_status.getResponsibleUsers.return_value = ''
   build_status.getChanges.return_value = ''

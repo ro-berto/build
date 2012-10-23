@@ -140,7 +140,7 @@ class PerfCountNotifier(ChromiumNotifier):
     if not results:
       results = [FAILURE]
 
-    builder_name = build_status.getName()
+    builder_name = build_status.getBuilder().getName()
     # If it is a success step, i.e. not interesting, then reset counters.
     if results[0] == SUCCESS:
       self._DeleteAllForBuild(builder_name)
