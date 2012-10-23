@@ -61,17 +61,18 @@ class PerfCountNotifier(ChromiumNotifier):
     """Initializes a new email results used by each email sent."""
     self.new_email_results = {REGRESS: [], IMPROVE: []}
 
-  def _UpdateResults(self, results):
+  def _UpdateResults(self, builder_name, results):
     """Updates the results by adding/removing from the history.
 
     Args:
       results: List of result tuples, each tuple is of the form
-          ('REGRESS|IMPROVE', 'value_name').
+          ('REGRESS|IMPROVE', 'value_name', 'builder').
     """
     new_results_ids = [' '.join(result) for result in results]
     # Delete the old results if the new results do not have them.
     to_delete = [old_id for old_id in self.recent_results.failures
-                 if old_id not in new_results_ids]
+                 if (old_id not in new_results_ids and
+                     old_id.endswith(builder_name))]
 
     for old_id in to_delete:
       self._DeleteResult(old_id)
@@ -87,13 +88,13 @@ class PerfCountNotifier(ChromiumNotifier):
     IMPROVE result, if any, is reset.
 
     Args:
-      result: A tuple of the form ('REGRESS|IMPROVE', 'value_name').
+      result: A tuple of the form ('REGRESS|IMPROVE', 'value_name', 'builder').
     """
     self.recent_results.Put(' '.join(result))
     if result[0] == REGRESS:
-      counter_id = IMPROVE + ' ' + result[1]
+      counter_id = IMPROVE + ' '.join(result[1:])
     else:
-      counter_id = REGRESS + ' ' + result[1]
+      counter_id = REGRESS + ' '.join(result[1:])
     # Reset counter_id count since this breaks the consecutive count of it.
     self._DeleteResult(counter_id)
 
@@ -111,6 +112,13 @@ class PerfCountNotifier(ChromiumNotifier):
       # history limitted by FailuresHistory.size_limit.
       del self.recent_results.failures[result_id]
       self.recent_results.failures_count -= num_results
+
+  def _DeleteAllForBuild(self, builder_name):
+    """Deletes all results related to a builder."""
+    to_delete = [result for result in self.recent_results.failures
+                 if result.endswith(builder_name)]
+    for result in to_delete:
+      self._DeleteResult(result)
 
   def _IsPerfStep(self, step_status):
     """Checks if the step name is one of the defined perf tests names."""
@@ -132,9 +140,10 @@ class PerfCountNotifier(ChromiumNotifier):
     if not results:
       results = [FAILURE]
 
+    builder_name = build_status.getName()
     # If it is a success step, i.e. not interesting, then reset counters.
     if results[0] == SUCCESS:
-      self._InitRecentResults()
+      self._DeleteAllForBuild(builder_name)
       return False
 
     # step_text is similar to:
@@ -142,18 +151,20 @@ class PerfCountNotifier(ChromiumNotifier):
     # time/t (89.07%) PERF_IMPROVE: fps/video (5.40%) </div>
     #
     # regex would return tuples of the form:
-    # ('REGRESS', 'time/t')
-    # ('IMPROVE', 'fps/video')
+    # ('REGRESS', 'time/t', 'linux-rel')
+    # ('IMPROVE', 'fps/video', 'win-debug')
+    #
+    # It is important to put the builder name as the last element in the tuple
+    # since it is used to check tests that belong to same builder.
     step_text = ' '.join(step_status.getText())
     log.msg('[PerfCountNotifier] Analyzing failure text: %s.' % step_text)
 
     perf_regress = perf_improve = ''
     perf_results = []
-
     if PERF_REGRESS in step_text:
       perf_regress = step_text[step_text.find(PERF_REGRESS) + len(PERF_REGRESS)
                                + 1: step_text.find(PERF_IMPROVE)]
-      perf_results.extend([(REGRESS, test_name) for test_name in
+      perf_results.extend([(REGRESS, test_name, builder_name) for test_name in
                            re.findall('(\S+) (?=\(.+\))', perf_regress)])
 
     if PERF_IMPROVE in step_text:
@@ -161,7 +172,7 @@ class PerfCountNotifier(ChromiumNotifier):
       # we assume that PERF_REGRESS (if any) appears before PERF_IMPROVE.
       perf_improve = step_text[step_text.find(PERF_IMPROVE) + len(PERF_IMPROVE)
                                + 1:]
-      perf_results.extend([(IMPROVE, test_name) for test_name in
+      perf_results.extend([(IMPROVE, test_name, builder_name) for test_name in
                            re.findall('(\S+) (?=\(.+\))', perf_improve)])
 
     # If there is no regress or improve then this could be warning or exception.
@@ -178,8 +189,8 @@ class PerfCountNotifier(ChromiumNotifier):
     is_interesting = False
     update_list = []
     for result in perf_results:
-      if len(result) != 2:
-        # We expect a tuple similar to ('REGRESS', 'time/t')
+      if len(result) != 3:
+        # We expect a tuple similar to ('REGRESS', 'time/t', 'linux-rel')
         continue
       result_id = ' '.join(result)
       update_list.append(result)
@@ -199,7 +210,7 @@ class PerfCountNotifier(ChromiumNotifier):
           log.msg('[PerfCountNotifier] Result: %s has already been notified.' %
                   result_id)
 
-    self._UpdateResults(update_list)
+    self._UpdateResults(builder_name, update_list)
 
     return is_interesting
 

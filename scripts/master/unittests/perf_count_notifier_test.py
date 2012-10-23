@@ -46,6 +46,16 @@ TEST_STATUS_MULTI_REGRESS_IMPROVE = (
     '(44.07%), cpu/t2 (3.0%) </div>')
 
 
+def getBuildStatusMock(name):
+  """Mocks a build status with a name as the parameter."""
+  build_status = mock.Mock()
+  build_status.getName.return_value = name
+  build_status.getSourceStamp.return_value = None
+  build_status.getResponsibleUsers.return_value = ''
+  build_status.getChanges.return_value = ''
+  return build_status
+
+
 class PerfCountNotifierTest(unittest.TestCase):
 
   def setUp(self):
@@ -76,9 +86,13 @@ class PerfCountNotifierTest(unittest.TestCase):
     """Mocks the getName which returns the build_status step name."""
     return self.notifier.step_names[0]
 
+  def getResultCount(self, result_name):
+    """Returns the number of times result_name has been stored."""
+    return self.notifier.recent_results.GetCount(result_name)
+
   def testSuccessIsNotInteresting(self):
     """Test success step is not interesting."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [SUCCESS]
     for _ in range(self.notifier.minimum_count):
@@ -87,7 +101,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingAfterMinimumResults(self):
     """Test step is interesting only after minimum consecutive results."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -98,7 +112,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingResetByCounterResults(self):
     """Test step is not interesting if a counter result appears."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -118,7 +132,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingResetBySuccess(self):
     """Test step count reset after a successful pass."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -138,7 +152,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingException(self):
     """Test step is interesting when step has exception."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT_EXCEPTION)
     results = [FAILURE]
     self.assertTrue(self.notifier.isInterestingStep(
@@ -146,7 +160,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testNotificationOnce(self):
     """Test isInsteresting happens only once."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -163,7 +177,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingResetByOtherResults(self):
     """Test isInsteresting resets after different results appear."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -183,55 +197,55 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testCountIsCorrectMultipleRegressOnly(self):
     """Test count of multiple REGRESS only is correct."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
       self.notifier.isInterestingStep(build_status, step_status, results)
 
-    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS time/t'),
+    self.assertEqual(self.getResultCount('REGRESS time/t test_build'),
                      self.notifier.minimum_count)
-    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS fps/video'),
+    self.assertEqual(self.getResultCount('REGRESS fps/video test_build'),
                      self.notifier.minimum_count)
     self.assertEqual(
-        self.notifier.recent_results.GetCount('REGRESS fps/video2'),
+        self.getResultCount('REGRESS fps/video2 test_build'),
         self.notifier.minimum_count)
 
   def testCountIsCorrectMultipleImproveOnly(self):
     """Test count of multiple IMPROVE only is correct."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_IMPROVE)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
       self.notifier.isInterestingStep(build_status, step_status, results)
 
-    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE time/t'),
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_build'),
                      self.notifier.minimum_count)
-    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE fps/video'),
+    self.assertEqual(self.getResultCount('IMPROVE fps/video test_build'),
                      self.notifier.minimum_count)
     self.assertEqual(
-        self.notifier.recent_results.GetCount('IMPROVE fps/video2'),
+        self.getResultCount('IMPROVE fps/video2 test_build'),
         self.notifier.minimum_count)
 
   def testCountIsCorrectMultipleRegressImprove(self):
     """Test count of multiple REGRESS and IMPROVE is correct."""
-    build_status = None
+    build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS_IMPROVE)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
       self.notifier.isInterestingStep(build_status, step_status, results)
 
-    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS time/t'),
+    self.assertEqual(self.getResultCount('REGRESS time/t test_build'),
                      self.notifier.minimum_count)
-    self.assertEqual(self.notifier.recent_results.GetCount('REGRESS fps/video'),
+    self.assertEqual(self.getResultCount('REGRESS fps/video test_build'),
                      self.notifier.minimum_count)
     self.assertEqual(
-        self.notifier.recent_results.GetCount('REGRESS fps/video2'),
+        self.getResultCount('REGRESS fps/video2 test_build'),
         self.notifier.minimum_count)
 
-    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE cpu/t'),
+    self.assertEqual(self.getResultCount('IMPROVE cpu/t test_build'),
                      self.notifier.minimum_count)
-    self.assertEqual(self.notifier.recent_results.GetCount('IMPROVE cpu/t2'),
+    self.assertEqual(self.getResultCount('IMPROVE cpu/t2 test_build'),
                      self.notifier.minimum_count)
 
   def testEmailContext(self):
@@ -241,10 +255,7 @@ class PerfCountNotifierTest(unittest.TestCase):
     self.notifier.minimum_delay_between_alert = 0
 
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
-    build_status = mock.Mock()
-    build_status.getSourceStamp.return_value = None
-    build_status.getResponsibleUsers.return_value = ''
-    build_status.getChanges.return_value = ''
+    build_status = getBuildStatusMock('test_build')
 
     self.notifier.master_status = mock.Mock()
     self.notifier.master_status.getBuildbotURL.return_value = ''
@@ -282,6 +293,53 @@ class PerfCountNotifierTest(unittest.TestCase):
                     email_content)
     self.assertTrue('PERF_REGRESS: time/t2.' in email_content)
     self.assertTrue('PERF_IMPROVE: fps/video2.' in email_content)
+
+  def testResultsForDifferentBuilders(self):
+    """Tests that results are unique per builder."""
+    build_linux = getBuildStatusMock('test_linux')
+    build_win = getBuildStatusMock('test_win')
+    step_status = BuildStepStatusMock(TEST_STATUS_MULTI_IMPROVE)
+    results = [FAILURE]
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_linux, step_status, results)
+      self.notifier.isInterestingStep(build_win, step_status, results)
+
+    # Check results store the builder names
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_win'),
+                     self.notifier.minimum_count)
+
+    # Reset only build_linux results
+    results = [SUCCESS]
+    self.assertFalse(self.notifier.isInterestingStep(
+        build_linux, step_status, results))
+
+    # Check build_win results are intact.
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_linux'), 0)
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_win'),
+                     self.notifier.minimum_count)
+
+    results = [FAILURE]
+    # Add build_lin results
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_linux, step_status, results)
+
+    # Check results store the builder names
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_win'),
+                     self.notifier.minimum_count)
+
+    # Reset only build_win results
+    results = [SUCCESS]
+    self.assertFalse(self.notifier.isInterestingStep(
+        build_win, step_status, results))
+
+    # Check build_lin results are intact.
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_win'), 0)
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_linux'),
+                     self.notifier.minimum_count)
 
 
 class BuildStepStatusMock(mock.Mock):
