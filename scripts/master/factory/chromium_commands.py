@@ -95,9 +95,6 @@ class ChromiumCommands(commands.FactoryCommands):
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
-    # scripts in scripts/slave
-    self._runbuild = J(self._script_dir, 'runbuild.py')
-
     # The _update_scripts_command will be run in the _update_scripts_dir to
     # udpate the slave's own script checkout.
     self._update_scripts_dir = '..'
@@ -275,11 +272,23 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'check_deps', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddBuildrunnerCheckDepsStep(self):
+    cmd = [self._python, self._check_deps_tool,
+           '--root', self._repository_root]
+    self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_deps', cmd,
+                                do_step_if=self.TestStepFilter)
+
   def AddCheckBinsStep(self):
     build_dir = os.path.join(self._build_dir, self._target)
     cmd = [self._python, self._check_bins_tool, build_dir]
     self.AddTestStep(shell.ShellCommand, 'check_bins', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerCheckBinsStep(self):
+    build_dir = os.path.join(self._build_dir, self._target)
+    cmd = [self._python, self._check_bins_tool, build_dir]
+    self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_bins', cmd,
+                                do_step_if=self.TestStepFilter)
 
   def AddCheckPermsStep(self):
     cmd = [self._python, self._check_perms_tool,
@@ -287,11 +296,23 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'check_perms', cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddBuildrunnerCheckPermsStep(self):
+    cmd = [self._python, self._check_perms_tool,
+           '--root', self._repository_root]
+    self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_perms', cmd,
+                                do_step_if=self.TestStepFilter)
+
   def AddCheckLicensesStep(self, factory_properties):
     cmd = [self._python, self._check_licenses_tool,
            '--root', self._repository_root]
     self.AddTestStep(shell.ShellCommand, 'check_licenses', cmd,
                      do_step_if=self.GetTestStepFilter(factory_properties))
+
+  def AddBuildrunnerCheckLicensesStep(self, factory_properties):
+    cmd = [self._python, self._check_licenses_tool,
+           '--root', self._repository_root]
+    self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_licenses', cmd,
+        do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddCheckLKGRStep(self):
     """Check LKGR; if unchanged, cancel the build.
@@ -728,6 +749,30 @@ class ChromiumCommands(commands.FactoryCommands):
         cmd,
         do_step_if=self.TestStepFilter)
 
+  def AddBuildrunnerDeps2GitStep(self, verify=True):
+    J = self.PathJoin
+    deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
+    cmd = [self._python, deps2git_tool,
+           '-d', J(self._repository_root, 'DEPS'),
+           '-o', J(self._repository_root, '.DEPS.git')]
+    if verify:
+      cmd.append('--verify')
+    self.AddBuildrunnerTestStep(
+        shell.ShellCommand,
+        'check_deps2git',
+        cmd,
+        do_step_if=self.TestStepFilter)
+
+    deps2submodules_tool = J(self._repository_root, 'tools', 'deps2git',
+                             'deps2submodules.py')
+    cmd = [self._python, deps2submodules_tool, '--gitless',
+           J(self._repository_root, '.DEPS.git')]
+    self.AddBuildrunnerTestStep(
+        shell.ShellCommand,
+        'check_deps2submodules',
+        cmd,
+        do_step_if=self.TestStepFilter)
+
   def AddReliabilityTests(self, platform):
     cmd = [self._python,
            self._reliability_tool,
@@ -747,6 +792,16 @@ class ChromiumCommands(commands.FactoryCommands):
                                        factory_properties,
                                        arg_list=['-clean'])
 
+  def AddBuildrunnerInstallerTests(self, factory_properties):
+    if self._target_platform == 'win32':
+      self.AddAnnotatedGTestTestStep('installer_util_unittests',
+                                     factory_properties)
+      if (self._target == 'Release' and
+          not factory_properties.get('disable_mini_installer_test')):
+        self.AddBuildrunnerGTest('mini_installer_test',
+                                 factory_properties,
+                                 arg_list=['-clean'])
+
   def AddAnnotatedChromeUnitTests(self, factory_properties):
     self.AddAnnotatedGTestTestStep('ipc_tests', factory_properties)
     self.AddAnnotatedGTestTestStep('sync_unit_tests', factory_properties)
@@ -757,12 +812,29 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_platform == 'win32':
       self.AddAnnotatedGTestTestStep('views_unittests', factory_properties)
 
+  def AddBuildrunnerChromeUnitTests(self, factory_properties):
+    self.AddBuildrunnerGTest('ipc_tests', factory_properties)
+    self.AddBuildrunnerGTest('sync_unit_tests', factory_properties)
+    self.AddBuildrunnerGTest('unit_tests', factory_properties)
+    self.AddBuildrunnerGTest('sql_unittests', factory_properties)
+    self.AddBuildrunnerGTest('ui_unittests', factory_properties)
+    self.AddBuildrunnerGTest('content_unittests', factory_properties)
+    if self._target_platform == 'win32':
+      self.AddBuildrunnerGTest('views_unittests', factory_properties)
+
   def AddAnnotatedSyncIntegrationTests(self, factory_properties):
     options = ['--ui-test-action-max-timeout=120000']
 
     self.AddAnnotatedGTestTestStep('sync_integration_tests',
                                    factory_properties, '',
                                    options)
+
+  def AddBuildrunnerSyncIntegrationTests(self, factory_properties):
+    options = ['--ui-test-action-max-timeout=120000']
+
+    self.AddBuildrunnerGTest('sync_integration_tests',
+                             factory_properties, '',
+                             options)
 
   def AddAnnotatedBrowserTests(self, factory_properties=None):
     description = ''
@@ -776,6 +848,19 @@ class ChromiumCommands(commands.FactoryCommands):
                                    description, options,
                                    total_shards=total_shards,
                                    shard_index=shard_index)
+
+  def AddBuildrunnerBrowserTests(self, factory_properties):
+    description = ''
+    options = ['--lib=browser_tests']
+
+    total_shards = factory_properties.get('browser_total_shards')
+    shard_index = factory_properties.get('browser_shard_index')
+    options.append(factory_properties.get('browser_tests_filter', []))
+
+    self.AddBuildrunnerGTest('browser_tests', factory_properties,
+                             description, options,
+                             total_shards=total_shards,
+                             shard_index=shard_index)
 
   def AddDomCheckerTests(self):
     cmd = [self._python, self._test_tool,
@@ -792,6 +877,22 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(shell.ShellCommand, 'dom_checker_tests', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerDomCheckerTests(self):
+    cmd = [self._python, self._test_tool,
+           '--target', self._target,
+           '--build-dir', self._build_dir]
+
+    cmd.extend(['--with-httpd',
+                self.PathJoin('src', 'chrome', 'test', 'data')])
+
+    cmd.extend([self.GetExecutableName('performance_ui_tests'),
+                '--gtest_filter=DomCheckerTest.*',
+                '--gtest_print_time',
+                '--run-dom-checker-test'])
+
+    self.AddBuildrunnerTestStep(shell.ShellCommand, 'dom_checker_tests', cmd,
+                                do_step_if=self.TestStepFilter)
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200,
                     factory_properties=None,
@@ -1125,6 +1226,15 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddBuildrunnerWebkitLint(self, factory_properties=None):
+    """Adds a step to the factory to lint the test_expectations.txt file."""
+    cmd = [self._python, self._lint_test_files_tool,
+           '--build-dir', self._build_dir, '--target', self._target]
+    self.AddBuildrunnerTestStep(shell.ShellCommand,
+                                test_name='webkit_lint',
+                                test_command=cmd,
+                                do_step_if=self.TestStepFilter)
+
   def AddWebkitTests(self, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
 
@@ -1427,24 +1537,6 @@ class ChromiumCommands(commands.FactoryCommands):
                           command=cmd,
                           env=env,
                           factory_properties=factory_properties)
-
-  def AddBuildStep(self, factory_properties=None, name='build', env=None,
-                   timeout=6000):
-    """Add annotated step to use the buildrunner to run steps on the slave."""
-
-    factory_properties = factory_properties or {}
-
-    cmd = [self._python, self._runbuild, '--annotate']
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-
-    self._factory.addStep(chromium_step.AnnotatedCommand,
-                          name=name,
-                          description=name,
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          command=cmd,
-                          env=env)
 
   def AddMediaTests(self, test_groups, factory_properties=None, timeout=1200):
     """Adds media test steps according to the specified test_groups.

@@ -870,7 +870,7 @@ class PerfStepAnnotatedCommand(AnnotatedCommand):
       for received_log in self.step_status.getLogs():
         # TODO(xusydoc): do we need to skip 'stdio' and 'preamble' here?
         if log == self._GRAPH_LIST:
-          self._SaveGraphInfo(self.getLog(received_log))
+          self._SaveGraphInfo(received_log)
         else:
-          self._Prepend(received_log, self.getLog(received_log))
+          self._Prepend(received_log, received_log)
     return AnnotatedCommand.commandComplete(self, cmd)

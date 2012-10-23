@@ -25,6 +25,7 @@ from slave import runbuild_utils
 from common import master_cfg_utils
 from common import chromium_utils
 
+
 def get_args():
   """Process command-line arguments."""
 
@@ -213,6 +214,7 @@ def args_ok(inoptions, pos_args):
 
   return True
 
+
 def execute(args):
   if args.list_masters:
     masterpairs = master_cfg_utils.GetMasters()
@@ -259,7 +261,7 @@ def execute(args):
     buildsetup['revision'] = '%d' % args.revision
     buildsetup['branch'] = 'src'
 
-  steplist, build = builder_utils.MockBuild(my_builder, buildsetup,  mastername,
+  steplist, build = builder_utils.MockBuild(my_builder, buildsetup, mastername,
       slavename, basepath=args.builderpath,
       build_properties=args.build_properties)
 
@@ -294,7 +296,6 @@ def execute(args):
   if args.output_build_properties or args.output_factory_properties:
     return 0
 
-
   commands = builder_utils.GetCommands(steplist)
 
   start_time = time.clock()
@@ -302,7 +303,6 @@ def execute(args):
       getattr(args, 'step_regex', None),
       getattr(args, 'stepreject_reject', None),
       args.annotate, args.log)
-
 
   end_time = time.clock()
 
@@ -318,6 +318,7 @@ def execute(args):
     if commands_executed < 1:
       print '0 commands executed.'
   return 0
+
 
 def main():
   opts, args = get_args()

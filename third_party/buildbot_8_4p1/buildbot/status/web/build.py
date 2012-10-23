@@ -95,10 +95,10 @@ class StatusResourceBuild(HtmlResource):
         for s in b.getSteps():
             step = {'name': s.getName() }
 
-            if s.isFinished():
-                if s.isHidden():
-                    continue
+            if s.isHidden():
+              continue
 
+            if s.isFinished():
                 step['css_class'] = css_classes[s.getResults()[0]]
                 (start, end) = s.getTimes()
                 step['time_to_run'] = util.formatInterval(end - start)

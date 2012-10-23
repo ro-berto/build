@@ -6,8 +6,7 @@
 
 Based on chromium_factory.py and adds chromium-specific steps."""
 
-from buildbot.process import factory
-
+from master.factory import build_factory
 from master.factory import chromium_factory
 from master.factory import swarm_commands
 
@@ -72,7 +71,7 @@ def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
 
 def SwarmTestBuilder(swarm_server):
   """Create a basic swarm builder that runs tests via swarm."""
-  f = factory.BuildFactory()
+  f = build_factory.BuildFactory()
 
   swarm_command_obj = swarm_commands.SwarmCommands(f)
 

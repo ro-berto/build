@@ -248,6 +248,9 @@ class FactoryCommands(object):
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
+    # scripts in scripts/slave
+    self._runbuild = self.PathJoin(self._script_dir, 'runbuild.py')
+
   # Util methods.
   def GetExecutableName(self, executable):
     """The executable name must be executable plus '.exe' on Windows, or else
@@ -351,7 +354,7 @@ class FactoryCommands(object):
   def AddTestStep(self, command_class, test_name, test_command,
                   test_description='', timeout=10*60, max_time=8*60*60,
                   workdir=None, env=None, locks=None, halt_on_failure=False,
-                  do_step_if=True):
+                  do_step_if=True, br_do_step_if=False, hide_step_if=False):
     """Adds a step to the factory to run a test.
 
     Args:
@@ -374,15 +377,25 @@ class FactoryCommands(object):
         anything if 'env' is None.
       locks: any locks to acquire for this test
       halt_on_failure: whether the current build should halt if this step fails
+      br_do_step_if: when run under buildrunner, execute this function to
+        determine whether to run a step or not. has no effect if not using
+        buildrunner.
     """
     assert timeout <= max_time
-    do_step_if = do_step_if or self.TestStepFilter
+    if not br_do_step_if:
+      do_step_if = do_step_if or self.TestStepFilter
+    else:
+      # don't confuse CQ with duplicate step names
+      # runbuild.py will strip this suffix out and add via annotator
+      test_name +=  '_buildrunner_ignore'
     self._factory.addStep(
         command_class,
         name=test_name,
         timeout=timeout,
         maxTime=max_time,
         doStepIf=do_step_if,
+        brDoStepIf=br_do_step_if,
+        hideStepIf=hide_step_if,
         workdir=workdir,
         env=env,
         # TODO(bradnelson): FIXME
@@ -391,6 +404,7 @@ class FactoryCommands(object):
         descriptionDone='%s%s' % (test_name, test_description),
         haltOnFailure=halt_on_failure,
         command=test_command)
+    self._factory.properties.setProperty('gtest_filter', None, 'BuildFactory')
 
   def TestStepFilter(self, bStep):
     return self.TestStepFilterImpl(bStep, True)
@@ -441,10 +455,18 @@ class FactoryCommands(object):
         bStep,
         bStep.name not in factory_properties.get('non_default', []))
 
+  def _GTestDoStep(self, test_name, factory_properties):
+    doStep = self.GetTestStepFilter(factory_properties)
+    if test_name.startswith('DISABLED_'):
+      test_name = test_name[len('DISABLED_'):]
+      doStep = False
+    return doStep
+
   def AddAnnotatedGTestTestStep(self, test_name, factory_properties=None,
                                 description='', arg_list=None,
                                 total_shards=None, shard_index=None,
-                                test_tool_arg_list=None):
+                                test_tool_arg_list=None,
+                                hideStep=False):
     """Adds an Annotated step to the factory to run the gtest tests.
 
     Args:
@@ -466,10 +488,12 @@ class FactoryCommands(object):
       arg_list = []
     arg_list = arg_list[:]
 
-    doStep = self.GetTestStepFilter(factory_properties)
-    if test_name.startswith('DISABLED_'):
-      test_name = test_name[len('DISABLED_'):]
+    if not hideStep:
+      doStep = self._GTestDoStep(test_name, factory_properties)
+      brDoStep = False
+    else:
       doStep = False
+      brDoStep = lambda: self._GTestDoStep(test_name, factory_properties)
 
     cmd = [self._python, self._test_tool,
            '--target', self._target,
@@ -510,7 +534,62 @@ class FactoryCommands(object):
     cmd.extend(arg_list)
 
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name,
-                     ListProperties(cmd), description, do_step_if=doStep)
+                     ListProperties(cmd), description, do_step_if=doStep,
+                     br_do_step_if=brDoStep, hide_step_if=hideStep)
+
+  def AddBuildStep(self, factory_properties, name='build', env=None,
+                   timeout=6000):
+    """Add annotated step to use the buildrunner to run steps on the slave."""
+
+    cmd = [self._python, self._runbuild, '--annotate']
+    cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+
+    self._factory.addStep(chromium_step.AnnotatedCommand,
+                          name=name,
+                          description=name,
+                          timeout=timeout,
+                          haltOnFailure=True,
+                          command=cmd,
+                          env=env)
+
+  def AddBuildrunnerGTest(self, test_name, factory_properties=None,
+                          description='', arg_list=None,
+                          total_shards=None, shard_index=None,
+                          test_tool_arg_list=None):
+    """Add a buildrunner GTest step, which will be executed with runbuild.
+
+    This will appear hidden and skipped on the main waterfall, but executed when
+    run under runbuild.py. Note that a final runbuild step will need to be added
+    with AddBuildStep().
+    """
+    self.AddAnnotatedGTestTestStep(test_name,
+                                   factory_properties=factory_properties,
+                                   description=description,
+                                   arg_list=arg_list,
+                                   total_shards=total_shards,
+                                   shard_index=shard_index,
+                                   test_tool_arg_list=test_tool_arg_list,
+                                   hideStep=True)
+
+  def AddBuildrunnerTestStep(self, command_class, test_name, test_command,
+                             test_description='', timeout=10*60,
+                             max_time=8*60*60, workdir=None, env=None,
+                             locks=None, halt_on_failure=False,
+                             do_step_if=True):
+    """Add a buildrunner test step, which will be executed with runbuild.
+
+    This will appear hidden and skipped on the main waterfall, but executed when
+    run under runbuild.py. Note that a final runbuild step will need to be added
+    with AddBuildStep().
+    """
+
+    do_step_if = do_step_if or self.TestStepFilter
+    self.AddTestStep(command_class, test_name, test_command,
+                     test_description=test_description, timeout=timeout,
+                     max_time=max_time, workdir=workdir, env=env, locks=locks,
+                     halt_on_failure=halt_on_failure, do_step_if=False,
+                     br_do_step_if=do_step_if, hide_step_if=True)
 
   def AddBasicShellStep(self, test_name, timeout=600, arg_list=None):
     """Adds a step to the factory to run a simple shell test with standard
@@ -538,7 +617,7 @@ class FactoryCommands(object):
                           description='cleanup_temp',
                           timeout=60,
                           workdir='',  # Doesn't really matter where we are.
-                          alwaysRun=True, # Run this even on update failures
+                          alwaysRun=True,  # Run this even on update failures
                           command=['python', self._cleanup_temp_tool])
 
   def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):

@@ -4,6 +4,60 @@ License: GNU General Public License (GPL) Version 2
 
 This is a forked copy of buildbot v0.8.4p1.
 
+Make hidden steps stay hidden even if not finished, add brDoStepIf
+to support buildrunner.
+
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/process/buildstep.py b/third_party/buildbot_8_4p1/buildbot/process/buildstep.py
+index 4aa307d..21044ea 100644
+--- a/third_party/buildbot_8_4p1/buildbot/process/buildstep.py
++++ b/third_party/buildbot_8_4p1/buildbot/process/buildstep.py
+@@ -621,6 +621,7 @@ class BuildStep:
+              'progressMetrics',
+              'doStepIf',
+              'hideStepIf',
++             'brDoStepIf',
+              ]
+
+     name = "generic"
+@@ -633,6 +634,9 @@ class BuildStep:
+     # doStepIf can be False, True, or a function that returns False or True
+     doStepIf = True
+     hideStepIf = False
++    # like doStepIf, but evaluated at runtime if executing under runbuild.py
++    # we also overload 'False' to signify this isn't a buildrunner step
++    brDoStepIf = False
+
+     def __init__(self, **kwargs):
+         self.factory = (self.__class__, dict(kwargs))
+@@ -679,6 +683,8 @@ class BuildStep:
+
+     def setStepStatus(self, step_status):
+         self.step_status = step_status
++        hidden = self._maybeEvaluate(self.hideStepIf, self.step_status)
++        self.step_status.setHidden(hidden)
+
+     def setupProgress(self):
+         if self.useProgress:
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/build.py b/third_party/buildbot_8_4p1/buildbot/status/web/build.py
+index 02e4b4d..c634060 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/build.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/build.py
+@@ -95,10 +95,10 @@ class StatusResourceBuild(HtmlResource):
+         for s in b.getSteps():
+             step = {'name': s.getName() }
+
+-            if s.isFinished():
+-                if s.isHidden():
+-                    continue
++            if s.isHidden():
++              continue
+
++            if s.isFinished():
+                 step['css_class'] = css_classes[s.getResults()[0]]
+                 (start, end) = s.getTimes()
+                 step['time_to_run'] = util.formatInterval(end - start)
+
 
 Apply 2577dac35b39c4ee9c419681021d7971e8f1e5d2 and
 3db80d46d3c35d71591f033e5c3d0a2fa0001c59 from buildbot upstream.

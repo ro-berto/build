@@ -621,6 +621,7 @@ class BuildStep:
              'progressMetrics',
              'doStepIf',
              'hideStepIf',
+             'brDoStepIf',
              ]
 
     name = "generic"
@@ -633,6 +634,9 @@ class BuildStep:
     # doStepIf can be False, True, or a function that returns False or True
     doStepIf = True
     hideStepIf = False
+    # like doStepIf, but evaluated at runtime if executing under runbuild.py
+    # we also overload 'False' to signify this isn't a buildrunner step
+    brDoStepIf = False
 
     def __init__(self, **kwargs):
         self.factory = (self.__class__, dict(kwargs))
@@ -679,6 +683,8 @@ class BuildStep:
 
     def setStepStatus(self, step_status):
         self.step_status = step_status
+        hidden = self._maybeEvaluate(self.hideStepIf, self.step_status)
+        self.step_status.setHidden(hidden)
 
     def setupProgress(self):
         if self.useProgress:

@@ -276,6 +276,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # test running before it leaks a window or a popup (crash dialog, etc).
     if R('interactive_ui'):
       f.AddAnnotatedGTestTestStep('interactive_ui_tests', fp)
+    if R('interactive_ui_br'):
+      f.AddBuildrunnerGTest('interactive_ui_tests', fp)
 
     # Check for an early bail.  Do early since this may cancel other tests.
     if R('check_lkgr'):
@@ -284,55 +286,98 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Scripted checks to verify various properties of the codebase:
     if R('check_deps2git'):
       f.AddDeps2GitStep()
-    if R('check_deps2git_runner'):
-      f.AddBuildStep(
-        name='check_deps2git_runner',
-        factory_properties=fp)
+    if R('check_deps2git_br'):
+      f.AddBuildrunnerDeps2GitStep()
     if R('check_deps'):
       f.AddCheckDepsStep()
+    if R('check_deps_br'):
+      f.AddBuildrunnerCheckDepsStep()
     if R('check_bins'):
+      f.AddCheckBinsStep()
+    if R('check_bins_br'):
       f.AddCheckBinsStep()
     if R('check_perms'):
       f.AddCheckPermsStep()
+    if R('check_perms_br'):
+      f.AddBuildrunnerCheckPermsStep()
     if R('check_licenses'):
       f.AddCheckLicensesStep(fp)
+    if R('check_licenses_br'):
+      f.AddBuildrunnerCheckLicensesStep(fp)
 
     # Small ("module") unit tests:
     if R('base'):
       f.AddAnnotatedGTestTestStep('base_unittests', fp)
+    if R('base_br'):
+      f.AddBuildrunnerGTest('base_unittests', fp)
     if R('cacheinvalidation'):
       f.AddAnnotatedGTestTestStep('cacheinvalidation_unittests', fp)
+    if R('cacheinvalidation_br'):
+      f.AddBuildrunnerGTest('cacheinvalidation_unittests', fp)
     if R('cc_unittests'):
       f.AddAnnotatedGTestTestStep('cc_unittests', fp)
+    if R('cc_unittests_br'):
+      f.AddBuildrunnerGTest('cc_unittests', fp)
     if R('courgette'):
       f.AddAnnotatedGTestTestStep('courgette_unittests', fp)
+    if R('courgette_br'):
+      f.AddBuildrunnerGTest('courgette_unittests', fp)
     if R('crypto'):
       f.AddAnnotatedGTestTestStep('crypto_unittests', fp)
+    if R('crypto_br'):
+      f.AddBuildrunnerGTest('crypto_unittests', fp)
     if R('dbus'):
       f.AddAnnotatedGTestTestStep('dbus_unittests', fp)
+    if R('dbus_br'):
+      f.AddBuildrunnerGTest('dbus_unittests', fp)
     if R('googleurl'):
       f.AddAnnotatedGTestTestStep('googleurl_unittests', fp)
+    if R('googleurl_br'):
+      f.AddBuildrunnerGTest('googleurl_unittests', fp)
     if R('gpu'):
       f.AddAnnotatedGTestTestStep(
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
+    if R('gpu_br'):
+      f.AddBuildrunnerGTest(
+          'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
     if R('jingle'):
       f.AddAnnotatedGTestTestStep('jingle_unittests', fp)
+    if R('jingle_br'):
+      f.AddBuildrunnerGTest('jingle_unittests', fp)
     if R('content_unittests'):
       f.AddAnnotatedGTestTestStep('content_unittests', fp)
+    if R('content_unittests_br'):
+      f.AddBuildrunnerGTest('content_unittests', fp)
     if R('media'):
       f.AddAnnotatedGTestTestStep('media_unittests', fp)
+    if R('media_br'):
+      f.AddBuildrunnerGTest('media_unittests', fp)
     if R('net'):
       f.AddAnnotatedGTestTestStep('net_unittests', fp)
+    if R('net_br'):
+      f.AddBuildrunnerGTest('net_unittests', fp)
     if R('ppapi_unittests'):
       f.AddAnnotatedGTestTestStep('ppapi_unittests', fp)
+    if R('ppapi_unittests_br'):
+      f.AddBuildrunnerGTest('ppapi_unittests', fp)
     if R('printing'):
       f.AddAnnotatedGTestTestStep('printing_unittests', fp)
+    if R('printing_br'):
+      f.AddBuildrunnerGTest('printing_unittests', fp)
     if R('remoting'):
       f.AddAnnotatedGTestTestStep('remoting_unittests', fp)
+    if R('remoting_br'):
+      f.AddBuildrunnerGTest('remoting_unittests', fp)
     if R('test_shell'):
       f.AddAnnotatedGTestTestStep('test_shell_tests', fp)
+    if R('test_shell_br'):
+      f.AddBuildrunnerGTest('test_shell_tests', fp)
     if R('safe_browsing'):
       f.AddAnnotatedGTestTestStep(
+          'safe_browsing_tests', fp,
+          arg_list=['--ui-test-action-max-timeout=40000'])
+    if R('safe_browsing_br'):
+      f.AddBuildrunnerGTest(
           'safe_browsing_tests', fp,
           arg_list=['--ui-test-action-max-timeout=40000'])
     # Windows sandbox
@@ -340,53 +385,93 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('sbox_unittests', fp)
       f.AddAnnotatedGTestTestStep('sbox_integration_tests', fp)
       f.AddAnnotatedGTestTestStep('sbox_validation_tests', fp)
+    if R('sandbox_br'):
+      f.AddBuildrunnerGTest('sbox_unittests', fp)
+      f.AddBuildrunnerGTest('sbox_integration_tests', fp)
+      f.AddBuildrunnerGTest('sbox_validation_tests', fp)
     # Linux sandbox
     if R('sandbox_linux_unittests'):
       f.AddAnnotatedGTestTestStep('sandbox_linux_unittests', fp)
+    if R('sandbox_linux_unittests_br'):
+      f.AddBuildrunnerGTest('sandbox_linux_unittests', fp)
     if R('ui_unittests'):
       f.AddAnnotatedGTestTestStep('ui_unittests', fp)
+    if R('ui_unittests_br'):
+      f.AddBuildrunnerGTest('ui_unittests', fp)
     if R('views'):
       f.AddAnnotatedGTestTestStep('views_unittests', fp)
+    if R('views_br'):
+      f.AddBuildrunnerGTest('views_unittests', fp)
     if R('aura'):
       f.AddAnnotatedGTestTestStep('aura_unittests', fp)
+    if R('aura_br'):
+      f.AddBuildrunnerGTest('aura_unittests', fp)
     if R('aura_shell') or R('ash') or R('ash_unittests'):
       f.AddAnnotatedGTestTestStep('ash_unittests', fp)
     if R('compositor'):
       f.AddAnnotatedGTestTestStep('compositor_unittests', fp)
+    if R('compositor_br'):
+      f.AddBuildrunnerGTest('compositor_unittests', fp)
 
     # Medium-sized tests (unit and browser):
     if R('unit'):
       f.AddAnnotatedChromeUnitTests(fp)
+    if R('unit_br'):
+      f.AddBuildrunnerChromeUnitTests(fp)
     # A snapshot of the "ChromeUnitTests" available for individual selection
     if R('unit_ipc'):
       f.AddAnnotatedGTestTestStep('ipc_tests', fp)
+    if R('unit_ipc_br'):
+      f.AddBuildrunnerGTest('ipc_tests', fp)
     if R('unit_sync'):
       f.AddAnnotatedGTestTestStep('sync_unit_tests', fp)
+    if R('unit_sync_br'):
+      f.AddBuildrunnerGTest('sync_unit_tests', fp)
     if R('unit_unit'):
       f.AddAnnotatedGTestTestStep('unit_tests', fp)
+    if R('unit_unit_br'):
+      f.AddBuildrunnerGTest('unit_tests', fp)
     if R('unit_sql'):
       f.AddAnnotatedGTestTestStep('sql_unittests', fp)
+    if R('unit_sql_br'):
+      f.AddBuildrunnerGTest('sql_unittests', fp)
     if R('browser_tests'):
       f.AddAnnotatedBrowserTests(fp)
+    if R('browser_tests_br'):
+      f.AddBuildrunnerBrowserTests(fp)
     if R('content_browsertests'):
       f.AddAnnotatedGTestTestStep('content_browsertests', fp)
+    if R('content_browsertests_br'):
+      f.AddBuildrunnerGTest('content_browsertests', fp)
 
     # Big, UI tests:
     if R('automated_ui'):
       f.AddAnnotatedAutomatedUiTests(fp)
+    if R('automated_ui_br'):
+      f.AddBuildrunnerAutomatedUiTests(fp)
     if R('dom_checker'):
       f.AddDomCheckerTests()
+    if R('dom_checker_br'):
+      f.AddBuildrunnerDomCheckerTests()
 
     if R('installer'):
       f.AddAnnotatedInstallerTests(fp)
+    if R('installer_br'):
+      f.AddBuildrunnerInstallerTests(fp)
 
     # WebKit-related tests:
     if R('webkit_compositor_bindings_unittests'):
       f.AddAnnotatedGTestTestStep('webkit_compositor_bindings_unittests', fp)
+    if R('webkit_compositor_bindings_unittests_br'):
+      f.AddBuildrunnerGTest('webkit_compositor_bindings_unittests', fp)
     if R('webkit_unit'):
       f.AddAnnotatedGTestTestStep('webkit_unit_tests', fp)
+    if R('webkit_unit_br'):
+      f.AddBuildrunnerGTest('webkit_unit_tests', fp)
     if R('webkit_lint'):
       f.AddWebkitLint(factory_properties=fp)
+    if R('webkit_lint_br'):
+      f.AddBuildrunnerWebkitLint(factory_properties=fp)
     if R('webkit'):
       f.AddWebkitTests(factory_properties=fp)
     if R('devtools_perf'):
@@ -509,16 +594,26 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     if R('sync_integration'):
       f.AddAnnotatedSyncIntegrationTests(fp)
+    if R('sync_integration_br'):
+      f.AddBuildrunnerSyncIntegrationTests(fp)
 
     # GPU tests:
     if R('gl_tests'):
       f.AddAnnotatedGLTests(fp)
+    if R('gl_tests_br'):
+      f.AddBuildrunnerGLTests(fp)
     if R('gles2_conform_test'):
       f.AddAnnotatedGLES2ConformTest(fp)
+    if R('gles2_conform_test_br'):
+      f.AddBuildrunnerGLES2ConformTest(fp)
     if R('gpu_tests'):
       f.AddAnnotatedGpuTests(fp)
+    if R('gpu_tests_br'):
+      f.AddBuildrunnerGpuTests(fp)
     if R('soft_gpu_tests'):
       f.AddAnnotatedSoftGpuTests(fp)
+    if R('soft_gpu_tests_br'):
+      f.AddBuildrunnerAnnotatedSoftGpuTests(fp)
     if R('spaceport'):
       fp['use_xvfb_on_linux'] = True
       f.AddPyAutoFunctionalTest(
@@ -536,13 +631,23 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('chrome_frame_net_tests', fp)
       f.AddAnnotatedGTestTestStep('chrome_frame_unittests', fp)
       f.AddAnnotatedGTestTestStep('chrome_frame_tests', fp)
+    elif R('chrome_frame_br'):
+      f.AddBuildrunnerGTest('chrome_frame_net_tests', fp)
+      f.AddBuildrunnerGTest('chrome_frame_unittests', fp)
+      f.AddBuildrunnerGTest('chrome_frame_tests', fp)
     else:
       if R('chrome_frame_net_tests'):
         f.AddAnnotatedGTestTestStep('chrome_frame_net_tests', fp)
+      if R('chrome_frame_net_tests_br'):
+        f.AddBuildrunnerGTest('chrome_frame_net_tests', fp)
       if R('chrome_frame_unittests'):
         f.AddAnnotatedGTestTestStep('chrome_frame_unittests', fp)
+      if R('chrome_frame_unittests_br'):
+        f.AddBuildrunnerGTest('chrome_frame_unittests', fp)
       if R('chrome_frame_tests'):
         f.AddAnnotatedGTestTestStep('chrome_frame_tests', fp)
+      if R('chrome_frame_tests_br'):
+        f.AddBuildrunnerGTest('chrome_frame_tests', fp)
 
     def S(test, prefix, add_functor):
       if test.startswith(prefix):
@@ -686,6 +791,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')
     if R('nacl_integration_tsan'):
       f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
+
+    f.AddBuildStep(factory_properties, name='buildrunner_tests')
 
     # Add an optional set of annotated steps.
     # NOTE: This really should go last as it can be confusing if the annotator

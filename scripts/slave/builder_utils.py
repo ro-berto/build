@@ -288,11 +288,21 @@ def GetCommands(steplist):
         setattr(step, renderable, step.build.render(getattr(step,
                 renderable)))
 
+      if isinstance(step.brDoStepIf, bool):
+        doStep = step.brDoStepIf
+      else:
+        doStep = step.brDoStepIf()
+
+      br_suffix = '_buildrunner_ignore'
+      if step.name.endswith(br_suffix):
+        step.name = step.name[0:-len(br_suffix)]
+
       cmdhash['name'] = step.name
+      cmdhash['doStep'] = doStep
       cmdhash['command'] = step.command
       cmdhash['quoted_command'] = shell_quote(step.command)
       cmdhash['workdir'] = step.workdir
-      cmdhash['quoted_workdir'] = shell_quote(step.workdir)
+      cmdhash['quoted_workdir'] = shell_quote([step.workdir])
       if hasattr(step, 'env'):
         cmdhash['env'] = step.env
       else:

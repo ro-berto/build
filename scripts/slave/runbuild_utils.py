@@ -7,8 +7,8 @@
 
 """Utility routines for the buildrunner (runbuild.py)."""
 
-import os
 import json
+import os
 import sys
 
 from common import chromium_utils
@@ -61,6 +61,10 @@ def Execute(commands, step_regex, step_reject, annotate, log):
   """
   commands_executed = 0
   for command in commands:
+    if not command['doStep']:
+      print >>sys.stderr, 'skipping step: ' + command['name']
+      continue
+
     if step_regex:
       if not step_regex.search(command['name']):
         if not annotate:
