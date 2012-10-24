@@ -22,6 +22,7 @@ LATEST_WIN_BUILD = 'public_html/builds/drmemory-windows-latest-sfx.exe'
 
 dr_svnurl = 'http://dynamorio.googlecode.com/svn/trunk'
 drm_svnurl = 'http://drmemory.googlecode.com/svn/trunk'
+bot_tools_svnurl = 'http://drmemory.googlecode.com/svn/buildbot/bot_tools'
 
 # TODO(rnk): Don't make assumptions about absolute path layout.  This won't work
 # on bare metal bots.  We can't use a relative path because we often configure
@@ -29,12 +30,25 @@ drm_svnurl = 'http://drmemory.googlecode.com/svn/trunk'
 WIN_BUILD_ENV_PATH = r'E:\b\build\scripts\slave\drmemory\build_env.bat'
 
 
+def WindowsToOs(windows):
+  """Takes a boolean windows value and returns a platform string.
+
+  TODO(rnk): Switch to taking target_platform like all other factory code.
+  """
+  if windows:
+    return 'windows'
+  else:
+    return 'linux'
+
+
 class CTest(Test):
 
   """BuildStep that parses DR's runsuite output."""
 
-  def __init__(self, **kwargs):
+  def __init__(self, os=None, **kwargs):
+    assert os is not None
     self.__result = None
+    PrepareBuildStepArgs(os, kwargs)
     Test.__init__(self, **kwargs)
 
   def createSummary(self, log):
@@ -294,7 +308,49 @@ def CreateDRInDrMemoryFactory(nightly=False, os='', os_version=''):
             masterdest='public_html/dr_docs'))
   return ret
 
+
+def AddToolsSteps(f, os):
+  """Add steps to update and unpack drmemory's tools from svn."""
+  if os.startswith('win'):
+    f.addStep(SVN(svnurl=bot_tools_svnurl,
+                  workdir='bot_tools',
+                  alwaysUseLatest=True,
+                  mode='update',
+                  name='update tools'))
+    f.addStep(ShellCommand(command=['unpack.bat'],
+                           workdir='bot_tools',
+                           name='unpack tools',
+                           description='unpack tools'))
+
+
+def PrepareBuildStepArgs(os, step_kwargs):
+  """Modify build step arguments to run the command with our custom tools."""
+  assert os is not None
+  if os.startswith('win'):
+    command = step_kwargs.get('command')
+    env = step_kwargs.get('env')
+    if isinstance(command, list):
+      command = [WIN_BUILD_ENV_PATH] + command
+    else:
+      command = WIN_BUILD_ENV_PATH + ' ' + command
+    if env:
+      env = dict(env)  # Copy
+    else:
+      env = {}
+    env['BOTTOOLS'] = WithProperties('%(workdir)s\\bot_tools')
+    step_kwargs['command'] = command
+    step_kwargs['env'] = env
+
+
+def DrShellCommand(os=None, **kwargs):
+  """Execute a ShellCommand using some of DR's custom bot tools."""
+  assert os is not None
+  PrepareBuildStepArgs(os, kwargs)
+  return ShellCommand(**kwargs)
+
+
 def AddDRSuite(f, dr_path, nightly, os, os_version):
+  AddToolsSteps(f, os)
   if nightly:
     assert os
     assert os_version
@@ -311,12 +367,12 @@ def AddDRSuite(f, dr_path, nightly, os, os_version):
   if suite_args:
     runsuite_cmd += ',' + suite_args
   cmd = ['ctest', '--timeout', '120', '-VV', '-S', runsuite_cmd]
-  if os.startswith('win'):
-    cmd.insert(0, WIN_BUILD_ENV_PATH)
   f.addStep(CTest(command=cmd,
+                  os=os,
                   name=step_name,
                   descriptionDone=step_name,
                   timeout=timeout))
+
 
 def CreateDRFactory(nightly=False, os='', os_version=''):
   """Create a factory to run the DR pre-commit suite.
@@ -325,11 +381,10 @@ def CreateDRFactory(nightly=False, os='', os_version=''):
   DR-within-drmemory.  Used on the client.dynamorio waterfall.
   """
   ret = factory.BuildFactory()
-
   ret.addStep(SVN(svnurl=dr_svnurl,
                   workdir='dynamorio',
                   mode='update',
-                  name='Checkout DynamoRIO'))
+                  name='update DynamoRIO'))
   AddDRSuite(ret, '../dynamorio', nightly, os, os_version)
   if os == 'linux':
     ret.addStep(
@@ -340,6 +395,7 @@ def CreateDRFactory(nightly=False, os='', os_version=''):
 
 
 def CreateDrMFactory(windows):
+  os = WindowsToOs(windows)
   ret = factory.BuildFactory()
   ret.addStep(
       SVN(svnurl=drm_svnurl,
@@ -353,16 +409,16 @@ def CreateDrMFactory(windows):
           name='Get DR revision',
           descriptionDone='Get DR revision',
           description='DR revision'))
+  AddToolsSteps(ret, os)
   cmd = ['ctest', '--timeout', '60', '-VV', '-S',
          WithProperties('../drmemory/tests/runsuite.cmake,' +
                         'drmemory_only;build=%(buildnumber)s')]
-  if windows:
-    cmd.insert(0, WIN_BUILD_ENV_PATH)
   ret.addStep(
       CTest(
           command=cmd,
           name='Dr. Memory ctest',
           descriptionDone='runsuite',
+          os=os,
           flunkOnFailure=False, # failure doesn't mark the whole run as failure
           warnOnFailure=True,
           timeout=600))
@@ -387,10 +443,11 @@ def CreateDrMFactory(windows):
             name='Checkout TSan tests',
             description='checkout tsan tests'))
     ret.addStep(
-        Compile(
-            command=[WIN_BUILD_ENV_PATH, 'make', '-C', '../tsan/unittest'],
+        DrShellCommand(
+            command=['make', '-C', '../tsan/unittest'],
             # suppress cygwin 'MSDOS' warnings
             env={'CYGWIN': 'nodosfilewarning'},
+            os=os,
             name='Build TSan tests',
             descriptionDone='build tsan tests',
             description='build tsan tests'))
@@ -437,13 +494,11 @@ def CreateDrMFactory(windows):
     testlog_dirs += ['xmlresults']
   else:
     testlog_dirs += ['xml:results']
-  cmd = ['7z', 'a', 'testlogs.7z'] + testlog_dirs
-  if windows:
-    cmd.insert(0, WIN_BUILD_ENV_PATH)
-  ret.addStep(ShellCommand(command=cmd,
-                           haltOnFailure=True,
-                           name='Pack test results',
-                           description='pack results'))
+  ret.addStep(DrShellCommand(command=['7z', 'a', 'testlogs.7z'] + testlog_dirs,
+                             haltOnFailure=True,
+                             os=os,
+                             name='Pack test results',
+                             description='pack results'))
 
   ret.addStep(
      FileUpload(
@@ -457,20 +512,22 @@ def CreateDrMFactory(windows):
 
 
 def CreateDrMPackageFactory(windows):
+  os = WindowsToOs(windows)
   ret = factory.BuildFactory()
   ret.addStep(
       SVN(svnurl=drm_svnurl,
           mode='clobber',
           name='Checkout Dr. Memory'))
+  AddToolsSteps(ret, os)
   # package.cmake will complain if this does not start with 'DrMemory-'
   package_name = 'DrMemory-package'
   # The default package name has the version and revision, so we override it
   # to something we can predict.
   cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
   cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
-  if windows:
-    cmd.insert(0, WIN_BUILD_ENV_PATH)
-  ret.addStep(Compile(command=cmd, name='Package Dr. Memory'))
+  ret.addStep(DrShellCommand(command=cmd,
+                             os=os,
+                             name='Package Dr. Memory'))
 
   if windows:
     OUTPUT_DIR = ('build_drmemory-debug-32\\' +
@@ -479,11 +536,11 @@ def CreateDrMPackageFactory(windows):
     PUB_FILE = RES_FILE
 
     ret.addStep(
-        ShellCommand(
-            command=[WIN_BUILD_ENV_PATH, '7z', 'a', '-sfx',
-                     WithProperties(RES_FILE), '*'],
+        DrShellCommand(
+            command=['7z', 'a', '-sfx', WithProperties(RES_FILE), '*'],
             workdir=WithProperties('build\\' + OUTPUT_DIR),
             haltOnFailure=True,
+            os=os,
             name='Pack test results',
             description='pack results'))
     ret.addStep(
