@@ -88,8 +88,8 @@ class SyzygyCommands(commands.FactoryCommands):
     command = [self._python,
                script_path,
                '--verbose',
-               '--build-dir',
                '--syzygy',
+               '--build-dir',
                self.PathJoin(self._build_dir, self._target)]
 
     # Add the step.
