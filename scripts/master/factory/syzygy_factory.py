@@ -112,10 +112,8 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     # coverage agent as well as the unittests.
     syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
 
-    # Then generate and upload a coverage report. We do this twice, once
-    # using the MSVS tools and once using the Syzygy tools.
+    # Then generate and upload a coverage report.
     syzygy_cmd_obj.AddGenerateCoverage()
-    syzygy_cmd_obj.AddGenerateCoverage(use_syzygy=True)
 
     return factory
 
