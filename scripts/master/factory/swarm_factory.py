@@ -42,7 +42,6 @@ def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
         'test_isolation_outdir=' +
         config.Master.swarm_hashtable_server_internal +
         ' ' + extra_gyp_defines +
-        ' disable_nacl=1'
         ' fastbuild=1'
       ),
       'GYP_MSVS_VERSION': '2010',
