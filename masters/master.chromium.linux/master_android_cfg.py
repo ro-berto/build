@@ -49,6 +49,21 @@ F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_main_tester.sh',
     factory_properties={'build_url': android_archive}))
 
+B('Android Builder', 'f_android_rel', None, 'android',
+  auto_reboot=False, notify_on_missing=True)
+F('f_android_rel', linux_android().ChromiumAnnotationFactory(
+    annotation_script='src/build/android/buildbot/bb_main_builder.sh'))
+
+B('Android Clang Builder (dbg)', 'f_android_clang_dbg', None, 'android',
+  auto_reboot=False, notify_on_missing=True)
+F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
+    target='Debug',
+    annotation_script='src/build/android/buildbot/bb_clang_builder.sh',
+    factory_properties={
+      'buildtool': 'ninja',
+      'extra_gyp_defines': 'clang=1',
+    }))
+
 
 def Update(config_arg, active_master, c):
   return helper.Update(c)
