@@ -28,8 +28,13 @@ set PATH=%BOTTOOLS%\cmake\bin;%PATH%
 set PATH=%BOTTOOLS%\7zip\File\7-Zip;%PATH%
 
 :: Add Cygwin to the *end* of PATH.  We don't want to override anything form
-:: depot_tools in particular.  We depend on perl, doxygen, and fig2dev.
+:: depot_tools in particular.
 set PATH=%PATH%;C:\cygwin\bin
+
+:: Make sure depot_tools svn.exe comes before Cygwin svn, otherwise CMake
+:: prefers C:\cygwin\bin\svn.exe over E:\b\depot_tools\svn.bat.
+:: TODO(rnk): Don't hardcode E:\b
+set PATH=E:\b\depot_tools\svn_bin;%PATH%
 
 echo Final PATH:
 echo %PATH%

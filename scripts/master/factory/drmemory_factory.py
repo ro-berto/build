@@ -45,10 +45,8 @@ class CTest(Test):
 
   """BuildStep that parses DR's runsuite output."""
 
-  def __init__(self, os=None, **kwargs):
-    assert os is not None
+  def __init__(self, **kwargs):
     self.__result = None
-    PrepareBuildStepArgs(os, kwargs)
     Test.__init__(self, **kwargs)
 
   def createSummary(self, log):
@@ -323,12 +321,11 @@ def AddToolsSteps(f, os):
                            description='unpack tools'))
 
 
-def PrepareBuildStepArgs(os, step_kwargs):
+def ToolStep(step_class, os, **kwargs):
   """Modify build step arguments to run the command with our custom tools."""
-  assert os is not None
   if os.startswith('win'):
-    command = step_kwargs.get('command')
-    env = step_kwargs.get('env')
+    command = kwargs.get('command')
+    env = kwargs.get('env')
     if isinstance(command, list):
       command = [WIN_BUILD_ENV_PATH] + command
     else:
@@ -338,18 +335,21 @@ def PrepareBuildStepArgs(os, step_kwargs):
     else:
       env = {}
     env['BOTTOOLS'] = WithProperties('%(workdir)s\\bot_tools')
-    step_kwargs['command'] = command
-    step_kwargs['env'] = env
+    kwargs['command'] = command
+    kwargs['env'] = env
+  return step_class(**kwargs)
 
 
 def DrShellCommand(os=None, **kwargs):
-  """Execute a ShellCommand using some of DR's custom bot tools."""
-  assert os is not None
-  PrepareBuildStepArgs(os, kwargs)
-  return ShellCommand(**kwargs)
+  return ToolStep(ShellCommand, os, **kwargs)
+
+
+def DrCTest(os=None, **kwargs):
+  return ToolStep(CTest, os, **kwargs)
 
 
 def AddDRSuite(f, dr_path, nightly, os, os_version):
+  assert os
   AddToolsSteps(f, os)
   if nightly:
     assert os
@@ -367,11 +367,11 @@ def AddDRSuite(f, dr_path, nightly, os, os_version):
   if suite_args:
     runsuite_cmd += ',' + suite_args
   cmd = ['ctest', '--timeout', '120', '-VV', '-S', runsuite_cmd]
-  f.addStep(CTest(command=cmd,
-                  os=os,
-                  name=step_name,
-                  descriptionDone=step_name,
-                  timeout=timeout))
+  f.addStep(DrCTest(command=cmd,
+                    os=os,
+                    name=step_name,
+                    descriptionDone=step_name,
+                    timeout=timeout))
 
 
 def CreateDRFactory(nightly=False, os='', os_version=''):
@@ -380,6 +380,7 @@ def CreateDRFactory(nightly=False, os='', os_version=''):
   Same as the above, except we just do a plain DR checkout instead of
   DR-within-drmemory.  Used on the client.dynamorio waterfall.
   """
+  assert os
   ret = factory.BuildFactory()
   ret.addStep(SVN(svnurl=dr_svnurl,
                   workdir='dynamorio',
@@ -414,7 +415,7 @@ def CreateDrMFactory(windows):
          WithProperties('../drmemory/tests/runsuite.cmake,' +
                         'drmemory_only;build=%(buildnumber)s')]
   ret.addStep(
-      CTest(
+      DrCTest(
           command=cmd,
           name='Dr. Memory ctest',
           descriptionDone='runsuite',
