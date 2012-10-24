@@ -792,7 +792,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('nacl_integration_tsan'):
       f.AddNaClIntegrationTestStep(fp, None, 'tsan-browser-tests')
 
-    f.AddBuildStep(factory_properties, name='buildrunner_tests')
+    if R('buildrunner_tests'):
+      f.AddBuildStep(factory_properties, name='buildrunner_tests')
 
     # Add an optional set of annotated steps.
     # NOTE: This really should go last as it can be confusing if the annotator
