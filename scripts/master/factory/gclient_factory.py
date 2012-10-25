@@ -44,7 +44,8 @@ class GClientSolution(object):
 
   def __init__(self, svn_url, name=None, custom_deps_list=None,
                needed_components=None, custom_vars_list=None,
-               custom_deps_file=None, safesync_url=None):
+               custom_deps_file=None, safesync_url=None,
+               managed=None):
     """ Initialize the GClient Solution.
     Params:
       svn_url: SVN path for this solution.
@@ -56,6 +57,7 @@ class GClientSolution(object):
       custom_vars_list: Modifications to make on the vars in the DEPS file.
       custom_deps_file: Change the default DEPS filename.
       safesync_url: Select to build based on a lkgr url.
+      managed: Specify managed in .gclient file
     """
     self.svn_url = svn_url
     self.name = name
@@ -64,6 +66,7 @@ class GClientSolution(object):
     self.custom_deps_file = custom_deps_file
     self.needed_components = (needed_components or {}).copy()
     self.safesync_url = safesync_url
+    self.managed = managed
 
     if not self.name:
       self.name = svn_url.split('/')[-1]
@@ -106,6 +109,8 @@ class GClientSolution(object):
       extras += '"deps_file": "%s",' % self.custom_deps_file
     if self.safesync_url:
       extras += '"safesync_url": "%s"' % self.safesync_url
+    if self.managed:
+      extras += '"managed": %s' % self.managed
 
     # This must not contain any line breaks or other characters that would
     # require escaping on the command line, since it will be passed to gclient.
