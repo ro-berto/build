@@ -318,6 +318,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('cc_unittests', fp)
     if R('cc_unittests_br'):
       f.AddBuildrunnerGTest('cc_unittests', fp)
+    if R('chromeos_unittests'):
+      f.AddAnnotatedGTestTestStep('chromeos_unittests', fp)
     if R('courgette'):
       f.AddAnnotatedGTestTestStep('courgette_unittests', fp)
     if R('courgette_br'):
