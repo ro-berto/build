@@ -29,11 +29,11 @@ SWARM_TESTS = [
     SwarmTest('net_unittests', 3),
     SwarmTest('unit_tests', 4),
     SwarmTest('browser_tests', 5),
+    SwarmTest('sync_integration_tests', 4),
 ]
 
 
-def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
-                    ninja=False):
+def SetupSwarmTests(machine, options, ninja, tests):
   """This is a swarm builder."""
   factory_properties = {
     'gclient_env' : {
@@ -41,7 +41,6 @@ def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
         'test_isolation_mode=hashtable '
         'test_isolation_outdir=' +
         config.Master.swarm_hashtable_server_internal +
-        ' ' + extra_gyp_defines +
         ' fastbuild=1'
       ),
       'GYP_MSVS_VERSION': '2010',
@@ -57,31 +56,32 @@ def SetupSwarmTests(machine, options=None, project=None, extra_gyp_defines='',
     # Build until death.
     options = ['--build-tool=ninja'] + options + ['--', '-k', '0']
 
+  swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
   # Accessing machine._target_platform, this function should be a member of
   # SwarmFactory.
   # pylint: disable=W0212
   return machine.SwarmFactory(
-      tests=SWARM_TESTS,
+      tests=swarm_tests,
       options=options,
-      project=project,
       target_platform=machine._target_platform,
       factory_properties=factory_properties)
 
 
-def SwarmTestBuilder(swarm_server):
+def SwarmTestBuilder(swarm_server, tests):
   """Create a basic swarm builder that runs tests via swarm."""
   f = build_factory.BuildFactory()
 
   swarm_command_obj = swarm_commands.SwarmCommands(f)
+  swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
 
   # Send the swarm tests to the swarm server.
   swarm_command_obj.AddTriggerSwarmTestStep(
       swarm_server=swarm_server,
-      tests=SWARM_TESTS,
+      tests=swarm_tests,
       doStepIf=swarm_commands.TestStepHasSwarmProperties)
 
   # Collect the results
-  for swarm_test in SWARM_TESTS:
+  for swarm_test in swarm_tests:
     swarm_command_obj.AddGetSwarmTestStep(swarm_server, swarm_test.test_name)
 
   return f
