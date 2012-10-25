@@ -802,7 +802,8 @@ def main_ninja(options, args):
       os.rename(os.path.join(output_dir, 'build.ninja'),
                 os.path.join(output_dir, 'build.ninja.orig'))
       cc_line_pattern = re.compile(r'(cc|cxx|cc_host|cxx_host) = (.*)')
-      goma_repl = '\\1 = %s \\2' % os.path.join(options.goma_dir, 'gomacc.exe')
+      goma_repl = '\\1 = %s \\2' % (
+          re.escape(os.path.join(options.goma_dir, 'gomacc.exe')))
       with open(os.path.join(output_dir, 'build.ninja.orig')) as orig_build:
         with open(os.path.join(output_dir, 'build.ninja'), 'w') as new_build:
           for line in orig_build:
