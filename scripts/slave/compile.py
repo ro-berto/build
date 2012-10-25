@@ -799,20 +799,14 @@ def main_ninja(options, args):
       # Note that, on other platform, ninja doesn't use ninja -t msvc
       # (it just simply run $cc/$cxx), so modifying PATH can work to run
       # gomacc without this hack.
-      orig_build = open(os.path.join(output_dir, 'build.ninja'))
-      new_build = open(os.path.join(output_dir, 'build.ninja.goma'), 'w')
-      for line in orig_build:
-        if line.startswith('cc '):
-          new_build.write('cc = %s cl\n' % (
-              os.path.join(options.goma_dir, 'gomacc.exe')))
-        elif line.startswith('cxx '):
-          new_build.write('cxx = %s cl\n' % (
-              os.path.join(options.goma_dir, 'gomacc.exe')))
-        else:
-          new_build.write(line)
-      orig_build.close()
-      new_build.close()
-      command.extend(['-f', 'build.ninja.goma'])
+      os.rename(os.path.join(output_dir, 'build.ninja'),
+                os.path.join(output_dir, 'build.ninja.orig'))
+      cc_line_pattern = re.compile(r'(cc|cxx|cc_host|cxx_host) = (.*)')
+      goma_repl = '\\1 = %s \\2' % os.path.join(options.goma_dir, 'gomacc.exe')
+      with open(os.path.join(output_dir, 'build.ninja.orig')) as orig_build:
+        with open(os.path.join(output_dir, 'build.ninja'), 'w') as new_build:
+          for line in orig_build:
+            new_build.write(cc_line_pattern.sub(goma_repl, line))
 
     # CC and CXX are set at gyp time for ninja. PATH still needs to be adjusted.
     print 'using', options.compiler
