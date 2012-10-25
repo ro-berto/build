@@ -799,7 +799,8 @@ def main_ninja(options, args):
       # Note that, on other platform, ninja doesn't use ninja -t msvc
       # (it just simply run $cc/$cxx), so modifying PATH can work to run
       # gomacc without this hack.
-      os.remove(os.path.join(output_dir, 'build.ninja.orig'))
+      if os.path.exists(os.path.join(output_dir, 'build.ninja.orig')):
+        os.remove(os.path.join(output_dir, 'build.ninja.orig'))
       os.rename(os.path.join(output_dir, 'build.ninja'),
                 os.path.join(output_dir, 'build.ninja.orig'))
       cc_line_pattern = re.compile(r'(cc|cxx|cc_host|cxx_host) = (.*)')
