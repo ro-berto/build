@@ -219,12 +219,14 @@ def CreateAppTest(windows, app_name, app_cmd, build_mode, run_mode,
     if windows:
       env['_NT_SYMBOL_PATH'] = ''
   step_name = '%s %s %s%s' % (build_mode, run_mode, syms_part, app_name)
-  return DrMemoryTest(command=cmd,
-                      env=env,
-                      name=step_name,
-                      descriptionDone=step_name,
-                      description='run ' + step_name,
-                      **kwargs)
+  return ToolStep(DrMemoryTest,
+                  WindowsToOs(windows),
+                  command=cmd,
+                  env=env,
+                  name=step_name,
+                  descriptionDone=step_name,
+                  description='run ' + step_name,
+                  **kwargs)
 
 
 class V8DrFactory(v8_factory.V8Factory):
@@ -528,6 +530,7 @@ def CreateDrMPackageFactory(windows):
   cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
   ret.addStep(DrShellCommand(command=cmd,
                              os=os,
+                             description='Package Dr. Memory',
                              name='Package Dr. Memory'))
 
   if windows:
@@ -593,19 +596,22 @@ def CreateWinStabFactory():
 
   # VP8 tests
   ret.addStep(
-      DrMemoryTest(command=[
-                      'bash',
-                      'E:\\vpx\\vp8-test-vectors\\run_tests.sh',
-                      ('--exec=unpacked/bin/drmemory.exe -batch '
-                       '-no_check_leaks -no_count_leaks '
-                       '-no_check_uninitialized '
-                       'e:/vpx/b/Win32/Debug/vpxdec.exe'),
-                      'E:\\vpx\\vp8-test-vectors',
-                   ],
-                   env={'PATH': 'C:\\cygwin\\bin;%PATH%'},
-                   name='VP8 tests',
-                   descriptionDone='VP8 tests',
-                   description='run vp8 tests'))
+      ToolStep(
+          DrMemoryTest,
+          'windows',
+          command=[
+              'bash',
+              'E:\\vpx\\vp8-test-vectors\\run_tests.sh',
+              ('--exec=unpacked/bin/drmemory.exe -batch '
+               '-no_check_leaks -no_count_leaks '
+               '-no_check_uninitialized '
+               'e:/vpx/b/Win32/Debug/vpxdec.exe'),
+              'E:\\vpx\\vp8-test-vectors',
+              ],
+          env={'PATH': 'C:\\cygwin\\bin;%PATH%'},
+          name='VP8 tests',
+          descriptionDone='VP8 tests',
+          description='run vp8 tests'))
 
   # Chromium tests
   for test in ['googleurl', 'printing', 'media', 'sql', 'crypto', 'remoting',

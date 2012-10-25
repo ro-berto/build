@@ -25,7 +25,7 @@ call %vcvars%
 :: We auto-unpack cmake and 7zip from svn on the bots now.  The master passes
 :: an env var holding the bot_tools directory.
 set PATH=%BOTTOOLS%\cmake\bin;%PATH%
-set PATH=%BOTTOOLS%\7zip\File\7-Zip;%PATH%
+set PATH=%BOTTOOLS%\7zip\Files\7-Zip;%PATH%
 
 :: Add Cygwin to the *end* of PATH.  We don't want to override anything form
 :: depot_tools in particular.
