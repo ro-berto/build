@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import ntpath
+import posixpath
 import re
 from buildbot.process import factory
 from buildbot.process.properties import WithProperties
@@ -31,14 +33,360 @@ WIN_BUILD_ENV_PATH = r'E:\b\build\scripts\slave\drmemory\build_env.bat'
 
 
 def WindowsToOs(windows):
-  """Takes a boolean windows value and returns a platform string.
-
-  TODO(rnk): Switch to taking target_platform like all other factory code.
-  """
+  """Takes a boolean windows value and returns a platform string."""
   if windows:
     return 'windows'
   else:
     return 'linux'
+
+
+def OsFullName(platform):
+  if platform.startswith('win'):
+    return 'Windows'
+  elif platform.startswith('linux'):
+    return 'Linux'
+  else:
+    raise ValueError('Unknown platform %s' % platform)
+
+
+def OsShortName(platform):
+  if platform.startswith('win'):
+    return 'win'
+  elif platform.startswith('linux'):
+    return 'linux'
+  else:
+    raise ValueError('Unknown platform %s' % platform)
+
+
+def ArchToBits(arch):
+  """Takes an arch string like x64 and ia32 and returns its bitwidth."""
+  if not arch:  # Default to x64.
+    return 64
+  elif arch == 'x64':
+    return 64
+  elif arch == 'ia32':
+    return 32
+  assert False, 'Unsupported architecture'
+
+
+class DrCommands(object):
+
+  """Encapsulates state for adding commands to BuildFactories.
+
+  Encapsulates the two things that we really need to pass everywhere: the
+  BuildFactory and the target platform.
+  """
+
+  def __init__(self, target_platform=None, os_version=None, build_factory=None):
+    if not build_factory:
+      build_factory = factory.BuildFactory()
+    self.factory = build_factory
+    self.target_platform = OsShortName(target_platform)
+    self.os_version = os_version
+
+  def IsWindows(self):
+    """Returns true if we're targetting Windows."""
+    return self.target_platform.startswith('win')
+
+  def PathJoin(self, *args):
+    """Join paths using the separator of the os of the bot."""
+    if self.IsWindows():
+      return ntpath.normpath(ntpath.join(*args))
+    else:
+      return posixpath.normpath(posixpath.join(*args))
+
+  def AddStep(self, step_class, **kwargs):
+    """Adds a regular buildbot step."""
+    self.factory.addStep(step_class(**kwargs))
+
+  def AddToolStep(self, step_class, **kwargs):
+    """Adds a buildbot step that uses one of our custom tools.
+
+    Currently this includes cmake, ctest, and 7zip.
+    """
+    self.factory.addStep(ToolStep(step_class, self.target_platform, **kwargs))
+
+  def AddDynamoRIOSource(self):
+    """Checks out or updates DR's sources."""
+    self.AddStep(SVN,
+                 svnurl=dr_svnurl,
+                 workdir='dynamorio',
+                 mode='update',
+                 name='Checkout DynamoRIO')
+
+  def AddDrMemorySource(self):
+    """Checks out or updates drmemory's sources."""
+    self.AddStep(SVN,
+                 svnurl=drm_svnurl,
+                 workdir='drmemory',
+                 mode='update',
+                 name='Checkout Dr. Memory')
+
+  def AddTools(self):
+    """Add steps to update and unpack drmemory's custom tools."""
+    if self.target_platform.startswith('win'):
+      # Using a SVN step breaks the console view because bb thinks we're at a
+      # different revision.  Therefore we run the checkout command manually.
+      self.AddStep(ShellCommand,
+                   command=['svn', 'checkout', '--force',
+                            bot_tools_svnurl, '.'],
+                   workdir='bot_tools',
+                   description='update tools',
+                   name='update tools')
+      self.AddStep(ShellCommand,
+                   command=['unpack.bat'],
+                   workdir='bot_tools',
+                   name='unpack tools',
+                   description='unpack tools')
+
+  def AddDRSuite(self, step_name, suite_args):
+    """Run DR's test suite with arguments."""
+    timeout = 20 * 60  # 20min w/o output.  10 is too short for Windows.
+    runsuite_cmd = '../dynamorio/suite/runsuite.cmake'
+    if suite_args:
+      runsuite_cmd += ',' + suite_args
+    cmd = ['ctest', '--timeout', '120', '-VV', '-S', runsuite_cmd]
+    self.AddToolStep(CTest,
+                     command=cmd,
+                     name=step_name,
+                     descriptionDone=step_name,
+                     timeout=timeout)
+
+  def AddDRBuild(self, target, target_arch):
+    """Build a single configuration of DR."""
+    cflags = '-m%s' % ArchToBits(target_arch)
+    cmake_env = {'CFLAGS': cflags, 'CXXFLAGS': cflags}
+    debug = 'OFF'
+    if target == 'Debug':
+      debug = 'ON'
+    self.AddToolStep(Configure,
+                     command=['cmake', '..', '-DDEBUG=' + debug],
+                     workdir='dynamorio/build',
+                     name='Configure %s %s DynamoRIO' % (target, target_arch),
+                     env=cmake_env)
+    assert not self.IsWindows(), "windows AddDRBuild NYI"
+    self.AddToolStep(Compile,
+                     command=['make', '-j5'],
+                     workdir='dynamorio/build',
+                     name='Compile %s %s DynamoRIO' % (target, target_arch))
+
+  def AddTSanTestBuild(self):
+    self.AddStep(ShellCommand,
+                 command=['svn', 'checkout', '--force',
+                          'http://data-race-test.googlecode.com/svn/trunk/',
+                          '../tsan'],
+                 name='Checkout TSan tests',
+                 description='checkout tsan tests')
+    self.AddToolStep(ShellCommand,
+                     command=['make', '-C', '../tsan/unittest'],
+                     # suppress cygwin 'MSDOS' warnings
+                     env={'CYGWIN': 'nodosfilewarning'},
+                     name='Build TSan tests',
+                     descriptionDone='build tsan tests',
+                     description='build tsan tests')
+
+  def DynamoRIOSuite(self):
+    """Build and test all configurations in the DR pre-commit suite."""
+    self.AddDynamoRIOSource()
+    self.AddTools()
+    self.AddDRSuite('pre-commit suite', '')
+    # The Linux bot has all the dependencies for docs generation, so we have it
+    # upload the docs to the master.
+    if self.target_platform == 'linux':
+      self.AddStep(DirectoryUpload,
+                   slavesrc='install/docs/html',
+                   masterdest='public_html/dr_docs')
+    return self.factory
+
+  def DynamoRIONightly(self):
+    """Build and test all configurations in the DR nightly suite."""
+    self.AddDynamoRIOSource()
+    self.AddTools()
+    site_name = '%s.%s.BuildBot' % (OsFullName(self.target_platform),
+                                    self.os_version.capitalize())
+    suite_args = 'nightly;long;site=%s' % site_name
+    self.AddDRSuite('nightly suite', suite_args)
+    return self.factory
+
+  def DynamoRIOPackage(self):
+    """Build, package, and upload all configurations of DR."""
+    self.AddDynamoRIOSource()
+    self.AddTools()
+    package_cmd = '../dynamorio/make/package.cmake,build=42'
+    cmd = ['ctest', '-VV', '-S', package_cmd]
+    self.AddToolStep(ShellCommand,
+                     command=cmd,
+                     description='Package DynamoRIO',
+                     name='Package DynamoRIO')
+    # For DR, we use plain cpack archives since we don't have existing scripts
+    # that expect sfx exes.
+    # TODO(rnk): Find a way to wildcard the DR version.
+    if self.IsWindows():
+      src_file = 'DynamoRIO-Windows-3.2.%(got_revision)s-42.zip'
+      dst_file = 'dynamorio-windows-r%(got_revision)s.zip'
+    else:
+      src_file = 'DynamoRIO-Linux-3.2.%(got_revision)s-42.tar.gz'
+      dst_file = 'dynamorio-linux-r%(got_revision)s.tar.gz'
+    self.AddStep(FileUpload,
+                 slavesrc=WithProperties(src_file),
+                 masterdest=WithProperties('public_html/builds/' + dst_file),
+                 name='Upload DR package')
+    return self.factory
+
+  def DrMemorySuite(self):
+    """Build and test all configurations in the drmemory pre-commit suite."""
+    self.AddDrMemorySource()
+    self.AddStep(SetProperty,
+                 command=['svnversion', '../drmemory/dynamorio'],
+                 property='dr_revision',
+                 name='Get DR revision',
+                 descriptionDone='Get DR revision',
+                 description='DR revision')
+    self.AddTools()
+    cmd = ['ctest', '--timeout', '60', '-VV', '-S',
+           WithProperties('../drmemory/tests/runsuite.cmake,' +
+                          'drmemory_only;build=%(buildnumber)s')]
+    self.AddToolStep(CTest,
+                     command=cmd,
+                     name='Dr. Memory ctest',
+                     descriptionDone='runsuite',
+                     # failure doesn't mark the whole run as failure
+                     flunkOnFailure=False,
+                     warnOnFailure=True,
+                     timeout=600)
+    return self.factory
+
+  def DrMemoryPackage(self):
+    """Build the drmemory package."""
+    self.AddDrMemorySource()
+    self.AddTools()
+    # The default package name has the version and revision, so we override it
+    # to something we can predict.  package.cmake will complain if this does not
+    # start with 'DrMemory-'
+    # TODO(rnk): Instead of overriding the package name, have package.cmake
+    # output the name to stderr or in a symlink.
+    package_name = 'DrMemory-package'
+    cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
+    cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
+    self.AddToolStep(ShellCommand,
+                     command=cmd,
+                     description='Package Dr. Memory',
+                     name='Package Dr. Memory')
+    if self.IsWindows():
+      # For Windows, our chromium scripts expect to find an sfx, so we figure
+      # out where cpack installed everything before archiving it, and re-archive
+      # it with 7z -sfx.
+      install_dir = ('build_drmemory-debug-32\\' +
+                     '_CPack_Packages\\Windows\\ZIP\\' + package_name)
+      sfx_file = 'drmemory-windows-r%(got_revision)s-sfx.exe'
+      dst_file = sfx_file
+      src_file = self.PathJoin(install_dir, sfx_file)
+      self.AddToolStep(ShellCommand,
+                       command=['7z', 'a', '-sfx',
+                                WithProperties(sfx_file), '*'],
+                       workdir='build\\' + install_dir,
+                       haltOnFailure=True,
+                       name='create sfx archive',
+                       description='create sfx archive')
+      self.AddStep(FileUpload,
+                   slavesrc=WithProperties(src_file),
+                   masterdest=LATEST_WIN_BUILD,
+                   name='upload latest build')
+    else:
+      # For Linux, we just use the tgz that cpack made for us.
+      src_file = package_name + '.tar.gz'
+      dst_file = 'drmemory-linux-r%(got_revision)s.tar.gz'
+    self.AddStep(FileUpload,
+                 slavesrc=WithProperties(src_file),
+                 masterdest=WithProperties('public_html/builds/' + dst_file),
+                 name='upload revision build')
+    return self.factory
+
+  def AddTSanTestConfig(self, build_mode, run_mode, use_syms=True, **kwargs):
+    """Add a test of a single drmemory config on the tsan tests."""
+    app_cmd = [('..\\tsan\\unittest\\bin\\'
+                'racecheck_unittest-windows-x86-O0.exe'),
+               ('--gtest_filter="-PositiveTests.FreeVsRead'
+                ':NegativeTests.WaitForMultiple*"'),
+               '-147']
+    # Pick exe from build mode.
+    if self.IsWindows():
+      cmd = ['build_drmemory-%s-32\\bin\\drmemory' % build_mode]
+    else:
+      cmd = ['build_drmemory-%s-32/bin/drmemory.pl' % build_mode]
+    # Default flags turn off message boxes, notepad, and print to stderr.
+    cmd += ['-dr_ops', '-msgbox_mask 0 -stderr_mask 15',
+            '-results_to_stderr', '-batch']
+    if self.IsWindows():
+      # FIXME: The point of these app tests is to verify that we get no false
+      # positives on well-behaved applications, so we should remove these
+      # extra suppressions.  We're not using them on dev machines but we'll
+      # leave them on the bots and for tsan tests for now.
+      cmd += ['-suppress',
+              '..\\drmemory\\tests\\app_suite\\default-suppressions.txt']
+    # Full mode flags are default, light mode turns off uninits and leaks.
+    if run_mode == 'light':
+      cmd += ['-light']
+    cmd.append('--')
+    cmd += app_cmd
+    # Set _NT_SYMBOL_PATH appropriately.
+    syms_part = ''
+    env = {}
+    if not use_syms:
+      syms_part = 'nosyms '
+      if self.IsWindows():
+        env['_NT_SYMBOL_PATH'] = ''
+    step_name = '%s %s %sTSan tests' % (build_mode, run_mode, syms_part)
+    self.AddToolStep(DrMemoryTest,
+                     command=cmd,
+                     env=env,
+                     name=step_name,
+                     descriptionDone=step_name,
+                     description='run ' + step_name,
+                     **kwargs)
+
+  def AddDrMemoryTSanTests(self):
+    """Run the tsan tests in a variety of configs."""
+    assert self.IsWindows()
+    # Run tsan tests in (dbg, rel) cross (full, light).
+    for build_mode in ('dbg', 'rel'):
+      for run_mode in ('full', 'light'):
+        self.AddTSanTestConfig(build_mode, run_mode, use_syms=True)
+    # Do one more run of TSan + app_suite without any pdb symbols to make
+    # sure our default suppressions match.
+    self.AddTSanTestConfig('dbg', 'full', use_syms=False)
+
+  def AddDrMemoryLogsUpload(self):
+    """Upload drmemory's logs after running the suite and the app tests."""
+    # TODO(rnk): What would make this *really* useful for reproducing bot issues
+    # is if we had a way of forcing a build with higher logging.
+    self.AddStep(ShellCommand,
+                 command=['del' if self.IsWindows() else 'rm', 'testlogs.7z'],
+                 haltOnFailure=False,
+                 flunkOnFailure=False,
+                 warnOnFailure=True,
+                 name='Prepare to pack test results',
+                 description='cleanup')
+    testlog_dirs = ['build_drmemory-dbg-32/logs',
+                    'build_drmemory-dbg-32/Testing/Temporary',
+                    'build_drmemory-rel-32/logs',
+                    'build_drmemory-rel-32/Testing/Temporary']
+    if self.IsWindows():
+      testlog_dirs += ['xmlresults']
+    else:
+      testlog_dirs += ['xml:results']
+    self.AddToolStep(ShellCommand,
+                     command=['7z', 'a', 'testlogs.7z'] + testlog_dirs,
+                     haltOnFailure=True,
+                     name='Pack test results',
+                     description='pack results')
+    self.AddStep(FileUpload,
+                 slavesrc='testlogs.7z',
+                 masterdest=WithProperties(
+                     'public_html/testlogs/' +
+                     'from_%(buildername)s/testlogs_r%(got_revision)s_b' +
+                     '%(buildnumber)s.7z'),
+                 name='Upload test logs to the master')
 
 
 class CTest(Test):
@@ -189,138 +537,30 @@ class DrMemoryTest(Test):
       return FAILURE
     return Test.evaluateCommand(self, cmd)
 
-def CreateAppTest(windows, app_name, app_cmd, build_mode, run_mode,
-                  use_syms=True, **kwargs):
-  # Pick exe from build mode.
-  if windows:
-    cmd = ['build_drmemory-%s-32\\bin\\drmemory' % build_mode]
-  else:
-    cmd = ['build_drmemory-%s-32/bin/drmemory.pl' % build_mode]
-  # Default flags turn off message boxes, notepad, and print to stderr.
-  cmd += ['-dr_ops', '-msgbox_mask 0 -stderr_mask 15',
-          '-results_to_stderr', '-batch']
-  if windows:
-    # FIXME: The point of these app tests is to verify that we get no false
-    # positives on well-behaved applications, so we should remove these
-    # extra suppressions.  We're not using them on dev machines but we'll
-    # leave them on the bots and for tsan tests for now.
-    cmd += ['-suppress',
-            '..\\drmemory\\tests\\app_suite\\default-suppressions.txt']
-  # Full mode flags are default, light mode turns off uninits and leaks.
-  if run_mode == 'light':
-    cmd += ['-light']
-  cmd.append('--')
-  cmd += app_cmd
-  # Set _NT_SYMBOL_PATH appropriately.
-  syms_part = ''
-  env = {}
-  if not use_syms:
-    syms_part = 'nosyms '
-    if windows:
-      env['_NT_SYMBOL_PATH'] = ''
-  step_name = '%s %s %s%s' % (build_mode, run_mode, syms_part, app_name)
-  return ToolStep(DrMemoryTest,
-                  WindowsToOs(windows),
-                  command=cmd,
-                  env=env,
-                  name=step_name,
-                  descriptionDone=step_name,
-                  description='run ' + step_name,
-                  **kwargs)
-
 
 class V8DrFactory(v8_factory.V8Factory):
 
   """Subclass of V8Factory to build DR alongside V8 for the same arch."""
-
-  @staticmethod
-  def _ArchToBits(arch):
-    """Takes a V8 architecture and returns its bitwidth for DR."""
-    if not arch:  # Default to x64, we don't have any real ia32 bots.
-      return 64
-    elif arch == 'x64':
-      return 64
-    elif arch == 'ia32':
-      return 32
-    assert False, 'Unsupported architecture'
 
   def BuildFactory(self, target_arch=None, *args, **kwargs):
     f = super(V8DrFactory, self).BuildFactory(*args,
                                               target_arch=target_arch,
                                               **kwargs)
     # Add in a build of DR.
-    f.addStep(SVN(svnurl=dr_svnurl,
-                  workdir='dynamorio',
-                  mode='update',
-                  name='Checkout DynamoRIO'))
-    cflags = '-m%s' % self._ArchToBits(target_arch)
-    cmake_env = {'CFLAGS': cflags, 'CXXFLAGS': cflags}
-    # We use release DR on the bots because debug is too slow.
-    f.addStep(Configure(command=['cmake', '..', '-DDEBUG=OFF'],
-                        workdir='dynamorio/build',
-                        name='Configure release DynamoRIO',
-                        env=cmake_env))
-    f.addStep(Compile(command=['make', '-j5'],
-                      workdir='dynamorio/build',
-                      name='Compile release DynamoRIO'))
+    b = DrCommands(self._target_platform, os_version=None, build_factory=f)
+    b.AddDynamoRIOSource()
+    b.AddTools()
+    # Debug DR is too slow for the V8 tests so use release.
+    b.AddDRBuild(target='Release', target_arch=target_arch)
     return f
 
   def V8Factory(self, target_arch=None, *args, **kwargs):
     assert 'shell_flags' not in kwargs
-    bits = self._ArchToBits(target_arch)
+    bits = ArchToBits(target_arch)
     drrun = '../../dynamorio/build/bin%d/drrun' % bits
-    # TODO(rnk): V8 tests tend to do a lot of flushing, which trigger repeated
-    # resets that slow things down.  Pass "-reset_at_pending 0" to alleviate
-    # this once we can get quoted strings through V8's test scripts.
-    kwargs['shell_flags'] = '%s @' % drrun
+    kwargs['shell_flags'] = '%s -reset_every_nth_pending 0 -- @' % drrun
     return super(V8DrFactory, self).V8Factory(*args, target_arch=target_arch,
                                               **kwargs)
-
-
-def CreateDRInDrMemoryFactory(nightly=False, os='', os_version=''):
-  ret = factory.BuildFactory()
-
-  # DR factory - we checkout Dr. Memory and *then* update drmemory/dynamorio,
-  # otherwise Buildbot goes crazy about multiple revisions/ChangeSources.
-  ret.addStep(
-    SVN(
-        svnurl=drm_svnurl,
-        workdir='drmemory',
-        mode='update',
-        name='Checkout Dr. Memory'))
-  ret.addStep(
-    ShellCommand(
-        command=['svn', 'up', '--force', '../drmemory/dynamorio'],
-        name='Update DR to ToT',
-        description='update DR'))
-  ret.addStep(
-    SetProperty(
-        command=['svnversion', '../drmemory/dynamorio'],
-        property='dr_revision',
-        name='Get DR revision',
-        descriptionDone='Get DR revision',
-        description='DR revision'))
-  AddDRSuite(ret, '../drmemory/dynamorio', nightly, os, os_version)
-  if os == 'linux':
-    ret.addStep(
-        DirectoryUpload(
-            slavesrc='install/docs/html',
-            masterdest='public_html/dr_docs'))
-  return ret
-
-
-def AddToolsSteps(f, os):
-  """Add steps to update and unpack drmemory's tools from svn."""
-  if os.startswith('win'):
-    f.addStep(SVN(svnurl=bot_tools_svnurl,
-                  workdir='bot_tools',
-                  alwaysUseLatest=True,
-                  mode='update',
-                  name='update tools'))
-    f.addStep(ShellCommand(command=['unpack.bat'],
-                           workdir='bot_tools',
-                           name='unpack tools',
-                           description='unpack tools'))
 
 
 def ToolStep(step_class, os, **kwargs):
@@ -342,230 +582,35 @@ def ToolStep(step_class, os, **kwargs):
   return step_class(**kwargs)
 
 
-def DrShellCommand(os=None, **kwargs):
-  return ToolStep(ShellCommand, os, **kwargs)
+def DynamoRIOSuiteFactory(os='', os_version=''):
+  return DrCommands(os, os_version).DynamoRIOSuite()
 
 
-def DrCTest(os=None, **kwargs):
-  return ToolStep(CTest, os, **kwargs)
+def DynamoRIONightlyFactory(os='', os_version=''):
+  return DrCommands(os, os_version).DynamoRIONightly()
 
 
-def AddDRSuite(f, dr_path, nightly, os, os_version):
-  assert os
-  AddToolsSteps(f, os)
-  if nightly:
-    assert os
-    assert os_version
-    os_mapping = {'win' : 'Windows', 'linux' : 'Linux'}
-    site_name = '%s.%s.BuildBot' % (os_mapping[os], os_version.capitalize())
-    suite_args = 'nightly;long;site=%s' % site_name
-    step_name = 'Run DR nightly suite'
-    timeout = 20 * 60  # 20min w/o output.  10 is too short for Windows.
-  else:
-    suite_args = ''  # TODO(rnk): Use a recent cmake so we can switch to ninja.
-    step_name = 'Build and test DR'
-    timeout = 10 * 60  # 10min w/o output
-  runsuite_cmd = '%s/suite/runsuite.cmake' % dr_path
-  if suite_args:
-    runsuite_cmd += ',' + suite_args
-  cmd = ['ctest', '--timeout', '120', '-VV', '-S', runsuite_cmd]
-  f.addStep(DrCTest(command=cmd,
-                    os=os,
-                    name=step_name,
-                    descriptionDone=step_name,
-                    timeout=timeout))
-
-
-def CreateDRFactory(nightly=False, os='', os_version=''):
-  """Create a factory to run the DR pre-commit suite.
-
-  Same as the above, except we just do a plain DR checkout instead of
-  DR-within-drmemory.  Used on the client.dynamorio waterfall.
-  """
-  assert os
-  ret = factory.BuildFactory()
-  ret.addStep(SVN(svnurl=dr_svnurl,
-                  workdir='dynamorio',
-                  mode='update',
-                  name='update DynamoRIO'))
-  AddDRSuite(ret, '../dynamorio', nightly, os, os_version)
-  if os == 'linux':
-    ret.addStep(
-        DirectoryUpload(
-            slavesrc='install/docs/html',
-            masterdest='public_html/dr_docs'))
-  return ret
+def DynamoRIOPackageFactory(os='', os_version=''):
+  return DrCommands(os, os_version).DynamoRIOPackage()
 
 
 def CreateDrMFactory(windows):
-  os = WindowsToOs(windows)
-  ret = factory.BuildFactory()
-  ret.addStep(
-      SVN(svnurl=drm_svnurl,
-          workdir='drmemory',
-          mode='update',
-          name='Checkout Dr. Memory'))
-  ret.addStep(
-      SetProperty(
-          command=['svnversion', '../drmemory/dynamorio'],
-          property='dr_revision',
-          name='Get DR revision',
-          descriptionDone='Get DR revision',
-          description='DR revision'))
-  AddToolsSteps(ret, os)
-  cmd = ['ctest', '--timeout', '60', '-VV', '-S',
-         WithProperties('../drmemory/tests/runsuite.cmake,' +
-                        'drmemory_only;build=%(buildnumber)s')]
-  ret.addStep(
-      DrCTest(
-          command=cmd,
-          name='Dr. Memory ctest',
-          descriptionDone='runsuite',
-          os=os,
-          flunkOnFailure=False, # failure doesn't mark the whole run as failure
-          warnOnFailure=True,
-          timeout=600))
-  if windows:
-    app_suite_cmd = ['build_drmemory-dbg-32\\tests\\app_suite_tests.exe']
-  else:
-    app_suite_cmd = ['build_drmemory-dbg-32/tests/app_suite_tests']
-  # Run app_suite tests in (dbg, rel) in light mode.
-  for build_mode in ('dbg', 'rel'):
-    ret.addStep(CreateAppTest(windows, 'app_suite_tests', app_suite_cmd,
-                              build_mode, 'light', use_syms=True))
-    if windows:
-      ret.addStep(CreateAppTest(windows, 'app_suite_tests', app_suite_cmd,
-                                build_mode, 'light', use_syms=False))
-  if windows:
-    ret.addStep(
-        ShellCommand(
-            command=[
-                'svn', 'checkout', '--force',
-                'http://data-race-test.googlecode.com/svn/trunk/',
-                '../tsan'],
-            name='Checkout TSan tests',
-            description='checkout tsan tests'))
-    ret.addStep(
-        DrShellCommand(
-            command=['make', '-C', '../tsan/unittest'],
-            # suppress cygwin 'MSDOS' warnings
-            env={'CYGWIN': 'nodosfilewarning'},
-            os=os,
-            name='Build TSan tests',
-            descriptionDone='build tsan tests',
-            description='build tsan tests'))
-
-    tsan_suite_cmd = [('..\\tsan\\unittest\\bin\\'
-                       'racecheck_unittest-windows-x86-O0.exe'),
-                      ('--gtest_filter="-PositiveTests.FreeVsRead'
-                       ':NegativeTests.WaitForMultiple*"'),
-                      '-147']
-
-    # Run tsan tests in (dbg, rel) cross (full, light).
-    for build_mode in ('dbg', 'rel'):
-      for run_mode in ('full', 'light'):
-        ret.addStep(CreateAppTest(windows, 'TSan tests', tsan_suite_cmd,
-                                  build_mode, run_mode, use_syms=True))
-    # Do one more run of TSan + app_suite without any pdb symbols to make
-    # sure our default suppressions match.
-    ret.addStep(CreateAppTest(windows, 'TSan tests', tsan_suite_cmd,
-                              'dbg', 'full', use_syms=False))
-
-    ret.addStep(
-        ShellCommand(
-            command=[
-                'taskkill', '/T', '/F', '/IM', 'drmemory.exe', '||',
-                 'echo', 'Dr. Memory is not running'],
-            alwaysRun=True,
-            name='Kill Dr. Memory processes',
-            description='taskkill'))
-
-  ret.addStep(
-      ShellCommand(
-          command=['del' if windows else 'rm', 'testlogs.7z'],
-          haltOnFailure=False,
-          flunkOnFailure=False,
-          warnOnFailure=True,
-          name='Prepare to pack test results',
-          description='cleanup'))
-
-  testlog_dirs = ['build_drmemory-dbg-32/logs',
-                  'build_drmemory-dbg-32/Testing/Temporary',
-                  'build_drmemory-rel-32/logs',
-                  'build_drmemory-rel-32/Testing/Temporary']
-  if windows:
-    testlog_dirs += ['xmlresults']
-  else:
-    testlog_dirs += ['xml:results']
-  ret.addStep(DrShellCommand(command=['7z', 'a', 'testlogs.7z'] + testlog_dirs,
-                             haltOnFailure=True,
-                             os=os,
-                             name='Pack test results',
-                             description='pack results'))
-
-  ret.addStep(
-     FileUpload(
-          slavesrc='testlogs.7z',
-          masterdest=WithProperties(
-              'public_html/testlogs/' +
-              'from_%(buildername)s/testlogs_r%(got_revision)s_b' +
-              '%(buildnumber)s.7z'),
-          name='Upload test logs to the master'))
-  return ret
+  # Build and run the drmemory pre-commit suite.
+  cmds = DrCommands(WindowsToOs(windows))
+  cmds.DrMemorySuite()
+  if cmds.IsWindows():
+    cmds.AddTSanTestBuild()
+    cmds.AddDrMemoryTSanTests()
+    # We used to kill stale drmemory processes, but now we use auto-reboot.
+  cmds.AddDrMemoryLogsUpload()
+  return cmds.factory
 
 
 def CreateDrMPackageFactory(windows):
-  os = WindowsToOs(windows)
-  ret = factory.BuildFactory()
-  ret.addStep(
-      SVN(svnurl=drm_svnurl,
-          mode='clobber',
-          name='Checkout Dr. Memory'))
-  AddToolsSteps(ret, os)
-  # package.cmake will complain if this does not start with 'DrMemory-'
-  package_name = 'DrMemory-package'
-  # The default package name has the version and revision, so we override it
-  # to something we can predict.
-  cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
-  cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
-  ret.addStep(DrShellCommand(command=cmd,
-                             os=os,
-                             description='Package Dr. Memory',
-                             name='Package Dr. Memory'))
+  return DrCommands(WindowsToOs(windows)).DrMemoryPackage()
 
-  if windows:
-    OUTPUT_DIR = ('build_drmemory-debug-32\\' +
-                  '_CPack_Packages\\Windows\\ZIP\\' + package_name)
-    RES_FILE = 'drmemory-windows-r%(got_revision)s-sfx.exe'
-    PUB_FILE = RES_FILE
 
-    ret.addStep(
-        DrShellCommand(
-            command=['7z', 'a', '-sfx', WithProperties(RES_FILE), '*'],
-            workdir=WithProperties('build\\' + OUTPUT_DIR),
-            haltOnFailure=True,
-            os=os,
-            name='Pack test results',
-            description='pack results'))
-    ret.addStep(
-        FileUpload(
-            slavesrc=WithProperties(OUTPUT_DIR + '/' + RES_FILE),
-            masterdest=LATEST_WIN_BUILD,
-            name='Upload as latest build'))
-  else:
-    OUTPUT_DIR = ('build_drmemory-debug-32/' +
-                  '_CPack_Packages/Linux/TGZ')
-    RES_FILE = package_name + '.tar.gz'
-    PUB_FILE = 'drmemory-linux-r%(got_revision)s.tar.gz'
-
-  ret.addStep(
-      FileUpload(
-          slavesrc=WithProperties(OUTPUT_DIR + '/' + RES_FILE),
-          masterdest=WithProperties('public_html/builds/' +
-                                    PUB_FILE),
-          name='Upload binaries to the master'))
-  return ret
-
+# TODO(rnk): Convert the rest of these to DrCommands methods.
 
 def CreateWinStabFactory():
   ret = factory.BuildFactory()
@@ -626,22 +671,7 @@ def CreateWinStabFactory():
              descriptionDone=('\'%s\' tests' % test),
              description=('run \'%s\' tests' % test)))
 
-  def isWeeklyRun(step):
-    # No hasProperty, so we have to test for a lookup exception.
-    try:
-      step.getProperty('is_weekly')
-    except KeyError:
-      return False
-    return True
-
-  ret.addStep(ShellCommand(command='shutdown -t 2 -r -f',
-                           name='reboot',
-                           description='reboot',
-                           descriptionDone='reboot',
-                           doStepIf=isWeeklyRun))
-
   return ret
-
 
 
 def CreateLinuxChromeFactory():
