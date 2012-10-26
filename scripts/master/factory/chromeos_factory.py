@@ -9,9 +9,15 @@ import os
 from buildbot.steps import shell
 from buildbot.process.properties import Property, WithProperties
 
+from common import chromium_utils
 from master import chromium_step
 from master.factory import build_factory
 from master.factory import chromeos_build_factory
+from master.factory import commands
+from master.log_parser import process_log
+
+import config
+
 
 class CbuildbotFactory(object):
   """
@@ -39,6 +45,7 @@ class CbuildbotFactory(object):
       show_gclient_output: Set to False to hide the output of 'gclient sync'.
           Used by external masters to prevent leaking sensitive information,
           since both external and internal slaves use internal.DEPS/.
+      perf_file: If set, name of the perf file to upload.
   """
   _default_git_base = 'http://git.chromium.org/chromiumos'
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
@@ -49,7 +56,7 @@ class CbuildbotFactory(object):
                chromite_repo=_default_chromite, dry_run=False, chrome_root=None,
                factory=None, pass_revision=False, slave_manager=True,
                chromite_patch=None, trybot=False, sleep_sync=None,
-               show_gclient_output=True):
+               show_gclient_output=True, perf_file=None):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -75,6 +82,8 @@ class CbuildbotFactory(object):
 
     self.add_bootstrap_steps()
     self.add_cbuildbot_step(params, pass_revision)
+    if perf_file:
+      self.add_perf_step(params, perf_file)
 
   def _git_clear_and_checkout(self, repo, patch=None):
     """rm -rf and clone the basename of the repo passed without .git
@@ -127,7 +136,7 @@ class CbuildbotFactory(object):
     if self.sleep_sync:
       # We run a script from the script checkout above.
       fuzz_start = ['python', 'scripts/slave/random_delay.py',
-                    '--max=%g' % self.sleep_sync,]
+                    '--max=%g' % self.sleep_sync]
       self.f_cbuild.addStep(shell.ShellCommand,
                             command=fuzz_start,
                             name='random_delay',
@@ -179,6 +188,40 @@ class CbuildbotFactory(object):
                           name='cbuildbot',
                           description=description,
                           usePTY=False)
+
+
+  def add_perf_step(self, params, perf_file):
+    """Adds step for uploading perf results using the given file.
+
+    Args:
+      params: Extra parameters for cbuildbot.
+      perf_file: Name of the perf file to upload. Note the name of this file
+        will be used as the testname and params[0] will be used as the platform
+        name.
+    """
+    # Name of platform is always taken as the first param.
+    platform = params.split()[0]
+    # Name of the test is based off the name of the file.
+    test = os.path.splitext(perf_file)[0]
+    # Assuming all perf files will be stored in the cbuildbot log directory.
+    perf_file_path = os.path.join(self.buildroot, 'cbuildbot_logs', perf_file)
+    report_link = '/'.join([config.Master.perf_base_url, platform, test,
+                            config.Master.perf_report_url_suffix])
+    output_dir = chromium_utils.AbsoluteCanonicalPath('/'.join([
+        config.Master.perf_output_dir, platform, test]))
+
+    cmd = ['cat', perf_file_path]
+
+    perf_class = commands.CreatePerformanceStepClass(
+        process_log.GraphingLogProcessor,
+        report_link=report_link, output_dir=output_dir,
+        factory_properties={}, perf_name=platform,
+        test_name=test)
+
+    self.f_cbuild.addStep(
+        perf_class, command=cmd, name='Upload Perf Results',
+        description='upload_perf_results')
+
 
   def get_factory(self):
     """Returns the produced factory."""
