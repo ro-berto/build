@@ -359,6 +359,7 @@ F('dbg_aura', win().ChromiumFactory(
       'compositor',
       'content_browsertests',
       'content_unittests',
+      'interactive_ui',
       'unit_unit',
       'views',
     ],
