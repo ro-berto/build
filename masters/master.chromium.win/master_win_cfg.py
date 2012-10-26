@@ -355,6 +355,7 @@ F('dbg_aura', win().ChromiumFactory(
     tests=[
       'ash_unittests',
       'aura',
+      'browser_tests',
       'compositor',
       'content_browsertests',
       'content_unittests',
@@ -364,6 +365,7 @@ F('dbg_aura', win().ChromiumFactory(
     project='all.sln;aura_builder',
       factory_properties={'gclient_env': {'GYP_DEFINES': aura_gyp_defines},
                           'process_dumps': True,
+                          'sharded_tests': sharded_tests,
                           'start_crash_handler': True,
                           'generate_gtest_json': True}))
 # When the tests grow we'll need a separate tester.
