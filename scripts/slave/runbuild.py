@@ -45,21 +45,23 @@ def get_args():
   parser.add_option('--list-steps', action='store_true',
                     help='list steps in factory, but don\'t execute them')
   parser.add_option('--stepfilter', help='only run steps that match the '
-                    'stepfilter regex')
+                    'stepfilter regex', default=None)
   parser.add_option('--stepreject', help='reject any steps that match the '
-                    'stepfilter regex')
+                    'stepfilter regex', default=None)
   parser.add_option('--logfile', default='build_runner.log',
                     help='log build runner output to file (use - for stdout). '
                     'default: %default')
   parser.add_option('--hide-header', help='don\'t log environment information'
                     ' to logfile', action='store_true')
+  parser.add_option('--slave-dir', help='location of the slave dir',
+                    default=None)
   parser.add_option('--svn-rev', help='revision to check out, default: '
                     'LKGR')
   parser.add_option('--master-cfg', default='master.cfg',
                     help='filename of the master config. default: %default')
   parser.add_option('--builderpath',
                     help='directory to build results in. default: safe '
-                    'transformation of builder name')
+                    'transformation of builder name', default=None)
   parser.add_option('--build-properties', action='callback',
                     callback=chromium_utils.convert_json, type='string',
                     nargs=1, default={},
@@ -106,6 +108,8 @@ def args_ok(inoptions, pos_args):
       if not inoptions.master_dir:
         inoptions.mastername = pos_args.pop(0)
 
+  inoptions.step_regex = None
+  inoptions.stepreject_regex = None
   if inoptions.stepfilter:
     if inoptions.stepreject:
       print >>sys.stderr, ('Error: can\'t specify both stepfilter and '
@@ -127,7 +131,7 @@ def args_ok(inoptions, pos_args):
       inoptions.stepreject_regex = re.compile(inoptions.stepreject)
     except re.error as e:
       print >>sys.stderr, 'Error compiling stepreject regex \'%s\': %s' % (
-          inoptions.stepfilter, e)
+          inoptions.stepreject, e)
       return False
 
   if inoptions.list_builders:
@@ -145,6 +149,11 @@ def args_ok(inoptions, pos_args):
     if not (pos_args or inoptions.slavehost or inoptions.builder):
       print >>sys.stderr, 'Error: you must provide a builder or slave hostname.'
       return False
+
+  # buildbot expects a list here, not a comma-delimited string
+  if 'blamelist' in inoptions.build_properties:
+    inoptions.build_properties['blamelist'] = (
+        inoptions.build_properties['blamelist'].split(','))
 
   inoptions.spec = {}
   if inoptions.builder:
@@ -215,20 +224,20 @@ def args_ok(inoptions, pos_args):
   return True
 
 
-def execute(args):
-  if args.list_masters:
+def execute(options):
+  if options.list_masters:
     masterpairs = master_cfg_utils.GetMasters()
     master_cfg_utils.PrettyPrintMasters(masterpairs)
     return 0
 
-  if args.master_dir:
-    config = master_cfg_utils.LoadConfig(args.master_dir, args.master_cfg)
+  if options.master_dir:
+    config = master_cfg_utils.LoadConfig(options.master_dir, options.master_cfg)
   else:
-    path = master_cfg_utils.ChooseMaster(args.mastername)
+    path = master_cfg_utils.ChooseMaster(options.mastername)
     if not path:
       return 2
 
-    config = master_cfg_utils.LoadConfig(path, config_file=args.master_cfg)
+    config = master_cfg_utils.LoadConfig(path, config_file=options.master_cfg)
 
   if not config:
     return 2
@@ -237,73 +246,75 @@ def execute(args):
   builders = master_cfg_utils.Denormalize(
       config['BuildmasterConfig']['builders'], 'slavenames', 'slavename')
 
-  if args.list_builders:
+  if options.list_builders:
     master_cfg_utils.PrettyPrintBuilders(builders, mastername)
     return 0
 
-  my_builder = master_cfg_utils.ChooseBuilder(builders, args.spec)
+  my_builder = master_cfg_utils.ChooseBuilder(builders, options.spec)
 
-  if args.spec and 'hostname' in args.spec:
-    slavename = args.spec['hostname']
-  elif (args.spec and 'either' in args.spec) and (
-      args.spec['either'] != my_builder['name']):
-    slavename = args.spec['either']
+  if options.spec and 'hostname' in options.spec:
+    slavename = options.spec['hostname']
+  elif (options.spec and 'either' in options.spec) and (
+      options.spec['either'] != my_builder['name']):
+    slavename = options.spec['either']
   else:
     slavename = my_builder['slavename']
 
   if not my_builder:
     return 2
 
-  if args.build_properties:
-    buildsetup = args.build_properties
+  if options.build_properties:
+    buildsetup = options.build_properties
   else:
     buildsetup = {}
-    buildsetup['revision'] = '%d' % args.revision
+    buildsetup['revision'] = '%d' % options.revision
     buildsetup['branch'] = 'src'
 
   steplist, build = builder_utils.MockBuild(my_builder, buildsetup, mastername,
-      slavename, basepath=args.builderpath,
-      build_properties=args.build_properties)
+      slavename, basepath=options.builderpath,
+      build_properties=options.build_properties,
+      slavedir=options.slave_dir)
 
-  if args.list_steps:
+  if options.list_steps:
+    filtered_steps = runbuild_utils.FilterSteps(steplist,
+                                                options.step_regex,
+                                                options.stepreject_regex)
     print
     print 'listing steps in %s/%s:' % (mastername, my_builder['name'])
     print
-    for step in steplist:
-      if hasattr(args, 'step_regex') and not args.step_regex.search(step.name):
-        print '-', step.name, '[skipped]'
-      elif hasattr(args, 'stepreject_regex') and (
-          args.stepreject_regex.search(step.name)):
+    for skip, step in filtered_steps:
+      if skip:
         print '-', step.name, '[skipped]'
       else:
         print '*', step.name
     return 0
 
-  if not args.annotate:
+  if not options.annotate:
     print >>sys.stderr, 'using %s builder \'%s\'' % (mastername,
         my_builder['name'])
 
-  if args.output_build_properties:
+  if options.output_build_properties:
     print
     print 'build properties:'
     print runbuild_utils.PropertiesToJSON(build.getProperties())
 
-  if args.output_factory_properties:
+  if options.output_factory_properties:
     print
     print 'factory properties:'
     print runbuild_utils.PropertiesToJSON(my_builder['factory'].properties)
 
-  if args.output_build_properties or args.output_factory_properties:
+  if options.output_build_properties or options.output_factory_properties:
     return 0
 
   commands = builder_utils.GetCommands(steplist)
+  filtered_commands = runbuild_utils.FilterCommands(commands,
+                                                    options.step_regex,
+                                                    options.stepreject_regex)
+
 
   start_time = time.clock()
-  commands_executed, err = runbuild_utils.Execute(commands,
-      getattr(args, 'step_regex', None),
-      getattr(args, 'stepreject_reject', None),
-      args.annotate, args.log)
-
+  commands_executed, err = runbuild_utils.Execute(filtered_commands,
+      options.annotate, options.log)
   end_time = time.clock()
 
   if err:
@@ -311,7 +322,7 @@ def execute(args):
                          ' since start).' % (end_time - start_time))
     return 2
 
-  if not args.annotate:
+  if not options.annotate:
     print >>sys.stderr, '%d commands completed (%0.2fs).' % (
         commands_executed, end_time - start_time)
   else:

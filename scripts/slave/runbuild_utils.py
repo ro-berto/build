@@ -44,8 +44,33 @@ class LogClass(chromium_utils.RunCommandFilter):
     return None
 
 
-def Execute(commands, step_regex, step_reject, annotate, log):
-  """Given a list of shell commands, execute them sequentially.
+def step_skip_filter(item, step_regex, step_reject):
+  """Provide common step/command filtering logic."""
+  return ((step_regex and not step_regex.search(item)) or
+          (step_reject and step_reject.search(item)))
+
+
+def FilterSteps(steps, step_regex, step_reject):
+  """Filter steps based on regex/reject.
+
+  Returns (skip, step) for each skip.
+  """
+  return list((step_skip_filter(step.name, step_regex, step_reject), step)
+              for step in steps)
+
+
+def FilterCommands(commands, step_regex, step_reject):
+  """Filter commands based on regex/reject.
+
+  Returns (skip, command) for each command.
+  """
+  return list((step_skip_filter(cmd['name'], step_regex, step_reject) or
+               not cmd['doStep'], cmd)
+              for cmd in commands)
+
+
+def Execute(commands, annotate, log):
+  """Given a list of (skip, command) pairs, execute commands sequentially.
 
   A command is specified as a hash with name, command, workdir, quoted_workdir,
   quoted_command, and env. quoted_workdir and _command are suitably
@@ -60,22 +85,10 @@ def Execute(commands, step_regex, step_reject, annotate, log):
   aborted early or not.
   """
   commands_executed = 0
-  for command in commands:
-    if not command['doStep']:
+  for skip, command in commands:
+    if skip:
       print >>sys.stderr, 'skipping step: ' + command['name']
       continue
-
-    if step_regex:
-      if not step_regex.search(command['name']):
-        if not annotate:
-          print >>sys.stderr, 'skipping step: ' + command['name']
-        continue
-
-    if step_reject:
-      if step_reject.search(command['name']):
-        if not annotate:
-          print >>sys.stderr, 'skipping step: ' + command['name']
-          continue
 
     if not annotate:
       print >>sys.stderr, 'running step: %s' % command['name']

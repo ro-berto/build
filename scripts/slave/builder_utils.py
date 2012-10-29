@@ -48,6 +48,9 @@ from twisted.spread import pb
 from twisted.spread import util
 
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 class FakeChange(object):
   """Represents a mock of a change to the source tree. See
   http://buildbot.net/buildbot/docs/0.8.5/reference/buildbot.changes.changes.
@@ -317,7 +320,7 @@ def GetCommands(steplist):
 
 
 def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
-              build_properties=None):
+              build_properties=None, slavedir=None):
   """Given a builder object and configuration, mock a Buildbot setup around it.
 
   This sets up a mock BuildMaster, BuildSlave, Build, BuildStatus, and all other
@@ -344,8 +347,9 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
   build = base.Build([FakeRequest(buildsetup)])
   safename = buildbot.util.safeTranslate(my_builder['name'])
   if not basepath: basepath = safename
-  basedir = os.path.join(os.path.dirname(__file__), '..', '..', 'slave',
-                         basepath)
+  if not slavedir: slavedir = os.path.join(SCRIPT_DIR,
+                                           '..', '..', 'slave')
+  basedir = os.path.join(slavedir, basepath)
   build.basedir = basedir
   builderstatus = builder.BuilderStatus('test')
   builderstatus.nextBuildNumber = 2

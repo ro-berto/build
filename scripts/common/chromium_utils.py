@@ -746,8 +746,6 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
   the intial command. For example, if you want to run "python a | python b | c",
   the "command" will be set to ['python', 'a'], while pipes will be set to
   [['python', 'b'],['c']]
-  NOTE: If pipes is used, filter_obj or parser_func cannot be used and the
-  stderr will automatically be redirected to stdout.
   """
 
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
