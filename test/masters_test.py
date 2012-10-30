@@ -189,6 +189,7 @@ def main():
       'master.client.syzygy': None,
       'master.client.tsan': None,  # make start fails
       'master.client.v8': 'V8',
+      'master.client.webrtc': 'WebRTC',
       'master.experimental': None,
       'master.reserved': None,  # make start fails
       'master.tryserver.chromium': 'Chromium Try Server',

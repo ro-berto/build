@@ -1334,6 +1334,27 @@ class ChromiumCommands(commands.FactoryCommands):
           link_text='layout test ' + result_str,
           command=cmd)
 
+  def AddWebRTCTests(self, tests, factory_properties, test_timeout=1200):
+    """Adds a list of tests, possibly prefixed for running within a tool.
+
+    To run a test under memcheck, prefix the test name with 'memcheck_'.
+    To run a test under tsan, prefix the test name with 'tsan_'.
+
+    Args:
+      tests: List of test names, possibly prefixed as described above.
+      factory_properties: Dict of properties to be used during execution.
+      test_timeout: Max time a test may run before it is killed.
+    """
+    for test in tests:
+      if test.startswith('memcheck_'):
+        self.AddMemoryTest(test[len('memcheck_'):], 'memcheck', test_timeout,
+                           factory_properties)
+      elif test.startswith('tsan_'):
+        self.AddMemoryTest(test[len('tsan_'):], 'tsan', test_timeout,
+                           factory_properties)
+      else:
+        self.AddAnnotatedGTestTestStep(test, factory_properties)
+
   def AddRunCrashHandler(self, build_dir=None, target=None):
     build_dir = build_dir or self._build_dir
     target = target or self._target

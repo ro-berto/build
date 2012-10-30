@@ -439,6 +439,16 @@ class Master(object):
     slave_port = 9193
     master_port_alt = 9293
 
+  class WebRTC(_Base):
+    project_name = 'WebRTC'
+    master_host = 'localhost'
+    master_port = 9094
+    slave_port = 9194
+    master_port_alt = 9294
+    server_url = 'http://webrtc.googlecode.com'
+    project_url = 'http://webrtc.googlecode.com'
+    from_address = 'webrtc-cb-watchlist@google.com'
+
 
 class Archive(object):
   archive_host = 'localhost'

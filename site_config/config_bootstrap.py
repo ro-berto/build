@@ -54,6 +54,8 @@ class Master(config_private.Master):
   syzygy_url = 'http://sawbuck.googlecode.com/svn/'
   syzygy_internal_url = config_private.Master.syzygy_internal_url
 
+  webrtc_url = 'http://webrtc.googlecode.com/svn/'
+
   # Default target platform if none was given to the factory.
   default_platform = 'win32'
 
