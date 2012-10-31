@@ -272,7 +272,7 @@ S('ios', branch='src', treeStableTimer=60)
 #
 # iOS Release iphoneos BuilderTester
 #
-B('iOS Device', 'ios_rel', gatekeeper=None, scheduler='ios',
+B('iOS Device', 'ios_rel', gatekeeper='ios_rel', scheduler='ios',
   auto_reboot=True, notify_on_missing=True)
 F('ios_rel', mac().ChromiumFactory(
   # TODO(lliabraa): Need to upstream support for running tests on devices
@@ -293,7 +293,7 @@ F('ios_rel', mac().ChromiumFactory(
 #
 # iOS Debug iphonesimulator BuilderTester
 #
-B('iOS Simulator (dbg)', 'ios_dbg', gatekeeper=None, scheduler='ios',
+B('iOS Simulator (dbg)', 'ios_dbg', gatekeeper='ios_dbg', scheduler='ios',
   auto_reboot=True, notify_on_missing=True)
 F('ios_dbg', mac().ChromiumFactory(
   target='Debug',

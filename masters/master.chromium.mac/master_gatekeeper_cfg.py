@@ -54,6 +54,14 @@ categories_steps = {
   # The gatekeeper currently does not recognize failure in a
   # @@@BUILD_STEP@@@, so we must match on the buildbot-defined step.
   'android': ['build'],
+  'ios_rel': ['compile'],
+  'ios_dbg': [
+    'compile',
+    'base_unittests',
+    'crypto_unittests',
+    'googleurl_unittests',
+    'sql_unittests',
+  ],
 }
 
 exclusions = {
@@ -96,5 +104,21 @@ def Update(config, active_master, c):
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
+      public_html='../master.chromium/public_html',
+      use_getname=True))
+
+  # Notify iOS sheriffs when iOS builder fails.
+  c['status'].append(gatekeeper.GateKeeper(
+      fromaddr=active_master.from_address,
+      categories_steps=categories_steps,
+      exclusions=exclusions,
+      relayhost=config.Master.smtp,
+      subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
+              'revision %(revision)s',
+      sheriffs=['sheriff_ios_europe', 'sheriff_ios_us'],
+      extraRecipients=active_master.tree_closing_notification_recipients,
+      lookup=master_utils.FilterDomain(),
+      forgiving_steps=forgiving_steps,
+      tree_status_url=active_master.tree_status_url,
       public_html='../master.chromium/public_html',
       use_getname=True))
