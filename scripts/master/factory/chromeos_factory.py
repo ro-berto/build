@@ -56,7 +56,8 @@ class CbuildbotFactory(object):
                chromite_repo=_default_chromite, dry_run=False, chrome_root=None,
                factory=None, pass_revision=False, slave_manager=True,
                chromite_patch=None, trybot=False, sleep_sync=None,
-               show_gclient_output=True, perf_file=None):
+               show_gclient_output=True, perf_file=None, perf_base_url=None,
+               perf_output_dir=None):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -83,7 +84,7 @@ class CbuildbotFactory(object):
     self.add_bootstrap_steps()
     self.add_cbuildbot_step(params, pass_revision)
     if perf_file:
-      self.add_perf_step(params, perf_file)
+      self.add_perf_step(params, perf_file, perf_base_url, perf_output_dir)
 
   def _git_clear_and_checkout(self, repo, patch=None):
     """rm -rf and clone the basename of the repo passed without .git
@@ -190,7 +191,7 @@ class CbuildbotFactory(object):
                           usePTY=False)
 
 
-  def add_perf_step(self, params, perf_file):
+  def add_perf_step(self, params, perf_file, perf_base_url, perf_output_dir):
     """Adds step for uploading perf results using the given file.
 
     Args:
@@ -205,10 +206,15 @@ class CbuildbotFactory(object):
     test = os.path.splitext(perf_file)[0]
     # Assuming all perf files will be stored in the cbuildbot log directory.
     perf_file_path = os.path.join(self.buildroot, 'cbuildbot_logs', perf_file)
-    report_link = '/'.join([config.Master.perf_base_url, platform, test,
+    if not perf_base_url:
+      perf_base_url = config.Master.perf_base_url
+    if not perf_output_dir:
+      perf_output_dir = config.Master.perf_output_dir
+
+    report_link = '/'.join([perf_base_url, platform, test,
                             config.Master.perf_report_url_suffix])
     output_dir = chromium_utils.AbsoluteCanonicalPath('/'.join([
-        config.Master.perf_output_dir, platform, test]))
+        perf_output_dir, platform, test]))
 
     cmd = ['cat', perf_file_path]
 
