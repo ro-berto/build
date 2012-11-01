@@ -112,6 +112,34 @@ class SwarmShellForHashes(shell.ShellCommand):
     self.setProperty('swarm_hashes', swarm_hashes)
 
 
+def GetSwarmTestsFromTestFilter(test_filters):
+  """Returns a list of all the tests in the list that should be run with
+  swarm."""
+  swarm_tests = []
+  for test_filter in test_filters:
+    if '_swarm:' in test_filter:
+      swarm_tests.append(test_filter.split('_swarm:', 1)[0])
+    elif test_filter.endswith('_swarm'):
+      swarm_tests.append(test_filter[:-len('_swarm')])
+
+  return swarm_tests
+
+
+class CompileWithRequiredSwarmTargets(shell.Compile):
+  def start(self):
+    try:
+      test_filters = self.getProperty('testfilter')
+    except KeyError:
+      test_filters = []
+
+    command = self.command
+    swarm_tests = GetSwarmTestsFromTestFilter(test_filters)
+    command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
+
+    self.setCommand(command)
+    return shell.Compile.start(self)
+
+
 class FactoryCommands(object):
   # Base URL for performance test results.
   PERF_BASE_URL = config.Master.perf_base_url
@@ -914,7 +942,7 @@ class FactoryCommands(object):
       halfOnFailure: should stop the build if compile fails
     """
     self._factory.addStep(
-        shell.Compile,
+        CompileWithRequiredSwarmTargets,
         name='compile',
         timeout=timeout,
         description=description,

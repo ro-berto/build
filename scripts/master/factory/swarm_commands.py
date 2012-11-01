@@ -20,18 +20,12 @@ def TestStepFilterSwarm(bStep):
   build has swarm steps and thus if the test should run.
   It also adds a property, swarm_tests, which contains all the tests which will
   run under swarm."""
-  bStep.setProperty('swarm_tests', '')
   test_filters = bStep.build.getProperties().getProperty('testfilter')
   test_filters = test_filters or commands.DEFAULT_TESTS
 
-  swarm_tests = ''
-  for test_filter in test_filters:
-    if '_swarm:' in test_filter:
-      swarm_tests += test_filter.split('_swarm:')[0] + ' '
-    elif test_filter.endswith('_swarm'):
-      swarm_tests += test_filter[:-len('_swarm')] + ' '
-
-  bStep.setProperty('swarm_tests', swarm_tests.strip())
+  swarm_tests = commands.GetSwarmTestsFromTestFilter(test_filters)
+  # TODO(csharp): Keep swarm_tests as a list.
+  bStep.setProperty('swarm_tests', ' '.join(swarm_tests))
 
   return bool(swarm_tests)
 
