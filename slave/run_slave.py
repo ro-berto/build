@@ -402,6 +402,7 @@ def main():
 
     remove_all_vars_except(os.environ, env_var)
     slave_path = [
+        os.path.join(os.path.expanduser('~'), 'slavebin'),
         depot_tools,
         # Reuse the python executable used to start this script.
         os.path.dirname(sys.executable),
