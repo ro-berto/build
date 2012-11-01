@@ -1,4 +1,7 @@
 deps = {
+  "build/scripts/command_wrapper/bin":
+    "/trunk/tools/command_wrapper/bin",
+
   "build/third_party/lighttpd":
     "/trunk/deps/third_party/lighttpd@58968",
 
@@ -10,9 +13,6 @@ deps = {
 
   "build/third_party/swarm_client":
     "/trunk/tools/swarm_client",
-
-  "build/scripts/command_wrapper/bin":
-    "/trunk/tools/command_wrapper/bin",
 
   "commit-queue":
     "/trunk/tools/commit-queue",
