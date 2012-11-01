@@ -352,6 +352,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('content_unittests', fp)
     if R('content_unittests_br'):
       f.AddBuildrunnerGTest('content_unittests', fp)
+    if R('device_unittests'):
+      f.AddAnnotatedGTestTestStep('device_unittests', fp)
+    if R('device_unittests_br'):
+      f.AddBuildrunnerGTest('device_unittests', fp)
     if R('media'):
       f.AddAnnotatedGTestTestStep('media_unittests', fp)
     if R('media_br'):

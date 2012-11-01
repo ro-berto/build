@@ -21,6 +21,7 @@ chromium_categories_steps = {
     'courgette_unittests',
     'crypto_unittests',
     'dbus_unittests',
+    'device_unittests',
     'googleurl_unittests',
     'installer_util_unittests',
     'interactive_ui_tests',

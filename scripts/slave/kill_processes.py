@@ -179,6 +179,7 @@ processes = [
     'crash_service.exe',
     'crypto_unittests.exe',
     'debug_message.exe',
+    'device_unittests.exe',
     'DumpRenderTree.exe',
     'flush_cache.exe',
     'gl_tests.exe',

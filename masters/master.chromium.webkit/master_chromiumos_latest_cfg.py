@@ -45,6 +45,7 @@ F('f_chromiumos_rel', linux().ChromiumOSWebkitLatestFactory(
       'content_unittests',
       'crypto_unittests',
       'dbus_unittests',
+      'device_unittests',
       'gpu_unittests',
       'googleurl_unittests',
       'interactive_ui_tests',
