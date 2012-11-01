@@ -71,11 +71,10 @@ class WebRTCFactory(gclient_factory.GClientFactory):
                                                  self._target_platform)
     # Override test runner script paths with our own that can run any test and
     # have our suppressions configured.
-    # pylint: disable=W0212
     cmds._posix_memory_tests_runner = cmds.PathJoin(
-        cmds._repository_root, 'tools', 'valgrind-webrtc', 'webrtc_tests.sh')
+        'src', 'tools', 'valgrind-webrtc', 'webrtc_tests.sh')
     cmds._win_memory_tests_runner = cmds.PathJoin(
-        cmds._repository_root, 'tools', 'valgrind-webrtc', 'webrtc_tests.bat')
+        'src', 'tools', 'valgrind-webrtc', 'webrtc_tests.bat')
 
     cmds.AddWebRTCTests(tests, factory_properties)
     return factory
