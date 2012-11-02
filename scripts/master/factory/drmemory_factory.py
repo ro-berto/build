@@ -267,7 +267,8 @@ class DrCommands(object):
     # output the name to stderr or in a symlink.
     package_name = 'DrMemory-package'
     cpack_arg = 'cpackappend=set(CPACK_PACKAGE_FILE_NAME "%s")' % package_name
-    cmd = ['ctest', '-VV', '-S', 'package.cmake,build=42;' + cpack_arg]
+    cmd = ['ctest', '-VV', '-S', '../drmemory/package.cmake,build=42;' +
+           cpack_arg]
     self.AddToolStep(ShellCommand,
                      command=cmd,
                      description='Package Dr. Memory',
