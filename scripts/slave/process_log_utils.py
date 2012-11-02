@@ -177,7 +177,7 @@ class PerformanceLogProcessor(object):
     for perf_key in all_perf_data.keys():
       # tools/perf_expectations/tests/perf_expectations_unittest.py should have
       # a matching regular expression.
-      m = re.match(r'^' + self._perf_name + '/' + self._test_name +
+      m = re.search(r'^' + self._perf_name + '/' + self._test_name +
                    '/([\w\.-]+)/([\w\.-]+)$', perf_key)
       if not m:
         continue
@@ -360,7 +360,7 @@ class BenchpressLogProcessor(PerformanceLogProcessor):
 
   def ProcessLine(self, log_line):
     if log_line.find('Time (') > -1:
-      match = BenchpressLogProcessor.TIMING_REGEX.match(log_line)
+      match = BenchpressLogProcessor.TIMING_REGEX.search(log_line)
       self._matches[match.group(1)] = int(match.group(2))
 
   def _FinalizeProcessing(self):
@@ -444,7 +444,7 @@ class PlaybackLogProcessor(PerformanceLogProcessor):
         return
 
     if self.current_type_data is not None:
-      match = PlaybackLogProcessor.RESULT_LINE.match(line)
+      match = PlaybackLogProcessor.RESULT_LINE.search(line)
       if match:
         test_name = match.group(1)
         test_data = int(match.group(2))
@@ -561,8 +561,8 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     return self.PerformanceChanges() + self._text_summary
 
   def ProcessLine(self, line):
-    results_match = self.RESULTS_REGEX.match(line)
-    histogram_match = self.HISTOGRAM_REGEX.match(line)
+    results_match = self.RESULTS_REGEX.search(line)
+    histogram_match = self.HISTOGRAM_REGEX.search(line)
     if results_match:
       self._ProcessResultLine(results_match)
     elif histogram_match:
@@ -823,7 +823,7 @@ class GraphingFrameRateLogProcessor(GraphingLogProcessor):
     """Also looks for the Gestures: line to find the individual results."""
     # super() should be used instead of GetParentClass().
     # pylint: disable=W0212
-    line_match = self.GESTURES_REGEXP.match(line)
+    line_match = self.GESTURES_REGEXP.search(line)
     if line_match:
       match_dict = line_match.groupdict()
       graph_name = match_dict['GRAPH'].strip()
@@ -864,7 +864,7 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
     """Also looks for the Pages: line to find the page count."""
     # super() should be used instead of GetParentClass().
     # pylint: disable=W0212
-    line_match = self.PAGES_REGEXP.match(line)
+    line_match = self.PAGES_REGEXP.search(line)
     if line_match:
       self._page_list = line_match.groupdict()['LIST'].strip().split(',')
       if len(self._page_list) < 1:
