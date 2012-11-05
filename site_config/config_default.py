@@ -153,6 +153,12 @@ class Master(object):
     slave_port = 9116
     master_port_alt = 9216
 
+  class ChromiumEndure(_ChromiumBase):
+    project_name = 'Chromium Endure'
+    master_port = 9021
+    slave_port = 9121
+    master_port_alt = 9221
+
   class ChromiumGPU(_ChromiumBase):
     project_name = 'Chromium GPU'
     master_port = 9076

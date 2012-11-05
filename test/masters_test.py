@@ -152,6 +152,7 @@ def main():
       'master.chromium.chrome': 'Chromium Chrome',
       'master.chromium.chromebot': 'Chromium Chromebot',
       'master.chromium.chromiumos': 'Chromium ChromiumOS',
+      'master.chromium.endure': 'Chromium Endure',
       'master.chromium.flaky': 'Chromium Flaky',
       'master.chromium.fyi': 'Chromium FYI',
       'master.chromium.git': 'Chromium Git',
