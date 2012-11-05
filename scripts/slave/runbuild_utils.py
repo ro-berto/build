@@ -84,6 +84,10 @@ def Execute(commands, annotate, log):
   Returns the number of successfully executed commands and whether execution was
   aborted early or not.
   """
+  for skip, command in commands:
+    if not skip:
+      print '@@@SEED_STEP %s@@@' % command['name']
+
   commands_executed = 0
   for skip, command in commands:
     if skip:
@@ -93,7 +97,8 @@ def Execute(commands, annotate, log):
     if not annotate:
       print >>sys.stderr, 'running step: %s' % command['name']
     else:
-      print '@@@BUILD_STEP %s@@@' % command['name']
+      print '@@@STEP_CURSOR %s@@@' % command['name']
+      print '@@@STEP_STARTED@@@'
 
     print >>log, '(in %s): %s' % (command['quoted_workdir'],
                                   command['quoted_command'])
@@ -116,6 +121,7 @@ def Execute(commands, annotate, log):
     commands_executed += 1
     if ret != 0:
       return commands_executed, True
+    print '@@@STEP_CLOSED@@@'
   return commands_executed, False
 
 

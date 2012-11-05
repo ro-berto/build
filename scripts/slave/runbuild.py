@@ -311,7 +311,6 @@ def execute(options):
                                                     options.step_regex,
                                                     options.stepreject_regex)
 
-
   start_time = time.clock()
   commands_executed, err = runbuild_utils.Execute(filtered_commands,
       options.annotate, options.log)
