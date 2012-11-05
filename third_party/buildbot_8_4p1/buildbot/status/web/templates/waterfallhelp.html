@@ -99,7 +99,7 @@ Erase the text from these "Show Committer:" boxes to remove that filter.
     {% for cn in committers %}
       <tr>
         <td>
-          Show Committer: <input type="text" name="committer" value="{{ cn }}">
+          Show Committer: <input type="text" name="committer" value="{{ cn|e }}">
         </td>
       </tr>
     {% endfor %}

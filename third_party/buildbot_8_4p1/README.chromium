@@ -2707,3 +2707,23 @@ index a23bdb2..c9daf0c 100644
      def addGetProcessOutputResult(self, pattern, result):
          self._patch_gpo()
          self._gpo_patterns.append((pattern, result))
+
+
+
+
+Correctly escape the committer in the waterfall/help page.
+
+Index: waterfallhelp.html
+===================================================================
+--- waterfallhelp.html  (revision 164735)
++++ waterfallhelp.html  (working copy)
+@@ -99,7 +99,7 @@
+     {% for cn in committers %}
+       <tr>
+         <td>
+-          Show Committer: <input type="text" name="committer" value="{{ cn }}">
++          Show Committer: <input type="text" name="committer" value="{{ cn|e }}">
+         </td>
+       </tr>
+     {% endfor %}
+
