@@ -30,7 +30,7 @@ import config
 class ArchiveCoverage(object):
   """Class to copy coverage HTML to the buildbot webserver."""
 
-  def __init__(self, options):
+  def __init__(self, options, coverage_folder_name):
     """Constructor.
 
     Args:
@@ -52,6 +52,7 @@ class ArchiveCoverage(object):
       self.is_posix = True
       self.from_dir = os.path.join(os.path.dirname(options.build_dir),
                                    'out', options.target, # make, not scons
+                                   coverage_folder_name,
                                    'coverage_croc_html')
 
     else:
@@ -60,6 +61,10 @@ class ArchiveCoverage(object):
 
     self.from_dir = os.path.normpath(self.from_dir)
     print 'copy from: %s' % self.from_dir
+
+    if not os.path.exists(self.from_dir):
+      print '%s directory does not exist' % self.from_dir
+      sys.exit(1)
 
     # Extract the build name of this slave (e.g., 'chrome-release') from its
     # configuration file.
@@ -99,6 +104,10 @@ class ArchiveCoverage(object):
     # TODO(jrg) use os.path.join here?
     self.archive_path = '%scoverage/%s/%s' % (
         archive_config.www_dir_base, self.perf_subdir, self.last_change)
+    # If this is for collecting coverage for unittests, then create
+    # a separate path.
+    if coverage_folder_name == 'unittests_coverage':
+      self.archive_path = os.path.join(self.archive_path, coverage_folder_name)
     self.archive_path = os.path.normpath(self.archive_path)
     print 'archive path: %s' % self.archive_path
 
@@ -114,7 +123,7 @@ class ArchiveCoverage(object):
     Returns:
       0 if successful, or non-zero error code if error.
     """
-    if self.is_posix:
+    if os.path.exists(self.from_dir) and self.is_posix:
       self._MakeSourceWorldReadable()
 
       cmd = ['ssh', self.archive_host, 'mkdir', '-p', self.archive_path]
@@ -162,9 +171,12 @@ def Main():
   options, args = option_parser.parse_args()
   if args:
     option_parser.error('Args not supported: %s' % args)
-  ac = ArchiveCoverage(options)
-  sys.exit(ac.Run())
+  ac = ArchiveCoverage(options, 'total_coverage')
+  ac.Run()
 
+  auc = ArchiveCoverage(options, 'unittests_coverage')
+  auc.Run()
+  return 0
 
 if '__main__' == __name__:
-  Main()
+  sys.exit(Main())

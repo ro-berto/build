@@ -1381,6 +1381,17 @@ class ChromiumCommands(commands.FactoryCommands):
            '.',
            '--bundles', 'coverage_bundles.py']
     self.AddTestStep(shell.ShellCommand, 'run_coverage_bundles', cmd)
+    # Run only unittests in this step.
+    cmd = [self._python,
+           os.path.join('src', 'tools', 'code_coverage', 'coverage_posix.py'),
+           '--build-dir',
+           self._build_dir,
+           '--target',
+           self._target,
+           '--src_root',
+           '.',
+           '--all_unittests', 'True']
+    self.AddTestStep(shell.ShellCommand, 'run_unittests_only', cmd)
 
   def AddProcessCoverage(self, factory_properties=None):
     factory_properties = factory_properties or {}

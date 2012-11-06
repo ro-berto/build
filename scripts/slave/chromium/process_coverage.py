@@ -80,21 +80,45 @@ def main_linux(options, args):
   """
   target_dir = os.path.join(os.path.dirname(options.build_dir),
                             'out', options.target)
+  if os.path.exists(os.path.join(target_dir, 'total_coverage')):
+    print 'total_coverage directory exists'
+    total_cov_file = os.path.join(target_dir,
+                                  'total_coverage',
+                                  'coverage.info')
+    cmdline = [
+        sys.executable,
+        'src/tools/code_coverage/croc.py',
+        '-c', 'src/build/common.croc',
+        '-c', 'src/build/linux/chrome_linux.croc',
+        '-i', total_cov_file,
+        '-r', os.getcwd(),
+        '--tree',
+        '--html',
+        os.path.join(target_dir, 'total_coverage', 'coverage_croc_html'),
+        ]
+    result = main_common(total_cov_file, cmdline)
 
-  cov_file = os.path.join(target_dir, 'coverage.info')
+  if os.path.exists(os.path.join(target_dir, 'unittests_coverage')):
+    print 'unittests_coverage directory exists'
+    unittests_cov_file = os.path.join(target_dir,
+                                      'unittests_coverage',
+                                      'coverage.info')
+    cmdline = [
+        sys.executable,
+        'src/tools/code_coverage/croc.py',
+        '-c', 'src/build/common.croc',
+        '-c', 'src/build/linux/chrome_linux.croc',
+        '-i', unittests_cov_file,
+        '-r', os.getcwd(),
+        '--tree',
+        '--html',
+        os.path.join(target_dir, 'unittests_coverage', 'coverage_croc_html'),
+        ]
+    unittests_result = main_common(unittests_cov_file, cmdline)
 
-  cmdline = [
-      sys.executable,
-      'src/tools/code_coverage/croc.py',
-      '-c', 'src/build/common.croc',
-      '-c', 'src/build/linux/chrome_linux.croc',
-      '-i', cov_file,
-      '-r', os.getcwd(),
-      '--tree',
-      '--html', os.path.join(target_dir, 'coverage_croc_html'),
-      ]
-
-  return main_common(cov_file, cmdline)
+  if unittests_result != 0:
+    result = unittests_result
+  return result
 
 
 def main_win(options, args):
