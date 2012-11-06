@@ -528,6 +528,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           factory_properties=fp, perf=True)
     if R('scrolling_benchmark'):
       f.AddChromeRemoteControlTest('scrolling_benchmark', 'top_25.json', fp)
+    if R('jsgamebench'):
+      f.AddChromeRemoteControlTest('jsgamebench', 'jsgamebench.json', fp)
+    if R('kraken'):
+      f.AddChromeRemoteControlTest('kraken', 'kraken.json', fp)
+    if R('robohornetpro'):
+      f.AddChromeRemoteControlTest('robohornetpro', 'robohornetpro.json', fp)
 
     if R('memory'):
       f.AddMemoryTests(fp)
