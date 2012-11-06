@@ -361,8 +361,12 @@ class DrCommands(object):
     """Upload drmemory's logs after running the suite and the app tests."""
     # TODO(rnk): What would make this *really* useful for reproducing bot issues
     # is if we had a way of forcing a build with higher logging.
+    if self.IsWindows():
+      del_cmd = ['del']
+    else:
+      del_cmd = ['rm', '-f']
     self.AddStep(ShellCommand,
-                 command=['del' if self.IsWindows() else 'rm', 'testlogs.7z'],
+                 command=del_cmd + ['testlogs.7z'],
                  haltOnFailure=False,
                  flunkOnFailure=False,
                  warnOnFailure=True,
@@ -611,17 +615,22 @@ def CreateDrMPackageFactory(windows):
   return DrCommands(WindowsToOs(windows)).DrMemoryPackage()
 
 
-# TODO(rnk): Convert the rest of these to DrCommands methods.
+def CreateWinChromeFactory():
+  """Run chrome tests with the latest drmemory.
 
-def CreateWinStabFactory():
+  Do *not* build TOT chrome or sync it.  Building chrome takes a lot of
+  resources and the tests are flaky, so we only do at known good revisions.  We
+  don't want to fall too far behind, or we're not really testing Chrome's full
+  test suite.
+  """
   ret = factory.BuildFactory()
-  SFX_NAME = 'drm-sfx'  # TODO: add .exe when BB supports that, d'oh!
+  sfx_name = 'drm-sfx'  # TODO: add .exe when BB supports that, d'oh!
   ret.addStep(
       FileDownload(mastersrc=LATEST_WIN_BUILD,
-                   slavedest=(SFX_NAME + '.exe'),
+                   slavedest=(sfx_name + '.exe'),
                    name='Download the latest build'))
   ret.addStep(
-      ShellCommand(command=[SFX_NAME, '-ounpacked', '-y'],
+      ShellCommand(command=[sfx_name, '-ounpacked', '-y'],
                    haltOnFailure=True,
                    name='Unpack the build',
                    description='unpack the build'))
@@ -641,30 +650,35 @@ def CreateWinStabFactory():
           descriptionDone='get revision'))
 
   # VP8 tests
-  ret.addStep(
-      ToolStep(
-          DrMemoryTest,
-          'windows',
-          command=[
-              'bash',
-              'E:\\vpx\\vp8-test-vectors\\run_tests.sh',
-              ('--exec=unpacked/bin/drmemory.exe -batch '
-               '-no_check_leaks -no_count_leaks '
-               '-no_check_uninitialized '
-               'e:/vpx/b/Win32/Debug/vpxdec.exe'),
-              'E:\\vpx\\vp8-test-vectors',
-              ],
-          env={'PATH': 'C:\\cygwin\\bin;%PATH%'},
-          name='VP8 tests',
-          descriptionDone='VP8 tests',
-          description='run vp8 tests'))
+  # TODO(rnk): Add back the VP8 test step.  We might be able to make this part
+  # of the buildbot steps if it doesn't update often and builds incrementally.
+  if False:
+    ret.addStep(
+        ToolStep(
+            DrMemoryTest,
+            'windows',
+            command=[
+                'bash',
+                'E:\\vpx\\vp8-test-vectors\\run_tests.sh',
+                ('--exec=unpacked/bin/drmemory.exe -batch '
+                 '-no_check_leaks -no_count_leaks '
+                 '-no_check_uninitialized '
+                 'e:/vpx/b/Win32/Debug/vpxdec.exe'),
+                'E:\\vpx\\vp8-test-vectors',
+                ],
+            env={'PATH': 'C:\\cygwin\\bin;%PATH%'},
+            name='VP8 tests',
+            descriptionDone='VP8 tests',
+            description='run vp8 tests'))
 
   # Chromium tests
   for test in ['googleurl', 'printing', 'media', 'sql', 'crypto', 'remoting',
                'ipc', 'base', 'net', 'unit']:
     ret.addStep(
         Test(command=[
-                 'E:\\chromium\\src\\tools\\valgrind\\chrome_tests.bat',
+                 # Use the build dir of the chrome builder on this slave.
+                 ('..\\win-cr-builder\\build\\' +
+                  'src\\tools\\valgrind\\chrome_tests.bat'),
                  '-t', test, '--tool', 'drmemory_light', '--keep_logs',
              ],
              env={'DRMEMORY_COMMAND': 'unpacked/bin/drmemory.exe'},
@@ -676,6 +690,8 @@ def CreateWinStabFactory():
 
 
 def CreateLinuxChromeFactory():
+  # TODO(rnk): Run drmemory, not dynamorio.
+  # TODO(rnk): Automate building the chrome tests so we can update occasionally.
   ret = factory.BuildFactory()
   ret.addStep(
       SVN(
