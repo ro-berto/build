@@ -216,7 +216,7 @@ def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
 
 def MakeVersionedArchive(zip_file, file_suffix, options):
   """Takes a file name, e.g. /foo/bar.zip and an extra suffix, e.g. _baz,
-  and copies (or hardlinks) the file to /foo/bar_baz.zip."""
+  and copies the file to /foo/bar_baz.zip."""
   zip_template = os.path.basename(zip_file)
   zip_base, zip_ext = os.path.splitext(zip_template)
   # Create a versioned copy of the file.
@@ -226,10 +226,7 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
     # revision. We can move this file away.
     old_file = versioned_file.replace(zip_ext, '_old' + zip_ext)
     chromium_utils.MoveFile(versioned_file, old_file)
-  if chromium_utils.IsWindows():
-    shutil.copyfile(zip_file, versioned_file)
-  else:
-    os.link(zip_file, versioned_file)
+  shutil.copyfile(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
   build_url = options.factory_properties.get('build_url', '')
   if build_url.startswith('gs://'):
