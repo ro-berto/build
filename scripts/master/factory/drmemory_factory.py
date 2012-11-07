@@ -31,6 +31,23 @@ bot_tools_svnurl = 'http://drmemory.googlecode.com/svn/buildbot/bot_tools'
 # builds at different directory depths.
 WIN_BUILD_ENV_PATH = r'E:\b\build\scripts\slave\drmemory\build_env.bat'
 
+# These tests are ordered roughly from shortest to longest so failure is
+# reported earlier.
+LINUX_CHROME_TESTS = [
+  'DumpRenderTree',
+  'googleurl_unittests',
+  'printing_unittests',
+  'sql_unittests',
+  'crypto_unittests',
+  'remoting_unittests',
+  'ipc_tests',
+  'media_unittests',
+  'base_unittests',
+  'browser_tests',
+  'net_unittests',
+  'unit_tests',
+]
+
 
 def WindowsToOs(windows):
   """Takes a boolean windows value and returns a platform string."""
@@ -677,7 +694,7 @@ def CreateWinChromeFactory():
     ret.addStep(
         Test(command=[
                  # Use the build dir of the chrome builder on this slave.
-                 ('..\\win-cr-builder\\build\\' +
+                 ('..\\..\\win7-cr-builder\\build\\' +
                   'src\\tools\\valgrind\\chrome_tests.bat'),
                  '-t', test, '--tool', 'drmemory_light', '--keep_logs',
              ],
@@ -690,8 +707,14 @@ def CreateWinChromeFactory():
 
 
 def CreateLinuxChromeFactory():
-  # TODO(rnk): Run drmemory, not dynamorio.
-  # TODO(rnk): Automate building the chrome tests so we can update occasionally.
+  """Run chrome tests with the latest dynamorio.
+
+  TODO(rnk): Run drmemory, not dynamorio.
+
+  We use a build of chrome produced weekly from a known good revision on the
+  same slave.
+  """
+  cr_src = '../../linux-cr-builder/build/src'
   ret = factory.BuildFactory()
   ret.addStep(
       SVN(
@@ -708,43 +731,45 @@ def CreateLinuxChromeFactory():
                       workdir='dynamorio/build',
                       name='Compile release DynamoRIO'))
 
-  test = 'DRT'
-  ret.addStep(
-      Test(command=' '.join([
-              'xvfb-run', '-a',
-              './dynamorio/build/bin64/drrun',
-              './chromium/src/out/Release/DumpRenderTree',
-              'file:///home/chrome-bot/bb.html',
-              '>drt_out',
-              '&&',
-              'md5sum', '-c', '/home/chrome-bot/bb.html.md5'
-           ]),
-           name=('Chromium \'%s\' tests' % test),
-           workdir='.',
-           descriptionDone=('\'%s\' tests' % test),
-           description=('run \'%s\' tests' % test)))
+  # Don't follow python children.  This should speed up net_unittests, which
+  # spawns a bunch of simple http servers to talk to.
+  ret.addStep(ShellCommand(
+      command=['bin64/drconfig', '-reg', 'python', '-norun', '-v'],
+      workdir='dynamorio/build',
+      name='don\'t follow python',
+      description='don\'t follow python',
+      descriptionDone='don\'t follow python'))
 
   # Chromium tests
-  for test in ['googleurl', 'printing', 'sql', 'crypto', 'remoting',
-               'ipc', 'media', 'base', 'browser', 'net', 'unit']:
-    if test in ('ipc', 'unit', 'browser'):
-      binary = test + '_tests'
-    else:
-      binary = test + '_unittests'
+  for test in LINUX_CHROME_TESTS:
     cmd = [
         'xvfb-run', '-a',
-        './dynamorio/build/bin64/drrun',
-        './chromium/src/out/Release/%s' % binary
-        ]
-    if test == 'browser':
+        '../dynamorio/build/bin64/drrun',
+        '-stderr_mask', '12',  # Show DR crashes
+        '--',
+        cr_src + '/out/Release/' + test
+    ]
+    if test == 'browser_tests':
       cmd += ['--gtest_filter=AutofillTest.BasicFormFill']
-    elif test == 'net':
+    elif test == 'net_unittests':
       cmd += ['--gtest_filter=-CertDatabaseNSSTest.ImportCACertHierarchy*']
-    ret.addStep(
-        Test(command=cmd,
-             name=('Chromium \'%s\' tests' % test),
-             workdir='.',
-             descriptionDone=('\'%s\' tests' % test),
-             description=('run \'%s\' tests' % test)))
+    elif test == 'remoting_unittests':
+      cmd += ['--gtest_filter='
+              '-VideoFrameCapturerTest.Capture:'
+              'DesktopProcessTest.DeathTest']
+    elif test == 'DumpRenderTree':
+      # We use shell redirection, so we make the command a string.
+      # TODO(rnk): We should run some selection of layout tests instead of
+      # directly running DRT.
+      cmd = ' '.join(cmd + [
+          'file:///home/chrome-bot/bb.html',
+          '>drt_out',
+          '&&',
+          'md5sum', '-c', '/home/chrome-bot/bb.html.md5'
+      ])
+    ret.addStep(Test(command=cmd,
+                     name=test,
+                     descriptionDone=test,
+                     description=test))
 
   return ret
