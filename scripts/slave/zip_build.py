@@ -100,7 +100,7 @@ def FileRegexWhitelist(options):
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
     # Also add browser_test*.pdb, ui_tests.pdb and ui_tests.pdb.
     # TODO(nsylvain): This should really be defined somewhere else.
-    return (r'^(chrome_dll|chrome_exe'
+    return (r'^(chrome[_.]dll|chrome[_.]exe'
             # r'|browser_test.+|unit_tests'
             # r'|chrome_frame_.*tests'
             r')\.pdb$')
