@@ -69,7 +69,7 @@ mac_asan_tests_2 = [
   'net',
 ]
 
-mac_asan_tests_2 = [
+mac_asan_tests_3 = [
   'browser_tests',
   'interactive_ui',
 ]
