@@ -92,7 +92,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
       'safe_browsing',
     ],
     factory_properties={'asan': True,
-                        'browser_total_shards': 2,
+                        'browser_total_shards': 3,
                         'browser_shard_index': 1 }))
 
 B('Linux ASAN Tests (2)', 'linux_asan_rel_tests_2', 'testers',
@@ -102,7 +102,6 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     build_url=linux_asan_archive,
     tests=[
       'browser_tests',
-      'content_browsertests',
       'googleurl',
       'media',
       'ppapi_unittests',
@@ -111,8 +110,21 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
       'unit',
     ],
     factory_properties={'asan': True,
-                        'browser_total_shards': 2,
+                        'browser_total_shards': 3,
                         'browser_shard_index': 2 }))
+
+B('Linux ASAN Tests (3)', 'linux_asan_rel_tests_3', 'testers',
+  'linux_asan_rel_trigger', notify_on_missing=True)
+F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=linux_asan_archive,
+    tests=[
+      'browser_tests',
+      'content_browsertests',
+    ],
+    factory_properties={'asan': True,
+                        'browser_total_shards': 3,
+                        'browser_shard_index': 3 }))
 
 def Update(config, active_master, c):
   return helper.Update(c)

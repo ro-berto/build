@@ -67,6 +67,10 @@ mac_asan_tests_1 = [
 mac_asan_tests_2 = [
   'browser_tests',
   'net',
+]
+
+mac_asan_tests_2 = [
+  'browser_tests',
   'interactive_ui',
 ]
 
@@ -109,7 +113,7 @@ F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
     tests=mac_asan_tests_1,
     factory_properties={
       'asan': True,
-      'browser_total_shards': '2',
+      'browser_total_shards': '3',
       'browser_shard_index': '1',
     }))
 
@@ -122,8 +126,20 @@ F('mac_asan_rel_tests_2', mac().ChromiumASANFactory(
     tests=mac_asan_tests_2,
     factory_properties={
       'asan': True,
-      'browser_total_shards': '2',
+      'browser_total_shards': '3',
       'browser_shard_index': '2',
+    }))
+
+B('Mac ASAN Tests (3)', 'mac_asan_rel_tests_3', 'testers',
+  'mac_asan_rel_trigger', notify_on_missing=True)
+F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=mac_asan_archive,
+    tests=mac_asan_tests_3,
+    factory_properties={
+      'asan': True,
+      'browser_total_shards': '3',
+      'browser_shard_index': '3',
     }))
 
 def Update(config, active_master, c):

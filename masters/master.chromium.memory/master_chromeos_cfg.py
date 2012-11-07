@@ -109,6 +109,10 @@ asan_tests_1 = [
 asan_tests_2 = [
   'browser_tests',
   'net',
+]
+
+asan_tests_3 = [
+  'browser_tests',
   'unit',
 ]
 
@@ -119,7 +123,7 @@ F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
     build_url=chromeos_asan_archive,
     tests=asan_tests_1,
     factory_properties=dict(fp_chromeos_asan,
-                            browser_total_shards='2',
+                            browser_total_shards='3',
                             browser_shard_index='1')))
 
 B('Chromium OS ASAN Tests (2)', 'chromeos_asan_rel_tests_2', 'testers',
@@ -129,8 +133,18 @@ F('chromeos_asan_rel_tests_2', linux().ChromiumASANFactory(
     build_url=chromeos_asan_archive,
     tests=asan_tests_2,
     factory_properties=dict(fp_chromeos_asan,
-                            browser_total_shards='2',
+                            browser_total_shards='3',
                             browser_shard_index='2')))
+
+B('Chromium OS ASAN Tests (3)', 'chromeos_asan_rel_tests_3', 'testers',
+  'chromeos_asan_rel_trigger', notify_on_missing=True)
+F('chromeos_asan_rel_tests_3', linux().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=chromeos_asan_archive,
+    tests=asan_tests_3,
+    factory_properties=dict(fp_chromeos_asan,
+                            browser_total_shards='3',
+                            browser_shard_index='3')))
 
 def Update(config, active_master, c):
   return helper.Update(c)
