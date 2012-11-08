@@ -81,8 +81,7 @@ def GetTestKeys(swarm_base_url, test_name):
            % test_name)
     return []
 
-  # TODO(csharp): return in a proper format (like json)
-  return result.split()
+  return json.loads(result)
 
 
 class ShardWatcher(object):

@@ -162,7 +162,7 @@ class GetTestKetsTest(SuperMoxTestBase):
     keys = ['key_1', 'key_2']
 
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
-    response = StringIO.StringIO('\n'.join(keys))
+    response = StringIO.StringIO(json.dumps(keys))
     swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
         response)
     self.mox.ReplayAll()
