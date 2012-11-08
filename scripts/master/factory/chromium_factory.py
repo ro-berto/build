@@ -131,7 +131,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/chrome/test/data/firefox3_profile/searchplugins', None),
        ('src/chrome/test/data/firefox3_searchplugins', None),
        ('src/chrome/test/data/ssl/certs', None)],
-    '(pyauto_functional_tests)':
+    '(pyauto_chromoting_tests)':
       [('src/chrome/test/data/plugin', None)],
     'unit':
       [('src/chrome/test/data/osdd', None)],
@@ -701,8 +701,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         continue
 
     # PyAuto functional tests.
-    if R('pyauto_functional_tests'):
-      f.AddPyAutoFunctionalTest('pyauto_functional_tests', suite='CONTINUOUS',
+    if R('pyauto_chromoting_tests'):
+      f.AddPyAutoFunctionalTest('pyauto_chromoting_tests', suite='CHROMOTING',
                                 factory_properties=fp)
     if R('pyauto_official_tests'):
       # Mapping from self._target_platform to a chrome-*.zip
