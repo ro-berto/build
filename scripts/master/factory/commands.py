@@ -731,7 +731,7 @@ class FactoryCommands(object):
         email='commit-bot@chromium.org',
         password=password,
         workdir=self.working_dir,
-        timeout=timeout or 120,
+        timeout=timeout or 600,
         haltOnFailure=True,
         flunkOnFailure=True,
         name='apply_issue',
