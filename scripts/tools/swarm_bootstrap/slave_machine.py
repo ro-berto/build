@@ -15,6 +15,7 @@ as a subset of the python syntax to a dictionary object. See
 http://code.google.com/p/swarming/wiki/MachineProvider for complete details.
 """
 
+
 import json
 import logging
 import logging.handlers
@@ -26,6 +27,9 @@ import time
 
 import url_helper  # pylint: disable=F0401
 
+
+# The default name of the text file containing the machine id of this machine.
+DEFAULT_MACHINE_ID_FILE = 'swarm_bot.id'
 
 class SlaveError(Exception):
   """Simple error exception properly scoped here."""
@@ -134,8 +138,8 @@ def ValidateCommand(commands, error_prefix='', errors=[]):
 class SlaveMachine(object):
   """Creates a slave that continuously polls the Swarm server for jobs."""
 
-  def __init__(self, url='http://localhost:8080', attributes=None,
-               max_url_tries=1):
+  def __init__(self, url='https://localhost:443', attributes=None,
+               max_url_tries=1, id_filename=None):
     """Sets the parameters of the slave.
 
     Args:
@@ -144,6 +148,8 @@ class SlaveMachine(object):
           machine dimensions as well.
       max_url_tries: The maximum number of consecutive url errors to accept
           before throwing an exception.
+      id_filename: The name of the file where the initial machine id should be
+          load from, and where any changes should be saved to.
 
     """
     self._url = url
@@ -152,6 +158,13 @@ class SlaveMachine(object):
     self._attributes['id'] = None
     self._attributes['try_count'] = 0
     self._come_back = 0
+    self._id_filename = id_filename
+
+    if self._id_filename and os.path.exists(self._id_filename):
+      with open(self._id_filename, 'r') as f:
+        # If this id is invalid the server will ignore it and generate a new
+        # id for this slave.
+        self._attributes['id'] = f.read()
 
     self._max_url_tries = max_url_tries
 
@@ -252,7 +265,12 @@ class SlaveMachine(object):
     """
 
     # Store id assigned by Swarm server so in the future they know this slave.
-    self._attributes['id'] = response['id']
+    if self._attributes['id'] != response['id']:
+      self._attributes['id'] = response['id']
+      if self._id_filename:
+        with open(self._id_filename, 'w') as f:
+          f.write(response['id'])
+
     logging.debug('received id: %s', self._attributes['id'])
 
     # Store try_count assigned by Swarm server to send it back in next request.
@@ -338,9 +356,9 @@ class SlaveMachine(object):
       return
 
     url_helper.UrlOpen(self._result_url,
-                       (('x', str(result_code)),
-                        ('s', False),
-                        ('r', result_string)),
+                       {'x': str(result_code),
+                        's': False,
+                        'r': result_string},
                        max_tries=self._max_url_tries)
 
   def LogRPC(self, args):  # pylint: disable=R0201
@@ -467,6 +485,7 @@ class SlaveMachine(object):
     commands = [sys.executable] + args
 
     try:
+      logging.debug('Running command: %s', commands)
       subprocess.check_call(commands)
     except subprocess.CalledProcessError as e:
       # The exception message will contain the commands that were
@@ -474,9 +493,8 @@ class SlaveMachine(object):
       raise SlaveRPCError(str(e))
     else:
       logging.debug('done!')
-      # At this point the script called by subprocess is responsible for
-      # notifying the Swarm server if anything goes wrong, so now the job
-      # is done.
+      # At this point the script called by subprocess has handled any further
+      # communication with the swarm server.
 
 
 def BuildRPC(func_name, args):
@@ -527,6 +545,7 @@ def ParseRPC(rpc):
 
   logging.debug('rpc function name: ' + function)
   logging.debug('rpc function arg type: ' + str(type(args)))
+  logging.debug('rpc function args: %s', str(args))
 
   return (function, args)
 
@@ -538,12 +557,12 @@ def main():
       'the machine are either given through a file (if provided) or read from '
       'stdin. See http://code.google.com/p/swarming/wiki/MachineProvider for '
       'complete details.')
-  parser.add_option('-a', '--address', default='localhost',
+  parser.add_option('-a', '--address', default='https://localhost',
                     help='Address of the Swarm server to connect to. '
                     'Defaults to %default. ')
-  parser.add_option('-p', '--port', default='8080', type='int',
+  parser.add_option('-p', '--port', default='443', type='int',
                     help='Port of the Swarm server. '
-                    'Defaults to %default. ')
+                    'Defaults to %default, which is the default https port.')
   parser.add_option('-r', '--max_url_tries', default=20, type='int',
                     help='The maximum number of times url messages will '
                     'attempt to be sent before accepting failure. Defaults '
@@ -551,8 +570,7 @@ def main():
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Set logging level to DEBUG. Optional. Defaults to '
                     'ERROR level.')
-  parser.add_option('-i', '--iterations', default=-1,
-                    type='int',
+  parser.add_option('-i', '--iterations', default=-1, type='int',
                     help='Number of iterations to request jobs from '
                     'Swarm server. Defaults to %default (infinite).')
   parser.add_option('-d', '--directory', default='.',
@@ -561,6 +579,10 @@ def main():
   parser.add_option('-l', '--log_file', default='slave_machine.log',
                     help='Set the name of the file to log to. '
                     'Defaults to %default.')
+  parser.add_option('--id_filename', default=DEFAULT_MACHINE_ID_FILE,
+                    help='The file to load the machine id from. If the file '
+                    'doesn\'t exist a new file will be create with a new ID '
+                    'retrieved from the swarm server. Defaults to %default')
   (options, args) = parser.parse_args()
 
   # Parser handles exiting this script after logging the error.
@@ -600,22 +622,17 @@ def main():
 
   url = '%s:%d' % (options.address, options.port)
   slave = SlaveMachine(url=url, attributes=attributes,
-                       max_url_tries=options.max_url_tries)
+                       max_url_tries=options.max_url_tries,
+                       id_filename=options.id_filename)
 
   # Change the working directory to specified path.
   os.chdir(options.directory)
 
-  terminated_normally = False
-  while not terminated_normally:
-    try:
-      # Start requesting jobs.
-      slave.Start(iterations=options.iterations)
-      terminated_normally = True
-    except SlaveError as e:
-      logging.exception('Slave start threw an exception:\n%s', str(e))
-
-  logging.debug('Slave machine shutting down.')
-
+  # Start requesting jobs.
+  try:
+    slave.Start(iterations=options.iterations)
+  except SlaveError as e:
+    logging.exception('Slave start threw an exception:\n%s', e)
 
 
 if __name__ == '__main__':
