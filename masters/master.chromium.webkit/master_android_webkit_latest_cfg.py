@@ -55,6 +55,7 @@ F('f_webkit_android_tests',
   linux_android().ChromiumWebkitLatestAnnotationFactory(
     annotation_script=('src/build/android/buildbot/'
                        'bb_webkit_latest_webkit_tester.sh'),
+    tests=['webkit'],
     factory_properties={
         'build_url': android_rel_archive,
         'archive_webkit_results': True,

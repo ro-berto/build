@@ -951,10 +951,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Ensure that component is set correctly in the gyp defines.
     ForceComponent(target, project, factory_properties)
 
-    factory = self.BuildFactory(target, clobber,
-                                None, None, # tests_for_build, mode,
-                                slave_type, options, compile_timeout, None,
-                                project, factory_properties,
+    factory = self.BuildFactory(target=target, clobber=clobber,
+                                tests=tests, mode=None, slave_type=slave_type,
+                                options=options,
+                                compile_timeout=compile_timeout, build_url=None,
+                                project=project,
+                                factory_properties=factory_properties,
                                 gclient_deps=gclient_deps)
 
     # Get the factory command object to create new steps to the factory.
