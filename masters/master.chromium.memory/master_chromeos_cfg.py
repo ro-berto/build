@@ -4,6 +4,7 @@
 
 from master import master_config
 from master.factory import chromium_factory
+from master.factory import chromeos_factory
 
 defaults = {}
 
@@ -70,7 +71,7 @@ fp_chromeos_asan = {
                         'chromeos=1 '),
         'GYP_GENERATORS': 'ninja' }}
 
-B('Chromium OS ASAN Builder', 'chromeos_asan_rel', 'compile',
+B('Linux Chromium OS ASAN Builder', 'chromeos_asan_rel', 'compile',
   'chromeos_asan_rel', auto_reboot=False, notify_on_missing=True)
 F('chromeos_asan_rel', linux().ChromiumASANFactory(
     slave_type='Builder',
@@ -116,7 +117,7 @@ asan_tests_3 = [
   'unit',
 ]
 
-B('Chromium OS ASAN Tests (1)', 'chromeos_asan_rel_tests_1', 'testers',
+B('Linux Chromium OS ASAN Tests (1)', 'chromeos_asan_rel_tests_1', 'testers',
   'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -126,7 +127,7 @@ F('chromeos_asan_rel_tests_1', linux().ChromiumASANFactory(
                             browser_total_shards='3',
                             browser_shard_index='1')))
 
-B('Chromium OS ASAN Tests (2)', 'chromeos_asan_rel_tests_2', 'testers',
+B('Linux Chromium OS ASAN Tests (2)', 'chromeos_asan_rel_tests_2', 'testers',
   'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_2', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -136,7 +137,7 @@ F('chromeos_asan_rel_tests_2', linux().ChromiumASANFactory(
                             browser_total_shards='3',
                             browser_shard_index='2')))
 
-B('Chromium OS ASAN Tests (3)', 'chromeos_asan_rel_tests_3', 'testers',
+B('Linux Chromium OS ASAN Tests (3)', 'chromeos_asan_rel_tests_3', 'testers',
   'chromeos_asan_rel_trigger', notify_on_missing=True)
 F('chromeos_asan_rel_tests_3', linux().ChromiumASANFactory(
     slave_type='Tester',
@@ -145,6 +146,28 @@ F('chromeos_asan_rel_tests_3', linux().ChromiumASANFactory(
     factory_properties=dict(fp_chromeos_asan,
                             browser_total_shards='3',
                             browser_shard_index='3')))
+
+B('Chromium OS (x86) ASAN',
+  factory='x86_asan',
+  builddir='chromium-tot-chromeos-x86-generic-asan',
+  scheduler='chromeos_asan_rel',
+  notify_on_missing=True)
+F('x86_asan', chromeos_factory.CbuildbotFactory(
+  buildroot='/b/cbuild.x86.asan',
+  crostools_repo=None,
+  pass_revision=True,
+  params='x86-generic-tot-asan-informational').get_factory())
+
+B('Chromium OS (amd64) ASAN',
+  factory='amd64_asan',
+  builddir='chromium-tot-chromeos-amd64-generic-asan',
+  scheduler='chromeos_asan_rel',
+  notify_on_missing=True)
+F('amd64_asan', chromeos_factory.CbuildbotFactory(
+  buildroot='/b/cbuild.amd64.asan',
+  crostools_repo=None,
+  pass_revision=True,
+  params='amd64-generic-tot-asan-informational').get_factory())
 
 def Update(config, active_master, c):
   return helper.Update(c)
