@@ -161,7 +161,7 @@ def main():
       'master.chromium.linux': 'Chromium Linux',
       'master.chromium.lkgr': 'Chromium LKGR',
       'master.chromium.mac': 'Chromium Mac',
-      'master.chromium.memory': None,
+      'master.chromium.memory': 'Chromium Memory',
       'master.chromium.memory.fyi': 'Chromium Memory FYI',
       'master.chromium.perf': 'Chromium Perf',
       'master.chromium.perf_av': 'Chromium Perf Av',
