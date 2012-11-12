@@ -380,14 +380,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('test_shell_tests', fp)
     if R('test_shell_br'):
       f.AddBuildrunnerGTest('test_shell_tests', fp)
-    if R('safe_browsing'):
-      f.AddAnnotatedGTestTestStep(
-          'safe_browsing_tests', fp,
-          arg_list=['--ui-test-action-max-timeout=40000'])
-    if R('safe_browsing_br'):
-      f.AddBuildrunnerGTest(
-          'safe_browsing_tests', fp,
-          arg_list=['--ui-test-action-max-timeout=40000'])
     # Windows sandbox
     if R('sandbox'):
       f.AddAnnotatedGTestTestStep('sbox_unittests', fp)

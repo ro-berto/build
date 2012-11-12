@@ -68,7 +68,6 @@ F('rel_unit_1', win().ChromiumGITFactory(
            'ppapi_unittests',
            'printing',
            'remoting',
-           'safe_browsing',
            'sandbox'],
     factory_properties={'process_dumps': True,
                         'browser_total_shards': 3, 'browser_shard_index': 1,

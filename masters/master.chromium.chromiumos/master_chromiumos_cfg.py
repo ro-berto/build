@@ -57,7 +57,6 @@ linux_options = [
     'ppapi_unittests',
     'printing_unittests',
     'remoting_unittests',
-    #'safe_browsing_tests',
     'sql_unittests',
     'sync_unit_tests',
     'ui_unittests',
@@ -83,7 +82,6 @@ linux_tests_1 = [
     'ppapi_unittests',
     'printing',
     'remoting',
-    #'safe_browsing'
     'unit_ipc',
     'unit_sql',
     'unit_sync',
@@ -172,7 +170,6 @@ F('tester_1', chromiumos().ChromiumOSFactory(
            'ppapi_unittests',
            'printing',
            'remoting',
-           #'safe_browsing'
            'unit_ipc',
            'unit_sql',
            'unit_sync',

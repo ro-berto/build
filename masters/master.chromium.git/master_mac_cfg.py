@@ -70,8 +70,7 @@ F('rel_unit_1', mac().ChromiumGITFactory(
          'nacl_integration',
          'ppapi_unittests',
          'printing',
-         'remoting',
-         'safe_browsing'],
+         'remoting'],
   factory_properties={'generate_gtest_json': True,
                       'browser_total_shards': 3, 'browser_shard_index': 1,})
 )

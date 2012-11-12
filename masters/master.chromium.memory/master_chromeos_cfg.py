@@ -57,7 +57,6 @@ linux_aura_options = [
   'ppapi_unittests',
   'printing_unittests',
   'remoting_unittests',
-  'safe_browsing_tests',
   'sql_unittests',
   'ui_unittests',
 ]
@@ -104,7 +103,6 @@ asan_tests_1 = [
   'ppapi_unittests',
   'printing',
   'remoting',
-  'safe_browsing',
   'views',
 ]
 
