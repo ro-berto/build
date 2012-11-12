@@ -201,13 +201,14 @@ T('win_dbg_trigger')
 #
 # Win Dbg Builder
 #
+win_dbg_gyp_defines = 'fastbuild=1 win_debug_disable_iterator_debugging=1'
 B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg',
   builddir='cr-win-dbg', auto_reboot=False, notify_on_missing=True)
 F('dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     project='all.sln;chromium_builder_tests',
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+    factory_properties={'gclient_env': {'GYP_DEFINES': win_dbg_gyp_defines},
                         'trigger': 'win_dbg_trigger'}))
 
 #
@@ -346,7 +347,8 @@ F('dbg_int', win_tester().ChromiumFactory(
 #
 # Dbg Aura builder
 #
-aura_gyp_defines = 'use_aura=1 fastbuild=1'
+aura_gyp_defines = (
+    'use_aura=1 fastbuild=1 win_debug_disable_iterator_debugging=1')
 B('Win Aura', 'dbg_aura', 'compile|testers|windows', 'win_dbg',
   notify_on_missing=True)
 F('dbg_aura', win().ChromiumFactory(
