@@ -559,7 +559,11 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
         if os.path.isfile(this_path):
           # Store files named relative to the outer output_dir.
           archive_name = this_path.replace(output_dir + os.sep, '')
-          to_zip_file.write(this_path, archive_name)
+          if os.path.getsize(this_path) == 0:
+            compress_method = zipfile.ZIP_STORED
+          else:
+            compress_method = zipfile.ZIP_DEFLATED
+          to_zip_file.write(this_path, archive_name, compress_method)
           print 'Adding %s' % archive_name
     zip_file = zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED)
     try:
