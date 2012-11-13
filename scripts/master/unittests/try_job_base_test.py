@@ -31,6 +31,7 @@ class PaseOptionsTest(unittest.TestCase):
         'patchset': None,
         'project': None,
         'reason': 'John Doe: Unnamed',
+        'requester': None,
         'repository': None,
         'revision': None,
         'root': None,

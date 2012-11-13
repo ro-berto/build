@@ -168,6 +168,7 @@ def parse_options(options, builders, pools):
 
     flatten(options, 'name', 'Unnamed')
     flatten(options, 'user', 'John Doe')
+    flatten(options, 'requester', None)
 
     comma_separated(options, 'email')
     for email in options['email']:
@@ -255,7 +256,15 @@ class TryJobBase(TryBase):
     """Current job extra properties that are not related to the source stamp.
     Initialize with the Scheduler's base properties.
     """
-    keys = ('clobber', 'issue', 'patchset', 'rietveld', 'root', 'try_job_key')
+    keys = (
+      'clobber',
+      'issue',
+      'patchset',
+      'requester',
+      'rietveld',
+      'root',
+      'try_job_key',
+    )
     # All these settings have no meaning when False or not set, so don't set
     # them in that case.
     properties = dict((i, options[i]) for i in keys if options.get(i))
