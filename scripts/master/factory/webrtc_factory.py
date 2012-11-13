@@ -50,14 +50,7 @@ class WebRTCFactory(gclient_factory.GClientFactory):
     options = options or ''
     tests = tests or []
     factory_properties = factory_properties or {}
-
-    # Make sure the gclient_env dict exists with key GYP_DEFINES.
-    if not 'GYP_DEFINES' in factory_properties.get('gclient_env', ''):
-      factory_properties['gclient_env'] = {'GYP_DEFINES': ''}
-
-    # Always use fastbuild=1
-    if 'fastbuild=1' not in factory_properties['gclient_env']['GYP_DEFINES']:
-      factory_properties['gclient_env']['GYP_DEFINES'] += ' fastbuild=1'
+    _EnsureFastBuild(factory_properties)
 
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
@@ -78,3 +71,18 @@ class WebRTCFactory(gclient_factory.GClientFactory):
 
     cmds.AddWebRTCTests(tests, factory_properties)
     return factory
+
+
+def _EnsureFastBuild(factory_properties):
+  '''Ensures fastbuild=1 is set for GYP_DEFINES in the gclient_env.
+
+  If gclient_env key don't exist in factory_properties, it will be created.
+  If the GYP_DEFINES key don't exist in the gclient_env dict, it will be
+  created.
+  '''
+  if not 'gclient_env' in factory_properties:
+    factory_properties['gclient_env'] = {'GYP_DEFINES': ''}
+  if not 'GYP_DEFINES' in factory_properties['gclient_env']:
+    factory_properties['gclient_env']['GYP_DEFINES'] = ''
+  if 'fastbuild=1' not in factory_properties['gclient_env']['GYP_DEFINES']:
+    factory_properties['gclient_env']['GYP_DEFINES'] += ' fastbuild=1'
