@@ -837,6 +837,8 @@ class ChromiumCommands(commands.FactoryCommands):
     shard_index = factory_properties.get('browser_shard_index')
     options.append(factory_properties.get('browser_tests_filter', []))
 
+    options = filter(None, options)
+
     self.AddAnnotatedGTestTestStep('browser_tests', factory_properties,
                                    description, options,
                                    total_shards=total_shards,
@@ -849,6 +851,8 @@ class ChromiumCommands(commands.FactoryCommands):
     total_shards = factory_properties.get('browser_total_shards')
     shard_index = factory_properties.get('browser_shard_index')
     options.append(factory_properties.get('browser_tests_filter', []))
+
+    options = filter(None, options)
 
     self.AddBuildrunnerGTest('browser_tests', factory_properties,
                              description, options,
