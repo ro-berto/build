@@ -784,30 +784,16 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     self._text_summary.sort()
 
   def __GenerateGraphInfo(self):
-    """Keep a list of all graphs ever produced, for use by the plotter.
+    """Output a list of graphs viewed this session, for use by the plotter.
 
-    Build a list of dictionaries:
-      [{'name': graph_name, 'important': important, 'units': units},
-       ...,
-      ]
-    sorted by importance (important graphs first) and then graph_name.
-    Save this list into the GRAPH_LIST file for use by the plotting
-    page. (We can't just use a plain dictionary with the names as keys,
-    because dictionaries are inherently unordered.)
+    These will be collated and sorted on the master side.
     """
-    # Group all of the new graphs into their own list, ...
-    new_graph_list = []
-    for graph_name, graph in self._graphs.iteritems():
-      new_graph_list.append({'name': graph_name,
-                             'important': graph.IsImportant(),
-                             'units': graph.units})
-
-    # sort them by not-'important', since True > False, and by graph_name, ...
-    new_graph_list.sort(lambda x, y: cmp((not x['important'], x['name']),
-                                         (not y['important'], y['name'])))
-
-    olddata = self._output.get(GRAPH_LIST, [])
-    self._output[GRAPH_LIST] = [json.dumps(new_graph_list)] + olddata
+    graphs = {}
+    for name, graph in self._graphs.iteritems():
+      graphs[name] = {'name': name,
+                      'important': graph.IsImportant(),
+                      'units': graph.units}
+    self._output[GRAPH_LIST] = json.dumps(graphs).split('\n')
 
 
 class GraphingFrameRateLogProcessor(GraphingLogProcessor):

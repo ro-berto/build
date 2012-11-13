@@ -403,6 +403,30 @@ class ProcessLogShellStep(shell.ShellCommand):
       self.addURL('results', '%s' % self._log_processor.ReportLink())
 
 
+def Prepend(filename, data, output_dir, perf_output_dir):
+  READABLE_FILE_PERMISSIONS = int('644', 8)
+
+  fullfn = chromium_utils.AbsoluteCanonicalPath(output_dir, filename)
+
+  # This whitelists writing to files only directly under output_dir
+  # or perf_expectations_dir for security reasons.
+  if os.path.dirname(fullfn) != output_dir and (
+      os.path.dirname(fullfn) != perf_output_dir):
+    raise Exception('Attempted to write to log file outside of \'%s\' or '
+                    '\'%s\': \'%s\'' % (output_dir,
+                                        perf_output_dir,
+                                        os.path.join(output_dir,
+                                                     filename)))
+
+  chromium_utils.Prepend(fullfn, data)
+  os.chmod(fullfn, READABLE_FILE_PERMISSIONS)
+
+
+def MakeOutputDirectory(output_dir):
+  if output_dir and not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+
 class AnnotationObserver(buildstep.LogLineObserver):
   """This class knows how to understand annotations.
 
@@ -446,6 +470,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@STEP_LOG_END@<label>@@@
   Finalizes a log added by STEP_LOG_LINE and calls addCompleteLog().
 
+  @@@STEP_LOG_END_PERF@<label>@@@
+  Same as STEP_LOG_END, but signifies that this is a perf log and should be
+  saved to the master.
+
   @@@STEP_CLEAR@@@
   Reset the text description of the current step.
 
@@ -480,7 +508,82 @@ class AnnotationObserver(buildstep.LogLineObserver):
   Equivalent to @@@STEP_LINK@<label>@<url>@@@
   """
 
-  def __init__(self, command=None, *args, **kwargs):
+  # Base URL for performance test results.
+  PERF_BASE_URL = config.Master.perf_base_url
+  PERF_REPORT_URL_SUFFIX = config.Master.perf_report_url_suffix
+
+  # Directory in which to save perf output data files.
+  PERF_OUTPUT_DIR = config.Master.perf_output_dir
+
+  # For the GraphingLogProcessor, the file into which it will save a list
+  # of graph names for use by the JS doing the plotting.
+  GRAPH_LIST = config.Master.perf_graph_list
+
+  # --------------------------------------------------------------------------
+  # PERF TEST SETTINGS
+  # In each mapping below, the first key is the target and the second is the
+  # perf_id. The value is the directory name in the results URL.
+
+  # Configuration of most tests.
+  PERF_TEST_MAPPINGS = {
+    'Release': {
+      'chrome-linux32-beta': 'linux32-beta',
+      'chrome-linux32-stable': 'linux32-stable',
+      'chrome-linux64-beta': 'linux64-beta',
+      'chrome-linux64-stable': 'linux64-stable',
+      'chrome-mac-beta': 'mac-beta',
+      'chrome-mac-stable': 'mac-stable',
+      'chrome-win-beta': 'win-beta',
+      'chrome-win-stable': 'win-stable',
+      'chromium-linux-targets': 'linux-targets',
+      'chromium-mac-targets': 'mac-targets',
+      'chromium-rel-frame': 'win-release-chrome-frame',
+      'chromium-rel-linux': 'linux-release',
+      'chromium-rel-linux-64': 'linux-release-64',
+      'chromium-rel-linux-hardy': 'linux-release-hardy',
+      'chromium-rel-linux-hardy-lowmem': 'linux-release-lowmem',
+      'chromium-rel-linux-memory': 'linux-release-memory',
+      'chromium-rel-linux-webkit': 'linux-release-webkit-latest',
+      'chromium-rel-mac': 'mac-release',
+      'chromium-rel-mac-memory': 'mac-release-memory',
+      'chromium-rel-mac5': 'mac-release-10.5',
+      'chromium-rel-mac6': 'mac-release-10.6',
+      'chromium-rel-mac5-v8': 'mac-release-10.5-v8-latest',
+      'chromium-rel-mac6-v8': 'mac-release-10.6-v8-latest',
+      'chromium-rel-mac6-webkit': 'mac-release-10.6-webkit-latest',
+      'chromium-rel-old-mac6': 'mac-release-old-10.6',
+      'chromium-rel-vista-dual': 'vista-release-dual-core',
+      'chromium-rel-vista-dual-v8': 'vista-release-v8-latest',
+      'chromium-rel-vista-memory': 'vista-release-memory',
+      'chromium-rel-vista-single': 'vista-release-single-core',
+      'chromium-rel-vista-webkit': 'vista-release-webkit-latest',
+      'chromium-rel-xp': 'xp-release',
+      'chromium-rel-xp-dual': 'xp-release-dual-core',
+      'chromium-rel-xp-single': 'xp-release-single-core',
+      'chromium-win-targets': 'win-targets',
+      'gpu-fyi-linux-release-ati': 'gpu-fyi-linux-release-ati',
+      'gpu-fyi-linux-release-intel': 'gpu-fyi-linux-release-intel',
+      'gpu-fyi-mac-release-ati': 'gpu-fyi-mac-release-ati',
+      'gpu-fyi-mac-retina-release': 'gpu-fyi-mac-retina-release',
+      'gpu-fyi-win7-release-ati': 'gpu-fyi-win7-release-ati',
+      'gpu-fyi-win7-release-intel': 'gpu-fyi-win7-release-intel',
+      'gpu-fyi-winxp-release-nvidia': 'gpu-fyi-winxp-release-nvidia',
+      'o3d-mac-experimental': 'o3d-mac-experimental',
+      'o3d-win-experimental': 'o3d-win-experimental',
+      'nacl-lucid64-spec-x86': 'nacl-lucid64-spec-x86',
+      'nacl-lucid64-spec-arm': 'nacl-lucid64-spec-arm',
+      'nacl-lucid64-spec-trans': 'nacl-lucid64-spec-trans',
+    },
+    'Debug': {
+      'chromium-dbg-linux': 'linux-debug',
+      'chromium-dbg-mac': 'mac-debug',
+      'chromium-dbg-xp': 'xp-debug',
+      'chromium-dbg-linux-try': 'linux-try-debug',
+      'gpu-fyi-winxp-debug-nvidia': 'gpu-fyi-winxp-debug-nvidia',
+    },
+  }
+  def __init__(self, command=None, show_perf=False, perf_id=None,
+               target=None, *args, **kwargs):
     buildstep.LogLineObserver.__init__(self, *args, **kwargs)
     self.command = command
     self.sections = []
@@ -488,6 +591,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
     self.halt_on_failure = False
     self.honor_zero_return_code = False
     self.cursor = None
+
+    self.show_perf = show_perf
+    self.perf_id = perf_id
+    self.target = target
 
   def initialSection(self):
     """Initializes the annotator's sections.
@@ -655,6 +762,77 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     return self.sections[-1]
 
+  def _PerfStepMappings(self, show_results, perf_id, test_name):
+    """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""
+    report_link = None
+    output_dir = None
+    perf_name = None
+
+    if show_results:
+      perf_name = perf_id
+      if (self.target in self.PERF_TEST_MAPPINGS and
+          perf_id in self.PERF_TEST_MAPPINGS[self.target]):
+        perf_name = self.PERF_TEST_MAPPINGS[self.target][perf_id]
+      report_link = '%s/%s/%s/%s' % (self.PERF_BASE_URL, perf_name, test_name,
+                                     self.PERF_REPORT_URL_SUFFIX)
+      output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
+
+    return report_link, output_dir, perf_name
+
+  def _SaveGraphInfo(self, newgraphdata, output_dir):
+    EXECUTABLE_FILE_PERMISSIONS = int('755', 8)
+
+    graph_filename = os.path.join(output_dir, self.GRAPH_LIST)
+    try:
+      graph_file = open(graph_filename)
+    except IOError, e:
+      if e.errno != errno.ENOENT:
+        raise
+      graph_file = None
+    graph_list = []
+    if graph_file:
+      try:
+        # We keep the original content of graphs.dat to avoid accidentally
+        # removing graphs when a test encounters a failure.
+        graph_list = json.load(graph_file)
+      except ValueError:
+        graph_file.seek(0)
+        logging.error('Error parsing %s: \'%s\'' % (self.GRAPH_LIST,
+                                                    graph_file.read().strip()))
+      graph_file.close()
+
+    # We need the graph names from graph_list so we can skip graphs that already
+    # exist in graph_list.
+    graph_names = [x['name'] for x in graph_list]
+
+    newgraphs = {}
+    try:
+      newgraphs = json.loads(newgraphdata)
+    except ValueError:
+      logging.error('Error parsing incoming \'%s\'' % (self.GRAPH_LIST))
+
+    # Group all of the new graphs into their own list, ...
+    new_graph_list = []
+    for graph_name, graph in newgraphs.iteritems():
+      if graph_name in graph_names:
+        continue
+      new_graph_list.append({'name': graph_name,
+                             'important': graph['important'],
+                             'units': graph['units']})
+
+    # sort them by not-'important', since True > False, and by graph_name, ...
+    new_graph_list.sort(lambda x, y: cmp((not x['important'], x['name']),
+                                         (not y['important'], y['name'])))
+
+    # then add the new graph list to the main graph list.
+    graph_list.extend(new_graph_list)
+
+    # Write the resulting graph list.
+    graph_file = open(graph_filename, 'w')
+    json.dump(graph_list, graph_file)
+    graph_file.close()
+    os.chmod(graph_filename, EXECUTABLE_FILE_PERMISSIONS)
+
   def handleOutputLine(self, line):
     """This is called once with each line of the test log."""
     # Add \n if not there, which seems to be the case for log lines from
@@ -682,6 +860,39 @@ class AnnotationObserver(buildstep.LogLineObserver):
       current_logs = self.cursor['annotated_logs']
       log_text = '\n'.join(current_logs.get(log_label, []))
       addLogToStep(self.cursor['step'], log_label, log_text)
+
+    # Support: @@@STEP_LOG_END_PERF@<label>@<line>@@@
+    # (finalizes log to step, marks it as being a perf step
+    # requiring logs to be stored on the master)
+    m = re.match('^@@@STEP_LOG_END_PERF@(.*)@@@', line)
+    if m:
+      log_label = m.group(1)
+      current_logs = self.cursor['annotated_logs']
+      log_text = '\n'.join(current_logs.get(log_label, []))
+
+      report_link = None
+      output_dir = None
+      if self.perf_id:
+        report_link, output_dir, _ = self._PerfStepMappings(self.show_perf,
+                                                            self.perf_id,
+                                                            self.cursor['name'])
+      PERF_EXPECTATIONS_PATH = ('../../scripts/master/log_parser/'
+                                'perf_expectations/')
+      perf_output_dir = None
+      if output_dir:
+        output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir)
+        perf_output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir,
+            PERF_EXPECTATIONS_PATH)
+
+      if report_link and output_dir:
+        MakeOutputDirectory(output_dir)
+        if log_label == self.GRAPH_LIST:
+          self._SaveGraphInfo(log_text, output_dir)
+        else:
+          Prepend(log_label, log_text, output_dir, perf_output_dir)
+      else:
+        raise Exception('Tried to save perf data, but no output_dir or '
+                        'report_link set!')
 
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
     # Also support depreceated @@@link@<name>@<url>@@@
@@ -782,11 +993,15 @@ class AnnotationObserver(buildstep.LogLineObserver):
 class AnnotatedCommand(ProcessLogShellStep):
   """Buildbot command that knows how to display annotations."""
 
-  def __init__(self, *args, **kwargs):
+  def __init__(self, target=None, *args, **kwargs):
     clobber = ''
+    perf_id = None
+    show_perf = None
     if 'factory_properties' in kwargs:
       if kwargs['factory_properties'].get('clobber'):
         clobber = '1'
+      perf_id = kwargs['factory_properties'].get('perf_id')
+      show_perf = kwargs['factory_properties'].get('show_perf_results')
       # kwargs is passed eventually to RemoteShellCommand(**kwargs).
       # This constructor (in buildbot/process/buildstep.py) does not
       # accept unknown arguments (like factory_properties)
@@ -811,7 +1026,9 @@ class AnnotatedCommand(ProcessLogShellStep):
     kwargs['env'] = env
 
     ProcessLogShellStep.__init__(self, *args, **kwargs)
-    self.script_observer = AnnotationObserver(self)
+    self.script_observer = AnnotationObserver(self, show_perf=show_perf,
+                                              perf_id=perf_id,
+                                              target=target)
     self.addLogObserver('stdio', self.script_observer)
 
   def describe(self, done=False):
@@ -850,113 +1067,3 @@ class AnnotatedCommand(ProcessLogShellStep):
     self.script_observer.handleReturnCode(cmd.rc)
     self._removePreamble()
     return ProcessLogShellStep.commandComplete(self, cmd)
-
-
-class PerfStepAnnotatedCommand(AnnotatedCommand):
-  """Annotator command that prepends perf logs when finished."""
-
-  def __init__(self, report_link=None, output_dir=None, *args, **kwargs):
-    # perf_expectations.json holds performance expectations.  See
-    # http://dev.chromium.org/developers/testing/chromium-build-infrastructure/
-    # performance-test-plots for more info.
-    PERF_EXPECTATIONS_PATH = ('../../scripts/master/log_parser/'
-                              'perf_expectations/')
-
-    # For the GraphingLogProcessor, the file into which it will save a list
-    # of graph names for use by the JS doing the plotting.
-    self._GRAPH_LIST = config.Master.perf_graph_list
-
-    self._report_link = report_link
-    self._output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir)
-    self._perf_output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir,
-        PERF_EXPECTATIONS_PATH)
-    AnnotatedCommand.__init__(self, *args, **kwargs)
-
-  def _MakeOutputDirectory(self):
-    if self._output_dir and not os.path.exists(self._output_dir):
-      os.makedirs(self._output_dir)
-
-  # TODO(xusydoc): GraphingPageCycler and GraphingFrameRate both output data
-  # using file.write(), make sure that Prepend is an applicable substitute
-  def _Prepend(self, filename, data):
-    READABLE_FILE_PERMISSIONS = int('644', 8)
-
-    fullfn = chromium_utils.AbsoluteCanonicalPath(self._output_dir, filename)
-
-    # this whitelists writing to files only directly under output_dir
-    # or perf_expectations_dir for security reasons
-    if os.path.dirname(fullfn) != self._output_dir or (
-        os.path.dirname(fullfn) != self._perf_output_dir):
-      raise Exception('Attempted to write to log file outside of \'%s\' or '
-                      '\'%s\': \'%s\'' % (self._output_dir,
-                                          self._perf_output_dir,
-                                          os.path.join(self._output_dir,
-                                                       filename)))
-
-    chromium_utils.Prepend(fullfn, data)
-    os.chmod(fullfn, READABLE_FILE_PERMISSIONS)
-
-  def _SaveGraphInfo(self, newgraphdata):
-    EXECUTABLE_FILE_PERMISSIONS = int('755', 8)
-
-    graph_filename = os.path.join(self._output_dir, self._GRAPH_LIST)
-    try:
-      graph_file = open(graph_filename)
-    except IOError, e:
-      if e.errno != errno.ENOENT:
-        raise
-      graph_file = None
-    graph_list = []
-    if graph_file:
-      try:
-        # We keep the original content of graphs.dat to avoid accidentally
-        # removing graphs when a test encounters a failure.
-        graph_list = json.load(graph_file)
-      except ValueError:
-        graph_file.seek(0)
-        logging.error('Error parsing %s: \'%s\'' % (self._GRAPH_LIST,
-                                                    graph_file.read().strip()))
-      graph_file.close()
-
-    # We need the graph names from graph_list so we can skip graphs that already
-    # exist in graph_list.
-    graph_names = [x['name'] for x in graph_list]
-
-    newgraphs = {}
-    try:
-      newgraphs = json.loads(newgraphdata)
-    except ValueError:
-      logging.error('Error parsing incoming \'%s\'' % (self._GRAPH_LIST))
-
-    # Group all of the new graphs into their own list, ...
-    new_graph_list = []
-    for graph_name, graph in newgraphs.iteritems():
-      if graph_name in graph_names:
-        continue
-      new_graph_list.append({'name': graph_name,
-                             'important': graph.IsImportant(),
-                             'units': graph.units})
-
-    # sort them by not-'important', since True > False, and by graph_name, ...
-    new_graph_list.sort(lambda x, y: cmp((not x['important'], x['name']),
-                                         (not y['important'], y['name'])))
-
-    # then add the new graph list to the main graph list.
-    graph_list.extend(new_graph_list)
-
-    # Write the resulting graph list.
-    graph_file = open(graph_filename, 'w')
-    json.dump(graph_list, graph_file)
-    graph_file.close()
-    os.chmod(graph_filename, EXECUTABLE_FILE_PERMISSIONS)
-
-  def commandComplete(self, cmd):
-    if self._report_link and self._output_dir:
-      self._MakeOutputDirectory()
-      for received_log in self.step_status.getLogs():
-        # TODO(xusydoc): do we need to skip 'stdio' and 'preamble' here?
-        if log == self._GRAPH_LIST:
-          self._SaveGraphInfo(received_log)
-        else:
-          self._Prepend(received_log, received_log)
-    return AnnotatedCommand.commandComplete(self, cmd)

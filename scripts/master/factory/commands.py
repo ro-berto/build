@@ -382,7 +382,8 @@ class FactoryCommands(object):
   def AddTestStep(self, command_class, test_name, test_command,
                   test_description='', timeout=10*60, max_time=8*60*60,
                   workdir=None, env=None, locks=None, halt_on_failure=False,
-                  do_step_if=True, br_do_step_if=False, hide_step_if=False):
+                  do_step_if=True, br_do_step_if=False, hide_step_if=False,
+                  **kwargs):
     """Adds a step to the factory to run a test.
 
     Args:
@@ -431,7 +432,8 @@ class FactoryCommands(object):
         description='running %s%s' % (test_name, test_description),
         descriptionDone='%s%s' % (test_name, test_description),
         haltOnFailure=halt_on_failure,
-        command=test_command)
+        command=test_command,
+        **kwargs)
     self._factory.properties.setProperty('gtest_filter', None, 'BuildFactory')
 
   def TestStepFilter(self, bStep):
@@ -563,11 +565,14 @@ class FactoryCommands(object):
 
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name,
                      ListProperties(cmd), description, do_step_if=doStep,
-                     br_do_step_if=brDoStep, hide_step_if=hideStep)
+                     br_do_step_if=brDoStep, hide_step_if=hideStep,
+                     target=self._target, factory_properties=factory_properties)
 
   def AddBuildStep(self, factory_properties, name='build', env=None,
                    timeout=6000):
     """Add annotated step to use the buildrunner to run steps on the slave."""
+
+    factory_properties['target'] = self._target
 
     cmd = [self._python, self._runbuild, '--annotate']
     cmd = self.AddBuildProperties(cmd)
@@ -579,7 +584,9 @@ class FactoryCommands(object):
                           timeout=timeout,
                           haltOnFailure=True,
                           command=cmd,
-                          env=env)
+                          env=env,
+                          factory_properties=factory_properties,
+                          target=self._target)
 
   def AddBuildrunnerGTest(self, test_name, factory_properties=None,
                           description='', arg_list=None,
@@ -984,22 +991,6 @@ class FactoryCommands(object):
         factory_properties=factory_properties, perf_name=perf_name,
         test_name=test_name, command_class=command_class)
 
-  def GetAnnotatedPerfStepClass(self, factory_properties, test_name,
-                                command_class=None):
-    """Creates an annotation step that will parse performance tests."""
-
-    factory_properties = factory_properties or {}
-    perf_id = factory_properties.get('perf_id')
-    show_results = factory_properties.get('show_perf_results')
-
-    report_link, output_dir, _ = self._PerfStepMappings(show_results,
-                                                        perf_id,
-                                                        test_name)
-
-    command_class = command_class or chromium_step.PerfStepAnnotatedCommand
-
-    return chromium_utils.InitializePartiallyWithArguments(command_class,
-        report_link=report_link, output_dir=output_dir)
 
   def AddGenerateResultHashesStep(self, using_ninja, tests=None, doStepIf=True):
     """Adds a step to generate the hashes for result files. This is used by

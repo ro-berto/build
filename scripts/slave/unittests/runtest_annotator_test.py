@@ -169,8 +169,12 @@ class GraphingLogProcessorTest(LoggingStepBase):
     expected = json.load(open(
         os.path.join(test_env.DATA_PATH, 'graphing_processor-graphs.dat')))
 
-    self.assertEqual(actual, expected, 'Filename %s did not contain expected '
-        'data.' % graphfile)
+    self.assertEqual(len(actual), len(expected))
+
+    for graph in expected:
+      self.assertTrue(graph['name'] in actual)
+      for element in graph:
+        self.assertEqual(actual[graph['name']][element], graph[element])
 
   def testHistogramGeometricMeanAndStandardDeviation(self):
     input_files = ['graphing_processor.log']

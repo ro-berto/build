@@ -370,7 +370,7 @@ def annotate(test_name, result, results_tracker, full_name=False):
   if hasattr(results_tracker, 'PerformanceLogs'):
     for logname, log in results_tracker.PerformanceLogs().iteritems():
       lines = [str(l).rstrip() for l in log]
-      slave_utils.WriteLogLines(logname, lines)
+      slave_utils.WriteLogLines(logname, lines, perf=True)
 
 
 def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
