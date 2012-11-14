@@ -133,12 +133,13 @@ def FileRegexBlacklist(options):
 
 
 def FileExclusions():
+  all_platforms = ['.landmines', 'obj', 'lib']
   # Skip files that the testers don't care about. Mostly directories.
   if chromium_utils.IsWindows():
     # Remove obj or lib dir entries
-    return ['obj', 'lib', 'cfinstaller_archive', 'installer_archive']
+    return all_platforms + ['cfinstaller_archive', 'installer_archive']
   if chromium_utils.IsMac():
-    return [
+    return all_platforms + [
       # We don't need the arm bits v8 builds.
       'd8_arm', 'v8_shell_arm',
       # pdfsqueeze is a build helper, no need to copy it to testers.
@@ -157,12 +158,12 @@ def FileExclusions():
       # copy outside the app.
       'Chromium Helper.app',
       'Google Chrome Helper.app',
-      '.deps', 'obj', 'obj.host', 'obj.target',
+      '.deps', 'obj.host', 'obj.target',
     ]
   if chromium_utils.IsLinux():
-    return [
+    return all_platforms + [
       # intermediate build directories (full of .o, .d, etc.).
-      'appcache', 'glue', 'googleurl', 'lib', 'lib.host', 'obj', 'obj.host',
+      'appcache', 'glue', 'googleurl', 'lib.host', 'obj.host',
       'obj.target', 'src', '.deps',
       # scons build cruft
       '.sconsign.dblite',
@@ -170,7 +171,7 @@ def FileExclusions():
       'mksnapshot',
     ]
 
-  return []
+  return all_platforms
 
 
 def WriteRevisionFile(dirname, build_revision):

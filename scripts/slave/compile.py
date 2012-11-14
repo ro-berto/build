@@ -435,9 +435,8 @@ def main_xcode(options, args):
 
   # Note: this clobbers all targets, not just Debug or Release.
   if options.clobber:
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-        'xcodebuild')
-    print('Removing %s' % build_output_dir)
+    clobber_dir = os.path.dirname(options.target_output_dir)
+    print('Removing %s' % clobber_dir)
     # Deleting output_dir would also delete all the .ninja files. iOS builds
     # generates ninja configuration inside the xcodebuild directory to be able
     # to run sub builds. crbug.com/138950 is tracking this issue.
@@ -445,7 +444,7 @@ def main_xcode(options, args):
     # .ninja files). For now, only delete all non-.ninja files.
     # TODO(thakis): Make "clobber" a step that runs before "runhooks". Once the
     # master has been restarted, remove all clobber handling from compile.py.
-    ninja_clobber(build_output_dir)
+    ninja_clobber(clobber_dir)
 
   common_xcode_settings(command, options, env, options.compiler)
 
@@ -560,9 +559,8 @@ def common_make_settings(
       assert options.goma_dir
       env['CC'] = 'clang'
       env['CXX'] = 'clang++'
-      clang_dir = os.path.abspath(os.path.join(
-          slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
-          'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+      clang_dir = os.path.join(options.src_dir,
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
       env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
     else:  # jsonclang
       env['CC'] = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium', 'jsonclang')
@@ -570,9 +568,8 @@ def common_make_settings(
       command.append('-r')
       command.append('-k')
       # 'jsonclang' assumes the clang binary is in the path.
-      clang_dir = os.path.abspath(os.path.join(
-          slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
-          'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+      clang_dir = os.path.join(options.src_dir,
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
       if options.goma_dir:
         env['PATH'] = ':'.join([options.goma_dir, clang_dir, env['PATH']])
       else:
@@ -599,9 +596,8 @@ def common_make_settings(
     return
 
   if compiler == 'clang':
-    clang_dir = os.path.abspath(os.path.join(
-        slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
-        'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
+    clang_dir = os.path.join(options.src_dir,
+        'third_party', 'llvm-build', 'Release+Asserts', 'bin')
     env['CC'] = os.path.join(clang_dir, 'clang')
     env['CXX'] = os.path.join(clang_dir, 'clang++')
     command.append('CC.host=' + env['CC'])
@@ -612,9 +608,7 @@ def common_make_settings(
     # See
     # http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer/gcc-tsan
     # for build instructions.
-    tsan_base = os.path.abspath(os.path.join(
-        slave_utils.SlaveBaseDir(options.build_dir), 'build', 'src',
-        'third_party', 'compiler-tsan'))
+    tsan_base = os.path.join(options.src_dir, 'third_party', 'compiler-tsan')
 
     tsan_gcc_bin = os.path.abspath(os.path.join(
         tsan_base, 'gcc-tsan', 'scripts'))
@@ -637,9 +631,8 @@ def common_make_settings(
     # extract_gcc.sh
     env['GCCTSAN_GCC_DIR'] = gcctsan_gcc_dir
     env['GCCTSAN_GCC_VER'] = 'current'
-    env['GCCTSAN_IGNORE'] = os.path.abspath(os.path.join(
-        slave_utils.SlaveBaseDir(options.build_dir),
-        'build', 'src', 'tools', 'valgrind', 'tsan', 'ignores.txt'))
+    env['GCCTSAN_IGNORE'] = os.path.join(
+        options.src_dir, 'tools', 'valgrind', 'tsan', 'ignores.txt')
     env['GCCTSAN_ARGS'] = (
         '-DADDRESS_SANITIZER -DWTF_USE_DYNAMIC_ANNOTATIONS=1 '
         '-DWTF_USE_DYNAMIC_ANNOTATIONS_NOIMPL=1' )
@@ -662,8 +655,6 @@ def main_make(options, args):
     assert options.goma_dir is None
 
   options.build_dir = os.path.abspath(options.build_dir)
-  src_dir = os.path.join(slave_utils.SlaveBaseDir(options.build_dir), 'build',
-                         'src')
   # TODO(mmoss) Temporary hack to ignore the Windows --solution flag that is
   # passed to all builders. This can be taken out once the master scripts are
   # updated to only pass platform-appropriate --solution values.
@@ -681,7 +672,7 @@ def main_make(options, args):
     if os.path.isfile(os.path.join(options.build_dir, 'Makefile')):
       working_dir = options.build_dir
     else:
-      working_dir = src_dir
+      working_dir = options.src_dir
 
   # Lots of test-execution scripts hard-code 'sconsbuild' as the output
   # directory.  Accomodate them.
@@ -713,22 +704,21 @@ def main_make(options, args):
   env.print_overrides()
   result = 0
 
-  def clobber(target):
-    build_output_dir = os.path.join(working_dir, 'out', target)
-    print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
+  def clobber():
+    print('Removing %s' % options.target_output_dir)
+    chromium_utils.RemoveDirectory(options.target_output_dir)
 
-  for target in options.target.split(','):
-    if options.clobber:
-      clobber(target)
+  assert ',' not in options.target, (
+   'Used to allow multiple comma-separated targets for make. This should not be'
+   ' in use any more. Asserting from orbit. It\'s the only way to be sure')
 
-    target_command = command + ['BUILDTYPE=' + target]
-    this_result = chromium_utils.RunCommand(target_command, env=env)
-    if this_result and not options.clobber:
-      clobber(target)
-    # Keep the first non-zero return code as overall result.
-    if this_result and not result:
-      result = this_result
+  if options.clobber:
+    clobber()
+
+  target_command = command + ['BUILDTYPE=' + options.target]
+  result = chromium_utils.RunCommand(target_command, env=env)
+  if result and not options.clobber:
+    clobber()
 
   goma_teardown(options, env)
 
@@ -749,24 +739,19 @@ def main_ninja(options, args):
   # ninja is different from all the other build systems in that it requires
   # most configuration to be done at gyp time. This is why this function does
   # less than the other comparable functions in this file.
-  src_dir = os.path.join(
-      slave_utils.SlaveBaseDir(os.path.abspath(options.build_dir)),
-      'build',
-      'src')
-  print 'chdir to %s' % src_dir
-  os.chdir(src_dir)
+  print 'chdir to %s' % options.src_dir
+  os.chdir(options.src_dir)
 
-  output_dir = os.path.join('out', options.target)
-  command = ['ninja', '-C', output_dir]
+  command = ['ninja', '-C', options.target_output_dir]
 
   if options.clobber:
-    print('Removing %s' % output_dir)
+    print('Removing %s' % options.target_output_dir)
     # Deleting output_dir would also delete all the .ninja files necessary to
     # build. Clobbering should run before runhooks (which creates .ninja files).
     # For now, only delete all non-.ninja files. TODO(thakis): Make "clobber" a
     # step that runs before "runhooks". Once the master has been restarted,
     # remove all clobber handling from compile.py.
-    ninja_clobber(output_dir)
+    ninja_clobber(options.target_output_dir)
 
   if options.verbose:
     command.append('-v')
@@ -799,15 +784,16 @@ def main_ninja(options, args):
       # Note that, on other platform, ninja doesn't use ninja -t msvc
       # (it just simply run $cc/$cxx), so modifying PATH can work to run
       # gomacc without this hack.
-      if os.path.exists(os.path.join(output_dir, 'build.ninja.orig')):
-        os.remove(os.path.join(output_dir, 'build.ninja.orig'))
-      os.rename(os.path.join(output_dir, 'build.ninja'),
-                os.path.join(output_dir, 'build.ninja.orig'))
+      manifest = os.path.join(options.target_output_dir, 'build.ninja')
+      orig_manifest = manifest + '.orig'
+      if os.path.exists(orig_manifest):
+        os.remove(orig_manifest)
+      os.rename(manifest, orig_manifest)
       cc_line_pattern = re.compile(r'(cc|cxx|cc_host|cxx_host) = (.*)')
       goma_repl = '\\1 = %s \\2' % (
           os.path.join(options.goma_dir, 'gomacc.exe').replace('\\', '\\\\'))
-      with open(os.path.join(output_dir, 'build.ninja.orig')) as orig_build:
-        with open(os.path.join(output_dir, 'build.ninja'), 'w') as new_build:
+      with open(orig_manifest) as orig_build:
+        with open(manifest, 'w') as new_build:
           for line in orig_build:
             new_build.write(cc_line_pattern.sub(goma_repl, line))
 
@@ -856,10 +842,8 @@ def main_scons(options, args):
   """
   options.build_dir = os.path.abspath(options.build_dir)
   if options.clobber:
-    build_output_dir = os.path.join(os.path.dirname(options.build_dir),
-                                    'sconsbuild', options.target)
-    print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
+    print('Removing %s' % options.target_output_dir)
+    chromium_utils.RemoveDirectory(options.target_output_dir)
 
   os.chdir(options.build_dir)
 
@@ -948,22 +932,21 @@ def main_win(options, args):
       tool_options.extend(['/Project', options.project])
 
   options.build_dir = os.path.abspath(options.build_dir)
-  build_output_dir = os.path.join(options.build_dir, options.target)
 
   def clobber():
-    print('Removing %s' % build_output_dir)
-    chromium_utils.RemoveDirectory(build_output_dir)
+    print('Removing %s' % options.target_output_dir)
+    chromium_utils.RemoveDirectory(options.target_output_dir)
 
   if options.clobber:
     clobber()
   else:
     # Remove the log file so it doesn't grow without limit,
-    chromium_utils.RemoveFile(build_output_dir, 'debug.log')
+    chromium_utils.RemoveFile(options.target_output_dir, 'debug.log')
     # Remove the chrome.dll version resource so it picks up the new svn
     # revision, unless user explicitly asked not to remove it. See
     # Bug 1064677 for more details.
     if not options.keep_version_file:
-      chromium_utils.RemoveFile(build_output_dir, 'obj', 'chrome_dll',
+      chromium_utils.RemoveFile(options.target_output_dir, 'obj', 'chrome_dll',
                                 'chrome_dll_version.rc')
 
   env = EchoDict(os.environ)
@@ -1064,10 +1047,10 @@ def main_win(options, args):
   if errors:
     print('\n\nRetrying a clobber build because of:')
     print('\n'.join(('  ' + l for l in errors)))
-    print('Removing %s' % build_output_dir)
+    print('Removing %s' % options.target_output_dir)
     for _ in range(3):
       try:
-        chromium_utils.RemoveDirectory(build_output_dir)
+        chromium_utils.RemoveDirectory(options.target_output_dir)
         break
       except OSError, e:
         print(e)
@@ -1084,6 +1067,35 @@ def main_win(options, args):
     clobber()
 
   return result
+
+
+def landmines_triggered(build_dir):
+  trigger_file = os.path.join(build_dir, '.landmines_triggered')
+  if os.path.exists(trigger_file):
+    print 'Setting clobber due to triggered landmines:'
+    with open(trigger_file) as f:
+      print f.read()
+    return True
+  return False
+
+
+def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
+  """Keep this function in sync with src/build/landmines.py"""
+  ret = None
+  if build_tool == 'xcode':
+    ret = os.path.join(src_dir, 'xcodebuild',
+        target + ('-iphoneos' if is_iphone else ''))
+  elif build_tool == 'make':
+    ret = os.path.join(src_dir, 'out', target)
+  elif build_tool == 'ninja':
+    ret = os.path.join(src_dir, 'out', target)
+  elif build_tool == 'msvs':
+    ret = os.path.join(src_dir, 'build', target)
+  elif build_tool == 'scons':
+    ret = os.path.join(src_dir, 'sconsbuild', target)
+  else:
+    raise NotImplementedError()
+  return os.path.abspath(ret)
 
 
 def real_main():
@@ -1144,10 +1156,13 @@ def real_main():
   if options.build_tool is None:
     if chromium_utils.IsWindows():
       main = main_win
+      options.build_tool = 'msvs'
     elif chromium_utils.IsMac():
       main = main_xcode
+      options.build_tool = 'xcode'
     elif chromium_utils.IsLinux():
       main = main_make
+      options.build_tool = 'make'
     else:
       print('Please specify --build-tool.')
       return 1
@@ -1164,6 +1179,14 @@ def real_main():
     if not main:
       sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
       return 2
+
+  options.build_dir = os.path.abspath(options.build_dir)
+  options.src_dir = os.path.join(slave_utils.SlaveBaseDir(
+      os.path.abspath(options.build_dir)), 'build', 'src')
+  options.target_output_dir = get_target_build_dir(options.build_tool,
+      options.src_dir, options.target, 'iphoneos' in args)
+  options.clobber = (options.clobber or
+      landmines_triggered(options.target_output_dir))
 
   return main(options, args)
 
