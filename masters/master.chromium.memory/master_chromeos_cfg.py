@@ -32,8 +32,9 @@ T('chromeos_asan_rel_trigger')
 chromeos_asan_archive = master_config.GetArchiveUrl(
     'ChromiumMemory',
     'Linux Chromium OS ASAN Builder',
-    'Chromium_OS_ASAN_Builder',
+    'Linux_Chromium_OS_ASAN_Builder',
     'linux')
+
 #
 # CrOS ASAN Rel Builder
 #
