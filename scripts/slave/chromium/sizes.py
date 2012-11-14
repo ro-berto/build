@@ -272,6 +272,32 @@ def main_linux(options, args):
   return result
 
 
+def main_android(options, args):
+  """Print appropriate size information about built Android targets.
+
+  Returns the first non-zero exit status of any command it executes,
+  or zero on success.
+  """
+  target_dir = os.path.join(os.path.dirname(options.build_dir),
+                            options.target)
+
+  binaries = [
+      'chromium_testshell/libs/armeabi-v7a/libchromiumtestshell.so',
+      'lib/libchromiumtestshell.so',
+  ]
+
+  result = 0
+
+  for binary in binaries:
+    this_result, this_sizes = check_linux_binary(target_dir, binary, options)
+    if result == 0:
+      result = this_result
+    for name, identifier, _, value, units in this_sizes:
+      print 'RESULT %s: %s= %s %s' % (name, identifier, value, units)
+
+  return result
+
+
 def main_win(options, args):
   """Print appropriate size information about built Windows targets.
 
@@ -309,6 +335,7 @@ def main():
     default_platform = None
 
   main_map = {
+    'android' : main_android,
     'linux' : main_linux,
     'mac' : main_mac,
     'win' : main_win,
