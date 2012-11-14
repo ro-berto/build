@@ -281,6 +281,25 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     self.assertEqual(expected, step._result_text[0])
     self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
 
+  def testPerfExpectationsImproveRelativeFloat(self):
+    step = self._TestPerfExpectations('perf_improve_relative_float.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (25.10%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsImproveRelativeFloatNonSci(self):
+    step = self._TestPerfExpectations(
+        'perf_improve_relative_float_nonscientific.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (25.10%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsRegressRelativeFloat(self):
+    step = self._TestPerfExpectations('perf_regress_relative_float.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (49.96%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
   def testPerfExpectationsRegressAbsolute(self):
     step = self._TestPerfExpectations('perf_regress_absolute.json')
     expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (2.49%)')
@@ -293,6 +312,25 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     self.assertEqual(expected, step._result_text[0])
     self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
 
+  def testPerfExpectationsRegressAbsoluteFloat(self):
+    step = self._TestPerfExpectations('perf_regress_absolute_float.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (2.55%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsRegressAbsoluteFloatNonSci(self):
+    step = self._TestPerfExpectations(
+        'perf_regress_absolute_float_nonscientific.json')
+    expected = ('PERF_REGRESS: vm_final_browser/1t_vm_b (2.55%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(2, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsImproveAbsoluteFloat(self):
+    step = self._TestPerfExpectations('perf_improve_absolute_float.json')
+    expected = ('PERF_IMPROVE: vm_final_browser/1t_vm_b (3.21%)')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(1, step._log_processor.evaluateCommand('mycommand'))
+
   def testPerfExpectationsNochangeRelative(self):
     step = self._TestPerfExpectations('perf_nochange_relative.json')
     expected = ('12t_cc: 50.2k')
@@ -301,6 +339,18 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
 
   def testPerfExpectationsNochangeAbsolute(self):
     step = self._TestPerfExpectations('perf_nochange_absolute.json')
+    expected = ('12t_cc: 50.2k')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsNochangeRelativeFloat(self):
+    step = self._TestPerfExpectations('perf_nochange_relative_float.json')
+    expected = ('12t_cc: 50.2k')
+    self.assertEqual(expected, step._result_text[0])
+    self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
+
+  def testPerfExpectationsNochangeAbsoluteFloat(self):
+    step = self._TestPerfExpectations('perf_nochange_absolute_float.json')
     expected = ('12t_cc: 50.2k')
     self.assertEqual(expected, step._result_text[0])
     self.assertEqual(0, step._log_processor.evaluateCommand('mycommand'))
