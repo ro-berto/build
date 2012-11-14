@@ -704,21 +704,23 @@ def main_make(options, args):
   env.print_overrides()
   result = 0
 
-  def clobber():
-    print('Removing %s' % options.target_output_dir)
-    chromium_utils.RemoveDirectory(options.target_output_dir)
+  def clobber(clobber_dir):
+    print('Removing %s' % clobber_dir)
+    chromium_utils.RemoveDirectory(clobber_dir)
 
-  assert ',' not in options.target, (
-   'Used to allow multiple comma-separated targets for make. This should not be'
-   ' in use any more. Asserting from orbit. It\'s the only way to be sure')
+  for target in options.target.split(','):
+    clobber_dir = os.path.join(os.path.dirname(options.target_output_dir),
+                               target)
+    if options.clobber:
+      clobber(clobber_dir)
 
-  if options.clobber:
-    clobber()
-
-  target_command = command + ['BUILDTYPE=' + options.target]
-  result = chromium_utils.RunCommand(target_command, env=env)
-  if result and not options.clobber:
-    clobber()
+    target_command = command + ['BUILDTYPE=' + target]
+    this_result = chromium_utils.RunCommand(target_command, env=env)
+    if result and not options.clobber:
+      clobber(clobber_dir)
+    # Keep the first non-zero return code as overall result.
+    if this_result and not result:
+      result = this_result
 
   goma_teardown(options, env)
 
