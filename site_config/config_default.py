@@ -455,6 +455,12 @@ class Master(object):
     project_url = 'http://webrtc.googlecode.com'
     from_address = 'webrtc-cb-watchlist@google.com'
 
+  class ChromiumWebRTC(WebRTC):
+    project_name = 'Chromium WebRTC'
+    master_port = 9095
+    slave_port = 9195
+    master_port_alt = 9295
+
 
 class Archive(object):
   archive_host = 'localhost'

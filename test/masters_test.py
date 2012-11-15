@@ -168,6 +168,7 @@ def main():
       'master.chromium.pyauto': 'Chromium PyAuto',
       'master.chromium.swarm': 'Chromium Swarm',
       'master.chromium.webkit': 'Chromium Webkit',
+      'master.chromium.webrtc': 'Chromium WebRTC',
       'master.chromium.win': 'Chromium Win',
       'master.chromiumos': 'ChromiumOS',
       'master.client.drmemory': 'DrMemory',

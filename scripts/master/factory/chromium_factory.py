@@ -80,6 +80,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # gclient additional custom deps
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
+  CUSTOM_DEPS_WEBRTC_LATEST = ('src/third_party/webrtc',
+    config.Master.webrtc_url + 'trunk/webrtc')
   CUSTOM_DEPS_AVPERF = ('src/chrome/test/data/media/avperf',
     config.Master.trunk_url + '/deps/avperf')
   CUSTOM_VARS_NACL_LATEST = [
@@ -720,6 +722,19 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 workdir=workdir,
                                 factory_properties=fp,
                                 perf=True)
+    if R('pyauto_webrtc_tests'):
+      # Mapping from self._target_platform to a chrome-*.zip
+      platmap = {'win32': 'win32',
+                 'darwin': 'mac',
+                 'linux2': 'lucid64bit'}
+      zip_plat = platmap[self._target_platform]
+      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
+      f.AddPyAutoFunctionalTest('pyauto_webrtc_tests',
+                                suite='WEBRTC',
+                                src_base='..',
+                                workdir=workdir,
+                                factory_properties=fp,
+                                perf=True)
 
     # Endurance tests.
     endure_tests = {
@@ -988,6 +1003,16 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                               build_url=None, project=None,
                               factory_properties=None):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_V8_LATEST]
+    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
+                                options, compile_timeout, build_url, project,
+                                factory_properties)
+
+  def ChromiumWebRTCLatestFactory(self, target='Release', clobber=False,
+                                  tests=None, mode=None,
+                                  slave_type='BuilderTester', options=None,
+                                  compile_timeout=1200, build_url=None,
+                                  project=None, factory_properties=None):
+    self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_WEBRTC_LATEST]
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)

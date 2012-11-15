@@ -511,6 +511,13 @@ twistd.pid
 /masters/master.chromium.webkit/webkit-win-pinned-rel
 /masters/master.chromium.webkit/win-latest-dbg
 /masters/master.chromium.webkit/win-latest-rel
+/masters/master.chromium.webrtc/chromium-webrtc-rel-linux-builder
+/masters/master.chromium.webrtc/chromium-webrtc-rel-mac-builder
+/masters/master.chromium.webrtc/Linux_Tester
+/masters/master.chromium.webrtc/Mac_Tester
+/masters/master.chromium.webrtc/Win7_Tester
+/masters/master.chromium.webrtc/WinXP_Tester
+/masters/master.chromium.webrtc/Win_Builder
 /masters/master.chromium.win/Chrome_Frame_Tests__ie6_
 /masters/master.chromium.win/Chrome_Frame_Tests__ie7_
 /masters/master.chromium.win/Chrome_Frame_Tests__ie8_
