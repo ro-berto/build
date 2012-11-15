@@ -747,6 +747,7 @@ class FactoryCommands(object):
   def AddRunHooksStep(self, env=None, timeout=None):
     """Adds a step to the factory to run the gclient hooks."""
     env = env or {}
+    env['LANDMINES_VERBOSE'] = '1'
     env['DEPOT_TOOLS_UPDATE'] = '0'
     if timeout is None:
       # svn timeout is 2 min; we allow 5
