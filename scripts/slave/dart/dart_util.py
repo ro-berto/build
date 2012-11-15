@@ -12,8 +12,7 @@ import sys
 
 def clobber():
   cmd = [sys.executable,
-         './tools/clean_output_directory.py',
-         '--mode=all']
+         './tools/clean_output_directory.py']
   print 'Clobbering %s' % (' '.join(cmd))
   return subprocess.call(cmd)
 
