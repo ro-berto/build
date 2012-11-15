@@ -242,8 +242,8 @@ def GetThirdPartyVersions(master):
   this function returns default values.
   """
   global USE_BUILDBOT_8
-  bb_ver = 'buildbot_7_12'
-  tw_ver = 'twisted_8_1'
+  bb_ver = 'buildbot_slave_8_4'
+  tw_ver = 'twisted_10_2'
   if master:
     bb_ver = getattr(master, 'buildslave_version', bb_ver)
     tw_ver = getattr(master, 'twisted_version', tw_ver)
