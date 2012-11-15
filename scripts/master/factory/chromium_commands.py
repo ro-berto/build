@@ -1040,17 +1040,6 @@ class ChromiumCommands(commands.FactoryCommands):
       return J(ref_dir, 'chrome_linux', 'chrome')
     return None
 
-  def _GetPythonTestCommand(self, script, args, factory_properties):
-    python_cmd = ['python', script, '-v'] + args
-    if self._target_platform == 'win32':
-      python_cmd = self.GetPythonTestCommand(script, ['-v'] + args)
-    elif self._target_platform == 'darwin':
-      python_cmd = self.GetTestCommand('/usr/bin/python2.6',
-                                       [script, '-v'] + args)
-    elif self._target_platform.startswith('linux'):
-      python_cmd = self.GetTestCommand('/usr/bin/python', [script, '-v'] + args)
-    return python_cmd
-
   def AddChromeRemoteControlTest(self, test_name, page_set,
                                  factory_properties=None, timeout=1200):
     """Adds a Chrome Remote Control performance test.
@@ -1068,16 +1057,17 @@ class ChromiumCommands(commands.FactoryCommands):
     page_set = J('src', 'tools', 'perf', 'page_sets', page_set)
 
     # Run the test against the target chrome build.
-    test_args = ['--browser=release', test_name, page_set]
-    test_cmd = self._GetPythonTestCommand(script, test_args, factory_properties)
+    test_args = ['-v', '--browser=release', test_name, page_set]
+    test_cmd = self.GetPythonTestCommand(script, test_args)
     cmd = ' '.join(test_cmd)
 
     # Run the test against the reference build on platforms where it exists.
     ref_build = self._GetReferenceBuildPath()
     if ref_build:
-      ref_args = ['--browser=exact', '--browser-executable=%s' % ref_build,
+      ref_args = ['-v', '--browser=exact',
+                  '--browser-executable=%s' % ref_build,
                   test_name, page_set]
-      ref_cmd = self._GetPythonTestCommand(script, ref_args, factory_properties)
+      ref_cmd = self.GetPythonTestCommand(script, ref_args)
       cmd += ' && ' + ' '.join(ref_cmd)
 
     command_class = self.GetPerfStepClass(

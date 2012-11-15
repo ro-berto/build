@@ -457,9 +457,13 @@ def main_mac(options, args):
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
   test_exe = args[0]
-  build_dir, test_exe_path = get_build_dir_and_exe_path_mac(options,
-                                                            options.target,
-                                                            test_exe)
+  if options.run_python_script:
+    build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+    test_exe_path = test_exe
+  else:
+    build_dir, test_exe_path = get_build_dir_and_exe_path_mac(options,
+                                                              options.target,
+                                                              test_exe)
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -657,7 +661,10 @@ def main_linux(options, args):
     special_xvfb_dir = options.special_xvfb_dir
 
   test_exe = args[0]
-  test_exe_path = os.path.join(bin_dir, test_exe)
+  if options.run_python_script:
+    test_exe_path = test_exe
+  else:
+    test_exe_path = os.path.join(bin_dir, test_exe)
   if not os.path.exists(test_exe_path):
     if options.factory_properties.get('succeed_on_missing_exe', False):
       print '%s missing but succeed_on_missing_exe used, exiting' % (
@@ -764,7 +771,11 @@ def main_win(options, args):
 
   test_exe = args[0]
   build_dir = os.path.abspath(options.build_dir)
-  test_exe_path = os.path.join(build_dir, options.target, test_exe)
+  if options.run_python_script:
+    test_exe_path = test_exe
+  else:
+    test_exe_path = os.path.join(build_dir, options.target, test_exe)
+
   if not os.path.exists(test_exe_path):
     if options.factory_properties.get('succeed_on_missing_exe', False):
       print '%s missing but succeed_on_missing_exe used, exiting' % (

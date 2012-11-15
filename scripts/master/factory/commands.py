@@ -318,8 +318,8 @@ class FactoryCommands(object):
     cmd = [self._python,
            self._test_tool,
            '--run-python-script',
-           '--target=',
-           '--build-dir=',
+           '--target', self._target,
+           '--build-dir', self._build_dir,
            py_script]
 
     if arg_list is not None:
