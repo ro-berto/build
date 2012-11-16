@@ -135,6 +135,8 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     command = self.command
     swarm_tests = GetSwarmTestsFromTestFilter(test_filters)
     command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
+    if 'compile' in test_filters:
+      command.append('all')
 
     self.setCommand(command)
     return shell.Compile.start(self)
