@@ -141,6 +141,13 @@ B('Android (dbg)', 'f_android_clobber_dbg', None, 'chromium',
 F('f_android_clobber_dbg', linux_android().ChromiumAnnotationFactory(
     clobber=True,
     target='Debug',
+    tests=[
+      'sizes',
+    ],
+    factory_properties={
+      'show_perf_results': True,
+      'perf_id': 'android-debug',
+    },
     annotation_script='src/build/android/buildbot/bb_main_clobber.sh',
     ))
 
