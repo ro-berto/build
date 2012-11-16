@@ -890,22 +890,9 @@ class PTYProcess(abstract.FileDescriptor, _BaseProcess):
         Setup child process after fork() but before exec().
         """
         os.close(masterfd)
-        if hasattr(termios, 'TIOCNOTTY'):
-            try:
-                fd = os.open("/dev/tty", os.O_RDWR | os.O_NOCTTY)
-            except OSError:
-                pass
-            else:
-                try:
-                    fcntl.ioctl(fd, termios.TIOCNOTTY, '')
-                except:
-                    pass
-                os.close(fd)
-
         os.setsid()
 
-        if hasattr(termios, 'TIOCSCTTY'):
-            fcntl.ioctl(slavefd, termios.TIOCSCTTY, '')
+        fcntl.ioctl(slavefd, termios.TIOCSCTTY, '')
 
         for fd in range(3):
             if fd != slavefd:
