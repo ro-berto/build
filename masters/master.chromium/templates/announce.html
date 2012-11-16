@@ -249,7 +249,6 @@
             c.cros = '';
             c.chrome = '';
             c.lkgr = '';
-            c.pyauto = '';
             c.gpu = '';
             c.gpu_fyi = '';
 
@@ -263,7 +262,6 @@
             c.status_chrome = '../chromium.chrome';
             c.status_perf = '../chromium.perf';
             c.status_lkgr = '../chromium.lkgr';
-            c.status_pyauto = '../chromium.pyauto';
             c.status_gpu = '../chromium.gpu';
             c.status_gpu_fyi = '../chromium.gpu.fyi';
 
@@ -285,7 +283,6 @@
             c.bar_perf = BarUrl('chromium.perf');
             c.bar_chrome = BarUrl('chromium.chrome');
             c.bar_lkgr = BarUrl('chromium.lkgr');
-            c.bar_pyauto = BarUrl('chromium.pyauto');
             c.bar_cros = BarUrl('chromium.chromiumos');
             c.bar_gpu = BarUrl('chromium.gpu');
             c.bar_gpu_fyi = BarUrl('chromium.gpu.fyi');
@@ -423,10 +420,8 @@
                             'Perf', 'width="75%" colspan=5', '')));
 
             document.write(tr(
-                HTMLBaseBar(c.status_pyauto, c.bar_pyauto, c.pyauto,
-                           'PyAuto', 'width="25%"', '') +
                 HTMLBaseBar(c.status_memory_fyi, c.bar_memory_fyi, c.memory_fyi,
-                           'Memory<br>FYI', 'width="75%" colspan=5', '')));
+                           'Memory<br>FYI', 'width="100%" colspan=6', '')));
 
             document.write(tr(
                 HTMLBaseBar(c.status_gpu, c.bar_gpu, c.gpu,
