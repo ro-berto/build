@@ -279,7 +279,7 @@ def main_android(options, args):
   or zero on success.
   """
   target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            options.target)
+                            'out', options.target)
 
   binaries = [
       'chromium_testshell/libs/armeabi-v7a/libchromiumtestshell.so',
