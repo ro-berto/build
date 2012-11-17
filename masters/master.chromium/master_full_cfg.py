@@ -94,7 +94,7 @@ F('linux_clobber', linux().ChromiumFactory(
       'check_perms',
       'sizes',
     ],
-    options=['--compiler=goma', '--build-tool=ninja', 'all'],
+    options=['--compiler=goma'],
     factory_properties={
       'archive_build': True,
       'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -105,7 +105,6 @@ F('linux_clobber', linux().ChromiumFactory(
       'generate_gtest_json': True,
       'gclient_env': {
         'GYP_DEFINES': 'target_arch=ia32 test_isolation_mode=noop',
-        'GYP_GENERATORS': 'ninja',
       },
     }))
 
