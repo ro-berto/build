@@ -136,7 +136,11 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     swarm_tests = GetSwarmTestsFromTestFilter(test_filters)
     command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
     if 'compile' in test_filters:
-      command.append('all')
+      # ninja has an 'all' pseudo-target that tries to run all the targets knows
+      # about.
+      # 'All' is a target in build/all.gyp that contains the vast majority of
+      # targets but not all of them. :)
+      command.append('All')
 
     self.setCommand(command)
     return shell.Compile.start(self)
