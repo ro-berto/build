@@ -87,6 +87,9 @@ F('linux64_full', linux().ChromiumFactory(
         'gs_acl': 'public-read',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
+asan_rel_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
+                'release_extra_cflags="-gline-tables-only"')
+
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
@@ -96,11 +99,11 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'asan_archive_build': True,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '
-                                      'v8_enable_verify_heap=1 '}}))
+       'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
 
-asan_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
-            'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
+asan_rel_sym_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
+                    'release_extra_cflags="-gline-tables-only '
+                    '-O1 -fno-inline-functions -fno-inline"')
 
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
@@ -112,7 +115,7 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
        'asan_archive_name': 'asan-symbolized',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
-       'gclient_env': {'GYP_DEFINES': asan_gyp}}))
+       'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp}}))
 
 B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
