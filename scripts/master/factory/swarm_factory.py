@@ -33,7 +33,7 @@ SWARM_TESTS = [
 ]
 
 
-def SetupSwarmTests(machine, options, ninja, tests):
+def SetupSwarmTests(machine, options, swarm_server, ninja, tests):
   """This is a swarm builder."""
   factory_properties = {
     'gclient_env' : {
@@ -49,7 +49,7 @@ def SetupSwarmTests(machine, options, ninja, tests):
       'ISOLATE_DEBUG': '1',
     },
     'data_dir': config.Master.swarm_hashtable_server_internal,
-    'swarm_server': config.Master.swarm_server_internal_url
+    'swarm_server': swarm_server
   }
   if ninja:
     factory_properties['gclient_env']['GYP_GENERATORS'] = 'ninja'
