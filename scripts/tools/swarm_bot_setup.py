@@ -20,13 +20,22 @@ SWARM_COPY_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'copy_swarm_sftp')
 
 SWARM_CLEAN_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'clean_swarm_sftp')
 
+# The swarm server links.
+SWARM_SERVER_PROD = 'https://chromium-swarm.appspot.com'
+SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
+
+
+class Options(object):
+  def __init__(self, swarm_server):
+    self.swarm_server = swarm_server
+
 
 def BuildSFTPCommand(user, host, command_file):
   return ['sftp', '-obatchmode=no', '-b', command_file,
           '%s@%s' % (user, host)]
 
 
-def BuildSSHCommand(user, host, platform):
+def BuildSSHCommand(user, host, platform, options):
   ssh = ['ssh', '-o ConnectTimeout=5', '-t']
   identity = [user + '@' + host]
 
@@ -60,9 +69,9 @@ def BuildSSHCommand(user, host, platform):
     bot_setup_commands.extend([
         'cd c:\\swarm\\',
         '&&',
-        'call swarm_bot_setup.bat'])
+        'call swarm_bot_setup.bat %s' % options.swarm_server])
   else:
-    bot_setup_commands.append('./swarm_bot_setup.sh')
+    bot_setup_commands.append('./swarm_bot_setup.sh %s' % options.swarm_server)
 
   # On windows the command must be executed by cmd.exe
   if platform == 'win':
@@ -78,12 +87,12 @@ def BuildCleanCommands(user, host):
       ]
 
 
-def BuildSetupCommands(user, host, platform):
+def BuildSetupCommands(user, host, platform, options):
   assert platform in ('linux', 'mac', 'win')
 
   return [
       BuildSFTPCommand(user, host, SWARM_COPY_SFTP_PATH),
-      BuildSSHCommand(user, host, platform)
+      BuildSSHCommand(user, host, platform, options)
       ]
 
 
@@ -98,6 +107,9 @@ def main():
   parser.add_option('-c', '--clean', action='store_true',
                     help='Removes any old swarm files before setting '
                     'up the bot.')
+  parser.add_option('-d', '--use_dev', action='store_true',
+                    help='Set when the swarm bots being setup should use the '
+                    'development swarm server instead of the production one.')
   parser.add_option('-u', '--user', default='chrome-bot',
                     help='The user to use when setting up the machine. '
                     'Defaults to %default')
@@ -136,7 +148,11 @@ def main():
     if options.clean:
       commands.extend(BuildCleanCommands(options.user, bot))
 
-    commands.extend(BuildSetupCommands(options.user, bot, platform))
+    command_options = Options(
+        swarm_server=SWARM_SERVER_DEV if options.use_dev else SWARM_SERVER_PROD)
+
+    commands.extend(BuildSetupCommands(options.user, bot, platform,
+                                       command_options))
 
     if options.print_only:
       print commands
