@@ -327,7 +327,7 @@ def GSUtilSetup():
                            '.boto')
 
   # Make sure gsutil uses this boto file.
-  os.environ['BOTO_CONFIG'] = boto_file
+  os.environ['AWS_CREDENTIAL_FILE'] = boto_file
   return gsutil
 
 
