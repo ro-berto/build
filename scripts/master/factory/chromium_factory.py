@@ -623,11 +623,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('soft_gpu_tests_br'):
       f.AddBuildrunnerAnnotatedSoftGpuTests(fp)
     if R('spaceport'):
-      fp['use_xvfb_on_linux'] = True
-      f.AddPyAutoFunctionalTest(
-          'spaceport',
-          test_args=['perf.BenchmarkPerfTest.testSpaceport'],
-          factory_properties=fp, perf=True)
+      f.AddChromeRemoteControlTest('spaceport', 'spaceport.json', fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
