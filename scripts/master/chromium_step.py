@@ -833,6 +833,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
     graph_file.close()
     os.chmod(graph_filename, EXECUTABLE_FILE_PERMISSIONS)
 
+  def addLinkToCursor(self, link_label, link_url):
+    self.cursor['links'].append((link_label, link_url))
+    self.cursor['step'].addURL(link_label, link_url)
+
   def handleOutputLine(self, line):
     """This is called once with each line of the test log."""
     # Add \n if not there, which seems to be the case for log lines from
@@ -873,9 +877,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
       report_link = None
       output_dir = None
       if self.perf_id:
+        perf_dashboard_name = self.cursor['name'].lstrip('page_cycler_')
         report_link, output_dir, _ = self._PerfStepMappings(self.show_perf,
                                                             self.perf_id,
-                                                            self.cursor['name'])
+                                                            perf_dashboard_name)
+        if report_link:
+          # It's harmless to send the results URL more than once, but it
+          # clutters up the logs.
+          if 'results' not in (x for x, _ in self.cursor['links']):
+            self.addLinkToCursor('results', report_link)
+
       PERF_EXPECTATIONS_PATH = ('../../scripts/master/log_parser/'
                                 'perf_expectations/')
       perf_output_dir = None
@@ -902,8 +913,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if m:
       link_label = m.group(1)
       link_url = m.group(2)
-      self.cursor['links'].append((link_label, link_url))
-      self.cursor['step'].addURL(link_label, link_url)
+      self.addLinkToCursor(link_label, link_url)
     # Support: @@@STEP_STARTED@@@ (start a step at cursor)
     if line.startswith('@@@STEP_STARTED@@@'):
       self.startStep(self.cursor)
