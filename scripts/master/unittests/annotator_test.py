@@ -5,14 +5,15 @@
 
 """ Source file for annotated command testcases."""
 
-import mock      # using third_party mock for now
 import os
 import unittest
 
 import test_env  # pylint: disable=W0611
 
-from twisted.internet import defer
 from buildbot.status import builder
+import mock
+from twisted.internet import defer
+
 from master import chromium_step
 
 # Mocks confuse pylint.

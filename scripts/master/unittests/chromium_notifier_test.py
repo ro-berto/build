@@ -5,12 +5,13 @@
 
 """ Source file for chromium_notifier testcases."""
 
-import mock
 import unittest
 
 import test_env  # pylint: disable=W0611
 
 from buildbot.status.builder import FAILURE
+import mock
+
 from master import chromium_notifier
 
 
