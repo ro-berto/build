@@ -23,7 +23,6 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   normal_tests = ['audio_coding_module_test',
                   'audio_coding_unittests',
                   'audio_conference_mixer_unittests',
-                  'audio_device_test_api',
                   'audioproc_unittest',
                   'bitrate_controller_unittests',
                   'common_video_unittests',
