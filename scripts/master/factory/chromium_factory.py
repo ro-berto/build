@@ -521,13 +521,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
           factory_properties=fp, perf=True)
     if R('scrolling_benchmark'):
-      f.AddChromeRemoteControlTest('scrolling_benchmark', 'top_25.json', fp)
+      f.AddTelemetryTest('scrolling_benchmark', 'top_25.json', fp)
     if R('jsgamebench'):
-      f.AddChromeRemoteControlTest('jsgamebench', 'jsgamebench.json', fp)
+      f.AddTelemetryTest('jsgamebench', 'jsgamebench.json', fp)
     if R('kraken'):
-      f.AddChromeRemoteControlTest('kraken', 'kraken.json', fp)
+      f.AddTelemetryTest('kraken', 'kraken.json', fp)
     if R('robohornetpro'):
-      f.AddChromeRemoteControlTest('robohornetpro', 'robohornetpro.json', fp)
+      f.AddTelemetryTest('robohornetpro', 'robohornetpro.json', fp)
 
     if R('memory'):
       f.AddMemoryTests(fp)
@@ -623,7 +623,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('soft_gpu_tests_br'):
       f.AddBuildrunnerAnnotatedSoftGpuTests(fp)
     if R('spaceport'):
-      f.AddChromeRemoteControlTest('spaceport', 'spaceport.json', fp)
+      f.AddTelemetryTest('spaceport', 'spaceport.json', fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):

@@ -1040,9 +1040,9 @@ class ChromiumCommands(commands.FactoryCommands):
       return J(ref_dir, 'chrome_linux', 'chrome')
     return None
 
-  def AddChromeRemoteControlTest(self, test_name, page_set,
-                                 factory_properties=None, timeout=1200):
-    """Adds a Chrome Remote Control performance test.
+  def AddTelemetryTest(self, test_name, page_set, factory_properties=None,
+                       timeout=1200):
+    """Adds a Telemetry performance test.
 
     Args:
       test_name: The name of the benchmark module to run.
