@@ -213,10 +213,10 @@ def FixSubversionConfig():
 def GetActiveSlavename(config_bootstrap):
   active_slavename = os.environ.get('TESTING_SLAVENAME', slavename)
   if active_slavename:
-    setattr(config_bootstrap.Master, 'active_slavename', active_slavename)
+    config_bootstrap.Master.active_slavename = active_slavename
   else:
-    setattr(config_bootstrap.Master, 'active_slavename',
-            socket.getfqdn().split('.')[0].lower())
+    config_bootstrap.Master.active_slavename = (
+        socket.getfqdn().split('.', 1)[0].lower())
   return active_slavename
 
 
@@ -231,7 +231,7 @@ def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
     return config_bootstrap.Master.active_master
   if master_name and getattr(config_bootstrap.Master, master_name):
     master = getattr(config_bootstrap.Master, master_name)
-    setattr(config_bootstrap.Master, 'active_master', master)
+    config_bootstrap.Master.active_master = master
     return master
   raise RuntimeError('*** Failed to detect the active master')
 
