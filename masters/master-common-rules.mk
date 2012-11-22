@@ -83,6 +83,12 @@ exceptions:
 	# Searches for exception in the last 11 log files.
 	grep -A 10 "exception caught here" twistd.log twistd.log.?
 
+last-restart:
+	@if `test -f twistd.pid`; then stat -c %y `readlink -f twistd.pid` | \
+	    cut -d "." -f1; fi;
+	@ls -t -1 twistd.log* | while read f; do tac $$f | grep -m 1 \
+	    "Creating BuildMaster"; done | head -n 1
+
 wait:
 	while `test -f twistd.pid`; do sleep 1; done;
 
