@@ -16,9 +16,6 @@ import time
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 needs_reboot = False
 
-# Determines which version of buildslave is used. Set by main().
-USE_BUILDBOT_8 = False
-
 # By default, the slave will identify itself to the master by its hostname.
 # To override that, explicitly set a slavename here.
 slavename = None
@@ -137,19 +134,9 @@ def HotPatchSlaveBuilder(is_testing):
   """We could override the SlaveBuilder class but it's way simpler to just
   hotpatch it."""
   Log('HotPatchSlaveBuilder(%s)' % is_testing)
-  # pylint: disable=E0611,F0401
-  if not USE_BUILDBOT_8:
-    # buildbot 0.7.12
-    from buildbot.slave.bot import Bot, SlaveBuilder
-    RemoteShutdownClass = SlaveBuilder
-    Log('Imported 0.7.x')
-  else:
-    # buildbot 0.8.x
-    from buildslave.bot import Bot, SlaveBuilder
-    RemoteShutdownClass = Bot
-    Log('Imported 0.8.x')
-  old_remote_shutdown = RemoteShutdownClass.remote_shutdown
+  from buildslave.bot import Bot  # pylint: disable=F0401
 
+  Bot.old_remote_shutdown = Bot.remote_shutdown
   def rebooting_remote_shutdown(self):
     """Set a reboot flag and stop the reactor so when the slave exits we reboot.
 
@@ -168,11 +155,11 @@ def HotPatchSlaveBuilder(is_testing):
     global needs_reboot
     if not is_testing:
       needs_reboot = True
-      old_remote_shutdown(self)
+      self.old_remote_shutdown()
     else:
       Log('Faking Reboot')
-
-  RemoteShutdownClass.remote_shutdown = rebooting_remote_shutdown
+  Bot.new_remote_shutdown = rebooting_remote_shutdown
+  Bot.remote_shutdown = Bot.new_remote_shutdown
 
   Bot.old_remote_setBuilderList = Bot.remote_setBuilderList
   def cleanup(self, wanted):
@@ -241,15 +228,11 @@ def GetThirdPartyVersions(master):
   versions of buildbot and twisted for its slaves to run.  If not specified,
   this function returns default values.
   """
-  global USE_BUILDBOT_8
   bb_ver = 'buildbot_slave_8_4'
   tw_ver = 'twisted_10_2'
   if master:
     bb_ver = getattr(master, 'buildslave_version', bb_ver)
     tw_ver = getattr(master, 'twisted_version', tw_ver)
-  if '8' in bb_ver:
-    # Cheezy-hack.
-    USE_BUILDBOT_8 = True
   print 'Using %s and %s' % (bb_ver, tw_ver)
   return (bb_ver, tw_ver)
 
