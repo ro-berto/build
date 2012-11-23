@@ -36,66 +36,51 @@ sharded_tests = [
   'media_unittests',
 ]
 
-linux_options = [
-    'aura_builder',
-    'base_unittests',
-    'browser_tests',
-    'cacheinvalidation_unittests',
-    'compositor_unittests',
-    'content_browsertests',
-    'content_unittests',
-    'crypto_unittests',
-    'dbus_unittests',
-    'device_unittests',
-    'gpu_unittests',
-    'googleurl_unittests',
-    'interactive_ui_tests',
-    'ipc_tests',
-    'jingle_unittests',
-    'media_unittests',
-    'net_unittests',
-    'ppapi_unittests',
-    'printing_unittests',
-    'remoting_unittests',
-    'sql_unittests',
-    'sync_unit_tests',
-    'ui_unittests',
-    'unit_tests',
-    'views_unittests',
+linux_chromeos_tests = [
+  ('ash_unittests', 'aura_builder', 1),
+  ('aura', 'aura_builder', 1),
+  ('base', 'base_unittests', 1),
+  ('browser_tests', 'browser_tests', 2),
+  ('cacheinvalidation', 'cacheinvalidation_unittests', 1),
+  ('chromeos_unittests', 'chromeos_unittests', 1),
+  ('compositor', 'compositor_unittests', 1),
+  ('content_browsertests', 'content_browsertests', 2),
+  ('content_unittests', 'content_unittests', 1),
+  ('crypto', 'crypto_unittests', 1),
+  ('dbus', 'dbus_unittests', 1),
+  ('device_unittests', 'device_unittests', 1),
+  ('googleurl', 'googleurl_unittests', 1),
+  (None, 'googleurl_unittests', 1),
+  ('gpu', 'gpu_unittests', 1),
+  ('interactive_ui', 'interactive_ui_tests', 3),
+  ('jingle', 'jingle_unittests', 1),
+  ('media', 'media_unittests', 1),
+  ('net', 'net_unittests', 1),
+  ('ppapi_unittests', 'ppapi_unittests', 1),
+  ('printing', 'printing_unittests', 1),
+  ('remoting', 'remoting_unittests', 1),
+  #('safe_browsing', 'safe_browsing_tests', 0),
+  ('sandbox_linux_unittests', 'sandbox_linux_unittests', 1),
+  ('ui_unittests', 'ui_unittests', 1),
+  ('unit_ipc', 'ipc_tests', 1),
+  ('unit_sql', 'sql_unittests', 1),
+  ('unit_sync', 'sync_unit_tests', 1),
+  ('unit_unit', 'unit_tests', 1),
+  ('views', 'views_unittests', 1),
 ]
 
-linux_tests_1 = [
-    'ash_unittests',
-    'aura',
-    'base',
-    'cacheinvalidation',
-    'compositor',
-    'content_unittests',
-    'crypto',
-    'dbus',
-    'device_unittests',
-    'googleurl',
-    'gpu',
-    'jingle',
-    'media',
-    'net',
-    'ppapi_unittests',
-    'printing',
-    'remoting',
-    'unit_ipc',
-    'unit_sql',
-    'unit_sync',
-    'unit_unit',
-    'ui_unittests',
-    'views',
-]
+def without_tests(pairs, without):
+  return [(a, b, c) for (a, b, c) in pairs if not a in without]
 
-linux_tests_2 = [
-    'browser_tests',
-    'content_browsertests',
-]
+def extract_tests(pairs, shard):
+  return list(set(a for (a, _, c) in pairs if a and c == shard))
 
-linux_tests_3 = [ 'interactive_ui' ]
+def extract_options(pairs):
+  return list(set(b for (_, b, c) in pairs if b and c))
+
+def prepend_type(prefix, tests):
+  return ['%s_%s' % (prefix, value) for value in tests]
+
 
 B('Linux ChromiumOS Full',
   factory='fullbuilder',
@@ -108,7 +93,7 @@ B('Linux ChromiumOS Full',
 F('fullbuilder', chromiumos().ChromiumOSFactory(
     slave_type='BuilderTester',
     clobber=True,
-    options=['--compiler=goma'] + linux_options,
+    options=['--compiler=goma'] + extract_options(linux_chromeos_tests),
     tests=['check_deps2git',
            'check_licenses',
            'check_perms',],
@@ -134,7 +119,7 @@ B('Linux ChromiumOS Builder',
   notify_on_missing=True)
 F('builder', chromiumos().ChromiumOSFactory(
     slave_type='Builder',
-    options=['--compiler=goma'] + linux_options,
+    options=['--compiler=goma'] + extract_options(linux_chromeos_tests),
     factory_properties={
         'archive_build': False,
         'trigger': 'chromiumos_rel_trigger',
@@ -153,30 +138,7 @@ B('Linux ChromiumOS Tests (1)',
 F('tester_1', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['ash_unittests',
-           'aura',
-           'base',
-           'cacheinvalidation',
-           'compositor',
-           'content_unittests',
-           'crypto',
-           'dbus',
-           'device_unittests',
-           'googleurl',
-           'gpu',
-           'jingle',
-           'media',
-           'net',
-           'ppapi_unittests',
-           'printing',
-           'remoting',
-           'unit_ipc',
-           'unit_sql',
-           'unit_sync',
-           'unit_unit',
-           'ui_unittests',
-           'views',
-           ],
+    tests=extract_tests(linux_chromeos_tests, 1),
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,
                         'chromeos': 1}))
@@ -190,7 +152,8 @@ B('Linux ChromiumOS Tests (2)',
 F('tester_2', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=linux_tests_2 + linux_tests_3,
+    tests=extract_tests(linux_chromeos_tests, 2) +
+          extract_tests(linux_chromeos_tests, 3),
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,
                         'chromeos': 1}))
@@ -206,7 +169,7 @@ B('Linux ChromiumOS (Clang dbg)',
 F('clang', chromiumos().ChromiumOSFactory(
     target='Debug',
     tests=[],
-    options=['--compiler=clang', 'aura_builder'],
+    options=['--compiler=clang'] + extract_options(linux_chromeos_tests),
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES': ('chromeos=1 target_arch=ia32'
@@ -230,7 +193,7 @@ B('Linux ChromiumOS Builder (dbg)', 'dbg', 'compile',
 F('dbg', chromiumos().ChromiumOSFactory(
     slave_type='Builder',
     target='Debug',
-    options=['--compiler=goma'] + linux_options,
+    options=['--compiler=goma'] + extract_options(linux_chromeos_tests),
     factory_properties={
       'gclient_env': { 'GYP_DEFINES' : 'chromeos=1 component=shared_library' },
       'trigger': 'chromiumos_dbg_trigger',
@@ -243,7 +206,7 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     target='Debug',
-    tests=linux_tests_1,
+    tests=extract_tests(linux_chromeos_tests, 1),
     factory_properties={'chromeos': 1,
                         'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,}))
@@ -255,7 +218,7 @@ F('dbg_tests_2', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     target='Debug',
-    tests=linux_tests_2,
+    tests=extract_tests(linux_chromeos_tests, 2),
     factory_properties={'chromeos': 1,
                         'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,}))
@@ -267,7 +230,7 @@ F('dbg_tests_3', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     target='Debug',
-    tests=linux_tests_3,
+    tests=extract_tests(linux_chromeos_tests, 3),
     factory_properties={'chromeos': 1,
                         'sharded_tests': sharded_tests,
                         'generate_gtest_json': True,}))
