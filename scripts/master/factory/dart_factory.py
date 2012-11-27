@@ -8,10 +8,21 @@
 Based on gclient_factory.py.
 """
 
+from buildbot.process.buildstep import RemoteShellCommand
+
 from master.factory import dart_commands
 from master.factory import gclient_factory
 
 import config
+
+dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
+dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
+
+# We set these paths relative to the dart root, the scripts need to
+# fix these to be absolute if they don't run from there.
+linux_env =  {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
+windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
+               'LOGONSERVER': '\\\\AD1'}
 
 
 def AddGeneralGClientProperties(factory_properties=None):
@@ -122,3 +133,25 @@ class DartFactory(gclient_factory.GClientFactory):
                                               env=env)
     dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout)
     return factory
+
+def monkey_patch_remoteshell():
+  # Hack to increase timeout for steps, dart2js debug checked mode takes more
+  # than 8 hours.
+  RemoteShellCommand.__init__.im_func.func_defaults = (None,
+                                                       1,
+                                                       1,
+                                                       1200,
+                                                       48*60*60, {},
+                                                       'slave-config',
+                                                       True)
+
+def DartTreeFileSplitter(path):
+  pieces = path.split('/')
+  if pieces[0] == 'trunk':
+    return ('trunk', '/'.join(pieces[1:]))
+  elif pieces[0] == 'branches':
+    return ('/'.join(pieces[0:2]),
+            '/'.join(pieces[2:]))
+  else:
+    return None
+
