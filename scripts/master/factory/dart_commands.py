@@ -178,6 +178,7 @@ class DartCommands(commands.FactoryCommands):
                             name='checked_tests',
                             description='checked_tests',
                             timeout=timeout,
+                            env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd)
