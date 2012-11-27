@@ -591,12 +591,21 @@ index 59cbc0e..c95ac7f 100644
          return d
 
 
-Add revision to changes in the waterfall.
+commit ca9f4ed52b4febcebd30ad77a8e40737f3a5ad1f
+Author: Nicolas Sylvain <nsylvain@chromium.org>
+Date:   Fri Nov 23 12:24:04 2012 -0500
 
-diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/changes.py b/third_party/buildbo
-index 415e781..a15dff8 100644
---- a/third_party/buildbot_8_4p1/buildbot/status/web/changes.py
-+++ b/third_party/buildbot_8_4p1/buildbot/status/web/changes.py
+    Optionally add revision to the waterfall display of changes.
+    
+    Used in chromium's waterfalls extensively.
+    publicly reviewed here: https://codereview.chromium.org/7276032
+    
+    Modified to not change the look by default.
+
+diff --git a/master/buildbot/status/web/changes.py b/master/buildbot/status/web/changes.py
+index 6be37b5..0971bea 100644
+--- a/master/buildbot/status/web/changes.py
++++ b/master/buildbot/status/web/changes.py
 @@ -63,7 +63,8 @@ class ChangeBox(components.Adapter):
          template = req.site.buildbot_service.templates.get_template("change_macros.html")
          text = template.module.box_contents(url=url,
@@ -606,18 +615,32 @@ index 415e781..a15dff8 100644
 +                                            revision=self.original.revision)
          return Box([text], class_="Change")
  components.registerAdapter(ChangeBox, Change, IBox)
+ 
+diff --git a/master/buildbot/status/web/templates/change_macros.html b/master/buildbot/status/web/templates/change_macros.html
+index 9b46191..dc6a9b2 100644
+--- a/master/buildbot/status/web/templates/change_macros.html
++++ b/master/buildbot/status/web/templates/change_macros.html
+@@ -71,6 +71,6 @@
+ {% endif %} 
+ {%- endmacro %} 
+ 
+-{% macro box_contents(who, url, pageTitle) -%}
++{% macro box_contents(who, url, pageTitle, revision) -%}
+ <a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a>
+ {%- endmacro %}
 
-diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/templates/change_macros.html b/t
-index b9b7780..9a37b47 100644
---- a/third_party/buildbot_8_4p1/buildbot/status/web/templates/change_macros.html
-+++ b/third_party/buildbot_8_4p1/buildbot/status/web/templates/change_macros.html
+Add revision to the chromium waterfalls.
+
+Index: buildbot/status/web/templates/change_macros.html
+===================================================================
+--- buildbot/status/web/templates/change_macros.html	(revision 167249)
++++ buildbot/status/web/templates/change_macros.html	(working copy)
 @@ -67,6 +67,6 @@
  {% endif %}
  {%- endmacro %}
 
--{% macro box_contents(who, url, pageTitle) -%}
+ {% macro box_contents(who, url, pageTitle, revision) -%}
 -<a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a>
-+{% macro box_contents(who, url, pageTitle, revision) -%}
 +<a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a><br>r{{ revision }}
  {%- endmacro %}
 
@@ -2727,3 +2750,43 @@ Index: waterfallhelp.html
        </tr>
      {% endfor %}
 
+
+commit 1fe8fbcf99cd98546a98d2dd6a3be1206ea590c7
+Author: Peter Mayo <petermayo@chromium.org>
+Date:   Fri Nov 23 12:37:00 2012 -0500
+
+    Optionally add project to changes in waterfall display.
+    
+    In some waterfalls it is useful to separate different change
+    sources visually.  This allows an attribute to reflect that to
+    be passed though from config to template.
+    
+    Related reviews: https://codereview.chromium.org/11425002
+    
+diff --git a/master/buildbot/status/web/changes.py b/master/buildbot/status/web/changes.py
+index 0971bea..e579669 100644
+--- a/master/buildbot/status/web/changes.py
++++ b/master/buildbot/status/web/changes.py
+@@ -64,7 +64,8 @@ class ChangeBox(components.Adapter):
+         text = template.module.box_contents(url=url,
+                                             who=self.original.getShortAuthor(),
+                                             pageTitle=self.original.comments,
+-                                            revision=self.original.revision)
++                                            revision=self.original.revision,
++                                            project=self.original.project)
+         return Box([text], class_="Change")
+ components.registerAdapter(ChangeBox, Change, IBox)
+ 
+diff --git a/master/buildbot/status/web/templates/change_macros.html b/master/buildbot/status/web/templates/change_macros.html
+index dc6a9b2..2ca01d9 100644
+--- a/master/buildbot/status/web/templates/change_macros.html
++++ b/master/buildbot/status/web/templates/change_macros.html
+@@ -71,6 +71,6 @@
+ {% endif %} 
+ {%- endmacro %} 
+ 
+-{% macro box_contents(who, url, pageTitle, revision) -%}
++{% macro box_contents(who, url, pageTitle, revision, project) -%}
+ <a href="{{ url }}" title="{{ pageTitle|e }}">{{ who|user }}</a>
+ {%- endmacro %}
+    
