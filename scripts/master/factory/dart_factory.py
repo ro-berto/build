@@ -9,9 +9,11 @@ Based on gclient_factory.py.
 """
 
 from buildbot.process.buildstep import RemoteShellCommand
+from buildbot.changes import svnpoller
 
 from master.factory import dart_commands
 from master.factory import gclient_factory
+from master import master_utils
 
 import config
 
@@ -24,6 +26,7 @@ linux_env =  {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
 windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
                'LOGONSERVER': '\\\\AD1'}
 
+dart_revision_url = "http://code.google.com/p/dart/source/detail?r=%s"
 
 def AddGeneralGClientProperties(factory_properties=None):
   """Adds the general gclient options to ensure we get the correct revisions"""
@@ -154,4 +157,54 @@ def DartTreeFileSplitter(path):
             '/'.join(pieces[2:]))
   else:
     return None
+
+def get_builders_from_variants(variants, slaves, slave_lock):
+  builders = []
+  for v in variants:
+    builders.append({
+       'name': v['name'],
+       'builddir': v['name'],
+       'factory': v['factory_builder'],
+       'slavenames': slaves.GetSlavesName(builder=v['name']),
+       'category': v['category'],
+       'locks': [slave_lock],
+       'auto_reboot': False,
+    })
+  return builders
+
+def get_builders_from_factories(factories, slaves, auto_reboot):
+  builders = []
+  for f in factories:
+    builders.append({
+        'name': f[0],
+        'slavenames': slaves.GetSlavesName(builder=f[0]),
+        'builddir': f[0],
+        'factory': f[2],
+        'category': '%s' % f[1],
+        # Don't enable auto_reboot for people testing locally.
+        'auto_reboot': auto_reboot,
+    })
+  return builders
+
+def get_slaves(builders):
+  # The 'slaves' list defines the set of allowable buildslaves. List all the
+  # slaves registered to a builder. Remove dupes.
+  return master_utils.AutoSetupSlaves(builders, config.Master.GetBotPassword())
+
+def get_svn_poller():
+  # Polls config.Master.dart_url for changes
+  return svnpoller.SVNPoller(svnurl=config.Master.dart_url,
+                             split_file=DartTreeFileSplitter,
+                             pollinterval=10,
+                             revlinktmpl=dart_revision_url)
+
+def get_web_statuses(public_html, templates, master_port, master_port_alt):
+  statuses = []
+  statuses.append(master_utils.CreateWebStatus(master_port,
+                                               allowForce=True,
+                                               public_html=public_html,
+                                               templates=templates))
+  statuses.append(
+      master_utils.CreateWebStatus(master_port_alt, allowForce=False))
+  return statuses
 
