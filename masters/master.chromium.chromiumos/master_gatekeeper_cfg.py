@@ -13,9 +13,11 @@ from master import master_utils
 chromium_categories_steps = {
   '': ['update'],
   'tester': [
+    'aura_unit_tests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
+    'chromeos_unittests',
     'content_browsertests',
     'content_unittests',
     'courgette_unittests',
