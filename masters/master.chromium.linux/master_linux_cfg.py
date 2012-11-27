@@ -291,12 +291,26 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
 # seccomp-bpf.
 #
 
-B('Linux (Precise)', 'dbg_precise_1', 'testers', 'linux_dbg_trigger',
+B('Linux Precise (dbg)', 'dbg_precise_1', 'testers', 'linux_dbg_trigger',
   auto_reboot=True, notify_on_missing=True)
 F('dbg_precise_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     target='Debug',
+    tests=[
+      'base',
+      'browser_tests',
+      'content_browsertests',
+      'sandbox_linux_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
+B('Linux Precise x64', 'rel_precise_1', 'testers', 'linux_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
+F('rel_precise_1', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=[
       'base',
       'browser_tests',
