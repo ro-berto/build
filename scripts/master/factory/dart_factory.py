@@ -158,7 +158,10 @@ def DartTreeFileSplitter(path):
   else:
     return None
 
-def get_builders_from_variants(variants, slaves, slave_lock):
+def get_builders_from_variants(variants,
+                               slaves,
+                               slave_locks,
+                               auto_reboot = False):
   builders = []
   for v in variants:
     builders.append({
@@ -167,23 +170,8 @@ def get_builders_from_variants(variants, slaves, slave_lock):
        'factory': v['factory_builder'],
        'slavenames': slaves.GetSlavesName(builder=v['name']),
        'category': v['category'],
-       'locks': [slave_lock],
-       'auto_reboot': False,
-    })
-  return builders
-
-def get_builders_from_factories(factories, slaves, auto_reboot):
-  builders = []
-  for f in factories:
-    builders.append({
-        'name': f[0],
-        'slavenames': slaves.GetSlavesName(builder=f[0]),
-        'builddir': f[0],
-        'factory': f[2],
-        'category': '%s' % f[1],
-        # Don't enable auto_reboot for people testing locally.
-        'auto_reboot': auto_reboot,
-    })
+       'locks': slave_locks,
+       'auto_reboot': auto_reboot})
   return builders
 
 def get_slaves(builders):
@@ -207,4 +195,38 @@ def get_web_statuses(public_html, templates, master_port, master_port_alt):
   statuses.append(
       master_utils.CreateWebStatus(master_port_alt, allowForce=False))
   return statuses
+
+def SetupFactory(v, base, platform):
+  env = v.get('env', {})
+  if platform in ['dart_client', 'dart-editor',
+                  'dart_client-trunk', 'dart-editor-trunk']:
+    v['factory_builder'] = base.DartAnnotatedFactory(
+        python_script='client/tools/buildbot_annotated_steps.py',
+        env=env,
+    )
+  else:
+    options = {
+        'mode': v['mode'],
+        'arch': v['arch'],
+        'name': v['name'] }
+    # TODO(ricow) Remove shards from here when we move dart2dart to annotated.
+    if 'shards' in v and 'shard' in v:
+      options['shards'] = v['shards']
+      options['shard'] = v['shard']
+    v['factory_builder'] = base.DartFactory(
+        slave_type='BuilderTester',
+        clobber=False,
+        options=options,
+        env=env
+    )
+
+def setup_factories(variants, factory_base):
+  for v in variants:
+    platform = v['platform']
+    base = factory_base[platform]
+    SetupFactory(v, base, platform)
+
+def get_builder_names(variants):
+  return [variant['name'] for variant in variants]
+
 
