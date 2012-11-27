@@ -35,7 +35,6 @@ class Master(object):
   slave_internal_url = None
 
   syzygy_internal_url = None
-  webrtc_internal_url = None
 
   swarm_server_internal_url = 'http://fake.swarm.url.server.com'
   swarm_server_dev_internal_url = 'http://fake.swarm.dev.url.server.com'
@@ -446,6 +445,7 @@ class Master(object):
 
   class WebRTC(_Base):
     project_name = 'WebRTC'
+    master_host = 'localhost'
     master_port = 9094
     slave_port = 9194
     master_port_alt = 9294

@@ -39,10 +39,6 @@ class WebRTCFactory(gclient_factory.GClientFactory):
     solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list,
         custom_deps_list=custom_deps_list))
-    if config.Master.webrtc_internal_url:
-      solutions.append(gclient_factory.GClientSolution(
-          config.Master.webrtc_internal_url, name='webrtc-internal',
-          custom_vars_list=custom_vars_list))
     self._branch = branch
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
                                             target_platform=target_platform)
