@@ -40,7 +40,10 @@ B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
 F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_main_builder.sh',
-    factory_properties={'trigger': 'android_trigger'}))
+    factory_properties={
+      'buildtool': 'ninja',
+      'trigger': 'android_trigger',
+    }))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android', 'android_trigger',
   auto_reboot=False, notify_on_missing=True)
