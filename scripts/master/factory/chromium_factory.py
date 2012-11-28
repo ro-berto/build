@@ -976,6 +976,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     chromium_cmd_obj.AddAnnotationStep('build', annotation_script, env=env,
                                        factory_properties=factory_properties)
 
+    # Add all the tests.
+    self._AddTests(factory_cmd_obj=chromium_cmd_obj, tests=tests,
+                   factory_properties=factory_properties)
+
     # Add a trigger step if needed.
     self.TriggerFactory(factory, slave_type=slave_type,
                         factory_properties=factory_properties)
