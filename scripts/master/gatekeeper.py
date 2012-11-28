@@ -65,7 +65,9 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
         'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
     self._last_closure_revision = 0
 
-    self.password = get_password.Password('.status_password').GetPassword()
+    self.password = None
+    if tree_status_url:
+      self.password = get_password.Password('.status_password').GetPassword()
 
 
   def isInterestingStep(self, build_status, step_status, results):
@@ -173,6 +175,10 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
     # isInterestingStep verified that latest_revision has expected properties.
     latest_revision = build_utils.getLatestRevision(build_status)
+
+    if not self.tree_status_url:
+      self._last_closure_revision = latest_revision
+      return
 
     # Don't blame last committers if they are not to blame.
     blame_text = ''
