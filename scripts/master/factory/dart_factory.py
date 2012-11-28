@@ -193,96 +193,141 @@ class DartFactory(gclient_factory.GClientFactory):
     dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout)
     return factory
 
-def monkey_patch_remoteshell():
-  # Hack to increase timeout for steps, dart2js debug checked mode takes more
-  # than 8 hours.
-  RemoteShellCommand.__init__.im_func.func_defaults = (None,
-                                                       1,
-                                                       1,
-                                                       1200,
-                                                       48*60*60, {},
-                                                       'slave-config',
-                                                       True)
+class DartUtils(object):
+  mac_options = ['--compiler=goma-clang',
+                 '--',
+                 '-target',
+                 'dartium_builder']
+  mac_dbg_options = ['--compiler=goma-clang',
+                     '--build-tool=ninja',
+                     '--',
+                     'dartium_builder']
+  linux_options = ['--compiler=goma', 'dartium_builder']
+  win_project = 'all.sln;dartium_builder'
+  win_rel_factory_properties = {
+    'gclient_env': {
+      'GYP_DEFINES': 'fastbuild=1',
+    },
+    'gclient_transitive': True,
+    'no_gclient_branch': True,
+    'annotated_script': 'dart_buildbot_run.py',
+  }
+  win_dbg_factory_properties = {
+    'gclient_env': {
+      'GYP_DEFINES': 'fastbuild=1 component=shared_library',
+    },
+    'gclient_transitive': True,
+    'no_gclient_branch': True,
+    'annotated_script': 'dart_buildbot_run.py',
+  }
 
-def DartTreeFileSplitter(path):
-  pieces = path.split('/')
-  if pieces[0] == 'trunk':
-    return ('trunk', '/'.join(pieces[1:]))
-  elif pieces[0] == 'branches':
-    return ('/'.join(pieces[0:2]),
-            '/'.join(pieces[2:]))
-  else:
-    return None
 
-def get_builders_from_variants(variants,
-                               slaves,
-                               slave_locks,
-                               auto_reboot = False):
-  builders = []
-  for v in variants:
-    builders.append({
-       'name': v['name'],
-       'builddir': v['name'],
-       'factory': v['factory_builder'],
-       'slavenames': slaves.GetSlavesName(builder=v['name']),
-       'category': v['category'],
-       'locks': slave_locks,
-       'auto_reboot': auto_reboot})
-  return builders
+  def __init__(self, active_master):
+    self._active_master = active_master
 
-def get_slaves(builders):
-  # The 'slaves' list defines the set of allowable buildslaves. List all the
-  # slaves registered to a builder. Remove dupes.
-  return master_utils.AutoSetupSlaves(builders, config.Master.GetBotPassword())
+  @staticmethod
+  def monkey_patch_remoteshell():
+    # Hack to increase timeout for steps, dart2js debug checked mode takes more
+    # than 8 hours.
+    RemoteShellCommand.__init__.im_func.func_defaults = (None,
+                                                         1,
+                                                         1,
+                                                         1200,
+                                                         48*60*60, {},
+                                                         'slave-config',
+                                                         True)
 
-def get_svn_poller():
-  # Polls config.Master.dart_url for changes
-  return svnpoller.SVNPoller(svnurl=config.Master.dart_url,
-                             split_file=DartTreeFileSplitter,
-                             pollinterval=10,
-                             revlinktmpl=dart_revision_url)
+  @staticmethod
+  def get_svn_poller():
+    def dart_tree_file_splitter(path):
+      pieces = path.split('/')
+      if pieces[0] == 'trunk':
+        return ('trunk', '/'.join(pieces[1:]))
+      elif pieces[0] == 'branches':
+        return ('/'.join(pieces[0:2]),
+                '/'.join(pieces[2:]))
+      else:
+        return None
 
-def get_web_statuses(public_html, templates, master_port, master_port_alt):
-  statuses = []
-  statuses.append(master_utils.CreateWebStatus(master_port,
-                                               allowForce=True,
-                                               public_html=public_html,
-                                               templates=templates))
-  statuses.append(
-      master_utils.CreateWebStatus(master_port_alt, allowForce=False))
-  return statuses
+    # Polls config.Master.dart_url for changes
+    return svnpoller.SVNPoller(svnurl=config.Master.dart_url,
+                               split_file=dart_tree_file_splitter,
+                               pollinterval=10,
+                               revlinktmpl=dart_revision_url)
 
-def SetupFactory(v, base, platform):
-  env = v.get('env', {})
-  if platform in ['dart_client', 'dart-editor',
-                  'dart_client-trunk', 'dart-editor-trunk']:
-    v['factory_builder'] = base.DartAnnotatedFactory(
-        python_script='client/tools/buildbot_annotated_steps.py',
-        env=env,
-    )
-  else:
-    options = {
-        'mode': v['mode'],
-        'arch': v['arch'],
-        'name': v['name'] }
-    # TODO(ricow) Remove shards from here when we move dart2dart to annotated.
-    if 'shards' in v and 'shard' in v:
-      options['shards'] = v['shards']
-      options['shard'] = v['shard']
-    v['factory_builder'] = base.DartFactory(
-        slave_type='BuilderTester',
-        clobber=False,
-        options=options,
-        env=env
-    )
+  @staticmethod
+  def setup_factories(variants, factory_base):
+    def setup_factory(v, base, platform):
+      env = v.get('env', {})
+      if platform in ['dart_client', 'dart-editor',
+                      'dart_client-trunk', 'dart-editor-trunk']:
+        v['factory_builder'] = base.DartAnnotatedFactory(
+            python_script='client/tools/buildbot_annotated_steps.py',
+            env=env,
+        )
+      else:
+        options = {
+            'mode': v['mode'],
+            'arch': v['arch'],
+            'name': v['name'] }
+        # TODO(ricow) Remove shards from here when we move dart2dart
+        # to annotated.
+        if 'shards' in v and 'shard' in v:
+          options['shards'] = v['shards']
+          options['shard'] = v['shard']
+        v['factory_builder'] = base.DartFactory(
+            slave_type='BuilderTester',
+            clobber=False,
+            options=options,
+            env=env
+        )
 
-def setup_factories(variants, factory_base):
-  for v in variants:
-    platform = v['platform']
-    base = factory_base[platform]
-    SetupFactory(v, base, platform)
+    for v in variants:
+      platform = v['platform']
+      base = factory_base[platform]
+      setup_factory(v, base, platform)
 
-def get_builder_names(variants):
-  return [variant['name'] for variant in variants]
+  def get_web_statuses(self):
+    public_html = '../master.client.dart/public_html'
+    templates = ['../master.client.dart/templates',
+                 '../master.chromium/templates']
+    master_port = self._active_master.master_port
+    master_port_alt = self._active_master.master_port_alt
 
+    statuses = []
+    statuses.append(master_utils.CreateWebStatus(master_port,
+                                                 allowForce=True,
+                                                 public_html=public_html,
+                                                 templates=templates))
+    statuses.append(
+        master_utils.CreateWebStatus(master_port_alt, allowForce=False))
+    return statuses
+
+  @staticmethod
+  def get_builders_from_variants(variants,
+                                 slaves,
+                                 slave_locks,
+                                 auto_reboot = False):
+    builders = []
+    for v in variants:
+      builders.append({
+         'name': v['name'],
+         'builddir': v['name'],
+         'factory': v['factory_builder'],
+         'slavenames': slaves.GetSlavesName(builder=v['name']),
+         'category': v['category'],
+         'locks': slave_locks,
+         'auto_reboot': auto_reboot})
+    return builders
+
+  @staticmethod
+  def get_builder_names(variants):
+    return [variant['name'] for variant in variants]
+
+  @staticmethod
+  def get_slaves(builders):
+    # The 'slaves' list defines the set of allowable buildslaves. List all the
+    # slaves registered to a builder. Remove dupes.
+    return master_utils.AutoSetupSlaves(builders,
+                                        config.Master.GetBotPassword())
 
