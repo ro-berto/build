@@ -11,6 +11,7 @@ Based on gclient_factory.py.
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.changes import svnpoller
 
+from master.factory import chromium_factory
 from master.factory import dart_commands
 from master.factory import gclient_factory
 from master import master_utils
@@ -27,6 +28,61 @@ windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
                'LOGONSERVER': '\\\\AD1'}
 
 dart_revision_url = "http://code.google.com/p/dart/source/detail?r=%s"
+
+# These chromium factories are used for building dartium
+F_LINUX_CH = None
+F_MAC_CH = None
+F_WIN_CH = None
+F_LINUX_CH_TRUNK = None
+F_MAC_CH_TRUNK = None
+F_WIN_CH_TRUNK = None
+
+def setup_chromium_factories():
+  gclient_dartium = gclient_factory.GClientSolution(dartium_url, 'dartium.deps')
+  gclient_dartium_trunk = gclient_factory.GClientSolution(dartium_trunk_url,
+                                                          'dartium.deps')
+
+  class DartiumFactory(chromium_factory.ChromiumFactory):
+    def __init__(self, target_platform=None):
+      chromium_factory.ChromiumFactory.__init__(self,
+                                                'src/build',
+                                                target_platform)
+      self._solutions = []
+
+    def add_solution(self, solution):
+      self._solutions.append(solution)
+
+  m_linux_ch = DartiumFactory('linux2')
+  m_linux_ch.add_solution(gclient_dartium)
+  m_mac_ch = DartiumFactory('darwin')
+  m_mac_ch.add_solution(gclient_dartium)
+  m_win_ch = DartiumFactory()
+  m_win_ch.add_solution(gclient_dartium)
+
+  m_linux_ch_trunk = DartiumFactory('linux2')
+  m_linux_ch_trunk.add_solution(gclient_dartium_trunk)
+  m_mac_ch_trunk = DartiumFactory('darwin')
+  m_mac_ch_trunk.add_solution(gclient_dartium_trunk)
+  m_win_ch_trunk = DartiumFactory()
+  m_win_ch_trunk.add_solution(gclient_dartium_trunk)
+
+  trunk_internal_url_src = config.Master.trunk_internal_url_src
+  if trunk_internal_url_src:
+    gclient_trunk_internal = gclient_factory.GClientSolution(
+        trunk_internal_url_src)
+    m_win_ch.add_solution(gclient_trunk_internal)
+    m_win_ch_trunk.add_solution(gclient_trunk_internal)
+
+  # Some shortcut to simplify the code in the master.cfg files
+  global F_LINUX_CH, F_MAC_CH, F_WIN_CH
+  global F_LINUX_CH_TRUNK, F_MAC_CH_TRUNK, F_WIN_CH_TRUNK
+  F_LINUX_CH = m_linux_ch.ChromiumFactory
+  F_MAC_CH = m_mac_ch.ChromiumFactory
+  F_WIN_CH = m_win_ch.ChromiumFactory
+  F_LINUX_CH_TRUNK = m_linux_ch_trunk.ChromiumFactory
+  F_MAC_CH_TRUNK = m_mac_ch_trunk.ChromiumFactory
+  F_WIN_CH_TRUNK = m_win_ch_trunk.ChromiumFactory
+setup_chromium_factories()
 
 def AddGeneralGClientProperties(factory_properties=None):
   """Adds the general gclient options to ensure we get the correct revisions"""
