@@ -10,6 +10,7 @@ Based on gclient_factory.py.
 
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.changes import svnpoller
+from buildbot.status.mail import MailNotifier
 
 from master.factory import chromium_factory
 from master.factory import dart_commands
@@ -450,4 +451,20 @@ class DartUtils(object):
     # slaves registered to a builder. Remove dupes.
     return master_utils.AutoSetupSlaves(builders,
                                         config.Master.GetBotPassword())
+
+  def get_mail_notifier_statuses(self, mail_notifiers):
+    statuses = []
+    for mail_notifier in mail_notifiers:
+      notifying_builders = mail_notifier['builders']
+      extra_recipients = mail_notifier['extraRecipients']
+      send_to_interested_useres = mail_notifier.get('sendToInterestedUsers',
+                                                    False)
+      statuses.append(
+          MailNotifier(fromaddr=self._active_master.from_address,
+                       mode='problem',
+                       sendToInterestedUsers=send_to_interested_useres,
+                       extraRecipients=extra_recipients,
+                       lookup=master_utils.FilterDomain(),
+                       builders=notifying_builders))
+    return statuses
 
