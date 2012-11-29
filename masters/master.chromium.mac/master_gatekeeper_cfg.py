@@ -18,6 +18,7 @@ categories_steps = {
     'cacheinvalidation_unittests',
     'cc_unittests',
     'chrome_frame_net_tests',
+    'chromedriver2_unittests',
     'content_browsertests',
     'content_unittests',
     'courgette_unittests',
