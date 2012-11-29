@@ -1566,7 +1566,6 @@ class ChromiumCommands(commands.FactoryCommands):
                           description=name,
                           timeout=timeout,
                           haltOnFailure=True,
-                          workdir=self._build_dir,
                           command=cmd,
                           env=env,
                           factory_properties=factory_properties)
