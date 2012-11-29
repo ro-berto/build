@@ -203,7 +203,9 @@ class DartUtils(object):
                      '--',
                      'dartium_builder']
   linux_options = ['--compiler=goma', 'dartium_builder']
+
   win_project = 'all.sln;dartium_builder'
+
   win_rel_factory_properties = {
     'gclient_env': {
       'GYP_DEFINES': 'fastbuild=1',
@@ -219,6 +221,121 @@ class DartUtils(object):
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
+  }
+  mac_factory_properties = {
+    'gclient_transitive': True,
+    'no_gclient_branch': True,
+    'annotated_script': 'dart_buildbot_run.py',
+  }
+  linux_factory_properties = {
+    'gclient_env': {'GYP_GENERATORS' : 'make'},
+    'gclient_transitive': True,
+    'no_gclient_branch': True,
+    'annotated_script': 'dart_buildbot_run.py',
+  }
+  linux32_factory_properties = {
+    'gclient_env': {'GYP_GENERATORS' : 'make',
+                    'GYP_DEFINES': 'target_arch=ia32'},
+    'gclient_transitive': True,
+    'no_gclient_branch': True,
+    'annotated_script': 'dart_buildbot_run.py',
+  }
+
+
+  factory_base = {
+    'vm-mac': DartFactory('dart', 'vm-mac'),
+    'vm-linux': DartFactory('dart', 'vm-linux'),
+    'vm-win32': DartFactory('dart', 'vm-win32'),
+    'dartc-linux': DartFactory('dart', 'dartc-linux'),
+    'dart_client': DartFactory('dart', 'dart_client'),
+    'dart-editor': DartFactory('dart', 'dart-editor'),
+    'frog': DartFactory('dart', 'frog'),
+    'frogsh': DartFactory('dart', 'frogsh'),
+    'dart2dart-linux': DartFactory('dart', 'dart2dart-linux'),
+    'vm-mac-trunk': DartFactory('dart', 'vm-mac', trunk=True),
+    'vm-linux-trunk': DartFactory('dart', 'vm-linux', trunk=True),
+    'vm-win32-trunk': DartFactory('dart', 'vm-win32', trunk=True),
+    'dart-editor-trunk': DartFactory('dart', 'dart-editor', trunk=True),
+  }
+  factory_base_dartium = {
+    'dartium-mac-full' : F_MAC_CH(
+        target='Release',
+        options=mac_options,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-mac-inc' : F_MAC_CH(
+        target='Release',
+        options=mac_options,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-mac-debug' : F_MAC_CH(
+        target='Debug',
+        compile_timeout=3600,
+        options=mac_dbg_options,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-lucid64-full' : F_LINUX_CH(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-lucid64-inc' : F_LINUX_CH(
+        target='Release',
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-lucid64-debug' : F_LINUX_CH(
+        target='Debug',
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-win-full' : F_WIN_CH(
+        target='Release',
+        project=win_project,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-win-inc' : F_WIN_CH(
+        target='Release',
+        project=win_project,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-win-debug' : F_WIN_CH(
+        target='Debug',
+        project=win_project,
+        tests=['annotated_steps'],
+        factory_properties=win_dbg_factory_properties),
+    'dartium-lucid32-full' : F_LINUX_CH(
+        target='Release',
+        clobber=True,
+        options=['dartium_builder'],
+        tests=['annotated_steps'],
+        factory_properties=linux32_factory_properties),
+    'dartium-lucid64-full-trunk' : F_LINUX_CH_TRUNK(
+        target='Release',
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-win-full-trunk' : F_WIN_CH_TRUNK(
+        target='Release',
+        project=win_project,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-mac-full-trunk' : F_MAC_CH_TRUNK(
+        target='Release',
+        options=mac_options,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-lucid32-full-trunk' : F_LINUX_CH_TRUNK(
+        target='Release',
+        clobber=True,
+        options=['dartium_builder'],
+        tests=['annotated_steps'],
+        factory_properties=linux32_factory_properties)
   }
 
 
@@ -255,8 +372,7 @@ class DartUtils(object):
                                pollinterval=10,
                                revlinktmpl=dart_revision_url)
 
-  @staticmethod
-  def setup_factories(variants, factory_base):
+  def setup_factories(self, variants):
     def setup_factory(v, base, platform):
       env = v.get('env', {})
       if platform in ['dart_client', 'dart-editor',
@@ -284,8 +400,12 @@ class DartUtils(object):
 
     for v in variants:
       platform = v['platform']
-      base = factory_base[platform]
+      base = self.factory_base[platform]
       setup_factory(v, base, platform)
+
+  def setup_dartium_factories(self, dartium_variants):
+    for variant in dartium_variants:
+      variant['factory_builder'] = self.factory_base_dartium[variant['name']]
 
   def get_web_statuses(self):
     public_html = '../master.client.dart/public_html'
