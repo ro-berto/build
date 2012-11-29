@@ -963,10 +963,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 gclient_deps=gclient_deps)
 
     # Get the factory command object to create new steps to the factory.
-    chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
-                                                          target,
-                                                          self._build_dir,
-                                                          self._target_platform)
+    chromium_cmd_obj = chromium_commands.ChromiumCommands(
+        factory=factory,
+        target=target,
+        build_dir=self._build_dir,
+        target_platform=self._target_platform,
+        target_os=self._target_os)
 
     # Add the main build.
     env = factory_properties.get('annotation_env')

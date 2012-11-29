@@ -32,10 +32,12 @@ class ChromiumCommands(commands.FactoryCommands):
   """Encapsulates methods to add chromium commands to a buildbot factory."""
 
   def __init__(self, factory=None, target=None, build_dir=None,
-               target_platform=None):
+               target_platform=None, target_os=None):
 
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform)
+
+    self._target_os = target_os
 
     # Where the chromium slave scripts are.
     self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
@@ -1031,7 +1033,10 @@ class ChromiumCommands(commands.FactoryCommands):
   def _GetReferenceBuildPath(self):
     J = self.PathJoin
     ref_dir = J('src', 'chrome', 'tools', 'test', 'reference_build')
-    if self._target_platform == 'win32':
+    if self._target_os == 'android':
+      # TODO(tonyg): Check in a reference android content shell.
+      return None
+    elif self._target_platform == 'win32':
       return J(ref_dir, 'chrome_win', 'chrome.exe')
     elif self._target_platform == 'darwin':
       return J(ref_dir, 'chrome_mac', 'Chromium.app', 'Contents', 'MacOS',
@@ -1043,6 +1048,9 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddTelemetryTest(self, test_name, page_set, factory_properties=None,
                        timeout=1200):
     """Adds a Telemetry performance test.
+
+    TODO(tonyg): Move this to an annotator step once we have a annotation for
+    the GraphingLogProcessor.
 
     Args:
       test_name: The name of the benchmark module to run.
@@ -1057,9 +1065,15 @@ class ChromiumCommands(commands.FactoryCommands):
     page_set = J('src', 'tools', 'perf', 'page_sets', page_set)
 
     # Run the test against the target chrome build.
-    test_args = ['-v', '--browser=release', test_name, page_set]
+    browser = 'release'
+    cmd = ''
+    if self._target_os == 'android':
+      browser = 'android-content-shell'
+      cmd = ('. src/build/android/envsetup.sh && ' +
+             'adb root && adb wait-for-device && ')
+    test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
     test_cmd = self.GetPythonTestCommand(script, test_args)
-    cmd = ' '.join(test_cmd)
+    cmd += ' '.join(test_cmd)
 
     # Run the test against the reference build on platforms where it exists.
     ref_build = self._GetReferenceBuildPath()
