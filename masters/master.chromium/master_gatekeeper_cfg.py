@@ -13,6 +13,7 @@ from master import master_utils
 categories_steps = {
   '': ['update'],
   'testers': [
+    'ash_unittests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
