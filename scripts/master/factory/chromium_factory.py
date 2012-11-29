@@ -528,6 +528,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('kraken', 'kraken.json', fp)
     if R('robohornetpro'):
       f.AddTelemetryTest('robohornetpro', 'robohornetpro.json', fp)
+    if R('memory_benchmark'):
+      f.AddTelemetryTest('memory_benchmark', 'top_25.json', fp)
 
     if R('memory'):
       f.AddMemoryTests(fp)
