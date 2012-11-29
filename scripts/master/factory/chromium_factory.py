@@ -261,10 +261,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     tests = (tests or [])[:]
 
     # This function is too crowded, try to simplify it a little.
-    def R(test):
-      if gclient_factory.ShouldRunTest(tests, test):
-        tests.remove(test)
-        return True
+    def R(*testnames):
+      for test in testnames:
+        if gclient_factory.ShouldRunTest(tests, test):
+          tests.remove(test)
+          return True
     f = factory_cmd_obj
     fp = factory_properties
 
@@ -310,11 +311,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerCheckLicensesStep(fp)
 
     # Small ("module") unit tests:
-    if R('base'):
+    if R('base', 'base_unittests'):
       f.AddAnnotatedGTestTestStep('base_unittests', fp)
     if R('base_br'):
       f.AddBuildrunnerGTest('base_unittests', fp)
-    if R('cacheinvalidation'):
+    if R('cacheinvalidation', 'cacheinvalidation_unittests'):
       f.AddAnnotatedGTestTestStep('cacheinvalidation_unittests', fp)
     if R('cacheinvalidation_br'):
       f.AddBuildrunnerGTest('cacheinvalidation_unittests', fp)
@@ -328,7 +329,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('courgette_unittests', fp)
     if R('courgette_br'):
       f.AddBuildrunnerGTest('courgette_unittests', fp)
-    if R('crypto'):
+    if R('crypto', 'crypto_unittests'):
       f.AddAnnotatedGTestTestStep('crypto_unittests', fp)
     if R('crypto_br'):
       f.AddBuildrunnerGTest('crypto_unittests', fp)
@@ -336,17 +337,17 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('dbus_unittests', fp)
     if R('dbus_br'):
       f.AddBuildrunnerGTest('dbus_unittests', fp)
-    if R('googleurl'):
+    if R('googleurl', 'googleurl_unittests'):
       f.AddAnnotatedGTestTestStep('googleurl_unittests', fp)
     if R('googleurl_br'):
       f.AddBuildrunnerGTest('googleurl_unittests', fp)
-    if R('gpu'):
+    if R('gpu', 'gpu_unittests'):
       f.AddAnnotatedGTestTestStep(
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
     if R('gpu_br'):
       f.AddBuildrunnerGTest(
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
-    if R('jingle'):
+    if R('jingle', 'jingle_unittests'):
       f.AddAnnotatedGTestTestStep('jingle_unittests', fp)
     if R('jingle_br'):
       f.AddBuildrunnerGTest('jingle_unittests', fp)
@@ -358,11 +359,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('device_unittests', fp)
     if R('device_unittests_br'):
       f.AddBuildrunnerGTest('device_unittests', fp)
-    if R('media'):
+    if R('media', 'media_unittests'):
       f.AddAnnotatedGTestTestStep('media_unittests', fp)
     if R('media_br'):
       f.AddBuildrunnerGTest('media_unittests', fp)
-    if R('net'):
+    if R('net', 'net_unittests'):
       f.AddAnnotatedGTestTestStep('net_unittests', fp)
     if R('net_br'):
       f.AddBuildrunnerGTest('net_unittests', fp)
@@ -370,11 +371,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('ppapi_unittests', fp)
     if R('ppapi_unittests_br'):
       f.AddBuildrunnerGTest('ppapi_unittests', fp)
-    if R('printing'):
+    if R('printing', 'printing_unittests'):
       f.AddAnnotatedGTestTestStep('printing_unittests', fp)
     if R('printing_br'):
       f.AddBuildrunnerGTest('printing_unittests', fp)
-    if R('remoting'):
+    if R('remoting', 'remoting_unittests'):
       f.AddAnnotatedGTestTestStep('remoting_unittests', fp)
     if R('remoting_br'):
       f.AddBuildrunnerGTest('remoting_unittests', fp)
@@ -416,7 +417,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('compositor_unittests', fp)
 
     # Medium-sized tests (unit and browser):
-    if R('unit'):
+    if R('unit', 'unit_tests'):
       f.AddAnnotatedChromeUnitTests(fp)
     if R('unit_br'):
       f.AddBuildrunnerChromeUnitTests(fp)
