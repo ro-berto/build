@@ -239,7 +239,7 @@ class ApplyIssue(LoggingBuildStep):
   """Runs the apply_issue.py script on the slave."""
 
   def __init__(self, root, issue, patchset, email, password, workdir, timeout,
-               **kwargs):
+               server, **kwargs):
     LoggingBuildStep.__init__(self, **kwargs)
     self.args = {'root': root,
                  'issue': issue,
@@ -248,6 +248,7 @@ class ApplyIssue(LoggingBuildStep):
                  'password': password,
                  'workdir': workdir,
                  'timeout': timeout,
+                 'server': server,
                  }
 
   def start(self):

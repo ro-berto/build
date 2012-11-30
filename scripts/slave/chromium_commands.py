@@ -660,6 +660,7 @@ class ApplyIssue(commandbase):
     self.password = None
     self.workdir = None
     self.timeout = None
+    self.server = None
     chromium_utils.GetParentClass(ApplyIssue).__init__(self, *args, **kwargs)
 
   def _doApplyIssue(self, _):
@@ -673,6 +674,9 @@ class ApplyIssue(commandbase):
         '-e', self.email,
         '-w', '-',
     ]
+
+    if self.server:
+      cmd.extend(['-s', self.server])
 
     command = runprocesscmd(
         self.builder, cmd, os.path.join(self.builder.basedir, self.workdir),
@@ -689,6 +693,7 @@ class ApplyIssue(commandbase):
     self.password = args['password']
     self.workdir = args['workdir']
     self.timeout = args['timeout']
+    self.server = args['server']
 
   def start(self):
     log.msg('ApplyIssue.start')

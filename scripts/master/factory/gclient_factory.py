@@ -17,6 +17,8 @@ from buildbot.steps import trigger
 from master.factory.build_factory import BuildFactory
 from master.factory import commands
 
+import config
+
 
 def ShouldRunTest(tests, name):
   """Returns True if |name| is an entry in |tests|."""
@@ -342,7 +344,9 @@ class GClientFactory(object):
         gclient_jobs=gclient_jobs)
 
     if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot'):
-      factory_cmd_obj.AddApplyIssueStep(timeout=timeout)
+      factory_cmd_obj.AddApplyIssueStep(
+          timeout=timeout,
+          server=config.Master.TryServer.code_review_site)
 
     if not self._nohooks_on_update:
       factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)

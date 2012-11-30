@@ -713,7 +713,7 @@ class FactoryCommands(object):
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo)
 
-  def AddApplyIssueStep(self, timeout):
+  def AddApplyIssueStep(self, timeout, server):
     """Adds a step to the factory to apply an issues from Rietveld.
 
     It is a conditional step that is only run on the try server if the following
@@ -723,6 +723,7 @@ class FactoryCommands(object):
 
     Args:
       timeout: Timeout to use on the slave when running apply_issue.py.
+      server: The Rietveld server to grab the patch from.
     """
 
     def do_step_if(bStep):
@@ -745,6 +746,7 @@ class FactoryCommands(object):
         password=password,
         workdir=self.working_dir,
         timeout=timeout or 600,
+        server=server,
         haltOnFailure=True,
         flunkOnFailure=True,
         name='apply_issue',
