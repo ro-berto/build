@@ -543,9 +543,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('tab_switching_annotated'):
       f.AddAnnotatedTabSwitchingTests(fp)
     if R('sunspider'):
-      f.AddSunSpiderTests(fp)
-    if R('sunspider_annotated'):
-      f.AddAnnotatedSunSpiderTests(fp)
+      f.AddTelemetryTest('sunspider', 'sunspider.json', fp)
     if R('v8_benchmark'):
       f.AddV8BenchmarkTests(fp)
     if R('v8_benchmark_annotated'):

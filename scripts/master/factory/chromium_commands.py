@@ -533,25 +533,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'sizes', cmd,
                      do_step_if=self.TestStepFilter)
 
-  def AddSunSpiderTests(self, factory_properties=None):
-    factory_properties = factory_properties or {}
-    c = self.GetPerfStepClass(factory_properties, 'sunspider',
-                              process_log.GraphingLogProcessor)
-
-    options = ['--gtest_filter=SunSpider*.*', '--gtest_print_time',
-               '--run-sunspider']
-    cmd = self.GetTestCommand('performance_ui_tests', arg_list=options,
-                              factory_properties=factory_properties)
-    self.AddTestStep(c, 'sunspider_test', cmd,
-                     do_step_if=self.TestStepFilter)
-
-  def AddAnnoatedSunSpiderTests(self, factory_properties=None):
-    options = ['--gtest_print_time', '--run-sunspider']
-
-    self.AddAnnotatedPerfStep('sunspider', 'SunSpider*.*', 'graphing',
-                              cmd_options=options,
-                              factory_properties=factory_properties)
-
   def AddV8BenchmarkTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
     c = self.GetPerfStepClass(factory_properties, 'v8_benchmark',
