@@ -19,8 +19,13 @@ import signal
 import time
 import textwrap
 
+import pyximport
+pyximport.install()
+
 from zope.interface import implements
 from twisted.python import log, components
+from twisted.internet import epollreactor
+epollreactor.install()
 from twisted.internet import defer, reactor
 from twisted.application import service
 from twisted.application.internet import TimerService
