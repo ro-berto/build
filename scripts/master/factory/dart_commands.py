@@ -171,7 +171,9 @@ class DartCommands(commands.FactoryCommands):
                             env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
-                            command=cmd)
+                            command=cmd,
+                            logfiles={"flakylog": ".flaky.log"},
+                            lazylogfiles=True)
       # Rerun all tests in checked mode (assertions and type tests).
       cmd = base_cmd + ' --checked'
       self._factory.addStep(shell.ShellCommand,
@@ -181,7 +183,9 @@ class DartCommands(commands.FactoryCommands):
                             env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
-                            command=cmd)
+                            command=cmd,
+                            logfiles={"flakylog": ".flaky.log"},
+                            lazylogfiles=True)
 
   def AddAnnotatedSteps(self, python_script, timeout=1200):
     self._factory.addStep(chromium_step.AnnotatedCommand,
