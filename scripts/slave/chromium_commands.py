@@ -693,7 +693,7 @@ class ApplyIssue(commandbase):
     self.password = args['password']
     self.workdir = args['workdir']
     self.timeout = args['timeout']
-    self.server = args['server']
+    self.server = args.get('server')
 
   def start(self):
     log.msg('ApplyIssue.start')
