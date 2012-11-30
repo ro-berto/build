@@ -524,6 +524,11 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._sizes_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
+    # For Android, platform is hardcoded as target_platform is set to linux2.
+    # By default, the sizes.py script looks at sys.platform to identify
+    # the platform (which is also linux2).
+    if self._target_os == 'android':
+      cmd = cmd + ['--platform', 'android']
 
     self.AddTestStep(c, 'sizes', cmd,
                      do_step_if=self.TestStepFilter)
