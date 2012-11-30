@@ -53,21 +53,6 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
                   'vp8_unittests',
                   'webrtc_utility_unittests',]
 
-  memcheck_disabled_tests = [
-      'audio_coding_module_test', # Issue 270
-      'test_fec',                 # Too slow for memcheck
-  ]
-  memcheck_tests = filter(lambda test: test not in memcheck_disabled_tests,
-                          normal_tests)
-  tsan_disabled_tests = [
-      'audio_coding_module_test',   # Issue 283
-      'audioproc_unittest',         # Issue 299
-      'system_wrappers_unittests',  # Issue 300
-      'video_processing_unittests', # Issue 303
-      'test_fec',                   # Too slow for TSAN
-  ]
-  tsan_tests = filter(lambda test: test not in tsan_disabled_tests,
-                      normal_tests)
   asan_disabled_tests = [
       'audio_coding_module_test', # Issue 281
       'neteq_unittests',          # Issue 282
@@ -88,22 +73,6 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
       target='Release',
       options=options,
       tests=normal_tests))
-  B('MacMemcheck', 'mac_memcheck_factory', scheduler=scheduler)
-  F('mac_memcheck_factory', mac().WebRTCFactory(
-      target='Release',
-      options=options,
-      tests=['memcheck_' + test for test in memcheck_tests],
-      factory_properties={'needs_valgrind': True,
-                          'gclient_env':
-                          {'GYP_DEFINES': 'build_for_tool=memcheck'}}))
-  B('MacTsan', 'mac_tsan_factory', scheduler=scheduler)
-  F('mac_tsan_factory', mac().WebRTCFactory(
-      target='Release',
-      options=options,
-      tests=['tsan_' + test for test in tsan_tests],
-      factory_properties={'needs_valgrind': True,
-                          'gclient_env':
-                          {'GYP_DEFINES': 'build_for_tool=tsan'}}))
   B('MacAsan', 'mac_asan_factory', scheduler=scheduler)
   F('mac_asan_factory', mac().WebRTCFactory(
       target='Release',
