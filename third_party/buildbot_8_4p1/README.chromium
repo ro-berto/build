@@ -2828,3 +2828,16 @@ index 28e46de..aba85f9 100644
  from twisted.internet import defer, reactor
  from twisted.application import service
  from twisted.application.internet import TimerService
+
+
+--- a/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
++++ b/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
+@@ -62,7 +62,7 @@ class Triggerable(base.BaseScheduler):
+         # and errback any outstanding deferreds
+         if self._waiters:
+             msg = 'Triggerable scheduler stopped before build was complete'
+-            for d in self.waiters:
++            for d in self._waiters:
+                 d.errback(failure.Failure(RuntimeError(msg)))
+             self._waiters = {}
+ 
