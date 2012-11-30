@@ -475,7 +475,7 @@ def CopyFileToDir(src_path, dest_dir, dest_fn=None):
 
 
 def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
-            raise_error=True, remove_archive_directory=True):
+            raise_error=True, remove_archive_directory=True, path_filter=None):
   """Packs files into a new zip archive.
 
   Files are first copied into a directory within the output_dir named for
@@ -499,6 +499,9 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
       the list is not found.
     remove_archive_directory: Whether to remove the archive staging directory
       before copying files over to it.
+    path_filter: A function f(path) -> path. For each file to add, transform
+      the path with the path_filter function, and read data from the resulting
+      file instead. i.e. foo.exe could actually contain data from foo.asan.exe.
 
   Returns:
     A tuple consisting of (archive_dir, zip_file_path), where archive_dir
@@ -527,6 +530,14 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
     # These paths are relative to the file_relative_dir.  We need to copy
     # them over maintaining the relative directories, where applicable.
     src_path = os.path.join(file_relative_dir, needed_file)
+    if path_filter:
+      new_src_path = path_filter(src_path)
+      if new_src_path is None:
+        print 'Skipping %s' % src_path
+        continue
+      if new_src_path != src_path:
+        print 'Replacing contents of %s with %s' % (src_path, new_src_path)
+      src_path = new_src_path
     dirname, basename = os.path.split(needed_file)
     try:
       if os.path.isdir(src_path):
@@ -535,9 +546,9 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
       elif dirname != '' and basename != '':
         dest_dir = os.path.join(archive_dir, dirname)
         MaybeMakeDirectory(dest_dir)
-        CopyFileToDir(src_path, dest_dir)
+        CopyFileToDir(src_path, dest_dir, basename)
       else:
-        CopyFileToDir(src_path, archive_dir)
+        CopyFileToDir(src_path, archive_dir, basename)
     except PathNotFound:
       if raise_error:
         raise
