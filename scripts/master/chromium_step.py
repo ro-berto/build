@@ -872,7 +872,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     if m:
       log_label = m.group(1)
       current_logs = self.cursor['annotated_logs']
-      log_text = '\n'.join(current_logs.get(log_label, []))
+      log_text = '\n'.join(current_logs.get(log_label, [])) + '\n'
 
       report_link = None
       output_dir = None
