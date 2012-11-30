@@ -18,7 +18,8 @@ S('win_rel_scheduler', branch='src', treeStableTimer=0)
 
 T('win_rel_trigger')
 
-chromium_rel_archive = 'gs://chromium-webrtc/Win Builder/full-build-win32.zip'
+chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
+                                                  'Win Builder')
 
 tests = ['pyauto_webrtc_tests']
 
