@@ -142,7 +142,7 @@ class PerformanceLogProcessor(object):
     if not self._finalized:
       self._FinalizeProcessing()
       self._finalized = True
-    return self._text_summary
+    return self.PerformanceChanges() + self._text_summary
 
   def _FinalizeProcessing(self):
     # to be overwritten by inheriting class
@@ -556,9 +556,6 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
     # Load performance expectations for this test.
     self.LoadPerformanceExpectations()
-
-  def PerformanceSummary(self):
-    return self.PerformanceChanges() + self._text_summary
 
   def ProcessLine(self, line):
     results_match = self.RESULTS_REGEX.search(line)
