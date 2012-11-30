@@ -33,11 +33,13 @@ def Update(config, active_master, c):
   cr_poller = svnpoller.SVNPoller(svnurl=config.Master.trunk_url,
                                   split_file=ChromeTreeFileSplitter,
                                   pollinterval=30,
-                                  revlinktmpl=chromium_url)
+                                  revlinktmpl=chromium_url,
+                                  project='chromium')
   c['change_source'].append(cr_poller)
 
   webkit_poller = svnpoller.SVNPoller(svnurl = config.Master.webkit_root_url,
                                       split_file=WebkitFileSplitter,
                                       pollinterval=30,
-                                      revlinktmpl=webkit_url)
+                                      revlinktmpl=webkit_url,
+                                      project='webkit')
   c['change_source'].append(webkit_poller)

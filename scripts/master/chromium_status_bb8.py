@@ -103,8 +103,10 @@ class ChromiumChangeBox(buildbot.status.web.changes.ChangeBox):
     text = template.module.box_contents(url=url,
                                         who=who,
                                         pageTitle=self.original.comments,
-                                        revision=revision)
-    return base.Box([text], class_="Change")
+                                        revision=revision,
+                                        project=self.original.project)
+    return base.Box([text],
+        class_=' '.join(filter(None, ["Change", self.original.project])))
 
 origInterface = buildbot.changes.changes.Change
 origInterface = declarations.implementedBy(origInterface)

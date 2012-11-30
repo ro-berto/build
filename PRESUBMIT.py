@@ -21,6 +21,7 @@ def CommonChecks(input_api, output_api):
       r'.*depot_tools/.*',
       r'.*scripts/release/.*',
       r'.+_bb7\.py$',
+      r'.*masters/.*/templates/.*\.html$',
   ]
 
   sys_path_backup = sys.path

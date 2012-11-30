@@ -107,6 +107,15 @@ td.Activity, td.Change, td.Builder {
   background-color: #CCCCCC;
 }
 
+td.Change.webkit {
+  color: #444;
+  background: #ddd;
+}
+
+td.Change.chromium {
+  background: #ccc;
+}
+
 td.Change {
   border-radius: 5px;
   -webkit-border-radius: 5px;
