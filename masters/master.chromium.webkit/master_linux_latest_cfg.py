@@ -42,6 +42,44 @@ F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
     options=['--compiler=goma'],
     factory_properties={'generate_gtest_json': True}))
 
+linux_aura_options = [
+  'aura_builder',
+  'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'compositor_unittests',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'googleurl_unittests',
+  'gpu_unittests',
+  'interactive_ui_tests',
+  'ipc_tests',
+  'jingle_unittests',
+  'media_unittests',
+  'net_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sql_unittests',
+  'ui_unittests',
+]
+
+B('Linux Aura', 'f_linux_aura_rel', scheduler='s9_webkit_rel')
+F('f_linux_aura_rel', linux().ChromiumWebkitLatestFactory(
+    tests=[
+      'aura',
+      # This seems to have many failures
+      #'content_browsertests',
+      'unit',
+    ],
+    options=['--compiler=goma'] + linux_aura_options,
+    factory_properties={
+      'generate_gtest_json': True,
+      'gclient_env': {'GYP_DEFINES': 'use_aura=1'}
+    }))
+
 B('Linux Perf', 'f_linux_perf_rel', scheduler='s9_webkit_rel')
 F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
     options=['--compiler=goma', 'chromium_builder_perf'],
