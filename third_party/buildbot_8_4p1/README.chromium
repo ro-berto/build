@@ -2808,3 +2808,23 @@ out-of-order build processing.
          self.currentBuilds.append(s)
          self.buildCache.put(s.number, s)
 
+Change buildbot to use the epoll reactor instead of the default select() 
+reaction.  Breaks compatability with non linux26 systems. 
+diff --git a/third_party/buildbot_8_4p1/buildbot/master.py b/third_party/buildbot_8_4p1/buildbot/master.py
+index 28e46de..aba85f9 100644
+--- a/third_party/buildbot_8_4p1/buildbot/master.py
++++ b/third_party/buildbot_8_4p1/buildbot/master.py
+@@ -19,8 +19,13 @@ import signal
+ import time
+ import textwrap
+ 
++import pyximport
++pyximport.install()
++
+ from zope.interface import implements
+ from twisted.python import log, components
++from twisted.internet import epollreactor
++epollreactor.install()
+ from twisted.internet import defer, reactor
+ from twisted.application import service
+ from twisted.application.internet import TimerService
