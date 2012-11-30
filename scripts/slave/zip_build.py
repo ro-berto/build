@@ -23,6 +23,30 @@ from slave import slave_utils
 class StagingError(Exception): pass
 
 
+def ASANFilter(path):
+  """Takes a path to a file and returns the path to its asan'd counterpart.
+
+  Returns None if path is already an asan'd file.
+  Returns the original path otherwise.
+  """
+  head, tail = os.path.split(path)
+  parts = tail.split('.', 1)
+  if len(parts) == 1:
+    return path
+  if parts[-1].startswith('asan'):  # skip 'foo.asan.exe' entirely
+    return None
+  parts.insert(1, 'asan')
+  asan_path = os.path.join(head, '.'.join(parts))
+  if os.path.exists(asan_path):
+    return asan_path
+  return path
+
+
+PATH_FILTERS = {
+    'asan': ASANFilter,
+}
+
+
 def CopyDebugCRT(build_dir):
   # Copy the relevant CRT DLLs to |build_dir|. We copy DLLs from all versions
   # of VS installed to make sure we have the correct CRT version, unused DLLs
@@ -194,14 +218,15 @@ def WriteRevisionFile(dirname, build_revision):
 
 
 def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                           zip_file_name):
+                           zip_file_name, path_filter):
   """Creates an unversioned full build archive.
   Returns the path of the created archive."""
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
                                                zip_file_name,
                                                zip_file_list,
                                                build_dir,
-                                               raise_error=True)
+                                               raise_error=True,
+                                               path_filter=path_filter)
   chromium_utils.RemoveDirectory(zip_dir)
   if not os.path.exists(zip_file):
     raise StagingError('Failed to make zip package %s' % zip_file)
@@ -319,7 +344,7 @@ def Archive(options):
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                                    unversioned_base_name)
+                                    unversioned_base_name, options.path_filter)
 
   zip_base, zip_ext = MakeVersionedArchive(zip_file, version_suffix, options)
   PruneOldArchives(staging_dir, zip_base, zip_ext)
@@ -349,6 +374,9 @@ def main(argv):
                                  'always be included in the zip.'))
   option_parser.add_option('--webkit-dir',
                            help='webkit directory path, relative to --src-dir')
+  option_parser.add_option('--path-filter',
+                           help='Filter to use to transform build zip '
+                                '(avail: %r).' % list(PATH_FILTERS.keys()))
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
@@ -364,7 +392,12 @@ def main(argv):
   if args[1:]:
     print 'Warning -- unknown arguments' % args[1:]
 
+  if options.path_filter is None and options.factory_properties.get('asan'):
+    options.path_filter = 'asan'
+  options.path_filter = PATH_FILTERS[options.path_filter]
+
   return Archive(options)
+
 
 if '__main__' == __name__:
   sys.exit(main(sys.argv))
