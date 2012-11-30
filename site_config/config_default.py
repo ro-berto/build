@@ -75,7 +75,7 @@ class Master(object):
     # You can host your own private rietveld instance on Django, see
     # http://code.google.com/p/google-app-engine-django and
     # http://code.google.com/appengine/articles/pure_django.html
-    code_review_site = 'https://chromiumcodereview.appspot.com/status_listener'
+    code_review_site = 'https://chromiumcodereview.appspot.com'
 
     # For the following values, they are used only if non-0. Do not set them
     # here, set them in the actual master configuration class.

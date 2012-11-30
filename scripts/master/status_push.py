@@ -4,6 +4,8 @@
 
 from buildbot.status import status_push
 
+import urlparse
+
 
 class TryServerHttpStatusPush(status_push.HttpStatusPush):
   """Status push used by try server.
@@ -11,7 +13,12 @@ class TryServerHttpStatusPush(status_push.HttpStatusPush):
   Rietveld listens to buildStarted and (step|build)Finished to know if a try
   job succeeeded or not.
   """
-  def __init__(self, *args, **kwargs):
+  def __init__(self, serverUrl, *args, **kwargs):
+    # Appends the status listener to the base url.
+    # TODO(csharp): Always add status_listener once all the configs are updated.
+    if not serverUrl.endswith('status_listener'):
+      serverUrl = urlparse.urljoin(serverUrl, 'status_listener')
+
     blackList = [
         'buildETAUpdate',
         #'buildFinished',
@@ -41,6 +48,7 @@ class TryServerHttpStatusPush(status_push.HttpStatusPush):
     status_push.HttpStatusPush.__init__(
         self,
         *args,
+        serverUrl=serverUrl,
         blackList=blackList,
         extra_post_params=extra_post_params,
         **kwargs)
