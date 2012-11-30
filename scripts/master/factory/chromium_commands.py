@@ -1066,14 +1066,11 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # Run the test against the target chrome build.
     browser = 'release'
-    cmd = ''
     if self._target_os == 'android':
       browser = 'android-content-shell'
-      cmd = ('. src/build/android/envsetup.sh && ' +
-             'adb root && adb wait-for-device && ')
     test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
     test_cmd = self.GetPythonTestCommand(script, test_args)
-    cmd += ' '.join(test_cmd)
+    cmd = ' '.join(test_cmd)
 
     # Run the test against the reference build on platforms where it exists.
     ref_build = self._GetReferenceBuildPath()
@@ -1083,6 +1080,12 @@ class ChromiumCommands(commands.FactoryCommands):
                   test_name, page_set]
       ref_cmd = self.GetPythonTestCommand(script, ref_args)
       cmd += ' && ' + ' '.join(ref_cmd)
+
+    # On android, telemetry needs to use the adb command and needs to be in
+    # root mode. Run it in bash since envsetup.sh doesn't work in sh.
+    if self._target_os == 'android':
+      cmd = ('bash -c ". src/build/android/envsetup.sh && ' +
+             'adb root && adb wait-for-device && %s"' % cmd)
 
     command_class = self.GetPerfStepClass(
         factory_properties, test_name, process_log.GraphingLogProcessor)
