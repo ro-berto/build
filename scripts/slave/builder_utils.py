@@ -15,6 +15,7 @@ a Buildbot master.
 # pylint: disable=C0323,R0201
 
 import os
+import re
 import sys
 
 from common import chromium_utils
@@ -273,6 +274,10 @@ def process_steps(steplist, build, buildslave, build_status, basedir):
     step.workdir = os.path.join(basedir, 'build')
 
 
+def StripBuildrunnerIgnore(step):
+  step.name = re.sub('_buildrunner_ignore$', '', step.name)
+
+
 def GetCommands(steplist):
   """Extract shell commands from a step.
 
@@ -296,9 +301,7 @@ def GetCommands(steplist):
       else:
         doStep = step.brDoStepIf()
 
-      br_suffix = '_buildrunner_ignore'
-      if step.name.endswith(br_suffix):
-        step.name = step.name[0:-len(br_suffix)]
+      StripBuildrunnerIgnore(step)
 
       cmdhash['name'] = step.name
       cmdhash['doStep'] = doStep

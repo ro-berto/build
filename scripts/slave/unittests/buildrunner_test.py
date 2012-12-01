@@ -69,7 +69,8 @@ class BuildrunnerTest(unittest.TestCase):
 
     # On Windows, stderr may get mixed in with stdio so we make our
     # tests flexible.
-    steps = [l.split(' ')[-1] for l in self.capture.text]
+    splits = [l.split(' ') for l in self.capture.text]
+    steps = [s[1] for s in splits if len(s) > 1]
     self.assertTrue('run' in steps)
     self.assertTrue('donotrun' in steps)
 

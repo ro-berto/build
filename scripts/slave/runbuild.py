@@ -44,10 +44,13 @@ def get_args():
                     help='string specified is a builder name')
   parser.add_option('--list-steps', action='store_true',
                     help='list steps in factory, but don\'t execute them')
+  parser.add_option('--show-commands', action='store_true',
+                    help='when listing steps, also show the generated output'
+                         ' command')
   parser.add_option('--stepfilter', help='only run steps that match the '
-                    'stepfilter regex', default=None)
+                    'stepfilter regex')
   parser.add_option('--stepreject', help='reject any steps that match the '
-                    'stepfilter regex', default=None)
+                    'stepfilter regex')
   parser.add_option('--logfile', default='build_runner.log',
                     help='log build runner output to file (use - for stdout). '
                     'default: %default')
@@ -61,7 +64,7 @@ def get_args():
                     help='filename of the master config. default: %default')
   parser.add_option('--builderpath',
                     help='directory to build results in. default: safe '
-                    'transformation of builder name', default=None)
+                    'transformation of builder name')
   parser.add_option('--build-properties', action='callback',
                     callback=chromium_utils.convert_json, type='string',
                     nargs=1, default={},
@@ -173,6 +176,7 @@ def args_ok(inoptions, pos_args):
       print >>sys.stderr, 'Error %d opening logfile %s: %s' % (
           inoptions.logfile, errno, strerror)
       return False
+    print >>sys.stderr, 'Writing to logfile', inoptions.logfile
 
   inoptions.revision = None
   if inoptions.build_properties and not inoptions.svn_rev:
@@ -275,24 +279,6 @@ def execute(options):
       build_properties=options.build_properties,
       slavedir=options.slave_dir)
 
-  if options.list_steps:
-    filtered_steps = runbuild_utils.FilterSteps(steplist,
-                                                options.step_regex,
-                                                options.stepreject_regex)
-    print
-    print 'listing steps in %s/%s:' % (mastername, my_builder['name'])
-    print
-    for skip, step in filtered_steps:
-      if skip:
-        print '-', step.name, '[skipped]'
-      else:
-        print '*', step.name
-    return 0
-
-  if not options.annotate:
-    print >>sys.stderr, 'using %s builder \'%s\'' % (mastername,
-        my_builder['name'])
-
   if options.output_build_properties:
     print
     print 'build properties:'
@@ -310,6 +296,25 @@ def execute(options):
   filtered_commands = runbuild_utils.FilterCommands(commands,
                                                     options.step_regex,
                                                     options.stepreject_regex)
+
+  if options.list_steps:
+    print
+    print 'listing steps in %s/%s:' % (mastername, my_builder['name'])
+    print
+    for skip, cmd in filtered_commands:
+      if skip:
+        print '-', cmd['name'], '[skipped]'
+      else:
+        print '*', cmd['name'],
+        if options.show_commands:
+          print '(in %s): %s' % (cmd['quoted_workdir'], cmd['quoted_command'])
+        print
+    return 0
+
+
+  if not options.annotate:
+    print >>sys.stderr, 'using %s builder \'%s\'' % (mastername,
+        my_builder['name'])
 
   start_time = time.clock()
   commands_executed, err = runbuild_utils.Execute(filtered_commands,

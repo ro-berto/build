@@ -50,15 +50,6 @@ def step_skip_filter(item, step_regex, step_reject):
           (step_reject and step_reject.search(item)))
 
 
-def FilterSteps(steps, step_regex, step_reject):
-  """Filter steps based on regex/reject.
-
-  Returns (skip, step) for each skip.
-  """
-  return list((step_skip_filter(step.name, step_regex, step_reject), step)
-              for step in steps)
-
-
 def FilterCommands(commands, step_regex, step_reject):
   """Filter commands based on regex/reject.
 
