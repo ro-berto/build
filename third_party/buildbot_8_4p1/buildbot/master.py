@@ -19,13 +19,18 @@ import signal
 import time
 import textwrap
 
-import pyximport
-pyximport.install()
+try:
+  import pyximport
+  pyximport.install()
+  from twisted.internet import epollreactor
+  epollreactor.install()
+except ImportError:
+  print 'Unable to load the epoll module, falling back to select.'
+  print 'This may be caused by the lack of cython, python-dev, or'
+  print 'you may be on a platform other than linux 2.6' 
 
 from zope.interface import implements
 from twisted.python import log, components
-from twisted.internet import epollreactor
-epollreactor.install()
 from twisted.internet import defer, reactor
 from twisted.application import service
 from twisted.application.internet import TimerService
