@@ -13,7 +13,7 @@ class ChromiumLinux(object):
   master_port_alt = 8287
   tree_closing_notification_recipients = []
   from_address = 'buildbot@chromium.org'
-  master_host = 'master1a.golo.chromium.org'
+  master_host = 'master1.golo.chromium.org'
   is_production_host = socket.getfqdn() == master_host
   buildslave_version = 'buildbot_slave_8_4'
   twisted_version = 'twisted_10_2'
