@@ -197,6 +197,9 @@ LKGR_STEPS = {
     'Android Tests (dbg)': [
       'build',
     ],
+    'Android Clang Builder (dbg)': [
+      'build',
+    ],
   },  # chromium.linux
   'chromium.chrome': {
     'Google Chrome Linux x64': [  # cycle time is ~14 mins as of 5/5/2012

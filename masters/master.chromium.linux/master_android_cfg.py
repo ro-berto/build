@@ -57,7 +57,7 @@ B('Android Builder', 'f_android_rel', None, 'android',
 F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_main_builder.sh'))
 
-B('Android Clang Builder (dbg)', 'f_android_clang_dbg', None, 'android',
+B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
