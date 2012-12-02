@@ -293,7 +293,8 @@ def main_android(options, args):
     if result == 0:
       result = this_result
     for name, identifier, _, value, units in this_sizes:
-      print 'RESULT %s: %s= %s %s' % (name, identifier, value, units)
+      print 'RESULT %s: %s= %s %s' % (name.replace('/', '_'), identifier, value,
+                                      units)
 
   return result
 
