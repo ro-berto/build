@@ -38,7 +38,6 @@ F('win_full', win().ChromiumFactory(
 ################################################################################
 
 B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
-B('Mac 10.8', 'mac_full', 'compile|testers', 'chromium_lkgr')
 F('mac_full', mac().ChromiumFactory(
     clobber=True,
     factory_properties={'archive_build': True,
@@ -46,7 +45,6 @@ F('mac_full', mac().ChromiumFactory(
                         'gs_acl': 'public-read',}))
 
 B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
-B('Mac 10.8 ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
 F('mac_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
@@ -58,7 +56,6 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
        'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
 
 B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
-B('Mac 10.8 ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
 F('mac_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
