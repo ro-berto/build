@@ -946,8 +946,16 @@ def main():
       options.factory_properties.get('tsan', False)):
     # Instruct GTK to use malloc while running ASan or TSan tests.
     os.environ['G_SLICE'] = 'always-malloc'
+    os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
+    os.environ['NSS_DISABLE_UNLOAD'] = '1'
     # Disable ASLR on Mac when running ASAN tests.
     os.environ['DYLD_NO_PIE'] = '1'
+
+  tsan_options = ('suppressions=tools/valgrind/tsan_v2/suppressions.txt '
+                  'report_signal_unsafe=0 '
+                  'report_thread_leaks=0')
+  if options.factory_properties.get('tsan', False):
+    os.environ['TSAN_OPTIONS'] = tsan_options
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
