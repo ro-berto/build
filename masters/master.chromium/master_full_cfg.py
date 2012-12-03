@@ -135,17 +135,17 @@ F('linux64_clobber', linux().ChromiumFactory(
 ## Android
 ################################################################################
 
-B('Android (dbg)', 'f_android_clobber_dbg', None, 'chromium',
+B('Android', 'f_android_clobber', None, 'chromium',
   notify_on_missing=True)
-F('f_android_clobber_dbg', linux_android().ChromiumAnnotationFactory(
+F('f_android_clobber', linux_android().ChromiumAnnotationFactory(
     clobber=True,
-    target='Debug',
+    target='Release',
     tests=[
       'sizes',
     ],
     factory_properties={
       'show_perf_results': True,
-      'perf_id': 'android-debug',
+      'perf_id': 'android-release',
     },
     annotation_script='src/build/android/buildbot/bb_main_clobber.sh',
     ))
