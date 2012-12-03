@@ -380,6 +380,10 @@ twistd.pid
 /masters/master.chromium.memory.fyi/webkit-rel-linux-valgrind
 /masters/master.chromium.memory.fyi/webkit-rel-linux-valgrind-layout
 /masters/master.chromium.memory.fyi/webkit-rel-mac-valgrind
+/masters/master.chromium.memory/Chromium_OS_ASAN_Builder/
+/masters/master.chromium.memory/Chromium_OS_ASAN_Tests__1_/
+/masters/master.chromium.memory/Chromium_OS_ASAN_Tests__2_/
+/masters/master.chromium.memory/Chromium_OS_ASAN_Tests__3_/
 /masters/master.chromium.memory/Linux_ASAN_Builder/
 /masters/master.chromium.memory/Linux_ASAN_Tests__1_/
 /masters/master.chromium.memory/Linux_ASAN_Tests__2_/
@@ -392,6 +396,9 @@ twistd.pid
 /masters/master.chromium.memory/Mac_ASAN_Tests__1_/
 /masters/master.chromium.memory/Mac_ASAN_Tests__2_/
 /masters/master.chromium.memory/Mac_ASAN_Tests__3_/
+/masters/master.chromium.memory/Win_ASAN_Builder/
+/masters/master.chromium.memory/Win_ASAN_Tests__1_/
+/masters/master.chromium.memory/Win_ASAN_Tests__2_/
 /masters/master.chromium.memory/chromium-tot-chromeos-amd64-generic-asan/
 /masters/master.chromium.memory/chromium-tot-chromeos-x86-generic-asan/
 /masters/master.chromium.perf/chromium-dbg-builder

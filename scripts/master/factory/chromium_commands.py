@@ -71,6 +71,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
+    self._windows_asan_tool = J(s_dir, 'win_apply_asan.py')
 
     # Scripts in the private dir.
     self._download_and_extract_official_tool = self.PathJoin(
@@ -134,6 +135,12 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self._factory.addStep(FileUpload(slavesrc=slavesrc,
                                      masterdest=masterdest))
+
+  def AddWindowsASANStep(self):
+    """Adds a step to run syzygy/ASAN over the output directory."""
+    cmd = [self._python, self._windows_asan_tool,
+           '--build-dir', self._build_dir, '--target', self._target]
+    self.AddTestStep(shell.ShellCommand, 'apply_asan', cmd)
 
   def AddArchiveBuild(self, mode='dev', show_url=True, factory_properties=None):
     """Adds a step to the factory to archive a build."""

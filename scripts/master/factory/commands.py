@@ -563,6 +563,8 @@ class FactoryCommands(object):
       if sharding_args:
         cmd.extend(['--sharding-args', sharding_args])
 
+    env = factory_properties.get('testing_env')
+
     cmd.append(self.GetExecutableName(test_name))
 
     arg_list.append('--gtest_print_time')
@@ -571,7 +573,7 @@ class FactoryCommands(object):
 
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name,
                      ListProperties(cmd), description, do_step_if=doStep,
-                     br_do_step_if=brDoStep, hide_step_if=hideStep,
+                     env=env, br_do_step_if=brDoStep, hide_step_if=hideStep,
                      target=self._target, factory_properties=factory_properties)
 
   def AddBuildStep(self, factory_properties, name='build', env=None,

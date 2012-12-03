@@ -881,16 +881,30 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Ensure GYP errors out if files referenced in .gyp files are missing.
     self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
 
+    is_windows_asan_builder = (slave_type == 'Builder' and
+                               self._target_platform == 'win32' and
+                               factory_properties.get('asan'))
+
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties,
-                                gclient_deps=gclient_deps)
+                                gclient_deps=gclient_deps,
+                                skip_archive_steps=is_windows_asan_builder)
 
     # Get the factory command object to create new steps to the factory.
     chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
                                                           target,
                                                           self._build_dir,
                                                           self._target_platform)
+
+    # Add ASANification step for windows
+    # MUST BE FIRST STEP ADDED AFTER BuildFactory CALL in order to add back
+    # the ZipBuild step in it's expected place
+    if is_windows_asan_builder:
+      chromium_cmd_obj.AddWindowsASANStep()
+      # Need to add the Zip Build step back
+      chromium_cmd_obj.AddZipBuild(halt_on_failure=True,
+                                   factory_properties=factory_properties)
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):

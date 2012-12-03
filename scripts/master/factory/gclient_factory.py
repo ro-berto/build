@@ -211,7 +211,7 @@ class GClientFactory(object):
                    slave_type='BuilderTester', options=None,
                    compile_timeout=1200, build_url=None, project=None,
                    factory_properties=None, gclient_deps=None,
-                   target_arch=None):
+                   target_arch=None, skip_archive_steps=False):
     factory_properties = factory_properties or {}
     if options and '--build-tool=ninja' in options:
       factory_properties['gclient_env']['GYP_GENERATORS'] = 'ninja'
@@ -238,7 +238,8 @@ class GClientFactory(object):
     # Update clang if necessary.
     gclient_env = factory_properties.get('gclient_env', {})
     if ('clang=1' in gclient_env.get('GYP_DEFINES', '') or
-        'asan=1' in gclient_env.get('GYP_DEFINES', '')):
+        (self._target_platform != 'win32' and
+         factory_properties.get('asan'))):
       factory_cmd_obj.AddUpdateClangStep()
 
     # Add a step to cleanup temporary files and data left from a previous run
@@ -255,15 +256,16 @@ class GClientFactory(object):
           timeout=compile_timeout,
           env=factory_properties.get('compile_env'))
 
-    # Archive the full output directory if the machine is a builder.
-    if slave_type == 'Builder':
-      factory_cmd_obj.AddZipBuild(halt_on_failure=True,
-                                  factory_properties=factory_properties)
+    if not skip_archive_steps:
+      # Archive the full output directory if the machine is a builder.
+      if slave_type == 'Builder':
+        factory_cmd_obj.AddZipBuild(halt_on_failure=True,
+                                    factory_properties=factory_properties)
 
-    # Download the full output directory if the machine is a tester.
-    if slave_type == 'Tester':
-      factory_cmd_obj.AddExtractBuild(build_url,
-                                      factory_properties=factory_properties)
+      # Download the full output directory if the machine is a tester.
+      if slave_type == 'Tester':
+        factory_cmd_obj.AddExtractBuild(build_url,
+                                        factory_properties=factory_properties)
 
     return factory
 
