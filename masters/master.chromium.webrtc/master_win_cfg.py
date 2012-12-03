@@ -13,9 +13,11 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
-S('win_rel_scheduler', branch='src', treeStableTimer=0)
 
+def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+
+# Scheduler for the WebRTC trunk branch.
+S('win_rel_scheduler', branch='trunk', treeStableTimer=0)
 T('win_rel_trigger')
 
 chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
@@ -57,6 +59,7 @@ F('win_7_tester_factory', win().ChromiumWebRTCLatestFactory(
                         'perf_id': 'chromium-webrtc-rel-7',
                         'process_dumps': True,
                         'start_crash_handler': True,}))
+
 
 def Update(config, active_master, c):
   return helper.Update(c)

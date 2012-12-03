@@ -21,7 +21,6 @@ def WebRTCFileSplitter(path):
 def Update(config, c):
   poller = svnpoller.SVNPoller(
       svnurl=config.Master.webrtc_url,
-      project='public',
       split_file=WebRTCFileSplitter,
       pollinterval=30,
       histmax=10,

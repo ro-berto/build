@@ -18,22 +18,16 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   S = helper.Scheduler
 
   scheduler = 'webrtc_%s_mac_scheduler' % category
-  S(scheduler, branch=branch, treeStableTimer=0, categories=[category])
+  S(scheduler, branch=branch, treeStableTimer=0)
 
   normal_tests = ['audio_coding_module_test',
                   'audio_coding_unittests',
-                  'audio_conference_mixer_unittests',
                   'audioproc_unittest',
                   'bitrate_controller_unittests',
                   'common_video_unittests',
-                  'cng_unittests',
-                  'g711_unittests',
-                  'g722_unittests',
-                  'isacfix_unittests',
                   'media_file_unittests',
                   'metrics_unittests',
                   'neteq_unittests',
-                  'pcm16b_unittests',
                   'resampler_unittests',
                   'rtp_rtcp_unittests',
                   'signal_processing_unittests',
@@ -43,8 +37,6 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
                   'test_support_unittests',
                   'udp_transport_unittests',
                   'vad_unittests',
-                  'video_codecs_test_framework_integrationtests',
-                  'video_codecs_test_framework_unittests',
                   'video_coding_unittests',
                   'video_engine_core_unittests',
                   'video_processing_unittests',

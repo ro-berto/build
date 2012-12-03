@@ -13,9 +13,11 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
-S('linux_rel_scheduler', branch='src', treeStableTimer=0)
 
+def linux(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+
+# Scheduler for the WebRTC trunk branch.
+S('linux_rel_scheduler', branch='trunk', treeStableTimer=0)
 T('linux_rel_trigger')
 
 chromium_rel_linux_archive = master_config.GetArchiveUrl('ChromiumWebRTC',
@@ -45,6 +47,7 @@ F('linux_tester_factory', linux().ChromiumWebRTCLatestFactory(
                         'show_perf_results': True,
                         'halt_on_missing_build': True,
                         'perf_id': 'chromium-webrtc-rel-linux',}))
+
 
 def Update(config, active_master, c):
   return helper.Update(c)
