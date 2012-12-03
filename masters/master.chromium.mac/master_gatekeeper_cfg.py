@@ -60,9 +60,13 @@ categories_steps = {
   'ios_dbg': [
     'compile',
     'base_unittests',
+    'content_unittests',
     'crypto_unittests',
     'googleurl_unittests',
+    'media_unittests',
+    'net_unittests',
     'sql_unittests',
+    'ui_unittests',
   ],
 }
 

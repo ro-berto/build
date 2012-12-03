@@ -299,8 +299,12 @@ F('ios_dbg', mac().ChromiumFactory(
   target='Debug',
   tests=[
     'base',
+    'content_unittests',
     'crypto',
     'googleurl',
+    'media',
+    'net',
+    'ui_unittests',
     'unit_sql',
   ],
   options = [
