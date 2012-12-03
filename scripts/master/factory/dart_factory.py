@@ -409,7 +409,7 @@ class DartUtils(object):
       variant['factory_builder'] = self.factory_base_dartium[variant['name']]
 
   def get_web_statuses(self):
-    public_html = '../master.client.dart/public_html'
+    public_html = '../master.chromium/public_html'
     templates = ['../master.client.dart/templates',
                  '../master.chromium/templates']
     master_port = self._active_master.master_port
@@ -467,4 +467,3 @@ class DartUtils(object):
                        lookup=master_utils.FilterDomain(),
                        builders=notifying_builders))
     return statuses
-
