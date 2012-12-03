@@ -6,19 +6,28 @@
 
 import logging
 import math
+import os
 import random
 import time
 import urllib
 import urllib2
 
-# pylint: disable=W0102
-def UrlOpen(url, data={}, max_tries=1, wait_duration=None):
+
+COUNT_KEY = 'UrlOpenAttempt'
+RESULT_STRING_KEY = 'result_output'
+
+
+def UrlOpen(url, data=None, max_tries=5, wait_duration=None):
   """Attempts to open the given url multiple times.
+
+  UrlOpen will attempt to open the the given url several times, stopping
+  if it succeeds at reaching the url. It also includes an additional data pair
+  in the data that is sent to indicate how many times it has attempted to
+  connect so far.
 
   Args:
     url: The url to open.
-    data: The unencoded data to send to the url. This must be a mapping object
-        or a sequence of two-element tuples.
+    data: The unencoded data to send to the url. This must be a mapping object.
     max_tries: The maximum number of times to try sending this data. Must be
         greater than 0.
     wait_duration: The number of seconds to wait between successive attempts.
@@ -39,12 +48,20 @@ def UrlOpen(url, data={}, max_tries=1, wait_duration=None):
     logging.error('Invalid wait duration, %d, passed in.', wait_duration)
     return None
 
+  if data is None:
+    data = {}
+
+  if COUNT_KEY in data:
+    logging.error('%s already existed in the data passed into UlrOpen. It '
+                  'would be overwritten. Aborting UrlOpen', COUNT_KEY)
+    return None
+
   url_response = None
-  encoded_data = urllib.urlencode(data)
   for attempt in range(max_tries):
+    data[COUNT_KEY] = attempt
     try:
       # Simply specifying data to urlopen makes it a POST.
-      url_response = urllib2.urlopen(url, encoded_data).read()
+      url_response = urllib2.urlopen(url, urllib.urlencode(data)).read()
     except urllib2.HTTPError as e:
       # An HTTPError means we reached the server, so don't retry.
       logging.error('Able to connect to %s but an exception was thrown.\n%s',
@@ -61,11 +78,43 @@ def UrlOpen(url, data={}, max_tries=1, wait_duration=None):
       else:
         duration = wait_duration
 
-      time.sleep(duration)
+      # Only sleep if we are going to try again.
+      if attempt != max_tries - 1:
+        time.sleep(duration)
 
     if url_response is not None:
+      logging.info('Opened given url, %s, and got response:\n%s', url,
+                   url_response)
       return url_response
 
   logging.error('Unable to open given url, %s, after %d attempts.',
                 url, max_tries)
   return None
+
+
+def DownloadFile(local_file, url):
+  """Downloads the data from the given url and saves it in the local_file.
+
+  Args:
+    local_file: Where to save the data downloaded from the url.
+    url: Where to fetch the data from.
+
+  Returns:
+    True if the file is successfully downloaded.
+  """
+  if not os.path.isabs(local_file):
+    local_file = os.path.abspath(local_file)
+
+  url_data = UrlOpen(url)
+
+  if url_data is None:
+    return False
+
+  try:
+    with open(local_file, 'wb') as f:
+      f.write(url_data)
+  except IOError as e:
+    logging.error('Failed to write to %s\n%s', local_file, e)
+    return False
+
+  return True
