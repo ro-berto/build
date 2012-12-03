@@ -50,7 +50,7 @@ class StatsBuilderStatusResource(HtmlResource):
     slowest = reduce(
         max, [reduce(max, [y[1] for y in x], 0) for x in stepTimes.values()], 0)
     timeRange = slowest + 1
-    yTicks = '[%s]' % ', '.join(["{v:%d}" % i for i in range(timeRange+1)])
+    yTicks = '[%s]' % ', '.join(["{v:%d}" % i for i in range(int(timeRange+1))])
 
     cxt['builder_status'] = self.builder_status
     cxt['buildTimes'] = buildTimes
