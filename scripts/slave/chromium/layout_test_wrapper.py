@@ -27,9 +27,13 @@ def layout_test(options, args):
   """Parse options and call run_webkit_tests.py, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
 
+  dumprendertree_exe = 'DumpRenderTree.exe'
+  if options.driver_name:
+    dumprendertree_exe = '%s.exe' % options.driver_name
+
   # Disable the page heap in case it got left enabled by some previous process.
   try:
-    slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', False)
+    slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
   except chromium_utils.PathNotFound:
     # If we don't have gflags.exe, report it but don't worry about it.
     print 'Warning: Couldn\'t disable page heap, if it was already enabled.'
@@ -128,13 +132,13 @@ def layout_test(options, args):
 
   try:
     if options.enable_pageheap:
-      slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', True)
+      slave_utils.SetPageHeap(build_dir, dumprendertree_exe, True)
     # Run the the tests
     return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
                                                   command)
   finally:
     if options.enable_pageheap:
-      slave_utils.SetPageHeap(build_dir, 'DumpRenderTree.exe', False)
+      slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
 
 
 def main():
