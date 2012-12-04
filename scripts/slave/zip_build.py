@@ -137,9 +137,9 @@ def FileRegexBlacklist(options):
     # Remove all .ilk/.7z and maybe PDB files
     include_pdbs = options.factory_properties.get('package_pdb_files', False)
     if include_pdbs:
-      return r'^.+\.(ilk|7z)$'
+      return r'^.+\.(ilk|7z|(precompile\.pch.*))$'
     else:
-      return r'^.+\.(ilk|pdb|7z)$'
+      return r'^.+\.(ilk|pdb|7z|(precompile\.pch.*))$'
   if chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers most of the time (except for
@@ -157,7 +157,7 @@ def FileRegexBlacklist(options):
 
 
 def FileExclusions():
-  all_platforms = ['.landmines', 'obj', 'lib']
+  all_platforms = ['.landmines', 'obj', 'lib', 'gen']
   # Skip files that the testers don't care about. Mostly directories.
   if chromium_utils.IsWindows():
     # Remove obj or lib dir entries
