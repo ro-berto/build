@@ -745,6 +745,7 @@ def main_linux(options, args):
 
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker)
+    print 'result = %d' % result
   finally:
     if http_server:
       http_server.StopServer()
@@ -977,6 +978,7 @@ def main():
     result = main_win(options, args)
   elif sys.platform == 'linux2':
     result = main_linux(options, args)
+    print 'result = %d' % result
   else:
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
     return 1
