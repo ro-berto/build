@@ -1271,43 +1271,44 @@ class ChromiumCommands(commands.FactoryCommands):
 
     webkit_result_dir = '/'.join(['..', '..', 'layout-test-results'])
 
-    cmd = [self._python, self._layout_test_tool,
-           '--target', self._target,
-           '-o', webkit_result_dir,
-           '--build-dir', self._build_dir,
-           '--build-number', WithProperties('%(buildnumber)s'),
-           '--builder-name', WithProperties(builder_name)]
+    cmd_args = ['--target', self._target,
+                '-o', webkit_result_dir,
+                '--build-dir', self._build_dir,
+                '--build-number', WithProperties('%(buildnumber)s'),
+                '--builder-name', WithProperties(builder_name)]
 
     for comps in factory_properties.get('additional_expectations_files', []):
-      cmd.append('--additional-expectations-file')
-      cmd.append(self.PathJoin('src', *comps))
+      cmd_args.append('--additional-expectations-file')
+      cmd_args.append(self.PathJoin('src', *comps))
 
     if layout_part:
-      cmd.extend(['--run-part', layout_part])
+      cmd_args.extend(['--run-part', layout_part])
 
     if with_pageheap:
-      cmd.append('--enable-pageheap')
+      cmd_args.append('--enable-pageheap')
 
     if test_results_server:
-      cmd.extend(['--test-results-server', test_results_server])
+      cmd_args.extend(['--test-results-server', test_results_server])
     if platform:
-      cmd.extend(['--platform', platform])
+      cmd_args.extend(['--platform', platform])
 
     if enable_hardware_gpu:
-      cmd.extend(['--options=--enable-hardware-gpu'])
+      cmd_args.extend(['--options=--enable-hardware-gpu'])
 
     if time_out_ms:
-      cmd.extend(['--time-out-ms', time_out_ms])
+      cmd_args.extend(['--time-out-ms', time_out_ms])
 
     if driver_name:
-      cmd.extend(['--driver-name', driver_name])
+      cmd_args.extend(['--driver-name', driver_name])
 
     if additional_drt_flag:
-      cmd.extend(['--additional-drt-flag', additional_drt_flag])
+      cmd_args.extend(['--additional-drt-flag', additional_drt_flag])
 
     # The list of tests is given as arguments.
     if layout_tests:
-      cmd.extend(layout_tests)
+      cmd_args.extend(layout_tests)
+
+    cmd = self.GetPythonTestCommand(self._layout_test_tool, cmd_args)
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
