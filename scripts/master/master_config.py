@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from buildbot.scheduler import Dependent
+from buildbot.scheduler import Nightly
 from buildbot.scheduler import Scheduler
 from buildbot.scheduler import Triggerable
 
@@ -44,27 +45,36 @@ class Helper(object):
                            'auto_reboot': auto_reboot,
                            'notify_on_missing': notify_on_missing})
 
+  def Hourly(self, name, branch, hour='*'):
+    """Helper method for the Nightly scheduler."""
+    if name in self._schedulers:
+      raise ValueError('Scheduler %s already exists' % name)
+    self._schedulers[name] = {'type': 'Nightly',
+                              'builders': [],
+                              'branch': branch,
+                              'hour': hour}
+
   def Dependent(self, name, parent):
     if name in self._schedulers:
-      raise ValueError('Scheduler %s already exist' % name)
+      raise ValueError('Scheduler %s already exists' % name)
     self._schedulers[name] = {'type': 'Dependent',
                               'parent': parent,
                               'builders': []}
 
   def Triggerable(self, name):
     if name in self._schedulers:
-      raise ValueError('Scheduler %s already exist' % name)
+      raise ValueError('Scheduler %s already exists' % name)
     self._schedulers[name] = {'type': 'Triggerable',
                               'builders': []}
 
   def Factory(self, name, factory):
     if name in self._factories:
-      raise ValueError('Factory %s already exist' % name)
+      raise ValueError('Factory %s already exists' % name)
     self._factories[name] = factory
 
   def Scheduler(self, name, branch, treeStableTimer=60, categories=None):
     if name in self._schedulers:
-      raise ValueError('Scheduler %s already exist' % name)
+      raise ValueError('Scheduler %s already exists' % name)
     self._schedulers[name] = {'type': 'Scheduler',
                               'branch': branch,
                               'treeStableTimer': treeStableTimer,
@@ -93,7 +103,7 @@ class Helper(object):
                      'category': category,
                      'auto_reboot': builder['auto_reboot']}
       if builder['builddir']:
-        new_builder['builddir'] =  builder['builddir']
+        new_builder['builddir'] = builder['builddir']
       c['builders'].append(new_builder)
 
     # Process the main schedulers
@@ -117,9 +127,18 @@ class Helper(object):
                       self._schedulers[scheduler['parent']]['instance'],
                       scheduler['builders']))
 
-    # Process the treggerable schedulers
+    # Process the triggerable schedulers
     for s_name in self._schedulers:
       scheduler = self._schedulers[s_name]
       if scheduler['type'] == 'Triggerable':
         c['schedulers'].append(Triggerable(s_name,
                                            scheduler['builders']))
+
+    # Process the nightly schedulers
+    for s_name in self._schedulers:
+      scheduler = self._schedulers[s_name]
+      if scheduler['type'] == 'Nightly':
+        c['schedulers'].append(Nightly(s_name,
+                                       branch=scheduler['branch'],
+                                       hour=scheduler['hour'],
+                                       builderNames=scheduler['builders']))
