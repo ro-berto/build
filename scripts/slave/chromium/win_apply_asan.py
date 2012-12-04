@@ -152,8 +152,9 @@ def ApplyAsanToBuild(full_directory, instrument_exe, jobs):
 
 
 def main():
-  default_asan_dir = os.path.normpath(os.path.join(
-      SCRIPT_DIR, '..', 'third_party', 'syzygy', 'binaries', 'exe'))
+  # syzygy is located in the source checkout, not relative to SCRIPT_DIR.
+  default_asan_dir = os.path.abspath(os.path.join(
+      os.pardir, 'third_party', 'syzygy', 'binaries', 'exe'))
   default_instrument_exe = os.path.join(default_asan_dir, 'instrument.exe')
   default_runtime_path = os.path.join(default_asan_dir, 'asan_rtl.dll')
 
