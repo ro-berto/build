@@ -320,15 +320,13 @@ class FactoryCommands(object):
       cmd.extend(arg_list)
     return cmd
 
-  def GetPythonTestCommand(self, py_script, arg_list=None, wrapper_args=None):
+  def GetPythonTestCommand(self, py_script, arg_list=None):
     cmd = [self._python,
            self._test_tool,
            '--run-python-script',
            '--target', self._target,
-           '--build-dir', self._build_dir]
-    if wrapper_args is not None:
-      cmd.extend(wrapper_args)
-    cmd.append(py_script)
+           '--build-dir', self._build_dir,
+           py_script]
 
     if arg_list is not None:
       cmd.extend(arg_list)
