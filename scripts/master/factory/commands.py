@@ -201,13 +201,6 @@ class FactoryCommands(object):
       'chromium-rel-xp-dual': 'xp-release-dual-core',
       'chromium-rel-xp-single': 'xp-release-single-core',
       'chromium-win-targets': 'win-targets',
-      'gpu-fyi-linux-release-ati': 'gpu-fyi-linux-release-ati',
-      'gpu-fyi-linux-release-intel': 'gpu-fyi-linux-release-intel',
-      'gpu-fyi-mac-release-ati': 'gpu-fyi-mac-release-ati',
-      'gpu-fyi-mac-retina-release': 'gpu-fyi-mac-retina-release',
-      'gpu-fyi-win7-release-ati': 'gpu-fyi-win7-release-ati',
-      'gpu-fyi-win7-release-intel': 'gpu-fyi-win7-release-intel',
-      'gpu-fyi-winxp-release-nvidia': 'gpu-fyi-winxp-release-nvidia',
       'o3d-mac-experimental': 'o3d-mac-experimental',
       'o3d-win-experimental': 'o3d-win-experimental',
       'nacl-lucid64-spec-x86': 'nacl-lucid64-spec-x86',
@@ -219,7 +212,6 @@ class FactoryCommands(object):
       'chromium-dbg-mac': 'mac-debug',
       'chromium-dbg-xp': 'xp-debug',
       'chromium-dbg-linux-try': 'linux-try-debug',
-      'gpu-fyi-winxp-debug-nvidia': 'gpu-fyi-winxp-debug-nvidia',
     },
   }
 
