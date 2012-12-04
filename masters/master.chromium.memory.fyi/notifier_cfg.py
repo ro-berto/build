@@ -28,6 +28,7 @@ categories_steps = {
     'memory test: net',
     'memory test: printing',
     'memory test: remoting',
+    'memory test: sandbox',
     'memory test: sql',
     'memory test: sync',
     'memory test: sync_unit_tests',
