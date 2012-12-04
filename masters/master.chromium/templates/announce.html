@@ -208,6 +208,24 @@
           </tr>
           <tr>
             <td style="text-align: right;">
+               <b>Masters:</b>
+            </td>
+            <td colspan="2">
+              <script>
+              document.write([
+                a("../tryserver.chromium/waterfall", "tryserver.chromium", ""),
+                aView("../chromium.fyi", "", "chromium.fyi"),
+                aView("../chromium.memory", "", "chromium.memory"),
+                aView("../chromium.memory.fyi", "", "chromium.memory.fyi"),
+                aView("../chromium.chromiumos", "", "chromium.chromiumos"),
+                aView("../chromiumos", "", "chromiumos"),
+                aView("../client.nacl", "", "client.nacl"),
+                aView("../chromium.webkit", "", "chromium.webkit")].join(' | '));
+              </script>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: right;">
                <b>Navigate:</b>
             </td>
             <td colspan="2">
@@ -217,15 +235,7 @@
                 a("./waterfall/help", "customize", ""),
                 a("./waterfall", "waterfall", ""),
                 a("./console", "console", ""),
-                a("../tryserver.chromium/waterfall", "try", ""),
-                aView("../chromium.fyi", "", "experimental"),
-                a("./waterfall?show_events=true&failures_only=true", "failures", ""),
-                aView("../chromium.memory", "", "memory"),
-                aView("../chromium.memory.fyi", "", "memory fyi"),
-                aView("../chromium.chromiumos", "", "chromiumos chrome"),
-                aView("../chromiumos", "", "chromiumos team"),
-                aView("../client.nacl", "", "NaCl"),
-                aView("../chromium.webkit", "", "webkit")].join(' | '));
+                a("./waterfall?show_events=true&failures_only=true", "failures", "")].join(' | '));
               </script>
             </td>
           </tr>
