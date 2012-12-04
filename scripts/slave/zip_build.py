@@ -322,7 +322,7 @@ def Archive(options):
     webkit_dir = os.path.join(src_dir, options.webkit_dir)
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, src_dir, webkit_dir)
+      options.build_properties, options.build_dir, webkit_dir)
 
   print 'Full Staging in %s' % staging_dir
   print 'Build Directory %s' % build_dir
