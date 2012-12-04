@@ -14,7 +14,7 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 # Scheduler for the WebRTC trunk branch.
 S('linux_rel_scheduler', branch='trunk', treeStableTimer=0)
