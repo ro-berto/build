@@ -951,7 +951,7 @@ def main():
     # Disable ASLR on Mac when running ASAN tests.
     os.environ['DYLD_NO_PIE'] = '1'
 
-  tsan_options = ('suppressions=tools/valgrind/tsan_v2/suppressions.txt '
+  tsan_options = ('suppressions=src/tools/valgrind/tsan_v2/suppressions.txt '
                   'report_signal_unsafe=0 '
                   'report_thread_leaks=0')
   if options.factory_properties.get('tsan', False):
