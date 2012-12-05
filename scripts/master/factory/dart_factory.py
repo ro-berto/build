@@ -116,7 +116,8 @@ class DartFactory(gclient_factory.GClientFactory):
                  config.Master.trunk_internal_url +
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
-  def __init__(self, build_dir, target_platform=None, trunk=False):
+  def __init__(self, build_dir, target_platform=None, trunk=False,
+               target_os=None):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
@@ -137,7 +138,8 @@ class DartFactory(gclient_factory.GClientFactory):
     solutions.append(main)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
-                                            target_platform=target_platform)
+                                            target_platform=target_platform,
+                                            target_os=target_os)
 
   def DartFactory(self, target='Release', clobber=False, tests=None,
                   slave_type='BuilderTester', options=None,
@@ -248,6 +250,7 @@ class DartUtils(object):
     'vm-linux': DartFactory('dart', 'vm-linux'),
     'vm-win32': DartFactory('dart', 'vm-win32'),
     'dartc-linux': DartFactory('dart', 'dartc-linux'),
+    'dart_android': DartFactory('dart', 'dart_android', target_os='android'),
     'dart_client': DartFactory('dart', 'dart_client'),
     'dart-editor': DartFactory('dart', 'dart-editor'),
     'frog': DartFactory('dart', 'frog'),
@@ -376,7 +379,7 @@ class DartUtils(object):
   def setup_factories(self, variants):
     def setup_factory(v, base, platform):
       env = v.get('env', {})
-      if platform in ['dart_client', 'dart-editor',
+      if platform in ['dart_client', 'dart-editor', 'dart_android',
                       'dart_client-trunk', 'dart-editor-trunk']:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
