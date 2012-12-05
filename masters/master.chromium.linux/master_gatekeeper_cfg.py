@@ -13,12 +13,14 @@ from master import master_utils
 categories_steps = {
   '': ['update'],
   'testers': [
+    'aura_unittests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
     'cc_unittests',
     'chrome_frame_net_tests',
     'chromedriver2_unittests',
+    'compositor_unittests',
     'content_browsertests',
     'content_unittests',
     'courgette_unittests',
@@ -47,6 +49,7 @@ categories_steps = {
     'sync_integration_tests',
     'test_shell_tests',
     'unit_tests',
+    'views_unittests',
     'webkit_compositor_bindings_unittests',
     #'webkit_tests',
    ],
