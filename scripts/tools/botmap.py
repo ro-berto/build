@@ -14,7 +14,7 @@ from common import chromium_utils
 
 def main():
   slaves = []
-  for master in chromium_utils.ListMasters():
+  for master in chromium_utils.ListMasters(cue='slaves.cfg'):
     masterbase = os.path.basename(master)
     master_slaves = {}
     execfile(os.path.join(master, 'slaves.cfg'), master_slaves)
