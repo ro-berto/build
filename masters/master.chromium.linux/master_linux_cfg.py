@@ -143,13 +143,10 @@ F('rel_sync', linux_tester().ChromiumFactory(
 # Linux aura bot
 #
 
-# Interactive ui tests and browser tests disabled in this configuration; it's a
-# long term goal to support them, but that isn't happening on the order of
-# months due to manpower issues.
 linux_aura_tests = [
   'aura',
   'base',
-  #'browser_tests',
+  'browser_tests',
   'cacheinvalidation',
   'compositor',
   'content_browsertests',
@@ -158,7 +155,7 @@ linux_aura_tests = [
   'device_unittests',
   'googleurl',
   'gpu',
-  #'interactive_ui',
+  'interactive_ui',
   'jingle',
   'media',
   'net',
