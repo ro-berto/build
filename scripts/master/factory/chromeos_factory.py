@@ -57,7 +57,7 @@ class CbuildbotFactory(object):
                factory=None, pass_revision=False, slave_manager=True,
                chromite_patch=None, trybot=False, sleep_sync=None,
                show_gclient_output=True, perf_file=None, perf_base_url=None,
-               perf_output_dir=None):
+               perf_output_dir=None, custom_build_script=None):
     self.buildroot = buildroot
     self.crostools_repo = crostools_repo
     self.chromite_repo = chromite_repo
@@ -82,7 +82,11 @@ class CbuildbotFactory(object):
       self.f_cbuild = chromeos_build_factory.BuildFactory()
 
     self.add_bootstrap_steps()
-    self.add_cbuildbot_step(params, pass_revision)
+    if custom_build_script:
+      self.add_custom_build_step(custom_build_script, params)
+    else:
+      self.add_cbuildbot_step(params, pass_revision)
+
     if perf_file:
       self.add_perf_step(params, perf_file, perf_base_url, perf_output_dir)
 
@@ -149,6 +153,29 @@ class CbuildbotFactory(object):
     if self.crostools_repo:
       self._git_clear_and_checkout(self.crostools_repo)
 
+  def add_custom_build_step(self, script, params):
+    """Adds custom build step in lieu of cbuildbot for Chromium OS builds.
+
+    This is in place for small build config types that require tools in chromite
+    but doesn't require cbuildbot i.e. doesn't sync entire tree and also doesn't
+    produce a build of Chromium OS.
+
+    Args:
+      script:  Name of the script to run from chromite/bin.
+      params:  A string containing extra parameters for the script.
+    """
+    cmd = ['chromite/bin/%s' % script]
+    if params:
+      cmd.extend(params.split())
+
+    self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
+                          command=cmd,
+                          timeout=self.timeout,
+                          name=script,
+                          description=script,
+                          usePTY=False)
+
+
   def add_cbuildbot_step(self, params, pass_revision=False):
     """Adds cbuildbot step for Chromium OS builds.
 
@@ -158,7 +185,7 @@ class CbuildbotFactory(object):
       params:  Extra parameters for cbuildbot.
       pass_revision: To pass the chrome revision desired into the build.
     """
-    cmd = ['chromite/buildbot/cbuildbot',
+    cmd = ['chromite/bin/cbuildbot',
            shell.WithProperties('--buildnumber=%(buildnumber)s'),
            '--buildroot=%s' % self.buildroot]
 
@@ -186,7 +213,7 @@ class CbuildbotFactory(object):
     self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
                           command=cmd,
                           timeout=self.timeout,
-                          name='cbuildbot',
+                          name=description,
                           description=description,
                           usePTY=False)
 
