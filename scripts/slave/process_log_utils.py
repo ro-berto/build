@@ -341,6 +341,9 @@ class PerformanceLogProcessor(object):
     if self._expectations and not self._read_expectations:
       return WARNINGS
 
+    # make sure regression and improvement logs are calculated
+    self.PerformanceSummary()
+
     if self._perf_regress:
       return FAILURE
 

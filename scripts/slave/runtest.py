@@ -361,12 +361,19 @@ def annotate(test_name, result, results_tracker, full_name=False,
 
     results_tracker.ClearParsingErrors()
 
+  if hasattr(results_tracker, 'evaluateCommand'):
+    parser_result = results_tracker.evaluateCommand('command')
+    if parser_result > result:
+      result = parser_result
+
   if result == process_log_utils.SUCCESS:
     if (len(results_tracker.ParsingErrors()) or
         len(results_tracker.FailedTests()) or
         len(results_tracker.SuppressionHashes())):
       print '@@@STEP_WARNINGS@@@'
       get_text_result = process_log_utils.WARNINGS
+  elif result == process_log_utils.WARNINGS:
+    print '@@@STEP_WARNINGS@@@'
   else:
     print '@@@STEP_FAILURE@@@'
     get_text_result = process_log_utils.FAILURE
