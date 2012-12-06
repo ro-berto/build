@@ -561,7 +561,8 @@ class GraphingLogProcessor(PerformanceLogProcessor):
        '(?P<VALUE>[\{\[]?[-\d\., ]+[\}\]]?)( ?(?P<UNITS>.+))?')
   HISTOGRAM_REGEX = re.compile(r'(?P<IMPORTANT>\*)?HISTOGRAM '
                                '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
-                               '(?P<VALUE_JSON>.*)')
+                               '(?P<VALUE_JSON>{.*})(?P<UNITS>.+)?')
+
   def __init__(self, *args, **kwargs):
     PerformanceLogProcessor.__init__(self, *args, **kwargs)
     # The text summary will be built by other methods as we go.
