@@ -16,6 +16,7 @@ BLACKLIST = set((
     'crnss.dll',
     'gpu.dll',
     'icuuc.dll',
+    'nacl.exe',
     'sql.dll',
 ))
 
@@ -127,7 +128,8 @@ def ApplyAsanToBuild(full_directory, instrument_exe, jobs):
     print >> sys.stderr, 'No files to ASAN!'
     return 1
 
-  stopped = multiprocessing.Event()
+  manager = multiprocessing.Manager()
+  stopped = manager.Event()
   sanitizer = ASANitizer(instrument_exe, stopped)
   pool = multiprocessing.Pool(jobs)
 
@@ -152,9 +154,9 @@ def ApplyAsanToBuild(full_directory, instrument_exe, jobs):
 
 
 def main():
-  # syzygy is located in the source checkout, not relative to SCRIPT_DIR.
-  default_asan_dir = os.path.abspath(os.path.join(
-      os.pardir, 'third_party', 'syzygy', 'binaries', 'exe'))
+  # syzygy is relative to --build-dir, not relative to SCRIPT_DIR.
+  default_asan_dir = os.path.join(
+      os.pardir, 'third_party', 'syzygy', 'binaries', 'exe')
   default_instrument_exe = os.path.join(default_asan_dir, 'instrument.exe')
   default_runtime_path = os.path.join(default_asan_dir, 'asan_rtl.dll')
 
