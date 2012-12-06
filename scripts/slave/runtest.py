@@ -338,7 +338,8 @@ def create_results_tracker(tracker_class, options):
   return tracker_obj
 
 
-def annotate(test_name, result, results_tracker, full_name=False):
+def annotate(test_name, result, results_tracker, full_name=False,
+             perf_dashboard_id=None):
   """Given a test result and tracker, update the waterfall with test results."""
   get_text_result = process_log_utils.SUCCESS
 
@@ -374,9 +375,14 @@ def annotate(test_name, result, results_tracker, full_name=False):
     print '@@@STEP_TEXT@%s@@@' % desc
 
   if hasattr(results_tracker, 'PerformanceLogs'):
+    if not perf_dashboard_id:
+      print 'runtest.py error: perf step specified but',
+      print 'no test_id in factory_properties!'
+      print '@@@STEP_EXCEPTION@@@'
+      return
     for logname, log in results_tracker.PerformanceLogs().iteritems():
       lines = [str(l).rstrip() for l in log]
-      slave_utils.WriteLogLines(logname, lines, perf=True)
+      slave_utils.WriteLogLines(logname, lines, perf=perf_dashboard_id)
 
 
 def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
@@ -519,7 +525,9 @@ def main_mac(options, args):
 
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
-             options.factory_properties.get('full_test_name'))
+             options.factory_properties.get('full_test_name'),
+             perf_dashboard_id=options.factory_properties.get(
+                 'test_name'))
 
   return result
 
@@ -762,7 +770,9 @@ def main_linux(options, args):
 
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
-             options.factory_properties.get('full_test_name'))
+             options.factory_properties.get('full_test_name'),
+             perf_dashboard_id=options.factory_properties.get(
+                 'test_name'))
 
   return result
 
@@ -834,7 +844,9 @@ def main_win(options, args):
 
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
-             options.factory_properties.get('full_test_name'))
+             options.factory_properties.get('full_test_name'),
+             perf_dashboard_id=options.factory_properties.get(
+                 'test_name'))
 
   return result
 

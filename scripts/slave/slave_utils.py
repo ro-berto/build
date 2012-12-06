@@ -609,10 +609,10 @@ def RemoveChromeTemporaryFiles():
         'Platform "%s" is not currently supported.' % sys.platform)
 
 
-def WriteLogLines(logname, lines, perf=False):
+def WriteLogLines(logname, lines, perf=None):
   for line in lines:
     print '@@@STEP_LOG_LINE@%s@%s@@@' % (logname, line)
   if perf:
-    print '@@@STEP_LOG_END_PERF@%s@@@' % logname
+    print '@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf)
   else:
     print '@@@STEP_LOG_END@%s@@@' % logname

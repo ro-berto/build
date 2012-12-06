@@ -395,8 +395,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # Add the test step to the factory.
     self.AddTestStep(test_class, test, cmd, do_step_if=self.TestStepFilter)
 
-  def AddAnnotatedPageCyclerTest(self, test, factory_properties=None,
-                                 suite=None):
+  def AddAnnotatedPageCyclerTest(self, test, factory_properties, suite=None):
     enable_http = test.endswith('-http')
     perf_dashboard_name = test.lstrip('page_cycler_')
 

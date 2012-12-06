@@ -861,16 +861,16 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Support: @@@STEP_LOG_END_PERF@<label>@<line>@@@
     # (finalizes log to step, marks it as being a perf step
     # requiring logs to be stored on the master)
-    m = re.match('^@@@STEP_LOG_END_PERF@(.*)@@@', line)
+    m = re.match('^@@@STEP_LOG_END_PERF@(.*)@(.*)@@@', line)
     if m:
       log_label = m.group(1)
+      perf_dashboard_name = m.group(2)
       current_logs = self.cursor['annotated_logs']
       log_text = '\n'.join(current_logs.get(log_label, [])) + '\n'
 
       report_link = None
       output_dir = None
       if self.perf_id:
-        perf_dashboard_name = self.cursor['name'].lstrip('page_cycler_')
         report_link, output_dir, _ = self._PerfStepMappings(self.show_perf,
                                                             self.perf_id,
                                                             perf_dashboard_name)
