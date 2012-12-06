@@ -379,7 +379,7 @@ class ChromiumCommands(commands.FactoryCommands):
         test_name, test_type, test_name, test_type)
 
     self.AddAnnotatedPerfStep(perf_dashboard_name, gtest_filter, 'pagecycler',
-                              cmd_options=options, step_name=test,
+                              tool_opts=options, step_name=test,
                               factory_properties=factory_properties)
 
   def AddStartupTests(self, factory_properties=None):
