@@ -167,10 +167,13 @@ def main():
       'master.chromium.perf_av': 'Chromium Perf Av',
       'master.chromium.pyauto': 'Chromium PyAuto',
       'master.chromium.swarm': 'Chromium Swarm',
+      'master.chromium.unused': None,
       'master.chromium.webkit': 'Chromium Webkit',
       'master.chromium.webrtc': 'Chromium WebRTC',
       'master.chromium.win': 'Chromium Win',
       'master.chromiumos': 'ChromiumOS',
+      'master.chromiumos.tryserver': None,
+      'master.chromiumos.unused': None,
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
       'master.client.dart': 'Dart',
@@ -190,13 +193,14 @@ def main():
       'master.client.skia': None,
       'master.client.syzygy': None,
       'master.client.tsan': None,  # make start fails
+      'master.client.unused': None,
       'master.client.v8': 'V8',
       'master.client.webrtc': 'WebRTC',
       'master.experimental': None,
       'master.reserved': None,  # make start fails
       'master.tryserver.chromium': 'Chromium Try Server',
       'master.tryserver.nacl': 'NativeClient-Try',
-      'master.chromiumos.tryserver': None,
+      'master.tryserver.unused': None,
       'master.devtools': 'Chromium DevTools',
   }
   return real_main(base_dir, expected)
