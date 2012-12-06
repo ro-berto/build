@@ -894,9 +894,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
           self._SaveGraphInfo(log_text, output_dir)
         else:
           Prepend(log_label, log_text, output_dir, perf_output_dir)
-      else:
-        raise Exception('Tried to save perf data, but no output_dir or '
-                        'report_link set!')
 
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
     # Also support depreceated @@@link@<name>@<url>@@@
