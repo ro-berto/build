@@ -229,8 +229,14 @@ def getText(result, observer, name):
   GTEST_DASHBOARD_BASE = ('http://test-results.appspot.com'
                           '/dashboards/flakiness_dashboard.html')
 
+  # TODO(xusydoc): unify this with gtest reporting below so getText() is
+  # less confusing
   if hasattr(observer, 'PerformanceSummary'):
-    return observer.PerformanceSummary()
+    basic_info = [name]
+    summary_text = ['<div class="BuildResultInfo">']
+    summary_text.extend(observer.PerformanceSummary())
+    summary_text.append('</div>')
+    return basic_info + summary_text
 
   # basic_info is an array of lines to display on the waterfall.
   basic_info = [name]
@@ -933,6 +939,9 @@ def main():
                                 ' types listed with --annotate=list.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
+
+  options.test_type = options.test_type or options.factory_properties.get(
+      'step_name')
 
   if options.run_shell_script and options.run_python_script:
     sys.stderr.write('Use either --run-shell-script OR --run-python-script, '
