@@ -202,6 +202,7 @@ def main():
       'master.tryserver.nacl': 'NativeClient-Try',
       'master.tryserver.unused': None,
       'master.devtools': 'Chromium DevTools',
+      'master.webkit': None,
   }
   return real_main(base_dir, expected)
 
