@@ -19,76 +19,66 @@ from master.log_parser import process_log
 import config
 
 
-class CbuildbotFactory(object):
+class ChromiteFactory(object):
   """
-  Create a cbuildbot build factory.
+  Create a build factory that runs a chromite script.
 
   This is designed mainly to utilize build scripts directly hosted in
   chromite.git.
 
   Attributes:
-      buildroot: --buildroot to pass to cbuild.
-      params: string of parameters to pass to the cbuildbot type
-      timeout: Timeout in seconds for the main command
-          (i.e. the type command). Default 9000 seconds.
+      script: the name of the chromite command to run (bin/<foo>)
+      params: string of parameters to pass to the main command.
+      b_params:  An array of StepParameters to pass to the main command.
+      timeout: Timeout in seconds for the main command. Default 9000 seconds.
+      branch: git branch of the chromite repo to pull.
       crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
-      dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
       factory: a factory with pre-existing steps to extend rather than start
           fresh.  Allows composing.
-      pass_revision: to pass the chrome revision desired into the build.
+      use_chromeos_factory: indicates we want a default of a chromeos factory.
+      slave_manager: whether we should manage the script area for the bot.
       chromite_patch: a url and ref pair (dict) to patch the checked out
           chromite. Fits well with a single change from a codereview, to use
           on one or more builders for realistic testing, or experiments.
-      trybot: Whether this is creating builders for the trybot waterfall.
-      sleep_sync: Whether to randomly delay the start of the cbuildbot step.
+      sleep_sync: Whether to randomly delay the start of the chromite step.
       show_gclient_output: Set to False to hide the output of 'gclient sync'.
           Used by external masters to prevent leaking sensitive information,
           since both external and internal slaves use internal.DEPS/.
-      perf_file: If set, name of the perf file to upload.
   """
   _default_git_base = 'http://git.chromium.org/chromiumos'
   _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
   _default_chromite = _default_git_base + '/chromite.git'
 
-  def __init__(self, params, buildroot='/b/cbuild', timeout=9000,
+  def __init__(self, script, params=None, b_params=None, timeout=9000,
                branch='master', crostools_repo=_default_crostools,
-               chromite_repo=_default_chromite, dry_run=False, chrome_root=None,
-               factory=None, pass_revision=False, slave_manager=True,
-               chromite_patch=None, trybot=False, sleep_sync=None,
-               show_gclient_output=True, perf_file=None, perf_base_url=None,
-               perf_output_dir=None, custom_build_script=None):
-    self.buildroot = buildroot
-    self.crostools_repo = crostools_repo
-    self.chromite_repo = chromite_repo
-    self.chromite_patch = chromite_patch
+               chromite_repo=_default_chromite,
+               factory=None, use_chromeos_factory=False, slave_manager=True,
+               chromite_patch=None, sleep_sync=None,
+               show_gclient_output=True):
     if chromite_patch:
       assert ('url' in chromite_patch and 'ref' in chromite_patch)
 
-    self.timeout = timeout
     self.branch = branch
-    self.dry_run = dry_run
-    self.chrome_root = chrome_root
-    self.slave_manager = slave_manager
-    self.trybot = trybot
-    self.sleep_sync = sleep_sync
+    self.chromite_patch = chromite_patch
+    self.chromite_repo = chromite_repo
+    self.crostools_repo = crostools_repo
+    self.timeout = timeout
     self.show_gclient_output = show_gclient_output
+    self.slave_manager = slave_manager
+    self.sleep_sync = sleep_sync
 
     if factory:
       self.f_cbuild = factory
-    elif pass_revision:
-      self.f_cbuild = build_factory.BuildFactory()
-    else:
+    elif use_chromeos_factory:
+      # Suppresses revisions, at the moment.
       self.f_cbuild = chromeos_build_factory.BuildFactory()
+    else:
+      self.f_cbuild = build_factory.BuildFactory()
 
     self.add_bootstrap_steps()
-    if custom_build_script:
-      self.add_custom_build_step(custom_build_script, params)
-    else:
-      self.add_cbuildbot_step(params, pass_revision)
-
-    if perf_file:
-      self.add_perf_step(params, perf_file, perf_base_url, perf_output_dir)
+    if script:
+      self.add_chromite_step(script, params, b_params)
 
   def _git_clear_and_checkout(self, repo, patch=None):
     """rm -rf and clone the basename of the repo passed without .git
@@ -153,18 +143,17 @@ class CbuildbotFactory(object):
     if self.crostools_repo:
       self._git_clear_and_checkout(self.crostools_repo)
 
-  def add_custom_build_step(self, script, params):
-    """Adds custom build step in lieu of cbuildbot for Chromium OS builds.
-
-    This is in place for small build config types that require tools in chromite
-    but doesn't require cbuildbot i.e. doesn't sync entire tree and also doesn't
-    produce a build of Chromium OS.
+  def add_chromite_step(self, script, params, b_params):
+    """Adds a step that runs a chromite command.
 
     Args:
       script:  Name of the script to run from chromite/bin.
       params:  A string containing extra parameters for the script.
+      b_params:  An array of StepParameters.
     """
     cmd = ['chromite/bin/%s' % script]
+    if b_params:
+      cmd.extend(b_params)
     if params:
       cmd.extend(params.split())
 
@@ -175,18 +164,64 @@ class CbuildbotFactory(object):
                           description=script,
                           usePTY=False)
 
+  def get_factory(self):
+    """Returns the produced factory."""
+    return self.f_cbuild
 
-  def add_cbuildbot_step(self, params, pass_revision=False):
-    """Adds cbuildbot step for Chromium OS builds.
 
-    Cbuildbot includes all steps for building any Chromium OS config.
+class CbuildbotFactory(ChromiteFactory):
+  """
+  Create a build factory that runs the cbuildbot script.
 
-    Args:
-      params:  Extra parameters for cbuildbot.
-      pass_revision: To pass the chrome revision desired into the build.
-    """
-    cmd = ['chromite/bin/cbuildbot',
-           shell.WithProperties('--buildnumber=%(buildnumber)s'),
+  Attributes:
+      params: string of parameters to pass to the cbuildbot command.
+      script: name of the cbuildbot command.  Default cbuildbot.
+      buildroot: buildroot to set. Default /b/cbuild.
+      dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
+      trybot: Whether this is creating builders for the trybot waterfall.
+      chrome_root: The place to put or use the chrome source.
+      pass_revision: to pass the chrome revision desired into the build.
+      perf_file: If set, name of the perf file to upload.
+      perf_base_url: If set, base url to build into references.
+      perf_output_dir: If set, where the perf files are to update.
+      *: anything else is passed to the base Chromite class.
+  """
+
+  def __init__(self,
+               params,
+               script='cbuildbot',
+               buildroot='/b/cbuild',
+               dry_run=False,
+               trybot=False,
+               chrome_root=None,
+               pass_revision=None,
+               perf_file=None,
+               perf_base_url=None,
+               perf_output_dir=None,
+               **kwargs):
+    super(CbuildbotFactory, self).__init__(None, None,
+        use_chromeos_factory=not pass_revision, **kwargs)
+
+    self.buildroot = buildroot
+    self.dry_run = dry_run
+    self.script = script
+    self.trybot = trybot
+    self.chrome_root = chrome_root
+    self.pass_revision = pass_revision
+
+    if params:
+      self.add_cbuildbot_step(params)
+
+    if perf_file:
+      self.add_perf_step(params, perf_file, perf_base_url, perf_output_dir)
+
+
+  def add_cbuildbot_step(self, params):
+    self.add_chromite_step(self.script, params, self.compute_buildbot_params())
+
+
+  def compute_buildbot_params(self):
+    cmd = [WithProperties('--buildnumber=%(buildnumber)s'),
            '--buildroot=%s' % self.buildroot]
 
     if self.trybot:
@@ -200,22 +235,13 @@ class CbuildbotFactory(object):
     if self.chrome_root:
       cmd.append('--chrome_root=%s' % self.chrome_root)
 
-    # Add properties from buildbot as necessary.
+    if self.pass_revision:
+      cmd.append(WithProperties('--chrome_version=%(revision)s'))
+
+    #TODO(petermayo): This adds an empty parameter when not clobbering; fix.
     cmd.append(WithProperties('%s', 'clobber:+--clobber'))
-    if pass_revision:
-      cmd.append(shell.WithProperties('--chrome_version=%(revision)s'))
 
-    # Add additional parameters.
-    cmd += params.split()
-
-    description = 'cbuildbot'
-
-    self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
-                          command=cmd,
-                          timeout=self.timeout,
-                          name=description,
-                          description=description,
-                          usePTY=False)
+    return cmd
 
 
   def add_perf_step(self, params, perf_file, perf_base_url, perf_output_dir):
@@ -226,6 +252,8 @@ class CbuildbotFactory(object):
       perf_file: Name of the perf file to upload. Note the name of this file
         will be used as the testname and params[0] will be used as the platform
         name.
+      perf_base_url: If set, base url to build into references.
+      perf_output_dir: If set, where the perf files are to update.
     """
     # Name of platform is always taken as the first param.
     platform = params.split()[0]
@@ -245,6 +273,7 @@ class CbuildbotFactory(object):
 
     cmd = ['cat', perf_file_path]
 
+    # Hmm - I wonder how dry_run should affect this.
     perf_class = commands.CreatePerformanceStepClass(
         process_log.GraphingLogProcessor,
         report_link=report_link, output_dir=output_dir,
@@ -255,7 +284,3 @@ class CbuildbotFactory(object):
         perf_class, command=cmd, name='Upload Perf Results',
         description='upload_perf_results')
 
-
-  def get_factory(self):
-    """Returns the produced factory."""
-    return self.f_cbuild
