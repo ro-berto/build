@@ -17,6 +17,7 @@ BLACKLIST = set((
     'gpu.dll',
     'icuuc.dll',
     'nacl.exe',
+    'nacl64.exe',
     'sql.dll',
 ))
 
