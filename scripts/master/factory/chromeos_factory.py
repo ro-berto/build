@@ -47,7 +47,7 @@ class ChromiteFactory(object):
           since both external and internal slaves use internal.DEPS/.
   """
   _default_git_base = 'http://git.chromium.org/chromiumos'
-  _default_crostools = 'ssh://gerrit-int.chromium.org:29419/chromeos/crostools'
+  _default_crostools = None
   _default_chromite = _default_git_base + '/chromite.git'
 
   def __init__(self, script, params=None, b_params=None, timeout=9000,
@@ -62,7 +62,6 @@ class ChromiteFactory(object):
     self.branch = branch
     self.chromite_patch = chromite_patch
     self.chromite_repo = chromite_repo
-    self.crostools_repo = crostools_repo
     self.timeout = timeout
     self.show_gclient_output = show_gclient_output
     self.slave_manager = slave_manager
@@ -113,8 +112,8 @@ class ChromiteFactory(object):
     """Bootstraps Chromium OS Build by syncing pre-requisite repositories.
 
     * gclient sync of /b
-    * clearing of chromite[& crostools]
-    * clean checkout of chromite[& crostools]
+    * clearing of chromite
+    * clean checkout of chromite
     """
     if self.slave_manager:
       build_slave_sync = ['gclient', 'sync',
@@ -140,8 +139,6 @@ class ChromiteFactory(object):
                             timeout=int(self.sleep_sync) + 10)
 
     self._git_clear_and_checkout(self.chromite_repo, self.chromite_patch)
-    if self.crostools_repo:
-      self._git_clear_and_checkout(self.crostools_repo)
 
   def add_chromite_step(self, script, params, b_params):
     """Adds a step that runs a chromite command.
