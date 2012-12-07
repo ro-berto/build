@@ -168,9 +168,6 @@ def FileExclusions():
       'd8_arm', 'v8_shell_arm',
       # pdfsqueeze is a build helper, no need to copy it to testers.
       'pdfsqueeze',
-      # The inspector copies its resources into a resources folder in the build
-      # output, but we only need the copy that ends up within the Chrome bundle.
-      'resources',
       # We copy the framework into the app bundle, we don't need the second
       # copy outside the app.
       # TODO(mark): Since r28431, the copy in the build directory is actually
