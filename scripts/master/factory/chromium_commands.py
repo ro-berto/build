@@ -438,16 +438,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_options=options,
                               factory_properties=factory_properties)
 
-  def AddDromaeoTests(self, factory_properties=None):
-    options = ['--gtest_print_time', '--run-dromaeo-benchmark']
-
-    tests = ['DOMCore', 'JSLib']
-    for test in tests:
-      test_name = 'dromaeo_%s' % test.lower()
-      self.AddAnnotatedPerfStep(test_name, 'Dromaeo*Test.%sPerf' % test,
-                                'graphing', cmd_options=options,
-                                factory_properties=factory_properties)
-
   def AddFrameRateTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
                               factory_properties=factory_properties)
@@ -843,8 +833,8 @@ class ChromiumCommands(commands.FactoryCommands):
       return J(ref_dir, 'chrome_linux', 'chrome')
     return None
 
-  def AddTelemetryTest(self, test_name, page_set, factory_properties=None,
-                       timeout=1200):
+  def AddTelemetryTest(self, test_name, page_set, step_name=None,
+                       factory_properties=None, timeout=1200):
     """Adds a Telemetry performance test.
 
     TODO(tonyg): Move this to an annotator step once we have a annotation for
@@ -854,8 +844,11 @@ class ChromiumCommands(commands.FactoryCommands):
       test_name: The name of the benchmark module to run.
       page_set: The path to the page set to run the benchmark against. Must be
         relative to src/tools/perf/page_sets/.
+      step_name: The name used to build the step's logfile name and descriptions
+        in the waterfall display. Defaults to |test_name|.
       factory_properties: A dictionary of factory property values.
     """
+    step_name = step_name or test_name
     factory_properties = factory_properties or {}
     J = self.PathJoin
 
@@ -886,8 +879,8 @@ class ChromiumCommands(commands.FactoryCommands):
              'adb root && adb wait-for-device && %s"' % cmd)
 
     command_class = self.GetPerfStepClass(
-        factory_properties, test_name, process_log.GraphingLogProcessor)
-    self.AddTestStep(command_class, test_name, cmd, timeout=timeout,
+        factory_properties, step_name, process_log.GraphingLogProcessor)
+    self.AddTestStep(command_class, step_name, cmd, timeout=timeout,
                      do_step_if=self.TestStepFilter)
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
