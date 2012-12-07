@@ -48,17 +48,25 @@ def Restart():
   Raises:
     Exception: When it is unable to restart the machine.
   """
+  restart_cmd = None
   if sys.platform == 'win32' or sys.platform == 'cygwin':
-    subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
+    restart_cmd = ['shutdown', '-r', '-f', '-t', '1']
   elif sys.platform == 'linux2' or sys.platform == 'darwin':
-    subprocess.call(['sudo', 'shutdown', '-r', 'now'])
+    restart_cmd = ['sudo', 'shutdown', '-r', 'now']
+
+  if restart_cmd:
+    logging.info('Restarting machine with command %s', restart_cmd)
+    try:
+      subprocess.call(restart_cmd)
+    except OSError as e:
+      logging.exception(e)
 
   # Sleep for 5 seconds to ensure we don't try to do anymore work while
   # the OS is preparing to shutdown.
   time.sleep(5)
 
   # The machine should be shutdown by now.
-  raise Exception('Unable to restart machine')
+  raise SlaveError('Unable to restart machine')
 
 
 # pylint: disable=W0102
@@ -584,7 +592,7 @@ def main():
   parser.add_option('-p', '--port', default='443', type='int',
                     help='Port of the Swarm server. '
                     'Defaults to %default, which is the default https port.')
-  parser.add_option('-r', '--max_url_tries', default=20, type='int',
+  parser.add_option('-r', '--max_url_tries', default=10, type='int',
                     help='The maximum number of times url messages will '
                     'attempt to be sent before accepting failure. Defaults '
                     'to %default')
