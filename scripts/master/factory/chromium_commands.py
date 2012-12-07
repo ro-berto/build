@@ -1293,6 +1293,20 @@ class ChromiumCommands(commands.FactoryCommands):
            '--gpu-reference-dir', ref_dir]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
 
+  def AddAnnotatedGpuContentTests(self, factory_properties):
+    """Runs content_browsertests binary with selected gpu tests.
+
+    This binary contains content side browser tests that should be run on the
+    gpu bots.
+    """
+    tests = ':'.join(['WebGLConformanceTest.*', 'GpuCrashTest.*'])
+
+    self.AddAnnotatedGTestTestStep('content_browsertests', factory_properties,
+                                   arg_list=['--use-gpu-in-tests',
+                                             '--gtest_filter=%s' % tests,
+                                             '--run-manual'],
+                                   test_tool_arg_list=['--no-xvfb'])
+
   def AddAnnotatedGLTests(self, factory_properties=None):
     """Runs gl_tests binary.
 

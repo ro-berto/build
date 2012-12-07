@@ -614,6 +614,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedSoftGpuTests(fp)
     if R('soft_gpu_tests_br'):
       f.AddBuildrunnerAnnotatedSoftGpuTests(fp)
+    if R('gpu_content_tests'):
+      f.AddAnnotatedGpuContentTests(fp)
     if R('spaceport'):
       f.AddTelemetryTest('spaceport', 'spaceport.json', fp)
 
