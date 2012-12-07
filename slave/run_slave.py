@@ -418,7 +418,7 @@ def UpdateScripts():
   gclient_path = os.path.join(SCRIPT_PATH, '..', '..', 'depot_tools', 'gclient')
   if sys.platform.startswith('win'):
     gclient_path += '.bat'
-  if subprocess.call([gclient_path, 'sync']) != 0:
+  if subprocess.call([gclient_path, 'sync', '--force']) != 0:
     msg = '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0]
     print >> sys.stderr, msg
   os.environ['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
