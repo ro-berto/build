@@ -28,7 +28,6 @@ B('ChromiumOS (x86)',
   notify_on_missing=True)
 F('x86', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.x86',
-  crostools_repo=None,
   pass_revision=True,
   params='x86-generic-tot-chrome-pfq-informational').get_factory())
 
@@ -42,7 +41,6 @@ B('ChromiumOS (amd64)',
   notify_on_missing=True)
 F('amd64', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.amd64',
-  crostools_repo=None,
   pass_revision=True,
   params='amd64-generic-tot-chrome-pfq-informational').get_factory())
 
@@ -55,7 +53,6 @@ B('ChromiumOS (daisy)',
   notify_on_missing=True)
 F('daisy', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.daisy',
-  crostools_repo=None,
   pass_revision=True,
   params='daisy-tot-chrome-pfq-informational').get_factory())
 

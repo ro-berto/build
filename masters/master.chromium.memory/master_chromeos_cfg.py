@@ -154,7 +154,6 @@ B('Chromium OS (x86) ASAN',
   notify_on_missing=True)
 F('x86_asan', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.x86.asan',
-  crostools_repo=None,
   pass_revision=True,
   params='x86-generic-tot-asan-informational').get_factory())
 
@@ -165,7 +164,6 @@ B('Chromium OS (amd64) ASAN',
   notify_on_missing=True)
 F('amd64_asan', chromeos_factory.CbuildbotFactory(
   buildroot='/b/cbuild.amd64.asan',
-  crostools_repo=None,
   pass_revision=True,
   params='amd64-generic-tot-asan-informational').get_factory())
 
