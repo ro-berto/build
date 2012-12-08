@@ -62,14 +62,20 @@ def CommonChecks(input_api, output_api):
   if input_api.is_committing:
     output.extend(input_api.canned_checks.PanProjectChecks(
       input_api, output_api, excluded_paths=black_list))
+
+  output.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+      input_api, output_api, 'test', [r'slaves_cfg_test\.py$']))
+
   return output
 
 
 def RunTests(input_api, output_api):
   out = []
   whitelist = [r'.+_test\.py$']
+  # slaves_cfg_test.py already runs in CommonChecks.
+  blacklist = [r'slaves_cfg_test\.py$']
   out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
-      input_api, output_api, 'test', whitelist))
+      input_api, output_api, 'test', whitelist, blacklist))
   out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
       input_api,
       output_api,
