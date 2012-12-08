@@ -498,6 +498,16 @@ class Trace(object):
     return result
 
 
+class EndureTrace(object):
+  """Encapsulates the data needed for one trace on an endurance graph."""
+
+  def __init__(self):
+    self.values = []  # [(time, value), (time, value), ...]
+
+  def __str__(self):
+    return ', '.join(['(%s: %s)' % (pair[0], pair[1]) for pair in self.values])
+
+
 class Graph(object):
   """Encapsulates the data needed for one performance graph."""
 
@@ -510,6 +520,20 @@ class Graph(object):
     for trace in self.traces.itervalues():
       if trace.important:
         return True
+    return False
+
+
+class EndureGraph(object):
+  """Encapsulates the data needed for one endurance performance graph."""
+
+  def __init__(self):
+    self.units = None
+    self.traces = {}
+    self.units_x = None
+    self.stack = False
+    self.stack_order = []
+
+  def IsImportant(self):  # pylint: disable=R0201
     return False
 
 
@@ -793,6 +817,138 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       graphs[name] = {'name': name,
                       'important': graph.IsImportant(),
                       'units': graph.units}
+    self._output[GRAPH_LIST] = json.dumps(graphs).split('\n')
+
+
+class GraphingEndureLogProcessor(GraphingLogProcessor):
+  """Handles additional processing for Chrome Endure data."""
+
+  ENDURE_RESULTS_REGEX = re.compile(
+      r'(?P<IMPORTANT>\*)?RESULT '
+       '(?P<GRAPH>[^:]+): (?P<TRACE>[^=]+)= '
+       '(?P<VALUE>\[[^\]]+\]) (?P<UNITSY>\S+) (?P<UNITSX>\S+)')
+
+  ENDURE_VALUE_PAIR_REGEX = re.compile(
+      r'\((?P<TIME>[0-9\.]+),(?P<VALUE>[0-9\.]+)\)')
+
+  EVENT_RESULTS_REGEX = re.compile(
+      r'(?P<IMPORTANT>\*)?RESULT '
+       '_EVENT_: (?P<TRACE>[^=]+)= '
+       '(?P<EVENT>\[[^\]]+\])')
+
+  def ProcessLine(self, line):
+    """Looks for Chrome Endure results: line to find the individual results."""
+    # super() should be used instead of GetParentClass().
+    # pylint: disable=W0212
+    endure_match = self.ENDURE_RESULTS_REGEX.search(line)
+    # TODO(dmikurube): Should handle EVENT lines.
+    # event_match = self.EVENT_RESULTS_REGEX.search(line)
+    if endure_match:
+      self._ProcessEndureResultLine(endure_match)
+    # elif event_match:
+    #   self._ProcessEventLine(event_match)
+    else:
+      chromium_utils.GetParentClass(self).ProcessLine(self, line)
+
+  def _ProcessEndureResultLine(self, line_match):
+    match_dict = line_match.groupdict()
+    graph_name = match_dict['GRAPH'].strip()
+    trace_name = match_dict['TRACE'].strip()
+
+    graph = self._graphs.get(graph_name, EndureGraph())
+    graph.units = match_dict['UNITSY'] or ''
+    graph.units_x = match_dict['UNITSX'] or ''
+    # TODO(dmikurube): Should change the way to indicate stacking.
+    if graph_name.endswith('-DMP'):
+      graph.stack = True
+      if not trace_name in graph.stack_order:
+        graph.stack_order.append(trace_name)
+    trace = graph.traces.get(trace_name, EndureTrace())
+    trace_values_str = match_dict['VALUE']
+    trace.important = match_dict['IMPORTANT'] or False
+
+    if trace_values_str.startswith('[') and trace_values_str.endswith(']'):
+      pair_list = re.findall(self.ENDURE_VALUE_PAIR_REGEX, trace_values_str)
+      for match in pair_list:
+        if match:
+          trace.values.append([match[0], match[1]])
+        else:
+          logging.warning("Bad test output: '%s'" % trace_values_str)
+          return
+    else:
+      logging.warning("Bad test output: '%s'" % trace_values_str)
+      return
+
+    graph.traces[trace_name] = trace
+    self._graphs[graph_name] = graph
+
+    # TODO(dmikurube): Write an original version to compare with extected data.
+    # Store values in actual performance.
+    # self.TrackActualPerformance(graph=graph_name, trace=trace_name,
+    #                             value=trace.value, stddev=trace.stddev)
+
+  def __BuildSummaryJSON(self, graph):
+    """Sorts the traces and returns a summary JSON encoding of the graph.
+
+    Although JS objects are not ordered, according to the spec, in practice
+    everyone iterates in order, since not doing so is a compatibility problem.
+    So we'll count on it here and produce an ordered list of traces.
+    if stack_order is given in the graph, use the order.
+
+    But since Python dicts are *not* ordered, we'll need to construct the JSON
+    manually so we don't lose the trace order.
+    """
+    if graph.stack:
+      trace_order = graph.stack_order
+    else:
+      trace_order = sorted(graph.traces.keys())
+
+    # Now build the JSON.
+    trace_json = ', '.join(
+        ['"%s": [%s]' % (trace_name,
+                         ', '.join(['["%s", "%s"]' % (pair[0], pair[1])
+                                    for pair
+                                    in graph.traces[trace_name].values]))
+         for trace_name in trace_order])
+
+    if not self._revision:
+      raise Exception('revision is None')
+    if graph.stack:
+      stack_order = '[%s]' % ', '.join(
+          ['"%s"' % name for name in graph.stack_order])
+      return ('{"traces": {%s}, "rev": "%s", "stack": true, '
+              '"stack_order": %s}'
+              % (trace_json, self._revision, stack_order))
+    else:
+      return ('{"traces": {%s}, "rev": "%s", "stack": false}'
+              % (trace_json, self._revision))
+
+  def __CreateSummaryOutput(self):
+    """Write the summary data file and collect the waterfall display text.
+
+    The summary file contains JSON-encoded data.
+    """
+
+    for graph_name, graph in self._graphs.iteritems():
+      # Write a line in the applicable summary file for each graph.
+      filename = ('%s-summary.dat' % graph_name)
+      data = [self.__BuildSummaryJSON(graph) + '\n']
+      self._output[filename] = data + self._output.get(filename, [])
+
+    self._text_summary.sort()
+
+  def __GenerateGraphInfo(self):
+    """Output a list of graphs viewed this session, for use by the plotter.
+
+    These will be collated and sorted on the master side.
+    """
+    graphs = {}
+    for name, graph in self._graphs.iteritems():
+      # TODO(xusydoc): Write the annotator to be more general.
+      graphs[name] = {'name': name,
+                      'important': graph.IsImportant(),
+                      'units': graph.units,
+                      'units_x': graph.units_x}
     self._output[GRAPH_LIST] = json.dumps(graphs).split('\n')
 
 

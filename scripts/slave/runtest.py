@@ -283,6 +283,7 @@ def get_parsers():
              'benchpress': process_log_utils.BenchpressLogProcessor,
              'playback': process_log_utils.PlaybackLogProcessor,
              'graphing': process_log_utils.GraphingLogProcessor,
+             'endure': process_log_utils.GraphingEndureLogProcessor,
              'framerate': process_log_utils.GraphingFrameRateLogProcessor,
              'pagecycler': process_log_utils.GraphingPageCyclerLogProcessor}
   return parsers
