@@ -28,6 +28,9 @@ categories_steps = {
     'memory test: net',
     'memory test: printing',
     'memory test: remoting',
+    'memory test: reliability',
+    # Running two times with different tools on the same bot, hence _1 version.
+    'memory test: reliability_1',
     'memory test: sandbox',
     'memory test: sql',
     'memory test: sync',
