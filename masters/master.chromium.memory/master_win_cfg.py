@@ -40,6 +40,10 @@ tests_1 = [
     'gpu_unittests',
     'jingle_unittests',
     'net_unittests',
+    'sql_unittests',
+    'ui_unittests',
+    'content_unittests',
+    'views_unittests',
 ]
 
 tests_2 = [
@@ -50,6 +54,8 @@ tests_2 = [
     'ppapi_unittests',
     'printing_unittests',
     'remoting_unittests',
+    'ipc_tests',
+    'sync_unit_tests',
     'unit_tests',
 ]
 

@@ -403,7 +403,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddAnnotatedGTestTestStep('ui_unittests', fp)
     if R('ui_unittests_br'):
       f.AddBuildrunnerGTest('ui_unittests', fp)
-    if R('views'):
+    if R('views', 'views_unittests'):
       f.AddAnnotatedGTestTestStep('views_unittests', fp)
     if R('views_br'):
       f.AddBuildrunnerGTest('views_unittests', fp)
@@ -419,24 +419,24 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('compositor_unittests', fp)
 
     # Medium-sized tests (unit and browser):
-    if R('unit', 'unit_tests'):
+    if R('unit'):
       f.AddAnnotatedChromeUnitTests(fp)
     if R('unit_br'):
       f.AddBuildrunnerChromeUnitTests(fp)
     # A snapshot of the "ChromeUnitTests" available for individual selection
-    if R('unit_ipc'):
+    if R('unit_ipc', 'ipc_tests'):
       f.AddAnnotatedGTestTestStep('ipc_tests', fp)
     if R('unit_ipc_br'):
       f.AddBuildrunnerGTest('ipc_tests', fp)
-    if R('unit_sync'):
+    if R('unit_sync', 'sync_unit_tests'):
       f.AddAnnotatedGTestTestStep('sync_unit_tests', fp)
     if R('unit_sync_br'):
       f.AddBuildrunnerGTest('sync_unit_tests', fp)
-    if R('unit_unit'):
+    if R('unit_unit', 'unit_tests'):
       f.AddAnnotatedGTestTestStep('unit_tests', fp)
     if R('unit_unit_br'):
       f.AddBuildrunnerGTest('unit_tests', fp)
-    if R('unit_sql'):
+    if R('unit_sql', 'sql_unittests'):
       f.AddAnnotatedGTestTestStep('sql_unittests', fp)
     if R('unit_sql_br'):
       f.AddBuildrunnerGTest('sql_unittests', fp)
