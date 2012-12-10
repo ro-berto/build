@@ -40,8 +40,9 @@ F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
       'gl_tests',
       'gpu_frame_rate',
       'gpu_latency',
-      'gpu_tests',
       'gpu_throughput',
+      'gpu_tests',
+      'gpu_content_tests',
     ],
     options=['--compiler=goma', 'chromium_gpu_builder'],
     factory_properties={
@@ -66,6 +67,7 @@ F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     tests=[
       'gl_tests',
       'gpu_tests',
+      'gpu_content_tests',
     ],
     options=['--compiler=goma', 'chromium_gpu_debug_builder'],
     factory_properties={'generate_gtest_json': True}))

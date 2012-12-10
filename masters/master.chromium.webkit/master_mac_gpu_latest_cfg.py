@@ -39,8 +39,9 @@ F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
       'gl_tests',
       'gpu_frame_rate',
       'gpu_latency',
-      'gpu_tests',
       'gpu_throughput',
+      'gpu_tests',
+      'gpu_content_tests',
     ],
     factory_properties={
         'generate_gtest_json': True,
@@ -72,6 +73,7 @@ F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
     tests=[
       'gl_tests',
       'gpu_tests',
+      'gpu_content_tests',
     ],
     factory_properties={
         'generate_gtest_json': True,

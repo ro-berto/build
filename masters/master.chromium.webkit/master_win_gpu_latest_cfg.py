@@ -37,8 +37,9 @@ F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
       'gl_tests',
       'gpu_frame_rate',
       'gpu_latency',
-      'gpu_tests',
       'gpu_throughput',
+      'gpu_tests',
+      'gpu_content_tests',
     ],
     project='all.sln;chromium_gpu_builder',
     factory_properties={'generate_gtest_json': True,
@@ -68,6 +69,7 @@ F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
     tests=[
       'gl_tests',
       'gpu_tests',
+      'gpu_content_tests',
     ],
     project='all.sln;chromium_gpu_debug_builder',
     factory_properties={'generate_gtest_json': True,
