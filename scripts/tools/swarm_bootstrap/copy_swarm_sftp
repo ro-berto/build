@@ -1,3 +1,0 @@
--mkdir swarm
-put swarm_bootstrap/* swarm/
-quit

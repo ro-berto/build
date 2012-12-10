@@ -17,7 +17,7 @@ cd $HOME/swarm
 python dimensions_generator.py $DIMENSIONS_FILE
 
 echo Setup up swarm script to run on startup...
-echo "@reboot cd $HOME/swarm && "$SLAVE_COMMAND > mycron
+echo "@reboot cd $2 && "$SLAVE_COMMAND > mycron
 crontab -r
 crontab mycron
 rm mycron

@@ -24,28 +24,30 @@ SWARM_CLEAN_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'clean_swarm_sftp')
 SWARM_SERVER_PROD = 'https://chromium-swarm.appspot.com'
 SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 
+# The directories to store the swarm code.
+SWARM_DIRECTORY = {
+  'linux': '/b/slave',
+  'mac': '/b/slave',
+  'win': 'c:\\swarm\\',
+}
+
 
 class Options(object):
   def __init__(self, swarm_server):
     self.swarm_server = swarm_server
 
 
-def BuildSFTPCommand(user, host, command_file):
-  return ['sftp', '-obatchmode=no', '-b', command_file,
-          '%s@%s' % (user, host)]
+def OpenSSHCommand(user, host):
+  return ['ssh', '-o ConnectTimeout=5', '-t', user + '@' + host]
+
+
+def BuildSFTPCommand(user, host, commands):
+  return (['sftp', '-obatchmode=no', '%s@%s' % (user, host)],
+          commands)
 
 
 def BuildSSHCommand(user, host, platform, options):
-  ssh = ['ssh', '-o ConnectTimeout=5', '-t']
-  identity = [user + '@' + host]
-
-  bot_setup_commands = []
-
-  if platform == 'win':
-    bot_setup_commands.append('cd c:\\swarm\\')
-  else:
-    bot_setup_commands.append('cd $HOME/swarm')
-  bot_setup_commands.append('&&')
+  bot_setup_commands = ['cd %s' % SWARM_DIRECTORY[platform], '&&']
 
   if '-m1' in host:
     network_drive = 'fas2-110'
@@ -67,32 +69,43 @@ def BuildSSHCommand(user, host, platform, options):
   if platform == 'win':
     # The path needs to be reset.
     bot_setup_commands.extend([
-        'cd c:\\swarm\\',
+        'cd %s' % SWARM_DIRECTORY[platform],
         '&&',
         'call swarm_bot_setup.bat %s' % options.swarm_server])
   else:
-    bot_setup_commands.append('./swarm_bot_setup.sh %s' % options.swarm_server)
+    bot_setup_commands.append('./swarm_bot_setup.sh %s %s' %
+                              (options.swarm_server, SWARM_DIRECTORY[platform]))
 
   # On windows the command must be executed by cmd.exe
   if platform == 'win':
     bot_setup_commands = ['cmd.exe /c',
                           '"' + ' '.join(bot_setup_commands) + '"']
 
-  return ssh + identity + bot_setup_commands
+  return OpenSSHCommand(user, host) + bot_setup_commands
 
 
-def BuildCleanCommands(user, host):
-  return [
-      BuildSFTPCommand(user, host, SWARM_CLEAN_SFTP_PATH)
-      ]
+def BuildCleanCommands(user, host, platform):
+  assert platform in ('linux', 'mac', 'win')
+
+  command = OpenSSHCommand(user, host)
+  if platform == 'win':
+    command.append('del /q /s %s' % SWARM_DIRECTORY[platform])
+  else:
+    command.append('rm -r %s' % SWARM_DIRECTORY[platform])
+
+  return [command]
 
 
 def BuildSetupCommands(user, host, platform, options):
   assert platform in ('linux', 'mac', 'win')
 
+  sftp_command = ['mkdir %s' % SWARM_DIRECTORY[platform],
+                  'put swarm_bootstrap/* %s' % SWARM_DIRECTORY[platform],
+                  'quit\n']
+
   return [
-      BuildSFTPCommand(user, host, SWARM_COPY_SFTP_PATH),
-      BuildSSHCommand(user, host, platform, options)
+      BuildSFTPCommand(user, host, '\n'.join(sftp_command)),
+      (BuildSSHCommand(user, host, platform, options), None),
       ]
 
 
@@ -146,7 +159,7 @@ def main():
     commands = []
 
     if options.clean:
-      commands.extend(BuildCleanCommands(options.user, bot))
+      commands.extend(BuildCleanCommands(options.user, bot, platform))
 
     command_options = Options(
         swarm_server=SWARM_SERVER_DEV if options.use_dev else SWARM_SERVER_PROD)
@@ -157,8 +170,12 @@ def main():
     if options.print_only:
       print commands
     else:
-      for command in commands:
-        subprocess.check_call(command)
+      for (command, stdin) in commands:
+        process = subprocess.Popen(command, stdin=subprocess.PIPE)
+        return_code = process.communicate(stdin)
+        if not return_code:
+          print('ERROR: Command %s with stdin %s exited with return code %d' %
+                (command, stdin, return_code))
 
 
 if __name__ == '__main__':
