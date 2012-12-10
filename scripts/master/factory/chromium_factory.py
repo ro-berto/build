@@ -506,26 +506,76 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
           factory_properties=fp, perf=True)
     if R('scrolling_benchmark'):
-      f.AddTelemetryTest('scrolling_benchmark', 'top_25.json', fp)
+      f.AddTelemetryTest(
+          'scrolling_benchmark', 'top_25.json', factory_properties=fp)
     if R('jsgamebench'):
-      f.AddTelemetryTest('jsgamebench', 'jsgamebench.json', fp)
+      f.AddTelemetryTest(
+          'jsgamebench', 'jsgamebench.json', factory_properties=fp)
     if R('kraken'):
-      f.AddTelemetryTest('kraken', 'kraken.json', fp)
+      f.AddTelemetryTest('kraken', 'kraken.json', factory_properties=fp)
     if R('robohornetpro'):
-      f.AddTelemetryTest('robohornetpro', 'robohornetpro.json', fp)
+      f.AddTelemetryTest(
+          'robohornetpro', 'robohornetpro.json', factory_properties=fp)
     if R('memory_benchmark'):
-      f.AddTelemetryTest('memory_benchmark', 'top_25.json', fp)
+      f.AddTelemetryTest(
+          'memory_benchmark', 'top_25.json', factory_properties=fp)
 
     if R('memory'):
       f.AddMemoryTests(fp)
     if R('tab_switching'):
       f.AddTabSwitchingTests(fp)
     if R('sunspider'):
-      f.AddTelemetryTest('sunspider', 'sunspider.json', fp)
+      f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
     if R('v8_benchmark'):
       f.AddV8BenchmarkTests(fp)
+    if R('octane'):
+      f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
+    if R('image_decoding_benchmark'):
+      f.AddTelemetryTest(
+          'image_decoding_benchmark', 'tough_image_cases.json',
+          factory_properties=fp)
     if R('dromaeo'):
-      f.AddDromaeoTests(fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/domcoreattr.json',
+                         step_name='dromaeo_domcoreattr', factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/domcoremodify.json',
+                         step_name='dromaeo_domcoremodify',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/domcorequery.json',
+                         step_name='dromaeo_domcorequery',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/domcoretraverse.json',
+                         step_name='dromaeo_domcoretraverse',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibattrjquery.json',
+                         step_name='dromaeo_jslibattrjquery',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibattrprototype.json',
+                         step_name='dromaeo_jslibattrprototype',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibeventjquery.json',
+                         step_name='dromaeo_jslibeventjquery',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibeventprototype.json',
+                         step_name='dromaeo_jslibeventprototype',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibmodifyjquery.json',
+                         step_name='dromaeo_jslibmodifyjquery',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibmodifyprototype.json',
+                         step_name='dromaeo_jslibmodifyprototype',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibstylejquery.json',
+                         step_name='dromaeo_jslibstylejquery',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibstyleprototype.json',
+                         step_name='dromaeo_jslibstyleprototype',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibtraversejquery.json',
+                         step_name='dromaeo_jslibtraversejquery',
+                         factory_properties=fp)
+      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibtraverseprototype.json',
+                         step_name='dromaeo_jslibtraverseprototype',
+                         factory_properties=fp)
     if R('frame_rate'):
       f.AddFrameRateTests(fp)
     if R('gpu_frame_rate'):
@@ -577,7 +627,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gpu_content_tests'):
       f.AddAnnotatedGpuContentTests(fp)
     if R('spaceport'):
-      f.AddTelemetryTest('spaceport', 'spaceport.json', fp)
+      f.AddTelemetryTest('spaceport', 'spaceport.json', factory_properties=fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
