@@ -340,7 +340,13 @@ class DartUtils(object):
         clobber=True,
         options=linux_options,
         tests=['annotated_steps'],
-        factory_properties=linux32_factory_properties)
+        factory_properties=linux32_factory_properties),
+    'release-lucid64-trunk' : F_LINUX_CH(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
   }
 
 
