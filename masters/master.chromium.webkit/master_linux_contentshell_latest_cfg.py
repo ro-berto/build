@@ -37,20 +37,23 @@ B('WebKit (Content Shell) Linux', 'f_contentshell_linux_rel',
 F('f_contentshell_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
     tests=[
-      'webkit',
+        'webkit',
     ],
     options=[
-      '--compiler=goma',
-      'content_shell_builder',
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'content_shell_builder',
     ],
     factory_properties={
-      'additional_expectations_files': [
-        ['content', 'shell', 'layout_tests', 'TestExpectations' ],
-      ],
-      'additional_drt_flag': '--dump-render-tree',
-      'archive_webkit_results': True,
-      'test_results_server': 'test-results.appspot.com',
-      'driver_name': 'content_shell'
+        'additional_expectations_files': [
+            ['content', 'shell', 'layout_tests', 'TestExpectations' ],
+        ],
+        'additional_drt_flag': '--dump-render-tree',
+        'archive_webkit_results': True,
+        'test_results_server': 'test-results.appspot.com',
+        'driver_name': 'content_shell',
+        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
     }))
 
 

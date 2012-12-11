@@ -37,18 +37,24 @@ B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_gpu_linux_webkit_rel',
 F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
     target='Release',
     tests=[
-      'gl_tests',
-      'gpu_frame_rate',
-      'gpu_latency',
-      'gpu_throughput',
-      'gpu_tests',
-      'gpu_content_tests',
+        'gl_tests',
+        'gpu_frame_rate',
+        'gpu_latency',
+        'gpu_throughput',
+        'gpu_tests',
+        'gpu_content_tests',
     ],
-    options=['--compiler=goma', 'chromium_gpu_builder'],
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'chromium_gpu_builder',
+    ],
     factory_properties={
         'generate_gtest_json': True,
         'perf_id': 'gpu-webkit-linux-nvidia',
         'show_perf_results': True,
+        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
     }))
 
 ################################################################################
@@ -65,12 +71,20 @@ B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg',
 F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     target='Debug',
     tests=[
-      'gl_tests',
-      'gpu_tests',
-      'gpu_content_tests',
+        'gl_tests',
+        'gpu_tests',
+        'gpu_content_tests',
     ],
-    options=['--compiler=goma', 'chromium_gpu_debug_builder'],
-    factory_properties={'generate_gtest_json': True}))
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'chromium_gpu_debug_builder'
+    ],
+    factory_properties={
+        'generate_gtest_json': True,
+        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+    }))
 
 
 def Update(config, active_master, c):
