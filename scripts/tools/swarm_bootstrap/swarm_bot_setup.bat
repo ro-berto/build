@@ -13,12 +13,12 @@ set SLAVE_COMMAND=python slave_machine.py %SLAVE_ARGUMENTS%
 
 :STARTUP_SCRIPT
 echo Generate the machine dimensions...
-cd C:\swarm\
+cd %2
 call python dimensions_generator.py %DIMENSIONS_FILE%
 
 echo Setup up swarm script to run on startup...
 cd c:\Users\chrome-bot\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-echo @cd C:\swarm\ > run_swarm_bot.bat
+echo @cd %2 > run_swarm_bot.bat
 echo @%SLAVE_COMMAND% >> run_swarm_bot.bat
 
 :: We are done.

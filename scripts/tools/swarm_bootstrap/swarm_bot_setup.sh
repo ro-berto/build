@@ -13,7 +13,7 @@ SLAVE_ARGUMENTS="-a $1 -p 443 -r 400 -v "$DIMENSIONS_FILE
 SLAVE_COMMAND="python slave_machine.py "$SLAVE_ARGUMENTS
 
 echo Generate the machine dimensions...
-cd $HOME/swarm
+cd $2
 python dimensions_generator.py $DIMENSIONS_FILE
 
 echo Setup up swarm script to run on startup...

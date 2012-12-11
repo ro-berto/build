@@ -16,18 +16,14 @@ import sys
 SWARM_DIRECTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                     'swarm_bootstrap')
 
-SWARM_COPY_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'copy_swarm_sftp')
-
-SWARM_CLEAN_SFTP_PATH = os.path.join(SWARM_DIRECTORY_PATH, 'clean_swarm_sftp')
-
 # The swarm server links.
 SWARM_SERVER_PROD = 'https://chromium-swarm.appspot.com'
 SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 
 # The directories to store the swarm code.
 SWARM_DIRECTORY = {
-  'linux': '/b/slave',
-  'mac': '/b/slave',
+  'linux': '/b/swarm_slave',
+  'mac': '/b/swarm_slave',
   'win': 'c:\\swarm\\',
 }
 
@@ -71,7 +67,8 @@ def BuildSSHCommand(user, host, platform, options):
     bot_setup_commands.extend([
         'cd %s' % SWARM_DIRECTORY[platform],
         '&&',
-        'call swarm_bot_setup.bat %s' % options.swarm_server])
+        'call swarm_bot_setup.bat %s %s' %
+        (options.swarm_server, SWARM_DIRECTORY[platform])])
   else:
     bot_setup_commands.append('./swarm_bot_setup.sh %s %s' %
                               (options.swarm_server, SWARM_DIRECTORY[platform]))
@@ -174,10 +171,10 @@ def main():
         if stdin:
           process = subprocess.Popen(command, stdin=subprocess.PIPE)
           process.communicate(stdin)
-          if process.return_code:
+          if process.returncode:
             raise Exception('ERROR: Command %s with stdin %s exited with '
                             'return code %d' % (command, stdin,
-                                                process.return_code))
+                                                process.returncode))
         else:
           subprocess.check_call(command)
 
