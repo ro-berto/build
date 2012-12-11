@@ -171,11 +171,15 @@ def main():
       print commands
     else:
       for (command, stdin) in commands:
-        process = subprocess.Popen(command, stdin=subprocess.PIPE)
-        return_code = process.communicate(stdin)
-        if not return_code:
-          print('ERROR: Command %s with stdin %s exited with return code %d' %
-                (command, stdin, return_code))
+        if stdin:
+          process = subprocess.Popen(command, stdin=subprocess.PIPE)
+          process.communicate(stdin)
+          if process.return_code:
+            raise Exception('ERROR: Command %s with stdin %s exited with '
+                            'return code %d' % (command, stdin,
+                                                process.return_code))
+        else:
+          subprocess.check_call(command)
 
 
 if __name__ == '__main__':
