@@ -43,7 +43,8 @@ tests_1 = [
     'sql_unittests',
     'ui_unittests',
     'content_unittests',
-    'views_unittests',
+    # Bug in ASAN causes this to time out. Disabling until ASAN can handle it.
+    #'views_unittests',
 ]
 
 tests_2 = [
