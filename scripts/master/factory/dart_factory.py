@@ -314,12 +314,13 @@ class DartUtils(object):
     'dartium-lucid32-full' : F_LINUX_CH(
         target='Release',
         clobber=True,
-        options=['dartium_builder'],
+        options=linux_options,
         tests=['annotated_steps'],
         factory_properties=linux32_factory_properties),
     'dartium-lucid64-full-trunk' : F_LINUX_CH_TRUNK(
         target='Release',
         clobber=True,
+        options=linux_options,
         tests=['annotated_steps'],
         factory_properties=linux_factory_properties),
     'dartium-win-full-trunk' : F_WIN_CH_TRUNK(
@@ -337,7 +338,7 @@ class DartUtils(object):
     'dartium-lucid32-full-trunk' : F_LINUX_CH_TRUNK(
         target='Release',
         clobber=True,
-        options=['dartium_builder'],
+        options=linux_options,
         tests=['annotated_steps'],
         factory_properties=linux32_factory_properties)
   }
