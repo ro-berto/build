@@ -172,6 +172,7 @@ F('rel_cf', win_tester().ChromiumFactory(
       'chrome_frame_unittests',
     ],
     factory_properties={'process_dumps': True,
+                        'generate_gtest_json': True,
                         'start_crash_handler': True,}))
 
 B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
