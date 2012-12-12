@@ -528,8 +528,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTabSwitchingTests(fp)
     if R('sunspider'):
       f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
-    if R('v8_benchmark'):
-      f.AddV8BenchmarkTests(fp)
     if R('octane'):
       f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
     if R('image_decoding_benchmark'):

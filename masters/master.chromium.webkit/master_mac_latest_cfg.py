@@ -68,7 +68,7 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
       'startup',
       'sunspider',
       'tab_switching',
-      'v8_benchmark',
+      'octane',
     ],
     factory_properties={
         'show_perf_results': True,

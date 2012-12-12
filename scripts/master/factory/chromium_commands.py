@@ -431,13 +431,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(c, 'sizes', cmd,
                      do_step_if=self.TestStepFilter)
 
-  def AddV8BenchmarkTests(self, factory_properties=None):
-    options = ['--gtest_print_time', '--run-v8-benchmark']
-
-    self.AddAnnotatedPerfStep('v8_benchmark', 'V8Benchmark*.*', 'graphing',
-                              cmd_options=options,
-                              factory_properties=factory_properties)
-
   def AddFrameRateTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
                               factory_properties=factory_properties)
