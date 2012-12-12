@@ -981,9 +981,14 @@ def main():
     # Disable ASLR on Mac when running ASAN tests.
     os.environ['DYLD_NO_PIE'] = '1'
 
+  # TODO(glider): remove the symbolizer path once
+  # https://code.google.com/p/address-sanitizer/issues/detail?id=134 is fixed.
+  symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
+      'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
   tsan_options = ('suppressions=src/tools/valgrind/tsan_v2/suppressions.txt '
                   'report_signal_unsafe=0 '
-                  'report_thread_leaks=0')
+                  'report_thread_leaks=0 '
+                  'external_symbolizer_path=%s' % symbolizer_path)
   if options.factory_properties.get('tsan', False):
     os.environ['TSAN_OPTIONS'] = tsan_options
   # Set the number of shards environement variables.
