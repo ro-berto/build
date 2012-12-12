@@ -196,7 +196,7 @@ linux_aura_options=[
   'ui_unittests',
 ]
 
-B('Linux (aura)', 'f_linux_rel_aura', 'compile', 'linux_rel',
+B('Linux Aura', 'f_linux_rel_aura', 'compile', 'linux_rel',
   notify_on_missing=True)
 F('f_linux_rel_aura', linux().ChromiumFactory(
     target='Release',
