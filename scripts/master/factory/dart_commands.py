@@ -140,7 +140,9 @@ class DartCommands(commands.FactoryCommands):
                             env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
-                            command=cmd)
+                            command=cmd,
+                            logfiles={"flakylog": ".flaky.log"},
+                            lazylogfiles=True)
     elif is_dart2dart:
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
@@ -150,7 +152,9 @@ class DartCommands(commands.FactoryCommands):
                             env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
-                            command=cmd)
+                            command=cmd,
+                            logfiles={"flakylog": ".flaky.log"},
+                            lazylogfiles=True)
       cmd = base_cmd + ' --minified'
       self._factory.addStep(shell.ShellCommand,
                             name='minified tests',
@@ -159,7 +163,9 @@ class DartCommands(commands.FactoryCommands):
                             env = self._custom_env,
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
-                            command=cmd)
+                            command=cmd,
+                            logfiles={"flakylog": ".flaky.log"},
+                            lazylogfiles=True)
     else:
       if options.get('flags') != None:
         base_cmd += options.get('flags')
@@ -195,4 +201,6 @@ class DartCommands(commands.FactoryCommands):
                           haltOnFailure=True,
                           env = self._custom_env,
                           workdir=self._dart_build_dir,
-                          command=[self._python, python_script])
+                          command=[self._python, python_script],
+                          logfiles={"flakylog": ".flaky.log"},
+                          lazylogfiles=True)
