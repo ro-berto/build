@@ -64,7 +64,7 @@ tests_2 = [
 # Windows ASAN Rel Builder
 #
 win_asan_rel_options = [
-    '--compiler=goma', '--build-tool=ninja', '--',
+    '--build-tool=ninja', '--',
 ] + tests_1 + tests_2
 
 B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
