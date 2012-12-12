@@ -424,10 +424,10 @@
                                   'Memory', '20%')))))));
 
             document.write(tr(
-                HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
-                            'LKGR', 'width="25%"', 'id="LKGRLink"') +
                 HTMLBaseBar(c.status_perf, c.bar_perf, c.perf,
-                            'Perf', 'width="75%" colspan=5', '')));
+                            'Perf', 'width="75%"', '') +
+                HTMLBaseBar(c.status_lkgr, c.bar_lkgr, c.lkgr,
+                            'LKGR', 'width="25%"', 'id="LKGRLink"')));
 
             document.write(tr(
                 HTMLBaseBar(c.status_memory_fyi, c.bar_memory_fyi, c.memory_fyi,
@@ -435,9 +435,9 @@
 
             document.write(tr(
                 HTMLBaseBar(c.status_gpu, c.bar_gpu, c.gpu,
-                           'GPU', 'width="80%"', '') +
+                           'GPU', 'width="75%"', '') +
                 HTMLBaseBar(c.status_gpu_fyi, c.bar_gpu_fyi, c.gpu_fyi,
-                           'GPU FYI', 'width="20%" colspan=5', '')));
+                           'GPU FYI', 'width="25%"', '')));
 
             setTimeout('DisplayLKGR()', 100);
           </script>
