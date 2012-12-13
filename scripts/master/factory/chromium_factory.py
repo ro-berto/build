@@ -179,10 +179,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         config.Master.trunk_url + '/src/net/data/ssl/certificates'),
        ('src/net/tools/testserver',
         config.Master.trunk_url + '/src/net/tools/testserver'),
+       # It would be better to use config.Master.googlecode_url here.
+       # But it causes QA buildbot failures on Mac beta and stable.
+       # See http://crbug.com/155918#c21 .
        ('src/third_party/pyftpdlib/src',
-        config.Master.googlecode_url % 'pyftpdlib' + '/trunk'),
+        'http://pyftpdlib.googlecode.com/svn/trunk'),
        ('src/third_party/pywebsocket/src',
-        config.Master.googlecode_url % 'pywebsocket' + '/trunk/src'),
+        'http://pywebsocket.googlecode.com/svn/trunk/src'),
        ('src/third_party/tlslite',
         config.Master.trunk_url + '/src/third_party/tlslite'),
        ('src/third_party/python_26',
