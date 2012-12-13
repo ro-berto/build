@@ -21,6 +21,7 @@ import config
 
 dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
+dartium_libv2_url = 'https://dart.googlecode.com/svn/experimental/lib_v2/deps/dartium.deps'
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
@@ -37,12 +38,14 @@ F_WIN_CH = None
 F_LINUX_CH_TRUNK = None
 F_MAC_CH_TRUNK = None
 F_WIN_CH_TRUNK = None
+F_WIN_CH_LIBV2 = None
 
 def setup_chromium_factories():
   gclient_dartium = gclient_factory.GClientSolution(dartium_url, 'dartium.deps')
   gclient_dartium_trunk = gclient_factory.GClientSolution(dartium_trunk_url,
                                                           'dartium.deps')
-
+  gclient_dartium_libv2 = gclient_factory.GClientSolution(dartium_libv2_url,
+                                                          'dartium.deps')
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
       chromium_factory.ChromiumFactory.__init__(self,
@@ -67,6 +70,9 @@ def setup_chromium_factories():
   m_win_ch_trunk = DartiumFactory()
   m_win_ch_trunk.add_solution(gclient_dartium_trunk)
 
+  m_win_ch_libv2 = DartiumFactory()
+  m_win_ch_libv2.add_solution(gclient_dartium_libv2)
+
   trunk_internal_url_src = config.Master.trunk_internal_url_src
   if trunk_internal_url_src:
     gclient_trunk_internal = gclient_factory.GClientSolution(
@@ -77,12 +83,14 @@ def setup_chromium_factories():
   # Some shortcut to simplify the code in the master.cfg files
   global F_LINUX_CH, F_MAC_CH, F_WIN_CH
   global F_LINUX_CH_TRUNK, F_MAC_CH_TRUNK, F_WIN_CH_TRUNK
+  global F_WIN_CH_LIBV2
   F_LINUX_CH = m_linux_ch.ChromiumFactory
   F_MAC_CH = m_mac_ch.ChromiumFactory
   F_WIN_CH = m_win_ch.ChromiumFactory
   F_LINUX_CH_TRUNK = m_linux_ch_trunk.ChromiumFactory
   F_MAC_CH_TRUNK = m_mac_ch_trunk.ChromiumFactory
   F_WIN_CH_TRUNK = m_win_ch_trunk.ChromiumFactory
+  F_WIN_CH_LIBV2 = m_win_ch_libv2.ChromiumFactory
 setup_chromium_factories()
 
 def AddGeneralGClientProperties(factory_properties=None):
@@ -117,7 +125,7 @@ class DartFactory(gclient_factory.GClientFactory):
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, build_dir, target_platform=None, trunk=False,
-               target_os=None):
+               libv2 = False, target_os=None):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
@@ -125,6 +133,9 @@ class DartFactory(gclient_factory.GClientFactory):
     # If this is trunk use the deps file from there instead.
     if trunk:
       dart_url = config.Master.dart_trunk + deps_file
+    if libv2:
+      deps_url = 'https://dart.googlecode.com/svn/experimental/lib_v2'
+      dart_url =  deps_url + deps_file
     custom_deps_list = []
 
     if config.Master.trunk_internal_url:
@@ -252,6 +263,7 @@ class DartUtils(object):
     'dartc-linux': DartFactory('dart', 'dartc-linux'),
     'dart_android': DartFactory('dart', 'dart_android', target_os='android'),
     'dart_client': DartFactory('dart', 'dart_client'),
+    'dart_client_libv2': DartFactory('dart', 'dart_client', libv2=True),
     'dart-editor': DartFactory('dart', 'dart-editor'),
     'frog': DartFactory('dart', 'frog'),
     'frogsh': DartFactory('dart', 'frogsh'),
@@ -260,6 +272,7 @@ class DartUtils(object):
     'vm-linux-trunk': DartFactory('dart', 'vm-linux', trunk=True),
     'vm-win32-trunk': DartFactory('dart', 'vm-win32', trunk=True),
     'dart-editor-trunk': DartFactory('dart', 'dart-editor', trunk=True),
+    'vm-win32-libv2': DartFactory('dart', 'dart-editor', libv2=True),
   }
   factory_base_dartium = {
     'dartium-mac-full' : F_MAC_CH(
@@ -347,6 +360,11 @@ class DartUtils(object):
         options=linux_options,
         tests=['annotated_steps'],
         factory_properties=linux_factory_properties),
+    'dartium-win-inc-libv2' : F_WIN_CH_LIBV2(
+        target='Release',
+        project=win_project,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
   }
 
 
@@ -387,7 +405,8 @@ class DartUtils(object):
     def setup_factory(v, base, platform):
       env = v.get('env', {})
       if platform in ['dart_client', 'dart-editor', 'dart_android',
-                      'dart_client-trunk', 'dart-editor-trunk']:
+                      'dart_client-trunk', 'dart-editor-trunk',
+                      'dart_client_libv2']:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
