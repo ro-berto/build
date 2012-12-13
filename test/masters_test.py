@@ -162,7 +162,7 @@ def real_main(base_dir, expected):
 
 def main():
   base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-  sys.path.extend(os.path.abspath(os.path.join(base_dir, d)) for d in (
+  sys.path.extend(os.path.normpath(os.path.join(base_dir, d)) for d in (
       'site_config',
       os.path.join('..', 'build_internal', 'site_config'),
   ))
