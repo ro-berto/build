@@ -165,6 +165,10 @@ class ChromiumCommands(commands.FactoryCommands):
     if use_build_number:
       cmd.extend(['--build-number', WithProperties('%(buildnumber)s')])
 
+    gclient_env = (factory_properties or {}).get('gclient_env', {})
+    if 'target_arch=arm' in gclient_env.get('GYP_DEFINES', ''):
+      cmd.extend(['--arch', 'arm'])
+
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
