@@ -277,6 +277,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # http://build.chromium.org/buildbot/waterfall/stats into account.
     # Tests that fail more often should be earlier in the queue.
 
+    # Check for goma
+    if R('diagnose_goma'):
+      f.AddDiagnoseGomaStep()
+
     # Run interactive_ui_tests first to make sure it does not fail if another
     # test running before it leaks a window or a popup (crash dialog, etc).
     if R('interactive_ui'):

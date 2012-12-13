@@ -1046,6 +1046,12 @@ class FactoryCommands(object):
     self._factory.addStep(FileDownload(mastersrc=mastersrc,
                                        slavedest=slavedest))
 
+  def AddDiagnoseGomaStep(self):
+    """Diagnose goma log."""
+    goma_dir = self.PathJoin('..', '..', '..', 'goma')
+    cmd = [self._python, self.PathJoin(goma_dir, 'diagnose_goma_log.py')]
+    self.AddTestStep(shell.ShellCommand, 'diagnose_goma', cmd, timeout=60)
+
 
 class CanCancelBuildShellCommand(shell.ShellCommand):
   """Like ShellCommand but can terminate the build.
