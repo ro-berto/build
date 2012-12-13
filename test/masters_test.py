@@ -6,7 +6,6 @@
 """Starts all masters and verify they can server /json/project fine.
 """
 
-from __future__ import with_statement
 import logging
 import optparse
 import os
@@ -17,7 +16,17 @@ import time
 import masters_util
 
 
-def test_master(master, name, path):
+def do_master_imports():
+  # Import scripts/slave/bootstrap.py to get access to the ImportMasterConfigs
+  # function that will pull in every site_config for us. The master config
+  # classes are saved as attributes of config_bootstrap.Master. The import
+  # takes care of knowing which set of site_configs to use.
+  import slave.bootstrap
+  slave.bootstrap.ImportMasterConfigs()
+  return getattr(sys.modules['config_bootstrap'], 'Master')
+
+
+def test_master(master, master_class, path):
   print('Trying %s' % master)
   start = time.time()
   if not masters_util.stop_master(master, path):
@@ -37,8 +46,12 @@ def test_master(master, name, path):
     try:
       if not masters_util.start_master(master, path):
         return False
-
-      res = masters_util.wait_for_start(master, name, path)
+      name = master_class.project_name
+      port1 = master_class.master_port
+      port2 = master_class.master_port_alt
+      # We pass both the read/write and read-only ports, even though querying
+      # either one alone would be sufficient sign of success.
+      res = masters_util.wait_for_start(master, name, path, [port1, port2])
       if res:
         logging.info('Success in %1.1fs' % (time.time() - start))
       return res
@@ -67,6 +80,7 @@ def real_main(base_dir, expected):
 
   start = time.time()
   base = os.path.join(base_dir, 'masters')
+  master_classes = do_master_imports()
   # Here we look for a slaves.cfg file in the directory to ensure that
   # the directory actually contains a master, as opposed to having existed
   # at one time but later having been removed.  In the latter case, it's
@@ -113,11 +127,12 @@ def real_main(base_dir, expected):
           with open(apply_issue_pwd_path, 'w') as f:
             f.write('foo\n')
         masters.remove(master)
-        name = expected.pop(master)
-        if not name:
+        classname = expected.pop(master)
+        if not classname:
           skipped += 1
           continue
-        if not test_master(master, name, os.path.join(base, master)):
+        master_class = getattr(master_classes, classname)
+        if not test_master(master, master_class, os.path.join(base, master)):
           failed.add(master)
         else:
           success += 1
@@ -147,37 +162,41 @@ def real_main(base_dir, expected):
 
 def main():
   base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+  sys.path.extend(os.path.abspath(os.path.join(base_dir, d)) for d in (
+      'site_config',
+      os.path.join('..', 'build_internal', 'site_config'),
+  ))
   expected = {
       'master.chromium': 'Chromium',
-      'master.chromium.chrome': 'Chromium Chrome',
-      'master.chromium.chromebot': 'Chromium Chromebot',
-      'master.chromium.chromiumos': 'Chromium ChromiumOS',
-      'master.chromium.endure': 'Chromium Endure',
-      'master.chromium.flaky': 'Chromium Flaky',
-      'master.chromium.fyi': 'Chromium FYI',
-      'master.chromium.git': 'Chromium Git',
-      'master.chromium.gpu': 'Chromium GPU',
-      'master.chromium.gpu.fyi': 'Chromium GPU FYI',
-      'master.chromium.linux': 'Chromium Linux',
-      'master.chromium.lkgr': 'Chromium LKGR',
-      'master.chromium.mac': 'Chromium Mac',
-      'master.chromium.memory': 'Chromium Memory',
-      'master.chromium.memory.fyi': 'Chromium Memory FYI',
-      'master.chromium.perf': 'Chromium Perf',
-      'master.chromium.perf_av': 'Chromium Perf Av',
-      'master.chromium.pyauto': 'Chromium PyAuto',
-      'master.chromium.swarm': 'Chromium Swarm',
+      'master.chromium.chrome': 'ChromiumChrome',
+      'master.chromium.chromebot': 'ChromiumChromebot',
+      'master.chromium.chromiumos': 'ChromiumChromiumOS',
+      'master.chromium.endure': 'ChromiumEndure',
+      'master.chromium.flaky': 'ChromiumFlaky',
+      'master.chromium.fyi': 'ChromiumFYI',
+      'master.chromium.git': 'ChromiumGIT',
+      'master.chromium.gpu': 'ChromiumGPU',
+      'master.chromium.gpu.fyi': 'ChromiumGPUFYI',
+      'master.chromium.linux': 'ChromiumLinux',
+      'master.chromium.lkgr': 'ChromiumLKGR',
+      'master.chromium.mac': 'ChromiumMac',
+      'master.chromium.memory': 'ChromiumMemory',
+      'master.chromium.memory.fyi': 'ChromiumMemoryFYI',
+      'master.chromium.perf': 'ChromiumPerf',
+      'master.chromium.perf_av': 'ChromiumPerfAv',
+      'master.chromium.pyauto': 'ChromiumPyauto',
+      'master.chromium.swarm': 'ChromiumSwarm',
       'master.chromium.unused': None,
-      'master.chromium.webkit': 'Chromium Webkit',
-      'master.chromium.webrtc': 'Chromium WebRTC',
-      'master.chromium.win': 'Chromium Win',
+      'master.chromium.webkit': 'ChromiumWebkit',
+      'master.chromium.webrtc': 'ChromiumWebRTC',
+      'master.chromium.win': 'ChromiumWin',
       'master.chromiumos': 'ChromiumOS',
       'master.chromiumos.tryserver': None,
       'master.chromiumos.unused': None,
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
       'master.client.dart': 'Dart',
-      'master.client.dart.fyi': 'Dart FYI',
+      'master.client.dart.fyi': 'DartFYI',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.chrome': 'NativeClientChrome',
       'master.client.nacl.llvm': 'NativeClientLLVM',
@@ -198,10 +217,10 @@ def main():
       'master.client.webrtc': 'WebRTC',
       'master.experimental': None,
       'master.reserved': None,  # make start fails
-      'master.tryserver.chromium': 'Chromium Try Server',
-      'master.tryserver.nacl': 'NativeClient-Try',
+      'master.tryserver.chromium': 'TryServer',
+      'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.unused': None,
-      'master.devtools': 'Chromium DevTools',
+      'master.devtools': 'DevTools',
       'master.webkit': None,
   }
   return real_main(base_dir, expected)

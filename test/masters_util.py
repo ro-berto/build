@@ -92,13 +92,14 @@ def search_for_exceptions(path):
   return False
 
 
-def json_probe(sensitive):
+def json_probe(sensitive, ports=None):
   """ Looks through the port range and finds a master listening.
   sensitive: Indicates whether partial success should be reported.
 
   Returns (port, name) or None.
   """
-  ports = range(8000, 8099) + range(8200, 8299) + range(9000, 9099)
+  default_ports = range(8000, 8099) + range(8200, 8299) + range(9000, 9099)
+  ports = ports or default_ports
   for port in ports:
     try:
       data = json.load(
@@ -121,10 +122,11 @@ def json_probe(sensitive):
   return None
 
 
-def wait_for_start(master, name, path):
+def wait_for_start(master, name, path, ports=None):
   """Waits for ~10s for the masters to open its web server."""
+  logging.info("Waiting for master %s on ports %s" % (name, ports))
   for _ in range(100):
-    result = json_probe(False)
+    result = json_probe(False, ports)
     if result is None:
       if search_for_exceptions(path):
         return False
@@ -135,6 +137,7 @@ def wait_for_start(master, name, path):
       logging.error('Wrong %s name, expected %s, got %s on port %d' %
                     (master, name, got_name, port))
       return False
+    logging.info("Found master %s on port %s" % (name, port))
     # The server is now answering /json requests. Check that the log file
     # doesn't have any other exceptions just in case there was some other
     # unexpected error.
