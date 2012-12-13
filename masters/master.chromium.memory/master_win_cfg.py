@@ -72,7 +72,7 @@ B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
 F('win_asan_rel', win().ChromiumASANFactory(
     slave_type='Builder',
     options=win_asan_rel_options,
-    compile_timeout=4800,
+    compile_timeout=7200,
     factory_properties={
         'asan': True,
         'gclient_env': {
