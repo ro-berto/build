@@ -2831,3 +2831,16 @@ index 28e46de..7ec0032 100644
  from zope.interface import implements
  from twisted.python import log, components
  from twisted.internet import defer, reactor
+
+
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/builder.py
+@@ -110,7 +110,7 @@ class StatusResourceBuilder(HtmlResource, BuildLineMixin):
+                 'num_changes' : len(changes),
+                 })
+
+-        numbuilds = int(req.args.get('numbuilds', ['5'])[0])
++        numbuilds = int(req.args.get('numbuilds', ['20'])[0])
+         recent = cxt['recent'] = []
+         for build in b.generateFinishedBuilds(num_builds=int(numbuilds)):
+             recent.append(self.get_line_values(req, build, False))
