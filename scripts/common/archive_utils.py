@@ -49,8 +49,9 @@ class FilesCfgParser(object):
     """Return a dict of file items that match the current build criteria."""
     files_dict = {}
     for fileobj in self._files_cfg:
-      if (self._buildtype in fileobj['buildtype'] and
-          self._arch in fileobj['arch']):
+      if self._buildtype not in fileobj['buildtype']:
+        continue
+      if not fileobj.get('arch') or self._arch in fileobj['arch']:
         files_dict[fileobj['filename']] = fileobj
     return files_dict
 

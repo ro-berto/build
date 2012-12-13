@@ -463,9 +463,8 @@ class StagerBase(object):
       raise archive_utils.StagingError('No build revision was provided')
     print 'Staging in %s' % self._staging_dir
 
-    arch = archive_utils.BuildArch()
     fparser = archive_utils.FilesCfgParser(self._files_file, self.options.mode,
-                                           arch)
+                                           self.options.arch)
     files_list = fparser.ParseLegacyList()
     self._archive_files = archive_utils.ExpandWildcards(self._build_dir,
                                                         files_list)
@@ -645,6 +644,8 @@ def main(argv):
       help='switch indicating how to archive build (dev is only valid value)')
   option_parser.add_option('--target', default='Release',
       help='build target to archive (Debug or Release)')
+  option_parser.add_option('--arch', default=archive_utils.BuildArch(),
+      help='specify that target architecure of the build')
   option_parser.add_option('--src-dir', default='src',
                            help='path to the top-level sources directory')
   option_parser.add_option('--build-dir', default='chrome',

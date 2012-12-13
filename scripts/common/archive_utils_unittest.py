@@ -45,7 +45,12 @@ TEMP_FILES_WITH_WILDCARDS = ['foo.txt',
 TEST_FILES_CFG = [
   {
     'filename': 'allany.txt',
-    'arch': ['32bit', '64bit'],
+    'arch': ['32bit', '64bit', 'arm'],
+    'buildtype': ['dev', 'official'],
+    'filegroup': ['default', 'allany'],
+  },
+  {
+    'filename': 'allany2.txt',
     'buildtype': ['dev', 'official'],
     'filegroup': ['default', 'allany'],
   },
@@ -236,6 +241,25 @@ class ArchiveUtilsTest(unittest.TestCase):
   def tearDown(self):
     shutil.rmtree(self.temp_dir)
 
+  # copied from python2.7 version of unittest
+  # TODO(sbc): remove once python2.7 is required.
+  def assertIn(self, member, container, msg=None):
+    """Just like self.assertTrue(a in b), but with a nicer default message."""
+    if member not in container:
+      standardMsg = '%s not found in %s' % (repr(member),
+                                            repr(container))
+      self.fail(self._formatMessage(msg, standardMsg))
+
+  # copied from python2.7 version of unittest
+  # TODO(sbc): remove once python2.7 is required.
+  def assertNotIn(self, member, container, msg=None):
+    """Just like self.assertTrue(a not in b), but with a nicer default
+    message."""
+    if member in container:
+      standardMsg = '%s unexpectedly found in %s' % (repr(member),
+                                                     repr(container))
+      self.fail(self._formatMessage(msg, standardMsg))
+
   def verifyZipFile(self, zip_dir, zip_file_path, archive_name, expected_files):
     # Extract the files from the archive
     extract_dir = os.path.join(zip_dir, 'extract')
@@ -254,7 +278,7 @@ class ArchiveUtilsTest(unittest.TestCase):
       os.path.walk(archive_path, FindFiles, archive_path)
       self.assertEquals(len(expected_files), len(extracted_files))
       for f in extracted_files:
-        self.assertTrue(f in expected_files)
+        self.assertIn(f, expected_files)
     else:
       test_result = zip_file.testzip()
       self.assertTrue(not test_result)
@@ -268,15 +292,18 @@ class ArchiveUtilsTest(unittest.TestCase):
     files_list = archive_utils.ParseFilesList(files_cfg, buildtype, arch)
     # Verify FILES.cfg was parsed correctly.
     for i in TEST_FILES_CFG:
-      if arch in i['arch'] and buildtype in i['buildtype']:
-        # 'archive' flagged files shouldn't be included in the default parse.
-        if i.get('archive'):
-          self.assertFalse(i['filename'] in files_list)
-        else:
-          self.assertTrue(i['filename'] in files_list)
-          files_list.remove(i['filename'])
-          # No duplicate files.
-          self.assertEqual(files_list.count(i['filename']), 0)
+      if buildtype not in i['buildtype']:
+        continue
+      if i.get('arch') and arch not in i['arch']:
+        continue
+      # 'archive' flagged files shouldn't be included in the default parse.
+      if i.get('archive'):
+        self.assertNotIn(i['filename'], files_list)
+      else:
+        self.assertIn(i['filename'], files_list)
+        files_list.remove(i['filename'])
+        # No duplicate files.
+        self.assertEqual(files_list.count(i['filename']), 0)
     # No unexpected files.
     self.assertEqual(len(files_list), 0)
 
@@ -288,15 +315,18 @@ class ArchiveUtilsTest(unittest.TestCase):
     files_list = fparser.ParseLegacyList()
     # Verify FILES.cfg was parsed correctly.
     for i in TEST_FILES_CFG:
-      if arch in i['arch'] and buildtype in i['buildtype']:
-        # 'archive' flagged files shouldn't be included in the default parse.
-        if i.get('archive'):
-          self.assertFalse(i['filename'] in files_list)
-        else:
-          self.assertTrue(i['filename'] in files_list)
-          files_list.remove(i['filename'])
-          # No duplicate files.
-          self.assertEqual(files_list.count(i['filename']), 0)
+      if buildtype not in i['buildtype']:
+        continue
+      if i.get('arch') and arch not in i['arch']:
+        continue
+      # 'archive' flagged files shouldn't be included in the default parse.
+      if i.get('archive'):
+        self.assertNotIn(i['filename'], files_list)
+      else:
+        self.assertIn(i['filename'], files_list)
+        files_list.remove(i['filename'])
+        # No duplicate files.
+        self.assertEqual(files_list.count(i['filename']), 0)
     # No unexpected files.
     self.assertEqual(len(files_list), 0)
 
