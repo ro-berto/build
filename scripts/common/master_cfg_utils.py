@@ -20,6 +20,7 @@ import copy
 import os
 import optparse
 import sys
+import traceback
 
 
 from common import chromium_utils
@@ -68,10 +69,12 @@ def LoadConfig(basedir, config_file='master.cfg', suppress=False):
     filename = err.filename
     print >>sys.stderr, 'error %d executing %s: %s: %s' % (errno,
         canonical_config, strerror, filename)
+    print >>sys.stderr, traceback.format_exc()
     return None
-  except Exception as e:
+  except Exception:
     if not suppress:
-      print >>sys.stderr, ('error while parsing %s: ' % canonical_config), e
+      print >>sys.stderr, ('error while parsing %s: ' % canonical_config)
+      print >>sys.stderr, traceback.format_exc()
     return None
 
   return localdict
