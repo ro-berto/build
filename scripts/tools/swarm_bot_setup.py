@@ -24,7 +24,7 @@ SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 SWARM_DIRECTORY = {
   'linux': '/b/swarm_slave',
   'mac': '/b/swarm_slave',
-  'win': 'c:\\swarm\\',
+  'win': 'e:\\b\\swarm\\',
 }
 
 
