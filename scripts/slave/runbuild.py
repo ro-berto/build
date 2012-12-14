@@ -81,6 +81,9 @@ def get_args():
                     'the build factory')
   parser.add_option('--annotate', action='store_true',
                     help='format output to work with the Buildbot annotator')
+  parser.add_option('--test-config', action='store_true',
+                    help='Attempt to parse all builders and steps without '
+                    'executing them. Returns 0 on success.')
 
   return parser.parse_args()
 
@@ -138,6 +141,13 @@ def args_ok(inoptions, pos_args):
       return False
 
   if inoptions.list_builders:
+    return True
+
+  if inoptions.test_config:
+    inoptions.spec = {}
+    inoptions.revision = 12345
+    inoptions.build_properties['got_revision'] = 12345
+    inoptions.build_properties['revision'] = 12345
     return True
 
   if inoptions.build_properties and not (inoptions.slavehost or
@@ -247,15 +257,24 @@ def execute(options):
     return 2
 
   mastername = config['BuildmasterConfig']['properties']['mastername']
-  builders = master_cfg_utils.Denormalize(
-      config['BuildmasterConfig']['builders'], 'slavenames', 'slavename')
+  builders = config['BuildmasterConfig']['builders']
 
   if options.list_builders:
     master_cfg_utils.PrettyPrintBuilders(builders, mastername)
     return 0
 
-  my_builder = master_cfg_utils.ChooseBuilder(builders, options.spec)
+  if options.test_config:
+    for builder in builders:
+      # We need to provide a slavename, so just pick the first one
+      # the builder has.
+      builder['slavename'] = builder['slavenames'][0]
+      execute_builder(builder, mastername, options)
+    return 0
 
+  my_builder = master_cfg_utils.ChooseBuilder(builders, options.spec)
+  return execute_builder(my_builder, mastername, options)
+
+def execute_builder(my_builder, mastername, options):
   if options.spec and 'hostname' in options.spec:
     slavename = options.spec['hostname']
   elif (options.spec and 'either' in options.spec) and (
@@ -293,6 +312,9 @@ def execute(options):
     return 0
 
   commands = builder_utils.GetCommands(steplist)
+  if options.test_config:
+    return 0
+
   filtered_commands = runbuild_utils.FilterCommands(commands,
                                                     options.step_regex,
                                                     options.stepreject_regex)
@@ -346,7 +368,7 @@ def main():
 
   if retcode == 0:
     if not (opts.annotate or opts.list_masters or opts.list_builders
-            or opts.list_steps):
+            or opts.list_steps or opts.test_config):
       print >>sys.stderr, 'build completed successfully'
   else:
     if opts.annotate:

@@ -16,7 +16,6 @@ and builders of a selected master.
 
 # pylint: disable=C0323
 
-import copy
 import os
 import optparse
 import sys
@@ -31,7 +30,13 @@ chromium_utils.AddThirdPartyLibToPath('setuptools-0.6c11')
 
 
 def ExecuteConfig(canonical_config):
-  """Execute a master.cfg file and return its dictionary."""
+  """Execute a master.cfg file and return its dictionary.
+
+  WARNING: executing a master.cfg loads modules into the python process.
+  Attempting to load another master.cfg with similar module names will
+  cause subtle (and not-so-subtle) errors. It is recommended to only call
+  this once per process.
+  """
   localDict = {'basedir': os.path.dirname(canonical_config),
                '__file__': canonical_config}
 
@@ -57,6 +62,11 @@ def LoadConfig(basedir, config_file='master.cfg', suppress=False):
 
   This is a nicer wrapper around ExecuteConfig which will trap IO or execution
   errors and provide an informative message if one occurs.
+
+  WARNING: executing a master.cfg loads modules into the python process.
+  Attempting to load another master.cfg with similar module names will
+  cause subtle (and not-so-subtle) errors. It is recommended to only call
+  this once per process.
   """
 
   canonical_basedir = os.path.abspath(os.path.expanduser(basedir))
@@ -117,6 +127,7 @@ def PrettyPrintBuilders(builders, master):
   columns = ['name', 'slavename', 'category']
   title = 'outputting builders for: %s' % master
   notfound = 'no builders found.'
+  builders = Denormalize(builders, 'slavenames', 'slavename', columns)
   PrettyPrintInternal(builders, columns, title, notfound)
 
 
@@ -137,13 +148,28 @@ def PrettyPrintMasters(masterpairs):
   PrettyPrintInternal(masters, columns, title, notfound)
 
 
-def Denormalize(items, over, newcol):
+def Denormalize(items, over, newcol, wanted):
   """Splits a one-to-many hash into many one-to-ones.
 
   PrettyPrintInternal needs a list of many builders with one slave, this will
-  properly format the data as such. Note that it currently does a deep copy to
-  achieve this, certain masters (such as the tryserver) will be relatively slow
-  here.
+  properly format the data as such.
+
+  items: a list of dictionaries to be denormalized
+  over: the column (key) over which to separate items
+  newcol: the new name of 'over' in the new item
+  wanted: the desired keys in the new item
+
+  Example: take some diners with different meals:
+    [{'name': 'diner1', 'toasts': ['rye', 'wheat'], eggs:['scrambled']},
+     {'name': 'diner2', 'toasts': ['rye', 'white'], eggs:['fried']}]
+
+  Let's say you only cared about your diner/toast options. If you denormalized
+  with over=toasts, newcol=toast, wanted=['name', toast'], you'd get:
+    [{'name': 'diner1', 'toast': 'rye'},
+     {'name': 'diner1', 'toast': 'wheat'},
+     {'name': 'diner2', 'toast': 'rye'},
+     {'name': 'diner2', 'toast': 'white'}]
+
   """
   def arrayify(possible_array):
     """Convert 'string' into ['string']. Leave actual arrays alone."""
@@ -151,11 +177,18 @@ def Denormalize(items, over, newcol):
       return [possible_array]
     return possible_array
 
+  wanted_cols = set(wanted)
+  wanted_cols.discard(newcol)
+
   result = []
-  for i in items:
-    for element in arrayify(i[over]):
-      newitem = copy.deepcopy(i)
-      del newitem[over]
+  for row in items:
+    for element in arrayify(row[over]):
+      newitem = {}
+
+      # Only bring over the requested columns, instead of all.
+      for col in wanted_cols:
+        if col in row:
+          newitem[col] = row[col]
       newitem[newcol] = element
       result.append(newitem)
   return result
@@ -184,7 +217,7 @@ def OnlyGetOne(seq, key, source):
     return res[0]
 
 
-def GetMasters():
+def GetMasters(include_internal=True):
   """Return a pair of (mastername, path) for all masters found."""
 
   # note: ListMasters uses master.cfg hardcoded as part of its search path
@@ -198,7 +231,8 @@ def GetMasters():
       raise ValueError('unable to parse mastername from path! (%s)' % tail)
     return sep.join(chunks[1:])
 
-  return [(parse_master_name(m), m) for m in chromium_utils.ListMasters()]
+  return [(parse_master_name(m), m) for m in
+          chromium_utils.ListMasters(include_internal=include_internal)]
 
 
 def ChooseMaster(searchname):
@@ -248,15 +282,24 @@ def GetBuilderName(builders, keyval):
 def ChooseBuilder(builders, spec):
   """Search through builders matching 'spec' and return it."""
 
-  candidates = SearchBuilders(builders, spec)
+  denormedbuilders = Denormalize(builders, 'slavenames', 'slavename', ['name'])
+  candidates = SearchBuilders(denormedbuilders, spec)
   buildername = GetBuilderName(candidates, spec.values()[0])
 
   if not buildername:
     return None
 
-  blder = [b for b in builders if b['name'] == buildername][0]
+  builder = [b for b in builders if b['name'] == buildername][0]
+  if 'hostname' in spec:
+    builder['slavename'] = spec['hostname']
+  elif 'either' in spec and spec['either'] in builder['slavenames']:
+    builder['slavename'] = spec['either']
+  else:
+    # User selected builder instead of slavename, so just pick the first
+    # slave the builder has.
+    builder['slavename'] = builder['slavenames'][0]
 
-  return blder
+  return builder
 
 
 def main():
@@ -283,8 +326,7 @@ def main():
     return 2
 
   mastername = config['BuildmasterConfig']['properties']['mastername']
-  builders = Denormalize(config['BuildmasterConfig']['builders'],
-                         'slavenames', 'slavename')
+  builders = config['BuildmasterConfig']['builders']
   if len(args) < 2:
     PrettyPrintBuilders(builders, mastername)
     return 0
