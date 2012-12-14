@@ -15,7 +15,7 @@ T = helper.Triggerable
 
 win = lambda: chromium_factory.ChromiumFactory('src/out', 'win32')
 
-defaults['category'] = '4win asan'
+defaults['category'] = 'win asan'
 
 #
 # Main asan release scheduler for src/
@@ -27,7 +27,7 @@ S('win_asan_rel', branch='src', treeStableTimer=60)
 #
 T('win_asan_rel_trigger')
 
-win_asan_archive = master_config.GetArchiveUrl('ChromiumMemory',
+win_asan_archive = master_config.GetArchiveUrl('ChromiumFYI',
                                                'Win ASAN Builder',
                                                'Win_ASAN_Builder',
                                                'win32')
