@@ -103,6 +103,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.nacl_trunk_url + '/src/third_party/valgrind/bin')
   CUSTOM_DEPS_TSAN_GCC = ('src/third_party/compiler-tsan',
      config.Master.trunk_url + '/deps/third_party/compiler-tsan')
+  CUSTOM_DEPS_WEBDRIVER_JAVA_TESTS = (
+     'src/chrome/test/chromedriver/third_party/java_tests',
+     config.Master.trunk_url + '/deps/third_party/webdriver')
 
   CUSTOM_DEPS_GYP = [
     ('src/tools/gyp', 'http://gyp.googlecode.com/svn/trunk')]
@@ -869,6 +872,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
             'drmemory.DEPS'))
     elif factory_properties.get('needs_tsan_gcc'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
+    elif factory_properties.get('needs_webdriver_java_tests'):
+      self._solutions[0].custom_deps_list = [
+        self.CUSTOM_DEPS_WEBDRIVER_JAVA_TESTS
+      ]
 
     if 'devtools_perf' in tests:
       self._solutions[0].custom_deps_list.extend(self.CUSTOM_DEPS_DEVTOOLS_PERF)
