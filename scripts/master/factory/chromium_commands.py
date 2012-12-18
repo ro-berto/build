@@ -338,7 +338,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      cmd)
 
   def AddMachPortsTests(self, factory_properties=None):
-    self.AddAnnotatedPerfStep('mach_ports', '--gtest_filter=MachPortsTest.*',
+    self.AddAnnotatedPerfStep('mach_ports', 'MachPortsTest.*',
                               'graphing', step_name='mach_ports',
                               factory_properties=factory_properties)
 
