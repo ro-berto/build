@@ -306,6 +306,8 @@ F('ios_dbg', mac().ChromiumFactory(
     'net',
     'ui_unittests',
     'unit_sql',
+    'unit_sync',
+    'unit_tests',
   ],
   options = [
     '--', '-project', '../build/all.xcodeproj', '-sdk',
