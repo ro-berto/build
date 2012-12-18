@@ -325,14 +325,18 @@ def create_results_tracker(tracker_class, options):
     tracker_obj = tracker_class()
   else:
     build_dir = os.path.abspath(options.build_dir)
-    webkit_dir = chromium_utils.FindUpward(build_dir, 'third_party', 'WebKit',
-                                           'Source')
+    try:
+      webkit_dir = chromium_utils.FindUpward(build_dir, 'third_party', 'WebKit',
+                                             'Source')
+      webkit_revision = GetSvnRevision(webkit_dir)
+    except:  # pylint: disable=W0702
+      webkit_revision = 'undefined'
 
     tracker_obj = tracker_class(
         revision=GetSvnRevision(os.path.dirname(build_dir)),
         build_property=options.build_properties,
         factory_properties=options.factory_properties,
-        webkit_revision=GetSvnRevision(webkit_dir))
+        webkit_revision=webkit_revision)
 
   if options.annotate and options.generate_json_file:
     tracker_obj.ProcessLine(_GetMasterString(_GetMaster()))
