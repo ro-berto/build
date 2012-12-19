@@ -20,6 +20,13 @@ SWARM_DIRECTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 SWARM_SERVER_PROD = 'https://chromium-swarm.appspot.com'
 SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 
+# The directories containing the swarm code initially.
+SWARM_STARTING_DIRECTORY = {
+  'linux': '/b/build/scripts/tools/swarm_bootstrap/',
+  'mac': '/b/build/scripts/tools/swarm_bootstrap/',
+  'win': 'e:\\b\\scripts\\tools\swarm_bootstrap\\',
+}
+
 # The directories to store the swarm code.
 SWARM_DIRECTORY = {
   'linux': '/b/swarm_slave',
@@ -37,36 +44,34 @@ def OpenSSHCommand(user, host):
   return ['ssh', '-o ConnectTimeout=5', '-t', user + '@' + host]
 
 
-def BuildSFTPCommand(user, host, commands):
-  return (['sftp', '-obatchmode=no', '%s@%s' % (user, host)],
-          commands)
+def BuildSetupCommand(user, host, platform, options):
+  assert platform in ('linux', 'mac', 'win')
+  bot_setup_commands = []
 
-
-def BuildSSHCommand(user, host, platform, options):
-  bot_setup_commands = ['cd %s' % SWARM_DIRECTORY[platform], '&&']
-
-  if '-m1' in host:
-    network_drive = 'fas2-110'
-  elif '-m4' in host:
-    network_drive = 'fas2-140'
-
+  # Update the swarm files on the machines
   if platform == 'win':
-    network_drive = '\\\\' + network_drive + '\\swarm_data'
-    bot_setup_commands.append(
-        'call swarm_windows_network_setup.bat %s %s' % ('Z:', network_drive))
+    bot_setup_commands.extend(['e:', '&&'])
+  bot_setup_commands.extend([
+      'cd %s' % SWARM_STARTING_DIRECTORY[platform],
+      '&&',
+      'svn update',
+      '&&'])
+
+  # Copy the swarm files to the new swarm directory
+  if platform == 'win':
+    copy_func = 'copy'
   else:
-    mount_program = 'mount'
-    if platform == 'mac':
-      mount_program = '/sbin/' + mount_program
-    bot_setup_commands.append(
-        'sudo ./swarm_network_setup.sh %s %s' % (mount_program, network_drive))
-  bot_setup_commands.append('&&')
+    copy_func = 'cp'
+  bot_setup_commands.extend([
+      '%s %s %s' % (copy_func,
+                    SWARM_STARTING_DIRECTORY[platform],
+                    SWARM_DIRECTORY[platform]),
+      '&&'])
 
+  # Run the final swarm setup script.
+  bot_setup_commands.extend(['cd %s' % SWARM_DIRECTORY[platform], '&&'])
   if platform == 'win':
-    # The path needs to be reset.
     bot_setup_commands.extend([
-        'cd %s' % SWARM_DIRECTORY[platform],
-        '&&',
         'call swarm_bot_setup.bat %s %s' %
         (options.swarm_server, SWARM_DIRECTORY[platform])])
   else:
@@ -81,7 +86,7 @@ def BuildSSHCommand(user, host, platform, options):
   return OpenSSHCommand(user, host) + bot_setup_commands
 
 
-def BuildCleanCommands(user, host, platform):
+def BuildCleanCommand(user, host, platform):
   assert platform in ('linux', 'mac', 'win')
 
   command = OpenSSHCommand(user, host)
@@ -90,20 +95,7 @@ def BuildCleanCommands(user, host, platform):
   else:
     command.append('rm -r %s' % SWARM_DIRECTORY[platform])
 
-  return [command]
-
-
-def BuildSetupCommands(user, host, platform, options):
-  assert platform in ('linux', 'mac', 'win')
-
-  sftp_command = ['mkdir %s' % SWARM_DIRECTORY[platform],
-                  'put swarm_bootstrap/* %s' % SWARM_DIRECTORY[platform],
-                  'quit\n']
-
-  return [
-      BuildSFTPCommand(user, host, '\n'.join(sftp_command)),
-      (BuildSSHCommand(user, host, platform, options), None),
-      ]
+  return command
 
 
 def main():
@@ -156,27 +148,19 @@ def main():
     commands = []
 
     if options.clean:
-      commands.extend(BuildCleanCommands(options.user, bot, platform))
+      commands.append(BuildCleanCommand(options.user, bot, platform))
 
     command_options = Options(
         swarm_server=SWARM_SERVER_DEV if options.use_dev else SWARM_SERVER_PROD)
 
-    commands.extend(BuildSetupCommands(options.user, bot, platform,
-                                       command_options))
+    commands.append(BuildSetupCommand(options.user, bot, platform,
+                                      command_options))
 
     if options.print_only:
       print commands
     else:
-      for (command, stdin) in commands:
-        if stdin:
-          process = subprocess.Popen(command, stdin=subprocess.PIPE)
-          process.communicate(stdin)
-          if process.returncode:
-            raise Exception('ERROR: Command %s with stdin %s exited with '
-                            'return code %d' % (command, stdin,
-                                                process.returncode))
-        else:
-          subprocess.check_call(command)
+      for command in commands:
+        subprocess.check_call(command)
 
 
 if __name__ == '__main__':
