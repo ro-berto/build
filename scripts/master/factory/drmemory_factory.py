@@ -239,10 +239,10 @@ class DrCommands(object):
     # that expect sfx exes.
     # TODO(rnk): Find a way to wildcard the DR version.
     if self.IsWindows():
-      src_file = 'DynamoRIO-Windows-3.2.%(got_revision)s-42.zip'
+      src_file = 'DynamoRIO-Windows-4.0.%(got_revision)s-42.zip'
       dst_file = 'dynamorio-windows-r%(got_revision)s.zip'
     else:
-      src_file = 'DynamoRIO-Linux-3.2.%(got_revision)s-42.tar.gz'
+      src_file = 'DynamoRIO-Linux-4.0.%(got_revision)s-42.tar.gz'
       dst_file = 'dynamorio-linux-r%(got_revision)s.tar.gz'
     self.AddStep(FileUpload,
                  slavesrc=WithProperties(src_file),
