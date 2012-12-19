@@ -354,7 +354,9 @@ F('dbg_int', win_tester().ChromiumFactory(
 #
 
 aura_gyp_defines = (
-    'use_aura=1 fastbuild=1 win_debug_disable_iterator_debugging=1')
+    'use_aura=1 fastbuild=1 win_debug_disable_iterator_debugging=1 '
+    'chromium_win_pch=0'
+)
 
 B('Win Aura Builder', 'dbg_aura', 'compile|windows', 'win_dbg',
   auto_reboot=False, notify_on_missing=True)
