@@ -192,7 +192,7 @@ dbg_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win Builder (dbg)',
                                           'cr-win-dbg', 'win32')
 dbg_aura_archive = master_config.GetArchiveUrl('ChromiumWin',
                                                'Win Aura Builder',
-                                               'Win_Aura', 'win32')
+                                               'Win_Aura_Builder', 'win32')
 
 #
 # Main debug scheduler for src/
