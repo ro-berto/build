@@ -188,6 +188,9 @@ B('Chrome Frame Tests (ie9)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
 
 dbg_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win Builder (dbg)',
                                           'cr-win-dbg', 'win32')
+dbg_aura_archive = master_config.GetArchiveUrl('ChromiumWin',
+                                               'Win Aura Builder',
+                                               'Win_Aura', 'win32')
 
 #
 # Main debug scheduler for src/
@@ -198,6 +201,7 @@ S('win_dbg', branch='src', treeStableTimer=60)
 # Triggerable scheduler for the dbg builder
 #
 T('win_dbg_trigger')
+T('win_dbg_aura_trigger')
 
 #
 # Win Dbg Builder
@@ -348,30 +352,73 @@ F('dbg_int', win_tester().ChromiumFactory(
 #
 # Dbg Aura builder
 #
-aura_gyp_defines = ('use_aura=1 win_debug_disable_iterator_debugging=1')
-B('Win Aura', 'dbg_aura', 'compile|testers|windows', 'win_dbg',
-  notify_on_missing=True)
+
+aura_gyp_defines = (
+    'use_aura=1 fastbuild=1 win_debug_disable_iterator_debugging=1')
+
+B('Win Aura Builder', 'dbg_aura', 'compile|windows', 'win_dbg',
+  auto_reboot=False, notify_on_missing=True)
 F('dbg_aura', win().ChromiumFactory(
     target='Debug',
-    slave_type='BuilderTester',
-    tests=[
-      'ash_unittests',
-      'aura',
-      'browser_tests',
-      'compositor',
-      'content_browsertests',
-      'content_unittests',
-      'interactive_ui',
-      'unit_unit',
-      'views',
-    ],
+    options=['--build-tool=ninja', '--compiler=goma'],
+    slave_type='Builder',
     project='all.sln;aura_builder',
-      factory_properties={'gclient_env': {'GYP_DEFINES': aura_gyp_defines},
-                          'process_dumps': True,
-                          'sharded_tests': sharded_tests,
-                          'start_crash_handler': True,
-                          'generate_gtest_json': True}))
-# When the tests grow we'll need a separate tester.
+    factory_properties={'gclient_env': {'GYP_DEFINES': aura_gyp_defines},
+                        'trigger': 'win_dbg_aura_trigger'}))
+
+#
+# Dbg Aura Testers
+#
+
+B('Win Aura Tests (1)', 'dbg_aura_test_1', 'testers|windows',
+  'win_dbg_aura_trigger', notify_on_missing=True)
+F('dbg_aura_test_1', win_tester().ChromiumFactory(
+    target='Debug',
+    slave_type='Tester',
+    build_url=dbg_aura_archive,
+    tests=['ash_unittests',
+           'aura',
+           'browser_tests',
+           'content_browsertests',
+          ],
+    factory_properties={'process_dumps': True,
+                        'sharded_tests': sharded_tests,
+                        'browser_total_shards': 3, 'browser_shard_index': 1,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
+
+B('Win Aura Tests (2)', 'dbg_aura_test_2', 'testers|windows',
+  'win_dbg_aura_trigger', notify_on_missing=True)
+F('dbg_aura_test_2', win_tester().ChromiumFactory(
+    target='Debug',
+    slave_type='Tester',
+    build_url=dbg_aura_archive,
+    tests=['browser_tests',
+           'compositor',
+           'content_unittests',
+           'unit_tests',
+           'views_unittests',
+          ],
+    factory_properties={'process_dumps': True,
+                        'sharded_tests': sharded_tests,
+                        'browser_total_shards': 3, 'browser_shard_index': 2,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
+
+B('Win Aura Tests (3)', 'dbg_aura_test_3', 'testers|windows',
+  'win_dbg_aura_trigger', notify_on_missing=True)
+F('dbg_aura_test_3', win_tester().ChromiumFactory(
+    target='Debug',
+    slave_type='Tester',
+    build_url=dbg_aura_archive,
+    tests=['browser_tests',
+           'interactive_ui',
+          ],
+    factory_properties={'process_dumps': True,
+                        'sharded_tests': sharded_tests,
+                        'browser_total_shards': 3, 'browser_shard_index': 3,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
 
 def Update(config, active_master, c):
   return helper.Update(c)
