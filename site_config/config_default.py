@@ -40,6 +40,7 @@ class Master(object):
   swarm_server_internal_url = 'http://fake.swarm.url.server.com'
   swarm_server_dev_internal_url = 'http://fake.swarm.dev.url.server.com'
   swarm_hashtable_server_internal = 'http://fake.swarm.hashtable.server.com'
+  swarm_hashtable_server_dev_internal = 'http://fake.swarm.hashtable.server.com'
 
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'

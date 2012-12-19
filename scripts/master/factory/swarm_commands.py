@@ -10,7 +10,6 @@ from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from twisted.python import log
 
-import config
 from master.factory import commands
 from master.log_parser import gtest_command
 
@@ -91,7 +90,8 @@ class SwarmCommands(commands.FactoryCommands):
     self._swarm_client_dir = self.PathJoin(
         self._script_dir, '..', '..', 'third_party', 'swarm_client')
 
-  def AddTriggerSwarmTestStep(self, swarm_server, tests, doStepIf=True):
+  def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
+                              doStepIf=True):
     script_path = self.PathJoin(self._swarm_client_dir, 'swarm_trigger_step.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
@@ -104,7 +104,7 @@ class SwarmCommands(commands.FactoryCommands):
       '-o', WithProperties('%s', 'target_os:-%s' % self._target_platform),
       '-u', swarm_server,
       '-t', swarm_request_name_prefix,
-      '-d', config.Master.swarm_hashtable_server_internal
+      '-d', isolation_outdir,
     ]
     assert all(i for i in command), command
     self._factory.addStep(
