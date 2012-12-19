@@ -24,7 +24,7 @@ SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 SWARM_STARTING_DIRECTORY = {
   'linux': '/b/build/scripts/tools/swarm_bootstrap',
   'mac': '/b/build/scripts/tools/swarm_bootstrap',
-  'win': 'e:\\b\\scripts\\tools\swarm_bootstrap',
+  'win': 'e:\\b\\build\\scripts\\tools\\swarm_bootstrap',
 }
 
 # The directories to store the swarm code.
