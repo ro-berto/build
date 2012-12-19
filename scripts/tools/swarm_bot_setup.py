@@ -22,16 +22,16 @@ SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 
 # The directories containing the swarm code initially.
 SWARM_STARTING_DIRECTORY = {
-  'linux': '/b/build/scripts/tools/swarm_bootstrap/',
-  'mac': '/b/build/scripts/tools/swarm_bootstrap/',
-  'win': 'e:\\b\\scripts\\tools\swarm_bootstrap\\',
+  'linux': '/b/build/scripts/tools/swarm_bootstrap',
+  'mac': '/b/build/scripts/tools/swarm_bootstrap',
+  'win': 'e:\\b\\scripts\\tools\swarm_bootstrap',
 }
 
 # The directories to store the swarm code.
 SWARM_DIRECTORY = {
   'linux': '/b/swarm_slave',
   'mac': '/b/swarm_slave',
-  'win': 'e:\\b\\swarm\\',
+  'win': 'e:\\b\\swarm_slave\\',
 }
 
 
@@ -59,9 +59,9 @@ def BuildSetupCommand(user, host, platform, options):
 
   # Copy the swarm files to the new swarm directory
   if platform == 'win':
-    copy_func = 'copy'
+    copy_func = 'xcopy /i'
   else:
-    copy_func = 'cp'
+    copy_func = 'cp -r'
   bot_setup_commands.extend([
       '%s %s %s' % (copy_func,
                     SWARM_STARTING_DIRECTORY[platform],
