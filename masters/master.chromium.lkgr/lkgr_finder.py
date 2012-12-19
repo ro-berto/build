@@ -127,17 +127,25 @@ LKGR_STEPS = {
     # 'Interactive Tests (dbg)': [
     #   'interactive_ui_tests',
     # ],
-    'Win Aura': [
+    'Win Aura Builder': [
+      'compile',
+    ],
+    'Win Aura Tests (1)': [
       'ash_unittests',
       'aura_unittests',
       'browser_tests',
-      'compile',
-      'compositor_unittests',
       'content_browsertests',
+    ],
+    'Win Aura Tests (2)': [
+      'browser_tests',
+      'compositor_unittests',
       'content_unittests',
-      'interactive_ui_tests',
       'unit_tests',
       'views_unittests',
+    ],
+    'Win Aura Tests (3)': [
+      'browser_tests',
+      'interactive_ui_tests',
     ],
   },  # chromium.win
   'chromium.mac': {
