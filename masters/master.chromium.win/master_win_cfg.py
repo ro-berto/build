@@ -362,9 +362,8 @@ B('Win Aura Builder', 'dbg_aura', 'compile|windows', 'win_dbg',
   auto_reboot=False, notify_on_missing=True)
 F('dbg_aura', win().ChromiumFactory(
     target='Debug',
-    options=['--build-tool=ninja', '--compiler=goma'],
+    options=['--build-tool=ninja', '--compiler=goma', '--', 'aura_builder'],
     slave_type='Builder',
-    project='all.sln;aura_builder',
     factory_properties={'gclient_env': {'GYP_DEFINES': aura_gyp_defines},
                         'trigger': 'win_dbg_aura_trigger'}))
 
