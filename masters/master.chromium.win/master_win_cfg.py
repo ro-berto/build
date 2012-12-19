@@ -15,6 +15,8 @@ T = helper.Triggerable
 
 def win():
   return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win_out():
+  return chromium_factory.ChromiumFactory('src/out', 'win32')
 def win_tester():
   return chromium_factory.ChromiumFactory(
       'src/build', 'win32', nohooks_on_update=True)
@@ -360,7 +362,7 @@ aura_gyp_defines = (
 
 B('Win Aura Builder', 'dbg_aura', 'compile|windows', 'win_dbg',
   auto_reboot=False, notify_on_missing=True)
-F('dbg_aura', win().ChromiumFactory(
+F('dbg_aura', win_out().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma', '--', 'aura_builder'],
     slave_type='Builder',
