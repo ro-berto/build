@@ -995,6 +995,9 @@ def main():
                   'external_symbolizer_path=%s' % symbolizer_path)
   if options.factory_properties.get('tsan', False):
     os.environ['TSAN_OPTIONS'] = tsan_options
+  if options.factory_properties.get('asan', False):
+    # Set the path to llvm-symbolizer to be used by asan_symbolize.py
+    os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
