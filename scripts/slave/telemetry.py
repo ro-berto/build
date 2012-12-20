@@ -109,7 +109,10 @@ def main(argv):
 
   commands = _GenerateTelemetryCommandSequence(fp)
 
-  full_command = ['bash', '-c', ' && '.join(commands)]
+  if fp.get('target_os') == 'android':
+    full_command = ['bash', '-c', ' && '.join(commands)]
+  else:
+    full_command = [' && '.join(commands)]
 
   if options.print_cmd:
     print ' '.join(full_command)
