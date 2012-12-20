@@ -105,6 +105,8 @@ class ChromiumCommands(commands.FactoryCommands):
         chromium_utils.GetGClientCommand(self._target_platform),
         'sync', '--verbose']
 
+    self._telemetry_tool = self.PathJoin(self._script_dir, 'telemetry.py')
+
   def AddArchiveStep(self, data_description, base_url, link_text, command,
                      more_link_url=None, more_link_text=None,
                      index_suffix=''):
@@ -237,7 +239,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
                            factory_properties, cmd_name='performance_ui_tests',
-                           tool_opts=None, cmd_options=None, step_name=None):
+                           tool_opts=None, cmd_options=None, step_name=None,
+                           timeout=1200):
 
     """Add an annotated perf step to the builder.
 
@@ -273,7 +276,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                      do_step_if=self.TestStepFilter, target=self._target,
-                     factory_properties=factory_properties)
+                     factory_properties=factory_properties, timeout=timeout)
 
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
@@ -815,27 +818,9 @@ class ChromiumCommands(commands.FactoryCommands):
                'run_webdriver_tests.py')
     self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
 
-  def _GetReferenceBuildPath(self):
-    J = self.PathJoin
-    ref_dir = J('src', 'chrome', 'tools', 'test', 'reference_build')
-    if self._target_os == 'android':
-      # TODO(tonyg): Check in a reference android content shell.
-      return None
-    elif self._target_platform == 'win32':
-      return J(ref_dir, 'chrome_win', 'chrome.exe')
-    elif self._target_platform == 'darwin':
-      return J(ref_dir, 'chrome_mac', 'Chromium.app', 'Contents', 'MacOS',
-               'Chromium')
-    elif self._target_platform.startswith('linux'):
-      return J(ref_dir, 'chrome_linux', 'chrome')
-    return None
-
   def AddTelemetryTest(self, test_name, page_set, step_name=None,
                        factory_properties=None, timeout=1200):
     """Adds a Telemetry performance test.
-
-    TODO(tonyg): Move this to an annotator step once we have a annotation for
-    the GraphingLogProcessor.
 
     Args:
       test_name: The name of the benchmark module to run.
@@ -846,39 +831,24 @@ class ChromiumCommands(commands.FactoryCommands):
       factory_properties: A dictionary of factory property values.
     """
     step_name = step_name or test_name
-    factory_properties = factory_properties or {}
-    J = self.PathJoin
 
-    script = J('src', 'tools', 'perf', 'run_multipage_benchmarks')
-    page_set = J('src', 'tools', 'perf', 'page_sets', page_set)
+    cmd = [self._python, self._telemetry_tool]
 
-    # Run the test against the target chrome build.
-    browser = 'release'
-    if self._target_os == 'android':
-      browser = 'android-content-shell'
-    test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
-    test_cmd = self.GetPythonTestCommand(script, test_args)
-    cmd = ' '.join(test_cmd)
+    factory_properties = (factory_properties or {}).copy()
+    factory_properties['test_name'] = test_name
+    factory_properties['page_set'] = page_set
+    factory_properties['target'] = self._target
+    factory_properties['target_os'] = self._target_os
+    factory_properties['target_platform'] = self._target_platform
+    factory_properties['build_dir'] = self._build_dir
+    factory_properties['step_name'] = step_name
 
-    # Run the test against the reference build on platforms where it exists.
-    ref_build = self._GetReferenceBuildPath()
-    if ref_build:
-      ref_args = ['-v', '--browser=exact',
-                  '--browser-executable=%s' % ref_build,
-                  test_name, page_set]
-      ref_cmd = self.GetPythonTestCommand(script, ref_args)
-      cmd += ' && ' + ' '.join(ref_cmd)
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
 
-    # On android, telemetry needs to use the adb command and needs to be in
-    # root mode. Run it in bash since envsetup.sh doesn't work in sh.
-    if self._target_os == 'android':
-      cmd = ('bash -c ". src/build/android/envsetup.sh && ' +
-             'adb root && adb wait-for-device && %s"' % cmd)
+    self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
+                     do_step_if=self.TestStepFilter, target=self._target,
+                     factory_properties=factory_properties, timeout=timeout)
 
-    command_class = self.GetPerfStepClass(
-        factory_properties, step_name, process_log.GraphingLogProcessor)
-    self.AddTestStep(command_class, step_name, cmd, timeout=timeout,
-                     do_step_if=self.TestStepFilter)
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
