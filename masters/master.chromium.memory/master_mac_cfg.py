@@ -98,7 +98,7 @@ F('mac_asan_rel', mac().ChromiumASANFactory(
       'package_dsym_files': True,
       'trigger': 'mac_asan_rel_trigger',
       'gclient_env': {
-          'GYP_DEFINES': 'asan=1 release_extra_cflags=-g',
+          'GYP_DEFINES': 'asan=1 release_extra_cflags=-gline-tables-only',
           'GYP_GENERATORS': 'ninja' }}
 ))
 
