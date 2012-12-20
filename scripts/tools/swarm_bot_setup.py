@@ -59,7 +59,7 @@ def BuildSetupCommand(user, host, platform, options):
 
   # Copy the swarm files to the new swarm directory
   if platform == 'win':
-    copy_func = 'xcopy /i /e /h'
+    copy_func = 'xcopy /i /e /h /y'
   else:
     copy_func = 'cp -r'
   bot_setup_commands.extend([
