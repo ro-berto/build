@@ -1296,7 +1296,7 @@ class ChromiumCommands(commands.FactoryCommands):
     This binary contains content side browser tests that should be run on the
     gpu bots.
     """
-    tests = ':'.join(['WebGLConformanceTest.*', 'GpuCrashTest.*'])
+    tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
 
     self.AddAnnotatedGTestTestStep('content_browsertests', factory_properties,
                                    arg_list=['--use-gpu-in-tests',
