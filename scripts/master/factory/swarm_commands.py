@@ -13,6 +13,11 @@ from twisted.python import log
 from master.factory import commands
 from master.log_parser import gtest_command
 
+# Indices used to get a test's name and the filter to apply to from a split
+# testfilter property.
+TEST_FILTER_TEST_NAME_INDEX = 0
+TEST_FILTER_TEST_FILTER_INDEX = 2
+
 
 def TestStepFilterSwarm(bStep):
   """Examines the 'testfilter' property of a build and determines if this
@@ -58,25 +63,32 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     swarm_tests_hash_mapping = self.getProperty('swarm_hashes') or {}
 
     command = self.command
-    for test_filter in test_filters:
-      if '_swarm:' in test_filter or test_filter.endswith('_swarm'):
-        (test_name, _, gtest_filter) = test_filter.partition(':')
-        for swarm_test in self.tests:
-          if (swarm_test.test_name + '_swarm' == test_name):
-            if swarm_tests_hash_mapping.get(swarm_test.test_name):
-              command.extend(
-                  [
-                    '--run_from_hash',
-                    swarm_tests_hash_mapping[swarm_test.test_name],
-                    swarm_test.test_name,
-                    '%d' % swarm_test.shards,
-                    # It is necessary even if it is empty.
-                    gtest_filter,
-                    ])
-            else:
-              log.msg('Given a swarm test, %s, that has no matching hash' %
-                      test_name)
-            break
+
+    # Split the test filters and remove any that aren't related to swarm.
+    test_filters_split = [t.partition(':') for t in test_filters
+                          if '_swarm:' in t or t.endswith('_swarm')]
+
+    # Scan through the tests instead of the test_filter to ensure that
+    # the tests are always run in the order they are listed in in
+    # SWARM_TESTS.
+    for swarm_test in self.test:
+      for test_filter in test_filters_split:
+        if (swarm_test.test_name + '_swarm' ==
+            test_filter[TEST_FILTER_TEST_NAME_INDEX]):
+          if swarm_tests_hash_mapping.get(swarm_test.test_name):
+            command.extend(
+                [
+                  '--run_from_hash',
+                  swarm_tests_hash_mapping[swarm_test.test_name],
+                  swarm_test.test_name,
+                  '%d' % swarm_test.shards,
+                  # It is necessary even if it is empty.
+                  test_filter[TEST_FILTER_TEST_FILTER_INDEX],
+                  ])
+          else:
+            log.msg('Given a swarm test, %s, that has no matching hash' %
+                    swarm_test.test_name)
+          break
 
     self.setCommand(command)
 
