@@ -48,11 +48,13 @@ B('WebKit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler=rel_scheduler, builddir=rel_builddir)
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=[
-        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+        'test_shell', 'test_shell_tests', 'webkit_unit_tests',
+        'DumpRenderTree'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'use_skia=1'
+            'GYP_DEFINES':'use_skia=1',
+            'GYP_GENERATORS':'ninja',
         },
         'layout_test_platform': 'chromium-mac',
     }))

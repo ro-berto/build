@@ -154,12 +154,14 @@ B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
 F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
     target='Debug',
     slave_type='Builder',
-    options=[
-        '--compiler=clang','--', '-project', '../webkit/webkit.xcodeproj'],
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+        'test_shell', 'test_shell_tests', 'webkit_unit_tests',
+        'DumpRenderTree'],
     factory_properties={
         'trigger': 's5_webkit_dbg_trigger',
         'gclient_env': {
-            'GYP_DEFINES':'use_skia=1'
+            'GYP_DEFINES':'use_skia=1',
+            'GYP_GENERATORS':'ninja',
         },
         'layout_test_platform': 'chromium-mac',
     }))
