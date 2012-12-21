@@ -79,7 +79,7 @@ class TelemetryTest(unittest.TestCase):
             '"build_dir": "src/build", "perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
-            '"show_perf_results": true}\' \'--annotate=graphing\' ' +
+            '"show_perf_results": true}\' ' +
             '\'src/tools/perf/run_multipage_benchmarks\' \'-v\' ' +
             '\'--browser=android-content-shell\' \'sunspider\' ' +
             '\'src/tools/perf/page_sets/sunspider.json\''

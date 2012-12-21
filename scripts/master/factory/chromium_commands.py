@@ -212,7 +212,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def GetAnnotatedPerfCmd(self, gtest_filter, log_type, test_name,
                           cmd_name='performance_ui_tests', tool_opts=None,
-                          options=None, factory_properties=None):
+                          options=None, factory_properties=None,
+                          py_script=False):
     """Return a runtest command suitable for most perf test steps."""
 
     tool_options = ['--annotate=' + log_type]
@@ -233,14 +234,19 @@ class ChromiumCommands(commands.FactoryCommands):
                                              test_name)
     factory_properties['perf_name'] = perf_name
 
-    return self.GetTestCommand(cmd_name, test_tool_arg_list=tool_options,
-                               arg_list=arg_list,
-                               factory_properties=factory_properties)
+    if py_script:
+      return self.GetPythonTestCommand(cmd_name, wrapper_args=tool_options,
+                                       arg_list=arg_list,
+                                       factory_properties=factory_properties)
+    else:
+      return self.GetTestCommand(cmd_name, test_tool_arg_list=tool_options,
+                                 arg_list=arg_list,
+                                 factory_properties=factory_properties)
 
   def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
                            factory_properties, cmd_name='performance_ui_tests',
                            tool_opts=None, cmd_options=None, step_name=None,
-                           timeout=1200):
+                           timeout=1200, py_script=False):
 
     """Add an annotated perf step to the builder.
 
@@ -272,7 +278,8 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = self.GetAnnotatedPerfCmd(gtest_filter, log_type, test_name,
                                    cmd_name=cmd_name, options=cmd_options,
                                    tool_opts=tool_opts,
-                                   factory_properties=factory_properties)
+                                   factory_properties=factory_properties,
+                                   py_script=py_script)
 
     self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                      do_step_if=self.TestStepFilter, target=self._target,
@@ -832,8 +839,6 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     step_name = step_name or test_name
 
-    cmd = [self._python, self._telemetry_tool]
-
     factory_properties = (factory_properties or {}).copy()
     factory_properties['test_name'] = test_name
     factory_properties['page_set'] = page_set
@@ -843,11 +848,13 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties['build_dir'] = self._build_dir
     factory_properties['step_name'] = step_name
 
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    cmd_options = self.AddFactoryProperties(factory_properties)
 
-    self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
-                     do_step_if=self.TestStepFilter, target=self._target,
-                     factory_properties=factory_properties, timeout=timeout)
+    self.AddAnnotatedPerfStep(test_name, None, 'graphing', factory_properties,
+                              cmd_name=self._telemetry_tool,
+                              cmd_options=cmd_options,
+                              step_name=step_name, timeout=timeout,
+                              py_script=True)
 
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,

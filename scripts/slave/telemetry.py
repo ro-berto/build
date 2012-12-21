@@ -79,8 +79,7 @@ def _GenerateTelemetryCommandSequence(fp):
   if target_os == 'android':
     browser = 'android-content-shell'
   test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
-  test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args,
-                                   wrapper_args=['--annotate=graphing'], fp=fp)
+  test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
   commands.append(test_cmd)
 
   # Run the test against the reference build on platforms where it exists.
@@ -89,8 +88,7 @@ def _GenerateTelemetryCommandSequence(fp):
     ref_args = ['-v', '--browser=exact',
                 '--browser-executable=%s' % ref_build,
                 test_name, page_set]
-    ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args,
-                                    wrapper_args=['--annotate=graphing'], fp=fp)
+    ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args, fp=fp)
     commands.append(ref_cmd)
 
   return commands, env

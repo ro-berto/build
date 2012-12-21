@@ -312,12 +312,17 @@ class FactoryCommands(object):
       cmd.extend(arg_list)
     return cmd
 
-  def GetPythonTestCommand(self, py_script, arg_list=None, wrapper_args=None):
+  # TODO(xusydoc): Make GetPythonTestCommand and GetTestCommand use the same
+  # argument names (wrapper_args / test_tool_arg_list).
+  def GetPythonTestCommand(self, py_script, arg_list=None, wrapper_args=None,
+                           factory_properties=None):
     cmd = [self._python,
            self._test_tool,
            '--run-python-script',
            '--target', self._target,
            '--build-dir', self._build_dir]
+    if factory_properties:
+      cmd = self.AddFactoryProperties(factory_properties, cmd)
     if wrapper_args is not None:
       cmd.extend(wrapper_args)
     cmd.append(py_script)
