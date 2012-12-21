@@ -62,7 +62,7 @@ class TelemetryTest(unittest.TestCase):
     fp['show_perf_results'] = True
     fp['perf_id'] = 'android-gn'
 
-    cmd = [sys.executable, self.telemetry, '--print-cmd',
+    cmd = [self.telemetry, '--print-cmd',
            '--factory-properties=%s' % json.dumps(fp)]
 
     ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
@@ -70,24 +70,21 @@ class TelemetryTest(unittest.TestCase):
 
     runtest = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'runtest.py'))
 
-    expectedText = ''.join([
-        'bash -c ',
-        '. src/build/android/envsetup.sh && ',
-        'adb root && ',
-        'adb wait-for-device && ',
-        '%s --run-python-script --target Release ' % runtest,
-        '--build-dir src/build --factory-properties=\'',
-        '{"page_set": "sunspider.json", "target": "Release", ',
-        '"build_dir": "src/build", "perf_id": "android-gn", ',
-        '"step_name": "sunspider", "test_name": "sunspider", ',
-        '"target_platform": "linux2", "target_os": "android", ',
-        '"show_perf_results": true}\' --annotate=graphing ',
-        'src/tools/perf/run_multipage_benchmarks -v ',
-        '--browser=android-content-shell sunspider ',
-        'src/tools/perf/page_sets/sunspider.json',
+    expectedText = (['\'adb\' \'root\'',
+        '\'adb\' \'wait-for-device\'',
+        '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
+            '\'--build-dir\' \'src/build\' \'--factory-properties=' +
+            '{"page_set": "sunspider.json", "target": "Release", ' +
+            '"build_dir": "src/build", "perf_id": "android-gn", ' +
+            '"step_name": "sunspider", "test_name": "sunspider", ' +
+            '"target_platform": "linux2", "target_os": "android", ' +
+            '"show_perf_results": true}\' \'--annotate=graphing\' ' +
+            '\'src/tools/perf/run_multipage_benchmarks\' \'-v\' ' +
+            '\'--browser=android-content-shell\' \'sunspider\' ' +
+            '\'src/tools/perf/page_sets/sunspider.json\''
         ])
 
-    self.assertEqual(expectedText, self.capture.text[0])
+    self.assertEqual(expectedText, self.capture.text)
 
 if __name__ == '__main__':
   unittest.main()

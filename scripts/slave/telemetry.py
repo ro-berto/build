@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # Copyright (c) 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -23,7 +24,7 @@ def _GetPythonTestCommand(py_script, target, build_dir, arg_list=None,
          '--target', target,
          '--build-dir', build_dir]
   if fp:
-    cmd.extend(["--factory-properties='%s'" % json.dumps(fp)])
+    cmd.extend(["--factory-properties=%s" % json.dumps(fp)])
   if wrapper_args is not None:
     cmd.extend(wrapper_args)
   cmd.append(py_script)
@@ -61,11 +62,14 @@ def _GenerateTelemetryCommandSequence(fp):
   script = os.path.join('src', 'tools', 'perf', 'run_multipage_benchmarks')
   page_set = os.path.join('src', 'tools', 'perf', 'page_sets', page_set)
 
+  env = os.environ
+
   # On android, telemetry needs to use the adb command and needs to be in
   # root mode. Run it in bash since envsetup.sh doesn't work in sh.
   if target_os == 'android':
-    commands = ['. src/build/android/envsetup.sh', 'adb root',
-                'adb wait-for-device']
+    env['PATH'] = os.pathsep.join(['/b/build_internal/scripts/slave/android',
+                                   env['PATH']])
+    commands = [['adb', 'root'], ['adb', 'wait-for-device']]
   else:
     commands = []
 
@@ -76,7 +80,7 @@ def _GenerateTelemetryCommandSequence(fp):
   test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
   test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args,
                                    wrapper_args=['--annotate=graphing'], fp=fp)
-  commands.append(' '.join(test_cmd))
+  commands.append(test_cmd)
 
   # Run the test against the reference build on platforms where it exists.
   ref_build = _GetReferenceBuildPath(target_os, target_platform)
@@ -86,9 +90,9 @@ def _GenerateTelemetryCommandSequence(fp):
                 test_name, page_set]
     ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args,
                                     wrapper_args=['--annotate=graphing'], fp=fp)
-    commands.append(' '.join(ref_cmd))
+    commands.append(ref_cmd)
 
-  return commands
+  return commands, env
 
 
 def main(argv):
@@ -107,18 +111,18 @@ def main(argv):
     print 'This program requires a factory properties to run.'
     return 1
 
-  commands = _GenerateTelemetryCommandSequence(fp)
+  commands, env = _GenerateTelemetryCommandSequence(fp)
 
-  if fp.get('target_os') == 'android':
-    full_command = ['bash', '-c', ' && '.join(commands)]
-  else:
-    full_command = [' && '.join(commands)]
+  retval = 0
+  for command in commands:
+    if options.print_cmd:
+      print ' '.join("'%s'" % c for c in command)
+      continue
 
-  if options.print_cmd:
-    print ' '.join(full_command)
-    return 0
-
-  return chromium_utils.RunCommand(full_command)
+    retval = chromium_utils.RunCommand(command, env=env)
+    if retval != 0:
+      break
+  return retval
 
 
 if '__main__' == __name__:
