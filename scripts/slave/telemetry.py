@@ -23,7 +23,9 @@ def _GetPythonTestCommand(py_script, target, build_dir, arg_list=None,
          os.path.join(SCRIPT_DIR, 'slave', 'runtest.py'),
          '--run-python-script',
          '--target', target,
-         '--build-dir', build_dir]
+         '--build-dir', build_dir,
+         '--no-xvfb'] #  telemetry.py should be run by a 'master' runtest.py
+                      #  which starts xvfb on linux.
   if fp:
     cmd.extend(["--factory-properties=%s" % json.dumps(fp)])
   if wrapper_args is not None:

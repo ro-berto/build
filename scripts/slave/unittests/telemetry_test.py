@@ -74,7 +74,8 @@ class TelemetryTest(unittest.TestCase):
         '\'adb\' \'wait-for-device\'',
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
-            '\'--build-dir\' \'src/build\' \'--factory-properties=' +
+            '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
+            '\'--factory-properties=' +
             '{"page_set": "sunspider.json", "target": "Release", ' +
             '"build_dir": "src/build", "perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +
