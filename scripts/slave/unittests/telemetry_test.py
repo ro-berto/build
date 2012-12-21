@@ -72,6 +72,7 @@ class TelemetryTest(unittest.TestCase):
 
     expectedText = (['\'adb\' \'root\'',
         '\'adb\' \'wait-for-device\'',
+        '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
             '\'--build-dir\' \'src/build\' \'--factory-properties=' +
             '{"page_set": "sunspider.json", "target": "Release", ' +

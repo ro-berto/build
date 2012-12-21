@@ -19,7 +19,8 @@ SCRIPT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 def _GetPythonTestCommand(py_script, target, build_dir, arg_list=None,
                          wrapper_args=None, fp=None):
   """Synthesizes a command line to run runtest.py."""
-  cmd = [os.path.join(SCRIPT_DIR, 'slave', 'runtest.py'),
+  cmd = [sys.executable,
+         os.path.join(SCRIPT_DIR, 'slave', 'runtest.py'),
          '--run-python-script',
          '--target', target,
          '--build-dir', build_dir]
