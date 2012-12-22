@@ -14,10 +14,14 @@
     'build': {
       'filepath': '.+',
     },
+    'build_scripts': {
+      'filepath': 'scripts/.*',
+    },
   },
 
   'WATCHLISTS': {
     'build': ['cmp+cc@chromium.org', 'nsylvain+cc@chromium.org'],
+    'build_scripts': ['kjellander+cc@chromium.org'],
   },
 
 }
