@@ -284,9 +284,53 @@ def FetchBuildsMain(master, builder, builds):
         if int(build) < 39789:
           Print('removing build %s from Linux Build x64' % build)
           del builder_history[build]
-    builds[master][builder] = builder_history
+    # Note that builds will be modified concurrently by multiple threads.
+    # That's safe for simple modifications like this, but don't iterate builds.
+    builds[builder] = builder_history
   except urllib2.URLError:
     VerbosePrint('URLException while fetching %s' % url)
+
+def FetchLKGR():
+  lkgr_url = '%s/lkgr' % REVISIONS_URL
+  try:
+    # pylint: disable=E1121
+    url_fh = urllib2.urlopen(lkgr_url, None, 60)
+  except urllib2.URLError:
+    VerbosePrint('URLException while fetching %s' % lkgr_url)
+    return
+  try:
+     # TODO: Fix for git: git revisions can't be converted to int.
+    return int(url_fh.read())
+  finally:
+    url_fh.close()
+
+def FetchBuildData():
+  builds = dict((master, {}) for master in MASTER_TO_BASE_URL)
+  fetch_threads = []
+  for master, builders in LKGR_STEPS.iteritems():
+    for builder in builders:
+      th = threading.Thread(target=FetchBuildsMain,
+                            name='Fetch %s' % builder,
+                            args=(master, builder, builds[master]))
+      th.start()
+      fetch_threads.append(th)
+  for th in fetch_threads:
+    th.join()
+
+  return builds
+
+def ReadBuildData(fn):
+  try:
+    if fn == '-':
+      fn = '<stdin>'
+      return json.load(sys.stdin)
+    else:
+      with open(fn, 'r') as fh:
+        return json.load(fh)
+  except Exception, e:
+    sys.stderr.write('Could not read build data from %s:\n%s\n' % (
+        fn, repr(e)))
+    raise
 
 def CollateRevisionHistory(builds, lkgr_steps):
   """Organize builder data into:
@@ -298,7 +342,8 @@ def CollateRevisionHistory(builds, lkgr_steps):
   for master in builds.keys():
     for (builder, builder_history) in builds[master].iteritems():
       VerbosePrint('%s/%s:' % (master, builder))
-      for (build_num, build_data) in builder_history.iteritems():
+      for build_num in sorted(builder_history, key=int):
+        build_data = builder_history[build_num]
         build_num = int(build_num)
         revision = build_data['sourceStamp']['revision']
         if not revision:
@@ -473,6 +518,12 @@ def main():
                         action='append', metavar='HOST:PORT',
                         help='Notify this master when a new LKGR is found')
   opt_parser.add_option('--manual', help='Set LKGR manually')
+  opt_parser.add_option('--build-data', metavar='FILE', dest='build_data',
+                        help='Rather than querying the build master, read the '
+                        'build data from this file.  Passing "-" as the '
+                        'argument will read from stdin.')
+  opt_parser.add_option('--dump-build-data', metavar='FILE', dest='dump_file',
+                        help='For debugging, dump the raw json build data.')
   options, args = opt_parser.parse_args()
 
   if args:
@@ -488,35 +539,22 @@ def main():
       NotifyMaster(master, options.manual, options.dry)
     return 0
 
-  builds = {}
-  # Prime builds with the dictionaries it will need per master.
-  for master in MASTER_TO_BASE_URL.keys():
-    builds.setdefault(master, {})
-  fetch_threads = []
-  lkgr = -1
-
-  for master in LKGR_STEPS.keys():
-    for builder in LKGR_STEPS[master].keys():
-      th = threading.Thread(target=FetchBuildsMain,
-                            name='Fetch %s' % builder,
-                            args=(master, builder, builds))
-      th.start()
-      fetch_threads.append(th)
-
-  lkgr_url = '%s/lkgr' % REVISIONS_URL
-  try:
-    # Requires python 2.6
-    # pylint: disable=E1121
-    url_fh = urllib2.urlopen(lkgr_url, None, 60)
-    # Fix for git
-    lkgr = int(url_fh.read())
-    url_fh.close()
-  except urllib2.URLError:
-    VerbosePrint('URLException while fetching %s' % lkgr_url)
+  lkgr = FetchLKGR()
+  if lkgr is None:
     return 1
 
-  for th in fetch_threads:
-    th.join()
+  if options.build_data:
+    builds = ReadBuildData(options.build_data)
+  else:
+    builds = FetchBuildData()
+
+  if options.dump_file:
+    try:
+      with open(options.dump_file, 'w') as fh:
+        json.dump(builds, fh, indent=2)
+    except IOError, e:
+      sys.stderr.write('Could not dump to %s:\n%s\n' % (
+          options.dump_file, repr(e)))
 
   build_history = CollateRevisionHistory(builds, LKGR_STEPS)
   candidate = FindLKGRCandidate(build_history, LKGR_STEPS)
