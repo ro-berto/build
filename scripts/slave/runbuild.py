@@ -46,7 +46,11 @@ def get_args():
                     help='list steps in factory, but don\'t execute them')
   parser.add_option('--show-commands', action='store_true',
                     help='when listing steps, also show the generated output'
-                         ' command')
+                         ' command. Also enables --list-steps and '
+                         '--override-brdostep.')
+  parser.add_option('--override-brdostep', action='store_true',
+                    help='process all steps, even those with '
+                         'brDoStepIf=False or None.')
   parser.add_option('--stepfilter', help='only run steps that match the '
                     'stepfilter regex')
   parser.add_option('--stepreject', help='reject any steps that match the '
@@ -142,6 +146,10 @@ def args_ok(inoptions, pos_args):
 
   if inoptions.list_builders:
     return True
+
+  if inoptions.show_commands:
+    inoptions.override_brdostep = True
+    inoptions.list_steps = True
 
   if inoptions.test_config:
     inoptions.spec = {}
@@ -314,6 +322,10 @@ def execute_builder(my_builder, mastername, options):
   commands = builder_utils.GetCommands(steplist)
   if options.test_config:
     return 0
+
+  if options.override_brdostep:
+    for command in commands:
+      command['doStep'] = True
 
   filtered_commands = runbuild_utils.FilterCommands(commands,
                                                     options.step_regex,
