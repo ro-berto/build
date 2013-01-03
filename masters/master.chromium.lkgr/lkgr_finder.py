@@ -181,6 +181,22 @@ LKGR_STEPS = {
       'ui_unittests',
       'unit_tests',
     ],
+    'iOS Device': [
+      'compile',
+    ],
+    'iOS Simulator (dbg)': [
+      'compile',
+      'base_unittests',
+      'content_unittests',
+      'crypto_unittests',
+      'googleurl_unittests',
+      'media_unittests',
+      'net_unittests',
+      'sql_unittests',
+      'sync_unit_tests',
+      'ui_unittests',
+      'unit_tests',
+    ],
   },  # chromium.mac
   'chromium.linux': {
     'Linux Builder (dbg)': [
