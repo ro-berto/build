@@ -60,53 +60,71 @@ from slave.slave_utils import GSUtilSetup
 
 FIRST_CHECKOUT_SH = """#!/bin/bash
 
-if test -z "$1"; then
-  case `uname -s` in
-    "Linux")
-      os=unix
-      ;;
-    "Darwin")
-      os=mac
-      ;;
+target_os=$(git config --get target.os 2>/dev/null)
+if [ -z "$target_os" ]; then
+  case $(uname -s) in
+    Linux) target_os=unix ;;
+    Darwin) target_os=mac ;;
+    CYGWIN*|MINGW*) target_os=win ;;
     *)
-      echo "You didn't specify an OS (mac, win, unix, or android), \
-and I can't figure it out from 'uname -s'" 1>&2
+      echo "[$solution] *** No target.os set in .git/config, and I can't" 1>&2
+      echo "[$solution] *** figure it out from 'uname -s'" 1>&2
       exit 1
       ;;
   esac
-else
-  os=$1
+  git config target.os "$target_os"
 fi
 
-git config target.os $os
-git checkout --force HEAD
-git config -f .gitmodules --get-regexp '.os$' "(all|$os)" |
-sed 's/^submodule\\.\\(.*\\)\\.os .*$/\\1/' |
-while read submodule; do
-  git config submodule.$submodule.update checkout
-  (cd $submodule && git checkout --force HEAD)
+git fetch origin
+git checkout --force origin/master
+
+git config -f .gitmodules --get-regexp '.os$' |
+sed 's/^submodule\.\(.*\)\.os /\1 /' |
+while read submodule submod_os; do
+  submod_os_cmp="${submod_os/all/}"
+  submod_os_cmp="${submod_os_cmp/${target_os}/}"
+  if [ "$submod_os_cmp" = "$submod_os" ]; then
+    git config "submodule.$submodule.update" none
+    rm -rf "$submodule/.git"
+  else
+    git submodule init "$submodule"
+    git config "submodule.$submodule.update" checkout
+    (test -e "$submodule/.git" && cd "$submodule" && git checkout --force HEAD)
+  fi
 done
-git submodule update
 """
 
 FIRST_CHECKOUT_BAT = """@echo off
-setlocal
+setlocal EnableDelayedExpansion
 
-if "%1" == "" (
-  SET os=win
-) ELSE (
-  SET os=%1
+FOR /F %%x in ('git config --get target.os') DO (
+  set target_os=%%x
 )
 
-call git config target.os %os%
-call git checkout --force HEAD
-
-FOR /F "delims=. tokens=2" %%x in ('git config -f .gitmodules --get-regexp .os$ "(all|%os%)"') DO (
-  call git config submodule.%%x.update checkout
-  CMD /C "cd %%x & git checkout --force HEAD"
+IF "%target_os%" == "" (
+  set target_os=win
+  CALL git config target.os win
 )
 
-call git submodule update
+CALL git fetch origin
+CALL git checkout --force origin/master
+
+FOR /F "tokens=1,*" %%x in ('git config -f .gitmodules --get-regexp .os$') DO (
+  SET submod=%%x
+  SET submod_os=%%y
+  SET submod=!submod:~10,-3!
+  SET submod_path=!submod:/=\!
+  SET submod_os_cmp=!submod_os:all=!
+  SET submod_os_cmp=!submod_os_cmp:%target_os%=!
+  IF !submod_os! == !submod_os_cmp! (
+    CALL git config submodule.!submod!.update none
+    IF EXIST "!submod_path!\.git" CMD /C "RMDIR /S /Q !submod_path!\.git"
+  ) ELSE (
+    CALL git submodule init !submod!
+    CALL git config submodule.!submod!.update checkout
+    IF EXIST "!submod_path!\.git" CMD /C "cd !submod_path! & git checkout --force HEAD"
+  )
+)
 """
 
 
