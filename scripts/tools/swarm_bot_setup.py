@@ -61,7 +61,7 @@ def BuildSetupCommand(user, host, platform, options):
   if platform == 'win':
     copy_func = 'xcopy /i /e /h /y'
   else:
-    copy_func = 'cp -r'
+    copy_func = 'cp -r -f -p'
   bot_setup_commands.extend([
       '%s %s %s' % (copy_func,
                     SWARM_STARTING_DIRECTORY[platform],
