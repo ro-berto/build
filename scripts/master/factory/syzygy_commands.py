@@ -137,7 +137,7 @@ class SyzygyCommands(commands.FactoryCommands):
     # Store every file in the "archive" subdir of our build directory."
     archive_dir = self.PathJoin(self._build_dir, self._target, 'archive')
     dst_gs_url = WithProperties(
-        'gs://syzygy-archive/builds/official/%(got_revision)s/')
+        'gs://syzygy-archive/builds/official/%(got_revision)s')
     url = WithProperties(
         'http://syzygy-archive.commondatastorage.googleapis.com/index.html?'
             'path=builds/official/%(got_revision)s/')
