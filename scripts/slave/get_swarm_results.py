@@ -131,8 +131,9 @@ def GetSwarmResults(swarm_base_url, test_keys):
   exit_codes = [1] * len(test_keys)
   shard_watcher = ShardWatcher(len(test_keys))
   for index in range(len(test_keys)):
-    result_url = '%s/get_result?r=%s' % (swarm_base_url.rstrip('/'),
-                                         test_keys[index])
+    test_key_encoded = urllib.urlencode([('r', test_keys[index])])
+    result_url = '%s/get_result?%s' % (swarm_base_url.rstrip('/'),
+                                       test_key_encoded)
     while True:
       output = ConnectToSwarmServer(result_url)
       if output is None:
@@ -187,10 +188,10 @@ def GetSwarmResults(swarm_base_url, test_keys):
 
         if exit_codes[index] == 0:
           # If the test passed, delete the key since it is no longer needed.
-          remove_key_url = '%s/cleanup_results' % (swarm_base_url.rstrip('/'))
-          key_encoding = urllib.urlencode([('r', test_keys[index])])
-          urllib2.urlopen(remove_key_url,
-                          key_encoding)
+          remove_key_url = '%s/cleanup_results?%s' % (
+              swarm_base_url.rstrip('/'),
+              test_key_encoded)
+          ConnectToSwarmServer(remove_key_url)
         break
       else:
         # Test is not yet done, wait a bit before checking again.

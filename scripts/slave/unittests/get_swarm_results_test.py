@@ -213,8 +213,8 @@ class GetSwarmResults(SuperMoxTestBase):
     url_response.msg = "OK"
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
                                   ).AndReturn(url_response)
-    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
-                                  mox.IgnoreArg())
+    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results?r=key1'
+                                  ).AndReturn(StringIO.StringIO(''))
     self.mox.ReplayAll()
 
     swarm_results.GetSwarmResults('http://host:9001', ['key1'])
