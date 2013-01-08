@@ -20,10 +20,8 @@ def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 S('linux_rel_scheduler', branch='trunk', treeStableTimer=0)
 T('linux_rel_trigger')
 
-chromium_rel_linux_archive = master_config.GetArchiveUrl('ChromiumWebRTC',
-    'Linux Builder',
-    'chromium-webrtc-rel-linux-builder',
-    'linux')
+chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
+                                                  'Linux Builder')
 
 tests = ['pyauto_webrtc_tests']
 
@@ -36,12 +34,13 @@ F('linux_rel_factory', linux().ChromiumWebRTCLatestFactory(
     target='Release',
     options=['--compiler=goma', 'chromium_builder_webrtc'],
     factory_properties={'lkgr': True,
-                        'trigger': 'linux_rel_trigger',}))
+                        'trigger': 'linux_rel_trigger',
+                        'build_url': chromium_rel_archive,}))
 
 B('Linux Tester', 'linux_tester_factory', scheduler='linux_rel_trigger')
 F('linux_tester_factory', linux().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
-    build_url=chromium_rel_linux_archive,
+    build_url=chromium_rel_archive,
     tests=tests,
     factory_properties={'use_xvfb_on_linux': True,
                         'show_perf_results': True,
