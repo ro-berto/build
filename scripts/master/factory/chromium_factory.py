@@ -542,7 +542,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
     if R('image_decoding_benchmark'):
       f.AddTelemetryTest(
-          'image_decoding_benchmark', 'tough_image_cases.json',
+          'image_decoding_benchmark', 'image_decoding_benchmark.json',
           factory_properties=fp)
     if R('dromaeo'):
       f.AddTelemetryTest('dromaeo', 'dromaeo/domcoreattr.json',
