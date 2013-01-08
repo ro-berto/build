@@ -144,6 +144,9 @@ F('f_android_clobber', linux_android().ChromiumAnnotationFactory(
       'sizes',
     ],
     factory_properties={
+      'archive_build': True,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
+      'gs_acl': 'public-read',
       'show_perf_results': True,
       'perf_id': 'android-release',
     },
