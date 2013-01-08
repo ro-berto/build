@@ -823,6 +823,12 @@ def main_win(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
 
+  # ASAN on windows currently causes chrome's IPC connection to hang on
+  # subprocess starts with the sandbox enabled. Additionally, turning off
+  # the sandbox will allow us to catch errors in the renderer processes.
+  if options.factory_properties.get('asan', False):
+    command += ['--no-sandbox']
+
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
