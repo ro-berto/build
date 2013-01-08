@@ -53,13 +53,16 @@ def TestRunOutput(output):
   return ''.join(test_run_output)
 
 
-def ConnectToSwarmServer(url):
+def ConnectToSwarmServer(url, data=None, max_retries=MAX_RETRY_ATTEMPTS):
   """Try multiple times to connect to the swarm server and return the response,
      or None if unable to connect.
   """
   for attempt in range(MAX_RETRY_ATTEMPTS):
     try:
-      return urllib2.urlopen(url).read()
+      if data:
+        return urllib2.urlopen(url, data=data).read()
+      else:
+        return urllib2.urlopen(url).read()
     except (socket.error, urllib2.URLError) as e:
       print 'Error: Calling %s threw %s' % (url, e)
 
@@ -188,10 +191,11 @@ def GetSwarmResults(swarm_base_url, test_keys):
 
         if exit_codes[index] == 0:
           # If the test passed, delete the key since it is no longer needed.
-          remove_key_url = '%s/cleanup_results?%s' % (
-              swarm_base_url.rstrip('/'),
-              test_key_encoded)
-          ConnectToSwarmServer(remove_key_url)
+          remove_key_url = '%s/cleanup_results' % swarm_base_url.rstrip('/')
+          # The data parameter must be used so that the the request will be a
+          # POST and not a GET.
+          ConnectToSwarmServer(remove_key_url, data=test_key_encoded,
+                               max_retries=1)
         break
       else:
         # Test is not yet done, wait a bit before checking again.

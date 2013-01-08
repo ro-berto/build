@@ -9,6 +9,7 @@ import json
 import StringIO
 import unittest
 import urllib2
+import urllib
 
 from testing_support.super_mox import mox
 from testing_support.super_mox import SuperMoxTestBase
@@ -213,7 +214,8 @@ class GetSwarmResults(SuperMoxTestBase):
     url_response.msg = "OK"
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
                                   ).AndReturn(url_response)
-    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results?r=key1'
+    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
+                                  data=urllib.urlencode({'r': 'key1'})
                                   ).AndReturn(StringIO.StringIO(''))
     self.mox.ReplayAll()
 
@@ -282,11 +284,14 @@ class GetSwarmResults(SuperMoxTestBase):
 
   def test_get_swarm_results_url_errors(self):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+    self.mox.StubOutWithMock(swarm_results.time, 'sleep')
     url = 'http://host:9001/get_result?r=key1'
     exception = urllib2.URLError('failed to connect')
 
-    for _ in range(swarm_results.MAX_RETRY_ATTEMPTS):
+    for i in range(swarm_results.MAX_RETRY_ATTEMPTS):
       swarm_results.urllib2.urlopen(url).AndRaise(exception)
+      if i + 1 != swarm_results.MAX_RETRY_ATTEMPTS:
+        swarm_results.time.sleep(mox.IgnoreArg())
     self.mox.ReplayAll()
 
     swarm_results.GetSwarmResults('http://host:9001', ['key1'])
