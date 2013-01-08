@@ -14,6 +14,7 @@ import sys
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BLACKLIST = set((
     'crnss.dll',
+    'ffmpegsumo.dll',
     'gpu.dll',
     'icuuc.dll',
     'nacl.exe',
