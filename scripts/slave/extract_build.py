@@ -77,15 +77,17 @@ def GetBuildUrl(abs_build_dir, options):
   replace_dict = dict(options.build_properties)
   # If builddir isn't specified, assume buildbot used the builder name
   # as the root folder for the build.
-  if not replace_dict.get('parent_builddir'):
-    replace_dict['parent_builddir'] = replace_dict['parentname']
+  if not replace_dict.get('parent_builddir') and replace_dict.get('parentname'):
+    replace_dict['parent_builddir'] = replace_dict.get('parentname', '')
   replace_dict['base_filename'] = base_filename
   url = options.build_url or options.factory_properties.get('build_url')
   if not url:
     url = ('http://%(parentslavename)s/b/build/slave/%(parent_builddir)s/'
            'chrome_staging')
   if url[-4:] != '.zip': # assume filename not specified
-    url = os.path.join(url, '%(base_filename)s.zip')
+    # Append the filename to the base URL. First strip any trailing slashes.
+    url = url.rstrip('/')
+    url = '%s/%s' % (url, '%(base_filename)s.zip')
   url = url % replace_dict
 
   versioned_url = url.replace('.zip', version_suffix + '.zip')

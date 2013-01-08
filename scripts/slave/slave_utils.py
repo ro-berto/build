@@ -93,7 +93,7 @@ def GetZipFileNames(build_properties, build_dir, webkit_dir=None,
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
   chromium_revision = SubversionRevision(os.path.dirname(build_dir))
-  if 'try' in build_properties.get('mastername'):
+  if 'try' in build_properties.get('mastername', ''):
     if extract:
       if not build_properties.get('parent_buildnumber'):
         raise Exception('build_props does not have parent data: %s' %
