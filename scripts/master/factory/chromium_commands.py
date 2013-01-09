@@ -1248,7 +1248,6 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
     gpu_data = self.PathJoin('..', 'gpu_data')
-    gpu_data = os.path.abspath(gpu_data)
     gen_dir = self.PathJoin(gpu_data, 'generated')
     ref_dir = self.PathJoin(gpu_data, 'reference')
 
