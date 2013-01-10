@@ -98,18 +98,27 @@ def real_main(options):
   """ Download a build, extract it to build\BuildDir\full-build-win32
       and rename it to build\BuildDir\Target
   """
+  normal_retval = 0
   # TODO: need to get the build *output* directory passed in also so Linux
   # and Mac don't have to walk up a directory to get to the right directory.
   if options.build_output_dir:
     build_output_dir = os.path.join(options.build_dir, options.build_output_dir)
   elif chromium_utils.IsWindows():
     build_output_dir = options.build_dir
-  elif chromium_utils.IsLinux():
-    build_output_dir = os.path.join(
-        os.path.dirname(options.build_dir), 'sconsbuild')
-  elif chromium_utils.IsMac():
-    build_output_dir = os.path.join(
-        os.path.dirname(options.build_dir), 'xcodebuild')
+  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
+    if options.build_dir == 'src/build':
+      print('WARNING: Passed "src/build" as --build-dir option. '
+            'This is almost certainly incorrect.')
+      normal_retval = slave_utils.WARNING_EXIT_CODE
+      if chromium_utils.IsMac():
+        legacy_path = 'xcodebuild'
+      else:
+        legacy_path = 'sconsbuild'
+      print 'Assuming you meant src/%s' % legacy_path
+      build_output_dir = os.path.join(
+          os.path.dirname(options.build_dir), legacy_path)
+    else:
+      build_output_dir = options.build_dir
   else:
     raise NotImplementedError('%s is not supported.' % sys.platform)
 
@@ -203,7 +212,7 @@ def real_main(options):
     if failure:
       # We successfully extracted the archive, but it was the generic one.
       return slave_utils.WARNING_EXIT_CODE
-    return 0
+    return normal_retval
 
   # If we get here, that means that it failed 3 times. We return a failure.
   return slave_utils.ERROR_EXIT_CODE
