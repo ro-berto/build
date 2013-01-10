@@ -41,8 +41,9 @@ B('Android Builder (dbg)', 'f_android_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
-    annotation_script='src/build/android/buildbot/bb_main_builder.sh',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
+      'android_bot_id': 'main-builder-dbg',
       'buildtool': 'ninja',
       'trigger': 'android_trigger',
     }))
@@ -51,20 +52,27 @@ B('Android Tests (dbg)', 'f_android_dbg_tests', 'android', 'android_trigger',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     target='Debug',
-    annotation_script='src/build/android/buildbot/bb_main_tester.sh',
-    factory_properties={'build_url': android_dbg_archive}))
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+      'android_bot_id': 'main-tests-dbg',
+      'build_url': android_dbg_archive,
+    }))
 
 B('Android Builder', 'f_android_rel', None, 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_rel', linux_android().ChromiumAnnotationFactory(
-    annotation_script='src/build/android/buildbot/bb_main_builder.sh'))
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+      'android_bot_id': 'main-builder-rel',
+    }))
 
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
-    annotation_script='src/build/android/buildbot/bb_clang_builder.sh',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
+      'android_bot_id': 'main-clang-builder-dbg',
       'buildtool': 'ninja',
       'extra_gyp_defines': 'clang=1',
     }))

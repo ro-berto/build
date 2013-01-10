@@ -44,18 +44,22 @@ android_dbg_archive = master_config.GetGSUtilUrl(
 B('Android Builder (dbg)', 'f_android_dbg', scheduler='s9_android_webkit')
 F('f_android_dbg', linux_android().ChromiumWebkitLatestAnnotationFactory(
     target='Debug',
-    annotation_script='src/build/android/buildbot/bb_webkit_latest_builder.sh',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
-        'trigger': 'android_dbg_trigger',
+        'android_bot_id': 'webkit-latest-builder-dbg',
         'build_url': android_dbg_archive,
+        'trigger': 'android_dbg_trigger',
         }))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', None, 'android_dbg_trigger',
   auto_reboot=False)
 F('f_android_dbg_tests', linux_android().ChromiumWebkitLatestAnnotationFactory(
     target='Debug',
-    annotation_script='src/build/android/buildbot/bb_webkit_latest_tester.sh',
-    factory_properties={'build_url': android_dbg_archive}))
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+        'android_bot_id': 'webkit-latest-tests-dbg',
+        'build_url': android_dbg_archive,
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)

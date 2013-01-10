@@ -144,13 +144,14 @@ F('f_android_clobber', linux_android().ChromiumAnnotationFactory(
       'sizes',
     ],
     factory_properties={
+      'android_bot_id': 'main-clobber-rel',
       'archive_build': True,
-      'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
-      'show_perf_results': True,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
       'perf_id': 'android-release',
+      'show_perf_results': True,
     },
-    annotation_script='src/build/android/buildbot/bb_main_clobber.sh',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
     ))
 
 
