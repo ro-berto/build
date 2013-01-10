@@ -57,6 +57,9 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
     factory_properties={
         'trigger': 's7_webkit_builder_rel_trigger',
         'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
+        'archive_build': True,
+        'gs_bucket': 'gs://chromium-webkit-snapshots',
+        'gs_acl': 'public_read',
     }))
 
 #
