@@ -256,7 +256,8 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   chromium_utils.MakeWorldReadable(versioned_file)
   build_url = options.factory_properties.get('build_url', '')
   if build_url.startswith('gs://'):
-    if slave_utils.GSUtilCopyFile(versioned_file, build_url):
+    gs_acl = options.factory_properties.get('gs_acl')
+    if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl):
       raise chromium_utils.ExternalError('gsutil returned non-zero status!')
   print 'Created versioned archive', versioned_file
   return (zip_base, zip_ext)
