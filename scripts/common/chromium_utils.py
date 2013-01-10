@@ -126,6 +126,8 @@ def FilteredMeanAndStandardDeviation(data):
   return MeanAndStandardDeviation(_FilterMax(data))
 
 def HistogramPercentiles(histogram, percentiles):
+  if not 'buckets' in histogram or not 'count' in histogram:
+    return []
   computed_percentiles = _ComputePercentiles(histogram['buckets'],
                                              histogram['count'],
                                              percentiles)
@@ -135,6 +137,8 @@ def HistogramPercentiles(histogram, percentiles):
   return output
 
 def GeomMeanAndStdDevFromHistogram(histogram):
+  if not 'buckets' in histogram or not 'count' in histogram:
+    return 0.0, 0.0
   count = 0
   sum_of_logs = 0
   for bucket in histogram['buckets']:
