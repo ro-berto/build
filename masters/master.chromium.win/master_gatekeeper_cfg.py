@@ -20,6 +20,7 @@ categories_steps = {
     'cacheinvalidation_unittests',
     'cc_unittests',
     'chrome_frame_net_tests',
+    'chrome_frame_tests',
     'chromedriver2_unittests',
     'compositor_unittests',
     'content_browsertests',
