@@ -156,6 +156,22 @@ class DrCommands(object):
                    name='unpack tools',
                    description='unpack tools')
 
+  def AddFindFileIntoPropertyStep(self, pattern, property_name):
+    """Finds a file on the slave and stores the name in property_name.
+
+    TODO(rnk): This won't work if pattern matches more than one file.
+    """
+    if self.IsWindows():
+      ls_cmd = 'dir /B'  # /B means "bare", like ls with no -l.
+    else:
+      ls_cmd = 'ls'
+    self.AddStep(SetProperty,
+                 name='find package file',
+                 description='find package file',
+                 # Use a string command here to let the shell expand *.
+                 command=WithProperties(ls_cmd + ' ' + pattern),
+                 property=property_name)
+
   def AddDRSuite(self, step_name, suite_args):
     """Run DR's test suite with arguments."""
     timeout = 20 * 60  # 20min w/o output.  10 is too short for Windows.
@@ -237,15 +253,15 @@ class DrCommands(object):
                      name='Package DynamoRIO')
     # For DR, we use plain cpack archives since we don't have existing scripts
     # that expect sfx exes.
-    # TODO(rnk): Find a way to wildcard the DR version.
     if self.IsWindows():
-      src_file = 'DynamoRIO-Windows-4.0.%(got_revision)s-42.zip'
+      src_file = 'DynamoRIO-Windows-*.%(got_revision)s-42.zip'
       dst_file = 'dynamorio-windows-r%(got_revision)s.zip'
     else:
-      src_file = 'DynamoRIO-Linux-4.0.%(got_revision)s-42.tar.gz'
+      src_file = 'DynamoRIO-Linux-*.%(got_revision)s-42.tar.gz'
       dst_file = 'dynamorio-linux-r%(got_revision)s.tar.gz'
+    self.AddFindFileIntoPropertyStep(src_file, 'package_name')
     self.AddStep(FileUpload,
-                 slavesrc=WithProperties(src_file),
+                 slavesrc=WithProperties('%(package_name)s'),
                  masterdest=WithProperties('public_html/builds/' + dst_file),
                  name='Upload DR package')
     return self.factory
