@@ -33,8 +33,7 @@ F('linux_rel_factory', linux().ChromiumWebRTCLatestFactory(
     slave_type='Builder',
     target='Release',
     options=['--compiler=goma', 'chromium_builder_webrtc'],
-    factory_properties={'lkgr': True,
-                        'trigger': 'linux_rel_trigger',
+    factory_properties={'trigger': 'linux_rel_trigger',
                         'build_url': chromium_rel_archive,}))
 
 B('Linux Tester', 'linux_tester_factory', scheduler='linux_rel_trigger')

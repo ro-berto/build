@@ -98,14 +98,14 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   B('LinuxMemcheck', 'linux_memcheck_factory', scheduler=scheduler)
   F('linux_memcheck_factory', linux().WebRTCFactory(
       target='Release',
-      tests=['memcheck_' + test for test in memcheck_tests],
+      tests=memcheck_tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
                           {'GYP_DEFINES': 'build_for_tool=memcheck'}}))
   B('LinuxTsan', 'linux_tsan_factory', scheduler=scheduler)
   F('linux_tsan_factory', linux().WebRTCFactory(
       target='Release',
-      tests=['tsan_' + test for test in tsan_tests],
+      tests=tsan_tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
                           {'GYP_DEFINES': 'build_for_tool=tsan'}}))

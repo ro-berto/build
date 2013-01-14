@@ -33,9 +33,7 @@ F('win_rel_factory', win().ChromiumWebRTCLatestFactory(
     slave_type='Builder',
     target='Release',
     project='all.sln;chromium_builder_webrtc',
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
-                        'lkgr': True,
-                        'trigger': 'win_rel_trigger',
+    factory_properties={'trigger': 'win_rel_trigger',
                         'build_url': chromium_rel_archive,}))
 
 B('WinXP Tester', 'win_xp_tester_factory', scheduler='win_rel_trigger')

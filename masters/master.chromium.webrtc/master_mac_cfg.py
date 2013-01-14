@@ -36,8 +36,7 @@ F('mac_rel_factory', mac().ChromiumWebRTCLatestFactory(
     target='Release',
     options=['--compiler=goma-clang', '--', '-target',
              'chromium_builder_webrtc'],
-    factory_properties={'lkgr': True,
-                        'trigger': 'mac_rel_trigger',}))
+    factory_properties={'trigger': 'mac_rel_trigger',}))
 
 B('Mac Tester', 'mac_tester_factory', scheduler='mac_rel_trigger')
 F('mac_tester_factory', mac().ChromiumWebRTCLatestFactory(
