@@ -81,7 +81,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
     'http://v8.googlecode.com/svn/branches/bleeding_edge')
   CUSTOM_DEPS_WEBRTC_LATEST = ('src/third_party/webrtc',
-    config.Master.webrtc_url + 'trunk/webrtc')
+    config.Master.webrtc_url + '/trunk/webrtc')
   CUSTOM_DEPS_AVPERF = ('src/chrome/test/data/media/avperf',
     config.Master.trunk_url + '/deps/avperf')
   CUSTOM_VARS_NACL_LATEST = [
