@@ -510,6 +510,9 @@ class StagerBase(object):
     # this into archive_utils.py.
     archive_files = [archive_file]
     for archive_name in archives_list:
+      # The list might be empty if it was all 'not_found' optional files.
+      if not archives_list[archive_name]:
+        continue
       if fparser.IsDirectArchive(archives_list[archive_name]):
         fileobj = archives_list[archive_name][0]
         # Copy the file to the path specified in archive_name, which might be
