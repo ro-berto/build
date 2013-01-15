@@ -146,6 +146,7 @@ processes = [
     # have hanging around.
     'BuildConsole.exe',
     'httpd.exe',
+    'lighttpd.exe',
     'outlook.exe',
     'perl.exe',
     'python_slave.exe',
