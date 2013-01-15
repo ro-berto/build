@@ -14,7 +14,11 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win():
+  return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win_tester():
+  return chromium_factory.ChromiumFactory('src/build', 'win32',
+                                          nohooks_on_update=True)
 
 # Scheduler for the WebRTC trunk branch.
 S('win_rel_scheduler', branch='trunk', treeStableTimer=0)
@@ -37,7 +41,7 @@ F('win_rel_factory', win().ChromiumWebRTCLatestFactory(
                         'build_url': chromium_rel_archive,}))
 
 B('WinXP Tester', 'win_xp_tester_factory', scheduler='win_rel_trigger')
-F('win_xp_tester_factory', win().ChromiumWebRTCLatestFactory(
+F('win_xp_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
@@ -48,7 +52,7 @@ F('win_xp_tester_factory', win().ChromiumWebRTCLatestFactory(
                         'start_crash_handler': True,}))
 
 B('Win7 Tester', 'win_7_tester_factory', scheduler='win_rel_trigger')
-F('win_7_tester_factory', win().ChromiumWebRTCLatestFactory(
+F('win_7_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,

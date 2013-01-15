@@ -14,7 +14,11 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux_tester():
+  return chromium_factory.ChromiumFactory('src/build', 'linux2',
+                                          nohooks_on_update=True)
 
 # Scheduler for the WebRTC trunk branch.
 S('linux_rel_scheduler', branch='trunk', treeStableTimer=0)
@@ -37,7 +41,7 @@ F('linux_rel_factory', linux().ChromiumWebRTCLatestFactory(
                         'build_url': chromium_rel_archive,}))
 
 B('Linux Tester', 'linux_tester_factory', scheduler='linux_rel_trigger')
-F('linux_tester_factory', linux().ChromiumWebRTCLatestFactory(
+F('linux_tester_factory', linux_tester().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
