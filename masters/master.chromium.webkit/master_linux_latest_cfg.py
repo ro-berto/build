@@ -35,9 +35,11 @@ B('Linux Tests', 'f_linux_tests_rel', scheduler='s9_webkit_rel')
 F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
     tests=[
         'browser_tests',
+        'cc_unittests',
         'content_browsertests',
         'interactive_ui',
         'unit',
+        'webkit_compositor_bindings_unittests',
     ],
     options=[
         '--build-tool=ninja',

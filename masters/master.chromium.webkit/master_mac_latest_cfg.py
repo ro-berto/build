@@ -36,9 +36,11 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
              'chromium_builder_tests'],
     tests=[
       'browser_tests',
+      'cc_unittests',
       'content_browsertests',
       'interactive_ui',
       'unit',
+      'webkit_compositor_bindings_unittests',
     ],
     factory_properties={
         'generate_gtest_json': True,

@@ -23,8 +23,10 @@ defaults['category'] = '7win latest'
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'cc_unittests',
   'content_browsertests',
   'media_unittests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 ################################################################################
