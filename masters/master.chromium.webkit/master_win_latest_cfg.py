@@ -59,7 +59,7 @@ F('f_win_rel', win().ChromiumWebkitLatestFactory(
         'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
         'archive_build': True,
         'gs_bucket': 'gs://chromium-webkit-snapshots',
-        'gs_acl': 'public_read',
+        'gs_acl': 'public-read',
     }))
 
 #
