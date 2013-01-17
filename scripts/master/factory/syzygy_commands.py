@@ -9,8 +9,8 @@ This is based on commands.py and adds Syzygy-specific commands."""
 from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 
+from master import chromium_step
 from master.factory import commands
-from master.log_parser import gtest_command
 
 class _UrlStatusCommand(shell.ShellCommand):
   """A ShellCommand subclass that adorns its build status with a URL on success.
@@ -52,9 +52,12 @@ class SyzygyCommands(commands.FactoryCommands):
     test_path = self.PathJoin(self._build_dir,
                               self._target,
                               test_name + '.exe')
-    command = [self._python, script_path, '--on-waterfall', test_path,
-               '--', '--gtest_print_time']
-    self.AddTestStep(gtest_command.GTestCommand, test_name, command)
+    args = ['--on-waterfall', test_path, '--', '--gtest_print_time']
+
+    command = self.GetPythonTestCommand(script_path, arg_list=args,
+                                        wrapper_args=['--annotate=gtest'])
+
+    self.AddTestStep(chromium_step.AnnotatedCommand, test_name, command)
 
   def AddRandomizeChromeStep(self):
     # Randomization script path.
