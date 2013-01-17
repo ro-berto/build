@@ -10,8 +10,8 @@ from buildbot.process.properties import WithProperties
 from buildbot.steps import shell
 from twisted.python import log
 
+from master import chromium_step
 from master.factory import commands
-from master.log_parser import gtest_command
 
 # Indices used to get a test's name and the filter to apply to from a split
 # testfilter property.
@@ -134,15 +134,17 @@ class SwarmCommands(commands.FactoryCommands):
                                         'buildername:-None',
                                         'buildnumber:-None')
 
-    command = [self._python, script_path, '-u', swarm_server,
-               swarm_request_name]
+    args = ['-u', swarm_server, swarm_request_name]
+
+    command = self.GetPythonTestCommand(script_path, arg_list=args,
+                                        wrapper_args=['--annotate=gtest'])
 
     # Swarm handles the timeouts due to no ouput being produced for 10 minutes,
     # but we don't have access to the output until the whole test is done, which
     # may take more than 10 minutes, so we increase the buildbot timeout.
     timeout = 2 * 60 * 60
 
-    self.AddTestStep(gtest_command.GTestCommand,
+    self.AddTestStep(chromium_step.AnnotatedCommand,
                      '%s_swarm' % test_name,
                      command,
                      timeout=timeout,
