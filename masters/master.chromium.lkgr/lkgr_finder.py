@@ -122,6 +122,7 @@ LKGR_STEPS = {
       'browser_tests',
     ],
     'Chrome Frame Tests (ie8)': [
+      'chrome_frame_tests',
       'chrome_frame_unittests',
     ],
     # 'Interactive Tests (dbg)': [
