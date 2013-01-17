@@ -71,7 +71,7 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     # Scan through the tests instead of the test_filter to ensure that
     # the tests are always run in the order they are listed in in
     # SWARM_TESTS.
-    for swarm_test in self.test:
+    for swarm_test in self.tests:
       for test_filter in test_filters_split:
         if (swarm_test.test_name + '_swarm' ==
             test_filter[TEST_FILTER_TEST_NAME_INDEX]):
