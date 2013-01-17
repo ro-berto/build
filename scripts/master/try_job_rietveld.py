@@ -210,7 +210,7 @@ class TryJobRietveld(TryJobBase):
     return urlparse.urljoin(code_review_sites[project],
                             'get_pending_try_patchsets?limit=100')
 
-  @defer.deferredGenerator
+  @defer.inlineCallbacks
   def SubmitJobs(self, jobs):
     """Submit pending try jobs to slaves for building.
 
@@ -250,22 +250,16 @@ class TryJobRietveld(TryJobBase):
         # Now cleanup the job dictionary and submit it.
         cleaned_job = self.parse_options(options)
 
-        wfd = defer.waitForDeferred(self.get_lkgr(cleaned_job))
-        yield wfd
-        wfd.getResult()
-
-        wfd = defer.waitForDeferred(self.master.addChange(
+        yield self.get_lkgr(cleaned_job)
+        c = yield self.master.addChange(
             author=','.join(cleaned_job['email']),
             # TODO(maruel): Get patchset properties to get the list of files.
             # files=[],
             revision=cleaned_job['revision'],
-            comments=''))
-        yield wfd
-        changeids = [wfd.getResult().number]
+            comments='')
+        changeids = [c.number]
 
-        wfd = defer.waitForDeferred(self.SubmitJob(cleaned_job, changeids))
-        yield wfd
-        wfd.getResult()
+        yield self.SubmitJob(cleaned_job, changeids)
       except BadJobfile, e:
         # We need to mark it as failed otherwise it'll stay in the pending
         # state. Simulate a buildFinished event on the build.
