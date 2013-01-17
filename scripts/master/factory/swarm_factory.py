@@ -35,15 +35,17 @@ SWARM_TESTS = [
 ]
 
 
-def SetupSwarmTests(machine, options, swarm_server, isolation_outdir, ninja,
-                    tests):
+def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
+                    isolation_outdir, ninja, tests):
   """This is a swarm builder."""
+  # Only set the outdir if we are building the hashtable to ensure we know where
+  # to load the hashtable from later.
   factory_properties = {
     'gclient_env' : {
       'GYP_DEFINES': (
-        'test_isolation_mode=hashtable '
-        'test_isolation_outdir=' + isolation_outdir +
-        ' fastbuild=1'
+          'test_isolation_mode=' + isolation_mode +
+          ' test_isolation_outdir=' + isolation_outdir +
+          ' fastbuild=1'
       ),
       'GYP_MSVS_VERSION': '2010',
     },
