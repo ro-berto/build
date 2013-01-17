@@ -22,7 +22,6 @@ from master.factory import commands
 from master.factory import swarm_commands
 
 from master.log_parser import archive_command
-from master.log_parser import gtest_command
 from master.log_parser import process_log
 from master.log_parser import retcode_command
 from master.log_parser import webkit_test_command
@@ -510,10 +509,10 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties)
 
   # Reliability sanity tests.
-  def AddAnnotatedAutomatedUiTests(self, factory_properties=None):
+  def AddAutomatedUiTests(self, factory_properties=None):
     arg_list = ['--gtest_filter=-AutomatedUITest.TheOneAndOnlyTest']
-    self.AddAnnotatedGTestTestStep('automated_ui_tests', factory_properties,
-                                   arg_list=arg_list)
+    self.AddGTestTestStep('automated_ui_tests', factory_properties,
+                          arg_list=arg_list)
 
   def AddDeps2GitStep(self, verify=True):
     J = self.PathJoin
@@ -572,35 +571,35 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(retcode_command.ReturnCodeCommand,
                      'reliability_tests', cmd)
 
-  def AddAnnotatedInstallerTests(self, factory_properties):
+  def AddInstallerTests(self, factory_properties):
     if self._target_platform == 'win32':
-      self.AddAnnotatedGTestTestStep('installer_util_unittests',
-                                     factory_properties)
+      self.AddGTestTestStep('installer_util_unittests',
+                            factory_properties)
       if (self._target == 'Release' and
           not factory_properties.get('disable_mini_installer_test')):
-        self.AddAnnotatedGTestTestStep('mini_installer_test',
-                                       factory_properties,
-                                       arg_list=['-clean'])
+        self.AddGTestTestStep('mini_installer_test',
+                              factory_properties,
+                              arg_list=['-clean'])
 
   def AddBuildrunnerInstallerTests(self, factory_properties):
     if self._target_platform == 'win32':
-      self.AddAnnotatedGTestTestStep('installer_util_unittests',
-                                     factory_properties)
+      self.AddGTestTestStep('installer_util_unittests',
+                            factory_properties)
       if (self._target == 'Release' and
           not factory_properties.get('disable_mini_installer_test')):
         self.AddBuildrunnerGTest('mini_installer_test',
                                  factory_properties,
                                  arg_list=['-clean'])
 
-  def AddAnnotatedChromeUnitTests(self, factory_properties):
-    self.AddAnnotatedGTestTestStep('ipc_tests', factory_properties)
-    self.AddAnnotatedGTestTestStep('sync_unit_tests', factory_properties)
-    self.AddAnnotatedGTestTestStep('unit_tests', factory_properties)
-    self.AddAnnotatedGTestTestStep('sql_unittests', factory_properties)
-    self.AddAnnotatedGTestTestStep('ui_unittests', factory_properties)
-    self.AddAnnotatedGTestTestStep('content_unittests', factory_properties)
+  def AddChromeUnitTests(self, factory_properties):
+    self.AddGTestTestStep('ipc_tests', factory_properties)
+    self.AddGTestTestStep('sync_unit_tests', factory_properties)
+    self.AddGTestTestStep('unit_tests', factory_properties)
+    self.AddGTestTestStep('sql_unittests', factory_properties)
+    self.AddGTestTestStep('ui_unittests', factory_properties)
+    self.AddGTestTestStep('content_unittests', factory_properties)
     if self._target_platform == 'win32':
-      self.AddAnnotatedGTestTestStep('views_unittests', factory_properties)
+      self.AddGTestTestStep('views_unittests', factory_properties)
 
   def AddBuildrunnerChromeUnitTests(self, factory_properties):
     self.AddBuildrunnerGTest('ipc_tests', factory_properties)
@@ -612,12 +611,12 @@ class ChromiumCommands(commands.FactoryCommands):
     if self._target_platform == 'win32':
       self.AddBuildrunnerGTest('views_unittests', factory_properties)
 
-  def AddAnnotatedSyncIntegrationTests(self, factory_properties):
+  def AddSyncIntegrationTests(self, factory_properties):
     options = ['--ui-test-action-max-timeout=120000']
 
-    self.AddAnnotatedGTestTestStep('sync_integration_tests',
-                                   factory_properties, '',
-                                   options)
+    self.AddGTestTestStep('sync_integration_tests',
+                          factory_properties, '',
+                          options)
 
   def AddBuildrunnerSyncIntegrationTests(self, factory_properties):
     options = ['--ui-test-action-max-timeout=120000']
@@ -626,7 +625,7 @@ class ChromiumCommands(commands.FactoryCommands):
                              factory_properties, '',
                              options)
 
-  def AddAnnotatedBrowserTests(self, factory_properties=None):
+  def AddBrowserTests(self, factory_properties=None):
     description = ''
     options = ['--lib=browser_tests']
 
@@ -636,10 +635,10 @@ class ChromiumCommands(commands.FactoryCommands):
 
     options = filter(None, options)
 
-    self.AddAnnotatedGTestTestStep('browser_tests', factory_properties,
-                                   description, options,
-                                   total_shards=total_shards,
-                                   shard_index=shard_index)
+    self.AddGTestTestStep('browser_tests', factory_properties,
+                          description, options,
+                          total_shards=total_shards,
+                          shard_index=shard_index)
 
   def AddBuildrunnerBrowserTests(self, factory_properties):
     description = ''
@@ -690,9 +689,17 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200,
                     factory_properties=None,
-                    command_class=gtest_command.GTestFullCommand,
                     wrapper_args=None):
     factory_properties = factory_properties or {}
+    factory_properties['full_test_name'] = True
+    if not wrapper_args:
+      wrapper_args = []
+    wrapper_args.extend([
+        '--annotate=gtest',
+        '--test-type', 'memory test: %s' % test_name
+    ])
+    command_class = chromium_step.AnnotatedCommand
+
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     build_dir = os.path.join(self._build_dir, self._target)
     if self._target_platform == 'darwin':  # Mac bins reside in src/xcodebuild
@@ -704,8 +711,6 @@ class ChromiumCommands(commands.FactoryCommands):
     elif self._target_platform == 'win32':  # Windows binaries are in src/build
       build_dir = os.path.join(os.path.dirname(self._build_dir), 'build',
                                self._target)
-    if not wrapper_args:
-      wrapper_args = []
     do_step_if = self.TestStepFilter
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
@@ -742,26 +747,23 @@ class ChromiumCommands(commands.FactoryCommands):
                      timeout=timeout,
                      do_step_if=do_step_if)
 
-  def AddAnnotatedMemoryTest(self, test_name, tool_name, timeout=1200,
-                    factory_properties=None):
+  def AddHeapcheckTest(self, test_name, timeout, factory_properties,
+                       wrapper_args=None):
+
     factory_properties = factory_properties or {}
     factory_properties['full_test_name'] = True
-    self.AddMemoryTest(test_name, tool_name, timeout, factory_properties,
-                       wrapper_args=[
-                           '--annotate=gtest',
-                           '--test-type', 'memory test: %s' % test_name
-                       ],
-                       command_class=chromium_step.AnnotatedCommand)
+    if not wrapper_args:
+      wrapper_args = []
+    wrapper_args.extend([
+        '--annotate=gtest',
+        '--test-type', 'heapcheck test: %s' % test_name
+    ])
+    command_class = chromium_step.AnnotatedCommand
 
-  def AddHeapcheckTest(self, test_name, timeout, factory_properties,
-                       command_class=gtest_command.GTestFullCommand,
-                       wrapper_args=None):
     build_dir = os.path.join(self._build_dir, self._target)
     if self._target_platform == 'linux2':  # Linux bins in src/sconsbuild
       build_dir = os.path.join(os.path.dirname(self._build_dir), 'sconsbuild',
                                self._target)
-
-    wrapper_args = wrapper_args or []
 
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
@@ -783,16 +785,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(command_class, test_name, cmd,
                      timeout=timeout,
                      do_step_if=self.TestStepFilter)
-
-  def AddAnnotatedHeapcheckTest(self, test_name, timeout, factory_properties):
-    factory_properties = factory_properties or {}
-    factory_properties['full_test_name'] = True
-    self.AddHeapcheckTest(test_name, timeout, factory_properties,
-                          wrapper_args=[
-                              '--annotate=gtest',
-                              '--test-type', 'heapcheck test: %s' % test_name
-                          ],
-                          command_class=chromium_step.AnnotatedCommand)
 
   def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
     args = args or []
@@ -1204,7 +1196,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      'Download and extract official build', cmd,
                      halt_on_failure=True)
 
-  def AddAnnotatedSoftGpuTests(self, factory_properties):
+  def AddSoftGpuTests(self, factory_properties):
     """Runs gpu_tests with software rendering and archives any results.
     """
     tests = ':'.join(['GpuPixelBrowserTest.*', 'GpuFeatureTest.*',
@@ -1212,15 +1204,31 @@ class ChromiumCommands(commands.FactoryCommands):
     # 'GPUCrashTest.*', while interesting, fails.
 
     # TODO(petermayo): Invoke the new executable when it is ready.
-    self.AddAnnotatedGTestTestStep('gpu_tests', factory_properties,
-                                   description='(soft)',
-                                   arg_list=['--gtest_also_run_disabled_tests',
-                                             '--gtest_filter=%s' % tests],
-                                   test_tool_arg_list=['--llvmpipe'])
+    self.AddGTestTestStep('gpu_tests', factory_properties,
+                          description='(soft)',
+                          arg_list=['--gtest_also_run_disabled_tests',
+                                    '--gtest_filter=%s' % tests],
+                          test_tool_arg_list=['--llvmpipe'])
 
     # Note: we aren't archiving these for the moment.
 
-  def AddAnnotatedGpuTests(self, factory_properties):
+  def AddBuildrunnerSoftGpuTests(self, factory_properties):
+    """Runs gpu_tests with software rendering and archives any results.
+    """
+    tests = ':'.join(['GpuPixelBrowserTest.*', 'GpuFeatureTest.*',
+                      'Canvas2DPixelTestSD.*', 'Canvas2DPixelTestHD.*'])
+    # 'GPUCrashTest.*', while interesting, fails.
+
+    # TODO(petermayo): Invoke the new executable when it is ready.
+    self.AddBuildrunnerGTest('gpu_tests', factory_properties,
+                             description='(soft)',
+                             arg_list=['--gtest_also_run_disabled_tests',
+                                       '--gtest_filter=%s' % tests],
+                             test_tool_arg_list=['--llvmpipe'])
+
+    # Note: we aren't archiving these for the moment.
+
+  def AddGpuTests(self, factory_properties):
     """Runs gpu_tests binary and archives any results.
 
     This binary contains browser tests that should be run on the gpu bots.
@@ -1230,11 +1238,11 @@ class ChromiumCommands(commands.FactoryCommands):
     gen_dir = self.PathJoin(gpu_data, 'generated')
     ref_dir = self.PathJoin(gpu_data, 'reference')
 
-    self.AddAnnotatedGTestTestStep('gpu_tests', factory_properties,
-                                   arg_list=['--use-gpu-in-tests',
-                                             '--generated-dir=%s' % gen_dir,
-                                             '--reference-dir=%s' % ref_dir],
-                                   test_tool_arg_list=['--no-xvfb'])
+    self.AddGTestTestStep('gpu_tests', factory_properties,
+                          arg_list=['--use-gpu-in-tests',
+                                    '--generated-dir=%s' % gen_dir,
+                                    '--reference-dir=%s' % ref_dir],
+                          test_tool_arg_list=['--no-xvfb'])
 
     # Setup environment for running gsutil, a Google Storage utility.
     gsutil = 'gsutil'
@@ -1250,7 +1258,39 @@ class ChromiumCommands(commands.FactoryCommands):
            '--gpu-reference-dir', ref_dir]
     self.AddTestStep(shell.ShellCommand, 'archive test results', cmd, env=env)
 
-  def AddAnnotatedGpuContentTests(self, factory_properties):
+
+  def AddBuildrunnerGpuTests(self, factory_properties):
+    """Runs gpu_tests under Buildrunner.
+
+    This binary contains browser tests that should be run on the gpu bots.
+    """
+    # Put gpu data in /b/build/slave/SLAVE_NAME/gpu_data
+    gpu_data = self.PathJoin('..', 'gpu_data')
+    gen_dir = self.PathJoin(gpu_data, 'generated')
+    ref_dir = self.PathJoin(gpu_data, 'reference')
+
+    self.AddBuildrunnerGTest('gpu_tests', factory_properties,
+                             arg_list=['--use-gpu-in-tests',
+                                       '--generated-dir=%s' % gen_dir,
+                                       '--reference-dir=%s' % ref_dir],
+                             test_tool_arg_list=['--no-xvfb'])
+
+    # Setup environment for running gsutil, a Google Storage utility.
+    gsutil = 'gsutil'
+    if self._target_platform.startswith('win'):
+      gsutil = 'gsutil.bat'
+    env = {}
+    env['GSUTIL'] = self.PathJoin(self._script_dir, gsutil)
+
+    cmd = [self._python,
+           self._gpu_archive_tool,
+           '--run-id', WithProperties('%(got_revision)s_%(buildername)s'),
+           '--generated-dir', gen_dir,
+           '--gpu-reference-dir', ref_dir]
+    self.AddBuildrunnerTestStep(shell.ShellCommand, 'archive test results', cmd,
+                                env=env)
+
+  def AddGpuContentTests(self, factory_properties):
     """Runs content_browsertests binary with selected gpu tests.
 
     This binary contains content side browser tests that should be run on the
@@ -1258,23 +1298,37 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
 
-    self.AddAnnotatedGTestTestStep('content_browsertests', factory_properties,
-                                   arg_list=['--use-gpu-in-tests',
-                                             '--gtest_filter=%s' % tests,
-                                             '--run-manual'],
-                                   test_tool_arg_list=['--no-xvfb'])
+    self.AddGTestTestStep('content_browsertests', factory_properties,
+                          arg_list=['--use-gpu-in-tests',
+                                    '--gtest_filter=%s' % tests,
+                                    '--run-manual'],
+                          test_tool_arg_list=['--no-xvfb'])
 
-  def AddAnnotatedGLTests(self, factory_properties=None):
+  def AddBuildrunnerGpuContentTests(self, factory_properties):
+    """Runs content_browsertests with selected gpu tests under Buildrunner.
+
+    This binary contains content side browser tests that should be run on the
+    gpu bots.
+    """
+    tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
+
+    self.AddBuildrunnerGTest('content_browsertests', factory_properties,
+                             arg_list=['--use-gpu-in-tests',
+                                       '--gtest_filter=%s' % tests,
+                                       '--run-manual'],
+                             test_tool_arg_list=['--no-xvfb'])
+
+  def AddGLTests(self, factory_properties=None):
     """Runs gl_tests binary.
 
     This binary contains unit tests that should be run on the gpu bots.
     """
     factory_properties = factory_properties or {}
 
-    self.AddAnnotatedGTestTestStep('gl_tests', factory_properties,
-                                   test_tool_arg_list=['--no-xvfb'])
+    self.AddGTestTestStep('gl_tests', factory_properties,
+                          test_tool_arg_list=['--no-xvfb'])
 
-  def AddAnnotatedGLES2ConformTest(self, factory_properties=None):
+  def AddGLES2ConformTest(self, factory_properties=None):
     """Runs gles2_conform_test binary.
 
     This binary contains the OpenGL ES 2.0 Conformance tests to be run on the
@@ -1282,8 +1336,8 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     factory_properties = factory_properties or {}
 
-    self.AddAnnotatedGTestTestStep('gles2_conform_test', factory_properties,
-                                   test_tool_arg_list=['--no-xvfb'])
+    self.AddGTestTestStep('gles2_conform_test', factory_properties,
+                          test_tool_arg_list=['--no-xvfb'])
 
   def AddNaClIntegrationTestStep(self, factory_properties, target=None,
                                  buildbot_preset=None, timeout=1200):

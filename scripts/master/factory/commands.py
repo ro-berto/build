@@ -497,11 +497,16 @@ class FactoryCommands(object):
       doStep = False
     return doStep
 
-  def AddAnnotatedGTestTestStep(self, test_name, factory_properties=None,
-                                description='', arg_list=None,
-                                total_shards=None, shard_index=None,
-                                test_tool_arg_list=None,
-                                hideStep=False):
+  def AddAnnotatedGTestTestStep(self, *args, **kwargs):
+    """Proxy for AddGTestTestStep() to allow two-phase commit.
+
+    This is temporarily needed to prevent breakage of internal code.
+    """
+    self.AddGTestTestStep(*args, **kwargs)
+
+  def AddGTestTestStep(self, test_name, factory_properties=None, description='',
+                       arg_list=None, total_shards=None, shard_index=None,
+                       test_tool_arg_list=None, hideStep=False):
     """Adds an Annotated step to the factory to run the gtest tests.
 
     Args:
@@ -605,14 +610,14 @@ class FactoryCommands(object):
     run under runbuild.py. Note that a final runbuild step will need to be added
     with AddBuildStep().
     """
-    self.AddAnnotatedGTestTestStep(test_name,
-                                   factory_properties=factory_properties,
-                                   description=description,
-                                   arg_list=arg_list,
-                                   total_shards=total_shards,
-                                   shard_index=shard_index,
-                                   test_tool_arg_list=test_tool_arg_list,
-                                   hideStep=True)
+    self.AddGTestTestStep(test_name,
+                          factory_properties=factory_properties,
+                          description=description,
+                          arg_list=arg_list,
+                          total_shards=total_shards,
+                          shard_index=shard_index,
+                          test_tool_arg_list=test_tool_arg_list,
+                          hideStep=True)
 
   def AddBuildrunnerTestStep(self, command_class, test_name, test_command,
                              test_description='', timeout=10*60,
