@@ -24,6 +24,9 @@ android_dbg_archive = master_config.GetArchiveUrl(
     'Android_Builder__dbg_',
     'linux')
 
+android_rel_archive = master_config.GetGSUtilUrl(
+    'chromium-android', 'android_main_rel')
+
 #
 # Main release scheduler for src/
 #
@@ -32,7 +35,8 @@ S('android', branch='src', treeStableTimer=60)
 #
 # Triggerable scheduler for the builder
 #
-T('android_trigger')
+T('android_trigger_dbg')
+T('android_trigger_rel')
 
 #
 # Android Builder
@@ -45,11 +49,11 @@ F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     factory_properties={
       'android_bot_id': 'main-builder-dbg',
       'buildtool': 'ninja',
-      'trigger': 'android_trigger',
+      'trigger': 'android_trigger_dbg',
     }))
 
-B('Android Tests (dbg)', 'f_android_dbg_tests', 'android', 'android_trigger',
-  auto_reboot=False, notify_on_missing=True)
+B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
+  'android_trigger_dbg', auto_reboot=False, notify_on_missing=True)
 F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -64,6 +68,18 @@ F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
       'android_bot_id': 'main-builder-rel',
+      'build_url': android_rel_archive,
+      'trigger': 'android_trigger_rel',
+    }))
+
+B('Android Tests', 'f_android_rel_tests', None, 'android_trigger_rel',
+  auto_reboot=False, notify_on_missing=True)
+F('f_android_rel_tests', linux_android().ChromiumAnnotationFactory(
+    target='Release',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+      'android_bot_id': 'main-tests-rel',
+      'build_url': android_rel_archive,
     }))
 
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
