@@ -120,6 +120,7 @@ F('rel_unit_3', win_tester().ChromiumFactory(
     build_url=rel_archive,
     tests=[
       'browser_tests',
+      'components_unittests',
       'unit',
     ],
     factory_properties={'process_dumps': True,
@@ -232,6 +233,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
       'cc_unittests',
       'chromedriver2_unittests',
       'check_deps',
+      'components_unittests',
       'courgette',
       'crypto',
       'googleurl',
