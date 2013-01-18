@@ -72,7 +72,7 @@ def main():
            '--buildbot',
            '--outdir=' + outdir,
            '--arch=' + options.arch,
-           '--mode=' + options.target.lower()]
+           '--mode=' + options.target]
     if options.testname:
       cmd.extend([options.testname])
     if options.testname == 'test262':
