@@ -379,6 +379,9 @@ class DartUtils(object):
       elif pieces[0] == 'branches':
         return ('/'.join(pieces[0:2]),
                 '/'.join(pieces[2:]))
+      elif pieces[0] == 'experimental':
+        return ('/'.join(pieces[0:2]),
+                '/'.join(pieces[2:]))
       else:
         return None
 
