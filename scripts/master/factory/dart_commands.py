@@ -18,6 +18,8 @@ from master.factory import commands
 class DartCommands(commands.FactoryCommands):
   """Encapsulates methods to add dart commands to a buildbot factory."""
 
+  logfiles = {"flakylog": ".flaky.log", "debuglog": ".debug.log"}
+
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, env=None):
 
@@ -131,6 +133,8 @@ class DartCommands(commands.FactoryCommands):
                   ' --progress=line --report --time --mode=%s --arch=%s '
                   ' --compiler=%s --runtime=%s') % configuration
 
+    base_cmd = base_cmd + " --write-debug-log"
+
     if is_dartc:
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
@@ -141,7 +145,7 @@ class DartCommands(commands.FactoryCommands):
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd,
-                            logfiles={"flakylog": ".flaky.log"},
+                            logfiles=self.logfiles,
                             lazylogfiles=True)
     elif is_dart2dart:
       cmd = base_cmd
@@ -153,7 +157,7 @@ class DartCommands(commands.FactoryCommands):
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd,
-                            logfiles={"flakylog": ".flaky.log"},
+                            logfiles=self.logfiles,
                             lazylogfiles=True)
       cmd = base_cmd + ' --minified'
       self._factory.addStep(shell.ShellCommand,
@@ -164,7 +168,7 @@ class DartCommands(commands.FactoryCommands):
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd,
-                            logfiles={"flakylog": ".flaky.log"},
+                            logfiles=self.logfiles,
                             lazylogfiles=True)
     else:
       if options.get('flags') != None:
@@ -178,7 +182,7 @@ class DartCommands(commands.FactoryCommands):
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd,
-                            logfiles={"flakylog": ".flaky.log"},
+                            logfiles=self.logfiles,
                             lazylogfiles=True)
       # Rerun all tests in checked mode (assertions and type tests).
       cmd = base_cmd + ' --checked'
@@ -190,7 +194,7 @@ class DartCommands(commands.FactoryCommands):
                             haltOnFailure=True,
                             workdir=self._dart_build_dir,
                             command=cmd,
-                            logfiles={"flakylog": ".flaky.log"},
+                            logfiles=self.logfiles,
                             lazylogfiles=True)
 
   def AddAnnotatedSteps(self, python_script, timeout=1200):
@@ -202,5 +206,5 @@ class DartCommands(commands.FactoryCommands):
                           env = self._custom_env,
                           workdir=self._dart_build_dir,
                           command=[self._python, python_script],
-                          logfiles={"flakylog": ".flaky.log"},
+                          logfiles=self.logfiles,
                           lazylogfiles=True)
