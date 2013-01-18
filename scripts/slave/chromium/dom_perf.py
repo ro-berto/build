@@ -88,7 +88,10 @@ def dom_perf(options, args):
       build_dir = os.path.join(os.path.dirname(build_dir), 'out')
     else:
       build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
-  elif chromium_utils.IsLinux():
+  elif chromium_utils.IsLinux() and options.build_dir == 'src/build':
+    print('WARNING: Passed "src/build" as --build-dir option. '
+        'This is almost certainly incorrect.')
+    print 'Assuming you meant src/sconsbuild'
     build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)
   if not os.path.exists(test_exe_path):
