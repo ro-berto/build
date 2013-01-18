@@ -31,6 +31,7 @@ T('chromiumos_rel_trigger')
 sharded_tests = [
   'base_unittests',
   'browser_tests',
+  'components_unittests',
   'content_browsertests',
   'content_unittests',
   'media_unittests',
@@ -43,6 +44,7 @@ linux_chromeos_tests = [
   ('browser_tests', 'browser_tests', 2),
   ('cacheinvalidation', 'cacheinvalidation_unittests', 1),
   ('chromeos_unittests', 'chromeos_unittests', 1),
+  ('components_unittests', 'components_unittests', 1),
   ('compositor', 'compositor_unittests', 1),
   ('content_browsertests', 'content_browsertests', 2),
   ('content_unittests', 'content_unittests', 1),

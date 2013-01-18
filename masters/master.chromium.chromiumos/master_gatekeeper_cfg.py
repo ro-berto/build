@@ -18,6 +18,7 @@ chromium_categories_steps = {
     'browser_tests',
     'cacheinvalidation_unittests',
     'chromeos_unittests',
+    'components_unittests',
     'content_browsertests',
     'content_unittests',
     'courgette_unittests',
