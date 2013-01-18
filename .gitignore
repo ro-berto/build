@@ -584,6 +584,9 @@ twistd.pid
 /masters/master.chromium.webrtc/Win7_Tester
 /masters/master.chromium.webrtc/WinXP_Tester
 /masters/master.chromium.webrtc/Win_Builder
+/masters/master.chromium.webrtc/chromium-webrtc-tot-chromeos-amd64
+/masters/master.chromium.webrtc/chromium-webrtc-tot-chromeos-daisy
+/masters/master.chromium.webrtc/chromium-webrtc-tot-chromeos-x86-generic
 /masters/master.chromium.webrtc/chromium-webrtc-rel-linux-builder
 /masters/master.chromium.webrtc/chromium-webrtc-rel-mac-builder
 /masters/master.chromium.win/Chrome_Frame_Tests__ie6_
