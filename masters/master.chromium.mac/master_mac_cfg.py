@@ -103,6 +103,7 @@ F('rel_unit_2', mac_tester().ChromiumFactory(
   build_url=rel_archive,
   tests=[
     'browser_tests',
+    'components_unittests',
     'unit',
   ],
   factory_properties={'generate_gtest_json': True,
@@ -245,6 +246,7 @@ F('dbg_unit_4', mac_tester().ChromiumFactory(
   target='Debug',
   tests=[
     'browser_tests',
+    'components_unittests',
     'unit',
   ],
   factory_properties={'generate_gtest_json': True,
