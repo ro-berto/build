@@ -62,24 +62,12 @@ def main():
   if args:
     option_parser.error('Unsupported arguments: %s' % args)
 
-  simultaneous = '-j8'
-  if options.platform in ('arm'):
-    simultaneous = '-j1'
-
   os.environ['LD_LIBRARY_PATH'] = os.environ.get('PWD')
 
-  if options.testname == 'leak':
-    cmd = ['python', 'tools/test.py', '--no-build', '--mode',
-           'debug', '--progress', 'verbose', '--timeout', '180',
-           '--time', '-Snapshot=on', '--special-command',
-           '"@ --nopreallocate-message-memory"',
-           '--valgrind', 'mjsunit/leakcheck',
-           'mjsunit/regress/regress-1134697', 'mjsunit/number-tostring-small']
-  elif options.testname == 'presubmit':
+  if options.testname == 'presubmit':
     cmd = ['python', 'tools/presubmit.py']
   else:
-    cmd = ['python', 'tools/test-wrapper-gypbuild.py',
-           simultaneous,
+    cmd = ['python', 'tools/run-tests.py',
            '--progress=verbose',
            '--buildbot',
            '--outdir=' + outdir,
@@ -109,7 +97,7 @@ def main():
     if options.isolates:
       cmd.extend(['--isolates'])
     if options.shell_flags:
-      cmd.extend(["--special-command", options.shell_flags.replace("\"", "")])
+      cmd.extend(["--extra-flags", options.shell_flags.replace("\"", "")])
 
 
 
