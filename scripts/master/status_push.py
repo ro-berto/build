@@ -15,9 +15,7 @@ class TryServerHttpStatusPush(status_push.HttpStatusPush):
   """
   def __init__(self, serverUrl, *args, **kwargs):
     # Appends the status listener to the base url.
-    # TODO(csharp): Always add status_listener once all the configs are updated.
-    if not serverUrl.endswith('status_listener'):
-      serverUrl = urlparse.urljoin(serverUrl, 'status_listener')
+    serverUrl = urlparse.urljoin(serverUrl, 'status_listener')
 
     blackList = [
         'buildETAUpdate',
