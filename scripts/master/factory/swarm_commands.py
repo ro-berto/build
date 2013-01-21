@@ -135,9 +135,10 @@ class SwarmCommands(commands.FactoryCommands):
                                         'buildnumber:-None')
 
     args = ['-u', swarm_server, swarm_request_name]
+    wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
 
     command = self.GetPythonTestCommand(script_path, arg_list=args,
-                                        wrapper_args=['--annotate=gtest'])
+                                        wrapper_args=wrapper_args)
 
     # Swarm handles the timeouts due to no ouput being produced for 10 minutes,
     # but we don't have access to the output until the whole test is done, which
