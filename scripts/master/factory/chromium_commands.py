@@ -1159,6 +1159,17 @@ class ChromiumCommands(commands.FactoryCommands):
            '.',
            '--all_unittests', 'True']
     self.AddTestStep(shell.ShellCommand, 'run_unittests_only', cmd)
+    # Run only browser_tests in this step.
+    cmd = [self._python,
+           os.path.join('src', 'tools', 'code_coverage', 'coverage_posix.py'),
+           '--build-dir',
+           self._build_dir,
+           '--target',
+           self._target,
+           '--src_root',
+           '.',
+           '--all_browsertests', 'True']
+    self.AddTestStep(shell.ShellCommand, 'run_browser_tests_only', cmd)
 
   def AddProcessCoverage(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -1175,9 +1186,14 @@ class ChromiumCommands(commands.FactoryCommands):
     # graph
     perf_mapping = self.PERF_TEST_MAPPINGS[self._target]
     perf_id = factory_properties.get('perf_id')
+    print 'perf_id: %s' % perf_id
     perf_subdir = perf_mapping.get(perf_id)
+    print 'perf_subdir: %s' % perf_subdir
 
-    url = _GetArchiveUrl('coverage', perf_subdir)
+    # 'total_coverage' is the default archive_folder for
+    # archive_coverage.py script.
+    url = _GetArchiveUrl('coverage', perf_subdir) + '/total_coverage'
+    print 'url: %s' % url
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
                    '--target', self._target,

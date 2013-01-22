@@ -30,7 +30,7 @@ import config
 class ArchiveCoverage(object):
   """Class to copy coverage HTML to the buildbot webserver."""
 
-  def __init__(self, options, coverage_folder_name):
+  def __init__(self, options):
     """Constructor.
 
     Args:
@@ -52,7 +52,7 @@ class ArchiveCoverage(object):
       self.is_posix = True
       self.from_dir = os.path.join(os.path.dirname(options.build_dir),
                                    'out', options.target, # make, not scons
-                                   coverage_folder_name,
+                                   options.archive_folder,
                                    'coverage_croc_html')
 
     else:
@@ -104,10 +104,8 @@ class ArchiveCoverage(object):
     # TODO(jrg) use os.path.join here?
     self.archive_path = '%scoverage/%s/%s' % (
         archive_config.www_dir_base, self.perf_subdir, self.last_change)
-    # If this is for collecting coverage for unittests, then create
-    # a separate path.
-    if coverage_folder_name == 'unittests_coverage':
-      self.archive_path = os.path.join(self.archive_path, coverage_folder_name)
+
+    self.archive_path = os.path.join(self.archive_path, options.archive_folder)
     self.archive_path = os.path.normpath(self.archive_path)
     print 'archive path: %s' % self.archive_path
 
@@ -168,14 +166,24 @@ def Main():
                            help='destination subdirectory under perf-subdir')
   option_parser.add_option('--internal', action='store_true',
                            help='specifies if we should use Internal config')
+  option_parser.add_option('--archive-folder',
+                           dest='archive_folder',
+                           default='total_coverage',
+                           help='directory to be archived '
+                                '[default: %default]')
   options, args = option_parser.parse_args()
   if args:
     option_parser.error('Args not supported: %s' % args)
-  ac = ArchiveCoverage(options, 'total_coverage')
+  ac = ArchiveCoverage(options)
   ac.Run()
 
-  auc = ArchiveCoverage(options, 'unittests_coverage')
+  options.archive_folder = 'unittests_coverage'
+  auc = ArchiveCoverage(options)
   auc.Run()
+
+  options.archive_folder = 'browsertests_coverage'
+  abc = ArchiveCoverage(options)
+  abc.Run()
   return 0
 
 if '__main__' == __name__:

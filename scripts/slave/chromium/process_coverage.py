@@ -116,8 +116,28 @@ def main_linux(options, args):
         ]
     unittests_result = main_common(unittests_cov_file, cmdline)
 
+  if os.path.exists(os.path.join(target_dir, 'browsertests_coverage')):
+    print 'browsertests_coverage directory exists'
+    browsertests_cov_file = os.path.join(target_dir,
+                                         'browsertests_coverage',
+                                         'coverage.info')
+    cmdline = [
+        sys.executable,
+        'src/tools/code_coverage/croc.py',
+        '-c', 'src/build/common.croc',
+        '-c', 'src/build/linux/chrome_linux.croc',
+        '-i', browsertests_cov_file,
+        '-r', os.getcwd(),
+        '--tree',
+        '--html',
+        os.path.join(target_dir, 'browsertests_coverage', 'coverage_croc_html'),
+        ]
+    browsertests_result = main_common(browsertests_cov_file, cmdline)
+
   if unittests_result != 0:
     result = unittests_result
+  if browsertests_result != 0:
+    result = browsertests_result
   return result
 
 
