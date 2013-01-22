@@ -124,7 +124,8 @@ class PerformanceLogProcessor(object):
     if revision:
       self._revision = revision
     else:
-      self._revision = -1
+      raise ValueError('Must provide a revision to PerformanceLogProcessor.')
+
     self._webkit_revision = webkit_revision
 
     if build_property:
