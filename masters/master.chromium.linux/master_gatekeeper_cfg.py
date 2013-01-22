@@ -107,11 +107,10 @@ def Update(config, active_master, c):
       relayhost=config.Master.smtp,
       subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
               'revision %(revision)s',
-      # sheriffs=['sheriff_android'],
-      sheriffs=None,
-      extraRecipients=['cmp@google.com', 'ilevy@google.com'],
+      extraRecipients=[],
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
       tree_status_url=None,
+      sheriffs=['sheriff_android'],
       public_html='../master.chromium/public_html',
       use_getname=True))
