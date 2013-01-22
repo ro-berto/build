@@ -45,7 +45,7 @@ B('ChromiumOS [x86]',
   scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_x86_factory',
-  CreateCbuildbotFactory(target='x86-generic-tot-chrome-pfq-informational',
+  CreateCbuildbotFactory(target='x86-webrtc-chrome-pfq-informational',
                          short_name='x86'))
 
 B('ChromiumOS [amd64]',
@@ -54,7 +54,7 @@ B('ChromiumOS [amd64]',
   scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_amd64_factory',
-  CreateCbuildbotFactory(target='amd64-generic-tot-chrome-pfq-informational',
+  CreateCbuildbotFactory(target='amd64-webrtc-chrome-pfq-informational',
                          short_name='amd64'))
 
 B('ChromiumOS [daisy]',
@@ -63,7 +63,7 @@ B('ChromiumOS [daisy]',
   scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_daisy_factory',
-  CreateCbuildbotFactory(target='daisy-tot-chrome-pfq-informational',
+  CreateCbuildbotFactory(target='daisy-webrtc-chrome-pfq-informational',
                          short_name='daisy'))
 
 
