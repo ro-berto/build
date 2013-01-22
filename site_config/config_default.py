@@ -460,6 +460,15 @@ class Master(object):
     slave_port = 9195
     master_port_alt = 9295
 
+  class Libyuv(_Base):
+    project_name = 'Libyuv'
+    master_port = 9096
+    slave_port = 9196
+    master_port_alt = 9296
+    server_url = 'http://libyuv.googlecode.com'
+    project_url = 'http://libyuv.googlecode.com'
+    from_address = 'libyuv-cb-watchlist@google.com'
+
 
 class Archive(object):
   archive_host = 'localhost'
