@@ -105,6 +105,8 @@ class ChromiumCommands(commands.FactoryCommands):
         'sync', '--verbose']
 
     self._telemetry_tool = self.PathJoin(self._script_dir, 'telemetry.py')
+    self._telemetry_unit_tests = J('src', 'tools', 'telemetry', 'run_tests')
+    self._telemetry_perf_unit_tests = J('src', 'tools', 'perf', 'run_tests')
 
   def AddArchiveStep(self, data_description, base_url, link_text, command,
                      more_link_url=None, more_link_text=None,
@@ -561,6 +563,24 @@ class ChromiumCommands(commands.FactoryCommands):
         'check_deps2submodules',
         cmd,
         do_step_if=self.TestStepFilter)
+
+  def AddTelemetryUnitTests(self):
+    args = ['--browser=%s' % self._target.lower()]
+    cmd = self.GetPythonTestCommand(self._telemetry_unit_tests,
+                                    arg_list=args,
+                                    wrapper_args=['--annotate=gtest'])
+
+    self.AddTestStep(chromium_step.AnnotatedCommand, 'telemetry_unittests', cmd,
+                     do_step_if=self.TestStepFilter)
+
+  def AddTelemetryPerfUnitTests(self):
+    args = ['--browser=%s' % self._target.lower()]
+    cmd = self.GetPythonTestCommand(self._telemetry_perf_unit_tests,
+                                    arg_list=args,
+                                    wrapper_args=['--annotate=gtest'])
+
+    self.AddTestStep(chromium_step.AnnotatedCommand, 'telemetry_perf_unittests',
+                     cmd, do_step_if=self.TestStepFilter)
 
   def AddReliabilityTests(self, platform):
     cmd = [self._python,

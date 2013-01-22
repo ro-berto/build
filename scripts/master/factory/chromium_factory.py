@@ -413,6 +413,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('sandbox_linux_unittests', fp)
     if R('sandbox_linux_unittests_br'):
       f.AddBuildrunnerGTest('sandbox_linux_unittests', fp)
+    if R('telemetry_unittests'):
+      f.AddTelemetryUnitTests()
+    if R('telemetry_perf_unittests'):
+      f.AddTelemetryPerfUnitTests()
     if R('ui_unittests'):
       f.AddGTestTestStep('ui_unittests', fp)
     if R('ui_unittests_br'):
