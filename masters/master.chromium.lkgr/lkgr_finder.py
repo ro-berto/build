@@ -89,6 +89,7 @@ LKGR_STEPS = {
       'cc_unittests',
       'check_deps',
       'chromedriver2_unittests',
+      'components_unittests',
       'content_unittests',
       'courgette_unittests',
       'crypto_unittests',
@@ -175,6 +176,7 @@ LKGR_STEPS = {
     ],
     'Mac 10.6 Tests (dbg)(4)': [
       'browser_tests',
+      'components_unittests',
       'content_unittests',
       'ipc_tests',
       'sql_unittests',
@@ -215,6 +217,7 @@ LKGR_STEPS = {
       'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
+      'components_unittests',
       'content_unittests',
       'googleurl_unittests',
       'interactive_ui_tests',
