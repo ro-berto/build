@@ -197,6 +197,7 @@ def main():
       'master.client.dynamorio': 'DynamoRIO',
       'master.client.dart': 'Dart',
       'master.client.dart.fyi': 'DartFYI',
+      'master.client.libjingle': 'Libjingle',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.chrome': 'NativeClientChrome',

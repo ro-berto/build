@@ -469,6 +469,15 @@ class Master(object):
     project_url = 'http://libyuv.googlecode.com'
     from_address = 'libyuv-cb-watchlist@google.com'
 
+  class Libjingle(_Base):
+    project_name = 'Libjingle'
+    master_port = 9097
+    slave_port = 9197
+    master_port_alt = 9297
+    server_url = 'http://libjingle.googlecode.com'
+    project_url = 'http://libjingle.googlecode.com'
+    from_address = 'libjingle-cb-watchlist@google.com'
+
 
 class Archive(object):
   archive_host = 'localhost'
