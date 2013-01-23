@@ -287,13 +287,16 @@ class PathMatcher(object):
 
     self.regex_whitelist = FileRegexWhitelist(options)
     self.regex_blacklist = FileRegexBlacklist(options)
+    self.exclude_unmatched = options.exclude_unmatched
 
   def __str__(self):
-    return '\n  '.join(['Zip rules',
-                        'Inclusions: %s' % self.inclusions,
-                        'Exclusions: %s' % self.exclusions,
-                        "Whitelist regex: '%s'" % self.regex_whitelist,
-                        "Blacklist regex: '%s'" % self.regex_blacklist])
+    return '\n  '.join([
+        'Zip rules',
+        'Inclusions: %s' % self.inclusions,
+        'Exclusions: %s' % self.exclusions,
+        "Whitelist regex: '%s'" % self.regex_whitelist,
+        "Blacklist regex: '%s'" % self.regex_blacklist,
+        'Zip unmatched files: %s' % (not self.exclude_unmatched)])
 
   def Match(self, filename):
     if filename in self.inclusions:
@@ -304,7 +307,7 @@ class PathMatcher(object):
       return True
     if re.match(self.regex_blacklist, filename):
       return False
-    return True
+    return not self.exclude_unmatched
 
 
 def Archive(options):
@@ -375,6 +378,8 @@ def main(argv):
   option_parser.add_option('--path-filter',
                            help='Filter to use to transform build zip '
                                 '(avail: %r).' % list(PATH_FILTERS.keys()))
+  option_parser.add_option('--exclude-unmatched', action='store_true',
+                           help='Exclude all files not matched by a whitelist')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
