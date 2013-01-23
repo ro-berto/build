@@ -33,7 +33,7 @@ class TryMailNotifier(mail.MailNotifier):
     # List of builders to NOT send email about if build was successful
     self.no_email_on_success = no_email_on_success or []
 
-  def buildMessage(self, name, build, results):
+  def buildMessage_internal(self, name, build, results):
     """Send an email about the result. Send it as a nice HTML message."""
 
     if results == SUCCESS and name in self.no_email_on_success:
@@ -137,6 +137,10 @@ http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage</
     m['Date'] = formatdate(localtime=True)
     m['Subject'] = subject
     m['From'] = self.fromaddr
+    return m
+
+  def buildMessage(self, name, build, results):
+    m = self.buildMessage_internal(name, build, results)
     if self.reply_to:
       m['Reply-To'] = self.reply_to
     # now, who is this message going to?

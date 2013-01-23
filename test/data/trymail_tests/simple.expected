@@ -1,0 +1,52 @@
+From nobody Wed Dec 31 16:00:01 1969
+Content-Type: multipart/mixed; boundary="===============7454617213454723890=="
+MIME-Version: 1.0
+Date: Wed, 31 Dec 1969 16:00:01 -0800
+Subject: try success for 11879010-3014: Rebase on FakeBuilder @ r1337
+From: from@example.org
+
+--===============7454617213454723890==
+Content-Type: text/html; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns=3D"http://www.w3.org/1999/xhtml">
+<head>
+  <title>try success for 11879010-3014: Rebase on FakeBuilder @ r1337</titl=
+e>
+</head>
+<body style=3D"font-family: Verdana, Cursor; font-size: 10px;">
+  try success for 11879010-3014: Rebase on FakeBuilder @ r1337<p>
+  <a href=3D"http://buildbot_url">http://buildbot_url</a><p>
+  You are awesome! Try succeeded!<p> <br>Parent builder: <a href=3D"http://=
+buildbot_url/builders/ParentBuilder/builds/1337">http://buildbot_url/builde=
+rs/ParentBuilder/builds/1337</a><br>
+  <a href=3D"None">None</a><br>
+  slave: SuperSlave1<br>
+    <table style=3D"border-spacing: 1px 1px; font-weight: bold; padding: 3p=
+x 0px 3px 0px; text-align: center;">
+<tr><td style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #=
+4F8530;"><a title=3D"Reason: 11879010-3014: Rebase" href=3D"http://buildbot=
+_urlbuilders/TestBuilder/builds/100">Build 100</a></td></tr><tr><td style=
+=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8530;">Some=
+ Text<br/><a href=3D"http://buildbot_urlbuilders/TestBuilder/builds/100/ste=
+ps/Update/logs/LogFileStep1">LogFileStep1</a></td></tr><tr><td style=3D"col=
+or: #FFFFFF; background-color: #ffc343; border-color: #C29D46;">Some Text<b=
+r/><a href=3D"http://buildbot_urlbuilders/TestBuilder/builds/100/steps/Comp=
+ile/logs/LogFileStep2">LogFileStep2</a></td></tr><tr><td style=3D"color: #F=
+FFFFF; background-color: #8fdf5f; border-color: #4F8530;">Some Text<br/><a =
+href=3D"http://buildbot_urlbuilders/TestBuilder/builds/100/steps/Test/logs/=
+LogFileStep3">LogFileStep3</a></td></tr><tr><td style=3D"color: #FFFFFF; ba=
+ckground-color: #8fdf5f; border-color: #4F8530;">Some Text<br/><a href=3D"h=
+ttp://buildbot_urlbuilders/TestBuilder/builds/100/steps/Archive/logs/LogFil=
+eStep4">LogFileStep4</a></td></tr></table>
+<br>
+FAQ: <a href=3D"http://sites.google.com/a/chromium.org/dev/developers/testi=
+ng/try-server-usage">
+http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-us=
+age</a><br>
+</body>
+</html>
+
+--===============7454617213454723890==--
