@@ -62,7 +62,7 @@ F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
       'build_url': android_dbg_archive,
     }))
 
-B('Android Builder', 'f_android_rel', None, 'android',
+B('Android Builder', 'f_android_rel', 'android', 'android',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -72,7 +72,7 @@ F('f_android_rel', linux_android().ChromiumAnnotationFactory(
       'trigger': 'android_trigger_rel',
     }))
 
-B('Android Tests', 'f_android_rel_tests', None, 'android_trigger_rel',
+B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
   auto_reboot=False, notify_on_missing=True)
 F('f_android_rel_tests', linux_android().ChromiumAnnotationFactory(
     target='Release',

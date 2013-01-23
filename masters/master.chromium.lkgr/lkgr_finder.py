@@ -266,6 +266,12 @@ LKGR_STEPS = {
     'Android Tests (dbg)': [
       'build',
     ],
+    'Android Builder': [
+      'build',
+    ],
+    'Android Tests': [
+      'build',
+    ],
     'Android Clang Builder (dbg)': [
       'build',
     ],
