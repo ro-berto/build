@@ -63,7 +63,8 @@ class V8Factory(gclient_factory.GClientFactory):
                 slave_type='BuilderTester', options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
                 target_arch=None, shard_count=1,
-                shard_run=1, shell_flags=None, isolates=False):
+                shard_run=1, shell_flags=None, isolates=False,
+                command_prefix=None):
     tests = tests or []
     factory_properties = factory_properties or {}
 
@@ -108,7 +109,8 @@ class V8Factory(gclient_factory.GClientFactory):
                                         shard_count,
                                         shard_run,
                                         shell_flags,
-                                        isolates)
+                                        isolates,
+                                        command_prefix)
     if factory_properties.get('archive_build'):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))

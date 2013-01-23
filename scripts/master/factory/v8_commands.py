@@ -21,7 +21,8 @@ class V8Commands(commands.FactoryCommands):
 
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, target_arch=None,
-               shard_count=1, shard_run=1, shell_flags=None, isolates=False):
+               shard_count=1, shard_run=1, shell_flags=None, isolates=False,
+               command_prefix=None):
 
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform, target_arch)
@@ -42,6 +43,7 @@ class V8Commands(commands.FactoryCommands):
     self._shard_run = shard_run
     self._shell_flags = shell_flags
     self._isolates = isolates
+    self._command_prefix = command_prefix
 
     if self._target_platform == 'win32':
       # Override to use the right python
@@ -67,6 +69,8 @@ class V8Commands(commands.FactoryCommands):
               '--shard_run=%s' % self._shard_run]
     if self._shell_flags:
       cmd += ['--shell_flags="'+ self._shell_flags +'"']
+    if self._command_prefix:
+      cmd += ['--command_prefix', self._command_prefix]
     if self._isolates:
       cmd += ['--isolates', 'on']
     return cmd

@@ -52,7 +52,10 @@ def main():
                            help='Specify shard count [default: %%default]')
   option_parser.add_option('--shell_flags',
                            default=None,
-                           help="Specify shell flags passed tools/test.py")
+                           help="Specify shell flags passed tools/run-test.py")
+  option_parser.add_option('--command_prefix',
+                           default=None,
+                           help="Command prefix passed tools/run-test.py")
   option_parser.add_option('--isolates',
                            default=None,
                            help="Run isolates tests")
@@ -98,7 +101,8 @@ def main():
       cmd.extend(['--isolates'])
     if options.shell_flags:
       cmd.extend(["--extra-flags", options.shell_flags.replace("\"", "")])
-
+    if options.command_prefix:
+      cmd.extend(["--command-prefix", options.command_prefix])
 
 
   if options.shard_count > 1:

@@ -596,7 +596,7 @@ class V8DrFactory(v8_factory.V8Factory):
     assert 'shell_flags' not in kwargs
     bits = ArchToBits(target_arch)
     drrun = '../../dynamorio/build/bin%d/drrun' % bits
-    kwargs['shell_flags'] = '%s -reset_every_nth_pending 0 -- @' % drrun
+    kwargs['command_prefix'] = '%s -reset_every_nth_pending 0 --' % drrun
     return super(V8DrFactory, self).V8Factory(*args, target_arch=target_arch,
                                               **kwargs)
 
