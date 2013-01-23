@@ -345,13 +345,10 @@ class PerfCountNotifierTest(unittest.TestCase):
                      self.notifier.minimum_count)
 
 
-class BuildStepStatusMock(mock.Mock):
-  def __init__(self, text):
-    self.text = text
-    mock.Mock.__init__(self)
-
-  def getText(self):
-    return [self.text]
+def BuildStepStatusMock(text):
+  ret = mock.Mock()
+  ret.getText.return_value = [text]
+  return ret
 
 
 if __name__ == '__main__':

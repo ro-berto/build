@@ -31,7 +31,7 @@ def CommonChecks(input_api, output_api):
         join('third_party', 'buildbot_8_4p1'),
         join('third_party', 'decorator_3_3_1'),
         join('third_party', 'jinja2'),
-        join('third_party', 'mock-0.7.2'),
+        join('third_party', 'mock-1.0.1'),
         join('third_party', 'sqlalchemy_0_7_1'),
         join('third_party', 'sqlalchemy_migrate_0_7_1'),
         join('third_party', 'tempita_0_5'),
