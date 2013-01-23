@@ -945,7 +945,6 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     """
     graphs = {}
     for name, graph in self._graphs.iteritems():
-      # TODO(xusydoc): Write the annotator to be more general.
       graphs[name] = {'name': name,
                       'important': graph.IsImportant(),
                       'units': graph.units,

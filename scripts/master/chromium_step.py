@@ -809,9 +809,8 @@ class AnnotationObserver(buildstep.LogLineObserver):
     for graph_name, graph in newgraphs.iteritems():
       if graph_name in graph_names:
         continue
-      new_graph_list.append({'name': graph_name,
-                             'important': graph['important'],
-                             'units': graph['units']})
+      new_graph_list.append(graph)
+      new_graph_list[-1]['name'] = graph_name
 
     # sort them by not-'important', since True > False, and by graph_name, ...
     new_graph_list.sort(lambda x, y: cmp((not x['important'], x['name']),
