@@ -27,6 +27,8 @@ def main():
          '../../../scripts/slave/runtest.py',
          '--run-python-script',
          'src/chrome/test/chromedriver/run_buildbot_steps.py',
+         '--revision',
+         options.build_properties.get('got_revision'),
         ])
   else:
     raise RuntimeError('Unrecognized master: ' + master_name)
