@@ -26,7 +26,7 @@ def main():
         [sys.executable,
          '../../../scripts/slave/runtest.py',
          '--run-python-script',
-         'src/chrome/test/chromedriver/run_all_tests.py',
+         'src/chrome/test/chromedriver/run_buildbot_steps.py',
         ])
   else:
     raise RuntimeError('Unrecognized master: ' + master_name)
