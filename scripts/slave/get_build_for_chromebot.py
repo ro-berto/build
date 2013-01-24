@@ -30,8 +30,6 @@ import urllib
 import urllib2
 import zipfile
 
-from slave import slave_utils
-
 
 def RemovePath(path):
   """Remove the given dir."""
@@ -226,10 +224,9 @@ class GetBuild(object):
 
   def DownloadAndExtractFiles(self):
     """Download and extract files."""
-    exit_code = 0
     if not DoesURLExist(self._chrome_zip_url):
       print 'URL does not exist : ' + self._chrome_zip_url
-      return slave_utils.ERROR_EXIT_CODE
+      return False
 
     os.makedirs(self._target_dir)
     os.chmod(self._target_dir, 0755)
@@ -255,7 +252,6 @@ class GetBuild(object):
         Extract(file_path, self._symbol_dir)
     else:
       print '\nWARNING: No breakpad symbol available.'
-      exit_code = slave_utils.WARNING_EXIT_CODE
 
     # Download ffmpegsumo.so.
     if self._ffmpegsumo_name:
@@ -266,8 +262,7 @@ class GetBuild(object):
     for path, _, fnames in os.walk(self._target_dir):
       for fname in fnames:
         os.chmod(os.path.join(path, fname), 0755)
-
-    return exit_code
+    return True
 
   def Main(self):
     """main() routine for GetBuild.  Fetch everything.
@@ -275,13 +270,13 @@ class GetBuild(object):
     Returns:
       Value suitable for process exit code (e.g. 0 on success).
     """
-    if not self.ProcessArgs() or not self.CleanUp():
-      return slave_utils.ERROR_EXIT_CODE
+    if (not self.ProcessArgs() or not self.CleanUp()
+        or not self.DownloadAndExtractFiles()):
+      return 1
 
     # See scripts/master/factory/commands.py's SetBuildPropertyShellCommand
     print 'BUILD_PROPERTY build_id=%s' % self._build_id
-
-    return self.DownloadAndExtractFiles()
+    return 0
 
 
 def main():
