@@ -151,6 +151,25 @@ class SwarmCommands(commands.FactoryCommands):
                      timeout=timeout,
                      do_step_if=self.TestStepFilter)
 
+  def AddIsolateTest(self, test_name, using_ninja):
+    if not self._target:
+      log.msg('No target specified, unable to find isolated files')
+      return
+
+    isolated_directory = self.GetOutputDirectory(using_ninja)
+    isolated_file = self.PathJoin(isolated_directory, test_name + '.isolated')
+    script_path = self.PathJoin('src', 'tools', 'swarm_client',
+                                'isolate.py')
+
+    args = ['run', '--isolated', isolated_file]
+    wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
+
+    command = self.GetPythonTestCommand(script_path, arg_list=args,
+                                        wrapper_args=wrapper_args)
+    self.AddTestStep(chromium_step.AnnotatedCommand,
+                     '%s_isolate' % test_name,
+                     command)
+
   def SetupWinNetworkDrive(self, drive, network_path):
     script_path = self.PathJoin(self._script_dir, 'add_network_drive.py')
 

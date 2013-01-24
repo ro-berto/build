@@ -114,14 +114,14 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
                                           'http://localhost:9001')
     swarm_server = swarm_server.rstrip('/')
     isolation_outdir = factory_properties.get('data_dir')
+    using_ninja = '--build-tool=ninja' in (options or []),
 
     gyp_defines = gclient_env['GYP_DEFINES']
     if 'test_isolation_mode=hashtable' in gyp_defines:
       test_names = [test.test_name for test in tests]
 
       swarm_command_obj.AddGenerateResultHashesStep(
-          using_ninja='--build-tool=ninja' in (options or []),
-          tests=test_names)
+          using_ninja=using_ninja, tests=test_names, doStepIf=True)
 
       # Send of all the test requests as a single step.
       swarm_command_obj.AddTriggerSwarmTestStep(swarm_server, isolation_outdir,
@@ -130,5 +130,9 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
       # Each test has its output returned as its own step.
       for test in tests:
         swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name)
+    elif 'test_isolation_mode=check':
+      for test in tests:
+        swarm_command_obj.AddIsolateTest(test.test_name,
+                                         using_ninja=using_ninja)
 
     return f

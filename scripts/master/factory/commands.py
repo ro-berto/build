@@ -1006,10 +1006,9 @@ class FactoryCommands(object):
         factory_properties=factory_properties, perf_name=perf_name,
         test_name=test_name, command_class=command_class)
 
-
-  def AddGenerateResultHashesStep(self, using_ninja, tests=None, doStepIf=True):
-    """Adds a step to generate the hashes for result files. This is used by
-    swarm."""
+  def GetOutputDirectory(self, using_ninja):
+    """Generates the path that points to the output directory for this
+    build."""
     if using_ninja:
       out_dir = 'out'
     elif self._target_platform == 'win32':
@@ -1019,11 +1018,16 @@ class FactoryCommands(object):
     else:
       out_dir = 'out'
 
+    return self.PathJoin('src', out_dir, self._target)
+
+  def AddGenerateResultHashesStep(self, using_ninja, tests, doStepIf):
+    """Adds a step to generate the hashes for result files. This is used by
+    swarm."""
     if not self._target:
       log.msg('No target specified, unable to find result files to '
               'trigger swarm tests')
       return
-    manifest_directory = self.PathJoin('src', out_dir, self._target)
+    manifest_directory = self.GetOutputDirectory(using_ninja)
 
     assert self._target_platform
     if self._target_platform == 'win32':
