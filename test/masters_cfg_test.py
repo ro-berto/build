@@ -20,6 +20,7 @@ from common import master_cfg_utils
 BLACKLIST = ['client.syzygy',
              'chromium.swarm',
              'chromium.chromebot',
+             'chromiumos.tryserver',
              'client.nacl.chrome',
              'client.dart',
              'client.dart.fyi']
