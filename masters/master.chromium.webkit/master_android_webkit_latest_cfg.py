@@ -16,7 +16,7 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def linux_android(): return chromium_factory.ChromiumFactory('',
-    'linux2', nohooks_on_update=True, target_os='android')
+    'linux2', full_checkout=True, nohooks_on_update=True, target_os='android')
 
 
 ################################################################################
@@ -54,7 +54,6 @@ B('WebKit Android (GalaxyNexus)', 'f_webkit_android_tests', None,
 F('f_webkit_android_tests',
   linux_android().ChromiumWebkitLatestAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    tests=['webkit'],
     factory_properties={
         'android_bot_id': 'webkit-latest-webkit-tests-rel',
         'archive_webkit_results': True,
