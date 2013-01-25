@@ -20,8 +20,7 @@ def mac_tester():
   return chromium_factory.ChromiumFactory('src/build', 'darwin',
                                           nohooks_on_update=True)
 
-# Scheduler for the WebRTC trunk branch.
-S('mac_rel_scheduler', branch='trunk', treeStableTimer=0)
+S('mac_rel_scheduler', branch='src', treeStableTimer=60)
 T('mac_rel_trigger')
 
 chromium_rel_mac_archive = master_config.GetArchiveUrl('ChromiumWebRTC',
@@ -47,10 +46,12 @@ F('mac_tester_factory', mac_tester().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
     build_url=chromium_rel_mac_archive,
     tests=tests,
-    factory_properties={'show_perf_results': True,
-                        'halt_on_missing_build': True,
-                        'perf_id': 'chromium-webrtc-rel-mac'}))
+    factory_properties={
+        'show_perf_results': True,
+        'halt_on_missing_build': True,
+        'perf_id': 'chromium-webrtc-rel-mac',
+    }))
 
 
 def Update(config, active_master, c):
-  return helper.Update(c)
+  helper.Update(c)

@@ -68,4 +68,4 @@ F('chromeos_daisy_factory',
 
 
 def Update(config, active_master, c):
-  return helper.Update(c)
+  helper.Update(c)

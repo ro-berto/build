@@ -20,8 +20,7 @@ def win_tester():
   return chromium_factory.ChromiumFactory('src/build', 'win32',
                                           nohooks_on_update=True)
 
-# Scheduler for the WebRTC trunk branch.
-S('win_rel_scheduler', branch='trunk', treeStableTimer=0)
+S('win_rel_scheduler', branch='src', treeStableTimer=60)
 T('win_rel_trigger')
 
 chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
@@ -45,23 +44,27 @@ F('win_xp_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
-    factory_properties={'show_perf_results': True,
-                        'halt_on_missing_build': True,
-                        'perf_id': 'chromium-webrtc-rel-xp',
-                        'process_dumps': True,
-                        'start_crash_handler': True,}))
+    factory_properties={
+        'show_perf_results': True,
+        'halt_on_missing_build': True,
+        'perf_id': 'chromium-webrtc-rel-xp',
+        'process_dumps': True,
+        'start_crash_handler': True,
+    }))
 
 B('Win7 Tester', 'win_7_tester_factory', scheduler='win_rel_trigger')
 F('win_7_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
-    factory_properties={'show_perf_results': True,
-                        'halt_on_missing_build': True,
-                        'perf_id': 'chromium-webrtc-rel-7',
-                        'process_dumps': True,
-                        'start_crash_handler': True,}))
+    factory_properties={
+        'show_perf_results': True,
+        'halt_on_missing_build': True,
+        'perf_id': 'chromium-webrtc-rel-7',
+        'process_dumps': True,
+        'start_crash_handler': True,
+    }))
 
 
 def Update(config, active_master, c):
-  return helper.Update(c)
+  helper.Update(c)
