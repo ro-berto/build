@@ -189,6 +189,7 @@ def main():
       'master.chromium.unused': None,
       'master.chromium.webkit': 'ChromiumWebkit',
       'master.chromium.webrtc': 'ChromiumWebRTC',
+      'master.chromium.webrtc.fyi': 'ChromiumWebRTCFYI',
       'master.chromium.win': 'ChromiumWin',
       'master.chromiumos': 'ChromiumOS',
       'master.chromiumos.tryserver': None,

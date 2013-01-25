@@ -32,7 +32,7 @@ defaults['category'] = 'win'
 
 B('Win Builder', 'win_rel_factory', scheduler='win_rel_scheduler',
   notify_on_missing=True)
-F('win_rel_factory', win().ChromiumWebRTCLatestFactory(
+F('win_rel_factory', win().ChromiumFactory(
     slave_type='Builder',
     target='Release',
     project='all.sln;chromium_builder_webrtc',
@@ -40,7 +40,7 @@ F('win_rel_factory', win().ChromiumWebRTCLatestFactory(
                         'build_url': chromium_rel_archive,}))
 
 B('WinXP Tester', 'win_xp_tester_factory', scheduler='win_rel_trigger')
-F('win_xp_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
+F('win_xp_tester_factory', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
@@ -53,7 +53,7 @@ F('win_xp_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
     }))
 
 B('Win7 Tester', 'win_7_tester_factory', scheduler='win_rel_trigger')
-F('win_7_tester_factory', win_tester().ChromiumWebRTCLatestFactory(
+F('win_7_tester_factory', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,

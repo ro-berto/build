@@ -4,6 +4,7 @@
 
 from buildbot.scheduler import Dependent
 from buildbot.scheduler import Nightly
+from buildbot.scheduler import Periodic
 from buildbot.scheduler import Scheduler
 from buildbot.scheduler import Triggerable
 
@@ -57,6 +58,14 @@ class Helper(object):
                               'branch': branch,
                               'hour': hour}
 
+  def Periodic(self, name, periodicBuildTimer):
+    """Helper method for the Periodic scheduler."""
+    if name in self._schedulers:
+      raise ValueError('Scheduler %s already exists' % name)
+    self._schedulers[name] = {'type': 'Periodic',
+                              'builders': [],
+                              'periodicBuildTimer': periodicBuildTimer}
+
   def Dependent(self, name, parent):
     if name in self._schedulers:
       raise ValueError('Scheduler %s already exists' % name)
@@ -109,7 +118,7 @@ class Helper(object):
         new_builder['builddir'] = builder['builddir']
       c['builders'].append(new_builder)
 
-    # Process the main schedulers
+    # Process the main schedulers.
     for s_name in self._schedulers:
       scheduler = self._schedulers[s_name]
       if scheduler['type'] == 'Scheduler':
@@ -121,7 +130,7 @@ class Helper(object):
         scheduler['instance'] = instance
         c['schedulers'].append(instance)
 
-    # Process the dependent schedulers
+    # Process the dependent schedulers.
     for s_name in self._schedulers:
       scheduler = self._schedulers[s_name]
       if scheduler['type'] == 'Dependent':
@@ -130,14 +139,23 @@ class Helper(object):
                       self._schedulers[scheduler['parent']]['instance'],
                       scheduler['builders']))
 
-    # Process the triggerable schedulers
+    # Process the triggerable schedulers.
     for s_name in self._schedulers:
       scheduler = self._schedulers[s_name]
       if scheduler['type'] == 'Triggerable':
         c['schedulers'].append(Triggerable(s_name,
                                            scheduler['builders']))
 
-    # Process the nightly schedulers
+    # Process the periodic schedulers.
+    for s_name in self._schedulers:
+      scheduler = self._schedulers[s_name]
+      if scheduler['type'] == 'Periodic':
+        c['schedulers'].append(
+            Periodic(s_name,
+                     periodicBuildTimer=scheduler['periodicBuildTimer'],
+                     builderNames=scheduler['builders']))
+
+    # Process the nightly schedulers.
     for s_name in self._schedulers:
       scheduler = self._schedulers[s_name]
       if scheduler['type'] == 'Nightly':

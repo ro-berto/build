@@ -30,8 +30,8 @@ tests = ['pyauto_webrtc_tests']
 defaults['category'] = 'linux'
 
 B('Linux Builder', 'linux_rel_factory', scheduler='linux_rel_scheduler',
-  builddir='chromium-webrtc-rel-linux-builder', notify_on_missing=True)
-F('linux_rel_factory', linux().ChromiumWebRTCLatestFactory(
+  notify_on_missing=True)
+F('linux_rel_factory', linux().ChromiumFactory(
     slave_type='Builder',
     target='Release',
     options=['--compiler=goma', 'chromium_builder_webrtc'],
@@ -41,7 +41,7 @@ F('linux_rel_factory', linux().ChromiumWebRTCLatestFactory(
     }))
 
 B('Linux Tester', 'linux_tester_factory', scheduler='linux_rel_trigger')
-F('linux_tester_factory', linux_tester().ChromiumWebRTCLatestFactory(
+F('linux_tester_factory', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,

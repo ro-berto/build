@@ -478,6 +478,11 @@ class Master(object):
     project_url = 'http://libjingle.googlecode.com'
     from_address = 'libjingle-cb-watchlist@google.com'
 
+  class ChromiumWebRTCFYI(WebRTC):
+    project_name = 'Chromium WebRTC FYI'
+    master_port = 9098
+    slave_port = 9198
+    master_port_alt = 9298
 
 class Archive(object):
   archive_host = 'localhost'

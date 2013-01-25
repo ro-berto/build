@@ -1,0 +1,108 @@
+# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+from master import master_config
+from master.factory import chromeos_factory
+from master.factory import chromium_factory
+
+defaults = {}
+
+helper = master_config.Helper(defaults)
+B = helper.Builder
+F = helper.Factory
+S = helper.Scheduler
+P = helper.Periodic
+
+
+def linux():
+  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+
+
+def CreateCbuildbotFactory(checkout_factory, target, short_name):
+  """Generate and register a ChromeOS builder along with its slave(s).
+
+  Args:
+    checkout_factory: Factory with the steps to pull out a Chromium source tree
+      (shouldn't contain any compile steps).
+    target: Target name in Chrome OS's puppet configuration scripts.
+    short_name: String only used to name the build directory.
+  """
+  # Extend the checkout_factory with Cbuildbot build steps to build and test
+  # CrOS using the Chrome from the above Chromium source tree.
+  return chromeos_factory.CbuildbotFactory(
+      params=target,
+      buildroot='/b/cbuild.%s' % short_name,
+      dry_run=True,
+      chrome_root='.',  # Where checkout_factory has put "Chrome".
+      factory=checkout_factory,
+      slave_manager=False).get_factory()
+
+
+# Use unused slave_type strings to avoid adding the normal compile step.
+latest_webrtc_trunk_factory = linux().ChromiumWebRTCLatestTrunkFactory(
+    slave_type='WebRtcCros')
+latest_webrtc_stable_factory = linux().ChromiumWebRTCLatestStableFactory(
+    slave_type='WebRtcCros')
+
+S('cros_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
+S('cros_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
+P('cros_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
+trunk_schedulers = 'cros_webrtc_trunk_scheduler|cros_every_4_hours_scheduler'
+stable_schedulers = 'cros_webrtc_stable_scheduler|cros_every_4_hours_scheduler'
+
+defaults['category'] = 'chromiumos'
+
+# x86.
+B('ChromiumOS x86 [latest WebRTC trunk]',
+  factory='chromeos_x86_webrtc_trunk_factory', scheduler=trunk_schedulers,
+  notify_on_missing=True)
+F('chromeos_x86_webrtc_trunk_factory',
+  CreateCbuildbotFactory(checkout_factory=latest_webrtc_trunk_factory,
+                         target='x86-webrtc-chrome-pfq-informational',
+                         short_name='x86'))
+
+B('ChromiumOS x86 [latest WebRTC stable]',
+  factory='chromeos_x86_webrtc_stable_factory', scheduler=stable_schedulers,
+  notify_on_missing=True)
+F('chromeos_x86_webrtc_stable_factory',
+  CreateCbuildbotFactory(checkout_factory=latest_webrtc_stable_factory,
+                         target='x86-webrtc-chrome-pfq-informational',
+                         short_name='x86'))
+# AMD64.
+B('ChromiumOS amd64 [latest WebRTC trunk]',
+  factory='chromeos_amd64_webrtc_trunk_factory', scheduler=trunk_schedulers,
+  notify_on_missing=True)
+F('chromeos_amd64_webrtc_trunk_factory',
+  CreateCbuildbotFactory(checkout_factory=latest_webrtc_trunk_factory,
+                         target='amd64-webrtc-chrome-pfq-informational',
+                         short_name='amd64'))
+
+B('ChromiumOS amd64 [latest WebRTC stable]',
+  factory='chromeos_amd64_webrtc_stable_factory', scheduler=stable_schedulers,
+  notify_on_missing=True)
+F('chromeos_amd64_webrtc_stable_factory',
+  CreateCbuildbotFactory(checkout_factory=latest_webrtc_stable_factory,
+                         target='amd64-webrtc-chrome-pfq-informational',
+                         short_name='amd64'))
+
+# ARM.
+B('ChromiumOS daisy [latest WebRTC trunk]',
+  factory='chromeos_daisy_webrtc_trunk_factory', scheduler=trunk_schedulers,
+  notify_on_missing=True)
+F('chromeos_daisy_webrtc_trunk_factory',
+  CreateCbuildbotFactory(checkout_factory=latest_webrtc_trunk_factory,
+                         target='daisy-webrtc-chrome-pfq-informational',
+                         short_name='daisy'))
+
+B('ChromiumOS daisy [latest WebRTC stable]',
+  factory='chromeos_daisy_webrtc_stable_factory', scheduler=stable_schedulers,
+  notify_on_missing=True)
+F('chromeos_daisy_webrtc_stable_factory',
+  CreateCbuildbotFactory(checkout_factory=latest_webrtc_stable_factory,
+                         target='daisy-webrtc-chrome-pfq-informational',
+                         short_name='daisy'))
+
+
+def Update(config, active_master, c):
+  return helper.Update(c)
