@@ -32,7 +32,6 @@ class ChromiteFactory(object):
       b_params:  An array of StepParameters to pass to the main command.
       timeout: Timeout in seconds for the main command. Default 9000 seconds.
       branch: git branch of the chromite repo to pull.
-      crostools_repo: git repo for crostools toolset.
       chromite_repo: git repo for chromite toolset.
       factory: a factory with pre-existing steps to extend rather than start
           fresh.  Allows composing.
@@ -47,12 +46,10 @@ class ChromiteFactory(object):
           since both external and internal slaves use internal.DEPS/.
   """
   _default_git_base = 'http://git.chromium.org/chromiumos'
-  _default_crostools = None
   _default_chromite = _default_git_base + '/chromite.git'
 
   def __init__(self, script, params=None, b_params=None, timeout=9000,
-               branch='master', crostools_repo=_default_crostools,
-               chromite_repo=_default_chromite,
+               branch='master', chromite_repo=_default_chromite,
                factory=None, use_chromeos_factory=False, slave_manager=True,
                chromite_patch=None, sleep_sync=None,
                show_gclient_output=True):
