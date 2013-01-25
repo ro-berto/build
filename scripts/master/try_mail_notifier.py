@@ -147,7 +147,7 @@ http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage</
     dl = []
     recipients = self.extraRecipients[:]
     if self.sendToInterestedUsers and self.lookup:
-      for u in build.getInterestedUsers():
+      for u in build[0].getInterestedUsers():
         d = defer.maybeDeferred(self.lookup.getAddress, u)
         d.addCallback(recipients.append)
         dl.append(d)
