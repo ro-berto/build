@@ -960,29 +960,15 @@ class ChromiumCommands(commands.FactoryCommands):
       env['ENDURE_NO_WPR'] = '1'
 
     for pyauto_test_name in pyauto_test_list:
-      tool_opts = []
-      if not factory_properties.get('use_xvfb_on_linux'):
-        tool_opts = ['--no-xvfb']
-
-      test_name = test_class_name.replace('_', '-')
-      if test_class_name.endswith('_test'):
-        test_name = test_name[0:-5]
-
-      pyauto_cmd = self.GetAnnotatedPerfCmd(
-          gtest_filter=None,
-          log_type='endure',
-          test_name=test_name,
-          cmd_name='/usr/bin/python',
-          tool_opts=tool_opts,
-          options=[pyauto_script, '-v'],
-          factory_properties=factory_properties,
-          py_script=False)
-
+      pyauto_cmd = ['python', pyauto_script, '-v']
+      if factory_properties.get('use_xvfb_on_linux'):
+        # Run through runtest.py on linux to launch virtual x server.
+        pyauto_cmd = self.GetTestCommand('/usr/bin/python',
+                                         [pyauto_script, '-v'])
       pyauto_cmd.append(pyauto_test_name)
       test_step_name = (test_class_name + ' ' +
                         pyauto_test_name[pyauto_test_name.rfind('.') + 1:])
-
-      self.AddTestStep(chromium_step.AnnotatedCommand,
+      self.AddTestStep(retcode_command.ReturnCodeCommand,
                        test_step_name,
                        pyauto_cmd,
                        env=env,
