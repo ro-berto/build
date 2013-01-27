@@ -150,6 +150,7 @@ F('chromeos_asan_rel_tests_3', linux().ChromiumASANFactory(
 B('Chromium OS (x86) ASAN',
   factory='x86_asan',
   builddir='chromium-tot-chromeos-x86-generic-asan',
+  gatekeeper='crosasantest',
   scheduler='chromeos_asan_rel',
   notify_on_missing=True)
 F('x86_asan', chromeos_factory.CbuildbotFactory(
@@ -160,6 +161,7 @@ F('x86_asan', chromeos_factory.CbuildbotFactory(
 B('Chromium OS (amd64) ASAN',
   factory='amd64_asan',
   builddir='chromium-tot-chromeos-amd64-generic-asan',
+  gatekeeper='crosasantest',
   scheduler='chromeos_asan_rel',
   notify_on_missing=True)
 F('amd64_asan', chromeos_factory.CbuildbotFactory(
