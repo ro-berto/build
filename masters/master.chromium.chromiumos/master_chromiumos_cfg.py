@@ -38,6 +38,7 @@ sharded_tests = [
 ]
 
 linux_chromeos_tests = [
+  ('app_list_unittests', 'app_list_unittests', 1),
   ('ash_unittests', 'aura_builder', 1),
   ('aura', 'aura_builder', 1),
   ('base', 'base_unittests', 1),
@@ -57,6 +58,7 @@ linux_chromeos_tests = [
   ('interactive_ui', 'interactive_ui_tests', 3),
   ('jingle', 'jingle_unittests', 1),
   ('media', 'media_unittests', 1),
+  ('message_center_unittests', 'message_center_unittests', 1),
   ('net', 'net_unittests', 1),
   ('ppapi_unittests', 'ppapi_unittests', 1),
   ('printing', 'printing_unittests', 1),

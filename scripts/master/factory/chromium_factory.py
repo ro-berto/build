@@ -433,6 +433,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('aura_unittests', fp)
     if R('aura_shell') or R('ash') or R('ash_unittests'):
       f.AddGTestTestStep('ash_unittests', fp)
+    if R('app_list_unittests'):
+      f.AddGTestTestStep('app_list_unittests', fp)
+    if R('message_center_unittests'):
+      f.AddGTestTestStep('message_center_unittests', fp)
     if R('compositor'):
       f.AddGTestTestStep('compositor_unittests', fp)
     if R('compositor_br'):
