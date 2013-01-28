@@ -441,7 +441,8 @@ def upload_profiling_data(options, args):
     return 0
 
   builder_name = options.build_properties.get('buildername')
-  if (builder_name != 'XP Perf (dbg) (1)' or
+  if ((builder_name != 'XP Perf (dbg) (2)' and
+       builder_name != 'Linux Perf (lowmem)') or
       options.build_properties.get('mastername') != 'chromium.perf' or
       not options.build_properties.get('got_revision')):
     return 0
