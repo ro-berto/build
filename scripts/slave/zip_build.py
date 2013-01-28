@@ -135,8 +135,7 @@ def FileRegexWhitelist(options):
 def FileRegexBlacklist(options):
   if chromium_utils.IsWindows():
     # Remove all .ilk/.7z and maybe PDB files
-    # TODO(phajdan.jr): Remove package_pdb_files when nobody uses it.
-    include_pdbs = options.factory_properties.get('package_pdb_files', True)
+    include_pdbs = options.factory_properties.get('package_pdb_files', False)
     if include_pdbs:
       return r'^.+\.(ilk|7z|(precompile\.h\.pch.*))$'
     else:
