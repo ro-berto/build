@@ -441,8 +441,7 @@ def upload_profiling_data(options, args):
     return 0
 
   builder_name = options.build_properties.get('buildername')
-  # Disabled uploading profile data (added a non-existing builder_name).
-  if (builder_name != 'XP Interactive Perf1' or
+  if (builder_name != 'XP Perf (dbg) (1)' or
       options.build_properties.get('mastername') != 'chromium.perf' or
       not options.build_properties.get('got_revision')):
     return 0
