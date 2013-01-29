@@ -606,8 +606,8 @@ twistd.pid
 /masters/master.chromium.win/Chrome_Frame_Tests__ie8_
 /masters/master.chromium.win/Chrome_Frame_Tests__ie9_
 /masters/master.chromium.win/Interactive_Tests__dbg_
-/masters/master.chromium.win/NACL_Tests
-/masters/master.chromium.win/NACL_Tests__x64_
+/masters/master.chromium.win/NaCl_Tests__x86-32_
+/masters/master.chromium.win/NaCl_Tests__x86-64_
 /masters/master.chromium.win/Vista_Tests__1_
 /masters/master.chromium.win/Vista_Tests__2_
 /masters/master.chromium.win/Vista_Tests__3_
@@ -686,8 +686,8 @@ twistd.pid
 /masters/master.chromium/Mac_10_7_Tests__dbg__3_/
 /masters/master.chromium/Mac_10_7_Tests__dbg__4_/
 /masters/master.chromium/Mac_Builder__dbg_
-/masters/master.chromium/NACL_Tests
-/masters/master.chromium/NACL_Tests__x64_
+/masters/master.chromium/NaCl_Tests__x86-32_
+/masters/master.chromium/NaCl_Tests__x86-64_
 /masters/master.chromium/Vista_Tests__1_
 /masters/master.chromium/Vista_Tests__2_
 /masters/master.chromium/Vista_Tests__3_
