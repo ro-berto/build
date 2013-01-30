@@ -785,25 +785,25 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     }
     # Live sites.
     if R('endure_control_tests'):
-      f.AddChromeEndureTest('endure_control_test', endure_tests['control'], fp)
+      f.AddChromeEndureTest('endure_control', endure_tests['control'], fp)
     if R('endure_docs_tests'):
-      f.AddChromeEndureTest('endure_docs_test', endure_tests['docs'], fp)
+      f.AddChromeEndureTest('endure_docs', endure_tests['docs'], fp)
     if R('endure_gmail_tests'):
-      f.AddChromeEndureTest('endure_gmail_test', endure_tests['gmail'], fp)
+      f.AddChromeEndureTest('endure_gmail', endure_tests['gmail'], fp)
     if R('endure_indexeddb_tests'):
-      f.AddChromeEndureTest('endure_indexeddb_test', endure_tests['indexeddb'],
+      f.AddChromeEndureTest('endure_indexeddb', endure_tests['indexeddb'],
                             fp)
     if R('endure_plus_tests'):
-      f.AddChromeEndureTest('endure_plus_test', endure_tests['plus'], fp)
+      f.AddChromeEndureTest('endure_plus', endure_tests['plus'], fp)
     # Web Page Replay.
     if R('endure_docs_wpr_tests'):
-      f.AddChromeEndureTest('endure_docs_wpr_test', endure_tests['docs'], fp,
+      f.AddChromeEndureTest('endure_docs_wpr', endure_tests['docs'], fp,
                             wpr=True)
     if R('endure_gmail_wpr_tests'):
-      f.AddChromeEndureTest('endure_gmail_wpr_test', endure_tests['gmail'], fp,
+      f.AddChromeEndureTest('endure_gmail_wpr', endure_tests['gmail'], fp,
                             wpr=True)
     if R('endure_plus_wpr_tests'):
-      f.AddChromeEndureTest('endure_plus_wpr_test', endure_tests['plus'], fp,
+      f.AddChromeEndureTest('endure_plus_wpr', endure_tests['plus'], fp,
                             wpr=True)
 
     # HTML5 media tag performance/functional test using PyAuto.

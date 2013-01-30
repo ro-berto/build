@@ -888,6 +888,10 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     # self.TrackActualPerformance(graph=graph_name, trace=trace_name,
     #                             value=trace.value, stddev=trace.stddev)
 
+  def _FinalizeProcessing(self):
+    self.__CreateSummaryOutput()
+    self.__GenerateGraphInfo()
+
   def __BuildSummaryJSON(self, graph):
     """Sorts the traces and returns a summary JSON encoding of the graph.
 
