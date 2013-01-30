@@ -33,7 +33,7 @@ password = config.Master.GetBotPassword()
 host = None
 port = None
 basedir = None
-keepalive = 600
+keepalive = 300
 usepty = 1
 umask = None
 
