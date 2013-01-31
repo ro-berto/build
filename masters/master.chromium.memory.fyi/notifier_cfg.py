@@ -17,6 +17,7 @@ categories_steps = {
     # Please keep the list below sorted.
     'memory test: base',
     'memory test: chromeos_unittests',
+    'memory test: components',
     'memory test: compositor',
     'memory test: content',
     'memory test: courgette',
@@ -106,6 +107,7 @@ def Update(config, active_master, c):
     'drmemory_tester': [
       # Please keep this list sorted.
       'memory test: base',
+      'memory test: components',
       'memory test: content',
       'memory test: crypto',
       'memory test: googleurl',
