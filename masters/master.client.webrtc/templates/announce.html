@@ -162,6 +162,7 @@
               document.write([
                 a("../client.webrtc/waterfall", "client.webrtc", ""),
                 aView("../chromium.webrtc", "", "chromium.webrtc"),
+                aView("../chromium.webrtc.fyi", "", "chromium.webrtc.fyi"),
                 aView("../client.libjingle", "", "client.libjingle"),
                 aView("../client.libyuv", "", "client.libyuv")].join(' | '));
               </script>
@@ -193,11 +194,13 @@
           <script language="javascript">
             c.webrtc = '';
             c.chromium = '';
+            c.chromium_fyi = '';
             c.libjingle = '';
             c.libyuv = '';
 
             c.status_webrtc = '../client.webrtc';
             c.status_chromium = '../chromium.webrtc';
+            c.status_chromium_fyi = '../chromium.webrtc.fyi';
             c.status_libjingle = '../client.libjingle';
             c.status_libyuv = '../client.libyuv';
 
@@ -212,6 +215,7 @@
             }
             c.bar_webrtc = BarUrl('client.webrtc')
             c.bar_chromium = BarUrl('chromium.webrtc');
+            c.bar_chromium_fyi = BarUrl('chromium.webrtc.fyi');
             c.bar_libjingle = BarUrl('client.libjingle');
             c.bar_libyuv = BarUrl('client.libyuv');
 
@@ -296,14 +300,17 @@
                     'width="100%"',
                     tr(
                        HTMLBaseBar(c.status_webrtc, c.bar_webrtc, c.webrtc,
-                                   'WebRTC', 'width="25%"') +
+                                   'WebRTC', 'width="50%"') +
                        HTMLBaseBar(c.status_chromium, c.bar_chromium,
-                                   c.chromium, 'Chromium', 'width="25%"')) +
+                                   c.chromium, 'Chromium', 'width="25%"') +
+                       HTMLBaseBar(c.status_chromium_fyi, c.bar_chromium_fyi,
+                                   c.chromium_fyi, 'Chromium FYI',
+                                   'width="25%"')) +
                     tr(
                        HTMLBaseBar(c.status_libjingle, c.bar_libjingle,
-                                   c.libjingle, 'libjingle', 'width="25%"') +
+                                   c.libjingle, 'libjingle', 'width="50%"') +
                        HTMLBaseBar(c.status_libyuv, c.bar_libyuv, c.libyuv,
-                                   'libyuv', 'width="25%"'))
+                                   'libyuv', 'width="50%" colspan=2'))
                   )
                 )
             )));
