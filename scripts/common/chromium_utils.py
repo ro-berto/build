@@ -628,7 +628,11 @@ def ExtractZip(filename, output_dir, verbose=True):
                           (str(command), result))
   else:
     assert IsWindows()
-    zipfile.ZipFile(filename).extractall(output_dir)
+    zf = zipfile.ZipFile(filename)
+    for name in zf.namelist():
+      if verbose:
+        print 'Extracting %s' % name
+      zf.extract(name, output_dir)
 
 
 def WindowsPath(path):
