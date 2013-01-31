@@ -600,7 +600,6 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
 
 def ExtractZip(filename, output_dir, verbose=True):
   """ Extract the zip archive in the output directory.
-      Based on http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/252508.
   """
   MaybeMakeDirectory(output_dir)
 
@@ -629,23 +628,7 @@ def ExtractZip(filename, output_dir, verbose=True):
                           (str(command), result))
   else:
     assert IsWindows()
-    zf = zipfile.ZipFile(filename)
-
-    # Grabs all the directories in the zip structure. This is necessary
-    # to create the structure before trying to extract the file to it.
-    dirs = set([os.path.dirname(n) for n in zf.namelist()])
-
-    # Create the directory structure.
-    for item in dirs:
-      MaybeMakeDirectory(os.path.join(output_dir, item))
-
-    # Extract files to directory structure.
-    for name in zf.namelist():
-      if verbose:
-        print 'Extracting %s' % name
-      outfile = open(os.path.join(output_dir, name), 'wb')
-      outfile.write(zf.read(name))
-      outfile.close()
+    zipfile.ZipFile(filename).extractall(output_dir)
 
 
 def WindowsPath(path):
