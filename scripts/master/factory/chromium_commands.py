@@ -565,21 +565,25 @@ class ChromiumCommands(commands.FactoryCommands):
         do_step_if=self.TestStepFilter)
 
   def AddTelemetryUnitTests(self):
+    step_name = 'telemetry_unittests'
     args = ['--browser=%s' % self._target.lower()]
     cmd = self.GetPythonTestCommand(self._telemetry_unit_tests,
                                     arg_list=args,
-                                    wrapper_args=['--annotate=gtest'])
+                                    wrapper_args=['--annotate=gtest',
+                                                  '--test-type=%s' % step_name])
 
-    self.AddTestStep(chromium_step.AnnotatedCommand, 'telemetry_unittests', cmd,
+    self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                      do_step_if=self.TestStepFilter)
 
   def AddTelemetryPerfUnitTests(self):
+    step_name = 'telemetry_perf_unittests'
     args = ['--browser=%s' % self._target.lower()]
     cmd = self.GetPythonTestCommand(self._telemetry_perf_unit_tests,
                                     arg_list=args,
-                                    wrapper_args=['--annotate=gtest'])
+                                    wrapper_args=['--annotate=gtest',
+                                                  '--test-type=%s' % step_name])
 
-    self.AddTestStep(chromium_step.AnnotatedCommand, 'telemetry_perf_unittests',
+    self.AddTestStep(chromium_step.AnnotatedCommand, step_name,
                      cmd, do_step_if=self.TestStepFilter)
 
   def AddReliabilityTests(self, platform):
