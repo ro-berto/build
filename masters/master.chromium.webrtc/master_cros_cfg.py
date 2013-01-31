@@ -35,7 +35,7 @@ def CreateCbuildbotFactory(target, short_name):
       slave_manager=False).get_factory()
 
 
-S(name='chromium_cros', branch='trunk', treeStableTimer=0)
+S(name='chromium_cros', branch='src', treeStableTimer=60)
 
 defaults['category'] = 'chromiumos'
 
