@@ -36,7 +36,7 @@ SWARM_TESTS = [
 
 
 def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
-                    isolation_outdir, ninja, tests):
+                    isolation_outdir, gyp_defines, ninja, tests):
   """This is a swarm builder."""
   # Only set the outdir if we are building the hashtable to ensure we know where
   # to load the hashtable from later.
@@ -45,7 +45,7 @@ def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
       'GYP_DEFINES': (
           'test_isolation_mode=' + isolation_mode +
           ' test_isolation_outdir=' + isolation_outdir +
-          ' fastbuild=1'
+          ' fastbuild=1 ' + gyp_defines
       ),
       'GYP_MSVS_VERSION': '2010',
     },
@@ -53,7 +53,7 @@ def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
       'ISOLATE_DEBUG': '1',
     },
     'data_dir': isolation_outdir,
-    'swarm_server': swarm_server
+    'swarm_server': swarm_server,
   }
   if ninja:
     factory_properties['gclient_env']['GYP_GENERATORS'] = 'ninja'
