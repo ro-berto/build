@@ -53,9 +53,10 @@ class SyzygyCommands(commands.FactoryCommands):
                               self._target,
                               test_name + '.exe')
     args = ['--on-waterfall', test_path, '--', '--gtest_print_time']
+    wrapper_args = ['--annotate=gtest', '--test-type=%s', test_name]
 
     command = self.GetPythonTestCommand(script_path, arg_list=args,
-                                        wrapper_args=['--annotate=gtest'])
+                                        wrapper_args=wrapper_args)
 
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name, command)
 
