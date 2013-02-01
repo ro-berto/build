@@ -14,6 +14,7 @@ chromium_categories_steps = {
   '': ['update'],
   'tester': [
     'aura_unit_tests',
+    'app_list_unittests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
@@ -31,6 +32,7 @@ chromium_categories_steps = {
     'ipc_tests',
     'jingle_unittests',
     'media_unittests',
+    'message_center_unittests',
     'mini_installer_test',
     'nacl_integration',
     'net_unittests',
