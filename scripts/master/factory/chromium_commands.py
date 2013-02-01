@@ -941,7 +941,8 @@ class ChromiumCommands(commands.FactoryCommands):
     """Adds a step to run PyAuto-based Chrome Endure tests.
 
     Args:
-      test_class_name: A string name for this class of tests.
+      test_class_name: A string name for this class of tests.  For example,
+          'control' for Endure 'control' tests.
       pyauto_test_list: A list of strings, where each string is the full name
           of a pyauto test to run (file.class.test_name).
       factory_properties: A dictionary of factory property values.
@@ -969,14 +970,15 @@ class ChromiumCommands(commands.FactoryCommands):
       if not factory_properties.get('use_xvfb_on_linux'):
         tool_opts = ['--no-xvfb']
 
-      step_name = (test_class_name.replace('-', '_') + '-' +
+      test_name = (test_class_name.replace('-', '_') + '-' +
                    pyauto_test_name[pyauto_test_name.rfind('.') + 1:])
+      step_name = 'endure_' + test_name
       factory_properties['step_name'] = step_name
 
       pyauto_cmd = self.GetAnnotatedPerfCmd(
           gtest_filter=None,
           log_type='endure',
-          test_name=test_class_name,
+          test_name=test_name,
           cmd_name=pyauto_script,
           tool_opts=tool_opts,
           options=['-v'],
@@ -989,6 +991,8 @@ class ChromiumCommands(commands.FactoryCommands):
                        pyauto_cmd,
                        env=env,
                        timeout=timeout,
+                       target=self._target,
+                       factory_properties=factory_properties,
                        do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddDevToolsTests(self, factory_properties=None):
