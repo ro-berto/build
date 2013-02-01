@@ -26,17 +26,13 @@ class _ValidUserPoller(internet.TimerService):
   # The name of the file that contains the password for authenticating
   # requests to chromium-access.
   _PWD_FILE = '.try_job_rietveld_password'
-  _NORMAL_DOMAIN = '@chromium.org'
-  _SPECIAL_DOMAIN = '@google.com'
 
   def __init__(self, interval):
     """
     Args:
       interval: Interval used to poll chromium-access, in seconds.
     """
-    if interval:
-      internet.TimerService.__init__(self, interval, _ValidUserPoller._poll,
-                                     self)
+    internet.TimerService.__init__(self, interval, _ValidUserPoller._poll, self)
     self._users = frozenset()
 
   def contains(self, email):
@@ -50,17 +46,7 @@ class _ValidUserPoller(internet.TimerService):
     """
     if email is None:
       return False
-
-    if email.count('@') > 1:
-      return False
-
-    if email.endswith(self._SPECIAL_DOMAIN):
-      return True
-
-    if email.endswith(self._NORMAL_DOMAIN):
-      email = email[:-len(self._NORMAL_DOMAIN)]
-
-    return email in self._users
+    return email in self._users or email.endswith('@google.com')
 
   # base.PollingChangeSource overrides:
   def _poll(self):
