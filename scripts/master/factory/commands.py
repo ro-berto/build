@@ -294,9 +294,12 @@ class FactoryCommands(object):
   # Basic commands
   def GetTestCommand(self, executable, arg_list=None, factory_properties=None,
                      test_tool_arg_list=None):
-    cmd = [self._python, self._test_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+    cmd = [self._python, self._test_tool]
+    if self._target:
+      cmd.extend(['--target', self._target])
+    if self._build_dir:
+      cmd.extend(['--build-dir', self._build_dir])
+
     if executable in ('performance_ui_tests',
                       'performance_browser_tests',
                       'sync_performance_tests'):
@@ -316,11 +319,12 @@ class FactoryCommands(object):
   # argument names (wrapper_args / test_tool_arg_list).
   def GetPythonTestCommand(self, py_script, arg_list=None, wrapper_args=None,
                            factory_properties=None):
-    cmd = [self._python,
-           self._test_tool,
-           '--run-python-script',
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+    cmd = [self._python, self._test_tool, '--run-python-script']
+    if self._target:
+      cmd.extend(['--target', self._target])
+    if self._build_dir:
+      cmd.extend(['--build-dir', self._build_dir])
+
     if factory_properties:
       cmd = self.AddFactoryProperties(factory_properties, cmd)
     if wrapper_args is not None:
