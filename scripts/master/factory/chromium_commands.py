@@ -432,19 +432,20 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddSizesTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
-    c = self.GetPerfStepClass(factory_properties, 'sizes',
-                              process_log.GraphingLogProcessor)
-    cmd = [self._python, self._sizes_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+
     # For Android, platform is hardcoded as target_platform is set to linux2.
     # By default, the sizes.py script looks at sys.platform to identify
     # the platform (which is also linux2).
-    if self._target_os == 'android':
-      cmd = cmd + ['--platform', 'android']
+    args = ['--target', self._target,
+            '--build-dir', self._build_dir]
 
-    self.AddTestStep(c, 'sizes', cmd,
-                     do_step_if=self.TestStepFilter)
+    if self._target_os == 'android':
+      args.extend(['--platform', 'android'])
+
+    self.AddAnnotatedPerfStep('sizes', None, 'graphing', step_name='sizes',
+                              cmd_name = self._sizes_tool, cmd_options=args,
+                              py_script=True,
+                              factory_properties=factory_properties)
 
   def AddFrameRateTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
