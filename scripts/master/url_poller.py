@@ -26,6 +26,9 @@ class URLPoller(base.PollingChangeSource):
 
   compare_attrs = ['changeurl', 'pollInterval']
 
+  # pylint runs this against the wrong buildbot version.
+  # In buildbot 8.4 base.PollingChangeSource has no __init__
+  # pylint: disable=W0231
   def __init__(self, changeurl, pollInterval=3600, category=None):
     """Initialize URLPoller.
 
@@ -38,7 +41,6 @@ class URLPoller(base.PollingChangeSource):
     self.pollInterval = pollInterval
     self.category = category
     self.last_change = None
-    base.PollingChangeSource.__init__(self, changeurl, pollInterval, category)
 
   def describe(self):
     return 'URLPoller watching %s' % self.changeurl
