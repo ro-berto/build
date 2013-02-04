@@ -12,7 +12,7 @@ import logging
 import os
 import sys
 import time
-import urllib
+import urllib2
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
@@ -103,7 +103,8 @@ def json_probe(sensitive, ports=None):
   for port in ports:
     try:
       data = json.load(
-          urllib.urlopen('http://localhost:%d/json/project' % port)) or {}
+          urllib2.urlopen('http://localhost:%d/json/project' % port,
+          timeout=5)) or {}
       if not data or (not 'projectName' in data and not 'title' in data):
         logging.debug('Didn\'t get valid data from port %d' % port)
         if sensitive:
