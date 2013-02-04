@@ -567,7 +567,10 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddTelemetryUnitTests(self):
     step_name = 'telemetry_unittests'
-    args = ['--browser=%s' % self._target.lower()]
+    if self._target_os == 'android':
+      args = ['--browser=android-content-shell']
+    else:
+      args = ['--browser=%s' % self._target.lower()]
     cmd = self.GetPythonTestCommand(self._telemetry_unit_tests,
                                     arg_list=args,
                                     wrapper_args=['--annotate=gtest',
@@ -578,7 +581,10 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddTelemetryPerfUnitTests(self):
     step_name = 'telemetry_perf_unittests'
-    args = ['--browser=%s' % self._target.lower()]
+    if self._target_os == 'android':
+      args = ['--browser=android-content-shell']
+    else:
+      args = ['--browser=%s' % self._target.lower()]
     cmd = self.GetPythonTestCommand(self._telemetry_perf_unit_tests,
                                     arg_list=args,
                                     wrapper_args=['--annotate=gtest',
