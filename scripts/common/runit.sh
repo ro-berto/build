@@ -11,7 +11,7 @@
 # is called from.
 SCRIPTFILE=`[[ $0 == /* ]] && echo "$0" || echo "${PWD}/${0#./}"`
 SCRIPTDIR=${SCRIPTFILE%/*}
-BUILD=`cd $SCRIPTDIR/../../; pwd` # canonicalize path
+BUILD=`builtin cd $SCRIPTDIR/../../; pwd` # canonicalize path
 
 PYTHONPATH="$PYTHONPATH:$BUILD/third_party/buildbot_8_4p1"
 PYTHONPATH="$PYTHONPATH:$BUILD/third_party/buildbot_slave_8_4"
