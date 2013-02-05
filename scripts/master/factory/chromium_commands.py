@@ -999,24 +999,25 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddDevToolsTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
-    c = self.GetPerfStepClass(factory_properties, 'devtools_perf',
-                              process_log.GraphingLogProcessor)
 
-    cmd = [self._python, self._devtools_perf_test_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir
-    ]
-    self.AddTestStep(c,
-                     test_name='DevTools.PerfTest',
-                     test_command=cmd,
-                     do_step_if=self.TestStepFilter)
+    args = ['--target', self._target,
+            '--build-dir', self._build_dir]
+
+    self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
+                              step_name='DevTools.PerfTest',
+                              cmd_name = self._devtools_perf_test_tool,
+                              py_script=True,
+                              factory_properties=factory_properties)
 
     def AddFunctionalTest(test_name, script_name):
       pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
                                     script_name)
-      # Run through runtest.py to launch virtual x server.
-      cmd = self.GetTestCommand('/usr/bin/python', [pyauto_script])
-      self.AddTestStep(c, test_name, cmd, do_step_if=self.TestStepFilter)
+      self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
+                                step_name=test_name,
+                                cmd_name=pyauto_script,
+                                cmd_options=args,
+                                py_script=True,
+                                factory_properties=factory_properties)
 
     AddFunctionalTest('DevTools.NativeSnapshotUnknownSize',
                       'devtools_native_memory_snapshot.py')
