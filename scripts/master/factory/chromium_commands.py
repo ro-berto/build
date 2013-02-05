@@ -1193,14 +1193,15 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddProcessCoverage(self, factory_properties=None):
     factory_properties = factory_properties or {}
-    c = self.GetPerfStepClass(factory_properties, 'coverage',
-                              process_log.GraphingLogProcessor)
 
-    cmd = [self._python, self._process_coverage_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+    args = ['--target', self._target,
+            '--build-dir', self._build_dir]
 
-    self.AddTestStep(c, 'process_coverage', cmd)
+    self.AddAnnotatedPerfStep('coverage', None, 'graphing',
+                              step_name='process_coverage',
+                              cmd_name = self._process_coverage_tool,
+                              cmd_options=args, py_script=True,
+                              factory_properties=factory_properties)
 
     # Map the perf ID to the coverage subdir, so we can link from the coverage
     # graph
