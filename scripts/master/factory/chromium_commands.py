@@ -483,16 +483,14 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddDomPerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
-    c = self.GetPerfStepClass(factory_properties, 'dom_perf',
-                              process_log.GraphingLogProcessor)
+    args = ['--target', self._target,
+            '--build-dir', self._build_dir]
 
-    cmd = [self._python, self._dom_perf_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self.AddTestStep(c, 'dom_perf', cmd,
-                     do_step_if=self.TestStepFilter)
+    self.AddAnnotatedPerfStep('dom_perf', None, 'graphing',
+                              step_name='dom_perf',
+                              cmd_name=self._dom_perf_tool, cmd_options=args,
+                              py_script=True,
+                              factory_properties=factory_properties)
 
   def AddIDBPerfTests(self, factory_properties):
     self.AddAnnotatedPerfStep('idb_perf', 'IndexedDBTest.Perf', 'graphing',
