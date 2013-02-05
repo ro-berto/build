@@ -89,9 +89,9 @@ def main():
     elif options.shell_flags and '--gc-interval' in options.shell_flags:
       # GC Stress testing takes much longer, set generous timeout.
       if options.arch in ('arm', 'mipsel'):
-        cmd.extend(['--timeout=900'])
+        cmd.extend(['--timeout=1200'])
       else:
-        cmd.extend(['--timeout=600'])
+        cmd.extend(['--timeout=900'])
     else:
       if options.arch in ('arm', 'mipsel'):
         cmd.extend(['--timeout=600'])
