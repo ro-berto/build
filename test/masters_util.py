@@ -126,19 +126,19 @@ def json_probe(sensitive, ports=None):
 def wait_for_start(master, name, path, ports=None):
   """Waits for ~10s for the masters to open its web server."""
   logging.info("Waiting for master %s on ports %s" % (name, ports))
-  for _ in range(100):
+  for i in range(200):
     result = json_probe(False, ports)
     if result is None:
       if search_for_exceptions(path):
         return False
-      time.sleep(0.01)
+      time.sleep(0.05)
       continue
     (port, got_name) = result
     if got_name != name:
       logging.error('Wrong %s name, expected %s, got %s on port %d' %
                     (master, name, got_name, port))
       return False
-    logging.info("Found master %s on port %s" % (name, port))
+    logging.info("Found master %s on port %s, iteration %d" % (name, port, i))
     # The server is now answering /json requests. Check that the log file
     # doesn't have any other exceptions just in case there was some other
     # unexpected error.
