@@ -6,6 +6,7 @@
 import os
 import sys
 import tempfile
+import time
 import unittest
 import webbrowser
 
@@ -30,6 +31,8 @@ class TestMailNotifier(unittest.TestCase):
   def __init__(self, *args, **kwargs):
     super(TestMailNotifier, self).__init__(*args, **kwargs)
     self.maxDiff = None
+    os.environ['TZ'] = 'PST+08'
+    time.tzset()
 
   @mock.patch('time.time')  # Needed to fix time while generating the email
   def check_mail(
