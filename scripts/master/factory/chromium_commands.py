@@ -228,11 +228,13 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties['test_name'] = test_name
 
     perf_id = factory_properties.get('perf_id')
+    perf_report_url_suffix = factory_properties.get('perf_report_url_suffix')
     show_results = factory_properties.get('show_perf_results')
 
     _, _, perf_name = self._PerfStepMappings(show_results,
                                              perf_id,
-                                             test_name)
+                                             test_name,
+                                             perf_report_url_suffix)
     factory_properties['perf_name'] = perf_name
 
     if py_script:

@@ -977,7 +977,7 @@ class FactoryCommands(object):
         haltOnFailure=haltOnFailure,
         env=env)
 
-  def _PerfStepMappings(self, show_results, perf_id, test_name):
+  def _PerfStepMappings(self, show_results, perf_id, test_name, suffix=None):
     """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""
     report_link = None
     output_dir = None
@@ -988,8 +988,10 @@ class FactoryCommands(object):
       if (self._target in self.PERF_TEST_MAPPINGS and
           perf_id in self.PERF_TEST_MAPPINGS[self._target]):
         perf_name = self.PERF_TEST_MAPPINGS[self._target][perf_id]
+      if not suffix:
+        suffix = self.PERF_REPORT_URL_SUFFIX
       report_link = '%s/%s/%s/%s' % (self.PERF_BASE_URL, perf_name, test_name,
-                                     self.PERF_REPORT_URL_SUFFIX)
+                                     suffix)
       output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
 
     return report_link, output_dir, perf_name
@@ -999,11 +1001,11 @@ class FactoryCommands(object):
     """Selects the right build step for the specified perf test."""
     factory_properties = factory_properties or {}
     perf_id = factory_properties.get('perf_id')
+    perf_report_url_suffix = factory_properties.get('perf_report_url_suffix')
     show_results = factory_properties.get('show_perf_results')
 
-    report_link, output_dir, perf_name = self._PerfStepMappings(show_results,
-                                                                perf_id,
-                                                                test_name)
+    report_link, output_dir, perf_name = self._PerfStepMappings(
+        show_results, perf_id, test_name, perf_report_url_suffix)
 
     return CreatePerformanceStepClass(log_processor_class,
         report_link=report_link, output_dir=output_dir,

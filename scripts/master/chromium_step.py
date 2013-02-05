@@ -576,7 +576,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
     },
   }
   def __init__(self, command=None, show_perf=False, perf_id=None,
-               target=None, *args, **kwargs):
+               perf_report_url_suffix=None, target=None, *args, **kwargs):
     buildstep.LogLineObserver.__init__(self, *args, **kwargs)
     self.command = command
     self.sections = []
@@ -587,6 +587,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     self.show_perf = show_perf
     self.perf_id = perf_id
+    self.perf_report_url_suffix = perf_report_url_suffix
     self.target = target
 
   def initialSection(self):
@@ -755,7 +756,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     return self.sections[-1]
 
-  def _PerfStepMappings(self, show_results, perf_id, test_name):
+  def _PerfStepMappings(self, show_results, perf_id, test_name, suffix=None):
     """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""
     report_link = None
     output_dir = None
@@ -766,8 +767,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
       if (self.target in self.PERF_TEST_MAPPINGS and
           perf_id in self.PERF_TEST_MAPPINGS[self.target]):
         perf_name = self.PERF_TEST_MAPPINGS[self.target][perf_id]
+      if not suffix:
+        suffix = self.PERF_REPORT_URL_SUFFIX
       report_link = '%s/%s/%s/%s' % (self.PERF_BASE_URL, perf_name, test_name,
-                                     self.PERF_REPORT_URL_SUFFIX)
+                                     suffix)
       output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
 
     return report_link, output_dir, perf_name
@@ -870,9 +873,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
       report_link = None
       output_dir = None
       if self.perf_id:
-        report_link, output_dir, _ = self._PerfStepMappings(self.show_perf,
-                                                            self.perf_id,
-                                                            perf_dashboard_name)
+        report_link, output_dir, _ = self._PerfStepMappings(
+            self.show_perf, self.perf_id, perf_dashboard_name,
+            self.perf_report_url_suffix)
         if report_link:
           # It's harmless to send the results URL more than once, but it
           # clutters up the logs.
@@ -995,11 +998,14 @@ class AnnotatedCommand(ProcessLogShellStep):
   def __init__(self, target=None, *args, **kwargs):
     clobber = ''
     perf_id = None
+    perf_report_url_suffix = None
     show_perf = None
     if 'factory_properties' in kwargs:
       if kwargs['factory_properties'].get('clobber'):
         clobber = '1'
       perf_id = kwargs['factory_properties'].get('perf_id')
+      perf_report_url_suffix = kwargs['factory_properties'].get(
+          'perf_report_url_suffix')
       show_perf = kwargs['factory_properties'].get('show_perf_results')
       # kwargs is passed eventually to RemoteShellCommand(**kwargs).
       # This constructor (in buildbot/process/buildstep.py) does not
@@ -1025,9 +1031,9 @@ class AnnotatedCommand(ProcessLogShellStep):
     kwargs['env'] = env
 
     ProcessLogShellStep.__init__(self, *args, **kwargs)
-    self.script_observer = AnnotationObserver(self, show_perf=show_perf,
-                                              perf_id=perf_id,
-                                              target=target)
+    self.script_observer = AnnotationObserver(
+        self, show_perf=show_perf, perf_id=perf_id,
+        perf_report_url_suffix=perf_report_url_suffix, target=target)
     self.addLogObserver('stdio', self.script_observer)
 
   def describe(self, done=False):
