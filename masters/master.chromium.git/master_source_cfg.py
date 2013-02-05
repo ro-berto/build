@@ -9,5 +9,5 @@ def Update(config, active_master, c):
       repourl='https://chromium.googlesource.com/chromium/src.git',
       branch='master',
       pollinterval=10,
-      revlinktmpl='https://chromium.googlesource.com/chromium/src/+/%h')
+      revlinktmpl='https://chromium.googlesource.com/chromium/src/+/%s')
   c['change_source'].append(poller)
