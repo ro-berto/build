@@ -137,7 +137,8 @@ def EmailableBuildTable(build_status, waterfall_url, styles=None):
                       if step.isStarted() and step.getText()])
   table_content = ''.join(build_boxes)
   return (('<table style="border-spacing: 1px 1px; font-weight: bold; '
-           'padding: 3px 0px 3px 0px; text-align: center;">\n') +
+           'padding: 3px 0px 3px 0px; text-align: center; font-size: 10px; '
+           'font-family: Verdana, Cursor; ">\n') +
           table_content +
           '</table>\n')
 
@@ -194,7 +195,8 @@ def EmailableBuildTable_bb8(build_status, waterfall_url, styles=None):
                       if step.isStarted() and step.getText()])
   table_content = ''.join(build_boxes)
   return (('<table style="border-spacing: 1px 1px; font-weight: bold; '
-           'padding: 3px 0px 3px 0px; text-align: center;">\n') +
+           'padding: 3px 0px 3px 0px; text-align: center; font-size: 10px; '
+           'font-family: Verdana, Cursor; ">\n') +
           table_content +
           '</table>\n')
 

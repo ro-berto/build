@@ -35,13 +35,10 @@ class TestMailNotifier(unittest.TestCase):
     time.tzset()
 
   @mock.patch('time.time')  # Needed to fix time while generating the email
-  def check_mail(
-      self, bs_cfg, step_cfgs, log_cfgs, ms_cfg, expected, test_name, _
-    ):
+  def check_mail(self, bs_cfg, step_cfgs, ms_cfg, expected, test_name, _):
     '''
     bs_cfg: BuildStatus config dict
     step_cfgs: [BuildStepStatus config dict]
-    log_cfgs: [[LogFile config dict]]
     ms_cfg: MasterStatus config dict
     '''
     mn = TryMailNotifier(
@@ -52,16 +49,10 @@ class TestMailNotifier(unittest.TestCase):
     bs = mock.Mock(BuildStatus)
 
     steps = []
-    for step_cfg, logs_cfg in zip(step_cfgs, log_cfgs):
+    for step_cfg in step_cfgs:
       step = mock.Mock(BuildStepStatus)
-      logs = []
-      for l_cfg in logs_cfg:
-        log = mock.Mock(LogFile)
-        log.configure_mock(**l_cfg)
-        logs.append(log)
       step.urls = {}
       step_cfg.update({
-        'getLogs.return_value': logs,
         'addURL.side_effect': lambda name, url: step.urls.update({name: url}),
         'getURLs.side_effect': step.urls.copy,
         'getBuild.return_value': bs,
@@ -72,21 +63,29 @@ class TestMailNotifier(unittest.TestCase):
     bs_cfg.update({'getSteps.return_value': steps})
     bs.configure_mock(**bs_cfg)
 
-    def assertBuildStatus(build):
-      assert isinstance(build, BuildStatus)
-
     ms = mock.Mock(MasterStatus)
-    ms_cfg.update({'getURLForThing.side_effect': assertBuildStatus})
+
+    def getBuildStatusURL(build):
+      assert isinstance(build, BuildStatus)
+      return "%sbuilders/%s/builds/%s" % (
+          ms.getBuildbotURL(),
+          build.getBuilder().getName(),
+          build.getNumber())
+
+    ms_cfg.update({'getURLForThing.side_effect': getBuildStatusURL})
     ms.configure_mock(**ms_cfg)
 
     mn.master_status = ms
 
-    mail = mn.buildMessage_internal('FakeBuilder', [bs], bs.getResults())
+    mail = mn.buildMessage_internal(
+        bs.getBuilder().getName(), [bs], bs.getResults())
     # Set the boundary. Otherwise it's randomly generated and breaks the
     # test cases.
     mail.set_boundary('===============7454617213454723890==')
 
-    mail_str = str(mail)
+    # Replace tabs with a space for compat with python 2.6, 2.7, since
+    # the mime header wrap whitespace changed between those versions.
+    mail_str = str(mail).replace('\t', ' ')
     if self.mode == self.TEST_MODE:
       with open(expected, 'rb') as expected_file:
         self.assertEqual(mail_str, expected_file.read())
@@ -132,17 +131,32 @@ def recursive_key_replace(obj, find, replace):
   return ret
 
 
+def step_helper(name, extras=None, result=results.SUCCESS, exLogNames=None,
+                started=True):
+  logs = []
+  for log_name in (exLogNames or []) + ['stdio']:
+    log = mock.Mock(LogFile)
+    log.getName.return_value = log_name
+    logs.append(log)
+  return {
+      'getName()': name,
+      'getText()': [name]+(extras or []),
+      'getResults()': (result, []),
+      'isStarted()': started,
+      'getLogs()': logs}
+
+
 def test_from_files(infile, expected, name):
   env = {'results': results}
   def inner(self):
     with open(infile) as f:
-      data = eval(f.read(), {}, env)
+      data = eval(f.read(), {'step': step_helper}, env)
     data['build_step']['getProperties()'] = FakeBuild(data['build_step_props'])
     data = recursive_key_replace(data, '()', '.return_value')
     self.check_mail(
-        data['build_step'], data['steps'], data['logs'], data['master'],
-        expected, name
+        data['build_step'], data['steps'], data['master'], expected, name
     )
+  inner.__name__ = "test_%s" % name
   return inner
 
 

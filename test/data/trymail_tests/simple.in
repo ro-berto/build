@@ -12,37 +12,11 @@
     'getResults()': results.SUCCESS,
     'getSlavename()': 'SuperSlave1',
   },
-  'logs': [
-    [{'getName()': 'LogFileStep1'}],
-    [{'getName()': 'LogFileStep2'}],
-    [{'getName()': 'LogFileStep3'}],
-    [{'getName()': 'LogFileStep4'}],
-  ],
   'steps': [
-    {
-      'getName()': 'Update',
-      'getText()': ['Some Text'],
-      'getResults()': (results.SUCCESS, []),
-      'isStarted()': True,
-    },
-    {
-      'getName()': 'Compile',
-      'getText()': ['Some Text'],
-      'getResults()': (results.WARNINGS, []),
-      'isStarted()': True,
-    },
-    {
-      'getName()': 'Test',
-      'getText()': ['Some Text'],
-      'getResults()': (results.SUCCESS, []),
-      'isStarted()': True,
-    },
-    {
-      'getName()': 'Archive',
-      'getText()': ['Some Text'],
-      'getResults()': (results.SUCCESS, []),
-      'isStarted()': True,
-    }
+    step('Update', ['Some Text']),
+    step('Compile', ['Some Text'], results.WARNINGS),
+    step('Test', ['Some Text']),
+    step('Archive', ['Some Text']),
   ],
   'master': {
     'getTitle()': 'Title',
