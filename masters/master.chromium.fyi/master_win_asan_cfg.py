@@ -63,13 +63,11 @@ tests_2 = [
 #
 # Windows ASAN Rel Builder
 #
-win_asan_rel_options = ['--project', 'chromium_builder_tests']
-
 B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
   auto_reboot=False, notify_on_missing=True)
 F('win_asan_rel', win().ChromiumASANFactory(
     slave_type='Builder',
-    options=win_asan_rel_options,
+    project='all.sln;chromium_builder_tests',
     compile_timeout=7200,
     factory_properties={
         'asan': True,
