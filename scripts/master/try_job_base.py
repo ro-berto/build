@@ -144,15 +144,14 @@ def dict_comma(values, valid_keys, default):
             last_value = item
             state = 3
           else:
-            last_key = item
-            state = 2
+            raise BadJobfile('Failed to process value %s' % value)
         else:
           if item not in valid_keys:
             # A value.
             out.setdefault(last_key, set()).add(item)
           else:
             # A key.
-            out.setdefault(item, set()).add(default)
+            raise BadJobfile('Failed to process value %s' % value)
 
   return out
 

@@ -131,14 +131,12 @@ class PaseOptionsTest(unittest.TestCase):
       pass
 
   def test_dict_comma_state_1_2_3_4_key(self):
-    values = ['win:foo:bar,linux']
-    expected = {
-      'linux': set([self.DEFAULT]),
-      'win': set(['foo:bar']),
-    }
-    self.assertEquals(
-        expected,
-        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
+    try:
+      values = ['win:foo:bar,linux']
+      try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT)
+      self.fail()
+    except try_job_base.BadJobfile:
+      pass
 
   def test_dict_comma_state_1_2_3_4_value(self):
     values = ['win:foo:bar,baz']
@@ -171,7 +169,7 @@ class PaseOptionsTest(unittest.TestCase):
     values = [
       # The currently supported formats are a bit messy while we transition
       # to something sane.
-      'linux:test1,linux_chromeos',
+      'linux_chromeos,linux:test1',
       'linux:test2:foo.*',
       'mac,win',
       'mac,win',
@@ -189,7 +187,7 @@ class PaseOptionsTest(unittest.TestCase):
   def test_dict_comma_life_like(self):
     values = [
       # Many builders on one line, with one including a test.:
-      'win,linux_chromeos:aura_unittests:Foo.*Bar,another_test:-*.*,linux',
+      'linux,win,linux_chromeos:aura_unittests:Foo.*Bar,another_test:-*.*',
       # Specify multiple tests on one line:
       'mac:base_unittests,unit_tests',
       # Append a test to self.DEFAULT:
