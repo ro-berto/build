@@ -13,6 +13,7 @@ import sys
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BLACKLIST = set((
+    'crash_service64.exe',
     'crnss.dll',
     'ffmpegsumo.dll',
     'gpu.dll',
