@@ -1266,7 +1266,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self._solutions[0] = main
     if (len(self._solutions) > 1 and
         self._solutions[1].svn_url == config.Master.trunk_internal_url_src):
-      svn_url = '%s/chrome/src-internal' % config.Master.git_internal_server_url
+      svn_url = '%s/chrome/src-internal.git' % config.Master.git_internal_server_url
       self._solutions[1] = gclient_factory.GClientSolution(
           svn_url=svn_url,
           name='src-internal',
