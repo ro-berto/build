@@ -1725,6 +1725,17 @@ twistd.pid
 /masters/master.tryserver.nacl/naclsdkm-windows64
 /masters/master.tryserver.nacl/public_html
 /masters/master.tryserver.nacl/templates
+/masters/master.tryserver.webrtc/linux
+/masters/master.tryserver.webrtc/linux_asan
+/masters/master.tryserver.webrtc/linux_memcheck
+/masters/master.tryserver.webrtc/linux_rel
+/masters/master.tryserver.webrtc/linux_tsan
+/masters/master.tryserver.webrtc/mac
+/masters/master.tryserver.webrtc/mac_asan
+/masters/master.tryserver.webrtc/mac_rel
+/masters/master.tryserver.webrtc/win
+/masters/master.tryserver.webrtc/win_rel
+/masters/master.tryserver.webrtc/public_html
 /scripts/command_wrapper
 /scripts/common/.bot_password
 /scripts/gsd_generate_index

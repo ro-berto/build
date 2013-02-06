@@ -484,6 +484,17 @@ class Master(object):
     slave_port = 9198
     master_port_alt = 9298
 
+  class WebRTCTryServer(WebRTC):
+    project_name = 'WebRTC Try Server'
+    master_port = 9099
+    slave_port = 9199
+    master_port_alt = 9299
+    try_job_port = 9399
+    svn_url = None
+    last_good_url = 'http://webrtc-dashboard.appspot.com/lkgr'
+    code_review_site = 'http://review.webrtc.org'
+
+
 class Archive(object):
   archive_host = 'localhost'
   # Skip any filenames (exes, symbols, etc.) starting with these strings

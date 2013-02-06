@@ -223,6 +223,7 @@ def main():
       'master.tryserver.chromium': 'TryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.unused': None,
+      'master.tryserver.webrtc': 'WebRTCTryServer',
       'master.devtools': 'DevTools',
       'master.webkit': None,
   }
