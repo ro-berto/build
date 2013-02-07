@@ -22,6 +22,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
 
   normal_tests = ['audio_coding_module_test',
                   'audio_coding_unittests',
+                  'audio_decoder_unittests',
                   'audioproc_unittest',
                   'bitrate_controller_unittests',
                   'common_video_unittests',
@@ -52,19 +53,10 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   memcheck_tests = filter(lambda test: test not in memcheck_disabled_tests,
                           normal_tests)
   tsan_disabled_tests = [
-      'audio_coding_module_test',   # Issue 283
-      'audioproc_unittest',         # Issue 299
-      'system_wrappers_unittests',  # Issue 300
-      'video_processing_unittests', # Issue 303
+      'audio_coding_module_test',   # Too slow for TSAN
       'test_fec',                   # Too slow for TSAN
   ]
   tsan_tests = filter(lambda test: test not in tsan_disabled_tests,
-                      normal_tests)
-  asan_disabled_tests = [
-      'audio_coding_module_test', # Issue 281
-      'neteq_unittests',          # Issue 282
-  ]
-  asan_tests = filter(lambda test: test not in asan_disabled_tests,
                       normal_tests)
 
   defaults['category'] = category
@@ -112,7 +104,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   B('LinuxAsan', 'linux_asan_factory', scheduler=scheduler)
   F('linux_asan_factory', linux().WebRTCFactory(
       target='Release',
-      tests=asan_tests,
+      tests=normal_tests,
       factory_properties={'asan': True,
                           'gclient_env':
                           {'GYP_DEFINES': ('asan=1 release_extra_cflags=-g '
