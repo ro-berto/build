@@ -1335,7 +1335,7 @@ class ChromiumCommands(commands.FactoryCommands):
     gen_dir = self.PathJoin(gpu_data, 'generated')
     ref_dir = self.PathJoin(gpu_data, 'reference')
 
-    build_revision = WithProperties('%(got_revision)s')
+    revision_arg = WithProperties('--build-revision=%(got_revision)s')
 
     tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
 
@@ -1343,7 +1343,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           arg_list=['--use-gpu-in-tests',
                                     '--generated-dir=%s' % gen_dir,
                                     '--reference-dir=%s' % ref_dir,
-                                    '--build-revision=%s' % build_revision,
+                                    revision_arg,
                                     '--gtest_filter=%s' % tests,
                                     '--run-manual'],
                           test_tool_arg_list=['--no-xvfb'])
@@ -1370,7 +1370,7 @@ class ChromiumCommands(commands.FactoryCommands):
     gen_dir = self.PathJoin(gpu_data, 'generated')
     ref_dir = self.PathJoin(gpu_data, 'reference')
 
-    build_revision = WithProperties('%(got_revision)s')
+    revision_arg = WithProperties('--build-revision=%(got_revision)s')
 
     tests = ':'.join(['WebGLConformanceTest.*', 'Gpu*.*'])
 
@@ -1378,7 +1378,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           arg_list=['--use-gpu-in-tests',
                                     '--generated-dir=%s' % gen_dir,
                                     '--reference-dir=%s' % ref_dir,
-                                    '--build-revision=%s' % build_revision,
+                                    revision_arg,
                                     '--gtest_filter=%s' % tests,
                                     '--run-manual'],
                           test_tool_arg_list=['--no-xvfb'])
