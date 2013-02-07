@@ -137,15 +137,18 @@ class ChromiteFactory(object):
 
     self._git_clear_and_checkout(self.chromite_repo, self.chromite_patch)
 
-  def add_chromite_step(self, script, params, b_params):
+  def add_chromite_step(self, script, params, b_params, legacy=False):
     """Adds a step that runs a chromite command.
 
     Args:
       script:  Name of the script to run from chromite/bin.
       params:  A string containing extra parameters for the script.
       b_params:  An array of StepParameters.
+      legacy:  Use a different directory for some legacy invocations.
     """
-    cmd = ['chromite/bin/%s' % script]
+    git_checkout_dir = os.path.basename(self.chromite_repo).replace('.git', '')
+    script_subdir = 'buildbot' if legacy else 'bin'
+    cmd = ['%s/%s/%s' % (git_checkout_dir, script_subdir, script)]
     if b_params:
       cmd.extend(b_params)
     if params:
@@ -178,6 +181,7 @@ class CbuildbotFactory(ChromiteFactory):
       perf_file: If set, name of the perf file to upload.
       perf_base_url: If set, base url to build into references.
       perf_output_dir: If set, where the perf files are to update.
+      legacy_chromite: If set, ask chromite to use an older cbuildbot directory.
       *: anything else is passed to the base Chromite class.
   """
 
@@ -192,6 +196,7 @@ class CbuildbotFactory(ChromiteFactory):
                perf_file=None,
                perf_base_url=None,
                perf_output_dir=None,
+               legacy_chromite=False,
                **kwargs):
     super(CbuildbotFactory, self).__init__(None, None,
         use_chromeos_factory=not pass_revision, **kwargs)
@@ -202,6 +207,7 @@ class CbuildbotFactory(ChromiteFactory):
     self.trybot = trybot
     self.chrome_root = chrome_root
     self.pass_revision = pass_revision
+    self.legacy_chromite = legacy_chromite
 
     if params:
       self.add_cbuildbot_step(params)
@@ -211,7 +217,8 @@ class CbuildbotFactory(ChromiteFactory):
 
 
   def add_cbuildbot_step(self, params):
-    self.add_chromite_step(self.script, params, self.compute_buildbot_params())
+    self.add_chromite_step(self.script, params, self.compute_buildbot_params(),
+                           legacy=self.legacy_chromite)
 
 
   def compute_buildbot_params(self):
