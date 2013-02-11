@@ -402,6 +402,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('test_shell_br'):
       f.AddBuildrunnerGTest('test_shell_tests', fp)
     # Windows sandbox
+    if R('sbox_unittests'):
+      f.AddGTestTestStep('sbox_unittests', fp)
+    if R('sbox_unittests_br'):
+      f.AddBuildrunnerGTest('sbox_unittests', fp)
+    if R('sbox_integration_tests'):
+      f.AddGTestTestStep('sbox_integration_tests', fp)
+    if R('sbox_integration_tests_br'):
+      f.AddBuildrunnerGTest('sbox_integration_tests', fp)
+    if R('sbox_validation_tests'):
+      f.AddBuildrunnerGTest('sbox_validation_tests', fp)
+    if R('sbox_validation_tests_br'):
+      f.AddBuildrunnerGTest('sbox_validation_tests', fp)
     if R('sandbox'):
       f.AddGTestTestStep('sbox_unittests', fp)
       f.AddGTestTestStep('sbox_integration_tests', fp)
@@ -484,6 +496,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddDomCheckerTests()
     if R('dom_checker_br'):
       f.AddBuildrunnerDomCheckerTests()
+
+    if self._target_platform == 'win32':
+      if R('installer_util_unittests'):
+        f.AddGTestTestStep('installer_util_unittests', fp)
+      if R('installer_util_unittests_br'):
+        f.AddBuildrunnerGTest('installer_util_unittests', fp)
 
     if R('installer'):
       f.AddInstallerTests(fp)
