@@ -15,7 +15,7 @@ import test_env
 import mock
 
 from buildbot.status import results
-from buildbot.status.builder import BuildStatus, BuildStepStatus
+from buildbot.status.builder import BuildStatus, BuildStepStatus, BuilderStatus
 from buildbot.status.logfile import LogFile
 from buildbot.status.master  import Status as MasterStatus
 
@@ -35,7 +35,8 @@ class TestMailNotifier(unittest.TestCase):
     time.tzset()
 
   @mock.patch('time.time')  # Needed to fix time while generating the email
-  def check_mail(self, bs_cfg, step_cfgs, ms_cfg, expected, test_name, _):
+  def check_mail(self, bs_cfg, builder_cfg, step_cfgs, ms_cfg, expected,
+                 test_name, _):
     '''
     bs_cfg: BuildStatus config dict
     step_cfgs: [BuildStepStatus config dict]
@@ -45,6 +46,9 @@ class TestMailNotifier(unittest.TestCase):
         fromaddr='from@example.org',
         subject="try %(result)s for %(reason)s on %(builder)s @ r%(revision)s",
         mode="all")
+
+    builder = mock.Mock(BuilderStatus)
+    builder.configure_mock(**builder_cfg)
 
     bs = mock.Mock(BuildStatus)
 
@@ -61,16 +65,23 @@ class TestMailNotifier(unittest.TestCase):
       steps.append(step)
 
     bs_cfg.update({'getSteps.return_value': steps})
+    bs_cfg.update({'getBuilder.return_value': builder})
     bs.configure_mock(**bs_cfg)
 
     ms = mock.Mock(MasterStatus)
 
-    def getBuildStatusURL(build):
-      assert isinstance(build, BuildStatus)
-      return "%sbuilders/%s/builds/%s" % (
-          ms.getBuildbotURL(),
-          build.getBuilder().getName(),
-          build.getNumber())
+    def getBuildStatusURL(obj):
+      if isinstance(obj, BuilderStatus):
+        return "%sbuilders/%s" % (
+            ms.getBuildbotURL(),
+            obj.getName())
+      elif isinstance(obj, BuildStatus):
+        return "%sbuilders/%s/builds/%s" % (
+            ms.getBuildbotURL(),
+            obj.getBuilder().getName(),
+            obj.getNumber())
+      else:
+        assert False, "Don't know how to getURLForThing(%s)" % obj
 
     ms_cfg.update({'getURLForThing.side_effect': getBuildStatusURL})
     ms.configure_mock(**ms_cfg)
@@ -132,7 +143,7 @@ def recursive_key_replace(obj, find, replace):
 
 
 def step_helper(name, extras=None, result=results.SUCCESS, exLogNames=None,
-                started=True):
+                started=True, skip_name=False):
   logs = []
   for log_name in (exLogNames or []) + ['stdio']:
     log = mock.Mock(LogFile)
@@ -140,21 +151,22 @@ def step_helper(name, extras=None, result=results.SUCCESS, exLogNames=None,
     logs.append(log)
   return {
       'getName()': name,
-      'getText()': [name]+(extras or []),
+      'getText()': ([name] if not skip_name else [])+(extras or []),
       'getResults()': (result, []),
       'isStarted()': started,
       'getLogs()': logs}
 
 
 def test_from_files(infile, expected, name):
-  env = {'results': results}
+  env = {'results': results, 'step': step_helper}
   def inner(self):
     with open(infile) as f:
-      data = eval(f.read(), {'step': step_helper}, env)
+      data = eval(f.read(), {}, env)
     data['build_step']['getProperties()'] = FakeBuild(data['build_step_props'])
     data = recursive_key_replace(data, '()', '.return_value')
     self.check_mail(
-        data['build_step'], data['steps'], data['master'], expected, name
+        data['build_step'], data['builder'], data['steps'], data['master'],
+        expected, name
     )
   inner.__name__ = "test_%s" % name
   return inner

@@ -19,12 +19,15 @@ e>
 <body style=3D"font-family: Verdana, Cursor; font-size: 10px;">
   try success for 11879010-3014: Rebase on TestBuilder @ r1337<p>
   <a href=3D"http://buildbot_url">http://buildbot_url</a><p>
-  You are awesome! Try succeeded!<p> <br>Parent builder: <a href=3D"http://=
-buildbot_url/builders/ParentBuilder/builds/1337">http://buildbot_url/builde=
-rs/ParentBuilder/builds/1337</a><br>
-  <a href=3D"http://buildbot_urlbuilders/TestBuilder/builds/100">http://bui=
-ldbot_urlbuilders/TestBuilder/builds/100</a><br>
-  slave: SuperSlave1<br>
+  You are awesome! Try succeeded!<p> <br>Parent build: <a href=3D"http://bu=
+ildbot_url/builders/ParentBuilder/builds/1337">1337</a> on <a href=3D"http:=
+//buildbot_url/builders/ParentBuilder">ParentBuilder</a><br>
+  Build: <a href=3D"http://buildbot_urlbuilders/TestBuilder/builds/100">100=
+</a> on
+         <a href=3D"http://buildbot_urlbuilders/TestBuilder">TestBuilder</a=
+><br>
+  slave: <a href=3D"http://buildbot_url/buildslaves/SuperSlave1">SuperSlave=
+1</a><br>
     <table style=3D"border-spacing: 1px 1px; font-weight: bold; padding: 3p=
 x 0px 3px 0px; text-align: center; font-size: 10px; font-family: Verdana, C=
 ursor; ">
@@ -44,10 +47,10 @@ olor: #8fdf5f; border-color: #4F8530;">Archive<br/>Some Text<br/><a href=3D=
 "http://buildbot_urlbuilders/TestBuilder/builds/100/steps/Archive/logs/stdi=
 o">stdio</a></td></tr></table>
 <br>
-FAQ: <a href=3D"http://sites.google.com/a/chromium.org/dev/developers/testi=
-ng/try-server-usage">
-http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-us=
-age</a><br>
+FAQ: <a href=3D"https://sites.google.com/a/chromium.org/dev/developers/test=
+ing/try-server-usage">
+https://sites.google.com/a/chromium.org/dev/developers/testing/try-server-u=
+sage</a><br>
 </body>
 </html>
 

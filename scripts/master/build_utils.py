@@ -216,6 +216,9 @@ class FakeBuild(object):
   def getProperties(self):
     return self
 
+  def asDict(self):
+    return self.properties.copy()
+
   def render(self, words):
     # pylint: disable=R0201
     return words

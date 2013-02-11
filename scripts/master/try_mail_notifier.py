@@ -49,6 +49,7 @@ class TryMailNotifier(mail.MailNotifier):
     build = build[0]
     job_stamp = build.getSourceStamp()
     build_url = self.master_status.getURLForThing(build)
+    builder_url = self.master_status.getURLForThing(build.getBuilder())
     waterfall_url = self.master_status.getBuildbotURL()
     if results == SUCCESS:
       status_text_html = "You are awesome! Try succeeded!"
@@ -91,10 +92,18 @@ class TryMailNotifier(mail.MailNotifier):
       parent_name = build_props.getProperty('parent_buildername')
       parent_buildnum = build_props.getProperty('parent_buildnumber')
       if parent_name and parent_buildnum:
-        parent_url = ('%s/builders/%s/builds/%s' %
-                      (waterfall_url.rstrip('/'), parent_name, parent_buildnum))
-        parent_html = ('<br>Parent builder: <a href="%(url)s">%(url)s</a><br>'
-                       % {'url': parent_url})
+        parent_builder_url = ('%s/builders/%s' %
+                      (waterfall_url.rstrip('/'), parent_name))
+        parent_build = parent_builder_url + '/builds/%d' % parent_buildnum
+        parent_html = (
+            '<br>Parent build: <a href="%(build_url)s">%(buildnum)s</a>'
+            ' on <a href="%(builder_url)s">%(builder)s</a><br>'
+                       % {'builder_url': parent_builder_url,
+                          'builder': parent_name,
+                          'build_url': parent_build,
+                          'buildnum': parent_buildnum})
+    slave = build.getSlavename()
+    slave_url = '%s/buildslaves/%s' % (waterfall_url.rstrip('/'), slave)
 
     html_params = {
         'subject': subject,
@@ -103,7 +112,11 @@ class TryMailNotifier(mail.MailNotifier):
         'status_text_html': status_text_html,
         'build_url': build_url,
         'parent_builder_html': parent_html,
-        'slave': build.getSlavename(),
+        'slave': slave,
+        'slave_url': slave_url,
+        'build_number': build.getNumber(),
+        'builder': build.getBuilder().getName(),
+        'builder_url': builder_url,
     }
 
     # Generate a HTML table looking like the waterfall.
@@ -118,16 +131,18 @@ class TryMailNotifier(mail.MailNotifier):
   %(first_line)s<p>
   <a href="%(waterfall_url)s">%(waterfall_url)s</a><p>
   %(status_text_html)s<p> %(parent_builder_html)s
-  <a href="%(build_url)s">%(build_url)s</a><br>
-  slave: %(slave)s<br>
+  Build: <a href="%(build_url)s">%(build_number)s</a> on
+         <a href="%(builder_url)s">%(builder)s</a><br>
+  slave: <a href="%(slave_url)s">%(slave)s</a><br>
     """) % html_params
 
+    html_content += self.SpecialPropertiesAsHTML(build_props.asDict())
     html_content += build_utils.EmailableBuildTable(build, waterfall_url)
     footer = self.footer
     if self.footer is None:
       footer = """<br>
-FAQ: <a href="http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage">
-http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage</a><br>
+FAQ: <a href="https://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage">
+https://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage</a><br>
 </body>
 </html>
 """
@@ -154,3 +169,26 @@ http://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage</
     d = defer.DeferredList(dl)
     d.addCallback(self._gotRecipients, recipients, m)
     return d
+
+  @staticmethod
+  def SpecialPropertiesAsHTML(props):
+    ret = ''
+
+    rev = props.get('got_revision')
+    if rev:
+      link = 'https://src.chromium.org/viewvc/chrome?view=rev&revision=%s' % rev
+      ret += 'base revision: <a href="%s">%s</a><br>' % (link, rev)
+
+    aux_propnames = ('issue', 'rietveld', 'patchset')
+    aux_props = dict((k, v) for k, v in props.iteritems() if k in aux_propnames)
+
+    if len(aux_props) == len(aux_propnames):
+      aux_props['issue_link'] = '%(rietveld)s/%(issue)s' % aux_props
+      aux_props['patch_link'] = (
+          '%(rietveld)s/download/issue%(issue)s_%(patchset)s.diff' % aux_props)
+
+      ret = 'issue: <a href="%(issue_link)s#ps%(patchset)s">%(issue)s</a><br>'
+      ret += 'raw patchset: <a href="%(patch_link)s">%(patchset)s</a><br>'
+      ret = ret % aux_props
+
+    return ret

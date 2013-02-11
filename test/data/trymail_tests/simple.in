@@ -7,10 +7,12 @@
     'getSourceStamp().revision': 1337,
     'getSourceStamp().timestamp': 'XXXXXX',
     'getReason()': '11879010-3014: Rebase',
-    'getBuilder().getName()': 'TestBuilder',
     'getNumber()': 100,
     'getResults()': results.SUCCESS,
     'getSlavename()': 'SuperSlave1',
+  },
+  'builder': {
+    'getName()': 'TestBuilder',
   },
   'steps': [
     step('Update', ['Some Text']),
