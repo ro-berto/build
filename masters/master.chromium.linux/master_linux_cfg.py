@@ -250,8 +250,6 @@ F('dbg', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
   notify_on_missing=True)
-B('Linux Tests (dbg)(1)(Precise)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -265,8 +263,6 @@ F('dbg_unit_1', linux_tester().ChromiumFactory(
                         'generate_gtest_json': True}))
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
-  notify_on_missing=True)
-B('Linux Tests (dbg)(2)(Precise)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
   notify_on_missing=True)
 F('dbg_unit_2', linux_tester().ChromiumFactory(
     slave_type='Tester',
