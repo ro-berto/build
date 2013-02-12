@@ -86,7 +86,7 @@ class DartCommands(commands.FactoryCommands):
       cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
 
-    if is_dart2dart:
+    if is_dart2dart or is_dartc:
       cmd += ' create_sdk'
     self._factory.addStep(shell.ShellCommand,
                           name='build',
