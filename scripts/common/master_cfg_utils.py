@@ -217,7 +217,7 @@ def OnlyGetOne(seq, key, source):
     return res[0]
 
 
-def GetMasters(include_internal=True):
+def GetMasters(include_public=True, include_internal=True):
   """Return a pair of (mastername, path) for all masters found."""
 
   # note: ListMasters uses master.cfg hardcoded as part of its search path
@@ -232,7 +232,8 @@ def GetMasters(include_internal=True):
     return sep.join(chunks[1:])
 
   return [(parse_master_name(m), m) for m in
-          chromium_utils.ListMasters(include_internal=include_internal)]
+          chromium_utils.ListMasters(include_public=include_public,
+                                     include_internal=include_internal)]
 
 
 def ChooseMaster(searchname):

@@ -976,14 +976,16 @@ def SshCopyTree(srctree, host, dst):
                         (srctree, host + ':' + dst, result))
 
 
-def ListMasters(cue='master.cfg', include_internal=True):
+def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   """Returns all the masters found."""
   # Look for "internal" masters first.
   path_internal = os.path.join(os.path.dirname(__file__), '..', '..', '..',
       'build_internal', 'masters/*/' + cue)
   path = os.path.join(os.path.dirname(__file__), '..', '..',
       'masters/*/' + cue)
-  filenames = glob.glob(path)
+  filenames = []
+  if include_public:
+    filenames += glob.glob(path)
   if include_internal:
     filenames += glob.glob(path_internal)
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
