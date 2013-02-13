@@ -118,6 +118,10 @@ class StagerBase(object):
           slave_utils.GypFlagIsOn(options, 'chromeos')):
         self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
                                       'chromeos')
+      # Or, we might have built for Android.
+      elif options.factory_properties.get('android', None):
+        self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
+                                      'android')
       else:
         self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
                                       'linux')
