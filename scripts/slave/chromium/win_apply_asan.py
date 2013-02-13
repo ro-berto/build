@@ -22,6 +22,9 @@ BLACKLIST = set((
     'nacl64.exe',
     'sql.dll',
 ))
+SKIP_DIRS = [
+    'locales',
+]
 
 
 class ASANitizer(object):
@@ -112,7 +115,13 @@ def FindFilesToAsan(directory):
         fname not in BLACKLIST and
         fname.split('.', 1)[-1].lower() in ('exe', 'dll'))
 
-  for root, _, files in os.walk(directory):
+  skip_dirs = set((os.path.join(directory, skip_dir) for skip_dir in SKIP_DIRS))
+
+  for root, subdirs, files in os.walk(directory):
+    for path, sdir in [(os.path.join(root, s), s) for s in subdirs]:
+      if path in skip_dirs:
+        subdirs.remove(sdir)
+
     for pe_image in (os.path.join(root, f) for f in files if GoodExeOrDll(f)):
       pdb = GetCompatiblePDB(pe_image)
       if not pdb:
