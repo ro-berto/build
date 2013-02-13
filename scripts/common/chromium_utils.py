@@ -580,7 +580,8 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
             compress_method = zipfile.ZIP_DEFLATED
           to_zip_file.write(this_path, archive_name, compress_method)
           print 'Adding %s' % archive_name
-    zip_file = zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED)
+    zip_file = zipfile.ZipFile(output_file, 'w', zipfile.ZIP_DEFLATED,
+                               allowZip64=True)
     try:
       os.path.walk(archive_dir, _Addfiles, zip_file)
     finally:
