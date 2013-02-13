@@ -201,6 +201,11 @@ def CreateWebStatus(port, templates=None, tagComparator=None, **kwargs):
   return webstatus
 
 
+def GetMastername():
+  # Get the master name from the directory name. Remove leading "master.".
+  return re.sub('^master.', '', os.path.basename(os.getcwd()))
+
+
 def AutoSetupMaster(c, active_master, mail_notifier=False,
                     public_html=None, templates=None,
                     order_console_by_time=False,
@@ -221,9 +226,7 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   c['projectName'] = active_master.project_name
   c['projectURL'] = config.Master.project_url
 
-  # Get the master name from the directory name. Remove leading "master.".
-  mastername = re.sub('^master.', '', os.path.basename(os.getcwd()))
-  c['properties'] = {'mastername': mastername}
+  c['properties'] = {'mastername': GetMastername()}
 
   # 'status' is a list of Status Targets. The results of each build will be
   # pushed to these targets. buildbot/status/*.py has a variety to choose from,

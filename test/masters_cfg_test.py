@@ -21,9 +21,7 @@ BLACKLIST = ['client.syzygy',
              'chromium.swarm',
              'chromium.chromebot',
              'chromiumos.tryserver',
-             'client.nacl.chrome',
-             'client.dart',
-             'client.dart.fyi']
+             'client.nacl.chrome']
 
 
 def TestMaster(mastername):
