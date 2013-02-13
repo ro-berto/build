@@ -11,6 +11,7 @@ Based on gclient_factory.py.
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.changes import svnpoller
 from buildbot.status.mail import MailNotifier
+from buildbot.status.status_push import HttpStatusPush
 
 from master.factory import chromium_factory
 from master.factory import dart_commands
@@ -434,6 +435,8 @@ class DartUtils(object):
     master_port = self._active_master.master_port
     master_port_alt = self._active_master.master_port_alt
 
+    http_status_push_url = self._active_master.http_status_push_url
+
     statuses = []
     statuses.append(master_utils.CreateWebStatus(master_port,
                                                  allowForce=True,
@@ -441,6 +444,8 @@ class DartUtils(object):
                                                  templates=templates))
     statuses.append(
         master_utils.CreateWebStatus(master_port_alt, allowForce=False))
+    if http_status_push_url:
+      statuses.append(HttpStatusPush(serverUrl=http_status_push_url))
     return statuses
 
   @staticmethod

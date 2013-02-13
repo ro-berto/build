@@ -267,6 +267,7 @@ class Master(object):
   ## Dart
 
   class Dart(_Base):
+    http_status_push_url = None
     project_name = 'Dart'
     master_port = 8040
     slave_port = 8140
@@ -274,6 +275,7 @@ class Master(object):
     master_port_alt = 8240
 
   class DartFYI(_Base):
+    http_status_push_url = None
     project_name = 'Dart FYI'
     master_port = 8051
     slave_port = 8151
