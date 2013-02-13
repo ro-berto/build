@@ -12,11 +12,7 @@ import socket
 import sys
 
 from twisted.application import service
-# python module paths changed from buildbot-7 to buildbot-8; support both
-try:
-  from buildbot.slave.bot import BuildSlave
-except ImportError:
-  from buildslave.bot import BuildSlave
+from buildslave.bot import BuildSlave
 
 # Register the commands.
 from slave import chromium_commands
