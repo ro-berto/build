@@ -22,7 +22,6 @@ from master.factory import commands
 from master.factory import swarm_commands
 
 from master.log_parser import archive_command
-from master.log_parser import process_log
 from master.log_parser import retcode_command
 from master.log_parser import webkit_test_command
 
@@ -905,41 +904,41 @@ class ChromiumCommands(commands.FactoryCommands):
       perf: Is this a perf test or not? Requires suite or test_args to be set.
     """
     factory_properties = factory_properties or {}
+    factory_properties['step_name'] = test_name
+
     J = self.PathJoin
     pyauto_script = J(src_base, 'src', 'chrome', 'test', 'functional',
                       'pyauto_functional.py')
-    pyauto_cmd = ['python', pyauto_script, '-v']
-    if self._target_platform == 'win32':
-      pyauto_cmd = self.GetPythonTestCommand(pyauto_script, ['-v'])
-      pyauto_cmd[1] = J(src_base, pyauto_cmd[1])  # adjust runtest.py if needed
-    elif self._target_platform == 'darwin':
-      pyauto_cmd = self.GetTestCommand('/usr/bin/python2.5',
-                                       [pyauto_script, '-v'])
-      pyauto_cmd[1] = J(src_base, pyauto_cmd[1])  # adjust runtest.py if needed
-    elif (self._target_platform.startswith('linux') and
-          factory_properties.get('use_xvfb_on_linux')):
-      # On Linux, use runtest.py to launch virtual X server.
-      pyauto_cmd = self.GetTestCommand('/usr/bin/python', [pyauto_script, '-v'])
-      pyauto_cmd[1] = J(src_base, pyauto_cmd[1])  # adjust runtest.py if needed
-
+    args = ['-v']
     if suite:
-      pyauto_cmd.append('--suite=%s' % suite)
+      args.append('--suite=%s' % suite)
     if test_args:
-      pyauto_cmd.extend(test_args)
+      args.extend(test_args)
 
-    command_class = retcode_command.ReturnCodeCommand
+    wrapper_args = []
+    if not factory_properties.get('use_xvfb_on_linux'):
+      wrapper_args.append('--no-xvfb')
+
     if perf and (suite or test_args):
-      # Use special command class for parsing perf values from output.
-      command_class = self.GetPerfStepClass(
-          factory_properties, test_name, process_log.GraphingLogProcessor)
+      cmd = self.GetAnnotatedPerfCmd(None, 'graphing', test_name,
+                                     cmd_name=pyauto_script, options=args,
+                                     factory_properties=factory_properties,
+                                     tool_opts=wrapper_args, py_script=True)
+    else:
+      cmd = self.GetPythonTestCommand(pyauto_script, arg_list=args,
+          wrapper_args=wrapper_args, factory_properties=factory_properties)
+
+
+
+    # The following lines adjust the runtest.py path and build_dir to be
+    # relative to src_base.
+    cmd[1] = J(src_base, cmd[1])
+    cmd = map(lambda x:x if x!= self._build_dir else J(src_base, x), cmd)
 
     env = env or {'PYTHONPATH': '.'}
-    self.AddTestStep(command_class,
-                     test_name,
-                     pyauto_cmd,
-                     env=env,
-                     workdir=workdir,
-                     timeout=timeout,
+    self.AddTestStep(chromium_step.AnnotatedCommand, test_name, cmd, env=env,
+                     target=self._target, factory_properties=factory_properties,
+                     timeout=timeout, workdir=workdir,
                      do_step_if=self.GetTestStepFilter(factory_properties))
 
   def AddChromeEndureTest(self, test_class_name, pyauto_test_list,

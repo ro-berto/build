@@ -238,6 +238,10 @@ def ListSteps(my_factory):
       stepnames[name] = 0
     step.name = name
 
+    # workdir is often silently passed through
+    if 'workdir' in cmdargs:
+      step.workdir = cmdargs['workdir']
+
     #TODO: is this a bug in FileUpload?
     if not hasattr(step, 'description') or not step.description:
       step.description = [step.name]
@@ -271,7 +275,11 @@ def process_steps(steplist, build, buildslave, build_status, basedir):
     step.setBuildSlave(buildslave)
     step.setStepStatus(build_status.addStepWithName(step.name))
     step.setDefaultWorkdir(os.path.join(basedir, 'build'))
-    step.workdir = os.path.join(basedir, 'build')
+    if not hasattr(step, 'workdir') or not step.workdir:
+      step.workdir = os.path.join(basedir, 'build')
+
+    if not os.path.isabs(step.workdir):
+      step.workdir = os.path.join(basedir, step.workdir)
 
 
 def StripBuildrunnerIgnore(step):
