@@ -763,7 +763,8 @@ def main_linux(options, args):
     if options.xvfb:
       xvfb.StartVirtualX(
           slave_name, bin_dir,
-          with_wm=options.factory_properties.get('window_manager', True),
+          with_wm=(options.factory_properties.get('window_manager', 'True') ==
+                   'True'),
           server_dir=special_xvfb_dir)
 
     pipes = []

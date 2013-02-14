@@ -211,7 +211,8 @@ F('f_linux_rel_aura', linux().ChromiumFactory(
     slave_type='BuilderTester',
     options=['--compiler=goma'] + linux_aura_options,
     tests=linux_aura_tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'use_aura=1'}}))
+    factory_properties={'gclient_env': {'GYP_DEFINES': 'use_aura=1'},
+                        'window_manager': 'False'}))
 
 
 ################################################################################
