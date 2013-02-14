@@ -78,8 +78,8 @@ exclusions = {
   # http://crbug.com/131422
   'Mac10.6 Tests (1)': ['nacl_integration'],
   'Mac 10.6 Tests (dbg)(1)': ['nacl_integration'],
-  #'Mac10.7 Tests (1)': ['nacl_integration'],
-  #'Mac 10.7 Tests (dbg)(1)': ['nacl_integration'],
+  'Mac10.7 Tests (1)': ['nacl_integration'],
+  'Mac 10.7 Tests (dbg)(1)': ['nacl_integration'],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
