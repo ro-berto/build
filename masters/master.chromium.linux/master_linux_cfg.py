@@ -250,6 +250,11 @@ F('dbg', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
   notify_on_missing=True)
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
+B('Linux Tests (dbg)(1)(Precise 32)',
+    factory='dbg_unit_1',
+    scheduler='linux_dbg_trigger',
+    notify_on_missing=True)
 F('dbg_unit_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -264,6 +269,11 @@ F('dbg_unit_1', linux_tester().ChromiumFactory(
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
   notify_on_missing=True)
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
+B('Linux Tests (dbg)(2)(Precise 32)',
+    factory='dbg_unit_2',
+    scheduler='linux_dbg_trigger',
+    notify_on_missing=True)
 F('dbg_unit_2', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
