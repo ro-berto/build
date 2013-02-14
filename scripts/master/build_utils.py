@@ -217,7 +217,12 @@ class FakeBuild(object):
     return self
 
   def asDict(self):
-    return self.properties.copy()
+    # The dictionary returned from a Properties object is in the form:
+    #   {'name': (value, 'source')}
+    ret = {}
+    for k, v in self.properties.iteritems():
+      ret[k] = (v, 'FakeBuild')
+    return ret
 
   def render(self, words):
     # pylint: disable=R0201

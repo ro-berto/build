@@ -172,15 +172,20 @@ https://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage<
 
   @staticmethod
   def SpecialPropertiesAsHTML(props):
+    """Props is a Properties-style dictionary in the form of:
+      {'name': (value, 'source')}
+    """
     ret = ''
 
     rev = props.get('got_revision')
     if rev:
+      rev = rev[0]
       link = 'https://src.chromium.org/viewvc/chrome?view=rev&revision=%s' % rev
       ret += 'base revision: <a href="%s">%s</a><br>' % (link, rev)
 
     aux_propnames = ('issue', 'rietveld', 'patchset')
-    aux_props = dict((k, v) for k, v in props.iteritems() if k in aux_propnames)
+    aux_props = dict(
+        (k, v[0]) for k, v in props.iteritems() if k in aux_propnames)
 
     if len(aux_props) == len(aux_propnames):
       aux_props['issue_link'] = '%(rietveld)s/%(issue)s' % aux_props
