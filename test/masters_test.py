@@ -6,6 +6,7 @@
 """Starts all masters and verify they can server /json/project fine.
 """
 
+import glob
 import logging
 import optparse
 import os
@@ -26,23 +27,34 @@ def do_master_imports():
   return getattr(sys.modules['config_bootstrap'], 'Master')
 
 
+saved_paths = []
+def backup_if_present(original_path):
+  real_paths = glob.glob(original_path)
+  for real_path in real_paths:
+    if os.path.exists(real_path):
+      saved_paths.append(real_path)
+      if subprocess.call(['mv', real_path, real_path + '_']) != 0:
+        print >> sys.stderr, 'ERROR: Failed to rename %s to %s_' % (
+            real_path, real_path)
+
+
+def restore_backup():
+  for path in saved_paths:
+    if subprocess.call(['rm', '-rf', path]) != 0:
+      print >> sys.stderr, 'ERROR: Failed to remove %s' % path
+    if subprocess.call(['mv', path + '_', path]) != 0:
+      print >> sys.stderr, 'ERROR: Failed to rename %s_ to %s' % (path, path)
+
+
 def test_master(master, master_class, path):
   print('Trying %s' % master)
   start = time.time()
   if not masters_util.stop_master(master, path):
     return False
-  # Try to backup twistd.log
-  twistd_log = os.path.join(path, 'twistd.log')
-  had_twistd_log = os.path.isfile(twistd_log)
-  # Try to backup a Git workdir.
-  git_workdir = os.path.join(path, 'git_poller_src.git')
-  had_git_workdir = os.path.isdir(git_workdir)
   try:
-    if had_twistd_log:
-      os.rename(twistd_log, twistd_log + '_')
-    if had_git_workdir:
-      if subprocess.call(['mv', git_workdir, git_workdir + '_']) != 0:
-        print >> sys.stderr, 'ERROR: Failed to rename %s' % git_workdir
+    # Try to backup paths we may not want to overwite.
+    backup_if_present(os.path.join(path, 'twistd.log'))
+    backup_if_present(os.path.join(path, 'git_poller_*.git'))
     try:
       if not masters_util.start_master(master, path):
         return False
@@ -58,14 +70,7 @@ def test_master(master, master_class, path):
     finally:
       masters_util.stop_master(master, path)
   finally:
-    if had_twistd_log:
-      os.rename(twistd_log + '_', twistd_log)
-    if (os.path.isdir(git_workdir) and
-        subprocess.call(['rm', '-rf', git_workdir]) != 0):
-      print >> sys.stderr, 'ERROR: Failed to remove %s' % git_workdir
-    if had_git_workdir:
-      if subprocess.call(['mv', git_workdir + '_', git_workdir]) != 0:
-        print >> sys.stderr, 'ERROR: Failed to rename %s' % (git_workdir + '_')
+    restore_backup()
 
 
 def real_main(base_dir, expected):
