@@ -491,10 +491,15 @@ class ChromiumCommands(commands.FactoryCommands):
     args = ['--target', self._target,
             '--build-dir', self._build_dir]
 
+    args = self.AddBuildProperties(args)
+    args = self.AddFactoryProperties(factory_properties, args)
+
+    tool_options = ['--no-xvfb']
+
     self.AddAnnotatedPerfStep('dom_perf', None, 'graphing',
                               step_name='dom_perf',
                               cmd_name=self._dom_perf_tool, cmd_options=args,
-                              py_script=True,
+                              py_script=True, tool_opts=tool_options,
                               factory_properties=factory_properties)
 
   def AddIDBPerfTests(self, factory_properties):

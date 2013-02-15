@@ -13,7 +13,7 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
