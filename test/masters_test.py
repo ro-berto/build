@@ -6,10 +6,11 @@
 """Starts all masters and verify they can server /json/project fine.
 """
 
+import glob
 import logging
 import optparse
 import os
-import subprocess
+import shutil
 import sys
 import time
 
@@ -35,14 +36,12 @@ def test_master(master, master_class, path):
   twistd_log = os.path.join(path, 'twistd.log')
   had_twistd_log = os.path.isfile(twistd_log)
   # Try to backup a Git workdir.
-  git_workdir = os.path.join(path, 'git_poller_src.git')
-  had_git_workdir = os.path.isdir(git_workdir)
+  git_workdirs = glob.glob(os.path.join(path, 'git_poller_*.git'))
   try:
     if had_twistd_log:
       os.rename(twistd_log, twistd_log + '_')
-    if had_git_workdir:
-      if subprocess.call(['mv', git_workdir, git_workdir + '_']) != 0:
-        print >> sys.stderr, 'ERROR: Failed to rename %s' % git_workdir
+    for git_workdir in git_workdirs:
+      os.rename(git_workdir, git_workdir + '_')
     try:
       if not masters_util.start_master(master, path):
         return False
@@ -60,12 +59,13 @@ def test_master(master, master_class, path):
   finally:
     if had_twistd_log:
       os.rename(twistd_log + '_', twistd_log)
-    if (os.path.isdir(git_workdir) and
-        subprocess.call(['rm', '-rf', git_workdir]) != 0):
-      print >> sys.stderr, 'ERROR: Failed to remove %s' % git_workdir
-    if had_git_workdir:
-      if subprocess.call(['mv', git_workdir + '_', git_workdir]) != 0:
-        print >> sys.stderr, 'ERROR: Failed to rename %s' % (git_workdir + '_')
+    for git_workdir in git_workdirs:
+      if os.path.isdir(git_workdir):
+        logging.info('Removing %s' % git_workdir)
+        shutil.rmtree(git_workdir)
+      if os.path.isdir(git_workdir + '_'):
+        logging.info('Renaming %s' % git_workdir)
+        os.rename(git_workdir + '_', git_workdir)
 
 
 def real_main(base_dir, expected):
