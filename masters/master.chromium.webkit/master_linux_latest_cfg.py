@@ -37,7 +37,7 @@ F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
         'browser_tests',
         'cc_unittests',
         'content_browsertests',
-        'interactive_ui',
+        'interactive_ui_tests',
         'unit',
         'webkit_compositor_bindings_unittests',
     ],

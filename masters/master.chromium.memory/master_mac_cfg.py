@@ -71,7 +71,7 @@ mac_asan_tests_2 = [
 
 mac_asan_tests_3 = [
   'browser_tests',
-  'interactive_ui',
+  'interactive_ui_tests',
 ]
 
 mac_asan_archive = master_config.GetArchiveUrl(

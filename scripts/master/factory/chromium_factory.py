@@ -291,9 +291,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Run interactive_ui_tests first to make sure it does not fail if another
     # test running before it leaks a window or a popup (crash dialog, etc).
-    if R('interactive_ui'):
+    if R('interactive_ui_tests'):
       f.AddGTestTestStep('interactive_ui_tests', fp)
-    if R('interactive_ui_br'):
+    if R('interactive_ui_tests_br'):
       f.AddBuildrunnerGTest('interactive_ui_tests', fp)
 
     # Check for an early bail.  Do early since this may cancel other tests.

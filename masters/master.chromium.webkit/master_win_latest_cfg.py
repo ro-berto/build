@@ -143,7 +143,7 @@ F('f_win_dbg', win().ChromiumWebkitLatestFactory(
     tests=[
       'browser_tests',
       'content_browsertests',
-      'interactive_ui',
+      'interactive_ui_tests',
       'unit',
     ],
     factory_properties={

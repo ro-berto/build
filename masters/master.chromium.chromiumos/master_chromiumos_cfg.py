@@ -55,7 +55,7 @@ linux_chromeos_tests = [
   ('googleurl', 'googleurl_unittests', 1),
   (None, 'googleurl_unittests', 1),
   ('gpu', 'gpu_unittests', 1),
-  ('interactive_ui', 'interactive_ui_tests', 3),
+  ('interactive_ui_tests', 'interactive_ui_tests', 3),
   ('jingle', 'jingle_unittests', 1),
   ('media', 'media_unittests', 1),
   ('message_center_unittests', 'message_center_unittests', 1),

@@ -38,7 +38,7 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
       'browser_tests',
       'cc_unittests',
       'content_browsertests',
-      'interactive_ui',
+      'interactive_ui_tests',
       'unit',
       'webkit_compositor_bindings_unittests',
     ],
@@ -88,7 +88,7 @@ F('f_mac_tests_rel_108', mac().ChromiumWebkitLatestFactory(
     tests=[
       'browser_tests',
       'content_browsertests',
-      'interactive_ui',
+      'interactive_ui_tests',
       'unit',
     ],
     factory_properties={

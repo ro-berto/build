@@ -82,7 +82,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
     'crypto',
     'googleurl',
     'gpu',
-    'interactive_ui',
+    'interactive_ui_tests',
     'jingle',
     'media',
     'nacl_integration',
@@ -232,7 +232,7 @@ F('dbg_unit_3', mac_tester().ChromiumFactory(
   tests=[
     'base',
     'browser_tests',
-    'interactive_ui',
+    'interactive_ui_tests',
   ],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
