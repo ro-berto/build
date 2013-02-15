@@ -72,6 +72,10 @@ defaults['category'] = '4linux'
 
 rel_archive = master_config.GetArchiveUrl('ChromiumLinux', 'Linux Builder x64',
                                           'Linux_Builder_x64', 'linux')
+rel_precise_archive = master_config.GetArchiveUrl(
+    'ChromiumLinux', 'Linux Builder (Precise)',
+    'Linux_Builder__Precise_', 'linux')
+
 #
 # Main release scheduler for src/
 #
@@ -81,6 +85,7 @@ S('linux_rel', branch='src', treeStableTimer=60)
 # Triggerable scheduler for the rel builder
 #
 T('linux_rel_trigger')
+T('linux_rel_precise_trigger')
 
 #
 # Linux Rel Builder
@@ -94,12 +99,19 @@ F('rel', linux().ChromiumFactory(
     tests=['check_deps'],
     factory_properties={'trigger': 'linux_rel_trigger'}))
 
+B('Linux Builder (Precise)', 'rel_precise', 'compile', 'linux_rel',
+  auto_reboot=False, notify_on_missing=True)
+F('rel_precise', linux().ChromiumFactory(
+    slave_type='Builder',
+    options=['--compiler=goma',] + linux_all_test_targets +
+            ['sync_integration_tests'],
+    tests=['check_deps'],
+    factory_properties={'trigger': 'linux_rel_precise_trigger'}))
+
 #
 # Linux Rel testers
 #
 B('Linux Tests x64', 'rel_unit', 'testers', 'linux_rel_trigger',
-  notify_on_missing=True)
-B('Linux Tests x64 (Precise)', 'rel_unit', 'testers', 'linux_rel_trigger',
   notify_on_missing=True)
 F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
@@ -136,13 +148,62 @@ F('rel_unit', linux_tester().ChromiumFactory(
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
 
-B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger',
+B('Linux Tests (Precise)',
+  'rel_precise_unit',
+  'testers',
+  'linux_rel_precise_trigger',
   notify_on_missing=True)
-B('Linux Sync (Precise)', 'rel_sync', 'testers', 'linux_rel_trigger',
+F('rel_precise_unit', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_precise_archive,
+    tests=[
+      'base',
+      'browser_tests',
+      'cacheinvalidation',
+      'cc_unittests',
+      'chromedriver2_unittests',
+      'components_unittests',
+      'content_browsertests',
+      'content_unittests',
+      'crypto',
+      'dbus',
+      'device_unittests',
+      'googleurl',
+      'gpu',
+      'interactive_ui',
+      'jingle',
+      'media',
+      'net',
+      'ppapi_unittests',
+      'printing',
+      'remoting',
+      'sandbox_linux_unittests',
+      'unit_ipc',
+      'unit_sql',
+      'unit_sync',
+      'unit_unit',
+      'ui_unittests',
+      'webkit_compositor_bindings_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
+B('Linux Sync', 'rel_sync', 'testers', 'linux_rel_trigger',
   notify_on_missing=True)
 F('rel_sync', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
+    tests=['sync_integration'],
+    factory_properties={'generate_gtest_json': True}))
+
+B('Linux Sync (Precise)',
+  'rel_precise_sync',
+  'testers',
+  'linux_rel_precise_trigger',
+  notify_on_missing=True)
+F('rel_precise_sync', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_precise_archive,
     tests=['sync_integration'],
     factory_properties={'generate_gtest_json': True}))
 
@@ -227,11 +288,16 @@ S('linux_dbg', branch='src', treeStableTimer=60)
 dbg_archive = master_config.GetArchiveUrl('ChromiumLinux',
                                           'Linux Builder (dbg)',
                                           'Linux_Builder__dbg_', 'linux')
+dbg_precise_archive = master_config.GetArchiveUrl(
+    'ChromiumLinux',
+    'Linux Builder (dbg)(Precise)',
+    'Linux_Builder__dbg__Precise_', 'linux')
 
 #
 # Triggerable scheduler for the dbg builders
 #
 T('linux_dbg_trigger')
+T('linux_dbg_precise_trigger')
 
 #
 # Linux Dbg Builder
@@ -308,6 +374,69 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
 
+B('Linux Builder (dbg)(Precise)', 'dbg_precise', 'compile', 'linux_dbg',
+  auto_reboot=False, notify_on_missing=True)
+F('dbg_precise', linux().ChromiumFactory(
+    slave_type='Builder',
+    target='Debug',
+    options=['--compiler=goma'] + linux_all_test_targets,
+    factory_properties={'trigger': 'linux_dbg_precise_trigger'}))
+
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
+B('Linux Tests (dbg)(1)(Precise)',
+    factory='dbg_precise_unit_1',
+    scheduler='linux_dbg_precise_trigger',
+    notify_on_missing=True)
+F('dbg_precise_unit_1', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=dbg_precise_archive,
+    target='Debug',
+    tests=[
+      'browser_tests',
+      'content_browsertests',
+      'net',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
+B('Linux Tests (dbg)(2)(Precise)',
+    factory='dbg_precise_unit_2',
+    scheduler='linux_dbg_precise_trigger',
+    notify_on_missing=True)
+F('dbg_precise_unit_2', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=dbg_precise_archive,
+    target='Debug',
+    tests=[
+      'base',
+      'cacheinvalidation',
+      'cc_unittests',
+      'chromedriver2_unittests',
+      'components_unittests',
+      'content_unittests',
+      'crypto',
+      'dbus',
+      'device_unittests',
+      'googleurl',
+      'gpu',
+      'interactive_ui',
+      'jingle',
+      'media',
+      'nacl_integration',
+      'ppapi_unittests',
+      'printing',
+      'remoting',
+      'unit_ipc',
+      'unit_sql',
+      'unit_sync',
+      'unit_unit',
+      'ui_unittests',
+      'webkit_compositor_bindings_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
 #
 # Linux Precise bot. Running Ubuntu 12.04, used for testing sandboxing with
 # seccomp-bpf.
@@ -349,6 +478,34 @@ F('rel_precise_1', linux_tester().ChromiumFactory(
 B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
   notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
+    target='Debug',
+    options=['--build-tool=ninja', '--compiler=goma-clang'],
+    tests=[
+      'base',
+      'components_unittests',
+      'content_unittests',
+      'crypto',
+      'device_unittests',
+      'unit_ipc',
+      'unit_sql',
+      'unit_sync',
+      'unit_unit',
+      'ui_unittests',
+    ],
+    factory_properties={
+      'gclient_env': {
+        'GYP_GENERATORS':'ninja',
+        'GYP_DEFINES':
+          'clang=1 clang_use_chrome_plugins=1 fastbuild=1 '
+            'test_isolation_mode=noop',
+    }}))
+
+B('Linux Clang (dbg)(Precise)',
+  'dbg_precise_linux_clang',
+  'compile',
+  'linux_dbg',
+  notify_on_missing=True)
+F('dbg_precise_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang'],
     tests=[
