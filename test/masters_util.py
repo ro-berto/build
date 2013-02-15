@@ -13,6 +13,7 @@ import os
 import sys
 import time
 import urllib2
+import httplib
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
@@ -112,6 +113,9 @@ def json_probe(sensitive, ports=None):
         return None
       name = data.get('projectName', data.get('title'))
       return (port, name)
+    except httplib.BadStatusLine:
+      logging.warning('Didn\'t get valid data from port %d' % port)
+      continue
     except ValueError:
       logging.warning('Didn\'t get valid data from port %d' % port)
       # presume this is some other type of server
