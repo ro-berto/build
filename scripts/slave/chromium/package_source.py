@@ -15,15 +15,15 @@ import Queue
 import shlex
 import shutil
 import sys
-import time
 import threading
-from time import strftime
+import time
 
 from common import chromium_utils
 from slave import slave_utils
 
 
-FILENAME = 'chromium-src.tar.bz2'
+FILENAME = 'chromium-src'
+EXT = '.tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 CONCURRENT_TASKS = 8
@@ -134,10 +134,11 @@ def main():
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
 
-  completed_hour = strftime('%H')
-  completed_filename = '%s.%s' % (
+  completed_filename = '%s-%s-%s.%s' % (
       options.factory_properties.get('package_filename', FILENAME),
-      completed_hour)
+      time.strftime('%s'),
+      options.build_properties.get('revision', 'NONE'),
+      EXT)
   partial_filename = '%s.partial' % completed_filename
 
   chromium_utils.RunCommand(['rm', '-f', partial_filename])
@@ -200,6 +201,19 @@ def main():
     if not modified_time:
       raise Exception('ERROR: could not get modified_time, exiting')
     print 'Last modified time: %s' % modified_time
+
+    print '%s: Deleting old archives on google storage...' % time.strftime('%X')
+    regex = re.compile('\s*\d+\s+([-:\w]+)\s+(%s/.*%s.*)\n' % (GSBASE, EXT))
+    last_week = int(time.time()) - 7 * 24 * 60 * 60
+    for match_data in regex.finditer(output):
+      timestamp = int(time.strftime(
+          '%s', time.strptime(match_data.group(1), '%Y-%m-%dT%H:%M:%S')))
+      if timestamp < last_week:
+        print 'Deleting %s...' % match_data.group(2)
+        status = slave_utils.GSUtilDeleteFile(match_data.group(2))
+        if status != 0:
+          raise Exception('ERROR: GSUtilDeleteFile error %d. "%s"' % (
+              status, match_data.group(2)))
 
   except Exception, e:
     print str(e)
