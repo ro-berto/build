@@ -23,7 +23,7 @@ from slave import slave_utils
 
 
 FILENAME = 'chromium-src'
-EXT = '.tar.bz2'
+EXT = 'tar.bz2'
 GSBASE = 'gs://chromium-browser-csindex'
 GSACL = 'public-read'
 CONCURRENT_TASKS = 8
@@ -134,10 +134,13 @@ def main():
   if not os.path.exists('src'):
     raise Exception('ERROR: no src directory to package, exiting')
 
+  revision = options.build_properties.get('got_revision', '')
+  if revision == '':
+    revision = 'NONE'
   completed_filename = '%s-%s-%s.%s' % (
       options.factory_properties.get('package_filename', FILENAME),
       time.strftime('%s'),
-      options.build_properties.get('revision', 'NONE'),
+      revision,
       EXT)
   partial_filename = '%s.partial' % completed_filename
 
