@@ -103,8 +103,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
      config.Master.trunk_url + '/deps/third_party/tsan')
   CUSTOM_DEPS_NACL_VALGRIND = ('src/third_party/valgrind/bin',
      config.Master.nacl_trunk_url + '/src/third_party/valgrind/bin')
-  CUSTOM_DEPS_TSAN_GCC = ('src/third_party/compiler-tsan',
-     config.Master.trunk_url + '/deps/third_party/compiler-tsan')
   CUSTOM_DEPS_WEBDRIVER_JAVA_TESTS = (
      'src/chrome/test/chromedriver/third_party/java_tests',
      config.Master.trunk_url + '/deps/third_party/webdriver')
@@ -716,8 +714,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       #                 below and in master.chromium/master.cfg
       if M(test, 'valgrind_', 'memcheck', fp):
         continue
-      if M(test, 'tsan_gcc_', 'tsan_gcc', fp):
-        continue
       # Run TSan in two-stage RaceVerifier mode.
       if M(test, 'tsan_rv_', 'tsan_rv', fp):
         continue
@@ -903,8 +899,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
             config.Master.trunk_url +
             '/deps/third_party/drmemory/drmemory.DEPS',
             'drmemory.DEPS'))
-    elif factory_properties.get('needs_tsan_gcc'):
-      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_GCC]
     elif factory_properties.get('needs_webdriver_java_tests'):
       self._solutions[0].custom_deps_list = [
         self.CUSTOM_DEPS_WEBDRIVER_JAVA_TESTS

@@ -505,8 +505,7 @@ def common_make_settings(
   that are common to the Make and SCons builds. Used on Linux
   and for the mac make build.
   """
-  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'tsan_gcc',
-                      'jsonclang')
+  assert compiler in (None, 'clang', 'goma', 'goma-clang', 'jsonclang')
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
 
@@ -602,43 +601,6 @@ def common_make_settings(
     env['CXX'] = os.path.join(clang_dir, 'clang++')
     command.append('CC.host=' + env['CC'])
     command.append('CXX.host=' + env['CXX'])
-    command.append('-r')
-
-  if compiler == 'tsan_gcc':
-    # See
-    # http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer/gcc-tsan
-    # for build instructions.
-    tsan_base = os.path.join(options.src_dir, 'third_party', 'compiler-tsan')
-
-    tsan_gcc_bin = os.path.abspath(os.path.join(
-        tsan_base, 'gcc-tsan', 'scripts'))
-    gcctsan_gcc_dir = os.path.abspath(os.path.join(
-        tsan_base, 'gcc-current'))
-
-    if not os.path.isdir(gcctsan_gcc_dir):
-      # Extract gcc from the tarball.
-      extract_gcc_sh = os.path.abspath(os.path.join(
-          tsan_base, 'extract_gcc.sh'))
-      assert(os.path.exists(extract_gcc_sh))
-      chromium_utils.RunCommand([extract_gcc_sh])
-      assert(os.path.isdir(gcctsan_gcc_dir))
-
-    env['CC'] = os.path.join(tsan_gcc_bin, 'gcc')
-    env['CXX'] = os.path.join(tsan_gcc_bin, 'g++')
-    env['LD'] = os.path.join(tsan_gcc_bin, 'ld')
-    # GCCTSAN_GCC_DIR and GCCTSAN_GCC_VER point to the symlinks to the current
-    # versions of the compiler and the instrumentation plugin created by
-    # extract_gcc.sh
-    env['GCCTSAN_GCC_DIR'] = gcctsan_gcc_dir
-    env['GCCTSAN_GCC_VER'] = 'current'
-    env['GCCTSAN_IGNORE'] = os.path.join(
-        options.src_dir, 'tools', 'valgrind', 'tsan', 'ignores.txt')
-    env['GCCTSAN_ARGS'] = (
-        '-DADDRESS_SANITIZER -DWTF_USE_DYNAMIC_ANNOTATIONS=1 '
-        '-DWTF_USE_DYNAMIC_ANNOTATIONS_NOIMPL=1' )
-    command.append('CC=' + env['CC'])
-    command.append('CXX=' + env['CXX'])
-    command.append('LD=' + env['LD'])
     command.append('-r')
 
   command.append('-j%d' % jobs)
