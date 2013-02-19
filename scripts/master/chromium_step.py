@@ -101,18 +101,13 @@ class GClient(source.Source):
   def startVC(self, branch, revision, patch):
     warnings = []
     args = copy.copy(self.args)
-    wk_revision = None
+    wk_revision = revision
     try:
       # parent_wk_revision might be set, but empty.
       if self.getProperty('parent_wk_revision'):
         wk_revision = self.getProperty('parent_wk_revision')
     except KeyError:
       pass
-    if patch:
-      match = re.search(r'third_party/WebKit@(\w+)', patch[1])
-      if match:
-        wk_revision = match.group(1)
-
     nacl_revision = revision
     try:
       # parent_nacl_revision might be set, but empty.
@@ -130,12 +125,8 @@ class GClient(source.Source):
     args['revision'] = revision
     args['branch'] = branch
     if args.get('gclient_spec'):
-      if wk_revision:
-        args['gclient_spec'] = args['gclient_spec'].replace(
-            '$$WK_REV$$', str(wk_revision))
-      else:
-        args['gclient_spec'] = args['gclient_spec'].replace(
-            ',"webkit_revision":"$$WK_REV$$"', '')
+      args['gclient_spec'] = args['gclient_spec'].replace(
+          '$$WK_REV$$', str(wk_revision or ''))
       args['gclient_spec'] = args['gclient_spec'].replace(
           '$$NACL_REV$$', str(nacl_revision or ''))
     if patch:
