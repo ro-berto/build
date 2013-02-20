@@ -89,7 +89,8 @@ F('f_linux_aura_rel', linux().ChromiumWebkitLatestFactory(
     ] + linux_aura_build_targets,
     factory_properties={
         'generate_gtest_json': True,
-        'gclient_env': {'GYP_DEFINES': 'use_aura=1', 'GYP_GENERATORS': 'ninja'}
+        'gclient_env': {'GYP_DEFINES': 'use_aura=1', 'GYP_GENERATORS': 'ninja'},
+        'window_manager': 'False'
     }))
 
 B('Linux Perf', 'f_linux_perf_rel', scheduler='s9_webkit_rel')
