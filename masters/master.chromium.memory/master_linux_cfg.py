@@ -81,7 +81,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
     slave_type='Tester',
     build_url=linux_asan_archive,
     tests=[
-      'base',
+      'base_unittests',
       'browser_tests',
       'cacheinvalidation',
       'crypto',

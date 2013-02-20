@@ -55,7 +55,7 @@ B('Linux Tests x64 (git)', 'rel_unit', 'testers', 'linux_rel_trigger')
 F('rel_unit', linux().ChromiumGITFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=['check_deps', 'base', 'net'],
+    tests=['check_deps', 'base_unittests', 'net'],
     factory_properties={'generate_gtest_json': True}))
 
 def Update(config, active_master, c):

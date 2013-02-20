@@ -59,7 +59,7 @@ B('Mac10.6 Tests (1)', 'rel_unit_1', 'testers', 'mac_rel_trigger')
 F('rel_unit_1', mac().ChromiumGITFactory(
   slave_type='Tester',
   build_url=rel_archive,
-  tests=['base',
+  tests=['base_unittests',
          'browser_tests',
          'cacheinvalidation',
          'crypto',

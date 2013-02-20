@@ -41,7 +41,7 @@ linux_chromeos_tests = [
   ('app_list_unittests', 'app_list_unittests', 1),
   ('ash_unittests', 'aura_builder', 1),
   ('aura', 'aura_builder', 1),
-  ('base', 'base_unittests', 1),
+  ('base_unittests', 'base_unittests', 1),
   ('browser_tests', 'browser_tests', 2),
   ('cacheinvalidation', 'cacheinvalidation_unittests', 1),
   ('chromeos_unittests', 'chromeos_unittests', 1),

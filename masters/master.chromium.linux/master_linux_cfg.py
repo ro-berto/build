@@ -117,7 +117,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'base',
+      'base_unittests',
       'browser_tests',
       'cacheinvalidation',
       'cc_unittests',
@@ -157,7 +157,7 @@ F('rel_precise_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_precise_archive,
     tests=[
-      'base',
+      'base_unittests',
       'browser_tests',
       'cacheinvalidation',
       'cc_unittests',
@@ -213,7 +213,7 @@ F('rel_precise_sync', linux_tester().ChromiumFactory(
 
 linux_aura_tests = [
   'aura',
-  'base',
+  'base_unittests',
   'browser_tests',
   'cacheinvalidation',
   'compositor',
@@ -346,7 +346,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     build_url=dbg_archive,
     target='Debug',
     tests=[
-      'base',
+      'base_unittests',
       'cacheinvalidation',
       'cc_unittests',
       'chromedriver2_unittests',
@@ -409,7 +409,7 @@ F('dbg_precise_unit_2', linux_tester().ChromiumFactory(
     build_url=dbg_precise_archive,
     target='Debug',
     tests=[
-      'base',
+      'base_unittests',
       'cacheinvalidation',
       'cc_unittests',
       'chromedriver2_unittests',
@@ -449,7 +449,7 @@ F('dbg_precise_1', linux_tester().ChromiumFactory(
     build_url=dbg_archive,
     target='Debug',
     tests=[
-      'base',
+      'base_unittests',
       'browser_tests',
       'content_browsertests',
       'sandbox_linux_unittests',
@@ -463,7 +463,7 @@ F('rel_precise_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'base',
+      'base_unittests',
       'browser_tests',
       'content_browsertests',
       'sandbox_linux_unittests',
@@ -481,7 +481,7 @@ F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang'],
     tests=[
-      'base',
+      'base_unittests',
       'components_unittests',
       'content_unittests',
       'crypto',
@@ -509,7 +509,7 @@ F('dbg_precise_linux_clang', linux().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang'],
     tests=[
-      'base',
+      'base_unittests',
       'components_unittests',
       'content_unittests',
       'crypto',

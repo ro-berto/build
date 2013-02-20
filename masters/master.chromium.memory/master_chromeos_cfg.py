@@ -90,7 +90,7 @@ F('chromeos_asan_rel', linux().ChromiumASANFactory(
 asan_tests_1 = [
   'ash_unittests',
   'aura',
-  'base',
+  'base_unittests',
   'browser_tests',
   'cacheinvalidation',
   'chromeos_unittests',

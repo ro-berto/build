@@ -73,7 +73,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=[
-    'base',
+    'base_unittests',
     'browser_tests',
     'cacheinvalidation',
     'cc_unittests',
@@ -230,7 +230,7 @@ F('dbg_unit_3', mac_tester().ChromiumFactory(
   build_url=dbg_archive,
   target='Debug',
   tests=[
-    'base',
+    'base_unittests',
     'browser_tests',
     'interactive_ui_tests',
   ],
@@ -300,7 +300,7 @@ B('iOS Simulator (dbg)', 'ios_dbg', gatekeeper='ios_dbg', scheduler='ios',
 F('ios_dbg', mac().ChromiumFactory(
   target='Debug',
   tests=[
-    'base',
+    'base_unittests',
     'content_unittests',
     'crypto',
     'googleurl',

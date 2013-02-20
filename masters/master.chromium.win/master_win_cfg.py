@@ -103,7 +103,7 @@ F('rel_unit_2', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'base',
+      'base_unittests',
       'browser_tests',
       'net',
     ],
@@ -228,7 +228,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=[
-      'base',
+      'base_unittests',
       'cacheinvalidation',
       'cc_unittests',
       'chromedriver2_unittests',
