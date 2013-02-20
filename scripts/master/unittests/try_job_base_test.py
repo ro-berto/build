@@ -71,11 +71,9 @@ class PaseOptionsTest(unittest.TestCase):
         try_job_base.parse_options(values, self.VALID_KEYS, None))
 
   def test_dict_comma_not_key(self):
-    try:
-      try_job_base.dict_comma(['foo'], self.VALID_KEYS, self.DEFAULT)
-      self.fail()
-    except try_job_base.BadJobfile:
-      pass
+    result = try_job_base.dict_comma(['foo'], self.VALID_KEYS, self.DEFAULT)
+    expected = {}
+    self.assertEquals(expected, result)
 
   def test_dict_comma_trailing_comma(self):
     try:
@@ -101,12 +99,12 @@ class PaseOptionsTest(unittest.TestCase):
         expected,
         try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
 
-  def test_dict_comma_state_1_1_bad(self):
-    try:
-      try_job_base.dict_comma(['win,bar'], self.VALID_KEYS, self.DEFAULT)
-      self.fail()
-    except try_job_base.BadJobfile:
-      pass
+  def test_dict_comma_state_1_1_drop(self):
+    values = ['win,bar']
+    expected = {'win': set([self.DEFAULT])}
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
 
   def test_dict_comma_state_1_2(self):
     values = ['win:foo']
@@ -130,15 +128,16 @@ class PaseOptionsTest(unittest.TestCase):
     except try_job_base.BadJobfile:
       pass
 
-  def test_dict_comma_state_1_2_3_4_key(self):
-    try:
-      values = ['win:foo:bar,linux']
-      try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT)
-      self.fail()
-    except try_job_base.BadJobfile:
-      pass
+  def test_dict_comma_state_1_2_3_4_value1(self):
+    values = ['win:foo:bar,linux']
+    expected = {
+      'win': set(['foo:bar', 'linux']),
+    }
+    self.assertEquals(
+        expected,
+        try_job_base.dict_comma(values, self.VALID_KEYS, self.DEFAULT))
 
-  def test_dict_comma_state_1_2_3_4_value(self):
+  def test_dict_comma_state_1_2_3_4_value2(self):
     values = ['win:foo:bar,baz']
     expected = {
       'win': set(['foo:bar', 'baz']),

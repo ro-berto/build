@@ -68,90 +68,38 @@ def comma_separated(options, key):
 def dict_comma(values, valid_keys, default):
   """Splits comma separated strings with : to create a dict."""
   out = {}
-  # See the unit test to understand all the supported formats. It's insane
-  # for now.
+  # We accept two formats:
+  # 1. Builder(s) only, will run default tests.  Eg. win,mac
+  # 2. Builder(s) with test(s): Eg. win,mac:test1:filter1,test2:filter2,test3
+  #    In this example, win will run default tests, and mac will be ran with
+  #    test1:filter1, test2:filter2, and test3.
+  # In no cases are builders allowed to be specified after tests are specified.
+
   for value in values:
-    # Slowly process the line as a state machine.
-    # The inputs are:
-    #  A. The next symbol, a string and the one after.
-    #  B. The separator after: (',', ':', None).
-    #  C. The last processed bot name.
-    #  D. The last processed test name.
-    # There is 4 states:
-    #  1. Next item must be a bot: value='builder'. Next state can be 1 or 2.
-    #  2. Next item must be a test: value='builder:test' when the index is at
-    #     test. Next state can be 3 or 4.
-    #  3. Next item must be a test filter: builder:test:filter when the index is
-    #     at filter. Next state is 4.
-    #  4. Next item can be a bot or is a test: value='builder:test,not_sure' or
-    #     value='builder:test:filter,not_sure' when the index is at not_sure. It
-    #     depends on not_sure being in valid_keys or not. Next state is 2 or 4.
-    items = re.split(r'([\,\:])', value)
-    if not items or ((len(items) - 1) % 2) != 0:
+    sections_match = re.match(r'^([^\:]+):?(.*)$', value)
+    if sections_match:
+      builders_raw, tests_raw = sections_match.groups()
+      builders = builders_raw.split(',')
+      tests = [test for test in tests_raw.split(',') if test]
+      for builder in builders:
+        if not builder:
+          # Empty builder means trailing comma.
+          raise BadJobfile('Bad input - trailing comma: %s' % value)
+        if builder not in valid_keys:
+          # Drop unrecognized builders.
+          log.msg('%s not in builders, dropping.' % builder)
+          continue
+        if not tests or builder != builders[-1]:
+          # We can only add filters to the last builder.
+          out.setdefault(builder, set()).add(default)
+        else:
+          for test in tests:
+            if len(test.split(':')) > 2:
+              # Don't support test:filter:foo.
+              raise BadJobfile('Failed to process test %s' % value)
+            out.setdefault(builder, set()).add(test)
+    else:
       raise BadJobfile('Failed to process value %s' % value)
-
-    last_key = None  # A bot
-    last_value = None  # A test
-    state = 1  # The initial item is a last_key (bot).
-
-    while items:
-      # Eat two items at a time:
-      item = items.pop(0)
-      separator = items.pop(0) if items else None  # Technically, next_separator
-
-      # Refuse "foo,:bar"
-      if item in (',', ':') or separator not in (',', ':', None):
-        raise BadJobfile('Failed to process value %s' % value)
-
-      if state == 1:
-        assert last_key is None
-        assert last_value is None
-        if item not in valid_keys:
-          raise BadJobfile('Failed to process value %s' % value)
-        if separator == ':':
-          # Don't save it yet.
-          last_key = item
-          state = 2
-        else:
-          out.setdefault(item, set()).add(default)
-          state = 1
-
-      elif state == 2:
-        assert last_key is not None
-        assert last_value is None
-        if separator == ':':
-          last_value = item
-          state = 3
-        else:
-          out.setdefault(last_key, set()).add(item)
-          last_value = None
-          state = 4
-
-      elif state == 3:
-        assert last_key is not None
-        assert last_value is not None
-        if separator == ':':
-          raise BadJobfile('Failed to process value %s' % value)
-        out.setdefault(last_key, set()).add('%s:%s' % (last_value, item))
-        last_value = None
-        state = 4
-
-      elif state == 4:
-        assert last_key is not None
-        assert last_value is None
-        if separator == ':':
-          if item not in valid_keys:
-            last_value = item
-            state = 3
-          else:
-            raise BadJobfile('Failed to process value %s' % value)
-        else:
-          if item not in valid_keys:
-            # A value.
-            out.setdefault(last_key, set()).add(item)
-          else:
-            # A key.
-            raise BadJobfile('Failed to process value %s' % value)
 
   return out
 
