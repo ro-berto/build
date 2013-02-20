@@ -1582,6 +1582,7 @@ twistd.pid
 /masters/master.tryserver.chromium/linux_rel_alt
 /masters/master.tryserver.chromium/linux_rel_naclmore/
 /masters/master.tryserver.chromium/linux_rel_precise/
+/masters/master.tryserver.chromium/linux_rel_precise32/
 /masters/master.tryserver.chromium/linux_shared
 /masters/master.tryserver.chromium/linux_swarm/
 /masters/master.tryserver.chromium/linux_sync
