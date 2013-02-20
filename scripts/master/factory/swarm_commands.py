@@ -19,15 +19,25 @@ TEST_FILTER_TEST_NAME_INDEX = 0
 TEST_FILTER_TEST_FILTER_INDEX = 2
 
 
+def GetSwarmTests(bStep):
+  """Gets the list of all the swarm tests that this step's filter
+  will allow."""
+  test_filters = bStep.build.getProperties().getProperty('testfilter')
+  test_filters = test_filters or commands.DEFAULT_TESTS
+
+  return commands.GetSwarmTestsFromTestFilter(test_filters)
+
+
+def TestStepFilterRetrieveStep(bStep):
+  """Returns True if the given step is a swarm test step."""
+  return bStep.name in GetSwarmTests(bStep)
+
 def TestStepFilterSwarm(bStep):
   """Examines the 'testfilter' property of a build and determines if this
   build has swarm steps and thus if the test should run.
   It also adds a property, swarm_tests, which contains all the tests which will
   run under swarm."""
-  test_filters = bStep.build.getProperties().getProperty('testfilter')
-  test_filters = test_filters or commands.DEFAULT_TESTS
-
-  swarm_tests = commands.GetSwarmTestsFromTestFilter(test_filters)
+  swarm_tests = GetSwarmTests(bStep)
   # TODO(csharp): Keep swarm_tests as a list.
   bStep.setProperty('swarm_tests', ' '.join(swarm_tests))
 
@@ -146,10 +156,10 @@ class SwarmCommands(commands.FactoryCommands):
     timeout = 2 * 60 * 60
 
     self.AddTestStep(chromium_step.AnnotatedCommand,
-                     '%s_swarm' % test_name,
+                     test_name,
                      command,
                      timeout=timeout,
-                     do_step_if=self.TestStepFilter)
+                     do_step_if=TestStepFilterRetrieveStep)
 
   def AddIsolateTest(self, test_name, using_ninja):
     if not self._target:
@@ -167,7 +177,7 @@ class SwarmCommands(commands.FactoryCommands):
     command = self.GetPythonTestCommand(script_path, arg_list=args,
                                         wrapper_args=wrapper_args)
     self.AddTestStep(chromium_step.AnnotatedCommand,
-                     '%s_isolate' % test_name,
+                     test_name,
                      command)
 
   def SetupWinNetworkDrive(self, drive, network_path):

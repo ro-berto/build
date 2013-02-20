@@ -1593,7 +1593,7 @@ class ChromiumCommands(commands.FactoryCommands):
         'parent_buildername': WithProperties('%(buildername:-)s'),
         'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
         'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
-        'patchset': WithProperties('%(patchset:-)s')
+        'patchset': WithProperties('%(patchset:-)s'),
     }
     self._factory.addStep(
         trigger.Trigger(
