@@ -421,7 +421,7 @@ F('dbg_aura_test_3', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Win8 Aura', 'dbg_aura_win8', 'testers|windows',
+B('Win8 Aura', 'dbg_aura_win8', 'windows',
   'win_dbg_aura_trigger', notify_on_missing=True)
 F('dbg_aura_win8', win_tester().ChromiumFactory(
     target='Debug',
