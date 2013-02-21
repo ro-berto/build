@@ -89,7 +89,9 @@ class DartCommands(commands.FactoryCommands):
     if is_dart2dart:
       cmd += ' create_sdk'
 
-    if is_dartc:
+    # For dartc we always do a full build, except for debug mode
+    # where we will time out doing api docs.
+    if is_dartc and options['mode'] == 'debug':
       cmd += ' dartc_bot'
 
     self._factory.addStep(shell.ShellCommand,
