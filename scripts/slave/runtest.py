@@ -479,6 +479,53 @@ def upload_profiling_data(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
+def main_parse(options, args):
+  """Run input through annotated test parser.
+
+  This doesn't execute a test, but reads test input from a file and runs it
+  through the specified annotation parser.
+  """
+
+  if not options.annotate:
+    raise chromium_utils.MissingArgument('--parse-input doesn\'t make sense '
+                                         'without --annotate.')
+
+  if list_parsers(options.annotate):
+    return 0
+  tracker_class = select_results_tracker(options.annotate,
+                                         options.generate_json_file)
+  results_tracker = create_results_tracker(tracker_class, options)
+
+  if options.generate_json_file:
+    if os.path.exists(options.test_output_xml):
+      # remove the old XML output file.
+      os.remove(options.test_output_xml)
+
+  if options.parse_input == '-':
+    f = sys.stdin
+  else:
+    try:
+      f = open(options.parse_input, 'rb')
+    except IOError as e:
+      print 'Error %d opening \'%s\': %s' % (e.errno, options.parse_input,
+                                             e.strerror)
+      return 1
+
+  with f:
+    for line in f:
+      results_tracker.ProcessLine(line)
+
+  if options.generate_json_file:
+    _GenerateJSONForTestResults(options, results_tracker)
+
+  if options.annotate:
+    annotate(options.test_type, options.parse_result, results_tracker,
+             options.factory_properties.get('full_test_name'),
+             perf_dashboard_id=options.factory_properties.get('test_name'))
+
+  return options.parse_result
+
+
 def main_mac(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
@@ -965,6 +1012,14 @@ def main():
                            help='Annotate output when run as a buildstep. '
                                 'Specify which type of test to parse, available'
                                 ' types listed with --annotate=list.')
+  option_parser.add_option('', '--parse-input', default='',
+                           help='When combined with --annotate, reads test '
+                                'from a file instead of executing a test '
+                                'binary. Use - for stdin.')
+  option_parser.add_option('', '--parse-result', default=0,
+                           help='Sets the return value of the simulated '
+                                'executable under test. Only has meaning when '
+                                '--parse-input is used.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
@@ -1012,7 +1067,9 @@ def main():
     args.append('--gtest_output=xml:' + options.test_output_xml)
 
   temp_files = get_temp_count()
-  if sys.platform.startswith('darwin'):
+  if options.parse_input:
+    result = main_parse(options, args)
+  elif sys.platform.startswith('darwin'):
     test_platform = options.factory_properties.get('test_platform', '')
     if test_platform in ('ios-simulator',):
       result = main_ios(options, args)
