@@ -889,10 +889,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       factory_properties['gclient_env'].setdefault('GYP_MSVS_VERSION', '2010')
     tests = tests or []
 
-    # This permits simpler WebKit specific try jobs.
-    if slave_type == 'Trybot':
-      self._InitWebkitLatestFactorySettings(factory_properties)
-
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
     elif factory_properties.get('needs_tsan_win'):

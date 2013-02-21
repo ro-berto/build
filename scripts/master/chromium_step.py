@@ -102,13 +102,6 @@ class GClient(source.Source):
     warnings = []
     args = copy.copy(self.args)
     wk_revision = revision
-    if patch:
-      match = re.search(r'third_party/WebKit@(\w+)', patch[1])
-      if match:
-        wk_revision = match.group(1)
-      elif args.get('gclient_spec'):
-        args['gclient_spec'] = args['gclient_spec'].replace(
-            ',"webkit_revision":"$$WK_REV$$"', '')
     try:
       # parent_wk_revision might be set, but empty.
       if self.getProperty('parent_wk_revision'):
