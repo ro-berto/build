@@ -1,4 +1,4 @@
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -17,6 +17,7 @@ class Master(object):
   # External repos.
   googlecode_url = 'http://%s.googlecode.com/svn'
   sourceforge_url = 'https://%(repo)s.svn.sourceforge.net/svnroot/%(repo)s'
+  googlecode_revlinktmpl = 'https://code.google.com/p/%s/source/browse?r=%s'
 
   # Directly fetches from anonymous webkit svn server.
   webkit_root_url = 'http://svn.webkit.org/repository/webkit'

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2012 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -17,8 +17,7 @@ from common import master_cfg_utils
 
 # Masters which do not currently load from the default configuration. These need
 # to be fixed and removed from the list!
-BLACKLIST = ['client.syzygy',
-             'chromium.swarm',
+BLACKLIST = ['chromium.swarm',
              'chromium.chromebot',
              'chromiumos.tryserver',
              'client.nacl.chrome']
