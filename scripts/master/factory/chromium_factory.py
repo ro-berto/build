@@ -1036,8 +1036,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties['target'] = target
     factory_properties.setdefault('clobber', clobber)
 
-    chromium_cmd_obj.AddAnnotationStep('build', annotation_script, env=env,
-                                       factory_properties=factory_properties)
+    chromium_cmd_obj.AddAnnotationStep(
+        name='slave_steps',
+        cmd=annotation_script,
+        factory_properties=factory_properties,
+        env=env)
 
     # Add all the tests.
     self._AddTests(factory_cmd_obj=chromium_cmd_obj, tests=tests,

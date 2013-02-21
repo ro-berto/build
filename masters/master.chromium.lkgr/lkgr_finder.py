@@ -261,19 +261,19 @@ LKGR_STEPS = {
       'views_unittests',
     ],
     'Android Builder (dbg)': [
-      'build',
+      ['build', 'slave_steps'], # Use either step if one is present.
     ],
     'Android Tests (dbg)': [
-      'build',
+      ['build', 'slave_steps'], # Use either step if one is present.
     ],
     'Android Builder': [
-      'build',
+      ['build', 'slave_steps'], # Use either step if one is present.
     ],
     'Android Tests': [
-      'build',
+      ['build', 'slave_steps'], # Use either step if one is present.
     ],
     'Android Clang Builder (dbg)': [
-      'build',
+      ['build', 'slave_steps'], # Use either step if one is present.
     ],
   },  # chromium.linux
   'chromium.chrome': {
@@ -374,21 +374,32 @@ def CollateRevisionHistory(builds, lkgr_steps):
         revision = build_data['sourceStamp']['revision']
         if not revision:
           continue
-        steps = {}
+        build_steps = {}
         reasons = []
         for step in build_data['steps']:
-          steps[step['name']] = step
-        for step in lkgr_steps[master][builder]:
-          if step not in steps:
-            reasons.append('Step %s has not completed.' % step)
+          build_steps[step['name']] = step
+        for lkgr_step in lkgr_steps[master][builder]:
+          # This allows us to rename a step and tell lkgr_finder that it should
+          # accept either name for step status.  We assume in the code that any
+          # given build will have at most one of the two steps.
+          if isinstance(lkgr_step, str):
+            steps = (lkgr_step,)
+          else:
+            steps = lkgr_step
+          matching_steps = [s for s in build_steps if s in steps]
+          if not matching_steps:
+            reasons.append('Step %s is not listed on the build.' % (lkgr_step,))
             continue
-          if ('isFinished' not in steps[step] or
-             steps[step]['isFinished'] is not True):
-            reasons.append('Step %s has not completed (%s)' % (
-                step, steps[step]['isFinished']))
+          elif len(matching_steps) > 1:
+            reasons.append('Multiple step matches: %s' % matching_steps)
             continue
-          if 'results' in steps[step]:
-            result = steps[step]['results'][0]
+          step = matching_steps[0]
+          if build_steps[step].get('isFinished') is not True:
+            reasons.append('Step %s has not completed (isFinished: %s)' % (
+                step, build_steps[step].get('isFinished')))
+            continue
+          if 'results' in build_steps[step]:
+            result = build_steps[step]['results'][0]
             if type(result) == list:
               result = result[0]
             if result and str(result) not in ('0', '1'):
