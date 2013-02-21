@@ -345,7 +345,7 @@ class GClientFactory(object):
         primary_repo=primary_repo,
         gclient_jobs=gclient_jobs)
 
-    if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot'):
+    if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect'):
       factory_cmd_obj.AddApplyIssueStep(
           timeout=timeout,
           server=config.Master.TryServer.code_review_site)

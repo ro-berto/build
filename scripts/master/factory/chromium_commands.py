@@ -1033,6 +1033,17 @@ class ChromiumCommands(commands.FactoryCommands):
       AddFunctionalTest('DevTools.CheckMemoryInstrumentation',
                         'devtools_instrumented_objects_check.py')
 
+  def AddBisectTest(self):
+    """Adds a step to the factory to run a bisection on a range of revisions
+    to investigate performance regressions."""
+
+    script_dir = self.PathJoin(self.working_dir, 'src', 'tools')
+    working_dir = self.PathJoin('..', '..')
+
+    cmd = [self._python, 'run-bisect-perf-regression.py', '-w', working_dir]
+    self.AddTestStep(chromium_step.AnnotatedCommand, 'Running Bisection',
+                     cmd, workdir=script_dir, timeout=60*60*8)
+
   def AddWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
     cmd = [self._python, self._lint_test_files_tool,
@@ -1593,7 +1604,7 @@ class ChromiumCommands(commands.FactoryCommands):
         'parent_buildername': WithProperties('%(buildername:-)s'),
         'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
         'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
-        'patchset': WithProperties('%(patchset:-)s'),
+        'patchset': WithProperties('%(patchset:-)s')
     }
     self._factory.addStep(
         trigger.Trigger(
