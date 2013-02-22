@@ -42,6 +42,10 @@ defaults['category'] = '2windows'
 rel_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win Builder',
                                           'cr-win-rel', 'win32')
 
+# Archive location
+rel_x64_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win x64 Builder',
+                                              'cr-win-rel', 'win32')
+
 #
 # Main debug scheduler for src/
 #
@@ -148,6 +152,121 @@ F('rel_sync', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=['sync_integration'],
+    factory_properties={'process_dumps': True,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
+
+#
+# Triggerable scheduler for the rel builder
+#
+T('win_x64_rel_trigger')
+
+#
+# Win x64 Rel Builder
+# Note: These should eventually merge with the build and test targets for
+# win_rel above, but x64 doesn't currently build/execute all unit tests yet.
+#
+B('Win x64 Builder', 'rel_x64', 'compile|windows', 'win_rel',
+  builddir='cr-win-rel-x64', auto_reboot=False, notify_on_missing=True)
+F('rel_x64', win_out().ChromiumFactory(
+    slave_type='Builder',
+    target='Release_x64',
+    options=['--build-tool=ninja', '--',
+        'base_unittests',
+        'cacheinvalidation_unittests',
+        'crypto_unittests',
+        'device_unittests',
+        'googleurl_unittests',
+        'gpu_unittests',
+        'installer_util_unittests',
+        'ipc_tests',
+        'jingle_unittests',
+        'net_unittests',
+        'ppapi_unittests',
+        'printing_unittests',
+        'sbox_unittests',
+        'sbox_integration_tests',
+        'sbox_validation_tests',
+        'sql_unittests',
+        'sync_unit_tests',
+        'ui_unittests',
+        'views_unittests',
+        'media_unittests',
+    ],
+    factory_properties={
+      'trigger': 'win_x64_rel_trigger',
+      'gclient_env': {
+        'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
+      }}))
+
+B('Win 7 Tests x64 (1)', 'rel_x64_unit_1', 'testers|windows',
+  'win_x64_rel_trigger', notify_on_missing=True)
+F('rel_x64_unit_1', win_tester().ChromiumFactory(
+    slave_type='Tester',
+    target='Release_x64',
+    build_url=rel_x64_archive,
+    tests=[
+      'cacheinvalidation_unittests',
+      'crypto_unittests',
+      'device_unittests',
+      'googleurl_unittests',
+      'gpu_unittests',
+      'installer_util_unittests',
+      'jingle_unittests',
+      'ppapi_unittests',
+      'printing_unittests',
+      'sbox_unittests',
+      'sbox_integration_tests',
+      'sbox_validation_tests',
+    ],
+    factory_properties={'process_dumps': True,
+                        'sharded_tests': sharded_tests,
+                        'browser_total_shards': 3, 'browser_shard_index': 1,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
+
+B('Win 7 Tests x64 (2)', 'rel_x64_unit_2', 'testers|windows',
+  'win_x64_rel_trigger', notify_on_missing=True)
+F('rel_x64_unit_2', win_tester().ChromiumFactory(
+    slave_type='Tester',
+    target='Release_x64',
+    build_url=rel_x64_archive,
+    tests=[
+      'base_unittests',
+      'net_unittests',
+    ],
+    factory_properties={'process_dumps': True,
+                        'sharded_tests': sharded_tests,
+                        'browser_total_shards': 3, 'browser_shard_index': 2,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
+
+B('Win 7 Tests x64 (3)', 'rel_x64_unit_3', 'testers|windows',
+  'win_x64_rel_trigger', notify_on_missing=True)
+F('rel_x64_unit_3', win_tester().ChromiumFactory(
+    slave_type='Tester',
+    target='Release_x64',
+    build_url=rel_x64_archive,
+    tests=[
+      'ipc_tests',
+      'sync_unit_tests',
+      'sql_unittests',
+      'ui_unittests',
+      'views_unittests',
+    ],
+    factory_properties={'process_dumps': True,
+                        'sharded_tests': sharded_tests,
+                        'browser_total_shards': 3, 'browser_shard_index': 3,
+                        'start_crash_handler': True,
+                        'generate_gtest_json': True}))
+
+B('Win7 Sync x64', 'rel_x64_sync', 'testers|windows', 'win_x64_rel_trigger',
+  notify_on_missing=True)
+F('rel_x64_sync', win_tester().ChromiumFactory(
+    slave_type='Tester',
+    target='Release_x64',
+    build_url=rel_x64_archive,
+    tests=[],
     factory_properties={'process_dumps': True,
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
