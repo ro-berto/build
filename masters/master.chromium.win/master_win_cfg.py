@@ -199,7 +199,7 @@ F('rel_x64', win_out().ChromiumFactory(
         'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
       }}))
 
-B('Win 7 Tests x64 (1)', 'rel_x64_unit_1', 'testers|windows',
+B('Win 7 Tests x64 (1)', 'rel_x64_unit_1', 'windows',
   'win_x64_rel_trigger', notify_on_missing=True)
 F('rel_x64_unit_1', win_tester().ChromiumFactory(
     slave_type='Tester',
@@ -225,7 +225,7 @@ F('rel_x64_unit_1', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Win 7 Tests x64 (2)', 'rel_x64_unit_2', 'testers|windows',
+B('Win 7 Tests x64 (2)', 'rel_x64_unit_2', 'windows',
   'win_x64_rel_trigger', notify_on_missing=True)
 F('rel_x64_unit_2', win_tester().ChromiumFactory(
     slave_type='Tester',
@@ -241,7 +241,7 @@ F('rel_x64_unit_2', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Win 7 Tests x64 (3)', 'rel_x64_unit_3', 'testers|windows',
+B('Win 7 Tests x64 (3)', 'rel_x64_unit_3', 'windows',
   'win_x64_rel_trigger', notify_on_missing=True)
 F('rel_x64_unit_3', win_tester().ChromiumFactory(
     slave_type='Tester',
@@ -260,7 +260,7 @@ F('rel_x64_unit_3', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('Win7 Sync x64', 'rel_x64_sync', 'testers|windows', 'win_x64_rel_trigger',
+B('Win7 Sync x64', 'rel_x64_sync', 'windows', 'win_x64_rel_trigger',
   notify_on_missing=True)
 F('rel_x64_sync', win_tester().ChromiumFactory(
     slave_type='Tester',
