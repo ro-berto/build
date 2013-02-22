@@ -252,7 +252,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
                            factory_properties, cmd_name='performance_ui_tests',
                            tool_opts=None, cmd_options=None, step_name=None,
-                           timeout=1200, py_script=False, **kwargs):
+                           timeout=1200, py_script=False):
 
     """Add an annotated perf step to the builder.
 
@@ -289,8 +289,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                      do_step_if=self.TestStepFilter, target=self._target,
-                     factory_properties=factory_properties, timeout=timeout,
-                     **kwargs)
+                     factory_properties=factory_properties, timeout=timeout)
 
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
