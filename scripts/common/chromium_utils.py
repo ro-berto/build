@@ -1131,3 +1131,34 @@ def AbsoluteCanonicalPath(*path):
 
   file_path = os.path.join(*path)
   return os.path.realpath(os.path.abspath(os.path.expanduser(file_path)))
+
+
+def ConvertBuildDirToLegacy(build_dir, target_platform=None, use_out=False):
+  """Returns a tuple of (build_dir<str>, legacy<bool>).
+
+  This function will print a warning to stderr. If possible, the caller of this
+  function should use the legacy boolean to turn the step into a WARNING.
+  Ideally, this function is a temporary step and NOTHING should take the branch
+  in this function after 3/2013 and this code can be removed.
+  """
+  if not target_platform:
+    target_platform = sys.platform
+  legacy_paths = {
+    'darwin': 'xcodebuild',
+    'linux': 'out',
+  }
+  bad = False
+  if (build_dir == 'src/build' and
+      any(target_platform.startswith(p) for p in legacy_paths)):
+    print >> sys.stderr, (
+        'WARNING: Passed "%s" as --build-dir option on %s. '
+        'This is almost certainly incorrect.' % (build_dir, target_platform))
+    if use_out:
+      legacy_path = 'out'
+    else:
+      legacy_path = legacy_paths[target_platform]
+    print >> sys.stderr, ('Assuming you meant "%s"' % legacy_path)
+    bad = True
+    build_dir = os.path.join(os.path.dirname(build_dir), legacy_path)
+
+  return (build_dir, bad)
