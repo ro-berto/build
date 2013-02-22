@@ -93,6 +93,13 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
 
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
+  def __init__(self, *args, **kwargs):
+    canary = kwargs.pop('canary', False)
+    super(SwarmFactory, self).__init__(*args, **kwargs)
+    if canary:
+      # pylint: disable=W0212
+      self._solutions[0].custom_vars_list.append(('swarm_revision', ''))
+
   def SwarmFactory(
       self, target_platform, target='Release', clobber=False, tests=None,
       mode=None, options=None, compile_timeout=1200,
