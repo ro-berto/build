@@ -13,13 +13,12 @@ from buildbot.steps.transfer import FileUpload
 from buildbot.process.properties import WithProperties
 
 from master import chromium_step
-from master.factory import commands
-from master.log_parser import process_log
+from master.factory import chromium_commands
 
 import config
 
 
-class NativeClientCommands(commands.FactoryCommands):
+class NativeClientCommands(chromium_commands.ChromiumCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
 
   # pylint: disable=W0212
@@ -27,8 +26,8 @@ class NativeClientCommands(commands.FactoryCommands):
   PERF_BASE_URL = config.Master._NaClBase.perf_base_url
 
   def __init__(self, factory=None, build_dir=None, target_platform=None):
-    commands.FactoryCommands.__init__(self, factory, 'Release', build_dir,
-                                      target_platform)
+    chromium_commands.ChromiumCommands.__init__(self, factory, 'Release',
+                                                build_dir, target_platform)
 
   def AddTrigger(self, trigger_who):
     self._factory.addStep(trigger.Trigger(
@@ -85,18 +84,26 @@ class NativeClientCommands(commands.FactoryCommands):
         '%(triggered_by_slavename:-None)s')
     if 'test_name' not in factory_properties:
       test_class = chromium_step.AnnotatedCommand
+      if usePython:
+        command = [self._python] + command
+      self._factory.addStep(test_class,
+                            name='annotate',
+                            description='annotate',
+                            timeout=timeout,
+                            haltOnFailure=haltOnFailure,
+                            env=env,
+                            workdir=workdir,
+                            command=command)
     else:
       test_name = factory_properties.get('test_name')
-      test_class = self.GetPerfStepClass(
-          factory_properties, test_name, process_log.GraphingLogProcessor,
-          command_class=chromium_step.AnnotatedCommand)
-    if usePython:
-      command = [self._python] + command
-    self._factory.addStep(test_class,
-                          name='annotate',
-                          description='annotate',
-                          timeout=timeout,
-                          haltOnFailure=haltOnFailure,
-                          env=env,
-                          workdir=workdir,
-                          command=command)
+
+      cmd_name = command[0]
+      cmd_options = command[1:]
+
+      tool_opts = ['--no-xvfb']
+
+      self.AddAnnotatedPerfStep(test_name, None, 'graphing',
+          factory_properties, cmd_name=cmd_name, cmd_options=cmd_options,
+          tool_opts=tool_opts, step_name='annotate', timeout=timeout,
+          halt_on_failure=haltOnFailure, env=env, workdir=workdir,
+          py_script=usePython)
