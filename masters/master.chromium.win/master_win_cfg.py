@@ -44,7 +44,7 @@ rel_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win Builder',
 
 # Archive location
 rel_x64_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win x64 Builder',
-                                              'cr-win-rel', 'win32')
+                                              'cr-win-rel-x64', 'win32')
 
 #
 # Main debug scheduler for src/
