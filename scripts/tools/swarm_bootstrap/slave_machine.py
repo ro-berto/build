@@ -661,7 +661,7 @@ def main():
   while True:
     try:
       slave.Start(iterations=options.iterations)
-    except SlaveError as e:
+    except Exception as e:
       logging.exception('Slave start threw an exception:\n%s', e)
 
 
