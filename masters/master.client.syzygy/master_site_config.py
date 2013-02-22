@@ -6,9 +6,9 @@
 
 class Syzygy(object):
   project_name = 'Syzygy'
-  master_port = 8142
-  slave_port = 8242
-  master_port_alt = 8342
+  master_port = 8042
+  slave_port = 8142
+  master_port_alt = 8242
   tree_closing_notification_recipients = []
   from_address = 'buildbot@chromium.org'
   master_host = 'master3.golo.chromium.org'
