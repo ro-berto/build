@@ -192,6 +192,7 @@ F('rel_x64', win_out().ChromiumFactory(
         'ui_unittests',
         'views_unittests',
         'media_unittests',
+        'crash_service',
     ],
     factory_properties={
       'trigger': 'win_x64_rel_trigger',
