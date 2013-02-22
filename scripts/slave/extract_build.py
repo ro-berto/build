@@ -99,13 +99,28 @@ def real_main(options):
       and rename it to build\BuildDir\Target
   """
   normal_retval = 0
+  # TODO: need to get the build *output* directory passed in also so Linux
+  # and Mac don't have to walk up a directory to get to the right directory.
   if options.build_output_dir:
     build_output_dir = os.path.join(options.build_dir, options.build_output_dir)
-  else:
-    build_output_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
-        options.build_dir)
-    if bad:
+  elif chromium_utils.IsWindows():
+    build_output_dir = options.build_dir
+  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
+    if options.build_dir == 'src/build':
+      print('WARNING: Passed "src/build" as --build-dir option. '
+            'This is almost certainly incorrect.')
       normal_retval = slave_utils.WARNING_EXIT_CODE
+      if chromium_utils.IsMac():
+        legacy_path = 'xcodebuild'
+      else:
+        legacy_path = 'sconsbuild'
+      print 'Assuming you meant src/%s' % legacy_path
+      build_output_dir = os.path.join(
+          os.path.dirname(options.build_dir), legacy_path)
+    else:
+      build_output_dir = options.build_dir
+  else:
+    raise NotImplementedError('%s is not supported.' % sys.platform)
 
   abs_build_dir = os.path.abspath(options.build_dir)
   abs_build_output_dir = os.path.abspath(build_output_dir)
