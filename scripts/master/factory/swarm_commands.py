@@ -29,8 +29,12 @@ def GetSwarmTests(bStep):
 
 
 def TestStepFilterRetrieveStep(bStep):
-  """Returns True if the given step is a swarm test step."""
+  """Returns True if the given swarm step should be run."""
+  if 'testfilter' not in bStep.build.getProperties():
+    return True
+
   return bStep.name in GetSwarmTests(bStep)
+
 
 def TestStepFilterSwarm(bStep):
   """Examines the 'testfilter' property of a build and determines if this
