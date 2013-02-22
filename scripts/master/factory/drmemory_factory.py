@@ -774,15 +774,11 @@ def CreateLinuxChromeFactory():
               '-VideoFrameCapturerTest.Capture:'
               'DesktopProcessTest.DeathTest']
     elif test == 'DumpRenderTree':
-      # We use shell redirection, so we make the command a string.
-      # TODO(rnk): We should run some selection of layout tests instead of
-      # directly running DRT.
-      cmd = ' '.join(cmd + [
-          'file:///home/chrome-bot/bb.html',
-          '>drt_out',
-          '&&',
-          'md5sum', '-c', '/home/chrome-bot/bb.html.md5'
-      ])
+      cmd += ['file:///home/chrome-bot/bb.html']
+    # We used to md5 the output, but that's too brittle.  Just dump it to stdout
+    # so humans can verify it.  The return code will tell us if we crash.
+    # TODO(rnk): We should run some selection of layout tests if we want to
+    # verify output.
     ret.addStep(Test(command=cmd,
                      name=test,
                      descriptionDone=test,
