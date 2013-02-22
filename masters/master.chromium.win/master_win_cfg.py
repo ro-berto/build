@@ -21,14 +21,31 @@ def win_tester():
   return chromium_factory.ChromiumFactory(
       'src/build', 'win32', nohooks_on_update=True)
 
-# Tests that are single-machine shard-safe. For now we only use the sharding
-# supervisor for long tests (more than 30 seconds) that are known to be stable.
+# Tests that are single-machine shard-safe.
 sharded_tests = [
+  'aura_unittests',
   'base_unittests',
   'browser_tests',
-  'content_browsertests',
+  'cacheinvalidation_unittests',
   'cc_unittests',
+  'chromedriver2_tests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'gpu_unittests',
+  'jingle_unittests',
   'media_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sync_integration_tests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+  'views_unittests',
   'webkit_compositor_bindings_unittests',
 ]
 
@@ -152,9 +169,12 @@ F('rel_sync', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=['sync_integration'],
-    factory_properties={'process_dumps': True,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
+    factory_properties={
+      'generate_gtest_json': True,
+      'process_dumps': True,
+      'sharded_tests': sharded_tests,
+      'start_crash_handler': True,
+    }))
 
 #
 # Triggerable scheduler for the rel builder
@@ -278,8 +298,11 @@ F('rel_nacl', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=['nacl_integration'],
-    factory_properties={'process_dumps': True,
-                        'start_crash_handler': True,}))
+    factory_properties={
+      'process_dumps': True,
+      'sharded_tests': sharded_tests,
+      'start_crash_handler': True,
+    }))
 
 B('NaCl Tests (x86-64)', 'rel_nacl', 'testers|windows', 'win_rel_trigger',
   notify_on_missing=True)
@@ -294,9 +317,12 @@ F('rel_cf', win_tester().ChromiumFactory(
       'chrome_frame_net_tests',
       'chrome_frame_unittests',
     ],
-    factory_properties={'process_dumps': True,
-                        'generate_gtest_json': True,
-                        'start_crash_handler': True,}))
+    factory_properties={
+      'generate_gtest_json': True,
+      'process_dumps': True,
+      'sharded_tests': sharded_tests,
+      'start_crash_handler': True,
+    }))
 
 B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
   notify_on_missing=True)
@@ -468,9 +494,12 @@ F('dbg_int', win_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['interactive_ui_tests'],
-    factory_properties={'process_dumps': True,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
+    factory_properties={
+      'generate_gtest_json': True,
+      'process_dumps': True,
+      'sharded_tests': sharded_tests,
+      'start_crash_handler': True,
+    }))
 
 #
 # Dbg Aura builder
@@ -552,9 +581,12 @@ F('dbg_aura_win8', win_tester().ChromiumFactory(
            'compositor',
            'views_unittests',
           ],
-    factory_properties={'process_dumps': True,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
+    factory_properties={
+      'generate_gtest_json': True,
+      'process_dumps': True,
+      'sharded_tests': sharded_tests,
+      'start_crash_handler': True,
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)

@@ -31,6 +31,35 @@ linux_asan_archive = master_config.GetArchiveUrl('ChromiumMemory',
                                                  'Linux ASAN Builder',
                                                  'Linux_ASAN_Builder',
                                                  'linux')
+
+# Tests that are single-machine shard-safe.
+sharded_tests = [
+  'aura_unittests',
+  'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'cc_unittests',
+  'chromedriver2_tests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'gpu_unittests',
+  'jingle_unittests',
+  'media_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sync_integration_tests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+  'views_unittests',
+  'webkit_compositor_bindings_unittests',
+]
+
 #
 # Linux ASAN Rel Builder
 #
@@ -91,9 +120,12 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
       'net',
       'sandbox_linux_unittests',
     ],
-    factory_properties={'asan': True,
-                        'browser_total_shards': 3,
-                        'browser_shard_index': 1 }))
+    factory_properties={
+      'asan': True,
+      'browser_total_shards': 3,
+      'browser_shard_index': 1,
+      'sharded_tests': sharded_tests,
+    }))
 
 B('Linux ASAN Tests (2)', 'linux_asan_rel_tests_2', 'testers',
   'linux_asan_rel_trigger', notify_on_missing=True)
@@ -109,9 +141,12 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
       'remoting',
       'unit',
     ],
-    factory_properties={'asan': True,
-                        'browser_total_shards': 3,
-                        'browser_shard_index': 2 }))
+    factory_properties={
+      'asan': True,
+      'browser_total_shards': 3,
+      'browser_shard_index': 2,
+      'sharded_tests': sharded_tests,
+    }))
 
 B('Linux ASAN Tests (3)', 'linux_asan_rel_tests_3', 'testers',
   'linux_asan_rel_trigger', notify_on_missing=True)
@@ -122,9 +157,12 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
       'browser_tests',
       'content_browsertests',
     ],
-    factory_properties={'asan': True,
-                        'browser_total_shards': 3,
-                        'browser_shard_index': 3 }))
+    factory_properties={
+      'asan': True,
+      'browser_total_shards': 3,
+      'browser_shard_index': 3,
+      'sharded_tests': sharded_tests,
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)

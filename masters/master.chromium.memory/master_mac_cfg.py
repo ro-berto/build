@@ -27,6 +27,34 @@ S('mac_asan_rel', branch='src', treeStableTimer=60)
 #
 T('mac_asan_rel_trigger')
 
+# Tests that are single-machine shard-safe.
+sharded_tests = [
+  'aura_unittests',
+  'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'cc_unittests',
+  'chromedriver2_tests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'gpu_unittests',
+  'jingle_unittests',
+  'media_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sync_integration_tests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+  'views_unittests',
+  'webkit_compositor_bindings_unittests',
+]
+
 mac_asan_options = [
   'base_unittests',
   'browser_tests',
@@ -115,6 +143,7 @@ F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
       'asan': True,
       'browser_total_shards': '3',
       'browser_shard_index': '1',
+      'sharded_tests': sharded_tests,
     }))
 
 
@@ -128,6 +157,7 @@ F('mac_asan_rel_tests_2', mac().ChromiumASANFactory(
       'asan': True,
       'browser_total_shards': '3',
       'browser_shard_index': '2',
+      'sharded_tests': sharded_tests,
     }))
 
 B('Mac ASAN Tests (3)', 'mac_asan_rel_tests_3', 'testers',
@@ -140,6 +170,7 @@ F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
       'asan': True,
       'browser_total_shards': '3',
       'browser_shard_index': '3',
+      'sharded_tests': sharded_tests,
     }))
 
 def Update(config, active_master, c):

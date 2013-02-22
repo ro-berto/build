@@ -26,15 +26,32 @@ S(name='chromium_local', branch='src', treeStableTimer=60)
 
 T('chromiumos_rel_trigger')
 
-# Tests that are single-machine shard-safe. For now we only use the sharding
-# supervisor for long tests (more than 30 seconds) that are known to be stable.
+# Tests that are single-machine shard-safe.
 sharded_tests = [
+  'aura_unittests',
   'base_unittests',
   'browser_tests',
+  'cacheinvalidation_unittests',
+  'cc_unittests',
+  'chromedriver2_tests',
+  'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',
   'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'gpu_unittests',
+  'jingle_unittests',
   'media_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sync_integration_tests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+  'views_unittests',
+  'webkit_compositor_bindings_unittests',
 ]
 
 linux_chromeos_tests = [

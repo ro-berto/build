@@ -35,6 +35,34 @@ chromeos_asan_archive = master_config.GetArchiveUrl(
     'Linux_Chromium_OS_ASAN_Builder',
     'linux')
 
+# Tests that are single-machine shard-safe.
+sharded_tests = [
+  'aura_unittests',
+  'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'cc_unittests',
+  'chromedriver2_tests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'gpu_unittests',
+  'jingle_unittests',
+  'media_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sync_integration_tests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+  'views_unittests',
+  'webkit_compositor_bindings_unittests',
+]
+
 #
 # CrOS ASAN Rel Builder
 #
@@ -70,7 +98,10 @@ fp_chromeos_asan = {
         'GYP_DEFINES': ('asan=1 '
                         'linux_use_tcmalloc=0 '
                         'chromeos=1 '),
-        'GYP_GENERATORS': 'ninja' }}
+        'GYP_GENERATORS': 'ninja',
+    },
+    'sharded_tests': sharded_tests,
+}
 
 B('Linux Chromium OS ASAN Builder', 'chromeos_asan_rel', 'compile',
   'chromeos_asan_rel', auto_reboot=False, notify_on_missing=True)

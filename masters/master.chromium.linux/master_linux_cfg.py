@@ -19,15 +19,31 @@ def linux_tester():
   return chromium_factory.ChromiumFactory(
       'src/build', 'linux2', nohooks_on_update=True)
 
-# Tests that are single-machine shard-safe. For now we only use the sharding
-# supervisor for long tests (more than 30 seconds) that are known to be stable.
+# Tests that are single-machine shard-safe.
 sharded_tests = [
+  'aura_unittests',
   'base_unittests',
   'browser_tests',
-  'content_browsertests',
+  'cacheinvalidation_unittests',
   'cc_unittests',
+  'chromedriver2_tests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'device_unittests',
+  'gpu_unittests',
+  'jingle_unittests',
   'media_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
   'sync_integration_tests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+  'views_unittests',
   'webkit_compositor_bindings_unittests',
 ]
 
@@ -148,7 +164,10 @@ F('rel_precise_sync', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_precise_archive,
     tests=['sync_integration'],
-    factory_properties={'generate_gtest_json': True}))
+    factory_properties={
+      'generate_gtest_json': True,
+      'sharded_tests': sharded_tests,
+    }))
 
 #
 # Linux aura bot
@@ -213,8 +232,11 @@ F('f_linux_rel_aura', linux().ChromiumFactory(
     slave_type='BuilderTester',
     options=['--compiler=goma'] + linux_aura_options,
     tests=linux_aura_tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'use_aura=1'},
-                        'window_manager': 'False'}))
+    factory_properties={
+      'gclient_env': {'GYP_DEFINES': 'use_aura=1'},
+      'sharded_tests': sharded_tests,
+      'window_manager': 'False',
+    }))
 
 
 ################################################################################
@@ -401,7 +423,9 @@ F('dbg_precise_linux_clang', linux().ChromiumFactory(
         'GYP_DEFINES':
           'clang=1 clang_use_chrome_plugins=1 fastbuild=1 '
             'test_isolation_mode=noop',
-    }}))
+      },
+      'sharded_tests': sharded_tests,
+    }))
 
 
 def Update(config, active_master, c):
