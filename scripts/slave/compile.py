@@ -542,6 +542,12 @@ def common_make_settings(
       command.append('-r')
       return
 
+  if options.llvm_tsan:
+    # Do not report thread leaks when running executables compiled with TSan.
+    # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
+    # contains other options that might be worth adding.
+    env['TSAN_OPTIONS'] = 'report_thread_leaks=0'
+
   if chromium_utils.IsMac() and options.disable_aslr:
     # Disallow dyld to randomize the load addresses of executables.
     # If any of them is compiled with ASan it will hang otherwise.
@@ -719,6 +725,12 @@ def main_ninja(options, args):
     command.append('-v')
   command.extend(options.build_args)
   command.extend(args)
+
+  if options.llvm_tsan:
+    # Do not report thread leaks when running executables compiled with TSan.
+    # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
+    # contains other options that might be worth adding.
+    env['TSAN_OPTIONS'] = 'report_thread_leaks=0'
 
   if chromium_utils.IsMac() and options.disable_aslr:
     # Disallow dyld to randomize the load addresses of executables.
@@ -1102,6 +1114,9 @@ def real_main():
   # For linux to arm cross compile.
   option_parser.add_option('', '--crosstool', default=None,
                            help='optional path to crosstool toolset')
+  option_parser.add_option('', '--llvm-tsan', action='store_true',
+                           default=False,
+                           help='build with LLVM\'s ThreadSanitizer')
   if chromium_utils.IsMac():
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
