@@ -35,6 +35,7 @@ sharded_tests = [
   'device_unittests',
   'gpu_unittests',
   'jingle_unittests',
+  'net_unittests',
   'media_unittests',
   'ppapi_unittests',
   'printing_unittests',
