@@ -316,17 +316,12 @@ dbg_precise_archive = master_config.GetArchiveUrl(
     'ChromiumLinux',
     'Linux Builder (dbg)(Precise)',
     'Linux_Builder__dbg__Precise_', 'linux')
-dbg_precise32_archive = master_config.GetArchiveUrl(
-    'ChromiumLinux',
-    'Linux Builder (dbg)(Precise 32)',
-    'Linux_Builder__dbg__Precise_32_', 'linux')
 
 #
 # Triggerable scheduler for the dbg builders
 #
 T('linux_dbg_trigger')
 T('linux_dbg_precise_trigger')
-T('linux_dbg_precise32_trigger')
 
 #
 # Linux Dbg Builder
@@ -346,14 +341,14 @@ F('dbg', linux().ChromiumFactory(
 
 B('Linux Tests (dbg)(1)', 'dbg_unit_1', 'testers', 'linux_dbg_trigger',
   notify_on_missing=True)
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
 B('Linux Tests (dbg)(1)(Precise 32)',
     factory='dbg_unit_1',
-    gatekeeper='testers',
-    scheduler='linux_dbg_precise32_trigger',
+    scheduler='linux_dbg_trigger',
     notify_on_missing=True)
 F('dbg_unit_1', linux_tester().ChromiumFactory(
     slave_type='Tester',
-    build_url=dbg_precise32_archive,
+    build_url=dbg_archive,
     target='Debug',
     tests=[
       'browser_tests',
@@ -365,14 +360,14 @@ F('dbg_unit_1', linux_tester().ChromiumFactory(
 
 B('Linux Tests (dbg)(2)', 'dbg_unit_2', 'testers', 'linux_dbg_trigger',
   notify_on_missing=True)
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
 B('Linux Tests (dbg)(2)(Precise 32)',
     factory='dbg_unit_2',
-    gatekeeper='testers',
-    scheduler='linux_dbg_precise32_trigger',
+    scheduler='linux_dbg_trigger',
     notify_on_missing=True)
 F('dbg_unit_2', linux_tester().ChromiumFactory(
     slave_type='Tester',
-    build_url=dbg_precise32_archive,
+    build_url=dbg_archive,
     target='Debug',
     tests=[
       'base_unittests',
@@ -393,7 +388,6 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
       'ppapi_unittests',
       'printing',
       'remoting',
-      'sandbox_linux_unittests',
       'unit_ipc',
       'unit_sql',
       'unit_sync',
@@ -412,17 +406,9 @@ F('dbg_precise', linux().ChromiumFactory(
     options=['--compiler=goma'] + linux_all_test_targets,
     factory_properties={'trigger': 'linux_dbg_precise_trigger'}))
 
-B('Linux Builder (dbg)(Precise 32)', 'dbg_precise32', 'compile', 'linux_dbg',
-  auto_reboot=False, notify_on_missing=True)
-F('dbg_precise32', linux().ChromiumFactory(
-    slave_type='Builder',
-    target='Debug',
-    options=['--compiler=goma'] + linux_all_test_targets,
-    factory_properties={'trigger': 'linux_dbg_precise32_trigger'}))
-
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
 B('Linux Tests (dbg)(1)(Precise)',
     factory='dbg_precise_unit_1',
-    gatekeeper='testers',
     scheduler='linux_dbg_precise_trigger',
     notify_on_missing=True)
 F('dbg_precise_unit_1', linux_tester().ChromiumFactory(
@@ -437,9 +423,9 @@ F('dbg_precise_unit_1', linux_tester().ChromiumFactory(
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
 
+# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
 B('Linux Tests (dbg)(2)(Precise)',
     factory='dbg_precise_unit_2',
-    gatekeeper='testers',
     scheduler='linux_dbg_precise_trigger',
     notify_on_missing=True)
 F('dbg_precise_unit_2', linux_tester().ChromiumFactory(
@@ -472,6 +458,40 @@ F('dbg_precise_unit_2', linux_tester().ChromiumFactory(
       'unit_unit',
       'ui_unittests',
       'webkit_compositor_bindings_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
+#
+# Linux Precise bot. Running Ubuntu 12.04, used for testing sandboxing with
+# seccomp-bpf.
+#
+
+B('Linux Precise (dbg)', 'dbg_precise_1', 'testers', 'linux_dbg_trigger',
+  auto_reboot=True, notify_on_missing=True)
+F('dbg_precise_1', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=dbg_archive,
+    target='Debug',
+    tests=[
+      'base_unittests',
+      'browser_tests',
+      'content_browsertests',
+      'sandbox_linux_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
+
+B('Linux Precise x64', 'rel_precise_1', 'testers', 'linux_rel_trigger',
+  auto_reboot=True, notify_on_missing=True)
+F('rel_precise_1', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=[
+      'base_unittests',
+      'browser_tests',
+      'content_browsertests',
+      'sandbox_linux_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
                         'generate_gtest_json': True}))
