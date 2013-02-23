@@ -38,7 +38,8 @@ sharded_tests = [
   'ppapi_unittests',
   'printing_unittests',
   'remoting_unittests',
-  'sync_integration_tests',
+  # http://crbug.com/157234
+  #'sync_integration_tests',
   'sync_unit_tests',
   'ui_unittests',
   'unit_tests',
