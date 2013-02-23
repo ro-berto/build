@@ -129,6 +129,17 @@ class GClient(source.Source):
           '$$WK_REV$$', str(wk_revision or ''))
       args['gclient_spec'] = args['gclient_spec'].replace(
           '$$NACL_REV$$', str(nacl_revision or ''))
+      webkit_try_revision = None
+      if patch:
+        match = re.match(r'third_party/WebKit@(\w+)', patch[1])
+        if match:
+          webkit_try_revision = match.group(1)
+      if webkit_try_revision:
+        args['gclient_spec'] = args['gclient_spec'].replace(
+            '$$WK_TRY_REV$$', webkit_try_revision)
+      else:
+        args['gclient_spec'] = args['gclient_spec'].replace(
+            ',"webkit_revision":"$$WK_TRY_REV$$"', '')
     if patch:
       args['patch'] = patch
     elif args.get('patch') is None:
