@@ -175,7 +175,7 @@ class SwarmCommands(commands.FactoryCommands):
     script_path = self.PathJoin('src', 'tools', 'swarm_client',
                                 'isolate.py')
 
-    args = ['run', '--isolated', isolated_file]
+    args = ['run', '--isolated', isolated_file, '--', '--no-cr']
     wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
 
     command = self.GetPythonTestCommand(script_path, arg_list=args,
