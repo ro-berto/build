@@ -706,7 +706,7 @@ def CreateWinChromeFactory():
 
   # Chromium tests
   for test in ['googleurl', 'printing', 'media', 'sql', 'crypto', 'remoting',
-               'ipc', 'base_unittests', 'net', 'unit']:
+               'ipc_tests', 'base_unittests', 'net', 'unit']:
     ret.addStep(
         Test(command=[
                  # Use the build dir of the chrome builder on this slave.

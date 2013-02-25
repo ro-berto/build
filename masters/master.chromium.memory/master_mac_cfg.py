@@ -83,16 +83,16 @@ mac_asan_tests_1 = [
   'base_unittests',
   'browser_tests',
   'cacheinvalidation',
-  'content_unittests',
   'content_browsertests',
+  'content_unittests',
   'crypto',
   'googleurl',
+  'ipc_tests',
   'jingle',
   'media',
   'ppapi_unittests',
   'printing',
   'remoting',
-  'unit_ipc',
   'unit_sql',
 ]
 

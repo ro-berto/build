@@ -458,9 +458,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('unit_br'):
       f.AddBuildrunnerChromeUnitTests(fp)
     # A snapshot of the "ChromeUnitTests" available for individual selection
-    if R('unit_ipc', 'ipc_tests'):
+    if R('ipc_tests'):
       f.AddGTestTestStep('ipc_tests', fp)
-    if R('unit_ipc_br'):
+    if R('ipc_tests_br'):
       f.AddBuildrunnerGTest('ipc_tests', fp)
     if R('unit_sync', 'sync_unit_tests'):
       f.AddGTestTestStep('sync_unit_tests', fp)
