@@ -32,10 +32,12 @@ sharded_tests = [
   'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',
-  'content_unittests',
+  # http://crbug.com/178006
+  #'content_unittests',
   'crypto_unittests',
   'device_unittests',
-  'gpu_unittests',
+  # http://crbug.com/178005
+  #'gpu_unittests',
   'jingle_unittests',
   'media_unittests',
   'net_unittests',

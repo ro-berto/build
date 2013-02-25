@@ -46,10 +46,12 @@ sharded_tests = [
   'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',
-  'content_unittests',
+  # http://crbug.com/178006
+  #'content_unittests',
   'crypto_unittests',
   'device_unittests',
-  'gpu_unittests',
+  # http://crbug.com/178005
+  #'gpu_unittests',
   'jingle_unittests',
   'media_unittests',
   'net_unittests',
@@ -59,7 +61,8 @@ sharded_tests = [
   'sync_integration_tests',
   'sync_unit_tests',
   'ui_unittests',
-  'unit_tests',
+  # http://crbug.com/177927
+  #'unit_tests',
   'views_unittests',
   'webkit_compositor_bindings_unittests',
 ]

@@ -30,13 +30,15 @@ sharded_tests = [
   'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',
-  'content_unittests',
+  # http://crbug.com/178006
+  #'content_unittests',
   'crypto_unittests',
   'device_unittests',
-  'gpu_unittests',
+  # http://crbug.com/178005
+  #'gpu_unittests',
   'jingle_unittests',
-  'net_unittests',
   'media_unittests',
+  'net_unittests',
   'ppapi_unittests',
   'printing_unittests',
   'remoting_unittests',
@@ -45,6 +47,8 @@ sharded_tests = [
   'ui_unittests',
   # unit_tests hangs on run_test_cases on OSX.
   # http://crbug.com/177925
+  # and they are slower
+  # http://crbug.com/177927
   #'unit_tests',
   'views_unittests',
   'webkit_compositor_bindings_unittests',
