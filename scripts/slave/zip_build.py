@@ -100,6 +100,25 @@ def GetRecentBuildsByModificationTime(zip_list):
   return ordered_asc_by_mtime_list[-10:]
 
 
+def GetRealBuildDirectory(build_dir, target, factory_properties):
+  """Return the build directory."""
+  if chromium_utils.IsWindows():
+    path_list = [build_dir, target]
+  elif chromium_utils.IsLinux():
+    path_list = [os.path.dirname(build_dir), 'out', target]
+  elif chromium_utils.IsMac():
+    is_make_or_ninja = (factory_properties.get('gclient_env', {})
+                        .get('GYP_GENERATORS') in ('ninja', 'make'))
+    if is_make_or_ninja:
+      path_list = [os.path.dirname(build_dir), 'out', target]
+    else:
+      path_list = [os.path.dirname(build_dir), 'xcodebuild', target]
+  else:
+    raise NotImplementedError('%s is not supported.' % sys.platform)
+
+  return os.path.abspath(os.path.join(*path_list))
+
+
 def FileRegexWhitelist(options):
   if chromium_utils.IsWindows() and options.target is 'Release':
     # Special case for chrome. Add back all the chrome*.pdb files to the list.
@@ -294,13 +313,8 @@ class PathMatcher(object):
 
 def Archive(options):
   src_dir = os.path.abspath(options.src_dir)
-  make_or_ninja = (
-      options.factory_properties.get('gclient_env', {}).get('GYP_GENERATORS') in
-      ('make', 'ninja')
-  )
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
-      options.build_dir, use_out=make_or_ninja)
-  build_dir = os.path.abspath(os.path.join(build_dir, options.target))
+  build_dir = GetRealBuildDirectory(options.build_dir, options.target,
+                                    options.factory_properties)
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
@@ -351,7 +365,7 @@ def main(argv):
                            help='build target to archive (Debug or Release)')
   option_parser.add_option('--src-dir', default='src',
                            help='path to the top-level sources directory')
-  option_parser.add_option('--build-dir', default='src/build',
+  option_parser.add_option('--build-dir', default='chrome',
                            help=('path to main build directory (the parent of '
                                  'the Release or Debug directory)'))
   option_parser.add_option('--exclude-files', default='',
