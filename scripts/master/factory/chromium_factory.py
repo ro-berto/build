@@ -1016,6 +1016,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Setup factory.
     factory_properties = factory_properties or {}
     options = options or {}
+    if self._target_os:
+      factory_properties['target_os'] = self._target_os
 
     # Ensure that component is set correctly in the gyp defines.
     ForceComponent(target, project, factory_properties)

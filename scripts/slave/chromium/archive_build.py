@@ -119,7 +119,7 @@ class StagerBase(object):
         self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
                                       'chromeos')
       # Or, we might have built for Android.
-      elif options.factory_properties.get('android', None):
+      elif options.factory_properties.get('target_os') == 'android':
         self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
                                       'android')
       else:
