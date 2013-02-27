@@ -98,12 +98,23 @@ def RunTests(input_api, output_api):
   return out
 
 
-def CheckChangeOnUpload(input_api, output_api):
-  return CommonChecks(input_api, output_api)
+def BuildInternalCheck(output, input_api, output_api):
+  if any(isinstance(item, output_api.PresubmitError) for item in output):
+    b_i = input_api.os_path.join('..', 'build_internal')
+    if input_api.os_path.exists(b_i):
+      output.append(output_api.PresubmitNotifyResult(
+          'You have a build_internal checkout. '
+          'Updating it may resolve some issues.'))
 
+
+def CheckChangeOnUpload(input_api, output_api):
+  output = CommonChecks(input_api, output_api)
+  BuildInternalCheck(output, input_api, output_api)
+  return output
 
 def CheckChangeOnCommit(input_api, output_api):
   output = []
   output.extend(CommonChecks(input_api, output_api))
   output.extend(RunTests(input_api, output_api))
+  BuildInternalCheck(output, input_api, output_api)
   return output
