@@ -41,11 +41,20 @@ USE_LAUNCHD := \
           [ "$$(pwd -P)" = "/b/build/masters/$(MASTERPATH)" ] && \
           echo 1)
 
+printstep:
+	@echo "**  `date`	make $(MAKECMDGOALS)" >> actions.log
+
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
-start: bootstrap
+start: printstep bootstrap
 else
-start:
+start: printstep
 endif
+	@if [ ! -f "$(GCLIENT)" ]; then \
+	    echo "gclient not found.  Add depot_tools to PATH or use DEPS checkout."; \
+	    exit 2; \
+	fi
+	$(GCLIENT) revinfo -a >> actions.log || true
+	$(GCLIENT) diff >> actions.log || true
 ifneq ($(USE_LAUNCHD),1)
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 else
@@ -63,17 +72,17 @@ else
 	launchctl start org.chromium.buildbot.$(MASTERPATH)
 endif
 
-stop:
+stop: printstep
 ifneq ($(USE_LAUNCHD),1)
 	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
 else
 	launchctl stop org.chromium.buildbot.$(MASTERPATH)
 endif
 
-reconfig:
+reconfig: printstep
 	kill -HUP `cat twistd.pid`
 
-no-new-builds:
+no-new-builds: printstep
 	kill -USR1 `cat twistd.pid`
 
 log:
@@ -97,12 +106,12 @@ restart: stop wait start log
 restart-prof: stop wait start-prof log
 
 # This target is only known to work on 0.8.x masters.
-upgrade:
+upgrade: printstep
 	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || \
 	PYTHONPATH=$(PYTHONPATH) python buildbot upgrade-master .
 
 # This target is only known to be useful on 0.8.x masters.
-bootstrap:
+bootstrap: printstep
 	@[ -e '.dbconfig' ] || [ -e 'state.sqlite' ] || \
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/tools/state_create.py \
 	--restore --db='state.sqlite' --txt '../state-template.txt'

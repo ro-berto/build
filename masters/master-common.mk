@@ -14,6 +14,9 @@ SCRIPTS_DIR ?= $(TOPLEVEL_DIR)/scripts
 PUBLICCONFIG_DIR ?= $(TOPLEVEL_DIR)/site_config
 PRIVATECONFIG_DIR ?= $(TOPLEVEL_DIR)/../build_internal/site_config
 
+GCLIENT = $(shell which gclient || echo "$(TOPLEVEL_DIR)/../depot_tools/gclient")
+
+
 # Packages needed by buildbot8
 BUILDBOT8_DEPS :=               \
     buildbot_8_4p1              \
