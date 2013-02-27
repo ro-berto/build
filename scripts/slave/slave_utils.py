@@ -88,11 +88,11 @@ def SubversionLastChangedRevision(wc_dir):
     return 0
 
 
-def GetZipFileNames(build_properties, build_dir, webkit_dir=None,
+def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
                     extract=False):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
-  chromium_revision = SubversionRevision(os.path.dirname(build_dir))
+  chromium_revision = SubversionRevision(src_dir)
   if 'try' in build_properties.get('mastername', ''):
     if extract:
       if not build_properties.get('parent_buildnumber'):

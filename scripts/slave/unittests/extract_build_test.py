@@ -27,8 +27,9 @@ class ExtractBuildTest(unittest.TestCase):
 
     # version_suffix is not tested, since it would just be copying of
     # implementation details from extract_build.py into this test.
+    src_dir = os.path.dirname(_ABS_BUILD_DIR)
     base_filename, _version_suffix = slave_utils.GetZipFileNames(
-        options.build_properties, _ABS_BUILD_DIR, None, extract=True)
+        options.build_properties, src_dir, None, extract=True)
 
     gs_url_without_slash = 'gs://foo/Win'
     gs_url_with_slash = 'gs://foo/Win/'

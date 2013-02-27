@@ -71,8 +71,9 @@ def GetBuildUrl(abs_build_dir, options):
   abs_webkit_dir = None
   if options.webkit_dir:
     abs_webkit_dir = os.path.join(abs_build_dir, '..', options.webkit_dir)
+  src_dir = os.path.dirname(abs_build_dir)
   base_filename, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, abs_build_dir, abs_webkit_dir, extract=True)
+      options.build_properties, src_dir, abs_webkit_dir, extract=True)
 
   replace_dict = dict(options.build_properties)
   # If builddir isn't specified, assume buildbot used the builder name
