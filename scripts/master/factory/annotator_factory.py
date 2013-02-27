@@ -9,7 +9,7 @@ Specifically creates a basic factory that will execute an arbirary annotator
 script.
 """
 
-from master.factory import commands
+from master.factory import annotator_commands
 from master.factory.build_factory import BuildFactory
 
 
@@ -22,5 +22,6 @@ class AnnotatorFactory(object):
   def BaseFactory(self, build_properties=None, factory_properties=None):
     self._factory_properties = factory_properties
     factory = BuildFactory(build_properties)
-    cmd_obj = commands.AnnotatorCommands(factory)
+    cmd_obj = annotator_commands.AnnotatorCommands(factory)
     cmd_obj.AddAnnotatedScript(factory_properties)
+    return factory
