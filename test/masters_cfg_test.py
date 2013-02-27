@@ -11,6 +11,8 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 
+import masters_util
+
 from common import chromium_utils
 from common import master_cfg_utils
 
@@ -47,36 +49,19 @@ def TestMaster(mastername):
 def main():
   masters = master_cfg_utils.GetMasters(include_internal=False)
   failures = []
-  for mastername, path in masters:
-    if mastername in BLACKLIST:
-      print 'Skipping %s, fix and enable in masters_cfg_test.py!' % mastername
-      continue
+  bot_pwd_path = os.path.join(BASE_DIR, 'site_config', '.bot_password')
+  with masters_util.temporary_password(bot_pwd_path):
+    for mastername, path in masters:
+      if mastername in BLACKLIST:
+        print 'Skipping %s, fix and enable in masters_cfg_test.py!' % mastername
+        continue
 
-    print 'Parsing', mastername
-
-    # TODO(xusydoc): Unify this code with masters_test.py.
-    bot_pwd_path = os.path.join(
-        BASE_DIR, 'site_config', '.bot_password')
-    need_bot_pwd = not os.path.isfile(bot_pwd_path)
-    try:
-      if need_bot_pwd:
-        with open(bot_pwd_path, 'w') as f:
-          f.write('foo\n')
+      print 'Parsing', mastername
 
       apply_issue_pwd_path = os.path.join(path, '.apply_issue_password')
-      need_apply_issue_pwd = not os.path.isfile(apply_issue_pwd_path)
-      try:
-        if need_apply_issue_pwd:
-          with open(apply_issue_pwd_path, 'w') as f:
-            f.write('foo\n')
+      with masters_util.temporary_password(apply_issue_pwd_path):
         if TestMaster(mastername):
           failures.append((mastername, path))
-      finally:
-        if need_apply_issue_pwd:
-          os.remove(apply_issue_pwd_path)
-    finally:
-      if need_bot_pwd:
-        os.remove(bot_pwd_path)
 
   if failures:
     print 'The following master.cfgs did not load:'

@@ -116,37 +116,22 @@ def real_main(base_dir, expected):
 
   bot_pwd_path = os.path.join(
       base_dir, '..', 'build', 'site_config', '.bot_password')
-  need_bot_pwd = not os.path.isfile(bot_pwd_path)
-  try:
-    if need_bot_pwd:
-      with open(bot_pwd_path, 'w') as f:
-        f.write('foo\n')
+  with masters_util.temporary_password(bot_pwd_path):
     for master in masters[:]:
       if not master in expected:
         continue
-
+      masters.remove(master)
+      classname = expected.pop(master)
+      if not classname:
+        skipped += 1
+        continue
+      master_class = getattr(master_classes, classname)
       apply_issue_pwd_path = os.path.join(base, master, '.apply_issue_password')
-      need_apply_issue_pwd = not os.path.isfile(apply_issue_pwd_path)
-      try:
-        if need_apply_issue_pwd:
-          with open(apply_issue_pwd_path, 'w') as f:
-            f.write('foo\n')
-        masters.remove(master)
-        classname = expected.pop(master)
-        if not classname:
-          skipped += 1
-          continue
-        master_class = getattr(master_classes, classname)
+      with masters_util.temporary_password(apply_issue_pwd_path):
         if not test_master(master, master_class, os.path.join(base, master)):
           failed.add(master)
         else:
           success += 1
-      finally:
-        if need_apply_issue_pwd:
-          os.remove(apply_issue_pwd_path)
-  finally:
-    if need_bot_pwd:
-      os.remove(bot_pwd_path)
 
   if failed:
     print >> sys.stderr, (

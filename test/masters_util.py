@@ -14,6 +14,7 @@ import sys
 import time
 import urllib2
 import httplib
+import contextlib
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
@@ -162,3 +163,27 @@ def check_for_no_masters():
   logging.error('Found unexpected master %s on port %d' %
                 (result[1], result[0]))
   return False
+
+
+@contextlib.contextmanager
+def temporary_password(path, password='foo'):
+  """Given path to some password file will ensure it exists, creating it if
+  necessary.
+
+  Should be used as a context manager:
+    with temporary_password(password_path):
+      ...
+
+  Removes created temp files when done.
+  """
+  # Already there? Just execute the block.
+  if os.path.isfile(path):
+    yield
+    return
+  # Make temp file, execute the block, delete temp file.
+  with open(path, 'w') as f:
+    f.write(password + '\n')
+  try:
+    yield
+  finally:
+    os.remove(path)
