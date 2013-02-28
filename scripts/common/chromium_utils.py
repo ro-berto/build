@@ -991,6 +991,25 @@ def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
 
 
+def ParsePythonCfg(cfg_filepath):
+  """Retrieves data from a python config file."""
+  if not os.path.exists(cfg_filepath):
+    return None
+  base_path = os.path.dirname(os.path.abspath(cfg_filepath))
+  old_sys_path = sys.path
+  sys.path = sys.path + [base_path]
+  old_path = os.getcwd()
+  try:
+    os.chdir(base_path)
+    local_vars = {}
+    execfile(os.path.join(cfg_filepath), local_vars)
+    del local_vars['__builtins__']
+    return local_vars
+  finally:
+    os.chdir(old_path)
+    sys.path = old_sys_path
+
+
 def RunSlavesCfg(slaves_cfg):
   """Runs slaves.cfg in a consistent way."""
   if not os.path.exists(slaves_cfg):
