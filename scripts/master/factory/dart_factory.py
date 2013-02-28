@@ -117,7 +117,7 @@ class DartFactory(gclient_factory.GClientFactory):
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, build_dir, target_platform=None, trunk=False,
-               libv2_io = False, target_os=None):
+               target_os=None):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
@@ -125,9 +125,6 @@ class DartFactory(gclient_factory.GClientFactory):
     # If this is trunk use the deps file from there instead.
     if trunk:
       dart_url = config.Master.dart_trunk + deps_file
-    if libv2_io:
-      deps_url = 'https://dart.googlecode.com/svn/experimental/lib_v2_io'
-      dart_url =  deps_url + deps_file
     custom_deps_list = []
 
     if config.Master.trunk_internal_url:
@@ -253,10 +250,8 @@ class DartUtils(object):
     'vm-linux': DartFactory('dart', 'vm-linux'),
     'vm-win32': DartFactory('dart', 'vm-win32'),
     'dartc-linux': DartFactory('dart', 'dartc-linux'),
-    'dartc-linux-libv2_io': DartFactory('dart', 'dartc-linux', libv2_io=True),
     'dart_android': DartFactory('dart', 'dart_android', target_os='android'),
     'dart_client': DartFactory('dart', 'dart_client'),
-    'dart_client_libv2_io': DartFactory('dart', 'dart_client', libv2_io=True),
     'dart-editor': DartFactory('dart', 'dart-editor'),
     'frog': DartFactory('dart', 'frog'),
     'frogsh': DartFactory('dart', 'frogsh'),
@@ -265,7 +260,6 @@ class DartUtils(object):
     'vm-linux-trunk': DartFactory('dart', 'vm-linux', trunk=True),
     'vm-win32-trunk': DartFactory('dart', 'vm-win32', trunk=True),
     'dart-editor-trunk': DartFactory('dart', 'dart-editor', trunk=True),
-    'vm-win32-libv2_io': DartFactory('dart', 'dart-editor', libv2_io=True),
   }
   factory_base_dartium = {
     'dartium-mac-full' : F_MAC_CH(
@@ -396,8 +390,7 @@ class DartUtils(object):
     def setup_factory(v, base, platform):
       env = v.get('env', {})
       if platform in ['dart_client', 'dart-editor', 'dart_android',
-                      'dart_client-trunk', 'dart-editor-trunk',
-                      'dart_client_libv2_io']:
+                      'dart_client-trunk', 'dart-editor-trunk']:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
