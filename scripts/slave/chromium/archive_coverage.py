@@ -37,21 +37,18 @@ class ArchiveCoverage(object):
       options: Command-line option object from optparse.
     """
     # Do platform-specific config
+    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+    self.from_dir = os.path.join(build_dir, options.target,
+                                'coverage_croc_html')
     if sys.platform in ('win32', 'cygwin'):
       self.is_posix = False
-      self.from_dir = os.path.join(options.build_dir, options.target,
-                                   'coverage_croc_html')
 
     elif sys.platform.startswith('darwin'):
       self.is_posix = True
-      self.from_dir = os.path.join(os.path.dirname(options.build_dir),
-                                   'xcodebuild', options.target,
-                                   'coverage_croc_html')
 
     elif sys.platform.startswith('linux'):
       self.is_posix = True
-      self.from_dir = os.path.join(os.path.dirname(options.build_dir),
-                                   'out', options.target, # make, not scons
+      self.from_dir = os.path.join(build_dir, options.target,
                                    options.archive_folder,
                                    'coverage_croc_html')
 
