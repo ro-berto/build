@@ -20,8 +20,14 @@ from master import master_utils
 
 import config
 
+current_milestone = '0.3'
+
+milestone_path = '/branches/' + current_milestone
+dart_milestone_url = config.Master.dart_url + milestone_path
+
 dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
+dartium_milestone_url = dart_milestone_url + '/deps/dartium.deps'
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
@@ -38,11 +44,18 @@ F_WIN_CH = None
 F_LINUX_CH_TRUNK = None
 F_MAC_CH_TRUNK = None
 F_WIN_CH_TRUNK = None
+F_LINUX_CH_MILESTONE = None
+F_MAC_CH_MILESTONE = None
+F_WIN_CH_MILESTONE = None
+
 
 def setup_chromium_factories():
   gclient_dartium = gclient_factory.GClientSolution(dartium_url, 'dartium.deps')
   gclient_dartium_trunk = gclient_factory.GClientSolution(dartium_trunk_url,
                                                           'dartium.deps')
+  gclient_dartium_milestone = gclient_factory.GClientSolution(
+      dartium_milestone_url, 'dartium.deps')
+
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
       chromium_factory.ChromiumFactory.__init__(self,
@@ -67,6 +80,13 @@ def setup_chromium_factories():
   m_win_ch_trunk = DartiumFactory()
   m_win_ch_trunk.add_solution(gclient_dartium_trunk)
 
+  m_linux_ch_milestone = DartiumFactory('linux2')
+  m_linux_ch_milestone.add_solution(gclient_dartium_milestone)
+  m_mac_ch_milestone = DartiumFactory('darwin')
+  m_mac_ch_milestone.add_solution(gclient_dartium_milestone)
+  m_win_ch_milestone = DartiumFactory()
+  m_win_ch_milestone.add_solution(gclient_dartium_milestone)
+
   trunk_internal_url_src = config.Master.trunk_internal_url_src
   if trunk_internal_url_src:
     gclient_trunk_internal = gclient_factory.GClientSolution(
@@ -77,12 +97,17 @@ def setup_chromium_factories():
   # Some shortcut to simplify the code in the master.cfg files
   global F_LINUX_CH, F_MAC_CH, F_WIN_CH
   global F_LINUX_CH_TRUNK, F_MAC_CH_TRUNK, F_WIN_CH_TRUNK
+  global F_LINUX_CH_MILESTONE, F_MAC_CH_MILESTONE, F_WIN_CH_MILESTONE
   F_LINUX_CH = m_linux_ch.ChromiumFactory
   F_MAC_CH = m_mac_ch.ChromiumFactory
   F_WIN_CH = m_win_ch.ChromiumFactory
   F_LINUX_CH_TRUNK = m_linux_ch_trunk.ChromiumFactory
   F_MAC_CH_TRUNK = m_mac_ch_trunk.ChromiumFactory
   F_WIN_CH_TRUNK = m_win_ch_trunk.ChromiumFactory
+  F_LINUX_CH_MILESTONE = m_linux_ch_milestone.ChromiumFactory
+  F_MAC_CH_MILESTONE = m_mac_ch_milestone.ChromiumFactory
+  F_WIN_CH_MILESTONE = m_win_ch_milestone.ChromiumFactory
+
 setup_chromium_factories()
 
 def AddGeneralGClientProperties(factory_properties=None):
@@ -117,7 +142,7 @@ class DartFactory(gclient_factory.GClientFactory):
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, build_dir, target_platform=None, trunk=False,
-               target_os=None):
+               milestone=False, target_os=None):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
@@ -125,6 +150,9 @@ class DartFactory(gclient_factory.GClientFactory):
     # If this is trunk use the deps file from there instead.
     if trunk:
       dart_url = config.Master.dart_trunk + deps_file
+    if milestone:
+      dart_url = dart_milestone_url + deps_file
+
     custom_deps_list = []
 
     if config.Master.trunk_internal_url:
@@ -260,6 +288,11 @@ class DartUtils(object):
     'vm-linux-trunk': DartFactory('dart', 'vm-linux', trunk=True),
     'vm-win32-trunk': DartFactory('dart', 'vm-win32', trunk=True),
     'dart-editor-trunk': DartFactory('dart', 'dart-editor', trunk=True),
+    'vm-mac-milestone': DartFactory('dart', 'vm-mac', milestone=True),
+    'vm-linux-milestone': DartFactory('dart', 'vm-linux', milestone=True),
+    'vm-win32-milestone': DartFactory('dart', 'vm-win32', milestone=True),
+    'dart-editor-milestone': DartFactory('dart', 'dart-editor', milestone=True),
+
   }
   factory_base_dartium = {
     'dartium-mac-full' : F_MAC_CH(
@@ -341,7 +374,31 @@ class DartUtils(object):
         options=linux_options,
         tests=['annotated_steps'],
         factory_properties=linux32_factory_properties),
-    'release-lucid64-trunk' : F_LINUX_CH(
+    'dartium-lucid64-full-milestone' : F_LINUX_CH_MILESTONE(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-win-full-milestone' : F_WIN_CH_MILESTONE(
+        target='Release',
+        project=win_project,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-mac-full-milestone' : F_MAC_CH_MILESTONE(
+        target='Release',
+        options=mac_options,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-lucid32-full-milestone' : F_LINUX_CH_MILESTONE(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux32_factory_properties),
+     'release-lucid64-trunk' : F_LINUX_CH(
         target='Release',
         clobber=True,
         options=linux_options,
@@ -390,7 +447,8 @@ class DartUtils(object):
     def setup_factory(v, base, platform):
       env = v.get('env', {})
       if platform in ['dart_client', 'dart-editor', 'dart_android',
-                      'dart_client-trunk', 'dart-editor-trunk']:
+                      'dart_client-trunk', 'dart-editor-trunk',
+                      'dart_client-milestone', 'dart-editor-milestone']:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
