@@ -19,6 +19,8 @@ import stat
 import subprocess
 import sys
 
+from common import chromium_utils
+from slave import slave_utils
 
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
@@ -30,13 +32,10 @@ def main_mac(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  xcodebuild_dir = os.path.join(os.path.dirname(options.build_dir),
-                                'xcodebuild', options.target)
-  out_dir = os.path.join(os.path.dirname(options.build_dir),
-                         'out', options.target)
-  target_dir = xcodebuild_dir
-  if not os.path.isdir(target_dir) and os.path.isdir(out_dir):
-    target_dir = out_dir
+  out_dir_path = os.path.join(os.path.dirname(options.build_dir), 'out')
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=os.path.exists(out_dir_path))
+  target_dir = os.path.join(build_dir, options.target)
 
   result = 0
   # Work with either build type.
@@ -120,7 +119,7 @@ RESULT chrome-si: initializers= %(initializers)d files
 """) % (
         print_dict)
       # Found a match, don't check the other base_names.
-      return result
+      return result or (slave_utils.WARNING_EXIT_CODE if bad else 0)
   # If no base_names matched, fail script.
   return 66
 
@@ -220,8 +219,8 @@ def main_linux(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            'sconsbuild', options.target)
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  target_dir = os.path.join(build_dir, options.target)
 
   binaries = [
       'chrome',
@@ -269,7 +268,7 @@ def main_linux(options, args):
     print 'RESULT totals-%s: %s= %s %s' % (identifier, identifier,
                                            value, units)
 
-  return result
+  return result or (slave_utils.WARNING_EXIT_CODE if bad else 0)
 
 
 def main_android(options, args):
