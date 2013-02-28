@@ -20,7 +20,6 @@ import subprocess
 import sys
 
 from common import chromium_utils
-from slave import slave_utils
 
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
