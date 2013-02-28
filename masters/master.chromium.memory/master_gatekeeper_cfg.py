@@ -40,9 +40,7 @@ categories_steps = {
     'unit_tests',
    ],
   'compile': ['compile'],
-  # Usually we don't close based on archive failures, but ASAN bots
-  # detect memory failures in the logs during the Archive stage.
-  'crosasantest': ['Archive'],
+  'crosasantest': ['VMTest'],
 }
 
 exclusions = {
