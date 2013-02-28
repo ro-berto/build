@@ -648,9 +648,12 @@ class GClient(sourcebase):
     return sourcebase.maybeDoVCRetry(self, res)
 
 
-class ApplyIssue(commandbase):  # disable=W0654
+class ApplyIssue(commandbase):
   """Command to run apple_issue.py on the checkbout."""
 
+  # pylint doesn't follow chromium_utils.GetParentClass, so it thinks parent's
+  # __init__ isn't called.
+  # pylint: disable=W0231
   def __init__(self, *args, **kwargs):
     log.msg('ApplyIssue.__init__')
     self.root = None
