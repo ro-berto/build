@@ -648,7 +648,7 @@ class GClient(sourcebase):
     return sourcebase.maybeDoVCRetry(self, res)
 
 
-class ApplyIssue(commandbase):
+class ApplyIssue(commandbase):  # disable=W0654
   """Command to run apple_issue.py on the checkbout."""
 
   def __init__(self, *args, **kwargs):
