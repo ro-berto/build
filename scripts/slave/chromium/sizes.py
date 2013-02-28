@@ -33,7 +33,7 @@ def main_mac(options, args):
   or zero on success.
   """
   out_dir_path = os.path.join(os.path.dirname(options.build_dir), 'out')
-  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
       options.build_dir, use_out=os.path.exists(out_dir_path))
   target_dir = os.path.join(build_dir, options.target)
 
@@ -119,7 +119,7 @@ RESULT chrome-si: initializers= %(initializers)d files
 """) % (
         print_dict)
       # Found a match, don't check the other base_names.
-      return result or (slave_utils.WARNING_EXIT_CODE if bad else 0)
+      return result
   # If no base_names matched, fail script.
   return 66
 
@@ -219,7 +219,7 @@ def main_linux(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
   target_dir = os.path.join(build_dir, options.target)
 
   binaries = [
@@ -268,7 +268,7 @@ def main_linux(options, args):
     print 'RESULT totals-%s: %s= %s %s' % (identifier, identifier,
                                            value, units)
 
-  return result or (slave_utils.WARNING_EXIT_CODE if bad else 0)
+  return result
 
 
 def main_android(options, args):
