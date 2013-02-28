@@ -1163,7 +1163,7 @@ def ConvertBuildDirToLegacy(build_dir, target_platform=None, use_out=False):
   target_platform = target_platform or sys.platform
   legacy_paths = {
     'darwin': 'xcodebuild',
-    'linux': 'out',
+    'linux': 'sconsbuild',
   }
   bad = False
 
