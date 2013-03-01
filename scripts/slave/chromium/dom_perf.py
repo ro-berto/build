@@ -81,18 +81,12 @@ def dom_perf(options, args):
   else:
     test_exe_name = 'performance_ui_tests'
 
-  if chromium_utils.IsMac():
-    is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
-        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
-    if is_make_or_ninja:
-      build_dir = os.path.join(os.path.dirname(build_dir), 'out')
-    else:
-      build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
-  elif chromium_utils.IsLinux() and options.build_dir == 'src/build':
-    print('WARNING: Passed "src/build" as --build-dir option. '
-        'This is almost certainly incorrect.')
-    print 'Assuming you meant src/sconsbuild'
-    build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
+  is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
+                      .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+  options.build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=is_make_or_ninja)
+  warning = slave_utils.WARNING_EXIT_CODE if bad else 0
+
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)
   if not os.path.exists(test_exe_path):
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
@@ -166,7 +160,7 @@ def dom_perf(options, args):
     if chromium_utils.IsLinux():
       xvfb.StopVirtualX(options.target)
 
-  return result
+  return result or warning
 
 
 def main():
