@@ -409,27 +409,19 @@ def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
            (e.g. 'Debug' or 'Release-iphonesimulator').
        exe_name: the name of the executable file in the target directory.
   """
-  build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+  is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
+                      .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=is_make_or_ninja)
+  build_dir = os.path.normpath(os.path.abspath(build_dir))
   exe_path = os.path.join(build_dir, target_dir, exe_name)
   if not os.path.exists(exe_path):
-    pre = 'Unable to find %s\n' % exe_path
-
-    build_dir = os.path.dirname(build_dir)
-    outdir = 'xcodebuild'
-    is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
-                        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
-    if is_make_or_ninja:
-      outdir = 'out'
-
-    build_dir = os.path.join(build_dir, outdir)
-    exe_path = os.path.join(build_dir, target_dir, exe_name)
-    if not os.path.exists(exe_path):
-      msg = pre + 'Unable to find %s' % exe_path
-      if options.factory_properties.get('succeed_on_missing_exe', False):
-        print '%s missing but succeed_on_missing_exe used, exiting' % (
-            exe_path)
-        return 0
-      raise chromium_utils.PathNotFound(msg)
+    msg = 'Unable to find %s' % exe_path
+    if options.factory_properties.get('succeed_on_missing_exe', False):
+      print '%s missing but succeed_on_missing_exe used, exiting' % (
+          exe_path)
+      return 0
+    raise chromium_utils.PathNotFound(msg)
 
   return build_dir, exe_path
 
@@ -698,31 +690,10 @@ def main_linux(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  build_dir = os.path.normpath(os.path.abspath(build_dir))
   slave_name = slave_utils.SlaveBuildName(build_dir)
-  # If this is a sub-project build (i.e. there's a 'sconsbuild' in build_dir),
-  # look for the test binaries there, otherwise look for the top-level build
-  # output.
-  # This assumes we never pass a build_dir which might contain build output that
-  # we're not trying to test. This is currently a safe assumption since we don't
-  # have any builders that do both sub-project and top-level builds (only
-  # Modules builders do sub-project builds), so they shouldn't ever have both
-  # 'build_dir/sconsbuild' and 'build_dir/../sconsbuild'.
-  outdir = None
-  if os.path.exists(os.path.join(build_dir, 'sconsbuild')):
-    outdir = 'sconsbuild'
-  elif os.path.exists(os.path.join(build_dir, 'out')):
-    outdir = 'out'
-
-  if outdir:
-    bin_dir = os.path.join(build_dir, outdir, options.target)
-    src_dir = os.path.join(slave_utils.SlaveBaseDir(build_dir), 'build', 'src')
-    os.environ['CR_SOURCE_ROOT'] = src_dir
-  else:
-    if os.path.exists(os.path.join(build_dir, '..', 'sconsbuild')):
-      bin_dir = os.path.join(build_dir, '..', 'sconsbuild', options.target)
-    else:
-      bin_dir = os.path.join(build_dir, '..', 'out', options.target)
+  bin_dir = os.path.join(build_dir, options.target)
 
   # Figure out what we want for a special frame buffer directory.
   special_xvfb_dir = None
@@ -935,7 +906,7 @@ def main():
 
   option_parser.add_option('', '--target', default='Release',
                            help='build target (Debug or Release)')
-  option_parser.add_option('', '--build-dir', default='chrome',
+  option_parser.add_option('', '--build-dir',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
   option_parser.add_option('', '--enable-pageheap', action='store_true',
