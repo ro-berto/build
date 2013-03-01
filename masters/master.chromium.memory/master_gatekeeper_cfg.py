@@ -10,16 +10,13 @@ from master import master_utils
 # automatically.
 # Note: don't include 'update scripts' since we can't do much about it when
 # it's failing and the tree is still technically fine.
-# TODO(glider): browser_tests and content_browsertests timeouts have become
-# annoying since the number of bots increased. Disable them until the failure
-# rate drops.
 categories_steps = {
   '': ['update'],
   'testers': [
     'base_unittests',
-    #'browser_tests',
+    'browser_tests',
     'cacheinvalidation_unittests',
-    #'content_browsertests',
+    'content_browsertests',
     'content_unittests',
     'courgette_unittests',
     'crypto_unittests',
