@@ -25,7 +25,6 @@ def main():
     return chromium_utils.RunCommand(
         [sys.executable,
          '../../../scripts/slave/runtest.py',
-         '--build-dir', 'src/build',
          '--run-python-script',
          'src/chrome/test/chromedriver/run_buildbot_steps.py',
          '--revision',
