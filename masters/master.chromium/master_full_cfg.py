@@ -5,6 +5,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.Chromium
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -40,7 +44,7 @@ F('win_clobber', win().ChromiumFactory(
       'sizes',
     ],
     factory_properties={
-      'archive_build': True,
+      'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
@@ -48,7 +52,7 @@ F('win_clobber', win().ChromiumFactory(
       'expectations': True,
       'process_dumps': True,
       'start_crash_handler': True,
-      'generate_gtest_json': True,
+      'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES': 'test_isolation_mode=noop',
       },
@@ -68,13 +72,13 @@ F('mac_clobber', mac().ChromiumFactory(
     ],
     options=['--compiler=goma-clang'],
     factory_properties={
-      'archive_build': True,
+      'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
       'perf_id': 'chromium-rel-mac',
       'expectations': True,
-      'generate_gtest_json': True,
+      'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES': 'test_isolation_mode=noop',
       },
@@ -96,13 +100,13 @@ F('linux_clobber', linux().ChromiumFactory(
     ],
     options=['--compiler=goma'],
     factory_properties={
-      'archive_build': True,
+      'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
       'perf_id': 'chromium-rel-linux',
       'expectations': True,
-      'generate_gtest_json': True,
+      'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES': 'target_arch=ia32 test_isolation_mode=noop',
       },
@@ -118,11 +122,11 @@ F('linux64_clobber', linux().ChromiumFactory(
     ],
     options=['--compiler=goma', '--build-tool=ninja', 'all'],
     factory_properties={
-      'archive_build': True,
+      'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
-      'generate_gtest_json': True,
+      'generate_gtest_json': ActiveMaster.is_production_host,
       'perf_id': 'chromium-rel-linux-64',
       'expectations': True,
       'gclient_env': {
@@ -145,7 +149,7 @@ F('f_android_clobber', linux_android().ChromiumAnnotationFactory(
     ],
     factory_properties={
       'android_bot_id': 'main-clobber-rel',
-      'archive_build': True,
+      'archive_build': ActiveMaster.is_production_host,
       'gs_acl': 'public-read',
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'perf_id': 'android-release',
