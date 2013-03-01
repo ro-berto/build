@@ -87,6 +87,14 @@ def setup_chromium_factories():
   m_win_ch_milestone = DartiumFactory()
   m_win_ch_milestone.add_solution(gclient_dartium_milestone)
 
+  trunk_internal_url_src = config.Master.trunk_internal_url_src
+  if trunk_internal_url_src:
+    gclient_trunk_internal = gclient_factory.GClientSolution(
+        trunk_internal_url_src)
+    m_win_ch.add_solution(gclient_trunk_internal)
+    m_win_ch_trunk.add_solution(gclient_trunk_internal)
+    m_win_ch_milestone.add_solution(gclient_trunk_internal)
+
   # Some shortcut to simplify the code in the master.cfg files
   global F_LINUX_CH, F_MAC_CH, F_WIN_CH
   global F_LINUX_CH_TRUNK, F_MAC_CH_TRUNK, F_WIN_CH_TRUNK
