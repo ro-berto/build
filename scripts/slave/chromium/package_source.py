@@ -137,9 +137,8 @@ def main():
   revision = options.build_properties.get('got_revision', '')
   if revision == '':
     revision = 'NONE'
-  completed_filename = '%s-%s-%s.%s' % (
+  completed_filename = '%s-%s.%s' % (
       options.factory_properties.get('package_filename', FILENAME),
-      time.strftime('%s'),
       revision,
       EXT)
   partial_filename = '%s.partial' % completed_filename
