@@ -51,14 +51,11 @@ def ShouldPackageFile(filename, target):
 
 
 def archive(options, args):
+  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=chromium_utils.IsLinux())
+  build_dir = os.path.join(build_dir, options.target)
   src_dir = os.path.abspath(os.path.dirname(options.build_dir))
 
-  if chromium_utils.IsMac():
-    build_dir = os.path.join(src_dir, 'xcodebuild', options.target)
-  elif chromium_utils.IsLinux():
-    build_dir = os.path.join(src_dir, 'out', options.target)
-  else:
-    raise NotImplementedError('%s is not supported.' % sys.platform)
   staging_dir = slave_utils.GetStagingDir(src_dir)
   build_revision = slave_utils.SubversionRevision(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
