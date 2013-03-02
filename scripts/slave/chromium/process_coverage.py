@@ -17,6 +17,8 @@ import shutil
 import subprocess
 import sys
 
+from common import chromium_utils
+from slave import slave_utils
 
 def main_common(cov_file, cmdline):
   """Common main() routine.
@@ -52,9 +54,11 @@ def main_mac(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            'xcodebuild', options.target)
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  target_dir = os.path.join(build_dir, options.target)
   cov_file = os.path.join(target_dir, 'coverage.info')
+
+  bad_ret = slave_utils.WARNING_EXIT_CODE if bad else 0
 
   cmdline = [
       sys.executable,
@@ -67,7 +71,7 @@ def main_mac(options, args):
       '--html', os.path.join(target_dir, 'coverage_croc_html'),
       ]
 
-  return main_common(cov_file, cmdline)
+  return main_common(cov_file, cmdline) or bad_ret
 
 
 def main_linux(options, args):
@@ -78,8 +82,11 @@ def main_linux(options, args):
 
   Assumes make, not scons.
   """
-  target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            'out', options.target)
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  target_dir = os.path.join(build_dir, options.target)
+
+  bad_ret = slave_utils.WARNING_EXIT_CODE if bad else 0
+
   if os.path.exists(os.path.join(target_dir, 'total_coverage')):
     print 'total_coverage directory exists'
     total_cov_file = os.path.join(target_dir,
@@ -138,7 +145,7 @@ def main_linux(options, args):
     result = unittests_result
   if browsertests_result != 0:
     result = browsertests_result
-  return result
+  return result or bad_ret
 
 
 def main_win(options, args):
