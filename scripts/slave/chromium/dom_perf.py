@@ -75,7 +75,6 @@ def print_result(top, name, score_string, refbuild):
 def dom_perf(options, args):
   """Using the target build configuration, run the dom perf test."""
 
-  build_dir = os.path.abspath(options.build_dir)
   if chromium_utils.IsWindows():
     test_exe_name = 'performance_ui_tests.exe'
   else:
@@ -83,8 +82,9 @@ def dom_perf(options, args):
 
   is_make_or_ninja = (options.factory_properties.get("gclient_env", {})
                       .get('GYP_GENERATORS', '') in ('ninja', 'make'))
-  options.build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
       options.build_dir, use_out=is_make_or_ninja)
+  build_dir = os.path.abspath(options.build_dir)
   warning = slave_utils.WARNING_EXIT_CODE if bad else 0
 
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)
