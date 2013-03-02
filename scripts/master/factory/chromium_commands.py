@@ -735,16 +735,10 @@ class ChromiumCommands(commands.FactoryCommands):
     command_class = chromium_step.AnnotatedCommand
 
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
-    build_dir = os.path.join(self._build_dir, self._target)
-    if self._target_platform == 'darwin':  # Mac bins reside in src/xcodebuild
-      build_dir = os.path.join(os.path.dirname(self._build_dir), 'xcodebuild',
-                               self._target)
-    elif self._target_platform == 'linux2':  # Linux bins in src/sconsbuild
-      build_dir = os.path.join(os.path.dirname(self._build_dir), 'sconsbuild',
-                               self._target)
-    elif self._target_platform == 'win32':  # Windows binaries are in src/build
-      build_dir = os.path.join(os.path.dirname(self._build_dir), 'build',
-                               self._target)
+    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(self._build_dir,
+                                                          self._target_platform)
+    build_dir = os.path.join(build_dir, self._target)
+
     do_step_if = self.TestStepFilter
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
@@ -794,10 +788,9 @@ class ChromiumCommands(commands.FactoryCommands):
     ])
     command_class = chromium_step.AnnotatedCommand
 
-    build_dir = os.path.join(self._build_dir, self._target)
-    if self._target_platform == 'linux2':  # Linux bins in src/sconsbuild
-      build_dir = os.path.join(os.path.dirname(self._build_dir), 'sconsbuild',
-                               self._target)
+    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(self._build_dir,
+                                                          self._target_platform)
+    build_dir = os.path.join(build_dir, self._target)
 
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
