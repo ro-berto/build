@@ -84,7 +84,7 @@ def dom_perf(options, args):
                       .get('GYP_GENERATORS', '') in ('ninja', 'make'))
   build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
       options.build_dir, use_out=is_make_or_ninja)
-  build_dir = os.path.abspath(options.build_dir)
+  build_dir = os.path.abspath(build_dir)
   warning = slave_utils.WARNING_EXIT_CODE if bad else 0
 
   test_exe_path = os.path.join(build_dir, options.target, test_exe_name)
