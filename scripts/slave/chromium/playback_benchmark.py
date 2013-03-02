@@ -22,6 +22,7 @@ import tempfile
 import threading
 
 from common import chromium_utils
+from slave import slave_utils
 from slave import xvfb
 from slave.chromium import playback_benchmark_replay
 
@@ -45,14 +46,12 @@ def print_result(top, name, result, refbuild):
 
 
 def run_benchmark(options, use_refbuild, benchmark_results):
-  result = 0
-
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
   build_dir = os.path.abspath(options.build_dir)
+
+  result = slave_utils.WARNING_EXIT_CODE if bad else 0
+
   if not use_refbuild:
-    if chromium_utils.IsMac():
-      build_dir = os.path.join(os.path.dirname(build_dir), 'xcodebuild')
-    elif chromium_utils.IsLinux():
-      build_dir = os.path.join(os.path.dirname(build_dir), 'sconsbuild')
     build_dir = os.path.join(build_dir, options.target)
   else:
     build_dir = os.path.join(os.path.dirname(build_dir), 'chrome', 'tools',
