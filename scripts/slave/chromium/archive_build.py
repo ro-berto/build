@@ -105,14 +105,13 @@ class StagerBase(object):
     self._webkit_dir = os.path.join(self._src_dir, 'third_party', 'WebKit',
                                     'Source', 'WebCore')
     self._v8_dir = os.path.join(self._src_dir, 'v8')
-    # TODO: need to get the build *output* directory passed in instead so Linux
-    # and Mac don't have to walk up a directory to get to the right directory.
+
+    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+        options.build_dir, use_out=chromium_utils.IsLinux())
+    self._build_dir = os.path.join(build_dir, options.target)
     if chromium_utils.IsWindows():
-      self._build_dir = os.path.join(options.build_dir, options.target)
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
     elif chromium_utils.IsLinux():
-      self._build_dir = os.path.join(os.path.dirname(options.build_dir),
-                                     'out', options.target)
       # On Linux, we might have built for chromeos.  Archive the same.
       if (options.factory_properties.get('chromeos', None) or
           slave_utils.GypFlagIsOn(options, 'chromeos')):
@@ -126,8 +125,6 @@ class StagerBase(object):
         self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build',
                                       'linux')
     elif chromium_utils.IsMac():
-      self._build_dir = os.path.join(os.path.dirname(options.build_dir),
-                                     'xcodebuild', options.target)
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'mac')
     else:
       raise NotImplementedError(
