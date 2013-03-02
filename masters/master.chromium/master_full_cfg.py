@@ -159,5 +159,5 @@ F('f_android_clobber', linux_android().ChromiumAnnotationFactory(
     ))
 
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)
