@@ -167,6 +167,7 @@ processes = [
     'midlc.exe',
 
     # Things built by/for Chromium.
+    'app_list_unittests.exe',
     'base_unittests.exe',
     'cacheinvalidation_unittests.exe',
     'chrome.exe',
