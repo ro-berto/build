@@ -13,7 +13,7 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def chromiumos(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def chromiumos(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 defaults['category'] = '1linux'
 
