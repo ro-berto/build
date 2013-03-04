@@ -14,10 +14,10 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def linux():
-  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 def linux_tester():
   return chromium_factory.ChromiumFactory(
-      'src/build', 'linux2', nohooks_on_update=True)
+      'src/out', 'linux2', nohooks_on_update=True)
 
 # Tests that are single-machine shard-safe.
 sharded_tests = [
