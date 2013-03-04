@@ -142,6 +142,11 @@ class DartFactory(gclient_factory.GClientFactory):
                  config.Master.trunk_internal_url +
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
+  # gclient custom vars
+  CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
+  CUSTOM_VARS_CHROMIUM_URL = (
+      'chromium_url', config.Master.server_url + config.Master.repo_root)
+
   def __init__(self, build_dir, target_platform=None, trunk=False,
                milestone=False, target_os=None):
     solutions = []
@@ -160,10 +165,14 @@ class DartFactory(gclient_factory.GClientFactory):
       custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
       custom_deps_list.append(self.CUSTOM_TZ)
 
+    custom_vars_list = [self.CUSTOM_VARS_GOOGLECODE_URL,
+                        self.CUSTOM_VARS_CHROMIUM_URL]
+
     main = gclient_factory.GClientSolution(
         dart_url,
         needed_components=self.NEEDED_COMPONENTS,
-        custom_deps_list = custom_deps_list)
+        custom_deps_list = custom_deps_list,
+        custom_vars_list = custom_vars_list)
     solutions.append(main)
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
