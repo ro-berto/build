@@ -20,19 +20,15 @@ WHITELIST = ['build1-m6']
 def main():
   status = 0
   slaves = {}
-  for master in chromium_utils.ListMasters(cue='slaves.cfg'):
-    masterbase = os.path.basename(master)
-    master_slaves = {}
-    execfile(os.path.join(master, 'slaves.cfg'), master_slaves)
-    for slave in master_slaves.get('slaves', []):
-      hostname = slave.get('hostname', None)
-      if hostname and hostname not in WHITELIST:
-        masters = slaves.get(hostname, [])
-        masters.append(masterbase)
-        slaves[hostname] = masters
-        if len(masters) > 1:
-          print '%s duplicated in masters: %s' % (hostname, ' '.join(masters))
-          status = 1
+  for slave in chromium_utils.GetAllSlaves():
+    mastername = slave['mastername']
+    slavename = chromium_utils.EntryToSlaveName(slave)
+    if slavename and slave.get('hostname') not in WHITELIST:
+      slaves.setdefault(slavename, []).append(mastername)
+  for slavename, masters in slaves.iteritems():
+    if len(masters) > 1:
+      print '%s duplicated in masters: %s' % (slavename, ' '.join(masters))
+      status = 1
   return status
 
 if __name__ == '__main__':

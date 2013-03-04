@@ -13,28 +13,19 @@ from common import chromium_utils
 
 
 def main():
-  slaves = []
-  for master in chromium_utils.ListMasters(cue='slaves.cfg'):
-    masterbase = os.path.basename(master)
-    master_slaves = {}
-    execfile(os.path.join(master, 'slaves.cfg'), master_slaves)
-    for slave in master_slaves.get('slaves', []):
-      slave['master'] = masterbase
-    slaves.extend(master_slaves.get('slaves', []))
-  for slave in sorted(slaves, cmp=None, key=lambda x : x.get('hostname', '')):
-    slavename = slave.get('hostname')
-    if not slavename:
-      continue
-    master = slave.get('master', '?')
-    builder = slave.get('builder', '?')
-    if builder == []:
-      builder = '?'
-    osname = slave.get('os', '?')
-    if type(builder) is list:
-      for b in sorted(builder):
-        print '%-30s %-35s %-35s %-10s' % (slavename, master, b, osname)
-    else:
-      print '%-30s %-35s %-35s %-10s' % (slavename, master, builder, osname)
+  # remove slaves with blank or no hostname
+  slaves = filter(lambda x: x.get('hostname'), chromium_utils.GetAllSlaves())
+  slaves.sort(key=lambda x: (x.get('mastername'), x['hostname']))
+  for slave in slaves:
+    builder = slave.get('builder') or '?'
+    if type(builder) is not list:
+      builder = [builder]
+    for b in sorted(builder):
+      print '%-30s %-35s %-35s %-10s' % (
+          slave['hostname'],
+          slave.get('mastername', '?'),
+          b,
+          slave.get('os', '?'))
 
 
 if __name__ == '__main__':

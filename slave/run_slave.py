@@ -8,13 +8,18 @@
 
 import os
 import shutil
-import socket
 import subprocess
 import sys
 import time
 
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 needs_reboot = False
+
+# Temporarily add scripts to the path.  We do so in a more consistent
+# manner below, but cannot keep it here because of our recursive calls.
+sys.path.insert(0, os.path.join(os.path.dirname(SCRIPT_PATH), 'scripts'))
+from common import chromium_utils
+sys.path.pop(0)
 
 # By default, the slave will identify itself to the master by its hostname.
 # To override that, explicitly set a slavename here.
@@ -170,7 +175,6 @@ def HotPatchSlaveBuilder(is_testing):
         i for i in os.listdir(self.basedir)
         if os.path.isdir(os.path.join(self.basedir, i)))
     Log('Actual directories: %s' % actual_dirs)
-    from common import chromium_utils
     for d in actual_dirs:
       # Delete build.dead directories.
       possible_build_dead = os.path.join(self.basedir, d, 'build.dead')
@@ -197,19 +201,9 @@ def FixSubversionConfig():
   shutil.copyfile('config', dest)
 
 
-def GetActiveSlavename(config_bootstrap):
-  active_slavename = os.environ.get('TESTING_SLAVENAME', slavename)
-  if active_slavename:
-    config_bootstrap.Master.active_slavename = active_slavename
-  else:
-    config_bootstrap.Master.active_slavename = (
-        socket.getfqdn().split('.', 1)[0].lower())
-  return active_slavename
-
-
 def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
   master_name = os.environ.get(
-      'TESTING_MASTER', slave_bootstrap.GetActiveMaster(active_slavename))
+      'TESTING_MASTER', chromium_utils.GetActiveMaster(active_slavename))
   if not master_name:
     raise RuntimeError('*** Failed to detect the active master')
   slave_bootstrap.ImportMasterConfigs(master_name)
@@ -280,9 +274,10 @@ def main():
   sys.path = python_path + sys.path
   import slave.bootstrap
   import config_bootstrap
-  active_slavename = GetActiveSlavename(config_bootstrap)
-  active_master = GetActiveMaster(slave.bootstrap, config_bootstrap,
-                                  active_slavename)
+  active_slavename = chromium_utils.GetActiveSlavename()
+  config_bootstrap.Master.active_slavename = active_slavename
+  active_master = GetActiveMaster(
+      slave.bootstrap, config_bootstrap, active_slavename)
 
   bb_ver, tw_ver = GetThirdPartyVersions(active_master)
   python_path.append(os.path.join(build_dir, 'third_party', bb_ver))

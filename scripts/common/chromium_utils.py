@@ -11,6 +11,7 @@ import glob
 import math
 import os
 import shutil
+import socket
 import stat
 import string  # pylint: disable=W0402
 import subprocess
@@ -24,6 +25,10 @@ try:
   import json  # pylint: disable=F0401
 except ImportError:
   import simplejson as json
+
+
+BUILD_DIR = os.path.realpath(os.path.join(
+    os.path.dirname(__file__), os.pardir, os.pardir))
 
 
 # Local errors.
@@ -979,16 +984,51 @@ def SshCopyTree(srctree, host, dst):
 def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   """Returns all the masters found."""
   # Look for "internal" masters first.
-  path_internal = os.path.join(os.path.dirname(__file__), '..', '..', '..',
-      'build_internal', 'masters/*/' + cue)
-  path = os.path.join(os.path.dirname(__file__), '..', '..',
-      'masters/*/' + cue)
+  path_internal = os.path.join(
+      BUILD_DIR, os.pardir, 'build_internal', 'masters/*/' + cue)
+  path = os.path.join(BUILD_DIR, 'masters/*/' + cue)
   filenames = []
   if include_public:
     filenames += glob.glob(path)
   if include_internal:
     filenames += glob.glob(path_internal)
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
+
+
+def GetAllSlaves():
+  """Return all slave objects from masters."""
+  slaves = []
+  for master in ListMasters(cue='slaves.cfg'):
+    cur_slaves = RunSlavesCfg(os.path.join(master, 'slaves.cfg'))
+    for slave in cur_slaves:
+      slave['mastername'] = os.path.basename(master)
+    slaves.extend(cur_slaves)
+  return slaves
+
+
+def GetActiveSlavename():
+  testing_slavename = os.getenv('TESTING_SLAVENAME')
+  if testing_slavename:
+    return testing_slavename
+  return socket.getfqdn().split('.', 1)[0].lower()
+
+
+def EntryToSlaveName(entry):
+  """Produces slave name from the slaves config dict."""
+  return entry.get('slavename') or entry.get('hostname')
+
+
+def GetActiveMaster(slavename=None):
+  """Parses all the slaves.cfg and returns the name of the active master
+  determined by the hostname. Returns None otherwise.
+
+  It will be matched against *both* the 'slavename' and 'hostname' fields
+  in slaves.cfg.
+  """
+  slavename = slavename or GetActiveSlavename()
+  for slave in GetAllSlaves():
+    if slavename == EntryToSlaveName(slave):
+      return slave['master']
 
 
 def ParsePythonCfg(cfg_filepath):
@@ -998,7 +1038,7 @@ def ParsePythonCfg(cfg_filepath):
   base_path = os.path.dirname(os.path.abspath(cfg_filepath))
   old_sys_path = sys.path
   sys.path = sys.path + [base_path]
-  old_path = os.getcwd()
+  old_cwd = os.getcwd()
   try:
     os.chdir(base_path)
     local_vars = {}
@@ -1006,28 +1046,14 @@ def ParsePythonCfg(cfg_filepath):
     del local_vars['__builtins__']
     return local_vars
   finally:
-    os.chdir(old_path)
+    os.chdir(old_cwd)
     sys.path = old_sys_path
 
 
 def RunSlavesCfg(slaves_cfg):
   """Runs slaves.cfg in a consistent way."""
-  if not os.path.exists(slaves_cfg):
-    return []
-  slaves_path = os.path.dirname(os.path.abspath(slaves_cfg))
-  old_sys_path = sys.path
-  sys.path = sys.path + [slaves_path]
-  try:
-    old_path = os.getcwd()
-    try:
-      os.chdir(slaves_path)
-      local_vars = {}
-      execfile(os.path.join(slaves_cfg), local_vars)
-      return local_vars['slaves']
-    finally:
-      os.chdir(old_path)
-  finally:
-    sys.path = old_sys_path
+  slave_config = ParsePythonCfg(slaves_cfg) or {}
+  return slave_config.get('slaves', [])
 
 
 def convert_json(option, opt, value, parser):
@@ -1080,7 +1106,6 @@ def GetCBuildbotConfigs(chromite_path=None):
   except ImportError:
     # To get around CQ pylint failures, because CQ doesn't check out chromite.
     # TODO(maruel): Remove this try block when this issue is resolved.
-    print 'cbuildbot_chromite not found!  Returning empty config dictionary.'
     return {}
 
 
@@ -1112,8 +1137,7 @@ def AddThirdPartyLibToPath(lib, override=False):
   Setting 'override' to true will place the directory in the beginning of
   sys.path, useful for overriding previously set packages.
   """
-  libpath = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                         '..', '..', 'third_party', lib))
+  libpath = os.path.abspath(os.path.join(BUILD_DIR, 'third_party', lib))
   if override:
     sys.path.insert(0, libpath)
   else:

@@ -22,7 +22,7 @@ if int(buildbot.version.split('.')[1]) == 7:
 else:
   import master.chromium_status_bb8 as chromium_status
 
-from master import slaves_list
+from common import chromium_utils
 import config
 
 
@@ -120,7 +120,7 @@ def VerifySetup(c, slaves):
 
   # Make sure every defined slave is used.
   for s in slaves.GetSlaves():
-    name = slaves_list.EntryToSlaveName(s)
+    name = chromium_utils.EntryToSlaveName(s)
     if not name in slaves_name:
       raise InvalidConfig('Slave %s defined in your slaves_list is not '
                           'referenced at all' % name)

@@ -15,7 +15,7 @@ import time
 
 from common import chromium_utils
 from slave.bootstrap import ImportMasterConfigs # pylint: disable=W0611
-from slave.bootstrap import GetActiveMaster # pylint: disable=W0611
+from common.chromium_utils import GetActiveMaster # pylint: disable=W0611
 import config
 from slave import xvfb
 
