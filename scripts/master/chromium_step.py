@@ -22,6 +22,7 @@ from buildbot.steps import shell
 from buildbot.steps import source
 from buildbot.process.buildstep import LoggingBuildStep
 
+from common import annotator
 from common import chromium_utils
 import config
 
@@ -856,17 +857,17 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
     # Appends a line to the log's array. When STEP_LOG_END is called,
     # that will finalize the log and call addCompleteLog().
-    m = re.match('^@@@STEP_LOG_LINE@(.*)@(.*)@@@', line)
+    m = annotator.Match.log_line(line)
     if m:
-      log_label = m.group(1)
-      log_line = m.group(2)
+      log_label = m[0]
+      log_line = m[1]
       current_logs = self.cursor['annotated_logs']
       current_logs[log_label] = current_logs.get(log_label, []) + [log_line]
 
     # Support: @@@STEP_LOG_END@<label>@<line>@@@ (finalizes log to step)
-    m = re.match('^@@@STEP_LOG_END@(.*)@@@', line)
+    m = annotator.Match.log_end(line)
     if m:
-      log_label = m.group(1)
+      log_label = m[0]
       current_logs = self.cursor['annotated_logs']
       log_text = '\n'.join(current_logs.get(log_label, []))
       addLogToStep(self.cursor['step'], log_label, log_text)
@@ -874,10 +875,10 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Support: @@@STEP_LOG_END_PERF@<label>@<line>@@@
     # (finalizes log to step, marks it as being a perf step
     # requiring logs to be stored on the master)
-    m = re.match('^@@@STEP_LOG_END_PERF@(.*)@(.*)@@@', line)
+    m = annotator.Match.log_end_perf(line)
     if m:
-      log_label = m.group(1)
-      perf_dashboard_name = m.group(2)
+      log_label = m[0]
+      perf_dashboard_name = m[1]
       current_logs = self.cursor['annotated_logs']
       log_text = '\n'.join(current_logs.get(log_label, [])) + '\n'
 
@@ -910,75 +911,70 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
     # Also support depreceated @@@link@<name>@<url>@@@
-    m = re.match('^@@@STEP_LINK@(.*)@(.*)@@@', line)
-    if not m:
-      m = re.match('^@@@link@(.*)@(.*)@@@', line)
+    m = annotator.Match.step_link(line)
     if m:
-      link_label = m.group(1)
-      link_url = m.group(2)
+      link_label = m[0]
+      link_url = m[1]
       self.addLinkToCursor(link_label, link_url)
     # Support: @@@STEP_STARTED@@@ (start a step at cursor)
-    if line.startswith('@@@STEP_STARTED@@@'):
+    if annotator.Match.step_started(line):
       self.startStep(self.cursor)
     # Support: @@@STEP_CLOSED@@@
-    if line.startswith('@@@STEP_CLOSED@@@'):
+    if annotator.Match.step_closed(line):
       self.finishCursor()
       self.cursor = self.sections[0]
     # Support: @@@STEP_WARNINGS@@@ (warn on a stage)
     # Also support deprecated @@@BUILD_WARNINGS@@@
-    if (line.startswith('@@@STEP_WARNINGS@@@') or
-        line.startswith('@@@BUILD_WARNINGS@@@')):
+    if annotator.Match.step_warnings(line):
       self.updateStepStatus(builder.WARNINGS)
     # Support: @@@STEP_FAILURE@@@ (fail a stage)
     # Also support deprecated @@@BUILD_FAILED@@@
-    if (line.startswith('@@@STEP_FAILURE@@@') or
-        line.startswith('@@@BUILD_FAILED@@@')):
+    if annotator.Match.step_failure(line):
       self.updateStepStatus(builder.FAILURE)
     # Support: @@@STEP_EXCEPTION@@@ (exception on a stage)
     # Also support deprecated @@@BUILD_FAILED@@@
-    if (line.startswith('@@@STEP_EXCEPTION@@@') or
-        line.startswith('@@@BUILD_EXCEPTION@@@')):
+    if annotator.Match.step_exception(line):
       self.updateStepStatus(builder.EXCEPTION)
     # Support: @@@HALT_ON_FAILURE@@@ (halt if a step fails immediately)
-    if line.startswith('@@@HALT_ON_FAILURE@@@'):
+    if annotator.Match.halt_on_failure(line):
       self.halt_on_failure = True
     # Support: @@@HONOR_ZERO_RETURN_CODE@@@ (succeed on 0 return, even if some
     #     steps have failed)
-    if line.startswith('@@@HONOR_ZERO_RETURN_CODE@@@'):
+    if annotator.Match.honor_zero_return_code(line):
       self.honor_zero_return_code = True
     # Support: @@@STEP_CLEAR@@@ (reset step description)
-    if line.startswith('@@@STEP_CLEAR@@@'):
+    if annotator.Match.step_clear(line):
       self.cursor['step_text'] = []
       self.updateCursorText()
     # Support: @@@STEP_SUMMARY_CLEAR@@@ (reset step summary)
-    if line.startswith('@@@STEP_SUMMARY_CLEAR@@@'):
+    if annotator.Match.step_summary_clear(line):
       self.cursor['step_summary_text'] = []
       self.updateCursorText()
     # Support: @@@STEP_TEXT@<msg>@@@
-    m = re.match('^@@@STEP_TEXT@(.*)@@@', line)
+    m = annotator.Match.step_text(line)
     if m:
-      self.cursor['step_text'].append(m.group(1))
+      self.cursor['step_text'].append(m[0])
       self.updateCursorText()
     # Support: @@@STEP_SUMMARY_TEXT@<msg>@@@
-    m = re.match('^@@@STEP_SUMMARY_TEXT@(.*)@@@', line)
+    m = annotator.Match.step_summary_text(line)
     if m:
-      self.cursor['step_summary_text'].append(m.group(1))
+      self.cursor['step_summary_text'].append(m[0])
       self.updateCursorText()
     # Support: @@@SEED_STEP <stepname>@@@ (seed a new section)
-    m = re.match('^@@@SEED_STEP (.*)@@@', line)
+    m = annotator.Match.seed_step(line)
     if m:
-      step_name = m.group(1)
+      step_name = m[0]
       # Add new one.
       self.addSection(step_name)
     # Support: @@@STEP_CURSOR <stepname>@@@ (set cursor to specified section)
-    m = re.match('^@@@STEP_CURSOR (.*)@@@', line)
+    m = annotator.Match.step_cursor(line)
     if m:
-      step_name = m.group(1)
+      step_name = m[0]
       self.cursor = self.lookupCursor(step_name)
     # Support: @@@BUILD_STEP <step_name>@@@ (start a new section)
-    m = re.match('^@@@BUILD_STEP (.*)@@@', line)
+    m = annotator.Match.build_step(line)
     if m:
-      step_name = m.group(1)
+      step_name = m[0]
       # Ignore duplicate consecutive step labels (for robustness).
       if step_name != self.sections[-1]['name']:
         # Finish up last section.
