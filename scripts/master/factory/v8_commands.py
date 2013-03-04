@@ -53,14 +53,15 @@ class V8Commands(commands.FactoryCommands):
     # Create smaller name for the functions and vars to siplify the code below.
     J = self.PathJoin
 
+    self._v8_test_tool = J(self._build_dir, 'tools')
+
     # Scripts in the v8 scripts dir.
     self._v8archive_tool = J(self._v8_script_dir, 'v8archive.py')
     self._v8testing_tool = J(self._v8_script_dir, 'v8testing.py')
 
   def GetV8TestingCommand(self):
     cmd = [self._python, self._v8testing_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
     if self._arch:
       cmd += ['--arch', self._arch]
     if self._shard_count > 1:
@@ -146,3 +147,12 @@ class V8Commands(commands.FactoryCommands):
     cmd = [self._python, self._v8archive_tool, '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'Archiving', cmd,
                  workdir='build/v8')
+
+  def AddMoveExtracted(self):
+    """Adds a step to download and extract a previously archived build."""
+    cmd = ('cp -R sconsbuild/release/* v8/.')
+    self._factory.addStep(shell.ShellCommand,
+                          description='Move extracted to bleeding',
+                          timeout=600,
+                          workdir='build',
+                          command=cmd)
