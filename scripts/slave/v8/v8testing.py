@@ -13,22 +13,23 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import slave_utils
 
 def main():
   if sys.platform in ('win32', 'cygwin'):
     default_platform = 'win'
-    outdir = 'build'
   elif sys.platform.startswith('darwin'):
     default_platform = 'mac'
-    outdir = 'xcodebuild'
   elif sys.platform == 'linux2':
     default_platform = 'linux'
-    outdir = 'out'
   else:
     default_platform = None
 
   option_parser = optparse.OptionParser()
 
+  option_parser.add_option('', '--build-dir',
+                           default=None,
+                           help='The directory of the build output target.')
   option_parser.add_option('', '--testname',
                            default=None,
                            help='The test to run'
@@ -64,6 +65,12 @@ def main():
   options, args = option_parser.parse_args()
   if args:
     option_parser.error('Unsupported arguments: %s' % args)
+
+  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=(sys.platform == 'linux2'))
+  outdir = os.path.join(*build_dir.split(os.path.sep)[1:])
+
+  bad_ret = slave_utils.WARNING_EXIT_CODE if bad else 0
 
   os.environ['LD_LIBRARY_PATH'] = os.environ.get('PWD')
 
@@ -109,7 +116,7 @@ def main():
     cmd.extend(['--shard-count=%s' % options.shard_count,
                 '--shard-run=%s' % options.shard_run])
 
-  return chromium_utils.RunCommand(cmd)
+  return chromium_utils.RunCommand(cmd) or bad_ret
 
 
 if __name__ == '__main__':
