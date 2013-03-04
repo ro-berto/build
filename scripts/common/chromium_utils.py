@@ -1018,7 +1018,7 @@ def EntryToSlaveName(entry):
   return entry.get('slavename') or entry.get('hostname')
 
 
-def GetActiveMaster(slavename=None):
+def GetActiveMaster(slavename=None, default=None):
   """Parses all the slaves.cfg and returns the name of the active master
   determined by the hostname. Returns None otherwise.
 
@@ -1029,6 +1029,7 @@ def GetActiveMaster(slavename=None):
   for slave in GetAllSlaves():
     if slavename == EntryToSlaveName(slave):
       return slave['master']
+  return default
 
 
 def ParsePythonCfg(cfg_filepath):

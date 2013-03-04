@@ -42,6 +42,7 @@ import config
 from slave import crash_utils
 from slave import gtest_slave_utils
 from slave import process_log_utils
+from slave import results_dashboard
 from slave import slave_utils
 from slave import xvfb
 from slave.gtest.json_results_generator import GetSvnRevision
@@ -346,6 +347,12 @@ def create_results_tracker(tracker_class, options):
   return tracker_obj
 
 
+def send_results_to_dashboard(results_tracker, system, test, url, build_dir):
+  for logname, log in results_tracker.PerformanceLogs().iteritems():
+    lines = [str(l).rstrip() for l in log]
+    results_dashboard.SendResults(logname, lines, system, test, url, build_dir)
+
+
 def annotate(test_name, result, results_tracker, full_name=False,
              perf_dashboard_id=None):
   """Given a test result and tracker, update the waterfall with test results."""
@@ -583,6 +590,11 @@ def main_mac(options, args):
              perf_dashboard_id=options.factory_properties.get(
                  'test_name'))
 
+  if options.results_url:
+    send_results_to_dashboard(
+        results_tracker, options.factory_properties.get('perf_id'),
+        options.test_type, options.results_url, options.build_dir)
+
   return result
 
 
@@ -813,6 +825,11 @@ def main_linux(options, args):
              perf_dashboard_id=options.factory_properties.get(
                  'test_name'))
 
+  if options.results_url:
+    send_results_to_dashboard(
+        results_tracker, options.factory_properties.get('perf_id'),
+        options.test_type, options.results_url, options.build_dir)
+
   return result
 
 
@@ -886,6 +903,11 @@ def main_win(options, args):
              options.factory_properties.get('full_test_name'),
              perf_dashboard_id=options.factory_properties.get(
                  'test_name'))
+
+  if options.results_url:
+    send_results_to_dashboard(
+        results_tracker, options.factory_properties.get('perf_id'),
+        options.test_type, options.results_url, options.build_dir)
 
   return result
 
@@ -996,6 +1018,9 @@ def main():
                            help='Sets the return value of the simulated '
                                 'executable under test. Only has meaning when '
                                 '--parse-input is used.')
+  option_parser.add_option('', '--results-url', default='',
+                           help='The URI of the perf dashboard to upload '
+                                'results to.')
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
