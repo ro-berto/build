@@ -13,6 +13,8 @@ from twisted.python import log
 from master import chromium_step
 from master.factory import commands
 
+from common import chromium_utils
+
 # Indices used to get a test's name and the filter to apply to from a split
 # testfilter property.
 TEST_FILTER_TEST_NAME_INDEX = 0
@@ -170,7 +172,10 @@ class SwarmCommands(commands.FactoryCommands):
       log.msg('No target specified, unable to find isolated files')
       return
 
-    isolated_directory = self.GetOutputDirectory(using_ninja)
+    isolated_directory, _ = chromium_utils.ConvertBuildDirToLegacy(
+        self._build_dir, target_platform=self._target_platform,
+        use_out=(using_ninja or self._target_platform.startswith('linux')))
+    isolated_directory = self.PathJoin(isolated_directory, self._target)
     isolated_file = self.PathJoin(isolated_directory, test_name + '.isolated')
     script_path = self.PathJoin('src', 'tools', 'swarm_client',
                                 'isolate.py')

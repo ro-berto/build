@@ -1012,20 +1012,6 @@ class FactoryCommands(object):
         factory_properties=factory_properties, perf_name=perf_name,
         test_name=test_name, command_class=command_class)
 
-  def GetOutputDirectory(self, using_ninja):
-    """Generates the path that points to the output directory for this
-    build."""
-    if using_ninja:
-      out_dir = 'out'
-    elif self._target_platform == 'win32':
-      out_dir = 'build'
-    elif self._target_platform == 'darwin':
-      out_dir = 'xcodebuild'
-    else:
-      out_dir = 'out'
-
-    return self.PathJoin('src', out_dir, self._target)
-
   def AddGenerateResultHashesStep(self, using_ninja, tests, doStepIf):
     """Adds a step to generate the hashes for result files. This is used by
     swarm."""
@@ -1033,7 +1019,10 @@ class FactoryCommands(object):
       log.msg('No target specified, unable to find result files to '
               'trigger swarm tests')
       return
-    manifest_directory = self.GetOutputDirectory(using_ninja)
+    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+        self._build_dir, target_platform=self._target_platform,
+        use_out=(using_ninja or self._target_platform.startswith('linux')))
+    manifest_directory = self.PathJoin(build_dir, self._target)
 
     assert self._target_platform
     if self._target_platform == 'win32':
