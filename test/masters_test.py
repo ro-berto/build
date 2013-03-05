@@ -26,35 +26,44 @@ def do_master_imports():
   slave.bootstrap.ImportMasterConfigs()
   return getattr(sys.modules['config_bootstrap'], 'Master')
 
-
-saved_paths = []
-def backup_if_present(original_path):
-  real_paths = glob.glob(original_path)
-  for real_path in real_paths:
-    if os.path.exists(real_path):
-      saved_paths.append(real_path)
-      if subprocess.call(['mv', real_path, real_path + '_']) != 0:
-        print >> sys.stderr, 'ERROR: Failed to rename %s to %s_' % (
-            real_path, real_path)
+class pathstack:
+  def __init__(self):
+    self.saved_paths = []
 
 
-def restore_backup():
-  for path in saved_paths:
-    if subprocess.call(['rm', '-rf', path]) != 0:
-      print >> sys.stderr, 'ERROR: Failed to remove %s' % path
-    if subprocess.call(['mv', path + '_', path]) != 0:
-      print >> sys.stderr, 'ERROR: Failed to rename %s_ to %s' % (path, path)
+  def backup_if_present(self, original_path):
+    real_paths = glob.glob(original_path)
+    for real_path in real_paths:
+      bkup_path = real_path + '_'
+      if os.path.exists(real_path) and not os.path.exists(bkup_path):
+        if subprocess.call(['mv', real_path, bkup_path]) != 0:
+          print >> sys.stderr, 'ERROR: Failed to rename %s to %s' % (
+              real_path, bkup_path)
+        else:
+          self.saved_paths.insert(0, (real_path, bkup_path))
+
+
+  def restore_backup(self):
+    restores = self.saved_paths
+    self.saved_paths = []
+    restores.reverse()
+    for (path, bkup) in restores:
+      if subprocess.call(['rm', '-rf', path]) != 0:
+        print >> sys.stderr, 'ERROR: Failed to remove %s' % path
+      if subprocess.call(['mv', bkup, path]) != 0:
+        print >> sys.stderr, 'ERROR: Failed to rename %s to %s' % (bkup, path)
 
 
 def test_master(master, master_class, path):
   print('Trying %s' % master)
+  context = pathstack()
   start = time.time()
   if not masters_util.stop_master(master, path):
     return False
   try:
     # Try to backup paths we may not want to overwite.
-    backup_if_present(os.path.join(path, 'twistd.log'))
-    backup_if_present(os.path.join(path, 'git_poller_*.git'))
+    context.backup_if_present(os.path.join(path, 'twistd.log'))
+    context.backup_if_present(os.path.join(path, 'git_poller_*.git'))
     try:
       if not masters_util.start_master(master, path):
         return False
@@ -70,7 +79,7 @@ def test_master(master, master_class, path):
     finally:
       masters_util.stop_master(master, path)
   finally:
-    restore_backup()
+    context.restore_backup()
 
 
 def real_main(base_dir, expected):
