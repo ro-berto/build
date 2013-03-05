@@ -19,10 +19,10 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
-def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def linux_android(): return chromium_factory.ChromiumFactory(
-    'src/build', 'linux2', nohooks_on_update=True, target_os='android')
+    'src/out', 'linux2', nohooks_on_update=True, target_os='android')
 
 defaults['category'] = '1clobber'
 
