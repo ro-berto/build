@@ -77,6 +77,14 @@ def SplitPath(projects, path):
   return None
 
 
+def GetStepsByName(build_status, step_names):
+  steps = []
+  for step in build_status.getSteps():
+    if step.getName() in step_names:
+      steps.append(step)
+  return steps
+
+
 # Extracted from
 # http://src.chromium.org/svn/trunk/tools/buildbot/master.chromium/public_html/buildbot.css
 DEFAULT_STYLES = {
@@ -143,7 +151,8 @@ def EmailableBuildTable(build_status, waterfall_url, styles=None):
           '</table>\n')
 
 
-def EmailableBuildTable_bb8(build_status, waterfall_url, styles=None):
+def EmailableBuildTable_bb8(build_status, waterfall_url, styles=None,
+                            step_names=None):
   """Uses new web reporting API in buildbot8."""
 
   styles = styles or DEFAULT_STYLES
@@ -191,8 +200,12 @@ def EmailableBuildTable_bb8(build_status, waterfall_url, styles=None):
     return fmt % (style, '<br/>'.join(text))
 
   build_boxes = [GenBuildBox(build_status)]
-  build_boxes.extend([GenStepBox(step) for step in build_status.getSteps()
-                      if step.isStarted() and step.getText()])
+  if step_names:
+    steps = GetStepsByName(build_status, step_names)
+  else:
+    steps = [step for step in build_status.getSteps()
+             if step.isStarted() and step.getText()]
+  build_boxes.extend([GenStepBox(step) for step in steps])
   table_content = ''.join(build_boxes)
   return (('<table style="border-spacing: 1px 1px; font-weight: bold; '
            'padding: 3px 0px 3px 0px; text-align: center; font-size: 10px; '

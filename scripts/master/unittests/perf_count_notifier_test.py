@@ -6,6 +6,7 @@
 import test_env  # pylint: disable=W0611
 import unittest
 import mock
+import re
 
 from buildbot.status.builder import FAILURE, SUCCESS
 
@@ -56,6 +57,7 @@ def getBuildStatusMock(name):
   build_status.getSourceStamp.return_value = None
   build_status.getResponsibleUsers.return_value = ''
   build_status.getChanges.return_value = ''
+  build_status.getSteps.return_value = []
   return build_status
 
 
@@ -81,6 +83,11 @@ class PerfCountNotifierTest(unittest.TestCase):
   def mockDefaultFunctions(self):
     self.old_getName = ChromiumNotifier.getName
     ChromiumNotifier.getName = self.getNameMock
+    self.notifier.GenStepBox = lambda x, y : ''
+    self.notifier.BuildEmailObject = lambda a, b, c, d, e : b
+    self.notifier.master_status = mock.Mock()
+    self.notifier.master_status.getBuildbotURL.return_value = ''
+    build_utils.EmailableBuildTable = mock.Mock(return_value='')
 
   def resetMockDefaultFunctions(self):
     ChromiumNotifier.getName = self.old_getName
@@ -162,7 +169,7 @@ class PerfCountNotifierTest(unittest.TestCase):
         build_status, step_status, results))
 
   def testNotificationOnce(self):
-    """Test isInsteresting happens only once."""
+    """Test isInsteresting happens until email is sent."""
     build_status = getBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
@@ -171,11 +178,15 @@ class PerfCountNotifierTest(unittest.TestCase):
           build_status, step_status, results))
     self.assertTrue(self.notifier.isInterestingStep(
         build_status, step_status, results))
-    self.assertFalse(self.notifier.isInterestingStep(
-        build_status, step_status, results))
-    # Force expiration of notifications
-    self.notifier.notifications.expiration_time = -1
     self.assertTrue(self.notifier.isInterestingStep(
+        build_status, step_status, results))
+
+    builder_name = build_status.getBuilder().getName()
+    self.notifier.buildMessage(builder_name=builder_name,
+                               build_status=build_status,
+                               results=results, step_name='')
+
+    self.assertFalse(self.notifier.isInterestingStep(
         build_status, step_status, results))
 
   def testIsInterestingResetByOtherResults(self):
@@ -260,42 +271,36 @@ class PerfCountNotifierTest(unittest.TestCase):
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
     build_status = getBuildStatusMock('test_build')
 
-    self.notifier.master_status = mock.Mock()
-    self.notifier.master_status.getBuildbotURL.return_value = ''
-
-    build_utils.EmailableBuildTable = mock.Mock(return_value='')
-
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
       self.notifier.isInterestingStep(build_status, step_status, results)
-    email = self.notifier.buildMessage(builder_name='',
-                                       build_status=build_status,
-                                       results=results, step_name='')
-    first_callback = email.callbacks[0]
-    callback_args = first_callback[0][1]  # Defer.addCallBacks implementation
-    email_content = callback_args[1].as_string()  # [0] is receipients
-    self.assertTrue('New perf results in this email' in email_content)
-    self.assertTrue('PERF_REGRESS: time/t, fps/video, fps/video2.' in
-                    email_content)
-    self.assertTrue('PERF_IMPROVE: cpu/t, cpu/t2.' not in email_content)
+
+    builder_name = build_status.getBuilder().getName()
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_status,
+                                               results=results, step_name='')
+    self.assertTrue(re.match('.*PERF_REGRESS.*time/t.*fps/video.*fps/video2.*',
+                             email_content))
+    self.assertTrue('PERF_IMPROVE' not in email_content)
 
     # Check that the previous regress/improve values do not show again and the
     # new values are shown.
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT_2)
     for _ in range(self.notifier.minimum_count):
       self.notifier.isInterestingStep(build_status, step_status, results)
-    email = self.notifier.buildMessage(builder_name='',
-                                       build_status=build_status,
-                                       results=results, step_name='')
-    first_callback = email.callbacks[0]
-    callback_args = first_callback[0][1]  # Defer.addCallBacks implementation
-    email_content = callback_args[1].as_string()  # [0] is receipients
 
-    self.assertTrue('New perf results in this email' in email_content)
-    self.assertTrue('PERF_REGRESS: time/t, fps/video, fps/video2.' not in
-                    email_content)
-    self.assertTrue('PERF_REGRESS: time/t2.' in email_content)
-    self.assertTrue('PERF_IMPROVE: fps/video2.' in email_content)
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_status,
+                                               results=results, step_name='')
+    # Assert old regressions are not valid anymore.
+    for string in ['time/t</a>', 'fps/video</a>']:
+      self.assertTrue(string not in email_content)
+    for string in ['time/t2</a>', 'fps/video2</a>']:
+      self.assertTrue(string in email_content)
+
+    self.assertTrue(re.match('.*PERF_REGRESS.*time/t2.*'
+                             'PERF_IMPROVE.*fps/video2.*', email_content))
+
 
   def testResultsForDifferentBuilders(self):
     """Tests that results are unique per builder."""
