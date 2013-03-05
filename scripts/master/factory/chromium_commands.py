@@ -1039,7 +1039,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      cmd, timeout=60*60)
 
     cmd_name = self.PathJoin('src', 'tools', 'run-bisect-perf-regression.py')
-    cmd_args = ['-w', '.']
+    cmd_args = ['-w', '.', '-p', self.PathJoin('..', '..', '..', 'goma')]
     path_to_bisect_data = self.PathJoin('bisect', 'src', 'data', 'page_cycler')
     runtest_args = ['--with-httpd', path_to_bisect_data]
     cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args,
