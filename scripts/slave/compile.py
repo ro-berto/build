@@ -427,7 +427,7 @@ def main_xcode(options, args):
     # updated to only pass platform-appropriate --solution values.
     if (not options.solution or
         os.path.splitext(options.solution)[1] != '.xcodeproj'):
-      options.solution = 'all.xcodeproj'
+      options.solution = '../build/all.xcodeproj'
     command.extend(['-project', options.solution])
 
   if options.xcode_target:
