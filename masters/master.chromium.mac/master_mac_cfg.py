@@ -14,10 +14,12 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def mac():
-  return chromium_factory.ChromiumFactory('src/build', 'darwin')
+  return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def mac_tester():
   return chromium_factory.ChromiumFactory(
-      'src/build', 'darwin', nohooks_on_update=True)
+      'src/xcodebuild', 'darwin', nohooks_on_update=True)
+def mac_out():
+  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 # Tests that are single-machine shard-safe.
 sharded_tests = [
@@ -186,7 +188,7 @@ T('mac_dbg_trigger')
 #
 B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg',
   auto_reboot=False, notify_on_missing=True)
-F('dbg', mac().ChromiumFactory(
+F('dbg', mac_out().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=[
