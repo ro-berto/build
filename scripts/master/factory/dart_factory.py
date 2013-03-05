@@ -37,6 +37,14 @@ windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
 
 dart_revision_url = "http://code.google.com/p/dart/source/detail?r=%s"
 
+# gclient custom vars
+CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
+CUSTOM_VARS_CHROMIUM_URL = (
+  'chromium_url', config.Master.server_url + config.Master.repo_root)
+
+custom_vars_list = [CUSTOM_VARS_GOOGLECODE_URL,
+                    CUSTOM_VARS_CHROMIUM_URL]
+
 # These chromium factories are used for building dartium
 F_LINUX_CH = None
 F_MAC_CH = None
@@ -50,11 +58,14 @@ F_WIN_CH_MILESTONE = None
 
 
 def setup_chromium_factories():
-  gclient_dartium = gclient_factory.GClientSolution(dartium_url, 'dartium.deps')
-  gclient_dartium_trunk = gclient_factory.GClientSolution(dartium_trunk_url,
-                                                          'dartium.deps')
+  gclient_dartium = gclient_factory.GClientSolution(
+      dartium_url, 'dartium.deps', custom_vars_list = custom_vars_list)
+  gclient_dartium_trunk = gclient_factory.GClientSolution(
+      dartium_trunk_url, 'dartium.deps', custom_vars_list = custom_vars_list)
   gclient_dartium_milestone = gclient_factory.GClientSolution(
-      dartium_milestone_url, 'dartium.deps')
+      dartium_milestone_url,
+      'dartium.deps',
+      custom_vars_list = custom_vars_list)
 
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
@@ -142,11 +153,6 @@ class DartFactory(gclient_factory.GClientFactory):
                  config.Master.trunk_internal_url +
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
-  # gclient custom vars
-  CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
-  CUSTOM_VARS_CHROMIUM_URL = (
-      'chromium_url', config.Master.server_url + config.Master.repo_root)
-
   def __init__(self, build_dir, target_platform=None, trunk=False,
                milestone=False, target_os=None):
     solutions = []
@@ -164,9 +170,6 @@ class DartFactory(gclient_factory.GClientFactory):
     if config.Master.trunk_internal_url:
       custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
       custom_deps_list.append(self.CUSTOM_TZ)
-
-    custom_vars_list = [self.CUSTOM_VARS_GOOGLECODE_URL,
-                        self.CUSTOM_VARS_CHROMIUM_URL]
 
     main = gclient_factory.GClientSolution(
         dart_url,
