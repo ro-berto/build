@@ -100,7 +100,8 @@ def RunTests(input_api, output_api):
 
 def BuildInternalCheck(output, input_api, output_api):
   if any(isinstance(item, output_api.PresubmitError) for item in output):
-    b_i = input_api.os_path.join('..', 'build_internal')
+    b_i = input_api.os_path.join(input_api.PresubmitLocalPath(), '..',
+                                 'build_internal')
     if input_api.os_path.exists(b_i):
       output.append(output_api.PresubmitNotifyResult(
           'You have a build_internal checkout. '
