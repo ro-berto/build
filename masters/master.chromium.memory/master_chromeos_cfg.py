@@ -14,7 +14,7 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 # CrOS ASan bots below.
 defaults['category'] = '3chromeos asan'
