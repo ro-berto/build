@@ -329,6 +329,19 @@ class TestExecution(unittest.TestCase):
     self.assertTrue('hello!' in self.capture.text)
     self.assertEquals(ret, 1)
 
+  def testSkip(self):
+    cmdlist = [{'name': 'one', 'cmd': _synthesizeCmd(['print \'yo!\''])},
+               {'name': 'delete', 'cmd': _synthesizeCmd(['error']),
+                    'skip': True},
+               {'name': 'checkout', 'cmd': _synthesizeCmd(['print \'nop\'']),
+                    'skip': False}]
+
+    ret = self._runAnnotator(cmdlist)
+    self.assertEquals(self.capture.text.count('yo!'), 1)
+    self.assertEquals(self.capture.text.count('nop'), 1)
+    self.assertTrue('@@@SEED_STEP delete@@@' in self.capture.text)
+    self.assertEquals(ret, 0)
+
 
 if __name__ == '__main__':
   unittest.main()
