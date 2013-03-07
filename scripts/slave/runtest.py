@@ -81,12 +81,17 @@ def get_temp_count():
   return len(os.listdir(tempfile.gettempdir()))
 
 
-def _RunGTestCommand(command, results_tracker=None, pipes=None):
+def _RunGTestCommand(command, results_tracker=None, pipes=None,
+                     extra_env=None):
+
+  env = os.environ.copy()
+  env.update(extra_env or {})
+
   if results_tracker:
     return chromium_utils.RunCommand(
-        command, pipes=pipes, parser_func=results_tracker.ProcessLine)
+        command, pipes=pipes, parser_func=results_tracker.ProcessLine, env=env)
   else:
-    return chromium_utils.RunCommand(command, pipes=pipes)
+    return chromium_utils.RunCommand(command, pipes=pipes, env=env)
 
 
 def _GetMaster():
@@ -737,6 +742,10 @@ def main_linux(options, args):
     msg = 'Unable to find %s' % test_exe_path
     raise chromium_utils.PathNotFound(msg)
 
+  # We will use this to accumulate overrides for the command under test,
+  # That we may not need or want for other support commands.
+  extra_env = {}
+
   # Unset http_proxy and HTTPS_PROXY environment variables.  When set, this
   # causes some tests to hang.  See http://crbug.com/139638 for more info.
   if 'http_proxy' in os.environ:
@@ -752,21 +761,21 @@ def main_linux(options, args):
       not options.factory_properties.get('tsan', False)):
     print 'Enabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
-    os.environ['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
+    extra_env['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
   else:
     print 'Disabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX=""'
-    os.environ['CHROME_DEVEL_SANDBOX'] = ''
+    extra_env['CHROME_DEVEL_SANDBOX'] = ''
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
-  os.environ['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
-                                                               bin_dir)
+  extra_env['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
+                                                              bin_dir)
   # Figure out what we want for a special llvmpipe directory.
   if options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir):
-    os.environ['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
+    extra_env['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
 
   if options.parallel:
     command = _BuildParallelCommand(build_dir, test_exe_path, options)
@@ -809,7 +818,8 @@ def main_linux(options, args):
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
     result = _RunGTestCommand(command, pipes=pipes,
-                              results_tracker=results_tracker)
+                              results_tracker=results_tracker,
+                              extra_env=extra_env)
   finally:
     if http_server:
       http_server.StopServer()
