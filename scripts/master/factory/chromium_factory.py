@@ -76,6 +76,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_VARS_NACL_TRUNK_URL = ('nacl_trunk', config.Master.nacl_trunk_url)
   # safe sync urls
   SAFESYNC_URL_CHROMIUM = 'http://chromium-status.appspot.com/lkgr'
+  # perf dashboard upload URL
+  DASHBOARD_UPLOAD_URL = config.Master.dashboard_upload_url
 
   # gclient additional custom deps
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
@@ -527,20 +529,44 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Benchmark tests:
     if R('page_cycler_moz'):
       f.AddPageCyclerTest('page_cycler_moz', fp)
+    if R('page_cycler_moz_pd'):
+      f.AddPageCyclerTest('page_cycler_moz', fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_morejs'):
       f.AddPageCyclerTest('page_cycler_morejs', fp)
+    if R('page_cycler_morejs_pd'):
+      f.AddPageCyclerTest('page_cycler_morejs', fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_intl1'):
       f.AddPageCyclerTest('page_cycler_intl1', fp)
+    if R('page_cycler_intl1_pd'):
+      f.AddPageCyclerTest('page_cycler_intl1', fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_intl2'):
       f.AddPageCyclerTest('page_cycler_intl2', fp)
+    if R('page_cycler_intl2_pd'):
+      f.AddPageCyclerTest('page_cycler_intl2', fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_bloat'):
       f.AddPageCyclerTest('page_cycler_bloat', fp)
+    if R('page_cycler_bloat_pd'):
+      f.AddPageCyclerTest('page_cycler_bloat', fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_dhtml'):
       f.AddPageCyclerTest('page_cycler_dhtml', fp)
+    if R('page_cycler_dhtml_pd'):
+      f.AddPageCyclerTest('page_cycler_dhtml', fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_database'):
       f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*')
+    if R('page_cycler_database_pd'):
+      f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*',
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_indexeddb'):
       f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
+    if R('page_cycler_indexeddb_pd'):
+      f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*',
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_2012Q2-netsim'):
       fp['use_xvfb_on_linux'] = True
       f.AddPyAutoFunctionalTest(
@@ -550,17 +576,36 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('scrolling_benchmark'):
       f.AddTelemetryTest(
           'scrolling_benchmark', 'top_25.json', factory_properties=fp)
+    if R('scrolling_benchmark_pd'):
+      f.AddTelemetryTest(
+          'scrolling_benchmark', 'top_25.json', factory_properties=fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('jsgamebench'):
       f.AddTelemetryTest(
           'jsgamebench', 'jsgamebench.json', factory_properties=fp)
+    if R('jsgamebench_pd'):
+      f.AddTelemetryTest(
+          'jsgamebench', 'jsgamebench.json', factory_properties=fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('kraken'):
       f.AddTelemetryTest('kraken', 'kraken.json', factory_properties=fp)
+    if R('kraken_pd'):
+      f.AddTelemetryTest('kraken', 'kraken.json', factory_properties=fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('robohornetpro'):
       f.AddTelemetryTest(
           'robohornetpro', 'robohornetpro.json', factory_properties=fp)
+    if R('robohornetpro_pd'):
+      f.AddTelemetryTest(
+          'robohornetpro', 'robohornetpro.json', factory_properties=fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('memory_benchmark'):
       f.AddTelemetryTest(
           'memory_benchmark', 'top_25.json', factory_properties=fp)
+    if R('memory_benchmark_pd'):
+      f.AddTelemetryTest(
+          'memory_benchmark', 'top_25.json', factory_properties=fp,
+          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
 
     if R('memory'):
       f.AddMemoryTests(fp)

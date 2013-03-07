@@ -377,7 +377,8 @@ class ChromiumCommands(commands.FactoryCommands):
                     test_name, test_type, test_name, test_type)])
     return cmd
 
-  def AddPageCyclerTest(self, test, factory_properties=None, suite=None):
+  def AddPageCyclerTest(self, test, factory_properties=None,
+                        suite=None, tool_options=None):
     """Adds a step to the factory to run a page cycler test."""
 
     enable_http = test.endswith('-http')
@@ -388,10 +389,11 @@ class ChromiumCommands(commands.FactoryCommands):
     else:
       test_name = perf_dashboard_name.partition('-http')[0].capitalize()
 
-    options = None
+    tool_options = tool_options or []
     if enable_http:
       test_type = 'Http'
-      options = ['--with-httpd', self.PathJoin('src', 'data', 'page_cycler')]
+      tool_options.extend(['--with-httpd',
+                          self.PathJoin('src', 'data', 'page_cycler')])
     else:
       test_type = 'File'
 
@@ -399,7 +401,7 @@ class ChromiumCommands(commands.FactoryCommands):
         test_name, test_type, test_name, test_type)
 
     self.AddAnnotatedPerfStep(perf_dashboard_name, gtest_filter, 'pagecycler',
-                              tool_opts=options, step_name=test,
+                              tool_opts=tool_options, step_name=test,
                               factory_properties=factory_properties)
 
   def AddStartupTests(self, factory_properties=None):
@@ -845,7 +847,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
 
   def AddTelemetryTest(self, test_name, page_set, step_name=None,
-                       factory_properties=None, timeout=1200):
+                       factory_properties=None, timeout=1200,
+                       tool_options=None):
     """Adds a Telemetry performance test.
 
     Args:
@@ -873,7 +876,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_name=self._telemetry_tool,
                               cmd_options=cmd_options,
                               step_name=step_name, timeout=timeout,
-                              py_script=True)
+                              tool_opts=tool_options, py_script=True)
 
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
