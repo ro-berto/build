@@ -199,6 +199,7 @@ processes = [
     'nacl64.exe',
     'net_unittests.exe',
     'page_cycler_tests.exe',
+    'peerconnection_server.exe',
     'perf_tests.exe',
     'performance_ui_tests.exe',
     'printing_unittests.exe',
