@@ -75,7 +75,12 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
   """Create a basic swarm builder that runs tests via swarm."""
   f = build_factory.BuildFactory()
 
-  swarm_command_obj = swarm_commands.SwarmCommands(f)
+  # Some of the scripts require a build_dir to be set, so set it even
+  # if the machine might not have it (It shouldn't matter what this is).
+  build_dir = 'chrome'
+
+  swarm_command_obj = swarm_commands.SwarmCommands(factory=f,
+                                                   build_dir=build_dir)
   swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
 
   # Send the swarm tests to the swarm server.
