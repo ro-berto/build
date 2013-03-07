@@ -221,6 +221,12 @@ class Master(object):
     # separate repo to put all the diff files to be tried.
     svn_url = None
 
+  class Gatekeeper(_ChromiumBase):
+    project_name = 'Chromium Gatekeeper'
+    master_port = 9511
+    slave_port = 9611
+    master_port_alt = 9711
+
   class MyChromeFork(_Base):
     # Place your continuous build fork settings here.
     project_name = 'My Forked Chrome'

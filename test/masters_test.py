@@ -173,6 +173,7 @@ def main():
       'master.chromium.endure': 'ChromiumEndure',
       'master.chromium.flaky': 'ChromiumFlaky',
       'master.chromium.fyi': 'ChromiumFYI',
+      'master.chromium.gatekeeper': 'Gatekeeper',
       'master.chromium.git': 'ChromiumGIT',
       'master.chromium.gpu': 'ChromiumGPU',
       'master.chromium.gpu.fyi': 'ChromiumGPUFYI',
