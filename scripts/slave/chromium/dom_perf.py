@@ -91,7 +91,8 @@ def dom_perf(options, args):
     raise chromium_utils.PathNotFound('Unable to find %s' % test_exe_path)
 
   # Find the current revision to pass to the test.
-  build_revision = slave_utils.SubversionRevision(build_dir)
+  wc_dir = os.path.dirname(build_dir)
+  build_revision = slave_utils.SubversionRevision(wc_dir)
 
   # Compute the path to the test data.
   src_dir = os.path.dirname(build_dir)

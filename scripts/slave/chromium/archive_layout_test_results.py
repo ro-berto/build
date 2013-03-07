@@ -124,7 +124,8 @@ def archive_layout(options, args):
   build_name = options.builder_name or slave_utils.SlaveBuildName(chrome_dir)
   build_name = re.sub('[ .()]', '_', build_name)
 
-  last_change = str(slave_utils.SubversionRevision(chrome_dir))
+  wc_dir = os.path.dirname(chrome_dir)
+  last_change = str(slave_utils.SubversionRevision(wc_dir))
   print 'last change: %s' % last_change
   print 'build name: %s' % build_name
   print 'host name: %s' % socket.gethostname()

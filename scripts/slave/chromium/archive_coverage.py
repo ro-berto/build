@@ -73,7 +73,8 @@ class ArchiveCoverage(object):
     # The 'last change:' line MUST appear for the buildbot output-parser to
     # construct the 'view coverage' link.  (See
     # scripts/master/log_parser/archive_command.py)
-    self.last_change = str(slave_utils.SubversionRevision(chrome_dir))
+    wc_dir = os.path.dirname(chrome_dir)
+    self.last_change = str(slave_utils.SubversionRevision(wc_dir))
     print 'last change: %s' % self.last_change
 
     host_name = socket.gethostname()

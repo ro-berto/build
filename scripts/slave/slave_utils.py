@@ -54,38 +54,39 @@ def SubversionCat(wc_dir):
     return None
 
 
+class NotSVNWorkingCopy(Exception): pass
+class InvalidSVNRevision(Exception): pass
+
+
+def ScrapeSVNInfoRevision(wc_dir, regexp):
+  """Runs 'svn info' on a working copy and applies the supplied regex and
+  returns the matched group as an int.
+  regexp can be either a compiled regex or a string regex.
+  throws NotSVNWorkingCopy if wc_dir is not in a working copy.
+  throws InvalidSVNRevision if matched group is not alphanumeric.
+  """
+  if isinstance(regexp, (str, unicode)):
+    regexp = re.compile(regexp)
+  retval, svn_info = chromium_utils.GetStatusOutput([SubversionExe(), 'info',
+                                                     wc_dir])
+  if retval or 'is not a working copy' in svn_info:
+    raise NotSVNWorkingCopy(wc_dir)
+  text = regexp.sub(r'\1', svn_info)
+  if text.isalnum():
+    return int(text)
+  else:
+    raise InvalidSVNRevision(text)
+
+
 def SubversionRevision(wc_dir):
-  """Finds the last svn revision of a working copy by running 'svn info',
-  and returns it as an integer.
-  """
-  svn_regexp = re.compile(r'.*Revision: (\d+).*', re.DOTALL)
-  try:
-    svn_info = chromium_utils.GetCommandOutput([SubversionExe(), 'info',
-                                                wc_dir])
-    return_value = re.sub(svn_regexp, r'\1', svn_info)
-    if return_value.isalnum():
-      return int(return_value)
-    else:
-      return 0
-  except chromium_utils.ExternalError:
-    return 0
+  """Finds the last svn revision of a working copy and returns it as an int."""
+  return ScrapeSVNInfoRevision(wc_dir, r'(?s).*Revision: (\d+).*')
 
 
-def SubversionLastChangedRevision(wc_dir):
-  """Finds the svn revision where this file/dir was last edited by running
-  'svn info', and returns it as an integer.
-  """
-  svn_regexp = re.compile(r'.*Last Changed Rev: (\d+).*', re.DOTALL)
-  try:
-    svn_info = chromium_utils.GetCommandOutput([SubversionExe(), 'info',
-                                                wc_dir])
-    return_value = re.sub(svn_regexp, r'\1', svn_info)
-    if return_value.isalnum():
-      return int(return_value)
-    else:
-      return 0
-  except chromium_utils.ExternalError:
-    return 0
+def SubversionLastChangedRevision(wc_dir_or_file):
+  """Finds the last changed svn revision of a fs path returns it as an int."""
+  return ScrapeSVNInfoRevision(wc_dir_or_file,
+                               r'(?s).*Last Changed Rev: (\d+).*')
 
 
 def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
