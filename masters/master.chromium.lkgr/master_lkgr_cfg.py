@@ -5,6 +5,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.ChromiumLKGR
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -29,7 +33,7 @@ B('Win', 'win_full', 'compile|windows', 'chromium_lkgr')
 F('win_full', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
-    factory_properties={'archive_build': True,
+    factory_properties={'archive_build': ActiveMaster.is_production_host,
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
@@ -40,7 +44,7 @@ F('win_full', win().ChromiumFactory(
 B('Mac', 'mac_full', 'compile|testers', 'chromium_lkgr')
 F('mac_full', mac().ChromiumFactory(
     clobber=True,
-    factory_properties={'archive_build': True,
+    factory_properties={'archive_build': ActiveMaster.is_production_host,
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
@@ -50,7 +54,7 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
     options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
              'chromium_builder_asan_mac'],
     factory_properties={
-       'asan_archive_build': True,
+       'asan_archive_build': ActiveMaster.is_production_host,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
@@ -62,7 +66,7 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
     options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
              'chromium_builder_asan_mac'],
     factory_properties={
-       'asan_archive_build': True,
+       'asan_archive_build': ActiveMaster.is_production_host,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 component=static_library '}}))
@@ -74,7 +78,7 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
 B('Linux', 'linux_full', 'compile|testers', 'chromium_lkgr')
 F('linux_full', linux().ChromiumFactory(
     clobber=True,
-    factory_properties={'archive_build': True,
+    factory_properties={'archive_build': ActiveMaster.is_production_host,
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
@@ -82,7 +86,7 @@ B('Linux x64', 'linux64_full', 'compile|testers', 'chromium_lkgr')
 F('linux64_full', linux().ChromiumFactory(
     clobber=True,
     factory_properties={
-        'archive_build': True,
+        'archive_build': ActiveMaster.is_production_host,
         'gs_bucket': 'gs://chromium-browser-continuous',
         'gs_acl': 'public-read',
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
@@ -96,7 +100,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
              'content_browsertests'],
     factory_properties={
-       'asan_archive_build': True,
+       'asan_archive_build': ActiveMaster.is_production_host,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
@@ -111,7 +115,7 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
              'content_browsertests'],
     factory_properties={
-       'asan_archive_build': True,
+       'asan_archive_build': ActiveMaster.is_production_host,
        'asan_archive_name': 'asan-symbolized',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
@@ -124,11 +128,11 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
              'content_browsertests'],
     factory_properties={
-       'asan_archive_build': True,
+       'asan_archive_build': ActiveMaster.is_production_host,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
 
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)
