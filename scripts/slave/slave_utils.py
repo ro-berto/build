@@ -44,6 +44,10 @@ def SubversionExe():
         'Platform "%s" is not currently supported.' % sys.platform)
 
 
+def GitExe():
+  return 'git.bat' if chromium_utils.IsWindows() else 'git'
+
+
 def SubversionCat(wc_dir):
   """Output the content of specified files or URLs in SVN.
   """
@@ -54,7 +58,9 @@ def SubversionCat(wc_dir):
     return None
 
 
+class NotGitWorkingCopy(Exception): pass
 class NotSVNWorkingCopy(Exception): pass
+class NotAnyWorkingCopy(Exception): pass
 class InvalidSVNRevision(Exception): pass
 
 
@@ -89,11 +95,33 @@ def SubversionLastChangedRevision(wc_dir_or_file):
                                r'(?s).*Last Changed Rev: (\d+).*')
 
 
+def GitHash(wc_dir):
+  """Finds the current commit hash of the wc_dir."""
+  retval, text = chromium_utils.GetStatusOutput([GitExe(), 'rev-parse', 'HEAD'])
+  if retval or 'fatal: Not a git repository' in text:
+    raise NotGitWorkingCopy(wc_dir)
+  return text.strip()
+
+
+def GetHashOrRevision(wc_dir):
+  """Gets the svn revision or git hash of wc_dir as a string. Throws
+  NotAnyWorkingCopy if neither are appropriate."""
+  try:
+    return str(SubversionRevision(wc_dir))
+  except NotSVNWorkingCopy:
+    pass
+  try:
+    return GitHash(wc_dir)
+  except NotGitWorkingCopy:
+    pass
+  raise NotAnyWorkingCopy(wc_dir)
+
+
 def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
                     extract=False):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
-  chromium_revision = SubversionRevision(src_dir)
+  chromium_revision = GetHashOrRevision(src_dir)
   if 'try' in build_properties.get('mastername', ''):
     if extract:
       if not build_properties.get('parent_buildnumber'):
@@ -104,9 +132,9 @@ def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
       version_suffix = '_%(buildnumber)s' % build_properties
   elif webkit_dir:
     webkit_revision = SubversionRevision(webkit_dir)
-    version_suffix = '_wk%d_%d' % (webkit_revision, chromium_revision)
+    version_suffix = '_wk%d_%s' % (webkit_revision, chromium_revision)
   else:
-    version_suffix = '_%d' % chromium_revision
+    version_suffix = '_%s' % chromium_revision
 
   return base_name, version_suffix
 
