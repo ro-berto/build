@@ -53,7 +53,6 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
         'DumpRenderTree'],
     factory_properties={
         'gclient_env': {
-            'GYP_DEFINES':'use_skia=1',
             'GYP_GENERATORS':'ninja',
         },
         'layout_test_platform': 'chromium-mac',
