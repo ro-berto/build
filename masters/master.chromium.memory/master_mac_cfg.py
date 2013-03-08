@@ -112,6 +112,12 @@ mac_asan_archive = master_config.GetArchiveUrl(
     'Mac_ASAN_Builder',
     'mac')
 
+
+gclient_env = {
+  'GYP_DEFINES': 'asan=1 release_extra_cflags=-gline-tables-only',
+  'GYP_GENERATORS': 'ninja',
+}
+
 #
 # Mac ASAN Rel Builder
 #
@@ -127,11 +133,10 @@ F('mac_asan_rel', mac().ChromiumASANFactory(
     ] + mac_asan_options,
     factory_properties={
       'asan': True,
+      'gclient_env': gclient_env,
       'package_dsym_files': True,
       'trigger': 'mac_asan_rel_trigger',
-      'gclient_env': {
-          'GYP_DEFINES': 'asan=1 release_extra_cflags=-gline-tables-only',
-          'GYP_GENERATORS': 'ninja' }}
+    },
 ))
 
 #
@@ -145,8 +150,9 @@ F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
     tests=mac_asan_tests_1,
     factory_properties={
       'asan': True,
-      'browser_total_shards': '3',
       'browser_shard_index': '1',
+      'browser_total_shards': '3',
+      'gclient_env': gclient_env,
       'sharded_tests': sharded_tests,
     }))
 
@@ -159,8 +165,9 @@ F('mac_asan_rel_tests_2', mac().ChromiumASANFactory(
     tests=mac_asan_tests_2,
     factory_properties={
       'asan': True,
-      'browser_total_shards': '3',
       'browser_shard_index': '2',
+      'browser_total_shards': '3',
+      'gclient_env': gclient_env,
       'sharded_tests': sharded_tests,
     }))
 
@@ -172,8 +179,9 @@ F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
     tests=mac_asan_tests_3,
     factory_properties={
       'asan': True,
-      'browser_total_shards': '3',
       'browser_shard_index': '3',
+      'browser_total_shards': '3',
+      'gclient_env': gclient_env,
       'sharded_tests': sharded_tests,
     }))
 
