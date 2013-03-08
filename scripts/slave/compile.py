@@ -12,6 +12,7 @@
 """
 
 import datetime
+import errno
 import optparse
 import os
 import re
@@ -470,6 +471,12 @@ def main_xcode(options, args):
     full_log.write('Build started ' + now.isoformat() + '\n\n\n')
     print 'NOTE: xcodebuild output filtered, full log at: "%s"' % full_log_path
     xcodebuild_filter = XcodebuildFilter(full_log)
+
+  try:
+    os.makedirs(options.build_dir)
+  except OSError, e:
+    if e.errno != errno.EEXIST:
+      raise
 
   os.chdir(options.build_dir)
 
