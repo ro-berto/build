@@ -44,7 +44,7 @@ class Master(object):
   swarm_hashtable_server_dev_internal = 'http://fake.swarm.hashtable.server.com'
 
   # Perf Dashboard upload URL.
-  dashboard_upload_url = 'https://chrome-perf.googleplex.com'
+  dashboard_upload_url = 'https://chromeperf.appspot.com'
 
   # Actually for Chromium OS slaves.
   chromeos_url = git_server_url + '/chromiumos.git'
