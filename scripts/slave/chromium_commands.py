@@ -278,7 +278,7 @@ class GClient(sourcebase):
     dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(),
                'sync', '--verbose', '--reset', '--manually_grab_svn_rev',
-               '--force']
+               '--force', '--with_branch_heads']
     if self.delete_unversioned_trees_when_updating:
       command.append('--delete_unversioned_trees')
     if self.gclient_jobs:
