@@ -98,7 +98,7 @@ F('linux_clobber', linux().ChromiumFactory(
       'check_perms',
       'sizes',
     ],
-    options=['--compiler=goma'],
+    options=['--compiler=goma', '--build-tool=ninja', '--', 'all'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -109,6 +109,7 @@ F('linux_clobber', linux().ChromiumFactory(
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES': 'target_arch=ia32 test_isolation_mode=noop',
+        'GYP_GENERATORS': 'ninja',
       },
     }))
 
@@ -120,7 +121,7 @@ F('linux64_clobber', linux().ChromiumFactory(
       'check_deps2git',
       'sizes',
     ],
-    options=['--compiler=goma', '--build-tool=ninja', 'all'],
+    options=['--compiler=goma', '--build-tool=ninja', '--', 'all'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
