@@ -212,7 +212,8 @@ F('rel_x64_unit_1', win_tester().ChromiumFactory(
     target='Release_x64',
     build_url=rel_x64_archive,
     tests=[
-      'browser_tests',
+      # Temporarially disabled b/c browser_tests was causing bot to crash.
+      #'browser_tests',
       'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
@@ -247,7 +248,8 @@ F('rel_x64_unit_2', win_tester().ChromiumFactory(
     build_url=rel_x64_archive,
     tests=[
       'base_unittests',
-      'browser_tests',
+      # Temporarially disabled b/c browser_tests was causing bot to crash.
+      #'browser_tests',
       'net_unittests',
     ],
     factory_properties={'process_dumps': True,
@@ -263,7 +265,8 @@ F('rel_x64_unit_3', win_tester().ChromiumFactory(
     target='Release_x64',
     build_url=rel_x64_archive,
     tests=[
-      'browser_tests',
+      # Temporarially disabled b/c browser_tests was causing bot to crash.
+      #'browser_tests',
       'components_unittests',
       'ipc_tests',
       'sync_unit_tests',
