@@ -14,7 +14,6 @@ from master import build_utils
 from master.chromium_notifier import ChromiumNotifier
 from master.perf_count_notifier import PerfCountNotifier
 
-import twisted.internet.defer
 
 # Sample test status results.
 # Based on log_parser/process_log.py PerformanceChangesAsText() function,
@@ -47,7 +46,7 @@ TEST_STATUS_MULTI_REGRESS_IMPROVE = (
     '(44.07%), cpu/t2 (3.0%) </div>')
 
 
-def getBuildStatusMock(name):
+def GetBuildStatusMock(name):
   """Mocks a build status with a name as the parameter."""
   builder = mock.Mock()
   builder.getName.return_value = name
@@ -83,7 +82,7 @@ class PerfCountNotifierTest(unittest.TestCase):
   def mockDefaultFunctions(self):
     self.old_getName = ChromiumNotifier.getName
     ChromiumNotifier.getName = self.getNameMock
-    self.notifier.GenStepBox = lambda x, y : ''
+    self.notifier.GenStepBox = lambda x, y, z: ''
     self.notifier.BuildEmailObject = lambda a, b, c, d, e : b
     self.notifier.master_status = mock.Mock()
     self.notifier.master_status.getBuildbotURL.return_value = ''
@@ -102,7 +101,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testSuccessIsNotInteresting(self):
     """Test success step is not interesting."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [SUCCESS]
     for _ in range(self.notifier.minimum_count):
@@ -111,7 +110,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingAfterMinimumResults(self):
     """Test step is interesting only after minimum consecutive results."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -122,7 +121,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingResetByCounterResults(self):
     """Test step is not interesting if a counter result appears."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -142,7 +141,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingResetBySuccess(self):
     """Test step count reset after a successful pass."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -162,7 +161,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingException(self):
     """Test step is interesting when step has exception."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT_EXCEPTION)
     results = [FAILURE]
     self.assertTrue(self.notifier.isInterestingStep(
@@ -170,7 +169,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testNotificationOnce(self):
     """Test isInsteresting happens until email is sent."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -191,7 +190,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testIsInterestingResetByOtherResults(self):
     """Test isInsteresting resets after different results appear."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_TEXT)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count - 1):
@@ -211,7 +210,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testCountIsCorrectMultipleRegressOnly(self):
     """Test count of multiple REGRESS only is correct."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
@@ -227,7 +226,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testCountIsCorrectMultipleImproveOnly(self):
     """Test count of multiple IMPROVE only is correct."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_IMPROVE)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
@@ -243,7 +242,7 @@ class PerfCountNotifierTest(unittest.TestCase):
 
   def testCountIsCorrectMultipleRegressImprove(self):
     """Test count of multiple REGRESS and IMPROVE is correct."""
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS_IMPROVE)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
@@ -265,11 +264,9 @@ class PerfCountNotifierTest(unittest.TestCase):
   def testEmailContext(self):
     """Tests email context contains relative failures."""
     # Needed so that callback details are retained after method call.
-    twisted.internet.defer.Deferred._startRunCallbacks = mock.Mock()
     self.notifier.minimum_delay_between_alert = 0
-
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
-    build_status = getBuildStatusMock('test_build')
+    build_status = GetBuildStatusMock('test_build')
 
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
@@ -301,11 +298,10 @@ class PerfCountNotifierTest(unittest.TestCase):
     self.assertTrue(re.match('.*PERF_REGRESS.*time/t2.*'
                              'PERF_IMPROVE.*fps/video2.*', email_content))
 
-
   def testResultsForDifferentBuilders(self):
     """Tests that results are unique per builder."""
-    build_linux = getBuildStatusMock('test_linux')
-    build_win = getBuildStatusMock('test_win')
+    build_linux = GetBuildStatusMock('test_linux')
+    build_win = GetBuildStatusMock('test_win')
     step_status = BuildStepStatusMock(TEST_STATUS_MULTI_IMPROVE)
     results = [FAILURE]
     for _ in range(self.notifier.minimum_count):
@@ -348,6 +344,89 @@ class PerfCountNotifierTest(unittest.TestCase):
     self.assertEqual(self.getResultCount('IMPROVE time/t test_win'), 0)
     self.assertEqual(self.getResultCount('IMPROVE time/t test_linux'),
                      self.notifier.minimum_count)
+
+  def testCombinedResultsForDifferentBuilders(self):
+    """Tests email content sent when combined=True for multi builders."""
+    build_linux = GetBuildStatusMock('test_linux')
+    build_win = GetBuildStatusMock('test_win')
+    step_status_linux = BuildStepStatusMock(TEST_STATUS_TEXT)
+    step_status_win = BuildStepStatusMock(TEST_STATUS_TEXT_2)
+    results = [FAILURE]
+    self.notifier.combine_results = True
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_linux, step_status_linux, results)
+      self.notifier.isInterestingStep(build_win, step_status_win, results)
+    # Check results store the builder names
+    self.assertEqual(self.getResultCount('REGRESS time/t test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE fps/video test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('REGRESS time/t2 test_win'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE fps/video2 test_win'),
+                     self.notifier.minimum_count)
+    # Use any builder name since combine_results should ignore that.
+    builder_name = build_linux.getBuilder().getName()
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_linux,
+                                               results=results, step_name='')
+    # Both win and linux results should appear in email content.
+    self.assertTrue(re.match('.*PERF_REGRESS.*time/t.*PERF_IMPROVE.*'
+                             'fps/video.*PERF_REGRESS.*time/t2.*PERF_IMPROVE.*'
+                             'fps/video2.*', email_content))
+
+  def testNonCombinedResultsForDifferentBuilders(self):
+    """Tests email content sent when combined=False for multi builders."""
+    build_linux = GetBuildStatusMock('test_linux')
+    build_win = GetBuildStatusMock('test_win')
+    step_status_linux = BuildStepStatusMock(TEST_STATUS_MULTI_REGRESS)
+    step_status_win = BuildStepStatusMock(TEST_STATUS_MULTI_IMPROVE)
+    results = [FAILURE]
+    self.notifier.combine_results = False
+    for _ in range(self.notifier.minimum_count):
+      self.notifier.isInterestingStep(build_linux, step_status_linux, results)
+      self.notifier.isInterestingStep(build_win, step_status_win, results)
+    # Check results store the builder names
+    self.assertEqual(self.getResultCount('REGRESS time/t test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('REGRESS fps/video test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('REGRESS fps/video2 test_linux'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE time/t test_win'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE fps/video test_win'),
+                     self.notifier.minimum_count)
+    self.assertEqual(self.getResultCount('IMPROVE fps/video2 test_win'),
+                     self.notifier.minimum_count)
+    # Check only linux results show in linux builder email
+    builder_name = build_linux.getBuilder().getName()
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_linux,
+                                               results=results, step_name='')
+    self.assertTrue(re.match('.*PERF_REGRESS.*time/t.*fps/video.*fps/video2.*',
+                             email_content))
+    self.assertTrue('PERF_IMPROVE' not in email_content)
+    # Check that email should not send again,
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_linux,
+                                               results=results, step_name='')
+    self.assertTrue('PERF_IMPROVE' not in email_content and
+                    'PERF_REGRESS' not in email_content)
+    # Check win results show in win builder email separately
+    builder_name = build_win.getBuilder().getName()
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_win,
+                                               results=results, step_name='')
+    self.assertTrue(re.match('.*PERF_IMPROVE.*time/t.*fps/video.*fps/video2.*',
+                             email_content))
+    self.assertTrue('PERF_REGRESS' not in email_content)
+    # Check that email should not send again,
+    email_content = self.notifier.buildMessage(builder_name=builder_name,
+                                               build_status=build_win,
+                                               results=results, step_name='')
+    self.assertTrue('PERF_IMPROVE' not in email_content and
+                    'PERF_REGRESS' not in email_content)
 
 
 def BuildStepStatusMock(text):

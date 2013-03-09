@@ -332,7 +332,7 @@ class PerfCountNotifier(ChromiumNotifier):
     if self.combine_results:
       builders = self.new_email_results.keys()
     for builder_name in builders:
-      email_body = '%s%s\n' % (
+      email_body += '%s%s\n' % (
           self.GetEmailHeader(builder_name, build_status, results, step_name),
           self.GetPerfEmailBody(builder_name)
           )
