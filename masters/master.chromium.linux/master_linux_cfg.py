@@ -83,6 +83,10 @@ linux_all_test_targets = [
   'webkit_compositor_bindings_unittests',
 ]
 
+goma_ninja_options = [
+    '--build-tool=ninja', '--compiler=goma', '--']
+goma_clang_ninja_options = [
+    '--build-tool=ninja', '--compiler=goma-clang', '--']
 
 ################################################################################
 ## Release
@@ -114,19 +118,29 @@ B('Linux Builder x64', 'rel', 'compile', 'linux_rel',
   auto_reboot=False, notify_on_missing=True)
 F('rel', linux().ChromiumFactory(
     slave_type='Builder',
-    options=['--compiler=goma',] + linux_all_test_targets +
+    options=goma_ninja_options + linux_all_test_targets +
             ['sync_integration_tests'],
     tests=['check_deps'],
-    factory_properties={'trigger': 'linux_rel_trigger'}))
+    factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
+        'trigger': 'linux_rel_trigger',
+    }))
 
 B('Linux Builder (Precise)', 'rel_precise', 'compile', 'linux_rel',
   auto_reboot=False, notify_on_missing=True)
 F('rel_precise', linux().ChromiumFactory(
     slave_type='Builder',
-    options=['--compiler=goma',] + linux_all_test_targets +
+    options=goma_ninja_options + linux_all_test_targets +
             ['sync_integration_tests'],
     tests=['check_deps'],
-    factory_properties={'trigger': 'linux_rel_precise_trigger'}))
+    factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS': 'ninja',
+        },
+        'trigger': 'linux_rel_precise_trigger',
+    }))
 
 #
 # Linux Rel testers
@@ -262,7 +276,7 @@ linux_aura_tests = [
   'views',
 ]
 
-linux_aura_options=[
+linux_aura_options = [
   'aura_builder',
   'base_unittests',
   'browser_tests',
@@ -295,10 +309,13 @@ B('Linux Aura (Precise)', 'f_linux_rel_aura', 'compile', 'linux_rel',
 F('f_linux_rel_aura', linux().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
-    options=['--compiler=goma'] + linux_aura_options,
+    options=goma_ninja_options + linux_aura_options,
     tests=linux_aura_tests,
     factory_properties={
-      'gclient_env': {'GYP_DEFINES': 'use_aura=1'},
+      'gclient_env': {
+          'GYP_DEFINES': 'use_aura=1',
+          'GYP_GENERATORS': 'ninja',
+      },
       'sharded_tests': sharded_tests,
       'window_manager': 'False',
     }))
@@ -335,9 +352,14 @@ B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg',
 F('dbg', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=['--compiler=goma'] + linux_all_test_targets,
-    factory_properties={'trigger': 'linux_dbg_trigger',
-                        'gclient_env': {'GYP_DEFINES':'target_arch=ia32'},}))
+    options=goma_ninja_options + linux_all_test_targets,
+    factory_properties={
+        'gclient_env': {
+            'GYP_DEFINES':'target_arch=ia32',
+            'GYP_GENERATORS':'ninja',
+        },
+        'trigger': 'linux_dbg_trigger',
+    }))
 
 #
 # Linux Dbg Unit testers
@@ -408,8 +430,13 @@ B('Linux Builder (dbg)(Precise)', 'dbg_precise', 'compile', 'linux_dbg',
 F('dbg_precise', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=['--compiler=goma'] + linux_all_test_targets,
-    factory_properties={'trigger': 'linux_dbg_precise_trigger'}))
+    options=goma_ninja_options + linux_all_test_targets,
+    factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
+        'trigger': 'linux_dbg_precise_trigger',
+    }))
 
 # TODO(phajdan.jr): Add the Precise bot to gatekeeper.
 B('Linux Tests (dbg)(1)(Precise)',
@@ -509,7 +536,7 @@ B('Linux Clang (dbg)', 'dbg_linux_clang', 'compile', 'linux_dbg',
   notify_on_missing=True)
 F('dbg_linux_clang', linux().ChromiumFactory(
     target='Debug',
-    options=['--build-tool=ninja', '--compiler=goma-clang'],
+    options=goma_clang_ninja_options,
     tests=[
       'base_unittests',
       'components_unittests',
@@ -538,7 +565,7 @@ B('Linux Clang (dbg)(Precise)',
   notify_on_missing=True)
 F('dbg_precise_linux_clang', linux().ChromiumFactory(
     target='Debug',
-    options=['--build-tool=ninja', '--compiler=goma-clang'],
+    options=goma_clang_ninja_options,
     tests=[
       'base_unittests',
       'components_unittests',
@@ -563,5 +590,5 @@ F('dbg_precise_linux_clang', linux().ChromiumFactory(
     }))
 
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)
