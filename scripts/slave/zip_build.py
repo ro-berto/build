@@ -139,11 +139,11 @@ def FileRegexBlacklist(options):
 
 
 def FileExclusions():
-  all_platforms = ['.landmines', 'obj', 'lib', 'gen']
+  all_platforms = ['.landmines', 'obj', 'gen']
   # Skip files that the testers don't care about. Mostly directories.
   if chromium_utils.IsWindows():
     # Remove obj or lib dir entries
-    return all_platforms + ['cfinstaller_archive', 'installer_archive']
+    return all_platforms + ['cfinstaller_archive', 'lib', 'installer_archive']
   if chromium_utils.IsMac():
     return all_platforms + [
       # We don't need the arm bits v8 builds.
@@ -161,7 +161,7 @@ def FileExclusions():
       # copy outside the app.
       'Chromium Helper.app',
       'Google Chrome Helper.app',
-      '.deps', 'obj.host', 'obj.target',
+      '.deps', 'obj.host', 'obj.target', 'lib'
     ]
   if chromium_utils.IsLinux():
     return all_platforms + [
