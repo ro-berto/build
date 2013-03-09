@@ -160,6 +160,9 @@ def real_main(base_dir, expected):
 
 
 def main():
+  # Remove site_config's we don't add ourselves. Can cause issues when running
+  # this test under a buildbot-spawned process.
+  sys.path = [x for x in sys.path if not x.endswith('site_config')]
   base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
   sys.path.extend(os.path.normpath(os.path.join(base_dir, d)) for d in (
       'site_config',
