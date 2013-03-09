@@ -1,13 +1,12 @@
-#!/usr/bin/env python
 # Copyright (c) 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
 """Specifies how to launch the gatekeeper."""
 
-import os
+from slave import recipe_util
 
-BASE_DIR = os.path.join(os.pardir, os.pardir, os.pardir)
-SCRIPT_DIR = os.path.join(BASE_DIR, 'scripts')
-script = os.path.join(SCRIPT_DIR, 'slave', 'gatekeeper_launch.py')
-factory_properties = {'script': script}
+def GetFactoryProperties(_build_properties):
+  return {
+      'script': recipe_util.build_path(
+          'scripts', 'slave', 'gatekeeper_launch.py')}
