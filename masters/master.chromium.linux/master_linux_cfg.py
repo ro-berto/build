@@ -351,7 +351,7 @@ F('dbg', linux().ChromiumFactory(
         'gclient_env': {
             'GYP_GENERATORS':'ninja',
         },
-        'trigger': 'linux_dbg_precise_trigger',
+        'trigger': 'linux_dbg_trigger',
     }))
 
 B('Linux Builder (dbg)(32)', 'dbg_32', 'compile', 'linux_dbg',
