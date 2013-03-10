@@ -205,9 +205,13 @@ LKGR_STEPS = {
     'Linux Builder (dbg)': [
       'compile',
     ],
-    'Linux Builder x64': [
+    'Linux Builder (dbg)(32)': [
+      'compile',
+    ],
+    'Linux Builder': [
       'check_deps',
     ],
+    # TODO(phajdan.jr): Add 32-bit Linux Precise testers to LKGR.
     'Linux Tests (dbg)(1)': [
       'browser_tests',
       'net_unittests',
