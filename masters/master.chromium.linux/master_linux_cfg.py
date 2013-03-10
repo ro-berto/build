@@ -281,6 +281,19 @@ dbg_32_archive = master_config.GetArchiveUrl(
 T('linux_dbg_trigger')
 T('linux_dbg_32_trigger')
 
+B('Linux Builder (dbg)(32)', 'dbg_32', 'compile', 'linux_dbg',
+  auto_reboot=False, notify_on_missing=True)
+F('dbg_32', linux().ChromiumFactory(
+    slave_type='Builder',
+    target='Debug',
+    options=goma_ninja_options + linux_all_test_targets,
+    factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
+        'trigger': 'linux_dbg_32_trigger',
+    }))
+
 #
 # Linux Dbg Unit testers
 #
@@ -352,19 +365,6 @@ F('dbg', linux().ChromiumFactory(
             'GYP_GENERATORS':'ninja',
         },
         'trigger': 'linux_dbg_trigger',
-    }))
-
-B('Linux Builder (dbg)(32)', 'dbg_32', 'compile', 'linux_dbg',
-  auto_reboot=False, notify_on_missing=True)
-F('dbg_32', linux().ChromiumFactory(
-    slave_type='Builder',
-    target='Debug',
-    options=goma_ninja_options + linux_all_test_targets,
-    factory_properties={
-        'gclient_env': {
-            'GYP_GENERATORS':'ninja',
-        },
-        'trigger': 'linux_dbg_32_trigger',
     }))
 
 B('Linux Tests (dbg)(1)',
