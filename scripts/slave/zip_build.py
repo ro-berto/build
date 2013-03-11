@@ -384,7 +384,7 @@ def main(argv):
 
   if (options.path_filter is None
       and options.factory_properties.get('asan')
-      and chromium_utils.isWindows()):
+      and chromium_utils.IsWindows()):
     options.path_filter = 'asan_win'
   options.path_filter = PATH_FILTERS.get(options.path_filter)
 
