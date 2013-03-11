@@ -23,7 +23,7 @@ from slave import slave_utils
 class StagingError(Exception): pass
 
 
-def ASANFilter(path):
+def ASANWinFilter(path):
   """Takes a path to a file and returns the path to its asan'd counterpart.
 
   Returns None if path is already an asan'd file.
@@ -43,7 +43,7 @@ def ASANFilter(path):
 
 
 PATH_FILTERS = {
-    'asan': ASANFilter,
+    'asan_win': ASANWinFilter,
 }
 
 
@@ -382,8 +382,10 @@ def main(argv):
   if args[1:]:
     print 'Warning -- unknown arguments' % args[1:]
 
-  if options.path_filter is None and options.factory_properties.get('asan'):
-    options.path_filter = 'asan'
+  if (options.path_filter is None
+      and options.factory_properties.get('asan')
+      and chromium_utils.isWindows()):
+    options.path_filter = 'asan_win'
   options.path_filter = PATH_FILTERS.get(options.path_filter)
 
   return Archive(options)
