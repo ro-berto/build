@@ -6,6 +6,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.ChromiumWebkit
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -46,6 +50,7 @@ F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
       'content_shell_builder',
     ],
     factory_properties={
+      'additional_drt_flag': '--dump-render-tree',
       'additional_expectations_files': [
           [ 'third_party',
             'WebKit',
@@ -54,8 +59,7 @@ F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
             'chromium',
             'ContentShellTestExpectations' ],
       ],
-      'additional_drt_flag': '--dump-render-tree',
-      'archive_webkit_results': True,
+      'archive_webkit_results': ActiveMaster.is_production_host,
       'driver_name': 'Content Shell',
       'gclient_env': {
           'GYP_GENERATORS':'ninja',
@@ -65,5 +69,5 @@ F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
     }))
 
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)

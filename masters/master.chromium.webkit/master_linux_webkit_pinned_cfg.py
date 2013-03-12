@@ -5,6 +5,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.ChromiumWebkit
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -51,11 +55,11 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         'additional_expectations_files': [
             ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],
         ],
-        'archive_webkit_results': True,
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
     }))
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)

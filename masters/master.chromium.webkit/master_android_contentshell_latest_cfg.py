@@ -6,6 +6,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.ChromiumWebkit
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -38,10 +42,7 @@ F('f_contentshell_android_rel',
   linux_android().ChromiumWebkitLatestAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
-        'android_bot_id': 'webkit-latest-contentshell-rel',
-        'archive_webkit_results': True,
-        'generate_gtest_json': True,
-        'test_results_server': 'test-results.appspot.com',
+        'additional_drt_flag': '--dump-render-tree',
         'additional_expectations_files': [
             [ 'third_party',
               'WebKit',
@@ -50,9 +51,12 @@ F('f_contentshell_android_rel',
               'chromium',
               'ContentShellTestExpectations' ],
         ],
-        'additional_drt_flag': '--dump-render-tree',
+        'android_bot_id': 'webkit-latest-contentshell-rel',
+        'archive_webkit_results': ActiveMaster.is_production_host,
         'driver_name': 'content_shell',
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
         }))
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)

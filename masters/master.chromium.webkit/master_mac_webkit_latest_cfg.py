@@ -21,6 +21,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.ChromiumWebkit
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -86,7 +90,7 @@ F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
       'webkit_unit',
     ],
     factory_properties={
-        'archive_webkit_results': True,
+        'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -103,7 +107,7 @@ F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
       'webkit_unit',
     ],
     factory_properties={
-        'archive_webkit_results': True,
+        'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -121,7 +125,7 @@ F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
       'webkit_unit',
     ],
     factory_properties={
-        'archive_webkit_results': True,
+        'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -182,7 +186,7 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
       'webkit_unit',
     ],
     factory_properties={
-        'archive_webkit_results': True,
+        'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
@@ -196,5 +200,5 @@ B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
 ##
 ################################################################################
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)

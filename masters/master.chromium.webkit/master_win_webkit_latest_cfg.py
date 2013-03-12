@@ -5,6 +5,10 @@
 from master import master_config
 from master.factory import chromium_factory
 
+import config
+
+ActiveMaster = config.Master.ChromiumWebkit
+
 defaults = {}
 
 helper = master_config.Helper(defaults)
@@ -62,9 +66,10 @@ F('f_webkit_rel_tests', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=webkit_tests,
-    factory_properties={'archive_webkit_results': True,
-                        'generate_gtest_json': True,
-                        'test_results_server': 'test-results.appspot.com'}))
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com'}))
 
 B('WebKit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 
@@ -110,10 +115,12 @@ F('f_webkit_dbg_tests_1', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=webkit_tests,
-    factory_properties={'archive_webkit_results': True,
-                        'generate_gtest_json': True,
-                        'test_results_server': 'test-results.appspot.com',
-                        'layout_part': '1:2'}))
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'generate_gtest_json': True,
+        'layout_part': '1:2',
+        'test_results_server': 'test-results.appspot.com',
+    }))
 
 B('WebKit Win7 (dbg)(2)', 'f_webkit_dbg_tests_2',
     scheduler='s4_webkit_dbg_trigger')
@@ -122,9 +129,11 @@ F('f_webkit_dbg_tests_2', win().ChromiumWebkitLatestFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=['webkit'],
-    factory_properties={'archive_webkit_results': True,
-                        'test_results_server': 'test-results.appspot.com',
-                        'layout_part': '2:2'}))
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'layout_part': '2:2',
+        'test_results_server': 'test-results.appspot.com',
+    }))
 
-def Update(config, active_master, c):
+def Update(_config, active_master, c):
   return helper.Update(c)
