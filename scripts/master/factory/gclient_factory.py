@@ -11,9 +11,6 @@ first."""
 import os
 import re
 
-from buildbot.process.properties import WithProperties
-from buildbot.steps import trigger
-
 from master.factory.build_factory import BuildFactory
 from master.factory import commands
 
@@ -280,35 +277,9 @@ class GClientFactory(object):
     trigger_name = factory_properties.get('trigger')
     # Propagate properties to the children if this is set in the factory.
     trigger_properties = factory_properties.get('trigger_properties', [])
-    factory.addStep(trigger.Trigger(
-        schedulerNames=[trigger_name],
-        updateSourceStamp=False,
-        waitForFinish=False,
-        set_properties={
-            # Here are the standard names of the parent build properties.
-            'parent_buildername': WithProperties('%(buildername:-)s'),
-            'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
-            'parent_branch': WithProperties('%(branch:-)s'),
-            'parent_got_revision': WithProperties('%(got_revision:-)s'),
-            'parent_got_webkit_revision':
-                WithProperties('%(got_webkit_revision:-)s'),
-            'parent_got_nacl_revision':
-                WithProperties('%(got_nacl_revision:-)s'),
-            'parent_revision': WithProperties('%(revision:-)s'),
-            'parent_scheduler': WithProperties('%(scheduler:-)s'),
-            'parent_slavename': WithProperties('%(slavename:-)s'),
-            'parent_builddir': WithProperties('%(builddir:-)s'),
-            'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
-            'issue': WithProperties('%(issue:-)s'),
-            'patchset': WithProperties('%(patchset:-)s'),
-
-            # And some scripts were written to use non-standard names.
-            'parent_cr_revision': WithProperties('%(got_revision:-)s'),
-            'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
-            'parentname': WithProperties('%(buildername)s'),
-            'parentslavename': WithProperties('%(slavename:-)s'),
-            },
-        copy_properties=trigger_properties + ['testfilter']))
+    factory.addStep(commands.CreateTriggerStep(
+        trigger_name=trigger_name,
+        trigger_copy_properties=trigger_properties))
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
                     slave_type, sudo_for_remove=False, gclient_deps=None):

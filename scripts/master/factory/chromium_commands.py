@@ -1604,24 +1604,12 @@ class ChromiumCommands(commands.FactoryCommands):
         using_ninja, [], doStepIf=swarm_commands.TestStepFilterSwarm)
 
     # Trigger the swarm test builder.
-    properties = {
-        'issue': WithProperties('%(issue:-)s'),
-        'target_os': self._target_platform,
-        'parent_buildername': WithProperties('%(buildername:-)s'),
-        'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
-        'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
-        'patchset': WithProperties('%(patchset:-)s')
-    }
-    self._factory.addStep(
-        trigger.Trigger(
-            name='trigger_swarm_triggered',
-            schedulerNames=['swarm_triggered'],
-            updateSourceStamp=False,
-            waitForFinish=False,
-            set_properties=properties,
-            copy_properties=['swarm_hashes', 'testfilter'],
-            doStepIf=swarm_commands.TestStepFilterSwarm))
-
+    self._factory.addStep(commands.CreateTriggerStep(
+        trigger_name='swarm_triggered',
+        trigger_set_properties={
+            'target_os': self._target_platform,
+        },
+        trigger_copy_properties=['swarm_hashes']))
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by

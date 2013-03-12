@@ -18,6 +18,7 @@ from buildbot.process.properties import WithProperties
 from buildbot.status.builder import SUCCESS
 from buildbot.steps import shell
 from buildbot.steps.transfer import FileDownload
+from buildbot.steps import trigger
 from twisted.python import log
 
 from common import chromium_utils
@@ -69,6 +70,56 @@ def CreatePerformanceStepClass(
   # knows which log_processor to use.
   return chromium_utils.InitializePartiallyWithArguments(
       command_class, log_processor_class=log_processor_class)
+
+
+def CreateTriggerStep(trigger_name, trigger_set_properties=None,
+                      trigger_copy_properties=None):
+  """Returns a Trigger Step, with all the default values copied over.
+
+  Args:
+    trigger_name: the name of the triggered scheduler.
+    trigger_set_properties: a dict of all the properties to be set on the
+      triggered bot. If a default property has the same name, it will be
+      overwritten.
+    trigger_copy_properties: a list of all the additional properties to copy
+      over to the triggered bot.
+  """
+  trigger_set_properties = trigger_set_properties or {}
+  trigger_copy_properties = trigger_copy_properties or []
+
+  set_properties =  {
+      # Here are the standard names of the parent build properties.
+      'parent_buildername': WithProperties('%(buildername:-)s'),
+      'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
+      'parent_branch': WithProperties('%(branch:-)s'),
+      'parent_got_revision': WithProperties('%(got_revision:-)s'),
+      'parent_got_webkit_revision':
+          WithProperties('%(got_webkit_revision:-)s'),
+      'parent_got_nacl_revision':
+          WithProperties('%(got_nacl_revision:-)s'),
+      'parent_revision': WithProperties('%(revision:-)s'),
+      'parent_scheduler': WithProperties('%(scheduler:-)s'),
+      'parent_slavename': WithProperties('%(slavename:-)s'),
+      'parent_builddir': WithProperties('%(builddir:-)s'),
+      'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
+      'issue': WithProperties('%(issue:-)s'),
+      'patchset': WithProperties('%(patchset:-)s'),
+
+      # And some scripts were written to use non-standard names.
+      'parent_cr_revision': WithProperties('%(got_revision:-)s'),
+      'parent_wk_revision': WithProperties('%(got_webkit_revision:-)s'),
+      'parentname': WithProperties('%(buildername)s'),
+      'parentslavename': WithProperties('%(slavename:-)s'),
+  }
+
+  set_properties.update(trigger_set_properties)
+
+  return trigger.Trigger(
+      schedulerNames=[trigger_name],
+      updateSourceStamp=False,
+      waitForFinish=False,
+      set_properties=set_properties,
+      copy_properties=trigger_copy_properties + ['testfilter'])
 
 
 class RunHooksShell(shell.ShellCommand):
