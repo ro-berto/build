@@ -156,6 +156,8 @@ https://sites.google.com/a/chromium.org/dev/developers/testing/try-server-usage<
 
   def buildMessage(self, name, build, results):
     m = self.buildMessage_internal(name, build, results)
+    if m is None:
+      return
     if self.reply_to:
       m['Reply-To'] = self.reply_to
     # now, who is this message going to?
