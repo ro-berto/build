@@ -199,8 +199,9 @@ class TestAnnotationStreams(unittest.TestCase):
       self.assertRaises(ValueError, s.write_log_lines, 'mylog', lines)
 
   def testAdvanced(self):
-    step = annotator.AdvancedAnnotationStep(stream=self.buf)
-    stream = annotator.AdvancedAnnotationStream(stream=self.buf)
+    step = annotator.AdvancedAnnotationStep(stream=self.buf, flush_before=None)
+    stream = annotator.AdvancedAnnotationStream(stream=self.buf,
+                                                flush_before=None)
     stream.seed_step('one')
     stream.seed_step('two')
     stream.step_cursor('one')
