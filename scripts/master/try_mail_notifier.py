@@ -94,7 +94,7 @@ class TryMailNotifier(mail.MailNotifier):
       if parent_name and parent_buildnum:
         parent_builder_url = ('%s/builders/%s' %
                       (waterfall_url.rstrip('/'), parent_name))
-        parent_build = parent_builder_url + '/builds/%d' % parent_buildnum
+        parent_build = parent_builder_url + '/builds/%s' % parent_buildnum
         parent_html = (
             '<br>Parent build: <a href="%(build_url)s">%(buildnum)s</a>'
             ' on <a href="%(builder_url)s">%(builder)s</a><br>'
