@@ -239,14 +239,14 @@ class DartFactory(gclient_factory.GClientFactory):
 
 class DartUtils(object):
   mac_options = ['--compiler=goma-clang',
+                 '--build-tool=ninja',
                  '--',
-                 '-target',
                  'dartium_builder']
   mac_dbg_options = ['--compiler=goma-clang',
                      '--build-tool=ninja',
                      '--',
                      'dartium_builder']
-  linux_options = ['--compiler=goma', 'dartium_builder']
+  linux_options = ['--compiler=goma', '--build-tool=ninja', 'dartium_builder']
 
   win_project = 'all.sln;dartium_builder'
 
@@ -272,13 +272,13 @@ class DartUtils(object):
     'annotated_script': 'dart_buildbot_run.py',
   }
   linux_factory_properties = {
-    'gclient_env': {'GYP_GENERATORS' : 'make'},
+    'gclient_env': {'GYP_GENERATORS' : 'ninja'},
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
   linux32_factory_properties = {
-    'gclient_env': {'GYP_GENERATORS' : 'make',
+    'gclient_env': {'GYP_GENERATORS' : 'ninja',
                     'GYP_DEFINES': 'target_arch=ia32'},
     'gclient_transitive': True,
     'no_gclient_branch': True,
@@ -294,6 +294,7 @@ class DartUtils(object):
     'dart_android': DartFactory('dart', 'dart_android', target_os='android'),
     'dart_client': DartFactory('dart', 'dart_client'),
     'dart-editor': DartFactory('dart', 'dart-editor'),
+    'new_analyzer-linux': DartFactory('dart', 'new_analyzer-linux'),
     'frog': DartFactory('dart', 'frog'),
     'frogsh': DartFactory('dart', 'frogsh'),
     'dart2dart-linux': DartFactory('dart', 'dart2dart-linux'),

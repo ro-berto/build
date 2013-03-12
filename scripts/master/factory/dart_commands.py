@@ -109,10 +109,14 @@ class DartCommands(commands.FactoryCommands):
                 options.get('name').startswith('dartc'))
     is_dart2dart = (options.get('name') != None and
                     options.get('name').startswith('dart2dart'))
+    is_new_analyzer = (options.get('name') != None and
+                       options.get('name').startswith('new_analyzer'))
 
     arch = options.get('arch')
-    if is_dartc:
+    if is_dartc or is_new_analyzer:
       compiler = 'dartc'
+      if is_new_analyzer:
+        compiler = 'new_analyzer'
       runtime = 'none'
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
