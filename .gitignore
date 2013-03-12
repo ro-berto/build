@@ -19,6 +19,7 @@ state.sqlite-wal
 twistd.log*
 twistd.pid
 /goma
+/masters/*/actions.log
 /masters/master.chromium.chrome/google-chrome-rel-chromeos
 /masters/master.chromium.chrome/google-chrome-rel-linux
 /masters/master.chromium.chrome/google-chrome-rel-linux_64
