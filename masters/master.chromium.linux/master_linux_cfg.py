@@ -139,7 +139,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
     tests=[
       'base_unittests',
       'browser_tests',
-      'cacheinvalidation',
+      'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
       'components_unittests',
@@ -190,7 +190,7 @@ linux_aura_tests = [
   'aura',
   'base_unittests',
   'browser_tests',
-  'cacheinvalidation',
+  'cacheinvalidation_unittests',
   'compositor',
   'content_browsertests',
   'content_unittests',
@@ -323,7 +323,7 @@ F('dbg_unit_32_2', linux_tester().ChromiumFactory(
     target='Debug',
     tests=[
       'base_unittests',
-      'cacheinvalidation',
+      'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
       'components_unittests',
@@ -392,7 +392,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     target='Debug',
     tests=[
       'base_unittests',
-      'cacheinvalidation',
+      'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
       'components_unittests',

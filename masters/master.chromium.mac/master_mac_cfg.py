@@ -100,7 +100,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
   tests=[
     'base_unittests',
     'browser_tests',
-    'cacheinvalidation',
+    'cacheinvalidation_unittests',
     'cc_unittests',
     'chromedriver2_unittests',
     'content_browsertests',
@@ -214,7 +214,7 @@ F('dbg_unit_1', mac_tester().ChromiumFactory(
   target='Debug',
   tests=[
     'browser_tests',
-    'cacheinvalidation',
+    'cacheinvalidation_unittests',
     'cc_unittests',
     'chromedriver2_unittests',
     'content_browsertests',

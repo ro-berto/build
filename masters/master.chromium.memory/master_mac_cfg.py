@@ -82,7 +82,7 @@ mac_asan_options = [
 mac_asan_tests_1 = [
   'base_unittests',
   'browser_tests',
-  'cacheinvalidation',
+  'cacheinvalidation_unittests',
   'content_browsertests',
   'content_unittests',
   'crypto',

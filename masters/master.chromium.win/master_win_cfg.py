@@ -101,7 +101,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
     build_url=rel_archive,
     tests=[
       'browser_tests',
-      'cacheinvalidation',
+      'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
       'content_browsertests',
@@ -376,7 +376,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
     build_url=dbg_archive,
     tests=[
       'base_unittests',
-      'cacheinvalidation',
+      'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
       'check_deps',

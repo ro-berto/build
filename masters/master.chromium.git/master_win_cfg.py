@@ -57,7 +57,7 @@ F('rel_unit_1', win().ChromiumGITFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=['browser_tests',
-           'cacheinvalidation',
+           'cacheinvalidation_unittests',
            'courgette',
            'crypto',
            'googleurl',

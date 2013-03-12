@@ -61,7 +61,7 @@ F('rel_unit_1', mac().ChromiumGITFactory(
   build_url=rel_archive,
   tests=['base_unittests',
          'browser_tests',
-         'cacheinvalidation',
+         'cacheinvalidation_unittests',
          'crypto',
          'googleurl',
          'gpu',

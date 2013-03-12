@@ -127,7 +127,7 @@ asan_tests_1 = [
   'aura',
   'base_unittests',
   'browser_tests',
-  'cacheinvalidation',
+  'cacheinvalidation_unittests',
   'chromeos_unittests',
   'compositor',
   'content_browsertests',
