@@ -142,7 +142,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/chrome/test/data/plugin', None)],
     'unit':
       [('src/chrome/test/data/osdd', None)],
-    '^(webkit|test_shell)$':
+    '^(webkit|test_shell|content_unittests)$':
       [('src/webkit/data/bmp_decoder', None),
        ('src/webkit/data/ico_decoder', None),
        ('src/webkit/data/test_shell/plugins', None),
