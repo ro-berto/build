@@ -1609,7 +1609,8 @@ class ChromiumCommands(commands.FactoryCommands):
         trigger_set_properties={
             'target_os': self._target_platform,
         },
-        trigger_copy_properties=['swarm_hashes']))
+        trigger_copy_properties=['swarm_hashes'],
+        do_step_if=swarm_commands.TestStepFilterSwarm))
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by

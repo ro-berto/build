@@ -73,7 +73,7 @@ def CreatePerformanceStepClass(
 
 
 def CreateTriggerStep(trigger_name, trigger_set_properties=None,
-                      trigger_copy_properties=None):
+                      trigger_copy_properties=None, do_step_if=True):
   """Returns a Trigger Step, with all the default values copied over.
 
   Args:
@@ -119,7 +119,8 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       updateSourceStamp=False,
       waitForFinish=False,
       set_properties=set_properties,
-      copy_properties=trigger_copy_properties + ['testfilter'])
+      copy_properties=trigger_copy_properties + ['testfilter'],
+      doStepIf=do_step_if)
 
 
 class RunHooksShell(shell.ShellCommand):
