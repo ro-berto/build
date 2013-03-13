@@ -817,19 +817,7 @@ def main_linux(options, args):
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
-    # Run the generated command through the isolate script, which will
-    # handle running the script in isoalte mode (if needed).
-    run_isolated_test = os.path.join(os.path.dirname(__file__),
-                                     'runisolatedtest.py')
-    tool_dir = os.path.join(build_dir, '..', 'tools')
-    isolate_command = [sys.executable, run_isolated_test,
-                       '--test_name', options.test_type,
-                       '--builder_name', options.build_properties.get(
-                           'buildername', ''),
-                       '--tool_dir', tool_dir,
-                       test_exe_path, '--'] + command
-
-    result = _RunGTestCommand(isolate_command, pipes=pipes,
+    result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker,
                               extra_env=extra_env)
   finally:
