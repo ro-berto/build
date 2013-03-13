@@ -41,6 +41,10 @@ def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
   # Only set the outdir if we are building the hashtable to ensure we know where
   # to load the hashtable from later.
   factory_properties = {
+    'compile_env': {
+      'ISOLATE_DEBUG': '1',
+    },
+    'data_dir': isolation_outdir,
     'gclient_env' : {
       'GYP_DEFINES': (
           'test_isolation_mode=' + isolation_mode +
@@ -49,11 +53,8 @@ def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
       ),
       'GYP_MSVS_VERSION': '2010',
     },
-    'compile_env': {
-      'ISOLATE_DEBUG': '1',
-    },
-    'data_dir': isolation_outdir,
     'swarm_server': swarm_server,
+    'window_manager': False,
   }
   if ninja:
     factory_properties['gclient_env']['GYP_GENERATORS'] = 'ninja'
