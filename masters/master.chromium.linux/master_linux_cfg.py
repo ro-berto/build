@@ -286,8 +286,11 @@ B('Linux Builder (dbg)(32)', 'dbg_32', 'compile', 'linux_dbg',
 F('dbg_32', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=['--compiler=goma'] + linux_all_test_targets,
+    options=goma_ninja_options + linux_all_test_targets,
     factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
         'trigger': 'linux_dbg_32_trigger',
     }))
 
