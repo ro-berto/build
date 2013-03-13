@@ -488,7 +488,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               tool_opts=tool_options,
                               factory_properties=factory_properties)
 
-  def AddDomPerfTests(self, factory_properties, tool_options=None):
+  def AddDomPerfTests(self, factory_properties):
     factory_properties = factory_properties or {}
     args = ['--target', self._target,
             '--build-dir', self._build_dir]
@@ -496,8 +496,7 @@ class ChromiumCommands(commands.FactoryCommands):
     args = self.AddBuildProperties(args)
     args = self.AddFactoryProperties(factory_properties, args)
 
-    tool_options = tool_options or []
-    tool_options.append('--no-xvfb')
+    tool_options = ['--no-xvfb']
 
     self.AddAnnotatedPerfStep('dom_perf', None, 'graphing',
                               step_name='dom_perf',
@@ -505,12 +504,11 @@ class ChromiumCommands(commands.FactoryCommands):
                               py_script=True, tool_opts=tool_options,
                               factory_properties=factory_properties)
 
-  def AddIDBPerfTests(self, factory_properties, tool_options=None):
+  def AddIDBPerfTests(self, factory_properties):
     self.AddAnnotatedPerfStep('idb_perf', 'IndexedDBTest.Perf', 'graphing',
                               step_name='idb_perf',
                               cmd_options=['--gtest_print_time'],
-                              factory_properties=factory_properties,
-                              tool_opts=tool_options)
+                              factory_properties=factory_properties)
 
   def AddChromeFramePerfTests(self, factory_properties):
     self.AddAnnotatedPerfStep('chrome_frame_perf', None, 'graphing',

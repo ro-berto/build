@@ -671,24 +671,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGpuThroughputTests(fp)
     if R('dom_perf'):
       f.AddDomPerfTests(fp)
-    if R('dom_perf_pd'):
-      f.AddDomPerfTests(fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
-    if R('idb_perf_pd'):
-      f.AddIDBPerfTests(fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_moz-http'):
       f.AddPageCyclerTest('page_cycler_moz-http', fp)
-    if R('page_cycler_moz-http_pd'):
-      f.AddPageCyclerTest('page_cycler_moz-http', fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_bloat-http'):
       f.AddPageCyclerTest('page_cycler_bloat-http', fp)
-    if R('page_cycler_bloat-http_pd'):
-      f.AddPageCyclerTest('page_cycler_bloat-http', fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
