@@ -78,6 +78,14 @@ def cleanup_directory(directory_to_clean):
   print '\nRemoved %d files from %s' % (removed_file_count, directory_to_clean)
 
 
+def remove_old_isolate_directories(slave_path):
+  """Removes all the old isolate directories."""
+  for path in glob.iglob(os.path.join(slave_path, '*', 'isolate*')):
+    print 'Removing %s' % path
+    cleanup_directory(path)
+    safe_rmdir(path)
+
+
 def remove_build_dead(slave_path):
   """Removes all the build.dead directories."""
   for path in glob.iglob(os.path.join(slave_path, '*', 'build.dead')):
@@ -111,9 +119,11 @@ def main_win():
   """Main function for Windows platform."""
   slave_utils.RemoveChromeTemporaryFiles()
   if os.path.isdir('e:\\'):
-    remove_build_dead('e:\\b\\build\\slave')
+    slave_path = 'e:\\b\\build\\slave'
   else:
-    remove_build_dead('c:\\b\\build\\slave')
+    slave_path =  'c:\\b\\build\\slave'
+  remove_build_dead(slave_path)
+  remove_old_isolate_directories(slave_path)
   # TODO(maruel): Temporary, add back.
   #cleanup_directory(os.environ['TEMP'])
   check_free_space_path('c:\\')
@@ -138,6 +148,7 @@ def main_mac():
   """Main function for Mac platform."""
   slave_utils.RemoveChromeTemporaryFiles()
   remove_build_dead('/b/build/slave')
+  remove_old_isolate_directories('/b/build/slave')
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
   if os.path.isdir('/b'):
@@ -151,6 +162,7 @@ def main_linux():
   """Main function for linux platform."""
   slave_utils.RemoveChromeTemporaryFiles()
   remove_build_dead('/b/build/slave')
+  remove_old_isolate_directories('/b/build/slave')
   # TODO(maruel): Temporary, add back.
   # cleanup_directory('/tmp')
   if os.path.isdir('/b'):
