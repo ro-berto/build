@@ -82,7 +82,10 @@ class DartCommands(commands.FactoryCommands):
                 options.get('name').startswith('dartc'))
     is_dart2dart = (options.get('name') != None and
                     options.get('name').startswith('dart2dart'))
-    if not is_dartc and not is_dart2dart:
+    is_new_analyzer = (options.get('name') != None and
+                       options.get('name').startswith('new_analyzer'))
+
+    if not is_dartc and not is_dart2dart and not is_new_analyzer:
       cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
 
