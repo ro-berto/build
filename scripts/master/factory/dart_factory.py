@@ -38,11 +38,13 @@ windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
 dart_revision_url = "http://code.google.com/p/dart/source/detail?r=%s"
 
 # gclient custom vars
+CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url', config.Master.sourceforge_url)
 CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
 CUSTOM_VARS_CHROMIUM_URL = (
   'chromium_url', config.Master.server_url + config.Master.repo_root)
 
-custom_vars_list = [CUSTOM_VARS_GOOGLECODE_URL,
+custom_vars_list = [CUSTOM_VARS_SOURCEFORGE_URL,
+                    CUSTOM_VARS_GOOGLECODE_URL,
                     CUSTOM_VARS_CHROMIUM_URL]
 
 # These chromium factories are used for building dartium
