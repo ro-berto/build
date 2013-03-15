@@ -47,6 +47,25 @@ custom_vars_list = [CUSTOM_VARS_SOURCEFORGE_URL,
                     CUSTOM_VARS_GOOGLECODE_URL,
                     CUSTOM_VARS_CHROMIUM_URL]
 
+if config.Master.trunk_internal_url:
+  # gclient custom deps
+  CUSTOM_DEPS_WIN7_SDK = (
+    "src/third_party/platformsdk_win7",
+    config.Master.trunk_internal_url + "/third_party/platformsdk_win7@23175")
+  CUSTOM_DEPS_WIN8_SDK = (
+    "src/third_party/platformsdk_win8",
+    config.Master.trunk_internal_url
+    + "/third_party/platformsdk_win8_9200@32005")
+  CUSTOM_DEPS_DIRECTX_SDK = (
+    "src/third_party/directxsdk",
+    config.Master.trunk_internal_url + "/third_party/directxsdk@20250")
+
+  custom_deps_list_win = [CUSTOM_DEPS_WIN7_SDK,
+                          CUSTOM_DEPS_WIN8_SDK,
+                          CUSTOM_DEPS_DIRECTX_SDK]
+else:
+  custom_deps_list_win = []
+
 # These chromium factories are used for building dartium
 F_LINUX_CH = None
 F_MAC_CH = None
@@ -60,14 +79,22 @@ F_WIN_CH_MILESTONE = None
 
 
 def setup_chromium_factories():
-  gclient_dartium = gclient_factory.GClientSolution(
-      dartium_url, 'dartium.deps', custom_vars_list = custom_vars_list)
-  gclient_dartium_trunk = gclient_factory.GClientSolution(
-      dartium_trunk_url, 'dartium.deps', custom_vars_list = custom_vars_list)
-  gclient_dartium_milestone = gclient_factory.GClientSolution(
-      dartium_milestone_url,
-      'dartium.deps',
-      custom_vars_list = custom_vars_list)
+  import os
+  isFYI = os.getcwd().endswith("master.client.dart.fyi")
+
+  global custom_deps_list_win
+  if not isFYI:
+    print "Debug: using normal src-internal"
+    custom_deps_list_win = []
+  else:
+    print "Debug: using custom_deps for src-internal dependencies"
+
+  def new_solution(url, custom_vars, custom_deps):
+    return  gclient_factory.GClientSolution(
+        url,
+        'dartium.deps',
+        custom_vars_list = custom_vars,
+        custom_deps_list = custom_deps)
 
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
@@ -80,28 +107,37 @@ def setup_chromium_factories():
       self._solutions.append(solution)
 
   m_linux_ch = DartiumFactory('linux2')
-  m_linux_ch.add_solution(gclient_dartium)
+  m_linux_ch.add_solution(new_solution(dartium_url, custom_vars_list, []))
   m_mac_ch = DartiumFactory('darwin')
-  m_mac_ch.add_solution(gclient_dartium)
+  m_mac_ch.add_solution(new_solution(dartium_url, custom_vars_list, []))
   m_win_ch = DartiumFactory()
-  m_win_ch.add_solution(gclient_dartium)
+  m_win_ch.add_solution(
+      new_solution(dartium_url, custom_vars_list, custom_deps_list_win))
 
   m_linux_ch_trunk = DartiumFactory('linux2')
-  m_linux_ch_trunk.add_solution(gclient_dartium_trunk)
+  m_linux_ch_trunk.add_solution(
+      new_solution(dartium_trunk_url, custom_vars_list, []))
   m_mac_ch_trunk = DartiumFactory('darwin')
-  m_mac_ch_trunk.add_solution(gclient_dartium_trunk)
+  m_mac_ch_trunk.add_solution(
+      new_solution(dartium_trunk_url, custom_vars_list, []))
   m_win_ch_trunk = DartiumFactory()
-  m_win_ch_trunk.add_solution(gclient_dartium_trunk)
+  m_win_ch_trunk.add_solution(
+      new_solution(dartium_trunk_url, custom_vars_list, custom_deps_list_win))
 
   m_linux_ch_milestone = DartiumFactory('linux2')
-  m_linux_ch_milestone.add_solution(gclient_dartium_milestone)
+  m_linux_ch_milestone.add_solution(
+      new_solution(dartium_milestone_url, custom_vars_list, []))
   m_mac_ch_milestone = DartiumFactory('darwin')
-  m_mac_ch_milestone.add_solution(gclient_dartium_milestone)
+  m_mac_ch_milestone.add_solution(
+      new_solution(dartium_milestone_url, custom_vars_list, []))
   m_win_ch_milestone = DartiumFactory()
-  m_win_ch_milestone.add_solution(gclient_dartium_milestone)
+  m_win_ch_milestone.add_solution(
+      new_solution(dartium_milestone_url,
+                   custom_vars_list,
+                   custom_deps_list_win))
 
   trunk_internal_url_src = config.Master.trunk_internal_url_src
-  if trunk_internal_url_src:
+  if trunk_internal_url_src and not isFYI:
     gclient_trunk_internal = gclient_factory.GClientSolution(
         trunk_internal_url_src)
     m_win_ch.add_solution(gclient_trunk_internal)
