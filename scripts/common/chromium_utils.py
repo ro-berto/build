@@ -11,7 +11,6 @@ import glob
 import math
 import os
 import shutil
-import signal
 import socket
 import stat
 import string  # pylint: disable=W0402
@@ -26,8 +25,6 @@ try:
   import json  # pylint: disable=F0401
 except ImportError:
   import simplejson as json
-
-from common import buffer_muxer
 
 
 BUILD_DIR = os.path.realpath(os.path.join(
@@ -830,52 +827,34 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
   else:
-    def subprocess_setup():
-      # Python installs a SIGPIPE handler by default. This is usually not what
-      # non-Python subprocesses expect.
-      # http://www.chiark.greenend.org.uk/ucgi/~cjwatson/blosxom/
-      # 2009-07-02-python-sigpipe.html
-      signal.signal(signal.SIGPIPE, signal.SIG_DFL)
-
-    preexec_fn = subprocess_setup
-    close_fds = True
-    if IsWindows():
-      preexec_fn = None
-      close_fds = False
-
     # Start the initial process.
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, universal_newlines=True,
-                            close_fds=close_fds,
-                            preexec_fn=preexec_fn, **kwargs)
+                            stderr=subprocess.STDOUT, bufsize=0, **kwargs)
     proc_handles = [proc]
-    joined_streams = [buffer_muxer.StreamJoin([proc_handles[0].stdout,
-                                               proc_handles[0].stderr])]
 
     if pipes:
       pipe_number = 0
       for pipe in pipes:
         pipe_number = pipe_number + 1
         if pipe_number == len(pipes) and not (parser_func or filter_obj):
-          # The last pipe process needs to output to sys.stdout
-          filter_obj = RunCommandFilter()
-
-        pipe_proc = subprocess.Popen(pipe, stdin=joined_streams[0].getPipe(),
-                                     stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE,
-                                     close_fds=close_fds,
-                                     preexec_fn=preexec_fn,
-                                     universal_newlines=True)
-        joined_streams[0].close()
+          # The last pipe process needs to output to sys.stdout or filter
+          stdout = sys.stdout
+        else:
+          # Output to a pipe, since another pipe is on top of us.
+          stdout = subprocess.PIPE
+        pipe_proc = subprocess.Popen(pipe, stdin=proc_handles[0].stdout,
+                                     stdout=stdout, stderr=subprocess.STDOUT)
         proc_handles.insert(0, pipe_proc)
-        joined_streams.insert(0, buffer_muxer.StreamJoin([pipe_proc.stdout,
-                                                          pipe_proc.stderr]))
+
+      # Allow proc to receive a SIGPIPE if the piped process exits.
+      for handle in proc_handles[1:]:
+        handle.stdout.close()
 
     thread = None
     if parser_func or filter_obj:
       # Launch and start the reader thread.
       thread = threading.Thread(target=ProcessRead,
-                                args=(joined_streams[0], sys.stdout,
+                                args=(proc_handles[0].stdout, sys.stdout,
                                       parser_func, filter_obj))
       thread.start()
 

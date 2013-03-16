@@ -5,15 +5,12 @@
 
 """Unit tests for classes in chromium_utils.py."""
 
-import os
 import sys
 import unittest
 
 import test_env  # pylint: disable=W0611
 
 from common import chromium_utils
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class FakeParser(object):
@@ -43,6 +40,7 @@ def synthesizeCmd(args):
 
 
 class TestRunCommand(unittest.TestCase):
+
   def testRunCommandPlain(self):
     mycmd = synthesizeCmd(['exit()'])
     self.assertEqual(0, chromium_utils.RunCommand(mycmd, print_cmd=False))
@@ -81,7 +79,6 @@ class TestRunCommand(unittest.TestCase):
     retval = chromium_utils.RunCommand(firstcmd, print_cmd=False,
                                        pipes=[secondcmd],
                                        parser_func=parser.ProcessLine)
-
     self.assertEqual(0, retval)
     self.assertEqual(['11', '21', ''], parser.lines)
 
@@ -95,22 +92,9 @@ class TestRunCommand(unittest.TestCase):
     retval = chromium_utils.RunCommand(firstcmd, print_cmd=False,
                                        pipes=[secondcmd],
                                        filter_obj=filter_obj)
-
     self.assertEqual(0, retval)
     self.assertEqual(['11\n', '21\n'], filter_obj.lines)
 
-  def testRunCommandStderr(self):
-    firstcmd = synthesizeCmd(['for _ in range(1000): print "1\\n2\\n3"'])
-    secondcmd = [sys.executable, os.path.abspath(
-        os.path.join(SCRIPT_DIR, 'data', 'shredder.py'))]
-    filter_obj = FakeFilterObj()
-    retval = chromium_utils.RunCommand(firstcmd, print_cmd=False,
-                                       pipes=[secondcmd, secondcmd, secondcmd],
-                                       filter_obj=filter_obj)
-    self.assertEqual(0, retval)
-    self.assertEqual(1000, filter_obj.lines.count('1\n'))
-    self.assertEqual(1000, filter_obj.lines.count('2\n'))
-    self.assertEqual(1000, filter_obj.lines.count('3\n'))
 
 if __name__ == '__main__':
   unittest.main()
