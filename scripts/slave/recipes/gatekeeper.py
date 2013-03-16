@@ -8,5 +8,5 @@ from slave import recipe_util
 
 def GetFactoryProperties(_build_properties):
   return {
-      'script': recipe_util.build_path(
+      'script': recipe_util.Steps.build_path(
           'scripts', 'slave', 'gatekeeper_launch.py')}
