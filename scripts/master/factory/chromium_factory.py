@@ -1403,7 +1403,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     client_os = factory_properties.get('client_os')
     if slave_type == 'ChromebotServer':
       chromium_cmd_obj.AddDownloadFileStep(factory_properties.get('config'),
-                                           'src/tools/chromebot/custom.cfg')
+                                           'src/tools/chromebot/custom.cfg',
+                                           halt_on_failure=False)
       chromium_cmd_obj.AddGetBuildForChromebot(client_os,
                                                archive_url=build_url,
                                                build_dir=web_build_dir)

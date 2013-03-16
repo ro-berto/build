@@ -1102,10 +1102,11 @@ class FactoryCommands(object):
                           env={'LLVM_URL': config.Master.llvm_url},
                           command=cmd)
 
-  def AddDownloadFileStep(self, mastersrc, slavedest):
+  def AddDownloadFileStep(self, mastersrc, slavedest, halt_on_failure):
     """Download a file from master."""
-    self._factory.addStep(FileDownload(mastersrc=mastersrc,
-                                       slavedest=slavedest))
+    self._factory.addStep(
+        FileDownload(mastersrc=mastersrc, slavedest=slavedest,
+                     haltOnFailure=halt_on_failure))
 
   def AddDiagnoseGomaStep(self):
     """Diagnose goma log."""
