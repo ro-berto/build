@@ -828,7 +828,11 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd_options = self.AddFactoryProperties(factory_properties)
 
-    self.AddAnnotatedPerfStep(step_name, None, 'graphing', factory_properties,
+    log_type = 'graphing'
+    if test_name == 'page_cycler':
+      log_type = 'pagecycler'
+
+    self.AddAnnotatedPerfStep(step_name, None, log_type, factory_properties,
                               cmd_name=self._telemetry_tool,
                               cmd_options=cmd_options,
                               step_name=step_name, timeout=timeout,
