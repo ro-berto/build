@@ -87,14 +87,14 @@ def _GenerateTelemetryCommandSequence(fp):
   # Run the test against the target chrome build for different user profiles on
   # certain page cyclers.
   if target_os != 'android':
-    if test_name in ['moz', 'morejs']:
+    if page_set.endswith('moz.json') or page_set.endswith('morejs.json'):
       test_args = ['-v', '--profile-type=typical_user',
                    '--output-trace-tag=_extcs1', '--browser=%s' % browser,
                    test_name, page_set]
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
       commands.append(test_cmd)
-    if test_name in ['moz', 'intl2']:
+    if page_set.endswith('moz.json') or page_set.endswith('intl2.json'):
       test_args = ['-v', '--profile-type=power_user',
                    '--output-trace-tag=_extwr', '--browser=%s' % browser,
                    test_name, page_set]
