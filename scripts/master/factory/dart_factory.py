@@ -47,8 +47,8 @@ custom_vars_list = [CUSTOM_VARS_SOURCEFORGE_URL,
                     CUSTOM_VARS_GOOGLECODE_URL,
                     CUSTOM_VARS_CHROMIUM_URL]
 
+# gclient custom deps
 if config.Master.trunk_internal_url:
-  # gclient custom deps
   CUSTOM_DEPS_WIN7_SDK = (
     "src/third_party/platformsdk_win7",
     config.Master.trunk_internal_url + "/third_party/platformsdk_win7@23175")
@@ -79,16 +79,6 @@ F_WIN_CH_MILESTONE = None
 
 
 def setup_chromium_factories():
-  import os
-  isFYI = os.getcwd().endswith("master.client.dart.fyi")
-
-  global custom_deps_list_win
-  if not isFYI:
-    print "Debug: using normal src-internal"
-    custom_deps_list_win = []
-  else:
-    print "Debug: using custom_deps for src-internal dependencies"
-
   def new_solution(url, custom_vars, custom_deps):
     return  gclient_factory.GClientSolution(
         url,
@@ -135,14 +125,6 @@ def setup_chromium_factories():
       new_solution(dartium_milestone_url,
                    custom_vars_list,
                    custom_deps_list_win))
-
-  trunk_internal_url_src = config.Master.trunk_internal_url_src
-  if trunk_internal_url_src and not isFYI:
-    gclient_trunk_internal = gclient_factory.GClientSolution(
-        trunk_internal_url_src)
-    m_win_ch.add_solution(gclient_trunk_internal)
-    m_win_ch_trunk.add_solution(gclient_trunk_internal)
-    m_win_ch_milestone.add_solution(gclient_trunk_internal)
 
   # Some shortcut to simplify the code in the master.cfg files
   global F_LINUX_CH, F_MAC_CH, F_WIN_CH
