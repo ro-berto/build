@@ -99,7 +99,6 @@ F('f_win_rel_perf', win().ChromiumWebkitLatestFactory(
     tests=[
       'dom_perf',
       'dromaeo',
-      'page_cycler_database',
       'page_cycler_dhtml',
       'page_cycler_indexeddb',
       'page_cycler_intl1',

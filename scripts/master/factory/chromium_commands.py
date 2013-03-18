@@ -358,52 +358,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               'graphing', step_name='mach_ports',
                               factory_properties=factory_properties)
 
-  def GetPageCyclerCommand(self, test_name, http, factory_properties=None):
-    """Returns a command list to call the _test_tool on the page_cycler
-    executable, with the appropriate GTest filter and additional arguments.
-    """
-    cmd = [self._python, self._test_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
-    if http:
-      test_type = 'Http'
-      cmd.extend(['--with-httpd', self.PathJoin('src', 'data', 'page_cycler')])
-    else:
-      test_type = 'File'
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    cmd.extend([self.GetExecutableName('performance_ui_tests'),
-                '--gtest_filter=PageCycler*.%s%s:PageCycler*.*_%s%s' % (
-                    test_name, test_type, test_name, test_type)])
-    return cmd
-
-  def AddPageCyclerTest(self, test, factory_properties=None,
-                        suite=None, tool_options=None):
-    """Adds a step to the factory to run a page cycler test."""
-
-    enable_http = test.endswith('-http')
-    perf_dashboard_name = test.lstrip('page_cycler_')
-
-    if suite:
-      test_name = suite
-    else:
-      test_name = perf_dashboard_name.partition('-http')[0].capitalize()
-
-    tool_options = tool_options or []
-    if enable_http:
-      test_type = 'Http'
-      tool_options.extend(['--with-httpd',
-                          self.PathJoin('src', 'data', 'page_cycler')])
-    else:
-      test_type = 'File'
-
-    gtest_filter = 'PageCycler*.%s%s:PageCycler*.*_%s%s' % (
-        test_name, test_type, test_name, test_type)
-
-    self.AddAnnotatedPerfStep(perf_dashboard_name, gtest_filter, 'pagecycler',
-                              tool_opts=tool_options, step_name=test,
-                              factory_properties=factory_properties)
-
   def AddStartupTests(self, factory_properties=None):
     test_list = 'StartupTest.*:ShutdownTest.*'
     # We don't need to run the Reference tests in debug mode.

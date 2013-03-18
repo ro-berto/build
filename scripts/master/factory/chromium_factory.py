@@ -528,44 +528,55 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Benchmark tests:
     if R('page_cycler_moz'):
-      f.AddPageCyclerTest('page_cycler_moz', fp)
+      f.AddTelemetryTest('page_cycler', 'page_cycler/moz.json',
+                         step_name='moz', factory_properties=fp)
     if R('page_cycler_moz_pd'):
-      f.AddPageCyclerTest('page_cycler_moz', fp,
+      f.AddTelemetryTest('page_cycler', 'page_cycler/moz.json',
+          step_name='moz', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_morejs'):
-      f.AddPageCyclerTest('page_cycler_morejs', fp)
+      f.AddTelemetryTest('page_cycler', 'page_cycler/morejs.json',
+                         step_name='morejs', factory_properties=fp)
     if R('page_cycler_morejs_pd'):
-      f.AddPageCyclerTest('page_cycler_morejs', fp,
+      f.AddTelemetryTest('page_cycler', 'page_cycler/morejs.json',
+          step_name='morejs', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_intl1'):
-      f.AddPageCyclerTest('page_cycler_intl1', fp)
+      f.AddTelemetryTest('page_cycler', 'page_cycler/intl1.json',
+                         step_name='intl1', factory_properties=fp)
     if R('page_cycler_intl1_pd'):
-      f.AddPageCyclerTest('page_cycler_intl1', fp,
+      f.AddTelemetryTest('page_cycler', 'page_cycler/intl1.json',
+          step_name='intl1', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_intl2'):
-      f.AddPageCyclerTest('page_cycler_intl2', fp)
+      f.AddTelemetryTest('page_cycler', 'page_cycler/intl2.json',
+                         step_name='intl2', factory_properties=fp)
     if R('page_cycler_intl2_pd'):
-      f.AddPageCyclerTest('page_cycler_intl2', fp,
+      f.AddTelemetryTest('page_cycler', 'page_cycler/intl2.json',
+          step_name='intl2', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_bloat'):
-      f.AddPageCyclerTest('page_cycler_bloat', fp)
+      f.AddTelemetryTest('page_cycler', 'page_cycler/bloat.json',
+                         step_name='bloat', factory_properties=fp)
     if R('page_cycler_bloat_pd'):
-      f.AddPageCyclerTest('page_cycler_bloat', fp,
+      f.AddTelemetryTest('page_cycler', 'page_cycler/bloat.json',
+          step_name='bloat', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_dhtml'):
-      f.AddPageCyclerTest('page_cycler_dhtml', fp)
+      f.AddTelemetryTest('page_cycler', 'page_cycler/dhtml.json',
+                         step_name='dhtml', factory_properties=fp)
     if R('page_cycler_dhtml_pd'):
-      f.AddPageCyclerTest('page_cycler_dhtml', fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
-    if R('page_cycler_database'):
-      f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*')
-    if R('page_cycler_database_pd'):
-      f.AddPageCyclerTest('page_cycler_database', fp, suite='Database*',
+      f.AddTelemetryTest('page_cycler', 'page_cycler/dhtml.json',
+          step_name='dhtml', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_indexeddb'):
-      f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*')
+      f.AddTelemetryTest('page_cycler',
+                         'page_cycler/indexed_db/basic_insert.json',
+                         step_name='indexeddb', factory_properties=fp)
     if R('page_cycler_indexeddb_pd'):
-      f.AddPageCyclerTest('page_cycler_indexeddb', fp, suite='IndexedDB*',
+      f.AddTelemetryTest('page_cycler',
+          'page_cycler/indexed_db/basic_insert.json',
+          step_name='indexeddb', factory_properties=fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('page_cycler_2012Q2-netsim'):
       fp['use_xvfb_on_linux'] = True
@@ -678,16 +689,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddIDBPerfTests(fp)
     if R('idb_perf_pd'):
       f.AddIDBPerfTests(fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
-    if R('page_cycler_moz-http'):
-      f.AddPageCyclerTest('page_cycler_moz-http', fp)
-    if R('page_cycler_moz-http_pd'):
-      f.AddPageCyclerTest('page_cycler_moz-http', fp,
-          tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
-    if R('page_cycler_bloat-http'):
-      f.AddPageCyclerTest('page_cycler_bloat-http', fp)
-    if R('page_cycler_bloat-http_pd'):
-      f.AddPageCyclerTest('page_cycler_bloat-http', fp,
           tool_options=['--results-url=%s' % self.DASHBOARD_UPLOAD_URL])
     if R('startup'):
       f.AddStartupTests(fp)

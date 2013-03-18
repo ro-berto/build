@@ -104,15 +104,13 @@ F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
     tests=[
         'dom_perf',
         'dromaeo',
-        'page_cycler_bloat-http',
-        'page_cycler_database',
+        'page_cycler_bloat',
         'page_cycler_dhtml',
         'page_cycler_indexeddb',
         'page_cycler_intl1',
         'page_cycler_intl2',
         'page_cycler_morejs',
         'page_cycler_moz',
-        'page_cycler_moz-http',
         'startup',
         'sunspider'
     ],

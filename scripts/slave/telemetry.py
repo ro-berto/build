@@ -84,11 +84,30 @@ def _GenerateTelemetryCommandSequence(fp):
   test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
   commands.append(test_cmd)
 
+  # Run the test against the target chrome build for different user profiles on
+  # certain page cyclers.
+  if target_os != 'android':
+    if test_name in ['moz', 'morejs']:
+      test_args = ['-v', '--profile-type=typical_user',
+                   '--output-trace-tag=_extcs1', '--browser=%s' % browser,
+                   test_name, page_set]
+      test_cmd = _GetPythonTestCommand(
+          script, target, build_dir, test_args, fp=fp)
+      commands.append(test_cmd)
+    if test_name in ['moz', 'intl2']:
+      test_args = ['-v', '--profile-type=power_user',
+                   '--output-trace-tag=_extwr', '--browser=%s' % browser,
+                   test_name, page_set]
+      test_cmd = _GetPythonTestCommand(
+          script, target, build_dir, test_args, fp=fp)
+      commands.append(test_cmd)
+
   # Run the test against the reference build on platforms where it exists.
   ref_build = _GetReferenceBuildPath(target_os, target_platform)
   if ref_build:
     ref_args = ['-v', '--browser=exact',
                 '--browser-executable=%s' % ref_build,
+                '--output-trace-tag=_ref',
                 test_name, page_set]
     ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args, fp=fp)
     commands.append(ref_cmd)
