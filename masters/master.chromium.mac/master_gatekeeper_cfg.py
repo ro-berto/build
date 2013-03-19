@@ -53,10 +53,10 @@ categories_steps = {
    ],
   'windows': ['svnkill', 'taskkill'],
   'compile': ['check_deps2git', 'check_deps', 'compile', 'archive_build'],
-  # Annotator scripts are triggered as a 'build' step.
+  # Annotator scripts are triggered as a 'slave_steps' step.
   # The gatekeeper currently does not recognize failure in a
   # @@@BUILD_STEP@@@, so we must match on the buildbot-defined step.
-  'android': ['build'],
+  'android': ['slave_steps'],
   'ios_rel': ['compile'],
   'ios_dbg': [
     'compile',

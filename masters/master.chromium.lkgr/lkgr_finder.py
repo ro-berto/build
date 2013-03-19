@@ -265,19 +265,19 @@ LKGR_STEPS = {
       'views_unittests',
     ],
     'Android Builder (dbg)': [
-      ['build', 'slave_steps'], # Use either step if one is present.
+      'slave_steps',
     ],
     'Android Tests (dbg)': [
-      ['build', 'slave_steps'], # Use either step if one is present.
+      'slave_steps',
     ],
     'Android Builder': [
-      ['build', 'slave_steps'], # Use either step if one is present.
+      'slave_steps',
     ],
     'Android Tests': [
-      ['build', 'slave_steps'], # Use either step if one is present.
+      'slave_steps',
     ],
     'Android Clang Builder (dbg)': [
-      ['build', 'slave_steps'], # Use either step if one is present.
+      'slave_steps',
     ],
   },  # chromium.linux
   'chromium.chrome': {
