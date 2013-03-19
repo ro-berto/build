@@ -26,19 +26,23 @@ def trunk_factory():
 def stable_factory():
   return linux().ChromiumWebRTCLatestStableFactory(slave_type='WebRtcCros')
 
-def create_cbuildbot_factory(checkout_factory, target, short_name):
+def create_cbuildbot_factory(checkout_factory, target, gs_path, short_name):
   """Generate and register a ChromeOS builder along with its slave(s).
 
   Args:
     checkout_factory: Factory with the steps to pull out a Chromium source tree
       (shouldn't contain any compile steps).
     target: Target name in Chrome OS's puppet configuration scripts.
+    gs_path: Path to use for build artifact storage.
     short_name: String only used to name the build directory.
   """
+  archive_base = 'gs://chromeos-image-archive/%s/%s' % (target, gs_path)
+  cbuildbot_params = '--archive-base=%s %s' % (archive_base, target)
+
   # Extend the checkout_factory with Cbuildbot build steps to build and test
   # CrOS using the Chrome from the above Chromium source tree.
   return chromeos_factory.CbuildbotFactory(
-      params=target,
+      params=cbuildbot_params,
       buildroot='/b/cbuild.%s' % short_name,
       dry_run=True,
       chrome_root='.',  # Where checkout_factory has put "Chrome".
@@ -60,6 +64,7 @@ B('ChromiumOS x86 [latest WebRTC trunk]',
 F('chromeos_x86_webrtc_trunk_factory',
   create_cbuildbot_factory(checkout_factory=trunk_factory(),
                            target='x86-webrtc-chrome-pfq-informational',
+                           gs_path='webrtc-trunk-tot',
                            short_name='x86'))
 
 B('ChromiumOS x86 [latest WebRTC stable]',
@@ -68,6 +73,7 @@ B('ChromiumOS x86 [latest WebRTC stable]',
 F('chromeos_x86_webrtc_stable_factory',
   create_cbuildbot_factory(checkout_factory=stable_factory(),
                            target='x86-webrtc-chrome-pfq-informational',
+                           gs_path='webrtc-stable-tot',
                            short_name='x86'))
 # AMD64.
 B('ChromiumOS amd64 [latest WebRTC trunk]',
@@ -76,6 +82,7 @@ B('ChromiumOS amd64 [latest WebRTC trunk]',
 F('chromeos_amd64_webrtc_trunk_factory',
   create_cbuildbot_factory(checkout_factory=trunk_factory(),
                            target='amd64-webrtc-chrome-pfq-informational',
+                           gs_path='webrtc-trunk-tot',
                            short_name='amd64'))
 
 B('ChromiumOS amd64 [latest WebRTC stable]',
@@ -84,6 +91,7 @@ B('ChromiumOS amd64 [latest WebRTC stable]',
 F('chromeos_amd64_webrtc_stable_factory',
   create_cbuildbot_factory(checkout_factory=stable_factory(),
                            target='amd64-webrtc-chrome-pfq-informational',
+                           gs_path='webrtc-stable-tot',
                            short_name='amd64'))
 
 # ARM.
@@ -93,6 +101,7 @@ B('ChromiumOS daisy [latest WebRTC trunk]',
 F('chromeos_daisy_webrtc_trunk_factory',
   create_cbuildbot_factory(checkout_factory=trunk_factory(),
                            target='daisy-webrtc-chrome-pfq-informational',
+                           gs_path='webrtc-trunk-tot',
                            short_name='daisy'))
 
 B('ChromiumOS daisy [latest WebRTC stable]',
@@ -101,6 +110,7 @@ B('ChromiumOS daisy [latest WebRTC stable]',
 F('chromeos_daisy_webrtc_stable_factory',
   create_cbuildbot_factory(checkout_factory=stable_factory(),
                            target='daisy-webrtc-chrome-pfq-informational',
+                           gs_path='webrtc-stable-tot',
                            short_name='daisy'))
 
 

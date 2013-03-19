@@ -14,20 +14,29 @@ F = helper.Factory
 S = helper.Scheduler
 
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 
-def CreateCbuildbotFactory(target, short_name):
-  """Generate and register a ChromiumOS builder along with its slave(s)."""
+def create_cbuildbot_factory(target, gs_path, short_name):
+  """Generate and register a ChromeOS builder along with its slave(s).
 
+  Args:
+    target: Target name in Chrome OS's puppet configuration scripts.
+    gs_path: Path to use for build artifact storage.
+    short_name: String only used to name the build directory.
+  """
   # Factory with the steps to pull out a Chromium source tree (no compilation).
   # It uses an unused slave_type string to avoid adding the normal compile step.
   chrome_factory = linux().ChromiumFactory(slave_type='WebRtcCros')
 
+  archive_base = 'gs://chromeos-image-archive/%s/%s' % (target, gs_path)
+  cbuildbot_params = '--archive-base=%s %s' % (archive_base, target)
+
   # Extend that factory with Cbuildbot build steps to build and test CrOS using
   # the Chrome from the above Chromium source tree.
   return chromeos_factory.CbuildbotFactory(
-      params=target,
+      params=cbuildbot_params,
       buildroot='/b/cbuild.%s' % short_name,
       dry_run=True,
       chrome_root='.',  # Where ChromiumFactory has put "Chrome".
@@ -42,20 +51,23 @@ defaults['category'] = 'chromiumos'
 B('ChromiumOS [x86]', 'chromeos_x86_factory', scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_x86_factory',
-  CreateCbuildbotFactory(target='x86-webrtc-chrome-pfq-informational',
-                         short_name='x86'))
+  create_cbuildbot_factory(target='x86-webrtc-chrome-pfq-informational',
+                           gs_path='unchanged-deps',
+                           short_name='x86'))
 
 B('ChromiumOS [amd64]', 'chromeos_amd64_factory', scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_amd64_factory',
-  CreateCbuildbotFactory(target='amd64-webrtc-chrome-pfq-informational',
-                         short_name='amd64'))
+  create_cbuildbot_factory(target='amd64-webrtc-chrome-pfq-informational',
+                           gs_path='unchanged-deps',
+                           short_name='amd64'))
 
 B('ChromiumOS [daisy]', 'chromeos_daisy_factory', scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_daisy_factory',
-  CreateCbuildbotFactory(target='daisy-webrtc-chrome-pfq-informational',
-                         short_name='daisy'))
+  create_cbuildbot_factory(target='daisy-webrtc-chrome-pfq-informational',
+                           gs_path='unchanged-deps',
+                           short_name='daisy'))
 
 
 def Update(config, active_master, c):
