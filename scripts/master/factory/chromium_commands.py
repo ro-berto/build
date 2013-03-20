@@ -217,11 +217,14 @@ class ChromiumCommands(commands.FactoryCommands):
   def GetAnnotatedPerfCmd(self, gtest_filter, log_type, test_name,
                           cmd_name='performance_ui_tests', tool_opts=None,
                           options=None, factory_properties=None,
-                          py_script=False):
+                          py_script=False, dashboard_url=None):
     """Return a runtest command suitable for most perf test steps."""
 
+    dashboard_url = dashboard_url or config.Master.dashboard_upload_url
+
     tool_options = ['--annotate=' + log_type]
-    tool_options += tool_opts or []
+    tool_options.extend(tool_opts or [])
+    tool_options.append('--results-url=%s' % dashboard_url)
 
     arg_list = options or []
     if gtest_filter:
@@ -252,7 +255,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
                            factory_properties, cmd_name='performance_ui_tests',
                            tool_opts=None, cmd_options=None, step_name=None,
-                           timeout=1200, py_script=False):
+                           timeout=1200, py_script=False, dashboard_url=None):
 
     """Add an annotated perf step to the builder.
 
@@ -285,7 +288,8 @@ class ChromiumCommands(commands.FactoryCommands):
                                    cmd_name=cmd_name, options=cmd_options,
                                    tool_opts=tool_opts,
                                    factory_properties=factory_properties,
-                                   py_script=py_script)
+                                   py_script=py_script,
+                                   dashboard_url=dashboard_url)
 
     self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                      do_step_if=self.TestStepFilter, target=self._target,
@@ -804,7 +808,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddTelemetryTest(self, test_name, page_set, step_name=None,
                        factory_properties=None, timeout=1200,
-                       tool_options=None):
+                       tool_options=None, dashboard_url=None):
     """Adds a Telemetry performance test.
 
     Args:
@@ -836,7 +840,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_name=self._telemetry_tool,
                               cmd_options=cmd_options,
                               step_name=step_name, timeout=timeout,
-                              tool_opts=tool_options, py_script=True)
+                              tool_opts=tool_options, py_script=True,
+                              dashboard_url=dashboard_url)
 
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
