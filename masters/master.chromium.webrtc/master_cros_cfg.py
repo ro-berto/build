@@ -38,7 +38,6 @@ def create_cbuildbot_factory(target, gs_path, short_name):
   return chromeos_factory.CbuildbotFactory(
       params=cbuildbot_params,
       buildroot='/b/cbuild.%s' % short_name,
-      dry_run=True,
       chrome_root='.',  # Where ChromiumFactory has put "Chrome".
       factory=chrome_factory,
       slave_manager=False).get_factory()
