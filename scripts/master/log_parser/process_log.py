@@ -675,13 +675,13 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       percentile_graph_name = graph_name + "_" + str(i['percentile'])
       graph = self._graphs.get(percentile_graph_name, Graph())
       graph.units = ''
-      trace = graph.traces.get(percentile_graph_name, Trace())
+      trace = graph.traces.get(trace_name, Trace())
       trace.value = i['value']
       trace.important = important
-      graph.traces[percentile_graph_name] = trace
+      graph.traces[trace_name] = trace
       self._graphs[percentile_graph_name] = graph
       self.TrackActualPerformance(graph=percentile_graph_name,
-                                  trace=percentile_graph_name,
+                                  trace=trace_name,
                                   value=i['value'])
 
     # Compute geometric mean and standard deviation.
