@@ -17,7 +17,6 @@ from common import chromium_utils
 from slave.bootstrap import ImportMasterConfigs # pylint: disable=W0611
 from common.chromium_utils import GetActiveMaster # pylint: disable=W0611
 import config
-from slave import xvfb
 
 # These codes used to distinguish true errors from script warnings.
 ERROR_EXIT_CODE = 1
@@ -252,23 +251,8 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
                                 + ':' +os.environ.get('PYTHONPATH', ''))
     python_exe = 'python'
 
-  if chromium_utils.IsLinux():
-    slave_name = SlaveBuildName(build_dir)
-    xvfb.StartVirtualX(slave_name,
-                       os.path.join(build_dir, '..', 'out', target),
-                       server_dir=server_dir)
-
-  command = [python_exe]
-
-  # The list of tests is given as arguments.
-  command.extend(command_line_args)
-
-  result = chromium_utils.RunCommand(command, filter_obj=filter_obj)
-
-  if chromium_utils.IsLinux():
-    xvfb.StopVirtualX(slave_name)
-
-  return result
+  command = [python_exe] + command_line_args
+  return chromium_utils.RunCommand(command, filter_obj=filter_obj)
 
 
 class RunCommandCaptureFilter(object):

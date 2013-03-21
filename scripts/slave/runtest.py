@@ -799,12 +799,20 @@ def main_linux(options, args):
       os.remove(options.test_output_xml)
 
   try:
+    start_xvfb = False
     http_server = None
     if options.document_root:
       http_server = start_http_server('linux', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
-    if options.xvfb:
+
+    # TODO(dpranke): checking on test_type is a temporary hack until we
+    # can change the buildbot master to pass --xvfb instead of --no-xvfb
+    # for these two steps. See
+    # https://code.google.com/p/chromium/issues/detail?id=179814
+    start_xvfb = options.xvfb or options.test_type in ('webkit_tests',
+                                                       'devtools_perf')
+    if start_xvfb:
       xvfb.StartVirtualX(
           slave_name, bin_dir,
           with_wm=(options.factory_properties.get('window_manager', 'True') ==
@@ -835,7 +843,7 @@ def main_linux(options, args):
   finally:
     if http_server:
       http_server.StopServer()
-    if options.xvfb:
+    if start_xvfb:
       xvfb.StopVirtualX(slave_name)
 
   if options.generate_json_file:
