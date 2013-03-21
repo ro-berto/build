@@ -806,12 +806,13 @@ def main_linux(options, args):
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
 
-    # TODO(dpranke): checking on test_type is a temporary hack until we
+    # TODO(dpranke): checking on test_exe is a temporary hack until we
     # can change the buildbot master to pass --xvfb instead of --no-xvfb
     # for these two steps. See
     # https://code.google.com/p/chromium/issues/detail?id=179814
-    start_xvfb = options.xvfb or options.test_type in ('webkit_tests',
-                                                       'devtools_perf')
+    start_xvfb = (options.xvfb or
+                  'layout_test_wrapper' in test_exe or
+                  'devtools_perf_test_wrapper' in test_exe)
     if start_xvfb:
       xvfb.StartVirtualX(
           slave_name, bin_dir,
