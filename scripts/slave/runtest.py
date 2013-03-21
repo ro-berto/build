@@ -353,6 +353,9 @@ def create_results_tracker(tracker_class, options):
 
 
 def send_results_to_dashboard(results_tracker, system, test, url, build_dir):
+  if system is None:
+    # perf_id not specified in factory-properties
+    return
   for logname, log in results_tracker.PerformanceLogs().iteritems():
     lines = [str(l).rstrip() for l in log]
     results_dashboard.SendResults(logname, lines, system, test, url, build_dir)
