@@ -22,7 +22,8 @@ CACHE_DIR = "results_dashboard"
 CACHE_FILENAME = "results_to_retry"
 
 
-def SendResults(logname, lines, system, test, url, build_dir):
+#TODO(xusydoc): set fail_hard to True when bots stabilize. See crbug.com/222607.
+def SendResults(logname, lines, system, test, url, build_dir, fail_hard=False):
   if not logname.endswith("-summary.dat"):
     return
 
@@ -61,8 +62,13 @@ def SendResults(logname, lines, system, test, url, build_dir):
   for error in errors:
     print error
   if fatal_error:
-    print "Multiple failures uploading to dashboard."
-    print "@@@STEP_EXCEPTION@@@"
+    if fail_hard:
+      print "Multiple failures uploading to dashboard."
+      print "@@@STEP_EXCEPTION@@@"
+    else:
+      print "Multiple failures uploading to dashboard."
+      print "You may have to whitelist your bot, please see crbug.com/222607."
+      print "@@@STEP_WARNINGS@@@"
 
 def _GetCacheFileName(build_dir):
   """Gets the cache filename, creating the file if it does not exist."""
