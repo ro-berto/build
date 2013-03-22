@@ -47,7 +47,7 @@ F('f_contentshell_win_rel', win().ChromiumWebkitLatestFactory(
     project='all.sln;content_shell_builder',
     factory_properties={
       'additional_drt_flag': '--dump-render-tree',
-      'additional_expectations_files': [
+      'additional_expectations': [
           [ 'third_party',
             'WebKit',
             'LayoutTests',

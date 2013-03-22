@@ -77,7 +77,7 @@ F('f_webkit_rel_tests', mac().ChromiumFactory(
       'webkit_unit',
     ],
     factory_properties={
-      'additional_expectations_files': [
+      'additional_expectations': [
         ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],
       ],
       'archive_webkit_results': ActiveMaster.is_production_host,

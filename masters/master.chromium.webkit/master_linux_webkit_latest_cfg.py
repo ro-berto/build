@@ -73,7 +73,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumWebkitLatestFactory(
         'DumpRenderTree'
     ],
     factory_properties={
-        'additional_expectations_files': [
+        'additional_expectations': [
             ['webkit', 'tools', 'layout_tests', 'test_expectations_asan.txt' ],
         ],
         'gs_bucket': 'gs://webkit-asan',

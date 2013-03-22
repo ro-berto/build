@@ -43,7 +43,7 @@ F('f_contentshell_android_rel',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
         'additional_drt_flag': '--dump-render-tree',
-        'additional_expectations_files': [
+        'additional_expectations': [
             [ 'third_party',
               'WebKit',
               'LayoutTests',
