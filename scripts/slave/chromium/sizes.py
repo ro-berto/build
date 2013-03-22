@@ -307,6 +307,7 @@ def main_win(options, args):
   chrome_dll = os.path.join(target_dir, 'chrome.dll')
   chrome_exe = os.path.join(target_dir, 'chrome.exe')
   mini_installer_exe = os.path.join(target_dir, 'mini_installer.exe')
+  npchrome_frame_dll = os.path.join(target_dir, 'npchrome_frame.dll')
   setup_exe = os.path.join(target_dir, 'setup.exe')
 
   result = 0
@@ -317,6 +318,9 @@ def main_win(options, args):
 
   fmt = 'RESULT mini_installer.exe: mini_installer.exe= %s bytes'
   print fmt % get_size(mini_installer_exe)
+
+  fmt = 'RESULT npchrome_frame.dll: npchrome_frame.dll= %s bytes'
+  print fmt % get_size(npchrome_frame_dll)
 
   print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
 
