@@ -24,7 +24,7 @@ deps = {
 deps_os = {
   "unix": {
     "build/third_party/cbuildbot_chromite":
-      "http://git.chromium.org/chromiumos/chromite.git",
+      "https://git.chromium.org/chromiumos/chromite.git",
 
     "build/third_party/xvfb":
       "/trunk/tools/third_party/xvfb",
