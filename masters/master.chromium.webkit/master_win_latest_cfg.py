@@ -14,7 +14,6 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 
 defaults['category'] = '7win latest'
 

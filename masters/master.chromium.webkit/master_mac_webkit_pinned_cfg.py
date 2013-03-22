@@ -19,7 +19,8 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
+def mac_out(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 defaults['category'] = '2webkit mac deps'
 
@@ -50,7 +51,7 @@ D(rel_dep_scheduler, rel_scheduler)
 #
 B('WebKit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
   scheduler=rel_scheduler, builddir=rel_builddir)
-F('f_webkit_mac_rel', mac().ChromiumFactory(
+F('f_webkit_mac_rel', mac_out().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'test_shell', 'test_shell_tests', 'webkit_unit_tests',

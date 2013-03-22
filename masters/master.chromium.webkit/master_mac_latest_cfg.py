@@ -13,7 +13,8 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
+def mac_out(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 
 ################################################################################
@@ -31,7 +32,7 @@ S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 # Mac Rel Builder
 #
 B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
-F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
+F('f_mac_tests_rel', mac_out().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
     tests=[
@@ -51,7 +52,7 @@ F('f_mac_tests_rel', mac().ChromiumWebkitLatestFactory(
     }))
 
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
-F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
+F('f_mac_perf6_rel', mac_out().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
     tests=[
@@ -80,7 +81,7 @@ F('f_mac_perf6_rel', mac().ChromiumWebkitLatestFactory(
     }))
 
 B('Mac10.8 Tests', 'f_mac_tests_rel_108', scheduler='s8_webkit_rel')
-F('f_mac_tests_rel_108', mac().ChromiumWebkitLatestFactory(
+F('f_mac_tests_rel_108', mac_out().ChromiumWebkitLatestFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
     tests=[

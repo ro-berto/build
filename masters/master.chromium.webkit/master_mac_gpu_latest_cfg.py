@@ -13,7 +13,7 @@ D = helper.Dependent
 F = helper.Factory
 S = helper.Scheduler
 
-def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 
 ################################################################################

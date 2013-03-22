@@ -33,7 +33,7 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 defaults['category'] = '5webkit mac latest'
 
