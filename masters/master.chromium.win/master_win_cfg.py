@@ -87,7 +87,7 @@ B('Win Builder', 'rel', 'compile|windows', 'win_rel', builddir='cr-win-rel',
   auto_reboot=False, notify_on_missing=True)
 F('rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;chromium_builder_tests',
+    project='all.sln;chromium_builder_tests;chromium_swarm_tests',
     factory_properties={'trigger': 'win_rel_trigger',
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
 

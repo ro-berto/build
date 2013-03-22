@@ -116,7 +116,7 @@ B('Linux Builder', 'rel', 'compile', 'linux_rel',
 F('rel', linux().ChromiumFactory(
     slave_type='Builder',
     options=goma_ninja_options + linux_all_test_targets +
-            ['sync_integration_tests'],
+            ['sync_integration_tests', 'chromium_swarm_tests'],
     tests=['check_deps'],
     factory_properties={
         'gclient_env': {
