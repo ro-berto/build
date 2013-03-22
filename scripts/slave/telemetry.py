@@ -77,7 +77,7 @@ def _GenerateTelemetryCommandSequence(fp):
     commands = []
 
   # Run the test against the target chrome build.
-  browser = 'release'
+  browser = target.lower()
   if target_os == 'android':
     browser = 'android-content-shell'
   test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
