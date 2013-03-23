@@ -2,10 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave import recipe_util
-
-def GetFactoryProperties(build_properties):
-  steps = recipe_util.Steps(build_properties)
+def GetFactoryProperties(api, build_properties):
+  steps = api.Steps(build_properties)
 
   git_steps = []
   if build_properties['root_repo_url'].endswith('.git'):

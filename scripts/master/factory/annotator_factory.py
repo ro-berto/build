@@ -19,9 +19,21 @@ class AnnotatorFactory(object):
   def __init__(self):
     self._factory_properties = None
 
-  def BaseFactory(self, build_properties=None, factory_properties=None):
+  def BaseFactory(self, recipe, factory_properties=None):
+    """The primary input for the factory is the |recipe|, which specifies the
+    name of a recipe file to search for. The recipe file will fill in the rest
+    of the |factory_properties|. This setup allows for major changes to factory
+    properties to occur on slave-side without master restarts.
+
+    NOTE: Please be very discerning with what |factory_properties| you pass to
+    this method. Ideally, you will pass none, and that will be sufficient in the
+    vast majority of cases. Think very carefully before adding any
+    |factory_properties| here, as changing them will require a master restart.
+    """
+    factory_properties = factory_properties or {}
+    factory_properties.update({'recipe': recipe})
     self._factory_properties = factory_properties
-    factory = BuildFactory(build_properties)
+    factory = BuildFactory()
     cmd_obj = annotator_commands.AnnotatorCommands(factory)
     cmd_obj.AddAnnotatedScript(factory_properties)
     return factory

@@ -4,9 +4,8 @@
 
 """Specifies how to launch the gatekeeper."""
 
-from slave import recipe_util
-
-def GetFactoryProperties(_build_properties):
+def GetFactoryProperties(api, build_properties):
   return {
-      'script': recipe_util.Steps.build_path(
-          'scripts', 'slave', 'gatekeeper_launch.py')}
+      'script':
+          api.Steps.build_path('scripts', 'slave', 'gatekeeper_launch.py')
+  }
