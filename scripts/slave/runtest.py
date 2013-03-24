@@ -841,7 +841,12 @@ def main_linux(options, args):
                        '--tool_dir', tool_dir,
                        test_exe_path, '--'] + command
 
-    result = _RunGTestCommand(isolate_command, pipes=pipes,
+    if not (options.test_type in ['views_unittests', 'ui_unittests']
+            and options.build_properties.get('buildername') == 'linux_aura'):
+      # The two listed tests are excluded from runisolatedtest.py because
+      # they are flaky with runisolatedtest.
+      command = isolate_command
+    result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker,
                               extra_env=extra_env)
   finally:
