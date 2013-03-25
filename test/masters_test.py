@@ -223,6 +223,7 @@ def main():
       'master.client.webrtc': 'WebRTC',
       'master.experimental': None,
       'master.reserved': None,  # make start fails
+      'master.toolkit': 'Toolkit',
       'master.tryserver.chromium': 'TryServer',
       'master.tryserver.chromium.linux': 'TryServerLinux',
       'master.tryserver.nacl': 'NativeClientTryServer',
