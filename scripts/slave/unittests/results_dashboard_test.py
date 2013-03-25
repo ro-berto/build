@@ -291,6 +291,68 @@ class ResultsDashboardTest(unittest.TestCase):
     cache_file.close()
     self.assertEqual(expected_new_json[0], actual_cache)
 
+  def test_NoResendAfterMultipleErrors(self):
+    previous_lines = "\n".join([
+        json.dumps([{
+            "master": "ChromiumPerf",
+            "bot": "linux-release",
+            "test": "foo/bar/baz",
+            "revision": "12345",
+            "value": "100.0",
+            "error": "5.0",
+            "supplemental_columns": {
+                "r_webkit_rev": "6789",
+            }}]),
+        json.dumps([{
+            "master": "ChromiumPerf",
+            "bot": "linux-release",
+            "test": "foo/bar/baz",
+            "revision": "12346",
+            "value": "101.0",
+            "error": "5.0",
+            "supplemental_columns": {
+                "r_webkit_rev": "6789",
+            }}]),
+        json.dumps([{
+            "master": "ChromiumPerf",
+            "bot": "linux-release",
+            "test": "foo/bar/baz",
+            "revision": "12347",
+            "value": "99.0",
+            "error": "5.0",
+            "supplemental_columns": {
+                "r_webkit_rev": "6789",
+            }}])
+    ])
+    cache_file = open(self.cache_filename, "wb")
+    cache_file.write(previous_lines)
+    cache_file.close()
+    args = [
+        "bar-summary.dat",
+        ['{"traces": {"baz": ["102.0", "5.0"]},'
+         ' "rev": "12348", "webkit_rev": "6789"}'],
+        "linux-release",
+        "foo",
+        "https://chrome-perf.googleplex.com"]
+    expected_new_json = [json.dumps([{
+        "master": "ChromiumPerf",
+        "bot": "linux-release",
+        "test": "foo/bar/baz",
+        "revision": "12345",
+        "value": "100.0",
+        "error": "5.0",
+        "supplemental_columns": {
+            "r_webkit_rev": "6789",
+        }}])]
+    errors = [urllib2.URLError("reason")]
+    self._SendResults(args, expected_new_json, errors)
+    cache_file = open(self.cache_filename, "rb")
+    actual_cache_lines = cache_file.readlines()
+    cache_file.close()
+    self.assertEqual(4, len(actual_cache_lines))
+    for line in previous_lines.split("\n") + expected_new_json:
+      self.assertTrue(line + "\n" in actual_cache_lines)
+
 
 if __name__ == '__main__':
   unittest.main()

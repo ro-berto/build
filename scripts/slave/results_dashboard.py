@@ -50,8 +50,9 @@ def SendResults(logname, lines, system, test, url, build_dir, fail_hard=False):
       if index != len(cache_lines) -1:
         # This request has already been tried before, now it's fatal.
         fatal_error = True
-      lines_to_retry.append(line)
+      lines_to_retry = [l.strip() for l in cache_lines[index:] if l.strip()]
       errors.append(error)
+      break
 
   # Write any failing requests to the cache.
   cache = open(cache_filename, "wb")
