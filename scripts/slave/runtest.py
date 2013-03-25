@@ -1093,6 +1093,8 @@ def main():
                   'external_symbolizer_path=%s' % symbolizer_path)
   if options.factory_properties.get('tsan', False):
     os.environ['TSAN_OPTIONS'] = tsan_options
+    # Disable sandboxing under TSan for now. http://crbug.com/223602.
+    args.append('--no-sandbox')
   if options.factory_properties.get('asan', False):
     # Set the path to llvm-symbolizer to be used by asan_symbolize.py
     os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
