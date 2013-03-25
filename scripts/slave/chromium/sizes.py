@@ -152,6 +152,15 @@ def check_linux_binary(target_dir, binary_name, options):
         result = p.returncode
     return result, stdout
 
+  def get_elf_section_size(readelf_stdout, section_name):
+    # Matches: .ctors PROGBITS 000000000516add0 5169dd0 000010 00 WA 0 0 8
+    match = re.search('\.%s.*$' % re.escape(section_name),
+                      readelf_stdout, re.MULTILINE)
+    if not match:
+      return (False, -1)
+    size_str = re.split('\W+', match.group(0))[5]
+    return (True, int(size_str, 16))
+
   sizes.append((binary_name, binary_name, 'size',
                 get_size(binary_file), 'bytes'))
 
@@ -173,23 +182,29 @@ def check_linux_binary(target_dir, binary_name, options):
   else:
     word_size = 8
 
-  # Then find the size of the .ctors section.
+  # Then find the number of files with global static initializers.
+  # NOTE: this is very implementation-specific and makes assumptions
+  # about how compiler and linker implement global static initializers.
+  si_count = 0
   result, stdout = run_process(result, ['readelf', '-SW', binary_file])
-  size_match = re.search('.ctors.*$', stdout, re.MULTILINE)
-  if size_match is None:
-    count = 0
-  else:
-    size_line = re.search('.ctors.*$', stdout, re.MULTILINE).group(0)
-    size = re.split('\W+', size_line)[5]
-    size = int(size, 16)
+  # TODO(phajdan.jr): Remove .ctors logic after migrating to Precise
+  # (http://crbug.com/170262). More recent toolchains use .init_array
+  # instead.
+  has_ctors, ctors_size = get_elf_section_size(stdout, 'ctors')
+  if has_ctors:
     # The first entry is always 0 and the last is -1 as guards.
     # So subtract 2 from the count.
-    count = (size / word_size) - 2
-  sizes.append((binary_name + '-si', 'initializers', '', count, 'files'))
+    si_count = (ctors_size / word_size) - 2
+  if si_count <= 0:
+    has_init_array, init_array_size = get_elf_section_size(stdout, 'init_array')
+    if has_init_array:
+      si_count = init_array_size / word_size
+    si_count = max(si_count, 0)
+  sizes.append((binary_name + '-si', 'initializers', '', si_count, 'files'))
 
   # For Release builds only, use dump-static-initializers.py to print the list
   # of static initializers.
-  if count and options.target == 'Release':
+  if si_count > 0 and options.target == 'Release':
     dump_static_initializers = os.path.join(os.path.dirname(options.build_dir),
                                             'tools', 'linux',
                                             'dump-static-initializers.py')
