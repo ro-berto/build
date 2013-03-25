@@ -51,10 +51,36 @@ def layout_test(options, args):
              '--clobber-old-results',  # Clobber test results before each run.
              '--exit-after-n-failures', '5000',
              '--exit-after-n-crashes-or-timeouts', '100',
-             '--debug-rwt-logging',
             ]
 
+  # TODO(dpranke): we can switch to always using --debug-rwt-logging
+  # after all the bots have WebKit r124789 or later.
+  capture_obj = slave_utils.RunCommandCaptureFilter()
+  slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
+                                         [run_webkit_tests, '--help'],
+                                         filter_obj=capture_obj)
+  if '--debug-rwt-logging' in ''.join(capture_obj.lines):
+    command.append('--debug-rwt-logging')
+  else:
+    command.append('--verbose')
+
   if options.results_directory:
+    # Prior to the fix in https://bugs.webkit.org/show_bug.cgi?id=58272,
+    # run_webkit_tests expects the results directory to be relative to
+    # the configuration directory (e.g., src/webkit/Release). The
+    # parameter is given to us relative to build_dir, which is where we
+    # will run the command from.
+    #
+    # When 58272 is landed, run_webkit_tests will support absolute file
+    # paths as well as paths relative to CWD for non-Chromium ports and
+    # paths relative to the configuration dir for Chromium ports. As
+    # a transitional fix, we convert to an absolute dir, but once the
+    # hack in 58272 is removed, we can use results_dir as-is.
+    if not os.path.isabs(options.results_directory):
+      if options.results_directory.startswith('../../'):
+        options.results_directory = options.results_directory[6:]
+      options.results_directory = os.path.abspath(
+          os.path.join(os.getcwd(), options.results_directory))
     chromium_utils.RemoveDirectory(options.results_directory)
     command.extend(['--results-directory', options.results_directory])
 
