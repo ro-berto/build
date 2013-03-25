@@ -124,7 +124,8 @@ class DartCommands(commands.FactoryCommands):
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
                   ' --progress=line --report --time --mode=%s --arch=%s '
-                  ' --compiler=%s --runtime=%s') % configuration
+                  ' --compiler=%s --runtime=%s --failure-summary'
+                 ) % configuration
     elif is_dart2dart:
       compiler = 'dart2dart'
       runtime = 'vm'
@@ -144,7 +145,8 @@ class DartCommands(commands.FactoryCommands):
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
                   ' --progress=line --report --time --mode=%s --arch=%s '
-                  ' --compiler=%s --runtime=%s') % configuration
+                  ' --compiler=%s --runtime=%s --failure-summary'
+                 ) % configuration
 
     base_cmd = base_cmd + " --write-debug-log"
 
