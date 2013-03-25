@@ -58,6 +58,12 @@ class ChromiumGitPoller(gitpoller.GitPoller):
     """Do not use /tmp as the default work dir, use the master checkout
     directory.
     """
+    # In 'dry_run' mode poller won't fetch the repository.
+    # Used when running master smoke tests.
+    if 'dry_run' in kwargs:
+      self.dry_run = kwargs.pop('dry_run')
+    else:
+      self.dry_run = 'GIT_POLLER_DRY_RUN' in os.environ
     if not kwargs.get('workdir'):
       # Make it non-absolute so it's set relative to the master's directory.
       kwargs['workdir'] = 'git_poller_%s' % os.path.basename(kwargs['repourl'])
@@ -106,13 +112,16 @@ class ChromiumGitPoller(gitpoller.GitPoller):
   def startService(self):
     gitpoller.GitPoller.startService(self)
     d = defer.succeed(None)
-    d.addCallback(self._init_history)
+    if not self.dry_run:
+      d.addCallback(self._init_history)
     def _comparator_initialized(*unused_args):
       self.comparator.initialized = True
     d.addCallback(_comparator_initialized)
 
   @deferredLocked('initLock')
   def poll(self):
+    if self.dry_run:
+      return defer.succeed(None)
     d = self._get_changes()
     d.addCallback(self._process_history)
     d.addErrback(ChromiumGitPoller._process_history_failure)
@@ -121,3 +130,9 @@ class ChromiumGitPoller(gitpoller.GitPoller):
     d.addCallback(self._catch_up)
     d.addErrback(self._catch_up_failure)
     return d
+
+  def initRepository(self):
+    if self.dry_run:
+      return defer.succeed(None)
+    else:
+      return gitpoller.GitPoller.initRepository(self)

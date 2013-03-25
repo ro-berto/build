@@ -35,10 +35,14 @@ def pid_exists(pid):
   return True
 
 
-def start_master(master, path):
+def start_master(master, path, dry_run=False):
   try:
+    env = os.environ.copy()
+    if dry_run:
+      # Ask ChromiumGitPoller not to pull git repos.
+      env['GIT_POLLER_DRY_RUN'] = '1'
     subprocess2.check_output(
-        ['make', 'start'], timeout=120, cwd=path,
+        ['make', 'start'], timeout=120, cwd=path, env=env,
         stderr=subprocess2.STDOUT)
   except subprocess2.CalledProcessError, e:
     logging.error('Error: cannot start %s' % master)

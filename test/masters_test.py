@@ -65,7 +65,7 @@ def test_master(master, master_class, path):
     context.backup_if_present(os.path.join(path, 'twistd.log'))
     context.backup_if_present(os.path.join(path, 'git_poller_*.git'))
     try:
-      if not masters_util.start_master(master, path):
+      if not masters_util.start_master(master, path, dry_run=True):
         return False
       name = master_class.project_name
       port1 = master_class.master_port
