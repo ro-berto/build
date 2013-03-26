@@ -217,13 +217,13 @@ def main():
       'master.client.sfntly': None,
       'master.client.skia': None,
       'master.client.syzygy': None,
+      'master.client.toolkit': 'Toolkit',
       'master.client.tsan': None,  # make start fails
       'master.client.unused': None,
       'master.client.v8': 'V8',
       'master.client.webrtc': 'WebRTC',
       'master.experimental': None,
       'master.reserved': None,  # make start fails
-      'master.toolkit': 'Toolkit',
       'master.tryserver.chromium': 'TryServer',
       'master.tryserver.chromium.linux': 'TryServerLinux',
       'master.tryserver.nacl': 'NativeClientTryServer',
