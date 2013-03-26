@@ -267,6 +267,7 @@ class DartUtils(object):
                      '--',
                      'dartium_builder']
   linux_options = ['--compiler=goma', '--build-tool=ninja', 'dartium_builder']
+  win_options_ninja = ['--build-tool=ninja', 'dartium_builder']
 
   win_project = 'all.sln;dartium_builder'
 
@@ -278,6 +279,16 @@ class DartUtils(object):
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
+  win_rel_factory_properties_ninja = {
+    'gclient_env': {
+      'GYP_DEFINES': 'fastbuild=1',
+      'GYP_GENERATORS': 'ninja',
+    },
+    'gclient_transitive': True,
+    'no_gclient_branch': True,
+    'annotated_script': 'dart_buildbot_run.py',
+  }
+
   win_dbg_factory_properties = {
     'gclient_env': {
       'GYP_DEFINES': 'fastbuild=1 component=shared_library',
@@ -373,6 +384,11 @@ class DartUtils(object):
         project=win_project,
         tests=['annotated_steps'],
         factory_properties=win_rel_factory_properties),
+    'dartium-win-inc-ninja' : F_WIN_CH(
+        target='Release',
+        options=win_options_ninja,
+        tests=[], # FIXME: no annotated steps -> no gcs uploads
+        factory_properties=win_rel_factory_properties_ninja),
     'dartium-win-debug' : F_WIN_CH(
         target='Debug',
         project=win_project,
