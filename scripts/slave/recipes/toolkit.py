@@ -9,5 +9,5 @@ def GetFactoryProperties(api, build_properties):
           'url': 'http://github.com/toolkitchen/toolkit.git',
           'recursive': True,
       },
-      'script': 'toolkit/build/gen_steps.py'
+      'script': ['toolkit', 'build', 'gen_steps.py']
   }
