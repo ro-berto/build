@@ -74,7 +74,7 @@ endif
 
 stop: printstep
 ifneq ($(USE_LAUNCHD),1)
-	if `test -f twistd.pid`; then kill `cat twistd.pid`; fi;
+	if `test -f twistd.pid`; then kill -TERM -$$(ps h -o '%r' $$(cat twistd.pid)); fi;
 else
 	launchctl stop org.chromium.buildbot.$(MASTERPATH)
 endif
