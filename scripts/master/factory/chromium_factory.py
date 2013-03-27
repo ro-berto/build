@@ -36,33 +36,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   DEFAULT_TARGET_PLATFORM = config.Master.default_platform
 
-  # TODO(rnk): crbug.com/109780, delete this once we've tested that
-  # build_for_tool= works on the FYI bots.
-  MEMORY_TOOLS_GYP_DEFINES = (
-    # gcc flags
-    'mac_debug_optimization=1 '
-    'mac_release_optimization=1 '
-    'release_optimize=1 '
-    'no_gc_sections=1 '
-    'debug_extra_cflags="-g -fno-inline -fno-omit-frame-pointer '
-                        '-fno-builtin -fno-optimize-sibling-calls" '
-    'release_extra_cflags="-g -fno-inline -fno-omit-frame-pointer '
-                          '-fno-builtin -fno-optimize-sibling-calls" '
-
-    # MSVS flags
-    'win_debug_RuntimeChecks=0 '
-    'win_debug_disable_iterator_debugging=1 '
-    'win_debug_Optimization=1 '
-    'win_debug_InlineFunctionExpansion=0 '
-    'win_release_InlineFunctionExpansion=0 '
-    'win_release_OmitFramePointers=0 '
-
-    'linux_use_tcmalloc=1 '
-    'release_valgrind_build=1 '
-    'werror= '
-    'component=static_library '
-    'use_system_zlib=0 '
-  )
+  MEMORY_TOOLS_GYP_DEFINES = 'build_for_tool=memcheck'
 
   # gclient custom vars
   CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
