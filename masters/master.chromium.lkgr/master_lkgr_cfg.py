@@ -54,7 +54,7 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
     options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
              'chromium_builder_asan_mac'],
     factory_properties={
-       'asan_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_build': ActiveMaster.is_production_host,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
@@ -66,7 +66,7 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
     options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
              'chromium_builder_asan_mac'],
     factory_properties={
-       'asan_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_build': ActiveMaster.is_production_host,
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 component=static_library '}}))
@@ -100,7 +100,8 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
              'content_browsertests'],
     factory_properties={
-       'asan_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan-release',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
@@ -115,8 +116,8 @@ F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
              'content_browsertests'],
     factory_properties={
-       'asan_archive_build': ActiveMaster.is_production_host,
-       'asan_archive_name': 'asan-symbolized',
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan-symbolized',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_sym_gyp}}))
@@ -128,7 +129,8 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
              'content_browsertests'],
     factory_properties={
-       'asan_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan-debug',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))

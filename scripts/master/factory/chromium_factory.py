@@ -935,8 +935,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get('archive_build'):
       chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)
 
-    if factory_properties.get('asan_archive_build'):
-      chromium_cmd_obj.AddAsanArchiveBuild(
+    if factory_properties.get('cf_archive_build'):
+      chromium_cmd_obj.AddCFArchiveBuild(
           factory_properties=factory_properties)
 
     # Add the package source step.

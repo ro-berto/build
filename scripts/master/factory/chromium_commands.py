@@ -69,7 +69,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
     self._crash_dump_tool = J(s_dir, 'archive_crash_dumps.py')
     self._dom_perf_tool = J(s_dir, 'dom_perf.py')
-    self._asan_archive_tool = J(s_dir, 'asan_archive_build.py')
+    self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
@@ -181,17 +181,18 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddArchiveStep(data_description='build', base_url=url, link_text=text,
                         command=cmd, index_suffix=index_suffix)
 
-  def AddAsanArchiveBuild(self, factory_properties=None):
-    """Adds a step to the factory to archive an asan build."""
+  def AddCFArchiveBuild(self, factory_properties=None):
+    """Adds a step to the factory to archive a ClusterFuzz build."""
 
-    cmd = [self._python, self._asan_archive_tool,
+    cmd = [self._python, self._cf_archive_tool,
            '--target', self._target,
            '--build-dir', self._build_dir]
 
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
 
-    self.AddTestStep(retcode_command.ReturnCodeCommand, 'ASAN Archive', cmd)
+    self.AddTestStep(retcode_command.ReturnCodeCommand,
+                     'ClusterFuzz Archive', cmd)
 
   def AddPackageSource(self, factory_properties=None):
     """Adds a step to the factory to package and upload the source directory."""
