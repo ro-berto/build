@@ -55,7 +55,11 @@ import json
 import multiprocessing
 import optparse
 import os
+import re
 import signal
+import smtplib
+import socket
+import subprocess
 import sys
 import threading
 import urllib
@@ -63,6 +67,7 @@ import urllib2
 
 
 VERBOSE = True
+EMAIL_ENABLED = False
 
 REVISIONS_URL = 'https://chromium-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
@@ -289,12 +294,44 @@ LKGR_STEPS = {
 
 #-------------------------------------------------------------------------------
 
+def SendMail(sender, recipients, subject, message):
+  if not EMAIL_ENABLED:
+    return
+  try:
+    body = ['From: %s' % sender]
+    body.append('To: %s' % recipients)
+    body.append('Subject: %s' % subject)
+    # Default to sending replies to the recipient list, not the account running
+    # the script, since that's probably just a role account.
+    body.append('Reply-To: %s' % recipients)
+    body.append('')
+    body.append(message)
+    server = smtplib.SMTP('localhost')
+    server.sendmail(sender, recipients.split(','), '\n'.join(body))
+    server.quit()
+  except Exception as e:
+    # If smtp fails, just dump the output. If running under cron, that will
+    # capture the output and send its own (ugly, but better than nothing) email.
+    print message
+    print ('\n--------- Exception in %s -----------\n' %
+           os.path.basename(__file__))
+    raise e
+
+run_log = []
+
+def FormatPrint(s):
+  return '%s: %s' % (datetime.datetime.now(), s)
+
 def Print(s):
-  print '%s: %s' % (datetime.datetime.now(), s)
+  msg = FormatPrint(s)
+  run_log.append(msg)
+  print msg
 
 def VerbosePrint(s):
   if VERBOSE:
     Print(s)
+  else:
+    run_log.append(FormatPrint(s))
 
 def FetchBuildsMain(master, builder, builds):
   if master not in MASTER_TO_BASE_URL:
@@ -541,6 +578,42 @@ def NotifyMaster(master, lkgr, dry=False):
     # p.terminate() can hang; just obliterate the sucker.
     os.kill(p.pid, signal.SIGKILL)
 
+def CheckLKGRLag(lag_hrs, rev_gap, allowed_lag_hrs, allowed_rev_gap):
+  """Determine if the LKGR lag is acceptable for current commit activity."""
+  # Lag isn't an absolute threshold because when things are slow, e.g. nights
+  # and weekends, there could be bad revisions that don't get noticed and
+  # fixed right away, so LKGR could go a long time without updating, but it
+  # wouldn't be a big concern, so we want to back off the 'ideal' threshold.
+  # When the tree is active, we don't want to back off much, or at all, to keep
+  # the lag under control.
+  # This causes the allowed_lag to back off proportionally to how far LKGR is
+  # below the gap threshold, which is used as a rough measure of activity.
+
+  # Equation arbitrarily chosen to fit the range of 2 to 12 hours when using the
+  # default allowed_lag and allowed_gap. Might need tweaking.
+  max_lag_hrs = (1 + max(0, allowed_rev_gap - rev_gap) / 30) * allowed_lag_hrs
+
+  VerbosePrint('LKGR is %s hours old (threshold: %s hours)' %
+               (int(lag_hrs.total_seconds()) / 3600, max_lag_hrs))
+
+  return lag_hrs > datetime.timedelta(hours=max_lag_hrs)
+
+def GetLKGRAge(lkgr, repo='svn://svn.chromium.org/chrome'):
+  """Parse the LKGR revision timestamp from the svn log."""
+  lkgr_age = datetime.timedelta(0)
+  cmd = ['svn', 'log', '--non-interactive', '--xml', '-r', str(lkgr), repo]
+  process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+  stdout = process.communicate()[0]
+  if not process.returncode:
+    match = re.search('<date>(?P<dt>.*)</date>', stdout)
+    if match:
+      lkgr_dt = datetime.datetime.strptime(match.group('dt'),
+                                           '%Y-%m-%dT%H:%M:%S.%fZ')
+      lkgr_age = datetime.datetime.utcnow() - lkgr_dt
+  return lkgr_age
+
+
 def main():
   opt_parser = optparse.OptionParser()
   opt_parser.add_option('-q', '--quiet', default=False,
@@ -565,11 +638,31 @@ def main():
                         'argument will read from stdin.')
   opt_parser.add_option('--dump-build-data', metavar='FILE', dest='dump_file',
                         help='For debugging, dump the raw json build data.')
+  opt_parser.add_option('--email-errors', action='store_true', default=False,
+                        help='Send e-mail to LKGR admins on errors (for cron).')
+  opt_parser.add_option('--allowed-gap', type='int', default=150,
+                        help='How many revisions to allow between head and '
+                        'LKGR before it\'s considered out-of-date.')
+  opt_parser.add_option('--allowed-lag', type='int', default=2,
+                        help='How long (in hours) since an LKGR update before'
+                        'it\'s considered out-of-date. This is a minimum and '
+                        'will be increased when commit activity slows.')
   options, args = opt_parser.parse_args()
+
+  # Error notification setup.
+  fqdn = socket.getfqdn()
+  sender = '%s@%s' % (os.environ.get('LOGNAME', 'unknown'), fqdn)
+  recipients = 'chrome-troopers+alerts@google.com'
+  subject_base = os.path.basename(__file__) + ': '
+
+  global EMAIL_ENABLED
+  EMAIL_ENABLED = options.email_errors
 
   if args:
     opt_parser.print_usage()
-    sys.exit(1)
+    SendMail(sender, recipients, subject_base + 'Usage error',
+             ' '.join(sys.argv) + '\n' + opt_parser.get_usage())
+    return 1
 
   global VERBOSE
   VERBOSE = not options.quiet
@@ -582,6 +675,8 @@ def main():
 
   lkgr = FetchLKGR()
   if lkgr is None:
+    SendMail(sender, recipients, subject_base + 'Failed to fetch LKGR',
+             '\n'.join(run_log))
     return 1
 
   if options.build_data:
@@ -598,6 +693,7 @@ def main():
           options.dump_file, repr(e)))
 
   build_history = CollateRevisionHistory(builds, LKGR_STEPS)
+  latest_rev = int(build_history[0][0])
   candidate = FindLKGRCandidate(build_history, LKGR_STEPS)
 
   VerbosePrint('-' * 80)
@@ -619,6 +715,22 @@ def main():
       NotifyMaster(master, candidate, options.dry)
   else:
     VerbosePrint('No newer LKGR found than current %s' % lkgr)
+
+    rev_behind = latest_rev - lkgr
+    VerbosePrint('LKGR is behind by %s revisions' % rev_behind)
+    if rev_behind > options.allowed_gap:
+      SendMail(sender, recipients,
+               '%sLKGR > %s revisions behind' %
+               (subject_base, options.allowed_gap),
+               '\n'.join(run_log))
+      return 1
+
+    if not CheckLKGRLag(GetLKGRAge(lkgr), rev_behind, options.allowed_lag,
+                        options.allowed_gap):
+      SendMail(sender, recipients, '%sLKGR exceeds lag threshold' %
+               subject_base, '\n'.join(run_log))
+      return 1
+
   VerbosePrint('-' * 80)
 
   return 0
