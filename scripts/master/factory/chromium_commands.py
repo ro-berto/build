@@ -933,6 +933,8 @@ class ChromiumCommands(commands.FactoryCommands):
     env = factory_properties.get('test_env', {})
     if 'PYTHONPATH' not in env:
       env['PYTHONPATH'] = '.'
+    if 'GSUTIL' not in env:
+      env['GSUTIL'] = self._gsutil
     if not wpr:
       env['ENDURE_NO_WPR'] = '1'
 
