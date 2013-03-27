@@ -579,7 +579,10 @@ def NotifyMaster(master, lkgr, dry=False):
     os.kill(p.pid, signal.SIGKILL)
 
 def CheckLKGRLag(lag_age, rev_gap, allowed_lag_hrs, allowed_rev_gap):
-  """Determine if the LKGR lag is acceptable for current commit activity."""
+  """Determine if the LKGR lag is acceptable for current commit activity.
+
+    Returns True if the lag is within acceptable thresholds.
+  """
   # Lag isn't an absolute threshold because when things are slow, e.g. nights
   # and weekends, there could be bad revisions that don't get noticed and
   # fixed right away, so LKGR could go a long time without updating, but it
@@ -597,7 +600,7 @@ def CheckLKGRLag(lag_age, rev_gap, allowed_lag_hrs, allowed_rev_gap):
   VerbosePrint('LKGR is %s hours old (threshold: %s hours)' %
                (lag_hrs, max_lag_hrs))
 
-  return lag_age > datetime.timedelta(hours=max_lag_hrs)
+  return lag_age < datetime.timedelta(hours=max_lag_hrs)
 
 def GetLKGRAge(lkgr, repo='svn://svn.chromium.org/chrome'):
   """Parse the LKGR revision timestamp from the svn log."""
