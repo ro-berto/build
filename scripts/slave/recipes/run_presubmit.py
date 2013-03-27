@@ -20,8 +20,8 @@ def GetFactoryProperties(api, build_properties):
     'steps': git_steps + [
       steps.apply_patch_step(),
       steps.step('presubmit', [
-        steps.depot_tools_path('presubmit_support.py'),
-        '--root', steps.checkout_path(),
+        api.depot_tools_path('presubmit_support.py'),
+        '--root', api.checkout_path(),
         '--commit',
         '--author', build_properties['blamelist'][0],
         '--description', build_properties['description'],

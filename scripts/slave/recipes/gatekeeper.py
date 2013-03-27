@@ -5,7 +5,10 @@
 """Specifies how to launch the gatekeeper."""
 
 def GetFactoryProperties(api, build_properties):
+  steps = api.Steps(build_properties)
   return {
-      'script':
-          api.Steps.build_path('scripts', 'slave', 'gatekeeper_launch.py')
+    'steps': [
+      steps.step('gatekeeper_launch',
+                 api.build_path('scripts', 'slave', 'gatekeeper_launch.py'))
+    ]
   }
