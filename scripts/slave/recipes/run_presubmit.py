@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetFactoryProperties(api, build_properties):
+def GetFactoryProperties(api, _factory_properties, build_properties):
   steps = api.Steps(build_properties)
 
   git_steps = []

@@ -4,7 +4,7 @@
 
 """Specifies how to launch the gatekeeper."""
 
-def GetFactoryProperties(api, build_properties):
+def GetFactoryProperties(api, _factory_properties, build_properties):
   steps = api.Steps(build_properties)
   return {
     'steps': [
