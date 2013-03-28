@@ -116,7 +116,7 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
         result.setdefault(
             "supplemental_columns", {})["r_webkit_rev"] = data["webkit_rev"]
       results_to_add.append(result)
-      _PrintLinkStep(url, master, bot, test_path, revision)
+  _PrintLinkStep(url, master, bot, test, revision)
   return json.dumps(results_to_add)
 
 def _SendResultsJson(url, results_json):
