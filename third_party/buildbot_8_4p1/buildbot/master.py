@@ -295,7 +295,7 @@ class BuildMaster(service.MultiService):
                           "logHorizon", "buildHorizon", "changeHorizon",
                           "logMaxSize", "logMaxTailSize", "logCompressionMethod",
                           "db_url", "multiMaster", "db_poll_interval",
-                          "metrics", "caches"
+                          "metrics", "caches", "autoBuildCacheRatio"
                           )
             for k in config.keys():
                 if k not in known_keys:
@@ -357,6 +357,7 @@ class BuildMaster(service.MultiService):
 
                 metrics_config = config.get("metrics")
                 caches_config = config.get("caches", {})
+                autoBuildCacheRatio = config.get("autoBuildCacheRatio", None)
 
             except KeyError:
                 log.msg("config dictionary is missing a required parameter")
@@ -555,6 +556,7 @@ class BuildMaster(service.MultiService):
             self.logHorizon = logHorizon
             self.buildHorizon = buildHorizon
             self.slavePortnum = slavePortnum # TODO: move this to master.config.slavePortnum
+            self.autoBuildCacheRatio = autoBuildCacheRatio
 
             # Set up the database
             d.addCallback(lambda res:
@@ -783,6 +785,16 @@ class BuildMaster(service.MultiService):
         # to update its config
         for builder in allBuilders.values():
             builder.builder_status.reconfigFromBuildmaster(self)
+
+            # Adjust the caches if autoBuildCacheRatio is on. Each builder's
+            # build cache is set to (autoBuildCacheRatio * number of slaves).
+            # This assumes that each slave-entry can only execute one concurrent
+            # build.
+            if self.autoBuildCacheRatio:
+                builder_status = builder.builder_status
+                slavecount = len(builder_status.slavenames)
+                max_size = max(self.autoBuildCacheRatio * slavecount, 15)
+                builder_status.buildCache.set_max_size(max_size)
 
         metrics.MetricCountEvent.log("num_builders",
             len(allBuilders), absolute=True)
