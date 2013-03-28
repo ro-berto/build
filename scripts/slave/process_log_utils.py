@@ -772,9 +772,9 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     if not self._revision:
       raise Exception('revision is None')
     return ('{"traces": {%s}, "rev": "%s", "webkit_rev": "%s",'
-            ' "ver": "%s", "chan": "%s"}'
+            ' "ver": "%s", "chan": "%s", "units": "%s"}'
             % (trace_json, self._revision, self._webkit_revision, self._version,
-               self._channel))
+               self._channel, graph.units))
 
   def _FinalizeProcessing(self):
     self.__CreateSummaryOutput()

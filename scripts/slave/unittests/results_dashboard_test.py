@@ -88,6 +88,48 @@ class ResultsDashboardTest(unittest.TestCase):
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
 
+  def test_UnitsLogLine(self):
+    args = [
+        "bar-summary.dat",
+        ['{"traces": {"baz": ["100.0", "5.0"]},'
+         ' "rev": "12345", "webkit_rev": "6789", "units": "ms"}',
+         '{"traces": {"bam": ["100.0", "5.0"]},'
+         ' "rev": "12345", "webkit_rev": "6789", "units": ""}'],
+        "linux-release",
+        "foo",
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
+    expected_new_json = [json.dumps([{
+        "master": "ChromiumPerf",
+        "bot": "linux-release",
+        "test": "foo/bar/baz",
+        "revision": "12345",
+        "value": "100.0",
+        "error": "5.0",
+        "units": "ms",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
+        "supplemental_columns": {
+            "r_webkit_rev": "6789",
+    }},{
+        "master": "ChromiumPerf",
+        "bot": "linux-release",
+        "test": "foo/bar/bam",
+        "revision": "12345",
+        "value": "100.0",
+        "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
+        "supplemental_columns": {
+            "r_webkit_rev": "6789",
+    }}])]
+    errors = [None]
+    self._SendResults(args, expected_new_json, errors)
+
   def test_MultipleLogLines(self):
     args = [
         "bar-summary.dat", [

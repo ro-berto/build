@@ -115,6 +115,8 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       if "webkit_rev" in data and data["webkit_rev"] != "undefined":
         result.setdefault(
             "supplemental_columns", {})["r_webkit_rev"] = data["webkit_rev"]
+      if data.get("units"):
+        result["units"] = data["units"]
       results_to_add.append(result)
   _PrintLinkStep(url, master, bot, test, revision)
   return json.dumps(results_to_add)
