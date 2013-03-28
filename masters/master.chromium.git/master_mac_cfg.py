@@ -62,7 +62,7 @@ F('rel_unit_1', mac().ChromiumGITFactory(
   tests=['base_unittests',
          'browser_tests',
          'cacheinvalidation_unittests',
-         'crypto',
+         'crypto_unittests',
          'googleurl',
          'gpu',
          'jingle',

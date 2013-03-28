@@ -70,7 +70,7 @@ linux_chromeos_tests = [
   ('compositor', 'compositor_unittests', 1),
   ('content_browsertests', 'content_browsertests', 2),
   ('content_unittests', 'content_unittests', 1),
-  ('crypto', 'crypto_unittests', 1),
+  ('crypto_unittests', 'crypto_unittests', 1),
   ('dbus', 'dbus_unittests', 1),
   ('device_unittests', 'device_unittests', 1),
   ('googleurl', 'googleurl_unittests', 1),

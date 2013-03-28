@@ -85,7 +85,7 @@ mac_asan_tests_1 = [
   'cacheinvalidation_unittests',
   'content_browsertests',
   'content_unittests',
-  'crypto',
+  'crypto_unittests',
   'googleurl',
   'ipc_tests',
   'jingle',

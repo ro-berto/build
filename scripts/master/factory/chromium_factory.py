@@ -319,7 +319,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('courgette_unittests', fp)
     if R('courgette_br'):
       f.AddBuildrunnerGTest('courgette_unittests', fp)
-    if R('crypto', 'crypto_unittests'):
+    if R('crypto_unittests'):
       f.AddGTestTestStep('crypto_unittests', fp)
     if R('crypto_br'):
       f.AddBuildrunnerGTest('crypto_unittests', fp)

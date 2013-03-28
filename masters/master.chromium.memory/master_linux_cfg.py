@@ -117,7 +117,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
-      'crypto',
+      'crypto_unittests',
       'device_unittests',
       'gpu',
       'jingle',

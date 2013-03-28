@@ -131,7 +131,7 @@ asan_tests_1 = [
   'chromeos_unittests',
   'compositor',
   'content_browsertests',
-  'crypto',
+  'crypto_unittests',
   'googleurl',
   'gpu',
   'jingle',

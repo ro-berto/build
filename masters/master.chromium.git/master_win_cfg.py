@@ -59,7 +59,7 @@ F('rel_unit_1', win().ChromiumGITFactory(
     tests=['browser_tests',
            'cacheinvalidation_unittests',
            'courgette_unittests',
-           'crypto',
+           'crypto_unittests',
            'googleurl',
            'gpu',
            'installer',
