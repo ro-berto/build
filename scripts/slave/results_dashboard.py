@@ -23,11 +23,13 @@ CACHE_FILENAME = "results_to_retry"
 
 
 #TODO(xusydoc): set fail_hard to True when bots stabilize. See crbug.com/222607.
-def SendResults(logname, lines, system, test, url, build_dir, fail_hard=False):
+def SendResults(logname, lines, system, test, url, masterid,
+                buildername, buildnumber, build_dir, fail_hard=False):
   if not logname.endswith("-summary.dat"):
     return
 
-  new_results_line = _GetResultsJson(logname, lines, system, test, url)
+  new_results_line = _GetResultsJson(logname, lines, system, test, url,
+                                     masterid, buildername, buildnumber)
   # Write the new request line to the cache, in case of errors.
   cache_filename = _GetCacheFileName(build_dir)
   cache = open(cache_filename, "ab")
@@ -82,7 +84,8 @@ def _GetCacheFileName(build_dir):
     open(cache_filename, "wb").close()
   return cache_filename
 
-def _GetResultsJson(logname, lines, system, test, url):
+def _GetResultsJson(logname, lines, system, test, url, masterid,
+                    buildername, buildnumber):
   results_to_add = []
   master = slave_utils.GetActiveMaster()
   bot = system
@@ -105,6 +108,9 @@ def _GetResultsJson(logname, lines, system, test, url):
           "revision": revision,
           "value": values[0],
           "error": values[1],
+          "masterid": masterid,
+          "buildername": buildername,
+          "buildnumber": buildnumber,
       }
       if "webkit_rev" in data and data["webkit_rev"] != "undefined":
         result.setdefault(

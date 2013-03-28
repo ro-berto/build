@@ -352,13 +352,15 @@ def create_results_tracker(tracker_class, options):
   return tracker_obj
 
 
-def send_results_to_dashboard(results_tracker, system, test, url, build_dir):
+def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
+                              masterid, buildername, buildnumber):
   if system is None:
     # perf_id not specified in factory-properties
     return
   for logname, log in results_tracker.PerformanceLogs().iteritems():
     lines = [str(l).rstrip() for l in log]
-    results_dashboard.SendResults(logname, lines, system, test, url, build_dir)
+    results_dashboard.SendResults(logname, lines, system, test, url, masterid,
+                                  buildername, buildnumber, build_dir)
 
 
 def annotate(test_name, result, results_tracker, full_name=False,
@@ -601,7 +603,10 @@ def main_mac(options, args):
   if options.results_url:
     send_results_to_dashboard(
         results_tracker, options.factory_properties.get('perf_id'),
-        options.test_type, options.results_url, options.build_dir)
+        options.test_type, options.results_url, options.build_dir,
+        options.build_properties.get('mastername'),
+        options.build_properties.get('buildername'),
+        options.build_properties.get('buildnumber'))
 
   return result
 
@@ -867,7 +872,10 @@ def main_linux(options, args):
   if options.results_url:
     send_results_to_dashboard(
         results_tracker, options.factory_properties.get('perf_id'),
-        options.test_type, options.results_url, options.build_dir)
+        options.test_type, options.results_url, options.build_dir,
+        options.build_properties.get('mastername'),
+        options.build_properties.get('buildername'),
+        options.build_properties.get('buildnumber'))
 
   return result
 
@@ -946,7 +954,10 @@ def main_win(options, args):
   if options.results_url:
     send_results_to_dashboard(
         results_tracker, options.factory_properties.get('perf_id'),
-        options.test_type, options.results_url, options.build_dir)
+        options.test_type, options.results_url, options.build_dir,
+        options.build_properties.get('mastername'),
+        options.build_properties.get('buildername'),
+        options.build_properties.get('buildnumber'))
 
   return result
 

@@ -68,7 +68,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -76,6 +79,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
         }}])]
@@ -91,7 +97,10 @@ class ResultsDashboardTest(unittest.TestCase):
             ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -99,6 +108,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
     }}, {
@@ -108,6 +120,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "101.0",
         "error": "4.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
     }}])]
@@ -122,7 +137,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -130,6 +148,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
     }},{
@@ -139,6 +160,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "99.0",
         "error": "2.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
     }}, {
@@ -148,6 +172,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "101.0",
         "error": "3.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
     }},{
@@ -157,6 +184,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "102.0",
         "error": "1.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
     }}])]
@@ -170,7 +200,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -178,6 +211,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
         }}])]
@@ -191,7 +227,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -199,6 +238,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
         }}])]
@@ -210,7 +252,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12346", "webkit_rev": "6790"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json.append(json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -218,6 +263,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12346",
         "value": "101.0",
         "error": "6.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6790",
         }
@@ -232,7 +280,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -240,6 +291,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
         }}])]
@@ -251,7 +305,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12346", "webkit_rev": "6790"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json2 = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -259,6 +316,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12346",
         "value": "101.0",
         "error": "6.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6790",
         }
@@ -273,7 +333,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12345", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -281,6 +344,9 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
         }}])]
@@ -300,6 +366,9 @@ class ResultsDashboardTest(unittest.TestCase):
             "revision": "12345",
             "value": "100.0",
             "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
             "supplemental_columns": {
                 "r_webkit_rev": "6789",
             }}]),
@@ -310,6 +379,9 @@ class ResultsDashboardTest(unittest.TestCase):
             "revision": "12346",
             "value": "101.0",
             "error": "5.0",
+            "masterid": "chromium.perf",
+            "buildername": "XP Perf (1)",
+            "buildnumber": "7890",
             "supplemental_columns": {
                 "r_webkit_rev": "6789",
             }}]),
@@ -320,6 +392,9 @@ class ResultsDashboardTest(unittest.TestCase):
             "revision": "12347",
             "value": "99.0",
             "error": "5.0",
+            "masterid": "chromium.perf",
+            "buildername": "XP Perf (1)",
+            "buildnumber": "7890",
             "supplemental_columns": {
                 "r_webkit_rev": "6789",
             }}])
@@ -333,7 +408,10 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "rev": "12348", "webkit_rev": "6789"}'],
         "linux-release",
         "foo",
-        "https://chrome-perf.googleplex.com"]
+        "https://chrome-perf.googleplex.com",
+        "chromium.perf",
+        "XP Perf (1)",
+        "7890"]
     expected_new_json = [json.dumps([{
         "master": "ChromiumPerf",
         "bot": "linux-release",
@@ -341,17 +419,20 @@ class ResultsDashboardTest(unittest.TestCase):
         "revision": "12345",
         "value": "100.0",
         "error": "5.0",
+        "masterid": "chromium.perf",
+        "buildername": "XP Perf (1)",
+        "buildnumber": "7890",
         "supplemental_columns": {
             "r_webkit_rev": "6789",
         }}])]
     errors = [urllib2.URLError("reason")]
     self._SendResults(args, expected_new_json, errors)
     cache_file = open(self.cache_filename, "rb")
-    actual_cache_lines = cache_file.readlines()
+    actual_cache_lines = [l.strip() for l in cache_file.readlines()]
     cache_file.close()
     self.assertEqual(4, len(actual_cache_lines))
     for line in previous_lines.split("\n") + expected_new_json:
-      self.assertTrue(line + "\n" in actual_cache_lines)
+      self.assertTrue(line in actual_cache_lines)
 
 
 if __name__ == '__main__':
