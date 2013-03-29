@@ -1101,6 +1101,7 @@ def main():
   tsan_options = ('suppressions=src/tools/valgrind/tsan_v2/suppressions.txt '
                   'report_signal_unsafe=0 '
                   'report_thread_leaks=0 '
+                  'history_size=7 '
                   'external_symbolizer_path=%s' % symbolizer_path)
   if options.factory_properties.get('tsan', False):
     os.environ['TSAN_OPTIONS'] = tsan_options
