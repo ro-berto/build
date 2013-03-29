@@ -724,15 +724,15 @@ def main():
     VerbosePrint('LKGR is behind by %s revisions' % rev_behind)
     if rev_behind > options.allowed_gap:
       SendMail(sender, recipients,
-               '%sLKGR > %s revisions behind' %
-               (subject_base, options.allowed_gap),
+               '%sLKGR (%s) > %s revisions behind' %
+               (subject_base, lkgr, options.allowed_gap),
                '\n'.join(run_log))
       return 1
 
     if not CheckLKGRLag(GetLKGRAge(lkgr), rev_behind, options.allowed_lag,
                         options.allowed_gap):
-      SendMail(sender, recipients, '%sLKGR exceeds lag threshold' %
-               subject_base, '\n'.join(run_log))
+      SendMail(sender, recipients, '%sLKGR (%s) exceeds lag threshold' %
+               (subject_base, lkgr), '\n'.join(run_log))
       return 1
 
   VerbosePrint('-' * 80)
