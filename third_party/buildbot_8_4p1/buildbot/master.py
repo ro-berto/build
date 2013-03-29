@@ -795,6 +795,7 @@ class BuildMaster(service.MultiService):
                 slavecount = len(builder_status.slavenames)
                 max_size = max(self.autoBuildCacheRatio * slavecount, 15)
                 builder_status.buildCache.set_max_size(max_size)
+                builder_status.buildCacheSize = max_size
 
         metrics.MetricCountEvent.log("num_builders",
             len(allBuilders), absolute=True)
