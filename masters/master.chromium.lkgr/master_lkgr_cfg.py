@@ -135,6 +135,38 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
 
+# The build process for TSan is described at
+# http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
+tsan_gyp = ('tsan=1 linux_use_tcmalloc=0 disable_nacl=1 '
+            'debug_extra_cflags="-gline-tables-only" '
+            'release_extra_cflags="-gline-tables-only" ')
+
+B('TSAN Release', 'linux_tsan_rel', 'compile', 'chromium_lkgr')
+F('linux_tsan_rel', linux().ChromiumFactory(
+    clobber=True,
+    options=['--compiler=goma-clang', 'chrome', 'dns_fuzz_stub',
+             'DumpRenderTree', 'content_browsertests'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'tsan-release',
+       'gs_bucket': 'gs://chromium-browser-tsan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
+
+B('TSAN Debug', 'linux_tsan_dbg', 'compile', 'chromium_lkgr')
+F('linux_tsan_dbg', linux().ChromiumFactory(
+    clobber=True,
+    target='Debug',
+    options=['--compiler=goma-clang', 'chrome', 'dns_fuzz_stub',
+             'DumpRenderTree', 'content_browsertests'],
+    factory_properties={
+       'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'tsan-debug',
+       'gs_bucket': 'gs://chromium-browser-tsan',
+       'gs_acl': 'public-read',
+       'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
+
+
 
 def Update(_config, active_master, c):
   return helper.Update(c)
