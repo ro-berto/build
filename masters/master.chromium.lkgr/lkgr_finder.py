@@ -589,14 +589,18 @@ def CheckLKGRLag(lag_age, rev_gap, allowed_lag_hrs, allowed_rev_gap):
   # wouldn't be a big concern, so we want to back off the 'ideal' threshold.
   # When the tree is active, we don't want to back off much, or at all, to keep
   # the lag under control.
-  # This causes the allowed_lag to back off proportionally to how far LKGR is
-  # below the gap threshold, which is used as a rough measure of activity.
-
-  # Equation arbitrarily chosen to fit the range of 2 to 12 hours when using the
-  # default allowed_lag and allowed_gap. Might need tweaking.
-  max_lag_hrs = (1 + max(0, allowed_rev_gap - rev_gap) / 30) * allowed_lag_hrs
 
   lag_hrs = (lag_age.days * 24) + (lag_age.seconds / 3600)
+  rev_rate = rev_gap / lag_hrs
+
+  # This causes the allowed_lag to back off proportionally to how far LKGR is
+  # below the gap threshold, roughly throttled by the rate of commits since the
+  # last LKGR.
+  # Equation arbitrarily chosen to fit the range of 2 to 22 hours when using the
+  # default allowed_lag and allowed_gap. Might need tweaking.
+  max_lag_hrs = ((1 + max(0, allowed_rev_gap - rev_gap) /
+                  min(30, max(15, rev_rate))) * allowed_lag_hrs)
+
   VerbosePrint('LKGR is %s hours old (threshold: %s hours)' %
                (lag_hrs, max_lag_hrs))
 
