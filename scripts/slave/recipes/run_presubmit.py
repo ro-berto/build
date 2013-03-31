@@ -2,11 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetFactoryProperties(api, _factory_properties, build_properties):
+def GetFactoryProperties(api, factory_properties, build_properties):
+  # TODO(iannucci): Pass the build repo info directly via build_properties
+  repo_name = factory_properties.get('repo_name')
   steps = api.Steps(build_properties)
 
+  solution = steps.gclient_common_solution(repo_name)
+
   git_steps = []
-  if build_properties['root_repo_url'].endswith('.git'):
+  if solution['url'].endswith('.git'):
     email = 'commit-bot@chromium.org'
     git_steps = [
       steps.git_step('config', 'user.email', email),
@@ -16,7 +20,7 @@ def GetFactoryProperties(api, _factory_properties, build_properties):
 
   return {
     'checkout': 'gclient',
-    'gclient_spec': steps.gclient_spec(),
+    'gclient_spec': {'solutions': [solution]},
     'steps': git_steps + [
       steps.apply_patch_step(),
       steps.step('presubmit', [
