@@ -22,7 +22,7 @@ def GetFactoryProperties(api, factory_properties, build_properties):
     'checkout': 'gclient',
     'gclient_spec': {'solutions': [solution]},
     'steps': git_steps + [
-      steps.apply_patch_step(),
+      steps.apply_issue_step(),
       steps.step('presubmit', [
         api.depot_tools_path('presubmit_support.py'),
         '--root', api.checkout_path(),
