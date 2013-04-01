@@ -94,6 +94,12 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
     data = json.loads(line)
     revision = data["rev"]
     for (trace, values) in data["traces"].iteritems():
+      # Test to make sure we don't have x/y data.
+      for value in values:
+        if not isinstance(value, basestring):
+          # http://crbug.com/224719
+          raise NotImplementedError('x/y graphs not supported at this time.')
+
       if trace == graph + "_ref":
         trace = "ref"
       graph = graph.replace("_by_url", "")

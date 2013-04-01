@@ -359,8 +359,11 @@ def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
     return
   for logname, log in results_tracker.PerformanceLogs().iteritems():
     lines = [str(l).rstrip() for l in log]
-    results_dashboard.SendResults(logname, lines, system, test, url, masterid,
-                                  buildername, buildnumber, build_dir)
+    try:
+      results_dashboard.SendResults(logname, lines, system, test, url, masterid,
+                                    buildername, buildnumber, build_dir)
+    except NotImplementedError as e:
+      print 'Did not submit to results dashboard: %s' % e
 
 
 def annotate(test_name, result, results_tracker, full_name=False,
