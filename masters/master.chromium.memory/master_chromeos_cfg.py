@@ -46,8 +46,7 @@ sharded_tests = [
   'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',
-  # http://crbug.com/178006
-  #'content_unittests',
+  'content_unittests',
   'crypto_unittests',
   'device_unittests',
   'gpu_unittests',
