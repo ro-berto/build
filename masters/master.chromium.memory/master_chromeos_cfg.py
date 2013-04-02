@@ -50,8 +50,7 @@ sharded_tests = [
   #'content_unittests',
   'crypto_unittests',
   'device_unittests',
-  # http://crbug.com/178005
-  #'gpu_unittests',
+  'gpu_unittests',
   'jingle_unittests',
   'media_unittests',
   'net_unittests',
