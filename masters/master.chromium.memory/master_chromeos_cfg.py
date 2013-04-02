@@ -61,8 +61,7 @@ sharded_tests = [
   'sync_integration_tests',
   'sync_unit_tests',
   'ui_unittests',
-  # http://crbug.com/177927
-  #'unit_tests',
+  'unit_tests',
   'views_unittests',
   'webkit_compositor_bindings_unittests',
 ]

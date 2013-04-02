@@ -47,11 +47,7 @@ sharded_tests = [
   'sync_integration_tests',
   'sync_unit_tests',
   'ui_unittests',
-  # unit_tests hangs on run_test_cases on OSX.
-  # http://crbug.com/177925
-  # and they are slower
-  # http://crbug.com/177927
-  #'unit_tests',
+  'unit_tests',
   'views_unittests',
   'webkit_compositor_bindings_unittests',
 ]

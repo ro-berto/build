@@ -48,10 +48,7 @@ sharded_tests = [
   #'sync_integration_tests',
   'sync_unit_tests',
   'ui_unittests',
-  # unit_tests seems to have a costly one-time initialization that takes over 2
-  # seconds, causing the whole run to take 2x longer with run_test_cases.
-  # http://crbug.com/177927
-  #'unit_tests',
+  'unit_tests',
   'views_unittests',
   'webkit_compositor_bindings_unittests',
 ]
