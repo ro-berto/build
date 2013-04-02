@@ -18,6 +18,7 @@ import os
 import signal
 import time
 import textwrap
+import twisted.internet.error
 
 try:
   import pyximport
@@ -28,6 +29,8 @@ except ImportError:
   print 'Unable to load the epoll module, falling back to select.'
   print 'This may be caused by the lack of cython, python-dev, or'
   print 'you may be on a platform other than linux 2.6' 
+except twisted.internet.error.ReactorAlreadyInstalledError:
+  pass
 
 from zope.interface import implements
 from twisted.python import log, components
