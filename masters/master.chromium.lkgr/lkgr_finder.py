@@ -48,6 +48,7 @@ the revisions and run the same algorithm.  Since we are only interested in the
 backward.
 """
 
+import cgi
 # The 2 following modules are not present on python 2.5
 # pylint: disable=F0401
 import datetime
@@ -463,6 +464,155 @@ def CollateRevisionHistory(builds, lkgr_steps):
 
   return build_history
 
+
+def FillResultBlanksBetweenBuilds(build_history, lkgr_steps):
+  """Given build history and LKGR steps, builds a two-dimensional array,
+  where rows are revisions and columns are bots. Each cell has a result
+  that corresponds to no-info/green/red, and for revisions that were not
+  built on given builder we approximate the above using two surrounding
+  builds (the closest before and closest after that revision)."""
+
+  # Sort seen revisions, most recent ones (biggest numbers) first.
+  revisions = sorted([rev for rev, results in build_history], reverse=True)
+  per_builder_history = {}
+
+  # Create a 2-D pseudo-array. Rows are revisions, and columns
+  # are waterfall-builder pairs.
+  for waterfall, builders in lkgr_steps.items():
+    for builder in builders:
+      per_builder_history[(waterfall, builder)] = {}
+      for rev in revisions:
+        per_builder_history[(waterfall, builder)][rev] = {
+          'result': None,
+          'has_build': False,
+        }
+
+  # Populate above array with known build results.
+  for rev, results in build_history:
+    for waterfall, builders in results.items():
+      for builder in builders:
+        per_builder_history[(waterfall, builder)][rev].update({
+          'result': results[waterfall][builder],
+          'has_build': True,
+        })
+
+  # Approximate results between builds.
+  for builder in per_builder_history:
+    # Do a top-bottom pass (most recent, bigger revisions first, to older,
+    # smaller ones). For revisions where we don't have a build, fill in
+    # the blank with last known result.
+    last_known_result = None
+    for rev in revisions:
+      if per_builder_history[builder][rev]['has_build']:
+        last_known_result = per_builder_history[builder][rev]['result']
+      else:
+        per_builder_history[builder][rev]['result'] = last_known_result
+
+    # Do a bottom-top pass. This can't add more green results, but it can
+    # add more unknowns or reds if the next build after a blank is red
+    # or if there is no build after the blank.
+    last_known_result = None
+    for rev in reversed(revisions):
+      if per_builder_history[builder][rev]['has_build']:
+        last_known_result = per_builder_history[builder][rev]['result']
+      elif (per_builder_history[builder][rev]['result'] or
+            last_known_result is None):
+        per_builder_history[builder][rev]['result'] = last_known_result
+
+  return per_builder_history
+
+
+def GenerateHTMLStatus(build_history, per_builder_history):
+  """Given build history, returns HTML code for a human-readable
+  status page."""
+
+  html_chunks = []
+  html_chunks += '<html>\n'
+  html_chunks += '<head>\n'
+  html_chunks += '<style type="text/css">\n'
+  html_chunks += 'th { font-size: xx-small; }\n'
+  html_chunks += 'td, th { border: 1px solid black; text-align: center; }\n'
+  html_chunks += '.success { background-color: #8d4; }\n'
+  html_chunks += '.failure { background-color: #e88; }\n'
+  html_chunks += '</style>\n'
+  html_chunks += '</head>\n'
+  html_chunks += '<body><table>\n'
+
+  html_chunks += '<tr><th></th>'
+  for waterfall, bot in per_builder_history.keys():
+    html_chunks += '<th>%s</th>' % cgi.escape(bot)
+  html_chunks += '</tr>'
+
+  for revision, _ in build_history:
+    html_chunks += '<tr>'
+
+    # All builders for given revision must be green to be an LKGR candidate.
+    lkgr_candidate = True
+    for waterfall, bot in per_builder_history.keys():
+      if not per_builder_history[(waterfall, bot)][revision]['result']:
+        lkgr_candidate = False
+        break
+
+    html_chunks += '<td class="%s"><b>%s</b></td>' % (
+        'success' if lkgr_candidate else 'failure',
+        cgi.escape(revision))
+
+    for waterfall, bot in per_builder_history.keys():
+      result = per_builder_history[(waterfall, bot)][revision]
+      if result['result'] is None:
+        html_chunks += '<td></td>'
+      elif result['result']:
+        html_chunks += '<td class="success">'
+      else:
+        html_chunks += '<td class="failure">'
+
+      if result['has_build']:
+        # Indicate the builder built exactly this revision
+        # (as opposed to an approximation).
+        html_chunks += 'x'
+
+      html_chunks += '</td>'
+    html_chunks += '</tr>'
+  html_chunks += '</table></body></html>'
+
+  return ''.join(html_chunks)
+
+
+def GenerateTextStatus(build_history, per_builder_history):
+  """Given build history, returns a plain text status report."""
+
+  output_chunks = []
+
+  for revision, _ in build_history:
+    problems = {}
+    had_no_build = False
+    for waterfall, bot in per_builder_history.keys():
+      result = per_builder_history[(waterfall, bot)][revision]
+      if result['result'] is None:
+        had_no_build = True
+      elif not result['result']:
+        problems[(waterfall, bot)] = result
+    if problems or had_no_build:
+      output_chunks += '[ BAD  ] revision %s\n' % revision
+      for wb, result in problems.items():
+        assert not result['result']
+        waterfall, bot = wb
+        status = 'build failed'
+        if not result['has_build']:
+          status += ' (approximation)'
+        output_chunks += '\t%s: %s -> %s\n' % (waterfall, bot, status)
+
+      # To avoid cluttering the output, only print brief information
+      # about missing builds. We can't do much about them, while we can
+      # fix failing builders.
+      if not problems:
+        output_chunks += '\tnot all builders finished\n'
+    else:
+      output_chunks += '[ GOOD ] revision %s\n' % revision
+
+  return ''.join(output_chunks)
+
+
 def FindLKGRCandidate(build_history, lkgr_steps):
   """Given a build_history of builds, run the algorithm for finding an LKGR
   candidate (refer to the algorithm description at the top of this script).
@@ -655,6 +805,12 @@ def main():
                         help='How long (in hours) since an LKGR update before'
                         'it\'s considered out-of-date. This is a minimum and '
                         'will be increased when commit activity slows.')
+  opt_parser.add_option('--html', metavar='FILE',
+                        help='Output details in HTML format '
+                             '(for troubleshooting LKGR staleness issues).')
+  opt_parser.add_option('--text', action='store_true',
+                        help='Output details in plain text format '
+                             '(for troubleshooting LKGR staleness issues).')
   options, args = opt_parser.parse_args()
 
   # Error notification setup.
@@ -701,6 +857,15 @@ def main():
           options.dump_file, repr(e)))
 
   build_history = CollateRevisionHistory(builds, LKGR_STEPS)
+  per_builder_history = FillResultBlanksBetweenBuilds(build_history, LKGR_STEPS)
+
+  if options.html:
+    with open(options.html, 'w') as fh:
+      fh.write(GenerateHTMLStatus(build_history, per_builder_history))
+
+  if options.text:
+    print GenerateTextStatus(build_history, per_builder_history)
+
   latest_rev = int(build_history[0][0])
   candidate = FindLKGRCandidate(build_history, LKGR_STEPS)
 
