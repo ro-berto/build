@@ -19,8 +19,8 @@ class Master(object):
   sourceforge_url = 'https://%(repo)s.svn.sourceforge.net/svnroot/%(repo)s'
   googlecode_revlinktmpl = 'https://code.google.com/p/%s/source/browse?r=%s'
 
-  # Directly fetches from anonymous webkit svn server.
-  webkit_root_url = 'http://svn.webkit.org/repository/webkit'
+  # Directly fetches from anonymous Blink svn server.
+  webkit_root_url = 'http://src.chromium.org/blink'
   nacl_trunk_url = 'http://src.chromium.org/native_client/trunk'
 
   llvm_url = 'http://llvm.org/svn/llvm-project'
