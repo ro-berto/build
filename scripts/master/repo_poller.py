@@ -104,8 +104,7 @@ class RepoPoller(PollingChangeSource):
   def RunCmd(self, binary, args, path):
     log.msg('RepoPoller: running "%s %s" (in %s)'
             % (binary, ' '.join(args), path))
-    d = utils.getProcessOutputAndValue(binary, args, path=path,
-                                       env=dict(PATH=os.environ['PATH']))
+    d = utils.getProcessOutputAndValue(binary, args, path=path, env=os.environ)
     def _check_status(result):
       (stdout, stderr, status) = result
       if status != 0:
@@ -218,8 +217,7 @@ class RepoPoller(PollingChangeSource):
     args = ['log', rev, '--no-walk', '--format=%s%n%b']
     d = utils.getProcessOutput(self.git_bin, args,
                                path=os.path.join(self.workdir, project),
-                               env=dict(PATH=os.environ['PATH']),
-                               errortoo=False)
+                               env=os.environ, errortoo=False)
     def process(git_output):
       stripped_output = git_output.strip().decode(self.encoding)
       if len(stripped_output) == 0:
@@ -232,8 +230,7 @@ class RepoPoller(PollingChangeSource):
     args = ['log', rev, '--name-only', '--no-walk', '--format=%n']
     d = utils.getProcessOutput(self.git_bin, args,
                                path=os.path.join(self.workdir, project),
-                               env=dict(PATH=os.environ['PATH']),
-                               errortoo=False)
+                               env=os.environ, errortoo=False)
     d.addCallback(lambda git_output: [x for x in git_output.splitlines() if x])
     return d
 
@@ -241,8 +238,7 @@ class RepoPoller(PollingChangeSource):
     args = ['log', rev, '--no-walk', '--format=%aE']
     d = utils.getProcessOutput(self.git_bin, args,
                                path=os.path.join(self.workdir, project),
-                               env=dict(PATH=os.environ['PATH']),
-                               errortoo=False)
+                               env=os.environ, errortoo=False)
     def process(git_output):
       stripped_output = git_output.strip().decode(self.encoding)
       if len(stripped_output) == 0:
