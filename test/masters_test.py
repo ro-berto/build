@@ -217,7 +217,7 @@ def main():
       'master.client.sfntly': None,
       'master.client.skia': None,
       'master.client.syzygy': None,
-      'master.client.toolkit': 'Toolkit',
+      'master.client.toolkit': None,
       'master.client.tsan': None,  # make start fails
       'master.client.unused': None,
       'master.client.v8': 'V8',
