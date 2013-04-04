@@ -101,7 +101,6 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
              'content_browsertests'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan-release',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
@@ -130,7 +129,6 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
              'content_browsertests'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'asan-debug',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 linux_use_tcmalloc=0 '}}))
@@ -148,7 +146,6 @@ F('linux_tsan_rel', linux().ChromiumFactory(
              'DumpRenderTree', 'content_browsertests'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'tsan-release',
        'gs_bucket': 'gs://chromium-browser-tsan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
@@ -161,7 +158,6 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
              'DumpRenderTree', 'content_browsertests'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
-       'cf_archive_name': 'tsan-debug',
        'gs_bucket': 'gs://chromium-browser-tsan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
