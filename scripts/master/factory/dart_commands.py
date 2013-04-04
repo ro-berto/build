@@ -84,18 +84,22 @@ class DartCommands(commands.FactoryCommands):
                     options.get('name').startswith('dart2dart'))
     is_new_analyzer = (options.get('name') != None and
                        options.get('name').startswith('new_analyzer'))
+    is_vm = not is_dartc and not is_dart2dart and not is_new_analyzer
 
-    if not is_dartc and not is_dart2dart and not is_new_analyzer:
+    if is_vm:
       cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
-
-    if is_dart2dart:
+    elif is_dart2dart:
       cmd += ' create_sdk'
-
-    # For dartc we always do a full build, except for debug mode
-    # where we will time out doing api docs.
-    if is_dartc and options['mode'] == 'debug':
+    elif is_dartc and options['mode'] == 'debug':
+      # For dartc we always do a full build, except for debug mode
+      # where we will time out doing api docs.
       cmd += ' dartc_bot'
+    else:
+      # Since the build.py uses the 'default' target as default (which doesn't
+      # include everything), we have to explicitly build the 'everything'
+      # target.
+      cmd += ' everything'
 
     self._factory.addStep(shell.ShellCommand,
                           name='build',
