@@ -769,12 +769,17 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     trace_json = ', '.join(['"%s": ["%s", "%s"]' %
                             (x, graph.traces[x].value,
                              graph.traces[x].stddev) for x in traces])
+    important = [x for x in traces if graph.traces[x].important]
+    if important:
+      important = ', "important": %s' % json.dumps(important)
+    else:
+      important = ''
     if not self._revision:
       raise Exception('revision is None')
     return ('{"traces": {%s}, "rev": "%s", "webkit_rev": "%s",'
-            ' "ver": "%s", "chan": "%s", "units": "%s"}'
+            ' "ver": "%s", "chan": "%s", "units": "%s"%s}'
             % (trace_json, self._revision, self._webkit_revision, self._version,
-               self._channel, graph.units))
+               self._channel, graph.units, important))
 
   def _FinalizeProcessing(self):
     self.__CreateSummaryOutput()
