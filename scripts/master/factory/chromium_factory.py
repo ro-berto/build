@@ -503,8 +503,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('page_cycler', 'page_cycler/moz.json',
                          step_name='moz', factory_properties=fp)
     if R('page_cycler_morejs'):
+      timeout = 1200
+      if 'target' in fp and fp['target'] == 'Debug':
+        timeout = 1800
       f.AddTelemetryTest('page_cycler', 'page_cycler/morejs.json',
-                         step_name='morejs', factory_properties=fp)
+                         step_name='morejs', factory_properties=fp,
+                         timeout=timeout)
     if R('page_cycler_intl1'):
       f.AddTelemetryTest('page_cycler', 'page_cycler/intl1.json',
                          step_name='intl1', factory_properties=fp)
