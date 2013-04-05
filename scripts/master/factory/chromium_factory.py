@@ -1029,6 +1029,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         factory_properties=factory_properties,
         env=env)
 
+    # Add archive build step.
+    if factory_properties.get('archive_build'):
+      chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)
+
     # Add all the tests.
     self._AddTests(factory_cmd_obj=chromium_cmd_obj, tests=tests,
                    factory_properties=factory_properties)

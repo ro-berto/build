@@ -169,6 +169,10 @@ class StagerBase(object):
     self._dual_upload = options.factory_properties.get('dual_upload', False)
     self._archive_files = None
 
+  def TargetPlatformName(self):
+    return self.options.factory_properties.get('target_os',
+                                               chromium_utils.PlatformName())
+
   def BuildOldFilesList(self, source_file_name):
     """Build list of files from the old "file of paths" style input.
 
@@ -358,7 +362,7 @@ class StagerBase(object):
 
     # Make test_file_list contain absolute paths.
     test_file_list = [os.path.join(self._build_dir, f) for f in test_file_list]
-    UPLOAD_DIR = 'chrome-%s.test' % chromium_utils.PlatformName()
+    UPLOAD_DIR = 'chrome-%s.test' % self.TargetPlatformName()
 
     # Filter out those files that don't exist.
     base_src_dir = os.path.join(self._build_dir, '')
@@ -502,7 +506,7 @@ class StagerBase(object):
 
     print 'build name: %s' % self._build_name
 
-    archive_name = 'chrome-%s.zip' % chromium_utils.PlatformName()
+    archive_name = 'chrome-%s.zip' % self.TargetPlatformName()
     archive_file = self.CreateArchiveFile(archive_name,
                                           self._archive_files)[1]
 
