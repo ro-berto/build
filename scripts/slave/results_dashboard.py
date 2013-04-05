@@ -21,11 +21,41 @@ RESULTS_LINK_PATH = '/report?masters=%s&bots=%s&tests=%s&rev=%s'
 CACHE_DIR = 'results_dashboard'
 CACHE_FILENAME = 'results_to_retry'
 
+SYSTEM_WHITELIST = [
+    'android-gn',
+    'android-nexus10',
+    'android-nexus4',
+    'chromium-rel-linux-webkit',
+    'chromium-rel-mac6',
+    'chromium-rel-mac6-webkit',
+    'chromium-rel-mac7-gpu-intel',
+    'chromium-rel-win7-dual',
+    'chromium-rel-win7-gpu-ati',
+    'chromium-rel-win7-gpu-intel',
+    'chromium-rel-win7-single',
+    'chromium-rel-win7-webkit',
+    'chromium-rel-xp-dual',
+    'chromium-rel-xp-single',
+    'gpu-linux-release-nvidia',
+    'gpu-mac-release-intel',
+    'gpu-mountain-lion-release-ati',
+    'gpu-mountain-lion-release-intel',
+    'gpu-webkit-linux-nvidia',
+    'gpu-webkit-mac',
+    'gpu-webkit-win7-nvidia',
+    'gpu-win7-release-nvidia',
+    'linux-release',
+    'linux-release-lowmem',
+]
+
 
 #TODO(xusydoc): set fail_hard to True when bots stabilize. See crbug.com/222607.
 def SendResults(logname, lines, system, test, url, masterid,
                 buildername, buildnumber, build_dir, fail_hard=False):
   if not logname.endswith('-summary.dat'):
+    return
+
+  if system not in SYSTEM_WHITELIST:
     return
 
   new_results_line = _GetResultsJson(logname, lines, system, test, url,
