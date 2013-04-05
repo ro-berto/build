@@ -29,7 +29,7 @@ def WebkitFileSplitter(path):
 def Update(config, active_master, c):
   # Polls config.Master.trunk_url for changes
   chromium_url = "http://src.chromium.org/viewvc/chrome?view=rev&revision=%s"
-  webkit_url = "http://trac.webkit.org/changeset/%s"
+  webkit_url = "http://src.chromium.org/viewvc/blink?view=rev&revision=%s"
   cr_poller = svnpoller.SVNPoller(svnurl=config.Master.trunk_url,
                                   split_file=ChromeTreeFileSplitter,
                                   pollinterval=30,
