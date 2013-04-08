@@ -123,7 +123,7 @@ class DartCommands(commands.FactoryCommands):
     if is_dartc or is_new_analyzer:
       compiler = 'dartc'
       if is_new_analyzer:
-        compiler = 'new_analyzer'
+        compiler = 'dartanalyzer'
       runtime = 'none'
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
