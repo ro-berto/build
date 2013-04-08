@@ -90,7 +90,7 @@ class DartCommands(commands.FactoryCommands):
       cmd += ' --arch=%s' % (options['arch'])
       cmd += ' runtime'
     elif is_dart2dart:
-      cmd += ' create_sdk'
+      cmd += ' dart2dart_bot'
     elif is_dartc and options['mode'] == 'debug':
       # For dartc we always do a full build, except for debug mode
       # where we will time out doing api docs.
