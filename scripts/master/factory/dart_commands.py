@@ -96,10 +96,8 @@ class DartCommands(commands.FactoryCommands):
       # where we will time out doing api docs.
       cmd += ' dartc_bot'
     else:
-      # Since the build.py uses the 'default' target as default (which doesn't
-      # include everything), we have to explicitly build the 'everything'
-      # target.
-      cmd += ' everything'
+      # We don't specify a specific target (i.e. we build the all target)
+      pass
 
     self._factory.addStep(shell.ShellCommand,
                           name='build',
