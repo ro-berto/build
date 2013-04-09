@@ -230,7 +230,6 @@ def main():
       'master.tryserver.unused': None,
       'master.tryserver.webrtc': 'WebRTCTryServer',
       'master.devtools': 'DevTools',
-      'master.webkit': None,
   }
   return real_main(base_dir, expected)
 
