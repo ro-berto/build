@@ -17,6 +17,13 @@ USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
          os.path.basename(sys.argv[0]))
 
 ISOLATE_ENABLED_TESTS = {
+    'Linux Tests': 'base_unittests',
+    'linux_rel': 'base_unittests',
+    'Vista Tests (2)': 'base_unittests',
+    'Win 7 Tests x64 (2)': 'base_unittests',
+    'win_rel': 'base_unittests',
+    'Win7 Tests (2)': 'base_unittests',
+    'XP Tests (2)': 'base_unittests',
 }
 
 
