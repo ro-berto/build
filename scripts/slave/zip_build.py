@@ -114,28 +114,30 @@ def FileRegexWhitelist(options):
 
 
 def FileRegexBlacklist(options):
+  all_platforms = r'(^.+\.isolated\.state$)'
+
   if chromium_utils.IsWindows():
     # Remove all .ilk/.7z and maybe PDB files
     # TODO(phajdan.jr): Remove package_pdb_files when nobody uses it.
     include_pdbs = options.factory_properties.get('package_pdb_files', True)
     if include_pdbs:
-      return r'^.+\.(ilk|7z|(precompile\.h\.pch.*))$'
+      return all_platforms + r'|(^.+\.(ilk|7z|(precompile\.h\.pch.*))$)'
     else:
-      return r'^.+\.(ilk|pdb|7z|(precompile\.h\.pch.*))$'
+      return all_platforms + r'|(^.+\.(ilk|pdb|7z|(precompile\.h\.pch.*))$)'
   if chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers most of the time (except for
     # the memory tools).
     include_dsyms = options.factory_properties.get('package_dsym_files', False)
     if include_dsyms:
-      return r'^.+\.(a)$'
+      return all_platforms + r'|(^.+\.(a)$)'
     else:
-      return r'^.+\.(a|dSYM)$'
+      return all_platforms + r'|(^.+\.(a|dSYM)$)'
   if chromium_utils.IsLinux():
     # object files, archives, and gcc (make build) dependency info.
-    return r'^.+\.(o|a|d)$'
+    return all_platforms + r'|(^.+\.(o|a|d)$)'
 
-  return '$NO_FILTER^'
+  return all_platforms
 
 
 def FileExclusions():
