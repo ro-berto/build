@@ -54,7 +54,7 @@ F('f_android_rel', linux_android().ChromiumWebkitLatestAnnotationFactory(
         }))
 
 B('WebKit Android (GalaxyNexus)', 'f_webkit_android_tests', None,
-  'android_rel_trigger', auto_reboot=False)
+  'android_rel_trigger')
 F('f_webkit_android_tests',
   linux_android().ChromiumWebkitLatestAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',

@@ -53,7 +53,7 @@ F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     }))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', 'android',
-  'android_trigger_dbg', auto_reboot=False, notify_on_missing=True)
+  'android_trigger_dbg', notify_on_missing=True)
 F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -63,7 +63,7 @@ F('f_android_dbg_tests', linux_android().ChromiumAnnotationFactory(
     }))
 
 B('Android Builder', 'f_android_rel', 'android', 'android',
-  auto_reboot=False, notify_on_missing=True)
+  notify_on_missing=True)
 F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -73,7 +73,7 @@ F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     }))
 
 B('Android Tests', 'f_android_rel_tests', 'android', 'android_trigger_rel',
-  auto_reboot=False, notify_on_missing=True)
+  notify_on_missing=True)
 F('f_android_rel_tests', linux_android().ChromiumAnnotationFactory(
     target='Release',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -83,7 +83,7 @@ F('f_android_rel_tests', linux_android().ChromiumAnnotationFactory(
     }))
 
 B('Android Clang Builder (dbg)', 'f_android_clang_dbg', 'android', 'android',
-  auto_reboot=False, notify_on_missing=True)
+  notify_on_missing=True)
 F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
