@@ -19,6 +19,8 @@ S = helper.Scheduler
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
+def linux_android(): return chromium_factory.ChromiumFactory(
+    'src/out', 'linux2', nohooks_on_update=True, target_os='android')
 
 defaults['category'] = '1lkgr'
 
@@ -166,6 +168,24 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
 
+################################################################################
+## Android
+################################################################################
+
+B('Android', 'android', None, 'chromium_lkgr')
+F('android', linux_android().ChromiumAnnotationFactory(
+    clobber=True,
+    target='Release',
+    factory_properties={
+      'android_bot_id': 'lkgr-clobber-rel',
+      'archive_build': True,
+      'gs_acl': 'public-read',
+      'gs_bucket': 'gs://chromium-browser-continuous',
+      'perf_id': 'android-release',
+      'show_perf_results': True,
+    },
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    ))
 
 
 def Update(_config, active_master, c):
