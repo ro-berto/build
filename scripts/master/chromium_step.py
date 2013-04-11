@@ -102,7 +102,11 @@ class GClient(source.Source):
   def startVC(self, branch, revision, patch):
     warnings = []
     args = copy.copy(self.args)
-    wk_revision = revision
+    wk_revision = None
+    # branch == 'trunk' means the change came from the blink poller, and the
+    # revision is a blink revision.
+    if branch == 'trunk':
+      wk_revision = revision
     try:
       # parent_wk_revision might be set, but empty.
       if self.getProperty('parent_wk_revision'):
