@@ -58,7 +58,7 @@ def CopyDebugCRT(build_dir):
     shutil.copy(dll, build_dir)
 
 
-def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext):
+def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext, prune_limit):
   # Build an ordered list of build numbers we have zip files for.
   regexp = re.compile(zip_base + '_([0-9]+)(_old)?' + zip_ext)
   build_list = []
@@ -70,9 +70,10 @@ def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext):
   # to a list to get an order list of build numbers.
   build_list = list(set(build_list))
   build_list.sort()
-  # Only keep the last 10 number (that means we could have 20 due to _old files
-  # if someone forced a respin of every single one)
-  saved_build_list = build_list[-10:]
+  # Only keep the last prune_limit number (that means we could have
+  # 2*prune_limit due to _old files if someone forced a respin of
+  # every single one)
+  saved_build_list = build_list[-prune_limit:]
   ordered_asc_by_build_number_list = []
   for saved_build in saved_build_list:
     recent_name = zip_base + ('_%d' % saved_build) + zip_ext
@@ -82,8 +83,8 @@ def GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext):
   return ordered_asc_by_build_number_list
 
 
-def GetRecentBuildsByModificationTime(zip_list):
-  """Return the 10 most recent builds by modification time."""
+def GetRecentBuildsByModificationTime(zip_list, prune_limit):
+  """Return the prune_limit most recent builds by modification time."""
   # Get the modification times for all of the entries in zip_list.
   mtimes_to_files = {}
   for zip_file in zip_list:
@@ -97,7 +98,7 @@ def GetRecentBuildsByModificationTime(zip_list):
   for key in mtimes_to_files_keys:
     ordered_asc_by_mtime_list.extend(mtimes_to_files[key])
   # Return the most recent 10 builds.
-  return ordered_asc_by_mtime_list[-10:]
+  return ordered_asc_by_mtime_list[-prune_limit:]
 
 
 def FileRegexWhitelist(options):
@@ -247,11 +248,12 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   return (zip_base, zip_ext)
 
 
-def PruneOldArchives(staging_dir, zip_base, zip_ext):
+def PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit):
   """Removes old archives so that we don't exceed disk space."""
   zip_list = glob.glob(os.path.join(staging_dir, zip_base + '_*' + zip_ext))
-  saved_zip_list = GetRecentBuildsByBuildNumber(zip_list, zip_base, zip_ext)
-  saved_mtime_list = GetRecentBuildsByModificationTime(zip_list)
+  saved_zip_list = GetRecentBuildsByBuildNumber(
+      zip_list, zip_base, zip_ext, prune_limit)
+  saved_mtime_list = GetRecentBuildsByModificationTime(zip_list, prune_limit)
 
   # Prune zip files not matched by the whitelists above.
   for zip_file in zip_list:
@@ -337,7 +339,8 @@ def Archive(options):
                                     unversioned_base_name, options.path_filter)
 
   zip_base, zip_ext = MakeVersionedArchive(zip_file, version_suffix, options)
-  PruneOldArchives(staging_dir, zip_base, zip_ext)
+  prune_limit = max(0, int(options.factory_properties.get('prune_limit', 10)))
+  PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit=prune_limit)
 
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision

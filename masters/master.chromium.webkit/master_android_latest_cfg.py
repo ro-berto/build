@@ -49,6 +49,7 @@ F('f_android_dbg', linux_android().ChromiumWebkitLatestAnnotationFactory(
         'android_bot_id': 'webkit-latest-builder-dbg',
         'build_url': android_dbg_archive,
         'trigger': 'android_dbg_trigger',
+        'prune_limit': 5,
         }))
 
 B('Android Tests (dbg)', 'f_android_dbg_tests', None, 'android_dbg_trigger',
