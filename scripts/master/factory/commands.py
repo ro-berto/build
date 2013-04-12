@@ -345,30 +345,27 @@ class FactoryCommands(object):
 
   # Basic commands
   def GetTestCommand(self, executable, arg_list=None, factory_properties=None,
-                     test_tool_arg_list=None):
+                     wrapper_args=None):
     cmd = [self._python, self._test_tool]
     if self._target:
       cmd.extend(['--target', self._target])
     if self._build_dir:
       cmd.extend(['--build-dir', self._build_dir])
 
-    if executable in ('performance_ui_tests',
-                      'performance_browser_tests',
-                      'sync_performance_tests'):
-      cmd = self.AddBuildProperties(cmd)
+    cmd = self.AddBuildProperties(cmd)
+
+    if factory_properties:
       cmd = self.AddFactoryProperties(factory_properties, cmd)
 
     # Must add test tool arg list before test arg list.
-    if test_tool_arg_list:
-      cmd.extend(test_tool_arg_list)
+    if wrapper_args:
+      cmd.extend(wrapper_args)
 
     cmd.append(self.GetExecutableName(executable))
     if arg_list is not None:
       cmd.extend(arg_list)
     return cmd
 
-  # TODO(xusydoc): Make GetPythonTestCommand and GetTestCommand use the same
-  # argument names (wrapper_args / test_tool_arg_list).
   def GetPythonTestCommand(self, py_script, arg_list=None, wrapper_args=None,
                            factory_properties=None):
     cmd = [self._python, self._test_tool, '--run-python-script']
@@ -376,6 +373,8 @@ class FactoryCommands(object):
       cmd.extend(['--target', self._target])
     if self._build_dir:
       cmd.extend(['--build-dir', self._build_dir])
+
+    cmd = self.AddBuildProperties(cmd)
 
     if factory_properties:
       cmd = self.AddFactoryProperties(factory_properties, cmd)

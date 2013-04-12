@@ -249,7 +249,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                        arg_list=arg_list,
                                        factory_properties=factory_properties)
     else:
-      return self.GetTestCommand(cmd_name, test_tool_arg_list=tool_options,
+      return self.GetTestCommand(cmd_name, wrapper_args=tool_options,
                                  arg_list=arg_list,
                                  factory_properties=factory_properties)
 
