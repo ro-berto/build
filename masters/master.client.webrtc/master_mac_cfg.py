@@ -39,6 +39,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
       'test_fec',
       'test_support_unittests',
       'vad_unittests',
+      'video_coding_integrationtests',
       'video_coding_unittests',
       'video_engine_core_unittests',
       'video_processing_unittests',
@@ -47,6 +48,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
       'vp8_unittests',
       'webrtc_utility_unittests',
   ]
+
   options = ['--', '-project', '../webrtc.xcodeproj']
 
   defaults['category'] = category
