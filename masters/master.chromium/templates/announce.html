@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "tree_status.html" import treestatus %}
 
 {% block header -%}
 {{ super() }}
@@ -136,7 +137,7 @@
 
 <div class="Announcement">
 
-<iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://chromium-status.appspot.com/current"></iframe>
+{{ treestatus() }}
 
 <center style="padding: 0 7px">
   <table width="100%" valign="top" bgcolor="#efefef" style="-webkit-border-bottom-left-radius: 24px; -webkit-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px; -moz-border-bottom-right-radius: 24px;   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);">
@@ -150,7 +151,8 @@
             <td>
               <a href="http://commondatastorage.googleapis.com/chromium-browser-continuous/index.html">continuous</a> |
               <a href="http://build.chromium.org/f/chromium/symsrv/index.html">symbols</a> |
-              <a href="http://chromium-status.appspot.com">status</a>
+              <a href="http://chromium-status.appspot.com">status</a> |
+              <a href="http://blink-status.appspot.com">blink status</a>
             </td>
           </tr>
           <tr>
