@@ -615,6 +615,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
+    if R('startup_benchmark'):
+      f.AddTelemetryTest(
+          'startup_benchmark', 'blank_page.json', factory_properties=fp,
+          tool_options=['--page-repeat=20'])
+
     if R('sizes'):
       f.AddSizesTests(fp)
     if R('sync'):
