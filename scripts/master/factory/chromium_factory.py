@@ -545,6 +545,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('memory_benchmark'):
       f.AddTelemetryTest(
           'memory_benchmark', 'top_25.json', factory_properties=fp)
+    if R('reload_benchmark'):
+      f.AddTelemetryTest(
+          'memory_benchmark', '2012Q3.json', factory_properties=fp)
 
     if R('memory'):
       f.AddMemoryTests(fp)
