@@ -58,6 +58,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   tsan_disabled_tests = [
       'audio_coding_module_test',   # Too slow for TSAN
       'test_fec',                   # Too slow for TSAN
+      'vp8_integrationtests',       # Too slow for TSAN
   ]
   tsan_tests = filter(lambda test: test not in tsan_disabled_tests,
                       normal_tests)
