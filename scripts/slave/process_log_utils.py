@@ -1031,6 +1031,15 @@ class GraphingPageCyclerLogProcessor(GraphingLogProcessor):
     <revision>_<tracename>.dat holding a line of times for each URL loaded,
     for use by humans when debugging a regression.
     """
+
+    # If the name of the trace is one of the pages in the page list then we are
+    # dealing with the results for that page only, not the overall results. So
+    # calculate the statistics like a normal GraphingLogProcessor, not the
+    # GraphingPageCyclerLogProcessor.
+    if trace_name in self._page_list:
+      return super(GraphingPageCyclerLogProcessor, self)._CalculateStatistics(
+          value_list, trace_name)
+
     sums = []
     page_times = {}
     page_count = len(self._page_list)

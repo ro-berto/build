@@ -431,6 +431,13 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
       expected = json.load(open(os.path.join(test_env.DATA_PATH, filename)))
       self.assertEqual(expected, actual)
 
+  def testPageCycler(self):
+    step = self._ConstructStep(process_log.GraphingPageCyclerLogProcessor,
+                               'page_cycler.log')
+    step.commandComplete('mycommand')
+    expected = 't: 2.32k'
+    self.assertEqual(expected, step._result_text[0])
+
 
 if __name__ == '__main__':
   unittest.main()

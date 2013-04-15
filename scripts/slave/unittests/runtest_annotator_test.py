@@ -355,5 +355,14 @@ class GraphingLogProcessorPerfTest(LoggingStepBase):
     self.assertEqual(expected, step.PerformanceSummary()[0])
     self.assertEqual(WARNINGS, step.evaluateCommand('mycommand'))
 
+class GraphingPageCyclerLogProcessorPerfTest(LoggingStepBase):
+  def testPageCycler(self):
+    parser = self._ConstructDefaultProcessor(
+        process_log_utils.GraphingPageCyclerLogProcessor)
+    self._ProcessLog(parser, 'page_cycler.log')
+
+    expected = 't: 2.32k'
+    self.assertEqual(expected, parser.PerformanceSummary()[0])
+
 if __name__ == '__main__':
   unittest.main()
