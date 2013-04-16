@@ -22,16 +22,18 @@ class SwarmTest(object):
 
 SWARM_TESTS = [
     # They must be in the reverse order of latency to get results, e.g. the
-    # slowest test should be last. The goal here is to take ~60s of actual test
+    # slowest test should be last. The goal here is to take ~5m of actual test
     # run, e.g. the 'RunTest' section in the logs, per shard so that the
     # trade-off of setup time vs latency is reasonable. The overhead is in the
-    # range of 10~20s. While it can be lowered, it'll stay in the "few seconds"
+    # range of ~90s, with the vast majority being downloading the executable
+    # files. While it can be lowered, it'll stay in the "few seconds"
     # range due to the sheer size of the executables to map.
     SwarmTest('base_unittests', 1),
-    SwarmTest('net_unittests', 3),
-    SwarmTest('unit_tests', 4),
-    SwarmTest('sync_integration_tests', 4),
     SwarmTest('browser_tests', 10),
+    SwarmTest('interactive_ui_tests', 3),
+    SwarmTest('net_unittests', 1),
+    SwarmTest('sync_integration_tests', 4),
+    SwarmTest('unit_tests', 2),
 ]
 
 
