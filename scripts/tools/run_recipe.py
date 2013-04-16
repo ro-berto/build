@@ -47,12 +47,12 @@ usage: %s <recipe_name> [<factory_property=value>*] [-- <build_property=value>*]
 
 def type_scrub_factory_properties(fp):
   """Specially 'eval' certain keys in factory_properties."""
-  fp['use_mirror'] = eval(fp.get('use_mirror', 'True'))
   return fp
 
 
 def type_scrub_build_properties(bp):
   """Specially 'eval' certain keys in build_properties."""
+  bp['use_mirror'] = eval(bp.get('use_mirror', 'True'))
   bp['blamelist'] = eval(bp.get('blamelist', '[]'))
   return bp
 

@@ -7,10 +7,10 @@ def GetFactoryProperties(api, factory_properties, build_properties):
   repo_name = factory_properties.get('repo_name')
   steps = api.Steps(build_properties)
 
-  solution = steps.gclient_common_solution(repo_name)
+  spec = steps.gclient_common_spec(repo_name)
 
   git_steps = []
-  if solution['url'].endswith('.git'):
+  if spec['solutions'][0]['url'].endswith('.git'):
     email = 'commit-bot@chromium.org'
     git_steps = [
       steps.git_step('config', 'user.email', email),
@@ -20,13 +20,14 @@ def GetFactoryProperties(api, factory_properties, build_properties):
 
   return {
     'checkout': 'gclient',
-    'gclient_spec': {'solutions': [solution]},
+    'gclient_spec': spec,
     'steps': git_steps + [
       steps.apply_issue_step(),
       steps.step('presubmit', [
         api.depot_tools_path('presubmit_support.py'),
         '--root', api.checkout_path(),
         '--commit',
+        '--verbose', '--verbose',
         '--author', build_properties['blamelist'][0],
         '--description', build_properties['description'],
         '--issue', build_properties['issue'],
