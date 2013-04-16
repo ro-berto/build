@@ -268,6 +268,18 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('interactive_ui_tests_br'):
       f.AddBuildrunnerGTest('interactive_ui_tests', fp)
 
+    # interactive_ui_tests specifically for Instant Extended.
+    if R('instant_extended_manual_tests'):
+      arg_list = [
+          '--gtest_filter=InstantExtendedManualTest.*',
+          '--run-manual',
+          '--enable-benchmarking',
+          '--enable-stats-table',
+          '--ignore-certificate-errors',
+      ]
+      f.AddBuildrunnerGTest('interactive_ui_tests', factory_properties=fp,
+                            arg_list=arg_list)
+
     # Check for an early bail.  Do early since this may cancel other tests.
     if R('check_lkgr'):
       f.AddCheckLKGRStep()
