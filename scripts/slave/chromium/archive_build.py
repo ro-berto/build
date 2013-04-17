@@ -103,7 +103,7 @@ class StagerBase(object):
     #       Worse, this code ends up looking at top-of-tree WebKit
     #       instead of the revision in DEPS.
     self._webkit_dir = os.path.join(self._src_dir, 'third_party', 'WebKit',
-                                    'Source', 'WebCore')
+                                    'Source')
     self._v8_dir = os.path.join(self._src_dir, 'v8')
 
     build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
