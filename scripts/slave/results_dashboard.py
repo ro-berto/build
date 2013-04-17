@@ -122,7 +122,18 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
   graph = logname.replace('-summary.dat', '')
   for line in lines:
     data = json.loads(line)
+    # TODO(sullivan): the dashboard requires ordered integer revision numbers.
+    # If the revision is not an integer, assume it's a git hash and send the
+    # buildnumber for an ordered revision until we can come up with a more
+    # correct solution.
     revision = data['rev']
+    git_hash = None
+    try:
+      revision = int(revision)
+    except ValueError:
+      revision = int(buildnumber)
+      git_hash = data['rev']
+
     for (trace, values) in data['traces'].iteritems():
       # Test to make sure we don't have x/y data.
       for value in values:
@@ -152,6 +163,9 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       if 'webkit_rev' in data and data['webkit_rev'] != 'undefined':
         result.setdefault(
             'supplemental_columns', {})['r_webkit_rev'] = data['webkit_rev']
+      if git_hash:
+        result.setdefault(
+            'supplemental_columns', {})['r_chromium_rev'] = git_hash
       if data.get('units'):
         result['units'] = data['units']
       if important:
