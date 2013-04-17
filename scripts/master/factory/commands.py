@@ -413,6 +413,10 @@ class FactoryCommands(object):
     class WithJsonProperties(WithProperties):
       def getRenderingFor(self, build):
         ret = build.getProperties().asDict()
+        # asDict returns key -> (value, source), so get the values, and convert
+        # empty values to blank strings.
+        for k in ret:
+          ret[k] = ret[k][0] or ''
         for k, v in self.lambda_subs.iteritems():
           ret[k] = v(build)
         # The |separators| argument is to densify the command line.
