@@ -42,19 +42,23 @@ USE_LAUNCHD := \
           echo 1)
 
 printstep:
+ifndef NO_REVISION_AUDIT
 	@echo "**  `date`	make $(MAKECMDGOALS)" >> actions.log
+endif
 
 ifeq ($(BUILDBOT_PATH),$(BUILDBOT8_PATH))
 start: printstep bootstrap
 else
 start: printstep
 endif
+ifndef NO_REVISION_AUDIT
 	@if [ ! -f "$(GCLIENT)" ]; then \
 	    echo "gclient not found.  Add depot_tools to PATH or use DEPS checkout."; \
 	    exit 2; \
 	fi
 	$(GCLIENT) revinfo -a >> actions.log || true
 	$(GCLIENT) diff >> actions.log || true
+endif
 ifneq ($(USE_LAUNCHD),1)
 	PYTHONPATH=$(PYTHONPATH) python $(SCRIPTS_DIR)/common/twistd --no_save -y buildbot.tac
 else

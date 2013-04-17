@@ -6,16 +6,21 @@
 """Starts all masters and verify they can server /json/project fine.
 """
 
+import collections
+import contextlib
 import glob
 import logging
 import optparse
 import os
 import subprocess
 import sys
+import threading
 import time
 
 import masters_util
 
+port_master_lock = threading.Lock()
+port_lock_map = collections.defaultdict(threading.Lock)
 
 def do_master_imports():
   # Import scripts/slave/bootstrap.py to get access to the ImportMasterConfigs
@@ -55,31 +60,51 @@ class pathstack:
 
 
 def test_master(master, master_class, path):
-  print('Trying %s' % master)
   context = pathstack()
-  start = time.time()
   if not masters_util.stop_master(master, path):
     return False
   try:
-    # Try to backup paths we may not want to overwite.
-    context.backup_if_present(os.path.join(path, 'twistd.log'))
-    context.backup_if_present(os.path.join(path, 'git_poller_*.git'))
-    try:
-      if not masters_util.start_master(master, path, dry_run=True):
-        return False
-      name = master_class.project_name
-      port1 = master_class.master_port
-      port2 = master_class.master_port_alt
-      # We pass both the read/write and read-only ports, even though querying
-      # either one alone would be sufficient sign of success.
-      res = masters_util.wait_for_start(master, name, path, [port1, port2])
-      if res:
-        logging.info('Success in %1.1fs' % (time.time() - start))
-      return res
-    finally:
-      masters_util.stop_master(master, path)
+    all_ports = [master_class.master_port, master_class.master_port_alt,
+                 master_class.slave_port]
+    with port_master_lock:
+      port_locks = [port_lock_map[p] for p in sorted(all_ports) if p]
+
+    with contextlib.nested(*port_locks):
+      start = time.time()
+      # Try to backup paths we may not want to overwite.
+      context.backup_if_present(os.path.join(path, 'twistd.log'))
+      context.backup_if_present(os.path.join(path, 'git_poller_*.git'))
+      try:
+        if not masters_util.start_master(master, path, dry_run=True):
+          return False
+        name = master_class.project_name
+        # We pass both the read/write and read-only ports, even though querying
+        # either one alone would be sufficient sign of success.
+        ports = [p for p in all_ports[:2] if p]
+        res = masters_util.wait_for_start(master, name, path, ports)
+        if not res:
+          logging.info('%s Success in %1.1fs', master, (time.time() - start))
+        return res
+      finally:
+        masters_util.stop_master(master, path)
   finally:
     context.restore_backup()
+
+
+class MasterTestThread(threading.Thread):
+  def __init__(self, master, master_class, master_path):
+    self.master = master
+    self.master_class = master_class
+    self.master_path = master_path
+    self.result = None
+    super(MasterTestThread, self).__init__()
+
+  def run(self):
+    logging.info('Starting %s', self.master)
+    with masters_util.temporary_password(
+        os.path.join(self.master_path, '.apply_issue_password')):
+      self.result = test_master(
+          self.master, self.master_class, self.master_path)
 
 
 def real_main(base_dir, expected):
@@ -126,6 +151,7 @@ def real_main(base_dir, expected):
   bot_pwd_path = os.path.join(
       base_dir, '..', 'build', 'site_config', '.bot_password')
   with masters_util.temporary_password(bot_pwd_path):
+    master_threads = []
     for master in masters[:]:
       if not master in expected:
         continue
@@ -134,13 +160,20 @@ def real_main(base_dir, expected):
       if not classname:
         skipped += 1
         continue
-      master_class = getattr(master_classes, classname)
-      apply_issue_pwd_path = os.path.join(base, master, '.apply_issue_password')
-      with masters_util.temporary_password(apply_issue_pwd_path):
-        if not test_master(master, master_class, os.path.join(base, master)):
-          failed.add(master)
-        else:
-          success += 1
+      cur_thread = MasterTestThread(
+          master=master,
+          master_class=getattr(master_classes, classname),
+          master_path=os.path.join(base, master))
+      cur_thread.start()
+      master_threads.append(cur_thread)
+    for cur_thread in master_threads:
+      cur_thread.join(20)
+      if cur_thread.result:
+        print '\n=== Error running %s === ' % cur_thread.master
+        print cur_thread.result
+        failed.add(cur_thread.master)
+      else:
+        success += 1
 
   if failed:
     print >> sys.stderr, (
