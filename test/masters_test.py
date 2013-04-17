@@ -19,8 +19,6 @@ import time
 
 import masters_util
 
-port_master_lock = threading.Lock()
-port_lock_map = collections.defaultdict(threading.Lock)
 
 def do_master_imports():
   # Import scripts/slave/bootstrap.py to get access to the ImportMasterConfigs
@@ -59,17 +57,14 @@ class pathstack:
         print >> sys.stderr, 'ERROR: Failed to rename %s to %s' % (bkup, path)
 
 
-def test_master(master, master_class, path):
+def test_master(master, path, name, ports):
   context = pathstack()
   if not masters_util.stop_master(master, path):
     return False
   try:
-    all_ports = [master_class.master_port, master_class.master_port_alt,
-                 master_class.slave_port]
-    with port_master_lock:
-      port_locks = [port_lock_map[p] for p in sorted(all_ports) if p]
-
-    with contextlib.nested(*port_locks):
+    with masters_util.temporary_password(
+        os.path.join(path, '.apply_issue_password')):
+      logging.info('%s Starting', master)
       start = time.time()
       # Try to backup paths we may not want to overwite.
       context.backup_if_present(os.path.join(path, 'twistd.log'))
@@ -77,10 +72,6 @@ def test_master(master, master_class, path):
       try:
         if not masters_util.start_master(master, path, dry_run=True):
           return False
-        name = master_class.project_name
-        # We pass both the read/write and read-only ports, even though querying
-        # either one alone would be sufficient sign of success.
-        ports = [p for p in all_ports[:2] if p]
         res = masters_util.wait_for_start(master, name, path, ports)
         if not res:
           logging.info('%s Success in %1.1fs', master, (time.time() - start))
@@ -92,19 +83,28 @@ def test_master(master, master_class, path):
 
 
 class MasterTestThread(threading.Thread):
+  # Class static. Only access this from the main thread.
+  port_lock_map = collections.defaultdict(threading.Lock)
+
   def __init__(self, master, master_class, master_path):
-    self.master = master
-    self.master_class = master_class
-    self.master_path = master_path
-    self.result = None
     super(MasterTestThread, self).__init__()
+    self.master = master
+    self.master_path = master_path
+    self.name = master_class.project_name
+    all_ports = [master_class.master_port, master_class.master_port_alt,
+                 master_class.slave_port]
+    # Sort port locks numerically to prevent deadlocks.
+    self.port_locks = [self.port_lock_map[p] for p in sorted(all_ports) if p]
+
+    # We pass both the read/write and read-only ports, even though querying
+    # either one alone would be sufficient sign of success.
+    self.ports = [p for p in all_ports[:2] if p]
+    self.result = None
 
   def run(self):
-    logging.info('Starting %s', self.master)
-    with masters_util.temporary_password(
-        os.path.join(self.master_path, '.apply_issue_password')):
+    with contextlib.nested(*self.port_locks):
       self.result = test_master(
-          self.master, self.master_class, self.master_path)
+          self.master, self.master_path, self.name, self.ports)
 
 
 def real_main(base_dir, expected):
