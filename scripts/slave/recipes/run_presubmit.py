@@ -29,7 +29,6 @@ def GetFactoryProperties(api, factory_properties, build_properties):
         '--commit',
         '--verbose', '--verbose',
         '--author', build_properties['blamelist'][0],
-        '--description', build_properties['description'],
         '--issue', build_properties['issue'],
         '--patchset', build_properties['patchset'],
         '--skip_canned', 'CheckRietveldTryJobExecution',
