@@ -8,9 +8,8 @@
 import logging
 import optparse
 import os
+import subprocess
 import sys
-
-from common import chromium_utils
 
 
 USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
@@ -29,13 +28,26 @@ ISOLATE_ENABLED_TESTS = {
 
 def should_run_as_isolated(builder_name, test_name):
   logging.info('should_run_as_isolated(%s, %s)' % (builder_name, test_name))
-
   return test_name in ISOLATE_ENABLED_TESTS.get(builder_name, ())
 
 
+def run_command(command):
+  """Inspired from chromium_utils.py's RunCommand()."""
+  print '\n' + subprocess.list2cmdline(command)
+  sys.stdout.flush()
+  sys.stderr.flush()
+  return subprocess.call(command)
+
+
 def run_test_isolated(isolate_script, test_exe, original_command):
-  # The isolated file should be alongside the test executable, with the same
-  # name and the .isolated extension.
+  """Runs the test under isolate.py run.
+
+  It compensates for discrepencies between sharding_supervisor.py arguments and
+  run_test_cases.py arguments.
+
+  The isolated file must be alongside the test executable, with the same
+  name and the .isolated extension.
+  """
   isolated_file = os.path.splitext(test_exe)[0] + '.isolated'
 
   if not os.path.exists(isolated_file):
@@ -48,19 +60,20 @@ def run_test_isolated(isolate_script, test_exe, original_command):
   # Start setting the test specific options.
   isolate_command.append('--')
   isolate_command.append('--no-cr')
+  original_command = original_command[:]
+  while original_command:
+    item = original_command.pop(0)
+    if item == '--total-slave':
+      isolate_command.extend(['--shards', original_command.pop(0)])
+    elif item == '--slave-index':
+      isolate_command.extend(['--index', original_command.pop(0)])
+    elif item.startswith(('--gtest_filter', '--gtest_output')):
+      isolate_command.append(item)
 
-  # Convert any commands from the original command that are understood.
-  if ('--total-slave' in original_command and
-      '--slave-index' in original_command):
-    total_count_pos = original_command.index('--total_slave') + 1
-    index_pos = original_command.index('--slave-index') + 1
-    isolate_command.extend(['--shards', original_command[total_count_pos],
-                            '--index', original_command[index_pos]])
-
-  return chromium_utils.RunCommand(isolate_command)
+  return run_command(isolate_command)
 
 
-def main():
+def main(argv):
   option_parser = optparse.OptionParser(USAGE)
   option_parser.add_option('--test_name', default='',
                            help='The name of the test')
@@ -74,7 +87,7 @@ def main():
                            help='Use to increase log verbosity. Can be passed '
                            'in multiple time for more logs.')
 
-  options, args = option_parser.parse_args()
+  options, args = option_parser.parse_args(argv)
 
   test_exe = args[0]
   original_command = args[1:]
@@ -93,8 +106,8 @@ def main():
     return run_test_isolated(isolate_script, test_exe, original_command)
   else:
     logging.info('Running test normally')
-    return chromium_utils.RunCommand(original_command)
+    return run_command(original_command)
 
 
 if '__main__' == __name__:
-  sys.exit(main())
+  sys.exit(main(None))
