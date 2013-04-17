@@ -1121,8 +1121,8 @@ def main():
     os.environ['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
 
   if options.results_directory:
-    options.test_output_xml = os.path.normpath(os.path.join(
-        options.results_directory, '%s.xml' % options.test_type))
+    options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
+        options.results_directory, '%s.xml' % options.test_type)))
     args.append('--gtest_output=xml:' + options.test_output_xml)
 
   temp_files = get_temp_count()
