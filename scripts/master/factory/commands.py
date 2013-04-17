@@ -410,24 +410,26 @@ class FactoryCommands(object):
     # pylint: disable=R0201
     cmd = cmd or []
 
-    # Create a WithProperties format string that includes build properties.
-    build_properties = dict(
-        (prop, '%%(%s:-)s' % prop)
-        for prop in (
-            'blamelist', 'branch', 'buildername', 'buildnumber', 'got_revision',
-            'mastername', 'parentname', 'parentslavename', 'parent_buildnumber',
-            'parent_builddir', 'revision', 'scheduler', 'slavename',
-        )
-    )
+    class WithJsonProperties(WithProperties):
+      def getRenderingFor(self, build):
+        ret = build.getProperties().asDict()
+        for k, v in self.lambda_subs.iteritems():
+          ret[k] = v(build)
+        # The |separators| argument is to densify the command line.
+        jstr = json.dumps(ret, sort_keys=True, separators=(',', ':'))
+        return self.fmtstring % jstr
 
     def gen_blamelist_string(build):
       blame = ','.join(build.getProperty('blamelist'))
       # Could be interpreted by the shell.
       return re.sub(r'[\&\|\^]', '', blame.replace('<', '[').replace('>', ']'))
-    # The |separators| argument is to densify the command line.
-    string = '--build-properties=' + json.dumps(
-        build_properties, sort_keys=True, separators=(',', ':'))
-    cmd.append(WithProperties(string, blamelist=gen_blamelist_string))
+
+    cmd.append(
+      WithJsonProperties(
+        '--build-properties=%s',
+        blamelist=gen_blamelist_string,
+        blamelist_real=lambda b: b.getProperty('blamelist')))
+
     return cmd
 
   def AddFactoryProperties(self, factory_properties, cmd=None):
