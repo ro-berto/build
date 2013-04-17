@@ -20,6 +20,8 @@ twistd.log*
 twistd.pid
 /goma
 /masters/*/*/
+!/masters/*/templates/
+!/masters/*/public_html/
 /masters/*/.*
 /masters/*/actions.log
 /scripts/command_wrapper
