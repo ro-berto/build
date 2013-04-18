@@ -59,6 +59,8 @@ HTTPD_CONF = {
     'win': 'httpd.conf'
 }
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 def should_enable_sandbox(sandbox_path):
   """Return a boolean indicating that the current slave is capable of using the
@@ -491,6 +493,30 @@ def upload_profiling_data(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
+def generate_run_isolated_command(build_dir, test_exe_path, options, command):
+  """Convert the command to run through the run isolate script.
+
+  All commands are sent through the run isolated script, in case
+  they need to be run in isolate mode.
+  """
+  run_isolated_test = os.path.join(BASE_DIR, 'runisolatedtest.py')
+  tool_dir = os.path.join(build_dir, '..', 'tools')
+  isolate_command = [sys.executable, run_isolated_test,
+                     '--test_name', options.test_type,
+                     '--builder_name', options.build_properties.get(
+                         'buildername', ''),
+                     '--tool_dir', tool_dir,
+                     test_exe_path, '--'] + command
+
+  if not (options.test_type in ['views_unittests', 'ui_unittests']
+          and options.build_properties.get('buildername') == 'linux_aura'):
+    # The two listed tests are excluded from runisolatedtest.py because
+    # they are flaky with runisolatedtest.
+    isolate_command = command
+
+  return isolate_command
+
+
 def main_parse(options, args):
   """Run input through annotated test parser.
 
@@ -588,6 +614,8 @@ def main_mac(options, args):
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
+    command = generate_run_isolated_command(build_dir, test_exe_path, options,
+                                            command)
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker)
   finally:
@@ -837,23 +865,8 @@ def main_linux(options, args):
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
-    # Run the generated command through the isolate script, which will
-    # handle running the script in isoalte mode (if needed).
-    run_isolated_test = os.path.join(os.path.dirname(__file__),
-                                     'runisolatedtest.py')
-    tool_dir = os.path.join(build_dir, '..', 'tools')
-    isolate_command = [sys.executable, run_isolated_test,
-                       '--test_name', options.test_type,
-                       '--builder_name', options.build_properties.get(
-                           'buildername', ''),
-                       '--tool_dir', tool_dir,
-                       test_exe_path, '--'] + command
-
-    if not (options.test_type in ['views_unittests', 'ui_unittests']
-            and options.build_properties.get('buildername') == 'linux_aura'):
-      # The two listed tests are excluded from runisolatedtest.py because
-      # they are flaky with runisolatedtest.
-      command = isolate_command
+    command = generate_run_isolated_command(build_dir, test_exe_path, options,
+                                            command)
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker,
                               extra_env=extra_env)
@@ -937,6 +950,8 @@ def main_win(options, args):
       http_server = start_http_server('win', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
+    command = generate_run_isolated_command(build_dir, test_exe_path, options,
+                                            command)
     result = _RunGTestCommand(command, results_tracker)
   finally:
     if http_server:
