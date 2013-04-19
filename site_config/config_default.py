@@ -145,6 +145,8 @@ class Master(object):
     master_port = 9053
     slave_port = 9154
     master_port_alt = 9055
+    base_app_url = 'https://blink-status.appspot.com'
+    tree_status_url = base_app_url + '/status'
 
   class ChromiumChrome(_ChromiumBase):
     project_name = 'Chromium Chrome'
