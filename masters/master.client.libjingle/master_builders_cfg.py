@@ -12,8 +12,8 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 
-def linux(): return libjingle_factory.LibjingleFactory('src/build', 'linux2')
-def mac(): return libjingle_factory.LibjingleFactory('src/build', 'darwin')
+def linux(): return libjingle_factory.LibjingleFactory('src/out', 'linux2')
+def mac(): return libjingle_factory.LibjingleFactory('src/out', 'darwin')
 def win(): return libjingle_factory.LibjingleFactory('src/build', 'win32')
 
 scheduler_name = 'libjingle_scheduler'
