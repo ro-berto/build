@@ -12,8 +12,8 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 
-def linux(): return libyuv_factory.LibyuvFactory('src/build', 'linux2')
-def mac(): return libyuv_factory.LibyuvFactory('src/build', 'darwin')
+def linux(): return libyuv_factory.LibyuvFactory('src/out', 'linux2')
+def mac(): return libyuv_factory.LibyuvFactory('src/out', 'darwin')
 def win(): return libyuv_factory.LibyuvFactory('src/build', 'win32')
 
 scheduler_name = 'libyuv_scheduler'
