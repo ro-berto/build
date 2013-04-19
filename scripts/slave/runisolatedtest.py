@@ -17,6 +17,7 @@ USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
 
 ISOLATE_ENABLED_TESTS = (
   'base_unittests',
+  'net_unittests',
 )
 
 ISOLATE_ENABLED_BUILDERS = {
