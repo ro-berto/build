@@ -688,8 +688,8 @@ def main_ios(options, args):
       test_name + '.app')
 
   _, test_exe_path = get_build_dir_and_exe_path_mac(options,
-                                                    options.target,
-                                                    'iossim')
+      os.path.join('ninja-iossim', options.target),
+      'iossim')
   command = [test_exe_path,
       '-d', device,
       '-s', ios_version,
