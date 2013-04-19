@@ -13,13 +13,13 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def mac():
+def ios():
   return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
+def mac():
+  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 def mac_tester():
   return chromium_factory.ChromiumFactory(
-      'src/xcodebuild', 'darwin', nohooks_on_update=True)
-def mac_out():
-  return chromium_factory.ChromiumFactory('src/out', 'darwin')
+      'src/out', 'darwin', nohooks_on_update=True)
 
 # Tests that are single-machine shard-safe.
 sharded_tests = [
@@ -78,9 +78,14 @@ B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=[
-        '--compiler=goma-clang', '--', '-target', 'chromium_builder_tests'],
+        '--compiler=goma-clang', '--build-tool=ninja', '--',
+        'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_rel_trigger',
+        'gclient_env': {
+            'GYP_GENERATORS': 'ninja',
+            'GYP_DEFINES':'clang=1',
+        }
     }))
 
 #
@@ -182,7 +187,7 @@ T('mac_dbg_trigger')
 #
 B('Mac Builder (dbg)', 'dbg', 'compile', 'mac_dbg',
   auto_reboot=False, notify_on_missing=True)
-F('dbg', mac_out().ChromiumFactory(
+F('dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=[
