@@ -2,22 +2,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from master.factory import chromium_factory
 from master.factory import gclient_factory
 from master.factory import chromium_commands
 
 import config
 
 
-class WebRTCFactory(gclient_factory.GClientFactory):
+class WebRTCFactory(chromium_factory.ChromiumFactory):
 
   CUSTOM_VARS_ROOT_DIR = ('root_dir', 'src')
+
   # Can't use the same Valgrind constant as in chromium_factory.py, since WebRTC
   # uses another path (use_relative_paths=True in DEPS).
   CUSTOM_DEPS_VALGRIND = ('third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
 
   def __init__(self, build_dir, target_platform, svn_root_url, branch,
-               custom_deps_list=None):
+               custom_deps_list=None, nohooks_on_update=False, target_os=None):
     """Creates a WebRTC factory.
 
     This factory can also be used to build stand-alone projects.
@@ -31,20 +33,27 @@ class WebRTCFactory(gclient_factory.GClientFactory):
       custom_deps_list: Content to be put in the custom_deps entry of the
         .gclient file for the default solution. The parameter must be a list
         of tuples with two strings in each: path and remote URL.
+      nohooks_on_update: If True, no hooks will be executed in the update step.
+      target_os: Used to sync down OS-specific dependencies, if specified.
     """
+    chromium_factory.ChromiumFactory.__init__(
+         self, build_dir, target_platform=target_platform,
+         nohooks_on_update=nohooks_on_update, target_os=target_os)
+
     svn_url = svn_root_url + '/' + branch
+
     # Use root_dir=src since many Chromium scripts rely on that path.
     custom_vars_list = [self.CUSTOM_VARS_ROOT_DIR]
-    solutions = []
-    solutions.append(gclient_factory.GClientSolution(
+
+    # Overwrite solutions of ChromiumFactory since we sync WebRTC, not Chromium.
+    self._solutions = []
+    self._solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list,
         custom_deps_list=custom_deps_list))
     if config.Master.webrtc_internal_url:
-      solutions.append(gclient_factory.GClientSolution(
+      self._solutions.append(gclient_factory.GClientSolution(
           config.Master.webrtc_internal_url, name='webrtc-internal',
           custom_vars_list=custom_vars_list))
-    gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
-                                            target_platform=target_platform)
 
   def WebRTCFactory(self, target='Debug', clobber=False, tests=None, mode=None,
                     slave_type='BuilderTester', options=None,
@@ -61,9 +70,8 @@ class WebRTCFactory(gclient_factory.GClientFactory):
                                 factory_properties, gclient_deps)
 
     # Get the factory command object to create new steps to the factory.
-    cmds = chromium_commands.ChromiumCommands(factory, target,
-                                                 self._build_dir,
-                                                 self._target_platform)
+    cmds = chromium_commands.ChromiumCommands(factory, target, self._build_dir,
+                                              self._target_platform)
     # Override test runner script paths with our own that can run any test and
     # have our suppressions configured.
     valgrind_script_path = cmds.PathJoin('src', 'tools', 'valgrind-webrtc')

@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master.factory import chromium_factory
 from master.factory import webrtc_factory
 
 defaults = {}
@@ -12,6 +13,11 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   def linux():
     return webrtc_factory.WebRTCFactory('src/out', 'linux2', svn_url,
                                         branch, custom_deps_list)
+  def android():
+    return webrtc_factory.WebRTCFactory('', 'linux2', svn_url,
+                                        branch, nohooks_on_update=True,
+                                        target_os='android')
+
   helper = master_config.Helper(defaults)
   B = helper.Builder
   F = helper.Factory
@@ -113,6 +119,16 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
                           'gclient_env':
                           {'GYP_DEFINES': ('asan=1 release_extra_cflags=-g '
                                            ' linux_use_tcmalloc=0 ')}}))
+
+  # Android.
+  B('Android NDK', 'android_ndk_factory', scheduler=scheduler)
+  F('android_ndk_factory', android().ChromiumAnnotationFactory(
+    target='Debug',
+    slave_type='AnnotatedBuilderTester',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+        'android_bot_id': 'webrtc-builder-dbg',
+    }))
 
   # ChromeOS.
   B('CrOS', 'chromeos_factory', scheduler=scheduler)
