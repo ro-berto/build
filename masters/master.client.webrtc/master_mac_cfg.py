@@ -10,7 +10,7 @@ defaults = {}
 
 def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   def mac():
-    return webrtc_factory.WebRTCFactory('src/build', 'darwin', svn_url,
+    return webrtc_factory.WebRTCFactory('src/xcodebuild', 'darwin', svn_url,
                                         branch, custom_deps_list)
   helper = master_config.Helper(defaults)
   B = helper.Builder

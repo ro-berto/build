@@ -10,7 +10,7 @@ defaults = {}
 
 def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   def linux():
-    return webrtc_factory.WebRTCFactory('src/build', 'linux2', svn_url,
+    return webrtc_factory.WebRTCFactory('src/out', 'linux2', svn_url,
                                         branch, custom_deps_list)
   helper = master_config.Helper(defaults)
   B = helper.Builder
