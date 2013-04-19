@@ -138,7 +138,6 @@ F('rel_unit_3', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'net',
-    'message_center_unittests',
   ],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
@@ -268,7 +267,6 @@ F('dbg_unit_4', mac_tester().ChromiumFactory(
     'browser_tests',
     'components_unittests',
     'unit',
-    'message_center_unittests',
   ],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
