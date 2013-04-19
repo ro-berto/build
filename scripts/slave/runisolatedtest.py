@@ -24,8 +24,8 @@ ISOLATE_ENABLED_BUILDERS = {
   # CI linux
   'Linux Tests': ISOLATE_ENABLED_TESTS,
   # CI mac
-  'Mac10.6 Tests (1)': ISOLATE_ENABLED_TESTS,
-  'Mac10.7 Tests (1)': ISOLATE_ENABLED_TESTS,
+  #'Mac10.6 Tests (1)': ISOLATE_ENABLED_TESTS,
+  #'Mac10.7 Tests (1)': ISOLATE_ENABLED_TESTS,
   # CI win
   'Vista Tests (2)': ISOLATE_ENABLED_TESTS,
   'Win7 Tests (2)': ISOLATE_ENABLED_TESTS,
