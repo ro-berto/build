@@ -33,7 +33,7 @@ ISOLATE_ENABLED_BUILDERS = {
 
   # Try Server
   'linux_rel': ISOLATE_ENABLED_TESTS,
-  'mac_rel': ISOLATE_ENABLED_TESTS,
+  #'mac_rel': ISOLATE_ENABLED_TESTS,
   'win_rel': ISOLATE_ENABLED_TESTS,
 }
 
