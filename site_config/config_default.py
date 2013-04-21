@@ -113,7 +113,6 @@ class Master(object):
     store_revisions_url = base_app_url + '/revisions'
     # Used by the try server to sync to the last known good revision:
     last_good_url = 'http://chromium-status.appspot.com/lkgr'
-    last_good_blink_url = 'http://blink-status.appspot.com/lkgr'
 
   class Chromium(_ChromiumBase):
     # Used by the waterfall display.

@@ -261,15 +261,7 @@ class TryJobBase(TryBase):
   def get_lkgr(self, options):
     """Grabs last known good revision number if necessary."""
     options['rietveld'] = (self.code_review_sites or {}).get(options['project'])
-
-    # TODO: crbug.com/233418 - Only use the blink url for jobs with the blink
-    # project set. This will require us to always set the project in blink
-    # configs.
-    project = options['project']
-    if project == 'chrome' and all('_layout_' in bot for bot in options['bot']):
-      project = 'blink'
-    last_good_url = (self.last_good_urls or {}).get(project)
-
+    last_good_url = (self.last_good_urls or {}).get(options['project'])
     if options['revision'] or not last_good_url:
       return defer.succeed(0)
 
