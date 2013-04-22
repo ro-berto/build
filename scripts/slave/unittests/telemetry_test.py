@@ -44,13 +44,8 @@ class FilterCapture(chromium_utils.RunCommandFilter):
 class TelemetryTest(unittest.TestCase):
   """Holds tests for telemetry script."""
 
-  def setUp(self):
-    super(TelemetryTest, self).setUp()
-
-    self.telemetry = os.path.join(SCRIPT_DIR, '..', 'telemetry.py')
-    self.capture = FilterCapture()
-
-  def testSimpleCommand(self):
+  @staticmethod
+  def _GetDefaultFactoryProperties():
     fp = {}
     fp['page_set'] = 'sunspider.json'
     fp['build_dir'] = 'src/build'
@@ -61,6 +56,16 @@ class TelemetryTest(unittest.TestCase):
     fp['step_name'] = 'sunspider'
     fp['show_perf_results'] = True
     fp['perf_id'] = 'android-gn'
+    return fp
+
+  def setUp(self):
+    super(TelemetryTest, self).setUp()
+
+    self.telemetry = os.path.join(SCRIPT_DIR, '..', 'telemetry.py')
+    self.capture = FilterCapture()
+
+  def testSimpleCommand(self):
+    fp = self._GetDefaultFactoryProperties()
 
     cmd = [self.telemetry, '--print-cmd',
            '--factory-properties=%s' % json.dumps(fp)]
@@ -82,6 +87,38 @@ class TelemetryTest(unittest.TestCase):
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
             '\'src/tools/perf/run_multipage_benchmarks\' \'-v\' ' +
+            '\'--browser=android-content-shell\' \'sunspider\' ' +
+            '\'src/tools/perf/page_sets/sunspider.json\''
+        ])
+
+    self.assertEqual(expectedText, self.capture.text)
+
+  def testPageRepeat(self):
+    fp = self._GetDefaultFactoryProperties()
+    fp['page_repeat'] = 20
+
+    cmd = [self.telemetry, '--print-cmd',
+           '--factory-properties=%s' % json.dumps(fp)]
+
+    ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
+    self.assertEqual(ret, 0)
+
+    runtest = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'runtest.py'))
+
+    expectedText = (['\'adb\' \'root\'',
+        '\'adb\' \'wait-for-device\'',
+        '\'%s\' ' % sys.executable +
+        '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
+            '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
+            '\'--factory-properties=' +
+            '{"page_set": "sunspider.json", "target": "Release", ' +
+            '"build_dir": "src/build", "perf_id": "android-gn", ' +
+            '"step_name": "sunspider", "test_name": "sunspider", ' +
+            '"page_repeat": 20, '+
+            '"target_platform": "linux2", "target_os": "android", ' +
+            '"show_perf_results": true}\' ' +
+            '\'src/tools/perf/run_multipage_benchmarks\' \'-v\' ' +
+            '\'--page-repeat=20\' '+
             '\'--browser=android-content-shell\' \'sunspider\' ' +
             '\'src/tools/perf/page_sets/sunspider.json\''
         ])

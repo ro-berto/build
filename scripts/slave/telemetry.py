@@ -57,6 +57,7 @@ def _GenerateTelemetryCommandSequence(fp):
 
   test_name = fp.get('test_name')
   page_set = fp.get('page_set')
+  page_repeat = fp.get('page_repeat')
   target = fp.get('target')
   target_os = fp.get('target_os')
   target_platform = fp.get('target_platform')
@@ -66,6 +67,11 @@ def _GenerateTelemetryCommandSequence(fp):
   page_set = os.path.join('src', 'tools', 'perf', 'page_sets', page_set)
 
   env = os.environ
+
+  # List of command line arguments common to all test platforms.
+  common_args = ['-v']
+  if page_repeat:
+    common_args.append('--page-repeat=%d' % page_repeat)
 
   # On android, telemetry needs to use the adb command and needs to be in
   # root mode. Run it in bash since envsetup.sh doesn't work in sh.
@@ -80,7 +86,8 @@ def _GenerateTelemetryCommandSequence(fp):
   browser = target.lower()
   if target_os == 'android':
     browser = 'android-content-shell'
-  test_args = ['-v', '--browser=%s' % browser, test_name, page_set]
+  test_args = common_args
+  test_args.extend(['--browser=%s' % browser, test_name, page_set])
   test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
   commands.append(test_cmd)
 
@@ -88,16 +95,18 @@ def _GenerateTelemetryCommandSequence(fp):
   # certain page cyclers.
   if target_os != 'android':
     if page_set.endswith('moz.json') or page_set.endswith('morejs.json'):
-      test_args = ['-v', '--profile-type=typical_user',
-                   '--output-trace-tag=_extcs1', '--browser=%s' % browser,
-                   test_name, page_set]
+      test_args = common_args
+      test_args.extend(['--profile-type=typical_user',
+                        '--output-trace-tag=_extcs1', '--browser=%s' % browser,
+                        test_name, page_set])
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
       commands.append(test_cmd)
     if page_set.endswith('moz.json') or page_set.endswith('intl2.json'):
-      test_args = ['-v', '--profile-type=power_user',
-                   '--output-trace-tag=_extwr', '--browser=%s' % browser,
-                   test_name, page_set]
+      test_args = common_args
+      test_args.extend(['--profile-type=power_user',
+                        '--output-trace-tag=_extwr', '--browser=%s' % browser,
+                        test_name, page_set])
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
       commands.append(test_cmd)
@@ -105,10 +114,11 @@ def _GenerateTelemetryCommandSequence(fp):
   # Run the test against the reference build on platforms where it exists.
   ref_build = _GetReferenceBuildPath(target_os, target_platform)
   if ref_build:
-    ref_args = ['-v', '--browser=exact',
+    ref_args = common_args
+    ref_args.extend(['--browser=exact',
                 '--browser-executable=%s' % ref_build,
                 '--output-trace-tag=_ref',
-                test_name, page_set]
+                test_name, page_set])
     ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args, fp=fp)
     commands.append(ref_cmd)
 
