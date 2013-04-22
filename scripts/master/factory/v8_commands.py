@@ -76,25 +76,31 @@ class V8Commands(commands.FactoryCommands):
     return cmd
 
   def AddV8GCMole(self):
-    cmd = ['lua', '../../../gcmole/gcmole.lua']
-    self.AddTestStep(shell.ShellCommand,
-                     'GCMole', cmd,
+    cmd = ['lua', './tools/gcmole/gcmole.lua']
+    env = {
+      'CLANG_BIN': (
+        self._build_dir + '../../../../../gcmole/bin'
+      ),
+      'CLANG_PLUGINS': (
+        self._build_dir + '../../../../../gcmole'
+      ),
+    }
+    self.AddTestStep(shell.ShellCommand, 'GCMole', cmd,
+                     env=env,
                      timeout=3600,
                      workdir='build/v8/')
 
   def AddV8Initializers(self):
     binary = 'out/' + self._target + '/d8'
     cmd = ['bash', './tools/check-static-initializers.sh', binary]
-    self.AddTestStep(shell.ShellCommand,
-                     'Static-Initializers', cmd,
+    self.AddTestStep(shell.ShellCommand, 'Static-Initializers', cmd,
                      workdir='build/v8/')
 
   def AddV8Testing(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
     cmd = self.GetV8TestingCommand()
-    self.AddTestStep(shell.ShellCommand,
-                     'Check', cmd,
+    self.AddTestStep(shell.ShellCommand, 'Check', cmd,
                      timeout=3600,
                      workdir='build/v8/')
 
