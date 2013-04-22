@@ -12,6 +12,10 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   def mac():
     return webrtc_factory.WebRTCFactory('src/xcodebuild', 'darwin', svn_url,
                                         branch, custom_deps_list)
+  def macIos():
+    return webrtc_factory.WebRTCFactory('', 'darwin', svn_url, branch,
+                                        nohooks_on_update=True)
+
   helper = master_config.Helper(defaults)
   B = helper.Builder
   F = helper.Factory
@@ -58,11 +62,31 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
       target='Debug',
       options=options,
       tests=tests))
+
   B('Mac32Release', 'mac_release_factory', scheduler=scheduler)
   F('mac_release_factory', mac().WebRTCFactory(
       target='Release',
       options=options,
       tests=tests))
+
+  B('Mac64Debug', 'mac64_debug_factory', scheduler=scheduler)
+  F('mac64_debug_factory', mac().WebRTCFactory(
+      target='Debug',
+      options=options,
+      tests=tests,
+      factory_properties={
+          'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
+      }))
+
+  B('Mac64Release', 'mac64_release_factory', scheduler=scheduler)
+  F('mac64_release_factory', mac().WebRTCFactory(
+      target='Release',
+      options=options,
+      tests=tests,
+      factory_properties={
+          'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
+      }))
+
   B('MacAsan', 'mac_asan_factory', scheduler=scheduler)
   F('mac_asan_factory', mac().WebRTCFactory(
       target='Release',
@@ -73,4 +97,12 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
                           {'GYP_DEFINES': ('asan=1'
                                            ' release_extra_cflags=-g '
                                            ' linux_use_tcmalloc=0 ')}}))
+
+  # iOS.
+  B('iOS Device', 'ios_release_factory', scheduler=scheduler)
+  F('ios_release_factory', macIos().ChromiumAnnotationFactory(
+      target='Release',
+      slave_type='AnnotatedBuilderTester',
+      annotation_script='src/webrtc/build/ios-webrtc.sh'))
+
   helper.Update(c)
