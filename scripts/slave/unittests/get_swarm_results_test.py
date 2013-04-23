@@ -134,6 +134,63 @@ TEST_SHARD_2 = 'Note: This is test shard 2 of 3.'
 TEST_SHARD_3 = 'Note: This is test shard 3 of 3.'
 
 
+SWARM_SHARD_OUTPUT = ("""
+[ RUN      ] unittests.Run Test
+%s
+[       OK ] unittests.Run Test (2549 ms)
+[ RUN      ] unittests.Clean Up
+No output!
+[       OK ] unittests.Clean Up (6 ms)
+
+[----------] unittests summary
+[==========] 2 tests ran. (2556 ms total)
+""")
+
+TEST_SHARD_OUTPUT_1 = SWARM_SHARD_OUTPUT % TEST_SHARD_1
+TEST_SHARD_OUTPUT_2 = SWARM_SHARD_OUTPUT % TEST_SHARD_2
+TEST_SHARD_OUTPUT_3 = SWARM_SHARD_OUTPUT % TEST_SHARD_3
+
+BUILDBOT_SHARD_OUTPUT = ("""
+================================================================
+Begin output from shard index %d (machine tag: localhost, id: host)
+================================================================
+
+%s
+
+================================================================
+End output from shard index %d (machine tag: localhost, id: host). Return %d
+================================================================
+""")
+
+BUILDBOT_OUTPUT_SHARDS = [
+    BUILDBOT_SHARD_OUTPUT % (0, TEST_SHARD_1, 0, 0),
+    '\nSkipping shard index 1 because it is a repeat of an earlier shard.\n',
+    BUILDBOT_SHARD_OUTPUT % (2, TEST_SHARD_2, 2, 0),
+    BUILDBOT_SHARD_OUTPUT % (3, TEST_SHARD_3, 3, 0)
+]
+
+BUILDBOT_FULL_SHARDED_OUTPUT_WITH_SKIP = '\n'.join(BUILDBOT_OUTPUT_SHARDS) + """
+Summary for all the shards:
+All tests passed.
+"""
+
+
+def generate_url_response(shard_output, exit_codes):
+  response_message = json.dumps(
+      {'machine_id': 'host',
+       'machine_tag': 'localhost',
+       'exit_codes': exit_codes,
+       'output': shard_output,
+       }
+      )
+
+  url_response = urllib2.addinfourl(StringIO.StringIO(response_message),
+                                    'mock message', 'host')
+  url_response.code = 200
+  url_response.msg = 'OK'
+  return url_response
+
+
 class TestRunOutputTest(unittest.TestCase):
   def test_correct_output_success(self):
     self.assertEqual(RUN_TEST_OUTPUT,
@@ -175,43 +232,69 @@ class GetTestKetsTest(SuperMoxTestBase):
 
 
 class AllShardsRun(unittest.TestCase):
-  def testAllShardsRun(self):
-    shard_watcher = swarm_results.ShardWatcher(3)
+  def testSingleShard(self):
+    shard_watcher = swarm_results.ShardWatcher(1)
 
-    shard_watcher.ProcessLine(TEST_SHARD_1)
-    shard_watcher.ProcessLine(TEST_SHARD_2)
-    shard_watcher.ProcessLine(TEST_SHARD_3)
+    self.assertTrue(
+        shard_watcher.ShouldProcessShard('run test\n.Done running test'))
 
     self.assertEqual([], shard_watcher.MissingShards())
     self.assertTrue(shard_watcher.ShardsCompleted())
 
-  def testShardRepeated(self):
+  def testSingleShardRepeated(self):
+    shard_watcher = swarm_results.ShardWatcher(1)
+
+    self.assertTrue(
+        shard_watcher.ShouldProcessShard('run test\n.Done running test'))
+    self.assertFalse(
+        shard_watcher.ShouldProcessShard('run test\n.Done running test'))
+
+    self.assertEqual([], shard_watcher.MissingShards())
+    self.assertTrue(shard_watcher.ShardsCompleted())
+
+  def testAllShardsRun(self):
     shard_watcher = swarm_results.ShardWatcher(3)
 
-    shard_watcher.ProcessLine(TEST_SHARD_1)
-    shard_watcher.ProcessLine(TEST_SHARD_1)
-    shard_watcher.ProcessLine(TEST_SHARD_1)
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_2))
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_3))
+
+    self.assertEqual([], shard_watcher.MissingShards())
+    self.assertTrue(shard_watcher.ShardsCompleted())
+
+  def testShardRepeatedNoMissing(self):
+    shard_watcher = swarm_results.ShardWatcher(3)
+
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
+    self.assertFalse(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_2))
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_3))
+
+    self.assertEqual([], shard_watcher.MissingShards())
+    self.assertTrue(shard_watcher.ShardsCompleted())
+
+  def testShardRepeatedAndMissing(self):
+    shard_watcher = swarm_results.ShardWatcher(3)
+
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
+    self.assertFalse(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
+    self.assertFalse(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
 
     self.assertEqual(['2', '3'], shard_watcher.MissingShards())
     self.assertFalse(shard_watcher.ShardsCompleted())
+
+  def testShardOutOfRange(self):
+    shard_watcher = swarm_results.ShardWatcher(1)
+
+    with self.assertRaises(AssertionError):
+      shard_watcher.ShouldProcessShard(TEST_SHARD_1)
 
 
 class GetSwarmResults(SuperMoxTestBase):
   def test_get_swarm_results_success(self):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
 
-    shard_output = json.dumps(
-      {'machine_id': 'host',
-       'machine_tag': 'localhost',
-       'exit_codes': '0, 0',
-       'output': SWARM_OUTPUT_WITHOUT_FAILURE
-     }
-    )
-
-    url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
-                                      "mock message", 'host')
-    url_response.code = 200
-    url_response.msg = "OK"
+    url_response = generate_url_response(SWARM_OUTPUT_WITHOUT_FAILURE, '0, 0')
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
                                   ).AndReturn(url_response)
     swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
@@ -219,7 +302,7 @@ class GetSwarmResults(SuperMoxTestBase):
                                   ).AndReturn(StringIO.StringIO(''))
     self.mox.ReplayAll()
 
-    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+    swarm_results.GetSwarmResults('http://host:9001', 1, ['key1'])
 
     self.checkstdout(BUILDBOT_OUTPUT)
 
@@ -228,23 +311,12 @@ class GetSwarmResults(SuperMoxTestBase):
   def test_get_swarm_results_failure(self):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
 
-    shard_output = json.dumps(
-      {'machine_id': 'host',
-       'machine_tag': 'localhost',
-       'exit_codes': '0, 1',
-       'output': SWARM_OUTPUT_WITH_FAILURE
-     }
-    )
-
-    url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
-                                      "mock message", 'host')
-    url_response.code = 200
-    url_response.msg = "OK"
+    url_response = generate_url_response(SWARM_OUTPUT_WITH_FAILURE, '0, 1')
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
                                   ).AndReturn(url_response)
     self.mox.ReplayAll()
 
-    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+    swarm_results.GetSwarmResults('http://host:9001', 1, ['key1'])
 
     self.checkstdout(BUILDBOT_OUTPUT_FAILURE)
 
@@ -262,21 +334,21 @@ class GetSwarmResults(SuperMoxTestBase):
     )
 
     url_response = urllib2.addinfourl(StringIO.StringIO(shard_output),
-                                      "mock message", 'host')
+                                      'mock message', 'host')
     url_response.code = 200
-    url_response.msg = "OK"
+    url_response.msg = 'OK'
     swarm_results.urllib2.urlopen('http://host:9001/get_result?r=key1'
                                   ).AndReturn(url_response)
     self.mox.ReplayAll()
 
-    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+    swarm_results.GetSwarmResults('http://host:9001', 1, ['key1'])
 
     self.checkstdout(BUILDBOT_OUTPUT_NO_TEST_OUTPUT)
 
     self.mox.VerifyAll()
 
   def test_get_swarm_results_no_keys(self):
-    swarm_results.GetSwarmResults('http://host:9001', [])
+    swarm_results.GetSwarmResults('http://host:9001', 1, [])
 
     self.checkstdout('Error: No test keys to get results with\n')
 
@@ -294,7 +366,7 @@ class GetSwarmResults(SuperMoxTestBase):
         swarm_results.time.sleep(mox.IgnoreArg())
     self.mox.ReplayAll()
 
-    swarm_results.GetSwarmResults('http://host:9001', ['key1'])
+    swarm_results.GetSwarmResults('http://host:9001', 1, ['key1'])
 
     expected_output = []
     for _ in range(swarm_results.MAX_RETRY_ATTEMPTS):
@@ -304,11 +376,70 @@ class GetSwarmResults(SuperMoxTestBase):
         (url, swarm_results.MAX_RETRY_ATTEMPTS))
     expected_output.append('Summary for all the shards:')
     expected_output.append('All tests passed.')
+    expected_output.append('Not all shards were executed.')
+    expected_output.append('The following gtest shards weren\'t run:')
+    expected_output.append('  1')
+
 
     self.checkstdout('\n'.join(expected_output) + '\n')
 
     self.mox.VerifyAll()
 
+  def test_get_swarm_results_all_shards_repeated(self):
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+
+    url_response = generate_url_response(SWARM_OUTPUT_WITHOUT_FAILURE, '0, 0')
+    keys = ['key1', 'key1-repeat']
+
+    # Only key1 is queried, since after it is recieved we have all the shards
+    # we want.
+    swarm_results.urllib2.urlopen('http://host:9001/get_result?r=%s' % keys[0]
+                                  ).AndReturn(url_response)
+    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
+                                  data=urllib.urlencode({'r': keys[0]})
+                                  ).AndReturn(StringIO.StringIO(''))
+    self.mox.ReplayAll()
+
+    swarm_results.GetSwarmResults('http://host:9001', 1, keys)
+
+    self.checkstdout(BUILDBOT_OUTPUT)
+
+    self.mox.VerifyAll()
+
+  def test_get_swarm_results_some_shards_repeated(self):
+    """Have shard 1 repeated twice, then shard 2 and 3."""
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+
+    keys = ['key1', 'key1-repeat']
+    for key in keys:
+      swarm_results.urllib2.urlopen(
+          'http://host:9001/get_result?r=%s' % key
+          ).AndReturn(generate_url_response(TEST_SHARD_OUTPUT_1, '0, 0'))
+      swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
+                                    data=urllib.urlencode({'r': key})
+                                    ).AndReturn(StringIO.StringIO(''))
+
+    keys.extend(['key2', 'key3'])
+    swarm_results.urllib2.urlopen(
+        'http://host:9001/get_result?r=%s' % keys[2]
+        ).AndReturn(generate_url_response(TEST_SHARD_OUTPUT_2, '0, 0'))
+    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
+                                  data=urllib.urlencode({'r': keys[2]})
+                                  ).AndReturn(StringIO.StringIO(''))
+    swarm_results.urllib2.urlopen(
+        'http://host:9001/get_result?r=%s' % keys[3]
+        ).AndReturn(generate_url_response(TEST_SHARD_OUTPUT_3, '0, 0'))
+    swarm_results.urllib2.urlopen('http://host:9001/cleanup_results',
+                                  data=urllib.urlencode({'r': keys[3]})
+                                  ).AndReturn(StringIO.StringIO(''))
+
+    self.mox.ReplayAll()
+
+    swarm_results.GetSwarmResults('http://host:9001', 3, keys)
+
+    self.checkstdout(BUILDBOT_FULL_SHARDED_OUTPUT_WITH_SKIP)
+
+    self.mox.VerifyAll()
 
 if __name__ == '__main__':
   unittest.main()

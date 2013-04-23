@@ -143,14 +143,14 @@ class SwarmCommands(commands.FactoryCommands):
         tests=tests,
         doStepIf=doStepIf)
 
-  def AddGetSwarmTestStep(self, swarm_server, test_name):
+  def AddGetSwarmTestStep(self, swarm_server, test_name, num_shards):
     script_path = self.PathJoin(self._script_dir, 'get_swarm_results.py')
 
     swarm_request_name = WithProperties('%s-%s-' + test_name,
                                         'buildername:-None',
                                         'buildnumber:-None')
 
-    args = ['-u', swarm_server, swarm_request_name]
+    args = ['-u', swarm_server, '-s', '%d' % num_shards, swarm_request_name]
     wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
 
     command = self.GetPythonTestCommand(script_path, arg_list=args,

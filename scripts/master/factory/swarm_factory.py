@@ -100,7 +100,8 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
 
   # Collect the results
   for swarm_test in swarm_tests:
-    swarm_command_obj.AddGetSwarmTestStep(swarm_server, swarm_test.test_name)
+    swarm_command_obj.AddGetSwarmTestStep(swarm_server, swarm_test.test_name,
+                                          swarm_test.shards)
 
   return f
 
@@ -149,7 +150,8 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
       # Each test has its output returned as its own step.
       for test in tests:
-        swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name)
+        swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name,
+                                              test.shards)
     elif 'test_isolation_mode=check':
       for test in tests:
         swarm_command_obj.AddIsolateTest(test.test_name,

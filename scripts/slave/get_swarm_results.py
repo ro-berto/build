@@ -101,39 +101,69 @@ class ShardWatcher(object):
 
   def __init__(self, shard_count):
     # We add 1 to the shard indices because they will start at 1, not 0.
+    self.shard_count = str(shard_count)
     self.remaining_shards = map(str, range(1, shard_count + 1))
     self.shard_line = re.compile(
         r'Note: This is test shard ([0-9]+) of ([0-9]+)')
-    self.errors = False
 
-  def ProcessLine(self, line):
-    """Examine the line to see if it tells us which shard we are."""
-    match = self.shard_line.match(line)
-    if match:
-      shard_num = match.group(1)
-      if shard_num in self.remaining_shards:
-        self.remaining_shards.remove(shard_num)
-      else:
-        self.errors = True
+  def ShouldProcessShard(self, lines):
+    """Examines the lines to see which shard this is and determine if it should
+    be used."""
+    shard_index = None
+    total_shards = None
+
+    for line in lines.splitlines():
+      match = self.shard_line.match(line)
+      if match:
+        shard_index = match.group(1)
+        total_shards = match.group(2)
+        break
+
+    if shard_index is None:
+      # If we didn't find a shard marker, then the test is running unsharded, so
+      # we consider this shard 1.
+      shard_index = '1'
+      total_shards = '1'
+
+    repeated_shard = False
+    if shard_index in self.remaining_shards:
+      self.remaining_shards.remove(shard_index)
+    else:
+      repeated_shard = True
+
+    assert total_shards == self.shard_count, (
+        'There should be %s shards in total but this shard was part of %s '
+        'shards' % (self.shard_count, total_shards))
+
+    return not repeated_shard
 
   def MissingShards(self):
     return self.remaining_shards
 
   def ShardsCompleted(self):
-    return not self.errors and not self.remaining_shards
+    return not self.remaining_shards
 
 
-def GetSwarmResults(swarm_base_url, test_keys):
+def GetSwarmResults(swarm_base_url, shard_count, test_keys):
   if not test_keys:
     print 'Error: No test keys to get results with'
     return 1
+
+  # TODO(csharp): remove once shard_count is always set.
+  shard_count = len(test_keys) if shard_count == -1 else shard_count
 
   gtest_parser = gtest_utils.GTestLogParser()
   machine_ids = ['unknown'] * len(test_keys)
   machine_tags = ['unknown'] * len(test_keys)
   exit_codes = [1] * len(test_keys)
-  shard_watcher = ShardWatcher(len(test_keys))
+  shard_watcher = ShardWatcher(shard_count)
+
   for index in range(len(test_keys)):
+    # If we've already seen output for every shard, we can safely ignore the
+    # remaining shards.
+    if not shard_watcher.MissingShards():
+      break
+
     test_key_encoded = urllib.urlencode([('r', test_keys[index])])
     result_url = '%s/get_result?%s' % (swarm_base_url.rstrip('/'),
                                        test_key_encoded)
@@ -150,11 +180,33 @@ def GetSwarmResults(swarm_base_url, test_keys):
         break
 
       if test_outputs['output']:
+        # Record the basic test information from the results.
+        machine_ids[index] = test_outputs['machine_id']
+        machine_tags[index] = test_outputs.get('machine_tag', 'unknown')
         if test_outputs['exit_codes']:
           test_exit_codes = test_outputs['exit_codes'].split(',')
           exit_codes[index] = max(map(int, test_exit_codes))
-        machine_ids[index] = test_outputs['machine_id']
-        machine_tags[index] = test_outputs.get('machine_tag', 'unknown')
+
+        cleaned_output = TestRunOutput(test_outputs['output'])
+        if not cleaned_output and not exit_codes[index]:
+          # If we fail to get cleanup_output, we should always mark it as an
+          # error
+          exit_codes[index] = 1
+
+        # If the test passed, delete the key since it is no longer needed.
+        if exit_codes[index] == 0:
+          remove_key_url = '%s/cleanup_results' % swarm_base_url.rstrip('/')
+          # The data parameter must be used so that the the request will be a
+          # POST and not a GET.
+          ConnectToSwarmServer(remove_key_url, data=test_key_encoded,
+                               max_retries=1)
+
+        if not shard_watcher.ShouldProcessShard(cleaned_output):
+          print
+          print ('Skipping shard index %d because it is a repeat of an '
+                 'earlier shard.' % index)
+          print
+          break
 
         print
         print '================================================================'
@@ -163,11 +215,8 @@ def GetSwarmResults(swarm_base_url, test_keys):
         print '================================================================'
         print
 
-        cleaned_output = TestRunOutput(test_outputs['output'])
         if cleaned_output:
-          for line in cleaned_output.splitlines():
-            gtest_parser.ProcessLine(line)
-            shard_watcher.ProcessLine(line)
+          map(gtest_parser.ProcessLine, cleaned_output.splitlines())
           print cleaned_output
         else:
           # We failed to get any test output which is an error, so we should
@@ -176,12 +225,6 @@ def GetSwarmResults(swarm_base_url, test_keys):
           print 'Showing all the output, including swarm specific output.'
           print
           print test_outputs['output']
-
-          # Ensure that we mark this as a failure, since we should always have
-          # output from the tests.
-          if not exit_codes[index]:
-            exit_codes[index] = 1
-
         print '================================================================'
         print ('End output from shard index %s (machine tag: %s, id: %s). '
                'Return %d' % (index, machine_tags[index], machine_ids[index],
@@ -189,13 +232,6 @@ def GetSwarmResults(swarm_base_url, test_keys):
         print '================================================================'
         print
 
-        if exit_codes[index] == 0:
-          # If the test passed, delete the key since it is no longer needed.
-          remove_key_url = '%s/cleanup_results' % swarm_base_url.rstrip('/')
-          # The data parameter must be used so that the the request will be a
-          # POST and not a GET.
-          ConnectToSwarmServer(remove_key_url, data=test_key_encoded,
-                               max_retries=1)
         break
       else:
         # Test is not yet done, wait a bit before checking again.
@@ -211,7 +247,7 @@ def GetSwarmResults(swarm_base_url, test_keys):
   else:
     print 'All tests passed.'
 
-  if len(test_keys) > 1 and shard_watcher.MissingShards():
+  if shard_watcher.MissingShards():
     print 'Not all shards were executed.'
     print 'The following gtest shards weren\'t run:'
     print '\n'.join('  ' + shard_id for shard_id in
@@ -235,6 +271,12 @@ def main():
   parser.add_option('-u', '--url', default='http://localhost:8080',
                     help='Specify the url of the Swarm server. '
                     'Defaults to %default')
+  # TODO(csharp): Change default to 0 once all callers have been updated to
+  # pass in --shards.
+  parser.add_option('-s', '--shards', default=-1, type=int,
+                    help='Specify the number of shards that the test was split '
+                    'into (i.e. how many shards should be retrieved from '
+                    'swarm.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Print verbose logging')
   (options, args) = parser.parse_args()
@@ -244,9 +286,12 @@ def main():
     parser.error('Must specify only one test name.')
   test_name = args[0]
 
+  if not options.shards:
+    parser.error('The number of shards expected must be passed in.')
+
   test_keys = GetTestKeys(options.url, test_name)
 
-  return GetSwarmResults(options.url, test_keys)
+  return GetSwarmResults(options.url, options.shards, test_keys)
 
 
 if __name__ == '__main__':
