@@ -57,7 +57,6 @@ class ResultsDashboardTest(unittest.TestCase):
       else:
         urllib2.urlopen(IsEncodedJson(json_line))
     self.mox.ReplayAll()
-    send_results_args.append(self.build_dir)
     results_dashboard.SendResults(*send_results_args)
     self.mox.VerifyAll()
 
@@ -71,7 +70,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -88,6 +89,40 @@ class ResultsDashboardTest(unittest.TestCase):
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
 
+  def test_SupplementalColumns(self):
+    args = [
+        'bar-summary.dat',
+        ['{"traces": {"baz": ["100.0", "5.0"]},'
+         ' "rev": "12345", "webkit_rev": "6789"}'],
+        'linux-release',
+        'foo',
+        'https://chrome-perf.googleplex.com',
+        'chromium.perf',
+        'XP Perf (1)',
+        '7890', self.build_dir,
+        {
+            'r_webkit_rev': '6789',
+            'r_foo': 'SHA1',
+            'r_bar': 'SHA2',
+        }]
+    expected_new_json = [json.dumps([{
+        'master': 'ChromiumPerf',
+        'bot': 'linux-release',
+        'test': 'foo/bar/baz',
+        'revision': 12345,
+        'value': '100.0',
+        'error': '5.0',
+        'masterid': 'chromium.perf',
+        'buildername': 'XP Perf (1)',
+        'buildnumber': '7890',
+        'supplemental_columns': {
+            'r_webkit_rev': '6789',
+            'r_foo': 'SHA1',
+            'r_bar': 'SHA2',
+        }}])]
+    errors = [None]
+    self._SendResults(args, expected_new_json, errors)
+
   def test_UnitsLogLine(self):
     args = [
         'bar-summary.dat',
@@ -100,7 +135,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -141,7 +178,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -185,7 +224,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -225,7 +266,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -288,7 +331,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -318,7 +363,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'Linux (1)',
-        '1234']
+        '1234',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -348,7 +395,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -373,7 +422,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json.append(json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -401,7 +452,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -426,7 +479,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json2 = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -454,7 +509,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -529,7 +586,9 @@ class ResultsDashboardTest(unittest.TestCase):
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'XP Perf (1)',
-        '7890']
+        '7890',
+        self.build_dir,
+        {}]
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',

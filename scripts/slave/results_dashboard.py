@@ -24,12 +24,14 @@ CACHE_FILENAME = 'results_to_retry'
 
 #TODO(xusydoc): set fail_hard to True when bots stabilize. See crbug.com/222607.
 def SendResults(logname, lines, system, test, url, masterid,
-                buildername, buildnumber, build_dir, fail_hard=False):
+                buildername, buildnumber, build_dir, supplemental_columns,
+                fail_hard=False):
   if not logname.endswith('-summary.dat'):
     return
 
   new_results_line = _GetResultsJson(logname, lines, system, test, url,
-                                     masterid, buildername, buildnumber)
+                                     masterid, buildername, buildnumber,
+                                     supplemental_columns)
   # Write the new request line to the cache, in case of errors.
   cache_filename = _GetCacheFileName(build_dir)
   cache = open(cache_filename, 'ab')
@@ -85,7 +87,7 @@ def _GetCacheFileName(build_dir):
   return cache_filename
 
 def _GetResultsJson(logname, lines, system, test, url, masterid,
-                    buildername, buildnumber):
+                    buildername, buildnumber, supplemental_columns):
   results_to_add = []
   master = slave_utils.GetActiveMaster()
   bot = system
@@ -136,6 +138,7 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       if git_hash:
         result.setdefault(
             'supplemental_columns', {})['r_chromium_rev'] = git_hash
+      result.setdefault('supplemental_columns', {}).update(supplemental_columns)
       if data.get('units'):
         result['units'] = data['units']
       if important:
@@ -143,6 +146,7 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       results_to_add.append(result)
   _PrintLinkStep(url, master, bot, test, revision)
   return json.dumps(results_to_add)
+
 
 def _SendResultsJson(url, results_json):
   data = urllib.urlencode({'data': results_json})

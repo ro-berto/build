@@ -12,6 +12,7 @@
 """
 
 import copy
+import json
 import logging
 import optparse
 import os
@@ -354,16 +355,31 @@ def create_results_tracker(tracker_class, options):
   return tracker_obj
 
 
+def _get_supplemental_columns(build_dir, supplemental_colummns_file_name):
+  supplemental_columns = {}
+  supplemental_columns_file = os.path.join(build_dir,
+                                           results_dashboard.CACHE_DIR,
+                                           supplemental_colummns_file_name)
+  if os.path.exists(supplemental_columns_file):
+    with file(supplemental_columns_file, 'r') as f:
+      supplemental_columns = json.loads(f.read())
+  return supplemental_columns
+
+
 def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
-                              masterid, buildername, buildnumber):
+                              masterid, buildername, buildnumber,
+                              supplemental_columns_file):
   if system is None:
     # perf_id not specified in factory-properties
     return
+  supplemental_columns = _get_supplemental_columns(build_dir,
+                                                   supplemental_columns_file)
   for logname, log in results_tracker.PerformanceLogs().iteritems():
     lines = [str(l).rstrip() for l in log]
     try:
       results_dashboard.SendResults(logname, lines, system, test, url, masterid,
-                                    buildername, buildnumber, build_dir)
+                                    buildername, buildnumber, build_dir,
+                                    supplemental_columns)
     except NotImplementedError as e:
       print 'Did not submit to results dashboard: %s' % e
 
@@ -637,7 +653,8 @@ def main_mac(options, args):
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'))
+        options.build_properties.get('buildnumber'),
+        options.supplemental_columns_file)
 
   return result
 
@@ -891,7 +908,8 @@ def main_linux(options, args):
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'))
+        options.build_properties.get('buildnumber'),
+        options.supplemental_columns_file)
 
   return result
 
@@ -975,7 +993,8 @@ def main_win(options, args):
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
-        options.build_properties.get('buildnumber'))
+        options.build_properties.get('buildnumber'),
+        options.supplemental_columns_file)
 
   return result
 
@@ -1089,6 +1108,12 @@ def main():
   option_parser.add_option('', '--results-url', default='',
                            help='The URI of the perf dashboard to upload '
                                 'results to.')
+  option_parser.add_option('', '--supplemental-columns-file',
+                           default='supplemental_columns',
+                           help='A file containing a JSON blob with a dict '
+                                'that will be uploaded to the results '
+                                'dashboard as supplemental columns.')
+
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
 
