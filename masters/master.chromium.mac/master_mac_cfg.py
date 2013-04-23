@@ -302,7 +302,7 @@ S('ios', branch='src', treeStableTimer=60)
 #
 B('iOS Device', 'ios_rel', gatekeeper='ios_rel', scheduler='ios',
   auto_reboot=True, notify_on_missing=True)
-F('ios_rel', mac().ChromiumFactory(
+F('ios_rel', ios().ChromiumFactory(
   # TODO(lliabraa): Need to upstream support for running tests on devices
   # before we can actually run any tests.
   tests=[],
@@ -323,7 +323,7 @@ F('ios_rel', mac().ChromiumFactory(
 #
 B('iOS Simulator (dbg)', 'ios_dbg', gatekeeper='ios_dbg', scheduler='ios',
   auto_reboot=True, notify_on_missing=True)
-F('ios_dbg', mac().ChromiumFactory(
+F('ios_dbg', ios().ChromiumFactory(
   target='Debug',
   tests=[
     'base_unittests',
