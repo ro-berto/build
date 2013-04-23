@@ -1129,7 +1129,9 @@ def main():
     # Set the path to llvm-symbolizer to be used by asan_symbolize.py
     os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
     # Avoid aggressive memcmp checks until http://crbug.com/178677 is fixed.
-    os.environ['ASAN_OPTIONS'] = 'strict_memcmp=0'
+    # Also do not replace memcpy/memmove/memset to suppress a report in OpenCL,
+    # see http://crbug.com/162461.
+    os.environ['ASAN_OPTIONS'] = 'strict_memcmp=0 replace_intrin=0'
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
