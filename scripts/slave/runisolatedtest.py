@@ -23,10 +23,13 @@ LINUX_ISOLATE_ENABLED_TESTS = (
   'unit_tests',
 )
 
-# TODO(maruel): Add back interactive_ui_tests.
+# TODO(maruel): Not enabled because of lack of XCode support and missing
+# dependencies for more complex tests.
+MAC_ISOLATE_ENABLED_TESTS = ()
+
+# TODO(maruel): Add back browser_tests and interactive_ui_tests.
 WIN_ISOLATE_ENABLED_TESTS = (
   'base_unittests',
-  'browser_tests',
   'net_unittests',
   'unit_tests',
 )
@@ -35,8 +38,8 @@ ISOLATE_ENABLED_BUILDERS = {
   # CI linux
   'Linux Tests': LINUX_ISOLATE_ENABLED_TESTS,
   # CI mac
-  #'Mac10.6 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
-  #'Mac10.7 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
+  'Mac10.6 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
+  'Mac10.7 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
   # CI win
   'Vista Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
   'Vista Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
@@ -50,7 +53,7 @@ ISOLATE_ENABLED_BUILDERS = {
 
   # Try Server
   'linux_rel': LINUX_ISOLATE_ENABLED_TESTS,
-  #'mac_rel': MAC_ISOLATE_ENABLED_TESTS,
+  'mac_rel': MAC_ISOLATE_ENABLED_TESTS,
   'win_rel': WIN_ISOLATE_ENABLED_TESTS,
 }
 
