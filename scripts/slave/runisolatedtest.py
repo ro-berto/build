@@ -17,7 +17,10 @@ USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
 
 ISOLATE_ENABLED_TESTS = (
   'base_unittests',
+  'browser_tests',
+  'interactive_ui_tests',
   'net_unittests',
+  'unit_tests',
 )
 
 ISOLATE_ENABLED_BUILDERS = {
@@ -27,9 +30,15 @@ ISOLATE_ENABLED_BUILDERS = {
   #'Mac10.6 Tests (1)': ISOLATE_ENABLED_TESTS,
   #'Mac10.7 Tests (1)': ISOLATE_ENABLED_TESTS,
   # CI win
+  'Vista Tests (1)': ISOLATE_ENABLED_TESTS,
   'Vista Tests (2)': ISOLATE_ENABLED_TESTS,
+  'Vista Tests (3)': ISOLATE_ENABLED_TESTS,
+  'Win7 Tests (1)': ISOLATE_ENABLED_TESTS,
   'Win7 Tests (2)': ISOLATE_ENABLED_TESTS,
+  'Win7 Tests (3)': ISOLATE_ENABLED_TESTS,
+  'XP Tests (1)': ISOLATE_ENABLED_TESTS,
   'XP Tests (2)': ISOLATE_ENABLED_TESTS,
+  'XP Tests (3)': ISOLATE_ENABLED_TESTS,
 
   # Try Server
   'linux_rel': ISOLATE_ENABLED_TESTS,
