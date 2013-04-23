@@ -433,6 +433,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('app_list_unittests', fp)
     if R('message_center_unittests'):
       f.AddGTestTestStep('message_center_unittests', fp)
+    if R('message_center_unittests_br'):
+      f.AddBuildrunnerGTest('message_center_unittests', fp)
     if R('compositor'):
       f.AddGTestTestStep('compositor_unittests', fp)
     if R('compositor_br'):

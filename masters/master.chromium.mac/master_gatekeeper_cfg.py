@@ -31,6 +31,7 @@ categories_steps = {
     'ipc_tests',
     'jingle_unittests',
     'media_unittests',
+    'message_center_unittests',
     'mini_installer_test',
     'nacl_integration',
     'net_unittests',
