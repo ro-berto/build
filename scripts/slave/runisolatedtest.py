@@ -26,7 +26,6 @@ LINUX_ISOLATE_ENABLED_TESTS = (
 # TODO(maruel): Add back browser_tests and unit_tests.
 WIN_ISOLATE_ENABLED_TESTS = (
   'base_unittests',
-  'interactive_ui_tests',
   'net_unittests',
 )
 
