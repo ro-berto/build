@@ -23,10 +23,12 @@ LINUX_ISOLATE_ENABLED_TESTS = (
   'unit_tests',
 )
 
-# TODO(maruel): Add back browser_tests and unit_tests.
+# TODO(maruel): Add back interactive_ui_tests.
 WIN_ISOLATE_ENABLED_TESTS = (
   'base_unittests',
+  'browser_tests',
   'net_unittests',
+  'unit_tests',
 )
 
 ISOLATE_ENABLED_BUILDERS = {
