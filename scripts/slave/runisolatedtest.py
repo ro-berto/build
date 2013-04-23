@@ -15,7 +15,7 @@ import sys
 USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
          os.path.basename(sys.argv[0]))
 
-ISOLATE_ENABLED_TESTS = (
+LINUX_ISOLATE_ENABLED_TESTS = (
   'base_unittests',
   'browser_tests',
   'interactive_ui_tests',
@@ -23,27 +23,34 @@ ISOLATE_ENABLED_TESTS = (
   'unit_tests',
 )
 
+# TODO(maruel): Add back browser_tests and unit_tests.
+WIN_ISOLATE_ENABLED_TESTS = (
+  'base_unittests',
+  'interactive_ui_tests',
+  'net_unittests',
+)
+
 ISOLATE_ENABLED_BUILDERS = {
   # CI linux
-  'Linux Tests': ISOLATE_ENABLED_TESTS,
+  'Linux Tests': LINUX_ISOLATE_ENABLED_TESTS,
   # CI mac
-  #'Mac10.6 Tests (1)': ISOLATE_ENABLED_TESTS,
-  #'Mac10.7 Tests (1)': ISOLATE_ENABLED_TESTS,
+  #'Mac10.6 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
+  #'Mac10.7 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
   # CI win
-  'Vista Tests (1)': ISOLATE_ENABLED_TESTS,
-  'Vista Tests (2)': ISOLATE_ENABLED_TESTS,
-  'Vista Tests (3)': ISOLATE_ENABLED_TESTS,
-  'Win7 Tests (1)': ISOLATE_ENABLED_TESTS,
-  'Win7 Tests (2)': ISOLATE_ENABLED_TESTS,
-  'Win7 Tests (3)': ISOLATE_ENABLED_TESTS,
-  'XP Tests (1)': ISOLATE_ENABLED_TESTS,
-  'XP Tests (2)': ISOLATE_ENABLED_TESTS,
-  'XP Tests (3)': ISOLATE_ENABLED_TESTS,
+  'Vista Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
+  'Vista Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
+  'Vista Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
+  'Win7 Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
+  'Win7 Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
+  'Win7 Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
+  'XP Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
+  'XP Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
+  'XP Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
 
   # Try Server
-  'linux_rel': ISOLATE_ENABLED_TESTS,
-  #'mac_rel': ISOLATE_ENABLED_TESTS,
-  'win_rel': ISOLATE_ENABLED_TESTS,
+  'linux_rel': LINUX_ISOLATE_ENABLED_TESTS,
+  #'mac_rel': MAC_ISOLATE_ENABLED_TESTS,
+  'win_rel': WIN_ISOLATE_ENABLED_TESTS,
 }
 
 
