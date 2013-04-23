@@ -125,5 +125,22 @@ class TelemetryTest(unittest.TestCase):
 
     self.assertEqual(expectedText, self.capture.text)
 
+  def testPageRepeatMozJS(self):
+    fp = self._GetDefaultFactoryProperties()
+    fp['page_repeat'] = 20
+    fp['page_set'] = 'moz.json'
+    fp['target_os'] = 'mac'
+
+    cmd = [self.telemetry, '--print-cmd',
+           '--factory-properties=%s' % json.dumps(fp)]
+
+    ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
+    self.assertEqual(ret, 0)
+
+    capture_text = self.capture.text
+    self.assertEqual(len(capture_text), 4)
+    for line in capture_text:
+      self.assertEqual(line.count('moz.json'), 2)
+
 if __name__ == '__main__':
   unittest.main()
