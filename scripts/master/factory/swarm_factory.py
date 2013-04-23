@@ -95,6 +95,9 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
       tests=swarm_tests,
       doStepIf=swarm_commands.TestStepHasSwarmProperties)
 
+  # Latency is everything, update scripts only after.
+  swarm_command_obj.AddUpdateScriptStep()
+
   # Collect the results
   for swarm_test in swarm_tests:
     swarm_command_obj.AddGetSwarmTestStep(swarm_server, swarm_test.test_name)
