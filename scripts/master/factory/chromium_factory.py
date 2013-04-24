@@ -770,6 +770,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 src_base='..',
                                 workdir=workdir,
                                 factory_properties=fp,
+                                env={'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
                                 perf=True)
 
     # Endurance tests.

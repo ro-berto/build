@@ -15,7 +15,7 @@ P = helper.Periodic
 
 
 def linux():
-  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 S('linux_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('linux_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
@@ -35,6 +35,7 @@ F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
     options=options,
     tests=tests,
     factory_properties={
+        'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-linux',
@@ -49,6 +50,7 @@ F('linux_webrtc_stable_factory', linux().ChromiumWebRTCLatestStableFactory(
     options=options,
     tests=tests,
     factory_properties={
+        'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-stable-tot-rel-linux',

@@ -15,9 +15,9 @@ T = helper.Triggerable
 
 
 def linux():
-  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 def linux_tester():
-  return chromium_factory.ChromiumFactory('src/build', 'linux2',
+  return chromium_factory.ChromiumFactory('src/out', 'linux2',
                                           nohooks_on_update=True)
 
 S('linux_rel_scheduler', branch='src', treeStableTimer=60)
