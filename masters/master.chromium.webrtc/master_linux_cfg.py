@@ -46,6 +46,7 @@ F('linux_tester_factory', linux_tester().ChromiumFactory(
     build_url=chromium_rel_archive,
     tests=tests,
     factory_properties={
+        'pyauto_env': {'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'halt_on_missing_build': True,

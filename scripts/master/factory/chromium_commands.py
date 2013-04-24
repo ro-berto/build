@@ -851,7 +851,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               suite=None,
                               test_args=None,
                               factory_properties=None,
-                              env=None,
                               perf=False):
     """Adds a step to run PyAuto functional tests.
 
@@ -866,8 +865,6 @@ class ChromiumCommands(commands.FactoryCommands):
       suite: PyAuto suite to execute.
       test_args: list of PyAuto test arguments.
       factory_properties: A dictionary of factory property values.
-      env: Dictionary with environmental variable key value pairs that will be
-          set or overridden before launching the test executable.
       perf: Is this a perf test or not? Requires suite or test_args to be set.
     """
     factory_properties = factory_properties or {}
@@ -902,7 +899,9 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd[1] = J(src_base, cmd[1])
     cmd = map(lambda x:x if x!= self._build_dir else J(src_base, x), cmd)
 
-    env = env or {'PYTHONPATH': '.'}
+    # Allow setting a custom environment for a PyAuto test.
+    env = factory_properties.get('pyauto_env', {'PYTHONPATH': '.'})
+
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name, cmd, env=env,
                      target=self._target, factory_properties=factory_properties,
                      timeout=timeout, workdir=workdir,
