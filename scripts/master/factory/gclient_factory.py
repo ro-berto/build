@@ -12,6 +12,7 @@ import os
 import re
 
 from master.factory.build_factory import BuildFactory
+from master.factory import annotator_commands
 from master.factory import commands
 
 import config
@@ -171,6 +172,13 @@ class GClientFactory(object):
     if (self._target_platform == 'win32' and
         not factory_properties.get('no_kill')):
       factory_cmd_obj.AddSvnKillStep()
+
+    # Prepare the checkout to be synced by doing, for example, a gclient revert.
+    fp = factory_properties.copy()
+    fp['recipe'] = 'gclient_prepare_checkout'
+    annotated_cmd_obj = annotator_commands.AnnotatorCommands(factory)
+    annotated_cmd_obj.AddAnnotatedScript(fp, timeout=60*5)
+
     script_solutions = None
     if (factory_properties.get('goma_canary') and
         factory_properties.get('slave_internal_url')):
