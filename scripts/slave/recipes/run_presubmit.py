@@ -28,13 +28,13 @@ def GetFactoryProperties(api, factory_properties, build_properties):
         '--root', api.checkout_path(),
         '--commit',
         '--verbose', '--verbose',
-        '--author', build_properties['blamelist'][0],
         '--issue', build_properties['issue'],
         '--patchset', build_properties['patchset'],
         '--skip_canned', 'CheckRietveldTryJobExecution',
         '--skip_canned', 'CheckTreeIsOpen',
         '--skip_canned', 'CheckBuildbotPendingBuilds',
         '--skip_canned', 'CheckOwners',
-        '--rietveld_url', build_properties['rietveld']])
+        '--rietveld_url', build_properties['rietveld'],
+        '--rietveld_fetch'])
     ]
   }
