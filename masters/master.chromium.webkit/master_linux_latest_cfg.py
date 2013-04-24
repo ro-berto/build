@@ -32,7 +32,7 @@ S('s9_webkit_rel', branch='trunk', treeStableTimer=60)
 # Linux Rel tests
 #
 B('Linux Tests', 'f_linux_tests_rel', scheduler='s9_webkit_rel')
-F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
+F('f_linux_tests_rel', linux().ChromiumFactory(
     tests=[
         'browser_tests',
         'cc_unittests',
@@ -48,6 +48,7 @@ F('f_linux_tests_rel', linux().ChromiumWebkitLatestFactory(
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'blink_config': 'blink',
     }))
 
 linux_aura_build_targets = [
@@ -75,7 +76,7 @@ linux_aura_build_targets = [
 ]
 
 B('Linux Aura', 'f_linux_aura_rel', scheduler='s9_webkit_rel')
-F('f_linux_aura_rel', linux().ChromiumWebkitLatestFactory(
+F('f_linux_aura_rel', linux().ChromiumFactory(
     tests=[
         'aura',
         # This seems to have many failures
@@ -90,11 +91,12 @@ F('f_linux_aura_rel', linux().ChromiumWebkitLatestFactory(
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': {'GYP_DEFINES': 'use_aura=1', 'GYP_GENERATORS': 'ninja'},
-        'window_manager': 'False'
+        'window_manager': 'False',
+        'blink_config': 'blink',
     }))
 
 B('Linux Perf', 'f_linux_perf_rel', scheduler='s9_webkit_rel')
-F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
+F('f_linux_perf_rel', linux().ChromiumFactory(
     options=[
         '--build-tool=ninja',
         '--compiler=goma',
@@ -118,11 +120,12 @@ F('f_linux_perf_rel', linux().ChromiumWebkitLatestFactory(
         'perf_id': 'chromium-rel-linux-webkit',
         'show_perf_results': True,
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'blink_config': 'blink',
     }))
 
 valgrind_gyp_defines = chromium_factory.ChromiumFactory.MEMORY_TOOLS_GYP_DEFINES
 B('Linux Valgrind', 'f_linux_valgrind_rel', scheduler='s9_webkit_rel')
-F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
+F('f_linux_valgrind_rel', linux().ChromiumFactory(
     options=[
         '--build-tool=ninja',
         '--compiler=goma',
@@ -136,6 +139,7 @@ F('f_linux_valgrind_rel', linux().ChromiumWebkitLatestFactory(
             'GYP_DEFINES' : valgrind_gyp_defines,
             'GYP_GENERATORS': 'ninja',
         },
+        'blink_config': 'blink',
     }))
 
 

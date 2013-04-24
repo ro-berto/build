@@ -38,7 +38,7 @@ S('s1_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 B('WebKit (Content Shell) Linux', 'f_contentshell_linux_rel',
   scheduler='s1_contentshell_webkit_rel')
 
-F('f_contentshell_linux_rel', linux().ChromiumWebkitLatestFactory(
+F('f_contentshell_linux_rel', linux().ChromiumFactory(
     target='Release',
     tests=[
         'webkit',
@@ -63,6 +63,7 @@ F('f_contentshell_linux_rel', linux().ChromiumWebkitLatestFactory(
         'driver_name': 'content_shell',
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
     }))
 
 

@@ -39,7 +39,7 @@ B('WebKit (Content Shell) Android', 'f_contentshell_android_rel',
   scheduler='s4_contentshell_webkit_rel')
 
 F('f_contentshell_android_rel',
-  linux_android().ChromiumWebkitLatestAnnotationFactory(
+  linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
         'additional_drt_flag': '--dump-render-tree',
@@ -56,6 +56,7 @@ F('f_contentshell_android_rel',
         'driver_name': 'content_shell',
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
         }))
 
 def Update(_config, active_master, c):

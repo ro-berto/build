@@ -33,7 +33,7 @@ S('s9_gpu_linux_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 
 B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_gpu_linux_webkit_rel')
-F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
+F('f_gpu_linux_rel', linux().ChromiumFactory(
     target='Release',
     tests=[
         'gl_tests',
@@ -54,6 +54,7 @@ F('f_gpu_linux_rel', linux().ChromiumWebkitLatestFactory(
         'perf_id': 'gpu-webkit-linux-nvidia',
         'show_perf_results': True,
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'blink_config': 'blink',
     }))
 
 ################################################################################
@@ -67,7 +68,7 @@ S('s9_gpu_linux_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg',
   scheduler='s9_gpu_linux_webkit_dbg')
-F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
+F('f_gpu_linux_dbg', linux().ChromiumFactory(
     target='Debug',
     tests=[
         'gl_tests',
@@ -83,6 +84,7 @@ F('f_gpu_linux_dbg', linux().ChromiumWebkitLatestFactory(
     factory_properties={
         'generate_gtest_json': True,
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'blink_config': 'blink',
     }))
 
 

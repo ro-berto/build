@@ -38,7 +38,7 @@ S('s3_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
 B('WebKit (Content Shell) Win', 'f_contentshell_win_rel',
   scheduler='s3_contentshell_webkit_rel')
 
-F('f_contentshell_win_rel', win().ChromiumWebkitLatestFactory(
+F('f_contentshell_win_rel', win().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
     tests=[
@@ -59,6 +59,7 @@ F('f_contentshell_win_rel', win().ChromiumWebkitLatestFactory(
       'driver_name': 'content_shell',
       'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
       'test_results_server': 'test-results.appspot.com',
+      'blink_config': 'blink',
     }))
 
 

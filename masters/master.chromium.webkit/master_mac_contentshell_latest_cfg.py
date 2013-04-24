@@ -39,7 +39,7 @@ B('WebKit (Content Shell) Mac10.6',
   'f_contentshell_mac_rel',
   scheduler='s2_contentshell_webkit_rel')
 
-F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
+F('f_contentshell_mac_rel', mac().ChromiumFactory(
     target='Release',
     tests=[
       'webkit',
@@ -66,6 +66,7 @@ F('f_contentshell_mac_rel', mac().ChromiumWebkitLatestFactory(
           'GYP_DEFINES':'fastbuild=1',
       },
       'test_results_server': 'test-results.appspot.com',
+      'blink_config': 'blink',
     }))
 
 

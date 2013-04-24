@@ -43,10 +43,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url',
                                  config.Master.sourceforge_url)
   CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
-  # $$WK_REV$$ below will be substituted with the revision that triggered the
-  # build in chromium_step.py@GClient.startVC. Use this only with builds
-  # triggered by a webkit poller.
-  CUSTOM_VARS_WEBKIT_LATEST = [('webkit_revision', '$$WK_REV$$')]
   CUSTOM_VARS_NACL_TRUNK_URL = ('nacl_trunk', config.Master.nacl_trunk_url)
   # safe sync urls
   SAFESYNC_URL_CHROMIUM = 'http://chromium-status.appspot.com/lkgr'
@@ -889,17 +885,22 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                       project=None, factory_properties=None, gclient_deps=None,
                       enable_swarm_tests=False):
     factory_properties = (factory_properties or {}).copy()
+
+    # Default to the configuration of Blink appropriate for Chromium patches.
+    factory_properties.setdefault('blink_config', 'chromium')
+    if factory_properties['blink_config'] == 'blink':
+      # This will let builders embed their webkit revision in their output
+      # filename and will let testers look for zip files containing a webkit
+      # revision in their filename. For this to work correctly, the testers
+      # need to be on a Triggerable that's activated by their builder.
+      factory_properties.setdefault('webkit_dir', 'third_party/WebKit/Source')
+
     factory_properties['gclient_env'] = \
         factory_properties.get('gclient_env', {}).copy()
     # Defaults gyp to VS2010.
     if self._target_platform == 'win32':
       factory_properties['gclient_env'].setdefault('GYP_MSVS_VERSION', '2010')
     tests = tests or []
-
-    # This permits simpler WebKit specific try jobs.
-    if slave_type == 'Trybot':
-      self._solutions[0].custom_vars_list.append(
-          ('webkit_revision', '$$WK_TRY_REV$$'))
 
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
@@ -1137,57 +1138,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
-
-  def _InitWebkitLatestFactorySettings(self, factory_properties):
-    self._solutions[0].custom_vars_list.extend(self.CUSTOM_VARS_WEBKIT_LATEST)
-
-    # This will let builders embed their webkit revision in their output
-    # filename and will let testers look for zip files containing a webkit
-    # revision in their filename. For this to work correctly, the testers
-    # need to be on a Triggerable that's activated by their builder.
-    factory_properties.setdefault('webkit_dir', 'third_party/WebKit/Source')
-
-  def ChromiumWebkitLatestAnnotationFactory(self, annotation_script,
-                                            branch='master', target='Release',
-                                            slave_type='AnnotatedBuilderTester',
-                                            clobber=False, compile_timeout=6000,
-                                            project=None,
-                                            factory_properties=None,
-                                            tests=None):
-    factory_properties = factory_properties or {}
-    self._InitWebkitLatestFactorySettings(factory_properties)
-
-    return self.ChromiumAnnotationFactory(
-        annotation_script=annotation_script, branch=branch, target=target,
-        slave_type=slave_type, clobber=clobber, compile_timeout=compile_timeout,
-        project=project, factory_properties=factory_properties, tests=tests)
-
-  def ChromiumWebkitLatestFactory(self, target='Release', clobber=False,
-                                  tests=None, mode=None,
-                                  slave_type='BuilderTester', options=None,
-                                  compile_timeout=1200, build_url=None,
-                                  project=None, factory_properties=None):
-    factory_properties = factory_properties or {}
-    self._InitWebkitLatestFactorySettings(factory_properties)
-
-    return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties)
-
-  def ChromiumOSWebkitLatestFactory(self, target='Release', clobber=False,
-                                    tests=None, mode=None,
-                                    slave_type='BuilderTester', options=None,
-                                    compile_timeout=1200, build_url=None,
-                                    project=None, factory_properties=None):
-    # Make sure the solution is not already there.
-    if 'cros_deps' not in [s.name for s in self._solutions]:
-      self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
-
-    return self.ChromiumWebkitLatestFactory(target, clobber, tests, mode,
-                                            slave_type, options,
-                                            compile_timeout, build_url,
-                                            project, factory_properties)
 
   def ChromiumGYPLatestFactory(self, target='Debug', clobber=False, tests=None,
                                mode=None, slave_type='BuilderTester',

@@ -29,7 +29,7 @@ S('s9_gpu_win_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 B('GPU Win7 (NVIDIA)', 'f_gpu_win_rel',
   scheduler='s9_gpu_win_webkit_rel')
-F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
+F('f_gpu_win_rel', win().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
     tests=[
@@ -41,11 +41,14 @@ F('f_gpu_win_rel', win().ChromiumWebkitLatestFactory(
       'gpu_content_tests',
     ],
     project='all.sln;chromium_gpu_builder',
-    factory_properties={'generate_gtest_json': True,
-                        'start_crash_handler': True,
-                        'perf_id': 'gpu-webkit-win7-nvidia',
-                        'show_perf_results': True,
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+    factory_properties={
+        'generate_gtest_json': True,
+        'start_crash_handler': True,
+        'perf_id': 'gpu-webkit-win7-nvidia',
+        'show_perf_results': True,
+        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+        'blink_config': 'blink',
+    }))
 
 ################################################################################
 ## Debug
@@ -62,7 +65,7 @@ S('s9_gpu_win_webkit_dbg', branch='trunk', treeStableTimer=60)
 #
 B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg',
   scheduler='s9_gpu_win_webkit_dbg')
-F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
+F('f_gpu_win_dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='BuilderTester',
     tests=[
@@ -71,9 +74,12 @@ F('f_gpu_win_dbg', win().ChromiumWebkitLatestFactory(
       'gpu_content_tests',
     ],
     project='all.sln;chromium_gpu_debug_builder',
-    factory_properties={'generate_gtest_json': True,
-                        'start_crash_handler': True,
-                        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
+    factory_properties={
+        'generate_gtest_json': True,
+        'start_crash_handler': True,
+        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+        'blink_config': 'blink',
+    }))
 
 
 def Update(config, active_master, c):

@@ -32,7 +32,7 @@ S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
 # Mac Rel Builder
 #
 B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
-F('f_mac_tests_rel', mac_out().ChromiumWebkitLatestFactory(
+F('f_mac_tests_rel', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
     tests=[
@@ -49,10 +49,11 @@ F('f_mac_tests_rel', mac_out().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
+        'blink_config': 'blink',
     }))
 
 B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
-F('f_mac_perf6_rel', mac_out().ChromiumWebkitLatestFactory(
+F('f_mac_perf6_rel', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
     tests=[
@@ -78,10 +79,11 @@ F('f_mac_perf6_rel', mac_out().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
             'GYP_DEFINES': 'fastbuild=1',
         },
+        'blink_config': 'blink',
     }))
 
 B('Mac10.8 Tests', 'f_mac_tests_rel_108', scheduler='s8_webkit_rel')
-F('f_mac_tests_rel_108', mac_out().ChromiumWebkitLatestFactory(
+F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
     tests=[
@@ -96,6 +98,7 @@ F('f_mac_tests_rel_108', mac_out().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
+        'blink_config': 'blink',
     }))
 
 
@@ -112,9 +115,12 @@ S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
 # Mac Dbg Builder
 #
 B('Mac Builder (dbg)', 'f_mac_dbg', scheduler='s8_webkit_dbg')
-F('f_mac_dbg', mac().ChromiumWebkitLatestFactory(
+F('f_mac_dbg', mac().ChromiumFactory(
     target='Debug',
-    options=['--', '-project', '../webkit/webkit.xcodeproj',]))
+    options=['--', '-project', '../webkit/webkit.xcodeproj',],
+    factory_properties={
+        'blink_config': 'blink',
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)

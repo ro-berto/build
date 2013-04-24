@@ -32,7 +32,7 @@ S('s10_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 B('Linux ChromiumOS Builder', 'f_chromiumos_rel', scheduler='s10_webkit_rel',
     auto_reboot=False)
-F('f_chromiumos_rel', linux().ChromiumOSWebkitLatestFactory(
+F('f_chromiumos_rel', linux().ChromiumOSFactory(
     slave_type='Builder',
     tests=[],
     options=['--compiler=goma',
@@ -63,7 +63,8 @@ F('f_chromiumos_rel', linux().ChromiumOSWebkitLatestFactory(
       'views_unittests',
     ],
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'chromeos=1'}
+        'gclient_env': {'GYP_DEFINES': 'chromeos=1'},
+        'blink_config': 'blink',
     }))
 
 

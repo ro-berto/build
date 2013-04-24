@@ -62,7 +62,7 @@ T('s5_webkit_rel_trigger')
 B('WebKit Mac Builder', 'f_webkit_mac_rel', gatekeeper='compile',
   auto_reboot=False, scheduler='s5_webkit_rel',
   builddir='webkit-mac-latest-rel')
-F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
+F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'test_shell', 'test_shell_tests', 'webkit_unit_tests',
@@ -74,6 +74,7 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
         },
         'layout_test_platform': 'chromium-mac',
+        'blink_config': 'blink',
     }))
 
 #
@@ -81,7 +82,7 @@ F('f_webkit_mac_rel', mac().ChromiumWebkitLatestFactory(
 #
 
 B('WebKit Mac10.6', 'f_webkit_rel_tests_106', scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
+F('f_webkit_rel_tests_106', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
@@ -95,10 +96,11 @@ F('f_webkit_rel_tests_106', mac().ChromiumWebkitLatestFactory(
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
     }))
 
 B('WebKit Mac10.7', 'f_webkit_rel_tests_107', scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
+F('f_webkit_rel_tests_107', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
@@ -112,11 +114,12 @@ F('f_webkit_rel_tests_107', mac().ChromiumWebkitLatestFactory(
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
     }))
 
 B('WebKit Mac10.8', 'f_webkit_rel_tests_108', auto_reboot=False,
   scheduler='s5_webkit_rel_trigger')
-F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
+F('f_webkit_rel_tests_108', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
@@ -130,6 +133,7 @@ F('f_webkit_rel_tests_108', mac().ChromiumWebkitLatestFactory(
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
     }))
 
 ################################################################################
@@ -156,7 +160,7 @@ T('s5_webkit_dbg_trigger')
 #
 B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
   scheduler='s5_webkit_dbg', builddir='webkit-mac-latest-dbg')
-F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
+F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
@@ -168,6 +172,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
         },
         'layout_test_platform': 'chromium-mac',
+        'blink_config': 'blink',
     }))
 
 #
@@ -176,7 +181,7 @@ F('f_webkit_mac_dbg', mac().ChromiumWebkitLatestFactory(
 
 B('WebKit Mac10.6 (dbg)', 'f_webkit_dbg_tests',
   scheduler='s5_webkit_dbg_trigger')
-F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
+F('f_webkit_dbg_tests', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -191,6 +196,7 @@ F('f_webkit_dbg_tests', mac().ChromiumWebkitLatestFactory(
         'generate_gtest_json': True,
         'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
     }))
 
 B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',

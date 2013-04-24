@@ -309,6 +309,7 @@ class GClientFactory(object):
     gclient_transitive = factory_properties.get('gclient_transitive', False)
     primary_repo = factory_properties.get('primary_repo', '')
     gclient_jobs = factory_properties.get('gclient_jobs')
+    blink_config = factory_properties.get('blink_config')
 
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(
@@ -322,7 +323,8 @@ class GClientFactory(object):
         no_gclient_revision=no_gclient_revision,
         gclient_transitive=gclient_transitive,
         primary_repo=primary_repo,
-        gclient_jobs=gclient_jobs)
+        gclient_jobs=gclient_jobs,
+        blink_config=blink_config)
 
     if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect'):
       factory_cmd_obj.AddApplyIssueStep(

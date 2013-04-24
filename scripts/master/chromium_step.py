@@ -9,7 +9,6 @@ import errno
 import json
 import logging
 import os
-import re
 import time
 
 from twisted.python import log
@@ -67,7 +66,9 @@ class GClient(source.Source):
                sudo_for_remove=False, gclient_deps=None, gclient_nohooks=False,
                no_gclient_branch=False, no_gclient_revision=False,
                gclient_transitive=False, primary_repo=None,
-               gclient_jobs=None, **kwargs):
+               gclient_jobs=None, blink_config=None, **kwargs):
+    # TODO: We shouldn't need to hard-code blink-specific info here. We
+    # should figure out how to generalize this to sub-repos somehow.
     source.Source.__init__(self, **kwargs)
     if env:
       self.args['env'] = env.copy()
@@ -84,6 +85,7 @@ class GClient(source.Source):
     self.args['gclient_transitive'] = gclient_transitive
     self.args['primary_repo'] = primary_repo or ''
     self.args['gclient_jobs'] = gclient_jobs
+    self.args['blink_config'] = blink_config
 
   def computeSourceRevision(self, changes):
     """Finds the latest revision number from the changeset that have
@@ -102,24 +104,7 @@ class GClient(source.Source):
   def startVC(self, branch, revision, patch):
     warnings = []
     args = copy.copy(self.args)
-    wk_revision = None
-    # branch == 'trunk' means the change came from the blink poller, and the
-    # revision is a blink revision.
-    if branch == 'trunk':
-      wk_revision = revision
-    try:
-      # parent_wk_revision might be set, but empty.
-      if self.getProperty('parent_wk_revision'):
-        wk_revision = self.getProperty('parent_wk_revision')
-    except KeyError:
-      pass
-    nacl_revision = revision
-    try:
-      # parent_nacl_revision might be set, but empty.
-      if self.getProperty('parent_got_nacl_revision'):
-        nacl_revision = self.getProperty('parent_got_nacl_revision')
-    except KeyError:
-      pass
+
     try:
       # parent_cr_revision might be set, but empty.
       if self.getProperty('parent_cr_revision'):
@@ -129,28 +114,54 @@ class GClient(source.Source):
     self.setProperty('primary_repo', args['primary_repo'], 'Source')
     args['revision'] = revision
     args['branch'] = branch
+
     if args.get('gclient_spec'):
-      args['gclient_spec'] = args['gclient_spec'].replace(
-          '$$WK_REV$$', str(wk_revision or ''))
-      args['gclient_spec'] = args['gclient_spec'].replace(
-          '$$NACL_REV$$', str(nacl_revision or ''))
-      webkit_try_revision = None
-      if patch:
-        match = re.match(r'third_party/WebKit@(\w+)', patch[1])
-        if match:
-          webkit_try_revision = match.group(1)
-      if webkit_try_revision:
-        args['gclient_spec'] = args['gclient_spec'].replace(
-            '$$WK_TRY_REV$$', webkit_try_revision)
-      else:
-        args['gclient_spec'] = args['gclient_spec'].replace(
-            ',"webkit_revision":"$$WK_TRY_REV$$"', '')
+      self.adjustGclientSpecForBlink(branch, revision, args)
+      self.adjustGclientSpecForNaCl(branch, revision, patch, args)
+
     if patch:
       args['patch'] = patch
     elif args.get('patch') is None:
       del args['patch']
+
     cmd = buildstep.LoggedRemoteCommand('gclient', args)
     self.startCommand(cmd, warnings)
+
+  def adjustGclientSpecForBlink(self, branch, revision, args):
+    # If the bot in question is a dedicated bot for Blink changes (either
+    # on a waterfall, or a blink-specific trybot), we want to set a custom
+    # version of Blink, otherwise we leave the gclient spec alone.
+    if args['blink_config'] != 'blink':
+      return
+
+    # branch == 'trunk' means the change came from the blink poller, and the
+    # revision is a blink revision; otherwise, we use '', or HEAD.
+    wk_revision = ''
+    if branch == 'trunk':
+      wk_revision = revision
+
+    try:
+      # parent_wk_revision might be set, but empty.
+      if self.getProperty('parent_wk_revision'):
+        wk_revision = self.getProperty('parent_wk_revision')
+    except KeyError:
+      pass
+
+    # TODO: Make this be something less fragile.
+    args['gclient_spec'] = args['gclient_spec'].replace(
+        '"webkit_trunk"',
+        '"webkit_revision":"%s","webkit_trunk"' % wk_revision)
+
+  def adjustGclientSpecForNaCl(self, branch, revision, patch, args):
+    nacl_revision = revision
+    try:
+      # parent_nacl_revision might be set, but empty.
+      if self.getProperty('parent_got_nacl_revision'):
+        nacl_revision = self.getProperty('parent_got_nacl_revision')
+    except KeyError:
+      pass
+    args['gclient_spec'] = args['gclient_spec'].replace(
+        '$$NACL_REV$$', str(nacl_revision or ''))
 
   def describe(self, done=False):
     """Tries to append the revision number to the description."""

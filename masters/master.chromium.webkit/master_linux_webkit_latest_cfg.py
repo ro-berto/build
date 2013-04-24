@@ -35,7 +35,7 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 B('WebKit Linux', 'f_webkit_linux_rel', gatekeeper='compile',
   scheduler='s6_webkit_rel')
-F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
+F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
         'test_shell',
         'webkit',
@@ -56,6 +56,7 @@ F('f_webkit_linux_rel', linux().ChromiumWebkitLatestFactory(
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
     }))
 
 B('WebKit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
@@ -65,7 +66,7 @@ asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
 
 B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='s6_webkit_rel',
   auto_reboot=False)
-F('f_webkit_linux_rel_asan', linux().ChromiumWebkitLatestFactory(
+F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
     tests=['webkit'],
     options=[
         '--build-tool=ninja',
@@ -79,7 +80,8 @@ F('f_webkit_linux_rel_asan', linux().ChromiumWebkitLatestFactory(
         ],
         'gs_bucket': 'gs://webkit-asan',
         'gclient_env': {'GYP_DEFINES': asan_gyp, 'GYP_GENERATORS': 'ninja'},
-        'time_out_ms': '18000'
+        'time_out_ms': '18000',
+        'blink_config': 'blink',
     }))
 
 
@@ -98,7 +100,7 @@ S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
 
 B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='s6_webkit_dbg',
   auto_reboot=False)
-F('f_webkit_dbg_tests', linux().ChromiumWebkitLatestFactory(
+F('f_webkit_dbg_tests', linux().ChromiumFactory(
     target='Debug',
     tests=[
         'test_shell',
@@ -120,6 +122,7 @@ F('f_webkit_dbg_tests', linux().ChromiumWebkitLatestFactory(
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'blink_config': 'blink',
     }))
 
 def Update(_config, active_master, c):

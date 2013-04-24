@@ -45,18 +45,19 @@ android_rel_archive = master_config.GetGSUtilUrl(
 # Android Rel Builder
 #
 B('Android Builder', 'f_android_rel', scheduler='s5_android_webkit')
-F('f_android_rel', linux_android().ChromiumWebkitLatestAnnotationFactory(
+F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
         'android_bot_id': 'webkit-latest-builder-rel',
         'build_url': android_rel_archive,
         'trigger': 'android_rel_trigger',
+        'blink_config': 'blink',
         }))
 
 B('WebKit Android (GalaxyNexus)', 'f_webkit_android_tests', None,
   'android_rel_trigger')
 F('f_webkit_android_tests',
-  linux_android().ChromiumWebkitLatestAnnotationFactory(
+  linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
         'android_bot_id': 'webkit-latest-webkit-tests-rel',
@@ -64,6 +65,7 @@ F('f_webkit_android_tests',
         'build_url': android_rel_archive,
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
         }))
 
 def Update(_config, active_master, c):

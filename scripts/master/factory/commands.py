@@ -753,7 +753,7 @@ class FactoryCommands(object):
                     gclient_nohooks=False, no_gclient_branch=False,
                     no_gclient_revision=False,
                     gclient_transitive=False, primary_repo=None,
-                    gclient_jobs=None):
+                    gclient_jobs=None, blink_config=None):
     """Adds a step to the factory to update the workspace."""
     env = env or {}
     env['DEPOT_TOOLS_UPDATE'] = '0'
@@ -778,7 +778,8 @@ class FactoryCommands(object):
         no_gclient_branch=no_gclient_branch,
         no_gclient_revision=no_gclient_revision,
         gclient_transitive=gclient_transitive,
-        primary_repo=primary_repo)
+        primary_repo=primary_repo,
+        blink_config=blink_config)
 
   def AddApplyIssueStep(self, timeout, server):
     """Adds a step to the factory to apply an issues from Rietveld.

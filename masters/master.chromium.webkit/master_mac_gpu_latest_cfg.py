@@ -31,7 +31,7 @@ S('s9_gpu_mac_webkit_rel', branch='trunk', treeStableTimer=60)
 # GPU Mac Release
 #
 B('GPU Mac10.7', 'f_gpu_mac_rel', scheduler='s9_gpu_mac_webkit_rel')
-F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
+F('f_gpu_mac_rel', mac().ChromiumFactory(
     target='Release',
     options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_builder'],
@@ -51,6 +51,7 @@ F('f_gpu_mac_rel', mac().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
+        'blink_config': 'blink',
     }))
 
 ################################################################################
@@ -66,7 +67,7 @@ S('s9_gpu_mac_webkit_dbg', branch='trunk', treeStableTimer=60)
 # GPU Mac Debug
 #
 B('GPU Mac10.7 (dbg)', 'f_gpu_mac_dbg', scheduler='s9_gpu_mac_webkit_dbg')
-F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
+F('f_gpu_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_debug_builder'],
@@ -81,6 +82,7 @@ F('f_gpu_mac_dbg', mac().ChromiumWebkitLatestFactory(
             'GYP_GENERATORS':'ninja',
             'GYP_DEFINES':'fastbuild=1',
         },
+        'blink_config': 'blink',
     }))
 
 def Update(config, active_master, c):
