@@ -14,7 +14,7 @@ from common import chromium_utils
 import config_bootstrap
 
 
-def ImportMasterConfigs(master_name=None):
+def ImportMasterConfigs(master_name=None, include_internal=True):
   """Imports master configs.
 
   Normally a slave can use chromium_utils.GetActiveMaster() to find
@@ -25,7 +25,7 @@ def ImportMasterConfigs(master_name=None):
   load them all.  In either case, masters are assigned as attributes
   to the config.Master object.
   """
-  for master in chromium_utils.ListMasters():
+  for master in chromium_utils.ListMasters(include_internal=include_internal):
     path = os.path.join(master, 'master_site_config.py')
     if os.path.exists(path):
       local_vars = {}
