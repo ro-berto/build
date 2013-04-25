@@ -316,6 +316,8 @@ class FactoryCommands(object):
     self._cleanup_temp_tool = self.PathJoin(self._script_dir, 'cleanup_temp.py')
     self._resource_sizes_tool = self.PathJoin(self._script_dir,
                                               'resource_sizes.py')
+    self._gclient_safe_revert_tool = self.PathJoin(self._script_dir,
+                                                   'gclient_safe_revert.py')
 
     self._get_build_for_chromebot_tool = self.PathJoin(
         self._script_dir, 'get_build_for_chromebot.py')
@@ -727,6 +729,19 @@ class FactoryCommands(object):
                           workdir='',  # Doesn't really matter where we are.
                           alwaysRun=True,  # Run this even on update failures
                           command=['python', self._cleanup_temp_tool])
+
+  def AddGClientRevertStep(self):
+    """Adds a step to revert the checkout to an unmodified state."""
+
+    command = [self._python, self._gclient_safe_revert_tool, '.',
+               chromium_utils.GetGClientCommand(self._target_platform)]
+
+    self._factory.addStep(shell.ShellCommand,
+                          name='gclient_revert',
+                          description='gclient_revert',
+                          timeout=60*5,
+                          workdir=self.working_dir,
+                          command=command)
 
   def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):
     """Adds a step to the factory to update the script folder."""

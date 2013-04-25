@@ -60,7 +60,7 @@ exclusions = {
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
-                   'archive_build', 'start_crash_handler']
+                   'archive_build', 'start_crash_handler', 'gclient_revert']
 
 close_chromiumos_categories_steps = {
   'closer': [

@@ -84,7 +84,7 @@ exclusions = {
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
-                   'archive_build', 'start_crash_handler']
+                   'archive_build', 'start_crash_handler', 'gclient_revert']
 
 def Update(config, active_master, c):
   c['status'].append(gatekeeper.GateKeeper(

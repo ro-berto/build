@@ -188,6 +188,10 @@ class GClientFactory(object):
     if (self._target_platform == 'win32' and
         not factory_properties.get('no_kill')):
       factory_cmd_obj.AddTaskkillStep()
+
+    # Revert the tree to a clean (unmodified) state.
+    factory_cmd_obj.AddGClientRevertStep()
+
     env = factory_properties.get('gclient_env', {})
     # Allow gclient_deps to also come from the factory_properties.
     if gclient_deps == None:

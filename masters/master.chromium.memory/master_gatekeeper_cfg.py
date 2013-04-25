@@ -47,7 +47,7 @@ categories_steps = {
 exclusions = {
 }
 
-forgiving_steps = ['update_scripts', 'update']
+forgiving_steps = ['update_scripts', 'update', 'gclient_revert']
 
 def Update(config, active_master, c):
   c['status'].append(gatekeeper.GateKeeper(
