@@ -8,11 +8,11 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts for
 details on the presubmit API built into gcl.
 """
 
+import contextlib
 import sys
 
-def CommonChecks(input_api, output_api):
-  output = []
 
+def CommonChecks(input_api, output_api):
   def join(*args):
     return input_api.os_path.join(input_api.PresubmitLocalPath(), *args)
 
@@ -23,7 +23,7 @@ def CommonChecks(input_api, output_api):
       r'.+_bb7\.py$',
       r'.*masters/.*/templates/.*\.html$',
   ]
-
+  tests = []
   sys_path_backup = sys.path
   try:
     sys.path = [
@@ -51,7 +51,7 @@ def CommonChecks(input_api, output_api):
       'C0321',  # More than one statement on a single line
       'W0613',  # Unused argument
     ]
-    output.extend(input_api.canned_checks.RunPylint(
+    tests.extend(input_api.canned_checks.GetPylint(
         input_api,
         output_api,
         black_list=black_list,
@@ -59,43 +59,43 @@ def CommonChecks(input_api, output_api):
   finally:
     sys.path = sys_path_backup
 
-  if input_api.is_committing:
-    output.extend(input_api.canned_checks.PanProjectChecks(
-      input_api, output_api, excluded_paths=black_list))
 
-  output.extend(input_api.canned_checks.RunUnitTestsInDirectory(
-      input_api, output_api, 'test', [r'slaves_cfg_test\.py$']))
-
-  return output
-
-
-def RunTests(input_api, output_api):
-  out = []
   whitelist = [r'.+_test\.py$']
-  # slaves_cfg_test.py already runs in CommonChecks.
-  blacklist = [r'slaves_cfg_test\.py$']
-  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
-      input_api, output_api, 'test', whitelist, blacklist))
-  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
+      input_api, output_api, 'test', whitelist=whitelist))
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'master', 'unittests'),
       whitelist))
-  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'slave', 'unittests'),
       whitelist))
-  out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
       input_api.os_path.join('scripts', 'common', 'unittests'),
       whitelist))
   internal_path = input_api.os_path.join('..', 'build_internal', 'test')
   if input_api.os_path.isfile(internal_path):
-    out.extend(input_api.canned_checks.RunUnitTestsInDirectory(
+    tests.extend(input_api.canned_checks.RunUnitTestsInDirectory(
         input_api, output_api, internal_path, whitelist))
-  return out
+
+  sys.path.extend([join('scripts'), join('test')])
+  from common import master_cfg_utils
+  import masters_util
+  # Run the tests.
+  temp_passwds = [join('site_config', '.bot_password')]
+  temp_passwds.extend(input_api.os_path.join(path, '.apply_issue_password')
+      for _, path in master_cfg_utils.GetMasters())
+  with contextlib.nested(*map(masters_util.temporary_password, temp_passwds)):
+    output = input_api.RunTests(tests)
+  output.extend(input_api.canned_checks.PanProjectChecks(
+    input_api, output_api, excluded_paths=black_list))
+
+  return output
 
 
 def BuildInternalCheck(output, input_api, output_api):
@@ -116,6 +116,5 @@ def CheckChangeOnUpload(input_api, output_api):
 def CheckChangeOnCommit(input_api, output_api):
   output = []
   output.extend(CommonChecks(input_api, output_api))
-  output.extend(RunTests(input_api, output_api))
   BuildInternalCheck(output, input_api, output_api)
   return output
