@@ -17,7 +17,7 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win(): return chromium_factory.ChromiumFactory('src/out', 'win32')
 
 defaults['category'] = '4webkit win latest'
 
@@ -54,10 +54,13 @@ B('WebKit Win Builder', 'f_webkit_win_rel', gatekeeper='compile',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;webkit_builder_win',
+    options=['--build-tool=ninja', 'webkit_builder_win'],
     factory_properties={
         'trigger': 's4_webkit_rel_trigger',
         'blink_config': 'blink',
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
     }))
 
 #
@@ -103,10 +106,13 @@ B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='s4_webkit_dbg',
 F('f_webkit_win_dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    project='all.sln;webkit_builder_win',
+    options=['--build-tool=ninja', 'webkit_builder_win'],
     factory_properties={
         'trigger': 's4_webkit_dbg_trigger',
         'blink_config': 'blink',
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
     }))
 
 #
