@@ -358,8 +358,8 @@ def FetchBuildsMain(master, builder, builds):
   except urllib2.URLError:
     VerbosePrint('URLException while fetching %s' % url)
 
-def FetchLKGR():
-  lkgr_url = '%s/lkgr' % REVISIONS_URL
+def FetchLKGR(revisions_url):
+  lkgr_url = '%s/lkgr' % revisions_url
   try:
     # pylint: disable=E1121
     url_fh = urllib2.urlopen(lkgr_url, None, 60)
@@ -372,10 +372,10 @@ def FetchLKGR():
   finally:
     url_fh.close()
 
-def FetchBuildData():
+def FetchBuildData(lkgr_steps):
   builds = dict((master, {}) for master in MASTER_TO_BASE_URL)
   fetch_threads = []
-  for master, builders in LKGR_STEPS.iteritems():
+  for master, builders in lkgr_steps.iteritems():
     for builder in builders:
       th = threading.Thread(target=FetchBuildsMain,
                             name='Fetch %s' % builder,
@@ -680,8 +680,8 @@ def FindLKGRCandidate(build_history, lkgr_steps):
 
   return -1
 
-def PostLKGR(lkgr, password_file, dry):
-  url = '%s/revisions' % REVISIONS_URL
+def PostLKGR(revisions_url, lkgr, password_file, dry):
+  url = '%s/revisions' % revisions_url
   VerbosePrint('Posting to %s...' % url)
   try:
     password_fh = open(password_file, 'r')
@@ -832,12 +832,12 @@ def main():
   VERBOSE = not options.quiet
 
   if options.manual:
-    PostLKGR(options.manual, options.pwfile, options.dry)
+    PostLKGR(REVISIONS_URL, options.manual, options.pwfile, options.dry)
     for master in options.notify:
       NotifyMaster(master, options.manual, options.dry)
     return 0
 
-  lkgr = FetchLKGR()
+  lkgr = FetchLKGR(REVISIONS_URL)
   if lkgr is None:
     SendMail(sender, recipients, subject_base + 'Failed to fetch LKGR',
              '\n'.join(run_log))
@@ -846,7 +846,7 @@ def main():
   if options.build_data:
     builds = ReadBuildData(options.build_data)
   else:
-    builds = FetchBuildData()
+    builds = FetchBuildData(LKGR_STEPS)
 
   if options.dump_file:
     try:
@@ -883,7 +883,7 @@ def main():
       VerbosePrint('%s Waterfall URL:' % master)
       VerbosePrint(waterfall)
     if options.post:
-      PostLKGR(candidate, options.pwfile, options.dry)
+      PostLKGR(REVISIONS_URL, candidate, options.pwfile, options.dry)
     for master in options.notify:
       NotifyMaster(master, candidate, options.dry)
   else:
