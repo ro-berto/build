@@ -70,7 +70,8 @@ import urllib2
 VERBOSE = True
 EMAIL_ENABLED = False
 
-REVISIONS_URL = 'https://chromium-status.appspot.com'
+BLINK_REVISIONS_URL = 'https://blink-status.appspot.com'
+CHROMIUM_REVISIONS_URL = 'https://chromium-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
 MASTER_TO_BASE_URL = {
   'chromium': 'http://build.chromium.org/p/chromium',
@@ -80,11 +81,11 @@ MASTER_TO_BASE_URL = {
   'chromium.win': 'http://build.chromium.org/p/chromium.win',
 }
 
-# LKGR_STEPS controls which steps must pass for a revision to be marked
+# *_LKGR_STEPS controls which steps must pass for a revision to be marked
 # as LKGR.
 #-------------------------------------------------------------------------------
 
-LKGR_STEPS = {
+CHROMIUM_LKGR_STEPS = {
   'chromium.win': {
     'Win Builder (dbg)': [
       'compile',
@@ -831,22 +832,26 @@ def main():
   global VERBOSE
   VERBOSE = not options.quiet
 
+  lkgr_type = 'Chromium'
+  revisions_url = CHROMIUM_REVISIONS_URL
+  lkgr_steps = CHROMIUM_LKGR_STEPS
+
   if options.manual:
-    PostLKGR(REVISIONS_URL, options.manual, options.pwfile, options.dry)
+    PostLKGR(revisions_url, options.manual, options.pwfile, options.dry)
     for master in options.notify:
       NotifyMaster(master, options.manual, options.dry)
     return 0
 
-  lkgr = FetchLKGR(REVISIONS_URL)
+  lkgr = FetchLKGR(revisions_url)
   if lkgr is None:
-    SendMail(sender, recipients, subject_base + 'Failed to fetch LKGR',
-             '\n'.join(run_log))
+    SendMail(sender, recipients, subject_base + 'Failed to fetch %s LKGR' %
+             lkgr_type, '\n'.join(run_log))
     return 1
 
   if options.build_data:
     builds = ReadBuildData(options.build_data)
   else:
-    builds = FetchBuildData(LKGR_STEPS)
+    builds = FetchBuildData(lkgr_steps)
 
   if options.dump_file:
     try:
@@ -856,8 +861,8 @@ def main():
       sys.stderr.write('Could not dump to %s:\n%s\n' % (
           options.dump_file, repr(e)))
 
-  build_history = CollateRevisionHistory(builds, LKGR_STEPS)
-  per_builder_history = FillResultBlanksBetweenBuilds(build_history, LKGR_STEPS)
+  build_history = CollateRevisionHistory(builds, lkgr_steps)
+  per_builder_history = FillResultBlanksBetweenBuilds(build_history, lkgr_steps)
 
   if options.html:
     with open(options.html, 'w') as fh:
@@ -867,41 +872,41 @@ def main():
     print GenerateTextStatus(build_history, per_builder_history)
 
   latest_rev = int(build_history[0][0])
-  candidate = FindLKGRCandidate(build_history, LKGR_STEPS)
+  candidate = FindLKGRCandidate(build_history, lkgr_steps)
 
   VerbosePrint('-' * 80)
-  VerbosePrint('LKGR=%d' % lkgr)
+  VerbosePrint('Current %s LKGR is %d' % (lkgr_type, lkgr))
   VerbosePrint('-' * 80)
   # Fix for git
   if candidate != -1 and int(candidate) > lkgr:
-    VerbosePrint('Revision %s is new LKGR' % candidate)
-    for master in LKGR_STEPS.keys():
+    VerbosePrint('Candidate %s LKGR is %s' % (lkgr_type, candidate))
+    for master in lkgr_steps.keys():
       formdata = ['builder=%s' % urllib2.quote(x)
-                  for x in LKGR_STEPS[master].keys()]
+                  for x in lkgr_steps[master].keys()]
       formdata = '&'.join(formdata)
       waterfall = '%s?%s' % (MASTER_TO_BASE_URL[master] + '/console', formdata)
       VerbosePrint('%s Waterfall URL:' % master)
       VerbosePrint(waterfall)
     if options.post:
-      PostLKGR(REVISIONS_URL, candidate, options.pwfile, options.dry)
+      PostLKGR(revisions_url, candidate, options.pwfile, options.dry)
     for master in options.notify:
       NotifyMaster(master, candidate, options.dry)
   else:
-    VerbosePrint('No newer LKGR found than current %s' % lkgr)
+    VerbosePrint('No newer %s LKGR found than current %s' % (lkgr_type, lkgr))
 
     rev_behind = latest_rev - lkgr
-    VerbosePrint('LKGR is behind by %s revisions' % rev_behind)
+    VerbosePrint('%s LKGR is behind by %s revisions' % (lkgr_type, rev_behind))
     if rev_behind > options.allowed_gap:
       SendMail(sender, recipients,
-               '%sLKGR (%s) > %s revisions behind' %
-               (subject_base, lkgr, options.allowed_gap),
+               '%s%s LKGR (%s) > %s revisions behind' %
+               (subject_base, lkgr_type, lkgr, options.allowed_gap),
                '\n'.join(run_log))
       return 1
 
     if not CheckLKGRLag(GetLKGRAge(lkgr), rev_behind, options.allowed_lag,
                         options.allowed_gap):
-      SendMail(sender, recipients, '%sLKGR (%s) exceeds lag threshold' %
-               (subject_base, lkgr), '\n'.join(run_log))
+      SendMail(sender, recipients, '%s%s LKGR (%s) exceeds lag threshold' %
+               (subject_base, lkgr_type, lkgr), '\n'.join(run_log))
       return 1
 
   VerbosePrint('-' * 80)
