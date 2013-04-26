@@ -33,8 +33,7 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 #
 # Linux Rel Builder/Tester
 #
-B('WebKit Linux', 'f_webkit_linux_rel', gatekeeper='compile',
-  scheduler='s6_webkit_rel')
+B('WebKit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
         'test_shell',

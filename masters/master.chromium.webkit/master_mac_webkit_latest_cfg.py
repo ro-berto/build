@@ -59,7 +59,7 @@ T('s5_webkit_rel_trigger')
 #
 # Mac Rel Builder
 #
-B('WebKit Mac Builder', 'f_webkit_mac_rel', gatekeeper='compile',
+B('WebKit Mac Builder', 'f_webkit_mac_rel',
   auto_reboot=False, scheduler='s5_webkit_rel',
   builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumFactory(

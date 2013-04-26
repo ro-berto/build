@@ -49,7 +49,7 @@ T('s4_webkit_rel_trigger')
 #
 # Win Rel Builder
 #
-B('WebKit Win Builder', 'f_webkit_win_rel', gatekeeper='compile',
+B('WebKit Win Builder', 'f_webkit_win_rel',
   scheduler='s4_webkit_rel', builddir='webkit-win-latest-rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
