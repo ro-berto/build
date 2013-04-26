@@ -772,6 +772,9 @@ def CheckLKGRLag(lag_age, rev_gap, allowed_lag_hrs, allowed_rev_gap):
   # the lag under control.
 
   lag_hrs = (lag_age.days * 24) + (lag_age.seconds / 3600)
+  if not lag_hrs:
+    return True
+
   rev_rate = rev_gap / lag_hrs
 
   # This causes the allowed_lag to back off proportionally to how far LKGR is
@@ -845,12 +848,21 @@ def main():
   opt_parser.add_option('-b', '--blink', action='store_true',
                         help='Find the Blink LKGR rather than the Chromium '
                              'one.')
+  opt_parser.add_option('--error-recipients',
+                        default='chrome-troopers+alerts@google.com',
+                        help='Send email to the specified recipients '
+                             'when errors occur (default %default).')
+  opt_parser.add_option('--update-recipients',
+                        default=None,
+                        help='Send email to the specified recipients '
+                             'when updating LKGR (default %default).')
   options, args = opt_parser.parse_args()
 
   # Error notification setup.
   fqdn = socket.getfqdn()
   sender = '%s@%s' % (os.environ.get('LOGNAME', 'unknown'), fqdn)
-  recipients = 'chrome-troopers+alerts@google.com'
+  error_recipients = options.error_recipients
+  update_recipients = options.update_recipients
   subject_base = os.path.basename(__file__) + ': '
 
   global EMAIL_ENABLED
@@ -858,7 +870,7 @@ def main():
 
   if args:
     opt_parser.print_usage()
-    SendMail(sender, recipients, subject_base + 'Usage error',
+    SendMail(sender, error_recipients, subject_base + 'Usage error',
              ' '.join(sys.argv) + '\n' + opt_parser.get_usage())
     return 1
 
@@ -878,12 +890,17 @@ def main():
     PostLKGR(revisions_url, options.manual, options.pwfile, options.dry)
     for master in options.notify:
       NotifyMaster(master, options.manual, options.dry)
+      if update_recipients:
+        subject = 'Updated %s LKGR to %s (manually)' % (
+            lkgr_type, options.manual)
+        message = subject + '.\n'
+        SendMail(sender, update_recipients, subject, message)
     return 0
 
   lkgr = FetchLKGR(revisions_url)
   if lkgr is None:
-    SendMail(sender, recipients, subject_base + 'Failed to fetch %s LKGR' %
-             lkgr_type, '\n'.join(run_log))
+    SendMail(sender, error_recipients, subject_base +
+             'Failed to fetch %s LKGR' % lkgr_type, '\n'.join(run_log))
     return 1
 
   if options.build_data:
@@ -927,6 +944,11 @@ def main():
       VerbosePrint(waterfall)
     if options.post:
       PostLKGR(revisions_url, candidate, options.pwfile, options.dry)
+      if update_recipients:
+        subject = 'Updated %s LKGR to %s' % (lkgr_type, candidate)
+        message = subject + '.\n'
+        SendMail(sender, update_recipients, subject, message)
+
     for master in options.notify:
       NotifyMaster(master, candidate, options.dry)
   else:
@@ -935,7 +957,7 @@ def main():
     rev_behind = latest_rev - lkgr
     VerbosePrint('%s LKGR is behind by %s revisions' % (lkgr_type, rev_behind))
     if rev_behind > options.allowed_gap:
-      SendMail(sender, recipients,
+      SendMail(sender, error_recipients,
                '%s%s LKGR (%s) > %s revisions behind' %
                (subject_base, lkgr_type, lkgr, options.allowed_gap),
                '\n'.join(run_log))
@@ -943,7 +965,8 @@ def main():
 
     if not CheckLKGRLag(GetLKGRAge(lkgr), rev_behind, options.allowed_lag,
                         options.allowed_gap):
-      SendMail(sender, recipients, '%s%s LKGR (%s) exceeds lag threshold' %
+      SendMail(sender, error_recipients,
+               '%s%s LKGR (%s) exceeds lag threshold' %
                (subject_base, lkgr_type, lkgr), '\n'.join(run_log))
       return 1
 
