@@ -15,9 +15,9 @@ T = helper.Triggerable
 
 
 def mac():
-  return chromium_factory.ChromiumFactory('src/build', 'darwin')
+  return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def mac_tester():
-  return chromium_factory.ChromiumFactory('src/build', 'darwin',
+  return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin',
                                           nohooks_on_update=True)
 
 S('mac_rel_scheduler', branch='src', treeStableTimer=60)

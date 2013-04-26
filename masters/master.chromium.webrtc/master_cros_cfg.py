@@ -15,7 +15,7 @@ S = helper.Scheduler
 
 
 def linux():
-  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 def create_cbuildbot_factory(target, gs_path, short_name):
