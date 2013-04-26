@@ -79,6 +79,7 @@ MASTER_TO_BASE_URL = {
   'chromium.linux': 'http://build.chromium.org/p/chromium.linux',
   'chromium.mac': 'http://build.chromium.org/p/chromium.mac',
   'chromium.win': 'http://build.chromium.org/p/chromium.win',
+  'chromium.webkit': 'http://build.chromium.org/p/chromium.webkit',
 }
 
 # *_LKGR_STEPS controls which steps must pass for a revision to be marked
@@ -292,6 +293,35 @@ CHROMIUM_LKGR_STEPS = {
       'compile',
     ],
   },  # chromium.chrome
+}
+
+# For blink, for the moment, we only want to test bots that also exist
+# in upstream variants. This helps us ensure that we won't pull a Chromium
+# rev that is broken. The newest Chromium rev that isn't broken should also
+# likely contain the newest revision of Blink that has been rolled downstream.
+# This is still likely behind Blink HEAD by quite a bit, but at least is
+# better than the Chromium LKGR.
+
+BLINK_LKGR_STEPS = {
+  'chromium.linux': {
+    'Linux Builder (dbg)': ['compile'],
+    'Linux Builder (dbg)(32)': ['compile'],
+    'Linux Aura': ['compile'],
+    'Android Builder (dbg)': ['slave_steps'],
+    'Android Builder': ['slave_steps'],
+  },
+  'chromium.mac': {
+    'Mac Builder (dbg)': ['compile'],
+    },
+  'chromium.win': {
+    'Win Builder (dbg)': ['compile'],
+    'Win Aura Builder': ['compile'],
+  },
+  'chromium.webkit': {
+    'WebKit Win Builder (deps)': ['compile'],
+    'WebKit Mac Builder (deps)': ['compile'],
+    'WebKit Linux (deps)': ['compile'],
+  },
 }
 
 #-------------------------------------------------------------------------------
@@ -812,6 +842,9 @@ def main():
   opt_parser.add_option('--text', action='store_true',
                         help='Output details in plain text format '
                              '(for troubleshooting LKGR staleness issues).')
+  opt_parser.add_option('-b', '--blink', action='store_true',
+                        help='Find the Blink LKGR rather than the Chromium '
+                             'one.')
   options, args = opt_parser.parse_args()
 
   # Error notification setup.
@@ -832,9 +865,14 @@ def main():
   global VERBOSE
   VERBOSE = not options.quiet
 
-  lkgr_type = 'Chromium'
-  revisions_url = CHROMIUM_REVISIONS_URL
-  lkgr_steps = CHROMIUM_LKGR_STEPS
+  if options.blink:
+    lkgr_type = 'Blink'
+    revisions_url = BLINK_REVISIONS_URL
+    lkgr_steps = BLINK_LKGR_STEPS
+  else:
+    lkgr_type = 'Chromium'
+    revisions_url = CHROMIUM_REVISIONS_URL
+    lkgr_steps = CHROMIUM_LKGR_STEPS
 
   if options.manual:
     PostLKGR(revisions_url, options.manual, options.pwfile, options.dry)
