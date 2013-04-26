@@ -16,7 +16,7 @@ P = helper.Periodic
 
 
 def linux():
-  return chromium_factory.ChromiumFactory('src/build', 'linux2')
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 # Use an unused slave_type string to avoid adding the normal compile step in
 # chromium_factory.ChromiumFactory.

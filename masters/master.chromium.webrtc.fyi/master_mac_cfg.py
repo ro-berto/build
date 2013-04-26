@@ -15,7 +15,7 @@ P = helper.Periodic
 
 
 def mac():
-  return chromium_factory.ChromiumFactory('src/build', 'darwin')
+  return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 
 S('mac_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('mac_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
