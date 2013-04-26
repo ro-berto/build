@@ -65,8 +65,7 @@ B('WebKit Mac Builder', 'f_webkit_mac_rel',
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'test_shell', 'test_shell_tests', 'webkit_unit_tests',
-        'DumpRenderTree'],
+        'test_shell', 'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={
         'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
@@ -86,7 +85,6 @@ F('f_webkit_rel_tests_106', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'test_shell',
       'webkit',
       'webkit_lint',
       'webkit_unit',
@@ -104,7 +102,6 @@ F('f_webkit_rel_tests_107', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'test_shell',
       'webkit',
       'webkit_lint',
       'webkit_unit',
@@ -123,7 +120,6 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'test_shell',
       'webkit',
       'webkit_lint',
       'webkit_unit',
@@ -164,8 +160,7 @@ F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'test_shell', 'test_shell_tests', 'webkit_unit_tests',
-        'DumpRenderTree'],
+        'test_shell', 'webkit_unit_tests', 'DumpRenderTree'],
     factory_properties={
         'trigger': 's5_webkit_dbg_trigger',
         'gclient_env': {
@@ -186,7 +181,6 @@ F('f_webkit_dbg_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=dbg_archive,
     tests=[
-      'test_shell',
       'webkit',
       'webkit_lint',
       'webkit_unit',

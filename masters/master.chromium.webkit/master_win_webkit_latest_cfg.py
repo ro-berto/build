@@ -22,7 +22,6 @@ def win(): return chromium_factory.ChromiumFactory('src/out', 'win32')
 defaults['category'] = '4webkit win latest'
 
 webkit_tests = [
-  'test_shell',
   'webkit',
   'webkit_lint',
   'webkit_unit',

@@ -59,7 +59,6 @@ F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
-      'test_shell',
       'webkit',
       'webkit_lint',
       'webkit_unit',

@@ -123,25 +123,5 @@ F('f_linux_perf_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-valgrind_gyp_defines = chromium_factory.ChromiumFactory.MEMORY_TOOLS_GYP_DEFINES
-B('Linux Valgrind', 'f_linux_valgrind_rel', scheduler='s9_webkit_rel')
-F('f_linux_valgrind_rel', linux().ChromiumFactory(
-    options=[
-        '--build-tool=ninja',
-        '--compiler=goma',
-        '--',
-        'test_shell',
-        'test_shell_tests'],
-    tests=['valgrind_test_shell'],
-    factory_properties={
-        'needs_valgrind': True,
-        'gclient_env': {
-            'GYP_DEFINES' : valgrind_gyp_defines,
-            'GYP_GENERATORS': 'ninja',
-        },
-        'blink_config': 'blink',
-    }))
-
-
 def Update(config, active_master, c):
   return helper.Update(c)

@@ -36,7 +36,6 @@ S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
 B('WebKit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
-        'test_shell',
         'webkit',
         'webkit_lint',
         'webkit_unit',
@@ -47,7 +46,6 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         '--',
         'DumpRenderTree',
         'test_shell',
-        'test_shell_tests',
         'webkit_unit_tests',
     ],
     factory_properties={
@@ -102,7 +100,6 @@ B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='s6_webkit_dbg',
 F('f_webkit_dbg_tests', linux().ChromiumFactory(
     target='Debug',
     tests=[
-        'test_shell',
         'webkit',
         'webkit_lint',
         'webkit_unit',
@@ -112,7 +109,6 @@ F('f_webkit_dbg_tests', linux().ChromiumFactory(
         '--compiler=goma',
         '--',
         'test_shell',
-        'test_shell_tests',
         'webkit_unit_tests',
         'DumpRenderTree',
     ],

@@ -44,7 +44,6 @@ categories_steps = {
     'start_crash_handler',
     'sync_unit_tests',
     'sync_integration_tests',
-    'test_shell_tests',
     'unit_tests',
     #'webkit_tests',
    ],

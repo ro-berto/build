@@ -37,7 +37,6 @@ categories_steps = {
     'printing_unittests',
     'remoting_unittests',
     'sql_unittests',
-    'test_shell_tests',
     'unit_tests',
    ],
   'compile': ['compile'],

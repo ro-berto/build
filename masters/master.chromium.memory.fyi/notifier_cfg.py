@@ -59,7 +59,6 @@ categories_steps = {
     'heapcheck test: sql',
     'heapcheck test: sync',
     'heapcheck test: sync_unit_tests',
-    'heapcheck test: test_shell',
     'heapcheck test: ui_unittests',
     'heapcheck test: unit',
     'heapcheck test: views',

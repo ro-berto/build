@@ -211,7 +211,6 @@ processes = [
     'sync_integration_tests.exe',
     'tab_switching_test.exe',
     'test_shell.exe',
-    'test_shell_tests.exe',
     'tld_cleanup.exe',
     'unit_tests.exe',
     'v8_shell.exe',

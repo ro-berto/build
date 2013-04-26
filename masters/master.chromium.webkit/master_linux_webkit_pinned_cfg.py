@@ -37,7 +37,6 @@ S('s3_chromium_rel', branch='src', treeStableTimer=60)
 B('WebKit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
-        'test_shell',
         'webkit',
         'webkit_lint',
         'webkit_unit',
@@ -48,7 +47,6 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         '--',
         'DumpRenderTree',
         'test_shell',
-        'test_shell_tests',
         'webkit_unit_tests',
     ],
     factory_properties={

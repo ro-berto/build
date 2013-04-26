@@ -46,7 +46,6 @@ chromium_categories_steps = {
     'sql_unittests',
     'start_crash_handler',
     'sync_unittests',
-    'test_shell_tests',
     'ui_unittests',
     'unit_tests',
     'views_unittests',

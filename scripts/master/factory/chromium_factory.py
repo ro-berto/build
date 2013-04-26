@@ -110,7 +110,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/chrome/test/data/plugin', None)],
     'unit':
       [('src/chrome/test/data/osdd', None)],
-    '^(webkit|test_shell|content_unittests)$':
+    '^(webkit|content_unittests)$':
       [('src/webkit/data/bmp_decoder', None),
        ('src/webkit/data/ico_decoder', None),
        ('src/webkit/data/test_shell/plugins', None),
@@ -377,10 +377,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('remoting_unittests', fp)
     if R('remoting_br'):
       f.AddBuildrunnerGTest('remoting_unittests', fp)
-    if R('test_shell'):
-      f.AddGTestTestStep('test_shell_tests', fp)
-    if R('test_shell_br'):
-      f.AddBuildrunnerGTest('test_shell_tests', fp)
     # Windows sandbox
     if R('sbox_unittests'):
       f.AddGTestTestStep('sbox_unittests', fp)
