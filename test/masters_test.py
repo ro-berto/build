@@ -262,6 +262,7 @@ def main():
       'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.unused': None,
       'master.tryserver.webrtc': 'WebRTCTryServer',
+      'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.devtools': 'DevTools',
   }
   return real_main(base_dir, expected)

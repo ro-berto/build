@@ -509,6 +509,14 @@ class Master(object):
     last_good_url = 'http://webrtc-dashboard.appspot.com/lkgr'
     code_review_site = 'http://review.webrtc.org'
 
+  class LibyuvTryServer(WebRTC):
+    project_name = 'Libyuv Try Server'
+    master_port = 9100
+    slave_port = 9200
+    master_port_alt = 9300
+    try_job_port = 9400
+    from_address = 'libyuv-cb-watchlist@google.com'
+
 
 class Archive(object):
   archive_host = 'localhost'
