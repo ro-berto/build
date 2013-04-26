@@ -999,6 +999,48 @@ def main_win(options, args):
   return result
 
 
+def main_android(options, args):
+  """Runs a gtest suite for android."""
+  if len(args) < 1:
+    raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
+
+  test_suite = args[0]
+  command = ['src/build/android/run_tests.py', '-s', test_suite]
+
+  if list_parsers(options.annotate):
+    return 0
+  tracker_class = select_results_tracker(options.annotate,
+                                         options.generate_json_file)
+  results_tracker = create_results_tracker(tracker_class, options)
+
+  if options.generate_json_file:
+    if os.path.exists(options.test_output_xml):
+      # remove the old XML output file.
+      os.remove(options.test_output_xml)
+
+  result = _RunGTestCommand(command, results_tracker=results_tracker)
+
+  if options.generate_json_file:
+    _GenerateJSONForTestResults(options, results_tracker)
+
+  if options.annotate:
+    annotate(options.test_type, result, results_tracker,
+             options.factory_properties.get('full_test_name'),
+             perf_dashboard_id=options.factory_properties.get(
+                 'test_name'))
+
+  if options.results_url:
+    send_results_to_dashboard(
+        results_tracker, options.factory_properties.get('perf_id'),
+        options.test_type, options.results_url, options.build_dir,
+        options.build_properties.get('mastername'),
+        options.build_properties.get('buildername'),
+        options.build_properties.get('buildnumber'),
+        options.supplemental_columns_file)
+
+  return result
+
+
 def main():
   import platform
 
@@ -1179,7 +1221,10 @@ def main():
   elif sys.platform == 'win32':
     result = main_win(options, args)
   elif sys.platform == 'linux2':
-    result = main_linux(options, args)
+    if options.factory_properties.get('test_platform', '') == 'android':
+      result = main_android(options, args)
+    else:
+      result = main_linux(options, args)
   else:
     sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
     return 1

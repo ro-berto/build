@@ -640,6 +640,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddSyncPerfTests(fp)
     if R('mach_ports'):
       f.AddMachPortsTests(fp)
+    if R('cc_perftests'):
+      f.AddGTestTestStep('cc_perftests', fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
