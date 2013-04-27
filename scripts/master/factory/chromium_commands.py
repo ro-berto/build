@@ -1199,14 +1199,11 @@ class ChromiumCommands(commands.FactoryCommands):
     # graph
     perf_mapping = self.PERF_TEST_MAPPINGS[self._target]
     perf_id = factory_properties.get('perf_id')
-    print 'perf_id: %s' % perf_id
     perf_subdir = perf_mapping.get(perf_id)
-    print 'perf_subdir: %s' % perf_subdir
 
     # 'total_coverage' is the default archive_folder for
     # archive_coverage.py script.
     url = _GetArchiveUrl('coverage', perf_subdir) + '/total_coverage'
-    print 'url: %s' % url
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
                    '--target', self._target,
