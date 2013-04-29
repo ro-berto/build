@@ -32,4 +32,5 @@ def Update(config, active_master, c):
       forgiving_steps=forgiving_steps,
       public_html='../master.chromium/public_html',
       tree_status_url=active_master.tree_status_url,
-      use_getname=True))
+      use_getname=True,
+      sheriffs=[]))
