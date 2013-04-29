@@ -33,7 +33,6 @@ def GetFactoryProperties(api, factory_properties, build_properties):
         '--skip_canned', 'CheckRietveldTryJobExecution',
         '--skip_canned', 'CheckTreeIsOpen',
         '--skip_canned', 'CheckBuildbotPendingBuilds',
-        '--skip_canned', 'CheckOwners',
         '--rietveld_url', build_properties['rietveld'],
         '--rietveld_email', '',  # activates anonymous mode
         '--rietveld_fetch'])
