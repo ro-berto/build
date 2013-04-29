@@ -6,19 +6,9 @@
 """ Source file for lkgr_finder testcases."""
 
 
-import os
-import sys
 import unittest
 
-lkgr_path = os.path.join(
-    os.path.dirname(__file__),
-    '..',
-    '..',
-    '..',
-    'masters',
-    'master.chromium.lkgr')
-sys.path.insert(0, lkgr_path)
-import lkgr_finder
+from master import lkgr_finder
 import test_env  # pylint: disable=W0611
 
 

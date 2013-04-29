@@ -17,8 +17,10 @@ BUILD_DIR = os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.pardir, os.pardir))
 
 
-def GSUtilCopy(from_path, to_path):
+def GSUtilCopy(from_path, to_path, ignore_missing):
   """Upload a file to Google Storage."""
+  if not os.path.exists(from_path):
+    return int(not ignore_missing)
   # -z <ext> instructs gsutil to gzip files with that extension
   # and add 'Content-Encoding: gzip' to header.
   # gsutil determines file extension by looking a last segment
@@ -32,16 +34,16 @@ def GSUtilCopy(from_path, to_path):
 def main():
   returncode = 0
   # See also: crbug.com/177922
-  lkgr_path = os.path.join(
-      BUILD_DIR, 'masters', 'master.chromium.lkgr', 'lkgr_finder.log')
-  if os.path.isfile(lkgr_path):
-    returncode |= GSUtilCopy(lkgr_path, 'lkgr.log')
+  lkgr_base = os.path.join(BUILD_DIR, 'scripts', 'master', 'lkgr_')
+  returncode |= GSUtilCopy(lkgr_base + 'finder.log', 'lkgr.log', True)
+  returncode |= GSUtilCopy(lkgr_base + 'build_data.json',
+                           'lkgr_build_data.json', True)
   for logpath in glob.glob(
       os.path.join(BUILD_DIR, 'masters', '*', 'actions.log')):
     master = logpath.split(os.sep)[-2]
     if master.startswith('master.'):
       master = master[7:]
-    returncode |= GSUtilCopy(logpath, '%s-actions.log' % master)
+    returncode |= GSUtilCopy(logpath, '%s-actions.log' % master, False)
   return returncode
 
 
