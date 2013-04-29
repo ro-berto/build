@@ -83,6 +83,13 @@ else
 	launchctl stop org.chromium.buildbot.$(MASTERPATH)
 endif
 
+kill: printstep
+ifneq ($(USE_LAUNCHD),1)
+	if `test -f twistd.pid`; then kill -KILL -$$(ps h -o '%r' $$(cat twistd.pid) | awk '{print $$1}'); fi;
+else
+	launchctl stop org.chromium.buildbot.$(MASTERPATH)
+endif
+
 reconfig: printstep
 	kill -HUP `cat twistd.pid`
 

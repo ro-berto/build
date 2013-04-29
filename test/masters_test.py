@@ -77,7 +77,7 @@ def test_master(master, path, name, ports):
           logging.info('%s Success in %1.1fs', master, (time.time() - start))
         return res
       finally:
-        masters_util.stop_master(master, path)
+        masters_util.stop_master(master, path, force=True)
   finally:
     context.restore_backup()
 
