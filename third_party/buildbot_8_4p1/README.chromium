@@ -2916,3 +2916,19 @@ index df80ca6..5304401 100644
  
  from zope.interface import implements
  from twisted.python import log, components
+
+Suppress a warning about old name.
+Index: buildbot/changes/svnpoller.py
+===================================================================
+--- buildbot/changes/svnpoller.py       (revision 195053)
++++ buildbot/changes/svnpoller.py       (working copy)
+@@ -352,7 +352,7 @@
+                     log.msg("Ignoring deletion of branch '%s'" % branch)
+                 else:
+                     chdict = dict(
+-                            who=author,
++                            author=author,
+                             files=files,
+                             comments=comments,
+                             revision=revision,
+
