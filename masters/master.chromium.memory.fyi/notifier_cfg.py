@@ -15,7 +15,9 @@ categories_steps = {
   'memory_tester': [
     'start_crash_handler',
     # Please keep the list below sorted.
-    'memory test: base',
+    'memory test: ash_unittests',
+    'memory test: aura',
+    'memory test: base_unittests',
     'memory test: chromeos_unittests',
     'memory test: components',
     'memory test: compositor',
@@ -43,7 +45,9 @@ categories_steps = {
    ],
   'heapcheck_tester': [
     # Please keep this list sorted.
-    'heapcheck test: base',
+    'heapcheck test: ash_unittests',
+    'heapcheck test: aura',
+    'heapcheck test: base_unittests',
     'heapcheck test: chromeos_unittests',
     'heapcheck test: compositor',
     'heapcheck test: content',
@@ -105,7 +109,7 @@ def Update(config, active_master, c):
   drm_categories_steps = {
     'drmemory_tester': [
       # Please keep this list sorted.
-      'memory test: base',
+      'memory test: base_unittests',
       'memory test: components',
       'memory test: content',
       'memory test: crypto',
