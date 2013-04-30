@@ -547,6 +547,7 @@ class DartUtils(object):
       elif name == 'v8-win-release':
         factory = m_v8_win32_stable.V8Factory(
             options=v8_win_default_opts,
+            project='build\\all.sln',
             target='Release',
             tests=[],
             target_arch=arch)
