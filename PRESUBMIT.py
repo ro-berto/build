@@ -83,7 +83,7 @@ def CommonChecks(input_api, output_api):
     tests.extend(input_api.canned_checks.RunUnitTestsInDirectory(
         input_api, output_api, internal_path, whitelist))
 
-  sys.path.extend([join('scripts'), join('test')])
+  sys.path = [join('scripts'), join('test')] + sys.path
   from common import master_cfg_utils
   import masters_util
   # Run the tests.
