@@ -13,6 +13,7 @@ from buildbot.changes import svnpoller
 from buildbot.status.mail import MailNotifier
 from buildbot.status.status_push import HttpStatusPush
 
+from master.factory import v8_factory
 from master.factory import chromium_factory
 from master.factory import dart_commands
 from master.factory import gclient_factory
@@ -21,6 +22,7 @@ from master import master_utils
 import config
 
 current_milestone = '0.3'
+v8_stable_branch = '3.15'
 
 milestone_path = '/branches/' + current_milestone
 dart_milestone_url = config.Master.dart_url + milestone_path
@@ -141,6 +143,19 @@ def setup_chromium_factories():
   F_WIN_CH_MILESTONE = m_win_ch_milestone.ChromiumFactory
 
 setup_chromium_factories()
+
+
+# These factories are used for building v8
+v8_win_default_opts = ['--build-tool=vs']
+v8_linux_default_opts = ['buildbot', '--build-tool=make']
+v8_mac_default_opts = ['--solution=build/all.xcodeproj', '--build-tool=xcode']
+
+m_v8_linux_stable = v8_factory.V8Factory('v8', target_platform = 'linux2',
+                                         branch='branches/' + v8_stable_branch)
+m_v8_win32_stable = v8_factory.V8Factory('v8', target_platform = 'win32',
+                                         branch='branches/' + v8_stable_branch)
+m_v8_mac_stable = v8_factory.V8Factory('v8', target_platform = 'darwin',
+                                       branch='branches/' + v8_stable_branch)
 
 def AddGeneralGClientProperties(factory_properties=None):
   """Adds the general gclient options to ensure we get the correct revisions"""
@@ -337,7 +352,6 @@ class DartUtils(object):
     'vm-linux-milestone': DartFactory('dart', 'vm-linux', milestone=True),
     'vm-win32-milestone': DartFactory('dart', 'vm-win32', milestone=True),
     'dart-editor-milestone': DartFactory('dart', 'dart-editor', milestone=True),
-
   }
   factory_base_dartium = {
     'dartium-mac-full' : F_MAC_CH(
@@ -494,7 +508,7 @@ class DartUtils(object):
                                revlinktmpl=dart_revision_url)
 
   def setup_factories(self, variants):
-    def setup_factory(v, base, platform):
+    def setup_dart_factory(v, base, platform):
       env = v.get('env', {})
       if platform in ['dart_client', 'dart-editor', 'dart_android',
                       'dart_client-trunk', 'dart-editor-trunk',
@@ -520,10 +534,39 @@ class DartUtils(object):
             env=env
         )
 
+    def setup_v8_factory(v):
+      factory = None
+      name = v['name']
+      arch = v['arch']
+      if name == 'v8-linux-release':
+        factory = m_v8_linux_stable.V8Factory(
+            options=v8_linux_default_opts,
+            target='Release',
+            tests=[],
+            target_arch=arch)
+      elif name == 'v8-win-release':
+        factory = m_v8_win32_stable.V8Factory(
+            options=v8_win_default_opts,
+            target='Release',
+            tests=[],
+            target_arch=arch)
+      elif name == 'v8-mac-release':
+        factory = m_v8_mac_stable.V8Factory(
+            options=v8_mac_default_opts,
+            target='Release',
+            tests=[],
+            target_arch=arch)
+      else:
+        raise Exception("Unknown v8 builder")
+      v['factory_builder'] = factory
+
     for v in variants:
       platform = v['platform']
-      base = self.factory_base[platform]
-      setup_factory(v, base, platform)
+      if platform == 'v8_vm':
+        setup_v8_factory(v)
+      else:
+        base = self.factory_base[platform]
+        setup_dart_factory(v, base, platform)
 
   def setup_dartium_factories(self, dartium_variants):
     for variant in dartium_variants:
