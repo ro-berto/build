@@ -34,6 +34,12 @@ from master.optional_arguments import ListProperties
 # builders that all steps are run.
 DEFAULT_TESTS = 'defaulttests'
 
+# The default swarm tests that should be triggered when defaulttests are run.
+DEFAULT_SWARM_TESTS = [
+    # TODO(csharp): Uncomment base_unittest to run the tests on swarm.
+    #'base_unittests'
+]
+
 
 # Performance step utils.
 def CreatePerformanceStepClass(
@@ -123,6 +129,17 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       doStepIf=do_step_if)
 
 
+def BuildSwarmFiles(test_filters, target_platform):
+  """Returns True if this build should generate the hashfiles required to run
+  tests on swarm."""
+
+  # TODO(csharp): Support more platforms.
+  if target_platform not in ('linux2', 'win32'):
+    return False
+
+  return bool(GetSwarmTestsFromTestFilter(test_filters))
+
+
 class RunHooksShell(shell.ShellCommand):
   """A special run hooks shell command to allow modifying its environment
   right before it starts up."""
@@ -135,14 +152,12 @@ class RunHooksShell(shell.ShellCommand):
 
     # If swarm tests are present ensure that the hash output required
     # by them is generated.
-    if any(test.endswith('_swarm') or '_swarm:' in test
-           for test in test_filters):
-      environ = cmd.args.get('env', {}).copy()
+    environ = cmd.args.get('env', {}).copy()
+    if BuildSwarmFiles(test_filters, environ.get('TARGET_PLATFORM', '')):
       environ.setdefault('GYP_DEFINES', '')
       environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
       environ['GYP_DEFINES'] += (' test_isolation_outdir=' +
                                  config.Master.swarm_hashtable_server_internal)
-
 
       cmd.args['env'] = environ
 
@@ -174,6 +189,9 @@ def GetSwarmTestsFromTestFilter(test_filters):
     elif test_filter.endswith('_swarm'):
       swarm_tests.append(test_filter[:-len('_swarm')])
 
+  if DEFAULT_TESTS in test_filters:
+    swarm_tests.extend(DEFAULT_SWARM_TESTS)
+
   return swarm_tests
 
 
@@ -187,6 +205,7 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     command = self.command
     swarm_tests = GetSwarmTestsFromTestFilter(test_filters)
     command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
+
     if 'compile' in test_filters and not 'All' in command:
       # ninja has an 'all' pseudo-target that tries to run all the targets knows
       # about.
@@ -533,8 +552,12 @@ class FactoryCommands(object):
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
     # Continue if:
     # - the test is specified in filters
-    # - DEFAULT_TESTS is listed and default is True
-    if not (name in filters or (DEFAULT_TESTS in filters and default)):
+    # - DEFAULT_TESTS is listed, default is True and the test isn't running
+    #   through swarm.
+    if not (name in filters or
+            (DEFAULT_TESTS in filters and
+             default and
+             name not in DEFAULT_SWARM_TESTS)):
       return False
 
     # This is gtest specific, but other test types can safely ignore it.
@@ -840,6 +863,7 @@ class FactoryCommands(object):
     env = env or {}
     env['LANDMINES_VERBOSE'] = '1'
     env['DEPOT_TOOLS_UPDATE'] = '0'
+    env['TARGET_PLATFORM'] = self._target_platform
     if timeout is None:
       # svn timeout is 2 min; we allow 5
       timeout = 60*5
