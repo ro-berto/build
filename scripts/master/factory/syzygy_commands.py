@@ -109,7 +109,7 @@ class SyzygyCommands(commands.FactoryCommands):
            'coverage/%(got_revision)s/index.html')
 
     command = [self._python,
-               self.PathJoin(self._script_dir, 'syzygy/gsutil_cp_dir.py'),
+               self.PathJoin(self._script_dir, 'syzygy', 'gsutil_cp_dir.py'),
                src_dir,
                dst_gs_url,]
 
@@ -147,7 +147,7 @@ class SyzygyCommands(commands.FactoryCommands):
             'path=builds/official/%(got_revision)s/')
 
     command = [self._python,
-               self.PathJoin(self._script_dir, 'syzygy/gsutil_cp_dir.py'),
+               self.PathJoin(self._script_dir, 'syzygy', 'gsutil_cp_dir.py'),
                archive_dir,
                dst_gs_url,]
 
@@ -156,3 +156,19 @@ class SyzygyCommands(commands.FactoryCommands):
                           extra_text=('archive', url),
                           name='archive_binaries',
                           description='Archive Binaries')
+
+  def AddUploadSymbols(self):
+    """Steps to upload the symbols and symbol-sources for official builds."""
+    script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'internal',
+                                'scripts', 'archive_symbols.py')
+    # We only upload symbols for the agent DLLs. We use prefix wildcards to
+    # (1) account for differing naming conventions across generations of the
+    # tools, some prepend a syzygy_ prefix to the DLL name; and (2) to
+    # automatically pick up new client DLLs as they are introduced.
+    asan_rtl_dll = self.PathJoin(self._build_dir, self._target, '*asan_rtl.dll')
+    client_dlls = self.PathJoin(self._build_dir, self._target, '*client.dll')
+    command = [self._python, script_path, '-s', '-b', asan_rtl_dll, client_dlls]
+    self._factory.addStep(_UrlStatusCommand,
+                          command=command,
+                          name='upload_symbols',
+                          description='Upload Symbols')

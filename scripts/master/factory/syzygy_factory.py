@@ -65,6 +65,12 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                     compile_timeout=1200, build_url=None, project=None,
                     factory_properties=None, target_arch=None,
                     official_release=False):
+    factory_properties = factory_properties or {}
+    if official_release:
+      gclient_env = factory_properties.setdefault('gclient_env', {})
+      gclient_env.setdefault('GYP_DEFINES', '')
+      gclient_env['GYP_DEFINES'] += ' official_build=1'
+
     factory = self.BaseFactory(factory_properties=factory_properties,
                                official_release=official_release)
 
@@ -93,6 +99,7 @@ class SyzygyFactory(gclient_factory.GClientFactory):
     if official_release:
       # Archive official build output.
       syzygy_cmd_obj.AddArchival()
+      syzygy_cmd_obj.AddUploadSymbols()
 
     return factory
 
