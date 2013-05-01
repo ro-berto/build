@@ -48,9 +48,9 @@ ________ running 'svn checkout http://src.chromium.org/native_client/trunk\
 Checked out revision 98765.
 
 ________ running 'svn checkout http://svn.webkit.org/repository/webkit/trunk\
-/Source@66952 .../build/src/third_party/WebKit/Source --revision 66952'\
+@66952 .../build/src/third_party/WebKit --revision 66952'\
 in '.../build'
- U   .../build/src/third_party/WebKit/Source
+ U   .../build/src/third_party/WebKit
 Checked out revision 67890."""
 
 SVN_UPDATE_STDOUT = """solutions=[...]
@@ -66,9 +66,9 @@ ________ running 'svn update http://src.chromium.org/native_client/trunk\
 Updated to revision 98765.
 
 ________ running 'svn update http://svn.webkit.org/repository/webkit/trunk\
-/Source@66952 .../build/src/third_party/WebKit/Source --revision \
+@66952 .../build/src/third_party/WebKit --revision \
 66952' in '.../build'
- U   .../build/src/third_party/WebKit/Source
+ U   .../build/src/third_party/WebKit
 Updated to revision 67890."""
 
 SVN_UPDATE_NO_CHANGE_STDOUT = """solutions=[...]
@@ -82,7 +82,7 @@ src/native_client .../build/src/native_client' in '.../build'
 At revision 98765.
 
 ________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/\
-Source@66952 .../build/src/third_party/WebKit/Source --revision \
+@66952 .../build/src/third_party/WebKit --revision \
 66952' in '.../build'
 At revision 67890."""
 
@@ -95,7 +95,7 @@ Syncing projects:  50% (12/24)
 _____ src/native_client at 98765
 
 Syncing projects:  77% (45/58)
-_____ src/third_party/WebKit/Source at 67890"""
+_____ src/third_party/WebKit at 67890"""
 
 GCLIENT_SYNC_MULTI_JOB_STDOUT = """solutions=[...]
 1>
@@ -130,7 +130,7 @@ At revision 61624.
 Syncing projects:  76% (46/60)
 
 ________ running 'svn update --revision BASE' in '.../build/src/third_party/\
-WebKit/Source'
+WebKit'
 At revision 69168.
 
 Syncing projects: 100% (60/60)
@@ -158,20 +158,10 @@ LayoutTests/fast/events --revision 69169' in '.../build'
 3>At revision 69169.
 3>
 
-50>
-50>________ running 'svn update .../build/src/third_party/WebKit/WebKit/\
-chromium --revision 69169' in '.../build'
-52>
-52>________ running 'svn update .../build/src/third_party/WebKit/Tools/\
-Scripts --revision 69169' in '.../build'
-50>At revision 69169.
-52>Updated to revision 69169.
 51>
-51>________ running 'svn update .../build/src/third_party/WebKit/Source \
+51>________ running 'svn update .../build/src/third_party/WebKit/ \
 --revision 69169' in '.../build'
-50>
 51>
-52>
 51>At revision 69169.
 51>
 
@@ -203,23 +193,11 @@ LayoutTests/fast/events --revision 69168' in '.../build'
 2>At revision 69168.
 2>
 
-46>
-46>________ running 'svn update .../build/src/third_party/WebKit/WebKit/\
-chromium --revision 69168' in '.../build'
-46>
-48>
-48>________ running 'svn update .../build/src/third_party/WebKit/Tools/\
-Scripts --revision 69168' in '.../build'
-46>At revision 69168.
-46>
-48>
 47>
-47>________ running 'svn update .../build/src/third_party/WebKit/Source \
+47>________ running 'svn update .../build/src/third_party/WebKit \
 --revision 69168' in '.../build'
-48>Updated to revision 69168.
 47>At revision 69168.
 47>
-48>
 
 ________ running '/usr/bin/python src/build/gyp_chromium' in '.../build'
 Updating projects from gyp files...
@@ -349,7 +327,7 @@ class GClientSourceTest(unittest.TestCase):
         'At revision 61624.',
         'Syncing projects:  76% (46/60)',
         '________ running \'svn update --revision BASE\' '
-        'in \'.../build/src/third_party/WebKit/Source\'',
+        'in \'.../build/src/third_party/WebKit\'',
         'At revision 69168.',
         'Syncing projects: 100% (60/60)',
         'Syncing projects: 100% (60/60), done.',
@@ -368,14 +346,8 @@ class GClientSourceTest(unittest.TestCase):
         'in \'.../build\'',
         'At revision 69169.',
         '________ running \'svn update .../build/src/third_party/WebKit/'
-        'WebKit/chromium --revision 69169\' in \'.../build\'',
+        ' --revision 69169\' in \'.../build\'',
         'At revision 69169.',
-        '________ running \'svn update .../build/src/third_party/WebKit/'
-        'Source --revision 69169\' in \'.../build\'',
-        'At revision 69169.',
-        '________ running \'svn update .../build/src/third_party/WebKit/'
-        'Tools/Scripts --revision 69169\' in \'.../build\'',
-        'Updated to revision 69169.',
         '________ running \'/usr/bin/python src/build/'
         'gyp_chromium\' in \'.../build\'',
         'Updating projects from gyp files...',
@@ -395,15 +367,9 @@ class GClientSourceTest(unittest.TestCase):
         'layout_tests/LayoutTests/fast/events '
         '--revision 69168\' in \'.../build\'',
         'At revision 69168.',
-        '________ running \'svn update .../build/src/third_party/WebKit/'
-        'WebKit/chromium --revision 69168\' in \'.../build\'',
+        '________ running \'svn update .../build/src/third_party/WebKit'
+        ' --revision 69168\' in \'.../build\'',
         'At revision 69168.',
-        '________ running \'svn update .../build/src/third_party/WebKit/'
-        'Source --revision 69168\' in \'.../build\'',
-        'At revision 69168.',
-        '________ running \'svn update .../build/src/third_party/WebKit/'
-        'Tools/Scripts --revision 69168\' in \'.../build\'',
-        'Updated to revision 69168.',
         '________ running \'/usr/bin/python src/build/'
         'gyp_chromium\' in \'.../build\'',
         'Updating projects from gyp files...',

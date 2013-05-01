@@ -521,7 +521,7 @@ class GClient(sourcebase):
       return None
 
     WEBKIT_CHECKOUT_PATH = os.path.join(
-        'src', 'third_party', 'WebKit', 'Source').replace('\\', '\\\\')
+        'src', 'third_party', 'WebKit').replace('\\', '\\\\')
 
     WEBKIT_UPDATE_RE = re.compile(
         r'svn (checkout|update) .*%s ' % WEBKIT_CHECKOUT_PATH)
