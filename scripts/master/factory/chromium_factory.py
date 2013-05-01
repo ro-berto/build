@@ -881,7 +881,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
                       project=None, factory_properties=None, gclient_deps=None,
-                      enable_swarm_tests=False):
+                      run_default_swarm_tests=False):
     factory_properties = (factory_properties or {}).copy()
 
     # Default to the configuration of Blink appropriate for Chromium patches.
@@ -974,8 +974,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                         factory_properties=factory_properties)
 
     # Trigger swarm tests.
-    if enable_swarm_tests:
-      chromium_cmd_obj.AddTriggerSwarmTests(tests, factory_properties)
+    chromium_cmd_obj.AddTriggerSwarmTests(tests, run_default_swarm_tests,
+                                          factory_properties)
 
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and

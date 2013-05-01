@@ -27,7 +27,11 @@ def GetSwarmTests(bStep):
   test_filters = bStep.build.getProperties().getProperty('testfilter')
   test_filters = test_filters or commands.DEFAULT_TESTS
 
-  return commands.GetSwarmTestsFromTestFilter(test_filters)
+  run_default_swarm_tests = (
+      bStep.build.getProperties().getProperty('run_default_swarm_tests'))
+
+  return commands.GetSwarmTestsFromTestFilter(test_filters,
+                                              run_default_swarm_tests)
 
 
 def TestStepFilterRetrieveStep(bStep):

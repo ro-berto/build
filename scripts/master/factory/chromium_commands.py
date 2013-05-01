@@ -1553,11 +1553,14 @@ class ChromiumCommands(commands.FactoryCommands):
 
   # TODO(csharp): Move this function into commands once swarm test can be added
   # via AddTestStep.
-  def AddTriggerSwarmTests(self, tests, factory_properties):
+  def AddTriggerSwarmTests(self, tests, run_default_swarm_tests,
+                           factory_properties):
     """Generate the hash for each swarm result file and then trigger the swarm
     tests."""
     using_ninja = (
         'ninja' in factory_properties['gclient_env'].get('GYP_GENERATORS', ''))
+    self._factory.properties.setProperty(
+        'run_default_swarm_tests', run_default_swarm_tests, 'BuildFactory')
 
     # TODO(csharp): Actually send the tests instead of just an empty list
     # once all tests have result files.

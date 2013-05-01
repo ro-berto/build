@@ -129,15 +129,11 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       doStepIf=do_step_if)
 
 
-def BuildSwarmFiles(test_filters, target_platform):
+def BuildSwarmFiles(test_filters, run_default_swarm_tests):
   """Returns True if this build should generate the hashfiles required to run
   tests on swarm."""
-
-  # TODO(csharp): Support more platforms.
-  if target_platform not in ('linux2', 'win32'):
-    return False
-
-  return bool(GetSwarmTestsFromTestFilter(test_filters))
+  return bool(GetSwarmTestsFromTestFilter(test_filters,
+                                          run_default_swarm_tests))
 
 
 class RunHooksShell(shell.ShellCommand):
@@ -152,8 +148,9 @@ class RunHooksShell(shell.ShellCommand):
 
     # If swarm tests are present ensure that the hash output required
     # by them is generated.
-    environ = cmd.args.get('env', {}).copy()
-    if BuildSwarmFiles(test_filters, environ.get('TARGET_PLATFORM', '')):
+    if BuildSwarmFiles(test_filters,
+                       self.getProperty('run_default_swarm_tests')):
+      environ = cmd.args.get('env', {}).copy()
       environ.setdefault('GYP_DEFINES', '')
       environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
       environ['GYP_DEFINES'] += (' test_isolation_outdir=' +
@@ -179,17 +176,19 @@ class SwarmShellForHashes(shell.ShellCommand):
     self.setProperty('swarm_hashes', swarm_hashes)
 
 
-def GetSwarmTestsFromTestFilter(test_filters):
+def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   """Returns a list of all the tests in the list that should be run with
   swarm."""
   swarm_tests = []
+  # Always allow manually added swarm tests to run.
   for test_filter in test_filters:
     if '_swarm:' in test_filter:
       swarm_tests.append(test_filter.split('_swarm:', 1)[0])
     elif test_filter.endswith('_swarm'):
       swarm_tests.append(test_filter[:-len('_swarm')])
 
-  if DEFAULT_TESTS in test_filters:
+  # Only add the default swarm tests if the builder is marked as swarm enabled.
+  if DEFAULT_TESTS in test_filters and run_default_swarm_tests:
     swarm_tests.extend(DEFAULT_SWARM_TESTS)
 
   return swarm_tests
@@ -203,7 +202,9 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
       test_filters = []
 
     command = self.command
-    swarm_tests = GetSwarmTestsFromTestFilter(test_filters)
+    swarm_tests = GetSwarmTestsFromTestFilter(
+        test_filters,
+        self.getProperty('run_default_swarm_tests'))
     command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
 
     if 'compile' in test_filters and not 'All' in command:
@@ -550,6 +551,10 @@ class FactoryCommands(object):
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
+    run_default_swarm_tests = (
+        bStep.build.getProperties().getProperty('run_default_swarm_tests'))
+    run_through_swarm = (name not in DEFAULT_SWARM_TESTS and
+                         run_default_swarm_tests)
     # Continue if:
     # - the test is specified in filters
     # - DEFAULT_TESTS is listed, default is True and the test isn't running
@@ -557,7 +562,7 @@ class FactoryCommands(object):
     if not (name in filters or
             (DEFAULT_TESTS in filters and
              default and
-             name not in DEFAULT_SWARM_TESTS)):
+             run_through_swarm)):
       return False
 
     # This is gtest specific, but other test types can safely ignore it.
@@ -863,7 +868,6 @@ class FactoryCommands(object):
     env = env or {}
     env['LANDMINES_VERBOSE'] = '1'
     env['DEPOT_TOOLS_UPDATE'] = '0'
-    env['TARGET_PLATFORM'] = self._target_platform
     if timeout is None:
       # svn timeout is 2 min; we allow 5
       timeout = 60*5
