@@ -22,7 +22,7 @@ from master import master_utils
 import config
 
 current_milestone = '0.3'
-v8_stable_branch = '3.15'
+v8_stable_branch = '3.17'
 
 milestone_path = '/branches/' + current_milestone
 dart_milestone_url = config.Master.dart_url + milestone_path
