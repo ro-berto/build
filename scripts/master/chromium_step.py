@@ -105,6 +105,10 @@ class GClient(source.Source):
     warnings = []
     args = copy.copy(self.args)
 
+    if args.get('gclient_spec'):
+      self.adjustGclientSpecForBlink(branch, revision, args)
+      self.adjustGclientSpecForNaCl(branch, revision, patch, args)
+
     try:
       # parent_cr_revision might be set, but empty.
       if self.getProperty('parent_cr_revision'):
@@ -114,10 +118,6 @@ class GClient(source.Source):
     self.setProperty('primary_repo', args['primary_repo'], 'Source')
     args['revision'] = revision
     args['branch'] = branch
-
-    if args.get('gclient_spec'):
-      self.adjustGclientSpecForBlink(branch, revision, args)
-      self.adjustGclientSpecForNaCl(branch, revision, patch, args)
 
     if patch:
       args['patch'] = patch
