@@ -13,6 +13,7 @@ class _Master4(object):
   is_production_host = socket.getfqdn() == 'master4.golo.chromium.org'
   tree_closing_notification_recipients = []
   from_address = 'tryserver@chromium.org'
+  reply_to = 'chrome-troope%s+tryserver@google.com' % 'rs'
   code_review_site = 'https://chromiumcodereview.appspot.com'
   buildslave_version = 'buildbot_slave_8_4'
   twisted_version = 'twisted_10_2'

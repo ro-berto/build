@@ -74,6 +74,8 @@ class Master(object):
     tree_closing_notification_recipients = []
     # 'from:' field for emails sent from the server.
     from_address = 'nobody@example.com'
+    # 'reply_to:' field for emails sent from the server.
+    reply_to = 'nobody@example.com'
     # Code review site to upload results. You should setup your own Rietveld
     # instance with the code at
     # http://code.google.com/p/rietveld/source/browse/#svn/branches/chromium
