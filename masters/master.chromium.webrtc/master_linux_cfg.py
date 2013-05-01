@@ -11,6 +11,7 @@ helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
+P = helper.Periodic
 T = helper.Triggerable
 
 
@@ -21,6 +22,7 @@ def linux_tester():
                                           nohooks_on_update=True)
 
 S('linux_rel_scheduler', branch='src', treeStableTimer=60)
+P('linux_daily_scheduler', periodicBuildTimer=24*60*60)
 T('linux_rel_trigger')
 
 chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
@@ -51,6 +53,16 @@ F('linux_tester_factory', linux_tester().ChromiumFactory(
         'show_perf_results': True,
         'halt_on_missing_build': True,
         'perf_id': 'chromium-webrtc-rel-linux',
+    }))
+
+# Builder to catch errors when enable_webrtc=0.
+B('Linux Daily WebRTC Disabled', 'linux_webrtc_disabled_factory',
+  scheduler='linux_daily_scheduler')
+F('linux_webrtc_disabled_factory', linux().ChromiumFactory(
+    slave_type='BuilderTester',
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': ('enable_webrtc=0 '
+                                        'component=static_library')},
     }))
 
 def Update(config, active_master, c):
