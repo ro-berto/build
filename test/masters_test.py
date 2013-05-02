@@ -91,8 +91,9 @@ class MasterTestThread(threading.Thread):
     self.master = master
     self.master_path = master_path
     self.name = master_class.project_name
-    all_ports = [master_class.master_port, master_class.master_port_alt,
-                 master_class.slave_port]
+    all_ports = [
+        master_class.master_port, master_class.master_port_alt,
+        master_class.slave_port, getattr(master_class, 'try_job_port', 0)]
     # Sort port locks numerically to prevent deadlocks.
     self.port_locks = [self.port_lock_map[p] for p in sorted(all_ports) if p]
 
