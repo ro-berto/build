@@ -2,11 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetFactoryProperties(api, _factory_properties, _build_properties):
+def GetFactoryProperties(api, _factory_properties, build_properties):
   return {
       'checkout': 'git',
       'git_spec': {
-          'url': 'http://github.com/toolkitchen/toolkit.git',
+          'url': build_properties['repository'] + '.git',
           'recursive': True,
       },
       'script': api.checkout_path('buildbot', 'gen_steps.py')
