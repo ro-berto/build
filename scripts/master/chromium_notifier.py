@@ -8,7 +8,6 @@ Since the behavior is very similar to the MainNotifier, we simply inherit from
 it and also reuse some of its methods to send emails.
 """
 
-import logging
 import re
 import time
 import urllib
@@ -46,7 +45,7 @@ class ChromiumNotifier(MailNotifier):
 
   def __init__(self, reply_to=None, categories_steps=None,
       exclusions=None, forgiving_steps=None, status_header=None,
-      use_getname=False, send_to_sheriffs=None, sheriffs=None,
+      use_getname=False, sheriffs=None,
       public_html='public_html', minimum_delay_between_alert=600, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
@@ -76,10 +75,6 @@ class ChromiumNotifier(MailNotifier):
     @param minimum_delay_between_alert: Don't send failure e-mails more often
                                         than the given value (in seconds).
 
-    @type send_to_sheriffs: Boolean or None.
-    @param send_to_sheriffs: Force the list of sheriffes to either ['sheriff']
-                             or [].  Deprecated, backwards compatability only.
-
     @type sheriffs: List of strings.
     @param sheriffs: The list of sheriff type names to be used for the set of
                      sheriffs.  The final destination changes over time.
@@ -105,19 +100,7 @@ class ChromiumNotifier(MailNotifier):
     self.status_header = status_header
     assert self.status_header
     self.minimum_delay_between_alert = minimum_delay_between_alert
-    #TODO(petermayo) Remove send_to_sheriffs one day soon.
-    if send_to_sheriffs is None:
-      self.sheriffs = sheriffs or []
-    elif send_to_sheriffs:
-      log.msg(
-          'Do not use send_to_sheriffs=True, please use sheriffs=["sheriff"]',
-          logLevel=logging.ERROR)
-      self.sheriffs = ['sheriff']
-    else:
-      log.msg(
-          'Do not use send_to_sheriffs=False, if you must: use sheriffs=[]',
-          logLevel=logging.ERROR)
-      self.sheriffs = []
+    self.sheriffs = sheriffs or []
 
     self.public_html = public_html
     self.use_getname = use_getname
