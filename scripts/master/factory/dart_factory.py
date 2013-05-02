@@ -34,6 +34,9 @@ dartium_milestone_url = dart_milestone_url + '/deps/dartium.deps'
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
 linux_env =  {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk'}
+linux_clang_env =  {'BUILDBOT_JAVA_HOME': 'third_party/java/linux/j2sdk',
+                    'CC': 'third_party/clang/linux/bin/clang',
+                    'CXX': 'third_party/clang/linux/bin/clang++'}
 windows_env = {'BUILDBOT_JAVA_HOME': 'third_party\\java\\windows\\j2sdk',
                'LOGONSERVER': '\\\\AD1'}
 
@@ -67,6 +70,7 @@ if config.Master.trunk_internal_url:
                           CUSTOM_DEPS_DIRECTX_SDK]
 else:
   custom_deps_list_win = []
+custom_deps_list_vm_linux = [('dart/third_party/clang', '/third_party/clang')]
 
 # These chromium factories are used for building dartium
 F_LINUX_CH = None
@@ -189,7 +193,7 @@ class DartFactory(gclient_factory.GClientFactory):
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, build_dir, target_platform=None, trunk=False,
-               milestone=False, target_os=None):
+               milestone=False, target_os=None, custom_deps_list=None):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
@@ -200,7 +204,8 @@ class DartFactory(gclient_factory.GClientFactory):
     if milestone:
       dart_url = dart_milestone_url + deps_file
 
-    custom_deps_list = []
+    if not custom_deps_list:
+      custom_deps_list = []
 
     if config.Master.trunk_internal_url:
       custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
@@ -334,7 +339,8 @@ class DartUtils(object):
 
   factory_base = {
     'vm-mac': DartFactory('dart', 'vm-mac'),
-    'vm-linux': DartFactory('dart', 'vm-linux'),
+    'vm-linux': DartFactory(
+        'dart', 'vm-linux', custom_deps_list=custom_deps_list_vm_linux),
     'vm-win32': DartFactory('dart', 'vm-win32'),
     'dartc-linux': DartFactory('dart', 'dartc-linux'),
     'dart_android': DartFactory('dart', 'dart_android', target_os='android'),
