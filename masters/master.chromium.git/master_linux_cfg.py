@@ -13,7 +13,7 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
+def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
@@ -58,5 +58,5 @@ F('rel_unit', linux().ChromiumGITFactory(
     tests=['check_deps', 'base_unittests', 'net'],
     factory_properties={'generate_gtest_json': True}))
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)
