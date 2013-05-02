@@ -204,10 +204,14 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     except KeyError:
       test_filters = []
 
+    try:
+      run_default_swarm_tests = self.getProperty('run_default_swarm_tests')
+    except KeyError:
+      run_default_swarm_tests = None
+
     command = self.command
-    swarm_tests = GetSwarmTestsFromTestFilter(
-        test_filters,
-        self.getProperty('run_default_swarm_tests'))
+    swarm_tests = GetSwarmTestsFromTestFilter(test_filters,
+                                              run_default_swarm_tests)
     command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
 
     if 'compile' in test_filters and not 'All' in command:
