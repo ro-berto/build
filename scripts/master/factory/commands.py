@@ -146,10 +146,13 @@ class RunHooksShell(shell.ShellCommand):
       test_filters = None
     test_filters = test_filters or DEFAULT_TESTS
 
+    try:
+      run_default_swarm_tests = self.getProperty('run_default_swarm_tests')
+    except KeyError:
+      run_default_swarm_tests = None
     # If swarm tests are present ensure that the hash output required
     # by them is generated.
-    if BuildSwarmFiles(test_filters,
-                       self.getProperty('run_default_swarm_tests')):
+    if BuildSwarmFiles(test_filters, run_default_swarm_tests):
       environ = cmd.args.get('env', {}).copy()
       environ.setdefault('GYP_DEFINES', '')
       environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
