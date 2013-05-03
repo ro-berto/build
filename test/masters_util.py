@@ -83,7 +83,7 @@ def start_master(master, path, dry_run=False):
     if dry_run:
       # Ask ChromiumGitPoller not to pull git repos.
       env['NO_REVISION_AUDIT'] = '0'
-      env['GIT_POLLER_DRY_RUN'] = '1'
+      env['POLLER_DRY_RUN'] = '1'
     subprocess2.check_output(
         ['make', 'start'], timeout=120, cwd=path, env=env,
         stderr=subprocess2.STDOUT)

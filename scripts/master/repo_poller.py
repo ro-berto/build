@@ -50,6 +50,10 @@ class RepoPoller(PollingChangeSource):
                category='', project='', revlinktmpl=None,
                encoding='utf-8', from_addr=None, to_addrs=None,
                smtp_host=None):
+    # In 'dry_run' mode poller won't fetch the repository.
+    # Used when running master smoke tests.
+    self.dry_run = 'POLLER_DRY_RUN' in os.environ
+
     if not workdir:
       workdir = tempfile.mkdtemp(prefix='repo_poller')
       log.msg('RepoPoller: using new working dir %s' % workdir)
@@ -76,6 +80,10 @@ class RepoPoller(PollingChangeSource):
     self.errCount = 0
 
   def startService(self):
+    if self.dry_run:
+      PollingChangeSource.startService(self)
+      return
+
     if not os.path.isabs(self.workdir):
       self.workdir = os.path.join(self.master.basedir, self.workdir)
       log.msg('RepoPoller: using workdir "%s"' % self.workdir)
@@ -180,6 +188,9 @@ class RepoPoller(PollingChangeSource):
 
   @deferredLocked('initLock')
   def poll(self):
+    if self.dry_run:
+      return defer.succeed(None)
+
     d = defer.succeed(0)
     for repo_branch in self.repo_branches:
       d.addCallback(log.msg,'RepoPoller: polling new changes for branch %s...'

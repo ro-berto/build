@@ -63,7 +63,7 @@ class ChromiumGitPoller(gitpoller.GitPoller):
     if 'dry_run' in kwargs:
       self.dry_run = kwargs.pop('dry_run')
     else:
-      self.dry_run = 'GIT_POLLER_DRY_RUN' in os.environ
+      self.dry_run = 'POLLER_DRY_RUN' in os.environ
     if not kwargs.get('workdir'):
       # Make it non-absolute so it's set relative to the master's directory.
       kwargs['workdir'] = 'git_poller_%s' % os.path.basename(kwargs['repourl'])
