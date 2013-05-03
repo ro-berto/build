@@ -36,8 +36,7 @@ DEFAULT_TESTS = 'defaulttests'
 
 # The default swarm tests that should be triggered when defaulttests are run.
 DEFAULT_SWARM_TESTS = [
-    # TODO(csharp): Uncomment base_unittest to run the tests on swarm.
-    #'base_unittests'
+    'base_unittests'
 ]
 
 
