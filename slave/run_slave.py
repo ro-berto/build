@@ -7,17 +7,20 @@
 """
 
 import os
+import re
 import shutil
 import subprocess
 import sys
 import time
 
-SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BUILD_DIR = os.path.dirname(SCRIPT_DIR)
+ROOT_DIR = os.path.dirname(BUILD_DIR)
 needs_reboot = False
 
 # Temporarily add scripts to the path.  We do so in a more consistent
 # manner below, but cannot keep it here because of our recursive calls.
-sys.path.insert(0, os.path.join(os.path.dirname(SCRIPT_PATH), 'scripts'))
+sys.path.insert(0, os.path.join(os.path.dirname(SCRIPT_DIR), 'scripts'))
 from common import chromium_utils
 sys.path.pop(0)
 
@@ -217,6 +220,48 @@ def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
   raise RuntimeError('*** Failed to detect the active master')
 
 
+def GetRoot():
+  if chromium_utils.IsWindows():
+    return os.path.splitdrive(SCRIPT_DIR)[0]
+  return '/'
+
+
+def SpawnSubdirBuildbotsIfNeeded():
+  """Creates /c directory structure and spawns other bots on host as needed."""
+  # 'make start' spawns subdirs bots only when run in /b.
+  # TODO(ilevy): Remove this restriction after run_slave.py refactor.
+  if chromium_utils.GetActiveSubdir():
+    return
+  print 'Spawning other slaves on this host as needed.'
+  print 'Run make stopall to terminate.'
+  for slave in chromium_utils.GetSlavesForHost():
+    subdir = slave.get('subdir')
+    if not subdir:
+      continue
+    botdir = os.path.join(GetRoot(), 'c', subdir)
+
+    def GClientCall(command):
+      # We just synced depot_tools, so disable gclient auto-sync.
+      env = dict(os.environ, DEPOT_TOOLS_UPDATE='0')
+      subprocess.check_call([GetGClientPath()] + command, env=env, cwd=botdir)
+
+    gclient_solutions = chromium_utils.ParsePythonCfg(
+        os.path.join(ROOT_DIR, '.gclient')).get('solutions', [])
+    assert len(gclient_solutions) == 1
+    if subdir and not os.path.exists(botdir):
+      print 'Creating %s' % botdir
+      os.mkdir(botdir)
+      GClientCall(['config', gclient_solutions[0]['url'], '--git-deps'])
+      GClientCall(['sync'])
+      shutil.copyfile(
+          os.path.join(BUILD_DIR, 'site_config', '.bot_password'),
+          os.path.join(botdir, 'build', 'site_config', '.bot_password'))
+    bot_slavedir = os.path.join(botdir, 'build', 'slave')
+    if not os.path.exists(os.path.join(bot_slavedir, 'twistd.pid')):
+      print 'Spawning slave in %s' % bot_slavedir
+      subprocess.check_call(['make', 'start'], cwd=bot_slavedir)
+
+
 def GetThirdPartyVersions(master):
   """Checks whether the master to which this slave belongs specifies particular
   versions of buildbot and twisted for its slaves to run.  If not specified,
@@ -239,18 +284,20 @@ def error(msg):
 def main():
   # Use adhoc argument parsing because of twisted's twisted argument parsing.
   # Change the current directory to the directory of the script.
-  os.chdir(SCRIPT_PATH)
-  build_dir = os.path.dirname(SCRIPT_PATH)
-  # Directory containing build/slave/run_slave.py
-  root_dir = os.path.dirname(build_dir)
-  depot_tools = os.path.join(root_dir, 'depot_tools')
-
+  os.chdir(SCRIPT_DIR)
+  depot_tools = os.path.join(ROOT_DIR, 'depot_tools')
   if not os.path.isdir(depot_tools):
     error('You must put a copy of depot_tools in %s' % depot_tools)
   bot_password_file = os.path.normpath(
-      os.path.join(build_dir, 'site_config', '.bot_password'))
+      os.path.join(BUILD_DIR, 'site_config', '.bot_password'))
   if not os.path.isfile(bot_password_file):
     error('You forgot to put the password at %s' % bot_password_file)
+
+  if (os.path.exists(os.path.join(GetRoot(), 'b')) and
+      os.path.exists(os.path.join(GetRoot(), 'c')) and
+      not filter(lambda x: re.match('TESTING_.*', x), os.environ)):
+    SpawnSubdirBuildbotsIfNeeded()
+
 
   # Make sure the current python path is absolute.
   old_pythonpath = os.environ.get('PYTHONPATH', '')
@@ -261,13 +308,13 @@ def main():
 
   # Update the python path.
   python_path = [
-    os.path.join(build_dir, 'site_config'),
-    os.path.join(build_dir, 'scripts'),
-    os.path.join(build_dir, 'scripts', 'release'),
-    os.path.join(build_dir, 'third_party'),
-    os.path.join(root_dir, 'build_internal', 'site_config'),
-    os.path.join(root_dir, 'build_internal', 'symsrc'),
-    SCRIPT_PATH,  # Include the current working directory by default.
+    os.path.join(BUILD_DIR, 'site_config'),
+    os.path.join(BUILD_DIR, 'scripts'),
+    os.path.join(BUILD_DIR, 'scripts', 'release'),
+    os.path.join(BUILD_DIR, 'third_party'),
+    os.path.join(ROOT_DIR, 'build_internal', 'site_config'),
+    os.path.join(ROOT_DIR, 'build_internal', 'symsrc'),
+    SCRIPT_DIR,  # Include the current working directory by default.
   ]
 
   # Need to update sys.path prior to the following imports.
@@ -280,8 +327,8 @@ def main():
       slave.bootstrap, config_bootstrap, active_slavename)
 
   bb_ver, tw_ver = GetThirdPartyVersions(active_master)
-  python_path.append(os.path.join(build_dir, 'third_party', bb_ver))
-  python_path.append(os.path.join(build_dir, 'third_party', tw_ver))
+  python_path.append(os.path.join(BUILD_DIR, 'third_party', bb_ver))
+  python_path.append(os.path.join(BUILD_DIR, 'third_party', tw_ver))
   sys.path.extend(python_path[-2:])
 
   os.environ['PYTHONPATH'] = (
@@ -339,7 +386,7 @@ def main():
         os.path.join(os.environ['SYSTEMROOT'], 'system32', 'WBEM'),
     ]
     # build_internal/tools contains tools we can't redistribute.
-    tools = os.path.join(root_dir, 'build_internal', 'tools')
+    tools = os.path.join(ROOT_DIR, 'build_internal', 'tools')
     if os.path.isdir(tools):
       slave_path.append(os.path.abspath(tools))
     os.environ['PATH'] = os.pathsep.join(slave_path)
@@ -406,21 +453,22 @@ def main():
     # This line should not be reached.
 
 
-def UpdateScripts():
-  if os.environ.get('RUN_SLAVE_UPDATED_SCRIPTS', None):
-    os.environ.pop('RUN_SLAVE_UPDATED_SCRIPTS')
-    return False
-  gclient_path = os.path.join(SCRIPT_PATH, '..', '..', 'depot_tools', 'gclient')
+def GetGClientPath():
+  """Returns path to local gclient executable."""
+  gclient_path = os.path.join(ROOT_DIR, 'depot_tools', 'gclient')
   if sys.platform.startswith('win'):
-    gclient_path += '.bat'
-  if subprocess.call([gclient_path, 'sync', '--force']) != 0:
-    msg = '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0]
-    print >> sys.stderr, msg
-  os.environ['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
-  return True
+    return gclient_path + '.bat'
+  return gclient_path
 
 
 if '__main__' == __name__:
-  if UpdateScripts():
-    os.execv(sys.executable, [sys.executable] + sys.argv)
+  skip_sync_arg = '--no-gclient-sync'
+  if skip_sync_arg not in sys.argv:
+    if subprocess.call([GetGClientPath(), 'sync', '--force']) != 0:
+      print >> sys.stderr, (
+          '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])
+    os.execv(sys.executable, [sys.executable] + sys.argv + [skip_sync_arg])
+
+  # Remove skip_sync_arg from arg list.  Needed because twistd.
+  sys.argv.remove(skip_sync_arg)
   main()

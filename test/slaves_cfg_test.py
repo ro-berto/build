@@ -23,6 +23,9 @@ def main():
   for slave in chromium_utils.GetAllSlaves():
     mastername = slave['mastername']
     slavename = chromium_utils.EntryToSlaveName(slave)
+    if slave.get('subdir') == 'b':
+      print 'Illegal subdir for %s: %s' % (mastername, slavename)
+      status = 1
     if slavename and slave.get('hostname') not in WHITELIST:
       slaves.setdefault(slavename, []).append(mastername)
   for slavename, masters in slaves.iteritems():

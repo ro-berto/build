@@ -1006,16 +1006,41 @@ def GetAllSlaves():
   return slaves
 
 
+def GetSlavesForHost(hostname=None):
+  """Get slaves for a host, defaulting to current host."""
+  hostname = hostname or socket.getfqdn().split('.', 1)[0].lower()
+  slaves = []
+  for master in ListMasters(cue='slaves.cfg'):
+    slaves.extend(
+        s for s in RunSlavesCfg(os.path.join(master, 'slaves.cfg'))
+        if s.get('hostname') == hostname)
+  return slaves
+
+
+def GetActiveSubdir():
+  """Get current checkout's subdir, if checkout uses subdir layout."""
+  rootdir, subdir = os.path.split(os.path.dirname(BUILD_DIR))
+  if subdir != 'b' and os.path.basename(rootdir) == 'c':
+    return subdir
+
+
 def GetActiveSlavename():
   testing_slavename = os.getenv('TESTING_SLAVENAME')
   if testing_slavename:
     return testing_slavename
-  return socket.getfqdn().split('.', 1)[0].lower()
+  hostname = socket.getfqdn().split('.', 1)[0].lower()
+  subdir = GetActiveSubdir()
+  if subdir:
+    return '%s#%s' % (hostname, subdir)
+  return hostname
 
 
 def EntryToSlaveName(entry):
   """Produces slave name from the slaves config dict."""
-  return entry.get('slavename') or entry.get('hostname')
+  name = entry.get('slavename') or entry.get('hostname')
+  if 'subdir' in entry:
+    return '%s#%s' % (name, entry['subdir'])
+  return name
 
 
 def GetActiveMaster(slavename=None, default=None):

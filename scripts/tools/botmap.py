@@ -17,12 +17,21 @@ def main():
   slaves = filter(lambda x: x.get('hostname'), chromium_utils.GetAllSlaves())
   slaves.sort(key=lambda x: (x.get('mastername'), x['hostname']))
   for slave in slaves:
+    if slave.get('os') == 'win':
+      pathsep = '\\'
+    else:
+      pathsep = '/'
+    if 'subdir' in slave:
+      slavedir = pathsep + 'c' + pathsep + slave['subdir']
+    else:
+      slavedir = pathsep + 'b'
     builder = slave.get('builder') or '?'
     if type(builder) is not list:
       builder = [builder]
     for b in sorted(builder):
-      print '%-30s %-35s %-35s %-10s' % (
+      print '%-30s %-20s %-35s %-35s %-10s' % (
           slave['hostname'],
+          slavedir,
           slave.get('mastername', '?'),
           b,
           slave.get('os', '?'))
