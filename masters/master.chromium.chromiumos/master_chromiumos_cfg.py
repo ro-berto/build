@@ -157,11 +157,6 @@ B('Linux ChromiumOS Tests (1)',
   scheduler='chromiumos_rel_trigger',
   gatekeeper='tester',
   notify_on_missing=True)
-# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
-B('Linux ChromiumOS Tests (1)(Precise)',
-  factory='tester_1',
-  scheduler='chromiumos_rel_trigger',
-  notify_on_missing=True)
 F('tester_1', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -175,11 +170,6 @@ B('Linux ChromiumOS Tests (2)',
   factory='tester_2',
   scheduler='chromiumos_rel_trigger',
   gatekeeper='tester',
-  notify_on_missing=True)
-# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
-B('Linux ChromiumOS Tests (2)(Precise)',
-  factory='tester_2',
-  scheduler='chromiumos_rel_trigger',
   notify_on_missing=True)
 F('tester_2', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
@@ -234,11 +224,6 @@ F('dbg', chromiumos().ChromiumOSFactory(
 
 B('Linux ChromiumOS Tests (dbg)(1)', 'dbg_tests_1', 'tester',
   'chromiumos_dbg_trigger', notify_on_missing=True)
-# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
-B('Linux ChromiumOS Tests (dbg)(1)(Precise)',
-    factory='dbg_tests_1',
-    scheduler='chromiumos_dbg_trigger',
-    notify_on_missing=True)
 F('dbg_tests_1', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -251,11 +236,6 @@ F('dbg_tests_1', chromiumos().ChromiumOSFactory(
 
 B('Linux ChromiumOS Tests (dbg)(2)', 'dbg_tests_2', 'tester',
   'chromiumos_dbg_trigger', notify_on_missing=True)
-# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
-B('Linux ChromiumOS Tests (dbg)(2)(Precise)',
-    factory='dbg_tests_2',
-    scheduler='chromiumos_dbg_trigger',
-    notify_on_missing=True)
 F('dbg_tests_2', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=dbg_archive,
@@ -268,11 +248,6 @@ F('dbg_tests_2', chromiumos().ChromiumOSFactory(
 
 B('Linux ChromiumOS Tests (dbg)(3)', 'dbg_tests_3', 'tester',
   'chromiumos_dbg_trigger', notify_on_missing=True)
-# TODO(phajdan.jr): Add the Precise bot to gatekeeper.
-B('Linux ChromiumOS Tests (dbg)(3)(Precise)',
-    factory='dbg_tests_3',
-    scheduler='chromiumos_dbg_trigger',
-    notify_on_missing=True)
 F('dbg_tests_3', chromiumos().ChromiumOSFactory(
     slave_type='Tester',
     build_url=dbg_archive,
