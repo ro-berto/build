@@ -5,8 +5,9 @@
 
 """Tests all master.cfgs to make sure they load properly."""
 
-import multiprocessing
+import collections
 import os
+import subprocess
 import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -17,7 +18,6 @@ import masters_util
 from common import chromium_utils
 from common import master_cfg_utils
 
-
 # Masters which do not currently load from the default configuration. These need
 # to be fixed and removed from the list!
 BLACKLIST = set(['chromium.swarm',
@@ -26,51 +26,59 @@ BLACKLIST = set(['chromium.swarm',
                  'client.nacl.chrome'])
 
 
-def TestMaster(args):
-  mastername, path = args
-  apply_issue_pwd_path = os.path.join(path, '.apply_issue_password')
-  with masters_util.temporary_password(apply_issue_pwd_path):
-    cmd = [sys.executable,
-           os.path.join(BASE_DIR, 'scripts', 'slave', 'runbuild.py'),
-           mastername,
-           '--test-config']
-    env = os.environ.copy()
-    buildpaths = ['scripts', 'third_party', 'site_config']
-    thirdpartypaths = ['buildbot_8_4p1', 'buildbot_slave_8_4', 'jinja2',
-                       'mock-1.0.1', 'twisted_10_2']
-
-    pythonpaths = [os.path.join(BASE_DIR, p) for p in buildpaths]
-    pythonpaths.extend(os.path.join(BASE_DIR, 'third_party', p)
-                       for p in thirdpartypaths)
-    if env.get('PYTHONPATH'):
-      pythonpaths.append(env.get('PYTHONPATH'))
-
-    env['PYTHONPATH'] = os.pathsep.join(pythonpaths)
-    return chromium_utils.RunCommand(cmd, print_cmd=False, env=env)
+Cmd = collections.namedtuple('Cmd', ['name', 'path', 'env'])
 
 
-def main():
-  masters = master_cfg_utils.GetMasters(include_internal=False)
-  failures = []
-  pool = multiprocessing.Pool()
-  bot_pwd_path = os.path.join(BASE_DIR, 'site_config', '.bot_password')
-  assert BLACKLIST <= set(m for m, _ in masters)
-  for master in BLACKLIST:
+def GetMasterCmds(masters, blacklist, pythonpaths):
+  assert blacklist <= set(m for m, _ in masters)
+  for master in blacklist:
     print 'Skipping %s, fix and enable in masters_cfg_test.py!' % master
-  with masters_util.temporary_password(bot_pwd_path):
-    masters_to_test = [mpair for mpair in masters if mpair[0] not in BLACKLIST]
-    results = pool.map_async(TestMaster, masters_to_test).get(999)
-    failures = [mpair for mpair, r in zip(masters_to_test, results) if r]
+  env = os.environ.copy()
+  pythonpaths = list(pythonpaths or [])
+  buildpaths = ['scripts', 'third_party', 'site_config']
+  thirdpartypaths = ['buildbot_8_4p1', 'buildbot_slave_8_4', 'jinja2',
+                     'mock-1.0.1', 'twisted_10_2']
 
-  if failures:
-    print 'The following master.cfgs did not load:'
-    for mastername, path in failures:
-      print '  %s: %s' % (mastername, path)
-    return 1
+  pythonpaths.extend(os.path.join(BASE_DIR, p) for p in buildpaths)
+  pythonpaths.extend(os.path.join(BASE_DIR, 'third_party', p)
+                     for p in thirdpartypaths)
+  if env.get('PYTHONPATH'):
+    pythonpaths.append(env.get('PYTHONPATH'))
+  env['PYTHONPATH'] = os.pathsep.join(pythonpaths)
 
+  return [Cmd(name, path, env)
+      for name, path in masters if name not in blacklist]
+
+
+def main(argv):
+  master_list = GetMasterCmds(
+      masters=master_cfg_utils.GetMasters(include_internal=False),
+      blacklist=BLACKLIST,
+      pythonpaths=None)
+  build_internal = os.path.join(BASE_DIR, '..', 'build_internal')
+  if os.path.exists(build_internal):
+    internal_test_data = chromium_utils.ParsePythonCfg(os.path.join(
+        build_internal, 'test', 'internal_masters_cfg.py'))
+    internal_cfg = internal_test_data['masters_cfg_test']
+    master_list.extend(GetMasterCmds(
+        masters=master_cfg_utils.GetMasters(include_public=False),
+        blacklist=internal_cfg['blacklist'],
+        pythonpaths=[os.path.join(build_internal, p)
+                     for p in internal_cfg['paths']]))
+
+  with masters_util.TemporaryMasterPasswords():
+    processes = [subprocess.Popen([
+      sys.executable, os.path.join(BASE_DIR, 'scripts', 'slave', 'runbuild.py'),
+      cmd.name, '--test-config'], env=cmd.env) for cmd in master_list]
+    results = map(lambda x: x.wait(), processes)
+    failures = [cmd for cmd, r in zip(master_list, results) if r]
+    if failures:
+      print 'The following master.cfgs did not load:'
+      for command in failures:
+        print '  %s: %s' % (command.name, command.path)
+      return 1
   print 'All master.cfg files parsed successfully!'
-  return 0
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  sys.exit(main(sys.argv))

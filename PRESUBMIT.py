@@ -8,7 +8,6 @@ See http://dev.chromium.org/developers/how-tos/depottools/presubmit-scripts for
 details on the presubmit API built into gcl.
 """
 
-import contextlib
 import sys
 
 
@@ -78,43 +77,34 @@ def CommonChecks(input_api, output_api):
       output_api,
       input_api.os_path.join('scripts', 'common', 'unittests'),
       whitelist))
-  internal_path = input_api.os_path.join('..', 'build_internal', 'test')
-  if input_api.os_path.isfile(internal_path):
-    tests.extend(input_api.canned_checks.RunUnitTestsInDirectory(
-        input_api, output_api, internal_path, whitelist))
 
-  sys.path = [join('scripts'), join('test')] + sys.path
-  from common import master_cfg_utils
+  sys.path.append(join('test'))
   import masters_util
   # Run the tests.
-  temp_passwds = [join('site_config', '.bot_password')]
-  temp_passwds.extend(input_api.os_path.join(path, '.apply_issue_password')
-      for _, path in master_cfg_utils.GetMasters())
-  with contextlib.nested(*map(masters_util.temporary_password, temp_passwds)):
+  with masters_util.TemporaryMasterPasswords():
     output = input_api.RunTests(tests)
+
   output.extend(input_api.canned_checks.PanProjectChecks(
     input_api, output_api, excluded_paths=black_list))
-
   return output
 
 
 def BuildInternalCheck(output, input_api, output_api):
-  if any(isinstance(item, output_api.PresubmitError) for item in output):
+  if output:
     b_i = input_api.os_path.join(input_api.PresubmitLocalPath(), '..',
                                  'build_internal')
     if input_api.os_path.exists(b_i):
-      output.append(output_api.PresubmitNotifyResult(
+      return [output_api.PresubmitNotifyResult(
           'You have a build_internal checkout. '
-          'Updating it may resolve some issues.'))
+          'Updating it may resolve some issues.')]
+  return []
 
 
 def CheckChangeOnUpload(input_api, output_api):
   output = CommonChecks(input_api, output_api)
-  BuildInternalCheck(output, input_api, output_api)
+  output.extend(BuildInternalCheck(output, input_api, output_api))
   return output
 
+
 def CheckChangeOnCommit(input_api, output_api):
-  output = []
-  output.extend(CommonChecks(input_api, output_api))
-  BuildInternalCheck(output, input_api, output_api)
-  return output
+  return CheckChangeOnUpload(input_api, output_api)
