@@ -559,7 +559,7 @@ class FactoryCommands(object):
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
     run_default_swarm_tests = (
         bStep.build.getProperties().getProperty('run_default_swarm_tests'))
-    run_through_swarm = (name not in DEFAULT_SWARM_TESTS and
+    run_through_swarm = (name in DEFAULT_SWARM_TESTS and
                          run_default_swarm_tests)
     # Continue if:
     # - the test is specified in filters
@@ -568,7 +568,7 @@ class FactoryCommands(object):
     if not (name in filters or
             (DEFAULT_TESTS in filters and
              default and
-             run_through_swarm)):
+             not run_through_swarm)):
       return False
 
     # This is gtest specific, but other test types can safely ignore it.
