@@ -7,7 +7,6 @@
 
 import json
 import errno
-import tempfile
 import logging
 import os
 import sys
@@ -18,7 +17,6 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
 
 from common import find_depot_tools  # pylint: disable=W0611
-from common import chromium_utils
 import subprocess2
 
 
@@ -262,27 +260,24 @@ def check_for_no_masters():
 
 
 @contextlib.contextmanager
-def TemporaryMasterPasswords():
-  password_paths = [os.path.join(BASE_PATH, 'site_config', '.bot_password')]
-  password_paths.extend(os.path.join(path, '.apply_issue_password')
-      for path in chromium_utils.ListMasters())
-  temporary_passwords = []
-  tmp_fd, tmp_path = tempfile.mkstemp(prefix='.tmpPasswordFile', dir=BASE_PATH)
-  with os.fdopen(tmp_fd, 'w') as f:
-    f.write('tmp_shared_pswd_file\n')
-    f.flush()
-    os.fsync(tmp_fd)
-  for path in password_paths:
-    if not os.path.exists(path):
-      try:
-        os.link(tmp_path, path)
-        temporary_passwords.append(path)
-      except OSError:
-        pass
-  os.remove(tmp_path)
-  yield
-  for path in temporary_passwords:
-    try:
-      os.remove(path)
-    except OSError:
-      print 'WARNING: Could not remove %s!' % path
+def temporary_password(path, password='foo'):
+  """Given path to some password file will ensure it exists, creating it if
+  necessary.
+
+  Should be used as a context manager:
+    with temporary_password(password_path):
+      ...
+
+  Removes created temp files when done.
+  """
+  # Already there? Just execute the block.
+  if os.path.isfile(path):
+    yield
+    return
+  # Make temp file, execute the block, delete temp file.
+  with open(path, 'w') as f:
+    f.write(password + '\n')
+  try:
+    yield
+  finally:
+    os.remove(path)

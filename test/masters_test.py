@@ -14,15 +14,10 @@ import optparse
 import os
 import subprocess
 import sys
-import tempfile
 import threading
 import time
 
-BUILD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
-
 import masters_util
-from common import chromium_utils
 
 
 def do_master_imports():
@@ -34,42 +29,57 @@ def do_master_imports():
   slave.bootstrap.ImportMasterConfigs()
   return getattr(sys.modules['config_bootstrap'], 'Master')
 
+class pathstack:
+  def __init__(self):
+    self.saved_paths = []
 
-@contextlib.contextmanager
-def BackupPaths(base_path, path_globs):
-  tmpdir = tempfile.mkdtemp(prefix='.tmpMastersTest', dir=base_path)
-  paths_to_restore = []
-  try:
-    for path_glob in path_globs:
-      for path in glob.glob(os.path.join(base_path, path_glob)):
-        bkup_path  = os.path.join(tmpdir, os.path.relpath(path, base_path))
-        os.rename(path, bkup_path)
-        paths_to_restore.append((path, bkup_path))
-    yield
-  finally:
-    for path, bkup_path in paths_to_restore:
+
+  def backup_if_present(self, original_path):
+    real_paths = glob.glob(original_path)
+    for real_path in real_paths:
+      bkup_path = real_path + '_'
+      if os.path.exists(real_path) and not os.path.exists(bkup_path):
+        if subprocess.call(['mv', real_path, bkup_path]) != 0:
+          print >> sys.stderr, 'ERROR: Failed to rename %s to %s' % (
+              real_path, bkup_path)
+        else:
+          self.saved_paths.insert(0, (real_path, bkup_path))
+
+
+  def restore_backup(self):
+    restores = self.saved_paths
+    self.saved_paths = []
+    restores.reverse()
+    for (path, bkup) in restores:
       if subprocess.call(['rm', '-rf', path]) != 0:
-        print >> sys.stderr, 'ERROR: failed to remove tmp %s' % path
-        continue
-      if subprocess.call(['mv', bkup_path, path]) != 0:
-        print >> sys.stderr, 'ERROR: mv %s %s' % (bkup_path, path)
-    os.rmdir(tmpdir)
+        print >> sys.stderr, 'ERROR: Failed to remove %s' % path
+      if subprocess.call(['mv', bkup, path]) != 0:
+        print >> sys.stderr, 'ERROR: Failed to rename %s to %s' % (bkup, path)
+
 
 def test_master(master, path, name, ports):
+  context = pathstack()
   if not masters_util.stop_master(master, path):
     return False
-  logging.info('%s Starting', master)
-  start = time.time()
-  with BackupPaths(path, ['twistd.log', 'twistd.log.?', 'git_poller_*.git']):
-    try:
-      if not masters_util.start_master(master, path, dry_run=True):
-        return False
-      res = masters_util.wait_for_start(master, name, path, ports)
-      if not res:
-        logging.info('%s Success in %1.1fs', master, (time.time() - start))
-      return res
-    finally:
-      masters_util.stop_master(master, path, force=True)
+  try:
+    with masters_util.temporary_password(
+        os.path.join(path, '.apply_issue_password')):
+      logging.info('%s Starting', master)
+      start = time.time()
+      # Try to backup paths we may not want to overwite.
+      context.backup_if_present(os.path.join(path, 'twistd.log'))
+      context.backup_if_present(os.path.join(path, 'git_poller_*.git'))
+      try:
+        if not masters_util.start_master(master, path, dry_run=True):
+          return False
+        res = masters_util.wait_for_start(master, name, path, ports)
+        if not res:
+          logging.info('%s Success in %1.1fs', master, (time.time() - start))
+        return res
+      finally:
+        masters_util.stop_master(master, path, force=True)
+  finally:
+    context.restore_backup()
 
 
 class MasterTestThread(threading.Thread):
@@ -98,15 +108,29 @@ class MasterTestThread(threading.Thread):
           self.master, self.master_path, self.name, self.ports)
 
 
-def real_main(all_expected):
+def real_main(base_dir, expected):
+  expected = expected.copy()
+  parser = optparse.OptionParser()
+  parser.add_option('-v', '--verbose', action='count', default=0)
+  options, args = parser.parse_args()
+  if args:
+    parser.error('Unsupported args %s' % ' '.join(args))
+  levels = (logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG)
+  logging.basicConfig(level=levels[min(options.verbose, len(levels)-1)])
+
   start = time.time()
+  base = os.path.join(base_dir, 'masters')
   master_classes = do_master_imports()
-  all_masters = {}
-  for base in all_expected:
-    base_dir = os.path.join(base, 'masters')
-    all_masters[base] = sorted(p for p in
-        os.listdir(base_dir) if
-        os.path.exists(os.path.join(base_dir, p, 'master.cfg')))
+  # Here we look for a slaves.cfg file in the directory to ensure that
+  # the directory actually contains a master, as opposed to having existed
+  # at one time but later having been removed.  In the latter case, it's
+  # no longer an actual master that should be 'discovered' by this test.
+  masters = sorted(
+      p for p in os.listdir(base)
+      if (os.path.isfile(os.path.join(base, p, 'slaves.cfg')) and
+          not p.startswith('.'))
+  )
+
   failed = set()
   skipped = 0
   success = 0
@@ -115,86 +139,70 @@ def real_main(all_expected):
   # conflicting port binding.
   if not masters_util.check_for_no_masters():
     return 1
-  for base, masters in all_masters.iteritems():
-    for master in masters:
-      pid_path = os.path.join(base, 'masters', master, 'twistd.pid')
-      if os.path.isfile(pid_path):
-        pid_value = int(open(pid_path).read().strip())
-        if masters_util.pid_exists(pid_value):
-          print >> sys.stderr, ('%s is still running as pid %d.' %
-              (master, pid_value))
-          print >> sys.stderr, 'Please stop it before running the test.'
-          return 1
+  for master in masters:
+    pid_path = os.path.join(base, master, 'twistd.pid')
+    if os.path.isfile(pid_path):
+      pid_value = int(open(pid_path).read().strip())
+      if masters_util.pid_exists(pid_value):
+        print >> sys.stderr, ('%s is still running as pid %d.' %
+            (master, pid_value))
+        print >> sys.stderr, 'Please stop it before running the test.'
+        return 1
 
-
-  with masters_util.TemporaryMasterPasswords():
+  bot_pwd_path = os.path.join(
+      base_dir, '..', 'build', 'site_config', '.bot_password')
+  with masters_util.temporary_password(bot_pwd_path):
     master_threads = []
-    for base, masters in all_masters.iteritems():
-      for master in masters[:]:
-        if not master in all_expected[base]:
-          continue
-        masters.remove(master)
-        classname = all_expected[base].pop(master)
-        if not classname:
-          skipped += 1
-          continue
-        cur_thread = MasterTestThread(
-            master=master,
-            master_class=getattr(master_classes, classname),
-            master_path=os.path.join(base, 'masters', master))
-        cur_thread.start()
-        master_threads.append(cur_thread)
-      for cur_thread in master_threads:
-        cur_thread.join(20)
-        if cur_thread.result:
-          print '\n=== Error running %s === ' % cur_thread.master
-          print cur_thread.result
-          failed.add(cur_thread.master)
-        else:
-          success += 1
+    for master in masters[:]:
+      if not master in expected:
+        continue
+      masters.remove(master)
+      classname = expected.pop(master)
+      if not classname:
+        skipped += 1
+        continue
+      cur_thread = MasterTestThread(
+          master=master,
+          master_class=getattr(master_classes, classname),
+          master_path=os.path.join(base, master))
+      cur_thread.start()
+      master_threads.append(cur_thread)
+    for cur_thread in master_threads:
+      cur_thread.join(20)
+      if cur_thread.result:
+        print '\n=== Error running %s === ' % cur_thread.master
+        print cur_thread.result
+        failed.add(cur_thread.master)
+      else:
+        success += 1
 
   if failed:
     print >> sys.stderr, (
         '%d masters failed:\n%s' % (len(failed), '\n'.join(sorted(failed))))
-  remaining_masters = []
-  for masters in all_masters.itervalues():
-    remaining_masters.extend(masters)
-  if any(remaining_masters):
+  if masters:
     print >> sys.stderr, (
         '%d masters were not expected:\n%s' %
-        (len(remaining_masters), '\n'.join(sorted(remaining_masters))))
-  outstanding_expected = []
-  for expected in all_expected.itervalues():
-    outstanding_expected.extend(expected)
-  if outstanding_expected:
+        (len(masters), '\n'.join(sorted(masters))))
+  if expected:
     print >> sys.stderr, (
         '%d masters were expected but not found:\n%s' %
-        (len(outstanding_expected), '\n'.join(sorted(outstanding_expected))))
+        (len(expected), '\n'.join(sorted(expected))))
   print >> sys.stderr, (
       '%s masters succeeded, %d failed, %d skipped in %1.1fs.' % (
         success, len(failed), skipped, time.time() - start))
-  return int(bool(remaining_masters or outstanding_expected or failed))
+  return int(bool(masters or expected or failed))
 
 
-def main(argv):
-  parser = optparse.OptionParser()
-  parser.add_option('-v', '--verbose', action='count', default=0)
-  options, args = parser.parse_args(argv[1:])
-  if args:
-    parser.error('Unknown args: %s' % args)
-  levels = (logging.ERROR, logging.WARNING, logging.INFO, logging.DEBUG)
-  logging.basicConfig(level=levels[min(options.verbose, len(levels)-1)])
-
+def main():
   # Remove site_config's we don't add ourselves. Can cause issues when running
   # this test under a buildbot-spawned process.
   sys.path = [x for x in sys.path if not x.endswith('site_config')]
   base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-  build_internal = os.path.join(os.path.dirname(base_dir), 'build_internal')
   sys.path.extend(os.path.normpath(os.path.join(base_dir, d)) for d in (
       'site_config',
-      os.path.join(build_internal, 'site_config'),
+      os.path.join('..', 'build_internal', 'site_config'),
   ))
-  public_masters = {
+  expected = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'ChromiumChrome',
       'master.chromium.chromebot': 'ChromiumChromebot',
@@ -215,16 +223,18 @@ def main(argv):
       'master.chromium.perf_av': 'ChromiumPerfAv',
       'master.chromium.pyauto': 'ChromiumPyauto',
       'master.chromium.swarm': 'ChromiumSwarm',
+      'master.chromium.unused': None,
       'master.chromium.webkit': 'ChromiumWebkit',
       'master.chromium.webrtc': 'ChromiumWebRTC',
       'master.chromium.webrtc.fyi': 'ChromiumWebRTCFYI',
       'master.chromium.win': 'ChromiumWin',
       'master.chromiumos': 'ChromiumOS',
-      'master.chromiumos.tryserver': 'ChromiumOSTryServer',
-      'master.client.dart': 'Dart',
-      'master.client.dart.fyi': 'DartFYI',
+      'master.chromiumos.tryserver': None,
+      'master.chromiumos.unused': None,
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
+      'master.client.dart': 'Dart',
+      'master.client.dart.fyi': 'DartFYI',
       'master.client.libjingle': 'Libjingle',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
@@ -242,23 +252,22 @@ def main(argv):
       'master.client.skia': None,
       'master.client.syzygy': None,
       'master.client.toolkit': None,
+      'master.client.tsan': None,  # make start fails
+      'master.client.unused': None,
       'master.client.v8': 'V8',
       'master.client.webrtc': 'WebRTC',
-      'master.devtools': 'DevTools',
       'master.experimental': None,
+      'master.reserved': None,  # make start fails
       'master.tryserver.chromium': 'TryServer',
       'master.tryserver.chromium.linux': 'TryServerLinux',
-      'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
+      'master.tryserver.unused': None,
       'master.tryserver.webrtc': 'WebRTCTryServer',
+      'master.tryserver.libyuv': 'LibyuvTryServer',
+      'master.devtools': 'DevTools',
   }
-  all_masters = { base_dir: public_masters }
-  if os.path.exists(build_internal):
-    internal_test_data = chromium_utils.ParsePythonCfg(os.path.join(
-        build_internal, 'test', 'internal_masters_cfg.py'))
-    all_masters[build_internal] = internal_test_data['masters_test']
-  return real_main(all_masters)
+  return real_main(base_dir, expected)
 
 
 if __name__ == '__main__':
-  sys.exit(main(sys.argv))
+  sys.exit(main())
