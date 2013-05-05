@@ -263,25 +263,26 @@ def check_for_no_masters():
 
 @contextlib.contextmanager
 def TemporaryMasterPasswords():
-  password_paths = [os.path.join(BUILD_DIR, 'site_config', '.bot_password')]
-  password_paths.extend(os.path.join(path, '.apply_issue_password')
+  all_paths = [os.path.join(BUILD_DIR, 'site_config', '.bot_password')]
+  all_paths.extend(os.path.join(path, '.apply_issue_password')
       for path in chromium_utils.ListMasters())
-  temporary_passwords = []
-  tmp_fd, tmp_path = tempfile.mkstemp(prefix='.tmpPasswordFile', dir=BUILD_DIR)
-  with os.fdopen(tmp_fd, 'w') as f:
-    f.write('tmp_shared_pswd_file\n')
-    f.flush()
-    os.fsync(tmp_fd)
-  for path in password_paths:
-    if not os.path.exists(path):
+  paths_to_create = [p for p in all_paths if not os.path.exists(p)]
+  created_paths = []
+  if paths_to_create:
+    tmp_fd, tmp_path = tempfile.mkstemp(prefix='.tmpPswd', dir=BUILD_DIR)
+    with os.fdopen(tmp_fd, 'w') as f:
+      f.write('tmp_shared_pswd_file\n')
+      f.flush()
+      os.fsync(tmp_fd)
+    for path in paths_to_create:
       try:
         os.link(tmp_path, path)
-        temporary_passwords.append(path)
+        created_paths.append(path)
       except OSError:
         pass
-  os.remove(tmp_path)
+    os.remove(tmp_path)
   yield
-  for path in temporary_passwords:
+  for path in created_paths:
     try:
       os.remove(path)
     except OSError:
