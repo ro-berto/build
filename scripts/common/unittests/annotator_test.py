@@ -355,7 +355,7 @@ class TestExecution(unittest.TestCase):
     self.assertEquals(ret, 0)
 
   def testCwd(self):
-    tmpdir = os.path.abspath(tempfile.mkdtemp())
+    tmpdir = os.path.realpath(tempfile.mkdtemp())
     try:
       cmdlist = [{'name': 'one',
                   'cmd': _synthesizeCmd(['import os; print os.getcwd()']),
