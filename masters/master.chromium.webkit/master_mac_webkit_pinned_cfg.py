@@ -54,7 +54,7 @@ B('WebKit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
 F('f_webkit_mac_rel', mac_out().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'test_shell', 'webkit_unit_tests', 'DumpRenderTree'],
+        'test_shell', 'webkit_unit_tests', 'DumpRenderTree', 'content_shell'],
     factory_properties={
         'gclient_env': {
             'GYP_GENERATORS':'ninja',

@@ -65,7 +65,7 @@ B('WebKit Mac Builder', 'f_webkit_mac_rel',
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'test_shell', 'webkit_unit_tests', 'DumpRenderTree'],
+        'test_shell', 'webkit_unit_tests', 'DumpRenderTree', 'content_shell'],
     factory_properties={
         'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
@@ -160,7 +160,7 @@ F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'test_shell', 'webkit_unit_tests', 'DumpRenderTree'],
+        'test_shell', 'webkit_unit_tests', 'DumpRenderTree', 'content_shell'],
     factory_properties={
         'trigger': 's5_webkit_dbg_trigger',
         'gclient_env': {

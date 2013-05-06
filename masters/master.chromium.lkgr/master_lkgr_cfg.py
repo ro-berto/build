@@ -100,7 +100,7 @@ B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
-             'content_browsertests'],
+             'content_browsertests', 'content_shell'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -116,7 +116,7 @@ B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     clobber=True,
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
-             'content_browsertests'],
+             'content_browsertests', 'content_shell'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan-symbolized',
@@ -129,7 +129,7 @@ F('linux_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
     options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'DumpRenderTree',
-             'content_browsertests'],
+             'content_browsertests', 'content_shell'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -147,7 +147,7 @@ B('TSAN Release', 'linux_tsan_rel', 'compile', 'chromium_lkgr')
 F('linux_tsan_rel', linux().ChromiumFactory(
     clobber=True,
     options=['--compiler=goma-clang', 'chrome', 'dns_fuzz_stub',
-             'DumpRenderTree', 'content_browsertests'],
+             'DumpRenderTree', 'content_browsertests', 'content_shell'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'tsan',
@@ -160,7 +160,7 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
     clobber=True,
     target='Debug',
     options=['--compiler=goma-clang', 'chrome', 'dns_fuzz_stub',
-             'DumpRenderTree', 'content_browsertests'],
+             'DumpRenderTree', 'content_browsertests', 'content_shell'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'tsan',
