@@ -14,8 +14,8 @@ import config
 
 # A list of unittests to run after each build.
 _UNITTESTS = [
-  'asan_rtl_unittests',
   'agent_common_unittests',
+  'asan_rtl_unittests',
   'basic_block_entry_unittests',
   'block_graph_orderers_unittests',
   'block_graph_transforms_unittests',
@@ -23,10 +23,13 @@ _UNITTESTS = [
   'common_unittests',
   'core_unittests',
   'coverage_unittests',
+  'genfilter_unittests',
   'grinder_unittests',
   'instrument_unittests',
+  'logger_unittests',
   'parse_unittests',
   'pdb_unittests',
+  'pdbfind_unittests',
   'pe_orderers_unittests',
   'pe_transforms_unittests',
   'pe_unittests',
@@ -38,7 +41,9 @@ _UNITTESTS = [
   'rpc_client_lib_unittests',
   'rpc_service_unittests',
   'simulate_unittests',
+  'trace_common_unittests',
   'wsdump_unittests',
+  'zap_timestamp_unittests',
 ]
 
 
