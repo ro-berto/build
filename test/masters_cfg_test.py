@@ -9,6 +9,7 @@ import collections
 import os
 import subprocess
 import sys
+import time
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
@@ -31,8 +32,6 @@ Cmd = collections.namedtuple('Cmd', ['name', 'path', 'env'])
 
 def GetMasterCmds(masters, blacklist, pythonpaths):
   assert blacklist <= set(m for m, _ in masters)
-  for master in blacklist:
-    print 'Skipping %s, fix and enable in masters_cfg_test.py!' % master
   env = os.environ.copy()
   pythonpaths = list(pythonpaths or [])
   buildpaths = ['scripts', 'third_party', 'site_config']
@@ -51,6 +50,8 @@ def GetMasterCmds(masters, blacklist, pythonpaths):
 
 
 def main(argv):
+  start_time = time.time()
+  num_skipped = len(BLACKLIST)
   master_list = GetMasterCmds(
       masters=master_cfg_utils.GetMasters(include_internal=False),
       blacklist=BLACKLIST,
@@ -60,6 +61,7 @@ def main(argv):
     internal_test_data = chromium_utils.ParsePythonCfg(os.path.join(
         build_internal, 'test', 'internal_masters_cfg.py'))
     internal_cfg = internal_test_data['masters_cfg_test']
+    num_skipped += len(internal_cfg['blacklist'])
     master_list.extend(GetMasterCmds(
         masters=master_cfg_utils.GetMasters(include_public=False),
         blacklist=internal_cfg['blacklist'],
@@ -69,15 +71,19 @@ def main(argv):
   with masters_util.TemporaryMasterPasswords():
     processes = [subprocess.Popen([
       sys.executable, os.path.join(BASE_DIR, 'scripts', 'slave', 'runbuild.py'),
-      cmd.name, '--test-config'], env=cmd.env) for cmd in master_list]
-    results = map(lambda x: x.wait(), processes)
-    failures = [cmd for cmd, r in zip(master_list, results) if r]
+      cmd.name, '--test-config'], stdout=subprocess.PIPE,
+      stderr=subprocess.STDOUT, env=cmd.env) for cmd in master_list]
+    results = map(lambda x: (x.communicate()[0], x.returncode), processes)
+    failures = [(cmd, out) for cmd, (out, r) in zip(master_list, results) if r]
     if failures:
       print 'The following master.cfgs did not load:'
-      for command in failures:
-        print '  %s: %s' % (command.name, command.path)
+      for command, output in failures:
+        print '%s: %s' % (command.name, command.path)
+        for line in output.splitlines():
+          print '> ', line
       return 1
-  print 'All master.cfg files parsed successfully!'
+  print 'Parsed %d masters (%d skipped) in %gs.' % (
+      len(master_list), num_skipped, round(time.time() - start_time, 1))
 
 
 if __name__ == '__main__':
