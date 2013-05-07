@@ -20,8 +20,8 @@
   },
 
   'WATCHLISTS': {
-    'build': ['cmp-cc@chromium.org'],
-    'build_scripts': ['kjellander+cc@chromium.org', 'ilevy+cc@chromium.org',
+    'build': ['cmp-cc@chromium.org', 'ilevy-cc@chromium.org'],
+    'build_scripts': ['kjellander+cc@chromium.org',
                       'xusydoc+watch@chromium.org'],
   },
 
