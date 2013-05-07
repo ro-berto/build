@@ -22,7 +22,7 @@ S = helper.Scheduler
 def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def mac_out(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
-defaults['category'] = '2webkit mac deps'
+defaults['category'] = 'deps'
 
 ################################################################################
 ## Release

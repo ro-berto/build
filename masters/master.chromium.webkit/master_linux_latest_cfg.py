@@ -21,7 +21,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '9linux latest'
+defaults['category'] = 'nonlayout'
 
 #
 # Main release scheduler for webkit

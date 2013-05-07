@@ -19,7 +19,7 @@ T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/out', 'win32')
 
-defaults['category'] = '4webkit win latest'
+defaults['category'] = 'layout'
 
 webkit_tests = [
   'webkit',

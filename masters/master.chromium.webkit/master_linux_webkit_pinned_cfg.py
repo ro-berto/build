@@ -24,7 +24,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '3webkit linux deps'
+defaults['category'] = 'deps'
 
 #
 # Main release scheduler for chromium

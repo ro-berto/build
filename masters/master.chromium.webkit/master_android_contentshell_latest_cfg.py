@@ -25,7 +25,7 @@ def linux_android(): return chromium_factory.ChromiumFactory('',
 ## Release
 ################################################################################
 
-defaults['category'] = '9content shell'
+defaults['category'] = 'content'
 
 #
 # Main release scheduler for WebKit

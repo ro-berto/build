@@ -24,7 +24,7 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 ## Release
 ################################################################################
 
-defaults['category'] = '1webkit win deps'
+defaults['category'] = 'deps'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',

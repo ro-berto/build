@@ -24,7 +24,7 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 ## Release
 ################################################################################
 
-defaults['category'] = '9content shell'
+defaults['category'] = 'content'
 
 #
 # Main release scheduler for webkit

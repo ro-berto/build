@@ -27,7 +27,7 @@ def linux_android(): return chromium_factory.ChromiumFactory('',
 ## Release
 ################################################################################
 
-defaults['category'] = '5webkit android latest'
+defaults['category'] = 'layout'
 
 #
 # Android scheduler

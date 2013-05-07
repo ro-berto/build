@@ -20,7 +20,7 @@ def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 ## Release
 ################################################################################
 
-defaults['category'] = '9gpu'
+defaults['category'] = 'gpu'
 
 #
 # Main release scheduler for webkit

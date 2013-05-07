@@ -35,7 +35,7 @@ T = helper.Triggerable
 
 def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
-defaults['category'] = '5webkit mac latest'
+defaults['category'] = 'layout'
 
 ################################################################################
 ## Release

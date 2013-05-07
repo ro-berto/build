@@ -24,7 +24,7 @@ def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 ## Release
 ################################################################################
 
-defaults['category'] = '9content shell'
+defaults['category'] = 'content'
 
 #
 # Main release scheduler for webkit

@@ -15,7 +15,7 @@ T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 
-defaults['category'] = '7win latest'
+defaults['category'] = 'nonlayout'
 
 # Tests that are single-machine shard-safe.
 sharded_tests = [

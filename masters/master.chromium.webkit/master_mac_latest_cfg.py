@@ -21,7 +21,7 @@ def mac_out(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 ## Release
 ################################################################################
 
-defaults['category'] = '8mac latest'
+defaults['category'] = 'nonlayout'
 
 #
 # Main release scheduler for webkit

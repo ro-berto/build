@@ -24,7 +24,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '9content shell'
+defaults['category'] = 'content'
 
 #
 # Main release scheduler for WebKit

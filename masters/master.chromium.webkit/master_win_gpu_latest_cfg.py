@@ -15,7 +15,7 @@ T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 
-defaults['category'] = '9gpu'
+defaults['category'] = 'gpu'
 
 ################################################################################
 ## Release

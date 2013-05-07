@@ -21,7 +21,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 ## Release
 ################################################################################
 
-defaults['category'] = '9gpu'
+defaults['category'] = 'gpu'
 
 #
 # Main release scheduler for webkit
