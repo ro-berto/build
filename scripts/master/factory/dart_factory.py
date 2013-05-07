@@ -161,7 +161,7 @@ m_v8_win32_stable = v8_factory.V8Factory('v8', target_platform = 'win32',
 m_v8_mac_stable = v8_factory.V8Factory('v8', target_platform = 'darwin',
                                        branch='branches/' + v8_stable_branch)
 
-def AddGeneralGClientProperties(factory_properties=None):
+def AddGeneralGClientProperties(factory_properties):
   """Adds the general gclient options to ensure we get the correct revisions"""
   # Make sure that pulled in projects have the right revision based on date.
   factory_properties['gclient_transitive'] = True
@@ -192,7 +192,7 @@ class DartFactory(gclient_factory.GClientFactory):
                  config.Master.trunk_internal_url +
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
-  def __init__(self, build_dir, target_platform=None, trunk=False,
+  def __init__(self, build_dir='dart', target_platform='posix', trunk=False,
                milestone=False, target_os=None, custom_deps_list=None):
     solutions = []
     self.target_platform = target_platform
@@ -237,7 +237,7 @@ class DartFactory(gclient_factory.GClientFactory):
     dart_cmd_obj = dart_commands.DartCommands(factory,
                                               target,
                                               self._build_dir,
-                                              self._target_platform,
+                                              self.target_platform,
                                               env=env)
 
     # We must always add the MaybeClobberStep, since this factory is
@@ -338,26 +338,20 @@ class DartUtils(object):
 
 
   factory_base = {
-    'vm-mac': DartFactory('dart', 'vm-mac'),
-    'vm-linux': DartFactory(
-        'dart', 'vm-linux', custom_deps_list=custom_deps_list_vm_linux),
-    'vm-win32': DartFactory('dart', 'vm-win32'),
-    'dartc-linux': DartFactory('dart', 'dartc-linux'),
-    'dart_android': DartFactory('dart', 'dart_android', target_os='android'),
-    'dart_client': DartFactory('dart', 'dart_client'),
-    'dart-editor': DartFactory('dart', 'dart-editor'),
-    'new_analyzer-linux': DartFactory('dart', 'new_analyzer-linux'),
-    'frog': DartFactory('dart', 'frog'),
-    'frogsh': DartFactory('dart', 'frogsh'),
-    'dart2dart-linux': DartFactory('dart', 'dart2dart-linux'),
-    'vm-mac-trunk': DartFactory('dart', 'vm-mac', trunk=True),
-    'vm-linux-trunk': DartFactory('dart', 'vm-linux', trunk=True),
-    'vm-win32-trunk': DartFactory('dart', 'vm-win32', trunk=True),
-    'dart-editor-trunk': DartFactory('dart', 'dart-editor', trunk=True),
-    'vm-mac-milestone': DartFactory('dart', 'vm-mac', milestone=True),
-    'vm-linux-milestone': DartFactory('dart', 'vm-linux', milestone=True),
-    'vm-win32-milestone': DartFactory('dart', 'vm-win32', milestone=True),
-    'dart-editor-milestone': DartFactory('dart', 'dart-editor', milestone=True),
+    'posix': DartFactory(),
+    'linux-clang': DartFactory(custom_deps_list=custom_deps_list_vm_linux),
+    'android': DartFactory(target_os='android'),
+    'windows': DartFactory(target_platform='win32'),
+
+    'posix-milestone': DartFactory(milestone=True),
+    'linux-clang-milestone':
+        DartFactory(custom_deps_list=custom_deps_list_vm_linux, milestone=True),
+    'windows-milestone': DartFactory(target_platform='win32', milestone=True),
+
+    'posix-trunk': DartFactory(trunk=True),
+    'linux-clang-trunk':
+        DartFactory(custom_deps_list=custom_deps_list_vm_linux, trunk=True),
+    'windows-trunk': DartFactory(target_platform='win32', trunk=True),
   }
   factory_base_dartium = {
     'dartium-mac-full' : F_MAC_CH(
@@ -514,16 +508,9 @@ class DartUtils(object):
                                revlinktmpl=dart_revision_url)
 
   def setup_factories(self, variants):
-    def setup_dart_factory(v, base, platform):
+    def setup_dart_factory(v, base, no_annotated):
       env = v.get('env', {})
-      if platform in ['dart_client', 'dart-editor', 'dart_android',
-                      'dart_client-trunk', 'dart-editor-trunk',
-                      'dart_client-milestone', 'dart-editor-milestone']:
-        v['factory_builder'] = base.DartAnnotatedFactory(
-            python_script='client/tools/buildbot_annotated_steps.py',
-            env=env,
-        )
-      else:
+      if no_annotated:
         options = {
             'mode': v['mode'],
             'arch': v['arch'],
@@ -538,6 +525,11 @@ class DartUtils(object):
             clobber=False,
             options=options,
             env=env
+        )
+      else:
+        v['factory_builder'] = base.DartAnnotatedFactory(
+            python_script='client/tools/buildbot_annotated_steps.py',
+            env=env,
         )
 
     def setup_v8_factory(v):
@@ -573,7 +565,13 @@ class DartUtils(object):
         setup_v8_factory(v)
       else:
         base = self.factory_base[platform]
-        setup_dart_factory(v, base, platform)
+        name = v['name']
+        no_annotated = ((name.startswith('vm') or
+                        name.startswith('dart2dart') or
+                        name.startswith('dartc') or
+                        name.startswith('new_analyzer')) and
+                        not name.startswith('vm-android'))
+        setup_dart_factory(v, base, no_annotated)
 
   def setup_dartium_factories(self, dartium_variants):
     for variant in dartium_variants:
