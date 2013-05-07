@@ -80,8 +80,7 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
     cmds._win_memory_tests_runner = cmds.PathJoin(valgrind_script_path,
                                                   'webrtc_tests.bat')
     # Add tests.
-    gclient_env = factory_properties.get('gclient_env', {})
-    gyp_defines = gclient_env.get('GYP_DEFINES', '')
+    gyp_defines = factory_properties['gclient_env'].get('GYP_DEFINES', '')
     for test in tests:
       if 'build_for_tool=memcheck' in gyp_defines:
         cmds.AddMemoryTest(test, 'memcheck',
