@@ -62,16 +62,15 @@ class TryMailNotifier(mail.MailNotifier):
       if status_text_html is None:
         status_text_html = (
             'TRY FAILED<p>'
-            '<strong>If you think the try slave is broken (it happens!),'
-            'please REPLY to this email, don\'t ask on irc, mailing '
-            'list or IM.<br>'
-            'If you think the test is flaky, notify the sheriffs.</strong><br>'
-            'Please use "rich text" replies so the links aren\'t lost.<br>'
-            'It is possible that you get no reply, don\'t worry, the reply '
-            'address isn\'t a blackhole.'
-            '<p>'
-            'Thanks!')
-
+            '<strong>If the failure is unrelated to your change, the test may'
+            ' be flaky. Contact the sheriffs via irc or gchat, or email the'
+            ' team mailing list.<br> If you think the system is broken,'
+            ' please reply to this email.</strong><br>'
+            ' Common examples of system issues: sync or compile failures'
+            ' on a specific machine, or failures that only affect trybots.<br>'
+            'Please use "rich text" replies so the links aren\'t lost.'
+            ' If you do not receive a reply, don\'t worry. The reply address'
+            ' isn\'t a blackhole.<p>Thanks!')
       res = "failure"
 
     info = {
