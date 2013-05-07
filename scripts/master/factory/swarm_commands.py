@@ -15,11 +15,6 @@ from master.factory import commands
 
 from common import chromium_utils
 
-# Indices used to get a test's name and the filter to apply to from a split
-# testfilter property.
-TEST_FILTER_TEST_NAME_INDEX = 0
-TEST_FILTER_TEST_FILTER_INDEX = 2
-
 
 def GetSwarmTests(bStep):
   """Gets the list of all the swarm tests that this step's filter
@@ -79,31 +74,39 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     try:
       test_filters = self.getProperty('testfilter')
     except KeyError:
-      test_filters = (test.test_name + '_swarm' for test in self.tests)
-    swarm_tests_hash_mapping = self.getProperty('swarm_hashes') or {}
+      test_filters = [test.test_name + '_swarm' for test in self.tests]
+
+    try:
+      swarm_tests_hash_mapping = self.getProperty('swarm_hashes') or {}
+    except KeyError:
+      swarm_tests_hash_mapping = {}
 
     command = self.command
 
     # Split the test filters and remove any that aren't related to swarm.
-    test_filters_split = [t.partition(':') for t in test_filters
+    test_filters_split = [t.split(':', 1) for t in test_filters
                           if '_swarm:' in t or t.endswith('_swarm')]
+
+    # Add the default swarm tests without filters if default tests are running.
+    if commands.DEFAULT_TESTS in test_filters:
+      test_filters_split.extend(
+          (x + '_swarm', '') for x in commands.DEFAULT_SWARM_TESTS)
 
     # Scan through the tests instead of the test_filter to ensure that
     # the tests are always run in the order they are listed in in
     # SWARM_TESTS.
     for swarm_test in self.tests:
       for test_filter in test_filters_split:
-        if (swarm_test.test_name + '_swarm' ==
-            test_filter[TEST_FILTER_TEST_NAME_INDEX]):
+        if (swarm_test.test_name + '_swarm' == test_filter[0]):
           if swarm_tests_hash_mapping.get(swarm_test.test_name):
+            target_filter = '' if len(test_filter) == 1 else test_filter[1]
             command.extend(
                 [
                   '--run_from_hash',
                   swarm_tests_hash_mapping[swarm_test.test_name],
                   swarm_test.test_name,
                   '%d' % swarm_test.shards,
-                  # It is necessary even if it is empty.
-                  test_filter[TEST_FILTER_TEST_FILTER_INDEX],
+                  target_filter,
                   ])
           else:
             log.msg('Given a swarm test, %s, that has no matching hash' %
