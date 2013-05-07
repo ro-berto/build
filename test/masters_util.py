@@ -7,7 +7,6 @@
 
 import json
 import errno
-import tempfile
 import logging
 import os
 import sys
@@ -265,22 +264,15 @@ def check_for_no_masters():
 def TemporaryMasterPasswords():
   all_paths = [os.path.join(BUILD_DIR, 'site_config', '.bot_password')]
   all_paths.extend(os.path.join(path, '.apply_issue_password')
-      for path in chromium_utils.ListMasters())
-  paths_to_create = [p for p in all_paths if not os.path.exists(p)]
+                   for path in chromium_utils.ListMasters())
   created_paths = []
-  if paths_to_create:
-    tmp_fd, tmp_path = tempfile.mkstemp(prefix='.tmpPswd', dir=BUILD_DIR)
-    with os.fdopen(tmp_fd, 'w') as f:
-      f.write('tmp_shared_pswd_file\n')
-      f.flush()
-      os.fsync(tmp_fd)
-    for path in paths_to_create:
+  for path in all_paths:
+    if not os.path.exists(path):
       try:
-        os.link(tmp_path, path)
+        os.symlink(os.devnull, path)
         created_paths.append(path)
       except OSError:
         pass
-    os.remove(tmp_path)
   yield
   for path in created_paths:
     try:

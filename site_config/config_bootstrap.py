@@ -9,6 +9,8 @@ without loading any buildbot or twisted code.
 
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Override config_default with a config_private file.
 try:
   import config_private # pylint: disable=F0401
@@ -100,7 +102,6 @@ class Master(config_private.Master):
     if not getattr(Master, 'bot_password', None):
       # If the bot_password has been requested, the file is required to exist
       # if not overriden in config_private.
-      bot_password_path = os.path.join(os.path.dirname(__file__),
-                                       '.bot_password')
+      bot_password_path = os.path.join(BASE_DIR, '.bot_password')
       Master.bot_password = open(bot_password_path).read().strip('\n\r')
     return Master.bot_password
