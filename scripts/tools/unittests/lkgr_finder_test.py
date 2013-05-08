@@ -6,10 +6,13 @@
 """ Source file for lkgr_finder testcases."""
 
 
+import os
+import sys
 import unittest
 
-from master import lkgr_finder
-import test_env  # pylint: disable=W0611
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(BASE_DIR, '..', '..'))
+from tools import lkgr_finder
 
 
 # Make lkgr_finder quiet on stdout.

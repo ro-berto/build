@@ -34,7 +34,7 @@ def GSUtilCopy(from_path, to_path, ignore_missing):
 def main():
   returncode = 0
   # See also: crbug.com/177922
-  lkgr_base = os.path.join(BUILD_DIR, 'scripts', 'master', 'lkgr_')
+  lkgr_base = os.path.join(BUILD_DIR, 'scripts', 'tools', 'lkgr_')
   returncode |= GSUtilCopy(lkgr_base + 'finder.log', 'lkgr.log', True)
   returncode |= GSUtilCopy(lkgr_base + 'build_data.json',
                            'lkgr_build_data.json', True)

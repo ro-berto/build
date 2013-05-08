@@ -77,6 +77,11 @@ def CommonChecks(input_api, output_api):
       output_api,
       input_api.os_path.join('scripts', 'common', 'unittests'),
       whitelist))
+  tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
+      input_api,
+      output_api,
+      input_api.os_path.join('scripts', 'tools', 'unittests'),
+      whitelist))
 
   sys.path.append(join('test'))
   import masters_util

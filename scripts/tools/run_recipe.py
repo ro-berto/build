@@ -30,7 +30,7 @@ SCRIPT_PATH = os.path.abspath(os.path.dirname(__file__))
 ROOT_PATH = os.path.abspath(os.path.join(SCRIPT_PATH, os.pardir, os.pardir))
 SLAVE_DIR = os.path.join(ROOT_PATH, 'slave', 'fake_slave', 'build')
 
-RUNIT = os.path.join(ROOT_PATH, 'scripts', 'common', 'runit.sh')
+RUNIT = os.path.join(SCRIPT_PATH, 'runit.sh')
 ANNOTATED_RUN = os.path.join(ROOT_PATH, 'scripts', 'slave', 'annotated_run.py')
 
 def usage(msg=None):
