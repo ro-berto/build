@@ -15,7 +15,7 @@ from master import master_utils
 # stability of browser_tests and content_browsertests on the ASan bot, let them
 #  not close the tree until the crash rate drops.
 categories_steps = {
-  '': ['update'],
+  '': ['update', 'runhooks'],
   'testers': [
     'base_unittests',
     #'browser_tests',

@@ -11,7 +11,7 @@ from master import master_utils
 # Note: don't include 'update scripts' since we can't do much about it when
 # it's failing and the tree is still technically fine.
 categories_steps = {
-  '': ['update', 'compile'],
+  '': ['update', 'runhooks', 'compile'],
 }
 
 exclusions = {
