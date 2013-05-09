@@ -1170,10 +1170,10 @@ def real_main():
 
       if ninja_stat > make_stat:
         main = main_ninja
-        options.build = 'ninja'
+        options.build_tool = 'ninja'
       else:
         main = main_make
-        options.build = 'make'
+        options.build_tool = 'make'
     else:
       print('Please specify --build-tool.')
       return 1
