@@ -1000,12 +1000,17 @@ def main_win(options, args):
 
 
 def main_android(options, args):
-  """Runs a gtest suite for android."""
+  """Runs tests for android.
+
+  GTest-based test is different from linux as it requires
+  src/build/android/run_tests.py to deploy and communicate with the device.
+  python scripts are the same.
+  """
+  if options.run_python_script:
+    return main_linux(options, args)
+
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
-
-  test_suite = args[0]
-  command = ['src/build/android/run_tests.py', '-s', test_suite]
 
   if list_parsers(options.annotate):
     return 0
@@ -1018,6 +1023,9 @@ def main_android(options, args):
       # remove the old XML output file.
       os.remove(options.test_output_xml)
 
+  # Assume it's a gtest apk, so use the android harness.
+  test_suite = args[0]
+  command = ['src/build/android/run_tests.py', '-s', test_suite]
   result = _RunGTestCommand(command, results_tracker=results_tracker)
 
   if options.generate_json_file:
