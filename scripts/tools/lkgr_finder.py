@@ -577,6 +577,9 @@ def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
       builder_history = []
       for build_num in sorted(builder_data.keys(), key=int):
         this_build_data = builder_data[build_num]
+        txt = this_build_data.get('text', [])
+        if 'exception' in txt and 'slave' in txt and 'lost' in txt:
+          continue
         revision = None
         for prop in this_build_data.get('properties', []):
           if prop[0] == 'got_revision':
