@@ -57,7 +57,7 @@ def ConnectToSwarmServer(url, data=None, max_retries=MAX_RETRY_ATTEMPTS):
   """Try multiple times to connect to the swarm server and return the response,
      or None if unable to connect.
   """
-  for attempt in range(MAX_RETRY_ATTEMPTS):
+  for attempt in range(max_retries):
     try:
       if data:
         return urllib2.urlopen(url, data=data).read()
@@ -66,14 +66,14 @@ def ConnectToSwarmServer(url, data=None, max_retries=MAX_RETRY_ATTEMPTS):
     except (socket.error, urllib2.URLError) as e:
       print 'Error: Calling %s threw %s' % (url, e)
 
-      if attempt != MAX_RETRY_ATTEMPTS - 1:
+      if attempt != max_retries - 1:
         wait_duration = random.random() * 3 + math.pow(1.3, (attempt + 1))
         wait_duration = min(5, max(0.1, wait_duration))
         time.sleep(wait_duration)
 
   # We were unable to connect to the url.
   print ('Unable to connect to the given url, %s, after %d attempts. Aborting.'
-         % (url, MAX_RETRY_ATTEMPTS))
+         % (url, max_retries))
   return None
 
 
@@ -82,16 +82,23 @@ def GetTestKeys(swarm_base_url, test_name):
   test_keys_url = '%s/get_matching_test_cases?%s' % (swarm_base_url.rstrip('/'),
                                                      key_data)
 
-  result = ConnectToSwarmServer(test_keys_url)
-  if result is None:
-    return []
+  for _ in range(MAX_RETRY_ATTEMPTS):
+    result = ConnectToSwarmServer(test_keys_url)
+    if result is None:
+      return []
 
-  if 'No matching' in result:
-    print ('Error: Unable to find any tests with the name, %s, on swarm server'
-           % test_name)
-    return []
+    if 'No matching' not in result:
+      return json.loads(result)
 
-  return json.loads(result)
+    # App engine's data is only eventually consistent, so wait for the keys
+    # to appear.
+    print ('Warning: Unable to find any tests with the name, %s, on swarm '
+           'server' % test_name)
+    time.sleep(2)
+
+  print ('Error: Test keys still not visible after %d attempts. Aborting' %
+         MAX_RETRY_ATTEMPTS)
+  return []
 
 
 class ShardWatcher(object):

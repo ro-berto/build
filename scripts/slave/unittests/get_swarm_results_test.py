@@ -201,17 +201,44 @@ class TestRunOutputTest(unittest.TestCase):
                      swarm_results.TestRunOutput(SWARM_OUTPUT_WITH_FAILURE))
 
 
-class GetTestKetsTest(SuperMoxTestBase):
+class GetTestKeysTest(SuperMoxTestBase):
   def test_no_keys(self):
     self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
-    response = StringIO.StringIO('No matching Test Cases')
-    swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
-        response)
+    self.mox.StubOutWithMock(swarm_results.time, 'sleep')
+
+    for _ in range(swarm_results.MAX_RETRY_ATTEMPTS):
+      swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
+          StringIO.StringIO('No matching Test Cases'))
+      swarm_results.time.sleep(mox.IgnoreArg())
     self.mox.ReplayAll()
 
     self.assertEqual([], swarm_results.GetTestKeys('http://host:9001',
                                                    'my_test'))
-    self.checkstdout('Error: Unable to find any tests with the name, '
+    expected_output = (swarm_results.MAX_RETRY_ATTEMPTS *
+                       'Warning: Unable to find any tests with the name, '
+                       'my_test, on swarm server\n')
+    expected_output += ('Error: Test keys still not visible after 20 attempts. '
+                        'Aborting\n')
+    self.checkstdout(expected_output)
+
+
+    self.mox.VerifyAll()
+
+  def test_no_keys_first_query(self):
+    keys = ['keys1', 'keys2']
+
+    self.mox.StubOutWithMock(swarm_results.urllib2, 'urlopen')
+    self.mox.StubOutWithMock(swarm_results.time, 'sleep')
+    swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
+        StringIO.StringIO('No matching Test Cases'))
+    swarm_results.time.sleep(mox.IgnoreArg())
+    swarm_results.urllib2.urlopen(mox.IgnoreArg()).AndReturn(
+        StringIO.StringIO(json.dumps(keys)))
+    self.mox.ReplayAll()
+
+    self.assertEqual(keys,
+                     swarm_results.GetTestKeys('http://host:9001', 'my_test'))
+    self.checkstdout('Warning: Unable to find any tests with the name, '
                      'my_test, on swarm server\n')
 
     self.mox.VerifyAll()
