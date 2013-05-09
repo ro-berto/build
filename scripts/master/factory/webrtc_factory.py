@@ -19,7 +19,8 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
 
   def __init__(self, build_dir, target_platform, svn_root_url, branch,
-               custom_deps_list=None, nohooks_on_update=False, target_os=None):
+               custom_deps_list=None, custom_vars_list=None,
+               nohooks_on_update=False, target_os=None):
     """Creates a WebRTC factory.
 
     This factory can also be used to build stand-alone projects.
@@ -30,6 +31,7 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
       target_platform: Platform, one of 'win32', 'darwin', 'linux2'
       svn_root_url: Subversion root URL (i.e. without branch/trunk part).
       branch: Branch name to checkout.
+      custom_vars_list: List of tuples specifying custom GYP variables.
       custom_deps_list: Content to be put in the custom_deps entry of the
         .gclient file for the default solution. The parameter must be a list
         of tuples with two strings in each: path and remote URL.
@@ -43,7 +45,8 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
     svn_url = svn_root_url + '/' + branch
 
     # Use root_dir=src since many Chromium scripts rely on that path.
-    custom_vars_list = [self.CUSTOM_VARS_ROOT_DIR]
+    custom_vars_list = custom_vars_list or []
+    custom_vars_list.append(self.CUSTOM_VARS_ROOT_DIR)
 
     # Overwrite solutions of ChromiumFactory since we sync WebRTC, not Chromium.
     self._solutions = []
