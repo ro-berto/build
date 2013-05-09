@@ -21,91 +21,88 @@ lkgr_finder.VERBOSE = False
 
 class LKGRCandidateTest(unittest.TestCase):
   def testSimpleSucceeds(self):
-    build_history = [
-      (1, {'m1': {'b1': True}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
+    build_history = {'m1': {'b1': [(1, True, 1)]}}
+    revisions = [1]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
     self.assertEquals(candidate, 1)
 
   def testSimpleFails(self):
-    build_history = [
-      (1, {'m1': {'b1': False}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
-    self.assertEquals(candidate, -1)
+    build_history = {'m1': {'b1': [(1, False, 1)]}}
+    revisions = [1]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
+    self.assertEquals(candidate, None)
 
   def testModerateSuccess(self):
-    build_history = [
-      (1, {'m1': {'b1': True}, 'm2': {'b2': True}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
+    build_history = {
+        'm1': {'b1': [(1, True, 1)]},
+        'm2': {'b2': [(1, True, 1)]}}
+    revisions = [1]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
     self.assertEquals(candidate, 1)
 
   def testModerateFailsOne(self):
-    build_history = [
-      (1, {'m1': {'b1': True}, 'm2': {'b2': False}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
-    self.assertEquals(candidate, -1)
+    build_history = {
+        'm1': {'b1': [(1, True, 1)]},
+        'm2': {'b2': [(1, False, 1)]}}
+    revisions = [1]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
+    self.assertEquals(candidate, None)
 
   def testModerateFailsTwo(self):
-    build_history = [
-      (1, {'m1': {'b1': False}, 'm2': {'b2': True}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
-    self.assertEquals(candidate, -1)
+    build_history = {
+        'm1': {'b1': [(1, False, 1)]},
+        'm2': {'b2': [(1, True, 1)]}}
+    revisions = [1]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
+    self.assertEquals(candidate, None)
 
   def testMultipleRevHistory(self):
-    build_history = [
-      (4, {'m1': {'b1': True},  'm2': {'b2': True}}),
-      (3, {'m1': {'b1': False}, 'm2': {'b2': True}}),
-      (2, {'m1': {'b1': True},  'm2': {'b2': False}}),
-      (1, {'m1': {'b1': False}, 'm2': {'b2': False}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
+    build_history = {
+        'm1': {'b1': [(1, False, 1), (2, True, 2),
+                      (3, False, 3), (4, True, 4)]},
+        'm2': {'b2': [(1, False, 1), (2, False, 2),
+                      (3, True, 3), (4, True, 4)]}}
+    revisions = [1, 2, 3, 4]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
     self.assertEquals(candidate, 4)
 
   def testMultipleSuccess(self):
-    build_history = [
-      (5, {'m1': {'b1': True},  'm2': {'b2': True}}),
-      (4, {'m1': {'b1': True},  'm2': {'b2': True}}),
-      (3, {'m1': {'b1': False}, 'm2': {'b2': True}}),
-      (2, {'m1': {'b1': True},  'm2': {'b2': False}}),
-      (1, {'m1': {'b1': False}, 'm2': {'b2': False}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
+    build_history = {
+        'm1': {'b1': [(1, False, 1), (2, True, 2),
+                      (3, False, 3), (4, True, 4), (5, True, 5)]},
+        'm2': {'b2': [(1, False, 1), (2, False, 2),
+                      (3, True, 3), (4, True, 4), (5, True, 5)]}}
+    revisions = [1, 2, 3, 4, 5]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
     self.assertEquals(candidate, 5)
 
   def testMissingFails(self):
-    build_history = [
-      (5, {'m1': {'b1': True},  }),
-      (4, {                     'm2': {'b2': True}}),
-      (3, {'m1': {'b1': False}, 'm2': {'b2': True}}),
-      (2, {'m1': {'b1': True},  'm2': {'b2': False}}),
-      (1, {'m1': {'b1': False}, 'm2': {'b2': False}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
-    self.assertEquals(candidate, -1)
+    build_history = {
+        'm1': {'b1': [(1, False, 1), (2, True, 2),
+                      (3, False, 3), (5, True, 5)]},
+        'm2': {'b2': [(1, False, 1), (2, False, 2),
+                      (3, True, 3), (4, True, 4)]}}
+    revisions = [1, 2, 3, 4, 5]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
+    self.assertEquals(candidate, None)
 
   def testMissingSuccess(self):
-    build_history = [
-      (6, {                     'm2': {'b2': True}}),
-      (5, {'m1': {'b1': True},  }),
-      (4, {                     'm2': {'b2': True}}),
-      (3, {'m1': {'b1': False}, 'm2': {'b2': True}}),
-      (2, {'m1': {'b1': True},  'm2': {'b2': False}}),
-      (1, {'m1': {'b1': False}, 'm2': {'b2': False}}),
-    ]
-    lkgr_steps = {'m1': {'b1': ['step']}, 'm2': {'b2': ['step']}}
-    candidate = lkgr_finder.FindLKGRCandidate(build_history, lkgr_steps)
+    build_history = {
+        'm1': {'b1': [(1, False, 1), (2, True, 2),
+                      (3, False, 3), (5, True, 5)]},
+        'm2': {'b2': [(1, False, 1), (2, False, 2),
+                      (3, True, 3), (4, True, 4), (6, True, 6)]}}
+    revisions = [1, 2, 3, 4, 5, 6]
+    candidate = lkgr_finder.FindLKGRCandidate(
+        build_history, revisions, lkgr_finder.SvnRevisionCmp)
     self.assertEquals(candidate, 5)
 
 

@@ -48,7 +48,6 @@ the revisions and run the same algorithm.  Since we are only interested in the
 backward.
 """
 
-import cgi
 # The 2 following modules are not present on python 2.5
 # pylint: disable=F0401
 import datetime
@@ -69,7 +68,6 @@ import urllib2
 
 VERBOSE = True
 EMAIL_ENABLED = False
-
 BLINK_REVISIONS_URL = 'https://blink-status.appspot.com'
 CHROMIUM_REVISIONS_URL = 'https://chromium-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
@@ -81,6 +79,7 @@ MASTER_TO_BASE_URL = {
   'chromium.win': 'http://build.chromium.org/p/chromium.win',
   'chromium.webkit': 'http://build.chromium.org/p/chromium.webkit',
 }
+RUN_LOG = []
 
 # *_LKGR_STEPS controls which steps must pass for a revision to be marked
 # as LKGR.
@@ -326,6 +325,97 @@ BLINK_LKGR_STEPS = {
 
 #-------------------------------------------------------------------------------
 
+class StatusGenerator(object):
+  def master_cb(self, master):
+    pass
+  def builder_cb(self, builder):
+    pass
+  def revision_cb(self, revision):
+    pass
+  def build_cb(self, master, builder, status, build_num=None):
+    pass
+  def lkgr_cb(self, revision):
+    pass
+
+
+class HTMLStatusGenerator(StatusGenerator):
+  def __init__(self):  # pylint: disable=W0231
+    self.masters = []
+    self.rows = []
+
+  def master_cb(self, master):
+    self.masters.append((master, []))
+
+  def builder_cb(self, builder):
+    self.masters[-1][1].append(builder)
+
+  def revision_cb(self, revision):
+    tmpl = 'https://src.chromium.org/viewvc/chrome?view=rev&revision=%s'
+    row = [
+        revision,
+        '<td class="revision"><a href="%s" target="_blank">%s</a></td>\n' % (
+            tmpl % urllib.quote(revision), revision)]
+    self.rows.append(row)
+
+  def build_cb(self, master, builder, status, build_num=None):
+    cell = '  <td class="%s">' % ('success' if status else 'failure')
+    if build_num is not None:
+      build_url = 'build.chromium.org/p/%s/builders/%s/builds/%s' % (
+          master, builder, build_num)
+      cell += '<a href="http://%s" target="_blank">%s</a>' % (
+          urllib.quote(build_url), build_num)
+    cell += '</td>\n'
+    self.rows[-1].append(cell)
+
+  def lkgr_cb(self, revision):
+    row = self.rows[-1]
+    row[1] = row[1].replace('class="revision"', 'class="lkgr"', 1)
+    for i in range(2, len(row)):
+      row[i] = row[i].replace('class="success"', 'class="lkgr"', 1)
+
+  def generate(self):
+    html_chunks = ['''
+<html>
+<head>
+<style type="text/css">
+table { border-collapse: collapse; }
+th { font-size: xx-small; }
+td, th { text-align: center; }
+.header { border: 1px solid black; }
+.revision { border-left: 1px solid black; border-right: 1px solid black; }
+.success { background-color: #8d4; }
+.failure { background-color: #e88; }
+.lkgr { background-color: #4af; }
+</style>
+</head>
+<body><table>
+''']
+    master_headers = ['<tr class="header"><th></th>\n']
+    builder_headers = ['<tr class="header"><th></th>\n']
+    for master, builders in self.masters:
+      master_url = 'build.chromium.org/p/%s' % master
+      hdr = '  <th colspan="%d" class="header">' % len(builders)
+      hdr += '<a href="%s" target="_blank">%s</a></th>\n' % (
+          'http://%s' % urllib.quote(master_url), master)
+      master_headers.append(hdr)
+      for builder in builders:
+        builder_url = 'build.chromium.org/p/%s/builders/%s' % (
+            master, builder)
+        hdr = '  <th><a href="%s" target="_blank">%s</a></th>\n' % (
+            'http://%s' % urllib.quote(builder_url), builder)
+        builder_headers.append(hdr)
+    master_headers.append('</tr>\n')
+    builder_headers.append('</tr>\n')
+    html_chunks.extend(master_headers)
+    html_chunks.extend(builder_headers)
+    for row in self.rows:
+      html_chunks.append('<tr>')
+      html_chunks.extend(row[1:])
+      html_chunks.append('</tr>\n')
+    html_chunks.append('</table></body></html>\n')
+    return ''.join(html_chunks)
+
+
 def SendMail(sender, recipients, subject, message):
   if not EMAIL_ENABLED:
     return
@@ -349,21 +439,19 @@ def SendMail(sender, recipients, subject, message):
            os.path.basename(__file__))
     raise e
 
-run_log = []
-
 def FormatPrint(s):
   return '%s: %s' % (datetime.datetime.now(), s)
 
 def Print(s):
   msg = FormatPrint(s)
-  run_log.append(msg)
+  RUN_LOG.append(msg)
   print msg
 
 def VerbosePrint(s):
   if VERBOSE:
     Print(s)
   else:
-    run_log.append(FormatPrint(s))
+    RUN_LOG.append(FormatPrint(s))
 
 def FetchBuildsMain(master, builder, builds):
   if master not in MASTER_TO_BASE_URL:
@@ -431,285 +519,124 @@ def ReadBuildData(fn):
         fn, repr(e)))
     raise
 
-def CollateRevisionHistory(builds, lkgr_steps):
-  """Organize builder data into:
-  build_history = [ (revision, {master: {builder: True/False, ...}, ...}), ... ]
-  ... and sort revisions chronologically, latest revision first
+def SvnRevisionCmp(a, b):
+  return cmp(int(a), int(b))
+
+def GitRevisionCmp(a, b):
+  raise RuntimeError('git revision comparison is unimplemented.')
+
+def EvaluateBuildData(build_data, builder_lkgr_steps):
+  step_data = {}
+  reasons = []
+  for step in build_data['steps']:
+    step_data[step['name']] = step
+  for lkgr_step in builder_lkgr_steps:
+    # This allows us to rename a step and tell lkgr_finder that it should
+    # accept either name for step status.  We assume in the code that any
+    # given build will have at most one of the two steps.
+    if isinstance(lkgr_step, str):
+      steps = (lkgr_step,)
+    else:
+      steps = lkgr_step
+    matching_steps = [s for s in step_data if s in steps]
+    if not matching_steps:
+      reasons.append('Step %s is not listed on the build.' % (lkgr_step,))
+      continue
+    elif len(matching_steps) > 1:
+      reasons.append('Multiple step matches: %s' % matching_steps)
+      continue
+    step = matching_steps[0]
+    if step_data[step].get('isFinished') is not True:
+      reasons.append('Step %s has not completed (isFinished: %s)' % (
+          step, step_data[step].get('isFinished')))
+      continue
+    if 'results' in step_data[step]:
+      result_data = step_data[step]['results'][0]
+      if type(result_data) == list:
+        result_data = result_data[0]
+      if result_data and str(result_data) not in ('0', '1'):
+        reasons.append('Step %s failed' % step)
+  return reasons
+
+def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
   """
-  # revision_history[revision][builder] = True/False (success/failure)
-  revision_history = {}
-  for master in builds.keys():
-    for (builder, builder_history) in builds[master].iteritems():
-      VerbosePrint('%s/%s:' % (master, builder))
-      for build_num in sorted(builder_history, key=int):
-        build_data = builder_history[build_num]
-        build_num = int(build_num)
-        revision = build_data['sourceStamp']['revision']
+  Organize builder data into:
+    build_history = {master: {builder: [(revision, bool, build_num), ...]}}
+    revisions = [revision, ...]
+  ... with revisions and build_history[master][builder] sorted by revcmp.
+  """
+  build_history = {}
+  revisions = set()
+  for master, master_data in build_data.iteritems():
+    if master not in lkgr_steps:
+      continue
+    master_history = build_history.setdefault(master, {})
+    for (builder, builder_data) in master_data.iteritems():
+      if builder not in lkgr_steps[master]:
+        continue
+      builder_history = []
+      for build_num in sorted(builder_data.keys(), key=int):
+        this_build_data = builder_data[build_num]
+        revision = None
+        for prop in this_build_data.get('properties', []):
+          if prop[0] == 'got_revision':
+            revision = prop[1]
+            break
+        if not revision:
+          revision = this_build_data.get(
+              'sourceStamp', {}).get('revision', None)
         if not revision:
           continue
-        build_steps = {}
-        reasons = []
-        for step in build_data['steps']:
-          build_steps[step['name']] = step
-        for lkgr_step in lkgr_steps[master][builder]:
-          # This allows us to rename a step and tell lkgr_finder that it should
-          # accept either name for step status.  We assume in the code that any
-          # given build will have at most one of the two steps.
-          if isinstance(lkgr_step, str):
-            steps = (lkgr_step,)
-          else:
-            steps = lkgr_step
-          matching_steps = [s for s in build_steps if s in steps]
-          if not matching_steps:
-            reasons.append('Step %s is not listed on the build.' % (lkgr_step,))
-            continue
-          elif len(matching_steps) > 1:
-            reasons.append('Multiple step matches: %s' % matching_steps)
-            continue
-          step = matching_steps[0]
-          if build_steps[step].get('isFinished') is not True:
-            reasons.append('Step %s has not completed (isFinished: %s)' % (
-                step, build_steps[step].get('isFinished')))
-            continue
-          if 'results' in build_steps[step]:
-            result = build_steps[step]['results'][0]
-            if type(result) == list:
-              result = result[0]
-            if result and str(result) not in ('0', '1'):
-              reasons.append('Step %s failed' % step)
-        revision_history.setdefault(revision, {})
-        revision_history[revision].setdefault(master, {})
-        if reasons:
-          revision_history[revision][master][builder] = False
-          VerbosePrint('  Build %s (rev %s) is bad or incomplete' % (
-              build_num, revision))
-          for reason in reasons:
-            VerbosePrint('    %s' % reason)
-        else:
-          revision_history[revision][master][builder] = True
-
-  # Need to fix the sort for git
-  # pylint: disable=W0108
-  sorted_keys = sorted(revision_history.keys(), None, lambda x: int(x), True)
-  build_history = [(rev, revision_history[rev]) for rev in sorted_keys]
-
-  return build_history
+        revisions.add(revision)
+        reasons = EvaluateBuildData(
+            this_build_data, lkgr_steps[master][builder])
+        builder_history.append((revision, not reasons, build_num))
+      master_history[builder] = sorted(
+          builder_history, key=lambda x: x[0], cmp=revcmp)
+  return (build_history, sorted(revisions, cmp=revcmp))
 
 
-def FillResultBlanksBetweenBuilds(build_history, lkgr_steps):
-  """Given build history and LKGR steps, builds a two-dimensional array,
-  where rows are revisions and columns are bots. Each cell has a result
-  that corresponds to no-info/green/red, and for revisions that were not
-  built on given builder we approximate the above using two surrounding
-  builds (the closest before and closest after that revision)."""
 
-  # Sort seen revisions, most recent ones (biggest numbers) first.
-  revisions = sorted([rev for rev, results in build_history], reverse=True)
-  per_builder_history = {}
-
-  # Create a 2-D pseudo-array. Rows are revisions, and columns
-  # are waterfall-builder pairs.
-  for waterfall, builders in lkgr_steps.items():
-    for builder in builders:
-      per_builder_history[(waterfall, builder)] = {}
-      for rev in revisions:
-        per_builder_history[(waterfall, builder)][rev] = {
-          'result': None,
-          'has_build': False,
-        }
-
-  # Populate above array with known build results.
-  for rev, results in build_history:
-    for waterfall, builders in results.items():
-      for builder in builders:
-        per_builder_history[(waterfall, builder)][rev].update({
-          'result': results[waterfall][builder],
-          'has_build': True,
-        })
-
-  # Approximate results between builds.
-  for builder in per_builder_history:
-    # Do a top-bottom pass (most recent, bigger revisions first, to older,
-    # smaller ones). For revisions where we don't have a build, fill in
-    # the blank with last known result.
-    last_known_result = None
-    for rev in revisions:
-      if per_builder_history[builder][rev]['has_build']:
-        last_known_result = per_builder_history[builder][rev]['result']
-      else:
-        per_builder_history[builder][rev]['result'] = last_known_result
-
-    # Do a bottom-top pass. This can't add more green results, but it can
-    # add more unknowns or reds if the next build after a blank is red
-    # or if there is no build after the blank.
-    last_known_result = None
-    for rev in reversed(revisions):
-      if per_builder_history[builder][rev]['has_build']:
-        last_known_result = per_builder_history[builder][rev]['result']
-      elif (per_builder_history[builder][rev]['result'] or
-            last_known_result is None):
-        per_builder_history[builder][rev]['result'] = last_known_result
-
-  return per_builder_history
-
-
-def GenerateHTMLStatus(build_history, per_builder_history):
-  """Given build history, returns HTML code for a human-readable
-  status page."""
-
-  html_chunks = []
-  html_chunks += '<html>\n'
-  html_chunks += '<head>\n'
-  html_chunks += '<style type="text/css">\n'
-  html_chunks += 'th { font-size: xx-small; }\n'
-  html_chunks += 'td, th { border: 1px solid black; text-align: center; }\n'
-  html_chunks += '.success { background-color: #8d4; }\n'
-  html_chunks += '.failure { background-color: #e88; }\n'
-  html_chunks += '</style>\n'
-  html_chunks += '</head>\n'
-  html_chunks += '<body><table>\n'
-
-  html_chunks += '<tr><th></th>'
-  for waterfall, bot in per_builder_history.keys():
-    html_chunks += '<th>%s</th>' % cgi.escape(bot)
-  html_chunks += '</tr>'
-
-  for revision, _ in build_history:
-    html_chunks += '<tr>'
-
-    # All builders for given revision must be green to be an LKGR candidate.
-    lkgr_candidate = True
-    for waterfall, bot in per_builder_history.keys():
-      if not per_builder_history[(waterfall, bot)][revision]['result']:
-        lkgr_candidate = False
-        break
-
-    html_chunks += '<td class="%s"><b>%s</b></td>' % (
-        'success' if lkgr_candidate else 'failure',
-        cgi.escape(revision))
-
-    for waterfall, bot in per_builder_history.keys():
-      result = per_builder_history[(waterfall, bot)][revision]
-      if result['result'] is None:
-        html_chunks += '<td></td>'
-      elif result['result']:
-        html_chunks += '<td class="success">'
-      else:
-        html_chunks += '<td class="failure">'
-
-      if result['has_build']:
-        # Indicate the builder built exactly this revision
-        # (as opposed to an approximation).
-        html_chunks += 'x'
-
-      html_chunks += '</td>'
-    html_chunks += '</tr>'
-  html_chunks += '</table></body></html>'
-
-  return ''.join(html_chunks)
-
-
-def GenerateTextStatus(build_history, per_builder_history):
-  """Given build history, returns a plain text status report."""
-
-  output_chunks = []
-
-  for revision, _ in build_history:
-    problems = {}
-    had_no_build = False
-    for waterfall, bot in per_builder_history.keys():
-      result = per_builder_history[(waterfall, bot)][revision]
-      if result['result'] is None:
-        had_no_build = True
-      elif not result['result']:
-        problems[(waterfall, bot)] = result
-    if problems or had_no_build:
-      output_chunks += '[ BAD  ] revision %s\n' % revision
-      for wb, result in problems.items():
-        assert not result['result']
-        waterfall, bot = wb
-        status = 'build failed'
-        if not result['has_build']:
-          status += ' (approximation)'
-        output_chunks += '\t%s: %s -> %s\n' % (waterfall, bot, status)
-
-      # To avoid cluttering the output, only print brief information
-      # about missing builds. We can't do much about them, while we can
-      # fix failing builders.
-      if not problems:
-        output_chunks += '\tnot all builders finished\n'
-    else:
-      output_chunks += '[ GOOD ] revision %s\n' % revision
-
-  return ''.join(output_chunks)
-
-
-def FindLKGRCandidate(build_history, lkgr_steps):
+def FindLKGRCandidate(build_history, revisions, revcmp, status_gen=None):
   """Given a build_history of builds, run the algorithm for finding an LKGR
   candidate (refer to the algorithm description at the top of this script).
   green1 and green2 record the sequence of two successful builds that are
   required for LKGR.
   """
-  candidate = -1
-  green1 = {}
-  green2 = {}
-  num_builders = 0
-  for master in lkgr_steps.keys():
-    num_builders += len(lkgr_steps[master])
-
-  for entry in build_history:
-    if len(green2) == num_builders:
-      break
-    revision = entry[0]
-    history = entry[1]
-    if candidate == -1:
-      master_loop_must_break = False
-      for master in history.keys():
-        if master_loop_must_break:
-          break
-        for (builder, status) in history[master].iteritems():
-          if not status:
-            candidate = -1
-            green1.clear()
-            master_loop_must_break = True
-            break
-          green1[master + '/' + builder] = revision
-      if len(green1) == num_builders:
-        candidate = revision
-        for master in history.keys():
-          for builder in history[master].keys():
-            green2[master + '/' + builder] = revision
-      continue
-    master_loop_must_break = False
-    for master in history.keys():
-      if master_loop_must_break:
-        break
-      for (builder, status) in history[master].iteritems():
-        if not status:
-          candidate = -1
-          green1.clear()
-          green2.clear()
-          master_loop_must_break = True
-          break
-        green2[master + '/' + builder] = revision
-
-  if candidate != -1 and len(green2) == num_builders:
-    VerbosePrint('-' * 80)
-    VerbosePrint('Revision %s is good based on:' % candidate)
-    revlist = list(green2.iteritems())
-    revlist.sort(None, lambda x: x[1])
-    for (builder, revision) in revlist:
-      VerbosePrint('  Revision %s is green for builder %s' %
-                   (revision, builder))
-    VerbosePrint('-' * 80)
-    revlist = list(green1.iteritems())
-    revlist.sort(None, lambda x: x[1])
-    for (builder, revision) in revlist:
-      VerbosePrint('  Revision %s is green for builder %s' %
-                   (revision, builder))
-    return candidate
-
-  return -1
+  lkgr = None
+  if not status_gen:
+    status_gen = StatusGenerator()
+  builders = []
+  for master, master_history in build_history.iteritems():
+    status_gen.master_cb(master)
+    for builder, builder_history in master_history.iteritems():
+      status_gen.builder_cb(builder)
+      gen = reversed(builder_history)
+      prev = []
+      try:
+        prev.append(gen.next())
+      except StopIteration:
+        prev.append((-1, False, -1))
+      builders.append((master, builder, gen, prev))
+  for revision in reversed(revisions):
+    status_gen.revision_cb(revision)
+    good_build = True
+    for master, builder, gen, prev in builders:
+      try:
+        while revcmp(revision, prev[-1][0]) < 0:
+          prev.append(gen.next())
+      except StopIteration:
+        prev.append((-1, False, -1))
+      bad = (not prev[-1][1] or (cmp(revision, prev[-1][0]) != 0 and
+                                 (len(prev) < 2 or not prev[-2][1])))
+      if bad:
+        good_build = False
+      build_num = prev[-1][2] if revcmp(revision, prev[-1][0]) == 0 else None
+      status_gen.build_cb(master, builder, not bad, build_num)
+    if not lkgr and good_build:
+      lkgr = revision
+      status_gen.lkgr_cb(revision)
+  return lkgr
 
 def PostLKGR(revisions_url, lkgr, password_file, dry):
   url = '%s/revisions' % revisions_url
@@ -900,7 +827,7 @@ def main():
   lkgr = FetchLKGR(revisions_url)
   if lkgr is None:
     SendMail(sender, error_recipients, subject_base +
-             'Failed to fetch %s LKGR' % lkgr_type, '\n'.join(run_log))
+             'Failed to fetch %s LKGR' % lkgr_type, '\n'.join(RUN_LOG))
     return 1
 
   if options.build_data:
@@ -916,24 +843,25 @@ def main():
       sys.stderr.write('Could not dump to %s:\n%s\n' % (
           options.dump_file, repr(e)))
 
-  build_history = CollateRevisionHistory(builds, lkgr_steps)
-  per_builder_history = FillResultBlanksBetweenBuilds(build_history, lkgr_steps)
+  # TODO: Fix this for git
+  revcmp = SvnRevisionCmp
 
+  (build_history, revisions) = CollateRevisionHistory(
+      builds, lkgr_steps, revcmp)
+  status_gen = None
   if options.html:
-    with open(options.html, 'w') as fh:
-      fh.write(GenerateHTMLStatus(build_history, per_builder_history))
+    status_gen = HTMLStatusGenerator()
+  candidate = FindLKGRCandidate(build_history, revisions, revcmp, status_gen)
+  if options.html:
+    fh = open(options.html, 'w')
+    fh.write(status_gen.generate())
+    fh.close()
 
-  if options.text:
-    print GenerateTextStatus(build_history, per_builder_history)
-
-  latest_rev = int(build_history[0][0])
-  candidate = FindLKGRCandidate(build_history, lkgr_steps)
-
-  VerbosePrint('-' * 80)
+  VerbosePrint('-' * 52)
   VerbosePrint('Current %s LKGR is %d' % (lkgr_type, lkgr))
-  VerbosePrint('-' * 80)
-  # Fix for git
-  if candidate != -1 and int(candidate) > lkgr:
+  VerbosePrint('-' * 52)
+  # TODO: Fix for git
+  if candidate and int(candidate) > lkgr:
     VerbosePrint('Candidate %s LKGR is %s' % (lkgr_type, candidate))
     for master in lkgr_steps.keys():
       formdata = ['builder=%s' % urllib2.quote(x)
@@ -954,23 +882,23 @@ def main():
   else:
     VerbosePrint('No newer %s LKGR found than current %s' % (lkgr_type, lkgr))
 
-    rev_behind = latest_rev - lkgr
+    rev_behind = int(revisions[-1]) - lkgr
     VerbosePrint('%s LKGR is behind by %s revisions' % (lkgr_type, rev_behind))
     if rev_behind > options.allowed_gap:
       SendMail(sender, error_recipients,
                '%s%s LKGR (%s) > %s revisions behind' %
                (subject_base, lkgr_type, lkgr, options.allowed_gap),
-               '\n'.join(run_log))
+               '\n'.join(RUN_LOG))
       return 1
 
     if not CheckLKGRLag(GetLKGRAge(lkgr), rev_behind, options.allowed_lag,
                         options.allowed_gap):
       SendMail(sender, error_recipients,
                '%s%s LKGR (%s) exceeds lag threshold' %
-               (subject_base, lkgr_type, lkgr), '\n'.join(run_log))
+               (subject_base, lkgr_type, lkgr), '\n'.join(RUN_LOG))
       return 1
 
-  VerbosePrint('-' * 80)
+  VerbosePrint('-' * 52)
 
   return 0
 
