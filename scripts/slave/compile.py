@@ -1066,9 +1066,7 @@ def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
   if build_tool == 'xcode':
     ret = os.path.join(src_dir, 'xcodebuild',
         target + ('-iphoneos' if is_iphone else ''))
-  elif build_tool == 'make':
-    ret = os.path.join(src_dir, 'out', target)
-  elif build_tool == 'ninja':
+  elif build_tool in ['make', 'ninja']:
     ret = os.path.join(src_dir, 'out', target)
   elif build_tool in ['msvs', 'vs', 'ib']:
     ret = os.path.join(src_dir, 'build', target)
@@ -1137,6 +1135,10 @@ def real_main():
 
   options, args = option_parser.parse_args()
 
+  options.build_dir = os.path.abspath(options.build_dir)
+  options.src_dir = os.path.join(slave_utils.SlaveBaseDir(
+      os.path.abspath(options.build_dir)), 'build', 'src')
+
   if options.build_tool is None:
     if chromium_utils.IsWindows():
       main = main_win
@@ -1145,8 +1147,33 @@ def real_main():
       main = main_xcode
       options.build_tool = 'xcode'
     elif chromium_utils.IsLinux():
-      main = main_make
-      options.build_tool = 'make'
+      # We're in the process of moving to ninja by default on Linux, see
+      # http://crbug.com/239257
+      # Builders for different branches will use either make or ninja depending
+      # on the release channel for a while. Until all release channels are on
+      # ninja, use build file mtime to figure out which build system to use.
+      # TODO(thakis): Just use main_ninja once the transition is complete.
+      make_stat, ninja_stat = 0, 0
+
+      ninja_path = os.path.join(
+          options.src_dir, 'out', options.target, 'build.ninja')
+      try:
+        ninja_stat = os.path.getmtime(ninja_path)
+      except os.error:
+        pass
+
+      make_path = os.path.join(options.src_dir, 'Makefile')
+      try:
+        make_stat = os.path.getmtime(make_path)
+      except os.error:
+        pass
+
+      if ninja_stat > make_stat:
+        main = main_ninja
+        options.build = 'ninja'
+      else:
+        main = main_make
+        options.build = 'make'
     else:
       print('Please specify --build-tool.')
       return 1
@@ -1164,9 +1191,6 @@ def real_main():
       sys.stderr.write('Unknown build tool %s.\n' % repr(options.build_tool))
       return 2
 
-  options.build_dir = os.path.abspath(options.build_dir)
-  options.src_dir = os.path.join(slave_utils.SlaveBaseDir(
-      os.path.abspath(options.build_dir)), 'build', 'src')
   options.target_output_dir = get_target_build_dir(options.build_tool,
       options.src_dir, options.target, 'iphoneos' in args)
   options.clobber = (options.clobber or
