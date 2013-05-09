@@ -65,7 +65,7 @@
     step('components_unittests', result=results.SKIPPED),
     step('courgette_unittests', result=results.SKIPPED),
     step('crypto_unittests', result=results.SKIPPED),
-    step('googleurl_unittests', result=results.SKIPPED),
+    step('url_unittests', result=results.SKIPPED),
     step('gpu_unittests', result=results.SKIPPED),
     step('jingle_unittests', result=results.SKIPPED),
     step('device_unittests', result=results.SKIPPED),

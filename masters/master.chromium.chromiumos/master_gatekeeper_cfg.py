@@ -13,8 +13,8 @@ from master import master_utils
 chromium_categories_steps = {
   '': ['update', 'runhooks'],
   'tester': [
-    'aura_unit_tests',
     'app_list_unittests',
+    'aura_unit_tests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
@@ -26,7 +26,6 @@ chromium_categories_steps = {
     'crypto_unittests',
     'dbus_unittests',
     'device_unittests',
-    'googleurl_unittests',
     'installer_util_unittests',
     'interactive_ui_tests',
     'ipc_tests',
@@ -48,6 +47,7 @@ chromium_categories_steps = {
     'sync_unittests',
     'ui_unittests',
     'unit_tests',
+    'url_unittests',
     'views_unittests',
     #'webkit_tests',
    ],

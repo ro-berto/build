@@ -47,7 +47,6 @@ F('f_chromiumos_rel', linux().ChromiumOSFactory(
       'dbus_unittests',
       'device_unittests',
       'gpu_unittests',
-      'googleurl_unittests',
       'interactive_ui_tests',
       'ipc_tests',
       'jingle_unittests',
@@ -60,6 +59,7 @@ F('f_chromiumos_rel', linux().ChromiumOSFactory(
       'sync_unit_tests',
       'ui_unittests',
       'unit_tests',
+      'url_unittests',
       'views_unittests',
     ],
     factory_properties={

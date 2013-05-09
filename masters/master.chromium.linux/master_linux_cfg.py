@@ -62,7 +62,6 @@ linux_all_test_targets = [
   'crypto_unittests',
   'dbus_unittests',
   'device_unittests',
-  'googleurl_unittests',
   'gpu_unittests',
   'interactive_ui_tests',
   'ipc_tests',
@@ -77,6 +76,7 @@ linux_all_test_targets = [
   'sync_unit_tests',
   'ui_unittests',
   'unit_tests',
+  'url_unittests',
   'webkit_compositor_bindings_unittests',
 ]
 
@@ -222,7 +222,6 @@ linux_aura_options = [
   'content_unittests',
   'crypto_unittests',
   'device_unittests',
-  'googleurl_unittests',
   'gpu_unittests',
   'interactive_ui_tests',
   'ipc_tests',
@@ -235,6 +234,7 @@ linux_aura_options = [
   'sandbox_linux_unittests',
   'sql_unittests',
   'ui_unittests',
+  'url_unittests',
 ]
 
 B('Linux Aura', 'f_linux_rel_aura', 'compile', 'linux_rel',

@@ -61,7 +61,6 @@ linux_aura_build_targets = [
     'content_unittests',
     'crypto_unittests',
     'device_unittests',
-    'googleurl_unittests',
     'gpu_unittests',
     'interactive_ui_tests',
     'ipc_tests',
@@ -73,6 +72,7 @@ linux_aura_build_targets = [
     'remoting_unittests',
     'sql_unittests',
     'ui_unittests',
+    'url_unittests',
 ]
 
 B('Linux Aura', 'f_linux_aura_rel', scheduler='s9_webkit_rel')

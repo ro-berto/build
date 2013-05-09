@@ -50,14 +50,14 @@ tests_1 = [
 tests_2 = [
     'browser_tests',
     'content_browsertests',
-    'googleurl_unittests',
+    'ipc_tests',
     'media_unittests',
     'ppapi_unittests',
     'printing_unittests',
     'remoting_unittests',
-    'ipc_tests',
     'sync_unit_tests',
     'unit_tests',
+    'url_unittests',
 ]
 
 #

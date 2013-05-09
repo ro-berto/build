@@ -35,17 +35,17 @@ WIN_BUILD_ENV_PATH = r'E:\b\build\scripts\slave\drmemory\build_env.bat'
 # reported earlier.
 LINUX_CHROME_TESTS = [
   'DumpRenderTree',
-  'googleurl_unittests',
-  'printing_unittests',
-  'sql_unittests',
-  'crypto_unittests',
-  'remoting_unittests',
-  'ipc_tests',
-  'media_unittests',
   'base_unittests',
   'browser_tests',
+  'crypto_unittests',
+  'ipc_tests',
+  'media_unittests',
   'net_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sql_unittests',
   'unit_tests',
+  'url_unittests',
 ]
 
 

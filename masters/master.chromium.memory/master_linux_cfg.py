@@ -80,7 +80,6 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
       'content_unittests',
       'crypto_unittests',
       'device_unittests',
-      'googleurl_unittests',
       'gpu_unittests',
       'ipc_tests',
       'jingle_unittests',
@@ -94,6 +93,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
       'sync_unit_tests',
       'ui_unittests',
       'unit_tests',
+      'url_unittests',
     ],
     factory_properties={
         'gclient_env': {

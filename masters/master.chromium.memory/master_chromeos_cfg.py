@@ -77,18 +77,18 @@ linux_aura_options = [
   'content_browsertests',
   'content_unittests',
   'crypto_unittests',
-  'googleurl_unittests',
   'gpu_unittests',
   'interactive_ui_tests',
   'ipc_tests',
   'jingle_unittests',
-  'net_unittests',
   'media_unittests',
+  'net_unittests',
   'ppapi_unittests',
   'printing_unittests',
   'remoting_unittests',
   'sql_unittests',
   'ui_unittests',
+  'url_unittests',
 ]
 
 # Please do not add release_extra_cflags=-g here until the debug info section

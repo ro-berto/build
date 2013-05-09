@@ -63,7 +63,6 @@ mac_asan_options = [
   'content_browsertests',
   'content_unittests',
   'crypto_unittests',
-  'googleurl_unittests',
   'interactive_ui_tests',
   'ipc_tests',
   'jingle_unittests',
@@ -74,6 +73,7 @@ mac_asan_options = [
   'remoting_unittests',
   'sql_unittests',
   'ui_unittests',
+  'url_unittests',
 ]
 
 mac_asan_tests_1 = [
