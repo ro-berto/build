@@ -775,7 +775,8 @@ class FactoryCommands(object):
                           description='gclient_revert',
                           timeout=60*5,
                           workdir=self.working_dir,
-                          command=command)
+                          command=command,
+                          haltOnFailure=False)
 
   def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):
     """Adds a step to the factory to update the script folder."""
