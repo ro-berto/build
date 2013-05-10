@@ -55,6 +55,7 @@ import json
 import multiprocessing
 import optparse
 import os
+import Queue
 import re
 import signal
 import smtplib
@@ -64,7 +65,7 @@ import sys
 import threading
 import urllib
 import urllib2
-
+from xml.dom import minidom
 
 VERBOSE = True
 EMAIL_ENABLED = False
@@ -339,9 +340,61 @@ class StatusGenerator(object):
 
 
 class HTMLStatusGenerator(StatusGenerator):
-  def __init__(self):  # pylint: disable=W0231
+  def __init__(self, revisions, revcmp):  # pylint: disable=W0231
     self.masters = []
     self.rows = []
+    self.blink_revisions = []
+    self.revcmp = revcmp
+    self.blink_rev_thread = threading.Thread(
+        target=self._get_blink_revisions, args=(revisions[0], revcmp))
+    self.blink_rev_thread.start()
+
+  def _get_blink_revisions(self, since_revision, revcmp):
+    deps_url = 'https://src.chromium.org/svn/trunk/src/DEPS'
+    new_rev_regexp = re.compile('[+].*"webkit_revision": "([0-9]*)"')
+    old_rev_regexp = re.compile('[-].*"webkit_revision": "([0-9]*)"')
+    cmd = ['svn', 'log', '--xml', '-r', '%s:HEAD' % since_revision,
+           deps_url]
+    subproc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    doc = [None]
+    def _parser_main():
+      doc[0] = minidom.parse(subproc.stdout)
+    parser_thread = threading.Thread(target=_parser_main)
+    parser_thread.start()
+    subproc.wait()
+    parser_thread.join()
+    jobq = Queue.Queue()
+    result = []
+    for logentry in doc[0].childNodes[0].getElementsByTagName('logentry'):
+      jobq.put(logentry.getAttribute('revision'))
+
+    def _diff_main():
+      while True:
+        try:
+          job = jobq.get_nowait()
+        except Queue.Empty:
+          return
+        log_cmd = ['svn', 'diff', '-c', job, deps_url]
+        grep_cmd = ['grep', '-e', '^[+-].*"webkit_revision": "[0-9]*"']
+        log_proc = subprocess.Popen(log_cmd, stdout=subprocess.PIPE)
+        grep_proc = subprocess.Popen(grep_cmd, stdin=log_proc.stdout,
+                                     stdout=subprocess.PIPE)
+        (grep_out, _) = grep_proc.communicate()
+        log_proc.wait()
+        if grep_out:
+          m_new = re.search(new_rev_regexp, grep_out)
+          m_old = re.search(old_rev_regexp, grep_out)
+          if m_new:
+            result.append(
+                (job, m_new.group(1), m_old.group(1) if m_old else None))
+
+    # pylint: disable=W0612
+    log_threads = [threading.Thread(target=_diff_main) for i in range(10)]
+    for t in log_threads:
+      t.start()
+    for t in log_threads:
+      t.join()
+    self.blink_revisions = sorted(result, key=lambda x: x[0], cmp=revcmp)
 
   def master_cb(self, master):
     self.masters.append((master, []))
@@ -362,8 +415,8 @@ class HTMLStatusGenerator(StatusGenerator):
     if build_num is not None:
       build_url = 'build.chromium.org/p/%s/builders/%s/builds/%s' % (
           master, builder, build_num)
-      cell += '<a href="http://%s" target="_blank">%s</a>' % (
-          urllib.quote(build_url), build_num)
+      cell += '<a href="http://%s" target="_blank">X</a>' % (
+          urllib.quote(build_url))
     cell += '</td>\n'
     self.rows[-1].append(cell)
 
@@ -374,6 +427,10 @@ class HTMLStatusGenerator(StatusGenerator):
       row[i] = row[i].replace('class="success"', 'class="lkgr"', 1)
 
   def generate(self):
+    if self.blink_rev_thread:
+      self.blink_rev_thread.join()
+      self.blink_rev_thread = None
+    blinkrevs = list(self.blink_revisions)
     html_chunks = ['''
 <html>
 <head>
@@ -382,16 +439,20 @@ table { border-collapse: collapse; }
 th { font-size: xx-small; }
 td, th { text-align: center; }
 .header { border: 1px solid black; }
+.revision { padding-left: 5px; padding-right: 5px; }
 .revision { border-left: 1px solid black; border-right: 1px solid black; }
 .success { background-color: #8d4; }
 .failure { background-color: #e88; }
 .lkgr { background-color: #4af; }
+.roll { border-top: 2px solid black; }
 </style>
 </head>
 <body><table>
 ''']
-    master_headers = ['<tr class="header"><th></th>\n']
-    builder_headers = ['<tr class="header"><th></th>\n']
+    master_headers = ['<tr class="header"><th></th><th></th>\n']
+    builder_headers = ['<tr class="header">']
+    builder_headers.append('<th>blink revision</th>\n')
+    builder_headers.append('<th>chromium revision</th>\n')
     for master, builders in self.masters:
       master_url = 'build.chromium.org/p/%s' % master
       hdr = '  <th colspan="%d" class="header">' % len(builders)
@@ -408,8 +469,19 @@ td, th { text-align: center; }
     builder_headers.append('</tr>\n')
     html_chunks.extend(master_headers)
     html_chunks.extend(builder_headers)
+    blink_tmpl = 'https://src.chromium.org/viewvc/blink?view=rev&revision=%s'
+    blinkrev = blinkrevs[-1][1]
     for row in self.rows:
-      html_chunks.append('<tr>')
+      rowclass = ''
+      while blinkrevs and self.revcmp(row[0], blinkrevs[-1][0]) < 0:
+        rowclass = ' class="roll"'
+        blinkrev = blinkrevs[-1][2] or '?'
+        blinkrevs.pop()
+        if blinkrevs:
+          blinkrev = blinkrevs[-1][1]
+      html_chunks.append('<tr%s><td class="revision">' % rowclass)
+      html_chunks.append('<a href="%s">%s</a></td>' % (
+          blink_tmpl % blinkrev, blinkrev))
       html_chunks.extend(row[1:])
       html_chunks.append('</tr>\n')
     html_chunks.append('</table></body></html>\n')
@@ -596,9 +668,12 @@ def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
         builder_history.append((revision, not reasons, build_num))
       master_history[builder] = sorted(
           builder_history, key=lambda x: x[0], cmp=revcmp)
-  return (build_history, sorted(revisions, cmp=revcmp))
-
-
+  revisions = sorted(revisions, cmp=revcmp)
+  # Sanity check; buildbot data sometimes has bogus old revisions
+  first_good_rev = 0
+  while int(revisions[-1]) - int(revisions[first_good_rev]) > 10000:
+    first_good_rev += 1
+  return (build_history, revisions[first_good_rev:])
 
 def FindLKGRCandidate(build_history, revisions, revcmp, status_gen=None):
   """Given a build_history of builds, run the algorithm for finding an LKGR
@@ -623,7 +698,7 @@ def FindLKGRCandidate(build_history, revisions, revcmp, status_gen=None):
       builders.append((master, builder, gen, prev))
   for revision in reversed(revisions):
     status_gen.revision_cb(revision)
-    good_build = True
+    good_revision = True
     for master, builder, gen, prev in builders:
       try:
         while revcmp(revision, prev[-1][0]) < 0:
@@ -633,10 +708,10 @@ def FindLKGRCandidate(build_history, revisions, revcmp, status_gen=None):
       bad = (not prev[-1][1] or (cmp(revision, prev[-1][0]) != 0 and
                                  (len(prev) < 2 or not prev[-2][1])))
       if bad:
-        good_build = False
+        good_revision = False
       build_num = prev[-1][2] if revcmp(revision, prev[-1][0]) == 0 else None
       status_gen.build_cb(master, builder, not bad, build_num)
-    if not lkgr and good_build:
+    if not lkgr and good_revision:
       lkgr = revision
       status_gen.lkgr_cb(revision)
   return lkgr
@@ -853,7 +928,7 @@ def main():
       builds, lkgr_steps, revcmp)
   status_gen = None
   if options.html:
-    status_gen = HTMLStatusGenerator()
+    status_gen = HTMLStatusGenerator(revisions, revcmp)
   candidate = FindLKGRCandidate(build_history, revisions, revcmp, status_gen)
   if options.html:
     fh = open(options.html, 'w')
