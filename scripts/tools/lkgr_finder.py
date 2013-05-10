@@ -428,9 +428,11 @@ class HTMLStatusGenerator(StatusGenerator):
 
   def generate(self):
     if self.blink_rev_thread:
-      self.blink_rev_thread.join()
-      self.blink_rev_thread = None
-    blinkrevs = list(self.blink_revisions)
+      self.blink_rev_thread.join(120)
+    if self.blink_rev_thread.isAlive():
+      blinkrevs = [(-1, '?', '?')]
+    else:
+      blinkrevs = list(self.blink_revisions)
     html_chunks = ['''
 <html>
 <head>
