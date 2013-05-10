@@ -537,9 +537,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           'page_cycler_2012Q2-netsim',
           test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
           factory_properties=fp, perf=True)
-    if R('scrolling_benchmark'):
+    if R('smoothness_measurement'):
       f.AddTelemetryTest(
-          'scrolling_benchmark', 'top_25.json', factory_properties=fp)
+          'smoothness_measurement', 'top_25.json', factory_properties=fp)
     if R('jsgamebench'):
       f.AddTelemetryTest(
           'jsgamebench', 'jsgamebench.json', factory_properties=fp)
@@ -548,12 +548,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('robohornetpro'):
       f.AddTelemetryTest(
           'robohornetpro', 'robohornetpro.json', factory_properties=fp)
-    if R('memory_benchmark'):
+    if R('memory_measurement'):
       f.AddTelemetryTest(
-          'memory_benchmark', 'top_25.json', factory_properties=fp)
+          'memory_measurement', 'top_25.json', factory_properties=fp)
     if R('reload_benchmark'):
       f.AddTelemetryTest(
-          'memory_benchmark', '2012Q3.json', step_name='reload_benchmark',
+          'memory_measurement', '2012Q3.json', step_name='reload_benchmark',
           factory_properties=fp)
 
     if R('memory'):
@@ -564,9 +564,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
     if R('octane'):
       f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
-    if R('image_decoding_benchmark'):
+    if R('image_decoding_measurement'):
       f.AddTelemetryTest(
-          'image_decoding_benchmark', 'image_decoding_benchmark.json',
+          'image_decoding_measurement', 'image_decoding_measurement.json',
           factory_properties=fp)
     if R('dromaeo'):
       f.AddTelemetryTest('dromaeo', 'dromaeo/domcoreattr.json',
@@ -625,10 +625,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
-    if R('startup_benchmark'):
+    if R('startup_measurement'):
       fp['page_repeat'] = 20
       f.AddTelemetryTest(
-          'startup_benchmark', 'blank_page.json', factory_properties=fp)
+          'startup_measurement', 'blank_page.json', factory_properties=fp)
 
     if R('sizes'):
       f.AddSizesTests(fp)

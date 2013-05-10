@@ -359,7 +359,7 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "ver": "undefined", "chan": "undefined", "units": "ms",'
          ' "important": ["mean_frame_time"]}'],
         'linux-release',
-        'scrolling_benchmark',
+        'smoothness_measurement',
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'Linux (1)',
@@ -369,7 +369,7 @@ class ResultsDashboardTest(unittest.TestCase):
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
-        'test': 'scrolling_benchmark/mean_frame_time',
+        'test': 'smoothness_measurement/mean_frame_time',
         'revision': 1234,
         'value': '77.0964285714',
         'error': '138.142773233',
