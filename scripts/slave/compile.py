@@ -505,6 +505,16 @@ def get_ubuntu_codename():
   return codename
 
 
+def maybe_set_official_build_envvars(options, env):
+  if options.mode == 'google_chrome' or options.mode == 'official':
+    env['CHROMIUM_BUILD'] = '_google_chrome'
+
+  if options.mode == 'official':
+    # Official builds are always Google Chrome.
+    env['OFFICIAL_BUILD'] = '1'
+    env['CHROME_BUILD_TYPE'] = '_official'
+
+
 def common_make_settings(
     command, options, env, crosstool=None, compiler=None):
   """
@@ -513,13 +523,7 @@ def common_make_settings(
   and for the mac make build.
   """
   assert compiler in (None, 'clang', 'goma', 'goma-clang', 'jsonclang')
-  if options.mode == 'google_chrome' or options.mode == 'official':
-    env['CHROMIUM_BUILD'] = '_google_chrome'
-
-  if options.mode == 'official':
-    # Official builds are always Google Chrome.
-    env['OFFICIAL_BUILD'] = '1'
-    env['CHROME_BUILD_TYPE'] = '_official'
+  maybe_set_official_build_envvars(options, env)
 
   # Don't stop at the first error.
   command.append('-k')
@@ -733,6 +737,8 @@ def main_ninja(options, args):
   command.extend(options.build_args)
   command.extend(args)
 
+  maybe_set_official_build_envvars(options, env)
+
   if options.llvm_tsan:
     # Do not report thread leaks when running executables compiled with TSan.
     # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
@@ -935,13 +941,7 @@ def main_win(options, args):
   # no goma support yet for this build tool.
   assert options.compiler != 'goma'
 
-  if options.mode == 'google_chrome' or options.mode == 'official':
-    env['CHROMIUM_BUILD'] = '_google_chrome'
-
-  if options.mode == 'official':
-    # Official builds are always Google Chrome.
-    env['OFFICIAL_BUILD'] = '1'
-    env['CHROME_BUILD_TYPE'] = '_official'
+  maybe_set_official_build_envvars(options, env)
 
   if not options.solution:
     options.solution = 'all.sln'
