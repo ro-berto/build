@@ -490,21 +490,6 @@ def main_xcode(options, args):
   return result
 
 
-DISTRIBUTION_FILE = '/etc/lsb-release'
-def get_ubuntu_codename():
-  if not os.path.exists(DISTRIBUTION_FILE):
-    return None
-  dist_file = open(DISTRIBUTION_FILE, 'r')
-  dist_text = dist_file.read().strip()
-  dist_file.close()
-  codename = None
-  for line in dist_text.splitlines():
-    match_data = re.match(r'^DISTRIB_CODENAME=(\w+)$', line)
-    if match_data:
-      codename = match_data.group(1)
-  return codename
-
-
 def maybe_set_official_build_envvars(options, env):
   if options.mode == 'google_chrome' or options.mode == 'official':
     env['CHROMIUM_BUILD'] = '_google_chrome'
