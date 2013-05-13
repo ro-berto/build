@@ -496,137 +496,89 @@ class GClient(sourcebase):
     return res
 
   def parseGotRevision(self):
-    """Extract the Chromium and WebKit revision numbers from the svn output.
+    """Extracts revision numbers for all the dependencies checked out.
 
     svn checkout operations finish with 'Checked out revision 16657.'
     svn update operations finish the line 'At revision 16654.' when there
     is no change. They finish with 'Updated to revision 16655.' otherwise.
-
-    A tuple of the two revisions is always returned, although either or both
-    may be None if they could not be found.
     """
-    SVN_REVISION_RE = re.compile(
-        r'^(Checked out|At|Updated to) revision ([0-9]+)\.')
-    def findRevisionNumberFromSvn(line):
-      m = SVN_REVISION_RE.search(line)
-      if m:
-        return int(m.group(2))
-      return None
-    GIT_REVISION_RE = re.compile(
-        r'^Checked out revision ([0-9a-fA-F]{40})$')
-    def findRevisionNumberFromGit(line):
-      m = GIT_REVISION_RE.search(line)
-      if m:
-        return m.group(1)
-      return None
-
-    WEBKIT_CHECKOUT_PATH = os.path.join(
-        'src', 'third_party', 'WebKit').replace('\\', '\\\\')
-
-    WEBKIT_UPDATE_RE = re.compile(
-        r'svn (checkout|update) .*%s ' % WEBKIT_CHECKOUT_PATH)
-    def findWebKitUpdate(line):
-      return WEBKIT_UPDATE_RE.search(line)
-
-    NACL_CHECKOUT_PATH = os.path.join(
-        'src', 'native_client').replace('\\', '\\\\')
-
-    NACL_UPDATE_RE = re.compile(
-        r'svn (checkout|update) .*%s ' % NACL_CHECKOUT_PATH)
-    def findNaClUpdate(line):
-      return NACL_UPDATE_RE.search(line)
-
-    V8_CHECKOUT_PATH = os.path.join('src', 'v8').replace('\\', '\\\\')
-
-    V8_UPDATE_RE = re.compile(r'svn (checkout|update) .*%s ' % V8_CHECKOUT_PATH)
-    def findV8Update(line):
-      return V8_UPDATE_RE.search(line)
-
-    def findRevisionNumberFromGclient(repo, line):
-      m = re.match(r'_____ %s at ([0-9]+)$' % repo, line)
-      if m:
-        return int(m.group(1))
-      return None
-
-    chromium_revision = None
-    webkit_revision = None
-    nacl_revision = None
-    v8_revision = None
-    found_webkit_update = False
-    found_nacl_update = False
-    found_v8_update = False
+    SCM_RE = {
+      'git': r'^Checked out revision ([0-9a-fA-F]{40})$',
+      'svn': r'^(?:Checked out|At|Updated to) revision ([0-9]+)\.',
+    }
+    GCLIENT_CMD = re.compile(r'^________ running \'(.+?)\' in \'(.+?)\'$')
+    GCLIENT_AT_REV = re.compile(r'_____ (.+?) at (\d+|[0-9a-fA-F]{40})$')
 
     untangled_stdout = untangle(self.command.stdout.splitlines(False))
     # We only care about the last sync which starts with "solutions=[...".
-    # Look backwards to find the last one first.
+    # Look backwards to find the last gclient sync call. It's parsing the whole
+    # sync step in one pass here, which could include gclient revert and two
+    # gclient sync calls. Only the last gclient sync call should be parsed.
     for i, line in enumerate(reversed(untangled_stdout)):
       if line.startswith('solutions=['):
         # Only keep from "solutions" line to end.
         untangled_stdout = untangled_stdout[-i-1:]
         break
 
-    # http://crbug.com/82939: This is very fragile, see the bug for the
-    # details.
+    projects_looking_for = {
+      os.path.join('src'): 'got_chromium_revision',
+      os.path.join('src', 'native_client'): 'got_nacl_revision',
+      os.path.join('src', 'tools', 'swarm_client'): 'got_swarm_client_revision',
+      os.path.join('src', 'v8'): 'got_v8_revision',
+      os.path.join('src', 'third_party', 'WebKit'): 'got_webkit_revision',
+    }
+    # Escape paths for windows.
+    for k, v in projects_looking_for.iteritems():
+      projects_looking_for[k] = v.replace('\\', '\\\\')
+
+    revisions_found = {}
+    current_scm = None
+    current_project = None
     for line in untangled_stdout:
-      revision = findRevisionNumberFromSvn(line)
-      if not revision:
-        revision = findRevisionNumberFromGit(line)
-      if revision:
-        if (not found_webkit_update and
-            not found_nacl_update and
-            not found_v8_update and
-            not chromium_revision):
-          chromium_revision = revision
-        elif found_webkit_update and not webkit_revision:
-          webkit_revision = revision
-        elif found_nacl_update and not nacl_revision:
-          nacl_revision = revision
-        elif found_v8_update and not v8_revision:
-          v8_revision = revision
+      match = GCLIENT_AT_REV.match(line)
+      if match:
+        current_project = None
+        current_scm = None
+        project = projects_looking_for.get(match.group(1))
+        if project:
+          revisions_found[project] = match.group(2)
+        continue
 
-      # No revision number found, look for the svn update for WebKit.
-      if not found_webkit_update:
-        found_webkit_update = findWebKitUpdate(line)
+      if current_project:
+        # Look for revision.
+        match = re.match(SCM_RE[current_scm], line)
+        if match:
+          # Override any previous value, since update can happen multiple times.
+          revisions_found[current_project] = match.group(1)
+          current_project = None
+          current_scm = None
+          continue
 
-      # No revision number found, look for the svn update for NaCl.
-      if not found_nacl_update:
-        found_nacl_update = findNaClUpdate(line)
+      match = GCLIENT_CMD.match(line)
+      if match:
+        command, directory = match.groups()
+        parts = command.split(' ')
+        directory = directory.rstrip(os.path.sep) + os.path.sep
+        if parts[0] in SCM_RE:
+          for part in parts:
+            # This code assumes absolute paths, which are easy to find in the
+            # argument list.
+            if part.startswith(directory):
+              reldir = part[len(directory):]
+              if reldir:
+                current_project = projects_looking_for.get(reldir)
+                if current_project:
+                  current_scm = parts[0]
+                  break
 
-      # No revision number found, look for the svn update for V8.
-      if not found_v8_update:
-        found_v8_update = findV8Update(line)
-
-      # Check for gclient output.
-      if not chromium_revision:
-        chromium_revision = findRevisionNumberFromGclient('src', line)
-      if not webkit_revision:
-        webkit_revision = findRevisionNumberFromGclient(
-            WEBKIT_CHECKOUT_PATH, line)
-      if not nacl_revision:
-        nacl_revision = findRevisionNumberFromGclient(
-            NACL_CHECKOUT_PATH, line)
-      if not v8_revision:
-        v8_revision = findRevisionNumberFromGclient(V8_CHECKOUT_PATH, line)
-
-      # Exit if we're done.
-      if (chromium_revision and
-          webkit_revision and
-          nacl_revision and
-          v8_revision):
-        break
-
-    return chromium_revision, webkit_revision, nacl_revision, v8_revision
+    return revisions_found
 
   def _handleGotRevision(self, res):
     """Send parseGotRevision() return values as status updates to the master."""
     d = defer.maybeDeferred(self.parseGotRevision)
-    def sendStatusUpdatesToMaster(revisions):
-      chromium_revision, webkit_revision, nacl_revision, v8_revision = revisions
-      self.sendStatus({'got_revision': chromium_revision})
-      self.sendStatus({'got_webkit_revision': webkit_revision})
-      self.sendStatus({'got_nacl_revision': nacl_revision})
-      self.sendStatus({'got_v8_revision': v8_revision})
-    d.addCallback(sendStatusUpdatesToMaster)
+    # parseGotRevision returns the revision dict, which is passed as the first
+    # argument to sendStatus.
+    d.addCallback(self.sendStatus)
     return d
 
   def maybeDoVCFallback(self, rc):

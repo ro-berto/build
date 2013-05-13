@@ -48,14 +48,13 @@ ________ running 'svn checkout http://src.chromium.org/native_client/trunk\
 Checked out revision 98765.
 
 ________ running 'svn checkout http://svn.webkit.org/repository/webkit/trunk\
-@66952 .../build/src/third_party/WebKit --revision 66952'\
-in '.../build'
+@66952 .../build/src/third_party/WebKit --revision 66952' in '.../build'
  U   .../build/src/third_party/WebKit
 Checked out revision 67890."""
 
 SVN_UPDATE_STDOUT = """solutions=[...]
 
-________ running 'svn update http://src.chromium.org/svn/trunk/src\
+________ running 'svn update http://src.chromium.org/svn/trunk/src \
 .../build/src' in '.../build'
  U   .../build/src
 Updated to revision 12345.
@@ -66,8 +65,7 @@ ________ running 'svn update http://src.chromium.org/native_client/trunk\
 Updated to revision 98765.
 
 ________ running 'svn update http://svn.webkit.org/repository/webkit/trunk\
-@66952 .../build/src/third_party/WebKit --revision \
-66952' in '.../build'
+@66952 .../build/src/third_party/WebKit --revision 66952' in '.../build'
  U   .../build/src/third_party/WebKit
 Updated to revision 67890."""
 
@@ -82,8 +80,7 @@ src/native_client .../build/src/native_client' in '.../build'
 At revision 98765.
 
 ________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/\
-@66952 .../build/src/third_party/WebKit --revision \
-66952' in '.../build'
+@66952 .../build/src/third_party/WebKit --revision 66952' in '.../build'
 At revision 67890."""
 
 GCLIENT_SYNC_NO_CHANGE_STDOUT = """solutions=[...]
@@ -131,7 +128,7 @@ Syncing projects:  76% (46/60)
 
 ________ running 'svn update --revision BASE' in '.../build/src/third_party/\
 WebKit'
-At revision 69168.
+At revision 12345.
 
 Syncing projects: 100% (60/60)
 Syncing projects: 100% (60/60), done.
@@ -209,68 +206,67 @@ class GClientSourceTest(unittest.TestCase):
 
   def testParseGotRevision_NoRevisions(self):
     gclient = TestableGClient("hello world!")
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(None, chromium_revision)
-    self.assertEqual(None, webkit_revision)
-    self.assertEqual(None, nacl_revision)
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    expected = {}
+    self.assertEqual(expected, actual)
 
   def testParseGotRevision_Checkout(self):
     gclient = TestableGClient(SVN_CHECKOUT_STDOUT)
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(12345, chromium_revision)
-    self.assertEqual(67890, webkit_revision)
-    self.assertEqual(98765, nacl_revision)
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    expected = {
+      'got_chromium_revision': '12345',
+      'got_nacl_revision': '98765',
+      'got_webkit_revision': '67890',
+    }
+    self.assertEqual(expected, actual)
 
   def testParseGotRevision_Update(self):
     gclient = TestableGClient(SVN_UPDATE_STDOUT)
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(12345, chromium_revision)
-    self.assertEqual(67890, webkit_revision)
-    self.assertEqual(98765, nacl_revision)
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    expected = {
+      'got_chromium_revision': '12345',
+      'got_nacl_revision': '98765',
+      'got_webkit_revision': '67890',
+    }
+    self.assertEqual(expected, actual)
 
   def testParseGotRevision_UpdateNoChange(self):
     gclient = TestableGClient(SVN_UPDATE_NO_CHANGE_STDOUT)
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(12345, chromium_revision)
-    self.assertEqual(67890, webkit_revision)
-    self.assertEqual(98765, nacl_revision)
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    expected = {
+      'got_chromium_revision': '12345',
+      'got_nacl_revision': '98765',
+      'got_webkit_revision': '67890',
+    }
+    self.assertEqual(expected, actual)
 
   def testParseGotRevision_GClientSyncNoChange(self):
     gclient = TestableGClient(GCLIENT_SYNC_NO_CHANGE_STDOUT)
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(12345, chromium_revision)
-    self.assertEqual(67890, webkit_revision)
-    self.assertEqual(98765, nacl_revision)
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    expected = {
+      'got_chromium_revision': '12345',
+      'got_nacl_revision': '98765',
+      'got_webkit_revision': '67890',
+    }
+    self.assertEqual(expected, actual)
 
   def testParseGotRevision_MulitJob(self):
     gclient = TestableGClient(stdout=GCLIENT_SYNC_MULTI_JOB_STDOUT)
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(59820, chromium_revision)
-    self.assertEqual(None, webkit_revision)  # not in truncated stdout
-    self.assertEqual(None, nacl_revision)  # not in truncated stdout
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    # The truncated stdout misses some values.
+    expected = {'got_chromium_revision': '59820'}
+    self.assertEqual(expected, actual)
 
   def testParseGotRevision_MultiJobDepsTry(self):
     gclient = TestableGClient(stdout=GCLIENT_SYNC_MULTI_JOB_DEPS_TRY_STDOUT)
-    (chromium_revision, webkit_revision,
-     nacl_revision, v8_revision) = gclient.parseGotRevision()
-    self.assertEqual(61624, chromium_revision)
-    # Finds the revision in the changed DEPS, not the one in the lkgr DEPS.
-    self.assertEqual(69168, webkit_revision)
-    # Nothing with nacl.
-    self.assertEqual(None, nacl_revision)
-    self.assertEqual(None, v8_revision)
+    actual = gclient.parseGotRevision()
+    expected = {
+      # Finds the revision in the changed DEPS, not the first one, e.g. 69168,
+      # not 12345.
+      'got_chromium_revision': '61624',
+      'got_webkit_revision': '69168',
+    }
+    self.assertEqual(expected, actual)
 
   def testUntangle_UpToDoubleDigits(self):
     stdout_lines = ['4>four', '9>nine', '1>one', '6>six', '3>three',
@@ -328,7 +324,7 @@ class GClientSourceTest(unittest.TestCase):
         'Syncing projects:  76% (46/60)',
         '________ running \'svn update --revision BASE\' '
         'in \'.../build/src/third_party/WebKit\'',
-        'At revision 69168.',
+        'At revision 12345.',
         'Syncing projects: 100% (60/60)',
         'Syncing projects: 100% (60/60), done.',
         'solutions=[{"name":"src","url":"http://src.chromium.org/svn/'

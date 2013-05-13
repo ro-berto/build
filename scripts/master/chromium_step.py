@@ -234,32 +234,23 @@ class GClient(source.Source):
   def commandComplete(self, cmd):
     """Handles status updates from buildbot slave when the step is done.
 
-    As a result 'got_revision', 'got_webkit_revision', 'got_nacl_revision' as
-    well as 'got_v8_revision' properties will be set, though either may be None
-    if it couldn't be found.
+    Update the relevant got_XX_revision build properties if available.
     """
     source.Source.commandComplete(self, cmd)
     primary_repo = self.args.get('primary_repo', '')
     primary_revision_key = 'got_' + primary_repo + 'revision'
-    if cmd.updates.has_key(primary_revision_key):
-      got_revision = cmd.updates[primary_revision_key][-1]
-      if got_revision:
-        self.setProperty('got_revision', str(got_revision), 'Source')
-    if cmd.updates.has_key('got_webkit_revision'):
-      got_webkit_revision = cmd.updates['got_webkit_revision'][-1]
-      if got_webkit_revision:
-        self.setProperty('got_webkit_revision', str(got_webkit_revision),
-                         'Source')
-    if cmd.updates.has_key('got_nacl_revision'):
-      got_nacl_revision = cmd.updates['got_nacl_revision'][-1]
-      if got_nacl_revision:
-        self.setProperty('got_nacl_revision', str(got_nacl_revision),
-                         'Source')
-    if cmd.updates.has_key('got_v8_revision'):
-      got_v8_revision = cmd.updates['got_v8_revision'][-1]
-      if got_v8_revision:
-        self.setProperty('got_v8_revision', str(got_v8_revision),
-                         'Source')
+    properties = (
+      ('got_revision', primary_revision_key),
+      ('got_nacl_revision', 'got_nacl_revision'),
+      ('got_swarm_client_revision', 'got_swarm_client_revision'),
+      ('got_v8_revision', 'got_v8_revision'),
+      ('got_webkit_revision', 'got_webkit_revision'),
+    )
+    for prop_name, cmd_arg in properties:
+      if cmd_arg in cmd.updates:
+        got_revision = cmd.updates[cmd_arg][-1]
+        if got_revision:
+          self.setProperty(prop_name, str(got_revision), 'Source')
 
 
 class ApplyIssue(LoggingBuildStep):
