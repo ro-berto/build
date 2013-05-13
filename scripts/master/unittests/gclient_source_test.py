@@ -216,6 +216,7 @@ class GClientSourceTest(unittest.TestCase):
     expected = {
       'got_chromium_revision': '12345',
       'got_nacl_revision': '98765',
+      'got_revision': '12345',
       'got_webkit_revision': '67890',
     }
     self.assertEqual(expected, actual)
@@ -226,6 +227,7 @@ class GClientSourceTest(unittest.TestCase):
     expected = {
       'got_chromium_revision': '12345',
       'got_nacl_revision': '98765',
+      'got_revision': '12345',
       'got_webkit_revision': '67890',
     }
     self.assertEqual(expected, actual)
@@ -236,6 +238,7 @@ class GClientSourceTest(unittest.TestCase):
     expected = {
       'got_chromium_revision': '12345',
       'got_nacl_revision': '98765',
+      'got_revision': '12345',
       'got_webkit_revision': '67890',
     }
     self.assertEqual(expected, actual)
@@ -246,6 +249,7 @@ class GClientSourceTest(unittest.TestCase):
     expected = {
       'got_chromium_revision': '12345',
       'got_nacl_revision': '98765',
+      'got_revision': '12345',
       'got_webkit_revision': '67890',
     }
     self.assertEqual(expected, actual)
@@ -254,7 +258,10 @@ class GClientSourceTest(unittest.TestCase):
     gclient = TestableGClient(stdout=GCLIENT_SYNC_MULTI_JOB_STDOUT)
     actual = gclient.parseGotRevision()
     # The truncated stdout misses some values.
-    expected = {'got_chromium_revision': '59820'}
+    expected = {
+      'got_chromium_revision': '59820',
+      'got_revision': '59820',
+    }
     self.assertEqual(expected, actual)
 
   def testParseGotRevision_MultiJobDepsTry(self):
@@ -264,6 +271,7 @@ class GClientSourceTest(unittest.TestCase):
       # Finds the revision in the changed DEPS, not the first one, e.g. 69168,
       # not 12345.
       'got_chromium_revision': '61624',
+      'got_revision': '61624',
       'got_webkit_revision': '69168',
     }
     self.assertEqual(expected, actual)

@@ -571,6 +571,10 @@ class GClient(sourcebase):
                   current_scm = parts[0]
                   break
 
+    # Some masters still require got_revision, which is the old name for
+    # got_chromium_revision.
+    if 'got_chromium_revision' in revisions_found:
+      revisions_found['got_revision'] = revisions_found['got_chromium_revision']
     return revisions_found
 
   def _handleGotRevision(self, res):
