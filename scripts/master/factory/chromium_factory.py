@@ -515,12 +515,24 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('page_cycler', 'page_cycler/morejs.json',
                          step_name='morejs', factory_properties=fp,
                          timeout=timeout)
-    if R('page_cycler_intl1'):
-      f.AddTelemetryTest('page_cycler', 'page_cycler/intl1.json',
-                         step_name='intl1', factory_properties=fp)
-    if R('page_cycler_intl2'):
-      f.AddTelemetryTest('page_cycler', 'page_cycler/intl2.json',
-                         step_name='intl2', factory_properties=fp)
+    if R('page_cycler_intl_ar_fa_he'):
+      f.AddTelemetryTest('page_cycler', 'intl_ar_fa_he.json',
+                         step_name='intl_ar_fa_he', factory_properties=fp)
+    if R('page_cycler_intl_es_fr_pt-BR'):
+      f.AddTelemetryTest('page_cycler', 'intl_es_fr_pt-BR.json',
+                         step_name='intl_es_fr_pt-BR', factory_properties=fp)
+    if R('page_cycler_intl_hi_ru'):
+      f.AddTelemetryTest('page_cycler', 'intl_hi_ru.json',
+                         step_name='intl_hi_ru', factory_properties=fp)
+    if R('page_cycler_intl_ja_zh'):
+      f.AddTelemetryTest('page_cycler', 'intl_ja_zh.json',
+                         step_name='intl_ja_zh', factory_properties=fp)
+    if R('page_cycler_intl_ko_th_vi'):
+      f.AddTelemetryTest('page_cycler', 'intl_ko_th_vi.json',
+                         step_name='intl_ko_th_vi', factory_properties=fp)
+    if R('page_cycler_typical_25'):
+      f.AddTelemetryTest('page_cycler', 'typical_25.json',
+                         step_name='typical_25', factory_properties=fp)
     if R('page_cycler_bloat'):
       f.AddTelemetryTest('page_cycler', 'page_cycler/bloat.json',
                          step_name='bloat', factory_properties=fp)
