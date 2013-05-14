@@ -9,6 +9,6 @@ def GetFactoryProperties(api, _factory_properties, build_properties):
   return {
     'steps': [
       steps.step('gatekeeper_launch',
-                 api.build_path('scripts', 'slave', 'gatekeeper_launch.py'))
+                 [api.build_path('scripts', 'slave', 'gatekeeper_launch.py')])
     ]
   }
