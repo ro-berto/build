@@ -156,8 +156,8 @@ class Master(object):
     slave_port = 9157
     master_port_alt = 9058
 
-  class ChromiumPyauto(_ChromiumBase):
-    project_name = 'Chromium PyAuto'
+  class ChromiumChromeDriver(_ChromiumBase):
+    project_name = 'Chromium ChromeDriver'
     master_port = 9016
     slave_port = 9116
     master_port_alt = 9216
