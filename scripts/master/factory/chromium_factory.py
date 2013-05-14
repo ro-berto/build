@@ -341,6 +341,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gpu_br'):
       f.AddBuildrunnerGTest(
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
+    if R('googleurl_unittests'):
+      f.AddGTestTestStep('googleurl_unittests', fp)
     if R('googleurl', 'url_unittests'):
       f.AddGTestTestStep('url_unittests', fp)
     if R('googleurl_br'):
