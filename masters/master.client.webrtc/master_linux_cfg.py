@@ -71,47 +71,47 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
 
   defaults['category'] = category
 
-  B('Linux32Debug', 'linux32_debug_factory', scheduler=scheduler)
+  B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler)
   F('linux32_debug_factory', linux().WebRTCFactory(
       target='Debug',
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
-  B('Linux32Release', 'linux32_release_factory', scheduler=scheduler)
+  B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler)
   F('linux32_release_factory', linux().WebRTCFactory(
       target='Release',
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
-  B('Linux64Debug', 'linux64_debug_factory', scheduler=scheduler)
+  B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler)
   F('linux64_debug_factory', linux().WebRTCFactory(
       target='Debug',
       tests=normal_tests))
-  B('Linux64Release', 'linux64_release_factory', scheduler=scheduler)
+  B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler)
   F('linux64_release_factory', linux().WebRTCFactory(
       target='Release',
       tests=normal_tests))
 
-  B('LinuxClang', 'linux_clang_factory', scheduler=scheduler)
+  B('Linux Clang', 'linux_clang_factory', scheduler=scheduler)
   F('linux_clang_factory', linux().WebRTCFactory(
       target='Debug',
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
-  B('LinuxMemcheck', 'linux_memcheck_factory', scheduler=scheduler)
+  B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler)
   F('linux_memcheck_factory', linux().WebRTCFactory(
       target='Release',
       tests=memcheck_tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
                           {'GYP_DEFINES': 'build_for_tool=memcheck'}}))
-  B('LinuxTsan', 'linux_tsan_factory', scheduler=scheduler)
+  B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler)
   F('linux_tsan_factory', linux().WebRTCFactory(
       target='Release',
       tests=tsan_tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
                           {'GYP_DEFINES': 'build_for_tool=tsan'}}))
-  B('LinuxAsan', 'linux_asan_factory', scheduler=scheduler)
+  B('Linux Asan', 'linux_asan_factory', scheduler=scheduler)
   F('linux_asan_factory', linux().WebRTCFactory(
       target='Release',
       tests=normal_tests,
@@ -131,7 +131,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
     }))
 
   # ChromeOS.
-  B('CrOS', 'chromeos_factory', scheduler=scheduler)
+  B('Chrome OS', 'chromeos_factory', scheduler=scheduler)
   F('chromeos_factory', linux().WebRTCFactory(
       target='Debug',
       tests=normal_tests,

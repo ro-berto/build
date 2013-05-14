@@ -57,19 +57,19 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
 
   defaults['category'] = category
 
-  B('Mac32Debug', 'mac_debug_factory', scheduler=scheduler)
+  B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler)
   F('mac_debug_factory', mac().WebRTCFactory(
       target='Debug',
       options=options,
       tests=tests))
 
-  B('Mac32Release', 'mac_release_factory', scheduler=scheduler)
+  B('Mac32 Release', 'mac_release_factory', scheduler=scheduler)
   F('mac_release_factory', mac().WebRTCFactory(
       target='Release',
       options=options,
       tests=tests))
 
-  B('Mac64Debug', 'mac64_debug_factory', scheduler=scheduler)
+  B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler)
   F('mac64_debug_factory', mac().WebRTCFactory(
       target='Debug',
       options=options,
@@ -78,7 +78,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
           'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
       }))
 
-  B('Mac64Release', 'mac64_release_factory', scheduler=scheduler)
+  B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler)
   F('mac64_release_factory', mac().WebRTCFactory(
       target='Release',
       options=options,
@@ -87,7 +87,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
           'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
       }))
 
-  B('MacAsan', 'mac_asan_factory', scheduler=scheduler)
+  B('Mac Asan', 'mac_asan_factory', scheduler=scheduler)
   F('mac_asan_factory', mac().WebRTCFactory(
       target='Release',
       options=options,

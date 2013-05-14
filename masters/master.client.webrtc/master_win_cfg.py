@@ -56,13 +56,13 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
 
   defaults['category'] = category
 
-  B('Win32Debug', 'win32_debug_factory', scheduler=scheduler)
+  B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler)
   F('win32_debug_factory', win().WebRTCFactory(
       target='Debug',
       project=project,
       tests=normal_tests,
       factory_properties=factory_prop))
-  B('Win32Release', 'win32_release_factory', scheduler=scheduler)
+  B('Win32 Release', 'win32_release_factory', scheduler=scheduler)
   F('win32_release_factory', win().WebRTCFactory(
       target='Release',
       project=project,
