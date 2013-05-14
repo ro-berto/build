@@ -201,6 +201,20 @@ Updating projects from gyp files...
 Generating .../build/src/sandbox/sandbox.Makefile
 """
 
+NACL_CHECKOUT = """
+solutions=[{"name":"native_client","url":"http://src.chromium.org/native_clie...
+1>________ running 'svn update /build/native_client --revision 11' in '/build'
+1>U    /build.sh
+1>Updated to revision 11.
+3>________ running 'svn update /build/native_client/tools/perf_expectations \
+--revision 191009' in '/build'
+4>________ running 'svn update /build/testing/gtest --revision 629' in '/build'
+2>________ running 'svn update /build/breakpad/src --revision 1172' in '/build'
+3>At revision 191009.
+2>At revision 1172.
+4>At revision 629.
+"""
+
 
 class GClientSourceTest(unittest.TestCase):
 
@@ -273,6 +287,14 @@ class GClientSourceTest(unittest.TestCase):
       'got_chromium_revision': '61624',
       'got_revision': '61624',
       'got_webkit_revision': '69168',
+    }
+    self.assertEqual(expected, actual)
+
+  def testParseGotRevision_Nacl(self):
+    gclient = TestableGClient(stdout=NACL_CHECKOUT)
+    actual = gclient.parseGotRevision()
+    expected = {
+      'got_revision': '11',
     }
     self.assertEqual(expected, actual)
 

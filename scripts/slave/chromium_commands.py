@@ -501,6 +501,10 @@ class GClient(sourcebase):
     svn checkout operations finish with 'Checked out revision 16657.'
     svn update operations finish the line 'At revision 16654.' when there
     is no change. They finish with 'Updated to revision 16655.' otherwise.
+
+    The first project checked out gets to be set to got_revision property. This
+    is important since this class is not only used for chromium, it's also used
+    for other projects.
     """
     SCM_RE = {
       'git': r'^Checked out revision ([0-9a-fA-F]{40})$',
@@ -540,16 +544,23 @@ class GClient(sourcebase):
         current_project = None
         current_scm = None
         project = projects_looking_for.get(match.group(1))
+        if not revisions_found:
+          # Set it to got_revision, independent if it's a chromium-specific
+          # thing.
+          revisions_found['got_revision'] = match.group(2)
         if project:
           revisions_found[project] = match.group(2)
         continue
 
-      if current_project:
+      if current_scm:
         # Look for revision.
         match = re.match(SCM_RE[current_scm], line)
         if match:
           # Override any previous value, since update can happen multiple times.
-          revisions_found[current_project] = match.group(1)
+          if not revisions_found:
+            revisions_found['got_revision'] = match.group(1)
+          if current_project:
+            revisions_found[current_project] = match.group(1)
           current_project = None
           current_scm = None
           continue
@@ -567,14 +578,9 @@ class GClient(sourcebase):
               reldir = part[len(directory):]
               if reldir:
                 current_project = projects_looking_for.get(reldir)
-                if current_project:
-                  current_scm = parts[0]
-                  break
+                current_scm = parts[0]
+                break
 
-    # Some masters still require got_revision, which is the old name for
-    # got_chromium_revision.
-    if 'got_chromium_revision' in revisions_found:
-      revisions_found['got_revision'] = revisions_found['got_chromium_revision']
     return revisions_found
 
   def _handleGotRevision(self, res):
