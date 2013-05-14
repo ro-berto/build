@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from buildbot.changes import svnpoller
+from buildbot.scheduler import AnyBranchScheduler
 
 from master import build_utils
 
@@ -26,7 +27,7 @@ def WebkitFileSplitter(path):
   return build_utils.SplitPath(projects, path)
 
 
-def Update(config, active_master, c):
+def Update(config, _active_master, c):
   # Polls config.Master.trunk_url for changes
   chromium_url = "http://src.chromium.org/viewvc/chrome?view=rev&revision=%s"
   webkit_url = "http://src.chromium.org/viewvc/blink?view=rev&revision=%s"
@@ -43,3 +44,7 @@ def Update(config, active_master, c):
                                       revlinktmpl=webkit_url,
                                       project='webkit')
   c['change_source'].append(webkit_poller)
+
+  c['schedulers'].append(AnyBranchScheduler(
+      name='global_scheduler', branches=['trunk', 'src'], treeStableTimer=60,
+      builderNames=[]))

@@ -15,9 +15,9 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 
-def linux_android(): return chromium_factory.ChromiumFactory('',
+def linux_android():
+  return chromium_factory.ChromiumFactory('',
     'linux2', nohooks_on_update=True, target_os='android', full_checkout=True)
 
 
@@ -28,15 +28,10 @@ def linux_android(): return chromium_factory.ChromiumFactory('',
 defaults['category'] = 'content'
 
 #
-# Main release scheduler for WebKit
-#
-S('s4_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Content Shell Layouttests
 #
 B('WebKit (Content Shell) Android', 'f_contentshell_android_rel',
-  scheduler='s4_contentshell_webkit_rel')
+  scheduler='global_scheduler')
 
 F('f_contentshell_android_rel',
   linux_android().ChromiumAnnotationFactory(
@@ -59,5 +54,5 @@ F('f_contentshell_android_rel',
         'blink_config': 'blink',
         }))
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

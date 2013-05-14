@@ -9,11 +9,10 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
-S = helper.Scheduler
 
-def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
+def mac():
+  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 
 ################################################################################
@@ -23,14 +22,9 @@ def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 defaults['category'] = 'gpu'
 
 #
-# Main release scheduler for webkit
-#
-S('s9_gpu_mac_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # GPU Mac Release
 #
-B('GPU Mac10.7', 'f_gpu_mac_rel', scheduler='s9_gpu_mac_webkit_rel')
+B('GPU Mac10.7', 'f_gpu_mac_rel', scheduler='global_scheduler')
 F('f_gpu_mac_rel', mac().ChromiumFactory(
     target='Release',
     options=['--build-tool=ninja', '--compiler=goma-clang',
@@ -59,14 +53,9 @@ F('f_gpu_mac_rel', mac().ChromiumFactory(
 ################################################################################
 
 #
-# Main debug scheduler for webkit
-#
-S('s9_gpu_mac_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # GPU Mac Debug
 #
-B('GPU Mac10.7 (dbg)', 'f_gpu_mac_dbg', scheduler='s9_gpu_mac_webkit_dbg')
+B('GPU Mac10.7 (dbg)', 'f_gpu_mac_dbg', scheduler='global_scheduler')
 F('f_gpu_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     options=['--build-tool=ninja', '--compiler=goma-clang',
@@ -85,5 +74,5 @@ F('f_gpu_mac_dbg', mac().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

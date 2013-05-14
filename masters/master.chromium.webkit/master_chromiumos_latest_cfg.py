@@ -11,9 +11,9 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
@@ -23,14 +23,9 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 defaults['category'] = 'nonlayout'
 
 #
-# Main release scheduler for webkit
-#
-S('s10_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # ChromiumOS Rel Builder
 #
-B('Linux ChromiumOS Builder', 'f_chromiumos_rel', scheduler='s10_webkit_rel',
+B('Linux ChromiumOS Builder', 'f_chromiumos_rel', scheduler='global_scheduler',
     auto_reboot=False)
 F('f_chromiumos_rel', linux().ChromiumOSFactory(
     slave_type='Builder',
@@ -68,5 +63,5 @@ F('f_chromiumos_rel', linux().ChromiumOSFactory(
     }))
 
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

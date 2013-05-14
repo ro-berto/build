@@ -14,10 +14,10 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 T = helper.Triggerable
 
-def win(): return chromium_factory.ChromiumFactory('src/out', 'win32')
+def win():
+  return chromium_factory.ChromiumFactory('src/out', 'win32')
 
 defaults['category'] = 'layout'
 
@@ -35,10 +35,6 @@ webkit_tests = [
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
                                           'WebKit Win Builder',
                                           'webkit-win-latest-rel', 'win32')
-#
-# Main release scheduler for webkit
-#
-S('s4_webkit_rel', branch='trunk', treeStableTimer=60)
 
 #
 # Triggerable scheduler for testers
@@ -49,7 +45,7 @@ T('s4_webkit_rel_trigger')
 # Win Rel Builder
 #
 B('WebKit Win Builder', 'f_webkit_win_rel',
-  scheduler='s4_webkit_rel', builddir='webkit-win-latest-rel',
+  scheduler='global_scheduler', builddir='webkit-win-latest-rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
@@ -88,11 +84,6 @@ dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
                                           'WebKit Win Builder (dbg)',
                                           'webkit-win-latest-dbg', 'win32')
 #
-# Main debug scheduler for webkit
-#
-S('s4_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # Triggerable scheduler for testers
 #
 T('s4_webkit_dbg_trigger')
@@ -100,7 +91,7 @@ T('s4_webkit_dbg_trigger')
 #
 # Win Dbg Builder
 #
-B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='s4_webkit_dbg',
+B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='global_scheduler',
   builddir='webkit-win-latest-dbg', auto_reboot=False)
 F('f_webkit_win_dbg', win().ChromiumFactory(
     target='Debug',
@@ -147,5 +138,5 @@ F('f_webkit_dbg_tests_2', win().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

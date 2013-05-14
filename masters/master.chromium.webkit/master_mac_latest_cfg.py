@@ -9,12 +9,13 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
-S = helper.Scheduler
 
-def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
-def mac_out(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
+def mac():
+  return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
+
+def mac_out():
+  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 
 ################################################################################
@@ -24,14 +25,9 @@ def mac_out(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 defaults['category'] = 'nonlayout'
 
 #
-# Main release scheduler for webkit
-#
-S('s8_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Mac Rel Builder
 #
-B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='s8_webkit_rel')
+B('Mac10.6 Tests', 'f_mac_tests_rel', scheduler='global_scheduler')
 F('f_mac_tests_rel', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
@@ -52,7 +48,7 @@ F('f_mac_tests_rel', mac_out().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='s8_webkit_rel')
+B('Mac10.6 Perf', 'f_mac_perf6_rel', scheduler='global_scheduler')
 F('f_mac_perf6_rel', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
@@ -86,7 +82,7 @@ F('f_mac_perf6_rel', mac_out().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('Mac10.8 Tests', 'f_mac_tests_rel_108', scheduler='s8_webkit_rel')
+B('Mac10.8 Tests', 'f_mac_tests_rel_108', scheduler='global_scheduler')
 F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_tests'],
@@ -111,14 +107,9 @@ F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
 ################################################################################
 
 #
-# Main debug scheduler for webkit
-#
-S('s8_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # Mac Dbg Builder
 #
-B('Mac Builder (dbg)', 'f_mac_dbg', scheduler='s8_webkit_dbg')
+B('Mac Builder (dbg)', 'f_mac_dbg', scheduler='global_scheduler')
 F('f_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     options=['--', '-project', '../webkit/webkit.xcodeproj',],
@@ -126,5 +117,5 @@ F('f_mac_dbg', mac().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

@@ -15,9 +15,9 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win():
+  return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 
 ################################################################################
@@ -27,16 +27,11 @@ def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 defaults['category'] = 'content'
 
 #
-# Main release scheduler for webkit
-#
-S('s3_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Content Shell Layouttests
 #
 
 B('WebKit (Content Shell) Win', 'f_contentshell_win_rel',
-  scheduler='s3_contentshell_webkit_rel')
+  scheduler='global_scheduler')
 
 F('f_contentshell_win_rel', win().ChromiumFactory(
     target='Release',
@@ -63,5 +58,5 @@ F('f_contentshell_win_rel', win().ChromiumFactory(
     }))
 
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

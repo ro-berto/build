@@ -15,9 +15,9 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 
-def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
+def mac():
+  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 
 ################################################################################
@@ -27,17 +27,11 @@ def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
 defaults['category'] = 'content'
 
 #
-# Main release scheduler for webkit
-#
-S('s2_contentshell_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Content Shell Layouttests
 #
 
-B('WebKit (Content Shell) Mac10.6',
-  'f_contentshell_mac_rel',
-  scheduler='s2_contentshell_webkit_rel')
+B('WebKit (Content Shell) Mac10.6', 'f_contentshell_mac_rel',
+  scheduler='global_scheduler')
 
 F('f_contentshell_mac_rel', mac().ChromiumFactory(
     target='Release',
@@ -70,5 +64,5 @@ F('f_contentshell_mac_rel', mac().ChromiumFactory(
     }))
 
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

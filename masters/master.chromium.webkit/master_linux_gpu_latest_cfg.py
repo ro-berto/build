@@ -10,11 +10,10 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
-S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
@@ -24,15 +23,10 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 defaults['category'] = 'gpu'
 
 #
-# Main release scheduler for webkit
-#
-S('s9_gpu_linux_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Linux Rel tests
 #
 
-B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='s9_gpu_linux_webkit_rel')
+B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='global_scheduler')
 F('f_gpu_linux_rel', linux().ChromiumFactory(
     target='Release',
     tests=[
@@ -61,13 +55,7 @@ F('f_gpu_linux_rel', linux().ChromiumFactory(
 ## Debug
 ################################################################################
 
-#
-# Main debug scheduler for webkit
-#
-S('s9_gpu_linux_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg',
-  scheduler='s9_gpu_linux_webkit_dbg')
+B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', scheduler='global_scheduler')
 F('f_gpu_linux_dbg', linux().ChromiumFactory(
     target='Debug',
     tests=[
@@ -88,5 +76,5 @@ F('f_gpu_linux_dbg', linux().ChromiumFactory(
     }))
 
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

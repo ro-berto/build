@@ -10,10 +10,10 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 T = helper.Triggerable
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win():
+  return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 defaults['category'] = 'nonlayout'
 
@@ -56,12 +56,6 @@ rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
                                           'Win Builder',
                                           'win-latest-rel', 'win32')
 
-#
-# Main release scheduler for webkit
-#
-S('s7_webkit_builder_rel', branch='trunk', treeStableTimer=60)
-S('s7_webkit_rel', branch='trunk', treeStableTimer=60)
-
 # Triggerable scheduler for testers
 T('s7_webkit_builder_rel_trigger')
 
@@ -69,7 +63,7 @@ T('s7_webkit_builder_rel_trigger')
 #
 # Win Rel Builders
 #
-B('Win Builder', 'f_win_rel', scheduler='s7_webkit_builder_rel',
+B('Win Builder', 'f_win_rel', scheduler='global_scheduler',
   builddir='win-latest-rel', auto_reboot=False)
 F('f_win_rel', win().ChromiumFactory(
     slave_type='Builder',
@@ -87,7 +81,7 @@ F('f_win_rel', win().ChromiumFactory(
 # Win Rel testers+builders
 #
 # TODO: Switch back to trigger, http://crbug.com/102331
-B('Win7 Perf', 'f_win_rel_perf', scheduler='s7_webkit_builder_rel')
+B('Win7 Perf', 'f_win_rel_perf', scheduler='global_scheduler')
 F('f_win_rel_perf', win().ChromiumFactory(
     # TODO: undo, http://crbug.com/102331
     #slave_type='Tester',
@@ -156,15 +150,9 @@ F('f_cf_rel_tests', win().ChromiumFactory(
 
 
 #
-# Main debug scheduler for webkit
-#
-S('s7_webkit_builder_dbg', branch='trunk', treeStableTimer=60)
-S('s7_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # Win Dbg Builder
 #
-B('Win7 (dbg)', 'f_win_dbg', scheduler='s7_webkit_builder_dbg',
+B('Win7 (dbg)', 'f_win_dbg', scheduler='global_scheduler',
   builddir='win-latest-dbg')
 F('f_win_dbg', win().ChromiumFactory(
     target='Debug',
@@ -183,5 +171,5 @@ F('f_win_dbg', win().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

@@ -10,11 +10,10 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
-S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
@@ -24,14 +23,9 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 defaults['category'] = 'nonlayout'
 
 #
-# Main release scheduler for webkit
-#
-S('s9_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Linux Rel tests
 #
-B('Linux Tests', 'f_linux_tests_rel', scheduler='s9_webkit_rel')
+B('Linux Tests', 'f_linux_tests_rel', scheduler='global_scheduler')
 F('f_linux_tests_rel', linux().ChromiumFactory(
     tests=[
         'browser_tests',
@@ -75,7 +69,7 @@ linux_aura_build_targets = [
     'url_unittests',
 ]
 
-B('Linux Aura', 'f_linux_aura_rel', scheduler='s9_webkit_rel')
+B('Linux Aura', 'f_linux_aura_rel', scheduler='global_scheduler')
 F('f_linux_aura_rel', linux().ChromiumFactory(
     tests=[
         'aura',
@@ -95,7 +89,7 @@ F('f_linux_aura_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('Linux Perf', 'f_linux_perf_rel', scheduler='s9_webkit_rel')
+B('Linux Perf', 'f_linux_perf_rel', scheduler='global_scheduler')
 F('f_linux_perf_rel', linux().ChromiumFactory(
     options=[
         '--build-tool=ninja',
@@ -127,5 +121,5 @@ F('f_linux_perf_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

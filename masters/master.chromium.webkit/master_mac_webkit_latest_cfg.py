@@ -30,10 +30,10 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 T = helper.Triggerable
 
-def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
+def mac():
+  return chromium_factory.ChromiumFactory('src/out', 'darwin')
 
 defaults['category'] = 'layout'
 
@@ -47,11 +47,6 @@ rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
                                           'webkit-mac-latest-rel', 'mac')
 
 #
-# Main release scheduler for webkit
-#
-S('s5_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Triggerable scheduler for testers
 #
 T('s5_webkit_rel_trigger')
@@ -60,7 +55,7 @@ T('s5_webkit_rel_trigger')
 # Mac Rel Builder
 #
 B('WebKit Mac Builder', 'f_webkit_mac_rel',
-  auto_reboot=False, scheduler='s5_webkit_rel',
+  auto_reboot=False, scheduler='global_scheduler',
   builddir='webkit-mac-latest-rel')
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
@@ -142,11 +137,6 @@ dbg_archive = master_config.GetArchiveUrl('ChromiumWebkit',
                                           'webkit-mac-latest-dbg', 'mac')
 
 #
-# Main debug scheduler for the builder
-#
-S('s5_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # Triggerable scheduler for testers
 #
 T('s5_webkit_dbg_trigger')
@@ -155,7 +145,7 @@ T('s5_webkit_dbg_trigger')
 # Mac Dbg Builder
 #
 B('WebKit Mac Builder (dbg)', 'f_webkit_mac_dbg', auto_reboot=False,
-  scheduler='s5_webkit_dbg', builddir='webkit-mac-latest-dbg')
+  scheduler='global_scheduler', builddir='webkit-mac-latest-dbg')
 F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
@@ -201,5 +191,5 @@ B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
 ##
 ################################################################################
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

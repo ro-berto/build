@@ -13,11 +13,11 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
+T = helper.Triggerable
 F = helper.Factory
-S = helper.Scheduler
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win():
+  return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 
 ################################################################################
@@ -32,29 +32,25 @@ rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
                                           'webkit-win-pinned-rel', 'win32')
 
 #
-# Main release scheduler for chromium
+# Trigger scheduler for the dbg builder
 #
-S('s1_chromium_rel', branch='src', treeStableTimer=60)
-
-#
-# Dependent scheduler for the dbg builder
-#
-D('s1_chromium_rel_dep', 's1_chromium_rel')
+T('s1_chromium_rel_trigger')
 
 #
 # Win Rel Builder
 #
 B('WebKit Win Builder (deps)', 'f_webkit_win_rel',
-  scheduler='s1_chromium_rel', builddir='webkit-win-pinned-rel',
+  scheduler='global_scheduler', builddir='webkit-win-pinned-rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;webkit_builder_win'))
+    project='all.sln;webkit_builder_win',
+    factory_properties={'trigger': 's1_chromium_rel_trigger'}))
 
 #
 # Win Rel WebKit testers
 #
-B('WebKit XP (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_dep')
+B('WebKit XP (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_trigger')
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
@@ -72,5 +68,5 @@ F('f_webkit_rel_tests', win().ChromiumFactory(
       'test_results_server': 'test-results.appspot.com',
     }))
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

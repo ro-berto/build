@@ -10,10 +10,9 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
-T = helper.Triggerable
 
-def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win():
+  return chromium_factory.ChromiumFactory('src/build', 'win32')
 
 defaults['category'] = 'gpu'
 
@@ -21,14 +20,10 @@ defaults['category'] = 'gpu'
 ## Release
 ################################################################################
 
-# Main release scheduler for webkit
-S('s9_gpu_win_webkit_rel', branch='trunk', treeStableTimer=60)
-
 #
 # GPU Win Release
 #
-B('GPU Win7 (NVIDIA)', 'f_gpu_win_rel',
-  scheduler='s9_gpu_win_webkit_rel')
+B('GPU Win7 (NVIDIA)', 'f_gpu_win_rel', scheduler='global_scheduler')
 F('f_gpu_win_rel', win().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
@@ -56,15 +51,9 @@ F('f_gpu_win_rel', win().ChromiumFactory(
 
 
 #
-# Main debug scheduler for webkit
-#
-S('s9_gpu_win_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # GPU Win Debug
 #
-B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg',
-  scheduler='s9_gpu_win_webkit_dbg')
+B('GPU Win7 (dbg) (NVIDIA)', 'f_gpu_win_dbg', scheduler='global_scheduler')
 F('f_gpu_win_dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='BuilderTester',
@@ -82,5 +71,5 @@ F('f_gpu_win_dbg', win().ChromiumFactory(
     }))
 
 
-def Update(config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

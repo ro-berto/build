@@ -14,9 +14,9 @@ defaults = {}
 helper = master_config.Helper(defaults)
 B = helper.Builder
 F = helper.Factory
-S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
@@ -26,14 +26,9 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 defaults['category'] = 'layout'
 
 #
-# Main release scheduler for webkit
-#
-S('s6_webkit_rel', branch='trunk', treeStableTimer=60)
-
-#
 # Linux Rel Builder/Tester
 #
-B('WebKit Linux', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
+B('WebKit Linux', 'f_webkit_linux_rel', scheduler='global_scheduler')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
         'webkit',
@@ -57,12 +52,12 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('WebKit Linux 32', 'f_webkit_linux_rel', scheduler='s6_webkit_rel')
+B('WebKit Linux 32', 'f_webkit_linux_rel', scheduler='global_scheduler')
 
 asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
 
-B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='s6_webkit_rel',
+B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='global_scheduler',
   auto_reboot=False)
 F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
     tests=['webkit'],
@@ -89,15 +84,10 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
 ################################################################################
 
 #
-# Main debug scheduler for webkit
-#
-S('s6_webkit_dbg', branch='trunk', treeStableTimer=60)
-
-#
 # Linux Dbg Webkit builders/testers
 #
 
-B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='s6_webkit_dbg',
+B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='global_scheduler',
   auto_reboot=False)
 F('f_webkit_dbg_tests', linux().ChromiumFactory(
     target='Debug',
@@ -123,5 +113,5 @@ F('f_webkit_dbg_tests', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

@@ -13,11 +13,10 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
-S = helper.Scheduler
 
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux():
+  return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
 
 ################################################################################
@@ -27,14 +26,9 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 defaults['category'] = 'deps'
 
 #
-# Main release scheduler for chromium
-#
-S('s3_chromium_rel', branch='src', treeStableTimer=60)
-
-#
 # Linux Rel Builder
 #
-B('WebKit Linux (deps)', 'f_webkit_linux_rel', scheduler='s3_chromium_rel')
+B('WebKit Linux (deps)', 'f_webkit_linux_rel', scheduler='global_scheduler')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
     tests=[
         'webkit',
@@ -60,5 +54,5 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

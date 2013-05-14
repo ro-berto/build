@@ -14,12 +14,11 @@ defaults = {}
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
-D = helper.Dependent
 F = helper.Factory
-S = helper.Scheduler
 T = helper.Triggerable
 
-def linux_android(): return chromium_factory.ChromiumFactory('',
+def linux_android():
+  return chromium_factory.ChromiumFactory('',
     'linux2', full_checkout=True, nohooks_on_update=True, target_os='android')
 
 
@@ -28,11 +27,6 @@ def linux_android(): return chromium_factory.ChromiumFactory('',
 ################################################################################
 
 defaults['category'] = 'layout'
-
-#
-# Android scheduler
-#
-S('s5_android_webkit', branch='trunk', treeStableTimer=60)
 
 #
 # Triggerable scheduler for the builder
@@ -44,7 +38,7 @@ android_rel_archive = master_config.GetGSUtilUrl(
 #
 # Android Rel Builder
 #
-B('Android Builder', 'f_android_rel', scheduler='s5_android_webkit')
+B('Android Builder', 'f_android_rel', scheduler='global_scheduler')
 F('f_android_rel', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -68,5 +62,5 @@ F('f_webkit_android_tests',
         'blink_config': 'blink',
         }))
 
-def Update(_config, active_master, c):
+def Update(_config, _active_master, c):
   return helper.Update(c)

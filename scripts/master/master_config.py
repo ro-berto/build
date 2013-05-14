@@ -94,12 +94,19 @@ class Helper(object):
                               'categories': categories}
 
   def Update(self, c):
+    global_schedulers = dict((s.name, s) for s in c['schedulers']
+                             if s.name.startswith('global_'))
+    assert not (set(global_schedulers) & set(self._schedulers))
+
     for builder in self._builders:
       # Update the schedulers with the builder.
       schedulers = builder['schedulers']
       if schedulers:
         for scheduler in schedulers:
-          self._schedulers[scheduler]['builders'].append(builder['name'])
+          if scheduler in global_schedulers:
+            global_schedulers[scheduler].builderNames.append(builder['name'])
+          else:
+            self._schedulers[scheduler]['builders'].append(builder['name'])
 
       # Construct the category.
       categories = []
