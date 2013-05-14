@@ -191,9 +191,11 @@ B('Linux ChromiumOS (Clang dbg)',
 F('clang', chromiumos().ChromiumOSFactory(
     target='Debug',
     tests=[],
-    options=['--compiler=clang'] + extract_options(linux_chromeos_tests),
+    options=['--build_tool=ninja', '--compiler=clang'] +
+      extract_options(linux_chromeos_tests),
     factory_properties={
         'gclient_env': {
+            'GYP_GENERATORS': 'ninja',
             'GYP_DEFINES': ('chromeos=1'
                             ' clang=1 clang_use_chrome_plugins=1'
                             ' fastbuild=1'
