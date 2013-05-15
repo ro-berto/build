@@ -438,6 +438,13 @@ def main():
   else:
     error('Platform %s is not implemented yet' % sys.platform)
 
+  # Get the path to the boto file containing the password.
+  boto_file = os.path.join(BUILD_DIR, 'site_config', '.boto')
+  # If the boto file exists, make sure gsutil uses this boto file.
+  if os.path.exists(boto_file):
+    os.environ['AWS_CREDENTIAL_FILE'] = boto_file
+    os.environ['BOTO_CONFIG'] = boto_file
+
   # This envrionment is defined only when testing the slave on a dev machine.
   is_testing = 'TESTING_MASTER' in os.environ
   if not is_testing:
