@@ -633,7 +633,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gpu_throughput'):
       f.AddGpuThroughputTests(fp)
     if R('dom_perf'):
-      f.AddDomPerfTests(fp)
+      f.AddTelemetryTest('dom_perf', 'dom_perf.json',
+                         step_name='dom_perf', factory_properties=fp)
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
     if R('startup'):

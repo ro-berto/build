@@ -76,7 +76,6 @@ class NativeClientPortsCommands(commands.FactoryCommands):
     self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._crash_dump_tool = J(s_dir, 'archive_crash_dumps.py')
-    self._dom_perf_tool = J(s_dir, 'dom_perf.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._archive_file_tool = J(s_dir, 'archive_file.py')
     self._sizes_tool = J(s_dir, 'sizes.py')

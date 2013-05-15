@@ -68,7 +68,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
     self._crash_dump_tool = J(s_dir, 'archive_crash_dumps.py')
-    self._dom_perf_tool = J(s_dir, 'dom_perf.py')
     self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
@@ -449,23 +448,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               step_name='gpu_throughput_tests',
                               cmd_options=options,
                               tool_opts=tool_options,
-                              factory_properties=factory_properties)
-
-  def AddDomPerfTests(self, factory_properties, tool_options=None):
-    factory_properties = factory_properties or {}
-    args = ['--target', self._target,
-            '--build-dir', self._build_dir]
-
-    args = self.AddBuildProperties(args)
-    args = self.AddFactoryProperties(factory_properties, args)
-
-    tool_options = tool_options or []
-    tool_options.append('--no-xvfb')
-
-    self.AddAnnotatedPerfStep('dom_perf', None, 'graphing',
-                              step_name='dom_perf',
-                              cmd_name=self._dom_perf_tool, cmd_options=args,
-                              py_script=True, tool_opts=tool_options,
                               factory_properties=factory_properties)
 
   def AddIDBPerfTests(self, factory_properties, tool_options=None):
