@@ -3,7 +3,7 @@
     "cmd": [
       "[DEPOT_TOOLS_ROOT]/apply_issue", 
       "-r", 
-      "[BUILD_ROOT]/slave/fake_slave/build/src/", 
+      "[BUILD_ROOT]/slave/fake_slave/build/src/third_party/WebKit", 
       "-i", 
       12853011, 
       "-p", 
@@ -19,7 +19,7 @@
     "cmd": [
       "[DEPOT_TOOLS_ROOT]/presubmit_support.py", 
       "--root", 
-      "[BUILD_ROOT]/slave/fake_slave/build/src/", 
+      "[BUILD_ROOT]/slave/fake_slave/build/src/third_party/WebKit", 
       "--commit", 
       "--verbose", 
       "--verbose", 

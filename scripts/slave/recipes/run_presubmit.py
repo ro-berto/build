@@ -18,14 +18,25 @@ def GetFactoryProperties(api, factory_properties, build_properties):
       steps.git_step('clean', '-xfq'),
     ]
 
+  root = build_properties.get('root', '')
+  # FIXME: Rietveld passes the blink path as src/third_party/WebKit
+  #        so we have to strip the src bit off before passing to
+  #        api.checkout_path. :(
+  if root.startswith('src'):
+    root = root[3:].lstrip('/')
+
+  # FIXME: Remove the blink_bare repository type.
+  if repo_name == 'blink_bare':
+    root = ''
+
   return {
     'checkout': 'gclient',
     'gclient_spec': spec,
     'steps': git_steps + [
-      steps.apply_issue_step(),
+      steps.apply_issue_step(root),
       steps.step('presubmit', [
         api.depot_tools_path('presubmit_support.py'),
-        '--root', api.checkout_path(),
+        '--root', api.checkout_path(root),
         '--commit',
         '--verbose', '--verbose',
         '--issue', build_properties['issue'],

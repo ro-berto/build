@@ -7,17 +7,31 @@
 def blink_bare_test(api):
   return {
     'factory_properties': {'repo_name': 'blink_bare'},
-    'build_properties': api.tryserver_build_properties(),
+    'build_properties': api.tryserver_build_properties(
+      root='src/third_party/WebKit'
+    ),
+  }
+
+def blink_test(api):
+  return {
+    'factory_properties': {'repo_name': 'blink'},
+    'build_properties': api.tryserver_build_properties(
+      root='src/third_party/WebKit'
+    ),
   }
 
 def tools_build_test(api):
   return {
     'factory_properties': {'repo_name': 'tools_build'},
-    'build_properties': api.tryserver_build_properties(),
+    'build_properties': api.tryserver_build_properties(
+      root='src'
+    ),
   }
 
 def chromium_test(api):
   return {
     'factory_properties': {'repo_name': 'chromium'},
-    'build_properties': api.tryserver_build_properties(),
+    'build_properties': api.tryserver_build_properties(
+      root='src'
+    ),
   }
