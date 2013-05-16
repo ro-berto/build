@@ -7,13 +7,15 @@
 This is based on commands.py and adds swarm-specific commands."""
 
 from buildbot.process.properties import WithProperties
-from buildbot.steps import shell
+from buildbot.steps import shell, source
 from twisted.python import log
 
 from master import chromium_step
 from master.factory import commands
 
 from common import chromium_utils
+
+import config
 
 
 def GetSwarmTests(bStep):
@@ -60,6 +62,19 @@ def TestStepHasSwarmProperties(bStep):
     return False
 
   return True
+
+
+class SwarmClientSVN(source.SVN):
+  """Uses the revision specified by use_swarm_client_revision."""
+
+  def start(self):
+    """Contrary to source.Source, ignores the branch, source stamp and patch."""
+    self.args['workdir'] = self.workdir
+    try:
+      revision = self.build.getProperty('use_swarm_client_revision')
+    except KeyError:
+      revision = None
+    self.startVC(None, revision, None)
 
 
 class SwarmShellForTriggeringTests(shell.ShellCommand):
@@ -122,8 +137,7 @@ class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
   def __init__(self, *args, **kwargs):
     super(SwarmCommands, self).__init__(*args, **kwargs)
-    self._swarm_client_dir = self.PathJoin(
-        self._script_dir, '..', '..', 'third_party', 'swarm_client')
+    self._swarm_client_dir = self.PathJoin('src', 'tools', 'swarm_client')
 
   def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
                               doStepIf=True):
@@ -174,6 +188,18 @@ class SwarmCommands(commands.FactoryCommands):
                      timeout=timeout,
                      do_step_if=TestStepFilterRetrieveStep)
 
+  def AddUpdateSwarmClientStep(self):
+    """Checks out swarm_client so it can be used at the right revision."""
+    url = (
+        config.Master.server_url +
+        config.Master.repo_root +
+        '/trunk/tools/swarm_client')
+    self._factory.addStep(
+        SwarmClientSVN,
+        svnurl=url,
+        # Emulate the path of a src/DEPS checkout, to keep things simpler.
+        workdir='build/src/tools/swarm_client')
+
   def AddIsolateTest(self, test_name, using_ninja):
     if not self._target:
       log.msg('No target specified, unable to find isolated files')
@@ -184,8 +210,7 @@ class SwarmCommands(commands.FactoryCommands):
         use_out=(using_ninja or self._target_platform.startswith('linux')))
     isolated_directory = self.PathJoin(isolated_directory, self._target)
     isolated_file = self.PathJoin(isolated_directory, test_name + '.isolated')
-    script_path = self.PathJoin('src', 'tools', 'swarm_client',
-                                'isolate.py')
+    script_path = self.PathJoin(self._swarm_client_dir, 'isolate.py')
 
     args = ['run', '--isolated', isolated_file, '--', '--no-cr']
     wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]

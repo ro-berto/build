@@ -88,6 +88,9 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
                                                    build_dir=build_dir)
   swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
 
+  # Checks out the scripts at the right revision so the trigger can happen.
+  swarm_command_obj.AddUpdateSwarmClientStep()
+
   # Send the swarm tests to the swarm server.
   swarm_command_obj.AddTriggerSwarmTestStep(
       swarm_server=swarm_server,

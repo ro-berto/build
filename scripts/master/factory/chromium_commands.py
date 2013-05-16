@@ -1553,11 +1553,16 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddGenerateResultHashesStep(
         using_ninja, [], doStepIf=swarm_commands.TestStepFilterSwarm)
 
-    # Trigger the swarm test builder.
+    # Trigger the swarm test builder. The only issue here is that
+    # updateSourceStamp=False cannot be used because we want the user to get the
+    # email, e.g. the blamelist to be properly set, but that causes any patch to
+    # be caried over, which is annoying but benign.
     self._factory.addStep(commands.CreateTriggerStep(
         trigger_name='swarm_triggered',
         trigger_set_properties={
             'target_os': self._target_platform,
+            'use_swarm_client_revision':
+              WithProperties('%(got_swarm_client_revision:-)s'),
         },
         trigger_copy_properties=[
             'run_default_swarm_tests',
