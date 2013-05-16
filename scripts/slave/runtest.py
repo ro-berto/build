@@ -670,9 +670,10 @@ def main_ios(options, args):
   #   [0] test display name formatted as 'test_name (device[ ios_version])'
   #   [1:] gtest args (e.g. --gtest_print_time)
 
-  # Default to running on iPhone with iOS version 5.1.
+  # Set defaults in case the device family and iOS version can't be parsed out
+  # of |args|
   device = 'iphone'
-  ios_version = '6.0'
+  ios_version = '6.1'
 
   # Parse the test_name and device from the test display name.
   # The expected format is: <test_name> (<device>)
