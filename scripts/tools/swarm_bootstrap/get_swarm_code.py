@@ -28,8 +28,12 @@ def main():
   # The response doesn't act exactly like a file so we can't pass it directly
   # to the zipfile reader.
   zipped_contents = StringIO.StringIO(response.read())
-  with zipfile.ZipFile(zipped_contents, 'r') as z:
+
+  z = zipfile.ZipFile(zipped_contents, 'r')
+  try:
     z.extractall()
+  finally:
+    z.close()
 
   return 0
 
