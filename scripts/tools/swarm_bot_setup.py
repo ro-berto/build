@@ -68,8 +68,12 @@ def BuildSetupCommand(user, host, platform, options):
                     SWARM_DIRECTORY[platform]),
       '&&'])
 
-  # Run the final swarm setup script.
+  # Download and setup the swarm code from the server.
   bot_setup_commands.extend(['cd %s' % SWARM_DIRECTORY[platform], '&&'])
+  bot_setup_commands.extend(['python', 'get_swarm_code.py',
+                             options.swarm_server, '&&'])
+
+  # Run the final swarm setup script.
   if platform == 'win':
     bot_setup_commands.extend([
         'call swarm_bot_setup.bat %s %s' %
