@@ -145,14 +145,11 @@ class GClientFactory(object):
     else:
       self._project = project
 
-  def BuildGClientSpec(self, tests=None, deps=None):
+  def BuildGClientSpec(self, tests=None):
     spec = 'solutions = ['
     for solution in self._solutions:
       spec += solution.GetSpec(tests)
     spec += ']'
-
-    if deps == 'ios':
-      spec += ';target_os = [\'ios\'];target_os_only = True'
 
     if self._target_os:
       spec += ';target_os = ["' + self._target_os + '"]'
@@ -164,7 +161,7 @@ class GClientFactory(object):
                   delay_compile_step=False, sudo_for_remove=False,
                   gclient_deps=None, slave_type=None):
     if gclient_spec is None:
-      gclient_spec = self.BuildGClientSpec(deps=gclient_deps)
+      gclient_spec = self.BuildGClientSpec()
     factory_properties = factory_properties or {}
     factory = BuildFactory(build_properties)
     factory_cmd_obj = commands.FactoryCommands(factory,
@@ -199,7 +196,10 @@ class GClientFactory(object):
     # Allow gclient_deps to also come from the factory_properties.
     if gclient_deps == None:
       gclient_deps = factory_properties.get('gclient_deps', None)
-      gclient_spec = self.BuildGClientSpec(deps=gclient_deps)
+
+    if gclient_deps == 'ios':
+      gclient_spec += ';target_os = [\'ios\'];target_os_only = True'
+
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
