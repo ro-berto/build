@@ -21,6 +21,14 @@ from common import chromium_utils
 import subprocess2
 
 
+def sublists(superlist, n):
+  """Breaks a list into list of sublists, each of length no more than n."""
+  result = []
+  for cut in range(0, len(superlist), n):
+    result.append(superlist[cut:cut + n])
+  return result
+
+
 def pid_exists(pid):
   """Returns True if there is a process in the system with given |pid|."""
   try:
@@ -186,39 +194,40 @@ def search_for_exceptions(path):
   return False
 
 
-def json_probe(sensitive, ports):
-  """ Looks through the port range and finds a master listening.
+def json_probe(sensitive, allports):
+  """Looks through the port range and finds a master listening.
   sensitive: Indicates whether partial success should be reported.
 
   Returns (port, name) or None.
   """
   procs = {}
-  for port in ports:
-    # urllib2 does not play nicely with threading. Using curl lets us avoid
-    # the GIL.
-    procs[port] = subprocess2.Popen(
-        ['curl', '-fs', '-m2', 'http://localhost:%d/json/project' % port],
-        stdin=subprocess2.VOID,
-        stdout=subprocess2.PIPE,
-        stderr=subprocess2.VOID)
-  for port in ports:
-    stdout, _ = procs[port].communicate()
-    if procs[port].returncode != 0:
-      continue
-    try:
-      data = json.loads(stdout) or {}
-      if not data or (not 'projectName' in data and not 'title' in data):
-        logging.debug('Didn\'t get valid data from port %d' % port)
-        if sensitive:
-          return (port, None)
-        return None
-      name = data.get('projectName', data.get('title'))
-      return (port, name)
-    except ValueError:
-      logging.warning('Didn\'t get valid data from port %d' % port)
-      # presume this is some other type of server
-      #  E.g. X20 on a dev workstation.
-      continue
+  for ports in sublists(allports, 30):
+    for port in ports:
+      # urllib2 does not play nicely with threading. Using curl lets us avoid
+      # the GIL.
+      procs[port] = subprocess2.Popen(
+          ['curl', '-fs', '-m2', 'http://localhost:%d/json/project' % port],
+          stdin=subprocess2.VOID,
+          stdout=subprocess2.PIPE,
+          stderr=subprocess2.VOID)
+    for port in ports:
+      stdout, _ = procs[port].communicate()
+      if procs[port].returncode != 0:
+        continue
+      try:
+        data = json.loads(stdout) or {}
+        if not data or (not 'projectName' in data and not 'title' in data):
+          logging.debug('Didn\'t get valid data from port %d' % port)
+          if sensitive:
+            return (port, None)
+          continue
+        name = data.get('projectName', data.get('title'))
+        return (port, name)
+      except ValueError:
+        logging.warning('Didn\'t get valid data from port %d' % port)
+        # presume this is some other type of server
+        #  E.g. X20 on a dev workstation.
+        continue
 
   return None
 
