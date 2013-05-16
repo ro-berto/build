@@ -97,7 +97,7 @@ def BuildCleanCommand(user, host, platform):
   if platform == 'win':
     command.append('del /q /s %s' % SWARM_DIRECTORY[platform])
   else:
-    command.append('rm -r %s' % SWARM_DIRECTORY[platform])
+    command.append('rm -f -r %s' % SWARM_DIRECTORY[platform])
 
   return command
 
