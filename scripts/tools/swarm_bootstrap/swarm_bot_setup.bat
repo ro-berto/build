@@ -18,8 +18,8 @@ call python dimensions_generator.py %DIMENSIONS_FILE%
 
 :UPDATE_START_SLAVE_SCRIPT
 echo Update start_slave script...
-echo "import slave_machine" > slave_machine.py
-echo "slave_machine.Restart()" >> slave_machine.py
+echo "import slave_machine" > start_slave.py
+echo "slave_machine.Restart()" >> start_slave.py
 
 echo Setup up swarm script to run on startup...
 cd /D c:\Users\chrome-bot\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
