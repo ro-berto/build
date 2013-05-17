@@ -16,6 +16,10 @@ echo Generate the machine dimensions...
 cd $2
 python dimensions_generator.py $DIMENSIONS_FILE
 
+echo Update start_slave script...
+echo "import slave_machine" > slave_machine.py
+echo "slave_machine.Restart()" >> slave_machine.py
+
 echo Setup up swarm script to run on startup...
 echo "@reboot cd $2 && "$SLAVE_COMMAND > mycron
 crontab -r
