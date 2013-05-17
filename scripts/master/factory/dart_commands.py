@@ -46,7 +46,6 @@ class DartCommands(commands.FactoryCommands):
     self._repository_root = ''
     self._custom_env = env or {}
 
-
   def AddMaybeClobberStep(self, clobber, options=None, timeout=1200):
     """Possibly clobber.
 
@@ -224,3 +223,7 @@ class DartCommands(commands.FactoryCommands):
                           command=[self._python, python_script],
                           logfiles=self.logfiles,
                           lazylogfiles=True)
+
+  def AddTrigger(self, trigger):
+    self._factory.addStep(trigger)
+

@@ -225,7 +225,7 @@ class DartFactory(gclient_factory.GClientFactory):
   def DartFactory(self, target='Release', clobber=False, tests=None,
                   slave_type='BuilderTester', options=None,
                   compile_timeout=1200, build_url=None,
-                  factory_properties=None, env=None):
+                  factory_properties=None, env=None, triggers=()):
     factory_properties = factory_properties or {}
     AddGeneralGClientProperties(factory_properties)
     tests = tests or []
@@ -254,12 +254,15 @@ class DartFactory(gclient_factory.GClientFactory):
     if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
       dart_cmd_obj.AddTests(options=options)
 
+    for trigger in triggers:
+      dart_cmd_obj.AddTrigger(trigger)
+
     return factory
 
   def DartAnnotatedFactory(self, python_script,
                            target='Release', tests=None,
                            timeout=1200, factory_properties=None,
-                           env=None):
+                           env=None, triggers=()):
     factory_properties = factory_properties or {}
     AddGeneralGClientProperties(factory_properties)
     tests = tests or []
@@ -275,6 +278,10 @@ class DartFactory(gclient_factory.GClientFactory):
                                               self._target_platform,
                                               env=env)
     dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout)
+
+    for trigger in triggers:
+      dart_cmd_obj.AddTrigger(trigger)
+
     return factory
 
 class DartUtils(object):
@@ -509,6 +516,8 @@ class DartUtils(object):
 
   def setup_factories(self, variants):
     def setup_dart_factory(v, base, no_annotated):
+      triggers = v.get('triggers', ())
+
       env = v.get('env', {})
       if no_annotated:
         options = {
@@ -524,12 +533,14 @@ class DartUtils(object):
             slave_type='BuilderTester',
             clobber=False,
             options=options,
-            env=env
+            env=env,
+            triggers=triggers,
         )
       else:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
+            triggers=triggers,
         )
 
     def setup_v8_factory(v):
@@ -569,8 +580,10 @@ class DartUtils(object):
         no_annotated = ((name.startswith('vm') or
                         name.startswith('dart2dart') or
                         name.startswith('dartc') or
-                        name.startswith('new_analyzer')) and
-                        not name.startswith('vm-android'))
+                        name.startswith('new_analyzer'))
+                        and not name.startswith('vm-android')
+                        and not name.startswith('cross-')
+                        and not name.startswith('target-'))
         setup_dart_factory(v, base, no_annotated)
 
   def setup_dartium_factories(self, dartium_variants):
