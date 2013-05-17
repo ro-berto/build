@@ -53,7 +53,7 @@ asan_tests = filter(lambda test: test not in asan_disabled_tests,
                     normal_tests)
 asan_gclient_env = {
     'GYP_DEFINES': ('asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 ')}
-mac_options = ['--build-tool=ninja']
+ninja_options = ['--build-tool=ninja']
 win_project = r'..\talk\libjingle_all.sln'
 win_factory_prop = {
     'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}}
@@ -77,19 +77,19 @@ F('win32_release_factory', win().LibjingleFactory(
 B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler_name)
 F('mac_debug_factory', mac().LibjingleFactory(
     target='Debug',
-    options=mac_options,
+    options=ninja_options,
     tests=normal_tests))
 
 B('Mac32 Release', 'mac_release_factory', scheduler=scheduler_name)
 F('mac_release_factory', mac().LibjingleFactory(
     target='Release',
-    options=mac_options,
+    options=ninja_options,
     tests=normal_tests))
 
 B('Mac Asan', 'mac_asan_factory', scheduler=scheduler_name)
 F('mac_asan_factory', mac().LibjingleFactory(
     target='Release',
-    options=mac_options,
+    options=ninja_options,
     tests=asan_tests,
     factory_properties={
         'asan': True,
@@ -100,35 +100,40 @@ F('mac_asan_factory', mac().LibjingleFactory(
 B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibjingleFactory(
     target='Debug',
+    options=ninja_options,
     tests=normal_tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
 B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler_name)
 F('linux32_release_factory', linux().LibjingleFactory(
     target='Release',
+    options=ninja_options,
     tests=normal_tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
 B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler_name)
 F('linux64_debug_factory', linux().LibjingleFactory(
     target='Debug',
+    options=ninja_options,
     tests=normal_tests))
 
 B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler_name)
 F('linux64_release_factory', linux().LibjingleFactory(
     target='Release',
+    options=ninja_options,
     tests=normal_tests))
 
 B('Linux Clang', 'linux_clang_factory', scheduler=scheduler_name)
 F('linux_clang_factory', linux().LibjingleFactory(
     target='Debug',
-    options=['--compiler=clang'],
+    options=ninja_options + ['--compiler=clang'],
     tests=normal_tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
 B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler_name)
 F('linux_memcheck_factory', linux().LibjingleFactory(
     target='Release',
+    options=ninja_options,
     tests=memcheck_tests,
     factory_properties={
         'needs_valgrind': True,
@@ -138,6 +143,7 @@ F('linux_memcheck_factory', linux().LibjingleFactory(
 B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler_name)
 F('linux_tsan_factory', linux().LibjingleFactory(
     target='Release',
+    options=ninja_options,
     tests=tsan_tests,
     factory_properties={
         'needs_valgrind': True,
@@ -147,6 +153,7 @@ F('linux_tsan_factory', linux().LibjingleFactory(
 B('Linux Asan', 'linux_asan_factory', scheduler=scheduler_name)
 F('linux_asan_factory', linux().LibjingleFactory(
     target='Release',
+    options=ninja_options,
     tests=asan_tests,
     factory_properties={
         'asan': True,
@@ -157,6 +164,7 @@ F('linux_asan_factory', linux().LibjingleFactory(
 B('Chrome OS', 'chromeos_factory', scheduler=scheduler_name)
 F('chromeos_factory', linux().LibjingleFactory(
     target='Debug',
+    options=ninja_options,
     tests=normal_tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
 

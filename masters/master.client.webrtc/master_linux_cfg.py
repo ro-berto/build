@@ -69,37 +69,45 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   tsan_tests = filter(lambda test: test not in tsan_disabled_tests,
                       normal_tests)
 
+  ninja_options = ['--build-tool=ninja']
+
   defaults['category'] = category
 
   B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler)
   F('linux32_debug_factory', linux().WebRTCFactory(
       target='Debug',
+      options=ninja_options,
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
   B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler)
   F('linux32_release_factory', linux().WebRTCFactory(
       target='Release',
+      options=ninja_options,
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
   B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler)
   F('linux64_debug_factory', linux().WebRTCFactory(
       target='Debug',
+      options=ninja_options,
       tests=normal_tests))
   B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler)
   F('linux64_release_factory', linux().WebRTCFactory(
       target='Release',
+      options=ninja_options,
       tests=normal_tests))
 
   B('Linux Clang', 'linux_clang_factory', scheduler=scheduler)
   F('linux_clang_factory', linux().WebRTCFactory(
       target='Debug',
+      options=ninja_options,
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
   B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler)
   F('linux_memcheck_factory', linux().WebRTCFactory(
       target='Release',
+      options=ninja_options,
       tests=memcheck_tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
@@ -107,6 +115,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler)
   F('linux_tsan_factory', linux().WebRTCFactory(
       target='Release',
+      options=ninja_options,
       tests=tsan_tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
@@ -114,6 +123,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   B('Linux Asan', 'linux_asan_factory', scheduler=scheduler)
   F('linux_asan_factory', linux().WebRTCFactory(
       target='Release',
+      options=ninja_options,
       tests=normal_tests,
       factory_properties={'asan': True,
                           'gclient_env':
@@ -134,6 +144,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   B('Chrome OS', 'chromeos_factory', scheduler=scheduler)
   F('chromeos_factory', linux().WebRTCFactory(
       target='Debug',
+      options=ninja_options,
       tests=normal_tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
 

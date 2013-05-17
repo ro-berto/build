@@ -21,7 +21,8 @@ S('linux_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('linux_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
 P('linux_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
 
-options = ['--compiler=goma', 'chromium_builder_webrtc']
+options = ['--compiler=goma',  '--build-tool=ninja', '--',
+           'chromium_builder_webrtc']
 tests = ['pyauto_webrtc_tests']
 
 defaults['category'] = 'linux'

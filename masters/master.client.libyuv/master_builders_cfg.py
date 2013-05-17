@@ -20,7 +20,7 @@ scheduler_name = 'libyuv_scheduler'
 S(scheduler_name, branch='trunk', treeStableTimer=60)
 
 test_targets = ['libyuv_unittest']
-mac_options = ['--build-tool=ninja']
+ninja_options = ['--build-tool=ninja']
 win_project = r'..\libyuv_test.sln'
 win_factory_prop = {
     'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}}
@@ -46,19 +46,19 @@ F('win32_release_factory', win().LibyuvFactory(
 B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler_name)
 F('mac_debug_factory', mac().LibyuvFactory(
     target='Debug',
-    options=mac_options,
+    options=ninja_options,
     tests=test_targets))
 
 B('Mac32 Release', 'mac_release_factory', scheduler=scheduler_name)
 F('mac_release_factory', mac().LibyuvFactory(
     target='Release',
-    options=mac_options,
+    options=ninja_options,
     tests=test_targets))
 
 B('Mac Asan', 'mac_asan_factory', scheduler=scheduler_name)
 F('mac_asan_factory', mac().LibyuvFactory(
     target='Release',
-    options=mac_options,
+    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'asan': True,
@@ -69,35 +69,40 @@ F('mac_asan_factory', mac().LibyuvFactory(
 B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibyuvFactory(
     target='Debug',
+    options=ninja_options,
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
 B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler_name)
 F('linux32_release_factory', linux().LibyuvFactory(
     target='Release',
+    options=ninja_options,
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
 B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler_name)
 F('linux64_debug_factory', linux().LibyuvFactory(
     target='Debug',
+    options=ninja_options,
     tests=test_targets))
 
 B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler_name)
 F('linux64_release_factory', linux().LibyuvFactory(
     target='Release',
+    options=ninja_options,
     tests=test_targets))
 
 B('Linux Clang', 'linux_clang_factory', scheduler=scheduler_name)
 F('linux_clang_factory', linux().LibyuvFactory(
     target='Debug',
-    options=['--compiler=clang'],
+    options=ninja_options + ['--compiler=clang'],
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
 B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler_name)
 F('linux_memcheck_factory', linux().LibyuvFactory(
     target='Release',
+    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'needs_valgrind': True,
@@ -107,6 +112,7 @@ F('linux_memcheck_factory', linux().LibyuvFactory(
 B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler_name)
 F('linux_tsan_factory', linux().LibyuvFactory(
     target='Release',
+    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'needs_valgrind': True,
@@ -116,6 +122,7 @@ F('linux_tsan_factory', linux().LibyuvFactory(
 B('Linux Asan', 'linux_asan_factory', scheduler=scheduler_name)
 F('linux_asan_factory', linux().LibyuvFactory(
     target='Release',
+    options=ninja_options,
     tests=test_targets,
     factory_properties={
         'asan': True,
@@ -126,6 +133,7 @@ F('linux_asan_factory', linux().LibyuvFactory(
 B('Chrome OS', 'chromeos_factory', scheduler=scheduler_name)
 F('chromeos_factory', linux().LibyuvFactory(
     target='Debug',
+    options=ninja_options,
     tests=test_targets,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
 
