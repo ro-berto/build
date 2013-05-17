@@ -20,17 +20,16 @@ SWARM_DIRECTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 SWARM_SERVER_PROD = 'https://chromium-swarm.appspot.com'
 SWARM_SERVER_DEV = 'https://chromium-swarm-dev.appspot.com'
 
-# The directories containing the swarm code initially.
-SWARM_STARTING_DIRECTORY = {
-  'linux': '/b/build/scripts/tools/swarm_bootstrap',
-  'mac': '/b/build/scripts/tools/swarm_bootstrap',
-  'win': 'e:\\b\\build\\scripts\\tools\\swarm_bootstrap',
-}
+# The initial location of the swarm code on windows.
+SWARM_WINDOWS_STARTING_DIRECTORY = 'c:\\b\\swarm_slave'
+
+# The sftp destination for swarm files.
+SFTP_SWARM_DIRECTORY = '/b/swarm_slave'
 
 # The directories to store the swarm code.
 SWARM_DIRECTORY = {
-  'linux': '/b/swarm_slave',
-  'mac': '/b/swarm_slave',
+  'linux': SFTP_SWARM_DIRECTORY,
+  'mac': SFTP_SWARM_DIRECTORY,
   'win': 'e:\\b\\swarm_slave\\',
 }
 
@@ -38,6 +37,17 @@ SWARM_DIRECTORY = {
 class Options(object):
   def __init__(self, swarm_server):
     self.swarm_server = swarm_server
+
+
+def CopySetupFiles(user, host, platform, options):
+  sftp_stdin = [
+      'rmdir %s' % SFTP_SWARM_DIRECTORY,
+      'mkdir %s' % SFTP_SWARM_DIRECTORY,
+      'put swarm_bootstrap/* %s' % SFTP_SWARM_DIRECTORY,
+      'exit',
+      ]
+
+  return ['sftp', user + '@' + host], '\n'.join(sftp_stdin)
 
 
 def OpenSSHCommand(user, host):
@@ -48,25 +58,14 @@ def BuildSetupCommand(user, host, platform, options):
   assert platform in ('linux', 'mac', 'win')
   bot_setup_commands = []
 
-  # Update the swarm files on the machines
+  # On Windows the swarm files need to be moved to the correct directory.
+  # This is because sftp can't access the e drive when copying the files over.
   if platform == 'win':
-    bot_setup_commands.extend(['e:', '&&'])
-  bot_setup_commands.extend([
-      'cd %s' % SWARM_STARTING_DIRECTORY[platform],
-      '&&',
-      'svn update',
-      '&&'])
-
-  # Copy the swarm files to the new swarm directory
-  if platform == 'win':
-    copy_func = 'xcopy /i /e /h /y'
-  else:
-    copy_func = 'cp -r -f -p'
-  bot_setup_commands.extend([
-      '%s %s %s' % (copy_func,
-                    SWARM_STARTING_DIRECTORY[platform],
-                    SWARM_DIRECTORY[platform]),
-      '&&'])
+    bot_setup_commands.extend([
+        'e:', '&&',
+        'xcopy /i /e /h /y %s %s' % (SWARM_WINDOWS_STARTING_DIRECTORY,
+                                     SWARM_DIRECTORY[platform]),
+        '&&'])
 
   # Download and setup the swarm code from the server.
   bot_setup_commands.extend(['cd %s' % SWARM_DIRECTORY[platform], '&&'])
@@ -87,7 +86,7 @@ def BuildSetupCommand(user, host, platform, options):
     bot_setup_commands = ['cmd.exe /c',
                           '"' + ' '.join(bot_setup_commands) + '"']
 
-  return OpenSSHCommand(user, host) + bot_setup_commands
+  return OpenSSHCommand(user, host) + bot_setup_commands, ''
 
 
 def BuildCleanCommand(user, host, platform):
@@ -99,7 +98,7 @@ def BuildCleanCommand(user, host, platform):
   else:
     command.append('rm -f -r %s' % SWARM_DIRECTORY[platform])
 
-  return command
+  return command, ''
 
 
 def main():
@@ -157,14 +156,21 @@ def main():
     command_options = Options(
         swarm_server=SWARM_SERVER_DEV if options.use_dev else SWARM_SERVER_PROD)
 
+    commands.append(CopySetupFiles(options.user, bot, platform,
+                                   command_options))
     commands.append(BuildSetupCommand(options.user, bot, platform,
                                       command_options))
 
     if options.print_only:
       print commands
     else:
-      for command in commands:
-        subprocess.check_call(command)
+      for command, stdin in commands:
+        process = subprocess.Popen(command, stdin=subprocess.PIPE)
+        process.communicate(stdin)
+
+        if process.returncode:
+          print 'Failed to execute command %s' % command
+          return 1
 
 
 if __name__ == '__main__':
