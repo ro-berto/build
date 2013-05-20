@@ -5,9 +5,9 @@
 from master import master_config
 from master.factory import chromium_factory
 
-import config
+import master_site_config
 
-ActiveMaster = config.Master.Chromium
+ActiveMaster = master_site_config.Chromium
 
 defaults = {}
 

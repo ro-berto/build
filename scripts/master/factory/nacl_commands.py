@@ -16,15 +16,9 @@ from master import chromium_step
 from master.factory import commands
 from master.log_parser import process_log
 
-import config
-
 
 class NativeClientCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
-
-  # pylint: disable=W0212
-  # (accessing protected member _NaClBase)
-  PERF_BASE_URL = config.Master._NaClBase.perf_base_url
 
   def __init__(self, factory=None, build_dir=None, target_platform=None):
     commands.FactoryCommands.__init__(self, factory, 'Release', build_dir,

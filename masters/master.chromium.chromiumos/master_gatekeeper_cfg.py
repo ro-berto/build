@@ -91,7 +91,7 @@ subject = ('buildbot %(result)s in %(projectName)s on %(builder)s, '
 warning_header = ('Please look at failure in "%(steps)s" on "%(builder)s" '
                   'and help out if you can')
 
-def Update(config, active_master, alternate_master, c):
+def Update(config, active_master, c):
   # chrome likely/possible failures to the chrome sheriffs, closing the
   # chrome tree
   c['status'].append(gatekeeper.GateKeeper(
@@ -114,10 +114,11 @@ def Update(config, active_master, alternate_master, c):
       exclusions=exclusions,
       relayhost=config.Master.smtp,
       subject='Closer ' + subject,
-      extraRecipients=alternate_master.tree_closing_notification_recipients,
+      extraRecipients=(
+          active_master.alternate_tree_closing_notification_recipients),
       lookup=master_utils.FilterDomain(),
       forgiving_steps=forgiving_steps,
-      tree_status_url=alternate_master.tree_status_url,
+      tree_status_url=active_master.alternate_tree_status_url,
       sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
       public_html='../master.chromium/public_html',
       use_getname=True))

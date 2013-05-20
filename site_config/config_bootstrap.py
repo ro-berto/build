@@ -54,7 +54,6 @@ class Master(config_private.Master):
   skia_url = 'http://skia.googlecode.com/svn/'
 
   syzygy_url = 'http://sawbuck.googlecode.com/svn/'
-  syzygy_internal_url = config_private.Master.syzygy_internal_url
 
   webrtc_url = 'http://webrtc.googlecode.com/svn'
   libyuv_url = 'http://libyuv.googlecode.com/svn'

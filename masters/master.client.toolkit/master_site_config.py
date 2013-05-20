@@ -4,15 +4,11 @@
 
 """Private ActiveMaster definition for master.toolkit."""
 
-import socket
+from config_bootstrap import Master
 
-class Toolkit(object):
+class Toolkit(Master.Master3):
   project_name = 'Toolkit'
   project_url = 'http://github.com/toolkitchen/toolkit'
   master_port = 8044
   slave_port = 8144
   master_port_alt = 8244
-  tree_closing_notification_recipients = []
-  from_address = 'buildbot@chromium.org'
-  master_host = 'master3.golo.chromium.org'
-  is_production_host = socket.getfqdn() == master_host

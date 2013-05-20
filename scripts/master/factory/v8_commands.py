@@ -15,10 +15,6 @@ import config
 class V8Commands(commands.FactoryCommands):
   """Encapsulates methods to add v8 commands to a buildbot factory."""
 
-  # pylint: disable=W0212
-  # (accessing protected member V8)
-  PERF_BASE_URL = config.Master.V8.perf_base_url
-
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, target_arch=None,
                shard_count=1, shard_run=1, shell_flags=None, isolates=False,

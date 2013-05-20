@@ -4,13 +4,11 @@
 
 """ActiveMaster definition."""
 
-class Syzygy(object):
+from config_bootstrap import Master
+
+class Syzygy(Master.Master3):
   project_name = 'Syzygy'
+  project_url = 'http://sawbuck.googlecode.com'
   master_port = 8042
   slave_port = 8142
   master_port_alt = 8242
-  tree_closing_notification_recipients = []
-  from_address = 'buildbot@chromium.org'
-  master_host = 'master3.golo.chromium.org'
-  buildslave_version = 'buildbot_slave_8_4'
-  twisted_version = 'twisted_10_2'

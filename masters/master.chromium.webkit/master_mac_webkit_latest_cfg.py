@@ -21,9 +21,9 @@
 from master import master_config
 from master.factory import chromium_factory
 
-import config
+import master_site_config
 
-ActiveMaster = config.Master.ChromiumWebkit
+ActiveMaster = master_site_config.ChromiumWebkit
 
 defaults = {}
 

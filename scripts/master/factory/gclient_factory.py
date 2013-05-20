@@ -331,7 +331,7 @@ class GClientFactory(object):
     if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect'):
       factory_cmd_obj.AddApplyIssueStep(
           timeout=timeout,
-          server=config.Master.TryServer.code_review_site)
+          server=config.Master.Master4.code_review_site)
 
     if not self._nohooks_on_update:
       factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)

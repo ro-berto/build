@@ -4,22 +4,9 @@
 
 """Linux Tryserver definition."""
 
-import socket
+from config_bootstrap import Master
 
-
-class _Master4(object):
-  """Try server master."""
-  master_host = 'master4.golo.chromium.org'
-  is_production_host = socket.getfqdn() == 'master4.golo.chromium.org'
-  tree_closing_notification_recipients = []
-  from_address = 'tryserver@chromium.org'
-  reply_to = 'chrome-troope%s+tryserver@google.com' % 'rs'
-  code_review_site = 'https://chromiumcodereview.appspot.com'
-  buildslave_version = 'buildbot_slave_8_4'
-  twisted_version = 'twisted_10_2'
-
-
-class TryServerLinux(_Master4):
+class TryServerLinux(Master.Master4):
   project_name = 'chromium.tryserver.linux'
   master_port = 8045
   slave_port = 8145
@@ -31,3 +18,4 @@ class TryServerLinux(_Master4):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = base_app_url + '/lkgr'
   svn_url = 'svn://svn.chromium.org/chrome-try/try'
+  reply_to = 'chrome-troope%s+tryserver@google.com' % 'rs'

@@ -24,8 +24,8 @@ from common import master_cfg_utils
 # to be fixed and removed from the list!
 BLACKLIST = set(['chromium.swarm',
                  'chromium.chromebot',
-                 'chromiumos.tryserver',
-                 'client.nacl.chrome'])
+                 'client.nacl.chrome'
+                 ])
 
 
 Cmd = collections.namedtuple('Cmd', ['name', 'path', 'env'])
