@@ -22,7 +22,7 @@ SDK_BUILDER_MAP = {
     'linux-sdk-mono64':
         [sys.executable, 'nacl-mono-buildbot.py'],
     'DEFAULT':
-        [sys.executable, 'build_sdk.py'],
+        [sys.executable, 'buildbot_run.py'],
 }
 
 
