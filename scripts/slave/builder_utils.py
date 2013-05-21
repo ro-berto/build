@@ -375,6 +375,8 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
   build_status.setProperty('mastername', mastername, 'Build')
   build_status.setProperty('slavename', slavename, 'Build')
   build_status.setProperty('gtest_filter', [], 'Build')
+  build_status.setProperty('extra_args', [], 'Build')
+  build_status.setProperty('build_id', 1, 'Build')
 
   # if build_properties are passed in, overwrite the defaults above:
   buildprops = Properties()
