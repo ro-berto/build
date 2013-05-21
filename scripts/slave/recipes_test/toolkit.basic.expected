@@ -13,7 +13,7 @@
    "name": "git update-ref"
   },
   {
-   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "clean", "-f", "-d", "-X"],
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "clean", "-f", "-d", "-x"],
    "name": "git clean"
   },
   {
