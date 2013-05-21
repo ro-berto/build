@@ -95,7 +95,7 @@ def setup_chromium_factories():
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
       chromium_factory.ChromiumFactory.__init__(self,
-                                                'src/build',
+                                                'src/out',
                                                 target_platform)
       self._solutions = []
 
