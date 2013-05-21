@@ -28,6 +28,8 @@ asan_gclient_env = {
     'GYP_DEFINES': ('asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 ')}
 
 # Windows.
+defaults['category'] = 'win'
+
 B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler_name)
 F('win32_debug_factory', win().LibyuvFactory(
     target='Debug',
@@ -43,6 +45,8 @@ F('win32_release_factory', win().LibyuvFactory(
     factory_properties=win_factory_prop))
 
 # Mac.
+defaults['category'] = 'mac'
+
 B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler_name)
 F('mac_debug_factory', mac().LibyuvFactory(
     target='Debug',
@@ -66,6 +70,8 @@ F('mac_asan_factory', mac().LibyuvFactory(
     }))
 
 # Linux.
+defaults['category'] = 'linux'
+
 B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibyuvFactory(
     target='Debug',

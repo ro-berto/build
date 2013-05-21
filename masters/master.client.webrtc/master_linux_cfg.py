@@ -9,7 +9,7 @@ from master.factory import webrtc_factory
 defaults = {}
 
 
-def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
+def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   def linux():
     return webrtc_factory.WebRTCFactory('src/out', 'linux2', svn_url,
                                         branch, custom_deps_list)
@@ -23,7 +23,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   F = helper.Factory
   S = helper.Scheduler
 
-  scheduler = 'webrtc_%s_linux_scheduler' % category
+  scheduler = 'webrtc_linux_scheduler'
   S(scheduler, branch=branch, treeStableTimer=0)
 
   normal_tests = [
@@ -71,7 +71,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
 
   ninja_options = ['--build-tool=ninja']
 
-  defaults['category'] = category
+  defaults['category'] = 'linux'
 
   B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler)
   F('linux32_debug_factory', linux().WebRTCFactory(

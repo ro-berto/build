@@ -59,6 +59,8 @@ win_factory_prop = {
     'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}}
 
 # Windows.
+defaults['category'] = 'win'
+
 B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler_name)
 F('win32_debug_factory', win().LibjingleFactory(
     target='Debug',
@@ -74,6 +76,8 @@ F('win32_release_factory', win().LibjingleFactory(
     factory_properties=win_factory_prop.copy()))
 
 # Mac.
+defaults['category'] = 'mac'
+
 B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler_name)
 F('mac_debug_factory', mac().LibjingleFactory(
     target='Debug',
@@ -97,6 +101,8 @@ F('mac_asan_factory', mac().LibjingleFactory(
     }))
 
 # Linux.
+defaults['category'] = 'linux'
+
 B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibjingleFactory(
     target='Debug',

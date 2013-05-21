@@ -8,7 +8,7 @@ from master.factory import webrtc_factory
 defaults = {}
 
 
-def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
+def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   def win():
     return webrtc_factory.WebRTCFactory('src/build', 'win32', svn_url,
                                         branch, custom_deps_list)
@@ -17,7 +17,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   F = helper.Factory
   S = helper.Scheduler
 
-  scheduler = 'webrtc_%s_win_scheduler' % category
+  scheduler = 'webrtc_win_scheduler'
   S(scheduler, branch=branch, treeStableTimer=0)
 
   normal_tests = [
@@ -54,7 +54,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
       'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}
   }
 
-  defaults['category'] = category
+  defaults['category'] = 'win'
 
   B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler)
   F('win32_debug_factory', win().WebRTCFactory(

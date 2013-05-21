@@ -8,7 +8,7 @@ from master.factory import webrtc_factory
 defaults = {}
 
 
-def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
+def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   def mac():
     return webrtc_factory.WebRTCFactory('src/xcodebuild', 'darwin', svn_url,
                                         branch, custom_deps_list)
@@ -21,7 +21,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
   F = helper.Factory
   S = helper.Scheduler
 
-  scheduler = 'webrtc_%s_mac_scheduler' % category
+  scheduler = 'webrtc_mac_scheduler'
   S(scheduler, branch=branch, treeStableTimer=0)
 
   tests = [
@@ -55,7 +55,7 @@ def ConfigureBuilders(c, svn_url, branch, category, custom_deps_list=None):
 
   options = ['--', '-project', '../webrtc.xcodeproj']
 
-  defaults['category'] = category
+  defaults['category'] = 'mac'
 
   B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler)
   F('mac_debug_factory', mac().WebRTCFactory(
