@@ -117,7 +117,11 @@ def archive_layout(options, args):
                                     results_dir_basename,
                                     actual_file_list,
                                     options.results_dir)[1]
+  # TODO(ojan): Stop separately uploading full_results.json once garden-o-matic
+  # switches to using failing_results.json.
   full_results_json = os.path.join(options.results_dir, 'full_results.json')
+  failing_results_json = os.path.join(options.results_dir,
+      'failing_results.json')
 
   # Extract the build name of this slave (e.g., 'chrome-release') from its
   # configuration file if not provided as a param.
@@ -141,10 +145,12 @@ def archive_layout(options, args):
     gs_acl = options.factory_properties.get('gs_acl', None)
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl)
     slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl)
+    slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl)
   else:
     slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
     slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
     slave_utils.CopyFileToArchiveHost(full_results_json, dest_dir)
+    slave_utils.CopyFileToArchiveHost(failing_results_json, dest_dir)
     # Not supported on Google Storage yet.
     _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
                                   options)
