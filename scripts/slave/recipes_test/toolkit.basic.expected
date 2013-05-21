@@ -26,13 +26,16 @@
    "name": "git submodule"
   },
   {
-   "cmd": ["[SLAVE_BUILD_ROOT]/toolkit/buildbot/gen_steps.py", "--factory-properties", "{\"recipe\": \"toolkit\"}", "--build-properties", "{\"blamelist\": [\"cool_dev1337@chromium.org\"], \"patchset\": 1, \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"issue\": 12853011, \"repository\": \"https://github.com/toolkitchen/toolkit\"}", "--output-json", "/path/to/tmp/json"],
-   "cwd": "[SLAVE_BUILD_ROOT]/toolkit",
-   "name": "gen step(gen_steps.py)"
+   "cmd": ["mkdir", "[SLAVE_BUILD_ROOT]/toolkit/.tmp"],
+   "name": "mktmp"
   },
   {
-   "cmd": ["bogus.py", "--arg"],
-   "name": "bogus",
-   "seed_steps": ["bogus"]
+   "cmd": ["npm", "install", "--tmp", "[SLAVE_BUILD_ROOT]/toolkit/.tmp"],
+   "name": "update-install"
+  },
+  {
+   "cmd": ["grunt", "test-buildbot"],
+   "cwd": "[SLAVE_BUILD_ROOT]/toolkit",
+   "name": "test"
   }
 ]
