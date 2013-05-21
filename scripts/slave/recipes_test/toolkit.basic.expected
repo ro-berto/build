@@ -6,23 +6,28 @@
   },
   {
    "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "fetch", "origin", "--recurse-submodules"],
-   "name": "git fetch"
+   "name": "git fetch",
+   "seed_steps": []
   },
   {
    "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "update-ref", "refs/heads/master", "origin/master"],
-   "name": "git update-ref"
+   "name": "git update-ref",
+   "seed_steps": []
   },
   {
    "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "clean", "-f", "-d", "-X"],
-   "name": "git clean"
+   "name": "git clean",
+   "seed_steps": []
   },
   {
    "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "checkout", "-f", "master"],
-   "name": "git checkout"
+   "name": "git checkout",
+   "seed_steps": []
   },
   {
    "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "submodule", "update", "--init", "--recursive"],
-   "name": "git submodule"
+   "name": "git submodule",
+   "seed_steps": []
   },
   {
    "cmd": ["[SLAVE_BUILD_ROOT]/toolkit/buildbot/gen_steps.py", "--factory-properties", "{\"recipe\": \"toolkit\"}", "--build-properties", "{\"blamelist\": [\"cool_dev1337@chromium.org\"], \"patchset\": 1, \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"issue\": 12853011, \"repository\": \"https://github.com/toolkitchen/toolkit\"}", "--output-json", "/path/to/tmp/json"],

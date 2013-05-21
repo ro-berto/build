@@ -6,11 +6,13 @@
   },
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "revert", "--nohooks"],
-   "name": "gclient clean"
+   "name": "gclient clean",
+   "seed_steps": []
   },
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks"],
-   "name": "gclient sync"
+   "name": "gclient sync",
+   "seed_steps": []
   },
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/apply_issue", "-r", "[SLAVE_BUILD_ROOT]/src/", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org"],
