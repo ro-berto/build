@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -26,11 +27,11 @@ def run_git(*args, **kwargs):
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('path', help='Path to prospective git repo.',
+  parser.add_argument('--path', help='Path to prospective git repo.',
                       required=True)
-  parser.add_argument('url', help='URL of remote to make origin.',
+  parser.add_argument('--url', help='URL of remote to make origin.',
                       required=True)
-  parser.add_argument('verbose', action='store_true')
+  parser.add_argument('-v', '--verbose', action='store_true')
   opts = parser.parse_args()
 
   path = opts.path
@@ -41,8 +42,7 @@ def main():
   if not os.path.exists(path):
     os.makedirs(path)
 
-  exists = run_git('branch', cwd=path, throw=False) == 0
-  if exists:
+  if os.path.exists(os.path.join(path, '.git')):
     run_git('remote', 'rm', 'origin', cwd=path)
   else:
     run_git('init', cwd=path)

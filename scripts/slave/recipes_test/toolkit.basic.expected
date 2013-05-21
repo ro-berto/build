@@ -22,6 +22,7 @@
   },
   {
    "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "submodule", "update", "--init", "--recursive"],
+   "cwd": "[SLAVE_BUILD_ROOT]/toolkit",
    "name": "git submodule"
   },
   {
