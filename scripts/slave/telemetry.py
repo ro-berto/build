@@ -63,7 +63,7 @@ def _GenerateTelemetryCommandSequence(fp):
   target_platform = fp.get('target_platform')
   build_dir = fp.get('build_dir')
 
-  script = os.path.join('src', 'tools', 'perf', 'run_multipage_benchmarks')
+  script = os.path.join('src', 'tools', 'perf', 'run_measurement')
   page_set = os.path.join('src', 'tools', 'perf', 'page_sets', page_set)
 
   env = os.environ
