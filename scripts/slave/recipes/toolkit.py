@@ -2,12 +2,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetFactoryProperties(api, _factory_properties, build_properties):
-  return {
-      'checkout': 'git',
-      'git_spec': {
-          'url': build_properties['repository'] + '.git',
-          'recursive': True,
-      },
-      'script': api.checkout_path('buildbot', 'gen_steps.py')
-  }
+def GetSteps(api, _factory_properties, build_properties):
+  steps = api.Steps(build_properties)
+  return (
+    steps.git_checkout(build_properties['repository'] + '.git', recursive=True),
+    steps.generator_script(api.checkout_path('buildbot', 'gen_steps.py'))
+  )

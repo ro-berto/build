@@ -9,4 +9,9 @@ def basic_test(api):
     'build_properties': api.tryserver_build_properties(
       repository="https://github.com/toolkitchen/toolkit"
     ),
+    'test_data': {
+      'gen step(gen_steps.py)': (0, [
+        {'name': 'bogus', 'cmd': ['bogus.py', '--arg']}
+      ])
+    }
   }

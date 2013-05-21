@@ -1,1 +1,37 @@
-"[BUILD_ROOT]/slave/fake_slave/build/toolkit/buildbot/gen_steps.py"
+[
+  {
+   "cmd": ["[BUILD_ROOT]/scripts/slave/git_setup.py", "--path", "[SLAVE_BUILD_ROOT]/toolkit", "--url", "https://github.com/toolkitchen/toolkit.git"],
+   "name": "git setup",
+   "seed_steps": ["git setup", "git fetch", "git update-ref", "git clean", "git checkout", "git submodule"]
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "fetch", "origin", "--recurse-submodules"],
+   "name": "git fetch"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "update-ref", "refs/heads/master", "origin/master"],
+   "name": "git update-ref"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "clean", "-f", "-d", "-X"],
+   "name": "git clean"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "checkout", "-f", "master"],
+   "name": "git checkout"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/toolkit", "--git-dir", "[SLAVE_BUILD_ROOT]/toolkit/.git", "submodule", "update", "--init", "--recursive"],
+   "name": "git submodule"
+  },
+  {
+   "cmd": ["[SLAVE_BUILD_ROOT]/toolkit/buildbot/gen_steps.py", "--factory-properties", "{\"recipe\": \"toolkit\"}", "--build-properties", "{\"blamelist\": [\"cool_dev1337@chromium.org\"], \"patchset\": 1, \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"issue\": 12853011, \"repository\": \"https://github.com/toolkitchen/toolkit\"}", "--output-json", "/path/to/tmp/json"],
+   "cwd": "[SLAVE_BUILD_ROOT]/toolkit",
+   "name": "gen step(gen_steps.py)"
+  },
+  {
+   "cmd": ["bogus.py", "--arg"],
+   "name": "bogus",
+   "seed_steps": ["bogus"]
+  }
+]

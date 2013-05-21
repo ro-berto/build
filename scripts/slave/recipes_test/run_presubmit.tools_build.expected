@@ -1,82 +1,36 @@
 [
   {
-    "cmd": [
-      "git", 
-      "--work-tree", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build", 
-      "--git-dir", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build/.git", 
-      "config", 
-      "user.email", 
-      "commit-bot@chromium.org"
-    ], 
-    "name": "git config user.email"
-  }, 
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "solutions = [{'url': 'https://chromium.googlesource.com/chromium/tools/build.git', 'managed': True, 'name': 'build', 'deps_file': '.DEPS.git'}]\n"],
+   "name": "gclient setup",
+   "seed_steps": ["gclient setup", "gclient clean", "gclient sync"]
+  },
   {
-    "cmd": [
-      "git", 
-      "--work-tree", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build", 
-      "--git-dir", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build/.git", 
-      "config", 
-      "user.name", 
-      "The Commit Bot"
-    ], 
-    "name": "git config user.name"
-  }, 
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "revert", "--nohooks"],
+   "name": "gclient clean"
+  },
   {
-    "cmd": [
-      "git", 
-      "--work-tree", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build", 
-      "--git-dir", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build/.git", 
-      "clean", 
-      "-xfq"
-    ], 
-    "name": "git clean"
-  }, 
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks"],
+   "name": "gclient sync"
+  },
   {
-    "cmd": [
-      "[DEPOT_TOOLS_ROOT]/apply_issue", 
-      "-r", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build/", 
-      "-i", 
-      12853011, 
-      "-p", 
-      1, 
-      "-s", 
-      "https://chromiumcodereview.appspot.com", 
-      "-e", 
-      "commit-bot@chromium.org"
-    ], 
-    "name": "apply_issue"
-  }, 
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/build", "--git-dir", "[SLAVE_BUILD_ROOT]/build/.git", "config", "user.email", "commit-bot@chromium.org"],
+   "name": "git config user.email",
+   "seed_steps": ["git config user.email", "git config user.name", "git clean"]
+  },
   {
-    "cmd": [
-      "[DEPOT_TOOLS_ROOT]/presubmit_support.py", 
-      "--root", 
-      "[BUILD_ROOT]/slave/fake_slave/build/build/", 
-      "--commit", 
-      "--verbose", 
-      "--verbose", 
-      "--issue", 
-      12853011, 
-      "--patchset", 
-      1, 
-      "--skip_canned", 
-      "CheckRietveldTryJobExecution", 
-      "--skip_canned", 
-      "CheckTreeIsOpen", 
-      "--skip_canned", 
-      "CheckBuildbotPendingBuilds", 
-      "--rietveld_url", 
-      "https://chromiumcodereview.appspot.com", 
-      "--rietveld_email", 
-      "", 
-      "--rietveld_fetch"
-    ], 
-    "name": "presubmit"
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/build", "--git-dir", "[SLAVE_BUILD_ROOT]/build/.git", "config", "user.name", "The Commit Bot"],
+   "name": "git config user.name"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/build", "--git-dir", "[SLAVE_BUILD_ROOT]/build/.git", "clean", "-xfq"],
+   "name": "git clean"
+  },
+  {
+   "cmd": ["[DEPOT_TOOLS_ROOT]/apply_issue", "-r", "[SLAVE_BUILD_ROOT]/build/", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org"],
+   "name": "apply_issue"
+  },
+  {
+   "cmd": ["[DEPOT_TOOLS_ROOT]/presubmit_support.py", "--root", "[SLAVE_BUILD_ROOT]/build/", "--commit", "--verbose", "--verbose", "--issue", 12853011, "--patchset", 1, "--skip_canned", "CheckRietveldTryJobExecution", "--skip_canned", "CheckTreeIsOpen", "--skip_canned", "CheckBuildbotPendingBuilds", "--rietveld_url", "https://chromiumcodereview.appspot.com", "--rietveld_email", "", "--rietveld_fetch"],
+   "name": "presubmit"
   }
 ]
