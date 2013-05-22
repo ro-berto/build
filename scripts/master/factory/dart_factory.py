@@ -94,8 +94,15 @@ def setup_chromium_factories():
 
   class DartiumFactory(chromium_factory.ChromiumFactory):
     def __init__(self, target_platform=None):
+      if target_platform in ['linux2', 'darwin']:
+        # We use make/ninja on our linux/mac dartium builders which use
+        # 'src/out' as build directory
+        build_directory = 'src/out'
+      else:
+        # On windows we still use msvc which uses 'src/build' as build directory
+        build_directory = 'src/build'
       chromium_factory.ChromiumFactory.__init__(self,
-                                                'src/out',
+                                                build_directory,
                                                 target_platform)
       self._solutions = []
 
