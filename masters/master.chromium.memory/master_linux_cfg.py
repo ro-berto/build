@@ -76,6 +76,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
+      'cc_unittests',
       'content_browsertests',
       'content_unittests',
       'crypto_unittests',
@@ -156,6 +157,7 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
     build_url=linux_asan_archive,
     tests=[
       'browser_tests',
+      'cc_unittests',
       'content_browsertests',
     ],
     factory_properties={
