@@ -21,6 +21,9 @@ def CommonChecks(input_api, output_api):
       r'.*scripts/release/.*',
       r'.+_bb7\.py$',
       r'.*masters/.*/templates/.*\.html$',
+      r'.*masters/.*/templates/.*\.css$',
+      r'.*masters/.*/public_html/.*\.html$',
+      r'.*masters/.*/public_html/.*\.css$',
   ]
   tests = []
   sys_path_backup = sys.path
