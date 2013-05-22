@@ -40,9 +40,15 @@ class Options(object):
 
 
 def CopySetupFiles(user, host, platform, options):
-  sftp_stdin = [
-      'rmdir %s' % SFTP_SWARM_DIRECTORY,
-      'mkdir %s' % SFTP_SWARM_DIRECTORY,
+  sftp_stdin = ['rmdir %s' % SFTP_SWARM_DIRECTORY]
+
+  directory = os.sep
+  for path_section in SFTP_SWARM_DIRECTORY.split(os.sep):
+    if path_section:
+      directory = os.path.join(directory, path_section)
+      sftp_stdin.append('mkdir %s' % directory)
+
+  sftp_stdin += [
       'put swarm_bootstrap/* %s' % SFTP_SWARM_DIRECTORY,
       'exit',
       ]
