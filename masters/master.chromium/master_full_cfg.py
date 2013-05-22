@@ -19,6 +19,7 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win_out(): return chromium_factory.ChromiumFactory('src/out', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def linux_android(): return chromium_factory.ChromiumFactory(
@@ -57,6 +58,20 @@ F('win_clobber', win().ChromiumFactory(
         'GYP_DEFINES': 'test_isolation_mode=noop',
       },
     }))
+
+B('Win Split', 'win_split', 'compile|windows', 'chromium')
+F('win_split', win_out().ChromiumFactory(
+    target='Release',
+    options=['--build-tool=ninja'],
+    factory_properties={
+      'process_dumps': True,
+      'start_crash_handler': True,
+      'gclient_env': {
+        'GYP_DEFINES': 'fastbuild=1 chrome_split_dll=1',
+        'GYP_GENERATORS': 'ninja',
+      },
+    }))
+
 
 ################################################################################
 ## Mac
