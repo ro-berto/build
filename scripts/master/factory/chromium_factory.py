@@ -659,6 +659,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('sync_integration_br'):
       f.AddBuildrunnerSyncIntegrationTests(fp)
 
+    if R('webrtc_perf_content_unittests'):
+      f.AddWebRtcPerfContentUnittests(fp)
+
     # GPU tests:
     if R('gl_tests'):
       f.AddGLTests(fp)

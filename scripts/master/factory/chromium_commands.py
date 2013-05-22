@@ -1451,6 +1451,13 @@ class ChromiumCommands(commands.FactoryCommands):
           'media_tests_' + group.lower(), suite=group, timeout=timeout,
           perf=is_perf, factory_properties=factory_properties)
 
+  def AddWebRtcPerfContentUnittests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep(test_name='webrtc_perf_content_unittests',
+                              gtest_filter="WebRTCAudioDeviceTest*",
+                              log_type='graphing',
+                              factory_properties=factory_properties,
+                              cmd_name='content_unittests')
+
   def AddChromebotServer(self, factory_properties=None):
     """Add steps to run Chromebot script for server.
 

@@ -27,7 +27,7 @@ T('linux_rel_trigger')
 
 chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
                                                   'Linux Builder')
-tests = ['pyauto_webrtc_tests']
+tests = ['pyauto_webrtc_tests', 'webrtc_perf_content_unittests']
 
 defaults['category'] = 'linux'
 
