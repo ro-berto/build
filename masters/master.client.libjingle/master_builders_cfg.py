@@ -51,8 +51,7 @@ asan_disabled_tests = [
 ]
 asan_tests = filter(lambda test: test not in asan_disabled_tests,
                     normal_tests)
-asan_gclient_env = {
-    'GYP_DEFINES': ('asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 ')}
+asan_gyp_defines = 'asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 '
 ninja_options = ['--build-tool=ninja']
 win_project = r'..\talk\libjingle_all.sln'
 win_factory_prop = {
@@ -97,44 +96,55 @@ F('mac_asan_factory', mac().LibjingleFactory(
     tests=asan_tests,
     factory_properties={
         'asan': True,
-        'gclient_env': asan_gclient_env.copy(),
+        'gclient_env': {'GYP_DEFINES': asan_gyp_defines},
     }))
 
 # Linux.
 defaults['category'] = 'linux'
+
+# Pass the location to the Java JDK as a GYP variable named 'java_home' to
+# enable Java compilation on Linux.
+java_home = 'java_home=/usr/lib/jvm/java-6-sun'
 
 B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler_name)
 F('linux32_debug_factory', linux().LibjingleFactory(
     target='Debug',
     options=ninja_options,
     tests=normal_tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'target_arch=ia32 %s' % java_home},
+    }))
 
 B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler_name)
 F('linux32_release_factory', linux().LibjingleFactory(
     target='Release',
     options=ninja_options,
     tests=normal_tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'target_arch=ia32 %s' % java_home},
+    }))
 
 B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler_name)
 F('linux64_debug_factory', linux().LibjingleFactory(
     target='Debug',
     options=ninja_options,
-    tests=normal_tests))
+    tests=normal_tests,
+    factory_properties={'gclient_env': {'GYP_DEFINES': java_home}}))
 
 B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler_name)
 F('linux64_release_factory', linux().LibjingleFactory(
     target='Release',
     options=ninja_options,
-    tests=normal_tests))
+    tests=normal_tests,
+    factory_properties={'gclient_env': {'GYP_DEFINES': java_home}}))
 
 B('Linux Clang', 'linux_clang_factory', scheduler=scheduler_name)
 F('linux_clang_factory', linux().LibjingleFactory(
     target='Debug',
     options=ninja_options + ['--compiler=clang'],
     tests=normal_tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'clang=1 %s' % java_home}}))
 
 B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler_name)
 F('linux_memcheck_factory', linux().LibjingleFactory(
@@ -143,7 +153,9 @@ F('linux_memcheck_factory', linux().LibjingleFactory(
     tests=memcheck_tests,
     factory_properties={
         'needs_valgrind': True,
-        'gclient_env': {'GYP_DEFINES': 'build_for_tool=memcheck'},
+        'gclient_env': {
+            'GYP_DEFINES': 'build_for_tool=memcheck %s' % java_home,
+        },
     }))
 
 B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler_name)
@@ -153,7 +165,7 @@ F('linux_tsan_factory', linux().LibjingleFactory(
     tests=tsan_tests,
     factory_properties={
         'needs_valgrind': True,
-        'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan'},
+        'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan %s' % java_home},
     }))
 
 B('Linux Asan', 'linux_asan_factory', scheduler=scheduler_name)
@@ -163,7 +175,7 @@ F('linux_asan_factory', linux().LibjingleFactory(
     tests=asan_tests,
     factory_properties={
         'asan': True,
-        'gclient_env': asan_gclient_env.copy(),
+        'gclient_env': {'GYP_DEFINES': '%s %s' % (asan_gyp_defines, java_home)},
     }))
 
 # Chrome OS.
@@ -172,7 +184,9 @@ F('chromeos_factory', linux().LibjingleFactory(
     target='Debug',
     options=ninja_options,
     tests=normal_tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'chromeos=1 %s' % java_home},
+    }))
 
 def Update(c):
   helper.Update(c)
