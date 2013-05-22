@@ -4,7 +4,7 @@
 
 
 REPOS = (
-  'toolkit',
+  'polymer',
   'platform',
   'CustomElements',
   'mdv',

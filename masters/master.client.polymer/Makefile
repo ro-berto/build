@@ -1,5 +1,5 @@
 # -*- makefile -*-
 
 BUILDBOT_PATH = $(BUILDBOT8_PATH)
-MASTERPATH := master.client.toolkit
+MASTERPATH := master.client.polymer
 include ../master-common.mk

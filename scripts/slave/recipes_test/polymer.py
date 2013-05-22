@@ -2,11 +2,11 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Test inputs for recipes/toolkit.py"""
+"""Test inputs for recipes/polymer.py"""
 
 def basic_test(api):
   return {
     'build_properties': {
-      'repository': 'https://github.com/toolkitchen/toolkit'
+      'repository': 'https://github.com/Polymer/polymer'
     }
   }

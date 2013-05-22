@@ -1,0 +1,41 @@
+[
+  {
+   "cmd": ["[BUILD_ROOT]/scripts/slave/git_setup.py", "--path", "[SLAVE_BUILD_ROOT]/polymer", "--url", "https://github.com/Polymer/polymer.git"],
+   "name": "git setup",
+   "seed_steps": ["git setup", "git fetch", "git update-ref", "git clean", "git checkout", "git submodule"]
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/polymer", "--git-dir", "[SLAVE_BUILD_ROOT]/polymer/.git", "fetch", "origin", "--recurse-submodules"],
+   "name": "git fetch"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/polymer", "--git-dir", "[SLAVE_BUILD_ROOT]/polymer/.git", "update-ref", "refs/heads/master", "origin/master"],
+   "name": "git update-ref"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/polymer", "--git-dir", "[SLAVE_BUILD_ROOT]/polymer/.git", "clean", "-f", "-d", "-x"],
+   "name": "git clean"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/polymer", "--git-dir", "[SLAVE_BUILD_ROOT]/polymer/.git", "checkout", "-f", "master"],
+   "name": "git checkout"
+  },
+  {
+   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/polymer", "--git-dir", "[SLAVE_BUILD_ROOT]/polymer/.git", "submodule", "update", "--init", "--recursive"],
+   "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+   "name": "git submodule"
+  },
+  {
+   "cmd": ["mkdir", "[SLAVE_BUILD_ROOT]/polymer/.tmp"],
+   "name": "mktmp"
+  },
+  {
+   "cmd": ["npm", "install", "--tmp", "[SLAVE_BUILD_ROOT]/polymer/.tmp"],
+   "name": "update-install"
+  },
+  {
+   "cmd": ["grunt", "test-buildbot"],
+   "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+   "name": "test"
+  }
+]
