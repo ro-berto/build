@@ -13,16 +13,19 @@
    "name": "gclient sync"
   },
   {
-   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/build", "--git-dir", "[SLAVE_BUILD_ROOT]/build/.git", "config", "user.email", "commit-bot@chromium.org"],
+   "cmd": ["git", "config", "user.email", "commit-bot@chromium.org"],
+   "cwd": "[SLAVE_BUILD_ROOT]/build",
    "name": "git config user.email",
    "seed_steps": ["git config user.email", "git config user.name", "git clean"]
   },
   {
-   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/build", "--git-dir", "[SLAVE_BUILD_ROOT]/build/.git", "config", "user.name", "The Commit Bot"],
+   "cmd": ["git", "config", "user.name", "The Commit Bot"],
+   "cwd": "[SLAVE_BUILD_ROOT]/build",
    "name": "git config user.name"
   },
   {
-   "cmd": ["git", "--work-tree", "[SLAVE_BUILD_ROOT]/build", "--git-dir", "[SLAVE_BUILD_ROOT]/build/.git", "clean", "-xfq"],
+   "cmd": ["git", "clean", "-xfq"],
+   "cwd": "[SLAVE_BUILD_ROOT]/build",
    "name": "git clean"
   },
   {
