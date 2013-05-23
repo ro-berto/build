@@ -23,7 +23,7 @@ import config
 
 current_milestone = '0.3'
 v8_stable_branch = '3.17'
-android_tools_rev = '@ebd740fc3d55dda34d9322c8c5f7749302734325'
+android_tools_rev = '@b12d410c0ee23385da78e6c9f353d28fd992e0bd'
 
 milestone_path = '/branches/' + current_milestone
 dart_milestone_url = config.Master.dart_url + milestone_path
