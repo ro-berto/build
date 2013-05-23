@@ -23,13 +23,17 @@ import config
 
 current_milestone = '0.3'
 v8_stable_branch = '3.17'
+android_tools_rev = '@ebd740fc3d55dda34d9322c8c5f7749302734325'
 
 milestone_path = '/branches/' + current_milestone
 dart_milestone_url = config.Master.dart_url + milestone_path
 
+chromium_git = 'http://git.chromium.org/git/'
+
 dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
 dartium_milestone_url = dart_milestone_url + '/deps/dartium.deps'
+android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
@@ -71,6 +75,9 @@ if config.Master.trunk_internal_url:
 else:
   custom_deps_list_win = []
 custom_deps_list_vm_linux = [('dart/third_party/clang', '/third_party/clang')]
+custom_deps_list_chromeOnAndroid = [
+    ('dart/third_party/android_tools', android_tools_url),
+]
 
 # These chromium factories are used for building dartium
 F_LINUX_CH = None
@@ -353,6 +360,8 @@ class DartUtils(object):
 
   factory_base = {
     'posix': DartFactory(),
+    'chromeOnAndroid':
+        DartFactory(custom_deps_list=custom_deps_list_chromeOnAndroid),
     'linux-clang': DartFactory(custom_deps_list=custom_deps_list_vm_linux),
     'android': DartFactory(target_os='android'),
     'windows': DartFactory(target_platform='win32'),
