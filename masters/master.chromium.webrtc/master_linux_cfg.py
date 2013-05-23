@@ -39,6 +39,7 @@ F('linux_rel_factory', linux().ChromiumFactory(
     options=['--compiler=goma', '--build-tool=ninja', '--',
              'chromium_builder_webrtc'],
     factory_properties={
+        'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
         'trigger': 'linux_rel_trigger',
         'build_url': chromium_rel_archive,
     }))
