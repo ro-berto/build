@@ -90,26 +90,33 @@ class TestMailNotifier(unittest.TestCase):
 
     mail = mn.buildMessage_internal(
         bs.getBuilder().getName(), [bs], bs.getResults())
-    # Set the boundary. Otherwise it's randomly generated and breaks the
-    # test cases.
-    mail.set_boundary('===============7454617213454723890==')
+    if mail:
+      # Set the boundary. Otherwise it's randomly generated and breaks the
+      # test cases.
+      mail.set_boundary('===============7454617213454723890==')
 
-    # Replace tabs with a space for compat with python 2.6, 2.7, since
-    # the mime header wrap whitespace changed between those versions.
-    mail_str = str(mail).replace('\t', ' ')
-    if self.mode == self.TEST_MODE:
-      with open(expected, 'rb') as expected_file:
-        self.assertEqual(mail_str, expected_file.read())
-    elif self.mode == self.TRAIN_MODE:
-      with tempfile.NamedTemporaryFile(suffix='.html') as f:
-        f.write(mail.get_payload(0).get_payload(decode=True))
-        f.flush()
-        webbrowser.open('file://%s' % f.name)
-        answer = raw_input(
-          'Accept as new test data for %s [y/N]? ' % test_name).strip().lower()
-      if answer == 'y':
-        with open(expected, 'wb') as expected_file:
-          expected_file.write(mail_str)
+      # Replace tabs with a space for compat with python 2.6, 2.7, since
+      # the mime header wrap whitespace changed between those versions.
+      mail_str = str(mail).replace('\t', ' ')
+      if self.mode == self.TEST_MODE:
+        with open(expected, 'rb') as expected_file:
+          self.assertEqual(mail_str, expected_file.read())
+      elif self.mode == self.TRAIN_MODE:
+        with tempfile.NamedTemporaryFile(suffix='.html') as f:
+          f.write(mail.get_payload(0).get_payload(decode=True))
+          f.flush()
+          webbrowser.open('file://%s' % f.name)
+          answer = raw_input('Accept as new test data for %s [y/N]? '
+                             % test_name).strip().lower()
+        if answer == 'y':
+          with open(expected, 'wb') as expected_file:
+            expected_file.write(mail_str)
+    else:
+      if self.mode == self.TEST_MODE:
+        self.assertFalse(os.path.exists(expected))
+      elif self.mode == self.TRAIN_MODE:
+        if os.path.exists(expected):
+          os.remove(expected)
 
 
 def recursive_key_replace(obj, find, replace):

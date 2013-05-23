@@ -45,7 +45,8 @@ class TryMailNotifier(mail.MailNotifier):
 
     if len(build) != 1:
       # TODO(maruel): Panic or process them all.
-      pass
+      return
+
     build = build[0]
     job_stamp = build.getSourceStamp()
     build_url = self.master_status.getURLForThing(build)
@@ -86,6 +87,12 @@ class TryMailNotifier(mail.MailNotifier):
         "try %(result)s for %(reason)s on %(builder)s @ r%(revision)s" % info)
 
     build_props = build.getProperties()
+    if build_props.getProperty('requester') == 'commit-bot@chromium.org':
+      # CQ handles notifying people about the ultimate success/failure of
+      # tryjobs by posting to rietveld. It also generates a LOT of email
+      # from the tryserver which is noisy.
+      return
+
     parent_html = ''
     if build_props:
       parent_name = build_props.getProperty('parent_buildername')

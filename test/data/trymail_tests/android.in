@@ -29,6 +29,7 @@
     'primary_repo': '',
     'project': 'chrome',
     'repository': '',
+    'requester': 'dudeawesome@chromium.org',
     'revision': 177980,
     'scheduler': 'android_dbg',
     'slavename': 'chromeperf51',

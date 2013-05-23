@@ -2,6 +2,7 @@
   'build_step_props': {
     'parent_buildername': 'ParentBuilder',
     'parent_buildnumber': 1337,
+    'requester': 'dudeawesome@chromium.org',
   },
   'build_step': {
     'getSourceStamp().revision': 1337,
