@@ -1211,7 +1211,9 @@ def main():
     # Avoid aggressive memcmp checks until http://crbug.com/178677 is fixed.
     # Also do not replace memcpy/memmove/memset to suppress a report in OpenCL,
     # see http://crbug.com/162461.
-    os.environ['ASAN_OPTIONS'] = 'strict_memcmp=0 replace_intrin=0'
+    # Disable the builtin online symbolizer, see http://crbug.com/243255.
+    os.environ['ASAN_OPTIONS'] = (
+        'strict_memcmp=0 replace_intrin=0 symbolize=false')
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
