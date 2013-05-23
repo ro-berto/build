@@ -756,17 +756,12 @@ def main_ninja(options, args):
       # Note that, on other platform, ninja doesn't use ninja -t msvc
       # (it just simply run $cc/$cxx), so modifying PATH can work to run
       # gomacc without this hack.
-      #
-      # Another option is to use CC_wrapper, CXX_wrapper environement variables
-      # at gyp time (and this is typical usage for chromium developers), but
-      # it would make it harder to fallback no-goma when goma is not available.
       manifest = os.path.join(options.target_output_dir, 'build.ninja')
       orig_manifest = manifest + '.orig'
       if os.path.exists(orig_manifest):
         os.remove(orig_manifest)
       os.rename(manifest, orig_manifest)
-      cc_line_pattern = re.compile(
-          r'(cc|cxx|cc_host|cxx_host|cl_x86|cl_x64) = (.*)')
+      cc_line_pattern = re.compile(r'(cc|cxx|cc_host|cxx_host) = (.*)')
       goma_repl = '\\1 = %s \\2' % (
           os.path.join(options.goma_dir, 'gomacc.exe').replace('\\', '\\\\'))
       with open(orig_manifest) as orig_build:
