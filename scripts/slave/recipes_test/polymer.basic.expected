@@ -35,6 +35,7 @@
   },
   {
    "cmd": ["npm", "install", "--tmp", "[SLAVE_BUILD_ROOT]/polymer/.tmp"],
+   "cwd": "[SLAVE_BUILD_ROOT]/polymer",
    "name": "update-install"
   },
   {
