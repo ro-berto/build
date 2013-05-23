@@ -39,7 +39,7 @@
    "name": "update-install"
   },
   {
-   "cmd": ["grunt", "test-buildbot"],
+   "cmd": ["xvfb-run", "grunt", "test-buildbot"],
    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
    "name": "test"
   }

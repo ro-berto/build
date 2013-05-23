@@ -5,7 +5,7 @@
 def GetSteps(api, _factory_properties, build_properties):
   steps = api.Steps(build_properties)
   tmp_path = api.checkout_path('.tmp')
-  test_prefix = [] if api.IsLinux() else ['xvfb-run']
+  test_prefix = ['xvfb-run'] if api.IsLinux() else []
   return (
     steps.git_checkout(build_properties['repository'] + '.git', recursive=True),
     steps.step('mktmp', ['mkdir', tmp_path]),
