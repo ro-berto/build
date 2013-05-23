@@ -9,6 +9,7 @@ REPOS = (
   'CustomElements',
   'mdv',
   'PointerGestures',
+  'PointerEvents',
   'ShadowDOM',
   'HTMLImports',
 )
