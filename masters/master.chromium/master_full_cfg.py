@@ -62,7 +62,7 @@ F('win_clobber', win().ChromiumFactory(
 B('Win Split', 'win_split', 'compile|windows', 'chromium')
 F('win_split', win_out().ChromiumFactory(
     target='Release',
-    options=['--build-tool=ninja'],
+    options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
     factory_properties={
       'process_dumps': True,
       'start_crash_handler': True,
