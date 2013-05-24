@@ -53,10 +53,12 @@ class TestAnnotationStreams(unittest.TestCase):
         '@@@SEED_STEP one@@@',
         '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
         '@@@SEED_STEP two@@@',
         '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
@@ -101,6 +103,7 @@ class TestAnnotationStreams(unittest.TestCase):
         '@@@STEP_LOG_LINE@full_perf_log@perf line one@@@',
         '@@@STEP_LOG_LINE@full_perf_log@perf line two@@@',
         '@@@STEP_LOG_END_PERF@full_perf_log@full_perf@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
@@ -120,9 +123,11 @@ class TestAnnotationStreams(unittest.TestCase):
         '@@@SEED_STEP two@@@',
         '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
         '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@'
     ]
 
@@ -145,13 +150,16 @@ class TestAnnotationStreams(unittest.TestCase):
         '@@@SEED_STEP three@@@',
         '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
         '@@@STEP_CURSOR three@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR three@@@',
         '@@@STEP_CLOSED@@@',
         '@@@SEED_STEP two@@@',
         '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
@@ -280,6 +288,8 @@ class TestExecution(unittest.TestCase):
         '/usr/bin/python -c "print \'hello!\'"',
         'hello!',
         '',
+        '@@@STEP_CURSOR one@@@',
+        '',
         '@@@STEP_CLOSED@@@',
         '',
         '@@@STEP_CURSOR two@@@',
@@ -288,6 +298,8 @@ class TestExecution(unittest.TestCase):
         '',
         '/usr/bin/python -c "print \'yo!\'"',
         'yo!',
+        '',
+        '@@@STEP_CURSOR two@@@',
         '',
         '@@@STEP_CLOSED@@@',
     ]
