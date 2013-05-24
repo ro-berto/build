@@ -94,7 +94,13 @@ F('win_asan_rel_tests_1', win().ChromiumASANFactory(
         'browser_shard_index': 1,
         'browser_total_shards': 2,
         'testing_env': {
-            'CHROME_ALLOCATOR': 'WINHEAP',
+            # The biggest gain observed on stack cache compression is when we
+            # skip the 5 bottom frames of the stack traces. To measure this gain
+            # we've run an instrumented version of base_unittests and observed
+            # the cache compression. With a value between 0 and 4
+            # the compression ratio was around 28.9%, and with a value of 5 it
+            # was 92.19%.
+            'SYZYGY_ASAN_OPTIONS': '--bottom_frames_to_skip=5',
         },
     }))
 
@@ -109,7 +115,13 @@ F('win_asan_rel_tests_2', win().ChromiumASANFactory(
         'browser_shard_index': 2,
         'browser_total_shards': 2,
         'testing_env': {
-            'CHROME_ALLOCATOR': 'WINHEAP',
+            # The biggest gain observed on stack cache compression is when we
+            # skip the 5 bottom frames of the stack traces. To measure this gain
+            # we've run an instrumented version of base_unittests and observed
+            # the cache compression. With a value between 0 and 4
+            # the compression ratio was around 28.9%, and with a value of 5 it
+            # was 92.19%.
+            'SYZYGY_ASAN_OPTIONS': '--bottom_frames_to_skip=5',
         },
     }))
 
