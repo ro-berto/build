@@ -688,6 +688,50 @@ def main_make(options, args):
 
   return result
 
+def main_make_android(options, args):
+  """Interprets options, clobbers object files, and calls make.
+  """
+
+  env = EchoDict(os.environ)
+  goma_ready = goma_setup(options, env)
+  if not goma_ready:
+    assert options.compiler not in ('goma', 'goma-clang')
+    assert options.goma_dir is None
+
+  options.build_dir = os.path.abspath(options.build_dir)
+
+  if goma_ready:
+    command = [os.path.join(options.goma_dir, 'goma-android-make')]
+  else:
+    command = ['make']
+
+  working_dir = options.src_dir
+
+  os.chdir(working_dir)
+
+  # V=1 prints the actual executed command
+  if options.verbose:
+    command.extend(['V=1'])
+  command.extend(options.build_args + args)
+
+  # Run the build.
+  env.print_overrides()
+  result = 0
+
+  def clobber():
+    print('Removing %s' % options.target_output_dir)
+    chromium_utils.RemoveDirectory(options.target_output_dir)
+
+  # The Android.mk build system handles deps differently than the 'regular'
+  # Chromium makefiles which can lead to targets not being rebuilt properly.
+  # Fixing this is actually quite hard so we make this bot always clobber.
+  clobber()
+
+  result = chromium_utils.RunCommand(command, env=env)
+
+  goma_teardown(options, env)
+
+  return result
 
 def main_ninja(options, args):
   """Interprets options, clobbers object files, and calls ninja."""
@@ -1053,6 +1097,8 @@ def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
         target + ('-iphoneos' if is_iphone else ''))
   elif build_tool in ['make', 'ninja']:
     ret = os.path.join(src_dir, 'out', target)
+  elif build_tool == 'make-android':
+    ret = os.path.join(src_dir, 'out')
   elif build_tool in ['msvs', 'vs', 'ib']:
     ret = os.path.join(src_dir, 'build', target)
   elif build_tool == 'scons':
@@ -1086,6 +1132,10 @@ def real_main():
   option_parser.add_option('', '--build-dir', default='build',
                            help='path to directory containing solution and in '
                                 'which the build output will be placed')
+  option_parser.add_option('', '--src-dir', default=None,
+                           help='path to the root of the source tree')
+  option_parser.add_option('', '--target-output-dir', default=None,
+                           help='path to the output folder')
   option_parser.add_option('', '--mode', default='dev',
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
@@ -1121,8 +1171,9 @@ def real_main():
   options, args = option_parser.parse_args()
 
   options.build_dir = os.path.abspath(options.build_dir)
-  options.src_dir = os.path.join(slave_utils.SlaveBaseDir(
-      os.path.abspath(options.build_dir)), 'build', 'src')
+  if not options.src_dir:
+    options.src_dir = os.path.join(slave_utils.SlaveBaseDir(
+        os.path.abspath(options.build_dir)), 'build', 'src')
 
   if options.build_tool is None:
     if chromium_utils.IsWindows():
@@ -1167,6 +1218,7 @@ def real_main():
         'ib' : main_win,
         'vs' : main_win,
         'make' : main_make,
+        'make-android' : main_make_android,
         'ninja' : main_ninja,
         'scons' : main_scons,
         'xcode' : main_xcode,
