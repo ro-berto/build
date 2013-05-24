@@ -407,8 +407,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('sandbox_linux_unittests', fp)
     if R('telemetry_unittests'):
       f.AddTelemetryUnitTests()
-    if R('telemetry_perf_unittests'):
-      f.AddTelemetryPerfUnitTests()
     if R('ui_unittests'):
       f.AddGTestTestStep('ui_unittests', fp)
     if R('ui_unittests_br'):
