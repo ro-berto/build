@@ -1559,7 +1559,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # TODO(csharp): Actually send the tests instead of just an empty list
     # once all tests have result files.
-    self.AddGenerateResultHashesStep(
+    self.AddGenerateIsolatedHashesStep(
         using_ninja, [], doStepIf=swarm_commands.TestStepFilterSwarm)
 
     # Trigger the swarm test builder. The only issue here is that

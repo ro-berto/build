@@ -128,7 +128,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       doStepIf=do_step_if)
 
 
-def BuildSwarmFiles(test_filters, run_default_swarm_tests):
+def BuildIsolatedFiles(test_filters, run_default_swarm_tests):
   """Returns True if this build should generate the hashfiles required to run
   tests on swarm."""
   return bool(GetSwarmTestsFromTestFilter(test_filters,
@@ -149,9 +149,9 @@ class RunHooksShell(shell.ShellCommand):
       run_default_swarm_tests = self.getProperty('run_default_swarm_tests')
     except KeyError:
       run_default_swarm_tests = None
-    # If swarm tests are present ensure that the hash output required
-    # by them is generated.
-    if BuildSwarmFiles(test_filters, run_default_swarm_tests):
+    # If swarm tests are present ensure that the .isolated and the sha-1 of its
+    # content, as required by the swarm steps, is generated.
+    if BuildIsolatedFiles(test_filters, run_default_swarm_tests):
       environ = cmd.args.get('env', {}).copy()
       environ.setdefault('GYP_DEFINES', '')
       environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
@@ -537,8 +537,12 @@ class FactoryCommands(object):
     return self.TestStepFilterImpl(bStep, False)
 
   def TestStepFilterImpl(self, bStep, default):
-    """Examines the 'testfilter' property of the build and determines if
-    the step should run; True for yes."""
+    """Returns True if the step should be executed, instead of being skipped.
+
+    It examines the 'testfilter' property of the build and determines if
+    the step should run. It may skip the test if it is supposed to be run on
+    Swarm instead.
+    """
     # TODO(maruel): This is bad hygiene to modify the build properties on the
     # fly like this. There should be another way to communicate the command line
     # properly.
@@ -557,10 +561,11 @@ class FactoryCommands(object):
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
+    # If it is set, it means that the step should be run through a swarm
+    # specific builder instead of the current step.
     run_default_swarm_tests = (
         bStep.build.getProperties().getProperty('run_default_swarm_tests'))
-    run_through_swarm = (name in DEFAULT_SWARM_TESTS and
-                         run_default_swarm_tests)
+    run_through_swarm = name in DEFAULT_SWARM_TESTS and run_default_swarm_tests
     # Continue if:
     # - the test is specified in filters
     # - DEFAULT_TESTS is listed, default is True and the test isn't running
@@ -1120,9 +1125,11 @@ class FactoryCommands(object):
         factory_properties=factory_properties, perf_name=perf_name,
         test_name=test_name, command_class=command_class)
 
-  def AddGenerateResultHashesStep(self, using_ninja, tests, doStepIf):
-    """Adds a step to generate the hashes for result files. This is used by
-    swarm."""
+  def AddGenerateIsolatedHashesStep(self, using_ninja, tests, doStepIf):
+    """Adds a step to generate the .isolated files hashes.
+
+    This is used by swarm to download the dependent files.
+    """
     if not self._target:
       log.msg('No target specified, unable to find result files to '
               'trigger swarm tests')
@@ -1139,6 +1146,7 @@ class FactoryCommands(object):
       script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
 
     cmd = [script_path, '--manifest_directory', manifest_directory]
+    # TODO(maruel): Stop using swarm_tests.
     cmd.append(tests if tests else WithProperties('%(swarm_tests:-)s'))
 
     self._factory.addStep(SwarmShellForHashes,

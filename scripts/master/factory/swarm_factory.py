@@ -144,7 +144,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     if 'test_isolation_mode=hashtable' in gyp_defines:
       test_names = [test.test_name for test in tests]
 
-      swarm_command_obj.AddGenerateResultHashesStep(
+      swarm_command_obj.AddGenerateIsolatedHashesStep(
           using_ninja=using_ninja, tests=test_names, doStepIf=True)
 
       # Send of all the test requests as a single step.
