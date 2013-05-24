@@ -12,5 +12,5 @@ def GetSteps(api, _factory_properties, build_properties):
     steps.step('update-install', ['npm', 'install', '--tmp', tmp_path],
                cwd=api.checkout_path()),
     steps.step('test', test_prefix+['grunt', 'test-buildbot'],
-               cwd=api.checkout_path())
+               cwd=api.checkout_path(), allow_subannotations=True)
   )

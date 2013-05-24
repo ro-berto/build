@@ -39,6 +39,7 @@
    "name": "update-install"
   },
   {
+   "allow_subannotations": true,
    "cmd": ["xvfb-run", "grunt", "test-buildbot"],
    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
    "name": "test"
