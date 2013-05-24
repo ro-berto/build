@@ -1283,10 +1283,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if 'cros_deps' not in [s.name for s in self._solutions]:
       self._solutions.append(gclient_factory.GClientSolution(
           config.Master.trunk_url + '/src/tools/cros.DEPS', name='cros_deps'))
-    if 'asan.DEPS' not in [s.name for s in self._solutions]:
-      self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.trunk_url + '/deps/asan.DEPS',
-          'asan.DEPS'))
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
