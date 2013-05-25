@@ -110,6 +110,14 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
 
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
+  """Factory that can be used for two things:
+
+  - Run swarm tests in a single build, contrary to ChromiumFactory which can
+    trigger swarm jobs but doesn't look for results.
+  - Run isolated tests, without using swarm at all.
+
+  Because of this, the class is slightly illnamed.
+  """
   def __init__(self, *args, **kwargs):
     canary = kwargs.pop('canary', False)
     super(SwarmFactory, self).__init__(*args, **kwargs)
@@ -118,14 +126,13 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
       self._solutions[0].custom_vars_list.append(('swarm_revision', ''))
 
   def SwarmFactory(
-      self, target_platform, target='Release', clobber=False, tests=None,
-      mode=None, options=None, compile_timeout=1200,
-      build_url=None, project=None, factory_properties=None,
-      gclient_deps=None):
+      self, target_platform, tests, options, factory_properties):
+    """Only Release is supported for now."""
+    target = 'Release'
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
-    f = self.ChromiumFactory(target, clobber, [], mode, 'BuilderTester',
-                             options, compile_timeout, build_url, project,
-                             factory_properties, gclient_deps)
+    f = self.ChromiumFactory(target=target,
+                             options=options,
+                             factory_properties=factory_properties)
 
     swarm_command_obj = swarm_commands.SwarmCommands(
         f,

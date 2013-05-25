@@ -163,10 +163,15 @@ class RunHooksShell(shell.ShellCommand):
     shell.ShellCommand.setupEnvironment(self, cmd)
 
 
-class SwarmShellForHashes(shell.ShellCommand):
-  """A basic swarm ShellCommand wrapper that assumes the script it runs will
-  output a list of property names and hashvalues, with each pair on its own
-  line."""
+class CalculateIsolatedSha1s(shell.ShellCommand):
+  """Build step that prints out the sha-1 of each .isolated file found.
+
+  The script runs the equivalent of sha1sum on the specified .isolated files.
+  The values found are saved in the build property 'swarm_hashes'.
+
+  This class assumes the script it runs will output a list of property names and
+  hashvalues, with each pair on its own line.
+  """
   def commandComplete(self, cmd):
     shell.ShellCommand.commandComplete(self, cmd)
 
@@ -179,9 +184,13 @@ class SwarmShellForHashes(shell.ShellCommand):
 
 
 def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
-  """Returns a list of all the tests in the list that should be run with
-  swarm."""
+  """Returns the list of all the tests in the list that should be run with
+  swarm.
+
+  Any _swarm suffix is stripped.
+  """
   swarm_tests = []
+  assert isinstance(test_filters, list)
   # Always allow manually added swarm tests to run.
   for test_filter in test_filters:
     if '_swarm:' in test_filter:
@@ -208,10 +217,15 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
     except KeyError:
       run_default_swarm_tests = None
 
-    command = self.command
+    command = self.command[:]
     swarm_tests = GetSwarmTestsFromTestFilter(test_filters,
                                               run_default_swarm_tests)
-    command.extend(swarm_test + '_run' for swarm_test in swarm_tests)
+    # Append each swarm test foo_run target so the .isolated file is generated.
+    # Only add if not already present.
+    for t in swarm_tests:
+      t += '_run'
+      if t not in command:
+        command.append(t)
 
     if 'compile' in test_filters and not 'All' in command:
       # ninja has an 'all' pseudo-target that tries to run all the targets knows
@@ -1128,7 +1142,12 @@ class FactoryCommands(object):
   def AddGenerateIsolatedHashesStep(self, using_ninja, tests, doStepIf):
     """Adds a step to generate the .isolated files hashes.
 
-    This is used by swarm to download the dependent files.
+    |tests| must be the list of targets, e.g. base_unittests, not
+    base_unittests_swarm nor base_unittests_run, for which the .isolated file
+    should be processed.
+
+    This is used by swarm to download the dependent files on the swarm slave via
+    run_isolated.py.
     """
     if not self._target:
       log.msg('No target specified, unable to find result files to '
@@ -1149,7 +1168,7 @@ class FactoryCommands(object):
     # TODO(maruel): Stop using swarm_tests.
     cmd.append(tests if tests else WithProperties('%(swarm_tests:-)s'))
 
-    self._factory.addStep(SwarmShellForHashes,
+    self._factory.addStep(CalculateIsolatedSha1s,
                           name='manifests_to_hashes',
                           description='manifests_to_hashes',
                           command=cmd,

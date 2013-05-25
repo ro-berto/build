@@ -1536,17 +1536,21 @@ class ChromiumCommands(commands.FactoryCommands):
   # via AddTestStep.
   def AddTriggerSwarmTests(self, tests, run_default_swarm_tests,
                            factory_properties):
-    """Generate the hash for each swarm result file and then trigger the swarm
-    tests."""
+    """Generates the hash for each .isolated file and then trigger a swarm job
+    for each test.
+
+    This doesn't add a step to get the actual results.
+    """
+    assert not tests or all(i.endswith('_swarm') for i in tests)
     using_ninja = (
         'ninja' in factory_properties['gclient_env'].get('GYP_GENERATORS', ''))
     self._factory.properties.setProperty(
         'run_default_swarm_tests', run_default_swarm_tests, 'BuildFactory')
 
-    # TODO(csharp): Actually send the tests instead of just an empty list
-    # once all tests have result files.
     self.AddGenerateIsolatedHashesStep(
-        using_ninja, [], doStepIf=swarm_commands.TestStepFilterSwarm)
+        using_ninja,
+        [t[:-len('_swarm')] for t in tests],
+        doStepIf=swarm_commands.TestStepFilterSwarm)
 
     # Trigger the swarm test builder. The only issue here is that
     # updateSourceStamp=False cannot be used because we want the user to get the

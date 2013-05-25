@@ -20,7 +20,10 @@ import config
 
 def GetSwarmTests(bStep):
   """Gets the list of all the swarm tests that this step's filter
-  will allow."""
+  will allow.
+
+  The items in the returned list have the '_swarm' suffix stripped.
+  """
   test_filters = bStep.build.getProperties().getProperty('testfilter')
   test_filters = test_filters or commands.DEFAULT_TESTS
 
@@ -42,10 +45,12 @@ def TestStepFilterRetrieveStep(bStep):
 def TestStepFilterSwarm(bStep):
   """Examines the 'testfilter' property of a build and determines if this
   build has swarm steps and thus if the test should run.
+
   It also adds a property, swarm_tests, which contains all the tests which will
-  run under swarm."""
+  run under swarm, without the '_swarm' suffix.
+  """
   swarm_tests = GetSwarmTests(bStep)
-  # TODO(csharp): Keep swarm_tests as a list.
+  # TODO(maruel): Remove this property.
   bStep.setProperty('swarm_tests', ' '.join(swarm_tests))
 
   return bool(swarm_tests)
@@ -78,11 +83,20 @@ class SwarmClientSVN(source.SVN):
 
 
 class SwarmShellForTriggeringTests(shell.ShellCommand):
-  """A simple swarm ShellCommand wrapper to ensue that all test that are sent
-  to swarm and properly assigned a number of shards to run on."""
+  """Triggers all the swarm jobs at once.
+
+  All the tests will run concurrently on Swarm and individual steps will gather
+  the results.
+
+  Makes sure each triggered swarm job has the proper number of shards.
+
+  This class can be used both on the Try Server, which supports 'testfilter' or
+  on the CI, where the steps are run inconditionally.
+  """
   def __init__(self, *args, **kwargs):
     self.tests = kwargs.pop('tests', [])
-
+    assert (not self.tests or
+            all(t.__class__.__name__ == 'SwarmTest' for t in self.tests))
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
