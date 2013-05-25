@@ -142,7 +142,7 @@ class RunHooksShell(shell.ShellCommand):
     try:
       test_filters = self.getProperty('testfilter')
     except KeyError:
-      test_filters = None
+      test_filters = []
     test_filters = test_filters or DEFAULT_TESTS
 
     try:
