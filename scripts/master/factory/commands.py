@@ -128,6 +128,14 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       doStepIf=do_step_if)
 
 
+def GetProp(bStep, name, default):
+  """Returns a build step property or |default| if the property is not set."""
+  try:
+    return bStep.build.getProperty(name)
+  except KeyError:
+    return default
+
+
 def BuildIsolatedFiles(test_filters, run_default_swarm_tests):
   """Returns True if this build should generate the hashfiles required to run
   tests on swarm."""
@@ -139,16 +147,8 @@ class RunHooksShell(shell.ShellCommand):
   """A special run hooks shell command to allow modifying its environment
   right before it starts up."""
   def setupEnvironment(self, cmd):
-    try:
-      test_filters = self.getProperty('testfilter')
-    except KeyError:
-      test_filters = []
-    test_filters = test_filters or DEFAULT_TESTS
-
-    try:
-      run_default_swarm_tests = self.getProperty('run_default_swarm_tests')
-    except KeyError:
-      run_default_swarm_tests = None
+    test_filters = GetProp(self, 'testfilter', []) or [DEFAULT_TESTS]
+    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', False)
     # If swarm tests are present ensure that the .isolated and the sha-1 of its
     # content, as required by the swarm steps, is generated.
     if BuildIsolatedFiles(test_filters, run_default_swarm_tests):
@@ -191,6 +191,7 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   """
   swarm_tests = []
   assert isinstance(test_filters, list)
+  assert isinstance(run_default_swarm_tests, bool)
   # Always allow manually added swarm tests to run.
   for test_filter in test_filters:
     if '_swarm:' in test_filter:
@@ -207,15 +208,8 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
 
 class CompileWithRequiredSwarmTargets(shell.Compile):
   def start(self):
-    try:
-      test_filters = self.getProperty('testfilter')
-    except KeyError:
-      test_filters = []
-
-    try:
-      run_default_swarm_tests = self.getProperty('run_default_swarm_tests')
-    except KeyError:
-      run_default_swarm_tests = None
+    test_filters = GetProp(self, 'testfilter', [])
+    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', False)
 
     command = self.command[:]
     swarm_tests = GetSwarmTestsFromTestFilter(test_filters,
@@ -565,10 +559,9 @@ class FactoryCommands(object):
       # Not a try job.
       return default
 
-    filters = bStep.build.getProperties().getProperty('testfilter')
     # DEFAULT_TESTS is a marker to specify all tests should be run normally.
     # Add it if no filter is explicitly specified.
-    filters = filters or [DEFAULT_TESTS]
+    filters = GetProp(bStep, 'testfilter', []) or [DEFAULT_TESTS]
 
     name = bStep.name
     # TODO(maruel): Fix the step name.
@@ -577,8 +570,7 @@ class FactoryCommands(object):
     filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
     # If it is set, it means that the step should be run through a swarm
     # specific builder instead of the current step.
-    run_default_swarm_tests = (
-        bStep.build.getProperties().getProperty('run_default_swarm_tests'))
+    run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', False)
     run_through_swarm = name in DEFAULT_SWARM_TESTS and run_default_swarm_tests
     # Continue if:
     # - the test is specified in filters

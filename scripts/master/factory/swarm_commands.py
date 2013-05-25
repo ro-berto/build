@@ -24,11 +24,10 @@ def GetSwarmTests(bStep):
 
   The items in the returned list have the '_swarm' suffix stripped.
   """
-  test_filters = bStep.build.getProperties().getProperty('testfilter')
-  test_filters = test_filters or commands.DEFAULT_TESTS
-
-  run_default_swarm_tests = (
-      bStep.build.getProperties().getProperty('run_default_swarm_tests'))
+  test_filters = commands.GetProp(bStep, 'testfilter', []) or [
+      commands.DEFAULT_TESTS]
+  run_default_swarm_tests = commands.GetProp(
+      bStep, 'run_default_swarm_tests', False)
 
   return commands.GetSwarmTestsFromTestFilter(test_filters,
                                               run_default_swarm_tests)
@@ -75,10 +74,7 @@ class SwarmClientSVN(source.SVN):
   def start(self):
     """Contrary to source.Source, ignores the branch, source stamp and patch."""
     self.args['workdir'] = self.workdir
-    try:
-      revision = self.build.getProperty('use_swarm_client_revision')
-    except KeyError:
-      revision = None
+    revision = commands.GetProp(self, 'use_swarm_client_revision', None)
     self.startVC(None, revision, None)
 
 
@@ -100,17 +96,12 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
-    try:
-      test_filters = self.getProperty('testfilter')
-    except KeyError:
-      test_filters = [test.test_name + '_swarm' for test in self.tests]
+    test_filters = commands.GetProp(self, 'testfilter', []) or [
+        test.test_name + '_swarm' for test in self.tests]
 
-    try:
-      swarm_tests_hash_mapping = self.getProperty('swarm_hashes') or {}
-    except KeyError:
-      swarm_tests_hash_mapping = {}
+    swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
 
-    command = self.command
+    command = self.command[:]
 
     # Split the test filters and remove any that aren't related to swarm.
     test_filters_split = [t.split(':', 1) for t in test_filters
