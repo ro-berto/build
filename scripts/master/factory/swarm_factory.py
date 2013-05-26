@@ -137,7 +137,8 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     f = self.ChromiumFactory(target=target,
                              options=options,
-                             factory_properties=factory_properties)
+                             factory_properties=factory_properties,
+                             run_default_swarm_tests=True)
 
     swarm_command_obj = swarm_commands.SwarmCommands(
         f,
