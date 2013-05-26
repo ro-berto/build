@@ -204,6 +204,9 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   """Returns the dict of all the tests in the list that should be run with
   swarm.
 
+  If 'run_default_swarm_tests' is set, DEFAULT_SWARM_TESTS is automatically
+  added to the list. It must only be set on builder/tester configuration.
+
   Any _swarm suffix is stripped.
   """
   assert isinstance(test_filters, dict)
@@ -556,25 +559,40 @@ class FactoryCommands(object):
     self._factory.properties.setProperty('gtest_filter', None, 'BuildFactory')
 
   def TestStepFilter(self, bStep):
+    """The normal step filter to use on tests. Runs the test by default.
+
+    The test will run unless a build property 'testfilter' is specified *and* it
+    also doesn't include DEFAULT_TESTS. In particular, if the build property
+    'testfilter' == None, it is equivalent as if it were set to DEFAULT_TESTS.
+    See GetTestfilter() for the ugly details.
+    """
     return self.TestStepFilterImpl(bStep, True)
 
   def TestStepFilterGTestFilterRequired(self, bStep):
+    """Do not run the test by default.
+
+    Note: this should only be used on the Try Server!
+    """
+    # TODO(maruel): Replace this caller of this code with GetTestStepFilter().
     return self.TestStepFilterImpl(bStep, False)
 
   def TestStepFilterImpl(self, bStep, default):
     """Returns True if the step should be executed, instead of being skipped.
 
     It examines the 'testfilter' property of the build and determines if
-    the step should run. It may skip the test if it is supposed to be run on
-    Swarm instead.
+    the step should run.
+
+    It will skip the test BuildStep if it is supposed to be run on Swarm
+    instead. This is specific to builder/tester type of builder setup. This is
+    determined via the 'run_default_swarm_tests' build property, which is set
+    via the factory. It is a bit cheezy for now as it is determined via the hard
+    coded DEFAULT_SWARM_TESTS.
+    TODO(maruel): Use non hardcoded list.
     """
     # TODO(maruel): This is bad hygiene to modify the build properties on the
     # fly like this. There should be another way to communicate the command line
     # properly.
     bStep.setProperty('gtest_filter', None, 'Factory')
-    if 'testfilter' not in bStep.build.getProperties():
-      # Not a try job.
-      return default
 
     test_filters = GetTestfilter(bStep)
 
@@ -607,7 +625,13 @@ class FactoryCommands(object):
   def GetTestStepFilter(self, factory_properties):
     """Returns a TestStepFilter lambda with the right default according to
     non_default factory property.
+
+    Note: the factory_properties 'non_default' MUST ONLY BE USED ON THE TRY
+    SERVER, since the only way to run non default tests is to supply a
+    'testfilter' build property.
     """
+    # TODO(maruel): Figure out a way to find out if it's currently running on a
+    # Try Server, and if not, refuse 'non_default'.
     return lambda bStep: self.TestStepFilterImpl(
         bStep,
         bStep.name not in factory_properties.get('non_default', []))

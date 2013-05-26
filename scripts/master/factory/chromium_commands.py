@@ -691,6 +691,8 @@ class ChromiumCommands(commands.FactoryCommands):
           wrapper_args.extend(['--sharding-args', sharding_args])
     elif test_name.endswith('_gtest_filter_required'):
       test_name = test_name[0:-len('_gtest_filter_required')]
+      # This is only to be run on the Try Server.
+      # TODO(maruel): This code should use GetTestStepFilter() instead!
       do_step_if = self.TestStepFilterGTestFilterRequired
 
     # Memory tests runner script path is relative to build_dir.

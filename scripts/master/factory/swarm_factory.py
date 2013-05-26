@@ -77,7 +77,10 @@ def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
 
 
 def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
-  """Create a basic swarm builder that runs tests via swarm."""
+  """Create a basic swarm builder that runs tests via swarm.
+
+  To clarify, this 'buildbot builder' doesn't compile.
+  """
   valid_tests = set(s.test_name for s in SWARM_TESTS)
   assert not any(t not in valid_tests for t in tests)
 
@@ -137,8 +140,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     f = self.ChromiumFactory(target=target,
                              options=options,
-                             factory_properties=factory_properties,
-                             run_default_swarm_tests=True)
+                             factory_properties=factory_properties)
 
     swarm_command_obj = swarm_commands.SwarmCommands(
         f,
