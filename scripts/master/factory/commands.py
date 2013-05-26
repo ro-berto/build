@@ -136,6 +136,23 @@ def GetProp(bStep, name, default):
     return default
 
 
+def GetTestfilter(bStep):
+  """Returns testfilter build property as a dict of steps.
+
+  Each element found in the build property is split along ':' and the value is
+  optional gtest filter.
+
+  If no testfilter property is set, {DEFAULT_TESTS, ''} is returned.
+  """
+  test_filters = GetProp(bStep, 'testfilter', None)
+  # testfilter could be a list or None.
+  if not test_filters:
+    return {DEFAULT_TESTS: ''}
+  # Actively look for bugs where 'testfilter' would be a string.
+  assert isinstance(test_filters, (list, tuple))
+  return dict(i.split(':', 1) if ':' in i else (i, '') for i in test_filters)
+
+
 def BuildIsolatedFiles(test_filters, run_default_swarm_tests):
   """Returns True if this build should generate the hashfiles required to run
   tests on swarm."""
@@ -147,7 +164,7 @@ class RunHooksShell(shell.ShellCommand):
   """A special run hooks shell command to allow modifying its environment
   right before it starts up."""
   def setupEnvironment(self, cmd):
-    test_filters = GetProp(self, 'testfilter', []) or [DEFAULT_TESTS]
+    test_filters = GetTestfilter(self)
     run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', False)
     # If swarm tests are present ensure that the .isolated and the sha-1 of its
     # content, as required by the swarm steps, is generated.
@@ -184,36 +201,36 @@ class CalculateIsolatedSha1s(shell.ShellCommand):
 
 
 def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
-  """Returns the list of all the tests in the list that should be run with
+  """Returns the dict of all the tests in the list that should be run with
   swarm.
 
   Any _swarm suffix is stripped.
   """
-  swarm_tests = []
-  assert isinstance(test_filters, list)
+  assert isinstance(test_filters, dict)
   assert isinstance(run_default_swarm_tests, bool)
   # Always allow manually added swarm tests to run.
-  for test_filter in test_filters:
-    if '_swarm:' in test_filter:
-      swarm_tests.append(test_filter.split('_swarm:', 1)[0])
-    elif test_filter.endswith('_swarm'):
-      swarm_tests.append(test_filter[:-len('_swarm')])
+  swarm_tests = dict(
+    (k[:-len('_swarm')], v) for k, v in test_filters.iteritems()
+    if k.endswith('_swarm')
+  )
 
   # Only add the default swarm tests if the builder is marked as swarm enabled.
   if DEFAULT_TESTS in test_filters and run_default_swarm_tests:
-    swarm_tests.extend(DEFAULT_SWARM_TESTS)
+    for test in DEFAULT_SWARM_TESTS:
+      swarm_tests.setdefault(test, '')
 
   return swarm_tests
 
 
 class CompileWithRequiredSwarmTargets(shell.Compile):
   def start(self):
-    test_filters = GetProp(self, 'testfilter', [])
+    test_filters = GetTestfilter(self)
     run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', False)
 
     command = self.command[:]
-    swarm_tests = GetSwarmTestsFromTestFilter(test_filters,
-                                              run_default_swarm_tests)
+    swarm_tests = list(GetSwarmTestsFromTestFilter(test_filters,
+                                                   run_default_swarm_tests))
+
     # Append each swarm test foo_run target so the .isolated file is generated.
     # Only add if not already present.
     for t in swarm_tests:
@@ -559,15 +576,12 @@ class FactoryCommands(object):
       # Not a try job.
       return default
 
-    # DEFAULT_TESTS is a marker to specify all tests should be run normally.
-    # Add it if no filter is explicitly specified.
-    filters = GetProp(bStep, 'testfilter', []) or [DEFAULT_TESTS]
+    test_filters = GetTestfilter(bStep)
 
     name = bStep.name
     # TODO(maruel): Fix the step name.
     if name.startswith('memory test: '):
       name = name[len('memory test: '):]
-    filters = dict(i.split(':', 1) if ':' in i else (i, '') for i in filters)
     # If it is set, it means that the step should be run through a swarm
     # specific builder instead of the current step.
     run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', False)
@@ -576,15 +590,15 @@ class FactoryCommands(object):
     # - the test is specified in filters
     # - DEFAULT_TESTS is listed, default is True and the test isn't running
     #   through swarm.
-    if not (name in filters or
-            (DEFAULT_TESTS in filters and
+    if not (name in test_filters or
+            (DEFAULT_TESTS in test_filters and
              default and
              not run_through_swarm)):
       return False
 
     # This is gtest specific, but other test types can safely ignore it.
     # Defaults to excluding FAILS and FLAKY test if none is specified.
-    gtest_filter = filters.get(name, '') or self.DEFAULT_GTEST_FILTER
+    gtest_filter = test_filters.get(name, '') or self.DEFAULT_GTEST_FILTER
     if gtest_filter:
       flag = '--gtest_filter=%s' % gtest_filter
       bStep.setProperty('gtest_filter', flag, 'Scheduler')

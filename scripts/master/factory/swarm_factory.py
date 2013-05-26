@@ -78,6 +78,9 @@ def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
 
 def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
   """Create a basic swarm builder that runs tests via swarm."""
+  valid_tests = set(s.test_name for s in SWARM_TESTS)
+  assert not any(t not in valid_tests for t in tests)
+
   f = build_factory.BuildFactory()
 
   # Some of the scripts require a build_dir to be set, so set it even
@@ -128,6 +131,8 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
   def SwarmFactory(
       self, target_platform, tests, options, factory_properties):
     """Only Release is supported for now."""
+    valid_tests = set(s.test_name for s in SWARM_TESTS)
+    assert not any(t.test_name not in valid_tests for t in tests)
     target = 'Release'
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     f = self.ChromiumFactory(target=target,

@@ -24,8 +24,7 @@ def GetSwarmTests(bStep):
 
   The items in the returned list have the '_swarm' suffix stripped.
   """
-  test_filters = commands.GetProp(bStep, 'testfilter', []) or [
-      commands.DEFAULT_TESTS]
+  test_filters = commands.GetTestfilter(bStep)
   run_default_swarm_tests = commands.GetProp(
       bStep, 'run_default_swarm_tests', False)
 
@@ -91,47 +90,30 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
   """
   def __init__(self, *args, **kwargs):
     self.tests = kwargs.pop('tests', [])
-    assert (not self.tests or
-            all(t.__class__.__name__ == 'SwarmTest' for t in self.tests))
+    assert all(t.__class__.__name__ == 'SwarmTest' for t in self.tests)
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
-    test_filters = commands.GetProp(self, 'testfilter', []) or [
-        test.test_name + '_swarm' for test in self.tests]
-
+    test_filters = GetSwarmTests(self)
     swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
 
     command = self.command[:]
 
-    # Split the test filters and remove any that aren't related to swarm.
-    test_filters_split = [t.split(':', 1) for t in test_filters
-                          if '_swarm:' in t or t.endswith('_swarm')]
-
-    # Add the default swarm tests without filters if default tests are running.
-    if commands.DEFAULT_TESTS in test_filters:
-      test_filters_split.extend(
-          (x + '_swarm', '') for x in commands.DEFAULT_SWARM_TESTS)
-
-    # Scan through the tests instead of the test_filter to ensure that
-    # the tests are always run in the order they are listed in in
-    # SWARM_TESTS.
+    # Only look at tests in test_filter also listed in self.tests.
     for swarm_test in self.tests:
-      for test_filter in test_filters_split:
-        if (swarm_test.test_name + '_swarm' == test_filter[0]):
-          if swarm_tests_hash_mapping.get(swarm_test.test_name):
-            target_filter = '' if len(test_filter) == 1 else test_filter[1]
-            command.extend(
-                [
-                  '--run_from_hash',
-                  swarm_tests_hash_mapping[swarm_test.test_name],
-                  swarm_test.test_name,
-                  '%d' % swarm_test.shards,
-                  target_filter,
-                  ])
-          else:
-            log.msg('Given a swarm test, %s, that has no matching hash' %
-                    swarm_test.test_name)
-          break
+      if (swarm_test.test_name in test_filters and
+          swarm_tests_hash_mapping.get(swarm_test.test_name)):
+        command.extend(
+            [
+              '--run_from_hash',
+              swarm_tests_hash_mapping[swarm_test.test_name],
+              swarm_test.test_name,
+              '%d' % swarm_test.shards,
+              test_filters[swarm_test.test_name] or '*',
+            ])
+      else:
+        log.msg('Given a swarm test, %s, that has no matching hash' %
+                swarm_test.test_name)
 
     self.setCommand(command)
 
