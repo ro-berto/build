@@ -2,9 +2,19 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Utility class to build the swarm master BuildFactory's.
+"""Utility class to build the Swarm master BuildFactory's.
 
-Based on chromium_factory.py and adds chromium-specific steps."""
+Based on chromium_factory.py and adds chromium-on-swarm-specific steps.
+
+Common usage:
+- For a split builder&tester configuration, use:
+  - One ChromiumFactory() builder with 'run_default_swarm_tests' set to True.
+  - One SwarmTestBuilder() builder named 'swarm_triggered', the builder name
+    is currently hardcoded.
+
+- For a single buildertester configuration, use:
+  - SwarmFactory()
+"""
 
 from master.factory import build_factory
 from master.factory import chromium_factory
@@ -39,52 +49,19 @@ SWARM_TESTS = [
 ]
 
 
-def SetupSwarmTests(machine, options, swarm_server, isolation_mode,
-                    isolation_outdir, gyp_defines, ninja, tests):
-  """This is a swarm builder."""
-  # Only set the outdir if we are building the hashtable to ensure we know where
-  # to load the hashtable from later.
-  factory_properties = {
-    'compile_env': {
-      'ISOLATE_DEBUG': '1',
-    },
-    'data_dir': isolation_outdir,
-    'gclient_env' : {
-      'GYP_DEFINES': (
-          'test_isolation_mode=' + isolation_mode +
-          ' test_isolation_outdir=' + isolation_outdir +
-          ' fastbuild=1 ' + gyp_defines
-      ),
-      'GYP_MSVS_VERSION': '2010',
-    },
-    'swarm_server': swarm_server,
-    'window_manager': False,
-  }
-  if ninja:
-    factory_properties['gclient_env']['GYP_GENERATORS'] = 'ninja'
-    # Build until death.
-    options = ['--build-tool=ninja'] + options + ['--', '-k', '0']
-
-  swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
-  # Accessing machine._target_platform, this function should be a member of
-  # SwarmFactory.
-  # pylint: disable=W0212
-  return machine.SwarmFactory(
-      tests=swarm_tests,
-      options=options,
-      target_platform=machine._target_platform,
-      factory_properties=factory_properties)
-
-
 def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
-  """Create a basic swarm builder that runs tests via swarm.
+  """Create a basic swarm builder that runs tests via Swarm.
 
   To clarify, this 'buildbot builder' doesn't compile.
   """
   valid_tests = set(s.test_name for s in SWARM_TESTS)
   assert not any(t not in valid_tests for t in tests)
 
-  f = build_factory.BuildFactory()
+  # No need of a window manager when only retrieving results.
+  f = build_factory.BuildFactory(
+      build_factory_properties={
+       'window_manager': False,
+      })
 
   # Some of the scripts require a build_dir to be set, so set it even
   # if the machine might not have it (It shouldn't matter what this is).
@@ -102,7 +79,7 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
       swarm_server=swarm_server,
       isolation_outdir=isolation_outdir,
       tests=swarm_tests,
-      doStepIf=swarm_commands.TestStepHasSwarmProperties)
+      doStepIf=swarm_commands.TestStepFilterTriggerSwarm)
 
   # Latency is everything, update scripts only after.
   swarm_command_obj.AddUpdateScriptStep()
@@ -116,20 +93,31 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
 
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
-  """Factory that can be used for two things:
+  """Runs swarm tests in a single build, contrary to ChromiumFactory which can
+  trigger swarm jobs but doesn't look for results.
 
-  - Run swarm tests in a single build, contrary to ChromiumFactory which can
-    trigger swarm jobs but doesn't look for results.
-  - Run isolated tests, without using swarm at all.
-
-  Because of this, the class is slightly illnamed.
+  This factory does both, which is usually a waste of resource, you don't want
+  to waste a powerful slave sitting idle, waiting for swarm results. Used on
+  chromium.swarm canary for simplicity purpose.
   """
   def SwarmFactory(
-      self, target_platform, tests, options, factory_properties):
-    """Only Release is supported for now."""
+      self, tests, options, factory_properties, swarm_server, isolate_server):
+    """Only Release is supported for now.
+
+    Caller must not reuse factory_properties since it is modified in-place.
+    """
     valid_tests = set(s.test_name for s in SWARM_TESTS)
-    assert not any(t.test_name not in valid_tests for t in tests)
+    assert not (set(tests) - set(valid_tests))
     target = 'Release'
+
+    factory_properties.setdefault('gclient_env', {})
+    factory_properties['gclient_env'].setdefault('GYP_DEFINES', '')
+    factory_properties['gclient_env']['GYP_DEFINES'] += (
+        ' test_isolation_mode=hashtable test_isolation_outdir=' +
+        isolate_server)
+    # No test is run locally so no need of a window manager.
+    factory_properties['window_manager'] = False
+
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     f = self.ChromiumFactory(target=target,
                              options=options,
@@ -141,31 +129,62 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
         self._build_dir,
         self._target_platform)
 
-    gclient_env = factory_properties.get('gclient_env')
-    swarm_server = factory_properties.get('swarm_server',
-                                          'http://localhost:9001')
-    swarm_server = swarm_server.rstrip('/')
-    isolation_outdir = factory_properties.get('data_dir')
     using_ninja = '--build-tool=ninja' in (options or []),
 
-    gyp_defines = gclient_env['GYP_DEFINES']
-    if 'test_isolation_mode=hashtable' in gyp_defines:
-      test_names = [test.test_name for test in tests]
+    swarm_command_obj.AddGenerateIsolatedHashesStep(
+        using_ninja=using_ninja, tests=tests, doStepIf=True)
 
-      swarm_command_obj.AddGenerateIsolatedHashesStep(
-          using_ninja=using_ninja, tests=test_names, doStepIf=True)
+    # Send of all the test requests as a single step.
+    swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
+    swarm_command_obj.AddTriggerSwarmTestStep(swarm_server, isolate_server,
+                                              swarm_tests, True)
 
-      # Send of all the test requests as a single step.
-      swarm_command_obj.AddTriggerSwarmTestStep(swarm_server, isolation_outdir,
-                                                tests, True)
+    # Each test has its output returned as its own step.
+    for test in swarm_tests:
+      swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name,
+                                            test.shards)
 
-      # Each test has its output returned as its own step.
-      for test in tests:
-        swarm_command_obj.AddGetSwarmTestStep(swarm_server, test.test_name,
-                                              test.shards)
-    elif 'test_isolation_mode=check':
-      for test in tests:
-        swarm_command_obj.AddIsolateTest(test.test_name,
-                                         using_ninja=using_ninja)
+    return f
 
+
+class IsolatedFactory(chromium_factory.ChromiumFactory):
+  """Run all the tests in isolated mode, without using swarm at all.
+
+  It's a normal BuilderTester but runs all its tests in isolated mode
+  inconditionally.
+  """
+  def IsolatedFactory(self, tests, options, factory_properties):
+    """Only Release is supported for now.
+
+    Caller must not reuse factory_properties since it is modified in-place.
+    """
+    target = 'Release'
+    tests = tests[:]
+    factory_properties.setdefault('gclient_env', {})
+    factory_properties['gclient_env'].setdefault('GYP_DEFINES', '')
+    factory_properties['gclient_env']['GYP_DEFINES'] += (
+        ' test_isolation_mode=check')
+
+    # Do not pass the tests to the ChromiumFactory, they'll be processed below.
+    f = self.ChromiumFactory(target=target,
+                             options=options,
+                             factory_properties=factory_properties)
+
+    swarm_command_obj = swarm_commands.SwarmCommands(
+        f,
+        target,
+        self._build_dir,
+        self._target_platform)
+
+    using_ninja = '--build-tool=ninja' in (options or []),
+
+    # Reorder the tests by the order specified in SWARM_TESTS. E.g. the slower
+    # tests are retrieved last.
+    for swarm_test in SWARM_TESTS:
+      if swarm_test.test_name in tests:
+        tests.remove(swarm_test.test_name)
+        swarm_command_obj.AddIsolateTest(
+            swarm_test.test_name, using_ninja=using_ninja)
+
+    assert not tests
     return f

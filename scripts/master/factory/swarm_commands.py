@@ -18,22 +18,25 @@ from common import chromium_utils
 import config
 
 
-def TestStepFilterRetrieveStep(bStep):
-  """Returns True if the given swarm step to get results should be run.
-
-  It is similar to commands.FactoryCommands.TestStepFilterImpl except that it
-  ignores 'run_default_swarm_tests'. It's in fact the counter part of
-  TestStepFilterImpl, as it runs the swarm step that would have been skipped by
-  TestStepFilterImpl.
-  """
-  return bStep.name in commands.GetSwarmTests(bStep)
-
-
-def TestStepHasSwarmProperties(bStep):
+def TestStepFilterTriggerSwarm(bStep):
   """Returns True if any swarm step is going to be run by this builder or a
   triggered one.
+
+  This is only useful on the Try Server, where triggering the swarm_triggered
+  try builder is conditional on running at least one swarm job there. Nobody
+  wants email for an empty job.
   """
   return bool(commands.GetSwarmTests(bStep))
+
+
+def TestStepFilterRetrieveSwarmResult(bStep):
+  """Returns True if the given swarm step to get results should be run.
+
+  It should be run if the .isolated hash was calculated.
+  """
+  # TODO(maruel): bStep.name[:-len('_swarm')] once the swarm retrieve results
+  # steps have the _swarm suffix.
+  return bStep.name in commands.GetProp(bStep, 'swarm_hashes', {})
 
 
 class SwarmClientSVN(source.SVN):
@@ -68,15 +71,16 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
 
     'swarm_hashes' is already related to GetSwarmTests().
     """
+    # Only used for pass gtest filters specified by the user via 'testfilter'.
     swarm_tests = commands.GetSwarmTests(self)
     # The 'swarm_hashes' build property has been set by the
-    # CalculateIsolatedSha1s build step.
+    # CalculateIsolatedSha1s build step. It will have all the steps that can be
+    # triggered. This implicitly takes account 'testfilter'.
     swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
 
     command = self.command[:]
     for swarm_test in self.tests:
-      if (swarm_test.test_name in swarm_tests and
-          swarm_tests_hash_mapping.get(swarm_test.test_name)):
+      if swarm_tests_hash_mapping.get(swarm_test.test_name):
         command.extend(
             [
               '--run_from_hash',
@@ -86,7 +90,7 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
               # '*' is a special value to mean no filter. This is used so '' is
               # not used, as '' may be misinterpreted by the shell, especially
               # on Windows.
-              swarm_tests[swarm_test.test_name] or '*',
+              swarm_tests.get(swarm_test.test_name) or '*',
             ])
       else:
         log.msg('Given a swarm test, %s, that has no matching hash' %
@@ -129,6 +133,9 @@ class SwarmCommands(commands.FactoryCommands):
         doStepIf=doStepIf)
 
   def AddGetSwarmTestStep(self, swarm_server, test_name, num_shards):
+    """Adds the step to retrieve the Swarm job results asynchronously."""
+    # TODO(maruel): assert test_name.endswith('_swarm') once swarm retrieve
+    # results steps have _swarm suffix.
     script_path = self.PathJoin(self._script_dir, 'get_swarm_results.py')
 
     swarm_request_name = WithProperties('%s-%s-' + test_name,
@@ -150,7 +157,7 @@ class SwarmCommands(commands.FactoryCommands):
                      test_name,
                      command,
                      timeout=timeout,
-                     do_step_if=TestStepFilterRetrieveStep)
+                     do_step_if=TestStepFilterRetrieveSwarmResult)
 
   def AddUpdateSwarmClientStep(self):
     """Checks out swarm_client so it can be used at the right revision."""

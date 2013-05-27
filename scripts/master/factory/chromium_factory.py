@@ -991,19 +991,20 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if slave_type == 'Indexer':
       chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
 
-    # Add a trigger step if needed.
-    self.TriggerFactory(factory, slave_type=slave_type,
-                        factory_properties=factory_properties)
+    if run_default_swarm_tests:
+      # Add a trigger step if needed.
+      self.TriggerFactory(factory, slave_type=slave_type,
+                          factory_properties=factory_properties)
 
-    # Trigger swarm tests. Extract all the swarm tests from |tests|. Note that
-    # this only triggers the swarm job but do not add the steps to get the
-    # results.
-    swarm_tests = []
-    for i in reversed(range(len(tests))):
-      if tests[i].endswith('_swarm'):
-        swarm_tests.append(tests.pop(i))
-    chromium_cmd_obj.AddTriggerSwarmTests(swarm_tests, run_default_swarm_tests,
-                                          factory_properties)
+      # Trigger swarm tests. Extract all the swarm tests from |tests|. Note that
+      # this only triggers the swarm job but do not add the steps to get the
+      # results.
+      swarm_tests = []
+      for i in reversed(range(len(tests))):
+        if tests[i].endswith('_swarm'):
+          swarm_tests.append(tests.pop(i))
+      chromium_cmd_obj.AddTriggerSwarmTests(
+          swarm_tests, run_default_swarm_tests, factory_properties)
 
     # Start the crash handler process.
     if ((self._target_platform == 'win32' and slave_type != 'Builder' and

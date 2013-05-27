@@ -35,6 +35,7 @@ from master.optional_arguments import ListProperties
 DEFAULT_TESTS = 'defaulttests'
 
 # The default swarm tests that should be triggered when defaulttests are run.
+# TODO(maruel): This doesn't belong here at all.
 DEFAULT_SWARM_TESTS = [
     'base_unittests'
 ]
@@ -189,6 +190,20 @@ class CalculateIsolatedSha1s(shell.ShellCommand):
   This class assumes the script it runs will output a list of property names and
   hashvalues, with each pair on its own line.
   """
+  def __init__(self, *args, **kwargs):
+    self.tests = kwargs.pop('tests')[:]
+    shell.ShellCommand.__init__(self, *args, **kwargs)
+
+  def start(self):
+    """Appends all the swarm steps specified in 'testfilter' or hard coded tests
+    to trigger.
+    """
+    command = self.command[:]
+    tests = set(self.tests).union(GetSwarmTests(self))
+    command.extend(sorted(tests))
+    self.setCommand(command)
+    return shell.ShellCommand.start(self)
+
   def commandComplete(self, cmd):
     shell.ShellCommand.commandComplete(self, cmd)
 
@@ -219,6 +234,7 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
 
   # Only add the default swarm tests if the builder is marked as swarm enabled.
   if DEFAULT_TESTS in test_filters and run_default_swarm_tests:
+    # TODO(maruel): This doesn't belong here at all.
     for test in DEFAULT_SWARM_TESTS:
       swarm_tests.setdefault(test, '')
 
@@ -617,6 +633,7 @@ class FactoryCommands(object):
     # If it is set, it means that the step should be run through a swarm
     # specific builder instead of the current step.
     run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', False)
+    # TODO(maruel): This doesn't belong here at all.
     run_through_swarm = name in DEFAULT_SWARM_TESTS and run_default_swarm_tests
     # Continue if:
     # - the test is specified in filters
@@ -1209,13 +1226,11 @@ class FactoryCommands(object):
       script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
 
     cmd = [script_path, '--manifest_directory', manifest_directory]
-    # TODO(maruel): Stop using swarm_tests.
-    cmd.append(tests if tests else WithProperties('%(swarm_tests:-)s'))
-
     self._factory.addStep(CalculateIsolatedSha1s,
                           name='manifests_to_hashes',
                           description='manifests_to_hashes',
                           command=cmd,
+                          tests=tests,
                           doStepIf=doStepIf)
 
   # Checks out and builds clang
