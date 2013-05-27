@@ -124,13 +124,6 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
   Because of this, the class is slightly illnamed.
   """
-  def __init__(self, *args, **kwargs):
-    canary = kwargs.pop('canary', False)
-    super(SwarmFactory, self).__init__(*args, **kwargs)
-    if canary:
-      # pylint: disable=W0212
-      self._solutions[0].custom_vars_list.append(('swarm_revision', ''))
-
   def SwarmFactory(
       self, target_platform, tests, options, factory_properties):
     """Only Release is supported for now."""

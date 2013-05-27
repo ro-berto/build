@@ -195,7 +195,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   def __init__(self, build_dir, target_platform=None, pull_internal=True,
                full_checkout=False, additional_svn_urls=None, name=None,
-               custom_deps_list=None, nohooks_on_update=False, target_os=None):
+               custom_deps_list=None, nohooks_on_update=False, target_os=None,
+               swarm_client_canary=False):
     if full_checkout:
       needed_components = None
     else:
@@ -229,6 +230,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                             target_platform=target_platform,
                                             nohooks_on_update=nohooks_on_update,
                                             target_os=target_os)
+    if swarm_client_canary:
+      # Contrary to other canaries like blink, v8, we don't really care about
+      # having one build per swarm_client commits by having an additional source
+      # change listener so just fetching @ToT all the time is good enough.
+      self._solutions[0].custom_vars_list.append(('swarm_revision', ''))
 
   def _AddTests(self, factory_cmd_obj, tests, mode=None,
                 factory_properties=None):
