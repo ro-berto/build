@@ -26,11 +26,15 @@ from master.log_parser import webkit_test_command
 
 
 def TestStepFilterSwarm(bStep):
-  """Examines the 'testfilter' property of a build and determines if this
-  build has swarm steps and thus if the test should run.
+  """Returns True if any swarm step is going to be run by this builder or a
+  triggered one.
 
   It also adds a property, swarm_tests, which contains all the tests which will
   run under swarm, without the '_swarm' suffix.
+
+  This is only useful on the Try Server, where triggering the swarm_triggered
+  try builder is conditional on running at least one swarm job there. Nobody
+  wants email for an empty job.
   """
   swarm_tests = commands.GetSwarmTests(bStep)
   # TODO(maruel): Remove this property.
@@ -1583,6 +1587,7 @@ class ChromiumCommands(commands.FactoryCommands):
             'swarm_hashes',
         ],
         do_step_if=TestStepFilterSwarm))
+
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by

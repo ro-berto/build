@@ -226,8 +226,10 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
 
 
 def GetSwarmTests(bStep):
-  """Gets the list of all the swarm tests that this step's filter
-  will allow.
+  """Gets the dict of all the swarm tests that this build testfilter will allow.
+
+  Arguments:
+    bStep: Any BuildStep inside the Build.
 
   The items in the returned list have the '_swarm' suffix stripped.
   """

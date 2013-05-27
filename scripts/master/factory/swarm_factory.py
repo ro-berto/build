@@ -164,7 +164,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
       # Send of all the test requests as a single step.
       swarm_command_obj.AddTriggerSwarmTestStep(swarm_server, isolation_outdir,
-                                                tests)
+                                                tests, True)
 
       # Each test has its output returned as its own step.
       for test in tests:

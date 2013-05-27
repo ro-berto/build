@@ -19,24 +19,21 @@ import config
 
 
 def TestStepFilterRetrieveStep(bStep):
-  """Returns True if the given swarm step should be run."""
-  if 'testfilter' not in bStep.build.getProperties():
-    return True
+  """Returns True if the given swarm step to get results should be run.
 
+  It is similar to commands.FactoryCommands.TestStepFilterImpl except that it
+  ignores 'run_default_swarm_tests'. It's in fact the counter part of
+  TestStepFilterImpl, as it runs the swarm step that would have been skipped by
+  TestStepFilterImpl.
+  """
   return bStep.name in commands.GetSwarmTests(bStep)
 
 
 def TestStepHasSwarmProperties(bStep):
-  """Returns true if the step has the required swarm properties set."""
-  properties = bStep.build.getProperties()
-
-  try:
-    properties.getProperty('testfilter')
-    properties.getProperty('swarm_hashes')
-  except ValueError:
-    return False
-
-  return True
+  """Returns True if any swarm step is going to be run by this builder or a
+  triggered one.
+  """
+  return bool(commands.GetSwarmTests(bStep))
 
 
 class SwarmClientSVN(source.SVN):
@@ -66,14 +63,19 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
-    test_filters = commands.GetSwarmTests(self)
+    """Triggers the intersection of 'swarm_hashes' build property,
+    self.tests and 'testfilter' build property if set.
+
+    'swarm_hashes' is already related to GetSwarmTests().
+    """
+    swarm_tests = commands.GetSwarmTests(self)
+    # The 'swarm_hashes' build property has been set by the
+    # CalculateIsolatedSha1s build step.
     swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
 
     command = self.command[:]
-
-    # Only look at tests in test_filter also listed in self.tests.
     for swarm_test in self.tests:
-      if (swarm_test.test_name in test_filters and
+      if (swarm_test.test_name in swarm_tests and
           swarm_tests_hash_mapping.get(swarm_test.test_name)):
         command.extend(
             [
@@ -81,14 +83,16 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
               swarm_tests_hash_mapping[swarm_test.test_name],
               swarm_test.test_name,
               '%d' % swarm_test.shards,
-              test_filters[swarm_test.test_name] or '*',
+              # '*' is a special value to mean no filter. This is used so '' is
+              # not used, as '' may be misinterpreted by the shell, especially
+              # on Windows.
+              swarm_tests[swarm_test.test_name] or '*',
             ])
       else:
         log.msg('Given a swarm test, %s, that has no matching hash' %
                 swarm_test.test_name)
 
     self.setCommand(command)
-
     shell.ShellCommand.start(self)
 
 
@@ -99,7 +103,8 @@ class SwarmCommands(commands.FactoryCommands):
     self._swarm_client_dir = self.PathJoin('src', 'tools', 'swarm_client')
 
   def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
-                              doStepIf=True):
+                              doStepIf):
+    assert all(t.__class__.__name__ == 'SwarmTest' for t in tests)
     script_path = self.PathJoin(self._swarm_client_dir, 'swarm_trigger_step.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
