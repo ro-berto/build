@@ -225,6 +225,18 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   return swarm_tests
 
 
+def GetSwarmTests(bStep):
+  """Gets the list of all the swarm tests that this step's filter
+  will allow.
+
+  The items in the returned list have the '_swarm' suffix stripped.
+  """
+  test_filters = GetTestfilter(bStep)
+  run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', False)
+
+  return GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests)
+
+
 class CompileWithRequiredSwarmTargets(shell.Compile):
   def start(self):
     test_filters = GetTestfilter(self)

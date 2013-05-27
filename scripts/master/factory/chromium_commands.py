@@ -19,11 +19,24 @@ from common import chromium_utils
 import config
 from master import chromium_step
 from master.factory import commands
-from master.factory import swarm_commands
 
 from master.log_parser import archive_command
 from master.log_parser import retcode_command
 from master.log_parser import webkit_test_command
+
+
+def TestStepFilterSwarm(bStep):
+  """Examines the 'testfilter' property of a build and determines if this
+  build has swarm steps and thus if the test should run.
+
+  It also adds a property, swarm_tests, which contains all the tests which will
+  run under swarm, without the '_swarm' suffix.
+  """
+  swarm_tests = commands.GetSwarmTests(bStep)
+  # TODO(maruel): Remove this property.
+  bStep.setProperty('swarm_tests', ' '.join(swarm_tests))
+
+  return bool(swarm_tests)
 
 
 class ChromiumCommands(commands.FactoryCommands):
@@ -1552,7 +1565,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddGenerateIsolatedHashesStep(
         using_ninja,
         [t[:-len('_swarm')] for t in tests],
-        doStepIf=swarm_commands.TestStepFilterSwarm)
+        doStepIf=TestStepFilterSwarm)
 
     # Trigger the swarm test builder. The only issue here is that
     # updateSourceStamp=False cannot be used because we want the user to get the
@@ -1569,7 +1582,7 @@ class ChromiumCommands(commands.FactoryCommands):
             'run_default_swarm_tests',
             'swarm_hashes',
         ],
-        do_step_if=swarm_commands.TestStepFilterSwarm))
+        do_step_if=TestStepFilterSwarm))
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
   # The default builder name is dynamically filled in by

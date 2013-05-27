@@ -18,40 +18,12 @@ from common import chromium_utils
 import config
 
 
-def GetSwarmTests(bStep):
-  """Gets the list of all the swarm tests that this step's filter
-  will allow.
-
-  The items in the returned list have the '_swarm' suffix stripped.
-  """
-  test_filters = commands.GetTestfilter(bStep)
-  run_default_swarm_tests = commands.GetProp(
-      bStep, 'run_default_swarm_tests', False)
-
-  return commands.GetSwarmTestsFromTestFilter(test_filters,
-                                              run_default_swarm_tests)
-
-
 def TestStepFilterRetrieveStep(bStep):
   """Returns True if the given swarm step should be run."""
   if 'testfilter' not in bStep.build.getProperties():
     return True
 
-  return bStep.name in GetSwarmTests(bStep)
-
-
-def TestStepFilterSwarm(bStep):
-  """Examines the 'testfilter' property of a build and determines if this
-  build has swarm steps and thus if the test should run.
-
-  It also adds a property, swarm_tests, which contains all the tests which will
-  run under swarm, without the '_swarm' suffix.
-  """
-  swarm_tests = GetSwarmTests(bStep)
-  # TODO(maruel): Remove this property.
-  bStep.setProperty('swarm_tests', ' '.join(swarm_tests))
-
-  return bool(swarm_tests)
+  return bStep.name in commands.GetSwarmTests(bStep)
 
 
 def TestStepHasSwarmProperties(bStep):
@@ -94,7 +66,7 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def start(self):
-    test_filters = GetSwarmTests(self)
+    test_filters = commands.GetSwarmTests(self)
     swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
 
     command = self.command[:]
