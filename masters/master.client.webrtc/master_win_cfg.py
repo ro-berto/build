@@ -10,7 +10,7 @@ defaults = {}
 
 def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   def win():
-    return webrtc_factory.WebRTCFactory('src/build', 'win32', svn_url,
+    return webrtc_factory.WebRTCFactory('src/out', 'win32', svn_url,
                                         branch, custom_deps_list)
   helper = master_config.Helper(defaults)
   B = helper.Builder
@@ -48,25 +48,53 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
       'vp8_unittests',
       'webrtc_utility_unittests',
   ]
+  win64_disabled_tests = [
+      'audio_coding_unittests',   # webrtc:1458.
+      'audio_decoder_unittests',  # webrtc:1459.
+      'audioproc_unittest',       # webrtc:1461.
+      'neteq_unittests',          # webrtc:1460.
+  ]
+  win64_tests = filter(lambda test: test not in win64_disabled_tests,
+                       normal_tests)
 
-  project = r'..\webrtc.sln'
-  factory_prop = {
-      'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}
-  }
+  ninja_options = ['--build-tool=ninja']
 
   defaults['category'] = 'win'
 
   B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler)
   F('win32_debug_factory', win().WebRTCFactory(
       target='Debug',
-      project=project,
-      tests=normal_tests,
-      factory_properties=factory_prop))
+      options=ninja_options,
+      tests=normal_tests))
+
   B('Win32 Release', 'win32_release_factory', scheduler=scheduler)
   F('win32_release_factory', win().WebRTCFactory(
       target='Release',
-      project=project,
+      options=ninja_options,
       tests=normal_tests,
-      factory_properties=factory_prop))
+      # No point having more than one bot complaining about missing sources.
+      factory_properties={
+          'gclient_env': {
+              'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1',
+          },
+      }))
+
+  B('Win64 Debug', 'win64_debug_factory', scheduler=scheduler)
+  F('win64_debug_factory', win().WebRTCFactory(
+      target='Debug_x64',
+      options=ninja_options,
+      tests=win64_tests,
+      factory_properties={
+          'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
+      }))
+
+  B('Win64 Release', 'win64_release_factory', scheduler=scheduler)
+  F('win64_release_factory', win().WebRTCFactory(
+      target='Release_x64',
+      options=ninja_options,
+      tests=win64_tests,
+      factory_properties={
+          'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
+      }))
 
   helper.Update(c)
