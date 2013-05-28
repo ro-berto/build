@@ -28,6 +28,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
       'bitrate_controller_unittests',
       'channel_transport_unittests',
       'common_video_unittests',
+      'desktop_capture_unittests',
       'media_file_unittests',
       'metrics_unittests',
       'neteq_unittests',
