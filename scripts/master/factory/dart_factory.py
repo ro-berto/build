@@ -207,7 +207,8 @@ class DartFactory(gclient_factory.GClientFactory):
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, build_dir='dart', target_platform='posix', trunk=False,
-               milestone=False, target_os=None, custom_deps_list=None):
+               milestone=False, target_os=None, custom_deps_list=None,
+               nohooks_on_update=False):
     solutions = []
     self.target_platform = target_platform
     deps_file = '/deps/all.deps'
@@ -234,7 +235,8 @@ class DartFactory(gclient_factory.GClientFactory):
 
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
                                             target_platform=target_platform,
-                                            target_os=target_os)
+                                            target_os=target_os,
+                                            nohooks_on_update=nohooks_on_update)
 
   def DartFactory(self, target='Release', clobber=False, tests=None,
                   slave_type='BuilderTester', options=None,
@@ -362,6 +364,7 @@ class DartUtils(object):
 
   factory_base = {
     'posix': DartFactory(),
+    'posixNoRunhooks': DartFactory(nohooks_on_update=True),
     'chromeOnAndroid':
         DartFactory(custom_deps_list=custom_deps_list_chromeOnAndroid),
     'linux-clang': DartFactory(custom_deps_list=custom_deps_list_vm_linux),
