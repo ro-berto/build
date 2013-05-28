@@ -50,21 +50,21 @@ defaults['category'] = 'chromiumos'
 B('ChromiumOS [x86]', 'chromeos_x86_factory', scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_x86_factory',
-  create_cbuildbot_factory(target='x86-webrtc-chrome-pfq-informational',
+  create_cbuildbot_factory(target='x86-webrtc-chromium-pfq-informational',
                            gs_path='unchanged-deps',
                            short_name='x86'))
 
 B('ChromiumOS [amd64]', 'chromeos_amd64_factory', scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_amd64_factory',
-  create_cbuildbot_factory(target='amd64-webrtc-chrome-pfq-informational',
+  create_cbuildbot_factory(target='amd64-webrtc-chromium-pfq-informational',
                            gs_path='unchanged-deps',
                            short_name='amd64'))
 
 B('ChromiumOS [daisy]', 'chromeos_daisy_factory', scheduler='chromium_cros',
   notify_on_missing=True)
 F('chromeos_daisy_factory',
-  create_cbuildbot_factory(target='daisy-webrtc-chrome-pfq-informational',
+  create_cbuildbot_factory(target='daisy-webrtc-chromium-pfq-informational',
                            gs_path='unchanged-deps',
                            short_name='daisy'))
 

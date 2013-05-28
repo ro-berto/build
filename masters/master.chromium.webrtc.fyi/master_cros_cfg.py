@@ -62,7 +62,7 @@ B('ChromiumOS x86 [latest WebRTC trunk]',
   notify_on_missing=True)
 F('chromeos_x86_webrtc_trunk_factory',
   create_cbuildbot_factory(checkout_factory=trunk_factory(),
-                           target='x86-webrtc-chrome-pfq-informational',
+                           target='x86-webrtc-chromium-pfq-informational',
                            gs_path='webrtc-trunk-tot',
                            short_name='x86'))
 
@@ -71,7 +71,7 @@ B('ChromiumOS x86 [latest WebRTC stable]',
   notify_on_missing=True)
 F('chromeos_x86_webrtc_stable_factory',
   create_cbuildbot_factory(checkout_factory=stable_factory(),
-                           target='x86-webrtc-chrome-pfq-informational',
+                           target='x86-webrtc-chromium-pfq-informational',
                            gs_path='webrtc-stable-tot',
                            short_name='x86'))
 # AMD64.
@@ -80,7 +80,7 @@ B('ChromiumOS amd64 [latest WebRTC trunk]',
   notify_on_missing=True)
 F('chromeos_amd64_webrtc_trunk_factory',
   create_cbuildbot_factory(checkout_factory=trunk_factory(),
-                           target='amd64-webrtc-chrome-pfq-informational',
+                           target='amd64-webrtc-chromium-pfq-informational',
                            gs_path='webrtc-trunk-tot',
                            short_name='amd64'))
 
@@ -89,7 +89,7 @@ B('ChromiumOS amd64 [latest WebRTC stable]',
   notify_on_missing=True)
 F('chromeos_amd64_webrtc_stable_factory',
   create_cbuildbot_factory(checkout_factory=stable_factory(),
-                           target='amd64-webrtc-chrome-pfq-informational',
+                           target='amd64-webrtc-chromium-pfq-informational',
                            gs_path='webrtc-stable-tot',
                            short_name='amd64'))
 
@@ -99,7 +99,7 @@ B('ChromiumOS daisy [latest WebRTC trunk]',
   notify_on_missing=True)
 F('chromeos_daisy_webrtc_trunk_factory',
   create_cbuildbot_factory(checkout_factory=trunk_factory(),
-                           target='daisy-webrtc-chrome-pfq-informational',
+                           target='daisy-webrtc-chromium-pfq-informational',
                            gs_path='webrtc-trunk-tot',
                            short_name='daisy'))
 
@@ -108,7 +108,7 @@ B('ChromiumOS daisy [latest WebRTC stable]',
   notify_on_missing=True)
 F('chromeos_daisy_webrtc_stable_factory',
   create_cbuildbot_factory(checkout_factory=stable_factory(),
-                           target='daisy-webrtc-chrome-pfq-informational',
+                           target='daisy-webrtc-chromium-pfq-informational',
                            gs_path='webrtc-stable-tot',
                            short_name='daisy'))
 
