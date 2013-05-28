@@ -276,7 +276,7 @@ class DartFactory(gclient_factory.GClientFactory):
   def DartAnnotatedFactory(self, python_script,
                            target='Release', tests=None,
                            timeout=1200, factory_properties=None,
-                           env=None, triggers=()):
+                           env=None, triggers=(), secondAnnotatedRun=False):
     factory_properties = factory_properties or {}
     AddGeneralGClientProperties(factory_properties)
     tests = tests or []
@@ -296,6 +296,8 @@ class DartFactory(gclient_factory.GClientFactory):
     for trigger in triggers:
       dart_cmd_obj.AddTrigger(trigger)
 
+    if secondAnnotatedRun:
+      dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout, run=2)
     return factory
 
 class DartUtils(object):
@@ -557,6 +559,7 @@ class DartUtils(object):
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
             triggers=triggers,
+            secondAnnotatedRun=v.get('second_annotated_steps_run', False)
         )
 
     def setup_v8_factory(v):

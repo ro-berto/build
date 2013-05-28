@@ -212,13 +212,18 @@ class DartCommands(commands.FactoryCommands):
                             logfiles=self.logfiles,
                             lazylogfiles=True)
 
-  def AddAnnotatedSteps(self, python_script, timeout=1200):
+  def AddAnnotatedSteps(self, python_script, timeout=1200, run=1):
+    name = 'annotated_steps'
+    env = dict(self._custom_env)
+    env['BUILDBOT_ANNOTATED_STEPS_RUN'] = '%d' % run
+    if run > 1:
+      name = name + '_run%d' % run
     self._factory.addStep(chromium_step.AnnotatedCommand,
-                          name='annotated_steps',
-                          description='annotated_steps',
+                          name=name,
+                          description=name,
                           timeout=timeout,
                           haltOnFailure=True,
-                          env = self._custom_env,
+                          env=env,
                           workdir=self._dart_build_dir,
                           command=[self._python, python_script],
                           logfiles=self.logfiles,
