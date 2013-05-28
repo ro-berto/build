@@ -991,11 +991,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if slave_type == 'Indexer':
       chromium_cmd_obj.AddPackageSource(factory_properties=factory_properties)
 
-    if run_default_swarm_tests:
-      # Add a trigger step if needed.
-      self.TriggerFactory(factory, slave_type=slave_type,
-                          factory_properties=factory_properties)
+    # Add a trigger step if needed.
+    self.TriggerFactory(factory, slave_type=slave_type,
+                        factory_properties=factory_properties)
 
+    if run_default_swarm_tests:
       # Trigger swarm tests. Extract all the swarm tests from |tests|. Note that
       # this only triggers the swarm job but do not add the steps to get the
       # results.
