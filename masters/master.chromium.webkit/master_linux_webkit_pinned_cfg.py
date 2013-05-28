@@ -39,10 +39,7 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         '--build-tool=ninja',
         '--compiler=goma',
         '--',
-        'content_shell',
-        'DumpRenderTree',
-        'test_shell',
-        'webkit_unit_tests',
+        'all_webkit',
     ],
     factory_properties={
         'additional_expectations': [

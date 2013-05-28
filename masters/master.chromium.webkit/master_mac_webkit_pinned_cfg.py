@@ -49,7 +49,7 @@ B('WebKit Mac Builder (deps)', 'f_webkit_mac_rel', auto_reboot=False,
 F('f_webkit_mac_rel', mac_out().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'test_shell', 'webkit_unit_tests', 'DumpRenderTree', 'content_shell'],
+        'all_webkit'],
     factory_properties={
         'trigger': 's2_chromium_rel_trigger',
         'gclient_env': {

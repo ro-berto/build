@@ -44,7 +44,7 @@ B('WebKit Win Builder (deps)', 'f_webkit_win_rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;webkit_builder_win',
+    project='all.sln;all_webkit',
     factory_properties={'trigger': 's1_chromium_rel_trigger'}))
 
 #
