@@ -24,6 +24,7 @@ import config
 current_milestone = '0.3'
 v8_stable_branch = '3.17'
 android_tools_rev = '@b12d410c0ee23385da78e6c9f353d28fd992e0bd'
+android_resources_rev = '@3855'
 
 milestone_path = '/branches/' + current_milestone
 dart_milestone_url = config.Master.dart_url + milestone_path
@@ -34,6 +35,11 @@ dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
 dartium_milestone_url = dart_milestone_url + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
+if config.Master.v8_internal_url:
+  android_resources_url = (config.Master.v8_internal_url +
+      '/buildbot_deps/android_testing_resources' + android_resources_rev )
+else:
+  android_resources_url = None
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
@@ -78,6 +84,9 @@ custom_deps_list_vm_linux = [('dart/third_party/clang', '/third_party/clang')]
 custom_deps_list_chromeOnAndroid = [
     ('dart/third_party/android_tools', android_tools_url),
 ]
+if android_resources_url:
+  custom_deps_list_chromeOnAndroid.append(
+      ('dart/third_party/android_testing_resources', android_resources_url))
 
 # These chromium factories are used for building dartium
 F_LINUX_CH = None
