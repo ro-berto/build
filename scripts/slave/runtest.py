@@ -1189,8 +1189,6 @@ def main():
     os.environ['G_SLICE'] = 'always-malloc'
     os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
     os.environ['NSS_DISABLE_UNLOAD'] = '1'
-    # Disable ASLR on Mac when running ASAN tests.
-    os.environ['DYLD_NO_PIE'] = '1'
 
   # TODO(glider): remove the symbolizer path once
   # https://code.google.com/p/address-sanitizer/issues/detail?id=134 is fixed.
