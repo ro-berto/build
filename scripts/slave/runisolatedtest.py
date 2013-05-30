@@ -112,9 +112,9 @@ def main(argv):
   option_parser.add_option('--builder_name', default='',
                            help='The name of the builder that created this'
                            'test')
-  option_parser.add_option('--tool_dir', default='',
-                           help='The location tools directory, used to located '
-                           'the isolate scripts.')
+  option_parser.add_option('--build_dir',
+                           help='Checkout directory, used to located '
+                           'the swarm_client scripts.')
   option_parser.add_option('-v', '--verbose', action='count', default=0,
                            help='Use to increase log verbosity. Can be passed '
                            'in multiple time for more logs.')
@@ -133,8 +133,8 @@ def main(argv):
 
   if should_run_as_isolated(options.builder_name, options.test_name):
     logging.info('Running test in isolate mode')
-    isolate_script = os.path.join(options.tool_dir, 'swarm_client',
-                                  'isolate.py')
+    isolate_script = os.path.join(options.build_dir, 'src', 'tools',
+                                  'swarm_client', 'isolate.py')
     return run_test_isolated(isolate_script, test_exe, original_command)
   else:
     logging.info('Running test normally')
