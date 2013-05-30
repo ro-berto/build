@@ -575,7 +575,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest(
           'memory_measurement', '2012Q3.json', step_name='reload_benchmark',
           factory_properties=fp)
-
+    if R('blink_perf'):
+      f.AddTelemetryTest(
+          'blink_perf',
+          os.path.join('..', '..', '..',
+                       'third_party', 'WebKit', 'PerformanceTests'),
+          factory_properties=fp)
     if R('memory'):
       f.AddMemoryTests(fp)
     if R('tab_switching'):

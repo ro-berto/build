@@ -88,6 +88,7 @@ F('f_win_rel_perf', win().ChromiumFactory(
     #build_url=rel_archive,
     project='all.sln;chromium_builder_perf',
     tests=[
+      'blink_perf',
       'dom_perf',
       'dromaeo',
       'page_cycler_dhtml',

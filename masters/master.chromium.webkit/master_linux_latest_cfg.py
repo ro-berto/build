@@ -98,6 +98,7 @@ F('f_linux_perf_rel', linux().ChromiumFactory(
         'chromium_builder_perf'
     ],
     tests=[
+        'blink_perf',
         'dom_perf',
         'dromaeo',
         'page_cycler_bloat',

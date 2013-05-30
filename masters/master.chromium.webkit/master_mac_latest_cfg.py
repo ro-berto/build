@@ -53,6 +53,7 @@ F('f_mac_perf6_rel', mac_out().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
              'chromium_builder_perf'],
     tests=[
+      'blink_perf',
       'dom_perf',
       'dromaeo',
       'memory',
