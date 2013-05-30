@@ -70,6 +70,7 @@ F('f_webkit_rel_tests', mac().ChromiumFactory(
       'webkit',
       'webkit_lint',
       'webkit_unit',
+      'wtf_unittests',
     ],
     factory_properties={
       'additional_expectations': [

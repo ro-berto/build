@@ -83,6 +83,7 @@ F('f_webkit_rel_tests_106', mac().ChromiumFactory(
       'webkit',
       'webkit_lint',
       'webkit_unit',
+      'wtf_unittests',
     ],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
@@ -100,6 +101,7 @@ F('f_webkit_rel_tests_107', mac().ChromiumFactory(
       'webkit',
       'webkit_lint',
       'webkit_unit',
+      'wtf_unittests',
     ],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
@@ -118,6 +120,7 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
       'webkit',
       'webkit_lint',
       'webkit_unit',
+      'wtf_unittests',
     ],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
@@ -174,6 +177,7 @@ F('f_webkit_dbg_tests', mac().ChromiumFactory(
       'webkit',
       'webkit_lint',
       'webkit_unit',
+      'wtf_unittests',
     ],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,

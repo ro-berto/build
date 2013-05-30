@@ -34,6 +34,7 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         'webkit',
         'webkit_lint',
         'webkit_unit',
+        'wtf_unittests',
     ],
     options=[
         '--build-tool=ninja',
