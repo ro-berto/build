@@ -37,7 +37,8 @@ DEFAULT_TESTS = 'defaulttests'
 # The default swarm tests that should be triggered when defaulttests are run.
 # TODO(maruel): This doesn't belong here at all.
 DEFAULT_SWARM_TESTS = [
-    'base_unittests'
+    'base_unittests',
+    'net_unittests',
 ]
 
 
