@@ -37,8 +37,8 @@ class TestAll(unittest.TestCase):
     sample_line = [
       '--test_name', 'base_unittests',
       '--builder_name', "Linux Tests",
-      '--build_dir',
-      'build/',
+      '--tool_dir',
+      'build/src/out/../tools',
       exe,
       '--',
       '/usr/bin/python',
@@ -55,7 +55,7 @@ class TestAll(unittest.TestCase):
     expected = [
       [
         '/usr/bin/python',
-        'build/src/tools/swarm_client/isolate.py',
+        'build/src/out/../tools/swarm_client/isolate.py',
         'run',
         '--isolated',
         isolated,

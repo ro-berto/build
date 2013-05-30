@@ -516,11 +516,12 @@ def generate_run_isolated_command(build_dir, test_exe_path, options, command):
   they need to be run in isolate mode.
   """
   run_isolated_test = os.path.join(BASE_DIR, 'runisolatedtest.py')
+  tool_dir = os.path.join(build_dir, '..', 'tools')
   isolate_command = [sys.executable, run_isolated_test,
                      '--test_name', options.test_type,
                      '--builder_name', options.build_properties.get(
                          'buildername', ''),
-                     '--build_dir', build_dir,
+                     '--tool_dir', tool_dir,
                      test_exe_path, '--'] + command
 
   if (options.test_type in ['views_unittests', 'ui_unittests']
