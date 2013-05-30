@@ -53,7 +53,7 @@ F('mac_full', mac().ChromiumFactory(
 B('Mac ASAN Release', 'mac_asan_rel', 'compile', 'chromium_lkgr')
 F('mac_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
-    options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
+    options=['--compiler=goma-clang', '--', '-target',
              'chromium_builder_asan_mac'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
@@ -65,7 +65,7 @@ B('Mac ASAN Debug', 'mac_asan_dbg', 'compile', 'chromium_lkgr')
 F('mac_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
-    options=['--compiler=goma-clang', '--disable-aslr', '--', '-target',
+    options=['--compiler=goma-clang', '--', '-target',
              'chromium_builder_asan_mac'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,

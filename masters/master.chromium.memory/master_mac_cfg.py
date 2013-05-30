@@ -126,7 +126,6 @@ F('mac_asan_rel', mac().ChromiumASANFactory(
     options=[
         '--build-tool=ninja',
         '--compiler=goma-clang',
-        '--disable-aslr'
     ] + mac_asan_options,
     factory_properties={
       'asan': True,
