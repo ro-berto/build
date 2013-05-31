@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -254,7 +254,7 @@ def main(argv):
   all_masters = { base_dir: public_masters }
   if os.path.exists(build_internal):
     internal_test_data = chromium_utils.ParsePythonCfg(os.path.join(
-        build_internal, 'test', 'internal_masters_cfg.py'))
+        build_internal, 'tests', 'internal_masters_cfg.py'))
     all_masters[build_internal] = internal_test_data['masters_test']
   return real_main(all_masters)
 

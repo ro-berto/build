@@ -46,7 +46,7 @@ def CommonChecks(input_api, output_api):
         join('scripts', 'master', 'unittests'),
         join('scripts', 'slave', 'unittests'),
         join('site_config'),
-        join('test'),
+        join('tests'),
     ] + sys.path
 
     disabled_warnings = [
@@ -65,7 +65,7 @@ def CommonChecks(input_api, output_api):
 
   whitelist = [r'.+_test\.py$']
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
-      input_api, output_api, 'test', whitelist=whitelist))
+      input_api, output_api, 'tests', whitelist=whitelist))
   tests.extend(input_api.canned_checks.GetUnitTestsInDirectory(
       input_api,
       output_api,
@@ -87,7 +87,7 @@ def CommonChecks(input_api, output_api):
       input_api.os_path.join('scripts', 'tools', 'unittests'),
       whitelist))
 
-  sys.path.append(join('test'))
+  sys.path.append(join('tests'))
   import masters_util
   # Run the tests.
   with masters_util.TemporaryMasterPasswords():
