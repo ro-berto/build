@@ -43,8 +43,7 @@ tests_1 = [
     'sql_unittests',
     'ui_unittests',
     'content_unittests',
-    # Bug in ASAN causes this to time out. Disabling until ASAN can handle it.
-    #'views_unittests',
+    'views_unittests',
 ]
 
 tests_2 = [
@@ -78,6 +77,9 @@ F('win_asan_rel', win().ChromiumASANFactory(
             ),
         },
         'trigger': 'win_asan_rel_trigger',
+        'archive_build': True,
+        'gs_acl': 'public-read',
+        'gs_bucket': 'chromium-browser-syzyasan',
     }))
 
 #
