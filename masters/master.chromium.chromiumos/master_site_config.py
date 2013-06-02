@@ -11,3 +11,6 @@ class ChromiumChromiumOS(Master.Master1):
   master_port = 8052
   slave_port = 8152
   master_port_alt = 8252
+  alternate_tree_closing_notification_recipients = [
+      'chromeos-build-failures@google.com']
+  alternate_tree_status_url = 'https://chromiumos-status.appspot.com'
