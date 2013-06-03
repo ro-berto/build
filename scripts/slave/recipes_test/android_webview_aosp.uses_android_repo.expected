@@ -30,6 +30,10 @@
    "name": "[spec: trimmed] gclient sync"
   },
   {
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "runhooks"],
+   "name": "gclient runhooks"
+  },
+  {
    "cmd": ["mkdir", "-p", "[SLAVE_BUILD_ROOT]/repo_copy"],
    "name": "mkdir repo copy dir",
    "seed_steps": ["mkdir repo copy dir", "copy repo from Android", "repo init"]

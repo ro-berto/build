@@ -70,6 +70,10 @@ def GetSteps(api, factory_properties, build_properties):
         }
     yield steps.gclient_checkout(trimmed_chromium_spec, spec_name='trimmed')
 
+  gclient_runhooks_step = steps.step(
+      'gclient runhooks',
+      [api.depot_tools_path('gclient'), 'runhooks'])
+
   # The version of repo checked into depot_tools doesn't support switching
   # between branches correctly due to
   # https://code.google.com/p/git-repo/issues/detail?id=46 which is why we use
@@ -169,6 +173,7 @@ def GetSteps(api, factory_properties, build_properties):
     sync_chromium_bare_step,
     calculate_trimmed_deps_step,
     sync_chromium_with_trimmed_deps_step,
+    gclient_runhooks_step,
     repo_init_steps,
     generate_local_manifest_step,
     repo_sync_step,
