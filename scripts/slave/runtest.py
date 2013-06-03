@@ -1204,8 +1204,11 @@ def main():
     # Disable sandboxing under TSan for now. http://crbug.com/223602.
     args.append('--no-sandbox')
   if options.factory_properties.get('asan', False):
-    # Set the path to llvm-symbolizer to be used by asan_symbolize.py
-    os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
+    # TODO(glider): enable llvm-symbolizer on Darwin when the performance
+    # problems are fixed. See http://crbug.com/246147.
+    if not sys.platform.startswith('darwin'):
+      # Set the path to llvm-symbolizer to be used by asan_symbolize.py
+      os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
     # Avoid aggressive memcmp checks until http://crbug.com/178677 is fixed.
     # Also do not replace memcpy/memmove/memset to suppress a report in OpenCL,
     # see http://crbug.com/162461.
