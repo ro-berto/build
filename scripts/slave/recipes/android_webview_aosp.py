@@ -33,6 +33,8 @@ def GetSteps(api, factory_properties, build_properties):
                         slave_android_build_path,
                         android_lunch_flavor]
 
+  lastchange_command = [api.checkout_path('build', 'util', 'lastchange.py')]
+
   # In order to get at the DEPS whitelist file we first need a bare checkout.
   bare_chromium_spec = {'solutions': [
     {
@@ -70,9 +72,14 @@ def GetSteps(api, factory_properties, build_properties):
         }
     yield steps.gclient_checkout(trimmed_chromium_spec, spec_name='trimmed')
 
-  gclient_runhooks_step = steps.step(
-      'gclient runhooks',
-      [api.depot_tools_path('gclient'), 'runhooks'])
+  lastchange_steps = [
+      steps.step('Chromium LASTCHANGE', lastchange_command + [
+          '-o', api.checkout_path('build', 'util', 'LASTCHANGE'),
+          '-s', api.checkout_path()]),
+      steps.step('Blink LASTCHANGE', lastchange_command + [
+          '-o', api.checkout_path('build', 'util', 'LASTCHANGE.blink'),
+          '-s', api.checkout_path('third_party', 'WebKit')])
+  ]
 
   # The version of repo checked into depot_tools doesn't support switching
   # between branches correctly due to
@@ -173,7 +180,7 @@ def GetSteps(api, factory_properties, build_properties):
     sync_chromium_bare_step,
     calculate_trimmed_deps_step,
     sync_chromium_with_trimmed_deps_step,
-    gclient_runhooks_step,
+    lastchange_steps,
     repo_init_steps,
     generate_local_manifest_step,
     repo_sync_step,

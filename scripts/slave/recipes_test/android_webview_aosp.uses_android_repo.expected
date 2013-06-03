@@ -30,8 +30,13 @@
    "name": "[spec: trimmed] gclient sync"
   },
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "runhooks"],
-   "name": "gclient runhooks"
+   "cmd": ["[SLAVE_BUILD_ROOT]/src/build/util/lastchange.py", "-o", "[SLAVE_BUILD_ROOT]/src/build/util/LASTCHANGE", "-s", "[SLAVE_BUILD_ROOT]/src"],
+   "name": "Chromium LASTCHANGE",
+   "seed_steps": ["Chromium LASTCHANGE", "Blink LASTCHANGE"]
+  },
+  {
+   "cmd": ["[SLAVE_BUILD_ROOT]/src/build/util/lastchange.py", "-o", "[SLAVE_BUILD_ROOT]/src/build/util/LASTCHANGE.blink", "-s", "[SLAVE_BUILD_ROOT]/src/third_party/WebKit"],
+   "name": "Blink LASTCHANGE"
   },
   {
    "cmd": ["mkdir", "-p", "[SLAVE_BUILD_ROOT]/repo_copy"],
