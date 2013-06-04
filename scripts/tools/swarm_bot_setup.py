@@ -18,20 +18,21 @@ import sys
 SWARM_DIRECTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                     'swarm_bootstrap')
 
-# The directories to store the swarm code.
-SWARM_DIRECTORY = {
+# The directories to store the swarm code. Chromium-specific.
+CHROMIUM_DEFAULT_SWARM_DIRECTORY = {
   'linux': '/b/swarm_slave',
   'mac': '/b/swarm_slave',
-  'win': 'e:\\b\\swarm_slave\\',
+  'win': 'e:\\b\\swarm_slave',
 }
 
 
 def CopySetupFiles(user, host, platform, dest_dir):
   """Copies the bootstrap files via sftp."""
+  assert not dest_dir.endswith(('/', '\\'))
+
   if platform == 'win':
     # Skip the drive letter. The ftp server maps at c:\.
     dest_dir = dest_dir[2:].replace('\\', '/')
-  dest_dir = dest_dir.rstrip('/')
   sftp_stdin = ['rmdir %s' % dest_dir]
 
   directory = ''
@@ -66,9 +67,9 @@ def BuildSetupCommand(user, host, platform, dest_dir, swarm_server):
       # xcopy the file on the right drive.
       bot_setup_commands.extend([
           dest_dir[:2], '&&',
-          'xcopy /i /e /h /y %s %s' % ('c' + dest_dir[1:].rstrip('\\'),
-                                      dest_dir),
+          'xcopy /i /e /h /y %s %s\\' % ('c' + dest_dir[1:], dest_dir),
           '&&'])
+    dest_dir += '\\'
 
   # Download and setup the swarm code from the server.
   bot_setup_commands.extend(
@@ -182,12 +183,18 @@ def main():
     parser.error('Must specify the bot\'s OS.')
 
   if not options.dest_dir:
-    options.dest_dir = SWARM_DIRECTORY[options.platform]
+    options.dest_dir = CHROMIUM_DEFAULT_SWARM_DIRECTORY[options.platform]
+
+  # Normalize the arguments.
+  options.dest_dir = options.dest_dir.rstrip('/').rstrip('\\')
+  options.swarm_server = options.swarm_server.rstrip('/')
 
   if options.raw:
     # Remove extra spaces and empty lines.
     options.bot.extend(
         filter(None, (s.strip() for s in open(options.raw, 'r'))))
+  if not options.bots:
+    parser.error('No bot to process.')
 
   for bot in options.bots:
     result = SendFilesToSwarmBotAndSelfSetup(bot, options)
