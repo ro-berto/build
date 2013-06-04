@@ -48,7 +48,6 @@ F('f_android_dbg', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
       'android_bot_id': 'main-builder-dbg',
-      'buildtool': 'ninja',
       'trigger': 'android_trigger_dbg',
     }))
 
@@ -89,8 +88,6 @@ F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
       'android_bot_id': 'main-clang-builder-dbg',
-      'buildtool': 'ninja',
-      'extra_gyp_defines': 'clang=1',
     }))
 
 
