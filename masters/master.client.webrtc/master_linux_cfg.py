@@ -37,6 +37,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
       'desktop_capture_unittests',
       'media_file_unittests',
       'metrics_unittests',
+      'modules_unittests',
       'neteq_unittests',
       'resampler_unittests',
       'rtp_rtcp_unittests',
@@ -53,7 +54,6 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
       'voice_engine_unittests',
       'vp8_integrationtests',
       'vp8_unittests',
-      'webrtc_utility_unittests',
   ]
 
   memcheck_disabled_tests = [
