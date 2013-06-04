@@ -20,7 +20,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   scheduler = 'webrtc_win_scheduler'
   S(scheduler, branch=branch, treeStableTimer=0)
 
-  normal_tests = [
+  tests = [
       'audio_coding_module_test',
       'audio_coding_unittests',
       'audio_decoder_unittests',
@@ -49,15 +49,6 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
       'vp8_unittests',
       'webrtc_utility_unittests',
   ]
-  win64_disabled_tests = [
-      'audio_coding_unittests',   # webrtc:1458.
-      'audio_decoder_unittests',  # webrtc:1459.
-      'audioproc_unittest',       # webrtc:1461.
-      'neteq_unittests',          # webrtc:1460.
-  ]
-  win64_tests = filter(lambda test: test not in win64_disabled_tests,
-                       normal_tests)
-
   ninja_options = ['--build-tool=ninja']
 
   defaults['category'] = 'win'
@@ -66,13 +57,13 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('win32_debug_factory', win().WebRTCFactory(
       target='Debug',
       options=ninja_options,
-      tests=normal_tests))
+      tests=tests))
 
   B('Win32 Release', 'win32_release_factory', scheduler=scheduler)
   F('win32_release_factory', win().WebRTCFactory(
       target='Release',
       options=ninja_options,
-      tests=normal_tests,
+      tests=tests,
       # No point having more than one bot complaining about missing sources.
       factory_properties={
           'gclient_env': {
@@ -84,7 +75,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('win64_debug_factory', win().WebRTCFactory(
       target='Debug_x64',
       options=ninja_options,
-      tests=win64_tests,
+      tests=tests,
       factory_properties={
           'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
       }))
@@ -93,7 +84,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('win64_release_factory', win().WebRTCFactory(
       target='Release_x64',
       options=ninja_options,
-      tests=win64_tests,
+      tests=tests,
       factory_properties={
           'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
       }))
