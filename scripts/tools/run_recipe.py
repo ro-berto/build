@@ -47,6 +47,7 @@ usage: %s <recipe_name> [<factory_property=value>*] [-- <build_property=value>*]
 
 def type_scrub_factory_properties(fp):
   """Specially 'eval' certain keys in factory_properties."""
+  fp['tests'] = eval(fp.get('tests', '[]'))
   return fp
 
 

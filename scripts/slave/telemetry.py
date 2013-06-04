@@ -52,9 +52,9 @@ def _GetReferenceBuildPath(target_os, target_platform):
   return None
 
 
-def _GenerateTelemetryCommandSequence(fp):
+def _GenerateTelemetryCommandSequence(options):
   """Given a test name, page set, and target, generate a telemetry test seq."""
-
+  fp = options.factory_properties
   test_name = fp.get('test_name')
   page_set = fp.get('page_set')
   page_repeat = fp.get('page_repeat')
@@ -85,7 +85,7 @@ def _GenerateTelemetryCommandSequence(fp):
   # Run the test against the target chrome build.
   browser = target.lower()
   if target_os == 'android':
-    browser = 'android-content-shell'
+    browser = options.target_android_browser
   test_args = list(common_args)
   test_args.extend(['--browser=%s' % browser, test_name, page_set])
   test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
@@ -130,18 +130,19 @@ def main(argv):
   parser = optparse.OptionParser(usage=('%prog [options]' + '\n\n' + prog_desc))
   parser.add_option('--print-cmd', action='store_true',
                     help='only print command instead of running it')
+  parser.add_option('--target-android-browser', default='android-content-shell',
+                    help='target browser used on Android')
   parser.add_option('--factory-properties', action='callback',
                     callback=chromium_utils.convert_json, type='string',
                     nargs=1, default={},
                     help='factory properties in JSON format')
 
   options, _ = parser.parse_args(argv[1:])
-  fp = options.factory_properties
-  if not fp:
+  if not options.factory_properties:
     print 'This program requires a factory properties to run.'
     return 1
 
-  commands, env = _GenerateTelemetryCommandSequence(fp)
+  commands, env = _GenerateTelemetryCommandSequence(options)
 
   retval = 0
   for command in commands:
