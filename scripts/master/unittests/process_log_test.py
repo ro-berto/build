@@ -25,6 +25,7 @@ import test_env
 from master import chromium_step
 from common import chromium_utils
 from master.log_parser import process_log
+from master.log_parser import webkit_test_command
 
 import mock
 
@@ -438,6 +439,43 @@ class GraphingLogProcessorTest(GoogleLoggingStepTest):
     expected = 't: 2.32k'
     self.assertEqual(expected, step._result_text[0])
 
+
+class WebKitTestsStepTest(GoogleLoggingStepTest):
+
+  def testBuildTestList(self):
+    webkit_command = webkit_test_command.WebKitCommand()
+    self.assertEqual(
+        webkit_command._BuildTestList([
+              "css3/selectors3/xml/css3-modsel-51.xml",
+              "http/tests/loading/preload-append-scan.php",
+              "fast/events/scale-and-scroll-body.html",
+              "virtual/gpu/fast/canvas/webgl/webgl-composite-modes.html",
+              "animations/additive-transform-animations.html",
+              "compositing/culling/filter-occlusion-blur.html",
+              "fast/events/selectionchange-iframe.html",
+            ], 6, "webkit_tests"),
+        ['webkit_tests 7', '<div class="BuildResultInfo">', '<a href="'
+        'http://test-results.appspot.com/dashboards/flakiness_dashboard.html#'
+        'master=&tests=animations/additive-transform-animations.html,'
+        'compositing/culling/filter-occlusion-blur.html,'
+        'css3/selectors3/xml/css3-modsel-51.xml,'
+        'fast/events/scale-and-scroll-body.html,'
+        'fast/events/selectionchange-iframe.html,'
+        'http/tests/loading/preload-append-scan.php,'
+        'virtual/gpu/fast/canvas/webgl/webgl-composite-modes.html">',
+        '<abbr title="animations/additive-transform-animations.html">'
+        'additive-transform-animations.html</abbr>', '<br>',
+        '<abbr title="css3/selectors3/xml/css3-modsel-51.xml">'
+        'css3-modsel-51.xml</abbr>', '<br>',
+        '<abbr title="compositing/culling/filter-occlusion-blur.html">'
+        'filter-occlusion-blur.html</abbr>', '<br>',
+        '<abbr title="http/tests/loading/preload-append-scan.php">'
+        'preload-append-scan.php</abbr>', '<br>',
+        '<abbr title="fast/events/scale-and-scroll-body.html">'
+        'scale-and-scroll-body.html</abbr>', '<br>',
+        '<abbr title="virtual/gpu/fast/canvas/webgl/webgl-composite-modes.html"'
+        '>webgl-composite-modes.html</abbr>', '<br>',
+        '...and more', '</a>', '</div>'])
 
 if __name__ == '__main__':
   unittest.main()
