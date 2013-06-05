@@ -313,8 +313,10 @@ class AllShardsRun(unittest.TestCase):
   def testShardOutOfRange(self):
     shard_watcher = swarm_results.ShardWatcher(1)
 
-    with self.assertRaises(AssertionError):
-      shard_watcher.ShouldProcessShard(TEST_SHARD_1)
+    self.assertTrue(shard_watcher.ShouldProcessShard(TEST_SHARD_1))
+
+    self.assertEqual(['1'], shard_watcher.MissingShards())
+    self.assertFalse(shard_watcher.ShardsCompleted())
 
 
 class GetSwarmResults(SuperMoxTestBase):

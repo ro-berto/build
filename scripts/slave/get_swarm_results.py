@@ -132,15 +132,17 @@ class ShardWatcher(object):
       shard_index = '1'
       total_shards = '1'
 
+    # If the the shard count for this test doesn't equal what we expect, the
+    # test failed in an unexpected way, so don't count it as any shard, but
+    # process it (so it prints the error).
+    if total_shards != self.shard_count:
+      return True
+
     repeated_shard = False
     if shard_index in self.remaining_shards:
       self.remaining_shards.remove(shard_index)
     else:
       repeated_shard = True
-
-    assert total_shards == self.shard_count, (
-        'There should be %s shards in total but this shard was part of %s '
-        'shards' % (self.shard_count, total_shards))
 
     return not repeated_shard
 
