@@ -143,7 +143,9 @@ class SwarmCommands(commands.FactoryCommands):
                                         'buildnumber:-None')
 
     args = ['-u', swarm_server, '-s', '%d' % num_shards, swarm_request_name]
-    wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
+    wrapper_args = [
+      '--no-xvfb', '--annotate=gtest', '--test-type=%s' % test_name,
+    ]
 
     command = self.GetPythonTestCommand(script_path, arg_list=args,
                                         wrapper_args=wrapper_args)

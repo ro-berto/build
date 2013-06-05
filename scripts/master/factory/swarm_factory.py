@@ -58,10 +58,7 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
   assert not any(t not in valid_tests for t in tests)
 
   # No need of a window manager when only retrieving results.
-  f = build_factory.BuildFactory(
-      build_factory_properties={
-       'window_manager': False,
-      })
+  f = build_factory.BuildFactory()
 
   # Some of the scripts require a build_dir to be set, so set it even
   # if the machine might not have it (It shouldn't matter what this is).
@@ -115,8 +112,6 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     factory_properties['gclient_env']['GYP_DEFINES'] += (
         ' test_isolation_mode=hashtable test_isolation_outdir=' +
         isolate_server)
-    # No test is run locally so no need of a window manager.
-    factory_properties['window_manager'] = False
 
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
     f = self.ChromiumFactory(target=target,
