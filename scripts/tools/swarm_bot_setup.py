@@ -66,25 +66,15 @@ def BuildSetupCommand(user, host, platform, dest_dir, swarm_server):
     if dest_dir[0].lower() != 'c':
       # xcopy the file on the right drive.
       bot_setup_commands.extend([
-          dest_dir[:2], '&&',
           'xcopy /i /e /h /y %s %s\\' % ('c' + dest_dir[1:], dest_dir),
           '&&'])
     dest_dir += '\\'
+  else:
+    dest_dir += '/'
 
   # Download and setup the swarm code from the server.
   bot_setup_commands.extend(
-      [
-        'cd %s' % dest_dir, '&&',
-        'python', 'get_swarm_code.py', swarm_server, '&&',
-      ])
-
-  # Run the final swarm setup script.
-  if platform == 'win':
-    bot_setup_commands.append(
-        'call swarm_bot_setup.bat %s %s' % (swarm_server, dest_dir))
-  else:
-    bot_setup_commands.append('./swarm_bot_setup.sh %s %s' %
-                              (swarm_server, dest_dir))
+      ['python', dest_dir + 'swarm_bootstrap.py', '-s', swarm_server])
 
   # On windows the command must be executed by cmd.exe
   if platform == 'win':
@@ -127,9 +117,10 @@ def SendFilesToSwarmBotAndSelfSetup(bot, options):
         print('\n'.join('  ' + l for l in stdin.splitlines()))
   else:
     for command, stdin in commands:
+      print('Running: %s' % ' '.join(command))
       process = subprocess.Popen(command, stdin=subprocess.PIPE)
       process.communicate(stdin)
-
+      print('')
       if process.returncode:
         print 'Failed to execute command %s' % command
         return 1

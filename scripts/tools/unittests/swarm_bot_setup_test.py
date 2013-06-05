@@ -31,13 +31,11 @@ class SwarmBotSetupTest(unittest.TestCase):
       '  mkdir /b/swarm_slave',
       '  put swarm_bootstrap/* /b/swarm_slave',
       '  exit',
-      'ssh -o ConnectTimeout=5 -t chrome-bot@joe cmd.exe /c '
-        '"e: && '
-        'xcopy /i /e /h /y c:\\b\\swarm_slave e:\\b\\swarm_slave\\ &&'
-        ' cd e:\\b\\swarm_slave\\ && '
-        'python get_swarm_code.py https://chromium-swarm.appspot.com && '
-        'call swarm_bot_setup.bat '
-        'https://chromium-swarm.appspot.com e:\\b\\swarm_slave\\"',
+      'ssh -o ConnectTimeout=5 -t chrome-bot@joe '
+        'cmd.exe /c '
+        '"xcopy /i /e /h /y c:\\b\\swarm_slave e:\\b\\swarm_slave\\ && '
+        'python e:\\b\\swarm_slave\\swarm_bootstrap.py '
+        '-s https://chromium-swarm.appspot.com"'
     ]
     self.assertEqual(expected, out.splitlines())
 
@@ -50,10 +48,9 @@ class SwarmBotSetupTest(unittest.TestCase):
       '  mkdir /b/swarm_slave',
       '  put swarm_bootstrap/* /b/swarm_slave',
       '  exit',
-      'ssh -o ConnectTimeout=5 -t chrome-bot@joe cd /b/swarm_slave && '
-        'python get_swarm_code.py https://chromium-swarm.appspot.com && '
-        './swarm_bot_setup.sh https://chromium-swarm.appspot.com '
-        '/b/swarm_slave',
+      'ssh -o ConnectTimeout=5 -t chrome-bot@joe '
+        'python /b/swarm_slave/swarm_bootstrap.py '
+        '-s https://chromium-swarm.appspot.com'
     ]
     self.assertEqual(expected, out.splitlines())
 
