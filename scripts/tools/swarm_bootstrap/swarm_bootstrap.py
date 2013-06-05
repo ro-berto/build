@@ -133,7 +133,48 @@ def SetupAutoStartupWin(command):
   return WriteToFile(filepath, content)
 
 
-def SetupAutoStartupPosix(command):
+def GenerateLaunchdPlist(command):
+  """Generates a plist with the corresponding command."""
+  entries = [
+    '<key>Label</key><string>org.swarm.bot</string>',
+    '<key>StandardOutPath</key><string>swarm_bot.log</string>',
+    '<key>StandardErrorPath</key><string>swarm_bot-err.log</string>',
+    '<key>EnvironmentVariables</key>',
+    '<dict>',
+    '  <key>PATH</key>',
+    '  <string>/opt/local/bin:/opt/local/sbin:/usr/local/sbin:/usr/local/bin'
+      ':/usr/sbin:/usr/bin:/sbin:/bin</string>',
+    '</dict>',
+    '<key>LimitLoadToSessionType</key><array><string>Aqua</string></array>',
+    '<key>RunAtLoad</key><true/>',
+    '<key>Umask</key><integer>18</integer>',
+  ]
+  entries.append('<key>Program</key><string>%s</string>' % command[0])
+  entries.append('<key>ProgramArguments</key>')
+  entries.append('<array>')
+  # Command[0] must be passed as an argument.
+  entries.extend('  <string>%s</string>' % i for i in command)
+  entries.append('</array>')
+  entries.append('<key>WorkingDirectory</key><string>%s</string>' % BASE_DIR)
+  header = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" '
+    '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
+    '<plist version="1.0">\n'
+    '  <dict>\n'
+    + ''.join('    %s\n' % l for l in entries) +
+    '  </dict>\n'
+    '</plist>\n')
+  return header
+
+
+def SetupAutoStartupOSX(command):
+  """Uses launchd with auto-login user."""
+  plistname = os.path.expanduser('~/Library/LaunchAgents/org.swarm.bot.plist')
+  return WriteToFile(plistname, GenerateLaunchdPlist(command))
+
+
+def SetupAutoStartupUnix(command):
   """Uses crontab."""
   # The \n is very important.
   content = '@reboot cd %s && %s\n' % (BASE_DIR, ' '.join(command))
@@ -201,8 +242,11 @@ def main():
   if sys.platform == 'win32':
     if not SetupAutoStartupWin(command):
       return 1
+  elif sys.platform == 'darwin':
+    if not SetupAutoStartupOSX(command):
+      return 1
   else:
-    if not SetupAutoStartupPosix(command):
+    if not SetupAutoStartupUnix(command):
       return 1
 
   print('Rebooting...')
