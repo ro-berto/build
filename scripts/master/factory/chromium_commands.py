@@ -64,6 +64,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._target_tests_tool = J(s_dir, 'target-tests.py')
     self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
     self._lint_test_files_tool = J(s_dir, 'lint_test_files_wrapper.py')
+    self._test_webkitpy_tool = J(s_dir, 'test_webkitpy_wrapper.py')
     self._devtools_perf_test_tool = J(s_dir, 'devtools_perf_test_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
@@ -1007,6 +1008,15 @@ class ChromiumCommands(commands.FactoryCommands):
                                 test_name='webkit_lint',
                                 test_command=cmd,
                                 do_step_if=self.TestStepFilter)
+
+  def AddWebkitPythonTests(self, factory_properties=None):
+    """Adds a step to the factory to run test-webkitpy."""
+    cmd = [self._python, self._test_webkitpy_tool,
+           '--build-dir', self._build_dir, '--target', self._target]
+    self.AddTestStep(shell.ShellCommand,
+                     test_name='webkit_python_tests',
+                     test_command=cmd,
+                     do_step_if=self.TestStepFilter)
 
   def AddWebkitTests(self, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.

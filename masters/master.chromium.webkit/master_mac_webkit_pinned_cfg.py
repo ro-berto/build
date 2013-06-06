@@ -26,6 +26,14 @@ def mac_out():
 
 defaults['category'] = 'deps'
 
+blink_tests = [
+  'webkit',
+  'webkit_lint',
+  'webkit_python_tests',
+  'webkit_unit',
+  'wtf_unittests',
+]
+
 ################################################################################
 ## Release
 ################################################################################
@@ -66,12 +74,7 @@ B('WebKit Mac10.6 (deps)', 'f_webkit_rel_tests',
 F('f_webkit_rel_tests', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=[
-      'webkit',
-      'webkit_lint',
-      'webkit_unit',
-      'wtf_unittests',
-    ],
+    tests=blink_tests,
     factory_properties={
       'additional_expectations': [
         ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],

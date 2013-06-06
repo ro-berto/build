@@ -507,6 +507,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddWebkitLint(factory_properties=fp)
     if R('webkit_lint_br'):
       f.AddBuildrunnerWebkitLint(factory_properties=fp)
+    if R('webkit_python_tests'):
+      f.AddWebkitPythonTests(factory_properties=fp)
     if R('webkit'):
       f.AddWebkitTests(factory_properties=fp)
     if R('devtools_perf'):

@@ -18,24 +18,26 @@ F = helper.Factory
 def linux():
   return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
+defaults['category'] = 'layout'
+
+blink_tests = [
+  'webkit',
+  'webkit_lint',
+  'webkit_python_tests',
+  'webkit_unit',
+  'wtf_unittests',
+]
 
 ################################################################################
 ## Release
 ################################################################################
-
-defaults['category'] = 'layout'
 
 #
 # Linux Rel Builder/Tester
 #
 B('WebKit Linux', 'f_webkit_linux_rel', scheduler='global_scheduler')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
-    tests=[
-        'webkit',
-        'webkit_lint',
-        'webkit_unit',
-        'wtf_unittests',
-    ],
+    tests=blink_tests,
     options=[
         '--build-tool=ninja',
         '--compiler=goma',
@@ -88,12 +90,7 @@ B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='global_scheduler',
   auto_reboot=False)
 F('f_webkit_dbg_tests', linux().ChromiumFactory(
     target='Debug',
-    tests=[
-        'webkit',
-        'webkit_lint',
-        'webkit_unit',
-        'wtf_unittests',
-    ],
+    tests=blink_tests,
     options=[
         '--build-tool=ninja',
         '--compiler=goma',

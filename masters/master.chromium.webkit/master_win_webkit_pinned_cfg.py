@@ -19,12 +19,19 @@ F = helper.Factory
 def win():
   return chromium_factory.ChromiumFactory('src/build', 'win32')
 
+defaults['category'] = 'deps'
+
+blink_tests = [
+  'webkit',
+  'webkit_lint',
+  'webkit_python_tests',
+  'webkit_unit',
+  'wtf_unittests',
+]
 
 ################################################################################
 ## Release
 ################################################################################
-
-defaults['category'] = 'deps'
 
 # Archive location
 rel_archive = master_config.GetArchiveUrl('ChromiumWebkit',
@@ -54,12 +61,7 @@ B('WebKit XP (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_trigger')
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=[
-      'webkit',
-      'webkit_lint',
-      'webkit_unit',
-      'wtf_unittests',
-    ],
+    tests=blink_tests,
     factory_properties={
       'additional_expectations': [
         ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],

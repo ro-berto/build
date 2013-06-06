@@ -37,6 +37,14 @@ def mac():
 
 defaults['category'] = 'layout'
 
+blink_tests = [
+  'webkit',
+  'webkit_lint',
+  'webkit_python_tests',
+  'webkit_unit',
+  'wtf_unittests',
+]
+
 ################################################################################
 ## Release
 ################################################################################
@@ -79,12 +87,7 @@ B('WebKit Mac10.6', 'f_webkit_rel_tests_106', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_106', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=[
-      'webkit',
-      'webkit_lint',
-      'webkit_unit',
-      'wtf_unittests',
-    ],
+    tests=blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -97,12 +100,7 @@ B('WebKit Mac10.7', 'f_webkit_rel_tests_107', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_107', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=[
-      'webkit',
-      'webkit_lint',
-      'webkit_unit',
-      'wtf_unittests',
-    ],
+    tests=blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -116,12 +114,7 @@ B('WebKit Mac10.8', 'f_webkit_rel_tests_108', auto_reboot=False,
 F('f_webkit_rel_tests_108', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=[
-      'webkit',
-      'webkit_lint',
-      'webkit_unit',
-      'wtf_unittests',
-    ],
+    tests=blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -173,12 +166,7 @@ F('f_webkit_dbg_tests', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=[
-      'webkit',
-      'webkit_lint',
-      'webkit_unit',
-      'wtf_unittests',
-    ],
+    tests=blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
