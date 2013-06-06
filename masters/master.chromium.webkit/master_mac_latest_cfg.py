@@ -113,8 +113,12 @@ F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
 B('Mac Builder (dbg)', 'f_mac_dbg', scheduler='global_scheduler')
 F('f_mac_dbg', mac().ChromiumFactory(
     target='Debug',
-    options=['--', '-project', '../webkit/webkit.xcodeproj',],
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+        'all_webkit'],
     factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
         'blink_config': 'blink',
     }))
 
