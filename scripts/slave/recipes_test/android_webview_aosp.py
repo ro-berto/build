@@ -73,7 +73,7 @@ def uses_goma_test(api):
 
 def uses_svn_revision_if_present_test(api):
   return  {
-    'build_properties': { 'revision': 1234 },
+    'build_properties': { 'revision': '1234' },
     'factory_properties': _common_factory_properties(),
     'test_data': _common_test_data(),
   }

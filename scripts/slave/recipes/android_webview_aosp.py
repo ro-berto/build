@@ -29,7 +29,7 @@ def GetSteps(api, factory_properties, build_properties):
   chromium_solution_name = 'src'
   chromium_checkout_revision = None
   if 'revision' in build_properties:
-    chromium_checkout_revision = '%s@%d' % (chromium_solution_name,
+    chromium_checkout_revision = '%s@%s' % (chromium_solution_name,
                                             build_properties['revision'])
 
   # In order to get at the DEPS whitelist file we first need a bare checkout.
