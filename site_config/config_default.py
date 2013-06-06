@@ -63,6 +63,7 @@ class Master(object):
   git_internal_server_url = None
   syzygy_internal_url = None
   webrtc_internal_url = None
+  webrtc_limited_url = None
   v8_internal_url = None
 
 

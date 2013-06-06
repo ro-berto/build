@@ -53,9 +53,9 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
     self._solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list,
         custom_deps_list=custom_deps_list))
-    if config.Master.webrtc_internal_url:
+    if config.Master.webrtc_limited_url:
       self._solutions.append(gclient_factory.GClientSolution(
-          config.Master.webrtc_internal_url, name='webrtc-internal',
+          config.Master.webrtc_limited_url, name='webrtc-limited',
           custom_vars_list=custom_vars_list))
 
   def WebRTCFactory(self, target='Debug', clobber=False, tests=None, mode=None,
