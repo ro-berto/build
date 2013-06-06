@@ -186,7 +186,7 @@ T('win_x64_rel_trigger')
 #
 # Win x64 Rel Builder
 # Note: These should eventually merge with the build and test targets for
-# win_rel above, but x64 doesn't currently build/execute all unit tests yet.
+# win_rel above.
 #
 B('Win x64 Builder', 'rel_x64', 'compile|windows', 'win_rel',
   builddir='cr-win-rel-x64', auto_reboot=False, notify_on_missing=True)
@@ -197,7 +197,8 @@ F('rel_x64', win_out().ChromiumFactory(
     factory_properties={
       'trigger': 'win_x64_rel_trigger',
       'gclient_env': {
-        'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
+        'GYP_DEFINES': 'component=static_library target_arch=x64',
+        'GYP_MSVS_VERSION': '2012',
       }}))
 
 B('Win 7 Tests x64 (1)', 'rel_x64_unit_1', 'windows',
@@ -207,8 +208,7 @@ F('rel_x64_unit_1', win_tester().ChromiumFactory(
     target='Release_x64',
     build_url=rel_x64_archive,
     tests=[
-      # Temporarially disabled b/c browser_tests was causing bot to crash.
-      #'browser_tests',
+      'browser_tests',
       'cacheinvalidation_unittests',
       'cc_unittests',
       'chromedriver2_unittests',
@@ -243,8 +243,7 @@ F('rel_x64_unit_2', win_tester().ChromiumFactory(
     build_url=rel_x64_archive,
     tests=[
       'base_unittests',
-      # Temporarially disabled b/c browser_tests was causing bot to crash.
-      #'browser_tests',
+      'browser_tests',
       'net_unittests',
     ],
     factory_properties={'process_dumps': True,
@@ -260,8 +259,7 @@ F('rel_x64_unit_3', win_tester().ChromiumFactory(
     target='Release_x64',
     build_url=rel_x64_archive,
     tests=[
-      # Temporarially disabled b/c browser_tests was causing bot to crash.
-      #'browser_tests',
+      'browser_tests',
       'components_unittests',
       'ipc_tests',
       'sync_unit_tests',
@@ -347,6 +345,22 @@ S('win_dbg', branch='src', treeStableTimer=60)
 #
 T('win_dbg_trigger')
 T('win_dbg_aura_trigger')
+
+#
+# Win x64 Dbg Builder
+#
+B('Win x64 Builder (dbg)', 'dbg_x64', 'compile|windows', 'win_dbg',
+  builddir='cr-win-dbg-x64', auto_reboot=False, notify_on_missing=True)
+F('dbg_x64', win_out().ChromiumFactory(
+    slave_type='Builder',
+    target='Debug_x64',
+    options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
+    factory_properties={
+      'gclient_env': {
+        'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
+        'GYP_MSVS_VERSION': '2012',
+      }}))
+
 
 #
 # Win Dbg Builder
