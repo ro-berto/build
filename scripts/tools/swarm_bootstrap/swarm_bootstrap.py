@@ -194,14 +194,36 @@ def SetupAutoStartupUnix(command):
   return True
 
 
+def SetupAutoStartup(slave_machine, swarm_server, dimensionsfile):
+  command = [
+    sys.executable,
+    slave_machine,
+    '-a', swarm_server,
+    '-p', '443',
+    '-r', '400',
+    '-v',
+    dimensionsfile,
+  ]
+  if sys.platform == 'win32':
+    return SetupAutoStartupWin(command)
+  elif sys.platform == 'darwin':
+    return SetupAutoStartupOSX(command)
+  else:
+    return SetupAutoStartupUnix(command)
+
+
 def main():
   # Simplify the code by setting the current directory as the directory
   # containing this file.
   os.chdir(BASE_DIR)
 
   parser = optparse.OptionParser(description=sys.modules[__name__].__doc__)
-  parser.add_option('-d', '--dimensionfile', default='dimension.in')
+  parser.add_option('-d', '--dimensionsfile', default='dimensions.in')
   parser.add_option('-s', '--swarm-server')
+  parser.add_option('--no-auto-start', action='store_true',
+                    help='Do not setup the swarm bot to auto start on boot.')
+  parser.add_option('--no-reboot', action='store_true',
+                    help='Do not reboot at the end of the setup.')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='Set logging level to DEBUG. Optional. Defaults to '
                     'ERROR level.')
@@ -214,10 +236,10 @@ def main():
 
   logging.basicConfig(level=logging.DEBUG if options.verbose else logging.ERROR)
 
-  options.dimensionfile = os.path.abspath(options.dimensionfile)
+  options.dimensionsfile = os.path.abspath(options.dimensionsfile)
 
   print('Generating the machine dimensions...')
-  if not WriteJsonToFile(options.dimensionfile, GetChromiumDimensions()):
+  if not WriteJsonToFile(options.dimensionsfile, GetChromiumDimensions()):
     return 1
 
   print('Downloading newest swarm_bot code...')
@@ -233,35 +255,23 @@ def main():
   if not CreateStartSlave(os.path.join(BASE_DIR, 'start_slave.py')):
     return 1
 
-  print('Setup up swarm script to run on startup...')
-  command = [
-    sys.executable,
-    slave_machine,
-    '-a', options.swarm_server,
-    '-p', '443',
-    '-r', '400',
-    '-v',
-    options.dimensionfile,
-  ]
-  if sys.platform == 'win32':
-    if not SetupAutoStartupWin(command):
-      return 1
-  elif sys.platform == 'darwin':
-    if not SetupAutoStartupOSX(command):
-      return 1
-  else:
-    if not SetupAutoStartupUnix(command):
+  if not options.no_auto_start:
+    print('Setup up swarm script to run on startup...')
+    if not SetupAutoStartup(
+        slave_machine, options.swarm_server, options.dimensionsfile):
       return 1
 
-  print('Rebooting...')
-  if sys.platform == 'win32':
-    result = subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
-  else:
-    result = subprocess.call(['sudo', 'shutdown', '-r', 'now'])
-  if result:
-    print('Please reboot the slave manually.')
+  if not options.no_reboot:
+    print('Rebooting...')
+    if sys.platform == 'win32':
+      result = subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
+    else:
+      result = subprocess.call(['sudo', 'shutdown', '-r', 'now'])
+    if result:
+      print('Please reboot the slave manually.')
+    return result
 
-  return result
+  return 0
 
 
 if __name__ == '__main__':
