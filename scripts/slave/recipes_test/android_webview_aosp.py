@@ -71,3 +71,9 @@ def uses_goma_test(api):
     'paths_to_mock' : ['[BUILD_ROOT]/goma', ]
   }
 
+def uses_svn_revision_if_present_test(api):
+  return  {
+    'build_properties': { 'revision': 1234 },
+    'factory_properties': _common_factory_properties(),
+    'test_data': _common_test_data(),
+  }

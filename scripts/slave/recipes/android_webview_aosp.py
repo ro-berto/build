@@ -26,17 +26,25 @@ def GetSteps(api, factory_properties, build_properties):
 
   lastchange_command = [api.checkout_path('build', 'util', 'lastchange.py')]
 
+  chromium_solution_name = 'src'
+  chromium_checkout_revision = None
+  if 'revision' in build_properties:
+    chromium_checkout_revision = '%s@%d' % (chromium_solution_name,
+                                            build_properties['revision'])
+
   # In order to get at the DEPS whitelist file we first need a bare checkout.
   bare_chromium_spec = {'solutions': [
     {
-      'name': 'src',
+      'name': chromium_solution_name,
       'url': steps.ChromiumSvnURL('chrome', 'trunk', 'src'),
       'deps_file': '',
       'managed': True,
       'safesync_url': '',
     }]}
-  sync_chromium_bare_step = steps.gclient_checkout(bare_chromium_spec,
-                                                   spec_name='bare')
+  sync_chromium_bare_step = steps.gclient_checkout(
+          bare_chromium_spec,
+          spec_name='bare',
+          svn_revision=chromium_checkout_revision)
 
   # For the android_webview AOSP build we want to only include whitelisted
   # DEPS. This is to detect the addition of unexpected new deps to the webview.
@@ -54,14 +62,16 @@ def GetSteps(api, factory_properties, build_properties):
     deps_blacklist = deps_blacklist_step.json_data['blacklist']
     trimmed_chromium_spec = {
         'solutions': [{
-            'name' : 'src',
+            'name' : chromium_solution_name,
             'url' : steps.ChromiumSvnURL('chrome', 'trunk', 'src'),
             'safesync_url': '',
             'custom_deps': deps_blacklist,
             }],
         'target_os': ['android'],
         }
-    yield steps.gclient_checkout(trimmed_chromium_spec, spec_name='trimmed')
+    yield steps.gclient_checkout(trimmed_chromium_spec,
+                                 spec_name='trimmed',
+                                 svn_revision=chromium_checkout_revision)
 
   lastchange_steps = [
       steps.step('Chromium LASTCHANGE', lastchange_command + [
