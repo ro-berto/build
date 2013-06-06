@@ -82,6 +82,10 @@ def GetChromiumDimensions():
   # '<host>-<vlan>'.
   if '-' in hostname:
     dimensions['dimensions']['vlan'] = hostname.split('-')[1]
+    # Replace vlan starting with 'c' to 'm'.
+    if dimensions['dimensions']['vlan'][0] == 'c':
+      dimensions['dimensions']['vlan'] = (
+          'm' + dimensions['dimensions']['vlan'][:1])
   return dimensions
 
 
