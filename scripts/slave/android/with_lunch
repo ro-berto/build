@@ -8,4 +8,4 @@ pushd ${ANDROID_ROOT}
 . ${ANDROID_ROOT}/build/envsetup.sh
 lunch ${PLATFORM}
 popd
-$@
+"$@"
