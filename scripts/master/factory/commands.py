@@ -39,6 +39,7 @@ DEFAULT_TESTS = 'defaulttests'
 DEFAULT_SWARM_TESTS = [
     'base_unittests',
     'net_unittests',
+    'unit_tests',
 ]
 
 
