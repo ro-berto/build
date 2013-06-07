@@ -363,20 +363,22 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
   basedir = os.path.join(slavedir, basepath)
   build.basedir = basedir
   builderstatus = builder.BuilderStatus('test')
-  builderstatus.nextBuildNumber = 2
+
+  buildnumber = build_properties.get('buildnumber', 1)
+  builderstatus.nextBuildNumber = buildnumber + 1
   builderstatus.basedir = basedir
   my_builder['builddir'] = safename
   my_builder['slavebuilddir'] = safename
   mybuilder = real_builder.Builder(my_builder, builderstatus)
   build.setBuilder(mybuilder)
-  build_status = build_module.BuildStatus(builderstatus, 1)
+  build_status = build_module.BuildStatus(builderstatus, buildnumber)
 
   build_status.setProperty('blamelist', [], 'Build')
   build_status.setProperty('mastername', mastername, 'Build')
   build_status.setProperty('slavename', slavename, 'Build')
   build_status.setProperty('gtest_filter', [], 'Build')
   build_status.setProperty('extra_args', [], 'Build')
-  build_status.setProperty('build_id', 1, 'Build')
+  build_status.setProperty('build_id', buildnumber, 'Build')
 
   # if build_properties are passed in, overwrite the defaults above:
   buildprops = Properties()
