@@ -497,12 +497,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('webkit_compositor_bindings_unittests', fp)
     if R('webkit_compositor_bindings_unittests_br'):
       f.AddBuildrunnerGTest('webkit_compositor_bindings_unittests', fp)
-    if R('webkit_unit'):
+    if R('webkit_unit_tests'):
       f.AddGTestTestStep('webkit_unit_tests', fp)
     if R('webkit_unit_br'):
       f.AddBuildrunnerGTest('webkit_unit_tests', fp)
     if R('wtf_unittests'):
       f.AddGTestTestStep('wtf_unittests', fp)
+    if R('weborigin_unittests'):
+      f.AddGTestTestStep('weborigin_unittests', fp)
     if R('webkit_lint'):
       f.AddWebkitLint(factory_properties=fp)
     if R('webkit_lint_br'):
