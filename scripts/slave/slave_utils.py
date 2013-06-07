@@ -629,3 +629,17 @@ def WriteLogLines(logname, lines, perf=None):
     print '@@@STEP_LOG_END_PERF@%s@%s@@@' % (logname, perf)
   else:
     print '@@@STEP_LOG_END@%s@@@' % logname
+
+
+def IsolatedImportFromPath(path, extra_paths=None):
+  dir_path, module_file = os.path.split(path)
+  module_file = os.path.splitext(module_file)[0]
+
+  saved = sys.path
+  sys.path = [dir_path] + (extra_paths or [])
+  try:
+    return __import__(module_file, globals(), locals())
+  except ImportError:
+    pass
+  finally:
+    sys.path = saved

@@ -71,7 +71,7 @@ def parse_args(argv):
 
   recipe = argv[1]
 
-  separator = argv.index('--') if '--' in argv else -1
+  separator = argv.index('--') if '--' in argv else len(argv)+1
   fp = dict(x.split('=', 1) for x in argv[2:separator])
   fp['recipe'] = recipe
 

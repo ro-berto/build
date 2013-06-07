@@ -1,6 +1,6 @@
 [
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "solutions = [{'url': 'https://chromium.googlesource.com/chromium/tools/build.git', 'managed': True, 'name': 'build', 'deps_file': '.DEPS.git'}]\n"],
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "deps_os = {}\nhooks = []\ntarget_os_only = False\nsolutions = [{'managed': True, 'custom_vars': {}, 'url': 'https://chromium.googlesource.com/tools/build.git', 'custom_deps': {}, 'deps_file': '.DEPS.git', 'safesync_url': None, 'name': 'build'}]\ntarget_os = []\n"],
    "name": "gclient setup",
    "seed_steps": ["gclient setup", "gclient clean", "gclient sync"]
   },

@@ -1,0 +1,134 @@
+{
+  "blink": {
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {
+          "src/third_party/WebKit": "svn://svn-mirror.golo.chromium.org/blink/trunk", 
+          "src/third_party/WebKit/LayoutTests": null, 
+          "src/webkit/data/layout_tests/LayoutTests": null
+        }, 
+        "custom_vars": {
+          "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
+          "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "svn://svn-mirror.golo.chromium.org/chrome/trunk/src"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "blink_bare": {
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "blink", 
+        "safesync_url": null, 
+        "url": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "chromium": {
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {
+          "src/third_party/WebKit/LayoutTests": null, 
+          "src/webkit/data/layout_tests/LayoutTests": null
+        }, 
+        "custom_vars": {
+          "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
+          "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "svn://svn-mirror.golo.chromium.org/chrome/trunk/src"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "chromium_bare": {
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "svn://svn-mirror.golo.chromium.org/chrome/trunk/src"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "nacl": {
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {
+          "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "native_client", 
+        "safesync_url": null, 
+        "url": "svn://svn-mirror.golo.chromium.org/native_client/trunk/src/native_client"
+      }, 
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "supplement.DEPS", 
+        "safesync_url": null, 
+        "url": "svn://svn-mirror.golo.chromium.org/native_client/trunk/deps/supplement.DEPS"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "tools_build": {
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "build", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/tools/build.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }
+}
