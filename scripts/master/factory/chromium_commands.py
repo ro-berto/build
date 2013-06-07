@@ -1033,6 +1033,9 @@ class ChromiumCommands(commands.FactoryCommands):
           results server
       driver_name: If specified, alternate layout test driver to use.
       additional_drt_flag: If specified, additional flag to pass to DRT.
+      webkit_test_options: A list of additional options passed to
+          run_webkit_tests.py. The list [o1, o2, ...] will be passed as a
+          space-separated string 'o1 o2 ...'.
       layout_tests: List of layout tests to run.
     """
     factory_properties = factory_properties or {}
@@ -1046,6 +1049,7 @@ class ChromiumCommands(commands.FactoryCommands):
     time_out_ms = factory_properties.get('time_out_ms')
     driver_name = factory_properties.get('driver_name')
     additional_drt_flag = factory_properties.get('additional_drt_flag')
+    webkit_test_options = factory_properties.get('webkit_test_options')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -1078,9 +1082,6 @@ class ChromiumCommands(commands.FactoryCommands):
     if platform:
       cmd_args.extend(['--platform', platform])
 
-    if enable_hardware_gpu:
-      cmd_args.extend(['--options=--enable-hardware-gpu'])
-
     if time_out_ms:
       cmd_args.extend(['--time-out-ms', time_out_ms])
 
@@ -1089,6 +1090,16 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if additional_drt_flag:
       cmd_args.extend(['--additional-drt-flag', additional_drt_flag])
+
+    additional_options = []
+    if webkit_test_options:
+      additional_options.extend(webkit_test_options)
+
+    if enable_hardware_gpu:
+      additional_options.append('--enable-hardware-gpu')
+
+    if additional_options:
+      cmd_args.append('--options=' + ' '.join(additional_options))
 
     # The list of tests is given as arguments.
     if layout_tests:
