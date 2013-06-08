@@ -18,6 +18,7 @@ to the main webkit test directory, may be passed on the command line.
 import optparse
 import os
 import sys
+import shutil
 
 from common import chromium_utils
 from slave import slave_utils
@@ -140,6 +141,11 @@ def layout_test(options, args):
     if options.enable_pageheap:
       slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
 
+  if options.json_output:
+    results_dir = options.results_directory
+    results_json = os.path.join(results_dir, "failing_results.json")
+    shutil.copyfile(results_json, options.json_output)
+
 
 def main():
   option_parser = optparse.OptionParser()
@@ -200,6 +206,10 @@ def main():
                            help=("If specified, additional command line flag "
                                  "to pass to DumpRenderTree. Specify multiple "
                                  "times to add multiple flags."))
+  option_parser.add_option("--json-output",
+                           help=("Path to write failures json to allow "
+                                 "TryJob recipe to know how to ignore "
+                                 "expected failures."))
   options, args = option_parser.parse_args()
 
   # Disable pageheap checking except on Windows.
