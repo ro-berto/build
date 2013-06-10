@@ -139,19 +139,35 @@ def SetupAutoStartupWin(command):
 
 def GenerateLaunchdPlist(command):
   """Generates a plist with the corresponding command."""
+  # The documentation is available at:
+  # https://developer.apple.com/library/mac/documentation/Darwin/Reference/ \
+  #    ManPages/man5/launchd.plist.5.html
   entries = [
     '<key>Label</key><string>org.swarm.bot</string>',
     '<key>StandardOutPath</key><string>swarm_bot.log</string>',
     '<key>StandardErrorPath</key><string>swarm_bot-err.log</string>',
+    '<key>LimitLoadToSessionType</key><array><string>Aqua</string></array>',
+    '<key>RunAtLoad</key><true/>',
+    '<key>Umask</key><integer>18</integer>',
+
     '<key>EnvironmentVariables</key>',
     '<dict>',
     '  <key>PATH</key>',
     '  <string>/opt/local/bin:/opt/local/sbin:/usr/local/sbin:/usr/local/bin'
       ':/usr/sbin:/usr/bin:/sbin:/bin</string>',
     '</dict>',
-    '<key>LimitLoadToSessionType</key><array><string>Aqua</string></array>',
-    '<key>RunAtLoad</key><true/>',
-    '<key>Umask</key><integer>18</integer>',
+
+    '<key>SoftResourceLimits</key>',
+    '<dict>',
+    '  <key>NumberOfFiles</key>',
+    '  <integer>32767</integer>',
+    '</dict>',
+
+    '<key>HardResourceLimits</key>',
+    '<dict>',
+    '  <key>NumberOfFiles</key>',
+    '  <integer>32767</integer>',
+    '</dict>',
   ]
   entries.append('<key>Program</key><string>%s</string>' % command[0])
   entries.append('<key>ProgramArguments</key>')
