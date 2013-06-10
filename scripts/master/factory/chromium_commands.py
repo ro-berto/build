@@ -1324,6 +1324,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                     '--reference-dir=%s' % ref_dir,
                                     revision_arg,
                                     '--gtest_filter=%s' % tests,
+                                    '--ui-test-action-max-timeout=45000',
                                     '--run-manual'],
                           test_tool_arg_list=['--no-xvfb'])
 
@@ -1359,6 +1360,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                     '--reference-dir=%s' % ref_dir,
                                     revision_arg,
                                     '--gtest_filter=%s' % tests,
+                                    '--ui-test-action-max-timeout=45000',
                                     '--run-manual'],
                           test_tool_arg_list=['--no-xvfb'])
 
