@@ -28,7 +28,8 @@ def main():
 
   build_dir = os.path.abspath(options.build_dir)
   webkit_tests_dir = chromium_utils.FindUpward(build_dir,
-                                              'webkit', 'tools', 'layout_tests')
+                                               'third_party', 'WebKit',
+                                               'Tools', 'Scripts')
   command = [os.path.join(webkit_tests_dir, 'test-webkitpy')]
   return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
                                                 command)
