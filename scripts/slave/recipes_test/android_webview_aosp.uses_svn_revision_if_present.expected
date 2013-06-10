@@ -1,16 +1,16 @@
 [
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "deps_os = {}\nhooks = []\ntarget_os_only = False\nsolutions = [{'managed': True, 'custom_vars': {}, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src', 'custom_deps': {}, 'deps_file': 'DEPS', 'safesync_url': None, 'name': 'src'}]\ntarget_os = []\n"],
-   "name": "[spec: bare] gclient setup",
-   "seed_steps": ["[spec: bare] gclient setup", "[spec: bare] gclient clean", "[spec: bare] gclient sync"]
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "deps_os = {}\nhooks = []\ntarget_os_only = False\nsolutions = [{'managed': True, 'custom_vars': {}, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src', 'custom_deps': {}, 'deps_file': '', 'safesync_url': None, 'name': 'src'}]\ntarget_os = []\n"],
+   "name": "[spec: empty_deps] gclient setup",
+   "seed_steps": ["[spec: empty_deps] gclient setup", "[spec: empty_deps] gclient clean", "[spec: empty_deps] gclient sync"]
   },
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "revert", "--nohooks"],
-   "name": "[spec: bare] gclient clean"
+   "name": "[spec: empty_deps] gclient clean"
   },
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks", "--revision", "src@1234"],
-   "name": "[spec: bare] gclient sync"
+   "name": "[spec: empty_deps] gclient sync"
   },
   {
    "cmd": ["[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/deps_whitelist.py", "--method", "android_build", "--path-to-deps", "[SLAVE_BUILD_ROOT]/src/DEPS", "--output-json", "/path/to/tmp/json"],

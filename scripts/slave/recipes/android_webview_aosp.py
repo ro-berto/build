@@ -30,6 +30,13 @@ def GetSteps(api):
     chromium_checkout_revision = '%s@%s' % (chromium_solution_name,
                                             api.properties['revision'])
 
+  empty_deps_spec = api.gclient_configs.chromium_bare(
+      api.gclient_configs.BaseConfig(api.properties.get('use_mirror', True)))
+  empty_deps_spec.solutions[0].deps_file = ''
+  sync_chromium_with_empty_deps_step = api.gclient_checkout(
+      empty_deps_spec, spec_name='empty_deps',
+      svn_revision=chromium_checkout_revision)
+
   # For the android_webview AOSP build we want to only include whitelisted
   # DEPS. This is to detect the addition of unexpected new deps to the webview.
   calculate_trimmed_deps_step_name = 'calculate trimmed deps'
@@ -44,7 +51,9 @@ def GetSteps(api):
   def sync_chromium_with_trimmed_deps_step(step_history, _failure):
     deps_blacklist_step = step_history[calculate_trimmed_deps_step_name]
     deps_blacklist = deps_blacklist_step.json_data['blacklist']
-    spec = api.gclient_configs.chromium_bare()
+    cfg = api.gclient_configs.BaseConfig(
+        api.properties.get('use_mirror', True))
+    spec = api.gclient_configs.chromium_bare(cfg)
     spec.solutions[0].custom_deps = deps_blacklist
     spec.target_os = ['android']
     yield api.gclient_checkout(spec, spec_name='trimmed',
@@ -108,8 +117,7 @@ def GetSteps(api):
       use_goma=True)
 
   return (
-    api.gclient_checkout('chromium_bare', spec_name='bare',
-                         svn_revision=chromium_checkout_revision),
+    sync_chromium_with_empty_deps_step,
     calculate_trimmed_deps_step,
     sync_chromium_with_trimmed_deps_step,
     lastchange_steps,
