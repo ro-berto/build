@@ -1195,6 +1195,7 @@ def main():
   symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
       'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
   tsan_options = ('suppressions=src/tools/valgrind/tsan_v2/suppressions.txt '
+                  'print_suppressions=1 '
                   'report_signal_unsafe=0 '
                   'report_thread_leaks=0 '
                   'history_size=7 '
