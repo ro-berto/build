@@ -9,7 +9,7 @@
    "name": "[spec: empty_deps] gclient clean"
   },
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks"],
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks", "--revision", "src@204787"],
    "name": "[spec: empty_deps] gclient sync"
   },
   {
@@ -26,7 +26,7 @@
    "name": "[spec: trimmed] gclient clean"
   },
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks"],
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks", "--revision", "src@204787"],
    "name": "[spec: trimmed] gclient sync"
   },
   {

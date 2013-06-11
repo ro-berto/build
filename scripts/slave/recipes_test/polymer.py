@@ -6,7 +6,6 @@
 
 def basic_test(api):
   return {
-    'build_properties': {
-      'repository': 'https://github.com/Polymer/polymer'
-    }
+    'build_properties': api.build_properties_scheduled(
+        repository='https://github.com/Polymer/polymer'),
   }

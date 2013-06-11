@@ -25,12 +25,14 @@ def _common_test_data():
 
 def basic_test(api):
   return  {
+    'build_properties': api.build_properties_scheduled(),
     'factory_properties': _common_factory_properties(),
     'test_data': _common_test_data(),
   }
 
 def with_ndk_pin_revision_test(api):
   return  {
+    'build_properties': api.build_properties_scheduled(),
     'factory_properties': _common_factory_properties(
       android_ndk_pin_revision='5049b437591600fb0d262e4215cee4226e63c6ce'
     ),
@@ -39,6 +41,7 @@ def with_ndk_pin_revision_test(api):
 
 def with_resync_projects_test(api):
   return  {
+    'build_properties': api.build_properties_scheduled(),
     'factory_properties': _common_factory_properties(
       android_repo_resync_projects=['frameworks/base']
     ),
@@ -47,6 +50,7 @@ def with_resync_projects_test(api):
 
 def uses_android_repo_test(api):
   return {
+    'build_properties': api.build_properties_scheduled(),
     'factory_properties': _common_factory_properties(),
     'test_data': _common_test_data(),
     'paths_to_mock' : [
@@ -57,6 +61,7 @@ def uses_android_repo_test(api):
 
 def does_delete_stale_chromium_test(api):
   return {
+    'build_properties': api.build_properties_scheduled(),
     'factory_properties': _common_factory_properties(),
     'test_data': _common_test_data(),
     'paths_to_mock' : [
@@ -66,14 +71,16 @@ def does_delete_stale_chromium_test(api):
 
 def uses_goma_test(api):
   return {
+    'build_properties': api.build_properties_scheduled(),
     'factory_properties': _common_factory_properties(),
     'test_data': _common_test_data(),
     'paths_to_mock' : ['[BUILD_ROOT]/goma', ]
   }
 
-def uses_svn_revision_if_present_test(api):
+def works_if_revision_not_present_test(api):
+  build_properties = api.build_properties_generic()
   return  {
-    'build_properties': { 'revision': '1234' },
+    'build_properties': build_properties,
     'factory_properties': _common_factory_properties(),
     'test_data': _common_test_data(),
   }

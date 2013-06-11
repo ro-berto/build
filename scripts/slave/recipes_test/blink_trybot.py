@@ -15,9 +15,10 @@ for result in ['success', 'fail']:
   for build_config in ['Release', 'Debug']:
     def closure(result_, build_config_):
       return lambda api: {
-        'build_properties': api.tryserver_build_properties(
+        'build_properties': api.build_properties_tryserver(
           build_config=build_config_,
           config_name='blink',
+          root='src/third_party/WebKit',
         ),
         'test_data': globals()['%s_DATA' % result_.upper()]
       }
