@@ -31,10 +31,10 @@ class LibjingleFactory(gclient_factory.GClientFactory):
     solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list))
 
-    # Need webrtc-internal to compile WebRTC (on Windows).
-    if config.Master.webrtc_internal_url:
+    # Need webrtc-limited to compile WebRTC (on Windows).
+    if config.Master.webrtc_limited_url:
       solutions.append(gclient_factory.GClientSolution(
-          config.Master.webrtc_internal_url, name='webrtc-internal',
+          config.Master.webrtc_limited_url, name='webrtc-limited',
           custom_vars_list=custom_vars_list))
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
                                             target_platform=target_platform)
