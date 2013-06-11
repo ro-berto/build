@@ -48,12 +48,12 @@
    "name": "copy repo from Android"
   },
   {
-   "cmd": ["[SLAVE_BUILD_ROOT]/repo_copy/repo", "init", "-u", "https://android.googlesource.com/platform/manifest", "-b", "master"],
+   "cmd": ["[SLAVE_BUILD_ROOT]/repo_copy/repo", "init", "-u", "https://android.googlesource.com/platform/manifest", "-b", "jb-mr1.1-dev"],
    "cwd": "[SLAVE_BUILD_ROOT]/android-src",
    "name": "repo init"
   },
   {
-   "cmd": ["[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/generate_local_manifest.py", "[SLAVE_BUILD_ROOT]/android-src", "external/chromium_org"],
+   "cmd": ["[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/generate_local_manifest.py", "[SLAVE_BUILD_ROOT]/android-src", "external/chromium_org", "--ndk-revision", "5049b437591600fb0d262e4215cee4226e63c6ce"],
    "name": "generate local manifest"
   },
   {
