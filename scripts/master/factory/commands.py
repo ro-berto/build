@@ -34,14 +34,6 @@ from master.optional_arguments import ListProperties
 # builders that all steps are run.
 DEFAULT_TESTS = 'defaulttests'
 
-# The default swarm tests that should be triggered when defaulttests are run.
-# TODO(maruel): This doesn't belong here at all.
-DEFAULT_SWARM_TESTS = [
-    'base_unittests',
-    'net_unittests',
-    'unit_tests',
-]
-
 
 # Performance step utils.
 def CreatePerformanceStepClass(
@@ -168,7 +160,7 @@ class RunHooksShell(shell.ShellCommand):
   right before it starts up."""
   def setupEnvironment(self, cmd):
     test_filters = GetTestfilter(self)
-    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', False)
+    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', [])
     # If swarm tests are present ensure that the .isolated and the sha-1 of its
     # content, as required by the swarm steps, is generated.
     if BuildIsolatedFiles(test_filters, run_default_swarm_tests):
@@ -221,13 +213,13 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   """Returns the dict of all the tests in the list that should be run with
   swarm.
 
-  If 'run_default_swarm_tests' is set, DEFAULT_SWARM_TESTS is automatically
-  added to the list. It must only be set on builder/tester configuration.
+  If 'run_default_swarm_tests' is set, it is automatically added to the list. It
+  must only be set on builder/tester configuration.
 
   Any _swarm suffix is stripped.
   """
   assert isinstance(test_filters, dict)
-  assert isinstance(run_default_swarm_tests, bool)
+  assert isinstance(run_default_swarm_tests, list)
   # Always allow manually added swarm tests to run.
   swarm_tests = dict(
     (k[:-len('_swarm')], v) for k, v in test_filters.iteritems()
@@ -237,7 +229,7 @@ def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
   # Only add the default swarm tests if the builder is marked as swarm enabled.
   if DEFAULT_TESTS in test_filters and run_default_swarm_tests:
     # TODO(maruel): This doesn't belong here at all.
-    for test in DEFAULT_SWARM_TESTS:
+    for test in run_default_swarm_tests:
       swarm_tests.setdefault(test, '')
 
   return swarm_tests
@@ -252,7 +244,7 @@ def GetSwarmTests(bStep):
   The items in the returned list have the '_swarm' suffix stripped.
   """
   test_filters = GetTestfilter(bStep)
-  run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', False)
+  run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', [])
 
   return GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests)
 
@@ -260,7 +252,7 @@ def GetSwarmTests(bStep):
 class CompileWithRequiredSwarmTargets(shell.Compile):
   def start(self):
     test_filters = GetTestfilter(self)
-    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', False)
+    run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', [])
 
     command = self.command[:]
     swarm_tests = list(GetSwarmTestsFromTestFilter(test_filters,
@@ -611,15 +603,30 @@ class FactoryCommands(object):
   def TestStepFilterImpl(self, bStep, default):
     """Returns True if the step should be executed, instead of being skipped.
 
-    It examines the 'testfilter' property of the build and determines if
-    the step should run.
+    It examines the |testfilter| build property and determines if the step
+    should run.
 
-    It will skip the test BuildStep if it is supposed to be run on Swarm
-    instead. This is specific to builder/tester type of builder setup. This is
-    determined via the 'run_default_swarm_tests' build property, which is set
-    via the factory. It is a bit cheezy for now as it is determined via the hard
-    coded DEFAULT_SWARM_TESTS.
-    TODO(maruel): Use non hardcoded list.
+    There is 2 broad categories, either |testfilter| was specified or not.
+
+    If |testfilter| was specified, there's 3 possibilities:
+    - |testfilter| contains the test name. The test is run unconditionally.
+    - |testfilter| doesn't contain the test name neither DEFAULT_TESTS. The test
+      is not run.
+    - |testfilter| contains DEFAULT_TESTS but not the test name, see the next
+      section as if |testfilter| was not specified.
+
+    If |testfilter| was not specified or contained DEFAULT_TESTS, there's 3
+    possibilities:
+    - Neither |run_default_swarm_tests| nor |non_default| were specified, the
+      test runs.
+    - test is listed in |non_default|, it is not run.
+    - test is listed in |run_default_swarm_tests|, it is not run by default,
+      similar to |non_default| but it is run on swarm_triggered instead.  This
+      is specific to builder/tester type of builder setup.
+
+    Both |run_default_swarm_tests| and |non_default| are 'hard coded' for the
+    builder in the factory. |testfilter| is optionally specified in Try Jobs via
+    the trigger.
     """
     # TODO(maruel): This is bad hygiene to modify the build properties on the
     # fly like this. There should be another way to communicate the command line
@@ -634,9 +641,7 @@ class FactoryCommands(object):
       name = name[len('memory test: '):]
     # If it is set, it means that the step should be run through a swarm
     # specific builder instead of the current step.
-    run_default_swarm_tests = GetProp(bStep, 'run_default_swarm_tests', False)
-    # TODO(maruel): This doesn't belong here at all.
-    run_through_swarm = name in DEFAULT_SWARM_TESTS and run_default_swarm_tests
+    run_through_swarm = name in GetProp(bStep, 'run_default_swarm_tests', [])
     # Continue if:
     # - the test is specified in filters
     # - DEFAULT_TESTS is listed, default is True and the test isn't running

@@ -915,8 +915,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
                       project=None, factory_properties=None, gclient_deps=None,
-                      run_default_swarm_tests=False):
+                      run_default_swarm_tests=None):
     factory_properties = (factory_properties or {}).copy()
+    run_default_swarm_tests = run_default_swarm_tests or []
 
     # Default to the configuration of Blink appropriate for Chromium patches.
     factory_properties.setdefault('blink_config', 'chromium')
