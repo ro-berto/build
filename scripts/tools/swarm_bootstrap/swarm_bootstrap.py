@@ -160,13 +160,7 @@ def GenerateLaunchdPlist(command):
     '<key>SoftResourceLimits</key>',
     '<dict>',
     '  <key>NumberOfFiles</key>',
-    '  <integer>32767</integer>',
-    '</dict>',
-
-    '<key>HardResourceLimits</key>',
-    '<dict>',
-    '  <key>NumberOfFiles</key>',
-    '  <integer>32767</integer>',
+    '  <integer>8000</integer>',
     '</dict>',
   ]
   entries.append('<key>Program</key><string>%s</string>' % command[0])
