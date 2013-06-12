@@ -29,6 +29,7 @@ F('f_gpu_win_rel', win().ChromiumFactory(
     slave_type='BuilderTester',
     tests=[
       'gl_tests',
+      'content_gl_tests',
       'gpu_frame_rate',
       'gpu_latency',
       'gpu_throughput',
@@ -59,6 +60,7 @@ F('f_gpu_win_dbg', win().ChromiumFactory(
     slave_type='BuilderTester',
     tests=[
       'gl_tests',
+      'content_gl_tests',
       'gpu_tests',
       'gpu_content_tests',
     ],

@@ -1386,6 +1386,17 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddGTestTestStep('gl_tests', factory_properties,
                           test_tool_arg_list=['--no-xvfb'])
 
+  def AddContentGLTests(self, factory_properties=None):
+    """Runs content_gl_tests binary.
+
+    This binary contains unit tests from the content directory
+    that should be run on the gpu bots.
+    """
+    factory_properties = factory_properties or {}
+
+    self.AddGTestTestStep('content_gl_tests', factory_properties,
+                          test_tool_arg_list=['--no-xvfb'])
+
   def AddGLES2ConformTest(self, factory_properties=None):
     """Runs gles2_conform_test binary.
 

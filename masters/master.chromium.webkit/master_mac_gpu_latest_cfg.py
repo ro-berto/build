@@ -31,6 +31,7 @@ F('f_gpu_mac_rel', mac().ChromiumFactory(
              'chromium_gpu_builder'],
     tests=[
       'gl_tests',
+      'content_gl_tests',
       'gpu_frame_rate',
       'gpu_latency',
       'gpu_throughput',
@@ -62,6 +63,7 @@ F('f_gpu_mac_dbg', mac().ChromiumFactory(
              'chromium_gpu_debug_builder'],
     tests=[
       'gl_tests',
+      'content_gl_tests',
       'gpu_tests',
       'gpu_content_tests',
     ],

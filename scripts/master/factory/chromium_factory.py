@@ -681,6 +681,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGLTests(fp)
     if R('gl_tests_br'):
       f.AddBuildrunnerGTest('gl_tests', fp, test_tool_arg_list=['--no-xvfb'])
+    if R('content_gl_tests'):
+      f.AddContentGLTests(fp)
     if R('gles2_conform_test'):
       f.AddGLES2ConformTest(fp)
     if R('gles2_conform_test_br'):

@@ -31,6 +31,7 @@ F('f_gpu_linux_rel', linux().ChromiumFactory(
     target='Release',
     tests=[
         'gl_tests',
+        'content_gl_tests',
         'gpu_frame_rate',
         'gpu_latency',
         'gpu_throughput',
@@ -60,6 +61,7 @@ F('f_gpu_linux_dbg', linux().ChromiumFactory(
     target='Debug',
     tests=[
         'gl_tests',
+        'content_gl_tests',
         'gpu_tests',
         'gpu_content_tests',
     ],
