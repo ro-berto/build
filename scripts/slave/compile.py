@@ -590,7 +590,7 @@ def common_make_settings(
         # file cache is warm, this can speed up clobber builds by up to 30%.
         env['GOMA_USE_LOCAL'] = '0'
     else:
-      goma_jobs = 100
+      goma_jobs = 50
     if jobs < goma_jobs:
       jobs = goma_jobs
     command.append('-j%d' % jobs)
