@@ -82,7 +82,11 @@ class DartCommands(commands.FactoryCommands):
                     options.get('name').startswith('dart2dart'))
     is_new_analyzer = (options.get('name') != None and
                        options.get('name').startswith('new_analyzer'))
-    is_vm = not is_dartc and not is_dart2dart and not is_new_analyzer
+    is_analyzer_experimental = (options.get('name') != None and
+                                options.get('name')
+                                .startswith('analyzer_experimental'))
+    is_vm = not (is_dartc or is_dart2dart or is_new_analyzer or
+                 is_analyzer_experimental)
 
     if is_vm:
       cmd += ' --arch=%s' % (options['arch'])
@@ -114,12 +118,16 @@ class DartCommands(commands.FactoryCommands):
                     options.get('name').startswith('dart2dart'))
     is_new_analyzer = (options.get('name') != None and
                        options.get('name').startswith('new_analyzer'))
-
+    is_analyzer_experimental = (options.get('name') != None and
+                                options.get('name')
+                                .startswith('analyzer_experimental'))
     arch = options.get('arch')
-    if is_dartc or is_new_analyzer:
+    if is_dartc or is_new_analyzer or is_analyzer_experimental:
       compiler = 'dartc'
       if is_new_analyzer:
         compiler = 'dartanalyzer'
+      if is_analyzer_experimental:
+        compiler = 'dart2analyzer'
       runtime = 'none'
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '

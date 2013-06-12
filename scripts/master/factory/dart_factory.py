@@ -611,7 +611,8 @@ class DartUtils(object):
         no_annotated = ((name.startswith('vm') or
                         name.startswith('dart2dart') or
                         name.startswith('dartc') or
-                        name.startswith('new_analyzer'))
+                        name.startswith('new_analyzer') or
+                        name.startswith('analyzer_experimental'))
                         and not name.startswith('vm-android')
                         and not name.startswith('cross-')
                         and not name.startswith('target-'))
