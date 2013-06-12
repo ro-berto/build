@@ -4,7 +4,9 @@ set lighttpd_dir=%~dp0..\third_party\lighttpd\win
 REM copy lighttpd.exe to lighttpd_server.exe, because we don't want it to be
 REM killed by taskkill.
 
-xcopy /D %lighttpd_dir%\lighttpd.exe %lighttpd_dir%\lighttpd_server.exe
+REM Since xcopy is stupid, tell it that lighttpd_server.exe is a file and not
+REM a directory using the echo hack.
+echo f | xcopy /D %lighttpd_dir%\lighttpd.exe %lighttpd_dir%\lighttpd_server.exe
 
 REM copy the cygwin dll to the lighttpd folder because otherwise it wont work.
 
