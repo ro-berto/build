@@ -91,6 +91,7 @@ def main(argv):
 
   env = os.environ.copy()
   env['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
+  env['PYTHONUNBUFFERED'] = '1'
   return subprocess.call(
       [RUNIT, ANNOTATED_RUN,
        '--keep-stdin',  # so that pdb works for local execution

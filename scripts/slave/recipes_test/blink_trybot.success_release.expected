@@ -2,18 +2,18 @@
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "deps_os = {}\nhooks = []\ntarget_os_only = False\nsolutions = [{'managed': True, 'custom_vars': {'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s'}, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src', 'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None, 'src/third_party/WebKit': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'safesync_url': None, 'name': 'src'}]\ntarget_os = []\n"],
    "name": "gclient setup",
-   "seed_steps": ["gclient setup", "gclient clean", "gclient sync", "apply_issue", "gclient runhooks", "compile", "webkit_unit_tests", "webkit_lint"]
+   "seed_steps": ["gclient setup", "gclient revert", "gclient sync", "apply_issue", "gclient runhooks", "compile", "webkit_unit_tests", "webkit_lint"]
   },
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "revert", "--nohooks"],
-   "name": "gclient clean"
+   "cmd": ["python", "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py", ".", "[DEPOT_TOOLS_ROOT]/gclient"],
+   "name": "gclient revert"
   },
   {
    "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "sync", "--nohooks"],
    "name": "gclient sync"
   },
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/apply_issue", "-r", "[SLAVE_BUILD_ROOT]/src", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org"],
+   "cmd": ["[DEPOT_TOOLS_ROOT]/apply_issue", "-r", "[SLAVE_BUILD_ROOT]/src/third_party/WebKit", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org"],
    "name": "apply_issue"
   },
   {
@@ -35,11 +35,11 @@
   },
   {
    "can_fail_build": false,
-   "cmd": ["python", "[BUILD_ROOT]/scripts/slave/chromium/layout_test_wrapper.py", "--output-json", "/path/to/tmp/json"],
+   "cmd": ["python", "[BUILD_ROOT]/scripts/slave/chromium/layout_test_wrapper.py", "--target", "Release", "-o", "[SLAVE_BUILD_ROOT]/layout-test-results", "--build-dir", "[SLAVE_BUILD_ROOT]/src/out", "--output-json", "/path/to/tmp/json"],
    "name": "webkit_tests (with patch)"
   },
   {
-   "cmd": ["python", "-e", "print \"ALL IS WELL\""],
+   "cmd": ["python", "-c", "print \"ALL IS WELL\""],
    "name": "webkit_tests"
   }
 ]

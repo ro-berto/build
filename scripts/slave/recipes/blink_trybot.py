@@ -3,27 +3,27 @@
 # found in the LICENSE file.
 
 def GetSteps(api):
-  api.set_common_configuration('blink')
+  repo_name = 'blink'
+  api.set_common_configuration(repo_name)
   api.auto_resolve_conflicts = True
-
-  script = ['python', api.build_path('scripts', 'slave', 'chromium',
-                                     'layout_test_wrapper.py')]
-  final_script = [
-      'python',
-      api.checkout_path('third_party', 'WebKit', 'Tools', 'Scripts',
-                        'print-json-test-results')]
 
   webkit_lint = api.build_path('scripts', 'slave', 'chromium',
                                'lint_test_files_wrapper.py')
 
   def BlinkTestsStep(with_patch):
     name = 'webkit_tests (with%s patch)' % ('' if with_patch else 'out')
+    script = ['python',
+              api.build_path('scripts', 'slave', 'chromium',
+                             'layout_test_wrapper.py'),
+              '--target', api.c.BUILD_CONFIG,
+              '-o', api.slave_build_path('layout-test-results'),
+              '--build-dir', api.checkout_path(api.c.build_dir)]
     return api.step(name, script, add_json_output=True, can_fail_build=False)
 
   def generator(step_history, _failure):
     yield (
-      api.gclient_checkout('blink'),
-      api.apply_issue(),
+      api.gclient_checkout(repo_name),
+      api.apply_issue('third_party', 'WebKit'),
       api.gclient_runhooks(),
       api.chromium_compile(),
       api.runtests('webkit_unit_tests'),
@@ -34,7 +34,7 @@ def GetSteps(api):
 
     yield BlinkTestsStep(with_patch=True)
     if step_history.last_step().retcode == 0:
-      yield api.step('webkit_tests', ['python', '-e', 'print "ALL IS WELL"'])
+      yield api.step('webkit_tests', ['python', '-c', 'print "ALL IS WELL"'])
       return
 
     failing_tests = step_history.last_step().json_data
@@ -47,9 +47,12 @@ def GetSteps(api):
     )
     base_failing_tests = step_history.last_step().json_data
 
-    yield api.step('webkit_tests', final_script + [
+    final_script = ['python',
+      api.checkout_path('third_party', 'WebKit', 'Tools', 'Scripts',
+                        'print-json-test-results'),
       '--ignored-failures-path', api.json_input(base_failing_tests),
       api.json_input(failing_tests),
-    ])
+    ]
+    yield api.step('webkit_tests', final_script)
 
   return generator

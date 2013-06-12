@@ -15,10 +15,11 @@ addition, a list of one or more tests or test directories, specified relative
 to the main webkit test directory, may be passed on the command line.
 """
 
+import json
 import optparse
 import os
+import re
 import sys
-import shutil
 
 from common import chromium_utils
 from slave import slave_utils
@@ -141,10 +142,30 @@ def layout_test(options, args):
     if options.enable_pageheap:
       slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
 
-  if options.json_output:
-    results_dir = options.results_directory
-    results_json = os.path.join(results_dir, "failing_results.json")
-    shutil.copyfile(results_json, options.json_output)
+    if options.output_json:
+      results_dir = options.results_directory
+      results_json = os.path.join(results_dir, "failing_results.json")
+      with open(results_json, 'rb') as f:
+        data = f.read()
+
+      # data is in the form of:
+      #   ADD_RESULTS(<json object>);
+      # but use a regex match to also support a raw json object.
+      m = re.match(r'[^({]*' # From the beginning, take any except '(' or '{'
+                  r'(?:'
+                    r'\((.*)\);'  # Expect '(<json>);'
+                    r'|'          # or
+                    r'({.*})'     # '<json object>'
+                  r')$',
+        data)
+      assert m is not None
+      data = m.group(1) or m.group(2)
+
+      json_data = json.loads(data)
+      assert isinstance(json_data, dict)
+
+      with open(options.output_json, 'wb') as f:
+        f.write(data)
 
 
 def main():
@@ -206,7 +227,7 @@ def main():
                            help=("If specified, additional command line flag "
                                  "to pass to DumpRenderTree. Specify multiple "
                                  "times to add multiple flags."))
-  option_parser.add_option("--json-output",
+  option_parser.add_option("--output-json",
                            help=("Path to write failures json to allow "
                                  "TryJob recipe to know how to ignore "
                                  "expected failures."))
