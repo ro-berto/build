@@ -372,6 +372,7 @@ def main():
         'USERDOMAIN',
         'USERPROFILE',
         'VS100COMNTOOLS',
+        'VS110COMNTOOLS',
         'WINDIR',
     ]
 
