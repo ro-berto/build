@@ -852,7 +852,7 @@ def main_ninja(options, args):
     if chromium_utils.IsMac():
       goma_jobs = 50
     else:
-      goma_jobs = 100
+      goma_jobs = 50
     command.append('-j%d' % goma_jobs)
 
     if chromium_utils.IsMac() and options.clobber:
