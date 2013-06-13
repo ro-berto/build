@@ -26,10 +26,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # A mapping between sys.platform values and the corresponding swarm name
 # for that platform.
 PLATFORM_MAPPING = {
-    'darwin': 'Mac',
-    'cygwin': 'Windows',
-    'linux2': 'Linux',
-    'win32': 'Windows'
+  'cygwin': 'Windows',
+  'darwin': 'Mac',
+  'linux2': 'Linux',
+  'win32': 'Windows',
 }
 
 
@@ -51,7 +51,7 @@ def WriteToFile(filepath, content):
     return False
 
 
-def GetDimensions():
+def GetDimensions(hostname, platform):
   """Returns a dictionary of attributes representing this machine.
 
   Returns:
@@ -62,18 +62,17 @@ def GetDimensions():
                   'generate dimensions', sys.platform)
     return {}
 
-  hostname = socket.gethostname().lower().split('.', 1)[0]
   return {
     'dimensions': {
-      'os': PLATFORM_MAPPING[sys.platform],
+      'os': PLATFORM_MAPPING[platform],
     },
     'tag': hostname,
   }
 
 
-def GetChromiumDimensions():
+def GetChromiumDimensions(hostname, platform):
   """Returns chromium infrastructure specific dimensions."""
-  dimensions = GetDimensions()
+  dimensions = GetDimensions(hostname, platform)
   if not dimensions:
     return dimensions
 
@@ -81,11 +80,11 @@ def GetChromiumDimensions():
   # Get the vlan of this machine from the hostname when it's in the form
   # '<host>-<vlan>'.
   if '-' in hostname:
-    dimensions['dimensions']['vlan'] = hostname.split('-')[1]
+    dimensions['dimensions']['vlan'] = hostname.split('-')[-1]
     # Replace vlan starting with 'c' to 'm'.
     if dimensions['dimensions']['vlan'][0] == 'c':
       dimensions['dimensions']['vlan'] = (
-          'm' + dimensions['dimensions']['vlan'][:1])
+          'm' + dimensions['dimensions']['vlan'][1:])
   return dimensions
 
 
@@ -249,7 +248,9 @@ def main():
   options.dimensionsfile = os.path.abspath(options.dimensionsfile)
 
   print('Generating the machine dimensions...')
-  if not WriteJsonToFile(options.dimensionsfile, GetChromiumDimensions()):
+  hostname = socket.gethostname().lower().split('.', 1)[0]
+  dimensions = GetChromiumDimensions(hostname, sys.platform)
+  if not WriteJsonToFile(options.dimensionsfile, dimensions):
     return 1
 
   print('Downloading newest swarm_bot code...')
