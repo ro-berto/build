@@ -1107,7 +1107,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = self.GetPythonTestCommand(self._layout_test_tool,
                                     cmd_args,
-                                    wrapper_args=['--no-xvfb'])
+                                    wrapper_args=['--no-xvfb'],
+                                    factory_properties=factory_properties)
 
     self.AddTestStep(webkit_test_command.WebKitCommand,
                      test_name=test_name,
