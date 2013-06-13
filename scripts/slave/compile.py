@@ -83,6 +83,11 @@ def goma_setup(options, env):
     options.goma_dir = None
     return False
 
+  # HACK(agable,goma): This prevents native-client's build_nexe.py from using
+  # Goma, as doing so is currently overloading machines and hurting the
+  # waterfall. Remove this as soon as that is fixed. (12 June, 2013).
+  env['NO_NACL_GOMA'] = 'true'
+
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
   if os.path.exists(goma_key):
