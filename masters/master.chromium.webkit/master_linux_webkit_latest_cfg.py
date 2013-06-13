@@ -76,6 +76,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'gclient_env': {'GYP_DEFINES': asan_gyp, 'GYP_GENERATORS': 'ninja'},
         'time_out_ms': '18000',
         'blink_config': 'blink',
+        'asan': True,
     }))
 
 
