@@ -25,25 +25,18 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   S(scheduler, branch=branch, treeStableTimer=0)
 
   tests = [
-      'audio_coding_module_test',
-      'audio_coding_unittests',
       'audio_decoder_unittests',
-      'audioproc_unittest',
       'common_audio_unittests',
       'common_video_unittests',
       'metrics_unittests',
+      'modules_integrationtests',
       'modules_unittests',
       'neteq_unittests',
       'system_wrappers_unittests',
-      'test_fec',
       'test_support_unittests',
-      'video_coding_integrationtests',
-      'video_coding_unittests',
+      'tools_unittests',
       'video_engine_core_unittests',
-      'video_processing_unittests',
       'voice_engine_unittests',
-      'vp8_integrationtests',
-      'vp8_unittests',
   ]
 
   options = ['--', '-project', '../webrtc.xcodeproj']

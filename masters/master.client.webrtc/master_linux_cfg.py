@@ -26,41 +26,20 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   scheduler = 'webrtc_linux_scheduler'
   S(scheduler, branch=branch, treeStableTimer=0)
 
-  normal_tests = [
-      'audio_coding_module_test',
-      'audio_coding_unittests',
+  tests = [
       'audio_decoder_unittests',
-      'audioproc_unittest',
       'common_audio_unittests',
       'common_video_unittests',
       'metrics_unittests',
+      'modules_integrationtests',
       'modules_unittests',
       'neteq_unittests',
       'system_wrappers_unittests',
-      'test_fec',
       'test_support_unittests',
-      'video_coding_integrationtests',
-      'video_coding_unittests',
+      'tools_unittests',
       'video_engine_core_unittests',
-      'video_processing_unittests',
       'voice_engine_unittests',
-      'vp8_integrationtests',
-      'vp8_unittests',
   ]
-
-  memcheck_disabled_tests = [
-      'audio_coding_module_test', # Issue 270
-      'test_fec',                 # Too slow for memcheck
-  ]
-  memcheck_tests = filter(lambda test: test not in memcheck_disabled_tests,
-                          normal_tests)
-  tsan_disabled_tests = [
-      'audio_coding_module_test',   # Too slow for TSAN
-      'test_fec',                   # Too slow for TSAN
-      'vp8_integrationtests',       # Too slow for TSAN
-  ]
-  tsan_tests = filter(lambda test: test not in tsan_disabled_tests,
-                      normal_tests)
 
   ninja_options = ['--build-tool=ninja']
 
@@ -70,38 +49,38 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('linux32_debug_factory', linux().WebRTCFactory(
       target='Debug',
       options=ninja_options,
-      tests=normal_tests,
+      tests=tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
   B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler)
   F('linux32_release_factory', linux().WebRTCFactory(
       target='Release',
       options=ninja_options,
-      tests=normal_tests,
+      tests=tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
   B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler)
   F('linux64_debug_factory', linux().WebRTCFactory(
       target='Debug',
       options=ninja_options,
-      tests=normal_tests))
+      tests=tests))
   B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler)
   F('linux64_release_factory', linux().WebRTCFactory(
       target='Release',
       options=ninja_options,
-      tests=normal_tests))
+      tests=tests))
 
   B('Linux Clang', 'linux_clang_factory', scheduler=scheduler)
   F('linux_clang_factory', linux().WebRTCFactory(
       target='Debug',
       options=ninja_options,
-      tests=normal_tests,
+      tests=tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
   B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler)
   F('linux_memcheck_factory', linux().WebRTCFactory(
       target='Release',
       options=ninja_options,
-      tests=memcheck_tests,
+      tests=tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
                           {'GYP_DEFINES': 'build_for_tool=memcheck'}}))
@@ -109,7 +88,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('linux_tsan_factory', linux().WebRTCFactory(
       target='Release',
       options=ninja_options,
-      tests=tsan_tests,
+      tests=tests,
       factory_properties={'needs_valgrind': True,
                           'gclient_env':
                           {'GYP_DEFINES': 'build_for_tool=tsan'}}))
@@ -117,7 +96,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('linux_asan_factory', linux().WebRTCFactory(
       target='Release',
       options=ninja_options,
-      tests=normal_tests,
+      tests=tests,
       factory_properties={'asan': True,
                           'gclient_env':
                           {'GYP_DEFINES': ('asan=1 release_extra_cflags=-g '
@@ -138,7 +117,7 @@ def ConfigureBuilders(c, svn_url, branch, custom_deps_list=None):
   F('chromeos_factory', linux().WebRTCFactory(
       target='Debug',
       options=ninja_options,
-      tests=normal_tests,
+      tests=tests,
       factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
 
   helper.Update(c)
