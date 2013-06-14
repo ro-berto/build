@@ -119,6 +119,12 @@ td.idle,td.waiting,td.offline,td.building {
         -moz-border-radius-topright: 5px;
 }
 
+.BuildProperties td.middle {
+        max-width: 250px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+}
+
 /* Console view styles */
 td.DevRev {
         padding: 4px 8px 4px 8px;
