@@ -1161,8 +1161,6 @@ def real_main():
                                 'which the build output will be placed')
   option_parser.add_option('', '--src-dir', default=None,
                            help='path to the root of the source tree')
-  option_parser.add_option('', '--target-output-dir', default=None,
-                           help='path to the output folder')
   option_parser.add_option('', '--mode', default='dev',
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')

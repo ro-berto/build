@@ -74,7 +74,7 @@
    "seed_steps": ["gyp_webview"]
   },
   {
-   "cmd": ["[BUILD_ROOT]/scripts/slave/android/with_lunch", "[SLAVE_BUILD_ROOT]/android-src", "full-eng", "[BUILD_ROOT]/scripts/slave/compile.py", "libwebviewchromium", "android_webview_java", "--build-dir", "[SLAVE_BUILD_ROOT]", "--src-dir", "[SLAVE_BUILD_ROOT]/android-src", "--target-output-dir", "[SLAVE_BUILD_ROOT]/android-src/out", "--build-tool", "make-android", "--verbose"],
+   "cmd": ["[BUILD_ROOT]/scripts/slave/android/with_lunch", "[SLAVE_BUILD_ROOT]/android-src", "full-eng", "[BUILD_ROOT]/scripts/slave/compile.py", "libwebviewchromium", "android_webview_java", "--build-dir", "[SLAVE_BUILD_ROOT]", "--src-dir", "[SLAVE_BUILD_ROOT]/android-src", "--build-tool", "make-android", "--verbose"],
    "cwd": "[SLAVE_BUILD_ROOT]",
    "name": "compile",
    "seed_steps": ["compile"]

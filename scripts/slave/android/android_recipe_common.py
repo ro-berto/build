@@ -161,10 +161,8 @@ class AndroidRecipeCommon(object):
              cwd=self._slave_chromium_in_android_path),
 
   def gen_compile_step(self, step_name, build_tool, targets=None,
-                     use_goma=True, src_dir=None, target_out_dir=None,
-                     envsetup=None):
+                     use_goma=True, src_dir=None, envsetup=None):
     src_dir = src_dir or self._slave_android_build_path
-    target_out_dir = target_out_dir or self._slave_android_out_path
     envsetup = envsetup or self.with_lunch_command
     targets = targets or []
     compiler_option = []
@@ -178,7 +176,6 @@ class AndroidRecipeCommon(object):
                            targets +
                            ['--build-dir', self._api.slave_build_path()] +
                            ['--src-dir', src_dir] +
-                           ['--target-output-dir', target_out_dir] +
                            ['--build-tool', build_tool] +
                            ['--verbose'] +
                            compiler_option,
