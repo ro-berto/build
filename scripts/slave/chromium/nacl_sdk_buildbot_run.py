@@ -38,8 +38,10 @@ def main():
   os.chdir(build_tools_dir)
   # Remove BOTO_CONFIG from the environment -- we want to use the NaCl .boto
   # file that has access to gs://nativeclient-mirror.
-  del os.environ['AWS_CREDENTIAL_FILE']
-  del os.environ['BOTO_CONFIG']
+  if 'AWS_CREDENTIAL_FILE' in os.environ:
+    del os.environ['AWS_CREDENTIAL_FILE']
+  if 'BOTO_CONFIG' in os.environ:
+    del os.environ['BOTO_CONFIG']
   return chromium_utils.RunCommand(cmd + args)
 
 
