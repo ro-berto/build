@@ -36,6 +36,10 @@ def main():
   build_tools_dir = chromium_utils.FindUpward(
       os.getcwd(), 'src', 'native_client_sdk', 'src', 'build_tools')
   os.chdir(build_tools_dir)
+  # Remove BOTO_CONFIG from the environment -- we want to use the NaCl .boto
+  # file that has access to gs://nativeclient-mirror.
+  del os.environ['AWS_CREDENTIAL_FILE']
+  del os.environ['BOTO_CONFIG']
   return chromium_utils.RunCommand(cmd + args)
 
 
