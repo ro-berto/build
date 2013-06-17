@@ -528,7 +528,7 @@ class FactoryCommands(object):
   def AddTestStep(self, command_class, test_name, test_command,
                   test_description='', timeout=10*60, max_time=8*60*60,
                   workdir=None, env=None, locks=None, halt_on_failure=False,
-                  do_step_if=True, br_do_step_if=False, hide_step_if=False,
+                  do_step_if=True, br_do_step_if=None, hide_step_if=False,
                   **kwargs):
     """Adds a step to the factory to run a test.
 
@@ -714,10 +714,10 @@ class FactoryCommands(object):
 
     if not hideStep:
       doStep = self._GTestDoStep(test_name, factory_properties)
-      brDoStep = False
+      brDoStep = None
     else:
       doStep = False
-      brDoStep = lambda: self._GTestDoStep(test_name, factory_properties)
+      brDoStep = self._GTestDoStep(test_name, factory_properties)
 
     cmd = [self._python, self._test_tool,
            '--target', self._target,
@@ -779,6 +779,7 @@ class FactoryCommands(object):
                           description=name,
                           timeout=timeout,
                           haltOnFailure=True,
+                          brDoStepIf=None,
                           command=cmd,
                           env=env,
                           factory_properties=factory_properties,

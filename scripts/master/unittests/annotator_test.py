@@ -6,6 +6,7 @@
 """ Source file for annotated command testcases."""
 
 import os
+import time
 import unittest
 
 import test_env  # pylint: disable=W0611
@@ -25,6 +26,10 @@ class FakeCommand(mock.Mock):
   def __init__(self):
     mock.Mock.__init__(self)
     self.rc = builder.SUCCESS
+    self.status = None
+
+  def addLog(self, name):
+    return self.status.addLog(name)
 
 
 class FakeLog(object):
@@ -132,7 +137,26 @@ class AnnotatorCommandsTest(unittest.TestCase):
                                                command=self.command)
     self.step_status = self.buildstatus.addStepWithName('annotated_steps')
     self.step.setStepStatus(self.step_status)
-    self.handleOutputLine = self.step.script_observer.handleOutputLine
+    self.command.status = self.step_status
+
+    preamble = self.command.addLog('preamble')
+    self.step.script_observer.addSection('annotated_steps',
+                                         step=self.step_status)
+    self.step.script_observer.sections[0]['log'] = preamble
+    self.step.script_observer.sections[0]['started'] = time.time()
+    self.step.script_observer.cursor = self.step.script_observer.sections[0]
+
+  def handleOutputLine(self, line):
+    self.step.script_observer.cursor['step'].started = True
+    if not self.step.script_observer.cursor['log']:
+      self.step.script_observer.cursor['log'] = (
+          self.step.script_observer.cursor['step'].addLog('stdio'))
+    self.step.script_observer.cursor['started'] = time.time()
+    self.step.script_observer.handleOutputLine(line)
+
+  def handleReturnCode(self, code):
+    self.step.script_observer['step'].stepFinished()
+    self.step.script_observer.handleReturnCode(code)
 
   def testAddAnnotatedSteps(self):
     self.handleOutputLine('@@@BUILD_STEP step@@@')
@@ -192,7 +216,6 @@ class AnnotatorCommandsTest(unittest.TestCase):
                       builder.WARNINGS)
 
   def testStepText(self):
-
     self.handleOutputLine('@@@STEP_TEXT@example_text@@@')
     self.handleOutputLine('@@@BUILD_STEP step2@@@')
     self.handleOutputLine('@@@STEP_TEXT@example_text2@@@')
@@ -203,6 +226,17 @@ class AnnotatorCommandsTest(unittest.TestCase):
 
     self.assertEquals(texts, [['example_text'], ['example_text2'],
                               ['example_text3']])
+
+  def testStepTextSeeded(self):
+    self.handleOutputLine('@@@SEED_STEP example_step@@@')
+    self.handleOutputLine('@@@SEED_STEP_TEXT@example_step@example_text@@@')
+    self.handleOutputLine('@@@STEP_CURSOR example_step@@@')
+
+    texts = [x['step_text'] for x in self.step.script_observer.sections]
+    start = [x['step'].isStarted() for x in self.step.script_observer.sections]
+
+    self.assertEquals(texts, [[], ['example_text']])
+    self.assertEquals(start, [True, False])
 
   def testStepClear(self):
     self.handleOutputLine('@@@STEP_TEXT@example_text@@@')
@@ -362,14 +396,17 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.assertEquals(self.step.script_observer.annotate_status,
                       builder.SUCCESS)
 
+
     lognames = [[x.getName() for x in l] for l in logs]
     logtexts = [[x.text for x in l] for l in logs]
 
-    self.assertEquals(lognames, [['preamble'], ['stdio'],
-                                 ['stdio', 'test_log'],
-                                 ['stdio'],
-                                 ['stdio', 'test_log'],
-                                 []])
+    expected_lognames = [['preamble'], ['stdio'],
+                         ['stdio', 'test_log'],
+                         ['stdio'],
+                         ['stdio', 'test_log'],
+                         []]
+
+    self.assertEquals(lognames, expected_lognames)
     self.assertEquals(logtexts[1:], [
         [''],
         ['', 'BBthis is line one\nBBthis is line two'],

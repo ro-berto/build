@@ -502,6 +502,9 @@ class AnnotationObserver(buildstep.LogLineObserver):
   @@@STEP_TEXT@<msg>@@@
   Append <msg> to the current step text.
 
+  @@@SEED_STEP_TEXT@step@<msg>@@@
+  Append <msg> to the specified seeded step.
+
   @@@STEP_SUMMARY_TEXT@<msg>@@@
   Append <msg> to the step summary (appears on top of the waterfall).
 
@@ -972,6 +975,15 @@ class AnnotationObserver(buildstep.LogLineObserver):
       step_name = m[0]
       # Add new one.
       self.addSection(step_name)
+    # Support: @@@SEED_STEP_TEXT@<stepname>@<step text@@@ (change step text of a
+    # seeded step)
+    m = annotator.Match.seed_step_text(line)
+    if m:
+      step_name = m[0]
+      step_text = m[1]
+      target = self.lookupCursor(step_name)
+      target['step_text'].append(step_text)
+      updateText(target)
     # Support: @@@STEP_CURSOR <stepname>@@@ (set cursor to specified section)
     m = annotator.Match.step_cursor(line)
     if m:

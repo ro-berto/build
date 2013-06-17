@@ -55,9 +55,15 @@ def FilterCommands(commands, step_regex, step_reject):
 
   Returns (skip, command) for each command.
   """
-  return list((step_skip_filter(cmd['name'], step_regex, step_reject) or
-               not cmd['doStep'], cmd)
-              for cmd in commands)
+  def filter_func(cmd):
+    skip = (step_skip_filter(cmd['name'], step_regex, step_reject) or
+            not cmd['doStep'])
+
+    if skip and (cmd['doStep'] is None):
+      skip = None
+    return skip
+
+  return list((filter_func(cmd), cmd) for cmd in commands)
 
 
 def Execute(commands, annotate, log):
@@ -76,13 +82,20 @@ def Execute(commands, annotate, log):
   aborted early or not.
   """
   for skip, command in commands:
-    if not skip:
-      print '@@@SEED_STEP %s@@@' % command['name']
+    # Don't execute non-buildrunner steps.
+    if skip is None:
+      continue
+    print '@@@SEED_STEP %s@@@' % command['name']
+    if skip:
+      print '@@@SEED_STEP_TEXT@%s@skipped@@@' % command['name']
 
   commands_executed = 0
   for skip, command in commands:
+    if skip is None:
+      continue
     if skip:
-      print >>sys.stderr, 'skipping step: ' + command['name']
+      if not annotate:
+        print >>sys.stderr, 'skipping step: ' + command['name']
       continue
 
     if not annotate:
@@ -98,7 +111,7 @@ def Execute(commands, annotate, log):
     myenv = os.environ
     os.chdir(command['workdir'])
 
-    # python docs says this might cause leaks on FreeBSD/OSX
+    # Python docs say this might cause leaks on FreeBSD/OSX.
     for envar in command['env']:
       os.environ[envar] = command['env'][envar]
 

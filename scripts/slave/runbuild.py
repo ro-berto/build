@@ -338,6 +338,8 @@ def execute_builder(my_builder, mastername, options):
     for skip, cmd in filtered_commands:
       if skip:
         print '-', cmd['name'], '[skipped]'
+      elif skip is None:
+        print '-', cmd['name'], '[skipped] (not under buildrunner)'
       else:
         print '*', cmd['name'],
         if options.show_commands:

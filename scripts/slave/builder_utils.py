@@ -296,6 +296,17 @@ def GetCommands(steplist):
   commands = []
   for step in steplist:
     if hasattr(step, 'command'):
+      StripBuildrunnerIgnore(step)
+
+      # None signifies this is not a buildrunner-added step.
+      if step.brDoStepIf is None:
+        doStep = step.brDoStepIf
+      # doStep may modify build properties, so it must run before rendering.
+      elif isinstance(step.brDoStepIf, bool):
+        doStep = step.brDoStepIf
+      else:
+        doStep = step.brDoStepIf(step)
+
       cmdhash = {}
       renderables = []
       accumulateClassList(step.__class__, 'renderables', renderables)
@@ -303,13 +314,6 @@ def GetCommands(steplist):
       for renderable in renderables:
         setattr(step, renderable, step.build.render(getattr(step,
                 renderable)))
-
-      if isinstance(step.brDoStepIf, bool):
-        doStep = step.brDoStepIf
-      else:
-        doStep = step.brDoStepIf()
-
-      StripBuildrunnerIgnore(step)
 
       cmdhash['name'] = step.name
       cmdhash['doStep'] = doStep
