@@ -174,11 +174,6 @@ def common_xcode_settings(command, options, env, compiler=None):
     print 'Forcing LDPLUSPLUS = %s' % ldplusplus
     env['LDPLUSPLUS'] = ldplusplus
 
-  if options.disable_aslr:
-    # Disallow dyld to randomize the load addresses of executables.
-    # If any of them is compiled with ASan it will hang otherwise.
-    env['DYLD_NO_PIE'] = '1'
-
 
 def ninja_clobber(build_output_dir):
   """Removes everything but ninja files from a build directory."""
@@ -549,11 +544,6 @@ def common_make_settings(
     # contains other options that might be worth adding.
     env['TSAN_OPTIONS'] = 'report_thread_leaks=0'
 
-  if chromium_utils.IsMac() and options.disable_aslr:
-    # Disallow dyld to randomize the load addresses of executables.
-    # If any of them is compiled with ASan it will hang otherwise.
-    env['DYLD_NO_PIE'] = '1'
-
   if compiler in ('goma', 'goma-clang', 'jsonclang'):
     print 'using', compiler
     if compiler == 'goma':
@@ -778,11 +768,6 @@ def main_ninja(options, args):
     # http://dev.chromium.org/developers/testing/threadsanitizer-tsan-v2
     # contains other options that might be worth adding.
     env['TSAN_OPTIONS'] = 'report_thread_leaks=0'
-
-  if chromium_utils.IsMac() and options.disable_aslr:
-    # Disallow dyld to randomize the load addresses of executables.
-    # If any of them is compiled with ASan it will hang otherwise.
-    env['DYLD_NO_PIE'] = '1'
 
   if options.compiler:
     print 'using', options.compiler
@@ -1186,8 +1171,6 @@ def real_main():
     # Mac only.
     option_parser.add_option('', '--xcode-target', default=None,
                              help='Target from the xcodeproj file')
-    option_parser.add_option('', '--disable-aslr', action='store_true',
-                             default=False, help='disable ASLR on OS X 10.6')
   option_parser.add_option('', '--goma-dir',
                            default=os.path.join(BUILD_DIR, 'goma'),
                            help='specify goma directory')
