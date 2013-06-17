@@ -191,6 +191,7 @@ T('win_x64_rel_trigger')
 B('Win x64 Builder', 'rel_x64', 'compile|windows', 'win_rel',
   builddir='cr-win-rel-x64', auto_reboot=False, notify_on_missing=True)
 F('rel_x64', win_out().ChromiumFactory(
+    compile_timeout=2400,
     slave_type='Builder',
     target='Release_x64',
     options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
