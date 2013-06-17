@@ -860,7 +860,7 @@ class FactoryCommands(object):
     self._factory.addStep(shell.ShellCommand,
                           name='gclient_revert',
                           description='gclient_revert',
-                          timeout=60*5,
+                          timeout=60*10,
                           workdir=self.working_dir,
                           command=command,
                           haltOnFailure=False)
