@@ -323,6 +323,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('cc_unittests', fp)
     if R('chromedriver2_unittests'):
       f.AddGTestTestStep('chromedriver2_unittests', fp)
+    if R('chromedriver2_unittests_br'):
+      f.AddBuildrunnerGTest('chromedriver2_unittests', fp)
     if R('chromeos_unittests'):
       f.AddGTestTestStep('chromeos_unittests', fp)
     if R('components_unittests'):
@@ -466,6 +468,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerBrowserTests(fp)
     if R('chromedriver2_tests'):
       f.AddGTestTestStep('chromedriver2_tests', fp)
+    if R('chromedriver2_tests_br'):
+      f.AddBuildrunnerGTest('chromedriver2_tests', fp)
     if R('content_browsertests'):
       f.AddGTestTestStep('content_browsertests', fp)
     if R('content_browsertests_br'):
@@ -503,14 +507,20 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('webkit_unit_tests', fp)
     if R('wtf_unittests'):
       f.AddGTestTestStep('wtf_unittests', fp)
+    if R('wtf_unittests_br'):
+      f.AddBuildrunnerGTest('wtf_unittests', fp)
     if R('weborigin_unittests'):
       f.AddGTestTestStep('weborigin_unittests', fp)
+    if R('weborigin_unittests_br'):
+      f.AddBuildrunnerGTest('weborigin_unittests', fp)
     if R('webkit_lint'):
       f.AddWebkitLint(factory_properties=fp)
     if R('webkit_lint_br'):
       f.AddBuildrunnerWebkitLint(factory_properties=fp)
     if R('webkit_python_tests'):
       f.AddWebkitPythonTests(factory_properties=fp)
+    if R('webkit_python_tests_br'):
+      f.AddBuildrunnerWebkitPythonTests(factory_properties=fp)
     if R('webkit'):
       f.AddWebkitTests(factory_properties=fp)
     if R('devtools_perf'):

@@ -1018,6 +1018,15 @@ class ChromiumCommands(commands.FactoryCommands):
                      test_command=cmd,
                      do_step_if=self.TestStepFilter)
 
+  def AddBuildrunnerWebkitPythonTests(self, factory_properties=None):
+    """Adds a step to the factory to run test-webkitpy."""
+    cmd = [self._python, self._test_webkitpy_tool,
+           '--build-dir', self._build_dir, '--target', self._target]
+    self.AddBuildrunnerTestStep(shell.ShellCommand,
+                                test_name='webkit_python_tests',
+                                test_command=cmd,
+                                do_step_if=self.TestStepFilter)
+
   def AddWebkitTests(self, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
 
