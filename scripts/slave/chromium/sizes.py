@@ -285,6 +285,22 @@ def main_linux(options, args):
   return result
 
 
+def check_android_binaries(binaries, target_dir, options):
+  """Common method for printing size information for Android targets.
+  """
+  result = 0
+
+  for binary in binaries:
+    this_result, this_sizes = check_linux_binary(target_dir, binary, options)
+    if result == 0:
+      result = this_result
+    for name, identifier, _, value, units in this_sizes:
+      print 'RESULT %s: %s= %s %s' % (name.replace('/', '_'), identifier, value,
+                                      units)
+
+  return result
+
+
 def main_android(options, args):
   """Print appropriate size information about built Android targets.
 
@@ -299,17 +315,23 @@ def main_android(options, args):
       'lib/libchromiumtestshell.so',
   ]
 
-  result = 0
+  return check_android_binaries(binaries, target_dir, options)
 
-  for binary in binaries:
-    this_result, this_sizes = check_linux_binary(target_dir, binary, options)
-    if result == 0:
-      result = this_result
-    for name, identifier, _, value, units in this_sizes:
-      print 'RESULT %s: %s= %s %s' % (name.replace('/', '_'), identifier, value,
-                                      units)
 
-  return result
+def main_android_webview(options, args):
+  """Print appropriate size information about Android WebViewChromium targets.
+
+  Returns the first non-zero exit status of any command it executes,
+  or zero on success.
+  """
+  binaries = [
+      'system/lib/libwebviewchromium.so',
+  ]
+
+  if options.target_dir is None:
+    sys.stderr.write('Specify --target-dir=/path/to/out argument.\n')
+
+  return check_android_binaries(binaries, options.target_dir, options)
 
 
 def main_win(options, args):
@@ -354,6 +376,7 @@ def main():
 
   main_map = {
     'android' : main_android,
+    'android-webview' : main_android_webview,
     'linux' : main_linux,
     'mac' : main_mac,
     'win' : main_win,
@@ -365,6 +388,9 @@ def main():
                            default='Release',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
+  option_parser.add_option('', '--target-dir',
+                           metavar='DIR',
+                           help='path to target out/ directory')
   option_parser.add_option('', '--build-dir',
                            default='chrome',
                            metavar='DIR',
