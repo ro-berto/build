@@ -408,7 +408,11 @@ class DrCommands(object):
     testlog_dirs = ['build_drmemory-dbg-32/logs',
                     'build_drmemory-dbg-32/Testing/Temporary',
                     'build_drmemory-rel-32/logs',
-                    'build_drmemory-rel-32/Testing/Temporary']
+                    'build_drmemory-rel-32/Testing/Temporary',
+                    'build_drmemory-dbg-64/logs',
+                    'build_drmemory-dbg-64/Testing/Temporary',
+                    'build_drmemory-rel-64/logs',
+                    'build_drmemory-rel-64/Testing/Temporary']
     if self.IsWindows():
       testlog_dirs += ['xmlresults']
     else:
