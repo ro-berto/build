@@ -652,7 +652,7 @@ def CreateDrMPackageFactory(windows):
   return DrCommands(WindowsToOs(windows)).DrMemoryPackage()
 
 
-def CreateWinChromeFactory():
+def CreateWinChromeFactory(builder):
   """Run chrome tests with the latest drmemory.
 
   Do *not* build TOT chrome or sync it.  Building chrome takes a lot of
@@ -714,7 +714,7 @@ def CreateWinChromeFactory():
     ret.addStep(
         Test(command=[
                  # Use the build dir of the chrome builder on this slave.
-                 ('..\\..\\win7-cr-builder\\build\\' +
+                 ('..\\..\\' + builder + '\\build\\' +
                   'src\\tools\\valgrind\\chrome_tests.bat'),
                  '-t', test, '--tool', 'drmemory_light', '--keep_logs',
              ],
