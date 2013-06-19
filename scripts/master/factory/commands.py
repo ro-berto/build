@@ -884,6 +884,7 @@ class FactoryCommands(object):
                           locks=[self.slave_exclusive_lock],
                           timeout=60*5,
                           workdir='../../..',
+                          warnOnFailure=True,
                           command=command)
 
   def AddUpdateStep(self, gclient_spec, env=None, timeout=None,
