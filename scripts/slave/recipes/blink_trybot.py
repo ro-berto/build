@@ -12,13 +12,13 @@ def GetSteps(api):
 
   def BlinkTestsStep(with_patch):
     name = 'webkit_tests (with%s patch)' % ('' if with_patch else 'out')
-    script = ['python',
-              api.build_path('scripts', 'slave', 'chromium',
-                             'layout_test_wrapper.py'),
-              '--target', api.c.BUILD_CONFIG,
-              '-o', api.slave_build_path('layout-test-results'),
-              '--build-dir', api.checkout_path(api.c.build_dir)]
-    return api.step(name, script, add_json_output=True, can_fail_build=False)
+    test = api.build_path('scripts', 'slave', 'chromium',
+                          'layout_test_wrapper.py')
+    args = ['--target', api.c.BUILD_CONFIG,
+            '-o', api.slave_build_path('layout-test-results'),
+            '--build-dir', api.checkout_path(api.c.build_dir)]
+    return api.runtests(test, args, name=name, add_json_output=True,
+                        can_fail_build=False)
 
   def generator(step_history, _failure):
     yield (

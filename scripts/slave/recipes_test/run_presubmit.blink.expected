@@ -1,6 +1,6 @@
 [
   {
-   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "deps_os = {}\nhooks = []\ntarget_os_only = False\nsolutions = [{'managed': True, 'custom_vars': {'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s'}, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src', 'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None, 'src/third_party/WebKit': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'safesync_url': None, 'name': 'src'}]\ntarget_os = []\n"],
+   "cmd": ["[DEPOT_TOOLS_ROOT]/gclient", "config", "--spec", "deps_os = {}\nhooks = []\ntarget_os_only = False\nsolutions = [{'managed': True, 'custom_vars': {'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk', 'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_revision': 'HEAD'}, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src', 'custom_deps': {'src/third_party/WebKit': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'safesync_url': None, 'name': 'src'}]\ntarget_os = []\n"],
    "name": "gclient setup",
    "seed_steps": ["gclient setup", "gclient revert", "gclient sync"]
   },

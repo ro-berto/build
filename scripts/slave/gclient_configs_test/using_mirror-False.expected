@@ -7,7 +7,9 @@
         "custom_deps": {
           "src/third_party/WebKit": "https://src.chromium.org/blink/trunk"
         }, 
-        "custom_vars": {}, 
+        "custom_vars": {
+          "webkit_revision": "HEAD"
+        }, 
         "deps_file": "DEPS", 
         "managed": true, 
         "name": "src", 

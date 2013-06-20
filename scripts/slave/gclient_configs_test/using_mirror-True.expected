@@ -5,14 +5,13 @@
     "solutions": [
       {
         "custom_deps": {
-          "src/third_party/WebKit": "svn://svn-mirror.golo.chromium.org/blink/trunk", 
-          "src/third_party/WebKit/LayoutTests": null, 
-          "src/webkit/data/layout_tests/LayoutTests": null
+          "src/third_party/WebKit": "svn://svn-mirror.golo.chromium.org/blink/trunk"
         }, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_revision": "HEAD", 
           "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
         }, 
         "deps_file": "DEPS", 

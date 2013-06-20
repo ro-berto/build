@@ -71,8 +71,10 @@ def blink_bare(c):
 
 @config_item(includes=['chromium'])
 def blink(c):
-  c.solutions[0].custom_deps['src/third_party/WebKit'] = (
-    ChromiumSvnURL(c, 'blink', 'trunk'))
+  c.solutions[0].custom_deps = {
+    'src/third_party/WebKit': ChromiumSvnURL(c, 'blink', 'trunk')
+  }
+  c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
 
 @config_item()
 def nacl(c):
