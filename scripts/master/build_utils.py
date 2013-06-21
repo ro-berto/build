@@ -205,7 +205,8 @@ def EmailableBuildTable_bb8(build_status, waterfall_url, styles=None,
   else:
     steps = [step for step in build_status.getSteps()
              if step.isStarted() and step.getText()]
-  build_boxes.extend([GenStepBox(step) for step in steps])
+  build_boxes.extend(
+      [GenStepBox(step) for step in steps if not step.isHidden()])
   table_content = ''.join(build_boxes)
   return (('<table style="border-spacing: 1px 1px; font-weight: bold; '
            'padding: 3px 0px 3px 0px; text-align: center; font-size: 10px; '

@@ -150,7 +150,7 @@ def recursive_key_replace(obj, find, replace):
 
 
 def step_helper(name, extras=None, result=results.SUCCESS, exLogNames=None,
-                started=True, skip_name=False):
+                started=True, skip_name=False, hidden=False):
   logs = []
   for log_name in (exLogNames or []) + ['stdio']:
     log = mock.Mock(LogFile)
@@ -161,6 +161,7 @@ def step_helper(name, extras=None, result=results.SUCCESS, exLogNames=None,
       'getText()': ([name] if not skip_name else [])+(extras or []),
       'getResults()': (result, []),
       'isStarted()': started,
+      'isHidden()': hidden,
       'getLogs()': logs}
 
 
