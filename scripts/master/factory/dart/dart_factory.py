@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -15,7 +15,7 @@ from buildbot.status.status_push import HttpStatusPush
 
 from master.factory import v8_factory
 from master.factory import chromium_factory
-from master.factory import dart_commands
+from master.factory.dart import dart_commands
 from master.factory import gclient_factory
 from master import master_utils
 
