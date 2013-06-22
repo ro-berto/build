@@ -4,8 +4,11 @@
 
 """Specifies how to launch the gatekeeper."""
 
-def GetSteps(api):
-  return [
-    api.step('gatekeeper_launch',
-             [api.build_path('scripts', 'slave', 'gatekeeper_launch.py')])
-  ]
+DEPS = ['step', 'path']
+
+def GenSteps(api):
+  yield api.step('gatekeeper_launch',
+                 [api.path.build('scripts', 'slave', 'gatekeeper_launch.py')])
+
+def GenTests(_api):
+  yield 'basic', {}

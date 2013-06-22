@@ -2,14 +2,23 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetSteps(api):
-  tmp_path = api.checkout_path('.tmp')
-  test_prefix = ['xvfb-run'] if api.IsLinux else []
-  return (
-    api.git_checkout(api.properties['repository'] + '.git', recursive=True),
-    api.step('mktmp', ['mkdir', tmp_path]),
-    api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
-             cwd=api.checkout_path()),
-    api.step('test', test_prefix+['grunt', 'test-buildbot'],
-             cwd=api.checkout_path(), allow_subannotations=True)
-  )
+DEPS = ['path', 'git', 'properties', 'step', 'platform']
+
+def GenSteps(api):
+  yield api.git.checkout(api.properties['repository'] + '.git', recursive=True)
+
+  tmp_path = api.path.checkout('.tmp')
+  yield api.step('mktmp', ['mkdir', tmp_path])
+  yield api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
+             cwd=api.path.checkout())
+
+  test_prefix = ['xvfb-run'] if api.platform.is_linux else []
+  yield api.step('test', test_prefix+['grunt', 'test-buildbot'],
+             cwd=api.path.checkout(), allow_subannotations=True)
+
+
+def GenTests(api):
+  yield 'basic', {
+    'build_properties': api.build_properties_scheduled(
+        repository='https://github.com/Polymer/polymer'),
+  }

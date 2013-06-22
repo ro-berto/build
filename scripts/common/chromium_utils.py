@@ -1236,3 +1236,17 @@ def ConvertBuildDirToLegacy(build_dir, target_platform=None, use_out=False):
     bad = True
 
   return (build_dir, bad)
+
+
+def IsolatedImportFromPath(path, extra_paths=None):
+  dir_path, module_file = os.path.split(path)
+  module_file = os.path.splitext(module_file)[0]
+
+  saved = sys.path
+  sys.path = [dir_path] + (extra_paths or [])
+  try:
+    return __import__(module_file, globals(), locals())
+  except ImportError:
+    pass
+  finally:
+    sys.path = saved

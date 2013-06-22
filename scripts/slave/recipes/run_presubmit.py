@@ -2,46 +2,61 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetSteps(api):
-  # TODO(iannucci): Pass the build repo info directly via properties
-  repo_name = api.properties.get('repo_name')
+DEPS = ['properties', 'gclient', 'git', 'rietveld', 'step', 'path']
 
-  def git_steps(step_history, _failure):
-    spec = step_history['gclient setup'].json_data['CheckoutSpec']
-    if spec['solutions'][0]['url'].endswith('.git'):
-      seed_steps = ['git config user.email', 'git config user.name',
-                    'git clean']
-      yield api.git('config', 'user.email', 'commit-bot@chromium.org',
-                      seed_steps=seed_steps)
-      yield api.git('config', 'user.name', 'The Commit Bot')
-      yield api.git('clean', '-xfq')
-
+def GenSteps(api):
   root = api.properties.get('root', '')
   # FIXME: Rietveld passes the blink path as src/third_party/WebKit
   #        so we have to strip the src bit off before passing to
-  #        api.checkout_path. :(
+  #        api.path.checkout. :(
   if root.startswith('src'):
     root = root[3:].lstrip('/')
 
   # FIXME: Remove the blink_bare repository type.
+  # TODO(iannucci): Pass the build repo info directly via properties
+  repo_name = api.properties['repo_name']
   if repo_name == 'blink_bare':
     root = ''
 
-  return (
-    api.gclient_checkout(repo_name),
-    git_steps,
-    api.apply_issue(root),
-    api.step('presubmit', [
-      api.depot_tools_path('presubmit_support.py'),
-      '--root', api.checkout_path(root),
-      '--commit',
-      '--verbose', '--verbose',
-      '--issue', api.properties['issue'],
-      '--patchset', api.properties['patchset'],
-      '--skip_canned', 'CheckRietveldTryJobExecution',
-      '--skip_canned', 'CheckTreeIsOpen',
-      '--skip_canned', 'CheckBuildbotPendingBuilds',
-      '--rietveld_url', api.properties['rietveld'],
-      '--rietveld_email', '',  # activates anonymous mode
-      '--rietveld_fetch'])
-  )
+  api.gclient.set_config(repo_name)
+  yield api.gclient.checkout()
+
+  spec = api.gclient.c
+  if spec.solutions[0].url.endswith('.git'):
+    seed_steps = ['git config user.email', 'git config user.name',
+                  'git clean']
+    yield api.git.command('config', 'user.email', 'commit-bot@chromium.org',
+                          seed_steps=seed_steps)
+    yield api.git.command('config', 'user.name', 'The Commit Bot')
+    yield api.git.command('clean', '-xfq')
+
+  yield api.rietveld.apply_issue(root)
+
+  yield api.step('presubmit', [
+    api.path.depot_tools('presubmit_support.py'),
+    '--root', api.path.checkout(root),
+    '--commit',
+    '--verbose', '--verbose',
+    '--issue', api.properties['issue'],
+    '--patchset', api.properties['patchset'],
+    '--skip_canned', 'CheckRietveldTryJobExecution',
+    '--skip_canned', 'CheckTreeIsOpen',
+    '--skip_canned', 'CheckBuildbotPendingBuilds',
+    '--rietveld_url', api.properties['rietveld'],
+    '--rietveld_email', '',  # activates anonymous mode
+    '--rietveld_fetch'])
+
+
+def GenTests(api):
+  for repo_name in ['blink', 'blink_bare', 'tools_build', 'chromium']:
+    if 'blink' in repo_name:
+      bp = api.build_properties_tryserver(
+        root='src/third_party/WebKit'
+      )
+    else:
+      bp = api.build_properties_tryserver()
+
+    yield repo_name, {
+      'factory_properties': {'repo_name': repo_name},
+      'build_properties': bp
+    }

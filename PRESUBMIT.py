@@ -19,6 +19,7 @@ def CommonChecks(input_api, output_api):
       r'.*slave/.*/build.*/.*',
       r'.*depot_tools/.*',
       r'.*scripts/release/.*',
+      r'.*scripts/slave/recipe_modules/.*',
       r'.+_bb7\.py$',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',

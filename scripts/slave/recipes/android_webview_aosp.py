@@ -2,38 +2,86 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.android.android_recipe_common import AndroidRecipeCommon
+DEPS = ['android']
 
-def GetSteps(api):
-  android_common = AndroidRecipeCommon(api, lunch_flavor='full-eng')
-  android_repo_url = 'https://android.googlesource.com/platform/manifest'
-  android_repo_branch = 'jb-mr1.1-dev'
-  android_ndk_pin_revision = '5049b437591600fb0d262e4215cee4226e63c6ce'
-  android_repo_sync_flags = ['-j16', '-d', '-f']
+def GenSteps(api):
+  droid = api.android
+  droid.set_config('AOSP')
+  yield droid.chromium_with_trimmed_deps()
+  yield droid.lastchange_steps()
 
-  chromium_solution_name = 'src'
-  chromium_checkout_revision = None
-  if 'revision' in api.properties:
-    chromium_checkout_revision = '%s@%s' % (chromium_solution_name,
-                                            api.properties['revision'])
-  compile_step = android_common.gen_compile_step(
-      step_name='compile',
-      build_tool='make-android',
-      targets=['libwebviewchromium', 'android_webview_java'],
-      use_goma=True)
+  yield droid.repo_init_steps()
+  yield droid.generate_local_manifest_step()
+  yield droid.repo_sync_steps()
 
-  return (
-    android_common.gen_sync_chromium_with_empty_deps_step(
-        svn_revision=chromium_checkout_revision),
-    android_common.gen_calculate_trimmed_deps_step(),
-    android_common.gen_sync_chromium_with_trimmed_deps_step(
-        svn_revision=chromium_checkout_revision),
-    android_common.gen_lastchange_steps(),
-    android_common.gen_repo_init_steps(android_repo_url, android_repo_branch),
-    android_common.gen_generate_local_manifest_step(
-            ndk_pin_revision=android_ndk_pin_revision),
-    android_common.gen_repo_sync_steps(android_repo_sync_flags),
-    android_common.gen_symlink_chromium_into_android_tree_step(),
-    android_common.gen_gyp_webview_step(),
-    compile_step
-  )
+  yield droid.symlink_chromium_into_android_tree_step()
+  yield droid.gyp_webview_step()
+
+  # TODO(android): use api.chromium.compile for this
+  yield droid.compile_step(
+    build_tool='make-android',
+    targets=['libwebviewchromium', 'android_webview_java'],
+    use_goma=True)
+
+def GenTests(api):
+  def _common_placeholder_data():
+    return {
+      'calculate trimmed deps': {
+        'json': {
+          'output': {
+            'blacklist': {
+              'src/blacklist/project/1': None,
+              'src/blacklist/project/2': None,
+            }
+          }
+        }
+      }
+    }
+
+  yield 'basic', {
+    'build_properties': api.build_properties_scheduled(),
+    'placeholder_data': _common_placeholder_data(),
+  }
+
+  yield 'uses_android_repo', {
+    'build_properties': api.build_properties_scheduled(),
+    'placeholder_data': _common_placeholder_data(),
+    'mock' : {
+      'path': {
+        'exists': [
+          '[SLAVE_BUILD_ROOT]/android-src/.repo/repo/repo',
+          '[SLAVE_BUILD_ROOT]/android-src',
+        ]
+      }
+    }
+  }
+
+  yield 'does_delete_stale_chromium', {
+    'build_properties': api.build_properties_scheduled(),
+    'placeholder_data': _common_placeholder_data(),
+    'mock' : {
+      'path': {
+        'exists': [
+          '[SLAVE_BUILD_ROOT]/android-src/external/chromium_org',
+        ]
+      }
+    }
+  }
+
+  yield 'uses_goma_test', {
+    'build_properties': api.build_properties_scheduled(),
+    'placeholder_data': _common_placeholder_data(),
+    'mock' : {
+      'path': {
+        'exists': [
+          '[BUILD_ROOT]/goma'
+        ]
+      }
+    }
+  }
+
+  yield 'works_if_revision_not_present', {
+    'build_properties': api.build_properties_generic(),
+    'placeholder_data': _common_placeholder_data(),
+  }
+

@@ -2,57 +2,83 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-def GetSteps(api):
-  repo_name = 'blink'
-  api.set_common_configuration(repo_name)
-  api.auto_resolve_conflicts = True
+DEPS = ['step', 'chromium', 'step_history', 'path', 'gclient', 'rietveld',
+        'properties', 'json']
 
-  webkit_lint = api.build_path('scripts', 'slave', 'chromium',
+def GenSteps(api):
+  api.chromium.set_config('blink')
+  api.chromium.apply_config('trybot_flavor')
+  api.step.auto_resolve_conflicts = True
+
+  webkit_lint = api.path.build('scripts', 'slave', 'chromium',
                                'lint_test_files_wrapper.py')
 
   def BlinkTestsStep(with_patch):
     name = 'webkit_tests (with%s patch)' % ('' if with_patch else 'out')
-    test = api.build_path('scripts', 'slave', 'chromium',
+    test = api.path.build('scripts', 'slave', 'chromium',
                           'layout_test_wrapper.py')
-    args = ['--target', api.c.BUILD_CONFIG,
-            '-o', api.slave_build_path('layout-test-results'),
-            '--build-dir', api.checkout_path(api.c.build_dir)]
-    return api.runtests(test, args, name=name, add_json_output=True,
-                        can_fail_build=False)
+    args = ['--target', api.chromium.c.BUILD_CONFIG,
+            '-o', api.path.slave_build('layout-test-results'),
+            '--build-dir', api.path.checkout(api.chromium.c.build_dir),
+            api.json.output()]
+    return api.chromium.runtests(test, args, name=name, can_fail_build=False)
 
-  def generator(step_history, _failure):
-    yield (
-      api.gclient_checkout(repo_name),
-      api.apply_issue('third_party', 'WebKit'),
-      api.gclient_runhooks(),
-      api.chromium_compile(),
-      api.runtests('webkit_unit_tests'),
-      api.step('webkit_lint', [
-        'python', webkit_lint, '--build-dir', api.checkout_path('out'),
-        '--target', api.properties['build_config']]),
-    )
+  yield (
+    api.gclient.checkout(),
+    api.rietveld.apply_issue('third_party', 'WebKit'),
+    api.chromium.runhooks(),
+    api.chromium.compile(),
+    api.chromium.runtests('webkit_unit_tests'),
+    api.step('webkit_lint', [
+      'python', webkit_lint, '--build-dir', api.path.checkout('out'),
+      '--target', api.properties['build_config']]),
+  )
 
-    yield BlinkTestsStep(with_patch=True)
-    if step_history.last_step().retcode == 0:
-      yield api.step('webkit_tests', ['python', '-c', 'print "ALL IS WELL"'])
-      return
+  yield BlinkTestsStep(with_patch=True)
+  if api.step_history.last_step().retcode == 0:
+    yield api.step('webkit_tests', ['python', '-c', 'print "ALL IS WELL"'])
+    return
 
-    failing_tests = step_history.last_step().json_data
+  failing_tests = api.step_history.last_step().json.output
 
-    yield (
-      api.gclient_revert(),
-      api.gclient_runhooks(),
-      api.chromium_compile(),
-      BlinkTestsStep(with_patch=False),
-    )
-    base_failing_tests = step_history.last_step().json_data
+  yield (
+    api.gclient.revert(),
+    api.chromium.runhooks(),
+    api.chromium.compile(),
+    BlinkTestsStep(with_patch=False),
+  )
+  base_failing_tests = api.step_history.last_step().json.output
 
-    final_script = ['python',
-      api.checkout_path('third_party', 'WebKit', 'Tools', 'Scripts',
-                        'print-json-test-results'),
-      '--ignored-failures-path', api.json_input(base_failing_tests),
-      api.json_input(failing_tests),
-    ]
-    yield api.step('webkit_tests', final_script)
+  final_script = ['python',
+    api.path.checkout('third_party', 'WebKit', 'Tools', 'Scripts',
+                      'print-json-test-results'),
+    '--ignored-failures-path', api.json.input(base_failing_tests),
+    api.json.input(failing_tests),
+  ]
+  yield api.step('webkit_tests', final_script)
 
-  return generator
+
+def GenTests(api):
+  SUCCESS_DATA = lambda: {}
+
+  FAIL_DATA = lambda: {
+    'webkit_tests (with patch)': {
+      'json': {'output': {'crazy': ['data', 'format']}},
+      '$R': 1
+    },
+    'webkit_tests (without patch)': {
+      'json': {'output': {'crazy': ['data', 'format']}},
+      '$R': 1
+    },
+  }
+
+  for result, data in [('success', SUCCESS_DATA), ('fail', FAIL_DATA)]:
+    for build_config in ['Release', 'Debug']:
+      yield ('%s_%s' % (result, build_config.lower())), {
+        'build_properties': api.build_properties_tryserver(
+          build_config=build_config,
+          config_name='blink',
+          root='src/third_party/WebKit',
+        ),
+        'placeholder_data': data()
+      }
