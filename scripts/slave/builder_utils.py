@@ -104,14 +104,14 @@ class FakeSlave(util.LocalAsRemote):
   SlaveBuilder-class.html and http://buildbot.net/buildbot/docs/0.8.3/
   reference/buildbot.buildslave.BuildSlave-class.html for reference."""
 
-  def __init__(self, builddir, slavename):
+  def __init__(self, builddir, slavebuilddir, slavename):
     self.slave = self
     self.properties = Properties()
     self.slave_basedir = '.'
     self.basedir = '.'  # this must be '.' since I combine slavebuilder
                         # and buildslave
     self.path_module = namedModule('posixpath')
-    self.slavebuilddir = builddir
+    self.slavebuilddir = slavebuilddir or builddir
     self.builddir = builddir
     self.slavename = slavename
     self.usePTY = True
@@ -372,7 +372,7 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
   builderstatus.nextBuildNumber = buildnumber + 1
   builderstatus.basedir = basedir
   my_builder['builddir'] = safename
-  my_builder['slavebuilddir'] = safename
+  my_builder.setdefault('slavebuilddir', safename)
   mybuilder = real_builder.Builder(my_builder, builderstatus)
   build.setBuilder(mybuilder)
   build_status = build_module.BuildStatus(builderstatus, buildnumber)
@@ -390,7 +390,7 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
     buildprops.update(build_properties, 'Botmaster')
   mybuilder.setBotmaster(FakeBotmaster(mastername, buildprops))
 
-  buildslave = FakeSlave(safename, slavename)
+  buildslave = FakeSlave(safename, my_builder.get('slavebuilddir'), slavename)
   build.build_status = build_status
   build.setupSlaveBuilder(buildslave)
   build.setupProperties()
