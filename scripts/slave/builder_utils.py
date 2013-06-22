@@ -361,18 +361,29 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
 
   build = base.Build([FakeRequest(buildsetup)])
   safename = buildbot.util.safeTranslate(my_builder['name'])
+
+  my_builder['builddir'] = safename
+  my_builder.setdefault('slavebuilddir', safename)
+
+
+  workdir_root = None
+  if not slavedir:
+    workdir_root = os.path.join(SCRIPT_DIR, '..', '..', 'slave',
+                                my_builder['slavebuilddir'])
+
   if not basepath: basepath = safename
   if not slavedir: slavedir = os.path.join(SCRIPT_DIR,
                                            '..', '..', 'slave')
   basedir = os.path.join(slavedir, basepath)
   build.basedir = basedir
-  builderstatus = builder.BuilderStatus('test')
+  if not workdir_root:
+    workdir_root = basedir
 
+  builderstatus = builder.BuilderStatus('test')
+  builderstatus.basedir = basedir
   buildnumber = build_properties.get('buildnumber', 1)
   builderstatus.nextBuildNumber = buildnumber + 1
-  builderstatus.basedir = basedir
-  my_builder['builddir'] = safename
-  my_builder.setdefault('slavebuilddir', safename)
+
   mybuilder = real_builder.Builder(my_builder, builderstatus)
   build.setBuilder(mybuilder)
   build_status = build_module.BuildStatus(builderstatus, buildnumber)
@@ -394,6 +405,6 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
   build.build_status = build_status
   build.setupSlaveBuilder(buildslave)
   build.setupProperties()
-  process_steps(steplist, build, buildslave, build_status, basedir)
+  process_steps(steplist, build, buildslave, build_status, workdir_root)
 
   return steplist, build
