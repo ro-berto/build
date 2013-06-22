@@ -88,6 +88,8 @@ def get_args():
   parser.add_option('--test-config', action='store_true',
                     help='Attempt to parse all builders and steps without '
                     'executing them. Returns 0 on success.')
+  parser.add_option('--fail-fast', action='store_true',
+                    help='Exit on first step error instead of continuing.')
 
   return parser.parse_args()
 
@@ -354,7 +356,7 @@ def execute_builder(my_builder, mastername, options):
 
   start_time = time.clock()
   commands_executed, err = runbuild_utils.Execute(filtered_commands,
-      options.annotate, options.log)
+      options.annotate, options.log, fail_fast=options.fail_fast)
   end_time = time.clock()
 
   if err:

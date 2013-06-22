@@ -66,7 +66,7 @@ def FilterCommands(commands, step_regex, step_reject):
   return list((filter_func(cmd), cmd) for cmd in commands)
 
 
-def Execute(commands, annotate, log):
+def Execute(commands, annotate, log, fail_fast=False):
   """Given a list of (skip, command) pairs, execute commands sequentially.
 
   A command is specified as a hash with name, command, workdir, quoted_workdir,
@@ -90,6 +90,7 @@ def Execute(commands, annotate, log):
       print '@@@SEED_STEP_TEXT@%s@skipped@@@' % command['name']
 
   commands_executed = 0
+  err = False
   for skip, command in commands:
     if skip is None:
       continue
@@ -124,9 +125,11 @@ def Execute(commands, annotate, log):
     os.environ = myenv
     commands_executed += 1
     if ret != 0:
-      return commands_executed, True
+      err = True
+      if fail_fast:
+        return commands_executed, err
     print '@@@STEP_CLOSED@@@'
-  return commands_executed, False
+  return commands_executed, err
 
 
 def PropertiesToJSON(props):
