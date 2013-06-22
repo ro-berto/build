@@ -256,7 +256,8 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddAnnotatedPerfStep(self, test_name, gtest_filter, log_type,
                            factory_properties, cmd_name='performance_ui_tests',
                            tool_opts=None, cmd_options=None, step_name=None,
-                           timeout=1200, py_script=False, dashboard_url=None):
+                           timeout=1200, py_script=False, dashboard_url=None,
+                           addmethod=None):
 
     """Add an annotated perf step to the builder.
 
@@ -284,6 +285,7 @@ class ChromiumCommands(commands.FactoryCommands):
     step_name = step_name or test_name.replace('-', '_') + '_test'
     factory_properties = factory_properties.copy()
     factory_properties['step_name'] = step_name
+    addmethod = addmethod or self.AddTestStep
 
     cmd = self.GetAnnotatedPerfCmd(gtest_filter, log_type, test_name,
                                    cmd_name=cmd_name, options=cmd_options,
@@ -292,9 +294,14 @@ class ChromiumCommands(commands.FactoryCommands):
                                    py_script=py_script,
                                    dashboard_url=dashboard_url)
 
-    self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
-                     do_step_if=self.TestStepFilter, target=self._target,
-                     factory_properties=factory_properties, timeout=timeout)
+    addmethod(chromium_step.AnnotatedCommand, step_name, cmd,
+              do_step_if=self.TestStepFilter, target=self._target,
+              factory_properties=factory_properties, timeout=timeout)
+
+  def AddBuildrunnerAnnotatedPerfStep(self, *args, **kwargs):
+    """Add annotated step to be run by buildrunner."""
+    kwargs.setdefault('addmethod', self.AddBuildrunnerTestStep)
+    self.AddAnnotatedPerfStep(*args, **kwargs)
 
   def AddCheckDepsStep(self):
     cmd = [self._python, self._check_deps_tool,
@@ -419,6 +426,22 @@ class ChromiumCommands(commands.FactoryCommands):
                               py_script=True,
                               factory_properties=factory_properties)
 
+  def AddBuildrunnerSizesTests(self, factory_properties=None):
+    factory_properties = factory_properties or {}
+
+    # For Android, platform is hardcoded as target_platform is set to linux2.
+    # By default, the sizes.py script looks at sys.platform to identify
+    # the platform (which is also linux2).
+    args = ['--target', self._target,
+            '--build-dir', self._build_dir]
+
+    if self._target_os == 'android':
+      args.extend(['--platform', 'android'])
+
+    self.AddBuildrunnerAnnotatedPerfStep('sizes', None, 'graphing',
+        step_name='sizes', cmd_name = self._sizes_tool, cmd_options=args,
+        py_script=True, factory_properties=factory_properties)
+
   def AddFrameRateTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
                               factory_properties=factory_properties)
@@ -533,6 +556,20 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerTelemetryUnitTests(self):
+    step_name = 'telemetry_unittests'
+    if self._target_os == 'android':
+      args = ['--browser=android-content-shell']
+    else:
+      args = ['--browser=%s' % self._target.lower()]
+    cmd = self.GetPythonTestCommand(self._telemetry_unit_tests,
+                                    arg_list=args,
+                                    wrapper_args=['--annotate=gtest',
+                                                  '--test-type=%s' % step_name])
+
+    self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
+                                do_step_if=self.TestStepFilter)
 
   def AddReliabilityTests(self, platform):
     cmd = [self._python,
@@ -1429,6 +1466,18 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddTestStep(chromium_step.AnnotatedCommand, 'nacl_integration', cmd,
                      halt_on_failure=True, timeout=timeout,
                      do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerNaClIntegrationTestStep(self, factory_properties,
+          target=None, buildbot_preset=None, timeout=1200):
+    target = target or self._target
+    cmd = [self._python, self._nacl_integration_tester_tool,
+           '--mode', target]
+    if buildbot_preset is not None:
+      cmd.extend(['--buildbot', buildbot_preset])
+
+    self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand,
+                                'nacl_integration', cmd, halt_on_failure=True,
+                                timeout=timeout, do_step_if=self.TestStepFilter)
 
   def AddAnnotatedSteps(self, factory_properties, timeout=1200):
     factory_properties = factory_properties or {}

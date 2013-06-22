@@ -808,7 +808,7 @@ class FactoryCommands(object):
                              test_description='', timeout=10*60,
                              max_time=8*60*60, workdir=None, env=None,
                              locks=None, halt_on_failure=False,
-                             do_step_if=True):
+                             do_step_if=True, **kwargs):
     """Add a buildrunner test step, which will be executed with runbuild.
 
     This will appear hidden and skipped on the main waterfall, but executed when
@@ -821,7 +821,7 @@ class FactoryCommands(object):
                      test_description=test_description, timeout=timeout,
                      max_time=max_time, workdir=workdir, env=env, locks=locks,
                      halt_on_failure=halt_on_failure, do_step_if=False,
-                     br_do_step_if=do_step_if, hide_step_if=True)
+                     br_do_step_if=do_step_if, hide_step_if=True, **kwargs)
 
   def AddBasicShellStep(self, test_name, timeout=600, arg_list=None):
     """Adds a step to the factory to run a simple shell test with standard
