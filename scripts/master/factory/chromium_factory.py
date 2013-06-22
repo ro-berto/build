@@ -327,8 +327,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('chromedriver2_unittests', fp)
     if R('chromeos_unittests'):
       f.AddGTestTestStep('chromeos_unittests', fp)
-    if R('chromeos_unittests_br'):
-      f.AddBuildrunnerGTest('chromeos_unittests', fp)
     if R('components_unittests'):
       f.AddGTestTestStep('components_unittests', fp)
     if R('components_unittests_br'):
@@ -417,8 +415,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('sandbox_linux_unittests', fp)
     if R('telemetry_unittests'):
       f.AddTelemetryUnitTests()
-    if R('telemetry_unittests_br'):
-      f.AddBuildrunnerTelemetryUnitTests()
     if R('ui_unittests'):
       f.AddGTestTestStep('ui_unittests', fp)
     if R('ui_unittests_br'):
@@ -433,12 +429,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('aura_unittests', fp)
     if R('aura_shell') or R('ash') or R('ash_unittests'):
       f.AddGTestTestStep('ash_unittests', fp)
-    if R('aura_shell_br', 'ash_br', 'ash_unittests_br'):
-      f.AddBuildrunnerGTest('ash_unittests', fp)
     if R('app_list_unittests'):
       f.AddGTestTestStep('app_list_unittests', fp)
-    if R('app_list_unittests_br'):
-      f.AddBuildrunnerGTest('app_list_unittests', fp)
     if R('message_center_unittests'):
       f.AddGTestTestStep('message_center_unittests', fp)
     if R('message_center_unittests_br'):
@@ -679,8 +671,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     if R('sizes'):
       f.AddSizesTests(fp)
-    if R('sizes_br'):
-      f.AddBuildrunnerSizesTests(fp)
     if R('sync'):
       f.AddSyncPerfTests(fp)
     if R('mach_ports'):
@@ -896,8 +886,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # annotator).
     if R('nacl_integration'):
       f.AddNaClIntegrationTestStep(fp)
-    if R('nacl_integration_br'):
-      f.AddBuildrunnerNaClIntegrationTestStep(fp)
     if R('nacl_integration_memcheck'):
       f.AddNaClIntegrationTestStep(fp, None, 'memcheck-browser-tests')
     if R('nacl_integration_tsan'):
