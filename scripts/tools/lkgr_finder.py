@@ -71,6 +71,7 @@ VERBOSE = True
 EMAIL_ENABLED = False
 BLINK_REVISIONS_URL = 'https://blink-status.appspot.com'
 CHROMIUM_REVISIONS_URL = 'https://chromium-status.appspot.com'
+WEBRTC_REVISIONS_URL = 'https://webrtc-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
 MASTER_TO_BASE_URL = {
   'chromium': 'http://build.chromium.org/p/chromium',
@@ -79,6 +80,7 @@ MASTER_TO_BASE_URL = {
   'chromium.mac': 'http://build.chromium.org/p/chromium.mac',
   'chromium.win': 'http://build.chromium.org/p/chromium.win',
   'chromium.webkit': 'http://build.chromium.org/p/chromium.webkit',
+  'client.webrtc': 'http://build.chromium.org/p/client.webrtc',
 }
 RUN_LOG = []
 
@@ -321,6 +323,46 @@ BLINK_LKGR_STEPS = {
     'WebKit Win Builder (deps)': ['compile'],
     'WebKit Mac Builder (deps)': ['compile'],
     'WebKit Linux (deps)': ['compile'],
+  },
+}
+
+WEBRTC_NORMAL_STEPS = [
+    'compile',
+    'audio_decoder_unittests',
+    'common_audio_unittests',
+    'common_video_unittests',
+    'metrics_unittests',
+    'modules_integrationtests',
+    'modules_unittests',
+    'neteq_unittests',
+    'system_wrappers_unittests',
+    'test_support_unittests',
+    'video_engine_core_unittests',
+    'voice_engine_unittests',
+]
+
+WEBRTC_LKGR_STEPS = {
+  'client.webrtc': {
+    'Win32 Debug': WEBRTC_NORMAL_STEPS,
+    'Win32 Release': WEBRTC_NORMAL_STEPS,
+    'Win64 Debug': WEBRTC_NORMAL_STEPS,
+    'Win64 Release': WEBRTC_NORMAL_STEPS,
+    'Mac32 Debug': WEBRTC_NORMAL_STEPS,
+    'Mac32 Release': WEBRTC_NORMAL_STEPS,
+    'Mac64 Debug': WEBRTC_NORMAL_STEPS,
+    'Mac64 Release': WEBRTC_NORMAL_STEPS,
+    'Mac Asan': WEBRTC_NORMAL_STEPS,
+    'iOS Device': ['compile'],
+    'Linux32 Debug': WEBRTC_NORMAL_STEPS,
+    'Linux32 Release': WEBRTC_NORMAL_STEPS,
+    'Linux64 Debug': WEBRTC_NORMAL_STEPS,
+    'Linux64 Release': WEBRTC_NORMAL_STEPS,
+    'Linux Clang': WEBRTC_NORMAL_STEPS,
+    'Linux Memcheck': WEBRTC_NORMAL_STEPS,
+    'Linux Tsan': WEBRTC_NORMAL_STEPS,
+    'Linux Asan': WEBRTC_NORMAL_STEPS,
+    'Android NDK': ['compile'],
+    'Chrome OS': WEBRTC_NORMAL_STEPS,
   },
 }
 
@@ -855,6 +897,9 @@ def main():
   opt_parser.add_option('-b', '--blink', action='store_true',
                         help='Find the Blink LKGR rather than the Chromium '
                              'one.')
+  opt_parser.add_option('-w', '--webrtc', action='store_true',
+                        help='Find the WebRTC LKGR rather than the Chromium '
+                             'one.')
   opt_parser.add_option('--error-recipients',
                         default='chrome-troopers+alerts@google.com',
                         help='Send email to the specified recipients '
@@ -864,6 +909,9 @@ def main():
                         help='Send email to the specified recipients '
                              'when updating LKGR (default %default).')
   options, args = opt_parser.parse_args()
+
+  if options.blink and options.webrtc:
+    opt_parser.error('You cannot specify --blink and --webrtc in the same run.')
 
   # Error notification setup.
   fqdn = socket.getfqdn()
@@ -888,6 +936,10 @@ def main():
     lkgr_type = 'Blink'
     revisions_url = BLINK_REVISIONS_URL
     lkgr_steps = BLINK_LKGR_STEPS
+  elif options.webrtc:
+    lkgr_type = 'WebRTC'
+    revisions_url = WEBRTC_REVISIONS_URL
+    lkgr_steps = WEBRTC_LKGR_STEPS
   else:
     lkgr_type = 'Chromium'
     revisions_url = CHROMIUM_REVISIONS_URL
