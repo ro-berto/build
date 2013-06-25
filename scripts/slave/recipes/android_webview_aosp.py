@@ -2,13 +2,16 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-DEPS = ['android']
+DEPS = ['android', 'properties', 'rietveld']
 
 def GenSteps(api):
   droid = api.android
   droid.set_config('AOSP')
   yield droid.chromium_with_trimmed_deps()
   yield droid.lastchange_steps()
+
+  if 'issue' in api.properties:
+    yield api.rietveld.apply_issue(api.rietveld.calculate_issue_root())
 
   yield droid.repo_init_steps()
   yield droid.generate_local_manifest_step()
@@ -85,3 +88,7 @@ def GenTests(api):
     'placeholder_data': _common_placeholder_data(),
   }
 
+  yield 'trybot', {
+    'build_properties': api.build_properties_tryserver(),
+    'placeholder_data': _common_placeholder_data(),
+  }

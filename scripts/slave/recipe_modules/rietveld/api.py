@@ -5,6 +5,15 @@
 from slave import recipe_api
 
 class RietveldApi(recipe_api.RecipeApi):
+  def calculate_issue_root(self):
+    root = self.m.properties.get('root', '')
+    # FIXME: Rietveld passes the blink path as src/third_party/WebKit
+    #        so we have to strip the src bit off before passing to
+    #        api.checkout_path. :(
+    if root.startswith('src'):
+      root = root[3:].lstrip('/')
+    return root
+
   def apply_issue(self, *root_pieces):
     return self.m.step('apply_issue', [
         self.m.path.depot_tools('apply_issue'),

@@ -5,12 +5,7 @@
 DEPS = ['properties', 'gclient', 'git', 'rietveld', 'step', 'path']
 
 def GenSteps(api):
-  root = api.properties.get('root', '')
-  # FIXME: Rietveld passes the blink path as src/third_party/WebKit
-  #        so we have to strip the src bit off before passing to
-  #        api.path.checkout. :(
-  if root.startswith('src'):
-    root = root[3:].lstrip('/')
+  root = api.rietveld.calculate_issue_root()
 
   # FIXME: Remove the blink_bare repository type.
   # TODO(iannucci): Pass the build repo info directly via properties
