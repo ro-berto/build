@@ -27,7 +27,7 @@ def GenSteps(api):
     use_goma=True)
 
 def GenTests(api):
-  def _common_placeholder_data():
+  def _common_step_mocks():
     return {
       'calculate trimmed deps': {
         'json': {
@@ -42,13 +42,13 @@ def GenTests(api):
     }
 
   yield 'basic', {
-    'build_properties': api.build_properties_scheduled(),
-    'placeholder_data': _common_placeholder_data(),
+    'properties': api.properties_scheduled(),
+    'step_mocks': _common_step_mocks(),
   }
 
   yield 'uses_android_repo', {
-    'build_properties': api.build_properties_scheduled(),
-    'placeholder_data': _common_placeholder_data(),
+    'properties': api.properties_scheduled(),
+    'step_mocks': _common_step_mocks(),
     'mock' : {
       'path': {
         'exists': [
@@ -60,8 +60,8 @@ def GenTests(api):
   }
 
   yield 'does_delete_stale_chromium', {
-    'build_properties': api.build_properties_scheduled(),
-    'placeholder_data': _common_placeholder_data(),
+    'properties': api.properties_scheduled(),
+    'step_mocks': _common_step_mocks(),
     'mock' : {
       'path': {
         'exists': [
@@ -72,8 +72,8 @@ def GenTests(api):
   }
 
   yield 'uses_goma_test', {
-    'build_properties': api.build_properties_scheduled(),
-    'placeholder_data': _common_placeholder_data(),
+    'properties': api.properties_scheduled(),
+    'step_mocks': _common_step_mocks(),
     'mock' : {
       'path': {
         'exists': [
@@ -84,11 +84,11 @@ def GenTests(api):
   }
 
   yield 'works_if_revision_not_present', {
-    'build_properties': api.build_properties_generic(),
-    'placeholder_data': _common_placeholder_data(),
+    'properties': api.properties_generic(),
+    'step_mocks': _common_step_mocks(),
   }
 
   yield 'trybot', {
-    'build_properties': api.build_properties_tryserver(),
-    'placeholder_data': _common_placeholder_data(),
+    'properties': api.properties_tryserver(),
+    'step_mocks': _common_step_mocks(),
   }

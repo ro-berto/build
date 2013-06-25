@@ -19,6 +19,6 @@ def GenSteps(api):
 
 def GenTests(api):
   yield 'basic', {
-    'build_properties': api.build_properties_scheduled(
+    'properties': api.properties_scheduled(
         repository='https://github.com/Polymer/polymer'),
   }

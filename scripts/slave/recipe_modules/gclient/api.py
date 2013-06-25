@@ -36,9 +36,7 @@ class GclientApi(recipe_api.RecipeApi):
 
   @property
   def use_mirror(self):
-    """
-    A r/w value indicating if gclient will use mirrors in its configuration.
-    """
+    """Indicates if gclient will use mirrors in its configuration."""
     if self.USE_MIRROR is None:
       self.USE_MIRROR = self.m.properties.get('use_mirror', True)
     return self.USE_MIRROR

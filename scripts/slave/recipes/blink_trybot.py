@@ -72,13 +72,13 @@ def GenTests(api):
     },
   }
 
-  for result, data in [('success', SUCCESS_DATA), ('fail', FAIL_DATA)]:
+  for result, step_mocks in [('success', SUCCESS_DATA), ('fail', FAIL_DATA)]:
     for build_config in ['Release', 'Debug']:
       yield ('%s_%s' % (result, build_config.lower())), {
-        'build_properties': api.build_properties_tryserver(
+        'properties': api.properties_tryserver(
           build_config=build_config,
           config_name='blink',
           root='src/third_party/WebKit',
         ),
-        'placeholder_data': data()
+        'step_mocks': step_mocks()
       }

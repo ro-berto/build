@@ -45,13 +45,13 @@ def GenSteps(api):
 def GenTests(api):
   for repo_name in ['blink', 'blink_bare', 'tools_build', 'chromium']:
     if 'blink' in repo_name:
-      bp = api.build_properties_tryserver(
+      props = api.properties_tryserver(
         root='src/third_party/WebKit'
       )
     else:
-      bp = api.build_properties_tryserver()
+      props = api.properties_tryserver()
 
+    props['repo_name'] = repo_name
     yield repo_name, {
-      'factory_properties': {'repo_name': repo_name},
-      'build_properties': bp
+      'properties': props
     }
