@@ -15,11 +15,12 @@ class RietveldApi(recipe_api.RecipeApi):
     return root
 
   def apply_issue(self, *root_pieces):
-    return self.m.step('apply_issue', [
-        self.m.path.depot_tools('apply_issue'),
+    return self.m.python('apply_issue',
+        self.m.path.depot_tools('apply_issue.py'), [
         '-r', self.m.path.checkout(*root_pieces),
         '-i', self.m.properties['issue'],
         '-p', self.m.properties['patchset'],
         '-s', self.m.properties['rietveld'],
-        '-e', 'commit-bot@chromium.org'])
+        '-e', 'commit-bot@chromium.org',
+        '--no-commit'])
 

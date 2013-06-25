@@ -1,4 +1,8 @@
 DEPS = [
-  'step', 'path', 'json', 'properties', 'platform',
-  'gclient'  # in order to have set_config automatically populate gclient
+  'gclient',  # in order to have set_config automatically populate gclient
+  'json',
+  'path',
+  'platform',
+  'properties',
+  'step',
 ]

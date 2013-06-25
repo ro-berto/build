@@ -62,7 +62,8 @@ HostPlatformValue = object()
 # Schema for config items in this module.
 def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
                TARGET_PLATFORM=None, TARGET_ARCH=HostPlatformValue,
-               TARGET_BITS=HostPlatformValue, BUILD_CONFIG=norm_build_config()):
+               TARGET_BITS=HostPlatformValue, BUILD_CONFIG=norm_build_config(),
+               **_kwargs):
   assert HOST_PLATFORM and HOST_ARCH and HOST_BITS
   TARGET_PLATFORM = TARGET_PLATFORM or HOST_PLATFORM
   TARGET_ARCH = HOST_ARCH if TARGET_ARCH is HostPlatformValue else TARGET_ARCH
@@ -79,7 +80,7 @@ def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
       GYP_GENERATORS = SetConfig(str, ','.join),
       GYP_GENERATOR_FLAGS = DictConfig(
         lambda i: ('%s=%s' % i), ' '.join, (str,int)),
-      GYP_MSVS_VERSION = SimpleConfig(str, empty_val="", required=False),
+      GYP_MSVS_VERSION = SimpleConfig(str, required=False),
     ),
     build_dir = SimpleConfig(str),
 

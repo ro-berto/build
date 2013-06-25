@@ -2,11 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-DEPS = ['step', 'chromium', 'step_history', 'path', 'gclient', 'rietveld',
-        'properties', 'json']
+DEPS = [
+  'chromium',
+  'gclient',
+  'json',
+  'path',
+  'properties',
+  'python',
+  'rietveld',
+  'step',
+  'step_history',
+]
 
 def GenSteps(api):
-  api.chromium.set_config('blink')
+  api.chromium.set_config('blink', GIT_MODE=True)
   api.chromium.apply_config('trybot_flavor')
   api.step.auto_resolve_conflicts = True
 
@@ -29,14 +38,14 @@ def GenSteps(api):
     api.chromium.runhooks(),
     api.chromium.compile(),
     api.chromium.runtests('webkit_unit_tests'),
-    api.step('webkit_lint', [
-      'python', webkit_lint, '--build-dir', api.path.checkout('out'),
-      '--target', api.properties['build_config']]),
+    api.python('webkit_lint', webkit_lint, [
+      '--build-dir', api.path.checkout('out'),
+      '--target', api.properties['build_config']])
   )
 
   yield BlinkTestsStep(with_patch=True)
   if api.step_history.last_step().retcode == 0:
-    yield api.step('webkit_tests', ['python', '-c', 'print "ALL IS WELL"'])
+    yield api.python.inline('webkit_tests', 'print "ALL IS WELL"')
     return
 
   failing_tests = api.step_history.last_step().json.output
@@ -49,13 +58,13 @@ def GenSteps(api):
   )
   base_failing_tests = api.step_history.last_step().json.output
 
-  final_script = ['python',
+  yield api.python(
+    'webkit_tests',
     api.path.checkout('third_party', 'WebKit', 'Tools', 'Scripts',
                       'print-json-test-results'),
-    '--ignored-failures-path', api.json.input(base_failing_tests),
-    api.json.input(failing_tests),
-  ]
-  yield api.step('webkit_tests', final_script)
+    ['--ignored-failures-path', api.json.input(base_failing_tests),
+      api.json.input(failing_tests)]
+  )
 
 
 def GenTests(api):

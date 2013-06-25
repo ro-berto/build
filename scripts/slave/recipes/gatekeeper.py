@@ -4,7 +4,10 @@
 
 """Specifies how to launch the gatekeeper."""
 
-DEPS = ['step', 'path']
+DEPS = [
+  'path',
+  'step',
+]
 
 def GenSteps(api):
   yield api.step('gatekeeper_launch',

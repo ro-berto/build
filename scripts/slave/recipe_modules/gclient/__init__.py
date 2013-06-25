@@ -1,1 +1,5 @@
-DEPS = ['properties', 'path', 'step']
+DEPS = [
+  'path',
+  'properties',
+  'python',
+]

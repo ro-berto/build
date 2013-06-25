@@ -2,7 +2,14 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-DEPS = ['properties', 'gclient', 'git', 'rietveld', 'step', 'path']
+DEPS = [
+  'gclient',
+  'git',
+  'path',
+  'properties',
+  'rietveld',
+  'step',
+]
 
 def GenSteps(api):
   root = api.rietveld.calculate_issue_root()
@@ -18,12 +25,11 @@ def GenSteps(api):
 
   spec = api.gclient.c
   if spec.solutions[0].url.endswith('.git'):
-    seed_steps = ['git config user.email', 'git config user.name',
-                  'git clean']
-    yield api.git.command('config', 'user.email', 'commit-bot@chromium.org',
-                          seed_steps=seed_steps)
-    yield api.git.command('config', 'user.name', 'The Commit Bot')
-    yield api.git.command('clean', '-xfq')
+    yield (
+        api.git.command('config', 'user.email', 'commit-bot@chromium.org'),
+        api.git.command('config', 'user.name', 'The Commit Bot'),
+        api.git.command('clean', '-xfq')
+    )
 
   yield api.rietveld.apply_issue(root)
 

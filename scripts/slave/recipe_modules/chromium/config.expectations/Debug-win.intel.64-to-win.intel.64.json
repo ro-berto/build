@@ -13,7 +13,7 @@
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": ""
+      "GYP_MSVS_VERSION": null
     }
   }, 
   "chromium": {
@@ -30,7 +30,7 @@
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": ""
+      "GYP_MSVS_VERSION": null
     }
   }, 
   "msvs": {
@@ -58,7 +58,7 @@
       "GYP_DEFINES": "component=shared_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": ""
+      "GYP_MSVS_VERSION": null
     }
   }, 
   "xcodebuild": "can not use xcodebuild on \"win\""

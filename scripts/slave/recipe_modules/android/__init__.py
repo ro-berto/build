@@ -1,1 +1,8 @@
-DEPS = ['gclient', 'path', 'properties', 'step', 'step_history', 'json']
+DEPS = [
+  'gclient',
+  'json',
+  'path',
+  'properties',
+  'step',
+  'step_history',
+]

@@ -64,18 +64,18 @@ class GclientApi(recipe_api.RecipeApi):
       step_name = lambda n: '[spec: %s] gclient %s' % (spec_name, n)
 
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
-    gclient = self.m.path.depot_tools('gclient', wrapper=True)
+    gclient = lambda name, *args: self.m.python(
+        name, self.m.path.depot_tools('gclient.py'), args)
 
-    gclient_sync_extra_args = []
+    revisions = []
     for s in cfg.solutions:
       if s.revision is not None:
-        gclient_sync_extra_args += [
-          '--revision', '%s@%s' % (s.name, s.revision)]
+        revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
     if not cfg.GIT_MODE:
       clean_step = self.revert(step_name)
-      sync_step = self.m.step(step_name('sync'), [
-        gclient, 'sync', '--nohooks'] + gclient_sync_extra_args)
+      sync_step = gclient(
+          step_name('sync'), 'sync', '--nohooks', *revisions)
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -91,14 +91,12 @@ class GclientApi(recipe_api.RecipeApi):
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
       clean_step = None
-      sync_step = self.m.step(step_name('sync'), [
-        gclient, 'sync', '--verbose', '--with_branch_heads', '--nohooks',
-                     '--reset', '--delete_unversioned_trees', '--force'])
+      sync_step = gclient(step_name('sync'),
+        'sync', '--verbose', '--with_branch_heads', '--nohooks',
+        '--reset', '--delete_unversioned_trees', '--force', *revisions)
+
     steps = [
-      self.m.step(
-        step_name('setup'),
-        [gclient, 'config', '--spec', spec_string],
-      ),
+      gclient(step_name('setup'), 'config', '--spec', spec_string)
     ]
     if clean_step:
       steps.append(clean_step)
@@ -111,9 +109,8 @@ class GclientApi(recipe_api.RecipeApi):
 
   def revert(self, step_name_fn=lambda x: 'gclient '+x):
     """Return a gclient_safe_revert step."""
-    return self.m.step(
-      step_name_fn('revert'), [
-        'python',
-        self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'), '.',
-        self.m.path.depot_tools('gclient', wrapper=True)],
+    return self.m.python(
+      step_name_fn('revert'),
+      self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),
+      ['.', self.m.path.depot_tools('gclient', wrapper=True)],
     )

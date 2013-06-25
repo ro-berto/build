@@ -13,7 +13,7 @@
       "GYP_DEFINES": "component=static_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": ""
+      "GYP_MSVS_VERSION": null
     }
   }, 
   "chromium": {
@@ -30,7 +30,7 @@
       "GYP_DEFINES": "component=static_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": ""
+      "GYP_MSVS_VERSION": null
     }
   }, 
   "msvs": "can not use msvs on \"mac\"", 
@@ -45,7 +45,7 @@
       "GYP_DEFINES": "component=static_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": ""
+      "GYP_MSVS_VERSION": null
     }
   }
 }

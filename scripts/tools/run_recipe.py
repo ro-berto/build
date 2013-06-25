@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python -u
 # Copyright (c) 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
@@ -30,7 +30,7 @@ SCRIPT_PATH = os.path.abspath(os.path.dirname(__file__))
 ROOT_PATH = os.path.abspath(os.path.join(SCRIPT_PATH, os.pardir, os.pardir))
 SLAVE_DIR = os.path.join(ROOT_PATH, 'slave', 'fake_slave', 'build')
 
-RUNIT = os.path.join(SCRIPT_PATH, 'runit.sh')
+RUNIT = os.path.join(SCRIPT_PATH, 'runit.py')
 ANNOTATED_RUN = os.path.join(ROOT_PATH, 'scripts', 'slave', 'annotated_run.py')
 
 def usage(msg=None):
@@ -93,7 +93,7 @@ def main(argv):
   env['RUN_SLAVE_UPDATED_SCRIPTS'] = '1'
   env['PYTHONUNBUFFERED'] = '1'
   return subprocess.call(
-      [RUNIT, ANNOTATED_RUN,
+      ['python', '-u', RUNIT, 'python', '-u', ANNOTATED_RUN,
        '--keep-stdin',  # so that pdb works for local execution
        '--factory-properties', json.dumps(fp),
        '--build-properties',   json.dumps(bp)],

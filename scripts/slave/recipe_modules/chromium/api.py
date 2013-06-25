@@ -34,12 +34,15 @@ class ChromiumApi(recipe_api.RecipeApi):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
-    test_args = [test] + args
 
     python_arg = []
     t_name, ext = self.m.path.splitext(self.m.path.basename(test))
     if ext == '.py':
       python_arg = ['--run-python-script']
+    elif self.m.platform.is_win and ext == '':
+      test += '.exe'
+
+    test_args = [test] + args
 
     return self.m.step(name or t_name, [
       'python', self.m.path.build('scripts', 'slave', 'runtest.py'),

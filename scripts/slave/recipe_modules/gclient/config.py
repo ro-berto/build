@@ -8,7 +8,7 @@ from slave.recipe_configs_util import config_item_context, ConfigGroup, BadConf
 from slave.recipe_configs_util import DictConfig, SimpleConfig, StaticConfig
 from slave.recipe_configs_util import SetConfig, ConfigList, ListConfig
 
-def BaseConfig(USE_MIRROR=True, GIT_MODE=False):
+def BaseConfig(USE_MIRROR=True, GIT_MODE=False, **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'
   return ConfigGroup(
     solutions = ConfigList(
