@@ -6,7 +6,12 @@ from slave import recipe_api
 
 class ChromiumApi(recipe_api.RecipeApi):
   def get_config_defaults(self, _config_name):
-    return {'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')}
+    return {
+      'HOST_PLATFORM': self.m.platform.name,
+      'HOST_ARCH': self.m.platform.arch,
+      'HOST_BITS': self.m.platform.bits,
+      'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
+    }
 
   def compile(self, targets=None):
     """Return a compile.py invocation."""

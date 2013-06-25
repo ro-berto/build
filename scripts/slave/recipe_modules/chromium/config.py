@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import platform
-import sys
-
 from slave.recipe_configs_util import config_item_context, ConfigGroup
 from slave.recipe_configs_util import DictConfig, SimpleConfig, StaticConfig
 from slave.recipe_configs_util import SetConfig, BadConf
@@ -13,15 +10,23 @@ from slave.recipe_configs_util import SetConfig, BadConf
 # type signature of functions annotated with the @config_ctx decorator.
 # pylint: disable=E1123
 
-def norm_platform(plat=None):
-  plat = plat or sys.platform
+def norm_host_platform(plat):
   if plat.startswith('linux'):
     return 'linux'
   elif plat.startswith(('win', 'cygwin')):
     return 'win'
   elif plat.startswith(('darwin', 'mac')):
     return 'mac'
-  elif plat.startswith('ios'):
+  else:  # pragma: no cover
+    raise ValueError('Don\'t understand platform "%s"' % plat)
+
+def norm_targ_platform(plat):
+  try:
+    return norm_host_platform(plat)
+  except ValueError:
+    pass
+
+  if plat.startswith('ios'):
     return 'ios'
   elif plat.startswith('android'):
     return 'android'
@@ -30,22 +35,12 @@ def norm_platform(plat=None):
   else:  # pragma: no cover
     raise ValueError('Don\'t understand platform "%s"' % plat)
 
-
-# Because norm_bits and norm_arch actually accept None as a valid parameter,
-# give them a means of distinguishing when they've been passed a default
-# argument v. None
-HostPlatformValue = object()
-
-def norm_bits(arch=HostPlatformValue):
-  if arch is HostPlatformValue:
-    arch = platform.machine()
+def norm_bits(arch):
   if not arch:
     return None
   return 64 if '64' in str(arch) else 32
 
-def norm_arch(arch=HostPlatformValue):
-  if arch is HostPlatformValue:
-    arch = platform.machine()
+def norm_arch(arch):
   if not arch:
     return None
 
@@ -59,11 +54,20 @@ def norm_arch(arch=HostPlatformValue):
 def norm_build_config(build_config=None):
   return 'Debug' if build_config == 'Debug' else 'Release'
 
+# Because bits and arch actually accept None as a valid parameter,
+# give them a means of distinguishing when they've been passed a default
+# argument v. None
+HostPlatformValue = object()
+
 # Schema for config items in this module.
-def BaseConfig(HOST_PLATFORM=norm_platform(), HOST_ARCH=norm_arch(),
-               HOST_BITS=norm_bits(), TARGET_PLATFORM=norm_platform(),
-               TARGET_ARCH=norm_arch(), TARGET_BITS=norm_bits(),
-               BUILD_CONFIG=norm_build_config()):
+def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
+               TARGET_PLATFORM=None, TARGET_ARCH=HostPlatformValue,
+               TARGET_BITS=HostPlatformValue, BUILD_CONFIG=norm_build_config()):
+  assert HOST_PLATFORM and HOST_ARCH and HOST_BITS
+  TARGET_PLATFORM = TARGET_PLATFORM or HOST_PLATFORM
+  TARGET_ARCH = HOST_ARCH if TARGET_ARCH is HostPlatformValue else TARGET_ARCH
+  TARGET_BITS = HOST_BITS if TARGET_BITS is HostPlatformValue else TARGET_BITS
+
   return ConfigGroup(
     compile_py = ConfigGroup(
       default_targets = SetConfig(str),
@@ -81,11 +85,11 @@ def BaseConfig(HOST_PLATFORM=norm_platform(), HOST_ARCH=norm_arch(),
 
     BUILD_CONFIG = StaticConfig(norm_build_config(BUILD_CONFIG)),
 
-    HOST_PLATFORM = StaticConfig(norm_platform(HOST_PLATFORM)),
+    HOST_PLATFORM = StaticConfig(norm_host_platform(HOST_PLATFORM)),
     HOST_ARCH = StaticConfig(norm_arch(HOST_ARCH)),
     HOST_BITS = StaticConfig(norm_bits(HOST_BITS)),
 
-    TARGET_PLATFORM = StaticConfig(norm_platform(TARGET_PLATFORM)),
+    TARGET_PLATFORM = StaticConfig(norm_targ_platform(TARGET_PLATFORM)),
     TARGET_ARCH = StaticConfig(norm_arch(TARGET_ARCH)),
     TARGET_BITS = StaticConfig(norm_bits(TARGET_BITS)),
   )
