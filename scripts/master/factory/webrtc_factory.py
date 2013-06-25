@@ -18,9 +18,8 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
   CUSTOM_DEPS_VALGRIND = ('third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
 
-  def __init__(self, build_dir, target_platform, svn_root_url, branch,
-               custom_deps_list=None, custom_vars_list=None,
-               nohooks_on_update=False, target_os=None):
+  def __init__(self, build_dir, target_platform, nohooks_on_update=False,
+               target_os=None):
     """Creates a WebRTC factory.
 
     This factory can also be used to build stand-alone projects.
@@ -29,12 +28,6 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
       build_dir: Directory to perform the build relative to. Usually this is
         trunk/build for WebRTC and other projects.
       target_platform: Platform, one of 'win32', 'darwin', 'linux2'
-      svn_root_url: Subversion root URL (i.e. without branch/trunk part).
-      branch: Branch name to checkout.
-      custom_vars_list: List of tuples specifying custom GYP variables.
-      custom_deps_list: Content to be put in the custom_deps entry of the
-        .gclient file for the default solution. The parameter must be a list
-        of tuples with two strings in each: path and remote URL.
       nohooks_on_update: If True, no hooks will be executed in the update step.
       target_os: Used to sync down OS-specific dependencies, if specified.
     """
@@ -42,17 +35,15 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
          self, build_dir, target_platform=target_platform,
          nohooks_on_update=nohooks_on_update, target_os=target_os)
 
-    svn_url = svn_root_url + '/' + branch
+    svn_url = config.Master.webrtc_url + '/trunk'
 
     # Use root_dir=src since many Chromium scripts rely on that path.
-    custom_vars_list = custom_vars_list or []
-    custom_vars_list.append(self.CUSTOM_VARS_ROOT_DIR)
+    custom_vars_list = [self.CUSTOM_VARS_ROOT_DIR]
 
     # Overwrite solutions of ChromiumFactory since we sync WebRTC, not Chromium.
     self._solutions = []
     self._solutions.append(gclient_factory.GClientSolution(
-        svn_url, name='src', custom_vars_list=custom_vars_list,
-        custom_deps_list=custom_deps_list))
+        svn_url, name='src', custom_vars_list=custom_vars_list))
     if config.Master.webrtc_limited_url:
       self._solutions.append(gclient_factory.GClientSolution(
           config.Master.webrtc_limited_url, name='webrtc-limited',
