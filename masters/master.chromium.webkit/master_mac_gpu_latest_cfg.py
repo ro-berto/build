@@ -33,7 +33,6 @@ F('f_gpu_mac_rel', mac().ChromiumFactory(
       'gl_tests',
       'content_gl_tests',
       'gpu_frame_rate',
-      'gpu_latency',
       'gpu_throughput',
       'gpu_tests',
       'gpu_content_tests',

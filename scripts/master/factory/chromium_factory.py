@@ -653,8 +653,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddFrameRateTests(fp)
     if R('gpu_frame_rate'):
       f.AddGpuFrameRateTests(fp)
-    if R('gpu_latency'):
-      f.AddGpuLatencyTests(fp)
     if R('gpu_throughput'):
       f.AddGpuThroughputTests(fp)
     if R('dom_perf'):
