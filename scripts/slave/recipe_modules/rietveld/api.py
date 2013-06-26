@@ -21,6 +21,5 @@ class RietveldApi(recipe_api.RecipeApi):
         '-i', self.m.properties['issue'],
         '-p', self.m.properties['patchset'],
         '-s', self.m.properties['rietveld'],
-        '-e', 'commit-bot@chromium.org',
-        '--no-commit'])
+        '-e', 'commit-bot@chromium.org'])
 

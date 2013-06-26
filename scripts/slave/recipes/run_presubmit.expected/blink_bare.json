@@ -13,7 +13,7 @@
    "name": "gclient sync"
   },
   {
-   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/apply_issue.py", "-r", "[SLAVE_BUILD_ROOT]/blink/", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org", "--no-commit"],
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/apply_issue.py", "-r", "[SLAVE_BUILD_ROOT]/blink/", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org"],
    "name": "apply_issue"
   },
   {
