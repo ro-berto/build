@@ -7,7 +7,7 @@ import os
 import subprocess
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
-BUILD = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
+BUILD_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 
 def main(argv):
   path = os.environ.get('PYTHONPATH', '')
@@ -16,15 +16,15 @@ def main(argv):
     if new_path not in path:
       path.append(new_path)
 
-  third_party = os.path.join(BUILD, 'third_party')
+  third_party = os.path.join(BUILD_DIR, 'third_party')
   for d in os.listdir(third_party):
     full = os.path.join(third_party, d)
     if os.path.isdir(full):
       add(full)
-  add(os.path.join(BUILD, 'scripts'))
+  add(os.path.join(BUILD_DIR, 'scripts'))
   add(third_party)
-  add(os.path.join(BUILD, 'site_config'))
-  add(os.path.join(BUILD, '..', 'build_internal', 'site_config'))
+  add(os.path.join(BUILD_DIR, 'site_config'))
+  add(os.path.join(BUILD_DIR, '..', 'build_internal', 'site_config'))
   add('.')
   os.environ['PYTHONPATH'] = os.pathsep.join(path)
   print 'Set PYTHONPATH: %s' % os.environ['PYTHONPATH']
