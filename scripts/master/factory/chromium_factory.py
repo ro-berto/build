@@ -683,8 +683,21 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('sync_integration_br'):
       f.AddBuildrunnerSyncIntegrationTests(fp)
 
+    # WebRTC tests:
     if R('webrtc_perf_content_unittests'):
       f.AddWebRtcPerfContentUnittests(fp)
+    if R('webrtc_manual_content_browsertests'):
+      arg_list = ['--gtest_filter=WebRTC*:Webrtc*:*Dtmf', '--run-manual']
+      f.AddGTestTestStep('content_browsertests', description=' (manual)',
+                         factory_properties=fp, arg_list=arg_list)
+    if R('webrtc_content_unittests'):
+      arg_list = ['--gtest_filter=WebRTC*:RTC*:MediaStream*']
+      f.AddGTestTestStep('content_unittests', description=' (webrtc filtered)',
+                         factory_properties=fp, arg_list=arg_list)
+    if R('webrtc_manual_browser_tests'):
+      arg_list = ['--gtest_filter=Webrtc*', '--run-manual']
+      f.AddGTestTestStep('browser_tests', description=' (manual)',
+                         factory_properties=fp, arg_list=arg_list)
 
     # GPU tests:
     if R('gl_tests'):
@@ -773,46 +786,34 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         continue
 
     # PyAuto functional tests.
+    def P(test_name, suite=None, src_base='.', factory_properties=None,
+          perf=False):
+      # Mapping from self._target_platform to a chrome-*.zip
+      platmap = {'win32': 'win32',
+                 'darwin': 'mac',
+                 'linux2': 'lucid64bit'}
+      zip_plat = platmap[self._target_platform]
+      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
+      f.AddPyAutoFunctionalTest(test_name, suite=suite, src_base=src_base,
+                                workdir=workdir, factory_properties=fp,
+                                perf=perf)
+
     if R('pyauto_chromoting_tests'):
-      f.AddPyAutoFunctionalTest('pyauto_chromoting_tests', suite='CHROMOTING',
-                                factory_properties=fp)
+      P('pyauto_chromoting_tests', suite='CHROMOTING', factory_properties=fp)
     if R('pyauto_official_tests'):
-      # Mapping from self._target_platform to a chrome-*.zip
-      platmap = {'win32': 'win32',
-                 'darwin': 'mac',
-                 'linux2': 'lucid64bit'}
-      zip_plat = platmap[self._target_platform]
-      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
-      f.AddPyAutoFunctionalTest('pyauto_functional_tests',
-                                src_base='..',
-                                workdir=workdir,
-                                factory_properties=fp)
+      P('pyauto_functional_tests', src_base='..', factory_properties=fp)
     if R('pyauto_perf_tests'):
-      # Mapping from self._target_platform to a chrome-*.zip
-      platmap = {'win32': 'win32',
-                 'darwin': 'mac',
-                 'linux2': 'lucid64bit'}
-      zip_plat = platmap[self._target_platform]
-      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
-      f.AddPyAutoFunctionalTest('pyauto_perf_tests',
-                                suite='PERFORMANCE',
-                                src_base='..',
-                                workdir=workdir,
-                                factory_properties=fp,
-                                perf=True)
+      P('pyauto_perf_tests', suite='PERFORMANCE', src_base='..',
+        factory_properties=fp, perf=True)
     if R('pyauto_webrtc_tests'):
-      # Mapping from self._target_platform to a chrome-*.zip
-      platmap = {'win32': 'win32',
-                 'darwin': 'mac',
-                 'linux2': 'lucid64bit'}
-      zip_plat = platmap[self._target_platform]
-      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
-      f.AddPyAutoFunctionalTest('pyauto_webrtc_tests',
-                                suite='WEBRTC',
-                                src_base='..',
-                                workdir=workdir,
-                                factory_properties=fp,
-                                perf=True)
+      P('pyauto_webrtc_tests', suite='WEBRTC', src_base='..',
+        factory_properties=fp, perf=True)
+    if R('pyauto_webrtc_apprtc_test'):
+      P('pyauto_webrtc_apprtc_test', suite='WEBRTC_APPRTC', src_base='..',
+        factory_properties=fp)
+    if R('pyauto_webrtc_quality_tests'):
+      P('pyauto_webrtc_quality_tests', suite='WEBRTC_QUALITY', src_base='..',
+        factory_properties=fp, perf=True)
 
     # Endurance tests.
     endure_tests = {

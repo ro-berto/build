@@ -28,7 +28,15 @@ chromium_rel_mac_archive = master_config.GetArchiveUrl('ChromiumWebRTC',
     'chromium-webrtc-rel-mac-builder',
     'mac')
 
-tests = ['pyauto_webrtc_tests']
+tests = [
+    'pyauto_webrtc_tests',
+    'pyauto_webrtc_apprtc_test',
+    'pyauto_webrtc_quality_tests',
+    'webrtc_manual_browser_tests',
+    'webrtc_manual_content_browsertests',
+    'webrtc_content_unittests',
+    'webrtc_perf_content_unittests',
+]
 
 defaults['category'] = 'mac'
 
