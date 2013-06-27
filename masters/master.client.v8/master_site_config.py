@@ -12,5 +12,3 @@ class V8(Master.Master3):
   slave_port = 8136
   master_port_alt = 8236
   project_url = 'http://v8.googlecode.com'
-
-Master.perf_base_url = 'http://build.chromium.org/f/client/perf'
