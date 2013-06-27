@@ -198,7 +198,7 @@ F('rel_x64', win_out().ChromiumFactory(
     factory_properties={
       'trigger': 'win_x64_rel_trigger',
       'gclient_env': {
-        'GYP_DEFINES': 'component=static_library target_arch=x64',
+        'GYP_DEFINES': 'component=shared_library target_arch=x64',
         'GYP_MSVS_VERSION': '2012',
       }}))
 
