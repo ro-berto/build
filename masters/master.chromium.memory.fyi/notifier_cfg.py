@@ -15,6 +15,7 @@ categories_steps = {
   'memory_tester': [
     'start_crash_handler',
     # Please keep the list below sorted.
+    'memory test: app_list',
     'memory test: ash_unittests',
     'memory test: aura',
     'memory test: base_unittests',
@@ -28,6 +29,7 @@ categories_steps = {
     'memory test: googleurl',
     'memory test: ipc_tests',
     'memory test: media',
+    'memory test: message_center',
     'memory test: net',
     'memory test: printing',
     'memory test: remoting',
@@ -45,6 +47,7 @@ categories_steps = {
    ],
   'heapcheck_tester': [
     # Please keep this list sorted.
+    'heapcheck test: app_list',
     'heapcheck test: ash_unittests',
     'heapcheck test: aura',
     'heapcheck test: base_unittests',
@@ -57,6 +60,7 @@ categories_steps = {
     'heapcheck test: googleurl',
     'heapcheck test: ipc_tests',
     'heapcheck test: media',
+    'heapcheck test: message_center',
     'heapcheck test: net',
     'heapcheck test: printing',
     'heapcheck test: remoting',
