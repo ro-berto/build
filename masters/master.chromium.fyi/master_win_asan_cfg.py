@@ -77,9 +77,6 @@ F('win_asan_rel', win().ChromiumASANFactory(
             ),
         },
         'trigger': 'win_asan_rel_trigger',
-        'archive_build': True,
-        'gs_acl': 'public-read',
-        'gs_bucket': 'chromium-browser-syzyasan',
     }))
 
 #
