@@ -1016,7 +1016,10 @@ def main():
 
     rev_behind = int(revisions[-1]) - lkgr
     VerbosePrint('%s LKGR is behind by %s revisions' % (lkgr_type, rev_behind))
-    VerbosePrint('See LKGR status at http://build.chromium.org/p/chromium/lkgr-status/')
+    # Make sure there is whitespace between the link below and the next line,
+    # to avoid e.g. gmail using the timestamp from the following line
+    # as the link target.
+    VerbosePrint('See LKGR status at http://build.chromium.org/p/chromium/lkgr-status/ .')
     if rev_behind > options.allowed_gap:
       SendMail(sender, error_recipients,
                '%s%s LKGR (%s) > %s revisions behind' %
