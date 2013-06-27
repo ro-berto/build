@@ -18,11 +18,15 @@ from common import chromium_utils
 
 
 def main():
-  master_urls = ['http://build.chromium.org/p/chromium.fyi']
+  master_urls = ['http://build.chromium.org/p/chromium']
+
+  json = os.path.join(SLAVE_DIR, 'gatekeeper.json')
+  args = ['-v', '--no-email-app', '--json=%s' % json]
 
   script = os.path.join(SLAVE_DIR, 'gatekeeper_ng.py')
   cmd = [sys.executable, script]
 
+  cmd.extend(args)
   cmd.extend(master_urls)
 
   stream = annotator.StructuredAnnotationStream(seed_steps=['gatekeeper_ng'])

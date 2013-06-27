@@ -187,7 +187,6 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
       logging.debug('  unsatisfied steps: %s', ', '.join(unsatisfied_steps))
       logging.debug('  set to close tree: %s', close_tree)
       logging.debug('  build failed: %s', bool(unsatisfied_steps))
-      logging.debug('  build_json: %s', json.dumps(build_json))
       logging.debug('----')
 
 
