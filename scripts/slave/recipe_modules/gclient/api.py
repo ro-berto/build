@@ -72,10 +72,14 @@ class GclientApi(recipe_api.RecipeApi):
       if s.revision is not None:
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
+    steps = [
+      gclient(step_name('setup'), 'config', '--spec', spec_string)
+    ]
+
     if not cfg.GIT_MODE:
-      clean_step = self.revert(step_name)
-      sync_step = gclient(
-          step_name('sync'), 'sync', '--nohooks', *revisions)
+      steps.append(self.revert(step_name))
+      steps.append(gclient(
+          step_name('sync'), 'sync', '--nohooks', *revisions))
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -90,19 +94,18 @@ class GclientApi(recipe_api.RecipeApi):
       # have a reliable gclient method to produce a pristine working dir for
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
-      clean_step = None
-      sync_step = gclient(step_name('sync'),
+      steps.append(gclient(step_name('sync'),
         'sync', '--verbose', '--with_branch_heads', '--nohooks',
         '--reset', '--delete_unversioned_trees', '--force', '--upstream',
-        *revisions)
+        '--no-nag-max', *revisions))
 
-    steps = [
-      gclient(step_name('setup'), 'config', '--spec', spec_string)
-    ]
-    if clean_step:
-      steps.append(clean_step)
-    if sync_step:
-      steps.append(sync_step)
+      cfg_cmds = [
+        ('user.name', 'local_bot'),
+        ('user.email', 'local_bot@example.com'),
+      ]
+      for var, val in cfg_cmds:
+        name = step_name('recurse (git config %s)' % var)
+        steps.append(gclient(name, 'recurse', 'git', 'config', var, val))
 
     self.m.path.set_checkout(self.m.path.slave_build(cfg.solutions[0].name))
 

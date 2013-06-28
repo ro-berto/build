@@ -2,11 +2,19 @@
   {
    "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "config", "--spec", "deps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {'src/third_party/WebKit': 'https://chromium.googlesource.com/chromium/blink.git'}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_revision': 'HEAD', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'https://chromium.googlesource.com/chromium/src.git'}]\ntarget_os = []\ntarget_os_only = False"],
    "name": "gclient setup",
-   "seed_steps": ["gclient setup", "gclient sync", "apply_issue", "gclient runhooks", "compile", "webkit_unit_tests", "webkit_lint"]
+   "seed_steps": ["gclient setup", "gclient sync", "gclient recurse (git config user.name)", "gclient recurse (git config user.email)", "apply_issue", "gclient runhooks", "compile", "webkit_unit_tests", "webkit_lint"]
   },
   {
-   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "sync", "--verbose", "--with_branch_heads", "--nohooks", "--reset", "--delete_unversioned_trees", "--force", "--upstream"],
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "sync", "--verbose", "--with_branch_heads", "--nohooks", "--reset", "--delete_unversioned_trees", "--force", "--upstream", "--no-nag-max"],
    "name": "gclient sync"
+  },
+  {
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "recurse", "git", "config", "user.name", "local_bot"],
+   "name": "gclient recurse (git config user.name)"
+  },
+  {
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "recurse", "git", "config", "user.email", "local_bot@example.com"],
+   "name": "gclient recurse (git config user.email)"
   },
   {
    "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\apply_issue.py", "-r", "[SLAVE_BUILD_ROOT]\\src\\third_party\\WebKit", "-i", 12853011, "-p", 1, "-s", "https://chromiumcodereview.appspot.com", "-e", "commit-bot@chromium.org"],
