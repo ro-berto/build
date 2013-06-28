@@ -55,6 +55,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('v8initializers'): f.AddV8Initializers()
     if R('v8testing'): f.AddV8Testing()
     if R('fuzz'): f.AddFuzzer()
+    if R('webkit'): f.AddV8Webkit()
     if R('test262'): f.AddV8Test262()
     if R('mozilla'): f.AddV8Mozilla()
     if R('gcmole'): f.AddV8GCMole()

@@ -100,6 +100,14 @@ class V8Commands(commands.FactoryCommands):
                      timeout=3600,
                      workdir='build/v8/')
 
+  def AddV8Webkit(self, properties=None):
+    if self._target_platform == 'win32':
+      self.AddTaskkillStep()
+    cmd = self.GetV8TestingCommand()
+    cmd += ['--testname', 'webkit']
+    self.AddTestStep(shell.ShellCommand, 'Webkit', cmd,
+                     timeout=3600, workdir='build/v8/')
+
   def AddV8Test262(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
