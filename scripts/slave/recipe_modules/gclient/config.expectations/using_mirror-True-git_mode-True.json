@@ -72,7 +72,12 @@
     "solutions": [
       {
         "custom_deps": {}, 
-        "custom_vars": {}, 
+        "custom_vars": {
+          "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
+          "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+        }, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src", 
@@ -89,7 +94,12 @@
     "solutions": [
       {
         "custom_deps": {}, 
-        "custom_vars": {}, 
+        "custom_vars": {
+          "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
+          "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+        }, 
         "deps_file": "", 
         "managed": true, 
         "name": "src", 

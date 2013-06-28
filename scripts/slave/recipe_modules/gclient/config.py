@@ -69,6 +69,11 @@ def chromium_bare(c):
   s = c.solutions.add()
   s.name = 'src'
   s.url = ChromiumSrcURL(c)
+  s.custom_vars = mirror_only(c, {
+    'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s',
+    'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk',
+    'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s',
+    'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'})
 
 @config_ctx(includes=['chromium_bare'])
 def chromium_empty(c):
@@ -80,11 +85,6 @@ def chromium(c):
   s.custom_deps = mirror_only(c, {
     'src/third_party/WebKit/LayoutTests': None,
     'src/webkit/data/layout_tests/LayoutTests': None})
-  s.custom_vars = mirror_only(c, {
-    'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s',
-    'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk',
-    'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s',
-    'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'})
 
 @config_ctx()
 def blink_bare(c):
