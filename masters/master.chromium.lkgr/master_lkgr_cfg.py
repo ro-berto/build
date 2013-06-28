@@ -153,6 +153,7 @@ F('linux_tsan_rel', linux().ChromiumFactory(
        'cf_archive_name': 'tsan',
        'gs_bucket': 'gs://chromium-browser-tsan',
        'gs_acl': 'public-read',
+       'tsan': True,
        'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
 
 B('TSAN Debug', 'linux_tsan_dbg', 'compile', 'chromium_lkgr')
@@ -166,6 +167,7 @@ F('linux_tsan_dbg', linux().ChromiumFactory(
        'cf_archive_name': 'tsan',
        'gs_bucket': 'gs://chromium-browser-tsan',
        'gs_acl': 'public-read',
+       'tsan': True,
        'gclient_env': {'GYP_DEFINES': tsan_gyp}}))
 
 ################################################################################
