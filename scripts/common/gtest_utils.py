@@ -178,6 +178,38 @@ class GTestLogParser(object):
     # Track line number for error messages.
     self._line_number += 1
 
+    # Some tests (net_unittests in particular) run subprocesses which can write
+    # stuff to shared stdout buffer. Sometimes such output appears between new
+    # line and gtest directives ('[  RUN  ]', etc) which breaks the parser.
+    # Code below tries to detect such cases and recognize a mixed line as two
+    # separate lines.
+
+    # List of regexps that parses expects to find at the start of a line but
+    # which can be somewhere in the middle.
+    gtest_regexps = [
+      self._test_start,
+      self._test_ok,
+      self._test_fail,
+      self._test_passed,
+    ]
+
+    for regexp in gtest_regexps:
+      match = regexp.search(line)
+      if match:
+        break
+
+    if not match or match.start() == 0:
+      self._ProcessLine(line)
+    else:
+      self._ProcessLine(line[:match.start()])
+      self._ProcessLine(line[match.start():])
+
+  def _ProcessLine(self, line):
+    """Parses the line and changes the state of parsed tests accordingly.
+
+    Will recognize newly started tests, OK or FAILED statuses, timeouts, etc.
+    """
+
     # Note: When sharding, the number of disabled and flaky tests will be read
     # multiple times, so this will only show the most recent values (but they
     # should all be the same anyway).

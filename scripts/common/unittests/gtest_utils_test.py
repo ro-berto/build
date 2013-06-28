@@ -159,6 +159,32 @@ TEST_DATA_CRASH = """
 Oops, this test crashed!
 """
 
+TEST_DATA_MIXED_STDOUT = """
+[==========] Running 3 tests from 3 test cases.
+[----------] Global test environment set-up.
+
+[----------] 1 tests from WebSocketHandshakeHandlerSpdy3Test
+[ RUN      ] WebSocketHandshakeHandlerSpdy3Test.RequestResponse
+[       OK ] WebSocketHandshakeHandlerSpdy3Test.RequestResponse (1 ms)
+[----------] 1 tests from WebSocketHandshakeHandlerSpdy3Test (1 ms total)
+
+[----------] 1 test from URLRequestTestFTP
+[ RUN      ] URLRequestTestFTP.UnsafePort
+FTP server started on port 32841...
+sending server_data: {"host": "127.0.0.1", "port": 32841} (36 bytes)
+starting FTP server[       OK ] URLRequestTestFTP.UnsafePort (300 ms)
+[----------] 1 test from URLRequestTestFTP (300 ms total)
+
+[ RUN      ] TestFix.TestCase
+[1:2/3:WARNING:extension_apitest.cc(169)] Workaround for 177163,
+prematurely stopping test
+[       OK ] X (1000ms total)
+
+[----------] 1 test from Crash
+[ RUN      ] Crash.Test
+Oops, this test crashed!
+"""
+
 VALGRIND_HASH = 'B254345E4D3B6A00'
 
 VALGRIND_SUPPRESSION = """Suppression (error hash=#%(hash)s#):
@@ -473,6 +499,17 @@ class TestGTestLogParserTests(unittest.TestCase):
     test_name = 'HunspellTest.Crashes'
     self.assertEqual('\n'.join(['%s: ' % test_name, 'Did not complete.']),
                      '\n'.join(parser.FailureDescription(test_name)))
+
+  def testGTestLogParserMixedStdout(self):
+    parser = gtest_utils.GTestLogParser()
+    for line in TEST_DATA_MIXED_STDOUT.splitlines():
+      parser.ProcessLine(line)
+
+    self.assertEqual([], parser.ParsingErrors())
+    self.assertEqual(['Crash.Test'], parser.RunningTests())
+    self.assertEqual(['TestFix.TestCase', 'Crash.Test'], parser.FailedTests())
+    self.assertEqual(0, parser.DisabledTests())
+    self.assertEqual(0, parser.FlakyTests())
 
   def testGTestLogParserValgrind(self):
     parser = gtest_utils.GTestLogParser()
