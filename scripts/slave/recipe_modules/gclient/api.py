@@ -93,7 +93,8 @@ class GclientApi(recipe_api.RecipeApi):
       clean_step = None
       sync_step = gclient(step_name('sync'),
         'sync', '--verbose', '--with_branch_heads', '--nohooks',
-        '--reset', '--delete_unversioned_trees', '--force', *revisions)
+        '--reset', '--delete_unversioned_trees', '--force', '--upstream',
+        *revisions)
 
     steps = [
       gclient(step_name('setup'), 'config', '--spec', spec_string)

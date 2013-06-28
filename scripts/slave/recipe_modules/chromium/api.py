@@ -19,7 +19,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     assert isinstance(targets, (list, tuple))
 
     args = [
-      'python', self.m.path.build('scripts', 'slave', 'compile.py'),
       '--target', self.c.BUILD_CONFIG,
       '--build-dir', self.m.path.checkout(self.c.build_dir)]
     if self.c.compile_py.build_tool:
@@ -28,38 +27,42 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--compiler', self.c.compile_py.compiler]
     args.append('--')
     args.extend(targets)
-    return self.m.step('compile', args)
+    return self.m.python('compile',
+                         self.m.path.build('scripts', 'slave', 'compile.py'),
+                         args)
 
   def runtests(self, test, args=None, xvfb=False, name=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
 
-    python_arg = []
     t_name, ext = self.m.path.splitext(self.m.path.basename(test))
-    if ext == '.py':
-      python_arg = ['--run-python-script']
-    elif self.m.platform.is_win and ext == '':
+    if self.m.platform.is_win and ext == '':
       test += '.exe'
 
-    test_args = [test] + args
-
-    return self.m.step(name or t_name, [
-      'python', self.m.path.build('scripts', 'slave', 'runtest.py'),
+    full_args = [
       '--target', self.c.BUILD_CONFIG,
       '--build-dir', self.m.path.checkout(self.c.build_dir),
-      ('--xvfb' if xvfb else '--no-xvfb')]
-      + self.m.json.property_args()
-      + python_arg
-      + test_args,
+      ('--xvfb' if xvfb else '--no-xvfb')
+    ]
+    full_args += self.m.json.property_args()
+    if ext == '.py':
+      full_args.append('--run-python-script')
+    full_args.append(test)
+    full_args.extend(args)
+
+    return self.m.python(
+      name or t_name,
+      self.m.path.build('scripts', 'slave', 'runtest.py'),
+      full_args,
       **kwargs
     )
 
   def runhooks(self):
     """Run the build-configuration hooks for chromium."""
-    return self.m.step(
+    return self.m.python(
       'gclient runhooks',
-      [self.m.path.depot_tools('gclient', wrapper=True), 'runhooks'],
+      self.m.path.depot_tools('gclient.py'), ['runhooks'],
       env=self.c.gyp_env.as_jsonish(),
     )
 

@@ -4,5 +4,5 @@ DEPS = [
   'path',
   'platform',
   'properties',
-  'step',
+  'python',
 ]

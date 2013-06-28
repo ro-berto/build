@@ -33,7 +33,7 @@ def main():
               gclient_config)
     return 0
 
-  cmd = [gclient_command, 'revert', '--nohooks']
+  cmd = [gclient_command, 'revert', '--nohooks', '--upstream']
   return chromium_utils.RunCommand(cmd, cwd=build_directory)
 
 

@@ -5,7 +5,7 @@
    "seed_steps": ["gclient setup", "gclient sync"]
   },
   {
-   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/gclient.py", "sync", "--verbose", "--with_branch_heads", "--nohooks", "--reset", "--delete_unversioned_trees", "--force"],
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/gclient.py", "sync", "--verbose", "--with_branch_heads", "--nohooks", "--reset", "--delete_unversioned_trees", "--force", "--upstream"],
    "name": "gclient sync"
   },
   {
