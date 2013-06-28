@@ -995,8 +995,12 @@ class AnnotationObserver(buildstep.LogLineObserver):
       step_name = m[0]
       # Ignore duplicate consecutive step labels (for robustness).
       if step_name != self.sections[-1]['name']:
-        # Finish up last section.
-        self.finishCursor()
+        # Don't close already closed steps or the initial step
+        # when using BUILD_STEP.
+        if not (self.cursor['step'].isFinished() or
+                self.cursor == self.sections[0]):
+          # Finish up last section.
+          self.finishCursor()
         section = self.addSection(step_name)
         self.startStep(section)
         self.cursor = section

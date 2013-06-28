@@ -429,5 +429,12 @@ class AnnotatorCommandsTest(unittest.TestCase):
                                   'Experimental Compile android_experimental ',
                                   'Zip build'])
 
+  def testRealOutputBuildStepSeedStep(self):
+    with open(os.path.join(test_env.DATA_PATH,
+                           'build_step_seed_step_annotator.txt')) as f:
+      for line in f.readlines():
+        self.handleOutputLine(line.rstrip())
+
+
 if __name__ == '__main__':
   unittest.main()
