@@ -48,13 +48,14 @@ class ASANitizer(object):
             '--input-image=%s' % pe_image,
             '--output-image=%s' % out_pe,
             '--output-pdb=%s' % out_pdb,
-            '2>&1'  # Combine stderr+stdout so that they're in order
         ]
 
         for fname in filter(os.path.exists, (out_pe, out_pdb)):
           os.remove(fname)
 
-        proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        proc = subprocess.Popen(command,
+                                stderr=subprocess.STDOUT,
+                                stdout=subprocess.PIPE)
         stdout, _ = proc.communicate()
         retval = proc.returncode
 
@@ -92,15 +93,22 @@ def UpdateAsanRuntime(full_directory, runtime_path):
   BLACKLIST.add(fname)
 
 
-def GetCompatiblePDB(pe_image):
+def GetCompatiblePDB(pe_image, pdbfind_exe):
   """Returns <path to pdb> or None (if no good pdb exists)."""
-  # TODO(iannucci): Use PE header to look up pdb name.
-  # for now, assume that the pdb is always just PE.pdb
-  pdb_path = pe_image+'.pdb'
-  return pdb_path if os.path.exists(pdb_path) else None
+  try:
+    command = [pdbfind_exe, pe_image]
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE)
+    pdb_path, _ = proc.communicate()
+    pdb_path = pdb_path.splitlines()[0]
+    retval = proc.returncode
+    if retval == 0:
+      return pdb_path
+    return None
+  except Exception:
+    return None
 
 
-def FindFilesToAsan(directory):
+def FindFilesToAsan(directory, pdbfind_exe):
   """Finds eligible PE images in given directory.
 
   A PE image is eligible if it has a corresponding pdb and doesn't already have
@@ -123,7 +131,7 @@ def FindFilesToAsan(directory):
         subdirs.remove(sdir)
 
     for pe_image in (os.path.join(root, f) for f in files if GoodExeOrDll(f)):
-      pdb = GetCompatiblePDB(pe_image)
+      pdb = GetCompatiblePDB(pe_image, pdbfind_exe)
       if not pdb:
         print >> sys.stderr, 'PDB for "%s" does not exist.' % pe_image
         continue
@@ -132,9 +140,9 @@ def FindFilesToAsan(directory):
   return ret
 
 
-def ApplyAsanToBuild(full_directory, instrument_exe, jobs):
+def ApplyAsanToBuild(full_directory, instrument_exe, pdbfind_exe, jobs):
   """Applies ASAN to all exe's/dll's in the build directory."""
-  to_asan = FindFilesToAsan(full_directory)
+  to_asan = FindFilesToAsan(full_directory, pdbfind_exe)
 
   if not to_asan:
     print >> sys.stderr, 'No files to ASAN!'
@@ -170,6 +178,7 @@ def main():
   default_asan_dir = os.path.join(
       os.pardir, 'third_party', 'syzygy', 'binaries', 'exe')
   default_instrument_exe = os.path.join(default_asan_dir, 'instrument.exe')
+  default_pdbfind_exe = os.path.join(default_asan_dir, 'pdbfind.exe')
   default_runtime_path = os.path.join(default_asan_dir, 'asan_rtl.dll')
 
   parser = optparse.OptionParser()
@@ -185,6 +194,10 @@ def main():
   parser.add_option(
       '--instrument_exe', default=default_instrument_exe,
       help='Specify the path to the ASAN instrument.exe relative to '
+           'build-dir (%default).')
+  parser.add_option(
+      '--pdbfind_exe', default=default_pdbfind_exe,
+      help='Specify the path to the ASAN pdbfind.exe relative to '
            'build-dir (%default).')
   parser.add_option(
       '--runtime_path', default=default_runtime_path,
@@ -207,6 +220,10 @@ def main():
       options.build_dir, options.instrument_exe)
   if not os.path.exists(options.instrument_exe):
     parser.error('Could not find instrument_exe: %s' % options.instrument_exe)
+  options.pdbfind_exe = os.path.join(
+      options.build_dir, options.pdbfind_exe)
+  if not os.path.exists(options.pdbfind_exe):
+    parser.error('Could not find pdbfind_exe: %s' % options.pdbfind_exe)
   options.runtime_path = os.path.join(
       options.build_dir, options.runtime_path)
   if not os.path.exists(options.runtime_path):
@@ -215,8 +232,10 @@ def main():
   print 'Default BLACKLIST is: %r' % BLACKLIST
 
   UpdateAsanRuntime(options.full_directory, options.runtime_path)
-  return ApplyAsanToBuild(
-      options.full_directory, options.instrument_exe, options.jobs)
+  return ApplyAsanToBuild(options.full_directory,
+                          options.instrument_exe,
+                          options.pdbfind_exe,
+                          options.jobs)
 
 
 if __name__ == '__main__':
