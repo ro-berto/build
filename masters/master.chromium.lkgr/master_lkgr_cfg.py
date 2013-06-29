@@ -39,6 +39,22 @@ F('win_full', win().ChromiumFactory(
                         'gs_bucket': 'gs://chromium-browser-continuous',
                         'gs_acl': 'public-read',}))
 
+B('Win x64', 'win_x64_full', 'windows', 'chromium_lkgr')
+F('win_x64_full', win().ChromiumFactory(
+    clobber=True,
+    compile_timeout=4800,  # Release build is LOOONG
+    target='Release_x64',
+    options=['--build-tool=ninja', '--', 'all'],
+    factory_properties={
+      'archive_build': ActiveMaster.is_production_host,
+      'gclient_env': {
+        'GYP_DEFINES': 'component=static_library target_arch=x64',
+        'GYP_MSVS_VERSION': '2012',
+      },
+      'gs_bucket': 'gs://chromium-browser-continuous',
+      'gs_acl': 'public-read',
+    }))
+
 ################################################################################
 ## Mac
 ################################################################################
