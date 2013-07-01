@@ -82,6 +82,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
       'crypto_unittests',
       'device_unittests',
       'gpu_unittests',
+      'interactive_ui_tests',
       'ipc_tests',
       'jingle_unittests',
       'media_unittests',
@@ -159,6 +160,7 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
       'browser_tests',
       'cc_unittests',
       'content_browsertests',
+      'interactive_ui_tests',
     ],
     factory_properties={
       'asan': True,

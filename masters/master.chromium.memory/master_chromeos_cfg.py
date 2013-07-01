@@ -141,6 +141,7 @@ asan_tests_1 = [
 
 asan_tests_2 = [
   'browser_tests',
+  'interactive_ui_tests',
   'net',
 ]
 
