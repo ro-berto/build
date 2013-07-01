@@ -27,7 +27,7 @@ class AnnotatorCommands(commands.FactoryCommands):
     self._call_counts['AddAnnotatedScript'] += 1
     factory_properties = factory_properties or {}
     runner = self.PathJoin(self._script_dir, 'annotated_run.py')
-    cmd = [self._python, runner]
+    cmd = [self._python, '-u', runner]
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self._factory.addStep(chromium_step.AnnotatedCommand,
