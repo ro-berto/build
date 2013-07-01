@@ -1041,7 +1041,6 @@ class ChromiumCommands(commands.FactoryCommands):
     archive_results = factory_properties.get('archive_webkit_results')
     layout_part = factory_properties.get('layout_part')
     test_results_server = factory_properties.get('test_results_server')
-    platform = factory_properties.get('layout_test_platform')
     enable_hardware_gpu = factory_properties.get('enable_hardware_gpu')
     layout_tests = factory_properties.get('layout_tests')
     time_out_ms = factory_properties.get('time_out_ms')
@@ -1077,8 +1076,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     if test_results_server:
       cmd_args.extend(['--test-results-server', test_results_server])
-    if platform:
-      cmd_args.extend(['--platform', platform])
 
     if time_out_ms:
       cmd_args.extend(['--time-out-ms', time_out_ms])

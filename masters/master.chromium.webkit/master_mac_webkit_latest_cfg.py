@@ -76,7 +76,6 @@ F('f_webkit_mac_rel', mac().ChromiumFactory(
             'GYP_DEFINES':'fastbuild=1',
             'GYP_GENERATORS':'ninja',
         },
-        'layout_test_platform': 'chromium-mac',
         'blink_config': 'blink',
     }))
 
@@ -92,7 +91,6 @@ F('f_webkit_rel_tests_106', mac().ChromiumFactory(
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
-        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
     }))
@@ -105,7 +103,6 @@ F('f_webkit_rel_tests_107', mac().ChromiumFactory(
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
-        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
     }))
@@ -119,7 +116,6 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
-        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
     }))
@@ -153,7 +149,6 @@ F('f_webkit_mac_dbg', mac().ChromiumFactory(
         'gclient_env': {
             'GYP_GENERATORS':'ninja',
         },
-        'layout_test_platform': 'chromium-mac',
         'blink_config': 'blink',
     }))
 
@@ -171,7 +166,6 @@ F('f_webkit_dbg_tests', mac().ChromiumFactory(
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
-        'layout_test_platform': 'chromium-mac',
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
     }))

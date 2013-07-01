@@ -64,7 +64,6 @@ F('f_webkit_mac_rel', mac_out().ChromiumFactory(
         'gclient_env': {
             'GYP_GENERATORS':'ninja',
         },
-        'layout_test_platform': 'chromium-mac',
     }))
 
 #
@@ -82,7 +81,6 @@ F('f_webkit_rel_tests', mac().ChromiumFactory(
       ],
       'archive_webkit_results': ActiveMaster.is_production_host,
       'generate_gtest_json': True,
-      'layout_test_platform': 'chromium-mac',
       'test_results_server': 'test-results.appspot.com',
     }))
 
