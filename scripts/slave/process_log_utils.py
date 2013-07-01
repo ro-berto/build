@@ -128,6 +128,11 @@ class PerformanceLogProcessor(object):
 
     self._webkit_revision = webkit_revision
 
+    if build_property and factory_properties.get('show_v8_revision'):
+      self._v8_revision = build_property.get('got_v8_revision', 'undefined')
+    else:
+      self._v8_revision = 'undefined'
+
     if build_property:
       self._version = build_property.get('version') or 'undefined'
       self._channel = build_property.get('channel') or 'undefined'
@@ -776,10 +781,11 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       important = ''
     if not self._revision:
       raise Exception('revision is None')
-    return ('{"traces": {%s}, "rev": "%s", "webkit_rev": "%s",'
+    return ('{"traces": {%s}, "rev": "%s", "webkit_rev": "%s", "v8_rev": "%s",'
             ' "ver": "%s", "chan": "%s", "units": "%s"%s}'
-            % (trace_json, self._revision, self._webkit_revision, self._version,
-               self._channel, graph.units, important))
+            % (trace_json, self._revision, self._webkit_revision,
+               self._v8_revision, self._version, self._channel, graph.units,
+               important))
 
   def _FinalizeProcessing(self):
     self.__CreateSummaryOutput()

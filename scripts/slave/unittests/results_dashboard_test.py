@@ -64,7 +64,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -85,6 +85,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
         }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -93,7 +94,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -102,6 +103,7 @@ class ResultsDashboardTest(unittest.TestCase):
         '7890', self.build_dir,
         {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
             'r_foo': 'SHA1',
             'r_bar': 'SHA2',
         }]
@@ -117,6 +119,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
             'r_foo': 'SHA1',
             'r_bar': 'SHA2',
         }}])]
@@ -127,9 +130,11 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789", "units": "ms"}',
+         ' "rev": "12345", "webkit_rev": "6789",'
+         ' "v8_rev": "2345", "units": "ms"}',
          '{"traces": {"bam": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789", "units": ""}'],
+         ' "rev": "12345", "webkit_rev": "6789",'
+         ' "v8_rev": "2345", "units": ""}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -151,6 +156,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }},{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -163,6 +169,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -171,7 +178,8 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"one": ["1.0", "5.0"], "two": ["2.0", "0.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789", "units": "ms", '
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345",'
+         ' "units": "ms", '
          '"important": ["one"]}'],
         'linux-release',
         'foo',
@@ -195,6 +203,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }},{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -208,6 +217,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -216,9 +226,9 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat', [
             '{"traces": {"baz": ["100.0", "5.0"]},'
-            ' "rev": "12345", "webkit_rev": "6789"}',
+            ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}',
             '{"traces": {"box": ["101.0", "4.0"]},'
-            ' "rev": "12345", "webkit_rev": "6789"}'],
+            ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -239,6 +249,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }}, {
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -251,6 +262,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -260,7 +272,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'bar-summary.dat',
         ['{"traces": {"bar": ["100.0", "5.0"], "bar_ref": ["99.0", "2.0"],'
          ' "baz/y": ["101.0", "3.0"], "notchanged": ["102.0", "1.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -281,6 +293,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }},{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -293,6 +306,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }}, {
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -305,6 +319,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }},{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
@@ -317,6 +332,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
     }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -325,7 +341,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar_by_url-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -346,6 +362,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
         }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -356,6 +373,7 @@ class ResultsDashboardTest(unittest.TestCase):
         ['{"traces": {"mean_frame_time": ["77.0964285714", "138.142773233"]},'
          ' "rev": "2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f",'
          ' "webkit_rev": "bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc88",'
+         ' "v8_rev": "bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc87",'
          ' "ver": "undefined", "chan": "undefined", "units": "ms",'
          ' "important": ["mean_frame_time"]}'],
         'linux-release',
@@ -381,6 +399,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'supplemental_columns': {
             'r_chromium_rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
             'r_webkit_rev': 'bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc88',
+            'r_v8_rev': 'bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc87',
         }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
@@ -389,7 +408,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -410,13 +429,14 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
         }}])]
     errors = [urllib2.URLError('reason')]
     self._SendResults(args, expected_new_json, errors)
     args2 = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["101.0", "6.0"]},'
-         ' "rev": "12346", "webkit_rev": "6790"}'],
+         ' "rev": "12346", "webkit_rev": "6790", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -437,6 +457,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6790',
+            'r_v8_rev': '2345',
         }
     }]))
     errors = [None, None]
@@ -446,7 +467,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -467,13 +488,14 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
         }}])]
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
     args2 = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["101.0", "6.0"]},'
-         ' "rev": "12346", "webkit_rev": "6790"}'],
+         ' "rev": "12346", "webkit_rev": "6790", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -494,6 +516,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6790',
+            'r_v8_rev': '2345',
         }
     }])]
     errors = [None]
@@ -503,7 +526,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["100.0", "5.0"]},'
-         ' "rev": "12345", "webkit_rev": "6789"}'],
+         ' "rev": "12345", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -524,6 +547,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
         }}])]
     errors = [urllib2.URLError('reason')]
     self._SendResults(args, expected_new_json, errors)
@@ -546,6 +570,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
             'supplemental_columns': {
                 'r_webkit_rev': '6789',
+                'r_v8_rev': '2345',
             }}]),
         json.dumps([{
             'master': 'ChromiumPerf',
@@ -559,6 +584,7 @@ class ResultsDashboardTest(unittest.TestCase):
             'buildnumber': '7890',
             'supplemental_columns': {
                 'r_webkit_rev': '6789',
+                'r_v8_rev': '2345',
             }}]),
         json.dumps([{
             'master': 'ChromiumPerf',
@@ -572,6 +598,7 @@ class ResultsDashboardTest(unittest.TestCase):
             'buildnumber': '7890',
             'supplemental_columns': {
                 'r_webkit_rev': '6789',
+                'r_v8_rev': '2345',
             }}])
     ])
     cache_file = open(self.cache_filename, 'wb')
@@ -580,7 +607,7 @@ class ResultsDashboardTest(unittest.TestCase):
     args = [
         'bar-summary.dat',
         ['{"traces": {"baz": ["102.0", "5.0"]},'
-         ' "rev": "12348", "webkit_rev": "6789"}'],
+         ' "rev": "12348", "webkit_rev": "6789", "v8_rev": "2345"}'],
         'linux-release',
         'foo',
         'https://chrome-perf.googleplex.com',
@@ -601,6 +628,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'buildnumber': '7890',
         'supplemental_columns': {
             'r_webkit_rev': '6789',
+            'r_v8_rev': '2345',
         }}])]
     errors = [urllib2.URLError('reason')]
     self._SendResults(args, expected_new_json, errors)

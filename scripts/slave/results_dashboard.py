@@ -135,6 +135,9 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       if 'webkit_rev' in data and data['webkit_rev'] != 'undefined':
         result.setdefault(
             'supplemental_columns', {})['r_webkit_rev'] = data['webkit_rev']
+      if 'v8_rev' in data and data['v8_rev'] != 'undefined':
+        result.setdefault(
+            'supplemental_columns', {})['r_v8_rev'] = data['v8_rev']
       if git_hash:
         result.setdefault(
             'supplemental_columns', {})['r_chromium_rev'] = git_hash
