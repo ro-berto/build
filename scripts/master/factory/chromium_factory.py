@@ -84,7 +84,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   # The map key is the test name. The map value is an array containing the
   # dependencies that are not needed when this test is not run.
   NEEDED_COMPONENTS = {
-    '^(webkit|avperf)$':
+    '^(webkit)$':
       [('src/webkit/data/layout_tests/LayoutTests', None),
        ('src/third_party/WebKit/LayoutTests', None),],
   }
@@ -865,7 +865,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('avperf'):
       # Performance test should be run on virtual X buffer.
       fp['use_xvfb_on_linux'] = True
-      f.AddWebkitTests(factory_properties=fp)
       f.AddMediaTests(factory_properties=fp, test_groups=self.MEDIA_TEST_GROUPS)
     if R('chromedriver_tests'):
       f.AddChromeDriverTest()
