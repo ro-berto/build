@@ -30,7 +30,7 @@ host = None
 port = None
 basedir = None
 keepalive = 300
-usepty = 1
+usepty = 0
 umask = None
 
 
