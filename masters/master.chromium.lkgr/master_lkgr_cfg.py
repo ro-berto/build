@@ -17,6 +17,7 @@ F = helper.Factory
 S = helper.Scheduler
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
+def win_out(): return chromium_factory.ChromiumFactory('src/out', 'win32')
 def linux(): return chromium_factory.ChromiumFactory('src/build', 'linux2')
 def mac(): return chromium_factory.ChromiumFactory('src/build', 'darwin')
 def linux_android(): return chromium_factory.ChromiumFactory(
@@ -40,7 +41,7 @@ F('win_full', win().ChromiumFactory(
                         'gs_acl': 'public-read',}))
 
 B('Win x64', 'win_x64_full', 'windows', 'chromium_lkgr')
-F('win_x64_full', win().ChromiumFactory(
+F('win_x64_full', win_out().ChromiumFactory(
     clobber=True,
     compile_timeout=4800,  # Release build is LOOONG
     target='Release_x64',
