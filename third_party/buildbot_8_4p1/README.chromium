@@ -3013,3 +3013,107 @@ index b656563..e48542d 100644
          return results
 
 
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/builder.py b/third_party/buildbot_8_4p1/buildbot/status/builder.py
+index 3f42eb6..c5bd1ec 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/builder.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/builder.py
+@@ -17,6 +17,7 @@
+ import weakref
+ import gc
+ import os, re, itertools
++import random
+ from cPickle import load, dump
+
+ from zope.interface import implements
+@@ -323,17 +324,58 @@ class BuilderStatus(styles.Versioned):
+     def getCategory(self):
+         return self.category
+
+-    def getBuild(self, number):
++    def _resolveBuildNumber(self, number):
+         if number < 0:
+             number = self.nextBuildNumber + number
+         if number < 0 or number >= self.nextBuildNumber:
+             return None
++        return number
+
++    def _safeGetBuild(self, build_number):
+         try:
+-            return self.getBuildByNumber(number)
++            return self.getBuildByNumber(build_number)
+         except IndexError:
+             return None
+
++    def getBuild(self, number):
++        number = self._resolveBuildNumber(number)
++
++        if number is None:
++            return None
++
++        return self._safeGetBuild(number)
++
++    def getBuilds(self, numbers):
++        """Cache-aware method to get multiple builds.
++
++        Prevents cascading evict/load when multiple builds are requested in
++        succession: requesting build 1 evicts build 2, requesting build 2 evicts
++        build 3, etc.
++
++        We query the buildCache and load hits first, then misses.  When loading,
++        we randomize the load order to alleviate the problem when external web
++        requests load builds sequentially (they don't have access to this
++        function).
++        """
++
++        numbers = list(enumerate(self._resolveBuildNumber(x) for x in numbers))
++        random.shuffle(numbers)
++
++        builds = [None] * len(numbers)
++        misses = []
++        for idx, build_number in numbers:
++            if build_number is None:
++                continue
++            if build_number in self.buildCache.cache:
++                builds[idx] = self._safeGetBuild(build_number)
++            else:
++                misses.append((idx, build_number))
++
++        for idx, build_number in misses:
++            builds[idx] = self._safeGetBuild(build_number)
++
++        return builds
++
+     def getEvent(self, number):
+         try:
+             return self.events[number]
+@@ -616,6 +658,11 @@ class BuilderStatus(styles.Versioned):
+         # Collect build numbers.
+         # Important: Only grab the *cached* builds numbers to reduce I/O.
+         current_builds = [b.getNumber() for b in self.currentBuilds]
++
++        # Populates buildCache with last N builds.
++        buildnums = range(-1, -(self.buildCacheSize - 1), -1)
++        self.getBuilds(buildnums)
++
+         cached_builds = list(set(self.buildCache.cache.keys() + current_builds))
+         cached_builds.sort()
+         result['cachedBuilds'] = cached_builds
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+index c357939..e7cd932 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/status_json.py
+@@ -641,8 +641,11 @@ class SlaveJsonResource(JsonResource):
+             if builderName not in buildercache:
+                 buildercache.add(builderName)
+                 builder_status = self.status.getBuilder(builderName)
+-                for i in range(1, builder_status.buildCacheSize - 1):
+-                    build_status = builder_status.getBuild(-i)
++
++                buildnums = range(-1, -(builder_status.buildCacheSize - 1), -1)
++                builds = builder_status.getBuilds(buildnums)
++
++                for build_status in builds:
+                     if not build_status or not build_status.isFinished():
+                         # If not finished, it will appear in runningBuilds.
+                         break
