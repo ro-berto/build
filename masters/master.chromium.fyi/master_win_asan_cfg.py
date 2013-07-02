@@ -13,7 +13,7 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-win = lambda: chromium_factory.ChromiumFactory('src/build', 'win32')
+win = lambda: chromium_factory.ChromiumFactory('src/out', 'win32')
 
 defaults['category'] = 'win asan'
 
@@ -66,7 +66,7 @@ B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
   auto_reboot=False, notify_on_missing=True)
 F('win_asan_rel', win().ChromiumASANFactory(
     slave_type='Builder',
-    project='all.sln;chromium_builder_tests',
+    options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
     compile_timeout=7200,
     factory_properties={
         'asan': True,
@@ -75,6 +75,7 @@ F('win_asan_rel', win().ChromiumASANFactory(
                 'asan=1 win_z7=1 chromium_win_pch=0 '
                 'component=static_library '
             ),
+            'GYP_GENERATORS': 'ninja',
         },
         'trigger': 'win_asan_rel_trigger',
     }))
