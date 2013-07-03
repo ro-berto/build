@@ -55,7 +55,7 @@ def GenSteps(api):
   yield _CheckoutSteps(api)
 
   tmp_path = api.path.slave_build('.tmp')
-  yield api.step('mktmp', ['mkdir', tmp_path])
+  yield api.step('mktmp', ['mkdir', '-p', tmp_path])
   yield api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
              cwd=api.path.checkout())
 
