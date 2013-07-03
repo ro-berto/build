@@ -1245,7 +1245,7 @@ def IsolatedImportFromPath(path, extra_paths=None):
   saved = sys.path
   sys.path = [dir_path] + (extra_paths or [])
   try:
-    return __import__(module_file, globals(), locals())
+    return __import__(module_file)
   except ImportError:
     pass
   finally:
