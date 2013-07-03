@@ -815,7 +815,8 @@ def main_linux(options, args):
   # Decide whether to enable the suid sandbox for Chrome.
   if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
       not options.factory_properties.get('asan', False) and
-      not options.factory_properties.get('tsan', False)):
+      not options.factory_properties.get('tsan', False) and
+      not options.factory_properties.get('lsan', False)):
     print 'Enabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
     extra_env['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
@@ -1184,7 +1185,8 @@ def main():
   print '[Running on builder: "%s"]' % options.builder_name
 
   if (options.factory_properties.get('asan', False) or
-      options.factory_properties.get('tsan', False)):
+      options.factory_properties.get('tsan', False) or
+      options.factory_properties.get('lsan', False)):
     # Instruct GTK to use malloc while running ASan or TSan tests.
     os.environ['G_SLICE'] = 'always-malloc'
     os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
@@ -1204,6 +1206,16 @@ def main():
     os.environ['TSAN_OPTIONS'] = tsan_options
     # Disable sandboxing under TSan for now. http://crbug.com/223602.
     args.append('--no-sandbox')
+  if options.factory_properties.get('lsan', False):
+    # Use the slow unwinder, because LSan stack traces often go through
+    # libstdc++, which is compiled without frame pointers.
+    # Also set verbosity=1 so LSan would always print suppression statistics.
+    os.environ['LSAN_OPTIONS'] = ('fast_unwind_on_malloc=0 '
+                                 'suppressions=src/tools/lsan/suppressions.txt '
+                                  'verbosity=1 ')
+    os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
+    # Disable sandboxing under LSan.
+    args.append('--no-sandbox')
   if options.factory_properties.get('asan', False):
     # TODO(glider): enable llvm-symbolizer on Darwin when the performance
     # problems are fixed. See http://crbug.com/246147.
@@ -1213,9 +1225,17 @@ def main():
     # Avoid aggressive memcmp checks until http://crbug.com/178677 is fixed.
     # Also do not replace memcpy/memmove/memset to suppress a report in OpenCL,
     # see http://crbug.com/162461.
-    # Disable the builtin online symbolizer, see http://crbug.com/243255.
-    os.environ['ASAN_OPTIONS'] = (
-        'strict_memcmp=0 replace_intrin=0 symbolize=false')
+    common_asan_options = 'strict_memcmp=0 replace_intrin=0 '
+    if options.factory_properties.get('lsan', False):
+      # On ASan+LSan bots we enable leak detection. Also, since sandbox is
+      # disabled under LSan, we can symbolize.
+      # fast_unwind_on_malloc must be passed in ASAN_OPTIONS in this case.
+      os.environ['ASAN_OPTIONS'] = (common_asan_options +
+                                    'detect_leaks=1 fast_unwind_on_malloc=0')
+      os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
+    else:
+      # Disable the builtin online symbolizer, see http://crbug.com/243255.
+      os.environ['ASAN_OPTIONS'] = (common_asan_options + 'symbolize=false')
   # Set the number of shards environement variables.
   if options.total_shards and options.shard_index:
     os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
