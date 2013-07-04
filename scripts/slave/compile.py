@@ -455,15 +455,17 @@ def main_xcode(options, args):
   # Set up the filter before changing directories so the raw build log can
   # be recorded.
   # Support a local file blocking filters (for debugging).  Also check the
-  # Xcode version to make sure it is 3.2, as that is what the filter is coded
-  # to.
+  # Xcode version to make sure it is 3.2 or has compatible output, as that is
+  # what the filter is coded to.
   xcodebuild_filter = None
   no_filter_path = os.path.join(os.getcwd(), 'no_xcodebuild_filter')
   xcode_info = chromium_utils.GetCommandOutput(['xcodebuild', '-version'])
   if os.path.exists(no_filter_path):
     print 'NOTE: "%s" exists, output is unfiltered' % no_filter_path
-  elif not xcode_info.startswith('Xcode 3.2.'):
-    print 'NOTE: Not using Xcode 3.2, output is unfiltered'
+  elif not xcode_info.startswith('Xcode 3.2.') and \
+       not xcode_info.startswith('Xcode 4.') and \
+       not xcode_info.startswith('Xcode 5.'):
+    print 'NOTE: Not using Xcode 3.2, 4.x, or 5.x, output is unfiltered'
   else:
     full_log_path = os.path.join(os.getcwd(), 'full_xcodebuild_log.txt')
     full_log = open(full_log_path, 'w')
