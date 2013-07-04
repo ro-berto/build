@@ -524,12 +524,6 @@ def generate_run_isolated_command(build_dir, test_exe_path, options, command):
                      '--tool_dir', tool_dir,
                      test_exe_path, '--'] + command
 
-  if (options.test_type in ['views_unittests', 'ui_unittests']
-      and options.build_properties.get('buildername') == 'linux_aura'):
-    # The two listed tests are excluded from runisolatedtest.py because
-    # they are flaky with runisolatedtest.
-    isolate_command = command
-
   return isolate_command
 
 
