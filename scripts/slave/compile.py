@@ -733,6 +733,10 @@ def main_ninja(options, args):
 
   # Prepare environment.
   env = EchoDict(os.environ)
+  # TODO(iannucci): Disabled goma for win x64 temporarily.
+  # https://code.google.com/p/chromium/issues/detail?id=256940
+  if options.target == 'Release_x64':
+    options.compiler = None
   orig_compiler = options.compiler
   goma_ready = goma_setup(options, env)
   if not goma_ready:
