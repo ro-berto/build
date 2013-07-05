@@ -210,6 +210,7 @@ def SetupAutoStartup(slave_machine, swarm_server, dimensionsfile):
     '-a', swarm_server,
     '-p', '443',
     '-r', '400',
+    '--keep_alive',
     '-v',
     dimensionsfile,
   ]
