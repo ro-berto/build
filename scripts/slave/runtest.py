@@ -873,7 +873,10 @@ def main_linux(options, args):
           server_dir=special_xvfb_dir)
 
     pipes = []
-    if options.factory_properties.get('asan', False):
+    # Plain ASan bots use a symbolizer script, whereas ASan+LSan and LSan bots
+    # use a built-in symbolizer.
+    if (options.factory_properties.get('asan', False) and
+        not options.factory_properties.get('lsan', False)):
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
@@ -1181,7 +1184,7 @@ def main():
   if (options.factory_properties.get('asan', False) or
       options.factory_properties.get('tsan', False) or
       options.factory_properties.get('lsan', False)):
-    # Instruct GTK to use malloc while running ASan or TSan tests.
+    # Instruct GTK to use malloc while running ASan, TSan or LSan tests.
     os.environ['G_SLICE'] = 'always-malloc'
     os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
     os.environ['NSS_DISABLE_UNLOAD'] = '1'
@@ -1201,13 +1204,14 @@ def main():
     # Disable sandboxing under TSan for now. http://crbug.com/223602.
     args.append('--no-sandbox')
   if options.factory_properties.get('lsan', False):
-    # Use the slow unwinder, because LSan stack traces often go through
-    # libstdc++, which is compiled without frame pointers.
-    # Also set verbosity=1 so LSan would always print suppression statistics.
-    os.environ['LSAN_OPTIONS'] = ('fast_unwind_on_malloc=0 '
-                                 'suppressions=src/tools/lsan/suppressions.txt '
-                                  'verbosity=1 ')
+    # Set verbosity=1 so LSan would always print suppression statistics.
+    os.environ['LSAN_OPTIONS'] = (
+        'suppressions=src/tools/lsan/suppressions.txt '
+        'verbosity=1 ')
     os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
+    # Use debug versions of shared libraries, otherwise the fast unwinder
+    # produces incomplete stack traces.
+    os.environ['LD_LIBRARY_PATH'] = '/usr/lib/debug/:/usr/lib32/debug/'
     # Disable sandboxing under LSan.
     args.append('--no-sandbox')
   if options.factory_properties.get('asan', False):
@@ -1223,9 +1227,8 @@ def main():
     if options.factory_properties.get('lsan', False):
       # On ASan+LSan bots we enable leak detection. Also, since sandbox is
       # disabled under LSan, we can symbolize.
-      # fast_unwind_on_malloc must be passed in ASAN_OPTIONS in this case.
       os.environ['ASAN_OPTIONS'] = (common_asan_options +
-                                    'detect_leaks=1 fast_unwind_on_malloc=0')
+                                    'detect_leaks=1')
       os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
     else:
       # Disable the builtin online symbolizer, see http://crbug.com/243255.
