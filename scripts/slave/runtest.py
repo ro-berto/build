@@ -1211,7 +1211,7 @@ def main():
     os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
     # Use debug versions of shared libraries, otherwise the fast unwinder
     # produces incomplete stack traces.
-    os.environ['LD_LIBRARY_PATH'] = '/usr/lib/debug/:/usr/lib32/debug/'
+    os.environ['LD_LIBRARY_PATH'] = '/usr/lib/x86_64-linux-gnu/debug'
     # Disable sandboxing under LSan.
     args.append('--no-sandbox')
   if options.factory_properties.get('asan', False):
