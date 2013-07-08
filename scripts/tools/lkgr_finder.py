@@ -820,6 +820,9 @@ def CheckLKGRLag(lag_age, rev_gap, allowed_lag_hrs, allowed_rev_gap):
   # When the tree is active, we don't want to back off much, or at all, to keep
   # the lag under control.
 
+  if rev_gap == 0:
+    return True
+
   lag_hrs = (lag_age.days * 24) + (lag_age.seconds / 3600)
   if not lag_hrs:
     return True
