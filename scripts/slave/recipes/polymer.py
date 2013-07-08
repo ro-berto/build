@@ -54,18 +54,29 @@ def _CheckoutSteps(api):
 def GenSteps(api):
   yield _CheckoutSteps(api)
 
-  tmp_path = api.path.slave_build('.tmp')
-  yield api.step('mktmp', ['mkdir', '-p', tmp_path])
-  yield api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
-             cwd=api.path.checkout())
+  if not api.platform.is_win:
+    tmp_path = api.path.slave_build('.tmp')
+    yield api.step('mktmp', ['mkdir', '-p', tmp_path])
+    npm_path = ['--tmp', tmp_path]
+  else:
+    npm_path = []
+
+  yield api.step('update-install', ['npm', 'install'] + npm_path,
+                 cwd=api.path.checkout())
 
   test_prefix = ['xvfb-run'] if api.platform.is_linux else []
   yield api.step('test', test_prefix+['grunt', 'test-buildbot'],
-             cwd=api.path.checkout(), allow_subannotations=True)
+                 cwd=api.path.checkout(), allow_subannotations=True)
 
 
 def GenTests(api):
-  yield 'polymer', {
-    'properties': api.properties_scheduled(
-        repository='https://github.com/Polymer/polymer'),
-  }
+  for plat in ('mac', 'linux', 'win'):
+    yield 'polymer-%s' % plat, {
+      'properties': api.properties_scheduled(
+          repository='https://github.com/Polymer/polymer'),
+      'mock': {
+        'platform': {
+            'name': plat
+        }
+      },
+    }
