@@ -188,7 +188,6 @@ processes = [
     'DumpRenderTree.exe',
     'flush_cache.exe',
     'gl_tests.exe',
-    'gpu_tests.exe',
     'ie_unittests.exe',
     'image_diff.exe',
     'installer_util_unittests.exe',

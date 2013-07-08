@@ -30,12 +30,12 @@ B('GPU Linux (NVIDIA)', 'f_gpu_linux_rel', scheduler='global_scheduler')
 F('f_gpu_linux_rel', linux().ChromiumFactory(
     target='Release',
     tests=[
-        'gl_tests',
         'content_gl_tests',
+        'gles2_conform_test',
+        'gl_tests',
+        'gpu_content_tests',
         'gpu_frame_rate',
         'gpu_throughput',
-        'gpu_tests',
-        'gpu_content_tests',
     ],
     options=[
         '--build-tool=ninja',
@@ -59,9 +59,9 @@ B('GPU Linux (dbg) (NVIDIA)', 'f_gpu_linux_dbg', scheduler='global_scheduler')
 F('f_gpu_linux_dbg', linux().ChromiumFactory(
     target='Debug',
     tests=[
-        'gl_tests',
         'content_gl_tests',
-        'gpu_tests',
+        'gles2_conform_test',
+        'gl_tests',
         'gpu_content_tests',
     ],
     options=[

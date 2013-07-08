@@ -30,12 +30,12 @@ F('f_gpu_mac_rel', mac().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_builder'],
     tests=[
-      'gl_tests',
       'content_gl_tests',
+      'gles2_conform_test',
+      'gl_tests',
+      'gpu_content_tests',
       'gpu_frame_rate',
       'gpu_throughput',
-      'gpu_tests',
-      'gpu_content_tests',
     ],
     factory_properties={
         'generate_gtest_json': True,
@@ -61,9 +61,9 @@ F('f_gpu_mac_dbg', mac().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang',
              'chromium_gpu_debug_builder'],
     tests=[
-      'gl_tests',
       'content_gl_tests',
-      'gpu_tests',
+      'gles2_conform_test',
+      'gl_tests',
       'gpu_content_tests',
     ],
     factory_properties={

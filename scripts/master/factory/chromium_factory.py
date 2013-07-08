@@ -710,14 +710,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gles2_conform_test_br'):
       f.AddBuildrunnerGTest('gles2_conform_test', fp,
                             test_tool_arg_list=['--no-xvfb'])
-    if R('gpu_tests'):
-      f.AddGpuTests(fp)
-    if R('gpu_tests_br'):
-      f.AddBuildrunnerGpuTests(fp)
-    if R('soft_gpu_tests'):
-      f.AddSoftGpuTests(fp)
-    if R('soft_gpu_tests_br'):
-      f.AddBuildrunnerSoftGpuTests(fp)
     if R('gpu_content_tests'):
       f.AddGpuContentTests(fp)
     if R('spaceport'):

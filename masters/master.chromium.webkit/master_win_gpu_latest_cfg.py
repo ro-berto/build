@@ -28,12 +28,12 @@ F('f_gpu_win_rel', win().ChromiumFactory(
     target='Release',
     slave_type='BuilderTester',
     tests=[
-      'gl_tests',
       'content_gl_tests',
+      'gles2_conform_test',
+      'gl_tests',
+      'gpu_content_tests',
       'gpu_frame_rate',
       'gpu_throughput',
-      'gpu_tests',
-      'gpu_content_tests',
     ],
     project='all.sln;chromium_gpu_builder',
     factory_properties={
@@ -58,9 +58,9 @@ F('f_gpu_win_dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='BuilderTester',
     tests=[
-      'gl_tests',
       'content_gl_tests',
-      'gpu_tests',
+      'gles2_conform_test',
+      'gl_tests',
       'gpu_content_tests',
     ],
     project='all.sln;chromium_gpu_debug_builder',
