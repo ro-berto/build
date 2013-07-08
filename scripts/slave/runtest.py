@@ -823,8 +823,15 @@ def main_linux(options, args):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
-  extra_env['LD_LIBRARY_PATH'] = '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
-                                                              bin_dir)
+  extra_env['LD_LIBRARY_PATH'] = ''
+
+  if options.factory_properties.get('lsan', False):
+    # Use the debug version of libstdc++ under LSan. If we don't, there will be
+    # a lot of incomplete stack traces in the reports.
+    extra_env['LD_LIBRARY_PATH'] += '/usr/lib/x86_64-linux-gnu/debug:'
+
+  extra_env['LD_LIBRARY_PATH'] += '%s:%s/lib:%s/lib.target' % (bin_dir, bin_dir,
+                                                               bin_dir)
   # Figure out what we want for a special llvmpipe directory.
   if options.llvmpipe_dir and os.path.exists(options.llvmpipe_dir):
     extra_env['LD_LIBRARY_PATH'] += ':' + options.llvmpipe_dir
@@ -1209,9 +1216,6 @@ def main():
         'suppressions=src/tools/lsan/suppressions.txt '
         'verbosity=1 ')
     os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
-    # Use debug versions of shared libraries, otherwise the fast unwinder
-    # produces incomplete stack traces.
-    os.environ['LD_LIBRARY_PATH'] = '/usr/lib/x86_64-linux-gnu/debug'
     # Disable sandboxing under LSan.
     args.append('--no-sandbox')
   if options.factory_properties.get('asan', False):
