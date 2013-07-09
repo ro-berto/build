@@ -80,9 +80,14 @@ B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=[
-        '--compiler=goma-clang', '--', '-target', 'chromium_builder_tests'],
+        '--compiler=goma-clang', '--build-tool=ninja', '--',
+        '-target', 'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_rel_trigger',
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+            'GYP_DEFINES':'clang=1 clang_use_chrome_plugins=1'
+        },
     }))
 
 #
