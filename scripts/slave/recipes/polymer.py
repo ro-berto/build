@@ -54,19 +54,30 @@ def _CheckoutSteps(api):
 def GenSteps(api):
   yield _CheckoutSteps(api)
 
+  tmp_path = ''
+  tmp_args = []
   if not api.platform.is_win:
     tmp_path = api.path.slave_build('.tmp')
     yield api.step('mktmp', ['mkdir', '-p', tmp_path])
-    yield api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
-                   cwd=api.path.checkout())
-  else:
-    npm_path = r'C:\Program Files (x86)\nodejs;%(PATH)s'
-    yield api.step('update-install', ['npm.cmd', 'install'],
-                   cwd=api.path.checkout(), env={'PATH': npm_path})
+    tmp_args = ['--tmp', tmp_path]
 
-  test_prefix = ['xvfb-run'] if api.platform.is_linux else []
-  yield api.step('test', test_prefix+['grunt', 'test-buildbot'],
-                 cwd=api.path.checkout(), allow_subannotations=True)
+  cmd_suffix = ''
+  npm_env = grunt_env = {}
+  if api.platform.is_win:
+    cmd_suffix = '.cmd'
+    npm_env = {'PATH': r'C:\Program Files (x86)\nodejs;%(PATH)s'}
+    grunt_env = {'PATH': r'C:\Users\chrome-bot\AppData\Roaming\npm;%(PATH)s'}
+
+  test_prefix = []
+  if api.platform.is_linux:
+    test_prefix = ['xvfb-run']
+
+  yield api.step('update-install', ['npm' + cmd_suffix, 'install'] + tmp_args,
+                 cwd=api.path.checkout(), env=npm_env)
+
+  yield api.step('test', test_prefix + ['grunt' + cmd_suffix, 'test-buildbot'],
+                 cwd=api.path.checkout(), env=grunt_env,
+                 allow_subannotations=True)
 
 
 def GenTests(api):

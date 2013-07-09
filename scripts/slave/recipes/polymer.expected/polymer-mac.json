@@ -23,12 +23,14 @@
   {
    "cmd": ["npm", "install", "--tmp", "[SLAVE_BUILD_ROOT]/.tmp"],
    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+   "env": {},
    "name": "update-install"
   },
   {
    "allow_subannotations": true,
    "cmd": ["grunt", "test-buildbot"],
    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+   "env": {},
    "name": "test"
   }
 ]

@@ -24,8 +24,9 @@
   },
   {
    "allow_subannotations": true,
-   "cmd": ["grunt", "test-buildbot"],
+   "cmd": ["grunt.cmd", "test-buildbot"],
    "cwd": "[SLAVE_BUILD_ROOT]\\polymer",
+   "env": {"PATH": "C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"},
    "name": "test"
   }
 ]
