@@ -17,8 +17,9 @@
    "name": "submodule update"
   },
   {
-   "cmd": ["npm", "install"],
+   "cmd": ["npm.cmd", "install"],
    "cwd": "[SLAVE_BUILD_ROOT]\\polymer",
+   "env": {"PATH": "C:\\Program Files (x86)\\nodejs:%(PATH)s"},
    "name": "update-install"
   },
   {

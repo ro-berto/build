@@ -57,12 +57,12 @@ def GenSteps(api):
   if not api.platform.is_win:
     tmp_path = api.path.slave_build('.tmp')
     yield api.step('mktmp', ['mkdir', '-p', tmp_path])
-    npm_path = ['--tmp', tmp_path]
+    yield api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
+                   cwd=api.path.checkout())
   else:
-    npm_path = []
-
-  yield api.step('update-install', ['npm', 'install'] + npm_path,
-                 cwd=api.path.checkout())
+    npm_path = r'C:\Program Files (x86)\nodejs:%(PATH)s'
+    yield api.step('update-install', ['npm.cmd', 'install'],
+                   cwd=api.path.checkout(), env={'PATH': npm_path})
 
   test_prefix = ['xvfb-run'] if api.platform.is_linux else []
   yield api.step('test', test_prefix+['grunt', 'test-buildbot'],
