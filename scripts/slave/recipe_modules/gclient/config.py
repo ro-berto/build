@@ -8,8 +8,9 @@ from slave.recipe_configs_util import config_item_context, ConfigGroup, BadConf
 from slave.recipe_configs_util import DictConfig, SimpleConfig, StaticConfig
 from slave.recipe_configs_util import SetConfig, ConfigList, ListConfig
 
-def BaseConfig(USE_MIRROR=True, GIT_MODE=False, **_kwargs):
+def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'
+  cache_dir = str(CACHE_DIR) if GIT_MODE and CACHE_DIR else None
   return ConfigGroup(
     solutions = ConfigList(
       lambda: ConfigGroup(
@@ -28,18 +29,24 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, **_kwargs):
     hooks = ListConfig(str),
     target_os = SetConfig(str),
     target_os_only = SimpleConfig(bool, empty_val=False, required=False),
+    cache_dir = StaticConfig(cache_dir, hidden=False),
+
     GIT_MODE = StaticConfig(bool(GIT_MODE)),
     USE_MIRROR = StaticConfig(bool(USE_MIRROR)),
   )
 
-config_ctx = config_item_context(
-  BaseConfig,
-  {
-    'USE_MIRROR': (True, False),
-    'GIT_MODE':   (True, False),
-  },
-  'using_mirror-%(USE_MIRROR)s-git_mode-%(GIT_MODE)s'
+VAR_TEST_MAP = {
+  'USE_MIRROR': (True, False),
+  'GIT_MODE':   (True, False),
+  'CACHE_DIR':  (None, 'CACHE_DIR'),
+}
+
+TEST_NAME_FORMAT = lambda kwargs: (
+  'using_mirror-%(USE_MIRROR)s-git_mode-%(GIT_MODE)s-cache_dir-%(using)s' %
+  dict(using=bool(kwargs['CACHE_DIR']), **kwargs)
 )
+
+config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 
 def ChromiumSvnSubURL(c, *pieces):
   BASES = ('https://src.chromium.org',

@@ -51,6 +51,7 @@ class GclientApi(recipe_api.RecipeApi):
     }
     if config_name in GIT_DEFAULT_WHITELIST:
       ret['GIT_MODE'] = True
+    ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 
   def checkout(self, gclient_config=None, spec_name=None):
@@ -95,7 +96,7 @@ class GclientApi(recipe_api.RecipeApi):
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
       steps.append(gclient(step_name('sync'),
-        'sync', '--verbose', '--with_branch_heads', '--nohooks',
+        'sync', '--verbose', '--with_branch_heads', '--nohooks', '-j8',
         '--reset', '--delete_unversioned_trees', '--force', '--upstream',
         '--no-nag-max', *revisions))
 

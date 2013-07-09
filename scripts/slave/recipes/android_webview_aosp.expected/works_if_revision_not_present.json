@@ -1,6 +1,6 @@
 [
   {
-   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/gclient.py", "config", "--spec", "deps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = []\ntarget_os_only = False"],
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/gclient.py", "config", "--spec", "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = []\ntarget_os_only = False"],
    "name": "[spec: empty_deps] gclient setup",
    "seed_steps": ["[spec: empty_deps] gclient setup", "[spec: empty_deps] gclient revert", "[spec: empty_deps] gclient sync"]
   },
@@ -17,7 +17,7 @@
    "name": "calculate trimmed deps"
   },
   {
-   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/gclient.py", "config", "--spec", "deps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {'src/blacklist/project/1': None, 'src/blacklist/project/2': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']\ntarget_os_only = False"],
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]/gclient.py", "config", "--spec", "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {'src/blacklist/project/1': None, 'src/blacklist/project/2': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']\ntarget_os_only = False"],
    "name": "[spec: trimmed] gclient setup",
    "seed_steps": ["[spec: trimmed] gclient setup", "[spec: trimmed] gclient revert", "[spec: trimmed] gclient sync"]
   },

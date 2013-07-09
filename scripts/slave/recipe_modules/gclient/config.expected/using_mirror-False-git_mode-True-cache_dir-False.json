@@ -1,0 +1,115 @@
+{
+  "blink": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {
+          "src/third_party/WebKit": "https://chromium.googlesource.com/chromium/blink.git"
+        }, 
+        "custom_vars": {
+          "webkit_revision": "HEAD"
+        }, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/chromium/src.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "blink_bare": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "blink", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/chromium/blink.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "chromium": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/chromium/src.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "chromium_bare": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/chromium/src.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "chromium_empty": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": "", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/chromium/src.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }, 
+  "nacl": "nacl only supports svn", 
+  "tools_build": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "build", 
+        "safesync_url": null, 
+        "url": "https://chromium.googlesource.com/chromium/tools/build.git"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }
+}

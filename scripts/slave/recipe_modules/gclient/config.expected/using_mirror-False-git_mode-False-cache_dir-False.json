@@ -1,5 +1,6 @@
 {
   "blink": {
+    "cache_dir": null, 
     "deps_os": {}, 
     "hooks": [], 
     "solutions": [
@@ -21,6 +22,7 @@
     "target_os_only": false
   }, 
   "blink_bare": {
+    "cache_dir": null, 
     "deps_os": {}, 
     "hooks": [], 
     "solutions": [
@@ -38,6 +40,7 @@
     "target_os_only": false
   }, 
   "chromium": {
+    "cache_dir": null, 
     "deps_os": {}, 
     "hooks": [], 
     "solutions": [
@@ -55,6 +58,7 @@
     "target_os_only": false
   }, 
   "chromium_bare": {
+    "cache_dir": null, 
     "deps_os": {}, 
     "hooks": [], 
     "solutions": [
@@ -72,6 +76,7 @@
     "target_os_only": false
   }, 
   "chromium_empty": {
+    "cache_dir": null, 
     "deps_os": {}, 
     "hooks": [], 
     "solutions": [
@@ -89,6 +94,7 @@
     "target_os_only": false
   }, 
   "nacl": {
+    "cache_dir": null, 
     "deps_os": {}, 
     "hooks": [], 
     "solutions": [
