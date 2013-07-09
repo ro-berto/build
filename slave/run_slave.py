@@ -281,6 +281,16 @@ def error(msg):
   sys.exit(1)
 
 
+def UseBotoPath():
+  """Mutate the environment to reference the prefered gs credentials."""
+  # Get the path to the boto file containing the password.
+  boto_file = os.path.join(BUILD_DIR, 'site_config', '.boto')
+  # If the boto file exists, make sure gsutil uses this boto file.
+  if os.path.exists(boto_file):
+    os.environ['AWS_CREDENTIAL_FILE'] = boto_file
+    os.environ['BOTO_CONFIG'] = boto_file
+
+
 def main():
   # Use adhoc argument parsing because of twisted's twisted argument parsing.
   # Change the current directory to the directory of the script.
@@ -439,12 +449,8 @@ def main():
   else:
     error('Platform %s is not implemented yet' % sys.platform)
 
-  # Get the path to the boto file containing the password.
-  boto_file = os.path.join(BUILD_DIR, 'site_config', '.boto')
-  # If the boto file exists, make sure gsutil uses this boto file.
-  if os.path.exists(boto_file):
-    os.environ['AWS_CREDENTIAL_FILE'] = boto_file
-    os.environ['BOTO_CONFIG'] = boto_file
+  # This may be redundant, unless this is imported and main is called.
+  UseBotoPath()
 
   # This envrionment is defined only when testing the slave on a dev machine.
   is_testing = 'TESTING_MASTER' in os.environ
@@ -472,6 +478,7 @@ def GetGClientPath():
 if '__main__' == __name__:
   skip_sync_arg = '--no-gclient-sync'
   if skip_sync_arg not in sys.argv:
+    UseBotoPath()
     if subprocess.call([GetGClientPath(), 'sync', '--force']) != 0:
       print >> sys.stderr, (
           '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])
