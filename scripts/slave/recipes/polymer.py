@@ -62,21 +62,22 @@ def GenSteps(api):
     tmp_args = ['--tmp', tmp_path]
 
   cmd_suffix = ''
-  npm_env = grunt_env = {}
+  node_env = {}
   if api.platform.is_win:
     cmd_suffix = '.cmd'
-    npm_env = {'PATH': r'C:\Program Files (x86)\nodejs;%(PATH)s'}
-    grunt_env = {'PATH': r'C:\Users\chrome-bot\AppData\Roaming\npm;%(PATH)s'}
+    node_env = {'PATH': r'C:\Program Files (x86)\nodejs;'
+                        r'C:\Users\chrome-bot\AppData\Roaming\npm;'
+                        r'%(PATH)s'}
 
   test_prefix = []
   if api.platform.is_linux:
     test_prefix = ['xvfb-run']
 
   yield api.step('update-install', ['npm' + cmd_suffix, 'install'] + tmp_args,
-                 cwd=api.path.checkout(), env=npm_env)
+                 cwd=api.path.checkout(), env=node_env)
 
   yield api.step('test', test_prefix + ['grunt' + cmd_suffix, 'test-buildbot'],
-                 cwd=api.path.checkout(), env=grunt_env,
+                 cwd=api.path.checkout(), env=node_env,
                  allow_subannotations=True)
 
 

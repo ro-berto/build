@@ -19,14 +19,14 @@
   {
    "cmd": ["npm.cmd", "install"],
    "cwd": "[SLAVE_BUILD_ROOT]\\polymer",
-   "env": {"PATH": "C:\\Program Files (x86)\\nodejs;%(PATH)s"},
+   "env": {"PATH": "C:\\Program Files (x86)\\nodejs;C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"},
    "name": "update-install"
   },
   {
    "allow_subannotations": true,
    "cmd": ["grunt.cmd", "test-buildbot"],
    "cwd": "[SLAVE_BUILD_ROOT]\\polymer",
-   "env": {"PATH": "C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"},
+   "env": {"PATH": "C:\\Program Files (x86)\\nodejs;C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"},
    "name": "test"
   }
 ]
