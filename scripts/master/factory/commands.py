@@ -403,6 +403,9 @@ class FactoryCommands(object):
     self._update_clang_tool = self.PathJoin(
         self._repository_root, 'tools', 'clang', 'scripts', 'update.sh')
 
+    self._update_nacl_sdk_tool = self.PathJoin(self._script_dir,
+                                               'update_nacl_sdk.py')
+
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
@@ -1180,6 +1183,20 @@ class FactoryCommands(object):
         command=self.GetBuildCommand(clobber, solution, mode, options),
         haltOnFailure=haltOnFailure,
         env=env)
+
+  def AddUpdateNaClSDKStep(self):
+    """Calls the NaCl SDK update script.
+
+    The newest pepper bundle is copied to nacl_sdk/pepper_current.
+    """
+    cmd = [self._python, self._update_nacl_sdk_tool]
+    self._factory.addStep(shell.ShellCommand,
+                          name='update NaCl SDK',
+                          description='updating NaCl SDK',
+                          descriptionDone='NaCl SDK updated',
+                          timeout=600,
+                          workdir=self.working_dir,
+                          command=cmd)
 
   def _PerfStepMappings(self, show_results, perf_id, test_name, suffix=None):
     """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""

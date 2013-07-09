@@ -253,6 +253,10 @@ class GClientFactory(object):
     # to prevent the drives from becoming full over time.
     factory_cmd_obj.AddTempCleanupStep()
 
+    # Update the NaCl SDK if needed
+    if factory_properties.get('update_nacl_sdk'):
+      factory_cmd_obj.AddUpdateNaClSDKStep()
+
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer']:
       factory_cmd_obj.AddCompileStep(

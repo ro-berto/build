@@ -92,13 +92,15 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Static-Initializers', cmd,
                      workdir='build/v8/')
 
-  def AddV8Testing(self, properties=None):
+  def AddV8Testing(self, properties=None, env=None, options=None):
+    options = options or []
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
+    cmd = self.GetV8TestingCommand() + options
     self.AddTestStep(shell.ShellCommand, 'Check', cmd,
                      timeout=3600,
-                     workdir='build/v8/')
+                     workdir='build/v8/',
+                     env=env)
 
   def AddV8Webkit(self, properties=None):
     if self._target_platform == 'win32':

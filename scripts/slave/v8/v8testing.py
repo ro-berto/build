@@ -59,7 +59,12 @@ def main():
   option_parser.add_option('--isolates',
                            default=None,
                            help="Run isolates tests")
-
+  option_parser.add_option('--buildbot',
+                           default='True',
+                           help="Resolve paths to executables for buildbots")
+  option_parser.add_option('--no-presubmit',
+                           default=False, action="store_true",
+                           help='Skip presubmit checks')
 
   options, args = option_parser.parse_args()
   if args:
@@ -72,10 +77,13 @@ def main():
   else:
     cmd = ['python', 'tools/run-tests.py',
            '--progress=verbose',
-           '--buildbot',
            '--outdir=' + outdir,
            '--arch=' + options.arch,
            '--mode=' + options.target]
+    if options.buildbot == 'True':
+      cmd.extend(['--buildbot'])
+    if options.no_presubmit:
+      cmd.extend(['--no-presubmit'])
     if options.testname:
       cmd.extend([options.testname])
     if options.testname == 'test262':

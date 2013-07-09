@@ -53,7 +53,9 @@ class V8Factory(gclient_factory.GClientFactory):
     f = factory_cmd_obj
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8initializers'): f.AddV8Initializers()
-    if R('v8testing'): f.AddV8Testing()
+    if R('v8testing'):
+      f.AddV8Testing(env=factory_properties.get('test_env', {}),
+                     options=factory_properties.get('test_options', []))
     if R('fuzz'): f.AddFuzzer()
     if R('webkit'): f.AddV8Webkit()
     if R('test262'): f.AddV8Test262()
