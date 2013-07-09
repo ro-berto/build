@@ -275,55 +275,65 @@ class TestExecution(unittest.TestCase):
 
     self.assertEquals(ret, 0)
 
-    result = [
-        '',
+    preamble = [
         '@@@SEED_STEP one@@@',
         '',
         '@@@SEED_STEP two@@@',
-        '',
+    ]
+    step_one_header = [
         '@@@STEP_CURSOR one@@@',
         '',
         '@@@STEP_STARTED@@@',
-        sys.executable + " -c print 'hello!'",
-        '  allow_subannotations: False',
-        '  always_run: False',
-        '  build_failure: False',
-        '  cmd: [' + repr(sys.executable) + ', \'-c\', "print \'hello!\'"]',
-        '  cwd: None',
-        '  env: None',
-        '  followup_fn: None',
-        '  name: one',
-        '  seed_steps: None',
-        '  skip: False',
         '',
+        sys.executable + " -c print 'hello!'",
+        'in dir %s:' % os.getcwd(),
+        ' allow_subannotations: False',
+        ' always_run: False',
+        ' build_failure: False',
+        ' cmd: [' + repr(sys.executable) + ', \'-c\', "print \'hello!\'"]',
+        ' name: one',
+        ' skip: False',
+        'full environment:',
+    ]
+    step_one_result = [
         'hello!',
         '',
         '@@@STEP_CURSOR one@@@',
         '',
         '@@@STEP_CLOSED@@@',
-        '',
+    ]
+    step_two_header = [
         '@@@STEP_CURSOR two@@@',
         '',
         '@@@STEP_STARTED@@@',
-        sys.executable + " -c print 'yo!'",
-        '  allow_subannotations: False',
-        '  always_run: False',
-        '  build_failure: False',
-        '  cmd: [' + repr(sys.executable) + ', \'-c\', "print \'yo!\'"]',
-        '  cwd: None',
-        '  env: None',
-        '  followup_fn: None',
-        '  name: two',
-        '  seed_steps: None',
-        '  skip: False',
         '',
+        sys.executable + " -c print 'yo!'",
+        'in dir %s:' % os.getcwd(),
+        ' allow_subannotations: False',
+        ' always_run: False',
+        ' build_failure: False',
+        ' cmd: [' + repr(sys.executable) + ', \'-c\', "print \'yo!\'"]',
+        ' name: two',
+        ' skip: False',
+        'full environment:',
+    ]
+    step_two_result = [
         'yo!',
         '',
         '@@@STEP_CURSOR two@@@',
         '',
         '@@@STEP_CLOSED@@@',
     ]
-    self.assertEquals(result, self.capture.text)
+
+    def has_sublist(whole, part):
+      n = len(part)
+      return any((part == whole[i:i+n]) for i in xrange(len(whole) - n+1))
+
+    self.assertTrue(has_sublist(self.capture.text, preamble))
+    self.assertTrue(has_sublist(self.capture.text, step_one_header))
+    self.assertTrue(has_sublist(self.capture.text, step_one_result))
+    self.assertTrue(has_sublist(self.capture.text, step_two_header))
+    self.assertTrue(has_sublist(self.capture.text, step_two_result))
 
   def testFailBuild(self):
     cmdlist = [{'name': 'one', 'cmd': _synthesizeCmd(['print \'hello!\''])},
