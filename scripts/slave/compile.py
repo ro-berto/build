@@ -162,7 +162,9 @@ def common_xcode_settings(command, options, env, compiler=None):
       if options.clobber:
         # Disable compiles on local machine.  When the goma server-side object
         # file cache is warm, this can speed up clobber builds by up to 30%.
-        env['GOMA_USE_LOCAL'] = '0'
+
+        # Enabling this while attempting to solve crbug.com/257467
+        env['GOMA_USE_LOCAL'] = '1'
       assert options.goma_dir
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
@@ -585,7 +587,9 @@ def common_make_settings(
       if options.clobber:
         # Disable compiles on local machine.  When the goma server-side object
         # file cache is warm, this can speed up clobber builds by up to 30%.
-        env['GOMA_USE_LOCAL'] = '0'
+
+        # Enabling this while attempting to solve crbug.com/257467
+        env['GOMA_USE_LOCAL'] = '1'
     else:
       goma_jobs = 50
     if jobs < goma_jobs:
@@ -847,7 +851,8 @@ def main_ninja(options, args):
     command.append('-j%d' % goma_jobs)
 
     if chromium_utils.IsMac() and options.clobber:
-      env['GOMA_USE_LOCAL'] = '0'
+      # Enabling this while attempting to solve crbug.com/257467
+      env['GOMA_USE_LOCAL'] = '1'
 
   if orig_compiler == 'goma-clang' and options.compiler == 'clang':
     # goma setup failed, fallback to local clang.
