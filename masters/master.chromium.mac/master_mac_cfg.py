@@ -79,8 +79,7 @@ B('Mac Builder', 'rel', 'compile', 'mac_rel', builddir='cr-mac-rel',
   auto_reboot=False, notify_on_missing=True)
 F('rel', mac().ChromiumFactory(
     slave_type='Builder',
-    options=[
-        '--compiler=goma-clang', '--', '-target', 'chromium_builder_tests'],
+    options=['--', '-target', 'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_rel_trigger',
     }))
