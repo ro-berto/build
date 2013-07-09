@@ -345,7 +345,13 @@ class DartUtils(object):
 
   win_dbg_factory_properties = {
     'gclient_env': {
-      'GYP_DEFINES': 'fastbuild=1 component=shared_library',
+      # We currently cannot use 'component=shared_library' here, because
+      # dartium/src/build/common.gypi will enable 'ExceptionHandling'.
+      # This results in the VisualStudio compiler switch '/EHsc' which in turn
+      # will unwind the stack and call destructors when doing a longjmp().
+      # The DartVM uses it's own mechanism for calling the destructors (see
+      # vm/longjump.cc). (i.e. with /EHsc the destructors will be called twice)
+      'GYP_DEFINES': 'fastbuild=1 component=static_library',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
