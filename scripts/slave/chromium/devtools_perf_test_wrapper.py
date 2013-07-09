@@ -55,7 +55,7 @@ def PerfTest(options):
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--build-dir', default='webkit',
+  option_parser.add_option('--build-dir', default='src/out',
       help='path to main build directory (the parent of '
            'the Release or Debug directory)')
   option_parser.add_option('--target', default='release',
