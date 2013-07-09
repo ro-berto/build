@@ -47,7 +47,10 @@ F('f_gpu_linux_rel', linux().ChromiumFactory(
         'generate_gtest_json': True,
         'perf_id': 'gpu-webkit-linux-nvidia',
         'show_perf_results': True,
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'gclient_env': {
+          'GYP_GENERATORS': 'ninja',
+          'GYP_DEFINES': 'fastbuild=1 internal_gles2_conform_tests=1',
+        },
         'blink_config': 'blink',
     }))
 
@@ -72,7 +75,10 @@ F('f_gpu_linux_dbg', linux().ChromiumFactory(
     ],
     factory_properties={
         'generate_gtest_json': True,
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'gclient_env': {
+          'GYP_GENERATORS': 'ninja',
+          'GYP_DEFINES': 'fastbuild=1 internal_gles2_conform_tests=1',
+        },
         'blink_config': 'blink',
     }))
 

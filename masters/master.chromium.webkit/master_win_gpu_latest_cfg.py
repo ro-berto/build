@@ -41,7 +41,9 @@ F('f_gpu_win_rel', win().ChromiumFactory(
         'start_crash_handler': True,
         'perf_id': 'gpu-webkit-win7-nvidia',
         'show_perf_results': True,
-        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+        'gclient_env': {
+          'GYP_DEFINES': 'fastbuild=1 internal_gles2_conform_tests=1',
+        },
         'blink_config': 'blink',
     }))
 
@@ -67,7 +69,9 @@ F('f_gpu_win_dbg', win().ChromiumFactory(
     factory_properties={
         'generate_gtest_json': True,
         'start_crash_handler': True,
-        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+        'gclient_env': {
+          'GYP_DEFINES': 'fastbuild=1 internal_gles2_conform_tests=1',
+        },
         'blink_config': 'blink',
     }))
 
