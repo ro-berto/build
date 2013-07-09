@@ -60,7 +60,7 @@ def GenSteps(api):
     yield api.step('update-install', ['npm', 'install', '--tmp', tmp_path],
                    cwd=api.path.checkout())
   else:
-    npm_path = r'C:\Program Files (x86)\nodejs:%(PATH)s'
+    npm_path = r'C:\Program Files (x86)\nodejs;%(PATH)s'
     yield api.step('update-install', ['npm.cmd', 'install'],
                    cwd=api.path.checkout(), env={'PATH': npm_path})
 
