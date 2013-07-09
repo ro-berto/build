@@ -943,6 +943,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
                               step_name='DevTools.PerfTest',
                               cmd_name = self._devtools_perf_test_tool,
+                              cmd_options=args,
                               py_script=True,
                               factory_properties=factory_properties)
 
@@ -952,7 +953,6 @@ class ChromiumCommands(commands.FactoryCommands):
       self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
                                 step_name=test_name,
                                 cmd_name=pyauto_script,
-                                cmd_options=args,
                                 py_script=True,
                                 factory_properties=factory_properties)
 
