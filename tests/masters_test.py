@@ -204,7 +204,7 @@ def main(argv):
       'master.chromium.flaky': 'ChromiumFlaky',
       'master.chromium.fyi': 'ChromiumFYI',
       'master.chromium.gatekeeper': 'Gatekeeper',
-      'master.chromium.git': 'ChromiumGIT',
+      'master.chromium.git': 'ChromiumGit',
       'master.chromium.gpu': 'ChromiumGPU',
       'master.chromium.gpu.fyi': 'ChromiumGPUFYI',
       'master.chromium.linux': 'ChromiumLinux',

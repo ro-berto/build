@@ -1278,29 +1278,33 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
-  def ChromiumGITFactory(self, target='Release', clobber=False, tests=None,
-                         mode=None, slave_type='Tester', options=None,
-                         compile_timeout=1200, build_url=None, project=None,
-                         git_url=None, factory_properties=None):
+  def ChromiumGitFactory(self, target='Release', clobber=False, tests=None,
+                      mode=None, slave_type='BuilderTester',
+                      options=None, compile_timeout=1200, build_url=None,
+                      project=None, factory_properties=None, gclient_deps=None,
+                      run_default_swarm_tests=None, git_url=None):
     if not factory_properties:
       factory_properties = {}
     factory_properties['no_gclient_branch'] = True
-    if git_url is None:
-      git_url = '%s/chromium/src.git' % config.Master.git_server_url
-    main = gclient_factory.GClientSolution(
-        svn_url=git_url, name='src', custom_deps_file='.DEPS.git')
-    self._solutions[0] = main
+
+    # Overwrite the default svn gclient solutions with git ones.
+    git_url = '%s/chromium/src.git' % config.Master.git_server_url
+    self._solutions[0].svn_url = git_url
+    #TODO(agable): remove custom_deps_file when .DEPS.git is deprecated.
+    self._solutions[0].custom_deps_file = '.DEPS.git'
+
     if (len(self._solutions) > 1 and
         self._solutions[1].svn_url == config.Master.trunk_internal_url_src):
-      svn_url = '%s/chrome/src-internal.git' % config.Master.git_internal_server_url
-      self._solutions[1] = gclient_factory.GClientSolution(
-          svn_url=svn_url,
-          name='src-internal',
-          custom_deps_file='.DEPS.git',
-          needed_components=self.NEEDED_COMPONENTS_INTERNAL)
+      git_url = ('%s/chrome/src-internal.git' %
+                 config.Master.git_internal_server_url)
+      self._solutions[1].svn_url = git_url
+      #TODO(agable): remove custom_deps_file when .DEPS.git is deprecated.
+      self._solutions[1].custom_deps_file = '.DEPS.git'
+
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
-                                factory_properties)
+                                factory_properties, gclient_deps,
+                                run_default_swarm_tests)
 
   def ChromiumOSASANFactory(self, target='Release', clobber=False, tests=None,
                             mode=None, slave_type='BuilderTester', options=None,
