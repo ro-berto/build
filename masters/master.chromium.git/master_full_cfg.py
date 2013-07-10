@@ -44,7 +44,7 @@ F('win', win().ChromiumGitFactory(
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
-      'perf_id': 'chromium-rel-xp',
+      'perf_id': 'chromium-rel-xp-git',
       'expectations': True,
       'process_dumps': True,
       'start_crash_handler': True,
@@ -72,7 +72,7 @@ F('mac', mac().ChromiumGitFactory(
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
-      'perf_id': 'chromium-rel-mac',
+      'perf_id': 'chromium-rel-mac-git',
       'expectations': True,
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
@@ -100,7 +100,7 @@ F('linux', linux().ChromiumGitFactory(
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
-      'perf_id': 'chromium-rel-linux',
+      'perf_id': 'chromium-rel-linux-git',
       'expectations': True,
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
@@ -124,7 +124,7 @@ F('linux64', linux().ChromiumGitFactory(
       'gs_acl': 'public-read',
       'show_perf_results': True,
       'generate_gtest_json': ActiveMaster.is_production_host,
-      'perf_id': 'chromium-rel-linux-64',
+      'perf_id': 'chromium-rel-linux-64-git',
       'expectations': True,
       'gclient_env': {
         'GYP_DEFINES': 'target_arch=x64 test_isolation_mode=noop',
