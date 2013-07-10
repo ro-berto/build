@@ -162,9 +162,7 @@ def common_xcode_settings(command, options, env, compiler=None):
       if options.clobber:
         # Disable compiles on local machine.  When the goma server-side object
         # file cache is warm, this can speed up clobber builds by up to 30%.
-
-        # Enabling this while attempting to solve crbug.com/257467
-        env['GOMA_USE_LOCAL'] = '1'
+        env['GOMA_USE_LOCAL'] = '0'
       assert options.goma_dir
       command.insert(0, '%s/goma-xcodebuild' % options.goma_dir)
 
@@ -587,9 +585,13 @@ def common_make_settings(
       if options.clobber:
         # Disable compiles on local machine.  When the goma server-side object
         # file cache is warm, this can speed up clobber builds by up to 30%.
-
-        # Enabling this while attempting to solve crbug.com/257467
-        env['GOMA_USE_LOCAL'] = '1'
+        env['GOMA_USE_LOCAL'] = '0'
+      # Temproary hack to try failing fast when the server looks unhealthy.
+      # 30 seconds is chosen because a local compile is almost certainly
+      # faster.
+      # crbug.com/257467
+      env['GOMA_RETRY'] = '0'
+      env['GOMA_COMPILER_PROXY_RPC_TIMEOUT_SECS'] = '30'
     else:
       goma_jobs = 50
     if jobs < goma_jobs:
