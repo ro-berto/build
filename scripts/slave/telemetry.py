@@ -64,7 +64,11 @@ def _GenerateTelemetryCommandSequence(options):
   build_dir = fp.get('build_dir')
 
   script = os.path.join('src', 'tools', 'perf', 'run_measurement')
-  page_set = os.path.join('src', 'tools', 'perf', 'page_sets', page_set)
+
+  test_specification = [test_name]
+  if page_set:
+    page_set = os.path.join('src', 'tools', 'perf', 'page_sets', page_set)
+    test_specification.append(page_set)
 
   env = os.environ
 
@@ -87,7 +91,8 @@ def _GenerateTelemetryCommandSequence(options):
   if target_os == 'android':
     browser = options.target_android_browser
   test_args = list(common_args)
-  test_args.extend(['--browser=%s' % browser, test_name, page_set])
+  test_args.append('--browser=%s' % browser)
+  test_args.extend(test_specification)
   test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
   commands.append(test_cmd)
 
@@ -97,16 +102,16 @@ def _GenerateTelemetryCommandSequence(options):
     if page_set.endswith('moz.json') or page_set.endswith('morejs.json'):
       test_args = list(common_args)
       test_args.extend(['--profile-type=typical_user',
-                        '--output-trace-tag=_extcs1', '--browser=%s' % browser,
-                        test_name, page_set])
+                        '--output-trace-tag=_extcs1', '--browser=%s' % browser])
+      test_args.extend(test_specification)
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
       commands.append(test_cmd)
     if page_set.endswith('moz.json') or page_set.endswith('intl2.json'):
       test_args = list(common_args)
       test_args.extend(['--profile-type=power_user',
-                        '--output-trace-tag=_extwr', '--browser=%s' % browser,
-                        test_name, page_set])
+                        '--output-trace-tag=_extwr', '--browser=%s' % browser])
+      test_args.extend(test_specification)
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
       commands.append(test_cmd)
@@ -117,8 +122,8 @@ def _GenerateTelemetryCommandSequence(options):
     ref_args = list(common_args)
     ref_args.extend(['--browser=exact',
                 '--browser-executable=%s' % ref_build,
-                '--output-trace-tag=_ref',
-                test_name, page_set])
+                '--output-trace-tag=_ref'])
+    ref_args.extend(test_specification)
     ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args, fp=fp)
     commands.append(ref_cmd)
 

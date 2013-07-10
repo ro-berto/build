@@ -603,6 +603,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
     if R('octane'):
       f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
+    if R('pica'):
+      f.AddTelemetryTest('pica', factory_properties=fp)
     if R('image_decoding_measurement'):
       f.AddTelemetryTest(
           'image_decoding_measurement', 'image_decoding_measurement.json',

@@ -142,5 +142,34 @@ class TelemetryTest(unittest.TestCase):
     for line in capture_text:
       self.assertEqual(line.count('moz.json'), 2)
 
+  def testWithoutPageSet(self):
+    fp = self._GetDefaultFactoryProperties()
+    fp['page_set'] = None
+
+    cmd = [self.telemetry, '--print-cmd',
+           '--factory-properties=%s' % json.dumps(fp)]
+
+    ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
+    self.assertEqual(ret, 0)
+
+    runtest = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'runtest.py'))
+
+    expectedText = (['\'adb\' \'root\'',
+        '\'adb\' \'wait-for-device\'',
+        '\'%s\' ' % sys.executable +
+        '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
+            '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
+            '\'--factory-properties=' +
+            '{"page_set": null, "target": "Release", ' +
+            '"build_dir": "src/build", "perf_id": "android-gn", ' +
+            '"step_name": "sunspider", "test_name": "sunspider", ' +
+            '"target_platform": "linux2", "target_os": "android", ' +
+            '"show_perf_results": true}\' ' +
+            '\'src/tools/perf/run_measurement\' \'-v\' ' +
+            '\'--browser=android-chromium-testshell\' \'sunspider\''
+        ])
+
+    self.assertEqual(expectedText, self.capture.text)
+
 if __name__ == '__main__':
   unittest.main()

@@ -773,7 +773,7 @@ class ChromiumCommands(commands.FactoryCommands):
                'run_webdriver_tests.py')
     self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
 
-  def AddTelemetryTest(self, test_name, page_set, step_name=None,
+  def AddTelemetryTest(self, test_name, page_set=None, step_name=None,
                        factory_properties=None, timeout=1200,
                        tool_options=None, dashboard_url=None):
     """Adds a Telemetry performance test.
