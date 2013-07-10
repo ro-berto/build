@@ -116,8 +116,7 @@ asan_rel_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
     clobber=True,
-    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'all_webkit',
-             'content_browsertests'],
+    options=['--compiler=clang', 'chrome_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -132,8 +131,7 @@ asan_rel_sym_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
     clobber=True,
-    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'all_webkit',
-             'content_browsertests'],
+    options=['--compiler=clang', 'chrome_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan-symbolized',
@@ -145,8 +143,7 @@ B('ASAN Debug', 'linux_asan_dbg', 'compile', 'chromium_lkgr')
 F('linux_asan_dbg', linux().ChromiumASANFactory(
     clobber=True,
     target='Debug',
-    options=['--compiler=clang', 'chrome', 'dns_fuzz_stub', 'all_webkit',
-             'content_browsertests'],
+    options=['--compiler=clang', 'chrome_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'asan',
@@ -163,8 +160,7 @@ tsan_gyp = ('tsan=1 linux_use_tcmalloc=0 disable_nacl=1 '
 B('TSAN Release', 'linux_tsan_rel', 'compile', 'chromium_lkgr')
 F('linux_tsan_rel', linux().ChromiumFactory(
     clobber=True,
-    options=['--compiler=goma-clang', 'chrome', 'dns_fuzz_stub',
-             'all_webkit', 'content_browsertests'],
+    options=['--compiler=goma-clang', 'chrome_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'tsan',
@@ -177,8 +173,7 @@ B('TSAN Debug', 'linux_tsan_dbg', 'compile', 'chromium_lkgr')
 F('linux_tsan_dbg', linux().ChromiumFactory(
     clobber=True,
     target='Debug',
-    options=['--compiler=goma-clang', 'chrome', 'dns_fuzz_stub',
-             'all_webkit', 'content_browsertests'],
+    options=['--compiler=goma-clang', 'chrome_builder_asan'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
        'cf_archive_name': 'tsan',
