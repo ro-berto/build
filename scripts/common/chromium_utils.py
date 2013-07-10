@@ -1006,9 +1006,11 @@ def GetAllSlaves():
   return slaves
 
 
-def GetSlavesForHost(hostname=None):
+def GetSlavesForHost():
   """Get slaves for a host, defaulting to current host."""
-  hostname = hostname or socket.getfqdn().split('.', 1)[0].lower()
+  hostname = os.getenv('TESTING_SLAVENAME')
+  if not hostname:
+    hostname = socket.getfqdn().split('.', 1)[0].lower()
   slaves = []
   for master in ListMasters(cue='slaves.cfg'):
     slaves.extend(
@@ -1025,14 +1027,13 @@ def GetActiveSubdir():
 
 
 def GetActiveSlavename():
-  testing_slavename = os.getenv('TESTING_SLAVENAME')
-  if testing_slavename:
-    return testing_slavename
-  hostname = socket.getfqdn().split('.', 1)[0].lower()
+  slavename = os.getenv('TESTING_SLAVENAME')
+  if not slavename:
+    slavename = socket.getfqdn().split('.', 1)[0].lower()
   subdir = GetActiveSubdir()
   if subdir:
-    return '%s#%s' % (hostname, subdir)
-  return hostname
+    return '%s#%s' % (slavename, subdir)
+  return slavename
 
 
 def EntryToSlaveName(entry):

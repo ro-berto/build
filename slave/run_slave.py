@@ -7,7 +7,6 @@
 """
 
 import os
-import re
 import shutil
 import subprocess
 import sys
@@ -304,10 +303,8 @@ def main():
     error('You forgot to put the password at %s' % bot_password_file)
 
   if (os.path.exists(os.path.join(GetRoot(), 'b')) and
-      os.path.exists(os.path.join(GetRoot(), 'c')) and
-      not filter(lambda x: re.match('TESTING_.*', x), os.environ)):
+      os.path.exists(os.path.join(GetRoot(), 'c'))):
     SpawnSubdirBuildbotsIfNeeded()
-
 
   # Make sure the current python path is absolute.
   old_pythonpath = os.environ.get('PYTHONPATH', '')
