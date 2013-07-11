@@ -81,6 +81,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   CUSTOM_DEPS_GYP = [
     ('src/tools/gyp', 'http://gyp.googlecode.com/svn/trunk')]
+  CUSTOM_DEPS_GIT_INTERNAL = [
+      ('src/third_party/adobe/flash/symbols/ppapi/mac', None),
+      ('src/third_party/adobe/flash/symbols/ppapi/mac_64', None),
+      ('src/third_party/adobe/flash/symbols/ppapi/linux', None),
+      ('src/third_party/adobe/flash/symbols/ppapi/linux_x64', None),
+      ('src/third_party/adobe/flash/symbols/ppapi/win', None),
+      ('src/third_party/adobe/flash/symbols/ppapi/win_x64', None),
+  ]
 
   # A map used to skip dependencies when a test is not run.
   # The map key is the test name. The map value is an array containing the
@@ -1311,6 +1319,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions[1].svn_url = git_url
       #TODO(agable): remove custom_deps_file when .DEPS.git is deprecated.
       self._solutions[1].custom_deps_file = '.DEPS.git'
+      self._solutions[1].custom_deps_list = self.CUSTOM_DEPS_GIT_INTERNAL
 
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
