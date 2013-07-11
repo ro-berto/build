@@ -43,7 +43,7 @@ F('win_full', win().ChromiumFactory(
 B('Win x64', 'win_x64_full', 'windows', 'chromium_lkgr')
 F('win_x64_full', win_out().ChromiumFactory(
     clobber=True,
-    compile_timeout=4800,  # Release build is LOOONG
+    compile_timeout=9600,  # Release build is LOOONG
     target='Release_x64',
     options=['--build-tool=ninja', '--', 'all'],
     factory_properties={
