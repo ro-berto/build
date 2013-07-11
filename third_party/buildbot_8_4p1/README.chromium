@@ -3117,3 +3117,39 @@ index c357939..e7cd932 100644
                      if not build_status or not build_status.isFinished():
                          # If not finished, it will appear in runningBuilds.
                          break
+
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/status/buildstep.py b/third_party/buildbot_8_4p1/buildbot/status/buildstep.py
+index 264b599..f64e0b9 100644
+--- a/third_party/buildbot_8_4p1/buildbot/status/buildstep.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/buildstep.py
+@@ -13,7 +13,10 @@
+ #
+ # Copyright Buildbot Team Members
+
++import collections
+ import os, weakref
++
++
+ from zope.interface import implements
+ from twisted.persisted import styles
+ from twisted.python import log
+@@ -21,6 +24,9 @@ from twisted.internet import reactor, defer
+ from buildbot import interfaces, util
+ from buildbot.status.logfile import LogFile, HTMLLogFile
+
++# This allows use of OrderedDict on python 2.6, found in scripts/common.
++import common.python26_polyfill  # pylint: disable=W0611
++
+ class BuildStepStatus(styles.Versioned):
+     """
+     I represent a collection of output status for a
+@@ -70,7 +76,7 @@ class BuildStepStatus(styles.Versioned):
+         self.step_number = step_number
+         self.hidden = False
+         self.logs = []
+-        self.urls = {}
++        self.urls = collections.OrderedDict()
+         self.watchers = []
+         self.updates = {}
+         self.finishedWatchers = []
