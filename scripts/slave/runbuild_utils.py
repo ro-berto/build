@@ -108,21 +108,18 @@ def Execute(commands, annotate, log, fail_fast=False):
     print >>log, '(in %s): %s' % (command['quoted_workdir'],
                                   command['quoted_command'])
 
-    mydir = os.getcwd()
-    myenv = os.environ
-    os.chdir(command['workdir'])
 
-    # Python docs say this might cause leaks on FreeBSD/OSX.
-    for envar in command['env']:
-      os.environ[envar] = command['env'][envar]
+    env = os.environ.copy()
+    env.update(command['env'])
+    env['PYTHONUNBUFFERED'] = 1
 
     mylogger = LogClass(log)
 
     ret = chromium_utils.RunCommand(command['command'],
+                                    cwd=command['workdir'],
+                                    env=command['env'],
                                     filter_obj=mylogger,
                                     print_cmd=False)
-    os.chdir(mydir)
-    os.environ = myenv
     commands_executed += 1
     if ret != 0:
       err = True
