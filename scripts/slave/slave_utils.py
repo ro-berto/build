@@ -96,7 +96,9 @@ def SubversionLastChangedRevision(wc_dir_or_file):
 
 def GitHash(wc_dir):
   """Finds the current commit hash of the wc_dir."""
-  retval, text = chromium_utils.GetStatusOutput([GitExe(), 'rev-parse', 'HEAD'])
+  retval, text = chromium_utils.GetStatusOutput(
+      [GitExe(), '--git-dir=%s/.git' % wc_dir, '--work-tree=%s' % wc_dir,
+       'rev-parse', 'HEAD'])
   if retval or 'fatal: Not a git repository' in text:
     raise NotGitWorkingCopy(wc_dir)
   return text.strip()
@@ -114,6 +116,26 @@ def GetHashOrRevision(wc_dir):
   except NotGitWorkingCopy:
     pass
   raise NotAnyWorkingCopy(wc_dir)
+
+
+def GitOrSubversion(wc_dir):
+  """Returns the VCS for the given directory.
+
+  Returns:
+    'git' if the directory is a valid git repo root
+    'svn' if the directory is a valid svn repo
+    None otherwise
+  """
+  vcs = 'svn'
+  ret, out = chromium_utils.GetStatusOutput([SubversionExe(), 'info', wc_dir])
+  if ret or 'is not a working copy' in out:
+    vcs = 'git'
+  ret, out = chromium_utils.GetStatusOutput(
+      [GitExe(), '--git-dir=%s/.git' % wc_dir, '--work-tree=%s' % wc_dir,
+       'rev-parse'])
+  if ret or 'fatal: Not a git repository' in out:
+    vcs = None
+  return vcs
 
 
 def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
