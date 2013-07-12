@@ -111,13 +111,13 @@ def Execute(commands, annotate, log, fail_fast=False):
 
     env = os.environ.copy()
     env.update(command['env'])
-    env['PYTHONUNBUFFERED'] = 1
+    env['PYTHONUNBUFFERED'] = '1'
 
     mylogger = LogClass(log)
 
     ret = chromium_utils.RunCommand(command['command'],
                                     cwd=command['workdir'],
-                                    env=command['env'],
+                                    env=env,
                                     filter_obj=mylogger,
                                     print_cmd=False)
     commands_executed += 1
