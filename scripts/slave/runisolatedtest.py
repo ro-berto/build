@@ -27,10 +27,9 @@ LINUX_ISOLATE_ENABLED_TESTS = (
 # dependencies for more complex tests.
 MAC_ISOLATE_ENABLED_TESTS = ()
 
-# TODO(maruel): Add back browser_tests.
+# TODO(maruel): Add back browser_tests and interactive_ui_tests.
 WIN_ISOLATE_ENABLED_TESTS = (
   'base_unittests',
-  'interactive_ui_tests',
   'net_unittests',
   'unit_tests',
 )
