@@ -69,7 +69,7 @@ class V8Factory(gclient_factory.GClientFactory):
                 shard_run=1, shell_flags=None, isolates=False,
                 command_prefix=None):
     tests = tests or []
-    factory_properties = factory_properties or {}
+    factory_properties = (factory_properties or {}).copy()
 
     # Automatically set v8_target_arch in GYP_DEFINES to target_arch.
     if not 'gclient_env' in factory_properties:
