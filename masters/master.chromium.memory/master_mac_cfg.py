@@ -96,6 +96,7 @@ mac_asan_tests_1 = [
 mac_asan_tests_2 = [
   'browser_tests',
   'net',
+  'unit',
 ]
 
 mac_asan_tests_3 = [
