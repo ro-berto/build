@@ -11,10 +11,8 @@ import test_env  # pylint: disable=W0403,W0611
 from slave import extract_build
 from slave import slave_utils
 
-# build/scripts/slave/unittests
 _SCRIPT_DIR = os.path.dirname(__file__)
-_BUILD_DIR = os.path.abspath(os.path.join(
-    _SCRIPT_DIR, os.pardir, os.pardir))
+_ABS_BUILD_DIR = os.path.abspath(_SCRIPT_DIR)
 
 
 class MockOptions(object):
@@ -29,7 +27,7 @@ class ExtractBuildTest(unittest.TestCase):
 
     # version_suffix is not tested, since it would just be copying of
     # implementation details from extract_build.py into this test.
-    src_dir = os.path.dirname(_BUILD_DIR)
+    src_dir = os.path.dirname(_ABS_BUILD_DIR)
     base_filename, _version_suffix = slave_utils.GetZipFileNames(
         options.build_properties, src_dir, None, extract=True)
 
@@ -56,7 +54,7 @@ class ExtractBuildTest(unittest.TestCase):
 
   def _VerifyBuildUrl(self, options, url_template, expected_url):
     options.build_url = url_template
-    url, _versioned_url = extract_build.GetBuildUrl(_BUILD_DIR, options)
+    url, _versioned_url = extract_build.GetBuildUrl(_SCRIPT_DIR, options)
     self.assertEquals(url, expected_url)
 
 if __name__ == '__main__':
