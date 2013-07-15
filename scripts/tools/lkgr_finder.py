@@ -706,6 +706,8 @@ def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
               'sourceStamp', {}).get('revision', None)
         if not revision:
           continue
+        if revision == 'ad5df9a5341d38778658c90e4aa241c4ebe4e8aa':
+          continue
         revisions.add(revision)
         reasons = EvaluateBuildData(
             this_build_data, lkgr_steps[master][builder])
