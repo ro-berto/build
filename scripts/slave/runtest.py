@@ -418,8 +418,9 @@ def annotate(test_name, result, results_tracker, full_name=False,
         len(results_tracker.SuppressionHashes())):
       print '@@@STEP_WARNINGS@@@'
       get_text_result = process_log_utils.WARNINGS
-  elif result == process_log_utils.WARNINGS:
+  elif result == slave_utils.WARNING_EXIT_CODE:
     print '@@@STEP_WARNINGS@@@'
+    get_text_result = process_log_utils.WARNINGS
   else:
     print '@@@STEP_FAILURE@@@'
     get_text_result = process_log_utils.FAILURE

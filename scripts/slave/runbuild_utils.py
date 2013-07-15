@@ -12,6 +12,7 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import slave_utils
 
 
 class LogClass(chromium_utils.RunCommandFilter):
@@ -122,10 +123,17 @@ def Execute(commands, annotate, log, fail_fast=False):
                                     print_cmd=False)
     commands_executed += 1
     if ret != 0:
-      err = True
-      if fail_fast:
-        return commands_executed, err
+      if ret == slave_utils.WARNING_EXIT_CODE:
+        if annotate:
+          print '@@@STEP_WARNINGS@@@'
+        continue
+      else:
+        if annotate:
+          print '@@@STEP_FAILURE@@@'
+        err = True
     print '@@@STEP_CLOSED@@@'
+    if fail_fast and err:
+      break
   return commands_executed, err
 
 
