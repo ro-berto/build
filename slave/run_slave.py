@@ -437,6 +437,11 @@ def main():
     slave_path = [
         os.path.join(os.path.expanduser('~'), 'slavebin'),
         depot_tools,
+    ]
+    # Git on mac is installed from git-scm.com/download/mac
+    if sys.platform == 'darwin' and os.path.isdir('/usr/local/git/bin'):
+      slave_path.append('/usr/local/git/bin')
+    slave_path += [
         # Reuse the python executable used to start this script.
         os.path.dirname(sys.executable),
         '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin'
