@@ -1281,12 +1281,7 @@ def main():
     # TODO(maruel): Make it an error soon. Not yet since I want to iron out all
     # the remaining cases before.
     #result = 1
-  if options.annotate and result in (process_log_utils.SUCCESS,
-                                     process_log_utils.WARNINGS,
-                                     process_log_utils.SKIPPED):
-    return 0
-  else:
-    return result
+  return result
 
 
 if '__main__' == __name__:
