@@ -11,22 +11,12 @@ import os
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SWARM_CLIENT = os.path.normpath(
-    os.path.join(BASE_DIR, '..', '..', 'third_party', 'swarm_client'))
 
 from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
 
 # From depot tools/
 import fix_encoding
-
-# From swarm_client/
-sys.path.insert(0, SWARM_CLIENT)
-try:
-  import swarm_get_results  # pylint: disable=F0401
-except ImportError:
-  print >> sys.stderr, 'Failed to find swarm_client at %s' % SWARM_CLIENT
-  sys.exit(1)
 
 
 NO_OUTPUT_FOUND = (
@@ -86,7 +76,8 @@ def gen_summary_output(failed_tests, exit_code, shards_remaining):
   return out, exit_code
 
 
-def GetSwarmResults(swarm_base_url, test_keys, timeout, max_threads):
+def GetSwarmResults(
+    swarm_get_results, swarm_base_url, test_keys, timeout, max_threads):
   gtest_parser = gtest_utils.GTestLogParser()
   exit_code = None
   shards_remaining = range(len(test_keys))
@@ -112,6 +103,24 @@ def GetSwarmResults(swarm_base_url, test_keys, timeout, max_threads):
 
 
 def main():
+  src_swarm_client = os.path.join(os.getcwd(), 'src', 'tools', 'swarm_client')
+  # TODO(maruel): Remove this.
+  third_party_swarm_client = os.path.normpath(
+      os.path.join(BASE_DIR, '..', '..', 'third_party', 'swarm_client'))
+
+  if os.path.isdir(src_swarm_client):
+    sys.path.insert(0, src_swarm_client)
+  elif os.path.isdir(third_party_swarm_client):
+    # TODO(maruel): Remove this once src/tools/swarm_client is verified to work.
+    print >> sys.stderr, 'WARNING: Failed to find %s' % src_swarm_client
+    sys.path.insert(0, third_party_swarm_client)
+  else:
+    print >> sys.stderr, 'Failed to find swarm_client at %s or %s' % (
+        src_swarm_client, third_party_swarm_client)
+    return 1
+
+  import swarm_get_results  # pylint: disable=F0401
+
   parser, options, test_name = swarm_get_results.parse_args()
   if not options.shards:
     parser.error('The number of shards expected must be passed in.')
@@ -128,7 +137,8 @@ def main():
                           'test keys were found' % (options.shards,
                                                     len(test_keys)))
 
-  return GetSwarmResults(options.url, test_keys, options.timeout, None)
+  return GetSwarmResults(
+      swarm_get_results, options.url, test_keys, options.timeout, None)
 
 
 if __name__ == '__main__':
