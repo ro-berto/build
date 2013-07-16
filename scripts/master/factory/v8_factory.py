@@ -74,7 +74,8 @@ class V8Factory(gclient_factory.GClientFactory):
     # Automatically set v8_target_arch in GYP_DEFINES to target_arch.
     if not 'gclient_env' in factory_properties:
       factory_properties['gclient_env'] = {}
-    gclient_env = factory_properties['gclient_env']
+    gclient_env = factory_properties['gclient_env'].copy()
+    factory_properties['gclient_env'] = gclient_env
     if 'GYP_DEFINES' in gclient_env:
       gclient_env['GYP_DEFINES'] += " v8_target_arch=%s" % target_arch
     else:
