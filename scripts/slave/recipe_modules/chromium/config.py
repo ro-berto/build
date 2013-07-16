@@ -236,4 +236,4 @@ def chromium(c):
 
 @config_ctx(includes=['chromium'])
 def blink(c):
-  c.compile_py.default_targets = ['all_webkit', 'content_shell']
+  c.compile_py.default_targets = ['all_webkit']

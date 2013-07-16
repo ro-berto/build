@@ -5,8 +5,7 @@
       "build_tool": "ninja", 
       "compiler": "goma", 
       "default_targets": [
-        "all_webkit", 
-        "content_shell"
+        "all_webkit"
       ]
     }, 
     "gyp_env": {

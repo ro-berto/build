@@ -26,7 +26,7 @@
    "name": "gclient runhooks"
   },
   {
-   "cmd": ["python", "-u", "[BUILD_ROOT]\\scripts\\slave\\compile.py", "--target", "Debug", "--build-dir", "[SLAVE_BUILD_ROOT]\\src\\out", "--build-tool", "ninja", "--compiler", "goma", "--", "all_webkit", "content_shell"],
+   "cmd": ["python", "-u", "[BUILD_ROOT]\\scripts\\slave\\compile.py", "--target", "Debug", "--build-dir", "[SLAVE_BUILD_ROOT]\\src\\out", "--build-tool", "ninja", "--compiler", "goma", "--", "all_webkit"],
    "name": "compile"
   },
   {
@@ -53,7 +53,7 @@
    "name": "gclient runhooks (2)"
   },
   {
-   "cmd": ["python", "-u", "[BUILD_ROOT]\\scripts\\slave\\compile.py", "--target", "Debug", "--build-dir", "[SLAVE_BUILD_ROOT]\\src\\out", "--build-tool", "ninja", "--compiler", "goma", "--", "all_webkit", "content_shell"],
+   "cmd": ["python", "-u", "[BUILD_ROOT]\\scripts\\slave\\compile.py", "--target", "Debug", "--build-dir", "[SLAVE_BUILD_ROOT]\\src\\out", "--build-tool", "ninja", "--compiler", "goma", "--", "all_webkit"],
    "name": "compile (2)"
   },
   {
