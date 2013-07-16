@@ -120,6 +120,7 @@ def main():
   if not test_keys:
     parser.error('No test keys to get results with.')
 
+  options.shards = int(options.shards)
   if options.shards == -1:
     options.shards = len(test_keys)
   elif len(test_keys) < options.shards:
