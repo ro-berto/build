@@ -119,8 +119,13 @@ def main():
       options.url, test_name, options.timeout)
   if not test_keys:
     parser.error('No test keys to get results with.')
+
   if options.shards == -1:
     options.shards = len(test_keys)
+  elif len(test_keys) < options.shard:
+    print >> sys.stderr, ('Warning: Test should have %d shards, but only %d '
+                          'test keys were found' % (options.shard,
+                                                    len(test_keys)))
 
   return GetSwarmResults(options.url, test_keys, options.timeout, None)
 
