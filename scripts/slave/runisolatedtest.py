@@ -15,24 +15,32 @@ import sys
 USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
          os.path.basename(sys.argv[0]))
 
-LINUX_ISOLATE_ENABLED_TESTS = (
+LINUX_ISOLATE_ENABLED_TESTS = set((
   'base_unittests',
   'browser_tests',
   'interactive_ui_tests',
   'net_unittests',
   'unit_tests',
-)
+))
 
 # TODO(maruel): Not enabled because of lack of XCode support and missing
 # dependencies for more complex tests.
-MAC_ISOLATE_ENABLED_TESTS = ()
+MAC_ISOLATE_ENABLED_TESTS = set()
 
-# TODO(maruel): Add back browser_tests and interactive_ui_tests.
-WIN_ISOLATE_ENABLED_TESTS = (
+WIN_ISOLATE_ENABLED_TESTS = set((
   'base_unittests',
+  'browser_tests',
+  'interactive_ui_tests',
   'net_unittests',
   'unit_tests',
-)
+))
+
+# http://crbug.com/260311
+# They are missing files for an unknown reason.
+BUG_260311 = set((
+  'browser_tests',
+  'interactive_ui_tests',
+))
 
 ISOLATE_ENABLED_BUILDERS = {
   # CI linux
@@ -41,15 +49,15 @@ ISOLATE_ENABLED_BUILDERS = {
   'Mac10.6 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
   'Mac10.7 Tests (1)': MAC_ISOLATE_ENABLED_TESTS,
   # CI win
-  'Vista Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
-  'Vista Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
-  'Vista Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
+  'Vista Tests (1)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
+  'Vista Tests (2)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
+  'Vista Tests (3)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
   'Win7 Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
   'Win7 Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
   'Win7 Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
-  'XP Tests (1)': WIN_ISOLATE_ENABLED_TESTS,
-  'XP Tests (2)': WIN_ISOLATE_ENABLED_TESTS,
-  'XP Tests (3)': WIN_ISOLATE_ENABLED_TESTS,
+  'XP Tests (1)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
+  'XP Tests (2)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
+  'XP Tests (3)': WIN_ISOLATE_ENABLED_TESTS - BUG_260311,
 
   # Try Server
   'linux_rel': LINUX_ISOLATE_ENABLED_TESTS,
