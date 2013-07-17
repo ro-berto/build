@@ -363,7 +363,13 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
     if self.line_mode == XcodebuildFilter.LineMode.DroppingFailures:
       if self.failures_end_regex.match(a_line):
         self.line_mode = XcodebuildFilter.LineMode.Unbuffered
-      return
+        return
+      # Only skip lines starting with a tab in DroppingFailures mode. Due to
+      # stdout / stderr buffer confusion, regular build output stragglers could
+      # appear in the failure summary, and those shouldn't be dropped
+      # (see http://crbug.com/260989).
+      if a_line.startswith('\t'):
+        return
 
     # Wasn't a header, direct the line based on the mode the filter is in.
     if self.line_mode == XcodebuildFilter.LineMode.BufferAsCommand:
