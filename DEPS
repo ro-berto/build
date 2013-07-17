@@ -11,9 +11,6 @@ deps = {
   "build/third_party/gsutil/boto":
     "svn://svn.chromium.org/boto@7",
 
-  "build/third_party/swarm_client":
-    "/trunk/tools/swarm_client",
-
   "commit-queue":
     "/trunk/tools/commit-queue",
 
