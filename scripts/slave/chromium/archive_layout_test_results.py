@@ -130,8 +130,13 @@ def archive_layout(options, args):
 
   wc_dir = os.path.dirname(chrome_dir)
   last_change = str(slave_utils.SubversionRevision(wc_dir))
+
+  # TODO(dpranke): Is it safe to assume build_number is not blank? Should we
+  # assert() this ?
+  build_number = str(options.build_number)
   print 'last change: %s' % last_change
   print 'build name: %s' % build_name
+  print 'build number: %s' % build_number
   print 'host name: %s' % socket.gethostname()
 
   # Where to save layout test results.
@@ -141,7 +146,7 @@ def archive_layout(options, args):
 
   gs_bucket = options.factory_properties.get('gs_bucket', None)
   if gs_bucket:
-    gs_base = '/'.join([gs_bucket, build_name, last_change])
+    gs_base = '/'.join([gs_bucket, build_name, build_number])
     gs_acl = options.factory_properties.get('gs_acl', None)
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl)
     slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl)
