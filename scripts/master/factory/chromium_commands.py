@@ -984,21 +984,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               py_script=True,
                               factory_properties=factory_properties)
 
-    def AddFunctionalTest(test_name, script_name):
-      pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
-                                    script_name)
-      self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
-                                step_name=test_name,
-                                cmd_name=pyauto_script,
-                                py_script=True,
-                                factory_properties=factory_properties)
-
-    AddFunctionalTest('DevTools.NativeSnapshotUnknownSize',
-                      'devtools_native_memory_snapshot.py')
-    if self._target == 'Release':
-      AddFunctionalTest('DevTools.CheckMemoryInstrumentation',
-                        'devtools_instrumented_objects_check.py')
-
   def AddBisectTest(self):
     """Adds a step to the factory to run a bisection on a range of revisions
     to investigate performance regressions."""
