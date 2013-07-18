@@ -144,8 +144,9 @@ F('rel_unit_3', mac_tester().ChromiumFactory(
   build_url=rel_archive,
   tests=[
     'browser_tests',
-    'net',
     'message_center_unittests',
+    'net',
+    'telemetry_unittests',
   ],
   factory_properties={'generate_gtest_json': True,
                       'sharded_tests': sharded_tests,
