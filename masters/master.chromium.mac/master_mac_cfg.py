@@ -81,7 +81,7 @@ F('rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=[
         '--compiler=goma-clang', '--build-tool=ninja', '--',
-        '-target', 'chromium_builder_tests'],
+        'chromium_builder_tests'],
     factory_properties={
         'trigger': 'mac_rel_trigger',
         'gclient_env': {
