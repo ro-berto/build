@@ -15,8 +15,9 @@ DEPS = [
 ]
 
 def GenSteps(api):
-  api.chromium.set_config('blink', GIT_MODE=True)
+  api.chromium.set_config('blink')
   api.chromium.apply_config('trybot_flavor')
+  api.gclient.set_config('blink_internal', GIT_MODE=True)
   api.step.auto_resolve_conflicts = True
 
   webkit_lint = api.path.build('scripts', 'slave', 'chromium',

@@ -68,6 +68,20 @@ def BlinkURL(c):
   else:
     return ChromiumSvnSubURL(c, 'blink', 'trunk')
 
+def ChromeSvnSubURL(c, *pieces):
+  BASES = ('svn://svn.chromium.org',
+           'svn://svn-mirror.golo.chromium.org')
+  return '/'.join((BASES[c.USE_MIRROR],) + pieces)
+
+def ChromeInternalGitURL(_c, *pieces):
+  return '/'.join(('https://chrome-internal.googlesource.com',) + pieces)
+
+def ChromeInternalSrcURL(c):
+  if c.GIT_MODE:
+    return ChromeInternalGitURL(c, 'chrome', 'src-internal.git')
+  else:
+    return ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'src-internal')
+
 def mirror_only(c, obj):
   return obj if c.USE_MIRROR else obj.__class__()
 
@@ -99,12 +113,56 @@ def blink_bare(c):
   s.name = 'blink'
   s.url = BlinkURL(c)
 
+# TODO(iannucci,vadimsh): Switch this to src-limited
+@config_ctx()
+def chrome_internal(c):
+  s = c.solutions.add()
+  s.name = 'src-internal'
+  s.url = ChromeInternalSrcURL(c)
+  # Remove some things which are generally not needed
+  s.custom_deps = {
+    "src/data/autodiscovery" : None,
+    "src/data/page_cycler" : None,
+    "src/tools/grit/grit/test/data" : None,
+    "src/chrome/test/data/perf/frame_rate/private" : None,
+    "src/data/mozilla_js_tests" : None,
+    "src/chrome/test/data/firefox2_profile/searchplugins" : None,
+    "src/chrome/test/data/firefox2_searchplugins" : None,
+    "src/chrome/test/data/firefox3_profile/searchplugins" : None,
+    "src/chrome/test/data/firefox3_searchplugins" : None,
+    "src/chrome/test/data/ssl/certs" : None,
+    "src/data/mach_ports" : None,
+    "src/data/esctf" : None,
+    "src/data/selenium_core" : None,
+    "src/chrome/test/data/plugin" : None,
+    "src/data/memory_test" : None,
+    "src/data/tab_switching" : None,
+    "src/chrome/test/data/osdd" : None,
+    "src/webkit/data/bmp_decoder":None,
+    "src/webkit/data/ico_decoder":None,
+    "src/webkit/data/test_shell/plugins":None,
+    "src/webkit/data/xbm_decoder":None,
+  }
+
 @config_ctx(includes=['chromium'])
 def blink(c):
   c.solutions[0].custom_deps = {
     'src/third_party/WebKit': BlinkURL(c)
   }
   c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
+
+@config_ctx(includes=['blink', 'chrome_internal'])
+def blink_internal(c):
+  # Add back the webkit data dependencies
+  needed_components_internal = [
+    "src/webkit/data/bmp_decoder",
+    "src/webkit/data/ico_decoder",
+    "src/webkit/data/test_shell/plugins",
+    "src/webkit/data/xbm_decoder",
+  ]
+  for key in needed_components_internal:
+    del c.solutions[1].custom_deps[key]
+
 
 @config_ctx()
 def nacl(c):
