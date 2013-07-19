@@ -326,6 +326,10 @@ class GClient(sourcebase):
     else:
       command.append(self.svnurl)
 
+    git_cache_dir = os.path.abspath(
+        os.path.join(self.builder.basedir, os.pardir, os.pardir, os.pardir,
+                     'git_cache'))
+    command.append('--cache-dir=' + git_cache_dir)
     c = runprocesscmd(self.builder, command, dirname,
                       sendRC=False, timeout=self.timeout,
                       keepStdout=True, environ=self.env)
