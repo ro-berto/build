@@ -22,6 +22,9 @@ def GenSteps(api):
 
   webkit_lint = api.path.build('scripts', 'slave', 'chromium',
                                'lint_test_files_wrapper.py')
+  webkit_python_tests = api.path.build('scripts', 'slave', 'chromium',
+                                       'test_webkitpy_wrapper.py')
+
 
   def BlinkTestsStep(with_patch):
     name = 'webkit_tests (with%s patch)' % ('' if with_patch else 'out')
@@ -38,10 +41,16 @@ def GenSteps(api):
     api.rietveld.apply_issue('third_party', 'WebKit'),
     api.chromium.runhooks(),
     api.chromium.compile(),
-    api.chromium.runtests('webkit_unit_tests'),
     api.python('webkit_lint', webkit_lint, [
       '--build-dir', api.path.checkout('out'),
-      '--target', api.properties['build_config']])
+      '--target', api.properties['build_config']]),
+    api.python('webkit_python_tests', webkit_python_tests, [
+      '--build-dir', api.path.checkout('out'),
+      '--target', api.properties['build_config']
+    ]),
+    api.chromium.runtests('webkit_unit_tests'),
+    api.chromium.runtests('weborigin_unittests'),
+    api.chromium.runtests('wtf_unittests'),
   )
 
   yield BlinkTestsStep(with_patch=True)
