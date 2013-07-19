@@ -96,7 +96,7 @@ class GclientApi(recipe_api.RecipeApi):
       # have a reliable gclient method to produce a pristine working dir for
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
-      j = '-j1' if self.m.platform.is_win else '-j8'
+      j = '-j2' if self.m.platform.is_win else '-j8'
       steps.append(gclient(step_name('sync'),
         'sync', '--verbose', '--with_branch_heads', '--nohooks', j,
         '--reset', '--delete_unversioned_trees', '--force', '--upstream',
