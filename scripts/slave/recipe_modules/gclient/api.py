@@ -54,7 +54,7 @@ class GclientApi(recipe_api.RecipeApi):
     ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 
-  def checkout(self, gclient_config=None, spec_name=None):
+  def checkout(self, gclient_config=None, spec_name=None, revert=True):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
     assert cfg.complete()
@@ -78,7 +78,8 @@ class GclientApi(recipe_api.RecipeApi):
     ]
 
     if not cfg.GIT_MODE:
-      steps.append(self.revert(step_name))
+      if revert:
+        steps.append(self.revert(step_name))
       steps.append(gclient(
           step_name('sync'), 'sync', '--nohooks', *revisions))
     else:
