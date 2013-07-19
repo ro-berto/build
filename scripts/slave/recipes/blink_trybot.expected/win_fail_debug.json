@@ -5,7 +5,7 @@
    "seed_steps": ["gclient setup", "gclient sync", "gclient recurse (git config user.name)", "gclient recurse (git config user.email)", "apply_issue", "gclient runhooks", "compile", "webkit_lint", "webkit_python_tests", "webkit_unit_tests", "weborigin_unittests", "wtf_unittests"]
   },
   {
-   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "sync", "--verbose", "--with_branch_heads", "--nohooks", "-j8", "--reset", "--delete_unversioned_trees", "--force", "--upstream", "--no-nag-max"],
+   "cmd": ["python", "-u", "[DEPOT_TOOLS_ROOT]\\gclient.py", "sync", "--verbose", "--with_branch_heads", "--nohooks", "-j1", "--reset", "--delete_unversioned_trees", "--force", "--upstream", "--no-nag-max"],
    "name": "gclient sync"
   },
   {
