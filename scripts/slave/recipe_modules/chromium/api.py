@@ -13,7 +13,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }
 
-  def compile(self, targets=None):
+  def compile(self, targets=None, name=None):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -27,7 +27,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--compiler', self.c.compile_py.compiler]
     args.append('--')
     args.extend(targets)
-    return self.m.python('compile',
+    return self.m.python(name or 'compile',
                          self.m.path.build('scripts', 'slave', 'compile.py'),
                          args)
 
