@@ -74,6 +74,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._sizes_tool = J(s_dir, 'sizes.py')
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
     self._windows_asan_tool = J(s_dir, 'win_apply_asan.py')
+    self._dynamorio_coverage_tool = J(s_dir, 'dynamorio_coverage.py')
 
     # Scripts in the private dir.
     self._download_and_extract_official_tool = self.PathJoin(
@@ -1293,13 +1294,59 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties = factory_properties or {}
 
     args = ['--target', self._target,
-            '--build-dir', self._build_dir]
+            '--build-dir', self._build_dir,
+            '--build-id', WithProperties('%(got_revision)s')]
+    if factory_properties.get('test_platform'):
+      args += ['--platform', factory_properties.get('test_platform')]
+    if factory_properties.get('upload-dir'):
+      args += ['--upload-dir', factory_properties.get('upload-dir')]
+
+    args = self.AddFactoryProperties(factory_properties, args)
 
     self.AddAnnotatedPerfStep('coverage', None, 'graphing',
-                              step_name='process_coverage',
-                              cmd_name = self._process_coverage_tool,
-                              cmd_options=args, py_script=True,
-                              factory_properties=factory_properties)
+                                         step_name='process_coverage',
+                                         cmd_name=self._process_coverage_tool,
+                                         cmd_options=args, py_script=True,
+                                         factory_properties=factory_properties)
+
+    # Map the perf ID to the coverage subdir, so we can link from the coverage
+    # graph
+    perf_mapping = self.PERF_TEST_MAPPINGS[self._target]
+    perf_id = factory_properties.get('perf_id')
+    perf_subdir = perf_mapping.get(perf_id)
+
+    # 'total_coverage' is the default archive_folder for
+    # archive_coverage.py script.
+    url = _GetArchiveUrl('coverage', perf_subdir) + '/total_coverage'
+    text = 'view coverage'
+    cmd_archive = [self._python, self._archive_coverage,
+                   '--target', self._target,
+                   '--build-dir', self._build_dir,
+                   '--perf-subdir', perf_subdir]
+    if factory_properties.get('use_build_number'):
+      cmd_archive.extend(['--build-number', WithProperties('%(buildnumber)s')])
+
+    self.AddArchiveStep(data_description='coverage', base_url=url,
+                        link_text=text, command=cmd_archive)
+
+  def AddBuildrunnerProcessCoverage(self, factory_properties=None):
+    factory_properties = factory_properties or {}
+
+    args = ['--target', self._target,
+            '--build-dir', self._build_dir,
+            '--build-id', WithProperties('%(got_revision)s')]
+    if factory_properties.get('test_platform'):
+      args += ['--platform', factory_properties.get('test_platform')]
+    if factory_properties.get('upload-dir'):
+      args += ['--upload-dir', factory_properties.get('upload-dir')]
+
+    args = self.AddFactoryProperties(factory_properties, args)
+
+    self.AddBuildrunnerAnnotatedPerfStep('coverage', None, 'graphing',
+                                         step_name='process_coverage',
+                                         cmd_name=self._process_coverage_tool,
+                                         cmd_options=args, py_script=True,
+                                         factory_properties=factory_properties)
 
     # Map the perf ID to the coverage subdir, so we can link from the coverage
     # graph
@@ -1661,6 +1708,86 @@ class ChromiumCommands(commands.FactoryCommands):
             'swarm_hashes',
         ],
         do_step_if=swarm_commands.TestStepFilterTriggerSwarm))
+
+  def AddTriggerCoverageTests(self, factory_properties):
+    """Trigger coverage testers, wait for completion, then process coverage."""
+    # Add trigger step.
+    self._factory.addStep(trigger.Trigger(
+        schedulerNames=[factory_properties.get('coverage_trigger')],
+        updateSourceStamp=True,
+        waitForFinish=True,
+        haltOnFailure=True))
+
+  def AddBuildrunnerCreateCoverageFile(self, test, dynamorio_dir,
+                                       dynamorio_log_dir, factory_properties):
+    # Create coverage file.
+    cmd = [self._python,
+           self._dynamorio_coverage_tool,
+           '--build-dir', self._build_dir,
+           '--build-id', WithProperties('%(got_revision)s'),
+           '--platform', factory_properties['test_platform'],
+           '--dynamorio-dir', dynamorio_dir,
+           '--dynamorio-log-dir', dynamorio_log_dir,
+           '--test-to-upload', test]
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    self.AddBuildrunnerTestStep(shell.ShellCommand,
+                                'create_coverage_' + test, cmd,
+                                timeout=900, halt_on_failure=True)
+
+  def AddBuildrunnerCoverageTests(self, factory_properties):
+    """Add tests to run with dynamorio code coverage tool."""
+    dynamorio_dir = self.PathJoin(self._build_dir, 'dynamorio')
+    dynamorio_log_dir = self.PathJoin(dynamorio_dir, 'tools', 'lib32',
+                                      'release')
+    ddrun_bin = self.PathJoin(dynamorio_dir, 'bin32',
+                              self.GetExecutableName('drrun'))
+    bbcov_dll = self.PathJoin(dynamorio_log_dir, 'bbcov.dll')
+    ddrun_cmd = [
+      ddrun_bin,
+      '-nop_initial_bblock',
+      '-disable_traces',
+      '-fast_client_decode',
+      '-c', bbcov_dll,
+      '--']
+    # Run browser tests with dynamorio environment vars.
+    tests = factory_properties['tests']
+    if 'browser_tests' in tests:
+      browser_tests_prop = factory_properties.copy()
+      browser_tests_prop['testing_env'] = {
+          'BROWSER_WRAPPER': ' '.join(ddrun_cmd)}
+      arg_list = ['--lib=browser_tests']
+      arg_list += ['--ui-test-action-timeout=1200000',
+                   '--ui-test-action-max-timeout=2400000',
+                   '--ui-test-terminate-timeout=1200000']
+      arg_list = filter(None, arg_list)
+      total_shards = factory_properties.get('browser_total_shards')
+      shard_index = factory_properties.get('browser_shard_index')
+      self.AddBuildrunnerGTest('browser_tests',
+                                factory_properties,
+                                description='',
+                                max_time=24*60*60,
+                                timeout=3*10*60,
+                                arg_list=arg_list,
+                                total_shards=total_shards,
+                                shard_index=shard_index)
+      self.AddBuildrunnerCreateCoverageFile('browser_tests',
+                                            dynamorio_dir,
+                                            dynamorio_log_dir,
+                                            factory_properties)
+
+    # Add all other tests without sharding.
+    shard_index = factory_properties.get('browser_shard_index')
+    if not shard_index or shard_index == 1:
+      test_path = self.PathJoin(self._build_dir, self._target)
+      for test in tests:
+        if test != 'browser_tests':
+          cmd = ddrun_cmd + [self.PathJoin(test_path,
+                             self.GetExecutableName(test))]
+          self.AddBuildrunnerTestStep(shell.ShellCommand, test, cmd)
+          self.AddBuildrunnerCreateCoverageFile(test,
+                                                dynamorio_dir,
+                                                dynamorio_log_dir,
+                                                factory_properties)
 
 
 def _GetArchiveUrl(archive_type, builder_name='%(build_name)s'):
