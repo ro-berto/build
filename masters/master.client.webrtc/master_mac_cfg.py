@@ -36,7 +36,13 @@ tests = [
     'voice_engine_unittests',
 ]
 
-options = ['--', '-project', '../webrtc.xcodeproj']
+baremetal_tests = [
+    'audio_device_integrationtests',
+    'video_capture_integrationtests',
+    'vie_auto_test',
+    'voe_auto_test',
+]
+options = ['--build-tool=ninja']
 
 defaults['category'] = 'mac'
 
@@ -80,6 +86,21 @@ F('mac_asan_factory', mac().WebRTCFactory(
                         {'GYP_DEFINES': ('asan=1'
                                          ' release_extra_cflags=-g '
                                          ' linux_use_tcmalloc=0 ')}}))
+
+B('Mac32 Release [large tests]', 'mac_largetests_factory',
+  scheduler=scheduler)
+F('mac_largetests_factory', mac().WebRTCFactory(
+    target='Release',
+    options=options,
+    tests=baremetal_tests,
+    factory_properties={
+        'show_perf_results': True,
+        'expectations': True,
+        'perf_id': 'webrtc-mac-large-tests',
+        'perf_measuring_tests': ['vie_auto_test'],
+        'custom_cmd_line_tests': ['vie_auto_test',
+                                  'voe_auto_test'],
+    }))
 
 # iOS.
 B('iOS Device', 'ios_release_factory', scheduler=scheduler)

@@ -33,6 +33,14 @@ tests = [
     'video_engine_core_unittests',
     'voice_engine_unittests',
 ]
+
+baremetal_tests = [
+    'audio_device_integrationtests',
+    'video_capture_integrationtests',
+    'vie_auto_test',
+    'voe_auto_test',
+]
+
 ninja_options = ['--build-tool=ninja']
 
 defaults['category'] = 'win'
@@ -71,6 +79,21 @@ F('win64_release_factory', win().WebRTCFactory(
     tests=tests,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
+    }))
+
+B('Win32 Release [large tests]', 'win32_largetests_factory',
+  scheduler=scheduler)
+F('win32_largetests_factory', win().WebRTCFactory(
+    target='Release',
+    options=ninja_options,
+    tests=baremetal_tests,
+    factory_properties={
+        'show_perf_results': True,
+        'expectations': True,
+        'perf_id': 'webrtc-win-large-tests',
+        'perf_measuring_tests': ['vie_auto_test'],
+        'custom_cmd_line_tests': ['vie_auto_test',
+                                  'voe_auto_test'],
     }))
 
 

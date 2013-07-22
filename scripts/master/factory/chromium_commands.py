@@ -1038,6 +1038,85 @@ class ChromiumCommands(commands.FactoryCommands):
                                 test_command=cmd,
                                 do_step_if=self.TestStepFilter)
 
+  def AddWebRTCTests(self, tests, factory_properties, timeout=1200):
+    """Adds a list of tests, possibly prefixed for running within a tool.
+
+    To run a test under memcheck, prefix the test name with 'memcheck_'.
+    To run a test under tsan, prefix the test name with 'tsan_'.
+    The following prefixes are supported:
+    - 'memcheck_' for memcheck
+    - 'tsan_' for Thread Sanitizer (tsan)
+    - 'tsan_gcc_' for Thread Sanitizer (GCC)
+    - 'tsan_rv_' for Thread Sanitizer (RaceVerifier)
+    - 'drmemory_full_' for Dr Memory (full)
+    - 'drmemory_light_' for Dr Memory (light)
+    - 'drmemory_pattern_' for Dr Memory (pattern)
+
+    To run a test with perf measurements; add a key 'perf_measuring_tests'
+    mapped to a list of test names in the factory properties.
+
+    To run a test using the buildbot_tests.py script in WebRTC; add a key
+    'custom_cmd_line_tests' mapped to a list of test names in the factory
+    properties.
+
+    Args:
+      tests: List of test names, possibly prefixed as described above.
+      factory_properties: Dict of properties to be used during execution.
+      timeout: Max time a test may run before it is killed.
+    """
+
+    def M(test, prefix, fp, timeout):
+      """If the prefix matches the test name it is added and True is returned.
+      """
+      if test.startswith(prefix):
+        self.AddMemoryTest(test[len(prefix):], prefix[:-1], timeout, fp)
+        return True
+      return False
+
+    def IsPerf(test_name, factory_properties):
+      perf_measuring_tests = factory_properties.get('perf_measuring_tests', [])
+      return test_name in perf_measuring_tests
+
+    custom_cmd_line_tests = factory_properties.get('custom_cmd_line_tests', [])
+    for test in tests:
+      if M(test, 'memcheck_', factory_properties, timeout):
+        continue
+      if M(test, 'tsan_rv_', factory_properties, timeout):
+        continue
+      if M(test, 'tsan_', factory_properties, timeout):
+        continue
+      if M(test, 'drmemory_full_', factory_properties, timeout):
+        continue
+      if M(test, 'drmemory_light_', factory_properties, timeout):
+        continue
+      if M(test, 'drmemory_pattern_', factory_properties, timeout):
+        continue
+
+      if test in custom_cmd_line_tests:
+        # This hardcoded path is not pretty but it's better than duplicating
+        # the output-path-finding code that only seems to exist in runtest.py.
+        test_run_script = 'src/out/%s/buildbot_tests.py' % self._target
+        args_list = ['--test', test]
+        if IsPerf(test, factory_properties):
+          self.AddAnnotatedPerfStep(test_name=test, gtest_filter=None,
+                                    log_type='graphing',
+                                    factory_properties=factory_properties,
+                                    cmd_name=test_run_script,
+                                    cmd_options=args_list, step_name=test,
+                                    py_script=True)
+        else:
+          cmd = self.GetPythonTestCommand(test_run_script, arg_list=args_list)
+          self.AddTestStep(chromium_step.AnnotatedCommand, test, cmd)
+      else:
+        if IsPerf(test, factory_properties):
+          self.AddAnnotatedPerfStep(test_name=test, gtest_filter=None,
+                                    log_type='graphing',
+                                    factory_properties=factory_properties,
+                                    cmd_name=test)
+        else:
+          self.AddGTestTestStep(test_name=test,
+                                factory_properties=factory_properties)
+
   def AddWebkitTests(self, factory_properties=None):
     """Adds a step to the factory to run the WebKit layout tests.
 

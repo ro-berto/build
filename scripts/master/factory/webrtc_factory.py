@@ -73,14 +73,5 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
                                                     'webrtc_tests.sh')
     cmds._win_memory_tests_runner = cmds.PathJoin(valgrind_script_path,
                                                   'webrtc_tests.bat')
-    # Add tests.
-    gyp_defines = factory_properties['gclient_env'].get('GYP_DEFINES', '')
-    for test in tests:
-      if 'build_for_tool=memcheck' in gyp_defines:
-        cmds.AddMemoryTest(test, 'memcheck',
-                           factory_properties=factory_properties)
-      elif 'build_for_tool=tsan' in gyp_defines:
-        cmds.AddMemoryTest(test, 'tsan', factory_properties=factory_properties)
-      else:
-        cmds.AddAnnotatedGTestTestStep(test, factory_properties)
+    cmds.AddWebRTCTests(tests, factory_properties)
     return factory
