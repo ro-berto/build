@@ -15,6 +15,7 @@ categories_steps = {
 }
 
 exclusions = {
+  'WebKit XP': ['runhooks'], # crbug.com/262577
 }
 
 forgiving_steps = ['update_scripts', 'update', 'gclient_revert']
