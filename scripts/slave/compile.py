@@ -363,13 +363,7 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
     if self.line_mode == XcodebuildFilter.LineMode.DroppingFailures:
       if self.failures_end_regex.match(a_line):
         self.line_mode = XcodebuildFilter.LineMode.Unbuffered
-        return
-      # Only skip lines starting with a tab in DroppingFailures mode. Due to
-      # stdout / stderr buffer confusion, regular build output stragglers could
-      # appear in the failure summary, and those shouldn't be dropped
-      # (see http://crbug.com/260989).
-      if a_line.startswith('\t'):
-        return
+      return
 
     # Wasn't a header, direct the line based on the mode the filter is in.
     if self.line_mode == XcodebuildFilter.LineMode.BufferAsCommand:
@@ -461,17 +455,16 @@ def main_xcode(options, args):
   # Set up the filter before changing directories so the raw build log can
   # be recorded.
   # Support a local file blocking filters (for debugging).  Also check the
-  # Xcode version to make sure it is 3.2 or has compatible output, as that is
-  # what the filter is coded to.
+  # Xcode version to make sure it is 3.2, as that is what the filter is coded
+  # to.
   xcodebuild_filter = None
   no_filter_path = os.path.join(os.getcwd(), 'no_xcodebuild_filter')
   xcode_info = chromium_utils.GetCommandOutput(['xcodebuild', '-version'])
   if os.path.exists(no_filter_path):
     print 'NOTE: "%s" exists, output is unfiltered' % no_filter_path
-  elif not xcode_info.startswith('Xcode 3.2.') and \
-       not xcode_info.startswith('Xcode 4.') and \
-       not xcode_info.startswith('Xcode 5.'):
-    print 'NOTE: Not using Xcode 3.2, 4.x, or 5.x, output is unfiltered'
+  elif not xcode_info.startswith('Xcode 3.2.'):
+    # Note: The filter sometimes hides real errors on 4.x+, see crbug.com/260989
+    print 'NOTE: Not using Xcode 3.2, output is unfiltered'
   else:
     full_log_path = os.path.join(os.getcwd(), 'full_xcodebuild_log.txt')
     full_log = open(full_log_path, 'w')
