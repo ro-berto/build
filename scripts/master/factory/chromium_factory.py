@@ -885,14 +885,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('webdriver_tests'):
       f.AddWebDriverTest()
 
-    # Dynamorio coverage.
-    if R('trigger_coverage_tests'):
-      f.AddTriggerCoverageTests(fp)
-    if R('extract_dynamorio_build_br'):
-      f.AddBuildrunnerExtractDynamorioBuild(fp)
-    if R('coverage_tests_br'):
-      f.AddBuildrunnerCoverageTests(fp)
-
     # When adding a test that uses a new executable, update kill_processes.py.
 
     # Coverage tests.  Add coverage processing absoluely last, after
@@ -902,8 +894,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddRunCoverageBundles(fp)
     if R('process_coverage'):
       f.AddProcessCoverage(fp)
-    if R('process_coverage_br'):
-      f.AddBuildrunnerProcessCoverage(fp)
 
     # Add nacl integration tests (do these toward the end as they use the
     # annotator).

@@ -341,7 +341,6 @@ class FactoryCommands(object):
       'chromium-dbg-linux': 'linux-debug',
       'chromium-dbg-mac': 'mac-debug',
       'chromium-dbg-xp': 'xp-debug',
-      'chromium-dbg-win': 'win-debug',
       'chromium-dbg-linux-try': 'linux-try-debug',
     },
   }
@@ -403,9 +402,6 @@ class FactoryCommands(object):
 
     self._update_clang_tool = self.PathJoin(
         self._repository_root, 'tools', 'clang', 'scripts', 'update.sh')
-
-    self._extract_dynamorio_tool = self.PathJoin(
-        self._script_dir, 'extract_dynamorio_build.py')
 
     self._update_nacl_sdk_tool = self.PathJoin(self._script_dir,
                                                'update_nacl_sdk.py')
@@ -696,8 +692,7 @@ class FactoryCommands(object):
     self.AddGTestTestStep(*args, **kwargs)
 
   def AddGTestTestStep(self, test_name, factory_properties=None, description='',
-                       max_time=8*60*60, timeout=10*60, arg_list=None,
-                       total_shards=None, shard_index=None,
+                       arg_list=None, total_shards=None, shard_index=None,
                        test_tool_arg_list=None, hideStep=False):
     """Adds an Annotated step to the factory to run the gtest tests.
 
@@ -768,8 +763,7 @@ class FactoryCommands(object):
     cmd.extend(arg_list)
 
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name,
-                     ListProperties(cmd), description, timeout=timeout,
-                     max_time=max_time, do_step_if=doStep,
+                     ListProperties(cmd), description, do_step_if=doStep,
                      env=env, br_do_step_if=brDoStep, hide_step_if=hideStep,
                      target=self._target, factory_properties=factory_properties)
 
@@ -795,8 +789,8 @@ class FactoryCommands(object):
                           target=self._target)
 
   def AddBuildrunnerGTest(self, test_name, factory_properties=None,
-                          description='', max_time=8*60*60, timeout=10*60,
-                          arg_list=None, total_shards=None, shard_index=None,
+                          description='', arg_list=None,
+                          total_shards=None, shard_index=None,
                           test_tool_arg_list=None):
     """Add a buildrunner GTest step, which will be executed with runbuild.
 
@@ -807,8 +801,6 @@ class FactoryCommands(object):
     self.AddGTestTestStep(test_name,
                           factory_properties=factory_properties,
                           description=description,
-                          max_time=max_time,
-                          timeout=timeout,
                           arg_list=arg_list,
                           total_shards=total_shards,
                           shard_index=shard_index,
@@ -1296,21 +1288,6 @@ class FactoryCommands(object):
     goma_dir = self.PathJoin('..', '..', '..', 'goma')
     cmd = [self._python, self.PathJoin(goma_dir, 'diagnose_goma_log.py')]
     self.AddTestStep(shell.ShellCommand, 'diagnose_goma', cmd, timeout=60)
-
-  def AddBuildrunnerExtractDynamorioBuild(self, factory_properties=None):
-    """Extract Dynamorio build."""
-    factory_properties = factory_properties or {}
-
-    cmd = [self._python, self._extract_dynamorio_tool,
-           '--build-dir', self._build_dir,
-           '--target', 'dynamorio',
-           '--build-url', factory_properties.get('dynamorio_build_url')]
-
-    cmd = self.AddBuildProperties(cmd)
-    cmd = self.AddFactoryProperties(factory_properties, cmd)
-    self.AddBuildrunnerTestStep(retcode_command.ReturnCodeCommand,
-                                'extract_dynamorio_build', cmd,
-                                halt_on_failure=True)
 
 
 class CanCancelBuildShellCommand(shell.ShellCommand):

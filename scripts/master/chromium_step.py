@@ -591,7 +591,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
     },
     'Debug': {
       'chromium-dbg-linux': 'linux-debug',
-      'chromium-dbg-win': 'win-debug',
       'chromium-dbg-mac': 'mac-debug',
       'chromium-dbg-xp': 'xp-debug',
       'chromium-dbg-linux-try': 'linux-try-debug',
