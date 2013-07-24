@@ -11,6 +11,6 @@ class Libjingle(Master.Master3):
   master_port = 8061
   slave_port = 8161
   master_port_alt = 8261
-  server_url = 'http://libjingle.googlecode.com'
-  project_url = 'http://libjingle.googlecode.com'
+  server_url = 'http://webrtc.googlecode.com'
+  project_url = 'http://webrtc.googlecode.com'
   from_address = 'libjingle-cb-watchlist@google.com'
