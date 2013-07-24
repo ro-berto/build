@@ -5,6 +5,7 @@
 """ Set of basic operations/utilities that are used by the build. """
 
 import copy
+import cStringIO
 import errno
 import fnmatch
 import glob
@@ -736,11 +737,15 @@ class RunCommandFilter(object):
 
 
 def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
-               print_cmd=True, **kwargs):
+               print_cmd=True, timeout=None, max_time=None, **kwargs):
   """Runs the command list, printing its output and returning its exit status.
 
   Prints the given command (which should be a list of one or more strings),
   then runs it and writes its stdout and stderr to the appropriate file handles.
+
+  If timeout is set, the process will be killed if output is stopped after
+  timeout seconds. If max_time is set, the process will be killed if it runs for
+  more than max_time.
 
   If parser_func is not given, the subprocess's output is passed to stdout
   and stderr directly.  If the func is given, each line of the subprocess's
@@ -760,55 +765,68 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
   [['python', 'b'],['c']]
   """
 
+  def TimedFlush(timeout, fh):
+    while True:
+      try:
+        fh.flush()
+      # File handle is closed, exit.
+      except ValueError:
+        return
+      time.sleep(timeout)
+
   # TODO(all): nsylvain's CommandRunner in buildbot_slave is based on this
   # method.  Update it when changes are introduced here.
-  def ProcessRead(readfh, writefh, parser_func=None, filter_obj=None):
-    last_flushed_at = time.time()
+  def ProcessRead(readfh, writefh, parser_func=None, filter_obj=None,
+                  log_event=None):
     writefh.flush()
 
+    # Python on Windows writes the buffer only when it reaches 4k.  Ideally
+    # we would flush a minimum of 10 seconds.  However, we only write and
+    # flush no more often than 20 seconds to avoid flooding the master with
+    # network traffic from unbuffered output.
+    flush_thread = threading.Thread(target=TimedFlush, args=(20, writefh))
+    flush_thread.daemon = True
+    flush_thread.start()
+
     in_byte = readfh.read(1)
-    in_line = ''
-    unwritten_characters = ''
+    in_line = cStringIO.StringIO()
     while in_byte:
       # Capture all characters except \r.
       if in_byte != '\r':
-        in_line += in_byte
+        in_line.write(in_byte)
 
       # Write and flush on newline.
       if in_byte == '\n':
+        if log_event:
+          log_event.set()
         if parser_func:
-          parser_func(in_line.strip())
+          parser_func(in_line.getvalue().strip())
+
         if filter_obj:
-          in_line = filter_obj.FilterLine(in_line)
-        # Python on Windows writes the buffer only when it reaches 4k.  Ideally
-        # we would flush a minimum of 10 seconds.  However, we only write and
-        # flush no more often than 20 seconds to avoid flooding the master with
-        # network traffic from unbuffered output.
-        if not in_line is None:
-          unwritten_characters += in_line
-          if (time.time() - last_flushed_at) > 20:
-            last_flushed_at = time.time()
-            writefh.write(unwritten_characters)
-            writefh.flush()
-            unwritten_characters = ''
-        in_line = ''
+          filtered_line = filter_obj.FilterLine(in_line.getvalue())
+          if filtered_line is not None:
+            writefh.write(filtered_line)
+        else:
+          writefh.write(in_line.getvalue())
+        in_line = cStringIO.StringIO()
       in_byte = readfh.read(1)
+
+    if log_event and in_line.getvalue():
+      log_event.set()
 
     # Write remaining data and flush on EOF.
     if parser_func:
-      parser_func(in_line.strip())
+      parser_func(in_line.getvalue().strip())
+
     if filter_obj:
-      if in_line != '':
-        in_line = filter_obj.FilterDone(in_line)
-    # If unwritten_characters is added to multiple times and it has been 15
-    # seconds since the last write and a EOF is encountered, then we can
-    # have unwritten_characters contain text that hasn't yet been written.
-    # Write that text here before the final write of in_line and the flush.
-    if in_line:
-      unwritten_characters += in_line
-    if unwritten_characters:
-      writefh.write(unwritten_characters)
-      writefh.flush()
+      if in_line.getvalue():
+        filtered_line = filter_obj.FilterDone(in_line.getvalue())
+        if filtered_line is not None:
+          writefh.write(filtered_line)
+    else:
+      if in_line.getvalue():
+        writefh.write(in_line.getvalue())
+    writefh.flush()
 
   pipes = pipes or []
 
@@ -820,13 +838,18 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
   sys.stdout.flush()
   sys.stderr.flush()
-  if not (parser_func or filter_obj or pipes):
+
+  if not (parser_func or filter_obj or pipes or timeout or max_time):
     # Run the command.  The stdout and stderr file handles are passed to the
     # subprocess directly for writing.  No processing happens on the output of
     # the subprocess.
     proc = subprocess.Popen(command, stdout=sys.stdout, stderr=sys.stderr,
                             bufsize=0, **kwargs)
+
   else:
+    if not (parser_func or filter_obj):
+      filter_obj = RunCommandFilter()
+
     # Start the initial process.
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT, bufsize=0, **kwargs)
@@ -850,22 +873,98 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
       for handle in proc_handles[1:]:
         handle.stdout.close()
 
-    thread = None
-    if parser_func or filter_obj:
-      # Launch and start the reader thread.
-      thread = threading.Thread(target=ProcessRead,
-                                args=(proc_handles[0].stdout, sys.stdout,
-                                      parser_func, filter_obj))
-      thread.start()
+    log_event = threading.Event()
+
+    # Launch and start the reader thread.
+    thread = threading.Thread(target=ProcessRead,
+                              args=(proc_handles[0].stdout, sys.stdout),
+                              kwargs={'parser_func': parser_func,
+                                      'filter_obj': filter_obj,
+                                      'log_event': log_event})
+
+    kill_lock = threading.Lock()
+
+
+    def term_then_kill(handle, initial_timeout, numtimeouts, interval):
+      def timed_check():
+        for _ in range(numtimeouts):
+          if handle.poll() is not None:
+            return True
+          time.sleep(interval)
+
+      handle.terminate()
+      time.sleep(initial_timeout)
+      timed_check()
+      if handle.poll() is None:
+        handle.kill()
+      timed_check()
+      return handle.poll() is not None
+
+
+    def kill_proc(proc_handles, message=None):
+      with kill_lock:
+        if proc_handles:
+          killed = term_then_kill(proc_handles[0], 0.1, 5, 1)
+
+          if message:
+            print >> sys.stderr, message
+
+          if not killed:
+            print >> sys.stderr, 'could not kill pid %d!' % proc_handles[0].pid
+          else:
+            print >> sys.stderr, 'program finished with exit code %d' % (
+                proc_handles[0].returncode)
+
+          # Prevent other timeouts from double-killing.
+          del proc_handles[:]
+
+    def timeout_func(timeout, proc_handles, log_event, finished_event):
+      while log_event.wait(timeout):
+        log_event.clear()
+        if finished_event.is_set():
+          return
+
+      message = ('command timed out: %d seconds without output, attempting to '
+                 'kill' % timeout)
+      kill_proc(proc_handles, message)
+
+    def maxtimeout_func(timeout, proc_handles, finished_event):
+      if not finished_event.wait(timeout):
+        message = ('command timed out: %d seconds elapsed' % timeout)
+        kill_proc(proc_handles, message)
+
+    timeout_thread = None
+    maxtimeout_thread = None
+    finished_event = threading.Event()
+
+    if timeout:
+      timeout_thread = threading.Thread(target=timeout_func,
+                                        args=(timeout, proc_handles, log_event,
+                                              finished_event))
+      timeout_thread.daemon = True
+    if max_time:
+      maxtimeout_thread = threading.Thread(target=maxtimeout_func,
+                                           args=(max_time, proc_handles,
+                                                 finished_event))
+      maxtimeout_thread.daemon = True
+
+    thread.start()
+    if timeout_thread:
+      timeout_thread.start()
+    if maxtimeout_thread:
+      maxtimeout_thread.start()
 
     # Wait for the commands to terminate.
     for handle in proc_handles:
       handle.wait()
 
-    if parser_func or filter_obj:
-      # Wait for the reader thread to complete (implies EOF reached on stdout/
-      # stderr pipes).
-      thread.join()
+    # Wake up timeout threads.
+    finished_event.set()
+    log_event.set()
+
+    # Wait for the reader thread to complete (implies EOF reached on stdout/
+    # stderr pipes).
+    thread.join()
 
   # Wait for the command to terminate.
   proc.wait()

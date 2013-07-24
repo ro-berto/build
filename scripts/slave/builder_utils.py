@@ -328,6 +328,8 @@ def GetCommands(steplist):
         cmdhash['env'] = {}
       if hasattr(step, 'timeout'):
         cmdhash['timeout'] = step.timeout
+      if hasattr(step, 'maxTime'):
+        cmdhash['maxTime'] = step.maxTime
 
       cmdhash['description'] = step.description
       cmdhash['descriptionDone'] = step.descriptionDone

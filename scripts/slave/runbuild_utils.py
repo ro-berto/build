@@ -120,7 +120,9 @@ def Execute(commands, annotate, log, fail_fast=False):
                                     cwd=command['workdir'],
                                     env=env,
                                     filter_obj=mylogger,
-                                    print_cmd=False)
+                                    print_cmd=False,
+                                    timeout=command.get('timeout'),
+                                    max_time=command.get('maxTime'))
     commands_executed += 1
     if ret != 0:
       if ret == slave_utils.WARNING_EXIT_CODE:
