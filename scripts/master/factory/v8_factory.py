@@ -57,6 +57,9 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8Testing(env=factory_properties.get('test_env', {}),
                      options=factory_properties.get('test_options', []))
     if R('fuzz'): f.AddFuzzer()
+    if R('deopt'):
+      f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
+                       options=factory_properties.get('test_options', []))
     if R('webkit'): f.AddV8Webkit()
     if R('test262'): f.AddV8Test262()
     if R('mozilla'): f.AddV8Mozilla()
