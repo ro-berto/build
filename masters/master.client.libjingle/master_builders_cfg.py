@@ -53,7 +53,7 @@ asan_tests = filter(lambda test: test not in asan_disabled_tests,
                     normal_tests)
 asan_gyp_defines = 'asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 '
 ninja_options = ['--build-tool=ninja']
-win_project = r'..\talk\libjingle_all.sln'
+win_project = r'..\talk\libjingle_tests.sln'
 win_factory_prop = {
     'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}}
 
