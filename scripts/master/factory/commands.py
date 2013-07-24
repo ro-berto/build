@@ -693,7 +693,8 @@ class FactoryCommands(object):
 
   def AddGTestTestStep(self, test_name, factory_properties=None, description='',
                        arg_list=None, total_shards=None, shard_index=None,
-                       test_tool_arg_list=None, hideStep=False):
+                       test_tool_arg_list=None, hideStep=False, timeout=10*60,
+                       max_time=8*60*60):
     """Adds an Annotated step to the factory to run the gtest tests.
 
     Args:
@@ -763,7 +764,8 @@ class FactoryCommands(object):
     cmd.extend(arg_list)
 
     self.AddTestStep(chromium_step.AnnotatedCommand, test_name,
-                     ListProperties(cmd), description, do_step_if=doStep,
+                     ListProperties(cmd), description, timeout=timeout,
+                     max_time=max_time, do_step_if=doStep,
                      env=env, br_do_step_if=brDoStep, hide_step_if=hideStep,
                      target=self._target, factory_properties=factory_properties)
 
@@ -791,7 +793,8 @@ class FactoryCommands(object):
   def AddBuildrunnerGTest(self, test_name, factory_properties=None,
                           description='', arg_list=None,
                           total_shards=None, shard_index=None,
-                          test_tool_arg_list=None):
+                          test_tool_arg_list=None, timeout=10*60,
+                          max_time=8*60*60):
     """Add a buildrunner GTest step, which will be executed with runbuild.
 
     This will appear hidden and skipped on the main waterfall, but executed when
@@ -805,7 +808,9 @@ class FactoryCommands(object):
                           total_shards=total_shards,
                           shard_index=shard_index,
                           test_tool_arg_list=test_tool_arg_list,
-                          hideStep=True)
+                          hideStep=True,
+                          timeout=10*60,
+                          max_time=8*60*60)
 
   def AddBuildrunnerTestStep(self, command_class, test_name, test_command,
                              test_description='', timeout=10*60,
