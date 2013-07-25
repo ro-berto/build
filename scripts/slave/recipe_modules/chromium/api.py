@@ -58,11 +58,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       **kwargs
     )
 
-  def runhooks(self):
+  def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
-    return self.m.python(
-      'gclient runhooks',
-      self.m.path.depot_tools('gclient.py'), ['runhooks'],
-      env=self.c.gyp_env.as_jsonish(),
-    )
+    env = kwargs.get('env', {})
+    env.update(self.c.gyp_env.as_jsonish())
+    kwargs['env'] = env
+    return self.m.gclient.runhooks(**kwargs)
 

@@ -41,7 +41,8 @@ class AOSPApi(recipe_api.RecipeApi):
 
     spec = self.m.gclient.make_config('chromium_empty')
     spec.solutions[0].revision = svn_revision
-    yield self.m.gclient.checkout(spec, spec_name='empty_deps')
+    self.m.gclient.spec_alias = 'empty_deps'
+    yield self.m.gclient.checkout(spec)
 
     yield self.m.step(
       'calculate trimmed deps',
@@ -55,7 +56,9 @@ class AOSPApi(recipe_api.RecipeApi):
     spec.solutions[0].custom_deps = deps_blacklist
     spec.solutions[0].revision = svn_revision
     spec.target_os = ['android']
-    yield self.m.gclient.checkout(spec, spec_name='trimmed')
+    self.m.gclient.spec_alias = 'trimmed'
+    yield self.m.gclient.checkout(spec)
+    del self.m.gclient.spec_alias
 
   def lastchange_steps(self):
     lastchange_command = self.m.path.checkout('build', 'util', 'lastchange.py')

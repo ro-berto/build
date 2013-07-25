@@ -33,6 +33,17 @@ class GclientApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(GclientApi, self).__init__(**kwargs)
     self.USE_MIRROR = None
+    self._spec_alias = None
+
+  def __call__(self, name, cmd, **kwargs):
+    """Wrapper for easy calling of gclient steps."""
+    assert isinstance(cmd, (list, tuple))
+    prefix = 'gclient '
+    if self.spec_alias:
+      prefix = ('[spec: %s] ' % self.spec_alias) + prefix
+
+    return self.m.python(
+        prefix + name, self.m.path.depot_tools('gclient.py'), cmd, **kwargs)
 
   @property
   def use_mirror(self):
@@ -45,6 +56,19 @@ class GclientApi(recipe_api.RecipeApi):
   def use_mirror(self, val):  # pragma: no cover
     self.USE_MIRROR = val
 
+  @property
+  def spec_alias(self):
+    """Optional name for the current spec for step naming."""
+    return self._spec_alias
+
+  @spec_alias.setter
+  def spec_alias(self, name):
+    self._spec_alias = name
+
+  @spec_alias.deleter
+  def spec_alias(self):
+    self._spec_alias = None
+
   def get_config_defaults(self, config_name):
     ret = {
       'USE_MIRROR': self.use_mirror
@@ -54,19 +78,12 @@ class GclientApi(recipe_api.RecipeApi):
     ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 
-  def checkout(self, gclient_config=None, spec_name=None, revert=True):
+  def checkout(self, gclient_config=None, revert=True):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
     assert cfg.complete()
 
-    if not spec_name:
-      step_name = lambda n: 'gclient ' + n
-    else:
-      step_name = lambda n: '[spec: %s] gclient %s' % (spec_name, n)
-
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
-    gclient = lambda name, *args: self.m.python(
-        name, self.m.path.depot_tools('gclient.py'), args)
 
     revisions = []
     for s in cfg.solutions:
@@ -74,14 +91,13 @@ class GclientApi(recipe_api.RecipeApi):
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
     steps = [
-      gclient(step_name('setup'), 'config', '--spec', spec_string)
+      self('setup', ['config', '--spec', spec_string])
     ]
 
     if not cfg.GIT_MODE:
       if revert:
-        steps.append(self.revert(step_name))
-      steps.append(gclient(
-          step_name('sync'), 'sync', '--nohooks', *revisions))
+        steps.append(self.revert())
+      steps.append(self('sync', ['sync', '--nohooks'] + revisions))
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -97,27 +113,36 @@ class GclientApi(recipe_api.RecipeApi):
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
       j = '-j2' if self.m.platform.is_win else '-j8'
-      steps.append(gclient(step_name('sync'),
-        'sync', '--verbose', '--with_branch_heads', '--nohooks', j,
+      steps.append(self('sync',
+        ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
         '--reset', '--delete_unversioned_trees', '--force', '--upstream',
-        '--no-nag-max', *revisions))
+        '--no-nag-max'] + revisions))
 
       cfg_cmds = [
         ('user.name', 'local_bot'),
         ('user.email', 'local_bot@example.com'),
       ]
       for var, val in cfg_cmds:
-        name = step_name('recurse (git config %s)' % var)
-        steps.append(gclient(name, 'recurse', 'git', 'config', var, val))
+        name = 'recurse (git config %s)' % var
+        steps.append(self(name, ['recurse', 'git', 'config', var, val]))
 
     self.m.path.set_checkout(self.m.path.slave_build(cfg.solutions[0].name))
 
     return steps
 
-  def revert(self, step_name_fn=lambda x: 'gclient '+x):
+  def revert(self):
     """Return a gclient_safe_revert step."""
-    return self.m.python(
-      step_name_fn('revert'),
-      self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),
-      ['.', self.m.path.depot_tools('gclient', wrapper=True)],
+    # Not directly calling gclient, so don't use self().
+    prefix = 'gclient '
+    if self.spec_alias:
+      prefix = ('[spec: %s] ' % self.spec_alias) + prefix
+
+    return self.m.python(prefix + 'revert',
+        self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),
+        ['.', self.m.path.depot_tools('gclient', wrapper=True)],
     )
+
+  def runhooks(self, args=[], **kwargs):
+    """Return a 'gclient runhooks' step."""
+    assert isinstance(args, (list, tuple))
+    return self('runhooks', ['runhooks'] + list(args), **kwargs)
