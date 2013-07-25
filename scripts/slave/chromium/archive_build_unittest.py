@@ -216,9 +216,9 @@ class ArchiveTest(unittest.TestCase):
 
   def testGenerateRevisionFile(self):
     build_number = None
-    chromium_revision = '12345'
-    webkit_revision = '54321'
-    v8_revision = '33333'
+    chromium_revision = 12345
+    webkit_revision = 54321
+    v8_revision = 33333
     self.initializeStager(build_number, chromium_revision, webkit_revision,
                           v8_revision)
     self.stager.GenerateRevisionFile()
@@ -239,10 +239,10 @@ class ArchiveTest(unittest.TestCase):
     GetLastBuildRevision when acrchiving by chromium revision.
     """
     build_number = None
-    chromium_revision = '12345'
-    webkit_revision = '54321'
-    v8_revision = '33333'
-    expect_last_change_file_contents = '%s' % (chromium_revision)
+    chromium_revision = 12345
+    webkit_revision = 54321
+    v8_revision = 33333
+    expect_last_change_file_contents = '%d' % (chromium_revision)
     self.initializeStager(build_number, chromium_revision, webkit_revision,
                           v8_revision)
     last_change_file_path = self.stager.last_change_file
@@ -262,11 +262,11 @@ class ArchiveTest(unittest.TestCase):
     """This test is to test function SaveBuildRevisionToSpecifiedFile and
     GetLastBuildRevision when acrchiving by build number.
     """
-    build_number = '99999'
-    chromium_revision = '12345'
-    webkit_revision = '54321'
-    v8_revision = '33333'
-    expect_last_change_file_contents = '%s' % (build_number)
+    build_number = 99999
+    chromium_revision = 12345
+    webkit_revision = 54321
+    v8_revision = 33333
+    expect_last_change_file_contents = '%d' % (build_number)
     self.initializeStager(build_number, chromium_revision, webkit_revision,
                           v8_revision)
     last_change_file_path = self.stager.last_change_file
