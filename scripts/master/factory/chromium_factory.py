@@ -715,10 +715,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('content_unittests', description=' (webrtc filtered)',
                          factory_properties=fp, arg_list=arg_list)
     if R('webrtc_manual_browser_tests'):
-      arg_list = ['--gtest_filter=Webrtc*', '--run-manual',
-                  '--ui-test-action-max-timeout=300000']
-      f.AddGTestTestStep('browser_tests', description=' (manual)',
-                         factory_properties=fp, arg_list=arg_list)
+      f.AddWebRtcPerfManualBrowserTests(fp)
 
     # GPU tests:
     if R('gl_tests'):

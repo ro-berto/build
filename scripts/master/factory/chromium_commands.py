@@ -1537,6 +1537,15 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties,
                               cmd_name='content_unittests')
 
+  def AddWebRtcPerfManualBrowserTests(self, factory_properties=None):
+    cmd_options = ['--run-manual', '--ui-test-action-max-timeout=300000']
+    self.AddAnnotatedPerfStep(test_name='webrtc_manual_browser_tests',
+                              gtest_filter="Webrtc*",
+                              log_type='graphing',
+                              factory_properties=factory_properties,
+                              cmd_name='browser_tests',
+                              cmd_options=cmd_options)
+
   def AddChromebotServer(self, factory_properties=None):
     """Add steps to run Chromebot script for server.
 
