@@ -971,10 +971,11 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
   return proc.returncode
 
 
-def GetStatusOutput(command):
+def GetStatusOutput(command, **kwargs):
   """Runs the command list, returning its result and output."""
   proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT, bufsize=1)
+                          stderr=subprocess.STDOUT, bufsize=1,
+                          **kwargs)
   output = proc.communicate()[0]
   result = proc.returncode
 
