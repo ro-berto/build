@@ -142,7 +142,8 @@ class GclientApi(recipe_api.RecipeApi):
         ['.', self.m.path.depot_tools('gclient', wrapper=True)],
     )
 
-  def runhooks(self, args=[], **kwargs):
+  def runhooks(self, args=None, **kwargs):
     """Return a 'gclient runhooks' step."""
+    args = args or []
     assert isinstance(args, (list, tuple))
     return self('runhooks', ['runhooks'] + list(args), **kwargs)
