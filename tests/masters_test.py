@@ -228,7 +228,6 @@ def main(argv):
       'master.client.libjingle': 'Libjingle',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
-      'master.client.nacl.chrome': 'NativeClientChrome',
       'master.client.nacl.llvm': 'NativeClientLLVM',
       'master.client.nacl.ports': 'NativeClientPorts',
       'master.client.nacl.sdk': 'NativeClientSDK',

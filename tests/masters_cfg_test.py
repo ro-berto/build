@@ -23,7 +23,6 @@ from common import master_cfg_utils
 # Masters which do not currently load from the default configuration. These need
 # to be fixed and removed from the list!
 BLACKLIST = set(['chromium.swarm',
-                 'client.nacl.chrome'
                  ])
 
 
