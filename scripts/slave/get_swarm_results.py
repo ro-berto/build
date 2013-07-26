@@ -103,7 +103,7 @@ def GetSwarmResults(
 
 
 def main():
-  src_swarming_client = os.path.normpath(
+  src_swarming_client = os.path.join(
       os.getcwd(), 'src', 'tools', 'swarming_client')
 
   # This is the previous path. This can be removed around 2013-12-01.
