@@ -304,7 +304,8 @@ class GatekeeperTest(unittest.TestCase):
   @staticmethod
   def decode_param_json(param):
     data = urlparse.parse_qs(param)
-    return json.loads(data['message'][0])
+    payload = json.loads(data['json'][0])['message']
+    return json.loads(payload)
 
   def handle_url_fp(self, url, fp):
     """Add a file object to handle a mocked URL."""
@@ -574,10 +575,11 @@ class GatekeeperTest(unittest.TestCase):
       step_url = build_url + '/steps/%s' % step.name
       step_json = {'name': step.name,
                    'logs': [],
-                   'results': step.results,
+                   'results': step.results[0],
                    'text': step.text}
-      if step.isStarted:
-        step_json['isStarted'] = True
+
+      step_json['started'] = step.isStarted
+      step_json['urls'] = []
 
       for log in step.logs:
         log_url = step_url + '/logs/%s' % log.name
@@ -585,7 +587,7 @@ class GatekeeperTest(unittest.TestCase):
       step_dicts.append(step_json)
 
     self.assertEquals(mailer_data['steps'], step_dicts)
-    self.assertEquals(mailer_data['results'], 3)
+    self.assertEquals(mailer_data['result'], 3)
     self.assertEquals(mailer_data['blamelist'], ['a_committer@chromium.org'])
     self.assertEquals(mailer_data['changes'],
         self.masters[0].builders[0].builds[0].sourcestamp['changes'])
@@ -594,7 +596,7 @@ class GatekeeperTest(unittest.TestCase):
 
     self.assertEquals(mailer_data['build_url'], unicode(build_url))
     self.assertEquals(mailer_data['project_name'], unicode('Chromium FYI'))
-    self.assertEquals(mailer_data['from_addr'], None)
+    self.assertEquals(mailer_data['from_addr'], 'buildbot@chromium.org')
 
 
   #### BuildDB operation.

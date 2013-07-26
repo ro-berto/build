@@ -396,7 +396,8 @@ def submit_email(email_app, build_data, secret):
 
   url = email_app + '/email'
   data = hash_message(json.dumps(build_data, sort_keys=True), url, secret)
-  req = urllib2.Request(url, urllib.urlencode(data))
+
+  req = urllib2.Request(url, urllib.urlencode({'json': json.dumps(data)}))
   with closing(urllib2.urlopen(req)) as f:
     code = f.getcode()
     if code != 200:
@@ -406,7 +407,8 @@ def submit_email(email_app, build_data, secret):
 
 
 def close_tree_if_failure(failed_builds, username, password, tree_status_url,
-                          set_status, sheriff_url, email_app_url, secret):
+                          set_status, sheriff_url, default_from_email,
+                          email_app_url, secret):
   """Given a list of failed builds, close the tree and email tree watchers."""
   if not failed_builds:
     logging.info( 'no failed builds!')
@@ -438,7 +440,7 @@ def close_tree_if_failure(failed_builds, username, password, tree_status_url,
         failed_build['build']['builderName'],
         failed_build['build']['number'])
     project_name = failed_build['project_name']
-    fromaddr = failed_build['build'].get('fromAddr')
+    fromaddr = failed_build['build'].get('fromAddr', default_from_email)
 
     tree_notify = failed_build['tree_notify']
 
@@ -450,28 +452,33 @@ def close_tree_if_failure(failed_builds, username, password, tree_status_url,
     sheriffs = get_sheriffs(failed_build['sheriff_classes'], sheriff_url)
     watchers = list(tree_notify | blamelist | sheriffs)
 
+
     build_data = {
-        'waterfall_url': waterfall_url,
         'build_url': build_url,
+        'from_addr': fromaddr,
         'project_name': project_name,
         'steps': [],
-        'from_addr': fromaddr
+        'unsatisfied': list(failed_build['unsatisfied']),
+        'waterfall_url': waterfall_url,
     }
 
     for field in ['builderName', 'number', 'reason']:
       build_data[field] = failed_build['build'][field]
 
-    build_data['results'] = failed_build['build'].get('results', 0)
+    build_data['result'] = failed_build['build'].get('results', 0)
     build_data['blamelist'] = failed_build['build']['blame']
     build_data['changes'] = failed_build['build'].get('sourceStamp', {}).get(
         'changes', [])
+
+    build_data['revisions'] = [x['revision'] for x in build_data['changes']]
 
     for step in failed_build['build']['steps']:
       new_step = {}
       for field in ['text', 'name', 'logs']:
         new_step[field] = step[field]
-      new_step['isStarted'] = step.get('isStarted', False)
-      new_step['results'] = step.get('results')
+      new_step['started'] = step.get('isStarted', False)
+      new_step['urls'] = step.get('urls', [])
+      new_step['results'] = step.get('results', [0, None])[0]
       build_data['steps'].append(new_step)
 
     if email_app_url and watchers:
@@ -550,6 +557,9 @@ def get_options():
                     help='URL pattern for the current sheriff list')
   parser.add_option('--parallelism', default=16,
                     help='up to this many builds can be queried simultaneously')
+  parser.add_option('--default-from-email',
+                    default='buildbot@chromium.org',
+                    help='default email address to send from')
   parser.add_option('--email-app-url',
                     default='https://chromium-gatekeeper-mailer.appspot.com',
                     help='URL of the application to send email from')
@@ -582,7 +592,7 @@ def get_options():
   if options.email_app_url:
     if os.path.exists(options.email_app_secret_file):
       with open(options.email_app_secret_file) as f:
-        options.email_app_secret = f.read()
+        options.email_app_secret = f.read().strip()
     else:
       parser.error('Must provide email app auth with  %s.' % (
           options.email_app_secret_file))
@@ -627,8 +637,8 @@ def main():
 
   close_tree_if_failure(failed_builds, options.status_user, options.password,
                         options.status_url, options.set_status,
-                        options.sheriff_url, options.email_app_url,
-                        options.email_app_secret)
+                        options.sheriff_url, options.default_from_email,
+                        options.email_app_url, options.email_app_secret)
 
   if not options.skip_build_db_update:
     save_build_db(build_db, options.build_db)
