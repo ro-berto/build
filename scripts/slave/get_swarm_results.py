@@ -103,20 +103,19 @@ def GetSwarmResults(
 
 
 def main():
-  src_swarm_client = os.path.join(os.getcwd(), 'src', 'tools', 'swarm_client')
-  # TODO(maruel): Remove this.
-  third_party_swarm_client = os.path.normpath(
-      os.path.join(BASE_DIR, '..', '..', 'third_party', 'swarm_client'))
+  src_swarming_client = os.path.normpath(
+      os.getcwd(), 'src', 'tools', 'swarming_client')
 
-  if os.path.isdir(src_swarm_client):
+  # This is the previous path. This can be removed around 2013-12-01.
+  src_swarm_client = os.path.join(os.getcwd(), 'src', 'tools', 'swarm_client')
+
+  if os.path.isdir(src_swarming_client):
+    sys.path.insert(0, src_swarming_client)
+  elif os.path.isdir(src_swarm_client):
     sys.path.insert(0, src_swarm_client)
-  elif os.path.isdir(third_party_swarm_client):
-    # TODO(maruel): Remove this once src/tools/swarm_client is verified to work.
-    print >> sys.stderr, 'WARNING: Failed to find %s' % src_swarm_client
-    sys.path.insert(0, third_party_swarm_client)
   else:
     print >> sys.stderr, 'Failed to find swarm_client at %s or %s' % (
-        src_swarm_client, third_party_swarm_client)
+        src_swarming_client, src_swarm_client)
     return 1
 
   import swarm_get_results  # pylint: disable=F0401
