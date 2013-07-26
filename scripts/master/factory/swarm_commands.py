@@ -49,6 +49,16 @@ class SwarmClientSVN(source.SVN):
     self.startVC(None, revision, None)
 
 
+class SwarmingClientGIT(source.Git):
+  """Uses the revision specified by use_swarming_client_revision."""
+
+  def start(self):
+    """Contrary to source.Source, ignores the branch, source stamp and patch."""
+    self.args['workdir'] = self.workdir
+    revision = commands.GetProp(self, 'use_swarming_client_revision', None)
+    self.startVC(None, revision, None)
+
+
 class SwarmShellForTriggeringTests(shell.ShellCommand):
   """Triggers all the swarm jobs at once.
 
@@ -104,12 +114,13 @@ class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
   def __init__(self, *args, **kwargs):
     super(SwarmCommands, self).__init__(*args, **kwargs)
-    self._swarm_client_dir = self.PathJoin('src', 'tools', 'swarm_client')
+    self._swarming_client_dir = self.PathJoin('src', 'tools', 'swarming_client')
 
   def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
                               doStepIf):
     assert all(t.__class__.__name__ == 'SwarmTest' for t in tests)
-    script_path = self.PathJoin(self._swarm_client_dir, 'swarm_trigger_step.py')
+    script_path = self.PathJoin(
+        self._swarming_client_dir, 'swarm_trigger_step.py')
 
     swarm_request_name_prefix = WithProperties('%s-%s-',
                                                'buildername:-None',
@@ -162,7 +173,14 @@ class SwarmCommands(commands.FactoryCommands):
                      do_step_if=TestStepFilterRetrieveSwarmResult)
 
   def AddUpdateSwarmClientStep(self):
-    """Checks out swarm_client so it can be used at the right revision."""
+    """Checks out swarming_client so it can be used at the right revision."""
+    def doSwarmingStepIf(b):
+      return bool(commands.GetProp(b, 'use_swarming_client_revision', None))
+    def doSwarmStepIf(b):
+      return not doSwarmingStepIf(b)
+
+    # Emulate the path of a src/DEPS checkout, to keep things simpler.
+    relpath = 'build/src/tools/swarming_client'
     url = (
         config.Master.server_url +
         config.Master.repo_root +
@@ -170,8 +188,15 @@ class SwarmCommands(commands.FactoryCommands):
     self._factory.addStep(
         SwarmClientSVN,
         svnurl=url,
-        # Emulate the path of a src/DEPS checkout, to keep things simpler.
-        workdir='build/src/tools/swarm_client')
+        workdir=relpath,
+        doStepIf=doSwarmStepIf)
+
+    url = config.Master.git_server_url + '/external/swarming.client'
+    self._factory.addStep(
+        SwarmingClientGIT,
+        repourl=url,
+        workdir=relpath,
+        doStepIf=doSwarmingStepIf)
 
   def AddIsolateTest(self, test_name, using_ninja):
     if not self._target:
@@ -183,7 +208,7 @@ class SwarmCommands(commands.FactoryCommands):
         use_out=(using_ninja or self._target_platform.startswith('linux')))
     isolated_directory = self.PathJoin(isolated_directory, self._target)
     isolated_file = self.PathJoin(isolated_directory, test_name + '.isolated')
-    script_path = self.PathJoin(self._swarm_client_dir, 'isolate.py')
+    script_path = self.PathJoin(self._swarming_client_dir, 'isolate.py')
 
     args = ['run', '--isolated', isolated_file, '--', '--no-cr']
     wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
