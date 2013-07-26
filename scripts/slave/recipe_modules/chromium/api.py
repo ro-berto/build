@@ -19,7 +19,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     assert isinstance(targets, (list, tuple))
 
     args = [
-      '--target', self.c.BUILD_CONFIG,
+      '--target', self.c.build_config_fs,
       '--build-dir', self.m.path.checkout(self.c.build_dir)]
     if self.c.compile_py.build_tool:
       args += ['--build-tool', self.c.compile_py.build_tool]
@@ -41,7 +41,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       test += '.exe'
 
     full_args = [
-      '--target', self.c.BUILD_CONFIG,
+      '--target', self.c.build_config_fs,
       '--build-dir', self.m.path.checkout(self.c.build_dir),
       ('--xvfb' if xvfb else '--no-xvfb')
     ]

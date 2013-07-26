@@ -52,7 +52,7 @@ def norm_arch(arch):
   return 'intel' if arch[0] in 'xi' else 'arm'
 
 def norm_build_config(build_config=None):
-  return 'Debug' if build_config == 'Debug' else 'Release'
+  return 'Release' if build_config == 'Release' else 'Debug'
 
 # Because bits and arch actually accept None as a valid parameter,
 # give them a means of distinguishing when they've been passed a default
@@ -62,12 +62,11 @@ HostPlatformValue = object()
 # Schema for config items in this module.
 def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
                TARGET_PLATFORM=None, TARGET_ARCH=HostPlatformValue,
-               TARGET_BITS=HostPlatformValue, BUILD_CONFIG=norm_build_config(),
+               TARGET_BITS=32, BUILD_CONFIG=norm_build_config(),
                **_kwargs):
   assert HOST_PLATFORM and HOST_ARCH and HOST_BITS
   TARGET_PLATFORM = TARGET_PLATFORM or HOST_PLATFORM
   TARGET_ARCH = HOST_ARCH if TARGET_ARCH is HostPlatformValue else TARGET_ARCH
-  TARGET_BITS = HOST_BITS if TARGET_BITS is HostPlatformValue else TARGET_BITS
 
   return ConfigGroup(
     compile_py = ConfigGroup(
@@ -83,6 +82,10 @@ def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
       GYP_MSVS_VERSION = SimpleConfig(str, required=False),
     ),
     build_dir = SimpleConfig(str),
+
+    # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
+    # passed as --target on the command line.
+    build_config_fs = SimpleConfig(str),
 
     BUILD_CONFIG = StaticConfig(norm_build_config(BUILD_CONFIG)),
 
@@ -138,7 +141,7 @@ def BASE(c):
     raise BadConf('Cannot build on "%s"' % c.HOST_PLATFORM)
 
   if c.HOST_BITS < c.TARGET_BITS:
-    raise BadConf('Invalid config: host bits <= targ bits')
+    raise BadConf('Invalid config: host bits < targ bits')
   if c.TARGET_PLATFORM == 'ios' and c.HOST_PLATFORM != 'mac':
     raise BadConf('iOS target only supported on mac host')
   if (c.TARGET_PLATFORM in ('chromeos', 'android') and
@@ -151,6 +154,16 @@ def BASE(c):
   if c.HOST_PLATFORM == 'linux' and c.TARGET_PLATFORM in ('win', 'mac'):
     raise BadConf('Can not compile "%s" on "%s"' %
                   (c.TARGET_PLATFORM, c.HOST_PLATFORM))
+
+  c.build_config_fs = c.BUILD_CONFIG
+  if c.HOST_PLATFORM == 'win':
+    if c.TARGET_BITS == 64:
+      # Windows requires 64-bit builds to be in <dir>_x64.
+      c.build_config_fs += '_x64'
+      c.gyp_env.GYP_MSVS_VERSION = '2012'
+      c.gyp_env.GYP_DEFINES['target_arch'] = 'x64'
+    else:
+      c.gyp_env.GYP_MSVS_VERSION = '2010'
 
   if c.BUILD_CONFIG == 'Release':
     static_library(c, final=False)
@@ -171,7 +184,6 @@ def msvs(c):
     raise BadConf('can not use msvs on "%s"' % c.HOST_PLATFORM)
   c.gyp_env.GYP_GENERATORS.add('msvs')
   c.gyp_env.GYP_GENERATOR_FLAGS['msvs_error_on_missing_sources'] = 1
-  c.gyp_env.GYP_MSVS_VERSION = '2010'
   c.compile_py.build_tool = 'msvs'
   c.build_dir = 'out'
 

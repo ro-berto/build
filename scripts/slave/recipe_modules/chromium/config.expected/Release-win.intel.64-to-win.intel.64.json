@@ -1,5 +1,6 @@
 {
   "blink": {
+    "build_config_fs": "Release_x64", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -9,13 +10,14 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library target_arch=x64", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_MSVS_VERSION": "2012"
     }
   }, 
   "chromium": {
+    "build_config_fs": "Release_x64", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -26,13 +28,14 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library target_arch=x64", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_MSVS_VERSION": "2012"
     }
   }, 
   "msvs": {
+    "build_config_fs": "Release_x64", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "msvs", 
@@ -40,13 +43,14 @@
       "default_targets": []
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library", 
+      "GYP_DEFINES": "component=static_library target_arch=x64", 
       "GYP_GENERATORS": "msvs", 
       "GYP_GENERATOR_FLAGS": "msvs_error_on_missing_sources=1", 
-      "GYP_MSVS_VERSION": "2010"
+      "GYP_MSVS_VERSION": "2012"
     }
   }, 
   "ninja": {
+    "build_config_fs": "Release_x64", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -54,10 +58,10 @@
       "default_targets": []
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library", 
+      "GYP_DEFINES": "component=static_library target_arch=x64", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_MSVS_VERSION": "2012"
     }
   }, 
   "xcodebuild": "can not use xcodebuild on \"win\""

@@ -1,5 +1,6 @@
 {
   "blink": {
+    "build_config_fs": "Release", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -16,6 +17,7 @@
     }
   }, 
   "chromium": {
+    "build_config_fs": "Release", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -34,6 +36,7 @@
   }, 
   "msvs": "can not use msvs on \"mac\"", 
   "ninja": {
+    "build_config_fs": "Release", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 

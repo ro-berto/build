@@ -1,5 +1,6 @@
 {
   "blink": {
+    "build_config_fs": "Debug", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -12,10 +13,11 @@
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_MSVS_VERSION": "2010"
     }
   }, 
   "chromium": {
+    "build_config_fs": "Debug", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -29,10 +31,11 @@
       "GYP_DEFINES": "chromium_win_pch=0 component=shared_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_MSVS_VERSION": "2010"
     }
   }, 
   "msvs": {
+    "build_config_fs": "Debug", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "msvs", 
@@ -47,6 +50,7 @@
     }
   }, 
   "ninja": {
+    "build_config_fs": "Debug", 
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
@@ -57,7 +61,7 @@
       "GYP_DEFINES": "component=shared_library", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_MSVS_VERSION": "2010"
     }
   }, 
   "xcodebuild": "can not use xcodebuild on \"win\""
