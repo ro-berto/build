@@ -39,7 +39,7 @@ class GitApi(recipe_api.RecipeApi):
     recursive_args = ['--recurse-submodules'] if recursive else []
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
-    self.m.path.set_checkout(dir_path)
+    self.m.path.add_checkout(dir_path)
     return [
       self.m.step(
         'git setup', [

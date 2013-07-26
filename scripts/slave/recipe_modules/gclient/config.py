@@ -29,6 +29,7 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     hooks = ListConfig(str),
     target_os = SetConfig(str),
     target_os_only = SimpleConfig(bool, empty_val=False, required=False),
+    checkouts = ListConfig(str, hidden=True),
     cache_dir = StaticConfig(cache_dir, hidden=False),
 
     GIT_MODE = StaticConfig(bool(GIT_MODE)),

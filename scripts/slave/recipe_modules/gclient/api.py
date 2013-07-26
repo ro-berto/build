@@ -126,7 +126,10 @@ class GclientApi(recipe_api.RecipeApi):
         name = 'recurse (git config %s)' % var
         steps.append(self(name, ['recurse', 'git', 'config', var, val]))
 
-    self.m.path.set_checkout(self.m.path.slave_build(cfg.solutions[0].name))
+    for c in cfg.checkouts:
+      self.m.path.add_checkout(self.m.path.slave_build(c))
+    for s in cfg.solutions:
+      self.m.path.add_checkout(self.m.path.slave_build(s.name))
 
     return steps
 

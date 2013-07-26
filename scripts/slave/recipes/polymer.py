@@ -32,9 +32,9 @@ def _CheckoutSteps(api):
   assert repo_url.startswith(url_base)
   repo = repo_url[len(url_base):]
 
-  api.path.set_checkout(api.path.slave_build(repo))
 
   cfg = api.gclient.make_config()
+  cfg.checkouts = [repo]
   for name in REPOS:
     soln = cfg.solutions.add()
     soln.name = name
