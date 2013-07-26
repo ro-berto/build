@@ -532,6 +532,8 @@ class GClient(sourcebase):
       os.path.join('src'): 'got_chromium_revision',
       os.path.join('src', 'native_client'): 'got_nacl_revision',
       os.path.join('src', 'tools', 'swarm_client'): 'got_swarm_client_revision',
+      os.path.join('src', 'tools', 'swarming_client'):
+          'got_swarming_client_revision',
       os.path.join('src', 'v8'): 'got_v8_revision',
       os.path.join('src', 'third_party', 'WebKit'): 'got_webkit_revision',
     }

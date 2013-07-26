@@ -1664,6 +1664,8 @@ class ChromiumCommands(commands.FactoryCommands):
             'target_os': self._target_platform,
             'use_swarm_client_revision':
               WithProperties('%(got_swarm_client_revision:-)s'),
+            'use_swarming_client_revision':
+              WithProperties('%(got_swarming_client_revision:-)s'),
         },
         trigger_copy_properties=[
             'run_default_swarm_tests',
