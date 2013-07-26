@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master.factory import annotator_factory
 from master.factory import chromium_factory
 
 defaults = {}
@@ -13,7 +14,8 @@ F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
 
-def linux_android(): return chromium_factory.ChromiumFactory(
+def linux_android():
+  return chromium_factory.ChromiumFactory(
     '', 'linux2', nohooks_on_update=True, target_os='android')
 
 defaults['category'] = '5android'
@@ -90,6 +92,11 @@ F('f_android_clang_dbg', linux_android().ChromiumAnnotationFactory(
       'android_bot_id': 'main-clang-builder-dbg',
     }))
 
+B('Android Webview AOSP Builder', 'f_android_webview_aosp_rel', 'android',
+  'android', notify_on_missing=True)
+F('f_android_webview_aosp_rel',
+  annotator_factory.AnnotatorFactory().BaseFactory('android_webview_aosp'))
 
-def Update(config_arg, active_master, c):
+
+def Update(_config_arg, _active_master, c):
   return helper.Update(c)
