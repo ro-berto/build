@@ -141,8 +141,14 @@ def main(argv):
 
   if should_run_as_isolated(options.builder_name, options.test_name):
     logging.info('Running test in isolate mode')
+    # Search first in swarming_client
     isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
-                                  'swarm_client', 'isolate.py')
+                                  'swarming_client', 'isolate.py')
+
+    # Remove around 2013-12-01.
+    if not os.path.isfile(isolate_script):
+      isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
+                                    'swarm_client', 'isolate.py')
     return run_test_isolated(isolate_script, test_exe, original_command)
   else:
     logging.info('Running test normally')
