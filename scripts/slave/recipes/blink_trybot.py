@@ -17,7 +17,8 @@ DEPS = [
 def GenSteps(api):
   api.chromium.set_config('blink')
   api.chromium.apply_config('trybot_flavor')
-  api.gclient.set_config('blink_internal', GIT_MODE=True)
+  api.gclient.set_config('blink_internal',
+                         GIT_MODE=api.properties.get('GIT_MODE', False))
   api.step.auto_resolve_conflicts = True
 
   webkit_lint = api.path.build('scripts', 'slave', 'chromium',
@@ -94,16 +95,19 @@ def GenTests(api):
   for result, step_mocks in [('success', SUCCESS_DATA), ('fail', FAIL_DATA)]:
     for build_config in ['Release', 'Debug']:
       for plat in ('win', 'mac', 'linux'):
-        yield ('%s_%s_%s' % (plat, result, build_config.lower())), {
-          'properties': api.properties_tryserver(
-            build_config=build_config,
-            config_name='blink',
-            root='src/third_party/WebKit',
-          ),
-          'step_mocks': step_mocks(),
-          'mock': {
-            'platform': {
-              'name': plat
+        for git_mode in True, False:
+          suffix = '_git' if git_mode else ''
+          yield ('%s_%s_%s%s' % (plat, result, build_config.lower(), suffix)), {
+            'properties': api.properties_tryserver(
+              build_config=build_config,
+              config_name='blink',
+              root='src/third_party/WebKit',
+              GIT_MODE=git_mode,
+            ),
+            'step_mocks': step_mocks(),
+            'mock': {
+              'platform': {
+                'name': plat
+              }
             }
           }
-        }
