@@ -1227,7 +1227,7 @@ class ChromiumCommands(commands.FactoryCommands):
         # For consistency between the try servers and the main bots, we
         # don't store the revision in the URL.
         base_url = ("https://storage.googleapis.com/"
-                    "chromium-layout-test-archives/%(builder_name)s/"
+                    "chromium-layout-test-archives/%(buildername)s/"
                     "%(buildnumber)s/")
       else:
         # TODO(dpranke): Delete this path once the main bots are flipped over
