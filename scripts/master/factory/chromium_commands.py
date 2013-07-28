@@ -1148,7 +1148,6 @@ class ChromiumCommands(commands.FactoryCommands):
     driver_name = factory_properties.get('driver_name')
     additional_drt_flag = factory_properties.get('additional_drt_flag')
     webkit_test_options = factory_properties.get('webkit_test_options')
-    gs_bucket = factory_properties.get('gs_bucket')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -1223,21 +1222,9 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd = self.AddBuildProperties(cmd)
       cmd = self.AddFactoryProperties(factory_properties, cmd)
 
-      if gs_bucket:
-        # For consistency between the try servers and the main bots, we
-        # don't store the revision in the URL.
-        base_url = ("https://storage.googleapis.com/"
-                    "chromium-layout-test-archives/%s/%s/" %
-                    (WithProperties(builder_name),
-                     WithProperties('%(buildnumber)s')))
-      else:
-        # TODO(dpranke): Delete this path once the main bots are flipped over
-        # to using Google Storage.
-        base_url = _GetArchiveUrl('layout_test_results')
-
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
-          base_url=base_url,
+          base_url=_GetArchiveUrl('layout_test_results'),
           link_text='layout test ' + result_str,
           command=cmd)
 
