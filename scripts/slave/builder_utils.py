@@ -322,6 +322,7 @@ def GetCommands(steplist):
       cmdhash['quoted_command'] = shell_quote(step.command)
       cmdhash['workdir'] = step.workdir
       cmdhash['quoted_workdir'] = shell_quote([step.workdir])
+      cmdhash['haltOnFailure'] = step.haltOnFailure
       if hasattr(step, 'env'):
         cmdhash['env'] = step.env
       else:

@@ -134,7 +134,7 @@ def Execute(commands, annotate, log, fail_fast=False):
           print '@@@STEP_FAILURE@@@'
         err = True
     print '@@@STEP_CLOSED@@@'
-    if fail_fast and err:
+    if (fail_fast or command['haltOnFailure']) and err:
       break
   return commands_executed, err
 
