@@ -570,6 +570,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('page_cycler_intl_ko_th_vi'):
       f.AddTelemetryTest('page_cycler', 'intl_ko_th_vi.json',
                          step_name='intl_ko_th_vi', factory_properties=fp)
+    if R('page_cycler_tough_layout_cases'):
+      f.AddTelemetryTest('page_cycler', 'tough_layout_cases.json',
+                         step_name='tough_layout_cases', factory_properties=fp)
     if R('page_cycler_typical_25'):
       f.AddTelemetryTest('page_cycler', 'typical_25.json',
                          step_name='typical_25', factory_properties=fp)
