@@ -70,6 +70,20 @@ class ChromiumGitPoller(gitpoller.GitPoller):
     gitpoller.GitPoller.__init__(self, *args, **kwargs)
     self.comparator = GitTagComparator()
 
+  # We override _get_commit_name to remove the SVN UUID from commiter emails.
+  def _get_commit_name(self, rev):
+    args = ['log', rev, '--no-walk', r'--format=%aE']
+    d = utils.getProcessOutput(
+      self.gitbin, args, path=self.workdir, env=os.environ, errortoo=False)
+    def process(git_output):
+      stripped_output = git_output.strip().decode(self.encoding)
+      if not stripped_output:
+        raise EnvironmentError('could not get commit name for rev')
+      # Return just a standard email address.
+      return stripped_output.rsplit('@', 1)[0]
+    d.addCallback(process)
+    return d
+
   def _parse_history(self, res):
     new_history = [line[0:40] for line in res[0].splitlines()]
     log.msg("Parsing %d new git tags" % len(new_history))
