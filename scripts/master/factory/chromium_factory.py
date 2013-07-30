@@ -108,8 +108,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/page_cycler', None)],
     '(selenium|chrome_frame)':
       [('src/data/selenium_core', None)],
-    'tab_switching':
-      [('src/data/tab_switching', None)],
     'browser_tests':
       [('src/chrome/test/data/firefox2_profile/searchplugins', None),
        ('src/chrome/test/data/firefox2_searchplugins', None),
@@ -619,7 +617,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('memory'):
       f.AddMemoryTests(fp)
     if R('tab_switching'):
-      f.AddTabSwitchingTests(fp)
+      f.AddTelemetryTest('tab_switching_measurement', 'top_10.json',
+                         step_name='tab_switching', factory_properties=fp)
     if R('sunspider'):
       f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
     if R('octane'):

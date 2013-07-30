@@ -403,13 +403,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_options=options, step_name='sync',
                               factory_properties=factory_properties)
 
-  def AddTabSwitchingTests(self, factory_properties=None):
-    options = ['-enable-logging', '-dump-histograms-on-exit', '-log-level=0']
-
-    self.AddAnnotatedPerfStep('tab-switching', 'TabSwitchingUITest.*',
-                              'graphing', cmd_options=options,
-                              factory_properties=factory_properties)
-
   def AddSizesTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
 
