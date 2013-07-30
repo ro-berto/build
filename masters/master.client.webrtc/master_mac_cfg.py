@@ -42,7 +42,7 @@ baremetal_tests = [
     'vie_auto_test',
     'voe_auto_test',
 ]
-options = ['--', '-project', '../webrtc.xcodeproj']
+options = ['--', '-project', '../webrtc/webrtc.xcodeproj']
 
 defaults['category'] = 'mac'
 
