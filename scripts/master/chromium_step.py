@@ -857,13 +857,17 @@ class AnnotationObserver(buildstep.LogLineObserver):
 
   def handleOutputLine(self, line):
     """This is called once with each line of the test log."""
+    # Handle initial setup here, as step_status might not exist yet at init.
+    self.initialSection()
+
+    # All annotator directives start with @.
+    if not line.startswith('@'):
+      return
+
     # Add \n if not there, which seems to be the case for log lines from
     # windows agents, but not others.
     if not line.endswith('\n'):
       line += '\n'
-    # Handle initial setup here, as step_status might not exist yet at init.
-    self.initialSection()
-
 
     # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
     # Appends a line to the log's array. When STEP_LOG_END is called,
