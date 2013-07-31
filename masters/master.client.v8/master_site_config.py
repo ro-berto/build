@@ -7,6 +7,10 @@
 from config_bootstrap import Master
 
 class V8(Master.Master3):
+  base_app_url = 'https://v8-status.appspot.com'
+  tree_status_url = base_app_url + '/status'
+  store_revisions_url = base_app_url + '/revisions'
+  last_good_url = base_app_url + '/lkgr'
   project_name = 'V8'
   master_port = 8036
   slave_port = 8136
