@@ -1010,7 +1010,7 @@ def main_android(options, args):
   """Runs tests for android.
 
   GTest-based test is different from linux as it requires
-  src/build/android/run_tests.py to deploy and communicate with the device.
+  src/build/android/test_runner.py to deploy and communicate with the device.
   python scripts are the same.
   """
   if options.run_python_script:
@@ -1035,8 +1035,8 @@ def main_android(options, args):
   run_test_target_option = '--release'
   if options.target == 'Debug':
     run_test_target_option = '--debug'
-  command = ['src/build/android/run_tests.py', run_test_target_option,
-             '-s', test_suite]
+  command = ['src/build/android/test_runner.py', 'gtest',
+             run_test_target_option, '-s', test_suite]
   result = _RunGTestCommand(command, results_tracker=results_tracker)
 
   if options.generate_json_file:
