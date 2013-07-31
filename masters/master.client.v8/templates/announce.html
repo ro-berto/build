@@ -3,11 +3,12 @@
 {% block header -%}
 {{ super() }}
 <hr/>
-<center>V8 BUILDBOT</center><BR>
-<font color=red><B>Current allowed redness:</b><br>
-Webkit64 - 16 test failures expected<br>
-Vista perf is flaky
-</font>
+
+<div class="Announcement">
+
+<iframe width="100%" height="44" frameborder="0" scrolling="no" src="http://v8-status.appspot.com/current" ></iframe>
+
+</div>
 {% endblock header %}
 
 {% block footer %}
