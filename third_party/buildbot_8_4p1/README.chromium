@@ -3153,3 +3153,18 @@ index 264b599..f64e0b9 100644
          self.watchers = []
          self.updates = {}
          self.finishedWatchers = []
+
+diff --git a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+index 5bf2725..71a0386 100644
+--- a/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
++++ b/third_party/buildbot_8_4p1/buildbot/changes/gitpoller.py
+@@ -238,7 +238,8 @@ class GitPoller(base.PollingChangeSource):
+     @defer.deferredGenerator
+     def _process_changes(self, unused_output):
+         # get the change list
+-        revListArgs = ['log', '%s..origin/%s' % (self.branch, self.branch), r'--format=%H']
++        revListArgs = ['log', '%s..origin/%s' % (self.branch, self.branch),
++                       r'--format=%H', '--first-parent']
+         self.changeCount = 0
+         d = utils.getProcessOutput(self.gitbin, revListArgs, path=self.workdir,
+                                    env=os.environ, errortoo=False )
