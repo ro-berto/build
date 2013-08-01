@@ -51,16 +51,43 @@ def _GetXMLChangeLogByModule(module_name, module_src_dir,
   """Get the change log information for specified module and start/end
   revision.
   """
-  if (last_revision and current_revision > last_revision):
-    command = [slave_utils.SubversionExe(), 'log', module_src_dir,
-                '--xml', '-r', '%d:%d' % (last_revision + 1, current_revision)]
-    changelog = chromium_utils.GetCommandOutput(command)
-    changelog_description = '%s changeLogs from ]%d to %d]' % (
-        module_name, last_revision, current_revision)
-  else:
-    changelog = ''
-    changelog_description = 'No new ChangeLogs on %s' % (module_name)
+  changelog = ''
+  changelog_description = 'No new ChangeLogs on %s' % (module_name)
+  try:
+    last_revision = int(last_revision)
+    current_revision = int(current_revision)
+    if (last_revision and current_revision > last_revision):
+      command = [slave_utils.SubversionExe(), 'log', module_src_dir, '--xml',
+                 '-r', '%d:%d' % (last_revision + 1, current_revision)]
+      changelog = chromium_utils.GetCommandOutput(command)
+      changelog_description = '%s changeLogs from ]%d to %d]' % (
+          module_name, last_revision, current_revision)
+  except ValueError, e:
+    print >> os.stderr, e
   return (changelog, changelog_description)
+
+
+def _GetGitChangeLogByModule(module_name, module_src_dir,
+                             last_revision, current_revision):
+  """Get the git log output for the specified module and revisions."""
+  #TODO(agable): Actually implement this. This needs to work for the full git
+  # changeover, but will require a bunch of code archaeology.
+  changelog = ''
+  changelog_description = 'Unable to create Git ChangeLog on %s' % module_name
+  return (changelog, changelog_description)
+
+
+def _GetChangeLog(module_name, module_src_dir,
+                  last_revision, current_revision):
+  """Get the Git or SVN ChangeLog."""
+  vcs = slave_utils.GitOrSubversion(module_src_dir)
+  if vcs == 'svn':
+    return _GetXMLChangeLogByModule(module_name, module_src_dir,
+                                    last_revision, current_revision)
+  elif vcs == 'git':
+    return _GetGitChangeLogByModule(module_name, module_src_dir,
+                                    last_revision, current_revision)
+  raise slave_utils.NotAnyWorkingCopy(module_src_dir)
 
 
 def Write(file_path, data):
@@ -143,15 +170,17 @@ class StagerBase(object):
     if options.default_chromium_revision:
       self._chromium_revision = options.default_chromium_revision
     else:
-      self._chromium_revision = slave_utils.SubversionRevision(self._chrome_dir)
+      self._chromium_revision = slave_utils.GetHashOrRevision(
+          os.path.dirname(self._chrome_dir)) # src/ instead of src/chrome
     if options.default_webkit_revision:
       self._webkit_revision = options.default_webkit_revision
     else:
-      self._webkit_revision = slave_utils.SubversionRevision(self._webkit_dir)
+      self._webkit_revision = slave_utils.GetHashOrRevision(
+          os.path.dirname(self._webkit_dir)) # WebKit/ instead of WebKit/Source
     if options.default_v8_revision:
       self._v8_revision = options.default_v8_revision
     else:
-      self._v8_revision = slave_utils.SubversionRevision(self._v8_dir)
+      self._v8_revision = slave_utils.GetHashOrRevision(self._v8_dir)
     self.last_change_file = os.path.join(self._staging_dir, 'LAST_CHANGE')
     # The REVISIONS file will record the revisions information of the main
     # components Chromium/WebKit/V8.
@@ -214,7 +243,7 @@ class StagerBase(object):
       chromium_utils.SshMakeDirectory(host, destination)
 
   def MySshCopyFiles(self, filename, host, destination, gs_base,
-                     gs_subdir=None, mimetype=None, gs_acl=None):
+                     gs_subdir='', mimetype=None, gs_acl=None):
     if gs_base:
       MyCopyFileToGS(filename, gs_base, gs_subdir, mimetype=mimetype,
                      gs_acl=gs_acl)
@@ -257,8 +286,8 @@ class StagerBase(object):
     print 'Saving revision to %s' % self.revisions_path
     Write(
         self.revisions_path,
-        ('{"chromium_revision":%d, "webkit_revision":%d, '
-         '"v8_revision":%d}') % (self._chromium_revision,
+        ('{"chromium_revision":%s, "webkit_revision":%s, '
+         '"v8_revision":%s}') % (self._chromium_revision,
                                  self._webkit_revision,
                                  self._v8_revision))
 
@@ -271,7 +300,7 @@ class StagerBase(object):
     """
     last_build_revision = None
     if os.path.exists(self.last_change_file):
-      last_build_revision = int(open(self.last_change_file).read())
+      last_build_revision = open(self.last_change_file).read()
 
     if os.path.exists(self.revisions_path):
       fp = open(self.revisions_path)
@@ -298,7 +327,7 @@ class StagerBase(object):
     """Save build revision in the specified file"""
 
     print 'Saving revision to %s' % file_path
-    Write(file_path, '%d' % self._build_revision)
+    Write(file_path, '%s' % self._build_revision)
 
   def CreateArchiveFile(self, zip_name, zip_file_list):
     return archive_utils.CreateArchive(self._build_dir, self._staging_dir,
@@ -428,7 +457,7 @@ class StagerBase(object):
       changelog = 'Unknown previous build number: no change log produced.'
     else:
       # Generate Chromium changelogs
-      (chromium_cl, chromium_cl_description) = _GetXMLChangeLogByModule(
+      (chromium_cl, chromium_cl_description) = _GetChangeLog(
           'Chromium', self._src_dir, self.last_chromium_revision,
           self._chromium_revision)
       # Remove the xml declaration since we need to combine  the changelogs
@@ -437,7 +466,7 @@ class StagerBase(object):
         chromium_cl = regex.sub('', chromium_cl)
 
       # Generate WebKit changelogs
-      (webkit_cl, webkit_cl_description) = _GetXMLChangeLogByModule(
+      (webkit_cl, webkit_cl_description) = _GetChangeLog(
           'WebKit', self._webkit_dir, self.last_webkit_revision,
           self._webkit_revision)
       # Remove the xml declaration since we need to combine  the changelogs
@@ -446,7 +475,7 @@ class StagerBase(object):
         webkit_cl = regex.sub('', webkit_cl)
 
       # Generate V8 changelogs
-      (v8_cl, v8_cl_description) = _GetXMLChangeLogByModule(
+      (v8_cl, v8_cl_description) = _GetChangeLog(
           'V8', self._v8_dir, self.last_v8_revision, self._v8_revision)
       # Remove the xml declaration since we need to combine the changelogs
       # of both chromium and webkit.
@@ -495,12 +524,15 @@ class StagerBase(object):
     # we only allow not_found_optional, and fail on any leftover not_found
     # files?
 
-    print 'last change: %d' % self._build_revision
+    print 'last change: %s' % self._build_revision
     previous_revision = self.GetLastBuildRevision()
-    if self._build_revision <= previous_revision:
+    # TODO(agable): This conditional only works for svn because git can't easily
+    # compare revisions.
+    if (slave_utils.GitOrSubversion(self._src_dir) == 'svn' and
+        self._build_revision <= previous_revision):
       # If there have been no changes, report it but don't raise an exception.
       # Someone might have pushed the "force build" button.
-      print 'No changes since last build (r%d <= r%d)' % (self._build_revision,
+      print 'No changes since last build (r%s <= r%s)' % (self._build_revision,
                                                           previous_revision)
       return 0
 
