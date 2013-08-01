@@ -7,12 +7,12 @@ from slave.recipe_configs_util import SimpleConfig, ListConfig, StaticConfig
 
 def BaseConfig(USE_MIRROR=False):
   return ConfigGroup(
-    lunch_flavor = SimpleConfig(str),
-    ndk_pin_revision = SimpleConfig(str),
+    lunch_flavor = SimpleConfig(basestring),
+    ndk_pin_revision = SimpleConfig(basestring),
     repo = ConfigGroup(
-      url = SimpleConfig(str),
-      branch = SimpleConfig(str),
-      sync_flags = ListConfig(str),
+      url = SimpleConfig(basestring),
+      branch = SimpleConfig(basestring),
+      sync_flags = ListConfig(basestring),
     ),
     USE_MIRROR = StaticConfig(bool(USE_MIRROR)),
   )

@@ -70,22 +70,22 @@ def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
 
   return ConfigGroup(
     compile_py = ConfigGroup(
-      default_targets = SetConfig(str),
-      build_tool = SimpleConfig(str),
-      compiler = SimpleConfig(str, required=False),
+      default_targets = SetConfig(basestring),
+      build_tool = SimpleConfig(basestring),
+      compiler = SimpleConfig(basestring, required=False),
     ),
     gyp_env = ConfigGroup(
-      GYP_DEFINES = DictConfig(lambda i: ('%s=%s' % i), ' '.join, (str,int)),
-      GYP_GENERATORS = SetConfig(str, ','.join),
+      GYP_DEFINES = DictConfig(lambda i: ('%s=%s' % i), ' '.join, (basestring,int)),
+      GYP_GENERATORS = SetConfig(basestring, ','.join),
       GYP_GENERATOR_FLAGS = DictConfig(
-        lambda i: ('%s=%s' % i), ' '.join, (str,int)),
-      GYP_MSVS_VERSION = SimpleConfig(str, required=False),
+        lambda i: ('%s=%s' % i), ' '.join, (basestring,int)),
+      GYP_MSVS_VERSION = SimpleConfig(basestring, required=False),
     ),
-    build_dir = SimpleConfig(str),
+    build_dir = SimpleConfig(basestring),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
     # passed as --target on the command line.
-    build_config_fs = SimpleConfig(str),
+    build_config_fs = SimpleConfig(basestring),
 
     BUILD_CONFIG = StaticConfig(norm_build_config(BUILD_CONFIG)),
 

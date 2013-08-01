@@ -14,22 +14,22 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
   return ConfigGroup(
     solutions = ConfigList(
       lambda: ConfigGroup(
-        name = SimpleConfig(str),
-        url = SimpleConfig(str),
-        deps_file = SimpleConfig(str, empty_val=deps, required=False),
+        name = SimpleConfig(basestring),
+        url = SimpleConfig(basestring),
+        deps_file = SimpleConfig(basestring, empty_val=deps, required=False),
         managed = SimpleConfig(bool, empty_val=True, required=False),
-        custom_deps = DictConfig(value_type=(str, types.NoneType)),
-        custom_vars = DictConfig(value_type=str),
-        safesync_url = SimpleConfig(str, required=False),
+        custom_deps = DictConfig(value_type=(basestring, types.NoneType)),
+        custom_vars = DictConfig(value_type=basestring),
+        safesync_url = SimpleConfig(basestring, required=False),
 
-        revision = SimpleConfig(str, required=False, hidden=True),
+        revision = SimpleConfig(basestring, required=False, hidden=True),
       )
     ),
-    deps_os = DictConfig(value_type=str),
-    hooks = ListConfig(str),
-    target_os = SetConfig(str),
+    deps_os = DictConfig(value_type=basestring),
+    hooks = ListConfig(basestring),
+    target_os = SetConfig(basestring),
     target_os_only = SimpleConfig(bool, empty_val=False, required=False),
-    checkouts = ListConfig(str, hidden=True),
+    checkouts = ListConfig(basestring, hidden=True),
     cache_dir = StaticConfig(cache_dir, hidden=False),
 
     GIT_MODE = StaticConfig(bool(GIT_MODE)),
