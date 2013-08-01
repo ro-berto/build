@@ -80,7 +80,8 @@ class ChromiumGitPoller(gitpoller.GitPoller):
       if not stripped_output:
         raise EnvironmentError('could not get commit name for rev')
       # Return just a standard email address.
-      return stripped_output.rsplit('@', 1)[0]
+      tokens = stripped_output.split('@')
+      return '@'.join(tokens[:2])
     d.addCallback(process)
     return d
 
