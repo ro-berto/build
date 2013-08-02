@@ -13,3 +13,26 @@ REPOS = (
   'ShadowDOM',
   'HTMLImports',
 )
+
+REPO_DEPS = {
+  'polymer': [
+    'platform',
+    'CustomElements',
+    'mdv',
+    'PointerGestures',
+    'PointerEvents',
+    'ShadowDOM',
+    'HTMLImports',
+  ],
+  'platform': [
+    'CustomElements',
+    'mdv',
+    'PointerGestures',
+    'PointerEvents',
+    'ShadowDOM',
+    'HTMLImports',
+  ],
+  'PointerGestures': [
+    'PointerEvents',
+  ]
+}
