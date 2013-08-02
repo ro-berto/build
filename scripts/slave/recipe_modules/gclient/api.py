@@ -18,14 +18,12 @@ def jsonish_to_python(spec, is_top=False):
     if isinstance(spec, dict):
       ret += '{'
       ret += ', '.join(
-        "%s: %s" % (repr(str(k)), jsonish_to_python(spec[k])) for k in sorted(spec))
+        "%s: %s" % (repr(k), jsonish_to_python(spec[k])) for k in sorted(spec))
       ret += '}'
     elif isinstance(spec, list):
       ret += '['
       ret += ', '.join(jsonish_to_python(x) for x in spec)
       ret += ']'
-    elif isinstance(spec, basestring):
-      ret = repr(str(spec))
     else:
       ret = repr(spec)
   return ret
