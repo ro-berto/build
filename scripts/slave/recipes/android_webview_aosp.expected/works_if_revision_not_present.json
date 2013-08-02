@@ -45,7 +45,11 @@
       "--output-json", 
       "/path/to/tmp/json"
     ], 
-    "name": "calculate trimmed deps"
+    "name": "calculate trimmed deps", 
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{\"blacklist\": {\"src/blacklist/project/2\": null, \"src/blacklist/project/1\": null}}@@@", 
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }, 
   {
     "cmd": [

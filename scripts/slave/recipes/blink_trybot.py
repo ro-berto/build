@@ -28,6 +28,10 @@ def GenSteps(api):
 
 
   def BlinkTestsStep(with_patch):
+    def followup_fn(step_result):
+      if step_result.retcode > 0:
+        step_result.presentation.status = 'WARNING'
+
     name = 'webkit_tests (with%s patch)' % ('' if with_patch else 'out')
     test = api.path.build('scripts', 'slave', 'chromium',
                           'layout_test_wrapper.py')
@@ -35,7 +39,8 @@ def GenSteps(api):
             '-o', api.path.slave_build('layout-test-results'),
             '--build-dir', api.path.checkout(api.chromium.c.build_dir),
             api.json.output()]
-    return api.chromium.runtests(test, args, name=name, can_fail_build=False)
+    return api.chromium.runtests(test, args, name=name, can_fail_build=False,
+                                 followup_fn=followup_fn)
 
   yield (
     api.gclient.checkout(),
