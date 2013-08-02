@@ -245,7 +245,6 @@ def main(argv):
       'master.devtools': 'DevTools',
       'master.experimental': 'Experimental',
       'master.tryserver.chromium': 'TryServer',
-      'master.tryserver.chromium.linux': 'TryServerLinux',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',
       'master.tryserver.webrtc': 'WebRTCTryServer',
