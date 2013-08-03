@@ -197,7 +197,11 @@
       "--output-json", 
       "/path/to/tmp/json"
     ], 
-    "name": "webkit_tests (with patch)"
+    "name": "webkit_tests (with patch)", 
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@null@@@", 
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }, 
   {
     "cmd": [

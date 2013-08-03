@@ -197,7 +197,12 @@
       "--output-json", 
       "/path/to/tmp/json"
     ], 
-    "name": "webkit_tests (with patch)"
+    "name": "webkit_tests (with patch)", 
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{\"crazy\": [\"data\", \"format\"]}@@@", 
+      "@@@STEP_LOG_END@json.output@@@", 
+      "@@@STEP_WARNINGS@@@"
+    ]
   }, 
   {
     "cmd": [
@@ -274,7 +279,12 @@
       "--output-json", 
       "/path/to/tmp/json"
     ], 
-    "name": "webkit_tests (without patch)"
+    "name": "webkit_tests (without patch)", 
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{\"crazy\": [\"data\", \"format\"]}@@@", 
+      "@@@STEP_LOG_END@json.output@@@", 
+      "@@@STEP_WARNINGS@@@"
+    ]
   }, 
   {
     "cmd": [
