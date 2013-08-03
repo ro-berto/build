@@ -879,7 +879,7 @@ class AnnotationObserver(buildstep.LogLineObserver):
       current_logs = self.cursor['annotated_logs']
       current_logs[log_label] = current_logs.get(log_label, []) + [log_line]
 
-    # Support: @@@STEP_LOG_END@<label>@<line>@@@ (finalizes log to step)
+    # Support: @@@STEP_LOG_END@<label>@@@ (finalizes log to step)
     m = annotator.Match.log_end(line)
     if m:
       log_label = m[0]
