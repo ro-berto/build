@@ -199,7 +199,12 @@
     ], 
     "name": "webkit_tests (with patch)", 
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{\"crazy\": [\"data\", \"format\"]}@@@", 
+      "@@@STEP_LOG_LINE@json.output@{@@@", 
+      "@@@STEP_LOG_LINE@json.output@  \"crazy\": [@@@", 
+      "@@@STEP_LOG_LINE@json.output@    \"data\", @@@", 
+      "@@@STEP_LOG_LINE@json.output@    \"format\"@@@", 
+      "@@@STEP_LOG_LINE@json.output@  ]@@@", 
+      "@@@STEP_LOG_LINE@json.output@}@@@", 
       "@@@STEP_LOG_END@json.output@@@", 
       "@@@STEP_WARNINGS@@@"
     ]
@@ -281,7 +286,12 @@
     ], 
     "name": "webkit_tests (without patch)", 
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@json.output@{\"crazy\": [\"data\", \"format\"]}@@@", 
+      "@@@STEP_LOG_LINE@json.output@{@@@", 
+      "@@@STEP_LOG_LINE@json.output@  \"crazy\": [@@@", 
+      "@@@STEP_LOG_LINE@json.output@    \"data\", @@@", 
+      "@@@STEP_LOG_LINE@json.output@    \"format\"@@@", 
+      "@@@STEP_LOG_LINE@json.output@  ]@@@", 
+      "@@@STEP_LOG_LINE@json.output@}@@@", 
       "@@@STEP_LOG_END@json.output@@@", 
       "@@@STEP_WARNINGS@@@"
     ]
