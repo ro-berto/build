@@ -209,6 +209,10 @@
       "-u", 
       "print \"ALL IS WELL\""
     ], 
-    "name": "webkit_tests"
+    "name": "webkit_tests", 
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@", 
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   }
 ]
