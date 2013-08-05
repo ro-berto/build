@@ -122,46 +122,6 @@
   }, 
   {
     "cmd": [
-      "mkdir", 
-      "[SLAVE_BUILD_ROOT]/android-src"
-    ], 
-    "name": "mkdir android source root"
-  }, 
-  {
-    "cmd": [
-      "[DEPOT_TOOLS_ROOT]/repo", 
-      "init", 
-      "-u", 
-      "https://android.googlesource.com/platform/manifest", 
-      "-b", 
-      "jb-mr1.1-dev"
-    ], 
-    "cwd": "[SLAVE_BUILD_ROOT]/android-src", 
-    "name": "repo init"
-  }, 
-  {
-    "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/generate_local_manifest.py", 
-      "[SLAVE_BUILD_ROOT]/android-src", 
-      "external/chromium_org", 
-      "--ndk-revision", 
-      "5049b437591600fb0d262e4215cee4226e63c6ce"
-    ], 
-    "name": "generate local manifest"
-  }, 
-  {
-    "cmd": [
-      "[DEPOT_TOOLS_ROOT]/repo", 
-      "sync", 
-      "-j16", 
-      "-d", 
-      "-f"
-    ], 
-    "cwd": "[SLAVE_BUILD_ROOT]/android-src", 
-    "name": "repo sync"
-  }, 
-  {
-    "cmd": [
       "rm", 
       "-rf", 
       "[SLAVE_BUILD_ROOT]/android-src/external/chromium_org"

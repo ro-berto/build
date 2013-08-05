@@ -58,7 +58,7 @@ def GenSteps(api):
   tmp_args = []
   if not api.platform.is_win:
     tmp_path = api.path.slave_build('.tmp')
-    yield api.step('mktmp', ['mkdir', '-p', tmp_path])
+    yield api.path.makedirs('tmp', tmp_path)
     tmp_args = ['--tmp', tmp_path]
 
   cmd_suffix = ''
