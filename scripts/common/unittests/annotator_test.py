@@ -78,7 +78,6 @@ class TestAnnotationStreams(unittest.TestCase):
       s.step_log_end('mylog')
       s.step_log_line('myperflog', 'perf data')
       s.step_log_end_perf('myperflog', 'dashboardname')
-      s.step_link('cool_link', 'https://cool.example.com/beano_gnarly')
       s.write_log_lines('full_log', ['line one', 'line two'])
       s.write_log_lines('full_perf_log', ['perf line one', 'perf line two'],
                         perf='full_perf')
@@ -98,7 +97,6 @@ class TestAnnotationStreams(unittest.TestCase):
         '@@@STEP_LOG_END@mylog@@@',
         '@@@STEP_LOG_LINE@myperflog@perf data@@@',
         '@@@STEP_LOG_END_PERF@myperflog@dashboardname@@@',
-        '@@@STEP_LINK@cool_link@https://cool.example.com/beano_gnarly@@@',
         '@@@STEP_LOG_LINE@full_log@line one@@@',
         '@@@STEP_LOG_LINE@full_log@line two@@@',
         '@@@STEP_LOG_END@full_log@@@',

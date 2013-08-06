@@ -264,29 +264,6 @@
     "cmd": [
       "python", 
       "-u", 
-      "[BUILD_ROOT]/scripts/slave/chromium/archive_layout_test_results.py", 
-      "--results-dir", 
-      "[SLAVE_BUILD_ROOT]/layout-test-results", 
-      "--build-dir", 
-      "[SLAVE_BUILD_ROOT]/src/out", 
-      "--build-number", 
-      571, 
-      "--builder-name", 
-      "TestBuilder", 
-      "--factory-properties", 
-      "{\"GIT_MODE\": true, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"config_name\": \"blink\", \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}", 
-      "--build-properties", 
-      "{\"GIT_MODE\": true, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"config_name\": \"blink\", \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
-    ], 
-    "name": "archive_webkit_tests_results", 
-    "~followup_annotations": [
-      "@@@STEP_LINK@layout_test_results@https://storage.googleapis.com/chromium-layout-test-archives/TestBuilder/571/@@@"
-    ]
-  }, 
-  {
-    "cmd": [
-      "python", 
-      "-u", 
       "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py", 
       ".", 
       "[DEPOT_TOOLS_ROOT]/gclient"
