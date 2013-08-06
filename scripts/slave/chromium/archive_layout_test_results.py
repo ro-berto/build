@@ -144,10 +144,9 @@ def archive_layout(options, args):
       results_dir_basename.replace('-','_'), build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
 
-  gs_bucket = options.factory_properties.get('gs_bucket', None)
-  if gs_bucket:
-    gs_base = '/'.join([gs_bucket, build_name, build_number])
-    gs_acl = options.factory_properties.get('gs_acl', None)
+  if options.gs_bucket:
+    gs_base = '/'.join([options.gs_bucket, build_name, build_number])
+    gs_acl = options.gs_acl
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl)
     slave_utils.GSUtilCopyFile(full_results_json, gs_base, gs_acl=gs_acl)
     slave_utils.GSUtilCopyFile(failing_results_json, gs_base, gs_acl=gs_acl)
@@ -177,8 +176,24 @@ def main():
                            default=None,
                            help=('The build number of the builder running'
                                  'this script.'))
+  option_parser.add_option('', '--gs-bucket',
+                           default=None,
+                           help=('The google storage bucket to upload to. '
+                                 'If provided, this script will upload to gs '
+                                 'instead of the master.'))
+  option_parser.add_option('', '--gs-acl',
+                           default=None,
+                           help=('The ACL of the google storage files.'))
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
+
+  # To continue supporting buildbot, initialize these from the
+  # factory_properties if they were not supplied on the command line.
+  if not options.gs_bucket:
+    options.gs_bucket = options.factory_properties.get('gs_bucket')
+  if not options.gs_acl:
+    options.gs_acl = options.factory_properties.get('gs_acl')
+
   return archive_layout(options, args)
 
 
