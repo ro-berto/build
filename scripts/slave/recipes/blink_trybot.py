@@ -65,8 +65,11 @@ def GenSteps(api):
 
   webkit_lint = api.path.build('scripts', 'slave', 'chromium',
                                'lint_test_files_wrapper.py')
+  archive_layout_test_results = api.path.build(
+    'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
   webkit_python_tests = api.path.build('scripts', 'slave', 'chromium',
                                        'test_webkitpy_wrapper.py')
+  results_dir = api.path.slave_build('layout-test-results')
 
 
   def BlinkTestsStep(with_patch):
@@ -74,7 +77,7 @@ def GenSteps(api):
     test = api.path.build('scripts', 'slave', 'chromium',
                           'layout_test_wrapper.py')
     args = ['--target', api.chromium.c.BUILD_CONFIG,
-            '-o', api.path.slave_build('layout-test-results'),
+            '-o', results_dir,
             '--build-dir', api.path.checkout(api.chromium.c.build_dir),
             api.json.results()]
     return api.chromium.runtests(test, args, name=name, can_fail_build=False,
@@ -101,8 +104,26 @@ def GenSteps(api):
   if api.step_history.last_step().retcode == 0:
     yield api.python.inline('webkit_tests', 'print "ALL IS WELL"')
     return
-
   with_patch = api.step_history.last_step().json.results
+
+  buildername = api.properties['buildername']
+  buildnumber = api.properties['buildnumber']
+  def archive_webkit_tests_results_followup(step_result):
+    fmt = "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s/"
+    step_result.presentation.links['layout_test_results'] = fmt % (
+      buildername, buildnumber)
+
+  yield api.python(
+    'archive_webkit_tests_results',
+    archive_layout_test_results,
+    [
+      '--results-dir', results_dir,
+      '--build-dir', api.path.checkout(api.chromium.c.build_dir),
+      '--build-number', buildnumber,
+      '--builder-name', buildername,
+    ] + api.json.property_args(),
+    followup_fn=archive_webkit_tests_results_followup
+  )
 
   yield (
     api.gclient.revert(),
