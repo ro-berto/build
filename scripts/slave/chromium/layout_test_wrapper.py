@@ -142,7 +142,7 @@ def layout_test(options, args):
     if options.enable_pageheap:
       slave_utils.SetPageHeap(build_dir, dumprendertree_exe, False)
 
-    if options.json_results:
+    if options.json_test_results:
       results_dir = options.results_directory
       results_json = os.path.join(results_dir, "failing_results.json")
       with open(results_json, 'rb') as f:
@@ -164,7 +164,7 @@ def layout_test(options, args):
       json_data = json.loads(data)
       assert isinstance(json_data, dict)
 
-      with open(options.json_results, 'wb') as f:
+      with open(options.json_test_results, 'wb') as f:
         f.write(data)
 
 
@@ -227,7 +227,7 @@ def main():
                            help=("If specified, additional command line flag "
                                  "to pass to DumpRenderTree. Specify multiple "
                                  "times to add multiple flags."))
-  option_parser.add_option("--json-results",
+  option_parser.add_option("--json-test-results",
                            help=("Path to write json results to allow "
                                  "TryJob recipe to know how to ignore "
                                  "expected failures."))

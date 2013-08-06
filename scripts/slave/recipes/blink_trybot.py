@@ -26,7 +26,7 @@ def html_results(*name_vals):
 
 
 def followup_fn(step_result):
-  r = step_result.json.results
+  r = step_result.json.test_results
   p = step_result.presentation
 
   p.step_text += html_results(
@@ -76,7 +76,7 @@ def GenSteps(api):
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', api.path.slave_build('layout-test-results'),
             '--build-dir', api.path.checkout(api.chromium.c.build_dir),
-            api.json.results()]
+            api.json.test_results()]
     return api.chromium.runtests(test, args, name=name, can_fail_build=False,
                                  followup_fn=followup_fn)
 
@@ -102,7 +102,7 @@ def GenSteps(api):
     yield api.python.inline('webkit_tests', 'print "ALL IS WELL"')
     return
 
-  with_patch = api.step_history.last_step().json.results
+  with_patch = api.step_history.last_step().json.test_results
 
   yield (
     api.gclient.revert(),
@@ -110,7 +110,7 @@ def GenSteps(api):
     api.chromium.compile(),
     BlinkTestsStep(with_patch=False),
   )
-  clean = api.step_history.last_step().json.results
+  clean = api.step_history.last_step().json.test_results
 
   ignored_failures = set(clean.unexpected_failures)
   new_failures = (set(with_patch.unexpected_failures) -
@@ -179,11 +179,11 @@ def GenTests(api):
 
   DATA = lambda good: dict((
     ('webkit_tests (with patch)', {
-      'json': {'results': TEST_OUTPUT(good) },
+      'json': {'test_results': TEST_OUTPUT(good) },
       '$R': 0 if good else 1
     }),)+((
     ('webkit_tests (without patch)', {
-      'json': {'results': TEST_OUTPUT(good) },
+      'json': {'test_results': TEST_OUTPUT(good) },
       '$R': 1
     }),) if not good else ()),
   )
@@ -210,7 +210,7 @@ def GenTests(api):
 
   warn_on_flakey_data = DATA(False)
   warn_on_flakey_data['webkit_tests (without patch)'] = {
-    'json': {'results': TEST_OUTPUT(True)},
+    'json': {'test_results': TEST_OUTPUT(True)},
     '$R': 0,
   }
   yield 'warn_on_flakey', {
