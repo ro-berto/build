@@ -30,14 +30,16 @@ def followup_fn(step_result):
   p = step_result.presentation
 
   p.step_text += html_results(
+    ('unexpected_flakes', r.unexpected_flakes),
     ('unexpected_failures', r.unexpected_failures),
-    ('failures', r.failures)
   )
 
   p.step_text += '<br/>Total executed: %s' % r.num_passes
 
-  if step_result.retcode > 0:
+  if r.unexpected_flakes or r.unexpected_failures:
     p.status = 'WARNING'
+  else:
+    p.status = 'SUCCESS'
 
 
 def summarize_failures(ignored, new):
@@ -150,7 +152,7 @@ def GenTests(api):
       "flake": {
         "totally-flakey.html": {
           "expected": "PASS",
-          "actual": "TIMEOUT PASS",
+          "actual": "PASS" if good else "TIMEOUT PASS",
           "is_unexpected": True,
         }
       },

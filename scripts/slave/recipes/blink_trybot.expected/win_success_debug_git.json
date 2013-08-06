@@ -236,7 +236,7 @@
       "@@@STEP_LOG_LINE@json.results@    }, @@@", 
       "@@@STEP_LOG_LINE@json.results@    \"flake\": {@@@", 
       "@@@STEP_LOG_LINE@json.results@      \"totally-flakey.html\": {@@@", 
-      "@@@STEP_LOG_LINE@json.results@        \"actual\": \"TIMEOUT PASS\", @@@", 
+      "@@@STEP_LOG_LINE@json.results@        \"actual\": \"PASS\", @@@", 
       "@@@STEP_LOG_LINE@json.results@        \"expected\": \"PASS\", @@@", 
       "@@@STEP_LOG_LINE@json.results@        \"is_unexpected\": true@@@", 
       "@@@STEP_LOG_LINE@json.results@      }@@@", 

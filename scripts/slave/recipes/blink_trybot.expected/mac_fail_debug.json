@@ -199,7 +199,7 @@
     ], 
     "name": "webkit_tests (with patch)", 
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>unexpected_failures:<br/>tricky/totally-maybe-not-awesome.html<br/><br/>failures:<br/>bad/totally-bad-probably.html<br/><br/>Total executed: 9001@@@", 
+      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001@@@", 
       "@@@STEP_LOG_LINE@json.results@{@@@", 
       "@@@STEP_LOG_LINE@json.results@  \"num_passes\": 9001, @@@", 
       "@@@STEP_LOG_LINE@json.results@  \"tests\": {@@@", 
@@ -312,7 +312,7 @@
     ], 
     "name": "webkit_tests (without patch)", 
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>unexpected_failures:<br/>tricky/totally-maybe-not-awesome.html<br/><br/>failures:<br/>bad/totally-bad-probably.html<br/><br/>Total executed: 9001@@@", 
+      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001@@@", 
       "@@@STEP_LOG_LINE@json.results@{@@@", 
       "@@@STEP_LOG_LINE@json.results@  \"num_passes\": 9001, @@@", 
       "@@@STEP_LOG_LINE@json.results@  \"tests\": {@@@", 
