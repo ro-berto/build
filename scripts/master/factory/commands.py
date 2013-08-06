@@ -1194,12 +1194,13 @@ class FactoryCommands(object):
         haltOnFailure=haltOnFailure,
         env=env)
 
-  def AddUpdateNaClSDKStep(self):
+  def AddUpdateNaClSDKStep(self, pepper_channel='stable'):
     """Calls the NaCl SDK update script.
 
-    The newest pepper bundle is copied to nacl_sdk/pepper_current.
+    The required pepper bundle is copied to nacl_sdk/pepper_current.
     """
-    cmd = [self._python, self._update_nacl_sdk_tool]
+    cmd = [self._python, self._update_nacl_sdk_tool, '--pepper-channel',
+           pepper_channel]
     self._factory.addStep(shell.ShellCommand,
                           name='update NaCl SDK',
                           description='updating NaCl SDK',

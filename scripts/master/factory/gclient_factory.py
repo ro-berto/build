@@ -255,7 +255,8 @@ class GClientFactory(object):
 
     # Update the NaCl SDK if needed
     if factory_properties.get('update_nacl_sdk'):
-      factory_cmd_obj.AddUpdateNaClSDKStep()
+      factory_cmd_obj.AddUpdateNaClSDKStep(
+          factory_properties['update_nacl_sdk'])
 
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer']:
