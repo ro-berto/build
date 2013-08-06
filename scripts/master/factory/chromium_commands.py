@@ -143,6 +143,23 @@ class ChromiumCommands(commands.FactoryCommands):
     self._factory.addStep(FileUpload(slavesrc=slavesrc,
                                      masterdest=masterdest))
 
+  def AddGenerateCodeTallyStep(self):
+    """Adds a step to run code tally over the chrome dll."""
+    code_tally_exe = self.PathJoin('src', 'third_party', 'syzygy', 'binaries',
+                                   'exe', 'experimental', 'code_tally.exe')
+
+    chrome_dll = self.PathJoin(self._build_dir, self._target, 'chrome.dll')
+    output_file = self.PathJoin(self._build_dir, self._target,
+                                'code_tally.json')
+
+    cmd = [code_tally_exe, '--input-image=%s' % chrome_dll,
+           '--output-file=%s' % output_file]
+
+    self._factory.addStep(shell.ShellCommand,
+                          name='code_tally',
+                          description='code_tally',
+                          command=cmd)
+
   def AddWindowsASANStep(self):
     """Adds a step to run syzygy/ASAN over the output directory."""
     cmd = [self._python, self._windows_asan_tool,
