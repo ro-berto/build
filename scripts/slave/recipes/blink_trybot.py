@@ -49,6 +49,10 @@ def summarize_failures(ignored, new):
       ('new', new),
       ('ignored', ignored),
     )
+    if new:
+      p.status = 'FAILURE'
+    elif ignored:
+      p.status = 'WARNING'
   return summarize_failures_inner
 
 
@@ -203,3 +207,23 @@ def GenTests(api):
               }
             }
           }
+
+  warn_on_flakey_data = DATA(False)
+  warn_on_flakey_data['webkit_tests (without patch)'] = {
+    'json': {'results': TEST_OUTPUT(True)},
+    '$R': 0,
+  }
+  yield 'warn_on_flakey', {
+    'properties': api.properties_tryserver(
+      build_config='Release',
+      config_name='blink',
+      root='src/third_party/WebKit',
+      GIT_MODE=False,
+    ),
+    'step_mocks': warn_on_flakey_data,
+    'mock': {
+      'platform': {
+        'name': 'linux'
+      }
+    }
+  }

@@ -395,7 +395,8 @@
       "@@@STEP_LOG_LINE@python.inline@  print '\\n'.join(failures['ignored'])@@@", 
       "@@@STEP_LOG_LINE@python.inline@@@@", 
       "@@@STEP_LOG_LINE@python.inline@sys.exit(bool(failures['new']))@@@", 
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@", 
+      "@@@STEP_WARNINGS@@@"
     ]
   }
 ]
