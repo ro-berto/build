@@ -29,7 +29,7 @@ S('chromium-git', branch='master', treeStableTimer=60)
 ## Windows
 ################################################################################
 
-B('Win', 'win', 'compile|testers', 'chromium-git',
+B('WinGit', 'win', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('win', win().ChromiumGitFactory(
     clobber=True,
@@ -58,7 +58,7 @@ F('win', win().ChromiumGitFactory(
 ## Mac
 ################################################################################
 
-B('Mac', 'mac', 'compile|testers', 'chromium-git',
+B('MacGit', 'mac', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('mac', mac().ChromiumGitFactory(
     clobber=True,
@@ -84,7 +84,7 @@ F('mac', mac().ChromiumGitFactory(
 ## Linux
 ################################################################################
 
-B('Linux', 'linux', 'compile|testers', 'chromium-git',
+B('LinuxGit', 'linux', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('linux', linux().ChromiumGitFactory(
     clobber=True,
@@ -109,7 +109,7 @@ F('linux', linux().ChromiumGitFactory(
       },
     }))
 
-B('Linux x64', 'linux64', 'compile|testers', 'chromium-git',
+B('LinuxGit x64', 'linux64', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('linux64', linux().ChromiumGitFactory(
     clobber=True,
