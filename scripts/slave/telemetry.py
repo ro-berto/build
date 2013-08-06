@@ -73,7 +73,7 @@ def _GenerateTelemetryCommandSequence(options):
   env = os.environ
 
   # List of command line arguments common to all test platforms.
-  common_args = ['-v']
+  common_args = ['-v', '--output-format=buildbot']
   if page_repeat:
     common_args.append('--page-repeat=%d' % page_repeat)
 

@@ -87,6 +87,7 @@ class TelemetryTest(unittest.TestCase):
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
             '\'src/tools/perf/run_measurement\' \'-v\' ' +
+            '\'--output-format=buildbot\' ' +
             '\'--browser=android-chromium-testshell\' \'sunspider\' ' +
             '\'src/tools/perf/page_sets/sunspider.json\''
         ])
@@ -117,7 +118,8 @@ class TelemetryTest(unittest.TestCase):
             '"page_repeat": 20, '+
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
-            '\'src/tools/perf/run_measurement\' \'-v\' ' +
+            '\'src/tools/perf/run_measurement\' \'-v\' '
+            '\'--output-format=buildbot\' ' +
             '\'--page-repeat=20\' '+
             '\'--browser=android-chromium-testshell\' \'sunspider\' ' +
             '\'src/tools/perf/page_sets/sunspider.json\''
@@ -165,7 +167,8 @@ class TelemetryTest(unittest.TestCase):
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
-            '\'src/tools/perf/run_measurement\' \'-v\' ' +
+            '\'src/tools/perf/run_measurement\' \'-v\' '
+            '\'--output-format=buildbot\' ' +
             '\'--browser=android-chromium-testshell\' \'sunspider\''
         ])
 
