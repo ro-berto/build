@@ -86,7 +86,7 @@ class AOSPApi(recipe_api.RecipeApi):
     repo_copy_dir = self.m.path.slave_build('repo_copy')
     repo_copy_path = self.m.path.slave_build('repo_copy', 'repo')
     self._repo_path = self.m.path.depot_tools('repo')
-    if self.m.path.exists(repo_in_android_path):
+    if self.m.path.exists(repo_in_android_path):  # pragma: no cover
       self._repo_path = repo_copy_path
       yield self.m.path.makedirs('repo copy dir', repo_copy_dir)
       yield self.m.step('copy repo from Android', [

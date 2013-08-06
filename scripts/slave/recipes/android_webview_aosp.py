@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-DEPS = ['android', 'properties', 'rietveld']
+DEPS = ['android', 'path', 'properties', 'rietveld']
 
 def GenSteps(api):
   droid = api.android
@@ -13,9 +13,10 @@ def GenSteps(api):
   if 'issue' in api.properties:
     yield api.rietveld.apply_issue(api.rietveld.calculate_issue_root())
 
-  yield droid.repo_init_steps()
-  yield droid.generate_local_manifest_step()
-  yield droid.repo_sync_steps()
+  if not api.path.exists(droid.build_path):
+    yield droid.repo_init_steps()
+    yield droid.generate_local_manifest_step()
+    yield droid.repo_sync_steps()
 
   yield droid.symlink_chromium_into_android_tree_step()
   yield droid.gyp_webview_step()
