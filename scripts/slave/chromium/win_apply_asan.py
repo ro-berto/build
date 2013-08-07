@@ -28,10 +28,9 @@ SKIP_DIRS = [
 
 
 class ASANitizer(object):
-  def __init__(self, instrument_exe, stopped, root):
+  def __init__(self, instrument_exe, stopped):
     self.instrument_exe = instrument_exe
     self.stopped = stopped
-    self.root = root
 
   def __call__(self, job):
     retval = 0
@@ -40,8 +39,8 @@ class ASANitizer(object):
 
     try:
       if not self.stopped.is_set():
-        out_pe = GetInstrumentedFilepath(pe_image, self.root)
-        out_pdb = GetInstrumentedFilepath(pdb, self.root)
+        out_pe = AddExtensionComponent(pe_image, 'asan')
+        out_pdb = AddExtensionComponent(pdb, 'asan')
 
         # Note that instrument.exe requires --foo=bar format (including the '=')
         command = [
@@ -66,25 +65,16 @@ class ASANitizer(object):
       return (1, stdout+'\n'+traceback.format_exc(), pe_image)
 
 
-def GetInstrumentedFilepath(fname, root):
-  """Returns the name of the instrumented file. Creates the output directory if
-  if doesn't exist.
+def AddExtensionComponent(path, new_ext):
+  """Prepends new_ext to the existing extension.
 
-  >>> GetInstrumentedFilepath('C:/src/out/Release/foo/image.exe',
-          'src/out/Release')
-  'c:/src/out/Release/syzygy/asan/foo/image.exe'
-  TODO(sebmarchand): Separate the path computation from the side-effect of path
-      creation.
-  NOTE: This only works with the release builds compiled with ninja.
+  >>> ChangeExtension('hello.foo.dll', 'asan')
+  'hello.asan.foo.dll'
   """
-  asan_root = os.path.join(root, 'syzygy', 'asan')
-  asaned_file = fname.replace(root, asan_root)
-  out_path = os.path.dirname(asaned_file)
-  if not os.path.exists(out_path):
-    os.makedirs(out_path)
-  elif not os.path.isdir(out_path):
-    raise Exception('Invalid output directory for %s.' % fname)
-  return asaned_file
+  # Don't use os.path.splitext, because it will split on the rightmost dot
+  # instead of the leftmost dot.
+  base, ext = path.split('.', 1)
+  return base + '.' + new_ext + '.' + ext
 
 
 def UpdateAsanRuntime(full_directory, runtime_path):
@@ -160,7 +150,7 @@ def ApplyAsanToBuild(full_directory, instrument_exe, pdbfind_exe, jobs):
 
   manager = multiprocessing.Manager()
   stopped = manager.Event()
-  sanitizer = ASANitizer(instrument_exe, stopped, full_directory)
+  sanitizer = ASANitizer(instrument_exe, stopped)
   pool = multiprocessing.Pool(jobs)
 
   ret = 0
