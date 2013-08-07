@@ -23,23 +23,23 @@ from slave import slave_utils
 class StagingError(Exception): pass
 
 
-def ASANWinFilter(path):
-  """Takes a path to a file and returns the path to its asan'd counterpart.
+class ASANWinFilter():
+  def __init__(self, build_dir, target):
+    self.root = os.path.join(build_dir, target)
 
-  Returns None if path is already an asan'd file.
-  Returns the original path otherwise.
-  """
-  head, tail = os.path.split(path)
-  parts = tail.split('.', 1)
-  if len(parts) == 1:
+  def __call__(self, path):
+    """Takes a path to a file and returns the path to its asanified counterpart.
+
+    Returns None if path is already an asanified file (to skip it's archival).
+    Returns the original path otherwise.
+    """
+    asan_root = os.path.join(self.root, 'syzygy', 'asan')
+    if asan_root in path:
+      return None
+    asaned_file = path.replace(self.root, asan_root)
+    if os.path.isfile(asaned_file):
+      return asaned_file
     return path
-  if parts[-1].startswith('asan'):  # skip 'foo.asan.exe' entirely
-    return None
-  parts.insert(1, 'asan')
-  asan_path = os.path.join(head, '.'.join(parts))
-  if os.path.exists(asan_path):
-    return asan_path
-  return path
 
 
 PATH_FILTERS = {
@@ -389,7 +389,9 @@ def main(argv):
       and options.factory_properties.get('asan')
       and chromium_utils.IsWindows()):
     options.path_filter = 'asan_win'
-  options.path_filter = PATH_FILTERS.get(options.path_filter)
+
+  options.path_filter = PATH_FILTERS.get(options.path_filter)(options.target,
+                                                              options.build_dir)
 
   return Archive(options)
 
