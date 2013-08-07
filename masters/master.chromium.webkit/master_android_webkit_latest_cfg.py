@@ -48,7 +48,7 @@ F('f_android_rel', linux_android().ChromiumAnnotationFactory(
         'blink_config': 'blink',
         }))
 
-B('WebKit Android (GalaxyNexus)', 'f_webkit_android_tests', None,
+B('WebKit Android (Nexus4)', 'f_webkit_android_tests', None,
   'android_rel_trigger')
 F('f_webkit_android_tests',
   linux_android().ChromiumAnnotationFactory(
