@@ -52,19 +52,23 @@ def main():
                            help='Specify shard count [default: %%default]')
   option_parser.add_option('--shell_flags',
                            default=None,
-                           help="Specify shell flags passed tools/run-test.py")
+                           help='Specify shell flags passed tools/run-test.py')
   option_parser.add_option('--command_prefix',
                            default=None,
-                           help="Command prefix passed tools/run-test.py")
+                           help='Command prefix passed tools/run-test.py')
   option_parser.add_option('--isolates',
                            default=None,
-                           help="Run isolates tests")
+                           help='Run isolates tests')
   option_parser.add_option('--buildbot',
                            default='True',
-                           help="Resolve paths to executables for buildbots")
+                           help='Resolve paths to executables for buildbots')
   option_parser.add_option('--no-presubmit',
-                           default=False, action="store_true",
+                           default=False, action='store_true',
                            help='Skip presubmit checks')
+  option_parser.add_option('--flaky-tests',
+                           default='dontcare',
+                           help=('Regard tests marked as flaky '
+                                 '(run|skip|dontcare)'))
 
   options, args = option_parser.parse_args()
   if args:
@@ -108,9 +112,11 @@ def main():
     if options.isolates:
       cmd.extend(['--isolates'])
     if options.shell_flags:
-      cmd.extend(["--extra-flags", options.shell_flags.replace("\"", "")])
+      cmd.extend(['--extra-flags', options.shell_flags.replace("\"", "")])
     if options.command_prefix:
-      cmd.extend(["--command-prefix", options.command_prefix])
+      cmd.extend(['--command-prefix', options.command_prefix])
+    if options.flaky_tests:
+      cmd.extend(['--flaky-tests', options.flaky_tests])
 
 
   if options.shard_count > 1:

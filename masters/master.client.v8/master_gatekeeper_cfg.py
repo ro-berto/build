@@ -24,12 +24,7 @@ categories_steps = {
 }
 
 exclusions = {
-  'V8 Linux - mips - sim': [],
-  'V8 GC Stress - 1': ['Check'],
-  'V8 GC Stress - 2': ['Check'],
-  'V8 GC Stress - 3': ['Check'],
-  'NaCl V8 Linux': ['Check'],
-  'NaCl V8 Linux64': ['Check'],
+  'V8 Linux - mips - sim': ['compile'],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
