@@ -628,7 +628,6 @@ class ApplyIssue(commandbase):
     self.issue = None
     self.patchset = None
     self.email = None
-    self.password = None
     self.workdir = None
     self.timeout = None
     self.server = None
@@ -643,7 +642,7 @@ class ApplyIssue(commandbase):
         '-i', self.issue,
         '-p', self.patchset,
         '-e', self.email,
-        '-w', '-',
+        '--no-auth',
     ]
 
     if self.server:
@@ -651,7 +650,7 @@ class ApplyIssue(commandbase):
 
     command = runprocesscmd(
         self.builder, cmd, os.path.join(self.builder.basedir, self.workdir),
-        timeout=self.timeout, initialStdin=self.password)
+        timeout=self.timeout)
     return command.start()
 
   # commandbase overrides:
@@ -661,7 +660,6 @@ class ApplyIssue(commandbase):
     self.issue = args['issue']
     self.patchset = args['patchset']
     self.email = args['email']
-    self.password = args['password']
     self.workdir = args['workdir']
     self.timeout = args['timeout']
     self.server = args.get('server')

@@ -257,14 +257,13 @@ class GClient(source.Source):
 class ApplyIssue(LoggingBuildStep):
   """Runs the apply_issue.py script on the slave."""
 
-  def __init__(self, root, issue, patchset, email, password, workdir, timeout,
+  def __init__(self, root, issue, patchset, email, workdir, timeout,
                server, **kwargs):
     LoggingBuildStep.__init__(self, **kwargs)
     self.args = {'root': root,
                  'issue': issue,
                  'patchset': patchset,
                  'email': email,
-                 'password': password,
                  'workdir': workdir,
                  'timeout': timeout,
                  'server': server,

@@ -956,21 +956,12 @@ class FactoryCommands(object):
         return False
       return True
 
-    #TODO(xusydoc): figure out a way to make this run on production host only.
-    pwfile = '.apply_issue_password'
-    try:
-      password = open(pwfile).readline().strip()
-    except IOError as e:
-      password = ''
-      log.msg('could not open %s: %s' % (pwfile, e))
-
     self._factory.addStep(
         chromium_step.ApplyIssue,
         root=WithProperties('%(root:~src)s'),
         issue=WithProperties('%(issue:-)s'),
         patchset=WithProperties('%(patchset:-)s'),
         email='commit-bot@chromium.org',
-        password=password,
         workdir=self.working_dir,
         timeout=timeout or 600,
         server=server,
