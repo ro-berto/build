@@ -16,6 +16,7 @@ BLACKLIST = set((
     'crash_service64.exe',
     'crnss.dll',
     'ffmpegsumo.dll',
+    'googleurl_unittests.exe',
     'gpu.dll',
     'icuuc.dll',
     'nacl.exe',
