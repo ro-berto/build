@@ -9,7 +9,7 @@ defaults = {}
 
 
 def mac():
-  return webrtc_factory.WebRTCFactory('src/xcodebuild', 'darwin')
+  return webrtc_factory.WebRTCFactory('src/out', 'darwin')
 def macIos():
   return webrtc_factory.WebRTCFactory('', 'darwin', nohooks_on_update=True)
 
@@ -42,7 +42,7 @@ baremetal_tests = [
     'vie_auto_test',
     'voe_auto_test',
 ]
-options = ['--', '-project', '../webrtc/webrtc.xcodeproj']
+options = ['--build-tool=ninja']
 
 defaults['category'] = 'mac'
 
