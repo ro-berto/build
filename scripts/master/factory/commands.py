@@ -962,6 +962,7 @@ class FactoryCommands(object):
         issue=WithProperties('%(issue:-)s'),
         patchset=WithProperties('%(patchset:-)s'),
         email='commit-bot@chromium.org',
+        password='DeliciousPie',
         workdir=self.working_dir,
         timeout=timeout or 600,
         server=server,

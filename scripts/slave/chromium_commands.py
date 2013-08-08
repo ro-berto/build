@@ -628,6 +628,7 @@ class ApplyIssue(commandbase):
     self.issue = None
     self.patchset = None
     self.email = None
+    self.password = None
     self.workdir = None
     self.timeout = None
     self.server = None
@@ -660,6 +661,7 @@ class ApplyIssue(commandbase):
     self.issue = args['issue']
     self.patchset = args['patchset']
     self.email = args['email']
+    self.password = args['password']
     self.workdir = args['workdir']
     self.timeout = args['timeout']
     self.server = args.get('server')
