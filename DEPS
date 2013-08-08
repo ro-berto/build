@@ -2,14 +2,20 @@ deps = {
   "build/scripts/command_wrapper/bin":
     "/trunk/tools/command_wrapper/bin",
 
-  "build/third_party/lighttpd":
-    "/trunk/deps/third_party/lighttpd@58968",
+  "build/scripts/gsd_generate_index":
+    "/trunk/tools/gsd_generate_index",
+
+  "build/scripts/private/data/reliability":
+    "/trunk/src/chrome/test/data/reliability",
 
   "build/third_party/gsutil":
     "svn://svn.chromium.org/gsutil/trunk/src@263",
 
   "build/third_party/gsutil/boto":
     "svn://svn.chromium.org/boto@7",
+
+  "build/third_party/lighttpd":
+    "/trunk/deps/third_party/lighttpd@58968",
 
   "commit-queue":
     "/trunk/tools/commit-queue",
