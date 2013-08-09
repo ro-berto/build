@@ -66,7 +66,6 @@ def main():
                            default=False, action='store_true',
                            help='Skip presubmit checks')
   option_parser.add_option('--flaky-tests',
-                           default='dontcare',
                            help=('Regard tests marked as flaky '
                                  '(run|skip|dontcare)'))
 
