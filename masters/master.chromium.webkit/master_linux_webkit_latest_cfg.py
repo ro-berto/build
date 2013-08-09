@@ -72,11 +72,14 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'additional_expectations': [
             ['webkit', 'tools', 'layout_tests', 'test_expectations_asan.txt' ],
         ],
-        'gs_bucket': 'gs://webkit-asan',
-        'gclient_env': {'GYP_DEFINES': asan_gyp, 'GYP_GENERATORS': 'ninja'},
-        'time_out_ms': '18000',
-        'blink_config': 'blink',
+        'archive_webkit_results': ActiveMaster.is_production_host,
         'asan': True,
+        'blink_config': 'blink',
+        'gclient_env': {'GYP_DEFINES': asan_gyp, 'GYP_GENERATORS': 'ninja'},
+        'generate_gtest_json': True,
+        'gs_bucket': 'gs://webkit-asan',
+        'test_results_server': 'test-results.appspot.com',
+        'time_out_ms': '18000',
     }))
 
 
