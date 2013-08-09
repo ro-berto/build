@@ -286,6 +286,7 @@ F('dbg_32', linux().ChromiumFactory(
     options=goma_ninja_options + linux_all_test_targets,
     factory_properties={
         'gclient_env': {
+            'GYP_DEFINES':'target_arch=ia32',
             'GYP_GENERATORS':'ninja',
         },
         'trigger': 'linux_dbg_32_trigger',
