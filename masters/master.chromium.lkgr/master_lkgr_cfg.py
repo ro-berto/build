@@ -74,6 +74,7 @@ F('mac_asan_rel', linux().ChromiumASANFactory(
              'chromium_builder_asan_mac'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 '}}))
@@ -86,6 +87,7 @@ F('mac_asan_dbg', linux().ChromiumASANFactory(
              'chromium_builder_asan_mac'],
     factory_properties={
        'cf_archive_build': ActiveMaster.is_production_host,
+       'cf_archive_name': 'asan',
        'gs_bucket': 'gs://chromium-browser-asan',
        'gs_acl': 'public-read',
        'gclient_env': {'GYP_DEFINES': 'asan=1 component=static_library '}}))
