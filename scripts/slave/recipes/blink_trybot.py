@@ -101,9 +101,6 @@ def GenSteps(api):
   )
 
   yield BlinkTestsStep(with_patch=True)
-  if api.step_history.last_step().retcode == 0:
-    yield api.python.inline('webkit_tests', 'print "ALL IS WELL"')
-    return
   with_patch = api.step_history.last_step().json.test_results
 
   buildername = api.properties['buildername']
@@ -128,6 +125,10 @@ def GenSteps(api):
     ] + api.json.property_args(),
     followup_fn=archive_webkit_tests_results_followup
   )
+
+  if not with_patch.unexpected_failures:
+    yield api.python.inline('webkit_tests', 'print "ALL IS WELL"')
+    return
 
   yield (
     api.gclient.revert(),
