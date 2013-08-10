@@ -19,12 +19,14 @@ BLACKLIST = set((
     'googleurl_unittests.exe',
     'gpu.dll',
     'icuuc.dll',
+    'mini_installer.exe',
     'nacl.exe',
     'nacl64.exe',
     'sql.dll',
 ))
 SKIP_DIRS = [
     'locales',
+    'obj',
 ]
 
 
