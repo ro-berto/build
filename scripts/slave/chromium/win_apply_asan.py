@@ -14,11 +14,6 @@ import sys
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BLACKLIST = set((
     'crash_service64.exe',
-    'crnss.dll',
-    'ffmpegsumo.dll',
-    'googleurl_unittests.exe',
-    'gpu.dll',
-    'icuuc.dll',
     'mini_installer.exe',
     'nacl.exe',
     'nacl64.exe',
@@ -27,6 +22,7 @@ BLACKLIST = set((
 SKIP_DIRS = [
     'locales',
     'obj',
+    'syzygy/asan',
 ]
 
 
