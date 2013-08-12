@@ -166,7 +166,7 @@
       "-u", 
       "https://android.googlesource.com/platform/manifest", 
       "-b", 
-      "jb-mr1.1-dev"
+      "android-4.3_r2.1"
     ], 
     "cwd": "[SLAVE_BUILD_ROOT]/android-src", 
     "name": "repo init"
@@ -175,9 +175,7 @@
     "cmd": [
       "[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/generate_local_manifest.py", 
       "[SLAVE_BUILD_ROOT]/android-src", 
-      "external/chromium_org", 
-      "--ndk-revision", 
-      "5049b437591600fb0d262e4215cee4226e63c6ce"
+      "external/chromium_org"
     ], 
     "name": "generate local manifest"
   }, 

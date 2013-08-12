@@ -8,7 +8,6 @@ from slave.recipe_configs_util import SimpleConfig, ListConfig, StaticConfig
 def BaseConfig(USE_MIRROR=False):
   return ConfigGroup(
     lunch_flavor = SimpleConfig(basestring),
-    ndk_pin_revision = SimpleConfig(basestring),
     repo = ConfigGroup(
       url = SimpleConfig(basestring),
       branch = SimpleConfig(basestring),
@@ -25,7 +24,6 @@ config_ctx = config_item_context(
 @config_ctx()
 def AOSP(c):
   c.lunch_flavor = 'full-eng'
-  c.ndk_pin_revision = '5049b437591600fb0d262e4215cee4226e63c6ce'
   c.repo.url = 'https://android.googlesource.com/platform/manifest'
-  c.repo.branch = 'jb-mr1.1-dev'
+  c.repo.branch = 'android-4.3_r2.1'
   c.repo.sync_flags = ['-j16', '-d', '-f']

@@ -101,18 +101,12 @@ class AOSPApi(recipe_api.RecipeApi):
     self.m.path.mock_add_paths(repo_in_android_path)
 
   def generate_local_manifest_step(self):
-    local_manifest_ndk_pin_revision = []
-    if self.c.ndk_pin_revision:
-      local_manifest_ndk_pin_revision = ['--ndk-revision',
-                                         self.c.ndk_pin_revision]
     yield self.m.step(
         'generate local manifest', [
           self.m.path.checkout('android_webview', 'buildbot',
                              'generate_local_manifest.py'),
           self.build_path,
-          self._CHROMIUM_IN_ANDROID_SUBPATH] +
-        local_manifest_ndk_pin_revision)
-
+          self._CHROMIUM_IN_ANDROID_SUBPATH])
 
   def repo_sync_steps(self):
     # repo_init_steps must have been invoked first.

@@ -1,9 +1,8 @@
 {
   "AOSP": {
     "lunch_flavor": "full-eng", 
-    "ndk_pin_revision": "5049b437591600fb0d262e4215cee4226e63c6ce", 
     "repo": {
-      "branch": "jb-mr1.1-dev", 
+      "branch": "android-4.3_r2.1", 
       "sync_flags": [
         "-j16", 
         "-d", 
