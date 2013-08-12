@@ -70,6 +70,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('webkit'): f.AddV8Webkit()
     if R('test262'): f.AddV8Test262()
     if R('mozilla'): f.AddV8Mozilla()
+    if R('intl'): f.AddV8Intl()
     if R('gcmole'): f.AddV8GCMole()
 
   def V8Factory(self, target='Release', clobber=False, tests=None, mode=None,

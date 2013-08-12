@@ -19,6 +19,7 @@ categories_steps = {
     'Webkit',
     'Test262',
     'Mozilla',
+    'Intl',
     'GCMole',
    ],
 }

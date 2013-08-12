@@ -131,6 +131,14 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
                      timeout=3600, workdir='build/v8/')
 
+  def AddV8Intl(self, properties=None):
+    if self._target_platform == 'win32':
+      self.AddTaskkillStep()
+    cmd = self.GetV8TestingCommand()
+    cmd += ['--testname', 'intl']
+    self.AddTestStep(shell.ShellCommand, 'Intl', cmd,
+                     timeout=3600, workdir='build/v8/')
+
   def AddPresubmitTest(self, properties=None):
     cmd = [self._python, self._v8testing_tool,
            '--testname', 'presubmit']
