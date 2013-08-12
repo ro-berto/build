@@ -616,6 +616,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           os.path.join('..', '..', '..',
                        'third_party', 'WebKit', 'PerformanceTests'),
           factory_properties=fp)
+    if R('media_perf'):
+      # Telemetry based media performance measurement.
+      f.AddTelemetryTest(
+          'media_measurement', 'tough_video_cases.json', factory_properties=fp)
     if R('memory'):
       f.AddMemoryTests(fp)
     if R('tab_switching'):
