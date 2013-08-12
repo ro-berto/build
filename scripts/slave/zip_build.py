@@ -33,9 +33,10 @@ class ASANWinFilter():
     Returns None if path is already an asanified file (to skip it's archival).
     Returns the original path otherwise.
     """
-    asan_root = os.path.join(self.root, 'syzygy', 'asan')
-    if asan_root in path:
+    syzygy_root = os.path.join(self.root, 'syzygy')
+    if syzygy_root in path:
       return None
+    asan_root = os.path.join(syzygy_root, 'asan')
     asaned_file = path.replace(self.root, asan_root)
     if os.path.isfile(asaned_file):
       return asaned_file
@@ -391,8 +392,8 @@ def main(argv):
     options.path_filter = 'asan_win'
 
   if options.path_filter:
-    options.path_filter = PATH_FILTERS[options.path_filter](options.target,
-        options.build_dir)
+    options.path_filter = PATH_FILTERS[options.path_filter](options.build_dir,
+        options.target)
 
   return Archive(options)
 
