@@ -22,7 +22,7 @@ from master import master_utils
 import config
 
 current_milestone = '0.3'
-v8_stable_branch = '3.19'
+v8_stable_branch = '3.20'
 android_tools_rev = '@b12d410c0ee23385da78e6c9f353d28fd992e0bd'
 android_resources_rev = '@3855'
 
