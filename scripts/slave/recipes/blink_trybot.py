@@ -170,55 +170,71 @@ def GenSteps(api):
   )
 
 
-def GenTests(api):
-  TEST_OUTPUT = lambda good: {
-    "tests": {
-      "good": {
-        "totally-awesome.html": {
-          "expected": "PASS",
-          "actual": "PASS",
-        }
-      },
-      "flake": {
-        "totally-flakey.html": {
-          "expected": "PASS",
-          "actual": "PASS" if good else "TIMEOUT PASS",
-          "is_unexpected": True,
-        }
-      },
-      "tricky": {
-        "totally-maybe-not-awesome.html": {
-          "expected": "PASS",
-          "actual": "PASS" if good else "FAIL",
-          "is_unexpected": True,
-        }
-      },
-      "bad": {
-        "totally-bad-probably.html": {
-          "expected": "PASS",
-          "actual": "PASS" if good else "FAIL",
-        }
-      }
-    },
-    "num_passes": 9001,
+## Test Code
+# TODO(iannucci): Find some way that the json module can provide these methods
+#                 in the test api, since they'll be useful for anyone who uses
+#                 the 'json.test_results' object.
+def add_result(r, name, expected, actual=None):
+  """Adds a test result to a 'json test results' compatible object.
+  Args:
+    r - The test result object to add to
+    name - A full test name delimited by '/'. ex. 'some/category/test.html'
+    expected - The string value for the 'expected' result of this test.
+    actual (optional) - If not None, this is the actual result of the test.
+                        Otherwise this will be set equal to expected.
+
+  The test will also get an 'is_unexpected' key if actual != expected.
+  """
+  actual = actual or expected
+  entry = r.setdefault('tests', {})
+  for token in name.split('/'):
+    entry = entry.setdefault(token, {})
+  entry['expected'] = expected
+  entry['actual'] = actual
+  if expected != actual:
+    entry['is_unexpected'] = True
+
+
+def canned_test_output(good, passes=9001):
+  """Produces a 'json test results' compatible object with some canned tests.
+  Args:
+    good - Determines if this test result is passing or not.
+    passes - The number of (theoretically) passing tests.
+  """
+  bad = lambda fail_val: None if good else fail_val
+  r = {"num_passes": passes}
+  add_result(r, 'good/totally-awesome.html', 'PASS')
+  add_result(r, 'flake/totally-flakey.html', 'PASS', bad('TIMEOUT PASS'))
+  add_result(r, 'tricky/totally-maybe-not-awesome.html', 'PASS', bad('FAIL'))
+  add_result(r, 'bad/totally-bad-probably.html', 'PASS', bad('FAIL'))
+  return r
+
+
+def step_mock(suffix, good):
+  """Produces the step mock for a single webkit tests step.
+  Args:
+    good - Determines if the result of this step was good or bad.
+    suffix - The suffix of the step name.
+  """
+  return {
+    ('webkit_tests (%s)' % suffix): {
+      'json': {'test_results': canned_test_output(good) },
+      '$R': 0 if good else 1
+    }
   }
 
-  DATA = lambda good: dict((
-    ('webkit_tests (with patch)', {
-      'json': {'test_results': TEST_OUTPUT(good) },
-      '$R': 0 if good else 1
-    }),)+((
-    ('webkit_tests (without patch)', {
-      'json': {'test_results': TEST_OUTPUT(good) },
-      '$R': 1
-    }),) if not good else ()),
-  )
 
+def GenTests(api):
   for result, good in [('success', True), ('fail', False)]:
     for build_config in ['Release', 'Debug']:
       for plat in ('win', 'mac', 'linux'):
         for git_mode in True, False:
           suffix = '_git' if git_mode else ''
+
+          step_mocks = step_mock('with patch', good)
+          if not good:
+            step_mocks.update(step_mock('without patch', good))
+
           yield ('%s_%s_%s%s' % (plat, result, build_config.lower(), suffix)), {
             'properties': api.properties_tryserver(
               build_config=build_config,
@@ -226,7 +242,7 @@ def GenTests(api):
               root='src/third_party/WebKit',
               GIT_MODE=git_mode,
             ),
-            'step_mocks': DATA(good),
+            'step_mocks': step_mocks,
             'mock': {
               'platform': {
                 'name': plat
@@ -234,11 +250,8 @@ def GenTests(api):
             }
           }
 
-  warn_on_flakey_data = DATA(False)
-  warn_on_flakey_data['webkit_tests (without patch)'] = {
-    'json': {'test_results': TEST_OUTPUT(True)},
-    '$R': 0,
-  }
+  warn_on_flakey_data = step_mock('with patch', False)
+  warn_on_flakey_data.update(step_mock('without patch', True))
   yield 'warn_on_flakey', {
     'properties': api.properties_tryserver(
       build_config='Release',
