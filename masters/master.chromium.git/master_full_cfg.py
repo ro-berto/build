@@ -23,7 +23,7 @@ def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
 defaults['category'] = '1clobber'
 
 # Global scheduler
-S('chromium-git', branch='master', treeStableTimer=60)
+S('chromium-git', branch='git-svn', treeStableTimer=60)
 
 ################################################################################
 ## Windows

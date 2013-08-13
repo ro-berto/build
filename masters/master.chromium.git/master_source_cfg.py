@@ -7,7 +7,7 @@ from master.chromium_git_poller_bb8 import ChromiumGitPoller
 def Update(config, active_master, c):
   poller = ChromiumGitPoller(
       repourl='https://chromium.googlesource.com/chromium/src.git',
-      branch='master',
+      branch='git-svn',
       pollinterval=10,
       revlinktmpl='https://chromium.googlesource.com/chromium/src/+/%s')
   c['change_source'].append(poller)
