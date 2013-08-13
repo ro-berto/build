@@ -112,9 +112,9 @@ F('f_webkit_win_dbg', win().ChromiumFactory(
 # Win Dbg WebKit testers
 #
 
-B('WebKit Win7 (dbg)(1)', 'f_webkit_dbg_tests_1',
+B('WebKit Win7 (dbg)', 'f_webkit_dbg_tests',
     scheduler='s4_webkit_dbg_trigger')
-F('f_webkit_dbg_tests_1', win().ChromiumFactory(
+F('f_webkit_dbg_tests', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
@@ -122,21 +122,6 @@ F('f_webkit_dbg_tests_1', win().ChromiumFactory(
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
-        'layout_part': '1:2',
-        'test_results_server': 'test-results.appspot.com',
-        'blink_config': 'blink',
-    }))
-
-B('WebKit Win7 (dbg)(2)', 'f_webkit_dbg_tests_2',
-    scheduler='s4_webkit_dbg_trigger')
-F('f_webkit_dbg_tests_2', win().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_archive,
-    tests=['webkit'],
-    factory_properties={
-        'archive_webkit_results': ActiveMaster.is_production_host,
-        'layout_part': '2:2',
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
     }))
