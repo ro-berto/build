@@ -20,6 +20,7 @@ SWARM_DIRECTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 
 # The directories to store the swarm code. Chromium-specific.
 CHROMIUM_DEFAULT_SWARM_DIRECTORY = {
+  'cygwin': '/cygdrive/e/b/swarm_slave',
   'linux': '/b/swarm_slave',
   'mac': '/b/swarm_slave',
   'win': 'e:\\b\\swarm_slave',
@@ -56,7 +57,7 @@ def BuildSetupCommand(user, host, platform, dest_dir, swarm_server):
   """Generates the command to run via ssh on the Swarm bot so it can setup
   itself.
   """
-  assert platform in ('linux', 'mac', 'win')
+  assert platform in ('cygwin', 'linux', 'mac', 'win')
   bot_setup_commands = []
 
   # On Windows the swarm files need to be moved to the correct directory.
@@ -69,15 +70,23 @@ def BuildSetupCommand(user, host, platform, dest_dir, swarm_server):
           'xcopy /i /e /h /y %s %s\\' % ('c' + dest_dir[1:], dest_dir),
           '&&'])
     dest_dir += '\\'
+  elif platform == 'cygwin':
+    # A bit hackish but works.
+    dest_dir = CHROMIUM_DEFAULT_SWARM_DIRECTORY['win'] + '\\'
   else:
     dest_dir += '/'
 
   # Download and setup the swarm code from the server.
+  if platform == 'cygwin':
+    # Hackish but for our deployment, depot_tools is always right aside.
+    python = dest_dir + '..\\depot_tools\\python.bat'
+  else:
+    python = 'python'
   bot_setup_commands.extend(
-      ['python', dest_dir + 'swarm_bootstrap.py', '-s', swarm_server])
+      [python, dest_dir + 'swarm_bootstrap.py', '-s', swarm_server])
 
   # On windows the command must be executed by cmd.exe
-  if platform == 'win':
+  if platform in ('cygwin', 'win'):
     bot_setup_commands = ['cmd.exe /c',
                           '"' + ' '.join(bot_setup_commands) + '"']
 
@@ -85,7 +94,7 @@ def BuildSetupCommand(user, host, platform, dest_dir, swarm_server):
 
 
 def BuildCleanCommand(user, host, platform, dest_dir):
-  assert platform in ('linux', 'mac', 'win')
+  assert platform in ('cygwin', 'linux', 'mac', 'win')
 
   command = OpenSSHCommand(user, host)
   if platform == 'win':
@@ -158,6 +167,8 @@ def main():
                     'swarm bot.')
   parser.add_option('-w', '--win', action='store_const', dest='platform',
                     const='win')
+  parser.add_option('-C', '--cygwin', action='store_const', dest='platform',
+                    const='cygwin')
   parser.add_option('-l', '--linux', action='store_const', dest='platform',
                     const='linux')
   parser.add_option('-m', '--mac', action='store_const', dest='platform',
