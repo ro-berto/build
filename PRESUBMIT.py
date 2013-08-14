@@ -20,7 +20,6 @@ def CommonChecks(input_api, output_api):
       r'.*depot_tools/.*',
       r'.*scripts/release/.*',
       r'.*scripts/slave/recipe_modules/.*',
-      r'.+_bb7\.py$',
       r'.*masters/.*/templates/.*\.html$',
       r'.*masters/.*/templates/.*\.css$',
       r'.*masters/.*/public_html/.*\.html$',
@@ -32,6 +31,7 @@ def CommonChecks(input_api, output_api):
     sys.path = [
         join('third_party'),
         join('third_party', 'buildbot_8_4p1'),
+        join('third_party', 'buildbot_slave_8_4'),
         join('third_party', 'coverage-3.6'),
         join('third_party', 'decorator_3_3_1'),
         join('third_party', 'jinja2'),

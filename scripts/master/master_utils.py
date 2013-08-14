@@ -17,10 +17,7 @@ from zope.interface import implements
 from master.autoreboot_buildslave import AutoRebootBuildSlave
 from buildbot.status.web.baseweb import WebStatus
 
-if int(buildbot.version.split('.')[1]) == 7:
-  from master import chromium_status_bb7 as chromium_status
-else:
-  import master.chromium_status_bb8 as chromium_status
+import master.chromium_status_bb8 as chromium_status
 
 from common import chromium_utils
 import config

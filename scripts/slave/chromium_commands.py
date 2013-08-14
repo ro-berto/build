@@ -15,31 +15,11 @@ from twisted.internet import defer
 
 from common import chromium_utils
 
-# TODO(maruel): REMOVE as soon as conversion to buildbot 0.8.4p1 is done.
-# pylint: disable=E1101
+from buildslave.commands.base import Command
+from buildslave.commands.base import SourceBaseCommand
+from buildslave.commands.registry import commandRegistry
+from buildslave import runprocess
 
-try:
-  # Buildbot 0.8.x
-  # Unable to import 'XX'
-  # pylint: disable=F0401
-  from buildslave.commands.base import Command
-  from buildslave.commands.base import SourceBaseCommand
-  from buildslave.commands.registry import commandRegistry
-  from buildslave import runprocess
-  commandbase = Command
-  sourcebase = SourceBaseCommand
-  runprocesscmd = runprocess.RunProcess
-  bbver = 8.4
-except ImportError:
-  # Buildbot 0.7.12
-  # Unable to import 'XX'
-  # pylint: disable=E0611,E1101,F0401
-  from buildbot.slave import commands
-  from buildbot.slave.registry import registerSlaveCommand
-  commandbase = commands.ShellCommand
-  sourcebase = commands.SourceBase
-  runprocesscmd = commands.ShellCommand
-  bbver = 7.12
 
 # Local errors.
 class InvalidPath(Exception): pass
@@ -100,7 +80,7 @@ def _RemoveFileCommand(filename):
           'chromium_utils.RemoveFile("%s")' % filename.replace('\\', '/')]
 
 
-class GClient(sourcebase):
+class GClient(SourceBaseCommand):
   """Source class that handles gclient checkouts.
 
   Buildbot 8.3 changed from commands.SourceBase to SourceBaseCommand,
@@ -173,21 +153,12 @@ class GClient(sourcebase):
     self.sourcedata = None
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
-  if bbver == 7.12:
-    def getCommand(self, arg): # pylint: disable=R0201
-      """In BB 8.3, this function is inherited"""
-      return commands.getCommand(arg)
-
   def setup(self, args):
     """Our implementation of command.Commands.setup() method.
     The method will get all the arguments that are passed to remote command
     and is invoked before start() method (that will in turn call doVCUpdate()).
     """
-
-    if bbver == 7.12:
-      commands.SourceBase.setup(self, args)
-    else:
-      sourcebase.setup(self, args)
+    SourceBaseCommand.setup(self, args)
     self.vcexe = self.getCommand('gclient')
     self.svnurl = args['svnurl']
     self.branch =  args.get('branch')
@@ -309,9 +280,10 @@ class GClient(sourcebase):
     if self.gclient_deps:
       command.append('--deps=' + self.gclient_deps)
 
-    c = runprocesscmd(self.builder, command, dirname,
-                      sendRC=False, timeout=self.timeout,
-                      keepStdout=True, environ=self.env)
+    c = runprocess.RunProcess(
+        self.builder, command, dirname,
+        sendRC=False, timeout=self.timeout,
+        keepStdout=True, environ=self.env)
     self.command = c
     return c.start()
 
@@ -330,9 +302,10 @@ class GClient(sourcebase):
         os.path.join(self.builder.basedir, os.pardir, os.pardir, os.pardir,
                      'git_cache'))
     command.append('--cache-dir=' + git_cache_dir)
-    c = runprocesscmd(self.builder, command, dirname,
-                      sendRC=False, timeout=self.timeout,
-                      keepStdout=True, environ=self.env)
+    c = runprocess.RunProcess(
+        self.builder, command, dirname,
+        sendRC=False, timeout=self.timeout,
+        keepStdout=True, environ=self.env)
     return c
 
   def doVCUpdate(self):
@@ -383,9 +356,10 @@ class GClient(sourcebase):
         command = self._RemoveDirectoryCommand(old_dir)
       else:
         command = _RenameDirectoryCommand(old_dir, dead_dir)
-      c = runprocesscmd(self.builder, command, self.builder.basedir,
-                        sendRC=0, timeout=self.rm_timeout,
-                        environ=self.env)
+      c = runprocess.RunProcess(
+          self.builder, command, self.builder.basedir,
+          sendRC=0, timeout=self.rm_timeout,
+          environ=self.env)
       self.command = c
       # See commands.SVN.doClobber for notes about sendRC.
       d = c.start()
@@ -402,9 +376,10 @@ class GClient(sourcebase):
     'global-ignores=*.orig', patch failure will occur."""
     dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(), 'revert', '--nohooks']
-    c = runprocesscmd(self.builder, command, dirname,
-                      sendRC=False, timeout=self.timeout,
-                      keepStdout=True, environ=self.env)
+    c = runprocess.RunProcess(
+        self.builder, command, dirname,
+        sendRC=False, timeout=self.timeout,
+        keepStdout=True, environ=self.env)
     self.command = c
     d = c.start()
     d.addCallback(self._abandonOnFailure)
@@ -420,9 +395,10 @@ class GClient(sourcebase):
     command = _RemoveFileCommand(os.path.join(self.builder.basedir,
                                  self.srcdir, '.buildbot-patched'))
     dirname = os.path.join(self.builder.basedir, self.srcdir)
-    c = runprocesscmd(self.builder, command, dirname,
-                      sendRC=False, timeout=self.timeout,
-                      keepStdout=True, environ=self.env)
+    c = runprocess.RunProcess(
+        self.builder, command, dirname,
+        sendRC=False, timeout=self.timeout,
+        keepStdout=True, environ=self.env)
     self.command = c
     d = c.start()
     d.addCallback(self._abandonOnFailure)
@@ -453,9 +429,10 @@ class GClient(sourcebase):
       dirname = os.path.join(dirname, root)
 
     # Now apply the patch.
-    c = runprocesscmd(self.builder, command, dirname,
-                      sendRC=False, timeout=self.timeout,
-                      initialStdin=diff, environ=self.env)
+    c = runprocess.RunProcess(
+        self.builder, command, dirname,
+        sendRC=False, timeout=self.timeout,
+        initialStdin=diff, environ=self.env)
     self.command = c
     d = c.start()
     d.addCallback(self._abandonOnFailure)
@@ -474,9 +451,10 @@ class GClient(sourcebase):
     """Runs "gclient runhooks" after patching."""
     dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(), 'runhooks']
-    c = runprocesscmd(self.builder, command, dirname,
-                      sendRC=False, timeout=self.timeout,
-                      keepStdout=True, environ=self.env)
+    c = runprocess.RunProcess(
+        self.builder, command, dirname,
+        sendRC=False, timeout=self.timeout,
+        keepStdout=True, environ=self.env)
     self.command = c
     d = c.start()
     d.addCallback(self._abandonOnFailure)
@@ -490,9 +468,10 @@ class GClient(sourcebase):
       self.sendStatus({'header': msg + '\n'})
       log.msg(msg)
       command = self._RemoveDirectoryCommand(dead_dir)
-      c = runprocesscmd(self.builder, command, self.builder.basedir,
-                        sendRC=0, timeout=self.rm_timeout,
-                        environ=self.env)
+      c = runprocess.RunProcess(
+          self.builder, command, self.builder.basedir,
+          sendRC=0, timeout=self.rm_timeout,
+          environ=self.env)
       self.command = c
       d = c.start()
       d.addCallback(self._abandonOnFailure)
@@ -604,7 +583,7 @@ class GClient(sourcebase):
       return rc
 
     # super
-    return sourcebase.maybeDoVCFallback(self, rc)
+    return SourceBaseCommand.maybeDoVCFallback(self, rc)
 
   def maybeDoVCRetry(self, res):
     """Called after doVCFull."""
@@ -613,10 +592,10 @@ class GClient(sourcebase):
       return res
 
     # super
-    return sourcebase.maybeDoVCRetry(self, res)
+    return SourceBaseCommand.maybeDoVCRetry(self, res)
 
 
-class ApplyIssue(commandbase):
+class ApplyIssue(Command):
   """Command to run apple_issue.py on the checkbout."""
 
   # pylint doesn't follow chromium_utils.GetParentClass, so it thinks parent's
@@ -649,12 +628,12 @@ class ApplyIssue(commandbase):
     if self.server:
       cmd.extend(['-s', self.server])
 
-    command = runprocesscmd(
+    command = runprocess.RunProcess(
         self.builder, cmd, os.path.join(self.builder.basedir, self.workdir),
         timeout=self.timeout)
     return command.start()
 
-  # commandbase overrides:
+  # Command overrides:
 
   def setup(self, args):
     self.root = args['root']
@@ -676,23 +655,11 @@ class ApplyIssue(commandbase):
 def RegisterCommands():
   """Registers all command objects defined in this file."""
   try:
-    # This version should work on BB 8.3
-
     # We run this code in a try because it fails with an assertion if
     # the module is loaded twice.
     commandRegistry['gclient'] = 'slave.chromium_commands.GClient'
     commandRegistry['apply_issue'] = 'slave.chromium_commands.ApplyIssue'
     return
-  except (AssertionError, NameError):
-    pass
-
-  try:
-    # This version should work on BB 7.12
-
-    # We run this code in a try because it fails with an assertion if
-    # the module is loaded twice.
-    registerSlaveCommand('gclient', GClient, commands.command_version)
-    registerSlaveCommand('apply_issue', ApplyIssue, commands.command_version)
   except (AssertionError, NameError):
     pass
 
