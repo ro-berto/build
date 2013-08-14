@@ -85,19 +85,14 @@ class AOSPApi(recipe_api.RecipeApi):
         self.SLAVE_ANDROID_ROOT_NAME, '.repo', 'repo', 'repo')
     repo_copy_dir = self.m.path.slave_build('repo_copy')
     repo_copy_path = self.m.path.slave_build('repo_copy', 'repo')
-    self._repo_path = self.m.path.depot_tools('repo')
     if self.m.path.exists(repo_in_android_path):
-      self._repo_path = repo_copy_path
       yield self.m.path.makedirs('repo copy dir', repo_copy_dir)
       yield self.m.step('copy repo from Android', [
         'cp', repo_in_android_path, repo_copy_path])
+      self.m.repo.repo_path = repo_copy_path
     yield self.m.path.makedirs('android source root', self.build_path)
-    yield self.m.step('repo init', [
-      self._repo_path,
-      'init',
-      '-u', self.c.repo.url,
-      '-b', self.c.repo.branch],
-      cwd=self.build_path)
+    yield self.m.repo.init(self.c.repo.url, self.c.repo.branch,
+                           cwd=self.build_path)
     self.m.path.mock_add_paths(repo_in_android_path)
 
   def generate_local_manifest_step(self):
@@ -110,9 +105,7 @@ class AOSPApi(recipe_api.RecipeApi):
 
   def repo_sync_steps(self):
     # repo_init_steps must have been invoked first.
-    yield self.m.step('repo sync',
-                    [self._repo_path, 'sync'] + self.c.repo.sync_flags,
-                    cwd=self.build_path)
+    yield self.m.repo.sync(*self.c.repo.sync_flags, cwd=self.build_path)
 
   def symlink_chromium_into_android_tree_step(self):
     if self.m.path.exists(self.slave_chromium_in_android_path):
