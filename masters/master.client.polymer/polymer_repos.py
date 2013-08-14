@@ -12,6 +12,10 @@ REPOS = (
   'PointerEvents',
   'ShadowDOM',
   'HTMLImports',
+  'observe-js',
+  'NodeBind',
+  'TemplateInstances',
+  'polymer-expressions',
 )
 
 REPO_DEPS = {
@@ -23,6 +27,10 @@ REPO_DEPS = {
     'PointerEvents',
     'ShadowDOM',
     'HTMLImports',
+    'observe-js',
+    'NodeBind',
+    'TemplateInstances',
+    'polymer-expressions',
   ],
   'platform': [
     'CustomElements',
@@ -31,8 +39,18 @@ REPO_DEPS = {
     'PointerEvents',
     'ShadowDOM',
     'HTMLImports',
+    'observe-js',
+    'NodeBind',
+    'TemplateInstances',
+    'polymer-expressions',
+  ],
+  'mdv': [
+    'observe-js',
+    'NodeBind',
+    'TemplateInstances',
+    'polymer-expressions',
   ],
   'PointerGestures': [
     'PointerEvents',
-  ]
+  ],
 }
