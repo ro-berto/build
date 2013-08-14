@@ -21,6 +21,17 @@ from buildslave.commands.registry import commandRegistry
 from buildslave import runprocess
 
 
+PROJECTS_LOOKING_FOR = {
+  os.path.join('src'): 'got_chromium_revision',
+  os.path.join('src', 'native_client'): 'got_nacl_revision',
+  os.path.join('src', 'tools', 'swarm_client'): 'got_swarm_client_revision',
+  os.path.join('src', 'tools', 'swarming_client'):
+    'got_swarming_client_revision',
+  os.path.join('src', 'v8'): 'got_v8_revision',
+  os.path.join('src', 'third_party', 'WebKit'): 'got_webkit_revision',
+}
+
+
 # Local errors.
 class InvalidPath(Exception): pass
 
@@ -61,6 +72,88 @@ def untangle(stdout_lines):
   for key in sorted(tasks.iterkeys()):
     out.extend(tasks[key])
   return out
+
+
+def extract_revisions(output):
+  """Extracts revision numbers for all the dependencies checked out.
+
+  svn checkout operations finish with 'Checked out revision 16657.'
+  svn update operations finish the line 'At revision 16654.' when there is no
+  change. They finish with 'Updated to revision 16655.' otherwise.
+
+  The first project checked out gets to be set to got_revision property. This is
+  important since this class is not only used for chromium, it's also used for
+  other projects.
+  """
+  SCM_RE = {
+    'git': r'^Checked out revision ([0-9a-fA-F]{40})$',
+    'svn': r'^(?:Checked out|At|Updated to) revision ([0-9]+)\.',
+  }
+  GCLIENT_CMD = re.compile(r'^________ running \'(.+?)\' in \'(.+?)\'$')
+  GCLIENT_AT_REV = re.compile(r'_____ (.+?) at (\d+|[0-9a-fA-F]{40})$')
+
+  untangled_stdout = untangle(output.splitlines(False))
+  # We only care about the last sync which starts with "solutions=[...".
+  # Look backwards to find the last gclient sync call. It's parsing the whole
+  # sync step in one pass here, which could include gclient revert and two
+  # gclient sync calls. Only the last gclient sync call should be parsed.
+  for i, line in enumerate(reversed(untangled_stdout)):
+    if line.startswith('solutions=['):
+      # Only keep from "solutions" line to end.
+      untangled_stdout = untangled_stdout[-i-1:]
+      break
+
+  revisions_found = {}
+  current_scm = None
+  current_project = None
+  reldir = None
+  for line in untangled_stdout:
+    match = GCLIENT_AT_REV.match(line)
+    if match:
+      current_project = None
+      current_scm = None
+      log.msg('gclient: %s == %s' % match.groups())
+      project = PROJECTS_LOOKING_FOR.get(match.group(1))
+      if not revisions_found:
+        # Set it to got_revision, independent if it's a chromium-specific
+        # thing.
+        revisions_found['got_revision'] = match.group(2)
+      if project:
+        revisions_found[project] = match.group(2)
+      continue
+
+    if current_scm:
+      # Look for revision.
+      match = re.match(SCM_RE[current_scm], line)
+      if match:
+        # Override any previous value, since update can happen multiple times.
+        log.msg(
+            'scm: %s (%s) == %s' % (reldir, current_project, match.group(1)))
+        if not revisions_found:
+          revisions_found['got_revision'] = match.group(1)
+        if current_project:
+          revisions_found[current_project] = match.group(1)
+        current_project = None
+        current_scm = None
+        continue
+
+    match = GCLIENT_CMD.match(line)
+    if match:
+      command, directory = match.groups()
+      parts = command.split(' ')
+      directory = directory.rstrip(os.path.sep) + os.path.sep
+      if parts[0] in SCM_RE:
+        for part in parts:
+          # This code assumes absolute paths, which are easy to find in the
+          # argument list.
+          if part.startswith(directory):
+            reldir = part[len(directory):]
+            if reldir:
+              current_project = PROJECTS_LOOKING_FOR.get(reldir)
+              current_scm = parts[0]
+              break
+
+  return revisions_found
 
 
 def _RenameDirectoryCommand(src_dir, dest_dir):
@@ -215,6 +308,10 @@ class GClient(SourceBaseCommand):
       d.addCallback(self.doCopy)
     if self.patch:
       d.addCallback(self.doPatch)
+
+    # Only after the patch call the actual code to get the revision numbers.
+    d.addCallback(self._handleGotRevisionAfterPatch)
+
     if (self.patch or self.was_patched) and not self.gclient_nohooks:
       # Always run doRunHooks if there *is* or there *was* a patch because
       # revert is run with --nohooks and `gclient sync` will not regenerate the
@@ -479,96 +576,15 @@ class GClient(SourceBaseCommand):
     return res
 
   def parseGotRevision(self):
-    """Extracts revision numbers for all the dependencies checked out.
-
-    svn checkout operations finish with 'Checked out revision 16657.'
-    svn update operations finish the line 'At revision 16654.' when there
-    is no change. They finish with 'Updated to revision 16655.' otherwise.
-
-    The first project checked out gets to be set to got_revision property. This
-    is important since this class is not only used for chromium, it's also used
-    for other projects.
-    """
-    SCM_RE = {
-      'git': r'^Checked out revision ([0-9a-fA-F]{40})$',
-      'svn': r'^(?:Checked out|At|Updated to) revision ([0-9]+)\.',
-    }
-    GCLIENT_CMD = re.compile(r'^________ running \'(.+?)\' in \'(.+?)\'$')
-    GCLIENT_AT_REV = re.compile(r'_____ (.+?) at (\d+|[0-9a-fA-F]{40})$')
-
-    untangled_stdout = untangle(self.command.stdout.splitlines(False))
-    # We only care about the last sync which starts with "solutions=[...".
-    # Look backwards to find the last gclient sync call. It's parsing the whole
-    # sync step in one pass here, which could include gclient revert and two
-    # gclient sync calls. Only the last gclient sync call should be parsed.
-    for i, line in enumerate(reversed(untangled_stdout)):
-      if line.startswith('solutions=['):
-        # Only keep from "solutions" line to end.
-        untangled_stdout = untangled_stdout[-i-1:]
-        break
-
-    projects_looking_for = {
-      os.path.join('src'): 'got_chromium_revision',
-      os.path.join('src', 'native_client'): 'got_nacl_revision',
-      os.path.join('src', 'tools', 'swarm_client'): 'got_swarm_client_revision',
-      os.path.join('src', 'tools', 'swarming_client'):
-          'got_swarming_client_revision',
-      os.path.join('src', 'v8'): 'got_v8_revision',
-      os.path.join('src', 'third_party', 'WebKit'): 'got_webkit_revision',
-    }
-    # Escape paths for windows.
-    for k, v in projects_looking_for.iteritems():
-      projects_looking_for[k] = v.replace('\\', '\\\\')
-
-    revisions_found = {}
-    current_scm = None
-    current_project = None
-    for line in untangled_stdout:
-      match = GCLIENT_AT_REV.match(line)
-      if match:
-        current_project = None
-        current_scm = None
-        project = projects_looking_for.get(match.group(1))
-        if not revisions_found:
-          # Set it to got_revision, independent if it's a chromium-specific
-          # thing.
-          revisions_found['got_revision'] = match.group(2)
-        if project:
-          revisions_found[project] = match.group(2)
-        continue
-
-      if current_scm:
-        # Look for revision.
-        match = re.match(SCM_RE[current_scm], line)
-        if match:
-          # Override any previous value, since update can happen multiple times.
-          if not revisions_found:
-            revisions_found['got_revision'] = match.group(1)
-          if current_project:
-            revisions_found[current_project] = match.group(1)
-          current_project = None
-          current_scm = None
-          continue
-
-      match = GCLIENT_CMD.match(line)
-      if match:
-        command, directory = match.groups()
-        parts = command.split(' ')
-        directory = directory.rstrip(os.path.sep) + os.path.sep
-        if parts[0] in SCM_RE:
-          for part in parts:
-            # This code assumes absolute paths, which are easy to find in the
-            # argument list.
-            if part.startswith(directory):
-              reldir = part[len(directory):]
-              if reldir:
-                current_project = projects_looking_for.get(reldir)
-                current_scm = parts[0]
-                break
-
-    return revisions_found
+    return extract_revisions(self.command.stdout)
 
   def _handleGotRevision(self, res):
+    """Do nothing, because it's called before the patch, and the patch could
+    affect the revision.
+    """
+    pass
+
+  def _handleGotRevisionAfterPatch(self, res):
     """Send parseGotRevision() return values as status updates to the master."""
     d = defer.maybeDeferred(self.parseGotRevision)
     # parseGotRevision returns the revision dict, which is passed as the first
