@@ -2,7 +2,7 @@
   {
     "cmd": [
       "[BUILD_ROOT]/scripts/slave/gatekeeper_launch.py"
-    ], 
+    ],
     "name": "gatekeeper_launch"
   }
 ]

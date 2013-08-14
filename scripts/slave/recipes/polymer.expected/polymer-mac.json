@@ -1,96 +1,96 @@
 [
   {
     "cmd": [
-      "python", 
-      "-u", 
-      "[DEPOT_TOOLS_ROOT]/gclient.py", 
-      "config", 
-      "--spec", 
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "config",
+      "--spec",
       "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'CustomElements', 'safesync_url': None, 'url': 'https://github.com/Polymer/CustomElements.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'HTMLImports', 'safesync_url': None, 'url': 'https://github.com/Polymer/HTMLImports.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'PointerEvents', 'safesync_url': None, 'url': 'https://github.com/Polymer/PointerEvents.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'PointerGestures', 'safesync_url': None, 'url': 'https://github.com/Polymer/PointerGestures.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'ShadowDOM', 'safesync_url': None, 'url': 'https://github.com/Polymer/ShadowDOM.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'mdv', 'safesync_url': None, 'url': 'https://github.com/Polymer/mdv.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'platform', 'safesync_url': None, 'url': 'https://github.com/Polymer/platform.git'}, {'custom_deps': {}, 'custom_vars': {}, 'deps_file': '', 'managed': True, 'name': 'polymer', 'safesync_url': None, 'url': 'https://github.com/Polymer/polymer.git'}]\ntarget_os = []\ntarget_os_only = False"
-    ], 
-    "name": "gclient setup", 
+    ],
+    "name": "gclient setup",
     "seed_steps": [
-      "gclient setup", 
-      "gclient revert", 
-      "gclient sync", 
+      "gclient setup",
+      "gclient revert",
+      "gclient sync",
       "submodule update"
     ]
-  }, 
+  },
   {
     "cmd": [
-      "python", 
-      "-u", 
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py", 
-      ".", 
+      "python",
+      "-u",
+      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      ".",
       "[DEPOT_TOOLS_ROOT]/gclient"
-    ], 
+    ],
     "name": "gclient revert"
-  }, 
+  },
   {
     "cmd": [
-      "python", 
-      "-u", 
-      "[DEPOT_TOOLS_ROOT]/gclient.py", 
-      "sync", 
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "sync",
       "--nohooks"
-    ], 
+    ],
     "name": "gclient sync"
-  }, 
+  },
   {
     "cmd": [
-      "python", 
-      "-u", 
-      "[DEPOT_TOOLS_ROOT]/gclient.py", 
-      "recurse", 
-      "git", 
-      "submodule", 
-      "update", 
-      "--init", 
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "recurse",
+      "git",
+      "submodule",
+      "update",
+      "--init",
       "--recursive"
-    ], 
+    ],
     "name": "submodule update"
-  }, 
+  },
   {
     "cmd": [
-      "python", 
-      "-u", 
-      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n", 
-      "[SLAVE_BUILD_ROOT]/.tmp", 
+      "python",
+      "-u",
+      "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
+      "[SLAVE_BUILD_ROOT]/.tmp",
       "511"
-    ], 
-    "name": "makedirs tmp", 
+    ],
+    "name": "makedirs tmp",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@", 
-      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@", 
-      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@", 
-      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@", 
-      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@", 
-      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@", 
-      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@", 
-      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@", 
-      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@", 
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys, os@@@",
+      "@@@STEP_LOG_LINE@python.inline@path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@mode = int(sys.argv[2])@@@",
+      "@@@STEP_LOG_LINE@python.inline@if not os.path.isdir(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.exists(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print \"%s exists but is not a dir\" % path@@@",
+      "@@@STEP_LOG_LINE@python.inline@    sys.exit(1)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.makedirs(path, mode)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
-  }, 
+  },
   {
     "cmd": [
-      "npm", 
-      "install", 
-      "--tmp", 
+      "npm",
+      "install",
+      "--tmp",
       "[SLAVE_BUILD_ROOT]/.tmp"
-    ], 
-    "cwd": "[SLAVE_BUILD_ROOT]/polymer", 
-    "env": {}, 
+    ],
+    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+    "env": {},
     "name": "update-install"
-  }, 
+  },
   {
-    "allow_subannotations": true, 
+    "allow_subannotations": true,
     "cmd": [
-      "grunt", 
+      "grunt",
       "test-buildbot"
-    ], 
-    "cwd": "[SLAVE_BUILD_ROOT]/polymer", 
-    "env": {}, 
+    ],
+    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+    "env": {},
     "name": "test"
   }
 ]
