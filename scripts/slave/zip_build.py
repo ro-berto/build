@@ -25,7 +25,7 @@ class StagingError(Exception): pass
 
 class ASANWinFilter():
   def __init__(self, build_dir, target):
-    self.root = os.path.join(build_dir, target)
+    self.root = os.path.abspath(os.path.join(build_dir, target))
 
   def __call__(self, path):
     """Takes a path to a file and returns the path to its asanified counterpart.

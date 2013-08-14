@@ -30,7 +30,7 @@ class ASANitizer(object):
   def __init__(self, instrument_exe, stopped, root):
     self.instrument_exe = instrument_exe
     self.stopped = stopped
-    self.root = root
+    self.root = os.path.abspath(root)
 
   def __call__(self, job):
     retval = 0
@@ -111,7 +111,7 @@ def GetCompatiblePDB(pe_image, pdbfind_exe):
     pdb_path = pdb_path.splitlines()[0]
     retval = proc.returncode
     if retval == 0:
-      return pdb_path
+      return os.path.abspath(pdb_path)
     return None
   except Exception:
     return None
@@ -132,7 +132,8 @@ def FindFilesToAsan(directory, pdbfind_exe):
         fname not in BLACKLIST and
         fname.split('.', 1)[-1].lower() in ('exe', 'dll'))
 
-  skip_dirs = set((os.path.join(directory, skip_dir) for skip_dir in SKIP_DIRS))
+  skip_dirs = set((os.path.abspath(os.path.join(directory, skip_dir))
+      for skip_dir in SKIP_DIRS))
 
   for root, subdirs, files in os.walk(directory):
     for path, sdir in [(os.path.join(root, s), s) for s in subdirs]:
