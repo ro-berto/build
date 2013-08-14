@@ -310,7 +310,7 @@ class GClient(SourceBaseCommand):
       d.addCallback(self.doPatch)
 
     # Only after the patch call the actual code to get the revision numbers.
-    d.addCallback(self._handleGotRevisionAfterPatch)
+    d.addCallback(self._handleGotRevision)
 
     if (self.patch or self.was_patched) and not self.gclient_nohooks:
       # Always run doRunHooks if there *is* or there *was* a patch because
@@ -576,16 +576,15 @@ class GClient(SourceBaseCommand):
     return res
 
   def parseGotRevision(self):
-    return extract_revisions(self.command.stdout)
+    if hasattr(self.command, 'stdout'):
+      # It may not be set on nacl slaves. The problem is when
+      # buildslave.runprocess.RunProcess(keepStdout=False) is
+      # used, it doesn't set the property stdout at all.
+      return extract_revisions(self.command.stdout)
 
   def _handleGotRevision(self, res):
-    """Do nothing, because it's called before the patch, and the patch could
-    affect the revision.
+    """Sends parseGotRevision() return values as status updates to the master.
     """
-    pass
-
-  def _handleGotRevisionAfterPatch(self, res):
-    """Send parseGotRevision() return values as status updates to the master."""
     d = defer.maybeDeferred(self.parseGotRevision)
     # parseGotRevision returns the revision dict, which is passed as the first
     # argument to sendStatus.
