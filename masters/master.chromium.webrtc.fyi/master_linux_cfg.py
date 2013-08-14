@@ -46,6 +46,7 @@ F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
     factory_properties={
         'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
         'pyauto_env': {'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
+        'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-linux',
@@ -62,6 +63,7 @@ F('linux_webrtc_stable_factory', linux().ChromiumWebRTCLatestStableFactory(
     factory_properties={
         'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
         'pyauto_env': {'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
+        'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-stable-tot-rel-linux',

@@ -117,6 +117,7 @@ F('linux_largetests_factory', linux().WebRTCFactory(
     options=ninja_options,
     tests=baremetal_tests,
     factory_properties={
+        'virtual_webcam': True,
         'show_perf_results': True,
         'expectations': True,
         'perf_id': 'webrtc-linux-large-tests',

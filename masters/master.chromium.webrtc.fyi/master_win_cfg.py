@@ -43,6 +43,7 @@ F('win_webrtc_trunk_factory', win().ChromiumWebRTCLatestTrunkFactory(
     project=project,
     tests=tests,
     factory_properties={
+        'virtual_webcam': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-win',
         'process_dumps': True,
@@ -58,6 +59,7 @@ F('win_webrtc_stable_factory', win().ChromiumWebRTCLatestStableFactory(
     project=project,
     tests=tests,
     factory_properties={
+        'virtual_webcam': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-stable-tot-rel-win',
         'process_dumps': True,

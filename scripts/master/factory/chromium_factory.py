@@ -1033,6 +1033,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       chromium_cmd_obj.AddZipBuild(halt_on_failure=True,
                                    factory_properties=factory_properties)
 
+    # Add check/start step for virtual webcams, if needed.
+    if factory_properties.get('virtual_webcam'):
+      chromium_cmd_obj.AddVirtualWebcamCheck()
+
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)

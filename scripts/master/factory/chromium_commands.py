@@ -112,6 +112,10 @@ class ChromiumCommands(commands.FactoryCommands):
     self._telemetry_unit_tests = J('src', 'tools', 'telemetry', 'run_tests')
     self._telemetry_perf_unit_tests = J('src', 'tools', 'perf', 'run_tests')
 
+    # Virtual webcam check script.
+    self._virtual_webcam_script = J(self._script_dir, 'webrtc',
+                                    'ensure_webcam_is_running.py')
+
   def AddArchiveStep(self, data_description, base_url, link_text, command,
                      more_link_url=None, more_link_text=None,
                      index_suffix=''):
@@ -338,6 +342,11 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._check_bins_tool, build_dir]
     self.AddTestStep(shell.ShellCommand, 'check_bins', cmd,
                      do_step_if=self.TestStepFilter)
+
+  def AddVirtualWebcamCheck(self):
+    cmd = [self._python, self._virtual_webcam_script]
+    self.AddTestStep(shell.ShellCommand, 'ensure_virtual_webcam_is_up', cmd,
+                     do_step_if=self.TestStepFilter, usePTY=False)
 
   def AddBuildrunnerCheckBinsStep(self):
     build_dir = os.path.join(self._build_dir, self._target)

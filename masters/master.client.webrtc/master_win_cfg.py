@@ -88,6 +88,7 @@ F('win32_largetests_factory', win().WebRTCFactory(
     options=ninja_options,
     tests=baremetal_tests,
     factory_properties={
+        'virtual_webcam': True,
         'show_perf_results': True,
         'expectations': True,
         'perf_id': 'webrtc-win-large-tests',

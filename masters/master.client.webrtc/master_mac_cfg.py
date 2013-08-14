@@ -94,6 +94,7 @@ F('mac_largetests_factory', mac().WebRTCFactory(
     options=options,
     tests=baremetal_tests,
     factory_properties={
+        'virtual_webcam': True,
         'show_perf_results': True,
         'expectations': True,
         'perf_id': 'webrtc-mac-large-tests',
