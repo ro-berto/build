@@ -24,9 +24,6 @@ P('linux_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
 options = ['--compiler=goma',  '--build-tool=ninja', '--',
            'chromium_builder_webrtc']
 tests = [
-    'pyauto_webrtc_tests',
-    'pyauto_webrtc_apprtc_test',
-    'pyauto_webrtc_quality_tests',
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
     'webrtc_content_unittests',
@@ -44,8 +41,6 @@ F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
     options=options,
     tests=tests,
     factory_properties={
-        'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
-        'pyauto_env': {'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
         'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
@@ -61,8 +56,6 @@ F('linux_webrtc_stable_factory', linux().ChromiumWebRTCLatestStableFactory(
     options=options,
     tests=tests,
     factory_properties={
-        'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
-        'pyauto_env': {'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
         'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,

@@ -23,9 +23,6 @@ P('mac_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
 
 options = ['--compiler=goma-clang', '--', '-target', 'chromium_builder_webrtc']
 tests = [
-    'pyauto_webrtc_tests',
-    'pyauto_webrtc_apprtc_test',
-    'pyauto_webrtc_quality_tests',
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
     'webrtc_content_unittests',
