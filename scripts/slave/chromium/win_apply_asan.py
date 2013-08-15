@@ -74,7 +74,6 @@ def GetInstrumentedFilepath(fname, root):
   'c:/src/out/Release/syzygy/asan/foo/image.exe'
   TODO(sebmarchand): Separate the path computation from the side-effect of path
       creation.
-  NOTE: This only works with the release builds compiled with ninja.
   """
   asan_root = os.path.join(root, 'syzygy', 'asan')
   asaned_file = fname.replace(root, asan_root)
@@ -86,18 +85,18 @@ def GetInstrumentedFilepath(fname, root):
   return asaned_file
 
 
-def UpdateAsanRuntime(full_directory, runtime_path):
-  """Updates the ASAN runtime dll in the build directory, if it exists."""
-  runtime = os.path.join(full_directory, os.path.basename(runtime_path))
+def UpdateAsanArtifact(full_directory, artifact_path):
+  """Updates an ASAN artifact in the build directory, if it exists."""
+  artifact = os.path.join(full_directory, os.path.basename(artifact_path))
 
-  if os.path.exists(runtime):
-    print('Removing', runtime)
-    os.remove(runtime)
+  if os.path.exists(artifact):
+    print('Removing', artifact)
+    os.remove(artifact)
 
-  print 'Copying %s -> %s' % (runtime_path, runtime)
-  shutil.copy2(runtime_path, runtime)
+  print 'Copying %s -> %s' % (artifact_path, artifact)
+  shutil.copy2(artifact_path, artifact)
 
-  fname = os.path.basename(runtime_path)
+  fname = os.path.basename(artifact_path)
   print 'Blacklisting %s' % fname
   BLACKLIST.add(fname)
 
@@ -188,6 +187,7 @@ def main():
   default_asan_dir = os.path.join(
       os.pardir, 'third_party', 'syzygy', 'binaries', 'exe')
   default_instrument_exe = os.path.join(default_asan_dir, 'instrument.exe')
+  default_logger_exe = os.path.join(default_asan_dir, 'logger.exe')
   default_pdbfind_exe = os.path.join(default_asan_dir, 'pdbfind.exe')
   default_runtime_path = os.path.join(default_asan_dir, 'asan_rtl.dll')
 
@@ -204,6 +204,10 @@ def main():
   parser.add_option(
       '--instrument_exe', default=default_instrument_exe,
       help='Specify the path to the ASAN instrument.exe relative to '
+           'build-dir (%default).')
+  parser.add_option(
+      '--logger_exe', default=default_logger_exe,
+      help='Specify the path to the ASAN logger.exe relative to '
            'build-dir (%default).')
   parser.add_option(
       '--pdbfind_exe', default=default_pdbfind_exe,
@@ -223,25 +227,33 @@ def main():
   if args:
     parser.error('Not expecting additional arguments')
 
-  options.full_directory = os.path.join(options.build_dir, options.target)
-  if not os.path.exists(options.full_directory):
-    parser.error('Could not find directory: %s' % options.full_directory)
-  options.instrument_exe = os.path.join(
-      options.build_dir, options.instrument_exe)
-  if not os.path.exists(options.instrument_exe):
-    parser.error('Could not find instrument_exe: %s' % options.instrument_exe)
-  options.pdbfind_exe = os.path.join(
-      options.build_dir, options.pdbfind_exe)
-  if not os.path.exists(options.pdbfind_exe):
-    parser.error('Could not find pdbfind_exe: %s' % options.pdbfind_exe)
-  options.runtime_path = os.path.join(
-      options.build_dir, options.runtime_path)
-  if not os.path.exists(options.runtime_path):
-    parser.error('Could not find runtime_path: %s' % options.runtime_path)
+  # A 3-tuples list describing the different artifacts needed in a Win ASan
+  # build. The tuples values are:
+  #     - Artifact name: The name of the parameter to add to the options for
+  #                      this artifact.
+  #     - Artifact path: The path to this artifact. It is expected to be
+  #                      relative to build_dir or absolute.
+  #     - should_update: Indicates it this artifact should be copied to the
+  #                      build directory.
+  artifacts = [
+      ('full_directory', options.target, False),
+      ('instrument_exe', options.instrument_exe, False),
+      ('logger_exe', options.logger_exe, True),
+      ('pdbfind_exe', options.pdbfind_exe, False),
+      ('runtime_path', options.runtime_path, True),
+  ]
+
+  for name, path, should_update in artifacts:
+    if not os.path.isabs(path):
+      path = os.path.abspath(os.path.join(options.build_dir, path))
+    setattr(options, name, path)
+    if not os.path.exists(path):
+      parser.error('Could not find %s : %s' % (name, path))
+    if should_update:
+      UpdateAsanArtifact(options.full_directory, path)
 
   print 'Default BLACKLIST is: %r' % BLACKLIST
 
-  UpdateAsanRuntime(options.full_directory, options.runtime_path)
   return ApplyAsanToBuild(options.full_directory,
                           options.instrument_exe,
                           options.pdbfind_exe,
