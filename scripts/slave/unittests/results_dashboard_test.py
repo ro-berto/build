@@ -5,10 +5,12 @@
 
 """ Source file for results_dashboard testcases."""
 
+import datetime
 import json
 import os
 import shutil
 import tempfile
+import time
 import unittest
 import urllib
 import urllib2
@@ -18,6 +20,12 @@ import test_env  # pylint: disable=W0403,W0611
 from slave import results_dashboard
 from slave import slave_utils
 from testing_support.super_mox import mox
+
+
+class FakeDateTime(object):
+  # pylint: disable=R0201
+  def utctimetuple(self):
+    return time.struct_time((2013, 8, 1, 0, 0, 0, 3, 217, 0))
 
 
 class IsEncodedJson(mox.Comparator):
@@ -46,10 +54,17 @@ class ResultsDashboardTest(unittest.TestCase):
     self.mox.UnsetStubs()
     shutil.rmtree(self.build_dir)
 
-  def _SendResults(self, send_results_args, expected_new_json, errors):
+  def _SendResults(self, send_results_args, expected_new_json, errors,
+                   mock_timestamp=False, webkit_master=False):
     self.mox.UnsetStubs()  # Needed for multiple calls from same test.
     self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
-    slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    if webkit_master:
+      slave_utils.GetActiveMaster().AndReturn('ChromiumWebkit')
+    else:
+      slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+    if mock_timestamp:
+      self.mox.StubOutWithMock(datetime, 'datetime')
+      datetime.datetime.utcnow().AndReturn(FakeDateTime())
     self.mox.StubOutWithMock(urllib2, 'urlopen')
     for json_line, error in zip(expected_new_json, errors):
       if error:
@@ -367,7 +382,7 @@ class ResultsDashboardTest(unittest.TestCase):
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
 
-  def test_GitHashToBuildNumber(self):
+  def test_GitHashToTimestamp(self):
     args = [
         'mean_frame_time-summary.dat',
         ['{"traces": {"mean_frame_time": ["77.0964285714", "138.142773233"]},'
@@ -388,7 +403,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
         'test': 'smoothness_measurement/mean_frame_time',
-        'revision': 1234,
+        'revision': 1375315200,
         'value': '77.0964285714',
         'error': '138.142773233',
         'masterid': 'chromium.perf',
@@ -402,7 +417,45 @@ class ResultsDashboardTest(unittest.TestCase):
             'r_v8_rev': 'bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc87',
         }}])]
     errors = [None]
-    self._SendResults(args, expected_new_json, errors)
+    self._SendResults(args, expected_new_json, errors, mock_timestamp=True)
+
+  def test_WebkitUsesTimestamp(self):
+    args = [
+        'mean_frame_time-summary.dat',
+        ['{"traces": {"mean_frame_time": ["77.0964285714", "138.142773233"]},'
+         ' "rev": "12345",'
+         ' "webkit_rev": "23456",'
+         ' "v8_rev": "34567",'
+         ' "ver": "undefined", "chan": "undefined", "units": "ms",'
+         ' "important": ["mean_frame_time"]}'],
+        'linux-release',
+        'smoothness_measurement',
+        'https://chrome-perf.googleplex.com',
+        'chromium.webkit',
+        'Linux (1)',
+        '1234',
+        self.build_dir,
+        {}]
+    expected_new_json = [json.dumps([{
+        'master': 'ChromiumWebkit',
+        'bot': 'linux-release',
+        'test': 'smoothness_measurement/mean_frame_time',
+        'revision': 1375315200,
+        'value': '77.0964285714',
+        'error': '138.142773233',
+        'masterid': 'chromium.webkit',
+        'buildername': 'Linux (1)',
+        'buildnumber': '1234',
+        'important': True,
+        'units': 'ms',
+        'supplemental_columns': {
+            'r_chromium_svn': 12345,
+            'r_webkit_rev': '23456',
+            'r_v8_rev': '34567',
+        }}])]
+    errors = [None]
+    self._SendResults(args, expected_new_json, errors, mock_timestamp=True,
+                      webkit_master=True)
 
   def test_FailureRetried(self):
     args = [

@@ -5,6 +5,8 @@
 
 """Functions for adding results to perf dashboard."""
 
+import calendar
+import datetime
 import httplib
 import json
 import os
@@ -94,16 +96,21 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
   graph = logname.replace('-summary.dat', '')
   for line in lines:
     data = json.loads(line)
-    # TODO(sullivan): the dashboard requires ordered integer revision numbers.
-    # If the revision is not an integer, assume it's a git hash and send the
-    # buildnumber for an ordered revision until we can come up with a more
-    # correct solution.
     revision = data['rev']
     git_hash = None
+    chrome_supplemental_revision = False
+    if master == 'ChromiumWebkit':
+      # Blink builds can have the same chromium revision for two builds. So
+      # order them by timestamp to get them to show on the dashboard in the
+      # order they were built.
+      revision = _GetTimestamp()
+      chrome_supplemental_revision = True
     try:
       revision = int(revision)
     except ValueError:
-      revision = int(buildnumber)
+      # The dashboard requires ordered integer revision numbers. If the revision
+      # is not an integer, assume it's a git hash and send a timestamp.
+      revision = _GetTimestamp()
       git_hash = data['rev']
 
     for (trace, values) in data['traces'].iteritems():
@@ -131,17 +138,21 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
           'masterid': masterid,
           'buildername': buildername,
           'buildnumber': buildnumber,
+          'supplemental_columns': {},
       }
+      if chrome_supplemental_revision:
+        try:
+          result['supplemental_columns']['r_chromium_svn'] = int(data['rev'])
+        except ValueError:
+          # Revision is git hash.
+          result['supplemental_columns']['r_chromium'] = data['rev']
       if 'webkit_rev' in data and data['webkit_rev'] != 'undefined':
-        result.setdefault(
-            'supplemental_columns', {})['r_webkit_rev'] = data['webkit_rev']
+        result['supplemental_columns']['r_webkit_rev'] = data['webkit_rev']
       if 'v8_rev' in data and data['v8_rev'] != 'undefined':
-        result.setdefault(
-            'supplemental_columns', {})['r_v8_rev'] = data['v8_rev']
+        result['supplemental_columns']['r_v8_rev'] = data['v8_rev']
       if git_hash:
-        result.setdefault(
-            'supplemental_columns', {})['r_chromium_rev'] = git_hash
-      result.setdefault('supplemental_columns', {}).update(supplemental_columns)
+        result['supplemental_columns']['r_chromium_rev'] = git_hash
+      result['supplemental_columns'].update(supplemental_columns)
       if data.get('units'):
         result['units'] = data['units']
       if important:
@@ -150,6 +161,8 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
   _PrintLinkStep(url, master, bot, test, revision)
   return json.dumps(results_to_add)
 
+def _GetTimestamp():
+  return int(calendar.timegm(datetime.datetime.utcnow().utctimetuple()))
 
 def _SendResultsJson(url, results_json):
   data = urllib.urlencode({'data': results_json})
