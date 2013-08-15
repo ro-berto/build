@@ -2,13 +2,17 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import uuid
+
+from buildbot.changes.filter import ChangeFilter
 from buildbot.scheduler import Dependent
 from buildbot.scheduler import Nightly
 from buildbot.scheduler import Periodic
-from buildbot.scheduler import Scheduler
+from buildbot.schedulers.basic import SingleBranchScheduler as Scheduler
 from buildbot.scheduler import Triggerable
 
 from master import slaves_list
+from master.url_poller import URLPoller
 
 def GetArchiveUrl(project, machine_name, builder_name, zip_os_name,
                   static_host=None):
@@ -93,6 +97,13 @@ class Helper(object):
                               'builders': [],
                               'categories': categories}
 
+  def URLScheduler(self, name, url, pollInterval=300, include_revision=False):
+    self._schedulers[name] = {'type': 'URLScheduler',
+                              'url': url,
+                              'builders': [],
+                              'include_revision': include_revision,
+                              'pollInterval': pollInterval}
+
   def Update(self, c):
     global_schedulers = dict((s.name, s) for s in c['schedulers']
                              if s.name.startswith('global_'))
@@ -134,6 +145,18 @@ class Helper(object):
                              treeStableTimer=scheduler['treeStableTimer'],
                              builderNames=scheduler['builders'],
                              categories=scheduler['categories'])
+        scheduler['instance'] = instance
+        c['schedulers'].append(instance)
+      elif scheduler['type'] == 'URLScheduler':
+        ident = str(uuid.uuid4())
+        c['change_source'].append(
+          URLPoller(changeurl=scheduler['url'],
+                    pollInterval=scheduler['pollInterval'],
+                    category=ident,
+                    include_revision=scheduler['include_revision']))
+        instance = Scheduler(name=s_name,
+                             change_filter=ChangeFilter(category=ident),
+                             builderNames=scheduler['builders'])
         scheduler['instance'] = instance
         c['schedulers'].append(instance)
 

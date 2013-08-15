@@ -3,7 +3,12 @@
 # found in the LICENSE file.
 
 from master import master_config
+from master import master_utils
+from master import gatekeeper
 from master.factory import chromium_factory
+
+import master_site_config
+ActiveMaster = master_site_config.ChromiumFYI
 
 defaults = {}
 
@@ -12,6 +17,7 @@ B = helper.Builder
 F = helper.Factory
 S = helper.Scheduler
 T = helper.Triggerable
+U = helper.URLScheduler
 
 win = lambda: chromium_factory.ChromiumFactory('src/out', 'win32')
 
@@ -62,23 +68,24 @@ tests_2 = [
 #
 # Windows ASAN Rel Builder
 #
+builder_factory_properties = {
+  'asan': True,
+  'gclient_env': {
+    'GYP_DEFINES': (
+      'asan=1 win_z7=1 chromium_win_pch=0 '
+      'component=static_library '
+    ),
+    'GYP_GENERATORS': 'ninja',
+  },
+  'trigger': 'win_asan_rel_trigger',
+}
 B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
   auto_reboot=False, notify_on_missing=True)
 F('win_asan_rel', win().ChromiumASANFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
     compile_timeout=7200,
-    factory_properties={
-        'asan': True,
-        'gclient_env': {
-            'GYP_DEFINES': (
-                'asan=1 win_z7=1 chromium_win_pch=0 '
-                'component=static_library '
-            ),
-            'GYP_GENERATORS': 'ninja',
-        },
-        'trigger': 'win_asan_rel_trigger',
-    }))
+    factory_properties=builder_factory_properties))
 
 #
 # Win ASAN Rel testers
@@ -126,5 +133,35 @@ F('win_asan_rel_tests_2', win().ChromiumASANFactory(
     }))
 
 
+U('LKGR', 'https://chromium-status.appspot.com/lkgr', include_revision=True)
+B('Win ASAN LKGR', 'win_asan_lkgr_rel', 'lkgr', 'LKGR',
+  notify_on_missing=True)
+lkgr_factory_properties = {
+  'cf_archive_build': ActiveMaster.is_production_host,
+  'cf_archive_name': 'asan',
+  'gs_acl': 'public-read',
+  'gs_bucket': 'gs://chromium-browser-asan',
+}
+lkgr_factory_properties.update(builder_factory_properties)
+F('win_asan_lkgr_rel', win().ChromiumASANFactory(
+    slave_type='Builder',
+    options=['--build-tool=ninja', '--', 'All_syzygy'],
+    compile_timeout=7200,
+    factory_properties=lkgr_factory_properties))
+
+
 def Update(config, active_master, c):
+  c['status'].append(gatekeeper.GateKeeper(
+      tree_status_url=None,
+      fromaddr=active_master.from_address,
+      categories_steps={
+        'lkgr': ['compile']
+      },
+      relayhost=config.Master.smtp,
+      subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
+              'revision %(revision)s',
+      sheriffs=None,
+      extraRecipients=['syzygy-team@chromium.org'],
+      lookup=master_utils.FilterDomain(),
+      use_getname=True))
   return helper.Update(c)

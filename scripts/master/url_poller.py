@@ -29,17 +29,21 @@ class URLPoller(base.PollingChangeSource):
   # pylint runs this against the wrong buildbot version.
   # In buildbot 8.4 base.PollingChangeSource has no __init__
   # pylint: disable=W0231
-  def __init__(self, changeurl, pollInterval=3600, category=None):
+  def __init__(self, changeurl, pollInterval=3600, category=None,
+               include_revision=False):
     """Initialize URLPoller.
 
     Args:
     changeurl: The URL to change number.
     pollInterval: The time (in seconds) between queries for
                           changes (default is 1 hour)
+    include_revision: If True, interpret the body of the changeurl as a
+                      revision.
     """
     self.changeurl = changeurl
     self.pollInterval = pollInterval
     self.category = category
+    self.include_revision = include_revision
     self.last_change = None
 
   def describe(self):
@@ -59,8 +63,12 @@ class URLPoller(base.PollingChangeSource):
     log.msg('URLPoller finished polling %s' % self.changeurl)
     # Skip calling addChange() if this is the first successful poll.
     if self.last_change != change:
+      extra = {}
+      if self.include_revision:
+        extra['revision'] = change.strip()
       self.master.addChange(who='committer',
                             files=[],
                             comments='comment',
-                            category=self.category)
+                            category=self.category,
+                            **extra)
     self.last_change = change
