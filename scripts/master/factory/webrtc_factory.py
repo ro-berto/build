@@ -73,5 +73,10 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
                                                     'webrtc_tests.sh')
     cmds._win_memory_tests_runner = cmds.PathJoin(valgrind_script_path,
                                                   'webrtc_tests.bat')
+
+    # Add check/start step for virtual webcams, if needed.
+    if factory_properties.get('virtual_webcam'):
+      cmds.AddVirtualWebcamCheck()
+
     cmds.AddWebRTCTests(tests, factory_properties)
     return factory
