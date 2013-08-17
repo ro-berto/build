@@ -15,8 +15,10 @@ import config
 # A list of unittests to run after each build.
 _UNITTESTS = [
   'agent_common_unittests',
+  'agent_logger_unittests',
   'asan_rtl_unittests',
   'basic_block_entry_unittests',
+  'block_graph_analysis_unittests',
   'block_graph_orderers_unittests',
   'block_graph_transforms_unittests',
   'block_graph_unittests',
@@ -26,7 +28,7 @@ _UNITTESTS = [
   'genfilter_unittests',
   'grinder_unittests',
   'instrument_unittests',
-  'logger_unittests',
+  'integration_tests',
   'parse_unittests',
   'pdb_unittests',
   'pdbfind_unittests',
@@ -40,6 +42,7 @@ _UNITTESTS = [
   'reorder_unittests',
   'rpc_client_lib_unittests',
   'rpc_service_unittests',
+  'sampler_unittests',
   'simulate_unittests',
   'trace_common_unittests',
   'wsdump_unittests',
