@@ -331,7 +331,7 @@ WEBRTC_NORMAL_STEPS = [
     'common_audio_unittests',
     'common_video_unittests',
     'metrics_unittests',
-    'modules_integrationtests',
+    'modules_tests',
     'modules_unittests',
     'neteq_unittests',
     'system_wrappers_unittests',

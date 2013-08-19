@@ -24,7 +24,7 @@ tests = [
     'common_audio_unittests',
     'common_video_unittests',
     'metrics_unittests',
-    'modules_integrationtests',
+    'modules_tests',
     'modules_unittests',
     'neteq_unittests',
     'system_wrappers_unittests',
@@ -35,8 +35,8 @@ tests = [
 ]
 
 baremetal_tests = [
-    'audio_device_integrationtests',
-    'video_capture_integrationtests',
+    'audio_device_tests',
+    'video_capture_tests',
     'vie_auto_test',
     'voe_auto_test',
 ]
