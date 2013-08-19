@@ -51,40 +51,46 @@ ninja_options = ['--build-tool=ninja']
 
 defaults['category'] = 'linux'
 
-B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler)
+B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux32_debug_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
-B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler)
+B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux32_release_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
 
-B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler)
+B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux64_debug_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests))
 
-B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler)
+B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux64_release_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=tests))
 
-B('Linux Clang', 'linux_clang_factory', scheduler=scheduler)
+B('Linux Clang', 'linux_clang_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux_clang_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests,
     factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
 
-B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler)
+B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux_memcheck_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -92,7 +98,8 @@ F('linux_memcheck_factory', linux().WebRTCFactory(
     factory_properties={'needs_valgrind': True,
                         'gclient_env':
                         {'GYP_DEFINES': 'build_for_tool=memcheck'}}))
-B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler)
+B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux_tsan_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -100,7 +107,8 @@ F('linux_tsan_factory', linux().WebRTCFactory(
     factory_properties={'needs_valgrind': True,
                         'gclient_env':
                         {'GYP_DEFINES': 'build_for_tool=tsan'}}))
-B('Linux Asan', 'linux_asan_factory', scheduler=scheduler)
+B('Linux Asan', 'linux_asan_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('linux_asan_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -111,7 +119,7 @@ F('linux_asan_factory', linux().WebRTCFactory(
                                          ' linux_use_tcmalloc=0 ')}}))
 
 B('Linux64 Release [large tests]', 'linux_largetests_factory',
-  scheduler=scheduler)
+  scheduler=scheduler, auto_reboot=True)
 F('linux_largetests_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -133,7 +141,7 @@ F('linux_largetests_factory', linux().WebRTCFactory(
     }))
 
 # Android.
-B('Android NDK', 'android_ndk_factory', scheduler=scheduler)
+B('Android NDK', 'android_ndk_factory', scheduler=scheduler, auto_reboot=False)
 F('android_ndk_factory', android().ChromiumAnnotationFactory(
   target='Debug',
   slave_type='AnnotatedBuilderTester',
@@ -143,7 +151,7 @@ F('android_ndk_factory', android().ChromiumAnnotationFactory(
   }))
 
 # ChromeOS.
-B('Chrome OS', 'chromeos_factory', scheduler=scheduler)
+B('Chrome OS', 'chromeos_factory', scheduler=scheduler, auto_reboot=False)
 F('chromeos_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,

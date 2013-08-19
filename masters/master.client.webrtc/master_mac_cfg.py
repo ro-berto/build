@@ -46,19 +46,20 @@ options = ['--build-tool=ninja']
 
 defaults['category'] = 'mac'
 
-B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler)
+B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler, auto_reboot=False)
 F('mac_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
     tests=tests))
 
-B('Mac32 Release', 'mac_release_factory', scheduler=scheduler)
+B('Mac32 Release', 'mac_release_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('mac_release_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
     tests=tests))
 
-B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler)
+B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler, auto_reboot=False)
 F('mac64_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
@@ -67,7 +68,8 @@ F('mac64_debug_factory', mac().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
     }))
 
-B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler)
+B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler,
+  auto_reboot=False)
 F('mac64_release_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
@@ -76,7 +78,7 @@ F('mac64_release_factory', mac().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
     }))
 
-B('Mac Asan', 'mac_asan_factory', scheduler=scheduler)
+B('Mac Asan', 'mac_asan_factory', scheduler=scheduler, auto_reboot=False)
 F('mac_asan_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
@@ -88,7 +90,7 @@ F('mac_asan_factory', mac().WebRTCFactory(
                                          ' linux_use_tcmalloc=0 ')}}))
 
 B('Mac32 Release [large tests]', 'mac_largetests_factory',
-  scheduler=scheduler)
+  scheduler=scheduler, auto_reboot=True)
 F('mac_largetests_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
@@ -104,7 +106,7 @@ F('mac_largetests_factory', mac().WebRTCFactory(
     }))
 
 # iOS.
-B('iOS Device', 'ios_release_factory', scheduler=scheduler)
+B('iOS Device', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
 F('ios_release_factory', macIos().ChromiumAnnotationFactory(
     target='Release',
     slave_type='AnnotatedBuilderTester',
