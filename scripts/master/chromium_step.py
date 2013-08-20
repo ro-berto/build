@@ -903,11 +903,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
         report_link, output_dir, _ = self._PerfStepMappings(
             self.show_perf, self.perf_id, perf_dashboard_name,
             self.perf_report_url_suffix)
-        if report_link:
-          # It's harmless to send the results URL more than once, but it
-          # clutters up the logs.
-          if 'results' not in (x for x, _ in self.cursor['links']):
-            self.addLinkToCursor('results', report_link)
 
       PERF_EXPECTATIONS_PATH = ('../../scripts/master/log_parser/'
                                 'perf_expectations/')
