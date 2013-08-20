@@ -15,14 +15,17 @@ DEPS = [
 
 
 REPOS = (
-  'CustomElements',
-  'HTMLImports',
-  'PointerEvents',
-  'PointerGestures',
-  'ShadowDOM',
-  'mdv',
-  'platform',
   'polymer',
+  'platform',
+  'CustomElements',
+  'ShadowDOM',
+  'HTMLImports',
+  'observe-js',
+  'NodeBind',
+  'TemplateBinding',
+  'polymer-expressions',
+  'PointerGestures',
+  'PointerEvents',
 )
 
 
@@ -52,6 +55,11 @@ def _CheckoutSteps(api):
 
 
 def GenSteps(api):
+
+  if api.properties['repository'].rsplit('/', 1)[1] in [
+      'observe-js', 'NodeBind', 'TemplateBinding', 'polymer-expressions']:
+    return
+
   yield _CheckoutSteps(api)
 
   tmp_path = ''
@@ -76,9 +84,9 @@ def GenSteps(api):
   yield api.step('update-install', ['npm' + cmd_suffix, 'install'] + tmp_args,
                  cwd=api.path.checkout(), env=node_env)
 
-  yield api.step('test', test_prefix + ['grunt' + cmd_suffix, 'test-buildbot'],
-                 cwd=api.path.checkout(), env=node_env,
-                 allow_subannotations=True)
+  yield api.step('test', test_prefix + ['grunt' + cmd_suffix,
+                 'test-buildbot'], cwd=api.path.checkout(),
+                 env=node_env, allow_subannotations=True)
 
 
 def GenTests(api):
@@ -90,5 +98,15 @@ def GenTests(api):
         'platform': {
             'name': plat
         }
+      },
+    }
+
+  for proj in ['observe-js', 'NodeBind', 'TemplateBinding',
+      'polymer-expressions']:
+    yield 'polymer-%s' % proj, {
+      'properties': api.properties_scheduled(
+        repository='https://github.com/Polymer/%s' % proj),
+      'mock': {
+        'repository': 'https://github.com/Polymer/%s' % proj
       },
     }
