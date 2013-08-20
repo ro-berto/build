@@ -187,7 +187,7 @@ def main():
   default_asan_dir = os.path.join(
       os.pardir, 'third_party', 'syzygy', 'binaries', 'exe')
   default_instrument_exe = os.path.join(default_asan_dir, 'instrument.exe')
-  default_logger_exe = os.path.join(default_asan_dir, 'logger.exe')
+  default_agent_logger_exe = os.path.join(default_asan_dir, 'agent_logger.exe')
   default_pdbfind_exe = os.path.join(default_asan_dir, 'pdbfind.exe')
   default_runtime_path = os.path.join(default_asan_dir, 'asan_rtl.dll')
 
@@ -206,8 +206,8 @@ def main():
       help='Specify the path to the ASAN instrument.exe relative to '
            'build-dir (%default).')
   parser.add_option(
-      '--logger_exe', default=default_logger_exe,
-      help='Specify the path to the ASAN logger.exe relative to '
+      '--agent_logger_exe', default=default_agent_logger_exe,
+      help='Specify the path to the ASAN agent_logger.exe relative to '
            'build-dir (%default).')
   parser.add_option(
       '--pdbfind_exe', default=default_pdbfind_exe,
@@ -238,7 +238,7 @@ def main():
   artifacts = [
       ('full_directory', options.target, False),
       ('instrument_exe', options.instrument_exe, False),
-      ('logger_exe', options.logger_exe, True),
+      ('agent_logger_exe', options.agent_logger_exe, True),
       ('pdbfind_exe', options.pdbfind_exe, False),
       ('runtime_path', options.runtime_path, True),
   ]
