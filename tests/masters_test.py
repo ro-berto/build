@@ -225,7 +225,6 @@ def main(argv):
       'master.client.dart.fyi': 'DartFYI',
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
-      'master.client.libjingle': 'Libjingle',
       'master.client.libyuv': 'Libyuv',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.llvm': 'NativeClientLLVM',
