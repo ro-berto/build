@@ -41,6 +41,17 @@ tests = [
     'voice_engine_unittests',
 ]
 
+# libjingle doesn't yet build on Mac 64-bit. See
+# https://code.google.com/p/webrtc/issues/detail?id=2124
+mac_x64_disabled_tests = [
+    'libjingle_media_unittest',
+    'libjingle_p2p_unittest',
+    'libjingle_peerconnection_unittest',
+    'libjingle_sound_unittest',
+    'libjingle_unittest',
+]
+mac_x64_tests = filter(lambda test: test not in mac_x64_disabled_tests, tests)
+
 baremetal_tests = [
     'audio_device_tests',
     'video_capture_tests',
@@ -68,7 +79,7 @@ B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler, auto_reboot=False)
 F('mac64_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
-    tests=tests,
+    tests=mac_x64_tests,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
     }))
@@ -78,7 +89,7 @@ B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler,
 F('mac64_release_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
-    tests=tests,
+    tests=mac_x64_tests,
     factory_properties={
         'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
     }))
