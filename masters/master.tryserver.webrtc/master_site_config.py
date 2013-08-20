@@ -16,5 +16,8 @@ class WebRTCTryServer(Master.Master4):
   reply_to = 'chrome-troopers+tryserver@google.com'
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
   svn_url = 'svn://svn.chromium.org/chrome-try/try-webrtc'
-  last_good_url = 'http://webrtc-dashboard.appspot.com/lkgr'
+  base_app_url = 'https://webrtc-status.appspot.com'
+  tree_status_url = base_app_url + '/status'
+  store_revisions_url = base_app_url + '/revisions'
+  last_good_url = base_app_url + '/lkgr'
   code_review_site = 'http://review.webrtc.org'

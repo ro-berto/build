@@ -15,3 +15,7 @@ class ChromiumWebRTCFYI(Master.Master1):
   project_url = 'http://webrtc.googlecode.com'
   from_address = 'webrtc-cb-watchlist@google.com'
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
+  base_app_url = 'https://webrtc-status.appspot.com'
+  tree_status_url = base_app_url + '/status'
+  store_revisions_url = base_app_url + '/revisions'
+  last_good_url = base_app_url + '/lkgr'
