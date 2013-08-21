@@ -881,6 +881,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddChromeEndureTest('plus_wpr', endure_tests['plus'], fp,
                             wpr=True)
 
+    # Endure with telemetry.
+    if R('endure_calendar_tests'):
+      f.AddTelemetryTest('endure', 'endure_calendar_forward_backward.json',
+                         step_name='endure_calendar', factory_properties=fp,
+                         timeout=6000)
+
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):
       # Performance test should be run on virtual X buffer.
