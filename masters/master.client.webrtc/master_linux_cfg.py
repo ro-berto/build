@@ -50,6 +50,7 @@ baremetal_tests = [
     'video_capture_tests',
     'vie_auto_test',
     'voe_auto_test',
+    'video_engine_tests',
 ]
 
 ninja_options = ['--build-tool=ninja']
@@ -137,7 +138,8 @@ F('linux_largetests_factory', linux().WebRTCFactory(
         'perf_measuring_tests': ['audio_e2e_test',
                                  'audioproc_perf',
                                  'isac_fixed_perf',
-                                 'vie_auto_test'],
+                                 'vie_auto_test',
+                                 'video_engine_tests'],
         'custom_cmd_line_tests': ['audio_e2e_test',
                                   'audioproc_perf',
                                   'isac_fixed_perf',

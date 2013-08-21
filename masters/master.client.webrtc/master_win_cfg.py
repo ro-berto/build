@@ -44,6 +44,7 @@ baremetal_tests = [
     'video_capture_tests',
     'vie_auto_test',
     'voe_auto_test',
+    'video_engine_tests',
 ]
 
 ninja_options = ['--build-tool=ninja']
@@ -97,7 +98,7 @@ F('win32_largetests_factory', win().WebRTCFactory(
         'show_perf_results': True,
         'expectations': True,
         'perf_id': 'webrtc-win-large-tests',
-        'perf_measuring_tests': ['vie_auto_test'],
+        'perf_measuring_tests': ['vie_auto_test', 'video_engine_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',
                                   'voe_auto_test'],
     }))
