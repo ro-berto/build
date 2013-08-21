@@ -105,7 +105,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       'issue': WithProperties('%(issue:-)s'),
       'patchset': WithProperties('%(patchset:-)s'),
       'root': WithProperties('%(root:-)s'),
-      'requestor': WithProperties('%(requestor:-)s'),
+      'requester': WithProperties('%(requester:-)s'),
 
       # And some scripts were written to use non-standard names.
       'parent_cr_revision': WithProperties('%(got_revision:-)s'),
