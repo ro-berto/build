@@ -53,7 +53,12 @@ B('WebKit Win Builder (deps)', 'f_webkit_win_rel',
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
     project='all.sln;all_webkit',
-    factory_properties={'trigger': 's1_chromium_rel_trigger'}))
+    factory_properties={
+        'trigger': 's1_chromium_rel_trigger',
+        'gclient_env': {
+            'GYP_DEFINES': 'use_aura=0',
+        },
+    }))
 
 #
 # Win Rel WebKit testers

@@ -57,6 +57,7 @@ F('f_webkit_win_rel', win().ChromiumFactory(
         'trigger': 's4_webkit_rel_trigger',
         'blink_config': 'blink',
         'gclient_env': {
+            'GYP_DEFINES': 'use_aura=0',
             'GYP_GENERATORS':'ninja',
         },
     }))
@@ -104,6 +105,7 @@ F('f_webkit_win_dbg', win().ChromiumFactory(
         'trigger': 's4_webkit_dbg_trigger',
         'blink_config': 'blink',
         'gclient_env': {
+            'GYP_DEFINES': 'use_aura=0',
             'GYP_GENERATORS':'ninja',
         },
     }))
