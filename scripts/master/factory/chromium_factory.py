@@ -690,11 +690,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
-    if R('startup_measurement'):
-      fp['page_repeat'] = 20
-      f.AddTelemetryTest(
-          'startup_measurement', 'blank_page.json', factory_properties=fp)
-
+    if R('startup_cold'):
+      fp['extra_args'] = ['--page-repeat=5', '--cold']
+      f.AddTelemetryTest('startup', 'blank_page.json', factory_properties=fp)
+    if R('startup_warm'):
+      fp['extra_args'] = ['--page-repeat=20', '--warm']
+      f.AddTelemetryTest('startup', 'blank_page.json', factory_properties=fp)
     if R('sizes'):
       f.AddSizesTests(fp)
     if R('sizes_br'):

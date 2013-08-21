@@ -57,7 +57,7 @@ def _GenerateTelemetryCommandSequence(options):
   fp = options.factory_properties
   test_name = fp.get('test_name')
   page_set = fp.get('page_set')
-  page_repeat = fp.get('page_repeat')
+  extra_args = fp.get('extra_args')
   target = fp.get('target')
   target_os = fp.get('target_os')
   target_platform = fp.get('target_platform')
@@ -74,8 +74,8 @@ def _GenerateTelemetryCommandSequence(options):
 
   # List of command line arguments common to all test platforms.
   common_args = ['-v', '--output-format=buildbot']
-  if page_repeat:
-    common_args.append('--page-repeat=%d' % page_repeat)
+  if extra_args:
+    common_args.extend(extra_args)
 
   # On android, telemetry needs to use the adb command and needs to be in
   # root mode. Run it in bash since envsetup.sh doesn't work in sh.

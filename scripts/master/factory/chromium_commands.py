@@ -399,7 +399,7 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties)
 
   def AddStartupTests(self, factory_properties=None):
-    test_list = 'StartupTest.*:ShutdownTest.*'
+    test_list = 'StartupTest.*:ShutdownTest.*:-StartupTest.PerfCold'
     # We don't need to run the Reference tests in debug mode.
     if self._target == 'Debug':
       test_list += ':-*.*Ref*'

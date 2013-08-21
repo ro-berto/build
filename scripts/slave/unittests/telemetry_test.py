@@ -96,7 +96,7 @@ class TelemetryTest(unittest.TestCase):
 
   def testPageRepeat(self):
     fp = self._GetDefaultFactoryProperties()
-    fp['page_repeat'] = 20
+    fp['extra_args'] = ['--page-repeat=20']
 
     cmd = [self.telemetry, '--print-cmd',
            '--factory-properties=%s' % json.dumps(fp)]
@@ -113,9 +113,9 @@ class TelemetryTest(unittest.TestCase):
             '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
             '\'--factory-properties=' +
             '{"page_set": "sunspider.json", "target": "Release", ' +
-            '"build_dir": "src/build", "perf_id": "android-gn", ' +
+            '"build_dir": "src/build", "extra_args": ["--page-repeat=20"], '+
+            '"perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +
-            '"page_repeat": 20, '+
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
             '\'src/tools/perf/run_measurement\' \'-v\' '
@@ -129,7 +129,7 @@ class TelemetryTest(unittest.TestCase):
 
   def testPageRepeatMozJS(self):
     fp = self._GetDefaultFactoryProperties()
-    fp['page_repeat'] = 20
+    fp['extra_args'] = ['--page-repeat=20']
     fp['page_set'] = 'moz.json'
     fp['target_os'] = 'mac'
 
