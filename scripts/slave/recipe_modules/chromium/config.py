@@ -172,6 +172,11 @@ def BASE(c):
   else:  # pragma: no cover
     raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
 
+@config_ctx()
+def disable_aura(c):
+  if c.TARGET_PLATFORM == 'win':
+    c.gyp_env.GYP_DEFINES['use_aura'] = 0
+
 @config_ctx(group='builder')
 def ninja(c):
   c.gyp_env.GYP_GENERATORS.add('ninja')
