@@ -543,6 +543,7 @@ F('dbg_aura_test_1', win_tester().ChromiumFactory(
            'aura',
            'browser_tests',
            'chrome_frame_net_tests',
+           'chrome_frame_tests',
            'content_browsertests',
           ],
     factory_properties={'process_dumps': True,
