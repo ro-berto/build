@@ -26,7 +26,7 @@ class Master(object):
 
   # External repos.
   googlecode_url = 'http://%s.googlecode.com/svn'
-  sourceforge_url = 'https://%(repo)s.svn.sourceforge.net/svnroot/%(repo)s'
+  sourceforge_url = 'https://svn.code.sf.net/p/%(repo)s/code'
   googlecode_revlinktmpl = 'https://code.google.com/p/%s/source/browse?r=%s'
 
   # Directly fetches from anonymous Blink svn server.
