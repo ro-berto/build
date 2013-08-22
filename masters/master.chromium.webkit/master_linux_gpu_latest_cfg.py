@@ -36,6 +36,7 @@ F('f_gpu_linux_rel', linux().ChromiumFactory(
         'gpu_content_tests',
         'gpu_frame_rate',
         'gpu_throughput',
+        'tab_capture_performance',
     ],
     options=[
         '--build-tool=ninja',

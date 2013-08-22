@@ -683,6 +683,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGpuFrameRateTests(fp)
     if R('gpu_throughput'):
       f.AddGpuThroughputTests(fp)
+    if R('tab_capture_performance'):
+      f.AddTabCapturePerformanceTests(fp)
     if R('dom_perf'):
       f.AddTelemetryTest('dom_perf', 'dom_perf.json', factory_properties=fp)
     if R('idb_perf'):

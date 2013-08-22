@@ -34,6 +34,7 @@ F('f_gpu_win_rel', win().ChromiumFactory(
       'gpu_content_tests',
       'gpu_frame_rate',
       'gpu_throughput',
+      'tab_capture_performance',
     ],
     project='all.sln;chromium_gpu_builder',
     factory_properties={

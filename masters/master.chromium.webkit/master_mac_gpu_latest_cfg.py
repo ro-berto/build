@@ -36,6 +36,7 @@ F('f_gpu_mac_rel', mac().ChromiumFactory(
       'gpu_content_tests',
       'gpu_frame_rate',
       'gpu_throughput',
+      'tab_capture_performance',
     ],
     factory_properties={
         'generate_gtest_json': True,

@@ -486,6 +486,18 @@ class ChromiumCommands(commands.FactoryCommands):
                               tool_opts=tool_options,
                               factory_properties=factory_properties)
 
+  def AddTabCapturePerformanceTests(self, factory_properties=None):
+    options = ['--enable-gpu']
+    tool_options = ['--no-xvfb']
+
+    self.AddAnnotatedPerfStep('tab_capture_performance',
+                              'TabCapturePerformanceTest*', 'graphing',
+                              cmd_name='performance_browser_tests',
+                              step_name='tab_capture_performance_tests',
+                              cmd_options=options,
+                              tool_opts=tool_options,
+                              factory_properties=factory_properties)
+
   def AddIDBPerfTests(self, factory_properties, tool_options=None):
     self.AddAnnotatedPerfStep('idb_perf', 'IndexedDBTest.Perf', 'graphing',
                               step_name='idb_perf',
