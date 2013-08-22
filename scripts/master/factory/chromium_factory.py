@@ -824,15 +824,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('pyauto_perf_tests'):
       P('pyauto_perf_tests', suite='PERFORMANCE', src_base='..',
         factory_properties=fp, perf=True)
-    if R('pyauto_webrtc_tests'):
-      P('pyauto_webrtc_tests', suite='WEBRTC', src_base='..',
-        factory_properties=fp, perf=True)
-    if R('pyauto_webrtc_apprtc_test'):
-      P('pyauto_webrtc_apprtc_test', suite='WEBRTC_APPRTC', src_base='..',
-        factory_properties=fp)
-    if R('pyauto_webrtc_quality_tests'):
-      P('pyauto_webrtc_quality_tests', suite='WEBRTC_QUALITY', src_base='..',
-        factory_properties=fp, perf=True)
 
     # Endurance tests.
     endure_tests = {
