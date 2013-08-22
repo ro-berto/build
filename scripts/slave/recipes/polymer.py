@@ -30,14 +30,9 @@ REPOS = (
 
 
 def _CheckoutSteps(api):
-  repo_url = api.properties['repository']
   url_base = 'https://github.com/Polymer/'
-  assert repo_url.startswith(url_base)
-  repo = repo_url[len(url_base):]
-
 
   cfg = api.gclient.make_config()
-  cfg.checkouts = [repo]
   for name in REPOS:
     soln = cfg.solutions.add()
     soln.name = name
@@ -61,6 +56,8 @@ def GenSteps(api):
     return
 
   yield _CheckoutSteps(api)
+  this_repo = api.properties['buildername'].split()[0]
+  api.path.choose_checkout(api.path.slave_build(this_repo))
 
   tmp_path = ''
   tmp_args = []
@@ -90,23 +87,27 @@ def GenSteps(api):
 
 
 def GenTests(api):
+  # Test paths and commands on each platform.
   for plat in ('mac', 'linux', 'win'):
     yield 'polymer-%s' % plat, {
       'properties': api.properties_scheduled(
-          repository='https://github.com/Polymer/polymer'),
+          repository='https://github.com/Polymer/polymer',
+          buildername='polymer %s' % plat),
       'mock': {
         'platform': {
             'name': plat
         }
       },
     }
-
-  for proj in ['observe-js', 'NodeBind', 'TemplateBinding',
-      'polymer-expressions']:
-    yield 'polymer-%s' % proj, {
-      'properties': api.properties_scheduled(
-        repository='https://github.com/Polymer/%s' % proj),
-      'mock': {
-        'repository': 'https://github.com/Polymer/%s' % proj
-      },
-    }
+  # Make sure we run nothing for the repos special-cased above.
+  yield 'polymer-no-test', {
+    'properties': api.properties_scheduled(
+        repository='https://github.com/Polymer/observe-js'),
+  }
+  # Make sure the steps are right for deps-triggered jobs.
+  yield 'polymer-from-platform', {
+    'properties': api.properties_scheduled(
+        repository='https://github.com/Polymer/platform',
+        buildername='polymer linux',
+        scheduler='polymer-platform')
+  }
