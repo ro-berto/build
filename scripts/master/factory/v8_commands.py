@@ -107,6 +107,23 @@ class V8Commands(commands.FactoryCommands):
                      workdir='build/v8/',
                      env=env)
 
+  def AddV8Test(self, name, properties=None, env=None, options=None,
+                flaky_tests='dontcare'):
+    options = options or []
+    if self._target_platform == 'win32':
+      self.AddTaskkillStep()
+    cmd = self.GetV8TestingCommand() + options
+    cmd += ['--testname', name]
+    step_name = name.capitalize()
+    if flaky_tests == 'run': step_name = '%s (flaky)' % step_name
+    if flaky_tests == 'run' or flaky_tests == 'skip':
+      cmd += ['--flaky-tests', flaky_tests]
+    self.AddTestStep(shell.ShellCommand, step_name, cmd,
+                     timeout=3600,
+                     workdir='build/v8/',
+                     env=env)
+
+  # TODO(machenbach): Clean up with the generic version above.
   def AddV8Webkit(self, properties=None):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()

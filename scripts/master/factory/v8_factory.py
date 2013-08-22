@@ -63,6 +63,9 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8Testing(env=factory_properties.get('test_env', {}),
                      options=factory_properties.get('test_options', []),
                      flaky_tests='run')
+    if R('mjsunit'):
+      f.AddV8Test('mjsunit', env=factory_properties.get('test_env', {}),
+                  options=factory_properties.get('test_options', []))
     if R('fuzz'): f.AddFuzzer()
     if R('deopt'):
       f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
