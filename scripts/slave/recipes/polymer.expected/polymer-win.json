@@ -57,6 +57,7 @@
     ],
     "cwd": "[SLAVE_BUILD_ROOT]\\polymer",
     "env": {
+      "CHROME_BIN": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
       "PATH": "C:\\Program Files (x86)\\nodejs;C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"
     },
     "name": "update-install"
@@ -69,6 +70,7 @@
     ],
     "cwd": "[SLAVE_BUILD_ROOT]\\polymer",
     "env": {
+      "CHROME_BIN": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
       "PATH": "C:\\Program Files (x86)\\nodejs;C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"
     },
     "name": "test"
