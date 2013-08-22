@@ -28,7 +28,6 @@ T('linux_rel_trigger')
 chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
                                                   'Linux Builder')
 tests = [
-    'pyauto_webrtc_tests',
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
     'webrtc_content_unittests',
@@ -45,7 +44,6 @@ F('linux_rel_factory', linux().ChromiumFactory(
     options=['--compiler=goma', '--build-tool=ninja', '--',
              'chromium_builder_webrtc'],
     factory_properties={
-        'gclient_env': {'GYP_DEFINES':'python_ver=2.7'},
         'trigger': 'linux_rel_trigger',
         'build_url': chromium_rel_archive,
     }))
@@ -56,7 +54,6 @@ F('linux_tester_factory', linux_tester().ChromiumFactory(
     build_url=chromium_rel_archive,
     tests=tests,
     factory_properties={
-        'pyauto_env': {'DO_NOT_RESTART_PYTHON_FOR_PYAUTO': '1'},
         'virtual_webcam': True,
         'use_xvfb_on_linux': True,
         'show_perf_results': True,

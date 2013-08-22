@@ -26,7 +26,6 @@ T('win_rel_trigger')
 chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
                                                   'Win Builder')
 tests = [
-    'pyauto_webrtc_tests',
     'webrtc_manual_browser_tests',
     'webrtc_manual_content_browsertests',
     'webrtc_content_unittests',
