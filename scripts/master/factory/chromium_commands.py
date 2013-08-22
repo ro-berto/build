@@ -860,6 +860,8 @@ class ChromiumCommands(commands.FactoryCommands):
     log_type = 'graphing'
     if test_name == 'page_cycler':
       log_type = 'pagecycler'
+    if test_name == 'endure':
+      log_type = 'endure'
 
     self.AddAnnotatedPerfStep(step_name, None, log_type, factory_properties,
                               cmd_name=self._telemetry_tool,
