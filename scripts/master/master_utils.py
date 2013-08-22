@@ -329,3 +329,57 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
     elif 'port' in values:
       c['manhole'] = manhole.AuthorizedKeysManhole(interface,
           os.path.expanduser("~/.ssh/authorized_keys"))
+
+def DumpSetup(c, important=None, filename='config.current.txt'):
+  """Writes a flattened version of the setup to a text file.
+     Some interesting classes are exploded with their variables
+     exposed,  by default the BuildFactories and Schedulers.
+     Newlines and indentation are sprinkled through the representation,
+     to make the output more easily broken up and groked with grep or diff.
+
+     Note that the heuristics of how to find classes that you want expanded
+     is not too hard to fool, but it seems to handle it usefully for
+     normal master configs.
+
+     c         The config: same as the rest of the utilities here.
+     important Array of classes to also expand.
+     filename  Where to write this ill-defined but useful information.
+  """
+  from buildbot.schedulers.base import BaseScheduler
+  from buildbot.process.factory import BuildFactory
+
+  def hacky_repr(obj, name, indent, important):
+    def hacky_repr_class(obj, indent, important):
+      r = '%s {\n' % obj.__class__.__name__
+      for (n, v) in vars(obj).iteritems():
+        r += hacky_repr(v, "%s: " % n, indent, important) + ',\n'
+      r += indent + '}'
+      return r
+
+    r = repr(obj)
+    subdent = '  '
+    if any(isinstance(obj, c) for c in important):
+      r = hacky_repr_class(obj, indent + subdent, important)
+    elif len(r) > max(30, 76-len(indent)-len(name)) and \
+        not isinstance(obj, basestring):
+      if isinstance(obj, list):
+        r = '[\n'
+        for o in obj:
+          r += hacky_repr(o, '', indent + subdent, important) + ',\n'
+        r += indent + ']'
+      elif isinstance(obj, tuple):
+        r = '(\n'
+        for o in obj:
+          r += hacky_repr(o, '', indent + subdent, important) + ',\n'
+        r += indent + ')'
+      elif isinstance(obj, dict):
+        r = '{\n'
+        for (n, v) in sorted(obj.iteritems(), key=lambda x: x[0]):
+          r += hacky_repr(v, "'%s': " % n, indent + subdent, important) + ',\n'
+        r += indent + '}'
+    return "%s%s%s" % (indent, name, r)
+
+  important = (important or []) + [BaseScheduler, BuildFactory]
+
+  with open(filename, 'w') as f:
+    print >> f, hacky_repr(c, 'config = ', '', important)
