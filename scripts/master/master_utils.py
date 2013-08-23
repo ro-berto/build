@@ -356,7 +356,15 @@ def DumpSetup(c, important=None, filename='config.current.txt'):
       r += indent + '}'
       return r
 
-    r = repr(obj)
+    if isinstance(obj, list):
+      r = '[' + ', '.join(hacky_repr(o, '', '', important) for o in obj) + ']'
+    elif isinstance(obj, tuple):
+      r = '(' + ', '.join(hacky_repr(o, '', '', important) for o in obj) + ')'
+    else:
+      r = repr(obj)
+      if not isinstance(obj, basestring):
+        r = re.sub(' at 0x[0-9a-fA-F]*>', '>', r)
+
     subdent = '  '
     if any(isinstance(obj, c) for c in important):
       r = hacky_repr_class(obj, indent + subdent, important)
