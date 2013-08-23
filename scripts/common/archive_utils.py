@@ -160,8 +160,14 @@ def ExtractDirsFromPaths(path_list):
   return list(filter(None, set(os.path.dirname(path) for path in path_list)))
 
 
-def BuildArch():
+def BuildArch(target_arch=None):
   """Determine the architecture of the build being processed."""
+  if target_arch == 'x64':
+    # Just use the architecture specified by the build if it's 64 bit.
+    return '64bit'
+  elif target_arch:
+    raise StagingError('Unknown target_arch "%s"', target_arch)
+
   if chromium_utils.IsWindows() or chromium_utils.IsMac():
     # Architecture is not relevant for Mac (combines multiple archs in one
     # release) and Win (32-bit only), so just call it 32bit.
