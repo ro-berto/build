@@ -28,7 +28,7 @@ class FakeSwarmGetResultsModule(object):
 sys.modules['swarm_get_results'] = FakeSwarmGetResultsModule()
 
 
-import slave.swarming.get_swarm_results as swarm_results
+import slave.swarming.get_swarm_results_shim as swarm_results
 
 
 RUN_TEST_OUTPUT = (

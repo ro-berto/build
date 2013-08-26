@@ -5,19 +5,22 @@
 
 """Takes in a test name and retrives all the output that the swarm server
 has produced for tests with that name. This is expected to be called as a
-build step."""
+build step.
+"""
 
+import optparse
 import os
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+from common import chromium_utils
 from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
 
 from slave.swarming import swarming_utils
 
-# From depot tools/
+# From depot_tools/
 import fix_encoding
 
 
@@ -78,14 +81,34 @@ def gen_summary_output(failed_tests, exit_code, shards_remaining):
   return out, exit_code
 
 
-def GetSwarmResults(
-    swarm_get_results, swarm_base_url, test_keys, timeout, max_threads):
+def v0(client, options, test_name):
+  """This code supports all the earliest versions of swarm_client.
+
+  This is before --version was added.
+  """
+  sys.path.insert(0, client)
+  import swarm_get_results  # pylint: disable=F0401
+
+  timeout = swarm_get_results.DEFAULT_SHARD_WAIT_TIME
+  test_keys = swarm_get_results.get_test_keys(
+      options.swarming, test_name, timeout)
+  if not test_keys:
+    print >> sys.stderr, 'No test keys to get results with.'
+    return 1
+
+  if options.shards == -1:
+    options.shards = len(test_keys)
+  elif len(test_keys) < options.shards:
+    print >> sys.stderr, ('Warning: Test should have %d shards, but only %d '
+                          'test keys were found' % (options.shards,
+                                                    len(test_keys)))
+
   gtest_parser = gtest_utils.GTestLogParser()
   exit_code = None
   shards_remaining = range(len(test_keys))
   first_result = True
   for index, result in swarm_get_results.yield_results(
-      swarm_base_url, test_keys, timeout, max_threads):
+      options.swarming, test_keys, timeout, None):
     assert index == result['config_instance_index']
     if first_result and result['num_config_instances'] != len(test_keys):
       # There are more test_keys than actual shards.
@@ -104,35 +127,58 @@ def GetSwarmResults(
   return exit_code
 
 
+def determine_version_and_run_handler(client, options, test_name):
+  """Executes the proper handler based on the code layout and --version
+  support.
+  """
+  # TODO(maruel): Determine version when needed.
+  return v0(client, options, test_name)
+
+
+def process_build_properties(options, name):
+  """Converts build properties and factory properties into expected flags."""
+  taskname = '%s-%s-%s' % (
+      options.build_properties.get('buildername'),
+      options.build_properties.get('buildnumber'),
+      name,
+  )
+  return taskname
+
+
 def main():
+  """Note: this is solely to run the current master's code and can totally
+  differ from the underlying script flags.
+
+  To update these flags:
+  - Update the following code to support both the previous flag and the new
+    flag.
+  - Change scripts/master/factory/swarm_commands.py to pass the new flag.
+  - Restart all the masters using swarming.
+  - Remove the old flag from this code.
+  """
   client = swarming_utils.find_client(os.getcwd())
   if not client:
     print >> sys.stderr, 'Failed to find swarm(ing)_client'
     return 1
 
-  # TODO(maruel): Do not import, reproduce the same flags and forward to a
-  # subprocess.call() instead.
-  sys.path.insert(0, client)
-  import swarm_get_results  # pylint: disable=F0401
+  parser = optparse.OptionParser()
+  parser.add_option('-u', '--swarming', help='Swarm server')
+  parser.add_option(
+      '-s', '--shards', type='int', default=-1, help='Number of shards')
+  chromium_utils.AddPropertiesOptions(parser)
+  (options, args) = parser.parse_args()
+  options.swarming = options.swarming.rstrip('/')
 
-  parser, options, test_name = swarm_get_results.parse_args()
-  if not options.shards:
-    parser.error('The number of shards expected must be passed in.')
-  test_keys = swarm_get_results.get_test_keys(
-      options.url, test_name, options.timeout)
-  if not test_keys:
-    parser.error('No test keys to get results with.')
-
-  options.shards = int(options.shards)
-  if options.shards == -1:
-    options.shards = len(test_keys)
-  elif len(test_keys) < options.shards:
-    print >> sys.stderr, ('Warning: Test should have %d shards, but only %d '
-                          'test keys were found' % (options.shards,
-                                                    len(test_keys)))
-
-  return GetSwarmResults(
-      swarm_get_results, options.url, test_keys, options.timeout, None)
+  if not args:
+    parser.error('Must specify one test name.')
+  elif len(args) > 1:
+    parser.error('Must specify only one test name.')
+  if options.build_properties:
+    # Loads the other flags implicitly.
+    task_name = process_build_properties(options, args[0])
+  else:
+    task_name = args[0]
+  return determine_version_and_run_handler(client, options, task_name)
 
 
 if __name__ == '__main__':

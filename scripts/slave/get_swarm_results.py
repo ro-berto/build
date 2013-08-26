@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def main():
   cmd = [
     sys.executable,
-    os.path.join(BASE_DIR, 'swarming', 'get_swarm_results.py')
+    os.path.join(BASE_DIR, 'swarming', 'get_swarm_results_shim.py')
   ] + sys.argv[1:]
   return subprocess.call(cmd)
 

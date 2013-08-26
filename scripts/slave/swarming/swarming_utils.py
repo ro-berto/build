@@ -9,7 +9,12 @@ import os
 
 
 def find_client(base_dir):
-  """Returns the path to swarming_client if found."""
+  """Returns the path to swarming_client if found.
+
+  |base_dir| will be in general os.getcwd(), so the script is very dependent on
+  CWD. CWD should be the base directory of the checkout. It has always been the
+  case.
+  """
   src_swarming_client = os.path.join(
       base_dir, 'src', 'tools', 'swarming_client')
   if os.path.isdir(src_swarming_client):

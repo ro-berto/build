@@ -6,7 +6,6 @@
 
 This is based on commands.py and adds swarm-specific commands."""
 
-from buildbot.process.properties import WithProperties
 from buildbot.steps import shell, source
 from twisted.python import log
 
@@ -88,12 +87,14 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
     # triggered. This implicitly takes account 'testfilter'.
     swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
 
+    # TODO(maruel): Move more logic out into
+    # scripts/slave/swarming/trigger_swarm_shim.py.
     command = self.command[:]
     for swarm_test in self.tests:
       if swarm_tests_hash_mapping.get(swarm_test.test_name):
         command.extend(
             [
-              '--run_from_hash',
+              '--task',
               swarm_tests_hash_mapping[swarm_test.test_name],
               swarm_test.test_name,
               '%d' % swarm_test.shards,
@@ -119,21 +120,13 @@ class SwarmCommands(commands.FactoryCommands):
   def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
                               doStepIf):
     assert all(t.__class__.__name__ == 'SwarmTest' for t in tests)
-    script_path = self.PathJoin(
-        self._swarming_client_dir, 'swarm_trigger_step.py')
-
-    swarm_request_name_prefix = WithProperties('%s-%s-',
-                                               'buildername:-None',
-                                               'buildnumber:-None')
-
     command = [
       self._python,
-      script_path,
-      '-o', WithProperties('%s', 'target_os:-%s' % self._target_platform),
-      '-u', swarm_server,
-      '-t', swarm_request_name_prefix,
-      '-d', isolation_outdir,
+      self.PathJoin(self._script_dir, 'swarming', 'trigger_swarm_shim.py'),
+      '--swarming', swarm_server,
+      '--isolate-server', isolation_outdir,
     ]
+    command = self.AddBuildProperties(command)
     assert all(i for i in command), command
     self._factory.addStep(
         SwarmShellForTriggeringTests,
@@ -147,30 +140,26 @@ class SwarmCommands(commands.FactoryCommands):
     """Adds the step to retrieve the Swarm job results asynchronously."""
     # TODO(maruel): assert test_name.endswith('_swarm') once swarm retrieve
     # results steps have _swarm suffix.
-    script_path = self.PathJoin(self._script_dir, 'get_swarm_results.py')
-
-    swarm_request_name = WithProperties('%s-%s-' + test_name,
-                                        'buildername:-None',
-                                        'buildnumber:-None')
-
-    args = ['-u', swarm_server, '-s', '%d' % num_shards, swarm_request_name]
-    wrapper_args = [
-      '--no-xvfb', '--annotate=gtest', '--test-type=%s' % test_name,
+    command = [
+      self._python,
+      self.PathJoin(self._script_dir, 'swarming', 'get_swarm_results_shim.py'),
+      '--swarming', swarm_server,
+      '--shards', '%d' % num_shards,
+      test_name,
     ]
-
-    command = self.GetPythonTestCommand(script_path, arg_list=args,
-                                        wrapper_args=wrapper_args)
+    command = self.AddBuildProperties(command)
 
     # Swarm handles the timeouts due to no ouput being produced for 10 minutes,
     # but we don't have access to the output until the whole test is done, which
     # may take more than 10 minutes, so we increase the buildbot timeout.
     timeout = 2 * 60 * 60
-
-    self.AddTestStep(chromium_step.AnnotatedCommand,
-                     test_name,
-                     command,
-                     timeout=timeout,
-                     do_step_if=TestStepFilterRetrieveSwarmResult)
+    self._factory.addStep(
+        shell.ShellCommand,
+        name=test_name,
+        description='%s Swarming' % test_name,
+        command=command,
+        timeout=timeout,
+        doStepIf=TestStepFilterRetrieveSwarmResult)
 
   def AddUpdateSwarmClientStep(self):
     """Checks out swarming_client so it can be used at the right revision."""
