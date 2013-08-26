@@ -260,8 +260,8 @@ def main_linux(options, args):
       totals[totals_id] = totals.get(totals_id, 0) + int(value)
 
   files = [
-    'chrome.pak',
     'nacl_irt_x86_64.nexe',
+    'resources.pak',
   ]
 
   for filename in files:
@@ -342,6 +342,7 @@ def main_win(options, args):
   """
   target_dir = os.path.join(options.build_dir, options.target)
   chrome_dll = os.path.join(target_dir, 'chrome.dll')
+  chrome_child_dll = os.path.join(target_dir, 'chrome_child.dll')
   chrome_exe = os.path.join(target_dir, 'chrome.exe')
   mini_installer_exe = os.path.join(target_dir, 'mini_installer.exe')
   npchrome_frame_dll = os.path.join(target_dir, 'npchrome_frame.dll')
@@ -350,6 +351,9 @@ def main_win(options, args):
   result = 0
 
   print 'RESULT chrome.dll: chrome.dll= %s bytes' % get_size(chrome_dll)
+
+  fmt = 'RESULT chrome_child.dll: chrome_child.dll= %s bytes'
+  print fmt % get_size(chrome_child_dll)
 
   print 'RESULT chrome.exe: chrome.exe= %s bytes' % get_size(chrome_exe)
 
