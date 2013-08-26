@@ -1188,8 +1188,10 @@ def real_main():
 
   options.build_dir = os.path.abspath(options.build_dir)
   if not options.src_dir:
-    options.src_dir = os.path.join(slave_utils.SlaveBaseDir(
-        os.path.abspath(options.build_dir)), 'build', 'src')
+    options.src_dir = os.path.join(slave_utils.SlaveBaseDir(options.build_dir),
+                                   'build', 'src')
+  else:
+    options.src_dir = os.path.abspath(options.src_dir)
 
   if options.build_tool is None:
     if chromium_utils.IsWindows():
