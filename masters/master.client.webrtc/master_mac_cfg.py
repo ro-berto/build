@@ -123,12 +123,6 @@ F('ios_debug_factory', mac().WebRTCFactory(
     options=options,
     factory_properties={'gclient_env': mac_ios_gclient_env}))
 
-B('iOS Release', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
-F('ios_release_factory', mac().WebRTCFactory(
-    target='Release',
-    options=options,
-    factory_properties={'gclient_env': mac_ios_gclient_env}))
-
 
 def Update(c):
   helper.Update(c)
