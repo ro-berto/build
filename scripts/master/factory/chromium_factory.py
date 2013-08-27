@@ -1007,15 +1007,24 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Ensure GYP errors out if files referenced in .gyp files are missing.
     self.ForceMissingFilesToBeFatal(project, factory_properties['gclient_env'])
 
-    is_windows_asan_builder = (slave_type == 'Builder' and
-                               self._target_platform == 'win32' and
-                               factory_properties.get('asan'))
+    # There's 2 different windows ASan builder:
+    #     - The unittests builder, which build all the unittests, instrument
+    #       them and put them in a zip file for the test bots.
+    #     - The Chromium LKGR builder, which build the All_syzygy target of the
+    #       Chromium project with the 'asan' gyp define set. There's no need to
+    #       call a script to do the instrumentation for this target (it' already
+    #       in the build steps). This builder should archive the builds for
+    #       Clusterfuzz, it need to have the 'cf_archive_build' property.
+    is_win_asan_tests_builder = (slave_type == 'Builder' and
+                                 self._target_platform == 'win32' and
+                                 factory_properties.get('asan') and
+                                 not factory_properties.get('cf_archive_build'))
 
     factory = self.BuildFactory(target, clobber, tests_for_build, mode,
                                 slave_type, options, compile_timeout, build_url,
                                 project, factory_properties,
                                 gclient_deps=gclient_deps,
-                                skip_archive_steps=is_windows_asan_builder)
+                                skip_archive_steps=is_win_asan_tests_builder)
 
     # Get the factory command object to create new steps to the factory.
     chromium_cmd_obj = chromium_commands.ChromiumCommands(factory,
@@ -1023,10 +1032,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                                           self._build_dir,
                                                           self._target_platform)
 
-    # Add ASANification step for windows
+    # Add ASANification step for windows unittests.
     # MUST BE FIRST STEP ADDED AFTER BuildFactory CALL in order to add back
-    # the ZipBuild step in it's expected place
-    if is_windows_asan_builder:
+    # the ZipBuild step in it's expected place.
+    if is_win_asan_tests_builder:
       # This must occur before syzygy modifies the dll.
       chromium_cmd_obj.AddGenerateCodeTallyStep()
 
