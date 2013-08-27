@@ -79,6 +79,9 @@ def GenSteps(api):
       'CHROME_BIN':
         api.path.join('C:', api.path.sep, 'Program Files (x86)', 'Google',
                       'Chrome', 'Application', 'chrome.exe'),
+      'IE_BIN':
+        api.path.join('C:', api.path.sep, 'Program Files', 'Internet Explorer',
+                      'iexplore.exe'),
     }
 
   test_prefix = []
