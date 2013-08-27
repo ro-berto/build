@@ -979,8 +979,7 @@ class FactoryCommands(object):
     env['LANDMINES_VERBOSE'] = '1'
     env['DEPOT_TOOLS_UPDATE'] = '0'
     if timeout is None:
-      # svn timeout is 2 min; we allow 5
-      timeout = 60*5
+      timeout = 60*10
     self._factory.addStep(
         RunHooksShell,
         haltOnFailure=True,
