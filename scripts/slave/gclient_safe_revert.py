@@ -33,6 +33,11 @@ def main():
               gclient_config)
     return 0
 
+  # Work around http://crbug.com/280158
+  cmd = [gclient_command, 'recurse', '-i', 'sh', '-c',
+         'if [ -e .git ]; then git remote update; fi']
+  chromium_utils.RunCommand(cmd, cwd=build_directory)
+
   cmd = [gclient_command, 'revert', '--nohooks', '--upstream']
   return chromium_utils.RunCommand(cmd, cwd=build_directory)
 
