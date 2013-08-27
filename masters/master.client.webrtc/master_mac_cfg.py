@@ -10,8 +10,6 @@ defaults = {}
 
 def mac():
   return webrtc_factory.WebRTCFactory('src/out', 'darwin')
-def macIos():
-  return webrtc_factory.WebRTCFactory('', 'darwin', nohooks_on_update=True)
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
@@ -60,6 +58,12 @@ baremetal_tests = [
     'video_engine_tests',
 ]
 options = ['--build-tool=ninja']
+
+mac_ios_gclient_env = {
+    'gclient_deps': 'ios',
+    'GYP_CROSSCOMPILE': '1',
+    'GYP_DEFINES': 'build_with_libjingle=1 OS=ios target_arch=armv7 key_id=""',
+}
 
 defaults['category'] = 'mac'
 
@@ -124,11 +128,17 @@ F('mac_largetests_factory', mac().WebRTCFactory(
     }))
 
 # iOS.
-B('iOS Device', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
-F('ios_release_factory', macIos().ChromiumAnnotationFactory(
+B('iOS Debug', 'ios_debug_factory', scheduler=scheduler, auto_reboot=False)
+F('ios_debug_factory', mac().WebRTCFactory(
+    target='Debug',
+    options=options,
+    factory_properties={'gclient_env': mac_ios_gclient_env}))
+
+B('iOS Release', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
+F('ios_release_factory', mac().WebRTCFactory(
     target='Release',
-    slave_type='AnnotatedBuilderTester',
-    annotation_script='src/webrtc/build/ios-webrtc.sh'))
+    options=options,
+    factory_properties={'gclient_env': mac_ios_gclient_env}))
 
 
 def Update(c):
