@@ -240,6 +240,7 @@ def main(argv):
       'master.client.syzygy': 'Syzygy',
       'master.client.v8': 'V8',
       'master.client.webrtc': 'WebRTC',
+      'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.devtools': 'DevTools',
       'master.experimental': 'Experimental',
       'master.tryserver.chromium': 'TryServer',

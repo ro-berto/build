@@ -17,6 +17,8 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
   # uses another path (use_relative_paths=True in DEPS).
   CUSTOM_DEPS_VALGRIND = ('third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
+  CUSTOM_DEPS_TSAN_WIN = ('third_party/tsan',
+     config.Master.trunk_url + '/deps/third_party/tsan')
 
   def __init__(self, build_dir, target_platform, nohooks_on_update=False,
                target_os=None):
@@ -59,6 +61,15 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
 
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
+    elif factory_properties.get('needs_tsan_win'):
+      self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_TSAN_WIN]
+    elif factory_properties.get('needs_drmemory'):
+      if 'drmemory.DEPS' not in [s.name for s in self._solutions]:
+        self._solutions.append(gclient_factory.GClientSolution(
+            config.Master.trunk_url +
+            '/deps/third_party/drmemory/drmemory.DEPS',
+            'drmemory.DEPS'))
+
     factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties, gclient_deps)
@@ -80,3 +91,4 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
 
     cmds.AddWebRTCTests(tests, factory_properties)
     return factory
+
