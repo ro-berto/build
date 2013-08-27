@@ -878,7 +878,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Endure with telemetry.
     if R('endure_calendar_tests'):
-      f.AddTelemetryTest('endure', 'endure_calendar_forward_backward.json',
+      f.AddTelemetryTest('endure', 'calendar_forward_backward.json',
                          step_name='endure_calendar', factory_properties=fp,
                          timeout=6000)
 
