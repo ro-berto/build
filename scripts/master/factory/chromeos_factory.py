@@ -45,7 +45,7 @@ class ChromiteFactory(object):
           Used by external masters to prevent leaking sensitive information,
           since both external and internal slaves use internal.DEPS/.
   """
-  _default_git_base = 'http://git.chromium.org/chromiumos'
+  _default_git_base = 'http://chromium.googlesource.com/chromiumos'
   _default_chromite = _default_git_base + '/chromite.git'
 
   def __init__(self, script, params=None, b_params=None, timeout=9000,
@@ -284,4 +284,3 @@ class CbuildbotFactory(ChromiteFactory):
     self.f_cbuild.addStep(
         perf_class, command=cmd, name='Upload Perf Results',
         description='upload_perf_results')
-
