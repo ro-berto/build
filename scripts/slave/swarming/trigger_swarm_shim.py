@@ -25,6 +25,14 @@ from slave.swarming import swarming_utils
 import fix_encoding
 
 
+PRIORITIES = {
+  'ci': 10,
+  'cq': 20,
+  'fyi': 30,
+  'tryjob': 40,
+}
+
+
 def v0(client, options):
   """Compatible up to the oldest swarm_client code."""
   cmd = [
@@ -43,11 +51,41 @@ def v0(client, options):
   return subprocess.call(cmd, cwd=client)
 
 
+def v0_1(client, options):
+  """Code starting around r218375.
+
+  TODO(maruel): Put exact revision once committe.d
+  """
+  cmd = [
+    sys.executable,
+    os.path.join(client, 'swarming.py'),
+    'trigger',
+    '--swarming', options.swarming,
+    '--isolate-server', options.isolate_server,
+    '--os', options.os,
+    '--task-prefix', options.task_prefix,
+    '--priority', str(PRIORITIES[options.type]),
+  ]
+
+  for i in options.tasks:
+    cmd.append('--task')
+    cmd.extend(i)
+
+  # Enable profiling on the -dev server.
+  if '-dev' in options.swarming:
+    cmd.append('--profile')
+
+  print ' '.join(cmd)
+  return subprocess.call(cmd, cwd=client)
+
+
 def determine_version_and_run_handler(client, options):
   """Executes the proper handler based on the code layout and --version support.
   """
-  # TODO(maruel): Determine version.
-  return v0(client, options)
+  if os.path.isfile(os.path.join(client, 'swarm_get_results.py')):
+    # Oh, that's old.
+    return v0(client, options)
+  return v0_1(client, options)
 
 
 def process_build_properties(options):
@@ -85,6 +123,11 @@ def main():
   parser.add_option('--swarming')
   parser.add_option('--isolate-server')
   parser.add_option('--task-prefix', help='task name prefix')
+  parser.add_option(
+      '--type',
+      choices=sorted(PRIORITIES),
+      default='fyi',
+      help='Type of job will define it\'s priority')
   parser.add_option(
       '--task', nargs=4, action='append', default=[], dest='tasks')
   chromium_utils.AddPropertiesOptions(parser)

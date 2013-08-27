@@ -22,6 +22,7 @@ from slave.swarming import swarming_utils
 
 # From depot_tools/
 import fix_encoding
+import subprocess2
 
 
 NO_OUTPUT_FOUND = (
@@ -127,12 +128,45 @@ def v0(client, options, test_name):
   return exit_code
 
 
+def v0_1(client, options, test_name):
+  """Code starting around r218375.
+
+  TODO(maruel): Put exact revision once committed.
+  """
+  swarming = os.path.join(client, 'swarming.py')
+  cmd = [
+    sys.executable,
+    swarming,
+    'collect',
+    '--swarming', options.swarming,
+    '--decorate',
+    test_name,
+  ]
+  print('Running: %s' % ' '.join(cmd))
+  proc = subprocess2.Popen(cmd, bufsize=0, stdout=subprocess2.PIPE)
+  gtest_parser = gtest_utils.GTestLogParser()
+  for line in proc.stdout.readlines():
+    line = line.rstrip()
+    print line
+    gtest_parser.ProcessLine(line)
+
+  proc.wait()
+  output, exit_code = gen_summary_output(
+      gtest_parser.FailedTests(),
+      proc.returncode,
+      0)
+  print output
+  return exit_code
+
+
 def determine_version_and_run_handler(client, options, test_name):
   """Executes the proper handler based on the code layout and --version
   support.
   """
-  # TODO(maruel): Determine version when needed.
-  return v0(client, options, test_name)
+  if os.path.isfile(os.path.join(client, 'swarm_get_results.py')):
+    # Oh, that's old.
+    return v0(client, options, test_name)
+  return v0_1(client, options, test_name)
 
 
 def process_build_properties(options, name):

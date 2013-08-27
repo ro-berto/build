@@ -6,6 +6,12 @@
 """Code to find swarming_client."""
 
 import os
+import sys
+
+from common import find_depot_tools  # pylint: disable=W0611
+
+# From depot_tools/
+import subprocess2
 
 
 def find_client(base_dir):
@@ -24,3 +30,17 @@ def find_client(base_dir):
   src_swarm_client = os.path.join(base_dir, 'src', 'tools', 'swarm_client')
   if os.path.isdir(src_swarm_client):
     return src_swarm_client
+
+
+def get_version(client):
+  """Returns the version of swarming.py client tool, if available."""
+  try:
+    version = subprocess2.check_output(
+        [
+          sys.executable,
+          os.path.join(client, 'swarming.py'),
+          '--version',
+        ])
+  except (subprocess2.CalledProcessError, OSError):
+    return None
+  return map(int, version.split('.'))
