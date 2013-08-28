@@ -23,7 +23,7 @@ tests = [
     'common_audio_unittests',
     'common_video_unittests',
     'metrics_unittests',
-    'modules_integrationtests',
+    'modules_tests',
     'modules_unittests',
     'neteq_unittests',
     'system_wrappers_unittests',
@@ -57,6 +57,21 @@ F('linux_tsan_rv_factory', linux().WebRTCFactory(
     factory_properties={
         'needs_valgrind': True,
         'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan'}}))
+
+B('Linux LSan (and ASan)', 'linux_lsan_factory', scheduler=scheduler)
+F('linux_lsan_factory', linux().WebRTCFactory(
+    target='Release',
+    tests=tests,
+    options=['--compiler=clang',
+             '--build-tool=ninja'],
+    factory_properties={
+        'lsan': True,
+        'asan': True,
+        'gclient_env': {
+            'GYP_DEFINES': ('asan=1 '
+                            'lsan=1 '
+                            'linux_use_tcmalloc=0 '
+                            'release_extra_cflags="-gline-tables-only" ')}}))
 
 
 def Update(c):
