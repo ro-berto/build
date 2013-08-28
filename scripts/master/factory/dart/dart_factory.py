@@ -265,6 +265,8 @@ class DartFactory(gclient_factory.GClientFactory):
                                               self.target_platform,
                                               env=env)
 
+    dart_cmd_obj.AddKillStep()
+
     # We must always add the MaybeClobberStep, since this factory is
     # created at master start, but the choice of clobber or not may be
     # chosen at runtime (e.g. check the 'clobber' box).

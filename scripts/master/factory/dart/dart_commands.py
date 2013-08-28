@@ -110,6 +110,21 @@ class DartCommands(commands.FactoryCommands):
                           workdir=workdir,
                           command=cmd)
 
+  def AddKillStep(self, options=None, timeout=1200):
+    options = options or {}
+    is_vm = (options.get('name') != None and
+             options.get('name').startswith('vm'))
+    if is_vm:
+      cmd = 'python ' + self._tools_dir + '/task_kill.py'
+      self._factory.addStep(shell.ShellCommand,
+                            name='Taskkill',
+                            description='Kill leftover processes',
+                            timeout=timeout,
+                            env = self._custom_env,
+                            haltOnFailure=False,
+                            workdir=self._dart_build_dir,
+                            command=cmd)
+
   def AddTests(self, options=None, timeout=1200):
     options = options or {}
     is_dartc = (options.get('name') != None and
