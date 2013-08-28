@@ -8,9 +8,9 @@ from config_bootstrap import Master
 
 class WebRTCFYI(Master.Master3):
   project_name = 'WebRTC FYI'
-  master_port = 8063
-  slave_port = 8163
-  master_port_alt = 8263
+  master_port = 8072
+  slave_port = 8172
+  master_port_alt = 8272
   server_url = 'http://webrtc.googlecode.com'
   project_url = 'http://webrtc.googlecode.com'
   from_address = 'webrtc-cb-fyi-watchlist@google.com'
