@@ -3,7 +3,6 @@
 # found in the LICENSE file.
 
 from master import master_config
-from master.factory import chromium_factory
 from master.factory import webrtc_factory
 
 defaults = {}
@@ -11,9 +10,6 @@ defaults = {}
 
 def linux():
   return webrtc_factory.WebRTCFactory('src/out', 'linux2')
-def android():
-  return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=True,
-                                      target_os='android')
 
 helper = master_config.Helper(defaults)
 B = helper.Builder
@@ -146,16 +142,6 @@ F('linux_largetests_factory', linux().WebRTCFactory(
                                   'vie_auto_test',
                                   'voe_auto_test'],
     }))
-
-# Android.
-B('Android NDK', 'android_ndk_factory', scheduler=scheduler, auto_reboot=False)
-F('android_ndk_factory', android().ChromiumAnnotationFactory(
-  target='Debug',
-  slave_type='AnnotatedBuilderTester',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-      'android_bot_id': 'webrtc-builder-dbg',
-  }))
 
 # ChromeOS.
 B('Chrome OS', 'chromeos_factory', scheduler=scheduler, auto_reboot=False)

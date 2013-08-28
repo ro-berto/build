@@ -1216,6 +1216,32 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
 
+  def ChromiumWebRTCAndroidFactory(self, annotation_script,
+                                   branch='master',
+                                   target='Release',
+                                   slave_type='AnnotatedBuilderTester',
+                                   clobber=False,
+                                   compile_timeout=6000,
+                                   project=None,
+                                   factory_properties=None, options=None,
+                                   tests=None,
+                                   gclient_deps=None):
+    self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_WEBRTC_TRUNK]
+    self._solutions.append(gclient_factory.GClientSolution(
+        config.Master.trunk_url + '/deps/third_party/webrtc/webrtc.DEPS',
+        name='webrtc.DEPS'))
+    return self.ChromiumAnnotationFactory(annotation_script=annotation_script,
+                                          branch=branch,
+                                          target=target,
+                                          slave_type=slave_type,
+                                          clobber=clobber,
+                                          compile_timeout=compile_timeout,
+                                          project=project,
+                                          factory_properties=factory_properties,
+                                          options=options,
+                                          tests=tests,
+                                          gclient_deps=gclient_deps)
+
   def ChromiumAVPerfFactory(self, target='Release', clobber=False, tests=None,
                               mode=None, slave_type='BuilderTester',
                               options=None, compile_timeout=1200,
