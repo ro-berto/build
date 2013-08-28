@@ -364,5 +364,67 @@ class GraphingPageCyclerLogProcessorPerfTest(LoggingStepBase):
     expected = 't: 2.32k'
     self.assertEqual(expected, parser.PerformanceSummary()[0])
 
+
+class GraphingEndureLogProcessorTest(LoggingStepBase):
+  def _testSummaryHelper(self, input_file, output_files):
+    output_files = ['%s-summary.dat' % graph for graph in output_files]
+    self._ConstructParseAndCheckJSON(input_file, output_files, None,
+        process_log_utils.GraphingEndureLogProcessor)
+
+  def testSummary(self):
+    """Compare each '-summary.dat' file for a basic single test output."""
+    input_file = ['endure_processor.log']
+    output_files = [
+        'https___www_google_com_calendar_-EventListenerCount',
+        'https___www_google_com_calendar_-TotalDOMNodeCount',
+        'https___www_google_com_calendar_-V8MemoryUsed']
+    self._testSummaryHelper(input_file, output_files)
+
+  def testMultipleRunsSummary(self):
+    """Compare each '-summary.dat' when we run two tests sequentially."""
+    input_file = ['endure_processor_multi.log']
+    output_files = [
+        'https___www_google_com_calendar_-EventListenerCount',
+        'https___www_google_com_calendar_-TotalDOMNodeCount',
+        'https___www_google_com_calendar_-V8MemoryUsed',
+        'https___www_gmail_com_-EventListenerCount',
+        'https___www_gmail_com_-TotalDOMNodeCount',
+        'https___www_gmail_com_-V8MemoryUsed']
+    self._testSummaryHelper(input_file, output_files)
+
+  def _testGraphListHelper(self, input_file, expected_graphfile):
+    """Compare the output 'graphs.dat' to what we expected."""
+    graphfile = 'graphs.dat'
+    output_file = [graphfile]
+
+    logs = self._ConstructParseAndCheckLogfiles(input_file, output_file,
+        process_log_utils.GraphingEndureLogProcessor)
+
+    actual = json.loads('\n'.join(logs[graphfile]))
+
+    with open(os.path.join(test_env.DATA_PATH, expected_graphfile)) as f:
+      expected = json.load(f)
+
+    self.assertEqual(len(actual), len(expected))
+    for graph in expected:
+      self.assertTrue(graph['name'] in actual)
+      for element in graph:
+        self.assertEqual(actual[graph['name']][element], graph[element])
+
+  def testGraphList(self):
+    """Compare the 'graphs.dat' file for a basic single test output."""
+    input_file = ['endure_processor.log']
+    expected_graphfile = 'endure_processor-graphs.dat'
+
+    self._testGraphListHelper(input_file, expected_graphfile)
+
+  def testMultipleRunsGraphList(self):
+    """Compare the 'graphs.dat' file when we run two tests sequentially."""
+    input_file = ['endure_processor_multi.log']
+    expected_graphfile = 'endure_processor-graphs_multi.dat'
+
+    self._testGraphListHelper(input_file, expected_graphfile)
+
+
 if __name__ == '__main__':
   unittest.main()

@@ -10,6 +10,8 @@ to help buildsteps parse these logs and identify if tests had anomalies.
 
 """
 
+import copy
+import csv
 import json
 import logging
 import os
@@ -536,8 +538,10 @@ class EndureGraph(object):
     self.units = None
     self.traces = {}
     self.units_x = None
-    self.stack = False
-    self.stack_order = []
+
+    # When parsing csv, the index locations where the x and y values are stored.
+    self.csv_index_x = None
+    self.csv_index_y = None
 
   def IsImportant(self):  # pylint: disable=R0201
     return False
@@ -834,70 +838,92 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
 class GraphingEndureLogProcessor(GraphingLogProcessor):
   """Handles additional processing for Chrome Endure data."""
+  ENDURE_HEADER_LINE_REGEX = re.compile(r'^url,')
+  ENDURE_RESULT_LINE_REGEX = re.compile(r'^http')
+  ENDURE_FIELD_NAME_REGEX = re.compile(
+      r'(?P<TRACE>.*)_(?P<COORDINATE>[XY]) \((?P<UNITS>.*)\)')
 
-  ENDURE_RESULTS_REGEX = re.compile(
-      r'(?P<IMPORTANT>\*)?RESULT '
-       '(?P<GRAPH>[^:]+): (?P<TRACE>[^=]+)= '
-       '(?P<VALUE>\[[^\]]+\]) (?P<UNITSY>\S+) (?P<UNITSX>\S+)')
-
-  ENDURE_VALUE_PAIR_REGEX = re.compile(
-      r'\((?P<TIME>[0-9\.]+),(?P<VALUE>[0-9\.]+)\)')
-
-  EVENT_RESULTS_REGEX = re.compile(
-      r'(?P<IMPORTANT>\*)?RESULT '
-       '_EVENT_: (?P<TRACE>[^=]+)= '
-       '(?P<EVENT>\[[^\]]+\])')
+  def __init__(self, *args, **kwargs):
+    GraphingLogProcessor.__init__(self, *args, **kwargs)
+    # A dictionary of trace names to EndureGraph objects, which is generated
+    # when parsing the header line.  This template will be used as the default
+    # EndureGraph when parsing results lines.
+    self._graph_template = {}
 
   def ProcessLine(self, line):
-    """Looks for Chrome Endure results: line to find the individual results."""
-    # super() should be used instead of GetParentClass().
-    # pylint: disable=W0212
-    endure_match = self.ENDURE_RESULTS_REGEX.search(line)
-    # TODO(dmikurube): Should handle EVENT lines.
-    # event_match = self.EVENT_RESULTS_REGEX.search(line)
-    if endure_match:
-      self._ProcessEndureResultLine(endure_match)
-    # elif event_match:
-    #   self._ProcessEventLine(event_match)
-    else:
-      chromium_utils.GetParentClass(self).ProcessLine(self, line)
+    """Parses one line of Chrome Endure output."""
+    if self.ENDURE_HEADER_LINE_REGEX.search(line):
+      self._ProcessEndureHeaderLine(line)
+    elif self.ENDURE_RESULT_LINE_REGEX.search(line):
+      self._ProcessEndureResultLine(line)
 
-  def _ProcessEndureResultLine(self, line_match):
-    match_dict = line_match.groupdict()
-    graph_name = match_dict['GRAPH'].strip()
-    trace_name = match_dict['TRACE'].strip()
+  def _ProcessEndureHeaderLine(self, line):
+    """Process the csv header line.
 
-    graph = self._graphs.get(graph_name, EndureGraph())
-    graph.units = match_dict['UNITSY'] or ''
-    graph.units_x = match_dict['UNITSX'] or ''
-    # TODO(dmikurube): Should change the way to indicate stacking.
-    if graph_name.endswith('-DMP'):
-      graph.stack = True
-      if not trace_name in graph.stack_order:
-        graph.stack_order.append(trace_name)
-    trace = graph.traces.get(trace_name, EndureTrace())
-    trace_values_str = match_dict['VALUE']
-    trace.important = match_dict['IMPORTANT'] or False
+    We will create default EndureGraph objects for each trace name with the
+    'units' attribute already set.  We also store the x/y indexes for each trace
+    so that we can lookup values when parsing the results lines.
+    This is an example of a csv header line:
+    url,EventListenerCount_X (seconds),EventListenerCount_Y (listeners),
+    TotalDOMNodeCount_X (seconds),TotalDOMNodeCount_Y (nodes)
+    """
+    # Need to reset graph template for every new header we parse.
+    self._graph_template = {}
 
-    if trace_values_str.startswith('[') and trace_values_str.endswith(']'):
-      pair_list = re.findall(self.ENDURE_VALUE_PAIR_REGEX, trace_values_str)
-      for match in pair_list:
-        if match:
-          trace.values.append([match[0], match[1]])
-        else:
-          logging.warning("Bad test output: '%s'" % trace_values_str)
-          return
-    else:
-      logging.warning("Bad test output: '%s'" % trace_values_str)
-      return
+    field_names = csv.reader([line]).next()
 
-    graph.traces[trace_name] = trace
-    self._graphs[graph_name] = graph
+    for index, field in enumerate(field_names):
+      match = self.ENDURE_FIELD_NAME_REGEX.match(field)
+      if not match:
+        continue
+      match_dict = match.groupdict()
+      trace_name = match_dict['TRACE'].strip()
+      coordinate = match_dict['COORDINATE'].strip()
+      units = match_dict['UNITS'].strip()
 
-    # TODO(dmikurube): Write an original version to compare with extected data.
-    # Store values in actual performance.
-    # self.TrackActualPerformance(graph=graph_name, trace=trace_name,
-    #                             value=trace.value, stddev=trace.stddev)
+      graph = self._graph_template.get(trace_name, EndureGraph())
+      if coordinate == 'X':
+        graph.units_x = units
+        graph.csv_index_x = index
+      else:
+        graph.units = units
+        graph.csv_index_y = index
+      self._graph_template[trace_name] = graph
+
+  def _ProcessEndureResultLine(self, line):
+    """Parse each regular results line in the csv input.
+
+    A typical results line will look like this:
+    https://www.google.com/calendar/,4,446,4,2847
+    """
+    assert self._graph_template
+
+    values = csv.reader([line]).next()
+
+    # Assume url is the first column.
+    test_name = self.url_as_file_safe_name(values[0])
+
+    # Iterate over all trace names discovered from the header.
+    for trace_name in self._graph_template:
+      graph_name = test_name + '-' + trace_name
+
+      # The default EndureGraph is copied from the template, which already
+      # contains all units and index information.
+      graph = self._graphs.get(
+          graph_name,
+          copy.deepcopy(self._graph_template[trace_name]))
+
+      trace = graph.traces.get(trace_name, EndureTrace())
+      trace.values.append([values[graph.csv_index_x],
+                           values[graph.csv_index_y]])
+
+      graph.traces[trace_name] = trace
+      self._graphs[graph_name] = graph
+
+  @staticmethod
+  def url_as_file_safe_name(url):
+    # Just replace all special characters in the url with underscore.
+    return re.sub('[^a-zA-Z0-9]', '_', url)
 
   def _FinalizeProcessing(self):
     self.__CreateSummaryOutput()
@@ -914,10 +940,7 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     But since Python dicts are *not* ordered, we'll need to construct the JSON
     manually so we don't lose the trace order.
     """
-    if graph.stack:
-      trace_order = graph.stack_order
-    else:
-      trace_order = sorted(graph.traces.keys())
+    trace_order = sorted(graph.traces.keys())
 
     # Now build the JSON.
     trace_json = ', '.join(
@@ -929,14 +952,8 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
 
     if not self._revision:
       raise Exception('revision is None')
-    if graph.stack:
-      stack_order = '[%s]' % ', '.join(
-          ['"%s"' % name for name in graph.stack_order])
-      return ('{"traces": {%s}, "rev": "%s", "stack": true, '
-              '"stack_order": %s}'
-              % (trace_json, self._revision, stack_order))
-    else:
-      return ('{"traces": {%s}, "rev": "%s", "stack": false}'
+
+    return ('{"traces": {%s}, "rev": "%s", "stack": false}'
               % (trace_json, self._revision))
 
   def __CreateSummaryOutput(self):
