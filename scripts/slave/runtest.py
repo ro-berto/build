@@ -1218,7 +1218,8 @@ def main():
     # Set verbosity=1 so LSan would always print suppression statistics.
     os.environ['LSAN_OPTIONS'] = (
         'suppressions=src/tools/lsan/suppressions.txt '
-        'verbosity=1 ')
+        'verbosity=1 '
+        'strip_path_prefix=build/src/out/Release/../../ ')
     os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
     # Disable sandboxing under LSan.
     args.append('--no-sandbox')
@@ -1231,7 +1232,8 @@ def main():
     # Avoid aggressive memcmp checks until http://crbug.com/178677 is fixed.
     # Also do not replace memcpy/memmove/memset to suppress a report in OpenCL,
     # see http://crbug.com/162461.
-    common_asan_options = 'strict_memcmp=0 replace_intrin=0 '
+    common_asan_options = ('strict_memcmp=0 replace_intrin=0 '
+                           'strip_path_prefix=build/src/out/Release/../../ ')
     if options.factory_properties.get('lsan', False):
       # On ASan+LSan bots we enable leak detection. Also, since sandbox is
       # disabled under LSan, we can symbolize.
