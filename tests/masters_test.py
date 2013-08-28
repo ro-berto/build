@@ -242,6 +242,7 @@ def main(argv):
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.devtools': 'DevTools',
       'master.experimental': 'Experimental',
+      'master.push.canary': 'PushCanary',
       'master.tryserver.chromium': 'TryServer',
       'master.tryserver.libyuv': 'LibyuvTryServer',
       'master.tryserver.nacl': 'NativeClientTryServer',

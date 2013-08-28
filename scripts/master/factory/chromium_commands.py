@@ -671,6 +671,25 @@ class ChromiumCommands(commands.FactoryCommands):
                           total_shards=total_shards,
                           shard_index=shard_index)
 
+  def AddPushCanaryTests(self, factory_properties=None):
+    description = ''
+    options = ['--lib=browser_tests']
+    options.append('--gtest_also_run_disabled_tests')
+    total_shards = factory_properties.get('browser_total_shards')
+    shard_index = factory_properties.get('browser_shard_index')
+    options.append('--gtest_filter=PushMessagingCanaryTest.*')
+    options.append('--password-file-for-test=' +
+                   '/usr/local/google/work/chromium/test_pass1.txt')
+    options.append('--override-user-data-dir=' +
+                   '/usr/local/google/work/chromium/foo')
+    options.append('--ui-test-action-timeout=120000')
+    options.append('--v=2')
+
+    self.AddGTestTestStep('browser_tests', factory_properties,
+                          description, options,
+                          total_shards=total_shards,
+                          shard_index=shard_index)
+
   def AddBuildrunnerBrowserTests(self, factory_properties):
     description = ''
     options = ['--lib=browser_tests']

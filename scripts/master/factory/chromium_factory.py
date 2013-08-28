@@ -484,6 +484,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBrowserTests(fp)
     if R('browser_tests_br'):
       f.AddBuildrunnerBrowserTests(fp)
+    if R('push_canary_tests'):
+      f.AddPushCanaryTests(fp)
     if R('chromedriver2_tests'):
       f.AddGTestTestStep('chromedriver2_tests', fp)
     if R('chromedriver2_tests_br'):
