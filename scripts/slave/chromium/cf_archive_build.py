@@ -36,6 +36,8 @@ def ShouldPackageFile(filename, target):
     file_filter = '^.+\.(a|dSYM)$'
   elif chromium_utils.IsLinux():
     file_filter = '^.+\.(o|a|d)$'
+  elif chromium_utils.IsWindows():
+    file_filter = '^.+\.(obj|lib|pch|exp)$'
   else:
     raise NotImplementedError('%s is not supported.' % sys.platform)
   if re.match(file_filter, filename):
