@@ -952,6 +952,18 @@ def main_win(options, args):
     command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
+
+  # The ASan tests needs to run under agent_logger in order to get the stack
+  # traces. The win ASan builder is responsible to put it in the
+  # build_dir/target/ directory.
+  if options.factory_properties.get('asan'):
+    logfile = test_exe_path + '.asan_log'
+    command = ['%s' % os.path.join(build_dir,
+                                   options.target,
+                                   'agent_logger.exe'),
+               'start',
+               '--output-file=%s' % logfile,
+               '--'] + command
   command.extend(args[1:])
 
   # Nuke anything that appears to be stale chrome items in the temporary
