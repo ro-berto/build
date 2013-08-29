@@ -516,6 +516,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('installer_br'):
       f.AddBuildrunnerInstallerTests(fp)
 
+    if R('mini_installer'):
+      f.AddMiniInstallerTestStep(fp)
+
     # WebKit-related tests:
     if R('webkit_compositor_bindings_unittests'):
       f.AddGTestTestStep('webkit_compositor_bindings_unittests', fp)

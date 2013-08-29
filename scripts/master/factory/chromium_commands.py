@@ -98,6 +98,11 @@ class ChromiumCommands(commands.FactoryCommands):
     self._nacl_integration_tester_tool = J(
         'src', 'chrome', 'test', 'nacl_test_injection',
         'buildbot_nacl_integration.py')
+    self._mini_installer_tests_runner = J('src', 'chrome', 'test',
+                                          'mini_installer', 'test_installer.py')
+    self._mini_installer_tests_config = J('src', 'chrome', 'test',
+                                          'mini_installer', 'config',
+                                          'config.config')
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
@@ -1594,6 +1599,13 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties,
                               cmd_name='browser_tests',
                               cmd_options=cmd_options)
+
+  def AddMiniInstallerTestStep(self, factory_properties):
+    cmd = [self._python, self._mini_installer_tests_runner,
+           self._mini_installer_tests_config]
+    self.AddTestStep(chromium_step.AnnotatedCommand, 'test_mini_installer', cmd,
+                     halt_on_failure=True, timeout=600,
+                     do_step_if=self.TestStepFilter)
 
   def AddChromebotServer(self, factory_properties=None):
     """Add steps to run Chromebot script for server.
