@@ -408,7 +408,8 @@ def submit_email(email_app, build_data, secret):
 
 def close_tree_if_failure(failed_builds, username, password, tree_status_url,
                           set_status, sheriff_url, default_from_email,
-                          email_app_url, secret):
+                          email_app_url, secret, domain, filter_domain,
+                          disable_domain_filter):
   """Given a list of failed builds, close the tree and email tree watchers."""
   if not failed_builds:
     logging.info( 'no failed builds!')
@@ -494,9 +495,19 @@ def close_tree_if_failure(failed_builds, username, password, tree_status_url,
     if not email_app_url:
       logging.warn('no email_app_url specified, no email sent!')
 
+  filtered_emails_to_send = []
+  for email in emails_to_send:
+    new_watchers  = [x if '@' in x else (x + '@' + domain) for x in email[0]]
+    if not disable_domain_filter:
+      new_watchers = [x for x in new_watchers if x.split('@')[-1] in
+                      filter_domain]
+    if new_watchers:
+      filtered_emails_to_send.append((new_watchers, email[1]))
+
   # Deduplicate emails.
   keyfunc = lambda x: x[1]
-  for k, g in itertools.groupby(sorted(emails_to_send, key=keyfunc), keyfunc):
+  for k, g in itertools.groupby(sorted(filtered_emails_to_send, key=keyfunc),
+                                keyfunc):
     watchers = list(reduce(operator.or_, [set(e[0]) for e in g], set()))
     build_data = json.loads(k)
     build_data['recipients'] = watchers
@@ -552,6 +563,12 @@ def get_options():
                     help='URL for the status app')
   parser.add_option('--status-user', default='buildbot@chromium.org',
                     help='username for the status app')
+  parser.add_option('--disable-domain-filter', action='store_true',
+                    help='allow emailing any domain')
+  parser.add_option('--filter-domain', default='chromium.org,google.com',
+                    help='only email users in these comma separated domains')
+  parser.add_option('--email-domain', default='google.com',
+                    help='default email domain to add to users without one')
   parser.add_option('--sheriff-url',
                     default='http://build.chromium.org/p/chromium/%s.js',
                     help='URL pattern for the current sheriff list')
@@ -597,6 +614,8 @@ def get_options():
       parser.error('Must provide email app auth with  %s.' % (
           options.email_app_secret_file))
 
+  options.filter_domain = options.filter_domain.split(',')
+
   args = [url.rstrip('/') for url in args]
 
   return options, args
@@ -638,7 +657,9 @@ def main():
   close_tree_if_failure(failed_builds, options.status_user, options.password,
                         options.status_url, options.set_status,
                         options.sheriff_url, options.default_from_email,
-                        options.email_app_url, options.email_app_secret)
+                        options.email_app_url, options.email_app_secret,
+                        options.email_domain, options.filter_domain,
+                        options.disable_domain_filter)
 
   if not options.skip_build_db_update:
     save_build_db(build_db, options.build_db)

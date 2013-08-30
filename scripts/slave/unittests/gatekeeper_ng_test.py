@@ -1341,6 +1341,44 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org',
                                                   'a_watcher@chromium.org'])
 
+  def testEmailFilter(self):
+    """Test that no email is sent if the email isn't in the domain filter."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file,
+                     '--filter-domain=squirrels.net,squirrels.com'])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+    self.assertNotIn(self.mailer_url, urls)
+
+  def testDisableEmailFilter(self):
+    """Test that no email is sent if the email isn't in the domain filter."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file,
+                     '--disable-domain-filter',
+                     '--filter-domain=squirrels.net,squirrels.com'])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    self.call_gatekeeper()
+
+    # Check that gatekeeper indeed sent an email.
+    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
+    mailer_data = GatekeeperTest.decode_param_json(
+        self.url_calls[-1]['params'])
+    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
   def testMasterNotConfigured(self):
     """Check that gatekeeper fails if a master isn't in config json."""
 
