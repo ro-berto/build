@@ -1,0 +1,67 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': 'DEPS', 'managed': True, 'name': 'v8', 'safesync_url': None, 'url': 'http://v8.googlecode.com/svn/branches/bleeding_edge'}]\ntarget_os = []\ntarget_os_only = False"
+    ],
+    "name": "gclient setup",
+    "seed_steps": [
+      "gclient setup",
+      "gclient revert",
+      "gclient sync"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS_ROOT]/gclient"
+    ],
+    "name": "gclient revert"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "sync",
+      "--nohooks"
+    ],
+    "name": "gclient sync"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "v8_target_arch=ia32"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD_ROOT]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "v8",
+      "--src-dir",
+      "v8",
+      "--build-tool",
+      "make",
+      "buildbot"
+    ],
+    "name": "compile"
+  }
+]
