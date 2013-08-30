@@ -721,7 +721,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
     if R('create_profiles'):
-      f.AddProfileCreationTest(fp, 'small_profile')
+      # pylint: disable=W0212
+      f.AddProfileCreationTest(fp, os.path.join(self._build_dir, f._target),
+          'small_profile')
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
@@ -734,14 +736,20 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_warm',
                          factory_properties=fp)
     if R('startup_warm_dirty'):
-      fp['extra_args'] = [
-          '--profile-type=small_profile', '--warm', '--page-repeat=20']
+      # pylint: disable=W0212
+      profile_dir = os.path.join(self._build_dir, f._target,
+          'generated_profiles', 'small_profile')
+      fp['extra_args'] = ['--warm', '--page-repeat=20',
+          '--profile-dir=%s' % profile_dir]
       f.AddTelemetryTest('startup', 'blank_page.json',
                          step_name='startup_warm_dirty',
                          factory_properties=fp)
     if R('startup_cold_dirty'):
-      fp['extra_args'] = [
-          '--profile-type=small_profile', '--cold', '--page-repeat=5']
+      # pylint: disable=W0212
+      profile_dir = os.path.join(self._build_dir, f._target,
+          'generated_profiles', 'small_profile')
+      fp['extra_args'] = ['--cold', '--page-repeat=5',
+          '--profile-dir=%s' % profile_dir]
       f.AddTelemetryTest('startup', 'blank_page.json',
                          step_name='startup_cold_dirty',
                          factory_properties=fp)
