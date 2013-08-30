@@ -906,6 +906,19 @@ class ChromiumCommands(commands.FactoryCommands):
                               tool_opts=tool_options, py_script=True,
                               dashboard_url=dashboard_url)
 
+  def AddProfileCreationTest(self, factory_properties, profile_type_to_create):
+    """Generate a profile for use by Telemetry tests.
+
+    Args:
+      factory_properties: A dictionary of factory property values.
+      profile_type_to_create: A string specifying the profile type to create.
+    """
+    cmd_name = self.PathJoin('src', 'tools', 'perf', 'generate_profile')
+    cmd_args = ['-v', '--browser=release',
+                '--profile-type-to-generate=' + profile_type_to_create]
+    cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
+    self.AddTestStep(chromium_step.AnnotatedCommand,
+        'Generating Profiles for Telemetry', cmd, timeout=20*60)
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,

@@ -694,6 +694,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('dom_perf', 'dom_perf.json', factory_properties=fp)
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
+    if R('create_profiles'):
+      f.AddProfileCreationTest(fp, 'small_profile')
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
@@ -705,6 +707,19 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       fp['extra_args'] = ['--page-repeat=20', '--warm']
       f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_warm',
                          factory_properties=fp)
+    if R('startup_warm_dirty'):
+      fp['extra_args'] = [
+          '--profile-type=small_profile', '--warm', '--page-repeat=20']
+      f.AddTelemetryTest('startup', 'blank_page.json',
+                         step_name='startup_warm_dirty',
+                         factory_properties=fp)
+    if R('startup_cold_dirty'):
+      fp['extra_args'] = [
+          '--profile-type=small_profile', '--cold', '--page-repeat=5']
+      f.AddTelemetryTest('startup', 'blank_page.json',
+                         step_name='startup_cold_dirty',
+                         factory_properties=fp)
+
     if R('sizes'):
       f.AddSizesTests(fp)
     if R('sizes_br'):
