@@ -28,18 +28,15 @@ class RepoApi(recipe_api.RecipeApi):
   def repo_path(self, path):
     self._repo_path = path
 
-  def init(self, url, branch=None, **kwargs):
+  def init(self, url, *args, **kwargs):
     """Perform a 'repo init' step with the given manifest url."""
-    branch_args = []
-    if branch:
-      branch_args = ['-b', branch]
-    yield self.m.step('repo init',
-      [self.repo_path, 'init', '-u', url] + branch_args,
-      **kwargs)
+    return self.m.step('repo init',
+                       [self.repo_path, 'init', '-u', url] + list(args),
+                       **kwargs)
 
   def sync(self, *args, **kwargs):
     """Sync an already-init'd repo."""
     # NOTE: This does not set self.m.path.checkout.
-    yield self.m.step('repo sync',
-                      [self.repo_path, 'sync'] + list(args),
-                      **kwargs)
+    return self.m.step('repo sync',
+                       [self.repo_path, 'sync'] + list(args),
+                       **kwargs)

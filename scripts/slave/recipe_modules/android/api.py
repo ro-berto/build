@@ -91,7 +91,7 @@ class AOSPApi(recipe_api.RecipeApi):
         'cp', repo_in_android_path, repo_copy_path])
       self.m.repo.repo_path = repo_copy_path
     yield self.m.path.makedirs('android source root', self.build_path)
-    yield self.m.repo.init(self.c.repo.url, self.c.repo.branch,
+    yield self.m.repo.init(self.c.repo.url, '-b', self.c.repo.branch,
                            cwd=self.build_path)
     self.m.path.mock_add_paths(repo_in_android_path)
 
