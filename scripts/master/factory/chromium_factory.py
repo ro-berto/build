@@ -875,6 +875,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       P('pyauto_perf_tests', suite='PERFORMANCE', src_base='..',
         factory_properties=fp, perf=True)
 
+    # TODO(machenbach): Remove as soon as endure has fully migrated to
+    # telemetry:
     # Endurance tests.
     endure_tests = {
       'control': [
@@ -926,6 +928,22 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('endure_calendar_tests'):
       f.AddTelemetryTest('endure', 'calendar_forward_backward.json',
                          step_name='endure_calendar', factory_properties=fp,
+                         timeout=6000)
+    if R('endure_gmail_expand_collapse_tests'):
+      f.AddTelemetryTest('endure', 'gmail_expand_collapse_conversation.json',
+                         step_name='endure_gmail_expand_collapse',
+                         factory_properties=fp, timeout=6000)
+    if R('endure_gmail_alt_label_tests'):
+      f.AddTelemetryTest('endure', 'gmail_alt_two_labels.json',
+                         step_name='endure_gmail_alt_labels',
+                         factory_properties=fp, timeout=6000)
+    if R('endure_gmail_alt_threadlist_tests'):
+      f.AddTelemetryTest('endure', 'gmail_alt_threadlist_conversation.json',
+                         step_name='endure_gmail_alt_threadlist',
+                         factory_properties=fp, timeout=6000)
+    if R('endure_plus_tests'):
+      f.AddTelemetryTest('endure', 'plus_alt_posts_photos.json',
+                         step_name='endure_plus', factory_properties=fp,
                          timeout=6000)
 
     # HTML5 media tag performance/functional test using PyAuto.
