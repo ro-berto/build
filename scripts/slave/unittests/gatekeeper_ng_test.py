@@ -128,7 +128,7 @@ class GatekeeperTest(unittest.TestCase):
     self.url_calls = []
 
     self.status_url = 'https://chromium-status.appspot.com/status'
-    self.mailer_url = 'https://chromium-gatekeeper-mailer.appspot.com/email'
+    self.mailer_url = 'https://chromium-build.appspot.com/mailer/email'
     self.handle_url_str(self.mailer_url, '')
     self.handle_url_str(self.status_url, 'the status')
 

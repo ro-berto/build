@@ -574,7 +574,7 @@ def get_options():
                     default='buildbot@chromium.org',
                     help='default email address to send from')
   parser.add_option('--email-app-url',
-                    default='https://chromium-gatekeeper-mailer.appspot.com',
+                    default='https://chromium-build.appspot.com/mailer',
                     help='URL of the application to send email from')
   parser.add_option('--email-app-secret-file',
                     default='.gatekeeper_secret',
