@@ -12,7 +12,6 @@ steps to close and which parties to notify are in a local gatekeeper.json file.
 """
 
 from contextlib import closing
-import datetime
 import getpass
 import hashlib
 import hmac
@@ -26,6 +25,7 @@ import os
 import random
 import re
 import sys
+import time
 import urllib
 import urllib2
 
@@ -372,22 +372,18 @@ def get_sheriffs(classes, base_url):
 
 
 def hash_message(message, url, secret):
-  # Make this backwards compatable with python 2.6, since total_seconds()
-  # exists only in python 2.7.
-  utc_now_td = (datetime.datetime.utcnow() -
-      datetime.datetime.utcfromtimestamp(0))
-
-  utc_now = utc_now_td.days * 86400 + utc_now_td.seconds
+  utc_now = time.time()
   salt = random.getrandbits(32)
-  hasher = hmac.new(secret, '%s:%d:%d' % (message, utc_now, salt),
-                    hashlib.sha256)
+  hasher = hmac.new(secret, message, hashlib.sha256)
+  hasher.update(str(utc_now))
+  hasher.update(str(salt))
   client_hash = hasher.hexdigest()
 
   return {'message': message,
           'time': utc_now,
           'salt': salt,
           'url': url,
-          'sha256': client_hash,
+          'hmac-sha256': client_hash,
          }
 
 
