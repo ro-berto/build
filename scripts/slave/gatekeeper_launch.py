@@ -21,7 +21,7 @@ def main():
   master_urls = ['http://build.chromium.org/p/chromium']
 
   json = os.path.join(SLAVE_DIR, 'gatekeeper.json')
-  args = ['-v', '--no-email-app', '--json=%s' % json]
+  args = ['-v', '--json=%s' % json]
 
   script = os.path.join(SLAVE_DIR, 'gatekeeper_ng.py')
   cmd = [sys.executable, script]
