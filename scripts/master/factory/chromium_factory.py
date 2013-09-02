@@ -883,75 +883,26 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       P('pyauto_perf_tests', suite='PERFORMANCE', src_base='..',
         factory_properties=fp, perf=True)
 
-    # TODO(machenbach): Remove as soon as endure has fully migrated to
-    # telemetry:
     # Endurance tests.
-    endure_tests = {
-      'control': [
-        'perf_endure.ChromeEndureControlTest.testControlAttachDetachDOMTree',
-        'perf_endure.ChromeEndureControlTest.'
-          'testControlAttachDetachDOMTreeWebDriver',
-      ],
-      'docs': [
-        'perf_endure.ChromeEndureDocsTest.testDocsAlternatelyClickLists',
-      ],
-      'gmail': [
-        'perf_endure.ChromeEndureGmailTest.testGmailComposeDiscard',
-        'perf_endure.ChromeEndureGmailTest.'
-          'testGmailAlternateThreadlistConversation',
-        'perf_endure.ChromeEndureGmailTest.testGmailAlternateTwoLabels',
-        'perf_endure.ChromeEndureGmailTest.testGmailExpandCollapseConversation',
-      ],
-      'indexeddb': [
-        'perf_endure.IndexedDBOfflineTest.testOfflineOnline',
-      ],
-      'plus': [
-        'perf_endure.ChromeEndurePlusTest.testPlusAlternatelyClickStreams',
-      ],
-    }
-    # Live sites.
-    if R('endure_control_tests'):
-      f.AddChromeEndureTest('control', endure_tests['control'], fp)
-    if R('endure_docs_tests'):
-      f.AddChromeEndureTest('docs', endure_tests['docs'], fp)
-    if R('endure_gmail_tests'):
-      f.AddChromeEndureTest('gmail', endure_tests['gmail'], fp)
-    if R('endure_indexeddb_tests'):
-      f.AddChromeEndureTest('indexeddb', endure_tests['indexeddb'],
-                            fp)
-    if R('endure_plus_tests'):
-      f.AddChromeEndureTest('plus', endure_tests['plus'], fp)
-    # Web Page Replay.
-    if R('endure_docs_wpr_tests'):
-      f.AddChromeEndureTest('docs_wpr', endure_tests['docs'], fp,
-                            wpr=True)
-    if R('endure_gmail_wpr_tests'):
-      f.AddChromeEndureTest('gmail_wpr', endure_tests['gmail'], fp,
-                            wpr=True)
-    if R('endure_plus_wpr_tests'):
-      f.AddChromeEndureTest('plus_wpr', endure_tests['plus'], fp,
-                            wpr=True)
-
-    # Endure with telemetry.
     if R('endure_calendar_tests'):
       f.AddTelemetryTest('endure', 'calendar_forward_backward.json',
-                         step_name='endure_calendar', factory_properties=fp,
+                         step_name='calendar', factory_properties=fp,
                          timeout=6000)
     if R('endure_gmail_expand_collapse_tests'):
       f.AddTelemetryTest('endure', 'gmail_expand_collapse_conversation.json',
-                         step_name='endure_gmail_expand_collapse',
+                         step_name='gmail_exp_col',
                          factory_properties=fp, timeout=6000)
     if R('endure_gmail_alt_label_tests'):
       f.AddTelemetryTest('endure', 'gmail_alt_two_labels.json',
-                         step_name='endure_gmail_alt_labels',
+                         step_name='gmail_labels',
                          factory_properties=fp, timeout=6000)
     if R('endure_gmail_alt_threadlist_tests'):
       f.AddTelemetryTest('endure', 'gmail_alt_threadlist_conversation.json',
-                         step_name='endure_gmail_alt_threadlist',
+                         step_name='gmail_threadlist',
                          factory_properties=fp, timeout=6000)
     if R('endure_plus_tests'):
       f.AddTelemetryTest('endure', 'plus_alt_posts_photos.json',
-                         step_name='endure_plus', factory_properties=fp,
+                         step_name='plus', factory_properties=fp,
                          timeout=6000)
 
     # HTML5 media tag performance/functional test using PyAuto.

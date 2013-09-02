@@ -986,67 +986,6 @@ class ChromiumCommands(commands.FactoryCommands):
                      timeout=timeout, workdir=workdir,
                      do_step_if=self.GetTestStepFilter(factory_properties))
 
-  def AddChromeEndureTest(self, test_class_name, pyauto_test_list,
-                          factory_properties, timeout=1200, wpr=False):
-    """Adds a step to run PyAuto-based Chrome Endure tests.
-
-    Args:
-      test_class_name: A string name for this class of tests.  For example,
-          'control' for Endure 'control' tests.
-      pyauto_test_list: A list of strings, where each string is the full name
-          of a pyauto test to run (file.class.test_name).
-      factory_properties: A dictionary of factory property values.
-      timeout: The buildbot timeout for this step, in seconds.  The step will
-          fail if the test does not produce any output within this time.
-      wpr: A boolean indicating whether or not to run the test using Web Page
-          replay (WPR).  If using WPR, the test will replay webapp interactions
-          from a pre-recorded file, rather than using the live site.
-    """
-    pyauto_script = self.PathJoin('src', 'chrome', 'test', 'functional',
-                                  'pyauto_functional.py')
-    # Only run on linux for now.
-    if not self._target_platform.startswith('linux'):
-      return
-
-    env = factory_properties.get('test_env', {})
-    if 'PYTHONPATH' not in env:
-      env['PYTHONPATH'] = '.'
-    if 'GSUTIL' not in env:
-      env['GSUTIL'] = self._gsutil
-    if not wpr:
-      env['ENDURE_NO_WPR'] = '1'
-
-    factory_properties = factory_properties.copy()
-    for pyauto_test_name in pyauto_test_list:
-      tool_opts = []
-      if not factory_properties.get('use_xvfb_on_linux'):
-        tool_opts = ['--no-xvfb']
-
-      test_name = (test_class_name.replace('-', '_') + '-' +
-                   pyauto_test_name[pyauto_test_name.rfind('.') + 1:])
-      step_name = 'endure_' + test_name
-      factory_properties['step_name'] = step_name
-
-      pyauto_cmd = self.GetAnnotatedPerfCmd(
-          gtest_filter=None,
-          log_type='endure',
-          test_name=test_name,
-          cmd_name=pyauto_script,
-          tool_opts=tool_opts,
-          options=['-v'],
-          factory_properties=factory_properties,
-          py_script=True)
-      pyauto_cmd.append(pyauto_test_name)
-
-      self.AddTestStep(chromium_step.AnnotatedCommand,
-                       step_name,
-                       pyauto_cmd,
-                       env=env,
-                       timeout=timeout,
-                       target=self._target,
-                       factory_properties=factory_properties,
-                       do_step_if=self.GetTestStepFilter(factory_properties))
-
   def AddDevToolsTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
 
