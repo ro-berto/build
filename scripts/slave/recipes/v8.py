@@ -3,54 +3,13 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'gclient',
-  'path',
-  'platform',
-  'properties',
-  'python',
+  'v8',
 ]
 
-
-def GetV8TargetArchitecture(api):
-  """Return v8ish architecture names."""
-  target_arch = api.properties.get('target_arch', 'intel')
-  bits = api.properties.get('bits', None) or api.platform.bits
-
-  if target_arch == 'arm':
-    return 'arm'
-  elif bits == 64:
-    return 'x64'
-  else:
-    return 'ia32'
-
-
 def GenSteps(api):
-  # Checkout.
-  cfg = api.gclient.make_config()
-  soln = cfg.solutions.add()
-  soln.name = 'v8'
-  soln.url = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
-  yield api.gclient.checkout(cfg)
-
-  # Hooks.
-  gclient_env = {
-    'GYP_DEFINES': 'v8_target_arch=%s' % GetV8TargetArchitecture(api),
-  }
-  yield api.gclient.runhooks(env=gclient_env)
-
-  # Compile.
-  compile_tool = api.path.build('scripts', 'slave', 'compile.py')
-  build_config = api.properties.get('build_config', 'Release')
-  compile_args = [
-    '--target', build_config,
-    '--build-dir', 'v8',
-    '--src-dir', 'v8',
-    '--build-tool', 'make',
-    'buildbot',
-  ]
-  if api.properties.get('clobber') is not None:
-    compile_args.append('--clobber')
-  yield api.python('compile', compile_tool, compile_args)
+  yield api.v8.checkout()
+  yield api.v8.runhooks()
+  yield api.v8.compile()
 
   # Tests.
   # TODO(machenbach): Implement the tests.
