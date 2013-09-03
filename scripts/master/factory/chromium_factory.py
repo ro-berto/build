@@ -520,6 +520,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('content_browsertests', fp)
     if R('content_browsertests_br'):
       f.AddBuildrunnerGTest('content_browsertests', fp)
+    if R('ash_browsertests'):
+      ash_fp = fp.copy()
+      ash_fp['browser_tests_extra_options'] = ['--ash-browsertests']
+      f.AddBuildrunnerBrowserTests(ash_fp)
 
     # Big, UI tests:
     if R('automated_ui'):

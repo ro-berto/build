@@ -703,6 +703,7 @@ class ChromiumCommands(commands.FactoryCommands):
     total_shards = factory_properties.get('browser_total_shards')
     shard_index = factory_properties.get('browser_shard_index')
     options.append(factory_properties.get('browser_tests_filter', []))
+    options.extend(factory_properties.get('browser_tests_extra_options', []))
 
     options = filter(None, options)
 
