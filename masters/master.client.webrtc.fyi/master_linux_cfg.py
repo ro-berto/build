@@ -22,6 +22,11 @@ tests = [
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
+    'libjingle_media_unittest',
+    'libjingle_p2p_unittest',
+    'libjingle_peerconnection_unittest',
+    'libjingle_sound_unittest',
+    'libjingle_unittest',
     'metrics_unittests',
     'modules_tests',
     'modules_unittests',
@@ -30,6 +35,7 @@ tests = [
     'test_support_unittests',
     'tools_unittests',
     'video_engine_core_unittests',
+    'video_engine_tests',
     'voice_engine_unittests',
 ]
 

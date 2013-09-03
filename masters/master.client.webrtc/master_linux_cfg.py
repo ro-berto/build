@@ -36,6 +36,7 @@ tests = [
     'test_support_unittests',
     'tools_unittests',
     'video_engine_core_unittests',
+    'video_engine_tests',
     'voice_engine_unittests',
 ]
 
@@ -44,9 +45,9 @@ baremetal_tests = [
     'audioproc_perf',
     'isac_fixed_perf',
     'video_capture_tests',
+    'video_engine_tests',
     'vie_auto_test',
     'voe_auto_test',
-    'video_engine_tests',
 ]
 
 ninja_options = ['--build-tool=ninja']
