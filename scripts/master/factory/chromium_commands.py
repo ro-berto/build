@@ -123,7 +123,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddArchiveStep(self, data_description, base_url, link_text, command,
                      more_link_url=None, more_link_text=None,
-                     index_suffix=''):
+                     index_suffix='', include_last_change=True):
     step_name = ('archive_%s' % data_description).replace(' ', '_')
     self._factory.addStep(archive_command.ArchiveCommand,
                           name=step_name,
@@ -135,7 +135,8 @@ class ChromiumCommands(commands.FactoryCommands):
                           more_link_url=more_link_url,
                           more_link_text=more_link_text,
                           command=command,
-                          index_suffix=index_suffix)
+                          index_suffix=index_suffix,
+                          include_last_change=include_last_change)
 
   def AddUploadPerfExpectations(self, factory_properties=None):
     """Adds a step to the factory to upload perf_expectations.json to the
@@ -1163,6 +1164,7 @@ class ChromiumCommands(commands.FactoryCommands):
     driver_name = factory_properties.get('driver_name')
     additional_drt_flag = factory_properties.get('additional_drt_flag')
     webkit_test_options = factory_properties.get('webkit_test_options')
+    gs_bucket = factory_properties.get('gs_bucket')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -1237,11 +1239,22 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd = self.AddBuildProperties(cmd)
       cmd = self.AddFactoryProperties(factory_properties, cmd)
 
+      if gs_bucket:
+        base_url = ("https://storage.googleapis.com/"
+                    "chromium-layout-test-archives/%(build_name)s")
+        include_last_change = False
+      else:
+        # TODO(dpranke): Delete this path once the main bots are flipped over
+        # to using Google Storage.
+        base_url = _GetArchiveUrl('layout_test_results')
+        include_last_change = True
+
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
-          base_url=_GetArchiveUrl('layout_test_results'),
+          base_url=base_url,
           link_text='layout test ' + result_str,
-          command=cmd)
+          command=cmd,
+          include_last_change=include_last_change)
 
   def AddRunCrashHandler(self, build_dir=None, target=None):
     build_dir = build_dir or self._build_dir
