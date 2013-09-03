@@ -590,6 +590,9 @@ class DartUtils(object):
         factory = m_v8_linux_stable.V8Factory(
             options=v8_linux_default_opts,
             target='Release',
+            factory_properties={
+              'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
+            },
             tests=[],
             target_arch=arch)
       elif name == 'v8-win-release':
@@ -597,12 +600,18 @@ class DartUtils(object):
             options=v8_win_default_opts,
             project='build\\all.sln',
             target='Release',
+            factory_properties={
+              'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
+            },
             tests=[],
             target_arch=arch)
       elif name == 'v8-mac-release':
         factory = m_v8_mac_stable.V8Factory(
             options=v8_mac_default_opts,
             target='Release',
+            factory_properties={
+              'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
+            },
             tests=[],
             target_arch=arch)
       else:
