@@ -349,10 +349,10 @@ def DumpSetup(c, important=None, filename='config.current.txt'):
   from buildbot.process.factory import BuildFactory
 
   def hacky_repr(obj, name, indent, important):
-    def hacky_repr_class(obj, indent, important):
+    def hacky_repr_class(obj, indent, subdent, important):
       r = '%s {\n' % obj.__class__.__name__
       for (n, v) in vars(obj).iteritems():
-        r += hacky_repr(v, "%s: " % n, indent, important) + ',\n'
+        r += hacky_repr(v, "%s: " % n, indent + subdent, important) + ',\n'
       r += indent + '}'
       return r
 
@@ -367,7 +367,7 @@ def DumpSetup(c, important=None, filename='config.current.txt'):
 
     subdent = '  '
     if any(isinstance(obj, c) for c in important):
-      r = hacky_repr_class(obj, indent + subdent, important)
+      r = hacky_repr_class(obj, indent, subdent, important)
     elif len(r) > max(30, 76-len(indent)-len(name)) and \
         not isinstance(obj, basestring):
       if isinstance(obj, list):
