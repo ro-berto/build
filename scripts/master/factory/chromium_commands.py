@@ -1165,7 +1165,6 @@ class ChromiumCommands(commands.FactoryCommands):
     driver_name = factory_properties.get('driver_name')
     additional_drt_flag = factory_properties.get('additional_drt_flag')
     webkit_test_options = factory_properties.get('webkit_test_options')
-    gs_bucket = factory_properties.get('gs_bucket')
 
     builder_name = '%(buildername)s'
     result_str = 'results'
@@ -1231,6 +1230,8 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.TestStepFilter)
 
     if archive_results:
+      gs_bucket = 'chromium-layout-test-archives'
+      factory_properties['gs_bucket'] = 'gs://' + gs_bucket
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
              '--build-dir', self._build_dir,
@@ -1240,22 +1241,14 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd = self.AddBuildProperties(cmd)
       cmd = self.AddFactoryProperties(factory_properties, cmd)
 
-      if gs_bucket:
-        base_url = ("https://storage.googleapis.com/"
-                    "chromium-layout-test-archives/%(build_name)s")
-        include_last_change = False
-      else:
-        # TODO(dpranke): Delete this path once the main bots are flipped over
-        # to using Google Storage.
-        base_url = _GetArchiveUrl('layout_test_results')
-        include_last_change = True
-
+      base_url = ("https://storage.googleapis.com/" +
+                  gs_bucket + "/%(build_name)s" )
       self.AddArchiveStep(
           data_description='webkit_tests ' + result_str,
           base_url=base_url,
           link_text='layout test ' + result_str,
           command=cmd,
-          include_last_change=include_last_change)
+          include_last_change=False)
 
   def AddRunCrashHandler(self, build_dir=None, target=None):
     build_dir = build_dir or self._build_dir
