@@ -409,7 +409,7 @@ config = {
         properties: Properties(**{}),
         },
       'name': 'daisy full',
-      'slavenames': ['build5-m2'],
+      'slavenames': ['build24-m2'],
     },
     {
       'auto_reboot': False,
@@ -460,7 +460,7 @@ config = {
         properties: Properties(**{}),
         },
       'name': 'arm generic full',
-      'slavenames': ['build8-m2'],
+      'slavenames': ['build36-m2'],
     },
     {
       'auto_reboot': False,
@@ -576,7 +576,7 @@ config = {
         properties: Properties(**{}),
         },
       'name': 'refresh packages',
-      'slavenames': ['build3-m2'],
+      'slavenames': ['build12-m2'],
     },
     {
       'auto_reboot': False,
@@ -627,7 +627,7 @@ config = {
         properties: Properties(**{}),
         },
       'name': 'x86 generic ASAN',
-      'slavenames': ['build3-m2'],
+      'slavenames': ['build12-m2'],
     },
     {
       'auto_reboot': False,
@@ -678,7 +678,7 @@ config = {
         properties: Properties(**{}),
         },
       'name': 'amd64 generic ASAN',
-      'slavenames': ['build60-m2'],
+      'slavenames': ['build39-m2'],
     },
     {
       'auto_reboot': False,
@@ -877,13 +877,13 @@ config = {
     <BuildSlave 'build136-m2', (no builders yet)>,
     <BuildSlave 'build14-m2', (no builders yet)>,
     <BuildSlave 'build11-m2', (no builders yet)>,
-    <BuildSlave 'build8-m2', (no builders yet)>,
+    <BuildSlave 'build36-m2', (no builders yet)>,
     <BuildSlave 'vm16-m2', (no builders yet)>,
     <BuildSlave 'build19-m2', (no builders yet)>,
     <BuildSlave 'vm17-m2', (no builders yet)>,
-    <BuildSlave 'build3-m2', (no builders yet)>,
-    <BuildSlave 'build5-m2', (no builders yet)>,
-    <BuildSlave 'build60-m2', (no builders yet)>,
+    <BuildSlave 'build24-m2', (no builders yet)>,
+    <BuildSlave 'build39-m2', (no builders yet)>,
+    <BuildSlave 'build12-m2', (no builders yet)>,
   ],
   'status': [<WebStatus on port tcp:8014>, <WebStatus on port tcp:8214>],
 }
