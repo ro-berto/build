@@ -180,15 +180,17 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
   if options.total_shards and options.shard_index:
     supervisor_args.extend(['--total-slaves', str(options.total_shards),
                             '--slave-index', str(options.shard_index - 1)])
-  cluster_size = options.factory_properties.get('cluster_size')
-  if cluster_size is not None:
-    supervisor_args.append('--clusters=%s' % str(cluster_size))
-
   if options.sharding_args:
     supervisor_args.extend(options.sharding_args.split())
   command = [sys.executable, supervisor_path]
   command.extend(supervisor_args)
   command.append(test_exe_path)
+
+  # Extra options for run_test_cases.py must be passed after the exe path.
+  cluster_size = options.factory_properties.get('cluster_size')
+  if cluster_size is not None:
+    command.append('--clusters=%s' % str(cluster_size))
+
   return command
 
 
