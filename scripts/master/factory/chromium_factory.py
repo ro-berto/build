@@ -621,12 +621,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('page_cycler',
                          'page_cycler/indexed_db/basic_insert.json',
                          step_name='indexeddb', factory_properties=fp)
-    if R('page_cycler_2012Q2-netsim'):
-      fp['use_xvfb_on_linux'] = True
-      f.AddPyAutoFunctionalTest(
-          'page_cycler_2012Q2-netsim',
-          test_args=['perf.PageCyclerNetSimTest.test2012Q2'],
-          factory_properties=fp, perf=True)
+    if R('page_cycler_top_10_netsim'):
+      fp['extra_args'] = ['--pageset-repeat=5', '--cold-load-percent=100',
+                          '--extra-wpr-args="--shaping_type=proxy --net=cable"']
+      f.AddTelemetryTest('page_cycler', 'top_10.json',
+                         step_name='top_10_netsim',
+                         factory_properties=fp)
     if R('smoothness_measurement'):
       f.AddTelemetryTest(
           'smoothness_measurement', 'top_25.json', factory_properties=fp)
