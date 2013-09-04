@@ -238,6 +238,7 @@ def main(argv):
       'master.client.skia': None,  # buildbot files live in Skia repo
       'master.client.syzygy': 'Syzygy',
       'master.client.v8': 'V8',
+      'master.client.v8.branches': 'V8Branches',
       'master.client.webrtc': 'WebRTC',
       'master.client.webrtc.fyi': 'WebRTCFYI',
       'master.devtools': 'DevTools',
