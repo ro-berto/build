@@ -51,10 +51,6 @@ def _CheckoutSteps(api):
 
 def GenSteps(api):
 
-  if api.properties['repository'].rsplit('/', 1)[1] in [
-      'observe-js', 'NodeBind', 'TemplateBinding', 'polymer-expressions']:
-    return
-
   yield _CheckoutSteps(api)
   this_repo = api.properties['buildername'].split()[0]
   api.path.choose_checkout(api.path.slave_build(this_repo))
@@ -109,11 +105,6 @@ def GenTests(api):
         }
       },
     }
-  # Make sure we run nothing for the repos special-cased above.
-  yield 'polymer-no-test', {
-    'properties': api.properties_scheduled(
-        repository='https://github.com/Polymer/observe-js'),
-  }
   # Make sure the steps are right for deps-triggered jobs.
   yield 'polymer-from-platform', {
     'properties': api.properties_scheduled(
