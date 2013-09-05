@@ -110,20 +110,15 @@ class DartCommands(commands.FactoryCommands):
                           workdir=workdir,
                           command=cmd)
 
-  def AddKillStep(self, options=None, timeout=1200):
-    options = options or {}
-    is_vm = (options.get('name') != None and
-             options.get('name').startswith('vm'))
-    if is_vm:
-      cmd = 'python ' + self._tools_dir + '/task_kill.py'
-      self._factory.addStep(shell.ShellCommand,
-                            name='Taskkill',
-                            description='Kill leftover processes',
-                            timeout=timeout,
-                            env = self._custom_env,
-                            haltOnFailure=False,
-                            workdir=self._dart_build_dir,
-                            command=cmd)
+  def AddKillStep(self, step_name='Kill leftover process'):
+    cmd = 'python ' + self._tools_dir + '/task_kill.py --kill_browsers=True'
+    self._factory.addStep(shell.ShellCommand,
+                          name='Taskkill',
+                          description=step_name,
+                          env = self._custom_env,
+                          haltOnFailure=False,
+                          workdir=self._dart_build_dir,
+                          command=cmd)
 
   def AddTests(self, options=None, timeout=1200):
     options = options or {}
@@ -180,7 +175,7 @@ class DartCommands(commands.FactoryCommands):
                             description='tests',
                             timeout=timeout,
                             env = self._custom_env,
-                            haltOnFailure=True,
+                            haltOnFailure=False,
                             workdir=self._dart_build_dir,
                             command=cmd,
                             logfiles=self.logfiles,
@@ -192,7 +187,7 @@ class DartCommands(commands.FactoryCommands):
                             description='tests',
                             timeout=timeout,
                             env = self._custom_env,
-                            haltOnFailure=True,
+                            haltOnFailure=False,
                             workdir=self._dart_build_dir,
                             command=cmd,
                             logfiles=self.logfiles,
@@ -203,7 +198,7 @@ class DartCommands(commands.FactoryCommands):
                             description='minified tests',
                             timeout=timeout,
                             env = self._custom_env,
-                            haltOnFailure=True,
+                            haltOnFailure=False,
                             workdir=self._dart_build_dir,
                             command=cmd,
                             logfiles=self.logfiles,
@@ -217,7 +212,7 @@ class DartCommands(commands.FactoryCommands):
                             description='tests',
                             timeout=timeout,
                             env = self._custom_env,
-                            haltOnFailure=True,
+                            haltOnFailure=False,
                             workdir=self._dart_build_dir,
                             command=cmd,
                             logfiles=self.logfiles,
@@ -229,7 +224,7 @@ class DartCommands(commands.FactoryCommands):
                             description='checked_tests',
                             timeout=timeout,
                             env = self._custom_env,
-                            haltOnFailure=True,
+                            haltOnFailure=False,
                             workdir=self._dart_build_dir,
                             command=cmd,
                             logfiles=self.logfiles,
@@ -245,7 +240,7 @@ class DartCommands(commands.FactoryCommands):
                           name=name,
                           description=name,
                           timeout=timeout,
-                          haltOnFailure=True,
+                          haltOnFailure=False,
                           env=env,
                           workdir=self._dart_build_dir,
                           command=[self._python, python_script],

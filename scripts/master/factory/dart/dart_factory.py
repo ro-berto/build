@@ -265,7 +265,7 @@ class DartFactory(gclient_factory.GClientFactory):
                                               self.target_platform,
                                               env=env)
 
-    dart_cmd_obj.AddKillStep(options)
+    dart_cmd_obj.AddKillStep(step_name="Taskkill before running")
 
     # We must always add the MaybeClobberStep, since this factory is
     # created at master start, but the choice of clobber or not may be
@@ -283,6 +283,8 @@ class DartFactory(gclient_factory.GClientFactory):
 
     for trigger in triggers:
       dart_cmd_obj.AddTrigger(trigger)
+
+    dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
 
     return factory
 
@@ -304,6 +306,8 @@ class DartFactory(gclient_factory.GClientFactory):
                                               self._build_dir,
                                               self._target_platform,
                                               env=env)
+    dart_cmd_obj.AddKillStep(step_name="Taskkill before running")
+
     dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout)
 
     for trigger in triggers:
@@ -311,6 +315,9 @@ class DartFactory(gclient_factory.GClientFactory):
 
     if secondAnnotatedRun:
       dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout, run=2)
+
+    dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
+
     return factory
 
 class DartUtils(object):
