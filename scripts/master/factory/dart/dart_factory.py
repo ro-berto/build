@@ -666,14 +666,17 @@ class DartUtils(object):
                                  auto_reboot = False):
     builders = []
     for v in variants:
-      builders.append({
+      builder = {
          'name': v['name'],
          'builddir': v['name'],
          'factory': v['factory_builder'],
          'slavenames': slaves.GetSlavesName(builder=v['name']),
          'category': v['category'],
          'locks': slave_locks,
-         'auto_reboot': auto_reboot})
+         'auto_reboot': auto_reboot}
+      if 'merge_requests' in v:
+        builder['mergeRequests'] = v['merge_requests']
+      builders.append(builder)
     return builders
 
   @staticmethod
