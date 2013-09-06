@@ -226,5 +226,23 @@
     ], 
     "target_os": [], 
     "target_os_only": false
+  }, 
+  "v8": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": ".DEPS.git", 
+        "managed": true, 
+        "name": "v8", 
+        "safesync_url": null, 
+        "url": "http://v8.googlecode.com/svn/branches/bleeding_edge"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
   }
 }

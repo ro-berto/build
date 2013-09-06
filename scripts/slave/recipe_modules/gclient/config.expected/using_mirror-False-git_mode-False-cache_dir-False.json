@@ -209,5 +209,23 @@
     "target_os": [], 
     "target_os_only": false
   }, 
-  "tools_build": "tools_build only supports git"
+  "tools_build": "tools_build only supports git", 
+  "v8": {
+    "cache_dir": null, 
+    "deps_os": {}, 
+    "hooks": [], 
+    "solutions": [
+      {
+        "custom_deps": {}, 
+        "custom_vars": {}, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "v8", 
+        "safesync_url": null, 
+        "url": "http://v8.googlecode.com/svn/branches/bleeding_edge"
+      }
+    ], 
+    "target_os": [], 
+    "target_os_only": false
+  }
 }

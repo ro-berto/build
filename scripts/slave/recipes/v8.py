@@ -7,6 +7,8 @@ DEPS = [
 ]
 
 def GenSteps(api):
+  api.v8.set_config('v8', optional=True)
+
   yield api.v8.checkout()
   yield api.v8.runhooks()
   yield api.v8.compile()
@@ -14,7 +16,7 @@ def GenSteps(api):
   # Tests.
   # TODO(machenbach): Implement the tests.
 
-def GenTests(api):
+def GenTests(_api):
   for bits in [32, 64]:
     for build_config in ['Release', 'Debug']:
       yield '%s%s' % (build_config, bits), {
