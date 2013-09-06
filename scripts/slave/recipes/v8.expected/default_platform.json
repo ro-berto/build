@@ -43,7 +43,10 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "v8_target_arch=ia32"
+      "GYP_DEFINES": "v8_target_arch=ia32",
+      "GYP_GENERATORS": "",
+      "GYP_GENERATOR_FLAGS": "",
+      "GYP_MSVS_VERSION": null
     },
     "name": "gclient runhooks"
   },
@@ -55,11 +58,12 @@
       "--target",
       "Release",
       "--build-dir",
-      "v8",
+      "[SLAVE_BUILD_ROOT]/v8",
       "--src-dir",
-      "v8",
+      "[SLAVE_BUILD_ROOT]/v8",
       "--build-tool",
       "make",
+      "--",
       "buildbot"
     ],
     "name": "compile"

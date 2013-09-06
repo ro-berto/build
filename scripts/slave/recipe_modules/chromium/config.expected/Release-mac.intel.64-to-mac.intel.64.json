@@ -49,5 +49,22 @@
       "GYP_GENERATOR_FLAGS": "", 
       "GYP_MSVS_VERSION": null
     }
+  }, 
+  "v8": {
+    "build_config_fs": "Release", 
+    "build_dir": "", 
+    "compile_py": {
+      "build_tool": "make", 
+      "compiler": null, 
+      "default_targets": [
+        "buildbot"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "v8_target_arch=x64", 
+      "GYP_GENERATORS": "", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
   }
 }

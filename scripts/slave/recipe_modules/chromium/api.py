@@ -35,6 +35,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--build-tool', self.c.compile_py.build_tool]
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
+    if self.m.properties.get('clobber') is not None:
+      args.append('--clobber')
     args.append('--')
     args.extend(targets)
     return self.m.python(name or 'compile',
