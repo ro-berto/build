@@ -10,64 +10,21 @@ from slave.recipe_configs_util import SetConfig, BadConf
 # type signature of functions annotated with the @config_ctx decorator.
 # pylint: disable=E1123
 
-def norm_host_platform(plat):
-  if plat.startswith('linux'):
-    return 'linux'
-  elif plat.startswith(('win', 'cygwin')):
-    return 'win'
-  elif plat.startswith(('darwin', 'mac')):
-    return 'mac'
-  else:  # pragma: no cover
-    raise ValueError('Don\'t understand platform "%s"' % plat)
+HOST_PLATFORMS = ('linux', 'win', 'mac')
+TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos')
+HOST_TARGET_BITS = (32, 64)
+HOST_ARCHS = ('intel',)
+TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips')
+BUILD_CONFIGS = ('Release', 'Debug')
 
-def norm_targ_platform(plat):
-  try:
-    return norm_host_platform(plat)
-  except ValueError:
-    pass
-
-  if plat.startswith('ios'):
-    return 'ios'
-  elif plat.startswith('android'):
-    return 'android'
-  elif plat.startswith('chromeos'):
-    return 'chromeos'
-  else:  # pragma: no cover
-    raise ValueError('Don\'t understand platform "%s"' % plat)
-
-def norm_bits(arch):
-  if not arch:
-    return None
-  return 64 if '64' in str(arch) else 32
-
-def norm_arch(arch):
-  if not arch:
-    return None
-
-  # platform.machine() can be things like:
-  #   * x86_64
-  #   * i386
-  #   * etc.
-  # So we cheat a bit here and just look at the first char as a heruistic.
-  return 'intel' if arch[0] in 'xi' else 'arm'
-
-def norm_build_config(build_config=None):
-  return 'Release' if build_config == 'Release' else 'Debug'
-
-# Because bits and arch actually accept None as a valid parameter,
-# give them a means of distinguishing when they've been passed a default
-# argument v. None
-HostPlatformValue = object()
+def check(val, potentials):
+  assert val in potentials
+  return val
 
 # Schema for config items in this module.
-def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
-               TARGET_PLATFORM=None, TARGET_ARCH=HostPlatformValue,
-               TARGET_BITS=32, BUILD_CONFIG=norm_build_config(),
-               **_kwargs):
-  assert HOST_PLATFORM and HOST_ARCH and HOST_BITS
-  TARGET_PLATFORM = TARGET_PLATFORM or HOST_PLATFORM
-  TARGET_ARCH = HOST_ARCH if TARGET_ARCH is HostPlatformValue else TARGET_ARCH
-
+def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
+               TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
+               BUILD_CONFIG, **_kwargs):
   return ConfigGroup(
     compile_py = ConfigGroup(
       default_targets = SetConfig(basestring),
@@ -75,7 +32,8 @@ def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
       compiler = SimpleConfig(basestring, required=False),
     ),
     gyp_env = ConfigGroup(
-      GYP_DEFINES = DictConfig(lambda i: ('%s=%s' % i), ' '.join, (basestring,int)),
+      GYP_DEFINES = DictConfig(lambda i: ('%s=%s' % i), ' '.join,
+                               (basestring,int)),
       GYP_GENERATORS = SetConfig(basestring, ','.join),
       GYP_GENERATOR_FLAGS = DictConfig(
         lambda i: ('%s=%s' % i), ' '.join, (basestring,int)),
@@ -87,15 +45,15 @@ def BaseConfig(HOST_PLATFORM=None, HOST_ARCH=None, HOST_BITS=None,
     # passed as --target on the command line.
     build_config_fs = SimpleConfig(basestring),
 
-    BUILD_CONFIG = StaticConfig(norm_build_config(BUILD_CONFIG)),
+    BUILD_CONFIG = StaticConfig(check(BUILD_CONFIG, BUILD_CONFIGS)),
 
-    HOST_PLATFORM = StaticConfig(norm_host_platform(HOST_PLATFORM)),
-    HOST_ARCH = StaticConfig(norm_arch(HOST_ARCH)),
-    HOST_BITS = StaticConfig(norm_bits(HOST_BITS)),
+    HOST_PLATFORM = StaticConfig(check(HOST_PLATFORM, HOST_PLATFORMS)),
+    HOST_ARCH = StaticConfig(check(HOST_ARCH, HOST_ARCHS)),
+    HOST_BITS = StaticConfig(check(HOST_BITS, HOST_TARGET_BITS)),
 
-    TARGET_PLATFORM = StaticConfig(norm_targ_platform(TARGET_PLATFORM)),
-    TARGET_ARCH = StaticConfig(norm_arch(TARGET_ARCH)),
-    TARGET_BITS = StaticConfig(norm_bits(TARGET_BITS)),
+    TARGET_PLATFORM = StaticConfig(check(TARGET_PLATFORM, TARGET_PLATFORMS)),
+    TARGET_ARCH = StaticConfig(check(TARGET_ARCH, TARGET_ARCHS)),
+    TARGET_BITS = StaticConfig(check(TARGET_BITS, HOST_TARGET_BITS)),
   )
 
 TEST_FORMAT = (
@@ -108,15 +66,15 @@ TEST_FORMAT = (
 # Used by the test harness to inspect and generate permutations for this
 # config module.  {varname -> [possible values]}
 VAR_TEST_MAP = {
-  'HOST_PLATFORM':   ('linux', 'win', 'mac'),
-  'HOST_ARCH':       ('intel',),
-  'HOST_BITS':       (32, 64),
+  'HOST_PLATFORM':   HOST_PLATFORMS,
+  'HOST_ARCH':       HOST_ARCHS,
+  'HOST_BITS':       HOST_TARGET_BITS,
 
-  'TARGET_PLATFORM': ('linux', 'win', 'mac', 'ios', 'android', 'chromeos'),
-  'TARGET_ARCH':     ('intel', 'arm', None),
-  'TARGET_BITS':     (32, 64, None),
+  'TARGET_PLATFORM': TARGET_PLATFORMS,
+  'TARGET_ARCH':     TARGET_ARCHS,
+  'TARGET_BITS':     HOST_TARGET_BITS,
 
-  'BUILD_CONFIG':    ('Debug', 'Release'),
+  'BUILD_CONFIG':    BUILD_CONFIGS,
 }
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_FORMAT)
 
@@ -127,33 +85,33 @@ def BASE(c):
                       (c.TARGET_PLATFORM, c.TARGET_ARCH, c.TARGET_BITS)]
 
   for (plat, arch, bits) in host_targ_tuples:
-    if plat in ('ios', 'android'):
-      if arch or bits:
-        raise BadConf('Cannot specify arch or bits for %s' % plat)
-    else:
-      if not (arch and bits):
-        raise BadConf('"%s" requires arch and bits to be set' % plat)
+    if plat == 'ios':
+      if arch != 'arm' or bits != 32:
+        raise BadConf('iOS only supports arm/32')
+    elif plat in ('win', 'mac'):
+      if arch != 'intel':
+        raise BadConf('%s arch is not supported on %s' % (arch, plat))
+    elif plat in ('chromeos', 'android', 'linux'):
+      pass  # no arch restrictions
+    else:  # pragma: no cover
+      assert False, "Not covering a platform: %s" % plat
 
-    if arch == 'arm' and plat != 'chromeos':
-      raise BadConf('Arm arch is only supported on chromeos')
+  potential_platforms = {
+    # host -> potential target platforms
+    'win':   ('win',),
+    'mac':   ('mac', 'ios'),
+    'linux': ('linux', 'chromeos', 'android'),
+  }.get(c.HOST_PLATFORM)
 
-  if c.HOST_PLATFORM not in ('win', 'linux', 'mac'):  # pragma: no cover
+  if not potential_platforms:  # pragma: no cover
     raise BadConf('Cannot build on "%s"' % c.HOST_PLATFORM)
 
+  if c.TARGET_PLATFORM not in potential_platforms:
+    raise BadConf('Can not compile "%s" on "%s"' %
+                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))
+
   if c.HOST_BITS < c.TARGET_BITS:
-    raise BadConf('Invalid config: host bits < targ bits')
-  if c.TARGET_PLATFORM == 'ios' and c.HOST_PLATFORM != 'mac':
-    raise BadConf('iOS target only supported on mac host')
-  if (c.TARGET_PLATFORM in ('chromeos', 'android') and
-      c.HOST_PLATFORM != 'linux'):
-    raise BadConf('Can not compile "%s" on "%s"' %
-                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))
-  if c.HOST_PLATFORM in ('win', 'mac') and c.TARGET_PLATFORM != c.HOST_PLATFORM:
-    raise BadConf('Can not compile "%s" on "%s"' %
-                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))
-  if c.HOST_PLATFORM == 'linux' and c.TARGET_PLATFORM in ('win', 'mac'):
-    raise BadConf('Can not compile "%s" on "%s"' %
-                  (c.TARGET_PLATFORM, c.HOST_PLATFORM))
+    raise BadConf('host bits < targ bits')
 
   c.build_config_fs = c.BUILD_CONFIG
   if c.HOST_PLATFORM == 'win':

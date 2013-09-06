@@ -10,6 +10,14 @@ class ChromiumApi(recipe_api.RecipeApi):
       'HOST_PLATFORM': self.m.platform.name,
       'HOST_ARCH': self.m.platform.arch,
       'HOST_BITS': self.m.platform.bits,
+
+      'TARGET_PLATFORM': self.m.platform.name,
+      'TARGET_ARCH': self.m.platform.arch,
+
+      # This should probably default to the platform.bits, but right now this
+      # is the more expected configuration.
+      'TARGET_BITS': 32,
+
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }
 
