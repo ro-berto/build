@@ -623,7 +623,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                          step_name='indexeddb', factory_properties=fp)
     if R('page_cycler_top_10_netsim'):
       fp['extra_args'] = ['--pageset-repeat=5', '--cold-load-percent=100',
-                          '--extra-wpr-args="--shaping_type=proxy --net=cable"']
+                          '--extra-wpr-args=--shaping_type=proxy --net=cable']
       f.AddTelemetryTest('page_cycler', 'top_10.json',
                          step_name='top_10_netsim',
                          factory_properties=fp)
