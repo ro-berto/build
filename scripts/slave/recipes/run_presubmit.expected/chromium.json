@@ -41,7 +41,7 @@
       "-u",
       "[DEPOT_TOOLS_ROOT]/apply_issue.py",
       "-r",
-      "[SLAVE_BUILD_ROOT]/src/",
+      "[SLAVE_BUILD_ROOT]/src",
       "-i",
       12853011,
       "-p",
@@ -56,7 +56,7 @@
     "cmd": [
       "[DEPOT_TOOLS_ROOT]/presubmit_support.py",
       "--root",
-      "[SLAVE_BUILD_ROOT]/src/",
+      "[SLAVE_BUILD_ROOT]/src",
       "--commit",
       "--verbose",
       "--verbose",

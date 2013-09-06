@@ -86,6 +86,8 @@
       "Release",
       "--build-dir",
       "[SLAVE_BUILD_ROOT]/src/out",
+      "--src-dir",
+      "[SLAVE_BUILD_ROOT]/src",
       "--build-tool",
       "ninja",
       "--compiler",
