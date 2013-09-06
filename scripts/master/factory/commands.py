@@ -93,6 +93,8 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       'parent_buildnumber': WithProperties('%(buildnumber:-)s'),
       'parent_branch': WithProperties('%(branch:-)s'),
       'parent_got_revision': WithProperties('%(got_revision:-)s'),
+      'parent_got_webrtc_revision':
+          WithProperties('%(got_webrtc_revision:-)s'),
       'parent_got_webkit_revision':
           WithProperties('%(got_webkit_revision:-)s'),
       'parent_got_nacl_revision':

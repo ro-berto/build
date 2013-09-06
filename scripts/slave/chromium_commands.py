@@ -29,6 +29,7 @@ PROJECTS_LOOKING_FOR = {
     'got_swarming_client_revision',
   os.path.join('src', 'v8'): 'got_v8_revision',
   os.path.join('src', 'third_party', 'WebKit'): 'got_webkit_revision',
+  os.path.join('src', 'third_party', 'webrtc'): 'got_webrtc_revision',
 }
 
 

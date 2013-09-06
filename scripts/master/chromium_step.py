@@ -108,6 +108,7 @@ class GClient(source.Source):
     if args.get('gclient_spec'):
       self.adjustGclientSpecForBlink(branch, revision, args)
       self.adjustGclientSpecForNaCl(branch, revision, patch, args)
+      self.adjustGclientSpecForWebRTC(branch, revision, patch, args)
 
     try:
       # parent_cr_revision might be set, but empty.
@@ -163,6 +164,17 @@ class GClient(source.Source):
     args['gclient_spec'] = args['gclient_spec'].replace(
         '$$NACL_REV$$', str(nacl_revision or ''))
 
+  def adjustGclientSpecForWebRTC(self, branch, revision, patch, args):
+    webrtc_revision = revision
+    try:
+      # parent_webrtc_revision might be set, but empty.
+      if self.getProperty('parent_got_webrtc_revision'):
+        webrtc_revision = self.getProperty('parent_got_webrtc_revision')
+    except KeyError:
+      pass
+    args['gclient_spec'] = args['gclient_spec'].replace(
+        '$$WEBRTC_REV$$', str(webrtc_revision or ''))
+
   def describe(self, done=False):
     """Tries to append the revision number to the description."""
     description = source.Source.describe(self, done)
@@ -170,6 +182,7 @@ class GClient(source.Source):
     self.appendWebKitRevision(description)
     self.appendNaClRevision(description)
     self.appendV8Revision(description)
+    self.appendWebRTCRevision(description)
     return description
 
   def appendChromeRevision(self, description):
@@ -231,6 +244,19 @@ class GClient(source.Source):
       if not v8_revision in description:
         description.append(v8_revision)
 
+  def appendWebRTCRevision(self, description):
+    """Tries to append the WebRTC revision to the given description."""
+    webrtc_revision = None
+    try:
+      webrtc_revision = self.getProperty('got_webrtc_revision')
+    except KeyError:
+      pass
+    if webrtc_revision:
+      webrtc_revision = 'webrtc r%s' % webrtc_revision
+      # Only append revision if it's not already there.
+      if not webrtc_revision in description:
+        description.append(webrtc_revision)
+
   def commandComplete(self, cmd):
     """Handles status updates from buildbot slave when the step is done.
 
@@ -246,6 +272,7 @@ class GClient(source.Source):
       ('got_swarming_client_revision', 'got_swarming_client_revision'),
       ('got_v8_revision', 'got_v8_revision'),
       ('got_webkit_revision', 'got_webkit_revision'),
+      ('got_webrtc_revision', 'got_webrtc_revision'),
     )
     for prop_name, cmd_arg in properties:
       if cmd_arg in cmd.updates:

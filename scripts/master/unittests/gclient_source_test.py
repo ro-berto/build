@@ -47,6 +47,11 @@ ________ running 'svn checkout http://src.chromium.org/native_client/trunk\
  U   .../build/src/native_client/src
 Checked out revision 98765.
 
+________ running 'svn checkout svn://svn.chromium.org/webrtc/stable/webrtc@4297\
+ .../build/src/third_party/webrtc' in '.../build'
+ U   .../build/src/third_party/webrtc
+Checked out revision 4297.
+
 ________ running 'svn checkout http://svn.webkit.org/repository/webkit/trunk\
 @66952 .../build/src/third_party/WebKit --revision 66952' in '.../build'
  U   .../build/src/third_party/WebKit
@@ -64,6 +69,11 @@ ________ running 'svn update http://src.chromium.org/native_client/trunk\
  U   .../build/src/native_client/src
 Updated to revision 98765.
 
+________ running 'svn update svn://svn.chromium.org/webrtc/stable/webrtc@4297 \
+.../build/src/third_party/webrtc' in '.../build'
+ U   .../build/src/third_party/webrtc
+Updated to revision 4297.
+
 ________ running 'svn update http://svn.webkit.org/repository/webkit/trunk\
 @66952 .../build/src/third_party/WebKit --revision 66952' in '.../build'
  U   .../build/src/third_party/WebKit
@@ -79,6 +89,10 @@ ________ running 'svn update http://src.chromium.org/native_client/trunk/\
 src/native_client .../build/src/native_client' in '.../build'
 At revision 98765.
 
+________ running 'svn update svn://svn.chromium.org/webrtc/stable/webrtc@4297 \
+.../build/src/third_party/webrtc' in '.../build'
+At revision 4297.
+
 ________ running 'svn update http://svn.webkit.org/repository/webkit/trunk/\
 @66952 .../build/src/third_party/WebKit --revision 66952' in '.../build'
 At revision 67890."""
@@ -90,6 +104,9 @@ _____ src at 12345
 
 Syncing projects:  50% (12/24)
 _____ src/native_client at 98765
+
+Syncing projects:  60% (14/24)
+_____ src/third_party/webrtc at 4297
 
 Syncing projects:  77% (45/58)
 _____ src/third_party/WebKit at 67890"""
@@ -232,6 +249,7 @@ class GClientSourceTest(unittest.TestCase):
       'got_nacl_revision': '98765',
       'got_revision': '12345',
       'got_webkit_revision': '67890',
+      'got_webrtc_revision': '4297',
     }
     self.assertEqual(expected, actual)
 
@@ -243,6 +261,7 @@ class GClientSourceTest(unittest.TestCase):
       'got_nacl_revision': '98765',
       'got_revision': '12345',
       'got_webkit_revision': '67890',
+      'got_webrtc_revision': '4297',
     }
     self.assertEqual(expected, actual)
 
@@ -254,6 +273,7 @@ class GClientSourceTest(unittest.TestCase):
       'got_nacl_revision': '98765',
       'got_revision': '12345',
       'got_webkit_revision': '67890',
+      'got_webrtc_revision': '4297',
     }
     self.assertEqual(expected, actual)
 
@@ -265,6 +285,7 @@ class GClientSourceTest(unittest.TestCase):
       'got_nacl_revision': '98765',
       'got_revision': '12345',
       'got_webkit_revision': '67890',
+      'got_webrtc_revision': '4297',
     }
     self.assertEqual(expected, actual)
 

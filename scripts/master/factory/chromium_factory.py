@@ -1227,6 +1227,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                        compile_timeout=1200, build_url=None,
                                        project=None, factory_properties=None):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_WEBRTC_TRUNK]
+    factory_properties = factory_properties or {}
+    factory_properties['primary_repo'] = 'webrtc_'
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
@@ -1238,6 +1240,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                         build_url=None, project=None,
                                         factory_properties=None):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_WEBRTC_STABLE]
+    factory_properties = factory_properties or {}
+    factory_properties['primary_repo'] = 'webrtc_'
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
