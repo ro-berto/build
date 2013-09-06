@@ -149,8 +149,7 @@ def archive_layout(options, args):
     gs_base = '/'.join([options.gs_bucket, build_name, build_number])
     gs_acl = options.gs_acl
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_acl=gs_acl)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base,
-                              'layout-test-results', gs_acl)
+    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl)
 
     # TODO(dpranke): Remove these two lines once clients are fetching the
     # files from the layout-test-results dir.
@@ -160,8 +159,7 @@ def archive_layout(options, args):
     # And also to the 'results' directory to provide the 'latest' results.
     gs_base = '/'.join([options.gs_bucket, build_name, 'results'])
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl)
-    slave_utils.GSUtilCopyDir(options.results_dir, gs_base,
-                              'layout-test-results', gs_acl)
+    slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl)
   else:
     slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
     slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
