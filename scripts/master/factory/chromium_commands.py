@@ -1262,7 +1262,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, self._process_dumps_tool,
            '--build-dir', self._build_dir,
            '--target', self._target]
-    self.AddTestStep(shell.ShellCommand, 'process_dumps', cmd)
+    self.AddTestStep(retcode_command.ReturnCodeCommand, 'process_dumps', cmd)
 
   def AddRunCoverageBundles(self, factory_properties=None):
     # If updating this command, update the mirror of it in chrome_tests.gypi.
