@@ -120,6 +120,19 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
+B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina', auto_reboot=False,
+  scheduler='s5_webkit_rel_trigger')
+F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=blink_tests,
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
+    }))
+
 ################################################################################
 ## Debug
 ################################################################################
