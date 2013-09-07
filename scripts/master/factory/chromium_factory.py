@@ -622,11 +622,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                          'page_cycler/indexed_db/basic_insert.json',
                          step_name='indexeddb', factory_properties=fp)
     if R('page_cycler_top_10_netsim'):
-      fp['extra_args'] = ['--pageset-repeat=5', '--cold-load-percent=100',
-                          '--extra-wpr-args=--shaping_type=proxy --net=cable']
+      netsim_fp = fp.copy()
+      netsim_fp['extra_args'] = [
+          '--pageset-repeat=5',
+          '--cold-load-percent=100',
+          '--extra-wpr-args=--shaping_type=proxy --net=cable']
       f.AddTelemetryTest('page_cycler', 'top_10.json',
                          step_name='top_10_netsim',
-                         factory_properties=fp)
+                         factory_properties=netsim_fp)
     if R('smoothness_measurement'):
       f.AddTelemetryTest(
           'smoothness_measurement', 'top_25.json', factory_properties=fp)
@@ -732,31 +735,35 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
     if R('startup_cold'):
-      fp['extra_args'] = ['--page-repeat=5', '--cold']
+      startup_fp = fp.copy()
+      startup_fp['extra_args'] = ['--page-repeat=5', '--cold']
       f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_cold',
-                         factory_properties=fp)
+                         factory_properties=startup_fp)
     if R('startup_warm'):
-      fp['extra_args'] = ['--page-repeat=20', '--warm']
+      startup_fp = fp.copy()
+      startup_fp['extra_args'] = ['--page-repeat=20', '--warm']
       f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_warm',
-                         factory_properties=fp)
+                         factory_properties=startup_fp)
     if R('startup_warm_dirty'):
+      startup_fp = fp.copy()
       # pylint: disable=W0212
       profile_dir = os.path.join(self._build_dir, f._target,
           'generated_profiles', 'small_profile')
-      fp['extra_args'] = ['--warm', '--page-repeat=20',
-          '--profile-dir=%s' % profile_dir]
+      startup_fp['extra_args'] = ['--warm', '--page-repeat=20',
+                                  '--profile-dir=%s' % profile_dir]
       f.AddTelemetryTest('startup', 'blank_page.json',
                          step_name='startup_warm_dirty',
-                         factory_properties=fp)
+                         factory_properties=startup_fp)
     if R('startup_cold_dirty'):
+      startup_fp = fp.copy()
       # pylint: disable=W0212
       profile_dir = os.path.join(self._build_dir, f._target,
           'generated_profiles', 'small_profile')
-      fp['extra_args'] = ['--cold', '--page-repeat=5',
-          '--profile-dir=%s' % profile_dir]
+      startup_fp['extra_args'] = ['--cold', '--page-repeat=5',
+                                  '--profile-dir=%s' % profile_dir]
       f.AddTelemetryTest('startup', 'blank_page.json',
                          step_name='startup_cold_dirty',
-                         factory_properties=fp)
+                         factory_properties=startup_fp)
 
     if R('sizes'):
       f.AddSizesTests(fp)
