@@ -45,6 +45,27 @@ F('f_linux_tests_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
+B('Linux Tests (dbg)', 'f_linux_tests_dbg', scheduler='global_scheduler')
+F('f_linux_tests_dbg', linux().ChromiumFactory(
+    target='Debug',
+    tests=[
+        'browser_tests',
+        'cc_unittests',
+        'content_browsertests',
+        'interactive_ui_tests',
+        'unit',
+        'webkit_compositor_bindings_unittests',
+    ],
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma'
+    ],
+    factory_properties={
+        'generate_gtest_json': True,
+        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'blink_config': 'blink',
+    }))
+
 linux_aura_build_targets = [
     'aura_builder',
     'base_unittests',
