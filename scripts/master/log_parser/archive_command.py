@@ -53,13 +53,19 @@ class ArchiveCommand(shell.ShellCommand):
     self.addLogObserver('stdio', self.script_observer)
     self.index_suffix = kwargs.get('index_suffix', '')
     self.include_last_change = kwargs.get('include_last_change', True)
+    self.more_link_url = kwargs.get('more_link_url', '')
+    self.more_link_text = kwargs.get('more_link_text', '')
 
   def createSummary(self, log):
     if (self.base_url and self.link_text):
-      url = self.base_url % {'build_name': self.script_observer.build_name}
+      url_prefix = self.base_url % {
+          'build_name': self.script_observer.build_name}
+
       if self.script_observer.build_number:
-        url += '/' + self.script_observer.build_number
+        url_prefix += '/' + self.script_observer.build_number
       if self.include_last_change:
-        url += '/' + self.script_observer.last_change
-      url += '/' + self.index_suffix
-      self.addURL(self.link_text, url)
+        url_prefix += '/' + self.script_observer.last_change
+      url_prefix += '/' + self.index_suffix
+      self.addURL(self.link_text, url_prefix + self.index_suffix)
+      if self.more_link_url and self.more_link_text:
+        self.addURL(self.more_link_text, url_prefix + self.more_link_url)

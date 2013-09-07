@@ -1248,7 +1248,10 @@ class ChromiumCommands(commands.FactoryCommands):
           base_url=base_url,
           link_text='layout test ' + result_str,
           command=cmd,
-          include_last_change=False)
+          include_last_change=False,
+          index_suffix='layout-test-results/results.html',
+          more_link_text='(zip)',
+          more_link_url='layout-test-results.zip')
 
   def AddRunCrashHandler(self, build_dir=None, target=None):
     build_dir = build_dir or self._build_dir
