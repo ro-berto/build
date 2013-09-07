@@ -107,12 +107,14 @@ def GenSteps(api):
   buildername = api.properties['buildername']
   buildnumber = api.properties['buildnumber']
   def archive_webkit_tests_results_followup(step_result):
-    fmt = (
-      "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s/"
-      "layout-test-results.zip")
+    base = (
+        "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s/" %
+        (buildername, buildnumber))
 
-    step_result.presentation.links['layout_test_results'] = fmt % (
-      buildername, buildnumber)
+    step_result.presentation.links['layout_test_results'] = (
+        base + '/layout-test-results/results.html')
+    step_result.presentation.links['(zip)'] = (
+        base + '/layout-test-results.zip')
 
   yield api.python(
     'archive_webkit_tests_results',
