@@ -108,7 +108,7 @@ def GenSteps(api):
   buildnumber = api.properties['buildnumber']
   def archive_webkit_tests_results_followup(step_result):
     base = (
-        "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s/" %
+        "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s" %
         (buildername, buildnumber))
 
     step_result.presentation.links['layout_test_results'] = (
