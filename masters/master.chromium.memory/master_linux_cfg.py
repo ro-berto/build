@@ -125,6 +125,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
     ],
     factory_properties={
       'asan': True,
+      'cluster_size': 1,
       'browser_total_shards': 3,
       'browser_shard_index': 1,
       'sharded_tests': sharded_tests,
@@ -146,6 +147,7 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
     ],
     factory_properties={
       'asan': True,
+      'cluster_size': 1,
       'browser_total_shards': 3,
       'browser_shard_index': 2,
       'sharded_tests': sharded_tests,
@@ -164,6 +166,7 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
     ],
     factory_properties={
       'asan': True,
+      'cluster_size': 1,
       'browser_total_shards': 3,
       'browser_shard_index': 3,
       'sharded_tests': sharded_tests,
