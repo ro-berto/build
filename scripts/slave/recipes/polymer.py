@@ -17,6 +17,7 @@ DEPS = [
 REPOS = (
   'polymer',
   'platform',
+  'WeakMap',
   'CustomElements',
   'ShadowDOM',
   'HTMLImports',
