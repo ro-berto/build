@@ -65,7 +65,6 @@ class ArchiveCommand(shell.ShellCommand):
         url_prefix += '/' + self.script_observer.build_number
       if self.include_last_change:
         url_prefix += '/' + self.script_observer.last_change
-      url_prefix += '/' + self.index_suffix
-      self.addURL(self.link_text, url_prefix + self.index_suffix)
+      self.addURL(self.link_text, url_prefix + '/' + self.index_suffix)
       if self.more_link_url and self.more_link_text:
-        self.addURL(self.more_link_text, url_prefix + self.more_link_url)
+        self.addURL(self.more_link_text, url_prefix + '/' + self.more_link_url)
