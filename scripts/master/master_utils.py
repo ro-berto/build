@@ -352,7 +352,8 @@ def DumpSetup(c, important=None, filename='config.current.txt'):
     def hacky_repr_class(obj, indent, subdent, important):
       r = '%s {\n' % obj.__class__.__name__
       for (n, v) in vars(obj).iteritems():
-        r += hacky_repr(v, "%s: " % n, indent + subdent, important) + ',\n'
+        if not n.startswith('_'):
+          r += hacky_repr(v, "%s: " % n, indent + subdent, important) + ',\n'
       r += indent + '}'
       return r
 
@@ -383,7 +384,9 @@ def DumpSetup(c, important=None, filename='config.current.txt'):
       elif isinstance(obj, dict):
         r = '{\n'
         for (n, v) in sorted(obj.iteritems(), key=lambda x: x[0]):
-          r += hacky_repr(v, "'%s': " % n, indent + subdent, important) + ',\n'
+          if not n.startswith('_'):
+            r += hacky_repr(v, "'%s': " % n, indent + subdent, important)
+            r += ',\n'
         r += indent + '}'
     return "%s%s%s" % (indent, name, r)
 
