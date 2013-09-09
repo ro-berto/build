@@ -75,6 +75,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('mozilla'): f.AddV8Mozilla()
     if R('intl'): f.AddV8Intl()
     if R('gcmole'): f.AddV8GCMole()
+    if R('simpleleak'): f.AddSimpleLeakTest()
 
   def V8Factory(self, target='Release', clobber=False, tests=None, mode=None,
                 slave_type='BuilderTester', options=None, compile_timeout=1200,

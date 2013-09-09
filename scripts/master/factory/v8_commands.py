@@ -206,6 +206,15 @@ class V8Commands(commands.FactoryCommands):
                      env=env,
                      workdir='build/v8/')
 
+  def AddSimpleLeakTest(self):
+    if self._target_platform == 'win32':
+      self.AddTaskkillStep()
+    cmd = ['valgrind', '--leak-check=full', '--show-reachable=yes',
+           '--num-callers=20', './out/%s/d8' % self._target, '-e',
+           '"print(1+2)"']
+    self.AddTestStep(shell.ShellCommand, 'Simple Leak Check', cmd,
+                     timeout=300, workdir='build/v8/')
+
   def AddArchiveBuild(self, mode='dev', show_url=True,
       extra_archive_paths=None):
     """Adds a step to the factory to archive a build."""
