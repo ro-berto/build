@@ -897,23 +897,23 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Endurance tests.
     if R('endure_calendar_tests'):
       f.AddTelemetryTest('endure', 'calendar_forward_backward.json',
-                         step_name='calendar', factory_properties=fp,
+                         step_name='endure_cal_fw_back', factory_properties=fp,
                          timeout=6000)
     if R('endure_gmail_expand_collapse_tests'):
       f.AddTelemetryTest('endure', 'gmail_expand_collapse_conversation.json',
-                         step_name='gmail_exp_col',
+                         step_name='endure_gmail_exp_col',
                          factory_properties=fp, timeout=6000)
     if R('endure_gmail_alt_label_tests'):
       f.AddTelemetryTest('endure', 'gmail_alt_two_labels.json',
-                         step_name='gmail_labels',
+                         step_name='endure_gmail_labels',
                          factory_properties=fp, timeout=6000)
     if R('endure_gmail_alt_threadlist_tests'):
       f.AddTelemetryTest('endure', 'gmail_alt_threadlist_conversation.json',
-                         step_name='gmail_threadlist',
+                         step_name='endure_gmail_thread',
                          factory_properties=fp, timeout=6000)
     if R('endure_plus_tests'):
       f.AddTelemetryTest('endure', 'plus_alt_posts_photos.json',
-                         step_name='plus', factory_properties=fp,
+                         step_name='endure_plus_photos', factory_properties=fp,
                          timeout=6000)
 
     # HTML5 media tag performance/functional test using PyAuto.
