@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright 2013 The Chromium Authors. All rights reserved.
+# Copyright (c) 2013 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -92,6 +92,7 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
       elif master == 'all':
         for m_p in masters_path:
           LoadMaster(slaves, m_p)
+        slaves.sort(key=lambda x: (x['mastername'], x.get('hostname')))
       else:
         if not master in masters:
           master = ProcessShortName(master)
@@ -117,12 +118,6 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
     selected = set(options.slave)
     slaves = [s for s in slaves if s.get('hostname') in selected]
 
-  # remove slaves with blank or no hostname
-  if options.fmt == 'botmap':
-    slaves = filter(lambda x: x.get('mastername'), slaves)
-    slaves = filter(lambda x: x.get('hostname'), slaves)
-    slaves.sort(key=lambda x: (x.get('mastername'), x.get('hostname')))
-
   for s in slaves:
     if options.fmt == 'raw':
       print s
@@ -131,23 +126,24 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
     elif options.fmt == 'waterfall':
       print s.get('hostname', 'unknown'), ':', s.get('master', 'unknown'), \
             ':', s.get('builder', 'unknown')
+    elif options.fmt == 'master':
+      print s.get('hostname', 'unknown'), ':', s.get('mastername', 'unknown'), \
+            ':', s.get('builder', 'unknown')
     elif options.fmt == 'botmap':
-      if s.get('os') == 'win':
-        pathsep = '\\'
-      else:
-        pathsep = '/'
-      if 'subdir' in s:
-        d = pathsep + 'c' + pathsep + s['subdir']
-      else:
-        d = pathsep + 'b'
-      host = s.get('hostname') or '?'
-      master = s.get('mastername') or '?'
-      slaveos = s.get('os') or '?'
-      builders = s.get('builder') or '?'
-      if type(builders) is not list:
-        builders = [builders]
-      for b in sorted(builders):
-        print '%-30s %-20s %-35s %-35s %-10s' % (host, d, master, b, slaveos)
+      host = s.get('hostname')
+      if host:
+        master = s.get('mastername') or '?'
+        slaveos = s.get('os') or '?'
+        pathsep = '\\' if s.get('os') == 'win' else '/'
+        if 'subdir' in s:
+          d = pathsep + 'c' + pathsep + s['subdir']
+        else:
+          d = pathsep + 'b'
+        builders = s.get('builder') or '?'
+        if type(builders) is not list:
+          builders = [builders]
+        for b in sorted(builders):
+          print '%-30s %-20s %-35s %-35s %-10s' % (host, d, master, b, slaveos)
     else:
       print s.get('hostname', 'unknown')
 
