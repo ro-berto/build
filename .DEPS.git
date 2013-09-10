@@ -18,9 +18,9 @@ deps = {
     'build/scripts/private/data/reliability':
         Var('git_url') + '/chromium/src/chrome/test/data/reliability.git',
     'build/third_party/gsutil':
-        Var('git_url') + '/external/gsutil/src.git@5cba434b828da428a906c8197a23c9ae120d2636',
+        Var('git_url') + '/external/gsutil/src.git@69a6dc21aabbf158c259c9207c82161fe2bad59d',
     'build/third_party/gsutil/boto':
-        Var('git_url') + '/external/boto.git@98fc59a5896f4ea990a4d527548204fed8f06c64',
+        Var('git_url') + '/external/boto.git@be8bd6a27327aa0e025d9be9fe1b7720e7471a60',
     'build/third_party/lighttpd':
         Var('git_url') + '/chromium/deps/lighttpd.git@9dfa55d15937a688a92cbf2b7a8621b0927d06eb',
     'commit-queue':
