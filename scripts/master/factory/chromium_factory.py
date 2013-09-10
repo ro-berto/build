@@ -1071,8 +1071,14 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # MUST BE FIRST STEP ADDED AFTER BuildFactory CALL in order to add back
     # the ZipBuild step in it's expected place.
     if is_win_asan_tests_builder:
-      # This must occur before syzygy modifies the dll.
-      chromium_cmd_obj.AddGenerateCodeTallyStep()
+      # This must occur before syzygy modifies the dlls.
+      for dll in ['chrome.dll', 'chrome_child.dll']:
+        chromium_cmd_obj.AddGenerateCodeTallyStep(dll)
+        chromium_cmd_obj.AddConvertCodeTallyJsonStep(dll)
+
+        if factory_properties.get('code_tally_upload_url'):
+          chromium_cmd_obj.AddUploadConvertedCodeTally(
+              dll, factory_properties.get('code_tally_upload_url'))
 
       chromium_cmd_obj.AddWindowsASANStep()
       # Need to add the Zip Build step back

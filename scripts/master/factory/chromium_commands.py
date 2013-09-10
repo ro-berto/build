@@ -153,21 +153,57 @@ class ChromiumCommands(commands.FactoryCommands):
     self._factory.addStep(FileUpload(slavesrc=slavesrc,
                                      masterdest=masterdest))
 
-  def AddGenerateCodeTallyStep(self):
-    """Adds a step to run code tally over the chrome dll."""
+  def AddGenerateCodeTallyStep(self, dll):
+    """Adds a step to run code tally over the given dll."""
     code_tally_exe = self.PathJoin('src', 'third_party', 'syzygy', 'binaries',
                                    'exe', 'experimental', 'code_tally.exe')
+    code_tally_json = self.PathJoin(self._build_dir, self._target,
+                                    '%s_code_tally.json' % dll)
 
-    chrome_dll = self.PathJoin(self._build_dir, self._target, 'chrome.dll')
-    output_file = self.PathJoin(self._build_dir, self._target,
-                                'code_tally.json')
+    dll_path = self.PathJoin(self._build_dir, self._target, dll)
 
-    cmd = [code_tally_exe, '--input-image=%s' % chrome_dll,
-           '--output-file=%s' % output_file]
+    cmd = [code_tally_exe, '--input-image=%s' % dll_path,
+           '--output-file=%s' % code_tally_json]
 
     self._factory.addStep(shell.ShellCommand,
-                          name='code_tally',
-                          description='code_tally',
+                          name='%s_code_tally' % dll,
+                          description='%s_code_tally' % dll,
+                          command=cmd)
+
+  def AddConvertCodeTallyJsonStep(self, dll):
+    """Adds a step to convert the json file to the required server format."""
+    convert_code_tally = self.PathJoin('src', 'third_party', 'syzygy',
+                                       'binaries', 'exe', 'experimental',
+                                       'convert_code_tally.py')
+    code_tally_json = self.PathJoin(self._build_dir, self._target,
+                                    '%s_code_tally.json' % dll)
+    converted_code_tally = self.PathJoin(self._build_dir, self._target,
+                                         '%s_converted_code_tally.json' % dll)
+
+    cmd = [self._python, convert_code_tally,
+           '--master_id', WithProperties('%(mastername)s'),
+           '--builder_name', WithProperties('%(buildername)s'),
+           '--builder_number', WithProperties('%(buildnumber)s'),
+           '--revision', WithProperties('%(got_revision)s'),
+           code_tally_json,
+           converted_code_tally]
+
+    self._factory.addStep(shell.ShellCommand,
+                          name='convert_%s_code_tally' % dll,
+                          description='convert_%s_code_tally' % dll,
+                          command=cmd)
+
+  def AddUploadConvertedCodeTally(self, dll, upload_url):
+    """Adds a step to upload the converted json file to the dashboard."""
+    upload_script = self.PathJoin(self._script_dir, 'upload_code_tally.py')
+    converted_code_tally = self.PathJoin(self._build_dir, self._target,
+                                         '%s_converted_code_tally.json' % dll)
+
+    cmd = [self._python, upload_script, upload_url, converted_code_tally]
+
+    self._factory.addStep(shell.ShellCommand,
+                          name='upload_%s_code_tally' % dll,
+                          description='upload_%s_code_tally' % dll,
                           command=cmd)
 
   def AddWindowsASANStep(self):

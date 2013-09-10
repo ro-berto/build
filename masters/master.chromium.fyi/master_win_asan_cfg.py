@@ -7,6 +7,7 @@ from master import master_utils
 from master import gatekeeper
 from master.factory import chromium_factory
 
+import config
 import master_site_config
 ActiveMaster = master_site_config.ChromiumFYI
 
@@ -65,11 +66,18 @@ tests_2 = [
     'url_unittests',
 ]
 
+# Don't publish test results from local bots.
+if ActiveMaster.is_production_host:
+  code_tally_upload_url = config.Master.dashboard_upload_url
+else:
+  code_tally_upload_url = None
+
 #
 # Windows ASAN Rel Builder
 #
 builder_factory_properties = {
   'asan': True,
+  'code_tally_upload_url': code_tally_upload_url,
   'gclient_env': {
     'GYP_DEFINES': (
       'asan=1 win_z7=1 chromium_win_pch=0 '
@@ -150,14 +158,14 @@ F('win_asan_lkgr_rel', win().ChromiumASANFactory(
     factory_properties=lkgr_factory_properties))
 
 
-def Update(config, active_master, c):
+def Update(update_config, active_master, c):
   c['status'].append(gatekeeper.GateKeeper(
       tree_status_url=None,
       fromaddr=active_master.from_address,
       categories_steps={
         'lkgr': ['compile']
       },
-      relayhost=config.Master.smtp,
+      relayhost=update_config.Master.smtp,
       subject='buildbot %(result)s in %(projectName)s on %(builder)s, '
               'revision %(revision)s',
       sheriffs=None,
