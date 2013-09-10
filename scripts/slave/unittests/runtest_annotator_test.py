@@ -387,9 +387,9 @@ class GraphingEndureLogProcessorTest(LoggingStepBase):
         'https___www_google_com_calendar_-EventListenerCount',
         'https___www_google_com_calendar_-TotalDOMNodeCount',
         'https___www_google_com_calendar_-V8MemoryUsed',
-        'https___www_gmail_com_-EventListenerCount',
-        'https___www_gmail_com_-TotalDOMNodeCount',
-        'https___www_gmail_com_-V8MemoryUsed']
+        'endure_gmail_alt_two_labels-EventListenerCount',
+        'endure_gmail_alt_two_labels-TotalDOMNodeCount',
+        'endure_gmail_alt_two_labels-V8MemoryUsed']
     self._testSummaryHelper(input_file, output_files)
 
   def _testGraphListHelper(self, input_file, expected_graphfile):

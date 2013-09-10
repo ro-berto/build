@@ -838,8 +838,8 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
 class GraphingEndureLogProcessor(GraphingLogProcessor):
   """Handles additional processing for Chrome Endure data."""
-  ENDURE_HEADER_LINE_REGEX = re.compile(r'^url,')
-  ENDURE_RESULT_LINE_REGEX = re.compile(r'^http')
+  ENDURE_HEADER_LINE_REGEX = re.compile(r'^url,|^page_name,')
+  ENDURE_RESULT_LINE_REGEX = re.compile(r'^http|^endure_')
   ENDURE_FIELD_NAME_REGEX = re.compile(
       r'(?P<TRACE>.*)_(?P<COORDINATE>[XY]) \((?P<UNITS>.*)\)')
 
@@ -900,8 +900,8 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
 
     values = csv.reader([line]).next()
 
-    # Assume url is the first column.
-    test_name = self.url_as_file_safe_name(values[0])
+    # Assume test name is the first column.
+    test_name = self.str_as_file_safe_name(values[0])
 
     # Iterate over all trace names discovered from the header.
     for trace_name in self._graph_template:
@@ -921,9 +921,9 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
       self._graphs[graph_name] = graph
 
   @staticmethod
-  def url_as_file_safe_name(url):
-    # Just replace all special characters in the url with underscore.
-    return re.sub('[^a-zA-Z0-9]', '_', url)
+  def str_as_file_safe_name(string):
+    # Just replace all special characters in the string with underscores.
+    return re.sub('[^a-zA-Z0-9]', '_', string)
 
   def _FinalizeProcessing(self):
     self.__CreateSummaryOutput()
