@@ -72,7 +72,9 @@ mac_asan_options = [
   'printing_unittests',
   'remoting_unittests',
   'sql_unittests',
+  'sync_unit_tests',
   'ui_unittests',
+  'unit_tests',
   'url_unittests',
 ]
 
