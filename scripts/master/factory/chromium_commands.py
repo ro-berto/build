@@ -42,6 +42,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._private_script_dir = self.PathJoin(self._script_dir, '..', '..', '..',
                                              'build_internal', 'scripts',
                                              'slave')
+    self._bb_dir = self.PathJoin('src', 'build', 'android', 'buildbot')
 
     # Create smaller name for the functions and vars to simplify the code below.
     J = self.PathJoin
@@ -75,6 +76,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
     self._windows_asan_tool = J(s_dir, 'win_apply_asan.py')
     self._dynamorio_coverage_tool = J(s_dir, 'dynamorio_coverage.py')
+    self._device_status_check = J(self._bb_dir, 'bb_device_status_check.py')
 
     # Scripts in the private dir.
     self._download_and_extract_official_tool = self.PathJoin(
@@ -904,6 +906,14 @@ class ChromiumCommands(commands.FactoryCommands):
     script = J('src', 'chrome', 'test', 'webdriver', 'test',
                'run_webdriver_tests.py')
     self._AddBasicPythonTest('webdriver_tests', script, timeout=timeout)
+
+  def AddDeviceStatus(self, factory_properties=None):
+    """Reports the status of the bot devices."""
+    factory_properties = factory_properties or {}
+    self.AddBuildrunnerAnnotatedPerfStep(
+      'device_status', None, 'graphing', cmd_name=self._device_status_check,
+      cmd_options=['--device-status-dashboard'], step_name='device_status',
+      py_script=True, factory_properties=factory_properties)
 
   def AddTelemetryTest(self, test_name, page_set=None, step_name=None,
                        factory_properties=None, timeout=1200,

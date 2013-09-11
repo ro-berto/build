@@ -579,6 +579,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('devtools_perf'):
       f.AddDevToolsTests(factory_properties=fp)
 
+    # Android device test
+    if R('device_status'):
+      f.AddDeviceStatus(factory_properties=fp)
+
     # Benchmark tests:
     if R('page_cycler_moz'):
       f.AddTelemetryTest('page_cycler', 'page_cycler/moz.json',
