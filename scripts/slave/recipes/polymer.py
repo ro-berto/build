@@ -27,6 +27,7 @@ REPOS = (
   'polymer-expressions',
   'PointerGestures',
   'PointerEvents',
+  'tools'
 )
 
 
