@@ -1214,29 +1214,11 @@ def main():
   # Some test suites are not yet green under LSan, so do not enable LSan for
   # them by default. Bots can override this behavior with lsan_run_all_tests.
   lsan_blacklist = [
-      'base_unittests',
       'browser_tests',
-      'cacheinvalidation_unittests',
-      'cc_unittests',
       'content_browsertests',
-      'content_unittests',
-      'crypto_unittests',
-      'device_unittests',
-      'gpu_unittests',
       'interactive_ui_tests',
-      'ipc_tests',
-      'jingle_unittests',
-      'media_unittests',
       'net_unittests',
-      'ppapi_unittests',
-      'printing_unittests',
-      'remoting_unittests',
-      'sandbox_linux_unittests',
-      'sql_unittests',
-      'sync_unit_tests',
-      'ui_unittests',
       'unit_tests',
-      'url_unittests',
   ]
   options.enable_lsan = (options.enable_lsan or
      (options.factory_properties.get('lsan', False) and
