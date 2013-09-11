@@ -6,7 +6,6 @@
 REPOS = (
   'polymer',
   'platform',
-  'WeakMap',
   'CustomElements',
   'ShadowDOM',
   'HTMLImports',
@@ -21,7 +20,6 @@ REPOS = (
 REPO_DEPS = {
   'polymer': [
     'platform',
-    'WeakMap',
     'CustomElements',
     'PointerGestures',
     'PointerEvents',
@@ -33,7 +31,6 @@ REPO_DEPS = {
     'polymer-expressions',
   ],
   'platform': [
-    'WeakMap',
     'CustomElements',
     'PointerGestures',
     'PointerEvents',
@@ -56,17 +53,7 @@ REPO_DEPS = {
     'NodeBind',
     'TemplateBinding',
   ],
-  'CustomElements': [
-    'WeakMap',
-  ],
-  'ShadowDOM': [
-    'WeakMap',
-  ],
-  'PointerEvents': [
-    'WeakMap',
-  ],
   'PointerGestures': [
-    'WeakMap',
     'PointerEvents',
   ],
 }
