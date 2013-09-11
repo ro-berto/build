@@ -74,7 +74,9 @@ mac_asan_options = [
   'sql_unittests',
   'sync_unit_tests',
   'ui_unittests',
-  'unit_tests',
+  # TODO(glider): unit_tests is too large on 32-bit OSX to run under ASAN.  See
+  # http://crbug.com/238398
+  # 'unit_tests',
   'url_unittests',
 ]
 
@@ -98,7 +100,8 @@ mac_asan_tests_1 = [
 mac_asan_tests_2 = [
   'browser_tests',
   'net',
-  'unit',
+  'sync_unit_tests',
+  'ui_unittests',
 ]
 
 mac_asan_tests_3 = [
