@@ -9,10 +9,10 @@ deps = {
     "/trunk/src/chrome/test/data/reliability",
 
   "build/third_party/gsutil":
-    "svn://svn.chromium.org/gsutil/trunk/src@344",
+    "svn://svn.chromium.org/gsutil/trunk/src@263",
 
   "build/third_party/gsutil/boto":
-    "svn://svn.chromium.org/boto@8",
+    "svn://svn.chromium.org/boto@7",
 
   "build/third_party/lighttpd":
     "/trunk/deps/third_party/lighttpd@58968",
