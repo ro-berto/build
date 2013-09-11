@@ -100,6 +100,7 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES': ('asan=1 '
+                            'lsan=1 '
                             'linux_use_tcmalloc=0 '),
             'GYP_GENERATORS': 'ninja', },
         'trigger': 'linux_asan_rel_trigger' }))
@@ -128,6 +129,7 @@ F('linux_asan_rel_tests_1', linux().ChromiumASANFactory(
       'cluster_size': 1,
       'browser_total_shards': 3,
       'browser_shard_index': 1,
+      'lsan': True,
       'sharded_tests': sharded_tests,
     }))
 
@@ -150,6 +152,7 @@ F('linux_asan_rel_tests_2', linux().ChromiumASANFactory(
       'cluster_size': 1,
       'browser_total_shards': 3,
       'browser_shard_index': 2,
+      'lsan': True,
       'sharded_tests': sharded_tests,
     }))
 
@@ -169,6 +172,7 @@ F('linux_asan_rel_tests_3', linux().ChromiumASANFactory(
       'cluster_size': 1,
       'browser_total_shards': 3,
       'browser_shard_index': 3,
+      'lsan': True,
       'sharded_tests': sharded_tests,
     }))
 

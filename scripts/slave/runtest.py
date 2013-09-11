@@ -817,7 +817,7 @@ def main_linux(options, args):
   if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
       not options.factory_properties.get('asan', False) and
       not options.factory_properties.get('tsan', False) and
-      not options.factory_properties.get('lsan', False)):
+      not options.enable_lsan):
     print 'Enabling sandbox.  Setting environment variable:'
     print '  CHROME_DEVEL_SANDBOX="%s"' % CHROME_SANDBOX_PATH
     extra_env['CHROME_DEVEL_SANDBOX'] = CHROME_SANDBOX_PATH
@@ -832,7 +832,7 @@ def main_linux(options, args):
 
   extra_env['LD_LIBRARY_PATH'] = ''
 
-  if options.factory_properties.get('lsan', False):
+  if options.enable_lsan:
     # Use the debug version of libstdc++ under LSan. If we don't, there will be
     # a lot of incomplete stack traces in the reports.
     extra_env['LD_LIBRARY_PATH'] += '/usr/lib/x86_64-linux-gnu/debug:'
@@ -890,7 +890,7 @@ def main_linux(options, args):
     # Plain ASan bots use a symbolizer script, whereas ASan+LSan and LSan bots
     # use a built-in symbolizer.
     if (options.factory_properties.get('asan', False) and
-        not options.factory_properties.get('lsan', False)):
+        not options.enable_lsan):
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
                                                'asan', 'asan_symbolize.py'))
       pipes = [[sys.executable, symbolize], ['c++filt']]
@@ -1192,6 +1192,10 @@ def main():
                            help='A file containing a JSON blob with a dict '
                                 'that will be uploaded to the results '
                                 'dashboard as supplemental columns.')
+  option_parser.add_option('', '--enable-lsan', default=False,
+                           help='Enable memory leak detection (LeakSanitizer). '
+                                'Also can be enabled with the factory '
+                                'properties "lsan" and "lsan_run_all_tests".')
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
@@ -1207,9 +1211,40 @@ def main():
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
 
+  # Some test suites are not yet green under LSan, so do not enable LSan for
+  # them by default. Bots can override this behavior with lsan_run_all_tests.
+  lsan_blacklist = [
+      'base_unittests',
+      'browser_tests',
+      'cacheinvalidation_unittests',
+      'cc_unittests',
+      'content_browsertests',
+      'content_unittests',
+      'crypto_unittests',
+      'device_unittests',
+      'gpu_unittests',
+      'interactive_ui_tests',
+      'ipc_tests',
+      'jingle_unittests',
+      'media_unittests',
+      'net_unittests',
+      'ppapi_unittests',
+      'printing_unittests',
+      'remoting_unittests',
+      'sandbox_linux_unittests',
+      'sql_unittests',
+      'sync_unit_tests',
+      'ui_unittests',
+      'unit_tests',
+      'url_unittests',
+  ]
+  options.enable_lsan = (options.enable_lsan or
+     (options.factory_properties.get('lsan', False) and
+      (options.factory_properties.get('lsan_run_all_tests', False) or
+       args[0] not in lsan_blacklist)))
+
   if (options.factory_properties.get('asan', False) or
-      options.factory_properties.get('tsan', False) or
-      options.factory_properties.get('lsan', False)):
+      options.factory_properties.get('tsan', False) or options.enable_lsan):
     # Instruct GTK to use malloc while running ASan, TSan or LSan tests.
     os.environ['G_SLICE'] = 'always-malloc'
     os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
@@ -1232,7 +1267,7 @@ def main():
     os.environ['TSAN_OPTIONS'] = tsan_options
     # Disable sandboxing under TSan for now. http://crbug.com/223602.
     args.append('--no-sandbox')
-  if options.factory_properties.get('lsan', False):
+  if options.enable_lsan:
     # Set verbosity=1 so LSan would always print suppression statistics.
     os.environ['LSAN_OPTIONS'] = (
         'suppressions=src/tools/lsan/suppressions.txt '
@@ -1252,7 +1287,7 @@ def main():
     # see http://crbug.com/162461.
     common_asan_options = ('strict_memcmp=0 replace_intrin=0 '
                            'strip_path_prefix=build/src/out/Release/../../ ')
-    if options.factory_properties.get('lsan', False):
+    if options.enable_lsan:
       # On ASan+LSan bots we enable leak detection. Also, since sandbox is
       # disabled under LSan, we can symbolize.
       os.environ['ASAN_OPTIONS'] = (common_asan_options +
