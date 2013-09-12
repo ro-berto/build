@@ -123,15 +123,19 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
 B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina', auto_reboot=False,
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
     tests=blink_tests,
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+        'all_webkit'],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
+        'blink_config': 'blink',
+        'gclient_env': {
+            'GYP_DEFINES':'fastbuild=1',
+            'GYP_GENERATORS':'ninja',
+        },
         'gclient_timeout': 3600, # TODO: crbug.com/249191 - remove this.
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
-        'blink_config': 'blink',
     }))
 
 ################################################################################
