@@ -187,9 +187,12 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
   command.append(test_exe_path)
 
   # Extra options for run_test_cases.py must be passed after the exe path.
+  # TODO(earthdok): pass '--clusters' in extra_sharding_args. No need for a
+  # separate factory property.
   cluster_size = options.factory_properties.get('cluster_size')
   if cluster_size is not None:
     command.append('--clusters=%s' % str(cluster_size))
+  command.extend(options.extra_sharding_args.split())
 
   return command
 
@@ -1196,6 +1199,8 @@ def main():
                            help='Enable memory leak detection (LeakSanitizer). '
                                 'Also can be enabled with the factory '
                                 'properties "lsan" and "lsan_run_all_tests".')
+  option_parser.add_option('', '--extra-sharding-args', default='',
+                           help='Extra options for run_test_cases.py.')
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
@@ -1224,6 +1229,9 @@ def main():
      (options.factory_properties.get('lsan', False) and
       (options.factory_properties.get('lsan_run_all_tests', False) or
        args[0] not in lsan_blacklist)))
+
+  if (options.factory_properties.get('asan', False)):
+    options.extra_sharding_args += ' --verbose'
 
   if (options.factory_properties.get('asan', False) or
       options.factory_properties.get('tsan', False) or options.enable_lsan):
