@@ -128,6 +128,7 @@ F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
     tests=blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
+        'gclient_timeout': 3600, # TODO: crbug.com/249191 - remove this.
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
