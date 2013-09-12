@@ -18,6 +18,8 @@ class SVNPoller(svnpoller.SVNPoller):
     TryJobSubversion. We don't want buildbot to see these changes.
     """
     for chdict in changes:
+      patch_change_id = chdict['revision']  # The svn rev of the patch repo
+
       # pylint: disable=E1101
       parsed = self.parent.parse_options(text_to_dict(chdict['comments']))
 
@@ -34,7 +36,8 @@ class SVNPoller(svnpoller.SVNPoller):
       yield wfd
       change = wfd.getResult()
 
-      self.parent.addChangeInner(chdict['files'], parsed, change.number)
+      self.parent.addChangeInner(chdict['files'], parsed, change.number,
+                                 patch_change_id)
 
 
 class TryJobSubversion(TryJobBase):
@@ -50,7 +53,7 @@ class TryJobSubversion(TryJobBase):
     self.watcher.setServiceParent(self)
     self.watcher.master = self.master
 
-  def addChangeInner(self, files, options, changeid):
+  def addChangeInner(self, files, options, changeid, patch_change_id):
     """Process the received data and send the queue buildset."""
     # Implicitly skips over non-files like directories.
     diffs = [f for f in files if f.endswith(".diff")]
@@ -59,11 +62,13 @@ class TryJobSubversion(TryJobBase):
       log.msg("Svn try with too many files %s" % (','.join(files)))
       return
 
-    command = [
-        'cat', self.watcher.svnurl + '/' + urllib.quote(diffs[0]),
-        '--non-interactive'
-    ]
-    deferred = self.watcher.getProcessOutput(command)
+    options['patch_url'] = (
+        '%s/%s@%s'
+        % (self.watcher.svnurl, urllib.quote(diffs[0]), patch_change_id)
+    )
+
+    deferred = self.watcher.getProcessOutput(
+        ['cat', options['patch_url'], '--non-interactive'])
     deferred.addCallback(
         lambda output: self._OnDiffReceived(options, output, changeid))
     return deferred

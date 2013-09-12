@@ -206,6 +206,7 @@ class TryJobBase(TryBase):
     keys = (
       'clobber',
       'issue',
+      'patch_url',
       'patchset',
       'requester',
       'rietveld',
