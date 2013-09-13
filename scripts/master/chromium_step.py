@@ -887,10 +887,14 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Handle initial setup here, as step_status might not exist yet at init.
     self.initialSection()
 
-    try:
-      annotator.MatchAnnotation(line.rstrip(), self)
-    except Exception as e:
-      logging.error('Error parsing annotated line "%s": %s' % (line, e))
+    annotator.MatchAnnotation(line.rstrip(), self)
+
+  def SET_BUILD_PROPERTY(self, name, value):
+    # Support: @@@SET_BUILD_PROPERTY@<name>@<json>@@@
+    # Sets the property and indicates that it came from an annoation on the
+    # current step.
+    self.command.build.setProperty(name, json.loads(value), 'Annotation(%s)'
+                                   % self.cursor['name'])
 
   def STEP_LOG_LINE(self, log_label, log_line):
     # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
