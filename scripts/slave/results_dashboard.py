@@ -164,13 +164,7 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
     for (trace_name, trace_values) in data['traces'].iteritems():
 
       is_important = trace_name in data.get('important', [])
-      if trace_name == chart_name + '_ref':
-        trace_name = 'ref'
-      chart_name = chart_name.replace('_by_url', '')
-      trace_name = trace_name.replace('/', '_')
-      test_path = '%s/%s/%s' % (test_name, chart_name, trace_name)
-      if chart_name == trace_name:
-        test_path = '%s/%s' % (test_name, chart_name)
+      test_path = _TestPath(test_name, chart_name, trace_name)
       result = {
           'master': master,
           'bot': system,
@@ -216,6 +210,30 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
       results_to_add.append(result)
   _PrintLinkStep(url, master, bot, test_name, revision)
   return json.dumps(results_to_add)
+
+
+def _TestPath(test_name, chart_name, trace_name):
+  """Get the slash-separated test path.
+
+  Args:
+    test: Test name. Typically, this will be a top-level 'test suite' name
+        such as 'moz'. A nested test hierarchy can be specified by including
+        slashes in this name.
+    chart_name: Name of chart where multiple trace lines are grouped.
+    trace_name: Name of trace line on chart.
+
+  Returns:
+    A slash-separated list of names that corresponds to the hierarchy of test
+    data in the Chrome Performance Dashboard.
+  """
+  if trace_name == chart_name + '_ref':
+    trace_name = 'ref'
+  chart_name = chart_name.replace('_by_url', '')
+  trace_name = trace_name.replace('/', '_')
+  test_path = '%s/%s/%s' % (test_name, chart_name, trace_name)
+  if chart_name == trace_name:
+    test_path = '%s/%s' % (test_name, chart_name)
+  return test_path
 
 
 def _GetTimestamp():
