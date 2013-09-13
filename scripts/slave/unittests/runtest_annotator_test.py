@@ -425,6 +425,16 @@ class GraphingEndureLogProcessorTest(LoggingStepBase):
 
     self._testGraphListHelper(input_file, expected_graphfile)
 
+  def testResultsLengthError(self):
+    input_file_error = 'endure_processor_results_length_error.log'
+
+    parser = self._ConstructDefaultProcessor(
+        process_log_utils.GraphingEndureLogProcessor)
+
+    # Mismatching results line length
+    self.assertRaises(AssertionError, self._ProcessLog, parser,
+                      input_file_error)
+
 
 if __name__ == '__main__':
   unittest.main()

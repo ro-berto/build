@@ -849,6 +849,7 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     # when parsing the header line.  This template will be used as the default
     # EndureGraph when parsing results lines.
     self._graph_template = {}
+    self._expected_results_len = None
 
   def ProcessLine(self, line):
     """Parses one line of Chrome Endure output."""
@@ -871,6 +872,7 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     self._graph_template = {}
 
     field_names = csv.reader([line]).next()
+    self._expected_results_len = len(field_names)
 
     for index, field in enumerate(field_names):
       match = self.ENDURE_FIELD_NAME_REGEX.match(field)
@@ -899,6 +901,10 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     assert self._graph_template
 
     values = csv.reader([line]).next()
+
+    assert len(values) == self._expected_results_len, (
+        'Result line \'%s\' has mismatching number of elements, expecting %s' %
+        (line.strip(), self._expected_results_len))
 
     # Assume test name is the first column.
     test_name = self.str_as_file_safe_name(values[0])
