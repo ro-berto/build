@@ -10,6 +10,7 @@ script.
 """
 
 from master.factory import annotator_commands
+from master.factory import commands
 from master.factory.build_factory import BuildFactory
 
 
@@ -19,7 +20,7 @@ class AnnotatorFactory(object):
   def __init__(self):
     self._factory_properties = None
 
-  def BaseFactory(self, recipe, factory_properties=None):
+  def BaseFactory(self, recipe, factory_properties=None, triggers=None):
     """The primary input for the factory is the |recipe|, which specifies the
     name of a recipe file to search for. The recipe file will fill in the rest
     of the |factory_properties|. This setup allows for major changes to factory
@@ -36,4 +37,8 @@ class AnnotatorFactory(object):
     factory = BuildFactory()
     cmd_obj = annotator_commands.AnnotatorCommands(factory)
     cmd_obj.AddAnnotatedScript(factory_properties)
+
+    for t in (triggers or []):
+      factory.addStep(commands.CreateTriggerStep(t))
+
     return factory
