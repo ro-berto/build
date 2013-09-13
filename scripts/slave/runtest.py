@@ -1223,7 +1223,6 @@ def main():
       'content_browsertests',
       'interactive_ui_tests',
       'net_unittests',
-      'unit_tests',
   ]
   options.enable_lsan = (options.enable_lsan or
      (options.factory_properties.get('lsan', False) and
