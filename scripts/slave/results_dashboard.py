@@ -114,11 +114,6 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       git_hash = data['rev']
 
     for (trace, values) in data['traces'].iteritems():
-      # Test to make sure we don't have x/y data.
-      for value in values:
-        if not isinstance(value, basestring):
-          # http://crbug.com/224719
-          raise NotImplementedError('x/y graphs not supported at this time.')
 
       important = trace in data.get('important', [])
       if trace == graph + '_ref':
@@ -133,13 +128,22 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
           'bot': system,
           'test': test_path,
           'revision': revision,
-          'value': values[0],
-          'error': values[1],
           'masterid': masterid,
           'buildername': buildername,
           'buildnumber': buildnumber,
           'supplemental_columns': {},
       }
+      # Test whether we have x/y data.
+      has_multi_value_data = False
+      for value in values:
+        if isinstance(value, list):
+          has_multi_value_data = True
+      if has_multi_value_data:
+        result['data'] = values
+      else:
+        result['value'] = values[0]
+        result['error'] = values[1]
+
       if chrome_supplemental_revision:
         try:
           result['supplemental_columns']['r_chromium_svn'] = int(data['rev'])
@@ -155,6 +159,10 @@ def _GetResultsJson(logname, lines, system, test, url, masterid,
       result['supplemental_columns'].update(supplemental_columns)
       if data.get('units'):
         result['units'] = data['units']
+      if data.get('units_x'):
+        result['units_x'] = data['units_x']
+      if data.get('stack'):
+        result['stack'] = data['stack']
       if important:
         result['important'] = True
       results_to_add.append(result)

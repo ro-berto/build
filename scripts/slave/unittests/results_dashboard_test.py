@@ -3,7 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-""" Source file for results_dashboard testcases."""
+"""Test cases for results_dashboard."""
 
 import datetime
 import json
@@ -55,8 +55,23 @@ class ResultsDashboardTest(unittest.TestCase):
     shutil.rmtree(self.build_dir)
 
   def _SendResults(self, send_results_args, expected_new_json, errors,
-                   mock_timestamp=False, webkit_master=False):
-    self.mox.UnsetStubs()  # Needed for multiple calls from same test.
+                       mock_timestamp=False, webkit_master=False):
+    """Test one call of SendResults with the given set of arguments.
+
+    Args:
+      send_results_args: The list of arguments to pass to SendResults.
+      expected_new_json: A list of JSON string expected to be sent.
+      errors: A list of corresponding errors expected to be received
+          (Each item in the list is either a string or None.)
+      mock_timestamp: Whether to stub out datetime with FakeDateTime().
+      webkit_master: Whether GetActiveMaster should give the webkit master.
+
+    This method will fail a test case if the JSON that gets sent and the
+    errors that are raised when results_dashboard.SendResults is called
+    don't match the expected json and errors.
+    """
+    # Unsetting stubs required here for multiple calls from same test.
+    self.mox.UnsetStubs()
     self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
     if webkit_master:
       slave_utils.GetActiveMaster().AndReturn('ChromiumWebkit')
@@ -65,6 +80,11 @@ class ResultsDashboardTest(unittest.TestCase):
     if mock_timestamp:
       self.mox.StubOutWithMock(datetime, 'datetime')
       datetime.datetime.utcnow().AndReturn(FakeDateTime())
+    # urllib2.urlopen is the function that's called to send data to
+    # the server. Here it is replaced with a mock object which is used
+    # to record the expected JSON.
+    # Because the JSON expected might be equivalent without being exactly
+    # equal (in the string sense), a Mox Comparator is used.
     self.mox.StubOutWithMock(urllib2, 'urlopen')
     for json_line, error in zip(expected_new_json, errors):
       if error:
@@ -352,6 +372,58 @@ class ResultsDashboardTest(unittest.TestCase):
     errors = [None]
     self._SendResults(args, expected_new_json, errors)
 
+  def test_MultiValueRowUpload(self):
+    args = [
+        'my_endure_test-summary.dat',
+        ['{"traces": {'
+             '"total_dom_nodes": [["10", "123"], ["20.5", "234"]],'
+             '"event_listeners": [["10", "12"], ["20.5", "40"]]},'
+         ' "rev": "12345",'
+         ' "webkit_rev": "6789",'
+         ' "v8_rev": "2345",'
+         ' "units": "count",'
+         ' "units_x": "seconds",'
+         ' "stack": false}'],
+        'linux-release',
+        'endure',
+        'https://chrome-perf.googleplex.com',
+        'chromium.perf',
+        'Linux (1)',
+        '1234',
+        self.build_dir,
+        {}]
+    expected_new_json = [json.dumps([{
+        'master': 'ChromiumPerf',
+        'bot': 'linux-release',
+        'test': 'endure/my_endure_test/total_dom_nodes',
+        'revision': 12345,
+        'data': [['10', '123'], ['20.5', '234']],
+        'masterid': 'chromium.perf',
+        'buildername': 'Linux (1)',
+        'buildnumber': '1234',
+        'units': 'count',
+        'units_x': 'seconds',
+        'supplemental_columns': {
+            'r_webkit_rev': '6789',
+            'r_v8_rev': '2345'
+    }}, {
+        'master': 'ChromiumPerf',
+        'bot': 'linux-release',
+        'test': 'endure/my_endure_test/event_listeners',
+        'revision': 12345,
+        'data': [['10', '12'], ['20.5', '40']],
+        'masterid': 'chromium.perf',
+        'buildername': 'Linux (1)',
+        'buildnumber': '1234',
+        'units': 'count',
+        'units_x': 'seconds',
+        'supplemental_columns': {
+            'r_webkit_rev': '6789',
+            'r_v8_rev': '2345'
+    }}])]
+    errors = [None, None]
+    self._SendResults(args, expected_new_json, errors)
+
   def test_ByUrlGraph(self):
     args = [
         'bar_by_url-summary.dat',
@@ -607,7 +679,9 @@ class ResultsDashboardTest(unittest.TestCase):
     cache_file = open(self.cache_filename, 'rb')
     actual_cache = cache_file.read()
     cache_file.close()
-    self.assertEqual(expected_new_json[0], actual_cache)
+    # Compare the dicts loaded from the JSON instead of the actual JSON string,
+    # because the order of the fields in the string doesn't matter.
+    self.assertEqual(json.loads(expected_new_json[0]), json.loads(actual_cache))
 
   def test_NoResendAfterMultipleErrors(self):
     previous_lines = '\n'.join([
