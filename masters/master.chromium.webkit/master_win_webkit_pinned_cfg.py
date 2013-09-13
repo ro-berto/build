@@ -56,7 +56,7 @@ F('f_webkit_win_rel', win().ChromiumFactory(
     factory_properties={
         'trigger': 's1_chromium_rel_trigger',
         'gclient_env': {
-            'GYP_DEFINES': 'use_aura=0',
+            'GYP_DEFINES': 'use_ash=0 use_aura=0',
         },
     }))
 

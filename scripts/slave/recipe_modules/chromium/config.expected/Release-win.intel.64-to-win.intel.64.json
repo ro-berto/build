@@ -10,7 +10,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library target_arch=x64", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library target_arch=x64 use_ash=0 use_aura=0", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
       "GYP_MSVS_VERSION": "2012"
