@@ -82,10 +82,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._download_and_extract_official_tool = self.PathJoin(
         p_dir, 'get_official_build.py')
 
-    # Reliability paths.
-    self._reliability_tool = J(self._script_dir, 'reliability_tests.py')
-    self._reliability_data = J('src', 'chrome', 'test', 'data', 'reliability')
-
     # These scripts should be move to the script dir.
     self._check_deps_tool = J('src', 'tools', 'checkdeps', 'checkdeps.py')
     self._check_bins_tool = J('src', 'tools', 'checkbins', 'checkbins.py')
@@ -555,12 +551,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               step_name='chrome_frame_perf',
                               factory_properties=factory_properties)
 
-  # Reliability sanity tests.
-  def AddAutomatedUiTests(self, factory_properties=None):
-    arg_list = ['--gtest_filter=-AutomatedUITest.TheOneAndOnlyTest']
-    self.AddGTestTestStep('automated_ui_tests', factory_properties,
-                          arg_list=arg_list)
-
   def AddDeps2GitStep(self, verify=True):
     J = self.PathJoin
     deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')
@@ -636,15 +626,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                                 do_step_if=self.TestStepFilter)
-
-  def AddReliabilityTests(self, platform):
-    cmd = [self._python,
-           self._reliability_tool,
-           '--platform', platform,
-           '--data-dir', self._reliability_data,
-           '--build-id', WithProperties('%(build_id)s')]
-    self.AddTestStep(retcode_command.ReturnCodeCommand,
-                     'reliability_tests', cmd)
 
   def AddInstallerTests(self, factory_properties):
     if self._target_platform == 'win32':

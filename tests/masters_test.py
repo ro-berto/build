@@ -197,7 +197,6 @@ def main(argv):
   public_masters = {
       'master.chromium': 'Chromium',
       'master.chromium.chrome': 'ChromiumChrome',
-      'master.chromium.chromebot': 'ChromiumChromebot',
       'master.chromium.chromedriver': 'ChromiumChromeDriver',
       'master.chromium.chromiumos': 'ChromiumChromiumOS',
       'master.chromium.endure': 'ChromiumEndure',
