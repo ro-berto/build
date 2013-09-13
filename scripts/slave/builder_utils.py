@@ -366,8 +366,8 @@ def MockBuild(my_builder, buildsetup, mastername, slavename, basepath=None,
   build = base.Build([FakeRequest(buildsetup)])
   safename = buildbot.util.safeTranslate(my_builder['name'])
 
-  my_builder['builddir'] = safename
-  my_builder.setdefault('slavebuilddir', safename)
+  my_builder.setdefault('builddir', safename)
+  my_builder.setdefault('slavebuilddir', my_builder['builddir'])
 
 
   workdir_root = None
