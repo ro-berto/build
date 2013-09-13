@@ -887,151 +887,139 @@ class AnnotationObserver(buildstep.LogLineObserver):
     # Handle initial setup here, as step_status might not exist yet at init.
     self.initialSection()
 
-    # All annotator directives start with @.
-    if not line.startswith('@'):
-      return
+    try:
+      annotator.MatchAnnotation(line.rstrip(), self)
+    except Exception as e:
+      logging.error('Error parsing annotated line "%s": %s' % (line, e))
 
-    # Add \n if not there, which seems to be the case for log lines from
-    # windows agents, but not others.
-    if not line.endswith('\n'):
-      line += '\n'
-
+  def STEP_LOG_LINE(self, log_label, log_line):
     # Support: @@@STEP_LOG_LINE@<label>@<line>@@@ (add log to step)
     # Appends a line to the log's array. When STEP_LOG_END is called,
     # that will finalize the log and call addCompleteLog().
-    m = annotator.Match.log_line(line)
-    if m:
-      log_label = m[0]
-      log_line = m[1]
-      current_logs = self.cursor['annotated_logs']
-      current_logs[log_label] = current_logs.get(log_label, []) + [log_line]
+    current_logs = self.cursor['annotated_logs']
+    current_logs[log_label] = current_logs.get(log_label, []) + [log_line]
 
+  def STEP_LOG_END(self, log_label):
     # Support: @@@STEP_LOG_END@<label>@@@ (finalizes log to step)
-    m = annotator.Match.log_end(line)
-    if m:
-      log_label = m[0]
-      current_logs = self.cursor['annotated_logs']
-      log_text = '\n'.join(current_logs.get(log_label, []))
-      addLogToStep(self.cursor['step'], log_label, log_text)
+    current_logs = self.cursor['annotated_logs']
+    log_text = '\n'.join(current_logs.get(log_label, []))
+    addLogToStep(self.cursor['step'], log_label, log_text)
 
+  def STEP_LOG_END_PERF(self, log_label, perf_dashboard_name):
     # Support: @@@STEP_LOG_END_PERF@<label>@<line>@@@
     # (finalizes log to step, marks it as being a perf step
     # requiring logs to be stored on the master)
-    m = annotator.Match.log_end_perf(line)
-    if m:
-      log_label = m[0]
-      perf_dashboard_name = m[1]
-      current_logs = self.cursor['annotated_logs']
-      log_text = '\n'.join(current_logs.get(log_label, [])) + '\n'
+    current_logs = self.cursor['annotated_logs']
+    log_text = '\n'.join(current_logs.get(log_label, [])) + '\n'
 
-      report_link = None
-      output_dir = None
-      if self.perf_id:
-        report_link, output_dir, _ = self._PerfStepMappings(
-            self.show_perf, self.perf_id, perf_dashboard_name,
-            self.perf_report_url_suffix)
+    report_link = None
+    output_dir = None
+    if self.perf_id:
+      report_link, output_dir, _ = self._PerfStepMappings(
+          self.show_perf, self.perf_id, perf_dashboard_name,
+          self.perf_report_url_suffix)
 
-      PERF_EXPECTATIONS_PATH = ('../../scripts/master/log_parser/'
-                                'perf_expectations/')
-      perf_output_dir = None
-      if output_dir:
-        output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir)
-        perf_output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir,
-            PERF_EXPECTATIONS_PATH)
+    PERF_EXPECTATIONS_PATH = ('../../scripts/master/log_parser/'
+                              'perf_expectations/')
+    perf_output_dir = None
+    if output_dir:
+      output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir)
+      perf_output_dir = chromium_utils.AbsoluteCanonicalPath(output_dir,
+          PERF_EXPECTATIONS_PATH)
 
-      if report_link and output_dir:
-        MakeOutputDirectory(output_dir)
-        if log_label == self.GRAPH_LIST:
-          self._SaveGraphInfo(log_text, output_dir)
-        else:
-          Prepend(log_label, log_text, output_dir, perf_output_dir)
+    if report_link and output_dir:
+      MakeOutputDirectory(output_dir)
+      if log_label == self.GRAPH_LIST:
+        self._SaveGraphInfo(log_text, output_dir)
+      else:
+        Prepend(log_label, log_text, output_dir, perf_output_dir)
 
+  def STEP_LINK(self, link_label, link_url):
     # Support: @@@STEP_LINK@<name>@<url>@@@ (emit link)
     # Also support depreceated @@@link@<name>@<url>@@@
-    m = annotator.Match.step_link(line)
-    if m:
-      link_label = m[0]
-      link_url = m[1]
-      self.addLinkToCursor(link_label, link_url)
+    self.addLinkToCursor(link_label, link_url)
+
+  def STEP_STARTED(self):
     # Support: @@@STEP_STARTED@@@ (start a step at cursor)
-    if annotator.Match.step_started(line):
-      self.startStep(self.cursor)
+    self.startStep(self.cursor)
+
+  def STEP_CLOSED(self):
     # Support: @@@STEP_CLOSED@@@
-    if annotator.Match.step_closed(line):
-      self.finishCursor()
-      self.cursor = self.sections[0]
+    self.finishCursor()
+    self.cursor = self.sections[0]
+
+  def STEP_WARNINGS(self):
     # Support: @@@STEP_WARNINGS@@@ (warn on a stage)
     # Also support deprecated @@@BUILD_WARNINGS@@@
-    if annotator.Match.step_warnings(line):
-      self.updateStepStatus(builder.WARNINGS)
+    self.updateStepStatus(builder.WARNINGS)
+
+  def STEP_FAILURE(self):
     # Support: @@@STEP_FAILURE@@@ (fail a stage)
     # Also support deprecated @@@BUILD_FAILED@@@
-    if annotator.Match.step_failure(line):
-      self.updateStepStatus(builder.FAILURE)
+    self.updateStepStatus(builder.FAILURE)
+
+  def STEP_EXCEPTION(self):
     # Support: @@@STEP_EXCEPTION@@@ (exception on a stage)
     # Also support deprecated @@@BUILD_FAILED@@@
-    if annotator.Match.step_exception(line):
-      self.updateStepStatus(builder.EXCEPTION)
+    self.updateStepStatus(builder.EXCEPTION)
+
+  def HALT_ON_FAILURE(self):
     # Support: @@@HALT_ON_FAILURE@@@ (halt if a step fails immediately)
-    if annotator.Match.halt_on_failure(line):
-      self.halt_on_failure = True
+    self.halt_on_failure = True
+
+  def HONOR_ZERO_RETURN_CODE(self):
     # Support: @@@HONOR_ZERO_RETURN_CODE@@@ (succeed on 0 return, even if some
     #     steps have failed)
-    if annotator.Match.honor_zero_return_code(line):
-      self.honor_zero_return_code = True
+    self.honor_zero_return_code = True
+
+  def STEP_CLEAR(self):
     # Support: @@@STEP_CLEAR@@@ (reset step description)
-    if annotator.Match.step_clear(line):
-      self.cursor['step_text'] = []
-      self.updateCursorText()
+    self.cursor['step_text'] = []
+    self.updateCursorText()
+
+  def STEP_SUMMARY_CLEAR(self):
     # Support: @@@STEP_SUMMARY_CLEAR@@@ (reset step summary)
-    if annotator.Match.step_summary_clear(line):
-      self.cursor['step_summary_text'] = []
-      self.updateCursorText()
+    self.cursor['step_summary_text'] = []
+    self.updateCursorText()
+
+  def STEP_TEXT(self, msg):
     # Support: @@@STEP_TEXT@<msg>@@@
-    m = annotator.Match.step_text(line)
-    if m:
-      self.cursor['step_text'].append(m[0])
-      self.updateCursorText()
+    self.cursor['step_text'].append(msg)
+    self.updateCursorText()
+
+  def STEP_SUMMARY_TEXT(self, msg):
     # Support: @@@STEP_SUMMARY_TEXT@<msg>@@@
-    m = annotator.Match.step_summary_text(line)
-    if m:
-      self.cursor['step_summary_text'].append(m[0])
-      self.updateCursorText()
+    self.cursor['step_summary_text'].append(msg)
+    self.updateCursorText()
+
+  def SEED_STEP(self, step_name):
     # Support: @@@SEED_STEP <stepname>@@@ (seed a new section)
-    m = annotator.Match.seed_step(line)
-    if m:
-      step_name = m[0]
-      # Add new one.
-      self.addSection(step_name)
+    self.addSection(step_name)
+
+  def SEED_STEP_TEXT(self, step_name, step_text):
     # Support: @@@SEED_STEP_TEXT@<stepname>@<step text@@@ (change step text of a
     # seeded step)
-    m = annotator.Match.seed_step_text(line)
-    if m:
-      step_name = m[0]
-      step_text = m[1]
-      target = self.lookupCursor(step_name)
-      target['step_text'].append(step_text)
-      updateText(target)
+    target = self.lookupCursor(step_name)
+    target['step_text'].append(step_text)
+    updateText(target)
+
+  def STEP_CURSOR(self, step_name):
     # Support: @@@STEP_CURSOR <stepname>@@@ (set cursor to specified section)
-    m = annotator.Match.step_cursor(line)
-    if m:
-      step_name = m[0]
-      self.cursor = self.lookupCursor(step_name)
+    self.cursor = self.lookupCursor(step_name)
+
+  def BUILD_STEP(self, step_name):
     # Support: @@@BUILD_STEP <step_name>@@@ (start a new section)
-    m = annotator.Match.build_step(line)
-    if m:
-      step_name = m[0]
-      # Ignore duplicate consecutive step labels (for robustness).
-      if step_name != self.sections[-1]['name']:
-        # Don't close already closed steps or the initial step
-        # when using BUILD_STEP.
-        if not (self.cursor['step'].isFinished() or
-                self.cursor == self.sections[0]):
-          # Finish up last section.
-          self.finishCursor()
-        section = self.addSection(step_name)
-        self.startStep(section)
-        self.cursor = section
+    # Ignore duplicate consecutive step labels (for robustness).
+    if step_name != self.sections[-1]['name']:
+      # Don't close already closed steps or the initial step
+      # when using BUILD_STEP.
+      if not (self.cursor['step'].isFinished() or
+              self.cursor == self.sections[0]):
+        # Finish up last section.
+        self.finishCursor()
+      section = self.addSection(step_name)
+      self.startStep(section)
+      self.cursor = section
 
   def handleReturnCode(self, return_code):
     # Treat all non-zero return codes as failure.
