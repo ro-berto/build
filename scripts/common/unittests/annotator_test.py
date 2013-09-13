@@ -7,7 +7,6 @@
 
 import cStringIO
 import json
-import types
 import os
 import sys
 import tempfile
@@ -51,15 +50,15 @@ class TestAnnotationStreams(unittest.TestCase):
       pass
 
     result = [
-        '@@@SEED_STEP@one@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@SEED_STEP one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
-        '@@@SEED_STEP@two@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@SEED_STEP two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
@@ -85,8 +84,8 @@ class TestAnnotationStreams(unittest.TestCase):
                         perf='full_perf')
 
     result = [
-        '@@@SEED_STEP@one@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@SEED_STEP one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
         '@@@STEP_WARNINGS@@@',
         '@@@STEP_FAILURE@@@',
@@ -106,27 +105,11 @@ class TestAnnotationStreams(unittest.TestCase):
         '@@@STEP_LOG_LINE@full_perf_log@perf line one@@@',
         '@@@STEP_LOG_LINE@full_perf_log@perf line two@@@',
         '@@@STEP_LOG_END_PERF@full_perf_log@full_perf@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
     self.assertEquals(result, self._getLines())
-
-  def testStepAnnotationsWrongParams(self):
-    stream = annotator.StructuredAnnotationStream(stream=self.buf)
-    with stream.step('one') as s:
-      with self.assertRaisesRegexp(TypeError, r'1 argument \(2 given\)'):
-        s.step_warnings('bar')
-      with self.assertRaisesRegexp(TypeError, r'2 arguments \(3 given\)'):
-        s.step_summary_text('hello!', 'bar')
-      with self.assertRaisesRegexp(TypeError, r'3 arguments \(1 given\)'):
-        s.step_log_line()
-
-  def testStepAnnotationsDocstring(self):
-    self.assertEqual(
-      annotator.AdvancedAnnotationStep.step_link.__doc__,
-      'Emits an annotation for STEP_LINK.'
-    )
 
   def testSeedStep(self):
     steps = ['one', 'two']
@@ -138,15 +121,15 @@ class TestAnnotationStreams(unittest.TestCase):
       pass
 
     result = [
-        '@@@SEED_STEP@one@@@',
-        '@@@SEED_STEP@two@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@SEED_STEP one@@@',
+        '@@@SEED_STEP two@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@'
     ]
 
@@ -164,21 +147,21 @@ class TestAnnotationStreams(unittest.TestCase):
       pass
 
     result = [
-        '@@@SEED_STEP@one@@@',
-        '@@@SEED_STEP@two@@@',
-        '@@@SEED_STEP@three@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@SEED_STEP one@@@',
+        '@@@SEED_STEP two@@@',
+        '@@@SEED_STEP three@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
-        '@@@STEP_CURSOR@three@@@',
+        '@@@STEP_CURSOR three@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@three@@@',
+        '@@@STEP_CURSOR three@@@',
         '@@@STEP_CLOSED@@@',
-        '@@@SEED_STEP@two@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@SEED_STEP two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
@@ -242,15 +225,15 @@ class TestAnnotationStreams(unittest.TestCase):
     step.step_closed()
 
     result = [
-        '@@@SEED_STEP@one@@@',
-        '@@@SEED_STEP@two@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@SEED_STEP one@@@',
+        '@@@SEED_STEP two@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_STARTED@@@',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '@@@STEP_CLOSED@@@',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '@@@STEP_CLOSED@@@',
     ]
 
@@ -295,18 +278,19 @@ class TestExecution(unittest.TestCase):
     self.assertEquals(ret, 0)
 
     preamble = [
-        '@@@SEED_STEP@one@@@',
+        '@@@SEED_STEP one@@@',
         '',
-        '@@@SEED_STEP@two@@@',
+        '@@@SEED_STEP two@@@',
     ]
     step_one_header = [
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '',
         '@@@STEP_STARTED@@@',
         '',
         sys.executable + " -c print 'hello!'",
         'in dir %s:' % os.getcwd(),
         ' allow_subannotations: False',
+        ' always_run: False',
         ' cmd: [' + repr(sys.executable) + ', \'-c\', "print \'hello!\'"]',
         ' followup_fn: default_followup(...)',
         ' name: one',
@@ -316,18 +300,19 @@ class TestExecution(unittest.TestCase):
     step_one_result = [
         'hello!',
         '',
-        '@@@STEP_CURSOR@one@@@',
+        '@@@STEP_CURSOR one@@@',
         '',
         '@@@STEP_CLOSED@@@',
     ]
     step_two_header = [
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '',
         '@@@STEP_STARTED@@@',
         '',
         sys.executable + " -c print 'yo!'",
         'in dir %s:' % os.getcwd(),
         ' allow_subannotations: False',
+        ' always_run: False',
         ' cmd: [' + repr(sys.executable) + ', \'-c\', "print \'yo!\'"]',
         ' followup_fn: default_followup(...)',
         ' name: two',
@@ -337,7 +322,7 @@ class TestExecution(unittest.TestCase):
     step_two_result = [
         'yo!',
         '',
-        '@@@STEP_CURSOR@two@@@',
+        '@@@STEP_CURSOR two@@@',
         '',
         '@@@STEP_CLOSED@@@',
     ]
@@ -367,7 +352,7 @@ class TestExecution(unittest.TestCase):
 
     ret = self._runAnnotator(cmdlist)
 
-    self.assertTrue('@@@STEP_CURSOR@two@@@' not in self.capture.text)
+    self.assertTrue('@@@STEP_CURSOR two@@@' not in self.capture.text)
     self.assertEquals(ret, 1)
 
   def testException(self):
@@ -384,7 +369,7 @@ class TestExecution(unittest.TestCase):
                     'always_run': True}]
 
     ret = self._runAnnotator(cmdlist)
-    self.assertTrue('@@@STEP_CURSOR@two@@@' in self.capture.text)
+    self.assertTrue('@@@STEP_CURSOR two@@@' in self.capture.text)
     self.assertTrue('yo!' in self.capture.text)
     self.assertEquals(ret, 1)
 
@@ -410,7 +395,7 @@ class TestExecution(unittest.TestCase):
     ret = self._runAnnotator(cmdlist)
     self.assertEquals(self.capture.text.count('yo!'), 1)
     self.assertEquals(self.capture.text.count('nop'), 1)
-    self.assertTrue('@@@SEED_STEP@delete@@@' in self.capture.text)
+    self.assertTrue('@@@SEED_STEP delete@@@' in self.capture.text)
     self.assertEquals(ret, 0)
 
   def testCwd(self):
@@ -473,143 +458,12 @@ class TestExecution(unittest.TestCase):
 
   def testIgnoreAnnotations(self):
     cmdlist = [{'name': 'one',
-                'cmd': _synthesizeCmd(['print \'@@@SEED_STEP@blah@@@\'']),
+                'cmd': _synthesizeCmd(['print \'@@@SEED_STEP blah@@@\'']),
                 'ignore_annotations': True
                },]
     ret = self._runAnnotator(cmdlist)
-    self.assertFalse('@@@SEED_STEP@blah@@@' in self.capture.text)
+    self.assertFalse('@@@SEED_STEP blah@@@' in self.capture.text)
     self.assertEquals(ret, 0)
-
-
-class TestMatchAnnotation(unittest.TestCase):
-  class Callback(object):
-    def __init__(self):
-      self.called = []
-
-    def STEP_WARNINGS(self):
-      self.called.append(('STEP_WARNINGS', []))
-
-    def SEED_STEP(self, name):
-      self.called.append(('SEED_STEP', [name]))
-
-    def STEP_LOG_LINE(self, log_name, line):
-      self.called.append(('STEP_LOG_LINE', [log_name, line]))
-
-    def STEP_LINK(self, name, url):
-      self.called.append(('STEP_LINK', [name, url]))
-
-    def STEP_CURSOR(self):  # pylint: disable=R0201
-      assert False, 'STEP_CURSOR called'
-
-    def SOME_OTHER_METHOD(self):  # pylint: disable=R0201
-      assert False, 'SOME_OTHER_METHOD called'
-
-
-  def setUp(self):
-    self.c = self.Callback()
-
-  def testNonAnnotated(self):
-    annotator.MatchAnnotation('@not really an annotation', self.c)
-    annotator.MatchAnnotation('@@@also not really an annotation@@', self.c)
-    annotator.MatchAnnotation('#@@@totally not an annotation@@@', self.c)
-    annotator.MatchAnnotation('###clearly not an annotation###', self.c)
-    self.assertEqual(self.c.called, [])
-
-  def testZeroAnnotated(self):
-    annotator.MatchAnnotation('@@@STEP_WARNINGS@@@', self.c)
-    self.assertEqual(self.c.called, [
-      ('STEP_WARNINGS', []),
-    ])
-
-  def testZeroAnnotatedCruft(self):
-    with self.assertRaisesRegexp(Exception, 'cruft "@"'):
-      annotator.MatchAnnotation('@@@STEP_WARNINGS@@@@', self.c)
-    with self.assertRaisesRegexp(Exception, 'cruft " "'):
-      annotator.MatchAnnotation('@@@STEP_WARNINGS @@@', self.c)
-
-  def testZeroCruft(self):
-    with self.assertRaisesRegexp(Exception, "cruft"):
-      annotator.MatchAnnotation('@@@STEP_WARNINGS flazoo@@@', self.c)
-
-  def testAlias(self):
-    annotator.MatchAnnotation('@@@BUILD_WARNINGS@@@', self.c)
-    annotator.MatchAnnotation('@@@link@foo@bar@trashcan@@@', self.c)
-    self.assertEqual(self.c.called, [
-      ('STEP_WARNINGS', []),
-      ('STEP_LINK', ['foo', 'bar@trashcan']),
-    ])
-
-  def testOneAnnotated(self):
-    annotator.MatchAnnotation('@@@SEED_STEP@@@@', self.c)
-    annotator.MatchAnnotation('@@@SEED_STEP@foo bar@@@', self.c)
-    annotator.MatchAnnotation('@@@SEED_STEP bat fur@@@', self.c)
-    annotator.MatchAnnotation('@@@SEED_STEP@ doom cake@@@', self.c)
-    annotator.MatchAnnotation('@@@SEED_STEP  sooper p@nts@@@', self.c)
-    self.assertEqual(self.c.called, [
-      ('SEED_STEP', ['']),
-      ('SEED_STEP', ['foo bar']),
-      ('SEED_STEP', ['bat fur']),
-      ('SEED_STEP', [' doom cake']),
-      ('SEED_STEP', [' sooper p@nts']),
-    ])
-
-  def testWrongZero(self):
-    with self.assertRaisesRegexp(Exception, "expects 1 args, got 0."):
-      annotator.MatchAnnotation('@@@SEED_STEP@@@', self.c)
-
-  def testTwoAnnotated(self):
-    annotator.MatchAnnotation('@@@STEP_LOG_LINE@foo bar@ awesome line!@@@',
-                              self.c)
-    annotator.MatchAnnotation('@@@STEP_LOG_LINE bat fur@ cool line.@@@',
-                              self.c)
-    annotator.MatchAnnotation('@@@STEP_LOG_LINE@ doom cake@ok@line :/@@@',
-                              self.c)
-    annotator.MatchAnnotation('@@@STEP_LOG_LINE  sooper pants@ pants@@@',
-                              self.c)
-    annotator.MatchAnnotation('@@@STEP_LOG_LINE @@@@', self.c)
-    self.assertEqual(self.c.called, [
-      ('STEP_LOG_LINE', ['foo bar', ' awesome line!']),
-      ('STEP_LOG_LINE', ['bat fur', ' cool line.']),
-      ('STEP_LOG_LINE', [' doom cake', 'ok@line :/']),
-      ('STEP_LOG_LINE', [' sooper pants', ' pants']),
-      ('STEP_LOG_LINE', ['', '']),
-    ])
-
-  def testWrongTwo(self):
-    with self.assertRaisesRegexp(Exception, "expects 2 args, got 0."):
-      annotator.MatchAnnotation('@@@STEP_LOG_LINE@@@', self.c)
-    with self.assertRaisesRegexp(Exception, "expects 2 args, got 1."):
-      annotator.MatchAnnotation('@@@STEP_LOG_LINE @@@', self.c)
-    with self.assertRaisesRegexp(Exception, "expects 2 args, got 1."):
-      annotator.MatchAnnotation('@@@STEP_LOG_LINE@foo@@@', self.c)
-
-  def testWrongImpl(self):
-    with self.assertRaisesRegexp(TypeError, "takes exactly 1 argument"):
-      annotator.MatchAnnotation('@@@STEP_CURSOR@p-pow!@@@', self.c)
-
-  def testBadAnnotation(self):
-    with self.assertRaisesRegexp(Exception, "Unrecognized annotator"):
-      annotator.MatchAnnotation('@@@SOME_OTHER_METHOD@@@', self.c)
-
-  def testMissingImpl(self):
-    with self.assertRaisesRegexp(Exception, "does not implement"):
-      annotator.MatchAnnotation('@@@SEED_STEP_TEXT@thingy@i like pie@@@',
-                                self.c)
-
-
-class TestMatchAnnotationImplementation(unittest.TestCase):
-  def testChromiumStepAnnotationObserver(self):
-    from master.chromium_step import AnnotationObserver
-    required = set(annotator.ALL_ANNOTATIONS.keys())
-    implemented = set()
-    for name, fn in AnnotationObserver.__dict__.iteritems():
-      if name not in required:
-        continue
-      implemented.add(name)
-      self.assertIsInstance(fn, types.FunctionType)
-      expected_num_args = annotator.ALL_ANNOTATIONS[name]
-      self.assertEqual(expected_num_args, fn.func_code.co_argcount - 1)
-    self.assertSetEqual(required, implemented)
 
 
 if __name__ == '__main__':

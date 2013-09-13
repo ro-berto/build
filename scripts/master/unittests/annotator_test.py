@@ -22,16 +22,6 @@ from master import chromium_step
 # pylint: disable=R0201
 
 
-class FakeBuild(mock.Mock):
-  def __init__(self, command):
-    mock.Mock.__init__(self)
-    self.properties = {}
-    self.command = command
-
-  def setProperty(self, propname, propval, source, runtime=True):
-    self.properties[propname] = (propval, source, runtime)
-
-
 class FakeCommand(mock.Mock):
   def __init__(self):
     mock.Mock.__init__(self)
@@ -145,7 +135,6 @@ class AnnotatorCommandsTest(unittest.TestCase):
     self.step = chromium_step.AnnotatedCommand(name='annotated_steps',
                                                description='annotated_steps',
                                                command=self.command)
-    self.step.build = FakeBuild(self.command)
     self.step_status = self.buildstatus.addStepWithName('annotated_steps')
     self.step.setStepStatus(self.step_status)
     self.command.status = self.step_status
@@ -306,24 +295,6 @@ class AnnotatorCommandsTest(unittest.TestCase):
 
     self.assertEquals(self.step.script_observer.annotate_status,
                       builder.SUCCESS)
-
-  def testProperty(self):
-    self.handleOutputLine(
-      '@@@SET_BUILD_PROPERTY@cool@["option", 1, {"dog": "cat"}]@@@')
-    self.assertDictEqual(
-      self.step.build.properties,
-      {'cool':
-       (["option", 1, {"dog": "cat"}], 'Annotation(annotated_steps)', True)
-      }
-    )
-    self.handleOutputLine('@@@SET_BUILD_PROPERTY@cool@1@@@')
-
-    self.handleOutputLine('@@@BUILD_STEP@different_step@@@')
-    self.handleOutputLine('@@@SET_BUILD_PROPERTY@cool@"option2"@@@')
-    self.assertDictEqual(
-      self.step.build.properties,
-      {'cool': ('option2', 'Annotation(different_step)', True)}
-    )
 
   def testLogLine(self):
     self.handleOutputLine('@@@STEP_LOG_LINE@test_log@this is line one@@@')
