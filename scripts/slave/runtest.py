@@ -1160,7 +1160,7 @@ def main():
   option_parser.add_option('', '--no-xvfb', action='store_false', dest='xvfb',
                            help='Do not start virtual X server on Linux.')
   option_parser.add_option('', '--sharding-args', dest='sharding_args',
-                           default=None,
+                           default='',
                            help='Options to pass to sharding_supervisor.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
@@ -1229,8 +1229,14 @@ def main():
       (options.factory_properties.get('lsan_run_all_tests', False) or
        args[0] not in lsan_blacklist)))
 
-  if (options.factory_properties.get('asan', False)):
+  if options.factory_properties.get('asan', False):
     options.extra_sharding_args += ' --verbose'
+  if options.factory_properties.get('tsan', False):
+    # Print ThreadSanitizer reports.
+    options.extra_sharding_args += ' --verbose'
+    # Data races may be flaky, but we don't want to restart the test if there's
+    # been a race report.
+    options.sharding_args += ' --retries 0'
 
   if (options.factory_properties.get('asan', False) or
       options.factory_properties.get('tsan', False) or options.enable_lsan):
