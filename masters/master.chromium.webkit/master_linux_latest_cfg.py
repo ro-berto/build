@@ -40,9 +40,11 @@ F('f_linux_tests_rel', linux().ChromiumFactory(
         '--compiler=goma'
     ],
     factory_properties={
+        'archive_build': True,
+        'blink_config': 'blink',
         'generate_gtest_json': True,
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
-        'blink_config': 'blink',
+        'gs_bucket': 'gs://chromium-webkit-snapshots',
     }))
 
 B('Linux Tests (dbg)', 'f_linux_tests_dbg', scheduler='global_scheduler')
