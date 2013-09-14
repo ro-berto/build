@@ -13,5 +13,6 @@ class LibyuvTryServer(Master.Master4):
   master_port_alt = 8206
   try_job_port = 8306
   from_address = 'libyuv-cb-watchlist@google.com'
+  reply_to = 'chrome-troopers+tryserver@google.com'
   code_review_site = 'http://review.webrtc.org'
   svn_url = 'svn://svn.chromium.org/chrome-try/try-libyuv'
