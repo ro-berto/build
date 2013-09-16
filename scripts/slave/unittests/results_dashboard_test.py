@@ -374,7 +374,7 @@ class ResultsDashboardTest(unittest.TestCase):
 
   def test_MultiValueRowUpload(self):
     args = [
-        'my_endure_test-summary.dat',
+        'my_endure_graph-summary.dat',
         ['{"traces": {'
              '"total_dom_nodes": [["10", "123"], ["20.5", "234"]],'
              '"event_listeners": [["10", "12"], ["20.5", "40"]]},'
@@ -385,7 +385,7 @@ class ResultsDashboardTest(unittest.TestCase):
          ' "units_x": "seconds",'
          ' "stack": false}'],
         'linux-release',
-        'endure',
+        'endure/test_name',
         'https://chrome-perf.googleplex.com',
         'chromium.perf',
         'Linux (1)',
@@ -395,7 +395,7 @@ class ResultsDashboardTest(unittest.TestCase):
     expected_new_json = [json.dumps([{
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
-        'test': 'endure/my_endure_test/total_dom_nodes',
+        'test': 'endure/test_name/my_endure_graph/total_dom_nodes',
         'revision': 12345,
         'data': [['10', '123'], ['20.5', '234']],
         'masterid': 'chromium.perf',
@@ -409,7 +409,7 @@ class ResultsDashboardTest(unittest.TestCase):
     }}, {
         'master': 'ChromiumPerf',
         'bot': 'linux-release',
-        'test': 'endure/my_endure_test/event_listeners',
+        'test': 'endure/test_name/my_endure_graph/event_listeners',
         'revision': 12345,
         'data': [['10', '12'], ['20.5', '40']],
         'masterid': 'chromium.perf',
