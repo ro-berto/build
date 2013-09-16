@@ -160,7 +160,12 @@ class StagerBase(object):
 
     self._symbol_dir_base = options.dirs['symbol_dir_base']
     self._www_dir_base = options.dirs['www_dir_base']
-    self._build_name = slave_utils.SlaveBuildName(self._src_dir)
+
+    if options.build_name:
+      self._build_name = options.build_name
+    else:
+      self._build_name = slave_utils.SlaveBuildName(self._src_dir)
+
     self._symbol_dir_base = os.path.join(self._symbol_dir_base,
                                          self._build_name)
     self._www_dir_base = os.path.join(self._www_dir_base, self._build_name)
@@ -719,6 +724,10 @@ def main(argv):
                            help='Files to ignore')
   option_parser.add_option('--archive_host',
                            default=config.Archive.archive_host)
+  option_parser.add_option('--build-name',
+                           default=None,
+                           help="Name to use for build directory instead of "
+                                "the slave build name")
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
   if args:

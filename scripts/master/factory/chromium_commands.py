@@ -216,6 +216,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
     extra_archive_paths = factory_properties.get('extra_archive_paths')
     use_build_number = factory_properties.get('use_build_number', False)
+    build_name = factory_properties.get('build_name')
 
     if show_url:
       (url, index_suffix) = _GetSnapshotUrl(factory_properties)
@@ -233,6 +234,8 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd.extend(['--extra-archive-paths', extra_archive_paths])
     if use_build_number:
       cmd.extend(['--build-number', WithProperties('%(buildnumber)s')])
+    if build_name:
+      cmd.extend(['--build-name', build_name])
 
     gclient_env = (factory_properties or {}).get('gclient_env', {})
     if 'target_arch=arm' in gclient_env.get('GYP_DEFINES', ''):

@@ -97,6 +97,7 @@ F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
     factory_properties={
         'archive_build': True,
         'blink_config': 'blink',
+        'build_name': 'Mac',
         'generate_gtest_json': True,
         'gclient_env': {
             'GYP_GENERATORS':'ninja',

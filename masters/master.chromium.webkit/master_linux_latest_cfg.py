@@ -42,6 +42,7 @@ F('f_linux_tests_rel', linux().ChromiumFactory(
     factory_properties={
         'archive_build': True,
         'blink_config': 'blink',
+        'build_name': 'Linux_x64',
         'generate_gtest_json': True,
         'gclient_env': { 'GYP_GENERATORS': 'ninja' },
         'gs_bucket': 'gs://chromium-webkit-snapshots',

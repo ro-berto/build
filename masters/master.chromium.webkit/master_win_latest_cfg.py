@@ -72,9 +72,10 @@ F('f_win_rel', win().ChromiumFactory(
         'trigger': 's7_webkit_builder_rel_trigger',
         'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
         'archive_build': True,
+        'blink_config': 'blink',
+        'build_name': 'Win',
         'gs_bucket': 'gs://chromium-webkit-snapshots',
         'gs_acl': 'public-read',
-        'blink_config': 'blink',
     }))
 
 #
