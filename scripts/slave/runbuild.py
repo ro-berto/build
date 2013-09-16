@@ -387,9 +387,7 @@ def main():
             or opts.list_steps or opts.test_config):
       print >>sys.stderr, 'build completed successfully'
   else:
-    if opts.annotate:
-      print >>opts.log, '@@@BUILD_FAILURE@@@'
-    else:
+    if not opts.annotate:
       print >>sys.stderr, 'build error encountered! aborting build'
 
   return retcode
