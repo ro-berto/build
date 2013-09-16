@@ -1747,16 +1747,26 @@ class ChromiumCommands(commands.FactoryCommands):
         waitForFinish=True,
         haltOnFailure=True))
 
-  def AddCreateCoverageFile(self, test, dynamorio_dir,
-                            dynamorio_log_dir, factory_properties):
+  def AddPreProcessCoverage(self, dynamorio_dir, factory_properties):
+    """Prepare dynamorio before running coverage tests."""
+    cmd = [self._python,
+           self._dynamorio_coverage_tool,
+           '--pre-process',
+           '--build-dir', self._build_dir,
+           '--dynamorio-dir', dynamorio_dir]
+    cmd = self.AddFactoryProperties(factory_properties, cmd)
+    self.AddTestStep(shell.ShellCommand,
+                     'pre-process coverage', cmd,
+                     timeout=900, halt_on_failure=True)
+
+  def AddCreateCoverageFile(self, test, dynamorio_dir, factory_properties):
     # Create coverage file.
     cmd = [self._python,
            self._dynamorio_coverage_tool,
+           '--post-process',
            '--build-dir', self._build_dir,
-           '--build-id', WithProperties('%(got_revision)s'),
            '--platform', factory_properties['test_platform'],
            '--dynamorio-dir', dynamorio_dir,
-           '--dynamorio-log-dir', dynamorio_log_dir,
            '--test-to-upload', test]
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(shell.ShellCommand,
@@ -1765,19 +1775,11 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddCoverageTests(self, factory_properties):
     """Add tests to run with dynamorio code coverage tool."""
+    factory_properties['coverage_gtest_exclusions'] = True
     dynamorio_dir = self.PathJoin(self._build_dir, 'dynamorio')
-    dynamorio_log_dir = self.PathJoin(dynamorio_dir, 'tools', 'lib32',
-                                      'release')
     ddrun_bin = self.PathJoin(dynamorio_dir, 'bin32',
                               self.GetExecutableName('drrun'))
-    bbcov_dll = self.PathJoin(dynamorio_log_dir, 'bbcov.dll')
-    ddrun_cmd = [
-      ddrun_bin,
-      '-nop_initial_bblock',
-      '-disable_traces',
-      '-fast_client_decode',
-      '-c', bbcov_dll,
-      '--']
+    ddrun_cmd = [ddrun_bin, '-t', 'bbcov', '--']
     # Run browser tests with dynamorio environment vars.
     tests = factory_properties['tests']
     if 'browser_tests' in tests:
@@ -1788,9 +1790,12 @@ class ChromiumCommands(commands.FactoryCommands):
       arg_list += ['--ui-test-action-timeout=1200000',
                    '--ui-test-action-max-timeout=2400000',
                    '--ui-test-terminate-timeout=1200000']
+      # Run single thread.
+      arg_list += ['--jobs=1']
       arg_list = filter(None, arg_list)
       total_shards = factory_properties.get('browser_total_shards')
       shard_index = factory_properties.get('browser_shard_index')
+      self.AddPreProcessCoverage(dynamorio_dir, browser_tests_prop)
       self.AddGTestTestStep('browser_tests',
                             browser_tests_prop,
                             description='',
@@ -1801,7 +1806,6 @@ class ChromiumCommands(commands.FactoryCommands):
                             max_time=24*60*60)
       self.AddCreateCoverageFile('browser_tests',
                                  dynamorio_dir,
-                                 dynamorio_log_dir,
                                  factory_properties)
 
     # Add all other tests without sharding.
@@ -1812,10 +1816,10 @@ class ChromiumCommands(commands.FactoryCommands):
         if test != 'browser_tests':
           cmd = ddrun_cmd + [self.PathJoin(test_path,
                              self.GetExecutableName(test))]
+          self.AddPreProcessCoverage(dynamorio_dir, factory_properties)
           self.AddTestStep(shell.ShellCommand, test, cmd)
           self.AddCreateCoverageFile(test,
                                      dynamorio_dir,
-                                     dynamorio_log_dir,
                                      factory_properties)
 
 

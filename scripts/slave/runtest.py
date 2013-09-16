@@ -474,6 +474,38 @@ def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
   return build_dir, exe_path
 
 
+def build_coverage_gtest_exclusions(options, args):
+  gtest_exclusions = {
+    'win32': {
+      'browser_tests': (
+        'ChromeNotifierDelegateBrowserTest.ClickTest',
+        'ChromeNotifierDelegateBrowserTest.ButtonClickTest',
+        'SyncFileSystemApiTest.GetFileStatuses',
+        'SyncFileSystemApiTest.WriteFileThenGetUsage',
+        'NaClExtensionTest.HostedApp',
+        'MediaGalleriesPlatformAppBrowserTest.MediaGalleriesCopyToNoAccess',
+        'PlatformAppBrowserTest.ComponentAppBackgroundPage',
+        'BookmarksTest.CommandAgainGoesBackToBookmarksTab',
+        'NotificationBitmapFetcherBrowserTest.OnURLFetchFailureTest',
+        'PreservedWindowPlacementIsMigrated.Test',
+        'ShowAppListBrowserTest.ShowAppListFlag',
+        '*AvatarMenuButtonTest.*',
+        'NotificationBitmapFetcherBrowserTest.HandleImageFailedTest',
+        'NotificationBitmapFetcherBrowserTest.OnImageDecodedTest',
+        'NotificationBitmapFetcherBrowserTest.StartTest',
+      )
+    },
+    'darwin2': {},
+    'linux2': {},
+  }
+  gtest_exclusion_filters = []
+  if sys.platform in gtest_exclusions:
+    excldict = gtest_exclusions.get(sys.platform)
+    if options.test_type in excldict:
+      gtest_exclusion_filters = excldict[options.test_type]
+  args.append('--gtest_filter=-' + ':'.join(gtest_exclusion_filters))
+
+
 def upload_profiling_data(options, args):
   """Using the target build configuration, archive the profiling data to Google
   Storage.
@@ -1305,6 +1337,9 @@ def main():
     options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
         options.results_directory, '%s.xml' % options.test_type)))
     args.append('--gtest_output=xml:' + options.test_output_xml)
+
+  if options.factory_properties.get('coverage_gtest_exclusions', False):
+    build_coverage_gtest_exclusions(options, args)
 
   temp_files = get_temp_count()
   if options.parse_input:

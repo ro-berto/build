@@ -44,10 +44,40 @@ def RunCmd(command, env=None, shell=True):
   return process.returncode
 
 
+def DynamorioLogDir():
+  profile = os.getenv("USERPROFILE")
+  if not profile:
+    raise Exception('USERPROFILE envir var not found')
+  if chromium_utils.IsWindows():
+    return profile + '\\AppData\\LocalLow\\coverage'
+  else:
+    return profile + '\\coverage'
+
+
+def PreProcess(options):
+  """Setup some dynamorio config before running tests."""
+  dynamorio_log_dir = DynamorioLogDir()
+  chromium_utils.RemoveDirectory(dynamorio_log_dir)
+  chromium_utils.MaybeMakeDirectory(dynamorio_log_dir)
+  drrun_config = ('DR_OP=-nop_initial_bblock -disable_traces '
+                  '-fast_client_decode -no_enable_reset\n'
+                  'CLIENT_REL=tools/lib32/release/bbcov.dll\n'
+                  'TOOL_OP=-logdir ' + dynamorio_log_dir + '\n')
+  fhandler = open(os.path.join(options.dynamorio_dir, 'tools',
+                               'bbcov.drrun32'), 'w+')
+  fhandler.write(drrun_config)
+
+  # Exclude python's execution
+  chromium_utils.RunCommand(os.path.join(options.dynamorio_dir, 'bin32',
+                                         'drconfig -reg python.exe -norun'))
+  return 0
+
+
 def CreateCoverageFileAndUpload(options):
   """Create coverage file with bbcov2lcov binary and upload to www dir."""
   # Assert log files exist
-  log_files = glob.glob(os.path.join(options.dynamorio_log_dir, '*.log'))
+  dynamorio_log_dir = DynamorioLogDir()
+  log_files = glob.glob(os.path.join(dynamorio_log_dir, '*.log'))
   if not log_files:
     print 'No coverage log files found.'
     return 1
@@ -66,14 +96,9 @@ def CreateCoverageFileAndUpload(options):
       os.path.join(options.dynamorio_dir, 'tools', 'bin32', 'bbcov2lcov'))
   cmd = [
       bbcov2lcov_binary,
-      '--dir', options.dynamorio_log_dir,
+      '--dir', dynamorio_log_dir,
       '--output', coverage_info]
   RunCmd(cmd)
-
-  # Delete log files.
-  log_files = glob.glob(os.path.join(options.dynamorio_log_dir, '*.log'))
-  for log_file in log_files:
-    os.remove(log_file)
 
   # Assert coverage.info file exist
   if not os.path.isfile(coverage_info):
@@ -106,6 +131,10 @@ def main():
   option_parser = optparse.OptionParser()
 
   # Required options:
+  option_parser.add_option('--post-process', action='store_true',
+                           help='Prepare dynamorio before running tests.')
+  option_parser.add_option('--pre-process', action='store_true',
+                           help='Process coverage after running tests.')
   option_parser.add_option('--build-dir',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
@@ -117,8 +146,6 @@ def main():
                            help='Coverage subdir.')
   option_parser.add_option('--dynamorio-dir',
                            help='Path to dynamorio binary.')
-  option_parser.add_option('--dynamorio-log-dir',
-                           help='Path to dynamorio coverage log files.')
   option_parser.add_option('--test-to-upload',
                            help='Test name.')
 
@@ -133,7 +160,14 @@ def main():
   del options.factory_properties
   del options.build_properties
 
-  return CreateCoverageFileAndUpload(options)
+  if options.pre_process:
+    return PreProcess(options)
+  elif options.post_process:
+    return CreateCoverageFileAndUpload(options)
+  else:
+    print 'No valid options provided.'
+    return 1
+
 
 if '__main__' == __name__:
   sys.exit(main())
