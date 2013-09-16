@@ -181,7 +181,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python, convert_code_tally,
            '--master_id', WithProperties('%(mastername)s'),
            '--builder_name', WithProperties('%(buildername)s'),
-           '--builder_number', WithProperties('%(buildnumber)s'),
+           '--build_number', WithProperties('%(buildnumber)s'),
            '--revision', WithProperties('%(got_revision)s'),
            code_tally_json,
            converted_code_tally]
@@ -193,7 +193,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddUploadConvertedCodeTally(self, dll, upload_url):
     """Adds a step to upload the converted json file to the dashboard."""
-    upload_script = self.PathJoin(self._script_dir, 'upload_code_tally.py')
+    upload_script = self.PathJoin(self._script_dir, 'syzygy',
+                                  'upload_code_tally.py')
     converted_code_tally = self.PathJoin(self._build_dir, self._target,
                                          '%s_converted_code_tally.json' % dll)
 
