@@ -893,18 +893,14 @@ class ChromiumCommands(commands.FactoryCommands):
     """Reports the status of the bot devices."""
     factory_properties = factory_properties or {}
 
-    # For Android, platform is hardcoded as target_platform is set to linux2.
-    args = ['--build-dir', self._build_dir]
-
-    if self._target_os == 'android':
-      args.extend(['--platform', 'android'])
-
-    args.extend(['--device-status-dashboard'])
+    # runtest.py needs --build-dir options
+    tool_opts = ['--build-dir="%s"' % self._build_dir]
 
     self.AddBuildrunnerAnnotatedPerfStep(
-      'device_status', None, 'graphing', cmd_name=self._device_status_check,
-      cmd_options=args, step_name='device_status', py_script=True,
-      factory_properties=factory_properties)
+      'device_status', None, 'graphing', tool_opts=tool_opts,
+      cmd_name=self._device_status_check,
+      cmd_options=['--device-status-dashboard'], step_name='device_status',
+      py_script=True, factory_properties=factory_properties)
 
   def AddTelemetryTest(self, test_name, page_set=None, step_name=None,
                        factory_properties=None, timeout=1200,
