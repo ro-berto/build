@@ -433,14 +433,10 @@ class ChromiumCommands(commands.FactoryCommands):
                      'check lkgr and stop build if unchanged',
                      cmd)
 
-  def AddMachPortsTests(self, factory_properties=None, buildrunner=False):
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('mach_ports', 'MachPortsTest.*',
-             'graphing', step_name='mach_ports',
-             factory_properties=factory_properties)
+  def AddMachPortsTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('mach_ports', 'MachPortsTest.*',
+                              'graphing', step_name='mach_ports',
+                              factory_properties=factory_properties)
 
   def AddStartupTests(self, factory_properties=None):
     test_list = 'StartupTest.*:ShutdownTest.*:-StartupTest.PerfCold'
@@ -451,23 +447,15 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddAnnotatedPerfStep('startup', test_list, 'graphing',
                               factory_properties=factory_properties)
 
-  def AddCCPerfTests(self, factory_properties=None, buildrunner=False):
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('cc_perftests', None, 'graphing',
-             cmd_name='cc_perftests',
-             step_name='cc_perftests',
-             factory_properties=factory_properties)
+  def AddCCPerfTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('cc_perftests', None, 'graphing',
+                              cmd_name='cc_perftests',
+                              step_name='cc_perftests',
+                              factory_properties=factory_properties)
 
-  def AddMemoryTests(self, factory_properties=None, buildrunner=False):
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('memory', 'GeneralMix*MemoryTest.*', 'graphing',
-             factory_properties=factory_properties)
+  def AddMemoryTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('memory', 'GeneralMix*MemoryTest.*', 'graphing',
+                              factory_properties=factory_properties)
 
   def AddNewTabUITests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('new-tab-ui-cold', 'NewTabUIStartupTest.*Cold',
@@ -475,16 +463,12 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddAnnotatedPerfStep('new-tab-ui-warm', 'NewTabUIStartupTest.*Warm',
                               'graphing', factory_properties=factory_properties)
 
-  def AddSyncPerfTests(self, factory_properties=None, buildrunner=False):
+  def AddSyncPerfTests(self, factory_properties=None):
     options = ['--ui-test-action-max-timeout=120000']
 
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('sync', '*SyncPerfTest.*', 'graphing',
-             cmd_options=options, step_name='sync',
-             factory_properties=factory_properties)
+    self.AddAnnotatedPerfStep('sync', '*SyncPerfTest.*', 'graphing',
+                              cmd_options=options, step_name='sync',
+                              factory_properties=factory_properties)
 
   def AddSizesTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
@@ -519,69 +503,47 @@ class ChromiumCommands(commands.FactoryCommands):
         step_name='sizes', cmd_name = self._sizes_tool, cmd_options=args,
         py_script=True, factory_properties=factory_properties)
 
-  def AddFrameRateTests(self, factory_properties=None, buildrunner=False):
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('frame_rate', 'FrameRate*Test*', 'framerate',
-             factory_properties=factory_properties)
+  def AddFrameRateTests(self, factory_properties=None):
+    self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
+                              factory_properties=factory_properties)
 
-  def AddGpuFrameRateTests(self, factory_properties=None, buildrunner=False):
+  def AddGpuFrameRateTests(self, factory_properties=None):
     options = ['--enable-gpu']
     tool_options = ['--no-xvfb']
 
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('gpu_frame_rate', 'FrameRate*Test*', 'framerate',
-             cmd_options=options, tool_opts=tool_options,
-             factory_properties=factory_properties)
+    self.AddAnnotatedPerfStep('gpu_frame_rate', 'FrameRate*Test*', 'framerate',
+                              cmd_options=options, tool_opts=tool_options,
+                              factory_properties=factory_properties)
 
-  def AddGpuThroughputTests(self, factory_properties=None, buildrunner=False):
+  def AddGpuThroughputTests(self, factory_properties=None):
     options = ['--enable-gpu']
     tool_options = ['--no-xvfb']
 
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('gpu_throughput', 'ThroughputTest*', 'graphing',
-             cmd_name='performance_browser_tests',
-             step_name='gpu_throughput_tests',
-             cmd_options=options,
-             tool_opts=tool_options,
-             factory_properties=factory_properties)
+    self.AddAnnotatedPerfStep('gpu_throughput', 'ThroughputTest*', 'graphing',
+                              cmd_name='performance_browser_tests',
+                              step_name='gpu_throughput_tests',
+                              cmd_options=options,
+                              tool_opts=tool_options,
+                              factory_properties=factory_properties)
 
-  def AddTabCapturePerformanceTests(self, factory_properties=None,
-      buildrunner=False):
+  def AddTabCapturePerformanceTests(self, factory_properties=None):
     options = ['--enable-gpu']
     tool_options = ['--no-xvfb']
 
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('tab_capture_performance',
-             'TabCapturePerformanceTest*', 'graphing',
-             cmd_name='performance_browser_tests',
-             step_name='tab_capture_performance_tests',
-             cmd_options=options,
-             tool_opts=tool_options,
-             factory_properties=factory_properties)
+    self.AddAnnotatedPerfStep('tab_capture_performance',
+                              'TabCapturePerformanceTest*', 'graphing',
+                              cmd_name='performance_browser_tests',
+                              step_name='tab_capture_performance_tests',
+                              cmd_options=options,
+                              tool_opts=tool_options,
+                              factory_properties=factory_properties)
 
-  def AddIDBPerfTests(self, factory_properties, tool_options=None,
-      buildrunner=False):
-    if buildrunner:
-      add_func = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_func = self.AddAnnotatedPerfStep
-    add_func('idb_perf', 'IndexedDBTest.Perf', 'graphing',
-             step_name='idb_perf',
-             cmd_options=['--gtest_print_time'],
-             factory_properties=factory_properties,
-             tool_opts=tool_options)
+  def AddIDBPerfTests(self, factory_properties, tool_options=None):
+    self.AddAnnotatedPerfStep('idb_perf', 'IndexedDBTest.Perf', 'graphing',
+                              step_name='idb_perf',
+                              cmd_options=['--gtest_print_time'],
+                              factory_properties=factory_properties,
+                              tool_opts=tool_options)
 
   def AddChromeFramePerfTests(self, factory_properties):
     self.AddAnnotatedPerfStep('chrome_frame_perf', None, 'graphing',
@@ -945,8 +907,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddTelemetryTest(self, test_name, page_set=None, step_name=None,
                        factory_properties=None, timeout=1200,
-                       tool_options=None, dashboard_url=None,
-                       buildrunner=False):
+                       tool_options=None, dashboard_url=None):
     """Adds a Telemetry performance test.
 
     Args:
@@ -976,15 +937,12 @@ class ChromiumCommands(commands.FactoryCommands):
     if test_name == 'endure':
       log_type = 'endure'
 
-    if buildrunner:
-      add_method = self.AddBuildrunnerAnnotatedPerfStep
-    else:
-      add_method = self.AddAnnotatedPerfStep
-
-    add_method(step_name, None, log_type, factory_properties,
-               cmd_name=self._telemetry_tool, cmd_options=cmd_options,
-               step_name=step_name, timeout=timeout, tool_opts=tool_options,
-               py_script=True, dashboard_url=dashboard_url)
+    self.AddAnnotatedPerfStep(step_name, None, log_type, factory_properties,
+                              cmd_name=self._telemetry_tool,
+                              cmd_options=cmd_options,
+                              step_name=step_name, timeout=timeout,
+                              tool_opts=tool_options, py_script=True,
+                              dashboard_url=dashboard_url)
 
   def AddProfileCreationTest(self, factory_properties, output_dir,
                              profile_type_to_create):

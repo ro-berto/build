@@ -273,18 +273,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         if gclient_factory.ShouldRunTest(tests, test):
           tests.remove(test)
           return True
-
-    # Checks for tests ending in _br, returns if buildrunnerized version should
-    # be used. The _br extension is temporary, and only meant to be used during
-    # transition.
-    def BR(*testnames):
-      for test in testnames:
-        if R(test):
-          return True, False
-        if R(test + '_br'):
-          return True, True
-      return False, False
-
     f = factory_cmd_obj
     fp = factory_properties
 
@@ -583,75 +571,48 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddDeviceStatus(factory_properties=fp)
 
     # Benchmark tests:
-
-    t = BR('page_cycler_moz')
-    if t[0]:
+    if R('page_cycler_moz'):
       f.AddTelemetryTest('page_cycler', 'page_cycler/moz.json',
-                         step_name='moz', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_morejs')
-    if t[0]:
+                         step_name='moz', factory_properties=fp)
+    if R('page_cycler_morejs'):
       timeout = 1200
       if 'target' in fp and fp['target'] == 'Debug':
         timeout = 1800
       f.AddTelemetryTest('page_cycler', 'page_cycler/morejs.json',
                          step_name='morejs', factory_properties=fp,
-                         timeout=timeout, buildrunner=t[1])
-    t = BR('page_cycler_intl_ar_fa_he')
-    if t[0]:
+                         timeout=timeout)
+    if R('page_cycler_intl_ar_fa_he'):
       f.AddTelemetryTest('page_cycler', 'intl_ar_fa_he.json',
-                         step_name='intl_ar_fa_he', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_intl_es_fr_pt-BR')
-    if t[0]:
+                         step_name='intl_ar_fa_he', factory_properties=fp)
+    if R('page_cycler_intl_es_fr_pt-BR'):
       f.AddTelemetryTest('page_cycler', 'intl_es_fr_pt-BR.json',
-                         step_name='intl_es_fr_pt-BR', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_intl_hi_ru')
-    if t[0]:
+                         step_name='intl_es_fr_pt-BR', factory_properties=fp)
+    if R('page_cycler_intl_hi_ru'):
       f.AddTelemetryTest('page_cycler', 'intl_hi_ru.json',
-                         step_name='intl_hi_ru', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_intl_ja_zh')
-    if t[0]:
+                         step_name='intl_hi_ru', factory_properties=fp)
+    if R('page_cycler_intl_ja_zh'):
       f.AddTelemetryTest('page_cycler', 'intl_ja_zh.json',
-                         step_name='intl_ja_zh', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_intl_ko_th_vi')
-    if t[0]:
+                         step_name='intl_ja_zh', factory_properties=fp)
+    if R('page_cycler_intl_ko_th_vi'):
       f.AddTelemetryTest('page_cycler', 'intl_ko_th_vi.json',
-                         step_name='intl_ko_th_vi', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_tough_layout_cases')
-    if t[0]:
+                         step_name='intl_ko_th_vi', factory_properties=fp)
+    if R('page_cycler_tough_layout_cases'):
       f.AddTelemetryTest('page_cycler', 'tough_layout_cases.json',
-                         step_name='tough_layout_cases', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_typical_25')
-    if t[0]:
+                         step_name='tough_layout_cases', factory_properties=fp)
+    if R('page_cycler_typical_25'):
       f.AddTelemetryTest('page_cycler', 'typical_25.json',
-                         step_name='typical_25', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_bloat')
-    if t[0]:
+                         step_name='typical_25', factory_properties=fp)
+    if R('page_cycler_bloat'):
       f.AddTelemetryTest('page_cycler', 'page_cycler/bloat.json',
-                         step_name='bloat', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_dhtml')
-    if t[0]:
+                         step_name='bloat', factory_properties=fp)
+    if R('page_cycler_dhtml'):
       f.AddTelemetryTest('page_cycler', 'page_cycler/dhtml.json',
-                         step_name='dhtml', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_indexeddb')
-    if t[0]:
+                         step_name='dhtml', factory_properties=fp)
+    if R('page_cycler_indexeddb'):
       f.AddTelemetryTest('page_cycler',
                          'page_cycler/indexed_db/basic_insert.json',
-                         step_name='indexeddb', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('page_cycler_top_10_netsim')
-    if t[0]:
-      fp['extra_args'] = ['--pageset-repeat=5', '--cold-load-percent=100',
-                          '--extra-wpr-args=--shaping_type=proxy --net=cable']
+                         step_name='indexeddb', factory_properties=fp)
+    if R('page_cycler_top_10_netsim'):
       netsim_fp = fp.copy()
       netsim_fp['extra_args'] = [
           '--pageset-repeat=5',
@@ -659,159 +620,123 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           '--extra-wpr-args=--shaping_type=proxy --net=cable']
       f.AddTelemetryTest('page_cycler', 'top_10.json',
                          step_name='top_10_netsim',
-                         factory_properties=netsim_fp, buildrunner=t[1])
-    t = BR('smoothness_measurement')
-    if t[0]:
+                         factory_properties=netsim_fp)
+    if R('smoothness_measurement'):
       f.AddTelemetryTest(
-          'smoothness_measurement', 'top_25.json', factory_properties=fp,
-          buildrunner=t[1])
-    t = BR('jsgamebench')
-    if t[0]:
+          'smoothness_measurement', 'top_25.json', factory_properties=fp)
+    if R('jsgamebench'):
       f.AddTelemetryTest(
-          'jsgamebench', 'jsgamebench.json', factory_properties=fp,
-          buildrunner=t[1])
-    t = BR('kraken')
-    if t[0]:
-      f.AddTelemetryTest('kraken', 'kraken.json', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('robohornetpro')
-    if t[0]:
+          'jsgamebench', 'jsgamebench.json', factory_properties=fp)
+    if R('kraken'):
+      f.AddTelemetryTest('kraken', 'kraken.json', factory_properties=fp)
+    if R('robohornetpro'):
       f.AddTelemetryTest(
-          'robohornetpro', 'robohornetpro.json', factory_properties=fp,
-          buildrunner=t[1])
-    t = BR('memory_measurement')
-    if t[0]:
+          'robohornetpro', 'robohornetpro.json', factory_properties=fp)
+    if R('memory_measurement'):
       f.AddTelemetryTest(
-          'memory_measurement', 'top_25.json', factory_properties=fp,
-          buildrunner=t[1])
-    t = BR('reload_benchmark')
-    if t[0]:
+          'memory_measurement', 'top_25.json', factory_properties=fp)
+    if R('reload_benchmark'):
       f.AddTelemetryTest(
           'memory_measurement', '2012Q3.json', step_name='reload_benchmark',
-          factory_properties=fp, buildrunner=t[1])
-    t = BR('blink_perf')
-    if t[0]:
+          factory_properties=fp)
+    if R('blink_perf'):
       f.AddTelemetryTest(
           'blink_perf',
           os.path.join('..', '..', '..',
                        'third_party', 'WebKit', 'PerformanceTests'),
-          factory_properties=fp, buildrunner=t[1])
-    t = BR('media_perf')
-    if t[0]:
+          factory_properties=fp)
+    if R('media_perf'):
       # Telemetry based media performance measurement.
       f.AddTelemetryTest(
-          'media_measurement', 'tough_video_cases.json', factory_properties=fp,
-          buildrunner=t[1])
-    t = BR('memory')
-    if t[0]:
-      f.AddMemoryTests(fp, buildrunner=t[1])
-    t = BR('tab_switching')
-    if t[0]:
+          'media_measurement', 'tough_video_cases.json', factory_properties=fp)
+    if R('memory'):
+      f.AddMemoryTests(fp)
+    if R('tab_switching'):
       f.AddTelemetryTest('tab_switching_measurement', 'top_10.json',
-                         step_name='tab_switching', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('sunspider')
-    if t[0]:
-      f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('octane')
-    if t[0]:
-      f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('pica')
-    if t[0]:
-      f.AddTelemetryTest('pica', factory_properties=fp, buildrunner=t[1])
-    t = BR('image_decoding_measurement')
-    if t[0]:
+                         step_name='tab_switching', factory_properties=fp)
+    if R('sunspider'):
+      f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
+    if R('octane'):
+      f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
+    if R('pica'):
+      f.AddTelemetryTest('pica', factory_properties=fp)
+    if R('image_decoding_measurement'):
       f.AddTelemetryTest(
           'image_decoding_measurement', 'image_decoding_measurement.json',
-          factory_properties=fp, buildrunner=t[1])
-    t = BR('dromaeo')
-    if t[0]:
+          factory_properties=fp)
+    if R('dromaeo'):
       f.AddTelemetryTest('dromaeo', 'dromaeo/domcoreattr.json',
-                         step_name='dromaeo_domcoreattr', factory_properties=fp,
-                         buildrunner=t[1])
+                         step_name='dromaeo_domcoreattr', factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/domcoremodify.json',
                          step_name='dromaeo_domcoremodify',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/domcorequery.json',
                          step_name='dromaeo_domcorequery',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/domcoretraverse.json',
                          step_name='dromaeo_domcoretraverse',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibattrjquery.json',
                          step_name='dromaeo_jslibattrjquery',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibattrprototype.json',
                          step_name='dromaeo_jslibattrprototype',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibeventjquery.json',
                          step_name='dromaeo_jslibeventjquery',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibeventprototype.json',
                          step_name='dromaeo_jslibeventprototype',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibmodifyjquery.json',
                          step_name='dromaeo_jslibmodifyjquery',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibmodifyprototype.json',
                          step_name='dromaeo_jslibmodifyprototype',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibstylejquery.json',
                          step_name='dromaeo_jslibstylejquery',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibstyleprototype.json',
                          step_name='dromaeo_jslibstyleprototype',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibtraversejquery.json',
                          step_name='dromaeo_jslibtraversejquery',
-                         factory_properties=fp, buildrunner=t[1])
+                         factory_properties=fp)
       f.AddTelemetryTest('dromaeo', 'dromaeo/jslibtraverseprototype.json',
                          step_name='dromaeo_jslibtraverseprototype',
-                         factory_properties=fp, buildrunner=t[1])
-    t = BR('frame_rate')
-    if t[0]:
-      f.AddFrameRateTests(fp, buildrunner=t[1])
-    t = BR('gpu_frame_rate')
-    if t[0]:
-      f.AddGpuFrameRateTests(fp, buildrunner=t[1])
-    t = BR('gpu_throughput')
-    if t[0]:
-      f.AddGpuThroughputTests(fp, buildrunner=t[1])
-    t = BR('tab_capture_performance')
-    if t[0]:
-      f.AddTabCapturePerformanceTests(fp, buildrunner=t[1])
-    t = BR('dom_perf')
-    if t[0]:
-      f.AddTelemetryTest('dom_perf', 'dom_perf.json', factory_properties=fp,
-                         buildrunner=t[1])
-    t = BR('idb_perf')
-    if t[0]:
+                         factory_properties=fp)
+    if R('frame_rate'):
+      f.AddFrameRateTests(fp)
+    if R('gpu_frame_rate'):
+      f.AddGpuFrameRateTests(fp)
+    if R('gpu_throughput'):
+      f.AddGpuThroughputTests(fp)
+    if R('tab_capture_performance'):
+      f.AddTabCapturePerformanceTests(fp)
+    if R('dom_perf'):
+      f.AddTelemetryTest('dom_perf', 'dom_perf.json', factory_properties=fp)
+    if R('idb_perf'):
       f.AddIDBPerfTests(fp)
-    t = BR('create_profiles')
-    if t[0]:
+    if R('create_profiles'):
       # pylint: disable=W0212
       f.AddProfileCreationTest(fp, os.path.join(self._build_dir, f._target),
           'small_profile')
-    t = BR('startup')
-    if t[0]:
+    if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
-    t = BR('startup_cold')
-    if t[0]:
+    if R('startup_cold'):
       startup_fp = fp.copy()
       startup_fp['extra_args'] = ['--page-repeat=5', '--cold']
       f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_cold',
-                         factory_properties=startup_fp, buildrunner=t[1])
-    t = BR('startup_warm')
-    if t[0]:
+                         factory_properties=startup_fp)
+    if R('startup_warm'):
       startup_fp = fp.copy()
       startup_fp['extra_args'] = ['--page-repeat=20', '--warm']
       f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_warm',
-                         factory_properties=startup_fp, buildrunner=t[1])
-    t = BR('startup_warm_dirty')
-    if t[0]:
+                         factory_properties=startup_fp)
+    if R('startup_warm_dirty'):
+      startup_fp = fp.copy()
       # pylint: disable=W0212
       profile_dir = os.path.join(self._build_dir, f._target,
           'generated_profiles', 'small_profile')
@@ -819,32 +744,28 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                   '--profile-dir=%s' % profile_dir]
       f.AddTelemetryTest('startup', 'blank_page.json',
                          step_name='startup_warm_dirty',
-                         factory_properties=startup_fp, buildrunner=t[1])
-    t = BR('startup_cold_dirty')
-    if t[0]:
-      # pylint: disable=W0212
+                         factory_properties=startup_fp)
+    if R('startup_cold_dirty'):
       startup_fp = fp.copy()
+      # pylint: disable=W0212
       profile_dir = os.path.join(self._build_dir, f._target,
           'generated_profiles', 'small_profile')
       startup_fp['extra_args'] = ['--cold', '--page-repeat=5',
                                   '--profile-dir=%s' % profile_dir]
       f.AddTelemetryTest('startup', 'blank_page.json',
                          step_name='startup_cold_dirty',
-                         factory_properties=startup_fp, buildrunner=t[1])
+                         factory_properties=startup_fp)
 
     if R('sizes'):
       f.AddSizesTests(fp)
     if R('sizes_br'):
       f.AddBuildrunnerSizesTests(fp)
-    t = BR('sync')
-    if t[0]:
-      f.AddSyncPerfTests(fp, buildrunner=t[1])
-    t = BR('mach_ports')
-    if t[0]:
-      f.AddMachPortsTests(fp, buildrunner=t[1])
-    t = BR('cc_perftests')
-    if t[0]:
-      f.AddCCPerfTests(fp, buildrunner=t[1])
+    if R('sync'):
+      f.AddSyncPerfTests(fp)
+    if R('mach_ports'):
+      f.AddMachPortsTests(fp)
+    if R('cc_perftests'):
+      f.AddCCPerfTests(fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
@@ -879,10 +800,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                             test_tool_arg_list=['--no-xvfb'])
     if R('gpu_content_tests'):
       f.AddGpuContentTests(fp)
-    t = BR('spaceport')
-    if t[0]:
-      f.AddTelemetryTest('spaceport', 'spaceport.json', factory_properties=fp,
-                         buildrunner=t[1])
+    if R('spaceport'):
+      f.AddTelemetryTest('spaceport', 'spaceport.json', factory_properties=fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
