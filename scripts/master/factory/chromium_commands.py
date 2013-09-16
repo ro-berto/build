@@ -896,8 +896,9 @@ class ChromiumCommands(commands.FactoryCommands):
     """Reports the status of the bot devices."""
     factory_properties = factory_properties or {}
 
-    # runtest.py needs --build-dir options
-    tool_opts = ['--build-dir="%s"' % self._build_dir]
+    # runtest.py needs --build-dir options set to parent dir of Debug/Release
+    src_out_dir = os.path.join(self._build_dir, 'src', 'out')
+    tool_opts = ['--build-dir=%s' % src_out_dir]
 
     self.AddBuildrunnerAnnotatedPerfStep(
       'device_status', None, 'graphing', tool_opts=tool_opts,
