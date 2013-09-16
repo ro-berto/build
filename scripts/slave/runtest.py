@@ -1229,14 +1229,19 @@ def main():
       (options.factory_properties.get('lsan_run_all_tests', False) or
        args[0] not in lsan_blacklist)))
 
+  extra_sharding_args_list = options.extra_sharding_args.split()
+
   if options.factory_properties.get('asan', False):
-    options.extra_sharding_args += ' --verbose'
+    extra_sharding_args_list.append('--verbose')
   if options.factory_properties.get('tsan', False):
-    # Print ThreadSanitizer reports.
-    options.extra_sharding_args += ' --verbose'
+    # Print ThreadSanitizer reports; don't cluster the tests so that TSan exit
+    # code denotes a test failure.
+    extra_sharding_args_list.extend(['--verbose', '--clusters=1'])
     # Data races may be flaky, but we don't want to restart the test if there's
     # been a race report.
     options.sharding_args += ' --retries 0'
+
+  options.extra_sharding_args = ' '.join(extra_sharding_args_list)
 
   if (options.factory_properties.get('asan', False) or
       options.factory_properties.get('tsan', False) or options.enable_lsan):
