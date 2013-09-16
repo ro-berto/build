@@ -144,25 +144,9 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
   chart_name = logname.replace('-summary.dat', '')
   for line in lines:
     data = json.loads(line)
-    revision = data['rev']
-    git_hash = None
-    chrome_supplemental_revision = False
-    if master == 'ChromiumWebkit':
-      # Blink builds can have the same chromium revision for two builds. So
-      # order them by timestamp to get them to show on the dashboard in the
-      # order they were built.
-      revision = _GetTimestamp()
-      chrome_supplemental_revision = True
-    try:
-      revision = int(revision)
-    except ValueError:
-      # The dashboard requires ordered integer revision numbers. If the revision
-      # is not an integer, assume it's a git hash and send a timestamp.
-      revision = _GetTimestamp()
-      git_hash = data['rev']
+    revision, revision_columns = _RevisionNumberColumns(data, master)
 
     for (trace_name, trace_values) in data['traces'].iteritems():
-
       is_important = trace_name in data.get('important', [])
       test_path = _TestPath(test_name, chart_name, trace_name)
       result = {
@@ -173,8 +157,12 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
           'masterid': masterid,
           'buildername': buildername,
           'buildnumber': buildnumber,
-          'supplemental_columns': {},
+          'supplemental_columns': {}
       }
+      # Add the supplemental_columns values that were passed in after the
+      # calculated revision column values so that these can be overwritten.
+      result['supplemental_columns'].update(revision_columns)
+      result['supplemental_columns'].update(supplemental_columns)
       # Test whether we have x/y data.
       have_multi_value_data = False
       for value in trace_values:
@@ -186,19 +174,6 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
         result['value'] = trace_values[0]
         result['error'] = trace_values[1]
 
-      if chrome_supplemental_revision:
-        try:
-          result['supplemental_columns']['r_chromium_svn'] = int(data['rev'])
-        except ValueError:
-          # Revision is git hash.
-          result['supplemental_columns']['r_chromium'] = data['rev']
-      if 'webkit_rev' in data and data['webkit_rev'] != 'undefined':
-        result['supplemental_columns']['r_webkit_rev'] = data['webkit_rev']
-      if 'v8_rev' in data and data['v8_rev'] != 'undefined':
-        result['supplemental_columns']['r_v8_rev'] = data['v8_rev']
-      if git_hash:
-        result['supplemental_columns']['r_chromium_rev'] = git_hash
-      result['supplemental_columns'].update(supplemental_columns)
       if data.get('units'):
         result['units'] = data['units']
       if data.get('units_x'):
@@ -210,6 +185,52 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
       results_to_add.append(result)
   _PrintLinkStep(url, master, bot, test_name, revision)
   return json.dumps(results_to_add)
+
+
+def _RevisionNumberColumns(data, master):
+  """Get the revision number and revision-related columns from the given data.
+
+  Args:
+    data: A dict of information from one line of the log file.
+    master: The name of the buildbot master.
+
+  Returns:
+    A pair with the revision number (which must be an int), and a dict of
+    version-related supplemental columns.
+  """
+  def GetTimestamp():
+    """Get the Unix timestamp for the current time."""
+    return int(calendar.timegm(datetime.datetime.utcnow().utctimetuple()))
+
+  revision_supplemental_columns = {}
+  git_hash = None
+  try:
+    revision = int(data['rev'])
+  except ValueError:
+    # The dashboard requires ordered integer revision numbers. If the revision
+    # is not an integer, assume it's a git hash and send a timestamp.
+    revision = GetTimestamp()
+    git_hash = data['rev']
+
+  if master == 'ChromiumWebkit':
+    # Blink builds can have the same chromium revision for two builds. So
+    # order them by timestamp to get them to show on the dashboard in the
+    # order they were built.
+    if not git_hash:
+      revision_supplemental_columns['r_chromium_svn'] = revision
+    revision = GetTimestamp()
+
+  # Regardless of what the master is, if a git hash is given instead of an int,
+  # then set a supplemental column to hold this git hash.
+  if git_hash:
+    revision_supplemental_columns['r_chromium'] = git_hash
+
+  # For other revision data, add it if it's present and not undefined:
+  for key in ['webkit_rev', 'v8_rev']:
+    if key in data and data[key] != 'undefined':
+      revision_supplemental_columns['r_' + key] = data[key]
+
+  return revision, revision_supplemental_columns
 
 
 def _TestPath(test_name, chart_name, trace_name):
@@ -234,10 +255,6 @@ def _TestPath(test_name, chart_name, trace_name):
   if chart_name == trace_name:
     test_path = '%s/%s' % (test_name, chart_name)
   return test_path
-
-
-def _GetTimestamp():
-  return int(calendar.timegm(datetime.datetime.utcnow().utctimetuple()))
 
 
 def _SendResultsJson(url, results_json):

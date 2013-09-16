@@ -484,7 +484,7 @@ class ResultsDashboardTest(unittest.TestCase):
         'important': True,
         'units': 'ms',
         'supplemental_columns': {
-            'r_chromium_rev': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
+            'r_chromium': '2eca27b067e3e57c70e40b8b95d0030c5d7c1a7f',
             'r_webkit_rev': 'bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc88',
             'r_v8_rev': 'bf9aa8d62561bb2e4d7bc09e9d9e8c6a665ddc87',
         }}])]
