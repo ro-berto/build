@@ -85,8 +85,9 @@ F('f_mac_perf6_rel', mac_out().ChromiumFactory(
 
 B('Mac10.8 Tests', 'f_mac_tests_rel_108', scheduler='global_scheduler')
 F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
-    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-             'chromium_builder_tests'],
+    # Build 'all' instead of 'chromium_builder_tests' so that archiving works.
+    # TODO: Define a new build target that is archive-friendly?
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--', 'all'],
     tests=[
       'browser_tests',
       'content_browsertests',
