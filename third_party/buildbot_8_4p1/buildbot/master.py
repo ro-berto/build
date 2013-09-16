@@ -796,7 +796,7 @@ class BuildMaster(service.MultiService):
             if self.autoBuildCacheRatio:
                 builder_status = builder.builder_status
                 slavecount = len(builder_status.slavenames)
-                max_size = max(self.autoBuildCacheRatio * slavecount, 15)
+                max_size = max(self.autoBuildCacheRatio * slavecount, 30)
                 builder_status.buildCache.set_max_size(max_size)
                 builder_status.buildCacheSize = max_size
 
