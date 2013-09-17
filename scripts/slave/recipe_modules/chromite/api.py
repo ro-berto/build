@@ -23,16 +23,15 @@ class ChromiteApi(recipe_api.RecipeApi):
     chromite_path = (chromite_path or
                      self.m.path.slave_build(self.chromite_subpath))
 
-    chroot_cmd = [self.m.path.join(chromite_path, 'bin', 'cros_sdk')]
+    chroot_cmd = self.m.path.join(chromite_path, 'bin', 'cros_sdk')
 
-    flag_list = []
+    arg_list = []
     for k, v in sorted((flags or {}).items()):
-      flag_list.extend(['--%s' % k, v])
-    chroot_cmd.extend(flag_list)
-    chroot_cmd.append('--')
-    chroot_cmd.extend(cmd)
+      arg_list.extend(['--%s' % k, v])
+    arg_list.append('--')
+    arg_list.extend(cmd)
 
-    return self.m.python(name, chroot_cmd, **kwargs)
+    return self.m.python(name, chroot_cmd, arg_list, **kwargs)
 
   def setup_board(self, board, flags=None, **kwargs):
     """Run the setup_board script inside the chroot."""

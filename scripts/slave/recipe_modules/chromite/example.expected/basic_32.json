@@ -27,15 +27,13 @@
     "cmd": [
       "python",
       "-u",
-      [
-        "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
-        "--cache-dir",
-        ".cache",
-        "--",
-        "./setup_board",
-        "--board",
-        "x86-generic"
-      ]
+      "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
+      "--cache-dir",
+      ".cache",
+      "--",
+      "./setup_board",
+      "--board",
+      "x86-generic"
     ],
     "name": "setup board"
   },
@@ -43,13 +41,11 @@
     "cmd": [
       "python",
       "-u",
-      [
-        "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
-        "--",
-        "./build_packages",
-        "--board",
-        "x86-generic"
-      ]
+      "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
+      "--",
+      "./build_packages",
+      "--board",
+      "x86-generic"
     ],
     "name": "build packages"
   }
