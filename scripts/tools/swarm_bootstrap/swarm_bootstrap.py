@@ -14,6 +14,7 @@ import json
 import logging
 import optparse
 import os
+import platform
 import socket
 import subprocess
 import sys
@@ -51,28 +52,80 @@ def WriteToFile(filepath, content):
     return False
 
 
-def GetDimensions(hostname, platform):
+def ConvertMacVersion(version):
+  """Returns the major OSX version, like 10.7, 10.8, etc."""
+  version_parts = version.split('.')
+
+  assert len(version_parts) >= 2, 'Unable to determine Mac version'
+  return '.'.join(version_parts[:2])
+
+
+def ConvertWindowsVersion(version):
+  """Returns the major Windows version, like 5.0, 5.1, 6.2, etc."""
+  if '-' in version:
+    version = version.split('-')[1]
+
+  version_parts = version.split('.')
+  assert len(version_parts) >= 2,  'Unable to determine Windows version'
+
+  return '.'.join(version_parts[:2])
+
+
+def GetPlatformVersion():
+  if sys.platform == 'cygwin':
+    return ConvertWindowsVersion(platform.system())
+
+  elif sys.platform == 'win32':
+    return ConvertWindowsVersion(platform.version())
+
+  elif sys.platform == 'darwin':
+    return ConvertMacVersion(platform.mac_ver()[0])
+
+  elif sys.platform == 'linux2':
+    # No need to convert the linux value since it already returns what we
+    # want (like '12.04' or '10.04' for ubuntu slaves).
+    return platform.linux_distribution()[1]
+
+  raise Exception('Unable to determine platform version')
+
+
+def GetArchitectureSize():
+  """Returns the number of bits in the systems architecture.
+
+  Currently this only works on 32-bit or 64-bit systems.
+  """
+  return '64' if sys.maxsize > 2**32 else '32'
+
+
+def GetDimensions(hostname, platform_id, platform_version):
   """Returns a dictionary of attributes representing this machine.
 
   Returns:
     A dictionary of the attributes of the machine.
   """
-  if sys.platform not in PLATFORM_MAPPING:
+  if platform_id not in PLATFORM_MAPPING:
     logging.error('Running on an unknown platform, %s, unable to '
-                  'generate dimensions', sys.platform)
+                  'generate dimensions', platform_id)
     return {}
+
+  platform_name = PLATFORM_MAPPING[platform_id]
 
   return {
     'dimensions': {
-      'os': PLATFORM_MAPPING[platform],
+      'bits': GetArchitectureSize(),
+      'machine': os.uname()[4],
+      'os': [
+          platform_name,
+          platform_name + '-' + platform_version,
+      ],
     },
     'tag': hostname,
   }
 
 
-def GetChromiumDimensions(hostname, platform):
+def GetChromiumDimensions(hostname, platform_id, platform_version):
   """Returns chromium infrastructure specific dimensions."""
-  dimensions = GetDimensions(hostname, platform)
+  dimensions = GetDimensions(hostname, platform_id, platform_version)
   if not dimensions:
     return dimensions
 
@@ -250,7 +303,8 @@ def main():
 
   print('Generating the machine dimensions...')
   hostname = socket.gethostname().lower().split('.', 1)[0]
-  dimensions = GetChromiumDimensions(hostname, sys.platform)
+  dimensions = GetChromiumDimensions(hostname, sys.platform,
+                                     GetPlatformVersion())
   if not WriteJsonToFile(options.dimensionsfile, dimensions):
     return 1
 
