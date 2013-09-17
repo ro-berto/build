@@ -1,0 +1,77 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = []\ntarget_os_only = False"
+    ],
+    "name": "gclient setup",
+    "seed_steps": [
+      "gclient setup",
+      "gclient revert",
+      "gclient sync"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS_ROOT]/gclient"
+    ],
+    "name": "gclient revert"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "sync",
+      "--nohooks"
+    ],
+    "name": "gclient sync"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': 'DEPS', 'managed': True, 'name': 'WebKit', 'safesync_url': None, 'url': 'svn://svn.chromium.org/blink/trunk'}]\ntarget_os = []\ntarget_os_only = False"
+    ],
+    "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
+    "name": "[spec: WebKit] gclient setup",
+    "seed_steps": [
+      "[spec: WebKit] gclient setup",
+      "[spec: WebKit] gclient revert",
+      "[spec: WebKit] gclient sync"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      ".",
+      "[DEPOT_TOOLS_ROOT]/gclient"
+    ],
+    "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
+    "name": "[spec: WebKit] gclient revert"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "sync",
+      "--nohooks"
+    ],
+    "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
+    "name": "[spec: WebKit] gclient sync"
+  }
+]

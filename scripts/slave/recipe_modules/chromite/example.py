@@ -13,7 +13,7 @@ def GenSteps(api):
 
   yield (
     api.chromite.checkout(),
-    api.chromite.setup_board(board),
+    api.chromite.setup_board(board, flags={'cache-dir': '.cache'}),
     api.chromite.build_packages(board),
   )
 
@@ -23,4 +23,3 @@ def GenTests(_api):
     yield 'basic_%s' % bits, {
       'properties': {'TARGET_BITS': bits},
     }
-

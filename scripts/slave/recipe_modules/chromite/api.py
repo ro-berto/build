@@ -18,24 +18,30 @@ class ChromiteApi(recipe_api.RecipeApi):
       self.m.repo.sync(),
     )
 
-  def cros_sdk(self, name, cmd, chromite_path=None, **kwargs):
+  def cros_sdk(self, name, cmd, flags=None, chromite_path=None, **kwargs):
     """Return a step to run a command inside the cros_sdk."""
     chromite_path = (chromite_path or
                      self.m.path.slave_build(self.chromite_subpath))
-    return self.m.python(
-      name,
-      [self.m.path.join(chromite_path, 'bin', 'cros_sdk'), '--'] + cmd,
-      **kwargs
-    )
 
-  def setup_board(self, board, **kwargs):
+    chroot_cmd = [self.m.path.join(chromite_path, 'bin', 'cros_sdk')]
+
+    flag_list = []
+    for k, v in sorted((flags or {}).items()):
+      flag_list.extend(['--%s' % k, v])
+    chroot_cmd.extend(flag_list)
+    chroot_cmd.append('--')
+    chroot_cmd.extend(cmd)
+
+    return self.m.python(name, chroot_cmd, **kwargs)
+
+  def setup_board(self, board, flags=None, **kwargs):
     """Run the setup_board script inside the chroot."""
     return self.cros_sdk('setup board',
                          ['./setup_board', '--board', board],
-                         **kwargs)
+                         flags, **kwargs)
 
-  def build_packages(self, board, **kwargs):
+  def build_packages(self, board, flags=None, **kwargs):
     """Run the build_packages script inside the chroot."""
     return self.cros_sdk('build packages',
                          ['./build_packages', '--board', board],
-                         **kwargs)
+                         flags, **kwargs)

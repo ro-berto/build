@@ -29,6 +29,8 @@
       "-u",
       [
         "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
+        "--cache-dir",
+        ".cache",
         "--",
         "./setup_board",
         "--board",

@@ -80,7 +80,7 @@ class GclientApi(recipe_api.RecipeApi):
     ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 
-  def checkout(self, gclient_config=None, revert=True):
+  def checkout(self, gclient_config=None, revert=True, **kwargs):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
     assert cfg.complete()
@@ -93,13 +93,13 @@ class GclientApi(recipe_api.RecipeApi):
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
     steps = [
-      self('setup', ['config', '--spec', spec_string])
+      self('setup', ['config', '--spec', spec_string], **kwargs)
     ]
 
     if not cfg.GIT_MODE:
       if revert:
-        steps.append(self.revert())
-      steps.append(self('sync', ['sync', '--nohooks'] + revisions))
+        steps.append(self.revert(**kwargs))
+      steps.append(self('sync', ['sync', '--nohooks'] + revisions, **kwargs))
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -118,7 +118,7 @@ class GclientApi(recipe_api.RecipeApi):
       steps.append(self('sync',
         ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
         '--reset', '--delete_unversioned_trees', '--force', '--upstream',
-        '--no-nag-max'] + revisions))
+        '--no-nag-max'] + revisions, **kwargs))
 
       cfg_cmds = [
         ('user.name', 'local_bot'),
@@ -126,16 +126,24 @@ class GclientApi(recipe_api.RecipeApi):
       ]
       for var, val in cfg_cmds:
         name = 'recurse (git config %s)' % var
-        steps.append(self(name, ['recurse', 'git', 'config', var, val]))
+        steps.append(self(name, ['recurse', 'git', 'config', var, val],
+                          **kwargs))
 
-    for c in cfg.checkouts:  # pragma: no cover
-      self.m.path.add_checkout(self.m.path.slave_build(c))
+    cwd = kwargs.get('cwd')
+    for c in cfg.checkouts:
+      path = self.m.path.slave_build(c)
+      if cwd:
+        path = self.m.path.join(cwd, c)
+      self.m.path.add_checkout(path)
     for s in cfg.solutions:
-      self.m.path.add_checkout(self.m.path.slave_build(s.name))
+      path = self.m.path.slave_build(s.name)
+      if cwd:
+        path = self.m.path.join(cwd, s.name)
+      self.m.path.add_checkout(path)
 
     return steps
 
-  def revert(self):
+  def revert(self, **kwargs):
     """Return a gclient_safe_revert step."""
     # Not directly calling gclient, so don't use self().
     prefix = 'gclient '
@@ -145,6 +153,7 @@ class GclientApi(recipe_api.RecipeApi):
     return self.m.python(prefix + 'revert',
         self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),
         ['.', self.m.path.depot_tools('gclient', wrapper=True)],
+        **kwargs
     )
 
   def runhooks(self, args=None, **kwargs):
