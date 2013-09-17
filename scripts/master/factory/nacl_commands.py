@@ -16,9 +16,16 @@ from master import chromium_step
 from master.factory import commands
 from master.log_parser import process_log
 
+import config
+
 
 class NativeClientCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
+
+  # This is needed to set legacy perf links. Can be removed when fully converted
+  # to the perf dashboard (chromium-perf.appspot.com). See
+  # scripts/master/factory/commands.py for how this is used.
+  PERF_BASE_URL = config.Master.NaClBase.perf_base_url
 
   def __init__(self, factory=None, build_dir=None, target_platform=None):
     commands.FactoryCommands.__init__(self, factory, 'Release', build_dir,
