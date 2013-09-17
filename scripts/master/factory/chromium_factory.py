@@ -889,7 +889,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     def FP(test_name):
       """A factory properties copy including test-specific properties."""
       if fp.has_key('test_properties'):
-        return fp.copy().update(fp['test_properties'].get(test_name, {}))
+        return dict(fp, **fp['test_properties'].get(test_name, {}))
       else:
         return fp
 
