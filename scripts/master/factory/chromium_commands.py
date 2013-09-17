@@ -1606,7 +1606,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddMiniInstallerTestStep(self, factory_properties):
     cmd = [self._python, self._mini_installer_tests_runner,
            self._mini_installer_tests_config, '--build-dir', self._build_dir,
-           '--target', self._target]
+           '--target', self._target, '--force-clean']
     self.AddTestStep(chromium_step.AnnotatedCommand, 'test_mini_installer', cmd,
                      halt_on_failure=True, timeout=600,
                      do_step_if=self.TestStepFilter)
