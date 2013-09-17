@@ -703,7 +703,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddPushCanaryTests(self, factory_properties=None):
     description = ''
     options = ['--lib=browser_tests']
-    options.append('--gtest_also_run_disabled_tests')
+    options.append('--run_manual')
     total_shards = factory_properties.get('browser_total_shards')
     shard_index = factory_properties.get('browser_shard_index')
     options.append('--gtest_filter=PushMessagingCanaryTest.*')

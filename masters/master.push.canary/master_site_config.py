@@ -9,6 +9,6 @@ from config_bootstrap import Master
 class PushCanary(Master.Base):
   project_name = 'Chromium PushCanary'
   master_host = 'localhost'
-  master_port = 8110
-  slave_port = 8210
-  master_port_alt = 8310
+  master_port = 8081
+  slave_port = 8181
+  master_port_alt = 8281
