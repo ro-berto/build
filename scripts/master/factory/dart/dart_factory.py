@@ -8,10 +8,11 @@
 Based on gclient_factory.py.
 """
 
-from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.changes import svnpoller
+from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.status.mail import MailNotifier
 from buildbot.status.status_push import HttpStatusPush
+from buildbot.steps import trigger
 
 from master.factory import v8_factory
 from master.factory import chromium_factory
@@ -281,8 +282,8 @@ class DartFactory(gclient_factory.GClientFactory):
     if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
       dart_cmd_obj.AddTests(options=options)
 
-    for trigger in triggers:
-      dart_cmd_obj.AddTrigger(trigger)
+    for trigger_instance in triggers:
+      dart_cmd_obj.AddTrigger(trigger_instance)
 
     dart_cmd_obj.AddKillStep(step_name="Taskkill after running")
 
@@ -310,8 +311,8 @@ class DartFactory(gclient_factory.GClientFactory):
 
     dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout)
 
-    for trigger in triggers:
-      dart_cmd_obj.AddTrigger(trigger)
+    for trigger_instance in triggers:
+      dart_cmd_obj.AddTrigger(trigger_instance)
 
     if secondAnnotatedRun:
       dart_cmd_obj.AddAnnotatedSteps(python_script, timeout=timeout, run=2)
@@ -561,7 +562,21 @@ class DartUtils(object):
 
   def setup_factories(self, variants):
     def setup_dart_factory(v, base, no_annotated):
+      # If we have triggers specified, create corresponding trigger.Trigger
+      # steps. Example of a trigger specification
+      # 'triggers' : [{
+      #   'schedulerNames': ['scheduler-arm'],
+      #   'waitForFinish': False,
+      #   'updateSourceStamp': False,
+      # }],
       triggers = v.get('triggers', ())
+      trigger_instances = []
+      for trigger_spec in triggers:
+        trigger_instances.append(
+            trigger.Trigger(
+                schedulerNames=trigger_spec['schedulerNames'],
+                waitForFinish=trigger_spec['waitForFinish'],
+                updateSourceStamp=trigger_spec['updateSourceStamp']))
 
       env = v.get('env', {})
       if no_annotated:
@@ -579,13 +594,13 @@ class DartUtils(object):
             clobber=False,
             options=options,
             env=env,
-            triggers=triggers,
+            triggers=trigger_instances,
         )
       else:
         v['factory_builder'] = base.DartAnnotatedFactory(
             python_script='client/tools/buildbot_annotated_steps.py',
             env=env,
-            triggers=triggers,
+            triggers=trigger_instances,
             secondAnnotatedRun=v.get('second_annotated_steps_run', False)
         )
 
