@@ -14,3 +14,4 @@ class Libyuv(Master.Master3):
   server_url = 'http://libyuv.googlecode.com'
   project_url = 'http://libyuv.googlecode.com'
   from_address = 'libyuv-cb-watchlist@google.com'
+  permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')

@@ -13,8 +13,7 @@ class ChromiumWebRTC(Master.Master1):
   master_port_alt = 8254
   server_url = 'http://webrtc.googlecode.com'
   project_url = 'http://webrtc.googlecode.com'
-  from_address = 'webrtc-cb-watchlist@google.com'
-  permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
+  from_address = 'chromium-webrtc-cb-watchlist@google.com'
   base_app_url = 'https://webrtc-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'

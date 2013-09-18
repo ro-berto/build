@@ -14,6 +14,7 @@ class WebRTC(Master.Master3):
   server_url = 'http://webrtc.googlecode.com'
   project_url = 'http://webrtc.googlecode.com'
   from_address = 'webrtc-cb-watchlist@google.com'
+  master_domain = 'webrtc.org'
   permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
   base_app_url = 'https://webrtc-status.appspot.com'
   tree_status_url = base_app_url + '/status'

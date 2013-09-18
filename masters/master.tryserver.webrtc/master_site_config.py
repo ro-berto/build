@@ -14,7 +14,6 @@ class WebRTCTryServer(Master.Master4):
   try_job_port = 8370
   from_address = 'tryserver@webrtc.org'
   reply_to = 'chrome-troopers+tryserver@google.com'
-  permitted_domains = ('google.com', 'chromium.org', 'webrtc.org')
   svn_url = 'svn://svn.chromium.org/chrome-try/try-webrtc'
   base_app_url = 'https://webrtc-status.appspot.com'
   tree_status_url = base_app_url + '/status'
