@@ -1,4 +1,21 @@
 {
+  "android_defaults": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": null, 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
   "blink": {
     "build_config_fs": "Release", 
     "build_dir": "out", 
@@ -34,6 +51,74 @@
       "GYP_MSVS_VERSION": "2010"
     }
   }, 
+  "clang_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 clang=1 component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
+  "component_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
+  "klp_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
+  "main_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
   "msvs": {
     "build_config_fs": "Release", 
     "build_dir": "out", 
@@ -64,6 +149,23 @@
       "GYP_MSVS_VERSION": "2010"
     }
   }, 
+  "try_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
   "v8": {
     "build_config_fs": "Release", 
     "build_dir": "", 
@@ -77,6 +179,23 @@
     "gyp_env": {
       "GYP_DEFINES": "v8_target_arch=ia32", 
       "GYP_GENERATORS": "", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
+  "x86_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
       "GYP_MSVS_VERSION": "2010"
     }

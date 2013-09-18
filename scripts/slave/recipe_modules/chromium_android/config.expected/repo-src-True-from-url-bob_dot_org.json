@@ -1,0 +1,58 @@
+{
+  "clang_builder": {
+    "custom_vars": {}, 
+    "extra_env": {}, 
+    "run_checkdeps": true, 
+    "run_findbugs": true, 
+    "run_lint": true, 
+    "target_arch": ""
+  }, 
+  "component_builder": {
+    "custom_vars": {}, 
+    "extra_env": {}, 
+    "run_checkdeps": false, 
+    "run_findbugs": false, 
+    "run_lint": false, 
+    "target_arch": ""
+  }, 
+  "klp_builder": {
+    "custom_vars": {}, 
+    "extra_env": {
+      "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie", 
+      "ANDROID_SDK_ROOT": [
+        "third_party", 
+        "android_tools_internal", 
+        "sdk"
+      ], 
+      "ANDROID_SDK_VERSION": "KeyLimePie"
+    }, 
+    "run_checkdeps": false, 
+    "run_findbugs": false, 
+    "run_lint": false, 
+    "target_arch": ""
+  }, 
+  "main_builder": {
+    "custom_vars": {}, 
+    "extra_env": {}, 
+    "run_checkdeps": false, 
+    "run_findbugs": false, 
+    "run_lint": false, 
+    "target_arch": ""
+  }, 
+  "try_builder": {
+    "custom_vars": {}, 
+    "extra_env": {}, 
+    "run_checkdeps": false, 
+    "run_findbugs": false, 
+    "run_lint": false, 
+    "target_arch": ""
+  }, 
+  "x86_builder": {
+    "custom_vars": {}, 
+    "extra_env": {}, 
+    "run_checkdeps": false, 
+    "run_findbugs": false, 
+    "run_lint": false, 
+    "target_arch": "x86"
+  }
+}

@@ -1,4 +1,21 @@
 {
+  "android_defaults": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": null, 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
   "blink": {
     "build_config_fs": "Release", 
     "build_dir": "out", 
@@ -34,6 +51,74 @@
       "GYP_MSVS_VERSION": null
     }
   }, 
+  "clang_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "clang=1 component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
+  "component_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=shared_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
+  "klp_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
+  "main_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
   "msvs": "can not use msvs on \"linux\"", 
   "ninja": {
     "build_config_fs": "Release", 
@@ -45,6 +130,23 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=static_library", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
+  "try_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=static_library fastbuild=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
       "GYP_MSVS_VERSION": null
@@ -63,6 +165,23 @@
     "gyp_env": {
       "GYP_DEFINES": "v8_target_arch=mips", 
       "GYP_GENERATORS": "", 
+      "GYP_GENERATOR_FLAGS": "", 
+      "GYP_MSVS_VERSION": null
+    }
+  }, 
+  "x86_builder": {
+    "build_config_fs": "Release", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "component=static_library fastbuild=1", 
+      "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "", 
       "GYP_MSVS_VERSION": null
     }

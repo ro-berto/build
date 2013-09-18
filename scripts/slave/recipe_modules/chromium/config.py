@@ -159,6 +159,7 @@ def xcodebuild(c):
 @config_ctx(group='compiler')
 def clang(c):
   c.compile_py.compiler = 'clang'
+  c.gyp_env.GYP_DEFINES['clang'] = 1
 
 @config_ctx(group='compiler')
 def default_compiler(_c):
@@ -172,6 +173,8 @@ def goma(c):
   # TODO(iannucci): support clang and jsonclang
   if not c.compile_py.compiler:
     c.compile_py.compiler = 'goma'
+  elif c.compile_py.compiler == 'clang':
+    c.compile_py.compiler = 'goma-clang'
   else:  # pragma: no cover
     raise BadConf('goma config dosen\'t understand %s' % c.compile_py.compiler)
 

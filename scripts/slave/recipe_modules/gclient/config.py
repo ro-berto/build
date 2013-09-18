@@ -109,6 +109,11 @@ def chromium(c):
     'src/webkit/data/layout_tests/LayoutTests': None})
 
 @config_ctx()
+def android_bare(c):
+  s = c.solutions.add()
+  s.deps_file = '.DEPS.git'
+
+@config_ctx()
 def blink_bare(c):
   s = c.solutions.add()
   s.name = 'blink'
