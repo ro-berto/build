@@ -17,27 +17,30 @@ from buildbot.steps import trigger
 from master.factory import v8_factory
 from master.factory import chromium_factory
 from master.factory.dart import dart_commands
-from master.factory.dart.channels import CHANNELS, CHANNELS_BY_NAME
 from master.factory import gclient_factory
 from master import master_utils
 
 import config
 
+current_milestone = '0.3'
 v8_stable_branch = '3.20'
 android_tools_rev = '@b12d410c0ee23385da78e6c9f353d28fd992e0bd'
 android_resources_rev = '@3855'
+
+milestone_path = '/branches/' + current_milestone
+dart_milestone_url = config.Master.dart_url + milestone_path
 
 chromium_git = 'http://git.chromium.org/git/'
 
 dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
 dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
+dartium_milestone_url = dart_milestone_url + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
 if config.Master.v8_internal_url:
   android_resources_url = (config.Master.v8_internal_url +
       '/buildbot_deps/android_testing_resources' + android_resources_rev )
 else:
   android_resources_url = None
-
 
 # We set these paths relative to the dart root, the scripts need to
 # fix these to be absolute if they don't run from there.
@@ -86,10 +89,22 @@ if android_resources_url:
   custom_deps_list_chromeOnAndroid.append(
       ('dart/third_party/android_testing_resources', android_resources_url))
 
-def BuildChromiumFactory(channel, target_platform='win32', trunk=False):
-  def new_solution(deps_url, custom_vars, custom_deps):
+# These chromium factories are used for building dartium
+F_LINUX_CH = None
+F_MAC_CH = None
+F_WIN_CH = None
+F_LINUX_CH_TRUNK = None
+F_MAC_CH_TRUNK = None
+F_WIN_CH_TRUNK = None
+F_LINUX_CH_MILESTONE = None
+F_MAC_CH_MILESTONE = None
+F_WIN_CH_MILESTONE = None
+
+
+def setup_chromium_factories():
+  def new_solution(url, custom_vars, custom_deps):
     return  gclient_factory.GClientSolution(
-        deps_url,
+        url,
         'dartium.deps',
         custom_vars_list = custom_vars,
         custom_deps_list = custom_deps)
@@ -111,23 +126,52 @@ def BuildChromiumFactory(channel, target_platform='win32', trunk=False):
     def add_solution(self, solution):
       self._solutions.append(solution)
 
-  if trunk:
-    dartium_deps_url = dartium_trunk_url
-  else:
-    # 'channel.dartium_deps_path' can be for example:
-    #   "/branches/bleeding_edge/deps/dartium.deps"
-    # config.Master.dart_url will be the base svn url. It will point to the
-    # mirror if we're in golo and otherwise to the googlecode location.
-    dartium_deps_url = config.Master.dart_url + channel.dartium_deps_path
+  m_linux_ch = DartiumFactory('linux2')
+  m_linux_ch.add_solution(new_solution(dartium_url, custom_vars_list, []))
+  m_mac_ch = DartiumFactory('darwin')
+  m_mac_ch.add_solution(new_solution(dartium_url, custom_vars_list, []))
+  m_win_ch = DartiumFactory()
+  m_win_ch.add_solution(
+      new_solution(dartium_url, custom_vars_list, custom_deps_list_win))
 
-  factory = DartiumFactory(target_platform)
-  if target_platform == 'win32':
-    factory.add_solution(
-        new_solution(dartium_deps_url, custom_vars_list, custom_deps_list_win))
-  else:
-    factory.add_solution(new_solution(dartium_deps_url, custom_vars_list, []))
+  m_linux_ch_trunk = DartiumFactory('linux2')
+  m_linux_ch_trunk.add_solution(
+      new_solution(dartium_trunk_url, custom_vars_list, []))
+  m_mac_ch_trunk = DartiumFactory('darwin')
+  m_mac_ch_trunk.add_solution(
+      new_solution(dartium_trunk_url, custom_vars_list, []))
+  m_win_ch_trunk = DartiumFactory()
+  m_win_ch_trunk.add_solution(
+      new_solution(dartium_trunk_url, custom_vars_list, custom_deps_list_win))
 
-  return factory.ChromiumFactory
+  m_linux_ch_milestone = DartiumFactory('linux2')
+  m_linux_ch_milestone.add_solution(
+      new_solution(dartium_milestone_url, custom_vars_list, []))
+  m_mac_ch_milestone = DartiumFactory('darwin')
+  m_mac_ch_milestone.add_solution(
+      new_solution(dartium_milestone_url, custom_vars_list, []))
+  m_win_ch_milestone = DartiumFactory()
+  m_win_ch_milestone.add_solution(
+      new_solution(dartium_milestone_url,
+                   custom_vars_list,
+                   custom_deps_list_win))
+
+  # Some shortcut to simplify the code in the master.cfg files
+  global F_LINUX_CH, F_MAC_CH, F_WIN_CH
+  global F_LINUX_CH_TRUNK, F_MAC_CH_TRUNK, F_WIN_CH_TRUNK
+  global F_LINUX_CH_MILESTONE, F_MAC_CH_MILESTONE, F_WIN_CH_MILESTONE
+  F_LINUX_CH = m_linux_ch.ChromiumFactory
+  F_MAC_CH = m_mac_ch.ChromiumFactory
+  F_WIN_CH = m_win_ch.ChromiumFactory
+  F_LINUX_CH_TRUNK = m_linux_ch_trunk.ChromiumFactory
+  F_MAC_CH_TRUNK = m_mac_ch_trunk.ChromiumFactory
+  F_WIN_CH_TRUNK = m_win_ch_trunk.ChromiumFactory
+  F_LINUX_CH_MILESTONE = m_linux_ch_milestone.ChromiumFactory
+  F_MAC_CH_MILESTONE = m_mac_ch_milestone.ChromiumFactory
+  F_WIN_CH_MILESTONE = m_win_ch_milestone.ChromiumFactory
+
+setup_chromium_factories()
+
 
 # These factories are used for building v8
 v8_win_default_opts = ['--build-tool=vs']
@@ -172,25 +216,18 @@ class DartFactory(gclient_factory.GClientFactory):
                  config.Master.trunk_internal_url +
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
-  def __init__(self, channel=None, build_dir='dart', target_platform='posix',
-               trunk=False, target_os=None, custom_deps_list=None,
+  def __init__(self, build_dir='dart', target_platform='posix', trunk=False,
+               milestone=False, target_os=None, custom_deps_list=None,
                nohooks_on_update=False):
     solutions = []
     self.target_platform = target_platform
-
-    # Default to the bleeding_edge channel
-    if not channel:
-      channel = CHANNELS_BY_NAME['be']
-
+    deps_file = '/deps/all.deps'
+    dart_url = config.Master.dart_bleeding + deps_file
     # If this is trunk use the deps file from there instead.
     if trunk:
-      all_deps_url = config.Master.dart_trunk + '/deps/all.deps'
-    else:
-      # 'channel.all_deps_path' can be for example:
-      #   "/branches/bleeding_edge/deps/all.deps"
-      # config.Master.dart_url will be the base svn url. It will point to the
-      # mirror if we're in golo and otherwise to the googlecode location.
-      all_deps_url = config.Master.dart_url + channel.all_deps_path
+      dart_url = config.Master.dart_trunk + deps_file
+    if milestone:
+      dart_url = dart_milestone_url + deps_file
 
     if not custom_deps_list:
       custom_deps_list = []
@@ -200,7 +237,7 @@ class DartFactory(gclient_factory.GClientFactory):
       custom_deps_list.append(self.CUSTOM_TZ)
 
     main = gclient_factory.GClientSolution(
-        all_deps_url,
+        dart_url,
         needed_components=self.NEEDED_COMPONENTS,
         custom_deps_list = custom_deps_list,
         custom_vars_list = custom_vars_list)
@@ -349,152 +386,146 @@ class DartUtils(object):
     'annotated_script': 'dart_buildbot_run.py',
   }
 
-  @staticmethod
-  def get_factory_base(channel):
-    postfix = channel.builder_postfix
-    factory_base = {
-      'posix' + postfix: DartFactory(channel),
-      'posixNoRunhooks' + postfix:
-          DartFactory(channel, nohooks_on_update=True),
-      'chromeOnAndroid' + postfix:
-          DartFactory(channel,
-                      custom_deps_list=custom_deps_list_chromeOnAndroid),
-      'linux-clang' + postfix:
-          DartFactory(channel, custom_deps_list=custom_deps_list_vm_linux),
-      'android' + postfix: DartFactory(channel, target_os='android'),
-      'windows' + postfix: DartFactory(channel, target_platform='win32'),
-    }
-    if channel.name == 'be':
-      factory_base.update({
-        'posix-trunk': DartFactory(channel),
-        'linux-clang-trunk':
-            DartFactory(channel,
-                        custom_deps_list=custom_deps_list_vm_linux, trunk=True),
-        'windows-trunk':
-            DartFactory(channel, target_platform='win32', trunk=True),
-      })
-    return factory_base
 
-  @staticmethod
-  def get_dartium_factory_base(channel):
-    postfix = channel.builder_postfix
+  factory_base = {
+    'posix': DartFactory(),
+    'posixNoRunhooks': DartFactory(nohooks_on_update=True),
+    'chromeOnAndroid':
+        DartFactory(custom_deps_list=custom_deps_list_chromeOnAndroid),
+    'linux-clang': DartFactory(custom_deps_list=custom_deps_list_vm_linux),
+    'android': DartFactory(target_os='android'),
+    'windows': DartFactory(target_platform='win32'),
 
-    F_MAC_CH = BuildChromiumFactory(channel, target_platform='darwin')
-    F_LINUX_CH = BuildChromiumFactory(channel, target_platform='linux2')
-    F_WIN_CH = BuildChromiumFactory(channel, target_platform='win32')
+    'posix-milestone': DartFactory(milestone=True),
+    'linux-clang-milestone':
+        DartFactory(custom_deps_list=custom_deps_list_vm_linux, milestone=True),
+    'windows-milestone': DartFactory(target_platform='win32', milestone=True),
 
-    factory_base_dartium = {
-      'dartium-mac-full' + postfix: F_MAC_CH(
-          target='Release',
-          options=DartUtils.mac_options,
-          clobber=True,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.mac_factory_properties),
-      'dartium-mac-inc' + postfix: F_MAC_CH(
-          target='Release',
-          options=DartUtils.mac_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.mac_factory_properties),
-      'dartium-mac-debug' + postfix: F_MAC_CH(
-          target='Debug',
-          compile_timeout=3600,
-          options=DartUtils.mac_dbg_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.mac_factory_properties),
-      'dartium-lucid64-full' + postfix: F_LINUX_CH(
-          target='Release',
-          clobber=True,
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      'dartium-lucid64-inc' + postfix: F_LINUX_CH(
-          target='Release',
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      'dartium-lucid64-debug' + postfix: F_LINUX_CH(
-          target='Debug',
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      'dartium-win-full' + postfix: F_WIN_CH(
-          target='Release',
-          project=DartUtils.win_project,
-          clobber=True,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_rel_factory_properties),
-      'dartium-win-inc' + postfix: F_WIN_CH(
-          target='Release',
-          project=DartUtils.win_project,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_rel_factory_properties),
-      'dartium-win-inc-ninja' + postfix: F_WIN_CH(
-          target='Release',
-          options=DartUtils.win_options_ninja,
-          tests=[], # FIXME: no annotated steps -> no gcs uploads
-          factory_properties=DartUtils.win_rel_factory_properties_ninja),
-      'dartium-win-debug' + postfix: F_WIN_CH(
-          target='Debug',
-          project=DartUtils.win_project,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.win_dbg_factory_properties),
-      'dartium-lucid32-full' + postfix: F_LINUX_CH(
-          target='Release',
-          clobber=True,
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux32_factory_properties),
-    }
-    if channel.name == 'be':
-      F_MAC_CH_TRUNK = BuildChromiumFactory(channel, target_platform='darwin')
-      F_LINUX_CH_TRUNK = BuildChromiumFactory(channel, target_platform='linux2')
-      F_WIN_CH_TRUNK = BuildChromiumFactory(channel, target_platform='win32')
+    'posix-trunk': DartFactory(trunk=True),
+    'linux-clang-trunk':
+        DartFactory(custom_deps_list=custom_deps_list_vm_linux, trunk=True),
+    'windows-trunk': DartFactory(target_platform='win32', trunk=True),
+  }
+  factory_base_dartium = {
+    'dartium-mac-full' : F_MAC_CH(
+        target='Release',
+        options=mac_options,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-mac-inc' : F_MAC_CH(
+        target='Release',
+        options=mac_options,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-mac-debug' : F_MAC_CH(
+        target='Debug',
+        compile_timeout=3600,
+        options=mac_dbg_options,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-lucid64-full' : F_LINUX_CH(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-lucid64-inc' : F_LINUX_CH(
+        target='Release',
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-lucid64-debug' : F_LINUX_CH(
+        target='Debug',
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-win-full' : F_WIN_CH(
+        target='Release',
+        project=win_project,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-win-inc' : F_WIN_CH(
+        target='Release',
+        project=win_project,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-win-inc-ninja' : F_WIN_CH(
+        target='Release',
+        options=win_options_ninja,
+        tests=[], # FIXME: no annotated steps -> no gcs uploads
+        factory_properties=win_rel_factory_properties_ninja),
+    'dartium-win-debug' : F_WIN_CH(
+        target='Debug',
+        project=win_project,
+        tests=['annotated_steps'],
+        factory_properties=win_dbg_factory_properties),
+    'dartium-lucid32-full' : F_LINUX_CH(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux32_factory_properties),
+    'dartium-lucid64-full-trunk' : F_LINUX_CH_TRUNK(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-win-full-trunk' : F_WIN_CH_TRUNK(
+        target='Release',
+        project=win_project,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-mac-full-trunk' : F_MAC_CH_TRUNK(
+        target='Release',
+        options=mac_options,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-lucid32-full-trunk' : F_LINUX_CH_TRUNK(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux32_factory_properties),
+    'dartium-lucid64-full-milestone' : F_LINUX_CH_MILESTONE(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+    'dartium-win-full-milestone' : F_WIN_CH_MILESTONE(
+        target='Release',
+        project=win_project,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=win_rel_factory_properties),
+    'dartium-mac-full-milestone' : F_MAC_CH_MILESTONE(
+        target='Release',
+        options=mac_options,
+        clobber=True,
+        tests=['annotated_steps'],
+        factory_properties=mac_factory_properties),
+    'dartium-lucid32-full-milestone' : F_LINUX_CH_MILESTONE(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux32_factory_properties),
+     'release-lucid64-trunk' : F_LINUX_CH(
+        target='Release',
+        clobber=True,
+        options=linux_options,
+        tests=['annotated_steps'],
+        factory_properties=linux_factory_properties),
+  }
 
-      factory_base_dartium.update({
-        'dartium-lucid64-full-trunk' : F_LINUX_CH_TRUNK(
-            target='Release',
-            clobber=True,
-            options=DartUtils.linux_options,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.linux_factory_properties),
-        'dartium-win-full-trunk' : F_WIN_CH_TRUNK(
-            target='Release',
-            project=DartUtils.win_project,
-            clobber=True,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.win_rel_factory_properties),
-        'dartium-mac-full-trunk' : F_MAC_CH_TRUNK(
-            target='Release',
-            options=DartUtils.mac_options,
-            clobber=True,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.mac_factory_properties),
-        'dartium-lucid32-full-trunk' : F_LINUX_CH_TRUNK(
-            target='Release',
-            clobber=True,
-            options=DartUtils.linux_options,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.linux32_factory_properties),
-       'release-lucid64-full-trunk': F_LINUX_CH_TRUNK(
-          target='Release',
-          clobber=True,
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      })
-    return factory_base_dartium
-
-  factory_base = {}
-  factory_base_dartium = {}
 
   def __init__(self, active_master):
     self._active_master = active_master
-
-    for channel in CHANNELS:
-      DartUtils.factory_base.update(DartUtils.get_factory_base(channel))
-    for channel in CHANNELS:
-      DartUtils.factory_base_dartium.update(
-          DartUtils.get_dartium_factory_base(channel))
 
   @staticmethod
   def monkey_patch_remoteshell():
@@ -577,7 +608,7 @@ class DartUtils(object):
       factory = None
       name = v['name']
       arch = v['arch']
-      if name.startswith('v8-linux-release'):
+      if name == 'v8-linux-release':
         factory = m_v8_linux_stable.V8Factory(
             options=v8_linux_default_opts,
             target='Release',
@@ -586,7 +617,7 @@ class DartUtils(object):
             },
             tests=[],
             target_arch=arch)
-      elif name.startswith('v8-win-release'):
+      elif name == 'v8-win-release':
         factory = m_v8_win32_stable.V8Factory(
             options=v8_win_default_opts,
             project='build\\all.sln',
@@ -596,7 +627,7 @@ class DartUtils(object):
             },
             tests=[],
             target_arch=arch)
-      elif name.startswith('v8-mac-release'):
+      elif name == 'v8-mac-release':
         factory = m_v8_mac_stable.V8Factory(
             options=v8_mac_default_opts,
             target='Release',
@@ -628,8 +659,7 @@ class DartUtils(object):
 
   def setup_dartium_factories(self, dartium_variants):
     for variant in dartium_variants:
-      name = variant['name']
-      variant['factory_builder'] = self.factory_base_dartium[name]
+      variant['factory_builder'] = self.factory_base_dartium[variant['name']]
 
   def get_web_statuses(self):
     public_html = '../master.chromium/public_html'
@@ -697,4 +727,3 @@ class DartUtils(object):
                        lookup=master_utils.FilterDomain(),
                        builders=notifying_builders))
     return statuses
-
