@@ -51,6 +51,7 @@ F('win_x64_full', win_out().ChromiumFactory(
       'gclient_env': {
         'GYP_DEFINES': 'component=static_library target_arch=x64',
         'GYP_MSVS_VERSION': '2012',
+        'GYP_LINK_CONCURRENCY_MAX': '4',
       },
       'gs_bucket': 'gs://chromium-browser-continuous',
       'gs_acl': 'public-read',
