@@ -14,6 +14,8 @@ sys.path.insert(0, os.path.join(BASE_PATH, '..', 'scripts'))
 
 from common import chromium_utils
 
+sys.path.pop(0)
+
 # List of slaves that are allowed to be used more than once.
 WHITELIST = ['build1-m6']
 
