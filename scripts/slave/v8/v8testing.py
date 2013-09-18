@@ -65,6 +65,9 @@ def main():
   option_parser.add_option('--no-presubmit',
                            default=False, action='store_true',
                            help='Skip presubmit checks')
+  option_parser.add_option("--no-i18n", "--noi18n",
+                           default=False, action='store_true',
+                           help='Skip internationalization tests')
   option_parser.add_option('--flaky-tests',
                            help=('Regard tests marked as flaky '
                                  '(run|skip|dontcare)'))
@@ -87,6 +90,8 @@ def main():
       cmd.extend(['--buildbot'])
     if options.no_presubmit:
       cmd.extend(['--no-presubmit'])
+    if options.no_i18n:
+      cmd.extend(['--no-i18n'])
     if options.testname:
       cmd.extend([options.testname])
     if options.testname == 'test262':
