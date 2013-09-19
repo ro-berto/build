@@ -82,37 +82,6 @@ F('f_win_rel', win().ChromiumFactory(
 # Win Rel testers+builders
 #
 # TODO: Switch back to trigger, http://crbug.com/102331
-B('Win7 Perf', 'f_win_rel_perf', scheduler='global_scheduler')
-F('f_win_rel_perf', win().ChromiumFactory(
-    # TODO: undo, http://crbug.com/102331
-    #slave_type='Tester',
-    #build_url=rel_archive,
-    project='all.sln;chromium_builder_perf',
-    tests=[
-      'blink_perf',
-      'dom_perf',
-      'dromaeo',
-      'page_cycler_dhtml',
-      'page_cycler_indexeddb',
-      'page_cycler_intl_ar_fa_he',
-      'page_cycler_intl_es_fr_pt-BR',
-      'page_cycler_intl_hi_ru',
-      'page_cycler_intl_ja_zh',
-      'page_cycler_intl_ko_th_vi',
-      'page_cycler_morejs',
-      'page_cycler_moz',
-      'page_cycler_typical_25',
-      'startup',
-      'sunspider',
-    ],
-    factory_properties={
-        'perf_id': 'chromium-rel-win7-webkit',
-        'show_perf_results': True,
-        'start_crash_handler': True,
-        # TODO: Remove, http://crbug.com/102331
-        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
-        'blink_config': 'blink',
-    }))
 
 B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger')
 F('f_win_rel_tests', win().ChromiumFactory(
@@ -120,6 +89,7 @@ F('f_win_rel_tests', win().ChromiumFactory(
     build_url=rel_archive,
     tests=[
       'installer',
+      'telemetry_unittests',
       'unit',
     ],
     factory_properties={
@@ -163,6 +133,7 @@ F('f_win_dbg', win().ChromiumFactory(
       'browser_tests',
       'content_browsertests',
       'interactive_ui_tests',
+      'telemetry_unittests',
       'unit',
     ],
     factory_properties={

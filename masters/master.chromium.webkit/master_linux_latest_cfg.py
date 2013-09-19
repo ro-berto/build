@@ -113,38 +113,6 @@ F('f_linux_aura_rel', linux().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('Linux Perf', 'f_linux_perf_rel', scheduler='global_scheduler')
-F('f_linux_perf_rel', linux().ChromiumFactory(
-    options=[
-        '--build-tool=ninja',
-        '--compiler=goma',
-        '--',
-        'chromium_builder_perf'
-    ],
-    tests=[
-        'blink_perf',
-        'dom_perf',
-        'dromaeo',
-        'page_cycler_bloat',
-        'page_cycler_dhtml',
-        'page_cycler_indexeddb',
-        'page_cycler_intl_ar_fa_he',
-        'page_cycler_intl_es_fr_pt-BR',
-        'page_cycler_intl_hi_ru',
-        'page_cycler_intl_ja_zh',
-        'page_cycler_intl_ko_th_vi',
-        'page_cycler_morejs',
-        'page_cycler_moz',
-        'page_cycler_typical_25',
-        'startup',
-        'sunspider'
-    ],
-    factory_properties={
-        'perf_id': 'chromium-rel-linux-webkit',
-        'show_perf_results': True,
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
-        'blink_config': 'blink',
-    }))
 
 def Update(_config, _active_master, c):
   return helper.Update(c)
