@@ -3,20 +3,19 @@
 # found in the LICENSE file.
 
 from slave.recipe_configs_util import config_item_context, ConfigGroup
-from slave.recipe_configs_util import DictConfig, ListConfig, SimpleConfig
-from slave.recipe_configs_util import StaticConfig
+from slave.recipe_configs_util import Dict, Single, Static
 
 def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
   return ConfigGroup(
-    INTERNAL = StaticConfig(INTERNAL),
-    REPO_NAME = StaticConfig(REPO_NAME),
-    REPO_URL = StaticConfig(REPO_URL),
-    target_arch = SimpleConfig(basestring, required=False, empty_val=''),
-    custom_vars = DictConfig(value_type=basestring),
-    extra_env = DictConfig(value_type=(basestring,int,list)),
-    run_findbugs = SimpleConfig(bool, required=False, empty_val=False),
-    run_lint = SimpleConfig(bool, required=False, empty_val=False),
-    run_checkdeps = SimpleConfig(bool, required=False, empty_val=False)
+    INTERNAL = Static(INTERNAL),
+    REPO_NAME = Static(REPO_NAME),
+    REPO_URL = Static(REPO_URL),
+    target_arch = Single(basestring, required=False, empty_val=''),
+    custom_vars = Dict(value_type=basestring),
+    extra_env = Dict(value_type=(basestring,int,list)),
+    run_findbugs = Single(bool, required=False, empty_val=False),
+    run_lint = Single(bool, required=False, empty_val=False),
+    run_checkdeps = Single(bool, required=False, empty_val=False)
   )
 
 

@@ -5,8 +5,8 @@
 import types
 
 from slave.recipe_configs_util import config_item_context, ConfigGroup, BadConf
-from slave.recipe_configs_util import DictConfig, SimpleConfig, StaticConfig
-from slave.recipe_configs_util import SetConfig, ConfigList, ListConfig
+from slave.recipe_configs_util import Dict, Single, Static, Set, ConfigList
+from slave.recipe_configs_util import List
 
 def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'
@@ -14,26 +14,26 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
   return ConfigGroup(
     solutions = ConfigList(
       lambda: ConfigGroup(
-        name = SimpleConfig(basestring),
-        url = SimpleConfig(basestring),
-        deps_file = SimpleConfig(basestring, empty_val=deps, required=False),
-        managed = SimpleConfig(bool, empty_val=True, required=False),
-        custom_deps = DictConfig(value_type=(basestring, types.NoneType)),
-        custom_vars = DictConfig(value_type=basestring),
-        safesync_url = SimpleConfig(basestring, required=False),
+        name = Single(basestring),
+        url = Single(basestring),
+        deps_file = Single(basestring, empty_val=deps, required=False),
+        managed = Single(bool, empty_val=True, required=False),
+        custom_deps = Dict(value_type=(basestring, types.NoneType)),
+        custom_vars = Dict(value_type=basestring),
+        safesync_url = Single(basestring, required=False),
 
-        revision = SimpleConfig(basestring, required=False, hidden=True),
+        revision = Single(basestring, required=False, hidden=True),
       )
     ),
-    deps_os = DictConfig(value_type=basestring),
-    hooks = ListConfig(basestring),
-    target_os = SetConfig(basestring),
-    target_os_only = SimpleConfig(bool, empty_val=False, required=False),
-    checkouts = ListConfig(basestring, hidden=True),
-    cache_dir = StaticConfig(cache_dir, hidden=False),
+    deps_os = Dict(value_type=basestring),
+    hooks = List(basestring),
+    target_os = Set(basestring),
+    target_os_only = Single(bool, empty_val=False, required=False),
+    checkouts = List(basestring, hidden=True),
+    cache_dir = Static(cache_dir, hidden=False),
 
-    GIT_MODE = StaticConfig(bool(GIT_MODE)),
-    USE_MIRROR = StaticConfig(bool(USE_MIRROR)),
+    GIT_MODE = Static(bool(GIT_MODE)),
+    USE_MIRROR = Static(bool(USE_MIRROR)),
   )
 
 VAR_TEST_MAP = {

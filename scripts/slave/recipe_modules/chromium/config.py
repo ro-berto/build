@@ -3,8 +3,7 @@
 # found in the LICENSE file.
 
 from slave.recipe_configs_util import config_item_context, ConfigGroup
-from slave.recipe_configs_util import DictConfig, SimpleConfig, StaticConfig
-from slave.recipe_configs_util import SetConfig, BadConf
+from slave.recipe_configs_util import Dict, Single, Static, Set, BadConf
 
 # Because of the way that we use decorators, pylint can't figure out the proper
 # type signature of functions annotated with the @config_ctx decorator.
@@ -25,35 +24,34 @@ def check(val, potentials):
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
                BUILD_CONFIG, **_kwargs):
+  equal_fn = lambda tup: ('%s=%s' % tup)
   return ConfigGroup(
     compile_py = ConfigGroup(
-      default_targets = SetConfig(basestring),
-      build_tool = SimpleConfig(basestring),
-      compiler = SimpleConfig(basestring, required=False),
+      default_targets = Set(basestring),
+      build_tool = Single(basestring),
+      compiler = Single(basestring, required=False),
     ),
     gyp_env = ConfigGroup(
-      GYP_DEFINES = DictConfig(lambda i: ('%s=%s' % i), ' '.join,
-                               (basestring,int)),
-      GYP_GENERATORS = SetConfig(basestring, ','.join),
-      GYP_GENERATOR_FLAGS = DictConfig(
-        lambda i: ('%s=%s' % i), ' '.join, (basestring,int)),
-      GYP_MSVS_VERSION = SimpleConfig(basestring, required=False),
+      GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int)),
+      GYP_GENERATORS = Set(basestring, ','.join),
+      GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
+      GYP_MSVS_VERSION = Single(basestring, required=False),
     ),
-    build_dir = SimpleConfig(basestring),
+    build_dir = Single(basestring),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
     # passed as --target on the command line.
-    build_config_fs = SimpleConfig(basestring),
+    build_config_fs = Single(basestring),
 
-    BUILD_CONFIG = StaticConfig(check(BUILD_CONFIG, BUILD_CONFIGS)),
+    BUILD_CONFIG = Static(check(BUILD_CONFIG, BUILD_CONFIGS)),
 
-    HOST_PLATFORM = StaticConfig(check(HOST_PLATFORM, HOST_PLATFORMS)),
-    HOST_ARCH = StaticConfig(check(HOST_ARCH, HOST_ARCHS)),
-    HOST_BITS = StaticConfig(check(HOST_BITS, HOST_TARGET_BITS)),
+    HOST_PLATFORM = Static(check(HOST_PLATFORM, HOST_PLATFORMS)),
+    HOST_ARCH = Static(check(HOST_ARCH, HOST_ARCHS)),
+    HOST_BITS = Static(check(HOST_BITS, HOST_TARGET_BITS)),
 
-    TARGET_PLATFORM = StaticConfig(check(TARGET_PLATFORM, TARGET_PLATFORMS)),
-    TARGET_ARCH = StaticConfig(check(TARGET_ARCH, TARGET_ARCHS)),
-    TARGET_BITS = StaticConfig(check(TARGET_BITS, HOST_TARGET_BITS)),
+    TARGET_PLATFORM = Static(check(TARGET_PLATFORM, TARGET_PLATFORMS)),
+    TARGET_ARCH = Static(check(TARGET_ARCH, TARGET_ARCHS)),
+    TARGET_BITS = Static(check(TARGET_BITS, HOST_TARGET_BITS)),
   )
 
 TEST_FORMAT = (

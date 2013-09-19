@@ -3,17 +3,17 @@
 # found in the LICENSE file.
 
 from slave.recipe_configs_util import config_item_context, ConfigGroup
-from slave.recipe_configs_util import SimpleConfig, ListConfig, StaticConfig
+from slave.recipe_configs_util import Single, List, Static
 
 def BaseConfig(USE_MIRROR=False):
   return ConfigGroup(
-    lunch_flavor = SimpleConfig(basestring),
+    lunch_flavor = Single(basestring),
     repo = ConfigGroup(
-      url = SimpleConfig(basestring),
-      branch = SimpleConfig(basestring),
-      sync_flags = ListConfig(basestring),
+      url = Single(basestring),
+      branch = Single(basestring),
+      sync_flags = List(basestring),
     ),
-    USE_MIRROR = StaticConfig(bool(USE_MIRROR)),
+    USE_MIRROR = Static(bool(USE_MIRROR)),
   )
 
 config_ctx = config_item_context(
