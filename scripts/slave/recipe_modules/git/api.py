@@ -41,12 +41,11 @@ class GitApi(recipe_api.RecipeApi):
         *[('-e', path) for path in keep_paths or []]))
     self.m.path.add_checkout(dir_path)
     return [
-      self.m.step(
-        'git setup', [
+      self.m.python(
+        'git setup',
           self.m.path.build('scripts', 'slave', 'git_setup.py'),
-          '--path', dir_path,
-          '--url', url,
-        ]),
+          ['--path', dir_path, '--url', url]
+          ),
       self.command('fetch', 'origin', *recursive_args),
       self.command('update-ref', 'refs/heads/'+branch, 'origin/'+branch),
       self.command('clean', '-f', '-d', '-x', *clean_args),

@@ -1,6 +1,8 @@
 [
   {
     "cmd": [
+      "python",
+      "-u",
       "[BUILD_ROOT]/scripts/slave/git_setup.py",
       "--path",
       "[SLAVE_BUILD_ROOT]/src",
