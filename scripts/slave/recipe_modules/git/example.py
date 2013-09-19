@@ -21,3 +21,11 @@ def GenSteps(api):
 
 def GenTests(_api):
   yield 'basic', {}
+
+  yield 'platform_win', {
+    'mock': {
+      'platform': {
+        'name': 'win'
+      }
+    }
+  }

@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 
-def run_git(*args, **kwargs):
+def run_git(git_cmd, *args, **kwargs):
   """Runs git with given arguments.
 
   kwargs are passed through to subprocess.
@@ -22,7 +22,7 @@ def run_git(*args, **kwargs):
   """
   logging.info('Running: git %s %s', args, kwargs)
   func = subprocess.check_call if kwargs.pop('throw', True) else subprocess.call
-  return func(('git',)+args, **kwargs)
+  return func((git_cmd,)+args, **kwargs)
 
 
 def main():
@@ -30,6 +30,10 @@ def main():
   parser.add_argument('--path', help='Path to prospective git repo.',
                       required=True)
   parser.add_argument('--url', help='URL of remote to make origin.',
+                      required=True)
+  parser.add_argument('--git_cmd_path',
+                      help='Path to the git command to run.',
+                      default='git',
                       required=True)
   parser.add_argument('-v', '--verbose', action='store_true')
   opts = parser.parse_args()
@@ -46,7 +50,7 @@ def main():
     run_git('remote', 'rm', 'origin', cwd=path)
   else:
     run_git('init', cwd=path)
-  run_git('remote', 'add', 'origin', url, cwd=path)
+  run_git(opts.git_cmd_path, 'remote', 'add', 'origin', url, cwd=path)
   return 0
 
 

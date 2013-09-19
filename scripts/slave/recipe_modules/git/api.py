@@ -40,12 +40,13 @@ class GitApi(recipe_api.RecipeApi):
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
     self.m.path.add_checkout(dir_path)
+    git_setup_args = ['--path', dir_path, '--url', url]
+    if self.m.platform.is_win:
+      git_setup_args += ['--git_cmd_path', self.m.path.depot_tools('git.bat')]
     return [
-      self.m.python(
-        'git setup',
-          self.m.path.build('scripts', 'slave', 'git_setup.py'),
-          ['--path', dir_path, '--url', url]
-          ),
+      self.m.python('git setup',
+                    self.m.path.build('scripts', 'slave', 'git_setup.py'),
+                    git_setup_args),
       self.command('fetch', 'origin', *recursive_args),
       self.command('update-ref', 'refs/heads/'+branch, 'origin/'+branch),
       self.command('clean', '-f', '-d', '-x', *clean_args),
