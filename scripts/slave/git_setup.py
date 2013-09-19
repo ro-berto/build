@@ -33,8 +33,7 @@ def main():
                       required=True)
   parser.add_argument('--git_cmd_path',
                       help='Path to the git command to run.',
-                      default='git',
-                      required=True)
+                      default='git')
   parser.add_argument('-v', '--verbose', action='store_true')
   opts = parser.parse_args()
 
