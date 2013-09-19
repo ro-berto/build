@@ -187,7 +187,7 @@ def nacl(c):
   s.url = ChromiumSvnSubURL(c, 'native_client', 'trunk', 'deps',
                             'supplement.DEPS')
 
-@config_ctx()
+@config_ctx(config_vars={'GIT_MODE': True})
 def tools_build(c):
   if not c.GIT_MODE:
     raise BadConf('tools_build only supports git')

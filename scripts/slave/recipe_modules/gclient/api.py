@@ -4,10 +4,6 @@
 
 from slave import recipe_api
 
-GIT_DEFAULT_WHITELIST = frozenset((
-  'tools_build',
-))
-
 def jsonish_to_python(spec, is_top=False):
   ret = ''
   if is_top:  # We're the 'top' level, so treat this dict as a suite.
@@ -18,7 +14,8 @@ def jsonish_to_python(spec, is_top=False):
     if isinstance(spec, dict):
       ret += '{'
       ret += ', '.join(
-        "%s: %s" % (repr(str(k)), jsonish_to_python(spec[k])) for k in sorted(spec))
+        "%s: %s"
+        % (repr(str(k)), jsonish_to_python(spec[k])) for k in sorted(spec))
       ret += '}'
     elif isinstance(spec, list):
       ret += '['
@@ -71,12 +68,10 @@ class GclientApi(recipe_api.RecipeApi):
   def spec_alias(self):
     self._spec_alias = None
 
-  def get_config_defaults(self, config_name):
+  def get_config_defaults(self):
     ret = {
       'USE_MIRROR': self.use_mirror
     }
-    if config_name in GIT_DEFAULT_WHITELIST:
-      ret['GIT_MODE'] = True
     ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 

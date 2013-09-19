@@ -5,7 +5,7 @@
 from slave import recipe_api
 
 class V8Api(recipe_api.RecipeApi):
-  def get_config_defaults(self, _config_name):
+  def get_config_defaults(self):
     ret = {}
     if 'target_arch' in self.m.properties:
       ret['TARGET_ARCH'] = self.m.properties['target_arch']

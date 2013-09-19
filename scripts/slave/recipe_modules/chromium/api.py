@@ -5,7 +5,7 @@
 from slave import recipe_api
 
 class ChromiumApi(recipe_api.RecipeApi):
-  def get_config_defaults(self, _config_name):
+  def get_config_defaults(self):
     return {
       'HOST_PLATFORM': self.m.platform.name,
       'HOST_ARCH': self.m.platform.arch,
