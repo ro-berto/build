@@ -16,8 +16,9 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
       lambda: ConfigGroup(
         name = Single(basestring),
         url = Single(basestring),
-        deps_file = Single(basestring, empty_val=deps, required=False),
-        managed = Single(bool, empty_val=True, required=False),
+        deps_file = Single(basestring, empty_val=deps, required=False,
+                           hidden=False),
+        managed = Single(bool, empty_val=True, required=False, hidden=False),
         custom_deps = Dict(value_type=(basestring, types.NoneType)),
         custom_vars = Dict(value_type=basestring),
         safesync_url = Single(basestring, required=False),

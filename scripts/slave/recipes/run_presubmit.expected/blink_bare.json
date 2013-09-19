@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS_ROOT]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': 'DEPS', 'managed': True, 'name': 'blink', 'safesync_url': None, 'url': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}]\ntarget_os = []\ntarget_os_only = False"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'blink', 'url': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}]"
     ],
     "name": "gclient setup",
     "seed_steps": [

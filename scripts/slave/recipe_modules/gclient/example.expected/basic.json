@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS_ROOT]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': None, 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = []\ntarget_os_only = False"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]"
     ],
     "name": "gclient setup",
     "seed_steps": [
@@ -42,7 +42,7 @@
       "[DEPOT_TOOLS_ROOT]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': 'DEPS', 'managed': True, 'name': 'WebKit', 'safesync_url': None, 'url': 'svn://svn.chromium.org/blink/trunk'}]\ntarget_os = []\ntarget_os_only = False"
+      "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'WebKit', 'url': 'svn://svn.chromium.org/blink/trunk'}]"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
     "name": "[spec: WebKit] gclient setup",

@@ -1,8 +1,6 @@
 {
   "blink": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
         "custom_deps": {
@@ -18,35 +16,23 @@
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/src.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "blink_bare": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
-        "custom_deps": {}, 
-        "custom_vars": {}, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "blink", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/blink.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "blink_internal": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
         "custom_deps": {
@@ -62,7 +48,6 @@
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/src.git"
       }, 
       {
@@ -85,21 +70,15 @@
           "src/data/tab_switching": null, 
           "src/tools/grit/grit/test/data": null
         }, 
-        "custom_vars": {}, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src-internal", 
-        "safesync_url": null, 
         "url": "https://chrome-internal.googlesource.com/chrome/src-internal.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "chrome_internal": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
         "custom_deps": {
@@ -125,21 +104,15 @@
           "src/webkit/data/test_shell/plugins": null, 
           "src/webkit/data/xbm_decoder": null
         }, 
-        "custom_vars": {}, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src-internal", 
-        "safesync_url": null, 
         "url": "https://chrome-internal.googlesource.com/chrome/src-internal.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "chromium": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
         "custom_deps": {
@@ -155,20 +128,14 @@
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/src.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "chromium_bare": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
-        "custom_deps": {}, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
@@ -178,20 +145,14 @@
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "src", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/src.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "chromium_empty": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
-        "custom_deps": {}, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
@@ -201,48 +162,31 @@
         "deps_file": "", 
         "managed": true, 
         "name": "src", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/src.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "nacl": "nacl only supports svn", 
   "tools_build": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
-        "custom_deps": {}, 
-        "custom_vars": {}, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "build", 
-        "safesync_url": null, 
         "url": "https://chromium.googlesource.com/chromium/tools/build.git"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }, 
   "v8": {
     "cache_dir": "CACHE_DIR", 
-    "deps_os": {}, 
-    "hooks": [], 
     "solutions": [
       {
-        "custom_deps": {}, 
-        "custom_vars": {}, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
         "name": "v8", 
-        "safesync_url": null, 
         "url": "http://v8.googlecode.com/svn/branches/bleeding_edge"
       }
-    ], 
-    "target_os": [], 
-    "target_os_only": false
+    ]
   }
 }

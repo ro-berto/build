@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS_ROOT]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = '[ROOT]/git_cache'\ndeps_os = {}\nhooks = []\nsolutions = [{'custom_deps': {}, 'custom_vars': {}, 'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'safesync_url': None, 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]\ntarget_os = []\ntarget_os_only = False"
+      "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]"
     ],
     "name": "gclient setup",
     "seed_steps": [

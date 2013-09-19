@@ -4,16 +4,13 @@
     "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
-      "compiler": null, 
       "default_targets": [
         "All"
       ]
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "blink": {
@@ -28,9 +25,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "chromium": {
@@ -46,9 +41,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "clang_builder": {
@@ -63,9 +56,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "clang=1 component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "component_builder": {
@@ -80,9 +71,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "klp_builder": {
@@ -97,9 +86,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "main_builder": {
@@ -114,9 +101,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "msvs": "can not use msvs on \"linux\"", 
@@ -124,15 +109,11 @@
     "build_config_fs": "Debug", 
     "build_dir": "out", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": null, 
-      "default_targets": []
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "try_builder": {
@@ -147,9 +128,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "v8": {
@@ -157,16 +136,12 @@
     "build_dir": "", 
     "compile_py": {
       "build_tool": "make", 
-      "compiler": null, 
       "default_targets": [
         "buildbot"
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "v8_target_arch=x64", 
-      "GYP_GENERATORS": "", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_DEFINES": "v8_target_arch=x64"
     }
   }, 
   "x86_builder": {
@@ -181,9 +156,7 @@
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=shared_library fastbuild=1", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "", 
-      "GYP_MSVS_VERSION": null
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "xcodebuild": "can not use xcodebuild on \"linux\""
