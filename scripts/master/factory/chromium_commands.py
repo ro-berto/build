@@ -1765,6 +1765,7 @@ class ChromiumCommands(commands.FactoryCommands):
            self._dynamorio_coverage_tool,
            '--post-process',
            '--build-dir', self._build_dir,
+           '--build-id', WithProperties('%(got_revision)s'),
            '--platform', factory_properties['test_platform'],
            '--dynamorio-dir', dynamorio_dir,
            '--test-to-upload', test]
