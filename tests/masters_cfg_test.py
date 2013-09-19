@@ -62,8 +62,9 @@ def main(argv):
       pythonpaths=None)
   build_internal = os.path.join(BASE_DIR, '..', 'build_internal')
   if os.path.exists(build_internal):
-    internal_test_data = chromium_utils.ParsePythonCfg(os.path.join(
-        build_internal, 'tests', 'internal_masters_cfg.py'))
+    internal_test_data = chromium_utils.ParsePythonCfg(
+        os.path.join(build_internal, 'tests', 'internal_masters_cfg.py'),
+        fail_hard=True)
     internal_cfg = internal_test_data['masters_cfg_test']
     num_skipped += len(internal_cfg['blacklist'])
     masters_list.extend(GetMasterCmds(

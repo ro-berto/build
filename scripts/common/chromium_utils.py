@@ -18,6 +18,7 @@ import string  # pylint: disable=W0402
 import subprocess
 import sys
 import threading
+import traceback
 import time
 import urllib
 import zipfile
@@ -1095,11 +1096,12 @@ def ListMasters(cue='master.cfg', include_public=True, include_internal=True):
   return [os.path.abspath(os.path.dirname(f)) for f in filenames]
 
 
-def GetAllSlaves():
+def GetAllSlaves(fail_hard=False):
   """Return all slave objects from masters."""
   slaves = []
   for master in ListMasters(cue='slaves.cfg'):
-    cur_slaves = RunSlavesCfg(os.path.join(master, 'slaves.cfg'))
+    cur_slaves = RunSlavesCfg(os.path.join(master, 'slaves.cfg'),
+                              fail_hard=fail_hard)
     for slave in cur_slaves:
       slave['mastername'] = os.path.basename(master)
     slaves.extend(cur_slaves)
@@ -1158,7 +1160,7 @@ def GetActiveMaster(slavename=None, default=None):
   return default
 
 
-def ParsePythonCfg(cfg_filepath):
+def ParsePythonCfg(cfg_filepath, fail_hard=False):
   """Retrieves data from a python config file."""
   if not os.path.exists(cfg_filepath):
     return None
@@ -1172,14 +1174,22 @@ def ParsePythonCfg(cfg_filepath):
     execfile(os.path.join(cfg_filepath), local_vars)
     del local_vars['__builtins__']
     return local_vars
+  except Exception as e:
+    # pylint: disable=C0323
+    print >>sys.stderr, 'An error occurred while parsing %s: %s' % (
+        cfg_filepath, e)
+    print >>sys.stderr, traceback.format_exc()  # pylint: disable=C0323
+    if fail_hard:
+      raise
+    return {}
   finally:
     os.chdir(old_cwd)
     sys.path = old_sys_path
 
 
-def RunSlavesCfg(slaves_cfg):
+def RunSlavesCfg(slaves_cfg, fail_hard=False):
   """Runs slaves.cfg in a consistent way."""
-  slave_config = ParsePythonCfg(slaves_cfg) or {}
+  slave_config = ParsePythonCfg(slaves_cfg, fail_hard=fail_hard) or {}
   return slave_config.get('slaves', [])
 
 

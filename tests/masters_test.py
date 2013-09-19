@@ -250,8 +250,9 @@ def main(argv):
   }
   all_masters = { base_dir: public_masters }
   if os.path.exists(build_internal):
-    internal_test_data = chromium_utils.ParsePythonCfg(os.path.join(
-        build_internal, 'tests', 'internal_masters_cfg.py'))
+    internal_test_data = chromium_utils.ParsePythonCfg(
+        os.path.join(build_internal, 'tests', 'internal_masters_cfg.py'),
+        fail_hard=True)
     all_masters[build_internal] = internal_test_data['masters_test']
   return real_main(all_masters)
 

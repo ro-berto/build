@@ -48,13 +48,11 @@ def ExecuteConfig(canonical_config):
   sys.path.append(localDict['basedir'])
   try:
     exec f in localDict
-  except:
-    raise
+    return localDict
   finally:
     sys.path = beforepath
     os.chdir(mycwd)
     f.close()
-  return localDict
 
 
 def LoadConfig(basedir, config_file='master.cfg', suppress=False):

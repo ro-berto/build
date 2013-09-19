@@ -22,7 +22,7 @@ WHITELIST = ['build1-m6']
 def main():
   status = 0
   slaves = {}
-  for slave in chromium_utils.GetAllSlaves():
+  for slave in chromium_utils.GetAllSlaves(fail_hard=True):
     mastername = slave['mastername']
     slavename = chromium_utils.EntryToSlaveName(slave)
     if slave.get('subdir') == 'b':
