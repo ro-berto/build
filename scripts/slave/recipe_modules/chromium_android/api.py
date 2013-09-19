@@ -2,13 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import datetime
-import re
-import uuid
-
 from slave import recipe_api
-
-import utils
 
 class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
