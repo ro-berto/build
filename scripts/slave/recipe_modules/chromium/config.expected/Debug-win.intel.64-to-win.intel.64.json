@@ -25,7 +25,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library target_arch=x64 use_ash=0 use_aura=0", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 target_arch=x64 use_ash=0 use_aura=0", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -42,7 +42,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library target_arch=x64", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 target_arch=x64", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }

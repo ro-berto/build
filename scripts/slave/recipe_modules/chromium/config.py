@@ -177,6 +177,7 @@ def goma(c):
     raise BadConf('goma config dosen\'t understand %s' % c.compile_py.compiler)
 
   if c.TARGET_PLATFORM == 'win':
+    fastbuild(c)
     pch(c, invert=True)
 
 @config_ctx()

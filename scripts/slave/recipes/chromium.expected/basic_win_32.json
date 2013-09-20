@@ -70,7 +70,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1",
       "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2010"
     },
