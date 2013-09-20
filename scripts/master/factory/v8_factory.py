@@ -71,7 +71,8 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
                        options=factory_properties.get('test_options', []))
     if R('webkit'): f.AddV8Webkit()
-    if R('test262'): f.AddV8Test262()
+    if R('test262'):
+      f.AddV8Test262(options=factory_properties.get('test_options', []))
     if R('mozilla'): f.AddV8Mozilla()
     if R('gcmole'): f.AddV8GCMole()
     if R('simpleleak'): f.AddSimpleLeakTest()
