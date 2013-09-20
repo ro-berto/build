@@ -31,11 +31,11 @@ def GenTests(api):
              'x86_builder', 'klp_builder', 'try_builder']
   def _common_step_mocks():
     return {
-      'Get AppManifestVars': {
+      'get app_manifest_vars': {
         'json': {
           'output': {
             'version_code': 10,
-            'version_name': 'some builder 1234',
+            'version_name': 'some_builder_1234',
             'build_id': 3333,
             'date_string': 6001
           }
@@ -45,6 +45,8 @@ def GenTests(api):
         'json': {
           'output': {
             'PATH': './',
+            'GYP_DEFINES': 'my_new_gyp_def=aaa',
+            'GYP_SOMETHING': 'gyp_something_value'
           }
         }
       }

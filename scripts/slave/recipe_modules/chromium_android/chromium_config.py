@@ -7,7 +7,17 @@ from RECIPE_MODULES.chromium import CONFIG_CTX
 @CONFIG_CTX(includes=['ninja'])
 def android_defaults(c):
   c.compile_py.default_targets=['All']
-  c.gyp_env.GYP_DEFINES['fastbuild'] = 1
+  c.gyp_env.GYP_CROSSCOMPILE = 1
+  c.gyp_env.GYP_GENERATORS.add('ninja')
+  c.gyp_env.GYP_GENERATOR_FLAGS['default_target'] = 'All'
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['fastbuild'] = 1
+  gyp_defs['OS'] = 'android'
+  gyp_defs['host_os'] = 'linux'
+  gyp_defs['gcc_version'] = 46
+  gyp_defs['order_text_section'] = ['orderfiles', 'orderfile.out']
+  gyp_defs['target_arch'] = 'arm'
+  
 
 @CONFIG_CTX(includes=['android_defaults', 'default_compiler', 'goma'])
 def main_builder(c):
