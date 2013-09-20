@@ -69,7 +69,7 @@
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk",
       "ANDROID_SDK_VERSION": "KeyLimePie",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:"
+      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android::%(PATH)s"
     },
     "name": "envsetup",
     "~followup_annotations": [
@@ -130,7 +130,7 @@
       "GYP_DEFINES": "OS=android app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=shared_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=[SLAVE_BUILD_ROOT]/src/orderfiles/orderfile.out target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=All",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./"
+      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -156,7 +156,7 @@
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk",
       "ANDROID_SDK_VERSION": "KeyLimePie",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./"
+      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "compile"
   }

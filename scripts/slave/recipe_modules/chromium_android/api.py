@@ -21,7 +21,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Use os.pathsep equivalent instead of ':' when it
     # provided by one of the recipe modules.
     env_dict['PATH'] = (self._build_internal_android + ':' +
-                        self._env.get('PATH', ''))
+                        self._env.get('PATH','') + ':%(PATH)s')
     return env_dict
 
   def init_and_sync(self):
