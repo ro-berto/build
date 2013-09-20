@@ -25,5 +25,5 @@ config_ctx = config_item_context(
 def AOSP(c):
   c.lunch_flavor = 'full-eng'
   c.repo.url = 'https://android.googlesource.com/platform/manifest'
-  c.repo.branch = 'android-4.3_r2.1'
+  c.repo.branch = 'android-4.3_r2.3'
   c.repo.sync_flags = ['-j16', '-d', '-f']

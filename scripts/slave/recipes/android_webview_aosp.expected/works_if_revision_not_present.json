@@ -145,7 +145,7 @@
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
-      "android-4.3_r2.1"
+      "android-4.3_r2.3"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]/android-src",
     "name": "repo init"
