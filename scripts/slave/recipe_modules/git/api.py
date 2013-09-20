@@ -13,7 +13,10 @@ class GitApi(recipe_api.RecipeApi):
       name += ' ' + args[1]
     if 'cwd' not in kwargs:
       kwargs.setdefault('cwd', self.m.path.checkout())
-    return self.m.step(name, ['git'] + list(args), **kwargs)
+    git_cmd = 'git'
+    if self.m.platform.is_win:
+      git_cmd = self.m.path.depot_tools('git.bat')
+    return self.m.step(name, [git_cmd] + list(args), **kwargs)
 
   def checkout(self, url, dir_path=None, branch='master', recursive=False,
                keep_paths=None):

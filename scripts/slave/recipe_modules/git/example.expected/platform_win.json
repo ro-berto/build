@@ -23,7 +23,7 @@
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS_ROOT]\\git.bat",
       "fetch",
       "origin",
       "--recurse-submodules"
@@ -33,7 +33,7 @@
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS_ROOT]\\git.bat",
       "update-ref",
       "refs/heads/master",
       "origin/master"
@@ -43,7 +43,7 @@
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS_ROOT]\\git.bat",
       "clean",
       "-f",
       "-d",
@@ -54,7 +54,7 @@
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS_ROOT]\\git.bat",
       "checkout",
       "-f",
       "master"
@@ -64,7 +64,7 @@
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS_ROOT]\\git.bat",
       "submodule",
       "update",
       "--init",
@@ -75,7 +75,7 @@
   },
   {
     "cmd": [
-      "git",
+      "[DEPOT_TOOLS_ROOT]\\git.bat",
       "status"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]\\src",
