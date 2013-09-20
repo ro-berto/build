@@ -891,46 +891,48 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       if fp.has_key('test_properties'):
         return dict(fp, **fp['test_properties'].get(test_name, {}))
       else:
-        return fp
+        return fp.copy()
 
-    def NameSuffix(test_fp):
-      return test_fp.get('test_name_suffix', '')
+    def Endure(test_name, page_set, test_name_ui):
+      """Adds an endurance test if configured."""
+      if R(test_name):
+        # Get test-specific factory properties.
+        test_fp = FP(test_name)
+        # Test name for waterfall ui and dashboard.
+        full_test_name = '%s%s' % (test_name_ui,
+                                   test_fp.get('test_name_suffix', ''))
+        # Hierarchical suite + test name only for dashboard. The 'extra_args'
+        # are passed to runtest.py, where the 'test-type' argument is used to
+        # build the test name on the archive and dashboard.
+        extra_args = list(test_fp.get('extra_args', []))
+        extra_args += ['--test-type', 'endure/%s' % full_test_name]
+        test_fp['extra_args'] = extra_args
 
-    if R('endure_calendar_tests'):
-      test_fp = FP('endure_calendar_tests')
-      f.AddTelemetryTest(
-          'endure', 'calendar_forward_backward.json',
-          step_name='endure/cal_fw_back%s' % NameSuffix(test_fp),
-          factory_properties=test_fp,
-          timeout=6000)
-    if R('endure_gmail_expand_collapse_tests'):
-      test_fp = FP('endure_gmail_expand_collapse_tests')
-      f.AddTelemetryTest(
-          'endure', 'gmail_expand_collapse_conversation.json',
-          step_name='endure/gmail_exp_col%s' % NameSuffix(test_fp),
-          factory_properties=test_fp,
-          timeout=6000)
-    if R('endure_gmail_alt_label_tests'):
-      test_fp = FP('endure_gmail_alt_label_tests')
-      f.AddTelemetryTest(
-          'endure', 'gmail_alt_two_labels.json',
-          step_name='endure/gmail_labels%s' % NameSuffix(test_fp),
-          factory_properties=test_fp,
-          timeout=6000)
-    if R('endure_gmail_alt_threadlist_tests'):
-      test_fp = FP('endure_gmail_alt_threadlist_tests')
-      f.AddTelemetryTest(
-          'endure', 'gmail_alt_threadlist_conversation.json',
-          step_name='endure/gmail_thread%s' % NameSuffix(test_fp),
-          factory_properties=test_fp,
-          timeout=6000)
-    if R('endure_plus_tests'):
-      test_fp = FP('endure_plus_tests')
-      f.AddTelemetryTest(
-          'endure', 'plus_alt_posts_photos.json',
-          step_name='endure/plus_photos%s' % NameSuffix(test_fp),
-          factory_properties=test_fp,
-          timeout=6000)
+        f.AddTelemetryTest(
+            'endure', page_set,
+            step_name='endure_%s' % full_test_name,
+            factory_properties=test_fp,
+            timeout=6000)
+
+    Endure('endure_calendar_tests',
+           'calendar_forward_backward.json',
+           'cal_fw_back')
+
+    Endure('endure_gmail_expand_collapse_tests',
+           'gmail_expand_collapse_conversation.json',
+           'gmail_exp_col')
+
+    Endure('endure_gmail_alt_label_tests',
+           'gmail_alt_two_labels.json',
+           'gmail_labels')
+
+    Endure('endure_gmail_alt_threadlist_tests',
+           'gmail_alt_threadlist_conversation.json',
+           'gmail_thread')
+
+    Endure('endure_plus_tests',
+           'plus_alt_posts_photos.json',
+           'plus_photos')
 
     # HTML5 media tag performance/functional test using PyAuto.
     if R('avperf'):
