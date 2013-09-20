@@ -1254,6 +1254,7 @@ def main():
       'browser_tests',
       'content_browsertests',
       'interactive_ui_tests',
+      'net_unittests',
   ]
   options.enable_lsan = (options.enable_lsan or
      (options.factory_properties.get('lsan', False) and
