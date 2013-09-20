@@ -44,7 +44,8 @@ class ChromiumApi(recipe_api.RecipeApi):
                          args, **kwargs)
 
   def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
-               results_url=None, **kwargs):
+               results_url=None, perf_dashboard_id=None, test_type=None,
+               **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -59,11 +60,17 @@ class ChromiumApi(recipe_api.RecipeApi):
       ('--xvfb' if xvfb else '--no-xvfb')
     ]
     full_args += self.m.json.property_args()
+
     if annotate:
       full_args.append('--annotate=%s' % annotate)
       kwargs['allow_subannotations'] = True
     if results_url:
       full_args.append('--results-url=%s' % results_url)
+    if perf_dashboard_id:
+      full_args.append('--perf-dashboard-id=%s' % perf_dashboard_id)
+    # This replaces the step_name that used to be sent via factory_properties.
+    if test_type:
+      full_args.append('--test-type=%s' % test_type)
     if ext == '.py':
       full_args.append('--run-python-script')
     full_args.append(test)

@@ -611,7 +611,7 @@ def main_parse(options, args):
   if options.annotate:
     annotate(options.test_type, options.parse_result, results_tracker,
              options.factory_properties.get('full_test_name'),
-             perf_dashboard_id=options.factory_properties.get('test_name'))
+             perf_dashboard_id=options.perf_dashboard_id)
 
   return options.parse_result
 
@@ -680,8 +680,7 @@ def main_mac(options, args):
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
              options.factory_properties.get('full_test_name'),
-             perf_dashboard_id=options.factory_properties.get(
-                 'test_name'))
+             perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     send_results_to_dashboard(
@@ -947,8 +946,7 @@ def main_linux(options, args):
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
              options.factory_properties.get('full_test_name'),
-             perf_dashboard_id=options.factory_properties.get(
-                 'test_name'))
+             perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     send_results_to_dashboard(
@@ -1044,8 +1042,7 @@ def main_win(options, args):
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
              options.factory_properties.get('full_test_name'),
-             perf_dashboard_id=options.factory_properties.get(
-                 'test_name'))
+             perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     send_results_to_dashboard(
@@ -1098,8 +1095,7 @@ def main_android(options, args):
   if options.annotate:
     annotate(options.test_type, result, results_tracker,
              options.factory_properties.get('full_test_name'),
-             perf_dashboard_id=options.factory_properties.get(
-                 'test_name'))
+             perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
     send_results_to_dashboard(
@@ -1222,6 +1218,9 @@ def main():
   option_parser.add_option('', '--results-url', default='',
                            help='The URI of the perf dashboard to upload '
                                 'results to.')
+  option_parser.add_option('', '--perf-dashboard-id', default='',
+                           help='The ID on the perf dashboard to add results '
+                                'to.')
   option_parser.add_option('', '--supplemental-columns-file',
                            default='supplemental_columns',
                            help='A file containing a JSON blob with a dict '
@@ -1236,6 +1235,8 @@ def main():
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
+  if not options.perf_dashboard_id:
+    options.perf_dashboard_id = options.factory_properties.get('test_name')
 
   options.test_type = options.test_type or options.factory_properties.get(
       'step_name', '')

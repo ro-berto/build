@@ -82,7 +82,9 @@ def GenSteps(api):
                                 args,
                                 name='gpu_frame_rate_test',
                                 annotate='framerate',
-                                results_url=dashboard_upload_url)
+                                results_url=dashboard_upload_url,
+                                perf_dashboard_id='gpu_frame_rate',
+                                test_type='gpu_frame_rate_test')
 
     # Former gpu_throughput_tests step
     args = ['--enable-gpu',
@@ -91,7 +93,9 @@ def GenSteps(api):
                                 args,
                                 name='gpu_throughput_tests',
                                 annotate='graphing',
-                                results_url=dashboard_upload_url)
+                                results_url=dashboard_upload_url,
+                                perf_dashboard_id='gpu_throughput',
+                                test_type='gpu_throughput_tests')
 
     # Former tab_capture_performance_tests_step
     args = ['--enable-gpu',
@@ -100,7 +104,9 @@ def GenSteps(api):
                                 args,
                                 name='tab_capture_performance_tests',
                                 annotate='graphing',
-                                results_url=dashboard_upload_url)
+                                results_url=dashboard_upload_url,
+                                perf_dashboard_id='tab_capture_performance',
+                                test_type='tab_capture_performance_tests')
 
   # TODO(kbr): after the conversion to recipes, add all GPU related
   # steps from the main waterfall, like gpu_unittests.
