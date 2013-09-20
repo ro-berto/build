@@ -26,9 +26,9 @@ def GenSteps(api):
   spec = api.gclient.c
   if spec.solutions[0].url.endswith('.git'):
     yield (
-        api.git.command('config', 'user.email', 'commit-bot@chromium.org'),
-        api.git.command('config', 'user.name', 'The Commit Bot'),
-        api.git.command('clean', '-xfq')
+        api.git('config', 'user.email', 'commit-bot@chromium.org'),
+        api.git('config', 'user.name', 'The Commit Bot'),
+        api.git('clean', '-xfq')
     )
 
   yield api.rietveld.apply_issue(root)

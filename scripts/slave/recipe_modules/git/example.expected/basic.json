@@ -33,7 +33,7 @@
     "cmd": [
       "git",
       "update-ref",
-      "refs/heads/master",
+      "master",
       "origin/master"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]/src",

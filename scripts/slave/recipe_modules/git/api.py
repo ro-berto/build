@@ -5,7 +5,7 @@
 from slave import recipe_api
 
 class GitApi(recipe_api.RecipeApi):
-  def command(self, *args, **kwargs):
+  def __call__(self, *args, **kwargs):
     """Return a git command step."""
     name = 'git '+args[0]
     # Distinguish 'git config' commands by the variable they are setting.
@@ -18,13 +18,13 @@ class GitApi(recipe_api.RecipeApi):
       git_cmd = self.m.path.depot_tools('git.bat')
     return self.m.step(name, [git_cmd] + list(args), **kwargs)
 
-  def checkout(self, url, dir_path=None, branch='master', recursive=False,
+  def checkout(self, url, ref='master', dir_path=None, recursive=False,
                keep_paths=None):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (string): url of remote repo to use as upstream
+      ref (string): ref to check out after fetching
       dir_path (string): optional directory to clone into
-      branch (string): branch to check out after fetching
       recursive (bool): whether to recursively fetch submodules or not
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
@@ -39,21 +39,25 @@ class GitApi(recipe_api.RecipeApi):
 
       dir_path = self.m.path.slave_build(dir_path)
     assert self.m.path.pardir not in dir_path
+    self.m.path.add_checkout(dir_path)
+
     recursive_args = ['--recurse-submodules'] if recursive else []
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
-    self.m.path.add_checkout(dir_path)
+
     git_setup_args = ['--path', dir_path, '--url', url]
     if self.m.platform.is_win:
       git_setup_args += ['--git_cmd_path', self.m.path.depot_tools('git.bat')]
+
     return [
       self.m.python('git setup',
                     self.m.path.build('scripts', 'slave', 'git_setup.py'),
                     git_setup_args),
-      self.command('fetch', 'origin', *recursive_args),
-      self.command('update-ref', 'refs/heads/'+branch, 'origin/'+branch),
-      self.command('clean', '-f', '-d', '-x', *clean_args),
-      self.command('checkout', '-f', branch),
-      self.command('submodule', 'update', '--init', '--recursive',
-                   cwd=dir_path),
+      # git_setup.py always sets the repo at the given url as remote 'origin'.
+      self('fetch', 'origin', *recursive_args),
+      self('update-ref', ref, 'origin/' + ref),
+      self('clean', '-f', '-d', '-x', *clean_args),
+      self('checkout', '-f', ref),
+      self('submodule', 'update', '--init', '--recursive',
+           cwd=dir_path),
     ]

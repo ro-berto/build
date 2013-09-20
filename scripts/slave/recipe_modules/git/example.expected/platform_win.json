@@ -35,7 +35,7 @@
     "cmd": [
       "[DEPOT_TOOLS_ROOT]\\git.bat",
       "update-ref",
-      "refs/heads/master",
+      "master",
       "origin/master"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]\\src",

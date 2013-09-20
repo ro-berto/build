@@ -14,9 +14,9 @@ def GenSteps(api):
   # You can use api.git.checkout to perform all the steps of a safe checkout.
   yield api.git.checkout(url, recursive=True)
 
-  # If you need to run more arbitrary git commands, you can use api.git.command,
+  # If you need to run more arbitrary git commands, you can use api.git itself,
   # which behaves like api.step(), but automatically sets the name of the step.
-  yield api.git.command('status', cwd=api.path.checkout())
+  yield api.git('status', cwd=api.path.checkout())
 
 
 def GenTests(_api):
