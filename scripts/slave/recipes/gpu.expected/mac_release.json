@@ -152,6 +152,7 @@
     "name": "content_browsertests"
   },
   {
+    "allow_subannotations": true,
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -175,6 +176,7 @@
     "name": "gpu_frame_rate_test"
   },
   {
+    "allow_subannotations": true,
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -198,6 +200,7 @@
     "name": "gpu_throughput_tests"
   },
   {
+    "allow_subannotations": true,
     "can_fail_build": false,
     "cmd": [
       "python",

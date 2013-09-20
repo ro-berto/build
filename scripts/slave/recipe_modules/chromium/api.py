@@ -61,6 +61,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args += self.m.json.property_args()
     if annotate:
       full_args.append('--annotate=%s' % annotate)
+      kwargs['allow_subannotations'] = True
     if results_url:
       full_args.append('--results-url=%s' % results_url)
     if ext == '.py':
