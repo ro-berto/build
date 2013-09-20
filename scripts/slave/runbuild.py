@@ -338,7 +338,10 @@ def execute_builder(my_builder, mastername, options):
     print 'listing steps in %s/%s:' % (mastername, my_builder['name'])
     print
     for skip, cmd in filtered_commands:
-      if skip:
+      if 'command' not in cmd:
+        print '-', cmd['name'], '[skipped] (custom step type: %s)' % (
+            cmd['stepclass'])
+      elif skip:
         print '-', cmd['name'], '[skipped]'
       elif skip is None:
         print '-', cmd['name'], '[skipped] (not under buildrunner)'
@@ -349,6 +352,8 @@ def execute_builder(my_builder, mastername, options):
         print
     return 0
 
+  # Only execute commands that can be executed.
+  filtered_commands = [(s, c) for s, c in filtered_commands if 'command' in c]
 
   if not options.annotate:
     print >>sys.stderr, 'using %s builder \'%s\'' % (mastername,

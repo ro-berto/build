@@ -296,9 +296,13 @@ def GetCommands(steplist):
   """
   commands = []
   for step in steplist:
+    cmdhash = {}
+    StripBuildrunnerIgnore(step)
+    cmdhash['name'] = step.name
+    cmdhash['doStep'] = None
+    cmdhash['stepclass'] = '%s.%s' % (step.__class__.__module__,
+                                      step.__class__.__name__)
     if hasattr(step, 'command'):
-      StripBuildrunnerIgnore(step)
-
       # None signifies this is not a buildrunner-added step.
       if step.brDoStepIf is None:
         doStep = step.brDoStepIf
@@ -308,7 +312,6 @@ def GetCommands(steplist):
       else:
         doStep = step.brDoStepIf(step)
 
-      cmdhash = {}
       renderables = []
       accumulateClassList(step.__class__, 'renderables', renderables)
 
@@ -316,7 +319,6 @@ def GetCommands(steplist):
         setattr(step, renderable, step.build.render(getattr(step,
                 renderable)))
 
-      cmdhash['name'] = step.name
       cmdhash['doStep'] = doStep
       cmdhash['command'] = step.command
       cmdhash['quoted_command'] = shell_quote(step.command)
@@ -334,7 +336,7 @@ def GetCommands(steplist):
 
       cmdhash['description'] = step.description
       cmdhash['descriptionDone'] = step.descriptionDone
-      commands.append(cmdhash)
+    commands.append(cmdhash)
   return commands
 
 
