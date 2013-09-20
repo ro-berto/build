@@ -143,6 +143,7 @@
     "name": "webkit_python_tests"
   },
   {
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -161,6 +162,7 @@
     "name": "webkit_unit_tests"
   },
   {
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -179,6 +181,7 @@
     "name": "weborigin_unittests"
   },
   {
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",

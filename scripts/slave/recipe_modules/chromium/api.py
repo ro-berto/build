@@ -63,6 +63,9 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.append(test)
     full_args.extend(args)
 
+    # By default, don't abort the recipe for a single test failure.
+    kwargs.setdefault('can_fail_build', False)
+
     return self.m.python(
       name or t_name,
       self.m.path.build('scripts', 'slave', 'runtest.py'),
