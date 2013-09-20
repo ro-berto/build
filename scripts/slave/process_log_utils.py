@@ -838,8 +838,8 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
 class GraphingEndureLogProcessor(GraphingLogProcessor):
   """Handles additional processing for Chrome Endure data."""
-  ENDURE_HEADER_LINE_REGEX = re.compile(r'^url,|^page_name,')
-  ENDURE_RESULT_LINE_REGEX = re.compile(r'^http|^endure_')
+  ENDURE_HEADER_LINE_REGEX = re.compile(r'^(url|page_name),')
+  ENDURE_RESULT_LINE_REGEX = re.compile(r'^(http|endure_).*,')
   ENDURE_FIELD_NAME_REGEX = re.compile(
       r'(?P<TRACE>.*)_(?P<COORDINATE>[XY]) \((?P<UNITS>.*)\)')
 
