@@ -20,7 +20,7 @@ def run_git(git_cmd, *args, **kwargs):
   If the kwarg 'throw' is provided, this behaves as check_call, otherwise will
   return git's return value.
   """
-  logging.info('Running: git %s %s', args, kwargs)
+  logging.info('Running: %s %s %s', git_cmd, args, kwargs)
   func = subprocess.check_call if kwargs.pop('throw', True) else subprocess.call
   return func((git_cmd,)+args, **kwargs)
 
@@ -46,9 +46,9 @@ def main():
     os.makedirs(path)
 
   if os.path.exists(os.path.join(path, '.git')):
-    run_git('remote', 'rm', 'origin', cwd=path)
+    run_git(opts.git_cmd_path, 'remote', 'rm', 'origin', cwd=path)
   else:
-    run_git('init', cwd=path)
+    run_git(opts.git_cmd_path, 'init', cwd=path)
   run_git(opts.git_cmd_path, 'remote', 'add', 'origin', url, cwd=path)
   return 0
 
