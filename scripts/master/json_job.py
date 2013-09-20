@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import json
+import urllib
 
 from buildbot.changes.base import PollingChangeSource
 from buildbot.process.properties import Properties
@@ -11,6 +12,8 @@ from twisted.internet import defer
 from twisted.python import log
 from twisted.web import client
 
+from master import get_password as get_pw
+
 
 _DEFAULT_POLLING_INTERVAL = 10  # seconds
 
@@ -18,10 +21,11 @@ _DEFAULT_POLLING_INTERVAL = 10  # seconds
 class JsonPoller(PollingChangeSource):
   """Polls a url for JSON blobs."""
 
-  def __init__(self, url, interval=_DEFAULT_POLLING_INTERVAL):
+  def __init__(self, url, password=None, interval=_DEFAULT_POLLING_INTERVAL):
     """
     Args:
       url: Url used to retrieve json blobs describing jobs.
+      password: The password to use to authenticate to the url.
       interval: Interval used to poll the url, in seconds.
     """
     # Set the interval used by base PollingChangeSource
@@ -29,6 +33,7 @@ class JsonPoller(PollingChangeSource):
 
     # The url that the poller will poll.
     self._url = url + '/pull'
+    self._password = password
 
     # The parent scheduler that is using this poller.
     self._scheduler = None
@@ -45,7 +50,13 @@ class JsonPoller(PollingChangeSource):
       A deferred object to be called once the polling completes.
     """
     log.msg('JsonPoller.poll')
-    d = client.getPage(self._url, method='POST')
+    if self._password:
+      postdata = urllib.urlencode({'password': self._password})
+    else:
+      postdata = ''
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    d = client.getPage(self._url, method='POST',
+                       postdata=postdata, headers=headers)
     d.addCallback(self._handleJobs)
     d.addErrback(log.err, 'error in JsonPoller.poll')
     return d
@@ -73,11 +84,15 @@ class JsonScheduler(TryBase):
     """
     TryBase.__init__(self, name, builders, properties or {})
 
+    # The password to use for authentication.
+    self._password = get_pw.Password('.jobqueue_password').MaybeGetPassword()
+
     # The poller instance that will be sending us jobs.
-    self._poller = JsonPoller(url, interval=_DEFAULT_POLLING_INTERVAL)
+    self._poller = JsonPoller(url, self._password,
+                              interval=_DEFAULT_POLLING_INTERVAL)
 
     # The url to which the scheduler posts that it started the job.
-    self._url = url + '/accept'
+    self._url = url + '/accept/%s'
 
   def gotChange(self, _change, _important):  # pylint: disable=R0201
     log.msg('ERROR: gotChange was unexpectedly called.')
@@ -112,7 +127,13 @@ class JsonScheduler(TryBase):
 
   def _acceptJob(self, _, job):
     log.msg('JsonScheduler accepting job: %s' % job['job_key'])
-    return client.getPage(self._url + '/' + str(job['job_key']), method='POST')
+    if self._password:
+      postdata = urllib.urlencode({'password': self._password})
+    else:
+      postdata = ''
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    return client.getPage(self._url % job['job_key'], method='POST',
+                          postdata=postdata, headers=headers)
 
   def setServiceParent(self, parent):
     TryBase.setServiceParent(self, parent)
