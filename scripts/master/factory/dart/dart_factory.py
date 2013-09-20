@@ -366,7 +366,7 @@ class DartUtils(object):
     }
     if channel.name == 'be':
       factory_base.update({
-        'posix-trunk': DartFactory(channel),
+        'posix-trunk': DartFactory(channel, trunk=True),
         'linux-clang-trunk':
             DartFactory(channel,
                         custom_deps_list=custom_deps_list_vm_linux, trunk=True),
@@ -446,9 +446,12 @@ class DartUtils(object):
           factory_properties=DartUtils.linux32_factory_properties),
     }
     if channel.name == 'be':
-      F_MAC_CH_TRUNK = BuildChromiumFactory(channel, target_platform='darwin')
-      F_LINUX_CH_TRUNK = BuildChromiumFactory(channel, target_platform='linux2')
-      F_WIN_CH_TRUNK = BuildChromiumFactory(channel, target_platform='win32')
+      F_MAC_CH_TRUNK = BuildChromiumFactory(channel, target_platform='darwin',
+                                            trunk=True)
+      F_LINUX_CH_TRUNK = BuildChromiumFactory(channel, target_platform='linux2',
+                                              trunk=True)
+      F_WIN_CH_TRUNK = BuildChromiumFactory(channel, target_platform='win32',
+                                            trunk=True)
 
       factory_base_dartium.update({
         'dartium-lucid64-full-trunk' : F_LINUX_CH_TRUNK(
