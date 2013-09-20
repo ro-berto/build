@@ -43,7 +43,8 @@ class ChromiumApi(recipe_api.RecipeApi):
                          self.m.path.build('scripts', 'slave', 'compile.py'),
                          args, **kwargs)
 
-  def runtests(self, test, args=None, xvfb=False, name=None, **kwargs):
+  def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
+               results_url=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -58,6 +59,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       ('--xvfb' if xvfb else '--no-xvfb')
     ]
     full_args += self.m.json.property_args()
+    if annotate:
+      full_args.append('--annotate=%s' % annotate)
+    if results_url:
+      full_args.append('--results-url=%s' % results_url)
     if ext == '.py':
       full_args.append('--run-python-script')
     full_args.append(test)

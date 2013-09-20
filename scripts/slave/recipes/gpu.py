@@ -77,30 +77,30 @@ def GenSteps(api):
   if api.properties.get('build_config', 'Release') == 'Release':
     # Former gpu_frame_rate_test step
     args = ['--enable-gpu',
-            '--gtest_filter=FrameRate*Test*',
-            '--annotate=framerate',
-            '--results-url=%s' % dashboard_upload_url ]
+            '--gtest_filter=FrameRate*Test*']
     yield api.chromium.runtests('performance_ui_tests',
                                 args,
-                                name='gpu_frame_rate_test')
+                                name='gpu_frame_rate_test',
+                                annotate='framerate',
+                                results_url=dashboard_upload_url)
 
     # Former gpu_throughput_tests step
     args = ['--enable-gpu',
-            '--gtest_filter=ThroughputTest*',
-            '--annotate=graphing',
-            '--results-url=%s' % dashboard_upload_url ]
+            '--gtest_filter=ThroughputTest*']
     yield api.chromium.runtests('performance_browser_tests',
                                 args,
-                                name='gpu_throughput_tests')
+                                name='gpu_throughput_tests',
+                                annotate='graphing',
+                                results_url=dashboard_upload_url)
 
     # Former tab_capture_performance_tests_step
     args = ['--enable-gpu',
-            '--gtest_filter=TabCapturePerformanceTest*',
-            '--annotate=graphing',
-            '--results-url=%s' % dashboard_upload_url ]
+            '--gtest_filter=TabCapturePerformanceTest*']
     yield api.chromium.runtests('performance_browser_tests',
                                 args,
-                                name='tab_capture_performance_tests')
+                                name='tab_capture_performance_tests',
+                                annotate='graphing',
+                                results_url=dashboard_upload_url)
 
   # TODO(kbr): after the conversion to recipes, add all GPU related
   # steps from the main waterfall, like gpu_unittests.
