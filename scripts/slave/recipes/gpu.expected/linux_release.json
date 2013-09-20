@@ -126,6 +126,7 @@
     "name": "gl_tests"
   },
   {
+    "allow_subannotations": true,
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -140,6 +141,12 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=content_browsertests",
+      "--generate-json-file",
+      "--results-directory=gtest-results/content_browsertests",
+      "--build-number=571",
+      "--builder-name=TestBuilder",
       "content_browsertests",
       "--use-gpu-in-tests",
       "--generated-dir=[SLAVE_BUILD_ROOT]/content_gpu_data/generated",

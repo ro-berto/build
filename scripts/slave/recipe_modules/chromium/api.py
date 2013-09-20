@@ -45,7 +45,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
                results_url=None, perf_dashboard_id=None, test_type=None,
-               **kwargs):
+               generate_json_file=False, results_directory=None,
+               build_number=None, builder_name=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -71,6 +72,14 @@ class ChromiumApi(recipe_api.RecipeApi):
     # This replaces the step_name that used to be sent via factory_properties.
     if test_type:
       full_args.append('--test-type=%s' % test_type)
+    if generate_json_file:
+      full_args.append('--generate-json-file')
+    if results_directory:
+      full_args.append('--results-directory=%s' % results_directory)
+    if build_number:
+      full_args.append('--build-number=%s' % build_number)
+    if builder_name:
+      full_args.append('--builder-name=%s' % builder_name)
     if ext == '.py':
       full_args.append('--run-python-script')
     full_args.append(test)

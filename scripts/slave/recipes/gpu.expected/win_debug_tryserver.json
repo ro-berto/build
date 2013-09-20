@@ -144,6 +144,7 @@
     "name": "gl_tests"
   },
   {
+    "allow_subannotations": true,
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -158,6 +159,12 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Debug\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"gpu\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Debug\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"gpu\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://chromiumcodereview.appspot.com\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=content_browsertests",
+      "--generate-json-file",
+      "--results-directory=gtest-results/content_browsertests",
+      "--build-number=571",
+      "--builder-name=TestBuilder",
       "content_browsertests.exe",
       "--use-gpu-in-tests",
       "--generated-dir=[SLAVE_BUILD_ROOT]\\content_gpu_data\\generated",

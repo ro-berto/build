@@ -71,7 +71,15 @@ def GenSteps(api):
           '--gtest_filter=WebGLConformanceTest.*:Gpu*.*',
           '--ui-test-action-max-timeout=45000',
           '--run-manual']
-  yield api.chromium.runtests('content_browsertests', args)
+  yield api.chromium.runtests('content_browsertests',
+                              args,
+                              annotate='gtest',
+                              test_type='content_browsertests',
+                              generate_json_file=True,
+                              results_directory=
+                                  'gtest-results/content_browsertests',
+                              build_number=api.properties['buildnumber'],
+                              builder_name=api.properties['buildername'])
 
   # Only run the performance tests on Release builds.
   if api.properties.get('build_config', 'Release') == 'Release':
