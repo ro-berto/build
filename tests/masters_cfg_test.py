@@ -15,8 +15,6 @@ import time
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 
-import masters_util
-
 from common import chromium_utils
 from common import master_cfg_utils
 
@@ -73,7 +71,7 @@ def main(argv):
         pythonpaths=[os.path.join(build_internal, p)
                      for p in internal_cfg['paths']]))
 
-  with masters_util.TemporaryMasterPasswords():
+  with master_cfg_utils.TemporaryMasterPasswords():
     processes = [subprocess.Popen([
       sys.executable, os.path.join(BASE_DIR, 'scripts', 'slave', 'runbuild.py'),
       cmd.name, '--test-config'], stdout=subprocess.PIPE,

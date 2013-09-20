@@ -11,13 +11,11 @@ import logging
 import os
 import sys
 import time
-import contextlib
 
 BUILD_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
 
 from common import find_depot_tools  # pylint: disable=W0611
-from common import chromium_utils
 import subprocess2
 
 
@@ -267,24 +265,3 @@ def check_for_no_masters():
   logging.error('Found unexpected master %s on port %d' %
                 (result[1], result[0]))
   return False
-
-
-@contextlib.contextmanager
-def TemporaryMasterPasswords():
-  all_paths = [os.path.join(BUILD_DIR, 'site_config', '.bot_password')]
-  all_paths.extend(os.path.join(path, '.apply_issue_password')
-                   for path in chromium_utils.ListMasters())
-  created_paths = []
-  for path in all_paths:
-    if not os.path.exists(path):
-      try:
-        os.symlink(os.devnull, path)
-        created_paths.append(path)
-      except OSError:
-        pass
-  yield
-  for path in created_paths:
-    try:
-      os.remove(path)
-    except OSError:
-      print 'WARNING: Could not remove %s!' % path

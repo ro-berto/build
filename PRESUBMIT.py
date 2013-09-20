@@ -88,15 +88,18 @@ def CommonChecks(input_api, output_api):
       input_api.os_path.join('scripts', 'tools', 'unittests'),
       whitelist))
 
-  sys.path.append(join('tests'))
-  import masters_util
-  # Run the tests.
-  with masters_util.TemporaryMasterPasswords():
-    output = input_api.RunTests(tests)
+  try:
+    sys.path = [join('scripts', 'common')] + sys.path
+    import master_cfg_utils  # pylint: disable=F0401
+    # Run the tests.
+    with master_cfg_utils.TemporaryMasterPasswords():
+      output = input_api.RunTests(tests)
 
-  output.extend(input_api.canned_checks.PanProjectChecks(
-    input_api, output_api, excluded_paths=black_list))
-  return output
+    output.extend(input_api.canned_checks.PanProjectChecks(
+      input_api, output_api, excluded_paths=black_list))
+    return output
+  finally:
+    sys.path = sys_path_backup
 
 
 def BuildInternalCheck(output, input_api, output_api):

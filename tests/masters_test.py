@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.join(BUILD_DIR, 'scripts'))
 
 import masters_util
 from common import chromium_utils
+from common import master_cfg_utils
 
 
 def do_master_imports():
@@ -127,7 +128,7 @@ def real_main(all_expected):
           return 1
 
 
-  with masters_util.TemporaryMasterPasswords():
+  with master_cfg_utils.TemporaryMasterPasswords():
     master_threads = []
     for base, masters in all_masters.iteritems():
       for master in masters[:]:
