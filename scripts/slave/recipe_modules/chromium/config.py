@@ -32,7 +32,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       compiler = Single(basestring, required=False),
     ),
     gyp_env = ConfigGroup(
-      GYP_CROSSCOMPILE = Single(int, required=False),
+      GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
       GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,list)),
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
