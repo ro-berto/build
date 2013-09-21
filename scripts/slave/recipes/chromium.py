@@ -6,6 +6,7 @@ DEPS = [
   'chromium',
   'gclient',
   'properties',
+  'python',
 ]
 
 def GenSteps(api):
@@ -24,6 +25,8 @@ def GenSteps(api):
     api.chromium.compile(),
   )
 
+  yield api.python.inline('last step', 'print "last step"')
+
 
 def GenTests(api):
   for plat in ('win', 'mac', 'linux'):
@@ -32,3 +35,10 @@ def GenTests(api):
         'mock': {'platform': {'name': plat}},
         'properties': {'TARGET_BITS': bits},
       }
+  yield 'fail', {
+    'step_mocks': {
+      'compile': {
+        '$R': 1
+      }
+    }
+  }

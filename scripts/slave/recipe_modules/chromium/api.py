@@ -41,7 +41,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     args.extend(targets)
     return self.m.python(name or 'compile',
                          self.m.path.build('scripts', 'slave', 'compile.py'),
-                         args, **kwargs)
+                         args, abort_on_failure=True, **kwargs)
 
   def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
                results_url=None, perf_dashboard_id=None, test_type=None,
@@ -85,8 +85,8 @@ class ChromiumApi(recipe_api.RecipeApi):
     full_args.append(test)
     full_args.extend(args)
 
-    # By default, don't abort the recipe for a single test failure.
-    kwargs.setdefault('can_fail_build', False)
+    # By default, always run the tests.
+    kwargs.setdefault('always_run', True)
 
     return self.m.python(
       name or t_name,

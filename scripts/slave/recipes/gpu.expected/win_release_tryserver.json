@@ -67,6 +67,7 @@
     "name": "gclient runhooks"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -87,7 +88,7 @@
     "name": "compile"
   },
   {
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -106,7 +107,7 @@
     "name": "content_gl_tests"
   },
   {
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -125,7 +126,7 @@
     "name": "gles2_conform_test"
   },
   {
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -145,7 +146,7 @@
   },
   {
     "allow_subannotations": true,
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -178,7 +179,7 @@
   },
   {
     "allow_subannotations": true,
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -204,7 +205,7 @@
   },
   {
     "allow_subannotations": true,
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -230,7 +231,7 @@
   },
   {
     "allow_subannotations": true,
-    "can_fail_build": false,
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

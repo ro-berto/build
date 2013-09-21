@@ -95,18 +95,9 @@
       "All",
       "chromium_builder_tests"
     ],
-    "name": "compile"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "print \"last step\""
-    ],
-    "name": "last step",
+    "name": "compile",
     "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@print \"last step\"@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_FAILURE@@@"
     ]
   }
 ]

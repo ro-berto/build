@@ -76,6 +76,7 @@
     "name": "gclient runhooks"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -95,5 +96,17 @@
       "chromium_builder_tests"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "print \"last step\""
+    ],
+    "name": "last step",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"last step\"@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   }
 ]
