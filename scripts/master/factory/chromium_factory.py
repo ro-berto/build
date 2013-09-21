@@ -370,6 +370,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('dbus_unittests', fp)
     if R('dbus_br'):
       f.AddBuildrunnerGTest('dbus_unittests', fp)
+    if R('google_apis_unittests'):
+      f.AddGTestTestStep('google_apis_unittests', fp)
+    if R('google_apis_unittests_br'):
+      f.AddBuildrunnerGTest('google_apis_unittests', fp)
     if R('gpu', 'gpu_unittests'):
       f.AddGTestTestStep(
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
