@@ -43,7 +43,8 @@ def TemporaryMasterPasswords():
   for path in all_paths:
     if not os.path.exists(path):
       try:
-        os.symlink(os.devnull, path)
+        with open(path, 'w') as f:
+          f.write('reindeer flotilla\n')
         created_paths.append(path)
       except OSError:
         pass
