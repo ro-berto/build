@@ -32,7 +32,7 @@ class JsonPoller(PollingChangeSource):
     self.pollInterval = interval
 
     # The url that the poller will poll.
-    self._url = url + '/pull'
+    self._url = url.rstrip('/') + '/pull'
     self._password = password
 
     # The parent scheduler that is using this poller.
@@ -92,7 +92,7 @@ class JsonScheduler(TryBase):
                               interval=_DEFAULT_POLLING_INTERVAL)
 
     # The url to which the scheduler posts that it started the job.
-    self._url = url + '/accept/%s'
+    self._url = url.rstrip('/') + '/accept/%s'
 
   def gotChange(self, _change, _important):  # pylint: disable=R0201
     log.msg('ERROR: gotChange was unexpectedly called.')
@@ -132,7 +132,8 @@ class JsonScheduler(TryBase):
     else:
       postdata = ''
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-    return client.getPage(self._url % job['job_key'], method='POST',
+    # We are guaranteed job_key is a str, but json makes it unicode.
+    return client.getPage(self._url % str(job['job_key']), method='POST',
                           postdata=postdata, headers=headers)
 
   def setServiceParent(self, parent):
