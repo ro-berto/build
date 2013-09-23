@@ -41,6 +41,8 @@ class GitApi(recipe_api.RecipeApi):
     assert self.m.path.pardir not in dir_path
     self.m.path.add_checkout(dir_path)
 
+    full_ref = 'refs/heads/%s' % ref if '/' not in ref else ref
+
     recursive_args = ['--recurse-submodules'] if recursive else []
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
@@ -55,7 +57,7 @@ class GitApi(recipe_api.RecipeApi):
                     git_setup_args),
       # git_setup.py always sets the repo at the given url as remote 'origin'.
       self('fetch', 'origin', *recursive_args),
-      self('update-ref', ref, 'origin/' + ref),
+      self('update-ref', full_ref, 'origin/' + ref),
       self('clean', '-f', '-d', '-x', *clean_args),
       self('checkout', '-f', ref),
       self('submodule', 'update', '--init', '--recursive',
