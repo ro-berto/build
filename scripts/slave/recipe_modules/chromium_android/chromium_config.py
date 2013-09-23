@@ -33,11 +33,14 @@ def component_builder(c):
 
 @CONFIG_CTX(includes=['main_builder'])
 def x86_builder(c):
-  pass
+  c.gyp_env.GYP_DEFINES['target_arch'] = 'x86'
 
 @CONFIG_CTX(includes=['main_builder'])
 def klp_builder(c):
-  pass
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['android_sdk_version'] = 'KeyLimePie'
+  gyp_defs['android_sdk_root'] = ['third_party', 'android_tools_internal',
+                                  'sdk']
 
 @CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):

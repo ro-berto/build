@@ -92,7 +92,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
+      "GYP_DEFINES": "OS=android android_sdk_root=['third_party', 'android_tools_internal', 'sdk'] android_sdk_version=KeyLimePie component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
@@ -168,7 +168,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=x86", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
