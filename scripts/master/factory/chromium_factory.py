@@ -905,12 +905,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         # Test name for waterfall ui and dashboard.
         full_test_name = '%s%s' % (test_name_ui,
                                    test_fp.get('test_name_suffix', ''))
-        # Hierarchical suite + test name only for dashboard. The 'extra_args'
-        # are passed to runtest.py, where the 'test-type' argument is used to
-        # build the test name on the archive and dashboard.
-        extra_args = list(test_fp.get('extra_args', []))
-        extra_args += ['--test-type', 'endure/%s' % full_test_name]
-        test_fp['extra_args'] = extra_args
+        # Hierarchical suite + test name only for dashboard. The 'step_name'
+        # is passed to runtest.py, where it is used to build the test name on
+        # the archive and dashboard.
+        test_fp['step_name'] = 'endure/%s' % full_test_name
 
         f.AddTelemetryTest(
             'endure', page_set,

@@ -928,7 +928,8 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties['target_os'] = self._target_os
     factory_properties['target_platform'] = self._target_platform
     factory_properties['build_dir'] = self._build_dir
-    factory_properties['step_name'] = step_name
+    factory_properties['step_name'] = factory_properties.get('step_name',
+                                                             step_name)
 
     cmd_options = self.AddFactoryProperties(factory_properties)
 
