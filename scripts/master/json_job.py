@@ -97,19 +97,31 @@ class JsonScheduler(TryBase):
   def gotChange(self, _change, _important):  # pylint: disable=R0201
     log.msg('ERROR: gotChange was unexpectedly called.')
 
-  @defer.inlineCallbacks
   def submitJobs(self, jobs):
-    log.msg('JsonScheduler.submitJobs')
-    for job in jobs:
-      d = self._createSourcestamp(job)
-      d.addCallback(self._createBuildset, job)
-      d.addCallback(self._acceptJob, job)
-      d.addErrback(log.err, "Failed to queue a job!")
-      log.msg(d)
-      yield d
+    return defer.DeferredList([self.submitJob(job) for job in jobs])
 
-  def _createSourcestamp(self, job):
-    log.msg('JsonScheduler adding sourcestamp: %s' % job)
+  @defer.inlineCallbacks
+  def submitJob(self, job):
+    try:
+      cid = yield self._createChange(job)
+      log.msg('JsonScheduler added change: %s' % cid.number)
+      ssid = yield self._createSourcestamp(cid.number, job)
+      log.msg('JsonScheduler added sourcestamp %s' % ssid)
+      bsid = yield self._createBuildset(ssid, job)
+      log.msg('JsonScheduler added buildset %s' % bsid)
+      yield self._acceptJob(bsid[0], job)
+      log.msg('JsonScheduler accepted job %s' % job['job_key'])
+    except Exception as e:
+      log.err('JsonScheduler failed: %s' % e)
+
+
+  def _createChange(self, job):
+    return self.master.addChange(
+        author=','.join(job.get('blamelist', [])),
+        revision=job.get('revision', ''),
+        comments='')
+
+  def _createSourcestamp(self, cid, job):
     return self.master.db.sourcestamps.addSourceStamp(
         project=job.get('project', ''),
         repository=job.get('repository', ''),
@@ -117,16 +129,19 @@ class JsonScheduler(TryBase):
         revision=job.get('revision', ''))
 
   def _createBuildset(self, ssid, job):
-    log.msg('JsonScheduler adding buildset: %s' % ssid)
     properties = Properties()
     properties.update(job, 'Job JSON')
-    return self.addBuildsetForSourceStamp(ssid,
-        builderNames=job.get('buildername', None),
+    builderNames = self.filterBuilderList([job.get('buildername', None)])
+    if not builderNames:
+      log.msg("Job did not specify any allowed builder names")
+      return defer.succeed(None)
+    return self.addBuildsetForSourceStamp(
+        ssid,
+        builderNames=builderNames,
         reason=job.get('reason', 'Job from JsonScheduler'),
         properties=properties)
 
-  def _acceptJob(self, _, job):
-    log.msg('JsonScheduler accepting job: %s' % job['job_key'])
+  def _acceptJob(self, bsid, job):
     if self._password:
       postdata = urllib.urlencode({'password': self._password})
     else:
