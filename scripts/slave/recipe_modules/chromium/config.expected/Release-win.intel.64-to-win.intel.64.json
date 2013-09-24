@@ -190,7 +190,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=x86", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=ia32", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"

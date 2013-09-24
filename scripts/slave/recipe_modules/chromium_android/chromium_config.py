@@ -4,7 +4,7 @@
 
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
-@CONFIG_CTX(includes=['ninja'])
+@CONFIG_CTX(includes=['ninja', 'static_library'])
 def android_defaults(c):
   c.compile_py.default_targets=['All']
   c.gyp_env.GYP_CROSSCOMPILE = 1
@@ -33,7 +33,7 @@ def component_builder(c):
 
 @CONFIG_CTX(includes=['main_builder'])
 def x86_builder(c):
-  c.gyp_env.GYP_DEFINES['target_arch'] = 'x86'
+  c.gyp_env.GYP_DEFINES['target_arch'] = 'ia32'
 
 @CONFIG_CTX(includes=['main_builder'])
 def klp_builder(c):
