@@ -39,6 +39,7 @@ tests = [
     'video_engine_tests',
     'voice_engine_unittests',
 ]
+x64_tests = tests + ['libjingle_peerconnection_objc_test']
 
 baremetal_tests = [
     'audio_device_tests',
@@ -77,9 +78,11 @@ B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler, auto_reboot=False)
 F('mac64_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
-    tests=tests,
+    tests=x64_tests,
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
+        'gclient_env': {
+            'GYP_DEFINES': 'host_arch=x64 target_arch=x64 mac_sdk=10.7'},
+        'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
     }))
 
 B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler,
@@ -87,9 +90,10 @@ B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler,
 F('mac64_release_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
-    tests=tests,
+    tests=x64_tests,
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'}
+        'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
+        'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
     }))
 
 B('Mac Asan', 'mac_asan_factory', scheduler=scheduler, auto_reboot=False)
