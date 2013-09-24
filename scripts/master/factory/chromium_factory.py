@@ -1283,6 +1283,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self._solutions.append(gclient_factory.GClientSolution(
         config.Master.trunk_url + '/deps/third_party/webrtc/webrtc.DEPS',
         name='webrtc.DEPS'))
+    factory_properties = factory_properties or {}
+    factory_properties['primary_repo'] = 'webrtc_'
     return self.ChromiumAnnotationFactory(annotation_script=annotation_script,
                                           branch=branch,
                                           target=target,
