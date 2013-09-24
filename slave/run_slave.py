@@ -365,6 +365,7 @@ def main():
         'PATHEXT',
         'PROCESSOR_ARCHITECTURE',
         'PROCESSOR_ARCHITEW6432',
+        'PROCESSOR_IDENTIFIER',
         'PROGRAMFILES',
         'PROGRAMW6432',
         'PYTHONPATH',
