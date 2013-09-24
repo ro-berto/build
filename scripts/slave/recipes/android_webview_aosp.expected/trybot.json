@@ -132,7 +132,7 @@
       "-p",
       1,
       "-s",
-      "https://chromiumcodereview.appspot.com",
+      "https://codereview.chromium.org",
       "--no-auth"
     ],
     "name": "apply_issue"

@@ -122,7 +122,7 @@ class Master(object):
     master_host = 'master4.golo.chromium.org'
     tree_closing_notification_recipients = []
     from_address = 'tryserver@chromium.org'
-    code_review_site = 'https://chromiumcodereview.appspot.com'
+    code_review_site = 'https://codereview.chromium.org'
 
   ## Native Client related
 

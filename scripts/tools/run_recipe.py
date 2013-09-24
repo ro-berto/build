@@ -12,7 +12,7 @@ Example:
   ./run_recipe.py run_presubmit repo_name=tools_build -- issue=12345 \
       patchset=1 description="this is a cool description" \
       blamelist=['dude@chromium.org'] \
-      rietveld=https://chromiumcodereview.appspot.com
+      rietveld=https://codereview.chromium.org
 
   This would execute the run_presubmit recipe, passing
   {'repo_name':'tools_build'} as factory_properties, and {'issue':'12345' ...}

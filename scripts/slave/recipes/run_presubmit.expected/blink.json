@@ -47,7 +47,7 @@
       "-p",
       1,
       "-s",
-      "https://chromiumcodereview.appspot.com",
+      "https://codereview.chromium.org",
       "--no-auth"
     ],
     "name": "apply_issue"
@@ -71,7 +71,7 @@
       "--skip_canned",
       "CheckBuildbotPendingBuilds",
       "--rietveld_url",
-      "https://chromiumcodereview.appspot.com",
+      "https://codereview.chromium.org",
       "--rietveld_email",
       "",
       "--rietveld_fetch"
