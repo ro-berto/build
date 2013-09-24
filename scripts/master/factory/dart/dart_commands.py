@@ -165,6 +165,9 @@ class DartCommands(commands.FactoryCommands):
                   ' --progress=line --report --time --mode=%s --arch=%s '
                   ' --compiler=%s --runtime=%s --failure-summary'
                  ) % configuration
+      vm_options = options.get('vm_options', None)
+      if vm_options:
+        base_cmd += ' --vm-options=%s' % vm_options
 
     base_cmd = base_cmd + " --write-debug-log"
 
