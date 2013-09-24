@@ -49,10 +49,13 @@ baremetal_tests = [
 ]
 options = ['--build-tool=ninja']
 
-mac_ios_gclient_env = {
+mac_ios_factory_properties = {
     'gclient_deps': 'ios',
-    'GYP_CROSSCOMPILE': '1',
-    'GYP_DEFINES': 'build_with_libjingle=1 OS=ios target_arch=armv7 key_id=""',
+    'gclient_env': {
+        'GYP_CROSSCOMPILE': '1',
+        'GYP_DEFINES': ('build_with_libjingle=1 OS=ios target_arch=armv7 '
+                        'key_id=""'),
+    }
 }
 
 defaults['category'] = 'mac'
@@ -122,7 +125,7 @@ B('iOS Debug', 'ios_debug_factory', scheduler=scheduler, auto_reboot=False)
 F('ios_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
-    factory_properties={'gclient_env': mac_ios_gclient_env}))
+    factory_properties=mac_ios_factory_properties))
 
 
 def Update(c):
