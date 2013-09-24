@@ -351,7 +351,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     step_name = step_name or test_name.replace('-', '_') + '_test'
     factory_properties = factory_properties.copy()
-    factory_properties['step_name'] = step_name
+    factory_properties['step_name'] = factory_properties.get('step_name',
+                                                             step_name)
     addmethod = addmethod or self.AddTestStep
 
     cmd = self.GetAnnotatedPerfCmd(gtest_filter, log_type, test_name,
