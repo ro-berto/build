@@ -15,6 +15,7 @@ DEPS = [
   'platform',
   'properties',
   'rietveld',
+  'python',
 ]
 
 SIMPLE_TESTS_TO_RUN = [
@@ -28,6 +29,7 @@ def GenSteps(api):
   dashboard_upload_url = 'https://chromeperf.appspot.com'
   generated_dir = api.path.slave_build('content_gpu_data', 'generated')
   reference_dir = api.path.slave_build('content_gpu_data', 'reference')
+  gsutil = api.path.build('scripts', 'slave', 'gsutil', wrapper=True)
 
   api.chromium.set_config('chromium')
   api.gclient.apply_config('chrome_internal')
@@ -81,6 +83,17 @@ def GenSteps(api):
                                   'gtest-results/content_browsertests',
                               build_number=api.properties['buildnumber'],
                               builder_name=api.properties['buildername'])
+
+  # Archive test results
+  args = ['--run-id',
+          '%s_%s' % (api.properties['revision'], api.properties['buildername']),
+          '--generated-dir', generated_dir,
+          '--gpu-reference-dir', reference_dir,
+          '--gsutil', gsutil]
+  yield api.python('archive_test_results',
+      api.path.build('scripts', 'slave', 'chromium', \
+                     'archive_gpu_pixel_test_results.py'),
+      args, always_run=True)
 
   # Only run the performance tests on Release builds.
   if api.properties.get('build_config', 'Release') == 'Release':

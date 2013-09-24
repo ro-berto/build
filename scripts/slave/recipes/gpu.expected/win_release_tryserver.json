@@ -178,6 +178,23 @@
     "name": "content_browsertests"
   },
   {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD_ROOT]\\scripts\\slave\\chromium\\archive_gpu_pixel_test_results.py",
+      "--run-id",
+      "HEAD_TestBuilder",
+      "--generated-dir",
+      "[SLAVE_BUILD_ROOT]\\content_gpu_data\\generated",
+      "--gpu-reference-dir",
+      "[SLAVE_BUILD_ROOT]\\content_gpu_data\\reference",
+      "--gsutil",
+      "[BUILD_ROOT]\\scripts\\slave\\gsutil.bat"
+    ],
+    "name": "archive_test_results"
+  },
+  {
     "allow_subannotations": true,
     "always_run": true,
     "cmd": [
