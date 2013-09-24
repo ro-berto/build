@@ -51,7 +51,6 @@ baremetal_tests = [
 options = ['--build-tool=ninja']
 
 mac_ios_factory_properties = {
-    'gclient_deps': 'ios',
     'gclient_env': {
         'GYP_CROSSCOMPILE': '1',
         'GYP_DEFINES': ('build_with_libjingle=1 OS=ios target_arch=armv7 '
