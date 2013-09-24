@@ -108,7 +108,7 @@ class JsonScheduler(TryBase):
       ssid = yield self._createSourcestamp(cid.number, job)
       log.msg('JsonScheduler added sourcestamp %s' % ssid)
       bsid = yield self._createBuildset(ssid, job)
-      log.msg('JsonScheduler added buildset %s' % bsid)
+      log.msg('JsonScheduler added buildset %s' % bsid[0])
       yield self._acceptJob(bsid[0], job)
       log.msg('JsonScheduler accepted job %s' % job['job_key'])
     except Exception as e:
