@@ -28,7 +28,6 @@ def jsonish_to_python(spec, is_top=False):
       ret = repr(spec)
   return ret
 
-
 class GclientApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(GclientApi, self).__init__(**kwargs)
@@ -76,26 +75,26 @@ class GclientApi(recipe_api.RecipeApi):
     ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 
-  def checkout(self, gclient_config=None, revert=True, **kwargs):
-    """Return a step generator function for gclient checkouts."""
-    cfg = gclient_config or self.c
-    assert cfg.complete()
-
-    spec_string = jsonish_to_python(cfg.as_jsonish(), True)
-
+  @recipe_api.inject_test_data
+  def sync(self, cfg, **kwargs):
     revisions = []
     for s in cfg.solutions:
       if s.revision is not None:
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
-    steps = [
-      self('setup', ['config', '--spec', spec_string], **kwargs)
-    ]
+    def parse_got_revision(step_result):
+      data = step_result.json.output
+      for path, info in data['solutions'].iteritems():
+        # gclient json paths always end with a slash
+        path = path.rstrip('/')
+        if path in cfg.got_revision_mapping:
+          propname = cfg.got_revision_mapping[path]
+          step_result.presentation.properties[propname] = info['revision']
 
     if not cfg.GIT_MODE:
-      if revert:
-        steps.append(self.revert(**kwargs))
-      steps.append(self('sync', ['sync', '--nohooks'] + revisions, **kwargs))
+      return self('sync', ['sync', '--nohooks'] + revisions +
+                  ['--output-json', self.m.json.output()],
+                  followup_fn=parse_got_revision, **kwargs)
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -111,10 +110,32 @@ class GclientApi(recipe_api.RecipeApi):
       # git-based builds (e.g. maybe some combination of 'git reset/clean -fx'
       # and removing the 'out' directory).
       j = '-j2' if self.m.platform.is_win else '-j8'
-      steps.append(self('sync',
-        ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
-        '--reset', '--delete_unversioned_trees', '--force', '--upstream',
-        '--no-nag-max'] + revisions, **kwargs))
+      return self('sync',
+                  ['sync', '--verbose', '--with_branch_heads', '--nohooks', j,
+                   '--reset', '--delete_unversioned_trees', '--force',
+                   '--upstream', '--no-nag-max'] + revisions +
+                  ['--output-json', self.m.json.output()],
+                  followup_fn=parse_got_revision,
+                  **kwargs)
+
+
+  def checkout(self, gclient_config=None, revert=True, **kwargs):
+    """Return a step generator function for gclient checkouts."""
+    cfg = gclient_config or self.c
+    assert cfg.complete()
+
+    spec_string = jsonish_to_python(cfg.as_jsonish(), True)
+
+    steps = [
+      self('setup', ['config', '--spec', spec_string], **kwargs)
+    ]
+
+    if not cfg.GIT_MODE:
+      if revert:
+        steps.append(self.revert(**kwargs))
+      steps.append(self.sync(cfg, **kwargs))
+    else:
+      steps.append(self.sync(cfg, **kwargs))
 
       cfg_cmds = [
         ('user.name', 'local_bot'),

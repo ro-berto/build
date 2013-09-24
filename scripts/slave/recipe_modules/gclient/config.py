@@ -31,6 +31,7 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     target_os_only = Single(bool, empty_val=False, required=False),
     checkouts = List(basestring, hidden=True),
     cache_dir = Static(cache_dir, hidden=False),
+    got_revision_mapping = Dict(hidden=True),
 
     GIT_MODE = Static(bool(GIT_MODE)),
     USE_MIRROR = Static(bool(USE_MIRROR)),
@@ -96,6 +97,13 @@ def chromium_bare(c):
     'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk',
     'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s',
     'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'})
+  m = c.got_revision_mapping
+  m['src'] = 'got_revision'
+  m['src/native_client'] = 'got_nacl_revision'
+  m['src/tools/swarm_client'] = 'got_swarm_client_revision'
+  m['src/tools/swarming_client'] = 'got_swarming_client_revision'
+  m['src/third_party/WebKit'] = 'got_webkit_revision'
+  m['src/third_party/webrtc'] = 'got_webrtc_revision'
 
 @config_ctx(includes=['chromium_bare'])
 def chromium_empty(c):

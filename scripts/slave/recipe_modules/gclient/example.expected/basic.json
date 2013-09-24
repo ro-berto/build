@@ -31,9 +31,17 @@
       "-u",
       "[DEPOT_TOOLS_ROOT]/gclient.py",
       "sync",
-      "--nohooks"
+      "--nohooks",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
-    "name": "gclient sync"
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
@@ -69,9 +77,22 @@
       "-u",
       "[DEPOT_TOOLS_ROOT]/gclient.py",
       "sync",
-      "--nohooks"
+      "--nohooks",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
-    "name": "[spec: WebKit] gclient sync"
+    "name": "[spec: WebKit] gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/blatley/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 248087@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_blatley_revision@248087@@@"
+    ]
   }
 ]

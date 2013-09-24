@@ -30,9 +30,17 @@
       "--delete_unversioned_trees",
       "--force",
       "--upstream",
-      "--no-nag-max"
+      "--no-nag-max",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
-    "name": "gclient sync"
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [

@@ -32,9 +32,17 @@
       "-u",
       "[DEPOT_TOOLS_ROOT]\\gclient.py",
       "sync",
-      "--nohooks"
+      "--nohooks",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
-    "name": "gclient sync"
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [

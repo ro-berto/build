@@ -33,9 +33,17 @@
       "sync",
       "--nohooks",
       "--revision",
-      "src/repo@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00"
+      "src/repo@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
-    "name": "gclient sync"
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
