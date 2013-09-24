@@ -97,20 +97,21 @@ def GenSteps(api):
 def GenTests(api):
   # Test paths and commands on each platform.
   for plat in ('mac', 'linux', 'win'):
-    yield 'polymer-%s' % plat, {
-      'properties': api.properties_scheduled(
-          repository='https://github.com/Polymer/polymer',
-          buildername='polymer %s' % plat),
-      'mock': {
-        'platform': {
-            'name': plat
-        }
-      },
-    }
+    yield (
+      api.test('polymer-%s' % plat) +
+      api.properties.scheduled(
+        repository='https://github.com/Polymer/polymer',
+        buildername='polymer %s' % plat,
+      ) +
+      api.platform.name(plat)
+    )
+
   # Make sure the steps are right for deps-triggered jobs.
-  yield 'polymer-from-platform', {
-    'properties': api.properties_scheduled(
-        repository='https://github.com/Polymer/platform',
-        buildername='polymer linux',
-        scheduler='polymer-platform')
-  }
+  yield (
+    api.test('polymer-from-platform') +
+    api.properties.scheduled(
+      repository='https://github.com/Polymer/platform',
+      buildername='polymer linux',
+      scheduler='polymer-platform'
+    )
+  )

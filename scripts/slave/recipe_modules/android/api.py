@@ -34,6 +34,19 @@ class AOSPApi(recipe_api.RecipeApi):
             self.build_path,
             self.c.lunch_flavor]
 
+  @recipe_api.inject_test_data
+  def calculate_trimmed_deps(self):
+    return self.m.step(
+      'calculate trimmed deps',
+      [
+        self.m.path.checkout('android_webview', 'buildbot',
+                             'deps_whitelist.py'),
+        '--method', 'android_build',
+        '--path-to-deps', self.m.path.checkout('DEPS'),
+        '--output-json', self.m.json.output()
+      ],
+    )
+
   def chromium_with_trimmed_deps(self, use_revision=True):
     svn_revision = None
     if use_revision and 'revision' in self.m.properties:
@@ -44,12 +57,7 @@ class AOSPApi(recipe_api.RecipeApi):
     self.m.gclient.spec_alias = 'empty_deps'
     yield self.m.gclient.checkout(spec)
 
-    yield self.m.step(
-      'calculate trimmed deps',
-      [self.m.path.checkout('android_webview', 'buildbot', 'deps_whitelist.py'),
-       '--method', 'android_build',
-       '--path-to-deps', self.m.path.checkout('DEPS'),
-       self.m.json.output()])
+    yield self.calculate_trimmed_deps()
 
     spec = self.m.gclient.make_config('chromium_bare')
     deps_blacklist = self.m.step_history.last_step().json.output['blacklist']

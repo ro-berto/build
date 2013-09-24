@@ -18,8 +18,6 @@ def GenSteps(api):
   )
 
 
-def GenTests(_api):
+def GenTests(api):
   for bits in (32, 64):
-    yield 'basic_%s' % bits, {
-      'properties': {'TARGET_BITS': bits},
-    }
+    yield api.test('basic_%s' % bits) + api.properties(TARGET_BITS=bits)

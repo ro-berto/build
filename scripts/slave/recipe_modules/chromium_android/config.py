@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_configs_util import config_item_context, ConfigGroup
-from slave.recipe_configs_util import Dict, Single, Static
+from slave.recipe_config import config_item_context, ConfigGroup
+from slave.recipe_config import Dict, Single, Static
 
 def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
   return ConfigGroup(
@@ -11,7 +11,6 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     REPO_NAME = Static(REPO_NAME),
     REPO_URL = Static(REPO_URL),
     target_arch = Single(basestring, required=False, empty_val=''),
-    custom_vars = Dict(value_type=basestring),
     extra_env = Dict(value_type=(basestring,int,list)),
     run_findbugs = Single(bool, required=False, empty_val=False),
     run_lint = Single(bool, required=False, empty_val=False),

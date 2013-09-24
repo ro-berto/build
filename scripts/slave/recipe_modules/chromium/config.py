@@ -2,8 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_configs_util import config_item_context, ConfigGroup
-from slave.recipe_configs_util import Dict, Single, Static, Set, BadConf
+from slave.recipe_config import config_item_context, ConfigGroup
+from slave.recipe_config import Dict, Single, Static, Set, BadConf
 
 # Because of the way that we use decorators, pylint can't figure out the proper
 # type signature of functions annotated with the @config_ctx decorator.

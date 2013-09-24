@@ -12,6 +12,7 @@ DEPS = [
   'chromium',
   'gclient',
   'path',
+  'platform',
   'properties',
   'rietveld',
 ]
@@ -124,23 +125,15 @@ def GenTests(api):
     for plat in ['win', 'mac', 'linux']:
       # Normal builder configuration
       base_name = '%s_%s' % (plat, build_config.lower())
-      yield base_name, {
-        'properties': api.properties_scheduled(
-          build_config=build_config),
-        'mock': {
-          'platform': {
-            'name': plat
-          }
-        }
-      }
+      yield (
+        api.test(base_name) +
+        api.properties.scheduled(build_config=build_config) +
+        api.platform.name(plat)
+      )
 
       # Try server configuration
-      yield '%s_tryserver' % base_name, {
-        'properties': api.properties_tryserver(
-          build_config=build_config),
-        'mock': {
-          'platform': {
-            'name': plat
-          }
-        }
-      }
+      yield (
+        api.test('%s_tryserver' % base_name) +
+        api.properties.tryserver(build_config=build_config) +
+        api.platform.name(plat)
+      )

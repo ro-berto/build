@@ -4,9 +4,8 @@
 
 import types
 
-from slave.recipe_configs_util import config_item_context, ConfigGroup, BadConf
-from slave.recipe_configs_util import Dict, Single, Static, Set, ConfigList
-from slave.recipe_configs_util import List
+from slave.recipe_config import config_item_context, ConfigGroup, BadConf
+from slave.recipe_config import ConfigList, Dict, Single, Static, Set, List
 
 def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
   deps = '.DEPS.git' if GIT_MODE else 'DEPS'

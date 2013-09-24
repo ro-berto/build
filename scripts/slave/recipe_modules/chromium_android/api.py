@@ -49,7 +49,6 @@ class AndroidApi(recipe_api.RecipeApi):
     s = spec.solutions[0]
     s.name = repo_name
     s.url = repo_url
-    s.custom_vars = self.c.custom_vars
     s.custom_deps = gclient_custom_deps or {}
     if revision:
       s.revision = revision
@@ -80,7 +79,7 @@ class AndroidApi(recipe_api.RecipeApi):
                self._internal_dir, 'build', 'dump_app_manifest_vars.py'),
            '-b', self.m.properties['buildername'],
            '-v', self.m.path.checkout('chrome', 'VERSION'),
-           self.m.json.output()]
+           '--output-json', self.m.json.output()]
       )
 
       app_manifest_vars = self.m.step_history.last_step().json.output
@@ -95,7 +94,7 @@ class AndroidApi(recipe_api.RecipeApi):
       envsetup_cmd += ['--target-arch=%s' % self.c.target_arch]
 
     cmd = ([self.m.path.checkout('build', 'env_dump.py'),
-            self.m.json.output()] + envsetup_cmd)
+            '--output-json', self.m.json.output()] + envsetup_cmd)
     yield self.m.step('envsetup', cmd, env=self.get_env())
 
     env_diff = self.m.step_history.last_step().json.output
@@ -132,7 +131,7 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Disable subannottations after cleaning up
     # tree_truth.sh.
     yield self.m.step('tree truth steps',
-                      [self.m.path.checkout('build', 'tree_truth.sh'), 
+                      [self.m.path.checkout('build', 'tree_truth.sh'),
                        self.m.path.checkout()] + repos,
                       allow_subannottations=True)
 

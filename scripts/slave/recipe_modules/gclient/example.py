@@ -28,5 +28,5 @@ def GenSteps(api):
       cwd=api.path.slave_build('src', 'third_party'))
 
 
-def GenTests(_api):
-  yield 'basic', {}
+def GenTests(api):
+  yield api.test('basic')

@@ -205,6 +205,7 @@
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001@@@",
       "@@@STEP_LOG_LINE@json.test_results@{@@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"num_passes\": 9001, @@@",
@@ -348,6 +349,7 @@
     ],
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
+      "step returned non-zero exit code: 1",
       "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001@@@",
       "@@@STEP_LOG_LINE@json.test_results@{@@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"num_passes\": 9001, @@@",

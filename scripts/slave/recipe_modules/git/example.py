@@ -5,6 +5,7 @@
 DEPS = [
   'git',
   'path',
+  'platform',
 ]
 
 
@@ -19,13 +20,7 @@ def GenSteps(api):
   yield api.git('status', cwd=api.path.checkout())
 
 
-def GenTests(_api):
-  yield 'basic', {}
+def GenTests(api):
+  yield api.test('basic')
 
-  yield 'platform_win', {
-    'mock': {
-      'platform': {
-        'name': 'win'
-      }
-    }
-  }
+  yield api.test('platform_win') + api.platform.name('win')

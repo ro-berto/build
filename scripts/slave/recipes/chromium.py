@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'gclient',
+  'platform',
   'properties',
   'python',
 ]
@@ -31,14 +32,9 @@ def GenSteps(api):
 def GenTests(api):
   for plat in ('win', 'mac', 'linux'):
     for bits in (32, 64):
-      yield 'basic_%s_%s' % (plat, bits), {
-        'mock': {'platform': {'name': plat}},
-        'properties': {'TARGET_BITS': bits},
-      }
-  yield 'fail', {
-    'step_mocks': {
-      'compile': {
-        '$R': 1
-      }
-    }
-  }
+      yield (
+        api.test('basic_%s_%s' % (plat, bits)) +
+        api.properties(TARGET_BITS=bits) +
+        api.platform(plat, bits)
+      )
+  yield api.test('fail') + api.step_data('compile', retcode=1)

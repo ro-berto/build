@@ -13,5 +13,5 @@ def GenSteps(api):
   yield api.step('gatekeeper_launch',
                  [api.path.build('scripts', 'slave', 'gatekeeper_launch.py')])
 
-def GenTests(_api):
-  yield 'basic', {}
+def GenTests(api):
+  yield api.test('basic')

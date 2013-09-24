@@ -2,7 +2,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-DEPS = ['android', 'properties', 'rietveld']
+DEPS = [
+  'android',
+  'path',
+  'properties',
+  'rietveld'
+]
 
 def GenSteps(api):
   droid = api.android
@@ -27,79 +32,32 @@ def GenSteps(api):
     use_goma=True)
 
 def GenTests(api):
-  def _common_step_mocks():
-    return {
-      'calculate trimmed deps': {
-        'json': {
-          'output': {
-            'blacklist': {
-              'src/blacklist/project/1': None,
-              'src/blacklist/project/2': None,
-            }
-          }
-        }
-      }
-    }
+  yield api.test('basic') + api.properties.scheduled()
 
-  yield 'basic', {
-    'properties': api.properties_scheduled(),
-    'step_mocks': _common_step_mocks(),
-  }
+  yield (
+    api.test('uses_android_repo') +
+    api.properties.scheduled() +
+    api.path.exists('[SLAVE_BUILD_ROOT]/android-src/.repo/repo/repo')
+  )
 
-  yield 'uses_android_repo', {
-    'properties': api.properties_scheduled(),
-    'step_mocks': _common_step_mocks(),
-    'mock' : {
-      'path': {
-        'exists': [
-          '[SLAVE_BUILD_ROOT]/android-src/.repo/repo/repo',
-        ]
-      }
-    }
-  }
+  yield (
+    api.test('doesnt_sync_if_android_present') +
+    api.properties.scheduled() +
+    api.path.exists('[SLAVE_BUILD_ROOT]/android-src')
+  )
 
-  yield 'doesnt_sync_if_android_present', {
-    'properties': api.properties_scheduled(),
-    'step_mocks': _common_step_mocks(),
-    'mock' : {
-      'path': {
-        'exists': [
-          '[SLAVE_BUILD_ROOT]/android-src',
-        ]
-      }
-    }
-  }
+  yield (
+    api.test('does_delete_stale_chromium') +
+    api.properties.scheduled() +
+    api.path.exists('[SLAVE_BUILD_ROOT]/android-src/external/chromium_org')
+  )
 
-  yield 'does_delete_stale_chromium', {
-    'properties': api.properties_scheduled(),
-    'step_mocks': _common_step_mocks(),
-    'mock' : {
-      'path': {
-        'exists': [
-          '[SLAVE_BUILD_ROOT]/android-src/external/chromium_org',
-        ]
-      }
-    }
-  }
+  yield (
+    api.test('uses_goma_test') +
+    api.properties.scheduled() +
+    api.path.exists('[BUILD_ROOT]/goma')
+  )
 
-  yield 'uses_goma_test', {
-    'properties': api.properties_scheduled(),
-    'step_mocks': _common_step_mocks(),
-    'mock' : {
-      'path': {
-        'exists': [
-          '[BUILD_ROOT]/goma'
-        ]
-      }
-    }
-  }
+  yield api.test('works_if_revision_not_present') + api.properties.generic()
 
-  yield 'works_if_revision_not_present', {
-    'properties': api.properties_generic(),
-    'step_mocks': _common_step_mocks(),
-  }
-
-  yield 'trybot', {
-    'properties': api.properties_tryserver(),
-    'step_mocks': _common_step_mocks(),
-  }
+  yield api.test('trybot') + api.properties.tryserver()

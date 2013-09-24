@@ -4,6 +4,8 @@
 
 DEPS = [
   'v8',
+  'platform',
+  'properties',
 ]
 
 def GenSteps(api):
@@ -16,36 +18,25 @@ def GenSteps(api):
   # Tests.
   # TODO(machenbach): Implement the tests.
 
-def GenTests(_api):
+def GenTests(api):
   for bits in [32, 64]:
     for build_config in ['Release', 'Debug']:
-      yield '%s%s' % (build_config, bits), {
-        'properties': {
-          'build_config': build_config,
-          'bits': bits,
-        },
-      }
+      yield (
+        api.test('%s%s' % (build_config, bits)) +
+        api.properties(build_config=build_config, bits=bits)
+      )
 
   for build_config in ['Release', 'Debug']:
-    yield 'arm_%s' % (build_config), {
-      'properties': {
-        'build_config': build_config,
-        'target_arch': 'arm',
-      },
-  }
+    yield (
+      api.test('arm_%s' % build_config) +
+      api.properties(build_config=build_config, target_arch='arm')
+    )
 
-  yield 'default_platform', {
-    'mock': {
-      'platform': {
-        'name': 'linux',
-        'bits': 64,
-      }
-    },
-  }
+  yield (
+    api.test('mips_target') +
+    api.properties(build_config='Release', target_arch='mips')
+  )
 
-  yield 'clobber', {
-    'properties': {
-      'clobber': '',
-    },
-  }
+  yield api.test('default_platform') + api.platform('linux', 64)
 
+  yield api.test('clobber') + api.properties(clobber='')

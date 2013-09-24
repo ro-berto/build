@@ -7,6 +7,7 @@ DEPS = [
   'gclient',
   'json',
   'path',
+  'platform',
   'properties',
   'python',
   'rietveld',
@@ -80,7 +81,7 @@ def GenSteps(api):
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
             '--build-dir', api.path.checkout(api.chromium.c.build_dir),
-            api.json.test_results()]
+            '--json-test-results', api.json.test_results()]
     return api.chromium.runtests(test, args, name=name, can_fail_build=False,
                                  followup_fn=followup_fn)
 
@@ -173,99 +174,40 @@ def GenSteps(api):
   )
 
 
-## Test Code
-# TODO(iannucci): Find some way that the json module can provide these methods
-#                 in the test api, since they'll be useful for anyone who uses
-#                 the 'json.test_results' object.
-def add_result(r, name, expected, actual=None):
-  """Adds a test result to a 'json test results' compatible object.
-  Args:
-    r - The test result object to add to
-    name - A full test name delimited by '/'. ex. 'some/category/test.html'
-    expected - The string value for the 'expected' result of this test.
-    actual (optional) - If not None, this is the actual result of the test.
-                        Otherwise this will be set equal to expected.
-
-  The test will also get an 'is_unexpected' key if actual != expected.
-  """
-  actual = actual or expected
-  entry = r.setdefault('tests', {})
-  for token in name.split('/'):
-    entry = entry.setdefault(token, {})
-  entry['expected'] = expected
-  entry['actual'] = actual
-  if expected != actual:
-    entry['is_unexpected'] = True
-
-
-def canned_test_output(good, passes=9001):
-  """Produces a 'json test results' compatible object with some canned tests.
-  Args:
-    good - Determines if this test result is passing or not.
-    passes - The number of (theoretically) passing tests.
-  """
-  bad = lambda fail_val: None if good else fail_val
-  r = {"num_passes": passes}
-  add_result(r, 'good/totally-awesome.html', 'PASS')
-  add_result(r, 'flake/totally-flakey.html', 'PASS', bad('TIMEOUT PASS'))
-  add_result(r, 'tricky/totally-maybe-not-awesome.html', 'PASS', bad('FAIL'))
-  add_result(r, 'bad/totally-bad-probably.html', 'PASS', bad('FAIL'))
-  return r
-
-
-def step_mock(suffix, good):
-  """Produces the step mock for a single webkit tests step.
-  Args:
-    good - Determines if the result of this step was good or bad.
-    suffix - The suffix of the step name.
-  """
-  return {
-    ('webkit_tests (%s)' % suffix): {
-      'json': {'test_results': canned_test_output(good) },
-      '$R': 0 if good else 1
-    }
-  }
-
-
 def GenTests(api):
+  canned_test = api.json.canned_test_output
+  with_patch = 'webkit_tests (with patch)'
+  without_patch = 'webkit_tests (without patch)'
+
   for result, good in [('success', True), ('fail', False)]:
     for build_config in ['Release', 'Debug']:
       for plat in ('win', 'mac', 'linux'):
         for git_mode in True, False:
           suffix = '_git' if git_mode else ''
-
-          step_mocks = step_mock('with patch', good)
-          if not good:
-            step_mocks.update(step_mock('without patch', good))
-
-          yield ('%s_%s_%s%s' % (plat, result, build_config.lower(), suffix)), {
-            'properties': api.properties_tryserver(
+          name = '%s_%s_%s%s' % (plat, result, build_config.lower(), suffix)
+          test = (
+            api.test(name) +
+            api.properties.tryserver(
               build_config=build_config,
               config_name='blink',
               root='src/third_party/WebKit',
               GIT_MODE=git_mode,
-            ),
-            'step_mocks': step_mocks,
-            'mock': {
-              'platform': {
-                'name': plat
-              }
-            }
-          }
+            ) +
+            api.platform.name(plat) +
+            api.step_data(with_patch, canned_test(good))
+          )
+          if not good:
+            test += api.step_data(without_patch, canned_test(False))
+          yield test
 
-  warn_on_flakey_data = step_mock('with patch', False)
-  warn_on_flakey_data.update(step_mock('without patch', True))
-  yield 'warn_on_flakey', {
-    'properties': api.properties_tryserver(
+  yield (
+    api.test('warn_on_flakey') +
+    api.properties.tryserver(
       build_config='Release',
       config_name='blink',
       root='src/third_party/WebKit',
       GIT_MODE=False,
-    ),
-    'step_mocks': warn_on_flakey_data,
-    'mock': {
-      'platform': {
-        'name': 'linux'
-      }
-    }
-  }
+    ) +
+    api.step_data(with_patch, canned_test(False)) +
+    api.step_data(without_patch, canned_test(True))
+  )
