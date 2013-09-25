@@ -121,6 +121,14 @@ gclient_env = {
   'GYP_GENERATORS': 'ninja',
 }
 
+gclient_64_env = {
+  'GYP_DEFINES': (
+    'asan=1 '
+    'release_extra_cflags=-gline-tables-only '
+    'target_arch=x64'),
+  'GYP_GENERATORS': 'ninja',
+}
+
 #
 # Mac ASAN Rel Builder
 #
@@ -186,6 +194,29 @@ F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
       'gclient_env': gclient_env,
       'sharded_tests': sharded_tests,
     }))
+
+B('Mac ASAN 64-bit', 'mac_asan_rel_64', 'testers',
+  'mac_asan_rel_trigger', notify_on_missing=True)
+F('mac_asan_rel_64', mac().ChromiumASANFactory(
+    slave_type='Tester',
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma-clang',
+        'base_unittests',
+        'net_unittests',
+        'unit_tests',
+    ],
+    tests=[
+        'base_unittests',
+        'net_unittests',
+        'unit_tests',
+    ],
+    factory_properties={
+      'asan': True,
+      'gclient_env': gclient_64_env,
+      'sharded_tests': sharded_tests,
+    }))
+
 
 def Update(config, active_master, c):
   return helper.Update(c)
