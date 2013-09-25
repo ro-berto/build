@@ -91,7 +91,8 @@ F('mac64_release_factory', mac().WebRTCFactory(
     options=options,
     tests=x64_tests,
     factory_properties={
-        'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
+        'gclient_env': {
+            'GYP_DEFINES': 'host_arch=x64 target_arch=x64 mac_sdk=10.7'},
         'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
     }))
 
