@@ -806,7 +806,10 @@ def main_linux(options, args):
   build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
       options.build_dir, use_out=(out_exists and not sconsbuild_exists))
   build_dir = os.path.normpath(os.path.abspath(build_dir))
-  slave_name = slave_utils.SlaveBuildName(build_dir)
+  if options.slave_name:
+    slave_name = options.slave_name
+  else:
+    slave_name = slave_utils.SlaveBuildName(build_dir)
   bin_dir = os.path.join(build_dir, options.target)
 
   # Figure out what we want for a special frame buffer directory.
@@ -1194,6 +1197,8 @@ def main():
                            help='output results directory for JSON file.')
   option_parser.add_option('', '--builder-name', default=None,
                            help='The name of the builder running this script.')
+  option_parser.add_option('', '--slave-name', default=None,
+                           help='The name of the slave running this script.')
   option_parser.add_option('', '--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))
