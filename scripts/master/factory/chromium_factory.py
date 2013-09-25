@@ -78,9 +78,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_V8_TRUNK = ('src/v8',
     'http://v8.googlecode.com/svn/trunk')
   CUSTOM_DEPS_WEBRTC_TRUNK = ('src/third_party/webrtc',
-    config.Master.webrtc_url + '/trunk/webrtc')
+    config.Master.webrtc_url + '/trunk/webrtc@$$WEBRTC_REV$$')
   CUSTOM_DEPS_WEBRTC_STABLE = ('src/third_party/webrtc',
-    config.Master.webrtc_url + '/stable/webrtc')
+    config.Master.webrtc_url + '/stable/webrtc@$$WEBRTC_REV$$')
   CUSTOM_DEPS_AVPERF = ('src/chrome/test/data/media/avperf',
     config.Master.trunk_url + '/deps/avperf')
   CUSTOM_VARS_NACL_LATEST = [
@@ -1252,6 +1252,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_WEBRTC_TRUNK]
     factory_properties = factory_properties or {}
     factory_properties['primary_repo'] = 'webrtc_'
+    factory_properties['no_gclient_revision'] = True
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
@@ -1265,6 +1266,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_WEBRTC_STABLE]
     factory_properties = factory_properties or {}
     factory_properties['primary_repo'] = 'webrtc_'
+    factory_properties['no_gclient_revision'] = True
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
@@ -1285,6 +1287,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         name='webrtc.DEPS'))
     factory_properties = factory_properties or {}
     factory_properties['primary_repo'] = 'webrtc_'
+    factory_properties['no_gclient_revision'] = True
     return self.ChromiumAnnotationFactory(annotation_script=annotation_script,
                                           branch=branch,
                                           target=target,
