@@ -37,16 +37,16 @@ SWARM_TESTS = [
     #
     # The goal here is to take ~5m of actual test run per shard, e.g. the
     # 'RunTest' section in the logs, so that the trade-off of setup time
-    # overhead vs latency is reasonable. The overhead is in the ~90s range, with
-    # the vast majority being downloading the executable files. While it can be
-    # lowered, it'll stay in the "few seconds" range due to the sheer size of
-    # the executables to map.
+    # overhead vs latency is reasonable. The overhead is in the 15~90s range,
+    # with the vast majority being downloading the executable files. While it
+    # can be lowered, it'll stay in the "few seconds" range due to the sheer
+    # size of the executables to map.
     SwarmTest('base_unittests', 1),
     SwarmTest('net_unittests', 1),
     SwarmTest('unit_tests', 2),
     SwarmTest('interactive_ui_tests', 3),
     SwarmTest('sync_integration_tests', 4),
-    SwarmTest('browser_tests', 10),
+    SwarmTest('browser_tests', 5),
 ]
 
 
