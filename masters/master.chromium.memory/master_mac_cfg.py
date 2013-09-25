@@ -125,7 +125,8 @@ gclient_64_env = {
   'GYP_DEFINES': (
     'asan=1 '
     'release_extra_cflags=-gline-tables-only '
-    'target_arch=x64'),
+    'target_arch=x64 '
+    'host_arch=x64'),
   'GYP_GENERATORS': 'ninja',
 }
 
@@ -198,7 +199,7 @@ F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
 B('Mac ASAN 64-bit', 'mac_asan_rel_64', 'testers',
   'mac_asan_rel_trigger', notify_on_missing=True)
 F('mac_asan_rel_64', mac().ChromiumASANFactory(
-    slave_type='Tester',
+    slave_type='BuilderTester',
     options=[
         '--build-tool=ninja',
         '--compiler=goma-clang',
