@@ -1746,8 +1746,7 @@ class ChromiumCommands(commands.FactoryCommands):
     self._factory.addStep(trigger.Trigger(
         schedulerNames=[factory_properties.get('coverage_trigger')],
         updateSourceStamp=True,
-        waitForFinish=True,
-        haltOnFailure=True))
+        waitForFinish=True))
 
   def AddPreProcessCoverage(self, dynamorio_dir, factory_properties):
     """Prepare dynamorio before running coverage tests."""
