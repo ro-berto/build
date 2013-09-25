@@ -52,6 +52,10 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
                    help='Only slaves with a substring present in a builder')
   group.add_option('-b', '--builder', action='append', default=[],
                    help='Only slaves attached to a specific builder')
+  group.add_option('--os', action='append', default=[],
+                   help='Only slaves using a specific OS')
+  group.add_option('--os-version', action='append', default=[],
+                   help='Only slaves using a specific OS version')
   group.add_option('-s', '--slave', action='append', default=[])
   parser.add_option_group(group)
   group = optparse.OptionGroup(parser, 'Output format')
@@ -113,6 +117,14 @@ Note: t is replaced with 'tryserver', 'c' with chromium' and
     def builder_interested_in_any(x):
       return builders.intersection(set(x))
     slaves = [s for s in slaves if builder_interested_in_any(s.get('builder'))]
+
+  if options.os:
+    selected = set(options.os)
+    slaves = [s for s in slaves if s.get('os', 'unknown') in selected]
+
+  if options.os_version:
+    selected = set(options.os_version)
+    slaves = [s for s in slaves if s.get('version', 'unknown') in selected]
 
   if options.slave:
     selected = set(options.slave)
