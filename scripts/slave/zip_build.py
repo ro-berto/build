@@ -312,8 +312,12 @@ def Archive(options):
   if options.webkit_dir:
     webkit_dir = os.path.join(src_dir, options.webkit_dir)
 
+  revision_dir = None
+  if options.revision_dir:
+    revision_dir = os.path.join(src_dir, options.revision_dir)
+
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, src_dir, webkit_dir)
+      options.build_properties, src_dir, webkit_dir, revision_dir)
 
   print 'Full Staging in %s' % staging_dir
   print 'Build Directory %s' % build_dir
@@ -366,6 +370,10 @@ def main(argv):
                                  'always be included in the zip.'))
   option_parser.add_option('--webkit-dir',
                            help='webkit directory path, relative to --src-dir')
+  option_parser.add_option('--revision-dir',
+                           help=('Directory path that shall be used to decide '
+                                 'the revision number for the archive, '
+                                 'relative to --src-dir'))
   option_parser.add_option('--path-filter',
                            help='Filter to use to transform build zip '
                                 '(avail: %r).' % list(PATH_FILTERS.keys()))
@@ -379,6 +387,8 @@ def main(argv):
     options.target = options.factory_properties.get('target', 'Release')
   if not options.webkit_dir:
     options.webkit_dir = options.factory_properties.get('webkit_dir')
+  if not options.revision_dir:
+    options.revision_dir = options.factory_properties.get('revision_dir')
 
   # When option_parser is passed argv as a list, it can return the caller as
   # first unknown arg.  So throw a warning if we have two or more unknown

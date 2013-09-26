@@ -64,16 +64,21 @@ def GetBuildUrl(abs_build_dir, options):
         construction is not compatible with the 'force build' button.
 
      Args:
-       abs_build_dir: Full path to source directory.
+       abs_build_dir: Full path to the build directory, which is assumed to
+         be one level down from the source directory.
        options: options object as specified by parser below.
    """
 
   abs_webkit_dir = None
   if options.webkit_dir:
     abs_webkit_dir = os.path.join(abs_build_dir, '..', options.webkit_dir)
+  abs_revision_dir = None
+  if options.revision_dir:
+    abs_revision_dir = os.path.join(abs_build_dir, '..', options.revision_dir)
   src_dir = os.path.dirname(abs_build_dir)
   base_filename, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, src_dir, abs_webkit_dir, extract=True)
+      options.build_properties, src_dir, abs_webkit_dir, abs_revision_dir,
+      extract=True)
 
   replace_dict = dict(options.build_properties)
   # If builddir isn't specified, assume buildbot used the builder name
@@ -220,6 +225,10 @@ def main():
                            help='whether to halt on a missing build')
   option_parser.add_option('--webkit-dir', help='webkit directory path, '
                                                 'relative to --build-dir')
+  option_parser.add_option('--revision-dir',
+                           help=('Directory path that shall be used to decide '
+                                 'the revision number for the archive, '
+                                 'relative to --src-dir'))
   option_parser.add_option('--build-output-dir',
                            help='Output path relative to --build-dir.')
   chromium_utils.AddPropertiesOptions(option_parser)
@@ -233,6 +242,8 @@ def main():
     options.target = options.factory_properties.get('target', 'Release')
   if not options.webkit_dir:
     options.webkit_dir = options.factory_properties.get('webkit_dir')
+  if not options.revision_dir:
+    options.revision_dir = options.factory_properties.get('revision_dir')
 
   return real_main(options)
 

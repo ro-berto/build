@@ -138,7 +138,7 @@ def GitOrSubversion(wc_dir):
 
 
 def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
-                    extract=False):
+                    revision_dir=None, extract=False):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
   chromium_revision = GetHashOrRevision(src_dir)
@@ -151,8 +151,10 @@ def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
     else:
       version_suffix = '_%(buildnumber)s' % build_properties
   elif webkit_dir:
-    webkit_revision = SubversionRevision(webkit_dir)
-    version_suffix = '_wk%d_%s' % (webkit_revision, chromium_revision)
+    webkit_revision = GetHashOrRevision(webkit_dir)
+    version_suffix = '_wk%s_%s' % (webkit_revision, chromium_revision)
+  elif revision_dir:
+    version_suffix = '_%s' % GetHashOrRevision(revision_dir)
   else:
     version_suffix = '_%s' % chromium_revision
 

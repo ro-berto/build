@@ -1253,6 +1253,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties = factory_properties or {}
     factory_properties['primary_repo'] = 'webrtc_'
     factory_properties['no_gclient_revision'] = True
+    factory_properties['revision_dir'] = 'third_party/webrtc'
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
@@ -1267,6 +1268,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties = factory_properties or {}
     factory_properties['primary_repo'] = 'webrtc_'
     factory_properties['no_gclient_revision'] = True
+    factory_properties['revision_dir'] = 'third_party/webrtc'
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
                                 options, compile_timeout, build_url, project,
                                 factory_properties)
@@ -1288,6 +1290,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     factory_properties = factory_properties or {}
     factory_properties['primary_repo'] = 'webrtc_'
     factory_properties['no_gclient_revision'] = True
+    factory_properties['revision_dir'] = 'third_party/webrtc'
     return self.ChromiumAnnotationFactory(annotation_script=annotation_script,
                                           branch=branch,
                                           target=target,

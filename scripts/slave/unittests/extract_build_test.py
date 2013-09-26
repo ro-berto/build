@@ -19,6 +19,7 @@ _BUILD_DIR = os.path.abspath(os.path.join(
 
 class MockOptions(object):
   webkit_dir = None
+  revision_dir = None
   build_properties = {}
   factory_properties = {}
 
@@ -31,7 +32,8 @@ class ExtractBuildTest(unittest.TestCase):
     # implementation details from extract_build.py into this test.
     src_dir = os.path.dirname(_BUILD_DIR)
     base_filename, _version_suffix = slave_utils.GetZipFileNames(
-        options.build_properties, src_dir, None, extract=True)
+        options.build_properties, src_dir, webkit_dir=None, revision_dir=None,
+        extract=True)
 
     gs_url_without_slash = 'gs://foo/Win'
     gs_url_with_slash = 'gs://foo/Win/'
