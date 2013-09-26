@@ -44,6 +44,7 @@ baremetal_tests = [
     'audio_e2e_test',
     'audioproc_perf',
     'isac_fixed_perf',
+    'libjingle_peerconnection_java_unittest',
     'video_capture_tests',
     'video_engine_tests',
     'vie_auto_test',
@@ -140,6 +141,7 @@ F('linux_largetests_factory', linux().WebRTCFactory(
         'custom_cmd_line_tests': ['audio_e2e_test',
                                   'audioproc_perf',
                                   'isac_fixed_perf',
+                                  'libjingle_peerconnection_java_unittest',
                                   'vie_auto_test',
                                   'voe_auto_test'],
     }))
