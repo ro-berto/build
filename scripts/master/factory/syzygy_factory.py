@@ -16,7 +16,6 @@ import config
 _UNITTESTS = [
   'agent_common_unittests',
   'agent_logger_unittests',
-  'asan_rtl_unittests',
   'basic_block_entry_unittests',
   'block_graph_analysis_unittests',
   'block_graph_orderers_unittests',
@@ -44,6 +43,7 @@ _UNITTESTS = [
   'rpc_service_unittests',
   'sampler_unittests',
   'simulate_unittests',
+  'syzyasan_rtl_unittests',
   'trace_common_unittests',
   'wsdump_unittests',
   'zap_timestamp_unittests',
