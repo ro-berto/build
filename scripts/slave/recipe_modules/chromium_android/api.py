@@ -142,6 +142,15 @@ class AndroidApi(recipe_api.RecipeApi):
           self._internal_dir, 'build', 'get_internal_landmines.py')
     return self.m.chromium.runhooks(env=run_hooks_env)
 
+  def apply_svn_patch(self):
+    # TODO(sivachandra): We should probably pull this into its own module
+    # (maybe a 'tryserver' module) at some point.
+    return self.m.step(
+        'apply_patch',
+        [self.m.path.build('scripts', 'slave', 'apply_svn_patch.py'),
+         '-p', self.m.properties['patch_url'],
+         '-r', self._internal_dir])
+
   def compile(self, target='Debug'):
     return self.m.chromium.compile(env=self.get_env())
 

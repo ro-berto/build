@@ -14,7 +14,8 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     extra_env = Dict(value_type=(basestring,int,list)),
     run_findbugs = Single(bool, required=False, empty_val=False),
     run_lint = Single(bool, required=False, empty_val=False),
-    run_checkdeps = Single(bool, required=False, empty_val=False)
+    run_checkdeps = Single(bool, required=False, empty_val=False),
+    apply_svn_patch = Single(bool, required=False, empty_val=False)
   )
 
 
@@ -63,5 +64,10 @@ def klp_builder(c):
 @config_ctx()
 def try_builder(c):
   if c.INTERNAL:
+    c.apply_svn_patch = True
     c.run_findbugs = True
     c.run_lint = True
+
+@config_ctx(includes=['x86_builder', 'try_builder'])
+def x86_try_builder(c):
+  pass

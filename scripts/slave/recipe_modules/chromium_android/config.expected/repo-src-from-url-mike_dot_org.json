@@ -16,5 +16,8 @@
   "try_builder": {}, 
   "x86_builder": {
     "target_arch": "x86"
+  }, 
+  "x86_try_builder": {
+    "target_arch": "x86"
   }
 }

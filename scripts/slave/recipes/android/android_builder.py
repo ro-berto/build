@@ -18,6 +18,8 @@ def GenSteps(api):
   if internal:
     yield droid.run_tree_truth()
   yield droid.runhooks()
+  if droid.c.apply_svn_patch:
+    yield droid.apply_svn_patch()
   yield droid.compile()
 
   if droid.c.run_findbugs:
@@ -29,7 +31,7 @@ def GenSteps(api):
 
 def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
-             'x86_builder', 'klp_builder', 'try_builder']
+             'x86_builder', 'klp_builder', 'try_builder', 'x86_try_builder']
 
   for bot_id in bot_ids:
     props = api.properties(
@@ -38,10 +40,12 @@ def GenTests(api):
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
       android_bot_id=bot_id,
       buildername='builder_name',
-      internal=True
+      internal=True,
+      patch_url=None
     )
-    if bot_id == 'try_builder':
+    if 'try_builder' in bot_id:
       props += api.properties(revision='')
+      props += api.properties(patch_url='try_job_svn_patch')
 
     yield (
       api.test(bot_id) +

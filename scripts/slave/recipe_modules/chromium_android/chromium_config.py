@@ -45,3 +45,7 @@ def klp_builder(c):
 @CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):
   pass
+
+@CONFIG_CTX(includes=['x86_builder', 'try_builder'])
+def x86_try_builder(c):
+  pass

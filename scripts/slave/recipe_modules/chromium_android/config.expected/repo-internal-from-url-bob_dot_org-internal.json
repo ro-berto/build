@@ -18,10 +18,17 @@
   }, 
   "main_builder": {}, 
   "try_builder": {
+    "apply_svn_patch": true, 
     "run_findbugs": true, 
     "run_lint": true
   }, 
   "x86_builder": {
+    "target_arch": "x86"
+  }, 
+  "x86_try_builder": {
+    "apply_svn_patch": true, 
+    "run_findbugs": true, 
+    "run_lint": true, 
     "target_arch": "x86"
   }
 }

@@ -172,5 +172,22 @@
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
+  }, 
+  "x86_try_builder": {
+    "build_config_fs": "Debug", 
+    "build_dir": "out", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=ia32", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All"
+    }
   }
 }
