@@ -143,7 +143,7 @@
       "-p",
       "try_job_svn_patch",
       "-r",
-      "repo"
+      "[SLAVE_BUILD_ROOT]/src/repo"
     ],
     "name": "apply_patch"
   },

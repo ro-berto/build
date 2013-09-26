@@ -149,7 +149,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'apply_patch',
         [self.m.path.build('scripts', 'slave', 'apply_svn_patch.py'),
          '-p', self.m.properties['patch_url'],
-         '-r', self._internal_dir])
+         '-r', self.m.path.checkout(self._internal_dir)])
 
   def compile(self, target='Debug'):
     return self.m.chromium.compile(env=self.get_env())
