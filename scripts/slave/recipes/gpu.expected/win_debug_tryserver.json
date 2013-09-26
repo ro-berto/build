@@ -116,7 +116,7 @@
       "--compiler",
       "goma",
       "--",
-      "chromium_gpu_builder"
+      "chromium_gpu_debug_builder"
     ],
     "name": "compile"
   },

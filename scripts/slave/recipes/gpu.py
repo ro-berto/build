@@ -31,6 +31,8 @@ def GenSteps(api):
   reference_dir = api.path.slave_build('content_gpu_data', 'reference')
   gsutil = api.path.build('scripts', 'slave', 'gsutil', wrapper=True)
 
+  is_release_build = api.properties.get('build_config', 'Release') == 'Release'
+
   api.chromium.set_config('chromium')
   api.gclient.apply_config('chrome_internal')
 
@@ -53,7 +55,10 @@ def GenSteps(api):
   if 'rietveld' in api.properties:
     yield api.rietveld.apply_issue()
   yield api.chromium.runhooks()
-  yield api.chromium.compile(targets=['chromium_gpu_builder'])
+  # Since performance tests aren't run on the debug builders, it isn't
+  # necessary to build all of the targets there.
+  build_tag = '' if is_release_build else 'debug_'
+  yield api.chromium.compile(targets=['chromium_gpu_%sbuilder' % build_tag])
 
   # TODO(kbr): currently some properties are passed to runtest.py via
   # factory_properties in the master.cfg: generate_gtest_json,
@@ -96,7 +101,7 @@ def GenSteps(api):
       args, always_run=True)
 
   # Only run the performance tests on Release builds.
-  if api.properties.get('build_config', 'Release') == 'Release':
+  if is_release_build:
     # Former gpu_frame_rate_test step
     args = ['--enable-gpu',
             '--gtest_filter=FrameRate*Test*']
