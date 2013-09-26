@@ -194,9 +194,9 @@
       "-r",
       "[SLAVE_BUILD_ROOT]/src",
       "-i",
-      12853011,
+      "12853011",
       "-p",
-      1,
+      "1",
       "-s",
       "https://codereview.chromium.org",
       "--no-auth"
