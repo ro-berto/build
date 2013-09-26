@@ -119,16 +119,18 @@ def GenSteps(api):
                                 perf_dashboard_id='gpu_throughput',
                                 test_type='gpu_throughput_tests')
 
+    # TODO: Test is failing intermittently. Re-enable once the test is reliable.
+    # http://crbug.com/298493
     # Former tab_capture_performance_tests_step
-    args = ['--enable-gpu',
-            '--gtest_filter=TabCapturePerformanceTest*']
-    yield api.chromium.runtests('performance_browser_tests',
-                                args,
-                                name='tab_capture_performance_tests',
-                                annotate='graphing',
-                                results_url=dashboard_upload_url,
-                                perf_dashboard_id='tab_capture_performance',
-                                test_type='tab_capture_performance_tests')
+    #args = ['--enable-gpu',
+    #        '--gtest_filter=TabCapturePerformanceTest*']
+    #yield api.chromium.runtests('performance_browser_tests',
+    #                            args,
+    #                            name='tab_capture_performance_tests',
+    #                            annotate='graphing',
+    #                            results_url=dashboard_upload_url,
+    #                            perf_dashboard_id='tab_capture_performance',
+    #                            test_type='tab_capture_performance_tests')
 
   # TODO(kbr): after the conversion to recipes, add all GPU related
   # steps from the main waterfall, like gpu_unittests.
