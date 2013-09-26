@@ -74,7 +74,7 @@
       "[SLAVE_BUILD_ROOT]/src/build/android/envsetup.sh"
     ],
     "env": {
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android::%(PATH)s"
+      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:%(PATH)s"
     },
     "name": "envsetup",
     "~followup_annotations": [

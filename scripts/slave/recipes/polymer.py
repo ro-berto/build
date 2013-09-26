@@ -69,7 +69,7 @@ def GenSteps(api):
   if api.platform.is_win:
     cmd_suffix = '.cmd'
     node_env = {
-      'PATH': ';'.join((
+      'PATH': api.path.pathsep.join((
         api.path.join('C:', api.path.sep, 'Program Files (x86)', 'nodejs'),
         api.path.join('C:', api.path.sep, 'Users', 'chrome-bot', 'AppData',
                       'Roaming', 'npm'),

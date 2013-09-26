@@ -77,7 +77,7 @@
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie",
       "ANDROID_SDK_ROOT": "[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk",
       "ANDROID_SDK_VERSION": "KeyLimePie",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android::%(PATH)s"
+      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:%(PATH)s"
     },
     "name": "envsetup",
     "~followup_annotations": [
