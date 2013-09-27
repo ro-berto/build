@@ -1,0 +1,35 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD_ROOT]/boom",
+      "gs://chromium-recipe-test/some/random/path/to/boom"
+    ],
+    "name": "gsutil upload"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/third_party/gsutil/gsutil",
+      "cp",
+      "gs://chromium-recipe-test/some/random/path/**",
+      "gs://chromium-recipe-test/staging"
+    ],
+    "name": "gsutil cp"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS_ROOT]/third_party/gsutil/gsutil",
+      "cp",
+      "gs://chromium-recipe-test/staging/to/boom",
+      "[SLAVE_BUILD_ROOT]/erang"
+    ],
+    "name": "gsutil download"
+  }
+]
