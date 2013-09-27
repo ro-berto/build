@@ -17,7 +17,7 @@ def GenSteps(api):
 
   # If you need to run more arbitrary git commands, you can use api.git itself,
   # which behaves like api.step(), but automatically sets the name of the step.
-  yield api.git('status', cwd=api.path.checkout)
+  yield api.git('status', cwd=api.path.checkout())
 
 
 def GenTests(api):

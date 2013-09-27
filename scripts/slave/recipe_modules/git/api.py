@@ -12,7 +12,7 @@ class GitApi(recipe_api.RecipeApi):
     if args[0] == 'config' and not args[1].startswith('-'):
       name += ' ' + args[1]
     if 'cwd' not in kwargs:
-      kwargs.setdefault('cwd', self.m.path.checkout)
+      kwargs.setdefault('cwd', self.m.path.checkout())
     git_cmd = 'git'
     if self.m.platform.is_win:
       git_cmd = self.m.path.depot_tools('git.bat')
@@ -24,7 +24,7 @@ class GitApi(recipe_api.RecipeApi):
     Args:
       url (string): url of remote repo to use as upstream
       ref (string): ref to check out after fetching
-      dir_path (Path): optional directory to clone into
+      dir_path (string): optional directory to clone into
       recursive (bool): whether to recursively fetch submodules or not
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
@@ -38,7 +38,8 @@ class GitApi(recipe_api.RecipeApi):
       dir_path = dir_path or dir_path.rsplit('/', 1)[-1]
 
       dir_path = self.m.path.slave_build(dir_path)
-    self.m.path.set_dynamic_path('checkout', dir_path, overwrite=False)
+    assert self.m.path.pardir not in dir_path
+    self.m.path.add_checkout(dir_path)
 
     full_ref = 'refs/heads/%s' % ref if '/' not in ref else ref
 

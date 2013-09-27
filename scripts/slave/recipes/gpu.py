@@ -29,8 +29,7 @@ def GenSteps(api):
   dashboard_upload_url = 'https://chromeperf.appspot.com'
   generated_dir = api.path.slave_build('content_gpu_data', 'generated')
   reference_dir = api.path.slave_build('content_gpu_data', 'reference')
-  gsutil = api.path.build('scripts', 'slave', 'gsutil',
-                          platform_ext={'win': '.bat'})
+  gsutil = api.path.build('scripts', 'slave', 'gsutil', wrapper=True)
 
   is_release_build = api.properties.get('build_config', 'Release') == 'Release'
 

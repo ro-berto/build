@@ -185,7 +185,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD_ROOT]/src/tools/checkdeps/checkdeps.py",
-      "--root=[SLAVE_BUILD_ROOT]/src/repo"
+      "--root=repo"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"

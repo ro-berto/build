@@ -28,8 +28,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args = [
       '--target', self.c.build_config_fs,
-      '--build-dir', self.c.build_dir,
-      '--src-dir', self.m.path.checkout,
+      '--build-dir', self.m.path.checkout(self.c.build_dir),
+      '--src-dir', self.m.path.checkout(),
     ]
     if self.c.compile_py.build_tool:
       args += ['--build-tool', self.c.compile_py.build_tool]
@@ -57,7 +57,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     full_args = [
       '--target', self.c.build_config_fs,
-      '--build-dir', self.c.build_dir,
+      '--build-dir', self.m.path.checkout(self.c.build_dir),
       ('--xvfb' if xvfb else '--no-xvfb')
     ]
     full_args += self.m.json.property_args()

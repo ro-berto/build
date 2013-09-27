@@ -1,7 +1,7 @@
 {
   "android_defaults": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "default_targets": [
@@ -10,7 +10,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -18,7 +18,7 @@
   }, 
   "blink": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -34,7 +34,7 @@
   }, 
   "chromium": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -51,7 +51,7 @@
   }, 
   "clang_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma-clang", 
@@ -61,7 +61,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 clang=1 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 clang=1 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -69,7 +69,7 @@
   }, 
   "component_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -79,7 +79,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=shared_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=shared_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -87,7 +87,7 @@
   }, 
   "klp_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -97,7 +97,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android android_sdk_root=Path('[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk') android_sdk_version=KeyLimePie chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android android_sdk_root=['third_party', 'android_tools_internal', 'sdk'] android_sdk_version=KeyLimePie chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -105,7 +105,7 @@
   }, 
   "main_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -115,7 +115,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -123,7 +123,7 @@
   }, 
   "msvs": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'build')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "msvs"
     }, 
@@ -136,7 +136,7 @@
   }, 
   "ninja": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja"
     }, 
@@ -148,7 +148,7 @@
   }, 
   "try_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -158,7 +158,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -166,7 +166,7 @@
   }, 
   "v8": {
     "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]')", 
+    "build_dir": "", 
     "compile_py": {
       "build_tool": "make", 
       "default_targets": [
@@ -180,7 +180,7 @@
   }, 
   "x86_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -190,7 +190,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=ia32", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
@@ -198,7 +198,7 @@
   }, 
   "x86_try_builder": {
     "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "build_dir": "out", 
     "compile_py": {
       "build_tool": "ninja", 
       "compiler": "goma", 
@@ -208,7 +208,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
+      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=['orderfiles', 'orderfile.out'] target_arch=ia32", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"

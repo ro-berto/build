@@ -4,12 +4,8 @@
 
 from slave.recipe_config import config_item_context, ConfigGroup, Single, List
 from slave.recipe_config import Static
-from slave.recipe_config_types import Path
 
 def BaseConfig(USE_MIRROR=False):
-  chromium_in_android_subpath = ('external', 'chromium_org')
-  build_path = Path('[SLAVE_BUILD]', 'android-src')
-
   return ConfigGroup(
     lunch_flavor = Single(basestring),
     repo = ConfigGroup(
@@ -18,13 +14,6 @@ def BaseConfig(USE_MIRROR=False):
       sync_flags = List(basestring),
     ),
     USE_MIRROR = Static(bool(USE_MIRROR)),
-
-    # Path stuff
-    chromium_in_android_subpath = Static('/'.join(chromium_in_android_subpath)),
-    build_path = Static(build_path),
-    slave_chromium_in_android_path = Static(
-      build_path(*chromium_in_android_subpath)),
-    slave_android_out_path = Static(build_path('out')),
   )
 
 config_ctx = config_item_context(

@@ -11,10 +11,27 @@ class AOSPApi(recipe_api.RecipeApi):
     super(AOSPApi, self).__init__(**kwargs)
     self._repo_path = None
 
+  # TODO(iannucci): use path.checkout
+  SLAVE_ANDROID_ROOT_NAME = 'android-src'
+  _CHROMIUM_IN_ANDROID_SUBPATH = 'external/chromium_org'
+
+  @property
+  def slave_chromium_in_android_path(self):
+    return self.m.path.slave_build(self.SLAVE_ANDROID_ROOT_NAME,
+                                   self._CHROMIUM_IN_ANDROID_SUBPATH)
+
+  @property
+  def build_path(self):
+    return self.m.path.slave_build(self.SLAVE_ANDROID_ROOT_NAME)
+
+  @property
+  def slave_android_out_path(self):
+    return self.m.path.slave_build(self.SLAVE_ANDROID_ROOT_NAME, 'out')
+
   @property
   def with_lunch_command(self):
     return [self.m.path.build('scripts', 'slave', 'android', 'with_lunch'),
-            self.c.build_path,
+            self.build_path,
             self.c.lunch_flavor]
 
   @recipe_api.inject_test_data
@@ -57,7 +74,7 @@ class AOSPApi(recipe_api.RecipeApi):
       self.m.step('Chromium LASTCHANGE', [
         lastchange_command,
         '-o', self.m.path.checkout('build', 'util', 'LASTCHANGE'),
-        '-s', self.m.path.checkout]),
+        '-s', self.m.path.checkout()]),
       self.m.step('Blink LASTCHANGE', [
         lastchange_command,
         '-o', self.m.path.checkout('build', 'util', 'LASTCHANGE.blink'),
@@ -72,7 +89,8 @@ class AOSPApi(recipe_api.RecipeApi):
     # the copy of repo from the Android tree.
     # The copy of repo from depot_tools is only used to bootstrap the Android
     # tree checkout.
-    repo_in_android_path = self.c.build_path('.repo', 'repo', 'repo')
+    repo_in_android_path = self.m.path.slave_build(
+        self.SLAVE_ANDROID_ROOT_NAME, '.repo', 'repo', 'repo')
     repo_copy_dir = self.m.path.slave_build('repo_copy')
     repo_copy_path = self.m.path.slave_build('repo_copy', 'repo')
     if self.m.path.exists(repo_in_android_path):
@@ -80,44 +98,45 @@ class AOSPApi(recipe_api.RecipeApi):
       yield self.m.step('copy repo from Android', [
         'cp', repo_in_android_path, repo_copy_path])
       self.m.repo.repo_path = repo_copy_path
-    yield self.m.path.makedirs('android source root', self.c.build_path)
+    yield self.m.path.makedirs('android source root', self.build_path)
     yield self.m.repo.init(self.c.repo.url, '-b', self.c.repo.branch,
-                           cwd=self.c.build_path)
+                           cwd=self.build_path)
     self.m.path.mock_add_paths(repo_in_android_path)
 
   def generate_local_manifest_step(self):
     yield self.m.step(
         'generate local manifest', [
           self.m.path.checkout('android_webview', 'buildbot',
-                               'generate_local_manifest.py'),
-          self.c.build_path,
-          self.c.chromium_in_android_subpath])
+                             'generate_local_manifest.py'),
+          self.build_path,
+          self._CHROMIUM_IN_ANDROID_SUBPATH])
 
   def repo_sync_steps(self):
     # repo_init_steps must have been invoked first.
-    yield self.m.repo.sync(*self.c.repo.sync_flags, cwd=self.c.build_path)
+    yield self.m.repo.sync(*self.c.repo.sync_flags, cwd=self.build_path)
 
   def symlink_chromium_into_android_tree_step(self):
-    if self.m.path.exists(self.c.slave_chromium_in_android_path):
+    if self.m.path.exists(self.slave_chromium_in_android_path):
       yield self.m.step('remove chromium_org',
-                      ['rm', '-rf', self.c.slave_chromium_in_android_path])
+                      ['rm', '-rf', self.slave_chromium_in_android_path])
 
     yield self.m.step('symlink chromium_org', [
       'ln', '-s',
-      self.m.path.checkout,
-      self.c.slave_chromium_in_android_path]),
+      self.m.path.checkout(),
+      self.slave_chromium_in_android_path]),
 
   def gyp_webview_step(self):
     yield self.m.step('gyp_webview', self.with_lunch_command + [
-      self.c.slave_chromium_in_android_path('android_webview', 'tools',
-                                            'gyp_webview')],
-      cwd=self.c.slave_chromium_in_android_path)
+      self.m.path.slave_build(
+        self.SLAVE_ANDROID_ROOT_NAME, 'external', 'chromium_org',
+        'android_webview', 'tools', 'gyp_webview')],
+      cwd=self.slave_chromium_in_android_path)
 
   def compile_step(self, build_tool, step_name='compile', targets=None,
                    use_goma=True, src_dir=None, target_out_dir=None,
                    envsetup=None):
-    src_dir = src_dir or self.c.build_path
-    target_out_dir = target_out_dir or self.c.slave_android_out_path
+    src_dir = src_dir or self.build_path
+    target_out_dir = target_out_dir or self.slave_android_out_path
     envsetup = envsetup or self.with_lunch_command
     targets = targets or []
     compiler_option = []
@@ -129,10 +148,10 @@ class AOSPApi(recipe_api.RecipeApi):
                       envsetup +
                       compile_script +
                       targets +
-                      ['--build-dir', self.m.path.slave_build] +
+                      ['--build-dir', self.m.path.slave_build()] +
                       ['--src-dir', src_dir] +
                       ['--build-tool', build_tool] +
                       ['--verbose'] +
                       compiler_option,
-                      cwd=self.m.path.slave_build)
+                      cwd=self.m.path.slave_build())
 

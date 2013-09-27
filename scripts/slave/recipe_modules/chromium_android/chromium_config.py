@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-from slave.recipe_config_types import Path
-
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
 @CONFIG_CTX(includes=['ninja', 'static_library'])
@@ -17,10 +15,9 @@ def android_defaults(c):
   gyp_defs['OS'] = 'android'
   gyp_defs['host_os'] = 'linux'
   gyp_defs['gcc_version'] = 46
-  gyp_defs['order_text_section'] = Path(
-    '[CHECKOUT]', 'orderfiles', 'orderfile.out')
+  gyp_defs['order_text_section'] = ['orderfiles', 'orderfile.out']
   gyp_defs['target_arch'] = 'arm'
-
+  
 
 @CONFIG_CTX(includes=['android_defaults', 'default_compiler', 'goma'])
 def main_builder(c):
@@ -42,8 +39,8 @@ def x86_builder(c):
 def klp_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_sdk_version'] = 'KeyLimePie'
-  gyp_defs['android_sdk_root'] = Path(
-    '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')
+  gyp_defs['android_sdk_root'] = ['third_party', 'android_tools_internal',
+                                  'sdk']
 
 @CONFIG_CTX(includes=['main_builder'])
 def try_builder(c):

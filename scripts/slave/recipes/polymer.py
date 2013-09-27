@@ -52,9 +52,10 @@ def _CheckoutSteps(api):
 
 
 def GenSteps(api):
+
   yield _CheckoutSteps(api)
   this_repo = api.properties['buildername'].split()[0]
-  api.path.set_dynamic_path('checkout', api.path.slave_build(this_repo))
+  api.path.choose_checkout(api.path.slave_build(this_repo))
 
   tmp_path = ''
   tmp_args = []
@@ -86,10 +87,10 @@ def GenSteps(api):
     test_prefix = ['xvfb-run']
 
   yield api.step('update-install', ['npm' + cmd_suffix, 'install'] + tmp_args,
-                 cwd=api.path.checkout, env=node_env)
+                 cwd=api.path.checkout(), env=node_env)
 
   yield api.step('test', test_prefix + ['grunt' + cmd_suffix,
-                 'test-buildbot'], cwd=api.path.checkout,
+                 'test-buildbot'], cwd=api.path.checkout(),
                  env=node_env, allow_subannotations=True)
 
 

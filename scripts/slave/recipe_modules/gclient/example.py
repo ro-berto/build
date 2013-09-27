@@ -22,6 +22,7 @@ def GenSteps(api):
   soln = bl_cfg.solutions.add()
   soln.name = 'WebKit'
   soln.url = 'svn://svn.chromium.org/blink/trunk'
+  bl_cfg.checkouts = ['src', api.path.join('src', 'third_party', 'WebKit')]
   bl_cfg.got_revision_mapping['src/blatley'] = 'got_blatley_revision'
   yield api.gclient.checkout(
       gclient_config=bl_cfg,
