@@ -19,6 +19,7 @@ class GSUtilApi(recipe_api.RecipeApi):
       cmd: list of (string) arguments to pass to gsutil.
            Include gsutil-level options first (see 'gsutil help options').
       name: the (string) name of the step to use.
+            Defaults to the first non-flag token in the cmd.
     """
     if not name:
       name = (t for t in cmd if not t.startswith('-')).next()
