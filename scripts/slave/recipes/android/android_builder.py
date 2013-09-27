@@ -29,6 +29,8 @@ def GenSteps(api):
   if droid.c.run_checkdeps:
     yield droid.checkdeps()
 
+  yield droid.upload_build()
+
 def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
              'x86_builder', 'klp_builder', 'try_builder', 'x86_try_builder']

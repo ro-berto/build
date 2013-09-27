@@ -179,3 +179,17 @@ class AndroidApi(recipe_api.RecipeApi):
           'lint',
           [self.m.path.checkout(self._internal_dir, 'bin', 'lint.py')],
           env=self.get_env())
+
+  def upload_build(self):
+    if self.c.INTERNAL:
+      # TODO(sivachandra): Replace this with an enquivalent step got from a
+      # gsutil module when available.
+      return self.m.step(
+          'upload_build',
+          [self.m.path.checkout(self._internal_dir, 'build', 'upload_build.py'),
+           '-b', self.m.properties['buildername'],
+           '-t', self.m.chromium.c.BUILD_CONFIG,
+           '-d', self.m.path.checkout('out'),
+           '-r', (self.m.properties.get('revision') or
+                  self.m.properties.get('buildnumber')),
+           '-g', self.m.path.build('scripts', 'slave', 'gsutil')])

@@ -160,5 +160,21 @@
       "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD_ROOT]/src/repo/build/upload_build.py",
+      "-b",
+      "builder_name",
+      "-t",
+      "Debug",
+      "-d",
+      "[SLAVE_BUILD_ROOT]/src/out",
+      "-r",
+      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
+      "-g",
+      "[BUILD_ROOT]/scripts/slave/gsutil"
+    ],
+    "name": "upload_build"
   }
 ]
