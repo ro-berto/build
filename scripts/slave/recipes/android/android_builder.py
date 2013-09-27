@@ -42,8 +42,8 @@ def GenTests(api):
       revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
       android_bot_id=bot_id,
       buildername='builder_name',
+      buildnumber=1337,
       internal=True,
-      patch_url=None
     )
     if 'try_builder' in bot_id:
       props += api.properties(revision='')

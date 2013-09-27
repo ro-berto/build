@@ -110,7 +110,7 @@
     ]
   },
   {
-    "allow_subannottations": true,
+    "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD_ROOT]/src/build/tree_truth.sh",
       "[SLAVE_BUILD_ROOT]/src",
@@ -203,7 +203,7 @@
       "-d",
       "[SLAVE_BUILD_ROOT]/src/out",
       "-r",
-      "None",
+      "1337",
       "-g",
       "[BUILD_ROOT]/scripts/slave/gsutil"
     ],

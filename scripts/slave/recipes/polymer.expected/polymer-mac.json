@@ -88,7 +88,6 @@
       "[SLAVE_BUILD_ROOT]/.tmp"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]/polymer",
-    "env": {},
     "name": "update-install"
   },
   {
@@ -98,7 +97,6 @@
       "test-buildbot"
     ],
     "cwd": "[SLAVE_BUILD_ROOT]/polymer",
-    "env": {},
     "name": "test"
   }
 ]

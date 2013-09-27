@@ -109,7 +109,7 @@
     ]
   },
   {
-    "allow_subannottations": true,
+    "allow_subannotations": true,
     "cmd": [
       "[SLAVE_BUILD_ROOT]/src/build/tree_truth.sh",
       "[SLAVE_BUILD_ROOT]/src",
@@ -185,7 +185,7 @@
   {
     "cmd": [
       "[SLAVE_BUILD_ROOT]/src/tools/checkdeps/checkdeps.py",
-      "--root=repo"
+      "--root=[SLAVE_BUILD_ROOT]/src/repo"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"

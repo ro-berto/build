@@ -80,7 +80,7 @@ def GenSteps(api):
                           'layout_test_wrapper.py')
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
-            '--build-dir', api.path.checkout(api.chromium.c.build_dir),
+            '--build-dir', api.chromium.c.build_dir,
             '--json-test-results', api.json.test_results()]
     return api.chromium.runtests(test, args, name=name, can_fail_build=False,
                                  followup_fn=followup_fn)
@@ -122,7 +122,7 @@ def GenSteps(api):
     archive_layout_test_results,
     [
       '--results-dir', results_dir,
-      '--build-dir', api.path.checkout(api.chromium.c.build_dir),
+      '--build-dir', api.chromium.c.build_dir,
       '--build-number', buildnumber,
       '--builder-name', buildername,
       '--gs-bucket', 'gs://chromium-layout-test-archives',
