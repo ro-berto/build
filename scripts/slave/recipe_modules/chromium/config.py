@@ -4,6 +4,7 @@
 
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import Dict, Single, Static, Set, BadConf
+from slave.recipe_config_types import Path
 
 # Because of the way that we use decorators, pylint can't figure out the proper
 # type signature of functions annotated with the @config_ctx decorator.
@@ -33,12 +34,12 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
-      GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,list)),
+      GYP_DEFINES = Dict(equal_fn, ' '.join, (basestring,int,Path)),
       GYP_GENERATORS = Set(basestring, ','.join),
       GYP_GENERATOR_FLAGS = Dict(equal_fn, ' '.join, (basestring,int)),
       GYP_MSVS_VERSION = Single(basestring, required=False),
     ),
-    build_dir = Single(basestring),
+    build_dir = Single(Path),
 
     # Some platforms do not have a 1:1 correlation of BUILD_CONFIG to what is
     # passed as --target on the command line.
@@ -116,7 +117,7 @@ def BASE(c):
   if c.HOST_PLATFORM == 'win':
     if c.TARGET_BITS == 64:
       # Windows requires 64-bit builds to be in <dir>_x64.
-      c.build_config_fs += '_x64'
+      c.build_config_fs = c.BUILD_CONFIG + '_x64'
       c.gyp_env.GYP_MSVS_VERSION = '2012'
       c.gyp_env.GYP_DEFINES['target_arch'] = 'x64'
     else:
@@ -138,7 +139,7 @@ def disable_aura(c):
 def ninja(c):
   c.gyp_env.GYP_GENERATORS.add('ninja')
   c.compile_py.build_tool = 'ninja'
-  c.build_dir = 'out'
+  c.build_dir = Path('[CHECKOUT]', 'out')
 
 @config_ctx(group='builder')
 def msvs(c):
@@ -147,7 +148,7 @@ def msvs(c):
   c.gyp_env.GYP_GENERATORS.add('msvs')
   c.gyp_env.GYP_GENERATOR_FLAGS['msvs_error_on_missing_sources'] = 1
   c.compile_py.build_tool = 'msvs'
-  c.build_dir = 'out'
+  c.build_dir = Path('[CHECKOUT]', 'build')
 
 @config_ctx(group='builder')
 def xcodebuild(c):

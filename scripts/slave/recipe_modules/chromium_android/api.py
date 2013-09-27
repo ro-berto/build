@@ -8,20 +8,13 @@ class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
     self._env = dict()
-    self._build_internal_android = None
     self._internal_dir = None
 
   def get_env(self):
     env_dict = dict(self._env)
-    for env_var, value in self.c.extra_env.iteritems():
-      if isinstance(value, list):
-        env_dict[env_var] = self.m.path.checkout(*value)
-      else:
-        env_dict[env_var] = value
-    # TODO(sivachandra): Use os.pathsep equivalent instead of ':' when it
-    # provided by one of the recipe modules.
+    env_dict.update(self.c.extra_env)
     env_dict['PATH'] = self.m.path.pathsep.join(filter(bool, (
-      self._build_internal_android,
+      str(self.c.build_internal_android),
       self._env.get('PATH',''),
       '%(PATH)s'
     )))
@@ -37,7 +30,7 @@ class AndroidApi(recipe_api.RecipeApi):
     gclient_custom_deps = self.m.properties.get('gclient_custom_deps')
 
     if internal:
-      self._internal_dir = repo_name.split('/', 1)[-1]
+      self._internal_dir = self.m.path.checkout(repo_name.split('/', 1)[-1])
 
     self.set_config(bot_id,
                     INTERNAL=internal,
@@ -63,23 +56,14 @@ class AndroidApi(recipe_api.RecipeApi):
     # TODO(sivachandra): Manufacture gclient spec such that it contains "src"
     # solution + repo_name solution. Then checkout will be automatically
     # correctly set by gclient.checkout
-    manual_checkout_path = self.m.path.slave_build('src')
-    self.m.path.add_checkout(manual_checkout_path)
-    self.m.path.choose_checkout(manual_checkout_path)
-
-    self._build_internal_android = self.m.path.build_internal(
-        'scripts', 'slave', 'android')
+    self.m.path.set_dynamic_path('checkout', self.m.path.slave_build('src'))
 
     gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
-    for gyp_def, val in gyp_defs.items():
-      if isinstance(val, list):
-        gyp_defs[gyp_def] = self.m.path.checkout(*val)
 
     if internal:
       yield self.m.step(
           'get app_manifest_vars',
-          [self.m.path.checkout(
-               self._internal_dir, 'build', 'dump_app_manifest_vars.py'),
+          [self._internal_dir('build', 'dump_app_manifest_vars.py'),
            '-b', self.m.properties['buildername'],
            '-v', self.m.path.checkout('chrome', 'VERSION'),
            '--output-json', self.m.json.output()]
@@ -122,10 +106,10 @@ class AndroidApi(recipe_api.RecipeApi):
               if f.endswith('.pyc'):
                 os.remove(os.path.join(base, f))
         """,
-        args=[debug_info_dumps, test_logs, self.m.path.checkout()],
+        args=[debug_info_dumps, test_logs, self.m.path.checkout],
     )
 
-  def run_tree_truth(self, show_revisions=False):
+  def run_tree_truth(self):
     # TODO(sivachandra): The downstream ToT builder will require
     # 'Show Revisions' step.
     repos = ['src', 'src-internal']
@@ -135,14 +119,14 @@ class AndroidApi(recipe_api.RecipeApi):
     # tree_truth.sh.
     yield self.m.step('tree truth steps',
                       [self.m.path.checkout('build', 'tree_truth.sh'),
-                       self.m.path.checkout()] + repos,
+                       self.m.path.checkout] + repos,
                       allow_subannottations=True)
 
   def runhooks(self):
     run_hooks_env = self.get_env()
     if self.m.properties.get('internal'):
-      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.m.path.checkout(
-          self._internal_dir, 'build', 'get_internal_landmines.py')
+      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self._internal_dir(
+        'build', 'get_internal_landmines.py')
     return self.m.chromium.runhooks(env=run_hooks_env)
 
   def apply_svn_patch(self):
@@ -152,17 +136,16 @@ class AndroidApi(recipe_api.RecipeApi):
         'apply_patch',
         [self.m.path.build('scripts', 'slave', 'apply_svn_patch.py'),
          '-p', self.m.properties['patch_url'],
-         '-r', self.m.path.checkout(self._internal_dir)])
+         '-r', self._internal_dir])
 
-  def compile(self, target='Debug'):
+  def compile(self):
     return self.m.chromium.compile(env=self.get_env())
 
   def findbugs(self):
     cmd = [self.m.path.checkout('build', 'android', 'findbugs_diff.py')]
     if self.c.INTERNAL:
       cmd.extend(
-          ['-b',
-           self.m.path.checkout(self._internal_dir, 'bin', 'findbugs_filter'),
+          ['-b', self._internal_dir('bin', 'findbugs_filter'),
            '-o', 'com.google.android.apps.chrome.-,org.chromium.-'])
       return self.m.step('findbugs internal', cmd, env=self.get_env())
 
@@ -177,7 +160,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.INTERNAL:
       return self.m.step(
           'lint',
-          [self.m.path.checkout(self._internal_dir, 'bin', 'lint.py')],
+          [self._internal_dir('bin', 'lint.py')],
           env=self.get_env())
 
   def upload_build(self):
@@ -186,7 +169,7 @@ class AndroidApi(recipe_api.RecipeApi):
       # gsutil module when available.
       return self.m.step(
           'upload_build',
-          [self.m.path.checkout(self._internal_dir, 'build', 'upload_build.py'),
+          [self._internal_dir('build', 'upload_build.py'),
            '-b', self.m.properties['buildername'],
            '-t', self.m.chromium.c.BUILD_CONFIG,
            '-d', self.m.path.checkout('out'),

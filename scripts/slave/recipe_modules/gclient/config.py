@@ -29,7 +29,6 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     hooks = List(basestring),
     target_os = Set(basestring),
     target_os_only = Single(bool, empty_val=False, required=False),
-    checkouts = List(basestring, hidden=True),
     cache_dir = Static(cache_dir, hidden=False),
     got_revision_mapping = Dict(hidden=True),
 

@@ -146,17 +146,10 @@ class GclientApi(recipe_api.RecipeApi):
         steps.append(self(name, ['recurse', 'git', 'config', var, val],
                           **kwargs))
 
-    cwd = kwargs.get('cwd')
-    for c in cfg.checkouts:
-      path = self.m.path.slave_build(c)
-      if cwd:
-        path = self.m.path.join(cwd, c)
-      self.m.path.add_checkout(path)
-    for s in cfg.solutions:
-      path = self.m.path.slave_build(s.name)
-      if cwd:
-        path = self.m.path.join(cwd, s.name)
-      self.m.path.add_checkout(path)
+    cwd = kwargs.get('cwd', self.m.path.slave_build)
+    self.m.path.set_dynamic_path(
+      'checkout', cwd(*cfg.solutions[0].name.split(self.m.path.sep)),
+      overwrite=False)
 
     return steps
 
@@ -169,7 +162,7 @@ class GclientApi(recipe_api.RecipeApi):
 
     return self.m.python(prefix + 'revert',
         self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),
-        ['.', self.m.path.depot_tools('gclient', wrapper=True)],
+        ['.', self.m.path.depot_tools('gclient', platform_ext={'win': '.bat'})],
         **kwargs
     )
 

@@ -4,6 +4,7 @@
 
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import Dict, Single, Static
+from slave.recipe_config_types import Path
 
 def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
   return ConfigGroup(
@@ -11,11 +12,13 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     REPO_NAME = Static(REPO_NAME),
     REPO_URL = Static(REPO_URL),
     target_arch = Single(basestring, required=False, empty_val=''),
-    extra_env = Dict(value_type=(basestring,int,list)),
+    extra_env = Dict(value_type=(basestring,int,Path)),
     run_findbugs = Single(bool, required=False, empty_val=False),
     run_lint = Single(bool, required=False, empty_val=False),
     run_checkdeps = Single(bool, required=False, empty_val=False),
-    apply_svn_patch = Single(bool, required=False, empty_val=False)
+    apply_svn_patch = Single(bool, required=False, empty_val=False),
+    build_internal_android = Static(Path('[BUILD_INTERNAL]',
+                                         'scripts', 'slave', 'android'))
   )
 
 
@@ -57,7 +60,8 @@ def x86_builder(c):
 def klp_builder(c):
   c.extra_env = {
     'ANDROID_SDK_BUILD_TOOLS_VERSION': 'android-KeyLimePie',
-    'ANDROID_SDK_ROOT': ['third_party', 'android_tools_internal', 'sdk'],
+    'ANDROID_SDK_ROOT': Path(
+      '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk'),
     'ANDROID_SDK_VERSION': 'KeyLimePie'
   }
 
