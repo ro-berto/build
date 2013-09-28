@@ -120,7 +120,7 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.m.step('tree truth steps',
                       [self.m.path.checkout('build', 'tree_truth.sh'),
                        self.m.path.checkout] + repos,
-                      allow_subannotations=True)
+                      allow_subannotations=False)
 
   def runhooks(self):
     run_hooks_env = self.get_env()

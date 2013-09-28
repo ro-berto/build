@@ -109,7 +109,7 @@
     ]
   },
   {
-    "allow_subannotations": true,
+    "allow_subannotations": false,
     "cmd": [
       "[SLAVE_BUILD]/src/build/tree_truth.sh",
       "[SLAVE_BUILD]/src",
