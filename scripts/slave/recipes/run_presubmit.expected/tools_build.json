@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = '[ROOT]/git_cache'\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'build', 'url': 'https://chromium.googlesource.com/chromium/tools/build.git'}]"
@@ -20,7 +20,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--verbose",
       "--with_branch_heads",
@@ -46,7 +46,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "recurse",
       "git",
       "config",
@@ -59,7 +59,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "recurse",
       "git",
       "config",
@@ -75,7 +75,7 @@
       "user.email",
       "commit-bot@chromium.org"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/build",
+    "cwd": "[SLAVE_BUILD]/build",
     "name": "git config user.email",
     "seed_steps": [
       "git config user.email",
@@ -90,7 +90,7 @@
       "user.name",
       "The Commit Bot"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/build",
+    "cwd": "[SLAVE_BUILD]/build",
     "name": "git config user.name"
   },
   {
@@ -99,16 +99,16 @@
       "clean",
       "-xfq"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/build",
+    "cwd": "[SLAVE_BUILD]/build",
     "name": "git clean"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/apply_issue.py",
+      "[DEPOT_TOOLS]/apply_issue.py",
       "-r",
-      "[SLAVE_BUILD_ROOT]/build",
+      "[SLAVE_BUILD]/build",
       "-i",
       "12853011",
       "-p",
@@ -121,9 +121,9 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]/presubmit_support.py",
+      "[DEPOT_TOOLS]/presubmit_support.py",
       "--root",
-      "[SLAVE_BUILD_ROOT]/build",
+      "[SLAVE_BUILD]/build",
       "--commit",
       "--verbose",
       "--verbose",

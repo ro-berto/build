@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '', 'managed': True, 'name': 'polymer', 'url': 'https://github.com/Polymer/polymer.git'}, {'deps_file': '', 'managed': True, 'name': 'platform', 'url': 'https://github.com/Polymer/platform.git'}, {'deps_file': '', 'managed': True, 'name': 'WeakMap', 'url': 'https://github.com/Polymer/WeakMap.git'}, {'deps_file': '', 'managed': True, 'name': 'CustomElements', 'url': 'https://github.com/Polymer/CustomElements.git'}, {'deps_file': '', 'managed': True, 'name': 'ShadowDOM', 'url': 'https://github.com/Polymer/ShadowDOM.git'}, {'deps_file': '', 'managed': True, 'name': 'HTMLImports', 'url': 'https://github.com/Polymer/HTMLImports.git'}, {'deps_file': '', 'managed': True, 'name': 'observe-js', 'url': 'https://github.com/Polymer/observe-js.git'}, {'deps_file': '', 'managed': True, 'name': 'NodeBind', 'url': 'https://github.com/Polymer/NodeBind.git'}, {'deps_file': '', 'managed': True, 'name': 'TemplateBinding', 'url': 'https://github.com/Polymer/TemplateBinding.git'}, {'deps_file': '', 'managed': True, 'name': 'polymer-expressions', 'url': 'https://github.com/Polymer/polymer-expressions.git'}, {'deps_file': '', 'managed': True, 'name': 'PointerGestures', 'url': 'https://github.com/Polymer/PointerGestures.git'}, {'deps_file': '', 'managed': True, 'name': 'PointerEvents', 'url': 'https://github.com/Polymer/PointerEvents.git'}, {'deps_file': '', 'managed': True, 'name': 'tools', 'url': 'https://github.com/Polymer/tools.git'}]"
@@ -20,9 +20,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
     "name": "gclient revert"
   },
@@ -30,7 +30,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--output-json",
@@ -48,7 +48,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "recurse",
       "git",
       "submodule",
@@ -63,7 +63,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD_ROOT]/.tmp",
+      "[SLAVE_BUILD]/.tmp",
       "511"
     ],
     "name": "makedirs tmp",
@@ -85,9 +85,9 @@
       "npm",
       "install",
       "--tmp",
-      "[SLAVE_BUILD_ROOT]/.tmp"
+      "[SLAVE_BUILD]/.tmp"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+    "cwd": "[SLAVE_BUILD]/polymer",
     "name": "update-install"
   },
   {
@@ -97,7 +97,7 @@
       "grunt",
       "test-buildbot"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/polymer",
+    "cwd": "[SLAVE_BUILD]/polymer",
     "name": "test"
   }
 ]

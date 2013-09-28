@@ -3,13 +3,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]\\scripts\\slave\\git_setup.py",
+      "[BUILD]\\scripts\\slave\\git_setup.py",
       "--path",
-      "[SLAVE_BUILD_ROOT]\\src",
+      "[SLAVE_BUILD]\\src",
       "--url",
       "https://chromium.googlesource.com/chromium/src.git",
       "--git_cmd_path",
-      "[DEPOT_TOOLS_ROOT]\\git.bat"
+      "[DEPOT_TOOLS]\\git.bat"
     ],
     "name": "git setup",
     "seed_steps": [
@@ -23,62 +23,62 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]\\git.bat",
+      "[DEPOT_TOOLS]\\git.bat",
       "fetch",
       "origin",
       "--recurse-submodules"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git fetch"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]\\git.bat",
+      "[DEPOT_TOOLS]\\git.bat",
       "update-ref",
       "refs/heads/master",
       "origin/master"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git update-ref"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]\\git.bat",
+      "[DEPOT_TOOLS]\\git.bat",
       "clean",
       "-f",
       "-d",
       "-x"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git clean"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]\\git.bat",
+      "[DEPOT_TOOLS]\\git.bat",
       "checkout",
       "-f",
       "master"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git checkout"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]\\git.bat",
+      "[DEPOT_TOOLS]\\git.bat",
       "submodule",
       "update",
       "--init",
       "--recursive"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git submodule"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]\\git.bat",
+      "[DEPOT_TOOLS]\\git.bat",
       "status"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]\\src",
+    "cwd": "[SLAVE_BUILD]\\src",
     "name": "git status"
   }
 ]

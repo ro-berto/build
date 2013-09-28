@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]"
@@ -19,9 +19,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
     "name": "gclient revert"
   },
@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--output-json",
@@ -47,12 +47,12 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': 'DEPS', 'managed': True, 'name': 'WebKit', 'url': 'svn://svn.chromium.org/blink/trunk'}]"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
+    "cwd": "[SLAVE_BUILD]/src/third_party",
     "name": "[spec: WebKit] gclient setup",
     "seed_steps": [
       "[spec: WebKit] gclient setup",
@@ -64,24 +64,24 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
+    "cwd": "[SLAVE_BUILD]/src/third_party",
     "name": "[spec: WebKit] gclient revert"
   },
   {
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--output-json",
       "/path/to/tmp/json"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/src/third_party",
+    "cwd": "[SLAVE_BUILD]/src/third_party",
     "name": "[spec: WebKit] gclient sync",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@{@@@",

@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
@@ -19,9 +19,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
     "name": "gclient revert"
   },
@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--output-json",
@@ -72,9 +72,9 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/apply_issue.py",
+      "[DEPOT_TOOLS]/apply_issue.py",
       "-r",
-      "[SLAVE_BUILD_ROOT]/src",
+      "[SLAVE_BUILD]/src",
       "-i",
       "12853011",
       "-p",
@@ -87,9 +87,9 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]/presubmit_support.py",
+      "[DEPOT_TOOLS]/presubmit_support.py",
       "--root",
-      "[SLAVE_BUILD_ROOT]/src",
+      "[SLAVE_BUILD]/src",
       "--commit",
       "--verbose",
       "--verbose",

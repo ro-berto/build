@@ -1,7 +1,7 @@
 [
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]/repo",
+      "[DEPOT_TOOLS]/repo",
       "init",
       "-u",
       "https://chromium.googlesource.com/chromiumos/manifest.git",
@@ -18,7 +18,7 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]/repo",
+      "[DEPOT_TOOLS]/repo",
       "sync"
     ],
     "name": "repo sync"
@@ -27,7 +27,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
+      "[SLAVE_BUILD]/chromite/bin/cros_sdk",
       "--cache-dir",
       ".cache",
       "--",
@@ -41,7 +41,7 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD_ROOT]/chromite/bin/cros_sdk",
+      "[SLAVE_BUILD]/chromite/bin/cros_sdk",
       "--",
       "./build_packages",
       "--board",

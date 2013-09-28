@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': '', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
@@ -19,9 +19,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
     "name": "[spec: empty_deps] gclient revert"
   },
@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--revision",
@@ -72,11 +72,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/deps_whitelist.py",
+      "[SLAVE_BUILD]/src/android_webview/buildbot/deps_whitelist.py",
       "--method",
       "android_build",
       "--path-to-deps",
-      "[SLAVE_BUILD_ROOT]/src/DEPS",
+      "[SLAVE_BUILD]/src/DEPS",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -95,7 +95,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/blacklist/project/1': None, 'src/blacklist/project/2': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
@@ -111,9 +111,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
     "name": "[spec: trimmed] gclient revert"
   },
@@ -121,7 +121,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--revision",
@@ -164,11 +164,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/build/util/lastchange.py",
+      "[SLAVE_BUILD]/src/build/util/lastchange.py",
       "-o",
-      "[SLAVE_BUILD_ROOT]/src/build/util/LASTCHANGE",
+      "[SLAVE_BUILD]/src/build/util/LASTCHANGE",
       "-s",
-      "[SLAVE_BUILD_ROOT]/src"
+      "[SLAVE_BUILD]/src"
     ],
     "name": "Chromium LASTCHANGE",
     "seed_steps": [
@@ -178,11 +178,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/build/util/lastchange.py",
+      "[SLAVE_BUILD]/src/build/util/lastchange.py",
       "-o",
-      "[SLAVE_BUILD_ROOT]/src/build/util/LASTCHANGE.blink",
+      "[SLAVE_BUILD]/src/build/util/LASTCHANGE.blink",
       "-s",
-      "[SLAVE_BUILD_ROOT]/src/third_party/WebKit"
+      "[SLAVE_BUILD]/src/third_party/WebKit"
     ],
     "name": "Blink LASTCHANGE"
   },
@@ -191,7 +191,7 @@
       "python",
       "-u",
       "\nimport sys, os\npath = sys.argv[1]\nmode = int(sys.argv[2])\nif not os.path.isdir(path):\n  if os.path.exists(path):\n    print \"%s exists but is not a dir\" % path\n    sys.exit(1)\n  os.makedirs(path, mode)\n",
-      "[SLAVE_BUILD_ROOT]/android-src",
+      "[SLAVE_BUILD]/android-src",
       "511"
     ],
     "name": "makedirs android source root",
@@ -210,40 +210,40 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]/repo",
+      "[DEPOT_TOOLS]/repo",
       "init",
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
       "android-4.3_r2.3"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/android-src",
+    "cwd": "[SLAVE_BUILD]/android-src",
     "name": "repo init"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/android_webview/buildbot/generate_local_manifest.py",
-      "[SLAVE_BUILD_ROOT]/android-src",
+      "[SLAVE_BUILD]/src/android_webview/buildbot/generate_local_manifest.py",
+      "[SLAVE_BUILD]/android-src",
       "external/chromium_org"
     ],
     "name": "generate local manifest"
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS_ROOT]/repo",
+      "[DEPOT_TOOLS]/repo",
       "sync",
       "-j16",
       "-d",
       "-f"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/android-src",
+    "cwd": "[SLAVE_BUILD]/android-src",
     "name": "repo sync"
   },
   {
     "cmd": [
       "rm",
       "-rf",
-      "[SLAVE_BUILD_ROOT]/android-src/external/chromium_org"
+      "[SLAVE_BUILD]/android-src/external/chromium_org"
     ],
     "name": "remove chromium_org"
   },
@@ -251,8 +251,8 @@
     "cmd": [
       "ln",
       "-s",
-      "[SLAVE_BUILD_ROOT]/src",
-      "[SLAVE_BUILD_ROOT]/android-src/external/chromium_org"
+      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]/android-src/external/chromium_org"
     ],
     "name": "symlink chromium_org",
     "seed_steps": [
@@ -261,31 +261,31 @@
   },
   {
     "cmd": [
-      "[BUILD_ROOT]/scripts/slave/android/with_lunch",
-      "[SLAVE_BUILD_ROOT]/android-src",
+      "[BUILD]/scripts/slave/android/with_lunch",
+      "[SLAVE_BUILD]/android-src",
       "full-eng",
-      "[SLAVE_BUILD_ROOT]/android-src/external/chromium_org/android_webview/tools/gyp_webview"
+      "[SLAVE_BUILD]/android-src/external/chromium_org/android_webview/tools/gyp_webview"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]/android-src/external/chromium_org",
+    "cwd": "[SLAVE_BUILD]/android-src/external/chromium_org",
     "name": "gyp_webview"
   },
   {
     "cmd": [
-      "[BUILD_ROOT]/scripts/slave/android/with_lunch",
-      "[SLAVE_BUILD_ROOT]/android-src",
+      "[BUILD]/scripts/slave/android/with_lunch",
+      "[SLAVE_BUILD]/android-src",
       "full-eng",
-      "[BUILD_ROOT]/scripts/slave/compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "libwebviewchromium",
       "android_webview_java",
       "--build-dir",
-      "[SLAVE_BUILD_ROOT]",
+      "[SLAVE_BUILD]",
       "--src-dir",
-      "[SLAVE_BUILD_ROOT]/android-src",
+      "[SLAVE_BUILD]/android-src",
       "--build-tool",
       "make-android",
       "--verbose"
     ],
-    "cwd": "[SLAVE_BUILD_ROOT]",
+    "cwd": "[SLAVE_BUILD]",
     "name": "compile"
   }
 ]

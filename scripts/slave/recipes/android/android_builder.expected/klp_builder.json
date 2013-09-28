@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
@@ -19,9 +19,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]/scripts/slave/gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS_ROOT]/gclient"
+      "[DEPOT_TOOLS]/gclient"
     ],
     "name": "gclient revert"
   },
@@ -29,7 +29,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
       "--revision",
@@ -47,11 +47,11 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/repo/build/dump_app_manifest_vars.py",
+      "[SLAVE_BUILD]/src/repo/build/dump_app_manifest_vars.py",
       "-b",
       "builder_name",
       "-v",
-      "[SLAVE_BUILD_ROOT]/src/chrome/VERSION",
+      "[SLAVE_BUILD]/src/chrome/VERSION",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -68,16 +68,16 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/build/env_dump.py",
+      "[SLAVE_BUILD]/src/build/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
-      "[SLAVE_BUILD_ROOT]/src/build/android/envsetup.sh"
+      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
     ],
     "env": {
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/src/third_party/android_tools_internal/sdk",
       "ANDROID_SDK_VERSION": "KeyLimePie",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:%(PATH)s"
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
     },
     "name": "envsetup",
     "~followup_annotations": [
@@ -94,9 +94,9 @@
       "python",
       "-u",
       "\nimport shutil, sys, os\nshutil.rmtree(sys.argv[1], True)\nshutil.rmtree(sys.argv[2], True)\nfor base, _dirs, files in os.walk(sys.argv[3]):\n  for f in files:\n    if f.endswith('.pyc'):\n      os.remove(os.path.join(base, f))\n",
-      "[SLAVE_BUILD_ROOT]/src/out/Debug/debug_info_dumps",
-      "[SLAVE_BUILD_ROOT]/src/out/Debug/test_logs",
-      "[SLAVE_BUILD_ROOT]/src"
+      "[SLAVE_BUILD]/src/out/Debug/debug_info_dumps",
+      "[SLAVE_BUILD]/src/out/Debug/test_logs",
+      "[SLAVE_BUILD]/src"
     ],
     "name": "clean local files",
     "~followup_annotations": [
@@ -114,8 +114,8 @@
   {
     "allow_subannotations": true,
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/build/tree_truth.sh",
-      "[SLAVE_BUILD_ROOT]/src",
+      "[SLAVE_BUILD]/src/build/tree_truth.sh",
+      "[SLAVE_BUILD]/src",
       "src",
       "src-internal",
       "src/repo"
@@ -126,19 +126,19 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS_ROOT]/gclient.py",
+      "[DEPOT_TOOLS]/gclient.py",
       "runhooks"
     ],
     "env": {
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/src/third_party/android_tools_internal/sdk",
       "ANDROID_SDK_VERSION": "KeyLimePie",
-      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD_ROOT]/src/repo/build/get_internal_landmines.py",
+      "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android android_sdk_root=[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk android_sdk_version=KeyLimePie app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=[SLAVE_BUILD_ROOT]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android android_sdk_root=[SLAVE_BUILD]/src/third_party/android_tools_internal/sdk android_sdk_version=KeyLimePie app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=All",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "gclient runhooks"
   },
@@ -147,13 +147,13 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD_ROOT]/scripts/slave/compile.py",
+      "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",
       "--build-dir",
-      "[SLAVE_BUILD_ROOT]/src/out",
+      "[SLAVE_BUILD]/src/out",
       "--src-dir",
-      "[SLAVE_BUILD_ROOT]/src",
+      "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
@@ -163,25 +163,25 @@
     ],
     "env": {
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-KeyLimePie",
-      "ANDROID_SDK_ROOT": "[SLAVE_BUILD_ROOT]/src/third_party/android_tools_internal/sdk",
+      "ANDROID_SDK_ROOT": "[SLAVE_BUILD]/src/third_party/android_tools_internal/sdk",
       "ANDROID_SDK_VERSION": "KeyLimePie",
-      "PATH": "[BUILD_INTERNAL_ROOT]/scripts/slave/android:./:%(PATH)s"
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "compile"
   },
   {
     "cmd": [
-      "[SLAVE_BUILD_ROOT]/src/repo/build/upload_build.py",
+      "[SLAVE_BUILD]/src/repo/build/upload_build.py",
       "-b",
       "builder_name",
       "-t",
       "Debug",
       "-d",
-      "[SLAVE_BUILD_ROOT]/src/out",
+      "[SLAVE_BUILD]/src/out",
       "-r",
       "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
       "-g",
-      "[BUILD_ROOT]/scripts/slave/gsutil"
+      "[BUILD]/scripts/slave/gsutil"
     ],
     "name": "upload_build"
   }
