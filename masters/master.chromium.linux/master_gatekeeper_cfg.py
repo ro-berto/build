@@ -27,6 +27,7 @@ categories_steps = {
     'courgette_unittests',
     'crypto_unittests',
     'device_unittests',
+    'google_apis_unittests',
     'installer_util_unittests',
     'interactive_ui_tests',
     'ipc_tests',
