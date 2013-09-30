@@ -131,6 +131,12 @@ F('ios_debug_factory', mac().WebRTCFactory(
     options=options,
     factory_properties=mac_ios_factory_properties))
 
+B('iOS Release', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
+F('ios_release_factory', mac().WebRTCFactory(
+    target='Release',
+    options=options,
+    factory_properties=mac_ios_factory_properties))
+
 
 def Update(c):
   helper.Update(c)
