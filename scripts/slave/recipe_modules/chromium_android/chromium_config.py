@@ -52,3 +52,23 @@ def try_builder(c):
 @CONFIG_CTX(includes=['x86_builder', 'try_builder'])
 def x86_try_builder(c):
   pass
+
+@CONFIG_CTX(includes=['android_defaults'])
+def tests_base(c):
+  pass
+
+@CONFIG_CTX(includes=['tests_base'])
+def main_tests(c):
+  pass
+
+@CONFIG_CTX(includes=['tests_base'])
+def enormous_tests(c):
+  pass
+
+@CONFIG_CTX(includes=['tests_base'])
+def try_instrumentation_tests(c):
+  pass
+
+@CONFIG_CTX(includes=['tests_base'])
+def x86_try_instrumentation_tests(c):
+  pass

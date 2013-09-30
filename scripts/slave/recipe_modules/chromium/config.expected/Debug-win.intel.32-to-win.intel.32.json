@@ -85,6 +85,23 @@
       "GYP_MSVS_VERSION": "2010"
     }
   }, 
+  "enormous_tests": {
+    "build_config_fs": "Debug", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
   "klp_builder": {
     "build_config_fs": "Debug", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -121,6 +138,23 @@
       "GYP_MSVS_VERSION": "2010"
     }
   }, 
+  "main_tests": {
+    "build_config_fs": "Debug", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
   "msvs": {
     "build_config_fs": "Debug", 
     "build_dir": "Path('[CHECKOUT]', 'build')", 
@@ -146,6 +180,23 @@
       "GYP_MSVS_VERSION": "2010"
     }
   }, 
+  "tests_base": {
+    "build_config_fs": "Debug", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
   "try_builder": {
     "build_config_fs": "Debug", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -159,6 +210,23 @@
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
+  "try_instrumentation_tests": {
+    "build_config_fs": "Debug", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2010"
@@ -209,6 +277,23 @@
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All", 
+      "GYP_MSVS_VERSION": "2010"
+    }
+  }, 
+  "x86_try_instrumentation_tests": {
+    "build_config_fs": "Debug", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2010"

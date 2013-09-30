@@ -8,7 +8,6 @@ class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
     self._env = dict()
-    self._internal_dir = None
 
   def get_env(self):
     env_dict = dict(self._env)
@@ -28,9 +27,6 @@ class AndroidApi(recipe_api.RecipeApi):
     repo_url = self.m.properties['repo_url']
     revision = self.m.properties.get('revision')
     gclient_custom_deps = self.m.properties.get('gclient_custom_deps')
-
-    if internal:
-      self._internal_dir = self.m.path.checkout(repo_name.split('/', 1)[-1])
 
     self.set_config(bot_id,
                     INTERNAL=internal,
@@ -63,7 +59,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if internal:
       yield self.m.step(
           'get app_manifest_vars',
-          [self._internal_dir('build', 'dump_app_manifest_vars.py'),
+          [self.c.internal_dir('build', 'dump_app_manifest_vars.py'),
            '-b', self.m.properties['buildername'],
            '-v', self.m.path.checkout('chrome', 'VERSION'),
            '--output-json', self.m.json.output()]
@@ -125,7 +121,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def runhooks(self):
     run_hooks_env = self.get_env()
     if self.m.properties.get('internal'):
-      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self._internal_dir(
+      run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.c.internal_dir(
         'build', 'get_internal_landmines.py')
     return self.m.chromium.runhooks(env=run_hooks_env)
 
@@ -136,7 +132,7 @@ class AndroidApi(recipe_api.RecipeApi):
         'apply_patch',
         [self.m.path.build('scripts', 'slave', 'apply_svn_patch.py'),
          '-p', self.m.properties['patch_url'],
-         '-r', self._internal_dir])
+         '-r', self.c.internal_dir()])
 
   def compile(self):
     return self.m.chromium.compile(env=self.get_env())
@@ -145,34 +141,143 @@ class AndroidApi(recipe_api.RecipeApi):
     cmd = [self.m.path.checkout('build', 'android', 'findbugs_diff.py')]
     if self.c.INTERNAL:
       cmd.extend(
-          ['-b', self._internal_dir('bin', 'findbugs_filter'),
+          ['-b', self.c.internal_dir('bin', 'findbugs_filter'),
            '-o', 'com.google.android.apps.chrome.-,org.chromium.-'])
-      return self.m.step('findbugs internal', cmd, env=self.get_env())
+      yield self.m.step('findbugs internal', cmd, env=self.get_env())
 
   def checkdeps(self):
-    return self.m.step(
-      'checkdeps',
-      [self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
-       '--root=%s' % self._internal_dir],
-      env=self.get_env())
+    if self.c.INTERNAL:
+      yield self.m.step(
+        'checkdeps',
+        [self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
+         '--root=%s' % self.c.internal_dir()],
+        env=self.get_env())
 
   def lint(self):
     if self.c.INTERNAL:
-      return self.m.step(
+      yield self.m.step(
           'lint',
-          [self._internal_dir('bin', 'lint.py')],
+          [self.c.internal_dir('bin', 'lint.py')],
           env=self.get_env())
 
+  # TODO(sivachandra): Clean this step up after cleaning up the zip_build.py
+  # script in scripts/slave. This step should ideally use that script.
   def upload_build(self):
     if self.c.INTERNAL:
-      # TODO(sivachandra): Replace this with an enquivalent step got from a
-      # gsutil module when available.
-      return self.m.step(
+      yield self.m.step(
           'upload_build',
-          [self._internal_dir('build', 'upload_build.py'),
+          [self.c.internal_dir('build', 'upload_build.py'),
            '-b', self.m.properties['buildername'],
            '-t', self.m.chromium.c.BUILD_CONFIG,
            '-d', self.m.path.checkout('out'),
            '-r', (self.m.properties.get('revision') or
                   self.m.properties.get('buildnumber')),
            '-g', self.m.path.build('scripts', 'slave', 'gsutil')])
+
+  # TODO(sivachandra): Clean this step up after cleaning up the extract_build.py
+  # script in scripts/slave. This step should ideally use that script.
+  def download_build(self):
+    if self.c.INTERNAL:
+      yield self.m.step(
+          'download_build',
+          [self.c.internal_dir('build', 'download_and_extract_build.py'),
+           '-b', self.m.properties['parent_buildername'],
+           '-d', self.m.path.checkout('out'),
+           '-r', (self.m.properties.get('revision') or
+                  self.m.properties.get('parent_buildnumber')),
+           '-g', self.m.path.build('scripts', 'slave', 'gsutil')])
+
+  def spawn_logcat_monitor(self):
+    return self.m.step(
+        'spawn_logcat_monitor',
+        [self.c.cr_build_android('adb_logcat_monitor.py'),
+         self.m.chromium.c.build_dir('logcat')],
+        env=self.get_env())
+
+  def detect_and_setup_devices(self):
+    yield self.m.step(
+        'provision_devices',
+        [self.c.cr_build_android('provision_devices.py'),
+         '-t', self.m.chromium.c.BUILD_CONFIG],
+        env=self.get_env())
+    yield self.m.step(
+        'device_status_check',
+        [self.c.cr_build_android('buildbot', 'bb_device_status_check.py')],
+        env=self.get_env())
+
+    if self.c.INTERNAL:
+      yield self.m.step(
+          'setup_devices_for_testing',
+          [self.c.internal_dir('build',  'setup_device_testing.py')],
+          env=self.get_env())
+      deploy_cmd = [
+          self.c.internal_dir('build', 'full_deploy.py'),
+          '-v', '--%s' % self.m.chromium.c.BUILD_CONFIG.lower()]
+      if self.c.extra_deploy_opts:
+        deploy_cmd.extend(self.c.extra_deploy_opts)
+      yield self.m.step('deploy_on_devices', deploy_cmd, env=self.get_env())
+
+  def instrumentation_tests(self, official=False):
+    for test in self.c.instrumentation_tests:
+      annotation = test.annotation
+      cmd = [self.c.internal_dir('build', 'run_intrumentation_tests.py'),
+             '-a', annotation, '-d', self.m.path.checkout()]
+      if test.exclude_annotation:
+        cmd.extend(['-e', test.exclude_annotation])
+      yield self.m.step(annotation.lower() + '_instrumentation_tests',
+                         cmd, env=self.get_env())
+
+  def logcat_dump(self):
+    return self.m.step(
+        'logcat_dump',
+        [self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
+         self.m.path.checkout('out', 'logcat')])
+
+  def stack_tool_steps(self):
+    if self.c.run_stack_tool_steps:
+      log_file = self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
+                                      'full_log')
+      yield self.m.step(
+          'stack_tool_with_logcat_dump',
+          [self.m.path.checkout('third_party', 'android_platform', 'development',
+                                'scripts', 'stack'),
+           '--more-info', log_file])
+      yield self.m.step(
+          'stack_tool_for_tombstones',
+          [self.m.path.checkout('build', 'android', 'tombstones.py'),
+           '-a', '-s', '-w'])
+      yield self.m.step(
+          'stack_tool_for_asan',
+          [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
+           '-l', log_file])
+
+  def test_report(self):
+    return self.m.python.inline(
+        'test_report',
+         """
+            import glob, os, sys
+            for report in glob.glob(sys.argv[1]):
+              with open(report, 'r') as f:
+                for l in f.readlines():
+                  print l
+              os.remove(report)
+         """,
+         args=[self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
+                                    'test_logs', '*.log')],
+    )
+
+  def common_tree_setup_steps(self):
+    yield self.init_and_sync()
+    yield self.envsetup()
+    yield self.clean_local_files()
+    if self.c.INTERNAL:
+      yield self.run_tree_truth()
+    
+  def common_tests_setup_steps(self):
+    yield self.spawn_logcat_monitor()
+    yield self.detect_and_setup_devices()
+
+  def common_tests_final_steps(self):
+    yield self.logcat_dump()
+    yield self.stack_tool_steps()
+    yield self.test_report()
