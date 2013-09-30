@@ -14,7 +14,7 @@ import time
 import urllib
 import urllib2
 
-UPLOAD_PATH = '/upload_sizes?data=%s'
+UPLOAD_PATH = '/upload_sizes'
 
 
 def UploadCodeTallyJson(server, json_file):
@@ -31,11 +31,11 @@ def UploadCodeTallyJson(server, json_file):
     try:
       urllib2.urlopen(req)
       print 'Sucessfully uploaded data to server'
-      return True
+      return 0
     except urllib2.HTTPError as e:
       if e.code < 500:
         print 'Encounter an exception, not retrying.\n%s' % str(e)
-        return False
+        return 1
       print 'Encountered a server error, retrying\n%s' % str(e)
     except (httplib.HTTPException, urllib2.URLError) as e:
       print 'Encountered an exception, retrying.\n%s' % str(e)
@@ -46,7 +46,7 @@ def UploadCodeTallyJson(server, json_file):
     time.sleep(duration)
 
   print 'Unable to upload to the server after 5 attempts, aborting.'
-  return False
+  return 1
 
 
 def main():
