@@ -138,13 +138,6 @@ def GenSteps(api):
     #                            perf_dashboard_id='tab_capture_performance',
     #                            test_type='tab_capture_performance_tests')
 
-    # WebGL conformance tests
-    yield api.python('webgl_conformance',
-        api.path.checkout('content', 'test', 'gpu', 'run_gpu_test'),
-                          ['run', 'webgl_conformance',
-                          '--output-format=gtest',
-                          '--webgl-conformance-version=1.0.1'])
-
   # TODO(kbr): after the conversion to recipes, add all GPU related
   # steps from the main waterfall, like gpu_unittests.
 

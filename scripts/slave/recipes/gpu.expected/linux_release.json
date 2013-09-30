@@ -260,17 +260,5 @@
       "--gtest_filter=ThroughputTest*"
     ],
     "name": "gpu_throughput_tests"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
-      "run",
-      "webgl_conformance",
-      "--output-format=gtest",
-      "--webgl-conformance-version=1.0.1"
-    ],
-    "name": "webgl_conformance"
   }
 ]
