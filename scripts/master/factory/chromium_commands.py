@@ -1056,7 +1056,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd_args = ['-w', '.', '-p', self.PathJoin('..', '..', '..', 'goma')]
     cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
     self.AddTestStep(chromium_step.AnnotatedCommand, 'Running Bisection',
-        cmd, timeout=30*60)
+        cmd, timeout=30*60, max_time=12*60*60)
 
   def AddWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
