@@ -106,6 +106,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       'parent_try_job_key': WithProperties('%(try_job_key:-)s'),
       'issue': WithProperties('%(issue:-)s'),
       'patchset': WithProperties('%(patchset:-)s'),
+      'patch_url': WithProperties('%(patch_url:-)s'),
       'root': WithProperties('%(root:-)s'),
       'requester': WithProperties('%(requester:-)s'),
 
