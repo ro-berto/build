@@ -407,6 +407,16 @@ class XcodebuildFilter(chromium_utils.RunCommandFilter):
     return self.AssembleOutput()
 
 
+def maybe_set_official_build_envvars(options, env):
+  if options.mode == 'google_chrome' or options.mode == 'official':
+    env['CHROMIUM_BUILD'] = '_google_chrome'
+
+  if options.mode == 'official':
+    # Official builds are always Google Chrome.
+    env['OFFICIAL_BUILD'] = '1'
+    env['CHROME_BUILD_TYPE'] = '_official'
+
+
 def main_xcode(options, args):
   """Interprets options, clobbers object files, and calls xcodebuild.
   """
@@ -448,6 +458,7 @@ def main_xcode(options, args):
     ninja_clobber(clobber_dir)
 
   common_xcode_settings(command, options, env, options.compiler)
+  maybe_set_official_build_envvars(options, env)
 
   # Add on any remaining args
   command.extend(args)
@@ -489,16 +500,6 @@ def main_xcode(options, args):
   goma_teardown(options, env)
 
   return result
-
-
-def maybe_set_official_build_envvars(options, env):
-  if options.mode == 'google_chrome' or options.mode == 'official':
-    env['CHROMIUM_BUILD'] = '_google_chrome'
-
-  if options.mode == 'official':
-    # Official builds are always Google Chrome.
-    env['OFFICIAL_BUILD'] = '1'
-    env['CHROME_BUILD_TYPE'] = '_official'
 
 
 def common_make_settings(
@@ -1198,16 +1199,13 @@ def real_main():
       main = main_win
       options.build_tool = 'msvs'
     elif chromium_utils.IsMac():
-      main = main_xcode
-      options.build_tool = 'xcode'
-    elif chromium_utils.IsLinux():
-      # We're in the process of moving to ninja by default on Linux, see
-      # http://crbug.com/239257
-      # Builders for different branches will use either make or ninja depending
+      # We're in the process of moving to ninja by default on Mac, see
+      # http://crbug.com/294387
+      # Builders for different branches will use either xcode or ninja depending
       # on the release channel for a while. Until all release channels are on
       # ninja, use build file mtime to figure out which build system to use.
       # TODO(thakis): Just use main_ninja once the transition is complete.
-      make_stat, ninja_stat = 0, 0
+      xcode_stat, ninja_stat = 0, 0
 
       ninja_path = os.path.join(
           options.src_dir, 'out', options.target, 'build.ninja')
@@ -1216,18 +1214,22 @@ def real_main():
       except os.error:
         pass
 
-      make_path = os.path.join(options.src_dir, 'Makefile')
+      xcode_path = os.path.join(
+          options.src_dir, 'build', 'all.xcodeproj', 'project.pbxproj')
       try:
-        make_stat = os.path.getmtime(make_path)
+        xcode_stat = os.path.getmtime(xcode_path)
       except os.error:
         pass
 
-      if ninja_stat > make_stat:
+      if ninja_stat > xcode_stat:
         main = main_ninja
         options.build_tool = 'ninja'
       else:
-        main = main_make
-        options.build_tool = 'make'
+        main = main_xcode
+        options.build_tool = 'xcode'
+    elif chromium_utils.IsLinux():
+      main = main_ninja
+      options.build_tool = 'ninja'
     else:
       print('Please specify --build-tool.')
       return 1
