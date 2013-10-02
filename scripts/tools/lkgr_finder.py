@@ -330,6 +330,11 @@ WEBRTC_NORMAL_STEPS = [
     'audio_decoder_unittests',
     'common_audio_unittests',
     'common_video_unittests',
+    'libjingle_media_unittest',
+    'libjingle_p2p_unittest',
+    'libjingle_peerconnection_unittest',
+    'libjingle_sound_unittest',
+    'libjingle_unittest',
     'metrics_unittests',
     'modules_tests',
     'modules_unittests',
@@ -338,6 +343,7 @@ WEBRTC_NORMAL_STEPS = [
     'test_support_unittests',
     'tools_unittests',
     'video_engine_core_unittests',
+    'video_engine_tests',
     'voice_engine_unittests',
 ]
 
@@ -373,6 +379,7 @@ WEBRTC_LKGR_STEPS = {
       'audio_e2e_test',
       'audioproc_perf',
       'isac_fixed_perf',
+      'libjingle_peerconnection_java_unittest',
       'video_capture_tests',
       'vie_auto_test',
       'voe_auto_test',
