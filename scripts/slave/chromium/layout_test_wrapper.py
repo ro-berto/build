@@ -235,6 +235,7 @@ def main():
                                  "TryJob recipe to know how to ignore "
                                  "expected failures."))
   option_parser.add_option("--test-list", action='append', metavar='FILE',
+                           default=[],
                            help="Read list of tests to run from file.")
   options, args = option_parser.parse_args()
 
