@@ -124,6 +124,9 @@ def layout_test(options, args):
   for additional_drt_flag in options.additional_drt_flag:
     command.append('--additional-drt-flag=%s' % additional_drt_flag)
 
+  for test_list in options.test_list:
+    command += ['--test-list', test_list]
+
   # The list of tests is given as arguments.
   command.extend(options.options.split(' '))
   command.extend(args)
@@ -231,6 +234,8 @@ def main():
                            help=("Path to write json results to allow "
                                  "TryJob recipe to know how to ignore "
                                  "expected failures."))
+  option_parser.add_option("--test-list", action='append', metavar='FILE',
+                           help="Read list of tests to run from file.")
   options, args = option_parser.parse_args()
 
   # Disable pageheap checking except on Windows.
