@@ -210,6 +210,22 @@
     "name": "archive_test_results"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
+      "run",
+      "webgl_conformance",
+      "--output-format=gtest",
+      "--webgl-conformance-version=1.0.1",
+      "--browser=release"
+    ],
+    "env": {
+      "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
+    },
+    "name": "webgl_conformance"
+  },
+  {
     "allow_subannotations": true,
     "always_run": true,
     "cmd": [

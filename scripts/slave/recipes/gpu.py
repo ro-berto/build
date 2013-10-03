@@ -52,7 +52,7 @@ def GenSteps(api):
   # If you want to stub out the checkout/runhooks/compile steps,
   # uncomment this line and then comment out the associated block of
   # yield statements below.
-  # api.path.add_checkout(api.path.slave_build('src'))
+  # api.path.set_dynamic_path('checkout', api.path.slave_build('src'))
 
   yield api.gclient.checkout()
   # If being run as a try server, apply the CL.
@@ -103,6 +103,20 @@ def GenSteps(api):
       api.path.build('scripts', 'slave', 'chromium', \
                      'archive_gpu_pixel_test_results.py'),
       args, always_run=True)
+
+  # WebGL conformance tests.
+  # Choose a reasonable default for the location of the sandbox binary
+  # on the bots.
+  env = {}
+  if api.platform.is_linux:
+    env['CHROME_DEVEL_SANDBOX'] = '/opt/chromium/chrome_sandbox'
+  yield api.python('webgl_conformance',
+      api.path.checkout('content', 'test', 'gpu', 'run_gpu_test'),
+      ['run', 'webgl_conformance',
+       '--output-format=gtest',
+       '--webgl-conformance-version=1.0.1',
+       '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
+      env=env)
 
   # Only run the performance tests on Release builds.
   if is_release_build:

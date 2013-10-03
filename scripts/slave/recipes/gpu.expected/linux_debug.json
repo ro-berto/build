@@ -208,5 +208,21 @@
       "[BUILD]/scripts/slave/gsutil"
     ],
     "name": "archive_test_results"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
+      "run",
+      "webgl_conformance",
+      "--output-format=gtest",
+      "--webgl-conformance-version=1.0.1",
+      "--browser=debug"
+    ],
+    "env": {
+      "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
+    },
+    "name": "webgl_conformance"
   }
 ]
