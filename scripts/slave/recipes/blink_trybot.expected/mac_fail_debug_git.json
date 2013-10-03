@@ -421,9 +421,7 @@
       "--build-dir",
       "[SLAVE_BUILD]/src/out",
       "--json-test-results",
-      "/path/to/tmp/json",
-      "--test-list",
-      "bad/totally-bad-probably.html\ntricky/totally-maybe-not-awesome.html"
+      "/path/to/tmp/json"
     ],
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
@@ -444,6 +442,12 @@
       "@@@STEP_LOG_LINE@json.test_results@        \"actual\": \"TIMEOUT PASS\", @@@",
       "@@@STEP_LOG_LINE@json.test_results@        \"expected\": \"PASS\", @@@",
       "@@@STEP_LOG_LINE@json.test_results@        \"is_unexpected\": true@@@",
+      "@@@STEP_LOG_LINE@json.test_results@      }@@@",
+      "@@@STEP_LOG_LINE@json.test_results@    }, @@@",
+      "@@@STEP_LOG_LINE@json.test_results@    \"good\": {@@@",
+      "@@@STEP_LOG_LINE@json.test_results@      \"totally-awesome.html\": {@@@",
+      "@@@STEP_LOG_LINE@json.test_results@        \"actual\": \"PASS\", @@@",
+      "@@@STEP_LOG_LINE@json.test_results@        \"expected\": \"PASS\"@@@",
       "@@@STEP_LOG_LINE@json.test_results@      }@@@",
       "@@@STEP_LOG_LINE@json.test_results@    }, @@@",
       "@@@STEP_LOG_LINE@json.test_results@    \"tricky\": {@@@",

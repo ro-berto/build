@@ -10,7 +10,6 @@ DEPS = [
   'platform',
   'properties',
   'python',
-  'raw_io',
   'rietveld',
   'step',
   'step_history',
@@ -58,48 +57,6 @@ def summarize_failures(ignored, new):
   return summarize_failures_inner
 
 
-def BlinkTestsStep(api, results_dir, suffix, test_list=None):
-  name = 'webkit_tests (%s)' % suffix
-  test = api.path.build('scripts', 'slave', 'chromium',
-                        'layout_test_wrapper.py')
-  args = ['--target', api.chromium.c.BUILD_CONFIG,
-          '-o', results_dir,
-          '--build-dir', api.chromium.c.build_dir,
-          '--json-test-results', api.json.test_results()]
-  if test_list:
-    args.extend(['--test-list', api.raw_io.input("\n".join(test_list))])
-  return api.chromium.runtests(test, args, name=name, can_fail_build=False,
-                                followup_fn=followup_fn)
-
-
-def SummarizeTestResults(api, ignored_failures, new_failures):
-  ignored_failures = sorted(ignored_failures)
-  new_failures = sorted(new_failures)
-  return api.python.inline(
-    'webkit_tests',
-    r"""
-    import sys, json
-    failures = json.load(open(sys.argv[1], 'rb'))
-
-    if failures['new']:
-      print 'New failures:'
-      print '\n'.join(failures['new'])
-    if failures['ignored']:
-      print 'Ignored failures:'
-      print '\n'.join(failures['ignored'])
-
-    sys.exit(bool(failures['new']))
-    """,
-    args=[
-      api.json.input({
-        'new': new_failures,
-        'ignored': ignored_failures
-      })
-    ],
-    followup_fn=summarize_failures(ignored_failures, new_failures)
-  )
-
-
 def GenSteps(api):
   api.chromium.set_config('blink')
   api.chromium.apply_config('trybot_flavor')
@@ -115,6 +72,18 @@ def GenSteps(api):
   webkit_python_tests = api.path.build('scripts', 'slave', 'chromium',
                                        'test_webkitpy_wrapper.py')
   results_dir = api.path.slave_build('layout-test-results')
+
+
+  def BlinkTestsStep(with_patch):
+    name = 'webkit_tests (with%s patch)' % ('' if with_patch else 'out')
+    test = api.path.build('scripts', 'slave', 'chromium',
+                          'layout_test_wrapper.py')
+    args = ['--target', api.chromium.c.BUILD_CONFIG,
+            '-o', results_dir,
+            '--build-dir', api.chromium.c.build_dir,
+            '--json-test-results', api.json.test_results()]
+    return api.chromium.runtests(test, args, name=name, can_fail_build=False,
+                                 followup_fn=followup_fn)
 
   yield (
     api.gclient.checkout(),
@@ -134,7 +103,7 @@ def GenSteps(api):
     api.chromium.runtests('wtf_unittests'),
   )
 
-  yield BlinkTestsStep(api, results_dir, 'with patch')
+  yield BlinkTestsStep(with_patch=True)
   with_patch = api.step_history.last_step().json.test_results
 
   buildername = api.properties['buildername']
@@ -170,60 +139,76 @@ def GenSteps(api):
     api.gclient.revert(),
     api.chromium.runhooks(),
     api.chromium.compile(),
-    BlinkTestsStep(api, results_dir, 'without patch',
-                   test_list=with_patch.unexpected_failures),
+    BlinkTestsStep(with_patch=False),
   )
-  without_patch = api.step_history.last_step().json.test_results
+  clean = api.step_history.last_step().json.test_results
 
-  ignored_failures = set(without_patch.unexpected_failures)
-  new_failures = set(with_patch.unexpected_failures) - ignored_failures
+  ignored_failures = set(clean.unexpected_failures)
+  new_failures = (set(with_patch.unexpected_failures) -
+                  ignored_failures)
 
-  yield SummarizeTestResults(api, ignored_failures, new_failures)
+  ignored_failures = sorted(ignored_failures)
+  new_failures = sorted(new_failures)
+
+  yield api.python.inline(
+    'webkit_tests',
+    r"""
+    import sys, json
+    failures = json.load(open(sys.argv[1], 'rb'))
+
+    if failures['new']:
+      print 'New failures:'
+      print '\n'.join(failures['new'])
+    if failures['ignored']:
+      print 'Ignored failures:'
+      print '\n'.join(failures['ignored'])
+
+    sys.exit(bool(failures['new']))
+    """,
+    args=[
+      api.json.input({
+        'new': new_failures,
+        'ignored': ignored_failures
+      })
+    ],
+    followup_fn=summarize_failures(ignored_failures, new_failures)
+  )
 
 
 def GenTests(api):
   canned_test = api.json.canned_test_output
   with_patch = 'webkit_tests (with patch)'
   without_patch = 'webkit_tests (without patch)'
-  def props(config='Release', git_mode=False):
-    return api.properties.tryserver(
-      build_config=config,
-      config_name='blink',
-      root='src/third_party/WebKit',
-      GIT_MODE=git_mode,
-    )
 
-  # This general loop tests
-  #   * 'all tests pass on the first try'  (passFirst)
-  #   * 'the tests never pass' (i.e. the minimal pass causes the build to
-  #                             succeed. passMinimal)
-  # across all platform/config combinations.
-
-  # The passWithout versions should end up emitting warnings on the summary
-  # step because they indicate the presence of new unexpected failures.
-  for passFirst in (True, False):
+  for result, good in [('success', True), ('fail', False)]:
     for build_config in ['Release', 'Debug']:
       for plat in ('win', 'mac', 'linux'):
         for git_mode in True, False:
-          tag = 'passFirst' if passFirst else 'passMinimal'
           suffix = '_git' if git_mode else ''
-          name = '%s_%s_%s%s' % (plat, tag, build_config.lower(), suffix)
+          name = '%s_%s_%s%s' % (plat, result, build_config.lower(), suffix)
           test = (
             api.test(name) +
-            props(build_config, git_mode) +
+            api.properties.tryserver(
+              build_config=build_config,
+              config_name='blink',
+              root='src/third_party/WebKit',
+              GIT_MODE=git_mode,
+            ) +
             api.platform.name(plat) +
-            api.step_data(with_patch, canned_test(passing=passFirst))
+            api.step_data(with_patch, canned_test(good))
           )
-          if not passFirst:
-            test += api.step_data(
-              without_patch, canned_test(passing=False, minimal=True))
+          if not good:
+            test += api.step_data(without_patch, canned_test(False))
           yield test
 
-  # This tests that if the first fails, but the second pass succeeds
-  # that we fail the whole build.
   yield (
-    api.test('minimal_pass_continues') +
-    props() +
-    api.step_data(with_patch, canned_test(passing=False)) +
-    api.step_data(without_patch, canned_test(passing=True, minimal=True))
+    api.test('warn_on_flakey') +
+    api.properties.tryserver(
+      build_config='Release',
+      config_name='blink',
+      root='src/third_party/WebKit',
+      GIT_MODE=False,
+    ) +
+    api.step_data(with_patch, canned_test(False)) +
+    api.step_data(without_patch, canned_test(True))
   )
