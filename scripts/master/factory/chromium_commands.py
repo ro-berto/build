@@ -324,7 +324,7 @@ class ChromiumCommands(commands.FactoryCommands):
                            factory_properties, cmd_name='performance_ui_tests',
                            tool_opts=None, cmd_options=None, step_name=None,
                            timeout=1200, py_script=False, dashboard_url=None,
-                           addmethod=None):
+                           addmethod=None, alwaysRun=False):
 
     """Add an annotated perf step to the builder.
 
@@ -364,7 +364,8 @@ class ChromiumCommands(commands.FactoryCommands):
 
     addmethod(chromium_step.AnnotatedCommand, step_name, cmd,
               do_step_if=self.TestStepFilter, target=self._target,
-              factory_properties=factory_properties, timeout=timeout)
+              factory_properties=factory_properties, timeout=timeout,
+              alwaysRun=alwaysRun)
 
   def AddBuildrunnerAnnotatedPerfStep(self, *args, **kwargs):
     """Add annotated step to be run by buildrunner."""
@@ -905,7 +906,7 @@ class ChromiumCommands(commands.FactoryCommands):
       'device_status', None, 'graphing', tool_opts=tool_opts,
       cmd_name=self._device_status_check,
       cmd_options=['--device-status-dashboard'], step_name='device_status',
-      py_script=True, factory_properties=factory_properties)
+      py_script=True, factory_properties=factory_properties, alwaysRun=True)
 
   def AddTelemetryTest(self, test_name, page_set=None, step_name=None,
                        factory_properties=None, timeout=1200,
