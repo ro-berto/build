@@ -51,7 +51,10 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
             ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
-        'gclient_env': { 'GYP_GENERATORS': 'ninja' },
+        'gclient_env': {
+            'GYP_DEFINES': 'use_ash=0 use_aura=0',
+            'GYP_GENERATORS':'ninja',
+        },
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
     }))

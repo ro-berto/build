@@ -102,7 +102,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1",
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 use_ash=0 use_aura=0",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -345,7 +345,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1",
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 use_ash=0 use_aura=0",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks (2)"

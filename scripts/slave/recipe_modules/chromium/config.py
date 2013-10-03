@@ -220,6 +220,6 @@ def chromium_clang(c):
 @config_ctx(includes=['chromium'])
 def blink(c):
   c.compile_py.default_targets = ['all_webkit']
-  if c.TARGET_PLATFORM == 'win':
+  if c.TARGET_PLATFORM in ('linux', 'win'):
     c.gyp_env.GYP_DEFINES['use_ash'] = 0
     c.gyp_env.GYP_DEFINES['use_aura'] = 0
