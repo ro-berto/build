@@ -70,7 +70,7 @@ def gen_summary_output(failed_tests, exit_code, shards_remaining):
   if failed_tests:
     plural = 's' if len(failed_tests) > 1 else ''
     out += '%d test%s failed, listed below:\n' % (len(failed_tests), plural)
-    out += ''.join('  %s\n' % test for test in failed_tests)
+    out += ''.join('[   FAILED ] %s\n' % test for test in failed_tests)
 
   if shards_remaining:
     out += 'Not all shards were executed.\n'
