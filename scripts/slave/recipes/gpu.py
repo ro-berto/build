@@ -35,6 +35,9 @@ def GenSteps(api):
   is_release_build = api.properties.get('build_config', 'Release') == 'Release'
 
   api.chromium.set_config('chromium')
+  # This is needed to make GOMA work properly on Mac.
+  if api.platform.is_mac:
+    api.chromium.set_config('chromium_clang')
   api.gclient.apply_config('chrome_internal')
 
   # Don't skip the frame_rate data, as it's needed for the frame rate tests.

@@ -213,6 +213,10 @@ def trybot_flavor(c):
 def chromium(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
+@config_ctx(includes=['ninja', 'clang', 'goma'])
+def chromium_clang(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
 @config_ctx(includes=['chromium'])
 def blink(c):
   c.compile_py.default_targets = ['all_webkit']

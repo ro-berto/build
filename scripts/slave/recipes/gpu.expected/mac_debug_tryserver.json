@@ -93,7 +93,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=shared_library internal_gles2_conform_tests=1",
+      "GYP_DEFINES": "clang=1 component=shared_library internal_gles2_conform_tests=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -113,7 +113,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--",
       "chromium_gpu_debug_builder"
     ],
