@@ -152,6 +152,7 @@ lkgr_factory_properties = {
 }
 lkgr_factory_properties.update(builder_factory_properties)
 F('win_asan_lkgr_rel', win().ChromiumASANFactory(
+    clobber=True,
     slave_type='Builder',
     options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
     compile_timeout=7200,
