@@ -780,12 +780,12 @@ def main_ninja(options, args):
   if options.compiler:
     print 'using', options.compiler
 
-  if options.compiler in ('goma', 'goma-clang'):
+  if options.compiler in ('goma', 'goma-clang', 'jsonclang'):
     assert options.goma_dir
     if chromium_utils.IsWindows():
       # rewrite cc, cxx line in output_dir\build.ninja.
       # in winja, ninja -t msvc is used to run $cc/$cxx to collect
-      # depepndency with "cl /showIncludes" and generates dependency info.
+      # dependency with "cl /showIncludes" and generates dependency info.
       # ninja -t msvc uses environment in output_dir\environment.*,
       # which is generated at gyp time (Note: gyp detect MSVC's path and set it
       # to PATH.  This PATH doesn't include goma_dir.), and ignores PATH
@@ -805,6 +805,7 @@ def main_ninja(options, args):
       # Another option is to use CC_wrapper, CXX_wrapper environement variables
       # at gyp time (and this is typical usage for chromium developers), but
       # it would make it harder to fallback no-goma when goma is not available.
+      # TODO: Set CC / CXX at gyp time instead. This is a horrible hack.
       manifest = os.path.join(options.target_output_dir, 'build.ninja')
       orig_manifest = manifest + '.orig'
       if os.path.exists(orig_manifest):
@@ -841,6 +842,15 @@ def main_ninja(options, args):
       clang_dir = os.path.abspath(os.path.join(
           'third_party', 'llvm-build', 'Release+Asserts', 'bin'))
       env['PATH'] = os.pathsep.join([options.goma_dir, clang_dir, env['PATH']])
+    elif options.compiler ==  'jsonclang':
+      jsonclang_dir = os.path.join(SLAVE_SCRIPTS_DIR, 'chromium')
+      clang_dir = os.path.join(options.src_dir,
+          'third_party', 'llvm-build', 'Release+Asserts', 'bin')
+      if options.goma_dir:
+        env['PATH'] = os.pathsep.join(
+            [jsonclang_dir, options.goma_dir, clang_dir, env['PATH']])
+      else:
+        env['PATH'] = os.pathsep.join([jsonclang_dir, clang_dir, env['PATH']])
 
     if chromium_utils.IsMac():
       goma_jobs = 50
