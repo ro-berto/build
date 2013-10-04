@@ -396,6 +396,12 @@ def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
 def annotate(test_name, result, results_tracker, full_name=False,
              perf_dashboard_id=None):
   """Given a test result and tracker, update the waterfall with test results."""
+
+  # Always print raw exit code of the subprocess. This is very helpful
+  # for debugging, especially when one gets the "crashed or hung" message
+  # with no output (exit code can have some clues, especially on Windows).
+  print 'exit code (as seen by runtest.py): %d' % result
+
   get_text_result = process_log_utils.SUCCESS
 
   for failure in sorted(results_tracker.FailedTests()):
