@@ -110,12 +110,17 @@ def GenSteps(api):
   env = {}
   if api.platform.is_linux:
     env['CHROME_DEVEL_SANDBOX'] = '/opt/chromium/chrome_sandbox'
-  yield api.python('webgl_conformance',
-      api.path.checkout('content', 'test', 'gpu', 'run_gpu_test'),
-      ['run', 'webgl_conformance',
-       '--output-format=gtest',
-       '--webgl-conformance-version=1.0.1',
-       '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
+  yield api.chromium.runtests(
+      str(api.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
+      ['webgl_conformance',
+          '--output-format=gtest',
+          '--webgl-conformance-version=1.0.1',
+          '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
+      annotate='gtest',
+      test_type='webgl_conformance',
+      generate_json_file=True,
+      build_number=api.properties['buildnumber'],
+      builder_name=api.properties['buildername'],
       env=env)
 
   # Only run the performance tests on Release builds.
