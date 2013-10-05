@@ -239,6 +239,6 @@
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
-    "name": "run_gpu_test"
+    "name": "webgl_conformance"
   }
 ]

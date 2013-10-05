@@ -253,6 +253,6 @@
       "--webgl-conformance-version=1.0.1",
       "--browser=debug"
     ],
-    "name": "run_gpu_test"
+    "name": "webgl_conformance"
   }
 ]

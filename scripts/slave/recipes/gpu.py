@@ -117,6 +117,7 @@ def GenSteps(api):
           '--webgl-conformance-version=1.0.1',
           '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
       annotate='gtest',
+      name='webgl_conformance',
       test_type='webgl_conformance',
       generate_json_file=True,
       build_number=api.properties['buildnumber'],
