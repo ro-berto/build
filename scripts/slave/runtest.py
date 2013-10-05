@@ -1348,6 +1348,10 @@ def main():
     options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
         options.results_directory, '%s.xml' % options.test_type)))
     args.append('--gtest_output=xml:' + options.test_output_xml)
+  else:
+    # Several places in the code above expect this property to exist,
+    # even if it doesn't point to a file.
+    options.test_output_xml = ''
 
   if options.factory_properties.get('coverage_gtest_exclusions', False):
     build_coverage_gtest_exclusions(options, args)

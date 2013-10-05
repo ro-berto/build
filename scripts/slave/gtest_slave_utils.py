@@ -64,13 +64,10 @@ class GTestUnexpectedDeathTracker(object):
       return
 
   def GetResultsMap(self):
-    """Returns a map of TestResults.  Returns an empty map if no current test
-    has been recorded."""
+    """Returns a map of TestResults."""
 
-    if not self._current_test:
-      return dict()
-
-    self._failed_tests.add(self._current_test)
+    if self._current_test:
+      self._failed_tests.add(self._current_test)
 
     test_results_map = dict()
     for test in self._failed_tests:
@@ -93,11 +90,7 @@ class GTestUnexpectedDeathTracker(object):
 
 
 def GetResultsMap(observer):
-  """Returns a map of TestResults.  Returns an empty map if no current test
-  has been recorded."""
-
-  if not observer.GetCurrentTest():
-    return dict()
+  """Returns a map of TestResults."""
 
   test_results_map = dict()
   for test in observer.FailedTests(include_fails=True, include_flaky=True):
