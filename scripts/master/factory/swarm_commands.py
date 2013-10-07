@@ -197,7 +197,12 @@ class SwarmCommands(commands.FactoryCommands):
         self._script_dir, 'swarming', 'isolate_shim.py'),
 
     args = [script_path, 'run', '--isolated', isolated_file, '--', '--no-cr']
-    wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
+    wrapper_args = [
+        '--annotate=gtest',
+        '--test-type=%s' % test_name,
+        '--pass-build-dir',
+        '--pass-target',
+        ]
 
     command = self.GetPythonTestCommand(slave_script_path, arg_list=args,
                                         wrapper_args=wrapper_args)
