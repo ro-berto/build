@@ -89,7 +89,8 @@ def GenSteps(api):
                               test_type='content_browsertests',
                               generate_json_file=True,
                               results_directory=
-                                  'gtest-results/content_browsertests',
+                                  api.path.slave_build('gtest-results',
+                                      'content_browsertests'),
                               build_number=api.properties['buildnumber'],
                               builder_name=api.properties['buildername'])
 
@@ -120,6 +121,8 @@ def GenSteps(api):
       name='webgl_conformance',
       test_type='webgl_conformance',
       generate_json_file=True,
+      results_directory=
+          api.path.slave_build('gtest-results', 'webgl_conformance'),
       build_number=api.properties['buildnumber'],
       builder_name=api.properties['buildername'],
       python_mode=True,
