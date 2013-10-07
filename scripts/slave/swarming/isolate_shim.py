@@ -46,6 +46,9 @@ def main():
   target, args = InterceptFlag('--target', args)
 
   if build_dir:
+    # TODO(thakis): Fix runtest.py to not pass an absolute path instead.
+    build_dir = os.path.relpath(build_dir)
+
     assert target
     # TODO(thakis): Move this logic into ConvertBuildDirToLegacy().
     using_ninja = False
