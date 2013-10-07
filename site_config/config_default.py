@@ -98,6 +98,8 @@ class Master(object):
     """Chromium master."""
     master_host = 'master1.golo.chromium.org'
     from_address = 'buildbot@chromium.org'
+    tree_closing_notification_recipients = [
+        'chromium-build-failure@chromium-gatekeeper-sentry.appspotmail.com']
     base_app_url = 'https://chromium-status.appspot.com'
     tree_status_url = base_app_url + '/status'
     store_revisions_url = base_app_url + '/revisions'
