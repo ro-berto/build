@@ -1217,7 +1217,7 @@ def real_main():
       # ninja, use build file mtime to figure out which build system to use.
       # TODO(thakis): Just use main_ninja once the transition is complete.
       if build_directory.AreNinjaFilesNewerThanXcodeFiles(
-          src_dir=options.src_dir)
+          src_dir=options.src_dir):
         main = main_ninja
         options.build_tool = 'ninja'
       else:
