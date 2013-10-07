@@ -33,11 +33,15 @@ def GenSteps(api):
                           platform_ext={'win': '.bat'})
 
   is_release_build = api.properties.get('build_config', 'Release') == 'Release'
+  # The infrastructure team has recommended not to use git yet on the
+  # bots, but it's useful -- even necessary -- when testing locally.
+  # To use, pass "use_git=True" as an argument to run_recipe.py.
+  use_git = api.properties.get('use_git', False)
 
-  api.chromium.set_config('chromium')
+  api.chromium.set_config('chromium', GIT_MODE=use_git)
   # This is needed to make GOMA work properly on Mac.
   if api.platform.is_mac:
-    api.chromium.set_config('chromium_clang')
+    api.chromium.set_config('chromium_clang', GIT_MODE=use_git)
   api.gclient.apply_config('chrome_internal')
 
   # Don't skip the frame_rate data, as it's needed for the frame rate tests.
@@ -185,3 +189,10 @@ def GenTests(api):
         api.properties.tryserver(build_config=build_config) +
         api.platform.name(plat)
       )
+
+  # Test one configuration using git mode.
+  yield (
+    api.test('mac_release_git') +
+    api.properties.scheduled(build_config='Release', use_git=True) +
+    api.platform.name('mac')
+  )
