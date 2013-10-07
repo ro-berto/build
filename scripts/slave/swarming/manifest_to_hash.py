@@ -13,7 +13,6 @@ import os
 import sys
 
 from common import chromium_utils
-from slave import build_dir
 
 def main():
   # Parses arguments

@@ -30,6 +30,6 @@ def AreNinjaFilesNewerThanXcodeFiles(src_dir=None):
   except os.error:
     pass
 
-  return ninja_stat > xcode_stat:
+  return ninja_stat > xcode_stat
 
 # TODO(thakis): Move ConvertBuildDirToLegacy() into this module.
