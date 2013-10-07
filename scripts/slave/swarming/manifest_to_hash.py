@@ -3,9 +3,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-# TODO(thakis): Remove this once the master is restarted after
-# https://codereview.chromium.org/26195002/
-
 """Given a list of manifest, print a dictionary mapping them
 to their hash values.
 """
@@ -15,17 +12,32 @@ import optparse
 import os
 import sys
 
+from common import chromium_utils
+from slave import build_dir
 
 def main():
   # Parses arguments
   parser = optparse.OptionParser(usage='%prog [options]')
   parser.add_option('-n', '--manifest_name', action='append', default=[],
                     help='The name of a manifest to send to swarm. This may '
-                    'be given multiple times to send multiple manifests.')
-  parser.add_option('--manifest_directory', default='',
-                    help='The directory to find the manifest files in. '
-                    'Defaults to %default')
+                         'be given multiple times to send multiple manifests.')
+  parser.add_option('--build-dir',
+                    help='path to main build directory (the parent of the '
+                         'Release or Debug directory)')
+  parser.add_option('--target', help='Release or Debug')
   (options, args) = parser.parse_args()
+
+  assert options.build_dir
+  assert options.target
+  # TODO(thakis): Move this logic into ConvertBuildDirToLegacy().
+  using_ninja = False
+  if sys.platform == 'darwin':
+    using_ninja = True  # manifests always use ninja on os x.
+    options.build_dir = 'src/out'
+  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+      options.build_dir,
+      use_out=(using_ninja or sys.platform.startswith('linux')))
+  manifest_directory = os.path.join(options.build_dir, options.target)
 
   manifests = options.manifest_name
 
@@ -41,7 +53,7 @@ def main():
   # Get the file hash values and output the pair.
   for filepath in manifests:
     test_name = os.path.basename(filepath).split('.')[0]
-    full_filepath = os.path.join(options.manifest_directory, filepath)
+    full_filepath = os.path.join(manifest_directory, filepath)
 
     if not os.path.exists(full_filepath):
       print 'The manifest, %s, doesn\'t exist' % full_filepath

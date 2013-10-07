@@ -23,6 +23,7 @@ import time
 
 from common import chromium_utils
 from slave import slave_utils
+from slave import build_directory
 
 
 # Path of the scripts/slave/ checkout on the slave, found by looking at the
@@ -1215,23 +1216,8 @@ def real_main():
       # on the release channel for a while. Until all release channels are on
       # ninja, use build file mtime to figure out which build system to use.
       # TODO(thakis): Just use main_ninja once the transition is complete.
-      xcode_stat, ninja_stat = 0, 0
-
-      ninja_path = os.path.join(
-          options.src_dir, 'out', options.target, 'build.ninja')
-      try:
-        ninja_stat = os.path.getmtime(ninja_path)
-      except os.error:
-        pass
-
-      xcode_path = os.path.join(
-          options.src_dir, 'build', 'all.xcodeproj', 'project.pbxproj')
-      try:
-        xcode_stat = os.path.getmtime(xcode_path)
-      except os.error:
-        pass
-
-      if ninja_stat > xcode_stat:
+      if build_directory.AreNinjaFilesNewerThanXcodeFiles(
+          src_dir=options.src_dir)
         main = main_ninja
         options.build_tool = 'ninja'
       else:

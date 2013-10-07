@@ -1255,18 +1255,12 @@ class FactoryCommands(object):
       log.msg('No target specified, unable to find result files to '
               'trigger swarm tests')
       return
-    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
-        self._build_dir, target_platform=self._target_platform,
-        use_out=(using_ninja or self._target_platform.startswith('linux')))
-    manifest_directory = self.PathJoin(build_dir, self._target)
 
-    assert self._target_platform
-    if self._target_platform == 'win32':
-      script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.bat')
-    else:
-      script_path = self.PathJoin(self._script_dir, 'manifest_to_hash.py')
-
-    cmd = [script_path, '--manifest_directory', manifest_directory]
+    script_path = self.PathJoin(
+        self._script_dir, 'swarming', 'manifest_to_hash.py')
+    cmd = [self._python, script_path,
+        '--build-dir', self._build_dir,
+        '--target', self._target]
     self._factory.addStep(CalculateIsolatedSha1s,
                           name='manifests_to_hashes',
                           description='manifests_to_hashes',
