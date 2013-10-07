@@ -46,13 +46,14 @@ class ChromiumApi(recipe_api.RecipeApi):
   def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
                results_url=None, perf_dashboard_id=None, test_type=None,
                generate_json_file=False, results_directory=None,
-               build_number=None, builder_name=None, **kwargs):
+               build_number=None, builder_name=None, python_mode=False,
+               **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
 
     t_name, ext = self.m.path.splitext(self.m.path.basename(test))
-    if self.m.platform.is_win and ext == '':
+    if not python_mode and self.m.platform.is_win and ext == '':
       test += '.exe'
 
     full_args = [
@@ -80,7 +81,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--build-number=%s' % build_number)
     if builder_name:
       full_args.append('--builder-name=%s' % builder_name)
-    if ext == '.py':
+    if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
     full_args.append(test)
     full_args.extend(args)

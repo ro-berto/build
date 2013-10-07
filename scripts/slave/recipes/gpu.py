@@ -122,6 +122,7 @@ def GenSteps(api):
       generate_json_file=True,
       build_number=api.properties['buildnumber'],
       builder_name=api.properties['buildername'],
+      python_mode=True,
       env=env)
 
   # Only run the performance tests on Release builds.
