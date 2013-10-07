@@ -36,7 +36,7 @@ def main():
   build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
       options.build_dir,
       use_out=(using_ninja or sys.platform.startswith('linux')))
-  manifest_directory = os.path.join(options.build_dir, options.target)
+  manifest_directory = os.path.join(build_dir, options.target)
 
   manifests = options.manifest_name
 
