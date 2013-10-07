@@ -4,6 +4,9 @@
 
 """Functions for discovering the build directory."""
 
+import os
+
+
 def AreNinjaFilesNewerThanXcodeFiles(src_dir=None):
   """Returns True if the generated ninja files are newer than the generated
   xcode files.
