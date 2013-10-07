@@ -778,15 +778,13 @@ class ChromiumCommands(commands.FactoryCommands):
       wrapper_args = []
     wrapper_args.extend([
         '--annotate=gtest',
-        '--test-type', 'memory test: %s' % test_name
+        '--test-type', 'memory test: %s' % test_name,
+        '--pass-build-dir',
+        '--pass-target',
     ])
     command_class = chromium_step.AnnotatedCommand
 
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
-    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(self._build_dir,
-                                                          self._target_platform)
-    build_dir = os.path.join(build_dir, self._target)
-
     do_step_if = self.TestStepFilter
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
@@ -806,14 +804,13 @@ class ChromiumCommands(commands.FactoryCommands):
       # TODO(maruel): This code should use GetTestStepFilter() instead!
       do_step_if = self.TestStepFilterGTestFilterRequired
 
-    # Memory tests runner script path is relative to build_dir.
+    # Memory tests runner script path is relative to build dir.
     if self._target_platform != 'win32':
       runner = os.path.join('..', '..', '..', self._posix_memory_tests_runner)
     else:
       runner = os.path.join('..', '..', '..', self._win_memory_tests_runner)
 
     cmd = self.GetShellTestCommand(runner, arg_list=[
-        '--build_dir', build_dir,
         '--test', test_name,
         '--tool', tool_name,
         WithProperties('%(gtest_filter)s')],
@@ -834,13 +831,11 @@ class ChromiumCommands(commands.FactoryCommands):
       wrapper_args = []
     wrapper_args.extend([
         '--annotate=gtest',
-        '--test-type', 'heapcheck test: %s' % test_name
+        '--test-type', 'heapcheck test: %s' % test_name,
+        '--pass-build-dir',
+        '--pass-target',
     ])
     command_class = chromium_step.AnnotatedCommand
-
-    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(self._build_dir,
-                                                          self._target_platform)
-    build_dir = os.path.join(build_dir, self._target)
 
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
@@ -853,7 +848,6 @@ class ChromiumCommands(commands.FactoryCommands):
     heapcheck_tool = os.path.join('..', '..', '..', self._heapcheck_tool)
 
     cmd = self.GetShellTestCommand(heapcheck_tool, arg_list=[
-        '--build_dir', build_dir,
         '--test', test_name],
         wrapper_args=wrapper_args,
         factory_properties=factory_properties)

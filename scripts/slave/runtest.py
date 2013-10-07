@@ -648,6 +648,8 @@ def main_mac(options, args):
   else:
     command = [test_exe_path]
   command.extend(args[1:])
+  if options.pass_build_dir:
+    command.append('--build-dir=' + build_dir)
 
   if list_parsers(options.annotate):
     return 0
@@ -739,13 +741,13 @@ def main_ios(options, args):
   # Build the args for invoking iossim, which will install the app on the
   # simulator and launch it, then dump the test results to stdout.
 
-  # Note that the first object (build_dir) returned from the following
-  # method invocations is ignored because only the app executable is needed.
-  _, app_exe_path = get_build_dir_and_exe_path_mac(
+  build_dir, app_exe_path = get_build_dir_and_exe_path_mac(
       options,
       options.target + '-iphonesimulator',
       test_name + '.app')
 
+  # Note that the first object (build_dir) returned from the following
+  # method invocations is ignored because only the app executable is needed.
   _, test_exe_path = get_build_dir_and_exe_path_mac(options,
       os.path.join('ninja-iossim', options.target),
       'iossim')
@@ -755,6 +757,8 @@ def main_ios(options, args):
       app_exe_path, '--'
   ]
   command.extend(args[1:])
+  if options.pass_build_dir:
+    command.append('--build-dir=' + build_dir)
 
   if list_parsers(options.annotate):
     return 0
@@ -895,6 +899,8 @@ def main_linux(options, args):
   else:
     command = [test_exe_path]
   command.extend(args[1:])
+  if options.pass_build_dir:
+    command.append('--build-dir=' + build_dir)
 
   if list_parsers(options.annotate):
     return 0
@@ -1013,6 +1019,8 @@ def main_win(options, args):
                '--output-file=%s' % logfile,
                '--'] + command
   command.extend(args[1:])
+  if options.pass_build_dir:
+    command.append('--build-dir=' + build_dir)
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -1139,9 +1147,14 @@ def main():
 
   option_parser.add_option('', '--target', default='Release',
                            help='build target (Debug or Release)')
+  option_parser.add_option('--pass-target', action='store_true', default=False,
+                           help='pass --target to the spawned test script')
   option_parser.add_option('', '--build-dir',
                            help='path to main build directory (the parent of '
                                 'the Release or Debug directory)')
+  option_parser.add_option('--pass-build-dir', action='store_true',
+                           default=False,
+                           help='pass --build-dir to the spawned test script')
   option_parser.add_option('', '--enable-pageheap', action='store_true',
                            default=False,
                            help='enable pageheap checking for chrome.exe')
@@ -1259,6 +1272,10 @@ def main():
 
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
+
+  if options.pass_target and options.target:
+    args.append('--target=' + options.target)
+  # TODO(thakis): Unify build_dir logic and handle pass_build_dir here too.
 
   # Some test suites are not yet green under LSan, so do not enable LSan for
   # them by default. Bots can override this behavior with lsan_run_all_tests.
