@@ -1712,13 +1712,10 @@ class ChromiumCommands(commands.FactoryCommands):
     This doesn't add a step to get the actual results.
     """
     assert not tests or all(i.endswith('_swarm') for i in tests)
-    using_ninja = (
-        'ninja' in factory_properties['gclient_env'].get('GYP_GENERATORS', ''))
     self._factory.properties.setProperty(
         'run_default_swarm_tests', run_default_swarm_tests, 'BuildFactory')
 
     self.AddGenerateIsolatedHashesStep(
-        using_ninja,
         [t[:-len('_swarm')] for t in tests],
         doStepIf=swarm_commands.TestStepFilterTriggerSwarm)
 

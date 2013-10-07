@@ -125,10 +125,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
         self._build_dir,
         self._target_platform)
 
-    using_ninja = '--build-tool=ninja' in (options or []),
-
-    swarm_command_obj.AddGenerateIsolatedHashesStep(
-        using_ninja=using_ninja, tests=tests, doStepIf=True)
+    swarm_command_obj.AddGenerateIsolatedHashesStep(tests=tests, doStepIf=True)
 
     # Send of all the test requests as a single step.
     swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
@@ -172,15 +169,12 @@ class IsolatedFactory(chromium_factory.ChromiumFactory):
         self._build_dir,
         self._target_platform)
 
-    using_ninja = '--build-tool=ninja' in (options or []),
-
     # Reorder the tests by the order specified in SWARM_TESTS. E.g. the slower
     # tests are retrieved last.
     for swarm_test in SWARM_TESTS:
       if swarm_test.test_name in tests:
         tests.remove(swarm_test.test_name)
-        swarm_command_obj.AddIsolateTest(
-            swarm_test.test_name, using_ninja=using_ninja)
+        swarm_command_obj.AddIsolateTest(swarm_test.test_name)
 
     assert not tests
     return f

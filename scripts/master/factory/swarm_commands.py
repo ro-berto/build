@@ -185,7 +185,7 @@ class SwarmCommands(commands.FactoryCommands):
         workdir=relpath,
         doStepIf=doSwarmingStepIf)
 
-  def AddIsolateTest(self, test_name, using_ninja):
+  def AddIsolateTest(self, test_name):
     if not self._target:
       log.msg('No target specified, unable to find isolated files')
       return

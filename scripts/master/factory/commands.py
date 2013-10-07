@@ -1241,7 +1241,7 @@ class FactoryCommands(object):
         factory_properties=factory_properties, perf_name=perf_name,
         test_name=test_name, command_class=command_class)
 
-  def AddGenerateIsolatedHashesStep(self, using_ninja, tests, doStepIf):
+  def AddGenerateIsolatedHashesStep(self, tests, doStepIf):
     """Adds a step to generate the .isolated files hashes.
 
     |tests| must be the list of targets, e.g. base_unittests, not
