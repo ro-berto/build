@@ -1164,6 +1164,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                 slave_type='AnnotatedBuilderTester',
                                 clobber=False,
                                 compile_timeout=6000,
+                                maxTime=8*60*60,
                                 project=None,
                                 factory_properties=None, options=None,
                                 tests=None,
@@ -1212,7 +1213,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         name='slave_steps',
         cmd=annotation_script,
         factory_properties=factory_properties,
-        env=env)
+        env=env, maxTime=maxTime)
 
     # Add archive build step.
     if factory_properties.get('archive_build'):
