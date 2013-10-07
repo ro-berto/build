@@ -42,7 +42,8 @@ def AdjustIsolatedFlag(args, base_dir):
 
 
 def main():
-  build_dir, args = InterceptFlag('--build-dir', sys.argv)
+  args = sys.argv[1:]  # Drop "isolate_shim.py" wrapper.
+  build_dir, args = InterceptFlag('--build-dir', args)
   target, args = InterceptFlag('--target', args)
 
   if build_dir:
