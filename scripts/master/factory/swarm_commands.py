@@ -12,8 +12,6 @@ from twisted.python import log
 from master import chromium_step
 from master.factory import commands
 
-from common import chromium_utils
-
 import config
 
 
@@ -192,17 +190,16 @@ class SwarmCommands(commands.FactoryCommands):
       log.msg('No target specified, unable to find isolated files')
       return
 
-    isolated_directory, _ = chromium_utils.ConvertBuildDirToLegacy(
-        self._build_dir, target_platform=self._target_platform,
-        use_out=(using_ninja or self._target_platform.startswith('linux')))
-    isolated_directory = self.PathJoin(isolated_directory, self._target)
-    isolated_file = self.PathJoin(isolated_directory, test_name + '.isolated')
-    script_path = self.PathJoin(self._swarming_client_dir, 'isolate.py')
+    isolated_file = test_name + '.isolated'
 
-    args = ['run', '--isolated', isolated_file, '--', '--no-cr']
+    script_path = self.PathJoin(self._swarming_client_dir, 'isolate.py')
+    slave_script_path = self.PathJoin(
+        self._script_dir, 'swarming', 'isolate_shim.py'),
+
+    args = [script_path, 'run', '--isolated', isolated_file, '--', '--no-cr']
     wrapper_args = ['--annotate=gtest', '--test-type=%s' % test_name]
 
-    command = self.GetPythonTestCommand(script_path, arg_list=args,
+    command = self.GetPythonTestCommand(slave_script_path, arg_list=args,
                                         wrapper_args=wrapper_args)
     self.AddTestStep(chromium_step.AnnotatedCommand,
                      test_name,
