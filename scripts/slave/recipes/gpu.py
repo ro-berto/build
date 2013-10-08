@@ -14,8 +14,9 @@ DEPS = [
   'path',
   'platform',
   'properties',
-  'rietveld',
   'python',
+  'rietveld',
+  'step_history',
 ]
 
 SIMPLE_TESTS_TO_RUN = [
@@ -38,6 +39,15 @@ def GenSteps(api):
   # To use, pass "use_git=True" as an argument to run_recipe.py.
   use_git = api.properties.get('use_git', False)
 
+  # Currently content_browsertests' pixel tests use the build revision
+  # (which is assumed to be the SVN revision of src/) to know whether
+  # to regenerate the reference images. This mechanism should be
+  # changed, but for now, pass down the intended value. Note that this
+  # is overridden below using the correct values from gclient. This is
+  # here in order to still support commenting out the block of code
+  # below while testing locally.
+  build_revision = api.properties['revision']
+
   api.chromium.set_config('chromium', GIT_MODE=use_git)
   # This is needed to make GOMA work properly on Mac.
   if api.platform.is_mac:
@@ -59,6 +69,8 @@ def GenSteps(api):
   # api.path.set_dynamic_path('checkout', api.path.slave_build('src'))
 
   yield api.gclient.checkout()
+  gclient_data = api.step_history['gclient sync'].json.output
+  build_revision = gclient_data['solutions']['src/']['revision']
   # If being run as a try server, apply the CL.
   if 'rietveld' in api.properties:
     yield api.rietveld.apply_issue()
@@ -83,7 +95,7 @@ def GenSteps(api):
   args = ['--use-gpu-in-tests',
           '--generated-dir=%s' % generated_dir,
           '--reference-dir=%s' % reference_dir,
-          '--build-revision=%s' % api.properties['revision'],
+          '--build-revision=%s' % build_revision,
           '--gtest_filter=WebGLConformanceTest.*:Gpu*.*',
           '--ui-test-action-max-timeout=45000',
           '--run-manual']
@@ -100,7 +112,7 @@ def GenSteps(api):
 
   # Archive test results
   args = ['--run-id',
-          '%s_%s' % (api.properties['revision'], api.properties['buildername']),
+          '%s_%s' % (build_revision, api.properties['buildername']),
           '--generated-dir', generated_dir,
           '--gpu-reference-dir', reference_dir,
           '--gsutil', gsutil]

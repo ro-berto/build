@@ -186,7 +186,7 @@
       "--use-gpu-in-tests",
       "--generated-dir=[SLAVE_BUILD]\\content_gpu_data\\generated",
       "--reference-dir=[SLAVE_BUILD]\\content_gpu_data\\reference",
-      "--build-revision=204787",
+      "--build-revision=170242",
       "--gtest_filter=WebGLConformanceTest.*:Gpu*.*",
       "--ui-test-action-max-timeout=45000",
       "--run-manual"
@@ -200,7 +200,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\chromium\\archive_gpu_pixel_test_results.py",
       "--run-id",
-      "204787_TestBuilder",
+      "170242_TestBuilder",
       "--generated-dir",
       "[SLAVE_BUILD]\\content_gpu_data\\generated",
       "--gpu-reference-dir",
