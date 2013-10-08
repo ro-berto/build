@@ -1274,7 +1274,7 @@ def main():
   print '[Running on builder: "%s"]' % options.builder_name
 
   if options.pass_target and options.target:
-    args.append('--target=' + options.target)
+    args.extend(['--target', options.target])
   # TODO(thakis): Unify build_dir logic and handle pass_build_dir here too.
 
   # Some test suites are not yet green under LSan, so do not enable LSan for
