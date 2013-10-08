@@ -227,9 +227,9 @@
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
-      "--test-type=webgl_conformance",
+      "--test-type=webgl_conformance_tests",
       "--generate-json-file",
-      "--results-directory=[SLAVE_BUILD]\\gtest-results\\webgl_conformance",
+      "--results-directory=[SLAVE_BUILD]\\gtest-results\\webgl_conformance_tests",
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
@@ -239,6 +239,6 @@
       "--webgl-conformance-version=1.0.1",
       "--browser=debug"
     ],
-    "name": "webgl_conformance"
+    "name": "webgl_conformance_tests"
   }
 ]

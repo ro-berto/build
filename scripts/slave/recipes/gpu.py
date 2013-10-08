@@ -115,6 +115,8 @@ def GenSteps(api):
   env = {}
   if api.platform.is_linux:
     env['CHROME_DEVEL_SANDBOX'] = '/opt/chromium/chrome_sandbox'
+  # Note that the step name must end in 'test' or 'tests' in order for
+  # the results to automatically show up on the flakiness dashboard.
   yield api.chromium.runtests(
       str(api.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
       ['webgl_conformance',
@@ -122,11 +124,11 @@ def GenSteps(api):
           '--webgl-conformance-version=1.0.1',
           '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
       annotate='gtest',
-      name='webgl_conformance',
-      test_type='webgl_conformance',
+      name='webgl_conformance_tests',
+      test_type='webgl_conformance_tests',
       generate_json_file=True,
       results_directory=
-          api.path.slave_build('gtest-results', 'webgl_conformance'),
+          api.path.slave_build('gtest-results', 'webgl_conformance_tests'),
       build_number=api.properties['buildnumber'],
       builder_name=api.properties['buildername'],
       python_mode=True,
