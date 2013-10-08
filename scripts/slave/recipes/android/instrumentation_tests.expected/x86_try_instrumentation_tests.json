@@ -177,7 +177,8 @@
     "cmd": [
       "[SLAVE_BUILD]/src/repo/build/full_deploy.py",
       "-v",
-      "--debug"
+      "--debug",
+      "--non-rooted"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
@@ -186,7 +187,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_intrumentation_tests.py",
+      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
       "-a",
       "Smoke",
       "-d",
@@ -199,7 +200,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_intrumentation_tests.py",
+      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
       "-a",
       "SmallTest",
       "-d",
@@ -212,7 +213,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_intrumentation_tests.py",
+      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
       "-a",
       "MediumTest",
       "-d",
@@ -225,7 +226,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_intrumentation_tests.py",
+      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
       "-a",
       "LargeTest",
       "-d",

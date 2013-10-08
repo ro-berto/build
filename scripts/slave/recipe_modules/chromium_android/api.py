@@ -221,7 +221,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def instrumentation_tests(self, official=False):
     for test in self.c.instrumentation_tests:
       annotation = test.annotation
-      cmd = [self.c.internal_dir('build', 'run_intrumentation_tests.py'),
+      cmd = [self.c.internal_dir('build', 'run_instrumentation_tests.py'),
              '-a', annotation, '-d', self.m.path.checkout()]
       if test.exclude_annotation:
         cmd.extend(['-e', test.exclude_annotation])

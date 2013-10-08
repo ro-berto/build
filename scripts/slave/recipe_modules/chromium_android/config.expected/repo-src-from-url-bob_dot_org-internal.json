@@ -125,6 +125,9 @@
   }, 
   "x86_try_instrumentation_tests": {
     "apply_svn_patch": true, 
+    "extra_deploy_opts": [
+      "--non-rooted"
+    ], 
     "instrumentation_tests": [
       {
         "annotation": "Smoke"

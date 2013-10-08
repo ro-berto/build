@@ -128,4 +128,4 @@ def try_instrumentation_tests(c):
 
 @config_ctx(includes=['x86_base', 'try_base', 'instrumentation_tests'])
 def x86_try_instrumentation_tests(c):
-  pass
+  c.extra_deploy_opts.append('--non-rooted')

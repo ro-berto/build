@@ -176,7 +176,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_intrumentation_tests.py",
+      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
       "-a",
       "EnormousTest",
       "-d",
@@ -191,7 +191,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_intrumentation_tests.py",
+      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
       "-a",
       "Feature=Sync",
       "-d",
