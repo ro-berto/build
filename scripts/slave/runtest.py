@@ -649,7 +649,7 @@ def main_mac(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
   if options.pass_build_dir:
-    command.append('--build-dir=' + build_dir)
+    command.extend(['--build-dir', build_dir])
 
   if list_parsers(options.annotate):
     return 0
@@ -758,7 +758,7 @@ def main_ios(options, args):
   ]
   command.extend(args[1:])
   if options.pass_build_dir:
-    command.append('--build-dir=' + build_dir)
+    command.extend(['--build-dir', build_dir])
 
   if list_parsers(options.annotate):
     return 0
@@ -900,7 +900,7 @@ def main_linux(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
   if options.pass_build_dir:
-    command.append('--build-dir=' + build_dir)
+    command.extend(['--build-dir', build_dir])
 
   if list_parsers(options.annotate):
     return 0
@@ -1020,7 +1020,7 @@ def main_win(options, args):
                '--'] + command
   command.extend(args[1:])
   if options.pass_build_dir:
-    command.append('--build-dir=' + build_dir)
+    command.extend(['--build-dir', build_dir])
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
