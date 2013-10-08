@@ -633,6 +633,34 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
                                 do_step_if=self.TestStepFilter)
 
+  def AddTelemetryPerfUnitTests(self):
+    step_name = 'telemetry_unittests'
+    if self._target_os == 'android':
+      args = ['--browser=android-content-shell']
+    else:
+      args = ['--browser=%s' % self._target.lower()]
+    cmd = self.GetPythonTestCommand(self._telemetry_perf_unit_tests,
+                                    arg_list=args,
+                                    wrapper_args=['--annotate=gtest',
+                                                  '--test-type=%s' % step_name])
+
+    self.AddTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
+                     do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerTelemetryPerfUnitTests(self):
+    step_name = 'telemetry_unittests'
+    if self._target_os == 'android':
+      args = ['--browser=android-content-shell']
+    else:
+      args = ['--browser=%s' % self._target.lower()]
+    cmd = self.GetPythonTestCommand(self._telemetry_perf_unit_tests,
+                                    arg_list=args,
+                                    wrapper_args=['--annotate=gtest',
+                                                  '--test-type=%s' % step_name])
+
+    self.AddBuildrunnerTestStep(chromium_step.AnnotatedCommand, step_name, cmd,
+                                do_step_if=self.TestStepFilter)
+
   def AddInstallerTests(self, factory_properties):
     if self._target_platform == 'win32':
       self.AddGTestTestStep('installer_util_unittests',

@@ -450,6 +450,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryUnitTests()
     if R('telemetry_unittests_br'):
       f.AddBuildrunnerTelemetryUnitTests()
+    if R('telemetry_perf_unittests'):
+      f.AddTelemetryPerfUnitTests()
+    if R('telemetry_perf_unittests_br'):
+      f.AddBuildrunnerTelemetryPerfUnitTests()
     if R('ui_unittests'):
       f.AddGTestTestStep('ui_unittests', fp)
     if R('ui_unittests_br'):
