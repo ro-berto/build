@@ -605,14 +605,6 @@ class FactoryCommands(object):
     """
     return self.TestStepFilterImpl(bStep, True)
 
-  def TestStepFilterGTestFilterRequired(self, bStep):
-    """Do not run the test by default.
-
-    Note: this should only be used on the Try Server!
-    """
-    # TODO(maruel): Replace this caller of this code with GetTestStepFilter().
-    return self.TestStepFilterImpl(bStep, False)
-
   def TestStepFilterImpl(self, bStep, default):
     """Returns True if the step should be executed, instead of being skipped.
 

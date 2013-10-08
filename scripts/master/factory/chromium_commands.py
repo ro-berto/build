@@ -813,7 +813,6 @@ class ChromiumCommands(commands.FactoryCommands):
     command_class = chromium_step.AnnotatedCommand
 
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
-    do_step_if = self.TestStepFilter
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
       test_name = test_name[0:matched.start()]
@@ -826,11 +825,6 @@ class ChromiumCommands(commands.FactoryCommands):
         sharding_args = factory_properties.get('sharding_args')
         if sharding_args:
           wrapper_args.extend(['--sharding-args', sharding_args])
-    elif test_name.endswith('_gtest_filter_required'):
-      test_name = test_name[0:-len('_gtest_filter_required')]
-      # This is only to be run on the Try Server.
-      # TODO(maruel): This code should use GetTestStepFilter() instead!
-      do_step_if = self.TestStepFilterGTestFilterRequired
 
     # Memory tests runner script path is relative to build dir.
     if self._target_platform != 'win32':
@@ -840,15 +834,14 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = self.GetShellTestCommand(runner, arg_list=[
         '--test', test_name,
-        '--tool', tool_name,
-        WithProperties('%(gtest_filter)s')],
+        '--tool', tool_name],
         wrapper_args=wrapper_args,
         factory_properties=factory_properties)
 
     test_name = 'memory test: %s' % test_name
     self.AddTestStep(command_class, test_name, cmd,
                      timeout=timeout,
-                     do_step_if=do_step_if)
+                     do_step_if=self.TestStepFilter)
 
   def AddHeapcheckTest(self, test_name, timeout, factory_properties,
                        wrapper_args=None):
