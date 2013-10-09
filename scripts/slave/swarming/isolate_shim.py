@@ -42,7 +42,8 @@ def AdjustIsolatedFlag(args, base_dir):
 
 
 def main():
-  args = sys.argv[1:]  # Drop "isolate_shim.py" wrapper.
+  python = 'python_slave' if sys.platform == 'win32' else 'python'
+  args = [python] + sys.argv[1:]  # Drop "isolate_shim.py" wrapper.
   build_dir, args = InterceptFlag('--build-dir', args)
   target, args = InterceptFlag('--target', args)
 
