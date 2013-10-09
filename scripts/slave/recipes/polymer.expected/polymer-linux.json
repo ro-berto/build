@@ -82,6 +82,21 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nshutil.rmtree('node_modules')\n"
+    ],
+    "cwd": "[SLAVE_BUILD]/polymer",
+    "name": "clean-install",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import shutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@shutil.rmtree('node_modules')@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
       "npm",
       "install",
       "--tmp",
