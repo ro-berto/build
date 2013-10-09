@@ -462,11 +462,11 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('views_unittests', fp)
     if R('views_br'):
       f.AddBuildrunnerGTest('views_unittests', fp)
-    if R('aura'):
+    if R('aura', 'aura_unittests'):
       f.AddGTestTestStep('aura_unittests', fp)
-    if R('aura_br'):
+    if R('aura_br', 'aura_unittests_br'):
       f.AddBuildrunnerGTest('aura_unittests', fp)
-    if R('aura_shell') or R('ash') or R('ash_unittests'):
+    if R('aura_shell', 'ash', 'ash_unittests'):
       f.AddGTestTestStep('ash_unittests', fp)
     if R('aura_shell_br', 'ash_br', 'ash_unittests_br'):
       f.AddBuildrunnerGTest('ash_unittests', fp)

@@ -139,23 +139,21 @@ CHROMIUM_LKGR_STEPS = {
     # 'Interactive Tests (dbg)': [
     #   'interactive_ui_tests',
     # ],
-    'Win Aura Builder': [
+    'Win NonAura Builder': [
       'compile',
     ],
-    'Win Aura Tests (1)': [
-      'ash_unittests',
-      'aura_unittests',
+    'Win NonAura Tests (1)': [
       'browser_tests',
       'content_browsertests',
     ],
-    'Win Aura Tests (2)': [
+    'Win NonAura Tests (2)': [
       'browser_tests',
       'compositor_unittests',
       'content_unittests',
       'unit_tests',
       'views_unittests',
     ],
-    'Win Aura Tests (3)': [
+    'Win NonAura Tests (3)': [
       'browser_tests',
       'interactive_ui_tests',
     ],
