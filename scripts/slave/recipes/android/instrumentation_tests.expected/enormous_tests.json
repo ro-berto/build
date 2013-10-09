@@ -135,6 +135,18 @@
   },
   {
     "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/android/provision_devices.py",
       "-t",
       "Debug"
@@ -203,6 +215,38 @@
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "feature=sync_instrumentation_tests"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "name": "logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "--more-info",
+      "[SLAVE_BUILD]/src/out/Debug/full_log"
+    ],
+    "name": "stack_tool_with_logcat_dump"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "name": "stack_tool_for_tombstones"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/asan_symbolize.py",
+      "-l",
+      "[SLAVE_BUILD]/src/out/Debug/full_log"
+    ],
+    "name": "stack_tool_for_asan"
   },
   {
     "cmd": [

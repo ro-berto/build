@@ -187,13 +187,13 @@ class AndroidApi(recipe_api.RecipeApi):
                   self.m.properties.get('parent_buildnumber')),
            '-g', self.m.path.build('scripts', 'slave', 'gsutil')])
 
-# TODO(sivachandra): Uncomment this once the logcat monitor is enabled.
-#  def spawn_logcat_monitor(self):
-#    return self.m.step(
-#        'spawn_logcat_monitor',
-#        [self.c.cr_build_android('adb_logcat_monitor.py'),
-#         self.m.chromium.c.build_dir('logcat')],
-#        env=self.get_env())
+  def spawn_logcat_monitor(self):
+    return self.m.step(
+        'spawn_logcat_monitor',
+        [self.m.path.build('scripts', 'slave', 'daemonizer.py'),
+         '--', self.c.cr_build_android('adb_logcat_monitor.py'),
+         self.m.chromium.c.build_dir('logcat')],
+        env=self.get_env())
 
   def detect_and_setup_devices(self):
     yield self.m.step(
@@ -228,31 +228,29 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.m.step(annotation.lower() + '_instrumentation_tests',
                          cmd, env=self.get_env())
 
-# TODO(sivachandra): Uncomment this once the logcat monitor is enabled.
-#  def logcat_dump(self):
-#    return self.m.step(
-#        'logcat_dump',
-#        [self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
-#         self.m.path.checkout('out', 'logcat')])
+  def logcat_dump(self):
+    return self.m.step(
+        'logcat_dump',
+        [self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
+         self.m.path.checkout('out', 'logcat')])
 
-# TODO(sivachandra): Uncomment this once the logcat monitor is enabled.
-#  def stack_tool_steps(self):
-#    if self.c.run_stack_tool_steps:
-#      log_file = self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
-#                                      'full_log')
-#      yield self.m.step(
-#          'stack_tool_with_logcat_dump',
-#          [self.m.path.checkout('third_party', 'android_platform', 'development',
-#                                'scripts', 'stack'),
-#           '--more-info', log_file])
-#      yield self.m.step(
-#          'stack_tool_for_tombstones',
-#          [self.m.path.checkout('build', 'android', 'tombstones.py'),
-#           '-a', '-s', '-w'])
-#      yield self.m.step(
-#          'stack_tool_for_asan',
-#          [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
-#           '-l', log_file])
+  def stack_tool_steps(self):
+    if self.c.run_stack_tool_steps:
+      log_file = self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
+                                      'full_log')
+      yield self.m.step(
+          'stack_tool_with_logcat_dump',
+          [self.m.path.checkout('third_party', 'android_platform', 'development',
+                                'scripts', 'stack'),
+           '--more-info', log_file])
+      yield self.m.step(
+          'stack_tool_for_tombstones',
+          [self.m.path.checkout('build', 'android', 'tombstones.py'),
+           '-a', '-s', '-w'])
+      yield self.m.step(
+          'stack_tool_for_asan',
+          [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
+           '-l', log_file])
 
   def test_report(self):
     return self.m.python.inline(
@@ -277,14 +275,10 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.run_tree_truth()
     
   def common_tests_setup_steps(self):
-    # TODO(sivachandra): Uncomment this step when 'spawing' background processes
-    # from recipes is sorted out.
-    # yield self.spawn_logcat_monitor()
+    yield self.spawn_logcat_monitor()
     yield self.detect_and_setup_devices()
 
   def common_tests_final_steps(self):
-    # TODO(sivachandra): Uncomment these two steps which depend on logcat
-    # monitor when the logcat monitor is enabled.
-    # yield self.logcat_dump()
-    # yield self.stack_tool_steps()
+    yield self.logcat_dump()
+    yield self.stack_tool_steps()
     yield self.test_report()
