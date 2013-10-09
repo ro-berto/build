@@ -16,6 +16,7 @@ import urllib
 import urllib2
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 
@@ -154,7 +155,7 @@ def main():
     options.build_output_dir = os.path.join(options.build_dir,
                                             options.build_output_dir)
   else:
-    options.build_output_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+    options.build_output_dir, bad = build_directory.ConvertBuildDirToLegacy(
         options.build_dir)
     if bad:
       return slave_utils.WARNING_EXIT_CODE

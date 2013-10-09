@@ -1313,42 +1313,6 @@ def AbsoluteCanonicalPath(*path):
   return os.path.realpath(os.path.abspath(os.path.expanduser(file_path)))
 
 
-def ConvertBuildDirToLegacy(build_dir, target_platform=None, use_out=False):
-  """Returns a tuple of (build_dir<str>, legacy<bool>).
-
-  This function will print a warning to stderr. If possible, the caller of this
-  function should use the legacy boolean to turn the step into a WARNING.
-  Ideally, this function is a temporary step and NOTHING should take the branch
-  in this function after 3/2013 and this code can be removed.
-  """
-  target_platform = target_platform or sys.platform
-  legacy_paths = {
-    'darwin': 'xcodebuild',
-    'linux': 'sconsbuild',
-  }
-  bad = False
-
-  platform_key = None
-  for key in legacy_paths:
-    if target_platform.startswith(key):
-      platform_key = key
-      break
-
-  if (build_dir == 'src/build' and platform_key):
-    print >> sys.stderr, (
-        'WARNING: Passed "%s" as --build-dir option on %s. '
-        'This is almost certainly incorrect.' % (build_dir, platform_key))
-    if use_out:
-      legacy_path = 'out'
-    else:
-      legacy_path = legacy_paths[platform_key]
-    build_dir = os.path.join(os.path.dirname(build_dir), legacy_path)
-    print >> sys.stderr, ('Assuming you meant "%s"' % build_dir)
-    bad = True
-
-  return (build_dir, bad)
-
-
 def IsolatedImportFromPath(path, extra_paths=None):
   dir_path, module_file = os.path.split(path)
   module_file = os.path.splitext(module_file)[0]

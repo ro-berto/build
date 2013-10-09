@@ -30,6 +30,7 @@ import re
 
 from common import archive_utils
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 import config
@@ -133,7 +134,7 @@ class StagerBase(object):
                                     'Source')
     self._v8_dir = os.path.join(self._src_dir, 'v8')
 
-    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+    build_dir, _ = build_directory.ConvertBuildDirToLegacy(
         options.build_dir, use_out=chromium_utils.IsLinux())
     self._build_dir = os.path.join(build_dir, options.target)
     if chromium_utils.IsWindows():

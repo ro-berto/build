@@ -40,6 +40,7 @@ sys.path.insert(0, os.path.abspath('src/tools/python'))
 from common import chromium_utils
 from common import gtest_utils
 import config
+from slave import build_directory
 from slave import crash_utils
 from slave import gtest_slave_utils
 from slave import process_log_utils
@@ -465,7 +466,7 @@ def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
   """
   is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
                       .get('GYP_GENERATORS', '') in ('ninja', 'make'))
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
       options.build_dir, use_out=is_make_or_ninja)
   build_dir = os.path.normpath(os.path.abspath(build_dir))
   exe_path = os.path.join(build_dir, target_dir, exe_name)
@@ -813,7 +814,7 @@ def main_linux(options, args):
       os.path.join(os.path.dirname(options.build_dir), 'sconsbuild'))
   out_exists = os.path.exists(
       os.path.join(os.path.dirname(options.build_dir), 'out'))
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
       options.build_dir, use_out=(out_exists and not sconsbuild_exists))
   build_dir = os.path.normpath(os.path.abspath(build_dir))
   if options.slave_name:

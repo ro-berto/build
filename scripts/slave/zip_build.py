@@ -18,6 +18,7 @@ import sys
 import tempfile
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 class StagingError(Exception): pass
@@ -301,7 +302,7 @@ def Archive(options):
       options.factory_properties.get('gclient_env', {}).get('GYP_GENERATORS') in
       ('make', 'ninja')
   )
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
       options.build_dir, use_out=make_or_ninja)
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 

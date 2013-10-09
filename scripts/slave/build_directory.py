@@ -5,6 +5,7 @@
 """Functions for discovering the build directory."""
 
 import os
+import sys
 
 
 def AreNinjaFilesNewerThanXcodeFiles(src_dir=None):
@@ -35,4 +36,34 @@ def AreNinjaFilesNewerThanXcodeFiles(src_dir=None):
 
   return ninja_stat > xcode_stat
 
-# TODO(thakis): Move ConvertBuildDirToLegacy() into this module.
+
+def ConvertBuildDirToLegacy(build_dir, use_out=False):
+  """Returns a tuple of (build_dir<str>, legacy<bool>).
+  """
+  # TODO(thakis): Make this the canonical source of truth for build_dir for
+  # slave scripts, remove all parameters.
+  legacy_paths = {
+    'darwin': 'xcodebuild',
+    'linux': 'sconsbuild',
+  }
+  bad = False
+
+  platform_key = None
+  for key in legacy_paths:
+    if sys.platform.startswith(key):
+      platform_key = key
+      break
+
+  if (build_dir == 'src/build' and platform_key):
+    print >> sys.stderr, (
+        'WARNING: Passed "%s" as --build-dir option on %s. '
+        'This is almost certainly incorrect.' % (build_dir, platform_key))
+    if use_out:
+      legacy_path = 'out'
+    else:
+      legacy_path = legacy_paths[platform_key]
+    build_dir = os.path.join(os.path.dirname(build_dir), legacy_path)
+    print >> sys.stderr, ('Assuming you meant "%s"' % build_dir)
+    bad = True
+
+  return (build_dir, bad)

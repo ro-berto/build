@@ -24,6 +24,7 @@ import stat
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 from slave import zip_build
 
@@ -51,7 +52,7 @@ def ShouldPackageFile(filename, target):
 
 
 def archive(options, args):
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
       options.build_dir, use_out=chromium_utils.IsLinux())
   build_dir = os.path.join(build_dir, options.target)
   src_dir = os.path.abspath(os.path.dirname(options.build_dir))

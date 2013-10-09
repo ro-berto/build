@@ -11,6 +11,7 @@ Intercepts the --build-dir and --target flags and inserts them into the
 
 import os
 import sys
+from slave import build_directory
 from common import chromium_utils
 
 
@@ -57,7 +58,7 @@ def main():
     if sys.platform == 'darwin':
       using_ninja = True  # isolate.py always uses ninja on OS X.
       build_dir = 'src/out'
-    build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+    build_dir, _ = build_directory.ConvertBuildDirToLegacy(
         build_dir, use_out=(using_ninja or sys.platform.startswith('linux')))
     AdjustIsolatedFlag(args, os.path.join(build_dir, target))
 

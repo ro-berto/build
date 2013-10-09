@@ -12,7 +12,7 @@ import optparse
 import os
 import sys
 
-from common import chromium_utils
+from slave import build_directory
 
 def main():
   # Parses arguments
@@ -33,7 +33,7 @@ def main():
   if sys.platform == 'darwin':
     using_ninja = True  # manifests always use ninja on os x.
     options.build_dir = 'src/out'
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
       options.build_dir,
       use_out=(using_ninja or sys.platform.startswith('linux')))
   manifest_directory = os.path.join(build_dir, options.target)

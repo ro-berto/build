@@ -22,6 +22,7 @@ import tempfile
 import threading
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 from slave import xvfb
 from slave.chromium import playback_benchmark_replay
@@ -46,7 +47,7 @@ def print_result(top, name, result, refbuild):
 
 
 def run_benchmark(options, use_refbuild, benchmark_results):
-  build_dir, bad = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  build_dir, bad = build_directory.ConvertBuildDirToLegacy(options.build_dir)
   build_dir = os.path.abspath(options.build_dir)
 
   result = slave_utils.WARNING_EXIT_CODE if bad else 0

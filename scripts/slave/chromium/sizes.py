@@ -19,7 +19,7 @@ import stat
 import subprocess
 import sys
 
-from common import chromium_utils
+from slave import build_directory
 
 def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
@@ -32,7 +32,7 @@ def main_mac(options, args):
   or zero on success.
   """
   out_dir_path = os.path.join(os.path.dirname(options.build_dir), 'out')
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
       options.build_dir, use_out=os.path.exists(out_dir_path))
   target_dir = os.path.join(build_dir, options.target)
 
@@ -233,7 +233,7 @@ def main_linux(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  build_dir, _ = chromium_utils.ConvertBuildDirToLegacy(options.build_dir)
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(options.build_dir)
   target_dir = os.path.join(build_dir, options.target)
 
   binaries = [

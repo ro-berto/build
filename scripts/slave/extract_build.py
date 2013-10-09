@@ -15,6 +15,7 @@ import urllib
 import urllib2
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 class ExtractHandler(object):
@@ -108,7 +109,7 @@ def real_main(options):
   if options.build_output_dir:
     build_output_dir = os.path.join(options.build_dir, options.build_output_dir)
   else:
-    build_output_dir, bad = chromium_utils.ConvertBuildDirToLegacy(
+    build_output_dir, bad = build_directory.ConvertBuildDirToLegacy(
         options.build_dir)
     if bad:
       normal_retval = slave_utils.WARNING_EXIT_CODE
