@@ -44,7 +44,6 @@ def ConvertBuildDirToLegacy(build_dir, use_out=False):
   # slave scripts, remove all parameters.
   legacy_paths = {
     'darwin': 'xcodebuild',
-    'linux': 'sconsbuild',
   }
   bad = False
 

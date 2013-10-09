@@ -810,12 +810,10 @@ def main_linux(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  sconsbuild_exists = os.path.exists(
-      os.path.join(os.path.dirname(options.build_dir), 'sconsbuild'))
   out_exists = os.path.exists(
       os.path.join(os.path.dirname(options.build_dir), 'out'))
   build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir, use_out=(out_exists and not sconsbuild_exists))
+      options.build_dir, use_out=out_exists)
   build_dir = os.path.normpath(os.path.abspath(build_dir))
   if options.slave_name:
     slave_name = options.slave_name

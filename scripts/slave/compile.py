@@ -17,7 +17,6 @@ import optparse
 import os
 import re
 import shlex
-import shutil
 import sys
 import time
 
@@ -506,9 +505,8 @@ def main_xcode(options, args):
 def common_make_settings(
     command, options, env, crosstool=None, compiler=None):
   """
-  Sets desirable environment variables and command-line options
-  that are common to the Make and SCons builds. Used on Linux
-  and for the mac make build.
+  Sets desirable environment variables and command-line options that are used
+  in the Make build.
   """
   assert compiler in (None, 'clang', 'goma', 'goma-clang', 'jsonclang')
   maybe_set_official_build_envvars(options, env)
@@ -577,24 +575,7 @@ def common_make_settings(
     command.append('CC.host=' + env['CC'])
     command.append('CXX.host=' + env['CXX'])
 
-    if chromium_utils.IsMac():
-      # The default process limit on 10.6 is 266 (`sysctl kern.maxprocperuid`),
-      # and about 100 processes are used by the system. The webkit bindings
-      # generation scripts open a preprocessor child process, so building at
-      # -j100 runs into the process limit. For now, just build with -j50.
-      goma_jobs = 50
-      if options.clobber:
-        # Disable compiles on local machine.  When the goma server-side object
-        # file cache is warm, this can speed up clobber builds by up to 30%.
-        env['GOMA_USE_LOCAL'] = '0'
-      # Temproary hack to try failing fast when the server looks unhealthy.
-      # 30 seconds is chosen because a local compile is almost certainly
-      # faster.
-      # crbug.com/257467
-      env['GOMA_RETRY'] = '0'
-      env['GOMA_COMPILER_PROXY_RPC_TIMEOUT_SECS'] = '30'
-    else:
-      goma_jobs = 50
+    goma_jobs = 50
     if jobs < goma_jobs:
       jobs = goma_jobs
     command.append('-j%d' % jobs)
@@ -641,23 +622,6 @@ def main_make(options, args):
       working_dir = options.build_dir
     else:
       working_dir = options.src_dir
-
-  # Lots of test-execution scripts hard-code 'sconsbuild' as the output
-  # directory.  Accomodate them.
-  # TODO:  remove when build_dir is properly parameterized in tests.
-  sconsbuild = os.path.join(working_dir, 'sconsbuild')
-  if os.path.islink(sconsbuild):
-    if os.readlink(sconsbuild) != 'out':
-      os.remove(sconsbuild)
-  elif os.path.exists(sconsbuild):
-    dead = sconsbuild + '.dead'
-    if os.path.isdir(dead):
-      shutil.rmtree(dead)
-    elif os.path.isfile(dead):
-      os.remove(dead)
-    os.rename(sconsbuild, sconsbuild+'.dead')
-  if not os.path.lexists(sconsbuild):
-    os.symlink('out', sconsbuild)
 
   os.chdir(working_dir)
   common_make_settings(command, options, env, options.crosstool,
@@ -885,50 +849,6 @@ def main_ninja(options, args):
   return result
 
 
-def main_scons(options, args):
-  """Interprets options, clobbers object files, and calls scons.
-  """
-  options.build_dir = os.path.abspath(options.build_dir)
-  if options.clobber:
-    print('Removing %s' % options.target_output_dir)
-    chromium_utils.RemoveDirectory(options.target_output_dir)
-
-  os.chdir(options.build_dir)
-
-  if sys.platform == 'win32':
-    command = ['hammer.bat']
-  else:
-    command = ['hammer']
-
-  env = EchoDict(os.environ)
-  if sys.platform == 'linux2':
-    common_make_settings(command, options, env)
-  else:
-    command.extend(['-k'])
-
-  command.extend([
-      # Force scons to always check for dependency changes.
-      '--implicit-deps-changed',
-      '--mode=' + options.target,
-  ])
-
-  # Here's what you can uncomment if you need to see more info
-  # about what the build is doing on a slave:
-  #
-  #   VERBOSE=1 (a setting in our local SCons config) replaces
-  #   the "Compiling ..." and "Linking ..." lines with the
-  #   actual executed command line(s)
-  #
-  #   --debug=explain (a SCons option) will tell you why SCons
-  #   is deciding to rebuild thing (the target doesn't exist,
-  #   which .h file(s) changed, etc.)
-  #
-  #command.extend(['--debug=explain', 'VERBOSE=1'])
-  command.extend(options.build_args + args)
-  env.print_overrides()
-  return chromium_utils.RunCommand(command, env=env)
-
-
 def main_win(options, args):
   """Interprets options, clobbers object files, and calls the build tool.
   """
@@ -1133,8 +1053,6 @@ def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
     ret = os.path.join(src_dir, 'out')
   elif build_tool in ['msvs', 'vs', 'ib']:
     ret = os.path.join(src_dir, 'build', target)
-  elif build_tool == 'scons':
-    ret = os.path.join(src_dir, 'sconsbuild', target)
   else:
     raise NotImplementedError()
   return os.path.abspath(ret)
@@ -1170,7 +1088,7 @@ def real_main():
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
   option_parser.add_option('', '--build-tool', default=None,
-                           help='specify build tool (ib, vs, scons, xcode)')
+                           help='specify build tool (ib, vs, xcode)')
   option_parser.add_option('', '--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
   option_parser.add_option('', '--compiler', default=None,
@@ -1236,7 +1154,6 @@ def real_main():
         'make' : main_make,
         'make-android' : main_make_android,
         'ninja' : main_ninja,
-        'scons' : main_scons,
         'xcode' : main_xcode,
     }
     main = build_tool_map.get(options.build_tool)
