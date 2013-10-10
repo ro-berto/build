@@ -219,12 +219,3 @@ class V8Commands(commands.FactoryCommands):
     cmd = [self._python, self._v8archive_tool, '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'Archiving', cmd,
                  workdir='build/v8')
-
-  def AddMoveExtracted(self):
-    """Adds a step to download and extract a previously archived build."""
-    cmd = ('cp -R sconsbuild/release/* v8/.')
-    self._factory.addStep(shell.ShellCommand,
-                          description='Move extracted to bleeding',
-                          timeout=600,
-                          workdir='build',
-                          command=cmd)

@@ -78,7 +78,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('simpleleak'): f.AddSimpleLeakTest()
 
   def V8Factory(self, target='Release', clobber=False, tests=None, mode=None,
-                slave_type='BuilderTester', options=None, compile_timeout=1200,
+                options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
                 target_arch=None, shard_count=1,
                 shard_run=1, shell_flags=None, isolates=False,
@@ -110,7 +110,7 @@ class V8Factory(gclient_factory.GClientFactory):
 
     factory = self.BuildFactory(target=target, clobber=clobber, tests=tests,
                                 mode=mode,
-                                slave_type=slave_type,
+                                slave_type='BuilderTester',
                                 options=options,
                                 compile_timeout=compile_timeout,
                                 build_url=build_url,
@@ -133,10 +133,6 @@ class V8Factory(gclient_factory.GClientFactory):
     if factory_properties.get('archive_build'):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))
-
-    # This is for the arm tester board (we don't have other pure tester slaves).
-    if (slave_type == 'Tester'):
-      v8_cmd_obj.AddMoveExtracted()
 
     # Add all the tests.
     self._AddTests(v8_cmd_obj, tests, mode, factory_properties)
