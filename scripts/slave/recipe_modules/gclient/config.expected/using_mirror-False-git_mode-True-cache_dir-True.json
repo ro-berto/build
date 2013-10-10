@@ -137,6 +137,7 @@
     ]
   }, 
   "nacl": "nacl only supports svn", 
+  "oilpan": "Oilpan requires SVN for now", 
   "tools_build": {
     "cache_dir": "CACHE_DIR", 
     "solutions": [

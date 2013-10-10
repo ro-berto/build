@@ -188,6 +188,26 @@
       }
     ]
   }, 
+  "oilpan": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "custom_deps": {
+          "src/third_party/WebKit/LayoutTests": null, 
+          "src/webkit/data/layout_tests/LayoutTests": null
+        }, 
+        "custom_vars": {
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_revision": "HEAD", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/branches/oilpan"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "url": "svn://svn-mirror.golo.chromium.org/chrome/trunk/src"
+      }
+    ]
+  }, 
   "tools_build": "tools_build only supports git", 
   "v8": {
     "cache_dir": null, 

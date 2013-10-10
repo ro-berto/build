@@ -211,6 +211,7 @@ def main(argv):
       'master.chromium.mac': 'ChromiumMac',
       'master.chromium.memory': 'ChromiumMemory',
       'master.chromium.memory.fyi': 'ChromiumMemoryFYI',
+      'master.chromium.oilpan': 'Oilpan',
       'master.chromium.perf': 'ChromiumPerf',
       'master.chromium.perf_av': 'ChromiumPerfAv',
       'master.chromium.swarm': 'ChromiumSwarm',

@@ -83,8 +83,8 @@ def ChromeInternalSrcURL(c):
   else:
     return ChromeSvnSubURL(c, 'chrome-internal', 'trunk', 'src-internal')
 
-def mirror_only(c, obj):
-  return obj if c.USE_MIRROR else obj.__class__()
+def mirror_only(c, obj, default=None):
+  return obj if c.USE_MIRROR else (default or obj.__class__())
 
 @config_ctx()
 def chromium_bare(c):
@@ -163,6 +163,24 @@ def blink(c):
     'src/third_party/WebKit': BlinkURL(c)
   }
   c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
+
+@config_ctx(includes=['chromium'])
+def oilpan(c):
+  if c.GIT_MODE:
+    raise BadConf("Oilpan requires SVN for now")
+  c.solutions[0].custom_vars = {
+    'webkit_trunk': ChromiumSvnSubURL(c, 'blink', 'branches', 'oilpan')
+  }
+  c.solutions[0].custom_vars['sourceforge_url'] = mirror_only(
+    c,
+    'svn://svn-mirror.golo.chromium.org/%(repo)s',
+    'svn://svn.chromium.org/%(repo)s'
+  )
+
+  c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
+  c.solutions[0].revision = '197341'
+  del c.got_revision_mapping['src']
+  c.got_revision_mapping['src/third_party/WebKit/Source'] = 'got_revision'
 
 @config_ctx(includes=['blink', 'chrome_internal'])
 def blink_internal(c):
