@@ -15,7 +15,6 @@
     "seed_steps": [
       "git setup",
       "git fetch",
-      "git update-ref",
       "git clean",
       "git checkout",
       "git submodule"
@@ -26,20 +25,11 @@
       "[DEPOT_TOOLS]\\git.bat",
       "fetch",
       "origin",
+      "master:refs/remotes/origin/master",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]\\src",
     "name": "git fetch"
-  },
-  {
-    "cmd": [
-      "[DEPOT_TOOLS]\\git.bat",
-      "update-ref",
-      "refs/heads/master",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]\\src",
-    "name": "git update-ref"
   },
   {
     "cmd": [
@@ -57,7 +47,7 @@
       "[DEPOT_TOOLS]\\git.bat",
       "checkout",
       "-f",
-      "master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]\\src",
     "name": "git checkout"

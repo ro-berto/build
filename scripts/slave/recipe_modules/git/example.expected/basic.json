@@ -13,7 +13,6 @@
     "seed_steps": [
       "git setup",
       "git fetch",
-      "git update-ref",
       "git clean",
       "git checkout",
       "git submodule"
@@ -24,20 +23,11 @@
       "git",
       "fetch",
       "origin",
+      "master:refs/remotes/origin/master",
       "--recurse-submodules"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git fetch"
-  },
-  {
-    "cmd": [
-      "git",
-      "update-ref",
-      "refs/heads/master",
-      "origin/master"
-    ],
-    "cwd": "[SLAVE_BUILD]/src",
-    "name": "git update-ref"
   },
   {
     "cmd": [
@@ -55,7 +45,7 @@
       "git",
       "checkout",
       "-f",
-      "master"
+      "origin/master"
     ],
     "cwd": "[SLAVE_BUILD]/src",
     "name": "git checkout"

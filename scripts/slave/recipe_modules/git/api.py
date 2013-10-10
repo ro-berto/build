@@ -40,9 +40,11 @@ class GitApi(recipe_api.RecipeApi):
       dir_path = self.m.path.slave_build(dir_path)
     self.m.path.set_dynamic_path('checkout', dir_path, overwrite=False)
 
-    full_ref = 'refs/heads/%s' % ref if '/' not in ref else ref
+    # git_setup.py always sets the repo at the given url as remote 'origin'.
+    remote = 'origin'
+    remote_ref = '%s/%s' % (remote, ref)
+    fetch_args = ['--recurse-submodules'] if recursive else []
 
-    recursive_args = ['--recurse-submodules'] if recursive else []
     clean_args = list(self.m.itertools.chain(
         *[('-e', path) for path in keep_paths or []]))
 
@@ -54,11 +56,10 @@ class GitApi(recipe_api.RecipeApi):
       self.m.python('git setup',
                     self.m.path.build('scripts', 'slave', 'git_setup.py'),
                     git_setup_args),
-      # git_setup.py always sets the repo at the given url as remote 'origin'.
-      self('fetch', 'origin', *recursive_args),
-      self('update-ref', full_ref, 'origin/' + ref),
+      self('fetch', remote, '%s:refs/remotes/%s' % (ref, remote_ref),
+           *fetch_args),
       self('clean', '-f', '-d', '-x', *clean_args),
-      self('checkout', '-f', ref),
+      self('checkout', '-f', remote_ref),
       self('submodule', 'update', '--init', '--recursive',
            cwd=dir_path),
     ]
