@@ -78,7 +78,6 @@ if config.Master.trunk_internal_url:
                           CUSTOM_DEPS_DIRECTX_SDK]
 else:
   custom_deps_list_win = []
-custom_deps_list_vm_linux = [('dart/third_party/clang', '/third_party/clang')]
 custom_deps_list_chromeOnAndroid = [
     ('dart/third_party/android_tools', android_tools_url),
 ]
@@ -359,17 +358,12 @@ class DartUtils(object):
       'chromeOnAndroid' + postfix:
           DartFactory(channel,
                       custom_deps_list=custom_deps_list_chromeOnAndroid),
-      'linux-clang' + postfix:
-          DartFactory(channel, custom_deps_list=custom_deps_list_vm_linux),
       'android' + postfix: DartFactory(channel, target_os='android'),
       'windows' + postfix: DartFactory(channel, target_platform='win32'),
     }
     if channel.name == 'be':
       factory_base.update({
         'posix-trunk': DartFactory(channel, trunk=True),
-        'linux-clang-trunk':
-            DartFactory(channel,
-                        custom_deps_list=custom_deps_list_vm_linux, trunk=True),
         'windows-trunk':
             DartFactory(channel, target_platform='win32', trunk=True),
       })
