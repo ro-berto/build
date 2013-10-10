@@ -53,7 +53,7 @@ def ConvertBuildDirToLegacy(build_dir, use_out=False):
       platform_key = key
       break
 
-  if (build_dir == 'src/build' and platform_key):
+  if (build_dir == 'src/build' and (platform_key or use_out)):
     print >> sys.stderr, (
         'WARNING: Passed "%s" as --build-dir option on %s. '
         'This is almost certainly incorrect.' % (build_dir, platform_key))
