@@ -62,6 +62,10 @@ def main_tests(c):
   pass
 
 @CONFIG_CTX(includes=['tests_base'])
+def clang_tests(c):
+  pass
+
+@CONFIG_CTX(includes=['tests_base'])
 def enormous_tests(c):
   pass
 

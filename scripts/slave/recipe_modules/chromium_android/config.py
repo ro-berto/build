@@ -18,6 +18,7 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     run_checkdeps = Single(bool, required=False, empty_val=False),
     apply_svn_patch = Single(bool, required=False, empty_val=False),
     run_stack_tool_steps = Single(bool, required=False, empty_val=False),
+    asan_symbolize = Single(bool, required=False, empty_val=False),
     extra_deploy_opts = List(inner_type=basestring),
     instrumentation_tests = ConfigList(
       lambda: ConfigGroup(
@@ -113,6 +114,11 @@ def instrumentation_tests(c):
 @config_ctx(includes=['instrumentation_tests'])
 def main_tests(c):
   pass
+
+@config_ctx(includes=['tests_base'])
+def clang_tests(c):
+  c.instrumentation_tests.append({'annotation': 'Smoke'})
+  c.asan_symbolize = True
 
 @config_ctx(includes=['tests_base'])
 def enormous_tests(c):

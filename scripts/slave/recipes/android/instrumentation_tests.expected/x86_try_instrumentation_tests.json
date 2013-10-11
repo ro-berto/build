@@ -271,6 +271,9 @@
       "--more-info",
       "[SLAVE_BUILD]/src/out/Debug/full_log"
     ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
     "name": "stack_tool_with_logcat_dump"
   },
   {
@@ -281,16 +284,10 @@
       "-s",
       "-w"
     ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
     "name": "stack_tool_for_tombstones"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/asan_symbolize.py",
-      "-l",
-      "[SLAVE_BUILD]/src/out/Debug/full_log"
-    ],
-    "name": "stack_tool_for_asan"
   },
   {
     "always_run": true,

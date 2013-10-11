@@ -79,6 +79,22 @@
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
   }, 
+  "clang_tests": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "default_targets": [
+        "All"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_GENERATOR_FLAGS": "default_target=All"
+    }
+  }, 
   "component_builder": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 

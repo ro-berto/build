@@ -19,8 +19,8 @@ def GenSteps(api):
   yield droid.common_tests_final_steps()
 
 def GenTests(api):
-  bot_ids = ['main_tests', 'enormous_tests', 'try_instrumentation_tests',
-             'x86_try_instrumentation_tests']
+  bot_ids = ['main_tests', 'clang_tests', 'enormous_tests',
+             'try_instrumentation_tests', 'x86_try_instrumentation_tests']
 
   def common_test_data(props):
     return (

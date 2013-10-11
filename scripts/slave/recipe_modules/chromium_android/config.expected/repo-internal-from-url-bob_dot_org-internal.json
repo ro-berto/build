@@ -8,6 +8,16 @@
     "run_findbugs": true, 
     "run_lint": true
   }, 
+  "clang_tests": {
+    "asan_symbolize": true, 
+    "instrumentation_tests": [
+      {
+        "annotation": "Smoke"
+      }
+    ], 
+    "internal_dir": "Path('[CHECKOUT]', 'internal')", 
+    "run_stack_tool_steps": true
+  }, 
   "component_builder": {
     "internal_dir": "Path('[CHECKOUT]', 'internal')"
   }, 

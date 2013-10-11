@@ -249,15 +249,16 @@ class AndroidApi(recipe_api.RecipeApi):
           'stack_tool_with_logcat_dump',
           [self.m.path.checkout('third_party', 'android_platform', 'development',
                                 'scripts', 'stack'),
-           '--more-info', log_file], always_run=True)
+           '--more-info', log_file], always_run=True, env=self.get_env())
       yield self.m.step(
           'stack_tool_for_tombstones',
           [self.m.path.checkout('build', 'android', 'tombstones.py'),
-           '-a', '-s', '-w'], always_run=True)
-      yield self.m.step(
-          'stack_tool_for_asan',
-          [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
-           '-l', log_file], always_run=True)
+           '-a', '-s', '-w'], always_run=True, env=self.get_env())
+      if self.c.asan_symbolize:
+        yield self.m.step(
+            'stack_tool_for_asan',
+            [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
+             '-l', log_file], always_run=True, env=self.get_env())
 
   def test_report(self):
     return self.m.python.inline(
