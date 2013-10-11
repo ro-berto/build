@@ -33,7 +33,7 @@
       "sync",
       "--nohooks",
       "--revision",
-      "src/repo@refs/remotes/origin/master",
+      "src/repo@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -121,23 +121,13 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/apply_svn_patch.py",
-      "-p",
-      "try_job_svn_patch",
-      "-r",
-      "[SLAVE_BUILD]/src/repo"
-    ],
-    "name": "apply_patch"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/src/repo/build/download_and_extract_build.py",
       "-b",
       "parent_buildername",
       "-d",
       "[SLAVE_BUILD]/src/out",
       "-r",
-      "1357",
+      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
       "-g",
       "[BUILD]/scripts/slave/gsutil"
     ],
@@ -175,7 +165,11 @@
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
-    "name": "device_status_check"
+    "name": "device_status_check",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "can_fail_build": false,
@@ -185,7 +179,8 @@
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
-    "name": "setup_devices_for_testing"
+    "name": "setup_devices_for_testing",
+    "skip": true
   },
   {
     "cmd": [
@@ -196,63 +191,8 @@
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
-    "name": "deploy_on_devices"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
-      "Smoke",
-      "-d",
-      "[SLAVE_BUILD]/src"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "smoke_instrumentation_tests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
-      "SmallTest",
-      "-d",
-      "[SLAVE_BUILD]/src"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "smalltest_instrumentation_tests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
-      "MediumTest",
-      "-d",
-      "[SLAVE_BUILD]/src"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "mediumtest_instrumentation_tests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
-      "LargeTest",
-      "-d",
-      "[SLAVE_BUILD]/src"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "largetest_instrumentation_tests"
+    "name": "deploy_on_devices",
+    "skip": true
   },
   {
     "always_run": true,

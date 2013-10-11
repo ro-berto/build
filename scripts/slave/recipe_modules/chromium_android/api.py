@@ -193,14 +193,14 @@ class AndroidApi(recipe_api.RecipeApi):
         [self.m.path.build('scripts', 'slave', 'daemonizer.py'),
          '--', self.c.cr_build_android('adb_logcat_monitor.py'),
          self.m.chromium.c.build_dir('logcat')],
-        env=self.get_env())
+        env=self.get_env(), can_fail_build=False)
 
   def detect_and_setup_devices(self):
     yield self.m.step(
         'provision_devices',
         [self.c.cr_build_android('provision_devices.py'),
          '-t', self.m.chromium.c.BUILD_CONFIG],
-        env=self.get_env())
+        env=self.get_env(), can_fail_build=False)
     yield self.m.step(
         'device_status_check',
         [self.c.cr_build_android('buildbot', 'bb_device_status_check.py')],
@@ -210,7 +210,7 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.m.step(
           'setup_devices_for_testing',
           [self.c.internal_dir('build',  'setup_device_testing.py')],
-          env=self.get_env())
+          env=self.get_env(), can_fail_build=False)
       deploy_cmd = [
           self.c.internal_dir('build', 'full_deploy.py'),
           '-v', '--%s' % self.m.chromium.c.BUILD_CONFIG.lower()]
@@ -219,20 +219,27 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.m.step('deploy_on_devices', deploy_cmd, env=self.get_env())
 
   def instrumentation_tests(self, official=False):
-    for test in self.c.instrumentation_tests:
-      annotation = test.annotation
-      cmd = [self.c.internal_dir('build', 'run_instrumentation_tests.py'),
-             '-a', annotation, '-d', self.m.path.checkout()]
-      if test.exclude_annotation:
-        cmd.extend(['-e', test.exclude_annotation])
-      yield self.m.step(annotation.lower() + '_instrumentation_tests',
-                         cmd, env=self.get_env())
+    dev_status_step = self.m.step_history.get('device_status_check')
+    setup_success = dev_status_step and dev_status_step.retcode == 0
+    if self.c.INTERNAL:
+      deploy_step = self.m.step_history.get('deploy_on_devices')
+      setup_success = deploy_step and deploy_step.retcode == 0
+    if setup_success:
+      for test in self.c.instrumentation_tests:
+        annotation = test.annotation
+        cmd = [self.c.internal_dir('build', 'run_instrumentation_tests.py'),
+               '-a', annotation, '-d', self.m.path.checkout()]
+        if test.exclude_annotation:
+          cmd.extend(['-e', test.exclude_annotation])
+        yield self.m.step(annotation.lower() + '_instrumentation_tests',
+                          cmd, env=self.get_env(), always_run=True)
 
   def logcat_dump(self):
-    return self.m.step(
-        'logcat_dump',
-        [self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
-         self.m.path.checkout('out', 'logcat')])
+    if self.m.step_history.get('spawn_logcat_monitor'):
+      return self.m.step(
+          'logcat_dump',
+          [self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
+           self.m.path.checkout('out', 'logcat')], always_run=True)
 
   def stack_tool_steps(self):
     if self.c.run_stack_tool_steps:
@@ -242,15 +249,15 @@ class AndroidApi(recipe_api.RecipeApi):
           'stack_tool_with_logcat_dump',
           [self.m.path.checkout('third_party', 'android_platform', 'development',
                                 'scripts', 'stack'),
-           '--more-info', log_file])
+           '--more-info', log_file], always_run=True)
       yield self.m.step(
           'stack_tool_for_tombstones',
           [self.m.path.checkout('build', 'android', 'tombstones.py'),
-           '-a', '-s', '-w'])
+           '-a', '-s', '-w'], always_run=True)
       yield self.m.step(
           'stack_tool_for_asan',
           [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
-           '-l', log_file])
+           '-l', log_file], always_run=True)
 
   def test_report(self):
     return self.m.python.inline(
@@ -265,6 +272,7 @@ class AndroidApi(recipe_api.RecipeApi):
          """,
          args=[self.m.path.checkout('out', self.m.chromium.c.BUILD_CONFIG,
                                     'test_logs', '*.log')],
+         always_run=True
     )
 
   def common_tree_setup_steps(self):

@@ -33,7 +33,7 @@
       "sync",
       "--nohooks",
       "--revision",
-      "src/repo@refs/remotes/origin/master",
+      "src/repo@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -121,23 +121,13 @@
   },
   {
     "cmd": [
-      "[BUILD]/scripts/slave/apply_svn_patch.py",
-      "-p",
-      "try_job_svn_patch",
-      "-r",
-      "[SLAVE_BUILD]/src/repo"
-    ],
-    "name": "apply_patch"
-  },
-  {
-    "cmd": [
       "[SLAVE_BUILD]/src/repo/build/download_and_extract_build.py",
       "-b",
       "parent_buildername",
       "-d",
       "[SLAVE_BUILD]/src/out",
       "-r",
-      "1357",
+      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
       "-g",
       "[BUILD]/scripts/slave/gsutil"
     ],
@@ -166,7 +156,11 @@
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
-    "name": "provision_devices"
+    "name": "provision_devices",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   },
   {
     "cmd": [
