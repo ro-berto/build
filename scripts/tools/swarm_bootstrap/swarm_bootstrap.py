@@ -94,6 +94,7 @@ def GetArchitectureSize():
 
   Currently this only works on 32-bit or 64-bit systems.
   """
+  # TODO(maruel): Returns the python build bitness, not the OS bitness.
   return '64' if sys.maxsize > 2**32 else '32'
 
 
@@ -113,7 +114,7 @@ def GetDimensions(hostname, platform_id, platform_version):
   return {
     'dimensions': {
       'bits': GetArchitectureSize(),
-      'machine': os.uname()[4],
+      'machine': platform.machine(),
       'os': [
           platform_name,
           platform_name + '-' + platform_version,
