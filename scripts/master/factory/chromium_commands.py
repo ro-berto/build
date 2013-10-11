@@ -923,15 +923,13 @@ class ChromiumCommands(commands.FactoryCommands):
       cmd_options=['--device-status-dashboard'], step_name='device_status',
       py_script=True, factory_properties=factory_properties, alwaysRun=True)
 
-  def AddTelemetryTest(self, test_name, page_set=None, step_name=None,
+  def AddTelemetryTest(self, test_name, step_name=None,
                        factory_properties=None, timeout=1200,
                        tool_options=None, dashboard_url=None):
     """Adds a Telemetry performance test.
 
     Args:
       test_name: The name of the benchmark module to run.
-      page_set: The path to the page set to run the benchmark against. Must be
-          relative to src/tools/perf/page_sets/.
       step_name: The name used to build the step's logfile name and descriptions
           in the waterfall display. Defaults to |test_name|.
       factory_properties: A dictionary of factory property values.
@@ -940,7 +938,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     factory_properties = (factory_properties or {}).copy()
     factory_properties['test_name'] = test_name
-    factory_properties['page_set'] = page_set
     factory_properties['target'] = self._target
     factory_properties['target_os'] = self._target_os
     factory_properties['target_platform'] = self._target_platform
@@ -951,9 +948,9 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd_options = self.AddFactoryProperties(factory_properties)
 
     log_type = 'graphing'
-    if test_name == 'page_cycler':
+    if test_name.split('.')[0] == 'page_cycler':
       log_type = 'pagecycler'
-    if test_name == 'endure':
+    if test_name.split('.')[0] == 'endure':
       log_type = 'endure'
 
     self.AddAnnotatedPerfStep(step_name, None, log_type, factory_properties,

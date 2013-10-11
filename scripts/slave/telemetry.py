@@ -56,19 +56,15 @@ def _GenerateTelemetryCommandSequence(options):
   """Given a test name, page set, and target, generate a telemetry test seq."""
   fp = options.factory_properties
   test_name = fp.get('test_name')
-  page_set = fp.get('page_set')
   extra_args = fp.get('extra_args')
   target = fp.get('target')
   target_os = fp.get('target_os')
   target_platform = fp.get('target_platform')
   build_dir = fp.get('build_dir')
 
-  script = os.path.join('src', 'tools', 'perf', 'run_measurement')
+  script = os.path.join('src', 'tools', 'perf', 'run_benchmark')
 
   test_specification = [test_name]
-  if page_set:
-    page_set = os.path.join('src', 'tools', 'perf', 'page_sets', page_set)
-    test_specification.append(page_set)
 
   env = os.environ
 
@@ -99,7 +95,7 @@ def _GenerateTelemetryCommandSequence(options):
   # Run the test against the target chrome build for different user profiles on
   # certain page cyclers.
   if target_os != 'android':
-    if page_set.endswith('moz.json') or page_set.endswith('morejs.json'):
+    if test_name in ('page_cycler_moz', 'page_cycler_morejs'):
       test_args = list(common_args)
       test_args.extend(['--profile-type=typical_user',
                         '--output-trace-tag=_extcs1', '--browser=%s' % browser])
@@ -107,7 +103,7 @@ def _GenerateTelemetryCommandSequence(options):
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
       commands.append(test_cmd)
-    if page_set.endswith('moz.json') or page_set.endswith('intl2.json'):
+    if test_name in ('page_cycler_moz', 'page_cycler_morejs'):
       test_args = list(common_args)
       test_args.extend(['--profile-type=power_user',
                         '--output-trace-tag=_extwr', '--browser=%s' % browser])

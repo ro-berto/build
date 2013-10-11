@@ -582,142 +582,83 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('device_status'):
       f.AddDeviceStatus(factory_properties=fp)
 
+    def Telemetry(test_name):
+      if R(test_name.replace('.', '_')):
+        f.AddTelemetryTest(test_name, factory_properties=fp)
+
     # Benchmark tests:
-    if R('page_cycler_moz'):
-      f.AddTelemetryTest('page_cycler', 'page_cycler/moz.json',
-                         step_name='moz', factory_properties=fp)
-    if R('page_cycler_morejs'):
-      timeout = 1200
-      if 'target' in fp and fp['target'] == 'Debug':
-        timeout = 1800
-      f.AddTelemetryTest('page_cycler', 'page_cycler/morejs.json',
-                         step_name='morejs', factory_properties=fp,
-                         timeout=timeout)
-    if R('page_cycler_intl_ar_fa_he'):
-      f.AddTelemetryTest('page_cycler', 'intl_ar_fa_he.json',
-                         step_name='intl_ar_fa_he', factory_properties=fp)
-    if R('page_cycler_intl_es_fr_pt-BR'):
-      f.AddTelemetryTest('page_cycler', 'intl_es_fr_pt-BR.json',
-                         step_name='intl_es_fr_pt-BR', factory_properties=fp)
-    if R('page_cycler_intl_hi_ru'):
-      f.AddTelemetryTest('page_cycler', 'intl_hi_ru.json',
-                         step_name='intl_hi_ru', factory_properties=fp)
-    if R('page_cycler_intl_ja_zh'):
-      f.AddTelemetryTest('page_cycler', 'intl_ja_zh.json',
-                         step_name='intl_ja_zh', factory_properties=fp)
-    if R('page_cycler_intl_ko_th_vi'):
-      f.AddTelemetryTest('page_cycler', 'intl_ko_th_vi.json',
-                         step_name='intl_ko_th_vi', factory_properties=fp)
-    if R('page_cycler_tough_layout_cases'):
-      f.AddTelemetryTest('page_cycler', 'tough_layout_cases.json',
-                         step_name='tough_layout_cases', factory_properties=fp)
-    if R('page_cycler_typical_25'):
-      f.AddTelemetryTest('page_cycler', 'typical_25.json',
-                         step_name='typical_25', factory_properties=fp)
-    if R('page_cycler_bloat'):
-      f.AddTelemetryTest('page_cycler', 'page_cycler/bloat.json',
-                         step_name='bloat', factory_properties=fp)
-    if R('page_cycler_dhtml'):
-      f.AddTelemetryTest('page_cycler', 'page_cycler/dhtml.json',
-                         step_name='dhtml', factory_properties=fp)
-    if R('page_cycler_indexeddb'):
-      f.AddTelemetryTest('page_cycler',
-                         'page_cycler/indexed_db/basic_insert.json',
-                         step_name='indexeddb', factory_properties=fp)
-    if R('page_cycler_top_10_netsim'):
-      netsim_fp = fp.copy()
-      netsim_fp['extra_args'] = [
-          '--pageset-repeat=5',
-          '--cold-load-percent=100',
-          '--extra-wpr-args=--shaping_type=proxy --net=cable']
-      f.AddTelemetryTest('page_cycler', 'top_10.json',
-                         step_name='top_10_netsim',
-                         factory_properties=netsim_fp)
-    if R('smoothness_measurement'):
-      f.AddTelemetryTest(
-          'smoothness_measurement', 'top_25.json', factory_properties=fp)
-    if R('jsgamebench'):
-      f.AddTelemetryTest(
-          'jsgamebench', 'jsgamebench.json', factory_properties=fp)
-    if R('kraken'):
-      f.AddTelemetryTest('kraken', 'kraken.json', factory_properties=fp)
-    if R('robohornetpro'):
-      f.AddTelemetryTest(
-          'robohornetpro', 'robohornetpro.json', factory_properties=fp)
-    if R('memory_measurement'):
-      f.AddTelemetryTest(
-          'memory_measurement', 'top_25.json', factory_properties=fp)
-    if R('reload_benchmark'):
-      f.AddTelemetryTest(
-          'memory_measurement', '2012Q3.json', step_name='reload_benchmark',
-          factory_properties=fp)
-    if R('blink_perf'):
-      f.AddTelemetryTest(
-          'blink_perf',
-          os.path.join('..', '..', '..',
-                       'third_party', 'WebKit', 'PerformanceTests'),
-          factory_properties=fp)
-    if R('media_perf'):
-      # Telemetry based media performance measurement.
-      f.AddTelemetryTest(
-          'media_measurement', 'tough_video_cases.json', factory_properties=fp)
+    # Page cyclers:
+    page_cyclers = (
+        'bloat',
+        'dhtml',
+        'indexeddb',
+        'morejs',
+        'moz',
+
+        'intl_ar_fa_he',
+        'intl_es_fr_pt-BR',
+        'intl_hi_ru',
+        'intl_ja_zh',
+        'intl_ko_th_vi',
+
+        'pica',
+        'tough_layout_cases',
+        'typical_25',
+
+        'netsim.top_10',
+      )
+    for test_name in page_cyclers:
+      Telemetry('page_cycler.' + test_name)
+
+    # Synthetic benchmarks:
+    synthetic_benchmarks = (
+        'blink_perf',
+        'dom_perf',
+        'jsgamebench',
+        'kraken',
+        'octane',
+        'robohornet_pro',
+        'spaceport',
+        'sunspider',
+
+        'image_decoding.tough_decoding_cases',
+        'media.tough_media_cases',
+      )
+    for test_name in synthetic_benchmarks:
+      Telemetry(test_name)
+    if R('dromaeo'):
+      dromaeo_benchmarks = (
+          'domcoreattr',
+          'domcoremodify',
+          'domcorequery',
+          'domcoretraverse',
+          'jslibattrjquery',
+          'jslibattrprototype',
+          'jslibeventjquery',
+          'jslibeventprototype',
+          'jslibmodifyjquery',
+          'jslibmodifyprototype',
+          'jslibstylejquery',
+          'jslibstyleprototype',
+          'jslibtraversejquery',
+          'jslibtraverseprototype',
+        )
+      for test_name in dromaeo_benchmarks:
+        f.AddTelemetryTest('dromaeo.%s' % test_name, factory_properties=fp)
+
+    # Real-world benchmarks:
+    real_world_benchmarks = (
+        'memory.reload.2012Q3',
+        'memory.top_25',
+        'smoothness.top_25',
+        'tab_switching.top_10',
+      )
+    for test_name in real_world_benchmarks:
+      Telemetry(test_name)
+
+    # Other benchmarks:
     if R('memory'):
       f.AddMemoryTests(fp)
-    if R('tab_switching'):
-      f.AddTelemetryTest('tab_switching_measurement', 'top_10.json',
-                         step_name='tab_switching', factory_properties=fp)
-    if R('sunspider'):
-      f.AddTelemetryTest('sunspider', 'sunspider.json', factory_properties=fp)
-    if R('octane'):
-      f.AddTelemetryTest('octane', 'octane.json', factory_properties=fp)
-    if R('pica'):
-      f.AddTelemetryTest('pica', factory_properties=fp)
-    if R('image_decoding_measurement'):
-      f.AddTelemetryTest(
-          'image_decoding_measurement', 'image_decoding_measurement.json',
-          factory_properties=fp)
-    if R('dromaeo'):
-      f.AddTelemetryTest('dromaeo', 'dromaeo/domcoreattr.json',
-                         step_name='dromaeo_domcoreattr', factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/domcoremodify.json',
-                         step_name='dromaeo_domcoremodify',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/domcorequery.json',
-                         step_name='dromaeo_domcorequery',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/domcoretraverse.json',
-                         step_name='dromaeo_domcoretraverse',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibattrjquery.json',
-                         step_name='dromaeo_jslibattrjquery',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibattrprototype.json',
-                         step_name='dromaeo_jslibattrprototype',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibeventjquery.json',
-                         step_name='dromaeo_jslibeventjquery',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibeventprototype.json',
-                         step_name='dromaeo_jslibeventprototype',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibmodifyjquery.json',
-                         step_name='dromaeo_jslibmodifyjquery',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibmodifyprototype.json',
-                         step_name='dromaeo_jslibmodifyprototype',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibstylejquery.json',
-                         step_name='dromaeo_jslibstylejquery',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibstyleprototype.json',
-                         step_name='dromaeo_jslibstyleprototype',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibtraversejquery.json',
-                         step_name='dromaeo_jslibtraversejquery',
-                         factory_properties=fp)
-      f.AddTelemetryTest('dromaeo', 'dromaeo/jslibtraverseprototype.json',
-                         step_name='dromaeo_jslibtraverseprototype',
-                         factory_properties=fp)
     if R('frame_rate'):
       f.AddFrameRateTests(fp)
     if R('gpu_frame_rate'):
@@ -726,8 +667,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGpuThroughputTests(fp)
     if R('tab_capture_performance'):
       f.AddTabCapturePerformanceTests(fp)
-    if R('dom_perf'):
-      f.AddTelemetryTest('dom_perf', 'dom_perf.json', factory_properties=fp)
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
     if R('create_profiles'):
@@ -738,34 +677,26 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
     if R('startup_cold'):
-      startup_fp = fp.copy()
-      startup_fp['extra_args'] = ['--page-repeat=5', '--cold']
-      f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_cold',
-                         factory_properties=startup_fp)
+      f.AddTelemetryTest('startup.cold.blank_page', factory_properties=fp)
     if R('startup_warm'):
-      startup_fp = fp.copy()
-      startup_fp['extra_args'] = ['--page-repeat=20', '--warm']
-      f.AddTelemetryTest('startup', 'blank_page.json', step_name='startup_warm',
-                         factory_properties=startup_fp)
+      f.AddTelemetryTest('startup.warm.blank_page', factory_properties=fp)
     if R('startup_warm_dirty'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
       profile_dir = os.path.join(self._build_dir, f._target,
           'generated_profiles', 'small_profile')
-      startup_fp['extra_args'] = ['--warm', '--page-repeat=20',
-                                  '--profile-dir=%s' % profile_dir]
-      f.AddTelemetryTest('startup', 'blank_page.json',
-                         step_name='startup_warm_dirty',
+      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      f.AddTelemetryTest('startup.warm.blank_page',
+                         step_name='startup.warm.dirty.blank_page',
                          factory_properties=startup_fp)
     if R('startup_cold_dirty'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
       profile_dir = os.path.join(self._build_dir, f._target,
           'generated_profiles', 'small_profile')
-      startup_fp['extra_args'] = ['--cold', '--page-repeat=5',
-                                  '--profile-dir=%s' % profile_dir]
-      f.AddTelemetryTest('startup', 'blank_page.json',
-                         step_name='startup_cold_dirty',
+      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      f.AddTelemetryTest('startup.cold.blank_page',
+                         step_name='startup.cold.dirty.blank_page',
                          factory_properties=startup_fp)
 
     if R('sizes'):
@@ -812,8 +743,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                             test_tool_arg_list=['--no-xvfb'])
     if R('gpu_content_tests'):
       f.AddGpuContentTests(fp)
-    if R('spaceport'):
-      f.AddTelemetryTest('spaceport', 'spaceport.json', factory_properties=fp)
 
     # ChromeFrame tests:
     if R('chrome_frame_perftests'):
@@ -905,7 +834,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       else:
         return fp.copy()
 
-    def Endure(test_name, page_set, test_name_ui):
+    def Endure(test_name, telemetry_test_name, test_name_ui):
       """Adds an endurance test if configured."""
       if R(test_name):
         # Get test-specific factory properties.
@@ -919,29 +848,29 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         test_fp['step_name'] = 'endure/%s' % full_test_name
 
         f.AddTelemetryTest(
-            'endure', page_set,
+            telemetry_test_name,
             step_name='endure_%s' % full_test_name,
             factory_properties=test_fp,
             timeout=6000)
 
     Endure('endure_calendar_tests',
-           'calendar_forward_backward.json',
+           'endure.calendar_forward_backward',
            'cal_fw_back')
 
     Endure('endure_gmail_expand_collapse_tests',
-           'gmail_expand_collapse_conversation.json',
+           'endure.gmail_expand_collapse_conversation',
            'gmail_exp_col')
 
     Endure('endure_gmail_alt_label_tests',
-           'gmail_alt_two_labels.json',
+           'endure.gmail_alt_two_labels',
            'gmail_labels')
 
     Endure('endure_gmail_alt_threadlist_tests',
-           'gmail_alt_threadlist_conversation.json',
+           'endure.gmail_alt_threadlist_conversation',
            'gmail_thread')
 
     Endure('endure_plus_tests',
-           'plus_alt_posts_photos.json',
+           'endure.plus_alt_posts_photos',
            'plus_photos')
 
     # HTML5 media tag performance/functional test using PyAuto.

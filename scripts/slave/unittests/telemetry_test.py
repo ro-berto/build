@@ -47,7 +47,6 @@ class TelemetryTest(unittest.TestCase):
   @staticmethod
   def _GetDefaultFactoryProperties():
     fp = {}
-    fp['page_set'] = 'sunspider.json'
     fp['build_dir'] = 'src/build'
     fp['test_name'] = 'sunspider'
     fp['target'] = 'Release'
@@ -81,22 +80,21 @@ class TelemetryTest(unittest.TestCase):
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
             '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
             '\'--factory-properties=' +
-            '{"page_set": "sunspider.json", "target": "Release", ' +
+            '{"target": "Release", ' +
             '"build_dir": "src/build", "perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
-            '\'src/tools/perf/run_measurement\' \'-v\' ' +
+            '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
-            '\'--browser=android-chromium-testshell\' \'sunspider\' ' +
-            '\'src/tools/perf/page_sets/sunspider.json\''
+            '\'--browser=android-chromium-testshell\' \'sunspider\''
         ])
 
     self.assertEqual(expectedText, self.capture.text)
 
-  def testPageRepeat(self):
+  def testExtraArg(self):
     fp = self._GetDefaultFactoryProperties()
-    fp['extra_args'] = ['--page-repeat=20']
+    fp['extra_args'] = ['--profile-dir=fake_dir']
 
     cmd = [self.telemetry, '--print-cmd',
            '--factory-properties=%s' % json.dumps(fp)]
@@ -112,63 +110,15 @@ class TelemetryTest(unittest.TestCase):
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
             '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
             '\'--factory-properties=' +
-            '{"page_set": "sunspider.json", "target": "Release", ' +
-            '"build_dir": "src/build", "extra_args": ["--page-repeat=20"], '+
+            '{"target": "Release", "build_dir": "src/build", ' +
+            '"extra_args": ["--profile-dir=fake_dir"], ' +
             '"perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
-            '\'src/tools/perf/run_measurement\' \'-v\' '
+            '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
-            '\'--page-repeat=20\' '+
-            '\'--browser=android-chromium-testshell\' \'sunspider\' ' +
-            '\'src/tools/perf/page_sets/sunspider.json\''
-        ])
-
-    self.assertEqual(expectedText, self.capture.text)
-
-  def testPageRepeatMozJS(self):
-    fp = self._GetDefaultFactoryProperties()
-    fp['extra_args'] = ['--page-repeat=20']
-    fp['page_set'] = 'moz.json'
-    fp['target_os'] = 'mac'
-
-    cmd = [self.telemetry, '--print-cmd',
-           '--factory-properties=%s' % json.dumps(fp)]
-
-    ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
-    self.assertEqual(ret, 0)
-
-    capture_text = self.capture.text
-    self.assertEqual(len(capture_text), 4)
-    for line in capture_text:
-      self.assertEqual(line.count('moz.json'), 2)
-
-  def testWithoutPageSet(self):
-    fp = self._GetDefaultFactoryProperties()
-    fp['page_set'] = None
-
-    cmd = [self.telemetry, '--print-cmd',
-           '--factory-properties=%s' % json.dumps(fp)]
-
-    ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
-    self.assertEqual(ret, 0)
-
-    runtest = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'runtest.py'))
-
-    expectedText = (['\'adb\' \'root\'',
-        '\'adb\' \'wait-for-device\'',
-        '\'%s\' ' % sys.executable +
-        '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
-            '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
-            '\'--factory-properties=' +
-            '{"page_set": null, "target": "Release", ' +
-            '"build_dir": "src/build", "perf_id": "android-gn", ' +
-            '"step_name": "sunspider", "test_name": "sunspider", ' +
-            '"target_platform": "linux2", "target_os": "android", ' +
-            '"show_perf_results": true}\' ' +
-            '\'src/tools/perf/run_measurement\' \'-v\' '
-            '\'--output-format=buildbot\' ' +
+            '\'--profile-dir=fake_dir\' '+
             '\'--browser=android-chromium-testshell\' \'sunspider\''
         ])
 
