@@ -275,7 +275,7 @@ class GClientFactory(object):
                                     factory_properties=factory_properties)
 
       # Download the full output directory if the machine is a tester.
-      if slave_type == 'Tester':
+      if slave_type in ['Tester', 'TrybotTester']:
         factory_cmd_obj.AddExtractBuild(build_url,
                                         factory_properties=factory_properties)
 
@@ -333,7 +333,8 @@ class GClientFactory(object):
         gclient_jobs=gclient_jobs,
         blink_config=blink_config)
 
-    if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect'):
+    if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect',
+                      'TrybotTester'):
       factory_cmd_obj.AddApplyIssueStep(
           timeout=timeout,
           server=config.Master.Master4.code_review_site)
