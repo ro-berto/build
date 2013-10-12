@@ -164,6 +164,7 @@ def FileExclusions():
       # copy outside the app.
       'Chromium Helper.app',
       'Google Chrome Helper.app',
+      'App Shim Socket',
       '.deps', 'obj.host', 'obj.target', 'lib'
     ]
   if chromium_utils.IsLinux():
