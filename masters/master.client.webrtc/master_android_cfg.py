@@ -35,6 +35,29 @@ S(scheduler, branch='trunk', treeStableTimer=0)
 T('android_trigger_dbg')
 T('android_trigger_rel')
 
+
+def f_dbg_android_tests(bot_id_suffix):
+  return android_apk().ChromiumWebRTCAndroidFactory(
+    target='Debug',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+      'android_bot_id': 'webrtc-tests-dbg-%s' % bot_id_suffix,
+      'build_url': android_dbg_archive,
+      'trigger': 'android_trigger_dbg',
+    })
+
+
+def f_rel_android_tests(bot_id_suffix):
+  return android_apk().ChromiumWebRTCAndroidFactory(
+    target='Release',
+    annotation_script='src/build/android/buildbot/bb_run_bot.py',
+    factory_properties={
+      'android_bot_id': 'webrtc-tests-rel-%s' % bot_id_suffix,
+      'build_url': android_rel_archive,
+      'trigger': 'android_trigger_rel',
+    })
+
+# WebRTC standalone builders (no tests).
 B('Android (dbg)', 'f_android_dbg', scheduler=scheduler,
   notify_on_missing=True)
 F('f_android_dbg', android_webrtc().ChromiumAnnotationFactory(
@@ -44,6 +67,16 @@ F('f_android_dbg', android_webrtc().ChromiumAnnotationFactory(
       'android_bot_id': 'webrtc-main-clobber',
   }))
 
+B('Android', 'f_android_rel', scheduler=scheduler,
+  notify_on_missing=True)
+F('f_android_rel', android_webrtc().ChromiumAnnotationFactory(
+  target='Release',
+  annotation_script='src/build/android/buildbot/bb_run_bot.py',
+  factory_properties={
+      'android_bot_id': 'webrtc-main-clobber',
+  }))
+
+# WebRTC native test APKs: builders.
 B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg',
   scheduler=scheduler, notify_on_missing=True)
 F('f_android_apk_dbg', android_apk().ChromiumWebRTCAndroidFactory(
@@ -53,25 +86,6 @@ F('f_android_apk_dbg', android_apk().ChromiumWebRTCAndroidFactory(
       'android_bot_id': 'webrtc-builder-dbg',
       'build_url': android_dbg_archive,
       'trigger': 'android_trigger_dbg',
-  }))
-
-B('Android Chromium-APK Tests (dbg)', 'f_android_apk_dbg_tests',
-  scheduler='android_trigger_dbg', notify_on_missing=True)
-F('f_android_apk_dbg_tests', android_apk().ChromiumWebRTCAndroidFactory(
-    target='Debug',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'webrtc-tests-dbg',
-      'build_url': android_dbg_archive,
-    }))
-
-B('Android', 'f_android_rel', scheduler=scheduler,
-  notify_on_missing=True)
-F('f_android_rel', android_webrtc().ChromiumAnnotationFactory(
-  target='Release',
-  annotation_script='src/build/android/buildbot/bb_run_bot.py',
-  factory_properties={
-      'android_bot_id': 'webrtc-main-clobber',
   }))
 
 B('Android Chromium-APK Builder', 'f_android_apk_rel', scheduler=scheduler,
@@ -85,15 +99,26 @@ F('f_android_apk_rel', android_apk().ChromiumWebRTCAndroidFactory(
       'trigger': 'android_trigger_rel',
   }))
 
-B('Android Chromium-APK Tests', 'f_android_apk_rel_tests',
-  scheduler='android_trigger_rel', notify_on_missing=True)
-F('f_android_apk_rel_tests', android_apk().ChromiumWebRTCAndroidFactory(
-    target='Release',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'webrtc-tests-rel',
-      'build_url': android_rel_archive,
-    }))
+# WebRTC native test APKs: device testers.
+B('Android Chromium-APK Tests (ICS GalaxyNexus)(dbg)',
+  'f_android_ics_galaxynexus_dbg_tests', scheduler='android_trigger_dbg',
+  notify_on_missing=True)
+F('f_android_ics_galaxynexus_dbg_tests', f_dbg_android_tests('ics-gn'))
+
+B('Android Chromium-APK Tests (JB Nexus7.2)(dbg)',
+  'f_android_jb_nexus7.2_dbg_tests', scheduler='android_trigger_dbg',
+  notify_on_missing=True)
+F('f_android_jb_nexus7.2_dbg_tests', f_dbg_android_tests('jb-n72'))
+
+B('Android Chromium-APK Tests (ICS GalaxyNexus)',
+  'f_android_ics_galaxynexus_rel_tests', scheduler='android_trigger_rel',
+  notify_on_missing=True)
+F('f_android_ics_galaxynexus_rel_tests', f_rel_android_tests('ics-gn'))
+
+B('Android Chromium-APK Tests (JB Nexus7.2)',
+  'f_android_jb_nexus7.2_rel_tests', scheduler='android_trigger_rel',
+  notify_on_missing=True)
+F('f_android_jb_nexus7.2_rel_tests', f_rel_android_tests('jb-n72'))
 
 
 def Update(c):
