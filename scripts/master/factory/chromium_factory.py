@@ -511,10 +511,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerBrowserTests(fp)
     if R('push_canary_tests'):
       f.AddPushCanaryTests(fp)
-    if R('chromedriver2_tests'):
-      f.AddGTestTestStep('chromedriver2_tests', fp)
-    if R('chromedriver2_tests_br'):
-      f.AddBuildrunnerGTest('chromedriver2_tests', fp)
+    if R('chromedriver_tests'):
+      f.AddGTestTestStep('chromedriver_tests', fp)
+    if R('chromedriver_tests_br'):
+      f.AddBuildrunnerGTest('chromedriver_tests', fp)
     if R('content_browsertests'):
       f.AddGTestTestStep('content_browsertests', fp)
     if R('content_browsertests_br'):

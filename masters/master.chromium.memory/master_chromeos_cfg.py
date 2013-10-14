@@ -42,7 +42,7 @@ sharded_tests = [
   'browser_tests',
   'cacheinvalidation_unittests',
   'cc_unittests',
-  'chromedriver2_tests',
+  'chromedriver_tests',
   'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',

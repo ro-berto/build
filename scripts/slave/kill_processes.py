@@ -172,6 +172,7 @@ processes = [
     'cacheinvalidation_unittests.exe',
     'chrome.exe',
     'chromedriver.exe',
+    'chromedriver_tests.exe',
     'chromedriver2_tests.exe',
     'chromedriver2_unittests.exe',
     'chrome_frame_helper.exe',

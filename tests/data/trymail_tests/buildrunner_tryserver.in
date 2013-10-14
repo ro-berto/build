@@ -86,7 +86,7 @@
     step('content_unittests', result=results.SKIPPED),
     step('views_unittests', result=results.SKIPPED),
     step('browser_tests', result=results.SKIPPED),
-    step('chromedriver2_tests', result=results.SKIPPED),
+    step('chromedriver_tests', result=results.SKIPPED),
     step('content_browsertests', result=results.SKIPPED),
     step('installer_util_unittests', result=results.SKIPPED),
     step('mini_installer_test', result=results.SKIPPED),
