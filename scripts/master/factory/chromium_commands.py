@@ -634,7 +634,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                 do_step_if=self.TestStepFilter)
 
   def AddTelemetryPerfUnitTests(self):
-    step_name = 'telemetry_unittests'
+    step_name = 'telemetry_perf_unittests'
     if self._target_os == 'android':
       args = ['--browser=android-content-shell']
     else:
@@ -648,7 +648,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.TestStepFilter)
 
   def AddBuildrunnerTelemetryPerfUnitTests(self):
-    step_name = 'telemetry_unittests'
+    step_name = 'telemetry_perf_unittests'
     if self._target_os == 'android':
       args = ['--browser=android-content-shell']
     else:
