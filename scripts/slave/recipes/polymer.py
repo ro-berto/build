@@ -85,7 +85,8 @@ def GenSteps(api):
   if api.platform.is_linux:
     test_prefix = ['xvfb-run']
 
-  yield api.git('clean', '-xdf', cwd=api.path.checkout)
+  yield api.git('clean', '-xdf', cwd=api.path.checkout,
+                can_fail_build=False)
 
   yield api.step('update-install', ['npm' + cmd_suffix, 'install'] + tmp_args,
                  cwd=api.path.checkout, env=node_env)

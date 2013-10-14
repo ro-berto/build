@@ -59,6 +59,7 @@
     "name": "submodule update"
   },
   {
+    "can_fail_build": false,
     "cmd": [
       "[DEPOT_TOOLS]\\git.bat",
       "clean",
