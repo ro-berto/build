@@ -8,6 +8,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
     self._env = dict()
+    self._internal_names = dict()
 
   def get_env(self):
     env_dict = dict(self._env)
@@ -70,6 +71,14 @@ class AndroidApi(recipe_api.RecipeApi):
       gyp_defs['app_manifest_version_code'] = app_manifest_vars['version_code']
       gyp_defs['app_manifest_version_name'] = app_manifest_vars['version_name']
       gyp_defs['chrome_build_id'] = app_manifest_vars['build_id']
+
+      yield self.m.step(
+          'get_internal_names',
+          [self.c.internal_dir('build', 'dump_internal_names.py'),
+           '--output-json', self.m.json.output()]
+      )
+
+      self._internal_names = self.m.step_history.last_step().json.output
 
   def envsetup(self):
     envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
@@ -225,14 +234,35 @@ class AndroidApi(recipe_api.RecipeApi):
       deploy_step = self.m.step_history.get('deploy_on_devices')
       setup_success = deploy_step and deploy_step.retcode == 0
     if setup_success:
-      for test in self.c.instrumentation_tests:
-        annotation = test.annotation
-        cmd = [self.c.internal_dir('build', 'run_instrumentation_tests.py'),
-               '-a', annotation, '-d', self.m.path.checkout()]
-        if test.exclude_annotation:
-          cmd.extend(['-e', test.exclude_annotation])
-        yield self.m.step(annotation.lower() + '_instrumentation_tests',
-                          cmd, env=self.get_env(), always_run=True)
+      install_cmd = [
+          self.m.path.checkout('build', 'android', 'adb_install_apk.py'),
+          '--apk', 'ChromeTest.apk',
+          '--apk_package', 'com.google.android.apps.chrome.tests'
+      ]
+      # TODO(sivachandra): Add --release option to install_cmd when those
+      # testers are added.
+      yield self.m.step('install ChromeTest.apk', install_cmd,
+                        env=self.get_env(),  always_run=True)
+      if self.m.step_history.last_step().retcode == 0:
+        for test in self.c.instrumentation_tests:
+          annotation = test.annotation
+          test_cmd = [
+              self.m.path.checkout('build', 'android', 'test_runner.py'),
+              'instrumentation',
+              '--test-apk', 'ChromeTest',
+              '--test_data', self._internal_names['INSTRUMENTATION_TEST_DATA'],
+              '--verbose',
+              ('--flakiness-dashboard-server=%s' %
+               self._internal_names['FLAKINESS_DASHBOARD_SERVER']),
+              '--host-driven-root=%s' % self.c.internal_dir('test'),
+              '-A', annotation,
+              '--screenshot']
+          if test.exclude_annotation:
+            test_cmd.extend(['-E', test.exclude_annotation])
+          # TODO(sivachandra): Add --release and --official-build options to
+          # test_cmd when those testers are added.
+          yield self.m.step(annotation.lower() + '_instrumentation_tests',
+                            test_cmd, env=self.get_env(), always_run=True)
 
   def logcat_dump(self):
     if self.m.step_history.get('spawn_logcat_monitor'):

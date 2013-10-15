@@ -68,6 +68,23 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/repo/build/dump_internal_names.py",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "get_internal_names",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"BUILD_BUCKET\": \"build-bucket\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"FLAKINESS_DASHBOARD_SERVER\": \"test-results.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"INSTRUMENTATION_TEST_DATA\": \"a:b/test/data/android/device_files\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"SCREENSHOT_BUCKET\": \"screenshot-archive\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",

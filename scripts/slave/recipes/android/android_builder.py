@@ -62,6 +62,15 @@ def GenTests(api):
         })
       ) +
       api.step_data(
+        'get_internal_names',
+        api.json.output({
+          'BUILD_BUCKET': 'build-bucket',
+          'SCREENSHOT_BUCKET': 'screenshot-archive',
+          'INSTRUMENTATION_TEST_DATA': 'a:b/test/data/android/device_files',
+          'FLAKINESS_DASHBOARD_SERVER': 'test-results.appspot.com'
+        })
+      ) +
+      api.step_data(
         'envsetup',
         api.json.output({
           'PATH': './',

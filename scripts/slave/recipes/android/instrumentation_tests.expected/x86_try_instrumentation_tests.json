@@ -68,6 +68,23 @@
   },
   {
     "cmd": [
+      "[SLAVE_BUILD]/src/repo/build/dump_internal_names.py",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "get_internal_names",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"BUILD_BUCKET\": \"build-bucket\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"FLAKINESS_DASHBOARD_SERVER\": \"test-results.appspot.com\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"INSTRUMENTATION_TEST_DATA\": \"a:b/test/data/android/device_files\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"SCREENSHOT_BUCKET\": \"screenshot-archive\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[SLAVE_BUILD]/src/build/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
@@ -203,11 +220,32 @@
   {
     "always_run": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
+      "[SLAVE_BUILD]/src/build/android/adb_install_apk.py",
+      "--apk",
+      "ChromeTest.apk",
+      "--apk_package",
+      "com.google.android.apps.chrome.tests"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "install ChromeTest.apk"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromeTest",
+      "--test_data",
+      "a:b/test/data/android/device_files",
+      "--verbose",
+      "--flakiness-dashboard-server=test-results.appspot.com",
+      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
+      "-A",
       "Smoke",
-      "-d",
-      "[SLAVE_BUILD]/src"
+      "--screenshot"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
@@ -217,11 +255,18 @@
   {
     "always_run": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromeTest",
+      "--test_data",
+      "a:b/test/data/android/device_files",
+      "--verbose",
+      "--flakiness-dashboard-server=test-results.appspot.com",
+      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
+      "-A",
       "SmallTest",
-      "-d",
-      "[SLAVE_BUILD]/src"
+      "--screenshot"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
@@ -231,11 +276,18 @@
   {
     "always_run": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromeTest",
+      "--test_data",
+      "a:b/test/data/android/device_files",
+      "--verbose",
+      "--flakiness-dashboard-server=test-results.appspot.com",
+      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
+      "-A",
       "MediumTest",
-      "-d",
-      "[SLAVE_BUILD]/src"
+      "--screenshot"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
@@ -245,11 +297,18 @@
   {
     "always_run": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/run_instrumentation_tests.py",
-      "-a",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "instrumentation",
+      "--test-apk",
+      "ChromeTest",
+      "--test_data",
+      "a:b/test/data/android/device_files",
+      "--verbose",
+      "--flakiness-dashboard-server=test-results.appspot.com",
+      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
+      "-A",
       "LargeTest",
-      "-d",
-      "[SLAVE_BUILD]/src"
+      "--screenshot"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
