@@ -1,5 +1,5 @@
 # -*- makefile -*-
 
 BUILDBOT_PATH = $(BUILDBOT8_PATH)
-MASTERPATH := master.chromium.oilpan
+MASTERPATH := master.client.oilpan
 include ../master-common.mk

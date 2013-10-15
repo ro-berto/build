@@ -12,5 +12,5 @@ class Oilpan(Master.Master3):
   slave_port = 8132
   master_port_alt = 8232
   viewvc_url = 'http://src.chromium.org/viewvc/blink?view=revision&revision=%s'
-  buildbot_url = 'http://build.chromium.org/p/chromium.webkit.oilpan/'
+  buildbot_url = 'http://build.chromium.org/p/client.oilpan/'
   svn_url = 'svn://svn.chromium.org/blink/branches/oilpan'
