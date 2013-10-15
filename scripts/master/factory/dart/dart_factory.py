@@ -526,6 +526,21 @@ class DartUtils(object):
                                pollinterval=10,
                                revlinktmpl=dart_revision_url)
 
+  @staticmethod
+  def prioritize_builders(buildmaster, builders):
+    def get_priority(name):
+      # TODO(ricow) remove once trunk is gone
+      if name.endswith('trunk'):
+        return 0
+      for channel in CHANNELS:
+        if name.endswith(channel.builder_postfix):
+          return channel.priority
+      # Default to a low priority
+      return 10
+    builders.sort(key=lambda b: get_priority(b.name))
+    return builders
+
+
   def setup_factories(self, variants):
     def setup_dart_factory(v, base, no_annotated):
       # If we have triggers specified, create corresponding trigger.Trigger

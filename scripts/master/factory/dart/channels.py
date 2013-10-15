@@ -3,21 +3,22 @@
 # found in the LICENSE file.
 
 class Channel(object):
-  def __init__(self, name, branch, position, category_postfix):
+  def __init__(self, name, branch, position, category_postfix, priority):
     self.branch = branch
     self.builder_postfix = '-' + name
     self.category_postfix = category_postfix
     self.name = name
     self.position = position
+    self.priority = priority
     self.all_deps_path = '/' + branch + '/deps/all.deps'
     self.dartium_deps_path = '/' + branch + '/deps/dartium.deps'
 
 # The channel names are replicated in the slave.cfg files for all
 # dart waterfalls. If you change anything here please also change it there.
 CHANNELS = [
-  Channel('be', 'branches/bleeding_edge', 0, ''),
-  Channel('dev', 'trunk', 1, '-dev'),
-  Channel('stable', 'branches/0.6', 2, '-stable'),
+  Channel('be', 'branches/bleeding_edge', 0, '', 3),
+  Channel('dev', 'trunk', 1, '-dev', 2),
+  Channel('stable', 'branches/0.6', 2, '-stable', 1),
 ]
 
 CHANNELS_BY_NAME = {}
