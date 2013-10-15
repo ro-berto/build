@@ -175,7 +175,7 @@ class TryJobBase(TryBase):
 
   # Simplistic email matching regexp.
   _EMAIL_VALIDATOR = re.compile(
-      r'[a-zA-Z][a-zA-Z0-9\.\+\-\_]*@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,3}$')
+      r'[a-zA-Z0-9][a-zA-Z0-9\.\+\-\_]*@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,3}$')
 
   _PROPERTY_SOURCE = 'Try job'
 
