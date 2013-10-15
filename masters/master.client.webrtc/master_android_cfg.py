@@ -43,7 +43,6 @@ def f_dbg_android_tests(bot_id_suffix):
     factory_properties={
       'android_bot_id': 'webrtc-tests-dbg-%s' % bot_id_suffix,
       'build_url': android_dbg_archive,
-      'trigger': 'android_trigger_dbg',
     })
 
 
@@ -54,7 +53,6 @@ def f_rel_android_tests(bot_id_suffix):
     factory_properties={
       'android_bot_id': 'webrtc-tests-rel-%s' % bot_id_suffix,
       'build_url': android_rel_archive,
-      'trigger': 'android_trigger_rel',
     })
 
 # WebRTC standalone builders (no tests).
