@@ -18,7 +18,7 @@ class Channel(object):
 CHANNELS = [
   Channel('be', 'branches/bleeding_edge', 0, '', 3),
   Channel('dev', 'trunk', 1, '-dev', 2),
-  Channel('stable', 'branches/0.6', 2, '-stable', 1),
+  Channel('stable', 'branches/0.7', 2, '-stable', 1),
 ]
 
 CHANNELS_BY_NAME = {}
