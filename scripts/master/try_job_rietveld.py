@@ -153,7 +153,7 @@ class _RietveldPoller(base.PollingChangeSource):
       endpoint = endpoint + '%scursor=%s' % (sep, self._cursor)
 
     log.msg('RietveldPoller._OpenUrl: %s' % endpoint)
-    return client.getPage(endpoint, agent='buildbot')
+    return client.getPage(endpoint, agent='buildbot', timeout=2*60)
 
   def _ParseJson(self, json_string):
     """Parses the JSON pending patch set information.
