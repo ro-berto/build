@@ -27,12 +27,12 @@ defaults['category'] = 'win asan'
 #
 # Main asan release scheduler for src/
 #
-S('win_asan_rel', branch='src', treeStableTimer=60)
+S('win_asan_dbg', branch='src', treeStableTimer=60)
 
 #
 # Triggerable scheduler for the rel asan builder
 #
-T('win_asan_rel_trigger')
+T('win_asan_dbg_trigger')
 
 win_asan_archive = master_config.GetArchiveUrl('ChromiumFYI',
                                                'Win ASAN Builder',
@@ -86,12 +86,13 @@ builder_factory_properties = {
     'GYP_GENERATORS': 'ninja',
     'GYP_LINK_CONCURRENCY_MAX': '4',
   },
-  'trigger': 'win_asan_rel_trigger',
+  'trigger': 'win_asan_dbg_trigger',
 }
-B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
+B('Win ASAN Builder', 'win_asan_dbg', 'compile_noclose', 'win_asan_dbg',
   auto_reboot=False, notify_on_missing=True)
-F('win_asan_rel', win().ChromiumASANFactory(
+F('win_asan_dbg', win().ChromiumASANFactory(
     slave_type='Builder',
+    target='Debug',
     options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
     compile_timeout=7200,
     factory_properties=builder_factory_properties))
@@ -99,9 +100,9 @@ F('win_asan_rel', win().ChromiumASANFactory(
 #
 # Win ASAN Rel testers
 #
-B('Win ASAN Tests (1)', 'win_asan_rel_tests_1', 'testers_noclose',
-  'win_asan_rel_trigger', notify_on_missing=True)
-F('win_asan_rel_tests_1', win().ChromiumASANFactory(
+B('Win ASAN Tests (1)', 'win_asan_dbg_tests_1', 'testers_noclose',
+  'win_asan_dbg_trigger', notify_on_missing=True)
+F('win_asan_dbg_tests_1', win().ChromiumASANFactory(
     slave_type='Tester',
     build_url=win_asan_archive,
     tests=tests_1,
@@ -120,9 +121,9 @@ F('win_asan_rel_tests_1', win().ChromiumASANFactory(
         },
     }))
 
-B('Win ASAN Tests (2)', 'win_asan_rel_tests_2', 'testers_noclose',
-  'win_asan_rel_trigger', notify_on_missing=True)
-F('win_asan_rel_tests_2', win().ChromiumASANFactory(
+B('Win ASAN Tests (2)', 'win_asan_dbg_tests_2', 'testers_noclose',
+  'win_asan_dbg_trigger', notify_on_missing=True)
+F('win_asan_dbg_tests_2', win().ChromiumASANFactory(
     slave_type='Tester',
     build_url=win_asan_archive,
     tests=tests_2,
