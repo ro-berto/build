@@ -38,7 +38,7 @@ defaults['category'] = 'linux'
 
 B('Linux Builder', 'linux_rel_factory', scheduler='linux_rel_scheduler',
   notify_on_missing=True)
-F('linux_rel_factory', linux().ChromiumFactory(
+F('linux_rel_factory', linux().ChromiumWebRTCFactory(
     slave_type='Builder',
     target='Release',
     options=['--compiler=goma', '--build-tool=ninja', '--',
@@ -49,7 +49,7 @@ F('linux_rel_factory', linux().ChromiumFactory(
     }))
 
 B('Linux Tester', 'linux_tester_factory', scheduler='linux_rel_trigger')
-F('linux_tester_factory', linux_tester().ChromiumFactory(
+F('linux_tester_factory', linux_tester().ChromiumWebRTCFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
@@ -64,7 +64,7 @@ F('linux_tester_factory', linux_tester().ChromiumFactory(
 # Builder to catch errors when enable_webrtc=0.
 B('Linux Daily WebRTC Disabled', 'linux_webrtc_disabled_factory',
   scheduler='linux_daily_scheduler')
-F('linux_webrtc_disabled_factory', linux().ChromiumFactory(
+F('linux_webrtc_disabled_factory', linux().ChromiumWebRTCFactory(
     slave_type='BuilderTester',
     factory_properties={
         'gclient_env': {'GYP_DEFINES': ('enable_webrtc=0 '

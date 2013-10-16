@@ -39,7 +39,7 @@ defaults['category'] = 'mac'
 
 B('Mac Builder', 'mac_rel_factory', scheduler='mac_rel_scheduler',
   builddir='chromium-webrtc-rel-mac-builder', notify_on_missing=True)
-F('mac_rel_factory', mac().ChromiumFactory(
+F('mac_rel_factory', mac().ChromiumWebRTCFactory(
     slave_type='Builder',
     target='Release',
     options=['--compiler=goma-clang', '--', '-target',
@@ -47,7 +47,7 @@ F('mac_rel_factory', mac().ChromiumFactory(
     factory_properties={'trigger': 'mac_rel_trigger',}))
 
 B('Mac Tester', 'mac_tester_factory', scheduler='mac_rel_trigger')
-F('mac_tester_factory', mac_tester().ChromiumFactory(
+F('mac_tester_factory', mac_tester().ChromiumWebRTCFactory(
     slave_type='Tester',
     build_url=chromium_rel_mac_archive,
     tests=tests,
