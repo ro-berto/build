@@ -259,7 +259,8 @@ class GClientFactory(object):
           factory_properties['update_nacl_sdk'])
 
     # Add the compile step if needed.
-    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer']:
+    if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer',
+                      'TrybotBuilder']:
       factory_cmd_obj.AddCompileStep(
           project or self._project,
           clobber,
@@ -270,7 +271,7 @@ class GClientFactory(object):
 
     if not skip_archive_steps:
       # Archive the full output directory if the machine is a builder.
-      if slave_type == 'Builder':
+      if slave_type in ['Builder', 'TrybotBuilder']:
         factory_cmd_obj.AddZipBuild(halt_on_failure=True,
                                     factory_properties=factory_properties)
 
@@ -334,7 +335,7 @@ class GClientFactory(object):
         blink_config=blink_config)
 
     if slave_type in ('AnnotatedTrybot', 'CrosTrybot', 'Trybot', 'Bisect',
-                      'TrybotTester'):
+                      'TrybotTester', 'TrybotBuilder'):
       factory_cmd_obj.AddApplyIssueStep(
           timeout=timeout,
           server=config.Master.Master4.code_review_site)
