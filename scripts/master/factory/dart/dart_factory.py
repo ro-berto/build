@@ -162,6 +162,9 @@ class DartFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
   }
 
+  # Custom deps override to not checkout eclipse if not necessary
+  CUSTOM_NO_ECLIPSE = ('dart/third_party/eclipse', None)
+
   if config.Master.trunk_internal_url:
     CUSTOM_DEPS_JAVA = ('dart/third_party/java',
                         config.Master.trunk_internal_url +
@@ -173,7 +176,7 @@ class DartFactory(gclient_factory.GClientFactory):
 
   def __init__(self, channel=None, build_dir='dart', target_platform='posix',
                trunk=False, target_os=None, custom_deps_list=None,
-               nohooks_on_update=False):
+               nohooks_on_update=False, need_java=False):
     solutions = []
     self.target_platform = target_platform
 
@@ -194,9 +197,12 @@ class DartFactory(gclient_factory.GClientFactory):
     if not custom_deps_list:
       custom_deps_list = []
 
-    if config.Master.trunk_internal_url:
+    if need_java and config.Master.trunk_internal_url:
       custom_deps_list.append(self.CUSTOM_DEPS_JAVA)
       custom_deps_list.append(self.CUSTOM_TZ)
+
+    if not need_java:
+      custom_deps_list.append(self.CUSTOM_NO_ECLIPSE)
 
     main = gclient_factory.GClientSolution(
         all_deps_url,
@@ -355,17 +361,21 @@ class DartUtils(object):
       'posix' + postfix: DartFactory(channel),
       'posixNoRunhooks' + postfix:
           DartFactory(channel, nohooks_on_update=True),
+      'posix-java' + postfix: DartFactory(channel, need_java=True),
       'chromeOnAndroid' + postfix:
           DartFactory(channel,
                       custom_deps_list=custom_deps_list_chromeOnAndroid),
       'android' + postfix: DartFactory(channel, target_os='android'),
       'windows' + postfix: DartFactory(channel, target_platform='win32'),
+      'windows-java' + postfix: DartFactory(channel, target_platform='win32',
+                                            need_java=True),
     }
     if channel.name == 'be':
       factory_base.update({
-        'posix-trunk': DartFactory(channel, trunk=True),
+        'posix-trunk': DartFactory(channel, trunk=True, need_java=True),
         'windows-trunk':
-            DartFactory(channel, target_platform='win32', trunk=True),
+            DartFactory(channel, target_platform='win32', trunk=True,
+                        need_java=True),
       })
     return factory_base
 
