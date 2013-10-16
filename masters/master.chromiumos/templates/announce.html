@@ -203,16 +203,16 @@
         <table width="100%">
           <script language="javascript">
             var closer = [
-                "builder=x86+generic+incremental",
-                "builder=amd64+generic+incremental",
+                "builder=x86-generic+incremental",
+                "builder=amd64-generic+incremental",
                 "builder=daisy+incremental",
-                "builder=x86+generic+full",
-                "builder=amd64+generic+full",
+                "builder=x86-generic+full",
+                "builder=amd64-generic+full",
                 "builder=daisy+full",
-                "builder=arm+generic+full",
+                "builder=arm-generic+full",
                 "builder=chromiumos+sdk",
-                "builder=x86+generic+ASAN",
-                "builder=amd64+generic+ASAN",
+                "builder=x86-generic+ASAN",
+                "builder=amd64-generic+ASAN",
                 "reload=30",
             ].join("&");
             var chromium_chromiumos = [
@@ -224,20 +224,20 @@
             ].join("&");
             var arm = [
                 "builder=daisy+incremental",
-                "builder=arm+generic+full",
+                "builder=arm-generic+full",
                 "builder=daisy+full",
                 "reload=30",
             ].join("&");
             var x86 = [
-                "builder=x86+generic+incremental",
-                "builder=amd64+generic+incremental",
-                "builder=x86+generic+full",
-                "builder=amd64+generic+full",
+                "builder=x86-generic+incremental",
+                "builder=amd64-generic+incremental",
+                "builder=x86-generic+full",
+                "builder=amd64-generic+full",
                 "reload=30",
             ].join("&");
             var commit_queue = [
-                "builder=x86+generic+paladin",
-                "builder=amd64+generic+paladin",
+                "builder=x86-generic+paladin",
+                "builder=amd64-generic+paladin",
             ].join("&");
 
             var bar = "http://build.chromium.org/p/chromiumos/horizontal_one_box_per_builder"
