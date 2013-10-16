@@ -30,6 +30,10 @@ def GenSteps(api):
   dashboard_upload_url = 'https://chromeperf.appspot.com'
   generated_dir = api.path.slave_build('content_gpu_data', 'generated')
   reference_dir = api.path.slave_build('content_gpu_data', 'reference')
+  telemetry_generated_dir = api.path.slave_build('content_gpu_data',
+      'telemetry', 'generated')
+  telemetry_reference_dir = api.path.slave_build('content_gpu_data',
+      'telemetry', 'reference')
   gsutil = api.path.build('scripts', 'slave', 'gsutil',
                           platform_ext={'win': '.bat'})
 
@@ -121,12 +125,45 @@ def GenSteps(api):
                      'archive_gpu_pixel_test_results.py'),
       args, always_run=True)
 
-  # WebGL conformance tests.
   # Choose a reasonable default for the location of the sandbox binary
   # on the bots.
   env = {}
   if api.platform.is_linux:
     env['CHROME_DEVEL_SANDBOX'] = '/opt/chromium/chrome_sandbox'
+
+  # Pixel tests.
+  # Note that the step name must end in 'test' or 'tests' in order for
+  # the results to automatically show up on the flakiness dashboard.
+  yield api.chromium.runtests(
+      str(api.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
+      ['pixel_test',
+          '--output-format=gtest',
+          '--generated-dir=%s' % telemetry_generated_dir,
+          '--reference-dir=%s' % telemetry_reference_dir,
+          '--build-revision=%s' % build_revision,
+          '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
+      annotate='gtest',
+      name='pixel_tests',
+      test_type='pixel_tests',
+      generate_json_file=True,
+      results_directory=api.path.slave_build('gtest-results', 'pixel_tests'),
+      build_number=api.properties['buildnumber'],
+      builder_name=api.properties['buildername'],
+      python_mode=True,
+      env=env)
+
+  # Archive telemetry pixel test results
+  args = ['--run-id',
+          '%s_%s_telemetry' % (build_revision, api.properties['buildername']),
+          '--generated-dir', telemetry_generated_dir,
+          '--gpu-reference-dir', telemetry_reference_dir,
+          '--gsutil', gsutil]
+  yield api.python('archive_pixel_test_results',
+      api.path.build('scripts', 'slave', 'chromium', \
+                     'archive_gpu_pixel_test_results.py'),
+      args, always_run=True)
+
+  # WebGL conformance tests.
   # Note that the step name must end in 'test' or 'tests' in order for
   # the results to automatically show up on the flakiness dashboard.
   yield api.chromium.runtests(
