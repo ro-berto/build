@@ -268,6 +268,8 @@ def execute(options):
 
   mastername = config['BuildmasterConfig']['properties']['mastername']
   builders = config['BuildmasterConfig']['builders']
+  options.build_properties.update(config['BuildmasterConfig'].get(
+      'properties', {}))
 
   if options.list_builders:
     master_cfg_utils.PrettyPrintBuilders(builders, mastername)
@@ -296,11 +298,10 @@ def execute_builder(my_builder, mastername, options):
   if not my_builder:
     return 2
 
-  if options.build_properties:
-    buildsetup = options.build_properties
-  else:
-    buildsetup = {}
+  buildsetup = options.build_properties
+  if 'revision' not in buildsetup:
     buildsetup['revision'] = '%d' % options.revision
+  if 'branch' not in buildsetup:
     buildsetup['branch'] = 'src'
 
   steplist, build = builder_utils.MockBuild(my_builder, buildsetup, mastername,

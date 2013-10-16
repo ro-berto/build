@@ -224,6 +224,8 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   c['projectURL'] = config.Master.project_url
 
   c['properties'] = {'mastername': GetMastername()}
+  if 'buildbotURL' in c:
+    c['properties']['buildbotURL'] = c['buildbotURL']
 
   # 'status' is a list of Status Targets. The results of each build will be
   # pushed to these targets. buildbot/status/*.py has a variety to choose from,
