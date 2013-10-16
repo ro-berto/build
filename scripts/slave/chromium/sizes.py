@@ -25,6 +25,16 @@ def get_size(filename):
   return os.stat(filename)[stat.ST_SIZE]
 
 
+def run_process(result, command):
+  p = subprocess.Popen(command, stdout=subprocess.PIPE)
+  stdout = p.communicate()[0]
+  if p.returncode != 0:
+    print 'ERROR from command "%s": %d' % (' '.join(command), p.returncode)
+    if result == 0:
+      result = p.returncode
+  return result, stdout
+
+
 def main_mac(options, args):
   """Print appropriate size information about built Mac targets.
 
@@ -43,13 +53,21 @@ def main_mac(options, args):
     app_bundle = base_name + '.app'
     framework_name = base_name + ' Framework'
     framework_bundle = framework_name + '.framework'
+    framework_dsym_bundle = framework_bundle + '.dSYM'
 
     chromium_app_dir = os.path.join(target_dir, app_bundle)
     chromium_executable = os.path.join(chromium_app_dir,
                                        'Contents', 'MacOS', base_name)
+
     chromium_framework_dir = os.path.join(target_dir, framework_bundle)
     chromium_framework_executable = os.path.join(chromium_framework_dir,
                                                  framework_name)
+
+    chromium_framework_dsym_dir = os.path.join(target_dir,
+                                               framework_dsym_bundle)
+    chromium_framework_dsym = os.path.join(chromium_framework_dsym_dir,
+                                           'Contents', 'Resources', 'DWARF',
+                                           framework_name)
     if os.path.exists(chromium_executable):
       print_dict = {
         # Remove spaces in the names so any downstream processing is less
@@ -63,31 +81,20 @@ def main_mac(options, args):
       }
 
       # Collect the segment info out of the App
-      p = subprocess.Popen(['size', chromium_executable],
-                           stdout=subprocess.PIPE)
-      stdout = p.communicate()[0]
+      result, stdout = run_process(result, ['size', chromium_executable])
       print_dict['app_text'], print_dict['app_data'], print_dict['app_objc'] = \
           re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
-      if result == 0:
-        result = p.returncode
 
       # Collect the segment info out of the Framework
-      p = subprocess.Popen(['size', chromium_framework_executable],
-                           stdout=subprocess.PIPE)
-      stdout = p.communicate()[0]
+      result, stdout = run_process(result, ['size',
+                                            chromium_framework_executable])
       print_dict['framework_text'], print_dict['framework_data'], \
         print_dict['framework_objc'] = \
           re.search('(\d+)\s+(\d+)\s+(\d+)', stdout).groups()
-      if result == 0:
-        result = p.returncode
 
       # Collect the whole size of the App bundle on disk (include the framework)
-      p = subprocess.Popen(['du', '-s', '-k', chromium_app_dir],
-                           stdout=subprocess.PIPE)
-      stdout = p.communicate()[0]
+      result, stdout = run_process(result, ['du', '-s', '-k', chromium_app_dir])
       du_s = re.search('(\d+)', stdout).group(1)
-      if result == 0:
-        result = p.returncode
       print_dict['app_bundle_size'] = (int(du_s) * 1024)
 
       # Count the number of files with at least one static initializer.
@@ -103,7 +110,20 @@ def main_mac(options, args):
       if result == 0:
         result = p.returncode
       word_size = 4  # Assume 32 bit
-      print_dict['initializers'] = int(initializers_s, 16) / word_size
+      si_count = int(initializers_s, 16) / word_size
+      print_dict['initializers'] = si_count
+
+      # For Release builds only, use dump-static-initializers.py to print the
+      # list of static initializers.
+      if si_count > 0 and options.target == 'Release':
+        dump_static_initializers = os.path.join(
+            os.path.dirname(options.build_dir), 'tools', 'mac',
+            'dump-static-initializers.py')
+        result, stdout = run_process(result, [dump_static_initializers,
+                                              chromium_framework_dsym])
+        print '\n# Static initializers in %s:' % chromium_framework_executable
+        print stdout
+
 
       print ("""RESULT %(app_name)s: %(app_name)s= %(app_size)s bytes
 RESULT %(app_name)s-__TEXT: __TEXT= %(app_text)s bytes
@@ -142,15 +162,6 @@ def check_linux_binary(target_dir, binary_name, options):
 
   result = 0
   sizes = []
-
-  def run_process(result, command):
-    p = subprocess.Popen(command, stdout=subprocess.PIPE)
-    stdout = p.communicate()[0]
-    if p.returncode != 0:
-      print 'ERROR from command "%s": %d' % (' '.join(command), p.returncode)
-      if result != 0:
-        result = p.returncode
-    return result, stdout
 
   def get_elf_section_size(readelf_stdout, section_name):
     # Matches: .ctors PROGBITS 000000000516add0 5169dd0 000010 00 WA 0 0 8
