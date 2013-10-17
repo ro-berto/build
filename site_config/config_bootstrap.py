@@ -51,6 +51,8 @@ class Master(config_private.Master):
   dart_bleeding = dart_url + '/branches/bleeding_edge'
   dart_trunk = dart_url + '/trunk'
 
+  oilpan_url = (config_private.Master.webkit_root_url + '/branches/oilpan')
+
   skia_url = 'http://skia.googlecode.com/svn/'
 
   syzygy_url = 'http://sawbuck.googlecode.com/svn/'
