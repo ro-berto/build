@@ -154,28 +154,6 @@ def GenSteps(api):
 
   # Only run the performance tests on Release builds.
   if is_release_build:
-    # Former gpu_frame_rate_test step
-    args = ['--enable-gpu',
-            '--gtest_filter=FrameRate*Test*']
-    yield api.chromium.runtests('performance_ui_tests',
-                                args,
-                                name='gpu_frame_rate_test',
-                                annotate='framerate',
-                                results_url=dashboard_upload_url,
-                                perf_dashboard_id='gpu_frame_rate',
-                                test_type='gpu_frame_rate_test')
-
-    # Former gpu_throughput_tests step
-    args = ['--enable-gpu',
-            '--gtest_filter=ThroughputTest*']
-    yield api.chromium.runtests('performance_browser_tests',
-                                args,
-                                name='gpu_throughput_tests',
-                                annotate='graphing',
-                                results_url=dashboard_upload_url,
-                                perf_dashboard_id='gpu_throughput',
-                                test_type='gpu_throughput_tests')
-
     # Former tab_capture_performance_tests_step
     args = ['--enable-gpu',
             '--gtest_filter=TabCapturePerformanceTest*']
