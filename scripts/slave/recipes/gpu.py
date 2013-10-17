@@ -29,14 +29,10 @@ SIMPLE_TESTS_TO_RUN = [
 def GenSteps(api):
   # These values may be replaced by external configuration later
   dashboard_upload_url = 'https://chromeperf.appspot.com'
-  generated_dir = api.path.slave_build('content_gpu_data', 'generated')
-  reference_dir = api.path.slave_build('content_gpu_data', 'reference')
-  telemetry_generated_dir = api.path.slave_build('content_gpu_data',
+  generated_dir = api.path.slave_build('content_gpu_data',
       'telemetry', 'generated')
-  telemetry_reference_dir = api.path.slave_build('content_gpu_data',
+  reference_dir = api.path.slave_build('content_gpu_data',
       'telemetry', 'reference')
-  gsutil = api.path.build('scripts', 'slave', 'gsutil',
-                          platform_ext={'win': '.bat'})
 
   is_release_build = api.properties.get('build_config', 'Release') == 'Release'
   # The infrastructure team has recommended not to use git yet on the
@@ -98,10 +94,7 @@ def GenSteps(api):
 
   # Former gpu_content_tests step
   args = ['--use-gpu-in-tests',
-          '--generated-dir=%s' % generated_dir,
-          '--reference-dir=%s' % reference_dir,
-          '--build-revision=%s' % build_revision,
-          '--gtest_filter=WebGLConformanceTest.*:Gpu*.*',
+          '--gtest_filter=Gpu*.*',
           '--ui-test-action-max-timeout=45000',
           '--run-manual']
   yield api.chromium.runtests('content_browsertests',
@@ -115,17 +108,6 @@ def GenSteps(api):
                               build_number=api.properties['buildnumber'],
                               builder_name=api.properties['buildername'])
 
-  # Archive test results
-  args = ['--run-id',
-          '%s_%s' % (build_revision, api.properties['buildername']),
-          '--generated-dir', generated_dir,
-          '--gpu-reference-dir', reference_dir,
-          '--gsutil', gsutil]
-  yield api.python('archive_test_results',
-      api.path.build('scripts', 'slave', 'chromium', \
-                     'archive_gpu_pixel_test_results.py'),
-      args, always_run=True)
-
   # Choose a reasonable default for the location of the sandbox binary
   # on the bots.
   env = {}
@@ -135,16 +117,16 @@ def GenSteps(api):
   # Pixel tests.
   yield api.gpu.run_telemetry_gpu_test('pixel_test',
       args=[
-          '--generated-dir=%s' % telemetry_generated_dir,
-          '--reference-dir=%s' % telemetry_reference_dir,
+          '--generated-dir=%s' % generated_dir,
+          '--reference-dir=%s' % reference_dir,
           '--build-revision=%s' % build_revision,
       ])
 
   # Archive telemetry pixel test results
   yield api.gpu.archive_pixel_test_results('archive_pixel_test_results',
       '%s_%s_telemetry' % (build_revision, api.properties['buildername']),
-      generated_dir=telemetry_generated_dir,
-      reference_dir=telemetry_reference_dir)
+      generated_dir=generated_dir,
+      reference_dir=reference_dir)
 
   # WebGL conformance tests.
   yield api.gpu.run_telemetry_gpu_test('webgl_conformance',

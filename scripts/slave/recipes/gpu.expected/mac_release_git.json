@@ -208,31 +208,11 @@
       "--builder-name=TestBuilder",
       "content_browsertests",
       "--use-gpu-in-tests",
-      "--generated-dir=[SLAVE_BUILD]/content_gpu_data/generated",
-      "--reference-dir=[SLAVE_BUILD]/content_gpu_data/reference",
-      "--build-revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
-      "--gtest_filter=WebGLConformanceTest.*:Gpu*.*",
+      "--gtest_filter=Gpu*.*",
       "--ui-test-action-max-timeout=45000",
       "--run-manual"
     ],
     "name": "content_browsertests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/chromium/archive_gpu_pixel_test_results.py",
-      "--run-id",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_TestBuilder",
-      "--generated-dir",
-      "[SLAVE_BUILD]/content_gpu_data/generated",
-      "--gpu-reference-dir",
-      "[SLAVE_BUILD]/content_gpu_data/reference",
-      "--gsutil",
-      "[BUILD]/scripts/slave/gsutil"
-    ],
-    "name": "archive_test_results"
   },
   {
     "allow_subannotations": true,
