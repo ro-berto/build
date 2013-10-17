@@ -186,6 +186,7 @@ F('rel_sync', linux_tester().ChromiumFactory(
 #
 
 linux_aura_tests = [
+  'app_list_unittests',
   'aura',
   'base_unittests',
   'browser_tests',
@@ -214,6 +215,7 @@ linux_aura_tests = [
 ]
 
 linux_aura_options = [
+  'app_list_unittests',
   'aura_builder',
   'base_unittests',
   'browser_tests',

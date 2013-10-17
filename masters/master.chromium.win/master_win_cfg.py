@@ -244,6 +244,7 @@ F('rel_x64_unit_2', win_tester().ChromiumFactory(
     target='Release_x64',
     build_url=rel_x64_archive,
     tests=[
+      'app_list_unittests',
       'base_unittests',
       'browser_tests',
       'net_unittests',

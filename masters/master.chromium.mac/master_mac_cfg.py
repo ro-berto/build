@@ -94,6 +94,7 @@ F('rel_unit_1', mac_tester().ChromiumFactory(
   slave_type='Tester',
   build_url=rel_archive,
   tests=[
+    'app_list_unittests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',

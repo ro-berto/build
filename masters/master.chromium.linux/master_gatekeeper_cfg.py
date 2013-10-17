@@ -13,6 +13,7 @@ from master import master_utils
 categories_steps = {
   '': ['update', 'runhooks'],
   'testers': [
+    'app_list_unittets',
     'aura_unittests',
     'base_unittests',
     'browser_tests',
