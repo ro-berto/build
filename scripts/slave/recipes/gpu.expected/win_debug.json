@@ -235,6 +235,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\content\\test\\gpu\\run_gpu_test",
       "pixel_test",
+      "--show-stdout",
       "--output-format=gtest",
       "--generated-dir=[SLAVE_BUILD]\\content_gpu_data\\telemetry\\generated",
       "--reference-dir=[SLAVE_BUILD]\\content_gpu_data\\telemetry\\reference",
@@ -285,6 +286,7 @@
       "--run-python-script",
       "[SLAVE_BUILD]\\src\\content\\test\\gpu\\run_gpu_test",
       "webgl_conformance",
+      "--show-stdout",
       "--output-format=gtest",
       "--webgl-conformance-version=1.0.1",
       "--browser=debug"

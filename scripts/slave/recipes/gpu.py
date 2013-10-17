@@ -137,6 +137,7 @@ def GenSteps(api):
   yield api.chromium.runtests(
       str(api.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
       ['pixel_test',
+          '--show-stdout',
           '--output-format=gtest',
           '--generated-dir=%s' % telemetry_generated_dir,
           '--reference-dir=%s' % telemetry_reference_dir,
@@ -169,6 +170,7 @@ def GenSteps(api):
   yield api.chromium.runtests(
       str(api.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
       ['webgl_conformance',
+          '--show-stdout',
           '--output-format=gtest',
           '--webgl-conformance-version=1.0.1',
           '--browser=%s' % api.chromium.c.BUILD_CONFIG.lower()],
