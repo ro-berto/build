@@ -1350,7 +1350,10 @@ def main():
       # On ASan+LSan bots we enable leak detection. Also, since sandbox is
       # disabled under LSan, we can symbolize.
       os.environ['ASAN_OPTIONS'] = (common_asan_options +
-                                    'detect_leaks=1')
+                                    'detect_leaks=1 ')
+      # Temprorarily disable the fast unwinder on the FYI LSan bot.
+      if options.factory_properties.get('lsan_run_all_tests', False):
+        os.environ['ASAN_OPTIONS'] += 'fast_unwind_on_malloc=0 '
       os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
     else:
       # Disable the builtin online symbolizer, see http://crbug.com/243255.
