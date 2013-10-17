@@ -17,9 +17,6 @@ T = helper.Triggerable
 
 def linux():
   return chromium_factory.ChromiumFactory('src/out', 'linux2')
-def linux_tester():
-  return chromium_factory.ChromiumFactory('src/out', 'linux2',
-                                          nohooks_on_update=True)
 
 S('linux_rel_scheduler', branch='src', treeStableTimer=60)
 P('linux_daily_scheduler', periodicBuildTimer=24*60*60)
@@ -49,7 +46,7 @@ F('linux_rel_factory', linux().ChromiumWebRTCFactory(
     }))
 
 B('Linux Tester', 'linux_tester_factory', scheduler='linux_rel_trigger')
-F('linux_tester_factory', linux_tester().ChromiumWebRTCFactory(
+F('linux_tester_factory', linux().ChromiumWebRTCFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,

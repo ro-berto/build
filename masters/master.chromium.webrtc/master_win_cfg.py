@@ -16,9 +16,6 @@ T = helper.Triggerable
 
 def win():
   return chromium_factory.ChromiumFactory('src/build', 'win32')
-def win_tester():
-  return chromium_factory.ChromiumFactory('src/build', 'win32',
-                                          nohooks_on_update=True)
 
 S('win_rel_scheduler', branch='src', treeStableTimer=60)
 T('win_rel_trigger')
@@ -44,7 +41,7 @@ F('win_rel_factory', win().ChromiumWebRTCFactory(
                         'build_url': chromium_rel_archive,}))
 
 B('WinXP Tester', 'win_xp_tester_factory', scheduler='win_rel_trigger')
-F('win_xp_tester_factory', win_tester().ChromiumWebRTCFactory(
+F('win_xp_tester_factory', win().ChromiumWebRTCFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,
@@ -58,7 +55,7 @@ F('win_xp_tester_factory', win_tester().ChromiumWebRTCFactory(
     }))
 
 B('Win7 Tester', 'win_7_tester_factory', scheduler='win_rel_trigger')
-F('win_7_tester_factory', win_tester().ChromiumWebRTCFactory(
+F('win_7_tester_factory', win().ChromiumWebRTCFactory(
     slave_type='Tester',
     build_url=chromium_rel_archive,
     tests=tests,

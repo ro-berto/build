@@ -16,9 +16,6 @@ T = helper.Triggerable
 
 def mac():
   return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
-def mac_tester():
-  return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin',
-                                          nohooks_on_update=True)
 
 S('mac_rel_scheduler', branch='src', treeStableTimer=60)
 T('mac_rel_trigger')
@@ -47,7 +44,7 @@ F('mac_rel_factory', mac().ChromiumWebRTCFactory(
     factory_properties={'trigger': 'mac_rel_trigger',}))
 
 B('Mac Tester', 'mac_tester_factory', scheduler='mac_rel_trigger')
-F('mac_tester_factory', mac_tester().ChromiumWebRTCFactory(
+F('mac_tester_factory', mac().ChromiumWebRTCFactory(
     slave_type='Tester',
     build_url=chromium_rel_mac_archive,
     tests=tests,
