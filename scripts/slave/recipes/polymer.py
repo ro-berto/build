@@ -18,6 +18,7 @@ REPOS = (
   'polymer',
   'platform',
   'WeakMap',
+  'MutationObservers',
   'CustomElements',
   'ShadowDOM',
   'HTMLImports',
