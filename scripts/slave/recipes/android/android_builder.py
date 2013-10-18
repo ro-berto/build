@@ -30,6 +30,7 @@ def GenSteps(api):
     yield droid.checkdeps()
 
   yield droid.upload_build()
+  yield droid.cleanup_build()
 
 def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',

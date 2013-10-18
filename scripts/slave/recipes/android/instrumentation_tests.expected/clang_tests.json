@@ -138,17 +138,38 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/download_and_extract_build.py",
-      "-b",
-      "parent_buildername",
-      "-d",
-      "[SLAVE_BUILD]/src/out",
-      "-r",
-      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
-      "-g",
-      "[BUILD]/scripts/slave/gsutil"
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "gs://build-bucket/parent_buildername/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar",
+      "[SLAVE_BUILD]/src/out"
     ],
-    "name": "download_build"
+    "name": "gsutil download_build_product"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nimport tarfile\n\ntar = tarfile.open(sys.argv[1], 'r')\ndest = '.'\nif len(sys.argv) == 3:\n  dest = sys.argv[2]\ntar.extractall(dest)\ntar.close()\n",
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar",
+      "Debug"
+    ],
+    "cwd": "[SLAVE_BUILD]/src/out",
+    "name": "untar_build_product",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import tarfile@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@tar = tarfile.open(sys.argv[1], 'r')@@@",
+      "@@@STEP_LOG_LINE@python.inline@dest = '.'@@@",
+      "@@@STEP_LOG_LINE@python.inline@if len(sys.argv) == 3:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  dest = sys.argv[2]@@@",
+      "@@@STEP_LOG_LINE@python.inline@tar.extractall(dest)@@@",
+      "@@@STEP_LOG_LINE@python.inline@tar.close()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
   },
   {
     "can_fail_build": false,
@@ -304,5 +325,14 @@
       "@@@STEP_LOG_LINE@python.inline@  os.remove(report)@@@",
       "@@@STEP_LOG_END@python.inline@@@"
     ]
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "rm",
+      "-rf",
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar"
+    ],
+    "name": "cleanup_build"
   }
 ]

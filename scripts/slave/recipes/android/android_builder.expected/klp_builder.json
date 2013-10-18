@@ -188,18 +188,44 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/repo/build/upload_build.py",
-      "-b",
-      "builder_name",
-      "-t",
-      "Debug",
-      "-d",
-      "[SLAVE_BUILD]/src/out",
-      "-r",
-      "4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
-      "-g",
-      "[BUILD]/scripts/slave/gsutil"
+      "python",
+      "-u",
+      "\nimport sys\nimport tarfile\n\ntar = tarfile.open(sys.argv[1], 'w')\nfor arg in sys.argv[2:]:\n  tar.add(arg)\ntar.close()\n",
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar",
+      "Debug"
     ],
-    "name": "upload_build"
+    "cwd": "[SLAVE_BUILD]/src/out",
+    "name": "tar_build_product",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import tarfile@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@tar = tarfile.open(sys.argv[1], 'w')@@@",
+      "@@@STEP_LOG_LINE@python.inline@for arg in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  tar.add(arg)@@@",
+      "@@@STEP_LOG_LINE@python.inline@tar.close()@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
+      "cp",
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar",
+      "gs://build-bucket/builder_name"
+    ],
+    "name": "gsutil upload_build_product"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "rm",
+      "-rf",
+      "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar"
+    ],
+    "name": "cleanup_build"
   }
 ]

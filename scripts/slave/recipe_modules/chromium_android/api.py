@@ -9,6 +9,7 @@ class AndroidApi(recipe_api.RecipeApi):
     super(AndroidApi, self).__init__(**kwargs)
     self._env = dict()
     self._internal_names = dict()
+    self._cleanup_list = []
 
   def get_env(self):
     env_dict = dict(self._env)
@@ -169,32 +170,42 @@ class AndroidApi(recipe_api.RecipeApi):
           [self.c.internal_dir('bin', 'lint.py')],
           env=self.get_env())
 
-  # TODO(sivachandra): Clean this step up after cleaning up the zip_build.py
-  # script in scripts/slave. This step should ideally use that script.
   def upload_build(self):
-    if self.c.INTERNAL:
-      yield self.m.step(
-          'upload_build',
-          [self.c.internal_dir('build', 'upload_build.py'),
-           '-b', self.m.properties['buildername'],
-           '-t', self.m.chromium.c.BUILD_CONFIG,
-           '-d', self.m.path.checkout('out'),
-           '-r', (self.m.properties.get('revision') or
-                  self.m.properties.get('buildnumber')),
-           '-g', self.m.path.build('scripts', 'slave', 'gsutil')])
+    revision = (self.m.properties.get('revision') or
+                self.m.properties.get('buildnumber'))
+    tarfile = self.m.path.checkout('out', 'build_product_%s.tar' % revision)
+    self._cleanup_list.append(tarfile)
+    yield self.m.archive.tar(
+        'tar_build_product',
+         tarfile,
+         [self.m.chromium.c.BUILD_CONFIG],
+         cwd=self.m.path.checkout('out')
+    )
+    yield self.m.gsutil.upload(
+        name='upload_build_product',
+        source=tarfile,
+        bucket=self._internal_names['BUILD_BUCKET'],
+        dest=self.m.properties['buildername']
+    )
 
-  # TODO(sivachandra): Clean this step up after cleaning up the extract_build.py
-  # script in scripts/slave. This step should ideally use that script.
   def download_build(self):
-    if self.c.INTERNAL:
-      yield self.m.step(
-          'download_build',
-          [self.c.internal_dir('build', 'download_and_extract_build.py'),
-           '-b', self.m.properties['parent_buildername'],
-           '-d', self.m.path.checkout('out'),
-           '-r', (self.m.properties.get('revision') or
-                  self.m.properties.get('parent_buildnumber')),
-           '-g', self.m.path.build('scripts', 'slave', 'gsutil')])
+    revision = (self.m.properties.get('revision') or
+                self.m.properties.get('parent_buildnumber'))
+    tarfile = self.m.path.checkout('out', 'build_product_%s.tar' % revision)
+    self._cleanup_list.append(tarfile)
+    yield self.m.gsutil.download(
+        name='download_build_product',
+        bucket=self._internal_names['BUILD_BUCKET'],
+        source='%s/%s' % (self.m.properties['parent_buildername'],
+                          'build_product_%s.tar' % revision),
+        dest=self.m.path.checkout('out')
+    )
+    yield self.m.archive.untar(
+        'untar_build_product',
+        tarfile,
+        self.m.chromium.c.BUILD_CONFIG,
+        cwd=self.m.path.checkout('out')
+    )
 
   def spawn_logcat_monitor(self):
     return self.m.step(
@@ -306,6 +317,12 @@ class AndroidApi(recipe_api.RecipeApi):
          always_run=True
     )
 
+  def cleanup_build(self):
+    return self.m.step(
+        'cleanup_build',
+        ['rm', '-rf'] + self._cleanup_list,
+        always_run=True)
+
   def common_tree_setup_steps(self):
     yield self.init_and_sync()
     yield self.envsetup()
@@ -321,3 +338,4 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.logcat_dump()
     yield self.stack_tool_steps()
     yield self.test_report()
+    yield self.cleanup_build()

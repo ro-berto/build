@@ -3,14 +3,5 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'archive',
-  'chromium',
-  'gclient',
-  'gsutil',
-  'json',
-  'path',
-  'properties',
   'python',
-  'step',
-  'step_history'
 ]
