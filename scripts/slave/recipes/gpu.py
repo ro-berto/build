@@ -134,6 +134,9 @@ def GenSteps(api):
           '--webgl-conformance-version=1.0.1'
       ])
 
+  # Context lost tests.
+  yield api.gpu.run_telemetry_gpu_test('context_lost')
+
   # Only run the performance tests on Release builds.
   if is_release_build:
     # Former tab_capture_performance_tests_step
