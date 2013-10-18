@@ -1741,7 +1741,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # email, e.g. the blamelist to be properly set, but that causes any patch to
     # be caried over, which is annoying but benign.
     self._factory.addStep(commands.CreateTriggerStep(
-        trigger_name='swarm_triggered',
+        trigger_name=factory_properties['triggered_builder'],
         trigger_set_properties={
             'target_os': self._target_platform,
             'use_swarm_client_revision':

@@ -10,8 +10,8 @@ Common usage:
 - For a split builder&tester configuration, use:
   - One ChromiumFactory() builder with 'run_default_swarm_tests' set to the list
     of tests to run on Swarm on the 'tester'.
-  - One SwarmTestBuilder() builder named 'swarm_triggered', the builder name
-    is currently hardcoded.
+  - One SwarmTestBuilder() builder named something like 'linux_swarm_triggered'.
+    It is defined as fp['triggered_builder']
 
 - For a single buildertester configuration, use:
   - SwarmFactory()
