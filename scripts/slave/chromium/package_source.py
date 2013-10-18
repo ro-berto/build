@@ -156,7 +156,7 @@ def main():
                   # The only files under src/out we want to package up
                   # are index files and generated sources.
                   '(', '-regex', '^src/out/.*index$', '-o',
-                       '-regex', '^src/out/[^/]*/obj/gen/.*', '-o',
+                       '-regex', '^src/out/[^/]*/gen/.*', '-o',
                        '!', '-regex', '^src/out/.*', ')', '-a',
                   # Exclude all .svn directories, the native client toolchain
                   # and the llvm build directory, and perf/data files.
