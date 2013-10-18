@@ -14,6 +14,7 @@
       "gclient revert",
       "gclient sync",
       "gclient runhooks",
+      "apply oilpan patches",
       "compile"
     ]
   },
@@ -84,6 +85,14 @@
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/third_party/WebKit/Source/apply_oilpan_patches.py"
+    ],
+    "name": "apply oilpan patches"
   },
   {
     "abort_on_failure": true,
