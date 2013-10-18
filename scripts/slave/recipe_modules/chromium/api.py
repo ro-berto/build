@@ -96,6 +96,47 @@ class ChromiumApi(recipe_api.RecipeApi):
       **kwargs
     )
 
+  def run_telemetry_test(self, runner, test, name='', args=None,
+      results_directory=''):
+    # Choose a reasonable default for the location of the sandbox binary
+    # on the bots.
+    env = {}
+    if self.m.platform.is_linux:
+      env['CHROME_DEVEL_SANDBOX'] = self.m.path.join(
+          '/opt', 'chromium', 'chrome_sandbox')
+
+    if not name:
+      name = test
+
+    # The step name must end in 'test' or 'tests' in order for the results to
+    # automatically show up on the flakiness dashboard.
+    if not (name.endswith('test') or name.endswith('tests')):
+      name = '%s_tests' % name
+
+    test_args = [test,
+        '--show-stdout',
+        '--output-format=gtest',
+        '--browser=%s' % self.c.BUILD_CONFIG.lower()]
+
+    if args:
+      test_args.extend(args)
+
+    if not results_directory:
+      results_directory = self.m.path.slave_build('gtest-results', name)
+
+    return self.runtests(
+        runner,
+        test_args,
+        annotate='gtest',
+        name=name,
+        test_type=name,
+        generate_json_file=True,
+        results_directory=results_directory,
+        build_number=self.m.properties['buildnumber'],
+        builder_name=self.m.properties['buildername'],
+        python_mode=True,
+        env=env)
+
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
     env = kwargs.get('env', {})
