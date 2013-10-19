@@ -25,9 +25,17 @@ class RootPage(HtmlResource):
         status = self.getStatus(request)
 
         if request.path == '/shutdown':
-            return redirectTo(path_to_authfail(request), request)
+            if self.getAuthz(request).actionAllowed("cleanShutdown", request):
+                eventually(status.cleanShutdown)
+                return redirectTo("/", request)
+            else:
+                return redirectTo(path_to_authfail(request), request)
         elif request.path == '/cancel_shutdown':
-            return redirectTo(path_to_authfail(request), request)
+            if self.getAuthz(request).actionAllowed("cleanShutdown", request):
+                eventually(status.cancelCleanShutdown)
+                return redirectTo("/", request)
+            else:
+                return redirectTo(path_to_authfail(request), request)
 
         cxt.update(
                 shutting_down = status.shuttingDown,

@@ -15,7 +15,6 @@ from twisted.python import log
 from zope.interface import implements
 
 from master.autoreboot_buildslave import AutoRebootBuildSlave
-from buildbot.status.web.authz import Authz
 from buildbot.status.web.baseweb import WebStatus
 
 import master.chromium_status_bb8 as chromium_status
@@ -276,17 +275,16 @@ def AutoSetupMaster(c, active_master, mail_notifier=False,
   if buildbot.version == '0.8.4p1':
     kwargs['provide_feeds'] = ['json']
   if active_master.master_port:
-    # Actions we want to allow must be explicitly listed here.
-    authz = Authz(forceBuild=True, cancelPendingBuild=True)
     c['status'].append(CreateWebStatus(active_master.master_port,
                                        tagComparator=tagComparator,
-                                       authz=authz,
+                                       allowForce=True,
                                        num_events_max=3000,
                                        templates=templates,
                                        **kwargs))
   if active_master.master_port_alt:
     c['status'].append(CreateWebStatus(active_master.master_port_alt,
                                        tagComparator=tagComparator,
+                                       allowForce=False,
                                        num_events_max=3000,
                                        templates=templates,
                                        **kwargs))

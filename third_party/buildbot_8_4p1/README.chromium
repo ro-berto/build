@@ -3182,28 +3182,3 @@ index 5304401..c90ad32 100644
                  builder_status.buildCache.set_max_size(max_size)
                  builder_status.buildCacheSize = max_size
 
-Index: third_party/buildbot_8_4p1/buildbot/status/web/root.py
-Hard-disables shutdown hooks for https://code.google.com/p/chromium/issues/detail?id=309046
-===================================================================
---- third_party/buildbot_8_4p1/buildbot/status/web/root.py	(revision 229253)
-+++ third_party/buildbot_8_4p1/buildbot/status/web/root.py	(working copy)
-@@ -25,17 +25,9 @@
-         status = self.getStatus(request)
- 
-         if request.path == '/shutdown':
--            if self.getAuthz(request).actionAllowed("cleanShutdown", request):
--                eventually(status.cleanShutdown)
--                return redirectTo("/", request)
--            else:
--                return redirectTo(path_to_authfail(request), request)
-+            return redirectTo(path_to_authfail(request), request)
-         elif request.path == '/cancel_shutdown':
--            if self.getAuthz(request).actionAllowed("cleanShutdown", request):
--                eventually(status.cancelCleanShutdown)
--                return redirectTo("/", request)
--            else:
--                return redirectTo(path_to_authfail(request), request)
-+            return redirectTo(path_to_authfail(request), request)
- 
-         cxt.update(
-                 shutting_down = status.shuttingDown,
