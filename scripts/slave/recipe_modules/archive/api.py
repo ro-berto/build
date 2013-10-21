@@ -14,7 +14,7 @@ class ArchiveApi(recipe_api.RecipeApi):
           import sys
           import tarfile
 
-          tar = tarfile.open(sys.argv[1], 'w')
+          tar = tarfile.open(sys.argv[1], 'w:gz')
           for arg in sys.argv[2:]:
             tar.add(arg)
           tar.close()

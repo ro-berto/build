@@ -213,7 +213,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys\nimport tarfile\n\ntar = tarfile.open(sys.argv[1], 'w')\nfor arg in sys.argv[2:]:\n  tar.add(arg)\ntar.close()\n",
+      "\nimport sys\nimport tarfile\n\ntar = tarfile.open(sys.argv[1], 'w:gz')\nfor arg in sys.argv[2:]:\n  tar.add(arg)\ntar.close()\n",
       "[SLAVE_BUILD]/src/out/build_product_4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00.tar",
       "Debug"
     ],
@@ -224,7 +224,7 @@
       "@@@STEP_LOG_LINE@python.inline@import sys@@@",
       "@@@STEP_LOG_LINE@python.inline@import tarfile@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@tar = tarfile.open(sys.argv[1], 'w')@@@",
+      "@@@STEP_LOG_LINE@python.inline@tar = tarfile.open(sys.argv[1], 'w:gz')@@@",
       "@@@STEP_LOG_LINE@python.inline@for arg in sys.argv[2:]:@@@",
       "@@@STEP_LOG_LINE@python.inline@  tar.add(arg)@@@",
       "@@@STEP_LOG_LINE@python.inline@tar.close()@@@",
