@@ -1243,8 +1243,7 @@ def main():
   if options.pass_target and options.target:
     args.extend(['--target', options.target])
   if options.pass_build_dir:
-    # TODO(thakis): Try to get rid of the abspath() call.
-    args.extend(['--build-dir', os.path.abspath(options.build_dir)])
+    args.extend(['--build-dir', options.build_dir])
 
 
   # Some test suites are not yet green under LSan, so do not enable LSan for
