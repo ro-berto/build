@@ -67,8 +67,7 @@ def real_main(options):
   Extract to build\BuildDir\full-build-win32 and rename it to
   build\BuildDir\Target
   """
-  target_build_output_dir = os.path.join(options.build_output_dir,
-                                         options.target)
+  target_build_output_dir = os.path.join(options.build_dir, options.target)
   platform = chromium_utils.PlatformName()
 
   revision = options.revision
@@ -83,7 +82,7 @@ def real_main(options):
 
   output_name = archive_name.replace('.zip', '')
   output_name = output_name.replace('.tar.gz', '')
-  output_dir = os.path.join(options.build_output_dir, output_name)
+  output_dir = os.path.join(options.build_dir, output_name)
 
   # We try to download and extract 3 times.
   for tries in range(1, 4):
@@ -102,8 +101,7 @@ def real_main(options):
     if failure:
       continue
 
-    print 'Extracting build %s to %s...' % (archive_name,
-                                            options.build_output_dir)
+    print 'Extracting build %s to %s...' % (archive_name, options.build_dir)
     try:
       chromium_utils.RemoveDirectory(target_build_output_dir)
       chromium_utils.ExtractZip(archive_name, output_dir)
@@ -114,8 +112,7 @@ def real_main(options):
           os.path.isdir(os.path.join(output_dir, entries[0]))):
         output_dir = os.path.join(output_dir, entries[0])
 
-      print 'Moving build from %s to %s' % (output_dir,
-                                            target_build_output_dir)
+      print 'Moving build from %s to %s' % (output_dir, target_build_output_dir)
       shutil.move(output_dir, target_build_output_dir)
     except (OSError, IOError, chromium_utils.ExternalError):
       print 'Failed to extract the build.'
@@ -140,8 +137,6 @@ def main():
                                 'the Release or Debug directory)')
   option_parser.add_option('--build-url',
                            help='url where to find the build to extract')
-  option_parser.add_option('--build-output-dir',
-                           help='Output path relative to --build-dir.')
   option_parser.add_option('--revision',
                            help='Revision number to download.')
   chromium_utils.AddPropertiesOptions(option_parser)
@@ -151,15 +146,11 @@ def main():
     print 'Unknown options: %s' % args
     return 1
 
-  if options.build_output_dir:
-    options.build_output_dir = os.path.join(options.build_dir,
-                                            options.build_output_dir)
-  else:
-    options.build_output_dir, bad = build_directory.ConvertBuildDirToLegacy(
-        options.build_dir)
-    if bad:
-      return slave_utils.WARNING_EXIT_CODE
-  options.build_output_dir = os.path.abspath(options.build_output_dir)
+  options.build_dir, bad = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
+  if bad:
+    return slave_utils.WARNING_EXIT_CODE
+  options.build_dir = os.path.abspath(options.build_dir)
 
   options.build_url = (options.build_url or
                        options.factory_properties.get('build_url'))
