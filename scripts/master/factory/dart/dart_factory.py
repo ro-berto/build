@@ -173,7 +173,7 @@ class DartFactory(gclient_factory.GClientFactory):
 
   def __init__(self, channel=None, build_dir='dart', target_platform='posix',
                trunk=False, target_os=None, custom_deps_list=None,
-               nohooks_on_update=False):
+               nohooks_on_update=False, is_standalone=False):
     solutions = []
     self.target_platform = target_platform
 
@@ -183,13 +183,16 @@ class DartFactory(gclient_factory.GClientFactory):
 
     # If this is trunk use the deps file from there instead.
     if trunk:
-      all_deps_url = config.Master.dart_trunk + '/deps/all.deps'
+      deps_url = config.Master.dart_trunk + '/deps/all.deps'
     else:
       # 'channel.all_deps_path' can be for example:
       #   "/branches/bleeding_edge/deps/all.deps"
       # config.Master.dart_url will be the base svn url. It will point to the
       # mirror if we're in golo and otherwise to the googlecode location.
-      all_deps_url = config.Master.dart_url + channel.all_deps_path
+      if is_standalone:
+        deps_url = config.Master.dart_url + channel.standalone_deps_path
+      else:
+        deps_url = config.Master.dart_url + channel.all_deps_path
 
     if not custom_deps_list:
       custom_deps_list = []
@@ -199,7 +202,7 @@ class DartFactory(gclient_factory.GClientFactory):
       custom_deps_list.append(self.CUSTOM_TZ)
 
     main = gclient_factory.GClientSolution(
-        all_deps_url,
+        deps_url,
         needed_components=self.NEEDED_COMPONENTS,
         custom_deps_list = custom_deps_list,
         custom_vars_list = custom_vars_list)
@@ -353,8 +356,9 @@ class DartUtils(object):
     postfix = channel.builder_postfix
     factory_base = {
       'posix' + postfix: DartFactory(channel),
-      'posixNoRunhooks' + postfix:
-          DartFactory(channel, nohooks_on_update=True),
+      'posix-standalone' + postfix: DartFactory(channel, is_standalone=True),
+      'posix-standalone-noRunhooks' + postfix:
+          DartFactory(channel, nohooks_on_update=True, is_standalone=True),
       'chromeOnAndroid' + postfix:
           DartFactory(channel,
                       custom_deps_list=custom_deps_list_chromeOnAndroid),

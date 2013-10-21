@@ -11,6 +11,7 @@ class Channel(object):
     self.position = position
     self.priority = priority
     self.all_deps_path = '/' + branch + '/deps/all.deps'
+    self.standalone_deps_path = '/' + branch + '/deps/standalone.deps'
     self.dartium_deps_path = '/' + branch + '/deps/dartium.deps'
 
 # The channel names are replicated in the slave.cfg files for all
