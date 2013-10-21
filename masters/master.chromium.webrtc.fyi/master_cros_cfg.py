@@ -50,9 +50,9 @@ def create_cbuildbot_factory(checkout_factory, target, gs_path, short_name):
 
 S('cros_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('cros_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
-P('cros_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
-trunk_schedulers = 'cros_webrtc_trunk_scheduler|cros_every_4_hours_scheduler'
-stable_schedulers = 'cros_webrtc_stable_scheduler|cros_every_4_hours_scheduler'
+P('cros_periodic_scheduler', periodicBuildTimer=2*60*60)
+trunk_schedulers = 'cros_webrtc_trunk_scheduler|cros_periodic_scheduler'
+stable_schedulers = 'cros_webrtc_stable_scheduler|cros_periodic_scheduler'
 
 defaults['category'] = 'chromiumos'
 

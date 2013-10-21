@@ -19,7 +19,7 @@ def linux():
 
 S('linux_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('linux_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
-P('linux_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
+P('linux_periodic_scheduler', periodicBuildTimer=60*60)
 
 options = ['--compiler=goma',  '--build-tool=ninja', '--',
            'chromium_builder_webrtc']
@@ -34,7 +34,7 @@ tests = [
 defaults['category'] = 'linux'
 
 B('Linux [latest WebRTC trunk]', 'linux_webrtc_trunk_factory',
-  scheduler='linux_webrtc_trunk_scheduler|linux_every_4_hours_scheduler',
+  scheduler='linux_webrtc_trunk_scheduler|linux_periodic_scheduler',
   notify_on_missing=True)
 F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
     slave_type='BuilderTester',
@@ -49,7 +49,7 @@ F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
     }))
 
 B('Linux [latest WebRTC stable]', 'linux_webrtc_stable_factory',
-  scheduler='linux_webrtc_stable_scheduler|linux_every_4_hours_scheduler',
+  scheduler='linux_webrtc_stable_scheduler|linux_periodic_scheduler',
   notify_on_missing=True)
 F('linux_webrtc_stable_factory', linux().ChromiumWebRTCLatestStableFactory(
     slave_type='BuilderTester',

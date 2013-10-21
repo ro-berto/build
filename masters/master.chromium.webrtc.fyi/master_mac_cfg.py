@@ -19,7 +19,7 @@ def mac():
 
 S('mac_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('mac_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
-P('mac_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
+P('mac_periodic_scheduler', periodicBuildTimer=60*60)
 
 options = ['--compiler=goma-clang', '--', '-target', 'chromium_builder_webrtc']
 tests = [
@@ -33,7 +33,7 @@ tests = [
 defaults['category'] = 'mac'
 
 B('Mac [latest WebRTC trunk]', 'mac_webrtc_trunk_factory',
-  scheduler='mac_webrtc_trunk_scheduler|mac_every_4_hours_scheduler',
+  scheduler='mac_webrtc_trunk_scheduler|mac_periodic_scheduler',
   notify_on_missing=True)
 F('mac_webrtc_trunk_factory', mac().ChromiumWebRTCLatestTrunkFactory(
     slave_type='BuilderTester',
@@ -47,7 +47,7 @@ F('mac_webrtc_trunk_factory', mac().ChromiumWebRTCLatestTrunkFactory(
     }))
 
 B('Mac [latest WebRTC stable]', 'mac_webrtc_stable_factory',
-  scheduler='mac_webrtc_stable_scheduler|mac_every_4_hours_scheduler',
+  scheduler='mac_webrtc_stable_scheduler|mac_periodic_scheduler',
   notify_on_missing=True)
 F('mac_webrtc_stable_factory', mac().ChromiumWebRTCLatestStableFactory(
     slave_type='BuilderTester',

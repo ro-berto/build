@@ -41,7 +41,7 @@ def f_dbg_android_tests(bot_id_suffix):
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
-      'android_bot_id': 'webrtc-tests-dbg-%s' % bot_id_suffix,
+      'android_bot_id': 'webrtc-native-tests-dbg-%s' % bot_id_suffix,
       'build_url': android_dbg_archive,
     })
 
@@ -51,7 +51,7 @@ def f_rel_android_tests(bot_id_suffix):
     target='Release',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
-      'android_bot_id': 'webrtc-tests-rel-%s' % bot_id_suffix,
+      'android_bot_id': 'webrtc-native-tests-rel-%s' % bot_id_suffix,
       'build_url': android_rel_archive,
     })
 
@@ -81,7 +81,7 @@ F('f_android_apk_dbg', android_apk().ChromiumWebRTCAndroidFactory(
   target='Debug',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
-      'android_bot_id': 'webrtc-builder-dbg',
+      'android_bot_id': 'webrtc-native-builder-dbg',
       'build_url': android_dbg_archive,
       'trigger': 'android_trigger_dbg',
   }))
@@ -92,7 +92,7 @@ F('f_android_apk_rel', android_apk().ChromiumWebRTCAndroidFactory(
   target='Release',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
-      'android_bot_id': 'webrtc-builder-rel',
+      'android_bot_id': 'webrtc-native-builder-rel',
       'build_url': android_rel_archive,
       'trigger': 'android_trigger_rel',
   }))

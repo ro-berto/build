@@ -19,7 +19,7 @@ def win():
 
 S('win_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
 S('win_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
-P('win_every_4_hours_scheduler', periodicBuildTimer=4*60*60)
+P('win_periodic_scheduler', periodicBuildTimer=4*60*60)
 
 project = 'all.sln;chromium_builder_webrtc'
 tests = [
@@ -33,7 +33,7 @@ tests = [
 defaults['category'] = 'win'
 
 B('Win [latest WebRTC trunk]', 'win_webrtc_trunk_factory',
-  scheduler='win_webrtc_trunk_scheduler|win_every_4_hours_scheduler',
+  scheduler='win_webrtc_trunk_scheduler|win_periodic_scheduler',
   notify_on_missing=True)
 F('win_webrtc_trunk_factory', win().ChromiumWebRTCLatestTrunkFactory(
     slave_type='BuilderTester',
@@ -49,7 +49,7 @@ F('win_webrtc_trunk_factory', win().ChromiumWebRTCLatestTrunkFactory(
     }))
 
 B('Win [latest WebRTC stable]', 'win_webrtc_stable_factory',
-  scheduler='win_webrtc_stable_scheduler|win_every_4_hours_scheduler',
+  scheduler='win_webrtc_stable_scheduler|win_periodic_scheduler',
   notify_on_missing=True)
 F('win_webrtc_stable_factory', win().ChromiumWebRTCLatestStableFactory(
     slave_type='BuilderTester',
