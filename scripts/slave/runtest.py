@@ -455,32 +455,6 @@ def annotate(test_name, result, results_tracker, full_name=False,
       slave_utils.WriteLogLines(logname, lines, perf=perf_dashboard_id)
 
 
-def get_build_dir_and_exe_path_mac(options, target_dir, exe_name):
-  """Returns a tuple of the build dir and path to the executable in the
-     specified target directory.
-
-     Args:
-       target_dir: the target directory where the executable should be found
-           (e.g. 'Debug' or 'Release-iphonesimulator').
-       exe_name: the name of the executable file in the target directory.
-  """
-  is_make_or_ninja = (options.factory_properties.get('gclient_env', {})
-                      .get('GYP_GENERATORS', '') in ('ninja', 'make'))
-  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir, use_out=is_make_or_ninja)
-  build_dir = os.path.normpath(os.path.abspath(build_dir))
-  exe_path = os.path.join(build_dir, target_dir, exe_name)
-  if not os.path.exists(exe_path):
-    msg = 'Unable to find %s' % exe_path
-    if options.factory_properties.get('succeed_on_missing_exe', False):
-      print '%s missing but succeed_on_missing_exe used, exiting' % (
-          exe_path)
-      return 0
-    raise chromium_utils.PathNotFound(msg)
-
-  return build_dir, exe_path
-
-
 def build_coverage_gtest_exclusions(options, args):
   gtest_exclusions = {
     'win32': {
@@ -632,9 +606,8 @@ def main_mac(options, args):
     build_dir = os.path.normpath(os.path.abspath(options.build_dir))
     test_exe_path = test_exe
   else:
-    build_dir, test_exe_path = get_build_dir_and_exe_path_mac(options,
-                                                              options.target,
-                                                              test_exe)
+    build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+    test_exe_path = os.path.join(build_dir, options.target, test_exe)
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -649,8 +622,6 @@ def main_mac(options, args):
   else:
     command = [test_exe_path]
   command.extend(args[1:])
-  if options.pass_build_dir:
-    command.extend(['--build-dir', build_dir])
 
   if list_parsers(options.annotate):
     return 0
@@ -742,24 +713,17 @@ def main_ios(options, args):
   # Build the args for invoking iossim, which will install the app on the
   # simulator and launch it, then dump the test results to stdout.
 
-  build_dir, app_exe_path = get_build_dir_and_exe_path_mac(
-      options,
-      options.target + '-iphonesimulator',
-      test_name + '.app')
-
-  # Note that the first object (build_dir) returned from the following
-  # method invocations is ignored because only the app executable is needed.
-  _, test_exe_path = get_build_dir_and_exe_path_mac(options,
-      os.path.join('ninja-iossim', options.target),
-      'iossim')
+  build_dir = os.path.normpath(os.path.abspath(options.build_dir))
+  app_exe_path = os.path.join(
+      build_dir, options.target + '-iphonesimulator', test_name + '.app')
+  test_exe_path = os.path.join(
+      build_dir, 'ninja-iossim', options.target, 'iossim')
   command = [test_exe_path,
       '-d', device,
       '-s', ios_version,
       app_exe_path, '--'
   ]
   command.extend(args[1:])
-  if options.pass_build_dir:
-    command.extend(['--build-dir', build_dir])
 
   if list_parsers(options.annotate):
     return 0
@@ -810,11 +774,7 @@ def main_linux(options, args):
   if len(args) < 1:
     raise chromium_utils.MissingArgument('Usage: %s' % USAGE)
 
-  out_exists = os.path.exists(
-      os.path.join(os.path.dirname(options.build_dir), 'out'))
-  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir, use_out=out_exists)
-  build_dir = os.path.normpath(os.path.abspath(build_dir))
+  build_dir = os.path.normpath(os.path.abspath(options.build_dir))
   if options.slave_name:
     slave_name = options.slave_name
   else:
@@ -898,8 +858,6 @@ def main_linux(options, args):
   else:
     command = [test_exe_path]
   command.extend(args[1:])
-  if options.pass_build_dir:
-    command.extend(['--build-dir', build_dir])
 
   if list_parsers(options.annotate):
     return 0
@@ -1018,8 +976,6 @@ def main_win(options, args):
                '--output-file=%s' % logfile,
                '--'] + command
   command.extend(args[1:])
-  if options.pass_build_dir:
-    command.extend(['--build-dir', build_dir])
 
   # Nuke anything that appears to be stale chrome items in the temporary
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
@@ -1272,9 +1228,24 @@ def main():
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
 
+  # TODO(thakis): Simplify this once ConvertBuildDirToLegacy() ignores its
+  # arguments.
+  use_out = False
+  if sys.platform == 'darwin':
+    use_out = (options.factory_properties.get('gclient_env', {})
+                        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
+  elif sys.platform != 'win32':
+    use_out = os.path.exists(
+        os.path.join(os.path.dirname(options.build_dir), 'out'))
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=use_out)
+
   if options.pass_target and options.target:
     args.extend(['--target', options.target])
-  # TODO(thakis): Unify build_dir logic and handle pass_build_dir here too.
+  if options.pass_build_dir:
+    # TODO(thakis): Try to get rid of the abspath() call.
+    args.extend(['--build-dir', os.path.abspath(options.build_dir)])
+
 
   # Some test suites are not yet green under LSan, so do not enable LSan for
   # them by default. Bots can override this behavior with lsan_run_all_tests.
