@@ -351,7 +351,10 @@ def main_win(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  target_dir = os.path.join(options.build_dir, options.target)
+  out_dir_path = os.path.join(os.path.dirname(options.build_dir), 'out')
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=os.path.exists(out_dir_path))
+  target_dir = os.path.join(build_dir, options.target)
   chrome_dll = os.path.join(target_dir, 'chrome.dll')
   chrome_child_dll = os.path.join(target_dir, 'chrome_child.dll')
   chrome_exe = os.path.join(target_dir, 'chrome.exe')
