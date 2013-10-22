@@ -651,6 +651,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'memory.reload.2012Q3',
         'memory.top_25',
         'smoothness.top_25',
+        'smoothness.tough_canvas_cases',
         'tab_switching.top_10',
       )
     for test_name in real_world_benchmarks:
