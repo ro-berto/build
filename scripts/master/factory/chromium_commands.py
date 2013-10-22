@@ -69,7 +69,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._devtools_perf_test_tool = J(s_dir, 'devtools_perf_test_wrapper.py')
     self._archive_coverage = J(s_dir, 'archive_coverage.py')
     self._gpu_archive_tool = J(s_dir, 'archive_gpu_pixel_test_results.py')
-    self._crash_dump_tool = J(s_dir, 'archive_crash_dumps.py')
     self._cf_archive_tool = J(s_dir, 'cf_archive_build.py')
     self._archive_tool = J(s_dir, 'archive_build.py')
     self._sizes_tool = J(s_dir, 'sizes.py')
