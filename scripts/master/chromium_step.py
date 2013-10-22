@@ -611,8 +611,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
       'chromium-rel-xp-dual': 'xp-release-dual-core',
       'chromium-rel-xp-single': 'xp-release-single-core',
       'chromium-win-targets': 'win-targets',
-      'o3d-mac-experimental': 'o3d-mac-experimental',
-      'o3d-win-experimental': 'o3d-win-experimental',
       'nacl-lucid64-spec-x86': 'nacl-lucid64-spec-x86',
       'nacl-lucid64-spec-arm': 'nacl-lucid64-spec-arm',
       'nacl-lucid64-spec-trans': 'nacl-lucid64-spec-trans',

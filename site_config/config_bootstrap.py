@@ -28,7 +28,6 @@ class Master(config_private.Master):
 
   trunk_url_src = trunk_url + '/src'
   trunk_url_tools = trunk_url + '/tools'
-  trunk_url_o3d = trunk_url + '/o3d'
   nacl_url = config_private.Master.nacl_trunk_url + '/src/native_client'
   nacl_sdk_root_url = 'https://nativeclient-sdk.googlecode.com/svn'
   nacl_ports_trunk_url = 'https://naclports.googlecode.com/svn/trunk'
