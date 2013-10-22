@@ -74,10 +74,13 @@ def SendResults(logname, lines, system, test_name, url, masterid,
   errors = []
   lines_to_retry = []
   fatal_error = False
+  total_results = len(cache_lines)
   for index, line in enumerate(cache_lines):
     line = line.strip()
     if not line:
       continue
+    print 'Submitting result %d of %d to dashboard...' % (
+        index + 1, total_results)
     error = _SendResultsJson(url, line)
     if error:
       if index != len(cache_lines) - 1:
