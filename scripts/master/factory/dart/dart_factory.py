@@ -8,6 +8,8 @@
 Based on gclient_factory.py.
 """
 
+import random
+
 from buildbot.changes import svnpoller
 from buildbot.process.buildstep import RemoteShellCommand
 from buildbot.status.mail import MailNotifier
@@ -541,6 +543,9 @@ class DartUtils(object):
           return channel.priority
       # Default to a low priority
       return 10
+    # Python's sort is stable, which means that builders with the same priority
+    # will be in random order.
+    random.shuffle(builders)
     builders.sort(key=lambda b: get_priority(b.name))
     return builders
 
