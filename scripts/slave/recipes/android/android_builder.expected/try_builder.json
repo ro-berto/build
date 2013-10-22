@@ -211,25 +211,13 @@
   },
   {
     "cmd": [
-      "python",
-      "-u",
-      "\nimport sys\nimport tarfile\n\ntar = tarfile.open(sys.argv[1], 'w:gz')\nfor arg in sys.argv[2:]:\n  tar.add(arg)\ntar.close()\n",
-      "[SLAVE_BUILD]/src/out/build_product_1337.tar",
+      "zip",
+      "-yr1",
+      "[SLAVE_BUILD]/src/out/build_product_1337.zip",
       "Debug"
     ],
     "cwd": "[SLAVE_BUILD]/src/out",
-    "name": "tar_build_product",
-    "~followup_annotations": [
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
-      "@@@STEP_LOG_LINE@python.inline@import tarfile@@@",
-      "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@tar = tarfile.open(sys.argv[1], 'w:gz')@@@",
-      "@@@STEP_LOG_LINE@python.inline@for arg in sys.argv[2:]:@@@",
-      "@@@STEP_LOG_LINE@python.inline@  tar.add(arg)@@@",
-      "@@@STEP_LOG_LINE@python.inline@tar.close()@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
-    ]
+    "name": "zip_build_product"
   },
   {
     "cmd": [
@@ -237,7 +225,7 @@
       "-u",
       "[DEPOT_TOOLS]/third_party/gsutil/gsutil",
       "cp",
-      "[SLAVE_BUILD]/src/out/build_product_1337.tar",
+      "[SLAVE_BUILD]/src/out/build_product_1337.zip",
       "gs://build-bucket/builder_name"
     ],
     "name": "gsutil upload_build_product"
@@ -247,7 +235,7 @@
     "cmd": [
       "rm",
       "-rf",
-      "[SLAVE_BUILD]/src/out/build_product_1337.tar"
+      "[SLAVE_BUILD]/src/out/build_product_1337.zip"
     ],
     "name": "cleanup_build"
   }

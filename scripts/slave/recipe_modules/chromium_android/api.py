@@ -21,6 +21,25 @@ class AndroidApi(recipe_api.RecipeApi):
     )))
     return env_dict
 
+  def make_zip_archive(self, step_name, zip_file, paths, **kwargs):
+    assert isinstance(paths, list)
+    assert len(paths)
+    # We want to store symbolic links as links, recurse into directories,
+    # and compress fast. Hence we pass -yr1 options to zip which are indicative
+    # of these requirements.
+    yield self.m.step(
+        step_name,
+        ['zip', '-yr1', zip_file] + paths,
+        **kwargs
+    )
+
+  def unzip_archive(self, step_name, zip_file, **kwargs):
+    yield self.m.step(
+      step_name,
+      ['unzip', '-o', zip_file],
+      **kwargs
+    )
+
   def init_and_sync(self):
     internal = self.m.properties['internal']
     bot_id = self.m.properties['android_bot_id']
@@ -173,17 +192,17 @@ class AndroidApi(recipe_api.RecipeApi):
   def upload_build(self):
     revision = (self.m.properties.get('revision') or
                 self.m.properties.get('buildnumber'))
-    tarfile = self.m.path.checkout('out', 'build_product_%s.tar' % revision)
-    self._cleanup_list.append(tarfile)
-    yield self.m.archive.tar(
-        'tar_build_product',
-         tarfile,
+    zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % revision)
+    self._cleanup_list.append(zipfile)
+    yield self.make_zip_archive(
+        'zip_build_product',
+         zipfile,
          [self.m.chromium.c.BUILD_CONFIG],
          cwd=self.m.path.checkout('out')
     )
     yield self.m.gsutil.upload(
         name='upload_build_product',
-        source=tarfile,
+        source=zipfile,
         bucket=self._internal_names['BUILD_BUCKET'],
         dest=self.m.properties['buildername']
     )
@@ -191,19 +210,18 @@ class AndroidApi(recipe_api.RecipeApi):
   def download_build(self):
     revision = (self.m.properties.get('revision') or
                 self.m.properties.get('parent_buildnumber'))
-    tarfile = self.m.path.checkout('out', 'build_product_%s.tar' % revision)
-    self._cleanup_list.append(tarfile)
+    zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % revision)
+    self._cleanup_list.append(zipfile)
     yield self.m.gsutil.download(
         name='download_build_product',
         bucket=self._internal_names['BUILD_BUCKET'],
         source='%s/%s' % (self.m.properties['parent_buildername'],
-                          'build_product_%s.tar' % revision),
+                          'build_product_%s.zip' % revision),
         dest=self.m.path.checkout('out')
     )
-    yield self.m.archive.untar(
-        'untar_build_product',
-        tarfile,
-        self.m.chromium.c.BUILD_CONFIG,
+    yield self.unzip_archive(
+        'unzip_build_product',
+        zipfile,
         cwd=self.m.path.checkout('out')
     )
 
