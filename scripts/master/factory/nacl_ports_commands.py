@@ -23,8 +23,7 @@ class NativeClientPortsCommands(commands.FactoryCommands):
     # Where to point waterfall links for builds and test results.
     self._archive_url = config.Master.archive_url
 
-    # Where the chromium slave scripts are.
-    self._chromium_script_dir = self.PathJoin(self._script_dir, 'chromium')
+    # Where the slave scripts are.
     self._private_script_dir = self.PathJoin(self._script_dir, '..', 'private')
 
     self._build_dir = self.PathJoin('build', build_dir)
@@ -61,25 +60,6 @@ class NativeClientPortsCommands(commands.FactoryCommands):
           r'c:\Program Files\Microsoft Visual Studio 8\Common7\Tools;'
           r'c:\Program Files (x86)\Microsoft Visual Studio 8\Common7\Tools;'
       )
-
-    # Create smaller name for the functions and vars to siplify the code below.
-    J = self.PathJoin
-    s_dir = self._chromium_script_dir
-
-    self._process_dumps_tool = self.PathJoin(self._script_dir,
-                                             'process_dumps.py')
-
-    # Scripts in the chromium scripts dir.  This list is sorted by decreasing
-    # line length just because it looks pretty.
-    self._process_coverage_tool = J(s_dir, 'process_coverage.py')
-    self._layout_archive_tool = J(s_dir, 'archive_layout_test_results.py')
-    self._crash_handler_tool = J(s_dir, 'run_crash_handler.py')
-    self._layout_test_tool = J(s_dir, 'layout_test_wrapper.py')
-    self._archive_coverage = J(s_dir, 'archive_coverage.py')
-    self._crash_dump_tool = J(s_dir, 'archive_crash_dumps.py')
-    self._archive_tool = J(s_dir, 'archive_build.py')
-    self._archive_file_tool = J(s_dir, 'archive_file.py')
-    self._sizes_tool = J(s_dir, 'sizes.py')
 
     if self._target_platform.startswith('win'):
       self.script_prefix = 'set PWD=&& '
