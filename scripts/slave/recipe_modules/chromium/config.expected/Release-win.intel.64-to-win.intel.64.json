@@ -32,6 +32,22 @@
       "GYP_MSVS_VERSION": "2012"
     }
   }, 
+  "blink_clang": {
+    "build_config_fs": "Release_x64", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "all_webkit"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromium_win_pch=0 clang=1 component=static_library fastbuild=1 target_arch=x64 use_ash=0 use_aura=0", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_MSVS_VERSION": "2012"
+    }
+  }, 
   "chromium": {
     "build_config_fs": "Release_x64", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 

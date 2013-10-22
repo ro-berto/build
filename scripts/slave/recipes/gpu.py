@@ -49,10 +49,14 @@ def GenSteps(api):
   # below while testing locally.
   build_revision = api.properties['revision']
 
-  api.chromium.set_config('chromium', GIT_MODE=use_git)
+  configuration = 'chromium'
+  if api.gclient.is_blink_mode:
+    configuration = 'blink'
+
+  api.chromium.set_config(configuration, GIT_MODE=use_git)
   # This is needed to make GOMA work properly on Mac.
   if api.platform.is_mac:
-    api.chromium.set_config('chromium_clang', GIT_MODE=use_git)
+    api.chromium.set_config(configuration + '_clang', GIT_MODE=use_git)
   api.gclient.apply_config('chrome_internal')
 
   # Don't skip the frame_rate data, as it's needed for the frame rate tests.
@@ -74,7 +78,7 @@ def GenSteps(api):
   build_revision = gclient_data['solutions']['src/']['revision']
   # If being run as a try server, apply the CL.
   if 'rietveld' in api.properties:
-    yield api.rietveld.apply_issue()
+    yield api.rietveld.apply_issue(api.rietveld.calculate_issue_root())
   yield api.chromium.runhooks()
   # Since performance tests aren't run on the debug builders, it isn't
   # necessary to build all of the targets there.
@@ -164,6 +168,15 @@ def GenTests(api):
         api.platform.name(plat)
       )
 
+      # Blink builder configuration
+      yield (
+        api.test('%s_blink' % base_name) +
+        api.properties.scheduled(
+            build_config=build_config,
+            top_of_tree_blink=True) +
+        api.platform.name(plat)
+      )
+
       # Try server configuration
       yield (
         api.test('%s_tryserver' % base_name) +
@@ -175,5 +188,14 @@ def GenTests(api):
   yield (
     api.test('mac_release_git') +
     api.properties.scheduled(build_config='Release', use_git=True) +
+    api.platform.name('mac')
+  )
+
+  # Test one trybot configuration with Blink issues.
+  yield (
+    api.test('mac_release_tryserver_blink') +
+    api.properties.tryserver(
+        build_config='Release',
+        root='src/third_party/WebKit') +
     api.platform.name('mac')
   )

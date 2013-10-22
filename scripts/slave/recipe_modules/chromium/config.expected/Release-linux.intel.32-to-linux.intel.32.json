@@ -30,6 +30,21 @@
       "GYP_GENERATORS": "ninja"
     }
   }, 
+  "blink_clang": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "all_webkit"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "clang=1 component=static_library use_ash=0 use_aura=0", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
   "chromium": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 

@@ -171,3 +171,23 @@ class GclientApi(recipe_api.RecipeApi):
     args = args or []
     assert isinstance(args, (list, tuple))
     return self('runhooks', ['runhooks'] + list(args), **kwargs)
+
+  @property
+  def is_blink_mode(self):
+    """ Indicates wether the caller is to use the Blink config rather than the
+    Chromium config. This may happen for one of two reasons:
+    1. The builder is configured to always use TOT Blink. (factory property
+       top_of_tree_blink=True)
+    2. A try job comes in that applies to the Blink tree. (root is
+       src/third_party/WebKit)
+    """
+    if self.m.properties.get('top_of_tree_blink'):
+      return True
+
+    # Normalize slashes to take into account possible Windows paths.
+    root = self.m.properties.get('root', '').replace('\\', '/').lower()
+
+    if root.endswith('third_party/webkit'):
+      return True
+
+    return False
