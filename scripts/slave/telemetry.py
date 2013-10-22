@@ -62,7 +62,10 @@ def _GenerateTelemetryCommandSequence(options):
   target_platform = fp.get('target_platform')
   build_dir = fp.get('build_dir')
 
-  script = os.path.join('src', 'tools', 'perf', 'run_benchmark')
+  script = os.path.join(fp.get('tools_dir')
+                            or os.path.join('src', 'tools'),
+                        'perf', 'run_benchmark')
+  browser_exe = fp.get('browser_exe')
 
   test_specification = [test_name]
 
@@ -86,8 +89,14 @@ def _GenerateTelemetryCommandSequence(options):
   browser = target.lower()
   if target_os == 'android':
     browser = options.target_android_browser
+  # If an executable is passed, use that instead.
+  if browser_exe:
+    browser_info = ['--browser=exact',
+                    '--browser-executable=%s' % browser_exe]
+  else:
+    browser_info = ['--browser=%s' % browser]
   test_args = list(common_args)
-  test_args.append('--browser=%s' % browser)
+  test_args.extend(browser_info)
   test_args.extend(test_specification)
   test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
   commands.append(test_cmd)
@@ -98,7 +107,8 @@ def _GenerateTelemetryCommandSequence(options):
     if test_name in ('page_cycler_moz', 'page_cycler_morejs'):
       test_args = list(common_args)
       test_args.extend(['--profile-type=typical_user',
-                        '--output-trace-tag=_extcs1', '--browser=%s' % browser])
+                        '--output-trace-tag=_extcs1'])
+      test_args.extend(browser_info)
       test_args.extend(test_specification)
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
@@ -106,7 +116,8 @@ def _GenerateTelemetryCommandSequence(options):
     if test_name in ('page_cycler_moz', 'page_cycler_morejs'):
       test_args = list(common_args)
       test_args.extend(['--profile-type=power_user',
-                        '--output-trace-tag=_extwr', '--browser=%s' % browser])
+                        '--output-trace-tag=_extwr'])
+      test_args.extend(browser_info)
       test_args.extend(test_specification)
       test_cmd = _GetPythonTestCommand(
           script, target, build_dir, test_args, fp=fp)
