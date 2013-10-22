@@ -26,9 +26,9 @@ chromium_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
                                                   'Linux Builder')
 tests = [
     'webrtc_manual_browser_tests',
-    'webrtc_manual_content_browsertests',
-    'webrtc_content_unittests',
-    'webrtc_perf_content_unittests',
+    # 'webrtc_manual_content_browsertests',  Disabled: crbug.com/281492.
+    # 'webrtc_content_unittests',  # Disabled: crbug.com/310115.
+    # 'webrtc_perf_content_unittests',  # Disabled: crbug.com/310115.
 ]
 
 defaults['category'] = 'linux'
