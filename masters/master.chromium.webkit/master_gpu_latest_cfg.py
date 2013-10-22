@@ -52,7 +52,8 @@ for bot in gpu_bot_info:
   factory_properties = {
     'test_results_server': 'test-results.appspot.com',
     'generate_gtest_json': True,
-    'build_config': 'Debug'
+    'build_config': 'Debug',
+    'top_of_tree_blink': True
   }
   if 'perf_id' in bot:
     factory_properties['show_perf_results'] = True
