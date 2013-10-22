@@ -73,10 +73,14 @@ def ScrapeSVNInfoRevision(wc_dir, regexp):
   if isinstance(regexp, (str, unicode)):
     regexp = re.compile(regexp)
   retval, svn_info = chromium_utils.GetStatusOutput([SubversionExe(), 'info',
-                                                     wc_dir])
+                                                    wc_dir])
   if retval or 'is not a working copy' in svn_info:
     raise NotSVNWorkingCopy(wc_dir)
-  text = regexp.sub(r'\1', svn_info)
+  match = regexp.search(svn_info)
+  if not match or not match.groups():
+    raise InvalidSVNRevision(
+        '%s did not match in svn info %s.' % (regexp.pattern, svn_info))
+  text = match.group(1)
   if text.isalnum():
     return int(text)
   else:

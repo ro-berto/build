@@ -46,6 +46,7 @@ F('win_webrtc_trunk_factory', win().ChromiumWebRTCLatestTrunkFactory(
         'perf_id': 'chromium-webrtc-trunk-tot-rel-win',
         'process_dumps': True,
         'start_crash_handler': True,
+        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 B('Win [latest WebRTC stable]', 'win_webrtc_stable_factory',
@@ -62,6 +63,7 @@ F('win_webrtc_stable_factory', win().ChromiumWebRTCLatestStableFactory(
         'perf_id': 'chromium-webrtc-stable-tot-rel-win',
         'process_dumps': True,
         'start_crash_handler': True,
+        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 

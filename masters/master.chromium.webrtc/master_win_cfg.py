@@ -52,6 +52,7 @@ F('win_xp_tester_factory', win().ChromiumWebRTCFactory(
         'perf_id': 'chromium-webrtc-rel-xp',
         'process_dumps': True,
         'start_crash_handler': True,
+        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 B('Win7 Tester', 'win_7_tester_factory', scheduler='win_rel_trigger')
@@ -66,6 +67,7 @@ F('win_7_tester_factory', win().ChromiumWebRTCFactory(
         'perf_id': 'chromium-webrtc-rel-7',
         'process_dumps': True,
         'start_crash_handler': True,
+        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
 

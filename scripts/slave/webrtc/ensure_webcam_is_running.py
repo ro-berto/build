@@ -48,9 +48,13 @@ def IsWebCamRunning():
   else:
     raise Exception('Unsupported platform: %s' % sys.platform)
   for p in psutil.process_iter():
-    if process_name == p.name:
-      print 'Found a running virtual webcam (%s with PID %s)' % (p.name, p.pid)
-      return True
+    try:
+      if process_name == p.name:
+        print 'Found a running virtual webcam (%s with PID %s)' % (p.name,
+                                                                   p.pid)
+        return True
+    except psutil.AccessDenied:
+      pass  # This is normal if we query sys processes, etc.
   return False
 
 
