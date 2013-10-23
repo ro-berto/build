@@ -4,10 +4,11 @@
 
 """A StatusReceiver module to mail someone when a step warns/fails.
 
-Since the behavior is very similar to the MainNotifier, we simply inherit from
+Since the behavior is very similar to the MailNotifier, we simply inherit from
 it and also reuse some of its methods to send emails.
 """
 
+import datetime
 import re
 import time
 import urllib
@@ -327,6 +328,8 @@ Buildbot waterfall: http://build.chromium.org/
         'reason': build_status.getReason(),
         'revision': str(latest_revision),
         'buildnumber': str(build_status.getNumber()),
+        'date': str(datetime.date.today()),
+        'steps': step_name,
     }
     m['From'] = self.fromaddr
     if self.reply_to:
