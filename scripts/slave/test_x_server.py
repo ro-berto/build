@@ -12,6 +12,8 @@ import sys
 # pylint: disable=W0403
 import xvfb
 
+from slave import build_directory
+
 def main():
   parser = optparse.OptionParser(usage='%prog [options] slavename')
 
@@ -21,6 +23,8 @@ def main():
   parser.add_option('--stop', action='store_true', help='Stop xvfb')
 
   options, args = parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   if len(args) != 1:
     parser.error('Please specify the slave name')

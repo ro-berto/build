@@ -11,6 +11,7 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 import config
 
 
@@ -95,6 +96,9 @@ def main():
                          'directory.')
 
   options, args = parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
+
   if args:
     parser.error('Unknown args "%s"' % ' '.join(args))
     return 1

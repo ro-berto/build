@@ -11,6 +11,7 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 
 
 SCRIPT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -60,7 +61,7 @@ def _GenerateTelemetryCommandSequence(options):
   target = fp.get('target')
   target_os = fp.get('target_os')
   target_platform = fp.get('target_platform')
-  build_dir = fp.get('build_dir')
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(fp.get('build_dir'))
 
   script = os.path.join(fp.get('tools_dir')
                             or os.path.join('src', 'tools'),

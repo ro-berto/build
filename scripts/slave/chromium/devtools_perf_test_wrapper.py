@@ -22,6 +22,7 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 
@@ -64,8 +65,12 @@ def main():
   option_parser.add_option('--platform',
       help='Platform value passed directly to run-perf-tests.')
   options, args = option_parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
+
   if args:
     option_parser.error('Unknown argument, try --help')
+
   return PerfTest(options)
 
 

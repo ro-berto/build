@@ -14,6 +14,7 @@ import subprocess
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 
 # Method could be a function
 # pylint: disable=R0201
@@ -151,6 +152,8 @@ def main():
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   fp = options.factory_properties
   options.browser_shard_index = fp.get('browser_shard_index')

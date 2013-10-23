@@ -20,6 +20,9 @@ def main():
   chromium_utils.AddPropertiesOptions(parser)
   options, _ = parser.parse_args()
 
+  # TODO(thakis): Remove the --build-dir parameter once
+  # ConvertBuildDirToLegacy() ignores the build_dir parameter.
+  # (src/build is passed here to force legacy path handling).
   return chromium_utils.RunCommand(
       [sys.executable,
        '../../../scripts/slave/runtest.py',

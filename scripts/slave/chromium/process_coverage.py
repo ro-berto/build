@@ -19,6 +19,7 @@ import subprocess
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 
 
 COVERAGE_DIR_POSTFIX = '_coverage'
@@ -174,6 +175,9 @@ def main():
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
+
   fp = options.factory_properties
   options.tests = fp.get('tests')
   options.sharded_tests = fp.get('sharded_tests')

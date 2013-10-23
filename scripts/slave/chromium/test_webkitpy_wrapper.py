@@ -10,6 +10,7 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 
@@ -25,6 +26,8 @@ def main():
       help='DumpRenderTree build configuration (Release or Debug)')
 
   options, _ = option_parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   build_dir = os.path.abspath(options.build_dir)
   webkit_tests_dir = chromium_utils.FindUpward(build_dir,

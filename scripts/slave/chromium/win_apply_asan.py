@@ -10,6 +10,8 @@ import shutil
 import subprocess
 import sys
 
+from slave import build_directory
+
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BLACKLIST = set((
@@ -218,6 +220,9 @@ def main():
       help='Specify the path to the ASAN runtime DLL relative to '
            'build-dir (%default).')
   options, args = parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
+
   options.build_dir = os.path.abspath(options.build_dir)
 
   if not options.build_dir:

@@ -31,6 +31,7 @@ import socket
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 import config
 
@@ -196,6 +197,8 @@ def main():
                            help=('The ACL of the google storage files.'))
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   # To continue supporting buildbot, initialize these from the
   # factory_properties if they were not supplied on the command line.

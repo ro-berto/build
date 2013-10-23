@@ -10,6 +10,7 @@ import os
 import sys
 
 from common import chromium_utils
+from slave import build_directory
 from slave import slave_utils
 
 
@@ -36,6 +37,8 @@ def main():
       help='DumpRenderTree build configuration (Release or Debug)')
 
   options, args = option_parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
   return layout_test(options, args)
 
 if '__main__' == __name__:
