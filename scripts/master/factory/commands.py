@@ -401,9 +401,6 @@ class FactoryCommands(object):
     self._gclient_safe_revert_tool = self.PathJoin(self._script_dir,
                                                    'gclient_safe_revert.py')
 
-    self._get_build_for_chromebot_tool = self.PathJoin(
-        self._script_dir, 'get_build_for_chromebot.py')
-
     self._update_clang_tool = self.PathJoin(
         self._repository_root, 'tools', 'clang', 'scripts', 'update.sh')
 
@@ -1084,37 +1081,6 @@ class FactoryCommands(object):
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'extract_build', cmd,
                      halt_on_failure=True)
-
-  def AddGetBuildForChromebot(self, platform, archive=False, extract=False,
-                              build_url=None, archive_url=None, build_id=None,
-                              build_dir=None):
-    """Get a Chrome build for Chromebot.
-
-    If |build_id| is omitted, latest build will be downloaded instead.
-
-    Args:
-      platform: The platform for Chrome build (win, linux, linux64).
-      archive: If the |build_url| contains a list of builds.
-      extract: Whether to extract the downloaded files.
-      build_url: URL to the build.  Default URL if None.
-      build_id: Id of build.
-    """
-    if not build_dir:
-      build_dir = self._build_dir
-    cmd = [self._python, self._get_build_for_chromebot_tool,
-           '--platform', platform,
-           '--build-dir', build_dir,
-           '--target-dir', self._target]
-
-    if extract:
-      cmd += ['--extract']
-    if build_url:
-      cmd += ['--build-url', build_url]
-    if archive_url:
-      cmd += ['--archive-url', archive_url]
-
-    self.AddTestStep(SetBuildPropertyShellCommand, 'get_build',
-                     cmd, halt_on_failure=True)
 
   # Build commands.
   def GetBuildCommand(self, clobber, solution, mode, options=None):
