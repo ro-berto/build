@@ -238,88 +238,43 @@
     "name": "install ChromeTest.apk"
   },
   {
-    "always_run": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeTest",
-      "--test_data",
-      "a:b/test/data/android/device_files",
-      "--verbose",
-      "--flakiness-dashboard-server=test-results.appspot.com",
-      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
-      "-A",
-      "Smoke",
-      "--screenshot"
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/repo/build/buildbot/tests_generator.py",
+      "--test smoke_instrumentation_tests",
+      "--test small_instrumentation_tests",
+      "--test medium_instrumentation_tests",
+      "--test large_instrumentation_tests",
+      "--checkout-dir",
+      "[SLAVE_BUILD]/src",
+      "--target",
+      "Debug",
+      "--output-json",
+      "/path/to/tmp/json"
     ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "smoke_instrumentation_tests"
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "gen step(tests_generator.py)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"cmd\": [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"path/to/test_script.py\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ], @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"name\": \"test_step\"@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
-    "always_run": true,
     "cmd": [
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeTest",
-      "--test_data",
-      "a:b/test/data/android/device_files",
-      "--verbose",
-      "--flakiness-dashboard-server=test-results.appspot.com",
-      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
-      "-A",
-      "SmallTest",
-      "--screenshot"
+      "path/to/test_script.py"
     ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "smalltest_instrumentation_tests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeTest",
-      "--test_data",
-      "a:b/test/data/android/device_files",
-      "--verbose",
-      "--flakiness-dashboard-server=test-results.appspot.com",
-      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
-      "-A",
-      "MediumTest",
-      "--screenshot"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "mediumtest_instrumentation_tests"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "[SLAVE_BUILD]/src/build/android/test_runner.py",
-      "instrumentation",
-      "--test-apk",
-      "ChromeTest",
-      "--test_data",
-      "a:b/test/data/android/device_files",
-      "--verbose",
-      "--flakiness-dashboard-server=test-results.appspot.com",
-      "--host-driven-root=[SLAVE_BUILD]/src/repo/test",
-      "-A",
-      "LargeTest",
-      "--screenshot"
-    ],
-    "env": {
-      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
-    },
-    "name": "largetest_instrumentation_tests"
+    "name": "test_step",
+    "seed_steps": [
+      "test_step"
+    ]
   },
   {
     "always_run": true,

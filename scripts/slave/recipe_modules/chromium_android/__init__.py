@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'gclient',
+  'generator_script',
   'gsutil',
   'json',
   'path',

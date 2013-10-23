@@ -256,7 +256,7 @@ class AndroidApi(recipe_api.RecipeApi):
         deploy_cmd.extend(self.c.extra_deploy_opts)
       yield self.m.step('deploy_on_devices', deploy_cmd, env=self.get_env())
 
-  def instrumentation_tests(self, official=False):
+  def instrumentation_tests(self):
     dev_status_step = self.m.step_history.get('device_status_check')
     setup_success = dev_status_step and dev_status_step.retcode == 0
     if self.c.INTERNAL:
@@ -273,25 +273,13 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.m.step('install ChromeTest.apk', install_cmd,
                         env=self.get_env(),  always_run=True)
       if self.m.step_history.last_step().retcode == 0:
-        for test in self.c.instrumentation_tests:
-          annotation = test.annotation
-          test_cmd = [
-              self.m.path.checkout('build', 'android', 'test_runner.py'),
-              'instrumentation',
-              '--test-apk', 'ChromeTest',
-              '--test_data', self._internal_names['INSTRUMENTATION_TEST_DATA'],
-              '--verbose',
-              ('--flakiness-dashboard-server=%s' %
-               self._internal_names['FLAKINESS_DASHBOARD_SERVER']),
-              '--host-driven-root=%s' % self.c.internal_dir('test'),
-              '-A', annotation,
-              '--screenshot']
-          if test.exclude_annotation:
-            test_cmd.extend(['-E', test.exclude_annotation])
-          # TODO(sivachandra): Add --release and --official-build options to
-          # test_cmd when those testers are added.
-          yield self.m.step(annotation.lower() + '_instrumentation_tests',
-                            test_cmd, env=self.get_env(), always_run=True)
+        args = (['--test %s' % s for s in self.c.tests] +
+                ['--checkout-dir', self.m.path.checkout(),
+                 '--target', self.m.chromium.c.BUILD_CONFIG])
+        yield self.m.generator_script(
+            self.c.internal_dir('build', 'buildbot', 'tests_generator.py'),
+            *args
+        )
 
   def logcat_dump(self):
     if self.m.step_history.get('spawn_logcat_monitor'):

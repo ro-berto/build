@@ -10,13 +10,11 @@
   }, 
   "clang_tests": {
     "asan_symbolize": true, 
-    "instrumentation_tests": [
-      {
-        "annotation": "Smoke"
-      }
-    ], 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_stack_tool_steps": true
+    "run_stack_tool_steps": true, 
+    "tests": [
+      "smoke_instrumentation_tests"
+    ]
   }, 
   "component_builder": {
     "internal_dir": "Path('[CHECKOUT]', 'internal')"
@@ -25,36 +23,21 @@
     "extra_deploy_opts": [
       "--await-internet"
     ], 
-    "instrumentation_tests": [
-      {
-        "annotation": "EnormousTest", 
-        "exclude_annotation": "Feature=Sync"
-      }, 
-      {
-        "annotation": "Feature=Sync", 
-        "exclude_annotation": "FlakyTest"
-      }
-    ], 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_stack_tool_steps": true
+    "run_stack_tool_steps": true, 
+    "tests": [
+      "enormous_instrumentation_tests"
+    ]
   }, 
   "instrumentation_tests": {
-    "instrumentation_tests": [
-      {
-        "annotation": "Smoke"
-      }, 
-      {
-        "annotation": "SmallTest"
-      }, 
-      {
-        "annotation": "MediumTest"
-      }, 
-      {
-        "annotation": "LargeTest"
-      }
-    ], 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_stack_tool_steps": true
+    "run_stack_tool_steps": true, 
+    "tests": [
+      "smoke_instrumentation_tests", 
+      "small_instrumentation_tests", 
+      "medium_instrumentation_tests", 
+      "large_instrumentation_tests"
+    ]
   }, 
   "klp_builder": {
     "extra_env": {
@@ -68,22 +51,14 @@
     "internal_dir": "Path('[CHECKOUT]', 'internal')"
   }, 
   "main_tests": {
-    "instrumentation_tests": [
-      {
-        "annotation": "Smoke"
-      }, 
-      {
-        "annotation": "SmallTest"
-      }, 
-      {
-        "annotation": "MediumTest"
-      }, 
-      {
-        "annotation": "LargeTest"
-      }
-    ], 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_stack_tool_steps": true
+    "run_stack_tool_steps": true, 
+    "tests": [
+      "smoke_instrumentation_tests", 
+      "small_instrumentation_tests", 
+      "medium_instrumentation_tests", 
+      "large_instrumentation_tests"
+    ]
   }, 
   "tests_base": {
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
@@ -101,22 +76,14 @@
   }, 
   "try_instrumentation_tests": {
     "apply_svn_patch": true, 
-    "instrumentation_tests": [
-      {
-        "annotation": "Smoke"
-      }, 
-      {
-        "annotation": "SmallTest"
-      }, 
-      {
-        "annotation": "MediumTest"
-      }, 
-      {
-        "annotation": "LargeTest"
-      }
-    ], 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_stack_tool_steps": true
+    "run_stack_tool_steps": true, 
+    "tests": [
+      "smoke_instrumentation_tests", 
+      "small_instrumentation_tests", 
+      "medium_instrumentation_tests", 
+      "large_instrumentation_tests"
+    ]
   }, 
   "x86_base": {
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
@@ -138,22 +105,14 @@
     "extra_deploy_opts": [
       "--non-rooted"
     ], 
-    "instrumentation_tests": [
-      {
-        "annotation": "Smoke"
-      }, 
-      {
-        "annotation": "SmallTest"
-      }, 
-      {
-        "annotation": "MediumTest"
-      }, 
-      {
-        "annotation": "LargeTest"
-      }
-    ], 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
     "run_stack_tool_steps": true, 
-    "target_arch": "x86"
+    "target_arch": "x86", 
+    "tests": [
+      "smoke_instrumentation_tests", 
+      "small_instrumentation_tests", 
+      "medium_instrumentation_tests", 
+      "large_instrumentation_tests"
+    ]
   }
 }

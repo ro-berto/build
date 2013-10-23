@@ -4,6 +4,7 @@
 
 DEPS = [
   'chromium_android',
+  'generator_script',
   'properties',
   'json',
 ]
@@ -22,8 +23,8 @@ def GenTests(api):
   bot_ids = ['main_tests', 'clang_tests', 'enormous_tests',
              'try_instrumentation_tests', 'x86_try_instrumentation_tests']
 
-  def common_test_data(props):
-    return (
+  def common_test_data(props, include_tests=True):
+    test_data = (
         props +
         api.step_data(
           'get app_manifest_vars',
@@ -52,6 +53,14 @@ def GenTests(api):
           })
         )
     )
+    if include_tests:
+      # TODO(sivachandra): Move this generator script's test to
+      # chromium_android/test_api.py
+      test_data += api.generator_script(
+          'tests_generator.py',
+          {'name': 'test_step', 'cmd': ['path/to/test_script.py']}
+      )
+    return test_data
 
   def props(bot_id):
     return api.properties(
@@ -75,10 +84,10 @@ def GenTests(api):
 
   # failure tests
   yield (api.test('main_tests_device_status_check_fail') +
-         common_test_data(props('main_tests')) +
+         common_test_data(props('main_tests'), include_tests=False) +
          api.step_data('device_status_check', retcode=1))
   yield (api.test('main_tests_deploy_fail') +
-         common_test_data(props('main_tests')) +
+         common_test_data(props('main_tests'), include_tests=False) +
          api.step_data('deploy_on_devices', retcode=1))
   yield (api.test('main_tests_provision_fail') +
          common_test_data(props('main_tests')) +

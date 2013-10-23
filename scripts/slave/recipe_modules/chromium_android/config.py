@@ -20,12 +20,7 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     run_stack_tool_steps = Single(bool, required=False, empty_val=False),
     asan_symbolize = Single(bool, required=False, empty_val=False),
     extra_deploy_opts = List(inner_type=basestring),
-    instrumentation_tests = ConfigList(
-      lambda: ConfigGroup(
-        annotation = Single(basestring, required=True),
-        exclude_annotation = Single(basestring, required=False, empty_val=None)
-      )
-    ),
+    tests = List(inner_type=basestring),
     build_internal_android = Static(Path('[BUILD_INTERNAL]',
                                          'scripts', 'slave', 'android')),
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
@@ -106,10 +101,10 @@ def tests_base(c):
 
 @config_ctx(includes=['tests_base'])
 def instrumentation_tests(c):
-  c.instrumentation_tests.append({'annotation': 'Smoke'})
-  c.instrumentation_tests.append({'annotation': 'SmallTest'})
-  c.instrumentation_tests.append({'annotation': 'MediumTest'})
-  c.instrumentation_tests.append({'annotation': 'LargeTest'})
+  c.tests.append('smoke_instrumentation_tests')
+  c.tests.append('small_instrumentation_tests')
+  c.tests.append('medium_instrumentation_tests')
+  c.tests.append('large_instrumentation_tests')
 
 @config_ctx(includes=['instrumentation_tests'])
 def main_tests(c):
@@ -117,16 +112,13 @@ def main_tests(c):
 
 @config_ctx(includes=['tests_base'])
 def clang_tests(c):
-  c.instrumentation_tests.append({'annotation': 'Smoke'})
+  c.tests.append('smoke_instrumentation_tests')
   c.asan_symbolize = True
 
 @config_ctx(includes=['tests_base'])
 def enormous_tests(c):
   c.extra_deploy_opts = ['--await-internet']
-  c.instrumentation_tests.append({'annotation': 'EnormousTest',
-                                  'exclude_annotation': 'Feature=Sync'})
-  c.instrumentation_tests.append({'annotation': 'Feature=Sync',
-                                  'exclude_annotation': 'FlakyTest'})
+  c.tests.append('enormous_instrumentation_tests')
 
 @config_ctx(includes=['try_base', 'instrumentation_tests'])
 def try_instrumentation_tests(c):
