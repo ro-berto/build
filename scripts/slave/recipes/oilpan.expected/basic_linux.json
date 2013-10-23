@@ -227,6 +227,27 @@
     ]
   },
   {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"TARGET_BITS\": 64, \"perf_id\": \"linux-release\", \"recipe\": \"oilpan\"}",
+      "--build-properties",
+      "{\"TARGET_BITS\": 64, \"perf_id\": \"linux-release\", \"recipe\": \"oilpan\"}",
+      "--run-python-script",
+      "[BUILD]/scripts/slave/chromium/layout_test_wrapper.py", "--target", "Release", "-o", "[SLAVE_BUILD]/layout-test-results", "--build-dir", "[SLAVE_BUILD]/src/out"
+    ],
+    "name": "webkit_tests",
+    "always_run": true
+  },
+  {
     "allow_subannotations": true,
     "always_run": true,
     "cmd": [
