@@ -20,15 +20,6 @@ PERF_TESTS = [
 ]
 
 
-def BlinkTestsStep(api, results_dir):
-  name = 'webkit_tests'
-  test = api.path.build('scripts', 'slave', 'chromium',
-                        'layout_test_wrapper.py')
-  args = ['--target', api.chromium.c.BUILD_CONFIG,
-          '-o', results_dir,
-          '--build-dir', api.chromium.c.build_dir]
-  return api.chromium.runtests(test, args, name=name, can_fail_build=False)
-
 def GenSteps(api):
   dashboard_upload_url = 'https://chromeperf.appspot.com'
   config_vals = {}
@@ -50,8 +41,6 @@ def GenSteps(api):
     api.chromium.m.python('apply oilpan patches', patch_exe),
     api.chromium.compile(),
   )
-
-  results_dir = api.path.slave_build('layout-test-results')
 
   if api.chromium.c.HOST_PLATFORM == 'linux':
     build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs,
@@ -76,7 +65,14 @@ def GenSteps(api):
       args=[build_exe('minidump_stackwalk'), test_out_dir]
     )
 
-    yield BlinkTestsStep(api, results_dir)
+    results_dir = api.path.slave_build('layout-test-results')
+    test = api.path.build('scripts', 'slave', 'chromium',
+                          'layout_test_wrapper.py')
+    args = ['--target', api.chromium.c.BUILD_CONFIG,
+            '-o', results_dir,
+            '--build-dir', api.chromium.c.build_dir]
+    yield api.chromium.runtests(test, args, name='webkit_tests',
+                                can_fail_build=False)
 
     factory_properties = {
       'blink_config':  'chromium',
