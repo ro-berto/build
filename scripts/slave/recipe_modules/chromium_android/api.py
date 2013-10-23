@@ -273,7 +273,7 @@ class AndroidApi(recipe_api.RecipeApi):
       yield self.m.step('install ChromeTest.apk', install_cmd,
                         env=self.get_env(),  always_run=True)
       if self.m.step_history.last_step().retcode == 0:
-        args = (['--test %s' % s for s in self.c.tests] +
+        args = (['--test=%s' % s for s in self.c.tests] +
                 ['--checkout-dir', self.m.path.checkout(),
                  '--target', self.m.chromium.c.BUILD_CONFIG])
         yield self.m.generator_script(

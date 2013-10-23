@@ -231,7 +231,7 @@
       "python",
       "-u",
       "[SLAVE_BUILD]/src/repo/build/buildbot/tests_generator.py",
-      "--test enormous_instrumentation_tests",
+      "--test=enormous_instrumentation_tests",
       "--checkout-dir",
       "[SLAVE_BUILD]/src",
       "--target",
