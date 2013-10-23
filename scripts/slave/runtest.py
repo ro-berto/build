@@ -1297,10 +1297,8 @@ def main():
     # Disable sandboxing under TSan for now. http://crbug.com/223602.
     args.append('--no-sandbox')
     symbolizer_dir = os.path.dirname(symbolizer_path)
-    if os.environ['PATH']:
-      os.environ['PATH'] = '%s:%s' % (os.environ['PATH'], symbolizer_dir)
-    else:
-      os.environ['PATH'] = symbolizer_dir
+    # TODO(glider): this is a workaround for http://crbug.com/310479.
+    os.environ['PATH'] = '%s:%s' % (os.environ['PATH'], symbolizer_dir)
   if options.enable_lsan:
     # Set verbosity=1 so LSan would always print suppression statistics.
     os.environ['LSAN_OPTIONS'] = (
