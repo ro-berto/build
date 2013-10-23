@@ -159,7 +159,11 @@ def _GenerateJSONForTestResults(options, results_tracker):
     # repository revisions).
     generate_json_options.webkit_dir = chromium_utils.FindUpward(
         build_dir, 'third_party', 'WebKit', 'Source')
-    generate_json_options.chrome_dir = build_dir
+    # build_dir is often 'src/out'. It seems safe to locate
+    # third_party in the parent of the build directory to find the
+    # root of the Chromium repo.
+    generate_json_options.chrome_dir = chromium_utils.FindUpwardParent(
+        build_dir, 'third_party')
 
     # Generate results JSON file and upload it to the appspot server.
     gtest_slave_utils.GenerateAndUploadJSONResults(
