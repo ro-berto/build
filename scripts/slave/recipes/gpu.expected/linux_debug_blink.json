@@ -76,7 +76,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=shared_library internal_gles2_conform_tests=1 use_ash=0 use_aura=0",
+      "GYP_DEFINES": "component=shared_library internal_gles2_conform_tests=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"

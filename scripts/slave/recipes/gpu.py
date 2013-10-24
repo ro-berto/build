@@ -59,6 +59,10 @@ def GenSteps(api):
     api.chromium.set_config(configuration + '_clang', GIT_MODE=use_git)
   api.gclient.apply_config('chrome_internal')
 
+  # Use the default Ash and Aura settings on all bots (specifically Blink bots).
+  api.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
+  api.chromium.c.gyp_env.GYP_DEFINES.pop('use_aura', None)
+
   # Don't skip the frame_rate data, as it's needed for the frame rate tests.
   # Per iannucci@, it can be relied upon that solutions[1] is src-internal.
   # Consider adding a 'gpu' module so that this can be managed in a
