@@ -278,7 +278,8 @@ class AndroidApi(recipe_api.RecipeApi):
                  '--target', self.m.chromium.c.BUILD_CONFIG])
         yield self.m.generator_script(
             self.c.internal_dir('build', 'buildbot', 'tests_generator.py'),
-            *args
+            *args,
+            env=self.get_env()
         )
 
   def logcat_dump(self):

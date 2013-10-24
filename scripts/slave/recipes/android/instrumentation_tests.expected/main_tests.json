@@ -259,6 +259,9 @@
     "cmd": [
       "path/to/test_script.py"
     ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
     "name": "test_step",
     "seed_steps": [
       "test_step"
