@@ -145,6 +145,9 @@ def GenSteps(api):
   # Context lost tests.
   yield api.gpu.run_telemetry_gpu_test('context_lost')
 
+  # Memory tests.
+  yield api.gpu.run_telemetry_gpu_test('memory_test')
+
   # Only run the performance tests on Release builds.
   if is_release_build:
     # Former tab_capture_performance_tests_step
