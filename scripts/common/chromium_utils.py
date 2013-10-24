@@ -32,6 +32,9 @@ except ImportError:
 BUILD_DIR = os.path.realpath(os.path.join(
     os.path.dirname(__file__), os.pardir, os.pardir))
 
+# Wrapper around svn that enforces a timeout.
+SVN_BIN = os.path.join(BUILD_DIR, 'scripts', 'tools', 'svn-with-timeout')
+
 
 # Local errors.
 class MissingArgument(Exception): pass

@@ -5,6 +5,8 @@
 from buildbot.changes import svnpoller
 from buildbot.scheduler import AnyBranchScheduler
 
+from common import chromium_utils
+
 from master import build_utils
 
 def ChromeTreeFileSplitter(path):
@@ -32,6 +34,7 @@ def Update(config, _active_master, c):
   chromium_url = "http://src.chromium.org/viewvc/chrome?view=rev&revision=%s"
   webkit_url = "http://src.chromium.org/viewvc/blink?view=rev&revision=%s"
   cr_poller = svnpoller.SVNPoller(svnurl=config.Master.trunk_url,
+                                  svnbin=chromium_utils.SVN_BIN,
                                   split_file=ChromeTreeFileSplitter,
                                   pollinterval=30,
                                   revlinktmpl=chromium_url,
@@ -40,6 +43,7 @@ def Update(config, _active_master, c):
   c['change_source'].append(cr_poller)
 
   webkit_poller = svnpoller.SVNPoller(svnurl = config.Master.webkit_root_url,
+                                      svnbin=chromium_utils.SVN_BIN,
                                       split_file=WebkitFileSplitter,
                                       pollinterval=30,
                                       revlinktmpl=webkit_url,

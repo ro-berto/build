@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from common import chromium_utils
+
 from master import build_utils
 
 from buildbot.changes import svnpoller
@@ -20,6 +22,7 @@ def ChromiumFileSplitter(path):
 def Update(config, c):
   poller = svnpoller.SVNPoller(
       svnurl=config.Master.trunk_url,
+      svnbin=chromium_utils.SVN_BIN,
       split_file=ChromiumFileSplitter,
       pollinterval=30,
       revlinktmpl='http://src.chromium.org/viewvc/chrome?view=rev&revision=%s')
