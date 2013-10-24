@@ -1138,6 +1138,22 @@ def real_main():
           src_dir=options.src_dir):
         main = main_ninja
         options.build_tool = 'ninja'
+
+        # There is no standard way to pass a build target (such as 'base') to
+        # compile.py. --target specifies Debug or Release. --project could do
+        # that, but it's only supported by the msvs build tool at the moment.
+        # Because of that, most build masters pass additional options to the
+        # build tool to specify the build target. For xcode, these are in the
+        # form of '-project blah.xcodeproj -target buildtarget'. Translate these
+        # into ninja options, if needed.
+        xcode_option_parse = optparse.OptionParser()
+        xcode_option_parse.add_option('--project')
+        xcode_option_parse.add_option('--target')
+        xcode_options, xcode_args = xcode_option_parse.parse_args(
+            [re.sub('^-', '--', a) for a in args])  # optparse wants --options.
+        args = xcode_args
+        if xcode_options.target:
+          args = [xcode_options.target] + args
       else:
         main = main_xcode
         options.build_tool = 'xcode'
