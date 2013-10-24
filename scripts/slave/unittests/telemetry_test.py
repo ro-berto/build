@@ -47,7 +47,7 @@ class TelemetryTest(unittest.TestCase):
   @staticmethod
   def _GetDefaultFactoryProperties():
     fp = {}
-    fp['build_dir'] = 'src/build'
+    fp['build_dir'] = 'src/out'
     fp['test_name'] = 'sunspider'
     fp['target'] = 'Release'
     fp['target_os'] = 'android'
@@ -78,10 +78,10 @@ class TelemetryTest(unittest.TestCase):
         '\'adb\' \'wait-for-device\'',
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
-            '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
+            '\'--build-dir\' \'src/out\' \'--no-xvfb\' ' +
             '\'--factory-properties=' +
             '{"target": "Release", ' +
-            '"build_dir": "src/build", "perf_id": "android-gn", ' +
+            '"build_dir": "src/out", "perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
@@ -108,9 +108,9 @@ class TelemetryTest(unittest.TestCase):
         '\'adb\' \'wait-for-device\'',
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
-            '\'--build-dir\' \'src/build\' \'--no-xvfb\' ' +
+            '\'--build-dir\' \'src/out\' \'--no-xvfb\' ' +
             '\'--factory-properties=' +
-            '{"target": "Release", "build_dir": "src/build", ' +
+            '{"target": "Release", "build_dir": "src/out", ' +
             '"extra_args": ["--profile-dir=fake_dir"], ' +
             '"perf_id": "android-gn", ' +
             '"step_name": "sunspider", "test_name": "sunspider", ' +

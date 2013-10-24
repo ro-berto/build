@@ -8,61 +8,63 @@ import os
 import sys
 
 
+def IsFileNewerThanFile(file_a, file_b):
+  """Returns True if file_a's mtime is newer than file_b's."""
+  def getmtime(f):
+    try:
+      return os.path.getmtime(f)
+    except os.error:
+      return 0
+  return getmtime(file_a) >= getmtime(file_b)
+
+
 def AreNinjaFilesNewerThanXcodeFiles(src_dir=None):
   """Returns True if the generated ninja files are newer than the generated
   xcode files.
-  
+
   Parameters:
     src_dir: The path to the src directory.  If None, it's assumed to be
              at src/ relative to the current working directory.
   """
-  xcode_stat = 0
-  ninja_stat = 0
-
   src_dir = src_dir or 'src'
-
   ninja_path = os.path.join(src_dir, 'out', 'Release', 'build.ninja')
-  try:
-    ninja_stat = os.path.getmtime(ninja_path)
-  except os.error:
-    pass
-
   xcode_path = os.path.join(
       src_dir, 'build', 'all.xcodeproj', 'project.pbxproj')
-  try:
-    xcode_stat = os.path.getmtime(xcode_path)
-  except os.error:
-    pass
+  return IsFileNewerThanFile(ninja_path, xcode_path)
 
-  return ninja_stat > xcode_stat
+
+def AreNinjaFilesNewerThanMSVSFiles(src_dir=None):
+  """Returns True if the generated ninja files are newer than the generated
+  msvs files.
+
+  Parameters:
+    src_dir: The path to the src directory.  If None, it's assumed to be
+             at src/ relative to the current working directory.
+  """
+  src_dir = src_dir or 'src'
+  ninja_path = os.path.join(src_dir, 'out', 'Release', 'build.ninja')
+  msvs_path = os.path.join(src_dir, 'build', 'all.sln')
+  return IsFileNewerThanFile(ninja_path, msvs_path)
 
 
 def ConvertBuildDirToLegacy(build_dir, use_out=False):
-  """Returns a tuple of (build_dir<str>, legacy<bool>).
+  """Returns the path to the build directory, relative to the checkout root.
+
+  Assumes that the current working directory is the checkout root.
   """
-  # TODO(thakis): Make this the canonical source of truth for build_dir for
-  # slave scripts, remove all parameters.
-  legacy_paths = {
-    'darwin': 'xcodebuild',
-  }
-  bad = False
+  # TODO(thakis): Remove parameters of this function, rename it to
+  # GetBuildDirectory(), make it return just a path not a tuple.
+  if sys.platform.startswith('linux'):
+    return 'src/out', False
 
-  platform_key = None
-  for key in legacy_paths:
-    if sys.platform.startswith(key):
-      platform_key = key
-      break
+  if sys.platform == 'darwin':
+    if AreNinjaFilesNewerThanXcodeFiles():
+      return 'src/out', False
+    return 'src/xcodebuild', False
 
-  if (build_dir == 'src/build' and (platform_key or use_out)):
-    print >> sys.stderr, (
-        'WARNING: Passed "%s" as --build-dir option on %s. '
-        'This is almost certainly incorrect.' % (build_dir, platform_key))
-    if use_out:
-      legacy_path = 'out'
-    else:
-      legacy_path = legacy_paths[platform_key]
-    build_dir = os.path.join(os.path.dirname(build_dir), legacy_path)
-    print >> sys.stderr, ('Assuming you meant "%s"' % build_dir)
-    bad = True
+  if sys.platform == 'cygwin' or sys.platform.startswith('win'):
+    if AreNinjaFilesNewerThanMSVSFiles():
+      return 'src/out', False
+    return 'src/build', False
 
-  return (build_dir, bad)
+  raise NotImplementedError('Unexpected platform %s' % sys.platform)
