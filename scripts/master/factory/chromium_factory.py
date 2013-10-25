@@ -612,7 +612,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Synthetic benchmarks:
     synthetic_benchmarks = (
-        'blink_perf',
         'dom_perf',
         'jsgamebench',
         'kraken',
@@ -626,6 +625,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       )
     for test_name in synthetic_benchmarks:
       Telemetry(test_name)
+    if R('blink_perf'):
+      f.AddTelemetryTest('blink_perf', factory_properties=fp)
+      f.AddTelemetryTest('blink_perf.web_animations', factory_properties=fp)
     if R('dromaeo'):
       dromaeo_benchmarks = (
           'domcoreattr',
