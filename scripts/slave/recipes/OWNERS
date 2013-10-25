@@ -3,4 +3,5 @@ iannucci@chromium.org
 per-file alloy.py=dfreedm@chromium.org
 per-file alloy.py=mmcnulty@chromium.org
 per-file alloy.py=ykyyip@chromium.org
+per-file gpu.py=kbr@chromium.org
 per-file v8.py=machenbach@chromium.org
