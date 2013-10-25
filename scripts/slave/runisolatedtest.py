@@ -123,6 +123,9 @@ def main(argv):
   option_parser.add_option('--checkout_dir',
                            help='Checkout directory, used to locate the '
                            'swarm_client scripts.')
+  option_parser.add_option('-f', '--force-isolated',  action='store_true',
+                           help='Force test to run isolated. By default only '
+                           'white listed builders and tests are run isolated.')
   option_parser.add_option('-v', '--verbose', action='count', default=0,
                            help='Use to increase log verbosity. Can be passed '
                            'in multiple time for more logs.')
@@ -139,7 +142,8 @@ def main(argv):
                              ' %(levelname)s %(message)s',
                       datefmt='%y%m%d %H:%M:%S')
 
-  if should_run_as_isolated(options.builder_name, options.test_name):
+  if (options.force_isolated or
+      should_run_as_isolated(options.builder_name, options.test_name)):
     logging.info('Running test in isolate mode')
     # Search first in swarming_client
     isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',

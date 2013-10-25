@@ -543,13 +543,15 @@ def generate_run_isolated_command(build_dir, test_exe_path, options, command):
   they need to be run in isolate mode.
   """
   run_isolated_test = os.path.join(BASE_DIR, 'runisolatedtest.py')
-  isolate_command = [sys.executable, run_isolated_test,
-                     '--test_name', options.test_type,
-                     '--builder_name', options.build_properties.get(
-                         'buildername', ''),
-                     '--checkout_dir',
-                     os.path.dirname(os.path.dirname(build_dir)),
-                     test_exe_path, '--'] + command
+  isolate_command = [
+      sys.executable, run_isolated_test,
+      '--test_name', options.test_type,
+      '--builder_name', options.build_properties.get('buildername', ''),
+      '--checkout_dir', os.path.dirname(os.path.dirname(build_dir)),
+  ]
+  if options.factory_properties.get('force_isolated'):
+    isolate_command += ['--force-isolated']
+  isolate_command += [test_exe_path, '--'] + command
 
   return isolate_command
 
