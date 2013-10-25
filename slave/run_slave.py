@@ -355,6 +355,7 @@ def main():
         'CHROMIUM_BUILD',
         'COMSPEC',
         'COMPUTERNAME',
+        'DBUS_SESSION_BUS_ADDRESS',
         'DXSDK_DIR',
         'HOMEDRIVE',
         'HOMEPATH',
