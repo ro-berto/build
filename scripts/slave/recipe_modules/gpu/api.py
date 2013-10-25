@@ -7,9 +7,13 @@ from slave import recipe_api
 class GpuApi(recipe_api.RecipeApi):
   def run_telemetry_gpu_test(self, test, name='', args=None,
                              results_directory=''):
+    test_args = ['-v']
+    if args:
+      test_args.extend(args)
+
     return self.m.chromium.run_telemetry_test(
         str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
-        test, name, args, results_directory, spawn_dbus=True)
+        test, name, test_args, results_directory, spawn_dbus=True)
 
   def archive_pixel_test_results(self, name, run_id, generated_dir,
                                  reference_dir, gsutil=''):
@@ -17,8 +21,7 @@ class GpuApi(recipe_api.RecipeApi):
       gsutil = self.m.path.build('scripts', 'slave', 'gsutil',
                                  platform_ext={'win': '.bat'})
 
-    args = ['--run-id',
-            run_id,
+    args = ['--run-id', run_id,
             '--generated-dir', generated_dir,
             '--gpu-reference-dir', reference_dir,
             '--gsutil', gsutil]

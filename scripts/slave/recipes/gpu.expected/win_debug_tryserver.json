@@ -240,6 +240,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
+      "-v",
       "--generated-dir=[SLAVE_BUILD]\\content_gpu_data\\telemetry\\generated",
       "--reference-dir=[SLAVE_BUILD]\\content_gpu_data\\telemetry\\reference",
       "--build-revision=170242"
@@ -292,6 +293,7 @@
       "--show-stdout",
       "--output-format=gtest",
       "--browser=debug",
+      "-v",
       "--webgl-conformance-version=1.0.1"
     ],
     "name": "webgl_conformance_tests"
@@ -324,7 +326,8 @@
       "context_lost",
       "--show-stdout",
       "--output-format=gtest",
-      "--browser=debug"
+      "--browser=debug",
+      "-v"
     ],
     "name": "context_lost_tests"
   },
@@ -356,7 +359,8 @@
       "memory_test",
       "--show-stdout",
       "--output-format=gtest",
-      "--browser=debug"
+      "--browser=debug",
+      "-v"
     ],
     "name": "memory_test"
   }
