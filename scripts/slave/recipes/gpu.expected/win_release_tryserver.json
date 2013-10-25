@@ -252,7 +252,7 @@
       "--generated-dir",
       "[SLAVE_BUILD]\\content_gpu_data\\telemetry\\generated",
       "--gpu-reference-dir",
-      "[SLAVE_BUILD]\\content_gpu_data\\telemetry\\reference",
+      "[SLAVE_BUILD]\\content_gpu_data\\telemetry\\generated",
       "--gsutil",
       "[BUILD]\\scripts\\slave\\gsutil.bat"
     ],

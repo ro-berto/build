@@ -134,7 +134,9 @@ def GenSteps(api):
   yield api.gpu.archive_pixel_test_results('archive_pixel_test_results',
       '%s_%s_telemetry' % (build_revision, api.properties['buildername']),
       generated_dir=generated_dir,
-      reference_dir=reference_dir)
+      reference_dir=generated_dir) # This mismatch is intentional.
+  # Reference images are copied into the generated directory upon failure
+  # to ensure that they get archived with the correct name.
 
   # WebGL conformance tests.
   yield api.gpu.run_telemetry_gpu_test('webgl_conformance',
