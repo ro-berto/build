@@ -45,6 +45,7 @@ def main():
   add(third_party)
   add(os.path.join(BUILD_DIR, 'site_config'))
   add(os.path.join(BUILD_DIR, '..', 'build_internal', 'site_config'))
+  add(os.path.join(BUILD_DIR, '..', 'build_internal', 'scripts', 'master'))
   add('.')
   os.environ['PYTHONPATH'] = os.pathsep.join(path)
 
