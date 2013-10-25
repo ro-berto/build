@@ -103,8 +103,9 @@ def GenTests(api):
     yield (
       api.test('polymer-%s' % plat) +
       api.properties.scheduled(
-        repository='https://github.com/Polymer/polymer',
         buildername='polymer %s' % plat,
+        repository='https://github.com/Polymer/polymer',
+        revision='HEAD',
       ) +
       api.platform.name(plat)
     )
@@ -113,8 +114,9 @@ def GenTests(api):
   yield (
     api.test('polymer-from-platform') +
     api.properties.scheduled(
-      repository='https://github.com/Polymer/platform',
       buildername='polymer linux',
-      scheduler='polymer-platform'
+      repository='https://github.com/Polymer/platform',
+      revision='HEAD',
+      scheduler='polymer-platform',
     )
   )

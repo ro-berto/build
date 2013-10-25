@@ -33,6 +33,8 @@
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
+      "--revision",
+      "polymer@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],

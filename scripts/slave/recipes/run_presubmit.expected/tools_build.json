@@ -31,6 +31,8 @@
       "--force",
       "--upstream",
       "--no-nag-max",
+      "--revision",
+      "build@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],

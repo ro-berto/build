@@ -78,8 +78,11 @@ class GclientApi(recipe_api.RecipeApi):
   @recipe_api.inject_test_data
   def sync(self, cfg, **kwargs):
     revisions = []
-    for s in cfg.solutions:
-      if s.revision is not None:
+    for i, s in enumerate(cfg.solutions):
+      if i == 0:
+        s.revision = s.revision or self.m.properties.get('revision')
+
+      if s.revision is not None and s.revision != '':
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])
 
     def parse_got_revision(step_result):

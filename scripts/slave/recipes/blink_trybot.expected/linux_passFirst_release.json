@@ -41,6 +41,8 @@
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
+      "--revision",
+      "src@HEAD",
       "--output-json",
       "/path/to/tmp/json"
     ],

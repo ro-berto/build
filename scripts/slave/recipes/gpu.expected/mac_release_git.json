@@ -31,6 +31,8 @@
       "--force",
       "--upstream",
       "--no-nag-max",
+      "--revision",
+      "src@204787",
       "--output-json",
       "/path/to/tmp/json"
     ],
