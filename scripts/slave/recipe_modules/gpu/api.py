@@ -9,7 +9,7 @@ class GpuApi(recipe_api.RecipeApi):
                              results_directory=''):
     return self.m.chromium.run_telemetry_test(
         str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
-        test, name, args, results_directory)
+        test, name, args, results_directory, spawn_dbus=True)
 
   def archive_pixel_test_results(self, name, run_id, generated_dir,
                                  reference_dir, gsutil=''):

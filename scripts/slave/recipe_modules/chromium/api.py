@@ -47,7 +47,7 @@ class ChromiumApi(recipe_api.RecipeApi):
                results_url=None, perf_dashboard_id=None, test_type=None,
                generate_json_file=False, results_directory=None,
                build_number=None, builder_name=None, python_mode=False,
-               **kwargs):
+               spawn_dbus=False, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -83,6 +83,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--builder-name=%s' % builder_name)
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
+    if spawn_dbus:
+      full_args.append('--spawn-dbus')
     full_args.append(test)
     full_args.extend(args)
 
@@ -97,7 +99,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     )
 
   def run_telemetry_test(self, runner, test, name='', args=None,
-      results_directory=''):
+      results_directory='', spawn_dbus=False):
     # Choose a reasonable default for the location of the sandbox binary
     # on the bots.
     env = {}
@@ -135,6 +137,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         build_number=self.m.properties['buildnumber'],
         builder_name=self.m.properties['buildername'],
         python_mode=True,
+        spawn_dbus=spawn_dbus,
         env=env)
 
   def runhooks(self, **kwargs):

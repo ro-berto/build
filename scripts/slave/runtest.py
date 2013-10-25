@@ -85,6 +85,33 @@ def get_temp_count():
   return len(os.listdir(tempfile.gettempdir()))
 
 
+def _LaunchDBus():
+  """Launches DBus to work around a bug in GLib.
+
+  Works around a bug in GLib where it performs operations which aren't
+  async-signal-safe (in particular, memory allocations) between fork
+  and exec when it spawns subprocesses. This causes threads inside
+  Chrome's browser and utility processes to get stuck, and this
+  harness to hang waiting for those processes, which will never
+  terminate. This doesn't happen on users' machines, because they have
+  an active desktop session and the DBUS_SESSION_BUS_ADDRESS
+  environment variable set, but it does happen on the bots. See Issue
+  309093 for more details."""
+  import platform
+  import subprocess
+  if (platform.uname()[0].lower() == 'linux' and
+      'DBUS_SESSION_BUS_ADDRESS' not in os.environ):
+    try:
+      print 'DBUS_SESSION_BUS_ADDRESS env var not found, starting dbus-launch'
+      dbus_output = subprocess.check_output(['dbus-launch']).split('\n')
+      for line in dbus_output:
+        m = re.match(r"([^=]+)\=(.+)", line)
+        if m:
+          os.environ[m.group(1)] = m.group(2)
+          print ' setting %s to %s' % (m.group(1), m.group(2))
+    except subprocess.CalledProcessError, e:
+      print 'Exception while running dbus_launch: %s' % e
+
 def _RunGTestCommand(command, results_tracker=None, pipes=None,
                      extra_env=None):
 
@@ -1217,6 +1244,10 @@ def main():
                                 'properties "lsan" and "lsan_run_all_tests".')
   option_parser.add_option('', '--extra-sharding-args', default='',
                            help='Extra options for run_test_cases.py.')
+  option_parser.add_option('--spawn-dbus', action='store_true',
+                           default=False,
+                           help='Work around GLib DBus bug by '
+                                'manually spawning dbus-launch')
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
@@ -1233,6 +1264,9 @@ def main():
 
   # Print out builder name for log_parser
   print '[Running on builder: "%s"]' % options.builder_name
+
+  if options.spawn_dbus:
+    _LaunchDBus()
 
   # TODO(thakis): Simplify this once ConvertBuildDirToLegacy() ignores its
   # arguments.

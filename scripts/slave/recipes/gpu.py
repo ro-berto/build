@@ -98,7 +98,7 @@ def GenSteps(api):
 
   # Note: --no-xvfb is the default.
   for test in SIMPLE_TESTS_TO_RUN:
-    yield api.chromium.runtests(test)
+    yield api.chromium.runtests(test, spawn_dbus=True)
 
   # Former gpu_content_tests step
   args = ['--use-gpu-in-tests',
@@ -114,7 +114,8 @@ def GenSteps(api):
                                   api.path.slave_build('gtest-results',
                                       'content_browsertests'),
                               build_number=api.properties['buildnumber'],
-                              builder_name=api.properties['buildername'])
+                              builder_name=api.properties['buildername'],
+                              spawn_dbus=True)
 
   # Choose a reasonable default for the location of the sandbox binary
   # on the bots.
@@ -161,7 +162,8 @@ def GenSteps(api):
                                 annotate='graphing',
                                 results_url=dashboard_upload_url,
                                 perf_dashboard_id='tab_capture_performance',
-                                test_type='tab_capture_performance_tests')
+                                test_type='tab_capture_performance_tests',
+                                spawn_dbus=True)
 
   # TODO(kbr): after the conversion to recipes, add all GPU related
   # steps from the main waterfall, like gpu_unittests.
