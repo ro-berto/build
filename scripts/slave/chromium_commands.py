@@ -391,17 +391,15 @@ class GClient(SourceBaseCommand):
     dirname = os.path.join(self.builder.basedir, self.srcdir)
     command = [chromium_utils.GetGClientCommand(), 'config']
 
+    if self.gclient_spec:
+      command.append('--spec=%s' % self.gclient_spec)
+    else:
+      command.append(self.svnurl)
+
     git_cache_dir = os.path.abspath(
         os.path.join(self.builder.basedir, os.pardir, os.pardir, os.pardir,
                      'git_cache'))
-
-    if self.gclient_spec:
-      self.gclient_spec += ';cache_dir="%s"' % git_cache_dir
-      command.append('--spec=%s' % self.gclient_spec)
-    else:
-      command.append('--cache-dir=' + git_cache_dir)
-      command.append(self.svnurl)
-
+    command.append('--cache-dir=' + git_cache_dir)
     c = runprocess.RunProcess(
         self.builder, command, dirname,
         sendRC=False, timeout=self.timeout,
