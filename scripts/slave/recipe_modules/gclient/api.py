@@ -79,8 +79,16 @@ class GclientApi(recipe_api.RecipeApi):
   def sync(self, cfg, **kwargs):
     revisions = []
     for i, s in enumerate(cfg.solutions):
-      if i == 0:
-        s.revision = s.revision or self.m.properties.get('revision')
+      if i == 0 and s.revision is None:
+        s.revision = self.m.properties.get('revision')
+
+        # HACK(iannucci): This is because the webkit Poller on chromium.webkit
+        # alternately sets 'revision' to the chromium revision OR the webkit
+        # revision. This causes gclient to sync to ancient chromium versions
+        # occasionally, which is bad. Key off of the 'project' build_property
+        # which seems to be set uniquely on this master.
+        if self.m.properties.get('project') == 'webkit':
+          s.revision = 'HEAD'
 
       if s.revision is not None and s.revision != '':
         revisions.extend(['--revision', '%s@%s' % (s.name, s.revision)])

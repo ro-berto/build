@@ -184,7 +184,9 @@ def GenTests(api):
         api.test('%s_blink' % base_name) +
         api.properties.scheduled(
             build_config=build_config,
-            top_of_tree_blink=True) +
+            top_of_tree_blink=True,
+            project='webkit'
+        ) +
         api.platform.name(plat)
       )
 
