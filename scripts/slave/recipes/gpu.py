@@ -198,7 +198,7 @@ def GenTests(api):
   # Test one configuration using git mode.
   yield (
     api.test('mac_release_git') +
-    api.properties.scheduled(build_config='Release', use_git=True) +
+    api.properties.git_scheduled(build_config='Release', use_git=True) +
     api.platform.name('mac')
   )
 
