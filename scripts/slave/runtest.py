@@ -563,8 +563,7 @@ def upload_profiling_data(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
-def generate_run_isolated_command(build_dir, test_exe_path, options, command,
-                                  relative_build_dir):
+def generate_run_isolated_command(build_dir, test_exe_path, options, command):
   """Convert the command to run through the run isolate script.
 
   All commands are sent through the run isolated script, in case
@@ -573,7 +572,6 @@ def generate_run_isolated_command(build_dir, test_exe_path, options, command,
   run_isolated_test = os.path.join(BASE_DIR, 'runisolatedtest.py')
   isolate_command = [
       sys.executable, run_isolated_test,
-      '--build-dir', relative_build_dir,
       '--test_name', options.test_type,
       '--builder_name', options.build_properties.get('buildername', ''),
       '--checkout_dir', os.path.dirname(os.path.dirname(build_dir)),
@@ -682,7 +680,7 @@ def main_mac(options, args):
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
     command = generate_run_isolated_command(build_dir, test_exe_path, options,
-                                            command, options.build_dir)
+                                            command)
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker)
   finally:
@@ -937,7 +935,7 @@ def main_linux(options, args):
       pipes = [[sys.executable, symbolize], ['c++filt']]
 
     command = generate_run_isolated_command(build_dir, test_exe_path, options,
-                                            command, options.build_dir)
+                                            command)
     result = _RunGTestCommand(command, pipes=pipes,
                               results_tracker=results_tracker,
                               extra_env=extra_env)
@@ -1034,7 +1032,7 @@ def main_win(options, args):
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
     command = generate_run_isolated_command(build_dir, test_exe_path, options,
-                                            command, options.build_dir)
+                                            command)
     result = _RunGTestCommand(command, results_tracker)
   finally:
     if http_server:
