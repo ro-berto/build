@@ -1389,7 +1389,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                       mode=None, slave_type='BuilderTester',
                       options=None, compile_timeout=1200, build_url=None,
                       project=None, factory_properties=None, gclient_deps=None,
-                      run_default_swarm_tests=None, git_url=None):
+                      run_default_swarm_tests=None, git_url=None,
+                      pure_git=False):
     if not factory_properties:
       factory_properties = {}
     factory_properties['no_gclient_branch'] = True
@@ -1398,7 +1399,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     git_url = '%s/chromium/src.git' % config.Master.git_server_url
     self._solutions[0].svn_url = git_url
     #TODO(agable): remove custom_deps_file when .DEPS.git is deprecated.
-    self._solutions[0].custom_deps_file = '.DEPS.git'
+    if pure_git:
+      self._solutions[0].custom_deps_file = '.DEPS.git'
 
     if (len(self._solutions) > 1 and
         self._solutions[1].svn_url == config.Master.trunk_internal_url_src):
@@ -1406,7 +1408,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                  config.Master.git_internal_server_url)
       self._solutions[1].svn_url = git_url
       #TODO(agable): remove custom_deps_file when .DEPS.git is deprecated.
-      self._solutions[1].custom_deps_file = '.DEPS.git'
+      if pure_git:
+        self._solutions[1].custom_deps_file = '.DEPS.git'
       self._solutions[1].custom_deps_list = self.CUSTOM_DEPS_GIT_INTERNAL
 
     return self.ChromiumFactory(target, clobber, tests, mode, slave_type,
