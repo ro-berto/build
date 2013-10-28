@@ -106,6 +106,18 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--target",
+      "Debug"
+    ],
+    "name": "start_crash_service"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
@@ -348,5 +360,17 @@
       "-v"
     ],
     "name": "memory_test"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--target",
+      "Debug"
+    ],
+    "name": "process_dumps"
   }
 ]

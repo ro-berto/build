@@ -96,6 +96,17 @@ def GenSteps(api):
   # and the setting of these properties should happen in this recipe
   # instead.
 
+  # On Windows, start the crash service.
+  if api.platform.is_win:
+    yield api.python(
+      'start_crash_service',
+      api.path.build('scripts', 'slave', 'chromium',
+                     'run_crash_handler.py'),
+      ['--build-dir',
+       api.path.checkout('out'),
+       '--target',
+       'Release' if is_release_build else 'Debug'])
+
   # Note: --no-xvfb is the default.
   for test in SIMPLE_TESTS_TO_RUN:
     yield api.chromium.runtests(test, spawn_dbus=True)
@@ -167,6 +178,16 @@ def GenSteps(api):
 
   # TODO(kbr): after the conversion to recipes, add all GPU related
   # steps from the main waterfall, like gpu_unittests.
+
+  # On Windows, process any crash dumps that may have occurred.
+  if api.platform.is_win:
+    yield api.python(
+      'process_dumps',
+      api.path.build('scripts', 'slave', 'process_dumps.py'),
+      ['--build-dir',
+       api.path.checkout('out'),
+       '--target',
+       'Release' if is_release_build else 'Debug'])
 
 def GenTests(api):
   for build_config in ['Release', 'Debug']:

@@ -106,6 +106,18 @@
     "name": "compile"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\chromium\\run_crash_handler.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--target",
+      "Release"
+    ],
+    "name": "start_crash_service"
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",
@@ -375,5 +387,17 @@
       "--gtest_filter=TabCapturePerformanceTest*"
     ],
     "name": "tab_capture_performance_tests"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\process_dumps.py",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--target",
+      "Release"
+    ],
+    "name": "process_dumps"
   }
 ]
