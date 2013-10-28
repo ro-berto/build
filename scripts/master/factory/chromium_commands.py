@@ -970,7 +970,7 @@ class ChromiumCommands(commands.FactoryCommands):
     """
     profile_dir = self.PathJoin(output_dir, 'generated_profiles')
     cmd_name = self.PathJoin('src', 'tools', 'perf', 'generate_profile')
-    cmd_args = ['-v', '--browser=release',
+    cmd_args = ['-v', '--browser=' + self._target.lower(),
                 '--profile-type-to-generate=' + profile_type_to_create,
                 '--output-dir=' + profile_dir]
     cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
