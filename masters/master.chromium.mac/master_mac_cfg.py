@@ -333,7 +333,6 @@ F('ios_dbg', ios().ChromiumFactory(
     'ui_unittests',
     'unit_sql',
     'unit_sync',
-    'unit_tests',
   ],
   options = [
     '--', '-project', '../build/all.xcodeproj', '-sdk',

@@ -68,7 +68,6 @@ categories_steps = {
     'sql_unittests',
     'sync_unit_tests',
     'ui_unittests',
-    'unit_tests',
     'url_unittests',
   ],
 }

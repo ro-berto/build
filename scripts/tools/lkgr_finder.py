@@ -206,7 +206,6 @@ CHROMIUM_LKGR_STEPS = {
       'sql_unittests',
       'sync_unit_tests',
       'ui_unittests',
-      'unit_tests',
       'url_unittests',
     ],
   },  # chromium.mac
