@@ -63,15 +63,26 @@ F('win_drmemory_pattern_factory', win().WebRTCFactory(
     tests=['drmemory_pattern_' + test for test in tests],
     factory_properties=dr_memory_factory_properties))
 
+B('Win Asan', 'win_asan_factory', scheduler=scheduler)
+F('win_asan_factory', win().WebRTCFactory(
+    target='Debug',
+    options=ninja_options,
+    tests=tests,
+    factory_properties={
+        'asan': True,
+        'gclient_env': {'GYP_DEFINES': ('asan=1 win_z7=1 chromium_win_pch=0 '
+                                        'component=static_library')},
+    }))
+
 B('Win Tsan', 'win_tsan_factory', scheduler=scheduler)
 F('win_tsan_factory', win().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=['tsan_' + test for test in tests],
-      factory_properties={
-          'needs_tsan_win': True,
-          'gclient_env': { 'GYP_DEFINES' : 'build_for_tool=tsan' },
-      }))
+    factory_properties={
+        'needs_tsan_win': True,
+        'gclient_env': { 'GYP_DEFINES' : 'build_for_tool=tsan' },
+    }))
 
 
 def Update(c):
