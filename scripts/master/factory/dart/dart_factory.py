@@ -74,12 +74,20 @@ if config.Master.trunk_internal_url:
   CUSTOM_DEPS_DIRECTX_SDK = (
     "src/third_party/directxsdk",
     config.Master.trunk_internal_url + "/third_party/directxsdk@20250")
-
   custom_deps_list_win = [CUSTOM_DEPS_WIN7_SDK,
                           CUSTOM_DEPS_WIN8_SDK,
                           CUSTOM_DEPS_DIRECTX_SDK]
 else:
   custom_deps_list_win = []
+
+# Wix custom deps
+if config.Master.trunk_internal_url:
+  custom_wix_deps = [(
+    'dart/third_party/wix',
+    config.Master.trunk_internal_url + "/third_party/wix/v3_6_3303")]
+else:
+  custom_wix_deps = []
+
 custom_deps_list_chromeOnAndroid = [
     ('dart/third_party/android_tools', android_tools_url),
 ]
@@ -366,6 +374,9 @@ class DartUtils(object):
                       custom_deps_list=custom_deps_list_chromeOnAndroid),
       'android' + postfix: DartFactory(channel, target_os='android'),
       'windows' + postfix: DartFactory(channel, target_platform='win32'),
+      'windows-wix' + postfix:
+          DartFactory(channel, target_platform='win32',
+                      custom_deps_list=custom_wix_deps),
     }
     if channel.name == 'be':
       factory_base.update({
