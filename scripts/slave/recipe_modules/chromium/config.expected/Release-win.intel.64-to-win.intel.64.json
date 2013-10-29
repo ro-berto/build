@@ -164,7 +164,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android android_sdk_root=Path('[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk') android_sdk_version=KeyLimePie chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android android_sdk_root=Path('[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk') android_sdk_version=4.4 chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All", 
       "GYP_MSVS_VERSION": "2012"
