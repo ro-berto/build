@@ -9,8 +9,11 @@ import json
 import logging
 import optparse
 import os
+import re
 import subprocess
 import sys
+
+from slave import build_directory
 
 
 USAGE = ('%s [options] /full/path/to/test.exe -- [original test command]' %
@@ -80,7 +83,54 @@ def run_command(command):
   return subprocess.call(command)
 
 
-def run_test_isolated(isolate_script, test_exe, original_command):
+def sanitize_build_dir(s, build_dir_basename):
+  """Replaces references to build directory in s with references to build_dir"""
+  return re.sub(r'\b(?:out|build|xcodebuild)([\\/](?:Debug|Release))',
+                build_dir_basename + r'\1', s)
+
+
+def sanitize_isolated_file(isolated_file, build_dir_basename):
+  """Crack open .isolated file and fix embedded paths, if necessary.
+
+  isolates assume that they can embed the build directory at build time and
+  still used that directory at test time. With a builder/tester setup, this
+  isn't generally true, so rewrite the paths in the isolated file. See
+  http://crbug.com/311622 for details. This can go away once all bots using
+  isolates are using ninja.
+  """
+  # See the isolates file format description at:
+  # https://code.google.com/p/swarming/wiki/IsolatedDesign#.isolated_file_format
+  with open(isolated_file) as f:
+    isolated_data = json.load(f)
+
+  # 1. check version
+  if isolated_data['version'] != '1.0':
+    logging.error('Unexpected isolate version %s', isolated_data['version'])
+    return 1
+
+  # 2. fix command, print it
+  for i in range(len(isolated_data['command'])):
+    arg = isolated_data['command'][i]
+    isolated_data['command'][i] = sanitize_build_dir(arg, build_dir_basename)
+
+  # 3. fix files
+  sanitized_files = {}
+  for key, value in isolated_data['files'].iteritems():
+    # a) fix key
+    key = sanitize_build_dir(key, build_dir_basename)
+    sanitized_files[key] = value
+    # b) fix 'l' entry
+    if 'l' in value:
+      value['l'] = sanitize_build_dir(value['l'], build_dir_basename)
+  isolated_data['files'] = sanitized_files
+
+  # TODO(thakis): fix 'includes' if necessary.
+
+  with open(isolated_file, 'w') as f:
+    json.dump(isolated_data, f)
+
+
+def run_test_isolated(isolate_script, test_exe, original_command, build_dir):
   """Runs the test under isolate.py run.
 
   It compensates for discrepancies between sharding_supervisor.py arguments and
@@ -94,6 +144,10 @@ def run_test_isolated(isolate_script, test_exe, original_command):
   if not os.path.exists(isolated_file):
     logging.error('No isolate file %s', isolated_file)
     return 1
+
+  # '/path/to/src/out' -> 'out'
+  build_dir_basename = os.path.basename(build_dir)
+  sanitize_isolated_file(isolated_file, build_dir_basename)
 
   isolate_command = [sys.executable, isolate_script,
                      'run', '--isolated', isolated_file]
@@ -120,6 +174,8 @@ def run_test_isolated(isolate_script, test_exe, original_command):
 
 def main(argv):
   option_parser = optparse.OptionParser(USAGE)
+  option_parser.add_option('--build-dir',
+                           help='Parent of the Release or Debug folder')
   option_parser.add_option('--test_name', default='',
                            help='The name of the test')
   option_parser.add_option('--builder_name', default='',
@@ -133,9 +189,11 @@ def main(argv):
                            'white listed builders and tests are run isolated.')
   option_parser.add_option('-v', '--verbose', action='count', default=0,
                            help='Use to increase log verbosity. Can be passed '
-                           'in multiple time for more logs.')
+                           'in multiple times for more detailed logs.')
 
   options, args = option_parser.parse_args(argv)
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   test_exe = args[0]
   original_command = args[1:]
@@ -158,7 +216,8 @@ def main(argv):
     if not os.path.isfile(isolate_script):
       isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
                                     'swarm_client', 'isolate.py')
-    return run_test_isolated(isolate_script, test_exe, original_command)
+    return run_test_isolated(
+        isolate_script, test_exe, original_command, options.build_dir)
   else:
     logging.info('Running test normally')
     return run_command(original_command)

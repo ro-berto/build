@@ -45,6 +45,7 @@ class TestAll(unittest.TestCase):
       json.dump(data, f)
 
     sample_line = [
+      '--build-dir', 'src/out',
       '--test_name', 'base_unittests',
       '--builder_name', "Linux Tests",
       '--checkout_dir',
@@ -78,6 +79,17 @@ class TestAll(unittest.TestCase):
       ],
     ]
     res = runisolatedtest.main(sample_line)
+
+    expected_data = {
+      'version': '1.0',
+      'command': [ '../testing/test_env.py',
+                   r'..\out\Release/browser_test.exe'],
+      'files': { r'out\Release\testdata': {} },
+    }
+    with open(isolated) as f:
+      converted_data = json.load(f)
+
+    self.assertEqual(expected_data, converted_data)
 
     self.assertEqual(0, res)
     self.assertEqual(expected, actual)
