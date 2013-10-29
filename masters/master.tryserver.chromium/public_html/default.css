@@ -3,6 +3,7 @@
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  * */
+
 body {
   margin-bottom:50px;
 }
@@ -110,6 +111,15 @@ td.Time {
 td.Activity, td.Change, td.Builder {
   color: #333333;
   background-color: #CCCCCC;
+}
+
+td.Change.webkit {
+  color: #444;
+  background: #ddd;
+}
+
+td.Change.chromium {
+  background: #ccc;
 }
 
 td.Change {

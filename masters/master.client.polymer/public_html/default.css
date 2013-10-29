@@ -1,3 +1,8 @@
+/* Copyright (c) 2013 The Chromium Authors. All rights reserved.
+ * Use of this source code is governed by a BSD-style license that can be
+ * found in the LICENSE file.
+ */
+
 body.interface {
         margin-left: 30px;
         margin-right: 30px;
@@ -117,12 +122,6 @@ td.idle,td.waiting,td.offline,td.building {
         border-top-right-radius: 5px;
         -webkit-border-top-right-radius: 5px;
         -moz-border-radius-topright: 5px;
-}
-
-.BuildProperties td.middle {
-        max-width: 250px;
-        text-overflow: ellipsis;
-        overflow: hidden;
 }
 
 /* Console view styles */
@@ -503,7 +502,7 @@ table.info td.left {
 }
 
 .alt {
-        background-color: #eee;
+        background-color: #f6f6f6;
 }
 
 li {
