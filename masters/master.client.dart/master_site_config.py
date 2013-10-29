@@ -12,7 +12,7 @@ class Dart(Master.Master3):
   store_revisions_url = base_app_url + '/revisions'
   last_good_url = base_app_url + '/lkgr'
   # This IP refers to a golem server in BigCluster
-  http_status_push_url = "http://108.170.219.1:8080/submit-buildbot-info/"
+  http_status_push_url = "http://108.170.219.8:8080/submit-buildbot-info/"
   project_name = 'Dart'
   master_port = 8040
   slave_port = 8140
