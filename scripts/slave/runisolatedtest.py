@@ -5,6 +5,7 @@
 
 """A tool to run a chrome test executable directly, or in isolated mode."""
 
+import json
 import logging
 import optparse
 import os
@@ -82,7 +83,7 @@ def run_command(command):
 def run_test_isolated(isolate_script, test_exe, original_command):
   """Runs the test under isolate.py run.
 
-  It compensates for discrepencies between sharding_supervisor.py arguments and
+  It compensates for discrepancies between sharding_supervisor.py arguments and
   run_test_cases.py arguments.
 
   The isolated file must be alongside the test executable, with the same
@@ -96,6 +97,10 @@ def run_test_isolated(isolate_script, test_exe, original_command):
 
   isolate_command = [sys.executable, isolate_script,
                      'run', '--isolated', isolated_file]
+
+  # Log command that's about to be run, http://crbug.com/311625
+  with open(isolated_file) as f:
+    print 'Command from isolated file:', json.load(f)['command']
 
   # Start setting the test specific options.
   isolate_command.append('--')

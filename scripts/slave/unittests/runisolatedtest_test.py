@@ -3,6 +3,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import os
 import shutil
 import sys
@@ -33,7 +34,16 @@ class TestAll(unittest.TestCase):
     runisolatedtest.run_command = lambda x: actual.append(x) or 0
     exe = os.path.join(self.tempdir, 'foo')
     isolated = exe + '.isolated'
-    open(isolated, 'w').close()
+
+    data = {
+      'version': '1.0',
+      'command': [ '../testing/test_env.py',
+                   r'..\build\Release/browser_test.exe'],
+      'files': { r'build\Release\testdata': {} },
+    }
+    with open(isolated, 'w') as f:
+      json.dump(data, f)
+
     sample_line = [
       '--test_name', 'base_unittests',
       '--builder_name', "Linux Tests",
@@ -68,6 +78,7 @@ class TestAll(unittest.TestCase):
       ],
     ]
     res = runisolatedtest.main(sample_line)
+
     self.assertEqual(0, res)
     self.assertEqual(expected, actual)
 
