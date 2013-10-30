@@ -165,6 +165,9 @@ def GenSteps(api):
   # Hardware acceleration tests.
   yield api.gpu.run_telemetry_gpu_test('hardware_accelerated_feature')
 
+  # GPU process launch tests.
+  yield api.gpu.run_telemetry_gpu_test('gpu_process', name='gpu_process_launch')
+
   # Only run the performance tests on Release builds.
   if is_release_build:
     # Former tab_capture_performance_tests_step
