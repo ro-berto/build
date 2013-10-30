@@ -63,6 +63,8 @@ B('Linux Daily WebRTC Disabled', 'linux_webrtc_disabled_factory',
   scheduler='linux_daily_scheduler')
 F('linux_webrtc_disabled_factory', linux().ChromiumWebRTCFactory(
     slave_type='BuilderTester',
+    options=['--compiler=goma', '--build-tool=ninja', '--',
+             'chromium_builder_webrtc'],
     factory_properties={
         'gclient_env': {'GYP_DEFINES': ('enable_webrtc=0 '
                                         'component=static_library')},
