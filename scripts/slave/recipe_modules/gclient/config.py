@@ -180,7 +180,11 @@ def oilpan(c):
   c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
   c.solutions[0].revision = '197341'
 
-  del c.solutions[0].custom_deps
+  c.solutions[0].custom_deps = {
+    'src/chrome/tools/test/reference_build/chrome_linux' :
+      ChromiumSvnSubURL(c, 'blink', 'branches', 'oilpan', 'Tools',
+                        'reference_build', 'chrome_linux')
+  }
   del c.got_revision_mapping['src']
   c.got_revision_mapping['src/third_party/WebKit/Source'] = 'got_revision'
 

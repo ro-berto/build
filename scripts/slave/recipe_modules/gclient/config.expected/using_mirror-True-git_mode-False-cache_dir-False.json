@@ -192,6 +192,9 @@
     "cache_dir": null, 
     "solutions": [
       {
+        "custom_deps": {
+          "src/chrome/tools/test/reference_build/chrome_linux": "svn://svn-mirror.golo.chromium.org/blink/branches/oilpan/Tools/reference_build/chrome_linux"
+        }, 
         "custom_vars": {
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
           "webkit_revision": "HEAD", 
@@ -208,6 +211,9 @@
     "cache_dir": null, 
     "solutions": [
       {
+        "custom_deps": {
+          "src/chrome/tools/test/reference_build/chrome_linux": "svn://svn-mirror.golo.chromium.org/blink/branches/oilpan/Tools/reference_build/chrome_linux"
+        }, 
         "custom_vars": {
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
           "webkit_revision": "HEAD", 
