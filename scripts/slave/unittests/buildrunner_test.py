@@ -48,8 +48,10 @@ class BuildrunnerTest(unittest.TestCase):
     self.runbuild = os.path.join(SCRIPT_DIR,
                                  '..', 'runbuild.py')
     self.capture = FilterCapture()
-    self.master_dir = os.path.join(SCRIPT_DIR,
-                                   'data', 'runbuild_master')
+    self.master_dir = os.path.join(SCRIPT_DIR, 'data', 'runbuild_master')
+
+    self.failing_master_dir = os.path.join(SCRIPT_DIR, 'data',
+                                           'failing_master')
 
   def testSampleMaster(self):
     sample = '--master-dir=%s' % self.master_dir
@@ -84,6 +86,13 @@ class BuildrunnerTest(unittest.TestCase):
     self.assertEqual(ret, 0)
     self.assertTrue('buildrunner should run this' in self.capture.text)
     self.assertTrue('buildrunner should not run this' not in self.capture.text)
+
+  def testCatchDupSteps(self):
+    sample = '--master-dir=%s' % self.failing_master_dir
+    cmd = [sys.executable, self.runbuild, sample, 'runtests', '--list-steps']
+    ret = runScript(cmd, filter_obj=self.capture, print_cmd=False)
+
+    self.assertEqual(ret, 1)
 
 
 if __name__ == '__main__':

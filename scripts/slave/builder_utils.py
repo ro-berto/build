@@ -284,6 +284,9 @@ def process_steps(steplist, build, buildslave, build_status, basedir):
 
 
 def StripBuildrunnerIgnore(step):
+  assert not step.name.endswith('_buildrunner_ignore_1'), (
+      'Duplicate buildrunner step %s not allowed in %s' % (
+          step.name.rstrip('_buildrunner_ignore_1'), step.build.builder.name))
   step.name = re.sub('_buildrunner_ignore$', '', step.name)
 
 
