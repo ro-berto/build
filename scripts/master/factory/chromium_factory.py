@@ -704,6 +704,25 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTelemetryTest('startup.cold.blank_page',
                          step_name='startup.cold.dirty.blank_page',
                          factory_properties=startup_fp)
+    if R('startup_warm_session_restore'):
+      startup_fp = fp.copy()
+      # pylint: disable=W0212
+      profile_dir = os.path.join(self._build_dir, f._target,
+          'generated_profiles', 'small_profile')
+      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      f.AddTelemetryTest('session_restore.warm.typical_25',
+                         step_name='session_restore.warm.typical_25',
+                         factory_properties=startup_fp)
+    if R('startup_cold_session_restore'):
+      startup_fp = fp.copy()
+      # pylint: disable=W0212
+      profile_dir = os.path.join(self._build_dir, f._target,
+          'generated_profiles', 'small_profile')
+      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      f.AddTelemetryTest('session_restore.cold.typical_25',
+                         step_name='session_restore.cold.typical_25',
+                         factory_properties=startup_fp)
+
 
     if R('sizes'):
       f.AddSizesTests(fp)
