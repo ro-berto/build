@@ -196,6 +196,21 @@ def blink_internal(c):
   for key in needed_components_internal:
     del c.solutions[1].custom_deps[key]
 
+@config_ctx(includes=['oilpan', 'chrome_internal'])
+def oilpan_internal(c):
+  # Add back the oilpan data dependencies
+  needed_components_internal = [
+    "src/data/memory_test",
+    "src/data/mozilla_js_tests",
+    "src/data/page_cycler",
+    "src/data/tab_switching",
+    "src/webkit/data/bmp_decoder",
+    "src/webkit/data/ico_decoder",
+    "src/webkit/data/test_shell/plugins",
+    "src/webkit/data/xbm_decoder",
+  ]
+  for key in needed_components_internal:
+    del c.solutions[1].custom_deps[key]
 
 @config_ctx()
 def nacl(c):

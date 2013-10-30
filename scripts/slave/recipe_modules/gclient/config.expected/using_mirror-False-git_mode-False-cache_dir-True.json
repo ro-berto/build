@@ -169,6 +169,43 @@
       }
     ]
   }, 
+  "oilpan_internal": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "custom_vars": {
+          "sourceforge_url": "svn://svn.chromium.org/%(repo)s", 
+          "webkit_revision": "HEAD", 
+          "webkit_trunk": "https://src.chromium.org/blink/branches/oilpan"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "url": "https://src.chromium.org/chrome/trunk/src"
+      }, 
+      {
+        "custom_deps": {
+          "src/chrome/test/data/firefox2_profile/searchplugins": null, 
+          "src/chrome/test/data/firefox2_searchplugins": null, 
+          "src/chrome/test/data/firefox3_profile/searchplugins": null, 
+          "src/chrome/test/data/firefox3_searchplugins": null, 
+          "src/chrome/test/data/osdd": null, 
+          "src/chrome/test/data/perf/frame_rate/private": null, 
+          "src/chrome/test/data/plugin": null, 
+          "src/chrome/test/data/ssl/certs": null, 
+          "src/data/autodiscovery": null, 
+          "src/data/esctf": null, 
+          "src/data/mach_ports": null, 
+          "src/data/selenium_core": null, 
+          "src/tools/grit/grit/test/data": null
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src-internal", 
+        "url": "svn://svn.chromium.org/chrome-internal/trunk/src-internal"
+      }
+    ]
+  }, 
   "tools_build": "tools_build only supports git", 
   "v8": {
     "cache_dir": null, 

@@ -46,7 +46,7 @@ def GenSteps(api):
     build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs,
                                          platform_ext={'win': '.exe'})
     test_dir = api.path.slave_build('test')
-    api.gclient.apply_config('chrome_internal')
+    api.gclient.set_config('oilpan_internal', **config_vals)
     api.gclient.spec_alias = 'test_checkout'
     api.gclient.c.solutions[0].revision = 'HEAD'
     api.gclient.c.got_revision_mapping.clear()
