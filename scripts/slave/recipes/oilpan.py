@@ -13,10 +13,29 @@ DEPS = [
 ]
 
 PERF_TESTS = [
+  'blink_perf.animation',
+  'blink_perf.web_animations',
+  'canvasmark',
   'dromaeo.domcoreattr',
   'dromaeo.domcoremodify',
   'dromaeo.domcorequery',
   'dromaeo.domcoretraverse',
+  'dromaeo.jslibattrjquery',
+  'dromaeo.jslibattrprototype',
+  'dromaeo.jslibeventjquery',
+  'dromaeo.jslibeventprototype',
+  'dromaeo.jslibmodifyjquery',
+  'dromaeo.jslibmodifyprototype',
+  'dromaeo.jslibstylejquery',
+  'dromaeo.jslibstyleprototype',
+  'dromaeo.jslibtraversejquery',
+  'dromaeo.jslibtraverseprototype',
+  'image_decoding.image_decoding_measurement',
+  'kraken',
+  'octane',
+  'pica.pica',
+  'spaceport',
+  'sunspider',
 ]
 
 
