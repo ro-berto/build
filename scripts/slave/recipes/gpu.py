@@ -111,23 +111,6 @@ def GenSteps(api):
   for test in SIMPLE_TESTS_TO_RUN:
     yield api.chromium.runtests(test, spawn_dbus=True)
 
-  # Former gpu_content_tests step
-  args = ['--use-gpu-in-tests',
-          '--gtest_filter=Gpu*.*',
-          '--ui-test-action-max-timeout=45000',
-          '--run-manual']
-  yield api.chromium.runtests('content_browsertests',
-                              args,
-                              annotate='gtest',
-                              test_type='content_browsertests',
-                              generate_json_file=True,
-                              results_directory=
-                                  api.path.slave_build('gtest-results',
-                                      'content_browsertests'),
-                              build_number=api.properties['buildnumber'],
-                              builder_name=api.properties['buildername'],
-                              spawn_dbus=True)
-
   # Choose a reasonable default for the location of the sandbox binary
   # on the bots.
   env = {}
