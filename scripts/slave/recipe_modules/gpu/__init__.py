@@ -4,8 +4,12 @@
 
 DEPS = [
   'chromium',
+  'gclient',
   'path',
+  'platform',
   'properties',
   'platform',
-  'python'
+  'python',
+  'rietveld',
+  'step_history',
 ]
