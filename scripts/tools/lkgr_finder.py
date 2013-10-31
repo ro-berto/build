@@ -71,6 +71,7 @@ VERBOSE = True
 EMAIL_ENABLED = False
 BLINK_REVISIONS_URL = 'https://blink-status.appspot.com'
 CHROMIUM_REVISIONS_URL = 'https://chromium-status.appspot.com'
+V8_REVISIONS_URL = 'https://v8-status.appspot.com'
 WEBRTC_REVISIONS_URL = 'https://webrtc-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
 MASTER_TO_BASE_URL = {
@@ -80,6 +81,7 @@ MASTER_TO_BASE_URL = {
   'chromium.mac': 'http://build.chromium.org/p/chromium.mac',
   'chromium.win': 'http://build.chromium.org/p/chromium.win',
   'chromium.webkit': 'http://build.chromium.org/p/chromium.webkit',
+  'client.v8': 'http://build.chromium.org/p/client.v8',
   'client.webrtc': 'http://build.chromium.org/p/client.webrtc',
 }
 RUN_LOG = []
@@ -321,6 +323,84 @@ BLINK_LKGR_STEPS = {
     'WebKit Win Builder (deps)': ['compile'],
     'WebKit Mac Builder (deps)': ['compile'],
     'WebKit Linux (deps)': ['compile'],
+  },
+}
+
+V8_NORMAL_STEPS = ['compile', 'Check', 'Test262', 'Mozilla']
+
+V8_CHECK = ['compile', 'Check']
+
+V8_MOZILLA = ['compile', 'Mozilla']
+
+V8_TEST262 = ['compile', 'Test262']
+
+V8_GC = ['compile', 'Mjsunit', 'Webkit']
+
+V8_LKGR_STEPS = {
+  'client.v8': {
+    'V8 Linux': V8_NORMAL_STEPS + [
+      'Presubmit',
+      'Static-Initializers',
+      'Webkit',
+    ],
+    'V8 Linux - debug': V8_CHECK,
+    'V8 Linux - debug - mozilla': V8_MOZILLA,
+    'V8 Linux - debug - test262': V8_TEST262,
+    'V8 Linux - shared': V8_NORMAL_STEPS,
+    'V8 Linux64': V8_NORMAL_STEPS + [ 'Static-Initializers'],
+    'V8 Linux64 - debug': V8_CHECK + ['Webkit'],
+    'V8 Linux64 - debug - mozilla': V8_MOZILLA,
+    'V8 Linux64 - debug - test262': V8_TEST262,
+    'V8 Linux - nosnap': V8_NORMAL_STEPS,
+    'V8 Linux - nosnap - debug': V8_CHECK,
+    'V8 Linux - nosnap - debug - mozilla': V8_MOZILLA,
+    'V8 Linux - nosnap - debug - test262': V8_TEST262,
+    'V8 Linux - isolates': V8_CHECK,
+    'V8 Linux - debug - isolates': V8_CHECK,
+    'V8 Linux - nosse2': V8_NORMAL_STEPS + ['GCMole'],
+    'V8 Linux - debug - nosse2': V8_NORMAL_STEPS + ['GCMole'],
+    'V8 Linux - nosse3': V8_NORMAL_STEPS,
+    'V8 Linux - debug - nosse3': V8_NORMAL_STEPS,
+    'V8 Linux - nosse4': V8_NORMAL_STEPS,
+    'V8 Linux - debug - nosse4': V8_NORMAL_STEPS,
+    'V8 Linux - deadcode': V8_NORMAL_STEPS,
+    'V8 Linux - interpreted regexp': V8_CHECK,
+    'V8 Win32': V8_CHECK + ['Webkit'],
+    'V8 Win32 - mozilla': V8_MOZILLA,
+    'V8 Win32 - test262': V8_TEST262,
+    'V8 Win32 - debug - 1': V8_CHECK + ['Webkit'],
+    'V8 Win32 - debug - 2': V8_CHECK + ['Webkit'],
+    'V8 Win32 - debug - mozilla - 1': V8_MOZILLA,
+    'V8 Win32 - debug - mozilla - 2': V8_MOZILLA,
+    'V8 Win32 - debug - test262 - 1': V8_TEST262,
+    'V8 Win32 - debug - test262 - 2': V8_TEST262,
+    'V8 Win64': V8_NORMAL_STEPS,
+    'V8 Mac': V8_NORMAL_STEPS + ['Webkit'],
+    'V8 Mac - debug': V8_CHECK + ['Webkit', 'Test262'],
+    'V8 Mac - debug - mozilla': V8_MOZILLA,
+    'V8 Arm - builder': ['compile'],
+    'V8 Arm': V8_CHECK + ['Webkit'],
+    'V8 Linux - arm - sim': V8_CHECK + ['Test262'],
+    'V8 Linux - arm - sim - mozilla': V8_MOZILLA,
+    'V8 Linux - arm - sim - debug': V8_CHECK,
+    'V8 Linux - arm - sim - debug - mozilla - 1': V8_MOZILLA,
+    'V8 Linux - arm - sim - debug - mozilla - 2': V8_MOZILLA,
+    'V8 Linux - arm - sim - debug - test262': V8_TEST262,
+    'V8 Fuzzer': ['compile', 'Fuzz'],
+    'V8 GC Stress - 1': V8_GC,
+    'V8 GC Stress - 2': V8_GC,
+    'V8 GC Stress - 3': V8_GC,
+    'Chrome Win7 Perf': ['compile'],
+    'Chrome Mac10.6 Perf': ['compile'],
+    'Chrome Linux Perf': ['compile'],
+    'Chrome Browser Tests': ['compile'],
+    'Chrome Linux Interactive - dbg': ['compile'],
+    'V8 Linux64 Heapcheck': ['compile'],
+    'Webkit': ['compile'],
+    'Webkit Mac': ['compile'],
+    'Webkit Linux': ['compile'],
+    'Webkit Linux 64': ['compile'],
+    'Webkit Linux - dbg': ['compile'],
   },
 }
 
@@ -922,10 +1002,12 @@ def main():
   opt_parser.add_option('--text', action='store_true',
                         help='Output details in plain text format '
                              '(for troubleshooting LKGR staleness issues).')
-  opt_parser.add_option('-b', '--blink', action='store_true',
+  opt_parser.add_option('-b', '--blink', action='store_true', default=False,
                         help='Find the Blink LKGR rather than the Chromium '
                              'one.')
-  opt_parser.add_option('-w', '--webrtc', action='store_true',
+  opt_parser.add_option('--v8', action='store_true', default=False,
+                        help='Find the V8 LKGR rather than the Chromium one.')
+  opt_parser.add_option('-w', '--webrtc', action='store_true', default=False,
                         help='Find the WebRTC LKGR rather than the Chromium '
                              'one.')
   opt_parser.add_option('--error-recipients',
@@ -938,8 +1020,9 @@ def main():
                              'when updating LKGR (default %default).')
   options, args = opt_parser.parse_args()
 
-  if options.blink and options.webrtc:
-    opt_parser.error('You cannot specify --blink and --webrtc in the same run.')
+  if sum([options.blink, options.v8, options.webrtc]) > 1:
+    opt_parser.error('You can only specify one of --blink, --v8 or --webrtc '
+                     'in the same run.')
 
   # Error notification setup.
   fqdn = socket.getfqdn()
@@ -964,6 +1047,10 @@ def main():
     lkgr_type = 'Blink'
     revisions_url = BLINK_REVISIONS_URL
     lkgr_steps = BLINK_LKGR_STEPS
+  elif options.v8:
+    lkgr_type = 'V8'
+    revisions_url = V8_REVISIONS_URL
+    lkgr_steps = V8_LKGR_STEPS
   elif options.webrtc:
     lkgr_type = 'WebRTC'
     revisions_url = WEBRTC_REVISIONS_URL
