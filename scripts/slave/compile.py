@@ -1148,12 +1148,10 @@ def real_main():
         # into ninja options, if needed.
         xcode_option_parse = optparse.OptionParser()
         xcode_option_parse.add_option('--project')
-        xcode_option_parse.add_option('--target')
+        xcode_option_parse.add_option('--target', action='append', default=[])
         xcode_options, xcode_args = xcode_option_parse.parse_args(
             [re.sub('^-', '--', a) for a in args])  # optparse wants --options.
-        args = xcode_args
-        if xcode_options.target:
-          args = [xcode_options.target] + args
+        args = xcode_options.target + xcode_args
       else:
         main = main_xcode
         options.build_tool = 'xcode'
