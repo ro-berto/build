@@ -16,13 +16,10 @@ class GpuApi(recipe_api.RecipeApi):
 
     # These values may be replaced by external configuration later
     self._dashboard_upload_url = 'https://chromeperf.appspot.com'
-    self._generated_dir = self.m.path.slave_build('content_gpu_data',
-        'telemetry', 'generated')
-    self._reference_dir = self.m.path.slave_build('content_gpu_data',
-        'telemetry', 'reference')
+    telemetry_dir = self.m.path.slave_build('content_gpu_data', 'telemetry')
+    self._generated_dir = telemetry_dir('generated')
+    self._reference_dir = telemetry_dir('reference')
 
-    self._is_release_build = self.m.properties.get(
-        'build_config', 'Release') == 'Release'
     # The infrastructure team has recommended not to use git yet on the
     # bots, but it's useful -- even necessary -- when testing locally.
     # To use, pass "use_git=True" as an argument to run_recipe.py.
@@ -78,7 +75,7 @@ class GpuApi(recipe_api.RecipeApi):
     yield self.m.chromium.runhooks()
     # Since performance tests aren't run on the debug builders, it isn't
     # necessary to build all of the targets there.
-    build_tag = '' if self._is_release_build else 'debug_'
+    build_tag = '' if self.m.chromium.is_release_build else 'debug_'
     yield self.m.chromium.compile(
         targets=['chromium_gpu_%sbuilder' % build_tag])
 
@@ -97,9 +94,9 @@ class GpuApi(recipe_api.RecipeApi):
         self.m.path.build('scripts', 'slave', 'chromium',
                           'run_crash_handler.py'),
         ['--build-dir',
-         self.m.path.checkout('out'),
+         self.m.chromium.c.build_dir,
          '--target',
-         'Release' if self._is_release_build else 'Debug'])
+         self.m.chromium.c.build_config_fs])
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
@@ -147,7 +144,7 @@ class GpuApi(recipe_api.RecipeApi):
     yield self.run_telemetry_gpu_test('gpu_process', name='gpu_process_launch')
 
     # Only run the performance tests on Release builds.
-    if self._is_release_build:
+    if self.m.chromium.is_release_build:
       # Former tab_capture_performance_tests_step
       args = ['--enable-gpu',
               '--gtest_filter=TabCapturePerformanceTest*']
@@ -169,9 +166,9 @@ class GpuApi(recipe_api.RecipeApi):
         'process_dumps',
         self.m.path.build('scripts', 'slave', 'process_dumps.py'),
         ['--build-dir',
-         self.m.path.checkout('out'),
+         self.m.chromium.c.build_dir,
          '--target',
-         'Release' if self._is_release_build else 'Debug'])
+         self.m.chromium.c.build_config_fs])
 
   def run_telemetry_gpu_test(self, test, name='', args=None,
                              results_directory=''):

@@ -98,6 +98,10 @@ class ChromiumApi(recipe_api.RecipeApi):
       **kwargs
     )
 
+  @property
+  def is_release_build(self):
+    return self.c.BUILD_CONFIG == 'Release'
+
   def run_telemetry_test(self, runner, test, name='', args=None,
       results_directory='', spawn_dbus=False):
     # Choose a reasonable default for the location of the sandbox binary
