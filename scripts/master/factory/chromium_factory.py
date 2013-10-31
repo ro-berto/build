@@ -675,10 +675,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddTabCapturePerformanceTests(fp)
     if R('idb_perf'):
       f.AddIDBPerfTests(fp)
-    if R('create_profiles'):
-      # pylint: disable=W0212
-      f.AddProfileCreationTest(fp, os.path.join(self._build_dir, f._target),
-          'small_profile')
     if R('startup'):
       f.AddStartupTests(fp)
       f.AddNewTabUITests(fp)
@@ -1070,6 +1066,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add check/start step for virtual webcams, if needed.
     if factory_properties.get('virtual_webcam'):
       chromium_cmd_obj.AddVirtualWebcamCheck()
+
+    # Generate synthetic user profiles. Must run before archive_build.
+    if factory_properties.get('create_profiles'):
+      # pylint: disable=W0212
+      chromium_cmd_obj.AddProfileCreationStep(
+          os.path.join(self._build_dir, chromium_cmd_obj._target),
+          'small_profile')
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):

@@ -959,12 +959,10 @@ class ChromiumCommands(commands.FactoryCommands):
                               tool_opts=tool_options, py_script=True,
                               dashboard_url=dashboard_url)
 
-  def AddProfileCreationTest(self, factory_properties, output_dir,
-                             profile_type_to_create):
+  def AddProfileCreationStep(self, output_dir, profile_type_to_create):
     """Generate a profile for use by Telemetry tests.
 
     Args:
-      factory_properties: A dictionary of factory property values.
       output_dir: the directory into which Chrome is built e.g. 'out/Release'.
       profile_type_to_create: A string specifying the profile type to create.
     """
