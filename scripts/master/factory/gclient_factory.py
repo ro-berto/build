@@ -223,10 +223,10 @@ class GClientFactory(object):
     gclient_env = factory_properties['gclient_env']
     if options and '--build-tool=ninja' in options:
       gclient_env['GYP_GENERATORS'] = 'ninja'
-      if '--compiler=goma-clang' in options:
-        # Ninja needs CC and CXX set at gyp time.
-        gclient_env['CC'] = 'clang'
-        gclient_env['CXX'] = 'clang++'
+    if options and '--compiler=goma-clang' in options:
+      # Ninja needs CC and CXX set at gyp time.
+      gclient_env['CC'] = 'clang'
+      gclient_env['CXX'] = 'clang++'
 
     # Create the spec for the solutions
     gclient_spec = self.BuildGClientSpec(tests)
