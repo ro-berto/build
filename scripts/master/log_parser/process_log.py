@@ -658,6 +658,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     match_dict = line_match.groupdict()
     graph_name = match_dict['GRAPH'].strip()
     trace_name = match_dict['TRACE'].strip()
+    units = (match_dict['UNITS'] or '').strip()
     histogram_json = match_dict['VALUE_JSON']
     important = match_dict['IMPORTANT'] or False
     try:
@@ -674,7 +675,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
     for i in percentiles:
       percentile_graph_name = graph_name + "_" + str(i['percentile'])
       graph = self._graphs.get(percentile_graph_name, Graph())
-      graph.units = ''
+      graph.units = units
       trace = graph.traces.get(trace_name, Trace())
       trace.value = i['value']
       trace.important = important
@@ -686,7 +687,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
     # Compute geometric mean and standard deviation.
     graph = self._graphs.get(graph_name, Graph())
-    graph.units = ''
+    graph.units = units
     trace = graph.traces.get(trace_name, Trace())
     trace.value, trace.stddev = self._CalculateHistogramStatistics(
         histogram_data, trace_name)
