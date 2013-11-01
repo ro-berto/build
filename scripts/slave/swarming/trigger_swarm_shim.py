@@ -25,25 +25,20 @@ from slave.swarming import swarming_utils
 import fix_encoding
 
 
-PRIORITIES = {
-  'ci': 10,
-  'cq': 20,
-  'fyi': 30,
-  'tryjob': 40,
-}
+def v0(client, swarming, isolate_server, tasks, task_prefix, slave_os):
+  """Handlers swarm_client/swarm_trigger_step.py.
 
-
-def v0(client, options):
-  """Compatible up to the oldest swarm_client code."""
+  Compatible from to the oldest swarm_client code up to r219626.
+  """
   cmd = [
     sys.executable,
     os.path.join(client, 'swarm_trigger_step.py'),
-    '--swarm-url', options.swarming,
-    '--data-server', options.isolate_server,
-    '--os_image', options.os,
-    '--test-name-prefix', options.task_prefix,
+    '--swarm-url', swarming,
+    '--data-server', isolate_server,
+    '--os_image', slave_os,
+    '--test-name-prefix', task_prefix,
   ]
-  for i in options.tasks:
+  for i in tasks:
     cmd.append('--run_from_hash')
     cmd.extend(i)
 
@@ -51,52 +46,71 @@ def v0(client, options):
   return subprocess.call(cmd, cwd=client)
 
 
-def v0_1(client, options):
-  """Code starting around r218375.
-
-  TODO(maruel): Put exact revision once committe.d
-  """
+def v0_1(
+    client, swarming, isolate_server, priority, tasks, task_prefix, slave_os):
+  """Handles swarm_client/swarming.py starting r219798."""
   cmd = [
     sys.executable,
     os.path.join(client, 'swarming.py'),
     'trigger',
-    '--swarming', options.swarming,
-    '--isolate-server', options.isolate_server,
-    '--os', options.os,
-    '--task-prefix', options.task_prefix,
-    '--priority', str(PRIORITIES[options.type]),
+    '--swarming', swarming,
+    '--isolate-server', isolate_server,
+    '--os', slave_os,
+    '--task-prefix', task_prefix,
+    '--priority', priority,
   ]
 
-  for i in options.tasks:
+  for i in tasks:
     cmd.append('--task')
     cmd.extend(i)
 
   # Enable profiling on the -dev server.
-  if '-dev' in options.swarming:
+  if '-dev' in swarming:
     cmd.append('--profile')
 
   print ' '.join(cmd)
   return subprocess.call(cmd, cwd=client)
 
 
-def determine_version_and_run_handler(client, options):
+def determine_version_and_run_handler(
+    client, swarming, isolate_server, priority, tasks, task_prefix, slave_os):
   """Executes the proper handler based on the code layout and --version support.
   """
   if os.path.isfile(os.path.join(client, 'swarm_get_results.py')):
-    # Oh, that's old.
-    return v0(client, options)
-  return v0_1(client, options)
+    # Oh, that's old. This can be removed on 2014-01-01 and replaced on hard
+    # failure if swarming.py doesn't exist.
+    return v0(client, swarming, isolate_server, tasks, task_prefix, slave_os)
+  return v0_1(
+      client, swarming, isolate_server, priority, tasks, task_prefix, slave_os)
 
 
 def process_build_properties(options):
   """Converts build properties and factory properties into expected flags."""
-  options.task_prefix = '%s-%s-' % (
-      options.build_properties.get('buildername'),
-      options.build_properties.get('buildnumber'),
+  task_prefix = '%s-%s-' % (
+      options.build_properties['buildername'],
+      options.build_properties['buildnumber'],
   )
-  # target_os is not defined when using a normal builder (and it's not
-  # needed since the OS match), it's defined in builder/tester configurations.
-  options.os = options.build_properties.get('target_os', options.os)
+  # target_os is not defined when using a normal builder, contrary to a
+  # xx_swarm_triggered buildbot<->swarming builder, and it's not needed since
+  # the OS match, it's defined in builder/tester configurations.
+  slave_os = options.build_properties.get('target_os', sys.platform)
+
+  # TODO(maruel): Also select the OS version.
+
+  # Determine the build type. This is used to determine the task priority. Lower
+  # is higher priority.
+  if options.build_properties.get('requester') == 'commit-bot@chromium.org':
+    # Commit queue job.
+    priority = '20'
+  elif (options.build_properties.get('requester') or
+      options.build_properties.get('testfilter')):
+    # Normal try job.
+    priority = '40'
+  else:
+    # FYI builder.
+    priority = '30'
+
+  return task_prefix, slave_os, priority
 
 
 def main():
@@ -116,18 +130,8 @@ def main():
     return 1
 
   parser = optparse.OptionParser()
-  parser.add_option(
-      '--os', default=sys.platform,
-      help='it\'s possible to trigger a task on an OS while the client code '
-           'runs on another OS')
   parser.add_option('--swarming')
   parser.add_option('--isolate-server')
-  parser.add_option('--task-prefix', help='task name prefix')
-  parser.add_option(
-      '--type',
-      choices=sorted(PRIORITIES),
-      default='fyi',
-      help='Type of job will define it\'s priority')
   parser.add_option(
       '--task', nargs=4, action='append', default=[], dest='tasks')
   chromium_utils.AddPropertiesOptions(parser)
@@ -135,11 +139,12 @@ def main():
   if args:
     parser.error('Unsupported args: %s' % args)
 
-  if options.build_properties:
-    # Loads the other flags implicitly.
-    process_build_properties(options)
+  # Loads the other flags implicitly.
+  task_prefix, slave_os, priority = process_build_properties(options)
 
-  return determine_version_and_run_handler(client, options)
+  return determine_version_and_run_handler(
+      client, options.swarming, options.isolate_server, priority,
+      options.tasks, task_prefix, slave_os)
 
 
 if __name__ == '__main__':
