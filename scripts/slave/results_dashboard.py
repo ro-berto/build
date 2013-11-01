@@ -228,10 +228,17 @@ def _RevisionNumberColumns(data, master):
   if git_hash:
     revision_supplemental_columns['r_chromium'] = git_hash
 
-  # For other revision data, add it if it's present and not undefined:
-  for key in ['webkit_rev', 'v8_rev']:
-    if key in data and data[key] != 'undefined':
-      revision_supplemental_columns['r_' + key] = data[key]
+  if master == 'Oilpan':
+    # For Oilpan, send the webkit_rev as r_oilpan since we are getting
+    # the oilpan branch revision instead of the Blink trunk revision
+    # and set r_oilpan to be the dashboard default revision.
+    revision_supplemental_columns['r_oilpan'] = data['webkit_rev']
+    revision_supplemental_columns['a_default_rev'] = 'r_oilpan'
+  else:
+    # For other revision data, add it if it's present and not undefined:
+    for key in ['webkit_rev', 'v8_rev']:
+      if key in data and data[key] != 'undefined':
+        revision_supplemental_columns['r_' + key] = data[key]
 
   return revision, revision_supplemental_columns
 
