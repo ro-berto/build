@@ -61,7 +61,9 @@ def _GenerateTelemetryCommandSequence(options):
   target = fp.get('target')
   target_os = fp.get('target_os')
   target_platform = fp.get('target_platform')
+  profile_type = fp.get('profile_type')
   build_dir, _ = build_directory.ConvertBuildDirToLegacy(fp.get('build_dir'))
+
 
   script = os.path.join(fp.get('tools_dir')
                             or os.path.join('src', 'tools'),
@@ -74,6 +76,10 @@ def _GenerateTelemetryCommandSequence(options):
 
   # List of command line arguments common to all test platforms.
   common_args = ['-v', '--output-format=buildbot']
+
+  if profile_type:
+    profile_dir = os.path.join(build_dir, 'generated_profile', profile_type)
+    common_args.append('--profile-dir=' + profile_dir)
   if extra_args:
     common_args.extend(extra_args)
 

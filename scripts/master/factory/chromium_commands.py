@@ -959,18 +959,17 @@ class ChromiumCommands(commands.FactoryCommands):
                               tool_opts=tool_options, py_script=True,
                               dashboard_url=dashboard_url)
 
-  def AddProfileCreationStep(self, output_dir, profile_type_to_create):
+  def AddProfileCreationStep(self, profile_type_to_create):
     """Generate a profile for use by Telemetry tests.
 
     Args:
-      output_dir: the directory into which Chrome is built e.g. 'out/Release'.
       profile_type_to_create: A string specifying the profile type to create.
     """
-    profile_dir = self.PathJoin(output_dir, 'generated_profiles')
-    cmd_name = self.PathJoin('src', 'tools', 'perf', 'generate_profile')
-    cmd_args = ['-v', '--browser=' + self._target.lower(),
+    cmd_name = self.PathJoin(self._chromium_script_dir,
+                             'generate_profile_shim.py')
+    cmd_args = ['--target=' + self._target,
                 '--profile-type-to-generate=' + profile_type_to_create,
-                '--output-dir=' + profile_dir]
+                '--build-dir=' + self._build_dir]
     cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
     self.AddTestStep(chromium_step.AnnotatedCommand,
         'Generating Profiles for Telemetry', cmd, timeout=20*60)

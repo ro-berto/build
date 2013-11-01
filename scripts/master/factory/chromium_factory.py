@@ -685,36 +685,28 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('startup_warm_dirty'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
-      profile_dir = os.path.join(self._build_dir, f._target,
-          'generated_profiles', 'small_profile')
-      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      startup_fp['profile_type'] = 'small_profile'
       f.AddTelemetryTest('startup.warm.blank_page',
                          step_name='startup.warm.dirty.blank_page',
                          factory_properties=startup_fp)
     if R('startup_cold_dirty'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
-      profile_dir = os.path.join(self._build_dir, f._target,
-          'generated_profiles', 'small_profile')
-      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      startup_fp['profile_type'] = 'small_profile'
       f.AddTelemetryTest('startup.cold.blank_page',
                          step_name='startup.cold.dirty.blank_page',
                          factory_properties=startup_fp)
     if R('startup_warm_session_restore'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
-      profile_dir = os.path.join(self._build_dir, f._target,
-          'generated_profiles', 'small_profile')
-      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      startup_fp['profile_type'] = 'small_profile'
       f.AddTelemetryTest('session_restore.warm.typical_25',
                          step_name='session_restore.warm.typical_25',
                          factory_properties=startup_fp)
     if R('startup_cold_session_restore'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
-      profile_dir = os.path.join(self._build_dir, f._target,
-          'generated_profiles', 'small_profile')
-      startup_fp['extra_args'] = ['--profile-dir=%s' % profile_dir]
+      startup_fp['profile_type'] = 'small_profile'
       f.AddTelemetryTest('session_restore.cold.typical_25',
                          step_name='session_restore.cold.typical_25',
                          factory_properties=startup_fp)
@@ -1070,9 +1062,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Generate synthetic user profiles. Must run before archive_build.
     if factory_properties.get('create_profiles'):
       # pylint: disable=W0212
-      chromium_cmd_obj.AddProfileCreationStep(
-          os.path.join(self._build_dir, chromium_cmd_obj._target),
-          'small_profile')
+      chromium_cmd_obj.AddProfileCreationStep('small_profile')
 
     # Add this archive build step.
     if factory_properties.get('archive_build'):
