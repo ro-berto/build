@@ -16,9 +16,7 @@ from slave import slave_utils
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--build-dir', default='webkit',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('--build-dir', help='ignored')
 
   # Note that --target isn't needed for --lint-test-files, but the
   # RunPythonCommandInBuildDir() will get upset if we don't say something.
@@ -26,8 +24,7 @@ def main():
       help='DumpRenderTree build configuration (Release or Debug)')
 
   options, _ = option_parser.parse_args()
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir)
+  options.build_dir, _ = build_directory.GetBuildOutputDirectory()
 
   build_dir = os.path.abspath(options.build_dir)
   webkit_tests_dir = chromium_utils.FindUpward(build_dir,

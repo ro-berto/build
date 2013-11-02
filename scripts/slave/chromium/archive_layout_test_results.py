@@ -174,9 +174,7 @@ def archive_layout(options, args):
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--build-dir', default='webkit',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('', '--build-dir', help='ignored')
   option_parser.add_option('', '--results-dir',
                            help='path to layout test results, relative to '
                                 'the build_dir')
@@ -197,8 +195,7 @@ def main():
                            help=('The ACL of the google storage files.'))
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir)
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   # To continue supporting buildbot, initialize these from the
   # factory_properties if they were not supplied on the command line.

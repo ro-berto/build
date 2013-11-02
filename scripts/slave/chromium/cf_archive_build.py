@@ -54,8 +54,7 @@ def ShouldPackageFile(filename, target):
 
 
 def archive(options, args):
-  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir, use_out=chromium_utils.IsLinux())
+  build_dir = build_directory.GetBuildOutputDirectory()
   build_dir = os.path.join(build_dir, options.target)
   src_dir = os.path.abspath(os.path.dirname(options.build_dir))
 
@@ -114,11 +113,9 @@ def archive(options, args):
 
 def main(argv):
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--target', default='Release',
+  option_parser.add_option('--target', default='Release',
                            help='build target to archive (Debug or Release)')
-  option_parser.add_option('', '--build-dir',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('--build-dir', help='ignored')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)
