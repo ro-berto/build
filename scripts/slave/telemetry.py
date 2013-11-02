@@ -78,7 +78,8 @@ def _GenerateTelemetryCommandSequence(options):
   common_args = ['-v', '--output-format=buildbot']
 
   if profile_type:
-    profile_dir = os.path.join(build_dir, 'generated_profile', profile_type)
+    profile_dir = os.path.join(
+        build_dir, target, 'generated_profile', profile_type)
     common_args.append('--profile-dir=' + profile_dir)
   if extra_args:
     common_args.extend(extra_args)
