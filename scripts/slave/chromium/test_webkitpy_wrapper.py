@@ -24,7 +24,7 @@ def main():
       help='DumpRenderTree build configuration (Release or Debug)')
 
   options, _ = option_parser.parse_args()
-  options.build_dir, _ = build_directory.GetBuildOutputDirectory()
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   build_dir = os.path.abspath(options.build_dir)
   webkit_tests_dir = chromium_utils.FindUpward(build_dir,
