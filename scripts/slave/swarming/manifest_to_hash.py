@@ -20,13 +20,22 @@ def main():
   parser.add_option('-n', '--manifest_name', action='append', default=[],
                     help='The name of a manifest to send to swarm. This may '
                          'be given multiple times to send multiple manifests.')
-  parser.add_option('--build-dir', help='ignored')
+  parser.add_option('--build-dir',
+                    help='path to main build directory (the parent of the '
+                         'Release or Debug directory)')
   parser.add_option('--target', help='Release or Debug')
   (options, args) = parser.parse_args()
 
   assert options.build_dir
   assert options.target
-  build_dir = build_directory.GetBuildOutputDirectory()
+  # TODO(thakis): Move this logic into ConvertBuildDirToLegacy().
+  using_ninja = False
+  if sys.platform == 'darwin':
+    using_ninja = True  # manifests always use ninja on os x.
+    options.build_dir = 'src/out'
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir,
+      use_out=(using_ninja or sys.platform.startswith('linux')))
   manifest_directory = os.path.join(build_dir, options.target)
 
   manifests = options.manifest_name

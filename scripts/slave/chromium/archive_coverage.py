@@ -12,7 +12,7 @@
 
   Example command line:
       python ../../../scripts/slave/chromium/archive_coverage.py
-      --target Debug --perf-subdir linux-debug
+      --target Debug --build-dir src/build --perf-subdir linux-debug
 """
 
 import optparse
@@ -146,7 +146,11 @@ def Main():
                            default='Debug',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
-  option_parser.add_option('--build-dir', help='ignored')
+  option_parser.add_option('--build-dir',
+                           default='chrome',
+                           metavar='DIR',
+                           help='directory in which build was run '
+                                '[default: %default]')
   option_parser.add_option('--perf-subdir',
                            metavar='DIR',
                            help='destination subdirectory under'
@@ -156,7 +160,8 @@ def Main():
   option_parser.add_option('--internal', action='store_true',
                            help='specifies if we should use Internal config')
   options, args = option_parser.parse_args()
-  options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   if args:
     option_parser.error('Args not supported: %s' % args)

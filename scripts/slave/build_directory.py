@@ -47,22 +47,24 @@ def AreNinjaFilesNewerThanMSVSFiles(src_dir=None):
   return IsFileNewerThanFile(ninja_path, msvs_path)
 
 
-def GetBuildOutputDirectory():
+def ConvertBuildDirToLegacy(build_dir, use_out=False):
   """Returns the path to the build directory, relative to the checkout root.
 
   Assumes that the current working directory is the checkout root.
   """
+  # TODO(thakis): Remove parameters of this function, rename it to
+  # GetBuildDirectory(), make it return just a path not a tuple.
   if sys.platform.startswith('linux'):
-    return 'src/out'
+    return 'src/out', False
 
   if sys.platform == 'darwin':
     if AreNinjaFilesNewerThanXcodeFiles():
-      return 'src/out'
-    return 'src/xcodebuild'
+      return 'src/out', False
+    return 'src/xcodebuild', False
 
   if sys.platform == 'cygwin' or sys.platform.startswith('win'):
     if AreNinjaFilesNewerThanMSVSFiles():
-      return 'src/out'
-    return 'src/build'
+      return 'src/out', False
+    return 'src/build', False
 
   raise NotImplementedError('Unexpected platform %s' % sys.platform)

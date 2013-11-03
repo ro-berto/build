@@ -155,12 +155,16 @@ def main():
   platforms = ['linux', 'mac', 'win']
 
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--target',
+  option_parser.add_option('', '--target',
                            default='Debug',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
-  option_parser.add_option('--build-dir', help='ignored')
-  option_parser.add_option('--platform',
+  option_parser.add_option('', '--build-dir',
+                           default='chrome',
+                           metavar='DIR',
+                           help='directory in which build was run '
+                                '[default: %default]')
+  option_parser.add_option('', '--platform',
                            default=default_platform,
                            help='specify platform (%s) [default: %%default]'
                                 % ', '.join(platforms))
@@ -171,7 +175,8 @@ def main():
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
-  options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   fp = options.factory_properties
   options.tests = fp.get('tests')

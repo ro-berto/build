@@ -134,7 +134,8 @@ class StagerBase(object):
                                     'Source')
     self._v8_dir = os.path.join(self._src_dir, 'v8')
 
-    build_dir = build_directory.GetBuildOutputDirectory()
+    build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+        options.build_dir, use_out=chromium_utils.IsLinux())
     self._build_dir = os.path.join(build_dir, options.target)
     if chromium_utils.IsWindows():
       self._tool_dir = os.path.join(self._chrome_dir, 'tools', 'build', 'win')
@@ -693,7 +694,9 @@ def main(argv):
       help='specify that target architecure of the build')
   option_parser.add_option('--src-dir', default='src',
                            help='path to the top-level sources directory')
-  option_parser.add_option('--build-dir', help='ignored')
+  option_parser.add_option('--build-dir', default='chrome',
+                           help='path to main build directory (the parent of '
+                                'the Release or Debug directory)')
   option_parser.add_option('--extra-archive-paths', default='',
                            help='comma-separated lists of paths containing '
                                 'files named FILES, SYMBOLS and TESTS. These '

@@ -56,14 +56,17 @@ def PerfTest(options):
 
 def main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--build-dir', help='ignored')
+  option_parser.add_option('--build-dir', default='src/out',
+      help='path to main build directory (the parent of '
+           'the Release or Debug directory)')
   option_parser.add_option('--target', default='release',
       choices=['release', 'debug', 'Release', 'Debug'],
       help='DumpRenderTree build configuration (Release or Debug)')
   option_parser.add_option('--platform',
       help='Platform value passed directly to run-perf-tests.')
   options, args = option_parser.parse_args()
-  options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   if args:
     option_parser.error('Unknown argument, try --help')

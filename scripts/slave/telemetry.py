@@ -24,7 +24,6 @@ def _GetPythonTestCommand(py_script, target, build_dir, arg_list=None,
          os.path.join(SCRIPT_DIR, 'slave', 'runtest.py'),
          '--run-python-script',
          '--target', target,
-         # TODO(thakis): Remove this parameter.
          '--build-dir', build_dir,
          '--no-xvfb'] #  telemetry.py should be run by a 'master' runtest.py
                       #  which starts xvfb on linux.
@@ -63,7 +62,8 @@ def _GenerateTelemetryCommandSequence(options):
   target_os = fp.get('target_os')
   target_platform = fp.get('target_platform')
   profile_type = fp.get('profile_type')
-  build_dir = build_directory.GetBuildOutputDirectory()
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(fp.get('build_dir'))
+
 
   script = os.path.join(fp.get('tools_dir')
                             or os.path.join('src', 'tools'),

@@ -18,12 +18,16 @@ from common import chromium_utils
 
 def main():
   parser = optparse.OptionParser()
-  parser.add_option('--build-dir', help='ignored')
+  parser.add_option('--build-dir',
+                    help='path to main build directory (the parent of the '
+                         'Release or Debug directory)')
   parser.add_option('--target', help='Release or Debug')
   parser.add_option('--profile-type-to-generate')
   options, args = parser.parse_args()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
-  output_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
+  output_dir = os.path.join(options.build_dir,
                             options.target,
                             'generated_profile')
   cmd = [

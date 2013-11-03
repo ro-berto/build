@@ -132,7 +132,9 @@ def main():
 
   option_parser.add_option('--target',
                            help='build target to archive (Debug or Release)')
-  option_parser.add_option('--build-dir', help='ignored')
+  option_parser.add_option('--build-dir',
+                           help='path to main build directory (the parent of '
+                                'the Release or Debug directory)')
   option_parser.add_option('--build-url',
                            help='url where to find the build to extract')
   option_parser.add_option('--revision',
@@ -144,7 +146,10 @@ def main():
     print 'Unknown options: %s' % args
     return 1
 
-  options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir, bad = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
+  if bad:
+    return slave_utils.WARNING_EXIT_CODE
   options.build_dir = os.path.abspath(options.build_dir)
 
   options.build_url = (options.build_url or

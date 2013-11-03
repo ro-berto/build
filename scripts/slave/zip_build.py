@@ -299,7 +299,12 @@ class PathMatcher(object):
 
 def Archive(options):
   src_dir = os.path.abspath(options.src_dir)
-  build_dir = build_directory.GetBuildOutputDirectory()
+  make_or_ninja = (
+      options.factory_properties.get('gclient_env', {}).get('GYP_GENERATORS') in
+      ('make', 'ninja')
+  )
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=make_or_ninja)
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
@@ -399,7 +404,6 @@ def main(argv):
     options.path_filter = 'asan_win'
 
   if options.path_filter:
-    # TODO(thakis): Don't look at options.build_dir here.
     options.path_filter = PATH_FILTERS[options.path_filter](options.build_dir,
         options.target)
 

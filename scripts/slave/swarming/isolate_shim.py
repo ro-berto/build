@@ -50,7 +50,13 @@ def main():
 
   if build_dir:
     assert target
-    build_dir = build_directory.GetBuildOutputDirectory()
+    # TODO(thakis): Move this logic into ConvertBuildDirToLegacy().
+    using_ninja = False
+    if sys.platform == 'darwin':
+      using_ninja = True  # isolate.py always uses ninja on OS X.
+      build_dir = 'src/out'
+    build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+        build_dir, use_out=(using_ninja or sys.platform.startswith('linux')))
     AdjustIsolatedFlag(args, os.path.join(build_dir, target))
 
   return chromium_utils.RunCommand(args)

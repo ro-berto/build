@@ -239,7 +239,8 @@ def main():
                            default=[],
                            help="Read list of tests to run from file.")
   options, args = option_parser.parse_args()
-  options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   # Disable pageheap checking except on Windows.
   if sys.platform != 'win32':

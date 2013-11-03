@@ -23,6 +23,7 @@ import threading
 
 from common import chromium_utils
 from slave import build_directory
+from slave import slave_utils
 from slave import xvfb
 from slave.chromium import playback_benchmark_replay
 
@@ -46,7 +47,10 @@ def print_result(top, name, result, refbuild):
 
 
 def run_benchmark(options, use_refbuild, benchmark_results):
-  build_dir = os.path.abspath(build_directory.GetBuildOutputDirectory())
+  build_dir, bad = build_directory.ConvertBuildDirToLegacy(options.build_dir)
+  build_dir = os.path.abspath(options.build_dir)
+
+  result = slave_utils.WARNING_EXIT_CODE if bad else 0
 
   if not use_refbuild:
     build_dir = os.path.join(build_dir, options.target)
@@ -95,12 +99,11 @@ def run_benchmark(options, use_refbuild, benchmark_results):
     os.system('kill -15 %i' % browser_process.pid)
   browser_process.wait()
   shutil.rmtree(temp_dir)
-  return 0
+  return result
 
 
 def playback_benchmark(options, args):
   """Using the target build configuration, run the playback test."""
-  # TODO(thakis): Stop looking at options.build_dir here.
   root_dir = os.path.dirname(options.build_dir) # That's src dir.
   data_dir = os.path.join(root_dir, 'data', 'webapp_benchmarks', 'gmailjs')
 

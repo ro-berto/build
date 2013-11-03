@@ -41,7 +41,9 @@ def main_mac(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  build_dir = build_directory.GetBuildOutputDirectory()
+  out_dir_path = os.path.join(os.path.dirname(options.build_dir), 'out')
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=os.path.exists(out_dir_path))
   target_dir = os.path.join(build_dir, options.target)
 
   result = 0
@@ -242,7 +244,7 @@ def main_linux(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  build_dir = build_directory.GetBuildOutputDirectory()
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(options.build_dir)
   target_dir = os.path.join(build_dir, options.target)
 
   binaries = [
@@ -316,7 +318,6 @@ def main_android(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  # TODO(thakis): Stop reading build_dir here.
   target_dir = os.path.join(os.path.dirname(options.build_dir),
                             'out', options.target)
 
@@ -350,7 +351,9 @@ def main_win(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  build_dir = build_directory.GetBuildOutputDirectory()
+  out_dir_path = os.path.join(os.path.dirname(options.build_dir), 'out')
+  build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir, use_out=os.path.exists(out_dir_path))
   target_dir = os.path.join(build_dir, options.target)
   chrome_dll = os.path.join(target_dir, 'chrome.dll')
   chrome_child_dll = os.path.join(target_dir, 'chrome_child.dll')

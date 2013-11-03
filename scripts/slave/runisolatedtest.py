@@ -130,7 +130,7 @@ def sanitize_isolated_file(isolated_file, build_dir_basename):
     json.dump(isolated_data, f)
 
 
-def run_test_isolated(isolate_script, test_exe, original_command):
+def run_test_isolated(isolate_script, test_exe, original_command, build_dir):
   """Runs the test under isolate.py run.
 
   It compensates for discrepancies between sharding_supervisor.py arguments and
@@ -146,8 +146,7 @@ def run_test_isolated(isolate_script, test_exe, original_command):
     return 1
 
   # '/path/to/src/out' -> 'out'
-  build_dir_basename = os.path.basename(
-      build_directory.GetBuildOutputDirectory())
+  build_dir_basename = os.path.basename(build_dir)
   sanitize_isolated_file(isolated_file, build_dir_basename)
 
   isolate_command = [sys.executable, isolate_script,
@@ -175,6 +174,8 @@ def run_test_isolated(isolate_script, test_exe, original_command):
 
 def main(argv):
   option_parser = optparse.OptionParser(USAGE)
+  option_parser.add_option('--build-dir',
+                           help='Parent of the Release or Debug folder')
   option_parser.add_option('--test_name', default='',
                            help='The name of the test')
   option_parser.add_option('--builder_name', default='',
@@ -191,6 +192,8 @@ def main(argv):
                            'in multiple times for more detailed logs.')
 
   options, args = option_parser.parse_args(argv)
+  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
+      options.build_dir)
 
   test_exe = args[0]
   original_command = args[1:]
@@ -213,7 +216,8 @@ def main(argv):
     if not os.path.isfile(isolate_script):
       isolate_script = os.path.join(options.checkout_dir, 'src', 'tools',
                                     'swarm_client', 'isolate.py')
-    return run_test_isolated(isolate_script, test_exe, original_command)
+    return run_test_isolated(
+        isolate_script, test_exe, original_command, options.build_dir)
   else:
     logging.info('Running test normally')
     return run_command(original_command)
