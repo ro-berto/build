@@ -45,7 +45,6 @@ class TestAll(unittest.TestCase):
       json.dump(data, f)
 
     sample_line = [
-      '--build-dir', 'src/out',
       '--test_name', 'base_unittests',
       '--builder_name', "Linux Tests",
       '--checkout_dir',

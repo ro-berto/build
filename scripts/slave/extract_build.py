@@ -105,15 +105,12 @@ def real_main(options):
   """ Download a build, extract it to build\BuildDir\full-build-win32
       and rename it to build\BuildDir\Target
   """
-  normal_retval = 0
   if options.build_output_dir:
     build_output_dir = os.path.join(options.build_dir, options.build_output_dir)
   else:
-    build_output_dir, bad = build_directory.ConvertBuildDirToLegacy(
-        options.build_dir)
-    if bad:
-      normal_retval = slave_utils.WARNING_EXIT_CODE
+    build_output_dir = build_directory.GetBuildOutputDirectory()
 
+  # TODO(thakis): Don't read options.build_dir here.
   abs_build_dir = os.path.abspath(options.build_dir)
   abs_build_output_dir = os.path.abspath(build_output_dir)
   target_build_output_dir = os.path.join(abs_build_output_dir, options.target)
@@ -204,7 +201,7 @@ def real_main(options):
     if failure:
       # We successfully extracted the archive, but it was the generic one.
       return slave_utils.WARNING_EXIT_CODE
-    return normal_retval
+    return 0
 
   # If we get here, that means that it failed 3 times. We return a failure.
   return slave_utils.ERROR_EXIT_CODE

@@ -136,9 +136,7 @@ def main():
                            help='Prepare dynamorio before running tests.')
   option_parser.add_option('--pre-process', action='store_true',
                            help='Process coverage after running tests.')
-  option_parser.add_option('--build-dir',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--build-id',
                            help='The build number of the tested build.')
   option_parser.add_option('--target',
@@ -152,8 +150,7 @@ def main():
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, _ = option_parser.parse_args()
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir)
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   fp = options.factory_properties
   options.browser_shard_index = fp.get('browser_shard_index')

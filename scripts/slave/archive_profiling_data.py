@@ -83,15 +83,13 @@ def main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('', '--revision', default=None,
                            help='unique id for this run')
-  option_parser.add_option('', '--build-dir', default=None,
-                           help=('path to the build directory'))
+  option_parser.add_option('', '--build-dir', help='ignored')
   option_parser.add_option('', '--builder-name', default=None,
                            help='name of the build machine')
   option_parser.add_option('', '--test-name', default=None,
                            help='name of the test')
   options = option_parser.parse_args()[0]
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir)
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   if (options.revision is None or options.build_dir is None or
       options.builder_name is None or options.test_name is None):

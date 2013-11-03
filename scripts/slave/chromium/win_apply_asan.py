@@ -194,9 +194,7 @@ def main():
   default_runtime_path = os.path.join(default_asan_dir, 'syzyasan_rtl.dll')
 
   parser = optparse.OptionParser()
-  parser.add_option(
-      '--build-dir',
-      help='Path to the build directory to asan (required).')
+  parser.add_option('--build-dir', help='ignored')
   parser.add_option(
       '--target',
       help='The target in the build directory to asan (required).')
@@ -220,8 +218,7 @@ def main():
       help='Specify the path to the ASAN runtime DLL relative to '
            'build-dir (%default).')
   options, args = parser.parse_args()
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir)
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   options.build_dir = os.path.abspath(options.build_dir)
 

@@ -572,7 +572,6 @@ def generate_run_isolated_command(build_dir, test_exe_path, options, command):
   run_isolated_test = os.path.join(BASE_DIR, 'runisolatedtest.py')
   isolate_command = [
       sys.executable, run_isolated_test,
-      '--build-dir', build_dir,
       '--test_name', options.test_type,
       '--builder_name', options.build_properties.get('buildername', ''),
       '--checkout_dir', os.path.dirname(os.path.dirname(build_dir)),
@@ -1134,116 +1133,114 @@ def main():
   # own, we need to stop parsing when we reach the first positional argument.
   option_parser.disable_interspersed_args()
 
-  option_parser.add_option('', '--target', default='Release',
+  option_parser.add_option('--target', default='Release',
                            help='build target (Debug or Release)')
   option_parser.add_option('--pass-target', action='store_true', default=False,
                            help='pass --target to the spawned test script')
-  option_parser.add_option('', '--build-dir',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--pass-build-dir', action='store_true',
                            default=False,
                            help='pass --build-dir to the spawned test script')
-  option_parser.add_option('', '--enable-pageheap', action='store_true',
+  option_parser.add_option('--enable-pageheap', action='store_true',
                            default=False,
                            help='enable pageheap checking for chrome.exe')
   # --with-httpd assumes a chromium checkout with src/tools/python.
-  option_parser.add_option('', '--with-httpd', dest='document_root',
+  option_parser.add_option('--with-httpd', dest='document_root',
                            default=None, metavar='DOC_ROOT',
                            help='Start a local httpd server using the given '
                                 'document root, relative to the current dir')
-  option_parser.add_option('', '--total-shards', dest='total_shards',
+  option_parser.add_option('--total-shards', dest='total_shards',
                            default=None, type='int',
                            help='Number of shards to split this test into.')
-  option_parser.add_option('', '--shard-index', dest='shard_index',
+  option_parser.add_option('--shard-index', dest='shard_index',
                            default=None, type='int',
                            help='Shard to run. Must be between 1 and '
                                 'total-shards.')
-  option_parser.add_option('', '--run-shell-script', action='store_true',
+  option_parser.add_option('--run-shell-script', action='store_true',
                            default=False,
                            help='treat first argument as the shell script'
                                 'to run.')
-  option_parser.add_option('', '--run-python-script', action='store_true',
+  option_parser.add_option('--run-python-script', action='store_true',
                            default=False,
                            help='treat first argument as a python script'
                                 'to run.')
-  option_parser.add_option('', '--generate-json-file', action='store_true',
+  option_parser.add_option('--generate-json-file', action='store_true',
                            default=False,
                            help='output JSON results file if specified.')
-  option_parser.add_option('', '--parallel', action='store_true',
+  option_parser.add_option('--parallel', action='store_true',
                            help='Shard and run tests in parallel for speed '
                                 'with sharding_supervisor.')
-  option_parser.add_option('', '--llvmpipe', action='store_const',
+  option_parser.add_option('--llvmpipe', action='store_const',
                            const=xvfb_path, dest='llvmpipe_dir',
                            help='Use software gpu pipe directory.')
-  option_parser.add_option('', '--no-llvmpipe', action='store_const',
+  option_parser.add_option('--no-llvmpipe', action='store_const',
                            const=None, dest='llvmpipe_dir',
                            help='Do not use software gpu pipe directory.')
-  option_parser.add_option('', '--llvmpipe-dir',
+  option_parser.add_option('--llvmpipe-dir',
                            default=None, dest='llvmpipe_dir',
                            help='Path to software gpu library directory.')
-  option_parser.add_option('', '--special-xvfb-dir', default=xvfb_path,
+  option_parser.add_option('--special-xvfb-dir', default=xvfb_path,
                            help='Path to virtual X server directory on Linux.')
-  option_parser.add_option('', '--special-xvfb', action='store_true',
+  option_parser.add_option('--special-xvfb', action='store_true',
                            default='auto',
                            help='use non-default virtual X server on Linux.')
-  option_parser.add_option('', '--no-special-xvfb', action='store_false',
+  option_parser.add_option('--no-special-xvfb', action='store_false',
                            dest='special_xvfb',
                            help='Use default virtual X server on Linux.')
-  option_parser.add_option('', '--auto-special-xvfb', action='store_const',
+  option_parser.add_option('--auto-special-xvfb', action='store_const',
                            const='auto', dest='special_xvfb',
                            help='Guess as to virtual X server on Linux.')
-  option_parser.add_option('', '--xvfb', action='store_true', dest='xvfb',
+  option_parser.add_option('--xvfb', action='store_true', dest='xvfb',
                            default=True,
                            help='Start virtual X server on Linux.')
-  option_parser.add_option('', '--no-xvfb', action='store_false', dest='xvfb',
+  option_parser.add_option('--no-xvfb', action='store_false', dest='xvfb',
                            help='Do not start virtual X server on Linux.')
-  option_parser.add_option('', '--sharding-args', dest='sharding_args',
+  option_parser.add_option('--sharding-args', dest='sharding_args',
                            default='',
                            help='Options to pass to sharding_supervisor.')
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory for JSON file.')
-  option_parser.add_option('', '--builder-name', default=None,
+  option_parser.add_option('--builder-name', default=None,
                            help='The name of the builder running this script.')
-  option_parser.add_option('', '--slave-name', default=None,
+  option_parser.add_option('--slave-name', default=None,
                            help='The name of the slave running this script.')
-  option_parser.add_option('', '--build-number', default=None,
+  option_parser.add_option('--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))
-  option_parser.add_option('', '--test-type', default='',
+  option_parser.add_option('--test-type', default='',
                            help='The test name that identifies the test, '
                                 'e.g. \'unit-tests\'')
-  option_parser.add_option('', '--test-results-server', default='',
+  option_parser.add_option('--test-results-server', default='',
                            help='The test results server to upload the '
                                 'results.')
-  option_parser.add_option('', '--annotate', default='',
+  option_parser.add_option('--annotate', default='',
                            help='Annotate output when run as a buildstep. '
                                 'Specify which type of test to parse, available'
                                 ' types listed with --annotate=list.')
-  option_parser.add_option('', '--parse-input', default='',
+  option_parser.add_option('--parse-input', default='',
                            help='When combined with --annotate, reads test '
                                 'from a file instead of executing a test '
                                 'binary. Use - for stdin.')
-  option_parser.add_option('', '--parse-result', default=0,
+  option_parser.add_option('--parse-result', default=0,
                            help='Sets the return value of the simulated '
                                 'executable under test. Only has meaning when '
                                 '--parse-input is used.')
-  option_parser.add_option('', '--results-url', default='',
+  option_parser.add_option('--results-url', default='',
                            help='The URI of the perf dashboard to upload '
                                 'results to.')
-  option_parser.add_option('', '--perf-dashboard-id', default='',
+  option_parser.add_option('--perf-dashboard-id', default='',
                            help='The ID on the perf dashboard to add results '
                                 'to.')
-  option_parser.add_option('', '--supplemental-columns-file',
+  option_parser.add_option('--supplemental-columns-file',
                            default='supplemental_columns',
                            help='A file containing a JSON blob with a dict '
                                 'that will be uploaded to the results '
                                 'dashboard as supplemental columns.')
-  option_parser.add_option('', '--enable-lsan', default=False,
+  option_parser.add_option('--enable-lsan', default=False,
                            help='Enable memory leak detection (LeakSanitizer). '
                                 'Also can be enabled with the factory '
                                 'properties "lsan" and "lsan_run_all_tests".')
-  option_parser.add_option('', '--extra-sharding-args', default='',
+  option_parser.add_option('--extra-sharding-args', default='',
                            help='Extra options for run_test_cases.py.')
   option_parser.add_option('--spawn-dbus', action='store_true',
                            default=False,
@@ -1269,17 +1266,7 @@ def main():
   if options.spawn_dbus:
     _LaunchDBus()
 
-  # TODO(thakis): Simplify this once ConvertBuildDirToLegacy() ignores its
-  # arguments.
-  use_out = False
-  if sys.platform == 'darwin':
-    use_out = (options.factory_properties.get('gclient_env', {})
-                        .get('GYP_GENERATORS', '') in ('ninja', 'make'))
-  elif sys.platform != 'win32':
-    use_out = os.path.exists(
-        os.path.join(os.path.dirname(options.build_dir), 'out'))
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir, use_out=use_out)
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   if options.pass_target and options.target:
     args.extend(['--target', options.target])

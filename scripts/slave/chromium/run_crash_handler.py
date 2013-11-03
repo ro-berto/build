@@ -35,14 +35,11 @@ def main():
   """
   option_parser = optparse.OptionParser(usage=USAGE)
 
-  option_parser.add_option('', '--target', default='Release',
+  option_parser.add_option('--target', default='Release',
                            help='build target (Debug or Release)')
-  option_parser.add_option('', '--build-dir', default='chrome',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('--build-dir', help='ignored')
   options, args = option_parser.parse_args()
-  options.build_dir, _ = build_directory.ConvertBuildDirToLegacy(
-      options.build_dir)
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
   if args:
     option_parser.error('No args are supported')
