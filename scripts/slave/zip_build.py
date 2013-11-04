@@ -357,21 +357,19 @@ def main(argv):
                            help='build target to archive (Debug or Release)')
   option_parser.add_option('--src-dir', default='src',
                            help='path to the top-level sources directory')
-  option_parser.add_option('--build-dir', default='src/build',
-                           help=('path to main build directory (the parent of '
-                                 'the Release or Debug directory)'))
+  option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--exclude-files', default='',
-                           help=('Comma separated list of files that should '
-                                 'always be excluded from the zip.'))
+                           help='Comma separated list of files that should '
+                                'always be excluded from the zip.')
   option_parser.add_option('--include-files', default='',
-                           help=('Comma separated list of files that should '
-                                 'always be included in the zip.'))
+                           help='Comma separated list of files that should '
+                                'always be included in the zip.')
   option_parser.add_option('--webkit-dir',
                            help='webkit directory path, relative to --src-dir')
   option_parser.add_option('--revision-dir',
-                           help=('Directory path that shall be used to decide '
-                                 'the revision number for the archive, '
-                                 'relative to --src-dir'))
+                           help='Directory path that shall be used to decide '
+                                'the revision number for the archive, '
+                                'relative to --src-dir')
   option_parser.add_option('--path-filter',
                            help='Filter to use to transform build zip '
                                 '(avail: %r).' % list(PATH_FILTERS.keys()))
@@ -403,9 +401,8 @@ def main(argv):
     options.path_filter = 'asan_win'
 
   if options.path_filter:
-    # TODO(thakis): Don't look at options.build_dir here.
-    options.path_filter = PATH_FILTERS[options.path_filter](options.build_dir,
-        options.target)
+    options.path_filter = PATH_FILTERS[options.path_filter](
+        build_directory.GetBuildOutputDirectory(), options.target)
 
   return Archive(options)
 
