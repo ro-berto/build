@@ -121,7 +121,7 @@ class TestOutputTest(unittest.TestCase):
     expected = (
       'Summary for all the shards:\n'
       '1 test failed, listed below:\n'
-      '[   FAILED ] StaticCookiePolicyTest.BlockAllCookiesTest\n')
+      '  StaticCookiePolicyTest.BlockAllCookiesTest\n')
     actual = swarm_results.gen_summary_output(
         ['StaticCookiePolicyTest.BlockAllCookiesTest'], 1, [])
     self.assertEqual((expected, 1), actual)
@@ -136,12 +136,13 @@ class TestOutputTest(unittest.TestCase):
     self.assertEqual((expected, 1), actual)
 
   def test_parsing_generated_summary(self):
+    # The summary should not trigger reports.
     gtest_parser = gtest_utils.GTestLogParser()
     data, code = swarm_results.gen_summary_output(['Foo.Bar'], 1, [])
     self.assertEqual(1, code)
     for i in data.splitlines():
       gtest_parser.ProcessLine(i)
-    self.assertEqual(['Foo.Bar'], gtest_parser.FailedTests())
+    self.assertEqual([], gtest_parser.FailedTests())
 
 
 if __name__ == '__main__':

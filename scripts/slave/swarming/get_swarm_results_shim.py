@@ -3,9 +3,10 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Takes in a test name and retrives all the output that the swarm server
-has produced for tests with that name. This is expected to be called as a
-build step.
+"""Takes in a test name and retrieves all the output that the swarm server
+has produced for tests with that name.
+
+This is expected to be called as a build step.
 """
 
 import optparse
@@ -18,6 +19,7 @@ from common import chromium_utils
 from common import find_depot_tools  # pylint: disable=W0611
 from common import gtest_utils
 
+from slave import annotation_utils
 from slave.swarming import swarming_utils
 
 # From depot_tools/
@@ -70,7 +72,7 @@ def gen_summary_output(failed_tests, exit_code, shards_remaining):
   if failed_tests:
     plural = 's' if len(failed_tests) > 1 else ''
     out += '%d test%s failed, listed below:\n' % (len(failed_tests), plural)
-    out += ''.join('[   FAILED ] %s\n' % test for test in failed_tests)
+    out += ''.join('  %s\n' % test for test in failed_tests)
 
   if shards_remaining:
     out += 'Not all shards were executed.\n'
@@ -120,6 +122,10 @@ def v0(client, options, test_name):
     print output
     exit_code = max(exit_code, test_exit_code)
 
+  # Print the annotation before the summary so it's easier to find when scolling
+  # down.
+  annotation_utils.annotate(test_name, exit_code, gtest_parser)
+  print('')
   output, exit_code = gen_summary_output(
       gtest_parser.FailedTests(),
       exit_code,
@@ -155,7 +161,12 @@ def v0_1(client, options, test_name):
       gtest_parser.FailedTests(),
       proc.returncode,
       0)
-  print output
+
+  # Print the annotation before the summary so it's easier to find when scolling
+  # down.
+  annotation_utils.annotate(test_name, exit_code, gtest_parser)
+  print('')
+  print(output)
   return exit_code
 
 

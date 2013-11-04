@@ -152,7 +152,7 @@ class SwarmCommands(commands.FactoryCommands):
     # may take more than 10 minutes, so we increase the buildbot timeout.
     timeout = 2 * 60 * 60
     self._factory.addStep(
-        shell.ShellCommand,
+        chromium_step.AnnotatedCommand,
         name=test_name,
         description='%s Swarming' % test_name,
         command=command,
