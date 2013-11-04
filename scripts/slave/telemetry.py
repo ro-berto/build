@@ -17,15 +17,13 @@ from slave import build_directory
 SCRIPT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 
-def _GetPythonTestCommand(py_script, target, build_dir, arg_list=None,
+def _GetPythonTestCommand(py_script, target, arg_list=None,
                          wrapper_args=None, fp=None):
   """Synthesizes a command line to run runtest.py."""
   cmd = [sys.executable,
          os.path.join(SCRIPT_DIR, 'slave', 'runtest.py'),
          '--run-python-script',
          '--target', target,
-         # TODO(thakis): Remove this parameter.
-         '--build-dir', build_dir,
          '--no-xvfb'] #  telemetry.py should be run by a 'master' runtest.py
                       #  which starts xvfb on linux.
   if fp:
@@ -106,7 +104,7 @@ def _GenerateTelemetryCommandSequence(options):
   test_args = list(common_args)
   test_args.extend(browser_info)
   test_args.extend(test_specification)
-  test_cmd = _GetPythonTestCommand(script, target, build_dir, test_args, fp=fp)
+  test_cmd = _GetPythonTestCommand(script, target, test_args, fp=fp)
   commands.append(test_cmd)
 
   # Run the test against the target chrome build for different user profiles on
@@ -118,8 +116,7 @@ def _GenerateTelemetryCommandSequence(options):
                         '--output-trace-tag=_extcs1'])
       test_args.extend(browser_info)
       test_args.extend(test_specification)
-      test_cmd = _GetPythonTestCommand(
-          script, target, build_dir, test_args, fp=fp)
+      test_cmd = _GetPythonTestCommand(script, target, test_args, fp=fp)
       commands.append(test_cmd)
     if test_name in ('page_cycler_moz', 'page_cycler_morejs'):
       test_args = list(common_args)
@@ -127,8 +124,7 @@ def _GenerateTelemetryCommandSequence(options):
                         '--output-trace-tag=_extwr'])
       test_args.extend(browser_info)
       test_args.extend(test_specification)
-      test_cmd = _GetPythonTestCommand(
-          script, target, build_dir, test_args, fp=fp)
+      test_cmd = _GetPythonTestCommand(script, target, test_args, fp=fp)
       commands.append(test_cmd)
 
   # Run the test against the reference build on platforms where it exists.
@@ -139,7 +135,7 @@ def _GenerateTelemetryCommandSequence(options):
                 '--browser-executable=%s' % ref_build,
                 '--output-trace-tag=_ref'])
     ref_args.extend(test_specification)
-    ref_cmd = _GetPythonTestCommand(script, target, build_dir, ref_args, fp=fp)
+    ref_cmd = _GetPythonTestCommand(script, target, ref_args, fp=fp)
     commands.append(ref_cmd)
 
   return commands, env

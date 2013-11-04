@@ -78,7 +78,7 @@ class TelemetryTest(unittest.TestCase):
         '\'adb\' \'wait-for-device\'',
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
-            '\'--build-dir\' \'src/out\' \'--no-xvfb\' ' +
+            '\'--no-xvfb\' ' +
             '\'--factory-properties=' +
             '{"target": "Release", ' +
             '"build_dir": "src/out", "perf_id": "android-gn", ' +
@@ -108,7 +108,7 @@ class TelemetryTest(unittest.TestCase):
         '\'adb\' \'wait-for-device\'',
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
-            '\'--build-dir\' \'src/out\' \'--no-xvfb\' ' +
+            '\'--no-xvfb\' ' +
             '\'--factory-properties=' +
             '{"target": "Release", "build_dir": "src/out", ' +
             '"extra_args": ["--profile-dir=fake_dir"], ' +
