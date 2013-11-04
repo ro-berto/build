@@ -105,22 +105,15 @@ def real_main(options):
   """ Download a build, extract it to build\BuildDir\full-build-win32
       and rename it to build\BuildDir\Target
   """
-  if options.build_output_dir:
-    build_output_dir = os.path.join(options.build_dir, options.build_output_dir)
-  else:
-    build_output_dir = build_directory.GetBuildOutputDirectory()
-
-  # TODO(thakis): Don't read options.build_dir here.
-  abs_build_dir = os.path.abspath(options.build_dir)
-  abs_build_output_dir = os.path.abspath(build_output_dir)
-  target_build_output_dir = os.path.join(abs_build_output_dir, options.target)
+  abs_build_dir = os.path.abspath(
+      build_directory.GetBuildOutputDirectory())
+  target_build_output_dir = os.path.join(abs_build_dir, options.target)
 
   # Generic name for the archive.
   archive_name = 'full-build-%s.zip' % chromium_utils.PlatformName()
 
   # Just take the zip off the name for the output directory name.
-  output_dir = os.path.join(abs_build_output_dir,
-                            archive_name.replace('.zip', ''))
+  output_dir = os.path.join(abs_build_dir, archive_name.replace('.zip', ''))
 
   base_url, url = GetBuildUrl(abs_build_dir, options)
   archive_name = os.path.basename(base_url)
@@ -166,10 +159,10 @@ def real_main(options):
         if not handler.download():
           continue
 
-    print 'Extracting build %s to %s...' % (archive_name, abs_build_output_dir)
+    print 'Extracting build %s to %s...' % (archive_name, abs_build_dir)
     try:
       chromium_utils.RemoveDirectory(target_build_output_dir)
-      chromium_utils.ExtractZip(archive_name, abs_build_output_dir)
+      chromium_utils.ExtractZip(archive_name, abs_build_dir)
       # For Chrome builds, the build will be stored in chrome-win32.
       if 'full-build-win32' in output_dir:
         chrome_dir = output_dir.replace('full-build-win32', 'chrome-win32')
@@ -212,9 +205,7 @@ def main():
 
   option_parser.add_option('--target',
                            help='build target to archive (Debug or Release)')
-  option_parser.add_option('--build-dir',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
+  option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--build-url',
                            help='url where to find the build to extract')
   # TODO(cmp): Remove --halt-on-missing-build when the buildbots are upgraded
@@ -227,8 +218,7 @@ def main():
                            help=('Directory path that shall be used to decide '
                                  'the revision number for the archive, '
                                  'relative to --src-dir'))
-  option_parser.add_option('--build-output-dir',
-                           help='Output path relative to --build-dir.')
+  option_parser.add_option('--build-output-dir', help='ignored')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()
