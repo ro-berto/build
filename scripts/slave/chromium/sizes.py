@@ -251,6 +251,7 @@ def main_linux(options, args):
       'nacl_helper_bootstrap',
       'libffmpegsumo.so',
       'libgcflashplayer.so',
+      'lib/libpeerconnection.so',
       'libpdf.so',
       'libppGoogleNaClPluginChrome.so',
   ]
@@ -358,6 +359,7 @@ def main_win(options, args):
   mini_installer_exe = os.path.join(target_dir, 'mini_installer.exe')
   npchrome_frame_dll = os.path.join(target_dir, 'npchrome_frame.dll')
   setup_exe = os.path.join(target_dir, 'setup.exe')
+  libpeerconnection_dll = os.path.join(target_dir, 'libpeerconnection.dll')
 
   result = 0
 
@@ -375,6 +377,10 @@ def main_win(options, args):
   print fmt % get_size(npchrome_frame_dll)
 
   print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
+
+  if os.path.exists(libpeerconnection_dll):
+    fmt = 'RESULT libpeerconnection.dll: libpeerconnection.dll= %s bytes'
+    print fmt % get_size(libpeerconnection_dll)
 
   return result
 
