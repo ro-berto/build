@@ -127,13 +127,13 @@ F('mac_largetests_factory', mac().WebRTCFactory(
 # iOS.
 B('iOS Debug', 'ios_debug_factory', scheduler=scheduler, auto_reboot=False)
 F('ios_debug_factory', mac().WebRTCFactory(
-    target='Debug',
+    target='Debug-iphoneos',
     options=options,
     factory_properties=mac_ios_factory_properties))
 
 B('iOS Release', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
 F('ios_release_factory', mac().WebRTCFactory(
-    target='Release',
+    target='Release-iphoneos',
     options=options,
     factory_properties=mac_ios_factory_properties))
 
