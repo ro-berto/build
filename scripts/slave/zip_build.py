@@ -240,7 +240,8 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   else:
     os.link(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
-  build_url = options.factory_properties.get('build_url', '')
+  build_url = (options.build_url or
+               options.factory_properties.get('build_url', ''))
   if build_url.startswith('gs://'):
     gs_acl = options.factory_properties.get('gs_acl')
     if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl):
@@ -376,6 +377,9 @@ def main(argv):
                                 '(avail: %r).' % list(PATH_FILTERS.keys()))
   option_parser.add_option('--exclude-unmatched', action='store_true',
                            help='Exclude all files not matched by a whitelist')
+  option_parser.add_option('--build-url', default='',
+                           help=('Optional URL to which to upload build '
+                                 '(overrides build_url factory property)'))
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args(argv)

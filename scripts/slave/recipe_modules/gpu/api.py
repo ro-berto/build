@@ -19,6 +19,7 @@ class GpuApi(recipe_api.RecipeApi):
     telemetry_dir = self.m.path.slave_build('content_gpu_data', 'telemetry')
     self._generated_dir = telemetry_dir('generated')
     self._reference_dir = telemetry_dir('reference')
+    self._gs_bucket_name = 'chromium-gpu-archive'
 
     # The infrastructure team has recommended not to use git yet on the
     # bots, but it's useful -- even necessary -- when testing locally.
@@ -78,6 +79,24 @@ class GpuApi(recipe_api.RecipeApi):
     build_tag = '' if self.m.chromium.is_release_build else 'debug_'
     yield self.m.chromium.compile(
         targets=['chromium_gpu_%sbuilder' % build_tag])
+
+  def upload_steps(self):
+    yield self.m.archive.zip_and_upload_build(
+      'package_build',
+      self.m.chromium.c.build_config_fs,
+      self.m.chromium.c.build_dir,
+      self.m.archive.legacy_upload_url(
+        self._gs_bucket_name,
+        extra_url_components=self.m.properties['mastername']))
+
+  def download_steps(self):
+    yield self.m.archive.download_and_unzip_build(
+      'extract_build',
+      self.m.chromium.c.build_config_fs,
+      self.m.chromium.c.build_dir,
+      self.m.archive.legacy_download_url(
+        self._gs_bucket_name,
+        extra_url_components=self.m.properties['mastername']))
 
   def test_steps(self):
     # TODO(kbr): currently some properties are passed to runtest.py via

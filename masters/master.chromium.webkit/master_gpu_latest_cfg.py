@@ -60,7 +60,9 @@ for bot in gpu_bot_info:
     factory_properties['perf_id'] = bot['perf_id']
     factory_properties['build_config'] = 'Release'
   B(bot['builder'], bot['factory_id'], scheduler='global_scheduler')
-  F(bot['factory_id'], m_annotator.BaseFactory('gpu', factory_properties))
+  F(bot['factory_id'], m_annotator.BaseFactory(
+      'gpu/build_and_test',
+      factory_properties))
 
 
 def Update(_config, _active_master, c):
