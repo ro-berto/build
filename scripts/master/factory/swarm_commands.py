@@ -134,7 +134,7 @@ class SwarmCommands(commands.FactoryCommands):
         tests=tests,
         doStepIf=doStepIf)
 
-  def AddGetSwarmTestStep(self, swarm_server, test_name, num_shards):
+  def AddGetSwarmTestResultStep(self, swarm_server, test_name, num_shards):
     """Adds the step to retrieve the Swarm job results asynchronously."""
     # TODO(maruel): assert test_name.endswith('_swarm') once swarm retrieve
     # results steps have _swarm suffix.
