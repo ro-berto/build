@@ -370,13 +370,16 @@ def main_win(options, args):
 
   print 'RESULT chrome.exe: chrome.exe= %s bytes' % get_size(chrome_exe)
 
-  fmt = 'RESULT mini_installer.exe: mini_installer.exe= %s bytes'
-  print fmt % get_size(mini_installer_exe)
+  if os.path.exists(mini_installer_exe):
+    fmt = 'RESULT mini_installer.exe: mini_installer.exe= %s bytes'
+    print fmt % get_size(mini_installer_exe)
 
-  fmt = 'RESULT npchrome_frame.dll: npchrome_frame.dll= %s bytes'
-  print fmt % get_size(npchrome_frame_dll)
+  if os.path.exists(npchrome_frame_dll):
+    fmt = 'RESULT npchrome_frame.dll: npchrome_frame.dll= %s bytes'
+    print fmt % get_size(npchrome_frame_dll)
 
-  print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
+  if os.path.exists(setup_exe):
+    print 'RESULT setup.exe: setup.exe= %s bytes' % get_size(setup_exe)
 
   if os.path.exists(libpeerconnection_dll):
     fmt = 'RESULT libpeerconnection.dll: libpeerconnection.dll= %s bytes'
