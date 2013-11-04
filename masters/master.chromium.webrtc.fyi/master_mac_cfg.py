@@ -17,8 +17,7 @@ P = helper.Periodic
 def mac():
   return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 
-S('mac_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
-S('mac_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
+S('mac_webrtc_scheduler', branch='trunk', treeStableTimer=0)
 P('mac_periodic_scheduler', periodicBuildTimer=60*60)
 
 options = ['--compiler=goma-clang', '--', '-target', 'chromium_builder_webrtc']
@@ -32,10 +31,10 @@ tests = [
 
 defaults['category'] = 'mac'
 
-B('Mac [latest WebRTC trunk]', 'mac_webrtc_trunk_factory',
-  scheduler='mac_webrtc_trunk_scheduler|mac_periodic_scheduler',
+B('Mac [latest WebRTC+libjingle]', 'mac_webrtc_factory',
+  scheduler='mac_webrtc_scheduler|mac_periodic_scheduler',
   notify_on_missing=True)
-F('mac_webrtc_trunk_factory', mac().ChromiumWebRTCLatestTrunkFactory(
+F('mac_webrtc_factory', mac().ChromiumWebRTCLatestFactory(
     slave_type='BuilderTester',
     target='Release',
     options=options,
@@ -44,20 +43,6 @@ F('mac_webrtc_trunk_factory', mac().ChromiumWebRTCLatestTrunkFactory(
         'virtual_webcam': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-mac',
-    }))
-
-B('Mac [latest WebRTC stable]', 'mac_webrtc_stable_factory',
-  scheduler='mac_webrtc_stable_scheduler|mac_periodic_scheduler',
-  notify_on_missing=True)
-F('mac_webrtc_stable_factory', mac().ChromiumWebRTCLatestStableFactory(
-    slave_type='BuilderTester',
-    target='Release',
-    options=options,
-    tests=tests,
-    factory_properties={
-        'virtual_webcam': True,
-        'show_perf_results': True,
-        'perf_id': 'chromium-webrtc-stable-tot-rel-mac',
     }))
 
 

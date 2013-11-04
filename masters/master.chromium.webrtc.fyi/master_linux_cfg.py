@@ -17,8 +17,7 @@ P = helper.Periodic
 def linux():
   return chromium_factory.ChromiumFactory('src/out', 'linux2')
 
-S('linux_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
-S('linux_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
+S('linux_webrtc_scheduler', branch='trunk', treeStableTimer=0)
 P('linux_periodic_scheduler', periodicBuildTimer=60*60)
 
 options = ['--compiler=goma',  '--build-tool=ninja', '--',
@@ -33,10 +32,10 @@ tests = [
 
 defaults['category'] = 'linux'
 
-B('Linux [latest WebRTC trunk]', 'linux_webrtc_trunk_factory',
-  scheduler='linux_webrtc_trunk_scheduler|linux_periodic_scheduler',
+B('Linux [latest WebRTC+libjingle]', 'linux_webrtc_factory',
+  scheduler='linux_webrtc_scheduler|linux_periodic_scheduler',
   notify_on_missing=True)
-F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
+F('linux_webrtc_factory', linux().ChromiumWebRTCLatestFactory(
     slave_type='BuilderTester',
     target='Release',
     options=options,
@@ -46,21 +45,6 @@ F('linux_webrtc_trunk_factory', linux().ChromiumWebRTCLatestTrunkFactory(
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-linux',
-    }))
-
-B('Linux [latest WebRTC stable]', 'linux_webrtc_stable_factory',
-  scheduler='linux_webrtc_stable_scheduler|linux_periodic_scheduler',
-  notify_on_missing=True)
-F('linux_webrtc_stable_factory', linux().ChromiumWebRTCLatestStableFactory(
-    slave_type='BuilderTester',
-    target='Release',
-    options=options,
-    tests=tests,
-    factory_properties={
-        'virtual_webcam': True,
-        'use_xvfb_on_linux': True,
-        'show_perf_results': True,
-        'perf_id': 'chromium-webrtc-stable-tot-rel-linux',
     }))
 
 

@@ -19,64 +19,37 @@ def android():
   return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=True,
                                           target_os='android')
 
-S('android_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
-S('android_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
+S('android_webrtc_scheduler', branch='trunk', treeStableTimer=0)
 P('android_periodic_scheduler', periodicBuildTimer=30*60)
-T('android_trigger_trunk')
-T('android_trigger_stable')
+T('android_trigger')
 
 defaults['category'] = 'android'
 
-android_trunk_archive = master_config.GetGSUtilUrl('chromium-webrtc',
-                                                   'android_chromium_trunk')
-android_stable_archive = master_config.GetGSUtilUrl('chromium-webrtc',
-                                                   'android_chromium_stable')
+android_archive = master_config.GetGSUtilUrl('chromium-webrtc',
+                                             'android_chromium_trunk')
 
 
-B('Android Builder [latest WebRTC trunk]', 'android_builder_trunk_factory',
-  scheduler='android_webrtc_trunk_scheduler|android_periodic_scheduler',
+B('Android Builder [latest WebRTC+libjingle]', 'android_builder_factory',
+  scheduler='android_webrtc_scheduler|android_periodic_scheduler',
   notify_on_missing=True)
-F('android_builder_trunk_factory', android().ChromiumWebRTCAndroidFactory(
+F('android_builder_factory', android().ChromiumWebRTCAndroidFactory(
     target='Release',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
         'android_bot_id': 'webrtc-chromium-builder-rel',
-        'build_url': android_trunk_archive,
-        'trigger': 'android_trigger_trunk',
+        'build_url': android_archive,
+        'trigger': 'android_trigger',
     }))
 
-B('Android Tests (JB Nexus7.2) [latest WebRTC trunk]',
-  'android_tests_trunk_factory', scheduler='android_trigger_trunk',
+B('Android Tests (JB Nexus7.2) [latest WebRTC+libjingle]',
+  'android_tests_factory', scheduler='android_trigger',
   notify_on_missing=True)
-F('android_tests_trunk_factory', android().ChromiumWebRTCAndroidFactory(
+F('android_tests_factory', android().ChromiumWebRTCAndroidFactory(
     target='Release',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
       'android_bot_id': 'webrtc-chromium-tests-rel',
-      'build_url': android_trunk_archive,
-    }))
-
-B('Android Builder [latest WebRTC stable]', 'android_builder_stable_factory',
-  scheduler='android_webrtc_stable_scheduler|android_periodic_scheduler',
-  notify_on_missing=True)
-F('android_builder_stable_factory', android().ChromiumWebRTCAndroidFactory(
-    target='Release',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-        'android_bot_id': 'webrtc-chromium-builder-rel',
-        'build_url': android_stable_archive,
-        'trigger': 'android_trigger_stable',
-    }))
-
-B('Android Tests (JB Nexus7.2) [latest WebRTC stable]',
-  'android_tests_stable_factory', scheduler='android_trigger_stable',
-  notify_on_missing=True)
-F('android_tests_stable_factory', android().ChromiumWebRTCAndroidFactory(
-    target='Release',
-    annotation_script='src/build/android/buildbot/bb_run_bot.py',
-    factory_properties={
-      'android_bot_id': 'webrtc-chromium-tests-rel',
-      'build_url': android_stable_archive,
+      'build_url': android_archive,
     }))
 
 

@@ -16,7 +16,7 @@ def WebRTCFileSplitter(path):
   # match paths in the Subversion repository, relative to the 'path' URL
   # argument. build_utils.SplitPath() will use them as branch names to
   # kick off the Schedulers for different projects.
-  projects = ['trunk', 'stable']
+  projects = ['trunk']
   return build_utils.SplitPath(projects, path)
 
 

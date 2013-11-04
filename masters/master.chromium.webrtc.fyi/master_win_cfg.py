@@ -17,8 +17,7 @@ P = helper.Periodic
 def win():
   return chromium_factory.ChromiumFactory('src/build', 'win32')
 
-S('win_webrtc_trunk_scheduler', branch='trunk', treeStableTimer=0)
-S('win_webrtc_stable_scheduler', branch='stable', treeStableTimer=0)
+S('win_webrtc_scheduler', branch='trunk', treeStableTimer=0)
 P('win_periodic_scheduler', periodicBuildTimer=4*60*60)
 
 project = 'all.sln;chromium_builder_webrtc'
@@ -32,10 +31,10 @@ tests = [
 
 defaults['category'] = 'win'
 
-B('Win [latest WebRTC trunk]', 'win_webrtc_trunk_factory',
-  scheduler='win_webrtc_trunk_scheduler|win_periodic_scheduler',
+B('Win [latest WebRTC+libjingle]', 'win_webrtc_factory',
+  scheduler='win_webrtc_scheduler|win_periodic_scheduler',
   notify_on_missing=True)
-F('win_webrtc_trunk_factory', win().ChromiumWebRTCLatestTrunkFactory(
+F('win_webrtc_factory', win().ChromiumWebRTCLatestFactory(
     slave_type='BuilderTester',
     target='Release',
     project=project,
@@ -44,23 +43,6 @@ F('win_webrtc_trunk_factory', win().ChromiumWebRTCLatestTrunkFactory(
         'virtual_webcam': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-win',
-        'process_dumps': True,
-        'start_crash_handler': True,
-        'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
-    }))
-
-B('Win [latest WebRTC stable]', 'win_webrtc_stable_factory',
-  scheduler='win_webrtc_stable_scheduler|win_periodic_scheduler',
-  notify_on_missing=True)
-F('win_webrtc_stable_factory', win().ChromiumWebRTCLatestStableFactory(
-    slave_type='BuilderTester',
-    target='Release',
-    project=project,
-    tests=tests,
-    factory_properties={
-        'virtual_webcam': True,
-        'show_perf_results': True,
-        'perf_id': 'chromium-webrtc-stable-tot-rel-win',
         'process_dumps': True,
         'start_crash_handler': True,
         'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
