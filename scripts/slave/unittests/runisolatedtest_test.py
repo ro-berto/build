@@ -40,6 +40,12 @@ class TestAll(unittest.TestCase):
       'command': [ '../testing/test_env.py',
                    r'..\build\Release/browser_test.exe'],
       'files': { r'build\Release\testdata': {} },
+
+      'variables' : {
+        'EXECUTABLE_SUFFIX' : '.exe',
+        'OS' : 'win',
+        'PRODUCT_DIR' : '../build/Release'
+      },
     }
     with open(isolated, 'w') as f:
       json.dump(data, f)
@@ -69,6 +75,7 @@ class TestAll(unittest.TestCase):
         'run',
         '--isolated',
         isolated,
+        '-v',
         '--',
         '--no-cr',
         '--gtest_output=xml:build/gtest-results/base_unittests.xml',
@@ -84,6 +91,11 @@ class TestAll(unittest.TestCase):
       'command': [ '../testing/test_env.py',
                    r'..\out\Release/browser_test.exe'],
       'files': { r'out\Release\testdata': {} },
+      'variables' : {
+        'EXECUTABLE_SUFFIX' : '.exe',
+        'OS' : 'win',
+        'PRODUCT_DIR' : '../out/Release'
+      },
     }
     with open(isolated) as f:
       converted_data = json.load(f)

@@ -124,6 +124,12 @@ def sanitize_isolated_file(isolated_file, build_dir_basename):
       value['l'] = sanitize_build_dir(value['l'], build_dir_basename)
   isolated_data['files'] = sanitized_files
 
+  # 4. Fix variables->PRODUCT_DIR if necessary (only present in the .cache file)
+  variables = isolated_data.get('variables', {})
+  if 'PRODUCT_DIR' in variables:
+    variables['PRODUCT_DIR'] = sanitize_build_dir(variables['PRODUCT_DIR'],
+                                                  build_dir_basename)
+
   # TODO(thakis): fix 'includes' if necessary.
 
   with open(isolated_file, 'w') as f:
@@ -150,12 +156,16 @@ def run_test_isolated(isolate_script, test_exe, original_command):
       build_directory.GetBuildOutputDirectory())
   sanitize_isolated_file(isolated_file, build_dir_basename)
 
-  isolate_command = [sys.executable, isolate_script,
-                     'run', '--isolated', isolated_file]
+  # Update the .isolated.state cache too.
+  cache_file = isolated_file + '.state'
+  if os.path.exists(cache_file):
+    sanitize_isolated_file(cache_file, build_dir_basename)
 
-  # Log command that's about to be run, http://crbug.com/311625
-  with open(isolated_file) as f:
-    print 'Command from isolated file:', json.load(f)['command']
+  isolate_command = [sys.executable, isolate_script,
+                     'run', '--isolated', isolated_file,
+                     # Print info log lines, so isolate.py prints the path to
+                     # the binary it's about to run, http://crbug.com/311625
+                     '-v']
 
   # Start setting the test specific options.
   isolate_command.append('--')
