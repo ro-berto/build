@@ -124,7 +124,7 @@ def sanitize_isolated_file(isolated_file, build_dir_basename):
       value['l'] = sanitize_build_dir(value['l'], build_dir_basename)
   isolated_data['files'] = sanitized_files
 
-  # 4. Fix variables->PRODUCT_DIR if necessary (only present in the .cache file)
+  # 4. Fix variables->PRODUCT_DIR if necessary (only present in the .state file)
   variables = isolated_data.get('variables', {})
   if 'PRODUCT_DIR' in variables:
     variables['PRODUCT_DIR'] = sanitize_build_dir(variables['PRODUCT_DIR'],
