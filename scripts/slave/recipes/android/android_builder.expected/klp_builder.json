@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
+      "cache_dir = None\nsolutions = [{'deps_file': '', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
     ],
     "name": "gclient setup",
     "seed_steps": [
@@ -85,7 +85,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/env_dump.py",
+      "[BUILD]/scripts/slave/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
       "[SLAVE_BUILD]/src/build/android/envsetup.sh"
