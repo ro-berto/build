@@ -115,7 +115,7 @@ def main_mac(options, args):
       # list of static initializers.
       if si_count > 0 and options.target == 'Release':
         dump_static_initializers = os.path.join(
-            os.path.dirname(options.build_dir), 'tools', 'mac',
+            os.path.dirname(build_dir), 'tools', 'mac',
             'dump-static-initializers.py')
         result, stdout = run_process(result, [dump_static_initializers,
                                               chromium_framework_dsym])
@@ -214,7 +214,8 @@ def check_linux_binary(target_dir, binary_name, options):
   # For Release builds only, use dump-static-initializers.py to print the list
   # of static initializers.
   if si_count > 0 and options.target == 'Release':
-    dump_static_initializers = os.path.join(os.path.dirname(options.build_dir),
+    build_dir = os.path.dirname(target_dir)
+    dump_static_initializers = os.path.join(os.path.dirname(build_dir),
                                             'tools', 'linux',
                                             'dump-static-initializers.py')
     result, stdout = run_process(result, [dump_static_initializers,
@@ -317,9 +318,8 @@ def main_android(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  # TODO(thakis): Stop reading build_dir here.
-  target_dir = os.path.join(os.path.dirname(options.build_dir),
-                            'out', options.target)
+  target_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
+                            options.target)
 
   binaries = [
       'chromium_testshell/libs/armeabi-v7a/libchromiumtestshell.so',
@@ -408,19 +408,15 @@ def main():
   platforms = sorted(main_map.keys())
 
   option_parser = optparse.OptionParser()
-  option_parser.add_option('', '--target',
+  option_parser.add_option('--target',
                            default='Release',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
-  option_parser.add_option('', '--target-dir',
+  option_parser.add_option('--target-dir',
                            metavar='DIR',
                            help='path to target out/ directory')
-  option_parser.add_option('', '--build-dir',
-                           default='chrome',
-                           metavar='DIR',
-                           help='directory in which build was run '
-                                '[default: %default]')
-  option_parser.add_option('', '--platform',
+  option_parser.add_option('--build-dir', help='ignored')
+  option_parser.add_option('--platform',
                            default=default_platform,
                            help='specify platform (%s) [default: %%default]'
                                 % ', '.join(platforms))
