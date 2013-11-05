@@ -24,8 +24,8 @@ def _XvfbPidFilename(slave_build_name):
 
 def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
   """Start a virtual X server and set the DISPLAY environment variable so sub
-  processes will use the virtual X server.  Also start openbox. This only works
-  on Linux and assumes that xvfb and openbox are installed.
+  processes will use the virtual X server.  Also start icewm. This only works
+  on Linux and assumes that xvfb and icewm are installed.
 
   Args:
     slave_build_name: The name of the build that we use for the pid file.
@@ -112,9 +112,8 @@ def StartVirtualX(slave_build_name, build_dir, with_wm=True, server_dir=None):
 
   if with_wm:
     # Some ChromeOS tests need a window manager.
-    subprocess.Popen('openbox', stdout=subprocess.PIPE,
-                     stderr=subprocess.STDOUT)
-    print 'Window manager (openbox) started.'
+    subprocess.Popen('icewm', stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print 'Window manager (icewm) started.'
   else:
     print 'No window manager required.'
 
