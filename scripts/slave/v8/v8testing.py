@@ -68,9 +68,6 @@ def main():
   option_parser.add_option("--no-i18n", "--noi18n",
                            default=False, action='store_true',
                            help='Skip internationalization tests')
-  option_parser.add_option("--no-variants",
-                           default=False, action='store_true',
-                           help='Skip testing variants')
   option_parser.add_option('--flaky-tests',
                            help=('Regard tests marked as flaky '
                                  '(run|skip|dontcare)'))
@@ -89,21 +86,17 @@ def main():
            '--outdir=' + outdir,
            '--arch=' + options.arch,
            '--mode=' + options.target]
-    if options.testname:
-      # Make testname hold a list of tests.
-      options.testname = options.testname.split(' ')
-      cmd.extend(options.testname)
     if options.buildbot == 'True':
       cmd.extend(['--buildbot'])
     if options.no_presubmit:
       cmd.extend(['--no-presubmit'])
     if options.no_i18n:
       cmd.extend(['--no-i18n'])
-    if options.no_variants:
-      cmd.extend(['--no-variants'])
-    if 'test262' in options.testname:
+    if options.testname:
+      cmd.extend([options.testname])
+    if options.testname == 'test262':
       cmd.extend(['--download-data'])
-    if 'mozilla' in options.testname:
+    if options.testname == 'mozilla':
       # Mozilla tests requires a number of tests to timeout, set it a bit lower.
       if options.arch in ('arm', 'mipsel'):
         cmd.extend(['--timeout=180'])

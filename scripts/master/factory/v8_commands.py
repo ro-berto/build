@@ -160,16 +160,6 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Presubmit', cmd,
                      workdir='build/v8/')
 
-  def AddOptimizeForSize(self, properties=None):
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
-    cmd += ['--testname', 'cctest mjsunit webkit',
-            '--no-variants',
-            '--shell_flags="--optimize-for-size"']
-    self.AddTestStep(shell.ShellCommand, 'OptimizeForSize', cmd,
-                     timeout=3600, workdir='build/v8/')
-
   def AddFuzzer(self, properties=None):
     binary = 'out/' + self._target + '/d8'
     cmd = ['bash', './tools/fuzz-harness.sh', binary]

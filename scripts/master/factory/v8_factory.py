@@ -66,8 +66,6 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('mjsunit'):
       f.AddV8Test('mjsunit', env=factory_properties.get('test_env', {}),
                   options=factory_properties.get('test_options', []))
-    if R('optimize_for_size'):
-      f.AddOptimizeForSize()
     if R('fuzz'): f.AddFuzzer()
     if R('deopt'):
       f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
