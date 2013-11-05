@@ -37,6 +37,7 @@ sharded_tests = [
   'content_unittests',
   'crypto_unittests',
   'device_unittests',
+  'google_apis_unittests',
   'gpu_unittests',
   'jingle_unittests',
   'media_unittests',
@@ -126,6 +127,7 @@ F('rel_unit_2', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'components_unittests',
+    'google_apis_unittests',
     'unit',
   ],
   factory_properties={'generate_gtest_json': True,
@@ -271,6 +273,7 @@ F('dbg_unit_4', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'components_unittests',
+    'google_apis_unittests',
     'unit',
     'message_center_unittests',
   ],
