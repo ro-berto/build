@@ -157,9 +157,8 @@ class Master(object):
     reply_to = 'nobody@example.com'
 
 
-# Stubs of Archive and Distributed classes. Only truly defined in
-# build_internal/.
-# TODO(agable): Move these somewhere more appropriate, like master_util.
+# Stub of Archive class. Only truly defined in build_internal/.
+# TODO(agable): Move this somewhere more appropriate, like master_util.
 class Archive(object):
   archive_host = 'localhost'
   # Skip any filenames (exes, symbols, etc.) starting with these strings
@@ -171,7 +170,3 @@ class Archive(object):
   @staticmethod
   def Internal():
     pass
-
-
-class Distributed(object):
-  """Not much to describe."""
