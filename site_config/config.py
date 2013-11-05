@@ -85,3 +85,8 @@ class Archive(config_private.Archive):
   # builds.
   archive_host = config_private.Archive.archive_host
   www_dir_base = config_private.Archive.www_dir_base
+
+
+class Distributed(config_private.Distributed):
+  # File holding current version information.
+  version_file = 'VERSION'
