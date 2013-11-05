@@ -546,9 +546,6 @@ class DartUtils(object):
   @staticmethod
   def prioritize_builders(buildmaster, builders):
     def get_priority(name):
-      # TODO(ricow) remove once trunk is gone
-      if name.endswith('trunk'):
-        return 0
       for channel in CHANNELS:
         if name.endswith(channel.builder_postfix):
           return channel.priority
