@@ -61,7 +61,11 @@ F('linux32_debug_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
+    factory_properties={
+        'sharded_tests': tests,
+        'force_isolated': True,
+        'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'},
+    }))
 
 B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler,
   auto_reboot=False)
@@ -69,21 +73,33 @@ F('linux32_release_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'}}))
+    factory_properties={
+        'sharded_tests': tests,
+        'force_isolated': True,
+        'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'},
+    }))
 
 B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler,
   auto_reboot=False)
 F('linux64_debug_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
-    tests=tests))
+    tests=tests,
+    factory_properties={
+        'sharded_tests': tests,
+        'force_isolated': True,
+    }))
 
 B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler,
   auto_reboot=False)
 F('linux64_release_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
-    tests=tests))
+    tests=tests,
+    factory_properties={
+        'sharded_tests': tests,
+        'force_isolated': True,
+    }))
 
 B('Linux Clang', 'linux_clang_factory', scheduler=scheduler,
   auto_reboot=False)
@@ -91,7 +107,11 @@ F('linux_clang_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'clang=1'}}))
+    factory_properties={
+        'sharded_tests': tests,
+        'force_isolated': True,
+        'gclient_env': {'GYP_DEFINES': 'clang=1'},
+    }))
 
 B('Linux Memcheck', 'linux_memcheck_factory', scheduler=scheduler,
   auto_reboot=False)
@@ -99,28 +119,36 @@ F('linux_memcheck_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=['memcheck_' + test for test in tests],
-    factory_properties={'needs_valgrind': True,
-                        'gclient_env':
-                        {'GYP_DEFINES': 'build_for_tool=memcheck'}}))
+    factory_properties={
+        'needs_valgrind': True,
+        'gclient_env': {'GYP_DEFINES': 'build_for_tool=memcheck'},
+    }))
+
 B('Linux Tsan', 'linux_tsan_factory', scheduler=scheduler,
   auto_reboot=False)
 F('linux_tsan_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=['tsan_' + test for test in tests],
-    factory_properties={'needs_valgrind': True,
-                        'gclient_env':
-                        {'GYP_DEFINES': 'build_for_tool=tsan'}}))
+    factory_properties={
+        'needs_valgrind': True,
+        'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan'},
+    }))
+
 B('Linux Asan', 'linux_asan_factory', scheduler=scheduler,
   auto_reboot=False)
 F('linux_asan_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=tests,
-    factory_properties={'asan': True,
-                        'gclient_env':
-                        {'GYP_DEFINES': ('asan=1 release_extra_cflags=-g '
-                                         ' linux_use_tcmalloc=0 ')}}))
+    factory_properties={
+        'asan': True,
+        'sharded_tests': tests,
+        'force_isolated': True,
+        'gclient_env': {
+            'GYP_DEFINES': ('asan=1 release_extra_cflags=-g '
+                            'linux_use_tcmalloc=0 ')},
+    }))
 
 B('Linux64 Release [large tests]', 'linux_largetests_factory',
   scheduler=scheduler, auto_reboot=True)
@@ -152,7 +180,9 @@ F('chromeos_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests,
-    factory_properties={'gclient_env': {'GYP_DEFINES': 'chromeos=1'}}))
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'chromeos=1'},
+    }))
 
 
 def Update(c):
