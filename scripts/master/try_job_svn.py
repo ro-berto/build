@@ -8,6 +8,8 @@ from buildbot.changes import svnpoller
 from twisted.internet import defer
 from twisted.python import log
 
+from common import chromium_utils
+
 from master.try_job_base import TryJobBase, text_to_dict
 
 
@@ -46,7 +48,9 @@ class TryJobSubversion(TryJobBase):
                last_good_urls=None, code_review_sites=None):
     TryJobBase.__init__(self, name, pools, properties,
                         last_good_urls, code_review_sites)
-    self.watcher = SVNPoller(svnurl=svn_url, pollinterval=10)
+    self.watcher = SVNPoller(svnurl=svn_url,
+                             svnbin=chromium_utils.SVN_BIN,
+                             pollinterval=10)
 
   def setServiceParent(self, parent):
     TryJobBase.setServiceParent(self, parent)
