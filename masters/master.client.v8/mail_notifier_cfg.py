@@ -17,6 +17,7 @@ categories_steps = {
     'Presubmit',
     'Static-Initializers',
     'Check',
+    'OptimizeForSize',
     'Mjsunit',
     'Webkit',
     'Test262',
