@@ -204,27 +204,49 @@ def _GenerateJSONForTestResults(options, results_tracker):
 
 
 def _BuildParallelCommand(build_dir, test_exe_path, options):
+  # TODO(phajdan.jr): Remove sharding_supervisor.py fallback in May 2014.
   supervisor_path = os.path.join(build_dir, '..', 'tools',
                                  'sharding_supervisor',
                                  'sharding_supervisor.py')
-  supervisor_args = ['--no-color']
-  if options.factory_properties.get('retry_failed', True):
-    supervisor_args.append('--retry-failed')
+  if os.path.exists(supervisor_path):
+    supervisor_args = ['--no-color']
+    if options.factory_properties.get('retry_failed', True):
+      supervisor_args.append('--retry-failed')
+    if options.total_shards and options.shard_index:
+      supervisor_args.extend(['--total-slaves', str(options.total_shards),
+                              '--slave-index', str(options.shard_index - 1)])
+    if options.sharding_args:
+      supervisor_args.extend(options.sharding_args.split())
+    command = [sys.executable, supervisor_path]
+    command.extend(supervisor_args)
+    command.append(test_exe_path)
+
+    # Extra options for run_test_cases.py must be passed after the exe path.
+    # TODO(earthdok): pass '--clusters' in extra_sharding_args. No need for a
+    # separate factory property.
+    cluster_size = options.factory_properties.get('cluster_size')
+    if cluster_size is not None:
+      command.append('--clusters=%s' % str(cluster_size))
+    command.extend(options.extra_sharding_args.split())
+
+    return command
+
+  command = [test_exe_path, '--brave-new-test-launcher']
+
   if options.total_shards and options.shard_index:
-    supervisor_args.extend(['--total-slaves', str(options.total_shards),
-                            '--slave-index', str(options.shard_index - 1)])
+    command.extend([
+        '--test-launcher-total-shards', str(options.total_shards),
+        '--test-launcher-shard-index', str(options.shard_index - 1)])
+
   if options.sharding_args:
-    supervisor_args.extend(options.sharding_args.split())
-  command = [sys.executable, supervisor_path]
-  command.extend(supervisor_args)
-  command.append(test_exe_path)
+    command.extend(options.sharding_args.split())
 
   # Extra options for run_test_cases.py must be passed after the exe path.
-  # TODO(earthdok): pass '--clusters' in extra_sharding_args. No need for a
-  # separate factory property.
+  # TODO(earthdok): pass '--test-launcher-batch-limit' in extra_sharding_args.
+  # No need for a separate factory property.
   cluster_size = options.factory_properties.get('cluster_size')
   if cluster_size is not None:
-    command.append('--clusters=%s' % str(cluster_size))
+    command.append('--test-launcher-batch-limit=%s' % str(cluster_size))
   command.extend(options.extra_sharding_args.split())
 
   return command
