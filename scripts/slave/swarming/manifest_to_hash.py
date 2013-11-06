@@ -24,7 +24,6 @@ def main():
   parser.add_option('--target', help='Release or Debug')
   (options, args) = parser.parse_args()
 
-  assert options.build_dir
   assert options.target
   build_dir = build_directory.GetBuildOutputDirectory()
   manifest_directory = os.path.join(build_dir, options.target)

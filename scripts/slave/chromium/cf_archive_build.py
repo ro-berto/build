@@ -55,8 +55,8 @@ def ShouldPackageFile(filename, target):
 
 def archive(options, args):
   build_dir = build_directory.GetBuildOutputDirectory()
+  src_dir = os.path.abspath(os.path.dirname(build_dir))
   build_dir = os.path.join(build_dir, options.target)
-  src_dir = os.path.abspath(os.path.dirname(options.build_dir))
 
   staging_dir = slave_utils.GetStagingDir(src_dir)
   build_revision = slave_utils.SubversionRevision(src_dir)

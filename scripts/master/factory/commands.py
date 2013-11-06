@@ -1035,8 +1035,7 @@ class FactoryCommands(object):
     factory_properties = factory_properties or {}
 
     cmd = [self._python, self._zip_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
 
     if 'webkit_dir' in factory_properties:
       cmd += ['--webkit-dir', factory_properties['webkit_dir']]
@@ -1070,7 +1069,6 @@ class FactoryCommands(object):
     factory_properties = factory_properties or {}
 
     cmd = [self._python, self._extract_tool,
-           '--build-dir', self._build_dir,
            '--target', self._target,
            '--build-url', build_url]
 
@@ -1215,7 +1213,6 @@ class FactoryCommands(object):
     script_path = self.PathJoin(
         self._script_dir, 'swarming', 'manifest_to_hash.py')
     cmd = [self._python, script_path,
-        '--build-dir', self._build_dir,
         '--target', self._target]
     self._factory.addStep(CalculateIsolatedSha1s,
                           name='manifests_to_hashes',
@@ -1252,7 +1249,6 @@ class FactoryCommands(object):
     factory_properties = factory_properties or {}
 
     cmd = [self._python, self._extract_dynamorio_tool,
-           '--build-dir', self._build_dir,
            '--target', 'dynamorio',
            '--build-url', factory_properties.get('dynamorio_build_url')]
 

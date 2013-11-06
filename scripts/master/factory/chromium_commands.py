@@ -207,7 +207,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddWindowsASANStep(self):
     """Adds a step to run syzygy/ASAN over the output directory."""
     cmd = [self._python, self._windows_asan_tool,
-           '--build-dir', self._build_dir, '--target', self._target]
+           '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'apply_asan', cmd)
 
   def AddArchiveBuild(self, mode='dev', show_url=True, factory_properties=None):
@@ -227,7 +227,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd = [self._python, self._archive_tool,
            '--target', self._target,
-           '--build-dir', self._build_dir,
            '--mode', mode]
     if extra_archive_paths:
       cmd.extend(['--extra-archive-paths', extra_archive_paths])
@@ -250,8 +249,7 @@ class ChromiumCommands(commands.FactoryCommands):
     """Adds a step to the factory to archive a ClusterFuzz build."""
 
     cmd = [self._python, self._cf_archive_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
 
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
@@ -481,8 +479,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # For Android, platform is hardcoded as target_platform is set to linux2.
     # By default, the sizes.py script looks at sys.platform to identify
     # the platform (which is also linux2).
-    args = ['--target', self._target,
-            '--build-dir', self._build_dir]
+    args = ['--target', self._target]
 
     if self._target_os == 'android':
       args.extend(['--platform', 'android'])
@@ -498,8 +495,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # For Android, platform is hardcoded as target_platform is set to linux2.
     # By default, the sizes.py script looks at sys.platform to identify
     # the platform (which is also linux2).
-    args = ['--target', self._target,
-            '--build-dir', self._build_dir]
+    args = ['--target', self._target]
 
     if self._target_os == 'android':
       args.extend(['--platform', 'android'])
@@ -912,12 +908,8 @@ class ChromiumCommands(commands.FactoryCommands):
     """Reports the status of the bot devices."""
     factory_properties = factory_properties or {}
 
-    # runtest.py needs --build-dir options set to parent dir of Debug/Release
-    src_out_dir = os.path.join(self._build_dir, 'src', 'out')
-    tool_opts = ['--build-dir=%s' % src_out_dir]
-
     self.AddBuildrunnerAnnotatedPerfStep(
-      'device_status', None, 'graphing', tool_opts=tool_opts,
+      'device_status', None, 'graphing',
       cmd_name=self._device_status_check,
       cmd_options=['--device-status-dashboard'], step_name='device_status',
       py_script=True, factory_properties=factory_properties, alwaysRun=True)
@@ -968,8 +960,7 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd_name = self.PathJoin(self._chromium_script_dir,
                              'generate_profile_shim.py')
     cmd_args = ['--target=' + self._target,
-                '--profile-type-to-generate=' + profile_type_to_create,
-                '--build-dir=' + self._build_dir]
+                '--profile-type-to-generate=' + profile_type_to_create]
     cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
     self.AddTestStep(chromium_step.AnnotatedCommand,
         'Generating Profiles for Telemetry', cmd, timeout=20*60)
@@ -1039,8 +1030,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddDevToolsTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
 
-    args = ['--target', self._target,
-            '--build-dir', self._build_dir]
+    args = ['--target', self._target]
 
     self.AddAnnotatedPerfStep('devtools_perf', None, 'graphing',
                               step_name='DevTools.PerfTest',
@@ -1070,7 +1060,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
     cmd = [self._python, self._lint_test_files_tool,
-           '--build-dir', self._build_dir, '--target', self._target]
+           '--target', self._target]
     self.AddTestStep(shell.ShellCommand,
                      test_name='webkit_lint',
                      test_command=cmd,
@@ -1079,7 +1069,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddBuildrunnerWebkitLint(self, factory_properties=None):
     """Adds a step to the factory to lint the test_expectations.txt file."""
     cmd = [self._python, self._lint_test_files_tool,
-           '--build-dir', self._build_dir, '--target', self._target]
+           '--target', self._target]
     self.AddBuildrunnerTestStep(shell.ShellCommand,
                                 test_name='webkit_lint',
                                 test_command=cmd,
@@ -1088,7 +1078,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddWebkitPythonTests(self, factory_properties=None):
     """Adds a step to the factory to run test-webkitpy."""
     cmd = [self._python, self._test_webkitpy_tool,
-           '--build-dir', self._build_dir, '--target', self._target]
+           '--target', self._target]
     self.AddTestStep(shell.ShellCommand,
                      test_name='webkit_python_tests',
                      test_command=cmd,
@@ -1097,7 +1087,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddBuildrunnerWebkitPythonTests(self, factory_properties=None):
     """Adds a step to the factory to run test-webkitpy."""
     cmd = [self._python, self._test_webkitpy_tool,
-           '--build-dir', self._build_dir, '--target', self._target]
+           '--target', self._target]
     self.AddBuildrunnerTestStep(shell.ShellCommand,
                                 test_name='webkit_python_tests',
                                 test_command=cmd,
@@ -1226,7 +1216,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     cmd_args = ['--target', self._target,
                 '-o', webkit_result_dir,
-                '--build-dir', self._build_dir,
                 '--build-number', WithProperties('%(buildnumber)s'),
                 '--builder-name', WithProperties(builder_name)]
 
@@ -1282,7 +1271,6 @@ class ChromiumCommands(commands.FactoryCommands):
       factory_properties['gs_bucket'] = 'gs://' + gs_bucket
       cmd = [self._python, self._layout_archive_tool,
              '--results-dir', webkit_result_dir,
-             '--build-dir', self._build_dir,
              '--build-number', WithProperties('%(buildnumber)s'),
              '--builder-name', WithProperties(builder_name)]
 
@@ -1305,13 +1293,11 @@ class ChromiumCommands(commands.FactoryCommands):
     build_dir = build_dir or self._build_dir
     target = target or self._target
     cmd = [self._python, self._crash_handler_tool,
-           '--build-dir', build_dir,
            '--target', target]
     self.AddTestStep(shell.ShellCommand, 'start_crash_handler', cmd)
 
   def AddProcessDumps(self):
     cmd = [self._python, self._process_dumps_tool,
-           '--build-dir', self._build_dir,
            '--target', self._target]
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'process_dumps', cmd)
 
@@ -1624,100 +1610,14 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_options=cmd_options)
 
   def AddMiniInstallerTestStep(self, factory_properties):
+    # TODO(thakis): Don't look at _build_dir here, instead use a slave dir
+    # shim that uses scripts/slave/build_directory
     cmd = [self._python, self._mini_installer_tests_runner,
            self._mini_installer_tests_config, '--build-dir', self._build_dir,
            '--target', self._target, '--force-clean']
     self.AddTestStep(chromium_step.AnnotatedCommand, 'test_mini_installer', cmd,
                      halt_on_failure=True, timeout=600,
                      do_step_if=self.TestStepFilter)
-
-  def AddChromebotServer(self, factory_properties=None):
-    """Add steps to run Chromebot script for server.
-
-    This expects build property to be set with Chromium build number, which
-    is set by SetBuildPropertyShellCommand in GetBuildForChromebot step.
-
-    Args:
-      client_os: Target client OS (win or linux).
-      server_port: Port for client/server communication.
-      timeout: Max time (secs) to run Chromebot server script.
-      build_type: Either 'official' or 'chromium'.
-      build_id: ID of the extracted Chrome build.
-    """
-    factory_properties = factory_properties or {}
-    client_os = factory_properties.get('client_os')
-    server_port = factory_properties.get('server_port')
-    timeout = factory_properties.get('timeout')
-    build_type = factory_properties.get('build_type')
-    max_time = timeout + 5 * 60  # Increase timeout by 5 minutes.
-    build_id = WithProperties('%(build_id)s')
-
-    # Chromebot script paths.
-    chromebot_path = self.PathJoin('src', 'tools', 'chromebot')
-    chromebot_script = self.PathJoin(chromebot_path, 'chromebot.py')
-    url_file = self.PathJoin(chromebot_path, 'top-million')
-
-    # Add trigger step.
-    self._factory.addStep(trigger.Trigger(
-        schedulerNames=[factory_properties.get('trigger')],
-        updateSourceStamp=False,
-        waitForFinish=False))
-
-    # Add step to run Chromebot server script.
-    cmd = [self._python,
-           chromebot_script,
-           url_file,
-           '--build-id', build_id,
-           '--build-type', build_type,
-           '--client-os', client_os,
-           '--log-level', 'INFO',
-           '--timeout', str(timeout),
-           '--mode', 'server',
-           '--server-port', str(server_port)]
-    self.AddTestStep(shell.ShellCommand, 'run_chromebot_server', cmd,
-                     max_time=max_time, do_step_if=self.TestStepFilter)
-
-  def AddChromebotClient(self, factory_properties=None):
-    """Add steps to run Chromebot script for server and client side.
-
-    This expects build property to be set with Chromium build number, which
-    is set by SetBuildPropertyShellCommand in GetBuildForChromebot step.
-
-    Args:
-      client_os: Target client OS (win or linux).
-      server_hostname: Hostname of Chromebot server machine.
-      server_port: Port for client/server communication.
-      build_id: ID of the extracted Chrome build.
-    """
-    factory_properties = factory_properties or {}
-    client_os = factory_properties.get('client_os')
-    server_hostname = factory_properties.get('server_hostname')
-    server_port = factory_properties.get('server_port')
-    proxy_servers = factory_properties.get('proxy_servers')
-    timeout = factory_properties.get('timeout')
-    max_time = timeout + 5 * 60  # Increase timeout by 5 minutes.
-    build_id = WithProperties('%(build_id)s')
-
-    # Chromebot script paths.
-    chromebot_path = self.PathJoin('src', 'tools', 'chromebot')
-    chromebot_script = self.PathJoin(chromebot_path, 'chromebot.py')
-    symbol_path = self.PathJoin(self._build_dir, 'breakpad_syms')
-    target_path = self.PathJoin(self._build_dir, self._target)
-
-    # Add step to run Chromebot client script.
-    cmd = [self._python,
-           chromebot_script,
-           '--build-dir', target_path,
-           '--build-id', build_id,
-           '--client-os', client_os,
-           '--log-level', 'INFO',
-           '--mode', 'client',
-           '--server', server_hostname,
-           '--server-port', str(server_port),
-           '--proxy-servers', ','.join(proxy_servers),
-           '--symbols-dir', symbol_path]
-    self.AddTestStep(shell.ShellCommand, 'run_chromebot_client', cmd,
-                     max_time=max_time, do_step_if=self.TestStepFilter)
 
   # TODO(csharp): Move this function into commands once swarm test can be added
   # via AddTestStep.
