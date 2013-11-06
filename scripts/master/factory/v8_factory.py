@@ -54,17 +54,21 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8initializers'): f.AddV8Initializers()
     if R('v8testing'):
-      f.AddV8Testing(env=factory_properties.get('test_env', {}),
-                     options=factory_properties.get('test_options', []))
+      f.AddV8Test('mjsunit cctest message preparser', 'Check',
+                  env=factory_properties.get('test_env', {}),
+                  options=factory_properties.get('test_options', []))
     if R('v8testing_tc'):
-      f.AddV8Testing(env=factory_properties.get('test_env', {}),
-                     options=factory_properties.get('test_options', []),
-                     flaky_tests='skip')
-      f.AddV8Testing(env=factory_properties.get('test_env', {}),
-                     options=factory_properties.get('test_options', []),
-                     flaky_tests='run')
+      f.AddV8Test('mjsunit cctest message preparser', 'Check',
+                  env=factory_properties.get('test_env', {}),
+                  options=factory_properties.get('test_options', []),
+                  flaky_tests='skip')
+      f.AddV8Test('mjsunit cctest message preparser', 'Check (flaky)',
+                  env=factory_properties.get('test_env', {}),
+                  options=factory_properties.get('test_options', []),
+                  flaky_tests='run')
     if R('mjsunit'):
-      f.AddV8Test('mjsunit', env=factory_properties.get('test_env', {}),
+      f.AddV8Test('mjsunit', 'Mjsunit',
+                  env=factory_properties.get('test_env', {}),
                   options=factory_properties.get('test_options', []))
     if R('optimize_for_size'):
       f.AddOptimizeForSize()
@@ -72,10 +76,11 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('deopt'):
       f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
                        options=factory_properties.get('test_options', []))
-    if R('webkit'): f.AddV8Webkit()
+    if R('webkit'): f.AddV8Test('webkit', 'Webkit')
     if R('test262'):
-      f.AddV8Test262(options=factory_properties.get('test_options', []))
-    if R('mozilla'): f.AddV8Mozilla()
+      f.AddV8Test('test262', 'Test262',
+                  options=factory_properties.get('test_options', []))
+    if R('mozilla'): f.AddV8Test('mozilla', 'Mozilla')
     if R('gcmole'): f.AddV8GCMole()
     if R('simpleleak'): f.AddSimpleLeakTest()
 

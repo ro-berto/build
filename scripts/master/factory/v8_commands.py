@@ -97,62 +97,19 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Static-Initializers', cmd,
                      workdir='build/v8/')
 
-  def AddV8Testing(self, properties=None, env=None, options=None,
-                   flaky_tests='dontcare'):
-    options = options or []
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand() + options
-    step_name = 'Check'
-    if flaky_tests == 'run': step_name = 'Check (flaky)'
-    if flaky_tests == 'run' or flaky_tests == 'skip':
-      cmd += ['--flaky-tests', flaky_tests]
-    self.AddTestStep(shell.ShellCommand, step_name, cmd,
-                     timeout=3600,
-                     workdir='build/v8/',
-                     env=env)
-
-  def AddV8Test(self, name, properties=None, env=None, options=None,
-                flaky_tests='dontcare'):
+  def AddV8Test(self, name, step_name, properties=None, env=None,
+                options=None, flaky_tests='dontcare'):
     options = options or []
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
     cmd = self.GetV8TestingCommand() + options
     cmd += ['--testname', name]
-    step_name = name.capitalize()
-    if flaky_tests == 'run': step_name = '%s (flaky)' % step_name
     if flaky_tests == 'run' or flaky_tests == 'skip':
       cmd += ['--flaky-tests', flaky_tests]
     self.AddTestStep(shell.ShellCommand, step_name, cmd,
                      timeout=3600,
                      workdir='build/v8/',
                      env=env)
-
-  # TODO(machenbach): Clean up with the generic version above.
-  def AddV8Webkit(self, properties=None):
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
-    cmd += ['--testname', 'webkit']
-    self.AddTestStep(shell.ShellCommand, 'Webkit', cmd,
-                     timeout=3600, workdir='build/v8/')
-
-  def AddV8Test262(self, properties=None, options=None):
-    options = options or []
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand() + options
-    cmd += ['--testname', 'test262']
-    self.AddTestStep(shell.ShellCommand, 'Test262', cmd,
-                     timeout=3600, workdir='build/v8/')
-
-  def AddV8Mozilla(self, properties=None):
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
-    cmd += ['--testname', 'mozilla']
-    self.AddTestStep(shell.ShellCommand, 'Mozilla', cmd,
-                     timeout=3600, workdir='build/v8/')
 
   def AddPresubmitTest(self, properties=None):
     cmd = [self._python, self._v8testing_tool,
