@@ -436,8 +436,6 @@ class FactoryCommands(object):
     cmd = [self._python, self._test_tool]
     if self._target:
       cmd.extend(['--target', self._target])
-    if self._build_dir:
-      cmd.extend(['--build-dir', self._build_dir])
 
     cmd = self.AddBuildProperties(cmd)
 
@@ -458,8 +456,6 @@ class FactoryCommands(object):
     cmd = [self._python, self._test_tool, '--run-python-script']
     if self._target:
       cmd.extend(['--target', self._target])
-    if self._build_dir:
-      cmd.extend(['--build-dir', self._build_dir])
 
     cmd = self.AddBuildProperties(cmd)
 
@@ -481,8 +477,7 @@ class FactoryCommands(object):
     cmd = [self._python,
            self._test_tool,
            '--run-shell-script',
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     if wrapper_args is not None:
@@ -722,8 +717,7 @@ class FactoryCommands(object):
       brDoStep = self._GTestDoStep(test_name, factory_properties)
 
     cmd = [self._python, self._test_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
 
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
@@ -828,14 +822,6 @@ class FactoryCommands(object):
                      max_time=max_time, workdir=workdir, env=env, locks=locks,
                      halt_on_failure=halt_on_failure, do_step_if=False,
                      br_do_step_if=do_step_if, hide_step_if=True, **kwargs)
-
-  def AddBasicShellStep(self, test_name, timeout=600, arg_list=None):
-    """Adds a step to the factory to run a simple shell test with standard
-    defaults.
-    """
-    self.AddTestStep(shell.ShellCommand, test_name, timeout=timeout,
-                     test_command=self.GetTestCommand(test_name,
-                                                      arg_list=arg_list))
 
   # GClient related commands.
   def AddSvnKillStep(self):
