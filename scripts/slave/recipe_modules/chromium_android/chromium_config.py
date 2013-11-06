@@ -38,10 +38,6 @@ def component_builder(c):
 def x86_builder(c):
   c.gyp_env.GYP_DEFINES['target_arch'] = 'ia32'
 
-@CONFIG_CTX(includes=['x86_builder'])
-def dartium_builder(c):
-  c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
-
 @CONFIG_CTX(includes=['main_builder'])
 def klp_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES

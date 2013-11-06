@@ -63,8 +63,6 @@ class AndroidApi(recipe_api.RecipeApi):
     s.name = repo_name
     s.url = repo_url
     s.custom_deps = gclient_custom_deps or {}
-    s.deps_file = self.c.deps_file
-    s.managed = self.c.managed
     if revision:
       s.revision = revision
     else:
@@ -79,7 +77,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
 
-    if internal and self.c.get_app_manifest_vars:
+    if internal:
       yield self.m.step(
           'get app_manifest_vars',
           [self.c.internal_dir('build', 'dump_app_manifest_vars.py'),
@@ -107,7 +105,7 @@ class AndroidApi(recipe_api.RecipeApi):
     if self.c.target_arch:
       envsetup_cmd += ['--target-arch=%s' % self.c.target_arch]
 
-    cmd = ([self.m.path.build('scripts', 'slave', 'env_dump.py'),
+    cmd = ([self.m.path.checkout('build', 'env_dump.py'),
             '--output-json', self.m.json.output()] + envsetup_cmd)
     yield self.m.step('envsetup', cmd, env=self.get_env())
 
@@ -336,7 +334,7 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.init_and_sync()
     yield self.envsetup()
     yield self.clean_local_files()
-    if self.c.INTERNAL and self.c.run_tree_truth:
+    if self.c.INTERNAL:
       yield self.run_tree_truth()
     
   def common_tests_setup_steps(self):

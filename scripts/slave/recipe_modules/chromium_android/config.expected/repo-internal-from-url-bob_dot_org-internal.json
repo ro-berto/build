@@ -19,13 +19,6 @@
   "component_builder": {
     "internal_dir": "Path('[CHECKOUT]', 'internal')"
   }, 
-  "dartium_builder": {
-    "deps_file": "DEPS", 
-    "get_app_manifest_vars": false, 
-    "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_tree_truth": false, 
-    "target_arch": "x86"
-  }, 
   "enormous_tests": {
     "extra_deploy_opts": [
       "--await-internet"
