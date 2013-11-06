@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from buildbot.status.builder import FAILURE
 from master import chromium_notifier
 from master import master_utils
 
@@ -50,8 +51,15 @@ exclusions = {
 forgiving_steps = ['update_scripts', 'update', 'svnkill', 'taskkill',
                    'gclient_revert']
 
+
+class V8Notifier(chromium_notifier.ChromiumNotifier):
+  def isInterestingStep(self, build_status, step_status, results):
+    """Watch only failing steps."""
+    return results[0] == FAILURE
+
+
 def Update(config, active_master, c):
-  c['status'].append(chromium_notifier.ChromiumNotifier(
+  c['status'].append(V8Notifier(
       fromaddr=active_master.from_address,
       categories_steps=categories_steps,
       exclusions=exclusions,
