@@ -441,8 +441,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               'graphing', step_name='mach_ports',
                               factory_properties=factory_properties)
 
-  def AddStartupTests(self, factory_properties=None):
-    test_list = 'StartupTest.*:ShutdownTest.*:-StartupTest.PerfCold'
+  def AddShutdownTests(self, factory_properties=None):
+    test_list = 'ShutdownTest.*'
     # We don't need to run the Reference tests in debug mode.
     if self._target == 'Debug':
       test_list += ':-*.*Ref*'
