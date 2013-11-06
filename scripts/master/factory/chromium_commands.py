@@ -460,12 +460,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddAnnotatedPerfStep('memory', 'GeneralMix*MemoryTest.*', 'graphing',
                               factory_properties=factory_properties)
 
-  def AddNewTabUITests(self, factory_properties=None):
-    self.AddAnnotatedPerfStep('new-tab-ui-cold', 'NewTabUIStartupTest.*Cold',
-                              'graphing', factory_properties=factory_properties)
-    self.AddAnnotatedPerfStep('new-tab-ui-warm', 'NewTabUIStartupTest.*Warm',
-                              'graphing', factory_properties=factory_properties)
-
   def AddSyncPerfTests(self, factory_properties=None):
     options = ['--ui-test-action-max-timeout=120000']
 

@@ -677,8 +677,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddIDBPerfTests(fp)
     if R('shutdown'):
       f.AddShutdownTests(fp)
-    if R('new_tab'):
-      f.AddNewTabUITests(fp)
     if R('startup_cold'):
       f.AddTelemetryTest('startup.cold.blank_page', factory_properties=fp)
     if R('startup_warm'):
