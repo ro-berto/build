@@ -1207,6 +1207,21 @@ class FactoryCommands(object):
                           tests=tests,
                           doStepIf=doStepIf)
 
+  def AddProfileCreationStep(self, profile_type_to_create):
+    """Generate a profile for use by Telemetry tests.
+
+    Args:
+      profile_type_to_create: A string specifying the profile type to create.
+    """
+    cmd_name = self.PathJoin(self._script_dir,
+                             'generate_profile_shim.py')
+    cmd_args = ['--target=' + self._target,
+                '--profile-type-to-generate=' + profile_type_to_create,
+                '--build-dir=' + self._build_dir]
+    cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
+    self.AddTestStep(chromium_step.AnnotatedCommand,
+        'generate_telemetry_profiles', cmd, timeout=20*60)
+
   # Checks out and builds clang
   def AddUpdateClangStep(self):
     cmd = [self._update_clang_tool]

@@ -1059,11 +1059,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get('virtual_webcam'):
       chromium_cmd_obj.AddVirtualWebcamCheck()
 
-    # Generate synthetic user profiles. Must run before archive_build.
-    if factory_properties.get('create_profiles'):
-      # pylint: disable=W0212
-      chromium_cmd_obj.AddProfileCreationStep('small_profile')
-
     # Add this archive build step.
     if factory_properties.get('archive_build'):
       chromium_cmd_obj.AddArchiveBuild(factory_properties=factory_properties)

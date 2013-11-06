@@ -269,6 +269,11 @@ class GClientFactory(object):
           timeout=compile_timeout,
           env=factory_properties.get('compile_env'))
 
+    # Generate synthetic user profiles. Must run before AddZipBuild().
+    if factory_properties.get('create_profiles'):
+      # pylint: disable=W0212
+      factory_cmd_obj.AddProfileCreationStep('small_profile')
+
     if not skip_archive_steps:
       # Archive the full output directory if the machine is a builder.
       if slave_type in ['Builder', 'TrybotBuilder']:
