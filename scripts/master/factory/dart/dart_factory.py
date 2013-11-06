@@ -16,6 +16,8 @@ from buildbot.status.mail import MailNotifier
 from buildbot.status.status_push import HttpStatusPush
 from buildbot.steps import trigger
 
+from common import chromium_utils
+
 from master.factory import v8_factory
 from master.factory import chromium_factory
 from master.factory.dart import dart_commands
@@ -539,6 +541,7 @@ class DartUtils(object):
 
     # Polls config.Master.dart_url for changes
     return svnpoller.SVNPoller(svnurl=config.Master.dart_url,
+                               svnbin=chromium_utils.SVN_BIN,
                                split_file=dart_tree_file_splitter,
                                pollinterval=10,
                                revlinktmpl=dart_revision_url)

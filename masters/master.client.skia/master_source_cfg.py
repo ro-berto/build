@@ -4,6 +4,8 @@
 
 from buildbot.changes import svnpoller
 
+from common import chromium_utils
+
 from master import build_utils
 
 def SkiaFileSplitter(path):
@@ -16,6 +18,7 @@ def Update(config, active_master, c):
   skia_revlinktmpl = 'http://code.google.com/p/skia/source/browse?r=%s'
 
   skia_poller = svnpoller.SVNPoller(svnurl=skia_url,
+                                    svnbin=chromium_utils.SVN_BIN,
                                     split_file=SkiaFileSplitter,
                                     pollinterval=30,
                                     revlinktmpl=skia_revlinktmpl)
