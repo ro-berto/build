@@ -762,8 +762,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddDomCheckerTests(self):
     cmd = [self._python, self._test_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
 
     cmd.extend(['--with-httpd',
                 self.PathJoin('src', 'chrome', 'test', 'data')])
@@ -778,8 +777,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddBuildrunnerDomCheckerTests(self):
     cmd = [self._python, self._test_tool,
-           '--target', self._target,
-           '--build-dir', self._build_dir]
+           '--target', self._target]
 
     cmd.extend(['--with-httpd',
                 self.PathJoin('src', 'chrome', 'test', 'data')])
@@ -1668,7 +1666,6 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python,
            self._dynamorio_coverage_tool,
            '--pre-process',
-           '--build-dir', self._build_dir,
            '--dynamorio-dir', dynamorio_dir]
     cmd = self.AddFactoryProperties(factory_properties, cmd)
     self.AddTestStep(shell.ShellCommand,
@@ -1680,7 +1677,6 @@ class ChromiumCommands(commands.FactoryCommands):
     cmd = [self._python,
            self._dynamorio_coverage_tool,
            '--post-process',
-           '--build-dir', self._build_dir,
            '--build-id', WithProperties('%(got_revision)s'),
            '--platform', factory_properties['test_platform'],
            '--dynamorio-dir', dynamorio_dir,
