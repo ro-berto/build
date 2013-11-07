@@ -121,7 +121,8 @@ def Update(config, active_master, c):
       tree_status_url=active_master.alternate_tree_status_url,
       sheriffs=['sheriff_cros_mtv', 'sheriff_cros_nonmtv'],
       public_html='../master.chromium/public_html',
-      use_getname=True))
+      use_getname=True,
+      throttle=True))
   # chromium os buried failures/flakiness to chrome OS folk
   c['status'].append(gatekeeper.GateKeeper(
       fromaddr=active_master.from_address,

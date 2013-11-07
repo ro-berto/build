@@ -35,7 +35,7 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
 
 
   def __init__(self, tree_status_url, tree_message=None,
-               check_revisions=True, **kwargs):
+               check_revisions=True, throttle=False, **kwargs):
     """Constructor with following specific arguments (on top of base class').
 
     @type tree_status_url: String.
@@ -47,22 +47,32 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     @type check_revisions: Boolean, default to True.
     @param check_revisions: Check revisions and users for closing the tree.
 
+    @type throttle: Boolean, default to False.
+    @param throttle: Set the tree to 'throttled' rather than 'closed'.
+
     @type password: String.
     @param password: Password for service.  If None, look in .status_password.
     """
+    if throttle:
+      adjective = 'throttled'
+      gerund = 'throttling'
+    else:
+      adjective = 'closed'
+      gerund = 'closing'
     # Set defaults.
     kwargs.setdefault('sheriffs', ['sheriff'])
     kwargs.setdefault('sendToInterestedUsers', True)
     kwargs.setdefault(
         'status_header',
-        'Automatically closing tree for "%(steps)s" on "%(builder)s"')
+        'Automatically ' + gerund + ' tree for "%(steps)s" on "%(builder)s"')
     chromium_notifier.ChromiumNotifier.__init__(self, **kwargs)
 
     self.tree_status_url = tree_status_url
     self.check_revisions = check_revisions
     self.tree_message = (
         tree_message or
-        'Tree is closed (Automatic: "%(steps)s" on "%(builder)s"%(blame)s)')
+        'Tree is ' + adjective + ' (Automatic: "%(steps)s" on '
+        '"%(builder)s"%(blame)s)')
     self._last_closure_revision = 0
 
     self.password = None
