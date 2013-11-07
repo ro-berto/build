@@ -460,7 +460,7 @@ config = {
         properties: Properties(**{}),
       },
       'name': 'arm-generic full',
-      'slavenames': ['build36-m2'],
+      'slavenames': ['build90-m2'],
     },
     {
       'auto_reboot': False,
@@ -678,7 +678,7 @@ config = {
         properties: Properties(**{}),
       },
       'name': 'amd64-generic ASAN',
-      'slavenames': ['build39-m2'],
+      'slavenames': ['build91-m2'],
     },
     {
       'auto_reboot': False,
@@ -858,13 +858,13 @@ config = {
   ],
   'slavePortnum': 8114,
   'slaves': [
-    <BuildSlave 'build39-m2', (no builders yet)>,
+    <BuildSlave 'build90-m2', (no builders yet)>,
+    <BuildSlave 'build91-m2', (no builders yet)>,
     <BuildSlave 'build52-m2', (no builders yet)>,
     <BuildSlave 'build136-m2', (no builders yet)>,
     <BuildSlave 'build14-m2', (no builders yet)>,
     <BuildSlave 'build11-m2', (no builders yet)>,
     <BuildSlave 'build80-m2', (no builders yet)>,
-    <BuildSlave 'build36-m2', (no builders yet)>,
     <BuildSlave 'vm16-m2', (no builders yet)>,
     <BuildSlave 'build19-m2', (no builders yet)>,
     <BuildSlave 'vm17-m2', (no builders yet)>,
