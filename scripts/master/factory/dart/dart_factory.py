@@ -314,7 +314,7 @@ class DartUtils(object):
 
   win_rel_factory_properties = {
     'gclient_env': {
-      'GYP_DEFINES': 'fastbuild=1',
+      'GYP_DEFINES': 'fastbuild=1 disable_nacl=1 disable_pnacl=1',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
@@ -322,7 +322,7 @@ class DartUtils(object):
   }
   win_rel_factory_properties_ninja = {
     'gclient_env': {
-      'GYP_DEFINES': 'fastbuild=1',
+      'GYP_DEFINES': 'fastbuild=1 disable_nacl=1 disable_pnacl=1',
       'GYP_GENERATORS': 'ninja',
     },
     'gclient_transitive': True,
@@ -338,26 +338,35 @@ class DartUtils(object):
       # will unwind the stack and call destructors when doing a longjmp().
       # The DartVM uses it's own mechanism for calling the destructors (see
       # vm/longjump.cc). (i.e. with /EHsc the destructors will be called twice)
-      'GYP_DEFINES': 'fastbuild=1 component=static_library',
+      'GYP_DEFINES': 'fastbuild=1 component=static_library '
+                     'disable_nacl=1 disable_pnacl=1',
     },
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
   mac_factory_properties = {
+    'gclient_env': {
+        'GYP_DEFINES': 'disable_nacl=1 disable_pnacl=1',
+    },
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
   linux_factory_properties = {
-    'gclient_env': {'GYP_GENERATORS' : 'ninja'},
+    'gclient_env': {
+        'GYP_GENERATORS' : 'ninja',
+        'GYP_DEFINES': 'disable_nacl=1 disable_pnacl=1',
+    },
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
   }
   linux32_factory_properties = {
-    'gclient_env': {'GYP_GENERATORS' : 'ninja',
-                    'GYP_DEFINES': 'target_arch=ia32'},
+    'gclient_env': {
+        'GYP_GENERATORS' : 'ninja',
+        'GYP_DEFINES': 'target_arch=ia32 disable_nacl=1 disable_pnacl=1',
+    },
     'gclient_transitive': True,
     'no_gclient_branch': True,
     'annotated_script': 'dart_buildbot_run.py',
