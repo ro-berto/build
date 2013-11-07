@@ -16,8 +16,7 @@ T = helper.Triggerable
 
 
 def android_apk():
-  return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=True,
-                                          target_os='android')
+  return chromium_factory.ChromiumFactory('', 'linux2', target_os='android')
 def android_webrtc():
   return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=True,
                                       target_os='android')
