@@ -34,7 +34,6 @@ android_resources_rev = '@3855'
 chromium_git = 'http://git.chromium.org/git/'
 
 dartium_url = config.Master.dart_bleeding + '/deps/dartium.deps'
-dartium_trunk_url = config.Master.dart_trunk + '/deps/dartium.deps'
 android_tools_url = chromium_git + 'android_tools.git' + android_tools_rev
 if config.Master.v8_internal_url:
   android_resources_url = (config.Master.v8_internal_url +
@@ -97,7 +96,7 @@ if android_resources_url:
   custom_deps_list_chromeOnAndroid.append(
       ('dart/third_party/android_testing_resources', android_resources_url))
 
-def BuildChromiumFactory(channel, target_platform='win32', trunk=False):
+def BuildChromiumFactory(channel, target_platform='win32'):
   def new_solution(deps_url, custom_vars, custom_deps):
     return  gclient_factory.GClientSolution(
         deps_url,
@@ -122,14 +121,11 @@ def BuildChromiumFactory(channel, target_platform='win32', trunk=False):
     def add_solution(self, solution):
       self._solutions.append(solution)
 
-  if trunk:
-    dartium_deps_url = dartium_trunk_url
-  else:
-    # 'channel.dartium_deps_path' can be for example:
-    #   "/branches/bleeding_edge/deps/dartium.deps"
-    # config.Master.dart_url will be the base svn url. It will point to the
-    # mirror if we're in golo and otherwise to the googlecode location.
-    dartium_deps_url = config.Master.dart_url + channel.dartium_deps_path
+  # 'channel.dartium_deps_path' can be for example:
+  #   "/branches/bleeding_edge/deps/dartium.deps"
+  # config.Master.dart_url will be the base svn url. It will point to the
+  # mirror if we're in golo and otherwise to the googlecode location.
+  dartium_deps_url = config.Master.dart_url + channel.dartium_deps_path
 
   factory = DartiumFactory(target_platform)
   if target_platform == 'win32':
@@ -184,7 +180,7 @@ class DartFactory(gclient_factory.GClientFactory):
                  '/third_party/openjdk/windows/j2sdk/jre/lib/zi')
 
   def __init__(self, channel=None, build_dir='dart', target_platform='posix',
-               trunk=False, target_os=None, custom_deps_list=None,
+               target_os=None, custom_deps_list=None,
                nohooks_on_update=False, is_standalone=False):
     solutions = []
     self.target_platform = target_platform
@@ -193,18 +189,14 @@ class DartFactory(gclient_factory.GClientFactory):
     if not channel:
       channel = CHANNELS_BY_NAME['be']
 
-    # If this is trunk use the deps file from there instead.
-    if trunk:
-      deps_url = config.Master.dart_trunk + '/deps/all.deps'
+    # 'channel.all_deps_path' can be for example:
+    #   "/branches/bleeding_edge/deps/all.deps"
+    # config.Master.dart_url will be the base svn url. It will point to the
+    # mirror if we're in golo and otherwise to the googlecode location.
+    if is_standalone:
+      deps_url = config.Master.dart_url + channel.standalone_deps_path
     else:
-      # 'channel.all_deps_path' can be for example:
-      #   "/branches/bleeding_edge/deps/all.deps"
-      # config.Master.dart_url will be the base svn url. It will point to the
-      # mirror if we're in golo and otherwise to the googlecode location.
-      if is_standalone:
-        deps_url = config.Master.dart_url + channel.standalone_deps_path
-      else:
-        deps_url = config.Master.dart_url + channel.all_deps_path
+      deps_url = config.Master.dart_url + channel.all_deps_path
 
     if not custom_deps_list:
       custom_deps_list = []
@@ -389,12 +381,6 @@ class DartUtils(object):
           DartFactory(channel, target_platform='win32',
                       custom_deps_list=custom_wix_deps),
     }
-    if channel.name == 'be':
-      factory_base.update({
-        'posix-trunk': DartFactory(channel, trunk=True),
-        'windows-trunk':
-            DartFactory(channel, target_platform='win32', trunk=True),
-      })
     return factory_base
 
   @staticmethod
@@ -467,46 +453,6 @@ class DartUtils(object):
           tests=['annotated_steps'],
           factory_properties=DartUtils.linux32_factory_properties),
     }
-    if channel.name == 'be':
-      F_MAC_CH_TRUNK = BuildChromiumFactory(channel, target_platform='darwin',
-                                            trunk=True)
-      F_LINUX_CH_TRUNK = BuildChromiumFactory(channel, target_platform='linux2',
-                                              trunk=True)
-      F_WIN_CH_TRUNK = BuildChromiumFactory(channel, target_platform='win32',
-                                            trunk=True)
-
-      factory_base_dartium.update({
-        'dartium-lucid64-full-trunk' : F_LINUX_CH_TRUNK(
-            target='Release',
-            clobber=True,
-            options=DartUtils.linux_options,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.linux_factory_properties),
-        'dartium-win-full-trunk' : F_WIN_CH_TRUNK(
-            target='Release',
-            project=DartUtils.win_project,
-            clobber=True,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.win_rel_factory_properties),
-        'dartium-mac-full-trunk' : F_MAC_CH_TRUNK(
-            target='Release',
-            options=DartUtils.mac_options,
-            clobber=True,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.mac_factory_properties),
-        'dartium-lucid32-full-trunk' : F_LINUX_CH_TRUNK(
-            target='Release',
-            clobber=True,
-            options=DartUtils.linux_options,
-            tests=['annotated_steps'],
-            factory_properties=DartUtils.linux32_factory_properties),
-       'release-lucid64-full-trunk': F_LINUX_CH_TRUNK(
-          target='Release',
-          clobber=True,
-          options=DartUtils.linux_options,
-          tests=['annotated_steps'],
-          factory_properties=DartUtils.linux_factory_properties),
-      })
     return factory_base_dartium
 
   factory_base = {}
