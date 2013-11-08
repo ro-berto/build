@@ -235,8 +235,8 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
 
   if options.total_shards and options.shard_index:
     command.extend([
-        '--test-launcher-total-shards', str(options.total_shards),
-        '--test-launcher-shard-index', str(options.shard_index - 1)])
+        '--test-launcher-total-shards=%d' % options.total_shards,
+        '--test-launcher-shard-index=%d' % (options.shard_index - 1)])
 
   if options.sharding_args:
     command.extend(options.sharding_args.split())
