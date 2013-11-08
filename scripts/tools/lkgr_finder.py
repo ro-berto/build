@@ -556,7 +556,8 @@ class HTMLStatusGenerator(StatusGenerator):
     self.rows.append(row)
 
   def build_cb(self, master, builder, status, build_num=None):
-    cell = '  <td class="%s">' % ('success' if status else 'failure')
+    stat_txt = ['unknown', 'success', 'failure', 'inprogress'][status]
+    cell = '  <td class="%s">' % stat_txt
     if build_num is not None:
       build_url = 'build.chromium.org/p/%s/builders/%s/builds/%s' % (
           master, builder, build_num)
@@ -590,6 +591,8 @@ td, th { text-align: center; }
 .revision { border-left: 1px solid black; border-right: 1px solid black; }
 .success { background-color: #8d4; }
 .failure { background-color: #e88; }
+.inprogress { background-color: #fe1; }
+.unknown { background-color: #ddd; }
 .lkgr { background-color: #4af; }
 .roll { border-top: 2px solid black; }
 </style>
@@ -744,9 +747,12 @@ def SvnRevisionCmp(a, b):
 def GitRevisionCmp(a, b):
   raise RuntimeError('git revision comparison is unimplemented.')
 
+UNKNOWN, SUCCESS, FAILURE, INPROGRESS = range(4)
+
 def EvaluateBuildData(build_data, builder_lkgr_steps):
   step_data = {}
   reasons = []
+  status = SUCCESS
   for step in build_data['steps']:
     step_data[step['name']] = step
   for lkgr_step in builder_lkgr_steps:
@@ -760,22 +766,29 @@ def EvaluateBuildData(build_data, builder_lkgr_steps):
     matching_steps = [s for s in step_data if s in steps]
     if not matching_steps:
       reasons.append('Step %s is not listed on the build.' % (lkgr_step,))
-      continue
     elif len(matching_steps) > 1:
       reasons.append('Multiple step matches: %s' % matching_steps)
+      status = FAILURE
       continue
-    step = matching_steps[0]
-    if step_data[step].get('isFinished') is not True:
-      reasons.append('Step %s has not completed (isFinished: %s)' % (
-          step, step_data[step].get('isFinished')))
-      continue
-    if 'results' in step_data[step]:
-      result_data = step_data[step]['results'][0]
-      if type(result_data) == list:
-        result_data = result_data[0]
-      if result_data and str(result_data) not in ('0', '1'):
-        reasons.append('Step %s failed' % step)
-  return reasons
+    else:
+      step = matching_steps[0]
+      cur_data = step_data[step]
+      if (cur_data.get('isFinished') is True and 'results' in cur_data):
+        result_data = cur_data['results'][0]
+        if type(result_data) == list:
+          result_data = result_data[0]
+        if result_data and str(result_data) not in ('0', '1'):
+          reasons.append('Step %s failed' % step)
+          status = FAILURE
+        continue
+      else:
+        reasons.append('Step %s has not completed (isFinished: %s)' % (
+            step, step_data[step].get('isFinished')))
+    if build_data['currentStep'] is not None and status != FAILURE:
+      status = INPROGRESS
+    else:
+      status = FAILURE
+  return status, reasons
 
 def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
   """
@@ -812,9 +825,9 @@ def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
         if revision == 'ad5df9a5341d38778658c90e4aa241c4ebe4e8aa':
           continue
         revisions.add(revision)
-        reasons = EvaluateBuildData(
+        status, _ = EvaluateBuildData(
             this_build_data, lkgr_steps[master][builder])
-        builder_history.append((revision, not reasons, build_num))
+        builder_history.append((revision, status, build_num))
       master_history[builder] = sorted(
           builder_history, key=lambda x: x[0], cmp=revcmp)
   revisions = sorted(revisions, cmp=revcmp)
@@ -843,7 +856,7 @@ def FindLKGRCandidate(build_history, revisions, revcmp, status_gen=None):
       try:
         prev.append(gen.next())
       except StopIteration:
-        prev.append((-1, False, -1))
+        prev.append((-1, UNKNOWN, -1))
       builders.append((master, builder, gen, prev))
   for revision in reversed(revisions):
     status_gen.revision_cb(revision)
@@ -853,13 +866,30 @@ def FindLKGRCandidate(build_history, revisions, revcmp, status_gen=None):
         while revcmp(revision, prev[-1][0]) < 0:
           prev.append(gen.next())
       except StopIteration:
-        prev.append((-1, False, -1))
-      bad = (not prev[-1][1] or (cmp(revision, prev[-1][0]) != 0 and
-                                 (len(prev) < 2 or not prev[-2][1])))
-      if bad:
-        good_revision = False
+        prev.append((-1, UNKNOWN, -1))
+
+      # current build matches revision
+      if revcmp(revision, prev[-1][0]) == 0:
+        status = prev[-1][1]
+      elif len(prev) == 1:
+        assert revcmp(revision, prev[-1][0]) > 0
+        # most recent build is behind revision
+        status = UNKNOWN
+      elif prev[-1][1] == UNKNOWN:
+        status = UNKNOWN
+      else:
+        # We color space between FAILED and INPROGRESS builds as FAILED,
+        # since that is what it will eventually become.
+        if prev[-1][1] == SUCCESS and prev[-2][1] == INPROGRESS:
+          status = INPROGRESS
+        elif prev[-1][1] == prev[-2][1] == SUCCESS:
+          status = SUCCESS
+        else:
+          status = FAILURE
       build_num = prev[-1][2] if revcmp(revision, prev[-1][0]) == 0 else None
-      status_gen.build_cb(master, builder, not bad, build_num)
+      status_gen.build_cb(master, builder, status, build_num)
+      if status != SUCCESS:
+        good_revision = False
     if not lkgr and good_revision:
       lkgr = revision
       status_gen.lkgr_cb(revision)
@@ -998,9 +1028,6 @@ def main():
                         'will be increased when commit activity slows.')
   opt_parser.add_option('--html', metavar='FILE',
                         help='Output details in HTML format '
-                             '(for troubleshooting LKGR staleness issues).')
-  opt_parser.add_option('--text', action='store_true',
-                        help='Output details in plain text format '
                              '(for troubleshooting LKGR staleness issues).')
   opt_parser.add_option('-b', '--blink', action='store_true', default=False,
                         help='Find the Blink LKGR rather than the Chromium '
