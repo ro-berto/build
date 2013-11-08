@@ -37,7 +37,12 @@ def _CheckoutSteps(api):
 
   cfg = api.gclient.make_config()
   for name in REPOS:
-    soln = cfg.solutions.add()
+    if name == 'polymer':
+      cfg.solutions.insert(0, {})
+      soln = cfg.solutions[0]
+      soln.revision = 'HEAD'
+    else:
+      soln = cfg.solutions.add()
     soln.name = name
     soln.url = url_base + name + '.git'
     soln.deps_file = ''
