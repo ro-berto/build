@@ -54,29 +54,22 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8initializers'): f.AddV8Initializers()
     if R('v8testing'):
-      f.AddV8Test('mjsunit cctest message preparser', 'Check',
-                  env=factory_properties.get('test_env', {}),
-                  options=factory_properties.get('test_options', []))
-    if R('v8testing_tc'):
-      f.AddV8Test('mjsunit cctest message preparser', 'Check',
-                  env=factory_properties.get('test_env', {}),
-                  options=factory_properties.get('test_options', []),
-                  flaky_tests='skip')
-      f.AddV8Test('mjsunit cctest message preparser', 'Check (flaky)',
-                  env=factory_properties.get('test_env', {}),
-                  options=factory_properties.get('test_options', []),
-                  flaky_tests='run')
+      f.AddV8TestTC('mjsunit cctest message preparser', 'Check',
+                    env=factory_properties.get('test_env', {}),
+                    options=factory_properties.get('test_options', []))
     if R('mjsunit'):
-      f.AddV8Test('mjsunit', 'Mjsunit',
-                  env=factory_properties.get('test_env', {}),
-                  options=factory_properties.get('test_options', []))
+      f.AddV8TestTC('mjsunit', 'Mjsunit',
+                    env=factory_properties.get('test_env', {}),
+                    options=factory_properties.get('test_options', []))
     if R('optimize_for_size'):
-      f.AddOptimizeForSize()
+      f.AddV8TestTC('cctest mjsunit webkit', 'OptimizeForSize',
+                    options=['--no-variants',
+                             '--shell_flags="--optimize-for-size"'])
     if R('fuzz'): f.AddFuzzer()
     if R('deopt'):
       f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
                        options=factory_properties.get('test_options', []))
-    if R('webkit'): f.AddV8Test('webkit', 'Webkit')
+    if R('webkit'): f.AddV8TestTC('webkit', 'Webkit')
     if R('test262'):
       f.AddV8Test('test262', 'Test262',
                   options=factory_properties.get('test_options', []))

@@ -111,21 +111,19 @@ class V8Commands(commands.FactoryCommands):
                      workdir='build/v8/',
                      env=env)
 
+  def AddV8TestTC(self, name, step_name, properties=None, env=None,
+                  options=None):
+    """Adds a tree closer step without flaky tests and another step with."""
+    self.AddV8Test(name, step_name, properties, env, options,
+                   flaky_tests='skip')
+    self.AddV8Test(name, "%s - flaky" % step_name, properties, env, options,
+                   flaky_tests='run')
+
   def AddPresubmitTest(self, properties=None):
     cmd = [self._python, self._v8testing_tool,
            '--testname', 'presubmit']
     self.AddTestStep(shell.ShellCommand, 'Presubmit', cmd,
                      workdir='build/v8/')
-
-  def AddOptimizeForSize(self, properties=None):
-    if self._target_platform == 'win32':
-      self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand()
-    cmd += ['--testname', 'cctest mjsunit webkit',
-            '--no-variants',
-            '--shell_flags="--optimize-for-size"']
-    self.AddTestStep(shell.ShellCommand, 'OptimizeForSize', cmd,
-                     timeout=3600, workdir='build/v8/')
 
   def AddFuzzer(self, properties=None):
     binary = 'out/' + self._target + '/d8'
