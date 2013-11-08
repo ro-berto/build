@@ -557,10 +557,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('wtf_unittests', fp)
     if R('wtf_unittests_br'):
       f.AddBuildrunnerGTest('wtf_unittests', fp)
-    if R('weborigin_unittests'):
-      f.AddGTestTestStep('weborigin_unittests', fp)
-    if R('weborigin_unittests_br'):
-      f.AddBuildrunnerGTest('weborigin_unittests', fp)
     if R('blink_platform_unittests'):
       f.AddGTestTestStep('blink_platform_unittests', fp)
     if R('blink_platform_unittests_br'):
