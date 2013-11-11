@@ -31,7 +31,7 @@ class AOSPApi(recipe_api.RecipeApi):
     )
 
   def chromium_with_trimmed_deps(self, use_revision=True):
-    svn_revision = None
+    svn_revision = 'HEAD'
     if use_revision and 'revision' in self.m.properties:
       svn_revision = str(self.m.properties['revision'])
 
