@@ -933,7 +933,6 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties['target'] = self._target
     factory_properties['target_os'] = self._target_os
     factory_properties['target_platform'] = self._target_platform
-    factory_properties['build_dir'] = self._build_dir
     factory_properties['step_name'] = factory_properties.get('step_name',
                                                              step_name)
 
@@ -1327,7 +1326,6 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties = factory_properties or {}
 
     args = ['--target', self._target,
-            '--build-dir', self._build_dir,
             '--build-id', WithProperties('%(got_revision)s')]
     if factory_properties.get('test_platform'):
       args += ['--platform', factory_properties.get('test_platform')]
@@ -1354,7 +1352,6 @@ class ChromiumCommands(commands.FactoryCommands):
     text = 'view coverage'
     cmd_archive = [self._python, self._archive_coverage,
                    '--target', self._target,
-                   '--build-dir', self._build_dir,
                    '--perf-subdir', perf_subdir]
     if factory_properties.get('use_build_number'):
       cmd_archive.extend(['--build-number', WithProperties('%(buildnumber)s')])
