@@ -157,9 +157,6 @@ class GpuApi(recipe_api.RecipeApi):
     # GPU process launch tests.
     yield self.run_telemetry_gpu_test('gpu_process', name='gpu_process_launch')
 
-    # Google maps pixel tests.
-    yield self.run_telemetry_gpu_test('maps', name='maps_pixel_test')
-
     # Only run the performance tests on Release builds.
     if self.m.chromium.is_release_build:
       # Former tab_capture_performance_tests_step
