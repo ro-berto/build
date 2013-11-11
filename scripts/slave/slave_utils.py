@@ -16,7 +16,6 @@ import time
 from common import chromium_utils
 from slave.bootstrap import ImportMasterConfigs # pylint: disable=W0611
 from common.chromium_utils import GetActiveMaster # pylint: disable=W0611
-import config
 
 # These codes used to distinguish true errors from script warnings.
 ERROR_EXIT_CODE = 1
@@ -310,49 +309,6 @@ def GetGypFlag(options, flag, default=None):
   if flag not in gypflags:
     return default
   return gypflags[flag]
-
-
-
-def CopyFileToArchiveHost(src, dest_dir):
-  """A wrapper method to copy files to the archive host.
-  It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
-  TODO: we will eventually want to change the code to upload the
-  data to appengine.
-
-  Args:
-      src: full path to the src file.
-      dest_dir: destination directory on the host.
-  """
-  host = config.Archive.archive_host
-  if not os.path.exists(src):
-    raise chromium_utils.ExternalError('Source path "%s" does not exist' % src)
-  chromium_utils.MakeWorldReadable(src)
-  if chromium_utils.IsWindows():
-    chromium_utils.CopyFileToDir(src, dest_dir)
-  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    chromium_utils.SshCopyFiles(src, host, dest_dir)
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
-
-
-def MaybeMakeDirectoryOnArchiveHost(dest_dir):
-  """A wrapper method to create a directory on the archive host.
-  It calls MaybeMakeDirectory on Windows and SshMakeDirectory on Linux/Mac.
-
-  Args:
-      dest_dir: destination directory on the host.
-  """
-  host = config.Archive.archive_host
-  if chromium_utils.IsWindows():
-    chromium_utils.MaybeMakeDirectory(dest_dir)
-    print 'saving results to %s' % dest_dir
-  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
-    chromium_utils.SshMakeDirectory(host, dest_dir)
-    print 'saving results to "%s" on "%s"' % (dest_dir, host)
-  else:
-    raise NotImplementedError(
-        'Platform "%s" is not currently supported.' % sys.platform)
 
 
 def GSUtilSetup():

@@ -19,7 +19,6 @@ sys.path.append(os.path.join(BASE_DIR, 'site_config'))
 from slave.chromium import archive_build
 from common import archive_utils_unittest
 from common import chromium_utils
-import config
 
 
 ZIP_TEST_FILES = ['file1.txt',
@@ -58,7 +57,6 @@ class MockOptions(object):
     self.default_chromium_revision = default_chromium_revision
     self.default_webkit_revision = default_webkit_revision
     self.default_v8_revision = default_v8_revision
-    self.installer = config.Archive.installer_exe
     self.factory_properties = {}
 
 

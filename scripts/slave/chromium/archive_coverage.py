@@ -21,11 +21,11 @@ import socket
 import subprocess
 import sys
 
+from common import archive_utils
 from common import chromium_utils
 
 from slave import slave_utils
 from slave import build_directory
-import config
 
 
 def MakeSourceWorldReadable(from_dir):
@@ -75,9 +75,7 @@ class ArchiveCoverage(object):
     host_name = socket.gethostname()
     print 'host name: %s' % host_name
 
-    archive_config = config.Archive()
-    if options.internal:
-      archive_config.Internal()
+    archive_config = archive_utils.Config()
 
     self.archive_host = archive_config.archive_host
     if self.is_posix:
@@ -153,8 +151,6 @@ def Main():
                                 'coverage')
   option_parser.add_option('--build-number',
                            help='destination subdirectory under perf-subdir')
-  option_parser.add_option('--internal', action='store_true',
-                           help='specifies if we should use Internal config')
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 

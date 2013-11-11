@@ -33,8 +33,6 @@ from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
 
-import config
-
 
 # TODO(mmoss): tests should be added to FILES.cfg, then TESTS can go away.
 # The names of the files containing the list of tests to be archived for the
@@ -721,7 +719,7 @@ def main(argv):
   option_parser.add_option('--ignore', default=[], action='append',
                            help='Files to ignore')
   option_parser.add_option('--archive_host',
-                           default=config.Archive.archive_host)
+                           default=archive_utils.Config.archive_host)
   option_parser.add_option('--build-name',
                            default=None,
                            help="Name to use for build directory instead of "
@@ -736,17 +734,17 @@ def main(argv):
     # derived from them (i.e., any filename starting with these strings) will
     # not be archived or uploaded, typically because they're not built for the
     # current distributon.
-    options.ignore = config.Archive.exes_to_skip_entirely
+    options.ignore = archive_utils.Config.exes_to_skip_entirely
 
   if options.mode == 'official':
     option_parser.error('Official mode is not supported here')
   elif options.mode == 'dev':
     options.dirs = {
       # Built files are stored here, in a subdir. named for the build version.
-      'www_dir_base': config.Archive.www_dir_base + 'snapshots',
+      'www_dir_base': archive_utils.Config.www_dir_base + 'snapshots',
 
       # Symbols are stored here, in a subdirectory named for the build version.
-      'symbol_dir_base': config.Archive.www_dir_base + 'snapshots',
+      'symbol_dir_base': archive_utils.Config.www_dir_base + 'snapshots',
     }
   else:
     option_parser.error('Invalid options mode %s' % options.mode)

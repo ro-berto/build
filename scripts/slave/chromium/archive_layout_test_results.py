@@ -30,10 +30,10 @@ import re
 import socket
 import sys
 
+from common import archive_utils
 from common import chromium_utils
 from slave import build_directory
 from slave import slave_utils
-import config
 
 # Directory name, above the build directory, in which test results can be
 # found if no --results-dir option is given.
@@ -93,8 +93,50 @@ def _ArchiveFullLayoutTestResults(staging_dir, dest_dir, diff_file_list,
     chromium_utils.ExtractZip(full_zip_file, extract_dir)
   elif chromium_utils.IsLinux() or chromium_utils.IsMac():
     remote_zip_file = os.path.join(dest_dir, os.path.basename(full_zip_file))
-    chromium_utils.SshExtractZip(config.Archive.archive_host, remote_zip_file,
-                                 extract_dir)
+    chromium_utils.SshExtractZip(archive_utils.Config.archive_host,
+                                 remote_zip_file, extract_dir)
+
+
+def _CopyFileToArchiveHost(src, dest_dir):
+  """A wrapper method to copy files to the archive host.
+  It calls CopyFileToDir on Windows and SshCopyFiles on Linux/Mac.
+  TODO: we will eventually want to change the code to upload the
+  data to appengine.
+
+  Args:
+      src: full path to the src file.
+      dest_dir: destination directory on the host.
+  """
+  host = archive_utils.Config.archive_host
+  if not os.path.exists(src):
+    raise chromium_utils.ExternalError('Source path "%s" does not exist' % src)
+  chromium_utils.MakeWorldReadable(src)
+  if chromium_utils.IsWindows():
+    chromium_utils.CopyFileToDir(src, dest_dir)
+  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
+    chromium_utils.SshCopyFiles(src, host, dest_dir)
+  else:
+    raise NotImplementedError(
+        'Platform "%s" is not currently supported.' % sys.platform)
+
+
+def _MaybeMakeDirectoryOnArchiveHost(dest_dir):
+  """A wrapper method to create a directory on the archive host.
+  It calls MaybeMakeDirectory on Windows and SshMakeDirectory on Linux/Mac.
+
+  Args:
+      dest_dir: destination directory on the host.
+  """
+  host = archive_utils.Config.archive_host
+  if chromium_utils.IsWindows():
+    chromium_utils.MaybeMakeDirectory(dest_dir)
+    print 'saving results to %s' % dest_dir
+  elif chromium_utils.IsLinux() or chromium_utils.IsMac():
+    chromium_utils.SshMakeDirectory(host, dest_dir)
+    print 'saving results to "%s" on "%s"' % (dest_dir, host)
+  else:
+    raise NotImplementedError(
+        'Platform "%s" is not currently supported.' % sys.platform)
 
 
 def archive_layout(options, args):
@@ -141,7 +183,7 @@ def archive_layout(options, args):
   print 'host name: %s' % socket.gethostname()
 
   # Where to save layout test results.
-  dest_parent_dir = os.path.join(config.Archive.www_dir_base,
+  dest_parent_dir = os.path.join(archive_utils.Config.www_dir_base,
       results_dir_basename.replace('-','_'), build_name)
   dest_dir = os.path.join(dest_parent_dir, last_change)
 
@@ -162,10 +204,10 @@ def archive_layout(options, args):
     slave_utils.GSUtilCopyFile(zip_file, gs_base, gs_base, gs_acl=gs_acl)
     slave_utils.GSUtilCopyDir(options.results_dir, gs_base, gs_acl=gs_acl)
   else:
-    slave_utils.MaybeMakeDirectoryOnArchiveHost(dest_dir)
-    slave_utils.CopyFileToArchiveHost(zip_file, dest_dir)
-    slave_utils.CopyFileToArchiveHost(full_results_json, dest_dir)
-    slave_utils.CopyFileToArchiveHost(failing_results_json, dest_dir)
+    _MaybeMakeDirectoryOnArchiveHost(dest_dir)
+    _CopyFileToArchiveHost(zip_file, dest_dir)
+    _CopyFileToArchiveHost(full_results_json, dest_dir)
+    _CopyFileToArchiveHost(failing_results_json, dest_dir)
     # Not supported on Google Storage yet.
     _ArchiveFullLayoutTestResults(staging_dir, dest_parent_dir, diff_file_list,
                                   options)
