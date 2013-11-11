@@ -78,10 +78,9 @@ def real_main(options):
       return slave_utils.ERROR_EXIT_CODE
 
   archive_url = GetBuildUrl(options.build_url, platform, revision)
-  archive_name = os.path.basename(archive_url)
+  archive_name = 'dynamorio.' + archive_url.split('.', 1)[1]
 
-  output_name = archive_name.replace('.zip', '')
-  output_name = output_name.replace('.tar.gz', '')
+  output_name = 'dynamorio'
   output_dir = os.path.join(options.build_dir, output_name)
 
   # We try to download and extract 3 times.
