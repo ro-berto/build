@@ -127,8 +127,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   NEEDED_COMPONENTS_INTERNAL = {
     'memory':
       [('src/data/memory_test', None)],
-    '(frame_rate|gpu_frame_rate)':
-      [('src/chrome/test/data/perf/frame_rate/private', None)],
     'page_cycler':
       [('src/data/page_cycler', None)],
     '(selenium|chrome_frame)':
@@ -661,10 +659,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Other benchmarks:
     if R('memory'):
       f.AddMemoryTests(fp)
-    if R('frame_rate'):
-      f.AddFrameRateTests(fp)
-    if R('gpu_frame_rate'):
-      f.AddGpuFrameRateTests(fp)
     if R('gpu_throughput'):
       f.AddGpuThroughputTests(fp)
     if R('tab_capture_performance'):

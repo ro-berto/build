@@ -507,18 +507,6 @@ class ChromiumCommands(commands.FactoryCommands):
         step_name='sizes', cmd_name = self._sizes_tool, cmd_options=args,
         py_script=True, factory_properties=factory_properties)
 
-  def AddFrameRateTests(self, factory_properties=None):
-    self.AddAnnotatedPerfStep('frame_rate', 'FrameRate*Test*', 'framerate',
-                              factory_properties=factory_properties)
-
-  def AddGpuFrameRateTests(self, factory_properties=None):
-    options = ['--enable-gpu']
-    tool_options = ['--no-xvfb']
-
-    self.AddAnnotatedPerfStep('gpu_frame_rate', 'FrameRate*Test*', 'framerate',
-                              cmd_options=options, tool_opts=tool_options,
-                              factory_properties=factory_properties)
-
   def AddGpuThroughputTests(self, factory_properties=None):
     options = ['--enable-gpu']
     tool_options = ['--no-xvfb']
