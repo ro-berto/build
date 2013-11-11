@@ -47,7 +47,7 @@ class SyzygyCommands(commands.FactoryCommands):
     self._factory = factory
 
   def AddAppVerifierGTestTestStep(self, test_name):
-    script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
+    script_path = self.PathJoin(self._repository_root, 'syzygy',
                                 'build', 'app_verifier.py')
     test_path = self.PathJoin(self._build_dir,
                               self._target,
@@ -62,7 +62,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddRandomizeChromeStep(self):
     # Randomization script path.
-    script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
+    script_path = self.PathJoin(self._repository_root, 'syzygy',
                                 'internal', 'build', 'randomize_chrome.py')
     command = [self._python, script_path,
                '--build-dir=%s' % self._build_dir,
@@ -72,7 +72,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddBenchmarkChromeStep(self):
     # Benchmark script path.
-    script_path = self.PathJoin(self._build_dir, '..', 'syzygy',
+    script_path = self.PathJoin(self._repository_root, 'syzygy',
                                 'internal', 'build', 'benchmark_chrome.py')
     command = [self._python, script_path,
                '--build-dir=%s' % self._build_dir,
@@ -85,7 +85,7 @@ class SyzygyCommands(commands.FactoryCommands):
     """
 
     # Coverage script path.
-    script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'build',
+    script_path = self.PathJoin(self._repository_root, 'syzygy', 'build',
                                 'generate_coverage.py')
 
     # Generate the appropriate command line.
@@ -122,7 +122,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddSmokeTest(self):
     # Smoke-test script path.
-    script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'internal',
+    script_path = self.PathJoin(self._repository_root, 'syzygy', 'internal',
                                 'build', 'smoke_test.py')
 
     # We pass in the root build directory to the smoke-test script. It will
@@ -159,7 +159,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
   def AddUploadSymbols(self):
     """Steps to upload the symbols and symbol-sources for official builds."""
-    script_path = self.PathJoin(self._build_dir, '..', 'syzygy', 'internal',
+    script_path = self.PathJoin(self._repository_root, 'syzygy', 'internal',
                                 'scripts', 'archive_symbols.py')
     # We only upload symbols for the agent DLLs. We use prefix wildcards to
     # (1) account for differing naming conventions across generations of the
