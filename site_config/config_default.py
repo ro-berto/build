@@ -155,18 +155,3 @@ class Master(object):
     repo_url_int = None
     # The reply-to address to set for emails sent from the server.
     reply_to = 'nobody@example.com'
-
-
-# Stub of Archive class. Only truly defined in build_internal/.
-# TODO(agable): Move this somewhere more appropriate, like master_util.
-class Archive(object):
-  archive_host = 'localhost'
-  # Skip any filenames (exes, symbols, etc.) starting with these strings
-  # entirely, typically because they're not built for this distribution.
-  exes_to_skip_entirely = []
-  # Web server base path.
-  www_dir_base = "\\\\" + archive_host + "\\www\\"
-
-  @staticmethod
-  def Internal():
-    pass
