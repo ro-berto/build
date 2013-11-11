@@ -12,12 +12,26 @@ DEPS = [
   'gpu',
   'platform',
   'properties',
+  'path',
 ]
 
 def GenSteps(api):
   api.gpu.setup()
-  yield api.gpu.checkout_steps()
-  yield api.gpu.compile_steps()
+
+  # For local testing: pass 'skip_checkout=True' to run_recipe to skip the
+  # checkout step. A full checkout via the recipe must have been done
+  # previously.
+  if not api.properties.get('skip_checkout', False):
+    yield api.gpu.checkout_steps()
+  else:
+    api.path.set_dynamic_path('checkout', api.path.slave_build('src'))
+
+  # For local testing: pass 'skip_compile=True' to run_recipe to skip the
+  # runhooks and compile steps. A checkout and build via the recipe must have
+  # been done previously.
+  if not api.properties.get('skip_compile', False):
+    yield api.gpu.compile_steps()
+
   yield api.gpu.test_steps()
 
 def GenTests(api):
@@ -62,5 +76,19 @@ def GenTests(api):
     api.properties.tryserver(
         build_config='Release',
         root='src/third_party/WebKit') +
+    api.platform.name('mac')
+  )
+
+  # Test one configuration skipping the checkout.
+  yield (
+    api.test('mac_release_skip_checkout') +
+    api.properties.git_scheduled(build_config='Release', skip_checkout=True) +
+    api.platform.name('mac')
+  )
+
+  # Test one configuration skipping the compile.
+  yield (
+    api.test('mac_release_skip_compile') +
+    api.properties.git_scheduled(build_config='Release', skip_compile=True) +
     api.platform.name('mac')
   )

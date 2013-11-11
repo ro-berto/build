@@ -59,11 +59,6 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
 
   def checkout_steps(self):
-    # If you want to stub out the checkout/runhooks/compile steps,
-    # uncomment this line and then comment out the associated block of
-    # yield statements below.
-    # self.m.path.set_dynamic_path('checkout', self.m.path.slave_build('src'))
-
     yield self.m.gclient.checkout()
     gclient_data = self.m.step_history['gclient sync'].json.output
     self._build_revision = gclient_data['solutions']['src/']['revision']
