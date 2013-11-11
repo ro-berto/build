@@ -307,6 +307,7 @@ B('iOS Device', 'ios_rel', gatekeeper='ios_rel', scheduler='ios',
 F('ios_rel', ios().ChromiumFactory(
   # TODO(lliabraa): Need to upstream support for running tests on devices
   # before we can actually run any tests.
+  clobber=True,
   tests=[],
   options = [
     '--', '-project', '../build/all.xcodeproj', '-sdk',
@@ -326,6 +327,7 @@ F('ios_rel', ios().ChromiumFactory(
 B('iOS Simulator (dbg)', 'ios_dbg', gatekeeper='ios_dbg', scheduler='ios',
   auto_reboot=True, notify_on_missing=True)
 F('ios_dbg', ios().ChromiumFactory(
+  clobber=True,
   target='Debug',
   tests=[
     'base_unittests',
