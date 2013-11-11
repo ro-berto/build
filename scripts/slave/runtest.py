@@ -1264,7 +1264,8 @@ def main():
       # On ASan+LSan bots we enable leak detection. Also, since sandbox is
       # disabled under LSan, we can symbolize.
       os.environ['ASAN_OPTIONS'] = (common_asan_options +
-                                    'detect_leaks=1 ')
+                                    'detect_leaks=1 ' +
+                                    'symbolize=true ')
       os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
     else:
       # Disable the builtin online symbolizer, see http://crbug.com/243255.
