@@ -1196,12 +1196,17 @@ def main():
 
   extra_sharding_args_list = options.extra_sharding_args.split()
 
+  # run_test_cases.py and the brave new test launcher need different flags to
+  # enable verbose output. We support both.
+  always_print_test_output = ['--verbose',
+                              '--test-launcher-print-test-stdio=always']
   if options.factory_properties.get('asan', False):
-    extra_sharding_args_list.append('--verbose')
+    extra_sharding_args_list.extend(always_print_test_output)
   if options.factory_properties.get('tsan', False):
     # Print ThreadSanitizer reports; don't cluster the tests so that TSan exit
     # code denotes a test failure.
-    extra_sharding_args_list.extend(['--verbose', '--clusters=1'])
+    extra_sharding_args_list.extend(always_print_test_output)
+    extra_sharding_args_list.append('--clusters=1')
     # Data races may be flaky, but we don't want to restart the test if there's
     # been a race report.
     options.sharding_args += ' --retries 0'
