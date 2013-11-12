@@ -90,7 +90,7 @@ def _GenerateTelemetryCommandSequence(options):
   if target_os == 'android':
     browser = options.target_android_browser
     wrapper_args = ['src/build/android/test_runner.py', 'perf', '-v',
-                    '--single-step']
+                    '--single-step', '--']
   # If an executable is passed, use that instead.
   if browser_exe:
     browser_info = ['--browser=exact',

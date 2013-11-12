@@ -86,6 +86,7 @@ class TelemetryTest(unittest.TestCase):
             '"show_perf_results": true}\' ' +
             '\'src/build/android/test_runner.py\' \'perf\' \'-v\' ' +
             '\'--single-step\' ' +
+            '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
             '\'--browser=android-chromium-testshell\' \'sunspider\''
@@ -118,6 +119,7 @@ class TelemetryTest(unittest.TestCase):
             '"show_perf_results": true}\' ' +
             '\'src/build/android/test_runner.py\' \'perf\' \'-v\' ' +
             '\'--single-step\' ' +
+            '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
             '\'--profile-dir=fake_dir\' '+
