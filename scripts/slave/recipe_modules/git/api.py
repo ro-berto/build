@@ -57,9 +57,9 @@ class GitApi(recipe_api.RecipeApi):
                     self.m.path.build('scripts', 'slave', 'git_setup.py'),
                     git_setup_args),
       self('fetch', remote, '%s:refs/remotes/%s' % (ref, remote_ref),
-           *fetch_args),
-      self('clean', '-f', '-d', '-x', *clean_args),
-      self('checkout', '-f', remote_ref),
+           *fetch_args, cwd=dir_path),
+      self('clean', '-f', '-d', '-x', *clean_args, cwd=dir_path),
+      self('checkout', '-f', remote_ref, cwd=dir_path),
       self('submodule', 'update', '--init', '--recursive',
            cwd=dir_path),
     ]
