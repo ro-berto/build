@@ -109,7 +109,7 @@ F('linux_clobber', linux().ChromiumFactory(
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES':
-            'target_arch=ia32 test_isolation_mode=noop linux_strip_binary=1',
+            'target_arch=ia32 test_isolation_mode=noop linux_dump_symbols=0',
         'GYP_GENERATORS': 'ninja',
       },
     }))
@@ -133,7 +133,7 @@ F('linux64_clobber', linux().ChromiumFactory(
       'expectations': True,
       'gclient_env': {
         'GYP_DEFINES':
-            'target_arch=x64 test_isolation_mode=noop linux_strip_binary=1',
+            'target_arch=x64 test_isolation_mode=noop linux_dump_symbols=0',
         'GYP_GENERATORS': 'ninja',
       },
     }))
