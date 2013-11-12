@@ -454,11 +454,13 @@ def Prepend(filename, data, output_dir, perf_output_dir):
   READABLE_FILE_PERMISSIONS = int('644', 8)
 
   fullfn = chromium_utils.AbsoluteCanonicalPath(output_dir, filename)
+  dir_path = os.path.dirname(fullfn)
+  MakeOutputDirectory(dir_path)
 
   # This whitelists writing to files only directly under output_dir
   # or perf_expectations_dir for security reasons.
-  if os.path.dirname(fullfn) != output_dir and (
-      os.path.dirname(fullfn) != perf_output_dir):
+  if not (dir_path.startswith(output_dir) or
+          dir_path.startswith(perf_output_dir)):
     raise Exception('Attempted to write to log file outside of \'%s\' or '
                     '\'%s\': \'%s\'' % (output_dir,
                                         perf_output_dir,
