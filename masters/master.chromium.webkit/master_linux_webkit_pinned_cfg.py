@@ -43,7 +43,7 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         '--build-tool=ninja',
         '--compiler=goma',
         '--',
-        'all_webkit',
+        'blink_tests',
     ],
     factory_properties={
         'additional_expectations': [

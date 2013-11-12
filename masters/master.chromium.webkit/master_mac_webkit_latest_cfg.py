@@ -69,7 +69,7 @@ B('WebKit Mac Builder', 'f_webkit_mac_rel',
 F('f_webkit_mac_rel', mac().ChromiumFactory(
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'all_webkit'],
+        'blink_tests'],
     factory_properties={
         'trigger': 's5_webkit_rel_trigger',
         'gclient_env': {
@@ -125,7 +125,7 @@ B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina', auto_reboot=False,
 F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
     tests=blink_tests,
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'all_webkit'],
+        'blink_tests'],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'blink_config': 'blink',
@@ -161,7 +161,7 @@ F('f_webkit_mac_dbg', mac().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
-        'all_webkit'],
+        'blink_tests'],
     factory_properties={
         'trigger': 's5_webkit_dbg_trigger',
         'gclient_env': {

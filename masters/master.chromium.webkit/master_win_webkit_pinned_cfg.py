@@ -52,7 +52,7 @@ B('WebKit Win Builder (deps)', 'f_webkit_win_rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;all_webkit',
+    project='all.sln;blink_tests',
     factory_properties={
         'trigger': 's1_chromium_rel_trigger',
         'gclient_env': {

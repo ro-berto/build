@@ -43,7 +43,7 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
         '--build-tool=ninja',
         '--compiler=goma',
         '--',
-        'all_webkit',
+        'blink_tests',
     ],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
@@ -69,7 +69,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         '--build-tool=ninja',
         '--compiler=goma-clang',
         '--',
-        'all_webkit'
+        'blink_tests'
     ],
     factory_properties={
         'additional_expectations': [
@@ -106,7 +106,7 @@ F('f_webkit_dbg_tests', linux().ChromiumFactory(
         '--build-tool=ninja',
         '--compiler=goma',
         '--',
-        'all_webkit',
+        'blink_tests',
     ],
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,

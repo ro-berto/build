@@ -22,7 +22,7 @@
       "build_tool": "ninja", 
       "compiler": "goma", 
       "default_targets": [
-        "all_webkit"
+        "blink_tests"
       ]
     }, 
     "gyp_env": {
@@ -37,7 +37,7 @@
       "build_tool": "ninja", 
       "compiler": "goma-clang", 
       "default_targets": [
-        "all_webkit"
+        "blink_tests"
       ]
     }, 
     "gyp_env": {

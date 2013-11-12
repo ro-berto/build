@@ -126,7 +126,7 @@
       "--compiler",
       "goma",
       "--",
-      "all_webkit"
+      "blink_tests"
     ],
     "name": "compile"
   },

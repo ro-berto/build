@@ -85,7 +85,7 @@ F('f_mac_tests_rel_108', mac_out().ChromiumFactory(
 B('Mac Builder (dbg)', 'f_mac_dbg', scheduler='global_scheduler')
 F('f_mac_dbg', mac().ChromiumFactory(
     target='Debug',
-    options=['--compiler=goma-clang', '--', '-target', 'all_webkit'],
+    options=['--compiler=goma-clang', '--', '-target', 'blink_tests'],
     factory_properties={
         'blink_config': 'blink',
     }))
