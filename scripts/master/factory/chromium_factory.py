@@ -599,6 +599,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'tough_layout_cases',
         'typical_25',
 
+        'top_10_mobile',
         'netsim.top_10',
       )
     for test_name in page_cyclers:
