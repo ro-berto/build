@@ -96,12 +96,15 @@ CHROMIUM_LKGR_STEPS = {
       'compile',
     ],
     'Win7 Tests (dbg)(1)': [
+      'ash_unittests',
+      'aura_unittests',
       'base_unittests',
       'cacheinvalidation_unittests',
       'cc_unittests',
       'check_deps',
       'chromedriver2_unittests',
       'components_unittests',
+      'compositor_unittests',
       'content_unittests',
       'courgette_unittests',
       'crypto_unittests',
@@ -117,6 +120,7 @@ CHROMIUM_LKGR_STEPS = {
       'ui_unittests',
       'unit_tests',
       'url_unittests',
+      'views_unittests',
       'webkit_compositor_bindings_unittests',
     ],
     'Win7 Tests (dbg)(2)': [
