@@ -413,7 +413,6 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
       'printing',
       'remoting',
       'unit',
-      'views_unittests',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'process_dumps': True,
