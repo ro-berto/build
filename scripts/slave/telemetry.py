@@ -18,7 +18,7 @@ SCRIPT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 
 def _GetPythonTestCommand(py_script, target, arg_list=None,
-                         wrapper_args=None, fp=None):
+                          wrapper_args=None, fp=None):
   """Synthesizes a command line to run runtest.py."""
   cmd = [sys.executable,
          os.path.join(SCRIPT_DIR, 'slave', 'runtest.py'),
@@ -82,19 +82,15 @@ def _GenerateTelemetryCommandSequence(options):
   if extra_args:
     common_args.extend(extra_args)
 
-  # On android, telemetry needs to use the adb command and needs to be in
-  # root mode. Run it in bash since envsetup.sh doesn't work in sh.
-  if target_os == 'android':
-    env['PATH'] = os.pathsep.join(['/b/build_internal/scripts/slave/android',
-                                   env['PATH']])
-    commands = [['adb', 'root'], ['adb', 'wait-for-device']]
-  else:
-    commands = []
+  commands = []
 
   # Run the test against the target chrome build.
   browser = target.lower()
+  wrapper_args = None
   if target_os == 'android':
     browser = options.target_android_browser
+    wrapper_args = ['src/build/android/test_runner.py', 'perf', '-v',
+                    '--single-step']
   # If an executable is passed, use that instead.
   if browser_exe:
     browser_info = ['--browser=exact',
@@ -104,7 +100,8 @@ def _GenerateTelemetryCommandSequence(options):
   test_args = list(common_args)
   test_args.extend(browser_info)
   test_args.extend(test_specification)
-  test_cmd = _GetPythonTestCommand(script, target, test_args, fp=fp)
+  test_cmd = _GetPythonTestCommand(script, target, test_args,
+                                   wrapper_args=wrapper_args, fp=fp)
   commands.append(test_cmd)
 
   # Run the test against the target chrome build for different user profiles on

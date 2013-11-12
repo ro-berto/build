@@ -74,8 +74,7 @@ class TelemetryTest(unittest.TestCase):
 
     runtest = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'runtest.py'))
 
-    expectedText = (['\'adb\' \'root\'',
-        '\'adb\' \'wait-for-device\'',
+    expectedText = ([
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
             '\'--no-xvfb\' ' +
@@ -85,6 +84,8 @@ class TelemetryTest(unittest.TestCase):
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
+            '\'src/build/android/test_runner.py\' \'perf\' \'-v\' ' +
+            '\'--single-step\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
             '\'--browser=android-chromium-testshell\' \'sunspider\''
@@ -104,8 +105,7 @@ class TelemetryTest(unittest.TestCase):
 
     runtest = os.path.abspath(os.path.join(SCRIPT_DIR, '..', 'runtest.py'))
 
-    expectedText = (['\'adb\' \'root\'',
-        '\'adb\' \'wait-for-device\'',
+    expectedText = ([
         '\'%s\' ' % sys.executable +
         '\'%s\' \'--run-python-script\' \'--target\' \'Release\' ' % runtest +
             '\'--no-xvfb\' ' +
@@ -116,6 +116,8 @@ class TelemetryTest(unittest.TestCase):
             '"step_name": "sunspider", "test_name": "sunspider", ' +
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
+            '\'src/build/android/test_runner.py\' \'perf\' \'-v\' ' +
+            '\'--single-step\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
             '\'--output-format=buildbot\' ' +
             '\'--profile-dir=fake_dir\' '+
