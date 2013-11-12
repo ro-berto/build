@@ -31,6 +31,7 @@ sharded_tests = [
   'content_unittests',
   'crypto_unittests',
   'device_unittests',
+  'events_unittests',
   'gpu_unittests',
   'jingle_unittests',
   'media_unittests',

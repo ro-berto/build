@@ -480,6 +480,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('compositor_unittests', fp)
     if R('compositor_br'):
       f.AddBuildrunnerGTest('compositor_unittests', fp)
+    if R('events'):
+      f.AddGTestTestStep('events_unittests', fp)
+    if R('events_br'):
+      f.AddBuildrunnerGTest('events_unittests', fp)
 
     # Medium-sized tests (unit and browser):
     if R('unit'):

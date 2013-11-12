@@ -35,6 +35,7 @@ sharded_tests = [
   'content_unittests',
   'crypto_unittests',
   'device_unittests',
+  'events_unittests',
   'gpu_unittests',
   'jingle_unittests',
   'media_unittests',
@@ -571,6 +572,7 @@ F('dbg_aura_test_2', win_tester().ChromiumFactory(
            'chrome_frame_unittests',
            'compositor',
            'content_unittests',
+           'events',
            'unit_tests',
            'views_unittests',
           ],
@@ -604,6 +606,7 @@ F('dbg_aura_win8', win_tester().ChromiumFactory(
     tests=['ash_unittests',
            'aura',
            'compositor',
+           'events',
            'views_unittests',
           ],
     factory_properties={
