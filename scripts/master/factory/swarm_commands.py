@@ -111,10 +111,6 @@ class SwarmShellForTriggeringTests(shell.ShellCommand):
 
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
-  def __init__(self, *args, **kwargs):
-    super(SwarmCommands, self).__init__(*args, **kwargs)
-    self._swarming_client_dir = self.PathJoin('src', 'tools', 'swarming_client')
-
   def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
                               doStepIf):
     assert all(t.__class__.__name__ == 'SwarmTest' for t in tests)
@@ -191,12 +187,10 @@ class SwarmCommands(commands.FactoryCommands):
       return
 
     isolated_file = test_name + '.isolated'
-
-    script_path = self.PathJoin(self._swarming_client_dir, 'isolate.py')
     slave_script_path = self.PathJoin(
-        self._script_dir, 'swarming', 'isolate_shim.py'),
+        self._script_dir, 'swarming', 'isolate_shim.py')
 
-    args = [script_path, 'run', '--isolated', isolated_file, '--', '--no-cr']
+    args = ['run', '--isolated', isolated_file, '--', '--no-cr']
     wrapper_args = [
         '--annotate=gtest',
         '--test-type=%s' % test_name,

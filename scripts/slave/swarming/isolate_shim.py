@@ -14,6 +14,8 @@ import sys
 from slave import build_directory
 from common import chromium_utils
 
+from slave.swarming import swarming_utils
+
 
 def InterceptFlag(flag, args):
   new_args, i, flag_value = [], 0, None
@@ -43,8 +45,12 @@ def AdjustIsolatedFlag(args, base_dir):
 
 
 def main():
-  python = 'python_slave' if sys.platform == 'win32' else 'python'
-  args = [python] + sys.argv[1:]  # Drop "isolate_shim.py" wrapper.
+  client = swarming_utils.find_client(os.getcwd())
+  if not client:
+    print >> sys.stderr, 'Failed to find swarm(ing)_client'
+    return 1
+  # Replace the 'isolate_shim.py' wrapper with 'isolate.py'.
+  args = [sys.executable, os.path.join(client, 'isolate.py')] + sys.argv[1:]
   build_dir, args = InterceptFlag('--build-dir', args)
   target, args = InterceptFlag('--target', args)
 
