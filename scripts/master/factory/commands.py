@@ -1016,8 +1016,7 @@ class FactoryCommands(object):
                           command=['python', self._kill_tool])
 
   # Zip / Extract commands.
-  def AddZipBuild(self, src_dir=None, include_files=None,
-                  halt_on_failure=False, factory_properties=None):
+  def AddZipBuild(self, halt_on_failure=False, factory_properties=None):
     factory_properties = factory_properties or {}
 
     cmd = [self._python, self._zip_tool,
@@ -1026,17 +1025,8 @@ class FactoryCommands(object):
     if 'webkit_dir' in factory_properties:
       cmd += ['--webkit-dir', factory_properties['webkit_dir']]
 
-    if src_dir is not None:
-      cmd += ['--src-dir', src_dir]
-
     cmd = self.AddBuildProperties(cmd)
     cmd = self.AddFactoryProperties(factory_properties, cmd)
-
-    if include_files is not None:
-      # Convert the include_files array into a quoted, comma-delimited list
-      # for passing as a command-line argument.
-      include_arg = ','.join(include_files)
-      cmd += ['--include-files', include_arg]
 
     self._factory.addStep(shell.ShellCommand,
                           name='package_build',
