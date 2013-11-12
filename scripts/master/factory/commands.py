@@ -1216,8 +1216,7 @@ class FactoryCommands(object):
     cmd_name = self.PathJoin(self._script_dir,
                              'generate_profile_shim.py')
     cmd_args = ['--target=' + self._target,
-                '--profile-type-to-generate=' + profile_type_to_create,
-                '--build-dir=' + self._build_dir]
+                '--profile-type-to-generate=' + profile_type_to_create]
     cmd = self.GetPythonTestCommand(cmd_name, arg_list=cmd_args)
     self.AddTestStep(chromium_step.AnnotatedCommand,
         'generate_telemetry_profiles', cmd, timeout=20*60)
