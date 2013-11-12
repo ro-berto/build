@@ -321,7 +321,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('check_bins'):
       f.AddCheckBinsStep()
     if R('check_bins_br'):
-      f.AddCheckBinsStep()
+      f.AddBuildrunnerCheckBinsStep()
     if R('check_perms'):
       f.AddCheckPermsStep()
     if R('check_perms_br'):
