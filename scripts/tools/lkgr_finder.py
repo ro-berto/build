@@ -151,7 +151,6 @@ CHROMIUM_LKGR_STEPS = {
     'Win Aura Tests (1)': [
       'ash_unittests',
       'aura_unittests',
-      'events_unittests',
       'browser_tests',
       'content_browsertests',
     ],
@@ -264,7 +263,6 @@ CHROMIUM_LKGR_STEPS = {
       'content_unittests',
       'crypto_unittests',
       'device_unittests',
-      'events_unittests',
       'gpu_unittests',
       'interactive_ui_tests',
       'ipc_tests',
