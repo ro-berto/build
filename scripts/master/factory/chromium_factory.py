@@ -6,7 +6,6 @@
 
 Based on gclient_factory.py and adds chromium-specific steps."""
 
-import os
 import re
 
 from master.factory import chromium_commands
@@ -137,8 +136,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
        ('src/chrome/test/data/firefox3_profile/searchplugins', None),
        ('src/chrome/test/data/firefox3_searchplugins', None),
        ('src/chrome/test/data/ssl/certs', None)],
-    '(pyauto_chromoting_tests)':
-      [('src/chrome/test/data/plugin', None)],
     'unit':
       [('src/chrome/test/data/osdd', None)],
     '^(webkit|content_unittests)$':
@@ -812,27 +809,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                                            timeout=1200,
                                            factory_properties=fp)):
         continue
-
-    # PyAuto functional tests.
-    def P(test_name, suite=None, src_base='.', factory_properties=None,
-          perf=False):
-      # Mapping from self._target_platform to a chrome-*.zip
-      platmap = {'win32': 'win32',
-                 'darwin': 'mac',
-                 'linux2': 'lucid64bit'}
-      zip_plat = platmap[self._target_platform]
-      workdir = os.path.join(f.working_dir, 'chrome-' + zip_plat)
-      f.AddPyAutoFunctionalTest(test_name, suite=suite, src_base=src_base,
-                                workdir=workdir, factory_properties=fp,
-                                perf=perf)
-
-    if R('pyauto_chromoting_tests'):
-      P('pyauto_chromoting_tests', suite='CHROMOTING', factory_properties=fp)
-    if R('pyauto_official_tests'):
-      P('pyauto_functional_tests', src_base='..', factory_properties=fp)
-    if R('pyauto_perf_tests'):
-      P('pyauto_perf_tests', suite='PERFORMANCE', src_base='..',
-        factory_properties=fp, perf=True)
 
     # Endurance tests.
     def FP(test_name):
