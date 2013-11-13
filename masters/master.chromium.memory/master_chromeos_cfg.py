@@ -99,11 +99,9 @@ fp_chromeos_asan = {
     'gclient_env': {
         'GYP_DEFINES': ('asan=1 '
                         'linux_use_tcmalloc=0 '
-                        'lsan=1 '
                         'chromeos=1 '),
         'GYP_GENERATORS': 'ninja',
     },
-    'lsan': True,
     'sharded_tests': sharded_tests,
 }
 
