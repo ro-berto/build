@@ -1153,7 +1153,7 @@ class ChromiumCommands(commands.FactoryCommands):
       driver_name: If specified, alternate layout test driver to use.
       additional_drt_flag: If specified, additional flag to pass to DRT.
       webkit_test_options: A list of additional options passed to
-          run_webkit_tests.py. The list [o1, o2, ...] will be passed as a
+          run-webkit-tests. The list [o1, o2, ...] will be passed as a
           space-separated string 'o1 o2 ...'.
       layout_tests: List of layout tests to run.
     """

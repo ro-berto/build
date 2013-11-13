@@ -5,11 +5,11 @@
 
 """A wrapper script to run layout tests on the buildbots.
 
-Runs the run_webkit_tests.py script found in webkit/tools/layout_tests above
+Runs the run-webkit-tests script found in third_party/WebKit/Tools/Scripts above
 this script. For a complete list of command-line options, pass '--help' on the
 command line.
 
-To pass additional options to run_webkit_tests without having them interpreted
+To pass additional options to run-webkit-tests without having them interpreted
 as options for this script, include them in an '--options="..."' argument. In
 addition, a list of one or more tests or test directories, specified relative
 to the main webkit test directory, may be passed on the command line.
@@ -27,7 +27,7 @@ from slave import slave_utils
 
 
 def layout_test(options, args):
-  """Parse options and call run_webkit_tests.py, using Python from the tree."""
+  """Parse options and call run-webkit-tests, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
 
   dumprendertree_exe = 'DumpRenderTree.exe'
@@ -41,13 +41,13 @@ def layout_test(options, args):
     # If we don't have gflags.exe, report it but don't worry about it.
     print 'Warning: Couldn\'t disable page heap, if it was already enabled.'
 
-  webkit_tests_dir = chromium_utils.FindUpward(build_dir,
-                                              'webkit', 'tools', 'layout_tests')
-  run_webkit_tests = os.path.join(webkit_tests_dir, 'run_webkit_tests.py')
+  blink_scripts_dir = chromium_utils.FindUpward(build_dir,
+    'third_party', 'WebKit', 'Tools', 'Scripts')
+  run_blink_tests = os.path.join(blink_scripts_dir, 'run-webkit-tests')
 
   slave_name = slave_utils.SlaveBuildName(build_dir)
 
-  command = [run_webkit_tests,
+  command = [run_blink_tests,
              '--no-show-results',
              '--no-new-test-results',
              '--full-results-html',    # For the dashboards.
@@ -60,7 +60,7 @@ def layout_test(options, args):
   # after all the bots have WebKit r124789 or later.
   capture_obj = slave_utils.RunCommandCaptureFilter()
   slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
-                                         [run_webkit_tests, '--help'],
+                                         [run_blink_tests, '--help'],
                                          filter_obj=capture_obj)
   if '--debug-rwt-logging' in ''.join(capture_obj.lines):
     command.append('--debug-rwt-logging')
@@ -69,12 +69,12 @@ def layout_test(options, args):
 
   if options.results_directory:
     # Prior to the fix in https://bugs.webkit.org/show_bug.cgi?id=58272,
-    # run_webkit_tests expects the results directory to be relative to
+    # run_blink_tests expects the results directory to be relative to
     # the configuration directory (e.g., src/webkit/Release). The
     # parameter is given to us relative to build_dir, which is where we
     # will run the command from.
     #
-    # When 58272 is landed, run_webkit_tests will support absolute file
+    # When 58272 is landed, run_blink_tests will support absolute file
     # paths as well as paths relative to CWD for non-Chromium ports and
     # paths relative to the configuration dir for Chromium ports. As
     # a transitional fix, we convert to an absolute dir, but once the
@@ -182,9 +182,9 @@ def main():
   option_parser.add_option('', '--target', default='',
       help='DumpRenderTree build configuration (Release or Debug)')
   option_parser.add_option('', '--options', default='',
-      help='additional options to pass to run_webkit_tests.py')
+      help='additional options to pass to run-webkit-tests')
   option_parser.add_option("", "--platform", default='',
-      help=("Platform value passed directly to run_webkit_tests."))
+      help=("Platform value passed directly to run_blink_tests."))
   option_parser.add_option('', '--no-pixel-tests', action='store_true',
                            default=False,
                            help='disable pixel-to-pixel PNG comparisons')

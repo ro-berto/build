@@ -15,15 +15,14 @@ from slave import slave_utils
 
 
 def layout_test(options, args):
-  """Parse options and call run_webkit_tests.py, using Python from the tree."""
+  """Parse options and call run-webkit-tests, using Python from the tree."""
   build_dir = os.path.abspath(options.build_dir)
-  webkit_tests_dir = chromium_utils.FindUpward(build_dir,
-                                              'webkit', 'tools', 'layout_tests')
-  run_webkit_tests = os.path.join(webkit_tests_dir, 'run_webkit_tests.py')
-  command = [run_webkit_tests, '--lint-test-files', '--chromium']
+  blink_scripts_dir = chromium_utils.FindUpward(build_dir,
+    'third_party', 'WebKit', 'Tools', 'Scripts')
+  lint_tests = os.path.join(blink_scripts_dir, 'lint-test-expectations')
 
   return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
-                                                command)
+                                                lint_tests)
 
 def main():
   option_parser = optparse.OptionParser()
