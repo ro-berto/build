@@ -373,7 +373,7 @@ V8_LKGR_STEPS = {
     'Chrome Win7 Perf': ['compile'],
     'Chrome Mac10.6 Perf': ['compile'],
     'Chrome Linux Perf': ['compile'],
-    'Chrome Browser Tests': ['compile'],
+    'Chrome Browser Tests - dbg': ['compile'],
     'Chrome Linux Interactive - dbg': ['compile'],
     'V8 Linux64 Heapcheck': ['compile'],
     'Webkit': ['compile'],
