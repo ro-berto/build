@@ -78,7 +78,7 @@ def real_main(options):
       return slave_utils.ERROR_EXIT_CODE
 
   archive_url = GetBuildUrl(options.build_url, platform, revision)
-  archive_name = 'dynamorio.' + archive_url.split('.', 1)[1]
+  archive_name = 'dynamorio.' + os.path.basename(archive_url).split('.', 1)[1]
 
   output_name = 'dynamorio'
   output_dir = os.path.join(options.build_dir, output_name)
@@ -136,6 +136,8 @@ def main():
                            help='url where to find the build to extract')
   option_parser.add_option('--revision',
                            help='Revision number to download.')
+  option_parser.add_option('--halt-on-missing-build',
+                           help='Halt on missing build.')
   chromium_utils.AddPropertiesOptions(option_parser)
 
   options, args = option_parser.parse_args()
