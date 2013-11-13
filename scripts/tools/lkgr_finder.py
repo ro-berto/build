@@ -74,6 +74,11 @@ CHROMIUM_REVISIONS_URL = 'https://chromium-status.appspot.com'
 V8_REVISIONS_URL = 'https://v8-status.appspot.com'
 WEBRTC_REVISIONS_URL = 'https://webrtc-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
+
+CHROMIUM_SVN_URL = 'svn://svn.chromium.org/chrome'
+V8_SVN_URL = 'http://v8.googlecode.com/svn/branches/bleeding_edge'
+WEBRTC_SVN_URL = 'http://webrtc.googlecode.com/svn/'
+
 MASTER_TO_BASE_URL = {
   'chromium': 'http://build.chromium.org/p/chromium',
   'chromium.chrome': 'http://build.chromium.org/p/chromium.chrome',
@@ -957,7 +962,7 @@ def CheckLKGRLag(lag_age, rev_gap, allowed_lag_hrs, allowed_rev_gap):
 
   return lag_age < datetime.timedelta(hours=max_lag_hrs)
 
-def GetLKGRAge(lkgr, repo='svn://svn.chromium.org/chrome'):
+def GetLKGRAge(lkgr, repo):
   """Parse the LKGR revision timestamp from the svn log."""
   lkgr_age = datetime.timedelta(0)
   cmd = ['svn', 'log', '--non-interactive', '--xml', '-r', str(lkgr), repo]
@@ -1054,18 +1059,22 @@ def main():
     lkgr_type = 'Blink'
     revisions_url = BLINK_REVISIONS_URL
     lkgr_steps = BLINK_LKGR_STEPS
+    svn_url = CHROMIUM_SVN_URL
   elif options.v8:
     lkgr_type = 'V8'
     revisions_url = V8_REVISIONS_URL
     lkgr_steps = V8_LKGR_STEPS
+    svn_url = V8_SVN_URL
   elif options.webrtc:
     lkgr_type = 'WebRTC'
     revisions_url = WEBRTC_REVISIONS_URL
     lkgr_steps = WEBRTC_LKGR_STEPS
+    svn_url = WEBRTC_SVN_URL
   else:
     lkgr_type = 'Chromium'
     revisions_url = CHROMIUM_REVISIONS_URL
     lkgr_steps = CHROMIUM_LKGR_STEPS
+    svn_url = CHROMIUM_SVN_URL
 
   if options.manual:
     PostLKGR(revisions_url, options.manual, options.pwfile, options.dry)
@@ -1135,7 +1144,6 @@ def main():
       NotifyMaster(master, candidate, options.dry)
   else:
     VerbosePrint('No newer %s LKGR found than current %s' % (lkgr_type, lkgr))
-
     rev_behind = int(revisions[-1]) - lkgr
     VerbosePrint('%s LKGR is behind by %s revisions' % (lkgr_type, rev_behind))
     # Make sure there is whitespace between the link below and the next line,
@@ -1149,7 +1157,8 @@ def main():
                '\n'.join(RUN_LOG))
       return 1
 
-    if not CheckLKGRLag(GetLKGRAge(lkgr), rev_behind, options.allowed_lag,
+    if not CheckLKGRLag(GetLKGRAge(lkgr, svn_url), rev_behind,
+                        options.allowed_lag,
                         options.allowed_gap):
       SendMail(sender, error_recipients,
                '%s%s LKGR (%s) exceeds lag threshold' %
