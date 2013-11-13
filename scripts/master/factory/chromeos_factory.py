@@ -19,6 +19,8 @@ from master.log_parser import process_log
 import config
 
 
+DEFAULT = object()
+
 class ChromiteFactory(object):
   """
   Create a build factory that runs a chromite script.
@@ -52,7 +54,7 @@ class ChromiteFactory(object):
                branch='master', chromite_repo=_default_chromite,
                factory=None, use_chromeos_factory=False, slave_manager=True,
                chromite_patch=None, sleep_sync=None,
-               show_gclient_output=True):
+               show_gclient_output=True, max_time=DEFAULT):
     if chromite_patch:
       assert ('url' in chromite_patch and 'ref' in chromite_patch)
 
@@ -63,6 +65,10 @@ class ChromiteFactory(object):
     self.show_gclient_output = show_gclient_output
     self.slave_manager = slave_manager
     self.sleep_sync = sleep_sync
+    self.step_args = {}
+
+    if max_time is not DEFAULT:
+      self.step_args['maxTime'] = max_time
 
     if factory:
       self.f_cbuild = factory
@@ -159,7 +165,8 @@ class ChromiteFactory(object):
                           timeout=self.timeout,
                           name=script,
                           description=script,
-                          usePTY=False)
+                          usePTY=False,
+                          **self.step_args)
 
   def get_factory(self):
     """Returns the produced factory."""
