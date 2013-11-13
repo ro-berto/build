@@ -21,7 +21,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }
 
-  def compile(self, targets=None, name=None, **kwargs):
+  def compile(self, targets=None, name=None, abort_on_failure=True, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -41,7 +41,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     args.extend(targets)
     return self.m.python(name or 'compile',
                          self.m.path.build('scripts', 'slave', 'compile.py'),
-                         args, abort_on_failure=True, **kwargs)
+                         args, abort_on_failure=abort_on_failure, **kwargs)
 
   def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
                results_url=None, perf_dashboard_id=None, test_type=None,
