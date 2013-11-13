@@ -19,6 +19,10 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     apply_svn_patch = Single(bool, required=False, empty_val=False),
     run_stack_tool_steps = Single(bool, required=False, empty_val=False),
     asan_symbolize = Single(bool, required=False, empty_val=False),
+    get_app_manifest_vars = Single(bool, required=False, empty_val=True),
+    run_tree_truth = Single(bool, required=False, empty_val=True),
+    deps_file = Single(basestring, required=False, empty_val='.DEPS.git'),
+    managed = Single(bool, required=False, empty_val=True),
     extra_deploy_opts = List(inner_type=basestring),
     tests = List(inner_type=basestring),
     build_internal_android = Static(Path('[BUILD_INTERNAL]',
@@ -70,6 +74,13 @@ def x86_base(c):
 @config_ctx(includes=['x86_base'])
 def x86_builder(c):
   pass
+
+@config_ctx(includes=['x86_builder'])
+def dartium_builder(c):
+  c.get_app_manifest_vars = False
+  c.run_tree_truth = False
+  c.deps_file = 'DEPS'
+  c.managed = True
 
 @config_ctx()
 def klp_builder(c):

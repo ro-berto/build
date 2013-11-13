@@ -85,7 +85,7 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/build/env_dump.py",
+      "[BUILD]/scripts/slave/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
       "[SLAVE_BUILD]/src/build/android/envsetup.sh"

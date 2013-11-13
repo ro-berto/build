@@ -15,7 +15,7 @@ def GenSteps(api):
   yield droid.init_and_sync()
   yield droid.envsetup()
   yield droid.clean_local_files()
-  if internal:
+  if internal and droid.c.run_tree_truth:
     yield droid.run_tree_truth()
   yield droid.runhooks()
   if droid.c.apply_svn_patch:
@@ -29,12 +29,14 @@ def GenSteps(api):
   if droid.c.run_checkdeps:
     yield droid.checkdeps()
 
-  yield droid.upload_build()
+  if internal and droid.c.get_app_manifest_vars:
+    yield droid.upload_build()
   yield droid.cleanup_build()
 
 def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
-             'x86_builder', 'klp_builder', 'try_builder', 'x86_try_builder']
+             'x86_builder', 'klp_builder', 'try_builder', 'x86_try_builder',
+             'dartium_builder']
 
   for bot_id in bot_ids:
     props = api.properties(
@@ -45,38 +47,47 @@ def GenTests(api):
       buildername='builder_name',
       buildnumber=1337,
       internal=True,
+      deps_file='DEPS',
+      managed=True,
     )
     if 'try_builder' in bot_id:
       props += api.properties(revision='')
       props += api.properties(patch_url='try_job_svn_patch')
 
-    yield (
-      api.test(bot_id) +
-      props +
-      api.step_data(
-        'get app_manifest_vars',
-        api.json.output({
-          'version_code': 10,
-          'version_name': 'some_builder_1234',
-          'build_id': 3333,
-          'date_string': 6001
-        })
-      ) +
-      api.step_data(
-        'get_internal_names',
-        api.json.output({
-          'BUILD_BUCKET': 'build-bucket',
-          'SCREENSHOT_BUCKET': 'screenshot-archive',
-          'INSTRUMENTATION_TEST_DATA': 'a:b/test/data/android/device_files',
-          'FLAKINESS_DASHBOARD_SERVER': 'test-results.appspot.com'
-        })
-      ) +
-      api.step_data(
+    test_data = (
+        api.test(bot_id) +
+        props +
+        api.step_data(
         'envsetup',
         api.json.output({
-          'PATH': './',
-          'GYP_DEFINES': 'my_new_gyp_def=aaa',
-          'GYP_SOMETHING': 'gyp_something_value'
-        })
-      )
+            'PATH': './',
+            'GYP_DEFINES': 'my_new_gyp_def=aaa',
+            'GYP_SOMETHING': 'gyp_something_value'
+            })
+        )
     )
+
+    if bot_id != "dartium_builder":
+      yield (
+        test_data +
+        api.step_data(
+        'get_internal_names',
+        api.json.output({
+            'BUILD_BUCKET': 'build-bucket',
+            'SCREENSHOT_BUCKET': 'screenshot-archive',
+            'INSTRUMENTATION_TEST_DATA': 'a:b/test/data/android/device_files',
+            'FLAKINESS_DASHBOARD_SERVER': 'test-results.appspot.com'
+            })
+        ) +
+        api.step_data(
+          'get app_manifest_vars',
+          api.json.output({
+              'version_code': 10,
+              'version_name': 'some_builder_1234',
+              'build_id': 3333,
+              'date_string': 6001
+              })
+          )
+        )
+    else:
+      yield (test_data)
