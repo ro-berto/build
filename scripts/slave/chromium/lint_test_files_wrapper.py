@@ -19,10 +19,10 @@ def layout_test(options, args):
   build_dir = os.path.abspath(options.build_dir)
   blink_scripts_dir = chromium_utils.FindUpward(build_dir,
     'third_party', 'WebKit', 'Tools', 'Scripts')
-  lint_tests = os.path.join(blink_scripts_dir, 'lint-test-expectations')
+  lint_tests_script = os.path.join(blink_scripts_dir, 'lint-test-expectations')
 
   return slave_utils.RunPythonCommandInBuildDir(build_dir, options.target,
-                                                lint_tests)
+                                                [lint_tests_script])
 
 def main():
   option_parser = optparse.OptionParser()
