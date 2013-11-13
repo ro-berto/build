@@ -142,29 +142,6 @@ CHROMIUM_LKGR_STEPS = {
       'chrome_frame_tests',
       'chrome_frame_unittests',
     ],
-    # 'Interactive Tests (dbg)': [
-    #   'interactive_ui_tests',
-    # ],
-    'Win Aura Builder': [
-      'compile',
-    ],
-    'Win Aura Tests (1)': [
-      'ash_unittests',
-      'aura_unittests',
-      'browser_tests',
-      'content_browsertests',
-    ],
-    'Win Aura Tests (2)': [
-      'browser_tests',
-      'compositor_unittests',
-      'content_unittests',
-      'unit_tests',
-      'views_unittests',
-    ],
-    'Win Aura Tests (3)': [
-      'browser_tests',
-      'interactive_ui_tests',
-    ],
   },  # chromium.win
   'chromium.mac': {
     'Mac Builder (dbg)': [
@@ -321,7 +298,6 @@ BLINK_LKGR_STEPS = {
     },
   'chromium.win': {
     'Win Builder (dbg)': ['compile'],
-    'Win Aura Builder': ['compile'],
   },
   'chromium.webkit': {
     'WebKit Win Builder (deps)': ['compile'],

@@ -340,9 +340,6 @@ B('Chrome Frame Tests (ie9)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
 
 dbg_archive = master_config.GetArchiveUrl('ChromiumWin', 'Win Builder (dbg)',
                                           'cr-win-dbg', 'win32')
-dbg_aura_archive = master_config.GetArchiveUrl('ChromiumWin',
-                                               'Win Aura Builder',
-                                               'Win_Aura_Builder', 'win32')
 
 #
 # Main debug scheduler for src/
@@ -353,7 +350,6 @@ S('win_dbg', branch='src', treeStableTimer=60)
 # Triggerable scheduler for the dbg builder
 #
 T('win_dbg_trigger')
-T('win_dbg_aura_trigger')
 
 #
 # Win x64 Dbg Builder
@@ -404,6 +400,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
       'compositor',
       'courgette_unittests',
       'crypto_unittests',
+      'events',
       'googleurl',
       'gpu',
       'installer',
@@ -524,84 +521,15 @@ F('dbg_int', win_tester().ChromiumFactory(
     }))
 
 #
-# Dbg Aura builder
-#
-
-aura_gyp_defines = 'use_aura=1 fastbuild=1 chromium_win_pch=0'
-
-B('Win Aura Builder', 'dbg_aura', 'compile|windows', 'win_dbg',
-  auto_reboot=False, notify_on_missing=True)
-F('dbg_aura', win_out().ChromiumFactory(
-    target='Debug',
-    options=['--build-tool=ninja', '--compiler=goma', '--', 'aura_builder'],
-    slave_type='Builder',
-    factory_properties={'gclient_env': {'GYP_DEFINES': aura_gyp_defines},
-                        'trigger': 'win_dbg_aura_trigger'}))
-
-#
 # Dbg Aura Testers
 #
 
-B('Win Aura Tests (1)', 'dbg_aura_test_1', 'testers|windows',
-  'win_dbg_aura_trigger', notify_on_missing=True)
-F('dbg_aura_test_1', win_tester().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_aura_archive,
-    tests=['ash_unittests',
-           'aura',
-           'browser_tests',
-           'chrome_frame_net_tests',
-           'chrome_frame_tests',
-           'content_browsertests',
-          ],
-    factory_properties={'process_dumps': True,
-                        'sharded_tests': sharded_tests,
-                        'browser_total_shards': 3, 'browser_shard_index': 1,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
-
-B('Win Aura Tests (2)', 'dbg_aura_test_2', 'testers|windows',
-  'win_dbg_aura_trigger', notify_on_missing=True)
-F('dbg_aura_test_2', win_tester().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_aura_archive,
-    tests=['browser_tests',
-           'chrome_frame_unittests',
-           'compositor',
-           'content_unittests',
-           'events',
-           'unit_tests',
-           'views_unittests',
-          ],
-    factory_properties={'process_dumps': True,
-                        'sharded_tests': sharded_tests,
-                        'browser_total_shards': 3, 'browser_shard_index': 2,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
-
-B('Win Aura Tests (3)', 'dbg_aura_test_3', 'testers|windows',
-  'win_dbg_aura_trigger', notify_on_missing=True)
-F('dbg_aura_test_3', win_tester().ChromiumFactory(
-    target='Debug',
-    slave_type='Tester',
-    build_url=dbg_aura_archive,
-    tests=['browser_tests',
-           'interactive_ui_tests',
-          ],
-    factory_properties={'process_dumps': True,
-                        'sharded_tests': sharded_tests,
-                        'browser_total_shards': 3, 'browser_shard_index': 3,
-                        'start_crash_handler': True,
-                        'generate_gtest_json': True}))
-
 B('Win8 Aura', 'dbg_aura_win8', 'windows',
-  'win_dbg_aura_trigger', notify_on_missing=True)
+  'win_dbg_trigger', notify_on_missing=True)
 F('dbg_aura_win8', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
-    build_url=dbg_aura_archive,
+    build_url=dbg_archive,
     tests=['ash_unittests',
            'aura',
            'compositor',
