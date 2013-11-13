@@ -1338,14 +1338,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self.AddArchiveStep(data_description='coverage', base_url=url,
                         link_text=text, command=cmd_archive)
 
-  def AddSendTestParityStep(self, platform):
-    cmd = [self._python,
-           self._upload_parity_tool,
-           self._build_dir,
-           'http://chrome-test-parity.appspot.com/bulk_update',
-           platform]
-    self.AddTestStep(shell.ShellCommand, 'upload test parity', cmd)
-
   def AddDownloadAndExtractOfficialBuild(self, qa_identifier, branch=None):
     """Download and extract an official build.
 

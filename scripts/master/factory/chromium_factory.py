@@ -1092,10 +1092,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if factory_properties.get('process_dumps'):
       chromium_cmd_obj.AddProcessDumps()
 
-    test_parity_platform = factory_properties.get('test_parity_platform')
-    if test_parity_platform:
-      chromium_cmd_obj.AddSendTestParityStep(test_parity_platform)
-
     return factory
 
   def ChromiumAnnotationFactory(self, annotation_script,
