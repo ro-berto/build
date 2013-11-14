@@ -110,112 +110,6 @@ T('linux_rel_trigger')
 #
 # Linux Rel Builder
 #
-B('Linux Builder', 'rel', 'compile', 'linux_rel',
-  auto_reboot=False, notify_on_missing=True)
-F('rel', linux().ChromiumFactory(
-    slave_type='Builder',
-    options=goma_ninja_options + linux_all_test_targets +
-            ['sync_integration_tests', 'chromium_swarm_tests'],
-    tests=['check_deps'],
-    factory_properties={
-        'gclient_env': {
-            'GYP_GENERATORS':'ninja',
-        },
-        'trigger': 'linux_rel_trigger',
-    }))
-
-#
-# Linux Rel testers
-#
-B('Linux Tests',
-  'rel_unit',
-  'testers',
-  'linux_rel_trigger',
-  notify_on_missing=True)
-F('rel_unit', linux_tester().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
-    tests=[
-      'base_unittests',
-      'browser_tests',
-      'cacheinvalidation_unittests',
-      'cc_unittests',
-      'chromedriver2_unittests',
-      'components_unittests',
-      'content_browsertests',
-      'content_unittests',
-      'crypto_unittests',
-      'dbus',
-      'device_unittests',
-      'google_apis_unittests',
-      'googleurl',
-      'gpu',
-      'interactive_ui_tests',
-      'ipc_tests',
-      'jingle',
-      'media',
-      'net',
-      'ppapi_unittests',
-      'printing',
-      'remoting',
-      'sandbox_linux_unittests',
-      'ui_unittests',
-      'unit_sql',
-      'unit_sync',
-      'unit_unit',
-      'webkit_compositor_bindings_unittests',
-    ],
-    factory_properties={'sharded_tests': sharded_tests,
-                        'generate_gtest_json': True}))
-
-B('Linux Sync',
-  'rel_sync',
-  'testers',
-  'linux_rel_trigger',
-  notify_on_missing=True)
-F('rel_sync', linux_tester().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
-    tests=['sync_integration'],
-    factory_properties={
-      'generate_gtest_json': True,
-      'sharded_tests': sharded_tests,
-    }))
-
-#
-# Linux aura bot
-#
-
-linux_aura_tests = [
-  'app_list_unittests',
-  'aura',
-  'base_unittests',
-  'browser_tests',
-  'cacheinvalidation_unittests',
-  'compositor',
-  'content_browsertests',
-  'content_unittests',
-  'crypto_unittests',
-  'device_unittests',
-  'events',
-  'googleurl',
-  'gpu',
-  'interactive_ui_tests',
-  'ipc_tests',
-  'jingle',
-  'media',
-  'net',
-  'ppapi_unittests',
-  'printing',
-  'remoting',
-  'sandbox_linux_unittests',
-  'ui_unittests',
-  'unit_sql',
-  'unit_sync',
-  'unit_unit',
-  'views',
-]
-
 linux_aura_options = [
   'app_list_unittests',
   'aura_builder',
@@ -243,20 +137,89 @@ linux_aura_options = [
   'url_unittests',
 ]
 
-B('Linux Aura', 'f_linux_rel_aura', 'compile', 'linux_rel',
+B('Linux Builder', 'rel', 'compile', 'linux_rel',
+  auto_reboot=False, notify_on_missing=True)
+F('rel', linux().ChromiumFactory(
+    slave_type='Builder',
+    # TODO(agable): Merge linux_all_test_targets and linux_aura_options
+    options=goma_ninja_options + linux_all_test_targets + linux_aura_options +
+            ['sync_integration_tests', 'chromium_swarm_tests'],
+    tests=['check_deps'],
+    factory_properties={
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+        },
+        'trigger': 'linux_rel_trigger',
+    }))
+
+B('Linux Sync',
+  'rel_sync',
+  'testers',
+  'linux_rel_trigger',
   notify_on_missing=True)
-F('f_linux_rel_aura', linux().ChromiumFactory(
-    target='Release',
-    slave_type='BuilderTester',
-    options=goma_ninja_options + linux_aura_options,
+F('rel_sync', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=['sync_integration'],
+    factory_properties={
+      'generate_gtest_json': True,
+      'sharded_tests': sharded_tests,
+    }))
+
+#
+# Linux aura bot
+#
+
+linux_aura_tests = [
+  'app_list_unittests',
+  'aura',
+  'base_unittests',
+  'browser_tests',
+  'cacheinvalidation_unittests',
+  'cc_unittests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'compositor',
+  'content_browsertests',
+  'content_unittests',
+  'crypto_unittests',
+  'dbus',
+  'device_unittests',
+  'events',
+  'google_apis_unittests',
+  'googleurl',
+  'gpu',
+  'interactive_ui_tests',
+  'ipc_tests',
+  'jingle',
+  'media',
+  'net',
+  'ppapi_unittests',
+  'printing',
+  'remoting',
+  'sandbox_linux_unittests',
+  'ui_unittests',
+  'unit_sql',
+  'unit_sync',
+  'unit_unit',
+  'views',
+  'webkit_compositor_bindings_unittests',
+]
+
+# TODO(agable): Rename Linux Aura to Linux Tests
+B('Linux Aura',
+  'f_linux_rel_aura',
+  'testers',
+  'linux_rel_trigger',
+  notify_on_missing=True)
+F('f_linux_rel_aura', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
     tests=linux_aura_tests,
     factory_properties={
-      'gclient_env': {
-          'GYP_DEFINES': 'use_aura=1',
-          'GYP_GENERATORS': 'ninja',
-      },
       'sharded_tests': sharded_tests,
       'window_manager': 'False',
+      'generate_gtest_json': True,
     }))
 
 
