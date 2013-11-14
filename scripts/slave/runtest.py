@@ -231,7 +231,11 @@ def _BuildParallelCommand(build_dir, test_exe_path, options):
 
     return command
 
-  command = [test_exe_path, '--brave-new-test-launcher']
+  command = [
+      test_exe_path,
+      '--brave-new-test-launcher',
+      '--test-launcher-bot-mode',
+  ]
 
   if options.total_shards and options.shard_index:
     command.extend([
