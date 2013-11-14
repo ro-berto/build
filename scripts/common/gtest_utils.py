@@ -116,6 +116,10 @@ class GTestLogParser(object):
     """Clears the currently stored parsing errors."""
     self._internal_error_lines = ['Cleared.']
 
+  def PassedTests(self):
+    """Returns list of tests that passed."""
+    return self._TestsByStatus('OK', False, False)
+
   def FailedTests(self, include_fails=False, include_flaky=False):
     """Returns list of tests that failed, timed out, or didn't finish
     (crashed).

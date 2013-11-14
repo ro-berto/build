@@ -95,6 +95,8 @@ def GetResultsMap(observer):
   test_results_map = dict()
   for test in observer.FailedTests(include_fails=True, include_flaky=True):
     test_results_map[canonical_name(test)] = TestResult(test, failed=True)
+  for test in observer.PassedTests():
+    test_results_map[canonical_name(test)] = TestResult(test, failed=False)
 
   return test_results_map
 
