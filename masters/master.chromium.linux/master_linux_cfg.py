@@ -166,7 +166,6 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
-                        'window_manager': 'False',
                         'generate_gtest_json': True}))
 
 B('Linux Sync',
