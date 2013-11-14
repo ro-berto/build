@@ -904,8 +904,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Coverage tests.  Add coverage processing absoluely last, after
     # all tests have run.  Tests which run after coverage processing
     # don't get counted.
-    if R('run_coverage_bundles'):
-      f.AddRunCoverageBundles(fp)
     if R('process_coverage'):
       f.AddProcessCoverage(fp)
 
