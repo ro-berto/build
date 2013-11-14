@@ -1266,41 +1266,6 @@ class ChromiumCommands(commands.FactoryCommands):
            '--target', self._target]
     self.AddTestStep(retcode_command.ReturnCodeCommand, 'process_dumps', cmd)
 
-  def AddRunCoverageBundles(self, factory_properties=None):
-    # If updating this command, update the mirror of it in chrome_tests.gypi.
-    cmd = [self._python,
-           os.path.join('src', 'tools', 'code_coverage', 'coverage_posix.py'),
-           '--build-dir',
-           self._build_dir,
-           '--target',
-           self._target,
-           '--src_root',
-           '.',
-           '--bundles', 'coverage_bundles.py']
-    self.AddTestStep(shell.ShellCommand, 'run_coverage_bundles', cmd)
-    # Run only unittests in this step.
-    cmd = [self._python,
-           os.path.join('src', 'tools', 'code_coverage', 'coverage_posix.py'),
-           '--build-dir',
-           self._build_dir,
-           '--target',
-           self._target,
-           '--src_root',
-           '.',
-           '--all_unittests', 'True']
-    self.AddTestStep(shell.ShellCommand, 'run_unittests_only', cmd)
-    # Run only browser_tests in this step.
-    cmd = [self._python,
-           os.path.join('src', 'tools', 'code_coverage', 'coverage_posix.py'),
-           '--build-dir',
-           self._build_dir,
-           '--target',
-           self._target,
-           '--src_root',
-           '.',
-           '--all_browsertests', 'True']
-    self.AddTestStep(shell.ShellCommand, 'run_browser_tests_only', cmd)
-
   def AddProcessCoverage(self, factory_properties=None):
     factory_properties = factory_properties or {}
 
