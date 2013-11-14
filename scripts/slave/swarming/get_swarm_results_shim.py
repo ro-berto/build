@@ -149,6 +149,7 @@ def v0_1(client, options, test_name):
     test_name,
   ]
   print('Running: %s' % ' '.join(cmd))
+  sys.stdout.flush()
   proc = subprocess2.Popen(cmd, bufsize=0, stdout=subprocess2.PIPE)
   gtest_parser = gtest_utils.GTestLogParser()
   for line in proc.stdout.readlines():
@@ -223,6 +224,8 @@ def main():
     task_name = process_build_properties(options, args[0])
   else:
     task_name = args[0]
+  print('Found %s' % client)
+  sys.stdout.flush()
   return determine_version_and_run_handler(client, options, task_name)
 
 
