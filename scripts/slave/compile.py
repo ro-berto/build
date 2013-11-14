@@ -21,6 +21,7 @@ import sys
 import time
 
 from common import chromium_utils
+from slave import slave_utils
 from slave import build_directory
 
 
@@ -1059,36 +1060,38 @@ def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
 
 def real_main():
   option_parser = optparse.OptionParser()
-  option_parser.add_option('--clobber', action='store_true', default=False,
+  option_parser.add_option('', '--clobber', action='store_true', default=False,
                            help='delete the output directory before compiling')
-  option_parser.add_option('--clobber-post-fail', action='store_true',
+  option_parser.add_option('', '--clobber-post-fail', action='store_true',
                            default=False,
                            help='delete the output directory after compiling '
                                 'only if it failed. Do not affect ninja.')
-  option_parser.add_option('--keep-version-file', action='store_true',
+  option_parser.add_option('', '--keep-version-file', action='store_true',
                            default=False,
                            help='do not delete the chrome_dll_version.rc file '
                                 'before compiling (ignored if --clobber is '
                                 'used')
-  option_parser.add_option('--target', default='Release',
+  option_parser.add_option('', '--target', default='Release',
                            help='build target (Debug or Release)')
-  option_parser.add_option('--arch', default=None,
+  option_parser.add_option('', '--arch', default=None,
                            help='target architecture (ia32, x64, ...')
-  option_parser.add_option('--solution', default=None,
+  option_parser.add_option('', '--solution', default=None,
                            help='name of solution/sub-project to build')
-  option_parser.add_option('--project', default=None,
+  option_parser.add_option('', '--project', default=None,
                            help='name of project to build')
-  option_parser.add_option('--build-dir', help='ignored')
-  option_parser.add_option('--src-dir', default=None,
+  option_parser.add_option('', '--build-dir', default='build',
+                           help='path to directory containing solution and in '
+                                'which the build output will be placed')
+  option_parser.add_option('', '--src-dir', default=None,
                            help='path to the root of the source tree')
-  option_parser.add_option('--mode', default='dev',
+  option_parser.add_option('', '--mode', default='dev',
                            help='build mode (dev or official) controlling '
                                 'environment variables set during build')
-  option_parser.add_option('--build-tool', default=None,
+  option_parser.add_option('', '--build-tool', default=None,
                            help='specify build tool (ib, vs, xcode)')
-  option_parser.add_option('--build-args', action='append', default=[],
+  option_parser.add_option('', '--build-args', action='append', default=[],
                            help='arguments to pass to the build tool')
-  option_parser.add_option('--compiler', default=None,
+  option_parser.add_option('', '--compiler', default=None,
                            help='specify alternative compiler (e.g. clang)')
   if chromium_utils.IsWindows():
     # Windows only.
@@ -1113,12 +1116,12 @@ def real_main():
 
   options, args = option_parser.parse_args()
 
+  options.build_dir = os.path.abspath(options.build_dir)
   if not options.src_dir:
-    options.src_dir = 'src'
-  options.src_dir = os.path.abspath(options.src_dir)
-
-  options.build_dir = os.path.abspath(build_directory.GetBuildOutputDirectory(
-        os.path.basename(options.src_dir)))
+    options.src_dir = os.path.join(slave_utils.SlaveBaseDir(options.build_dir),
+                                   'build', 'src')
+  else:
+    options.src_dir = os.path.abspath(options.src_dir)
 
   if options.build_tool is None:
     if chromium_utils.IsWindows():
