@@ -85,6 +85,7 @@ class TelemetryTest(unittest.TestCase):
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
             '\'src/build/android/test_runner.py\' \'perf\' \'-v\' ' +
+            '\'--release\' ' +
             '\'--single-step\' ' +
             '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
@@ -118,6 +119,7 @@ class TelemetryTest(unittest.TestCase):
             '"target_platform": "linux2", "target_os": "android", ' +
             '"show_perf_results": true}\' ' +
             '\'src/build/android/test_runner.py\' \'perf\' \'-v\' ' +
+            '\'--release\' ' +
             '\'--single-step\' ' +
             '\'--\' ' +
             '\'src/tools/perf/run_benchmark\' \'-v\' ' +
