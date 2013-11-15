@@ -230,6 +230,24 @@
   },
   {
     "cmd": [
+      "python",
+      "-u",
+      "\nimport os\n\nto_delete = sys.argv[1]\nif os.path.exists(to_delete) and os.path.islink(to_delete):\n  os.unlink(to_delete)\n",
+      "[SLAVE_BUILD]/android-src/external/chromium_org"
+    ],
+    "name": "remove chromium_org symlink",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@to_delete = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@if os.path.exists(to_delete) and os.path.islink(to_delete):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  os.unlink(to_delete)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
       "[DEPOT_TOOLS]/repo",
       "sync",
       "-j16",
