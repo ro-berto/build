@@ -40,6 +40,10 @@ def get_args():
   parser.add_option('-l', '--list', action='store_true', default=False,
                     help='Output a list of all ports in use by all masters. '
                          'Default behavior if no other options are given.')
+  parser.add_option('--sort-by', action='store',
+                    help='Define the primary key by which rows are sorted. '
+                    'Possible values are: "port", "alt_port", "slave_port", '
+                    '"host", and "name". Only one value is allowed (for now).')
   parser.add_option('--find', action='store', type='int', default=0,
                     metavar='N',
                     help='Output N sets of three available ports.')
@@ -121,11 +125,12 @@ def csv_print(lines, verbose):
 def master_map(masters, output, opts):
   """Display a list of masters and their associated hosts and ports."""
 
-  lines = [['Master', 'Host', 'Web port', 'Slave port', 'Alt port', 'MSC']]
+  lines = [['Master', 'Host', 'Web port', 'Slave port', 'Alt port',
+            'MSC', 'URL']]
   for master in masters:
     lines.append([master['name'], master['host'],
                  master['port'], master['slave_port'], master['alt_port'],
-                 master['msc']])
+                 master['msc'], master['buildbot_url']])
 
   output(lines, opts.verbose)
 
@@ -221,6 +226,7 @@ def extract_masters(masters):
         'port': getattr(master, 'master_port', 0),
         'slave_port': getattr(master, 'slave_port', 0),
         'alt_port': getattr(master, 'master_port_alt', 0),
+        'buildbot_url': getattr(master, 'buildbot_url', ''),
     })
   return good_masters
 
@@ -241,11 +247,20 @@ def real_main(include_internal=False):
   for master in msc_masters:
     master['msc'] = 'Y'
 
-  sort_string = '%-40s %-8s %-8s %-8s %-30s'
-  sorted_masters = sorted(
-      config_masters + msc_masters,
-      key=lambda m: sort_string % (m['port'], m['alt_port'], m['slave_port'],
-                                   m['host'], m['name']))
+  # Define sorting order
+  sort_keys = ['port', 'alt_port', 'slave_port', 'host', 'name']
+  # Move key specified on command-line to the front of the list
+  if opts.sort_by is not None:
+    try:
+      index = sort_keys.index(opts.sort_by)
+    except ValueError:
+      pass
+    else:
+      sort_keys.insert(0, sort_keys.pop(index))
+
+  sorted_masters = config_masters + msc_masters
+  for key in reversed(sort_keys):
+    sorted_masters.sort(key = lambda m: m[key])
 
   if opts.csv:
     printer = csv_print
