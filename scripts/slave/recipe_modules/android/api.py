@@ -94,19 +94,6 @@ class AOSPApi(recipe_api.RecipeApi):
           self.c.chromium_in_android_subpath])
 
   def repo_sync_steps(self):
-    # If external/chromium_org is a symlink this prevents repo from trying to
-    # update the symlink's target (which might be an svn checkout).
-    yield self.m.python.inline(
-      'remove chromium_org symlink',
-      """
-        import os
-
-        to_delete = sys.argv[1]
-        if os.path.exists(to_delete) and os.path.islink(to_delete):
-          os.unlink(to_delete)
-      """,
-      args = [self.c.slave_chromium_in_android_path]
-    )
     # repo_init_steps must have been invoked first.
     yield self.m.repo.sync(*self.c.repo.sync_flags, cwd=self.c.build_path)
 
@@ -114,6 +101,7 @@ class AOSPApi(recipe_api.RecipeApi):
     if self.m.path.exists(self.c.slave_chromium_in_android_path):
       yield self.m.step('remove chromium_org',
                       ['rm', '-rf', self.c.slave_chromium_in_android_path])
+
     yield self.m.step('symlink chromium_org', [
       'ln', '-s',
       self.m.path.checkout,
