@@ -66,6 +66,19 @@ class AOSPApi(recipe_api.RecipeApi):
 
   # TODO(iannucci): Refactor repo stuff into another module?
   def repo_init_steps(self):
+    # If a local_manifest.xml file is present and contains invalid entries init
+    # and sync might fail.
+    yield self.m.python.inline(
+      'remove local_manifest.xml',
+      """
+        import os, sys
+
+        to_delete = sys.argv[1]
+        if os.path.exists(to_delete):
+          os.unlink(to_delete)
+      """,
+      args=[self.c.build_path('.repo', 'local_manifest.xml')]
+    )
     # The version of repo checked into depot_tools doesn't support switching
     # between branches correctly due to
     # https://code.google.com/p/git-repo/issues/detail?id=46 which is why we use
