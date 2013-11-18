@@ -166,6 +166,25 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "aura_unittests"
+    ],
+    "name": "aura_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--build-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
       "base_unittests"
     ],
     "name": "base_unittests"
@@ -207,6 +226,25 @@
       "cc_unittests"
     ],
     "name": "cc_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--build-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "components_unittests"
+    ],
+    "name": "components_unittests"
   },
   {
     "always_run": true,
@@ -501,46 +539,6 @@
       "content_unittests"
     ],
     "name": "experimentally compile content_unittests"
-  },
-  {
-    "always_run": true,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"recipe\": \"ozone_ecs\"}",
-      "--build-properties",
-      "{\"recipe\": \"ozone_ecs\"}",
-      "aura_unittests"
-    ],
-    "name": "experimentally run aura_unittests"
-  },
-  {
-    "always_run": true,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"recipe\": \"ozone_ecs\"}",
-      "--build-properties",
-      "{\"recipe\": \"ozone_ecs\"}",
-      "components_unittests"
-    ],
-    "name": "experimentally run components_unittests"
   },
   {
     "always_run": true,
