@@ -21,8 +21,21 @@ S(scheduler_name, branch='trunk', treeStableTimer=60)
 
 test_targets = ['libyuv_unittest']
 ninja_options = ['--build-tool=ninja']
-win_factory_prop = {
+win_msvs_missing_files_factory_properties = {
     'gclient_env': {'GYP_GENERATOR_FLAGS': 'msvs_error_on_missing_sources=1'}}
+win_msvs_2012_factory_properties = {
+    'gclient_env': {
+        'GYP_GENERATORS': 'ninja',
+        'GYP_MSVS_VERSION': '2012',
+    },
+}
+win_msvs_2012_x64_factory_properties = {
+    'gclient_env': {
+        'GYP_DEFINES': 'target_arch=x64',
+        'GYP_GENERATORS': 'ninja',
+        'GYP_MSVS_VERSION': '2012',
+    },
+}
 asan_gclient_env = {
     'GYP_DEFINES': ('asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 ')}
 
@@ -34,29 +47,96 @@ F('win32_debug_factory', win().LibyuvFactory(
     target='Debug',
     options=ninja_options,
     tests=test_targets,
-    factory_properties=win_factory_prop))
+    factory_properties=win_msvs_missing_files_factory_properties))
 
 B('Win32 Release', 'win32_release_factory', scheduler=scheduler_name)
 F('win32_release_factory', win().LibyuvFactory(
     target='Release',
     options=ninja_options,
     tests=test_targets,
-    factory_properties=win_factory_prop))
+    factory_properties=win_msvs_missing_files_factory_properties))
+
+B('Win64 Debug', 'win64_debug_factory', scheduler=scheduler_name)
+F('win64_debug_factory', win().LibyuvFactory(
+    target='Debug',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
+    }))
+
+B('Win64 Release', 'win64_release_factory', scheduler=scheduler_name)
+F('win64_release_factory', win().LibyuvFactory(
+    target='Release',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
+    }))
+
+B('Win32 Debug (VS2012)', 'win32_2012_debug_factory', scheduler=scheduler_name)
+F('win32_2012_debug_factory', win().LibyuvFactory(
+    target='Debug',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties=win_msvs_2012_factory_properties))
+
+B('Win32 Release (VS2012)', 'win32_2012_release_factory',
+  scheduler=scheduler_name)
+F('win32_2012_release_factory', win().LibyuvFactory(
+    target='Release',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties=win_msvs_2012_factory_properties))
+
+B('Win64 Debug (VS2012)', 'win64_2012_debug_factory',
+  scheduler=scheduler_name)
+F('win64_2012_debug_factory', win().LibyuvFactory(
+    target='Debug',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties=win_msvs_2012_x64_factory_properties))
+
+B('Win64 Release (VS2012)', 'win64_2012_release_factory',
+  scheduler=scheduler_name)
+F('win64_2012_release_factory', win().LibyuvFactory(
+    target='Release',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties=win_msvs_2012_x64_factory_properties))
 
 # Mac.
 defaults['category'] = 'mac'
 
-B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler_name)
-F('mac_debug_factory', mac().LibyuvFactory(
+B('Mac32 Debug', 'mac32_debug_factory', scheduler=scheduler_name)
+F('mac32_debug_factory', mac().LibyuvFactory(
     target='Debug',
     options=ninja_options,
     tests=test_targets))
 
-B('Mac32 Release', 'mac_release_factory', scheduler=scheduler_name)
-F('mac_release_factory', mac().LibyuvFactory(
+B('Mac32 Release', 'mac32_release_factory', scheduler=scheduler_name)
+F('mac32_release_factory', mac().LibyuvFactory(
     target='Release',
     options=ninja_options,
     tests=test_targets))
+
+B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler_name)
+F('mac64_debug_factory', mac().LibyuvFactory(
+    target='Debug',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
+    }))
+
+B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler_name)
+F('mac64_release_factory', mac().LibyuvFactory(
+    target='Release',
+    options=ninja_options,
+    tests=test_targets,
+    factory_properties={
+        'gclient_env': {'GYP_DEFINES': 'host_arch=x64 target_arch=x64'},
+    }))
 
 B('Mac Asan', 'mac_asan_factory', scheduler=scheduler_name)
 F('mac_asan_factory', mac().LibyuvFactory(
