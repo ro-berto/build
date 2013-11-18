@@ -439,7 +439,7 @@ class DartUtils(object):
       'dartium-win-inc-ninja' + postfix: F_WIN_CH(
           target='Release',
           options=DartUtils.win_options_ninja,
-          tests=[], # FIXME: no annotated steps -> no gcs uploads
+          tests=['annotated_steps'],
           factory_properties=DartUtils.win_rel_factory_properties_ninja),
       'dartium-win-debug' + postfix: F_WIN_CH(
           target='Debug',
