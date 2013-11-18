@@ -102,6 +102,10 @@ def GenSteps(api):
     api.chromium.compile(targets=GTEST_TESTS),
   )
 
+  # Do not run tests if the build is already in a failed state.
+  if api.step_history.failed:
+    return
+
   with_patch = {}
   for test in GTEST_TESTS:
     yield GTestsStep(api, test, 'with patch')
@@ -185,3 +189,11 @@ def GenTests(api):
                   canned_test(passing=False, minimal=True))
 
             yield test
+
+  for step in ('gclient revert', 'gclient runhooks', 'compile'):
+    yield (
+      api.test(step.replace(' ', '_') + '_failure') +
+      props() +
+      api.platform.name('win') +
+      api.step_data(step, retcode=1)
+    )
