@@ -717,6 +717,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddMachPortsTests(fp)
     if R('cc_perftests'):
       f.AddCCPerfTests(fp)
+    if R('media_perftests'):
+      f.AddMediaPerfTests(fp)
 
     if R('sync_integration'):
       f.AddSyncIntegrationTests(fp)
