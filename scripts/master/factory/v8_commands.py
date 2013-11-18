@@ -103,7 +103,8 @@ class V8Commands(commands.FactoryCommands):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
     cmd = self.GetV8TestingCommand() + options
-    cmd += ['--testname', name]
+    if name:
+      cmd += ['--testname', name]
     if flaky_tests == 'run' or flaky_tests == 'skip':
       cmd += ['--flaky-tests', flaky_tests]
     self.AddTestStep(shell.ShellCommand, step_name, cmd,

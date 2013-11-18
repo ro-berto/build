@@ -57,6 +57,10 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8TestTC('mjsunit cctest message preparser', 'Check',
                     env=factory_properties.get('test_env', {}),
                     options=factory_properties.get('test_options', []))
+    if R('experimental_parser'):
+      f.AddV8TestTC('', 'CheckParser',
+                    env=factory_properties.get('test_env', {}),
+                    options=factory_properties.get('test_options', []))
     if R('mjsunit'):
       f.AddV8TestTC('mjsunit', 'Mjsunit',
                     env=factory_properties.get('test_env', {}),
