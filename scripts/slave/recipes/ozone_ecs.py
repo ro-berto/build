@@ -27,7 +27,7 @@ OZONE_TESTS = [
     # 'interactive_ui_tests', Not sensible.
     'ipc_tests',
     # 'jingle_unittests', Later.
-    # 'media_unittests', Later.
+    'media_unittests',
     'net_unittests',
     'ppapi_unittests',
     # 'printing_unittests', Not sensible.
@@ -79,6 +79,11 @@ def GenSteps(api):
   yield api.chromium.runhooks()
   yield api.chromium.compile(['content_shell'], name='compile content_shell')
 
+  yield api.python('check ecs deps', api.path.checkout('tools',
+      'check_ecs_deps', 'check_ecs_deps.py'),
+      can_fail_build=False,
+      cwd=api.chromium.c.build_dir(api.chromium.c.build_config_fs))
+
   tests_to_compile = list(set(OZONE_TESTS) - set(tests_that_do_not_compile))
   tests_to_compile.sort()
   yield api.chromium.compile(tests_to_compile, name='compile tests')
@@ -87,14 +92,10 @@ def GenSteps(api):
   yield (api.chromium.runtests(x, xvfb=False, spawn_dbus=(x in dbus_tests))
          for x in sorted(tests_to_run))
 
-  yield api.python('check ecs deps', api.path.checkout('tools',
-      'check_ecs_deps', 'check_ecs_deps.py'),
-      can_fail_build=False, abort_on_failure=False,
-      cwd=api.chromium.c.build_dir(api.chromium.c.build_config_fs))
-
   # Compile the failing targets.
   yield (api.chromium.compile([x], name='experimentally compile %s' % x,
-                              can_fail_build=False, abort_on_failure=False)
+                              can_fail_build=False, abort_on_failure=False,
+                              always_run=True)
          for x in sorted(set(OZONE_TESTS) & set(tests_that_do_not_compile)))
 
   # Run the failing tests.

@@ -103,6 +103,16 @@
     "name": "compile content_shell"
   },
   {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/check_ecs_deps/check_ecs_deps.py"
+    ],
+    "cwd": "[SLAVE_BUILD]/src/out/Debug",
+    "name": "check ecs deps"
+  },
+  {
     "abort_on_failure": true,
     "cmd": [
       "python",
@@ -130,6 +140,7 @@
       "device_unittests",
       "gpu_unittests",
       "ipc_tests",
+      "media_unittests",
       "net_unittests",
       "ppapi_unittests",
       "sandbox_linux_unittests",
@@ -308,6 +319,25 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "media_unittests"
+    ],
+    "name": "media_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--build-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
       "net_unittests"
     ],
     "name": "net_unittests"
@@ -428,17 +458,7 @@
   },
   {
     "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[SLAVE_BUILD]/src/tools/check_ecs_deps/check_ecs_deps.py"
-    ],
-    "cwd": "[SLAVE_BUILD]/src/out/Debug",
-    "name": "check ecs deps"
-  },
-  {
-    "abort_on_failure": false,
+    "always_run": true,
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -461,6 +481,7 @@
   },
   {
     "abort_on_failure": false,
+    "always_run": true,
     "can_fail_build": false,
     "cmd": [
       "python",
