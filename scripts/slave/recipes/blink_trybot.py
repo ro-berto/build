@@ -103,7 +103,6 @@ def SummarizeTestResults(api, ignored_failures, new_failures):
 def GenSteps(api):
   api.chromium.set_config('blink')
   api.chromium.apply_config('trybot_flavor')
-  api.chromium.apply_config('disable_aura')
   api.gclient.set_config('blink_internal',
                          GIT_MODE=api.properties.get('GIT_MODE', False))
   api.step.auto_resolve_conflicts = True

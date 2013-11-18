@@ -48,7 +48,6 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'gclient_env': {
-          'GYP_DEFINES': 'use_ash=0 use_aura=0',
           'GYP_GENERATORS': 'ninja',
         },
         'generate_gtest_json': True,
@@ -79,7 +78,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'asan': True,
         'blink_config': 'blink',
         'gclient_env': {
-          'GYP_DEFINES': asan_gyp + ' use_ash=0 use_aura=0',
+          'GYP_DEFINES': asan_gyp,
           'GYP_GENERATORS': 'ninja',
         },
         'generate_gtest_json': True,
@@ -113,7 +112,6 @@ F('f_webkit_dbg_tests', linux().ChromiumFactory(
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
         'gclient_env': {
-            'GYP_DEFINES': 'use_ash=0 use_aura=0',
             'GYP_GENERATORS':'ninja',
         },
         'blink_config': 'blink',

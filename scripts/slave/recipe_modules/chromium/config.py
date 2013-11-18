@@ -130,11 +130,6 @@ def BASE(c):
   else:  # pragma: no cover
     raise BadConf('Unknown build config "%s"' % c.BUILD_CONFIG)
 
-@config_ctx()
-def disable_aura(c):
-  if c.TARGET_PLATFORM == 'win':
-    c.gyp_env.GYP_DEFINES['use_aura'] = 0
-
 @config_ctx(group='builder')
 def ninja(c):
   c.gyp_env.GYP_GENERATORS.add('ninja')
@@ -220,13 +215,7 @@ def chromium_clang(c):
 @config_ctx(includes=['chromium'])
 def blink(c):
   c.compile_py.default_targets = ['blink_tests']
-  if c.TARGET_PLATFORM in ('linux', 'win'):
-    c.gyp_env.GYP_DEFINES['use_ash'] = 0
-    c.gyp_env.GYP_DEFINES['use_aura'] = 0
 
 @config_ctx(includes=['chromium_clang'])
 def blink_clang(c):
   c.compile_py.default_targets = ['blink_tests']
-  if c.TARGET_PLATFORM in ('linux', 'win'):
-    c.gyp_env.GYP_DEFINES['use_ash'] = 0
-    c.gyp_env.GYP_DEFINES['use_aura'] = 0

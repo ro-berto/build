@@ -26,7 +26,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=shared_library use_ash=0 use_aura=0", 
+      "GYP_DEFINES": "component=shared_library", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -41,7 +41,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=shared_library use_ash=0 use_aura=0", 
+      "GYP_DEFINES": "clang=1 component=shared_library", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
