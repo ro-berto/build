@@ -1155,7 +1155,7 @@ def main():
   option_parser.add_option('--extra-sharding-args', default='',
                            help='Extra options for run_test_cases.py.')
   option_parser.add_option('--spawn-dbus', action='store_true',
-                           default=False,
+                           default=True,
                            help='Work around GLib DBus bug by '
                                 'manually spawning dbus-launch')
 
