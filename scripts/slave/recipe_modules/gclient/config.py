@@ -30,7 +30,19 @@ def BaseConfig(USE_MIRROR=True, GIT_MODE=False, CACHE_DIR=None, **_kwargs):
     target_os = Set(basestring),
     target_os_only = Single(bool, empty_val=False, required=False),
     cache_dir = Static(cache_dir, hidden=False),
+
+    # Maps 'solution' -> build_property
     got_revision_mapping = Dict(hidden=True),
+
+    # TODO(iannucci): HACK! The use of None here to indicate that we apply this
+    #   to the solution.revision field is really terrible. I mostly blame
+    #   gclient.
+    # Maps 'parent_build_property' -> 'custom_var_name'
+    # Maps 'parent_build_property' -> None
+    # If value is None, the property value will be applied to
+    # solutions[0].revision. Otherwise, it will be applied to
+    # solutions[0].custom_vars['custom_var_name']
+    parent_got_revision_mapping = Dict(hidden=True),
 
     GIT_MODE = Static(bool(GIT_MODE)),
     USE_MIRROR = Static(bool(USE_MIRROR)),
@@ -103,6 +115,13 @@ def chromium_bare(c):
   m['src/tools/swarming_client'] = 'got_swarming_client_revision'
   m['src/third_party/WebKit'] = 'got_webkit_revision'
   m['src/third_party/webrtc'] = 'got_webrtc_revision'
+
+  p = c.parent_got_revision_mapping
+  p['parent_got_revision'] = None
+  p['parent_got_nacl_revision'] = 'nacl_revision'
+  p['parent_got_swarming_client_revision'] = 'swarming_revision'
+  p['parent_got_webkit_revision'] = 'webkit_revision'
+  p['parent_got_webrtc_revision'] = 'webrtc_revision'
 
 @config_ctx(includes=['chromium_bare'])
 def chromium_empty(c):

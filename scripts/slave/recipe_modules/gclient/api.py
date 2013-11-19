@@ -129,11 +129,36 @@ class GclientApi(recipe_api.RecipeApi):
                   followup_fn=parse_got_revision,
                   **kwargs)
 
+  def inject_parent_got_revision(self, gclient_config=None, override=False):
+    """Match gclient config to build revisions obtained from build_properties.
 
-  def checkout(self, gclient_config=None, revert=True, **kwargs):
+    Args:
+      gclient_config (gclient config object) - The config to manipulate. A value
+        of None manipulates the module's built-in config (self.c).
+      override (bool) - If True, will forcibly set revision and custom_vars
+        even if the config already contains values for them.
+    """
+    cfg = gclient_config or self.c
+
+    for prop, custom_var in cfg.parent_got_revision_mapping.iteritems():
+      val = str(self.m.properties.get(prop, ''))
+      if val:
+        # Special case for 'src', inject into solutions[0]
+        if custom_var is None:
+          if cfg.solutions[0].revision is None or override:
+            cfg.solutions[0].revision = val
+        else:
+          if custom_var not in cfg.solutions[0].custom_vars or override:
+            cfg.solutions[0].custom_vars[custom_var] = val
+
+  def checkout(self, gclient_config=None, revert=True,
+               inject_parent_got_revision=True, **kwargs):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
     assert cfg.complete()
+
+    if inject_parent_got_revision:
+      self.inject_parent_got_revision(cfg, override=True)
 
     spec_string = jsonish_to_python(cfg.as_jsonish(), True)
 

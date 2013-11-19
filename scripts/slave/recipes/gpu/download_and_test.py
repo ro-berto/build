@@ -43,6 +43,9 @@ def GenTests(api):
         buildername='%s tester' % plat,
         buildnumber=776,
         parent_buildername='%s builder' % plat,
-        parent_buildnumber=571) +
+        parent_buildnumber=571,
+        parent_got_revision=160000,
+        parent_got_webkit_revision=10000,
+      ) +
       api.platform.name(plat)
     )
