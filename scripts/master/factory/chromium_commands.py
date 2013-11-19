@@ -780,7 +780,7 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddMemoryTest(self, test_name, tool_name, timeout=1200,
                     factory_properties=None,
-                    wrapper_args=None):
+                    wrapper_args=None, addmethod=None):
     factory_properties = factory_properties or {}
     factory_properties['full_test_name'] = True
     if not wrapper_args:
@@ -792,6 +792,7 @@ class ChromiumCommands(commands.FactoryCommands):
         '--pass-target',
     ])
     command_class = chromium_step.AnnotatedCommand
+    addmethod = addmethod or self.AddTestStep
 
     # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
@@ -820,12 +821,17 @@ class ChromiumCommands(commands.FactoryCommands):
         factory_properties=factory_properties)
 
     test_name = 'memory test: %s' % test_name
-    self.AddTestStep(command_class, test_name, cmd,
-                     timeout=timeout,
-                     do_step_if=self.TestStepFilter)
+    addmethod(command_class, test_name, cmd,
+              timeout=timeout,
+              do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerMemoryTest(self, *args, **kwargs):
+    """Add a memory test using buildrunner."""
+    kwargs.setdefault('addmethod', self.AddBuildrunnerTestStep)
+    self.AddMemoryTest(*args, **kwargs)
 
   def AddHeapcheckTest(self, test_name, timeout, factory_properties,
-                       wrapper_args=None):
+                       wrapper_args=None, addmethod=None):
 
     factory_properties = factory_properties or {}
     factory_properties['full_test_name'] = True
@@ -838,6 +844,7 @@ class ChromiumCommands(commands.FactoryCommands):
         '--pass-target',
     ])
     command_class = chromium_step.AnnotatedCommand
+    addmethod = addmethod or self.AddTestStep
 
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
@@ -855,9 +862,14 @@ class ChromiumCommands(commands.FactoryCommands):
         factory_properties=factory_properties)
 
     test_name = 'heapcheck test: %s' % test_name
-    self.AddTestStep(command_class, test_name, cmd,
-                     timeout=timeout,
-                     do_step_if=self.TestStepFilter)
+    addmethod(command_class, test_name, cmd,
+              timeout=timeout,
+              do_step_if=self.TestStepFilter)
+
+  def AddBuildrunnerHeapcheckTest(self, *args, **kwargs):
+    """Adds a heapcheck memory test, but using buildrunner."""
+    kwargs.setdefault('addmethod', self.AddBuildrunnerTestStep)
+    self.AddHeapcheckTest(*args, **kwargs)
 
   def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
     args = args or []
@@ -1095,7 +1107,14 @@ class ChromiumCommands(commands.FactoryCommands):
       """If the prefix matches the test name it is added and True is returned.
       """
       if test.startswith(prefix):
-        self.AddMemoryTest(test[len(prefix):], prefix[:-1], timeout, fp)
+        # Normally buildrunner tests would be added in chromium_factory. We need
+        # to add that logic here since we're in chromium_commands.
+        if test.endswith('_br'):
+          real_test = test[:-3]
+          self.AddBuildrunnerMemoryTest(
+              real_test[len(prefix):], prefix[:-1], timeout, fp)
+        else:
+          self.AddMemoryTest(test[len(prefix):], prefix[:-1], timeout, fp)
         return True
       return False
 

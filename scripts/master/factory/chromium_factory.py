@@ -777,17 +777,32 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       if R('chrome_frame_tests_br'):
         f.AddBuildrunnerGTest('chrome_frame_tests', fp)
 
-    def S(test, prefix, add_functor):
+    def S(test, prefix, add_functor, br_functor=None):
+      """Find any tests with a specific prefix and add them to the build.
+
+      S() looks for prefix attached to a test, strips the prefix, and performs a
+      prefix-specific add function via add_functor. If the test is also a
+      buildrunner test (ends in _br), it uses a buildrunner functor. Thus,
+      instead of ash_unittests, valgrind_ash_unittests is ash_unittests added
+      with a special function (one that wraps it with a valgrind driver.
+      """
       if test.startswith(prefix):
         test_name = test[len(prefix):]
         tests.remove(test)
-        add_functor(test_name)
+        if br_functor and test_name.endswith('_br'):
+          br_functor(test_name[:-3])
+        else:
+          add_functor(test_name)
         return True
 
     def M(test, prefix, test_type, fp):
+      """A special case of S() that operates on memory tests."""
       return S(
           test, prefix, lambda test_name:
-          f.AddMemoryTest(test_name, test_type, factory_properties=fp))
+          f.AddMemoryTest(test_name, test_type, factory_properties=fp),
+          lambda test_name:
+            f.AddBuildrunnerMemoryTest(
+                test_name, test_type, factory_properties=fp))
 
     # Valgrind tests:
     for test in tests[:]:
