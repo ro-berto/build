@@ -23,8 +23,7 @@
     "deps_file": "DEPS", 
     "get_app_manifest_vars": false, 
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
-    "run_tree_truth": false, 
-    "target_arch": "x86"
+    "run_tree_truth": false
   }, 
   "enormous_tests": {
     "extra_deploy_opts": [

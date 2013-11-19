@@ -75,7 +75,7 @@ def x86_base(c):
 def x86_builder(c):
   pass
 
-@config_ctx(includes=['x86_builder'])
+@config_ctx(includes=['main_builder'])
 def dartium_builder(c):
   c.get_app_manifest_vars = False
   c.run_tree_truth = False
