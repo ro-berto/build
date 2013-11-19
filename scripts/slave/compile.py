@@ -13,6 +13,7 @@
 
 import datetime
 import errno
+import multiprocessing
 import optparse
 import os
 import re
@@ -817,10 +818,27 @@ def main_ninja(options, args):
       else:
         env['PATH'] = os.pathsep.join([jsonclang_dir, clang_dir, env['PATH']])
 
-    if chromium_utils.IsMac():
-      goma_jobs = 50
-    else:
-      goma_jobs = 50
+    def determine_goma_jobs():
+      # We would like to speed up build on Windows a bit, since it is slowest.
+      number_of_processors = 0
+      try:
+        number_of_processors = multiprocessing.cpu_count()
+      except NotImplementedError:
+        print 'cpu_count() is not implemented, using default value'
+
+      # When goma is used, 10 * number_of_processors is almost suitable
+      # for -j value. However, using this value in all buildbots will make
+      # goma-server overloaded. So, let's limit this only for Windows and
+      # number_of_processors >= 16.
+      # Note that most try-bot build slaves have 8 processors.
+      if chromium_utils.IsMac():
+        return 50
+      elif chromium_utils.IsWindows() and number_of_processors >= 16:
+        return min(10 * number_of_processors, 200)
+      else:
+        return 50
+
+    goma_jobs = determine_goma_jobs()
     command.append('-j%d' % goma_jobs)
 
     if chromium_utils.IsMac() and options.clobber:
