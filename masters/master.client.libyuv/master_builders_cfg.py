@@ -58,7 +58,7 @@ F('win32_release_factory', win().LibyuvFactory(
 
 B('Win64 Debug', 'win64_debug_factory', scheduler=scheduler_name)
 F('win64_debug_factory', win().LibyuvFactory(
-    target='Debug',
+    target='Debug_x64',
     options=ninja_options,
     tests=test_targets,
     factory_properties={
@@ -67,7 +67,7 @@ F('win64_debug_factory', win().LibyuvFactory(
 
 B('Win64 Release', 'win64_release_factory', scheduler=scheduler_name)
 F('win64_release_factory', win().LibyuvFactory(
-    target='Release',
+    target='Release_x64',
     options=ninja_options,
     tests=test_targets,
     factory_properties={
@@ -92,7 +92,7 @@ F('win32_2012_release_factory', win().LibyuvFactory(
 B('Win64 Debug (VS2012)', 'win64_2012_debug_factory',
   scheduler=scheduler_name)
 F('win64_2012_debug_factory', win().LibyuvFactory(
-    target='Debug',
+    target='Debug_x64',
     options=ninja_options,
     tests=test_targets,
     factory_properties=win_msvs_2012_x64_factory_properties))
@@ -100,7 +100,7 @@ F('win64_2012_debug_factory', win().LibyuvFactory(
 B('Win64 Release (VS2012)', 'win64_2012_release_factory',
   scheduler=scheduler_name)
 F('win64_2012_release_factory', win().LibyuvFactory(
-    target='Release',
+    target='Release_x64',
     options=ninja_options,
     tests=test_targets,
     factory_properties=win_msvs_2012_x64_factory_properties))
