@@ -47,7 +47,6 @@ OZONE_TESTS = [
 
 tests_that_do_not_compile = [
     'compositor_unittests',  # Bug 315370, ...
-    'content_unittests',  # Bug 315394, ...
 ]
 
 tests_that_do_not_pass = [

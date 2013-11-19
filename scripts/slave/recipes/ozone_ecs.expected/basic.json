@@ -135,6 +135,7 @@
       "cc_unittests",
       "components_unittests",
       "content_browsertests",
+      "content_unittests",
       "crypto_unittests",
       "dbus_unittests",
       "device_unittests",
@@ -245,6 +246,25 @@
       "components_unittests"
     ],
     "name": "components_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--build-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "content_unittests"
+    ],
+    "name": "content_unittests"
   },
   {
     "always_run": true,
@@ -516,29 +536,6 @@
       "compositor_unittests"
     ],
     "name": "experimentally compile compositor_unittests"
-  },
-  {
-    "abort_on_failure": false,
-    "always_run": true,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Debug",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--",
-      "content_unittests"
-    ],
-    "name": "experimentally compile content_unittests"
   },
   {
     "always_run": true,
