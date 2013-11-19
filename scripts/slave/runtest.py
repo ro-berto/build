@@ -378,12 +378,14 @@ def _get_supplemental_columns(build_dir, supplemental_colummns_file_name):
 
 def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
                               masterid, buildername, buildnumber,
-                              supplemental_columns_file):
+                              supplemental_columns_file, extra_columns=None):
   if system is None:
     # perf_id not specified in factory-properties
     return
   supplemental_columns = _get_supplemental_columns(build_dir,
                                                    supplemental_columns_file)
+  if extra_columns:
+    supplemental_columns.update(extra_columns)
   for logname, log in results_tracker.PerformanceLogs().iteritems():
     lines = [str(l).rstrip() for l in log]
     try:
@@ -611,7 +613,8 @@ def main_mac(options, args):
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file)
+        options.supplemental_columns_file,
+        options.factory_properties.get('perf_config'))
 
   return result
 
@@ -870,7 +873,8 @@ def main_linux(options, args):
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file)
+        options.supplemental_columns_file,
+        options.factory_properties.get('perf_config'))
 
   return result
 
@@ -967,7 +971,8 @@ def main_win(options, args):
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file)
+        options.supplemental_columns_file,
+        options.factory_properties.get('perf_config'))
 
   return result
 
@@ -1021,7 +1026,8 @@ def main_android(options, args):
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
         options.build_properties.get('buildnumber'),
-        options.supplemental_columns_file)
+        options.supplemental_columns_file,
+        options.factory_properties.get('perf_config'))
 
   return result
 
