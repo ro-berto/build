@@ -17,6 +17,7 @@ categories_steps = {
     'Static-Initializers',
     'Check',
     'Webkit',
+    'Benchmarks',
     'Test262',
     'Mozilla',
     'GCMole',

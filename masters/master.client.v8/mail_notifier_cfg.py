@@ -21,6 +21,7 @@ categories_steps = {
     'OptimizeForSize',
     'Mjsunit',
     'Webkit',
+    'Benchmarks',
     'Test262',
     'Mozilla',
     'GCMole',
