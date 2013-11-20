@@ -76,7 +76,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromeos=0 component=static_library toolkit_views=0 use_ash=0 use_aura=1 use_ozone=1 use_pango=0",
+      "GYP_DEFINES": "component=static_library embedded=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
