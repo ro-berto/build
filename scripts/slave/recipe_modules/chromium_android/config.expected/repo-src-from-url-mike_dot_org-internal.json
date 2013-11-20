@@ -92,19 +92,16 @@
     ]
   }, 
   "x86_base": {
-    "internal_dir": "Path('[CHECKOUT]', 'src')", 
-    "target_arch": "x86"
+    "internal_dir": "Path('[CHECKOUT]', 'src')"
   }, 
   "x86_builder": {
-    "internal_dir": "Path('[CHECKOUT]', 'src')", 
-    "target_arch": "x86"
+    "internal_dir": "Path('[CHECKOUT]', 'src')"
   }, 
   "x86_try_builder": {
     "apply_svn_patch": true, 
     "internal_dir": "Path('[CHECKOUT]', 'src')", 
     "run_findbugs": true, 
-    "run_lint": true, 
-    "target_arch": "x86"
+    "run_lint": true
   }, 
   "x86_try_instrumentation_tests": {
     "apply_svn_patch": true, 
@@ -113,7 +110,6 @@
     ], 
     "internal_dir": "Path('[CHECKOUT]', 'src')", 
     "run_stack_tool_steps": true, 
-    "target_arch": "x86", 
     "tests": [
       "smoke_instrumentation_tests", 
       "small_instrumentation_tests", 

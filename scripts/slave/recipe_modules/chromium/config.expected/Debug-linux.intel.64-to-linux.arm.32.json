@@ -26,7 +26,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=shared_library", 
+      "GYP_DEFINES": "component=shared_library target_arch=arm", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -41,7 +41,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=shared_library", 
+      "GYP_DEFINES": "clang=1 component=shared_library target_arch=arm", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -57,7 +57,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=shared_library", 
+      "GYP_DEFINES": "component=shared_library target_arch=arm", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -73,7 +73,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=shared_library", 
+      "GYP_DEFINES": "clang=1 component=shared_library target_arch=arm", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -127,24 +127,7 @@
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
   }, 
-  "dartium_builder": {
-    "build_config_fs": "Debug", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "chrome_apk", 
-        "content_shell_apk"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
+  "dartium_builder": "config \"dartium_builder\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == arm]", 
   "enormous_tests": {
     "build_config_fs": "Debug", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -219,7 +202,7 @@
       "build_tool": "ninja"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=shared_library", 
+      "GYP_DEFINES": "component=shared_library target_arch=arm", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -282,58 +265,11 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "v8_target_arch=arm"
+      "GYP_DEFINES": "target_arch=arm v8_target_arch=arm"
     }
   }, 
-  "x86_builder": {
-    "build_config_fs": "Debug", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
-  "x86_try_builder": {
-    "build_config_fs": "Debug", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
-  "x86_try_instrumentation_tests": {
-    "build_config_fs": "Debug", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
+  "x86_builder": "Cannot target x86 with TARGET_ARCH == arm", 
+  "x86_try_builder": "config \"x86_try_builder\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == arm]", 
+  "x86_try_instrumentation_tests": "config \"x86_try_instrumentation_tests\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == arm]", 
   "xcodebuild": "can not use xcodebuild on \"linux\""
 }

@@ -259,5 +259,3 @@ def tools_build(c):
   s = c.solutions.add()
   s.name = 'build'
   s.url = ChromiumGitURL(c, 'chromium', 'tools', 'build.git')
-
-

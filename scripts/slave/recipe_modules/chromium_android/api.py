@@ -104,8 +104,8 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def envsetup(self):
     envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
-    if self.c.target_arch:
-      envsetup_cmd += ['--target-arch=%s' % self.c.target_arch]
+    if self.target_arch:
+      envsetup_cmd += ['--target-arch=%s' % self.target_arch]
 
     cmd = ([self.m.path.build('scripts', 'slave', 'env_dump.py'),
             '--output-json', self.m.json.output()] + envsetup_cmd)
@@ -310,6 +310,15 @@ class AndroidApi(recipe_api.RecipeApi):
             [self.m.path.checkout('build', 'android', 'asan_symbolize.py'),
              '-l', log_file], always_run=True, env=self.get_env())
 
+  @property
+  def target_arch(self):
+    """Convert from recipe arch to android arch."""
+    return {
+      'intel': 'x86',
+      'arm':   'arm',
+      'mips':  'mips',
+    }.get(self.m.chromium.c.TARGET_ARCH, '')
+
   def test_report(self):
     return self.m.python.inline(
         'test_report',
@@ -338,7 +347,7 @@ class AndroidApi(recipe_api.RecipeApi):
     yield self.clean_local_files()
     if self.c.INTERNAL and self.c.run_tree_truth:
       yield self.run_tree_truth()
-    
+
   def common_tests_setup_steps(self):
     yield self.spawn_logcat_monitor()
     yield self.detect_and_setup_devices()

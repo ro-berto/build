@@ -119,9 +119,19 @@ def BASE(c):
       # Windows requires 64-bit builds to be in <dir>_x64.
       c.build_config_fs = c.BUILD_CONFIG + '_x64'
       c.gyp_env.GYP_MSVS_VERSION = '2012'
-      c.gyp_env.GYP_DEFINES['target_arch'] = 'x64'
     else:
       c.gyp_env.GYP_MSVS_VERSION = '2010'
+
+  gyp_arch = {
+    ('intel', 32): 'ia32',
+    ('intel', 64): 'x64',
+    ('arm',   32): 'arm',
+    ('arm',   64): 'arm',
+    ('mips',  32): 'mips',
+    ('mips',  64): 'mips',
+  }.get((c.TARGET_ARCH, c.TARGET_BITS))
+  if gyp_arch:
+    c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch
 
   if c.BUILD_CONFIG == 'Release':
     static_library(c, final=False)

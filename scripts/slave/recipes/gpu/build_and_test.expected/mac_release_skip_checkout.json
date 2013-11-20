@@ -7,7 +7,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library internal_gles2_conform_tests=1",
+      "GYP_DEFINES": "clang=1 component=static_library internal_gles2_conform_tests=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"

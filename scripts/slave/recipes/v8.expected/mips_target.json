@@ -56,7 +56,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "v8_target_arch=mips"
+      "GYP_DEFINES": "target_arch=mips v8_target_arch=mips"
     },
     "name": "gclient runhooks"
   },

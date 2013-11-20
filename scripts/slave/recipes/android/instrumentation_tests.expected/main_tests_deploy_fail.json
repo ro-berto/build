@@ -88,7 +88,8 @@
       "[BUILD]/scripts/slave/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
+      "[SLAVE_BUILD]/src/build/android/envsetup.sh",
+      "--target-arch=arm"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"

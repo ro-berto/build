@@ -56,7 +56,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "v8_target_arch=ia32"
+      "GYP_DEFINES": "target_arch=x64 v8_target_arch=x64"
     },
     "name": "gclient runhooks"
   },

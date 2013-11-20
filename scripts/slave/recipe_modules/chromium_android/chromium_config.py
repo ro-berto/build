@@ -3,10 +3,12 @@
 # found in the LICENSE file.
 
 from slave.recipe_config_types import Path
+from slave import recipe_config
 
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
-@CONFIG_CTX(includes=['ninja', 'static_library'])
+@CONFIG_CTX(includes=['ninja', 'static_library'],
+            config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32})
 def android_defaults(c):
   c.compile_py.default_targets=['All']
   c.gyp_env.GYP_CROSSCOMPILE = 1
@@ -19,12 +21,18 @@ def android_defaults(c):
   gyp_defs['gcc_version'] = 46
   gyp_defs['order_text_section'] = Path(
     '[CHECKOUT]', 'orderfiles', 'orderfile.out')
-  gyp_defs['target_arch'] = 'arm'
+
+  if c.HOST_PLATFORM != 'linux':
+    raise recipe_config.BadConf('Can only build android on linux.')
+  if c.TARGET_BITS != 32:
+    raise recipe_config.BadConf('Android cannot target %d bits' % c.TARGET_BITS)
 
 
 @CONFIG_CTX(includes=['android_defaults', 'default_compiler', 'goma'])
 def main_builder(c):
-  pass
+  if c.TARGET_ARCH != 'arm':
+    raise recipe_config.BadConf(
+      'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
 @CONFIG_CTX(includes=['android_defaults', 'clang', 'goma'])
 def clang_builder(c):
@@ -34,9 +42,12 @@ def clang_builder(c):
 def component_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
-@CONFIG_CTX(includes=['main_builder'])
+@CONFIG_CTX(includes=['android_defaults', 'default_compiler', 'goma'],
+            config_vars={'TARGET_ARCH': 'intel'})
 def x86_builder(c):
-  c.gyp_env.GYP_DEFINES['target_arch'] = 'ia32'
+  if c.TARGET_ARCH != 'intel':
+    raise recipe_config.BadConf(
+      'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
 @CONFIG_CTX(includes=['x86_builder'])
 def dartium_builder(c):
@@ -53,7 +64,7 @@ def klp_builder(c):
 def try_builder(c):
   pass
 
-@CONFIG_CTX(includes=['x86_builder', 'try_builder'])
+@CONFIG_CTX(includes=['x86_builder'])
 def x86_try_builder(c):
   pass
 
@@ -77,6 +88,6 @@ def enormous_tests(c):
 def try_instrumentation_tests(c):
   pass
 
-@CONFIG_CTX(includes=['tests_base'])
+@CONFIG_CTX(includes=['x86_builder'])
 def x86_try_instrumentation_tests(c):
   pass

@@ -10,7 +10,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
@@ -26,7 +26,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library", 
+      "GYP_DEFINES": "component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -41,7 +41,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=static_library", 
+      "GYP_DEFINES": "clang=1 component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -57,7 +57,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library", 
+      "GYP_DEFINES": "component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -73,7 +73,7 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=static_library", 
+      "GYP_DEFINES": "clang=1 component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -89,7 +89,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
@@ -105,46 +105,13 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
   }, 
-  "component_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=shared_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
-  "dartium_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "chrome_apk", 
-        "content_shell_apk"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
+  "component_builder": "config \"component_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == mips]", 
+  "dartium_builder": "config \"dartium_builder\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == mips]", 
   "enormous_tests": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -156,45 +123,13 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
   }, 
-  "klp_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android android_sdk_root=Path('[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk') android_sdk_version=4.4 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
-  "main_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
+  "klp_builder": "config \"klp_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == mips]", 
+  "main_builder": "Cannot target arm with TARGET_ARCH == mips", 
   "main_tests": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -206,7 +141,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
@@ -219,7 +154,7 @@
       "build_tool": "ninja"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library", 
+      "GYP_DEFINES": "component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -234,28 +169,12 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
   }, 
-  "try_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
+  "try_builder": "config \"try_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == mips]", 
   "try_instrumentation_tests": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -267,7 +186,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
@@ -282,58 +201,11 @@
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "v8_target_arch=mips"
+      "GYP_DEFINES": "target_arch=mips v8_target_arch=mips"
     }
   }, 
-  "x86_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
-  "x86_try_builder": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
-  "x86_try_instrumentation_tests": {
-    "build_config_fs": "Release", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
-    }
-  }, 
+  "x86_builder": "Cannot target x86 with TARGET_ARCH == mips", 
+  "x86_try_builder": "config \"x86_try_builder\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == mips]", 
+  "x86_try_instrumentation_tests": "config \"x86_try_instrumentation_tests\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == mips]", 
   "xcodebuild": "can not use xcodebuild on \"linux\""
 }

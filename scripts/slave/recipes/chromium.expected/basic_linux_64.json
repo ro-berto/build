@@ -103,7 +103,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library",
+      "GYP_DEFINES": "component=static_library target_arch=x64",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"

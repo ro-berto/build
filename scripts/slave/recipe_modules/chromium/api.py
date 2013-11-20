@@ -14,9 +14,17 @@ class ChromiumApi(recipe_api.RecipeApi):
       'TARGET_PLATFORM': self.m.platform.name,
       'TARGET_ARCH': self.m.platform.arch,
 
-      # This should probably default to the platform.bits, but right now this
-      # is the more expected configuration.
-      'TARGET_BITS': 32,
+      # NOTE: This is replicating logic which lives in
+      # chrome/trunk/src/build/common.gypi, which is undesirable. The desired
+      # end-state is that all the configuration logic lives in one place
+      # (in chromium/config.py), and the buildside gypfiles are as dumb as
+      # possible. However, since the recipes need to accurately contain
+      # {TARGET,HOST}_{BITS,ARCH,PLATFORM}, for use across many tools (of which
+      # gyp is one tool), we're taking a small risk and replicating the logic
+      # here.
+      'TARGET_BITS': (
+        32 if self.m.platform.name in ('mac', 'win')
+        else self.m.platform.bits),
 
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }

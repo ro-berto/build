@@ -56,7 +56,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "v8_target_arch=arm"
+      "GYP_DEFINES": "target_arch=arm v8_target_arch=arm"
     },
     "name": "gclient runhooks"
   },

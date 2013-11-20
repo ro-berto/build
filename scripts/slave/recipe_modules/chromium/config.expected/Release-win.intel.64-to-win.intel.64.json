@@ -1,21 +1,5 @@
 {
-  "android_defaults": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
+  "android_defaults": "Can only build android on linux.", 
   "blink": {
     "build_config_fs": "Release_x64", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -82,148 +66,14 @@
       "GYP_MSVS_VERSION": "2012"
     }
   }, 
-  "clang_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma-clang", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 clang=1 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "clang_tests": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "component_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=shared_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "dartium_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "chrome_apk", 
-        "content_shell_apk"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "enormous_tests": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "klp_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android android_sdk_root=Path('[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk') android_sdk_version=4.4 chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "main_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "main_tests": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
+  "clang_builder": "config \"clang_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
+  "clang_tests": "config \"clang_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "component_builder": "config \"component_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "dartium_builder": "config \"dartium_builder\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "enormous_tests": "config \"enormous_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "klp_builder": "config \"klp_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "main_builder": "config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
+  "main_tests": "config \"main_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "msvs": {
     "build_config_fs": "Release_x64", 
     "build_dir": "Path('[CHECKOUT]', 'build')", 
@@ -249,58 +99,9 @@
       "GYP_MSVS_VERSION": "2012"
     }
   }, 
-  "tests_base": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "try_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "try_instrumentation_tests": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
+  "tests_base": "config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]", 
+  "try_builder": "config \"try_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "try_instrumentation_tests": "config \"try_instrumentation_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "v8": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]')", 
@@ -315,58 +116,8 @@
       "GYP_MSVS_VERSION": "2012"
     }
   }, 
-  "x86_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "x86_try_builder": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
-  "x86_try_instrumentation_tests": {
-    "build_config_fs": "Release_x64", 
-    "build_dir": "Path('[CHECKOUT]', 'out')", 
-    "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
-    }, 
-    "gyp_env": {
-      "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=arm", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All", 
-      "GYP_MSVS_VERSION": "2012"
-    }
-  }, 
+  "x86_builder": "config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
+  "x86_try_builder": "config \"x86_try_builder\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "x86_try_instrumentation_tests": "config \"x86_try_instrumentation_tests\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "xcodebuild": "can not use xcodebuild on \"win\""
 }

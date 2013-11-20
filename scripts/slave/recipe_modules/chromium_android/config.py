@@ -11,7 +11,6 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
     INTERNAL = Static(INTERNAL),
     REPO_NAME = Static(REPO_NAME),
     REPO_URL = Static(REPO_URL),
-    target_arch = Single(basestring, required=False, empty_val=''),
     extra_env = Dict(value_type=(basestring,int,Path)),
     run_findbugs = Single(bool, required=False, empty_val=False),
     run_lint = Single(bool, required=False, empty_val=False),
@@ -69,7 +68,7 @@ def component_builder(c):
 
 @config_ctx()
 def x86_base(c):
-  c.target_arch = 'x86'
+  pass
 
 @config_ctx(includes=['x86_base'])
 def x86_builder(c):
