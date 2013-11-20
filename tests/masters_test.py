@@ -225,6 +225,7 @@ def main(argv):
       'master.client.drmemory': 'DrMemory',
       'master.client.dynamorio': 'DynamoRIO',
       'master.client.libyuv': 'Libyuv',
+      'master.client.libvpx': 'Libvpx',
       'master.client.nacl': 'NativeClient',
       'master.client.nacl.ports': 'NativeClientPorts',
       'master.client.nacl.sdk': 'NativeClientSDK',
