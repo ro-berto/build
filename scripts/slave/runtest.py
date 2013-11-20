@@ -5,10 +5,10 @@
 
 """A tool to run a chrome test executable, used by the buildbot slaves.
 
-  When this is run, the current directory (cwd) should be the outer build
-  directory (e.g., chrome-release/build/).
+When this is run, the current directory (cwd) should be the outer build
+directory (e.g., chrome-release/build/).
 
-  For a list of command-line options, call this script with '--help'.
+For a list of command-line options, call this script with '--help'.
 """
 
 import copy
@@ -34,9 +34,8 @@ import tempfile
 sys.path.insert(0, os.path.abspath('src/tools/python'))
 
 # Because of this dependency on a chromium checkout, we need to disable some
-# pylint checks.
+# pylint checks (no modules httpd_utils, platform_utils in module 'google').
 # pylint: disable=E0611
-# pylint: disable=E1101
 from common import chromium_utils
 from common import gtest_utils
 import config
@@ -66,9 +65,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def should_enable_sandbox(sandbox_path):
-  """Return a boolean indicating that the current slave is capable of using the
-  sandbox and should enable it.  This should return True iff the slave is a
-  Linux host with the sandbox file present and configured correctly."""
+  """Checks whether the current slave should use the sandbox.
+
+  This should return True iff the slave is a Linux host with the sandbox file
+  present and configured correctly.
+  """
   if not (sys.platform.startswith('linux') and
           os.path.exists(sandbox_path)):
     return False
@@ -90,14 +91,16 @@ def _LaunchDBus():
   """Launches DBus to work around a bug in GLib.
 
   Works around a bug in GLib where it performs operations which aren't
-  async-signal-safe (in particular, memory allocations) between fork
-  and exec when it spawns subprocesses. This causes threads inside
-  Chrome's browser and utility processes to get stuck, and this
-  harness to hang waiting for those processes, which will never
-  terminate. This doesn't happen on users' machines, because they have
-  an active desktop session and the DBUS_SESSION_BUS_ADDRESS
-  environment variable set, but it does happen on the bots. See Issue
-  309093 for more details."""
+  async-signal-safe (in particular, memory allocations) between fork and exec
+  when it spawns subprocesses. This causes threads inside Chrome's browser and
+  utility processes to get stuck, and this harness to hang waiting for those
+  processes, which will never terminate. This doesn't happen on users'
+  machines, because they have an active desktop session and the
+  DBUS_SESSION_BUS_ADDRESS environment variable set, but it does happen on the
+  bots. See crbug.com/309093 for more details.
+
+  This function is called when the flag --spawn-dbus is given.
+  """
   import platform
   import subprocess
   if (platform.uname()[0].lower() == 'linux' and
@@ -113,9 +116,9 @@ def _LaunchDBus():
     except subprocess.CalledProcessError, e:
       print 'Exception while running dbus_launch: %s' % e
 
+
 def _RunGTestCommand(command, results_tracker=None, pipes=None,
                      extra_env=None):
-
   env = os.environ.copy()
   env.update(extra_env or {})
 
@@ -300,6 +303,7 @@ def start_http_server(platform, build_dir, test_exe_path, document_root):
 
 
 def get_parsers():
+  """Returns a dictionary mapping strings to log parser classes."""
   parsers = {'gtest': gtest_utils.GTestLogParser,
              'benchpress': process_log_utils.BenchpressLogProcessor,
              'playback': process_log_utils.PlaybackLogProcessor,
@@ -311,6 +315,11 @@ def get_parsers():
 
 
 def list_parsers(selection):
+  """Prints a list of available log parser classes iff the input is 'list'.
+
+  Returns:
+    True iff the input is 'list' (meaning that a list was printed).
+  """
   parsers = get_parsers()
   shouldlist = selection and selection == 'list'
   if shouldlist:
@@ -323,6 +332,17 @@ def list_parsers(selection):
 
 
 def select_results_tracker(selection, use_gtest):
+  """Returns a log parser class (aka results tracker class).
+
+  Args:
+    selection: Name of parser to use. This is the value of the
+        of the --annotate option that's passed to this script.
+    use_gtest: Whether the gtest parser should be used. This is
+        the value of the --generate-json-file flag.
+
+  Returns:
+    A log parser class (aka results tracker class), or None.
+  """
   parsers = get_parsers()
   if selection:
     if selection in parsers:
@@ -339,6 +359,15 @@ def select_results_tracker(selection, use_gtest):
 
 
 def create_results_tracker(tracker_class, options):
+  """Instantiate a log parser (aka results tracker).
+
+  Args:
+    tracker_class: A log parser class.
+    options: Command-line options (from OptionParser).
+
+  Returns:
+    An instance of a log parser class, or None.
+  """
   if not tracker_class:
     return None
 
@@ -366,6 +395,16 @@ def create_results_tracker(tracker_class, options):
 
 
 def _get_supplemental_columns(build_dir, supplemental_colummns_file_name):
+  """Reads supplemental columns data from a file.
+
+  Args:
+    build_dir: Build dir name.
+    supplemental_columns_file_name: Name of a file which contains the
+        supplemental columns data (in JSON format).
+
+  Returns:
+    A dict of supplemental data to send to the dashboard.
+  """
   supplemental_columns = {}
   supplemental_columns_file = os.path.join(build_dir,
                                            results_dashboard.CACHE_DIR,
@@ -379,6 +418,22 @@ def _get_supplemental_columns(build_dir, supplemental_colummns_file_name):
 def send_results_to_dashboard(results_tracker, system, test, url, build_dir,
                               masterid, buildername, buildnumber,
                               supplemental_columns_file, extra_columns=None):
+  """Sends results from a results tracker (aka log parser) to the dashboard.
+
+  Args:
+    results_tracker: An instance of a log parser class, which has been used to
+        process the test output, so it contains the test results.
+    system: A string such as 'linux-release', which comes from perf_id.
+    test: Test "suite" name string.
+    url: Dashboard URL.
+    build_dir: Build dir name (used for cache file by results_dashboard).
+    masterid: ID of buildbot master, e.g. 'chromium.perf'
+    buildername: Builder name, e.g. 'Linux QA Perf (1)'
+    buildnumber: Build number (as a string).
+    supplemental_columns_file: Filename for JSON supplemental columns file.
+    extra_columns: A dict of extra values to add to the supplemental columns
+        dict.
+  """
   if system is None:
     # perf_id not specified in factory-properties
     return
@@ -429,9 +484,7 @@ def build_coverage_gtest_exclusions(options, args):
 
 
 def upload_profiling_data(options, args):
-  """Using the target build configuration, archive the profiling data to Google
-  Storage.
-  """
+  """Archives profiling data to Google Storage."""
   # args[1] has --gtest-filter argument.
   if len(args) < 2:
     return 0
@@ -503,8 +556,10 @@ def main_parse(options, _args):
     raise chromium_utils.MissingArgument('--parse-input doesn\'t make sense '
                                          'without --annotate.')
 
+  # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
+
   tracker_class = select_results_tracker(options.annotate,
                                          options.generate_json_file)
   results_tracker = create_results_tracker(tracker_class, options)
@@ -566,6 +621,7 @@ def main_mac(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
 
+  # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
   tracker_class = select_results_tracker(options.annotate,
@@ -670,6 +726,7 @@ def main_ios(options, args):
   ]
   command.extend(args[1:])
 
+  # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
   results_tracker = create_results_tracker(get_parsers()['gtest'], options)
@@ -804,6 +861,7 @@ def main_linux(options, args):
     command = [test_exe_path]
   command.extend(args[1:])
 
+  # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
   tracker_class = select_results_tracker(options.annotate,
@@ -880,7 +938,9 @@ def main_linux(options, args):
 
 
 def main_win(options, args):
-  """Using the target build configuration, run the executable given in the
+  """Runs tests on windows.
+
+  Using the target build configuration, run the executable given in the
   first non-option argument, passing any following arguments to that
   executable.
   """
@@ -928,6 +988,7 @@ def main_win(options, args):
   # directory from previous test runs (i.e.- from crashes or unittest leaks).
   slave_utils.RemoveChromeTemporaryFiles()
 
+  # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
   tracker_class = select_results_tracker(options.annotate,
@@ -978,11 +1039,11 @@ def main_win(options, args):
 
 
 def main_android(options, args):
-  """Runs tests for android.
+  """Runs tests on android.
 
-  GTest-based test is different from linux as it requires
+  Running GTest-based tests is different than on linux as it requires
   src/build/android/test_runner.py to deploy and communicate with the device.
-  python scripts are the same.
+  Python scripts are the same as with linux.
   """
   if options.run_python_script:
     return main_linux(options, args)
@@ -1033,6 +1094,13 @@ def main_android(options, args):
 
 
 def main():
+  """Entry point for runtest.py.
+
+  This function:
+    (1) Sets up the command-line options.
+    (2) Sets environment variables based on those options.
+    (3) Delegates to the platform-specific main functions.
+  """
   import platform
 
   xvfb_path = os.path.join(os.path.dirname(sys.argv[0]), '..', '..',
