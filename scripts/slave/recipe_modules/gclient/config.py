@@ -107,7 +107,7 @@ def chromium_bare(c):
     'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s',
     'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk',
     'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s',
-    'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'})
+    'webkit_trunk': BlinkURL(c)})
   m = c.got_revision_mapping
   m['src'] = 'got_revision'
   m['src/native_client'] = 'got_nacl_revision'
@@ -178,9 +178,7 @@ def chrome_internal(c):
 
 @config_ctx(includes=['chromium'])
 def blink(c):
-  c.solutions[0].custom_deps = {
-    'src/third_party/WebKit': BlinkURL(c)
-  }
+  del c.solutions[0].custom_deps
   c.solutions[0].custom_vars['webkit_revision'] = 'HEAD'
 
 @config_ctx(includes=['chromium'])
@@ -243,7 +241,7 @@ def nacl(c):
   s.name = 'native_client'
   s.url = ChromiumSvnSubURL(c, 'native_client', 'trunk', 'src', 'native_client')
   s.custom_vars = mirror_only(c, {
-    'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk',
+    'webkit_trunk': BlinkURL(c),
     'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s',
     'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s'})
 

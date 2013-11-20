@@ -3,9 +3,6 @@
     "cache_dir": null, 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "https://src.chromium.org/blink/trunk"
-        }, 
         "custom_vars": {
           "webkit_revision": "HEAD"
         }, 
@@ -31,9 +28,6 @@
     "cache_dir": null, 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "https://src.chromium.org/blink/trunk"
-        }, 
         "custom_vars": {
           "webkit_revision": "HEAD"
         }, 

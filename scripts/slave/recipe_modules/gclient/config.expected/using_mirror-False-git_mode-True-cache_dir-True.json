@@ -3,9 +3,6 @@
     "cache_dir": "CACHE_DIR", 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "https://chromium.googlesource.com/chromium/blink.git"
-        }, 
         "custom_vars": {
           "webkit_revision": "HEAD"
         }, 
@@ -31,9 +28,6 @@
     "cache_dir": "CACHE_DIR", 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "https://chromium.googlesource.com/chromium/blink.git"
-        }, 
         "custom_vars": {
           "webkit_revision": "HEAD"
         }, 

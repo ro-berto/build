@@ -3,9 +3,6 @@
     "cache_dir": null, 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "svn://svn-mirror.golo.chromium.org/blink/trunk"
-        }, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
@@ -35,9 +32,6 @@
     "cache_dir": null, 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "svn://svn-mirror.golo.chromium.org/blink/trunk"
-        }, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 

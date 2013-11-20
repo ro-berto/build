@@ -3,15 +3,12 @@
     "cache_dir": "CACHE_DIR", 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "https://chromium.googlesource.com/chromium/blink.git"
-        }, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
           "webkit_revision": "HEAD", 
-          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+          "webkit_trunk": "https://chromium.googlesource.com/chromium/blink.git"
         }, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
@@ -35,15 +32,12 @@
     "cache_dir": "CACHE_DIR", 
     "solutions": [
       {
-        "custom_deps": {
-          "src/third_party/WebKit": "https://chromium.googlesource.com/chromium/blink.git"
-        }, 
         "custom_vars": {
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
           "webkit_revision": "HEAD", 
-          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+          "webkit_trunk": "https://chromium.googlesource.com/chromium/blink.git"
         }, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
@@ -123,7 +117,7 @@
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
-          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+          "webkit_trunk": "https://chromium.googlesource.com/chromium/blink.git"
         }, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
@@ -140,7 +134,7 @@
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
-          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+          "webkit_trunk": "https://chromium.googlesource.com/chromium/blink.git"
         }, 
         "deps_file": ".DEPS.git", 
         "managed": true, 
@@ -157,7 +151,7 @@
           "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
           "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
           "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
-          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+          "webkit_trunk": "https://chromium.googlesource.com/chromium/blink.git"
         }, 
         "deps_file": "", 
         "managed": true, 
