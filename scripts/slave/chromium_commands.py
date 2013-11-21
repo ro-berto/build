@@ -15,7 +15,6 @@ from twisted.internet import defer
 
 from common import chromium_utils
 
-from buildslave.commands.base import Command
 from buildslave.commands.base import SourceBaseCommand
 from buildslave.commands.registry import commandRegistry
 from buildslave import runprocess
@@ -616,70 +615,12 @@ class GClient(SourceBaseCommand):
     return SourceBaseCommand.maybeDoVCRetry(self, res)
 
 
-class ApplyIssue(Command):
-  """Command to run apple_issue.py on the checkbout."""
-
-  # pylint doesn't follow chromium_utils.GetParentClass, so it thinks parent's
-  # __init__ isn't called.
-  # pylint: disable=W0231
-  def __init__(self, *args, **kwargs):
-    log.msg('ApplyIssue.__init__')
-    self.root = None
-    self.issue = None
-    self.patchset = None
-    self.email = None
-    self.password = None
-    self.workdir = None
-    self.timeout = None
-    self.server = None
-    chromium_utils.GetParentClass(ApplyIssue).__init__(self, *args, **kwargs)
-
-  def _doApplyIssue(self, _):
-    """Run the apply_issue.py script in the source checkout directory."""
-    log.msg('ApplyIssue._doApplyIssue')
-    cmd = [
-        'apply_issue.bat' if chromium_utils.IsWindows() else 'apply_issue',
-        '-r', self.root,
-        '-i', self.issue,
-        '-p', self.patchset,
-        '-e', self.email,
-        '--no-auth',
-    ]
-
-    if self.server:
-      cmd.extend(['-s', self.server])
-
-    command = runprocess.RunProcess(
-        self.builder, cmd, os.path.join(self.builder.basedir, self.workdir),
-        timeout=self.timeout)
-    return command.start()
-
-  # Command overrides:
-
-  def setup(self, args):
-    self.root = args['root']
-    self.issue = args['issue']
-    self.patchset = args['patchset']
-    self.email = args['email']
-    self.password = args['password']
-    self.workdir = args['workdir']
-    self.timeout = args['timeout']
-    self.server = args.get('server')
-
-  def start(self):
-    log.msg('ApplyIssue.start')
-    d = defer.succeed(None)
-    d.addCallback(self._doApplyIssue)
-    return d
-
-
 def RegisterCommands():
   """Registers all command objects defined in this file."""
   try:
     # We run this code in a try because it fails with an assertion if
     # the module is loaded twice.
     commandRegistry['gclient'] = 'slave.chromium_commands.GClient'
-    commandRegistry['apply_issue'] = 'slave.chromium_commands.ApplyIssue'
     return
   except (AssertionError, NameError):
     pass
