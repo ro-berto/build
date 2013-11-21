@@ -827,13 +827,18 @@ def main_ninja(options, args):
         print 'cpu_count() is not implemented, using default value'
 
       # When goma is used, 10 * number_of_processors is almost suitable
-      # for -j value. However, using this value in all buildbots will make
-      # goma-server overloaded. So, let's limit this only for Windows and
-      # number_of_processors >= 16.
-      # Note that most try-bot build slaves have 8 processors.
+      # for -j value. Actually -j value was originally 100 for Linux and
+      # Windows. But when goma was overloaded, it was reduced to 50.
+      # Actually, goma server could not cope with burst request correctly
+      # that time. Currently the situation got better a bit. The goma server is
+      # now able to treat such requests well to a certain extent.
+      # However, for safety, let's limit incrementing -j value only for Windows
+      # now, since it's slowest.
+      # Note that currently most try-bot build slaves have 8 processors.
       if chromium_utils.IsMac():
+        # On mac, due to the process number limit, we're using 50.
         return 50
-      elif chromium_utils.IsWindows() and number_of_processors >= 16:
+      elif chromium_utils.IsWindows() and number_of_processors > 0:
         return min(10 * number_of_processors, 200)
       else:
         return 50
