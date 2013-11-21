@@ -29,7 +29,6 @@ sys.modules['swarm_get_results'] = FakeSwarmGetResultsModule()
 
 
 import slave.swarming.get_swarm_results_shim as swarm_results
-from common import gtest_utils
 
 
 RUN_TEST_OUTPUT = (
@@ -111,38 +110,6 @@ class TestOutputTest(unittest.TestCase):
     result = generate_swarm_response(0, '', '0')
     actual = swarm_results.gen_shard_output(result, FakeGtestParser())
     self.assertEqual((expected, 1), actual)
-
-  def test_summary_output_success(self):
-    expected = 'Summary for all the shards:\nAll tests passed.'
-    actual = swarm_results.gen_summary_output([], 0, [])
-    self.assertEqual((expected, 0), actual)
-
-  def test_summary_output_failure(self):
-    expected = (
-      'Summary for all the shards:\n'
-      '1 test failed, listed below:\n'
-      '  StaticCookiePolicyTest.BlockAllCookiesTest\n')
-    actual = swarm_results.gen_summary_output(
-        ['StaticCookiePolicyTest.BlockAllCookiesTest'], 1, [])
-    self.assertEqual((expected, 1), actual)
-
-  def test_summary_output_not_found(self):
-    expected = (
-      'Summary for all the shards:\n'
-      'Not all shards were executed.\n'
-      'The following gtest shards weren\'t run:\n'
-      '  1\n')
-    actual = swarm_results.gen_summary_output([], 0, [1])
-    self.assertEqual((expected, 1), actual)
-
-  def test_parsing_generated_summary(self):
-    # The summary should not trigger reports.
-    gtest_parser = gtest_utils.GTestLogParser()
-    data, code = swarm_results.gen_summary_output(['Foo.Bar'], 1, [])
-    self.assertEqual(1, code)
-    for i in data.splitlines():
-      gtest_parser.ProcessLine(i)
-    self.assertEqual([], gtest_parser.FailedTests())
 
 
 if __name__ == '__main__':

@@ -67,23 +67,6 @@ def gen_shard_output(result, gtest_parser):
   return header + content + footer, test_exit_code
 
 
-def gen_summary_output(failed_tests, exit_code, shards_remaining):
-  out = 'Summary for all the shards:\n'
-  if failed_tests:
-    plural = 's' if len(failed_tests) > 1 else ''
-    out += '%d test%s failed, listed below:\n' % (len(failed_tests), plural)
-    out += ''.join('  %s\n' % test for test in failed_tests)
-
-  if shards_remaining:
-    out += 'Not all shards were executed.\n'
-    out += 'The following gtest shards weren\'t run:\n'
-    out += ''.join('  %d\n' % shard_id for shard_id in shards_remaining)
-    exit_code = exit_code or 1
-  elif not failed_tests:
-    out += 'All tests passed.'
-  return out, exit_code
-
-
 def v0(client, options, test_name):
   """This code supports all the earliest versions of swarm_client.
 
@@ -126,11 +109,6 @@ def v0(client, options, test_name):
   # down.
   annotation_utils.annotate(test_name, exit_code, gtest_parser)
   print('')
-  output, exit_code = gen_summary_output(
-      gtest_parser.FailedTests(),
-      exit_code,
-      shards_remaining)
-  print output
   return exit_code
 
 
@@ -158,17 +136,10 @@ def v0_1(client, options, test_name):
     gtest_parser.ProcessLine(line)
 
   proc.wait()
-  output, exit_code = gen_summary_output(
-      gtest_parser.FailedTests(),
-      proc.returncode,
-      0)
 
-  # Print the annotation before the summary so it's easier to find when scolling
-  # down.
-  annotation_utils.annotate(test_name, exit_code, gtest_parser)
+  annotation_utils.annotate(test_name, proc.returncode, gtest_parser)
   print('')
-  print(output)
-  return exit_code
+  return proc.returncode
 
 
 def determine_version_and_run_handler(client, options, test_name):
