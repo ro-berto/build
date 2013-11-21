@@ -54,7 +54,7 @@ mac_ios_factory_properties = {
     'gclient_env': {
         'GYP_CROSSCOMPILE': '1',
         'GYP_DEFINES': ('build_with_libjingle=1 OS=ios target_arch=armv7 '
-                        'key_id=""'),
+                        'key_id="" chromium_ios_signing=0'),
     }
 }
 
