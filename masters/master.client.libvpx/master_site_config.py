@@ -8,8 +8,8 @@ from config_bootstrap import Master
 
 class Libvpx(Master.Master3):
   project_name = 'Libvpx'
-  master_port = 8032
-  slave_port = 8132
-  master_port_alt = 8232
+  master_port = 8037
+  slave_port = 8137
+  master_port_alt = 8237
   buildbot_url = 'http://build.chromium.org/p/client.libvpx/'
   source_url = 'https://chromium.googlesource.com/webm/libvpx'
