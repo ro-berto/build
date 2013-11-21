@@ -25,6 +25,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -104,6 +105,7 @@
     "name": "gclient recurse (git config user.email)"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -329,6 +331,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

@@ -16,6 +16,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -26,6 +27,7 @@
     "name": "[spec: empty_deps] gclient revert"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -108,6 +110,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -118,6 +121,7 @@
     "name": "[spec: trimmed] gclient revert"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -199,6 +203,7 @@
     "name": "Blink LASTCHANGE"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

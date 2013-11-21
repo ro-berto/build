@@ -21,5 +21,6 @@ class RietveldApi(recipe_api.RecipeApi):
         '-i', self.m.properties['issue'],
         '-p', self.m.properties['patchset'],
         '-s', self.m.properties['rietveld'],
-        '--no-auth'])
+        '--no-auth'],
+        abort_on_failure=True)
 

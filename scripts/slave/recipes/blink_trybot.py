@@ -210,10 +210,10 @@ def GenTests(api):
             api.test(name) +
             props(build_config, git_mode) +
             api.platform.name(plat) +
-            api.step_data(with_patch, canned_test(passing=passFirst))
+            api.override_step_data(with_patch, canned_test(passing=passFirst))
           )
           if not passFirst:
-            test += api.step_data(
+            test += api.override_step_data(
               without_patch, canned_test(passing=False, minimal=True))
           yield test
 
@@ -222,6 +222,19 @@ def GenTests(api):
   yield (
     api.test('minimal_pass_continues') +
     props() +
-    api.step_data(with_patch, canned_test(passing=False)) +
-    api.step_data(without_patch, canned_test(passing=True, minimal=True))
+    api.override_step_data(with_patch, canned_test(passing=False)) +
+    api.override_step_data(without_patch,
+                           canned_test(passing=True, minimal=True))
+  )
+
+  yield (
+    api.test('bad_revert_bails') +
+    props() +
+    api.step_data('gclient revert', retcode=1)
+  )
+
+  yield (
+    api.test('bad_sync_bails') +
+    props() +
+    api.step_data('gclient sync', retcode=1)
   )

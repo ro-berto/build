@@ -19,6 +19,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -29,6 +30,7 @@
     "name": "gclient revert"
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -74,6 +76,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",

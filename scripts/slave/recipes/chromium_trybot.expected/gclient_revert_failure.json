@@ -19,6 +19,7 @@
     ]
   },
   {
+    "abort_on_failure": true,
     "cmd": [
       "python",
       "-u",
@@ -31,76 +32,5 @@
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"
     ]
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "sync",
-      "--nohooks",
-      "--revision",
-      "src@HEAD",
-      "--output-json",
-      "/path/to/tmp/json"
-    ],
-    "name": "gclient sync",
-    "skip": true
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]\\apply_issue.py",
-      "-r",
-      "[SLAVE_BUILD]\\src",
-      "-i",
-      "12853011",
-      "-p",
-      "1",
-      "-s",
-      "https://codereview.chromium.org",
-      "--no-auth"
-    ],
-    "name": "apply_issue",
-    "skip": true
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]\\gclient.py",
-      "runhooks"
-    ],
-    "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
-      "GYP_GENERATORS": "ninja",
-      "GYP_MSVS_VERSION": "2010"
-    },
-    "name": "gclient runhooks",
-    "skip": true
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\compile.py",
-      "--target",
-      "Release",
-      "--build-dir",
-      "[SLAVE_BUILD]\\src\\out",
-      "--src-dir",
-      "[SLAVE_BUILD]\\src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma",
-      "--",
-      "base_unittests",
-      "net_unittests"
-    ],
-    "name": "compile",
-    "skip": true
   }
 ]

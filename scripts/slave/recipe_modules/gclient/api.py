@@ -77,6 +77,8 @@ class GclientApi(recipe_api.RecipeApi):
 
   @recipe_api.inject_test_data
   def sync(self, cfg, **kwargs):
+    kwargs.setdefault('abort_on_failure', True)
+
     revisions = []
     for i, s in enumerate(cfg.solutions):
       if i == 0 and s.revision is None:
@@ -195,6 +197,8 @@ class GclientApi(recipe_api.RecipeApi):
     prefix = 'gclient '
     if self.spec_alias:
       prefix = ('[spec: %s] ' % self.spec_alias) + prefix
+
+    kwargs.setdefault('abort_on_failure', True)
 
     return self.m.python(prefix + 'revert',
         self.m.path.build('scripts', 'slave', 'gclient_safe_revert.py'),

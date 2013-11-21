@@ -92,3 +92,13 @@ def GenTests(api):
     api.properties.git_scheduled(build_config='Release', skip_compile=True) +
     api.platform.name('mac')
   )
+
+  # Bail when apply_issue fails
+  yield (
+    api.test('bail_on_bad_patch') +
+    api.properties.tryserver(
+        build_config='Release',
+        root='src/third_party/WebKit') +
+    api.platform.name('mac') +
+    api.step_data('apply_issue', retcode=1)
+  )
