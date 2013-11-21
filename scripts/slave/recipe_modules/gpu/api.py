@@ -122,6 +122,13 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.platform.is_linux:
       env['CHROME_DEVEL_SANDBOX'] = '/opt/chromium/chrome_sandbox'
 
+    # Google Maps Pixel tests.
+    yield self.run_telemetry_gpu_test('maps', name='maps_pixel_test',
+        args=[
+            '--generated-dir=%s' % self._generated_dir,
+            '--build-revision=%s' % self._build_revision,
+        ])
+
     # Pixel tests.
     yield self.run_telemetry_gpu_test('pixel_test',
         args=[
