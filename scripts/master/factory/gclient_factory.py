@@ -132,12 +132,13 @@ class GClientFactory(object):
   """Encapsulates data and methods common to both (all) master.cfg files."""
 
   def __init__(self, build_dir, solutions, project=None, target_platform=None,
-               nohooks_on_update=False, target_os=None):
+               nohooks_on_update=False, target_os=None, revision_mapping=None):
     self._build_dir = build_dir
     self._solutions = solutions
     self._target_platform = target_platform or 'win32'
     self._target_os = target_os
     self._nohooks_on_update = nohooks_on_update
+    self._revision_mapping = revision_mapping
 
     if self._target_platform == 'win32':
       # Look for a solution named for its enclosing directory.
@@ -343,7 +344,8 @@ class GClientFactory(object):
                       'TrybotTester', 'TrybotBuilder'):
       factory_cmd_obj.AddApplyIssueStep(
           timeout=timeout,
-          server=config.Master.Master4.code_review_site)
+          server=config.Master.Master4.code_review_site,
+          revision_mapping=self._revision_mapping)
 
     if not self._nohooks_on_update:
       factory_cmd_obj.AddRunHooksStep(env=env, timeout=timeout)

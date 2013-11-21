@@ -114,6 +114,17 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       ('src/third_party/adobe/flash/symbols/ppapi/win_x64', None),
   ]
 
+  # Mapping of repositories to got_xx_revision variables.
+  CHROMIUM_GOT_REVISION_MAPPINGS = {
+      'src': 'got_revision',
+      'src/third_party/WebKit': 'got_webkit_revision',
+      'src/third_party/webrtc': 'got_webrtc_revision',
+      'src/tools/swarm_client': 'got_swarm_client_revision',  # crbug.com/321778
+      'src/tools/swarming_client': 'got_swarming_client_revision',
+      'src/v8': 'got_v8_revision',
+  }
+
+
   # A map used to skip dependencies when a test is not run.
   # The map key is the test name. The map value is an array containing the
   # dependencies that are not needed when this test is not run.
@@ -245,11 +256,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       solution = gclient_factory.GClientSolution(svn_url)
       internal_custom_deps_list.append(solution)
 
-    gclient_factory.GClientFactory.__init__(self, build_dir,
-                                            internal_custom_deps_list,
-                                            target_platform=target_platform,
-                                            nohooks_on_update=nohooks_on_update,
-                                            target_os=target_os)
+    gclient_factory.GClientFactory.__init__(self,
+        build_dir, internal_custom_deps_list, target_platform=target_platform,
+        nohooks_on_update=nohooks_on_update, target_os=target_os,
+        revision_mapping=self.CHROMIUM_GOT_REVISION_MAPPINGS)
     if swarm_client_canary:
       # Contrary to other canaries like blink, v8, we don't really care about
       # having one build per swarm_client commits by having an additional source

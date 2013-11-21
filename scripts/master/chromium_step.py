@@ -19,7 +19,6 @@ from buildbot.process.properties import WithProperties
 from buildbot.status import builder
 from buildbot.steps import shell
 from buildbot.steps import source
-from buildbot.process.buildstep import LoggingBuildStep
 
 from common import annotator
 from common import chromium_utils
@@ -279,29 +278,6 @@ class GClient(source.Source):
         got_revision = cmd.updates[cmd_arg][-1]
         if got_revision:
           self.setProperty(prop_name, str(got_revision), 'Source')
-
-
-class ApplyIssue(LoggingBuildStep):
-  """Runs the apply_issue.py script on the slave."""
-
-  def __init__(self, root, issue, patchset, email, password, workdir, timeout,
-               server, **kwargs):
-    LoggingBuildStep.__init__(self, **kwargs)
-    self.args = {'root': root,
-                 'issue': issue,
-                 'patchset': patchset,
-                 'email': email,
-                 'password': password,
-                 'workdir': workdir,
-                 'timeout': timeout,
-                 'server': server,
-                 }
-
-  def start(self):
-    args = dict((name, self.build.render(value))
-                for name, value in self.args.iteritems())
-    cmd = buildstep.LoggedRemoteCommand('apply_issue', args)
-    self.startCommand(cmd)
 
 
 class BuilderStatus(object):

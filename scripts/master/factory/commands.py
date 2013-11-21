@@ -912,7 +912,7 @@ class FactoryCommands(object):
         primary_repo=primary_repo,
         blink_config=blink_config)
 
-  def AddApplyIssueStep(self, timeout, server):
+  def AddApplyIssueStep(self, timeout, server, revision_mapping):
     """Adds a step to the factory to apply an issues from Rietveld.
 
     It is a conditional step that is only run on the try server if the following
@@ -935,20 +935,34 @@ class FactoryCommands(object):
         return False
       return True
 
+    apply_issue = 'apply_issue'
+    if self._target_platform and self._target_platform == 'win32':
+      apply_issue += '.bat'
+
+    cmd = [
+        apply_issue,
+        '-r', WithProperties('%(root:~src)s'),
+        '-i', WithProperties('%(issue:-)s'),
+        '-p', WithProperties('%(patchset:-)s'),
+        '-e', 'commit-bot@chromium.org',
+        '--no-auth',
+    ]
+
+    if server:
+      cmd.extend(['-s', server])
+
+    if revision_mapping:
+      cmd.extend(['--revision-mapping=%s' % json.dumps(revision_mapping)])
+
     self._factory.addStep(
-        chromium_step.ApplyIssue,
-        root=WithProperties('%(root:~src)s'),
-        issue=WithProperties('%(issue:-)s'),
-        patchset=WithProperties('%(patchset:-)s'),
-        email='commit-bot@chromium.org',
-        password='DeliciousPie',
-        workdir=self.working_dir,
-        timeout=timeout or 600,
-        server=server,
+        chromium_step.AnnotatedCommand,
         haltOnFailure=True,
         flunkOnFailure=True,
         name='apply_issue',
-        doStepIf=do_step_if)
+        timeout=timeout or 600,
+        workdir=self.working_dir,
+        doStepIf=do_step_if,
+        command=cmd)
 
   def AddRunHooksStep(self, env=None, timeout=None):
     """Adds a step to the factory to run the gclient hooks."""
