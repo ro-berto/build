@@ -51,6 +51,8 @@ class AOSPApi(recipe_api.RecipeApi):
     yield self.m.gclient.checkout(spec)
     del self.m.gclient.spec_alias
 
+    yield self.m.gclient.runhooks(env={'GYP_CHROMIUM_NO_ACTION': 1})
+
   def lastchange_steps(self):
     lastchange_command = self.m.path.checkout('build', 'util', 'lastchange.py')
     yield (
