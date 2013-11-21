@@ -113,7 +113,7 @@ def _LaunchDBus():
         if m:
           os.environ[m.group(1)] = m.group(2)
           print ' setting %s to %s' % (m.group(1), m.group(2))
-    except subprocess.CalledProcessError, e:
+    except (subprocess.CalledProcessError, OSError), e:
       print 'Exception while running dbus_launch: %s' % e
 
 
