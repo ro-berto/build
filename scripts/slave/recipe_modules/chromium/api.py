@@ -161,3 +161,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     return self.m.gclient.runhooks(**kwargs)
 
+  def checkdeps(self, suffix=None, **kwargs):
+    name = 'checkdeps'
+    if suffix:
+      name += ' (%s)' % suffix
+    return self.m.step(
+        name,
+        [self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
+         '--json', self.m.json.output()],
+        **kwargs)

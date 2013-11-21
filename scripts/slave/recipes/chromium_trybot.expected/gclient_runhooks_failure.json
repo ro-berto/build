@@ -15,7 +15,8 @@
       "gclient sync",
       "apply_issue",
       "gclient runhooks",
-      "compile"
+      "compile",
+      "checkdeps (with patch)"
     ]
   },
   {
@@ -132,6 +133,16 @@
       "net_unittests"
     ],
     "name": "compile",
+    "skip": true
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "[SLAVE_BUILD]\\src\\tools\\checkdeps\\checkdeps.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checkdeps (with patch)",
     "skip": true
   }
 ]
