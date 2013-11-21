@@ -264,7 +264,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       # Contrary to other canaries like blink, v8, we don't really care about
       # having one build per swarm_client commits by having an additional source
       # change listener so just fetching @ToT all the time is good enough.
-      self._solutions[0].custom_vars_list.append(('swarm_revision', ''))
+      self._solutions[0].custom_vars_list.append(('swarming_revision', ''))
 
   def _AddTests(self, factory_cmd_obj, tests, mode=None,
                 factory_properties=None):
