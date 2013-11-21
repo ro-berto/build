@@ -142,6 +142,7 @@
       "crypto_unittests",
       "dbus_unittests",
       "device_unittests",
+      "events_unittests",
       "gpu_unittests",
       "ipc_tests",
       "media_unittests",
@@ -345,6 +346,25 @@
       "device_unittests"
     ],
     "name": "device_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--build-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "events_unittests"
+    ],
+    "name": "events_unittests"
   },
   {
     "always_run": true,

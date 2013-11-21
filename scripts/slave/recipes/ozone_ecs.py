@@ -43,6 +43,7 @@ OZONE_TESTS = [
 ] + [
     'aura_unittests',
     'compositor_unittests',
+    'events_unittests',
 ]
 
 tests_that_do_not_compile = [
