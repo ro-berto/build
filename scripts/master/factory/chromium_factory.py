@@ -660,6 +660,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'memory.reload.2012Q3',
         'memory.top_25',
         'rasterize_and_record.key_mobile_sites',
+        'rasterize_and_record.key_silk_cases',
         'rasterize_and_record.top_25',
         'smoothness.key_mobile_sites',
         'smoothness.top_25',
