@@ -249,7 +249,7 @@
       "-u",
       "https://android.googlesource.com/platform/manifest",
       "-b",
-      "android-4.3_r2.3"
+      "android-4.4_r1"
     ],
     "cwd": "[SLAVE_BUILD]/android-src",
     "name": "repo init"
@@ -284,7 +284,7 @@
     "cmd": [
       "[DEPOT_TOOLS]/repo",
       "sync",
-      "-j16",
+      "-j6",
       "-d",
       "-f"
     ],

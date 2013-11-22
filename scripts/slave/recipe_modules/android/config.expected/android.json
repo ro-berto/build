@@ -2,9 +2,9 @@
   "AOSP": {
     "lunch_flavor": "full-eng", 
     "repo": {
-      "branch": "android-4.3_r2.3", 
+      "branch": "android-4.4_r1", 
       "sync_flags": [
-        "-j16", 
+        "-j6", 
         "-d", 
         "-f"
       ], 
