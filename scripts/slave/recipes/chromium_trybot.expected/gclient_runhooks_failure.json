@@ -138,6 +138,8 @@
   {
     "can_fail_build": false,
     "cmd": [
+      "python",
+      "-u",
       "[SLAVE_BUILD]\\src\\tools\\checkdeps\\checkdeps.py",
       "--json",
       "/path/to/tmp/json"
