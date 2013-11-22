@@ -18,6 +18,30 @@
     return ''
   };
 
+  /**
+   * Callback to replace the LKGR link with one that identifies the current
+   * revision for the LKGR.
+   */
+  function DisplayLKGR() {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        json = JSON.parse(xmlHttp.responseText);
+        lkgr = 0
+        for (var i in json) {
+          if(json[i]["status"] && json[i]["revision"] > lkgr)
+            lkgr = json[i]["revision"];
+        }
+        if(lkgr != 0)
+          document.getElementById('lkgr_link').innerHTML = lkgr;
+      }
+    };
+
+    var lkgrPath = "http://v8-status.appspot.com/revisions?format=json";
+    xmlHttp.open('GET', lkgrPath, true);
+    xmlHttp.send(null);
+  }
+
   branches_url = "http://build.chromium.org/p/client.v8.branches/horizontal_one_box_per_builder"
 </script>
 
@@ -35,6 +59,12 @@
         &nbsp;&nbsp;
         <b>Controls: </b>
         <a id="tree_status_link" href="http://v8-status.appspot.com">tree status</a>
+        &nbsp;&nbsp;
+        <b>LKGR: </b>
+        <a id="lkgr_link" href="http://v8-status.appspot.com/lkgr">lkgr</a>
+        <script language="javascript">
+          setTimeout('DisplayLKGR()', 100);
+        </script>
         &nbsp;&nbsp;
         <b>Branch builders: </b>
       </td>
