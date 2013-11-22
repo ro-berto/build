@@ -16,13 +16,14 @@ class LibyuvFactory(gclient_factory.GClientFactory):
   CUSTOM_DEPS_VALGRIND = ('third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
 
-  def __init__(self, build_dir, target_platform):
+  def __init__(self, build_dir, target_platform, target_os=None):
     """Creates a Libyuv factory.
 
     Args:
       build_dir: Directory to perform the build relative to. Usually this is
         src/build.
-      target_platform: Platform, one of 'win32', 'darwin', 'linux2'
+      target_platform: Platform, one of 'win32', 'darwin', 'linux2'.
+      target_os: Set to sync additional OS dependencies.
     """
     # Use root_dir=src since many Chromium scripts rely on that path.
     custom_vars_list = [self.CUSTOM_VARS_ROOT_DIR]
@@ -31,7 +32,8 @@ class LibyuvFactory(gclient_factory.GClientFactory):
     solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list))
     gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
-                                            target_platform=target_platform)
+                                            target_platform=target_platform,
+                                            target_os=target_os)
 
   def LibyuvFactory(self, target='Debug', clobber=False, tests=None,
                        mode=None, slave_type='BuilderTester', options=None,

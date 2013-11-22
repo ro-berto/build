@@ -14,6 +14,8 @@ S = helper.Scheduler
 
 def linux(): return libyuv_factory.LibyuvFactory('src/out', 'linux2')
 def mac(): return libyuv_factory.LibyuvFactory('src/out', 'darwin')
+def mac_ios(): return libyuv_factory.LibyuvFactory('src/out', 'darwin',
+                                                   target_os='ios')
 def win(): return libyuv_factory.LibyuvFactory('src/out', 'win32')
 
 scheduler_name = 'libyuv_scheduler'
@@ -36,6 +38,14 @@ win_msvs_2012_x64_factory_properties = {
         'GYP_MSVS_VERSION': '2012',
     },
 }
+
+mac_ios_factory_properties = {
+    'gclient_env': {
+        'GYP_CROSSCOMPILE': '1',
+        'GYP_DEFINES': 'OS=ios target_arch=armv7',
+    }
+}
+
 asan_gclient_env = {
     'GYP_DEFINES': ('asan=1 release_extra_cflags=-g linux_use_tcmalloc=0 ')}
 
@@ -147,6 +157,18 @@ F('mac_asan_factory', mac().LibyuvFactory(
         'asan': True,
         'gclient_env': asan_gclient_env.copy(),
     }))
+
+B('iOS Debug', 'ios_debug_factory', scheduler=scheduler_name)
+F('ios_debug_factory', mac_ios().LibyuvFactory(
+    target='Debug-iphoneos',
+    options=ninja_options,
+    factory_properties=mac_ios_factory_properties))
+
+B('iOS Release', 'ios_release_factory', scheduler=scheduler_name)
+F('ios_release_factory', mac_ios().LibyuvFactory(
+    target='Release-iphoneos',
+    options=ninja_options,
+    factory_properties=mac_ios_factory_properties))
 
 # Linux.
 defaults['category'] = 'linux'
