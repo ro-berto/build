@@ -7,7 +7,8 @@ from slave import recipe_api
 SIMPLE_TESTS_TO_RUN = [
   'content_gl_tests',
   'gles2_conform_test',
-  'gl_tests'
+  'gl_tests',
+  'angle_unittests'
 ]
 
 class GpuApi(recipe_api.RecipeApi):
