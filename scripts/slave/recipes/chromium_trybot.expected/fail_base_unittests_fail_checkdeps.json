@@ -38,6 +38,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
+      "--delete_unversioned_trees",
       "--revision",
       "src@HEAD",
       "--output-json",

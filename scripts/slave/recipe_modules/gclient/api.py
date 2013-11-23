@@ -105,8 +105,8 @@ class GclientApi(recipe_api.RecipeApi):
           step_result.presentation.properties[propname] = info['revision']
 
     if not cfg.GIT_MODE:
-      return self('sync', ['sync', '--nohooks'] + revisions +
-                  ['--output-json', self.m.json.output()],
+      return self('sync', ['sync', '--nohooks', '--delete_unversioned_trees'] +
+                  revisions + ['--output-json', self.m.json.output()],
                   followup_fn=parse_got_revision, **kwargs)
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()

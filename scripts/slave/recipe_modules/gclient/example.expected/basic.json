@@ -34,6 +34,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
+      "--delete_unversioned_trees",
       "--output-json",
       "/path/to/tmp/json"
     ],
@@ -82,6 +83,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "sync",
       "--nohooks",
+      "--delete_unversioned_trees",
       "--output-json",
       "/path/to/tmp/json"
     ],
