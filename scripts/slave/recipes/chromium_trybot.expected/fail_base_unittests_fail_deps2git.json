@@ -15,8 +15,7 @@
       "gclient sync",
       "apply_issue",
       "gclient runhooks",
-      "compile",
-      "checkdeps (with patch)"
+      "compile"
     ]
   },
   {
@@ -140,19 +139,47 @@
       "/path/to/tmp/json"
     ],
     "name": "checkdeps (with patch)",
+    "seed_steps": [
+      "checkdeps (with patch)",
+      "deps2git (with patch)",
+      "deps2submodules"
+    ],
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/deps2git/deps2git.py",
+      "-d",
+      "[SLAVE_BUILD]/src/DEPS",
+      "-o",
+      "[SLAVE_BUILD]/src/.DEPS.git",
+      "--verify",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "deps2git (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dependee_path\": \"/path/to/dependee\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"violations\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"include_path\": \"/path/to/include\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"https://chromium.googlesource.com/external/v8.git\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/deps2git/deps2submodules.py",
+      "--gitless",
+      "[SLAVE_BUILD]/src/.DEPS.git"
+    ],
+    "name": "deps2submodules"
   },
   {
     "always_run": true,
@@ -262,6 +289,18 @@
     ]
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "print \"ALL IS WELL\""
+    ],
+    "name": "checkdeps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
     "abort_on_failure": true,
     "cmd": [
       "python",
@@ -294,21 +333,19 @@
     "cmd": [
       "python",
       "-u",
-      "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
+      "[SLAVE_BUILD]/src/tools/deps2git/deps2git.py",
+      "-d",
+      "[SLAVE_BUILD]/src/DEPS",
+      "-o",
+      "[SLAVE_BUILD]/src/.DEPS.git",
+      "--verify",
       "--json",
       "/path/to/tmp/json"
     ],
-    "name": "checkdeps (without patch)",
+    "name": "deps2git (without patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
-      "@@@STEP_LOG_LINE@json.output@  {@@@",
-      "@@@STEP_LOG_LINE@json.output@    \"dependee_path\": \"/path/to/dependee\", @@@",
-      "@@@STEP_LOG_LINE@json.output@    \"violations\": [@@@",
-      "@@@STEP_LOG_LINE@json.output@      {@@@",
-      "@@@STEP_LOG_LINE@json.output@        \"include_path\": \"/path/to/include\"@@@",
-      "@@@STEP_LOG_LINE@json.output@      }@@@",
-      "@@@STEP_LOG_LINE@json.output@    ]@@@",
-      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"https://chromium.googlesource.com/external/v8.git\"@@@",
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
@@ -317,10 +354,10 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for (dependee, include) in failures['new']:\n    print '\\t%s -> %s' % (dependee, include)\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for (dependee, include) in failures['ignored']:\n    print '\\t%s -> %s' % (dependee, include)\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [[\"/path/to/dependee\", \"/path/to/include\"]], \"new\": []}"
+      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for url in failures['new']:\n    print url\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for url in failures['ignored']:\n    print url\n\nsys.exit(0 if success else 1)\n",
+      "{\"ignored\": [\"https://chromium.googlesource.com/external/v8.git\"], \"new\": []}"
     ],
-    "name": "checkdeps",
+    "name": "checkdeps (2)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
@@ -331,13 +368,13 @@
       "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
       "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
       "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for (dependee, include) in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print '\\t%s -> %s' % (dependee, include)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for url in failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print url@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
       "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for (dependee, include) in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print '\\t%s -> %s' % (dependee, include)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for url in failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print url@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
       "@@@STEP_LOG_END@python.inline@@@"

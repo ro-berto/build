@@ -15,8 +15,7 @@
       "gclient sync",
       "apply_issue",
       "gclient runhooks",
-      "compile",
-      "checkdeps (with patch)"
+      "compile"
     ]
   },
   {
@@ -140,6 +139,11 @@
       "/path/to/tmp/json"
     ],
     "name": "checkdeps (with patch)",
+    "seed_steps": [
+      "checkdeps (with patch)",
+      "deps2git (with patch)",
+      "deps2submodules"
+    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -153,6 +157,36 @@
       "@@@STEP_LOG_LINE@json.output@]@@@",
       "@@@STEP_LOG_END@json.output@@@"
     ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/deps2git/deps2git.py",
+      "-d",
+      "[SLAVE_BUILD]/src/DEPS",
+      "-o",
+      "[SLAVE_BUILD]/src/.DEPS.git",
+      "--verify",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "deps2git (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/deps2git/deps2submodules.py",
+      "--gitless",
+      "[SLAVE_BUILD]/src/.DEPS.git"
+    ],
+    "name": "deps2submodules"
   },
   {
     "always_run": true,
@@ -256,6 +290,18 @@
       "@@@STEP_LOG_LINE@json.gtest_results@  ]@@@",
       "@@@STEP_LOG_LINE@json.gtest_results@}@@@",
       "@@@STEP_LOG_END@json.gtest_results@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "print \"ALL IS WELL\""
+    ],
+    "name": "deps2git",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
     ]
   },
   {

@@ -129,6 +129,39 @@ def SummarizeCheckdepsResults(api, with_patch, without_patch):
   )
 
 
+def SummarizeDeps2GitResults(api, with_patch, without_patch):
+  ignored_failures = set(without_patch)
+  new_failures = set(with_patch) - ignored_failures
+  return api.python.inline(
+    'checkdeps',
+    r"""
+    import sys, json
+    failures = json.load(open(sys.argv[1], 'rb'))
+
+    success = True
+
+    if failures['new']:
+      success = False
+      print 'New failures:'
+      for url in failures['new']:
+        print url
+
+    if failures['ignored']:
+      print 'Ignored failures:'
+      for url in failures['ignored']:
+        print url
+
+    sys.exit(0 if success else 1)
+    """,
+    args=[
+      api.json.input({
+        'new': list(new_failures),
+        'ignored': list(ignored_failures),
+      })
+    ],
+  )
+
+
 def GenSteps(api):
   api.chromium.set_config('chromium')
   api.chromium.apply_config('trybot_flavor')
@@ -139,12 +172,17 @@ def GenSteps(api):
     api.rietveld.apply_issue(),
     api.chromium.runhooks(),
     api.chromium.compile(targets=GTEST_TESTS),
-    api.chromium.checkdeps('with patch', can_fail_build=False),
   )
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
     return
+
+  yield (
+    api.chromium.checkdeps('with patch', can_fail_build=False),
+    api.chromium.deps2git('with patch', can_fail_build=False),
+    api.chromium.deps2submodules(),
+  )
 
   with_patch = {}
   for test in GTEST_TESTS:
@@ -163,6 +201,11 @@ def GenSteps(api):
   else:
     other_retry_tests.append('checkdeps')
 
+  if api.step_history['deps2git (with patch)'].json.output == []:
+    yield api.python.inline('deps2git', 'print "ALL IS WELL"')
+  else:
+    other_retry_tests.append('deps2git')
+
   if not gtest_retry_tests:
     yield api.python.inline('gtest_tests', 'print "ALL IS WELL"')
 
@@ -180,6 +223,14 @@ def GenSteps(api):
       api,
       with_patch=api.step_history['checkdeps (with patch)'].json.output,
       without_patch=api.step_history['checkdeps (without patch)'].json.output
+    )
+
+  if 'deps2git' in other_retry_tests:
+    yield api.chromium.deps2git('without patch', can_fail_build=False)
+    yield SummarizeDeps2GitResults(
+      api,
+      with_patch=api.step_history['deps2git (with patch)'].json.output,
+      without_patch=api.step_history['deps2git (without patch)'].json.output
     )
 
   if gtest_retry_tests:
@@ -218,6 +269,10 @@ def GenTests(api):
       },
     ],
   }
+  canned_deps2git = {
+    True: [],
+    False: ['https://chromium.googlesource.com/external/v8.git'],
+  }
   canned_test = api.json.canned_gtest_output
   def props(config='Release', git_mode=False):
     return api.properties.tryserver(
@@ -238,6 +293,8 @@ def GenTests(api):
 
         test += api.step_data('checkdeps (with patch)',
                               api.json.output(canned_checkdeps[True]))
+        test += api.step_data('deps2git (with patch)',
+                              api.json.output(canned_deps2git[True]))
         for gtest_test in GTEST_TESTS:
           test += api.step_data(gtest_test + ' (with patch)',
                                 canned_test(passing=True))
@@ -254,7 +311,7 @@ def GenTests(api):
     (None, 'checkdeps'),
     ('checkdeps', None),
     ('checkdeps', 'base_unittests'),
-    ('base_unittests', 'checkdeps'),
+    ('base_unittests', 'deps2git'),
   ]
   for (really_failing_test, spuriously_failing_test) in TEST_FAILURES:
     name = ('success' if not really_failing_test else
@@ -276,6 +333,16 @@ def GenTests(api):
           'checkdeps (without patch)',
           api.json.output(
               canned_checkdeps[really_failing_test=='checkdeps']))
+
+    passing = 'deps2git' not in (really_failing_test,
+                                 spuriously_failing_test)
+    test += api.step_data('deps2git (with patch)',
+                          api.json.output(canned_deps2git[passing]))
+    if not passing:
+      test += api.step_data(
+          'deps2git (without patch)',
+          api.json.output(
+              canned_deps2git[really_failing_test=='deps2git']))
 
     for gtest_test in GTEST_TESTS:
       passing = gtest_test not in (really_failing_test,

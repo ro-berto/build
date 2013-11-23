@@ -170,3 +170,23 @@ class ChromiumApi(recipe_api.RecipeApi):
         self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
         args=['--json', self.m.json.output()],
         **kwargs)
+
+  def deps2git(self, suffix=None, **kwargs):
+    name = 'deps2git'
+    if suffix:
+      name += ' (%s)' % suffix
+    return self.m.python(
+        name,
+        self.m.path.checkout('tools', 'deps2git', 'deps2git.py'),
+        args=['-d', self.m.path.checkout('DEPS'),
+              '-o', self.m.path.checkout('.DEPS.git'),
+              '--verify',
+              '--json', self.m.json.output()],
+        **kwargs)
+
+  def deps2submodules(self, **kwargs):
+    return self.m.python(
+        'deps2submodules',
+        self.m.path.checkout('tools', 'deps2git', 'deps2submodules.py'),
+        args=['--gitless', self.m.path.checkout('.DEPS.git')],
+        **kwargs)

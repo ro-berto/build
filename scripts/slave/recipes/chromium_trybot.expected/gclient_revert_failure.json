@@ -15,8 +15,7 @@
       "gclient sync",
       "apply_issue",
       "gclient runhooks",
-      "compile",
-      "checkdeps (with patch)"
+      "compile"
     ]
   },
   {
