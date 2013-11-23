@@ -150,7 +150,7 @@ class GpuApi(recipe_api.RecipeApi):
     # WebGL conformance tests.
     yield self.run_telemetry_gpu_test('webgl_conformance',
         args=[
-            '--webgl-conformance-version=1.0.2'
+            '--webgl-conformance-version=1.0.1'
         ])
 
     # Context lost tests.
