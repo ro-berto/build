@@ -1,0 +1,226 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport os, sys, shutil\nroot = sys.argv[1]\nnuke_dirs = sys.argv[2:]\nfor fname in os.listdir(root):\n  path = os.path.join(root, fname)\n  if os.path.isfile(path):\n    os.unlink(path)\n  elif fname in nuke_dirs:\n    shutil.rmtree(path)\n",
+      "[SLAVE_BUILD]",
+      "libs",
+      "obj",
+      "armeabi-v7a"
+    ],
+    "name": "clean_build",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import os, sys, shutil@@@",
+      "@@@STEP_LOG_LINE@python.inline@root = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@nuke_dirs = sys.argv[2:]@@@",
+      "@@@STEP_LOG_LINE@python.inline@for fname in os.listdir(root):@@@",
+      "@@@STEP_LOG_LINE@python.inline@  path = os.path.join(root, fname)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  if os.path.isfile(path):@@@",
+      "@@@STEP_LOG_LINE@python.inline@    os.unlink(path)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  elif fname in nuke_dirs:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    shutil.rmtree(path)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/android_tools",
+      "--url",
+      "https://chromium.googlesource.com/android_tools"
+    ],
+    "name": "git setup",
+    "seed_steps": [
+      "git setup",
+      "git fetch",
+      "git clean",
+      "git checkout",
+      "git submodule"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "master:refs/remotes/origin/master",
+      "--recurse-submodules"
+    ],
+    "cwd": "[SLAVE_BUILD]/android_tools",
+    "name": "git fetch"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/android_tools",
+    "name": "git clean"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/android_tools",
+    "name": "git checkout"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/android_tools",
+    "name": "git submodule"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/git_setup.py",
+      "--path",
+      "[SLAVE_BUILD]/libvpx",
+      "--url",
+      "https://chromium.googlesource.com/webm/libvpx"
+    ],
+    "name": "git setup (2)",
+    "seed_steps": [
+      "git setup (2)",
+      "git fetch (2)",
+      "git clean (2)",
+      "git checkout (2)",
+      "git submodule (2)"
+    ]
+  },
+  {
+    "cmd": [
+      "git",
+      "fetch",
+      "origin",
+      "master:refs/remotes/origin/master",
+      "--recurse-submodules"
+    ],
+    "cwd": "[SLAVE_BUILD]/libvpx",
+    "name": "git fetch (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "clean",
+      "-f",
+      "-d",
+      "-x"
+    ],
+    "cwd": "[SLAVE_BUILD]/libvpx",
+    "name": "git clean (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "checkout",
+      "-f",
+      "origin/master"
+    ],
+    "cwd": "[SLAVE_BUILD]/libvpx",
+    "name": "git checkout (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
+      "update",
+      "--init",
+      "--recursive"
+    ],
+    "cwd": "[SLAVE_BUILD]/libvpx",
+    "name": "git submodule (2)"
+  },
+  {
+    "cmd": [
+      "./libvpx/configure",
+      "--disable-examples",
+      "--disable-install-docs",
+      "--disable-install-srcs",
+      "--disable-unit-tests",
+      "--disable-vp8-encoder",
+      "--disable-vp9-encoder",
+      "--enable-decode-perf-tests",
+      "--enable-external-build",
+      "--enable-vp8-decoder",
+      "--enable-vp9-decoder",
+      "--sdk-path=[SLAVE_BUILD]/android_tools/ndk",
+      "--target=armv7-android-gcc"
+    ],
+    "name": "configure"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android_tools/ndk/ndk-build",
+      "APP_BUILD_SCRIPT=[SLAVE_BUILD]/libvpx/test/android/Android.mk",
+      "APP_ABI=armeabi-v7a",
+      "APP_PLATFORM=android-14",
+      "APP_OPTIM=release",
+      "APP_STL=gnustl_static"
+    ],
+    "env": {
+      "NDK_PROJECT_PATH": "[SLAVE_BUILD]"
+    },
+    "name": "ndk-build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/libvpx/test/android/get_files.py",
+      "-i",
+      "[SLAVE_BUILD]/libvpx/test/test-data.sha1",
+      "-o",
+      "[SLAVE_BUILD]/test_data",
+      "-u",
+      "http://downloads.webmproject.org/test_data/libvpx"
+    ],
+    "name": "get_files"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/android/transfer_files.py",
+      "/data/local/tmp",
+      "[SLAVE_BUILD]/test_data"
+    ],
+    "name": "transfer_files"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
+      "push",
+      "[SLAVE_BUILD]/libs/armeabi-v7a",
+      "/data/local/tmp"
+    ],
+    "name": "push_so"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
+      "shell",
+      "LD_LIBRARY_PATH=/data/local/tmp",
+      "LIBVPX_TEST_DATA_PATH=/data/local/tmp",
+      "/data/local/tmp/vpx_test"
+    ],
+    "name": "shell"
+  }
+]
