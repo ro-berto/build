@@ -17,6 +17,9 @@ def mac(): return libyuv_factory.LibyuvFactory('src/out', 'darwin')
 def mac_ios(): return libyuv_factory.LibyuvFactory('src/out', 'darwin',
                                                    target_os='ios')
 def win(): return libyuv_factory.LibyuvFactory('src/out', 'win32')
+def android():
+  return libyuv_factory.LibyuvFactory('', 'linux2', nohooks_on_update=True,
+                                      target_os='android')
 
 scheduler_name = 'libyuv_scheduler'
 S(scheduler_name, branch='trunk', treeStableTimer=60)
@@ -235,6 +238,23 @@ F('linux_asan_factory', linux().LibyuvFactory(
         'asan': True,
         'gclient_env': asan_gclient_env.copy(),
     }))
+
+# Android.
+B('Android Debug', 'android_debug_factory', scheduler=scheduler_name)
+F('android_debug_factory', android().ChromiumAnnotationFactory(
+  target='Debug',
+  annotation_script='src/build/android/buildbot/bb_run_bot.py',
+  factory_properties={
+      'android_bot_id': 'libyuv-main-clobber-dbg',
+  }))
+
+B('Android Release', 'android_release_factory', scheduler=scheduler_name)
+F('android_release_factory', android().ChromiumAnnotationFactory(
+  target='Release',
+  annotation_script='src/build/android/buildbot/bb_run_bot.py',
+  factory_properties={
+      'android_bot_id': 'libyuv-main-clobber',
+  }))
 
 # Chrome OS.
 B('Chrome OS', 'chromeos_factory', scheduler=scheduler_name)

@@ -2,38 +2,45 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+from master.factory import chromium_factory
 from master.factory import gclient_factory
 from master.factory import chromium_commands
 
 import config
 
 
-class LibyuvFactory(gclient_factory.GClientFactory):
+class LibyuvFactory(chromium_factory.ChromiumFactory):
 
   CUSTOM_VARS_ROOT_DIR = ('root_dir', 'src')
+
   # Can't use the same Valgrind constant as in chromium_factory.py, since
   # Libyuv uses another path (use_relative_paths=True in DEPS).
   CUSTOM_DEPS_VALGRIND = ('third_party/valgrind',
      config.Master.trunk_url + '/deps/third_party/valgrind/binaries')
 
-  def __init__(self, build_dir, target_platform, target_os=None):
+  def __init__(self, build_dir, target_platform, nohooks_on_update=False,
+               target_os=None):
     """Creates a Libyuv factory.
 
     Args:
       build_dir: Directory to perform the build relative to. Usually this is
         src/build.
       target_platform: Platform, one of 'win32', 'darwin', 'linux2'.
+      nohooks_on_update: If True, no hooks will be executed in the update step.
       target_os: Set to sync additional OS dependencies.
     """
+    chromium_factory.ChromiumFactory.__init__(
+         self, build_dir, target_platform=target_platform,
+         nohooks_on_update=nohooks_on_update, target_os=target_os)
+
     # Use root_dir=src since many Chromium scripts rely on that path.
     custom_vars_list = [self.CUSTOM_VARS_ROOT_DIR]
     svn_url = config.Master.libyuv_url + '/trunk'
-    solutions = []
-    solutions.append(gclient_factory.GClientSolution(
+
+    # Overwrite solutions of ChromiumFactory since we sync Libyuv, not Chromium.
+    self._solutions = []
+    self._solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list))
-    gclient_factory.GClientFactory.__init__(self, build_dir, solutions,
-                                            target_platform=target_platform,
-                                            target_os=target_os)
 
   def LibyuvFactory(self, target='Debug', clobber=False, tests=None,
                        mode=None, slave_type='BuilderTester', options=None,
