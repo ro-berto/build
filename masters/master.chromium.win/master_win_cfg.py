@@ -385,8 +385,6 @@ F('dbg', win().ChromiumFactory(
 #
 # Win Dbg Unit testers
 #
-B('XP Tests (dbg)(1)', 'dbg_unit_1', 'testers|windows', 'win_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_1', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -420,9 +418,6 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-
-B('XP Tests (dbg)(2)', 'dbg_unit_2', 'testers|windows', 'win_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_2', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -438,8 +433,6 @@ F('dbg_unit_2', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(3)', 'dbg_unit_3', 'testers|windows', 'win_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_3', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -454,8 +447,6 @@ F('dbg_unit_3', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(4)', 'dbg_unit_4', 'testers|windows', 'win_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_4', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -467,8 +458,6 @@ F('dbg_unit_4', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(5)', 'dbg_unit_5', 'testers|windows', 'win_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_5', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
@@ -480,8 +469,6 @@ F('dbg_unit_5', win_tester().ChromiumFactory(
                         'start_crash_handler': True,
                         'generate_gtest_json': True}))
 
-B('XP Tests (dbg)(6)', 'dbg_unit_6', 'testers|windows', 'win_dbg_trigger',
-  notify_on_missing=True)
 F('dbg_unit_6', win_tester().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
