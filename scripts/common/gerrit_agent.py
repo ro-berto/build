@@ -101,7 +101,7 @@ class GerritAgent(Agent):
     url = '%s://%s%s' % (self.gerrit_protocol, self.gerrit_host, path)
     if body:
       body = json.dumps(body)
-      headers.setRawHeader('Content-Type', 'application/json')
+      headers.setRawHeaders('Content-Type', ['application/json'])
     if DEBUG:
       log.msg(url)
     d = Agent.request(self, method, url, headers, body)
