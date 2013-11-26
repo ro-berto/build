@@ -222,9 +222,14 @@ def extract_masters(masters):
     if not hasattr(master, 'master_port'):
       # Not actually a master
       continue
+    host = getattr(master, 'master_host', '')
+    for suffix in ('.chromium.org', '.corp.google.com'):
+      if host.endswith(suffix):
+        host = host[:-len(suffix)]
+        break
     good_masters.append({
         'name': master_name,
-        'host': getattr(master, 'master_host', ''),
+        'host': host,
         'port': getattr(master, 'master_port', 0),
         'slave_port': getattr(master, 'slave_port', 0),
         'alt_port': getattr(master, 'master_port_alt', 0),
