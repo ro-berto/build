@@ -26,6 +26,7 @@ S('mac_asan_rel', branch='src', treeStableTimer=60)
 # Triggerable scheduler for the rel asan builder
 #
 T('mac_asan_rel_trigger')
+T('mac_asan_64_rel_trigger')
 
 # Tests that are single-machine shard-safe.
 sharded_tests = [
@@ -85,6 +86,9 @@ mac_asan_options = [
   'url_unittests',
 ]
 
+# See above. It's ok to run unit_tests under ASan on 64-bit OSX.
+mac_asan_64_options = mac_asan_options + ['unit_tests']
+
 mac_asan_tests_1 = [
   'base_unittests',
   'browser_tests',
@@ -124,6 +128,11 @@ mac_asan_archive = master_config.GetArchiveUrl(
     'Mac_ASAN_Builder',
     'mac')
 
+mac_asan_64_archive = master_config.GetArchiveUrl(
+    'ChromiumMemory',
+    'Mac ASAN 64 Builder',
+    'Mac_ASAN_64_Builder',
+    'mac')
 
 gclient_env = {
   'GYP_DEFINES': 'asan=1 release_extra_cflags=-gline-tables-only',
@@ -205,56 +214,71 @@ F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
       'sharded_tests': sharded_tests,
     }))
 
-B('Mac ASAN 64-bit', 'mac_asan_rel_64', 'testers',
-  'mac_asan_rel_trigger', notify_on_missing=True)
-F('mac_asan_rel_64', mac().ChromiumASANFactory(
-    slave_type='BuilderTester',
+#
+# Mac ASAN 64-bit Rel Builder
+#
+B('Mac ASAN 64 Builder', 'mac_asan_64_rel_f', 'compile', 'mac_asan_rel',
+  auto_reboot=False, notify_on_missing=True)
+F('mac_asan_64_rel_f', mac().ChromiumASANFactory(
+    target='Release',
+    slave_type='Builder',
     options=[
         '--build-tool=ninja',
         '--compiler=goma-clang',
-        'base_unittests',
-        'cacheinvalidation_unittests',
-        'cc_unittests',
-        'chromedriver2_unittests',
-        'components_unittests',
-        'content_unittests',
-        'crypto_unittests',
-        'device_unittests',
-        'gpu_unittests',
-        'jingle_unittests',
-        'media_unittests',
-        'net_unittests',
-        'ppapi_unittests',
-        'printing_unittests',
-        'remoting_unittests',
-        'sync_unit_tests',
-        'unit_tests',
-    ],
-    tests=[
-        'base_unittests',
-        'cacheinvalidation_unittests',
-        'cc_unittests',
-        'chromedriver2_unittests',
-        'components_unittests',
-        'content_unittests',
-        'crypto_unittests',
-        'device_unittests',
-        'gpu_unittests',
-        'jingle_unittests',
-        'media_unittests',
-        'net_unittests',
-        'ppapi_unittests',
-        'printing_unittests',
-        'remoting_unittests',
-        'sync_unit_tests',
-        'unit_tests',
-    ],
+    ] + mac_asan_64_options,
     factory_properties={
       'asan': True,
+      'gclient_env': gclient_64_env,
+      'package_dsym_files': True,
+      'trigger': 'mac_asan_64_rel_trigger',
+    },
+))
+
+#
+# Mac ASAN 64-bit Rel testers
+#
+B('Mac ASAN 64 Tests (1)', 'mac_asan_64_rel_tests_1', 'testers',
+  'mac_asan_64_rel_trigger', notify_on_missing=True)
+F('mac_asan_64_rel_tests_1', mac().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=mac_asan_archive,
+    tests=mac_asan_tests_1 + ['unit_tests'],
+    factory_properties={
+      'asan': True,
+      'browser_shard_index': '1',
+      'browser_total_shards': '3',
       'gclient_env': gclient_64_env,
       'sharded_tests': sharded_tests,
     }))
 
+
+B('Mac ASAN 64 Tests (2)', 'mac_asan_64_rel_tests_2', 'testers',
+  'mac_asan_64_rel_trigger', notify_on_missing=True)
+F('mac_asan_64_rel_tests_2', mac().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=mac_asan_64_archive,
+    tests=mac_asan_tests_2,
+    factory_properties={
+      'asan': True,
+      'browser_shard_index': '2',
+      'browser_total_shards': '3',
+      'gclient_env': gclient_64_env,
+      'sharded_tests': sharded_tests,
+    }))
+
+B('Mac ASAN 64 Tests (3)', 'mac_asan_64_rel_tests_3', 'testers',
+  'mac_asan_64_rel_trigger', notify_on_missing=True)
+F('mac_asan_64_rel_tests_3', mac().ChromiumASANFactory(
+    slave_type='Tester',
+    build_url=mac_asan_64_archive,
+    tests=mac_asan_tests_3,
+    factory_properties={
+      'asan': True,
+      'browser_shard_index': '3',
+      'browser_total_shards': '3',
+      'gclient_env': gclient_64_env,
+      'sharded_tests': sharded_tests,
+    }))
 
 def Update(config, active_master, c):
   return helper.Update(c)
