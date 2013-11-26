@@ -11,6 +11,9 @@ from twisted.internet import defer, protocol, reactor
 from twisted.python import log
 from twisted.web.client import Agent
 from twisted.web.http_headers import Headers
+from twisted.web import iweb
+
+from zope.interface import implements
 
 # pylint: disable=W0105
 """
@@ -63,6 +66,23 @@ class JsonResponse(protocol.Protocol):
     except ValueError:
       self.finished.errback(errmsg)
 
+class JsonBodyProducer:
+
+  implements(iweb.IBodyProducer)
+
+  def __init__(self, text):
+    self.text = text
+    self.length = len(text)
+
+  def startProducing(self, consumer):
+    consumer.write(self.text)
+    self.text = ''
+    self.length = 0
+    return defer.succeed(None)
+
+  def stopProducing(self):
+    pass
+
 class GerritAgent(Agent):
 
   gerrit_protocol = 'https'
@@ -100,11 +120,11 @@ class GerritAgent(Agent):
       headers.setRawHeaders('authorization', [self.auth_token])
     url = '%s://%s%s' % (self.gerrit_protocol, self.gerrit_host, path)
     if body:
-      body = json.dumps(body)
+      body = JsonBodyProducer(json.dumps(body))
       headers.setRawHeaders('Content-Type', ['application/json'])
     if DEBUG:
       log.msg(url)
-    d = Agent.request(self, method, url, headers, body)
+    d = Agent.request(self, method, str(url), headers, body)
     def _check_code(response):
       if response.code != expected_code:
         msg = 'Failed gerrit request (code %s, expected %s): %s' % (
