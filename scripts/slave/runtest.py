@@ -122,6 +122,13 @@ def _RunGTestCommand(command, results_tracker=None, pipes=None,
   env = os.environ.copy()
   env.update(extra_env or {})
 
+  # Trigger bot mode (test retries, redirection of stdio, possibly faster,
+  # etc.) - using an environment variable instead of command-line flags because
+  # some internal waterfalls run this (_RunGTestCommand) for totally non-gtest
+  # code.
+  # TODO(phajdan.jr): Clean this up when internal waterfalls are fixed.
+  env.update({'CHROMIUM_TEST_LAUNCHER_BOT_MODE': '1'})
+
   if results_tracker:
     return chromium_utils.RunCommand(
         command, pipes=pipes, parser_func=results_tracker.ProcessLine, env=env)
