@@ -33,7 +33,7 @@ def find_client(base_dir):
 
 
 def get_version(client):
-  """Returns the version of swarming.py client tool, if available."""
+  """Returns the version of swarming.py client tool as a tuple, if available."""
   try:
     version = subprocess2.check_output(
         [
@@ -43,4 +43,6 @@ def get_version(client):
         ])
   except (subprocess2.CalledProcessError, OSError):
     return None
-  return map(int, version.split('.'))
+  version = tuple(map(int, version.split('.')))
+  print('Detected swarming.py version %s' % '.'.join(map(str, version)))
+  return version

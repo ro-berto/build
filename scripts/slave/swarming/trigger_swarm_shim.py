@@ -42,7 +42,8 @@ def v0(client, swarming, isolate_server, tasks, task_prefix, slave_os):
     cmd.append('--run_from_hash')
     cmd.extend(i)
 
-  print ' '.join(cmd)
+  print(' '.join(cmd))
+  sys.stdout.flush()
   return subprocess.call(cmd, cwd=client)
 
 
@@ -68,8 +69,38 @@ def v0_1(
   if '-dev' in swarming:
     cmd.append('--profile')
 
-  print ' '.join(cmd)
+  print(' '.join(cmd))
+  sys.stdout.flush()
   return subprocess.call(cmd, cwd=client)
+
+
+def v0_3(
+    client, swarming, isolate_server, priority, tasks, task_prefix, slave_os):
+  """Handles swarm_client/swarming.py starting 7c543276f08."""
+  ret = 0
+  for isolated_hash, test_name, shards, gtest_filter in tasks:
+    cmd = [
+      sys.executable,
+      os.path.join(client, 'swarming.py'),
+      'trigger',
+      '--swarming', swarming,
+      '--isolate-server', isolate_server,
+      '--os', slave_os,
+      '--priority', priority,
+      '--shards', shards,
+      # TODO(maruel): Make the task name: <test-name>-<os>-<isolated>
+      '--task-name', task_prefix + test_name,
+      isolated_hash,
+    ]
+    # Enable profiling on the -dev server.
+    if '-dev' in swarming:
+      cmd.append('--profile')
+    if gtest_filter not in (None, '', '.', '*'):
+      cmd.extend(('--env', 'GTEST_FILTER', gtest_filter))
+    print(' '.join(cmd))
+    sys.stdout.flush()
+    ret = max(ret, subprocess.call(cmd, cwd=client))
+  return ret
 
 
 def determine_version_and_run_handler(
@@ -80,7 +111,13 @@ def determine_version_and_run_handler(
     # Oh, that's old. This can be removed on 2014-01-01 and replaced on hard
     # failure if swarming.py doesn't exist.
     return v0(client, swarming, isolate_server, tasks, task_prefix, slave_os)
-  return v0_1(
+
+  version = swarming_utils.get_version(client)
+  if version < (0, 3):
+    return v0_1(
+        client, swarming, isolate_server, priority, tasks, task_prefix,
+        slave_os)
+  return v0_3(
       client, swarming, isolate_server, priority, tasks, task_prefix, slave_os)
 
 
