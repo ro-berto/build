@@ -241,7 +241,7 @@ B('Mac ASAN 64 Tests (1)', 'mac_asan_64_rel_tests_1', 'testers',
   'mac_asan_64_rel_trigger', notify_on_missing=True)
 F('mac_asan_64_rel_tests_1', mac().ChromiumASANFactory(
     slave_type='Tester',
-    build_url=mac_asan_archive,
+    build_url=mac_asan_64_archive,
     tests=mac_asan_tests_1 + ['unit_tests'],
     factory_properties={
       'asan': True,
