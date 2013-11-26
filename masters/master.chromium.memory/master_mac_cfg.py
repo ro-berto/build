@@ -14,6 +14,9 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def mac(): return chromium_factory.ChromiumFactory('src/out', 'darwin')
+def make_64(tests):
+  blacklist = ['browser_tests', 'interactive_ui_tests']
+  return [t for t in tests if t not in blacklist]
 
 defaults['category'] = '2mac asan'
 
@@ -109,6 +112,7 @@ mac_asan_tests_1 = [
   'remoting',
   'unit_sql',
 ]
+mac_asan_64_tests_1 = make_64(mac_asan_tests_1)
 
 mac_asan_tests_2 = [
   'browser_tests',
@@ -116,11 +120,13 @@ mac_asan_tests_2 = [
   'sync_unit_tests',
   'ui_unittests',
 ]
+mac_asan_64_tests_2 = make_64(mac_asan_tests_2)
 
 mac_asan_tests_3 = [
   'browser_tests',
   'interactive_ui_tests',
 ]
+mac_asan_64_tests_3 = make_64(mac_asan_tests_3)
 
 mac_asan_archive = master_config.GetArchiveUrl(
     'ChromiumMemory',
@@ -242,7 +248,7 @@ B('Mac ASAN 64 Tests (1)', 'mac_asan_64_rel_tests_1', 'testers',
 F('mac_asan_64_rel_tests_1', mac().ChromiumASANFactory(
     slave_type='Tester',
     build_url=mac_asan_64_archive,
-    tests=mac_asan_tests_1 + ['unit_tests'],
+    tests=mac_asan_64_tests_1 + ['unit_tests'],
     factory_properties={
       'asan': True,
       'browser_shard_index': '1',
@@ -257,7 +263,7 @@ B('Mac ASAN 64 Tests (2)', 'mac_asan_64_rel_tests_2', 'testers',
 F('mac_asan_64_rel_tests_2', mac().ChromiumASANFactory(
     slave_type='Tester',
     build_url=mac_asan_64_archive,
-    tests=mac_asan_tests_2,
+    tests=mac_asan_64_tests_2,
     factory_properties={
       'asan': True,
       'browser_shard_index': '2',
@@ -271,7 +277,7 @@ B('Mac ASAN 64 Tests (3)', 'mac_asan_64_rel_tests_3', 'testers',
 F('mac_asan_64_rel_tests_3', mac().ChromiumASANFactory(
     slave_type='Tester',
     build_url=mac_asan_64_archive,
-    tests=mac_asan_tests_3,
+    tests=mac_asan_64_tests_3,
     factory_properties={
       'asan': True,
       'browser_shard_index': '3',
