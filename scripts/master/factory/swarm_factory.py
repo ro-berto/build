@@ -67,20 +67,20 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
 
   swarm_command_obj = swarm_commands.SwarmCommands(factory=f,
                                                    build_dir=build_dir)
-  swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
+  # Update scripts before triggering so the tasks are triggered and collected
+  # with the same version of the scripts.
+  swarm_command_obj.AddUpdateScriptStep()
 
   # Checks out the scripts at the right revision so the trigger can happen.
   swarm_command_obj.AddUpdateSwarmClientStep()
 
   # Send the swarm tests to the swarm server.
+  swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
   swarm_command_obj.AddTriggerSwarmTestStep(
       swarm_server=swarm_server,
       isolation_outdir=isolation_outdir,
       tests=swarm_tests,
       doStepIf=swarm_commands.TestStepFilterTriggerSwarm)
-
-  # Latency is everything, update scripts only after.
-  swarm_command_obj.AddUpdateScriptStep()
 
   # Collect the results
   for swarm_test in swarm_tests:
