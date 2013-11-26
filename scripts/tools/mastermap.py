@@ -95,9 +95,10 @@ def human_print(lines, verbose):
 
   num_cols = len(lines[0])
   format_string = ''
-  for col in xrange(num_cols):
+  for col in xrange(num_cols - 1):
     col_width = max(len(str(line[col])) for line in lines) + 1
     format_string += '%-' + str(col_width) + 's '
+  format_string += '%s'
 
   if verbose:
     for line in lines:
@@ -125,12 +126,13 @@ def csv_print(lines, verbose):
 def master_map(masters, output, opts):
   """Display a list of masters and their associated hosts and ports."""
 
-  lines = [['Master', 'Host', 'Web port', 'Slave port', 'Alt port',
-            'MSC', 'URL']]
+  lines = [['Master', 'Config Dir', 'Host', 'Web port', 'Slave port',
+            'Alt port', 'MSC', 'URL']]
   for master in masters:
-    lines.append([master['name'], master['host'],
-                 master['port'], master['slave_port'], master['alt_port'],
-                 master['msc'], master['buildbot_url']])
+    lines.append([
+        master['name'], master['dirname'], master['host'], master['port'],
+        master['slave_port'], master['alt_port'], master['msc'],
+        master['buildbot_url']])
 
   output(lines, opts.verbose)
 
@@ -227,6 +229,7 @@ def extract_masters(masters):
         'slave_port': getattr(master, 'slave_port', 0),
         'alt_port': getattr(master, 'master_port_alt', 0),
         'buildbot_url': getattr(master, 'buildbot_url', ''),
+        'dirname': os.path.basename(getattr(master, 'local_config_path', ''))
     })
   return good_masters
 

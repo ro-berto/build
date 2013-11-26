@@ -38,7 +38,8 @@ def ImportMasterConfigs(master_name=None, include_internal=True):
         print >> sys.stderr, 'WARNING: cannot exec ' + path
         print >> sys.stderr, e
       for (symbol_name, symbol) in local_vars.iteritems():
-        if inspect.isclass(local_vars[symbol_name]):
+        if inspect.isclass(symbol):
+          setattr(symbol, 'local_config_path', master)
           setattr(config_bootstrap.Master, symbol_name, symbol)
           # If we have a master_name and it matches, set
           # config_bootstrap.Master.active_master.
