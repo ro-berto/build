@@ -45,8 +45,8 @@ def _GetReferenceBuildPath(target_os, target_platform):
   elif target_platform == 'win32':
     return os.path.join(ref_dir, 'chrome_win', 'chrome.exe')
   elif target_platform == 'darwin':
-    return os.path.join(ref_dir, 'chrome_mac', 'Chromium.app', 'Contents',
-        'MacOS', 'Chromium')
+    return os.path.join(ref_dir, 'chrome_mac', 'Google Chrome.app', 'Contents',
+        'MacOS', 'Google Chrome')
   elif target_platform.startswith('linux'):
     return os.path.join(ref_dir, 'chrome_linux', 'chrome')
   return None
