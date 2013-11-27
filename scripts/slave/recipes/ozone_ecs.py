@@ -20,7 +20,7 @@ OZONE_TESTS = [
     'content_browsertests',
     'content_unittests',
     'crypto_unittests',
-    'dbus_unittests',
+    # 'dbus_unittests', Not sensible; use_dbus==0.
     'device_unittests',
     # 'google_apis_unittests', Not sensible.
     'gpu_unittests',
