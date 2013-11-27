@@ -325,6 +325,10 @@ class GClientFactory(object):
     gclient_jobs = factory_properties.get('gclient_jobs')
     blink_config = factory_properties.get('blink_config')
 
+    # Do not run gyp_chromium on testers.
+    if slave_type in ('Tester',):
+      env.update({'GYP_CHROMIUM_NO_ACTION': '1'})
+
     # Add the update step.
     factory_cmd_obj.AddUpdateStep(
         gclient_spec,
