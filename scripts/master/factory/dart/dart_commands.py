@@ -122,8 +122,6 @@ class DartCommands(commands.FactoryCommands):
 
   def AddTests(self, options=None, timeout=1200):
     options = options or {}
-    is_dartc = (options.get('name') != None and
-                options.get('name').startswith('dartc'))
     is_dart2dart = (options.get('name') != None and
                     options.get('name').startswith('dart2dart'))
     is_new_analyzer = (options.get('name') != None and
@@ -132,7 +130,7 @@ class DartCommands(commands.FactoryCommands):
                                 options.get('name')
                                 .startswith('analyzer_experimental'))
     arch = options.get('arch')
-    if is_dartc or is_new_analyzer or is_analyzer_experimental:
+    if is_new_analyzer or is_analyzer_experimental:
       compiler = 'dartc'
       if is_new_analyzer:
         compiler = 'dartanalyzer'
@@ -171,7 +169,7 @@ class DartCommands(commands.FactoryCommands):
 
     base_cmd = base_cmd + " --write-debug-log"
 
-    if is_dartc:
+    if is_new_analyzer or is_analyzer_experimental:
       cmd = base_cmd
       self._factory.addStep(shell.ShellCommand,
                             name='tests',
