@@ -116,23 +116,6 @@ def _LaunchDBus():
     except (subprocess.CalledProcessError, OSError), e:
       print 'Exception while running dbus_launch: %s' % e
 
-def _ShutdownDBus():
-  """Manually kills the previously-launched DBus daemon.
-
-  It appears that passing --exit-with-session to dbus-launch in
-  _LaunchDBus(), above, doesn't cause the launched dbus-daemon to shut
-  down properly. Manually kill the sub-process using the PID it gave
-  us at launch time.
-
-  This function is called when the flag --spawn-dbus is given.
-  """
-  import platform
-  import signal
-  if (platform.uname()[0].lower() == 'linux' and
-      'DBUS_SESSION_BUS_PID' in os.environ):
-    dbus_pid = os.environ['DBUS_SESSION_BUS_PID']
-    os.kill(int(dbus_pid), signal.SIGTERM)
-    print ' killed dbus-daemon with PID %s' % dbus_pid
 
 def _RunGTestCommand(command, results_tracker=None, pipes=None,
                      extra_env=None):
@@ -1276,161 +1259,155 @@ def main():
   if options.spawn_dbus:
     _LaunchDBus()
 
-  try:
-    options.build_dir = build_directory.GetBuildOutputDirectory()
+  options.build_dir = build_directory.GetBuildOutputDirectory()
 
-    if options.pass_target and options.target:
-      args.extend(['--target', options.target])
-    if options.pass_build_dir:
-      args.extend(['--build-dir', options.build_dir])
+  if options.pass_target and options.target:
+    args.extend(['--target', options.target])
+  if options.pass_build_dir:
+    args.extend(['--build-dir', options.build_dir])
 
 
-    # Some test suites are not yet green under LSan, so do not enable LSan for
-    # them by default. Bots can override this behavior with lsan_run_all_tests.
-    lsan_blacklist = [
-        'browser_tests',
-        'content_browsertests',
-        'interactive_ui_tests',
-    ]
-    options.enable_lsan = (options.enable_lsan or
-       (options.factory_properties.get('lsan', False) and
-        (options.factory_properties.get('lsan_run_all_tests', False) or
-         args[0] not in lsan_blacklist)))
+  # Some test suites are not yet green under LSan, so do not enable LSan for
+  # them by default. Bots can override this behavior with lsan_run_all_tests.
+  lsan_blacklist = [
+      'browser_tests',
+      'content_browsertests',
+      'interactive_ui_tests',
+  ]
+  options.enable_lsan = (options.enable_lsan or
+     (options.factory_properties.get('lsan', False) and
+      (options.factory_properties.get('lsan_run_all_tests', False) or
+       args[0] not in lsan_blacklist)))
 
-    extra_sharding_args_list = options.extra_sharding_args.split()
+  extra_sharding_args_list = options.extra_sharding_args.split()
 
-    # run_test_cases.py and the brave new test launcher need different flags to
-    # enable verbose output. We support both.
-    always_print_test_output = ['--verbose',
-                                '--test-launcher-print-test-stdio=always']
-    if options.factory_properties.get('asan', False):
-      extra_sharding_args_list.extend(always_print_test_output)
-    if options.factory_properties.get('tsan', False):
-      # Print ThreadSanitizer reports; don't cluster the tests so that TSan exit
-      # code denotes a test failure.
-      extra_sharding_args_list.extend(always_print_test_output)
-      extra_sharding_args_list.append('--clusters=1')
-      # Data races may be flaky, but we don't want to restart the test if
-      # there's been a race report.
-      options.sharding_args += ' --retries 0'
+  # run_test_cases.py and the brave new test launcher need different flags to
+  # enable verbose output. We support both.
+  always_print_test_output = ['--verbose',
+                              '--test-launcher-print-test-stdio=always']
+  if options.factory_properties.get('asan', False):
+    extra_sharding_args_list.extend(always_print_test_output)
+  if options.factory_properties.get('tsan', False):
+    # Print ThreadSanitizer reports; don't cluster the tests so that TSan exit
+    # code denotes a test failure.
+    extra_sharding_args_list.extend(always_print_test_output)
+    extra_sharding_args_list.append('--clusters=1')
+    # Data races may be flaky, but we don't want to restart the test if there's
+    # been a race report.
+    options.sharding_args += ' --retries 0'
 
-    options.extra_sharding_args = ' '.join(extra_sharding_args_list)
+  options.extra_sharding_args = ' '.join(extra_sharding_args_list)
 
-    if (options.factory_properties.get('asan', False) or
-        options.factory_properties.get('tsan', False) or options.enable_lsan):
-      # Instruct GTK to use malloc while running ASan, TSan or LSan tests.
-      os.environ['G_SLICE'] = 'always-malloc'
-      os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
-      os.environ['NSS_DISABLE_UNLOAD'] = '1'
+  if (options.factory_properties.get('asan', False) or
+      options.factory_properties.get('tsan', False) or options.enable_lsan):
+    # Instruct GTK to use malloc while running ASan, TSan or LSan tests.
+    os.environ['G_SLICE'] = 'always-malloc'
+    os.environ['NSS_DISABLE_ARENA_FREE_LIST'] = '1'
+    os.environ['NSS_DISABLE_UNLOAD'] = '1'
 
-    # TODO(glider): remove the symbolizer path once
-    # https://code.google.com/p/address-sanitizer/issues/detail?id=134 is fixed.
-    symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
-        'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
-    suppressions_file = options.factory_properties.get('tsan_suppressions_file',
-        'src/tools/valgrind/tsan_v2/suppressions.txt')
-    tsan_options = ('suppressions=%s '
-                    'print_suppressions=1 '
-                    'report_signal_unsafe=0 '
-                    'report_thread_leaks=0 '
-                    'history_size=7 '
-                    'external_symbolizer_path=%s' % (suppressions_file,
-                                                     symbolizer_path))
-    if options.factory_properties.get('tsan', False):
-      os.environ['TSAN_OPTIONS'] = tsan_options
-      # Disable sandboxing under TSan for now. http://crbug.com/223602.
-      args.append('--no-sandbox')
-      symbolizer_dir = os.path.dirname(symbolizer_path)
-      # TODO(glider): this is a workaround for http://crbug.com/310479.
-      os.environ['PATH'] = '%s:%s' % (os.environ['PATH'], symbolizer_dir)
+  # TODO(glider): remove the symbolizer path once
+  # https://code.google.com/p/address-sanitizer/issues/detail?id=134 is fixed.
+  symbolizer_path = os.path.abspath(os.path.join('src', 'third_party',
+      'llvm-build', 'Release+Asserts', 'bin', 'llvm-symbolizer'))
+  suppressions_file = options.factory_properties.get('tsan_suppressions_file',
+      'src/tools/valgrind/tsan_v2/suppressions.txt')
+  tsan_options = ('suppressions=%s '
+                  'print_suppressions=1 '
+                  'report_signal_unsafe=0 '
+                  'report_thread_leaks=0 '
+                  'history_size=7 '
+                  'external_symbolizer_path=%s' % (suppressions_file,
+                                                   symbolizer_path))
+  if options.factory_properties.get('tsan', False):
+    os.environ['TSAN_OPTIONS'] = tsan_options
+    # Disable sandboxing under TSan for now. http://crbug.com/223602.
+    args.append('--no-sandbox')
+    symbolizer_dir = os.path.dirname(symbolizer_path)
+    # TODO(glider): this is a workaround for http://crbug.com/310479.
+    os.environ['PATH'] = '%s:%s' % (os.environ['PATH'], symbolizer_dir)
+  if options.enable_lsan:
+    # Set verbosity=1 so LSan would always print suppression statistics.
+    os.environ['LSAN_OPTIONS'] = (
+        'suppressions=src/tools/lsan/suppressions.txt '
+        'verbosity=1 '
+        'strip_path_prefix=build/src/out/Release/../../ ')
+    os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
+    # Disable sandboxing under LSan.
+    args.append('--no-sandbox')
+  if options.factory_properties.get('asan', False):
+    # TODO(glider): enable llvm-symbolizer on Darwin when the performance
+    # problems are fixed. See http://crbug.com/246147.
+    if not sys.platform.startswith('darwin'):
+      # Set the path to llvm-symbolizer to be used by asan_symbolize.py
+      os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
+    # Avoid aggressive memcmp checks until http://crbug.com/178677 is fixed.
+    # Also do not replace memcpy/memmove/memset to suppress a report in OpenCL,
+    # see http://crbug.com/162461.
+    common_asan_options = ('strict_memcmp=0 replace_intrin=0 '
+                           'strip_path_prefix=build/src/out/Release/../../ ')
     if options.enable_lsan:
-      # Set verbosity=1 so LSan would always print suppression statistics.
-      os.environ['LSAN_OPTIONS'] = (
-          'suppressions=src/tools/lsan/suppressions.txt '
-          'verbosity=1 '
-          'strip_path_prefix=build/src/out/Release/../../ ')
-      os.environ['LSAN_SYMBOLIZER_PATH'] = symbolizer_path
-      # Disable sandboxing under LSan.
-      args.append('--no-sandbox')
-    if options.factory_properties.get('asan', False):
-      # TODO(glider): enable llvm-symbolizer on Darwin when the performance
-      # problems are fixed. See http://crbug.com/246147.
-      if not sys.platform.startswith('darwin'):
-        # Set the path to llvm-symbolizer to be used by asan_symbolize.py
-        os.environ['LLVM_SYMBOLIZER_PATH'] = symbolizer_path
-      # Avoid aggressive memcmp checks until http://crbug.com/178677 is
-      # fixed.  Also do not replace memcpy/memmove/memset to suppress a
-      # report in OpenCL, see http://crbug.com/162461.
-      common_asan_options = ('strict_memcmp=0 replace_intrin=0 '
-                             'strip_path_prefix=build/src/out/Release/../../ ')
-      if options.enable_lsan:
-        # On ASan+LSan bots we enable leak detection. Also, since sandbox is
-        # disabled under LSan, we can symbolize.
-        os.environ['ASAN_OPTIONS'] = (common_asan_options +
-                                      'detect_leaks=1 ' +
-                                      'symbolize=true ')
-        os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
-      else:
-        # Disable the builtin online symbolizer, see http://crbug.com/243255.
-        os.environ['ASAN_OPTIONS'] = (common_asan_options + 'symbolize=false')
-    # Set the number of shards environement variables.
-    if options.total_shards and options.shard_index:
-      os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
-      os.environ['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
-
-    if options.results_directory:
-      options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
-          options.results_directory, '%s.xml' % options.test_type)))
-      args.append('--gtest_output=xml:' + options.test_output_xml)
-    elif options.generate_json_file:
-      option_parser.error(
-          '--results-directory is required with --generate-json-file=True')
-      return 1
-
-    if options.factory_properties.get('coverage_gtest_exclusions', False):
-      build_coverage_gtest_exclusions(options, args)
-
-    temp_files = get_temp_count()
-    if options.parse_input:
-      result = main_parse(options, args)
-    elif sys.platform.startswith('darwin'):
-      test_platform = options.factory_properties.get('test_platform', '')
-      if test_platform in ('ios-simulator',):
-        result = main_ios(options, args)
-      else:
-        result = main_mac(options, args)
-    elif sys.platform == 'win32':
-      result = main_win(options, args)
-    elif sys.platform == 'linux2':
-      if options.factory_properties.get('test_platform', '') == 'android':
-        result = main_android(options, args)
-      else:
-        result = main_linux(options, args)
+      # On ASan+LSan bots we enable leak detection. Also, since sandbox is
+      # disabled under LSan, we can symbolize.
+      os.environ['ASAN_OPTIONS'] = (common_asan_options +
+                                    'detect_leaks=1 ' +
+                                    'symbolize=true ')
+      os.environ['ASAN_SYMBOLIZER_PATH'] = symbolizer_path
     else:
-      sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
-      return 1
+      # Disable the builtin online symbolizer, see http://crbug.com/243255.
+      os.environ['ASAN_OPTIONS'] = (common_asan_options + 'symbolize=false')
+  # Set the number of shards environement variables.
+  if options.total_shards and options.shard_index:
+    os.environ['GTEST_TOTAL_SHARDS'] = str(options.total_shards)
+    os.environ['GTEST_SHARD_INDEX'] = str(options.shard_index - 1)
 
-    upload_profiling_data(options, args)
+  if options.results_directory:
+    options.test_output_xml = os.path.normpath(os.path.abspath(os.path.join(
+        options.results_directory, '%s.xml' % options.test_type)))
+    args.append('--gtest_output=xml:' + options.test_output_xml)
+  elif options.generate_json_file:
+    option_parser.error(
+        '--results-directory is required with --generate-json-file=True')
+    return 1
 
-    new_temp_files = get_temp_count()
-    if temp_files > new_temp_files:
-      print >> sys.stderr, (
-          'Confused: %d files were deleted from %s during the test run') % (
-              (temp_files - new_temp_files), tempfile.gettempdir())
-    elif temp_files < new_temp_files:
-      print >> sys.stderr, (
-          '%d new files were left in %s: Fix the tests to clean up themselves.'
-          ) % ((new_temp_files - temp_files), tempfile.gettempdir())
-      # TODO(maruel): Make it an error soon. Not yet since I want to iron
-      # out all the remaining cases before.
-      #result = 1
-    return result
-  finally:
-    if options.spawn_dbus:
-      # It looks like the command line argument --exit-with-session
-      # isn't working to clean up the spawned dbus-daemon. Kill it
-      # manually.
-      _ShutdownDBus()
+  if options.factory_properties.get('coverage_gtest_exclusions', False):
+    build_coverage_gtest_exclusions(options, args)
+
+  temp_files = get_temp_count()
+  if options.parse_input:
+    result = main_parse(options, args)
+  elif sys.platform.startswith('darwin'):
+    test_platform = options.factory_properties.get('test_platform', '')
+    if test_platform in ('ios-simulator',):
+      result = main_ios(options, args)
+    else:
+      result = main_mac(options, args)
+  elif sys.platform == 'win32':
+    result = main_win(options, args)
+  elif sys.platform == 'linux2':
+    if options.factory_properties.get('test_platform', '') == 'android':
+      result = main_android(options, args)
+    else:
+      result = main_linux(options, args)
+  else:
+    sys.stderr.write('Unknown sys.platform value %s\n' % repr(sys.platform))
+    return 1
+
+  upload_profiling_data(options, args)
+
+  new_temp_files = get_temp_count()
+  if temp_files > new_temp_files:
+    print >> sys.stderr, (
+        'Confused: %d files were deleted from %s during the test run') % (
+            (temp_files - new_temp_files), tempfile.gettempdir())
+  elif temp_files < new_temp_files:
+    print >> sys.stderr, (
+        '%d new files were left in %s: Fix the tests to clean up themselves.'
+        ) % ((new_temp_files - temp_files), tempfile.gettempdir())
+    # TODO(maruel): Make it an error soon. Not yet since I want to iron out all
+    # the remaining cases before.
+    #result = 1
+  return result
+
 
 if '__main__' == __name__:
   sys.exit(main())
