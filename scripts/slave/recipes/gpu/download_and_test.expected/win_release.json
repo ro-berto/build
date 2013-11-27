@@ -301,7 +301,7 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--webgl-conformance-version=1.0.1"
+      "--webgl-conformance-version=1.0.2"
     ],
     "name": "webgl_conformance_tests"
   },
