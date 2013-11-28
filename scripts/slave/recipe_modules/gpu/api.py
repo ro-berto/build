@@ -169,6 +169,8 @@ class GpuApi(recipe_api.RecipeApi):
     if self.m.chromium.is_release_build:
       # Former tab_capture_performance_tests_step
       args = ['--enable-gpu',
+              '--test-launcher-jobs=1',
+              '--test-launcher-print-test-stdio=always',
               '--gtest_filter=TabCapturePerformanceTest*']
       yield self.m.chromium.runtests('performance_browser_tests',
                                      args,
