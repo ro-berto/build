@@ -79,7 +79,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=shared_library embedded=1 target_arch=x64",
+      "GYP_DEFINES": "component=static_library embedded=1 target_arch=x64",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"

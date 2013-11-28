@@ -64,6 +64,7 @@ def GenSteps(api):
   yield api.gclient.checkout()
 
   api.chromium.c.gyp_env.GYP_DEFINES['embedded'] = 1
+  api.chromium.c.gyp_env.GYP_DEFINES['component'] = 'static_library'
 
   yield api.chromium.runhooks()
   yield api.chromium.compile(['content_shell'], name='compile content_shell')
