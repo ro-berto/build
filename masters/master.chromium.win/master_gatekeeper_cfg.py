@@ -55,10 +55,6 @@ categories_steps = {
     'webkit_compositor_bindings_unittests',
     #'webkit_tests',
    ],
-  'chrome_frame': [
-    'chrome_frame_net_tests',
-    'chrome_frame_tests',
-   ],
   'windows': ['svnkill', 'taskkill'],
   'compile': ['check_deps2git', 'check_deps', 'compile', 'archive_build'],
   # Annotator scripts are triggered as a 'slave_steps' step.

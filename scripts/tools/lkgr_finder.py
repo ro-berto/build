@@ -143,10 +143,6 @@ CHROMIUM_LKGR_STEPS = {
     'Win7 Tests (dbg)(6)': [
       'browser_tests',
     ],
-    'Chrome Frame Tests (ie8)': [
-      'chrome_frame_tests',
-      'chrome_frame_unittests',
-    ],
   },  # chromium.win
   'chromium.mac': {
     'Mac Builder (dbg)': [
