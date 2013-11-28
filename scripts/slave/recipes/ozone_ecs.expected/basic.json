@@ -171,6 +171,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "aura_unittests"
     ],
     "name": "aura_unittests"
@@ -190,6 +191,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "base_unittests"
     ],
     "name": "base_unittests"
@@ -209,6 +211,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "cacheinvalidation_unittests"
     ],
     "name": "cacheinvalidation_unittests"
@@ -228,6 +231,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "cc_unittests"
     ],
     "name": "cc_unittests"
@@ -247,6 +251,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "components_unittests"
     ],
     "name": "components_unittests"
@@ -266,6 +271,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "compositor_unittests"
     ],
     "name": "compositor_unittests"
@@ -285,6 +291,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "content_unittests"
     ],
     "name": "content_unittests"
@@ -304,6 +311,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "crypto_unittests"
     ],
     "name": "crypto_unittests"
@@ -323,6 +331,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "device_unittests"
     ],
     "name": "device_unittests"
@@ -342,6 +351,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "events_unittests"
     ],
     "name": "events_unittests"
@@ -361,6 +371,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "gpu_unittests"
     ],
     "name": "gpu_unittests"
@@ -380,6 +391,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "ipc_tests"
     ],
     "name": "ipc_tests"
@@ -399,6 +411,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "media_unittests"
     ],
     "name": "media_unittests"
@@ -418,6 +431,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "net_unittests"
     ],
     "name": "net_unittests"
@@ -437,6 +451,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "ppapi_unittests"
     ],
     "name": "ppapi_unittests"
@@ -456,6 +471,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "sandbox_linux_unittests"
     ],
     "name": "sandbox_linux_unittests"
@@ -475,6 +491,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "sql_unittests"
     ],
     "name": "sql_unittests"
@@ -494,6 +511,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "sync_unit_tests"
     ],
     "name": "sync_unit_tests"
@@ -513,6 +531,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "ui_unittests"
     ],
     "name": "ui_unittests"
@@ -532,6 +551,7 @@
       "{\"recipe\": \"ozone_ecs\"}",
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "url_unittests"
     ],
     "name": "url_unittests"

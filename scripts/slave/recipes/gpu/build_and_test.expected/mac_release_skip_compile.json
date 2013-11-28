@@ -88,7 +88,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--spawn-dbus",
       "content_gl_tests"
     ],
     "name": "content_gl_tests"
@@ -108,7 +107,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--spawn-dbus",
       "gles2_conform_test"
     ],
     "name": "gles2_conform_test"
@@ -128,7 +126,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--spawn-dbus",
       "gl_tests"
     ],
     "name": "gl_tests"
@@ -148,7 +145,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_compile\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--spawn-dbus",
       "angle_unittests"
     ],
     "name": "angle_unittests"
@@ -176,7 +172,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "maps",
       "--show-stdout",
@@ -211,7 +206,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "pixel_test",
       "--show-stdout",
@@ -264,7 +258,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "webgl_conformance",
       "--show-stdout",
@@ -298,7 +291,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "context_lost",
       "--show-stdout",
@@ -331,7 +323,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "memory_test",
       "--show-stdout",
@@ -364,7 +355,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "hardware_accelerated_feature",
       "--show-stdout",
@@ -397,7 +387,6 @@
       "--build-number=571",
       "--builder-name=TestBuilder",
       "--run-python-script",
-      "--spawn-dbus",
       "[SLAVE_BUILD]/src/content/test/gpu/run_gpu_test",
       "gpu_process",
       "--show-stdout",
@@ -427,7 +416,6 @@
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=tab_capture_performance",
       "--test-type=tab_capture_performance_tests",
-      "--spawn-dbus",
       "performance_browser_tests",
       "--enable-gpu",
       "--test-launcher-jobs=1",

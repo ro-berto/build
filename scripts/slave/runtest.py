@@ -99,7 +99,6 @@ def _LaunchDBus():
   DBUS_SESSION_BUS_ADDRESS environment variable set, but it does happen on the
   bots. See crbug.com/309093 for more details.
 
-  This function is called when the flag --spawn-dbus is given.
 
   Returns True if it actually spawned DBus.
   """
@@ -1264,9 +1263,9 @@ def main():
                                 'properties "lsan" and "lsan_run_all_tests".')
   option_parser.add_option('--extra-sharding-args', default='',
                            help='Extra options for run_test_cases.py.')
-  option_parser.add_option('--spawn-dbus', action='store_true',
-                           default=True,
-                           help='Work around GLib DBus bug by '
+  option_parser.add_option('--no-spawn-dbus', action='store_true',
+                           default=False,
+                           help='Disable GLib DBus bug workaround: '
                                 'manually spawning dbus-launch')
 
   chromium_utils.AddPropertiesOptions(option_parser)
@@ -1286,7 +1285,7 @@ def main():
   print '[Running on builder: "%s"]' % options.builder_name
 
   did_launch_dbus = False
-  if options.spawn_dbus:
+  if not options.no_spawn_dbus:
     did_launch_dbus = _LaunchDBus()
 
   try:
