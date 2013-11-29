@@ -152,14 +152,16 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddGenerateCodeTallyStep(self, dll):
     """Adds a step to run code tally over the given dll."""
+    launcher = self.PathJoin(self._script_dir, 'syzygy', 'script_launcher.py')
     code_tally_exe = self.PathJoin('src', 'third_party', 'syzygy', 'binaries',
                                    'exe', 'experimental', 'code_tally.exe')
-    code_tally_json = self.PathJoin(self._build_dir, self._target,
+    code_tally_json = self.PathJoin('@{BUILD_DIR}', self._target,
                                     '%s_code_tally.json' % dll)
+    dll_path = self.PathJoin('@{BUILD_DIR}', self._target, dll)
 
-    dll_path = self.PathJoin(self._build_dir, self._target, dll)
-
-    cmd = [code_tally_exe, '--input-image=%s' % dll_path,
+    cmd = [self._python, launcher,
+           code_tally_exe,
+           '--input-image=%s' % dll_path,
            '--output-file=%s' % code_tally_json]
 
     self._factory.addStep(shell.ShellCommand,
@@ -169,15 +171,17 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddConvertCodeTallyJsonStep(self, dll):
     """Adds a step to convert the json file to the required server format."""
+    launcher = self.PathJoin(self._script_dir, 'syzygy', 'script_launcher.py')
     convert_code_tally = self.PathJoin('src', 'third_party', 'syzygy',
                                        'binaries', 'exe', 'experimental',
                                        'convert_code_tally.py')
-    code_tally_json = self.PathJoin(self._build_dir, self._target,
+    code_tally_json = self.PathJoin('@{BUILD_DIR}', self._target,
                                     '%s_code_tally.json' % dll)
-    converted_code_tally = self.PathJoin(self._build_dir, self._target,
+    converted_code_tally = self.PathJoin('@{BUILD_DIR}', self._target,
                                          '%s_converted_code_tally.json' % dll)
 
-    cmd = [self._python, convert_code_tally,
+    cmd = [self._python, launcher,
+           self._python, convert_code_tally,
            '--master_id', WithProperties('%(mastername)s'),
            '--builder_name', WithProperties('%(buildername)s'),
            '--build_number', WithProperties('%(buildnumber)s'),
@@ -192,12 +196,16 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddUploadConvertedCodeTally(self, dll, upload_url):
     """Adds a step to upload the converted json file to the dashboard."""
+    launcher = self.PathJoin(self._script_dir, 'syzygy', 'script_launcher.py')
     upload_script = self.PathJoin(self._script_dir, 'syzygy',
                                   'upload_code_tally.py')
-    converted_code_tally = self.PathJoin(self._build_dir, self._target,
+    converted_code_tally = self.PathJoin('@{BUILD_DIR}', self._target,
                                          '%s_converted_code_tally.json' % dll)
 
-    cmd = [self._python, upload_script, upload_url, converted_code_tally]
+    cmd = [self._python, launcher,
+           self._python, upload_script,
+           upload_url,
+           converted_code_tally]
 
     self._factory.addStep(shell.ShellCommand,
                           name='upload_%s_code_tally' % dll,
