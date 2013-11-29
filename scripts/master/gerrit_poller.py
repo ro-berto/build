@@ -74,7 +74,7 @@ class GerritPoller(base.PollingChangeSource):
     commit = revision['commit']
     properties = {'event.change.number': change['_number']}
     if change['status'] == 'NEW':
-      ref = revision.get('fetch', {}).get('git', {}).get('url')
+      ref = revision.get('fetch', {}).get('http', {}).get('ref')
       if ref:
         properties['event.patchSet.ref'] = ref
     elif change['status'] in ('SUBMITTED', 'MERGED'):
