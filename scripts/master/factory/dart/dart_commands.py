@@ -18,7 +18,11 @@ from master.factory import commands
 class DartCommands(commands.FactoryCommands):
   """Encapsulates methods to add dart commands to a buildbot factory."""
 
-  logfiles = {"flakylog": ".flaky.log", "debuglog": ".debug.log"}
+  logfiles = {
+    "flakylog": ".flaky.log",
+    "debuglog": ".debug.log",
+    "testoutcomelog": ".test-outcome.log",
+  }
 
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, env=None):
@@ -120,7 +124,7 @@ class DartCommands(commands.FactoryCommands):
                           workdir=self._dart_build_dir,
                           command=cmd)
 
-  def AddTests(self, options=None, timeout=1200):
+  def AddTests(self, options=None, timeout=1200, channel=None):
     options = options or {}
     is_dart2dart = (options.get('name') != None and
                     options.get('name').startswith('dart2dart'))
@@ -168,6 +172,8 @@ class DartCommands(commands.FactoryCommands):
         base_cmd += ' --vm-options=%s' % vm_options
 
     base_cmd = base_cmd + " --write-debug-log"
+    if channel and channel.name == 'be':
+      base_cmd = base_cmd + " --write-test-outcome-log"
 
     if is_new_analyzer or is_analyzer_experimental:
       cmd = base_cmd

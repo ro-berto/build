@@ -188,15 +188,16 @@ class DartFactory(gclient_factory.GClientFactory):
     # Default to the bleeding_edge channel
     if not channel:
       channel = CHANNELS_BY_NAME['be']
+    self.channel = channel
 
     # 'channel.all_deps_path' can be for example:
     #   "/branches/bleeding_edge/deps/all.deps"
     # config.Master.dart_url will be the base svn url. It will point to the
     # mirror if we're in golo and otherwise to the googlecode location.
     if is_standalone:
-      deps_url = config.Master.dart_url + channel.standalone_deps_path
+      deps_url = config.Master.dart_url + self.channel.standalone_deps_path
     else:
-      deps_url = config.Master.dart_url + channel.all_deps_path
+      deps_url = config.Master.dart_url + self.channel.all_deps_path
 
     if not custom_deps_list:
       custom_deps_list = []
@@ -249,7 +250,7 @@ class DartFactory(gclient_factory.GClientFactory):
 
     # Add all the tests.
     if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
-      dart_cmd_obj.AddTests(options=options)
+      dart_cmd_obj.AddTests(options=options, channel=self.channel)
 
     for trigger_instance in triggers:
       dart_cmd_obj.AddTrigger(trigger_instance)
