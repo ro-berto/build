@@ -73,6 +73,12 @@ class GerritPoller(base.PollingChangeSource):
     revision = change['revisions'].values()[0]
     commit = revision['commit']
     properties = {'event.change.number': change['_number']}
+    if change['status'] == 'NEW':
+      ref = revision.get('fetch', {}).get('git', {}).get('url')
+      if ref:
+        properties['event.patchSet.ref'] = ref
+    elif change['status'] in ('SUBMITTED', 'MERGED'):
+      properties['event.refUpdate.newRev'] = change['current_revision']
     chdict = {
         'author': '%s <%s>' % (
             commit['author']['name'], commit['author']['email']),
