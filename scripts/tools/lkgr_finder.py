@@ -377,7 +377,9 @@ V8_LKGR_STEPS = {
     'Chrome Browser Tests - dbg': ['compile'],
     'Chrome Linux Interactive - dbg': ['compile'],
     'V8 Linux64 Heapcheck': ['compile'],
-    'Webkit': ['compile'],
+    # TODO(machenbach): Disabled until stability issues with the windows bot
+    # are resolved.
+    # 'Webkit': ['compile'],
     'Webkit Mac': ['compile'],
     'Webkit Linux': ['compile'],
     'Webkit Linux 64': ['compile'],
