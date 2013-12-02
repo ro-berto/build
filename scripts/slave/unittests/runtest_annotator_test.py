@@ -3,11 +3,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""Unit tests for annotated log parsers in runtest.py.
+"""Unit tests for annotated log parsers used by runtest.py.
 
-runtest.py has the option to parse test output locally and send results to the
-master via annotator steps. This file tests those parsers.
+The classes tested here reside in process_log_utils.py.
 
+The script runtest.py has the option to parse test output locally and send
+results to the master via annotator steps. This file tests those parsers.
 """
 
 import json
@@ -18,20 +19,19 @@ import test_env  # pylint: disable=W0403,W0611
 
 from slave import process_log_utils
 
-TEST_PERCENTILES = [.05, .3, .8]
-
-# From buildbot.status.builder:
+# These should be the same as the constants used in process_log_utils.
+# See: http://docs.buildbot.net/current/developer/results.html
 SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION, RETRY = range(6)
 
-class LoggingStepBase(unittest.TestCase):
-  """Logging testcases superclass.
+# Custom percentile numbers to use in the tests below.
+TEST_PERCENTILES = [.05, .3, .8]
 
-  The class provides some operations common for testcases.
-  """
+
+class LogProcessorTest(unittest.TestCase):
+  """Base class for log processor unit tests. Contains common operations."""
 
   def setUp(self):
-    super(LoggingStepBase, self).setUp()
-
+    super(LogProcessorTest, self).setUp()
     self._revision = 12345
     self._webkit_revision = 67890
 
@@ -42,15 +42,17 @@ class LoggingStepBase(unittest.TestCase):
     factory_properties['perf_filename'] = perf_expectations_path
     factory_properties['perf_name'] = 'test-system'
     factory_properties['test_name'] = 'test-name'
-    parser = log_processor_class(revision=self._revision, build_property={},
-                                 factory_properties=factory_properties,
-                                 webkit_revision=self._webkit_revision)
+    processor = log_processor_class(
+        revision=self._revision, build_properties={},
+        factory_properties=factory_properties,
+        webkit_revision=self._webkit_revision)
 
-    # Set custom percentiles if we're testing GraphingLogProcessor.
-    if hasattr(parser, '_percentiles'):
-      parser._percentiles = TEST_PERCENTILES
+    # Set custom percentiles. This will be used by GraphingLogProcessor, which
+    # has and uses a private member attribute called _percentiles.
+    if hasattr(processor, '_percentiles'):
+      processor._percentiles = TEST_PERCENTILES
 
-    return parser
+    return processor
 
   def _ProcessLog(self, log_processor, logfile):  # pylint: disable=R0201
     for line in open(os.path.join(test_env.DATA_PATH, logfile)):
@@ -91,7 +93,7 @@ class LoggingStepBase(unittest.TestCase):
           'expectations.' % filename)
 
 
-class BenchpressPerformanceTestStepTest(LoggingStepBase):
+class BenchpressPerformanceTestStepTest(LogProcessorTest):
   def testOutputsSummaryBenchpress(self):
     input_files = ['benchpress_log']
     output_files = ['summary.dat']
@@ -112,7 +114,9 @@ class BenchpressPerformanceTestStepTest(LoggingStepBase):
     self.assertEqual(expected, actual)
 
 
-class GraphingLogProcessorTest(LoggingStepBase):
+class GraphingLogProcessorTest(LogProcessorTest):
+  """Test case for basic functionality of GraphingLogProcessor class."""
+
   def testSummary(self):
     input_files = ['graphing_processor.log']
     output_files = ['%s-summary.dat' % graph for graph in ('commit_charge',
@@ -192,7 +196,14 @@ class GraphingLogProcessorTest(LoggingStepBase):
       self.assertEqual(actual, expected, 'Filename %s did not contain expected '
           'data.' % filename)
 
-class GraphingLogProcessorPerfTest(LoggingStepBase):
+
+class GraphingLogProcessorPerfTest(LogProcessorTest):
+  """Another test case for the GraphingLogProcessor class.
+
+  The tests in this test case compare results against the contents of a
+  perf expectations file.
+  """
+
   def _TestPerfExpectations(self, perf_expectations_file):
     perf_expectations_path = os.path.join(
         test_env.DATA_PATH, perf_expectations_file)
@@ -355,7 +366,10 @@ class GraphingLogProcessorPerfTest(LoggingStepBase):
     self.assertEqual(expected, step.PerformanceSummary()[0])
     self.assertEqual(WARNINGS, step.evaluateCommand('mycommand'))
 
-class GraphingPageCyclerLogProcessorPerfTest(LoggingStepBase):
+
+class GraphingPageCyclerLogProcessorPerfTest(LogProcessorTest):
+  """Unit tests for the GraphingPageCyclerLogProcessor class."""
+
   def testPageCycler(self):
     parser = self._ConstructDefaultProcessor(
         process_log_utils.GraphingPageCyclerLogProcessor)
@@ -365,8 +379,10 @@ class GraphingPageCyclerLogProcessorPerfTest(LoggingStepBase):
     self.assertEqual(expected, parser.PerformanceSummary()[0])
 
 
-class GraphingEndureLogProcessorTest(LoggingStepBase):
-  def _testSummaryHelper(self, input_file, output_files):
+class GraphingEndureLogProcessorTest(LogProcessorTest):
+  """Unit tests for the GraphingEndureLogProcessor class."""
+
+  def _TestSummaryHelper(self, input_file, output_files):
     output_files = ['%s-summary.dat' % graph for graph in output_files]
     self._ConstructParseAndCheckJSON(input_file, output_files, None,
         process_log_utils.GraphingEndureLogProcessor)
@@ -378,7 +394,7 @@ class GraphingEndureLogProcessorTest(LoggingStepBase):
         'https___www_google_com_calendar_-EventListenerCount',
         'https___www_google_com_calendar_-TotalDOMNodeCount',
         'https___www_google_com_calendar_-V8MemoryUsed']
-    self._testSummaryHelper(input_file, output_files)
+    self._TestSummaryHelper(input_file, output_files)
 
   def testMultipleRunsSummary(self):
     """Compare each '-summary.dat' when we run two tests sequentially."""
@@ -390,10 +406,10 @@ class GraphingEndureLogProcessorTest(LoggingStepBase):
         'endure_gmail_alt_two_labels-EventListenerCount',
         'endure_gmail_alt_two_labels-TotalDOMNodeCount',
         'endure_gmail_alt_two_labels-V8MemoryUsed']
-    self._testSummaryHelper(input_file, output_files)
+    self._TestSummaryHelper(input_file, output_files)
 
-  def _testGraphListHelper(self, input_file, expected_graphfile):
-    """Compare the output 'graphs.dat' to what we expected."""
+  def _TestGraphListHelper(self, input_file, expected_graphfile):
+    """Compares the output 'graphs.dat' to what we expected."""
     graphfile = 'graphs.dat'
     output_file = [graphfile]
 
@@ -416,14 +432,14 @@ class GraphingEndureLogProcessorTest(LoggingStepBase):
     input_file = ['endure_processor.log']
     expected_graphfile = 'endure_processor-graphs.dat'
 
-    self._testGraphListHelper(input_file, expected_graphfile)
+    self._TestGraphListHelper(input_file, expected_graphfile)
 
   def testMultipleRunsGraphList(self):
     """Compare the 'graphs.dat' file when we run two tests sequentially."""
     input_file = ['endure_processor_multi.log']
     expected_graphfile = 'endure_processor-graphs_multi.dat'
 
-    self._testGraphListHelper(input_file, expected_graphfile)
+    self._TestGraphListHelper(input_file, expected_graphfile)
 
   def testResultsLengthError(self):
     input_file_error = 'endure_processor_results_length_error.log'

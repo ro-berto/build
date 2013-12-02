@@ -419,7 +419,7 @@ def create_results_tracker(tracker_class, options):
 
     tracker_obj = tracker_class(
         revision=GetSvnRevision(os.path.dirname(build_dir)),
-        build_property=options.build_properties,
+        build_properties=options.build_properties,
         factory_properties=options.factory_properties,
         webkit_revision=webkit_revision)
 
