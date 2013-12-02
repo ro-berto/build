@@ -78,12 +78,13 @@ class ChromiteFactory(object):
     else:
       self.f_cbuild = build_factory.BuildFactory()
 
+    self.chromite_dir = None
     self.add_bootstrap_steps()
     if script:
       self.add_chromite_step(script, params, b_params)
 
-  def _git_clear_and_checkout(self, repo, patch=None):
-    """rm -rf and clone the basename of the repo passed without .git
+  def git_clear_and_checkout(self, repo, patch=None):
+    """Clears and clones the given git repo. Returns relative path to repo.
 
     Args:
       repo: ssh: uri for the repo to be checked out
@@ -110,6 +111,8 @@ class ChromiteFactory(object):
                           name=msg,
                           description=msg,
                           haltOnFailure=True)
+
+    return git_checkout_dir
 
   def add_bootstrap_steps(self):
     """Bootstraps Chromium OS Build by syncing pre-requisite repositories.
@@ -141,7 +144,8 @@ class ChromiteFactory(object):
                             workdir='/b/build',
                             timeout=int(self.sleep_sync) + 10)
 
-    self._git_clear_and_checkout(self.chromite_repo, self.chromite_patch)
+    self.chromite_dir = self.git_clear_and_checkout(self.chromite_repo,
+                                                    self.chromite_patch)
 
   def add_chromite_step(self, script, params, b_params, legacy=False):
     """Adds a step that runs a chromite command.
@@ -152,9 +156,8 @@ class ChromiteFactory(object):
       b_params:  An array of StepParameters.
       legacy:  Use a different directory for some legacy invocations.
     """
-    git_checkout_dir = os.path.basename(self.chromite_repo).replace('.git', '')
     script_subdir = 'buildbot' if legacy else 'bin'
-    cmd = ['%s/%s/%s' % (git_checkout_dir, script_subdir, script)]
+    cmd = ['%s/%s/%s' % (self.chromite_dir, script_subdir, script)]
     if b_params:
       cmd.extend(b_params)
     if params:
@@ -181,7 +184,7 @@ class CbuildbotFactory(ChromiteFactory):
       params: string of parameters to pass to the cbuildbot command.
       script: name of the cbuildbot command.  Default cbuildbot.
       buildroot: buildroot to set. Default /b/cbuild.
-      dry_run: Means cbuildbot --debug, or don't push anything (cbuildbot only)
+      dry_run: Don't push anything as we're running a test run.
       trybot: Whether this is creating builders for the trybot waterfall.
       chrome_root: The place to put or use the chrome source.
       pass_revision: to pass the chrome revision desired into the build.
@@ -208,13 +211,13 @@ class CbuildbotFactory(ChromiteFactory):
     super(CbuildbotFactory, self).__init__(None, None,
         use_chromeos_factory=not pass_revision, **kwargs)
 
-    self.buildroot = buildroot
-    self.dry_run = dry_run
     self.script = script
     self.trybot = trybot
     self.chrome_root = chrome_root
     self.pass_revision = pass_revision
     self.legacy_chromite = legacy_chromite
+    self.buildroot = buildroot
+    self.dry_run = dry_run
 
     if params:
       self.add_cbuildbot_step(params)
@@ -291,3 +294,55 @@ class CbuildbotFactory(ChromiteFactory):
     self.f_cbuild.addStep(
         perf_class, command=cmd, name='Upload Perf Results',
         description='upload_perf_results')
+
+
+class ChromitePlusFactory(ChromiteFactory):
+  """
+  Create a build factory that depends on chromite but runs a script from
+  another repo.
+
+  Arg Changes from Parent Class:
+     script: Instead of pointing to a chromite script, points to a script in the
+             additional repo specified. Chromite repo is also checked out and
+             included in the PYTHONPATH to called script.
+     chromite_plus_repo: Repo that script resides in.
+     buildroot: buildroot to set. Default /b/cbuild.
+     dry_run: Don't push anything as we're running a test run.
+  """
+  def __init__(self, script, chromite_plus_repo,
+               buildroot='/b/cbuild',
+               dry_run=False,
+               *args, **dargs):
+    # Initialize without running a script step similar to Cbuildbot factory.
+    super(ChromitePlusFactory, self).__init__(None, **dargs)
+    self.buildroot = buildroot
+    self.dry_run = dry_run
+
+    # Checkout and run the script.
+    plus_checkout_dir = self.git_clear_and_checkout(chromite_plus_repo, None)
+    self.add_chromite_plus_step(script, plus_checkout_dir)
+
+  def add_chromite_plus_step(self, script, plus_checkout_dir):
+    """Adds a step that runs the chromite_plus command.
+
+    Args:
+      script:  Name of the script to run from chromite_plus_repo.
+      plus_checkout_dir: Directory that script resides in.
+    """
+    cmd = [os.path.join(plus_checkout_dir, script)]
+
+    # Are we a debug build.
+    if self.dry_run:
+      cmd.extend(['--debug'])
+
+    # Adds buildroot / clobber as last arg.
+    cmd.append(WithProperties('%s' + self.buildroot, 'clobber:+--clobber '))
+
+    self.f_cbuild.addStep(chromium_step.AnnotatedCommand,
+                          command=cmd,
+                          timeout=self.timeout,
+                          name=script,
+                          description=script,
+                          usePTY=False,
+                          env={'PYTHONPATH':'.'},
+                          ** self.step_args)
