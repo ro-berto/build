@@ -396,3 +396,25 @@ def DumpSetup(c, important=None, filename='config.current.txt'):
 
   with open(filename, 'w') as f:
     print >> f, hacky_repr(c, 'config = ', '', important)
+
+
+def Partition(item_tuples, num_partitions):
+  """Divides |item_tuples| into |num_partitions| separate lists.
+
+  Perfect partitioning is NP hard, this is a "good enough" estimate.
+
+  Args:
+    item_tuples: tuple in the format (weight, item_name).
+    num_partitions: int number of partitions to generate.
+
+  Returns:
+    A list of lists of item_names with as close to equal weight as possible.
+  """
+  assert num_partitions > 0, 'Must pass a positive number of partitions'
+  assert len(item_tuples) >= num_partitions, 'Need more items than partitions'
+  partitions = [[] for _ in xrange(num_partitions)]
+  def GetLowestSumPartition():
+    return sorted(partitions, key=lambda x: sum([i[0] for i in x]))[0]
+  for item in sorted(item_tuples, reverse=True):
+    GetLowestSumPartition().append(item)
+  return sorted([sorted([name for _, name in p]) for p in partitions])
