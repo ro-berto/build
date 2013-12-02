@@ -19,7 +19,8 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux(): return chromium_factory.ChromiumFactory(
+    'src/out', 'linux2', pull_internal=False)
 def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
 def linux_android(): return chromium_factory.ChromiumFactory(
     'src/out', 'linux2', nohooks_on_update=True, target_os='android')
