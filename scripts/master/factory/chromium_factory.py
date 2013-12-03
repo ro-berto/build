@@ -629,7 +629,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'image_decoding.tough_decoding_cases',
         'media.tough_media_cases',
         'media.android',
-        'media.mse_cases'
+        'media.mse_cases',
+        'media.media_cns_cases'
       )
     for test_name in synthetic_benchmarks:
       Telemetry(test_name)
