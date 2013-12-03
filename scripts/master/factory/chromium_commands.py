@@ -1561,7 +1561,11 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddWebRtcPerfManualBrowserTests(self, factory_properties=None):
     # These tests needs --test-launcher-jobs=1 since some of them are not able
     # to run in parallel (due to the usage of the peerconnection server).
-    cmd_options = ['--run-manual', '--ui-test-action-max-timeout=300000',
+    # We also need a longer timeout because the video quality test generally
+    # needs about 90 seconds to execute on the bot.
+    longer_timeout_ms = 3 * 60 * 1000
+    cmd_options = ['--run-manual',
+                   '--ui-test-action-max-timeout=%d' % longer_timeout_ms,
                    '--test-launcher-jobs=1',
                    '--test-launcher-print-test-stdio=always']
     self.AddAnnotatedPerfStep(test_name='webrtc_manual_browser_tests',
