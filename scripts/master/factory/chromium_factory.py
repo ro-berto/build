@@ -743,9 +743,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('webrtc_perf_content_unittests'):
       f.AddWebRtcPerfContentUnittests(fp)
     if R('webrtc_manual_content_browsertests'):
-      arg_list = ['--gtest_filter=WebRTC*:Webrtc*:*Dtmf', '--run-manual']
-      f.AddGTestTestStep('content_browsertests', description=' (manual)',
-                         factory_properties=fp, arg_list=arg_list)
+      f.AddWebRtcPerfManualContentBrowserTests(fp)
     if R('webrtc_content_unittests'):
       arg_list = ['--gtest_filter=WebRTC*:RTC*:MediaStream*']
       f.AddGTestTestStep('content_unittests', description=' (webrtc filtered)',
