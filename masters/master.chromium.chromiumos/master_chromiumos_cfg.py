@@ -121,7 +121,6 @@ F('fullbuilder', chromiumos().ChromiumOSFactory(
     clobber=True,
     options=['--compiler=goma'] + extract_options(linux_chromeos_tests),
     tests=['check_deps2git',
-           'check_licenses',
            'check_perms',],
     factory_properties={
         'archive_build': True,
