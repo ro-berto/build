@@ -24,8 +24,13 @@ categories_steps = {
    ],
 }
 
+# TODO(machenbach): Remove nacl compile exclusion as soon as builder is stable
+# again.
 exclusions = {
   'V8 Linux - mips - sim': ['compile'],
+  'NaCl V8 Linux': ['compile'],
+  'NaCl V8 Linux64 - stable': ['compile'],
+  'NaCl V8 Linux64 - canary': ['compile'],
   'V8 Linux - recipe': [],
 }
 
