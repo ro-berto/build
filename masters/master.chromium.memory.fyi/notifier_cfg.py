@@ -48,35 +48,6 @@ categories_steps = {
     'memory test: url',
     'memory test: views',
    ],
-  'heapcheck_tester': [
-    # Please keep this list sorted.
-    'heapcheck test: app_list',
-    'heapcheck test: ash_unittests',
-    'heapcheck test: aura',
-    'heapcheck test: base_unittests',
-    'heapcheck test: chromeos_unittests',
-    'heapcheck test: compositor',
-    'heapcheck test: content',
-    'heapcheck test: courgette',
-    'heapcheck test: crypto',
-    'heapcheck test: device_unittests',
-    'heapcheck test: gpu',
-    'heapcheck test: ipc_tests',
-    'heapcheck test: jingle',
-    'heapcheck test: media',
-    'heapcheck test: message_center',
-    'heapcheck test: net',
-    'heapcheck test: printing',
-    'heapcheck test: ppapi_unittests',
-    'heapcheck test: remoting',
-    'heapcheck test: sql',
-    'heapcheck test: sync',
-    'heapcheck test: sync_unit_tests',
-    'heapcheck test: ui_unittests',
-    'heapcheck test: unit',
-    'heapcheck test: url',
-    'heapcheck test: views',
-  ],
   'windows': ['svnkill', 'taskkill'],
   'compile': ['check_deps', 'compile', 'archive_build']
 }
@@ -109,7 +80,6 @@ def Update(config, active_master, c):
           'http://dev.chromium.org/developers/tree-sheriffs/sheriff-details-chromium/memory-sheriff\n'
           'http://dev.chromium.org/developers/how-tos/using-valgrind\n'
           'http://dev.chromium.org/developers/how-tos/using-valgrind/threadsanitizer\n'
-          'http://dev.chromium.org/developers/how-tos/using-the-heap-leak-checker\n'
           '\nBy the way, the current memory sheriff is on the CC list.'
       ))
 
