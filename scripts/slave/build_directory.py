@@ -47,22 +47,27 @@ def AreNinjaFilesNewerThanMSVSFiles(src_dir=None):
   return IsFileNewerThanFile(ninja_path, msvs_path)
 
 
-def GetBuildOutputDirectory():
+def GetBuildOutputDirectory(src_dir=None):
   """Returns the path to the build directory, relative to the checkout root.
 
   Assumes that the current working directory is the checkout root.
   """
+  # src_dir is only needed for compiling v8, which uses compile.py (but no other
+  # of the build scripts), but its source root isn't "src" -- crbug.com/315004
+  if src_dir is None:
+    src_dir = 'src'
+
   if sys.platform.startswith('linux'):
-    return 'src/out'
+    return os.path.join(src_dir, 'out')
 
   if sys.platform == 'darwin':
-    if AreNinjaFilesNewerThanXcodeFiles():
-      return 'src/out'
-    return 'src/xcodebuild'
+    if AreNinjaFilesNewerThanXcodeFiles(src_dir):
+      return os.path.join(src_dir, 'out')
+    return os.path.join(src_dir, 'xcodebuild')
 
   if sys.platform == 'cygwin' or sys.platform.startswith('win'):
-    if AreNinjaFilesNewerThanMSVSFiles():
-      return 'src/out'
-    return 'src/build'
+    if AreNinjaFilesNewerThanMSVSFiles(src_dir):
+      return os.path.join(src_dir, 'out')
+    return os.path.join(src_dir, 'build')
 
   raise NotImplementedError('Unexpected platform %s' % sys.platform)

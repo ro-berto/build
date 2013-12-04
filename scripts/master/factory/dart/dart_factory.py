@@ -137,9 +137,11 @@ def BuildChromiumFactory(channel, target_platform='win32'):
   return factory.ChromiumFactory
 
 # These factories are used for building v8
-v8_win_default_opts = ['--build-tool=vs']
-v8_linux_default_opts = ['buildbot', '--build-tool=make']
-v8_mac_default_opts = ['--solution=build/all.xcodeproj', '--build-tool=xcode']
+v8_win_default_opts = ['--build-tool=vs', '--src-dir=v8']
+v8_linux_default_opts = ['--build-tool=make', '--src-dir=v8',
+                         '--', 'builddir_name=.']
+v8_mac_default_opts = ['--solution=../build/all.xcodeproj',
+                       '--build-tool=xcode', '--src-dir=v8']
 
 m_v8_linux_stable = v8_factory.V8Factory('v8', target_platform = 'linux2',
                                          branch='branches/' + v8_stable_branch)
@@ -579,7 +581,7 @@ class DartUtils(object):
       elif name.startswith('v8-win-release'):
         factory = m_v8_win32_stable.V8Factory(
             options=v8_win_default_opts,
-            project='build\\all.sln',
+            project='all.sln',
             target='Release',
             factory_properties={
               'gclient_env': {'GYP_DEFINES': 'v8_enable_disassembler=1'},
