@@ -82,6 +82,12 @@ linux_all_test_targets = [
   'webkit_compositor_bindings_unittests',
 ]
 
+linux_aura_test_targets = [
+  'app_list_unittests',
+  'aura_builder',
+  'compositor_unittests',
+]
+
 goma_ninja_options = [
     '--build-tool=ninja', '--compiler=goma', '--']
 goma_clang_ninja_options = [
@@ -97,15 +103,20 @@ rel_archive = master_config.GetArchiveUrl(
     'ChromiumLinux', 'Linux Builder',
     'Linux_Builder', 'linux')
 
+rel_aura_archive = master_config.GetArchiveUrl(
+    'ChromiumLinux', 'Linux Aura Builder',
+    'Linux_Aura_Builder', 'linux')
+
 #
 # Main release scheduler for src/
 #
 S('linux_rel', branch='src', treeStableTimer=60)
 
 #
-# Triggerable scheduler for the rel builder
+# Triggerable schedulers for the rel builders
 #
 T('linux_rel_trigger')
+T('linux_rel_aura_trigger')
 
 #
 # Linux Rel Builder
@@ -185,79 +196,70 @@ F('rel_sync', linux_tester().ChromiumFactory(
 #
 # Linux aura bot
 #
-
-linux_aura_tests = [
-  'app_list_unittests',
-  'aura',
-  'base_unittests',
-  'browser_tests',
-  'cacheinvalidation_unittests',
-  'compositor',
-  'content_browsertests',
-  'content_unittests',
-  'crypto_unittests',
-  'device_unittests',
-  'events',
-  'googleurl',
-  'gpu',
-  'interactive_ui_tests',
-  'ipc_tests',
-  'jingle',
-  'media',
-  'net',
-  'ppapi_unittests',
-  'printing',
-  'remoting',
-  'sandbox_linux_unittests',
-  'ui_unittests',
-  'unit_sql',
-  'unit_sync',
-  'unit_unit',
-  'views',
-]
-
-linux_aura_options = [
-  'app_list_unittests',
-  'aura_builder',
-  'base_unittests',
-  'browser_tests',
-  'cacheinvalidation_unittests',
-  'chrome',
-  'compositor_unittests',
-  'content_browsertests',
-  'content_unittests',
-  'crypto_unittests',
-  'device_unittests',
-  'gpu_unittests',
-  'interactive_ui_tests',
-  'ipc_tests',
-  'jingle_unittests',
-  'media_unittests',
-  'net_unittests',
-  'ppapi_unittests',
-  'printing_unittests',
-  'remoting_unittests',
-  'sandbox_linux_unittests',
-  'sql_unittests',
-  'ui_unittests',
-  'url_unittests',
-]
-
-B('Linux Aura', 'f_linux_rel_aura', 'compile', 'linux_rel',
-  notify_on_missing=True)
-F('f_linux_rel_aura', linux().ChromiumFactory(
-    target='Release',
-    slave_type='BuilderTester',
-    options=goma_ninja_options + linux_aura_options,
-    tests=linux_aura_tests,
+B('Linux Aura Builder', 'rel_aura', 'compile', 'linux_rel',
+  auto_reboot=False, notify_on_missing=True)
+F('rel_aura', linux().ChromiumFactory(
+    slave_type='Builder',
+    options=goma_ninja_options + linux_all_test_targets +
+            linux_aura_test_targets +
+            ['sync_integration_tests', 'chromium_swarm_tests'],
+    tests=['check_deps'],
     factory_properties={
       'gclient_env': {
           'GYP_DEFINES': 'use_aura=1',
           'GYP_GENERATORS': 'ninja',
       },
-      'sharded_tests': sharded_tests,
-      'window_manager': 'False',
+      'trigger': 'linux_rel_aura_trigger',
     }))
+
+#
+# Linux aura tests
+#
+B('Linux Aura Tests',
+  'rel_aura_unit',
+  'testers',
+  'linux_rel_aura_trigger',
+  notify_on_missing=True)
+F('rel_aura_unit', linux_tester().ChromiumFactory(
+    slave_type='Tester',
+    build_url=rel_archive,
+    tests=[
+      'app_list_unittests',
+      'aura',
+      'base_unittests',
+      'browser_tests',
+      'cacheinvalidation_unittests',
+      'cc_unittests',
+      'chromedriver2_unittests',
+      'components_unittests',
+      'compositor',
+      'content_browsertests',
+      'content_unittests',
+      'crypto_unittests',
+      'dbus',
+      'device_unittests',
+      'events',
+      'google_apis_unittests',
+      'googleurl',
+      'gpu',
+      'interactive_ui_tests',
+      'ipc_tests',
+      'jingle',
+      'media',
+      'net',
+      'ppapi_unittests',
+      'printing',
+      'remoting',
+      'sandbox_linux_unittests',
+      'ui_unittests',
+      'unit_sql',
+      'unit_sync',
+      'unit_unit',
+      'views',
+      'webkit_compositor_bindings_unittests',
+    ],
+    factory_properties={'sharded_tests': sharded_tests,
+                        'generate_gtest_json': True}))
 
 
 ################################################################################
