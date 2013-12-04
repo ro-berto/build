@@ -107,6 +107,7 @@ class GClient(source.Source):
     if args.get('gclient_spec'):
       self.adjustGclientSpecForBlink(branch, revision, args)
       self.adjustGclientSpecForNaCl(branch, revision, patch, args)
+      self.adjustGclientSpecForV8(branch, revision, patch, args)
       self.adjustGclientSpecForWebRTC(branch, revision, patch, args)
 
     try:
@@ -162,6 +163,17 @@ class GClient(source.Source):
       pass
     args['gclient_spec'] = args['gclient_spec'].replace(
         '$$NACL_REV$$', str(nacl_revision or ''))
+
+  def adjustGclientSpecForV8(self, branch, revision, patch, args):
+    v8_revision = revision
+    try:
+      # parent_v8_revision might be set, but empty.
+      if self.getProperty('parent_got_v8_revision'):
+        v8_revision = self.getProperty('parent_got_v8_revision')
+    except KeyError:
+      pass
+    args['gclient_spec'] = args['gclient_spec'].replace(
+        '$$V8_REV$$', str(v8_revision or ''))
 
   def adjustGclientSpecForWebRTC(self, branch, revision, patch, args):
     webrtc_revision = revision

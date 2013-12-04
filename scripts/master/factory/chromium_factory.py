@@ -73,9 +73,9 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
   # gclient additional custom deps
   CUSTOM_DEPS_V8_LATEST = ('src/v8',
-    'http://v8.googlecode.com/svn/branches/bleeding_edge')
+    'http://v8.googlecode.com/svn/branches/bleeding_edge@$$V8_REV$$')
   CUSTOM_DEPS_V8_TRUNK = ('src/v8',
-    'http://v8.googlecode.com/svn/trunk')
+    'http://v8.googlecode.com/svn/trunk@$$V8_REV$$')
   CUSTOM_DEPS_WEBRTC_TRUNK = ('src/third_party/webrtc',
     config.Master.webrtc_url + '/trunk/webrtc@$$WEBRTC_REV$$')
   CUSTOM_DEPS_LIBJINGLE_TRUNK = ('src/third_party/libjingle/source/talk',
