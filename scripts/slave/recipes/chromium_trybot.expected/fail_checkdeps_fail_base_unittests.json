@@ -125,7 +125,8 @@
       "goma",
       "--",
       "base_unittests",
-      "net_unittests"
+      "net_unittests",
+      "chrome"
     ],
     "name": "compile"
   },
@@ -296,12 +297,41 @@
     ]
   },
   {
+    "can_fail_build": false,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/chrome/test/nacl_test_injection/buildbot_nacl_integration.py",
+      "--mode",
+      "Release",
+      "--json_build_results_output_file",
+      "/path/to/tmp/json"
+    ],
+    "name": "nacl_integration (with patch)",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
     "cmd": [
       "python",
       "-u",
       "print \"ALL IS WELL\""
     ],
     "name": "deps2git",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "print \"ALL IS WELL\""
+    ],
+    "name": "nacl_integration",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
       "@@@STEP_LOG_END@python.inline@@@"

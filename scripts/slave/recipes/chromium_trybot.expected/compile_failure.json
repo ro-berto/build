@@ -126,7 +126,8 @@
       "goma",
       "--",
       "base_unittests",
-      "net_unittests"
+      "net_unittests",
+      "chrome"
     ],
     "name": "compile",
     "~followup_annotations": [

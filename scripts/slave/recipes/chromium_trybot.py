@@ -22,6 +22,9 @@ GTEST_TESTS = [
   'net_unittests',
 ]
 
+NACL_INTEGRATION_TARGETS = [
+  'chrome',
+]
 
 def followup_fn(step_result):
   r = step_result.json.gtest_results
@@ -57,6 +60,22 @@ def GTestsStep(api, test, suffix, additional_args=None):
                                parallel=True,
                                can_fail_build=False,
                                followup_fn=followup_fn)
+
+
+def NaclIntegrationStep(api, suffix):
+  name = 'nacl_integration (%s)' % suffix
+  args = [
+    '--mode', api.chromium.c.BUILD_CONFIG,
+    '--json_build_results_output_file', api.json.output(),
+  ]
+  return api.python(
+      name,
+      api.path.checkout('chrome',
+                        'test',
+                        'nacl_test_injection',
+                        'buildbot_nacl_integration.py'),
+      args,
+      can_fail_build=False)
 
 
 def SummarizeTestResults(api, ignored_failures, new_failures):
@@ -162,6 +181,41 @@ def SummarizeDeps2GitResults(api, with_patch, without_patch):
   )
 
 
+def SummarizeNaclIntegrationResults(api, with_patch, without_patch):
+  def results_to_set(results):
+    return set([result['raw_name'] for result in results])
+  ignored_failures = results_to_set(without_patch)
+  new_failures = results_to_set(with_patch) - ignored_failures
+  return api.python.inline(
+    'nacl_integration',
+    r"""
+    import sys, json
+    failures = json.load(open(sys.argv[1], 'rb'))
+
+    success = True
+
+    if failures['new']:
+      success = False
+      print 'New failures:'
+      for url in failures['new']:
+        print url
+
+    if failures['ignored']:
+      print 'Ignored failures:'
+      for url in failures['ignored']:
+        print url
+
+    sys.exit(0 if success else 1)
+    """,
+    args=[
+      api.json.input({
+        'new': list(new_failures),
+        'ignored': list(ignored_failures),
+      })
+    ],
+  )
+
+
 def GenSteps(api):
   api.chromium.set_config('chromium')
   api.chromium.apply_config('trybot_flavor')
@@ -171,7 +225,7 @@ def GenSteps(api):
     api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(),
     api.chromium.runhooks(),
-    api.chromium.compile(targets=GTEST_TESTS),
+    api.chromium.compile(targets=(GTEST_TESTS + NACL_INTEGRATION_TARGETS)),
   )
 
   # Do not run tests if the build is already in a failed state.
@@ -194,6 +248,8 @@ def GenSteps(api):
     if not with_patch[test].valid or with_patch[test].failures:
       gtest_retry_tests.append(test)
 
+  yield NaclIntegrationStep(api, 'with patch')
+
   other_retry_tests = []
 
   if api.step_history['checkdeps (with patch)'].json.output == []:
@@ -208,6 +264,11 @@ def GenSteps(api):
 
   if not gtest_retry_tests:
     yield api.python.inline('gtest_tests', 'print "ALL IS WELL"')
+
+  if api.step_history['nacl_integration (with patch)'].json.output == []:
+    yield api.python.inline('nacl_integration', 'print "ALL IS WELL"')
+  else:
+    other_retry_tests.append('nacl_integration')
 
   if not gtest_retry_tests and not other_retry_tests:
     return
@@ -256,6 +317,18 @@ def GenSteps(api):
 
     yield SummarizeTestResults(api, ignored_failures, new_failures)
 
+  if 'nacl_integration' in other_retry_tests:
+    yield api.chromium.compile(targets=NACL_INTEGRATION_TARGETS)
+    yield NaclIntegrationStep(api, 'without patch')
+
+    yield SummarizeNaclIntegrationResults(
+      api,
+      with_patch=api.step_history[
+          'nacl_integration (with patch)'].json.output,
+      without_patch=api.step_history[
+          'nacl_integration (without patch)'].json.output
+    )
+
 
 def GenTests(api):
   canned_checkdeps = {
@@ -272,6 +345,16 @@ def GenTests(api):
   canned_deps2git = {
     True: [],
     False: ['https://chromium.googlesource.com/external/v8.git'],
+  }
+  canned_nacl = {
+    True: [],
+    False: [
+      {
+        'test_name': 'test_foo',
+        'raw_name': 'test_foo',
+        'errstr': 'baz',
+      }
+    ],
   }
   canned_test = api.json.canned_gtest_output
   def props(config='Release', git_mode=False):
@@ -295,6 +378,8 @@ def GenTests(api):
                               api.json.output(canned_checkdeps[True]))
         test += api.step_data('deps2git (with patch)',
                               api.json.output(canned_deps2git[True]))
+        test += api.step_data('nacl_integration (with patch)',
+                              api.json.output(canned_nacl[True]))
         for gtest_test in GTEST_TESTS:
           test += api.step_data(gtest_test + ' (with patch)',
                                 canned_test(passing=True))
@@ -307,7 +392,7 @@ def GenTests(api):
     ('base_unittests', None),
     ('net_unittests', None),
     ('base_unittests', 'net_unittests'),
-    ('net_unittests', 'base_unittests'),
+    ('base_unittests', 'nacl_integration'),
     (None, 'checkdeps'),
     ('checkdeps', None),
     ('checkdeps', 'base_unittests'),
@@ -343,6 +428,15 @@ def GenTests(api):
           'deps2git (without patch)',
           api.json.output(
               canned_deps2git[really_failing_test=='deps2git']))
+
+    passing = 'nacl_integration' not in (really_failing_test,
+                                         spuriously_failing_test)
+    test += api.step_data('nacl_integration (with patch)',
+                          api.json.output(canned_nacl[passing]))
+    if not passing:
+      test += api.step_data(
+          'nacl_integration (without patch)',
+          api.json.output(canned_nacl[really_failing_test=='nacl_integration']))
 
     for gtest_test in GTEST_TESTS:
       passing = gtest_test not in (really_failing_test,
