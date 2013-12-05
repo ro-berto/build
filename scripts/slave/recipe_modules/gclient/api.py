@@ -153,7 +153,7 @@ class GclientApi(recipe_api.RecipeApi):
           if custom_var not in cfg.solutions[0].custom_vars or override:
             cfg.solutions[0].custom_vars[custom_var] = val
 
-  def checkout(self, gclient_config=None, revert=True,
+  def checkout(self, gclient_config=None, revert=False,
                inject_parent_got_revision=True, **kwargs):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
@@ -194,9 +194,8 @@ class GclientApi(recipe_api.RecipeApi):
   def revert(self, **kwargs):
     """Return a gclient_safe_revert step."""
     # Not directly calling gclient, so don't use self().
-    prefix = 'gclient '
-    if self.spec_alias:
-      prefix = ('[spec: %s] ' % self.spec_alias) + prefix
+    alias = self.spec_alias
+    prefix = '%sgclient ' % (('[spec: %s] ' % alias) if alias else '')
 
     kwargs.setdefault('abort_on_failure', True)
 

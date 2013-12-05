@@ -11,20 +11,8 @@
     "name": "[spec: empty_deps] gclient setup",
     "seed_steps": [
       "[spec: empty_deps] gclient setup",
-      "[spec: empty_deps] gclient revert",
       "[spec: empty_deps] gclient sync"
     ]
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "[spec: empty_deps] gclient revert"
   },
   {
     "abort_on_failure": true,
@@ -106,20 +94,8 @@
     "name": "[spec: trimmed] gclient setup",
     "seed_steps": [
       "[spec: trimmed] gclient setup",
-      "[spec: trimmed] gclient revert",
       "[spec: trimmed] gclient sync"
     ]
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]/gclient"
-    ],
-    "name": "[spec: trimmed] gclient revert"
   },
   {
     "abort_on_failure": true,

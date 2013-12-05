@@ -11,23 +11,11 @@
     "name": "gclient setup",
     "seed_steps": [
       "gclient setup",
-      "gclient revert",
       "gclient sync",
       "gclient runhooks",
       "apply oilpan patches",
       "compile"
     ]
-  },
-  {
-    "abort_on_failure": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]\\scripts\\slave\\gclient_safe_revert.py",
-      ".",
-      "[DEPOT_TOOLS]\\gclient.bat"
-    ],
-    "name": "gclient revert"
   },
   {
     "abort_on_failure": true,

@@ -116,7 +116,7 @@ def GenSteps(api):
   results_dir = api.path.slave_build('layout-test-results')
 
   yield (
-    api.gclient.checkout(),
+    api.gclient.checkout(revert=True),
     api.rietveld.apply_issue('third_party', 'WebKit'),
     api.chromium.runhooks(),
     api.chromium.compile(),

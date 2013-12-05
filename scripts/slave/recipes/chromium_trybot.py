@@ -168,7 +168,7 @@ def GenSteps(api):
   api.step.auto_resolve_conflicts = True
 
   yield (
-    api.gclient.checkout(),
+    api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(),
     api.chromium.runhooks(),
     api.chromium.compile(targets=GTEST_TESTS),
