@@ -222,7 +222,7 @@ B('Linux Aura Tests',
   notify_on_missing=True)
 F('rel_aura_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
-    build_url=rel_archive,
+    build_url=rel_aura_archive,
     tests=[
       'app_list_unittests',
       'aura',
