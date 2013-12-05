@@ -21,7 +21,7 @@ def GenSteps(api):
     root = ''
 
   api.gclient.set_config(repo_name)
-  yield api.gclient.checkout()
+  yield api.gclient.checkout(revert=True)
 
   spec = api.gclient.c
   if spec.solutions[0].url.endswith('.git'):
