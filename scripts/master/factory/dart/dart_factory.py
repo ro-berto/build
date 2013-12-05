@@ -139,6 +139,8 @@ def BuildChromiumFactory(channel, target_platform='win32'):
 # These factories are used for building v8
 v8_win_default_opts = ['--build-tool=vs', '--src-dir=v8']
 v8_linux_default_opts = ['--build-tool=make', '--src-dir=v8',
+                         # TODO(thakis): Remove this once v8 r18257 has reached
+                         # the stable branch.
                          '--', 'builddir_name=.']
 v8_mac_default_opts = ['--solution=../build/all.xcodeproj',
                        '--build-tool=xcode', '--src-dir=v8']
