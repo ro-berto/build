@@ -29,10 +29,14 @@ categories_steps = {
     'Deopt Fuzz',
     'webkit_tests',
     'interactive_ui_tests',
-    'heapcheck test: base_unittests',
-    'heapcheck test: unit',
-    'heapcheck test: net',
   ],
+  'asan': [
+    'browser_tests',
+    'net',
+    'media',
+    'remoting',
+    'content_browsertests',
+  ]
 }
 
 # TODO(machenbach): Remove nacl compile exclusion as soon as builder is stable

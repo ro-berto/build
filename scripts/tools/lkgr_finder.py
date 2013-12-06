@@ -380,7 +380,7 @@ V8_LKGR_STEPS = {
     'Chrome Linux Perf': ['compile'],
     'Chrome Browser Tests - dbg': ['compile'],
     'Chrome Linux Interactive - dbg': ['compile'],
-    'V8 Linux64 Heapcheck': ['compile'],
+    'V8 Linux64 ASAN': ['compile'],
     # TODO(machenbach): Disabled until stability issues with the windows bot
     # are resolved.
     # 'Webkit': ['compile'],
