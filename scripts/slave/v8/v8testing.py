@@ -74,6 +74,9 @@ def main():
   option_parser.add_option('--flaky-tests',
                            help=('Regard tests marked as flaky '
                                  '(run|skip|dontcare)'))
+  option_parser.add_option("--quickcheck",
+                           default=False, action='store_true',
+                           help='Quick check mode (skip slow/flaky tests)')
 
   options, args = option_parser.parse_args()
   if args:
@@ -132,7 +135,8 @@ def main():
       cmd.extend(['--command-prefix', options.command_prefix])
     if options.flaky_tests:
       cmd.extend(['--flaky-tests', options.flaky_tests])
-
+    if options.quickcheck:
+      cmd.extend(['--quickcheck'])
 
   if options.shard_count > 1:
     cmd.extend(['--shard-count=%s' % options.shard_count,

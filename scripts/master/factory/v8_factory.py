@@ -57,6 +57,9 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8TestTC('mjsunit cctest message preparser', 'Check',
                     env=factory_properties.get('test_env', {}),
                     options=factory_properties.get('test_options', []))
+    if R('v8try'):
+      f.AddV8Test('mjsunit cctest message preparser', 'Check',
+                  options=['--quickcheck'])
     if R('experimental_parser'):
       f.AddV8TestTC('', 'CheckParser',
                     env=factory_properties.get('test_env', {}),
@@ -83,7 +86,7 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('simpleleak'): f.AddSimpleLeakTest()
 
   def V8Factory(self, target='Release', clobber=False, tests=None, mode=None,
-                options=None, compile_timeout=1200,
+                slave_type='BuilderTester', options=None, compile_timeout=1200,
                 build_url=None, project=None, factory_properties=None,
                 target_arch=None, shard_count=1,
                 shard_run=1, shell_flags=None, isolates=False,
@@ -115,7 +118,7 @@ class V8Factory(gclient_factory.GClientFactory):
 
     factory = self.BuildFactory(target=target, clobber=clobber, tests=tests,
                                 mode=mode,
-                                slave_type='BuilderTester',
+                                slave_type=slave_type,
                                 options=options,
                                 compile_timeout=compile_timeout,
                                 build_url=build_url,
