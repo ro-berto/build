@@ -36,6 +36,7 @@ sharded_tests = [
   'crypto_unittests',
   'device_unittests',
   'events_unittests',
+  'google_apis_unittests',
   'gpu_unittests',
   'jingle_unittests',
   'media_unittests',
@@ -151,6 +152,7 @@ F('rel_unit_3', win_tester().ChromiumFactory(
     tests=[
       'browser_tests',
       'components_unittests',
+      'google_apis_unittests',
       'unit',
     ],
     factory_properties={'process_dumps': True,
@@ -224,6 +226,7 @@ F('rel_x64_unit_1', win_tester().ChromiumFactory(
       'content_browsertests',
       'courgette_unittests',
       'crypto_unittests',
+      'google_apis_unittests',
       'gpu_unittests',
       'installer_util_unittests',
       'interactive_ui_tests',
