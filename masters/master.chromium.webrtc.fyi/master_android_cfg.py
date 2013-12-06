@@ -50,6 +50,9 @@ F('android_tests_factory', android().ChromiumWebRTCAndroidFactory(
     factory_properties={
       'android_bot_id': 'webrtc-chromium-tests-rel',
       'build_url': android_archive,
+      'perf_id': 'chromium-webrtc-trunk-tot-rel-android-nexus72',
+      'show_perf_results': True,
+      'test_platform': 'android',
     }))
 
 

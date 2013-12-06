@@ -43,6 +43,9 @@ def f_dbg_android_tests(bot_id_suffix):
     factory_properties={
       'android_bot_id': 'webrtc-native-tests-dbg-%s' % bot_id_suffix,
       'build_url': android_dbg_archive,
+      'perf_id': 'webrtc-android-native-tests-dbg-%s' % bot_id_suffix,
+      'show_perf_results': True,
+      'test_platform': 'android',
     })
 
 
@@ -53,6 +56,9 @@ def f_rel_android_tests(bot_id_suffix):
     factory_properties={
       'android_bot_id': 'webrtc-native-tests-rel-%s' % bot_id_suffix,
       'build_url': android_rel_archive,
+      'perf_id': 'webrtc-android-native-tests-rel-%s' % bot_id_suffix,
+      'show_perf_results': True,
+      'test_platform': 'android',
     })
 
 # WebRTC standalone builders (no tests).
