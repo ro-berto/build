@@ -11,3 +11,4 @@ class ChromiumFYI(Master.Master1):
   master_port = 8011
   slave_port = 8111
   master_port_alt = 8211
+  buildbot_url = 'http://build.chromium.org/p/chromium.fyi/'

@@ -11,3 +11,4 @@ class ChromiumMac(Master.Master1):
   master_port = 8086
   slave_port = 8186
   master_port_alt = 8286
+  buildbot_url = 'http://build.chromium.org/p/chromium.mac/'
