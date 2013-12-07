@@ -29,6 +29,10 @@ def jsonish_to_python(spec, is_top=False):
   return ret
 
 class GclientApi(recipe_api.RecipeApi):
+  # Singleton object to indicate to checkout() that we should run a revert if
+  # we detect that we're on the tryserver.
+  RevertOnTryserver = object()
+
   def __init__(self, **kwargs):
     super(GclientApi, self).__init__(**kwargs)
     self.USE_MIRROR = None
@@ -153,11 +157,14 @@ class GclientApi(recipe_api.RecipeApi):
           if custom_var not in cfg.solutions[0].custom_vars or override:
             cfg.solutions[0].custom_vars[custom_var] = val
 
-  def checkout(self, gclient_config=None, revert=False,
+  def checkout(self, gclient_config=None, revert=RevertOnTryserver,
                inject_parent_got_revision=True, **kwargs):
     """Return a step generator function for gclient checkouts."""
     cfg = gclient_config or self.c
     assert cfg.complete()
+
+    if revert is self.RevertOnTryserver:
+      revert = 'rietveld' in self.m.properties
 
     if inject_parent_got_revision:
       self.inject_parent_got_revision(cfg, override=True)
