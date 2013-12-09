@@ -131,7 +131,7 @@ class GClientSolution(object):
 class GClientFactory(object):
   """Encapsulates data and methods common to both (all) master.cfg files."""
 
-  def __init__(self, build_dir, solutions, project=None, target_platform=None,
+  def __init__(self, build_dir, solutions, target_platform=None,
                nohooks_on_update=False, target_os=None, revision_mapping=None):
     self._build_dir = build_dir
     self._solutions = solutions
@@ -139,12 +139,6 @@ class GClientFactory(object):
     self._target_os = target_os
     self._nohooks_on_update = nohooks_on_update
     self._revision_mapping = revision_mapping
-
-    if self._target_platform == 'win32':
-      # Look for a solution named for its enclosing directory.
-      self._project = project or os.path.basename(self._build_dir) + '.sln'
-    else:
-      self._project = project
 
   def BuildGClientSpec(self, tests=None):
     spec = 'solutions = ['
@@ -262,8 +256,12 @@ class GClientFactory(object):
     # Add the compile step if needed.
     if slave_type in ['BuilderTester', 'Builder', 'Trybot', 'Indexer',
                       'TrybotBuilder']:
+      if self._target_platform == 'win32':
+        # Look for a solution named for its enclosing directory.
+        project = project or os.path.basename(self._build_dir) + '.sln'
+
       factory_cmd_obj.AddCompileStep(
-          project or self._project,
+          project,
           clobber,
           mode=mode,
           options=options,
