@@ -61,6 +61,7 @@ linux_all_test_targets = [
   'content_browsertests',
   'content_unittests',
   'crypto_unittests',
+  'dbus_unittests',
   'device_unittests',
   'google_apis_unittests',
   'gpu_unittests',
