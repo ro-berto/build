@@ -604,24 +604,14 @@ def main_make(options, args):
     assert options.goma_dir is None
 
   options.build_dir = os.path.abspath(options.build_dir)
-  # TODO(mmoss) Temporary hack to ignore the Windows --solution flag that is
-  # passed to all builders. This can be taken out once the master scripts are
-  # updated to only pass platform-appropriate --solution values.
-  if options.solution and os.path.splitext(options.solution)[1] != '.Makefile':
-    options.solution = None
 
   command = ['make']
-  if options.solution:
-    command.extend(['-f', options.solution])
+  # Try to build from <build_dir>/Makefile, or if that doesn't exist,
+  # from the top-level Makefile.
+  if os.path.isfile(os.path.join(options.build_dir, 'Makefile')):
     working_dir = options.build_dir
   else:
-    # If no solution file (i.e. sub-project *.Makefile) is specified, try to
-    # build from <build_dir>/Makefile, or if that doesn't exist, from
-    # the top-level Makefile.
-    if os.path.isfile(os.path.join(options.build_dir, 'Makefile')):
-      working_dir = options.build_dir
-    else:
-      working_dir = options.src_dir
+    working_dir = options.src_dir
 
   os.chdir(working_dir)
   common_make_settings(command, options, env, options.crosstool,
