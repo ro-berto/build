@@ -595,52 +595,49 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Benchmark tests:
     # Page cyclers:
-    page_cyclers = (
+    page_cyclers = [
         'bloat',
         'dhtml',
         'indexeddb',
-        'morejs',
-        'moz',
-
         'intl_ar_fa_he',
         'intl_es_fr_pt-BR',
         'intl_hi_ru',
         'intl_ja_zh',
         'intl_ko_th_vi',
-
+        'mobile_memory',
+        'morejs',
+        'moz',
+        'netsim.top_10',
         'pica',
+        'top_10_mobile',
         'tough_layout_cases',
         'typical_25',
-
-        'top_10_mobile',
-        'netsim.top_10',
-      )
+      ]
     for test_name in page_cyclers:
       Telemetry('page_cycler.' + test_name)
 
     # Synthetic benchmarks:
-    synthetic_benchmarks = (
+    synthetic_benchmarks = [
         'dom_perf',
+        'image_decoding.tough_decoding_cases',
         'jsgamebench',
         'kraken',
+        'media.android',
+        'media.media_cns_cases',
+        'media.mse_cases',
+        'media.tough_media_cases',
         'octane',
         'robohornet_pro',
         'spaceport',
         'sunspider',
-
-        'image_decoding.tough_decoding_cases',
-        'media.tough_media_cases',
-        'media.android',
-        'media.mse_cases',
-        'media.media_cns_cases'
-      )
+      ]
     for test_name in synthetic_benchmarks:
       Telemetry(test_name)
     if R('blink_perf'):
       f.AddTelemetryTest('blink_perf', factory_properties=fp)
       f.AddTelemetryTest('blink_perf.web_animations', factory_properties=fp)
     if R('dromaeo'):
-      dromaeo_benchmarks = (
+      dromaeo_benchmarks = [
           'domcoreattr',
           'domcoremodify',
           'domcorequery',
@@ -655,12 +652,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           'jslibstyleprototype',
           'jslibtraversejquery',
           'jslibtraverseprototype',
-        )
+        ]
       for test_name in dromaeo_benchmarks:
         f.AddTelemetryTest('dromaeo.%s' % test_name, factory_properties=fp)
 
     # Real-world benchmarks:
-    real_world_benchmarks = (
+    real_world_benchmarks = [
         'maps',
         'memory.reload.2012Q3',
         'memory.top_25',
@@ -673,7 +670,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'smoothness.top_25',
         'smoothness.tough_canvas_cases',
         'tab_switching.top_10',
-      )
+      ]
     for test_name in real_world_benchmarks:
       Telemetry(test_name)
 
