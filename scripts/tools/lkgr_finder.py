@@ -90,6 +90,8 @@ MASTER_TO_BASE_URL = {
   'client.webrtc': 'http://build.chromium.org/p/client.webrtc',
 }
 RUN_LOG = []
+UNKNOWN, SUCCESS, FAILURE, INPROGRESS = range(4)
+GIT_HASH_RE = re.compile('^[a-fA-F0-9]{40}$')
 
 # *_LKGR_STEPS controls which steps must pass for a revision to be marked
 # as LKGR.
@@ -729,13 +731,21 @@ def ReadBuildData(fn):
         fn, repr(e)))
     raise
 
+def SvnRevisionCheck(r):
+  try:
+    r = int(r)
+  except (TypeError, ValueError):
+    return False
+  return r > 0
+
 def SvnRevisionCmp(a, b):
   return cmp(int(a), int(b))
 
+def GitRevisionCheck(r):
+  return bool(GIT_HASH_RE.match(r))
+
 def GitRevisionCmp(a, b):
   raise RuntimeError('git revision comparison is unimplemented.')
-
-UNKNOWN, SUCCESS, FAILURE, INPROGRESS = range(4)
 
 def EvaluateBuildData(build_data, builder_lkgr_steps):
   step_data = {}
@@ -778,12 +788,19 @@ def EvaluateBuildData(build_data, builder_lkgr_steps):
       status = FAILURE
   return status, reasons
 
-def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
+def CollateRevisionHistory(build_data, lkgr_steps, revcheck, revcmp):
   """
   Organize builder data into:
     build_history = {master: {builder: [(revision, bool, build_num), ...]}}
     revisions = [revision, ...]
   ... with revisions and build_history[master][builder] sorted by revcmp.
+
+  Args:
+    build_data: json-formatted build data returned by buildbot.
+    lkgr_steps: List of interesting builders and steps.
+    revcheck: Predicate function which checks the sanity of the 'revision'
+        field in build_data.
+    revcmp: Comparator function for sorting builds by 'revision'
   """
   build_history = {}
   revisions = set()
@@ -808,9 +825,7 @@ def CollateRevisionHistory(build_data, lkgr_steps, revcmp):
         if not revision:
           revision = this_build_data.get(
               'sourceStamp', {}).get('revision', None)
-        if not revision:
-          continue
-        if revision == 'ad5df9a5341d38778658c90e4aa241c4ebe4e8aa':
+        if not revision or not revcheck(revision):
           continue
         revisions.add(revision)
         status, _ = EvaluateBuildData(
@@ -1110,10 +1125,11 @@ def main():
           options.dump_file, repr(e)))
 
   # TODO: Fix this for git
+  revcheck = SvnRevisionCheck
   revcmp = SvnRevisionCmp
 
   (build_history, revisions) = CollateRevisionHistory(
-      builds, lkgr_steps, revcmp)
+      builds, lkgr_steps, revcheck, revcmp)
   status_gen = None
   if options.html:
     status_gen = HTMLStatusGenerator(revisions, revcmp)
