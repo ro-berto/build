@@ -836,11 +836,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         continue
       if M(test, 'drmemory_pattern_', 'drmemory_pattern', fp):
         continue
-      if S(test, 'heapcheck_',
-           lambda name: f.AddHeapcheckTest(name,
-                                           timeout=1200,
-                                           factory_properties=fp)):
-        continue
 
     # Endurance tests.
     def FP(test_name):

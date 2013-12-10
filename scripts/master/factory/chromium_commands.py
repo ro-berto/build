@@ -838,47 +838,6 @@ class ChromiumCommands(commands.FactoryCommands):
     kwargs.setdefault('addmethod', self.AddBuildrunnerTestStep)
     self.AddMemoryTest(*args, **kwargs)
 
-  def AddHeapcheckTest(self, test_name, timeout, factory_properties,
-                       wrapper_args=None, addmethod=None):
-
-    factory_properties = factory_properties or {}
-    factory_properties['full_test_name'] = True
-    if not wrapper_args:
-      wrapper_args = []
-    wrapper_args.extend([
-        '--annotate=gtest',
-        '--test-type', 'heapcheck test: %s' % test_name,
-        '--pass-build-dir',
-        '--pass-target',
-    ])
-    command_class = chromium_step.AnnotatedCommand
-    addmethod = addmethod or self.AddTestStep
-
-    matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
-    if matched:
-      test_name = test_name[0:matched.start()]
-      shard = int(matched.group(1))
-      numshards = int(matched.group(2))
-      wrapper_args.extend(['--shard-index', str(shard),
-                           '--total-shards', str(numshards)])
-
-    heapcheck_tool = os.path.join('..', '..', '..', self._heapcheck_tool)
-
-    cmd = self.GetShellTestCommand(heapcheck_tool, arg_list=[
-        '--test', test_name],
-        wrapper_args=wrapper_args,
-        factory_properties=factory_properties)
-
-    test_name = 'heapcheck test: %s' % test_name
-    addmethod(command_class, test_name, cmd,
-              timeout=timeout,
-              do_step_if=self.TestStepFilter)
-
-  def AddBuildrunnerHeapcheckTest(self, *args, **kwargs):
-    """Adds a heapcheck memory test, but using buildrunner."""
-    kwargs.setdefault('addmethod', self.AddBuildrunnerTestStep)
-    self.AddHeapcheckTest(*args, **kwargs)
-
   def _AddBasicPythonTest(self, test_name, script, args=None, timeout=1200):
     args = args or []
     J = self.PathJoin
