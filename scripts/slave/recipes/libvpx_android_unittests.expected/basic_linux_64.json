@@ -40,7 +40,8 @@
       "git fetch",
       "git clean",
       "git checkout",
-      "git submodule"
+      "submodule sync",
+      "submodule update"
     ]
   },
   {
@@ -79,12 +80,21 @@
     "cmd": [
       "git",
       "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/android_tools",
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
       "update",
       "--init",
       "--recursive"
     ],
     "cwd": "[SLAVE_BUILD]/android_tools",
-    "name": "git submodule"
+    "name": "submodule update"
   },
   {
     "cmd": [
@@ -102,7 +112,8 @@
       "git fetch (2)",
       "git clean (2)",
       "git checkout (2)",
-      "git submodule (2)"
+      "submodule sync (2)",
+      "submodule update (2)"
     ]
   },
   {
@@ -141,12 +152,21 @@
     "cmd": [
       "git",
       "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/libvpx",
+    "name": "submodule sync (2)"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
       "update",
       "--init",
       "--recursive"
     ],
     "cwd": "[SLAVE_BUILD]/libvpx",
-    "name": "git submodule (2)"
+    "name": "submodule update (2)"
   },
   {
     "cmd": [

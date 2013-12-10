@@ -7,7 +7,7 @@ from slave import recipe_api
 class GitApi(recipe_api.RecipeApi):
   def __call__(self, *args, **kwargs):
     """Return a git command step."""
-    name = 'git '+args[0]
+    name = kwargs.pop('name', 'git '+args[0])
     # Distinguish 'git config' commands by the variable they are setting.
     if args[0] == 'config' and not args[1].startswith('-'):
       name += ' ' + args[1]
@@ -60,6 +60,7 @@ class GitApi(recipe_api.RecipeApi):
            *fetch_args, cwd=dir_path),
       self('clean', '-f', '-d', '-x', *clean_args, cwd=dir_path),
       self('checkout', '-f', remote_ref, cwd=dir_path),
+      self('submodule', 'sync', name='submodule sync', cwd=dir_path),
       self('submodule', 'update', '--init', '--recursive',
-           cwd=dir_path),
+           name='submodule update', cwd=dir_path),
     ]

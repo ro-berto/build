@@ -15,7 +15,8 @@
       "git fetch",
       "git clean",
       "git checkout",
-      "git submodule"
+      "submodule sync",
+      "submodule update"
     ]
   },
   {
@@ -54,12 +55,21 @@
     "cmd": [
       "git",
       "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]/src",
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "git",
+      "submodule",
       "update",
       "--init",
       "--recursive"
     ],
     "cwd": "[SLAVE_BUILD]/src",
-    "name": "git submodule"
+    "name": "submodule update"
   },
   {
     "cmd": [

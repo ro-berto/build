@@ -17,7 +17,8 @@
       "git fetch",
       "git clean",
       "git checkout",
-      "git submodule"
+      "submodule sync",
+      "submodule update"
     ]
   },
   {
@@ -56,12 +57,21 @@
     "cmd": [
       "[DEPOT_TOOLS]\\git.bat",
       "submodule",
+      "sync"
+    ],
+    "cwd": "[SLAVE_BUILD]\\src",
+    "name": "submodule sync"
+  },
+  {
+    "cmd": [
+      "[DEPOT_TOOLS]\\git.bat",
+      "submodule",
       "update",
       "--init",
       "--recursive"
     ],
     "cwd": "[SLAVE_BUILD]\\src",
-    "name": "git submodule"
+    "name": "submodule update"
   },
   {
     "cmd": [
