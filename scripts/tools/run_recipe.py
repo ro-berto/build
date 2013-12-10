@@ -18,6 +18,8 @@ Example:
   {'repo_name':'tools_build'} as factory_properties, and {'issue':'12345' ...}
   as build_properties.
 
+This script can be run from any directory.
+
 See scripts/slave/annotated_run.py for more information about recipes.
 """
 
@@ -38,7 +40,7 @@ def usage(msg=None):
   if msg:
     print 'Error:', msg
 
-  print (
+  print(
 """
 usage: %s <recipe_name> [<factory_property=value>*] [-- <build_property=value>*]
 """ % os.path.basename(sys.argv[0]))
@@ -69,7 +71,7 @@ def parse_args(argv):
     usage('Must specify a recipe.')
   bad_parms = [x for x in argv[2:] if ('=' not in x and x != '--')]
   if bad_parms:
-    usage('Got bad arguments %s' % bad_parms)
+    usage('Got bad arguments %s (expecting key=value pairs)' % bad_parms)
 
   recipe = argv[1]
 
