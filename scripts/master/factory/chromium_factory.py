@@ -66,6 +66,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
   CUSTOM_VARS_GOOGLECODE_URL = ('googlecode_url', config.Master.googlecode_url)
   CUSTOM_VARS_SOURCEFORGE_URL = ('sourceforge_url',
                                  config.Master.sourceforge_url)
+  CUSTOM_VARS_LLVM_URL = ('llvm_url', config.Master.llvm_url)
   CUSTOM_VARS_WEBKIT_MIRROR = ('webkit_trunk', config.Master.webkit_trunk_url)
   CUSTOM_VARS_NACL_TRUNK_URL = ('nacl_trunk', config.Master.nacl_trunk_url)
   # safe sync urls
@@ -239,6 +240,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
                custom_vars_list=[self.CUSTOM_VARS_WEBKIT_MIRROR,
                                  self.CUSTOM_VARS_GOOGLECODE_URL,
                                  self.CUSTOM_VARS_SOURCEFORGE_URL,
+                                 self.CUSTOM_VARS_LLVM_URL,
                                  self.CUSTOM_VARS_NACL_TRUNK_URL])
     internal_custom_deps_list = [main]
     if config.Master.trunk_internal_url_src and pull_internal:
