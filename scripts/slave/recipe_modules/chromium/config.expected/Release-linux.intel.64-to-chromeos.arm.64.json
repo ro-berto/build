@@ -89,10 +89,7 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]')", 
     "compile_py": {
-      "build_tool": "make", 
-      "default_targets": [
-        "buildbot"
-      ]
+      "build_tool": "make"
     }, 
     "gyp_env": {
       "GYP_DEFINES": "target_arch=arm v8_target_arch=arm"

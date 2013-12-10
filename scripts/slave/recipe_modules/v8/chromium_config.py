@@ -18,4 +18,3 @@ def v8(c):
   c.build_dir = Path('[CHECKOUT]')
 
   c.compile_py.build_tool = 'make'
-  c.compile_py.default_targets = ['buildbot']

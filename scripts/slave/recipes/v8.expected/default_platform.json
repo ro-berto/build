@@ -65,8 +65,7 @@
       "[SLAVE_BUILD]/v8",
       "--build-tool",
       "make",
-      "--",
-      "buildbot"
+      "--"
     ],
     "name": "compile"
   }

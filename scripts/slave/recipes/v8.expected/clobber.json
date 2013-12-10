@@ -66,8 +66,7 @@
       "--build-tool",
       "make",
       "--clobber",
-      "--",
-      "buildbot"
+      "--"
     ],
     "name": "compile"
   }
