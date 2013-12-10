@@ -91,7 +91,6 @@ class ChromiumCommands(commands.FactoryCommands):
                                         'chrome_tests.sh')
     self._win_memory_tests_runner = J('src', 'tools', 'valgrind',
                                       'chrome_tests.bat')
-    self._heapcheck_tool = J('src', 'tools', 'heapcheck', 'chrome_tests.sh')
     self._nacl_integration_tester_tool = J(
         'src', 'chrome', 'test', 'nacl_test_injection',
         'buildbot_nacl_integration.py')
@@ -802,7 +801,6 @@ class ChromiumCommands(commands.FactoryCommands):
     command_class = chromium_step.AnnotatedCommand
     addmethod = addmethod or self.AddTestStep
 
-    # TODO(timurrrr): merge this with Heapcheck runner. http://crbug.com/45482
     matched = re.search(r'_([0-9]*)_of_([0-9]*)$', test_name)
     if matched:
       test_name = test_name[0:matched.start()]
