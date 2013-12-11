@@ -60,20 +60,19 @@ mac_ios_factory_properties = {
 
 defaults['category'] = 'mac'
 
-B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler, auto_reboot=False)
+B('Mac32 Debug', 'mac_debug_factory', scheduler=scheduler)
 F('mac_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
     tests=tests))
 
-B('Mac32 Release', 'mac_release_factory', scheduler=scheduler,
-  auto_reboot=False)
+B('Mac32 Release', 'mac_release_factory', scheduler=scheduler)
 F('mac_release_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
     tests=tests))
 
-B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler, auto_reboot=False)
+B('Mac64 Debug', 'mac64_debug_factory', scheduler=scheduler)
 F('mac64_debug_factory', mac().WebRTCFactory(
     target='Debug',
     options=options,
@@ -84,8 +83,7 @@ F('mac64_debug_factory', mac().WebRTCFactory(
         'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
     }))
 
-B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler,
-  auto_reboot=False)
+B('Mac64 Release', 'mac64_release_factory', scheduler=scheduler)
 F('mac64_release_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
@@ -96,7 +94,7 @@ F('mac64_release_factory', mac().WebRTCFactory(
         'custom_cmd_line_tests': ['libjingle_peerconnection_objc_test'],
     }))
 
-B('Mac Asan', 'mac_asan_factory', scheduler=scheduler, auto_reboot=False)
+B('Mac Asan', 'mac_asan_factory', scheduler=scheduler)
 F('mac_asan_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
@@ -108,7 +106,7 @@ F('mac_asan_factory', mac().WebRTCFactory(
                                          ' linux_use_tcmalloc=0 ')}}))
 
 B('Mac32 Release [large tests]', 'mac_largetests_factory',
-  scheduler=scheduler, auto_reboot=True)
+  scheduler=scheduler)
 F('mac_largetests_factory', mac().WebRTCFactory(
     target='Release',
     options=options,
@@ -125,13 +123,13 @@ F('mac_largetests_factory', mac().WebRTCFactory(
     }))
 
 # iOS.
-B('iOS Debug', 'ios_debug_factory', scheduler=scheduler, auto_reboot=False)
+B('iOS Debug', 'ios_debug_factory', scheduler=scheduler)
 F('ios_debug_factory', mac().WebRTCFactory(
     target='Debug-iphoneos',
     options=options,
     factory_properties=mac_ios_factory_properties))
 
-B('iOS Release', 'ios_release_factory', scheduler=scheduler, auto_reboot=False)
+B('iOS Release', 'ios_release_factory', scheduler=scheduler)
 F('ios_release_factory', mac().WebRTCFactory(
     target='Release-iphoneos',
     options=options,
