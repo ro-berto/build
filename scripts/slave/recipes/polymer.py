@@ -15,8 +15,8 @@ DEPS = [
 
 
 REPOS = (
-  'polymer',
-  'platform',
+  'polymer-dev',
+  'platform-dev',
   'WeakMap',
   'MutationObservers',
   'CustomElements',
@@ -37,7 +37,7 @@ def _CheckoutSteps(api):
 
   cfg = api.gclient.make_config()
   for name in REPOS:
-    if name == 'polymer':
+    if name == 'polymer-dev':
       cfg.solutions.insert(0, {})
       soln = cfg.solutions[0]
       soln.revision = 'HEAD'
@@ -109,7 +109,7 @@ def GenTests(api):
       api.test('polymer-%s' % plat) +
       api.properties.scheduled(
         buildername='polymer %s' % plat,
-        repository='https://github.com/Polymer/polymer',
+        repository='https://github.com/Polymer/polymer-dev',
         revision='HEAD',
       ) +
       api.platform.name(plat)
@@ -120,7 +120,7 @@ def GenTests(api):
     api.test('polymer-from-platform') +
     api.properties.scheduled(
       buildername='polymer linux',
-      repository='https://github.com/Polymer/platform',
+      repository='https://github.com/Polymer/platform-dev',
       revision='HEAD',
       scheduler='polymer-platform',
     )

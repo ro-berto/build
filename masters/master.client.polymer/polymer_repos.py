@@ -4,8 +4,8 @@
 
 
 REPOS = (
-  'polymer',
-  'platform',
+  'polymer-dev',
+  'platform-dev',
   'CustomElements',
   'ShadowDOM',
   'HTMLImports',
@@ -18,8 +18,8 @@ REPOS = (
 )
 
 REPO_DEPS = {
-  'polymer': [
-    'platform',
+  'polymer-dev': [
+    'platform-dev',
     'CustomElements',
     'PointerGestures',
     'PointerEvents',
@@ -30,7 +30,7 @@ REPO_DEPS = {
     'TemplateBinding',
     'polymer-expressions',
   ],
-  'platform': [
+  'platform-dev': [
     'CustomElements',
     'PointerGestures',
     'PointerEvents',
