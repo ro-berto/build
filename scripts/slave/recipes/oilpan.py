@@ -14,7 +14,6 @@ DEPS = [
 
 PERF_TESTS = [
   'blink_perf.animation',
-  'blink_perf.web_animations',
   'canvasmark',
   'dromaeo.domcoreattr',
   'dromaeo.domcoremodify',
