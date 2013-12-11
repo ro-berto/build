@@ -889,6 +889,7 @@ class FactoryCommands(object):
     """Adds a step to the factory to update the workspace."""
     env = env or {}
     env['DEPOT_TOOLS_UPDATE'] = '0'
+    env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     if timeout is None:
       # svn timeout is 2 min; we allow 5
       timeout = 60*5
@@ -970,6 +971,7 @@ class FactoryCommands(object):
     env = env or {}
     env['LANDMINES_VERBOSE'] = '1'
     env['DEPOT_TOOLS_UPDATE'] = '0'
+    env['CHROMIUM_GYP_SYNTAX_CHECK'] = '1'
     if timeout is None:
       timeout = 60*10
     self._factory.addStep(
