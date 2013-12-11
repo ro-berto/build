@@ -3182,3 +3182,43 @@ index 5304401..c90ad32 100644
                  builder_status.buildCache.set_max_size(max_size)
                  builder_status.buildCacheSize = max_size
 
+
+*** maruel on 2013-12-05
+Add support for transferring 'reason' from a build to its triggered build.
+Otherwise the default is 'Triggerable(%(name))' which is not very useful.
+
+--- a/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
++++ b/third_party/buildbot_8_4p1/buildbot/schedulers/triggerable.py
+@@ -28,7 +28,7 @@ class Triggerable(base.BaseScheduler):
+         self._bsc_subscription = None
+         self.reason = "Triggerable(%s)" % name
+ 
+-    def trigger(self, ssid, set_props=None):
++    def trigger(self, ssid, set_props=None, reason=None):
+         """Trigger this scheduler with the given sourcestamp ID. Returns a
+         deferred that will fire when the buildset is finished."""
+         # properties for this buildset are composed of our own properties,
+@@ -42,10 +42,10 @@ class Triggerable(base.BaseScheduler):
+         # the duration of interest to the caller is bounded by the lifetime of
+         # this process.
+         if ssid:
+-            d = self.addBuildsetForSourceStamp(reason=self.reason, ssid=ssid,
++            d = self.addBuildsetForSourceStamp(reason=reason or self.reason, ssid=ssid,
+                     properties=props)
+         else:
+-            d = self.addBuildsetForLatest(reason=self.reason, properties=props)
++            d = self.addBuildsetForLatest(reason=reason or self.reason, properties=props)
+         def setup_waiter((bsid,brids)):
+             self._waiters[bsid] = d = defer.Deferred()
+             self._updateWaiters()
+--- a/third_party/buildbot_8_4p1/buildbot/steps/trigger.py
++++ b/third_party/buildbot_8_4p1/buildbot/steps/trigger.py
+@@ -167,7 +167,7 @@ class Trigger(LoggingBuildStep):
+             dl = []
+             for scheduler in triggered_schedulers:
+                 sch = all_schedulers[scheduler]
+-                dl.append(sch.trigger(ssid, set_props=props_to_set))
++                dl.append(sch.trigger(ssid, set_props=props_to_set, reason=self.build.reason))
+             self.step_status.setText(['triggered'] + triggered_schedulers)
+ 
+             d = defer.DeferredList(dl, consumeErrors=1)

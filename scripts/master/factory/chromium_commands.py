@@ -1573,6 +1573,11 @@ class ChromiumCommands(commands.FactoryCommands):
               WithProperties('%(got_swarming_client_revision:-)s'),
         },
         trigger_copy_properties=[
+            # try_mail_notifier.py needs issue, patchset and rietveld to note in
+            # its email which issue this build references to.
+            'issue',
+            'patchset',
+            'rietveld',
             'run_default_swarm_tests',
             'swarm_hashes',
         ],
