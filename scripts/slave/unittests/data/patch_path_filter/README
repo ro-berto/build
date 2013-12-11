@@ -1,0 +1,5 @@
+Sources of the patch files:
+
+git_patch1.patch is a copy of https://codereview.chromium.org/download/issue61833011_1450001.diff
+git_patch2.patch is a stripped down copy of http://review.webrtc.org/download/issue4859004_110001.diff
+svn_patch1.patch is a copy of https://codereview.chromium.org/download/issue490009_2003.diff
