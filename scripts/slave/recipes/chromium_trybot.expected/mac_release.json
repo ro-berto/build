@@ -140,11 +140,6 @@
       "/path/to/tmp/json"
     ],
     "name": "checkdeps (with patch)",
-    "seed_steps": [
-      "checkdeps (with patch)",
-      "deps2git (with patch)",
-      "deps2submodules"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -165,6 +160,10 @@
       "/path/to/tmp/json"
     ],
     "name": "deps2git (with patch)",
+    "seed_steps": [
+      "deps2git (with patch)",
+      "deps2submodules"
+    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -331,7 +330,19 @@
       "-u",
       "print \"ALL IS WELL\""
     ],
-    "name": "gtest_tests",
+    "name": "base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "print \"ALL IS WELL\""
+    ],
+    "name": "net_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
       "@@@STEP_LOG_END@python.inline@@@"

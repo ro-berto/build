@@ -5,6 +5,7 @@
 DEPS = [
   'chromium',
   'gclient',
+  'itertools',
   'json',
   'path',
   'platform',
@@ -14,6 +15,7 @@ DEPS = [
   'rietveld',
   'step',
   'step_history',
+  'test_utils',
 ]
 
 
@@ -22,312 +24,145 @@ GTEST_TESTS = [
   'net_unittests',
 ]
 
-NACL_INTEGRATION_TARGETS = [
-  'chrome',
-]
-
-def followup_fn(step_result):
-  r = step_result.json.gtest_results
-  p = step_result.presentation
-
-  if r.failures:
-    p.step_text += '<br/>failures:<br/>'
-    for test_fullname in r.failures:
-      p.step_text += test_fullname + '<br/>'
-
-
-def summarize_failures(new_failures):
-  def summarize_failures_inner(step_result):
-    p = step_result.presentation
-
-    for executable_name, test_names in new_failures.iteritems():
-      if test_names:
-        p.step_text += '<br/>%s failures:<br/>' % executable_name
-        for test_fullname in test_names:
-          p.step_text += test_fullname + '<br/>'
-  return summarize_failures_inner
-
-
-def GTestsStep(api, test, suffix, additional_args=None):
-  if additional_args is None:
-    additional_args = []
-
-  name = '%s (%s)' % (test, suffix)
-  args = [api.json.gtest_results()] + additional_args
-  return api.chromium.runtests(test,
-                               args,
-                               name=name,
-                               parallel=True,
-                               can_fail_build=False,
-                               followup_fn=followup_fn)
-
-
-def NaclIntegrationStep(api, suffix):
-  name = 'nacl_integration (%s)' % suffix
-  args = [
-    '--mode', api.chromium.c.BUILD_CONFIG,
-    '--json_build_results_output_file', api.json.output(),
-  ]
-  return api.python(
-      name,
-      api.path.checkout('chrome',
-                        'test',
-                        'nacl_test_injection',
-                        'buildbot_nacl_integration.py'),
-      args,
-      can_fail_build=False)
-
-
-def SummarizeTestResults(api, ignored_failures, new_failures):
-  return api.python.inline(
-    'gtest_tests',
-    r"""
-    import sys, json
-    failures = json.load(open(sys.argv[1], 'rb'))
-
-    success = True
-
-    for executable_name, new_failures in failures['new'].iteritems():
-      if new_failures:
-        success = False
-        print 'New failures (%s):' % executable_name
-        print '\n'.join(sorted(new_failures))
-    for executable_name, ignored_failures in failures['ignored'].iteritems():
-      if ignored_failures:
-        print 'Ignored failures (%s):' % executable_name
-        print '\n'.join(sorted(ignored_failures))
-
-    sys.exit(0 if success else 1)
-    """,
-    args=[
-      api.json.input({
-        'new': new_failures,
-        'ignored': ignored_failures
-      })
-    ],
-    followup_fn=summarize_failures(new_failures)
-  )
-
-
-def SummarizeCheckdepsResults(api, with_patch, without_patch):
-  def results_to_set(results):
-    result_set = set()
-    for result in results:
-      for violation in result['violations']:
-        result_set.add((result['dependee_path'], violation['include_path']))
-    return result_set
-  ignored_failures = results_to_set(without_patch)
-  new_failures = results_to_set(with_patch) - ignored_failures
-  return api.python.inline(
-    'checkdeps',
-    r"""
-    import sys, json
-    failures = json.load(open(sys.argv[1], 'rb'))
-
-    success = True
-
-    if failures['new']:
-      success = False
-      print 'New failures:'
-      for (dependee, include) in failures['new']:
-        print '\t%s -> %s' % (dependee, include)
-
-    if failures['ignored']:
-      print 'Ignored failures:'
-      for (dependee, include) in failures['ignored']:
-        print '\t%s -> %s' % (dependee, include)
-
-    sys.exit(0 if success else 1)
-    """,
-    args=[
-      api.json.input({
-        'new': list(new_failures),
-        'ignored': list(ignored_failures),
-      })
-    ],
-  )
-
-
-def SummarizeDeps2GitResults(api, with_patch, without_patch):
-  ignored_failures = set(without_patch)
-  new_failures = set(with_patch) - ignored_failures
-  return api.python.inline(
-    'checkdeps',
-    r"""
-    import sys, json
-    failures = json.load(open(sys.argv[1], 'rb'))
-
-    success = True
-
-    if failures['new']:
-      success = False
-      print 'New failures:'
-      for url in failures['new']:
-        print url
-
-    if failures['ignored']:
-      print 'Ignored failures:'
-      for url in failures['ignored']:
-        print url
-
-    sys.exit(0 if success else 1)
-    """,
-    args=[
-      api.json.input({
-        'new': list(new_failures),
-        'ignored': list(ignored_failures),
-      })
-    ],
-  )
-
-
-def SummarizeNaclIntegrationResults(api, with_patch, without_patch):
-  def results_to_set(results):
-    return set([result['raw_name'] for result in results])
-  ignored_failures = results_to_set(without_patch)
-  new_failures = results_to_set(with_patch) - ignored_failures
-  return api.python.inline(
-    'nacl_integration',
-    r"""
-    import sys, json
-    failures = json.load(open(sys.argv[1], 'rb'))
-
-    success = True
-
-    if failures['new']:
-      success = False
-      print 'New failures:'
-      for url in failures['new']:
-        print url
-
-    if failures['ignored']:
-      print 'Ignored failures:'
-      for url in failures['ignored']:
-        print url
-
-    sys.exit(0 if success else 1)
-    """,
-    args=[
-      api.json.input({
-        'new': list(new_failures),
-        'ignored': list(ignored_failures),
-      })
-    ],
-  )
-
 
 def GenSteps(api):
+  class CheckdepsTest(api.test_utils.Test):  # pylint: disable=W0232
+    name = 'checkdeps'
+
+    @staticmethod
+    def compile_targets():
+      return []
+
+    @staticmethod
+    def run(suffix):
+      return api.chromium.checkdeps(suffix, can_fail_build=False)
+
+    def failures(self, suffix):
+      results = api.step_history[self._step_name(suffix)].json.output
+      result_set = set()
+      for result in results:
+        for violation in result['violations']:
+          result_set.add((result['dependee_path'], violation['include_path']))
+      return ['%s: %s' % (r[0], r[1]) for r in result_set]
+
+
+  class Deps2GitTest(api.test_utils.Test):  # pylint: disable=W0232
+    name = 'deps2git'
+
+    @staticmethod
+    def compile_targets():
+      return []
+
+    @staticmethod
+    def run(suffix):
+      yield (
+        api.chromium.deps2git(suffix, can_fail_build=False),
+        api.chromium.deps2submodules()
+      )
+
+    def failures(self, suffix):
+      return api.step_history[self._step_name(suffix)].json.output
+
+
+  class GTestTest(api.test_utils.Test):
+    def __init__(self, name):
+      api.test_utils.Test.__init__(self)
+      self._name = name
+
+    @property
+    def name(self):
+      return self._name
+
+    def compile_targets(self):
+      return [self.name]
+
+    def run(self, suffix):
+      def followup_fn(step_result):
+        r = step_result.json.gtest_results
+        p = step_result.presentation
+
+        p.step_text += api.test_utils.format_step_text([
+            ['failures:', r.failures]
+        ])
+
+      args = [api.json.gtest_results()]
+
+      if suffix == 'without patch':
+        args.append('--gtest_filter=%s' % ':'.join(self.failures('with patch')))
+
+      return api.chromium.runtests(self.name,
+                                   args,
+                                   name=self._step_name(suffix),
+                                   parallel=True,
+                                   can_fail_build=False,
+                                   followup_fn=followup_fn)
+
+    def failures(self, suffix):
+      step_name = self._step_name(suffix)
+      return api.step_history[step_name].json.gtest_results.failures
+
+
+  class NaclIntegrationTest(api.test_utils.Test):  # pylint: disable=W0232
+    name = 'nacl_integration'
+
+    @staticmethod
+    def compile_targets():
+      return ['chrome']
+
+    def run(self, suffix):
+      args = [
+        '--mode', api.chromium.c.BUILD_CONFIG,
+        '--json_build_results_output_file', api.json.output(),
+      ]
+      return api.python(
+          self._step_name(suffix),
+          api.path.checkout('chrome',
+                            'test',
+                            'nacl_test_injection',
+                            'buildbot_nacl_integration.py'),
+          args,
+          can_fail_build=False)
+
+    def failures(self, suffix):
+      failures = api.step_history[self._step_name(suffix)].json.output
+      return [f['raw_name'] for f in failures]
+
+
   api.chromium.set_config('chromium')
   api.chromium.apply_config('trybot_flavor')
   api.step.auto_resolve_conflicts = True
+
+  tests = []
+  tests.append(CheckdepsTest())
+  tests.append(Deps2GitTest())
+  for name in GTEST_TESTS:
+    tests.append(GTestTest(name))
+  tests.append(NaclIntegrationTest())
 
   yield (
     api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(),
     api.chromium.runhooks(),
-    api.chromium.compile(targets=(GTEST_TESTS + NACL_INTEGRATION_TARGETS)),
+    api.chromium.compile(
+        targets=list(
+            api.itertools.chain(*[t.compile_targets() for t in tests]))),
   )
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
     return
 
-  yield (
-    api.chromium.checkdeps('with patch', can_fail_build=False),
-    api.chromium.deps2git('with patch', can_fail_build=False),
-    api.chromium.deps2submodules(),
-  )
-
-  with_patch = {}
-  for test in GTEST_TESTS:
-    yield GTestsStep(api, test, 'with patch')
-    with_patch[test] = api.step_history.last_step().json.gtest_results
-
-  gtest_retry_tests = []
-  for test in GTEST_TESTS:
-    if not with_patch[test].valid or with_patch[test].failures:
-      gtest_retry_tests.append(test)
-
-  yield NaclIntegrationStep(api, 'with patch')
-
-  other_retry_tests = []
-
-  if api.step_history['checkdeps (with patch)'].json.output == []:
-    yield api.python.inline('checkdeps', 'print "ALL IS WELL"')
-  else:
-    other_retry_tests.append('checkdeps')
-
-  if api.step_history['deps2git (with patch)'].json.output == []:
-    yield api.python.inline('deps2git', 'print "ALL IS WELL"')
-  else:
-    other_retry_tests.append('deps2git')
-
-  if not gtest_retry_tests:
-    yield api.python.inline('gtest_tests', 'print "ALL IS WELL"')
-
-  if api.step_history['nacl_integration (with patch)'].json.output == []:
-    yield api.python.inline('nacl_integration', 'print "ALL IS WELL"')
-  else:
-    other_retry_tests.append('nacl_integration')
-
-  if not gtest_retry_tests and not other_retry_tests:
-    return
-
-  yield (
-    api.gclient.revert(),
-    api.chromium.runhooks(),
-  )
-
-  if 'checkdeps' in other_retry_tests:
-    yield api.chromium.checkdeps('without patch', can_fail_build=False)
-    yield SummarizeCheckdepsResults(
-      api,
-      with_patch=api.step_history['checkdeps (with patch)'].json.output,
-      without_patch=api.step_history['checkdeps (without patch)'].json.output
+  def deapply_patch_fn(failing_tests):
+    yield (
+      api.gclient.revert(),
+      api.chromium.runhooks(),
     )
+    compile_targets = api.itertools.chain(
+        *[t.compile_targets() for t in failing_tests])
+    if compile_targets:
+      yield api.chromium.compile(targets=list(compile_targets))
 
-  if 'deps2git' in other_retry_tests:
-    yield api.chromium.deps2git('without patch', can_fail_build=False)
-    yield SummarizeDeps2GitResults(
-      api,
-      with_patch=api.step_history['deps2git (with patch)'].json.output,
-      without_patch=api.step_history['deps2git (without patch)'].json.output
-    )
-
-  if gtest_retry_tests:
-    yield api.chromium.compile(targets=gtest_retry_tests)
-
-    without_patch = {}
-    for test in gtest_retry_tests:
-      additional_args = [
-          '--gtest_filter=%s' % ':'.join(with_patch[test].failures),
-      ]
-      yield GTestsStep(api,
-                       test,
-                       'without patch',
-                       additional_args=additional_args)
-      without_patch[test] = api.step_history.last_step().json.gtest_results
-
-    ignored_failures = {}
-    new_failures = {}
-    for test in gtest_retry_tests:
-      ignored_failures[test] = list(without_patch[test].failures)
-      new_failures[test] = list(
-          set(with_patch[test].failures) - set(ignored_failures[test]))
-
-    yield SummarizeTestResults(api, ignored_failures, new_failures)
-
-  if 'nacl_integration' in other_retry_tests:
-    yield api.chromium.compile(targets=NACL_INTEGRATION_TARGETS)
-    yield NaclIntegrationStep(api, 'without patch')
-
-    yield SummarizeNaclIntegrationResults(
-      api,
-      with_patch=api.step_history[
-          'nacl_integration (with patch)'].json.output,
-      without_patch=api.step_history[
-          'nacl_integration (without patch)'].json.output
-    )
+  yield api.test_utils.determine_new_failures(tests, deapply_patch_fn)
 
 
 def GenTests(api):

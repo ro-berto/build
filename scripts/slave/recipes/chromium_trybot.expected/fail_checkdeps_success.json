@@ -140,11 +140,6 @@
       "/path/to/tmp/json"
     ],
     "name": "checkdeps (with patch)",
-    "seed_steps": [
-      "checkdeps (with patch)",
-      "deps2git (with patch)",
-      "deps2submodules"
-    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[@@@",
       "@@@STEP_LOG_LINE@json.output@  {@@@",
@@ -174,6 +169,10 @@
       "/path/to/tmp/json"
     ],
     "name": "deps2git (with patch)",
+    "seed_steps": [
+      "deps2git (with patch)",
+      "deps2submodules"
+    ],
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.output@[]@@@",
       "@@@STEP_LOG_END@json.output@@@"
@@ -328,7 +327,19 @@
       "-u",
       "print \"ALL IS WELL\""
     ],
-    "name": "gtest_tests",
+    "name": "base_unittests",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "print \"ALL IS WELL\""
+    ],
+    "name": "net_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
       "@@@STEP_LOG_END@python.inline@@@"
@@ -375,6 +386,28 @@
     "name": "gclient runhooks (2)"
   },
   {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Release",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--",
+      "All",
+      "chromium_builder_tests"
+    ],
+    "name": "compile (2)"
+  },
+  {
     "can_fail_build": false,
     "cmd": [
       "python",
@@ -393,11 +426,12 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for (dependee, include) in failures['new']:\n    print '\\t%s -> %s' % (dependee, include)\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for (dependee, include) in failures['ignored']:\n    print '\\t%s -> %s' % (dependee, include)\n\nsys.exit(0 if success else 1)\n",
-      "{\"ignored\": [], \"new\": [[\"/path/to/dependee\", \"/path/to/include\"]]}"
+      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
+      "{\"ignored\": [], \"new\": [\"/path/to/dependee: /path/to/include\"]}"
     ],
     "name": "checkdeps",
     "~followup_annotations": [
+      "@@@STEP_TEXT@<br/>failures:<br/>/path/to/dependee: /path/to/include<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
       "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
@@ -407,16 +441,17 @@
       "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
       "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
       "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for (dependee, include) in failures['new']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print '\\t%s -> %s' % (dependee, include)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
       "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  for (dependee, include) in failures['ignored']:@@@",
-      "@@@STEP_LOG_LINE@python.inline@    print '\\t%s -> %s' % (dependee, include)@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
-      "@@@STEP_LOG_END@python.inline@@@"
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@STEP_FAILURE@@@"
     ]
   }
 ]

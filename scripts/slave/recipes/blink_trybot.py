@@ -14,99 +14,83 @@ DEPS = [
   'rietveld',
   'step',
   'step_history',
+  'test_utils',
 ]
 
 
-def html_results(*name_vals):
-  ret = ''
-  for name, val in name_vals:
-    if val:
-      ret += '<br/>%s:<br/>' % name
-    for test in val:
-      ret += test + '<br/>'
-  return ret
-
-
-def followup_fn(step_result):
-  r = step_result.json.test_results
-  p = step_result.presentation
-
-  p.step_text += html_results(
-    ('unexpected_flakes', r.unexpected_flakes),
-    ('unexpected_failures', r.unexpected_failures),
-  )
-
-  p.step_text += '<br/>Total executed: %s<br/>' % r.num_passes
-
-  if r.unexpected_flakes or r.unexpected_failures:
-    p.status = 'WARNING'
-  else:
-    p.status = 'SUCCESS'
-
-
-def summarize_failures(ignored, new):
-  def summarize_failures_inner(step_result):
-    p = step_result.presentation
-    p.step_text += html_results(
-      ('new', new),
-      ('ignored', ignored),
-    )
-    if new:
-      p.status = 'FAILURE'
-    elif ignored:
-      p.status = 'WARNING'
-  return summarize_failures_inner
-
-
-def BlinkTestsStep(api, results_dir, suffix, test_list=None):
-  name = 'webkit_tests (%s)' % suffix
-  test = api.path.build('scripts', 'slave', 'chromium',
-                        'layout_test_wrapper.py')
-  args = ['--target', api.chromium.c.BUILD_CONFIG,
-          '-o', results_dir,
-          '--build-dir', api.chromium.c.build_dir,
-          '--json-test-results', api.json.test_results()]
-  if test_list:
-    args.extend(['--test-list', api.raw_io.input("\n".join(test_list))])
-  return api.chromium.runtests(test, args, name=name, can_fail_build=False,
-                                followup_fn=followup_fn)
-
-
-def SummarizeTestResults(api, ignored_failures, new_failures):
-  ignored_failures = sorted(ignored_failures)
-  new_failures = sorted(new_failures)
-  return api.python.inline(
-    'webkit_tests',
-    r"""
-    import sys, json
-    failures = json.load(open(sys.argv[1], 'rb'))
-
-    success = True
-
-    if failures['new']:
-      success = False
-      print 'New failures:'
-      for f in failures['new']:
-        print f
-
-    if failures['ignored']:
-      print 'Ignored failures:'
-      for f in failures['ignored']:
-        print f
-
-    sys.exit(0 if success else 1)
-    """,
-    args=[
-      api.json.input({
-        'new': new_failures,
-        'ignored': ignored_failures
-      })
-    ],
-    followup_fn=summarize_failures(ignored_failures, new_failures)
-  )
-
-
 def GenSteps(api):
+  class BlinkTest(api.test_utils.Test):
+    name = 'webkit_tests'
+
+    def __init__(self):
+      self.results_dir = api.path.slave_build('layout-test-results')
+      self.layout_test_wrapper = api.path.build(
+          'scripts', 'slave', 'chromium', 'layout_test_wrapper.py')
+
+    def run(self, suffix):
+      args = ['--target', api.chromium.c.BUILD_CONFIG,
+              '-o', self.results_dir,
+              '--build-dir', api.chromium.c.build_dir,
+              '--json-test-results', api.json.test_results()]
+      if suffix == 'without patch':
+        test_list = "\n".join(self.failures('with patch'))
+        args.extend(['--test-list', api.raw_io.input(test_list)])
+
+      def followup_fn(step_result):
+        r = step_result.json.test_results
+        p = step_result.presentation
+
+        p.step_text += api.test_utils.format_step_text([
+          ['unexpected_flakes:', r.unexpected_flakes.keys()],
+          ['unexpected_failures:', r.unexpected_failures.keys()],
+          ['Total executed: %s' % r.num_passes],
+        ])
+
+        if r.unexpected_flakes or r.unexpected_failures:
+          p.status = 'WARNING'
+        else:
+          p.status = 'SUCCESS'
+
+      yield api.chromium.runtests(self.layout_test_wrapper,
+                                  args,
+                                  name=self._step_name(suffix),
+                                  can_fail_build=False,
+                                  followup_fn=followup_fn)
+
+      if suffix == 'with patch':
+        buildername = api.properties['buildername']
+        buildnumber = api.properties['buildnumber']
+        def archive_webkit_tests_results_followup(step_result):
+          base = (
+              "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s" %
+              (buildername, buildnumber))
+
+          step_result.presentation.links['layout_test_results'] = (
+              base + '/layout-test-results/results.html')
+          step_result.presentation.links['(zip)'] = (
+              base + '/layout-test-results.zip')
+
+        archive_layout_test_results = api.path.build(
+            'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
+
+        yield api.python(
+          'archive_webkit_tests_results',
+          archive_layout_test_results,
+          [
+            '--results-dir', self.results_dir,
+            '--build-dir', api.chromium.c.build_dir,
+            '--build-number', buildnumber,
+            '--builder-name', buildername,
+            '--gs-bucket', 'gs://chromium-layout-test-archives',
+          ] + api.json.property_args(),
+          followup_fn=archive_webkit_tests_results_followup
+        )
+
+
+    def failures(self, suffix):
+      sn = self._step_name(suffix)
+      return api.step_history[sn].json.test_results.unexpected_failures
+
   api.chromium.set_config('blink')
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('blink_internal',
@@ -115,11 +99,8 @@ def GenSteps(api):
 
   webkit_lint = api.path.build('scripts', 'slave', 'chromium',
                                'lint_test_files_wrapper.py')
-  archive_layout_test_results = api.path.build(
-    'scripts', 'slave', 'chromium', 'archive_layout_test_results.py')
   webkit_python_tests = api.path.build('scripts', 'slave', 'chromium',
                                        'test_webkitpy_wrapper.py')
-  results_dir = api.path.slave_build('layout-test-results')
 
   yield (
     api.gclient.checkout(revert=True),
@@ -138,52 +119,14 @@ def GenSteps(api):
     api.chromium.runtests('wtf_unittests'),
   )
 
-  yield BlinkTestsStep(api, results_dir, 'with patch')
-  with_patch = api.step_history.last_step().json.test_results
+  def deapply_patch_fn(failing_steps):
+    yield (
+      api.gclient.revert(),
+      api.chromium.runhooks(),
+      api.chromium.compile(),
+    )
 
-  buildername = api.properties['buildername']
-  buildnumber = api.properties['buildnumber']
-  def archive_webkit_tests_results_followup(step_result):
-    base = (
-        "https://storage.googleapis.com/chromium-layout-test-archives/%s/%s" %
-        (buildername, buildnumber))
-
-    step_result.presentation.links['layout_test_results'] = (
-        base + '/layout-test-results/results.html')
-    step_result.presentation.links['(zip)'] = (
-        base + '/layout-test-results.zip')
-
-  yield api.python(
-    'archive_webkit_tests_results',
-    archive_layout_test_results,
-    [
-      '--results-dir', results_dir,
-      '--build-dir', api.chromium.c.build_dir,
-      '--build-number', buildnumber,
-      '--builder-name', buildername,
-      '--gs-bucket', 'gs://chromium-layout-test-archives',
-    ] + api.json.property_args(),
-    followup_fn=archive_webkit_tests_results_followup
-  )
-
-  if not with_patch.unexpected_failures:
-    yield api.python.inline('webkit_tests', 'print "ALL IS WELL"')
-    return
-
-  yield (
-    api.gclient.revert(),
-    api.chromium.runhooks(),
-    api.chromium.compile(),
-  )
-
-  yield BlinkTestsStep(api, results_dir, 'without patch',
-                       test_list=with_patch.unexpected_failures)
-  without_patch = api.step_history.last_step().json.test_results
-
-  ignored_failures = set(without_patch.unexpected_failures)
-  new_failures = set(with_patch.unexpected_failures) - ignored_failures
-
-  yield SummarizeTestResults(api, ignored_failures, new_failures)
+  yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
 
 
 def GenTests(api):

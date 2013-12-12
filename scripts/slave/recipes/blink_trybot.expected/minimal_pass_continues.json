@@ -424,7 +424,7 @@
     ],
     "name": "webkit_tests",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>new:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
+      "@@@STEP_TEXT@<br/>failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/>@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
       "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
