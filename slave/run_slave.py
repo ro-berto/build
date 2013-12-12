@@ -481,6 +481,10 @@ def GetGClientPath():
   gclient_path = os.path.join(ROOT_DIR, 'depot_tools', 'gclient')
   if sys.platform.startswith('win'):
     return gclient_path + '.bat'
+
+  if not os.path.isfile(gclient_path):
+    raise RuntimeError('gclient not found. Check that depot_tools is '
+                       'properly installed')
   return gclient_path
 
 
