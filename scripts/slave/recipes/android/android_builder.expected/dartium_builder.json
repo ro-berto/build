@@ -42,7 +42,7 @@
       "--output-json",
       "/path/to/tmp/json",
       "[SLAVE_BUILD]/src/build/android/envsetup.sh",
-      "--target-arch=x86"
+      "--target-arch=arm"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
@@ -89,7 +89,7 @@
     "env": {
       "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=All",
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"

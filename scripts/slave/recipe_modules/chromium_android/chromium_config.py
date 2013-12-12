@@ -49,7 +49,7 @@ def x86_builder(c):
     raise recipe_config.BadConf(
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['x86_builder'])
+@CONFIG_CTX(includes=['main_builder'])
 def dartium_builder(c):
   c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
 

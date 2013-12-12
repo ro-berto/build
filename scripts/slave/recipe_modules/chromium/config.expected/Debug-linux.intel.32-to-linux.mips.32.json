@@ -111,7 +111,7 @@
     }
   }, 
   "component_builder": "config \"component_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == mips]", 
-  "dartium_builder": "config \"dartium_builder\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == mips]", 
+  "dartium_builder": "config \"dartium_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == mips]", 
   "enormous_tests": {
     "build_config_fs": "Debug", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
