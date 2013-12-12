@@ -243,7 +243,7 @@
     ],
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
-      "@@@STEP_TEXT@<br/>Total executed: 9001@@@",
+      "@@@STEP_TEXT@<br/>Total executed: 9001<br/>@@@",
       "@@@STEP_LOG_LINE@json.test_results@{@@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"num_passes\": 9001, @@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"tests\": {@@@",

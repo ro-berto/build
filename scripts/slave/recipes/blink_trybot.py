@@ -36,7 +36,7 @@ def followup_fn(step_result):
     ('unexpected_failures', r.unexpected_failures),
   )
 
-  p.step_text += '<br/>Total executed: %s' % r.num_passes
+  p.step_text += '<br/>Total executed: %s<br/>' % r.num_passes
 
   if r.unexpected_flakes or r.unexpected_failures:
     p.status = 'WARNING'
@@ -81,14 +81,20 @@ def SummarizeTestResults(api, ignored_failures, new_failures):
     import sys, json
     failures = json.load(open(sys.argv[1], 'rb'))
 
+    success = True
+
     if failures['new']:
+      success = False
       print 'New failures:'
-      print '\n'.join(failures['new'])
+      for f in failures['new']:
+        print f
+
     if failures['ignored']:
       print 'Ignored failures:'
-      print '\n'.join(failures['ignored'])
+      for f in failures['ignored']:
+        print f
 
-    sys.exit(bool(failures['new']))
+    sys.exit(0 if success else 1)
     """,
     args=[
       api.json.input({
@@ -168,9 +174,10 @@ def GenSteps(api):
     api.gclient.revert(),
     api.chromium.runhooks(),
     api.chromium.compile(),
-    BlinkTestsStep(api, results_dir, 'without patch',
-                   test_list=with_patch.unexpected_failures),
   )
+
+  yield BlinkTestsStep(api, results_dir, 'without patch',
+                       test_list=with_patch.unexpected_failures)
   without_patch = api.step_history.last_step().json.test_results
 
   ignored_failures = set(without_patch.unexpected_failures)

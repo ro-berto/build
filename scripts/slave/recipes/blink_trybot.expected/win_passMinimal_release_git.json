@@ -268,7 +268,7 @@
     "name": "webkit_tests (with patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001@@@",
+      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
       "@@@STEP_LOG_LINE@json.test_results@{@@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"num_passes\": 9001, @@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"tests\": {@@@",
@@ -344,8 +344,7 @@
     "seed_steps": [
       "gclient revert",
       "gclient runhooks (2)",
-      "compile (2)",
-      "webkit_tests (without patch)"
+      "compile (2)"
     ]
   },
   {
@@ -415,7 +414,7 @@
     "name": "webkit_tests (without patch)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
-      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001@@@",
+      "@@@STEP_TEXT@<br/>unexpected_flakes:<br/>flake/totally-flakey.html<br/><br/>unexpected_failures:<br/>bad/totally-bad-probably.html<br/>tricky/totally-maybe-not-awesome.html<br/><br/>Total executed: 9001<br/>@@@",
       "@@@STEP_LOG_LINE@json.test_results@{@@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"num_passes\": 9001, @@@",
       "@@@STEP_LOG_LINE@json.test_results@  \"tests\": {@@@",
@@ -450,7 +449,7 @@
     "cmd": [
       "python",
       "-u",
-      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nif failures['new']:\n  print 'New failures:'\n  print '\\n'.join(failures['new'])\nif failures['ignored']:\n  print 'Ignored failures:'\n  print '\\n'.join(failures['ignored'])\n\nsys.exit(bool(failures['new']))\n",
+      "\nimport sys, json\nfailures = json.load(open(sys.argv[1], 'rb'))\n\nsuccess = True\n\nif failures['new']:\n  success = False\n  print 'New failures:'\n  for f in failures['new']:\n    print f\n\nif failures['ignored']:\n  print 'Ignored failures:'\n  for f in failures['ignored']:\n    print f\n\nsys.exit(0 if success else 1)\n",
       "{\"ignored\": [\"bad/totally-bad-probably.html\", \"tricky/totally-maybe-not-awesome.html\"], \"new\": []}"
     ],
     "name": "webkit_tests",
@@ -460,14 +459,20 @@
       "@@@STEP_LOG_LINE@python.inline@import sys, json@@@",
       "@@@STEP_LOG_LINE@python.inline@failures = json.load(open(sys.argv[1], 'rb'))@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@success = True@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@if failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  success = False@@@",
       "@@@STEP_LOG_LINE@python.inline@  print 'New failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print '\\n'.join(failures['new'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['new']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
       "@@@STEP_LOG_LINE@python.inline@if failures['ignored']:@@@",
       "@@@STEP_LOG_LINE@python.inline@  print 'Ignored failures:'@@@",
-      "@@@STEP_LOG_LINE@python.inline@  print '\\n'.join(failures['ignored'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  for f in failures['ignored']:@@@",
+      "@@@STEP_LOG_LINE@python.inline@    print f@@@",
       "@@@STEP_LOG_LINE@python.inline@@@@",
-      "@@@STEP_LOG_LINE@python.inline@sys.exit(bool(failures['new']))@@@",
+      "@@@STEP_LOG_LINE@python.inline@sys.exit(0 if success else 1)@@@",
       "@@@STEP_LOG_END@python.inline@@@",
       "@@@STEP_WARNINGS@@@"
     ]
