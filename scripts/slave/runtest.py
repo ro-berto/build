@@ -654,6 +654,8 @@ def main_mac(options, args):
     command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
+    if options.annotate == 'gtest':
+      command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log parser classes and exit.
@@ -894,6 +896,8 @@ def main_linux(options, args):
     command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
+    if options.annotate == 'gtest':
+      command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
   command.extend(args[1:])
 
   # If --annotate=list was passed, list the log parser classes and exit.
@@ -1005,6 +1009,8 @@ def main_win(options, args):
     command = [sys.executable, test_exe]
   else:
     command = [test_exe_path]
+    if options.annotate == 'gtest':
+      command.extend(['--brave-new-test-launcher', '--test-launcher-bot-mode'])
 
   # The ASan tests needs to run under agent_logger in order to get the stack
   # traces. The win ASan builder is responsible to put it in the
