@@ -697,6 +697,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       startup_fp = fp.copy()
       # pylint: disable=W0212
       startup_fp['profile_type'] = 'small_profile'
+      # TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
       f.AddTelemetryTest('startup.warm.blank_page',
                          step_name='startup.warm.dirty.blank_page',
                          factory_properties=startup_fp)
@@ -704,6 +706,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       startup_fp = fp.copy()
       # pylint: disable=W0212
       startup_fp['profile_type'] = 'small_profile'
+      # TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
       f.AddTelemetryTest('startup.cold.blank_page',
                          step_name='startup.cold.dirty.blank_page',
                          factory_properties=startup_fp)
@@ -711,6 +715,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       startup_fp = fp.copy()
       # pylint: disable=W0212
       startup_fp['profile_type'] = 'small_profile'
+      # TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
       f.AddTelemetryTest('session_restore.warm.typical_25',
                          step_name='session_restore.warm.typical_25',
                          factory_properties=startup_fp)
@@ -718,6 +724,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       startup_fp = fp.copy()
       # pylint: disable=W0212
       startup_fp['profile_type'] = 'small_profile'
+      #TODO(jeremy): Disable on ref builds pending fix for crbug.com/327017.
+      startup_fp['run_reference_build'] = False
       f.AddTelemetryTest('session_restore.cold.typical_25',
                          step_name='session_restore.cold.typical_25',
                          factory_properties=startup_fp)
