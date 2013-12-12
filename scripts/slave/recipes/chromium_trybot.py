@@ -20,8 +20,33 @@ DEPS = [
 
 
 GTEST_TESTS = [
+  # Small and medium tests. Sort alphabetically.
   'base_unittests',
+  'cacheinvalidation_unittests',
+  'cc_unittests',
+  'chromedriver2_unittests',
+  'components_unittests',
+  'content_unittests',
+  'crypto_unittests',
+  'google_apis_unittests',
+  'gpu_unittests',
+  'ipc_tests',
+  'jingle_unittests',
+  'media_unittests',
   'net_unittests',
+  'ppapi_unittests',
+  'printing_unittests',
+  'remoting_unittests',
+  'sql_unittests',
+  'sync_unit_tests',
+  'ui_unittests',
+  'unit_tests',
+
+  # Large tests. Sort alphabetically.
+  'browser_tests',
+  'content_browsertests',
+  'interactive_ui_tests',
+  'sync_integration_tests',
 ]
 
 
