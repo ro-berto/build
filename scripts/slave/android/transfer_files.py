@@ -12,7 +12,7 @@ The script takes two arguments, a device directory to transfer to, and a
 local directory to use to compare
 
 Example:
-    transfer_files.py /device/dir /local/dir
+    transfer_files.py /path/to/adb /device/dir /local/dir
 
 """
 import os
@@ -26,15 +26,16 @@ FILE_NAME_COL = 6
 FILE_SIZE_COL = 3
 
 def main(argv):
-  device_root = argv[1]
-  local_root = argv[2]
+  adb = argv[1]
+  device_root = argv[2]
+  local_root = argv[3]
 
   files = os.listdir(local_root)
 
   file_sizes = {afile: os.path.getsize(os.path.join(local_root, afile))
                 for afile in files}
 
-  proc = subprocess.Popen(['adb', 'shell', 'ls', '-la', device_root],
+  proc = subprocess.Popen([adb, 'shell', 'ls', '-la', device_root],
                           stdout=subprocess.PIPE)
   out = proc.communicate()[0]
 

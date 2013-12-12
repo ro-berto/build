@@ -89,7 +89,7 @@ def GenSteps(api):
   yield api.python(
       'transfer_files',
       api.path.build('scripts', 'slave', 'android', 'transfer_files.py'),
-      args=[DEVICE_ROOT, test_data])
+      args=[adb, DEVICE_ROOT, test_data])
 
   lib_root = build_root('libs', 'armeabi-v7a')
   yield api.step('push_so', [ adb, 'push', lib_root, DEVICE_ROOT])

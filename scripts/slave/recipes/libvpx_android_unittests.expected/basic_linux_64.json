@@ -219,6 +219,7 @@
       "python",
       "-u",
       "[BUILD]/scripts/slave/android/transfer_files.py",
+      "[SLAVE_BUILD]/android_tools/sdk/platform-tools/adb",
       "/data/local/tmp",
       "[SLAVE_BUILD]/test_data"
     ],
