@@ -104,7 +104,7 @@ def sanitize_isolated_file(isolated_file, build_dir_basename):
     isolated_data = json.load(f)
 
   # 1. check version
-  if isolated_data['version'] != '1.0':
+  if isolated_data['version'].split('.', 1)[0] != '1':
     logging.error('Unexpected isolate version %s', isolated_data['version'])
     return 1
 
