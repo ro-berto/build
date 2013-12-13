@@ -353,6 +353,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('cc_unittests', fp)
     if R('cc_unittests_br'):
       f.AddBuildrunnerGTest('cc_unittests', fp)
+    if R('chromedriver_unittests'):
+      f.AddGTestTestStep('chromedriver_unittests', fp)
+    if R('chromedriver_unittests_br'):
+      f.AddBuildrunnerGTest('chromedriver_unittests', fp)
     if R('chromedriver2_unittests'):
       f.AddGTestTestStep('chromedriver2_unittests', fp)
     if R('chromedriver2_unittests_br'):

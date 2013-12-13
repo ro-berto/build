@@ -174,6 +174,7 @@ processes = [
     'chromedriver.exe',
     'chromedriver_tests.exe',
     'chromedriver2_tests.exe',
+    'chromedriver_unittests.exe',
     'chromedriver2_unittests.exe',
     'chrome_frame_helper.exe',
     'chrome_frame_net_tests.exe',
