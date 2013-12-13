@@ -915,7 +915,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
   def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
                               workdir=None,
-                              src_base='.',
                               suite=None,
                               test_args=None,
                               factory_properties=None,
@@ -928,8 +927,6 @@ class ChromiumCommands(commands.FactoryCommands):
       timeout: The buildbot timeout for this step, in seconds.  The step will
           fail if the test does not produce any output within this time.
       workdir: the working dir for this step
-      src_base: relative path (from workdir) to src. Not needed if workdir is
-          'build' (the default)
       suite: PyAuto suite to execute.
       test_args: list of PyAuto test arguments.
       factory_properties: A dictionary of factory property values.
@@ -939,7 +936,7 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties['step_name'] = test_name
 
     J = self.PathJoin
-    pyauto_script = J(src_base, 'src', 'chrome', 'test', 'functional',
+    pyauto_script = J('src', 'chrome', 'test', 'functional',
                       'pyauto_functional.py')
     args = ['-v']
     if suite:
@@ -959,13 +956,6 @@ class ChromiumCommands(commands.FactoryCommands):
     else:
       cmd = self.GetPythonTestCommand(pyauto_script, arg_list=args,
           wrapper_args=wrapper_args, factory_properties=factory_properties)
-
-
-
-    # The following lines adjust the runtest.py path and build_dir to be
-    # relative to src_base.
-    cmd[1] = J(src_base, cmd[1])
-    cmd = map(lambda x:x if x!= self._build_dir else J(src_base, x), cmd)
 
     # Allow setting a custom environment for a PyAuto test.
     env = factory_properties.get('pyauto_env', {'PYTHONPATH': '.'})
