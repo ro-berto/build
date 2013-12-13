@@ -318,30 +318,6 @@ F('rel_nacl', win_tester().ChromiumFactory(
 B('NaCl Tests (x86-64)', 'rel_nacl', 'testers|windows', 'win_rel_trigger',
   notify_on_missing=True)
 
-B('Chrome Frame Tests (ie6)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  notify_on_missing=True)
-F('rel_cf', win_tester().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
-    tests=[
-      'chrome_frame_tests',
-      'chrome_frame_net_tests',
-      'chrome_frame_unittests',
-    ],
-    factory_properties={
-      'generate_gtest_json': True,
-      'process_dumps': True,
-      'sharded_tests': sharded_tests,
-      'start_crash_handler': True,
-    }))
-
-B('Chrome Frame Tests (ie7)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  notify_on_missing=True)
-B('Chrome Frame Tests (ie8)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  notify_on_missing=True)
-B('Chrome Frame Tests (ie9)', 'rel_cf', 'testers|windows', 'win_rel_trigger',
-  notify_on_missing=True)
-
 ################################################################################
 ## Debug
 ################################################################################
