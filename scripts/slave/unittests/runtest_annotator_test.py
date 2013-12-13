@@ -382,74 +382,58 @@ class GraphingPageCyclerLogProcessorPerfTest(LogProcessorTest):
 class GraphingEndureLogProcessorTest(LogProcessorTest):
   """Unit tests for the GraphingEndureLogProcessor class."""
 
-  def _TestSummaryHelper(self, input_file, output_files):
-    output_files = ['%s-summary.dat' % graph for graph in output_files]
-    self._ConstructParseAndCheckJSON(input_file, output_files, None,
+  def testProcessLogs(self):
+    log_processor = self._ConstructDefaultProcessor(
         process_log_utils.GraphingEndureLogProcessor)
 
-  def testSummary(self):
-    """Compare each '-summary.dat' file for a basic single test output."""
-    input_file = ['endure_processor.log']
-    output_files = [
-        'https___www_google_com_calendar_-EventListenerCount',
-        'https___www_google_com_calendar_-TotalDOMNodeCount',
-        'https___www_google_com_calendar_-V8MemoryUsed']
-    self._TestSummaryHelper(input_file, output_files)
+    # Process the sample endure output log file.
+    self._ProcessLog(log_processor, 'endure_sample.log')
+    output = log_processor.PerformanceLogs()
 
-  def testMultipleRunsSummary(self):
-    """Compare each '-summary.dat' when we run two tests sequentially."""
-    input_file = ['endure_processor_multi.log']
-    output_files = [
-        'https___www_google_com_calendar_-EventListenerCount',
-        'https___www_google_com_calendar_-TotalDOMNodeCount',
-        'https___www_google_com_calendar_-V8MemoryUsed',
-        'endure_gmail_alt_two_labels-EventListenerCount',
-        'endure_gmail_alt_two_labels-TotalDOMNodeCount',
-        'endure_gmail_alt_two_labels-V8MemoryUsed']
-    self._TestSummaryHelper(input_file, output_files)
+    # The data in the input sample file is considered to have 3 separate
+    # graph names, so there are 3 entries here.
+    self.assertEqual(3, len(output))
 
-  def _TestGraphListHelper(self, input_file, expected_graphfile):
-    """Compares the output 'graphs.dat' to what we expected."""
-    graphfile = 'graphs.dat'
-    output_file = [graphfile]
+    # Each of these three entries is mapped to a list that contains one string.
+    self.assertEqual(
+        1, len(output['endure_calendar-dom_nodes-summary.dat']))
+    self.assertEqual(
+        1, len(output['endure_calendar-event_listeners-summary.dat']))
+    self.assertEqual(
+        1, len(output['endure_calendar-renderer_vm-summary.dat']))
 
-    logs = self._ConstructParseAndCheckLogfiles(input_file, output_file,
-        process_log_utils.GraphingEndureLogProcessor)
+    self.assertEqual(
+        {
+            'traces': {
+                'event_listeners': [[1, 2621], [2, 2812], [3, 1242]],
+            },
+            'units_x': 'iterations',
+            'units': 'count',
+            'rev': 12345,
+        },
+        json.loads(output['endure_calendar-event_listeners-summary.dat'][0]))
 
-    actual = json.loads('\n'.join(logs[graphfile]))
+    self.assertEqual(
+        {
+            'traces': {
+                'dom_nodes': [[1, 492], [2, 490], [3, 487]],
+            },
+            'units_x': 'iterations',
+            'units': 'count',
+            'rev': 12345,
+        },
+        json.loads(output['endure_calendar-dom_nodes-summary.dat'][0]))
 
-    with open(os.path.join(test_env.DATA_PATH, expected_graphfile)) as f:
-      expected = json.load(f)
-
-    self.assertEqual(len(actual), len(expected))
-    for graph in expected:
-      self.assertTrue(graph['name'] in actual)
-      for element in graph:
-        self.assertEqual(actual[graph['name']][element], graph[element])
-
-  def testGraphList(self):
-    """Compare the 'graphs.dat' file for a basic single test output."""
-    input_file = ['endure_processor.log']
-    expected_graphfile = 'endure_processor-graphs.dat'
-
-    self._TestGraphListHelper(input_file, expected_graphfile)
-
-  def testMultipleRunsGraphList(self):
-    """Compare the 'graphs.dat' file when we run two tests sequentially."""
-    input_file = ['endure_processor_multi.log']
-    expected_graphfile = 'endure_processor-graphs_multi.dat'
-
-    self._TestGraphListHelper(input_file, expected_graphfile)
-
-  def testResultsLengthError(self):
-    input_file_error = 'endure_processor_results_length_error.log'
-
-    parser = self._ConstructDefaultProcessor(
-        process_log_utils.GraphingEndureLogProcessor)
-
-    # Mismatching results line length
-    self.assertRaises(AssertionError, self._ProcessLog, parser,
-                      input_file_error)
+    self.assertEqual(
+        {
+            'traces': {
+                'renderer_vm': [[1, 180.1], [2, 181.0], [3, 180.7]],
+            },
+            'units_x': 'iterations',
+            'units': 'MB',
+            'rev': 12345,
+        },
+        json.loads(output['endure_calendar-renderer_vm-summary.dat'][0]))
 
 
 if __name__ == '__main__':

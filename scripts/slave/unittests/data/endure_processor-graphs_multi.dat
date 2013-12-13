@@ -1,6 +1,0 @@
-[{"units": "nodes", "important": false, "name": "https___www_google_com_calendar_-TotalDOMNodeCount", "units_x": "seconds"},
- {"units": "listeners", "important": false, "name": "https___www_google_com_calendar_-EventListenerCount", "units_x": "seconds"},
- {"units": "KB", "important": false, "name": "https___www_google_com_calendar_-V8MemoryUsed", "units_x": "seconds"},
- {"units": "nodes", "important": false, "name": "endure_gmail_alt_two_labels-TotalDOMNodeCount", "units_x": "seconds"},
- {"units": "listeners", "important": false, "name": "endure_gmail_alt_two_labels-EventListenerCount", "units_x": "seconds"},
- {"units": "KB", "important": false, "name": "endure_gmail_alt_two_labels-V8MemoryUsed", "units_x": "seconds"}]

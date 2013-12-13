@@ -897,67 +897,128 @@ class GraphingLogProcessor(PerformanceLogProcessor):
 
 
 class GraphingEndureLogProcessor(GraphingLogProcessor):
-  """Log processor for Telemetry endure data."""
+  """Log processor for the Telemetry endure benchmark.
 
-  ENDURE_HEADER_LINE_REGEX = re.compile(r'^(url|page_name),')
-  ENDURE_RESULT_LINE_REGEX = re.compile(r'^(http|endure_).*,')
+  There's one major difference between the endure benchmark output and other
+  Telemetry test output: Endure results for one test run will contain lists of
+  (x, y) points (and they will NOT contain lists of results that need to have
+  the mean and standard deviation calculated).
+
+  With the CSV output format, these series will be formatted like this:
+
+    page_name,event_listeners_X (iterations),event_listeners_Y (listeners)
+    endure_calendar,1,492
+    endure_calendar,1,489
+    endure_calendar,1,492
+
+  With the 'buildbot' output format, these series will be formatted like this:
+
+    RESULT object_counts_by_url: endure_calendar= [1,2,3] iterations
+    RESULT object_counts: event_listeners_X= [1,2,3] iterations
+    RESULT object_counts_Y_by_url: endure_calendar= [492,489,492] count
+    RESULT object_counts_Y: event_listeners_Y= [492,489,492] count
+
+  This should be passed to the perf dashboard add_point handler as JSON in
+  the following format:
+
+    [
+      {
+        "revision": <to be filled in>,
+        "master": <to be filled in>,
+        "bot": <to be filled in>,
+        "test": "object_counts/event_listeners"
+        "units": "count",
+        "units_x": "iterations",
+        "stack": false,
+        "important": false,
+        "data": [[1, 492], [2, 489], [3, 492]]
+      }
+    ]
+
+  In order for this to be successfully passed to the dashboard, the following
+  needs to be present in the self._output dict:
+
+    {
+      'object_counts-summary.dat': [
+        '{"traces": {"event_listeners": [[1, 492], [2, 489], [3, 492]]}, '
+        '"rev": <to be filled in>, "units": "count", "units_x": "iterations"'
+      ]
+    }
+
+  That is, self._output is a dict which contains an entry for each chart name.
+  Within each such entry, there is a list of strings, each of which is JSON
+  which contains a list of strings, which contain JSON for data to be sent to
+  the dashboard.
+
+  (Historically, this output dict contained lines of JSON which were written
+  to disk, and read and parsed by JS to plot graphs with the data. The job of
+  this old graphing system is now replaced by the new perf dashboard.)
+  """
+
+  ENDURE_HEADER_LINE_REGEX = re.compile(r'^(page_name),')
+  ENDURE_RESULT_LINE_REGEX = re.compile(r'^(endure_).*,')
   ENDURE_FIELD_NAME_REGEX = re.compile(
       r'(?P<TRACE>.*)_(?P<COORDINATE>[XY]) \((?P<UNITS>.*)\)')
 
   class EndureTrace(object):
-    """Represents a time series."""
+    """Represents one time series in a graph of endure results."""
 
     def __init__(self):
-      self.values = []  # [(time, value), (time, value), ...]
+      self.important = False
+      self.data = []
 
-    def __str__(self):
-      return ', '.join(['(%s: %s)' % (pair[0], pair[1])
-                        for pair in self.values])
-
-  class EndureGraph(object):
-    """Encapsulates the data in one endure performance graph."""
+  class EndureGraph(GraphingLogProcessor.Graph):
+    """An endure graph contains multiple traces with the same units."""
 
     def __init__(self):
-      self.units = None
-      self.traces = {}
+      GraphingLogProcessor.Graph.__init__(self)
+      # The attributes 'traces' and 'units' are set in the superclass,
+      # The superclass also contains the method IsImportant().
+
+      # X units, set when the header row is read.
       self.units_x = None
 
-      # Index locations where the x and y values are stored.
+      # Index locations in each row where the x and y values for this graph
+      # are. These are set once the header row is read.
       self.csv_index_x = None
       self.csv_index_y = None
 
-    # pylint: disable=R0201
-    def IsImportant(self):
-      return False
-
   def __init__(self, *args, **kwargs):
     GraphingLogProcessor.__init__(self, *args, **kwargs)
-    # The dict |self._graph_template| maps trace names to |EndureGraph|
+
+    # The dict self._graph_templates maps trace names to EndureGraph
     # objects, and it is populated when parsing the header line. This
     # template will be used as the default EndureGraph when parsing
     # results lines.
-    self._graph_template = {}
+    self._graph_templates = {}
+
+    # Expected number of columns in each row for normal results lines.
+    # This is set based on the number of columns in the header line.
     self._expected_results_len = None
 
   def ProcessLine(self, line):
     """Processes one line of output from Telemetry endure measurement."""
+    # With CSV output format, there are two types of line: the header line
+    # and all the rest of the results lines.
     if self.ENDURE_HEADER_LINE_REGEX.search(line):
       self._ProcessEndureHeaderLine(line)
     elif self.ENDURE_RESULT_LINE_REGEX.search(line):
       self._ProcessEndureResultLine(line)
 
   def _ProcessEndureHeaderLine(self, line):
-    """Process the csv header line.
+    """Process the CSV header line.
 
     We will create default EndureGraph objects for each trace name with the
-    'units' attribute already set.  We also store the x/y indexes for each trace
-    so that we can lookup values when parsing the results lines.
-    This is an example of a csv header line:
-    url,EventListenerCount_X (seconds),EventListenerCount_Y (listeners),
-    TotalDOMNodeCount_X (seconds),TotalDOMNodeCount_Y (nodes)
+    'units' attribute already set. We also store the indexes of the X and Y
+    values for each trace so that we can lookup values when parsing the results
+    lines.
+
+    Example CSV header line:
+      page_name,EventListenerCount_X (seconds),EventListenerCount_Y (listeners),
+      TotalDOMNodeCount_X (seconds),TotalDOMNodeCount_Y (nodes)
     """
-    # Need to reset graph template for every new header we parse.
-    self._graph_template = {}
+    # Reset the graph template for every new header we parse.
+    self._graph_templates = {}
 
     field_names = csv.reader([line]).next()
     self._expected_results_len = len(field_names)
@@ -971,22 +1032,26 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
       coordinate = match_dict['COORDINATE'].strip()
       units = match_dict['UNITS'].strip()
 
-      graph = self._graph_template.get(trace_name, self.EndureGraph())
+      graph = self._graph_templates.get(trace_name, self.EndureGraph())
       if coordinate == 'X':
         graph.units_x = units
         graph.csv_index_x = index
       else:
         graph.units = units
         graph.csv_index_y = index
-      self._graph_template[trace_name] = graph
+      self._graph_templates[trace_name] = graph
 
   def _ProcessEndureResultLine(self, line):
-    """Parse each regular results line in the csv input.
+    """Parse each regular results line in the CSV input.
 
-    A typical results line will look like this:
-    https://www.google.com/calendar/,4,446,4,2847
+    Importantly, this method populates and updates the self._graphs state
+    each time a new line is read in. This variable is used later when
+    _FinalizeProcessing is called.
+
+    Example CSV regular result line:
+      endure_calendar,4,446,4,2847
     """
-    assert self._graph_template
+    assert self._graph_templates
 
     values = csv.reader([line]).next()
 
@@ -994,92 +1059,94 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
         'Result line \'%s\' has mismatching number of elements, expecting %s' %
         (line.strip(), self._expected_results_len))
 
-    # Assume test name is the first column.
-    test_name = self._StringAsFilesafeName(values[0])
+    # The page name (which serves as the test name) is the first column.
+    page_name = values[0]
 
     # Iterate over all trace names discovered from the header.
-    for trace_name in self._graph_template:
-      graph_name = test_name + '-' + trace_name
+    for trace_name in self._graph_templates:
+      # Note that in the CSV format, there's no way of specifying an arbitrary
+      # graph name. So, we construct a graph name here.
+      graph_name = page_name + '-' + trace_name
 
       # The default EndureGraph is copied from the template, which already
       # contains all units and index information.
       graph = self._graphs.get(
           graph_name,
-          copy.deepcopy(self._graph_template[trace_name]))
+          copy.deepcopy(self._graph_templates[trace_name]))
 
       trace = graph.traces.get(trace_name, self.EndureTrace())
-      trace.values.append([values[graph.csv_index_x],
-                           values[graph.csv_index_y]])
+      x = float(values[graph.csv_index_x])
+      y = float(values[graph.csv_index_y])
+      trace.data.append([x, y])
 
       graph.traces[trace_name] = trace
       self._graphs[graph_name] = graph
 
-  @staticmethod
-  def _StringAsFilesafeName(string):
-    """Replaces all special characters with underscores.
-
-    This was necessary before because the page names were URLs which contained
-    characters that we didn't want to go into filenames.
-    """
-    return re.sub('[^a-zA-Z0-9]', '_', string)
-
   def _FinalizeProcessing(self):
-    self._CreateSummaryOutput()
-    self._GenerateGraphInfo()
+    """This method is called before PerformanceLogs returns the output.
 
-  def _BuildSummaryJson(self, graph):
-    """Sorts the traces and returns a summary JSON encoding of the graph.
+    This is where the self._output dict is populated. After this method is
+    called, self._output should contain a summary dict for each graph name
+    (which may contain traces for both scalar results and series results),
+    as well as a graph name list file.
 
-    Although JS objects are not ordered, according to the spec, in practice
-    everyone iterates in order, since not doing so is a compatibility problem.
-    So we'll count on it here and produce an ordered list of traces.
-    if stack_order is given in the graph, use the order.
-
-    But since Python dicts are *not* ordered, we'll need to construct the JSON
-    manually so we don't lose the trace order.
+    Note that in the superclass, self._GenerateGraphInfo() is also called.
+    The purpose of this method is to add a graphs.dat entry to self._output.
+    However, this entry in self._output is not sent to the dashboard, so
+    there's no need to add it.
     """
-    trace_order = sorted(graph.traces.keys())
-
-    # Now build the JSON.
-    trace_json = ', '.join(
-        ['"%s": [%s]' % (trace_name,
-                         ', '.join(['["%s", "%s"]' % (pair[0], pair[1])
-                                    for pair
-                                    in graph.traces[trace_name].values]))
-         for trace_name in trace_order])
-
-    if not self._revision:
-      raise Exception('revision is None')
-
-    return ('{"traces": {%s}, "rev": "%s", "stack": false}'
-              % (trace_json, self._revision))
+    self._CreateSummaryOutput()
 
   def _CreateSummaryOutput(self):
-    """Write the summary data file and collect the waterfall display text.
+    """Sets entries in self._output for each graph.
 
-    The summary file contains JSON-encoded data.
+    Note that in the superclass, the variable self._text_summary is also
+    set, but like the graphs.dat entry in self._output, this is not used by
+    the dashboard, so it's not added here.
     """
-
     for graph_name, graph in self._graphs.iteritems():
-      # Write a line in the applicable summary file for each graph.
       filename = ('%s-summary.dat' % graph_name)
       data = [self._BuildSummaryJson(graph) + '\n']
       self._output[filename] = data + self._output.get(filename, [])
 
-    self._text_summary.sort()
+  def _BuildSummaryJson(self, graph):
+    """Constructs the JSON for one graph.
 
-  def _GenerateGraphInfo(self):
-    """Output a list of graphs viewed this session, for use by the plotter.
+    Note that _CreateSummaryOutput calls this method for each graph in
+    self._graphs in order to populate self._output.
 
-    These will be collated and sorted on the master side.
+    A note about ordering of traces in the result returned: The data in each
+    trace in the graph are stored in a dict (JSON Object) of trace names to
+    data. Dicts (or Objects) are unordered, but the old graph page would rely
+    on trace names being ordered, and wouldn't sort them itself.
+
+    Args:
+      graph: Either a GraphingLogProcessor.Graph instance or a
+          GraphingEndureLogProcessor.Graph instance.
+
+    Returns:
+      JSON for one graph.
     """
-    graphs = {}
-    for name, graph in self._graphs.iteritems():
-      graphs[name] = {'name': name,
-                      'important': graph.IsImportant(),
-                      'units': graph.units,
-                      'units_x': graph.units_x}
-    self._output[self.GRAPH_LIST] = json.dumps(graphs).split('\n')
+    assert self._revision, 'Revision must be set.'
+    units_x = graph.units_x if hasattr(graph, 'units_x') else ''
+    graph_dict = {
+        'units': graph.units,
+        'units_x': units_x,
+        'rev': self._revision,
+        'traces': {},
+    }
+
+    # Fill in the values for each graph. For an EndureTrace (a time series),
+    # This will be a list of pairs. Otherwise, it's a (value, error) pair.
+    # Note: Given CSV-format input, there are only traces of this type, there
+    # will never be any traces that don't have a 'data' attribute.
+    for trace_name, trace in graph.traces.iteritems():
+      if hasattr(trace, 'data'):
+        graph_dict['traces'][trace_name] = trace.data
+      else:
+        graph_dict['traces'][trace_name] = [trace.value, trace.stddev]
+
+    return json.dumps(graph_dict)
 
 
 class GraphingFrameRateLogProcessor(GraphingLogProcessor):

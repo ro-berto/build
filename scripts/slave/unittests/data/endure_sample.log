@@ -1,0 +1,9 @@
+Pages: [endure_calendar_forward_backward]
+page_name,event_listeners_X (iterations),event_listeners_Y (count),dom_nodes_X (iterations),dom_nodes_Y (count),renderer_vm_X (iterations),renderer_vm_Y (MB)
+endure_calendar,1,2621,1,492,1,180.1
+endure_calendar,2,2812,2,490,2,181.0
+endure_calendar,3,1242,3,487,3,180.7
+
+There can also be other lines, and as long as they don't start with certain
+special strings like page_name or url or endure_, then they will be ignored.
+
