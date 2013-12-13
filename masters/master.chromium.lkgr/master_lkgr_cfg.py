@@ -128,8 +128,9 @@ F('linux_asan_rel', linux().ChromiumASANFactory(
        'gclient_env': {'GYP_DEFINES': asan_rel_gyp}}))
 
 asan_rel_sym_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
-                    'release_extra_cflags="-gline-tables-only '
-                    '-O1 -fno-inline-functions -fno-inline"')
+                    'enable_ipc_fuzzer=1 release_extra_cflags='
+                    '"-gline-tables-only -O1 -fno-inline-functions '
+                    '-fno-inline"')
 
 B('ASAN Release (symbolized)', 'linux_asan_rel_sym', 'compile', 'chromium_lkgr')
 F('linux_asan_rel_sym', linux().ChromiumASANFactory(
