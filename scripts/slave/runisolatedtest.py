@@ -3,7 +3,12 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""A tool to run a chrome test executable directly, or in isolated mode."""
+"""A tool to run a chrome test executable directly, or in isolated mode.
+
+TODO(maruel): This script technically needs to die and be replaced by running
+all the tests always isolated even when not run on Swarming. This will take a
+while.
+"""
 
 import json
 import logging
@@ -97,6 +102,9 @@ def sanitize_isolated_file(isolated_file, build_dir_basename):
   isn't generally true, so rewrite the paths in the isolated file. See
   http://crbug.com/311622 for details. This can go away once all bots using
   isolates are using ninja.
+
+  TODO(maruel): Do not forget to delete this code once the Windows incremental
+  builder is switched to ninja.
   """
   # See the isolates file format description at:
   # https://code.google.com/p/swarming/wiki/IsolatedDesign#.isolated_file_format
@@ -125,10 +133,11 @@ def sanitize_isolated_file(isolated_file, build_dir_basename):
   isolated_data['files'] = sanitized_files
 
   # 4. Fix variables->PRODUCT_DIR if necessary (only present in the .state file)
-  variables = isolated_data.get('variables', {})
-  if 'PRODUCT_DIR' in variables:
-    variables['PRODUCT_DIR'] = sanitize_build_dir(variables['PRODUCT_DIR'],
-                                                  build_dir_basename)
+  for name in ('path_variables', 'variables'):
+    variables = isolated_data.get(name, {})
+    if 'PRODUCT_DIR' in variables:
+      variables['PRODUCT_DIR'] = sanitize_build_dir(variables['PRODUCT_DIR'],
+                                                    build_dir_basename)
 
   # TODO(thakis): fix 'includes' if necessary.
 
