@@ -51,6 +51,9 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_aura', None)
 
+    # TODO(kbr): remove the workaround for http://crbug.com/328249 .
+    self.m.chromium.c.gyp_env.GYP_DEFINES['disable_glibcxx_debug'] = 1
+
     # Don't skip the frame_rate data, as it's needed for the frame rate tests.
     # Per iannucci@, it can be relied upon that solutions[1] is src-internal.
     # Consider managing this in a 'gpu' config.
