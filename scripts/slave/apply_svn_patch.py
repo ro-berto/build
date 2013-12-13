@@ -19,9 +19,8 @@ def main():
                           'the contents of the patch. One example could be to '
                           'remove parts of the patch matching certain file '
                           'paths. The script must use stdin for input and '
-                          'stdout for output. The script will get the '
-                          '--root-dir flag passed on to it. To pass additional '
-                          'flags; use: -- --flag1 --flag2'))
+                          'stdout for output. To pass flags to the script, '
+                          'use: -- --flag1 --flag2'))
   parser.add_option('', '--strip-level', type='int', default=0,
                     help=('The number of path components to be stripped from '
                           'the filenames in the patch. Default: %default.'))
@@ -38,8 +37,8 @@ def main():
   patch_input = svn_cat.stdout
   if options.filter_script:
     extra_args = args or []
-    filtering = subprocess.Popen([sys.executable, options.filter_script,
-                                  '--root-dir', options.root_dir] + extra_args,
+    filtering = subprocess.Popen([sys.executable, options.filter_script] +
+                                 extra_args,
                                  stdin=svn_cat.stdout, stdout=subprocess.PIPE,
                                  stderr=sys.stdout)
     patch_input = filtering.stdout

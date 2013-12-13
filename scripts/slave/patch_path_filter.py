@@ -76,17 +76,12 @@ def convert_to_patch_compatible_diff(filename, patch_data):
 
 
 def main():
-  usage = '%s -f <path-filter> [-r <root-dir>]' % os.path.basename(sys.argv[0])
+  usage = '%s -f <path-filter>' % os.path.basename(sys.argv[0])
   parser = optparse.OptionParser(usage=usage)
   parser.add_option('-f', '--path-filter',
-                    help=('The path filter (UNIX paths) that all file paths '
+                    help=('The path filter (POSIX paths) that all file paths '
                           'are required to have to pass this filter (no '
                           'regexp).'))
-  parser.add_option('-r', '--root-dir',
-                    help=('The patch root dir in which to apply the patch. If '
-                          'specified, it will be prepended to the filename '
-                          'for each patch entry before the filter is applied.'))
-
   options, args = parser.parse_args()
   if args:
     parser.error('Unused args: %s' % args)
@@ -97,11 +92,7 @@ def main():
 
   # Only print the patch entries that passes our path filter.
   for patch_entry in parse_patch_set(patch_contents):
-    filename = patch_entry.filename
-    if options.root_dir:
-      filename = os.path.join(options.root_dir, filename)
-
-    if filename.startswith(options.path_filter):
+    if patch_entry.filename.startswith(options.path_filter):
       print convert_to_patch_compatible_diff(patch_entry.filename,
                                              patch_entry.get(for_git=False)),
 

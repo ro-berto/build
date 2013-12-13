@@ -1,1 +1,1 @@
---path-filter=src/content/ --root-dir=src/
+--path-filter=non-matching-folder-name
