@@ -55,7 +55,7 @@ def main(argv):
 
   for afile in files_to_transfer:
     print afile + " not found on device, pushing"
-    subprocess.call(['adb', 'push', afile, device_root])
+    subprocess.call([adb, 'push', afile, device_root])
 
   return 0
 
