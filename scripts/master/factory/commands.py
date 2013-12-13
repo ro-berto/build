@@ -1087,8 +1087,7 @@ class FactoryCommands(object):
       cmd.extend(['--solution', split_solution[0]])
       if len(split_solution) == 2:
         cmd.extend(['--project', split_solution[1]])
-    cmd.extend(['--target', self._target,
-                '--build-dir', self._build_dir])
+    cmd.extend(['--target', self._target])
     if self._target_arch:
       cmd.extend(['--arch', self._target_arch])
     if mode:
