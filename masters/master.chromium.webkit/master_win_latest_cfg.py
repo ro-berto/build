@@ -102,22 +102,6 @@ F('f_win_rel_tests', win().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('Chrome Frame Tests', 'f_cf_rel_tests',
-  scheduler='s7_webkit_builder_rel_trigger')
-F('f_cf_rel_tests', win().ChromiumFactory(
-    slave_type='Tester',
-    build_url=rel_archive,
-    tests=[
-      'chrome_frame_net_tests',
-      'chrome_frame_tests',
-      'chrome_frame_unittests',
-    ],
-    factory_properties={
-        'process_dumps': True,
-        'start_crash_handler': True,
-        'blink_config': 'blink',
-    }))
-
 ################################################################################
 ## Debug
 ################################################################################
