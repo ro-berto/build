@@ -176,68 +176,66 @@ def main():
   option_parser = optparse.OptionParser()
   option_parser.add_option('-o', '--results-directory', default='',
                            help='output results directory')
-  option_parser.add_option('', '--build-dir', default='webkit',
-                           help='path to main build directory (the parent of '
-                                'the Release or Debug directory)')
-  option_parser.add_option('', '--target', default='',
+  option_parser.add_option('--build-dir', default='webkit', help='ignored')
+  option_parser.add_option('--target', default='',
       help='DumpRenderTree build configuration (Release or Debug)')
-  option_parser.add_option('', '--options', default='',
+  option_parser.add_option('--options', default='',
       help='additional options to pass to run-webkit-tests')
-  option_parser.add_option("", "--platform", default='',
-      help=("Platform value passed directly to run_blink_tests."))
-  option_parser.add_option('', '--no-pixel-tests', action='store_true',
+  option_parser.add_option('--platform', default='',
+      help=('Platform value passed directly to run_blink_tests.'))
+  option_parser.add_option('--no-pixel-tests', action='store_true',
                            default=False,
                            help='disable pixel-to-pixel PNG comparisons')
-  option_parser.add_option('', '--enable-pageheap', action='store_true',
+  option_parser.add_option('--enable-pageheap', action='store_true',
                            default=False, help='Enable page heap checking')
-  option_parser.add_option("", "--batch-size",
+  option_parser.add_option('--batch-size',
                            default=None,
-                           help=("Run a the tests in batches (n), after every "
-                                 "n tests, the test shell is relaunched."))
-  option_parser.add_option("", "--run-part",
+                           help=('Run a the tests in batches (n), after every '
+                                 'n tests, the test shell is relaunched.'))
+  option_parser.add_option('--run-part',
                            default=None,
-                           help=("Run a specified part (n:l), the nth of lth"
-                                 ", of the layout tests"))
-  option_parser.add_option("", "--builder-name",
+                           help=('Run a specified part (n:l), the nth of lth'
+                                 ', of the layout tests'))
+  option_parser.add_option('--builder-name',
                            default=None,
-                           help="The name of the builder running this script.")
-  option_parser.add_option("", "--build-number",
+                           help='The name of the builder running this script.')
+  option_parser.add_option('--build-number',
                            default=None,
-                           help=("The build number of the builder running"
-                                 "this script."))
-  option_parser.add_option("", "--test-results-server",
-                           help=("If specified, upload results json files to "
-                                 "this appengine server."))
-  option_parser.add_option("--additional-expectations", action="append",
+                           help=('The build number of the builder running'
+                                 'this script.'))
+  option_parser.add_option('--test-results-server',
+                           help=('If specified, upload results json files to '
+                                 'this appengine server.'))
+  option_parser.add_option('--additional-expectations', action='append',
                            default=[],
-                           help=("Path to a test_expectations file "
-                                 "that will override previous expectations. "
-                                 "Specify multiple times for multiple sets "
-                                 "of overrides."))
+                           help=('Path to a test_expectations file '
+                                 'that will override previous expectations. '
+                                 'Specify multiple times for multiple sets '
+                                 'of overrides.'))
   # TODO(dpranke): remove this after we fix the flag in the chromium command.
-  option_parser.add_option("--additional-expectations-file",
+  option_parser.add_option('--additional-expectations-file',
                            dest='additional_expectations',
-                           action="append", default=[],
-                           help=("DEPRECATED. "
-                                 "Same as --additional-expectations"))
-  option_parser.add_option("--time-out-ms",
-                           action="store", default=None,
-                           help="Set the timeout for each (non-SLOW) test")
-  option_parser.add_option("--driver-name",
-                           help=("If specified, alternative DumpRenderTree "
-                                 "binary to use"))
-  option_parser.add_option("--additional-drt-flag", action="append",
+                           action='append', default=[],
+                           help=('DEPRECATED. '
+                                 'Same as --additional-expectations'))
+  option_parser.add_option('--time-out-ms',
+                           action='store', default=None,
+                           help='Set the timeout for each (non-SLOW) test')
+  option_parser.add_option('--driver-name',
+                           help=('If specified, alternative DumpRenderTree '
+                                 'binary to use'))
+  option_parser.add_option('--additional-drt-flag', action='append',
                            default=[],
-                           help=("If specified, additional command line flag "
-                                 "to pass to DumpRenderTree. Specify multiple "
-                                 "times to add multiple flags."))
-  option_parser.add_option("--json-test-results",
-                           help=("Path to write json results to allow "
-                                 "TryJob recipe to know how to ignore "
-                                 "expected failures."))
-  option_parser.add_option("--test-list", action='append', metavar='FILE',
+                           help=('If specified, additional command line flag '
+                                 'to pass to DumpRenderTree. Specify multiple '
+                                 'times to add multiple flags.'))
+  option_parser.add_option('--json-test-results',
+                           help=('Path to write json results to allow '
+                                 'TryJob recipe to know how to ignore '
+                                 'expected failures.'))
+  option_parser.add_option('--test-list', action='append', metavar='FILE',
                            default=[],
-                           help="Read list of tests to run from file.")
+                           help='Read list of tests to run from file.')
   options, args = option_parser.parse_args()
   options.build_dir = build_directory.GetBuildOutputDirectory()
 
