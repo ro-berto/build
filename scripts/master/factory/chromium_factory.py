@@ -612,7 +612,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'intl_hi_ru',
         'intl_ja_zh',
         'intl_ko_th_vi',
-        'mobile_memory',
         'morejs',
         'moz',
         'netsim.top_10',
@@ -665,6 +664,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Real-world benchmarks:
     real_world_benchmarks = [
         'maps',
+        'memory.mobile_memory',
         'memory.reload.2012Q3',
         'memory.top_25',
         'rasterize_and_record.key_mobile_sites',
