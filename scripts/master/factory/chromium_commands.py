@@ -389,6 +389,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                 do_step_if=self.TestStepFilter)
 
   def AddCheckBinsStep(self):
+    # TODO(thakis): Don't look at _build_dir here.
     build_dir = os.path.join(self._build_dir, self._target)
     cmd = [self._python, self._check_bins_tool, build_dir]
     self.AddTestStep(shell.ShellCommand, 'check_bins', cmd,
@@ -400,6 +401,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.TestStepFilter, usePTY=False)
 
   def AddBuildrunnerCheckBinsStep(self):
+    # TODO(thakis): Don't look at _build_dir here.
     build_dir = os.path.join(self._build_dir, self._target)
     cmd = [self._python, self._check_bins_tool, build_dir]
     self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_bins', cmd,
@@ -1235,10 +1237,8 @@ class ChromiumCommands(commands.FactoryCommands):
           more_link_url='layout-test-results.zip')
 
   def AddRunCrashHandler(self, build_dir=None, target=None):
-    build_dir = build_dir or self._build_dir
     target = target or self._target
-    cmd = [self._python, self._crash_handler_tool,
-           '--target', target]
+    cmd = [self._python, self._crash_handler_tool, '--target', target]
     self.AddTestStep(shell.ShellCommand, 'start_crash_handler', cmd)
 
   def AddProcessDumps(self):
@@ -1609,6 +1609,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddCoverageTests(self, factory_properties):
     """Add tests to run with dynamorio code coverage tool."""
     factory_properties['coverage_gtest_exclusions'] = True
+    # TODO(thakis): Don't look at _build_dir here.
     dynamorio_dir = self.PathJoin(self._build_dir, 'dynamorio')
     ddrun_bin = self.PathJoin(dynamorio_dir, 'bin32',
                               self.GetExecutableName('drrun'))
@@ -1644,6 +1645,7 @@ class ChromiumCommands(commands.FactoryCommands):
     # Add all other tests without sharding.
     shard_index = factory_properties.get('browser_shard_index')
     if not shard_index or shard_index == 1:
+      # TODO(thakis): Don't look at _build_dir here.
       test_path = self.PathJoin(self._build_dir, self._target)
       for test in tests:
         if test != 'browser_tests':
