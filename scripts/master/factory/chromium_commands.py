@@ -75,6 +75,8 @@ class ChromiumCommands(commands.FactoryCommands):
     self._check_lkgr_tool = J(s_dir, 'check_lkgr.py')
     self._windows_asan_tool = J(s_dir, 'win_apply_asan.py')
     self._dynamorio_coverage_tool = J(s_dir, 'dynamorio_coverage.py')
+    self._checkbins_tool = J(s_dir, 'checkbins_wrapper.py')
+    self._mini_installer_tests_tool = J(s_dir, 'test_mini_installer_wrapper.py')
     self._device_status_check = J(self._bb_dir, 'bb_device_status_check.py')
 
     # Scripts in the private dir.
@@ -83,7 +85,6 @@ class ChromiumCommands(commands.FactoryCommands):
 
     # These scripts should be move to the script dir.
     self._check_deps_tool = J('src', 'tools', 'checkdeps', 'checkdeps.py')
-    self._check_bins_tool = J('src', 'tools', 'checkbins', 'checkbins.py')
     self._check_perms_tool = J('src', 'tools', 'checkperms', 'checkperms.py')
     self._check_licenses_tool = J('src', 'tools', 'checklicenses',
                                   'checklicenses.py')
@@ -94,11 +95,6 @@ class ChromiumCommands(commands.FactoryCommands):
     self._nacl_integration_tester_tool = J(
         'src', 'chrome', 'test', 'nacl_test_injection',
         'buildbot_nacl_integration.py')
-    self._mini_installer_tests_runner = J('src', 'chrome', 'test',
-                                          'mini_installer', 'test_installer.py')
-    self._mini_installer_tests_config = J('src', 'chrome', 'test',
-                                          'mini_installer', 'config',
-                                          'config.config')
     # chrome_staging directory, relative to the build directory.
     self._staging_dir = self.PathJoin('..', 'chrome_staging')
 
@@ -389,9 +385,7 @@ class ChromiumCommands(commands.FactoryCommands):
                                 do_step_if=self.TestStepFilter)
 
   def AddCheckBinsStep(self):
-    # TODO(thakis): Don't look at _build_dir here.
-    build_dir = os.path.join(self._build_dir, self._target)
-    cmd = [self._python, self._check_bins_tool, build_dir]
+    cmd = [self._python, self._checkbins_tool, '--target', self._target]
     self.AddTestStep(shell.ShellCommand, 'check_bins', cmd,
                      do_step_if=self.TestStepFilter)
 
@@ -401,9 +395,7 @@ class ChromiumCommands(commands.FactoryCommands):
                      do_step_if=self.TestStepFilter, usePTY=False)
 
   def AddBuildrunnerCheckBinsStep(self):
-    # TODO(thakis): Don't look at _build_dir here.
-    build_dir = os.path.join(self._build_dir, self._target)
-    cmd = [self._python, self._check_bins_tool, build_dir]
+    cmd = [self._python, self._checkbins_tool, '--target', self._target]
     self.AddBuildrunnerTestStep(shell.ShellCommand, 'check_bins', cmd,
                                 do_step_if=self.TestStepFilter)
 
@@ -1523,11 +1515,8 @@ class ChromiumCommands(commands.FactoryCommands):
                               cmd_options=cmd_options)
 
   def AddMiniInstallerTestStep(self, factory_properties):
-    # TODO(thakis): Don't look at _build_dir here, instead use a slave dir
-    # shim that uses scripts/slave/build_directory
-    cmd = [self._python, self._mini_installer_tests_runner,
-           self._mini_installer_tests_config, '--build-dir', self._build_dir,
-           '--target', self._target, '--force-clean']
+    cmd = [self._python, self._mini_installer_tests_tool,
+           '--target', self._target]
     self.AddTestStep(chromium_step.AnnotatedCommand, 'test_mini_installer', cmd,
                      halt_on_failure=True, timeout=600,
                      do_step_if=self.TestStepFilter)
