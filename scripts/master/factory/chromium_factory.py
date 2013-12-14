@@ -1097,9 +1097,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           swarm_tests, run_default_swarm_tests, factory_properties)
 
     # Start the crash handler process.
-    if ((self._target_platform == 'win32' and slave_type != 'Builder' and
-         self._build_dir == 'src/chrome') or
-        factory_properties.get('start_crash_handler')):
+    if factory_properties.get('start_crash_handler'):
       chromium_cmd_obj.AddRunCrashHandler()
 
     # Add all the tests.
