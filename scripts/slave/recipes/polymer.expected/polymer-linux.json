@@ -74,16 +74,6 @@
     ]
   },
   {
-    "can_fail_build": false,
-    "cmd": [
-      "git",
-      "clean",
-      "-xdf"
-    ],
-    "cwd": "[SLAVE_BUILD]/polymer",
-    "name": "git clean"
-  },
-  {
     "cmd": [
       "npm",
       "install",
