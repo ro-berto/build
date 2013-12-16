@@ -17,6 +17,7 @@ DEPS = [
 REPOS = (
   'polymer-dev',
   'platform-dev',
+  'platform',
   'WeakMap',
   'MutationObservers',
   'CustomElements',
