@@ -26,31 +26,31 @@ class ParsePatchSetTest(unittest.TestCase):
   depending on the kind of change it is.
   """
   def test_git_empty(self):
-    patchset = patch_path_filter.parse_patch_set('')
+    patchset = patch_path_filter.parse_git_patch_set('')
     self.assertEqual(0, len(patchset.filenames))
 
   def test_svn_empty(self):
-    patchset = patch_path_filter.parse_patch_set('')
+    patchset = patch_path_filter.parse_svn_patch_set('')
     self.assertEqual(0, len(patchset.filenames))
 
   def test_git_patch(self):
     patch_data = 'Index: chrome/file.cc\n' + GIT.PATCH
-    patchset = patch_path_filter.parse_patch_set(patch_data)
+    patchset = patch_path_filter.parse_git_patch_set(patch_data)
     self._verify_patch(patchset)
 
   def test_svn_patch(self):
-    patchset = patch_path_filter.parse_patch_set(RAW.PATCH)
+    patchset = patch_path_filter.parse_svn_patch_set(RAW.PATCH)
     self._verify_patch(patchset)
 
   def test_git_patch_two_files(self):
     patch_data = 'Index: chrome/file.cc\n' + GIT.PATCH + GIT.RENAME
-    patchset = patch_path_filter.parse_patch_set(patch_data)
+    patchset = patch_path_filter.parse_git_patch_set(patch_data)
     self.assertEqual(2, len(patchset.filenames))
     self.assertEqual('tools/run_local_server.sh', patchset.filenames[0])
     self.assertEqual('chrome/file.cc', patchset.filenames[1])
 
   def test_svn_patch_two_files(self):
-    patchset = patch_path_filter.parse_patch_set(RAW.PATCH + RAW.DIFFERENT)
+    patchset = patch_path_filter.parse_svn_patch_set(RAW.PATCH + RAW.DIFFERENT)
     self.assertEqual(2, len(patchset.filenames))
     self.assertEqual('chrome/file.cc', patchset.filenames[0])
     self.assertEqual('master/unittests/data/processes-summary.dat',
@@ -103,19 +103,26 @@ def _display_diff(expected, actual):
 
 class ConvertToPatchCompatibleDiffTest(unittest.TestCase):
   def test_git(self):
+    diff = patch_path_filter.convert_to_patch_compatible_diff('chrome/file.cc',
+                                                              GIT.PATCH)
+    self._verify_diff(diff)
+
+  def test_git_from_rietveld(self):
     data = 'Index: chrome/file.cc\n' + GIT.PATCH
     diff = patch_path_filter.convert_to_patch_compatible_diff('chrome/file.cc',
                                                               data)
-    self.assertTrue('--- chrome/file.cc' in diff)
-    self.assertTrue('+++ chrome/file.cc' in diff)
+    self._verify_diff(diff)
 
   def test_svn(self):
-    data = RAW.PATCH
     diff = patch_path_filter.convert_to_patch_compatible_diff('chrome/file.cc',
-                                                              data)
+                                                              RAW.PATCH)
+    self._verify_diff(diff)
+
+  def _verify_diff(self, diff):
+    lines = diff.splitlines()
+    self.assertEquals('Index: chrome/file.cc', lines[0])
     self.assertTrue('--- chrome/file.cc' in diff)
     self.assertTrue('+++ chrome/file.cc' in diff)
-
 
 if __name__ == '__main__':
   unittest.main()

@@ -8,12 +8,7 @@
 Usage: pipe the patch contents to stdin and the filtered output will be written
 to stdout.
 The output will be compatible with the patch program, both for Subversion and
-Git patches.
-NOTICE: the script can only manage patches created by depot tools (i.e. it
-is supposed to be used for tryjob generated patches. This is because it relies
-no the Index: line being present, which is normally not the case for Git patches
-(it is added by depot_tools/third_party/upload.py during the creation of the
-try job).
+Git patches as input.
 """
 
 import optparse
@@ -23,19 +18,42 @@ import sys
 
 from depot_tools import patch
 
+# Subversion patch entries always start with either of the following, according
+# to depot_tools/third_party/upload.py.
+_SVN_PREFIXES = ('Index: ', 'Property changes on: ')
+_GIT_PREFIX = 'diff --git '
 
-_FILENAME_REGEX = re.compile(r'^.*: ([^\t]+).*\n$')
+_SVN_FILENAME_REGEX = re.compile(r'^.*: ([^\t]+).*\n$')
+
+# The Git patches generated from depot_tools/git_cl.py has the a/ and b/
+# prefixes for the source filenames stripped out. To support both normal patches
+# and such patches, theyse prefixes are put in optional non-capturing groups.
+_GIT_FILENAME_REGEX = re.compile(r'^diff --git (?:a/)?.* (?:b/)?(.*)\n$')
 
 
-def parse_patch_set(patch_contents):
+def parse_git_patch_set(patch_contents):
+  return _parse_patch_set(_GIT_PREFIX, _GIT_FILENAME_REGEX, patch_contents)
+
+
+def parse_svn_patch_set(patch_contents):
+  return _parse_patch_set(_SVN_PREFIXES, _SVN_FILENAME_REGEX, patch_contents)
+
+
+def _parse_patch_set(prefix, filename_regex, patch_contents):
+  # To support both normal Git patches and ones that has been uploaded with
+  # depot_tools/third_party/upload.py (which adds an Subversion-style Index:
+  # line before each file entry) we strip out the Index: lines if they exist for
+  # Git patches, so we can parse each entry properly. Then they're readded in
+  # the convert_to_patch_compatible_diff funtion.
+  if prefix == _GIT_PREFIX:
+    filtered_lines = filter(lambda line: not line.startswith(_SVN_PREFIXES),
+                            patch_contents.splitlines(True))
+    patch_contents = ''.join(filtered_lines)
+
   patch_chunks = []
   current_chunk = []
   for line in patch_contents.splitlines(True):
-    # See https://code.google.com/p/chromium/codesearch#
-    #     chromium/tools/depot_tools/third_party/upload.py
-    # for details on how patches uploaded with depot_tools will have each
-    # file chunk start with either of these strings (for both Git and SVN).
-    if line.startswith(('Index:', 'Property changes on:')) and current_chunk:
+    if line.startswith(prefix) and current_chunk:
       patch_chunks.insert(0, current_chunk)
       current_chunk = []
     current_chunk.append(line)
@@ -44,29 +62,32 @@ def parse_patch_set(patch_contents):
     patch_chunks.insert(0, current_chunk)
 
   # Parse filename for each patch chunk and create FilePatchDiff objects
-
   patches = []
   for chunk in patch_chunks:
-    match = _FILENAME_REGEX.match(chunk[0])
+    match = filename_regex.match(chunk[0])
     if not match:
-      raise Exception('Did not find any filename in line "%s". Notice that '
-                      'only patches uploaded using depot tools are supported '
-                      'since normal Git patches don\'t include the "Index:" '
-                      'line.' % chunk[0])
+      raise Exception('Did not find any filename in line "%s"' % chunk[0])
     filename = match.group(1).replace('\\', '/')
     patches.append(patch.FilePatchDiff(filename=filename, diff=''.join(chunk),
                                        svn_properties=[]))
   return patch.PatchSet(patches)
 
 
-def convert_to_patch_compatible_diff(filename, patch_data):
+def convert_to_patch_compatible_diff(filename, patch_entry):
   """Convert patch data to be compatible with the standard patch program.
 
   This will remove the "a/" and "b/" prefixes added by Git, so the patch becomes
   compatible with the standard patch program.
+  It will also add an Index: line at the first line if not already present, to
+  make the patch entry compatible a Subversion patch (so it can be used by the
+  standard patch program).
   """
   diff = ''
-  for line in patch_data.splitlines(True):
+  patch_lines = patch_entry.splitlines(True)
+  if not patch_lines[0].startswith(_SVN_PREFIXES):
+    diff += _SVN_PREFIXES[0] + filename + '\n'
+
+  for line in patch_lines:
     if line.startswith('---'):
       line = line.replace('a/' + filename, filename)
     elif line.startswith('+++'):
@@ -90,8 +111,16 @@ def main():
 
   patch_contents = sys.stdin.read()
 
+  # Find out if it's a Git or Subversion patch set.
+  is_git = any(l.startswith(_GIT_PREFIX) for l in patch_contents.splitlines())
+
+  if is_git:
+    patchset = parse_git_patch_set(patch_contents)
+  else:
+    patchset = parse_svn_patch_set(patch_contents)
+
   # Only print the patch entries that passes our path filter.
-  for patch_entry in parse_patch_set(patch_contents):
+  for patch_entry in patchset:
     if patch_entry.filename.startswith(options.path_filter):
       print convert_to_patch_compatible_diff(patch_entry.filename,
                                              patch_entry.get(for_git=False)),
