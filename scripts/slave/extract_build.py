@@ -56,7 +56,7 @@ class WebHandler(ExtractHandler):
     return rc
 
 
-def GetBuildUrl(abs_build_dir, options):
+def GetBuildUrl(options, build_revision, webkit_revision=None):
   """Compute the url to download the build from.  This will use as a base
      string, in order of preference:
      1) options.build_url
@@ -65,21 +65,12 @@ def GetBuildUrl(abs_build_dir, options):
         construction is not compatible with the 'force build' button.
 
      Args:
-       abs_build_dir: Full path to the build directory, which is assumed to
-         be one level down from the source directory.
        options: options object as specified by parser below.
+       build_revision: Revision for the build.
+       webkit_revision: WebKit revision (optional)
    """
-
-  abs_webkit_dir = None
-  if options.webkit_dir:
-    abs_webkit_dir = os.path.join(abs_build_dir, '..', options.webkit_dir)
-  abs_revision_dir = None
-  if options.revision_dir:
-    abs_revision_dir = os.path.join(abs_build_dir, '..', options.revision_dir)
-  src_dir = os.path.dirname(abs_build_dir)
   base_filename, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, src_dir, abs_webkit_dir, abs_revision_dir,
-      extract=True)
+      options.build_properties, build_revision, webkit_revision, extract=True)
 
   replace_dict = dict(options.build_properties)
   # If builddir isn't specified, assume buildbot used the builder name
@@ -115,7 +106,10 @@ def real_main(options):
   # Just take the zip off the name for the output directory name.
   output_dir = os.path.join(abs_build_dir, archive_name.replace('.zip', ''))
 
-  base_url, url = GetBuildUrl(abs_build_dir, options)
+  src_dir = os.path.dirname(abs_build_dir)
+  (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
+      src_dir, options.webkit_dir, options.revision_dir)
+  base_url, url = GetBuildUrl(options, build_revision, webkit_revision)
   archive_name = os.path.basename(base_url)
 
   if url.startswith('gs://'):
@@ -212,12 +206,12 @@ def main():
   #            to not use this argument.
   option_parser.add_option('--halt-on-missing-build', action='store_true',
                            help='whether to halt on a missing build')
-  option_parser.add_option('--webkit-dir', help='webkit directory path, '
-                                                'relative to --build-dir')
+  option_parser.add_option('--webkit-dir', help='WebKit directory path, '
+                                                'relative to the src/ dir.')
   option_parser.add_option('--revision-dir',
                            help=('Directory path that shall be used to decide '
                                  'the revision number for the archive, '
-                                 'relative to --src-dir'))
+                                 'relative to the src/ dir.'))
   option_parser.add_option('--build-output-dir', help='ignored')
   chromium_utils.AddPropertiesOptions(option_parser)
 
