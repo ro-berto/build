@@ -183,7 +183,10 @@ def FileExclusions():
 
 def WriteRevisionFile(dirname, build_revision):
   """Writes a file containing revision number to given directory.
-  Replaces the target file in place."""
+  Replaces the target file in place.
+
+  Returns: The path of the written file.
+  """
   try:
     # Script only works on python 2.6
     # pylint: disable=E1123
@@ -196,6 +199,7 @@ def WriteRevisionFile(dirname, build_revision):
     dest_path = os.path.join(dirname,
                              chromium_utils.FULL_BUILD_REVISION_FILENAME)
     shutil.move(tmp_revision_file.name, dest_path)
+    return dest_path
   except IOError:
     print 'Writing to revision file in %s failed.' % dirname
 
@@ -225,7 +229,10 @@ def MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
 
 def MakeVersionedArchive(zip_file, file_suffix, options):
   """Takes a file name, e.g. /foo/bar.zip and an extra suffix, e.g. _baz,
-  and copies (or hardlinks) the file to /foo/bar_baz.zip."""
+  and copies (or hardlinks) the file to /foo/bar_baz.zip.
+
+  Returns: A tuple containing three elements: the base filename, the extension
+     and the full versioned filename."""
   zip_template = os.path.basename(zip_file)
   zip_base, zip_ext = os.path.splitext(zip_template)
   # Create a versioned copy of the file.
@@ -240,14 +247,27 @@ def MakeVersionedArchive(zip_file, file_suffix, options):
   else:
     os.link(zip_file, versioned_file)
   chromium_utils.MakeWorldReadable(versioned_file)
-  build_url = (options.build_url or
-               options.factory_properties.get('build_url', ''))
-  if build_url.startswith('gs://'):
-    gs_acl = options.factory_properties.get('gs_acl')
-    if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl):
-      raise chromium_utils.ExternalError('gsutil returned non-zero status!')
   print 'Created versioned archive', versioned_file
-  return (zip_base, zip_ext)
+  return (zip_base, zip_ext, versioned_file)
+
+
+def UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl):
+  if slave_utils.GSUtilCopyFile(versioned_file, build_url, gs_acl=gs_acl):
+    raise chromium_utils.ExternalError(
+        'gsutil returned non-zero status when uploading %s to %s!' %
+        (versioned_file, build_url))
+  print 'Successfully uploaded %s to %s' % (versioned_file, build_url)
+
+  # The file showing the latest uploaded revision must be named LAST_CHANGE
+  # locally since that filename is used in the GS bucket as well.
+  last_change_file = os.path.join(os.path.dirname(revision_file), 'LAST_CHANGE')
+  shutil.copy(revision_file, last_change_file)
+  if slave_utils.GSUtilCopyFile(last_change_file, build_url, gs_acl=gs_acl):
+    raise chromium_utils.ExternalError(
+        'gsutil returned non-zero status when uploading %s to %s!' %
+        (last_change_file, build_url))
+  print 'Successfully uploaded %s to %s' % (last_change_file, build_url)
+  os.remove(last_change_file)
 
 
 def PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit):
@@ -299,29 +319,22 @@ class PathMatcher(object):
 
 
 def Archive(options):
-  src_dir = os.path.abspath(options.src_dir)
   build_dir = build_directory.GetBuildOutputDirectory()
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
-  staging_dir = slave_utils.GetStagingDir(src_dir)
+  staging_dir = slave_utils.GetStagingDir(options.src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
-  webkit_dir = None
-  if options.webkit_dir:
-    webkit_dir = os.path.join(src_dir, options.webkit_dir)
-
-  revision_dir = None
-  if options.revision_dir:
-    revision_dir = os.path.join(src_dir, options.revision_dir)
+  (build_revision, webkit_revision) = slave_utils.GetBuildRevisions(
+      options.src_dir, options.webkit_dir, options.revision_dir)
 
   unversioned_base_name, version_suffix = slave_utils.GetZipFileNames(
-      options.build_properties, src_dir, webkit_dir, revision_dir)
+      options.build_properties, build_revision, webkit_revision)
 
   print 'Full Staging in %s' % staging_dir
   print 'Build Directory %s' % build_dir
 
   # Include the revision file in tarballs
-  build_revision = slave_utils.SubversionRevision(src_dir)
   WriteRevisionFile(build_dir, build_revision)
 
   # Copy the crt files if necessary.
@@ -339,14 +352,22 @@ def Archive(options):
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
                                     unversioned_base_name, options.path_filter)
 
-  zip_base, zip_ext = MakeVersionedArchive(zip_file, version_suffix, options)
+  zip_base, zip_ext, versioned_file = MakeVersionedArchive(
+      zip_file, version_suffix, options)
+
   prune_limit = max(0, int(options.factory_properties.get('prune_limit', 10)))
   PruneOldArchives(staging_dir, zip_base, zip_ext, prune_limit=prune_limit)
 
   # Update the latest revision file in the staging directory
   # to allow testers to figure out the latest packaged revision
   # without downloading tarballs.
-  WriteRevisionFile(staging_dir, build_revision)
+  revision_file = WriteRevisionFile(staging_dir, build_revision)
+
+  build_url = (options.build_url or
+               options.factory_properties.get('build_url', ''))
+  if build_url.startswith('gs://'):
+    gs_acl = options.factory_properties.get('gs_acl')
+    UploadToGoogleStorage(versioned_file, revision_file, build_url, gs_acl)
 
   return 0
 

@@ -140,11 +140,35 @@ def GitOrSubversion(wc_dir):
   return None
 
 
-def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
-                    revision_dir=None, extract=False):
+def GetBuildRevisions(src_dir, webkit_dir=None, revision_dir=None):
+  """Parses build revisions out of the provided directories.
+
+  Args:
+    src_dir: The source directory to be used to check the revision in.
+    webkit_dir: Optional WebKit directory, relative to src_dir.
+    revision_dir: If provided, this dir will be used for the build revision
+      instead of the mandatory src_dir.
+
+  Returns a tuple of the build revision and (optional) WebKit revision.
+  """
+  abs_src_dir = os.path.abspath(src_dir)
+  webkit_revision = None
+  if webkit_dir:
+    webkit_dir = os.path.join(abs_src_dir, webkit_dir)
+    webkit_revision = GetHashOrRevision(webkit_dir)
+
+  if revision_dir:
+    revision_dir = os.path.join(abs_src_dir, revision_dir)
+    build_revision = GetHashOrRevision(revision_dir)
+  else:
+    build_revision = GetHashOrRevision(src_dir)
+  return (build_revision, webkit_revision)
+
+
+def GetZipFileNames(build_properties, build_revision, webkit_revision=None,
+                    extract=False):
   base_name = 'full-build-%s' % chromium_utils.PlatformName()
 
-  chromium_revision = GetHashOrRevision(src_dir)
   if 'try' in build_properties.get('mastername', ''):
     if extract:
       if not build_properties.get('parent_buildnumber'):
@@ -153,13 +177,10 @@ def GetZipFileNames(build_properties, src_dir, webkit_dir=None,
       version_suffix = '_%(parent_buildnumber)s' % build_properties
     else:
       version_suffix = '_%(buildnumber)s' % build_properties
-  elif webkit_dir:
-    webkit_revision = GetHashOrRevision(webkit_dir)
-    version_suffix = '_wk%s_%s' % (webkit_revision, chromium_revision)
-  elif revision_dir:
-    version_suffix = '_%s' % GetHashOrRevision(revision_dir)
+  elif webkit_revision:
+    version_suffix = '_wk%s_%s' % (webkit_revision, build_revision)
   else:
-    version_suffix = '_%s' % chromium_revision
+    version_suffix = '_%s' % build_revision
 
   return base_name, version_suffix
 
@@ -201,6 +222,7 @@ def GetStagingDir(start_dir):
   """Creates a chrome_staging dir in the starting directory. and returns its
   full path.
   """
+  start_dir = os.path.abspath(start_dir)
   staging_dir = os.path.join(SlaveBaseDir(start_dir), 'chrome_staging')
   chromium_utils.MaybeMakeDirectory(staging_dir)
   return staging_dir

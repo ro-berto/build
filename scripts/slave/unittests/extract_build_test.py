@@ -18,21 +18,21 @@ _BUILD_DIR = os.path.abspath(os.path.join(
 
 
 class MockOptions(object):
-  webkit_dir = None
-  revision_dir = None
   build_properties = {}
   factory_properties = {}
 
 
 class ExtractBuildTest(unittest.TestCase):
+  def setUp(self):
+    self._build_revision = 123
+    self._webkit_revision = None
+
   def testGetBuildUrl(self):
     options = MockOptions()
 
-    # version_suffix is not tested, since it would just be copying of
-    # implementation details from extract_build.py into this test.
-    src_dir = os.path.dirname(_BUILD_DIR)
     base_filename, _version_suffix = slave_utils.GetZipFileNames(
-        options.build_properties, src_dir, webkit_dir=None, revision_dir=None,
+        options.build_properties, build_revision=self._build_revision,
+        webkit_revision=self._webkit_revision,
         extract=True)
 
     gs_url_without_slash = 'gs://foo/Win'
@@ -58,7 +58,12 @@ class ExtractBuildTest(unittest.TestCase):
 
   def _VerifyBuildUrl(self, options, url_template, expected_url):
     options.build_url = url_template
-    url, _versioned_url = extract_build.GetBuildUrl(_BUILD_DIR, options)
+
+    # The versioned_url part of the tuple returned is not tested, since it would
+    # just be to copy implementation from extract_build.py into this test.
+    url, _versioned_url = extract_build.GetBuildUrl(
+        options, build_revision=self._build_revision,
+        webkit_revision=self._webkit_revision)
     self.assertEquals(url, expected_url)
 
 if __name__ == '__main__':
