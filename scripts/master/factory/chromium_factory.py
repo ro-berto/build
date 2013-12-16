@@ -168,13 +168,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/mozilla_js_tests', None)],
   }
 
-  # List of test groups for media tests.  Media tests generate a lot of data, so
-  # it's nice to separate them into different graphs.  Each tuple corresponds to
-  # a PyAuto test suite name and indicates if the suite contains perf tests.
-  MEDIA_TEST_GROUPS = [
-      ('AV_PERF', True),
-  ]
-
   # Minimal deps for running PyAuto.
   # http://dev.chromium.org/developers/pyauto
   PYAUTO_DEPS = \
@@ -898,11 +891,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
            'endure.plus_alt_posts_photos',
            'plus_photos')
 
-    # HTML5 media tag performance/functional test using PyAuto.
-    if R('avperf'):
-      # Performance test should be run on virtual X buffer.
-      fp['use_xvfb_on_linux'] = True
-      f.AddMediaTests(factory_properties=fp, test_groups=self.MEDIA_TEST_GROUPS)
     if R('chromedriver_tests'):
       f.AddChromeDriverTest()
     if R('webdriver_tests'):

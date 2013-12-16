@@ -907,58 +907,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               tool_opts=tool_options, py_script=True,
                               dashboard_url=dashboard_url)
 
-  def AddPyAutoFunctionalTest(self, test_name, timeout=1200,
-                              workdir=None,
-                              suite=None,
-                              test_args=None,
-                              factory_properties=None,
-                              perf=False):
-    """Adds a step to run PyAuto functional tests.
-
-    Args:
-      test_name: a string describing the test, used to build its logfile name
-          and its descriptions in the waterfall display
-      timeout: The buildbot timeout for this step, in seconds.  The step will
-          fail if the test does not produce any output within this time.
-      workdir: the working dir for this step
-      suite: PyAuto suite to execute.
-      test_args: list of PyAuto test arguments.
-      factory_properties: A dictionary of factory property values.
-      perf: Is this a perf test or not? Requires suite or test_args to be set.
-    """
-    factory_properties = factory_properties or {}
-    factory_properties['step_name'] = test_name
-
-    J = self.PathJoin
-    pyauto_script = J('src', 'chrome', 'test', 'functional',
-                      'pyauto_functional.py')
-    args = ['-v']
-    if suite:
-      args.append('--suite=%s' % suite)
-    if test_args:
-      args.extend(test_args)
-
-    wrapper_args = []
-    if not factory_properties.get('use_xvfb_on_linux'):
-      wrapper_args.append('--no-xvfb')
-
-    if perf and (suite or test_args):
-      cmd = self.GetAnnotatedPerfCmd(None, 'graphing', test_name,
-                                     cmd_name=pyauto_script, options=args,
-                                     factory_properties=factory_properties,
-                                     tool_opts=wrapper_args, py_script=True)
-    else:
-      cmd = self.GetPythonTestCommand(pyauto_script, arg_list=args,
-          wrapper_args=wrapper_args, factory_properties=factory_properties)
-
-    # Allow setting a custom environment for a PyAuto test.
-    env = factory_properties.get('pyauto_env', {'PYTHONPATH': '.'})
-
-    self.AddTestStep(chromium_step.AnnotatedCommand, test_name, cmd, env=env,
-                     target=self._target, factory_properties=factory_properties,
-                     timeout=timeout, workdir=workdir,
-                     do_step_if=self.GetTestStepFilter(factory_properties))
-
   def AddDevToolsTests(self, factory_properties=None):
     factory_properties = factory_properties or {}
 
@@ -1468,18 +1416,6 @@ class ChromiumCommands(commands.FactoryCommands):
                           env=env,
                           maxTime=maxTime,
                           factory_properties=factory_properties)
-
-  def AddMediaTests(self, test_groups, factory_properties=None, timeout=1200):
-    """Adds media test steps according to the specified test_groups.
-
-    Args:
-      test_groups: List of (str:Name, bool:Perf?) tuples which should be
-        translated into test steps.
-    """
-    for group, is_perf in test_groups:
-      self.AddPyAutoFunctionalTest(
-          'media_tests_' + group.lower(), suite=group, timeout=timeout,
-          perf=is_perf, factory_properties=factory_properties)
 
   def AddWebRtcPerfContentUnittests(self, factory_properties=None):
     self.AddAnnotatedPerfStep(test_name='webrtc_perf_content_unittests',
