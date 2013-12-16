@@ -1,4 +1,21 @@
 {
+  "_webrtc_additional_solutions": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "webrtc-limited", 
+        "url": "svn://svn.chromium.org/chrome-internal/trunk/webrtc-limited"
+      }, 
+      {
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "webrtc.DEPS", 
+        "url": "https://src.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS"
+      }
+    ]
+  }, 
   "blink": {
     "cache_dir": null, 
     "solutions": [
@@ -216,6 +233,35 @@
         "name": "v8", 
         "url": "http://v8.googlecode.com/svn/branches/bleeding_edge"
       }
+    ]
+  }, 
+  "webrtc_android_apk_try_builder": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "custom_deps": {
+          "src/third_party/webrtc": "http://webrtc.googlecode.com/svn/trunk/webrtc"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "url": "https://src.chromium.org/chrome/trunk/src"
+      }, 
+      {
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "webrtc-limited", 
+        "url": "svn://svn.chromium.org/chrome-internal/trunk/webrtc-limited"
+      }, 
+      {
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "webrtc.DEPS", 
+        "url": "https://src.chromium.org/chrome/trunk/deps/third_party/webrtc/webrtc.DEPS"
+      }
+    ], 
+    "target_os": [
+      "android"
     ]
   }
 }

@@ -1,4 +1,16 @@
 {
+  "android": {
+    "build_config_fs": "Debug", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma"
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "OS=linux component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
   "android_defaults": "Android cannot target 64 bits", 
   "blink": {
     "build_config_fs": "Debug", 
@@ -95,6 +107,7 @@
       "GYP_DEFINES": "target_arch=mips v8_target_arch=mips"
     }
   }, 
+  "webrtc_android_apk_try_builder": "Only \"android\" platform is supported (got: \"linux\")", 
   "x86_builder": "config \"x86_builder\" includes \"android_defaults\", but [Android cannot target 64 bits]", 
   "x86_try_builder": "config \"x86_try_builder\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Android cannot target 64 bits]]", 
   "x86_try_instrumentation_tests": "config \"x86_try_instrumentation_tests\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Android cannot target 64 bits]]", 

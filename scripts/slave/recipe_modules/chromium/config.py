@@ -110,6 +110,9 @@ def BASE(c):
     raise BadConf('Can not compile "%s" on "%s"' %
                   (c.TARGET_PLATFORM, c.HOST_PLATFORM))
 
+  if c.HOST_PLATFORM != c.TARGET_PLATFORM:
+    c.gyp_env.GYP_CROSSCOMPILE = 1
+
   if c.HOST_BITS < c.TARGET_BITS:
     raise BadConf('host bits < targ bits')
 
@@ -229,3 +232,13 @@ def blink(c):
 @config_ctx(includes=['chromium_clang'])
 def blink_clang(c):
   c.compile_py.default_targets = ['blink_tests']
+
+@config_ctx(includes=['ninja', 'static_library', 'default_compiler', 'goma'])
+def android(c):
+  gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['fastbuild'] = 1
+  gyp_defs['OS'] = c.TARGET_PLATFORM
+  gyp_defs['host_os'] = c.HOST_PLATFORM
+  gyp_defs['gcc_version'] = 46
+  gyp_defs['order_text_section'] = Path(
+    '[CHECKOUT]', 'orderfiles', 'orderfile.out')

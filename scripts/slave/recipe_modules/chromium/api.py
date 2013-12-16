@@ -161,6 +161,11 @@ class ChromiumApi(recipe_api.RecipeApi):
     kwargs['env'] = env
     return self.m.gclient.runhooks(**kwargs)
 
+  def cleanup_temp(self):
+    return self.m.python(
+      'cleanup_temp',
+      self.m.path.build('scripts', 'slave', 'cleanup_temp.py'))
+
   def checkdeps(self, suffix=None, **kwargs):
     name = 'checkdeps'
     if suffix:

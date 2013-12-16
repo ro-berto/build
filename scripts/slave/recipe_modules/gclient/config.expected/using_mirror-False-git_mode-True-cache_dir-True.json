@@ -1,4 +1,5 @@
 {
+  "_webrtc_additional_solutions": "WebRTC only supports svn", 
   "blink": {
     "cache_dir": "CACHE_DIR", 
     "solutions": [
@@ -154,5 +155,6 @@
         "url": "http://v8.googlecode.com/svn/branches/bleeding_edge"
       }
     ]
-  }
+  }, 
+  "webrtc_android_apk_try_builder": "config \"webrtc_android_apk_try_builder\" includes \"_webrtc_additional_solutions\", but [WebRTC only supports svn]"
 }

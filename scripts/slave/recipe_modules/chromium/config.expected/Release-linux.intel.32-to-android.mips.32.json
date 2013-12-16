@@ -1,4 +1,17 @@
 {
+  "android": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma"
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
   "android_defaults": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
@@ -26,6 +39,7 @@
       ]
     }, 
     "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
@@ -41,6 +55,7 @@
       ]
     }, 
     "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "clang=1 component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
@@ -57,6 +72,7 @@
       ]
     }, 
     "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
@@ -73,6 +89,7 @@
       ]
     }, 
     "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "clang=1 component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
@@ -154,6 +171,7 @@
       "build_tool": "ninja"
     }, 
     "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "component=static_library target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
@@ -198,9 +216,11 @@
       "build_tool": "make"
     }, 
     "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "target_arch=mips v8_target_arch=mips"
     }
   }, 
+  "webrtc_android_apk_try_builder": "Only \"intel,arm\" architectures are supported (got: \"mips\")", 
   "x86_builder": "Cannot target x86 with TARGET_ARCH == mips", 
   "x86_try_builder": "config \"x86_try_builder\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == mips]", 
   "x86_try_instrumentation_tests": "config \"x86_try_instrumentation_tests\" includes \"x86_builder\", but [Cannot target x86 with TARGET_ARCH == mips]", 

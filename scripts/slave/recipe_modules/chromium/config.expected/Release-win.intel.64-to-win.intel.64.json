@@ -1,4 +1,17 @@
 {
+  "android": {
+    "build_config_fs": "Release_x64", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma"
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "OS=win chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=win order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=x64", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_MSVS_VERSION": "2012"
+    }
+  }, 
   "android_defaults": "Can only build android on linux.", 
   "blink": {
     "build_config_fs": "Release_x64", 
@@ -113,6 +126,7 @@
       "GYP_MSVS_VERSION": "2012"
     }
   }, 
+  "webrtc_android_apk_try_builder": "Only \"android\" platform is supported (got: \"win\")", 
   "x86_builder": "config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
   "x86_try_builder": "config \"x86_try_builder\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "x86_try_instrumentation_tests": "config \"x86_try_instrumentation_tests\" includes \"x86_builder\", but [config \"x86_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
