@@ -212,7 +212,6 @@ def main(argv):
       'master.chromium.memory': 'ChromiumMemory',
       'master.chromium.memory.fyi': 'ChromiumMemoryFYI',
       'master.chromium.perf': 'ChromiumPerf',
-      'master.chromium.perf_av': 'ChromiumPerfAv',
       'master.chromium.swarm': 'ChromiumSwarm',
       'master.chromium.webkit': 'ChromiumWebkit',
       'master.chromium.webrtc': 'ChromiumWebRTC',
