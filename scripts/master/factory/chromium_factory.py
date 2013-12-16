@@ -941,10 +941,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # _AddTests() had the factory-specific tests stripped off.
     assert not tests, 'Did you make a typo? %s wasn\'t processed' % tests
 
-  @property
-  def build_dir(self):
-    return self._build_dir
-
   def ForceMissingFilesToBeFatal(self, project, gclient_env):
     """Force Windows bots to fail GYPing if referenced files do not exist."""
     gyp_generator_flags = gclient_env.setdefault('GYP_GENERATOR_FLAGS', '')
