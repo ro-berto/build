@@ -42,10 +42,9 @@ class LibyuvFactory(chromium_factory.ChromiumFactory):
     self._solutions.append(gclient_factory.GClientSolution(
         svn_url, name='src', custom_vars_list=custom_vars_list))
 
-  def LibyuvFactory(self, target='Debug', clobber=False, tests=None,
-                       mode=None, slave_type='BuilderTester', options=None,
-                       compile_timeout=1200, build_url=None, project=None,
-                       factory_properties=None, gclient_deps=None):
+  def LibyuvFactory(self, target='Debug', tests=None,
+                    slave_type='BuilderTester', options=None,
+                    factory_properties=None):
     options = options or ''
     tests = tests or []
     factory_properties = factory_properties or {}
@@ -53,9 +52,9 @@ class LibyuvFactory(chromium_factory.ChromiumFactory):
 
     if factory_properties.get('needs_valgrind'):
       self._solutions[0].custom_deps_list = [self.CUSTOM_DEPS_VALGRIND]
-    factory = self.BuildFactory(target, clobber, tests, mode, slave_type,
-                                options, compile_timeout, build_url, project,
-                                factory_properties, gclient_deps)
+    factory = self.BuildFactory(target=target, tests=tests,
+                                slave_type=slave_type, options=options,
+                                factory_properties=factory_properties)
 
     # Get the factory command object to create new steps to the factory.
     cmds = chromium_commands.ChromiumCommands(factory, target,
