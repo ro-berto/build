@@ -92,7 +92,12 @@ def GenSteps(api):
   if api.platform.is_linux:
     test_prefix = ['xvfb-run']
 
-  yield api.step('update-install', ['npm' + cmd_suffix, 'install'] + tmp_args,
+  # Install deps from npm
+  yield api.step('install-deps', ['npm' + cmd_suffix, 'install'] + tmp_args,
+                 cwd=api.path.checkout, env=node_env)
+
+  # Update existing deps with version '*'
+  yield api.step('update-deps', ['npm' + cmd_suffix, 'update'] + tmp_args,
                  cwd=api.path.checkout, env=node_env)
 
   yield api.step('test', test_prefix + ['grunt' + cmd_suffix,

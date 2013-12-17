@@ -81,7 +81,17 @@
       "[SLAVE_BUILD]/.tmp"
     ],
     "cwd": "[SLAVE_BUILD]/polymer",
-    "name": "update-install"
+    "name": "install-deps"
+  },
+  {
+    "cmd": [
+      "npm",
+      "update",
+      "--tmp",
+      "[SLAVE_BUILD]/.tmp"
+    ],
+    "cwd": "[SLAVE_BUILD]/polymer",
+    "name": "update-deps"
   },
   {
     "allow_subannotations": true,

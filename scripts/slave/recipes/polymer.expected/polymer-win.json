@@ -62,7 +62,20 @@
       "IE_BIN": "C:\\Program Files\\Internet Explorer\\iexplore.exe",
       "PATH": "C:\\Program Files (x86)\\nodejs;C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"
     },
-    "name": "update-install"
+    "name": "install-deps"
+  },
+  {
+    "cmd": [
+      "npm.cmd",
+      "update"
+    ],
+    "cwd": "[SLAVE_BUILD]\\polymer",
+    "env": {
+      "CHROME_BIN": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+      "IE_BIN": "C:\\Program Files\\Internet Explorer\\iexplore.exe",
+      "PATH": "C:\\Program Files (x86)\\nodejs;C:\\Users\\chrome-bot\\AppData\\Roaming\\npm;%(PATH)s"
+    },
+    "name": "update-deps"
   },
   {
     "allow_subannotations": true,
