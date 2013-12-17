@@ -28,7 +28,6 @@ tests = [
     'libjingle_peerconnection_unittest',
     'libjingle_sound_unittest',
     'libjingle_unittest',
-    'metrics_unittests',
     'modules_tests',
     'modules_unittests',
     'neteq_unittests',
@@ -44,9 +43,9 @@ x64_tests = tests + ['libjingle_peerconnection_objc_test']
 baremetal_tests = [
     'audio_device_tests',
     'video_capture_tests',
-    'video_engine_tests',
     'vie_auto_test',
     'voe_auto_test',
+    'webrtc_perf_tests',
 ]
 options = ['--build-tool=ninja']
 
@@ -118,7 +117,7 @@ F('mac_largetests_factory', mac().WebRTCFactory(
         'perf_id': 'webrtc-mac-large-tests',
         'perf_config': {'a_default_rev': 'r_webrtc'},
         'perf_measuring_tests': ['vie_auto_test',
-                                 'video_engine_tests'],
+                                 'webrtc_perf_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',
                                   'voe_auto_test'],
     }))

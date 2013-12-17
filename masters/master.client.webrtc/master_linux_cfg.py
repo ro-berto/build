@@ -28,7 +28,6 @@ tests = [
     'libjingle_peerconnection_unittest',
     'libjingle_sound_unittest',
     'libjingle_unittest',
-    'metrics_unittests',
     'modules_tests',
     'modules_unittests',
     'neteq_unittests',
@@ -46,9 +45,9 @@ baremetal_tests = [
     'isac_fixed_perf',
     'libjingle_peerconnection_java_unittest',
     'video_capture_tests',
-    'video_engine_tests',
     'vie_auto_test',
     'voe_auto_test',
+    'webrtc_perf_tests',
 ]
 
 ninja_options = ['--build-tool=ninja']
@@ -158,7 +157,7 @@ F('linux_largetests_factory', linux().WebRTCFactory(
                                  'audioproc_perf',
                                  'isac_fixed_perf',
                                  'vie_auto_test',
-                                 'video_engine_tests'],
+                                 'webrtc_perf_tests'],
         'custom_cmd_line_tests': ['audio_e2e_test',
                                   'audioproc_perf',
                                   'isac_fixed_perf',

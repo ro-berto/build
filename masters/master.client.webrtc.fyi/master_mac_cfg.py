@@ -27,7 +27,6 @@ tests = [
     'libjingle_peerconnection_unittest',
     'libjingle_sound_unittest',
     'libjingle_unittest',
-    'metrics_unittests',
     'modules_tests',
     'modules_unittests',
     'neteq_unittests',

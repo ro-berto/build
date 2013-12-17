@@ -28,7 +28,6 @@ tests = [
     'libjingle_peerconnection_unittest',
     'libjingle_sound_unittest',
     'libjingle_unittest',
-    'metrics_unittests',
     'modules_tests',
     'modules_unittests',
     'neteq_unittests',
@@ -43,9 +42,9 @@ tests = [
 baremetal_tests = [
     'audio_device_tests',
     'video_capture_tests',
-    'video_engine_tests',
     'vie_auto_test',
     'voe_auto_test',
+    'webrtc_perf_tests',
 ]
 
 ninja_options = ['--build-tool=ninja']
@@ -100,7 +99,8 @@ F('win32_largetests_factory', win().WebRTCFactory(
         'expectations': True,
         'perf_id': 'webrtc-win-large-tests',
         'perf_config': {'a_default_rev': 'r_webrtc'},
-        'perf_measuring_tests': ['vie_auto_test', 'video_engine_tests'],
+        'perf_measuring_tests': ['vie_auto_test',
+                                 'webrtc_perf_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',
                                   'voe_auto_test'],
     }))
