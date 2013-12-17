@@ -48,7 +48,7 @@ class SyzygyCommands(commands.FactoryCommands):
 
     # Build the path to the Python 2.6 runtime checked into Syzygy.
     self._syzygy_python_exe = self.PathJoin(
-        self._repository_root, 'third_party', 'python', 'python.exe')
+        self._repository_root, 'third_party', 'python_26', 'python.exe')
 
   def AddAppVerifierGTestTestStep(self, test_name):
     script_path = self.PathJoin(self._repository_root, 'syzygy',
