@@ -116,6 +116,7 @@ F('mac_largetests_factory', mac().WebRTCFactory(
         'show_perf_results': True,
         'expectations': True,
         'perf_id': 'webrtc-mac-large-tests',
+        'perf_config': {'a_default_rev': 'r_webrtc'},
         'perf_measuring_tests': ['vie_auto_test',
                                  'video_engine_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',

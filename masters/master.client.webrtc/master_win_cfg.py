@@ -99,6 +99,7 @@ F('win32_largetests_factory', win().WebRTCFactory(
         'show_perf_results': True,
         'expectations': True,
         'perf_id': 'webrtc-win-large-tests',
+        'perf_config': {'a_default_rev': 'r_webrtc'},
         'perf_measuring_tests': ['vie_auto_test', 'video_engine_tests'],
         'custom_cmd_line_tests': ['vie_auto_test',
                                   'voe_auto_test'],

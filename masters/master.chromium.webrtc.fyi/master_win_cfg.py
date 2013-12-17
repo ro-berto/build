@@ -43,6 +43,7 @@ F('win_webrtc_factory', win().ChromiumWebRTCLatestFactory(
         'virtual_webcam': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-win',
+        'perf_config': {'a_default_rev': 'r_webrtc'},
         'process_dumps': True,
         'start_crash_handler': True,
         'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
