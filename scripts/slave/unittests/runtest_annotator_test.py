@@ -392,48 +392,38 @@ class GraphingEndureLogProcessorTest(LogProcessorTest):
 
     # The data in the input sample file is considered to have 3 separate
     # graph names, so there are 3 entries here.
-    self.assertEqual(3, len(output))
+    self.assertEqual(2, len(output))
+    self.maxDiff = 800
 
     # Each of these three entries is mapped to a list that contains one string.
-    self.assertEqual(
-        1, len(output['endure_calendar-dom_nodes-summary.dat']))
-    self.assertEqual(
-        1, len(output['endure_calendar-event_listeners-summary.dat']))
-    self.assertEqual(
-        1, len(output['endure_calendar-renderer_vm-summary.dat']))
+    self.assertEqual(1, len(output['object_counts-summary.dat']))
+    self.assertEqual(1, len(output['vm_stats-summary.dat']))
 
     self.assertEqual(
         {
             'traces': {
-                'event_listeners': [[1, 2621], [2, 2812], [3, 1242]],
+                'event_listeners': [[1, 492], [2, 490], [3, 487]],
+                'event_listeners_max': [492, 0],
+                'dom_nodes': [[1, 2621], [2, 2812], [3, 1242]],
+                'dom_nodes_max': [2812, 0],
             },
             'units_x': 'iterations',
             'units': 'count',
             'rev': 12345,
         },
-        json.loads(output['endure_calendar-event_listeners-summary.dat'][0]))
-
-    self.assertEqual(
-        {
-            'traces': {
-                'dom_nodes': [[1, 492], [2, 490], [3, 487]],
-            },
-            'units_x': 'iterations',
-            'units': 'count',
-            'rev': 12345,
-        },
-        json.loads(output['endure_calendar-dom_nodes-summary.dat'][0]))
+        json.loads(output['object_counts-summary.dat'][0]))
 
     self.assertEqual(
         {
             'traces': {
                 'renderer_vm': [[1, 180.1], [2, 181.0], [3, 180.7]],
+                'renderer_vm_max': [181, 0],
             },
             'units_x': 'iterations',
             'units': 'MB',
             'rev': 12345,
         },
-        json.loads(output['endure_calendar-renderer_vm-summary.dat'][0]))
+        json.loads(output['vm_stats-summary.dat'][0]))
 
 
 if __name__ == '__main__':

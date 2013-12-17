@@ -15,8 +15,6 @@ Note: This module is doomed to be deprecated in the future, as Telemetry
 results will be passed more directly to the new performance dashboard.
 """
 
-import copy
-import csv
 import json
 import logging
 import os
@@ -904,13 +902,6 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
   (x, y) points (and they will NOT contain lists of results that need to have
   the mean and standard deviation calculated).
 
-  With the CSV output format, these series will be formatted like this:
-
-    page_name,event_listeners_X (iterations),event_listeners_Y (listeners)
-    endure_calendar,1,492
-    endure_calendar,1,489
-    endure_calendar,1,492
-
   With the 'buildbot' output format, these series will be formatted like this:
 
     RESULT object_counts_by_url: endure_calendar= [1,2,3] iterations
@@ -955,10 +946,11 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
   this old graphing system is now replaced by the new perf dashboard.)
   """
 
-  ENDURE_HEADER_LINE_REGEX = re.compile(r'^(page_name),')
-  ENDURE_RESULT_LINE_REGEX = re.compile(r'^(endure_).*,')
-  ENDURE_FIELD_NAME_REGEX = re.compile(
-      r'(?P<TRACE>.*)_(?P<COORDINATE>[XY]) \((?P<UNITS>.*)\)')
+  # Regular expression which matches a line that has multiple X or Y values.
+  VECTOR_RESULTS_REGEX = re.compile(r'(?P<IMPORTANT>\*)?RESULT '
+                                    '(?P<GRAPH>[^:]*): (?P<TRACE>[^=]*)= '
+                                    '(?P<VALUES>\[[-\d\., ]+\]?)'
+                                    ' ?(?P<UNITS>.+)')
 
   class EndureTrace(object):
     """Represents one time series in a graph of endure results."""
@@ -974,113 +966,62 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
       GraphingLogProcessor.Graph.__init__(self)
       # The attributes 'traces' and 'units' are set in the superclass,
       # The superclass also contains the method IsImportant().
-
-      # X units, set when the header row is read.
+      # EndureGraph is just like its superclass except it has X units.
       self.units_x = None
-
-      # Index locations in each row where the x and y values for this graph
-      # are. These are set once the header row is read.
-      self.csv_index_x = None
-      self.csv_index_y = None
 
   def __init__(self, *args, **kwargs):
     GraphingLogProcessor.__init__(self, *args, **kwargs)
-
-    # The dict self._graph_templates maps trace names to EndureGraph
-    # objects, and it is populated when parsing the header line. This
-    # template will be used as the default EndureGraph when parsing
-    # results lines.
-    self._graph_templates = {}
-
-    # Expected number of columns in each row for normal results lines.
-    # This is set based on the number of columns in the header line.
-    self._expected_results_len = None
+    # The following dicts contain all X and Y values respectively, and are
+    # populated as the input is processed. They contain data for each chart
+    # for each trace. Example structure:
+    # self._x_data = {
+    #     'chart_foo': {
+    #         'trace_foo': {
+    #             'units': 'seconds',
+    #             'important': True,
+    #             'values': [1, 2, 3]
+    #         }
+    #     }
+    # }
+    self._x_data = {}
+    self._y_data = {}
 
   def ProcessLine(self, line):
     """Processes one line of output from Telemetry endure measurement."""
-    # With CSV output format, there are two types of line: the header line
-    # and all the rest of the results lines.
-    if self.ENDURE_HEADER_LINE_REGEX.search(line):
-      self._ProcessEndureHeaderLine(line)
-    elif self.ENDURE_RESULT_LINE_REGEX.search(line):
-      self._ProcessEndureResultLine(line)
+    match = self.VECTOR_RESULTS_REGEX.search(line)
+    if match:
+      self._ProcessEndureResultLine(match)
+    else:
+      # For ordinary RESULT lines, leave it to the superclass to process.
+      GraphingLogProcessor.ProcessLine(self, line)
 
-  def _ProcessEndureHeaderLine(self, line):
-    """Process the CSV header line.
+  def _ProcessEndureResultLine(self, line_match):
+    """Processes result lines from endure that have a list of X or Y values."""
+    match_dict = line_match.groupdict()
+    # Get the graph name (chart name). Ignore by_url lines.
+    graph_name = match_dict['GRAPH'].strip()
+    if graph_name.endswith('by_url'):
+      return
 
-    We will create default EndureGraph objects for each trace name with the
-    'units' attribute already set. We also store the indexes of the X and Y
-    values for each trace so that we can lookup values when parsing the results
-    lines.
+    # Get the trace name. This ends with _X or _Y, indicating X or Y values.
+    trace_name = match_dict['TRACE'].strip()
+    is_x_data = trace_name.endswith('_X')
+    trace_name = trace_name[:-2]
 
-    Example CSV header line:
-      page_name,EventListenerCount_X (seconds),EventListenerCount_Y (listeners),
-      TotalDOMNodeCount_X (seconds),TotalDOMNodeCount_Y (nodes)
-    """
-    # Reset the graph template for every new header we parse.
-    self._graph_templates = {}
+    # Store away the information for this results line.
+    values_info = {
+        'values': json.loads(match_dict['VALUES']),
+        'units': match_dict['UNITS'],
+        'important': match_dict['IMPORTANT'] == '*',
+    }
 
-    field_names = csv.reader([line]).next()
-    self._expected_results_len = len(field_names)
-
-    for index, field in enumerate(field_names):
-      match = self.ENDURE_FIELD_NAME_REGEX.match(field)
-      if not match:
-        continue
-      match_dict = match.groupdict()
-      trace_name = match_dict['TRACE'].strip()
-      coordinate = match_dict['COORDINATE'].strip()
-      units = match_dict['UNITS'].strip()
-
-      graph = self._graph_templates.get(trace_name, self.EndureGraph())
-      if coordinate == 'X':
-        graph.units_x = units
-        graph.csv_index_x = index
-      else:
-        graph.units = units
-        graph.csv_index_y = index
-      self._graph_templates[trace_name] = graph
-
-  def _ProcessEndureResultLine(self, line):
-    """Parse each regular results line in the CSV input.
-
-    Importantly, this method populates and updates the self._graphs state
-    each time a new line is read in. This variable is used later when
-    _FinalizeProcessing is called.
-
-    Example CSV regular result line:
-      endure_calendar,4,446,4,2847
-    """
-    assert self._graph_templates
-
-    values = csv.reader([line]).next()
-
-    assert len(values) == self._expected_results_len, (
-        'Result line \'%s\' has mismatching number of elements, expecting %s' %
-        (line.strip(), self._expected_results_len))
-
-    # The page name (which serves as the test name) is the first column.
-    page_name = values[0]
-
-    # Iterate over all trace names discovered from the header.
-    for trace_name in self._graph_templates:
-      # Note that in the CSV format, there's no way of specifying an arbitrary
-      # graph name. So, we construct a graph name here.
-      graph_name = page_name + '-' + trace_name
-
-      # The default EndureGraph is copied from the template, which already
-      # contains all units and index information.
-      graph = self._graphs.get(
-          graph_name,
-          copy.deepcopy(self._graph_templates[trace_name]))
-
-      trace = graph.traces.get(trace_name, self.EndureTrace())
-      x = float(values[graph.csv_index_x])
-      y = float(values[graph.csv_index_y])
-      trace.data.append([x, y])
-
-      graph.traces[trace_name] = trace
-      self._graphs[graph_name] = graph
+    # Add the values to self._x_data or self._y_data.
+    if is_x_data:
+      self._x_data[graph_name] = self._x_data.get(graph_name, {})
+      self._x_data[graph_name][trace_name] = values_info
+    else:
+      self._y_data[graph_name] = self._y_data.get(graph_name, {})
+      self._y_data[graph_name][trace_name] = values_info
 
   def _FinalizeProcessing(self):
     """This method is called before PerformanceLogs returns the output.
@@ -1095,6 +1036,7 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     However, this entry in self._output is not sent to the dashboard, so
     there's no need to add it.
     """
+    self._CompileEndureTraces()
     self._CreateSummaryOutput()
 
   def _CreateSummaryOutput(self):
@@ -1138,15 +1080,44 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
 
     # Fill in the values for each graph. For an EndureTrace (a time series),
     # This will be a list of pairs. Otherwise, it's a (value, error) pair.
-    # Note: Given CSV-format input, there are only traces of this type, there
-    # will never be any traces that don't have a 'data' attribute.
     for trace_name, trace in graph.traces.iteritems():
       if hasattr(trace, 'data'):
         graph_dict['traces'][trace_name] = trace.data
       else:
         graph_dict['traces'][trace_name] = [trace.value, trace.stddev]
 
-    return json.dumps(graph_dict)
+    return json.dumps(graph_dict, sort_keys=True)
+
+  def _CompileEndureTraces(self):
+    """Organizes the series data that was collected in self._graphs.
+
+    This is done because GraphingLogProcessor._CreateSummaryOutput
+    requires that data is organized in self._graphs.
+
+    Note that when this function is called (after all lines have been
+    processed, there will already be Graph objects in self._graphs created
+    GraphingLogProcessor.ProcessLine.
+    """
+    for graph_name in self._x_data:
+
+      graph = self.EndureGraph()
+      if self._graphs[graph_name]:
+        graph.traces = self._graphs[graph_name].traces
+        graph.units = self._graphs[graph_name].units
+
+      for trace_name in self._x_data[graph_name]:
+        if trace_name not in self._y_data[graph_name]:
+          continue
+        x = self._x_data[graph_name][trace_name]
+        y = self._y_data[graph_name][trace_name]
+        trace = self.EndureTrace()
+        trace.important = y['important']
+        trace.data = zip(x['values'], y['values'])
+        graph.traces[trace_name] = trace
+        graph.units = y.get('units')
+        graph.units_x = x.get('units')
+
+      self._graphs[graph_name] = graph
 
 
 class GraphingFrameRateLogProcessor(GraphingLogProcessor):
