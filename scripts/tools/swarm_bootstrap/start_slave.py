@@ -11,9 +11,6 @@ import platform
 import socket
 import sys
 
-import slave_machine  # pylint: disable-msg=F0401
-
-
 # A mapping between sys.platform values and the corresponding swarm name
 # for that platform.
 PLATFORM_MAPPING = {
@@ -154,6 +151,7 @@ def main():
   # written out are the ones the machine will read.
   GenerateAndWriteDimensions('dimensions.in')
 
+  import slave_machine  # pylint: disable-msg=F0401
   slave_machine.Restart()
 
 
