@@ -46,6 +46,10 @@ class SyzygyCommands(commands.FactoryCommands):
     self._arch = target_arch
     self._factory = factory
 
+    # Build the path to the Python 2.6 runtime checked into Syzygy.
+    self._syzygy_python_exe = self.PathJoin(
+        self._repository_root, 'third_party', 'python', 'python.exe')
+
   def AddAppVerifierGTestTestStep(self, test_name):
     script_path = self.PathJoin(self._repository_root, 'syzygy',
                                 'build', 'app_verifier.py')
@@ -64,7 +68,7 @@ class SyzygyCommands(commands.FactoryCommands):
     # Randomization script path.
     script_path = self.PathJoin(self._repository_root, 'syzygy',
                                 'internal', 'build', 'randomize_chrome.py')
-    command = [self._python, script_path,
+    command = [self._syzygy_python_exe, script_path,
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
                '--verbose']
@@ -74,7 +78,7 @@ class SyzygyCommands(commands.FactoryCommands):
     # Benchmark script path.
     script_path = self.PathJoin(self._repository_root, 'syzygy',
                                 'internal', 'build', 'benchmark_chrome.py')
-    command = [self._python, script_path,
+    command = [self._syzygy_python_exe, script_path,
                '--build-dir=%s' % self._build_dir,
                '--target=%s' % self._target,
                '--verbose']
@@ -89,7 +93,7 @@ class SyzygyCommands(commands.FactoryCommands):
                                 'generate_coverage.py')
 
     # Generate the appropriate command line.
-    command = [self._python,
+    command = [self._syzygy_python_exe,
                script_path,
                '--verbose',
                '--syzygy',
@@ -108,7 +112,7 @@ class SyzygyCommands(commands.FactoryCommands):
         'http://syzygy-archive.commondatastorage.googleapis.com/builds/'
            'coverage/%(got_revision)s/index.html')
 
-    command = [self._python,
+    command = [self._syzygy_python_exe,
                self.PathJoin(self._script_dir, 'syzygy', 'gsutil_cp_dir.py'),
                src_dir,
                dst_gs_url,]
@@ -128,7 +132,7 @@ class SyzygyCommands(commands.FactoryCommands):
     # We pass in the root build directory to the smoke-test script. It will
     # place its output in <build_dir>/smoke_test, alongside the various
     # configuration sub-directories.
-    command = [self._python,
+    command = [self._syzygy_python_exe,
                script_path,
                '--verbose',
                '--build-dir',
@@ -146,7 +150,7 @@ class SyzygyCommands(commands.FactoryCommands):
         'http://syzygy-archive.commondatastorage.googleapis.com/index.html?'
             'path=builds/official/%(got_revision)s/')
 
-    command = [self._python,
+    command = [self._syzygy_python_exe,
                self.PathJoin(self._script_dir, 'syzygy', 'gsutil_cp_dir.py'),
                archive_dir,
                dst_gs_url,]
@@ -167,7 +171,8 @@ class SyzygyCommands(commands.FactoryCommands):
     # automatically pick up new client DLLs as they are introduced.
     asan_rtl_dll = self.PathJoin(self._build_dir, self._target, '*asan_rtl.dll')
     client_dlls = self.PathJoin(self._build_dir, self._target, '*client.dll')
-    command = [self._python, script_path, '-s', '-b', asan_rtl_dll, client_dlls]
+    command = [self._syzygy_python_exe, script_path, '-s', '-b', asan_rtl_dll,
+               client_dlls]
     self._factory.addStep(_UrlStatusCommand,
                           command=command,
                           name='upload_symbols',
