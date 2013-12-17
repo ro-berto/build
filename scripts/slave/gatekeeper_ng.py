@@ -153,6 +153,7 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
       closing_steps = set(gatekeeper.get('closing_steps', [])) | forgiving
       tree_notify = set(gatekeeper.get('tree_notify', []))
       sheriff_classes = set(gatekeeper.get('sheriff_classes', []))
+      subject_template = gatekeeper['subject_template']
       finished = [s for s in steps if s.get('isFinished')]
       close_tree = gatekeeper.get('close_tree', True)
       respect_build_status = gatekeeper.get('respect_build_status', False)
@@ -201,6 +202,7 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
                               'forgiving_steps': forgiving,
                               'project_name': project_name,
                               'sheriff_classes': sheriff_classes,
+                              'subject_template': subject_template,
                               'tree_notify': tree_notify,
                               'unsatisfied': unsatisfied_steps,
                              })
@@ -243,6 +245,18 @@ def load_gatekeeper_config(filename):
   instead of closing the tree. A section or builder can also specify to respect
   a build's failure status with respect_build_status.
 
+  The 'subject_template' key is the template used for the email subjects. Its
+  formatting arguments are found at https://chromium.googlesource.com/chromium/
+    tools/chromium-build/+/master/gatekeeper_mailer.py, but the list is
+  reproduced here:
+
+    %(result)s: 'warning' or 'failure'
+    %(projectName): 'Chromium', 'Chromium Perf', etc.
+    %(builder): the builder name
+    %(reason): reason for launching the build
+    %(revision): build revision
+    %(buildnumber): buildnumber
+
   The 'comment' key can be put anywhere and is ignored by the parser.
 
   # Python, not JSON.
@@ -275,6 +289,7 @@ def load_gatekeeper_config(filename):
       },
       'win_extra': {
         'closing_steps': ['extra_win_step']
+        'subject_template': 'windows heads up on %(builder)',
       }
     }
   }
@@ -289,9 +304,22 @@ def load_gatekeeper_config(filename):
   Again, fields are optional and treated as empty lists/sets if not present.
   """
 
-  master_keys = ['sheriff_classes', 'tree_notify']
+  # Keys which are allowed in a master or builder section.
+  master_keys = ['sheriff_classes', 'tree_notify', 'subject_template']
   builder_keys = ['forgiving_steps', 'closing_steps', 'tree_notify',
-                  'sheriff_classes']
+                  'sheriff_classes', 'subject_template']
+
+
+  # Keys which have defaults besides None or set([]).
+  defaults = {
+      'subject_template': ('buildbot %(result)s in %(projectName)s on '
+                           '%(builder)s, revision %(revision)s'),
+  }
+
+  # These keys are strings instead of sets. Strings can't be merged,
+  # so more specific (master -> category -> builder) strings clobber
+  # more generic ones.
+  strings = ['subject_template']
 
   with open(filename) as f:
     raw_gatekeeper_config = json.load(f)
@@ -314,20 +342,32 @@ def load_gatekeeper_config(filename):
       builders = master_section.get('builders', {})
       for buildername, builder in builders.iteritems():
         allowed_keys(builder, 'categories', *builder_keys)
-        for item in builder.values():
-          assert isinstance(item, list)
-          assert all(isinstance(elem, basestring) for elem in item)
+        for key, item in builder.iteritems():
+          if key in strings:
+            assert isinstance(item, basestring)
+          else:
+            assert isinstance(item, list)
+            assert all(isinstance(elem, basestring) for elem in item)
 
         gatekeeper_config[master_url][-1].setdefault(buildername, {})
         gatekeeper_builder = gatekeeper_config[master_url][-1][buildername]
 
-        # Populate with empty defaults.
+        # Populate with specified defaults.
         for k in builder_keys:
-          gatekeeper_builder.setdefault(k, set())
+          if k in defaults:
+            gatekeeper_builder.setdefault(k, defaults[k])
+          elif k in strings:
+            gatekeeper_builder.setdefault(k, '')
+          else:
+            gatekeeper_builder.setdefault(k, set())
 
         # Inherit any values from the master.
         for k in master_keys:
-          gatekeeper_builder[k] |= set(master_section.get(k, []))
+          if k in strings:
+            if k in master_section:
+              gatekeeper_builder[k] = master_section[k]
+          else:
+            gatekeeper_builder[k] |= set(master_section.get(k, []))
 
         gatekeeper_builder['close_tree'] = master_section.get('close_tree',
                                                               True)
@@ -339,11 +379,19 @@ def load_gatekeeper_config(filename):
                           master_section.get( 'categories', []))
         for c in all_categories:
           for k in builder_keys:
-            gatekeeper_builder[k] |= set(categories[c].get(k, []))
+            if k in strings:
+              if k in categories[c]:
+                gatekeeper_builder[k] = categories[c][k]
+            else:
+              gatekeeper_builder[k] |= set(categories[c].get(k, []))
 
         # Add in any builder-specific values.
         for k in builder_keys:
-          gatekeeper_builder[k] |= set(builder.get(k, []))
+          if k in strings:
+            if k in builder:
+              gatekeeper_builder[k] = builder[k]
+          else:
+            gatekeeper_builder[k] |= set(builder.get(k, []))
 
   return gatekeeper_config
 
@@ -449,11 +497,11 @@ def close_tree_if_failure(failed_builds, username, password, tree_status_url,
     sheriffs = get_sheriffs(failed_build['sheriff_classes'], sheriff_url)
     watchers = list(tree_notify | blamelist | sheriffs)
 
-
     build_data = {
         'build_url': build_url,
         'from_addr': fromaddr,
         'project_name': project_name,
+        'subject_template': failed_build['subject_template'],
         'steps': [],
         'unsatisfied': list(failed_build['unsatisfied']),
         'waterfall_url': waterfall_url,

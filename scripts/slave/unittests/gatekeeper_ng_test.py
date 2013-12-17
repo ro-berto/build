@@ -544,6 +544,27 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertNotIn(self.status_url, urls)
 
+  def testDefaultSubjectTemplate(self):
+    """Test that the subject template is set by default."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step4']})
+
+    self.call_gatekeeper()
+
+    # Check that gatekeeper indeed sent an email.
+    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
+    mailer_data = GatekeeperTest.decode_param_json(self.url_calls[-1]['params'])
+    self.assertEquals(mailer_data['subject_template'], unicode(
+        'buildbot %(result)s in %(projectName)s on %(builder)s, '
+        'revision %(revision)s'))
+
+
   def testEmailJson(self):
     """Test that the email json is formatted correctly."""
     sys.argv.extend([m.url for m in self.masters])
@@ -551,12 +572,13 @@ class GatekeeperTest(unittest.TestCase):
                      '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
+    subject_template = 'build %(result)s, oh no!'
     self.masters[0].builders[0].builds[0].results = 3
     self.add_gatekeeper_master_config(self.masters[0].url,
                                       {'respect_build_status': True})
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
-                                {},
+                                {'subject_template': subject_template},
                                 idx=0)
 
     self.call_gatekeeper()
@@ -597,6 +619,8 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(mailer_data['build_url'], unicode(build_url))
     self.assertEquals(mailer_data['project_name'], unicode('Chromium FYI'))
     self.assertEquals(mailer_data['from_addr'], 'buildbot@chromium.org')
+    self.assertEquals(mailer_data['subject_template'],
+                      unicode(subject_template))
 
 
   #### BuildDB operation.
