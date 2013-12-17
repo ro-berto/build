@@ -762,7 +762,7 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       A 3-tuple - mean, standard deviation, and a dict which is either
           empty or contains information about some file contents.
     """
-    mean, stddev = chromium_utils.FilteredMeanAndStandardDeviation(value_list)
+    mean, stddev = chromium_utils.MeanAndStandardDeviation(value_list)
     return mean, stddev, {}
 
   def _CalculatePercentiles(self, histogram, trace_name):
