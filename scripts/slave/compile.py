@@ -864,11 +864,15 @@ def main_ninja(options, args):
 def main_win(options, args):
   """Interprets options, clobbers object files, and calls the build tool.
   """
+  if not options.solution:
+    options.solution = 'all.sln'
+  solution = os.path.join(options.build_dir, options.solution)
+
   # Prefer the version specified in the .sln. When devenv.com is used at the
   # command line to start a build, it doesn't accept sln file from a different
   # version.
   if not options.msvs_version:
-    sln = open(os.path.join(options.build_dir, options.solution), 'rU')
+    sln = open(os.path.join(solution), 'rU')
     header = sln.readline().strip()
     sln.close()
     if header.endswith('13.00'):
@@ -940,11 +944,7 @@ def main_win(options, args):
 
   maybe_set_official_build_envvars(options, env)
 
-  if not options.solution:
-    options.solution = 'all.sln'
-
   result = -1
-  solution = os.path.join(options.build_dir, options.solution)
   command = [tool, solution] + tool_options + args
   errors = []
   # Examples:
