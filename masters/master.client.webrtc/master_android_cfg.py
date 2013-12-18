@@ -80,6 +80,15 @@ F('f_android_rel', android_webrtc().ChromiumAnnotationFactory(
       'android_bot_id': 'webrtc-main-clobber',
   }))
 
+B('Android Clang (dbg)', 'f_android_clang_dbg', scheduler=scheduler,
+  notify_on_missing=True)
+F('f_android_clang_dbg', android_webrtc().ChromiumAnnotationFactory(
+  target='Debug',
+  annotation_script='src/build/android/buildbot/bb_run_bot.py',
+  factory_properties={
+    'android_bot_id': 'webrtc-main-clang-builder-dbg',
+  }))
+
 # WebRTC native test APKs: builders.
 B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg',
   scheduler=scheduler, notify_on_missing=True, slavebuilddir='android_apk')
