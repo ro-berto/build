@@ -117,6 +117,7 @@ def GenSteps(api):
 
       return api.chromium.runtests(self.name,
                                    args,
+                                   xvfb=True,
                                    name=self._step_name(suffix),
                                    parallel=True,
                                    can_fail_build=False,
