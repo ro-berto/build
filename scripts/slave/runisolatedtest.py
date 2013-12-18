@@ -186,7 +186,9 @@ def run_test_isolated(isolate_script, test_exe, original_command):
       isolate_command.extend(['--shards', original_command.pop(0)])
     elif item == '--slave-index':
       isolate_command.extend(['--index', original_command.pop(0)])
-    elif item.startswith(('--gtest_filter', '--gtest_output')):
+    elif item.startswith(('--gtest_filter',
+                          '--gtest_output',
+                          '--test-launcher')):
       isolate_command.append(item)
 
   return run_command(isolate_command)
