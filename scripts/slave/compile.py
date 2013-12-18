@@ -603,8 +603,6 @@ def main_make(options, args):
     assert options.compiler not in ('goma', 'goma-clang')
     assert options.goma_dir is None
 
-  options.build_dir = os.path.abspath(options.build_dir)
-
   command = ['make']
   # Try to build from <build_dir>/Makefile, or if that doesn't exist,
   # from the top-level Makefile.
@@ -655,8 +653,6 @@ def main_make_android(options, args):
   if not goma_ready:
     assert options.compiler not in ('goma', 'goma-clang')
     assert options.goma_dir is None
-
-  options.build_dir = os.path.abspath(options.build_dir)
 
   if goma_ready:
     command = [os.path.join(options.goma_dir, 'goma-android-make')]
@@ -918,8 +914,6 @@ def main_win(options, args):
       tool_options = ['/Build', options.target]
     if options.project:
       tool_options.extend(['/Project', options.project])
-
-  options.build_dir = os.path.abspath(options.build_dir)
 
   def clobber():
     print('Removing %s' % options.target_output_dir)
