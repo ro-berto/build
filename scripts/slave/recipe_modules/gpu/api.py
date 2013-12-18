@@ -63,7 +63,10 @@ class GpuApi(recipe_api.RecipeApi):
     self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
 
   def checkout_steps(self):
-    yield self.m.gclient.checkout()
+    # Always force a gclient-revert in order to avoid problems when
+    # directories are added to, removed from, and re-added to the repo.
+    # crbug.com/329577
+    yield self.m.gclient.checkout(revert=True)
     gclient_data = self.m.step_history['gclient sync'].json.output
     self._build_revision = gclient_data['solutions']['src/']['revision']
     # If being run as a try server, apply the CL.
