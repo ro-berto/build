@@ -3,7 +3,9 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import json
 import re
+import tempfile
 
 
 class GTestLogParser(object):
@@ -388,3 +390,94 @@ class GTestLogParser(object):
         self._parsing_failures = False
     elif line.startswith('Failing tests:'):
       self._parsing_failures = True
+
+
+class GTestJSONParser(object):
+  def __init__(self):
+    self.json_file = None
+
+    self.passed_tests = set()
+    self.failed_tests = set()
+    self.flaky_tests = set()
+    self.test_logs = {}
+
+    self.parsing_errors = []
+
+    self.master_name = None
+
+  def ProcessLine(self, line):
+    # Deliberately do nothing - we parse out-of-band JSON summary
+    # instead of in-band stdout.
+    pass
+
+  def PassedTests(self):
+    return sorted(self.passed_tests)
+
+  def FailedTests(self, include_fails=False, include_flaky=False):
+    return sorted(self.failed_tests)
+
+  def FailureDescription(self, test):
+    return self.test_logs.get(test, [])
+
+  @staticmethod
+  def SuppressionHashes():
+    return []
+
+  def ParsingErrors(self):
+    return self.parsing_errors
+
+  def ClearParsingErrors(self):
+    self.parsing_errors = ['Cleared.']
+
+  @staticmethod
+  def DisabledTests():
+    # TODO(phajdan.jr): Count disabled tests when JSON summary includes them.
+    return 0
+
+  def FlakyTests(self):
+    return len(self.flaky_tests)
+
+  @staticmethod
+  def RunningTests():
+    return []
+
+  def OpenJSONFile(self, cmdline_path):
+    if cmdline_path:
+      self.json_file = open(cmdline_path, 'rw')
+      return cmdline_path
+    else:
+      self.json_file = tempfile.NamedTemporaryFile(mode='r')
+      return self.json_file.name
+
+  def ProcessAndCloseJSONFile(self):
+    if not self.json_file:
+      return
+
+    try:
+      json_output = self.json_file.read()
+      json_data = json.loads(json_output)
+    except ValueError:
+      self.parsing_errors = json_output.split('\n')
+    else:
+      self._ProcessJSONData(json_data)
+    finally:
+      self.json_file.close()
+      self.json_file = None
+
+  def _ProcessJSONData(self, json_data):
+    for iteration_data in json_data['per_iteration_data']:
+      for test_name, test_runs in iteration_data.iteritems():
+        if test_runs[-1]['status'] == 'SUCCESS':
+          self.passed_tests.add(test_name)
+        else:
+          self.failed_tests.add(test_name)
+
+        if len(test_runs) > 1:
+          self.flaky_tests.add(test_name)
+
+        self.test_logs.setdefault(test_name, [])
+        for run_index, run_data in enumerate(test_runs, start=1):
+          run_lines = ['%s (run #%d):' % (test_name, run_index)]
+          decoded_lines = run_data['output_snippet'].decode('string_escape')
+          run_lines.extend(decoded_lines.split('\n'))
+          self.test_logs[test_name].extend(run_lines)

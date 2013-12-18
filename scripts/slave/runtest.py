@@ -188,13 +188,17 @@ def _GenerateJSONForTestResults(options, results_tracker):
   # pylint: disable=W0703
   results_map = None
   try:
-    if os.path.exists(options.test_output_xml):
+    if (os.path.exists(options.test_output_xml) and
+        not using_gtest_json(options)):
       results_map = gtest_slave_utils.GetResultsMapFromXML(
           options.test_output_xml)
     else:
-      sys.stderr.write(
-          ('"%s" \ "%s" doesn\'t exist: Unable to generate JSON from XML, '
-           'using log output.\n') % (os.getcwd(), options.test_output_xml))
+      if using_gtest_json(options):
+        sys.stderr.write('using JSON summary output instead of gtest XML\n')
+      else:
+        sys.stderr.write(
+            ('"%s" \ "%s" doesn\'t exist: Unable to generate JSON from XML, '
+             'using log output.\n') % (os.getcwd(), options.test_output_xml))
       # The file did not get generated. See if we can generate a results map
       # from the log output.
       results_map = gtest_slave_utils.GetResultsMap(results_tracker)
@@ -337,6 +341,13 @@ def start_http_server(platform, build_dir, test_exe_path, document_root):
   return http_server
 
 
+def using_gtest_json(options):
+  """Returns true if we're using gtest JSON summary."""
+  return (options.annotate == 'gtest' and
+          not options.run_python_script and
+          not options.run_shell_script)
+
+
 def get_parsers():
   """Returns a dictionary mapping strings to log parser classes."""
   parsers = {'gtest': gtest_utils.GTestLogParser,
@@ -366,30 +377,31 @@ def list_parsers(selection):
   return shouldlist
 
 
-def select_results_tracker(selection, use_gtest):
+def select_results_tracker(options):
   """Returns a log parser class (aka results tracker class).
 
   Args:
-    selection: Name of parser to use. This is the value of the
-        of the --annotate option that's passed to this script.
-    use_gtest: Whether the gtest parser should be used. This is
-        the value of the --generate-json-file flag.
+    options: Command-line options (from OptionParser).
 
   Returns:
     A log parser class (aka results tracker class), or None.
   """
+  if (using_gtest_json(options)):
+    return gtest_utils.GTestJSONParser
+
   parsers = get_parsers()
-  if selection:
-    if selection in parsers:
-      if use_gtest and selection != 'gtest':
+  if options.annotate:
+    if options.annotate in parsers:
+      if options.generate_json_file and options.annotate != 'gtest':
         raise NotImplementedError("'%s' doesn't make sense with "
                                   "options.generate_json_file")
       else:
-        return parsers[selection]
+        return parsers[options.annotate]
     else:
-      raise KeyError("'%s' is not a valid GTest parser!!" % selection)
-  elif use_gtest:
+      raise KeyError("'%s' is not a valid GTest parser!!" % options.annotate)
+  elif options.generate_json_file:
     return parsers['gtest']
+
   return None
 
 
@@ -406,7 +418,7 @@ def create_results_tracker(tracker_class, options):
   if not tracker_class:
     return None
 
-  if tracker_class.__name__ == 'GTestLogParser':
+  if tracker_class.__name__ in ('GTestLogParser', 'GTestJSONParser'):
     tracker_obj = tracker_class()
   else:
     build_dir = os.path.abspath(options.build_dir)
@@ -595,8 +607,7 @@ def main_parse(options, _args):
   if list_parsers(options.annotate):
     return 0
 
-  tracker_class = select_results_tracker(options.annotate,
-                                         options.generate_json_file)
+  tracker_class = select_results_tracker(options)
   results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
@@ -661,8 +672,7 @@ def main_mac(options, args):
   # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options.annotate,
-                                         options.generate_json_file)
+  tracker_class = select_results_tracker(options)
   results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
@@ -676,6 +686,12 @@ def main_mac(options, args):
       http_server = start_http_server('mac', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
+
+    if using_gtest_json(options):
+      json_file_name = results_tracker.OpenJSONFile(
+          options.test_launcher_summary_output)
+      command.append('--test-launcher-summary-output=%s' % json_file_name)
+
     pipes = []
     if options.factory_properties.get('asan', False):
       symbolize = os.path.abspath(os.path.join('src', 'tools', 'valgrind',
@@ -689,6 +705,8 @@ def main_mac(options, args):
   finally:
     if http_server:
       http_server.StopServer()
+    if using_gtest_json(options):
+      results_tracker.ProcessAndCloseJSONFile()
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -903,8 +921,7 @@ def main_linux(options, args):
   # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options.annotate,
-                                         options.generate_json_file)
+  tracker_class = select_results_tracker(options)
   results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
@@ -934,6 +951,11 @@ def main_linux(options, args):
                    'True'),
           server_dir=special_xvfb_dir)
 
+    if using_gtest_json(options):
+      json_file_name = results_tracker.OpenJSONFile(
+          options.test_launcher_summary_output)
+      command.append('--test-launcher-summary-output=%s' % json_file_name)
+
     pipes = []
     # Plain ASan bots use a symbolizer script, whereas ASan+LSan and LSan bots
     # use a built-in symbolizer.
@@ -953,6 +975,8 @@ def main_linux(options, args):
       http_server.StopServer()
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
+    if using_gtest_json(options):
+      results_tracker.ProcessAndCloseJSONFile()
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -1032,8 +1056,7 @@ def main_win(options, args):
   # If --annotate=list was passed, list the log parser classes and exit.
   if list_parsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options.annotate,
-                                         options.generate_json_file)
+  tracker_class = select_results_tracker(options)
   results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
@@ -1047,12 +1070,20 @@ def main_win(options, args):
       http_server = start_http_server('win', build_dir=build_dir,
                                       test_exe_path=test_exe_path,
                                       document_root=options.document_root)
+
+    if using_gtest_json(options):
+      json_file_name = results_tracker.OpenJSONFile(
+          options.test_launcher_summary_output)
+      command.append('--test-launcher-summary-output=%s' % json_file_name)
+
     command = generate_run_isolated_command(build_dir, test_exe_path, options,
                                             command)
     result = _RunGTestCommand(command, results_tracker)
   finally:
     if http_server:
       http_server.StopServer()
+    if using_gtest_json(options):
+      results_tracker.ProcessAndCloseJSONFile()
 
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)
@@ -1094,8 +1125,7 @@ def main_android(options, args):
 
   if list_parsers(options.annotate):
     return 0
-  tracker_class = select_results_tracker(options.annotate,
-                                         options.generate_json_file)
+  tracker_class = select_results_tracker(options)
   results_tracker = create_results_tracker(tracker_class, options)
 
   if options.generate_json_file:
@@ -1273,6 +1303,9 @@ def main():
                            default=False,
                            help='Disable GLib DBus bug workaround: '
                                 'manually spawning dbus-launch')
+  option_parser.add_option('--test-launcher-summary-output',
+                           help='Path to test results file with all the info '
+                                'from the test launcher')
 
   chromium_utils.AddPropertiesOptions(option_parser)
   options, args = option_parser.parse_args()
