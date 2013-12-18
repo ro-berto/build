@@ -656,6 +656,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Real-world benchmarks:
     real_world_benchmarks = [
+        'fast_path.key_mobile_sites',
         'maps',
         'memory.mobile_memory',
         'memory.reload.2012Q3',
