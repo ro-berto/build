@@ -42,7 +42,8 @@ class Helper(object):
     self._schedulers = {}
 
   def Builder(self, name, factory, gatekeeper=None, scheduler=None,
-              builddir=None, auto_reboot=True, notify_on_missing=False):
+              builddir=None, auto_reboot=True, notify_on_missing=False,
+              slavebuilddir=None):
     category = self._defaults.get('category')
     self._builders.append({'name': name,
                            'factory': factory,
@@ -51,7 +52,8 @@ class Helper(object):
                            'builddir': builddir,
                            'category': category,
                            'auto_reboot': auto_reboot,
-                           'notify_on_missing': notify_on_missing})
+                           'notify_on_missing': notify_on_missing,
+                           'slavebuilddir': slavebuilddir})
 
   def Hourly(self, name, branch, hour='*'):
     """Helper method for the Nightly scheduler."""
@@ -134,6 +136,8 @@ class Helper(object):
                      'auto_reboot': builder['auto_reboot']}
       if builder['builddir']:
         new_builder['builddir'] = builder['builddir']
+      if builder['slavebuilddir']:
+        new_builder['slavebuilddir'] = builder['slavebuilddir']
       c['builders'].append(new_builder)
 
     # Process the main schedulers.

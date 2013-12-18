@@ -54,7 +54,8 @@ ninja_options = ['--build-tool=ninja']
 
 defaults['category'] = 'linux'
 
-B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler)
+B('Linux32 Debug', 'linux32_debug_factory', scheduler=scheduler,
+  slavebuilddir='linux32')
 F('linux32_debug_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
@@ -65,7 +66,8 @@ F('linux32_debug_factory', linux().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'},
     }))
 
-B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler)
+B('Linux32 Release', 'linux32_release_factory', scheduler=scheduler,
+  slavebuilddir='linux32')
 F('linux32_release_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -76,7 +78,8 @@ F('linux32_release_factory', linux().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'target_arch=ia32'},
     }))
 
-B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler)
+B('Linux64 Debug', 'linux64_debug_factory', scheduler=scheduler,
+  slavebuilddir='linux64')
 F('linux64_debug_factory', linux().WebRTCFactory(
     target='Debug',
     options=ninja_options,
@@ -86,7 +89,8 @@ F('linux64_debug_factory', linux().WebRTCFactory(
         'force_isolated': True,
     }))
 
-B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler)
+B('Linux64 Release', 'linux64_release_factory', scheduler=scheduler,
+  slavebuilddir='linux64')
 F('linux64_release_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,

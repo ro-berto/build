@@ -102,30 +102,34 @@ F('win_tsan_factory', win().WebRTCFactory(
         'gclient_env': { 'GYP_DEFINES' : 'build_for_tool=tsan' },
     }))
 
-B('Win32 Debug (VS2012)', 'win32_2012_debug_factory', scheduler=scheduler)
+B('Win32 Debug (VS2012)', 'win32_2012_debug_factory', scheduler=scheduler,
+  slavebuilddir='win')
 F('win32_2012_debug_factory', win().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests,
     factory_properties=win_msvs_2012_factory_properties))
 
-B('Win32 Release (VS2012)', 'win32_2012_release_factory', scheduler=scheduler)
+B('Win32 Release (VS2012)', 'win32_2012_release_factory', scheduler=scheduler,
+  slavebuilddir='win')
 F('win32_2012_release_factory', win().WebRTCFactory(
     target='Release',
     options=ninja_options,
     tests=tests,
     factory_properties=win_msvs_2012_factory_properties))
 
-B('Win64 Debug (VS2012)', 'win64_2012_debug_factory', scheduler=scheduler)
+B('Win64 Debug (VS2012)', 'win64_2012_debug_factory', scheduler=scheduler,
+  slavebuilddir='win')
 F('win64_2012_debug_factory', win().WebRTCFactory(
-    target='Debug',
+    target='Debug_x64',
     options=ninja_options,
     tests=tests,
     factory_properties=win_msvs_2012_x64_factory_properties))
 
-B('Win64 Release (VS2012)', 'win64_2012_release_factory', scheduler=scheduler)
+B('Win64 Release (VS2012)', 'win64_2012_release_factory', scheduler=scheduler,
+  slavebuilddir='win')
 F('win64_2012_release_factory', win().WebRTCFactory(
-    target='Release',
+    target='Release_x64',
     options=ninja_options,
     tests=tests,
     factory_properties=win_msvs_2012_x64_factory_properties))
