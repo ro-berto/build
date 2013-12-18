@@ -688,7 +688,7 @@ def main_mac(options, args):
                                       document_root=options.document_root)
 
     if using_gtest_json(options):
-      json_file_name = results_tracker.OpenJSONFile(
+      json_file_name = results_tracker.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
@@ -706,7 +706,7 @@ def main_mac(options, args):
     if http_server:
       http_server.StopServer()
     if using_gtest_json(options):
-      results_tracker.ProcessAndCloseJSONFile()
+      results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -952,7 +952,7 @@ def main_linux(options, args):
           server_dir=special_xvfb_dir)
 
     if using_gtest_json(options):
-      json_file_name = results_tracker.OpenJSONFile(
+      json_file_name = results_tracker.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
@@ -976,7 +976,7 @@ def main_linux(options, args):
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
     if using_gtest_json(options):
-      results_tracker.ProcessAndCloseJSONFile()
+      results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
     _GenerateJSONForTestResults(options, results_tracker)
@@ -1072,7 +1072,7 @@ def main_win(options, args):
                                       document_root=options.document_root)
 
     if using_gtest_json(options):
-      json_file_name = results_tracker.OpenJSONFile(
+      json_file_name = results_tracker.PrepareJSONFile(
           options.test_launcher_summary_output)
       command.append('--test-launcher-summary-output=%s' % json_file_name)
 
@@ -1083,7 +1083,7 @@ def main_win(options, args):
     if http_server:
       http_server.StopServer()
     if using_gtest_json(options):
-      results_tracker.ProcessAndCloseJSONFile()
+      results_tracker.ProcessJSONFile()
 
   if options.enable_pageheap:
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)

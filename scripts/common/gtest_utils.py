@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import json
+import os
 import re
 import tempfile
 
@@ -394,7 +395,8 @@ class GTestLogParser(object):
 
 class GTestJSONParser(object):
   def __init__(self):
-    self.json_file = None
+    self.json_file_path = None
+    self.delete_json_file = False
 
     self.passed_tests = set()
     self.failed_tests = set()
@@ -441,28 +443,33 @@ class GTestJSONParser(object):
   def RunningTests():
     return []
 
-  def OpenJSONFile(self, cmdline_path):
+  def PrepareJSONFile(self, cmdline_path):
     if cmdline_path:
-      self.json_file = open(cmdline_path, 'rw')
-      return cmdline_path
+      self.json_file_path = cmdline_path
+      # If the caller requested JSON summary, do not delete it.
+      self.delete_json_file = False
     else:
-      self.json_file = tempfile.NamedTemporaryFile(mode='r')
-      return self.json_file.name
+      fd, self.json_file_path = tempfile.mkstemp()
+      os.close(fd)
+      # When we create the file ourselves, delete it to avoid littering.
+      self.delete_json_file = True
+    return self.json_file_path
 
-  def ProcessAndCloseJSONFile(self):
-    if not self.json_file:
+  def ProcessJSONFile(self):
+    if not self.json_file_path:
       return
 
-    try:
-      json_output = self.json_file.read()
-      json_data = json.loads(json_output)
-    except ValueError:
-      self.parsing_errors = json_output.split('\n')
-    else:
-      self._ProcessJSONData(json_data)
-    finally:
-      self.json_file.close()
-      self.json_file = None
+    with open(self.json_file_path) as json_file:
+      try:
+        json_output = json_file.read()
+        json_data = json.loads(json_output)
+      except ValueError:
+        self.parsing_errors = json_output.split('\n')
+      else:
+        self._ProcessJSONData(json_data)
+
+    if self.delete_json_file:
+      os.remove(self.json_file_path)
 
   def _ProcessJSONData(self, json_data):
     for iteration_data in json_data['per_iteration_data']:
