@@ -18,6 +18,7 @@ categories_steps = {
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
+    'cast_unittests',
     'cc_unittests',
     'chrome_frame_net_tests',
     'chromedriver_unittests',

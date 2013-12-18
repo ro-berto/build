@@ -342,6 +342,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('cacheinvalidation_unittests', fp)
     if R('cacheinvalidation_br'):
       f.AddBuildrunnerGTest('cacheinvalidation_unittests', fp)
+    if R('cast', 'cast_unittests'):
+      f.AddGTestTestStep('cast_unittests', fp)
+    if R('cast_br'):
+      f.AddBuildrunnerGTest('cast_unittests', fp)
     if R('cc_unittests'):
       f.AddGTestTestStep('cc_unittests', fp)
     if R('cc_unittests_br'):

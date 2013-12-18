@@ -27,6 +27,7 @@ sharded_tests = [
   'base_unittests',
   'browser_tests',
   'cacheinvalidation_unittests',
+  'cast_unittests',
   'cc_unittests',
   'chrome_elf_unittests',
   'chromedriver_tests',
@@ -101,6 +102,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
     tests=[
       'browser_tests',
       'cacheinvalidation_unittests',
+      'cast',
       'cc_unittests',
       'chromedriver_unittests',
       'chromedriver2_unittests',
@@ -225,6 +227,7 @@ F('rel_x64_unit_1', win_tester().ChromiumFactory(
     tests=[
       'browser_tests',
       'cacheinvalidation_unittests',
+      'cast_unittests',
       'cc_unittests',
       'chromedriver_unittests',
       'chromedriver2_unittests',
@@ -379,6 +382,7 @@ F('dbg_unit_1', win_tester().ChromiumFactory(
       'aura',
       'base_unittests',
       'cacheinvalidation_unittests',
+      'cast',
       'cc_unittests',
       'chrome_elf_unittests',
       'chromedriver_unittests',
