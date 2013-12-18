@@ -478,6 +478,11 @@ class GTestJSONParser(object):
         self.test_logs.setdefault(test_name, [])
         for run_index, run_data in enumerate(test_runs, start=1):
           run_lines = ['%s (run #%d):' % (test_name, run_index)]
-          decoded_lines = run_data['output_snippet'].decode('string_escape')
+          # Make sure the annotations are ASCII to avoid character set related
+          # errors. They are mostly informational anyway, and more detailed
+          # info can be obtained from the original JSON output.
+          ascii_lines = run_data['output_snippet'].encode('ascii',
+                                                          errors='replace')
+          decoded_lines = ascii_lines.decode('string_escape')
           run_lines.extend(decoded_lines.split('\n'))
           self.test_logs[test_name].extend(run_lines)
