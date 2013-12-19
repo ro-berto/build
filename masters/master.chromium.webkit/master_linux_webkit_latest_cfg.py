@@ -84,7 +84,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
         'generate_gtest_json': True,
         'gs_bucket': 'gs://webkit-asan',
         'test_results_server': 'test-results.appspot.com',
-        'time_out_ms': '18000',
+        'time_out_ms': '48000', # ASAN is roughly 8x slower than Release.
     }))
 
 
