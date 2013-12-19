@@ -23,6 +23,10 @@ CATEGORIES = object()
 class StepNotifier(MailNotifier):
   """This is a status notifier which can selectively mail for certain steps."""
 
+  @staticmethod
+  def log(msg):
+    print '[StepNotifier] %s' % msg
+
   def __init__(self, watch_mode, interesting_steps, boring_steps=None,
                **kwargs):
     """
@@ -57,8 +61,8 @@ class StepNotifier(MailNotifier):
     if any((arg in ('builders', 'categores') for arg in kwargs)):
       raise interfaces.ParameterError(
           'Please do not specify |builders| or |categories| in StepNotifier.')
-    keys = set(self.interesting_steps) + set(self.boring_steps)
-    keys.pop('*')
+    keys = set(self.interesting_steps) | set(self.boring_steps)
+    keys.discard('*')
     if self.watch_mode is BUILDERS:
       kwargs['builders'] = list(keys)
     elif self.watch_mode is CATEGORIES:
@@ -66,6 +70,11 @@ class StepNotifier(MailNotifier):
     else:
       raise interfaces.ParameterError(
           'Please specify either BUILDERS or CATEGORIES for |watch_mode|.')
+
+    self.log('Interesting steps: %s' % self.interesting_steps)
+    self.log('Boring steps: %s' % self.boring_steps)
+    self.log('Instantiating MailNotifier with: %s' % kwargs)
+
     # Don't use super because MailNotifier is an old-style class.
     MailNotifier.__init__(self, **kwargs)
 
@@ -77,19 +86,24 @@ class StepNotifier(MailNotifier):
     * we care about steps on the builder with this name
     * we care about steps on any of this builder's categories
     """
-    if '*' in self.categories:
+    if '*' in (self.interesting_steps or {}):
       self.watched.append(builder)
+      self.log('Interested in %s (wildcard).' % builder.name)
       return True
 
     if builder.name in (self.builders or []):
       self.watched.append(builder)
+      self.log('Interested in %s (in builders).' % builder.name)
       return True
 
     if any([cat in (self.categories or [])
         for cat in builder.category.split('|')]):
+      self.log('Interested in %s (%s in categories).' % (
+          builder.name, builder.category))
       self.watched.append(builder)
       return True
 
+    self.log('Not interested in %s.' % builder.name)
     return False
 
   def builderAdded(self, name, builder):
@@ -110,35 +124,48 @@ class StepNotifier(MailNotifier):
       # We should never be here (we shouldn't be subscribed) but just in case.
       return False
 
-    watched_steps = set(self.interesting_steps.get('*'))
+    watched_steps = set(self.interesting_steps.get('*', []))
     if self.watch_mode is BUILDERS:
-      watched_steps |= (set(self.interesting_steps.get(builder.name)) -
-                        set(self.boring_steps.get(builder.name)))
+      watched_steps |= (set(self.interesting_steps.get(builder.name, [])) -
+                        set(self.boring_steps.get(builder.name, [])))
     else:
       for category in builder.category.split('|'):
-        watched_steps |= (set(self.interesting_steps.get(category)) -
-                          set(self.boring_steps.get(category)))
-    watched_steps -= set(self.boring_steps.get('*'))
+        watched_steps |= (set(self.interesting_steps.get(category, [])) -
+                          set(self.boring_steps.get(category, [])))
+    watched_steps -= set(self.boring_steps.get('*', []))
+    self.log('Watched steps: %s' % watched_steps)
+    self.log('Mail mode: %s' % self.mode)
+
+    def log_mail_reason(mode, step, result):
+      self.log('Mode is %s and step %s was a %s; sending mail.' % (
+          mode, step, result))
 
     for step in build.getSteps():
-      if step.getName() not in watched_steps:
+      name = step.getName()
+      if name not in watched_steps:
         continue
       result = step.getResults()[0]
 
       if self.mode == "passing" and result == SUCCESS:
+        log_mail_reason('passing', name, 'success')
         return True
       if self.mode == "warnings" and result != SUCCESS:
+        log_mail_reason('warnings', name, 'warning')
         return True
       if self.mode == "failing" and result == FAILURE:
+        log_mail_reason('failing', name, 'failure')
         return True
       # TODO(agable): Handle 'problem' and 'change' on a step-by-step level.
       if self.mode == "problem":
         prev = build.getPreviousBuild()
         if result == FAILURE and (prev and prev.getResults() != FAILURE):
+          log_mail_reason('problem', name, 'failure')
           return True
       if self.mode == "change":
         prev = build.getPreviousBuild()
         if not prev or prev.getResults() != result:
+          log_mail_reason('change', name, result)
           return True
 
+    self.log('Not mailing')
     return False
