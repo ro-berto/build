@@ -18,7 +18,8 @@ from common import chromium_utils
 
 
 def main():
-  master_urls = ['http://build.chromium.org/p/chromium']
+  master_urls = ['http://build.chromium.org/p/chromium',
+                 'http://build.chromium.org/p/chromium.lkgr']
 
   json = os.path.join(SLAVE_DIR, 'gatekeeper.json')
   args = ['-v', '--json=%s' % json]

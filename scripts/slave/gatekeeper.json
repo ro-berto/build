@@ -61,6 +61,24 @@
           }
         }
       }
+    ],
+    "http://build.chromium.org/p/chromium.lkgr": [
+      {
+        "tree_notify": [
+          "jschuh@chromium.org"
+        ],
+
+        "builders": {
+          "Linux x64": {
+            "categories": [
+              "chromium_archive_build",
+              "chromium_compile",
+              "chromium_windows",
+              "gclient"
+            ]
+          }
+        }
+      }
     ]
   },
 
