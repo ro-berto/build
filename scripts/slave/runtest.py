@@ -12,6 +12,8 @@ For a list of command-line options, call this script with '--help'.
 """
 
 import copy
+import datetime
+import hashlib
 import json
 import logging
 import optparse
@@ -572,6 +574,47 @@ def upload_profiling_data(options, args):
   return chromium_utils.RunCommand(cmd)
 
 
+def upload_gtest_json_summary(json_path, build_properties, test_exe):
+  """Archives gtest results to Google Storage."""
+  if not os.path.exists(json_path):
+    return
+
+  with open(json_path) as orig_json:
+    orig_json_data = json.load(orig_json)
+  fd, target_json_path = tempfile.mkstemp()
+  try:
+    target_json = {
+      # Increment the version number when making incompatible changes
+      # to the layout of this dict. This way clients can recognize different
+      # formats instead of guessing.
+      'version': 1,
+      'timestamp': str(datetime.datetime.now()),
+      'test_exe': test_exe,
+      'build_properties': build_properties,
+      'gtest_results': orig_json_data,
+    }
+    target_json_serialized = json.dumps(target_json, indent=2)
+    os.write(fd, target_json_serialized)
+
+    today = datetime.date.today()
+    weekly_timestamp = today - datetime.timedelta(days=today.weekday())
+    # Pick a non-colliding file name by hashing the JSON contents
+    # (build metadata should be different from build to build).
+    target_name = hashlib.sha1(target_json_serialized).hexdigest()
+    slave_utils.GSUtilCopy(
+        target_json_path,
+        # Use a directory structure that makes it easy to filter by year,
+        # month and week based just on the file name.
+        'gs://chromium-gtest-results/%d/%d/%d/%s.json' % (
+            weekly_timestamp.year,
+            weekly_timestamp.month,
+            weekly_timestamp.day,
+            target_name))
+  finally:
+    os.close(fd)
+    os.remove(target_json_path)
+
+
 def generate_run_isolated_command(build_dir, test_exe_path, options, command):
   """Convert the command to run through the run isolate script.
 
@@ -706,6 +749,9 @@ def main_mac(options, args):
     if http_server:
       http_server.StopServer()
     if using_gtest_json(options):
+      upload_gtest_json_summary(json_file_name,
+                                options.build_properties,
+                                test_exe)
       results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
@@ -976,6 +1022,9 @@ def main_linux(options, args):
     if start_xvfb:
       xvfb.StopVirtualX(slave_name)
     if using_gtest_json(options):
+      upload_gtest_json_summary(json_file_name,
+                                options.build_properties,
+                                test_exe)
       results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
@@ -1083,6 +1132,9 @@ def main_win(options, args):
     if http_server:
       http_server.StopServer()
     if using_gtest_json(options):
+      upload_gtest_json_summary(json_file_name,
+                                options.build_properties,
+                                test_exe)
       results_tracker.ProcessJSONFile()
 
   if options.enable_pageheap:
