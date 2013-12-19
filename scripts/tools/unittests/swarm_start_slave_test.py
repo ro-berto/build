@@ -25,7 +25,7 @@ import start_slave
 class Options(object):
   def __init__(self):
     self.swarm_server = 'http://dummy-swarm-server.com'
-    self.server_port = '443'
+    self.port = '443'
 
 
 class MockOptParser(object):

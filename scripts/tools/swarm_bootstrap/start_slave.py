@@ -291,7 +291,7 @@ def main():
 
     slave_machine = os.path.join(BASE_DIR, 'slave_machine.py')
 
-    SetupAutoStartup(slave_machine, options.swarm_server, options.server_port,
+    SetupAutoStartup(slave_machine, options.swarm_server, options.port,
                      dimensions_file)
 
   import slave_machine  # pylint: disable-msg=F0401
