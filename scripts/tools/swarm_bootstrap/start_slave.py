@@ -245,14 +245,14 @@ def SetupAutoStartupUnix(command):
   return True
 
 
-def SetupAutoStartup(slave_machine, swarm_server, dimensionsfile):
+def SetupAutoStartup(slave_machine, swarm_server, server_port, dimensionsfile):
   logging.info('Generating AutoStartup')
 
   command = [
     sys.executable,
     slave_machine,
     '-a', swarm_server,
-    '-p', '443',
+    '-p', server_port,
     '-r', '400',
     '--keep_alive',
     '-v',
@@ -269,6 +269,7 @@ def SetupAutoStartup(slave_machine, swarm_server, dimensionsfile):
 def main():
   parser = optparse.OptionParser(description=sys.modules[__name__].__doc__)
   parser.add_option('-s', '--swarm-server')
+  parser.add_option('-p', '--port')
   options, _args = parser.parse_args()
 
   # Setup up logging to a constant file.
@@ -290,7 +291,8 @@ def main():
 
     slave_machine = os.path.join(BASE_DIR, 'slave_machine.py')
 
-    SetupAutoStartup(slave_machine, options.swarm_server, dimensions_file)
+    SetupAutoStartup(slave_machine, options.swarm_server, options.server_port,
+                     dimensions_file)
 
   import slave_machine  # pylint: disable-msg=F0401
   slave_machine.Restart()

@@ -109,7 +109,7 @@ def main():
   if not options.no_auto_start:
     print('Setup up swarm script to run on startup...')
     if not start_slave.SetupAutoStartup(
-        slave_machine, options.swarm_server, options.dimensionsfile):
+        slave_machine, options.swarm_server, '443', options.dimensionsfile):
       return 1
 
   if not options.no_reboot:
