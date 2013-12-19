@@ -535,12 +535,6 @@ class ChromiumCommands(commands.FactoryCommands):
                               factory_properties=factory_properties,
                               tool_opts=tool_options)
 
-  def AddChromeFramePerfTests(self, factory_properties):
-    self.AddAnnotatedPerfStep('chrome_frame_perf', None, 'graphing',
-                              cmd_name='chrome_frame_perftests',
-                              step_name='chrome_frame_perf',
-                              factory_properties=factory_properties)
-
   def AddDeps2GitStep(self, verify=True):
     J = self.PathJoin
     deps2git_tool = J(self._repository_root, 'tools', 'deps2git', 'deps2git.py')

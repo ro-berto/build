@@ -162,20 +162,13 @@ s/win_rel/builds/102110/steps/sizes/logs/stdio">stdio</a></td></tr><tr><td =
 style=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8530;"=
 >sync_integration_tests<br/><a href=3D"http://build.chromium.org/p/tryserve=
 r.chromium/builders/win_rel/builds/102110/steps/sync_integration_tests/logs=
-/stdio">stdio</a></td></tr><tr><td style=3D"">chrome_frame_net_tests<br/><a=
- href=3D"http://build.chromium.org/p/tryserver.chromium/builders/win_rel/bu=
-ilds/102110/steps/chrome_frame_net_tests/logs/stdio">stdio</a></td></tr><tr=
-><td style=3D"">chrome_frame_unittests<br/><a href=3D"http://build.chromium=
-.org/p/tryserver.chromium/builders/win_rel/builds/102110/steps/chrome_frame=
-_unittests/logs/stdio">stdio</a></td></tr><tr><td style=3D"">chrome_frame_t=
-ests<br/><a href=3D"http://build.chromium.org/p/tryserver.chromium/builders=
-/win_rel/builds/102110/steps/chrome_frame_tests/logs/stdio">stdio</a></td><=
-/tr><tr><td style=3D"">nacl_integration<br/><a href=3D"http://build.chromiu=
-m.org/p/tryserver.chromium/builders/win_rel/builds/102110/steps/nacl_integr=
-ation/logs/stdio">stdio</a></td></tr><tr><td style=3D"color: #FFFFFF; backg=
-round-color: #8fdf5f; border-color: #4F8530;">process_dumps<br/><a href=3D"=
-http://build.chromium.org/p/tryserver.chromium/builders/win_rel/builds/1021=
-10/steps/process_dumps/logs/stdio">stdio</a></td></tr></table>
+/stdio">stdio</a></td></tr><tr><td style=3D"">nacl_integration<br/><a href=
+=3D"http://build.chromium.org/p/tryserver.chromium/builders/win_rel/builds/=
+102110/steps/nacl_integration/logs/stdio">stdio</a></td></tr><tr><td style=
+=3D"color: #FFFFFF; background-color: #8fdf5f; border-color: #4F8530;">proc=
+ess_dumps<br/><a href=3D"http://build.chromium.org/p/tryserver.chromium/bui=
+lders/win_rel/builds/102110/steps/process_dumps/logs/stdio">stdio</a></td><=
+/tr></table>
 <br>
 FAQ: <a href=3D"https://sites.google.com/a/chromium.org/dev/developers/test=
 ing/try-server-usage">

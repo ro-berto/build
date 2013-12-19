@@ -778,32 +778,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('gpu_content_tests'):
       f.AddGpuContentTests(fp)
 
-    # ChromeFrame tests:
-    if R('chrome_frame_perftests'):
-      f.AddChromeFramePerfTests(fp)
-    if R('chrome_frame'):
-      # Add all major CF tests.
-      f.AddGTestTestStep('chrome_frame_net_tests', fp)
-      f.AddGTestTestStep('chrome_frame_unittests', fp)
-      f.AddGTestTestStep('chrome_frame_tests', fp)
-    elif R('chrome_frame_br'):
-      f.AddBuildrunnerGTest('chrome_frame_net_tests', fp)
-      f.AddBuildrunnerGTest('chrome_frame_unittests', fp)
-      f.AddBuildrunnerGTest('chrome_frame_tests', fp)
-    else:
-      if R('chrome_frame_net_tests'):
-        f.AddGTestTestStep('chrome_frame_net_tests', fp)
-      if R('chrome_frame_net_tests_br'):
-        f.AddBuildrunnerGTest('chrome_frame_net_tests', fp)
-      if R('chrome_frame_unittests'):
-        f.AddGTestTestStep('chrome_frame_unittests', fp)
-      if R('chrome_frame_unittests_br'):
-        f.AddBuildrunnerGTest('chrome_frame_unittests', fp)
-      if R('chrome_frame_tests'):
-        f.AddGTestTestStep('chrome_frame_tests', fp)
-      if R('chrome_frame_tests_br'):
-        f.AddBuildrunnerGTest('chrome_frame_tests', fp)
-
     def S(test, prefix, add_functor, br_functor=None):
       """Find any tests with a specific prefix and add them to the build.
 

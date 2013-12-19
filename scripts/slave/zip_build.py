@@ -110,7 +110,6 @@ def FileRegexWhitelist(options):
     # TODO(nsylvain): This should really be defined somewhere else.
     return (r'^(chrome[_.]dll|chrome[_.]exe'
             # r'|browser_test.+|unit_tests'
-            # r'|chrome_frame_.*tests'
             r')\.pdb$')
 
   return '$NO_FILTER^'
