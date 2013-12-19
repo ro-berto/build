@@ -85,17 +85,19 @@ F('f_win_rel', win().ChromiumFactory(
 #
 # TODO: Switch back to trigger, http://crbug.com/102331
 
-B('Vista Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger')
+B('Win7 Tests', 'f_win_rel_tests', scheduler='s7_webkit_builder_rel_trigger')
 F('f_win_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
       'installer',
+      'browser_tests',
+      'content_browsertests',
       'telemetry_unittests',
       'unit',
     ],
     factory_properties={
-        'perf_id': 'chromium-rel-vista-webkit',
+        'perf_id': 'chromium-rel-win7-webkit',
         'show_perf_results': True,
         'start_crash_handler': True,
         'test_results_server': 'test-results.appspot.com',
