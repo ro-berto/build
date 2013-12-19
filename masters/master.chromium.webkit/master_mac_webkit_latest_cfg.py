@@ -107,7 +107,7 @@ F('f_webkit_rel_tests_107', mac().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('WebKit Mac10.8', 'f_webkit_rel_tests_108', auto_reboot=False,
+B('WebKit Mac10.8', 'f_webkit_rel_tests_108',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108', mac().ChromiumFactory(
     slave_type='Tester',
@@ -120,7 +120,7 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
-B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina', auto_reboot=False,
+B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
     tests=blink_tests,
@@ -138,7 +138,7 @@ F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
         'test_results_server': 'test-results.appspot.com',
     }))
 
-B('WebKit Mac10.9', 'f_webkit_rel_tests_109', auto_reboot=False,
+B('WebKit Mac10.9', 'f_webkit_rel_tests_109',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_109', mac().ChromiumFactory(
     slave_type='Tester',
