@@ -579,8 +579,12 @@ def upload_gtest_json_summary(json_path, build_properties, test_exe):
   if not os.path.exists(json_path):
     return
 
-  with open(json_path) as orig_json:
-    orig_json_data = json.load(orig_json)
+  orig_json_data = 'invalid'
+  try:
+    with open(json_path) as orig_json:
+      orig_json_data = json.load(orig_json)
+  except ValueError:
+    pass
   fd, target_json_path = tempfile.mkstemp()
   try:
     target_json = {
