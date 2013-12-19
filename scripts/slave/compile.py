@@ -427,6 +427,9 @@ def main_xcode(options, args):
     assert options.compiler not in ('goma', 'goma-clang')
     assert options.goma_dir is None
 
+  # Print some basic information about xcodebuild to ease debugging.
+  chromium_utils.RunCommand(['xcodebuild', '-sdk', '-version'], env=env)
+
   # If the project isn't in args, add all.xcodeproj to simplify configuration.
   command = ['xcodebuild', '-configuration', options.target]
 
