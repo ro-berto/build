@@ -7,6 +7,13 @@ import os
 import sys
 import unittest
 
+import test_env  # pylint: disable=W0611
+from common import find_depot_tools  # pylint: disable=W0611
+
+import mock
+
+from testing_support import auto_stub
+
 SWARM_BOOTSTRAP_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     'swarm_bootstrap')
@@ -15,14 +22,31 @@ sys.path.insert(0, SWARM_BOOTSTRAP_DIR)
 import start_slave
 
 
-class SwarmStartSlaveTest(unittest.TestCase):
-  def setUp(self):
-    # Ensure that none of the tests try to actually write files.
-    self.old_write_to_json = start_slave.WriteJsonToFile
-    start_slave.WriteJsonToFile = lambda _filepath, _data: True
+class Options(object):
+  def __init__(self):
+    self.swarm_server = 'http://dummy-swarm-server.com'
 
-  def tearDown(self):
-    start_slave.WriteJsonToFile = self.old_write_to_json
+
+class MockOptParser(object):
+  def __init__(self, description):
+    pass
+
+  def add_option(self, _short_flag, _long_flag):
+    pass
+
+  def parse_args(self):  # pylint:disable=R0201
+    return Options(), []
+
+
+class SwarmStartSlaveTest(auto_stub.TestCase):
+  def setUp(self):
+    super(SwarmStartSlaveTest, self).setUp()
+
+    # Ensure that none of the tests try to actually write files or modify
+    # cronjobs.
+    self.mock(start_slave.subprocess, 'call', mock.Mock())
+    self.mock(start_slave.subprocess, 'check_call', mock.Mock())
+    self.mock(start_slave, 'WriteToFile', mock.Mock())
 
   def test_dimensions(self):
     bits = start_slave.GetArchitectureSize()
@@ -75,11 +99,28 @@ class SwarmStartSlaveTest(unittest.TestCase):
         '6.2',
         start_slave.ConvertWindowsVersion('CYGWIN_NT-6.2.9200'))
 
-  def test_main(self):  # pylint: disable=R0201
-    # Make sure that main can run without crashing, because if it crash all
-    # the swarm slaves will be unable to restart themselves and they'll need
-    # to be manually reset.
+  def check_start_slave_main(self, platform):
+    """Calls start_slave main and ensure it doesn't crash for the given
+    platform.
+    """
+    self.mock(start_slave.optparse, 'OptionParser', MockOptParser)
+    self.mock(start_slave.sys, 'platform', platform)
+
     start_slave.main()
+
+  def test_main_linux(self):  # pylint: disable=R0201
+    self.check_start_slave_main('linux2')
+
+  def test_main_mac(self):  # pylint: disable=R0201
+    self.mock(start_slave.platform, 'mac_ver',
+              mock.Mock(return_value=('10.7', (), '')))
+
+    self.check_start_slave_main('darwin')
+
+  def test_main_win(self):  # pylint: disable=R0201
+    self.mock(start_slave.platform, 'version', mock.Mock(return_value='5.1'))
+
+    self.check_start_slave_main('win32')
 
 
 if __name__ == '__main__':

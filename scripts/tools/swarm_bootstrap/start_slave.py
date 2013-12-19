@@ -3,13 +3,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-"""This file is needed by Google Cloud Compute Engine slaves."""
+"""Sets up the swarming slave to connect to the swarm server.
+
+This file is uploaded the swarming server so the swarming slaves can update
+their dimensions and startup method easily.
+"""
 
 import json
 import logging
+import logging.handlers
+import optparse
+import os
 import platform
 import socket
+import subprocess
 import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 # A mapping between sys.platform values and the corresponding swarm name
 # for that platform.
@@ -21,18 +32,26 @@ PLATFORM_MAPPING = {
 }
 
 
-def WriteJsonToFile(filepath, data):
-  """Writes out a json file.
+def WriteToFile(filepath, content):
+  """Writes out a file.
 
   Returns True on success.
   """
   try:
     with open(filepath, mode='w') as f:
-      f.write(json.dumps(data, sort_keys=True, indent=2))
+      f.write(content)
     return True
   except IOError as e:
-    logging.error('Cannot write file %s: %s\n%s', filepath, data, e)
+    logging.error('Cannot write file %s: %s', filepath, e)
     return False
+
+
+def WriteJsonToFile(filepath, data):
+  """Writes out a json file.
+
+  Returns True on success.
+  """
+  return WriteToFile(filepath, json.dumps(data, sort_keys=True, indent=2))
 
 
 def ConvertMacVersion(version):
@@ -134,6 +153,8 @@ def GenerateAndWriteDimensions(dimensions_file):
   Returns:
     0 if the dimension file is successfully generated, 1 otherwise.
   """
+  logging.info('Generating and writing dimensions to %s', dimensions_file)
+
   hostname = socket.gethostname().lower().split('.', 1)[0]
   dimensions = GetChromiumDimensions(hostname, sys.platform,
                                      GetPlatformVersion())
@@ -144,12 +165,132 @@ def GenerateAndWriteDimensions(dimensions_file):
   return 0
 
 
-def main():
-  # TODO(csharp): Write the logs to a local file.
+def SetupAutoStartupWin(command):
+  """Uses Startup folder in the Start Menu."""
+  # TODO(maruel): Not always true. Read from registry if needed.
+  filepath = os.path.expanduser(
+      '~\\AppData\\Roaming\\Microsoft\\Windows\\'
+      'Start Menu\\Programs\\Startup\\run_swarm_bot.bat')
+  content = '@cd /d ' + BASE_DIR + ' && ' + ' '.join(command)
+  return WriteToFile(filepath, content)
 
-  # TODO(csharp): Update the auto start code to ensure the dimensions that are
-  # written out are the ones the machine will read.
-  GenerateAndWriteDimensions('dimensions.in')
+
+def GenerateLaunchdPlist(command):
+  """Generates a plist with the corresponding command."""
+  # The documentation is available at:
+  # https://developer.apple.com/library/mac/documentation/Darwin/Reference/ \
+  #    ManPages/man5/launchd.plist.5.html
+  entries = [
+    '<key>Label</key><string>org.swarm.bot</string>',
+    '<key>StandardOutPath</key><string>swarm_bot.log</string>',
+    '<key>StandardErrorPath</key><string>swarm_bot-err.log</string>',
+    '<key>LimitLoadToSessionType</key><array><string>Aqua</string></array>',
+    '<key>RunAtLoad</key><true/>',
+    '<key>Umask</key><integer>18</integer>',
+
+    '<key>EnvironmentVariables</key>',
+    '<dict>',
+    '  <key>PATH</key>',
+    '  <string>/opt/local/bin:/opt/local/sbin:/usr/local/sbin:/usr/local/bin'
+      ':/usr/sbin:/usr/bin:/sbin:/bin</string>',
+    '</dict>',
+
+    '<key>SoftResourceLimits</key>',
+    '<dict>',
+    '  <key>NumberOfFiles</key>',
+    '  <integer>8000</integer>',
+    '</dict>',
+  ]
+  entries.append('<key>Program</key><string>%s</string>' % command[0])
+  entries.append('<key>ProgramArguments</key>')
+  entries.append('<array>')
+  # Command[0] must be passed as an argument.
+  entries.extend('  <string>%s</string>' % i for i in command)
+  entries.append('</array>')
+  entries.append('<key>WorkingDirectory</key><string>%s</string>' % BASE_DIR)
+  header = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" '
+    '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
+    '<plist version="1.0">\n'
+    '  <dict>\n'
+    + ''.join('    %s\n' % l for l in entries) +
+    '  </dict>\n'
+    '</plist>\n')
+  return header
+
+
+def SetupAutoStartupOSX(command):
+  """Uses launchd with auto-login user."""
+  plistname = os.path.expanduser('~/Library/LaunchAgents/org.swarm.bot.plist')
+  return WriteToFile(plistname, GenerateLaunchdPlist(command))
+
+
+def SetupAutoStartupUnix(command):
+  """Uses crontab."""
+  # The \n is very important.
+  content = '@reboot cd %s && %s\n' % (BASE_DIR, ' '.join(command))
+  if not WriteToFile('mycron', content):
+    return False
+
+  try:
+    # It returns 1 if there was no cron job set.
+    subprocess.call(['crontab', '-r'])
+    subprocess.check_call(['crontab', 'mycron'])
+  finally:
+    try:
+      os.remove('mycron')
+    except OSError as e:
+      logging.warning('Unable to remove the crontab file, %s', e)
+  return True
+
+
+def SetupAutoStartup(slave_machine, swarm_server, dimensionsfile):
+  logging.info('Generating AutoStartup')
+
+  command = [
+    sys.executable,
+    slave_machine,
+    '-a', swarm_server,
+    '-p', '443',
+    '-r', '400',
+    '--keep_alive',
+    '-v',
+    dimensionsfile,
+  ]
+  if sys.platform == 'win32':
+    return SetupAutoStartupWin(command)
+  elif sys.platform == 'darwin':
+    return SetupAutoStartupOSX(command)
+  else:
+    return SetupAutoStartupUnix(command)
+
+
+def main():
+  parser = optparse.OptionParser(description=sys.modules[__name__].__doc__)
+  parser.add_option('-s', '--swarm-server')
+  options, _args = parser.parse_args()
+
+  # Setup up logging to a constant file.
+  logging_rotating_file = logging.handlers.RotatingFileHandler(
+      'start_slave.log',
+      maxBytes=2 * 1024 * 1024, backupCount=2)
+  logging_rotating_file.setLevel(logging.DEBUG)
+  logging_rotating_file.setFormatter(logging.Formatter(
+      '%(asctime)s %(levelname)-8s %(module)15s(%(lineno)4d): %(message)s'))
+  logging.getLogger('').addHandler(logging_rotating_file)
+
+  if options.swarm_server:
+    dimensions_file = os.path.join(BASE_DIR, 'dimensions.in')
+
+    # Only reset the dimensions if the server is given, because the auto
+    # startup code needs to also be run to ensure the slave is reading the
+    # correct dimensions file.
+    GenerateAndWriteDimensions(dimensions_file)
+
+    slave_machine = os.path.join(BASE_DIR, 'slave_machine.py')
+
+    SetupAutoStartup(slave_machine, options.swarm_server, dimensions_file)
 
   import slave_machine  # pylint: disable-msg=F0401
   slave_machine.Restart()

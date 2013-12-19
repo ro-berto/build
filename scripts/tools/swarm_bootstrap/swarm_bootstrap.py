@@ -23,20 +23,6 @@ import start_slave
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def WriteToFile(filepath, content):
-  """Writes out a file.
-
-  Returns True on success.
-  """
-  try:
-    with open(filepath, mode='w') as f:
-      f.write(content)
-    return True
-  except IOError as e:
-    logging.error('Cannot write file %s: %s', filepath, e)
-    return False
-
-
 def DownloadSwarmBot(swarm_server):
   """Downloads the latest version of swarm_bot code directly from the Swarm
   server.
@@ -72,103 +58,9 @@ def CreateStartSlave(filepath):
   content = (
     'import slave_machine\n'
     'slave_machine.Restart()\n')
-  return WriteToFile(filepath, content)
+  return start_slave.WriteToFile(filepath, content)
 
 
-def SetupAutoStartupWin(command):
-  """Uses Startup folder in the Start Menu."""
-  # TODO(maruel): Not always true. Read from registry if needed.
-  filepath = os.path.expanduser(
-      '~\\AppData\\Roaming\\Microsoft\\Windows\\'
-      'Start Menu\\Programs\\Startup\\run_swarm_bot.bat')
-  content = '@cd /d ' + BASE_DIR + ' && ' + ' '.join(command)
-  return WriteToFile(filepath, content)
-
-
-def GenerateLaunchdPlist(command):
-  """Generates a plist with the corresponding command."""
-  # The documentation is available at:
-  # https://developer.apple.com/library/mac/documentation/Darwin/Reference/ \
-  #    ManPages/man5/launchd.plist.5.html
-  entries = [
-    '<key>Label</key><string>org.swarm.bot</string>',
-    '<key>StandardOutPath</key><string>swarm_bot.log</string>',
-    '<key>StandardErrorPath</key><string>swarm_bot-err.log</string>',
-    '<key>LimitLoadToSessionType</key><array><string>Aqua</string></array>',
-    '<key>RunAtLoad</key><true/>',
-    '<key>Umask</key><integer>18</integer>',
-
-    '<key>EnvironmentVariables</key>',
-    '<dict>',
-    '  <key>PATH</key>',
-    '  <string>/opt/local/bin:/opt/local/sbin:/usr/local/sbin:/usr/local/bin'
-      ':/usr/sbin:/usr/bin:/sbin:/bin</string>',
-    '</dict>',
-
-    '<key>SoftResourceLimits</key>',
-    '<dict>',
-    '  <key>NumberOfFiles</key>',
-    '  <integer>8000</integer>',
-    '</dict>',
-  ]
-  entries.append('<key>Program</key><string>%s</string>' % command[0])
-  entries.append('<key>ProgramArguments</key>')
-  entries.append('<array>')
-  # Command[0] must be passed as an argument.
-  entries.extend('  <string>%s</string>' % i for i in command)
-  entries.append('</array>')
-  entries.append('<key>WorkingDirectory</key><string>%s</string>' % BASE_DIR)
-  header = (
-    '<?xml version="1.0" encoding="UTF-8"?>\n'
-    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" '
-    '"http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n'
-    '<plist version="1.0">\n'
-    '  <dict>\n'
-    + ''.join('    %s\n' % l for l in entries) +
-    '  </dict>\n'
-    '</plist>\n')
-  return header
-
-
-def SetupAutoStartupOSX(command):
-  """Uses launchd with auto-login user."""
-  plistname = os.path.expanduser('~/Library/LaunchAgents/org.swarm.bot.plist')
-  return WriteToFile(plistname, GenerateLaunchdPlist(command))
-
-
-def SetupAutoStartupUnix(command):
-  """Uses crontab."""
-  # The \n is very important.
-  content = '@reboot cd %s && %s\n' % (BASE_DIR, ' '.join(command))
-  if not WriteToFile('mycron', content):
-    return False
-
-  try:
-    # It returns 1 if there was no cron job set.
-    subprocess.call(['crontab', '-r'])
-    subprocess.check_call(['crontab', 'mycron'])
-  finally:
-    os.remove('mycron')
-  return True
-
-
-def SetupAutoStartup(slave_machine, swarm_server, dimensionsfile):
-  command = [
-    sys.executable,
-    slave_machine,
-    '-a', swarm_server,
-    '-p', '443',
-    '-r', '400',
-    '--keep_alive',
-    '-v',
-    dimensionsfile,
-  ]
-  if sys.platform == 'win32':
-    return SetupAutoStartupWin(command)
-  elif sys.platform == 'darwin':
-    return SetupAutoStartupOSX(command)
-  else:
-    return SetupAutoStartupUnix(command)
 
 
 def main():
@@ -216,7 +108,7 @@ def main():
 
   if not options.no_auto_start:
     print('Setup up swarm script to run on startup...')
-    if not SetupAutoStartup(
+    if not start_slave.SetupAutoStartup(
         slave_machine, options.swarm_server, options.dimensionsfile):
       return 1
 
