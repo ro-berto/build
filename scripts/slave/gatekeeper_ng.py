@@ -153,7 +153,8 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
       closing_steps = set(gatekeeper.get('closing_steps', [])) | forgiving
       tree_notify = set(gatekeeper.get('tree_notify', []))
       sheriff_classes = set(gatekeeper.get('sheriff_classes', []))
-      subject_template = gatekeeper['subject_template']
+      subject_template = gatekeeper.get('subject_template',
+                                        DEFAULTS['subject_template'])
       finished = [s for s in steps if s.get('isFinished')]
       close_tree = gatekeeper.get('close_tree', True)
       respect_build_status = gatekeeper.get('respect_build_status', False)
@@ -216,6 +217,13 @@ def allowed_keys(test_dict, *keys):
       'not valid: %s; allowed: %s' % (
           ', '.join(set(test_dict.keys()) - set(keys)),
           ', '.join(keys)))
+
+
+# Keys which have defaults besides None or set([]).
+DEFAULTS = {
+    'subject_template': ('buildbot %(result)s in %(projectName)s on '
+                         '%(builder)s, revision %(revision)s'),
+}
 
 
 def load_gatekeeper_config(filename):
@@ -310,12 +318,6 @@ def load_gatekeeper_config(filename):
                   'sheriff_classes', 'subject_template']
 
 
-  # Keys which have defaults besides None or set([]).
-  defaults = {
-      'subject_template': ('buildbot %(result)s in %(projectName)s on '
-                           '%(builder)s, revision %(revision)s'),
-  }
-
   # These keys are strings instead of sets. Strings can't be merged,
   # so more specific (master -> category -> builder) strings clobber
   # more generic ones.
@@ -354,8 +356,8 @@ def load_gatekeeper_config(filename):
 
         # Populate with specified defaults.
         for k in builder_keys:
-          if k in defaults:
-            gatekeeper_builder.setdefault(k, defaults[k])
+          if k in DEFAULTS:
+            gatekeeper_builder.setdefault(k, DEFAULTS[k])
           elif k in strings:
             gatekeeper_builder.setdefault(k, '')
           else:
