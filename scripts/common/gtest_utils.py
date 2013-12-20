@@ -464,7 +464,10 @@ class GTestJSONParser(object):
         json_output = json_file.read()
         json_data = json.loads(json_output)
       except ValueError:
-        self.parsing_errors = json_output.split('\n')
+        # Only signal parsing error if the file is non-empty. Empty file
+        # most likely means the binary doesn't support JSON output.
+        if json_output:
+          self.parsing_errors = json_output.split('\n')
       else:
         self._ProcessJSONData(json_data)
 
