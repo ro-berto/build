@@ -100,6 +100,18 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
         '6.2',
         start_slave.ConvertWindowsVersion('CYGWIN_NT-6.2.9200'))
 
+  def test_convert_cygwin_path(self):
+    self.assertEqual(None, start_slave.ConvertCygwinPath('/b/path'))
+    self.assertEqual(None, start_slave.ConvertCygwinPath('c:\\temp.txt'))
+
+    self.assertEqual('e:\\b\\swarm_slave',
+                     start_slave.ConvertCygwinPath('/cygdrive/e/b/swarm_slave'))
+
+    self.assertEqual(
+        'c:\\b\\swarm_slave\\slave_machine.py',
+        start_slave.ConvertCygwinPath(
+            '/cygdrive/c/b/swarm_slave/slave_machine.py'))
+
   def check_start_slave_main(self, platform):
     """Calls start_slave main and ensure it doesn't crash for the given
     platform.

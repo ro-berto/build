@@ -37,6 +37,8 @@ def WriteToFile(filepath, content):
 
   Returns True on success.
   """
+  logging.debug('Writing new file, %s, with contents:\n%s', filepath,
+                content)
   try:
     with open(filepath, mode='w') as f:
       f.write(content)
@@ -165,13 +167,55 @@ def GenerateAndWriteDimensions(dimensions_file):
   return 0
 
 
+def ConvertCygwinPath(path):
+  """Convert a full cygwin path to a standard Windows path."""
+  if not path.startswith('/cygdrive/'):
+    logging.warning('%s is not a cygwin path', path)
+    return None
+
+  # Remove the cygwin path identifier.
+  path = path.replace('/cygdrive/', '')
+
+  # Add : after the drive letter.
+  path = path[:1] + ':' + path[1:]
+
+  return path.replace('/', '\\')
+
+
 def SetupAutoStartupWin(command):
   """Uses Startup folder in the Start Menu."""
   # TODO(maruel): Not always true. Read from registry if needed.
-  filepath = os.path.expanduser(
-      '~\\AppData\\Roaming\\Microsoft\\Windows\\'
-      'Start Menu\\Programs\\Startup\\run_swarm_bot.bat')
-  content = '@cd /d ' + BASE_DIR + ' && ' + ' '.join(command)
+  path = ('~\\AppData\\Roaming\\Microsoft\\Windows\\'
+          'Start Menu\\Programs\\Startup\\run_swarm_bot.bat')
+  swarm_directory = BASE_DIR
+
+  # If we are running through cygwin, the path to write to must be
+  # changed to be in the cywgin format, but we also need to change
+  # the commands to be in non-cygwin format (since they will execute
+  # in a batch file).
+  if sys.platform == 'cygwin':
+    path = path.replace('\\', '/')
+
+    swarm_directory = ConvertCygwinPath(swarm_directory)
+
+    # Convert all the cygwin paths in the command.
+    for i in range(len(command)):
+      if '/cygdrive/' in command[i]:
+        command[i] = ConvertCygwinPath(command[i])
+
+    # Replace the python command.
+    # TODO(csharp): This should just be 'python'.
+    c_drive_python = '/cygdrive/e/depot_tools/python.bat'
+    e_drive_python = '/cygdrive/e/depot_tools/python.bat'
+    if os.path.exists(c_drive_python):
+      command[0] = ConvertCygwinPath(c_drive_python)
+    elif os.path.exists(e_drive_python):
+      command[0] = ConvertCygwinPath(e_drive_python)
+    else:
+      raise Exception('Unable to find python.bat')
+
+  filepath = os.path.expanduser(path)
+  content = '@cd /d ' + swarm_directory + ' && ' + ' '.join(command)
   return WriteToFile(filepath, content)
 
 
@@ -258,7 +302,7 @@ def SetupAutoStartup(slave_machine, swarm_server, server_port, dimensionsfile):
     '-v',
     dimensionsfile,
   ]
-  if sys.platform == 'win32':
+  if sys.platform in ('cygwin', 'win32'):
     return SetupAutoStartupWin(command)
   elif sys.platform == 'darwin':
     return SetupAutoStartupOSX(command)
@@ -280,8 +324,9 @@ def main():
   logging_rotating_file.setFormatter(logging.Formatter(
       '%(asctime)s %(levelname)-8s %(module)15s(%(lineno)4d): %(message)s'))
   logging.getLogger('').addHandler(logging_rotating_file)
+  logging.getLogger('').setLevel(logging.DEBUG)
 
-  if options.swarm_server:
+  if options.swarm_server and options.port:
     dimensions_file = os.path.join(BASE_DIR, 'dimensions.in')
 
     # Only reset the dimensions if the server is given, because the auto
@@ -294,9 +339,14 @@ def main():
     SetupAutoStartup(slave_machine, options.swarm_server, options.port,
                      dimensions_file)
 
+  logging.debug('Restarting machine')
   import slave_machine  # pylint: disable-msg=F0401
   slave_machine.Restart()
 
 
 if __name__ == '__main__':
-  sys.exit(main())
+  try:
+    sys.exit(main())
+  except Exception as e:
+    logging.exception(e)
+    sys.exit(1)
