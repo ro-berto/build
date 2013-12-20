@@ -62,6 +62,9 @@ def GenSteps(api):
     def run(suffix):
       return api.chromium.checkdeps(suffix, can_fail_build=False)
 
+    def has_valid_results(self, suffix):
+      return api.step_history[self._step_name(suffix)].json.output is not None
+
     def failures(self, suffix):
       results = api.step_history[self._step_name(suffix)].json.output
       result_set = set()
@@ -85,6 +88,9 @@ def GenSteps(api):
         api.chromium.deps2submodules()
       )
 
+    def has_valid_results(self, suffix):
+      return api.step_history[self._step_name(suffix)].json.output is not None
+
     def failures(self, suffix):
       return api.step_history[self._step_name(suffix)].json.output
 
@@ -106,9 +112,10 @@ def GenSteps(api):
         r = step_result.json.gtest_results
         p = step_result.presentation
 
-        p.step_text += api.test_utils.format_step_text([
-            ['failures:', r.failures]
-        ])
+        if r.valid:
+          p.step_text += api.test_utils.format_step_text([
+              ['failures:', r.failures]
+          ])
 
       args = [api.json.gtest_results()]
 
@@ -123,6 +130,10 @@ def GenSteps(api):
                                    parallel=True,
                                    can_fail_build=False,
                                    followup_fn=followup_fn)
+
+    def has_valid_results(self, suffix):
+      step_name = self._step_name(suffix)
+      return api.step_history[step_name].json.gtest_results.valid
 
     def failures(self, suffix):
       step_name = self._step_name(suffix)
@@ -149,6 +160,9 @@ def GenSteps(api):
                             'buildbot_nacl_integration.py'),
           args,
           can_fail_build=False)
+
+    def has_valid_results(self, suffix):
+      return api.step_history[self._step_name(suffix)].json.output is not None
 
     def failures(self, suffix):
       failures = api.step_history[self._step_name(suffix)].json.output
@@ -314,6 +328,42 @@ def GenTests(api):
           canned_test(passing=False, minimal=True))
 
     yield test
+
+  invalid_json_with_patch_test = (
+    api.test('invalid_json_with_patch') +
+    props() +
+    api.platform.name('win') +
+    api.step_data('checkdeps (with patch)', api.json.output(None)) +
+    api.step_data('deps2git (with patch)', api.json.output(None)) +
+    api.step_data('nacl_integration (with patch)', api.json.output(None))
+  )
+  for gtest_test in GTEST_TESTS:
+    invalid_json_with_patch_test += api.step_data(gtest_test + ' (with patch)',
+                                                  canned_test(passing=True))
+  yield invalid_json_with_patch_test
+
+  invalid_json_without_patch_test = (
+    api.test('invalid_json_without_patch') +
+    props() +
+    api.platform.name('win')
+  )
+
+  invalid_json_without_patch_test += api.step_data(
+      'checkdeps (with patch)',
+      api.json.output(canned_checkdeps[False]))
+  invalid_json_without_patch_test += api.step_data(
+      'deps2git (with patch)',
+      api.json.output(canned_deps2git[True]))
+  invalid_json_without_patch_test += api.step_data(
+      'nacl_integration (with patch)',
+      api.json.output(canned_nacl[True]))
+  for gtest_test in GTEST_TESTS:
+    invalid_json_without_patch_test += api.step_data(
+        gtest_test + ' (with patch)',
+        canned_test(passing=True))
+  invalid_json_without_patch_test += api.step_data('checkdeps (without patch)',
+                                                   api.json.output(None))
+  yield invalid_json_without_patch_test
 
   for step in ('gclient revert', 'gclient runhooks', 'compile'):
     yield (

@@ -86,6 +86,9 @@ def GenSteps(api):
           followup_fn=archive_webkit_tests_results_followup
         )
 
+    def has_valid_results(self, suffix):
+      sn = self._step_name(suffix)
+      return api.step_history[sn].json.test_results.valid
 
     def failures(self, suffix):
       sn = self._step_name(suffix)

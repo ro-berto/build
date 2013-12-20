@@ -50,6 +50,16 @@ class TestUtilsApi(recipe_api.RecipeApi):
       """Run the test. suffix is 'with patch' or 'without patch'."""
       raise NotImplementedError()
 
+    def has_valid_results(self, suffix):  # pragma: no cover
+      """
+      Returns True if results (failures) are valid.
+
+      This makes it possible to distinguish between the case of no failures
+      and the test failing to even report its results in machine-readable
+      format.
+      """
+      raise NotImplementedError()
+
     def failures(self, suffix):  # pragma: no cover
       """Return list of failures (list of strings)."""
       raise NotImplementedError()
@@ -72,7 +82,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
 
     failing_tests = []
     for t in tests:
-      if t.failures('with patch'):
+      if not t.has_valid_results('with patch'):
+        yield self.m.python.inline(
+          t.name,
+          r"""
+          import sys
+          print 'FAILED TO READ TEST RESULTS'
+          sys.exit(1)
+          """)
+      elif t.failures('with patch'):
         failing_tests.append(t)
       else:
         yield self.m.python.inline(t.name, 'print "ALL IS WELL"')
@@ -85,6 +103,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
     yield (self._summarize_retried_test(t) for t in failing_tests)
 
   def _summarize_retried_test(self, test):
+    if not test.has_valid_results('without patch'):
+      return self.m.python.inline(
+        test.name,
+        r"""
+        import sys
+        print 'FAILED TO READ TEST RESULTS'
+        sys.exit(1)
+        """)
+
     ignored_failures = set(test.failures('without patch'))
     new_failures = set(test.failures('with patch')) - ignored_failures
 
