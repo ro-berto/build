@@ -609,7 +609,7 @@ def upload_gtest_json_summary(json_path, build_properties, test_exe):
         target_json_path,
         # Use a directory structure that makes it easy to filter by year,
         # month and week based just on the file name.
-        'gs://chromium-gtest-results/%d/%d/%d/%s.json' % (
+        'gs://chrome-gtest-results/%d/%d/%d/%s.json' % (
             weekly_timestamp.year,
             weekly_timestamp.month,
             weekly_timestamp.day,
