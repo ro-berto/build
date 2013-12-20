@@ -15,6 +15,7 @@ Note: This module is doomed to be deprecated in the future, as Telemetry
 results will be passed more directly to the new performance dashboard.
 """
 
+import collections
 import json
 import logging
 import os
@@ -983,8 +984,8 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     #         }
     #     }
     # }
-    self._x_data = {}
-    self._y_data = {}
+    self._x_data = collections.defaultdict(dict)
+    self._y_data = collections.defaultdict(dict)
 
   def ProcessLine(self, line):
     """Processes one line of output from Telemetry endure measurement."""
@@ -1017,10 +1018,8 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
 
     # Add the values to self._x_data or self._y_data.
     if is_x_data:
-      self._x_data[graph_name] = self._x_data.get(graph_name, {})
       self._x_data[graph_name][trace_name] = values_info
     else:
-      self._y_data[graph_name] = self._y_data.get(graph_name, {})
       self._y_data[graph_name][trace_name] = values_info
 
   def _FinalizeProcessing(self):
@@ -1089,24 +1088,31 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
     return json.dumps(graph_dict, sort_keys=True)
 
   def _CompileEndureTraces(self):
-    """Organizes the series data that was collected in self._graphs.
+    """Organizes the series data that was collected into self._graphs.
 
     This is done because GraphingLogProcessor._CreateSummaryOutput
     requires that data is organized in self._graphs.
 
     Note that when this function is called (after all lines have been
     processed, there will already be Graph objects in self._graphs created
-    GraphingLogProcessor.ProcessLine.
+    GraphingLogProcessor.ProcessLine, but there won't be any created by
+    GraphingEndureLogProcessor and all items in self._graphs should be Graph
+    objects.
     """
     for graph_name in self._x_data:
+      if graph_name not in self._y_data:
+        logging.warning('Missing Y data for graph "%s"', graph_name)
+        continue
 
+      # Make a new Graph and copy over the data from any existing graph.
       graph = self.EndureGraph()
-      if self._graphs[graph_name]:
+      if graph_name in self._graphs:
         graph.traces = self._graphs[graph_name].traces
         graph.units = self._graphs[graph_name].units
 
       for trace_name in self._x_data[graph_name]:
         if trace_name not in self._y_data[graph_name]:
+          logging.warning('Missing Y data for trace "%s"', trace_name)
           continue
         x = self._x_data[graph_name][trace_name]
         y = self._y_data[graph_name][trace_name]
@@ -1117,7 +1123,12 @@ class GraphingEndureLogProcessor(GraphingLogProcessor):
         graph.units = y.get('units')
         graph.units_x = x.get('units')
 
-      self._graphs[graph_name] = graph
+      # It's possible that if all traces were skipped in the above loop,
+      # then there are no traces. If this is the case, don't add a graph.
+      if len(graph.traces):
+        self._graphs[graph_name] = graph
+      else:
+        logging.warning('No traces for graph "%s"', graph_name)
 
 
 class GraphingFrameRateLogProcessor(GraphingLogProcessor):

@@ -392,12 +392,12 @@ class GraphingEndureLogProcessorTest(LogProcessorTest):
 
     # The data in the input sample file is considered to have 3 separate
     # graph names, so there are 3 entries here.
-    self.assertEqual(2, len(output))
-    self.maxDiff = 800
+    self.assertEqual(3, len(output))
 
     # Each of these three entries is mapped to a list that contains one string.
     self.assertEqual(1, len(output['object_counts-summary.dat']))
     self.assertEqual(1, len(output['vm_stats-summary.dat']))
+    self.assertEqual(1, len(output['new_graph_name-summary.dat']))
 
     self.assertEqual(
         {
@@ -424,6 +424,17 @@ class GraphingEndureLogProcessorTest(LogProcessorTest):
             'rev': 12345,
         },
         json.loads(output['vm_stats-summary.dat'][0]))
+
+    self.assertEqual(
+        {
+            'traces': {
+                'my_trace_name': [10, 0],
+            },
+            'units': 'kg',
+            'units_x': '',
+            'rev': 12345,
+        },
+        json.loads(output['new_graph_name-summary.dat'][0]))
 
 
 if __name__ == '__main__':
