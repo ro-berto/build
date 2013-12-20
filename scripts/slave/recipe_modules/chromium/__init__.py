@@ -5,5 +5,6 @@ DEPS = [
   'platform',
   'properties',
   'python',
+  'raw_io',
   'step',
 ]

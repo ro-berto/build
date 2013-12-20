@@ -3,6 +3,23 @@
 # found in the LICENSE file.
 
 from slave import recipe_api
+from slave import recipe_util
+
+
+class TestLauncherFilterFileInputPlaceholder(recipe_util.Placeholder):
+  def __init__(self, api, tests):
+    self.raw = api.m.raw_io.input('\n'.join(tests))
+    super(TestLauncherFilterFileInputPlaceholder, self).__init__()
+
+  def render(self, test):
+    result = self.raw.render(test)
+    if not test.enabled:  # pragma: no cover
+      result[0] = '--test-launcher-filter-file=%s' % result[0]
+    return result
+
+  def result(self, presentation, test):
+    return self.raw.result(presentation, test)
+
 
 class ChromiumApi(recipe_api.RecipeApi):
   def get_config_defaults(self):
@@ -50,6 +67,10 @@ class ChromiumApi(recipe_api.RecipeApi):
     return self.m.python(name or 'compile',
                          self.m.path.build('scripts', 'slave', 'compile.py'),
                          args, abort_on_failure=abort_on_failure, **kwargs)
+
+  @recipe_util.returns_placeholder
+  def test_launcher_filter(self, tests):
+    return TestLauncherFilterFileInputPlaceholder(self, tests)
 
   def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
                results_url=None, perf_dashboard_id=None, test_type=None,

@@ -1875,7 +1875,7 @@
       "--parallel",
       "base_unittests",
       "/path/to/tmp/json",
-      "--gtest_filter=Test.Two"
+      "Test.Two"
     ],
     "name": "base_unittests (without patch)",
     "~followup_annotations": [

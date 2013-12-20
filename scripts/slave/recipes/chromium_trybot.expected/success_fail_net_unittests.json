@@ -1849,7 +1849,7 @@
       "--parallel",
       "net_unittests",
       "/path/to/tmp/json",
-      "--gtest_filter=Test.Two"
+      "Test.Two"
     ],
     "name": "net_unittests (without patch)",
     "~followup_annotations": [
