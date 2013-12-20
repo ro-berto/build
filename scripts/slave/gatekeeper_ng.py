@@ -481,7 +481,7 @@ def close_tree_if_failure(failed_builds, username, password, tree_status_url,
   # Email everyone that should be notified.
   emails_to_send = []
   for failed_build in failed_builds:
-    waterfall_url = failed_build['base_url'].rstrip('/') + '/waterfall'
+    waterfall_url = failed_build['base_url'].rstrip('/')
     build_url = '%s/builders/%s/builds/%d' % (
         failed_build['base_url'].rstrip('/'),
         failed_build['build']['builderName'],

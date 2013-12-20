@@ -614,7 +614,7 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(mailer_data['changes'],
         self.masters[0].builders[0].builds[0].sourcestamp['changes'])
     self.assertEquals(mailer_data['waterfall_url'], unicode(
-        self.masters[0].url + '/waterfall'))
+        self.masters[0].url))
 
     self.assertEquals(mailer_data['build_url'], unicode(build_url))
     self.assertEquals(mailer_data['project_name'], unicode('Chromium FYI'))
