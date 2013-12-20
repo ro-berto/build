@@ -69,7 +69,7 @@
         ],
 
         "builders": {
-          "Linux x64": {
+          "Win x64": {
             "categories": [
               "chromium_archive_build",
               "chromium_compile",
