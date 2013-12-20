@@ -69,10 +69,13 @@ B('Win Builder', 'f_win_rel', scheduler='global_scheduler',
   builddir='win-latest-rel', auto_reboot=False)
 F('f_win_rel', win().ChromiumFactory(
     slave_type='Builder',
-    project='all.sln;chromium_builder',
+    options=['--build-tool=ninja', '--compiler=goma', 'chromium_builder'],
     factory_properties={
         'trigger': 's7_webkit_builder_rel_trigger',
-        'gclient_env': { 'GYP_DEFINES': 'fastbuild=1' },
+        'gclient_env': {
+            'GYP_DEFINES': 'fastbuild=1',
+            'GYP_GENERATORS': 'ninja',
+        },
         'archive_build': True,
         'blink_config': 'blink',
         'build_name': 'Win',
@@ -116,7 +119,7 @@ B('Win7 (dbg)', 'f_win_dbg', scheduler='global_scheduler',
   builddir='win-latest-dbg')
 F('f_win_dbg', win().ChromiumFactory(
     target='Debug',
-    project='all.sln;chromium_builder',
+    options=['--build-tool=ninja', '--compiler=goma', 'chromium_builder'],
     tests=[
       'browser_tests',
       'content_browsertests',
@@ -128,7 +131,10 @@ F('f_win_dbg', win().ChromiumFactory(
         'sharded_tests': sharded_tests,
         'start_crash_handler': True,
         'generate_gtest_json': True,
-        'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
+        'gclient_env': {
+             'GYP_DEFINES': 'fastbuild=1',
+             'GYP_GENERATORS': 'ninja',
+        },
         'blink_config': 'blink',
     }))
 
