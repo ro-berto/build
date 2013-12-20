@@ -1,4 +1,6 @@
 per-file drmemory_factory.py=rnk@chromium.org
+per-file drmemory_factory.py=bruening@chromium.org
+per-file drmemory_factory.py=zhaoqin@chromium.org
 per-file v8_factory.py=jkummerow@chromium.org
 per-file v8_factory.py=machenbach@chromium.org
 per-file v8_commands.py=jkummerow@chromium.org
