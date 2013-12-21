@@ -403,7 +403,6 @@ WEBRTC_NORMAL_STEPS = [
     'libjingle_peerconnection_unittest',
     'libjingle_sound_unittest',
     'libjingle_unittest',
-    'metrics_unittests',
     'modules_tests',
     'modules_unittests',
     'neteq_unittests',
@@ -455,6 +454,8 @@ WEBRTC_LKGR_STEPS = {
     ],
     'Linux Clang': WEBRTC_NORMAL_STEPS,
     'Android': ['compile'],
+    'Android (dbg)': ['compile'],
+    'Android Clang (dbg)': ['compile'],
     'Chrome OS': WEBRTC_NORMAL_STEPS,
   },
 }
