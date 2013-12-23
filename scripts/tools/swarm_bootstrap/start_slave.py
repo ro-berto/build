@@ -205,8 +205,8 @@ def SetupAutoStartupWin(command):
 
     # Replace the python command.
     # TODO(csharp): This should just be 'python'.
-    c_drive_python = '/cygdrive/e/depot_tools/python.bat'
-    e_drive_python = '/cygdrive/e/depot_tools/python.bat'
+    c_drive_python = '/cygdrive/c/b/depot_tools/python.bat'
+    e_drive_python = '/cygdrive/e/b/depot_tools/python.bat'
     if os.path.exists(c_drive_python):
       command[0] = ConvertCygwinPath(c_drive_python)
     elif os.path.exists(e_drive_python):
