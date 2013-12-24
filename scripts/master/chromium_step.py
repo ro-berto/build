@@ -577,7 +577,6 @@ class AnnotationObserver(buildstep.LogLineObserver):
       'chrome-win-stable': 'win-stable',
       'chromium-linux-targets': 'linux-targets',
       'chromium-mac-targets': 'mac-targets',
-      'chromium-rel-frame': 'win-release-chrome-frame',
       'chromium-rel-linux': 'linux-release',
       'chromium-rel-linux-64': 'linux-release-64',
       'chromium-rel-linux-hardy': 'linux-release-hardy',

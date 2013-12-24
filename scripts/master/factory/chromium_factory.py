@@ -140,7 +140,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       [('src/data/memory_test', None)],
     'page_cycler':
       [('src/data/page_cycler', None)],
-    '(selenium|chrome_frame)':
+    'selenium':
       [('src/data/selenium_core', None)],
     'browser_tests':
       [('src/chrome/test/data/firefox2_profile/searchplugins', None),
