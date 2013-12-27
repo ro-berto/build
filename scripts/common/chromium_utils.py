@@ -1215,7 +1215,7 @@ def SafeTranslate(inputstr):
 
 
 def GetCBuildbotConfigs(chromite_path=None):
-  """Get the sorted cbuildbot configs from cbuildbot_config.py.
+  """Get the sorted cbuildbot configs from cbuildbot_view_config.
 
   Args:
     chromite_path: The path to the chromite/ directory.
@@ -1232,7 +1232,7 @@ def GetCBuildbotConfigs(chromite_path=None):
       chromite_path = os.path.dirname(os.path.abspath(chromite.__file__))
 
     chromite_path = os.path.abspath(chromite_path)
-    config_path = os.path.join(chromite_path, 'buildbot', 'cbuildbot_config.py')
+    config_path = os.path.join(chromite_path, 'bin', 'cbuildbot_view_config')
     proc = subprocess.Popen([config_path, '--dump', '--for-buildbot'],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             close_fds=True, cwd=os.path.dirname(config_path))
