@@ -137,11 +137,32 @@ class GpuApi(recipe_api.RecipeApi):
         ])
 
     # Pixel tests.
+    # Try servers pull their results from cloud storage; the other
+    # tester bots send their results to cloud storage.
+    #
+    # NOTE that ALL of the bots need to share a bucket. They can't be split
+    # by mastername/waterfall, because the try servers are on a different
+    # waterfall (tryserver.chromium) than the other test bots (chromium.gpu
+    # and chromium.webkit, as of this writing). This means there will be
+    # races between bots with identical OS/GPU combinations, on different
+    # waterfalls, attempting to upload results for new versions of each
+    # pixel test. If this is a significant problem in practice then we will
+    # have to rethink the cloud storage code in the pixel tests.
+    ref_img_arg = '--upload-refimg-to-cloud-storage'
+    if 'rietveld' in self.m.properties:
+      ref_img_arg = '--download-refimg-from-cloud-storage'
+    cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
     yield self.run_telemetry_gpu_test('pixel_test',
         args=[
-            '--generated-dir=%s' % self._generated_dir,
-            '--reference-dir=%s' % self._reference_dir,
-            '--build-revision=%s' % self._build_revision,
+            '--build-revision',
+            str(self._build_revision),
+            ref_img_arg,
+            '--refimg-cloud-storage-bucket',
+            cloud_storage_bucket,
+            '--os-type',
+            self.m.chromium.c.TARGET_PLATFORM,
+            '--test-machine-name',
+            self.m.properties['buildername']
         ])
 
     # Archive telemetry pixel test results

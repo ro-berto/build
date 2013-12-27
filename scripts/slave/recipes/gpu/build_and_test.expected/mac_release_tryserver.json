@@ -264,9 +264,15 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--generated-dir=[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--reference-dir=[SLAVE_BUILD]/content_gpu_data/telemetry/reference",
-      "--build-revision=170242"
+      "--build-revision",
+      "170242",
+      "--download-refimg-from-cloud-storage",
+      "--refimg-cloud-storage-bucket",
+      "chromium-gpu-archive/reference-images",
+      "--os-type",
+      "mac",
+      "--test-machine-name",
+      "TestBuilder"
     ],
     "name": "pixel_test"
   },
