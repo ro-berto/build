@@ -235,8 +235,10 @@
       "--output-format=gtest",
       "--browser=release",
       "-v",
-      "--generated-dir=[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--build-revision=f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9"
+      "--build-revision",
+      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9",
+      "--test-machine-name",
+      "TestBuilder"
     ],
     "name": "maps_pixel_test"
   },
@@ -280,23 +282,6 @@
       "TestBuilder"
     ],
     "name": "pixel_test"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/chromium/archive_gpu_pixel_test_results.py",
-      "--run-id",
-      "f27fede2220bcd326aee3e86ddfd4ebd0fe58cb9_TestBuilder_telemetry",
-      "--generated-dir",
-      "[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--gpu-reference-dir",
-      "[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--gsutil",
-      "[BUILD]/scripts/slave/gsutil"
-    ],
-    "name": "archive_pixel_test_results"
   },
   {
     "allow_subannotations": true,

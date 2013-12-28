@@ -17,9 +17,6 @@ class GpuApi(recipe_api.RecipeApi):
 
     # These values may be replaced by external configuration later
     self._dashboard_upload_url = 'https://chromeperf.appspot.com'
-    telemetry_dir = self.m.path.slave_build('content_gpu_data', 'telemetry')
-    self._generated_dir = telemetry_dir('generated')
-    self._reference_dir = telemetry_dir('reference')
     self._gs_bucket_name = 'chromium-gpu-archive'
 
     # The infrastructure team has recommended not to use git yet on the
@@ -27,12 +24,13 @@ class GpuApi(recipe_api.RecipeApi):
     # To use, pass "use_git=True" as an argument to run_recipe.py.
     self._use_git = self.m.properties.get('use_git', False)
 
-    # Currently content_browsertests' pixel tests use the build revision
-    # (which is assumed to be the SVN revision of src/) to know whether
-    # to regenerate the reference images. This mechanism should be
-    # changed, but for now, pass down the intended value. Note that this
-    # is overridden below using the correct values from gclient. This is
-    # here in order to still support commenting out the block of code
+    # TODO(kbr): currently the pixel and maps tests use the build revision
+    # (which is assumed to be the SVN revision of src/) when uploading
+    # error images to cloud storage, only for naming purposes. This should
+    # be changed to use a different identifier, for example, the build
+    # number on the slave. For now, pass down the intended value. Note that
+    # this is overridden below using the correct values from gclient. This
+    # is here in order to still support commenting out the block of code
     # below while testing locally.
     self._build_revision = self.m.properties['revision']
 
@@ -132,8 +130,10 @@ class GpuApi(recipe_api.RecipeApi):
     # Google Maps Pixel tests.
     yield self.run_telemetry_gpu_test('maps', name='maps_pixel_test',
         args=[
-            '--generated-dir=%s' % self._generated_dir,
-            '--build-revision=%s' % self._build_revision,
+            '--build-revision',
+            str(self._build_revision),
+            '--test-machine-name',
+            self.m.properties['buildername']
         ])
 
     # Pixel tests.
@@ -164,15 +164,6 @@ class GpuApi(recipe_api.RecipeApi):
             '--test-machine-name',
             self.m.properties['buildername']
         ])
-
-    # Archive telemetry pixel test results
-    yield self.archive_pixel_test_results('archive_pixel_test_results',
-        '%s_%s_telemetry' % (self._build_revision,
-                             self.m.properties['buildername']),
-        generated_dir=self._generated_dir,
-        reference_dir=self._generated_dir) # This mismatch is intentional.
-    # Reference images are copied into the generated directory upon failure
-    # to ensure that they get archived with the correct name.
 
     # WebGL conformance tests.
     yield self.run_telemetry_gpu_test('webgl_conformance',
@@ -233,21 +224,3 @@ class GpuApi(recipe_api.RecipeApi):
     return self.m.chromium.run_telemetry_test(
         str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
         test, name, test_args, results_directory, spawn_dbus=True)
-
-  def archive_pixel_test_results(self, name, run_id, generated_dir,
-                                 reference_dir, gsutil=''):
-    """Returns a step which archives results of a previously run pixel
-    test."""
-
-    if not gsutil:
-      gsutil = self.m.path.build('scripts', 'slave', 'gsutil',
-                                 platform_ext={'win': '.bat'})
-
-    args = ['--run-id', run_id,
-            '--generated-dir', generated_dir,
-            '--gpu-reference-dir', reference_dir,
-            '--gsutil', gsutil]
-    return self.m.python(name,
-                         self.m.path.build('scripts', 'slave', 'chromium',
-                                           'archive_gpu_pixel_test_results.py'),
-                         args, always_run=True)

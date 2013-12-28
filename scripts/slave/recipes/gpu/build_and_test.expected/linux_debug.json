@@ -212,8 +212,10 @@
       "--output-format=gtest",
       "--browser=debug",
       "-v",
-      "--generated-dir=[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--build-revision=170242"
+      "--build-revision",
+      "170242",
+      "--test-machine-name",
+      "TestBuilder"
     ],
     "env": {
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
@@ -263,23 +265,6 @@
       "CHROME_DEVEL_SANDBOX": "/opt/chromium/chrome_sandbox"
     },
     "name": "pixel_test"
-  },
-  {
-    "always_run": true,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/chromium/archive_gpu_pixel_test_results.py",
-      "--run-id",
-      "170242_TestBuilder_telemetry",
-      "--generated-dir",
-      "[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--gpu-reference-dir",
-      "[SLAVE_BUILD]/content_gpu_data/telemetry/generated",
-      "--gsutil",
-      "[BUILD]/scripts/slave/gsutil"
-    ],
-    "name": "archive_pixel_test_results"
   },
   {
     "allow_subannotations": true,
