@@ -21,6 +21,42 @@ BUILD_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 
 USAGE = '%s [options] <command to run>' % os.path.basename(sys.argv[0])
 
+
+def add_build_paths(path_list):
+  """Prepend required paths for build system to the provided path_list.
+
+  path_list is modified in-place. It can be sys.path or something else.
+  No paths are added twice.
+  """
+
+  # First build the list of required paths
+  build_paths = []
+
+  third_party = os.path.join(BUILD_DIR, 'third_party')
+
+  for d in os.listdir(third_party):
+    full = os.path.join(third_party, d)
+    if os.path.isdir(full):
+      build_paths.append(full)
+
+  build_paths.append(os.path.join(BUILD_DIR, 'scripts'))
+  build_paths.append(third_party)
+  build_paths.append(os.path.join(BUILD_DIR, 'site_config'))
+  build_paths.append(os.path.join(BUILD_DIR,
+                                  '..', 'build_internal', 'site_config'))
+  build_paths.append(os.path.join(BUILD_DIR,
+                                  '..', 'build_internal', 'scripts', 'master'))
+
+  # build_paths now contains all the required paths, in *reverse order*
+  # of priority.
+
+  # Prepend the list of paths to path_list. We take care of possible
+  # duplicates here.
+  for path in build_paths:
+    if path not in path_list:
+      path_list.insert(0, path)
+
+
 def main():
   option_parser = optparse.OptionParser(usage=USAGE)
   option_parser.add_option('-s', '--show-path', action='store_true',
@@ -31,22 +67,7 @@ def main():
     option_parser.error('Must provide a command to run.')
 
   path = os.environ.get('PYTHONPATH', '').split(os.pathsep)
-
-  def add(new_path):
-    if new_path not in path:
-      path.insert(0, new_path)
-
-  third_party = os.path.join(BUILD_DIR, 'third_party')
-  for d in os.listdir(third_party):
-    full = os.path.join(third_party, d)
-    if os.path.isdir(full):
-      add(full)
-  add(os.path.join(BUILD_DIR, 'scripts'))
-  add(third_party)
-  add(os.path.join(BUILD_DIR, 'site_config'))
-  add(os.path.join(BUILD_DIR, '..', 'build_internal', 'site_config'))
-  add(os.path.join(BUILD_DIR, '..', 'build_internal', 'scripts', 'master'))
-  add('.')
+  add_build_paths(path)
   os.environ['PYTHONPATH'] = os.pathsep.join(path)
 
   if options.show_path:
