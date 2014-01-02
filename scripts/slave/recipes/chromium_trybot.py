@@ -24,7 +24,7 @@ GTEST_TESTS = [
   'base_unittests',
   'cacheinvalidation_unittests',
   'cc_unittests',
-  'chromedriver2_unittests',
+  'chromedriver_unittests',
   'components_unittests',
   'content_unittests',
   'crypto_unittests',

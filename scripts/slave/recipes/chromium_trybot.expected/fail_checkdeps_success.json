@@ -127,7 +127,7 @@
       "base_unittests",
       "cacheinvalidation_unittests",
       "cc_unittests",
-      "chromedriver2_unittests",
+      "chromedriver_unittests",
       "components_unittests",
       "content_unittests",
       "crypto_unittests",
@@ -383,10 +383,10 @@
       "--build-properties",
       "{\"GIT_MODE\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"chromium_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--parallel",
-      "chromedriver2_unittests",
+      "chromedriver_unittests",
       "/path/to/tmp/json"
     ],
-    "name": "chromedriver2_unittests (with patch)",
+    "name": "chromedriver_unittests (with patch)",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@json.gtest_results@{@@@",
       "@@@STEP_LOG_LINE@json.gtest_results@  \"per_iteration_data\": [@@@",
@@ -1529,7 +1529,7 @@
       "-u",
       "print \"ALL IS WELL\""
     ],
-    "name": "chromedriver2_unittests",
+    "name": "chromedriver_unittests",
     "~followup_annotations": [
       "@@@STEP_LOG_LINE@python.inline@print \"ALL IS WELL\"@@@",
       "@@@STEP_LOG_END@python.inline@@@"

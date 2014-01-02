@@ -61,7 +61,7 @@
     step('base_unittests', result=results.SKIPPED),
     step('cacheinvalidation_unittests', result=results.SKIPPED),
     step('cc_unittests', result=results.SKIPPED),
-    step('chromedriver2_unittests', result=results.SKIPPED),
+    step('chromedriver_unittests', result=results.SKIPPED),
     step('components_unittests', result=results.SKIPPED),
     step('courgette_unittests', result=results.SKIPPED),
     step('crypto_unittests', result=results.SKIPPED),
