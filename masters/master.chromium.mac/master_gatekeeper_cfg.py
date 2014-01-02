@@ -20,7 +20,6 @@ categories_steps = {
     'cast_unittests',
     'cc_unittests',
     'chromedriver_unittests',
-    'chromedriver2_unittests',
     'components_unittests',
     'content_browsertests',
     'content_unittests',

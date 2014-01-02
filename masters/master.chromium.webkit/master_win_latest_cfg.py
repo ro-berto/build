@@ -26,7 +26,6 @@ sharded_tests = [
   'cc_unittests',
   'chromedriver_tests',
   'chromedriver_unittests',
-  'chromedriver2_unittests',
   'components_unittests',
   'content_browsertests',
   'content_unittests',
