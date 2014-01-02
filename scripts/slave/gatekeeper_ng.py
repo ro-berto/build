@@ -635,6 +635,8 @@ def get_options():
                     help='location of gatekeeper configuration file')
   parser.add_option('--verify', action='store_true',
                     help='verify that the gatekeeper config file is correct')
+  parser.add_option('--flatten-json', action='store_true',
+                    help='display flattened gatekeeper.json for debugging')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='turn on extra debugging information')
 
@@ -643,7 +645,7 @@ def get_options():
   options.email_app_secret = None
   options.password = None
 
-  if options.verify:
+  if options.verify or options.flatten_json:
     return options, args
 
   if not args:
@@ -675,6 +677,19 @@ def main():
   gatekeeper_config = load_gatekeeper_config(options.json)
 
   if options.verify:
+    return 0
+
+  if options.flatten_json:
+    # Python's sets aren't JSON-encodable, so we convert them to lists here.
+    class SetEncoder(json.JSONEncoder):
+      # pylint: disable=E0202
+      def default(self, obj):
+        if isinstance(obj, set):
+          return list(obj)
+        return json.JSONEncoder.default(self, obj)
+
+    json.dump(gatekeeper_config, sys.stdout, cls=SetEncoder)
+    print
     return 0
 
   masters = set(args)
