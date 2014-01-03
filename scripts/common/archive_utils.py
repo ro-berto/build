@@ -51,6 +51,7 @@ class Config(object):
                       'icudt38.dll',
                       'icudt42.dll',
                       'icudt46.dll',
+                      'icudtl.dat',
                       'plugins\\npapi_layout_test_plugin.dll',
                      ]
 
