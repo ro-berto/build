@@ -628,8 +628,11 @@ def main_make(options, args):
   result = 0
 
   def clobber():
-    print('Removing %s' % options.target_output_dir)
-    chromium_utils.RemoveDirectory(options.target_output_dir)
+    clobber_dir = options.target_output_dir
+    if options.src_dir == 'v8':
+      clobber_dir = os.path.dirname(clobber_dir)
+    print('Removing %s' % clobber_dir)
+    chromium_utils.RemoveDirectory(clobber_dir)
 
   assert ',' not in options.target, (
    'Used to allow multiple comma-separated targets for make. This should not be'
