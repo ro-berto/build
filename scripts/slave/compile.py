@@ -629,7 +629,7 @@ def main_make(options, args):
 
   def clobber():
     clobber_dir = options.target_output_dir
-    if os.path.basename(options.src_dir) == 'v8':
+    if options.src_dir == 'v8':
       clobber_dir = os.path.dirname(clobber_dir)
     print('Removing %s' % clobber_dir)
     chromium_utils.RemoveDirectory(clobber_dir)
