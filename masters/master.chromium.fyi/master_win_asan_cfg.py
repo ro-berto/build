@@ -40,6 +40,7 @@ win_asan_archive = master_config.GetArchiveUrl('ChromiumFYI',
                                                'win32')
 
 tests_1 = [
+    'accessibility_unittests',
     'base_unittests',
     'browser_tests',
     'cacheinvalidation_unittests',
