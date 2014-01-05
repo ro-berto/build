@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 import time
 import traceback
 import urllib
@@ -80,47 +81,50 @@ def real_main(options):
   archive_url = GetBuildUrl(options.build_url, platform, revision)
   archive_name = 'dynamorio.' + os.path.basename(archive_url).split('.', 1)[1]
 
-  output_name = 'dynamorio'
-  output_dir = os.path.join(options.build_dir, output_name)
+  temp_dir = tempfile.mkdtemp()
+  try:
+    # We try to download and extract 3 times.
+    for tries in range(1, 4):
+      print 'Try %d: Fetching build from %s' % (tries, archive_url)
 
-  # We try to download and extract 3 times.
-  for tries in range(1, 4):
-    print 'Try %d: Fetching build from %s' % (tries, archive_url)
+      failure = False
+      try:
+        print '%s/%s' % (archive_url, archive_name)
+        urllib.urlretrieve(archive_url, archive_name)
+        print '\nDownload complete'
+      except IOError:
+        print '\nFailed to download build'
+        failure = True
+        if options.halt_on_missing_build:
+          return slave_utils.ERROR_EXIT_CODE
+      if failure:
+        continue
 
-    failure = False
-    try:
-      print '%s/%s' % (archive_url, archive_name)
-      urllib.urlretrieve(archive_url, archive_name)
-      print '\nDownload complete'
-    except IOError:
-      print '\nFailed to download build'
-      failure = True
-      if options.halt_on_missing_build:
-        return slave_utils.ERROR_EXIT_CODE
-    if failure:
-      continue
+      print 'Extracting build %s to %s...' % (archive_name, options.build_dir)
+      try:
+        chromium_utils.RemoveDirectory(target_build_output_dir)
+        chromium_utils.ExtractZip(archive_name, temp_dir)
 
-    print 'Extracting build %s to %s...' % (archive_name, options.build_dir)
-    try:
-      chromium_utils.RemoveDirectory(target_build_output_dir)
-      chromium_utils.ExtractZip(archive_name, output_dir)
+        # Look for the top level directory from extracted build.
+        entries = os.listdir(temp_dir)
+        output_dir = temp_dir
+        if (len(entries) == 1 and
+            os.path.isdir(os.path.join(output_dir, entries[0]))):
+          output_dir = os.path.join(output_dir, entries[0])
 
-      # Look for the top level directory from extracted build.
-      entries = os.listdir(output_dir)
-      if (len(entries) == 1 and
-          os.path.isdir(os.path.join(output_dir, entries[0]))):
-        output_dir = os.path.join(output_dir, entries[0])
-
-      print 'Moving build from %s to %s' % (output_dir, target_build_output_dir)
-      shutil.move(output_dir, target_build_output_dir)
-    except (OSError, IOError, chromium_utils.ExternalError):
-      print 'Failed to extract the build.'
-      # Print out the traceback in a nice format
-      traceback.print_exc()
-      # Try again...
-      #continue
-      time.sleep(3)
-    return 0
+        print 'Moving build from %s to %s' % (output_dir,
+                                              target_build_output_dir)
+        shutil.move(output_dir, target_build_output_dir)
+      except (OSError, IOError, chromium_utils.ExternalError):
+        print 'Failed to extract the build.'
+        # Print out the traceback in a nice format
+        traceback.print_exc()
+        # Try again...
+        time.sleep(3)
+        continue
+      return 0
+  finally:
+    chromium_utils.RemoveDirectory(temp_dir)
 
   # If we get here, that means that it failed 3 times. We return a failure.
   return slave_utils.ERROR_EXIT_CODE
