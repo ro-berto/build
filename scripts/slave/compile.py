@@ -179,7 +179,11 @@ def ninja_clobber(build_output_dir):
   """Removes everything but ninja files from a build directory."""
   for root, _, files in os.walk(build_output_dir, topdown=False):
     for f in files:
-      if (f.endswith('.ninja') or
+      # For .manifest in particular, gyp windows ninja generates manifest
+      # files at generation time but clobber nukes at the beginning of
+      # compile, so make sure not to delete those generated files, otherwise
+      # compile will fail.
+      if (f.endswith('.ninja') or f.endswith('.manifest') or
           f in ('gyp-mac-tool', 'gyp-win-tool',
                 'environment.x86', 'environment.x64')):
         continue
