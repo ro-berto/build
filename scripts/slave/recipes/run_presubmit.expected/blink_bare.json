@@ -88,8 +88,21 @@
       "https://codereview.chromium.org",
       "--rietveld_email",
       "",
-      "--rietveld_fetch"
+      "--rietveld_fetch",
+      "--trybot-json",
+      "/path/to/tmp/json"
     ],
-    "name": "presubmit"
+    "name": "presubmit",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  [@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"linux_rel\", @@@",
+      "@@@STEP_LOG_LINE@json.output@    [@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"compile\"@@@",
+      "@@@STEP_LOG_LINE@json.output@    ]@@@",
+      "@@@STEP_LOG_LINE@json.output@  ]@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]

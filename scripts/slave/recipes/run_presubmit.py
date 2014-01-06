@@ -5,6 +5,7 @@
 DEPS = [
   'gclient',
   'git',
+  'json',
   'path',
   'properties',
   'rietveld',
@@ -45,7 +46,8 @@ def GenSteps(api):
     '--skip_canned', 'CheckBuildbotPendingBuilds',
     '--rietveld_url', api.properties['rietveld'],
     '--rietveld_email', '',  # activates anonymous mode
-    '--rietveld_fetch'])
+    '--rietveld_fetch',
+    '--trybot-json', api.json.output()])
 
 
 def GenTests(api):
@@ -56,5 +58,6 @@ def GenTests(api):
 
     yield (
       api.test(repo_name) +
-      api.properties.tryserver(repo_name=repo_name, **extra)
+      api.properties.tryserver(repo_name=repo_name, **extra) +
+      api.step_data('presubmit', api.json.output([['linux_rel', ['compile']]]))
     )
