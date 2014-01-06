@@ -3222,3 +3222,28 @@ Otherwise the default is 'Triggerable(%(name))' which is not very useful.
              self.step_status.setText(['triggered'] + triggered_schedulers)
  
              d = defer.DeferredList(dl, consumeErrors=1)
+
+Hard-disables shutdown hooks for https://code.google.com/p/chromium/issues/detail?id=309046
+===================================================================
+--- a/third_party/buildbot_8_4p1/buildbot/status/web/root.py
++++ b/third_party/buildbot_8_4p1/buildbot/status/web/root.py
+@@ -25,17 +25,9 @@
+         status = self.getStatus(request)
+ 
+         if request.path == '/shutdown':
+-            if self.getAuthz(request).actionAllowed("cleanShutdown", request):
+-                eventually(status.cleanShutdown)
+-                return redirectTo("/", request)
+-            else:
+-                return redirectTo(path_to_authfail(request), request)
++            return redirectTo(path_to_authfail(request), request)
+         elif request.path == '/cancel_shutdown':
+-            if self.getAuthz(request).actionAllowed("cleanShutdown", request):
+-                eventually(status.cancelCleanShutdown)
+-                return redirectTo("/", request)
+-            else:
+-                return redirectTo(path_to_authfail(request), request)
++            return redirectTo(path_to_authfail(request), request)
+ 
+         cxt.update(
+                 shutting_down = status.shuttingDown,
