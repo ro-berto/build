@@ -80,7 +80,7 @@ def cleanup_directory(directory_to_clean):
 
 def remove_old_isolate_directories(slave_path):
   """Removes all the old isolate directories."""
-  for path in glob.iglob(os.path.join(slave_path, '*', 'isolate*')):
+  for path in glob.iglob(os.path.join(slave_path, '*', 'build', 'isolate*')):
     print 'Removing %s' % path
     cleanup_directory(path)
     safe_rmdir(path)
