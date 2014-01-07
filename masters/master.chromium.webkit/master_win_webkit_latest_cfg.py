@@ -52,7 +52,7 @@ B('WebKit Win Builder', 'f_webkit_win_rel',
   auto_reboot=False)
 F('f_webkit_win_rel', win().ChromiumFactory(
     slave_type='Builder',
-    options=['--build-tool=ninja', 'blink_tests'],
+    options=['--build-tool=ninja', '--', 'blink_tests'],
     factory_properties={
         'trigger': 's4_webkit_rel_trigger',
         'blink_config': 'blink',
@@ -78,6 +78,25 @@ F('f_webkit_rel_tests', win().ChromiumFactory(
 
 B('WebKit Win7', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 
+#
+# Win x64 Rel Builder (note: currently no x64 testers)
+#
+B('WebKit Win x64 Builder', 'f_webkit_win_rel_x64',
+  scheduler='global_scheduler', builddir='webkit-win-latest-rel-x64',
+  auto_reboot=False)
+F('f_webkit_win_rel_x64', win().ChromiumFactory(
+    slave_type='Builder',
+    target='Release_x64',
+    options=['--build-tool=ninja', '--', 'blink_tests'],
+    factory_properties={
+        'blink_config': 'blink',
+        'gclient_env': {
+            'GYP_GENERATORS':'ninja',
+            'GYP_DEFINES': 'component=shared_library target_arch=x64',
+            'GYP_MSVS_VERSION': '2012',
+        },
+    }))
+
 ################################################################################
 ## Debug
 ################################################################################
@@ -99,7 +118,7 @@ B('WebKit Win Builder (dbg)', 'f_webkit_win_dbg', scheduler='global_scheduler',
 F('f_webkit_win_dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
-    options=['--build-tool=ninja', 'blink_tests'],
+    options=['--build-tool=ninja', '--', 'blink_tests'],
     factory_properties={
         'trigger': 's4_webkit_dbg_trigger',
         'blink_config': 'blink',
@@ -124,6 +143,25 @@ F('f_webkit_dbg_tests', win().ChromiumFactory(
         'generate_gtest_json': True,
         'test_results_server': 'test-results.appspot.com',
         'blink_config': 'blink',
+    }))
+
+#
+# Win x64 Dbg Builder (note: currently no x64 testers)
+#
+B('WebKit Win x64 Builder (dbg)', 'f_webkit_win_dbg_x64',
+  scheduler='global_scheduler', builddir='webkit-win-latest-dbg-x64',
+  auto_reboot=False)
+F('f_webkit_win_dbg_x64', win().ChromiumFactory(
+    slave_type='Builder',
+    target='Debug_x64',
+    options=['--build-tool=ninja', '--', 'blink_tests'],
+    factory_properties={
+        'blink_config': 'blink',
+        'gclient_env': {
+          'GYP_GENERATORS':'ninja',
+          'GYP_DEFINES': 'component=shared_library fastbuild=1 target_arch=x64',
+          'GYP_MSVS_VERSION': '2012',
+        },
     }))
 
 def Update(_config, _active_master, c):
