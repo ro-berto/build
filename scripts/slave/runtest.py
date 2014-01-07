@@ -608,11 +608,12 @@ def upload_gtest_json_summary(json_path, build_properties, test_exe):
     slave_utils.GSUtilCopy(
         target_json_path,
         # Use a directory structure that makes it easy to filter by year,
-        # month and week based just on the file name.
-        'gs://chrome-gtest-results/%d/%d/%d/%s.json' % (
+        # month, week and day based just on the file path.
+        'gs://chrome-gtest-results/%d/%d/%d/%d/%s.json' % (
             weekly_timestamp.year,
             weekly_timestamp.month,
             weekly_timestamp.day,
+            today.day,
             target_name))
   finally:
     os.close(fd)
