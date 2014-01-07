@@ -1140,17 +1140,8 @@ def real_main():
 
   if options.build_tool is None:
     if chromium_utils.IsWindows():
-      # We're in the process of moving to ninja by default on Windows, see
-      # http://crbug.com/303291.
-      if build_directory.AreNinjaFilesNewerThanMSVSFiles(
-          src_dir=options.src_dir):
-        main = main_ninja
-        options.build_tool = 'ninja'
-        if options.project:
-          args += [options.project]
-      else:
-        main = main_win
-        options.build_tool = 'msvs'
+      main = main_win
+      options.build_tool = 'msvs'
     elif chromium_utils.IsMac():
       # We're in the process of moving to ninja by default on Mac, see
       # http://crbug.com/294387
