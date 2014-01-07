@@ -460,6 +460,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddMediaPerfTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('media_perftests', None, 'graphing',
                               cmd_name='media_perftests',
+                              cmd_options=['--single-process-tests'],
                               step_name='media_perftests',
                               factory_properties=factory_properties)
 
