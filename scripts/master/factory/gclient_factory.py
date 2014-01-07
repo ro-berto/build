@@ -184,9 +184,6 @@ class GClientFactory(object):
         not factory_properties.get('no_kill')):
       factory_cmd_obj.AddTaskkillStep()
 
-    # Revert the tree to a clean (unmodified) state.
-    factory_cmd_obj.AddGClientRevertStep()
-
     env = factory_properties.get('gclient_env', {})
     # Allow gclient_deps to also come from the factory_properties.
     if gclient_deps == None:
@@ -202,9 +199,13 @@ class GClientFactory(object):
       factory_cmd_obj.AddClobberTreeStep(gclient_spec, env, timeout,
           gclient_deps=gclient_deps, gclient_nohooks=self._nohooks_on_update,
           no_gclient_branch=no_gclient_branch)
-    elif not delay_compile_step:
-      self.AddUpdateStep(gclient_spec, factory_properties, factory,
-                         slave_type, sudo_for_remove, gclient_deps=gclient_deps)
+    else:
+      # Revert the tree to a clean (unmodified) state.
+      factory_cmd_obj.AddGClientRevertStep()
+      if not delay_compile_step:
+        self.AddUpdateStep(gclient_spec, factory_properties, factory,
+                           slave_type, sudo_for_remove,
+                           gclient_deps=gclient_deps)
     return factory
 
   def BuildFactory(self, target='Release', clobber=False, tests=None, mode=None,
