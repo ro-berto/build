@@ -12,6 +12,8 @@ class V8TryServer(Master.Master4):
   slave_port = 8107
   master_port_alt = 8207
   try_job_port = 8307
+  from_address = 'v8-dev@googlegroups.com'
+  reply_to = 'chrome-troopers+tryserver@google.com'
   svn_url = 'svn://svn.chromium.org/chrome-try-v8'
   base_app_url = 'https://v8-status.appspot.com'
   tree_status_url = base_app_url + '/status'
