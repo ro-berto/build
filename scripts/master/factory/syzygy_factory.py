@@ -55,7 +55,7 @@ _UNITTESTS = [
 def ForceToMsvsBuildTool(options):
   # TODO: Move syzygy off msvs to ninja once it works. http://crbug.com/332429
   options = options or []
-  options.append('--build-tool=msvs')
+  options.append('--build-tool=vs')
   return options
 
 
