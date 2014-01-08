@@ -2,16 +2,20 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import logging
+import os
+import urlparse
+
 from buildbot.status import status_push
 
-import urlparse
+CR_PASSWORD_FILE = '.code_review_password'
 
 
 class TryServerHttpStatusPush(status_push.HttpStatusPush):
   """Status push used by try server.
 
   Rietveld listens to buildStarted and (step|build)Finished to know if a try
-  job succeeeded or not.
+  job succeeded or not.
   """
   def __init__(self, serverUrl, *args, **kwargs):
     # Appends the status listener to the base url.
@@ -40,8 +44,16 @@ class TryServerHttpStatusPush(status_push.HttpStatusPush):
         'stepText2Changed',
         'stepTextChanged',
     ]
-    # Create the file with the password set into rietveld.
-    pwd = open('.code_review_password').readline().strip()
+
+    if not os.path.isfile(CR_PASSWORD_FILE):
+      logging.warn("The file %s does not exist. "
+                   "Connections to rietveld may not work."
+                   % CR_PASSWORD_FILE)
+      pwd = ''
+    else:
+      with open(CR_PASSWORD_FILE, 'rb') as f:
+        pwd = f.readline().strip()
+
     extra_post_params = { 'password': pwd }
     status_push.HttpStatusPush.__init__(
         self,

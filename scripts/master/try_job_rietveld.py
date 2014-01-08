@@ -269,11 +269,10 @@ class TryJobRietveld(TryJobBase):
         # state. Simulate a buildFinished event on the build.
         if not job.get('key'):
           log.err(
-              'Got %s for issue %s but not key, not updating Rietveld' %
+              'Got "%s" for issue %s but not key, not updating Rietveld' %
               (e, job.get('issue')))
           continue
-        log.err(
-            'Got %s for issue %s, updating Rietveld' % (e, job.get('issue')))
+        log.err('Got "%s" for issue %s' % (e, job.get('issue')))
         for service in self.master.services:
           if service.__class__.__name__ == 'TryServerHttpStatusPush':
             build = {
@@ -293,7 +292,10 @@ class TryJobRietveld(TryJobBase):
               'results': EXCEPTION,
             }
             service.push('buildFinished', build=build)
+            log.err('Rietveld updated')
             break
+        else:
+          log.err('Rietveld not updated: no corresponding service found.')
 
   # TryJobBase overrides:
   def setServiceParent(self, parent):
