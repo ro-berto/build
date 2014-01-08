@@ -21,6 +21,12 @@ BUILD_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, '..', '..'))
 
 USAGE = '%s [options] <command to run>' % os.path.basename(sys.argv[0])
 
+# These third_party libs interfere with other imports in PYTHONPATH and should
+# be put last. Please file bugs to clean up each entry here.
+troublemakers = [
+    'cbuildbot_chromite',  # crbug.com/321266
+]
+
 
 def add_build_paths(path_list):
   """Prepend required paths for build system to the provided path_list.
@@ -34,7 +40,9 @@ def add_build_paths(path_list):
 
   third_party = os.path.join(BUILD_DIR, 'third_party')
 
-  for d in os.listdir(third_party):
+  # Put troublemakers first, which when prepended will put them last.
+  keyfunc = lambda x: (1 if x not in troublemakers else -troublemakers.index(x))
+  for d in sorted(os.listdir(third_party), key=keyfunc):
     full = os.path.join(third_party, d)
     if os.path.isdir(full):
       build_paths.append(full)
