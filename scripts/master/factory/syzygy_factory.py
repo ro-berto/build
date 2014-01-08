@@ -52,6 +52,13 @@ _UNITTESTS = [
 ]
 
 
+def ForceToMsvsBuildTool(options):
+  # TODO: Move syzygy off msvs to ninja once it works. http://crbug.com/332429
+  options = options or []
+  options.append('--build-tool=msvs')
+  return options
+
+
 class SyzygyFactory(gclient_factory.GClientFactory):
   """Encapsulates data and methods common to the Syzygy master.cfg files."""
 
@@ -90,13 +97,17 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                                     self.target_platform,
                                                     target_arch)
 
+    options = ForceToMsvsBuildTool(options)
+
     if official_release:
       # Compile the official_build project of the "all" solution for
       # official builds.
-      syzygy_cmd_obj.AddCompileStep('../syzygy/build/all.sln;official_build')
+      syzygy_cmd_obj.AddCompileStep('../syzygy/build/all.sln;official_build',
+                                    options=options)
     else:
       # Compile the build_all project of the Syzygy solution.
-      syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
+      syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all',
+                                    options=options)
 
     # Run the unittests.
     for test_name in _UNITTESTS:
@@ -125,9 +136,12 @@ class SyzygyFactory(gclient_factory.GClientFactory):
                                                     self.target_platform,
                                                     target_arch)
 
+    options = ForceToMsvsBuildTool(options)
+
     # Compile everything. We need the grinder, the instrumenter and the
     # coverage agent as well as the unittests.
-    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all')
+    syzygy_cmd_obj.AddCompileStep('../syzygy/syzygy.sln;build_all',
+                                  options=options)
 
     # Then generate and upload a coverage report.
     syzygy_cmd_obj.AddGenerateCoverage()
