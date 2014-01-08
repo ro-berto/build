@@ -97,7 +97,7 @@ def real_main(options):
       and rename it to build\BuildDir\Target
   """
   abs_build_dir = os.path.abspath(
-      build_directory.GetBuildOutputDirectory())
+      build_directory.GetBuildOutputDirectory(options.src_dir))
   target_build_output_dir = os.path.join(abs_build_dir, options.target)
 
   # Generic name for the archive.
@@ -199,6 +199,8 @@ def main():
 
   option_parser.add_option('--target',
                            help='build target to archive (Debug or Release)')
+  option_parser.add_option('--src-dir', default='src',
+                           help='path to the top-level sources directory')
   option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--build-url',
                            help='url where to find the build to extract')
@@ -226,6 +228,8 @@ def main():
     options.webkit_dir = options.factory_properties.get('webkit_dir')
   if not options.revision_dir:
     options.revision_dir = options.factory_properties.get('revision_dir')
+  options.src_dir = (options.factory_properties.get('extract_build_src_dir')
+                     or options.src_dir)
 
   return real_main(options)
 

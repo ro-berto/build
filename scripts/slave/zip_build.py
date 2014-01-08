@@ -322,7 +322,7 @@ class PathMatcher(object):
 
 
 def Archive(options):
-  build_dir = build_directory.GetBuildOutputDirectory()
+  build_dir = build_directory.GetBuildOutputDirectory(options.src_dir)
   build_dir = os.path.abspath(os.path.join(build_dir, options.target))
 
   staging_dir = slave_utils.GetStagingDir(options.src_dir)
@@ -412,6 +412,8 @@ def main(argv):
     options.webkit_dir = options.factory_properties.get('webkit_dir')
   if not options.revision_dir:
     options.revision_dir = options.factory_properties.get('revision_dir')
+  options.src_dir = (options.factory_properties.get('zip_build_src_dir')
+                     or options.src_dir)
 
   # When option_parser is passed argv as a list, it can return the caller as
   # first unknown arg.  So throw a warning if we have two or more unknown
