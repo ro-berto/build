@@ -44,7 +44,6 @@ categories_steps = {
 exclusions = {
   'V8 Linux - full debug': ['Mozilla'],
   'V8 Linux - nosnap - full debug ': ['Mozilla'],
-  'V8 Win32 - full debug ': ['Mozilla'],
   'V8 Mac - full debug': ['Mozilla'],
   'V8 Linux - mips - sim': ['compile'],
   'V8 Linux - recipe': [],
