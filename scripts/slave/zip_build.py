@@ -346,19 +346,26 @@ def Archive(options):
 
   # Build the list of files to archive.
   root_files = os.listdir(build_dir)
+
+  # Remove initial\chrome.ilk. The filtering is only done on toplevel files,
+  # and we can't exclude everything in initial since initial\chrome.dll.pdb is
+  # needed in the archive. (And we can't delete it on disk because that would
+  # slow down the next incremental build).
+  if 'initial' in root_files:
+    # Expand 'initial' directory by its contents, so that initial\chrome.ilk
+    # will be filtered out by the blacklist.
+    index = root_files.index('initial')
+    root_files[index:index+1] = [os.path.join('initial', f)
+        for f in os.listdir(os.path.join(build_dir, 'initial'))]
+
   path_filter = PathMatcher(options)
   print path_filter
   print ('\nActually excluded: %s' %
          [f for f in root_files if not path_filter.Match(f)])
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
-  # Filter out initial\chrome.ilk. The PathMatcher only applies to toplevel
-  # files, but we can't exclude everything in initial since
-  # initial\chrome.dll.pdb is needed in the archive.
-  zip_filter = lambda p: None if p.endswith('.ilk') \
-      else p if not options.path_filter else options.path_filter(p)
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                                    unversioned_base_name, zip_filter)
+                                    unversioned_base_name, options.path_filter)
 
   zip_base, zip_ext, versioned_file = MakeVersionedArchive(
       zip_file, version_suffix, options)
