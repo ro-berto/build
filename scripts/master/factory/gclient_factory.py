@@ -296,11 +296,16 @@ class GClientFactory(object):
       return
 
     trigger_name = factory_properties.get('trigger')
+
+    # Allow overwriting default values for specified properties.
+    set_properties = factory_properties.get('trigger_set_properties', {})
+
     # Propagate properties to the children if this is set in the factory.
-    trigger_properties = factory_properties.get('trigger_properties', [])
+    copy_properties = factory_properties.get('trigger_properties', [])
     factory.addStep(commands.CreateTriggerStep(
         trigger_name=trigger_name,
-        trigger_copy_properties=trigger_properties))
+        trigger_copy_properties=copy_properties,
+        trigger_set_properties=set_properties))
 
   def AddUpdateStep(self, gclient_spec, factory_properties, factory,
                     slave_type, sudo_for_remove=False, gclient_deps=None):
