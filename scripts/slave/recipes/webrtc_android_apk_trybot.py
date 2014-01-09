@@ -41,10 +41,8 @@ def GenSteps(api):
   yield api.chromium.cleanup_temp()
   yield api.base_android.compile()
 
-  for test in api.webrtc.NORMAL_TESTS:
-    # The libjingle tests or video_engine_tests are not yet supported.
-    if not test.startswith(('libjingle', 'video_engine_tests')):
-      yield api.base_android.test_runner(test)
+  for test in api.webrtc.ANDROID_APK_TESTS:
+    yield api.base_android.test_runner(test)
 
 
 def GenTests(api):

@@ -9,16 +9,10 @@ class WebRTCApi(recipe_api.RecipeApi):
     super(WebRTCApi, self).__init__(**kwargs)
     self._env = {}
 
-  NORMAL_TESTS = [
+  COMMON_TESTS = [
       'audio_decoder_unittests',
       'common_audio_unittests',
       'common_video_unittests',
-      'libjingle_media_unittest',
-      'libjingle_p2p_unittest',
-      'libjingle_peerconnection_unittest',
-      'libjingle_sound_unittest',
-      'libjingle_unittest',
-      'metrics_unittests',
       'modules_tests',
       'modules_unittests',
       'neteq_unittests',
@@ -26,9 +20,19 @@ class WebRTCApi(recipe_api.RecipeApi):
       'test_support_unittests',
       'tools_unittests',
       'video_engine_core_unittests',
-      'video_engine_tests',
       'voice_engine_unittests',
   ]
+
+  ANDROID_APK_TESTS = COMMON_TESTS
+
+  LINUX_TESTS = sorted(COMMON_TESTS + [
+      'libjingle_media_unittest',
+      'libjingle_p2p_unittest',
+      'libjingle_peerconnection_unittest',
+      'libjingle_sound_unittest',
+      'libjingle_unittest',
+      'video_engine_tests',
+  ])
 
   def apply_svn_patch(self):
     script = self.m.path.build('scripts', 'slave', 'apply_svn_patch.py')
