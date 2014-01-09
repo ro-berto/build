@@ -142,6 +142,10 @@ class V8Factory(gclient_factory.GClientFactory):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))
 
+    # Add a trigger step if needed.
+    self.TriggerFactory(factory, slave_type=slave_type,
+                        factory_properties=factory_properties)
+
     # Add all the tests.
     self._AddTests(v8_cmd_obj, tests, mode, factory_properties)
     return factory
