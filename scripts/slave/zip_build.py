@@ -121,9 +121,9 @@ def FileRegexBlacklist(options):
     # TODO(phajdan.jr): Remove package_pdb_files when nobody uses it.
     include_pdbs = options.factory_properties.get('package_pdb_files', True)
     if include_pdbs:
-      return r'^.+\.(ilk|7z|(precompile\.h\.pch.*))$'
+      return r'^.+\.(rc|res|lib|exp|ilk|7z|([pP]recompile\.h\.pch.*))$'
     else:
-      return r'^.+\.(ilk|pdb|7z|(precompile\.h\.pch.*))$'
+      return r'^.+\.(rc|res|lib|exp|ilk|pdb|7z|([pP]recompile\.h\.pch.*))$'
   if chromium_utils.IsMac():
     # The static libs are just built as intermediate targets, and we don't
     # need to pull the dSYMs over to the testers most of the time (except for
