@@ -352,8 +352,12 @@ def Archive(options):
          [f for f in root_files if not path_filter.Match(f)])
 
   zip_file_list = [f for f in root_files if path_filter.Match(f)]
+  # Filter out initial\chrome.ilk. The PathMatcher only applies to toplevel
+  # files, but we can't exclude everything in initial since
+  # initial\chrome.dll.pdb is needed in the archive.
+  zip_filter = lambda f: None if f.endswith('.ilk') else options.path_filter(f)
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
-                                    unversioned_base_name, options.path_filter)
+                                    unversioned_base_name, zip_filter)
 
   zip_base, zip_ext, versioned_file = MakeVersionedArchive(
       zip_file, version_suffix, options)
