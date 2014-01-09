@@ -86,6 +86,7 @@ B('Win Builder', 'rel', 'compile|windows', 'win_rel', builddir='cr-win-rel',
   auto_reboot=False, notify_on_missing=True)
 F('rel', win().ChromiumFactory(
     slave_type='Builder',
+    options=['--compiler=goma'],
     project='all.sln;chromium_builder_tests',
     factory_properties={'trigger': 'win_rel_trigger',
                         'gclient_env': {'GYP_DEFINES': 'fastbuild=1'}}))
@@ -207,7 +208,7 @@ F('rel_x64', win_out().ChromiumFactory(
     compile_timeout=2400,
     slave_type='Builder',
     target='Release_x64',
-    options=['--build-tool=ninja', '--compiler=goma',
+    options=['--compiler=goma',
              '--', 'chromium_builder_tests'],
     factory_properties={
       'trigger': 'win_x64_rel_trigger',
@@ -346,7 +347,7 @@ B('Win x64 Builder (dbg)', 'dbg_x64', 'compile|windows', 'win_dbg',
 F('dbg_x64', win_out().ChromiumFactory(
     slave_type='Builder',
     target='Debug_x64',
-    options=['--build-tool=ninja', '--compiler=goma',
+    options=['--compiler=goma',
              '--', 'chromium_builder_tests'],
     factory_properties={
       'gclient_env': {
@@ -363,6 +364,7 @@ B('Win Builder (dbg)', 'dbg', 'compile|windows', 'win_dbg',
 F('dbg', win().ChromiumFactory(
     target='Debug',
     slave_type='Builder',
+    options=['--compiler=goma'],
     project='all.sln;chromium_builder_tests',
     factory_properties={'gclient_env': {'GYP_DEFINES': 'fastbuild=1'},
                         'trigger': 'win_dbg_trigger'}))
