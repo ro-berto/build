@@ -398,6 +398,7 @@ class GTestJSONParser(object):
     self.json_file_path = None
     self.delete_json_file = False
 
+    self.disabled_tests = set()
     self.passed_tests = set()
     self.failed_tests = set()
     self.flaky_tests = set()
@@ -431,10 +432,8 @@ class GTestJSONParser(object):
   def ClearParsingErrors(self):
     self.parsing_errors = ['Cleared.']
 
-  @staticmethod
-  def DisabledTests():
-    # TODO(phajdan.jr): Count disabled tests when JSON summary includes them.
-    return 0
+  def DisabledTests(self):
+    return len(self.disabled_tests)
 
   def FlakyTests(self):
     return len(self.flaky_tests)
@@ -475,6 +474,8 @@ class GTestJSONParser(object):
       os.remove(self.json_file_path)
 
   def _ProcessJSONData(self, json_data):
+    self.disabled_tests = set(json_data['disabled_tests'])
+
     for iteration_data in json_data['per_iteration_data']:
       for test_name, test_runs in iteration_data.iteritems():
         if test_runs[-1]['status'] == 'SUCCESS':

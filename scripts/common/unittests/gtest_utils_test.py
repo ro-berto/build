@@ -641,45 +641,73 @@ class TestGTestLogParserTests(unittest.TestCase):
 class TestGTestJSONParserTests(unittest.TestCase):
   def testPassedTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({'per_iteration_data': [  # pylint: disable=W0212
-      {
-        'Test.One': [{'status': 'SUCCESS', 'output_snippet': ''}],
-        'Test.Two': [{'status': 'SUCCESS', 'output_snippet': ''}],
-      }
-    ]})
+    parser._ProcessJSONData({  # pylint: disable=W0212
+      'disabled_tests': [],
+      'per_iteration_data': [
+        {
+          'Test.One': [{'status': 'SUCCESS', 'output_snippet': ''}],
+          'Test.Two': [{'status': 'SUCCESS', 'output_snippet': ''}],
+        }
+      ]
+    })
 
     self.assertEqual(['Test.One', 'Test.Two'], parser.PassedTests())
     self.assertEqual([], parser.FailedTests())
     self.assertEqual(0, parser.FlakyTests())
+    self.assertEqual(0, parser.DisabledTests())
 
   def testFailedTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({'per_iteration_data': [  # pylint: disable=W0212
-      {
-        'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
-        'Test.Two': [{'status': 'FAILURE', 'output_snippet': ''}],
-      }
-    ]})
+    parser._ProcessJSONData({  # pylint: disable=W0212
+      'disabled_tests': [],
+      'per_iteration_data': [
+        {
+          'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
+          'Test.Two': [{'status': 'FAILURE', 'output_snippet': ''}],
+        }
+      ]
+    })
 
     self.assertEqual([], parser.PassedTests())
     self.assertEqual(['Test.One', 'Test.Two'], parser.FailedTests())
     self.assertEqual(0, parser.FlakyTests())
+    self.assertEqual(0, parser.DisabledTests())
 
   def testFlakyTests(self):
     parser = gtest_utils.GTestJSONParser()
-    parser._ProcessJSONData({'per_iteration_data': [  # pylint: disable=W0212
-      {
-        'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
-        'Test.Two': [
-          {'status': 'FAILURE', 'output_snippet': ''},
-          {'status': 'SUCCESS', 'output_snippet': ''},
-        ],
-      }
-    ]})
+    parser._ProcessJSONData({  # pylint: disable=W0212
+      'disabled_tests': [],
+      'per_iteration_data': [
+        {
+          'Test.One': [{'status': 'FAILURE', 'output_snippet': ''}],
+          'Test.Two': [
+            {'status': 'FAILURE', 'output_snippet': ''},
+            {'status': 'SUCCESS', 'output_snippet': ''},
+          ],
+        }
+      ]
+    })
 
     self.assertEqual(['Test.Two'], parser.PassedTests())
     self.assertEqual(['Test.One'], parser.FailedTests())
     self.assertEqual(1, parser.FlakyTests())
+    self.assertEqual(0, parser.DisabledTests())
+
+  def testDisabledTests(self):
+    parser = gtest_utils.GTestJSONParser()
+    parser._ProcessJSONData({  # pylint: disable=W0212
+      'disabled_tests': ['Test.Two'],
+      'per_iteration_data': [
+        {
+          'Test.One': [{'status': 'SUCCESS', 'output_snippet': ''}],
+        }
+      ]
+    })
+
+    self.assertEqual(['Test.One'], parser.PassedTests())
+    self.assertEqual([], parser.FailedTests())
+    self.assertEqual(0, parser.FlakyTests())
+    self.assertEqual(1, parser.DisabledTests())
 
 
 if __name__ == '__main__':
