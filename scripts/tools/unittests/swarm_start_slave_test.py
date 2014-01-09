@@ -43,10 +43,7 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
   def setUp(self):
     super(SwarmStartSlaveTest, self).setUp()
 
-    # Ensure that none of the tests try to actually write files or modify
-    # cronjobs.
-    self.mock(start_slave.subprocess, 'call', mock.Mock())
-    self.mock(start_slave.subprocess, 'check_call', mock.Mock())
+    # Ensure that none of the tests try to actually write files.
     self.mock(start_slave, 'WriteToFile', mock.Mock())
 
   def test_dimensions(self):

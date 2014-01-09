@@ -16,7 +16,6 @@ import optparse
 import os
 import platform
 import socket
-import subprocess
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -270,25 +269,6 @@ def SetupAutoStartupOSX(command):
   return WriteToFile(plistname, GenerateLaunchdPlist(command))
 
 
-def SetupAutoStartupUnix(command):
-  """Uses crontab."""
-  # The \n is very important.
-  content = '@reboot cd %s && %s\n' % (BASE_DIR, ' '.join(command))
-  if not WriteToFile('mycron', content):
-    return False
-
-  try:
-    # It returns 1 if there was no cron job set.
-    subprocess.call(['crontab', '-r'])
-    subprocess.check_call(['crontab', 'mycron'])
-  finally:
-    try:
-      os.remove('mycron')
-    except OSError as e:
-      logging.warning('Unable to remove the crontab file, %s', e)
-  return True
-
-
 def SetupAutoStartup(slave_machine, swarm_server, server_port, dimensionsfile):
   logging.info('Generating AutoStartup')
 
@@ -307,7 +287,8 @@ def SetupAutoStartup(slave_machine, swarm_server, server_port, dimensionsfile):
   elif sys.platform == 'darwin':
     return SetupAutoStartupOSX(command)
   else:
-    return SetupAutoStartupUnix(command)
+    logging.info('Skipping Autostart for Linux since they should have an up to '
+                 'conf file that handles their startup')
 
 
 def main():
