@@ -474,7 +474,8 @@ class GTestJSONParser(object):
       os.remove(self.json_file_path)
 
   def _ProcessJSONData(self, json_data):
-    self.disabled_tests = set(json_data['disabled_tests'])
+    # TODO(phajdan.jr): Require disabled_tests to be present (May 2014).
+    self.disabled_tests = set(json_data.get('disabled_tests', []))
 
     for iteration_data in json_data['per_iteration_data']:
       for test_name, test_runs in iteration_data.iteritems():
