@@ -38,7 +38,11 @@ F('win_full', win().ChromiumFactory(
     project='all.sln',
     factory_properties={'archive_build': ActiveMaster.is_production_host,
                         'gs_bucket': 'gs://chromium-browser-continuous',
-                        'gs_acl': 'public-read',}))
+                        'gs_acl': 'public-read',
+                        'gclient_env': {
+                          'GYP_LINK_CONCURRENCY_MAX': '4',
+                        },
+                       }))
 
 B('Win x64', 'win_x64_full', 'windows', 'chromium_lkgr')
 F('win_x64_full', win_out().ChromiumFactory(
