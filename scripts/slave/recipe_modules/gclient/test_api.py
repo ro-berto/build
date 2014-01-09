@@ -1,3 +1,8 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import hashlib
 
 from slave import recipe_test_api
 
@@ -27,7 +32,6 @@ class GclientTestApi(recipe_test_api.RecipeTestApi):
   @staticmethod
   def gen_revision(project, GIT_MODE):
     """Hash project to bogus deterministic revision values."""
-    import hashlib
     h = hashlib.sha1(project)
     if GIT_MODE:
       return h.hexdigest()
