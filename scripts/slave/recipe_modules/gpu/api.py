@@ -78,7 +78,10 @@ class GpuApi(recipe_api.RecipeApi):
     # necessary to build all of the targets there.
     build_tag = '' if self.m.chromium.is_release_build else 'debug_'
     yield self.m.chromium.compile(
-        targets=['chromium_gpu_%sbuilder' % build_tag])
+        targets=['chromium_gpu_%sbuilder' % build_tag, 'gl_tests_run'])
+    # This is only an initial test of the isolate upload path; the
+    # subsequent GPU isolates will follow.
+    yield self.m.isolate.manifest_to_hash(['gl_tests'])
 
   def upload_steps(self):
     yield self.m.archive.zip_and_upload_build(

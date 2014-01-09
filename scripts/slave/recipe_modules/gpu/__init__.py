@@ -6,6 +6,7 @@ DEPS = [
   'archive',
   'chromium',
   'gclient',
+  'isolate',
   'path',
   'platform',
   'properties',

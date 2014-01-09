@@ -103,9 +103,30 @@
       "--compiler",
       "goma",
       "--",
-      "chromium_gpu_builder"
+      "chromium_gpu_builder",
+      "gl_tests_run"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/swarming/manifest_to_hash.py",
+      "--target",
+      "Release",
+      "--output-json",
+      "/path/to/tmp/json",
+      "gl_tests"
+    ],
+    "name": "manifest_to_hash",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"gl_tests\": \"6e784864abbeeff7499c15f75b904851d633c187\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@swarm_hashes@{\"gl_tests\": \"6e784864abbeeff7499c15f75b904851d633c187\"}@@@"
+    ]
   },
   {
     "always_run": true,
