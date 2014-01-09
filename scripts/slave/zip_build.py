@@ -355,7 +355,8 @@ def Archive(options):
   # Filter out initial\chrome.ilk. The PathMatcher only applies to toplevel
   # files, but we can't exclude everything in initial since
   # initial\chrome.dll.pdb is needed in the archive.
-  zip_filter = lambda p: None if p.endswith('.ilk') else options.path_filter(p)
+  zip_filter = lambda p: None if p.endswith('.ilk') or not options.path_filter \
+                              else options.path_filter(p)
   zip_file = MakeUnversionedArchive(build_dir, staging_dir, zip_file_list,
                                     unversioned_base_name, zip_filter)
 
