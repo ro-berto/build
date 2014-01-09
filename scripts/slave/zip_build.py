@@ -141,7 +141,7 @@ def FileRegexBlacklist(options):
 
 
 def FileExclusions():
-  all_platforms = ['.landmines', 'obj', 'gen']
+  all_platforms = ['.landmines', 'obj', 'gen', '.ninja_deps', '.ninja_log']
   # Skip files that the testers don't care about. Mostly directories.
   if chromium_utils.IsWindows():
     # Remove obj or lib dir entries
