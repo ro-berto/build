@@ -584,9 +584,7 @@ def RemoveChromeTemporaryFiles():
     RemoveChromeDesktopFiles()
     RemoveJumpListFiles()
   elif chromium_utils.IsLinux():
-    kLogRegexHeapcheck = '\.(sym|heap)$'
     LogAndRemoveFiles(tempfile.gettempdir(), kLogRegex)
-    LogAndRemoveFiles(tempfile.gettempdir(), kLogRegexHeapcheck)
     LogAndRemoveFiles('/dev/shm', kLogRegex)
   elif chromium_utils.IsMac():
     nstempdir_path = '/usr/local/libexec/nstempdir'

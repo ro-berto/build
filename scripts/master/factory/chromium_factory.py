@@ -977,7 +977,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       self._solutions[0].safesync_url = self.SAFESYNC_URL_CHROMIUM
 
     tests_for_build = [
-        re.match('^(?:valgrind_|heapcheck_)?(.*)$', t).group(1) for t in tests]
+        re.match('^(?:valgrind_)?(.*)$', t).group(1) for t in tests]
 
     # Ensure that component is set correctly in the gyp defines.
     ForceComponent(target, project, factory_properties['gclient_env'])
