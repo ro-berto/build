@@ -504,8 +504,11 @@ class GClient(SourceBaseCommand):
   def doPatch(self, res):
     patchlevel = self.patch[0]
     diff = FixDiffLineEnding(self.patch[1])
-    root = None
-    if len(self.patch) >= 3:
+
+    # Allow overwriting the root with an environment variable.
+    root = self.env.get("GCLIENT_PATCH_ROOT", None)
+
+    if len(self.patch) >= 3 and root is None:
       root = self.patch[2]
     command = [
         self.getCommand("patch"),
