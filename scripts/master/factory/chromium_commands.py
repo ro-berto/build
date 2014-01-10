@@ -506,17 +506,6 @@ class ChromiumCommands(commands.FactoryCommands):
         step_name='sizes', cmd_name = self._sizes_tool, cmd_options=args,
         py_script=True, factory_properties=factory_properties)
 
-  def AddGpuThroughputTests(self, factory_properties=None):
-    options = ['--enable-gpu']
-    tool_options = ['--no-xvfb']
-
-    self.AddAnnotatedPerfStep('gpu_throughput', 'ThroughputTest*', 'graphing',
-                              cmd_name='performance_browser_tests',
-                              step_name='gpu_throughput_tests',
-                              cmd_options=options,
-                              tool_opts=tool_options,
-                              factory_properties=factory_properties)
-
   def AddTabCapturePerformanceTests(self, factory_properties=None):
     options = ['--enable-gpu']
     tool_options = ['--no-xvfb']

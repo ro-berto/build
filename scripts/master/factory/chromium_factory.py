@@ -681,8 +681,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Other benchmarks:
     if R('memory'):
       f.AddMemoryTests(fp)
-    if R('gpu_throughput'):
-      f.AddGpuThroughputTests(fp)
     if R('tab_capture_performance'):
       f.AddTabCapturePerformanceTests(fp)
     if R('idb_perf'):
