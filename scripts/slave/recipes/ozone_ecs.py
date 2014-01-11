@@ -50,7 +50,6 @@ tests_that_do_not_compile = [
 ]
 
 tests_that_do_not_pass = [
-    'content_browsertests',  # Bug 315392, ...
 ]
 
 dbus_tests = [

@@ -280,6 +280,26 @@
       "--build-properties",
       "{\"recipe\": \"ozone_ecs\"}",
       "--no-spawn-dbus",
+      "content_browsertests"
+    ],
+    "name": "content_browsertests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--build-dir",
+      "[SLAVE_BUILD]/src/out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--build-properties",
+      "{\"recipe\": \"ozone_ecs\"}",
+      "--no-spawn-dbus",
       "content_unittests"
     ],
     "name": "content_unittests"
@@ -543,25 +563,5 @@
       "url_unittests"
     ],
     "name": "url_unittests"
-  },
-  {
-    "always_run": true,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/runtest.py",
-      "--target",
-      "Debug",
-      "--build-dir",
-      "[SLAVE_BUILD]/src/out",
-      "--no-xvfb",
-      "--factory-properties",
-      "{\"recipe\": \"ozone_ecs\"}",
-      "--build-properties",
-      "{\"recipe\": \"ozone_ecs\"}",
-      "content_browsertests"
-    ],
-    "name": "experimentally run content_browsertests"
   }
 ]
