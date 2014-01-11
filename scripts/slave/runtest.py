@@ -929,7 +929,6 @@ def main_linux(options, args):
 
   # Decide whether to enable the suid sandbox for Chrome.
   if (should_enable_sandbox(CHROME_SANDBOX_PATH) and
-      not options.factory_properties.get('asan', False) and
       not options.factory_properties.get('tsan', False) and
       not options.enable_lsan):
     print 'Enabling sandbox.  Setting environment variable:'
