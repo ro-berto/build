@@ -1068,7 +1068,7 @@ def get_target_build_dir(build_tool, src_dir, target, is_iphone=False):
     ret = os.path.join(src_dir, 'out', target)
   elif build_tool == 'make-android':
     ret = os.path.join(src_dir, 'out')
-  elif build_tool in ['msvs', 'vs', 'ib']:
+  elif build_tool in ['vs', 'ib']:
     ret = os.path.join(src_dir, 'build', target)
   else:
     raise NotImplementedError()
@@ -1150,7 +1150,7 @@ def real_main():
           args += [options.project]
       else:
         main = main_win
-        options.build_tool = 'msvs'
+        options.build_tool = 'vs'
     elif chromium_utils.IsMac():
       # We're in the process of moving to ninja by default on Mac, see
       # http://crbug.com/294387
