@@ -85,7 +85,7 @@ builder_factory_properties = {
       'component=static_library '
     ),
     'GYP_GENERATORS': 'ninja',
-    'GYP_LINK_CONCURRENCY_MAX': '4',
+    'GYP_USE_SEPARATE_MSPDBSRV': '1',
   },
   'trigger': 'win_asan_dbg_trigger',
 }
