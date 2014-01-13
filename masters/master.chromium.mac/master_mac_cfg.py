@@ -314,7 +314,6 @@ F('ios_rel', ios().ChromiumFactory(
   tests=[],
   options = [
     '--', '-project', '../build/all.xcodeproj',
-    # Use 'iphoneos6.1' sdk for Xcode 4.6 and 'iphoneos' for Xcode 5.
     '-sdk', 'iphoneos6.1', '-target' , 'All'],
   factory_properties={
     'app_name': 'Chromium.app',
