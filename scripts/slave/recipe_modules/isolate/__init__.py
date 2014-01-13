@@ -6,6 +6,5 @@ DEPS = [
   'chromium',
   'json',
   'path',
-  'properties',
   'python',
 ]
