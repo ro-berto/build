@@ -15,6 +15,7 @@ from slave import build_directory
 
 SCRIPT_DIR = os.path.abspath(os.path.dirname(__file__))
 BLACKLIST = set((
+    'blacklist_test_dll_1.dll',
     'crash_service64.exe',
     'mini_installer.exe',
     'nacl.exe',
