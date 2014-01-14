@@ -454,13 +454,24 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddCCPerfTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('cc_perftests', None, 'graphing',
                               cmd_name='cc_perftests',
+                              cmd_options=[
+                                  # Retrieving perf test results currently
+                                  # relies on parsing stdout.
+                                  # TODO(phajdan.jr): Do not parse stdout.
+                                  '--test-launcher-print-test-stdio=always'
+                              ],
                               step_name='cc_perftests',
                               factory_properties=factory_properties)
 
   def AddMediaPerfTests(self, factory_properties=None):
     self.AddAnnotatedPerfStep('media_perftests', None, 'graphing',
                               cmd_name='media_perftests',
-                              cmd_options=['--single-process-tests'],
+                              cmd_options=[
+                                  # Retrieving perf test results currently
+                                  # relies on parsing stdout.
+                                  # TODO(phajdan.jr): Do not parse stdout.
+                                  '--test-launcher-print-test-stdio=always'
+                              ],
                               step_name='media_perftests',
                               factory_properties=factory_properties)
 
