@@ -118,7 +118,8 @@ F('linux64_full', linux().ChromiumFactory(
         'gclient_env': {'GYP_DEFINES':'target_arch=x64'}}))
 
 asan_rel_gyp = ('asan=1 linux_use_tcmalloc=0 v8_enable_verify_heap=1 '
-                'release_extra_cflags="-gline-tables-only"')
+                'enable_ipc_fuzzer=1 release_extra_cflags='
+                '"-gline-tables-only"')
 
 B('ASAN Release', 'linux_asan_rel', 'compile', 'chromium_lkgr')
 F('linux_asan_rel', linux().ChromiumASANFactory(
