@@ -1468,6 +1468,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1480,6 +1481,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1492,6 +1494,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1504,6 +1507,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1516,6 +1520,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1528,6 +1533,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1540,6 +1546,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1552,6 +1559,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1564,6 +1572,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1576,6 +1585,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1588,6 +1598,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1600,6 +1611,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1612,6 +1624,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1624,6 +1637,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1636,6 +1650,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1648,6 +1663,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1660,6 +1676,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1672,6 +1689,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1684,6 +1702,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1696,6 +1715,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1708,6 +1728,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1720,6 +1741,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1732,6 +1754,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1744,6 +1767,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1756,6 +1780,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1768,6 +1793,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
@@ -1780,6 +1806,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",

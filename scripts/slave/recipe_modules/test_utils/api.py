@@ -89,11 +89,15 @@ class TestUtilsApi(recipe_api.RecipeApi):
           import sys
           print 'FAILED TO READ TEST RESULTS'
           sys.exit(1)
-          """)
+          """,
+          always_run=True)
       elif t.failures('with patch'):
         failing_tests.append(t)
       else:
-        yield self.m.python.inline(t.name, 'print "ALL IS WELL"')
+        yield self.m.python.inline(
+          t.name,
+          'print "ALL IS WELL"',
+          always_run=True)
     if not failing_tests:
       return
 
@@ -110,7 +114,8 @@ class TestUtilsApi(recipe_api.RecipeApi):
         import sys
         print 'FAILED TO READ TEST RESULTS'
         sys.exit(1)
-        """)
+        """,
+        always_run=True)
 
     ignored_failures = set(test.failures('without patch'))
     new_failures = set(test.failures('with patch')) - ignored_failures
@@ -156,4 +161,5 @@ class TestUtilsApi(recipe_api.RecipeApi):
         })
       ],
       followup_fn=followup_fn,
+      always_run=True,
     )

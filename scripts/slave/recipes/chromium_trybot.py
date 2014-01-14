@@ -329,6 +329,27 @@ def GenTests(api):
 
     yield test
 
+  # It is important that even when steps related to deapplying the patch
+  # fail, we either print the summary for all retried steps or do no
+  # retries at all.
+  yield (
+    api.test('persistent_failure_and_runhooks_2_fail_test') +
+    props() +
+    api.platform.name('linux') +
+    api.step_data('checkdeps (with patch)', api.json.output(None)) +
+    api.step_data('deps2git (with patch)', api.json.output(None)) +
+    api.step_data('nacl_integration (with patch)', api.json.output(None)) +
+    reduce(
+      lambda a, b: a + b,
+      (api.step_data('%s (with patch)' % name, canned_test(passing=True))
+       for name in GTEST_TESTS if name != 'media_unittests')
+    ) +
+    api.step_data('media_unittests (with patch)', canned_test(passing=False)) +
+    api.step_data('media_unittests (without patch)',
+                  canned_test(passing=False)) +
+    api.step_data('gclient runhooks (2)', retcode=1)
+  )
+
   invalid_json_with_patch_test = (
     api.test('invalid_json_with_patch') +
     props() +

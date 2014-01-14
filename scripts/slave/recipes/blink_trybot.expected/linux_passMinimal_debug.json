@@ -421,6 +421,7 @@
     ]
   },
   {
+    "always_run": true,
     "cmd": [
       "python",
       "-u",
