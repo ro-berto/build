@@ -633,6 +633,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'media.tough_media_cases',
         'octane',
         'robohornet_pro',
+        'scheduler.tough_scheduling_cases',
         'spaceport',
         'sunspider',
       ]
