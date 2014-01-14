@@ -35,22 +35,17 @@ def GenTests(api):
   # Keep the additional properties in sync with the build_and_upload
   # recipe in order to catch regressions.
   for plat in ['win', 'mac', 'linux']:
-    for flavor in ['Debug', 'Release']:
-      flavor_lower = flavor.lower()
-      yield (
-        api.test('%s_%s' % (plat, flavor_lower)) +
-        api.properties.scheduled(
-          build_config=flavor,
-          mastername='chromium.gpu.testing',
-          buildername='%s %s tester' % (plat, flavor_lower),
-          buildnumber=776,
-          parent_buildername='%s %s builder' % (plat, flavor_lower),
-          parent_buildnumber=571,
-          parent_got_revision=160000,
-          parent_got_webkit_revision=10000,
-          # These would ordinarily be generated during the build step.
-          swarm_hashes=dict(
-            gl_tests='6e784864abbeeff7499c15f75b904851d633c187'),
-          ) +
-        api.platform.name(plat)
-      )
+    yield (
+      api.test('%s_release' % plat) +
+      api.properties.scheduled(
+        build_config='Release',
+        mastername='chromium.gpu.testing',
+        buildername='%s tester' % plat,
+        buildnumber=776,
+        parent_buildername='%s builder' % plat,
+        parent_buildnumber=571,
+        parent_got_revision=160000,
+        parent_got_webkit_revision=10000,
+      ) +
+      api.platform.name(plat)
+    )

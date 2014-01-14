@@ -26,14 +26,12 @@ def GenTests(api):
   # Keep the additional properties in sync with the download_and_test
   # recipe in order to catch regressions.
   for plat in ['win', 'mac', 'linux']:
-    for flavor in ['Debug', 'Release']:
-      flavor_lower = flavor.lower()
-      yield (
-        api.test('%s_%s' % (plat, flavor_lower)) +
-        api.properties.scheduled(
-          build_config=flavor,
-          mastername='chromium.gpu.testing',
-          buildername='%s %s builder' % (plat, flavor_lower),
-          buildnumber=571) +
-        api.platform.name(plat)
-      )
+    yield (
+      api.test('%s_release' % plat) +
+      api.properties.scheduled(
+        build_config='Release',
+        mastername='chromium.gpu.testing',
+        buildername='%s builder' % plat,
+        buildnumber=571) +
+      api.platform.name(plat)
+    )

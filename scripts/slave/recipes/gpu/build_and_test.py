@@ -89,12 +89,7 @@ def GenTests(api):
   # Test one configuration skipping the compile.
   yield (
     api.test('mac_release_skip_compile') +
-    api.properties.git_scheduled(
-      build_config='Release',
-      skip_compile=True,
-      # These would ordinarily be generated during the build step.
-      swarm_hashes=dict(
-        gl_tests='6e784864abbeeff7499c15f75b904851d633c187')) +
+    api.properties.git_scheduled(build_config='Release', skip_compile=True) +
     api.platform.name('mac')
   )
 
