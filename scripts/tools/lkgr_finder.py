@@ -386,11 +386,12 @@ V8_LKGR_STEPS = {
     'V8 GC Stress - 1': V8_GC,
     'V8 GC Stress - 2': V8_GC,
     'V8 GC Stress - 3': V8_GC,
+    'Linux Debug Builder': ['compile'],
+    'Linux ASAN Builder': ['compile'],
+    'Android Builder': ['compile'],
     'Chrome Win7 Perf': ['compile'],
     'Chrome Mac10.6 Perf': ['compile'],
     'Chrome Linux Perf': ['compile'],
-    'Chrome Browser Tests - dbg': ['compile'],
-    'V8 Linux64 ASAN': ['compile'],
     # TODO(machenbach): Disabled until stability issues with the windows bot
     # are resolved.
     # 'Webkit': ['compile'],
