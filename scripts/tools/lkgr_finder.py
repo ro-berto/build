@@ -332,7 +332,7 @@ V8_LKGR_STEPS = {
     'V8 Linux': [
       'Check',
       'Test262',
-      'Mozilla'
+      'Mozilla',
       'Presubmit',
       'Static-Initializers',
       'Webkit',
