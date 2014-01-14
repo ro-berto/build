@@ -149,3 +149,37 @@ class V8Factory(gclient_factory.GClientFactory):
     # Add all the tests.
     self._AddTests(v8_cmd_obj, tests, mode, factory_properties)
     return factory
+
+  def V8LinuxBuilderFactory(self, target, target_arch, gclient_env, build_url,
+                            trigger):
+    return self.V8Factory(
+        slave_type='Builder',
+        options=['--build-tool=make', '--src-dir=v8'],
+        target=target,
+        factory_properties={
+          'build_url': build_url,
+          'trigger': trigger,
+          'gclient_env': gclient_env,
+          'trigger_set_properties': {'parent_cr_revision': None},
+          'zip_build_src_dir': 'v8',
+        },
+        target_arch=target_arch)
+
+  def V8Linux32BuilderFactory(self, target, gclient_env, build_url, trigger):
+    return self.V8LinuxBuilderFactory(target, 'ia32', gclient_env, build_url,
+                                      trigger)
+
+  def V8Linux64BuilderFactory(self, target, gclient_env, build_url, trigger):
+    return self.V8LinuxBuilderFactory(target, 'x64', gclient_env, build_url,
+                                      trigger)
+
+  def V8TesterFactory(self, target, build_url, factory_properties=None, *args,
+                      **kwargs):
+    factory_properties = factory_properties or {}
+    factory_properties['extract_build_src_dir'] = 'v8'
+    return self.V8Factory(
+        slave_type='Tester',
+        target=target,
+        build_url=build_url,
+        factory_properties=factory_properties,
+        *args, **kwargs)
