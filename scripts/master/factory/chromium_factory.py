@@ -337,7 +337,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('accessibility_unittests'):
       f.AddGTestTestStep('accessibility_unittests', fp)
     if R('accessibility_unittests_br'):
-      f.AddBuildrunnerGTest('accessibility_unittests_br', fp)
+      f.AddBuildrunnerGTest('accessibility_unittests', fp)
     if R('base_unittests'):
       f.AddGTestTestStep('base_unittests', fp)
     if R('base_unittests_br'):
