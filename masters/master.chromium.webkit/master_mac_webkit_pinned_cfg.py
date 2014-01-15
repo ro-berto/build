@@ -32,6 +32,7 @@ blink_tests = [
   'webkit_python_tests',
   'webkit_unit_tests',
   'blink_platform_unittests',
+  'blink_heap_unittests',
   'wtf_unittests',
 ]
 

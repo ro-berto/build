@@ -20,6 +20,7 @@
       "webkit_python_tests",
       "webkit_unit_tests",
       "blink_platform_unittests",
+      "blink_heap_unittests",
       "wtf_unittests"
     ]
   },
@@ -195,6 +196,25 @@
       "blink_platform_unittests.exe"
     ],
     "name": "blink_platform_unittests"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Release",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--no-xvfb",
+      "--factory-properties",
+      "{\"GIT_MODE\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"config_name\": \"blink\", \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"GIT_MODE\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"config_name\": \"blink\", \"issue\": 12853011, \"mastername\": \"chromium.testing.master\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "blink_heap_unittests.exe"
+    ],
+    "name": "blink_heap_unittests"
   },
   {
     "always_run": true,

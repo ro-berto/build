@@ -119,6 +119,7 @@ def GenSteps(api):
     ]),
     api.chromium.runtests('webkit_unit_tests'),
     api.chromium.runtests('blink_platform_unittests'),
+    api.chromium.runtests('blink_heap_unittests'),
     api.chromium.runtests('wtf_unittests'),
   )
 
