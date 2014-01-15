@@ -19,19 +19,21 @@ def GenSteps(api):
   api.chromium.set_config('chromium', **config_vals)
 
   api.chromium.c.gyp_env.GYP_DEFINES['linux_strip_binary'] = 1
-  api.chromium.c.gyp_env.GYP_DEFINES['target_arch'] = 'x64'
 
   s = api.gclient.c.solutions[0]
 
   USE_MIRROR = api.gclient.c.USE_MIRROR
   def DartRepositoryURL(*pieces):
     BASES = ('https://dart.googlecode.com/svn',
-             'svn://svn-mirror.golo.chromium.org')
+             'svn://svn-mirror.golo.chromium.org/dart')
     return '/'.join((BASES[USE_MIRROR],) + pieces)
 
-  s.url = DartRepositoryURL('branches/bleeding_edge/deps/dartium.deps')
+  s.url = DartRepositoryURL('branches', 'bleeding_edge', 'deps', 'dartium.deps')
   s.name = 'dartium.deps'
   s.custom_deps = api.properties.get('gclient_custom_deps') or {}
+  s.revision = api.properties.get('revision')
+  api.gclient.c.got_revision_mapping.pop('src', None)
+  api.gclient.c.got_revision_mapping['src/dart'] = 'got_revision'
   if USE_MIRROR:
     s.custom_vars.update({
       'dartium_base': 'svn://svn-mirror.golo.chromium.org'})
