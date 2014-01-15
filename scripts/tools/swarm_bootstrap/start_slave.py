@@ -131,6 +131,7 @@ def GetDimensions(hostname, platform_id, platform_version):
   return {
     'dimensions': {
       'bits': GetArchitectureSize(),
+      'hostname': hostname,
       'machine': GetMachineType(),
       'os': [
           platform_name,

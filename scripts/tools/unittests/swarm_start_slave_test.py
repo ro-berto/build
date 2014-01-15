@@ -52,21 +52,42 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
     bits = start_slave.GetArchitectureSize()
     machine = start_slave.GetMachineType()
     actual = start_slave.GetChromiumDimensions('s33-c4', 'darwin', '10.8')
-    expected = {'dimensions': {'bits': bits, 'machine': machine,
-                               'os': ['Mac', 'Mac-10.8'], 'vlan': 'm4'},
-                'tag': 's33-c4'}
+    expected = {
+        'dimensions': {
+          'bits': bits,
+          'hostname': 's33-c4',
+          'machine': machine,
+          'os': ['Mac', 'Mac-10.8'],
+          'vlan': 'm4',
+        },
+        'tag': 's33-c4',
+    }
     self.assertEqual(expected, actual)
 
     actual = start_slave.GetChromiumDimensions('vm1-m4', 'linux2', '12.04')
-    expected = {'dimensions': {'bits': bits, 'machine': machine,
-                               'os': ['Linux', 'Linux-12.04'], 'vlan': 'm4'},
-                'tag': 'vm1-m4'}
+    expected = {
+        'dimensions': {
+          'bits': bits,
+          'hostname': 'vm1-m4',
+          'machine': machine,
+          'os': ['Linux', 'Linux-12.04'],
+          'vlan': 'm4',
+        },
+        'tag': 'vm1-m4',
+    }
     self.assertEqual(expected, actual)
 
     actual = start_slave.GetChromiumDimensions('vm1-m1', 'win32', '7')
-    expected = {'dimensions': {'bits': bits, 'machine': machine,
-                               'os': ['Windows', 'Windows-7'], 'vlan': 'm1'},
-                'tag': 'vm1-m1'}
+    expected = {
+        'dimensions': {
+          'bits': bits,
+          'hostname': 'vm1-m1',
+          'machine': machine,
+          'os': ['Windows', 'Windows-7'],
+          'vlan': 'm1',
+        },
+        'tag': 'vm1-m1',
+    }
     self.assertEqual(expected, actual)
 
   def test_mac_mapping(self):
