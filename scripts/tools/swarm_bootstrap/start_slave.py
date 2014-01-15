@@ -92,12 +92,26 @@ def GetPlatformVersion():
   raise Exception('Unable to determine platform version')
 
 
-def GetArchitectureSize():
-  """Returns the number of bits in the systems architecture.
+def GetMachineType():
+  """Returns the type of processor. Should be ARM, x86 or x64."""
+  machine = platform.machine()
+  if machine in ('AMD64', 'x86_64'):
+    # Normalize the value returned on Windows (AMD64) and other platforms
+    # (x86_64).
+    return 'x64'
+  if machine == 'i386':
+    return 'x86'
+  return machine
 
-  Currently this only works on 32-bit or 64-bit systems.
-  """
-  # TODO(maruel): Returns the python build bitness, not the OS bitness.
+
+def GetArchitectureSize():
+  """Returns the number of bits in the systems architecture."""
+  machine = GetMachineType()
+  if machine == 'x64':
+    return '64'
+  if machine == 'x86':
+    return '32'
+  # Fallback.
   return '64' if sys.maxsize > 2**32 else '32'
 
 
@@ -117,7 +131,7 @@ def GetDimensions(hostname, platform_id, platform_version):
   return {
     'dimensions': {
       'bits': GetArchitectureSize(),
-      'machine': platform.machine(),
+      'machine': GetMachineType(),
       'os': [
           platform_name,
           platform_name + '-' + platform_version,

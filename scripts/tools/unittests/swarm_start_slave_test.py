@@ -47,9 +47,10 @@ class SwarmStartSlaveTest(auto_stub.TestCase):
     self.mock(start_slave, 'WriteToFile', mock.Mock())
 
   def test_dimensions(self):
+    # These two require some logic that doesn't need to be tested here. Just
+    # test GetchromiumDimensions() work fine.
     bits = start_slave.GetArchitectureSize()
-    machine = os.uname()[4]
-
+    machine = start_slave.GetMachineType()
     actual = start_slave.GetChromiumDimensions('s33-c4', 'darwin', '10.8')
     expected = {'dimensions': {'bits': bits, 'machine': machine,
                                'os': ['Mac', 'Mac-10.8'], 'vlan': 'm4'},
