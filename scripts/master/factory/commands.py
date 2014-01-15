@@ -1254,6 +1254,7 @@ class FactoryCommands(object):
     factory_properties = factory_properties or {}
 
     cmd = [self._python, self._extract_dynamorio_tool,
+           '--build-dir', self._build_dir,
            '--target', 'dynamorio',
            '--build-url', factory_properties.get('dynamorio_build_url')]
 

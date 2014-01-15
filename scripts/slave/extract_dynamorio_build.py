@@ -17,7 +17,6 @@ import urllib
 import urllib2
 
 from common import chromium_utils
-from slave import build_directory
 from slave import slave_utils
 
 
@@ -149,14 +148,12 @@ def main():
     print 'Unknown options: %s' % args
     return 1
 
-  options.build_dir = build_directory.GetBuildOutputDirectory()
   options.build_dir = os.path.abspath(options.build_dir)
 
   options.build_url = (options.build_url or
                        options.factory_properties.get('build_url'))
 
   del options.factory_properties
-  del options.build_properties
 
   return real_main(options)
 
