@@ -58,8 +58,11 @@ def archive(options, args):
   src_dir = os.path.abspath(os.path.dirname(build_dir))
   build_dir = os.path.join(build_dir, options.target)
 
+  revision_dir = options.factory_properties.get('revision_dir')
+  (build_revision, _) = slave_utils.GetBuildRevisions(
+      src_dir, None, revision_dir)
+
   staging_dir = slave_utils.GetStagingDir(src_dir)
-  build_revision = slave_utils.SubversionRevision(src_dir)
   chromium_utils.MakeParentDirectoriesWorldReadable(staging_dir)
 
   print 'Staging in %s' % build_dir
@@ -76,10 +79,16 @@ def archive(options, args):
     subdir = '%s-%s' % (chromium_utils.PlatformName(),
                         options.target.lower())
 
+  # Components like v8 get a <name>-v8-component-<revision> infix.
+  component = ''
+  if revision_dir:
+    component = '-%s-component' % revision_dir
+
   prefix = options.factory_properties.get('cf_archive_name', 'cf_archive')
-  zip_file_name = '%s-%s-%s-%d' % (prefix,
+  zip_file_name = '%s-%s-%s%s-%s' % (prefix,
                                    chromium_utils.PlatformName(),
                                    options.target.lower(),
+                                   component,
                                    build_revision)
 
   (zip_dir, zip_file) = chromium_utils.MakeZip(staging_dir,
