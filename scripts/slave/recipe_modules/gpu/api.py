@@ -60,6 +60,13 @@ class GpuApi(recipe_api.RecipeApi):
 
     self.m.chromium.c.gyp_env.GYP_DEFINES['internal_gles2_conform_tests'] = 1
 
+    # Isolates don't work with the component build yet.
+    # Fortunately, we can easily tell which GPU bots are using the
+    # component build -- all of those building or testing Debug.
+    self._use_isolates = self.m.chromium.is_release_build
+    if self._use_isolates:
+      self.m.isolate.set_isolate_environment(self.m.chromium.c)
+
   def checkout_steps(self):
     # Always force a gclient-revert in order to avoid problems when
     # directories are added to, removed from, and re-added to the repo.
@@ -77,6 +84,9 @@ class GpuApi(recipe_api.RecipeApi):
     # Since performance tests aren't run on the debug builders, it isn't
     # necessary to build all of the targets there.
     build_tag = '' if self.m.chromium.is_release_build else 'debug_'
+    # It's harmless to process the isolate-related targets even if they
+    # aren't supported on the current configuration (because the component
+    # build is used).
     yield self.m.chromium.compile(
         targets=['chromium_gpu_%sbuilder' % build_tag, 'gl_tests_run'])
     # This is only an initial test of the isolate upload path; the

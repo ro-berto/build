@@ -104,7 +104,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library disable_glibcxx_debug=1 internal_gles2_conform_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "clang=1 component=static_library disable_glibcxx_debug=1 internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=hashtable test_isolation_outdir=https://isolateserver.appspot.com",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
