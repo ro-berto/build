@@ -876,6 +876,7 @@ class FactoryCommands(object):
                           locks=[self.slave_exclusive_lock],
                           timeout=60*5,
                           workdir='../../..',
+                          flunkOnFailure=False,
                           warnOnFailure=True,
                           command=command)
 
