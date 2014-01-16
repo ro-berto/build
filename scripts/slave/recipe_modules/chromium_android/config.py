@@ -74,6 +74,14 @@ def x86_base(c):
 def x86_builder(c):
   pass
 
+@config_ctx()
+def mips_base(c):
+  pass
+
+@config_ctx(includes=['mips_base'])
+def mips_builder(c):
+  pass
+
 @config_ctx(includes=['main_builder'])
 def dartium_builder(c):
   c.get_app_manifest_vars = False

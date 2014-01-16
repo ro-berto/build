@@ -82,6 +82,7 @@
   "klp_builder": "config \"klp_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "main_builder": "config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
   "main_tests": "config \"main_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "mips_builder": "config \"mips_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
   "msvs": "can not use msvs on \"mac\"", 
   "ninja": {
     "build_config_fs": "Release", 

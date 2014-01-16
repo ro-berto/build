@@ -49,6 +49,12 @@ def x86_builder(c):
     raise recipe_config.BadConf(
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
+@CONFIG_CTX(includes=['android_defaults', 'default_compiler'],
+            config_vars={'TARGET_ARCH': 'mips'})
+def mips_builder(c):
+  if c.TARGET_ARCH != 'mips':
+    raise recipe_config.BadConf('I dunno what to put in a mips builder!')
+
 @CONFIG_CTX(includes=['main_builder'])
 def dartium_builder(c):
   c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']

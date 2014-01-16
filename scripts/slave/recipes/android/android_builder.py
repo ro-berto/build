@@ -36,7 +36,7 @@ def GenSteps(api):
 def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
              'x86_builder', 'klp_builder', 'try_builder', 'x86_try_builder',
-             'dartium_builder']
+             'dartium_builder', 'mips_builder']
 
   for bot_id in bot_ids:
     props = api.properties(

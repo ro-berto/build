@@ -228,6 +228,7 @@
       "GYP_GENERATOR_FLAGS": "default_target=All"
     }
   }, 
+  "mips_builder": "I dunno what to put in a mips builder!", 
   "msvs": "can not use msvs on \"linux\"", 
   "ninja": {
     "build_config_fs": "Release", 

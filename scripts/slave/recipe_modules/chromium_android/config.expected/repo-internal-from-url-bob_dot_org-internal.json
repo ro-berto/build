@@ -66,6 +66,12 @@
       "large_instrumentation_tests"
     ]
   }, 
+  "mips_base": {
+    "internal_dir": "Path('[CHECKOUT]', 'internal')"
+  }, 
+  "mips_builder": {
+    "internal_dir": "Path('[CHECKOUT]', 'internal')"
+  }, 
   "tests_base": {
     "internal_dir": "Path('[CHECKOUT]', 'internal')", 
     "run_stack_tool_steps": true
