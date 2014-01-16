@@ -335,14 +335,12 @@ def main_android_webview(options, args):
   Returns the first non-zero exit status of any command it executes,
   or zero on success.
   """
-  binaries = [
-      'system/lib/libwebviewchromium.so',
-  ]
+  target_dir = os.path.join(build_directory.GetBuildOutputDirectory(),
+                            options.target)
 
-  if options.target_dir is None:
-    sys.stderr.write('Specify --target-dir=/path/to/out argument.\n')
+  binaries = ['lib/libwebviewchromium.so']
 
-  return check_android_binaries(binaries, options.target_dir, options)
+  return check_android_binaries(binaries, target_dir, options)
 
 
 def main_win(options, args):
@@ -407,9 +405,7 @@ def main():
                            default='Release',
                            help='build target (Debug, Release) '
                                 '[default: %default]')
-  option_parser.add_option('--target-dir',
-                           metavar='DIR',
-                           help='path to target out/ directory')
+  option_parser.add_option('--target-dir', help='ignored')
   option_parser.add_option('--build-dir', help='ignored')
   option_parser.add_option('--platform',
                            default=default_platform,
