@@ -490,13 +490,15 @@ def GetGClientPath():
 
 if '__main__' == __name__:
   skip_sync_arg = '--no-gclient-sync'
-  if skip_sync_arg not in sys.argv:
+  if skip_sync_arg not in sys.argv and (
+      os.environ.get('SKIP_SLAVE_UPDATE_SCRIPTS') != '1'):
     UseBotoPath()
     if subprocess.call([GetGClientPath(), 'sync', '--force']) != 0:
       print >> sys.stderr, (
           '(%s) `gclient sync` failed; proceeding anyway...' % sys.argv[0])
     os.execv(sys.executable, [sys.executable] + sys.argv + [skip_sync_arg])
 
-  # Remove skip_sync_arg from arg list.  Needed because twistd.
-  sys.argv.remove(skip_sync_arg)
+  if skip_sync_arg in sys.argv:
+    # Remove skip_sync_arg from arg list.  Needed because twistd.
+    sys.argv.remove(skip_sync_arg)
   main()
