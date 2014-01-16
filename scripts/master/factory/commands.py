@@ -10,7 +10,6 @@ project-specific. See the other *_commands.py for project-specific commands.
 
 import json
 import ntpath
-import os
 import posixpath
 import re
 
@@ -861,12 +860,8 @@ class FactoryCommands(object):
 
   def AddUpdateScriptStep(self, gclient_jobs=None, solutions=None):
     """Adds a step to the factory to update the script folder."""
-    # This will be run in the '..' directory to update the slave's own script
+    # This will be run in the '..' directory to udpate the slave's own script
     # checkout.
-
-    if os.environ.get('SKIP_SLAVE_UPDATE_SCRIPTS') == '1':
-      return
-
     command = [chromium_utils.GetGClientCommand(self._target_platform),
                'sync', '--verbose', '--force']
     if gclient_jobs:
