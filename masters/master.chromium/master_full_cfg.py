@@ -57,7 +57,7 @@ F('win_clobber', win().ChromiumFactory(
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES': 'test_isolation_mode=noop',
-        'GYP_USE_SEPARATE_MSPDBSRV': '1',
+        'GYP_LINK_CONCURRENCY_MAX': '4',
       },
     }))
 
