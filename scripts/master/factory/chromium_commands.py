@@ -1422,7 +1422,7 @@ class ChromiumCommands(commands.FactoryCommands):
   def AddWebRtcPerfManualContentBrowserTests(self, factory_properties=None):
     cmd_options = ['--run-manual', '--test-launcher-print-test-stdio=always']
     self.AddAnnotatedPerfStep(test_name='webrtc_manual_content_browsertests',
-                              gtest_filter="WebRTC*:Webrtc*:*Dtmf",
+                              gtest_filter="WebRtc*",
                               log_type='graphing',
                               factory_properties=factory_properties,
                               cmd_name='content_browsertests',
@@ -1435,7 +1435,7 @@ class ChromiumCommands(commands.FactoryCommands):
                    '--test-launcher-jobs=1',
                    '--test-launcher-print-test-stdio=always']
     self.AddAnnotatedPerfStep(test_name='webrtc_manual_browser_tests',
-                              gtest_filter="Webrtc*",
+                              gtest_filter="WebRtc*",
                               log_type='graphing',
                               factory_properties=factory_properties,
                               cmd_name='browser_tests',
