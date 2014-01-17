@@ -13,9 +13,12 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def get_env(self):
     env_dict = dict(self._env)
-    env_dict.update(self.c.extra_env)
+    internal_path = None
+    if self.c is not None:
+      env_dict.update(self.c.extra_env)
+      internal_path = str(self.c.build_internal_android)
     env_dict['PATH'] = self.m.path.pathsep.join(filter(bool, (
-      str(self.c.build_internal_android),
+      internal_path,
       self._env.get('PATH',''),
       '%(PATH)s'
     )))
@@ -165,8 +168,11 @@ class AndroidApi(recipe_api.RecipeApi):
          '-p', self.m.properties['patch_url'],
          '-r', self.c.internal_dir()])
 
-  def compile(self):
-    return self.m.chromium.compile(env=self.get_env())
+  def compile(self, **kwargs):
+    assert 'env' not in kwargs, (
+        "chromium_andoid compile clobbers env in keyword arguments")
+    kwargs['env'] = self.get_env()
+    return self.m.chromium.compile(**kwargs)
 
   def findbugs(self):
     cmd = [self.m.path.checkout('build', 'android', 'findbugs_diff.py')]
