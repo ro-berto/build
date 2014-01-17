@@ -424,15 +424,24 @@ def create_results_tracker(tracker_class, options):
     tracker_obj = tracker_class()
   else:
     build_dir = os.path.abspath(options.build_dir)
-    try:
-      webkit_dir = chromium_utils.FindUpward(build_dir, 'third_party', 'WebKit',
-                                             'Source')
-      webkit_revision = GetSvnRevision(webkit_dir)
-    except:  # pylint: disable=W0702
-      webkit_revision = 'undefined'
+
+    if options.webkit_revision:
+      webkit_revision = options.webkit_revision
+    else:
+      try:
+        webkit_dir = chromium_utils.FindUpward(
+            build_dir, 'third_party', 'WebKit', 'Source')
+        webkit_revision = GetSvnRevision(webkit_dir)
+      except:  # pylint: disable=W0702
+        webkit_revision = 'undefined'
+
+    if options.revision:
+      revision = options.revision
+    else:
+      revision = GetSvnRevision(os.path.dirname(build_dir))
 
     tracker_obj = tracker_class(
-        revision=GetSvnRevision(os.path.dirname(build_dir)),
+        revision=revision,
         build_properties=options.build_properties,
         factory_properties=options.factory_properties,
         webkit_revision=webkit_revision)
@@ -1349,6 +1358,14 @@ def main():
                            help='A file containing a JSON blob with a dict '
                                 'that will be uploaded to the results '
                                 'dashboard as supplemental columns.')
+  option_parser.add_option('--revision',
+                           default='Force the Chromium revision',
+                           help='The revision number which will be is used as '
+                                'primary key by the dashboard. If omitted it '
+                                'is automatically extracted from the checkout.')
+  option_parser.add_option('--webkit-revision',
+                           default='Force the WebKit revision',
+                           help='See --revision.')
   option_parser.add_option('--enable-lsan', default=False,
                            help='Enable memory leak detection (LeakSanitizer). '
                                 'Also can be enabled with the factory '
