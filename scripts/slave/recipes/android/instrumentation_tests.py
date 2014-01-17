@@ -43,14 +43,6 @@ def GenTests(api):
             'INSTRUMENTATION_TEST_DATA': 'a:b/test/data/android/device_files',
             'FLAKINESS_DASHBOARD_SERVER': 'test-results.appspot.com'
           })
-        ) +
-        api.step_data(
-          'envsetup',
-          api.json.output({
-            'PATH': './',
-            'GYP_DEFINES': 'my_new_gyp_def=aaa',
-            'GYP_SOMETHING': 'gyp_something_value'
-          })
         )
     )
     if include_tests:

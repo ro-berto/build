@@ -105,6 +105,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
       self._internal_names = self.m.step_history.last_step().json.output
 
+  @recipe_api.inject_test_data
   def envsetup(self):
     envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
     if self.target_arch:
@@ -112,14 +113,18 @@ class AndroidApi(recipe_api.RecipeApi):
 
     cmd = ([self.m.path.build('scripts', 'slave', 'env_dump.py'),
             '--output-json', self.m.json.output()] + envsetup_cmd)
-    yield self.m.step('envsetup', cmd, env=self.get_env())
 
-    env_diff = self.m.step_history.last_step().json.output
-    for key, value in env_diff.iteritems():
-      if key.startswith('GYP_'):
-        continue
-      else:
-        self._env[key] = value
+    def update_self_env(step_result):
+      env_diff = step_result.json.output
+      for key, value in env_diff.iteritems():
+        if key.startswith('GYP_'):
+          continue
+        else:
+          self._env[key] = value
+
+    return self.m.step('envsetup', cmd, env=self.get_env(),
+                       followup_fn=update_self_env)
+
 
   def clean_local_files(self):
     target = self.m.properties.get('target', 'Debug')
