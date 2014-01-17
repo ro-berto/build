@@ -181,9 +181,9 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"webkit\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"top_of_tree_blink\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"webkit\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"top_of_tree_blink\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "angle_unittests"
+      "gl_tests"
     ],
-    "name": "angle_unittests"
+    "name": "gl_tests"
   },
   {
     "always_run": true,
@@ -200,14 +200,9 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"webkit\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"top_of_tree_blink\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"webkit\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"top_of_tree_blink\": true, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "--run-python-script",
-      "[SLAVE_BUILD]/src/tools/swarming_client/run_isolated.py",
-      "-H",
-      "6e784864abbeeff7499c15f75b904851d633c187",
-      "-I",
-      "https://isolateserver.appspot.com"
+      "angle_unittests"
     ],
-    "name": "gl_tests"
+    "name": "angle_unittests"
   },
   {
     "allow_subannotations": true,

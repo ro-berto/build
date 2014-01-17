@@ -7,6 +7,7 @@ from slave import recipe_api
 SIMPLE_TESTS_TO_RUN = [
   'content_gl_tests',
   'gles2_conform_test',
+  'gl_tests',
   'angle_unittests'
 ]
 
@@ -131,12 +132,7 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
-      yield self.m.chromium.runtests(test)
-
-    if self._use_isolates:
-      yield self.m.isolate.run_isolate_test('gl_tests')
-    else:
-      yield self.m.chromium.runtests('gl_tests')
+      yield self.m.chromium.runtests(test, spawn_dbus=True)
 
     # Choose a reasonable default for the location of the sandbox binary
     # on the bots.
