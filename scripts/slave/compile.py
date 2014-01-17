@@ -35,21 +35,37 @@ BUILD_DIR = os.path.dirname(os.path.dirname(SLAVE_SCRIPTS_DIR))
 
 
 class EchoDict(dict):
-  """Dict that remembers all assigned values."""
+  """Dict that remembers all modified values."""
+
   def __init__(self, *args, **kwargs):
-    self.overrides = {}
+    self.overrides = set()
+    self.adds = set()
     super(EchoDict, self).__init__(*args, **kwargs)
+
   def __setitem__(self, key, val):
-    self.overrides[key] = True
+    if not key in self and not key in self.overrides:
+      self.adds.add(key)
+    self.overrides.add(key)
     super(EchoDict, self).__setitem__(key, val)
+
+  def __delitem__(self, key):
+    self.overrides.add(key)
+    if key in self.adds:
+      self.adds.remove(key)
+      self.overrides.remove(key)
+    super(EchoDict, self).__delitem__(key)
+
   def print_overrides(self, fh=None):
     if not self.overrides:
       return
     if not fh:
       fh = sys.stdout
-    fh.write('Environment variables set in compile.py:\n')
-    for k in sorted(self.overrides.keys()):
-      fh.write('  %s=%s\n' % (k, self[k]))
+    fh.write('Environment variables modified in compile.py:\n')
+    for k in sorted(list(self.overrides)):
+      if k in self:
+        fh.write('  %s=%s\n' % (k, self[k]))
+      else:
+        fh.write('  %s (removed)\n' % k)
     fh.write('\n')
 
 
