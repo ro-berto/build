@@ -165,8 +165,13 @@ class _RietveldPoller(base.PollingChangeSource):
         by Rietveld, not simply the ones we tried this time.
     """
     data = json.loads(json_string)
-    self._cursor = str(data['cursor'])
-    return self._try_job_rietveld.SubmitJobs(data['jobs'])
+    d = self._try_job_rietveld.SubmitJobs(data['jobs'])
+    def success_callback(value):
+      self._cursor = str(data['cursor'])
+      self._try_job_rietveld.processed_keys.clear()
+      return value
+    d.addCallback(success_callback)
+    return d
 
 
 class TryJobRietveld(TryJobBase):
@@ -192,6 +197,10 @@ class TryJobRietveld(TryJobBase):
     self._poller = _RietveldPoller(endpoint, interval=10)
     self._valid_users = _ValidUserPoller(interval=12 * 60 * 60)
     self._project = project
+
+    # Cleared by _RietveldPoller._ParseJson's success callback.
+    self.processed_keys = set()
+
     log.msg('TryJobRietveld created, get_pending_endpoint=%s '
             'project=%s' % (endpoint, project))
 
@@ -231,6 +240,10 @@ class TryJobRietveld(TryJobBase):
           raise BadJobfile(
               'TryJobRietveld rejecting job from %s' % job['requester'])
 
+        if job['key'] in self.processed_keys:
+          log.msg('TryJobRietveld skipping processed key %s' % job['key'])
+          continue
+
         if job['email'] != job['requester']:
           # Note the fact the try job was requested by someone else in the
           # 'reason'.
@@ -264,14 +277,11 @@ class TryJobRietveld(TryJobBase):
         changeids = [c.number]
 
         yield self.SubmitJob(cleaned_job, changeids)
+
+        self.processed_keys.add(job['key'])
       except BadJobfile, e:
         # We need to mark it as failed otherwise it'll stay in the pending
         # state. Simulate a buildFinished event on the build.
-        if not job.get('key'):
-          log.err(
-              'Got "%s" for issue %s but not key, not updating Rietveld' %
-              (e, job.get('issue')))
-          continue
         log.err('Got "%s" for issue %s' % (e, job.get('issue')))
         for service in self.master.services:
           if service.__class__.__name__ == 'TryServerHttpStatusPush':
@@ -292,9 +302,11 @@ class TryJobRietveld(TryJobBase):
               'results': EXCEPTION,
             }
             service.push('buildFinished', build=build)
+            self.processed_keys.add(job['key'])
             log.err('Rietveld updated')
             break
         else:
+          self.processed_keys.add(job['key'])
           log.err('Rietveld not updated: no corresponding service found.')
 
   # TryJobBase overrides:
