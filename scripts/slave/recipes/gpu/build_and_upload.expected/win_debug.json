@@ -81,7 +81,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library disable_glibcxx_debug=1 fastbuild=1 internal_gles2_conform_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 internal_gles2_conform_tests=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2010"
     },
