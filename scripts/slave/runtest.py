@@ -1359,12 +1359,10 @@ def main():
                                 'that will be uploaded to the results '
                                 'dashboard as supplemental columns.')
   option_parser.add_option('--revision',
-                           default='Force the Chromium revision',
                            help='The revision number which will be is used as '
                                 'primary key by the dashboard. If omitted it '
                                 'is automatically extracted from the checkout.')
   option_parser.add_option('--webkit-revision',
-                           default='Force the WebKit revision',
                            help='See --revision.')
   option_parser.add_option('--enable-lsan', default=False,
                            help='Enable memory leak detection (LeakSanitizer). '
