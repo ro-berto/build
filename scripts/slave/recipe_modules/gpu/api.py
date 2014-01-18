@@ -11,6 +11,15 @@ SIMPLE_TESTS_TO_RUN = [
   'angle_unittests'
 ]
 
+GPU_ISOLATES = [
+  'angle_unittests',
+  'content_gl_tests',
+  'gles2_conform_test',
+  'gl_tests',
+  'tab_capture_performance_tests',
+  'telemetry_gpu_test'
+]
+
 class GpuApi(recipe_api.RecipeApi):
   def setup(self):
     """Call this once before any of the other APIs in this module."""
@@ -88,10 +97,9 @@ class GpuApi(recipe_api.RecipeApi):
     # aren't supported on the current configuration (because the component
     # build is used).
     yield self.m.chromium.compile(
-        targets=['chromium_gpu_%sbuilder' % build_tag, 'gl_tests_run'])
-    # This is only an initial test of the isolate upload path; the
-    # subsequent GPU isolates will follow.
-    yield self.m.isolate.manifest_to_hash(['gl_tests'])
+        targets=['chromium_gpu_%sbuilder' % build_tag] + [
+          '%s_run' % test for test in GPU_ISOLATES])
+    yield self.m.isolate.manifest_to_hash(GPU_ISOLATES)
 
   def upload_steps(self):
     yield self.m.archive.zip_and_upload_build(
