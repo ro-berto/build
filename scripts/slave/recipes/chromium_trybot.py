@@ -50,6 +50,24 @@ GTEST_TESTS = [
 ]
 
 
+# Make it easy to change how different configurations of this recipe
+# work without making buildbot-side changes. Each builder will only
+# have a tag specifying a config/flavor (adding, removing or changing
+# builders requires a buildbot-side change anyway), but we can change
+# everything about what that config means in the recipe.
+RECIPE_CONFIGS = {
+  # Default config.
+  None: {
+    'chromium_config': 'chromium',
+    'compile_only': False,
+  },
+  'clang': {
+    'chromium_config': 'chromium_clang',
+    'compile_only': True,
+  },
+}
+
+
 def GenSteps(api):
   class CheckdepsTest(api.test_utils.Test):  # pylint: disable=W0232
     name = 'checkdeps'
@@ -168,9 +186,14 @@ def GenSteps(api):
       failures = api.step_history[self._step_name(suffix)].json.output
       return [f['raw_name'] for f in failures]
 
+  recipe_config_name = api.properties.get('recipe_config')
+  if recipe_config_name not in RECIPE_CONFIGS:  # pragma: no cover
+    raise ValueError('Unsupported recipe_config "%s"' % recipe_config_name)
+  recipe_config = RECIPE_CONFIGS[recipe_config_name]
 
-  api.chromium.set_config('chromium')
+  api.chromium.set_config(recipe_config['chromium_config'])
   api.chromium.apply_config('trybot_flavor')
+  api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
 
   tests = []
@@ -191,6 +214,9 @@ def GenSteps(api):
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
+    return
+
+  if recipe_config['compile_only']:
     return
 
   def deapply_patch_fn(failing_tests):
@@ -233,10 +259,11 @@ def GenTests(api):
     ],
   }
   canned_test = api.json.canned_gtest_output
-  def props(config='Release', git_mode=False):
+  def props(config='Release', git_mode=False, **kwargs):
     return api.properties.tryserver(
       build_config=config,
       GIT_MODE=git_mode,
+      **kwargs
     )
 
   for build_config in ['Release', 'Debug']:
@@ -260,6 +287,12 @@ def GenTests(api):
           test += api.step_data(gtest_test + ' (with patch)',
                                 canned_test(passing=True))
         yield test
+
+  yield (
+    api.test('clang') +
+    props(recipe_config='clang') +
+    api.platform.name('linux')
+  )
 
   TEST_FAILURES = [
     (None, None),
