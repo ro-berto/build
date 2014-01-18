@@ -860,6 +860,24 @@ class GatekeeperTest(unittest.TestCase):
     self.assertNotIn(self.mailer_url, urls)
     self.assertIn(self.status_url, urls)
 
+  def testForgiveAllSteps(self):
+    """Test that setting forgive_all prevents emailing the blamelist."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                     ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1'],
+                                 'forgive_all': 'true'})
+    urls = self.call_gatekeeper()
+
+    self.assertNotIn(self.mailer_url, urls)
+    self.assertIn(self.status_url, urls)
 
   #### Multiple failures.
 

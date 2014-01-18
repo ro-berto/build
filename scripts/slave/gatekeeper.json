@@ -9,9 +9,7 @@
           "gclient"
         ],
 
-        "sheriff_classes": [
-          "sheriff"
-        ],
+        "forgive_all": "true",
 
         "builders": {
           "Win": {
@@ -65,8 +63,12 @@
     "http://build.chromium.org/p/chromium.lkgr": [
       {
         "tree_notify": [
-          "jschuh@chromium.org"
+          "jschuh@chromium.org",
+          "scottmg@chromium.org",
+          "wfh@chromium.org"
         ],
+
+        "forgive_all": "true",
 
         "builders": {
           "Win x64": {

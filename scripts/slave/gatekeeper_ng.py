@@ -265,6 +265,11 @@ def load_gatekeeper_config(filename):
     %(revision): build revision
     %(buildnumber): buildnumber
 
+  'forgive_all' converts all closing_steps to be forgiving_steps. Since
+  forgiving_steps only email sheriffs + watchlist (not the committer), this is a
+  great way to set up experimental or informational builders without spamming
+  people. It is enabled by providing the string 'true'.
+
   The 'comment' key can be put anywhere and is ignored by the parser.
 
   # Python, not JSON.
@@ -309,19 +314,21 @@ def load_gatekeeper_config(filename):
                   'a_watcher@chromium.org']
     sheriff_classes: ['sheriff_win', 'sheriff_win_test', 'sheriff_xp']
 
-  Again, fields are optional and treated as empty lists/sets if not present.
+  Again, fields are optional and treated as empty lists/sets/strings if not
+  present.
   """
 
   # Keys which are allowed in a master or builder section.
-  master_keys = ['sheriff_classes', 'tree_notify', 'subject_template']
-  builder_keys = ['forgiving_steps', 'closing_steps', 'tree_notify',
-                  'sheriff_classes', 'subject_template']
+  master_keys = ['forgive_all', 'tree_notify', 'sheriff_classes',
+                 'subject_template']
+  builder_keys = ['closing_steps', 'forgiving_steps', 'forgive_all',
+                  'sheriff_classes', 'subject_template', 'tree_notify']
 
 
   # These keys are strings instead of sets. Strings can't be merged,
   # so more specific (master -> category -> builder) strings clobber
   # more generic ones.
-  strings = ['subject_template']
+  strings = ['forgive_all', 'subject_template']
 
   with open(filename) as f:
     raw_gatekeeper_config = json.load(f)
@@ -394,6 +401,12 @@ def load_gatekeeper_config(filename):
               gatekeeper_builder[k] = builder[k]
           else:
             gatekeeper_builder[k] |= set(builder.get(k, []))
+
+        # Builder postprocessing.
+        if gatekeeper_builder['forgive_all'] == 'true':
+          gatekeeper_builder['forgiving_steps'] |= gatekeeper_builder[
+              'closing_steps']
+          gatekeeper_builder['closing_steps'] = set([])
 
   return gatekeeper_config
 
