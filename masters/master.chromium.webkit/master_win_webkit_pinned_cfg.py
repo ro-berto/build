@@ -21,16 +21,6 @@ def win():
 
 defaults['category'] = 'deps'
 
-blink_tests = [
-  'webkit',
-  'webkit_lint',
-  'webkit_python_tests',
-  'webkit_unit_tests',
-  'blink_platform_unittests',
-  'blink_heap_unittests',
-  'wtf_unittests',
-]
-
 ################################################################################
 ## Release
 ################################################################################
@@ -67,7 +57,7 @@ B('WebKit XP (deps)', 'f_webkit_rel_tests', scheduler='s1_chromium_rel_trigger')
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
       'additional_expectations': [
         ['webkit', 'tools', 'layout_tests', 'test_expectations.txt' ],

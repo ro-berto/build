@@ -20,15 +20,6 @@ def linux():
 
 defaults['category'] = 'layout'
 
-blink_tests = [
-  'webkit',
-  'webkit_lint',
-  'webkit_python_tests',
-  'webkit_unit_tests',
-  'blink_platform_unittests',
-  'blink_heap_unittests',
-  'wtf_unittests',
-]
 
 ################################################################################
 ## Release
@@ -39,7 +30,7 @@ blink_tests = [
 #
 B('WebKit Linux', 'f_webkit_linux_rel', scheduler='global_scheduler')
 F('f_webkit_linux_rel', linux().ChromiumFactory(
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     options=[
         '--build-tool=ninja',
         '--compiler=goma',
@@ -101,7 +92,7 @@ B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='global_scheduler',
   auto_reboot=False)
 F('f_webkit_dbg_tests', linux().ChromiumFactory(
     target='Debug',
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     options=[
         '--build-tool=ninja',
         '--compiler=goma',

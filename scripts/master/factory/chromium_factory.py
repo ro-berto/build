@@ -14,6 +14,37 @@ from master.factory import gclient_factory
 import config
 
 
+# This is kind of the wrong place for this, but it is the only place apart
+# from master_config imported by all the configs that need this list.
+blink_tests = [
+  'blink_heap_unittests',
+  'blink_platform_unittests',
+  'webkit',
+  'webkit_lint',
+  'webkit_python_tests',
+  'webkit_unit_tests',
+  'wtf_unittests',
+]
+
+# These are run on the non-blink tryservers. We don't run the layout tests
+# because they are slow, and we don't run the python tests because there's no
+# need to on chromium jobs.
+blink_tests_for_chromium_tryjobs = [
+  'blink_heap_unittests_br',
+  'blink_platform_unittests_br',
+  'webkit_unit_tests_br',
+  'wtf_unittests_br',
+]
+
+# These are run on the blink tryservers; the 'webkit' step is not run
+# under buildrunner because it needs to archive things.
+blink_tests_for_blink_tryjobs = blink_tests_for_chromium_tryjobs + [
+  'buildrunner_tests',
+  'webkit',
+  'webkit_lint_br',
+  'webkit_python_tests_br',
+]
+
 def ForceComponent(target, project, gclient_env):
   # Force all bots to specify the "Component" gyp variables, unless it is
   # already set.
@@ -567,7 +598,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddBuildrunnerGTest('webkit_compositor_bindings_unittests', fp)
     if R('webkit_unit_tests'):
       f.AddGTestTestStep('webkit_unit_tests', fp)
-    if R('webkit_unit_br'):
+    if R('webkit_unit_tests_br'):
       f.AddBuildrunnerGTest('webkit_unit_tests', fp)
     if R('wtf_unittests'):
       f.AddGTestTestStep('wtf_unittests', fp)

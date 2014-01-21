@@ -37,16 +37,6 @@ def mac():
 
 defaults['category'] = 'layout'
 
-blink_tests = [
-  'webkit',
-  'webkit_lint',
-  'webkit_python_tests',
-  'webkit_unit_tests',
-  'blink_platform_unittests',
-  'blink_heap_unittests',
-  'wtf_unittests',
-]
-
 ################################################################################
 ## Release
 ################################################################################
@@ -88,7 +78,7 @@ B('WebKit Mac10.6', 'f_webkit_rel_tests_106', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_106', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -100,7 +90,7 @@ B('WebKit Mac10.7', 'f_webkit_rel_tests_107', scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_107', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -113,7 +103,7 @@ B('WebKit Mac10.8', 'f_webkit_rel_tests_108',
 F('f_webkit_rel_tests_108', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -124,7 +114,7 @@ F('f_webkit_rel_tests_108', mac().ChromiumFactory(
 B('WebKit Mac10.8 (retina)', 'f_webkit_rel_tests_108_retina',
   scheduler='s5_webkit_rel_trigger')
 F('f_webkit_rel_tests_108_retina', mac().ChromiumFactory(
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'blink_tests'],
     factory_properties={
@@ -144,7 +134,7 @@ B('WebKit Mac10.9', 'f_webkit_rel_tests_109',
 F('f_webkit_rel_tests_109', mac().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -194,7 +184,7 @@ F('f_webkit_dbg_tests', mac().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,

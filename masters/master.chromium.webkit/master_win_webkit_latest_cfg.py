@@ -21,16 +21,6 @@ def win():
 
 defaults['category'] = 'layout'
 
-blink_tests = [
-  'webkit',
-  'webkit_lint',
-  'webkit_python_tests',
-  'webkit_unit_tests',
-  'blink_platform_unittests',
-  'blink_heap_unittests',
-  'wtf_unittests',
-]
-
 ################################################################################
 ## Release
 ################################################################################
@@ -69,7 +59,7 @@ B('WebKit XP', 'f_webkit_rel_tests', scheduler='s4_webkit_rel_trigger')
 F('f_webkit_rel_tests', win().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
@@ -138,7 +128,7 @@ F('f_webkit_dbg_tests', win().ChromiumFactory(
     target='Debug',
     slave_type='Tester',
     build_url=dbg_archive,
-    tests=blink_tests,
+    tests=chromium_factory.blink_tests,
     factory_properties={
         'archive_webkit_results': ActiveMaster.is_production_host,
         'generate_gtest_json': True,
