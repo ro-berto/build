@@ -113,10 +113,34 @@ def v0(client, options, test_name):
 
 
 def v0_1(client, options, test_name):
-  """Code starting around r218375.
+  """Code starting r219798."""
+  swarming = os.path.join(client, 'swarming.py')
+  cmd = [
+    sys.executable,
+    swarming,
+    'collect',
+    '--swarming', options.swarming,
+    '--decorate',
+    test_name,
+  ]
+  print('Running: %s' % ' '.join(cmd))
+  sys.stdout.flush()
+  proc = subprocess2.Popen(cmd, bufsize=0, stdout=subprocess2.PIPE)
+  gtest_parser = gtest_utils.GTestLogParser()
+  for line in proc.stdout.readlines():
+    line = line.rstrip()
+    print line
+    gtest_parser.ProcessLine(line)
 
-  TODO(maruel): Put exact revision once committed.
-  """
+  proc.wait()
+
+  annotation_utils.annotate(test_name, proc.returncode, gtest_parser)
+  print('')
+  return proc.returncode
+
+
+def v0_4(client, options, test_name):
+  """Handles swarm_client/swarming.py starting b39e8cf08c."""
   swarming = os.path.join(client, 'swarming.py')
   cmd = [
     sys.executable,
@@ -146,20 +170,38 @@ def determine_version_and_run_handler(client, options, test_name):
   """Executes the proper handler based on the code layout and --version
   support.
   """
+  old_test_name, new_test_name = process_build_properties(options, test_name)
   if os.path.isfile(os.path.join(client, 'swarm_get_results.py')):
     # Oh, that's old.
-    return v0(client, options, test_name)
-  return v0_1(client, options, test_name)
+    return v0(client, options, old_test_name)
+  version = swarming_utils.get_version(client)
+  if version < (0, 4):
+    return v0_1(client, options, old_test_name)
+  return v0_4(client, options, new_test_name)
 
 
 def process_build_properties(options, name):
   """Converts build properties and factory properties into expected flags."""
-  taskname = '%s-%s-%s' % (
+  # Pre 0.4.
+  old_taskname = '%s-%s-%s' % (
       options.build_properties.get('buildername'),
       options.build_properties.get('buildnumber'),
       name,
   )
-  return taskname
+  # 0.4+
+  # TODO(maruel): This is a bit adhoc. The good way is to set the buildbot
+  # properties or completely do this as a wrapping scripts.
+  isolated_hash = options.build_properties.get('swarm_hashes', {}).get(name)
+  if not isolated_hash:
+    print >> sys.stderr, 'Failed to get hash for %s' % name
+    sys.exit(1)
+  slave_os = options.build_properties.get('target_os', sys.platform)
+  new_taskname = '%s/%s/%s' % (
+      name,
+      # TODO(maruel): This will have to be runtime specified.
+      swarming_utils.OS_MAPPING[slave_os],
+      isolated_hash)
+  return old_taskname, new_taskname
 
 
 def main():
@@ -190,14 +232,9 @@ def main():
     parser.error('Must specify one test name.')
   elif len(args) > 1:
     parser.error('Must specify only one test name.')
-  if options.build_properties:
-    # Loads the other flags implicitly.
-    task_name = process_build_properties(options, args[0])
-  else:
-    task_name = args[0]
   print('Found %s' % client)
   sys.stdout.flush()
-  return determine_version_and_run_handler(client, options, task_name)
+  return determine_version_and_run_handler(client, options, args[0])
 
 
 if __name__ == '__main__':

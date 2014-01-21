@@ -25,16 +25,6 @@ from slave.swarming import swarming_utils
 import fix_encoding
 
 
-OS_MAPPING = {
-    'darwin': 'Mac',
-    'linux2': 'Linux',
-    # TODO(maruel): This solves our immediate need of running all the swarming
-    # tests by default on Win7 but this doesn't fix the usage on the CI for XP
-    # and Vista.
-    'win32': 'Windows-6.1',
-}
-
-
 def v0(client, swarming, isolate_server, tasks, task_prefix, slave_os):
   """Handlers swarm_client/swarm_trigger_step.py.
 
@@ -98,7 +88,6 @@ def v0_3(
       '--os', slave_os,
       '--priority', priority,
       '--shards', shards,
-      # TODO(maruel): Make the task name: <test-name>-<os>-<isolated>
       '--task-name', task_prefix + test_name,
       isolated_hash,
     ]
@@ -113,22 +102,22 @@ def v0_3(
   return ret
 
 
-def v0_4(
-    client, swarming, isolate_server, priority, tasks, task_prefix, slave_os):
+def v0_4(client, swarming, isolate_server, priority, tasks, slave_os):
   """Handles swarm_client/swarming.py starting b39e8cf08c."""
   ret = 0
   for isolated_hash, test_name, shards, gtest_filter in tasks:
+    selected_os = swarming_utils.OS_MAPPING[slave_os]
+    task_name = '%s/%s/%s' % (test_name, selected_os, isolated_hash)
     cmd = [
       sys.executable,
       os.path.join(client, 'swarming.py'),
       'trigger',
       '--swarming', swarming,
       '--isolate-server', isolate_server,
-      '--dimension', 'os', OS_MAPPING[slave_os],
+      '--dimension', 'os', selected_os,
       '--priority', priority,
       '--shards', shards,
-      # TODO(maruel): Make the task name: <test-name>-<os>-<isolated>
-      '--task-name', task_prefix + test_name,
+      '--task-name', task_name,
       isolated_hash,
     ]
     # Enable profiling on the -dev server.
@@ -136,6 +125,7 @@ def v0_4(
       cmd.append('--profile')
     if gtest_filter not in (None, '', '.', '*'):
       cmd.extend(('--env', 'GTEST_FILTER', gtest_filter))
+    print('Triggering %s' % task_name)
     print(' '.join(cmd))
     sys.stdout.flush()
     ret = max(ret, subprocess.call(cmd, cwd=client))
@@ -160,8 +150,8 @@ def determine_version_and_run_handler(
     return v0_3(
         client, swarming, isolate_server, priority, tasks, task_prefix,
         slave_os)
-  return v0_4(
-      client, swarming, isolate_server, priority, tasks, task_prefix, slave_os)
+  # It is not using <buildername>-<buildnumber>- anymore.
+  return v0_4(client, swarming, isolate_server, priority, tasks, slave_os)
 
 
 def process_build_properties(options):

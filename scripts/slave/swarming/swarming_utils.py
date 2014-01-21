@@ -14,6 +14,16 @@ from common import find_depot_tools  # pylint: disable=W0611
 import subprocess2
 
 
+OS_MAPPING = {
+    'darwin': 'Mac',
+    'linux2': 'Linux',
+    # TODO(maruel): This solves our immediate need of running all the swarming
+    # tests by default on Win7 but this doesn't fix the usage on the CI for XP
+    # and Vista.
+    'win32': 'Windows-6.1',
+}
+
+
 def find_client(base_dir):
   """Returns the path to swarming_client if found.
 
