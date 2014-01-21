@@ -389,9 +389,11 @@ V8_LKGR_STEPS = {
     'Linux Debug Builder': ['compile'],
     'Linux ASAN Builder': ['compile'],
     'Android Builder': ['compile'],
-    'Chrome Win7 Perf': ['compile'],
-    'Chrome Mac10.6 Perf': ['compile'],
-    'Chrome Linux Perf': ['compile'],
+    # TODO(machenbach): Disabled until there are pure builders available for
+    # this. With a perf BuilderTester, the total lkgr cycle time is too big.
+    # 'Chrome Win7 Perf': ['compile'],
+    # 'Chrome Mac10.6 Perf': ['compile'],
+    # 'Chrome Linux Perf': ['compile'],
     # TODO(machenbach): Disabled until stability issues with the windows bot
     # are resolved.
     # 'Webkit': ['compile'],
