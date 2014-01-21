@@ -74,6 +74,9 @@ def main():
   option_parser.add_option('--flaky-tests',
                            help=('Regard tests marked as flaky '
                                  '(run|skip|dontcare)'))
+  option_parser.add_option("--gc-stress",
+                           default=False, action='store_true',
+                           help='Switch on GC stress mode')
   option_parser.add_option("--quickcheck",
                            default=False, action='store_true',
                            help='Quick check mode (skip slow/flaky tests)')
@@ -135,6 +138,8 @@ def main():
       cmd.extend(['--command-prefix', options.command_prefix])
     if options.flaky_tests:
       cmd.extend(['--flaky-tests', options.flaky_tests])
+    if options.gc_stress:
+      cmd.extend(['--gc-stress'])
     if options.quickcheck:
       cmd.extend(['--quickcheck'])
 
