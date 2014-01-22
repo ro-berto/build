@@ -89,7 +89,7 @@ def GenSteps(api):
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
             '--build-dir', api.chromium.c.build_dir]
-    yield api.chromium.runtests(test, args, name='webkit_tests')
+    yield api.chromium.runtests(test, args, name='webkit_tests', xvfb=True)
 
     factory_properties = {
       'blink_config':  'chromium',
