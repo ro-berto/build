@@ -229,7 +229,7 @@
       "Release",
       "--build-dir",
       "[SLAVE_BUILD]/src/out",
-      "--xvfb",
+      "--no-xvfb",
       "--factory-properties",
       "{\"TARGET_BITS\": 64, \"perf_id\": \"linux-release\", \"recipe\": \"oilpan\"}",
       "--build-properties",

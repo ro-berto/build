@@ -55,7 +55,6 @@ def GenSteps(api):
                                  args,
                                  name=self._step_name(suffix),
                                  can_fail_build=False,
-                                 xvfb=True,
                                  followup_fn=followup_fn)
 
       if suffix == 'with patch':
@@ -118,7 +117,7 @@ def GenSteps(api):
       '--build-dir', api.path.checkout('out'),
       '--target', api.properties['build_config']
     ]),
-    api.chromium.runtest('webkit_unit_tests'),
+    api.chromium.runtest('webkit_unit_tests', xvfb=True),
     api.chromium.runtest('blink_platform_unittests'),
     api.chromium.runtest('blink_heap_unittests'),
     api.chromium.runtest('wtf_unittests'),
