@@ -107,7 +107,6 @@ def goma_setup(options, env):
   hostname = socket.gethostname().split('.')[0]
   if hostname in ['slave%d-c4' % i for i in range(350, 360)]:
     del env['NO_NACL_GOMA']
-    env['NACL_GOMA_BURST'] = 'false'
 
   # goma is requested.
   goma_key = os.path.join(options.goma_dir, 'goma.key')
