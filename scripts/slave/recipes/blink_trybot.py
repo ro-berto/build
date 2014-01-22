@@ -55,6 +55,7 @@ def GenSteps(api):
                                   args,
                                   name=self._step_name(suffix),
                                   can_fail_build=False,
+                                  xvfb=True,
                                   followup_fn=followup_fn)
 
       if suffix == 'with patch':
