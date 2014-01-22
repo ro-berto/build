@@ -5,8 +5,10 @@
 DEPS = [
   'chromium',
   'gclient',
-  'python',
   'path',
+  'properties',
+  'python',
+  'rietveld',
   'step',
 ]
 
@@ -62,6 +64,9 @@ def GenSteps(api):
 
   yield api.gclient.checkout()
 
+  if 'issue' in api.properties:
+    yield api.rietveld.apply_issue(api.rietveld.calculate_issue_root())
+
   api.chromium.c.gyp_env.GYP_DEFINES['embedded'] = 1
 
   yield api.chromium.runhooks()
@@ -95,3 +100,4 @@ def GenSteps(api):
 
 def GenTests(api):
   yield api.test('basic')
+  yield api.test('trybot') + api.properties.tryserver()
