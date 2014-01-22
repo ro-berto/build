@@ -314,7 +314,7 @@ F('ios_rel', ios().ChromiumFactory(
   tests=[],
   options = [
     '--', '-project', '../build/all.xcodeproj',
-    '-sdk', 'iphoneos6.1', '-target' , 'All'],
+    '-sdk', 'iphoneos7.0', '-target' , 'All'],
   factory_properties={
     'app_name': 'Chromium.app',
     'gclient_deps': 'ios',
@@ -344,7 +344,7 @@ F('ios_dbg', ios().ChromiumFactory(
   ],
   options = [
     '--', '-project', '../build/all.xcodeproj', '-sdk',
-    'iphonesimulator6.1', '-target', 'All',],
+    'iphonesimulator7.0', '-target', 'All',],
   factory_properties={
     'app_name': 'Chromium.app',
     'test_platform': 'ios-simulator',
