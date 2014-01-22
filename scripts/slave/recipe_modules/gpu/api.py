@@ -142,7 +142,7 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
-      yield self.m.chromium.runtests(test, spawn_dbus=True)
+      yield self.m.chromium.runtest(test, spawn_dbus=True)
 
     # Choose a reasonable default for the location of the sandbox binary
     # on the bots.
@@ -213,14 +213,14 @@ class GpuApi(recipe_api.RecipeApi):
               '--test-launcher-jobs=1',
               '--test-launcher-print-test-stdio=always',
               '--gtest_filter=TabCapturePerformanceTest*']
-      yield self.m.chromium.runtests('performance_browser_tests',
-                                     args,
-                                     name='tab_capture_performance_tests',
-                                     annotate='graphing',
-                                     results_url=self._dashboard_upload_url,
-                                     perf_dashboard_id='tab_capture_performance',
-                                     test_type='tab_capture_performance_tests',
-                                     spawn_dbus=True)
+      yield self.m.chromium.runtest('performance_browser_tests',
+                                    args,
+                                    name='tab_capture_performance_tests',
+                                    annotate='graphing',
+                                    results_url=self._dashboard_upload_url,
+                                    perf_dashboard_id='tab_capture_performance',
+                                    test_type='tab_capture_performance_tests',
+                                    spawn_dbus=True)
 
     # TODO(kbr): after the conversion to recipes, add all GPU related
     # steps from the main waterfall, like gpu_unittests.

@@ -77,7 +77,7 @@ def GenSteps(api):
   yield api.chromium.compile(tests_to_compile, name='compile tests')
 
   tests_to_run = list(set(tests_to_compile) - set(tests_that_do_not_pass))
-  yield (api.chromium.runtests(x, xvfb=False, spawn_dbus=(x in dbus_tests))
+  yield (api.chromium.runtest(x, xvfb=False, spawn_dbus=(x in dbus_tests))
          for x in sorted(tests_to_run))
 
   # Compile the failing targets.
@@ -88,8 +88,8 @@ def GenSteps(api):
 
   # Run the failing tests.
   tests_to_try = list(set(tests_to_compile) & set(tests_that_do_not_pass))
-  yield (api.chromium.runtests(x, xvfb=False, name='experimentally run %s' % x,
-                               can_fail_build=False)
+  yield (api.chromium.runtest(x, xvfb=False, name='experimentally run %s' % x,
+                              can_fail_build=False)
          for x in sorted(tests_to_try))
 
 

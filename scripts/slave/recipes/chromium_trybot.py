@@ -141,13 +141,13 @@ def GenSteps(api):
         args.append(api.chromium.test_launcher_filter(
                         self.failures('with patch')))
 
-      return api.chromium.runtests(self.name,
-                                   args,
-                                   xvfb=True,
-                                   name=self._step_name(suffix),
-                                   parallel=True,
-                                   can_fail_build=False,
-                                   followup_fn=followup_fn)
+      return api.chromium.runtest(self.name,
+                                  args,
+                                  xvfb=True,
+                                  name=self._step_name(suffix),
+                                  parallel=True,
+                                  can_fail_build=False,
+                                  followup_fn=followup_fn)
 
     def has_valid_results(self, suffix):
       step_name = self._step_name(suffix)

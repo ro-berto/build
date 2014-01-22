@@ -72,11 +72,11 @@ class ChromiumApi(recipe_api.RecipeApi):
   def test_launcher_filter(self, tests):
     return TestLauncherFilterFileInputPlaceholder(self, tests)
 
-  def runtests(self, test, args=None, xvfb=False, name=None, annotate=None,
-               results_url=None, perf_dashboard_id=None, test_type=None,
-               generate_json_file=False, results_directory=None,
-               build_number=None, builder_name=None, python_mode=False,
-               spawn_dbus=True, parallel=False, **kwargs):
+  def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
+              results_url=None, perf_dashboard_id=None, test_type=None,
+              generate_json_file=False, results_directory=None,
+              build_number=None, builder_name=None, python_mode=False,
+              spawn_dbus=True, parallel=False, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -161,7 +161,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not results_directory:
       results_directory = self.m.path.slave_build('gtest-results', name)
 
-    return self.runtests(
+    return self.runtest(
         runner,
         test_args,
         annotate='gtest',

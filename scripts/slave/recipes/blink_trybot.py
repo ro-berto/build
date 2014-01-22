@@ -51,12 +51,12 @@ def GenSteps(api):
         else:
           p.status = 'SUCCESS'
 
-      yield api.chromium.runtests(self.layout_test_wrapper,
-                                  args,
-                                  name=self._step_name(suffix),
-                                  can_fail_build=False,
-                                  xvfb=True,
-                                  followup_fn=followup_fn)
+      yield api.chromium.runtest(self.layout_test_wrapper,
+                                 args,
+                                 name=self._step_name(suffix),
+                                 can_fail_build=False,
+                                 xvfb=True,
+                                 followup_fn=followup_fn)
 
       if suffix == 'with patch':
         buildername = api.properties['buildername']
@@ -118,10 +118,10 @@ def GenSteps(api):
       '--build-dir', api.path.checkout('out'),
       '--target', api.properties['build_config']
     ]),
-    api.chromium.runtests('webkit_unit_tests'),
-    api.chromium.runtests('blink_platform_unittests'),
-    api.chromium.runtests('blink_heap_unittests'),
-    api.chromium.runtests('wtf_unittests'),
+    api.chromium.runtest('webkit_unit_tests'),
+    api.chromium.runtest('blink_platform_unittests'),
+    api.chromium.runtest('blink_heap_unittests'),
+    api.chromium.runtest('wtf_unittests'),
   )
 
   def deapply_patch_fn(failing_steps):

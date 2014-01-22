@@ -89,7 +89,7 @@ def GenSteps(api):
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
             '--build-dir', api.chromium.c.build_dir]
-    yield api.chromium.runtests(test, args, name='webkit_tests', xvfb=True)
+    yield api.chromium.runtest(test, args, name='webkit_tests', xvfb=True)
 
     factory_properties = {
       'blink_config':  'chromium',
@@ -108,7 +108,7 @@ def GenSteps(api):
       factory_properties['test_name'] = test
       factory_properties['step_name'] = test
       fp = "--factory-properties=%s" % json.dumps(factory_properties)
-      yield api.chromium.runtests(
+      yield api.chromium.runtest(
           api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
           [fp], name=test, python_mode=True,
           results_url=dashboard_upload_url,
