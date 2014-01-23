@@ -134,7 +134,12 @@ class ChromiumApi(recipe_api.RecipeApi):
     return self.c.BUILD_CONFIG == 'Release'
 
   def run_telemetry_test(self, runner, test, name='', args=None,
-      results_directory='', spawn_dbus=False):
+                         prefix_args=None, results_directory='',
+                         spawn_dbus=False):
+    """Runs a Telemetry based test with 'runner' as the executable.
+    Automatically passes certain flags like --output-format=gtest to the
+    test runner. 'prefix_args' are passed before the built-in arguments and
+    'args'."""
     # Choose a reasonable default for the location of the sandbox binary
     # on the bots.
     env = {}
@@ -150,11 +155,13 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not (name.endswith('test') or name.endswith('tests')):
       name = '%s_tests' % name
 
-    test_args = [test,
-        '--show-stdout',
-        '--output-format=gtest',
-        '--browser=%s' % self.c.BUILD_CONFIG.lower()]
-
+    test_args = []
+    if prefix_args:
+      test_args.extend(prefix_args)
+    test_args.extend([test,
+                      '--show-stdout',
+                      '--output-format=gtest',
+                      '--browser=%s' % self.c.BUILD_CONFIG.lower()])
     if args:
       test_args.extend(args)
 
