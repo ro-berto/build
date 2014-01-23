@@ -152,15 +152,17 @@ class PerformanceLogProcessor(object):
       raise ValueError('Must provide a revision to PerformanceLogProcessor.')
 
     self._webkit_revision = webkit_revision
-
-    if build_properties and factory_properties.get('show_v8_revision'):
-      self._v8_revision = build_properties.get('got_v8_revision', 'undefined')
-    else:
-      self._v8_revision = 'undefined'
-
     if build_properties:
+      if factory_properties.get('show_v8_revision'):
+        self._v8_revision = build_properties.get('got_v8_revision', 'undefined')
+      self._webrtc_revision = build_properties.get('got_webrtc_revision',
+                                                   'undefined')
       self._version = build_properties.get('version') or 'undefined'
       self._channel = build_properties.get('channel') or 'undefined'
+    else:
+      self._v8_revision = 'undefined'
+      self._webrtc_revision = 'undefined'
+
     self._percentiles = [.1, .25, .5, .75, .90, .95, .99]
 
   def PerformanceLogs(self):
@@ -844,11 +846,17 @@ class GraphingLogProcessor(PerformanceLogProcessor):
       important = ''
     if not self._revision:
       raise Exception('revision is None')
-    return ('{"traces": {%s}, "rev": "%s", "webkit_rev": "%s", "v8_rev": "%s",'
-            ' "ver": "%s", "chan": "%s", "units": "%s"%s}'
+    return ('{"traces": {%s},'
+            ' "rev": "%s",'
+            ' "webkit_rev": "%s",'
+            ' "webrtc_rev": "%s",'
+            ' "v8_rev": "%s",'
+            ' "ver": "%s",'
+            ' "chan": "%s",'
+            ' "units": "%s"%s}'
             % (trace_json, self._revision, self._webkit_revision,
-               self._v8_revision, self._version, self._channel, graph.units,
-               important))
+               self._webrtc_revision, self._v8_revision, self._version,
+               self._channel, graph.units, important))
 
   def _FinalizeProcessing(self):
     self._CreateSummaryOutput()

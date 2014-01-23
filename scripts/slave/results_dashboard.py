@@ -236,7 +236,7 @@ def _RevisionNumberColumns(data, master):
     revision_supplemental_columns['a_default_rev'] = 'r_oilpan'
   else:
     # For other revision data, add it if it's present and not undefined:
-    for key in ['webkit_rev', 'v8_rev']:
+    for key in ['webkit_rev', 'webrtc_rev', 'v8_rev']:
       if key in data and data[key] != 'undefined':
         revision_supplemental_columns['r_' + key] = data[key]
 
