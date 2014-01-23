@@ -2,8 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import hashlib
-
 from slave import recipe_test_api
 
 class IsolateTestApi(recipe_test_api.RecipeTestApi):
@@ -15,4 +13,4 @@ class IsolateTestApi(recipe_test_api.RecipeTestApi):
     targets."""
     # Hash the target's name to get a bogus but deterministic value.
     return self.m.json.output(dict(
-        (target, hashlib.sha1(target).hexdigest()) for target in targets))
+        (target, '[dummy hash for %s]' % target) for target in targets))

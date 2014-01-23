@@ -4,20 +4,13 @@
 
 from slave import recipe_api
 
+import common
+
 SIMPLE_TESTS_TO_RUN = [
   'content_gl_tests',
   'gles2_conform_test',
   'gl_tests',
   'angle_unittests'
-]
-
-GPU_ISOLATES = [
-  'angle_unittests',
-  'content_gl_tests',
-  'gles2_conform_test',
-  'gl_tests',
-  'tab_capture_performance_tests',
-  'telemetry_gpu_test'
 ]
 
 class GpuApi(recipe_api.RecipeApi):
@@ -100,8 +93,8 @@ class GpuApi(recipe_api.RecipeApi):
     # build is used).
     yield self.m.chromium.compile(
         targets=['chromium_gpu_%sbuilder' % build_tag] + [
-          '%s_run' % test for test in GPU_ISOLATES])
-    yield self.m.isolate.manifest_to_hash(GPU_ISOLATES)
+          '%s_run' % test for test in common.GPU_ISOLATES])
+    yield self.m.isolate.manifest_to_hash(common.GPU_ISOLATES)
 
   def upload_steps(self):
     yield self.m.archive.zip_and_upload_build(
@@ -175,7 +168,7 @@ class GpuApi(recipe_api.RecipeApi):
     if 'rietveld' in self.m.properties:
       ref_img_arg = '--download-refimg-from-cloud-storage'
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
-    yield self.run_telemetry_gpu_test('pixel_test',
+    yield self.run_telemetry_gpu_test('pixel',
         args=[
             '--build-revision',
             str(self._build_revision),
@@ -186,7 +179,8 @@ class GpuApi(recipe_api.RecipeApi):
             self.m.chromium.c.TARGET_PLATFORM,
             '--test-machine-name',
             self.m.properties['buildername']
-        ])
+        ],
+        name='pixel_test')
 
     # WebGL conformance tests.
     yield self.run_telemetry_gpu_test('webgl_conformance',
@@ -238,12 +232,12 @@ class GpuApi(recipe_api.RecipeApi):
   def run_telemetry_gpu_test(self, test, name='', args=None,
                              results_directory=''):
     """Returns a step which runs a Telemetry based GPU test (via
-    run_gpu_test)."""
+    run_gpu_test.py)."""
 
     test_args = ['-v']
     if args:
       test_args.extend(args)
 
     return self.m.chromium.run_telemetry_test(
-        str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test')),
+        str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test.py')),
         test, name, test_args, results_directory, spawn_dbus=True)

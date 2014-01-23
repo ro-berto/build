@@ -93,8 +93,8 @@ def GenTests(api):
       build_config='Release',
       skip_compile=True,
       # These would ordinarily be generated during the build step.
-      swarm_hashes=dict(
-        gl_tests='6e784864abbeeff7499c15f75b904851d633c187')) +
+      swarm_hashes=api.gpu.dummy_swarm_hashes,
+    ) +
     api.platform.name('mac')
   )
 
