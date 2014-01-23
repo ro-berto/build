@@ -64,7 +64,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
     ],
     factory_properties={
         'additional_expectations': [
-            ['webkit', 'tools', 'layout_tests', 'test_expectations_asan.txt' ],
+            ['third_party', 'WebKit', 'LayoutTests', 'ASANExpectations' ],
         ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'asan': True,
