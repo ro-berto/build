@@ -57,8 +57,6 @@ def type_scrub_build_properties(bp):
   """Specially 'eval' certain keys in build_properties."""
   bp['use_mirror'] = eval(bp.get('use_mirror', 'False'))
   bp['blamelist'] = eval(bp.get('blamelist', '[]'))
-  if 'swarm_hashes' in bp:
-    bp['swarm_hashes'] = eval(bp['swarm_hashes'])
   if 'TARGET_BITS' in bp:
     bp['TARGET_BITS'] = eval(bp['TARGET_BITS'])
   return bp
