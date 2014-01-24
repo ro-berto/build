@@ -71,6 +71,7 @@ VERBOSE = True
 EMAIL_ENABLED = False
 BLINK_REVISIONS_URL = 'https://blink-status.appspot.com'
 CHROMIUM_REVISIONS_URL = 'https://chromium-status.appspot.com'
+CHROMIUM_LKCR_URL = 'https://build.chromium.org/p/chromium/lkcr-status'
 V8_REVISIONS_URL = 'https://v8-status.appspot.com'
 WEBRTC_REVISIONS_URL = 'https://webrtc-status.appspot.com'
 REVISIONS_PASSWORD_FILE = '.status_password'
@@ -282,6 +283,123 @@ CHROMIUM_LKGR_STEPS = {
   'chromium.chrome': {
     'Google Chrome Linux x64': [  # cycle time is ~14 mins as of 5/5/2012
       'compile',
+    ],
+  },  # chromium.chrome
+}
+
+# Last Known Compilable (Cool) Revision
+CHROMIUM_LKCR_STEPS = {
+  'chromium.win': {
+    'Win Builder': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Win Builder (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Win x64 Builder': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Win x64 Builder (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+  },  # chromium.win
+  'chromium.mac': {
+    'Mac Builder': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Mac Builder (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'iOS Device': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'iOS Simulator (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+  },  # chromium.mac
+  'chromium.linux': {
+    'Linux Aura Builder': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Linux Builder': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Linux Builder (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Linux Builder (dbg)(32)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Linux Clang (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Android Builder (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Android Builder': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Android Clang Builder (dbg)': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+  },  # chromium.linux
+  'chromium.chrome': {
+    'Google Chrome ChromeOS': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Google Chrome Linux': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Google Chrome Linux x64': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Google Chrome Mac': [
+      'compile',
+      'runhooks',
+      'update',
+    ],
+    'Google Chrome Win': [
+      'compile',
+      'runhooks',
+      'update',
     ],
   },  # chromium.chrome
 }
@@ -1019,6 +1137,8 @@ def main():
   opt_parser.add_option('--post', default=False,
                         dest='post', action='store_true',
                         help='Upload new LKGR to chromium-status app')
+  opt_parser.add_option('--write-to-file',
+                        help='Write new LKGR to FILE', metavar='FILE')
   opt_parser.add_option('--password-file', default=REVISIONS_PASSWORD_FILE,
                         dest='pwfile', metavar='FILE',
                         help='File containing password for chromium-status app')
@@ -1049,6 +1169,8 @@ def main():
                              'one.')
   opt_parser.add_option('--v8', action='store_true', default=False,
                         help='Find the V8 LKGR rather than the Chromium one.')
+  opt_parser.add_option('--chromium-lkcr', action='store_true', default=False,
+                        help='Find the Chromium LKCR instead of LKGR.')
   opt_parser.add_option('-w', '--webrtc', action='store_true', default=False,
                         help='Find the WebRTC LKGR rather than the Chromium '
                              'one.')
@@ -1062,8 +1184,12 @@ def main():
                              'when updating LKGR (default %default).')
   options, args = opt_parser.parse_args()
 
-  if sum([options.blink, options.v8, options.webrtc]) > 1:
-    opt_parser.error('You can only specify one of --blink, --v8 or --webrtc '
+  if sum([options.blink,
+          options.v8,
+          options.chromium_lkcr,
+          options.webrtc]) > 1:
+    opt_parser.error('You can only specify one of --blink, --v8, '
+                     '--chromium-lkcr or --webrtc '
                      'in the same run.')
 
   # Error notification setup.
@@ -1100,6 +1226,11 @@ def main():
     revisions_url = WEBRTC_REVISIONS_URL
     lkgr_steps = WEBRTC_LKGR_STEPS
     svn_url = WEBRTC_SVN_URL
+  elif options.chromium_lkcr:
+    lkgr_type = 'ChromiumLKCR'
+    revisions_url = CHROMIUM_LKCR_URL
+    lkgr_steps = CHROMIUM_LKCR_STEPS
+    svn_url = CHROMIUM_SVN_URL
   else:
     lkgr_type = 'Chromium'
     revisions_url = CHROMIUM_REVISIONS_URL
@@ -1170,6 +1301,10 @@ def main():
         subject = 'Updated %s LKGR to %s' % (lkgr_type, candidate)
         message = subject + '.\n'
         SendMail(sender, update_recipients, subject, message)
+
+    if options.write_to_file and not options.dry:
+      with open(options.write_to_file, 'w') as f:
+        f.write('%d' % candidate)
 
     for master in options.notify:
       NotifyMaster(master, candidate, options.dry)
