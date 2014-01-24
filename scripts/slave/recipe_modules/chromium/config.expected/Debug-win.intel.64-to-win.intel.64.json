@@ -62,6 +62,74 @@
       "GYP_MSVS_VERSION": "2012"
     }
   }, 
+  "chromium_asan": {
+    "build_config_fs": "Debug_x64", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "asan=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 lsan=1 target_arch=x64", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_MSVS_VERSION": "2012"
+    }
+  }, 
+  "chromium_chromeos": {
+    "build_config_fs": "Debug_x64", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromeos=1 chromium_win_pch=0 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=x64", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_MSVS_VERSION": "2012"
+    }
+  }, 
+  "chromium_chromeos_asan": {
+    "build_config_fs": "Debug_x64", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "asan=1 chromeos=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS lsan=1 proprietary_codecs=1 target_arch=x64", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_MSVS_VERSION": "2012"
+    }
+  }, 
+  "chromium_chromeos_clang": {
+    "build_config_fs": "Debug_x64", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromeos=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=x64", 
+      "GYP_GENERATORS": "ninja", 
+      "GYP_MSVS_VERSION": "2012"
+    }
+  }, 
   "chromium_clang": {
     "build_config_fs": "Debug_x64", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 

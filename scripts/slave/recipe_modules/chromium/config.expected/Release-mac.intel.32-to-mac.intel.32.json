@@ -58,6 +58,70 @@
       "GYP_GENERATORS": "ninja"
     }
   }, 
+  "chromium_asan": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
+  "chromium_chromeos": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
+  "chromium_chromeos_asan": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "asan=1 chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS lsan=1 proprietary_codecs=1 target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
+  "chromium_chromeos_clang": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "compiler": "goma-clang", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ]
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
   "chromium_clang": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 

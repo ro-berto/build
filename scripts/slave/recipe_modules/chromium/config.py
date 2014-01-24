@@ -212,6 +212,32 @@ def static_library(c):
   c.gyp_env.GYP_DEFINES['component'] = 'static_library'
 
 @config_ctx()
+def ffmpeg_branding(c, branding=None):
+  if branding:
+    c.gyp_env.GYP_DEFINES['ffmpeg_branding'] = branding
+
+@config_ctx()
+def proprietary_codecs(c, invert=False):
+  c.gyp_env.GYP_DEFINES['proprietary_codecs'] = int(not invert)
+
+@config_ctx()
+def chromeos(c):
+  c.gyp_env.GYP_DEFINES['chromeos'] = 1
+  ffmpeg_branding(c, branding='ChromeOS')
+  proprietary_codecs(c)
+
+@config_ctx(deps=['compiler'])
+def asan(c):
+  if 'clang' not in c.compile_py.compiler:  # pragma: no cover
+    raise BadConf('asan requires clang')
+
+  if c.TARGET_PLATFORM == 'linux':
+    c.gyp_env.GYP_DEFINES['linux_use_tcmalloc'] = 0
+
+  c.gyp_env.GYP_DEFINES['asan'] = 1
+  c.gyp_env.GYP_DEFINES['lsan'] = 1
+
+@config_ctx()
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)
@@ -219,6 +245,22 @@ def trybot_flavor(c):
 #### 'Full' configurations
 @config_ctx(includes=['ninja', 'default_compiler', 'goma'])
 def chromium(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'asan'])
+def chromium_asan(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['ninja', 'default_compiler', 'goma', 'chromeos'])
+def chromium_chromeos(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos', 'asan'])
+def chromium_chromeos_asan(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['ninja', 'clang', 'goma', 'chromeos'])
+def chromium_chromeos_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])

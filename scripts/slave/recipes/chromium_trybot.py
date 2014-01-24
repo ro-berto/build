@@ -61,6 +61,22 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium',
     'compile_only': False,
   },
+  'asan': {
+    'chromium_config': 'chromium_asan',
+    'compile_only': False,
+  },
+  'chromeos': {
+    'chromium_config': 'chromium_chromeos',
+    'compile_only': False,
+  },
+  'chromeos_asan': {
+    'chromium_config': 'chromium_chromeos_asan',
+    'compile_only': False,
+  },
+  'chromeos_clang': {
+    'chromium_config': 'chromium_chromeos_clang',
+    'compile_only': True,
+  },
   'clang': {
     'chromium_config': 'chromium_clang',
     'compile_only': True,
@@ -288,11 +304,28 @@ def GenTests(api):
                                 canned_test(passing=True))
         yield test
 
-  yield (
-    api.test('clang') +
-    props(recipe_config='clang') +
-    api.platform.name('linux')
-  )
+  # While not strictly required for coverage, record expectations for each
+  # of the configs so we can see when and how they change.
+  for config in RECIPE_CONFIGS:
+    if config:
+      test = (
+        api.test(config) +
+        props(recipe_config=config) +
+        api.platform.name('linux')
+      )
+
+      if not RECIPE_CONFIGS[config]['compile_only']:
+        test += api.step_data('checkdeps (with patch)',
+                              api.json.output(canned_checkdeps[True]))
+        test += api.step_data('deps2git (with patch)',
+                              api.json.output(canned_deps2git[True]))
+        test += api.step_data('nacl_integration (with patch)',
+                              api.json.output(canned_nacl[True]))
+        for gtest_test in GTEST_TESTS:
+          test += api.step_data(gtest_test + ' (with patch)',
+                                canned_test(passing=True))
+
+      yield test
 
   TEST_FAILURES = [
     (None, None),
