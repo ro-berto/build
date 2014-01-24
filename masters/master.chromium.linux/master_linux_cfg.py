@@ -173,6 +173,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'printing',
       'remoting',
       'sandbox_linux_unittests',
+      'telemetry_unittests',
       'ui_unittests',
       'unit_sql',
       'unit_sync',
