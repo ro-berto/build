@@ -73,7 +73,15 @@ def _GenerateTelemetryCommandSequence(options):
   env = os.environ
 
   # List of command line arguments common to all test platforms.
-  common_args = ['-v', '--output-format=buildbot']
+  common_args = [
+      # INFO level verbosity.
+      '-v',
+      # Output results in the format the buildbot expects.
+      '--output-format=buildbot',
+      # Try to report metrics that require elevated privileges.
+      # Bots should be configured to allow this without interaction.
+      '--report-root-metrics',
+      ]
 
   if profile_type:
     profile_dir = os.path.join(
