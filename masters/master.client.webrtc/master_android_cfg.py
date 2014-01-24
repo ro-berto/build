@@ -15,9 +15,12 @@ S = helper.Scheduler
 T = helper.Triggerable
 
 
-def android_apk():
+def android_apk_builder():
   return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=True,
                                           target_os='android')
+def android_apk_tester():
+  return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=False,
+                                      target_os='android')
 def android_webrtc():
   return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=True,
                                       target_os='android')
@@ -37,7 +40,7 @@ T('android_trigger_rel')
 
 
 def f_dbg_android_tests(bot_id_suffix):
-  return android_apk().ChromiumWebRTCAndroidFactory(
+  return android_apk_tester().ChromiumWebRTCAndroidFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -50,7 +53,7 @@ def f_dbg_android_tests(bot_id_suffix):
 
 
 def f_rel_android_tests(bot_id_suffix):
-  return android_apk().ChromiumWebRTCAndroidFactory(
+  return android_apk_tester().ChromiumWebRTCAndroidFactory(
     target='Release',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -92,7 +95,7 @@ F('f_android_clang_dbg', android_webrtc().ChromiumAnnotationFactory(
 # WebRTC native test APKs: builders.
 B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg',
   scheduler=scheduler, notify_on_missing=True, slavebuilddir='android_apk')
-F('f_android_apk_dbg', android_apk().ChromiumWebRTCAndroidFactory(
+F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidFactory(
   target='Debug',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
@@ -103,7 +106,7 @@ F('f_android_apk_dbg', android_apk().ChromiumWebRTCAndroidFactory(
 
 B('Android Chromium-APK Builder', 'f_android_apk_rel', scheduler=scheduler,
   notify_on_missing=True, slavebuilddir='android_apk')
-F('f_android_apk_rel', android_apk().ChromiumWebRTCAndroidFactory(
+F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidFactory(
   target='Release',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
