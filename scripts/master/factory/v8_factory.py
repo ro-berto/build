@@ -57,6 +57,12 @@ class V8Factory(gclient_factory.GClientFactory):
       f.AddV8TestTC('mjsunit cctest message preparser', 'Check',
                     env=factory_properties.get('test_env', {}),
                     options=factory_properties.get('test_options', []))
+    # TODO(machenbach): Backwards compatible testing target for a64 branch.
+    # Remove when branch has merged.
+    if R('v8testing_a64'):
+      f.AddV8Test('mjsunit cctest message preparser', 'Check',
+                  env=factory_properties.get('test_env', {}),
+                  options=factory_properties.get('test_options', []))
     if R('v8try'):
       f.AddV8Test('mjsunit cctest message preparser', 'Check',
                   options=['--quickcheck'])
