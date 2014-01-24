@@ -123,7 +123,8 @@ class GpuApi(recipe_api.RecipeApi):
     # instead.
 
     # On Windows, start the crash service.
-    if self.m.platform.is_win:
+    # TODO(kbr): figure out what to do with this when running via isolates.
+    if self.m.platform.is_win and not self._use_isolates:
       yield self.m.python(
         'start_crash_service',
         self.m.path.build('scripts', 'slave', 'chromium',
@@ -135,22 +136,17 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
-      yield self.m.chromium.runtest(test, spawn_dbus=True)
-
-    # Choose a reasonable default for the location of the sandbox binary
-    # on the bots.
-    env = {}
-    if self.m.platform.is_linux:
-      env['CHROME_DEVEL_SANDBOX'] = '/opt/chromium/chrome_sandbox'
+      yield self._maybe_run_isolate(test)
 
     # Google Maps Pixel tests.
-    yield self.run_telemetry_gpu_test('maps', name='maps_pixel_test',
-        args=[
-            '--build-revision',
-            str(self._build_revision),
-            '--test-machine-name',
-            self.m.properties['buildername']
-        ])
+    yield self._maybe_run_isolated_telemetry_gpu_test(
+      'maps', name='maps_pixel_test',
+      args=[
+        '--build-revision',
+        str(self._build_revision),
+        '--test-machine-name',
+        self.m.properties['buildername']
+      ])
 
     # Pixel tests.
     # Try servers pull their results from cloud storage; the other
@@ -168,7 +164,7 @@ class GpuApi(recipe_api.RecipeApi):
     if 'rietveld' in self.m.properties:
       ref_img_arg = '--download-refimg-from-cloud-storage'
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
-    yield self.run_telemetry_gpu_test('pixel',
+    yield self._maybe_run_isolated_telemetry_gpu_test('pixel',
         args=[
             '--build-revision',
             str(self._build_revision),
@@ -183,22 +179,24 @@ class GpuApi(recipe_api.RecipeApi):
         name='pixel_test')
 
     # WebGL conformance tests.
-    yield self.run_telemetry_gpu_test('webgl_conformance',
+    yield self._maybe_run_isolated_telemetry_gpu_test('webgl_conformance',
         args=[
             '--webgl-conformance-version=1.0.2'
         ])
 
     # Context lost tests.
-    yield self.run_telemetry_gpu_test('context_lost')
+    yield self._maybe_run_isolated_telemetry_gpu_test('context_lost')
 
     # Memory tests.
-    yield self.run_telemetry_gpu_test('memory_test')
+    yield self._maybe_run_isolated_telemetry_gpu_test('memory_test')
 
     # Hardware acceleration tests.
-    yield self.run_telemetry_gpu_test('hardware_accelerated_feature')
+    yield self._maybe_run_isolated_telemetry_gpu_test(
+      'hardware_accelerated_feature')
 
     # GPU process launch tests.
-    yield self.run_telemetry_gpu_test('gpu_process', name='gpu_process_launch')
+    yield self._maybe_run_isolated_telemetry_gpu_test('gpu_process',
+                                                      name='gpu_process_launch')
 
     # Only run the performance tests on Release builds.
     if self.m.chromium.is_release_build:
@@ -207,8 +205,8 @@ class GpuApi(recipe_api.RecipeApi):
               '--test-launcher-jobs=1',
               '--test-launcher-print-test-stdio=always',
               '--gtest_filter=TabCapturePerformanceTest*']
-      yield self.m.chromium.runtest('performance_browser_tests',
-                                    args,
+      yield self._maybe_run_isolate('performance_browser_tests',
+                                    args=args,
                                     name='tab_capture_performance_tests',
                                     annotate='graphing',
                                     results_url=self._dashboard_upload_url,
@@ -220,7 +218,8 @@ class GpuApi(recipe_api.RecipeApi):
     # steps from the main waterfall, like gpu_unittests.
 
     # On Windows, process any crash dumps that may have occurred.
-    if self.m.platform.is_win:
+    # TODO(kbr): figure out what to do with this when running via isolates.
+    if self.m.platform.is_win and not self._use_isolates:
       yield self.m.python(
         'process_dumps',
         self.m.path.build('scripts', 'slave', 'process_dumps.py'),
@@ -229,8 +228,34 @@ class GpuApi(recipe_api.RecipeApi):
          '--target',
          self.m.chromium.c.build_config_fs])
 
-  def run_telemetry_gpu_test(self, test, name='', args=None,
-                             results_directory=''):
+  def _maybe_run_isolate(self, test, **kwargs):
+    """Runs a test either from the extracted build or via an isolate,
+    depending on whether isolates are in use for this build."""
+    if self._use_isolates:
+      # If the name is supplied, treat that as the name of the isolate.
+      yield self.m.isolate.runtest(kwargs.get('name', test), **kwargs)
+    else:
+      yield self.m.chromium.runtest(test, **kwargs)
+
+  def _maybe_run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
+                                             **kwargs):
+    """Runs a telemetry GPU test either from the extracted build or via an
+    isolate, depending on whether isolates are in use for this build."""
+    if self._use_isolates:
+      test_args = ['-v']
+      if args:
+        test_args.extend(args)
+      yield self.m.isolate.run_telemetry_test('telemetry_gpu_test',
+                                              test,
+                                              args=test_args,
+                                              name=name,
+                                              spawn_dbus=True,
+                                              **kwargs)
+    else:
+      yield self._run_telemetry_gpu_test(test, name, args)
+
+  def _run_telemetry_gpu_test(self, test, name='', args=None,
+                              results_directory=''):
     """Returns a step which runs a Telemetry based GPU test (via
     run_gpu_test.py)."""
 
