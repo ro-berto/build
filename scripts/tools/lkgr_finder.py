@@ -1304,7 +1304,7 @@ def main():
 
     if options.write_to_file and not options.dry:
       with open(options.write_to_file, 'w') as f:
-        f.write('%d' % candidate)
+        f.write('%s' % candidate)
 
     for master in options.notify:
       NotifyMaster(master, candidate, options.dry)
