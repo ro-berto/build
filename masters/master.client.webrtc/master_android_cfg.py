@@ -19,8 +19,8 @@ def android_apk_builder():
   return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=True,
                                           target_os='android')
 def android_apk_tester():
-  return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=False,
-                                      target_os='android')
+  return chromium_factory.ChromiumFactory('', 'linux2', nohooks_on_update=False,
+                                          target_os='android')
 def android_webrtc():
   return webrtc_factory.WebRTCFactory('', 'linux2', nohooks_on_update=True,
                                       target_os='android')
