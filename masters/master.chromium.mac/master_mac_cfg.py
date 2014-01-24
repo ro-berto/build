@@ -146,6 +146,7 @@ F('rel_unit_3', mac_tester().ChromiumFactory(
     'browser_tests',
     'message_center_unittests',
     'net',
+    'telemetry_perf_unittests',
     'telemetry_unittests',
   ],
   factory_properties={'generate_gtest_json': True,

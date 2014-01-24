@@ -139,6 +139,7 @@ F('rel_unit_2', win_tester().ChromiumFactory(
       'compositor',
       'events',
       'net',
+      'telemetry_perf_unittests',
       'telemetry_unittests',
       'views_unittests',
     ],
