@@ -104,6 +104,12 @@ def stream_process(cmd):
       try:
         i = p.stdout.readline()
         if i:
+          if sys.platform == 'win32':
+            # Instead of using universal_newlines=True which would affect
+            # buffering, just convert the ending CRLF to LF. Otherwise, it
+            # creates an double interline.
+            if i.endswith('\r\n'):
+              i = i[:-1] + '\n'
           yield i
           continue
       except OSError:
