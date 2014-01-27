@@ -6,7 +6,7 @@
 
 This is based on commands.py and adds swarm-specific commands."""
 
-from buildbot.steps import shell, source
+from buildbot.steps import source
 from twisted.python import log
 
 from master import chromium_step
@@ -24,16 +24,6 @@ def TestStepFilterTriggerSwarm(bStep):
   wants email for an empty job.
   """
   return bool(commands.GetSwarmTests(bStep))
-
-
-def TestStepFilterRetrieveSwarmResult(bStep):
-  """Returns True if the given swarm step to get results should be run.
-
-  It should be run if the .isolated hash was calculated.
-  """
-  # TODO(maruel): bStep.name[:-len('_swarm')] once the swarm retrieve results
-  # steps have the _swarm suffix.
-  return bStep.name in commands.GetProp(bStep, 'swarm_hashes', {})
 
 
 class SwarmClientSVN(source.SVN):
@@ -56,104 +46,8 @@ class SwarmingClientGIT(source.Git):
     self.startVC(None, revision, None)
 
 
-class SwarmShellForTriggeringTests(shell.ShellCommand):
-  """Triggers all the swarm jobs at once.
-
-  All the tests will run concurrently on Swarm and individual steps will gather
-  the results.
-
-  Makes sure each triggered swarm job has the proper number of shards.
-
-  This class can be used both on the Try Server, which supports 'testfilter' or
-  on the CI, where the steps are run inconditionally.
-  """
-  def __init__(self, *args, **kwargs):
-    self.tests = kwargs.pop('tests', [])
-    assert all(t.__class__.__name__ == 'SwarmTest' for t in self.tests)
-    shell.ShellCommand.__init__(self, *args, **kwargs)
-
-  def start(self):
-    """Triggers the intersection of 'swarm_hashes' build property,
-    self.tests and 'testfilter' build property if set.
-
-    'swarm_hashes' is already related to GetSwarmTests().
-    """
-    # Only used for pass gtest filters specified by the user via 'testfilter'.
-    swarm_tests = commands.GetSwarmTests(self)
-    # The 'swarm_hashes' build property has been set by the
-    # CalculateIsolatedSha1s build step. It will have all the steps that can be
-    # triggered. This implicitly takes account 'testfilter'.
-    swarm_tests_hash_mapping = commands.GetProp(self, 'swarm_hashes', {})
-
-    # TODO(maruel): Move more logic out into
-    # scripts/slave/swarming/trigger_swarm_shim.py.
-    command = self.command[:]
-    for swarm_test in self.tests:
-      if swarm_tests_hash_mapping.get(swarm_test.test_name):
-        command.extend(
-            [
-              '--task',
-              swarm_tests_hash_mapping[swarm_test.test_name],
-              swarm_test.test_name,
-              '%d' % swarm_test.shards,
-              # '*' is a special value to mean no filter. This is used so '' is
-              # not used, as '' may be misinterpreted by the shell, especially
-              # on Windows.
-              swarm_tests.get(swarm_test.test_name) or '*',
-            ])
-      else:
-        log.msg('Given a swarm test, %s, that has no matching hash' %
-                swarm_test.test_name)
-
-    self.setCommand(command)
-    shell.ShellCommand.start(self)
-
-
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
-  def AddTriggerSwarmTestStep(self, swarm_server, isolation_outdir, tests,
-                              doStepIf):
-    assert all(t.__class__.__name__ == 'SwarmTest' for t in tests)
-    command = [
-      self._python,
-      self.PathJoin(self._script_dir, 'swarming', 'trigger_swarm_shim.py'),
-      '--swarming', swarm_server,
-      '--isolate-server', isolation_outdir,
-    ]
-    command = self.AddBuildProperties(command)
-    assert all(i for i in command), command
-    self._factory.addStep(
-        SwarmShellForTriggeringTests,
-        name='swarm_trigger_tests',
-        description='Trigger swarm steps',
-        command=command,
-        tests=tests,
-        doStepIf=doStepIf)
-
-  def AddGetSwarmTestResultStep(self, swarm_server, test_name, num_shards):
-    """Adds the step to retrieve the Swarm job results asynchronously."""
-    # TODO(maruel): assert test_name.endswith('_swarm') once swarm retrieve
-    # results steps have _swarm suffix.
-    command = [
-      self._python,
-      self.PathJoin(self._script_dir, 'swarming', 'get_swarm_results_shim.py'),
-      '--swarming', swarm_server,
-      '--shards', '%d' % num_shards,
-      test_name,
-    ]
-    command = self.AddBuildProperties(command)
-
-    # Swarm handles the timeouts due to no ouput being produced for 10 minutes,
-    # but we don't have access to the output until the whole test is done, which
-    # may take more than 10 minutes, so we increase the buildbot timeout.
-    timeout = 2 * 60 * 60
-    self._factory.addStep(
-        chromium_step.AnnotatedCommand,
-        name=test_name,
-        description='%s Swarming' % test_name,
-        command=command,
-        timeout=timeout,
-        doStepIf=TestStepFilterRetrieveSwarmResult)
 
   def AddUpdateSwarmClientStep(self):
     """Checks out swarming_client so it can be used at the right revision."""
@@ -181,6 +75,27 @@ class SwarmCommands(commands.FactoryCommands):
         workdir=relpath,
         doStepIf=doSwarmingStepIf)
 
+  def AddSwarmingStep(self, swarming_server, isolate_server):
+    """Adds the step to run and get results from Swarming."""
+    command = [
+      self._python,
+      self.PathJoin(self._script_dir, 'swarming', 'swarming_run_shim.py'),
+      '--swarming', swarming_server,
+      '--isolate-server', isolate_server,
+    ]
+    command = self.AddBuildProperties(command)
+
+    # Swarm handles the timeouts due to no ouput being produced for 10 minutes,
+    # but we don't have access to the output until the whole test is done, which
+    # may take more than 10 minutes, so we increase the buildbot timeout.
+    timeout = 2 * 60 * 60
+    self._factory.addStep(
+        chromium_step.AnnotatedCommand,
+        name='swarming',
+        description='Swarming tests',
+        command=command,
+        timeout=timeout)
+
   def AddIsolateTest(self, test_name):
     if not self._target:
       log.msg('No target specified, unable to find isolated files')
@@ -203,16 +118,3 @@ class SwarmCommands(commands.FactoryCommands):
     self.AddTestStep(chromium_step.AnnotatedCommand,
                      test_name,
                      command)
-
-  def SetupWinNetworkDrive(self, drive, network_path):
-    script_path = self.PathJoin(self._script_dir, 'add_network_drive.py')
-
-    command = [self._python, script_path, '--drive', drive,
-               '--network_path', network_path]
-
-    self._factory.addStep(
-        shell.ShellCommand,
-        name='setup_windows_network_storage',
-        description='setup_windows_network_storage',
-        descriptionDone='setup_windows_network_storage',
-        command=command)

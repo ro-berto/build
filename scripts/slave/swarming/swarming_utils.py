@@ -24,6 +24,22 @@ OS_MAPPING = {
 }
 
 
+# This should match build/scripts/master/factory/swarming_factory.py until the
+# code there is deleted.
+# The goal here is to take ~5m of actual test run per shard, e.g. the 'RunTest'
+# section in the logs, so that the trade-off of setup time overhead vs latency
+# is reasonable. The overhead is in the 15~90s range, with the vast majority
+# being downloading the executable files. While it can be lowered, it'll stay in
+# the "few seconds" range due to the sheer size of the executables to map.
+# Anything not listed defaults to 1 shard.
+TESTS_SHARDS = {
+    'browser_tests': 5,
+    'interactive_ui_tests': 3,
+    'sync_integration_tests': 4,
+    'unit_tests': 2,
+}
+
+
 def find_client(base_dir):
   """Returns the path to swarming_client if found.
 
@@ -56,3 +72,43 @@ def get_version(client):
   version = tuple(map(int, version.split('.')))
   print('Detected swarming.py version %s' % '.'.join(map(str, version)))
   return version
+
+
+def build_to_priority(build_properties):
+  """Returns the Swarming task priority for the build.
+
+  Does this by determining the build type. Lower is higher priority.
+  """
+  url = build_properties.get('buildbotURL', '')
+  # TODO(maruel): It's a tad annoying to use the url as a signal here. It is
+  # just too easy to forget to update this list so find a way to specify the
+  # priority more clearly.
+  ci_masters = (
+      '/chromium/',
+      '/chromium.chrome/',
+      '/chromium.chromiumos/',
+      '/chromium.linux/',
+      '/chromium.mac/',
+      '/chromium.memory/',
+      '/chromium.win/',
+  )
+  try_masters = (
+      '/tryserver.chromium/',
+      '/tryserver.nacl/',
+  )
+
+  if url.endswith(ci_masters):
+    # Continuous integration master.
+    return 10
+
+  if url.endswith(try_masters):
+    requester = build_properties.get('requester')
+    if requester == 'commit-bot@chromium.org':
+      # Commit queue job.
+      return 30
+    # Normal try job.
+    return 50
+
+  # FYI builder or something else we do not know about. Run these at very low
+  # priority so if something is misconfigured above, we can catch it sooner.
+  return 200

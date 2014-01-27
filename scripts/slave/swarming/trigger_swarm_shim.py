@@ -58,7 +58,7 @@ def v0_1(
     '--isolate-server', isolate_server,
     '--os', slave_os,
     '--task-prefix', task_prefix,
-    '--priority', priority,
+    '--priority', str(priority),
   ]
 
   for i in tasks:
@@ -86,8 +86,8 @@ def v0_3(
       '--swarming', swarming,
       '--isolate-server', isolate_server,
       '--os', slave_os,
-      '--priority', priority,
-      '--shards', shards,
+      '--priority', str(priority),
+      '--shards', str(shards),
       '--task-name', task_prefix + test_name,
       isolated_hash,
     ]
@@ -115,8 +115,8 @@ def v0_4(client, swarming, isolate_server, priority, tasks, slave_os):
       '--swarming', swarming,
       '--isolate-server', isolate_server,
       '--dimension', 'os', selected_os,
-      '--priority', priority,
-      '--shards', shards,
+      '--priority', str(priority),
+      '--shards', str(shards),
       '--task-name', task_name,
       isolated_hash,
     ]
@@ -132,7 +132,7 @@ def v0_4(client, swarming, isolate_server, priority, tasks, slave_os):
   return ret
 
 
-def determine_version_and_run_handler(
+def trigger(
     client, swarming, isolate_server, priority, tasks, task_prefix, slave_os):
   """Executes the proper handler based on the code layout and --version support.
   """
@@ -164,22 +164,7 @@ def process_build_properties(options):
   # xx_swarm_triggered buildbot<->swarming builder, and it's not needed since
   # the OS match, it's defined in builder/tester configurations.
   slave_os = options.build_properties.get('target_os', sys.platform)
-
-  # TODO(maruel): Also select the OS version.
-
-  # Determine the build type. This is used to determine the task priority. Lower
-  # is higher priority.
-  if options.build_properties.get('requester') == 'commit-bot@chromium.org':
-    # Commit queue job.
-    priority = '20'
-  elif (options.build_properties.get('requester') or
-      options.build_properties.get('testfilter')):
-    # Normal try job.
-    priority = '40'
-  else:
-    # FYI builder.
-    priority = '30'
-
+  priority = swarming_utils.build_to_priority(options.build_properties)
   return task_prefix, slave_os, priority
 
 
@@ -199,7 +184,7 @@ def main():
     print >> sys.stderr, 'Failed to find swarm(ing)_client'
     return 1
 
-  parser = optparse.OptionParser()
+  parser = optparse.OptionParser(description=sys.modules[__name__].__doc__)
   parser.add_option('--swarming')
   parser.add_option('--isolate-server')
   parser.add_option(
@@ -212,7 +197,7 @@ def main():
   # Loads the other flags implicitly.
   task_prefix, slave_os, priority = process_build_properties(options)
 
-  return determine_version_and_run_handler(
+  return trigger(
       client, options.swarming, options.isolate_server, priority,
       options.tasks, task_prefix, slave_os)
 

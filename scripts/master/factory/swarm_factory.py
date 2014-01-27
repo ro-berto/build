@@ -50,14 +50,12 @@ SWARM_TESTS = [
 ]
 
 
-def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
-  """Create a basic swarm builder that runs tests via Swarm.
+def SwarmTestBuilder(swarm_server, isolation_server, tests):
+  """Create a basic swarm builder that runs tests via Swarming.
 
-  To clarify, this 'buildbot builder' doesn't compile.
+  To clarify, this 'buildbot builder' doesn't compile, doesn't have a checkout,
+  it just triggers a job and gets results.
   """
-  valid_tests = set(s.test_name for s in SWARM_TESTS)
-  assert not any(t not in valid_tests for t in tests)
-
   # No need of a window manager when only retrieving results.
   f = build_factory.BuildFactory()
 
@@ -74,25 +72,13 @@ def SwarmTestBuilder(swarm_server, isolation_outdir, tests):
   # Checks out the scripts at the right revision so the trigger can happen.
   swarm_command_obj.AddUpdateSwarmClientStep()
 
-  # Send the swarm tests to the swarm server.
-  swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
-  swarm_command_obj.AddTriggerSwarmTestStep(
-      swarm_server=swarm_server,
-      isolation_outdir=isolation_outdir,
-      tests=swarm_tests,
-      doStepIf=swarm_commands.TestStepFilterTriggerSwarm)
-
-  # Collect the results
-  for swarm_test in swarm_tests:
-    swarm_command_obj.AddGetSwarmTestResultStep(
-        swarm_server, swarm_test.test_name, swarm_test.shards)
-
+  swarm_command_obj.AddSwarmingStep(swarm_server, isolation_server)
   return f
 
 
 class SwarmFactory(chromium_factory.ChromiumFactory):
-  """Runs swarm tests in a single build, contrary to ChromiumFactory which can
-  trigger swarm jobs but doesn't look for results.
+  """Runs swarming tests in a single build, contrary to ChromiumFactory which
+  can trigger swarming jobs but doesn't look for results.
 
   This factory does both, which is usually a waste of resource, you don't want
   to waste a powerful slave sitting idle, waiting for swarm results. Used on
@@ -104,10 +90,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
 
     Caller must not reuse factory_properties since it is modified in-place.
     """
-    valid_tests = set(s.test_name for s in SWARM_TESTS)
-    assert not (set(tests) - set(valid_tests))
     target = 'Release'
-
     factory_properties.setdefault('gclient_env', {})
     factory_properties['gclient_env'].setdefault('GYP_DEFINES', '')
     factory_properties['gclient_env']['GYP_DEFINES'] += (
@@ -126,17 +109,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
         self._target_platform)
 
     swarm_command_obj.AddGenerateIsolatedHashesStep(tests=tests, doStepIf=True)
-
-    # Send of all the test requests as a single step.
-    swarm_tests = [s for s in SWARM_TESTS if s.test_name in tests]
-    swarm_command_obj.AddTriggerSwarmTestStep(swarm_server, isolate_server,
-                                              swarm_tests, True)
-
-    # Each test has its output returned as its own step.
-    for test in swarm_tests:
-      swarm_command_obj.AddGetSwarmTestResultStep(
-          swarm_server, test.test_name, test.shards)
-
+    swarm_command_obj.AddSwarmingStep(swarm_server, isolate_server)
     return f
 
 
