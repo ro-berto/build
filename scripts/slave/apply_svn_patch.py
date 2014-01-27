@@ -3,9 +3,24 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+"""Apply a Subversion patch to the checkout.
+
+This script can optionally pass the patch contents through an external filter
+script to alter the contents.
+As this script involves multiple subprocesses, the exit code of this script is a
+result of the different subprocess exit codes. Each failing subprocess will get
+its exit code printed to stdout and add a unique number to the script's combined
+exit code (in order to make debugging easier).
+"""
+
 import optparse
 import subprocess
 import sys
+
+
+SVN_CAT_FAILED = 1 << 0
+FILTERING_FAILED = 1 << 1
+PATCH_FAILED = 1 << 2
 
 
 def main():
@@ -47,14 +62,20 @@ def main():
                             '-d', options.root_dir],
                            stdin=patch_input)
 
-  _, err = patch.communicate()
-
-  # Ensure we fail if any of the subprocesses failed. Stdout output will provide
-  # enough information for debugging but we need the script to return a non-zero
-  # exit code in such a case.
-  exit_code = err or patch.returncode != 0 or svn_cat.returncode != 0 or None
+  # Ensure we wait for the subprocesses to finish their execution and that we
+  # check all their exit codes properly.
+  procs = [('svn cat', svn_cat, SVN_CAT_FAILED)]
   if filtering:
-    exit_code = exit_code or filtering.returncode != 0
+    procs.append(('filtering', filtering, FILTERING_FAILED))
+  procs.append(('patch', patch, PATCH_FAILED))
+  patch.communicate()
+
+  exit_code = 0
+  for name, proc, fail_code in procs:
+    proc.wait()
+    if proc.returncode != 0:
+      print '%s subprocess failed. Exit code: %s' % (name, proc.returncode)
+      exit_code += fail_code
   return exit_code
 
 
