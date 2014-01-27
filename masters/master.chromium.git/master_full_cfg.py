@@ -32,7 +32,7 @@ S('chromium-git', branch='git-svn', treeStableTimer=60)
 B('WinGit', 'win', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('win', win().ChromiumGitFactory(
-    pure_git=False,
+    pure_git=True,
     clobber=True,
     project='all.sln',
     tests=[
@@ -62,7 +62,7 @@ F('win', win().ChromiumGitFactory(
 B('MacGit', 'mac', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('mac', mac().ChromiumGitFactory(
-    pure_git=False,
+    pure_git=True,
     clobber=True,
     tests=[
       'check_deps2git',
@@ -89,7 +89,7 @@ F('mac', mac().ChromiumGitFactory(
 B('LinuxGit', 'linux', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('linux', linux().ChromiumGitFactory(
-    pure_git=False,
+    pure_git=True,
     clobber=True,
     tests=[
       'check_deps2git',
@@ -115,7 +115,7 @@ F('linux', linux().ChromiumGitFactory(
 B('LinuxGit x64', 'linux64', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
 F('linux64', linux().ChromiumGitFactory(
-    pure_git=False,
+    pure_git=True,
     clobber=True,
     tests=[
       'check_deps2git',
