@@ -167,7 +167,12 @@ def GenSteps(api):
 
     def has_valid_results(self, suffix):
       step_name = self._step_name(suffix)
-      return api.step_history[step_name].json.gtest_results.valid
+      gtest_results = api.step_history[step_name].json.gtest_results
+      if not gtest_results.valid:  # pragma: no cover
+        return False
+      global_tags = gtest_results.raw.get('global_tags', [])
+      return 'UNRELIABLE_RESULTS' not in global_tags
+
 
     def failures(self, suffix):
       step_name = self._step_name(suffix)
