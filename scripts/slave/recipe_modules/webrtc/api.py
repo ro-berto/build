@@ -36,7 +36,10 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   def apply_svn_patch(self):
     script = self.m.path.build('scripts', 'slave', 'apply_svn_patch.py')
-    args = ['-p', self.m.properties['patch_url'],
+    # Use the SVN mirror as the slaves only have authentication setup for that.
+    patch_url = self.m.properties['patch_url'].replace(
+        'svn://svn.chromium.org', 'svn://svn-mirror.golo.chromium.org')
+    args = ['-p', patch_url,
             '-r', self.c.patch_root_dir]
 
     # Allow manipulating patches for try jobs.
