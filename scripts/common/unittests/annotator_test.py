@@ -22,19 +22,6 @@ from common import chromium_utils
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-class FilterCapture(chromium_utils.RunCommandFilter):
-  """Captures the text and places it into an array."""
-  def __init__(self):
-    chromium_utils.RunCommandFilter.__init__(self)
-    self.text = []
-
-  def FilterLine(self, line):
-    self.text.append(line.rstrip())
-
-  def FilterDone(self, text):
-    self.text.append(text)
-
-
 class TestAnnotationStreams(unittest.TestCase):
   def setUp(self):
     self.buf = cStringIO.StringIO()
@@ -265,7 +252,7 @@ def _synthesizeCmd(args):
 
 class TestExecution(unittest.TestCase):
   def setUp(self):
-    self.capture = FilterCapture()
+    self.capture = chromium_utils.FilterCapture()
     self.tempfd, self.tempfn = tempfile.mkstemp()
     self.temp = os.fdopen(self.tempfd, 'wb')
     self.script = os.path.join(SCRIPT_DIR, os.pardir, 'annotator.py')

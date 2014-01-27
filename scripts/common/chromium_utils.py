@@ -742,6 +742,19 @@ class RunCommandFilter(object):
     return last_bits
 
 
+class FilterCapture(RunCommandFilter):
+  """Captures the text and places it into an array."""
+  def __init__(self):
+    RunCommandFilter.__init__(self)
+    self.text = []
+
+  def FilterLine(self, line):
+    self.text.append(line.rstrip())
+
+  def FilterDone(self, text):
+    self.text.append(text)
+
+
 def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
                print_cmd=True, timeout=None, max_time=None, **kwargs):
   """Runs the command list, printing its output and returning its exit status.

@@ -29,18 +29,6 @@ def runScript(*args, **kwargs):
   return chromium_utils.RunCommand(*args, env=env, **kwargs)
 
 
-class FilterCapture(chromium_utils.RunCommandFilter):
-  """Captures the text and places it into an array."""
-  def __init__(self):
-    chromium_utils.RunCommandFilter.__init__(self)
-    self.text = []
-
-  def FilterLine(self, line):
-    self.text.append(line.rstrip())
-
-  def FilterDone(self, text):
-    self.text.append(text)
-
 class TelemetryTest(unittest.TestCase):
   """Holds tests for telemetry script."""
 
@@ -61,7 +49,7 @@ class TelemetryTest(unittest.TestCase):
     super(TelemetryTest, self).setUp()
 
     self.telemetry = os.path.join(SCRIPT_DIR, '..', 'telemetry.py')
-    self.capture = FilterCapture()
+    self.capture = chromium_utils.FilterCapture()
 
   def testSimpleCommand(self):
     fp = self._GetDefaultFactoryProperties()
