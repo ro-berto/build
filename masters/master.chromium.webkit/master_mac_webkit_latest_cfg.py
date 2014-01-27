@@ -142,6 +142,23 @@ F('f_webkit_rel_tests_109', mac().ChromiumFactory(
         'blink_config': 'blink',
     }))
 
+B('WebKit Mac Oilpan', 'f_webkit_mac_oilpan_rel', scheduler='global_scheduler')
+F('f_webkit_mac_oilpan_rel', mac().ChromiumFactory(
+    tests=chromium_factory.blink_tests,
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+        'blink_tests'],
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'blink_config': 'blink',
+        'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_DEFINES':'enable_oilpan=1 fastbuild=1',
+            'GYP_GENERATORS':'ninja',
+        },
+        'test_results_server': 'test-results.appspot.com',
+    }))
+
+
 ################################################################################
 ## Debug
 ################################################################################
@@ -194,6 +211,24 @@ F('f_webkit_dbg_tests', mac().ChromiumFactory(
 
 B('WebKit Mac10.7 (dbg)', 'f_webkit_dbg_tests',
   scheduler='s5_webkit_dbg_trigger')
+
+B('WebKit Mac Oilpan (dbg)', 'f_webkit_mac_oilpan_dbg',
+  scheduler='global_scheduler')
+F('f_webkit_mac_oilpan_dbg', mac().ChromiumFactory(
+    target='Debug',
+    tests=chromium_factory.blink_tests,
+    options=['--build-tool=ninja', '--compiler=goma-clang', '--',
+        'blink_tests'],
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'blink_config': 'blink',
+        'generate_gtest_json': True,
+        'gclient_env': {
+            'GYP_DEFINES':'enable_oilpan=1',
+            'GYP_GENERATORS':'ninja',
+        },
+        'test_results_server': 'test-results.appspot.com',
+    }))
 
 
 ################################################################################

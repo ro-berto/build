@@ -16,6 +16,14 @@ categories_steps = {
 
 exclusions = {
   'WebKit XP': ['runhooks'], # crbug.com/262577
+
+  # crbug.com/334617: For now, Oilpan bots don't close the tree.
+  'WebKit Linux Oilpan': [],
+  'WebKit Linux Oilpan (dbg)': [],
+  'WebKit Mac Oilpan': [],
+  'WebKit Mac Oilpan (dbg)': [],
+  'WebKit Win Oilpan': [],
+  'WebKit Win Oilpan (dbg)': [],
 }
 
 forgiving_steps = ['update_scripts', 'update', 'gclient_revert']

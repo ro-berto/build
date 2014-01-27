@@ -49,11 +49,32 @@ F('f_webkit_linux_rel', linux().ChromiumFactory(
 
 B('WebKit Linux 32', 'f_webkit_linux_rel', scheduler='global_scheduler')
 
+B('WebKit Linux Oilpan', 'f_webkit_linux_oilpan_rel',
+    scheduler='global_scheduler')
+F('f_webkit_linux_oilpan_rel', linux().ChromiumFactory(
+    tests=chromium_factory.blink_tests,
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'blink_tests',
+    ],
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'gclient_env': {
+          'GYP_DEFINES': 'enable_oilpan=1',
+          'GYP_GENERATORS': 'ninja',
+        },
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
+    }))
+
 asan_gyp = ('asan=1 linux_use_tcmalloc=0 '
             'release_extra_cflags="-g -O1 -fno-inline-functions -fno-inline"')
 
 B('WebKit Linux ASAN', 'f_webkit_linux_rel_asan', scheduler='global_scheduler',
-  auto_reboot=False)
+    auto_reboot=False)
 F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
     tests=['webkit'],
     options=[
@@ -89,7 +110,7 @@ F('f_webkit_linux_rel_asan', linux().ChromiumFactory(
 #
 
 B('WebKit Linux (dbg)', 'f_webkit_dbg_tests', scheduler='global_scheduler',
-  auto_reboot=False)
+    auto_reboot=False)
 F('f_webkit_dbg_tests', linux().ChromiumFactory(
     target='Debug',
     tests=chromium_factory.blink_tests,
@@ -108,6 +129,29 @@ F('f_webkit_dbg_tests', linux().ChromiumFactory(
         },
         'blink_config': 'blink',
     }))
+
+B('WebKit Linux Oilpan (dbg)', 'f_webkit_linux_oilpan_dbg',
+    scheduler='global_scheduler')
+F('f_webkit_linux_oilpan_dbg', linux().ChromiumFactory(
+    target='Debug',
+    tests=chromium_factory.blink_tests,
+    options=[
+        '--build-tool=ninja',
+        '--compiler=goma',
+        '--',
+        'blink_tests',
+    ],
+    factory_properties={
+        'archive_webkit_results': ActiveMaster.is_production_host,
+        'gclient_env': {
+          'GYP_DEFINES': 'enable_oilpan=1',
+          'GYP_GENERATORS': 'ninja',
+        },
+        'generate_gtest_json': True,
+        'test_results_server': 'test-results.appspot.com',
+        'blink_config': 'blink',
+    }))
+
 
 def Update(_config, _active_master, c):
   return helper.Update(c)
