@@ -149,6 +149,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
+      'aura',
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
@@ -179,6 +180,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
+      'views',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
@@ -337,6 +339,7 @@ F('dbg_unit_32_2', linux_tester().ChromiumFactory(
     build_url=dbg_32_archive,
     target='Debug',
     tests=[
+      'aura',
       'base_unittests',
       'cacheinvalidation_unittests',
       'cast',
@@ -362,6 +365,7 @@ F('dbg_unit_32_2', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
+      'views',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
@@ -407,6 +411,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     build_url=dbg_archive,
     target='Debug',
     tests=[
+      'aura',
       'base_unittests',
       'cacheinvalidation_unittests',
       'cast',
@@ -433,6 +438,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
+      'views',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
