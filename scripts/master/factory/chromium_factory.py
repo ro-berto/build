@@ -417,6 +417,10 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddGTestTestStep('gcm_unit_tests', fp)
     if R('gcm_unit_tests_br'):
       f.AddBuildrunnerGTest('gcm_unit_tests', fp)
+    if R('gfx_unittests'):
+      f.AddGTestTestStep('gfx_unittests', fp)
+    if R('gfx_unittests_br'):
+      f.AddBuildrunnerGTest('gfx_unittests', fp)
     if R('google_apis_unittests'):
       f.AddGTestTestStep('google_apis_unittests', fp)
     if R('google_apis_unittests_br'):
