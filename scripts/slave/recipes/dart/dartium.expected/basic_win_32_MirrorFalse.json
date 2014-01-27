@@ -105,7 +105,6 @@
       "Release",
       "--build-dir",
       "[SLAVE_BUILD]\\src\\out",
-      "--no-xvfb",
       "--factory-properties",
       "{\"TARGET_BITS\": 32, \"USE_MIRROR\": false, \"recipe\": \"dart/dartium\"}",
       "--build-properties",

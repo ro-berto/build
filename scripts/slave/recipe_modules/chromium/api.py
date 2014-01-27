@@ -87,9 +87,10 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     full_args = [
       '--target', self.c.build_config_fs,
-      '--build-dir', self.c.build_dir,
-      ('--xvfb' if xvfb else '--no-xvfb')
+      '--build-dir', self.c.build_dir
     ]
+    if self.m.platform.is_linux:
+      full_args.append('--xvfb' if xvfb else '--no-xvfb')
     full_args += self.m.json.property_args()
 
     if annotate:
