@@ -51,6 +51,31 @@ class SwarmingRunTest(auto_stub.TestCase):
     actual = list(swarming_run_shim.stream_process(cmd))
     self.assertEqual(['a\n', 'b\n', 0], actual)
 
+  def test_none(self):
+    def stream_process_mock(cmd):
+      self.fail()
+
+    def find_client_mock(path):
+      return '/doesn\'t/exist/'
+
+    self.mock(swarming_run_shim, 'stream_process', stream_process_mock)
+    self.mock(swarming_run_shim.swarming_utils, 'find_client', find_client_mock)
+    self.mock(swarming_run_shim.swarming_utils, 'get_version', lambda _: (0, 4))
+    self.mock(sys, 'stdout', StringIO.StringIO())
+
+    cmd = [
+        '--swarming', 'http://localhost:1',
+        '--isolate-server', 'http://localhost:2',
+    ]
+    props = {
+        'target_os': 'darwin',
+        'buildbotURL': 'http://build.chromium.org/p/chromium.win/'
+    }
+    cmd.extend(('--build-properties', json.dumps(props)))
+    self.assertEqual(0, swarming_run_shim.main(cmd))
+    expected = 'Nothing to trigger\n\n@@@STEP_WARNINGS@@@\n'
+    self.assertEqual(expected, sys.stdout.getvalue())
+
   def test_one(self):
     cmds = []
     def stream_process_mock(cmd):
@@ -98,11 +123,12 @@ class SwarmingRunTest(auto_stub.TestCase):
         'Selected tests:\n base_test\nSelected OS: Mac\n'
         '\n@@@SEED_STEP base_test@@@\n'
         '\n@@@STEP_CURSOR base_test@@@\n'
+        '\n@@@STEP_STARTED@@@\n'
         '\n@@@STEP_TEXT@Mac@@@\n'
         '\n@@@STEP_TEXT@1234@@@\n'
-        '\n@@@STEP_CURSOR base_test@@@\n'
         'a\nb\nc\n'
         '\n@@@STEP_CLOSED@@@\n'
+        '\n'
     )
     self.assertEqual(expected, sys.stdout.getvalue())
 
@@ -130,11 +156,12 @@ class SwarmingRunTest(auto_stub.TestCase):
         'Selected tests:\n base_test\nSelected OS: Linux\n'
         '\n@@@SEED_STEP base_test@@@\n'
         '\n@@@STEP_CURSOR base_test@@@\n'
+        '\n@@@STEP_STARTED@@@\n'
         '\n@@@STEP_TEXT@Linux@@@\n'
         '\n@@@STEP_TEXT@1234@@@\n'
-        '\n@@@STEP_CURSOR base_test@@@\n'
         'a\n'
         '\n@@@STEP_CLOSED@@@\n'
+        '\n'
     )
     self.assertEqual(expected, sys.stdout.getvalue())
 
@@ -284,31 +311,44 @@ class SwarmingRunTest(auto_stub.TestCase):
         u'\n@@@SEED_STEP bloa_test@@@\n'
         u'\n@@@SEED_STEP slow_test@@@\n'
         u'\n@@@STEP_CURSOR base_test@@@\n'
+        u'\n@@@STEP_STARTED@@@\n'
         u'\n@@@STEP_TEXT@Mac@@@\n'
         u'\n@@@STEP_TEXT@1234@@@\n'
         u'\n@@@STEP_CURSOR bloa_test@@@\n'
+        u'\n@@@STEP_STARTED@@@\n'
         u'\n@@@STEP_TEXT@Mac@@@\n'
         u'\n@@@STEP_TEXT@0000@@@\n'
         u'\n@@@STEP_CURSOR slow_test@@@\n'
+        u'\n@@@STEP_STARTED@@@\n'
         u'\n@@@STEP_TEXT@Mac@@@\n'
         u'\n@@@STEP_TEXT@4321@@@\n'
         u'\n@@@STEP_CURSOR base_test@@@\n'
+        u'\n'
         u'base1\nbase2\n'
         u'\n@@@STEP_CLOSED@@@\n'
+        u'\n'
         u'\n@@@STEP_CURSOR slow_test@@@\n'
+        u'\n'
         u'slow1\n'
         u'\n@@@STEP_CURSOR bloa_test@@@\n'
+        u'\n'
         u'bloated1\n'
         u'\n@@@STEP_CURSOR slow_test@@@\n'
+        u'\n'
         u'slow2\n'
         u'\n@@@STEP_CURSOR bloa_test@@@\n'
+        u'\n'
         u'bloated2\n'
         u'bloated3\n'
         u'\n@@@STEP_CURSOR slow_test@@@\n'
+        u'\n'
         u'\n@@@STEP_FAILURE@@@\n'
         u'\n@@@STEP_CLOSED@@@\n'
+        u'\n'
         u'\n@@@STEP_CURSOR bloa_test@@@\n'
+        u'\n'
         u'\n@@@STEP_CLOSED@@@\n'
+        u'\n'
     )
     self.assertEqual(expected.splitlines(), actual.splitlines())
 

@@ -109,7 +109,7 @@ def stream_process(cmd):
             # buffering, just convert the ending CRLF to LF. Otherwise, it
             # creates an double interline.
             if i.endswith('\r\n'):
-              i = i[:-1] + '\n'
+              i = i[:-2] + '\n'
           yield i
           continue
       except OSError:
@@ -124,11 +124,11 @@ def stream_process(cmd):
 
 def drive_one(
     client, version, swarming_server, isolate_server, priority, dimensions,
-    task_name, isolated_hash, env, shards, out):
+    task_name, cursor, isolated_hash, env, shards, out):
   """Executes the proper handler based on the code layout and --version support.
   """
   def send_back(l):
-    out.put((task_name, l))
+    out.put((cursor, l))
   if version < (0, 4):
     cmd = v0_3(
         client, swarming_server, isolate_server, priority, dimensions,
@@ -156,16 +156,6 @@ def drive_many(
     steps, Queue.Queue())
 
 
-def step_name_to_cursor(x):
-  """The cursor is buildbot's step name. It is only the base test name for
-  simplicity.
-
-  But the swarming task name is longer, it is
-  "<name>/<dimensions>/<isolated hash>".
-  """
-  return x.split('/', 1)[0]
-
-
 def _drive_many(
     client, version, swarming_server, isolate_server, priority, dimensions,
     steps, out):
@@ -190,48 +180,59 @@ def _drive_many(
     t = threading.Thread(
         target=drive_one,
         args=(client, version, swarming_server, isolate_server, priority,
-              dimensions, task_name, isolated_hash, env, shards, out))
+              dimensions, task_name, step_name, isolated_hash, env, shards,
+              out))
     t.daemon = True
     t.start()
     threads.append(t)
-    steps_annotations[task_name] = annotator.AdvancedAnnotationStep(
-        sys.stdout, False)
-    items = task_name.split('/', 2)
-    assert step_name == items[0]
-    assert step_name == step_name_to_cursor(task_name)
     # It is important data to surface through buildbot.
+    steps_annotations[step_name] = annotator.AdvancedAnnotationStep(
+        sys.stdout, False)
     stream.step_cursor(step_name)
-    steps_annotations[task_name].step_text(items[1])
-    steps_annotations[task_name].step_text(items[2])
-  collect(stream, steps_annotations, out)
+    steps_annotations[step_name].step_started()
+    steps_annotations[step_name].step_text(dimensions['os'])
+    steps_annotations[step_name].step_text(isolated_hash)
+  sys.stdout.flush()
+  collect(stream, steps_annotations, step_name, out)
   return 0
 
 
-def collect(stream, steps_annotations, out):
-  last_cursor = None
+def collect(stream, steps_annotations, last_cursor, out):
   while steps_annotations:
     try:
       # Polling FTW.
       packet = out.get(timeout=1)
     except Queue.Empty:
       continue
-    task_name, item = packet
-    if last_cursor != task_name:
-      stream.step_cursor(step_name_to_cursor(task_name))
-      last_cursor = task_name
-    if isinstance(item, int):
+    # Each packet contains the task name and a item to process in the main
+    # thread.
+    cursor, item = packet
+    if last_cursor != cursor:
+      # Switch annotated buildbot cursor if necessary.
+      assert steps_annotations.get(cursor), steps_annotations
+      stream.step_cursor(cursor)
+      # Works around a problem on Windows where the cursor would not be properly
+      # updated.
+      sys.stdout.write('\n')
+      sys.stdout.flush()
+      last_cursor = cursor
+    if isinstance(item, (int, Exception)):
       # Signals it's completed.
       if item:
-        steps_annotations[task_name].step_failure()
-      steps_annotations[task_name].step_closed()
-      del steps_annotations[task_name]
-      last_cursor = None
-    elif isinstance(item, Exception):
-      print >> sys.stderr, item
-      steps_annotations[task_name].step_failure()
-      steps_annotations[task_name].step_close()
-      del steps_annotations[task_name]
-      last_cursor = None
+        steps_annotations[cursor].step_failure()
+      sys.stdout.flush()
+      if isinstance(item, Exception):
+        print >> sys.stderr, item
+      steps_annotations[cursor].step_closed()
+      # Works around a problem on Windows where the step would not be detected
+      # as closed until the next output. This breaks the steps duration, the
+      # step is listed as taking much more time than in reality.
+      sys.stdout.write('\n')
+      # TODO(maruel): Even with this, there is still buffering happening
+      # outside of the control of this script. This is mostly apparant on
+      # Windows.
+      sys.stdout.flush()
+      del steps_annotations[cursor]
     else:
       assert isinstance(item, str), item
       sys.stdout.write(item)
