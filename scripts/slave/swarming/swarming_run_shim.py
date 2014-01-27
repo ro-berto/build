@@ -42,6 +42,7 @@ def v0_3(
       '--priority', str(priority),
       '--shards', str(shards),
       '--task-name', task_name,
+      '--decorate',
       isolated_hash,
   ]
   for name, value in dimensions.iteritems():
@@ -71,15 +72,16 @@ def v0_4(
   It was rolled in src on r246113 on 2014-01-21.
   """
   cmd = [
-    sys.executable,
-    os.path.join(client, 'swarming.py'),
-    'run',
-    '--swarming', swarming_server,
-    '--isolate-server', isolate_server,
-    '--priority', str(priority),
-    '--shards', str(shards),
-    '--task-name', task_name,
-    isolated_hash,
+      sys.executable,
+      os.path.join(client, 'swarming.py'),
+      'run',
+      '--swarming', swarming_server,
+      '--isolate-server', isolate_server,
+      '--priority', str(priority),
+      '--shards', str(shards),
+      '--task-name', task_name,
+      '--decorate',
+      isolated_hash,
   ]
   for name, value in dimensions.iteritems():
     cmd.extend(('--dimension', name, value))
