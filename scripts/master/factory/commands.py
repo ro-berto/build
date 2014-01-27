@@ -172,7 +172,7 @@ class RunHooksShell(shell.ShellCommand):
     if BuildIsolatedFiles(test_filters, run_default_swarm_tests):
       environ = cmd.args.get('env', {}).copy()
       environ.setdefault('GYP_DEFINES', '')
-      environ['GYP_DEFINES'] += ' test_isolation_mode=hashtable'
+      environ['GYP_DEFINES'] += ' test_isolation_mode=archive'
       environ['GYP_DEFINES'] += (' test_isolation_outdir=' +
                                  config.Master.swarm_hashtable_server_internal)
 

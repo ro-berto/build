@@ -20,7 +20,7 @@ class IsolateApi(recipe_api.RecipeApi):
     definitely before the checkout and runhooks steps."""
     assert config.gyp_env.GYP_DEFINES['component'] != 'shared_library', (
       "isolates don't work with the component build yet; see crbug.com/333473")
-    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'hashtable'
+    config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
     config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = ISOLATE_SERVER
 
   @recipe_api.inject_test_data

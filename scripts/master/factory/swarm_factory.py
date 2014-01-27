@@ -94,7 +94,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
     factory_properties.setdefault('gclient_env', {})
     factory_properties['gclient_env'].setdefault('GYP_DEFINES', '')
     factory_properties['gclient_env']['GYP_DEFINES'] += (
-        ' test_isolation_mode=hashtable test_isolation_outdir=' +
+        ' test_isolation_mode=archive test_isolation_outdir=' +
         isolate_server)
 
     # Do not pass the tests to the ChromiumFactory, they'll be processed below.
