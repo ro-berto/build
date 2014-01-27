@@ -35,6 +35,7 @@ def main():
   svn_cat = subprocess.Popen(['svn', 'cat', options.patch_url],
                              stdout=subprocess.PIPE)
   patch_input = svn_cat.stdout
+  filtering = None
   if options.filter_script:
     extra_args = args or []
     filtering = subprocess.Popen([sys.executable, options.filter_script] +
@@ -47,7 +48,14 @@ def main():
                            stdin=patch_input)
 
   _, err = patch.communicate()
-  return err or None
+
+  # Ensure we fail if any of the subprocesses failed. Stdout output will provide
+  # enough information for debugging but we need the script to return a non-zero
+  # exit code in such a case.
+  exit_code = err or patch.returncode != 0 or svn_cat.returncode != 0 or None
+  if filtering:
+    exit_code = exit_code or filtering.returncode != 0
+  return exit_code
 
 
 if __name__ == '__main__':
