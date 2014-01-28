@@ -1164,7 +1164,7 @@ def EntryToSlaveName(entry):
   return name
 
 
-def GetActiveMaster(slavename=None, default=None):
+def GetActiveMastername(slavename=None, default=None):
   """Parses all the slaves.cfg and returns the name of the active master
   determined by the hostname. Returns None otherwise.
 
@@ -1176,6 +1176,18 @@ def GetActiveMaster(slavename=None, default=None):
     if slavename == EntryToSlaveName(slave):
       return slave['master']
   return default
+
+
+def GetBotPassword(bot_password_path=None):
+  """Returns the slave password retrieved from a local file, or None.
+
+  The default location is build/site_config/.bot_password
+  """
+  bot_password_path = (bot_password_path or
+      os.path.join(BUILD_DIR, 'site_config', '.bot_password'))
+  with open(bot_password_path) as f:
+    pw = f.read().strip('\n\r')
+  return pw
 
 
 def ParsePythonCfg(cfg_filepath, fail_hard=False):

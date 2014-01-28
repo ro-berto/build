@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import NaClBase
 
-class NativeClient(Master.NaClBase):
+class NativeClient(NaClBase):
   project_name = 'NativeClient'
   master_port = 8030
   slave_port = 8130

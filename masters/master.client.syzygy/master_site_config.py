@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class Syzygy(Master.Master3):
+class Syzygy(Master3):
   project_name = 'Syzygy'
   project_url = 'http://sawbuck.googlecode.com'
   master_port = 8042

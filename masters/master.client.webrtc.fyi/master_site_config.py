@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class WebRTCFYI(Master.Master3):
+class WebRTCFYI(Master3):
   project_name = 'WebRTC FYI'
   master_port = 8072
   slave_port = 8172

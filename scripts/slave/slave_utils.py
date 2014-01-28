@@ -14,8 +14,7 @@ import tempfile
 import time
 
 from common import chromium_utils
-from slave.bootstrap import ImportMasterConfigs # pylint: disable=W0611
-from common.chromium_utils import GetActiveMaster # pylint: disable=W0611
+from common.chromium_utils import GetActiveMastername # pylint: disable=W0611
 
 # These codes used to distinguish true errors from script warnings.
 ERROR_EXIT_CODE = 1

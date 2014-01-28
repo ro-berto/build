@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master4
 
-class V8TryServer(Master.Master4):
+class V8TryServer(Master4):
   project_name = 'V8 Try Server'
   master_port = 8007
   slave_port = 8107

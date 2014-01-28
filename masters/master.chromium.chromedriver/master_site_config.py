@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class ChromiumChromeDriver(Master.Master1):
+class ChromiumChromeDriver(Master1):
   project_name = 'Chromium ChromeDriver'
   master_port = 8016
   slave_port = 8116

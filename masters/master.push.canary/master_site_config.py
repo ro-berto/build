@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import PublicBase
 
-class PushCanary(Master.Base):
+class PushCanary(PublicBase):
   project_name = 'Chromium PushCanary'
   master_host = 'localhost'
   master_port = 8081

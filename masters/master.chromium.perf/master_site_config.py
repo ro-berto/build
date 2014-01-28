@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class ChromiumPerf(Master.Master1):
+class ChromiumPerf(Master1):
   project_name = 'Chromium Perf'
   master_port = 8013
   slave_port = 8113

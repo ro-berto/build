@@ -142,7 +142,7 @@ def _GetResultsJson(logname, lines, system, test_name, url, masterid,
     JSON that shall be sent to the Chrome Performance Dashboard.
   """
   results_to_add = []
-  master = slave_utils.GetActiveMaster()
+  master = slave_utils.GetActiveMastername()
   bot = system
   chart_name = logname.replace('-summary.dat', '')
   for line in lines:

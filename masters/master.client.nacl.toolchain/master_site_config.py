@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import NaClBase
 
-class NativeClientToolchain(Master.NaClBase):
+class NativeClientToolchain(NaClBase):
   project_name = 'NativeClientToolchain'
   master_port = 8031
   slave_port = 8131

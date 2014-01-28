@@ -11,20 +11,21 @@ import os
 import sys
 
 from common import chromium_utils
-import config_bootstrap
 
 
-def ImportMasterConfigs(master_name=None, include_internal=True):
-  """Imports master configs.
+def GetMasterConfigs(master_name=None, include_internal=True):
+  """Executes and returns master configs.
 
-  Normally a slave can use chromium_utils.GetActiveMaster() to find
-  itself and determine which ActiveMaster to use.  In that case, the
+  Normally a slave can use chromium_utils.GetActiveMastername() to find
+  itself and determine which ActiveMaster to use. In that case, the
   active master name is passed in as an arg, and we only load the
-  site_config.py that defines it.  When testing, the current "slave"
-  won't be found.  In that case, we don't know which config to use, so
-  load them all.  In either case, masters are assigned as attributes
+  site_config.py that defines it. When testing, the current "slave"
+  won't be found. In that case, we don't know which config to use, so
+  load them all. In either case, masters are assigned as attributes
   to the config.Master object.
   """
+  masters = {}
+  active_master = None
   for master in chromium_utils.ListMasters(include_internal=include_internal):
     path = os.path.join(master, 'master_site_config.py')
     if os.path.exists(path):
@@ -40,8 +41,7 @@ def ImportMasterConfigs(master_name=None, include_internal=True):
       for (symbol_name, symbol) in local_vars.iteritems():
         if inspect.isclass(symbol):
           setattr(symbol, 'local_config_path', master)
-          setattr(config_bootstrap.Master, symbol_name, symbol)
-          # If we have a master_name and it matches, set
-          # config_bootstrap.Master.active_master.
+          masters[symbol_name] = symbol
           if master_name and master_name == symbol_name:
-            setattr(config_bootstrap.Master, 'active_master', symbol)
+            active_master = symbol
+  return (masters, active_master)

@@ -102,7 +102,7 @@ def layout_test(options, args):
     command.extend(['--builder-name', options.builder_name])
   if options.build_number:
     command.extend(['--build-number', options.build_number])
-  command.extend(['--master-name', slave_utils.GetActiveMaster() or ''])
+  command.extend(['--master-name', slave_utils.GetActiveMastername() or ''])
   command.extend(['--build-name', slave_name])
   # On Windows, look for the target in an exact location.
   if sys.platform == 'win32':

@@ -674,7 +674,7 @@ class DartUtils(object):
     # The 'slaves' list defines the set of allowable buildslaves. List all the
     # slaves registered to a builder. Remove dupes.
     return master_utils.AutoSetupSlaves(builders,
-                                        config.Master.GetBotPassword())
+                                        chromium_utils.GetBotPassword())
 
   def get_mail_notifier_statuses(self, mail_notifiers):
     statuses = []

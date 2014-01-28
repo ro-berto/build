@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class DartFYI(Master.Master3):
+class DartFYI(Master3):
   # This IP refers to a golem server in BigCluster
   http_status_push_url = "http://108.170.219.8:8080/submit-buildbot-info/"
   project_name = 'Dart FYI'

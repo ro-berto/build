@@ -26,14 +26,9 @@ from common import chromium_utils
 from common import master_cfg_utils
 
 
-def do_master_imports():
-  # Import scripts/slave/bootstrap.py to get access to the ImportMasterConfigs
-  # function that will pull in every site_config for us. The master config
-  # classes are saved as attributes of config_bootstrap.Master. The import
-  # takes care of knowing which set of site_configs to use.
+def get_all_masters():
   import slave.bootstrap
-  slave.bootstrap.ImportMasterConfigs()
-  return getattr(sys.modules['config_bootstrap'], 'Master')
+  return slave.bootstrap.GetMasterConfigs()[0]
 
 
 @contextlib.contextmanager
@@ -101,7 +96,7 @@ class MasterTestThread(threading.Thread):
 
 def real_main(all_expected):
   start = time.time()
-  master_classes = do_master_imports()
+  master_classes = get_all_masters()
   all_masters = {}
   for base in all_expected:
     base_dir = os.path.join(base, 'masters')
@@ -141,7 +136,7 @@ def real_main(all_expected):
           continue
         cur_thread = MasterTestThread(
             master=master,
-            master_class=getattr(master_classes, classname),
+            master_class=master_classes[classname],
             master_path=os.path.join(base, 'masters', master))
         cur_thread.start()
         master_threads.append(cur_thread)

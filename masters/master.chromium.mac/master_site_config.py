@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class ChromiumMac(Master.Master1):
+class ChromiumMac(Master1):
   project_name = 'Chromium Mac'
   master_port = 8086
   slave_port = 8186

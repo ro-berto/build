@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class ChromiumWebRTCFYI(Master.Master1):
+class ChromiumWebRTCFYI(Master1):
   project_name = 'Chromium WebRTC FYI'
   master_port = 8056
   slave_port = 8156

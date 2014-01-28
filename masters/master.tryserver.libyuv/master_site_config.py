@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master4
 
-class LibyuvTryServer(Master.Master4):
+class LibyuvTryServer(Master4):
   project_name = 'Libyuv Try Server'
   master_port = 8006
   slave_port = 8106

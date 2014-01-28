@@ -15,17 +15,16 @@ from twisted.application import service
 from buildslave.bot import BuildSlave
 
 # Register the commands.
+from common import chromium_utils
 from slave import chromium_commands
 # Load default settings.
 import config
 
-# config.Master.active_master and config.Master.active_slavename
-# are set in run_slave.py
+slavename = chromium_utils.GetActiveSlavename()
 ActiveMaster = config.Master.active_master
-slavename = config.Master.active_slavename
 
 # Slave properties:
-password = config.Master.GetBotPassword()
+password = chromium_utils.GetBotPassword()
 host = None
 port = None
 basedir = None

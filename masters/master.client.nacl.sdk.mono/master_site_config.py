@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import NaClBase
 
-class NativeClientSDKMono(Master.NaClBase):
+class NativeClientSDKMono(NaClBase):
   project_name = 'NativeClientSDKMono'
   master_port = 8050
   slave_port = 8150

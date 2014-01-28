@@ -8,9 +8,9 @@
 # code that remains here is out-of-date and unsued, but is still here as a
 # placeholder for when Skia upstreams.
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class Skia(Master.Master3):
+class Skia(Master3):
   project_name = 'Skia'
   master_port = 8041
   slave_port = 8141

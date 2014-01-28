@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class Libvpx(Master.Master3):
+class Libvpx(Master3):
   project_name = 'Libvpx'
   master_port = 8037
   slave_port = 8137

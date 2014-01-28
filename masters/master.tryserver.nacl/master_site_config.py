@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master4
 
-class NativeClientTryServer(Master.Master4):
+class NativeClientTryServer(Master4):
   project_name = 'NativeClient-Try'
   master_port = 8029
   slave_port = 8129

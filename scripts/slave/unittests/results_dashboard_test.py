@@ -64,7 +64,7 @@ class ResultsDashboardTest(unittest.TestCase):
       errors: A list of corresponding errors expected to be received
           (Each item in the list is either a string or None.)
       mock_timestamp: Whether to stub out datetime with FakeDateTime().
-      webkit_master: Whether GetActiveMaster should give the webkit master.
+      webkit_master: Whether GetActiveMastername should give the webkit master.
 
     This method will fail a test case if the JSON that gets sent and the
     errors that are raised when results_dashboard.SendResults is called
@@ -72,11 +72,11 @@ class ResultsDashboardTest(unittest.TestCase):
     """
     # Unsetting stubs required here for multiple calls from same test.
     self.mox.UnsetStubs()
-    self.mox.StubOutWithMock(slave_utils, 'GetActiveMaster')
+    self.mox.StubOutWithMock(slave_utils, 'GetActiveMastername')
     if webkit_master:
-      slave_utils.GetActiveMaster().AndReturn('ChromiumWebkit')
+      slave_utils.GetActiveMastername().AndReturn('ChromiumWebkit')
     else:
-      slave_utils.GetActiveMaster().AndReturn('ChromiumPerf')
+      slave_utils.GetActiveMastername().AndReturn('ChromiumPerf')
     if mock_timestamp:
       self.mox.StubOutWithMock(datetime, 'datetime')
       datetime.datetime.utcnow().AndReturn(FakeDateTime())

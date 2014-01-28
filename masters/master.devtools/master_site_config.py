@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class DevTools(Master.Master1):
+class DevTools(Master1):
   project_name = 'Chromium DevTools'
   master_port = 8053
   slave_port = 8153

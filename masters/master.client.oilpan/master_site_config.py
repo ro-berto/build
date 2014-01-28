@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class Oilpan(Master.Master3):
+class Oilpan(Master3):
   project_name = 'Oilpan'
   master_port = 8032
   slave_port = 8132

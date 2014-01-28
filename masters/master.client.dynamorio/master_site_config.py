@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class DynamoRIO(Master.Master3):
+class DynamoRIO(Master3):
   project_name = 'DynamoRIO'
   master_port = 8059
   slave_port = 8159

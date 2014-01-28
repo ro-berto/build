@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class ChromiumLKGR(Master.Master1):
+class ChromiumLKGR(Master1):
   project_name = 'Chromium LKGR'
   master_port = 8018
   slave_port = 8118

@@ -14,7 +14,7 @@ import re
 from master.factory.build_factory import BuildFactory
 from master.factory import commands
 
-import config
+from config_public import Master4
 
 
 def ShouldRunTest(tests, name):
@@ -352,7 +352,7 @@ class GClientFactory(object):
                       'TrybotTester', 'TrybotBuilder'):
       factory_cmd_obj.AddApplyIssueStep(
           timeout=timeout,
-          server=config.Master.Master4.code_review_site,
+          server=Master4.code_review_site,
           revision_mapping=self._revision_mapping)
 
     if not self._nohooks_on_update:

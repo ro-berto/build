@@ -167,7 +167,7 @@ def _RunGTestCommand(command, results_tracker=None, pipes=None,
 
 
 def _GetMaster():
-  return slave_utils.GetActiveMaster()
+  return slave_utils.GetActiveMastername()
 
 
 def _GetMasterString(master):

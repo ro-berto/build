@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master1
 
-class ChromiumMemory(Master.Master1):
+class ChromiumMemory(Master1):
   project_name = 'Chromium Memory'
   master_port = 8012
   slave_port = 8112

@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master3
 
-class Sfntly(Master.Master3):
+class Sfntly(Master3):
   project_name = 'Sfntly'
   project_url = 'http://code.google.com/p/sfntly/'
   master_port = 8048

@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import Master4
 
-class TryServer(Master.Master4):
+class TryServer(Master4):
   project_name = 'Chromium Try Server'
   master_port = 8028
   slave_port = 8128

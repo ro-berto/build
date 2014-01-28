@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_bootstrap import Master
+from config_public import PublicBase
 
-class Experimental(Master.Base):
+class Experimental(PublicBase):
   project_name = 'Chromium Experimental'
   master_host = 'localhost'
   master_port = 8010
