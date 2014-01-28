@@ -46,7 +46,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }
 
-  def compile(self, targets=None, name=None, abort_on_failure=True, **kwargs):
+  def compile(self, targets=None, name=None, abort_on_failure=True,
+              force_clobber=False, **kwargs):
     """Return a compile.py invocation."""
     targets = targets or self.c.compile_py.default_targets.as_jsonish()
     assert isinstance(targets, (list, tuple))
@@ -60,7 +61,7 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--build-tool', self.c.compile_py.build_tool]
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
-    if self.m.properties.get('clobber') is not None:
+    if self.m.properties.get('clobber') is not None or force_clobber:
       args.append('--clobber')
     args.append('--')
     args.extend(targets)

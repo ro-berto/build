@@ -131,6 +131,7 @@
       }
     ]
   }, 
+  "chromium_lkcr": "LKCR is not ready for git yet", 
   "nacl": "nacl only supports svn", 
   "oilpan": "Oilpan requires SVN for now", 
   "oilpan_internal": "config \"oilpan_internal\" includes \"oilpan\", but [Oilpan requires SVN for now]", 

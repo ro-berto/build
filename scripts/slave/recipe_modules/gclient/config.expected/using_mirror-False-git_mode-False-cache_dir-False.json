@@ -147,6 +147,18 @@
       }
     ]
   }, 
+  "chromium_lkcr": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": "https://build.chromium.org/p/chromium/lkcr-status/lkgr", 
+        "url": "https://src.chromium.org/chrome/trunk/src"
+      }
+    ]
+  }, 
   "nacl": {
     "cache_dir": null, 
     "solutions": [

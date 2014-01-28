@@ -214,7 +214,7 @@ def GenSteps(api):
 
   api.chromium.set_config(recipe_config['chromium_config'])
   api.chromium.apply_config('trybot_flavor')
-  api.gclient.set_config('chromium')
+  api.gclient.set_config('chromium_lkcr')
   api.step.auto_resolve_conflicts = True
 
   tests = []
@@ -228,10 +228,18 @@ def GenSteps(api):
     api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(),
     api.chromium.runhooks(),
-    api.chromium.compile(
-        targets=list(
-            api.itertools.chain(*[t.compile_targets() for t in tests]))),
   )
+
+  compile_targets = list(api.itertools.chain(
+                             *[t.compile_targets() for t in tests]))
+  yield api.chromium.compile(compile_targets,
+                             name='compile (with patch)',
+                             abort_on_failure=False,
+                             can_fail_build=False)
+  if api.step_history['compile (with patch)'].retcode != 0:
+    yield api.chromium.compile(compile_targets,
+                               name='compile (with patch, clobber)',
+                               force_clobber=True)
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
@@ -245,10 +253,17 @@ def GenSteps(api):
       api.gclient.revert(),
       api.chromium.runhooks(),
     )
-    compile_targets = api.itertools.chain(
-        *[t.compile_targets() for t in failing_tests])
+    compile_targets = list(api.itertools.chain(
+                               *[t.compile_targets() for t in failing_tests]))
     if compile_targets:
-      yield api.chromium.compile(targets=list(compile_targets))
+      yield api.chromium.compile(compile_targets,
+                                 name='compile (without patch)',
+                                 abort_on_failure=False,
+                                 can_fail_build=False)
+      if api.step_history['compile (without patch)'].retcode != 0:
+        yield api.chromium.compile(compile_targets,
+                                   name='compile (without patch, clobber)',
+                                   force_clobber=True)
 
   yield api.test_utils.determine_new_failures(tests, deapply_patch_fn)
 
@@ -457,10 +472,18 @@ def GenTests(api):
                                                    api.json.output(None))
   yield invalid_json_without_patch_test
 
-  for step in ('gclient revert', 'gclient runhooks', 'compile'):
+  for step in ('gclient revert', 'gclient runhooks'):
     yield (
       api.test(step.replace(' ', '_') + '_failure') +
       props() +
       api.platform.name('win') +
       api.step_data(step, retcode=1)
     )
+
+  yield (
+    api.test('compile_failure') +
+    props() +
+    api.platform.name('win') +
+    api.step_data('compile (with patch)', retcode=1) +
+    api.step_data('compile (with patch, clobber)', retcode=1)
+  )

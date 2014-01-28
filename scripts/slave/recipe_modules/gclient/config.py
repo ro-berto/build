@@ -134,6 +134,14 @@ def chromium(c):
     'src/third_party/WebKit/LayoutTests': None,
     'src/webkit/data/layout_tests/LayoutTests': None})
 
+@config_ctx(includes=['chromium'])
+def chromium_lkcr(c):
+  # TODO(phajdan.jr): Add git hashes for LKCR.
+  if c.GIT_MODE:
+    raise BadConf('LKCR is not ready for git yet')
+  s = c.solutions[0]
+  s.safesync_url = 'https://build.chromium.org/p/chromium/lkcr-status/lkgr'
+
 @config_ctx()
 def android_bare(c):
   s = c.solutions.add()

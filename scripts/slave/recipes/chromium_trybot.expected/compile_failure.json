@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]\\gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
+      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
     "name": "gclient setup",
     "seed_steps": [
@@ -14,8 +14,7 @@
       "gclient revert",
       "gclient sync",
       "apply_issue",
-      "gclient runhooks",
-      "compile"
+      "gclient runhooks"
     ]
   },
   {
@@ -109,7 +108,8 @@
     "name": "gclient runhooks"
   },
   {
-    "abort_on_failure": true,
+    "abort_on_failure": false,
+    "can_fail_build": false,
     "cmd": [
       "python",
       "-u",
@@ -151,7 +151,57 @@
       "sync_integration_tests",
       "chrome"
     ],
-    "name": "compile",
+    "name": "compile (with patch)",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\compile.py",
+      "--target",
+      "Release",
+      "--build-dir",
+      "[SLAVE_BUILD]\\src\\out",
+      "--src-dir",
+      "[SLAVE_BUILD]\\src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma",
+      "--clobber",
+      "--",
+      "base_unittests",
+      "cacheinvalidation_unittests",
+      "cc_unittests",
+      "chromedriver_unittests",
+      "components_unittests",
+      "content_unittests",
+      "crypto_unittests",
+      "google_apis_unittests",
+      "gpu_unittests",
+      "ipc_tests",
+      "jingle_unittests",
+      "media_unittests",
+      "net_unittests",
+      "ppapi_unittests",
+      "printing_unittests",
+      "remoting_unittests",
+      "sql_unittests",
+      "sync_unit_tests",
+      "ui_unittests",
+      "unit_tests",
+      "browser_tests",
+      "content_browsertests",
+      "interactive_ui_tests",
+      "sync_integration_tests",
+      "chrome"
+    ],
+    "name": "compile (with patch, clobber)",
     "~followup_annotations": [
       "step returned non-zero exit code: 1",
       "@@@STEP_FAILURE@@@"

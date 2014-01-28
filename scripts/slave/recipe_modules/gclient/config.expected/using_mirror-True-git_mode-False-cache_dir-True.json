@@ -177,6 +177,28 @@
       }
     ]
   }, 
+  "chromium_lkcr": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "custom_deps": {
+          "src/third_party/WebKit/LayoutTests": null, 
+          "src/webkit/data/layout_tests/LayoutTests": null
+        }, 
+        "custom_vars": {
+          "googlecode_url": "svn://svn-mirror.golo.chromium.org/%s", 
+          "nacl_trunk": "svn://svn-mirror.golo.chromium.org/native_client/trunk", 
+          "sourceforge_url": "svn://svn-mirror.golo.chromium.org/%(repo)s", 
+          "webkit_trunk": "svn://svn-mirror.golo.chromium.org/blink/trunk"
+        }, 
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "src", 
+        "safesync_url": "https://build.chromium.org/p/chromium/lkcr-status/lkgr", 
+        "url": "svn://svn-mirror.golo.chromium.org/chrome/trunk/src"
+      }
+    ]
+  }, 
   "nacl": {
     "cache_dir": null, 
     "solutions": [
