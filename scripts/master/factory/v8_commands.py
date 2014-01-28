@@ -9,7 +9,7 @@ This is based on commands.py and adds chromium-specific commands."""
 from buildbot.steps import shell
 
 from master.factory import commands
-from config_public import NaClBase
+import config
 
 
 class V8Commands(commands.FactoryCommands):
@@ -18,7 +18,7 @@ class V8Commands(commands.FactoryCommands):
   # This is needed to set legacy perf links. Can be removed when fully converted
   # to the perf dashboard (chromium-perf.appspot.com). See
   # scripts/master/factory/commands.py for how this is used.
-  PERF_BASE_URL = NaClBase.perf_base_url
+  PERF_BASE_URL = config.Master.NaClBase.perf_base_url
 
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, target_arch=None,
@@ -33,7 +33,7 @@ class V8Commands(commands.FactoryCommands):
     self._script_dir = self.PathJoin('..', self._script_dir)
 
     # Where to point waterfall links for builds and test results.
-    self._archive_url = NaClBase.archive_url
+    self._archive_url = config.Master.archive_url
 
     # Where the v8 slave scritps are.
     self._v8_script_dir = self.PathJoin(self._script_dir, 'v8')

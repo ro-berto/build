@@ -4,9 +4,9 @@
 
 """ActiveMaster definition for master.client.polymer."""
 
-from config_public import Master3
+from config_bootstrap import Master
 
-class Polymer(Master3):
+class Polymer(Master.Master3):
   project_name = 'Polymer'
   project_url = 'http://github.com/Polymer/'
   master_port = 8044

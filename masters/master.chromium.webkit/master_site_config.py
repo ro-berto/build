@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master1
+from config_bootstrap import Master
 
-class ChromiumWebkit(Master1):
+class ChromiumWebkit(Master.Master1):
   project_name = 'Chromium Webkit'
   master_port = 8014
   slave_port = 8114

@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master4
+from config_bootstrap import Master
 
-class WebRTCTryServer(Master4):
+class WebRTCTryServer(Master.Master4):
   project_name = 'WebRTC Try Server'
   master_port = 8070
   slave_port = 8170

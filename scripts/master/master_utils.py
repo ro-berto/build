@@ -54,20 +54,6 @@ class InvalidConfig(Exception):
   pass
 
 
-def DatabaseSetup(buildmaster_config, require_dbconfig=False):
-  if os.path.isfile('.dbconfig'):
-    values = {}
-    execfile('.dbconfig', values)
-    if 'password' not in values:
-      raise Exception('could not get db password')
-
-    buildmaster_config['db_url'] = 'postgresql://%s:%s@%s/%s' % (
-        values['username'], values['password'],
-        values.get('hostname', 'localhost'), values['dbname'])
-  else:
-    assert(not require_dbconfig)
-
-
 def AutoSetupSlaves(builders, bot_password, max_builds=1,
                     missing_recipients=None, missing_timeout=300):
   """Helper function for master.cfg to quickly setup c['slaves']."""

@@ -28,6 +28,7 @@ BASE_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, os.pardir, os.pardir))
 sys.path.insert(0, os.path.join(BASE_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
 
+import config_bootstrap
 from slave import bootstrap
 
 
@@ -125,12 +126,13 @@ def csv_print(lines, verbose):
 def master_map(masters, output, opts):
   """Display a list of masters and their associated hosts and ports."""
 
-  lines = [['Master', 'Config Dir', 'Host',
-            'Web port', 'Slave port', 'Alt port', 'URL']]
+  lines = [['Master', 'Config Dir', 'Host', 'Web port', 'Slave port',
+            'Alt port', 'MSC', 'URL']]
   for master in masters:
-    lines.append([master['name'], master['dirname'], master['host'],
-                 master['port'], master['slave_port'], master['alt_port'],
-                 master['buildbot_url']])
+    lines.append([
+        master['name'], master['dirname'], master['host'], master['port'],
+        master['slave_port'], master['alt_port'], master['msc'],
+        master['buildbot_url']])
 
   output(lines, opts.verbose)
 
@@ -240,7 +242,18 @@ def extract_masters(masters):
 def real_main(include_internal=False):
   opts = get_args()
 
-  masters = bootstrap.GetMasterConfigs(include_internal=include_internal)
+  bootstrap.ImportMasterConfigs(include_internal=include_internal)
+
+  # These are the masters that are configured in site_config/.
+  config_masters = extract_masters(
+      config_bootstrap.config_private.Master.__dict__)
+  for master in config_masters:
+    master['msc'] = ''
+
+  # These are the masters that have their own master_site_config.
+  msc_masters = extract_masters(config_bootstrap.Master.__dict__)
+  for master in msc_masters:
+    master['msc'] = 'Y'
 
   # Define sorting order
   sort_keys = ['port', 'alt_port', 'slave_port', 'host', 'name']
@@ -253,8 +266,9 @@ def real_main(include_internal=False):
     else:
       sort_keys.insert(0, sort_keys.pop(index))
 
+  sorted_masters = config_masters + msc_masters
   for key in reversed(sort_keys):
-    masters.sort(key = lambda m: m[key])
+    sorted_masters.sort(key = lambda m: m[key])
 
   if opts.csv:
     printer = csv_print
@@ -262,14 +276,14 @@ def real_main(include_internal=False):
     printer = human_print
 
   if opts.list:
-    master_map(masters, printer, opts)
+    master_map(sorted_masters, printer, opts)
 
   ret = 0
   if opts.audit or opts.presubmit:
-    ret = master_audit(masters, printer, opts)
+    ret = master_audit(sorted_masters, printer, opts)
 
   if opts.find:
-    find_port(masters, printer, opts)
+    find_port(sorted_masters, printer, opts)
 
   return ret
 

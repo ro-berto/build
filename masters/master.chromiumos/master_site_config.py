@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import ChromiumOSBase
+from config_bootstrap import Master
 
-class ChromiumOS(ChromiumOSBase):
+class ChromiumOS(Master.ChromiumOSBase):
   project_name = 'ChromiumOS'
   master_port = 8014
   slave_port = 8114

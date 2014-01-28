@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master1
+from config_bootstrap import Master
 
-class ChromiumEndure(Master1):
+class ChromiumEndure(Master.Master1):
   project_name = 'Chromium Endure'
   master_port = 8026
   slave_port = 8126

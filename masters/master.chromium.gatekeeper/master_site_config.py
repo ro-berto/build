@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import PublicBase
+from config_bootstrap import Master
 
-class Gatekeeper(PublicBase):
+class Gatekeeper(Master.Base):
   project_name = 'Chromium Gatekeeper'
   master_host = 'localhost'
   master_port = 9511

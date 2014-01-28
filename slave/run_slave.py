@@ -203,15 +203,20 @@ def FixSubversionConfig():
   shutil.copyfile('config', dest)
 
 
-def GetActiveMaster(slave_bootstrap, active_slavename):
+def GetActiveMaster(slave_bootstrap, config_bootstrap, active_slavename):
   master_name = os.environ.get(
-      'TESTING_MASTER', chromium_utils.GetActiveMastername(active_slavename))
+      'TESTING_MASTER', chromium_utils.GetActiveMaster(active_slavename))
   if not master_name:
     raise RuntimeError('*** Failed to detect the active master')
-  _, active_master = slave_bootstrap.GetMasterConfigs(master_name)
-  if not active_master:
-    raise RuntimeError('*** Failed to detect the active master')
-  return active_master
+  slave_bootstrap.ImportMasterConfigs(master_name)
+  if hasattr(config_bootstrap.Master, 'active_master'):
+    # pylint: disable=E1101
+    return config_bootstrap.Master.active_master
+  if master_name and getattr(config_bootstrap.Master, master_name):
+    master = getattr(config_bootstrap.Master, master_name)
+    config_bootstrap.Master.active_master = master
+    return master
+  raise RuntimeError('*** Failed to detect the active master')
 
 
 def GetRoot():
@@ -319,11 +324,14 @@ def main():
     SCRIPT_DIR,  # Include the current working directory by default.
   ]
 
-  # Need to update sys.path prior to this import.
+  # Need to update sys.path prior to the following imports.
   sys.path = python_path + sys.path
   import slave.bootstrap
+  import config_bootstrap
   active_slavename = chromium_utils.GetActiveSlavename()
-  active_master = GetActiveMaster(slave.bootstrap, active_slavename)
+  config_bootstrap.Master.active_slavename = active_slavename
+  active_master = GetActiveMaster(
+      slave.bootstrap, config_bootstrap, active_slavename)
 
   bb_ver, tw_ver = GetThirdPartyVersions(active_master)
   python_path.append(os.path.join(BUILD_DIR, 'third_party', bb_ver))

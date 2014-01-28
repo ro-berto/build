@@ -81,7 +81,7 @@ def setPrefixLimit(limit):
     _PREFIX_LIMIT = limit
 setPrefixLimit(64)
 
-SIZE_LIMIT = 100 * 1024 * 1024   # We need more than 640k :-(
+SIZE_LIMIT = 640 * 1024   # 640k is all you'll ever need :-)
 
 class Banana(protocol.Protocol, styles.Ephemeral):
     knownDialects = ["pb", "none"]

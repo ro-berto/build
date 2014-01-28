@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import NaClBase
+from config_bootstrap import Master
 
-class NativeClientSDKAddIn(NaClBase):
+class NativeClientSDKAddIn(Master.NaClBase):
   project_name = 'NativeClientSDKAddIn'
   master_port = 8057
   slave_port = 8157

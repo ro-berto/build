@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master3
+from config_bootstrap import Master
 
-class V8Branches(Master3):
+class V8Branches(Master.Master3):
   base_app_url = 'https://v8-status.appspot.com'
   tree_status_url = base_app_url + '/status'
   store_revisions_url = base_app_url + '/revisions'

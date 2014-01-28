@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master3
+from config_bootstrap import Master
 
-class PageSpeed(Master3):
+class PageSpeed(Master.Master3):
   project_name = 'PageSpeed'
   master_port = 8038
   slave_port = 8138

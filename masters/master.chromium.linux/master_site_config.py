@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master1
+from config_bootstrap import Master
 
-class ChromiumLinux(Master1):
+class ChromiumLinux(Master.Master1):
   project_name = 'Chromium Linux'
   master_port = 8087
   slave_port = 8187

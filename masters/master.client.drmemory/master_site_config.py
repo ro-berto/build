@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master3
+from config_bootstrap import Master
 
-class DrMemory(Master3):
+class DrMemory(Master.Master3):
   project_name = 'DrMemory'
   master_port = 8058
   slave_port = 8158

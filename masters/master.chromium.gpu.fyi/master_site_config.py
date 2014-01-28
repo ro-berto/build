@@ -4,9 +4,9 @@
 
 """ActiveMaster definition."""
 
-from config_public import Master1
+from config_bootstrap import Master
 
-class ChromiumGPUFYI(Master1):
+class ChromiumGPUFYI(Master.Master1):
   project_name = 'Chromium GPU FYI'
   master_port = 8017
   slave_port = 8117
