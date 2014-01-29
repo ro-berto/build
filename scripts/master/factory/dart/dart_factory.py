@@ -256,6 +256,10 @@ class DartFactory(gclient_factory.GClientFactory):
     if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
       dart_cmd_obj.AddTests(options=options, channel=self.channel)
 
+     # Archive crash dumps
+    if slave_type in ['BuilderTester', 'Trybot', 'Tester']:
+      dart_cmd_obj.AddArchiveCoredumps(options=options)
+
     for trigger_instance in triggers:
       dart_cmd_obj.AddTrigger(trigger_instance)
 

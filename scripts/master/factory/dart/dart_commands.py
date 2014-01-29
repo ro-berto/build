@@ -124,6 +124,19 @@ class DartCommands(commands.FactoryCommands):
                           workdir=self._dart_build_dir,
                           command=cmd)
 
+  def AddArchiveCoredumps(self, options=None, step_name='Archive coredumps'):
+    options = options or {}
+    if (options.get('name') != None and
+        options.get('name').startswith('vm')):
+      cmd = 'python ' + self._tools_dir + '/archive_crash.py'
+      self._factory.addStep(shell.ShellCommand,
+                            name='ArchiveCore',
+                            description=step_name,
+                            env = self._custom_env,
+                            haltOnFailure=False,
+                            workdir=self._dart_build_dir,
+                            command=cmd)
+
   def AddTests(self, options=None, timeout=1200, channel=None):
     options = options or {}
     is_dart2dart = (options.get('name') != None and
@@ -165,7 +178,8 @@ class DartCommands(commands.FactoryCommands):
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
                   ' --progress=line --report --time --mode=%s --arch=%s '
-                  ' --compiler=%s --runtime=%s --failure-summary'
+                  '--compiler=%s --runtime=%s --failure-summary '
+                  '--copy-coredumps'
                  ) % configuration
       vm_options = options.get('vm_options', None)
       if vm_options:
