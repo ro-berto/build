@@ -34,7 +34,7 @@ WIN_BUILD_ENV_PATH = r'E:\b\build\scripts\slave\drmemory\build_env.bat'
 # These tests are ordered roughly from shortest to longest so failure is
 # reported earlier.
 LINUX_CHROME_TESTS = [
-  'DumpRenderTree',
+  'content_shell',
   'base_unittests',
   'browser_tests',
   'crypto_unittests',
@@ -777,8 +777,9 @@ def CreateLinuxChromeFactory():
       cmd += ['--gtest_filter='
               '-VideoFrameCapturerTest.Capture:'
               'DesktopProcessTest.DeathTest']
-    elif test == 'DumpRenderTree':
-      cmd += ['file:///home/chrome-bot/bb.html']
+    elif test == 'content_shell':
+      cmd += ['-dump-render-tree'
+              'file:///home/chrome-bot/bb.html']
     # We used to md5 the output, but that's too brittle.  Just dump it to stdout
     # so humans can verify it.  The return code will tell us if we crash.
     # TODO(rnk): We should run some selection of layout tests if we want to
