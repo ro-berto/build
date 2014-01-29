@@ -46,6 +46,10 @@ forgiving_steps only email sheriffs + watchlist (not the committer), this is a
 great way to set up experimental or informational builders without spamming
 people. It is enabled by providing the string 'true'.
 
+'forgiving_optional' and 'closing_optional' work just like 'forgiving_steps'
+and 'closing_steps', but they won't close if the step is missing. This is like
+previous gatekeeper behavior.
+
 The 'comment' key can be put anywhere and is ignored by the parser.
 
 # Python, not JSON.
@@ -122,11 +126,19 @@ def load_gatekeeper_config(filename):
   """Loads and verifies config json, constructs builder config dict."""
 
   # Keys which are allowed in a master or builder section.
-  master_keys = ['forgive_all', 'tree_notify', 'sheriff_classes',
+  master_keys = ['forgive_all',
+                 'tree_notify',
+                 'sheriff_classes',
                  'subject_template']
-  builder_keys = ['closing_steps', 'forgiving_steps', 'forgive_all',
-                  'sheriff_classes', 'subject_template', 'tree_notify']
 
+  builder_keys = ['closing_optional',
+                  'closing_steps',
+                  'forgiving_optional',
+                  'forgiving_steps',
+                  'forgive_all',
+                  'sheriff_classes',
+                  'subject_template',
+                  'tree_notify']
 
   # These keys are strings instead of sets. Strings can't be merged,
   # so more specific (master -> category -> builder) strings clobber
@@ -209,7 +221,10 @@ def load_gatekeeper_config(filename):
         if gatekeeper_builder['forgive_all'] == 'true':
           gatekeeper_builder['forgiving_steps'] |= gatekeeper_builder[
               'closing_steps']
+          gatekeeper_builder['forgiving_optional'] |= gatekeeper_builder[
+              'closing_optional']
           gatekeeper_builder['closing_steps'] = set([])
+          gatekeeper_builder['closing_optional'] = set([])
 
   return gatekeeper_config
 

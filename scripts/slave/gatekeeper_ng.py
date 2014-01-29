@@ -152,7 +152,10 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
       gatekeeper = gatekeeper_section.get(build_json['builderName'], {})
       steps = build_json['steps']
       forgiving = set(gatekeeper.get('forgiving_steps', []))
+      forgiving_optional = set(gatekeeper.get('forgiving_optional', []))
       closing_steps = set(gatekeeper.get('closing_steps', [])) | forgiving
+      closing_optional = set(
+          gatekeeper.get('closing_optional', [])) | forgiving_optional
       tree_notify = set(gatekeeper.get('tree_notify', []))
       sheriff_classes = set(gatekeeper.get('sheriff_classes', []))
       subject_template = gatekeeper.get('subject_template',
@@ -166,9 +169,14 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
                              if (s.get('results', [FAILURE])[0] == SUCCESS or
                                  s.get('results', [FAILURE])[0] == WARNINGS))
 
-      unsatisfied_steps = closing_steps - successful_steps
 
       finished_steps = set(s['name'] for s in finished)
+
+      unsatisfied_steps = closing_steps - successful_steps
+      failed_steps = finished_steps - successful_steps
+      failed_optional_steps = failed_steps & closing_optional
+      unsatisfied_steps |= failed_optional_steps
+
       # Build is not yet finished, don't penalize on unstarted/unfinished steps.
       if build_json.get('results', None) is None:
         unsatisfied_steps &= finished_steps
@@ -185,6 +193,7 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
                     build_json['builderName'], build_json['number'])
       logging.debug('  build steps: %s', ', '.join(s['name'] for s in steps))
       logging.debug('  closing steps: %s', ', '.join(closing_steps))
+      logging.debug('  closing optional steps: %s', ', '.join(closing_optional))
       logging.debug('  finished steps: %s', ', '.join(finished_steps))
       logging.debug('  successful: %s', ', '.join(successful_steps))
       logging.debug('  build complete: %s', bool(
@@ -203,7 +212,7 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
         failed_builds.append({'base_url': buildbot_url,
                               'build': build_json,
                               'close_tree': close_tree,
-                              'forgiving_steps': forgiving,
+                              'forgiving_steps': forgiving | forgiving_optional,
                               'project_name': project_name,
                               'sheriff_classes': sheriff_classes,
                               'subject_template': subject_template,
@@ -212,7 +221,6 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
                              })
 
   return failed_builds
-
 
 
 def parse_sheriff_file(url):
