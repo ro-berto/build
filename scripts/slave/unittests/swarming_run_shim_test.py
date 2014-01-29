@@ -153,8 +153,7 @@ class SwarmingRunTest(auto_stub.TestCase):
     cmd.extend(('--build-properties', json.dumps(props)))
     self.assertEqual(0, swarming_run_shim.main(cmd))
     expected = (
-        # This test only passes on linux.
-        'Selected tests:\n base_test\nSelected OS: Linux\n'
+        'Selected tests:\n base_test\nSelected OS: %s\n'
         '\n@@@SEED_STEP base_test@@@\n'
         '\n@@@STEP_CURSOR base_test@@@\n'
         '\n@@@STEP_STARTED@@@\n'
@@ -163,7 +162,7 @@ class SwarmingRunTest(auto_stub.TestCase):
         'a\n'
         '\n@@@STEP_CLOSED@@@\n'
         '\n'
-    )
+    ) % swarming_run_shim.swarming_utils.OS_MAPPING[sys.platform]
     self.assertEqual(expected, sys.stdout.getvalue())
 
   def test_three(self):
