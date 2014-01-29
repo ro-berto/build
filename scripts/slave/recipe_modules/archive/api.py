@@ -6,11 +6,10 @@ from slave import recipe_api
 
 class ArchiveApi(recipe_api.RecipeApi):
   def zip_and_upload_build(
-      self, step_name, target, build_dir, build_url=None, **kwargs):
+      self, step_name, target, build_url=None, **kwargs):
     """Returns a step invoking zip_build.py to zip up a Chromium build.
        If build_url is specified, also uploads the build."""
-    args = ['--target', target,
-            '--build-dir', build_dir ]
+    args = ['--target', target]
     if build_url:
       args.append('--build-url')
       args.append(build_url)
@@ -23,11 +22,10 @@ class ArchiveApi(recipe_api.RecipeApi):
     )
 
   def download_and_unzip_build(
-      self, step_name, target, build_dir, build_url, **kwargs):
+      self, step_name, target, build_url, **kwargs):
     """Returns a step invoking extract_build.py to download and unzip
        a Chromium build."""
     args = ['--target', target,
-            '--build-dir', build_dir,
             '--build-url', build_url]
     args.extend(self.m.json.property_args())
     return self.m.python(

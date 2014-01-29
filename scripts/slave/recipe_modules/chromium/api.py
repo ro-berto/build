@@ -54,7 +54,6 @@ class ChromiumApi(recipe_api.RecipeApi):
 
     args = [
       '--target', self.c.build_config_fs,
-      '--build-dir', self.c.build_dir,
       '--src-dir', self.m.path.checkout,
     ]
     if self.c.compile_py.build_tool:
@@ -86,10 +85,7 @@ class ChromiumApi(recipe_api.RecipeApi):
     if not python_mode and self.m.platform.is_win and ext == '':
       test += '.exe'
 
-    full_args = [
-      '--target', self.c.build_config_fs,
-      '--build-dir', self.c.build_dir
-    ]
+    full_args = ['--target', self.c.build_config_fs]
     if self.m.platform.is_linux:
       full_args.append('--xvfb' if xvfb else '--no-xvfb')
     full_args += self.m.json.property_args()

@@ -59,8 +59,6 @@
       "[BUILD]/scripts/slave/compile.py",
       "--target",
       "Debug",
-      "--build-dir",
-      "[SLAVE_BUILD]/v8",
       "--src-dir",
       "[SLAVE_BUILD]/v8",
       "--build-tool",

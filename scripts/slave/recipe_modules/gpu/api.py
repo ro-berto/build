@@ -100,7 +100,6 @@ class GpuApi(recipe_api.RecipeApi):
     yield self.m.archive.zip_and_upload_build(
       'package_build',
       self.m.chromium.c.build_config_fs,
-      self.m.chromium.c.build_dir,
       self.m.archive.legacy_upload_url(
         self._gs_bucket_name,
         extra_url_components=self.m.properties['mastername']))
@@ -109,7 +108,6 @@ class GpuApi(recipe_api.RecipeApi):
     yield self.m.archive.download_and_unzip_build(
       'extract_build',
       self.m.chromium.c.build_config_fs,
-      self.m.chromium.c.build_dir,
       self.m.archive.legacy_download_url(
         self._gs_bucket_name,
         extra_url_components=self.m.properties['mastername']))
@@ -129,10 +127,7 @@ class GpuApi(recipe_api.RecipeApi):
         'start_crash_service',
         self.m.path.build('scripts', 'slave', 'chromium',
                           'run_crash_handler.py'),
-        ['--build-dir',
-         self.m.chromium.c.build_dir,
-         '--target',
-         self.m.chromium.c.build_config_fs])
+        ['--target', self.m.chromium.c.build_config_fs])
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
@@ -223,10 +218,7 @@ class GpuApi(recipe_api.RecipeApi):
       yield self.m.python(
         'process_dumps',
         self.m.path.build('scripts', 'slave', 'process_dumps.py'),
-        ['--build-dir',
-         self.m.chromium.c.build_dir,
-         '--target',
-         self.m.chromium.c.build_config_fs])
+        ['--target', self.m.chromium.c.build_config_fs])
 
   def _maybe_run_isolate(self, test, **kwargs):
     """Runs a test either from the extracted build or via an isolate,
