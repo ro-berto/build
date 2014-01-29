@@ -5,9 +5,6 @@
 from slave import recipe_test_api
 
 class IsolateTestApi(recipe_test_api.RecipeTestApi):
-  def manifest_to_hash(self, targets):
-    return self.output_json(targets)
-
   def output_json(self, targets):
     """Deterministically synthesize json.output test data for the given
     targets."""

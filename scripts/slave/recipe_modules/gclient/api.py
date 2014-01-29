@@ -79,7 +79,6 @@ class GclientApi(recipe_api.RecipeApi):
     ret['CACHE_DIR'] = self.m.path.root('git_cache')
     return ret
 
-  @recipe_api.inject_test_data
   def sync(self, cfg, **kwargs):
     kwargs.setdefault('abort_on_failure', True)
 
@@ -108,10 +107,13 @@ class GclientApi(recipe_api.RecipeApi):
           propname = cfg.got_revision_mapping[path]
           step_result.presentation.properties[propname] = info['revision']
 
+    step_test_data = lambda: (
+      self.test_api.output_json(cfg.got_revision_mapping.keys(), cfg.GIT_MODE))
     if not cfg.GIT_MODE:
       return self('sync', ['sync', '--nohooks', '--delete_unversioned_trees'] +
                   revisions + ['--output-json', self.m.json.output()],
-                  followup_fn=parse_got_revision, **kwargs)
+                  followup_fn=parse_got_revision, step_test_data=step_test_data,
+                  **kwargs)
     else:
       # clean() isn't used because the gclient sync flags passed in checkout()
       # do much the same thing, and they're more correct than doing a separate
@@ -132,7 +134,7 @@ class GclientApi(recipe_api.RecipeApi):
                    '--reset', '--delete_unversioned_trees', '--force',
                    '--upstream', '--no-nag-max'] + revisions +
                   ['--output-json', self.m.json.output()],
-                  followup_fn=parse_got_revision,
+                  followup_fn=parse_got_revision, step_test_data=step_test_data,
                   **kwargs)
 
   def inject_parent_got_revision(self, gclient_config=None, override=False):

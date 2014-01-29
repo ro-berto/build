@@ -13,7 +13,8 @@ class IsolateApi(recipe_api.RecipeApi):
     super(IsolateApi, self).__init__(**kwargs)
     self._manifest_hashes = {}
 
-  def set_isolate_environment(self, config):
+  @staticmethod
+  def set_isolate_environment(config):
     """Modifies the passed Config (which should generally be api.chromium.c)
     to set up the appropriate GYP_DEFINES to upload isolates to the isolate
     server during the build. This must be called early in your recipe;
@@ -23,7 +24,6 @@ class IsolateApi(recipe_api.RecipeApi):
     config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
     config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = ISOLATE_SERVER
 
-  @recipe_api.inject_test_data
   def manifest_to_hash(self, targets):
     """Returns a step which runs manifest_to_hash.py against the given array
     of targets. Assigns the result to the swarm_hashes factory property.
@@ -38,7 +38,8 @@ class IsolateApi(recipe_api.RecipeApi):
       ['--target', self.m.chromium.c.build_config_fs,
        '--output-json', self.m.json.output(),
       ] + targets,
-      followup_fn=followup_fn)
+      followup_fn=followup_fn,
+      step_test_data=lambda: (self.test_api.output_json(targets)))
 
   @property
   def manifest_hashes(self):

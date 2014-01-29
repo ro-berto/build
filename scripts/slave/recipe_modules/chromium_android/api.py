@@ -105,7 +105,6 @@ class AndroidApi(recipe_api.RecipeApi):
 
       self._internal_names = self.m.step_history.last_step().json.output
 
-  @recipe_api.inject_test_data
   def envsetup(self):
     envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
     if self.target_arch:
@@ -123,7 +122,8 @@ class AndroidApi(recipe_api.RecipeApi):
           self._env[key] = value
 
     return self.m.step('envsetup', cmd, env=self.get_env(),
-                       followup_fn=update_self_env)
+                       followup_fn=update_self_env,
+                       step_test_data=self.test_api.envsetup)
 
 
   def clean_local_files(self):
@@ -308,8 +308,8 @@ class AndroidApi(recipe_api.RecipeApi):
                                       'full_log')
       yield self.m.step(
           'stack_tool_with_logcat_dump',
-          [self.m.path.checkout('third_party', 'android_platform', 'development',
-                                'scripts', 'stack'),
+          [self.m.path.checkout('third_party', 'android_platform',
+                                'development', 'scripts', 'stack'),
            '--more-info', log_file], always_run=True, env=self.get_env())
       yield self.m.step(
           'stack_tool_for_tombstones',

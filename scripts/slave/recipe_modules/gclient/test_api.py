@@ -7,9 +7,6 @@ import hashlib
 from slave import recipe_test_api
 
 class GclientTestApi(recipe_test_api.RecipeTestApi):
-  def sync(self, cfg, **kwargs):
-    return self.output_json(cfg.got_revision_mapping.keys(), cfg.GIT_MODE)
-
   def output_json(self, projects, git_mode=False):
     """Deterministically synthesize json.output test data for gclient's
     --output-json option.
