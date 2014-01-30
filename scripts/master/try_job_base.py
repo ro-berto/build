@@ -128,7 +128,10 @@ def parse_options(options, builders, pools):
     flatten(options, 'root', None)
     try_int(options, 'patchlevel', 0)
     flatten(options, 'branch', None)
+
     flatten(options, 'revision', None)
+    options.setdefault('orig_revision', options['revision'])
+
     flatten(options, 'reason', '%s: %s' % (options['user'], options['name']))
     try_bool(options, 'clobber', False)
 
@@ -206,6 +209,7 @@ class TryJobBase(TryBase):
     keys = (
       'clobber',
       'issue',
+      'orig_revision',
       'patch_url',
       'patchset',
       'requester',

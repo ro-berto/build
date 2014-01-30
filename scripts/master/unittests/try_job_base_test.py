@@ -26,6 +26,7 @@ class PaseOptionsTest(unittest.TestCase):
         'email': [],
         'issue': None,
         'name': 'Unnamed',
+        'orig_revision': None,
         'patch': None,
         'patchlevel': 0,
         'patchset': None,
