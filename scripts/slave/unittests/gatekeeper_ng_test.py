@@ -1033,6 +1033,71 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(mailer_data['recipients'],
                       ['a_second_committer@chromium.org'])
 
+  def testStarBuilder(self):
+    """Test that * captures failures across all builders."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.add_gatekeeper_section(self.masters[0].url,
+                                '*',
+                                {'closing_steps': ['step4']})
+
+    self.call_gatekeeper()
+
+    # Check that gatekeeper indeed sent an email.
+    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
+    mailer_data = GatekeeperTest.decode_param_json(self.url_calls[-1]['params'])
+    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
+  def testStarBuilderOverride(self):
+    """Test that * can be explicitly overridden."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    # step3 won't fail the build.
+    self.add_gatekeeper_section(self.masters[0].url,
+                                '*',
+                                {'closing_steps': ['step3']})
+
+    # But step4 will.
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step4']},
+                                idx=0)
+
+    self.call_gatekeeper()
+
+    # Check that gatekeeper indeed sent an email.
+    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
+    mailer_data = GatekeeperTest.decode_param_json(self.url_calls[-1]['params'])
+    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
+  def testStarBuilderNoPropagate(self):
+    """Test that * doesn't propagate to other builders."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    # step4 will fail the build.
+    self.add_gatekeeper_section(self.masters[0].url,
+                                '*',
+                                {'closing_steps': ['step4']})
+
+    # But step3 won't.
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step3']},
+                                idx=0)
+
+    urls = self.call_gatekeeper()
+
+    self.assertNotIn(self.mailer_url, urls)
+
   def testMultiBuilderOneFailure(self):
     """Test that failure in one build doesn't affect another."""
     sys.argv.extend([m.url for m in self.masters])

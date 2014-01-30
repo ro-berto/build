@@ -149,7 +149,12 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
   for build_json, master_url in master_builds:
     gatekeeper_sections = gatekeeper_config.get(master_url, [])
     for gatekeeper_section in gatekeeper_sections:
-      gatekeeper = gatekeeper_section.get(build_json['builderName'], {})
+      if build_json['builderName'] in gatekeeper_section:
+        gatekeeper = gatekeeper_section[build_json['builderName']]
+      elif '*' in gatekeeper_section:
+        gatekeeper = gatekeeper_section['*']
+      else:
+        gatekeeper = {}
       steps = build_json['steps']
       forgiving = set(gatekeeper.get('forgiving_steps', []))
       forgiving_optional = set(gatekeeper.get('forgiving_optional', []))
