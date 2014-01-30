@@ -48,7 +48,8 @@ people. It is enabled by providing the string 'true'.
 
 'forgiving_optional' and 'closing_optional' work just like 'forgiving_steps'
 and 'closing_steps', but they won't close if the step is missing. This is like
-previous gatekeeper behavior.
+previous gatekeeper behavior. They can be set to '*', which will match all
+steps in the builder.
 
 The 'comment' key can be put anywhere and is ignored by the parser.
 

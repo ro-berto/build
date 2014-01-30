@@ -467,6 +467,26 @@ class GatekeeperTest(unittest.TestCase):
         self.url_calls[-1]['params'])
     self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
 
+  def testStepCloserFailureOptionalStar(self):
+    """Test that a failed closing_optional * step closes the tree."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_optional': ['*']})
+
+    self.call_gatekeeper()
+
+    # Check that gatekeeper indeed sent an email.
+    self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
+    mailer_data = GatekeeperTest.decode_param_json(
+        self.url_calls[-1]['params'])
+    self.assertEquals(mailer_data['recipients'], ['a_committer@chromium.org'])
+
   def testStepOmissionDetected(self):
     """Test that the lack of a closing step closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
@@ -926,6 +946,24 @@ class GatekeeperTest(unittest.TestCase):
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
                                 {'forgiving_optional': ['step1']})
+    urls = self.call_gatekeeper()
+
+    self.assertNotIn(self.mailer_url, urls)
+    self.assertIn(self.status_url, urls)
+
+  def testForgivingOptionalStar(self):
+    """Test that forgiving_optional * sets status but doesn't email."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--skip-build-db-update',
+                     '--json', self.gatekeeper_file,
+                     '--email-app-secret-file=%s' % self.email_secret_file,
+                     '--set-status', '--password-file', self.status_secret_file
+                     ])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'forgiving_optional': ['*']})
     urls = self.call_gatekeeper()
 
     self.assertNotIn(self.mailer_url, urls)

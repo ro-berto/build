@@ -174,8 +174,12 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
                              if (s.get('results', [FAILURE])[0] == SUCCESS or
                                  s.get('results', [FAILURE])[0] == WARNINGS))
 
-
       finished_steps = set(s['name'] for s in finished)
+
+      if '*' in forgiving_optional:
+        forgiving_optional = finished_steps
+      if '*' in closing_optional:
+        closing_optional = finished_steps
 
       unsatisfied_steps = closing_steps - successful_steps
       failed_steps = finished_steps - successful_steps
