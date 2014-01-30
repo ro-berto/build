@@ -4,6 +4,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma"
     }, 
     "gyp_env": {
@@ -18,6 +19,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "blink_tests"
@@ -34,6 +36,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "blink_tests"
@@ -50,6 +53,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "All", 
@@ -67,6 +71,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -84,6 +89,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "All", 
@@ -101,6 +107,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -118,6 +125,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -135,6 +143,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -144,6 +153,25 @@
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
       "GYP_DEFINES": "clang=1 component=static_library target_arch=x64", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
+  "chromium_official": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "clobber": true, 
+      "compiler": "goma", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ], 
+      "mode": "official"
+    }, 
+    "gyp_env": {
+      "GYP_CROSSCOMPILE": "1", 
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=x64", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -161,7 +189,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -176,7 +205,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]')", 
     "compile_py": {
-      "build_tool": "make"
+      "build_tool": "make", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 

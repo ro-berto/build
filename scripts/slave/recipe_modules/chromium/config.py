@@ -31,6 +31,8 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       default_targets = Set(basestring),
       build_tool = Single(basestring),
       compiler = Single(basestring, required=False),
+      mode = Single(basestring, required=False),
+      clobber = Single(bool, empty_val=False, required=False, hidden=False),
     ),
     gyp_env = ConfigGroup(
       GYP_CROSSCOMPILE = Single(int, jsonish_fn=str, required=False),
@@ -226,6 +228,13 @@ def chromeos(c):
   ffmpeg_branding(c, branding='ChromeOS')
   proprietary_codecs(c)
 
+@config_ctx(includes=['static_library'])
+def official(c):
+  c.gyp_env.GYP_DEFINES['branding'] = 'Chrome'
+  c.gyp_env.GYP_DEFINES['buildtype'] = 'Official'
+  c.compile_py.clobber = True
+  c.compile_py.mode = 'official'
+
 @config_ctx(deps=['compiler'])
 def asan(c):
   if 'clang' not in c.compile_py.compiler:  # pragma: no cover
@@ -265,6 +274,10 @@ def chromium_chromeos_clang(c):
 
 @config_ctx(includes=['ninja', 'clang', 'goma'])
 def chromium_clang(c):
+  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+@config_ctx(includes=['chromium', 'official'])
+def chromium_official(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['chromium'])

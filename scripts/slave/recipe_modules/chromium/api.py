@@ -60,7 +60,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       args += ['--build-tool', self.c.compile_py.build_tool]
     if self.c.compile_py.compiler:
       args += ['--compiler', self.c.compile_py.compiler]
-    if self.m.properties.get('clobber') is not None or force_clobber:
+    if self.c.compile_py.mode:
+      args += ['--mode', self.c.compile_py.mode]
+    if (self.m.properties.get('clobber') is not None or
+        self.c.compile_py.clobber or
+        force_clobber):
       args.append('--clobber')
     args.append('--')
     args.extend(targets)

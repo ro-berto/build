@@ -4,6 +4,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma"
     }, 
     "gyp_env": {
@@ -15,7 +16,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -28,6 +30,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "blink_tests"
@@ -43,6 +46,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "blink_tests"
@@ -58,6 +62,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "All", 
@@ -74,6 +79,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -90,6 +96,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "All", 
@@ -106,6 +113,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -122,6 +130,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -138,6 +147,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang", 
       "default_targets": [
         "All", 
@@ -149,11 +159,30 @@
       "GYP_GENERATORS": "ninja"
     }
   }, 
+  "chromium_official": {
+    "build_config_fs": "Release", 
+    "build_dir": "Path('[CHECKOUT]', 'out')", 
+    "compile_py": {
+      "build_tool": "ninja", 
+      "clobber": true, 
+      "compiler": "goma", 
+      "default_targets": [
+        "All", 
+        "chromium_builder_tests"
+      ], 
+      "mode": "official"
+    }, 
+    "gyp_env": {
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=arm", 
+      "GYP_GENERATORS": "ninja"
+    }
+  }, 
   "clang_builder": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma-clang"
     }, 
     "gyp_env": {
@@ -166,7 +195,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -179,6 +209,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma"
     }, 
     "gyp_env": {
@@ -192,6 +223,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma", 
       "default_targets": [
         "chrome_apk", 
@@ -208,7 +240,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -221,6 +254,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma"
     }, 
     "gyp_env": {
@@ -234,6 +268,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma"
     }, 
     "gyp_env": {
@@ -246,7 +281,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -260,7 +296,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_DEFINES": "component=static_library target_arch=arm", 
@@ -271,7 +308,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -284,6 +322,7 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
+      "clobber": false, 
       "compiler": "goma"
     }, 
     "gyp_env": {
@@ -296,7 +335,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja"
+      "build_tool": "ninja", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
@@ -308,7 +348,8 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]')", 
     "compile_py": {
-      "build_tool": "make"
+      "build_tool": "make", 
+      "clobber": false
     }, 
     "gyp_env": {
       "GYP_DEFINES": "target_arch=arm v8_target_arch=arm"
