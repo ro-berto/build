@@ -27,8 +27,9 @@ categories_steps = {
     'GCMole',
     'Fuzz',
     'Deopt Fuzz',
-    'webkit_tests',
-    'interactive_ui_tests',
+    # TODO(machenbach): Enable mail notifications as soon as a try builder is
+    # set up.
+    # 'webkit_tests',
   ],
   'asan': [
     'browser_tests',
@@ -39,17 +40,12 @@ categories_steps = {
   ]
 }
 
-# TODO(machenbach): Remove nacl compile exclusion as soon as builder is stable
-# again.
 exclusions = {
-  'V8 Linux - full debug': ['Mozilla'],
-  'V8 Linux - nosnap - full debug ': ['Mozilla'],
-  'V8 Mac - full debug': ['Mozilla'],
   'V8 Linux - mips - sim': ['compile'],
   'V8 Linux - recipe': [],
-  'NaCl V8 Linux': ['compile', 'Check'],
-  'NaCl V8 Linux64 - stable': ['compile', 'Check'],
-  'NaCl V8 Linux64 - canary': ['compile', 'Check'],
+  'NaCl V8 Linux': ['Check'],
+  'NaCl V8 Linux64 - stable': ['Check'],
+  'NaCl V8 Linux64 - canary': ['Check'],
   'Webkit - dbg': ['webkit_tests'],
   'Webkit Mac - dbg': ['webkit_tests'],
 }
