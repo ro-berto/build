@@ -85,7 +85,8 @@ class GclientApi(recipe_api.RecipeApi):
     revisions = []
     for i, s in enumerate(cfg.solutions):
       if i == 0 and s.revision is None:
-        s.revision = self.m.properties.get('revision')
+        s.revision = self.m.properties.get('orig_revision',
+                                           self.m.properties.get('revision'))
 
         # HACK(iannucci): This is because the webkit Poller on chromium.webkit
         # alternately sets 'revision' to the chromium revision OR the webkit
