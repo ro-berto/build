@@ -39,7 +39,7 @@ class TryServerHttpStatusPush(status_push.HttpStatusPush):
         'slaveDisconnected',
         'start',
         'stepETAUpdate',
-        #'stepFinished',
+        'stepFinished',
         'stepStarted',
         'stepText2Changed',
         'stepTextChanged',
