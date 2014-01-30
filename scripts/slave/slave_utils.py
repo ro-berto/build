@@ -288,13 +288,6 @@ def RunPythonCommandInBuildDir(build_dir, target, command_line_args,
                                server_dir=None, filter_obj=None):
   if sys.platform == 'win32':
     python_exe = 'python.exe'
-
-    setup_mount = chromium_utils.FindUpward(build_dir,
-                                            'third_party',
-                                            'cygwin',
-                                            'setup_mount.bat')
-
-    chromium_utils.RunCommand([setup_mount])
   else:
     os.environ['PYTHONPATH'] = (chromium_utils.FindUpward(build_dir, 'tools',
                                                           'python')
