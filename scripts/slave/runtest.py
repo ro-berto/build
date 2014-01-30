@@ -13,6 +13,7 @@ For a list of command-line options, call this script with '--help'.
 
 import copy
 import datetime
+import gzip
 import hashlib
 import json
 import logging
@@ -594,38 +595,43 @@ def upload_gtest_json_summary(json_path, build_properties, test_exe):
       orig_json_data = json.load(orig_json)
   except ValueError:
     pass
+
+  target_json = {
+    # Increment the version number when making incompatible changes
+    # to the layout of this dict. This way clients can recognize different
+    # formats instead of guessing.
+    'version': 1,
+    'timestamp': str(datetime.datetime.now()),
+    'test_exe': test_exe,
+    'build_properties': build_properties,
+    'gtest_results': orig_json_data,
+  }
+  target_json_serialized = json.dumps(target_json, indent=2)
+
+  today = datetime.date.today()
+  weekly_timestamp = today - datetime.timedelta(days=today.weekday())
+
+  # Pick a non-colliding file name by hashing the JSON contents
+  # (build metadata should be different from build to build).
+  target_name = hashlib.sha1(target_json_serialized).hexdigest()
+
   fd, target_json_path = tempfile.mkstemp()
   try:
-    target_json = {
-      # Increment the version number when making incompatible changes
-      # to the layout of this dict. This way clients can recognize different
-      # formats instead of guessing.
-      'version': 1,
-      'timestamp': str(datetime.datetime.now()),
-      'test_exe': test_exe,
-      'build_properties': build_properties,
-      'gtest_results': orig_json_data,
-    }
-    target_json_serialized = json.dumps(target_json, indent=2)
-    os.write(fd, target_json_serialized)
+    with os.fdopen(fd, 'w') as f:
+      with gzip.GzipFile(fileobj=f, compresslevel=9) as gzipf:
+        gzipf.write(target_json_serialized)
 
-    today = datetime.date.today()
-    weekly_timestamp = today - datetime.timedelta(days=today.weekday())
-    # Pick a non-colliding file name by hashing the JSON contents
-    # (build metadata should be different from build to build).
-    target_name = hashlib.sha1(target_json_serialized).hexdigest()
     slave_utils.GSUtilCopy(
         target_json_path,
         # Use a directory structure that makes it easy to filter by year,
         # month, week and day based just on the file path.
-        'gs://chrome-gtest-results/%d/%d/%d/%d/%s.json' % (
+        'gs://chrome-gtest-results/%d/%d/%d/%d/%s.json.gz' % (
             weekly_timestamp.year,
             weekly_timestamp.month,
             weekly_timestamp.day,
             today.day,
             target_name))
   finally:
-    os.close(fd)
     os.remove(target_json_path)
 
 
