@@ -81,6 +81,27 @@
           }
         }
       }
+    ],
+    "http://build.chromium.org/p/chromium.perf": [
+      {
+        "tree_notify": [
+          "stip@chromium.org",
+          "tonyg@chromium.org"
+        ],
+
+        "forgive_all": "true",
+
+        "subject_template": "%(projectName)s %(builder)s %(result)s",
+
+        "categories": [
+          "chromium_perf_steps",
+          "gclient"
+        ],
+
+        "builders": {
+          "*": {}
+        }
+      }
     ]
   },
 
@@ -130,6 +151,12 @@
     "chromium_archive_build": {
       "forgiving_steps": [
         "archive_build"
+      ]
+    },
+
+    "chromium_perf_steps": {
+      "closing_optional": [
+        "*"
       ]
     }
   }
