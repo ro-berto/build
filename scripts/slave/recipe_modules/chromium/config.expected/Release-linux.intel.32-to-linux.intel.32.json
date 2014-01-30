@@ -15,16 +15,12 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "blink": {
@@ -158,32 +154,24 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
-      "compiler": "goma-clang", 
-      "default_targets": [
-        "All"
-      ]
+      "compiler": "goma-clang"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "clang_tests": {
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "component_builder": "config \"component_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == intel]", 
@@ -192,16 +180,12 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "klp_builder": "config \"klp_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == intel]", 
@@ -210,16 +194,12 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "mips_builder": "I dunno what to put in a mips builder!", 
@@ -239,16 +219,12 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "try_builder": "config \"try_builder\" includes \"main_builder\", but [Cannot target arm with TARGET_ARCH == intel]", 
@@ -256,16 +232,12 @@
     "build_config_fs": "Release", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
-      "build_tool": "ninja", 
-      "default_targets": [
-        "All"
-      ]
+      "build_tool": "ninja"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "v8": {
@@ -284,16 +256,12 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
+      "compiler": "goma"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "x86_try_builder": {
@@ -301,16 +269,12 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
+      "compiler": "goma"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "x86_try_instrumentation_tests": {
@@ -318,16 +282,12 @@
     "build_dir": "Path('[CHECKOUT]', 'out')", 
     "compile_py": {
       "build_tool": "ninja", 
-      "compiler": "goma", 
-      "default_targets": [
-        "All"
-      ]
+      "compiler": "goma"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
-      "GYP_GENERATORS": "ninja", 
-      "GYP_GENERATOR_FLAGS": "default_target=All"
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_GENERATORS": "ninja"
     }
   }, 
   "xcodebuild": "can not use xcodebuild on \"linux\""

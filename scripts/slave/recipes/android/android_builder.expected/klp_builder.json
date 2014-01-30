@@ -144,9 +144,8 @@
       "ANDROID_SDK_VERSION": "4.4",
       "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android android_sdk_root=[SLAVE_BUILD]/src/third_party/android_tools_internal/sdk android_sdk_version=4.4 app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android android_sdk_root=[SLAVE_BUILD]/src/third_party/android_tools_internal/sdk android_sdk_version=4.4 app_manifest_version_code=10 app_manifest_version_name=some_builder_1234 chrome_build_id=3333 component=static_library fastbuild=1 host_os=linux target_arch=arm",
       "GYP_GENERATORS": "ninja",
-      "GYP_GENERATOR_FLAGS": "default_target=All",
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
     "name": "gclient runhooks"
@@ -165,8 +164,7 @@
       "ninja",
       "--compiler",
       "goma",
-      "--",
-      "All"
+      "--"
     ],
     "env": {
       "ANDROID_SDK_BUILD_TOOLS_VERSION": "android-4.4",
