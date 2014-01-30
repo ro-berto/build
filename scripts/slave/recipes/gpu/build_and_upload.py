@@ -9,6 +9,7 @@
 #   chromium.webkit
 
 DEPS = [
+  'buildbot',
   'gpu',
   'platform',
   'properties',
@@ -16,6 +17,7 @@ DEPS = [
 
 def GenSteps(api):
   api.gpu.setup()
+  yield api.buildbot.prep()
   yield api.gpu.checkout_steps()
   yield api.gpu.compile_steps()
   yield api.gpu.upload_steps()

@@ -10,6 +10,7 @@
 # These testers are triggered by the builders on the same waterfall.
 
 DEPS = [
+  'buildbot',
   'gpu',
   'path',
   'platform',
@@ -18,6 +19,7 @@ DEPS = [
 
 def GenSteps(api):
   api.gpu.setup()
+  yield api.buildbot.prep()
 
   # Even the testers need a complete workspace:
   #  - runtest.py needs it in order to pick up the revision for the

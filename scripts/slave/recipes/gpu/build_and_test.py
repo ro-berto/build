@@ -9,14 +9,16 @@
 #   The GPU bots on the tryserver.chromium waterfall
 
 DEPS = [
+  'buildbot',
   'gpu',
+  'path',
   'platform',
   'properties',
-  'path',
 ]
 
 def GenSteps(api):
   api.gpu.setup()
+  yield api.buildbot.prep()
 
   # For local testing: pass 'skip_checkout=True' to run_recipe to skip the
   # checkout step. A full checkout via the recipe must have been done
