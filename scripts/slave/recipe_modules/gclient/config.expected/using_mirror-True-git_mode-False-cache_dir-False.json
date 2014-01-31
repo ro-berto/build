@@ -280,6 +280,17 @@
       }
     ]
   }, 
+  "skia": {
+    "cache_dir": null, 
+    "solutions": [
+      {
+        "deps_file": "DEPS", 
+        "managed": true, 
+        "name": "skia", 
+        "url": "https://skia.googlesource.com/skia.git"
+      }
+    ]
+  }, 
   "tools_build": "tools_build only supports git", 
   "v8": {
     "cache_dir": null, 

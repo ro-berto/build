@@ -79,8 +79,7 @@ class GpuApi(recipe_api.RecipeApi):
     gclient_data = self.m.step_history['gclient sync'].json.output
     self._build_revision = gclient_data['solutions']['src/']['revision']
     # If being run as a try server, apply the CL.
-    if 'rietveld' in self.m.properties:
-      yield self.m.rietveld.apply_issue(self.m.rietveld.calculate_issue_root())
+    yield self.m.tryserver.maybe_apply_issue()
 
   def compile_steps(self):
     # We only need to runhooks if we're going to compile locally.
@@ -156,7 +155,7 @@ class GpuApi(recipe_api.RecipeApi):
     # pixel test. If this is a significant problem in practice then we will
     # have to rethink the cloud storage code in the pixel tests.
     ref_img_arg = '--upload-refimg-to-cloud-storage'
-    if 'rietveld' in self.m.properties:
+    if self.m.tryserver.is_tryserver:
       ref_img_arg = '--download-refimg-from-cloud-storage'
     cloud_storage_bucket = 'chromium-gpu-archive/reference-images'
     yield self._maybe_run_isolated_telemetry_gpu_test('pixel',

@@ -167,7 +167,7 @@ class GclientApi(recipe_api.RecipeApi):
     assert cfg.complete()
 
     if revert is self.RevertOnTryserver:
-      revert = 'rietveld' in self.m.properties
+      revert = self.m.tryserver.is_tryserver
 
     if inject_parent_got_revision:
       self.inject_parent_got_revision(cfg, override=True)

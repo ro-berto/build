@@ -8,8 +8,8 @@ DEPS = [
   'path',
   'properties',
   'python',
-  'rietveld',
   'step',
+  'tryserver',
 ]
 
 OZONE_TESTS = [
@@ -64,8 +64,7 @@ def GenSteps(api):
 
   yield api.gclient.checkout()
 
-  if 'issue' in api.properties:
-    yield api.rietveld.apply_issue(api.rietveld.calculate_issue_root())
+  yield api.tryserver.maybe_apply_issue()
 
   api.chromium.c.gyp_env.GYP_DEFINES['embedded'] = 1
 

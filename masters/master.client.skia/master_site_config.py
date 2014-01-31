@@ -4,18 +4,15 @@
 
 """ActiveMaster definition."""
 
-# NOTE: The Skia buildbot master code currently resides in the Skia repo. The
-# code that remains here is out-of-date and unsued, but is still here as a
-# placeholder for when Skia upstreams.
 
 from config_bootstrap import Master
+
 
 class Skia(Master.Master3):
   project_name = 'Skia'
   master_port = 8041
   slave_port = 8141
   master_port_alt = 8241
-  server_url = 'http://skia.googlecode.com'
-  project_url = 'http://skia.googlecode.com'
+  repo_url = 'https://skia.googlesource.com/skia.git'
   production_host = None
   is_production_host = False

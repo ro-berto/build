@@ -235,7 +235,7 @@ def main(argv):
       'master.client.pagespeed': 'PageSpeed',
       'master.client.polymer': 'Polymer',
       'master.client.sfntly': 'Sfntly',
-      'master.client.skia': None,  # buildbot files live in Skia repo
+      'master.client.skia': 'Skia',
       'master.client.syzygy': 'Syzygy',
       'master.client.v8': 'V8',
       'master.client.v8.branches': 'V8Branches',

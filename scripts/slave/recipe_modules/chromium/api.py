@@ -46,6 +46,11 @@ class ChromiumApi(recipe_api.RecipeApi):
       'BUILD_CONFIG': self.m.properties.get('build_config', 'Release')
     }
 
+  @property
+  def output_dir(self):
+    """Return the path to the built executable directory."""
+    return self.c.build_dir(self.c.build_config_fs)
+
   def compile(self, targets=None, name=None, abort_on_failure=True,
               force_clobber=False, **kwargs):
     """Return a compile.py invocation."""

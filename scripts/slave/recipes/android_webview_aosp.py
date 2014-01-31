@@ -6,7 +6,7 @@ DEPS = [
   'android',
   'path',
   'properties',
-  'rietveld'
+  'tryserver',
 ]
 
 def GenSteps(api):
@@ -15,8 +15,7 @@ def GenSteps(api):
   yield droid.chromium_with_trimmed_deps()
   yield droid.lastchange_steps()
 
-  if 'issue' in api.properties:
-    yield api.rietveld.apply_issue(api.rietveld.calculate_issue_root())
+  yield api.tryserver.maybe_apply_issue()
 
   yield droid.repo_init_steps()
   yield droid.generate_local_manifest_step()
