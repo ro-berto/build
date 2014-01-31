@@ -8,7 +8,7 @@
       "compiler": "goma"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "OS=win chromium_win_pch=0 component=static_library fastbuild=1 gcc_version=46 host_os=win order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=ia32", 
+      "GYP_DEFINES": "OS=win chromium_win_pch=0 component=static_library fastbuild=1 host_os=win target_arch=ia32", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2010"
     }

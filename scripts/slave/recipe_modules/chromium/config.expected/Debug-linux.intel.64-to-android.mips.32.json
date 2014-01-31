@@ -9,7 +9,7 @@
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=mips", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=mips", 
       "GYP_GENERATORS": "ninja"
     }
   }, 

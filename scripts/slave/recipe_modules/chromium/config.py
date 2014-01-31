@@ -294,6 +294,3 @@ def android(c):
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = c.TARGET_PLATFORM
   gyp_defs['host_os'] = c.HOST_PLATFORM
-  gyp_defs['gcc_version'] = 46
-  gyp_defs['order_text_section'] = Path(
-    '[CHECKOUT]', 'orderfiles', 'orderfile.out')

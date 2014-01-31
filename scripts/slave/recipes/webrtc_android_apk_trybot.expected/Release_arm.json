@@ -107,7 +107,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -141,7 +141,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -161,7 +161,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -181,7 +181,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -201,7 +201,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -221,7 +221,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -241,7 +241,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -261,7 +261,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -281,7 +281,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -301,7 +301,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -321,7 +321,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -341,7 +341,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -361,7 +361,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gcc_version=46 host_os=linux include_tests=1 order_text_section=[SLAVE_BUILD]/src/orderfiles/orderfile.out target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=arm",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },

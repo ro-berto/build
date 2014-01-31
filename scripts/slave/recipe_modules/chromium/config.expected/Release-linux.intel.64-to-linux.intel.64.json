@@ -8,7 +8,7 @@
       "compiler": "goma"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "OS=linux component=static_library fastbuild=1 gcc_version=46 host_os=linux order_text_section=Path('[CHECKOUT]', 'orderfiles', 'orderfile.out') target_arch=x64", 
+      "GYP_DEFINES": "OS=linux component=static_library fastbuild=1 host_os=linux target_arch=x64", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
