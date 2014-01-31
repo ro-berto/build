@@ -665,7 +665,7 @@ class HTMLStatusGenerator(StatusGenerator):
     row = [
         revision,
         '<td class="revision"><a href="%s" target="_blank">%s</a></td>\n' % (
-            tmpl % urllib.quote(revision), revision)]
+            tmpl % urllib.quote(str(revision)), revision)]
     self.rows.append(row)
 
   def build_cb(self, master, builder, status, build_num=None):
