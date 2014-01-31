@@ -92,7 +92,9 @@
       "-H",
       "[dummy hash for content_gl_tests]",
       "-I",
-      "https://isolateserver.appspot.com"
+      "https://isolateserver.appspot.com",
+      "--",
+      "--use-gpu-in-tests"
     ],
     "name": "content_gl_tests"
   },
@@ -113,7 +115,9 @@
       "-H",
       "[dummy hash for gles2_conform_test]",
       "-I",
-      "https://isolateserver.appspot.com"
+      "https://isolateserver.appspot.com",
+      "--",
+      "--use-gpu-in-tests"
     ],
     "name": "gles2_conform_test"
   },
@@ -134,7 +138,9 @@
       "-H",
       "[dummy hash for gl_tests]",
       "-I",
-      "https://isolateserver.appspot.com"
+      "https://isolateserver.appspot.com",
+      "--",
+      "--use-gpu-in-tests"
     ],
     "name": "gl_tests"
   },
@@ -155,7 +161,9 @@
       "-H",
       "[dummy hash for angle_unittests]",
       "-I",
-      "https://isolateserver.appspot.com"
+      "https://isolateserver.appspot.com",
+      "--",
+      "--use-gpu-in-tests"
     ],
     "name": "angle_unittests"
   },
@@ -342,6 +350,40 @@
       "-v"
     ],
     "name": "memory_test"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_checkout\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"master\", \"build_config\": \"Release\", \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"mastername\": \"chromium.testing.master\", \"project\": \"\", \"recipe\": \"gpu/build_and_test\", \"repository\": \"https://chromium.googlesource.com/chromium/src.git\", \"revision\": \"c14d891d44f0afff64e56ed7c9702df1d807b1ee\", \"skip_checkout\": true, \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=screenshot_sync_tests",
+      "--generate-json-file",
+      "--results-directory=[SLAVE_BUILD]/gtest-results/screenshot_sync_tests",
+      "--build-number=571",
+      "--builder-name=TestBuilder",
+      "--run-python-script",
+      "[SLAVE_BUILD]/src/tools/swarming_client/run_isolated.py",
+      "-H",
+      "[dummy hash for telemetry_gpu_test]",
+      "-I",
+      "https://isolateserver.appspot.com",
+      "--",
+      "screenshot_sync",
+      "--show-stdout",
+      "--output-format=gtest",
+      "--browser=release",
+      "-v"
+    ],
+    "name": "screenshot_sync_tests"
   },
   {
     "allow_subannotations": true,

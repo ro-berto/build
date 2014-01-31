@@ -130,7 +130,7 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Note: --no-xvfb is the default.
     for test in SIMPLE_TESTS_TO_RUN:
-      yield self._maybe_run_isolate(test)
+      yield self._maybe_run_isolate(test, args=['--use-gpu-in-tests'])
 
     # Google Maps Pixel tests.
     yield self._maybe_run_isolated_telemetry_gpu_test(
@@ -183,6 +183,9 @@ class GpuApi(recipe_api.RecipeApi):
 
     # Memory tests.
     yield self._maybe_run_isolated_telemetry_gpu_test('memory_test')
+
+    # Screenshot synchronization tests.
+    yield self._maybe_run_isolated_telemetry_gpu_test('screenshot_sync')
 
     # Hardware acceleration tests.
     yield self._maybe_run_isolated_telemetry_gpu_test(

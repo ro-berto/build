@@ -119,7 +119,8 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "content_gl_tests.exe"
+      "content_gl_tests.exe",
+      "--use-gpu-in-tests"
     ],
     "name": "content_gl_tests"
   },
@@ -135,7 +136,8 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "gles2_conform_test.exe"
+      "gles2_conform_test.exe",
+      "--use-gpu-in-tests"
     ],
     "name": "gles2_conform_test"
   },
@@ -151,7 +153,8 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "gl_tests.exe"
+      "gl_tests.exe",
+      "--use-gpu-in-tests"
     ],
     "name": "gl_tests"
   },
@@ -167,7 +170,8 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
-      "angle_unittests.exe"
+      "angle_unittests.exe",
+      "--use-gpu-in-tests"
     ],
     "name": "angle_unittests"
   },
@@ -329,6 +333,35 @@
       "-v"
     ],
     "name": "memory_test"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]\\scripts\\slave\\runtest.py",
+      "--target",
+      "Debug",
+      "--factory-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--build-properties",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"TestBranch\", \"build_config\": \"Debug\", \"buildername\": \"win debug tester\", \"buildnumber\": 776, \"mastername\": \"chromium.gpu.testing\", \"parent_buildername\": \"win debug builder\", \"parent_buildnumber\": 571, \"parent_got_revision\": 160000, \"parent_got_webkit_revision\": 10000, \"project\": \"\", \"recipe\": \"gpu/download_and_test\", \"repository\": \"svn://svn-mirror.golo.chromium.org/chrome/trunk\", \"revision\": \"204787\", \"slavename\": \"TestSlavename\", \"swarm_hashes\": {\"angle_unittests\": \"[dummy hash for angle_unittests]\", \"content_gl_tests\": \"[dummy hash for content_gl_tests]\", \"gl_tests\": \"[dummy hash for gl_tests]\", \"gles2_conform_test\": \"[dummy hash for gles2_conform_test]\", \"tab_capture_performance_tests\": \"[dummy hash for tab_capture_performance_tests]\", \"telemetry_gpu_test\": \"[dummy hash for telemetry_gpu_test]\"}, \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "--annotate=gtest",
+      "--test-type=screenshot_sync_tests",
+      "--generate-json-file",
+      "--results-directory=[SLAVE_BUILD]\\gtest-results\\screenshot_sync_tests",
+      "--build-number=776",
+      "--builder-name=win debug tester",
+      "--run-python-script",
+      "[SLAVE_BUILD]\\src\\content\\test\\gpu\\run_gpu_test.py",
+      "screenshot_sync",
+      "--show-stdout",
+      "--output-format=gtest",
+      "--browser=debug",
+      "-v"
+    ],
+    "name": "screenshot_sync_tests"
   },
   {
     "allow_subannotations": true,
