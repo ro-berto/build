@@ -45,7 +45,7 @@ F('linux_webrtc_factory', linux().ChromiumWebRTCLatestFactory(
         'use_xvfb_on_linux': True,
         'show_perf_results': True,
         'perf_id': 'chromium-webrtc-trunk-tot-rel-linux',
-        'perf_config': {'a_default_rev': 'r_webrtc'},
+        'perf_config': {'a_default_rev': 'r_webrtc_rev'},
     }))
 
 
