@@ -335,6 +335,7 @@ F('ios_dbg', ios().ChromiumFactory(
   target='Debug',
   tests=[
     'base_unittests',
+    'components_unittests',
     'content_unittests',
     'crypto_unittests',
     'googleurl',
