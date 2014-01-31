@@ -1,4 +1,4 @@
-# Copyright 2013 The Chromium Authors. All rights reserved.
+# Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -26,7 +26,7 @@ T('android_trigger_dbg')
 defaults['category'] = 'android'
 
 android_dbg_archive = master_config.GetGSUtilUrl('chromium-webrtc',
-                                                 'android_chromium_trunk_dbg')
+                                                 'android_chromium_dbg')
 
 # Builders.
 B('Android Builder (dbg)', 'android_builder_dbg_factory',
@@ -50,7 +50,7 @@ F('android_tests_dbg_factory', android().ChromiumWebRTCAndroidFactory(
     factory_properties={
       'android_bot_id': 'webrtc-chromium-tests-dbg',
       'build_url': android_dbg_archive,
-      'perf_id': 'chromium-webrtc-trunk-tot-dbg-android-nexus72',
+      'perf_id': 'chromium-webrtc-dbg-android-nexus72',
       'show_perf_results': True,
       'test_platform': 'android',
     }))
