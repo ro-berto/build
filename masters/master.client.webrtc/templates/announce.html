@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% from "tree_status.html" import treestatus %}
+{% from "description.html" import waterfall_description %}
 
 {% block header -%}
 {{ super() }}
@@ -322,6 +323,7 @@
     </tr>
   </table>
 </center>
+{{ waterfall_description() }}
 
 </div>
 {% endblock header %}
