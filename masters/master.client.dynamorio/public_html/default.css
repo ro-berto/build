@@ -72,7 +72,6 @@ div.BuildResultInfo {
 }
 
 div.Announcement {
-  margin-top: 1em;
   margin-bottom: 1em;
 }
 
@@ -435,10 +434,6 @@ div.BuildWaterfall {
 .closed .large {
   font-size: 1.5em;
   font-weight: bolder;
-}
-
-.footer {
-  margin-top: 2em;
 }
 
 td.Project a:hover, td.start a:hover {
