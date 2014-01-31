@@ -125,5 +125,15 @@
       "-rf"
     ],
     "name": "cleanup_build"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/dart/tools/bots/dartium_android.py",
+      "--build-products-dir",
+      "[SLAVE_BUILD]/src/out/Debug"
+    ],
+    "name": "dartium_test"
   }
 ]

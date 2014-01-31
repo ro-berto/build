@@ -3,9 +3,12 @@
 # found in the LICENSE file.
 
 DEPS = [
+  'chromium',
   'chromium_android',
   'properties',
   'json',
+  'path',
+  'python',
 ]
 
 def GenSteps(api):
@@ -32,6 +35,14 @@ def GenSteps(api):
   if internal and droid.c.get_app_manifest_vars:
     yield droid.upload_build()
   yield droid.cleanup_build()
+
+  if api.properties.get('android_bot_id') == "dartium_builder":
+    yield api.python('dartium_test',
+        api.path.slave_build('src', 'dart', 'tools',
+                             'bots', 'dartium_android.py'),
+        args = ['--build-products-dir',
+                api.chromium.c.build_dir(api.chromium.c.build_config_fs)]
+    )
 
 def GenTests(api):
   bot_ids = ['main_builder', 'component_builder', 'clang_builder',
