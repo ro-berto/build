@@ -101,8 +101,10 @@
       "official",
       "--clobber",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "chrome",
+      "chrome_sandbox",
+      "linux_symbols",
+      "symupload"
     ],
     "name": "compile"
   }

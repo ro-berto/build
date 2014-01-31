@@ -70,7 +70,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=x64",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -96,20 +96,14 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--mode",
       "official",
       "--clobber",
       "--",
-      "chrome",
-      "chrome_sandbox",
-      "linux_symbols",
-      "symupload"
+      "All",
+      "chromium_builder_tests"
     ],
-    "name": "compile",
-    "~followup_annotations": [
-      "step returned non-zero exit code: 1",
-      "@@@STEP_FAILURE@@@"
-    ]
+    "name": "compile"
   }
 ]

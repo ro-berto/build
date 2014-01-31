@@ -167,8 +167,10 @@
       "clobber": true, 
       "compiler": "goma", 
       "default_targets": [
-        "All", 
-        "chromium_builder_tests"
+        "chrome", 
+        "chrome_sandbox", 
+        "linux_symbols", 
+        "symupload"
       ], 
       "mode": "official"
     }, 

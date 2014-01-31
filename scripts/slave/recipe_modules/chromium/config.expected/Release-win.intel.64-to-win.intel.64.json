@@ -164,8 +164,7 @@
       "clobber": true, 
       "compiler": "goma", 
       "default_targets": [
-        "All", 
-        "chromium_builder_tests"
+        "chrome_official_builder"
       ], 
       "mode": "official"
     }, 

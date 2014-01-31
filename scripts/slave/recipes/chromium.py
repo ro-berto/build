@@ -18,6 +18,12 @@ DEPS = [
 # builders requires a buildbot-side change anyway), but we can change
 # everything about what that config means in the recipe.
 RECIPE_CONFIGS = {
+  'chromeos_official': {
+    'chromium_config': 'chromium_official',
+    'chromium_apply_config': ['chromeos'],
+    'gclient_config': 'chromium',
+    'gclient_apply_config': ['chrome_internal'],
+  },
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',
@@ -33,6 +39,8 @@ def GenSteps(api):
   recipe_config = RECIPE_CONFIGS[recipe_config_name]
 
   api.chromium.set_config(recipe_config['chromium_config'])
+  for c in recipe_config.get('chromium_apply_config', []):
+    api.chromium.apply_config(c)
   api.gclient.set_config(recipe_config['gclient_config'])
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)

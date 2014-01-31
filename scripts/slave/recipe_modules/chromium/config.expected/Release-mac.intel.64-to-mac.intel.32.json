@@ -5,10 +5,10 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma-clang"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "OS=mac component=static_library fastbuild=1 host_os=mac target_arch=ia32", 
+      "GYP_DEFINES": "OS=mac clang=1 component=static_library fastbuild=1 host_os=mac target_arch=ia32", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -19,13 +19,13 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma", 
+      "compiler": "goma-clang", 
       "default_targets": [
         "blink_tests"
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -51,14 +51,14 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma", 
+      "compiler": "goma-clang", 
       "default_targets": [
         "All", 
         "chromium_builder_tests"
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -85,14 +85,14 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma", 
+      "compiler": "goma-clang", 
       "default_targets": [
         "All", 
         "chromium_builder_tests"
       ]
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32", 
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -153,7 +153,7 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": true, 
-      "compiler": "goma", 
+      "compiler": "goma-clang", 
       "default_targets": [
         "All", 
         "chromium_builder_tests"
@@ -161,7 +161,7 @@
       "mode": "official"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library target_arch=ia32", 
       "GYP_GENERATORS": "ninja"
     }
   }, 

@@ -166,14 +166,18 @@ def xcodebuild(c):
     raise BadConf('can not use xcodebuild on "%s"' % c.HOST_PLATFORM)
   c.gyp_env.GYP_GENERATORS.add('xcodebuild')
 
-@config_ctx(group='compiler')
-def clang(c):
+def _clang_common(c):
   c.compile_py.compiler = 'clang'
   c.gyp_env.GYP_DEFINES['clang'] = 1
 
 @config_ctx(group='compiler')
-def default_compiler(_c):
-  pass
+def clang(c):
+  _clang_common(c)
+
+@config_ctx(group='compiler')
+def default_compiler(c):
+  if c.TARGET_PLATFORM == 'mac':
+    _clang_common(c)
 
 @config_ctx(deps=['compiler', 'builder'], group='distributor')
 def goma(c):
@@ -278,7 +282,17 @@ def chromium_clang(c):
 
 @config_ctx(includes=['chromium', 'official'])
 def chromium_official(c):
-  c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+  if c.TARGET_PLATFORM == 'linux':
+    c.compile_py.default_targets = [
+        'chrome',
+        'chrome_sandbox',
+        'linux_symbols',
+        'symupload'
+    ]
+  elif c.TARGET_PLATFORM == 'win':
+    c.compile_py.default_targets = ['chrome_official_builder']
+  else:
+    c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
 @config_ctx(includes=['chromium'])
 def blink(c):

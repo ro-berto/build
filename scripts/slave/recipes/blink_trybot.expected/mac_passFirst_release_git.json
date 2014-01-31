@@ -131,7 +131,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -149,7 +149,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--",
       "blink_tests"
     ],

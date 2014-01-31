@@ -102,8 +102,7 @@
       "official",
       "--clobber",
       "--",
-      "All",
-      "chromium_builder_tests"
+      "chrome_official_builder"
     ],
     "name": "compile"
   }

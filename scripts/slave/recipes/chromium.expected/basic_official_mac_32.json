@@ -70,7 +70,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=ia32",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official clang=1 component=static_library target_arch=ia32",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -96,7 +96,7 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma",
+      "goma-clang",
       "--mode",
       "official",
       "--clobber",
