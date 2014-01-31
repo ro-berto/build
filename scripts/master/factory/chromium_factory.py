@@ -677,6 +677,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'scheduler.tough_scheduling_cases',
         'spaceport',
         'sunspider',
+        'silk',
       ]
     for test_name in synthetic_benchmarks:
       Telemetry(test_name)
