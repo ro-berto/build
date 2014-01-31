@@ -32,7 +32,7 @@ tests = [
 
 defaults['category'] = 'linux'
 
-B('Linux [latest WebRTC+libjingle]', 'linux_webrtc_factory',
+B('Linux', 'linux_webrtc_factory',
   scheduler='linux_webrtc_scheduler|linux_periodic_scheduler',
   notify_on_missing=True)
 F('linux_webrtc_factory', linux().ChromiumWebRTCLatestFactory(

@@ -32,7 +32,7 @@ android_rel_archive = master_config.GetGSUtilUrl('chromium-webrtc',
                                                  'android_chromium_trunk_rel')
 
 # Builders.
-B('Android Builder (dbg) [latest WebRTC+libjingle]',
+B('Android Builder (dbg)',
   'android_builder_dbg_factory',
   scheduler='android_webrtc_scheduler|android_periodic_scheduler',
   notify_on_missing=True)
@@ -45,7 +45,7 @@ F('android_builder_dbg_factory', android().ChromiumWebRTCAndroidFactory(
         'trigger': 'android_trigger_dbg',
     }))
 
-B('Android Builder [latest WebRTC+libjingle]', 'android_builder_rel_factory',
+B('Android Builder', 'android_builder_rel_factory',
   scheduler='android_webrtc_scheduler|android_periodic_scheduler',
   notify_on_missing=True)
 F('android_builder_rel_factory', android().ChromiumWebRTCAndroidFactory(
@@ -58,7 +58,7 @@ F('android_builder_rel_factory', android().ChromiumWebRTCAndroidFactory(
     }))
 
 # Testers.
-B('Android Tests (dbg) (JB Nexus7.2) [latest WebRTC+libjingle]',
+B('Android Tests (dbg) (JB Nexus7.2)',
   'android_tests_dbg_factory', scheduler='android_trigger_dbg',
   notify_on_missing=True)
 F('android_tests_dbg_factory', android().ChromiumWebRTCAndroidFactory(
@@ -72,7 +72,7 @@ F('android_tests_dbg_factory', android().ChromiumWebRTCAndroidFactory(
       'test_platform': 'android',
     }))
 
-B('Android Tests (JB Nexus7.2) [latest WebRTC+libjingle]',
+B('Android Tests (JB Nexus7.2)',
   'android_tests_rel_factory', scheduler='android_trigger_rel',
   notify_on_missing=True)
 F('android_tests_rel_factory', android().ChromiumWebRTCAndroidFactory(

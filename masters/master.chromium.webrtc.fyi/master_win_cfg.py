@@ -31,7 +31,7 @@ tests = [
 
 defaults['category'] = 'win'
 
-B('Win [latest WebRTC+libjingle]', 'win_webrtc_factory',
+B('Win', 'win_webrtc_factory',
   scheduler='win_webrtc_scheduler|win_periodic_scheduler',
   notify_on_missing=True)
 F('win_webrtc_factory', win().ChromiumWebRTCLatestFactory(

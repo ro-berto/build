@@ -31,7 +31,7 @@ tests = [
 
 defaults['category'] = 'mac'
 
-B('Mac [latest WebRTC+libjingle]', 'mac_webrtc_factory',
+B('Mac', 'mac_webrtc_factory',
   scheduler='mac_webrtc_scheduler|mac_periodic_scheduler',
   notify_on_missing=True)
 F('mac_webrtc_factory', mac().ChromiumWebRTCLatestFactory(
