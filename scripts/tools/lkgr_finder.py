@@ -378,8 +378,8 @@ CHROMIUM_LKCR_STEPS = {
   'chromium.chrome': {
     'Google Chrome ChromeOS': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Google Chrome Linux': [
       'compile',
@@ -388,18 +388,18 @@ CHROMIUM_LKCR_STEPS = {
     ],
     'Google Chrome Linux x64': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Google Chrome Mac': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Google Chrome Win': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
   },  # chromium.chrome
 }
