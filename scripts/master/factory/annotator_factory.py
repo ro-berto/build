@@ -20,7 +20,8 @@ class AnnotatorFactory(object):
   def __init__(self):
     self._factory_properties = None
 
-  def BaseFactory(self, recipe, factory_properties=None, triggers=None):
+  def BaseFactory(self, recipe, factory_properties=None, triggers=None,
+                  timeout=1200):
     """The primary input for the factory is the |recipe|, which specifies the
     name of a recipe file to search for. The recipe file will fill in the rest
     of the |factory_properties|. This setup allows for major changes to factory
@@ -36,7 +37,7 @@ class AnnotatorFactory(object):
     self._factory_properties = factory_properties
     factory = BuildFactory()
     cmd_obj = annotator_commands.AnnotatorCommands(factory)
-    cmd_obj.AddAnnotatedScript(factory_properties)
+    cmd_obj.AddAnnotatedScript(factory_properties, timeout=timeout)
 
     for t in (triggers or []):
       factory.addStep(commands.CreateTriggerStep(
