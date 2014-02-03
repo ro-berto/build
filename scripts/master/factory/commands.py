@@ -396,6 +396,7 @@ class FactoryCommands(object):
     self._zip_tool = self.PathJoin(self._script_dir, 'zip_build.py')
     self._extract_tool = self.PathJoin(self._script_dir, 'extract_build.py')
     self._cleanup_temp_tool = self.PathJoin(self._script_dir, 'cleanup_temp.py')
+    self._bot_update_tool = self.PathJoin(self._script_dir, 'bot_update.py')
     self._resource_sizes_tool = self.PathJoin(self._script_dir,
                                               'resource_sizes.py')
     self._gclient_safe_revert_tool = self.PathJoin(self._script_dir,
@@ -965,6 +966,41 @@ class FactoryCommands(object):
         workdir=self.working_dir,
         doStepIf=do_step_if,
         command=cmd)
+
+  def AddBotUpdateStep(self, env, gclient_specs, revision_mapping, server=None):
+    """Add a step to force checkout to some state.
+
+    This is meant to replace all gclient revert/sync steps.
+    """
+    cmd = ['python', self._bot_update_tool, '--specs', gclient_specs]
+
+    PROPERTIES = {
+        'root': '%(root:~src)s',
+        'issue': '%(issue:-)s',
+        'patchset': '%(patchset:-)s',
+        'master': '%(mastername:-)s'
+    }
+
+    for property_name, property_expr in PROPERTIES.iteritems():
+      property_value = WithProperties(property_expr)
+      if property_value:
+        cmd.extend(['--%s' % property_name, property_value])
+
+    if server:
+      cmd.extend(['--server', server])
+
+    if revision_mapping:
+      cmd.extend(['--revision-mapping=%s' % json.dumps(revision_mapping)])
+
+    self._factory.addStep(
+        chromium_step.AnnotatedCommand,
+        name='bot update',
+        haltOnFailure=True,
+        flunkOnFailure=True,
+        timeout=600,
+        workdir=self.working_dir,
+        command=cmd)
+
 
   def AddRunHooksStep(self, env=None, timeout=None):
     """Adds a step to the factory to run the gclient hooks."""

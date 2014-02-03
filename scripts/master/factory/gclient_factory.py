@@ -192,6 +192,14 @@ class GClientFactory(object):
     if gclient_deps == 'ios':
       gclient_spec += ';target_os = [\'ios\'];target_os_only = True'
 
+    # Force the build checkout to be at some revision.  This may or may not
+    # activate depending on its own criteria, but the expectation is that if
+    # this does activate, it will emit a BOT_UPDATED file in the build/
+    # directory to signal to the other gclient update steps to no-op.
+    code_review_site = config.Master.Master4.code_review_site
+    factory_cmd_obj.AddBotUpdateStep(env, gclient_spec, code_review_site)
+
+
     # svn timeout is 2 min; we allow 5
     timeout = factory_properties.get('gclient_timeout')
     if official_release or factory_properties.get('nuke_and_pave'):
