@@ -357,5 +357,26 @@ F('ios_dbg', ios().ChromiumFactory(
     },
   }))
 
+#
+# iOS Release iphoneos BuilderTester w/ ninja
+#
+B('iOS Device (ninja)', 'ios_rel_ninja', gatekeeper='ios_rel_ninja',
+  scheduler='ios', auto_reboot=True, notify_on_missing=True)
+F('ios_rel_ninja', ios().ChromiumFactory(
+  # TODO(lliabraa): Need to upstream support for running tests on devices
+  # before we can actually run any tests.
+  clobber=True,
+  tests=[],
+  options = ['--build-tool=ninja'],
+  factory_properties={
+    'app_name': 'Chromium.app',
+    'gclient_deps': 'ios',
+    'gclient_env': {
+      'GYP_CROSSCOMPILE': '1',
+      'GYP_GENERATORS': 'ninja',
+      'GYP_DEFINES': 'component=static_library OS=ios',
+    },
+  }))
+
 def Update(config, active_master, c):
   return helper.Update(c)

@@ -72,6 +72,7 @@ categories_steps = {
     'ui_unittests',
     'url_unittests',
   ],
+  'ios_rel_ninja': ['compile'],
 }
 
 exclusions = {
