@@ -18,7 +18,8 @@ F = helper.Factory
 
 def win(): return chromium_factory.ChromiumFactory('src/build', 'win32')
 def mac(): return chromium_factory.ChromiumFactory('src/xcodebuild', 'darwin')
-def linux(): return chromium_factory.ChromiumFactory('src/out', 'linux2')
+def linux(): return chromium_factory.ChromiumFactory(
+    'src/out', 'linux2', pull_internal=False)
 
 defaults['category'] = '1clobber'
 
@@ -31,8 +32,7 @@ S('chromium-git', branch='git-svn', treeStableTimer=60)
 
 B('WinGit', 'win', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
-F('win', win().ChromiumGitFactory(
-    pure_git=True,
+F('win', win().ChromiumFactory(
     clobber=True,
     project='all.sln',
     tests=[
@@ -40,6 +40,7 @@ F('win', win().ChromiumGitFactory(
       'check_deps2git',
       'sizes',
     ],
+    options=['--compiler=goma'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -52,6 +53,7 @@ F('win', win().ChromiumGitFactory(
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
         'GYP_DEFINES': 'test_isolation_mode=noop',
+        'GYP_USE_SEPARATE_MSPDBSRV': '1',
       },
     }))
 
@@ -61,8 +63,7 @@ F('win', win().ChromiumGitFactory(
 
 B('MacGit', 'mac', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
-F('mac', mac().ChromiumGitFactory(
-    pure_git=True,
+F('mac', mac().ChromiumFactory(
     clobber=True,
     tests=[
       'check_deps2git',
@@ -78,7 +79,7 @@ F('mac', mac().ChromiumGitFactory(
       'expectations': True,
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
-        'GYP_DEFINES': 'test_isolation_mode=noop',
+        'GYP_DEFINES': 'test_isolation_mode=noop mac_strip_release=1',
       },
     }))
 
@@ -88,8 +89,7 @@ F('mac', mac().ChromiumGitFactory(
 
 B('LinuxGit', 'linux', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
-F('linux', linux().ChromiumGitFactory(
-    pure_git=True,
+F('linux', linux().ChromiumFactory(
     clobber=True,
     tests=[
       'check_deps2git',
@@ -97,7 +97,7 @@ F('linux', linux().ChromiumGitFactory(
       'check_perms',
       'sizes',
     ],
-    options=['--compiler=goma', '--build-tool=ninja', '--', 'all'],
+    options=['--compiler=goma', '--', 'all'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -107,21 +107,20 @@ F('linux', linux().ChromiumGitFactory(
       'expectations': True,
       'generate_gtest_json': ActiveMaster.is_production_host,
       'gclient_env': {
-        'GYP_DEFINES': 'target_arch=ia32 test_isolation_mode=noop',
-        'GYP_GENERATORS': 'ninja',
+        'GYP_DEFINES':
+            'target_arch=ia32 test_isolation_mode=noop linux_dump_symbols=0',
       },
     }))
 
 B('LinuxGit x64', 'linux64', 'compile|testers', 'chromium-git',
   notify_on_missing=True)
-F('linux64', linux().ChromiumGitFactory(
-    pure_git=True,
+F('linux64', linux().ChromiumFactory(
     clobber=True,
     tests=[
       'check_deps2git',
       'sizes',
     ],
-    options=['--compiler=goma', '--build-tool=ninja', '--', 'all'],
+    options=['--compiler=goma', '--', 'all'],
     factory_properties={
       'archive_build': ActiveMaster.is_production_host,
       'gs_bucket': 'gs://chromium-browser-snapshots',
@@ -131,8 +130,8 @@ F('linux64', linux().ChromiumGitFactory(
       'perf_id': 'chromium-rel-linux-64-git',
       'expectations': True,
       'gclient_env': {
-        'GYP_DEFINES': 'target_arch=x64 test_isolation_mode=noop',
-        'GYP_GENERATORS': 'ninja',
+        'GYP_DEFINES':
+            'target_arch=x64 test_isolation_mode=noop linux_dump_symbols=0',
       },
     }))
 
