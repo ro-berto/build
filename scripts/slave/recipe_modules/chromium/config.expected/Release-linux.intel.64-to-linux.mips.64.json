@@ -5,10 +5,11 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "OS=linux component=static_library fastbuild=1 host_os=linux target_arch=mips", 
+      "GYP_DEFINES": "OS=linux component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -22,10 +23,11 @@
       "compiler": "goma", 
       "default_targets": [
         "blink_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library target_arch=mips", 
+      "GYP_DEFINES": "component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -38,10 +40,11 @@
       "compiler": "goma-clang", 
       "default_targets": [
         "blink_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=mips", 
+      "GYP_DEFINES": "clang=1 component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -55,10 +58,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "component=static_library target_arch=mips", 
+      "GYP_DEFINES": "component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -72,10 +76,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library linux_use_tcmalloc=0 lsan=1 target_arch=mips", 
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library gomadir=Path('[BUILD]', 'goma') linux_use_tcmalloc=0 lsan=1 target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -89,10 +94,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=mips", 
+      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') proprietary_codecs=1 target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -106,10 +112,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "asan=1 chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS linux_use_tcmalloc=0 lsan=1 proprietary_codecs=1 target_arch=mips", 
+      "GYP_DEFINES": "asan=1 chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') linux_use_tcmalloc=0 lsan=1 proprietary_codecs=1 target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -123,10 +130,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=mips", 
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') proprietary_codecs=1 target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -140,10 +148,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=mips", 
+      "GYP_DEFINES": "clang=1 component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -160,10 +169,11 @@
         "linux_symbols", 
         "symupload"
       ], 
+      "goma_dir": "Path('[BUILD]', 'goma')", 
       "mode": "official"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=mips", 
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=mips use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 

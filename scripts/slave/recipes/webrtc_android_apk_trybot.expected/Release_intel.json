@@ -107,7 +107,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -135,13 +135,15 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--",
       "android_builder_webrtc"
     ],
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -161,7 +163,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -181,7 +183,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -201,7 +203,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -221,7 +223,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -241,7 +243,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -261,7 +263,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -281,7 +283,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -301,7 +303,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -321,7 +323,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -341,7 +343,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
@@ -361,7 +363,7 @@
     "env": {
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=ia32 use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },

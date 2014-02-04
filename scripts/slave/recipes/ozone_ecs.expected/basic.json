@@ -67,7 +67,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=shared_library embedded=1 target_arch=x64",
+      "GYP_DEFINES": "component=shared_library embedded=1 gomadir=[BUILD]/goma target_arch=x64 use_goma=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -86,6 +86,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--",
       "content_shell"
     ],
@@ -115,6 +117,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--",
       "aura_unittests",
       "base_unittests",

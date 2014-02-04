@@ -5,10 +5,11 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "OS=win chromium_win_pch=0 component=static_library fastbuild=1 host_os=win target_arch=x64", 
+      "GYP_DEFINES": "OS=win chromium_win_pch=0 component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=win target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -23,10 +24,11 @@
       "compiler": "goma", 
       "default_targets": [
         "blink_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 target_arch=x64", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -40,10 +42,11 @@
       "compiler": "goma-clang", 
       "default_targets": [
         "blink_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 target_arch=x64", 
+      "GYP_DEFINES": "chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -58,10 +61,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 target_arch=x64", 
+      "GYP_DEFINES": "chromium_win_pch=0 component=shared_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -76,10 +80,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "asan=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 lsan=1 target_arch=x64", 
+      "GYP_DEFINES": "asan=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') lsan=1 target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -94,10 +99,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromeos=1 chromium_win_pch=0 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=x64", 
+      "GYP_DEFINES": "chromeos=1 chromium_win_pch=0 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') proprietary_codecs=1 target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -112,10 +118,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "asan=1 chromeos=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS lsan=1 proprietary_codecs=1 target_arch=x64", 
+      "GYP_DEFINES": "asan=1 chromeos=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') lsan=1 proprietary_codecs=1 target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -130,10 +137,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromeos=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=x64", 
+      "GYP_DEFINES": "chromeos=1 chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') proprietary_codecs=1 target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }
@@ -148,10 +156,11 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 target_arch=x64", 
+      "GYP_DEFINES": "chromium_win_pch=0 clang=1 component=shared_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') target_arch=x64 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2012"
     }

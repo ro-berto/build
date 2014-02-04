@@ -89,7 +89,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library fastbuild=1 gomadir=[BUILD]\\goma internal_gles2_conform_tests=1 target_arch=ia32 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1",
       "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2010"
     },
@@ -109,6 +109,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--",
       "chromium_gpu_builder",
       "angle_unittests_run",

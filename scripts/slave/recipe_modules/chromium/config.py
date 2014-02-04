@@ -32,6 +32,7 @@ def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
       build_tool = Single(basestring),
       compiler = Single(basestring, required=False),
       mode = Single(basestring, required=False),
+      goma_dir = Single(Path, required=False),
       clobber = Single(bool, empty_val=False, required=False, hidden=False),
     ),
     gyp_env = ConfigGroup(
@@ -191,6 +192,12 @@ def goma(c):
     c.compile_py.compiler = 'goma-clang'
   else:  # pragma: no cover
     raise BadConf('goma config dosen\'t understand %s' % c.compile_py.compiler)
+
+  c.gyp_env.GYP_DEFINES['use_goma'] = 1
+
+  goma_dir = Path('[BUILD]', 'goma')
+  c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+  c.compile_py.goma_dir = goma_dir
 
   if c.TARGET_PLATFORM == 'win':
     fastbuild(c)

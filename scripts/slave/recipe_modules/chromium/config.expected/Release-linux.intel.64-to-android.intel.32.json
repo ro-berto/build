@@ -5,11 +5,12 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -35,11 +36,12 @@
       "compiler": "goma", 
       "default_targets": [
         "blink_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -52,11 +54,12 @@
       "compiler": "goma-clang", 
       "default_targets": [
         "blink_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "clang=1 component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -70,11 +73,12 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -88,11 +92,12 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library lsan=1 target_arch=ia32", 
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library gomadir=Path('[BUILD]', 'goma') lsan=1 target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -106,11 +111,12 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32", 
+      "GYP_DEFINES": "chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') proprietary_codecs=1 target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -124,11 +130,12 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "asan=1 chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS lsan=1 proprietary_codecs=1 target_arch=ia32", 
+      "GYP_DEFINES": "asan=1 chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') lsan=1 proprietary_codecs=1 target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -142,11 +149,12 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32", 
+      "GYP_DEFINES": "chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS gomadir=Path('[BUILD]', 'goma') proprietary_codecs=1 target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -160,11 +168,12 @@
       "default_targets": [
         "All", 
         "chromium_builder_tests"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "clang=1 component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "clang=1 component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -179,11 +188,12 @@
         "All", 
         "chromium_builder_tests"
       ], 
+      "goma_dir": "Path('[BUILD]', 'goma')", 
       "mode": "official"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=ia32", 
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library gomadir=Path('[BUILD]', 'goma') target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -193,11 +203,12 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma-clang"
+      "compiler": "goma-clang", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_DEFINES": "OS=android clang=1 component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -307,11 +318,12 @@
       "compiler": "goma", 
       "default_targets": [
         "android_builder_webrtc"
-      ]
+      ], 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux include_tests=1 target_arch=ia32", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux include_tests=1 target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja", 
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     }
@@ -322,11 +334,12 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -336,11 +349,12 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 
@@ -350,11 +364,12 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": false, 
-      "compiler": "goma"
+      "compiler": "goma", 
+      "goma_dir": "Path('[BUILD]', 'goma')"
     }, 
     "gyp_env": {
       "GYP_CROSSCOMPILE": "1", 
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=ia32", 
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=Path('[BUILD]', 'goma') host_os=linux target_arch=ia32 use_goma=1", 
       "GYP_GENERATORS": "ninja"
     }
   }, 

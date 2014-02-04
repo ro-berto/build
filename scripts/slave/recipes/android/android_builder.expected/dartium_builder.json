@@ -89,7 +89,7 @@
     "env": {
       "EXTRA_LANDMINES_SCRIPT": "[SLAVE_BUILD]/src/repo/build/get_internal_landmines.py",
       "GYP_CROSSCOMPILE": "1",
-      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 host_os=linux target_arch=arm",
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux target_arch=arm use_goma=1",
       "GYP_GENERATORS": "ninja",
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
     },
@@ -109,6 +109,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]/goma",
       "--",
       "chrome_apk",
       "content_shell_apk"
