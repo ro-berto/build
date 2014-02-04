@@ -17,6 +17,8 @@ deps = {
         Var('git_url') + '/chromium/tools/gsd_generate_index.git',
     'build/scripts/private/data/reliability':
         Var('git_url') + '/chromium/src/chrome/test/data/reliability.git',
+    'build/scripts/tools/deps2git':
+        Var('git_url') + '/chromium/tools/deps2git.git@5d3006d5bf9a3982b8549f8a7bd25ac40e038be0',
     'build/third_party/gsutil':
         Var('git_url') + '/external/gsutil/src.git@5cba434b828da428a906c8197a23c9ae120d2636',
     'build/third_party/gsutil/boto':
