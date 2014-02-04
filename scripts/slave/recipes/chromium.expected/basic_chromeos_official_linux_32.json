@@ -102,11 +102,7 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--clobber",
-      "--",
-      "chrome",
-      "chrome_sandbox",
-      "linux_symbols",
-      "symupload"
+      "--"
     ],
     "name": "compile"
   }

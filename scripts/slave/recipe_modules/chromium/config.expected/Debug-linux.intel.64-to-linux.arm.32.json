@@ -175,12 +175,6 @@
       "build_tool": "ninja", 
       "clobber": true, 
       "compiler": "goma", 
-      "default_targets": [
-        "chrome", 
-        "chrome_sandbox", 
-        "linux_symbols", 
-        "symupload"
-      ], 
       "goma_dir": "Path('[BUILD]', 'goma')", 
       "mode": "official"
     }, 

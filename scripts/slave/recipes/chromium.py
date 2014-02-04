@@ -18,11 +18,27 @@ DEPS = [
 # to one of recipe configs below.
 BUILDERS = {
   'chromium.chrome': {
-    'Google Chrome ChromeOS': 'chromeos_official',
-    'Google Chrome Linux': 'official',
-    'Google Chrome Linux x64': 'official',
-    'Google Chrome Mac': 'official',
-    'Google Chrome Win': 'official',
+    'Google Chrome ChromeOS': {
+      'recipe_config': 'chromeos_official',
+      'compile_targets': [
+        'chrome',
+        'chrome_sandbox',
+        'linux_symbols',
+        'symupload'
+      ],
+    },
+    'Google Chrome Linux': {
+      'recipe_config': 'official',
+    },
+    'Google Chrome Linux x64': {
+      'recipe_config': 'official',
+    },
+    'Google Chrome Mac': {
+      'recipe_config': 'official',
+    },
+    'Google Chrome Win': {
+      'recipe_config': 'official',
+    },
   },
 }
 
@@ -44,6 +60,7 @@ RECIPE_CONFIGS = {
 
 
 def GenSteps(api):
+  bot_config = {}
   recipe_config_name = api.properties.get('recipe_config')
   if recipe_config_name:
     assert recipe_config_name in RECIPE_CONFIGS, (
@@ -51,7 +68,8 @@ def GenSteps(api):
   else:
     mastername = api.properties.get('mastername')
     buildername = api.properties.get('buildername')
-    recipe_config_name = BUILDERS.get(mastername, {}).get(buildername)
+    bot_config = BUILDERS.get(mastername, {}).get(buildername)
+    recipe_config_name = bot_config['recipe_config']
     assert recipe_config_name, (
         'Unrecognized builder name %r for master %r.' % (
             buildername, mastername))
@@ -68,7 +86,7 @@ def GenSteps(api):
     api.gclient.checkout(),
     api.chromium.runhooks(),
     api.chromium.cleanup_temp(),
-    api.chromium.compile(),
+    api.chromium.compile(targets=bot_config.get('compile_targets')),
   )
 
 

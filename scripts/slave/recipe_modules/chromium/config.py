@@ -289,16 +289,10 @@ def chromium_clang(c):
 
 @config_ctx(includes=['ninja', 'default_compiler', 'official'])
 def chromium_official(c):
-  if c.TARGET_PLATFORM == 'linux':
-    c.compile_py.default_targets = [
-        'chrome',
-        'chrome_sandbox',
-        'linux_symbols',
-        'symupload'
-    ]
-  elif c.TARGET_PLATFORM == 'win':
+  # TODO(phajdan.jr): Unify compile targets used by official builders.
+  if c.TARGET_PLATFORM == 'win':
     c.compile_py.default_targets = ['chrome_official_builder']
-  elif c.TARGET_PLATFORM == 'mac':
+  elif c.TARGET_PLATFORM in ['linux', 'mac']:
     c.compile_py.default_targets = []
   else:
     c.compile_py.default_targets = ['All', 'chromium_builder_tests']
