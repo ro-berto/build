@@ -13,10 +13,21 @@ DEPS = [
 
 
 # Make it easy to change how different configurations of this recipe
-# work without making buildbot-side changes. Each builder will only
-# have a tag specifying a config/flavor (adding, removing or changing
-# builders requires a buildbot-side change anyway), but we can change
-# everything about what that config means in the recipe.
+# work without making buildbot-side changes. This contains a dictionary
+# of buildbot masters, and each of these dictionaries maps a builder name
+# to one of recipe configs below.
+BUILDERS = {
+  'chromium.chrome': {
+    'Google Chrome ChromeOS': 'chromeos_official',
+    'Google Chrome Linux': 'official',
+    'Google Chrome Linux x64': 'official',
+    'Google Chrome Mac': 'official',
+    'Google Chrome Win': 'official',
+  },
+}
+
+
+# Different types of builds this recipe can do.
 RECIPE_CONFIGS = {
   'chromeos_official': {
     'chromium_config': 'chromium_official',
@@ -34,8 +45,16 @@ RECIPE_CONFIGS = {
 
 def GenSteps(api):
   recipe_config_name = api.properties.get('recipe_config')
-  if recipe_config_name not in RECIPE_CONFIGS:  # pragma: no cover
-    raise ValueError('Unsupported recipe_config "%s"' % recipe_config_name)
+  if recipe_config_name:
+    assert recipe_config_name in RECIPE_CONFIGS, (
+        'Unsupported recipe_config "%s"' % recipe_config_name)
+  else:
+    mastername = api.properties.get('mastername')
+    buildername = api.properties.get('buildername')
+    recipe_config_name = BUILDERS.get(mastername, {}).get(buildername)
+    assert recipe_config_name, (
+        'Unrecognized builder name %r for master %r.' % (
+            buildername, mastername))
   recipe_config = RECIPE_CONFIGS[recipe_config_name]
 
   api.chromium.set_config(recipe_config['chromium_config'])
@@ -62,6 +81,13 @@ def GenTests(api):
           api.properties(recipe_config=recipe_config, TARGET_BITS=bits) +
           api.platform(plat, bits)
         )
+
+  yield (
+    api.test('chromium_chrome_google_chrome_linux_x64') +
+    api.properties(mastername='chromium.chrome',
+                   buildername='Google Chrome Linux x64') +
+    api.platform('linux', 64)
+  )
 
   yield (
     api.test('fail') +
