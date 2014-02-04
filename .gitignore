@@ -30,6 +30,7 @@ twistd.pid
 /scripts/gsd_generate_index
 /scripts/master/log_parser/perf_expectations
 /scripts/private
+/scripts/tools/deps2git
 /site_config/.bot_password
 /slave/*/
 !/slave/cert/
