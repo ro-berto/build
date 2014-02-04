@@ -162,14 +162,13 @@
     "compile_py": {
       "build_tool": "ninja", 
       "clobber": true, 
-      "compiler": "goma", 
       "default_targets": [
         "chrome_official_builder"
       ], 
       "mode": "official"
     }, 
     "gyp_env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 target_arch=ia32", 
+      "GYP_DEFINES": "branding=Chrome buildtype=Official component=static_library target_arch=ia32", 
       "GYP_GENERATORS": "ninja", 
       "GYP_MSVS_VERSION": "2010"
     }

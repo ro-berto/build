@@ -100,9 +100,7 @@
       "--mode",
       "official",
       "--clobber",
-      "--",
-      "All",
-      "chromium_builder_tests"
+      "--"
     ],
     "name": "compile"
   }

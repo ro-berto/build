@@ -70,7 +70,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromeos=1 chromium_win_pch=0 component=static_library fastbuild=1 ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromeos=1 component=static_library ffmpeg_branding=ChromeOS proprietary_codecs=1 target_arch=ia32",
       "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2010"
     },
@@ -96,8 +96,6 @@
       "[SLAVE_BUILD]\\src",
       "--build-tool",
       "ninja",
-      "--compiler",
-      "goma",
       "--mode",
       "official",
       "--clobber",

@@ -280,7 +280,7 @@ def chromium_chromeos_clang(c):
 def chromium_clang(c):
   c.compile_py.default_targets = ['All', 'chromium_builder_tests']
 
-@config_ctx(includes=['chromium', 'official'])
+@config_ctx(includes=['ninja', 'default_compiler', 'official'])
 def chromium_official(c):
   if c.TARGET_PLATFORM == 'linux':
     c.compile_py.default_targets = [
@@ -291,8 +291,15 @@ def chromium_official(c):
     ]
   elif c.TARGET_PLATFORM == 'win':
     c.compile_py.default_targets = ['chrome_official_builder']
+  elif c.TARGET_PLATFORM == 'mac':
+    c.compile_py.default_targets = []
   else:
     c.compile_py.default_targets = ['All', 'chromium_builder_tests']
+
+  # It seems that goma actually makes the Windows build slower
+  # on master.chromium.chrome.
+  if c.TARGET_PLATFORM != 'win':
+    goma(c)
 
 @config_ctx(includes=['chromium'])
 def blink(c):

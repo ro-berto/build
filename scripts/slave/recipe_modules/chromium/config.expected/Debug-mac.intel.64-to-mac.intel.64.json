@@ -154,10 +154,6 @@
       "build_tool": "ninja", 
       "clobber": true, 
       "compiler": "goma-clang", 
-      "default_targets": [
-        "All", 
-        "chromium_builder_tests"
-      ], 
       "mode": "official"
     }, 
     "gyp_env": {
