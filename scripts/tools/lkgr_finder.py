@@ -383,8 +383,8 @@ CHROMIUM_LKCR_STEPS = {
     ],
     'Google Chrome Linux': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Google Chrome Linux x64': [
       'compile',
