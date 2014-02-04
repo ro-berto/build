@@ -252,6 +252,11 @@ def determine_steps_to_run(isolated_hashes, default_swarming_tests, testfilter):
       'determine_steps_to_run(%s, %s, %s)',
       isolated_hashes, default_swarming_tests, testfilter)
   # TODO(maruel): Support gtest filter.
+
+  # If testfilter == [], make it behave the same as if defaulttests was
+  # specified.
+  testfilter = testfilter or ['defaulttests']
+
   def should_run(name):
     return (
         ((name in default_swarming_tests or not default_swarming_tests) and
