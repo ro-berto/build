@@ -125,6 +125,7 @@ class GClient(source.Source):
     elif args.get('patch') is None:
       del args['patch']
 
+    args['project'] = self.build.getSourceStamp().project
     cmd = buildstep.LoggedRemoteCommand('gclient', args)
     self.startCommand(cmd, warnings)
 

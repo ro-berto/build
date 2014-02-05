@@ -242,6 +242,7 @@ class GClient(SourceBaseCommand):
     self.gclient_transitive = False
     self.delete_unversioned_trees_when_updating = True
     self.gclient_jobs = None
+    self.project = None
     # TODO(maruel): Remove once buildbot 0.8.4p1 conversion is complete.
     self.sourcedata = None
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
@@ -269,6 +270,7 @@ class GClient(SourceBaseCommand):
     self.no_gclient_revision = args.get('no_gclient_revision', False)
     self.gclient_transitive = args.get('gclient_transitive')
     self.gclient_jobs = args.get('gclient_jobs')
+    self.project = args.get('project', None)
 
   def start(self):
     """Start the update process.
@@ -368,7 +370,8 @@ class GClient(SourceBaseCommand):
         command.append(str(self.revision))
       else:
         # Make the revision look like branch@revision.
-        command.append('%s@%s' % (self.branch, self.revision))
+        prefix = self.project if self.project else self.branch
+        command.append('%s@%s' % (prefix, self.revision))
       # We only add the transitive flag if we have a revision, otherwise it is
       # meaningless.
       if self.gclient_transitive:
