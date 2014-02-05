@@ -726,8 +726,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddMemoryTests(fp)
     if R('tab_capture_performance'):
       f.AddTabCapturePerformanceTests(fp)
-    if R('idb_perf'):
-      f.AddIDBPerfTests(fp)
     if R('indexeddb_perf'):
       f.AddTelemetryTest('indexeddb_perf', factory_properties=fp)
     if R('shutdown'):
