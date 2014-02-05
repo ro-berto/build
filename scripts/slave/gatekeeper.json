@@ -60,6 +60,21 @@
         }
       }
     ],
+    "http://build.chromium.org/p/chromium.gatekeeper": [
+      {
+        "tree_notify": [
+          "chromium-build-heartbeat@chromium-gatekeeper-sentry.appspotmail.com"
+        ],
+
+        "builders": {
+          "Chromium Gatekeeper Failure": {
+            "forgiving_steps": [
+              "*"
+            ]
+          }
+        }
+      }
+    ],
     "http://build.chromium.org/p/chromium.lkgr": [
       {
         "tree_notify": [
