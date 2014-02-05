@@ -1,6 +1,7 @@
 # Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+import json
 
 DEPS = [
   'chromium',
@@ -9,6 +10,32 @@ DEPS = [
   'platform',
   'properties',
 ]
+
+PERF_TESTS = [
+  'blink_perf.animation',
+  'canvasmark',
+  'dromaeo.domcoreattr',
+  'dromaeo.domcoremodify',
+  'dromaeo.domcorequery',
+  'dromaeo.domcoretraverse',
+  'dromaeo.jslibattrjquery',
+  'dromaeo.jslibattrprototype',
+  'dromaeo.jslibeventjquery',
+  'dromaeo.jslibeventprototype',
+  'dromaeo.jslibmodifyjquery',
+  'dromaeo.jslibmodifyprototype',
+  'dromaeo.jslibstylejquery',
+  'dromaeo.jslibstyleprototype',
+  'dromaeo.jslibtraversejquery',
+  'dromaeo.jslibtraverseprototype',
+  'image_decoding.image_decoding_measurement',
+  'kraken',
+  'octane',
+  'pica.pica',
+  'spaceport',
+  'sunspider',
+]
+
 
 def GenSteps(api):
   config_vals = {}
@@ -28,8 +55,9 @@ def GenSteps(api):
              'svn://svn-mirror.golo.chromium.org/dart')
     return '/'.join((BASES[USE_MIRROR],) + pieces)
 
-  s.url = DartRepositoryURL('branches', 'bleeding_edge', 'deps', 'dartium.deps')
-  s.name = 'dartium.deps'
+  deps_name = api.properties.get('deps', 'dartium_deps')
+  s.url = DartRepositoryURL('branches', 'bleeding_edge', 'deps', deps_name)
+  s.name = deps_name
   s.custom_deps = api.properties.get('gclient_custom_deps') or {}
   s.revision = api.properties.get('revision')
   api.gclient.c.got_revision_mapping.pop('src', None)
@@ -55,12 +83,43 @@ def GenSteps(api):
           '--build-dir', api.chromium.c.build_dir]
   yield api.chromium.runtest(test, args, name='webkit_tests')
 
+  if api.platform.is_linux:
+    dashboard_upload_url = 'https://chromeperf.appspot.com'
+    build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs)
+    factory_properties = {
+      'blink_config':  'chromium',
+      'browser_exe':  str(build_exe('chrome')),
+      'build_dir':  'src/out',
+      'expectations':  True,
+      'halt_on_missing_build':  True,
+      'show_perf_results':  True,
+      'target':  'Release',
+      'target_os':  None,
+      'target_platform':  'linux2',
+      'tools_dir':  str(api.path.slave_build('src', 'tools'))
+    }
+
+    for test in PERF_TESTS:
+      factory_properties['test_name'] = test
+      factory_properties['step_name'] = test
+      fp = "--factory-properties=%s" % json.dumps(factory_properties)
+      yield api.chromium.runtest(
+          api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
+          [fp], name=test, python_mode=True,
+          results_url=dashboard_upload_url,
+          annotate='graphing', perf_dashboard_id=test, test_type=test
+      )
+
+
 def GenTests(api):
   for plat in ('win', 'mac', 'linux'):
     for bits in (32, 64):
       for use_mirror in (True, False):
         yield (
           api.test('basic_%s_%s_Mirror%s' % (plat, bits, use_mirror)) +
-          api.properties(TARGET_BITS=bits, USE_MIRROR=use_mirror) +
+          api.properties(
+              TARGET_BITS=bits,
+              USE_MIRROR=use_mirror,
+              deps='dartium.deps') +
           api.platform(plat, bits)
       )
