@@ -84,7 +84,7 @@ linux_all_test_targets = [
   'webkit_compositor_bindings_unittests',
 ]
 
-linux_aura_test_targets = [
+linux_gtk_test_targets = [
   'app_list_unittests',
   'aura_builder',
   'compositor_unittests',
@@ -105,9 +105,9 @@ rel_archive = master_config.GetArchiveUrl(
     'ChromiumLinux', 'Linux Builder',
     'Linux_Builder', 'linux')
 
-rel_aura_archive = master_config.GetArchiveUrl(
-    'ChromiumLinux', 'Linux Aura Builder',
-    'Linux_Aura_Builder', 'linux')
+rel_gtk_archive = master_config.GetArchiveUrl(
+    'ChromiumLinux', 'Linux GTK Builder',
+    'Linux_GTK_Builder', 'linux')
 
 #
 # Main release scheduler for src/
@@ -118,7 +118,7 @@ S('linux_rel', branch='src', treeStableTimer=60)
 # Triggerable schedulers for the rel builders
 #
 T('linux_rel_trigger')
-T('linux_rel_aura_trigger')
+T('linux_rel_gtk_trigger')
 
 #
 # Linux Rel Builder
@@ -199,35 +199,35 @@ F('rel_sync', linux_tester().ChromiumFactory(
     }))
 
 #
-# Linux aura bot
+# Linux GTK bot
 #
-B('Linux Aura Builder', 'rel_aura', 'compile', 'linux_rel',
+B('Linux GTK Builder', 'rel_gtk', 'compile', 'linux_rel',
   auto_reboot=False, notify_on_missing=True)
-F('rel_aura', linux().ChromiumFactory(
+F('rel_gtk', linux().ChromiumFactory(
     slave_type='Builder',
     options=goma_ninja_options + linux_all_test_targets +
-            linux_aura_test_targets +
+            linux_gtk_test_targets +
             ['sync_integration_tests', 'chromium_swarm_tests'],
     tests=['check_deps'],
     factory_properties={
       'gclient_env': {
-          'GYP_DEFINES': 'use_aura=1',
+          'GYP_DEFINES': 'use_aura=0',
           'GYP_GENERATORS': 'ninja',
       },
-      'trigger': 'linux_rel_aura_trigger',
+      'trigger': 'linux_rel_gtk_trigger',
     }))
 
 #
-# Linux aura tests
+# Linux GTK tests
 #
-B('Linux Aura Tests',
-  'rel_aura_unit',
+B('Linux GTK Tests',
+  'rel_gtk_unit',
   'testers',
-  'linux_rel_aura_trigger',
+  'linux_rel_gtk_trigger',
   notify_on_missing=True)
-F('rel_aura_unit', linux_tester().ChromiumFactory(
+F('rel_gtk_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
-    build_url=rel_aura_archive,
+    build_url=rel_gtk_archive,
     tests=[
       'app_list_unittests',
       'aura',
