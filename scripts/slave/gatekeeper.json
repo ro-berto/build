@@ -85,8 +85,6 @@
     "http://build.chromium.org/p/chromium.perf": [
       {
         "tree_notify": [
-          "stip@chromium.org",
-          "tonyg@chromium.org"
         ],
 
         "forgive_all": "true",
