@@ -4,12 +4,14 @@
 
 """ Set of basic operations/utilities that are used by the build. """
 
+from contextlib import contextmanager
 import copy
 import cStringIO
 import errno
 import fnmatch
 import glob
 import math
+import multiprocessing
 import os
 import shutil
 import socket
@@ -1343,3 +1345,21 @@ def IsolatedImportFromPath(path, extra_paths=None):
     pass
   finally:
     sys.path = saved
+
+
+@contextmanager
+def MultiPool(processes):
+  """Manages a multiprocessing.Pool making sure to close the pool when done.
+
+  This will also call pool.terminate() when an exception is raised (and
+  re-raised the exception to the calling procedure can handle it).
+  """
+  try:
+    pool = multiprocessing.Pool(processes=processes)
+    yield pool
+    pool.close()
+  except:
+    pool.terminate()
+    raise
+  finally:
+    pool.join()

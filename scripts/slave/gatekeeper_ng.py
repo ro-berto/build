@@ -18,7 +18,6 @@ import hmac
 import itertools
 import json
 import logging
-import multiprocessing
 import operator
 import optparse
 import os
@@ -29,6 +28,7 @@ import time
 import urllib
 import urllib2
 
+from common import chromium_utils
 from slave import gatekeeper_ng_config
 
 SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -122,7 +122,6 @@ def get_build_jsons(master_builds, build_db, processes):
   and appends that to url_list. Then, it forks out and queries each build_url
   for build information.
   """
-  pool = multiprocessing.Pool(processes=processes)
   url_list = []
   for master, builder_dict in master_builds.iteritems():
     for builder, new_builds in builder_dict.iteritems():
@@ -133,7 +132,8 @@ def get_build_jsons(master_builds, build_db, processes):
   # The async/get is so that ctrl-c can interrupt the scans.
   # See http://stackoverflow.com/questions/1408356/
   # keyboard-interrupts-with-pythons-multiprocessing-pool
-  builds = filter(bool, pool.map_async(get_build_json, url_list).get(9999999))
+  with chromium_utils.MultiPool(processes) as pool:
+    builds = filter(bool, pool.map_async(get_build_json, url_list).get(9999999))
 
   for build_json, master in builds:
     if build_json.get('results', None) is not None:
