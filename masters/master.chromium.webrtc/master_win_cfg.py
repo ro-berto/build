@@ -73,6 +73,20 @@ F('win_7_tester_factory', win().ChromiumWebRTCFactory(
         'gclient_env': {'DEPOT_TOOLS_PYTHON_275': '1'},
     }))
 
+B('Win8 Tester', 'win_8_tester_factory', scheduler='win_rel_trigger')
+F('win_8_tester_factory', win().ChromiumWebRTCFactory(
+    slave_type='Tester',
+    build_url=chromium_rel_archive,
+    tests=tests,
+    factory_properties={
+        'virtual_webcam': True,
+        'show_perf_results': True,
+        'halt_on_missing_build': True,
+        'perf_id': 'chromium-webrtc-rel-win8',
+        'process_dumps': True,
+        'start_crash_handler': True,
+    }))
+
 
 def Update(config, active_master, c):
   helper.Update(c)
