@@ -65,7 +65,8 @@ class SyzygyFactory(gclient_factory.GClientFactory):
   def __init__(self, build_dir, target_platform=None):
     self.target_platform = target_platform
     main = gclient_factory.GClientSolution(config.Master.syzygy_url + 'trunk',
-                                           name='src')
+                                           name='src',
+                                           custom_deps_file='DEPS.syzygy')
 
     custom_deps_list = [main]
     if config.Master.syzygy_internal_url:
