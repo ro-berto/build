@@ -6,9 +6,8 @@
 
 from config_bootstrap import Master
 
-class Gatekeeper(Master.Base):
+class Gatekeeper(Master.Master1):
   project_name = 'Chromium Gatekeeper'
-  master_host = 'localhost'
-  master_port = 9511
-  slave_port = 9611
-  master_port_alt = 9711
+  master_port = 8008
+  slave_port = 8108
+  master_port_alt = 8208
