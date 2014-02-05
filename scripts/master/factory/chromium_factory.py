@@ -734,8 +734,12 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       f.AddShutdownTests(fp)
     if R('startup_cold'):
       f.AddTelemetryTest('startup.cold.blank_page', factory_properties=fp)
+      f.AddTelemetryTest('start_with_url.cold.startup_pages',
+                         factory_properties=fp)
     if R('startup_warm'):
       f.AddTelemetryTest('startup.warm.blank_page', factory_properties=fp)
+      f.AddTelemetryTest('start_with_url.warm.startup_pages',
+                         factory_properties=fp)
     if R('startup_warm_dirty'):
       startup_fp = fp.copy()
       # pylint: disable=W0212
