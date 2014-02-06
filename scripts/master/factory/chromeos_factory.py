@@ -9,14 +9,9 @@ import os
 from buildbot.steps import shell
 from buildbot.process.properties import Property, WithProperties
 
-from common import chromium_utils
 from master import chromium_step
 from master.factory import build_factory
 from master.factory import chromeos_build_factory
-from master.factory import commands
-from master.log_parser import process_log
-
-import config
 
 
 DEFAULT = object()
@@ -188,9 +183,6 @@ class CbuildbotFactory(ChromiteFactory):
       trybot: Whether this is creating builders for the trybot waterfall.
       chrome_root: The place to put or use the chrome source.
       pass_revision: to pass the chrome revision desired into the build.
-      perf_file: If set, name of the perf file to upload.
-      perf_base_url: If set, base url to build into references.
-      perf_output_dir: If set, where the perf files are to update.
       legacy_chromite: If set, ask chromite to use an older cbuildbot directory.
       *: anything else is passed to the base Chromite class.
   """
@@ -203,9 +195,6 @@ class CbuildbotFactory(ChromiteFactory):
                trybot=False,
                chrome_root=None,
                pass_revision=None,
-               perf_file=None,
-               perf_base_url=None,
-               perf_output_dir=None,
                legacy_chromite=False,
                **kwargs):
     super(CbuildbotFactory, self).__init__(None, None,
@@ -221,9 +210,6 @@ class CbuildbotFactory(ChromiteFactory):
 
     if params:
       self.add_cbuildbot_step(params)
-
-    if perf_file:
-      self.add_perf_step(params, perf_file, perf_base_url, perf_output_dir)
 
 
   def add_cbuildbot_step(self, params):
@@ -253,47 +239,6 @@ class CbuildbotFactory(ChromiteFactory):
     cmd.append(WithProperties('%s', 'clobber:+--clobber'))
 
     return cmd
-
-
-  def add_perf_step(self, params, perf_file, perf_base_url, perf_output_dir):
-    """Adds step for uploading perf results using the given file.
-
-    Args:
-      params: Extra parameters for cbuildbot.
-      perf_file: Name of the perf file to upload. Note the name of this file
-        will be used as the testname and params[0] will be used as the platform
-        name.
-      perf_base_url: If set, base url to build into references.
-      perf_output_dir: If set, where the perf files are to update.
-    """
-    # Name of platform is always taken as the first param.
-    platform = params.split()[0]
-    # Name of the test is based off the name of the file.
-    test = os.path.splitext(perf_file)[0]
-    # Assuming all perf files will be stored in the cbuildbot log directory.
-    perf_file_path = os.path.join(self.buildroot, 'cbuildbot_logs', perf_file)
-    if not perf_base_url:
-      perf_base_url = config.Master.perf_base_url
-    if not perf_output_dir:
-      perf_output_dir = config.Master.perf_output_dir
-
-    report_link = '/'.join([perf_base_url, platform, test,
-                            config.Master.perf_report_url_suffix])
-    output_dir = chromium_utils.AbsoluteCanonicalPath('/'.join([
-        perf_output_dir, platform, test]))
-
-    cmd = ['cat', perf_file_path]
-
-    # Hmm - I wonder how dry_run should affect this.
-    perf_class = commands.CreatePerformanceStepClass(
-        process_log.GraphingLogProcessor,
-        report_link=report_link, output_dir=output_dir,
-        factory_properties={}, perf_name=platform,
-        test_name=test)
-
-    self.f_cbuild.addStep(
-        perf_class, command=cmd, name='Upload Perf Results',
-        description='upload_perf_results')
 
 
 class ChromitePlusFactory(ChromiteFactory):
