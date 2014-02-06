@@ -236,7 +236,6 @@ F('rel_gtk_unit', linux_tester().ChromiumFactory(
       'cc_unittests',
       'chromedriver_unittests',
       'components_unittests',
-      'compositor',
       'content_browsertests',
       'content_unittests',
       'crypto_unittests',
