@@ -242,7 +242,6 @@ F('rel_gtk_unit', linux_tester().ChromiumFactory(
       'crypto_unittests',
       'dbus',
       'device_unittests',
-      'events',
       'google_apis_unittests',
       'googleurl',
       'gpu',
