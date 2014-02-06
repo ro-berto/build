@@ -130,6 +130,7 @@ class ChromiumCommands(commands.FactoryCommands):
                           index_suffix=index_suffix,
                           include_last_change=include_last_change)
 
+  # TODO(stip): not sure if this is relevant for new perf dashboard.
   def AddUploadPerfExpectations(self, factory_properties=None):
     """Adds a step to the factory to upload perf_expectations.json to the
     master.
@@ -302,13 +303,10 @@ class ChromiumCommands(commands.FactoryCommands):
     factory_properties['test_name'] = test_name
 
     perf_id = factory_properties.get('perf_id')
-    perf_report_url_suffix = factory_properties.get('perf_report_url_suffix')
     show_results = factory_properties.get('show_perf_results')
 
-    _, _, perf_name = self._PerfStepMappings(show_results,
-                                             perf_id,
-                                             test_name,
-                                             perf_report_url_suffix)
+    perf_name = self._PerfStepMappings(show_results,
+                                       perf_id)
     factory_properties['perf_name'] = perf_name
 
     if py_script:

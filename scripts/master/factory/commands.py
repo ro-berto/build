@@ -35,43 +35,6 @@ from master.optional_arguments import ListProperties
 DEFAULT_TESTS = 'defaulttests'
 
 
-# Performance step utils.
-def CreatePerformanceStepClass(
-    log_processor_class, report_link=None, output_dir=None,
-    factory_properties=None, perf_name=None, test_name=None,
-    command_class=None):
-  """Returns ProcessLogShellStep class.
-
-  Args:
-    log_processor_class: class that will be used to process logs. Normally
-      should be a subclass of process_log.PerformanceLogProcessor.
-    report_link: URL that will be used as a link to results. If None,
-      result won't be written into file.
-    output_dir: directory where the log processor will write the results.
-    command_class: command type to run for this step. Normally this will be
-      chromium_step.ProcessLogShellStep.
-  """
-  factory_properties = factory_properties or {}
-  command_class = command_class or chromium_step.ProcessLogShellStep
-  # We create a log-processor class using
-  # chromium_utils.InitializePartiallyWithArguments, which uses function
-  # currying to create classes that have preset constructor arguments.
-  # This serves two purposes:
-  # 1. Allows the step to instantiate its log processor without any
-  #    additional parameters;
-  # 2. Creates a unique log processor class for each individual step, so
-  # they can keep state that won't be shared between builds
-  log_processor_class = chromium_utils.InitializePartiallyWithArguments(
-      log_processor_class, report_link=report_link, output_dir=output_dir,
-      factory_properties=factory_properties, perf_name=perf_name,
-      test_name=test_name)
-  # Similarly, we need to allow buildbot to create the step itself without
-  # using additional parameters, so we create a step class that already
-  # knows which log_processor to use.
-  return chromium_utils.InitializePartiallyWithArguments(
-      command_class, log_processor_class=log_processor_class)
-
-
 def CreateTriggerStep(trigger_name, trigger_set_properties=None,
                       trigger_copy_properties=None, do_step_if=True):
   """Returns a Trigger Step, with all the default values copied over.
@@ -283,13 +246,6 @@ class CompileWithRequiredSwarmTargets(shell.Compile):
 
 
 class FactoryCommands(object):
-  # Base URL for performance test results.
-  PERF_BASE_URL = config.Master.perf_base_url
-  PERF_REPORT_URL_SUFFIX = config.Master.perf_report_url_suffix
-
-  # Directory in which to save perf output data files.
-  PERF_OUTPUT_DIR = config.Master.perf_output_dir
-
   # Use this to prevent steps which cannot be run on the same
   # slave from being done together (in the case where slaves are
   # shared by multiple builds).
@@ -301,6 +257,8 @@ class FactoryCommands(object):
   # perf_id. The value is the directory name in the results URL.
 
   # Configuration of most tests.
+
+  # TODO(stip): would be nice to get rid of this.
   PERF_TEST_MAPPINGS = {
     'Release': {
       'chrome-linux32-beta': 'linux32-beta',
@@ -1188,10 +1146,8 @@ class FactoryCommands(object):
                           workdir=self.working_dir,
                           command=cmd)
 
-  def _PerfStepMappings(self, show_results, perf_id, test_name, suffix=None):
+  def _PerfStepMappings(self, show_results, perf_id):
     """Looks up test IDs in PERF_TEST_MAPPINGS and returns test info."""
-    report_link = None
-    output_dir = None
     perf_name = None
 
     if show_results:
@@ -1199,29 +1155,7 @@ class FactoryCommands(object):
       if (self._target in self.PERF_TEST_MAPPINGS and
           perf_id in self.PERF_TEST_MAPPINGS[self._target]):
         perf_name = self.PERF_TEST_MAPPINGS[self._target][perf_id]
-      if not suffix:
-        suffix = self.PERF_REPORT_URL_SUFFIX
-      report_link = '%s/%s/%s/%s' % (self.PERF_BASE_URL, perf_name, test_name,
-                                     suffix)
-      output_dir = '%s/%s/%s' % (self.PERF_OUTPUT_DIR, perf_name, test_name)
-
-    return report_link, output_dir, perf_name
-
-  def GetPerfStepClass(self, factory_properties, test_name, log_processor_class,
-                       command_class=None):
-    """Selects the right build step for the specified perf test."""
-    factory_properties = factory_properties or {}
-    perf_id = factory_properties.get('perf_id')
-    perf_report_url_suffix = factory_properties.get('perf_report_url_suffix')
-    show_results = factory_properties.get('show_perf_results')
-
-    report_link, output_dir, perf_name = self._PerfStepMappings(
-        show_results, perf_id, test_name, perf_report_url_suffix)
-
-    return CreatePerformanceStepClass(log_processor_class,
-        report_link=report_link, output_dir=output_dir,
-        factory_properties=factory_properties, perf_name=perf_name,
-        test_name=test_name, command_class=command_class)
+    return perf_name
 
   def AddGenerateIsolatedHashesStep(self, tests, doStepIf):
     """Adds a step to generate the .isolated files hashes.
