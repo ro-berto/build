@@ -148,19 +148,19 @@ def drive_one(
 
 def drive_many(
     client, version, swarming_server, isolate_server, priority, dimensions,
-    steps):
+    steps, builder, build_number):
   logging.info(
-      'drive_many(%s, %s, %s, %s, %s, %s, %s)',
+      'drive_many(%s, %s, %s, %s, %s, %s, %s, %s, %d)',
       client, version, swarming_server, isolate_server, priority, dimensions,
-      steps)
+      steps, builder, build_number)
   return _drive_many(
     client, version, swarming_server, isolate_server, priority, dimensions,
-    steps, Queue.Queue())
+    steps, builder, build_number, Queue.Queue())
 
 
 def _drive_many(
     client, version, swarming_server, isolate_server, priority, dimensions,
-    steps, out):
+    steps, builder, build_number, out):
   """Internal version, exposed so it can be hooked in test."""
   stream = annotator.AdvancedAnnotationStream(sys.stdout, False)
   for step_name in sorted(steps):
@@ -178,7 +178,13 @@ def _drive_many(
     #  env['GTEST_FILTER'] = gtest_filter
     shards = swarming_utils.TESTS_SHARDS.get(step_name, 1)
     # This will be the key in steps_annotations.
-    task_name = '%s/%s/%s' % (step_name, dimensions['os'], isolated_hash)
+    # TODO(maruel): Work around bug swarming:73 by using unique swarming task
+    # name. This is done by including the builder name and the build number.
+    # This is not something we want to keep long term because we lose the
+    # benefit of skipping running the exact same executable twice for no good
+    # reason.
+    task_name = '%s/%s/%s/%s/%d' % (
+        step_name, dimensions['os'], isolated_hash, builder, build_number)
     t = threading.Thread(
         target=drive_one,
         args=(client, version, swarming_server, isolate_server, priority,
@@ -280,7 +286,9 @@ def process_build_properties(options):
       options.build_properties.get('swarm_hashes', {}),
       options.build_properties.get('run_default_swarm_tests', []),
       options.build_properties.get('testfilter', ['defaulttests']))
-  return slave_os, priority, steps
+  builder = options.build_properties.get('buildername', 'unknown')
+  build_number = options.build_properties.get('buildnumber', 0)
+  return slave_os, priority, steps, builder, build_number
 
 
 def main(args):
@@ -318,7 +326,8 @@ def main(args):
 
   logging.basicConfig(level=logging.DEBUG if options.verbose else logging.ERROR)
   # Loads the other flags implicitly.
-  slave_os, priority, steps = process_build_properties(options)
+  slave_os, priority, steps, builder, build_number = process_build_properties(
+      options)
   logging.info('To run: %s, %s, %s', slave_os, priority, steps)
   if not steps:
     print('Nothing to trigger')
@@ -335,7 +344,9 @@ def main(args):
       options.isolate_server,
       priority,
       {'os': selected_os},
-      steps)
+      steps,
+      builder,
+      build_number)
 
 
 if __name__ == '__main__':

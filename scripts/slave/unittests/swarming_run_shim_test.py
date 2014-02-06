@@ -98,11 +98,13 @@ class SwarmingRunTest(auto_stub.TestCase):
         '--isolate-server', 'http://localhost:2',
     ]
     props = {
-        'target_os': 'darwin',
-        'swarm_hashes': {'base_test': '1234'},
+        'buildername': 'win_rel',
+        'buildnumber': 18,
+        'buildbotURL': 'http://build.chromium.org/p/chromium.win/',
         'run_default_swarm_tests': ['base_test'],
+        'swarm_hashes': {'base_test': '1234'},
+        'target_os': 'darwin',
         'testfilter': ['base_test_swarm'],
-        'buildbotURL': 'http://build.chromium.org/p/chromium.win/'
     }
     cmd.extend(('--build-properties', json.dumps(props)))
     self.assertEqual(0, swarming_run_shim.main(cmd))
@@ -114,7 +116,7 @@ class SwarmingRunTest(auto_stub.TestCase):
         '--isolate-server', 'http://localhost:2',
         '--priority', '10',
         '--shards', '1',
-        '--task-name', u'base_test/Mac/1234',
+        '--task-name', u'base_test/Mac/1234/win_rel/18',
         '--decorate',
         u'1234',
         '--dimension', 'os', 'Mac',
@@ -167,12 +169,9 @@ class SwarmingRunTest(auto_stub.TestCase):
 
   def test_three(self):
     out = Queue.Queue()
-    def drive_many(
-        client, version, swarming_server, isolate_server, priority, dimensions,
-        steps):
-      return swarming_run_shim._drive_many(
-        client, version, swarming_server, isolate_server, priority, dimensions,
-        steps, out)
+    def drive_many(*args, **kwargs):
+      # Inject our own queue.
+      return swarming_run_shim._drive_many(*args, out=out, **kwargs)
     self.mock(swarming_run_shim, 'drive_many', drive_many)
 
     lock = threading.Lock()
@@ -190,7 +189,7 @@ class SwarmingRunTest(auto_stub.TestCase):
       """
       with lock:
         cmds.add(tuple(cmd))
-      if 'base_test/Mac/1234' in cmd:
+      if 'base_test/Mac/1234/win_rel/18' in cmd:
         step.wait_for(0)
         yield 'base1\n'
         out.join()
@@ -199,7 +198,7 @@ class SwarmingRunTest(auto_stub.TestCase):
         yield 0
         out.join()
         step.increment()
-      elif 'slow_test/Mac/4321' in cmd:
+      elif 'slow_test/Mac/4321/win_rel/18' in cmd:
         step.wait_for(1)
         yield 'slow1\n'
         out.join()
@@ -214,7 +213,7 @@ class SwarmingRunTest(auto_stub.TestCase):
         yield 1
         out.join()
         step.increment()
-      elif 'bloa_test/Mac/0000' in cmd:
+      elif 'bloa_test/Mac/0000/win_rel/18' in cmd:
         step.wait_for(2)
         yield 'bloated1\n'
         out.join()
@@ -248,13 +247,15 @@ class SwarmingRunTest(auto_stub.TestCase):
         '--isolate-server', 'http://localhost:2',
     ]
     props = {
-        'target_os': 'darwin',
+        'buildername': 'win_rel',
+        'buildnumber': 18,
+        'run_default_swarm_tests': ['base_test', 'slow_test'],
         'swarm_hashes': {
             'base_test': '1234',
-            'slow_test': '4321',
             'bloa_test': '0000',
+            'slow_test': '4321',
         },
-        'run_default_swarm_tests': ['base_test', 'slow_test'],
+        'target_os': 'darwin',
         'testfilter': ['defaulttests', 'bloa_test_swarm'],
     }
     cmd.extend(('--build-properties', json.dumps(props)))
@@ -268,7 +269,7 @@ class SwarmingRunTest(auto_stub.TestCase):
           '--isolate-server', 'http://localhost:2',
           '--priority', '200',
           '--shards', '1',
-          '--task-name', u'base_test/Mac/1234',
+          '--task-name', u'base_test/Mac/1234/win_rel/18',
           '--decorate',
           u'1234',
           '--dimension', 'os', 'Mac',
@@ -281,7 +282,7 @@ class SwarmingRunTest(auto_stub.TestCase):
           '--isolate-server', 'http://localhost:2',
           '--priority', '200',
           '--shards', '1',
-          '--task-name', u'slow_test/Mac/4321',
+          '--task-name', u'slow_test/Mac/4321/win_rel/18',
           '--decorate',
           u'4321',
           '--dimension', 'os', 'Mac',
@@ -294,7 +295,7 @@ class SwarmingRunTest(auto_stub.TestCase):
           '--isolate-server', 'http://localhost:2',
           '--priority', '200',
           '--shards', '1',
-          '--task-name', u'bloa_test/Mac/0000',
+          '--task-name', u'bloa_test/Mac/0000/win_rel/18',
           '--decorate',
           u'0000',
           '--dimension', 'os', 'Mac',
