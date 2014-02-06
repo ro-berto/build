@@ -12,14 +12,7 @@ from master import master_utils
 # it's failing and the tree is still technically fine.
 categories_steps = {
   '': [
-    'update',
-    'runhooks',
-    'svnkill',
-    'taskkill',
-    'check_deps2git',
-    'check_deps',
-    'compile',
-    'archive_build'
+    'steps',
   ],
 }
 
