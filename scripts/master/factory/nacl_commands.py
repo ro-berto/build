@@ -14,18 +14,10 @@ from buildbot.process.properties import WithProperties
 
 from master import chromium_step
 from master.factory import commands
-from master.log_parser import process_log
-
-import config
 
 
 class NativeClientCommands(commands.FactoryCommands):
   """Encapsulates methods to add nacl commands to a buildbot factory."""
-
-  # This is needed to set legacy perf links. Can be removed when fully converted
-  # to the perf dashboard (chromium-perf.appspot.com). See
-  # scripts/master/factory/commands.py for how this is used.
-  PERF_BASE_URL = config.Master.NaClBase.perf_base_url
 
   def __init__(self, factory=None, build_dir=None, target_platform=None):
     commands.FactoryCommands.__init__(self, factory, 'Release', build_dir,
@@ -84,16 +76,9 @@ class NativeClientCommands(commands.FactoryCommands):
         '%(triggered_by_buildnumber:-None)s')
     env['BUILDBOT_TRIGGERED_BY_SLAVENAME'] = WithProperties(
         '%(triggered_by_slavename:-None)s')
-    if 'test_name' not in factory_properties:
-      test_class = chromium_step.AnnotatedCommand
-    else:
-      test_name = factory_properties.get('test_name')
-      test_class = self.GetPerfStepClass(
-          factory_properties, test_name, process_log.GraphingLogProcessor,
-          command_class=chromium_step.AnnotatedCommand)
     if usePython:
       command = [self._python] + command
-    self._factory.addStep(test_class,
+    self._factory.addStep(chromium_step.AnnotatedCommand,
                           name='annotate',
                           description='annotate',
                           timeout=timeout,
