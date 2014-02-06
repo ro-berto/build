@@ -334,7 +334,7 @@ CHROMIUM_LKCR_STEPS = {
     ],
   },  # chromium.mac
   'chromium.linux': {
-    'Linux Aura Builder': [
+    'Linux GTK Builder': [
       'compile',
       'runhooks',
       'update',
