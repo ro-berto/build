@@ -178,10 +178,13 @@ class DartCommands(commands.FactoryCommands):
       configuration = (options['mode'], arch, compiler, runtime)
       base_cmd = ('python ' + self._tools_dir + '/test.py '
                   ' --progress=line --report --time --mode=%s --arch=%s '
-                  '--compiler=%s --runtime=%s --failure-summary '
-                  '--copy-coredumps'
+                  '--compiler=%s --runtime=%s --failure-summary'
                  ) % configuration
       vm_options = options.get('vm_options', None)
+      # Currently we only do this on bleeding since scripts have not landed
+      # on trunk/stable yet.
+      if channel and channel.name == 'be':
+        base_cmd += ' --copy-coredumps'
       if vm_options:
         base_cmd += ' --vm-options=%s' % vm_options
 
