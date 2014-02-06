@@ -12,6 +12,7 @@ import logging
 import os
 import socket
 import sys
+import tempfile
 import urllib
 
 from common import chromium_utils
@@ -46,14 +47,6 @@ def send_alert(path, left):
             str(e))
 
 
-def safe_rmdir(path):
-  """Tries to delete a directory."""
-  try:
-    os.rmdir(path)
-  except OSError:
-    pass  # Ignore failures, this is best effort only
-
-
 def cleanup_directory(directory_to_clean):
   """Cleans up a directory.
 
@@ -63,19 +56,10 @@ def cleanup_directory(directory_to_clean):
   Args:
     directory_to_clean: directory to clean, the directory itself is not deleted.
   """
-  removed_file_count = 0
-  for root, dirs, files in os.walk(directory_to_clean, topdown=False):
-    for name in files:
-      try:
-        os.remove(os.path.join(root, name))
-        removed_file_count = removed_file_count + 1
-      except OSError:
-        pass  # Ignore failures, this is best effort only
-    for name in dirs:
-      safe_rmdir(os.path.join(root, name))
-    sys.stdout.write('.')
-    sys.stdout.flush()
-  print '\nRemoved %d files from %s' % (removed_file_count, directory_to_clean)
+  try:
+    chromium_utils.RemoveDirectory(directory_to_clean)
+  except OSError as e:
+    print 'Exception removing %s: %s' % (directory_to_clean, e)
 
 
 def remove_old_isolate_directories(slave_path):
@@ -83,7 +67,19 @@ def remove_old_isolate_directories(slave_path):
   for path in glob.iglob(os.path.join(slave_path, '*', 'build', 'isolate*')):
     print 'Removing %s' % path
     cleanup_directory(path)
-    safe_rmdir(path)
+
+
+def remove_old_isolate_execution_directories_impl_(directory):
+  """Removes all the old directories from past isolate executions."""
+  for path in glob.iglob(os.path.join(directory, 'run_tha_test*')):
+    print 'Removing %s' % path
+    cleanup_directory(path)
+
+
+def remove_old_isolate_execution_directories(slave_path):
+  """Removes all the old directories from past isolate executions."""
+  remove_old_isolate_execution_directories_impl_(tempfile.gettempdir())
+  remove_old_isolate_execution_directories_impl_(slave_path)
 
 
 def remove_build_dead(slave_path):
@@ -91,7 +87,6 @@ def remove_build_dead(slave_path):
   for path in glob.iglob(os.path.join(slave_path, '*', 'build.dead')):
     print 'Removing %s' % path
     cleanup_directory(path)
-    safe_rmdir(path)
 
 
 def get_free_space(path):
@@ -124,6 +119,7 @@ def main_win():
     slave_path =  'c:\\b\\build\\slave'
   remove_build_dead(slave_path)
   remove_old_isolate_directories(slave_path)
+  remove_old_isolate_execution_directories(slave_path)
   # TODO(maruel): Temporary, add back.
   #cleanup_directory(os.environ['TEMP'])
   check_free_space_path('c:\\')
@@ -149,6 +145,7 @@ def main_mac():
   slave_utils.RemoveChromeTemporaryFiles()
   remove_build_dead('/b/build/slave')
   remove_old_isolate_directories('/b/build/slave')
+  remove_old_isolate_execution_directories('/b/build/slave')
   # On the Mac, clearing out the entire tmp folder could be problematic,
   # as it might remove files in use by apps not related to the build.
   if os.path.isdir('/b'):
@@ -163,6 +160,7 @@ def main_linux():
   slave_utils.RemoveChromeTemporaryFiles()
   remove_build_dead('/b/build/slave')
   remove_old_isolate_directories('/b/build/slave')
+  remove_old_isolate_execution_directories('/b/build/slave')
   # TODO(maruel): Temporary, add back.
   # cleanup_directory('/tmp')
   if os.path.isdir('/b'):
