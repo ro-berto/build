@@ -96,7 +96,8 @@ def GenSteps(api):
       'target':  'Release',
       'target_os':  None,
       'target_platform':  'linux2',
-      'tools_dir':  str(api.path.slave_build('src', 'tools'))
+      'tools_dir':  str(api.path.slave_build('src', 'tools')),
+      'run_reference_build': False,
     }
 
     for test in PERF_TESTS:
@@ -113,13 +114,14 @@ def GenSteps(api):
 
 def GenTests(api):
   for plat in ('win', 'mac', 'linux'):
-    for bits in (32, 64):
+    for bits in (64,):
       for use_mirror in (True, False):
         yield (
           api.test('basic_%s_%s_Mirror%s' % (plat, bits, use_mirror)) +
           api.properties(
               TARGET_BITS=bits,
               USE_MIRROR=use_mirror,
+              perf_id='dartium-linux-release',
               deps='dartium.deps') +
           api.platform(plat, bits)
       )
