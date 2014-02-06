@@ -206,10 +206,13 @@ class TryJobBase(TryBase):
     """Current job extra properties that are not related to the source stamp.
     Initialize with the Scheduler's base properties.
     """
-    keys = (
+    always_included_keys = (
+      'orig_revision',
+    )
+
+    optional_keys = (
       'clobber',
       'issue',
-      'orig_revision',
       'patch_url',
       'patchset',
       'requester',
@@ -217,10 +220,20 @@ class TryJobBase(TryBase):
       'root',
       'try_job_key',
     )
+
     # All these settings have no meaning when False or not set, so don't set
     # them in that case.
-    properties = dict((i, options[i]) for i in keys if options.get(i))
+    properties = dict((i, options[i]) for i in optional_keys if options.get(i))
+
+    # These settings are meaningful even if the value evaluates to False
+    # or None. Note that when options don't contain given key, it will
+    # be set to None.
+    properties.update(dict((i, options.get(i)) for i in always_included_keys))
+
+    # Specially evaluated properties, e.g. ones where key name is different
+    # between properties and options.
     properties['testfilter'] = options['bot'].get(builder, None)
+
     props = Properties()
     props.updateFromProperties(self.properties)
     props.update(properties, self._PROPERTY_SOURCE)
