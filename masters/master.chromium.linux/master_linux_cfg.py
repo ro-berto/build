@@ -86,7 +86,6 @@ linux_all_test_targets = [
 
 linux_gtk_test_targets = [
   'app_list_unittests',
-  'aura_builder',
   'compositor_unittests',
 ]
 
@@ -230,7 +229,6 @@ F('rel_gtk_unit', linux_tester().ChromiumFactory(
     build_url=rel_gtk_archive,
     tests=[
       'app_list_unittests',
-      'aura',
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
@@ -261,7 +259,6 @@ F('rel_gtk_unit', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
-      'views',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
