@@ -24,6 +24,8 @@ def GenSteps(api):
   yield droid.symlink_chromium_into_android_tree_step()
   yield droid.gyp_webview_step()
 
+  yield droid.incompatible_directories_check_step()
+
   # TODO(android): use api.chromium.compile for this
   yield droid.compile_step(
     build_tool='make-android',

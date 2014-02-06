@@ -135,7 +135,13 @@ class AOSPApi(recipe_api.RecipeApi):
     yield self.m.step('gyp_webview', self.with_lunch_command + [
       self.c.slave_chromium_in_android_path('android_webview', 'tools',
                                             'gyp_webview')],
-      cwd=self.c.slave_chromium_in_android_path)
+      cwd=self.m.path.checkout)
+
+  def incompatible_directories_check_step(self):
+    webview_license_tool_path = self.m.path.checkout(
+        'android_webview', 'tools', 'webview_licenses.py')
+    yield self.m.python('incompatible directories', webview_license_tool_path,
+                        ['incompatible_directories'])
 
   def compile_step(self, build_tool, step_name='compile', targets=None,
                    use_goma=True, src_dir=None, target_out_dir=None,
