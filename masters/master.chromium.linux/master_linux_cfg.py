@@ -83,10 +83,12 @@ linux_all_test_targets = [
   'url_unittests',
   'webkit_compositor_bindings_unittests',
 ]
-
-linux_gtk_test_targets = [
+linux_aura_targets = [
+  'aura_unittests',
   'app_list_unittests',
   'compositor_unittests',
+  'events_unittests',
+  'views_unittests',
 ]
 
 goma_ninja_options = [
@@ -126,7 +128,7 @@ B('Linux Builder', 'rel', 'compile', 'linux_rel',
   auto_reboot=False, notify_on_missing=True)
 F('rel', linux().ChromiumFactory(
     slave_type='Builder',
-    options=goma_ninja_options + linux_all_test_targets +
+    options=goma_ninja_options + linux_all_test_targets + linux_aura_targets +
             ['sync_integration_tests', 'chromium_swarm_tests'],
     tests=['check_deps'],
     factory_properties={
@@ -148,6 +150,8 @@ F('rel_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_archive,
     tests=[
+      'app_list_unittests',
+      'aura',
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
@@ -155,11 +159,13 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'cc_unittests',
       'chromedriver_unittests',
       'components_unittests',
+      'compositor',
       'content_browsertests',
       'content_unittests',
       'crypto_unittests',
       'dbus',
       'device_unittests',
+      'events',
       'google_apis_unittests',
       'googleurl',
       'gpu',
@@ -178,6 +184,7 @@ F('rel_unit', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
+      'views_unittests',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
@@ -205,7 +212,6 @@ B('Linux GTK Builder', 'rel_gtk', 'compile', 'linux_rel',
 F('rel_gtk', linux().ChromiumFactory(
     slave_type='Builder',
     options=goma_ninja_options + linux_all_test_targets +
-            linux_gtk_test_targets +
             ['sync_integration_tests', 'chromium_swarm_tests'],
     tests=['check_deps'],
     factory_properties={
@@ -228,7 +234,6 @@ F('rel_gtk_unit', linux_tester().ChromiumFactory(
     slave_type='Tester',
     build_url=rel_gtk_archive,
     tests=[
-      'app_list_unittests',
       'base_unittests',
       'browser_tests',
       'cacheinvalidation_unittests',
@@ -292,7 +297,7 @@ B('Linux Builder (dbg)(32)', 'dbg_32', 'compile', 'linux_dbg',
 F('dbg_32', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=goma_ninja_options + linux_all_test_targets,
+    options=goma_ninja_options + linux_all_test_targets + linux_aura_targets,
     factory_properties={
         'gclient_env': {
             'GYP_DEFINES':'target_arch=ia32',
@@ -332,16 +337,20 @@ F('dbg_unit_32_2', linux_tester().ChromiumFactory(
     build_url=dbg_32_archive,
     target='Debug',
     tests=[
+      'app_list_unittests',
+      'aura',
       'base_unittests',
       'cacheinvalidation_unittests',
       'cast',
       'cc_unittests',
       'chromedriver_unittests',
       'components_unittests',
+      'compositor',
       'content_unittests',
       'crypto_unittests',
       'dbus',
       'device_unittests',
+      'events',
       'googleurl',
       'gpu',
       'interactive_ui_tests',
@@ -357,6 +366,7 @@ F('dbg_unit_32_2', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
+      'views_unittests',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
@@ -367,7 +377,7 @@ B('Linux Builder (dbg)', 'dbg', 'compile', 'linux_dbg',
 F('dbg', linux().ChromiumFactory(
     slave_type='Builder',
     target='Debug',
-    options=goma_ninja_options + linux_all_test_targets,
+    options=goma_ninja_options + linux_all_test_targets + linux_aura_targets,
     factory_properties={
         'gclient_env': {
             'GYP_GENERATORS':'ninja',
@@ -402,16 +412,20 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
     build_url=dbg_archive,
     target='Debug',
     tests=[
+      'app_list_unittests',
+      'aura',
       'base_unittests',
       'cacheinvalidation_unittests',
       'cast',
       'cc_unittests',
       'chromedriver_unittests',
       'components_unittests',
+      'compositor',
       'content_unittests',
       'crypto_unittests',
       'dbus',
       'device_unittests',
+      'events',
       'google_apis_unittests',
       'googleurl',
       'gpu',
@@ -428,6 +442,7 @@ F('dbg_unit_2', linux_tester().ChromiumFactory(
       'unit_sql',
       'unit_sync',
       'unit_unit',
+      'views_unittests',
       'webkit_compositor_bindings_unittests',
     ],
     factory_properties={'sharded_tests': sharded_tests,
