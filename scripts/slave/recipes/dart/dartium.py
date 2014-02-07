@@ -55,7 +55,7 @@ def GenSteps(api):
              'svn://svn-mirror.golo.chromium.org/dart')
     return '/'.join((BASES[USE_MIRROR],) + pieces)
 
-  deps_name = api.properties.get('deps', 'dartium_deps')
+  deps_name = api.properties.get('deps', 'dartium.deps')
   s.url = DartRepositoryURL('branches', 'bleeding_edge', 'deps', deps_name)
   s.name = deps_name
   s.custom_deps = api.properties.get('gclient_custom_deps') or {}
@@ -92,12 +92,12 @@ def GenSteps(api):
       'build_dir':  'src/out',
       'expectations':  True,
       'halt_on_missing_build':  True,
+      'run_reference_build': False,
       'show_perf_results':  True,
       'target':  'Release',
       'target_os':  None,
       'target_platform':  'linux2',
       'tools_dir':  str(api.path.slave_build('src', 'tools')),
-      'run_reference_build': False,
     }
 
     for test in PERF_TESTS:
@@ -108,7 +108,8 @@ def GenSteps(api):
           api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
           [fp], name=test, python_mode=True,
           results_url=dashboard_upload_url,
-          annotate='graphing', perf_dashboard_id=test, test_type=test
+          annotate='graphing', perf_dashboard_id=test, test_type=test,
+          revision=s.revision,
       )
 
 
@@ -122,6 +123,7 @@ def GenTests(api):
               TARGET_BITS=bits,
               USE_MIRROR=use_mirror,
               perf_id='dartium-linux-release',
-              deps='dartium.deps') +
+              deps='dartium.deps',
+              revision='12345') +
           api.platform(plat, bits)
       )

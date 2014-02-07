@@ -87,7 +87,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               results_url=None, perf_dashboard_id=None, test_type=None,
               generate_json_file=False, results_directory=None,
               build_number=None, builder_name=None, python_mode=False,
-              spawn_dbus=True, parallel=False, **kwargs):
+              spawn_dbus=True, parallel=False, revision=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -125,6 +125,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--no-spawn-dbus')
     if parallel:
       full_args.append('--parallel')
+    if revision:
+      full_args.append('--revision=%s' % revision)
     full_args.append(test)
     full_args.extend(args)
 
