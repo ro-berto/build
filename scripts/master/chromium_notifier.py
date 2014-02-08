@@ -9,6 +9,7 @@ it and also reuse some of its methods to send emails.
 """
 
 import datetime
+import os
 import re
 import time
 import urllib
@@ -224,8 +225,11 @@ class ChromiumNotifier(MailNotifier):
     return defer.succeed(0)
 
   def sendMessage(self, message, recipients):
-    if not self.enable_mail:
-      log.msg('Not sending mail to %r:\n%s' % (recipients, str(message)))
+    if os.path.exists('.suppress_mailer') or not self.enable_mail:
+      format_string = 'Not sending mail to %r (suppressed!):\n%s'
+      if not self.enable_mail:
+        format_string = 'Not sending mail to %r:\n%s'
+      log.msg(format_string % (recipients, str(message)))
       return None
     return MailNotifier.sendMessage(self, message, recipients)
 

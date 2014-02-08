@@ -16,6 +16,7 @@ Since the behavior is very similar to the MainNotifier, we simply inherit from
 it and also reuse some of its methods to send emails.
 """
 
+import os
 import urllib
 
 from buildbot.status.builder import FAILURE
@@ -187,6 +188,12 @@ class GateKeeper(chromium_notifier.ChromiumNotifier):
     latest_revision = build_utils.getLatestRevision(build_status)
 
     if not self.tree_status_url:
+      self._last_closure_revision = latest_revision
+      return
+
+    if os.path.exists('.suppress_gatekeeper'):
+      log.msg('[gatekeeper] Suppression file is in place, will not close for '
+              'rev %s' % str(latest_revision))
       self._last_closure_revision = latest_revision
       return
 
