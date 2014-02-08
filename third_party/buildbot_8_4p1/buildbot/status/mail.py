@@ -587,7 +587,12 @@ class MailNotifier(base.StatusReceiverMultiService):
                                         build=build, results=build.results)
             msgdict['body'] += tmp['body']
             msgdict['body'] += '\n\n'
+            # This is terrible. Whichever build is iterated over last will
+            # overwrite the subject and type set by all previous builds.
+            # But we never iterate over more than one build, so we'll
+            # just do this anyway and try not to lose any sleep over it.
             msgdict['type'] = tmp['type']
+            msgdict['subject'] = tmp['subject']
             
         m = self.createEmail(msgdict, name, self.master_status.getTitle(),
                              results, builds, patches, logs)
