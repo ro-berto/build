@@ -128,7 +128,7 @@ F('linux_tsan_factory', linux().WebRTCFactory(
     tests=['tsan_' + test for test in tests],
     factory_properties={
         'needs_valgrind': True,
-        'gclient_env': {'GYP_DEFINES': 'build_for_tool=tsan'},
+        'gclient_env': {'GYP_DEFINES': 'build_for_tool=memcheck'},
     }))
 
 B('Linux Asan', 'linux_asan_factory', scheduler=scheduler)
