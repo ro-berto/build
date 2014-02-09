@@ -472,7 +472,7 @@ def RemoveDirectory(*path):
 
 
 def CopyFileToDir(src_path, dest_dir, dest_fn=None):
-  """Copies the file found at src_path to the dest_dir directory.
+  """Copies the file found at src_path to the dest_dir directory, with metadata.
 
   If dest_fn is specified, the src_path is copied to that name in dest_dir,
   otherwise it is copied to a file of the same name.
@@ -487,9 +487,9 @@ def CopyFileToDir(src_path, dest_dir, dest_fn=None):
     raise PathNotFound('Unable to find dir %s' % dest_dir)
   src_file = os.path.basename(src_path)
   if dest_fn:
-    shutil.copy(src_path, os.path.join(dest_dir, dest_fn))
+    shutil.copy2(src_path, os.path.join(dest_dir, dest_fn))
   else:
-    shutil.copy(src_path, os.path.join(dest_dir, src_file))
+    shutil.copy2(src_path, os.path.join(dest_dir, src_file))
 
 
 def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
@@ -500,7 +500,7 @@ def MakeZip(output_dir, archive_name, file_list, file_relative_dir,
   the archive_name, which will be created if necessary and emptied if it
   already exists.  The files are then then packed using archive names
   relative to the output_dir.  That is, if the zipfile is unpacked in place,
-  it will create a directory identical to the new archiev_name directory, in
+  it will create a directory identical to the new archive_name directory, in
   the output_dir.  The zip file will be named as the archive_name, plus
   '.zip'.
 
