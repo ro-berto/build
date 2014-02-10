@@ -83,34 +83,37 @@ def GenSteps(api):
           '--build-dir', api.chromium.c.build_dir]
   yield api.chromium.runtest(test, args, name='webkit_tests')
 
-  if api.platform.is_linux:
-    dashboard_upload_url = 'https://chromeperf.appspot.com'
-    build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs)
-    factory_properties = {
-      'blink_config':  'chromium',
-      'browser_exe':  str(build_exe('chrome')),
-      'build_dir':  'src/out',
-      'expectations':  True,
-      'halt_on_missing_build':  True,
-      'run_reference_build': False,
-      'show_perf_results':  True,
-      'target':  'Release',
-      'target_os':  None,
-      'target_platform':  'linux2',
-      'tools_dir':  str(api.path.slave_build('src', 'tools')),
-    }
+  dashboard_upload_url = 'https://chromeperf.appspot.com'
+  build_exe = api.chromium.c.build_dir(api.chromium.c.build_config_fs,
+                                       platform_ext={'win': '.exe'})
+  target_platform = {'linux': 'linux2',
+                     'mac': 'darwin',
+                     'win': 'win32'}[api.platform.name]
+  factory_properties = {
+    'blink_config':  'chromium',
+    'browser_exe':  str(build_exe('chrome')),
+    'build_dir':  'src/out',
+    'expectations':  True,
+    'halt_on_missing_build':  True,
+    'run_reference_build': True,
+    'show_perf_results':  True,
+    'target':  'Release',
+    'target_os':  None,
+    'target_platform':  target_platform,
+    'tools_dir':  str(api.path.slave_build('src', 'tools')),
+  }
 
-    for test in PERF_TESTS:
-      factory_properties['test_name'] = test
-      factory_properties['step_name'] = test
-      fp = "--factory-properties=%s" % json.dumps(factory_properties)
-      yield api.chromium.runtest(
-          api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
-          [fp], name=test, python_mode=True,
-          results_url=dashboard_upload_url,
-          annotate='graphing', perf_dashboard_id=test, test_type=test,
-          revision=s.revision,
-      )
+  for test in PERF_TESTS:
+    factory_properties['test_name'] = test
+    factory_properties['step_name'] = test
+    fp = "--factory-properties=%s" % json.dumps(factory_properties)
+    yield api.chromium.runtest(
+        api.chromium.m.path.build('scripts', 'slave', 'telemetry.py'),
+        [fp], name=test, python_mode=True,
+        results_url=dashboard_upload_url,
+        annotate='graphing', perf_dashboard_id=test, test_type=test,
+        revision=s.revision,
+    )
 
 
 def GenTests(api):

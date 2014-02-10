@@ -141,7 +141,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"blink_perf.animation\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"blink_perf.animation\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"blink_perf.animation\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"blink_perf.animation\"}"
     ],
     "name": "blink_perf.animation"
   },
@@ -166,7 +166,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"canvasmark\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"canvasmark\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"canvasmark\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"canvasmark\"}"
     ],
     "name": "canvasmark"
   },
@@ -191,7 +191,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoreattr\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoreattr\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoreattr\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoreattr\"}"
     ],
     "name": "dromaeo.domcoreattr"
   },
@@ -216,7 +216,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoremodify\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoremodify\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoremodify\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoremodify\"}"
     ],
     "name": "dromaeo.domcoremodify"
   },
@@ -241,7 +241,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcorequery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcorequery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcorequery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcorequery\"}"
     ],
     "name": "dromaeo.domcorequery"
   },
@@ -266,7 +266,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoretraverse\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoretraverse\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoretraverse\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoretraverse\"}"
     ],
     "name": "dromaeo.domcoretraverse"
   },
@@ -291,7 +291,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrjquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrjquery\"}"
     ],
     "name": "dromaeo.jslibattrjquery"
   },
@@ -316,7 +316,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrprototype\"}"
     ],
     "name": "dromaeo.jslibattrprototype"
   },
@@ -341,7 +341,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventjquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventjquery\"}"
     ],
     "name": "dromaeo.jslibeventjquery"
   },
@@ -366,7 +366,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventprototype\"}"
     ],
     "name": "dromaeo.jslibeventprototype"
   },
@@ -391,7 +391,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyjquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyjquery\"}"
     ],
     "name": "dromaeo.jslibmodifyjquery"
   },
@@ -416,7 +416,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyprototype\"}"
     ],
     "name": "dromaeo.jslibmodifyprototype"
   },
@@ -441,7 +441,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstylejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstylejquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstylejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstylejquery\"}"
     ],
     "name": "dromaeo.jslibstylejquery"
   },
@@ -466,7 +466,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstyleprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstyleprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstyleprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstyleprototype\"}"
     ],
     "name": "dromaeo.jslibstyleprototype"
   },
@@ -491,7 +491,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraversejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraversejquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraversejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraversejquery\"}"
     ],
     "name": "dromaeo.jslibtraversejquery"
   },
@@ -516,7 +516,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraverseprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraverseprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraverseprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraverseprototype\"}"
     ],
     "name": "dromaeo.jslibtraverseprototype"
   },
@@ -541,7 +541,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"image_decoding.image_decoding_measurement\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"image_decoding.image_decoding_measurement\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"image_decoding.image_decoding_measurement\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"image_decoding.image_decoding_measurement\"}"
     ],
     "name": "image_decoding.image_decoding_measurement"
   },
@@ -566,7 +566,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"kraken\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"kraken\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"kraken\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"kraken\"}"
     ],
     "name": "kraken"
   },
@@ -591,7 +591,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"octane\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"octane\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"octane\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"octane\"}"
     ],
     "name": "octane"
   },
@@ -616,7 +616,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"pica.pica\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"pica.pica\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"pica.pica\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"pica.pica\"}"
     ],
     "name": "pica.pica"
   },
@@ -641,7 +641,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"spaceport\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"spaceport\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"spaceport\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"spaceport\"}"
     ],
     "name": "spaceport"
   },
@@ -666,7 +666,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"sunspider\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": false, \"build_dir\": \"src/out\", \"step_name\": \"sunspider\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"sunspider\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"sunspider\"}"
     ],
     "name": "sunspider"
   }
