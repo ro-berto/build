@@ -665,7 +665,7 @@ class HTMLStatusGenerator(StatusGenerator):
     row = [
         revision,
         '<td class="revision"><a href="%s" target="_blank">%s</a></td>\n' % (
-            tmpl % urllib.quote(str(revision)), revision)]
+            tmpl % urllib.quote(revision), revision)]
     self.rows.append(row)
 
   def build_cb(self, master, builder, status, build_num=None):
@@ -950,7 +950,7 @@ def CollateRevisionHistory(build_data, lkgr_steps, revcheck, revcmp):
               'sourceStamp', {}).get('revision', None)
         if not revision or not revcheck(revision):
           continue
-        revisions.add(revision)
+        revisions.add(str(revision))
         status, _ = EvaluateBuildData(
             this_build_data, lkgr_steps[master][builder])
         builder_history.append((revision, status, build_num))
