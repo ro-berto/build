@@ -433,7 +433,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
           'gpu_unittests', fp, arg_list=['--gmock_verbose=error'])
     if R('googleurl', 'url_unittests'):
       f.AddGTestTestStep('url_unittests', fp)
-    if R('googleurl_br'):
+    if R('url_unittests_br'):
       f.AddBuildrunnerGTest('url_unittests', fp)
     if R('jingle', 'jingle_unittests'):
       f.AddGTestTestStep('jingle_unittests', fp)
