@@ -27,6 +27,11 @@ def main():
     print 'Path %s isn\'t a directory, not running gclient.' % build_directory
     return 0
 
+  if os.path.isfile(os.path.join(build_directory, 'update.flag')):
+    print 'update.flag file found: bot_update has run and checkout is already '
+    print 'in a consistent state. No actions will be performed in this step.'
+    return 0
+
   gclient_config = os.path.join(build_directory, '.gclient')
   if not os.path.exists(gclient_config):
     print ('%s doesn\'t exist, not a gclient-controlled checkout.' %

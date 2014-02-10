@@ -245,6 +245,7 @@ class GClient(SourceBaseCommand):
     self.project = None
     # TODO(maruel): Remove once buildbot 0.8.4p1 conversion is complete.
     self.sourcedata = None
+    self.do_nothing = None
     chromium_utils.GetParentClass(GClient).__init__(self, *args, **kwargs)
 
   def setup(self, args):
@@ -289,8 +290,21 @@ class GClient(SourceBaseCommand):
     self.sourcedatafile = os.path.join(self.builder.basedir,
                                        self.srcdir,
                                        ".buildbot-sourcedata")
+    self.do_nothing = os.path.isfile(os.path.join(self.builder.basedir,
+                                                  self.srcdir,
+                                                  'update.flag'))
 
-    d = defer.succeed(None)
+    d = defer.succeed(0)
+
+    if self.do_nothing:
+      # If bot update is run, we don't need to run the traditional update step.
+      msg = 'update.flag file found: bot_update has run and checkout is \n'
+      msg += 'already in a consistent state.\n'
+      msg += 'No actions will be performed in this step.'
+      self.sendStatus({'header': msg})
+      d.addCallback(self._sendRC)
+      return d
+
     # Do we need to clobber anything?
     if self.mode in ("copy", "clobber", "export"):
       d.addCallback(self.doClobber, self.workdir)

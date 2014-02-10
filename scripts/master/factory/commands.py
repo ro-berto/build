@@ -935,10 +935,14 @@ class FactoryCommands(object):
     cmd = ['python', self._bot_update_tool, '--specs', gclient_specs]
 
     PROPERTIES = {
-        'root': '%(root:~src)s',
+        'root': '%(root:-)s',
         'issue': '%(issue:-)s',
         'patchset': '%(patchset:-)s',
-        'master': '%(mastername:-)s'
+        'master': '%(mastername:-)s',
+        'revision': '%(revision:-)s',
+        'patch_url': '%(patch_url:-)s',
+        'slave_name': '%(slavename:-)s',
+        'builder_name': '%(buildername:-)s',
     }
 
     for property_name, property_expr in PROPERTIES.iteritems():
@@ -947,7 +951,7 @@ class FactoryCommands(object):
         cmd.extend(['--%s' % property_name, property_value])
 
     if server:
-      cmd.extend(['--server', server])
+      cmd.extend(['--rietveld_server', server])
 
     if revision_mapping:
       cmd.extend(['--revision-mapping=%s' % json.dumps(revision_mapping)])
