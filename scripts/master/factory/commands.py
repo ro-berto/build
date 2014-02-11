@@ -932,7 +932,7 @@ class FactoryCommands(object):
 
     This is meant to replace all gclient revert/sync steps.
     """
-    cmd = ['python', self._bot_update_tool, '--specs', gclient_specs]
+    cmd = ['python', '-u', self._bot_update_tool, '--specs', gclient_specs]
 
     PROPERTIES = {
         'root': '%(root:-)s',
