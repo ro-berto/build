@@ -161,7 +161,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chrome-infra/chromium.linux/Linux GTK Builder",
+      "gs://chromium-linux-archive/chromium.linux/Linux GTK Builder",
       "--factory-properties",
       "{\"buildername\": \"Linux GTK Builder\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
       "--build-properties",

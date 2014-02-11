@@ -132,8 +132,7 @@ BUILDERS = {
   },
   'chromium.linux': {
     'settings': {
-      #'build_gs_bucket': 'chromium-linux-archive',
-      'build_gs_bucket': 'chrome-infra',
+      'build_gs_bucket': 'chromium-linux-archive',
     },
     'builders': {
       'Linux Builder': {

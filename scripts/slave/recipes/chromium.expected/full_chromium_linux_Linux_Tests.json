@@ -139,7 +139,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chrome-infra/chromium.linux/Linux Builder/full-build-linux.zip",
+      "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
       "--factory-properties",
       "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
       "--build-properties",

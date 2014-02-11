@@ -111,7 +111,7 @@
       "--target",
       "Debug",
       "--build-url",
-      "gs://chrome-infra/chromium.linux/Linux Builder (dbg)/full-build-linux.zip",
+      "gs://chromium-linux-archive/chromium.linux/Linux Builder (dbg)/full-build-linux.zip",
       "--factory-properties",
       "{\"buildername\": \"Linux Tests (dbg)(1)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder (dbg)\", \"recipe\": \"chromium\"}",
       "--build-properties",

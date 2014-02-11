@@ -138,7 +138,7 @@
       "--target",
       "Release",
       "--build-url",
-      "gs://chrome-infra/chromium.linux/Linux GTK Builder/full-build-linux.zip",
+      "gs://chromium-linux-archive/chromium.linux/Linux GTK Builder/full-build-linux.zip",
       "--factory-properties",
       "{\"buildername\": \"Linux GTK Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux GTK Builder\", \"recipe\": \"chromium\"}",
       "--build-properties",
