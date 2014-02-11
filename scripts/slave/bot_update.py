@@ -95,14 +95,15 @@ class SubprocessFailed(Exception):
   pass
 
 
-def call(*args):
+def call(*args, **kwargs):
   """Interactive subprocess call."""
+  kwargs['stdout'] = subprocess.PIPE
+  kwargs['stderr'] = subprocess.STDOUT
   for attempt in xrange(RETRIES):
     attempt_msg = '(retry #%d)' % attempt if attempt else ''
     print '===Running %s%s===' % (' '.join(args), attempt_msg)
     start_time = time.time()
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT)
+    proc = subprocess.Popen(args, **kwargs)
     # This is here because passing 'sys.stdout' into stdout for proc will
     # produce out of order output.
     while True:
@@ -275,9 +276,9 @@ def git_checkout(solutions, revision):
       call('git', 'clone', url, sln_dir)
 
     # Clean out .DEPS.git changes first.
-    call('git', '-C', sln_dir, 'reset', '--hard')
-    call('git', '-C', sln_dir, 'clean', '-df')
-    call('git', '-C', sln_dir, 'pull', 'origin', 'master')
+    call('git', 'reset', '--hard', cwd=sln_dir)
+    call('git', 'clean', '-df', cwd=sln_dir)
+    call('git', 'pull', 'origin', 'master', cwd=sln_dir)
     # TODO(hinoka): We probably have to make use of revision mapping.
     if first_solution and revision and revision.lower() != 'head':
       if revision and revision.isdigit() and len(revision) < 40:
@@ -286,9 +287,9 @@ def git_checkout(solutions, revision):
       else:
         # rev_num is actually a git hash or ref, we can just use it.
         git_ref = revision
-      call('git', '-C', sln_dir, 'checkout', git_ref)
+      call('git', 'checkout', git_ref, cwd=sln_dir)
     else:
-      call('git', '-C', sln_dir, 'checkout', 'origin/master')
+      call('git', 'checkout', 'origin/master', cwd=sln_dir)
 
     first_solution = False
 
