@@ -261,6 +261,13 @@ def asan(c):
   c.gyp_env.GYP_DEFINES['lsan'] = 1
 
 @config_ctx()
+def gtk(c):
+  if c.TARGET_PLATFORM != 'linux':
+    raise BadConf('gtk is only applicable to Linux targets')
+
+  c.gyp_env.GYP_DEFINES['use_aura'] = 0
+
+@config_ctx()
 def trybot_flavor(c):
   fastbuild(c, optional=True)
   dcheck(c, optional=True)

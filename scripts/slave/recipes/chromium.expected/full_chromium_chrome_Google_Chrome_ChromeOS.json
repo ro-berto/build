@@ -14,7 +14,8 @@
       "gclient sync",
       "gclient runhooks",
       "cleanup_temp",
-      "compile"
+      "compile",
+      "checkdeps"
     ]
   },
   {
@@ -70,7 +71,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromeos=1 clang=1 component=static_library ffmpeg_branding=ChromeOS gomadir=[BUILD]/goma proprietary_codecs=1 target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir=[BUILD]/goma proprietary_codecs=1 target_arch=x64 use_goma=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -96,14 +97,32 @@
       "--build-tool",
       "ninja",
       "--compiler",
-      "goma-clang",
+      "goma",
       "--mode",
       "official",
       "--goma-dir",
       "[BUILD]/goma",
       "--clobber",
-      "--"
+      "--",
+      "chrome",
+      "chrome_sandbox",
+      "linux_symbols",
+      "symupload"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checkdeps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]

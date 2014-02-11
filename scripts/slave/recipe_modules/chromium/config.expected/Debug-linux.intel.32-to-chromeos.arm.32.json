@@ -272,6 +272,7 @@
       "GYP_GENERATORS": "ninja"
     }
   }, 
+  "gtk": "gtk is only applicable to Linux targets", 
   "klp_builder": {
     "build_config_fs": "Debug", 
     "build_dir": "Path('[CHECKOUT]', 'out')", 

@@ -14,7 +14,8 @@
       "gclient sync",
       "gclient runhooks",
       "cleanup_temp",
-      "compile"
+      "compile",
+      "checkdeps"
     ]
   },
   {
@@ -70,9 +71,9 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 target_arch=x64",
       "GYP_GENERATORS": "ninja",
-      "GYP_MSVS_VERSION": "2010"
+      "GYP_MSVS_VERSION": "2012"
     },
     "name": "gclient runhooks"
   },
@@ -91,7 +92,7 @@
       "-u",
       "[BUILD]\\scripts\\slave\\compile.py",
       "--target",
-      "Release",
+      "Release_x64",
       "--src-dir",
       "[SLAVE_BUILD]\\src",
       "--build-tool",
@@ -105,5 +106,19 @@
       "chrome_official_builder"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]\\src\\tools\\checkdeps\\checkdeps.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checkdeps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   }
 ]

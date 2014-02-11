@@ -179,6 +179,7 @@
   "component_builder": "config \"component_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "dartium_builder": "config \"dartium_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "enormous_tests": "config \"enormous_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 
+  "gtk": "gtk is only applicable to Linux targets", 
   "klp_builder": "config \"klp_builder\" includes \"main_builder\", but [config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]]", 
   "main_builder": "config \"main_builder\" includes \"android_defaults\", but [Can only build android on linux.]", 
   "main_tests": "config \"main_tests\" includes \"tests_base\", but [config \"tests_base\" includes \"android_defaults\", but [Can only build android on linux.]]", 

@@ -193,6 +193,16 @@ class ChromiumApi(recipe_api.RecipeApi):
         spawn_dbus=spawn_dbus,
         env=env)
 
+  def run_telemetry_unittests(self, name):
+    return self.runtest(
+        self.m.path.checkout('tools', 'telemetry', 'run_tests'),
+        args=['--browser=%s' % self.c.BUILD_CONFIG.lower()],
+        annotate='gtest',
+        name=name,
+        test_type=name,
+        python_mode=True,
+        xvfb=True)
+
   def runhooks(self, **kwargs):
     """Run the build-configuration hooks for chromium."""
     env = kwargs.get('env', {})

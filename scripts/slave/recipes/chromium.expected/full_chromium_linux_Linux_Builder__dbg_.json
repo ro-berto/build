@@ -6,7 +6,7 @@
       "[DEPOT_TOOLS]/gclient.py",
       "config",
       "--spec",
-      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}, {'custom_deps': {'src/chrome/test/data/firefox2_profile/searchplugins': None, 'src/chrome/test/data/firefox2_searchplugins': None, 'src/chrome/test/data/firefox3_profile/searchplugins': None, 'src/chrome/test/data/firefox3_searchplugins': None, 'src/chrome/test/data/osdd': None, 'src/chrome/test/data/perf/frame_rate/private': None, 'src/chrome/test/data/plugin': None, 'src/chrome/test/data/ssl/certs': None, 'src/data/autodiscovery': None, 'src/data/esctf': None, 'src/data/mach_ports': None, 'src/data/memory_test': None, 'src/data/mozilla_js_tests': None, 'src/data/page_cycler': None, 'src/data/selenium_core': None, 'src/data/tab_switching': None, 'src/tools/grit/grit/test/data': None, 'src/webkit/data/bmp_decoder': None, 'src/webkit/data/ico_decoder': None, 'src/webkit/data/test_shell/plugins': None, 'src/webkit/data/xbm_decoder': None}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src-internal', 'url': 'svn://svn-mirror.golo.chromium.org/chrome-internal/trunk/src-internal'}]"
+      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
     ],
     "name": "gclient setup",
     "seed_steps": [
@@ -14,7 +14,9 @@
       "gclient sync",
       "gclient runhooks",
       "cleanup_temp",
-      "compile"
+      "compile",
+      "checkdeps",
+      "package build"
     ]
   },
   {
@@ -70,7 +72,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromeos=1 component=static_library ffmpeg_branding=ChromeOS gomadir=[BUILD]/goma proprietary_codecs=1 target_arch=ia32 use_goma=1",
+      "GYP_DEFINES": "component=shared_library gomadir=[BUILD]/goma target_arch=x64 use_goma=1",
       "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
@@ -90,20 +92,77 @@
       "-u",
       "[BUILD]/scripts/slave/compile.py",
       "--target",
-      "Release",
+      "Debug",
       "--src-dir",
       "[SLAVE_BUILD]/src",
       "--build-tool",
       "ninja",
       "--compiler",
       "goma",
-      "--mode",
-      "official",
       "--goma-dir",
       "[BUILD]/goma",
-      "--clobber",
-      "--"
+      "--",
+      "base_unittests",
+      "browser_tests",
+      "cacheinvalidation_unittests",
+      "cast_unittests",
+      "cc_unittests",
+      "chrome",
+      "chromedriver_unittests",
+      "components_unittests",
+      "content_browsertests",
+      "content_unittests",
+      "crypto_unittests",
+      "dbus_unittests",
+      "device_unittests",
+      "google_apis_unittests",
+      "gpu_unittests",
+      "interactive_ui_tests",
+      "ipc_tests",
+      "jingle_unittests",
+      "media_unittests",
+      "net_unittests",
+      "ppapi_unittests",
+      "printing_unittests",
+      "remoting_unittests",
+      "sandbox_linux_unittests",
+      "sql_unittests",
+      "sync_unit_tests",
+      "ui_unittests",
+      "unit_tests",
+      "url_unittests",
+      "webkit_compositor_bindings_unittests"
     ],
     "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checkdeps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/zip_build.py",
+      "--target",
+      "Debug",
+      "--build-url",
+      "gs://chrome-infra/chromium.linux/Linux Builder (dbg)",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Builder (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Builder (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}"
+    ],
+    "name": "package build"
   }
 ]

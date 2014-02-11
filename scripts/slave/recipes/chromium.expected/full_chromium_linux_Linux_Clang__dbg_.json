@@ -1,0 +1,386 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
+    ],
+    "name": "gclient setup",
+    "seed_steps": [
+      "gclient setup",
+      "gclient sync",
+      "gclient runhooks",
+      "cleanup_temp",
+      "compile",
+      "checkdeps",
+      "base_unittests",
+      "components_unittests",
+      "crypto_unittests",
+      "google_apis_unittests",
+      "content_unittests",
+      "device_unittests",
+      "sandbox_linux_unittests",
+      "ui_unittests",
+      "ipc_tests",
+      "sync_unit_tests",
+      "unit_tests",
+      "sql_unittests"
+    ]
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--delete_unversioned_trees",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 170242@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/native_client/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 274981@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/WebKit/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 124383@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/third_party/webrtc/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 120644@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarm_client/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 200767@@@",
+      "@@@STEP_LOG_LINE@json.output@    }, @@@",
+      "@@@STEP_LOG_LINE@json.output@    \"src/tools/swarming_client/\": {@@@",
+      "@@@STEP_LOG_LINE@json.output@      \"revision\": 276089@@@",
+      "@@@STEP_LOG_LINE@json.output@    }@@@",
+      "@@@STEP_LOG_LINE@json.output@  }@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@SET_BUILD_PROPERTY@got_nacl_revision@274981@@@",
+      "@@@SET_BUILD_PROPERTY@got_webkit_revision@124383@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarming_client_revision@276089@@@",
+      "@@@SET_BUILD_PROPERTY@got_webrtc_revision@120644@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@170242@@@",
+      "@@@SET_BUILD_PROPERTY@got_swarm_client_revision@200767@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "clang=1 component=shared_library gomadir=[BUILD]/goma target_arch=x64 use_goma=1",
+      "GYP_GENERATORS": "ninja"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/cleanup_temp.py"
+    ],
+    "name": "cleanup_temp"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--compiler",
+      "goma-clang",
+      "--goma-dir",
+      "[BUILD]/goma",
+      "--",
+      "all",
+      "base_unittests",
+      "components_unittests",
+      "crypto_unittests",
+      "google_apis_unittests",
+      "content_unittests",
+      "device_unittests",
+      "sandbox_linux_unittests",
+      "ui_unittests",
+      "ipc_tests",
+      "sync_unit_tests",
+      "unit_tests",
+      "sql_unittests"
+    ],
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/tools/checkdeps/checkdeps.py",
+      "--json",
+      "/path/to/tmp/json"
+    ],
+    "name": "checkdeps",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "base_unittests"
+    ],
+    "name": "base_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "components_unittests"
+    ],
+    "name": "components_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "crypto_unittests"
+    ],
+    "name": "crypto_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "google_apis_unittests"
+    ],
+    "name": "google_apis_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "content_unittests"
+    ],
+    "name": "content_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "device_unittests"
+    ],
+    "name": "device_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "sandbox_linux_unittests"
+    ],
+    "name": "sandbox_linux_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "ui_unittests"
+    ],
+    "name": "ui_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "ipc_tests"
+    ],
+    "name": "ipc_tests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "sync_unit_tests"
+    ],
+    "name": "sync_unit_tests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "unit_tests"
+    ],
+    "name": "unit_tests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Debug",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Clang (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "sql_unittests"
+    ],
+    "name": "sql_unittests"
+  }
+]
