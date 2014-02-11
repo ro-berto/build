@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 from buildbot.scheduler import Triggerable
+from buildbot.schedulers.basic import SingleBranchScheduler
 
 from master.factory import annotator_factory
 
@@ -10,6 +11,16 @@ m_annotator = annotator_factory.AnnotatorFactory()
 
 def Update(_config, _active_master, c):
   c['schedulers'].extend([
+      SingleBranchScheduler(name='linux_src',
+                            branch='src',
+                            treeStableTimer=60,
+                            builderNames=[
+          'Linux Builder',
+          'Linux GTK Builder',
+          'Linux Builder (dbg)(32)',
+          'Linux Builder (dbg)',
+          'Linux Clang (dbg)',
+      ]),
       Triggerable(name='linux_rel_trigger', builderNames=[
           'Linux Tests',
           'Linux Sync',
