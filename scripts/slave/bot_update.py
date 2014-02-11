@@ -17,6 +17,8 @@ import urlparse
 
 import os.path as path
 
+from common import chromium_utils
+
 
 RECOGNIZED_PATHS = {
     # If SVN path matches key, the entire URL is rewritten to the Git url.
@@ -223,7 +225,7 @@ def ensure_no_checkout(dir_names, scm_dirname):
 
     os.chdir(path.dirname(os.getcwd()))
     print '%s detected in checkout, deleting %s...' % (scm_dirname, build_dir),
-    shutil.rmtree(build_dir)
+    chromium_utils.RemoveDirectory(build_dir)
     print 'done'
     os.mkdir(build_dir)
     os.chdir(build_dir)
