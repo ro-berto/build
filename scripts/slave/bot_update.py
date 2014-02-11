@@ -102,7 +102,7 @@ def call(*args, **kwargs):
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
   for attempt in xrange(RETRIES):
-    attempt_msg = '(retry #%d)' % attempt if attempt else ''
+    attempt_msg = ' (retry #%d)' % attempt if attempt else ''
     print '===Running %s%s===' % (' '.join(args), attempt_msg)
     start_time = time.time()
     proc = subprocess.Popen(args, **kwargs)
@@ -124,6 +124,17 @@ def call(*args, **kwargs):
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
                          (' '.join(args), code, os.getcwd(), RETRIES))
+
+
+def git(*args, **kwargs):
+  """Wrapper around call specifically for Git commands."""
+  git_executable = 'git'
+  # On windows, subprocess doesn't fuzzy-match 'git' to 'git.bat', so we
+  # have to do it explicitly. This is better than passing shell=True.
+  if sys.platform.startswith('win'):
+    git_executable += '.bat'
+  cmd = (git_executable,) + args
+  call(*cmd, **kwargs)
 
 
 def get_gclient_spec(solutions):
@@ -275,12 +286,12 @@ def git_checkout(solutions, revision):
     url = sln['url']
     sln_dir = path.join(build_dir, name)
     if not path.isdir(sln_dir):
-      call('git', 'clone', url, sln_dir)
+      git('clone', url, sln_dir)
 
     # Clean out .DEPS.git changes first.
-    call('git', 'reset', '--hard', cwd=sln_dir)
-    call('git', 'clean', '-df', cwd=sln_dir)
-    call('git', 'pull', 'origin', 'master', cwd=sln_dir)
+    git('reset', '--hard', cwd=sln_dir)
+    git('clean', '-df', cwd=sln_dir)
+    git('pull', 'origin', 'master', cwd=sln_dir)
     # TODO(hinoka): We probably have to make use of revision mapping.
     if first_solution and revision and revision.lower() != 'head':
       if revision and revision.isdigit() and len(revision) < 40:
@@ -289,9 +300,9 @@ def git_checkout(solutions, revision):
       else:
         # rev_num is actually a git hash or ref, we can just use it.
         git_ref = revision
-      call('git', 'checkout', git_ref, cwd=sln_dir)
+      git('checkout', git_ref, cwd=sln_dir)
     else:
-      call('git', 'checkout', 'origin/master', cwd=sln_dir)
+      git('checkout', 'origin/master', cwd=sln_dir)
 
     first_solution = False
 
