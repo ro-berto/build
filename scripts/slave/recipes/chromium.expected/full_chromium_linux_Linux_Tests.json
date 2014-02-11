@@ -16,6 +16,8 @@
       "cleanup_temp",
       "rmtree build directory",
       "extract build",
+      "app_list_unittests",
+      "aura_unittests",
       "interactive_ui_tests",
       "base_unittests",
       "cacheinvalidation_unittests",
@@ -23,6 +25,7 @@
       "cc_unittests",
       "chromedriver_unittests",
       "components_unittests",
+      "compositor_unittests",
       "crypto_unittests",
       "dbus_unittests",
       "google_apis_unittests",
@@ -31,6 +34,7 @@
       "jingle_unittests",
       "content_unittests",
       "device_unittests",
+      "events_unittests",
       "media_unittests",
       "net_unittests",
       "ppapi_unittests",
@@ -43,6 +47,7 @@
       "ipc_tests",
       "sync_unit_tests",
       "unit_tests",
+      "views_unittests",
       "sql_unittests",
       "browser_tests",
       "content_browsertests",
@@ -146,6 +151,46 @@
       "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}"
     ],
     "name": "extract build"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "app_list_unittests"
+    ],
+    "name": "app_list_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "aura_unittests"
+    ],
+    "name": "aura_unittests"
   },
   {
     "allow_subannotations": true,
@@ -286,6 +331,26 @@
       "components_unittests"
     ],
     "name": "components_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "compositor_unittests"
+    ],
+    "name": "compositor_unittests"
   },
   {
     "allow_subannotations": true,
@@ -446,6 +511,26 @@
       "device_unittests"
     ],
     "name": "device_unittests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "events_unittests"
+    ],
+    "name": "events_unittests"
   },
   {
     "allow_subannotations": true,
@@ -690,6 +775,26 @@
       "unit_tests"
     ],
     "name": "unit_tests"
+  },
+  {
+    "allow_subannotations": true,
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/runtest.py",
+      "--target",
+      "Release",
+      "--xvfb",
+      "--factory-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--build-properties",
+      "{\"buildername\": \"Linux Tests\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "--annotate=gtest",
+      "--parallel",
+      "views_unittests"
+    ],
+    "name": "views_unittests"
   },
   {
     "allow_subannotations": true,

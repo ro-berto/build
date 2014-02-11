@@ -102,7 +102,6 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "app_list_unittests",
       "base_unittests",
       "browser_tests",
       "cacheinvalidation_unittests",
