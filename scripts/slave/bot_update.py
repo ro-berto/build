@@ -94,7 +94,9 @@ CACHE_DIR = path.join(SLAVE_DIR, 'cache_dir')
 
 
 class SubprocessFailed(Exception):
-  pass
+  def __init__(self, message, code):
+    Exception.__init__(self, message)
+    self.code = code
 
 
 def call(*args, **kwargs):
@@ -123,7 +125,7 @@ def call(*args, **kwargs):
     print
 
   raise SubprocessFailed('%s failed with code %d in %s after %d attempts.' %
-                         (' '.join(args), code, os.getcwd(), RETRIES))
+                         (' '.join(args), code, os.getcwd(), RETRIES), code)
 
 
 def git(*args, **kwargs):
@@ -289,7 +291,18 @@ def git_checkout(solutions, revision):
       git('clone', url, sln_dir)
 
     # Clean out .DEPS.git changes first.
-    git('reset', '--hard', cwd=sln_dir)
+    try:
+      git('reset', '--hard', cwd=sln_dir)
+    except SubprocessFailed as e:
+      if e.code == 128:
+        # Exited abnormally, theres probably something wrong with the checkout.
+        # Lets wipe the checkout and try again.
+        chromium_utils.RemoveDirectory(sln_dir)
+        git('clone', url, sln_dir)
+        git('reset', '--hard', cwd=sln_dir)
+      else:
+        raise
+
     git('clean', '-df', cwd=sln_dir)
     git('pull', 'origin', 'master', cwd=sln_dir)
     # TODO(hinoka): We probably have to make use of revision mapping.
