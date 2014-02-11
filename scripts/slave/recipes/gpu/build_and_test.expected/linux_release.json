@@ -89,8 +89,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library disable_glibcxx_debug=1 gomadir=[BUILD]/goma internal_gles2_conform_tests=1 target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "component=static_library disable_glibcxx_debug=1 gomadir=[BUILD]/goma internal_gles2_conform_tests=1 target_arch=x64 test_isolation_mode=archive test_isolation_outdir=https://isolateserver.appspot.com use_goma=1"
     },
     "name": "gclient runhooks"
   },

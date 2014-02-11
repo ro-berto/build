@@ -101,8 +101,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma linux_use_tcmalloc=0 lsan=1 target_arch=x64 use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "asan=1 clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma linux_use_tcmalloc=0 lsan=1 target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },

@@ -72,7 +72,6 @@
     ],
     "env": {
       "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 target_arch=x64",
-      "GYP_GENERATORS": "ninja",
       "GYP_MSVS_VERSION": "2012"
     },
     "name": "gclient runhooks"

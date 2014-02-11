@@ -101,8 +101,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma target_arch=x64 use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks"
   },
@@ -1073,8 +1072,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma target_arch=x64 use_goma=1",
-      "GYP_GENERATORS": "ninja"
+      "GYP_DEFINES": "component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma target_arch=x64 use_goma=1"
     },
     "name": "gclient runhooks (2)",
     "~followup_annotations": [

@@ -148,7 +148,9 @@ def BASE(c):
 
 @config_ctx(group='builder')
 def ninja(c):
-  c.gyp_env.GYP_GENERATORS.add('ninja')
+  if c.TARGET_PLATFORM == 'ios':
+    c.gyp_env.GYP_GENERATORS.add('ninja')
+
   c.compile_py.build_tool = 'ninja'
   c.build_dir = Path('[CHECKOUT]', 'out')
 

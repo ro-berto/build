@@ -108,7 +108,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "gclient runhooks"
@@ -144,7 +143,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "compile"
@@ -163,7 +161,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "audio_decoder_unittests"
@@ -182,7 +179,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "common_audio_unittests"
@@ -201,7 +197,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "common_video_unittests"
@@ -220,7 +215,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "modules_tests"
@@ -239,7 +233,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "modules_unittests"
@@ -258,7 +251,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "neteq_unittests"
@@ -277,7 +269,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "system_wrappers_unittests"
@@ -296,7 +287,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "test_support_unittests"
@@ -315,7 +305,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "tools_unittests"
@@ -334,7 +323,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "video_engine_core_unittests"
@@ -353,7 +341,6 @@
       "FOO": "bar",
       "GYP_CROSSCOMPILE": "1",
       "GYP_DEFINES": "OS=android component=static_library fastbuild=1 gomadir=[BUILD]/goma host_os=linux include_tests=1 target_arch=arm use_goma=1",
-      "GYP_GENERATORS": "ninja",
       "GYP_GENERATOR_FLAGS": "default_target=android_builder_webrtc"
     },
     "name": "voice_engine_unittests"
