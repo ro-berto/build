@@ -47,9 +47,6 @@
       "gyp_skia"
     ],
     "cwd": "[SLAVE_BUILD]/skia",
-    "env": {
-      "GYP_DEFINES": "skia_arch_width=64 skia_gpu=0 skia_warnings_as_errors=0"
-    },
     "name": "gyp_skia"
   },
   {
@@ -63,14 +60,12 @@
   },
   {
     "cmd": [
-      "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/tests"
     ],
     "name": "tests"
   },
   {
     "cmd": [
-      "catchsegv",
       "[SLAVE_BUILD]/skia/out/Debug/gm"
     ],
     "name": "gm"

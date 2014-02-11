@@ -9,9 +9,13 @@ from slave import recipe_config_types
 
 class SkiaApi(recipe_api.RecipeApi):
 
+  def setup(self):
+    self.builder_name = self.m.properties['buildername']
+    self.set_config('skia', BUILDER_NAME=self.builder_name)
+    self.c.flavor.set_skia_api(self)
+
   def checkout_steps(self):
     """Run the steps to obtain a checkout of Skia."""
-    self.set_config('skia', BUILDER_NAME=self.m.properties['buildername'])
     yield self.m.gclient.checkout()
     yield self.m.tryserver.maybe_apply_issue()
 
@@ -26,11 +30,8 @@ class SkiaApi(recipe_api.RecipeApi):
       yield self.m.step('clean', ['make', 'clean'], cwd=self.m.path.checkout)
 
     # Run GYP to generate project files.
-    gyp_args = []
-    for gyp_define, value in self.c.gyp_defines.iteritems():
-      gyp_args.append('-D%s=%s' % (gyp_define, value))
-
-    yield self.m.python(name='gyp_skia', script='gyp_skia', args=gyp_args,
+    env = dict(self.c.gyp_env.as_jsonish())
+    yield self.m.python(name='gyp_skia', script='gyp_skia', env=env,
                         cwd=self.m.path.checkout, abort_on_failure=True)
 
     # Compile each target.
@@ -41,8 +42,8 @@ class SkiaApi(recipe_api.RecipeApi):
   def test_steps(self):
     """Run all Skia test executables."""
     # Unit tests.
-    yield self.m.step('tests', [self.m.chromium.output_dir('tests')])
+    yield self.c.flavor.step('tests', ['tests'])
 
     # GM
-    yield self.m.step('gm', [self.m.chromium.output_dir('gm')])
+    yield self.c.flavor.step('gm', ['gm'])
 
