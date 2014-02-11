@@ -204,7 +204,7 @@ CHROMIUM_LKGR_STEPS = {
       'compile',
     ],
     'Linux Builder': [
-      'check_deps',
+      'checkdeps',
     ],
     'Linux Tests (dbg)(1)(32)': [
       'browser_tests',
@@ -336,28 +336,28 @@ CHROMIUM_LKCR_STEPS = {
   'chromium.linux': {
     'Linux GTK Builder': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Linux Builder': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Linux Builder (dbg)': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Linux Builder (dbg)(32)': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Linux Clang (dbg)': [
       'compile',
-      'runhooks',
-      'update',
+      'gclient runhooks',
+      'gclient sync',
     ],
     'Android Builder (dbg)': [
       'compile',
