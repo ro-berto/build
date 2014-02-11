@@ -1,9 +1,0 @@
-{
-  "skia": {
-    "gyp_defines": {
-      "skia_arch_width": "64", 
-      "skia_gpu": "0", 
-      "skia_warnings_as_errors": "0"
-    }
-  }
-}

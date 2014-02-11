@@ -1,8 +1,0 @@
-{
-  "webrtc_android_apk_try_builder": {
-    "patch_filter_script": "Path('[BUILD]', 'scripts', 'slave', 'patch_path_filter.py')", 
-    "patch_path_filter": "webrtc/", 
-    "patch_root_dir": "Path('[CHECKOUT]', 'third_party', 'webrtc')", 
-    "patch_strip_level": 1
-  }
-}
