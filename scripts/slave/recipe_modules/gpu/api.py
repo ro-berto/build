@@ -46,6 +46,9 @@ class GpuApi(recipe_api.RecipeApi):
       self.m.chromium.set_config(self._configuration + '_clang',
                                  GIT_MODE=self._use_git)
     self.m.gclient.apply_config('chrome_internal')
+    if self.m.tryserver.is_tryserver:
+      # Force dcheck on in try server builds.
+      self.m.chromium.apply_config('dcheck')
 
     # Use the default Ash and Aura settings on all bots (specifically Blink bots).
     self.m.chromium.c.gyp_env.GYP_DEFINES.pop('use_ash', None)
