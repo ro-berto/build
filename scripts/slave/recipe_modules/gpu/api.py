@@ -96,20 +96,22 @@ class GpuApi(recipe_api.RecipeApi):
     yield self.m.isolate.manifest_to_hash(common.GPU_ISOLATES)
 
   def upload_steps(self):
-    yield self.m.archive.zip_and_upload_build(
-      'package_build',
-      self.m.chromium.c.build_config_fs,
-      self.m.archive.legacy_upload_url(
-        self._gs_bucket_name,
-        extra_url_components=self.m.properties['mastername']))
+    if not self._use_isolates:
+      yield self.m.archive.zip_and_upload_build(
+        'package_build',
+        self.m.chromium.c.build_config_fs,
+        self.m.archive.legacy_upload_url(
+          self._gs_bucket_name,
+          extra_url_components=self.m.properties['mastername']))
 
   def download_steps(self):
-    yield self.m.archive.download_and_unzip_build(
-      'extract_build',
-      self.m.chromium.c.build_config_fs,
-      self.m.archive.legacy_download_url(
-        self._gs_bucket_name,
-        extra_url_components=self.m.properties['mastername']))
+    if not self._use_isolates:
+      yield self.m.archive.download_and_unzip_build(
+        'extract_build',
+        self.m.chromium.c.build_config_fs,
+        self.m.archive.legacy_download_url(
+          self._gs_bucket_name,
+          extra_url_components=self.m.properties['mastername']))
 
   def test_steps(self):
     # TODO(kbr): currently some properties are passed to runtest.py via
