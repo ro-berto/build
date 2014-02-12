@@ -215,6 +215,9 @@ def _RevisionNumberColumns(data, master):
     revision = GetTimestamp()
     git_hash = data['rev']
 
+  if 'ver' in data and data['ver'] != 'undefined':
+    revision_supplemental_columns['r_chrome_version'] = data['ver']
+
   if master in ['ChromiumWebkit', 'Oilpan']:
     # Blink builds can have the same chromium revision for two builds. So
     # order them by timestamp to get them to show on the dashboard in the
