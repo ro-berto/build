@@ -220,7 +220,7 @@ def solutions_to_git(input_solutions):
 
 
 def ensure_no_checkout(dir_names, scm_dirname):
-  """Ensure that there is no git checkout under build/.
+  """Ensure that there is no undesired checkout under build/.
 
   If there is an incorrect checkout under build/, then
   move build/ to build.dead/
@@ -228,16 +228,19 @@ def ensure_no_checkout(dir_names, scm_dirname):
 
   scm_dirname is expected to be either ['.svn', '.git']
   """
-  assert scm_dirname in ['.svn', '.git']
+  assert scm_dirname in ['.svn', '.git', '*']
   has_checkout = any(map(lambda dir_name: path.exists(
       path.join(os.getcwd(), dir_name, scm_dirname)), dir_names))
 
-  if has_checkout:
+  if has_checkout or scm_dirname == '*':
     # cd .. && rm -rf ./build && mkdir ./build && cd build
     build_dir = os.getcwd()
 
     os.chdir(path.dirname(os.getcwd()))
-    print '%s detected in checkout, deleting %s...' % (scm_dirname, build_dir),
+    prefix = ''
+    if scm_dirname != '*':
+      prefix = '%s detected in checkout, ' % scm_dirname
+    print '%sdeleting %s...' % (prefix, build_dir),
     chromium_utils.RemoveDirectory(build_dir)
     print 'done'
     os.mkdir(build_dir)
@@ -324,9 +327,14 @@ def apply_issue(issue, patchset, root, server):
   pass
 
 
+def check_flag(flag_file):
+  """Returns True if the flag file is present."""
+  return os.path.isfile(flag_file)
+
+
 def delete_flag(flag_file):
   """Remove bot update flag."""
-  if os.path.exists(flag_file):
+  if os.path.isfile(flag_file):
     os.remove(flag_file)
 
 
@@ -392,13 +400,15 @@ def main():
   git_solutions = solutions_to_git(svn_solutions)
   solutions_printer(git_solutions)
 
-  # Cleanup svn checkout if active, otherwise remove git checkout and exit.
   dir_names = [sln.get('name') for sln in svn_solutions if 'name' in sln]
+  # If we're active now, but the flag file doesn't exist (we weren't active last
+  # run) or vice versa, blow away all checkouts.
+  if bool(active) != bool(check_flag(options.flag_file)):
+    ensure_no_checkout(dir_names, '*')
   if active:
     ensure_no_checkout(dir_names, '.svn')
     emit_flag(options.flag_file)
   else:
-    ensure_no_checkout(dir_names, '.git')
     delete_flag(options.flag_file)
     return
 
