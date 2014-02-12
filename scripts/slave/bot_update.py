@@ -31,19 +31,34 @@ RECOGNIZED_PATHS = {
 
 
 BOT_UPDATE_MESSAGE = """
-What is the "Bot Update" doing here?
-====================================
+What is the "Bot Update" step?
+==============================
 
-The bot update step ensures that a checkout with the
-proper revision and patchset is present on the bot.
+This step ensures that the source checkout on the bot (e.g. Chromium's src/ and
+its dependencies) is checked out in a consistent state. This means that all of
+the necessary repositories are checked out, no extra repositories are checked
+out, and no locally modified files are present.
 
-You may be wondering - why is this step here if "gclient revert" and
-"update" is on the bot already?  The reason is that we are preparing to
-transition from SVN to Git.
+These actions used to be taken care of by the "gclient revert" and "update"
+steps. However, those steps are known to be buggy and occasionally flaky. This
+step has two main advantages over them:
+  * it only operates in Git, so the logic can be clearer and cleaner; and
+  * it is a slave-side script, so its behavior can be modified without
+    restarting the master.
 
-Please pardon the dust while we fully convert everything to Git,
-in the meantime we need this shim order to perform a gradual rollout.
+Why Git, you ask? Because that is the direction that the Chromium project is
+heading. This step is an integral part of the transition from using the SVN repo
+at chrome/trunk/src to using the Git repo src.git. Please pardon the dust while
+we fully convert everything to Git. This message will get out of your way
+eventually, and the waterfall will be a happier place because of it.
 
+This step can be activated or deactivated independently on every builder on
+every master. When it is active, the "gclient revert" and "update" steps become
+no-ops. When it is inactive, it prints this message, cleans up after itself, and
+lets everything else continue as though nothing has changed. Eventually, when
+everything is stable enough, this step will replace them entirely.
+
+Debugging information:
 master: %(master)s
 builder: %(builder)s
 slave: %(slave)s
