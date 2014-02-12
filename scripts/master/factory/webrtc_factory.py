@@ -21,7 +21,7 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
      config.Master.trunk_url + '/deps/third_party/tsan')
 
   def __init__(self, build_dir, target_platform, nohooks_on_update=False,
-               target_os=None):
+               custom_deps_list=None, target_os=None):
     """Creates a WebRTC factory.
 
     This factory can also be used to build stand-alone projects.
@@ -31,6 +31,8 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
         trunk/build for WebRTC and other projects.
       target_platform: Platform, one of 'win32', 'darwin', 'linux2'
       nohooks_on_update: If True, no hooks will be executed in the update step.
+      custom_deps_list: List of tuples to override directories in the gclient
+        spec.
       target_os: Used to sync down OS-specific dependencies, if specified.
     """
     chromium_factory.ChromiumFactory.__init__(
@@ -39,13 +41,16 @@ class WebRTCFactory(chromium_factory.ChromiumFactory):
 
     svn_url = config.Master.webrtc_url + '/trunk'
 
+    custom_deps_list = custom_deps_list or []
+
     # Use root_dir=src since many Chromium scripts rely on that path.
     custom_vars_list = [self.CUSTOM_VARS_ROOT_DIR]
 
     # Overwrite solutions of ChromiumFactory since we sync WebRTC, not Chromium.
     self._solutions = []
     self._solutions.append(gclient_factory.GClientSolution(
-        svn_url, name='src', custom_vars_list=custom_vars_list))
+        svn_url, name='src', custom_deps_list=custom_deps_list,
+        custom_vars_list=custom_vars_list))
     if config.Master.webrtc_limited_url:
       self._solutions.append(gclient_factory.GClientSolution(
           config.Master.webrtc_limited_url, name='webrtc-limited',

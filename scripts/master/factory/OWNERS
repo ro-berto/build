@@ -9,3 +9,4 @@ per-file syzygy_commands.py=chrisha@chromium.org
 per-file syzygy_commands.py=siggi@chromium.org
 per-file syzygy_factory.py=chrisha@chromium.org
 per-file syzygy_factory.py=siggi@chromium.org
+per-file webrtc_factory.py=kjellander@chromium.org
