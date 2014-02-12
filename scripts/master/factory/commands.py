@@ -63,6 +63,8 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
           WithProperties('%(got_webkit_revision:-)s'),
       'parent_got_nacl_revision':
           WithProperties('%(got_nacl_revision:-)s'),
+      'parent_got_swarming_client_revision':
+          WithProperties('%(got_swarming_client_revision:-)s'),
       'parent_revision': WithProperties('%(revision:-)s'),
       'parent_scheduler': WithProperties('%(scheduler:-)s'),
       'parent_slavename': WithProperties('%(slavename:-)s'),
