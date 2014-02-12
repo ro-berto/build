@@ -200,13 +200,19 @@ class GClient(SourceBaseCommand):
     if not None, then this specifies the module name to pass to 'gclient sync'
     in --revision argument.
 
+  ['project']:
+    if not None, then this specifies the module name to pass to 'gclient sync'
+    in --revision argument. This value overloads 'branch', and is mostly useful
+    for git checkouts. See also 'no_gclient_branch'.
+
   ['env']:
     Augment os.environ.
 
   ['no_gclient_branch']:
     If --revision is specified, don't prepend it with <branch>@.  This is
     necessary for git, where the solution name is 'src' and the branch name
-    is 'master'.
+    is 'master'. Use the project attribute if there are several solution in
+    the .gclient file.
 
   ['no_gclient_revision']:
     Do not specify the --revision argument to gclient at all.
