@@ -960,7 +960,8 @@ class FactoryCommands(object):
 
     self._factory.addStep(
         chromium_step.AnnotatedCommand,
-        name='bot update',
+        name='bot_update',
+        description='bot_update',
         haltOnFailure=True,
         flunkOnFailure=True,
         timeout=600,
