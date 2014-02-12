@@ -12,9 +12,9 @@ class TryserverApi(recipe_api.RecipeApi):
   def is_tryserver(self):
     """Determine whether we're a trybot.
 
-    This just checks for the presence of the "rietveld" property.
+    Checks for the presence of the "rietveld" property or a specified patch_url.
     """
-    return 'rietveld' in self.m.properties
+    return 'rietveld' in self.m.properties or self.m.properties.get('patch_url')
 
   def maybe_apply_issue(self):
     """If we're a trybot, apply a codereview issue."""
