@@ -471,6 +471,8 @@ def get_options():
                     help='verify that the gatekeeper config file is correct')
   parser.add_option('--flatten-json', action='store_true',
                     help='display flattened gatekeeper.json for debugging')
+  parser.add_option('--no-hashes', action='store_true',
+                    help='don\'t insert gatekeeper section hashes')
   parser.add_option('-v', '--verbose', action='store_true',
                     help='turn on extra debugging information')
 
@@ -478,6 +480,10 @@ def get_options():
 
   options.email_app_secret = None
   options.password = None
+
+  if options.no_hashes and not options.flatten_json:
+    parser.error('specifying --no-hashes doesn\'t make sense without '
+                 '--flatten-json')
 
   if options.verify or options.flatten_json:
     return options, args
@@ -514,6 +520,8 @@ def main():
     return 0
 
   if options.flatten_json:
+    if not options.no_hashes:
+      gatekeeper_config = gatekeeper_ng_config.inject_hashes(gatekeeper_config)
     gatekeeper_ng_config.flatten_to_json(gatekeeper_config, sys.stdout)
     print
     return 0

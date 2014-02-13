@@ -99,6 +99,9 @@ Again, fields are optional and treated as empty lists/sets/strings if not
 present.
 """
 
+import copy
+import cStringIO
+import hashlib
 import json
 import optparse
 import os
@@ -230,13 +233,27 @@ def load_gatekeeper_config(filename):
   return gatekeeper_config
 
 
+def gatekeeper_section_hash(gatekeeper_section):
+  st = cStringIO.StringIO()
+  flatten_to_json(gatekeeper_section, st)
+  return hashlib.sha256(st.getvalue()).hexdigest()
+
+
+def inject_hashes(gatekeeper_config):
+  new_config = copy.deepcopy(gatekeeper_config)
+  for master in new_config.values():
+    for section in master:
+      section['section_hash'] = gatekeeper_section_hash(section)
+  return new_config
+
+
 def flatten_to_json(gatekeeper_config, stream):
   # Python's sets aren't JSON-encodable, so we convert them to lists here.
   class SetEncoder(json.JSONEncoder):
     # pylint: disable=E0202
     def default(self, obj):
       if isinstance(obj, set):
-        return list(obj)
+        return sorted(list(obj))
       return json.JSONEncoder.default(self, obj)
 
   json.dump(gatekeeper_config, stream, cls=SetEncoder, sort_keys=True)
@@ -248,9 +265,15 @@ def main():
   parser = optparse.OptionParser(usage=(usage + '\n\n' + prog_desc))
   parser.add_option('--json', default=os.path.join(DATA_DIR, 'gatekeeper.json'),
                     help='location of gatekeeper configuration file')
+  parser.add_option('--no-hashes', action='store_true',
+                    help='don\'t insert gatekeeper section hashes')
   options, _ = parser.parse_args()
 
   gatekeeper_config = load_gatekeeper_config(options.json)
+
+  if not options.no_hashes:
+    gatekeeper_config = inject_hashes(gatekeeper_config)
+
   flatten_to_json(gatekeeper_config, sys.stdout)
   print
 
