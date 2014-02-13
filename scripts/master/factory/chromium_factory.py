@@ -444,6 +444,8 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     if R('content_unittests_br'):
       f.AddBuildrunnerGTest('content_unittests', fp)
     if R('keyboard_unittests'):
+      f.AddGTestTestStep('keyboard_unittests', fp)
+    if R('keyboard_unittests_br'):
       f.AddBuildrunnerGTest('keyboard_unittests', fp)
     if R('device_unittests'):
       f.AddGTestTestStep('device_unittests', fp)
