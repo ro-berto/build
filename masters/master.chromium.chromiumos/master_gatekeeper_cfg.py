@@ -31,6 +31,7 @@ chromium_categories_steps = {
     'interactive_ui_tests',
     'ipc_tests',
     'jingle_unittests',
+    'keyboard_unittests',
     'media_unittests',
     'message_center_unittests',
     'mini_installer_test',
