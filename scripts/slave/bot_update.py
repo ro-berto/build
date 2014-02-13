@@ -106,6 +106,11 @@ THIS_DIR = path.abspath(os.getcwd())
 BUILDER_DIR = path.dirname(THIS_DIR)
 SLAVE_DIR = path.dirname(BUILDER_DIR)
 CACHE_DIR = path.join(SLAVE_DIR, 'cache_dir')
+# Because we print CACHE_DIR out into a .gclient file, and then later run
+# eval() on it, backslashes need to be escaped, otherwise "E:\b\build" gets
+# parsed as "E:[\x08][\x08]uild".
+if sys.platform.startswith('win'):
+  CACHE_DIR = CACHE_DIR.replace('\\', '\\\\')
 
 
 class SubprocessFailed(Exception):
