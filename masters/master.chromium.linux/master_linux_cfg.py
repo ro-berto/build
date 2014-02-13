@@ -43,6 +43,7 @@ def Update(_config, _active_master, c):
         'factory': m_annotator.BaseFactory('chromium',
                                            triggers=spec.get('triggers')),
         'notify_on_missing': True,
+        'category': '4linux',
       } for spec in [
           {'buildername': 'Linux Builder',
            'triggers': ['linux_rel_trigger']},
