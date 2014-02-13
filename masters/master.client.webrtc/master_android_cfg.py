@@ -65,7 +65,7 @@ def f_rel_android_tests(bot_id_suffix):
     })
 
 # WebRTC standalone builders (no tests).
-B('Android (dbg)', 'f_android_dbg', scheduler=scheduler,
+B('Android (dbg)', 'f_android_dbg', 'android', scheduler,
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_dbg', android_webrtc().ChromiumAnnotationFactory(
   target='Debug',
@@ -74,8 +74,8 @@ F('f_android_dbg', android_webrtc().ChromiumAnnotationFactory(
       'android_bot_id': 'webrtc-main-clobber',
   }))
 
-B('Android', 'f_android_rel', scheduler=scheduler,
-  notify_on_missing=True, slavebuilddir='android')
+B('Android', 'f_android_rel', 'android', scheduler, notify_on_missing=True,
+  slavebuilddir='android')
 F('f_android_rel', android_webrtc().ChromiumAnnotationFactory(
   target='Release',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -83,7 +83,7 @@ F('f_android_rel', android_webrtc().ChromiumAnnotationFactory(
       'android_bot_id': 'webrtc-main-clobber',
   }))
 
-B('Android Clang (dbg)', 'f_android_clang_dbg', scheduler=scheduler,
+B('Android Clang (dbg)', 'f_android_clang_dbg', 'android', scheduler,
   notify_on_missing=True)
 F('f_android_clang_dbg', android_webrtc().ChromiumAnnotationFactory(
   target='Debug',
@@ -93,8 +93,8 @@ F('f_android_clang_dbg', android_webrtc().ChromiumAnnotationFactory(
   }))
 
 # WebRTC native test APKs: builders.
-B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg',
-  scheduler=scheduler, notify_on_missing=True, slavebuilddir='android_apk')
+B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg', 'android',
+  scheduler, notify_on_missing=True, slavebuilddir='android_apk')
 F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidFactory(
   target='Debug',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
@@ -104,7 +104,7 @@ F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidFactory(
       'trigger': 'android_trigger_dbg',
   }))
 
-B('Android Chromium-APK Builder', 'f_android_apk_rel', scheduler=scheduler,
+B('Android Chromium-APK Builder', 'f_android_apk_rel', 'android', scheduler,
   notify_on_missing=True, slavebuilddir='android_apk')
 F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidFactory(
   target='Release',
@@ -117,22 +117,22 @@ F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidFactory(
 
 # WebRTC native test APKs: device testers.
 B('Android Chromium-APK Tests (ICS GalaxyNexus)(dbg)',
-  'f_android_ics_galaxynexus_dbg_tests', scheduler='android_trigger_dbg',
+  'f_android_ics_galaxynexus_dbg_tests', 'android', 'android_trigger_dbg',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_ics_galaxynexus_dbg_tests', f_dbg_android_tests('ics-gn'))
 
 B('Android Chromium-APK Tests (JB Nexus7.2)(dbg)',
-  'f_android_jb_nexus7.2_dbg_tests', scheduler='android_trigger_dbg',
+  'f_android_jb_nexus7.2_dbg_tests', 'android', 'android_trigger_dbg',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_jb_nexus7.2_dbg_tests', f_dbg_android_tests('jb-n72'))
 
 B('Android Chromium-APK Tests (ICS GalaxyNexus)',
-  'f_android_ics_galaxynexus_rel_tests', scheduler='android_trigger_rel',
+  'f_android_ics_galaxynexus_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_ics_galaxynexus_rel_tests', f_rel_android_tests('ics-gn'))
 
 B('Android Chromium-APK Tests (JB Nexus7.2)',
-  'f_android_jb_nexus7.2_rel_tests', scheduler='android_trigger_rel',
+  'f_android_jb_nexus7.2_rel_tests', 'android', 'android_trigger_rel',
   notify_on_missing=True, slavebuilddir='android')
 F('f_android_jb_nexus7.2_rel_tests', f_rel_android_tests('jb-n72'))
 

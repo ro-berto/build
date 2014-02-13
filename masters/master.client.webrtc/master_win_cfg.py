@@ -51,15 +51,15 @@ ninja_options = ['--build-tool=ninja']
 
 defaults['category'] = 'win'
 
-B('Win32 Debug', 'win32_debug_factory', scheduler=scheduler,
+B('Win32 Debug', 'win32_debug_factory', 'compile|testers|windows', scheduler,
   slavebuilddir='win')
 F('win32_debug_factory', win().WebRTCFactory(
     target='Debug',
     options=ninja_options,
     tests=tests))
 
-B('Win32 Release', 'win32_release_factory', scheduler=scheduler,
-  slavebuilddir='win')
+B('Win32 Release', 'win32_release_factory', 'compile|testers|windows',
+  scheduler, slavebuilddir='win')
 F('win32_release_factory', win().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -71,7 +71,7 @@ F('win32_release_factory', win().WebRTCFactory(
         },
     }))
 
-B('Win64 Debug', 'win64_debug_factory', scheduler=scheduler,
+B('Win64 Debug', 'win64_debug_factory', 'compile|testers|windows', scheduler,
   slavebuilddir='win')
 F('win64_debug_factory', win().WebRTCFactory(
     target='Debug_x64',
@@ -81,8 +81,8 @@ F('win64_debug_factory', win().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'target_arch=x64'},
     }))
 
-B('Win64 Release', 'win64_release_factory', scheduler=scheduler,
-  slavebuilddir='win')
+B('Win64 Release', 'win64_release_factory', 'compile|testers|windows',
+  scheduler, slavebuilddir='win')
 F('win64_release_factory', win().WebRTCFactory(
     target='Release_x64',
     options=ninja_options,
@@ -92,7 +92,7 @@ F('win64_release_factory', win().WebRTCFactory(
     }))
 
 B('Win32 Release [large tests]', 'win32_largetests_factory',
-  scheduler=scheduler)
+  'compile|baremetal|windows', scheduler)
 F('win32_largetests_factory', win().WebRTCFactory(
     target='Release',
     options=ninja_options,
