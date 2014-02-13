@@ -83,7 +83,7 @@ linux_chromeos_tests = [
   ('interactive_ui_tests', 'interactive_ui_tests', 3),
   ('ipc_tests', 'ipc_tests', 1),
   ('jingle', 'jingle_unittests', 1),
-  (None, 'keyboard_unittests', 1),
+  ('keyboard_unittests', 'aura_builder', 1),
   ('media', 'media_unittests', 1),
   ('message_center_unittests', 'message_center_unittests', 1),
   ('net', 'net_unittests', 1),
