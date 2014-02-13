@@ -13,7 +13,10 @@ def GenSteps(api):
     'https://android.googlesource.com/platform/manifest')
   api.android.c.repo.branch = 'master'
 
+  yield api.android.chromium_with_trimmed_deps()
+
   yield api.android.repo_init_steps()
+  yield api.android.generate_local_manifest_step()
   yield api.android.repo_sync_steps()
 
   make_vars = {'CC': 'foo', 'CXX': 'bar'}

@@ -11,14 +11,13 @@ DEPS = [
 
 def GenSteps(api):
   droid = api.android
-  droid.set_config('AOSP')
+  droid.set_config('AOSP_webview')
   yield droid.chromium_with_trimmed_deps()
   yield droid.lastchange_steps()
 
   yield api.tryserver.maybe_apply_issue()
 
   yield droid.repo_init_steps()
-  yield droid.generate_local_manifest_step()
   yield droid.repo_sync_steps()
 
   yield droid.symlink_chromium_into_android_tree_step()
@@ -29,7 +28,7 @@ def GenSteps(api):
   # TODO(android): use api.chromium.compile for this
   yield droid.compile_step(
     build_tool='make-android',
-    targets=['libwebviewchromium', 'android_webview_java'],
+    targets=['webviewchromium'],
     use_goma=True)
 
 def GenTests(api):
