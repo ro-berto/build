@@ -32,6 +32,7 @@ from twisted.internet import reactor, defer, protocol, task, error
 
 from buildslave import util
 from buildslave.exceptions import AbandonChain
+import slave.reboot_tools
 
 if runtime.platformType == 'posix':
     from twisted.internet.process import Process
@@ -802,11 +803,14 @@ class RunProcess:
                                        self.doBackupTimeout)
 
     def doBackupTimeout(self):
-        log.msg("we tried to kill the process, and it wouldn't die.."
-                " finish anyway")
+        log.msg("we tried to kill the process, and it wouldn't die..")
         self.timer = None
         self.sendStatus({'header': "SIGKILL failed to kill process\n"})
         if self.sendRC:
             self.sendStatus({'header': "using fake rc=-1\n"})
             self.sendStatus({'rc': -1})
+        slave.reboot_tools.Reboot()
+        # In production, Reboot() does not return, and failed() is
+        # never called. In testing mode, Reboot() returns immediately
+        # with no effect, and we need to recover.
         self.failed(RuntimeError("SIGKILL failed to kill process"))
