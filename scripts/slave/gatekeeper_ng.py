@@ -515,6 +515,7 @@ def main():
 
   if options.flatten_json:
     gatekeeper_ng_config.flatten_to_json(gatekeeper_config, sys.stdout)
+    print
     return 0
 
   masters = set(args)

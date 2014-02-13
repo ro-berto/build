@@ -239,8 +239,7 @@ def flatten_to_json(gatekeeper_config, stream):
         return list(obj)
       return json.JSONEncoder.default(self, obj)
 
-  json.dump(gatekeeper_config, stream, cls=SetEncoder)
-  stream.write('\n')
+  json.dump(gatekeeper_config, stream, cls=SetEncoder, sort_keys=True)
 
 
 def main():
@@ -253,6 +252,7 @@ def main():
 
   gatekeeper_config = load_gatekeeper_config(options.json)
   flatten_to_json(gatekeeper_config, sys.stdout)
+  print
 
   return 0
 
