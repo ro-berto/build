@@ -784,8 +784,11 @@ def main_mac(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
+    perf_id = options.factory_properties.get('perf_id')
+    if options.factory_properties.get('add_perf_id_suffix'):
+      perf_id += options.build_properties.get('perf_id_suffix')
     send_results_to_dashboard(
-        results_tracker, options.factory_properties.get('perf_id'),
+        results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1056,8 +1059,11 @@ def main_linux(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
+    perf_id = options.factory_properties.get('perf_id')
+    if options.factory_properties.get('add_perf_id_suffix'):
+      perf_id += options.build_properties.get('perf_id_suffix')
     send_results_to_dashboard(
-        results_tracker, options.factory_properties.get('perf_id'),
+        results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1169,8 +1175,11 @@ def main_win(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
+    perf_id = options.factory_properties.get('perf_id')
+    if options.factory_properties.get('add_perf_id_suffix'):
+      perf_id += options.build_properties.get('perf_id_suffix')
     send_results_to_dashboard(
-        results_tracker, options.factory_properties.get('perf_id'),
+        results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
@@ -1223,8 +1232,11 @@ def main_android(options, args):
         perf_dashboard_id=options.perf_dashboard_id)
 
   if options.results_url:
+    perf_id = options.factory_properties.get('perf_id')
+    if options.factory_properties.get('add_perf_id_suffix'):
+      perf_id += options.build_properties.get('perf_id_suffix')
     send_results_to_dashboard(
-        results_tracker, options.factory_properties.get('perf_id'),
+        results_tracker, perf_id,
         options.test_type, options.results_url, options.build_dir,
         options.build_properties.get('mastername'),
         options.build_properties.get('buildername'),
