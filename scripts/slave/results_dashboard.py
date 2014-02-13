@@ -217,6 +217,8 @@ def _RevisionNumberColumns(data, master):
 
   if 'ver' in data and data['ver'] != 'undefined':
     revision_supplemental_columns['r_chrome_version'] = data['ver']
+    revision_supplemental_columns['a_default_rev'] = 'r_chrome_version'
+    revision = GetTimestamp()
 
   if master in ['ChromiumWebkit', 'Oilpan']:
     # Blink builds can have the same chromium revision for two builds. So
