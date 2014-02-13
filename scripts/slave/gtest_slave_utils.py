@@ -132,9 +132,9 @@ def GetResultsMapFromXML(results_xml):
   return test_results_map
 
 
-def GenerateAndUploadJSONResults(test_results_map, options):
-  """Generates a JSON results file from the given test_results_map and
-  upload it to the results server if options.test_results_server is given.
+def GenerateJSONResults(test_results_map, options):
+  """Generates a JSON results file from the given test_results_map,
+  returning the associated generator for use with UploadJSONResults, below.
 
   Args:
     test_results_map: A map of TestResult.
@@ -189,8 +189,14 @@ def GenerateAndUploadJSONResults(test_results_map, options):
       master_name=options.master_name)
   generator.generate_json_output()
   generator.generate_times_ms_file()
-  generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME, TIMES_MS_FILENAME])
+  return generator
 
+def UploadJSONResults(generator):
+  """Conditionally uploads the results from GenerateJSONResults if
+  test_results_server was given."""
+  if generator:
+    generator.upload_json_files([INCREMENTAL_RESULTS_FILENAME,
+                                 TIMES_MS_FILENAME])
 
 # For command-line testing.
 def main():
@@ -256,7 +262,8 @@ def main():
     options.chrome_dir = os.path.join(options.webkit_dir, 'WebKit', 'chromium')
 
   results_map = GetResultsMapFromXML(options.input_results_xml)
-  GenerateAndUploadJSONResults(results_map, options)
+  generator = GenerateJSONResults(results_map, options)
+  UploadJSONResults(generator)
 
 
 if '__main__' == __name__:

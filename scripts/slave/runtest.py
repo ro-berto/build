@@ -184,6 +184,8 @@ def _GenerateJSONForTestResults(options, results_tracker):
   Note that it adds slave's WebKit/Tools/Scripts to the PYTHONPATH
   to run the JSON generator.
 
+  Returns True upon success, False upon failure.
+
   Args:
     options: command-line options that are supposed to have build_dir,
         results_directory, builder_name, build_name and test_output_xml values.
@@ -211,7 +213,8 @@ def _GenerateJSONForTestResults(options, results_tracker):
 
   if not results_map:
     print 'No data was available to update the JSON results'
-    return
+    # Consider this non-fatal.
+    return True
 
   build_dir = os.path.abspath(options.build_dir)
   slave_name = slave_utils.SlaveBuildName(build_dir)
@@ -227,6 +230,8 @@ def _GenerateJSONForTestResults(options, results_tracker):
   # Print out master name for log_parser
   print _GetMasterString(generate_json_options.master_name)
 
+  generator = None
+
   try:
     # Set webkit and chrome directory (they are used only to get the
     # repository revisions).
@@ -239,14 +244,26 @@ def _GenerateJSONForTestResults(options, results_tracker):
         build_dir, 'third_party')
 
     # Generate results JSON file and upload it to the appspot server.
-    gtest_slave_utils.GenerateAndUploadJSONResults(
+    generator = gtest_slave_utils.GenerateJSONResults(
         results_map, generate_json_options)
 
-    # The code can throw all sorts of exceptions, including
-    # slave.gtest.networktransaction.NetworkTimeout so just trap everything.
-  except:  # pylint: disable=W0702
-    print 'Unexpected error while generating JSON'
+  except Exception, e:  # pylint: disable=W0702
+    print 'Unexpected error while generating JSON: %s' % e
+    return False
 
+  # The code can throw all sorts of exceptions, including
+  # slave.gtest.networktransaction.NetworkTimeout so just trap everything.
+  # Earlier versions of this code ignored network errors, so until a
+  # retry mechanism is added, continue to do so rather than reporting
+  # an error.
+  try:
+    # Upload results JSON file to the appspot server.
+    gtest_slave_utils.UploadJSONResults(generator)
+  except Exception, e:  # pylint: disable=W0702
+    # Consider this non-fatal for the moment.
+    print 'Unexpected error while uploading JSON: %s' % e
+
+  return True
 
 def _BuildParallelCommand(build_dir, test_exe_path, options):
   # TODO(phajdan.jr): Remove sharding_supervisor.py fallback in May 2014.
@@ -693,7 +710,8 @@ def main_parse(options, _args):
       results_tracker.ProcessLine(line)
 
   if options.generate_json_file:
-    _GenerateJSONForTestResults(options, results_tracker)
+    if not _GenerateJSONForTestResults(options, results_tracker):
+      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -775,7 +793,8 @@ def main_mac(options, args):
       results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
-    _GenerateJSONForTestResults(options, results_tracker)
+    if not _GenerateJSONForTestResults(options, results_tracker):
+      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1050,7 +1069,8 @@ def main_linux(options, args):
       results_tracker.ProcessJSONFile()
 
   if options.generate_json_file:
-    _GenerateJSONForTestResults(options, results_tracker)
+    if not _GenerateJSONForTestResults(options, results_tracker):
+      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1166,7 +1186,8 @@ def main_win(options, args):
     slave_utils.SetPageHeap(build_dir, 'chrome.exe', False)
 
   if options.generate_json_file:
-    _GenerateJSONForTestResults(options, results_tracker)
+    if not _GenerateJSONForTestResults(options, results_tracker):
+      return 1
 
   if options.annotate:
     annotation_utils.annotate(
@@ -1223,7 +1244,8 @@ def main_android(options, args):
   result = _RunGTestCommand(command, results_tracker=results_tracker)
 
   if options.generate_json_file:
-    _GenerateJSONForTestResults(options, results_tracker)
+    if not _GenerateJSONForTestResults(options, results_tracker):
+      return 1
 
   if options.annotate:
     annotation_utils.annotate(
