@@ -270,7 +270,8 @@ def gclient_configure(solutions):
 
 
 def gclient_sync():
-  call('gclient', 'sync', '--verbose', '--reset', '--force',
+  gclient_bin = 'gclient.bat' if sys.platform.startswith('win') else 'gclient'
+  call(gclient_bin, 'sync', '--verbose', '--reset', '--force',
        '--nohooks', '--noprehooks')
 
 
@@ -288,10 +289,6 @@ def deps2git(sln_dirs):
       return
     # Do we have a better way of doing this....?
     repo_type = 'internal' if 'internal' in sln_dir else 'public'
-    # TODO(hinoka): This will be what populates the git caches on the first
-    #               run for all of the bots.  Since deps2git is single threaded,
-    #               all of this will run in a single threaded context and be
-    #               super slow.  Should make deps2git multithreaded.
     call(sys.executable, DEPS2GIT_PATH, '-t', repo_type,
          '--cache_dir=%s' % CACHE_DIR,
          '--deps=%s' % deps_file, '--out=%s' % deps_git_file)
