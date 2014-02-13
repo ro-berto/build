@@ -12,3 +12,4 @@ class ChromiumFYI(Master.Master1):
   slave_port = 8111
   master_port_alt = 8211
   buildbot_url = 'http://build.chromium.org/p/chromium.fyi/'
+  reboot_on_step_timeout = True
