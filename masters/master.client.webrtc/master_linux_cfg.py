@@ -111,7 +111,7 @@ F('linux_clang_factory', linux().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'clang=1'},
     }))
 
-B('Linux Memcheck', 'linux_memcheck_factory', 'compile|testers', scheduler)
+B('Linux Memcheck', 'linux_memcheck_factory', 'compile', scheduler)
 F('linux_memcheck_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
@@ -121,7 +121,7 @@ F('linux_memcheck_factory', linux().WebRTCFactory(
         'gclient_env': {'GYP_DEFINES': 'build_for_tool=memcheck'},
     }))
 
-B('Linux Tsan', 'linux_tsan_factory', 'compile|testers', scheduler)
+B('Linux Tsan', 'linux_tsan_factory', 'compile', scheduler)
 F('linux_tsan_factory', linux().WebRTCFactory(
     target='Release',
     options=ninja_options,
