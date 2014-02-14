@@ -120,7 +120,10 @@ class AOSPApi(recipe_api.RecipeApi):
       args = [self.c.slave_chromium_in_android_path]
     )
     # repo_init_steps must have been invoked first.
-    yield self.m.repo.sync(*self.c.repo.sync_flags, cwd=self.c.build_path)
+    sync_flags = self.c.repo.sync_flags.as_jsonish()
+    if self.c.sync_manifest_override:
+      sync_flags.extend(['-m', self.c.sync_manifest_override])
+    yield self.m.repo.sync(*sync_flags, cwd=self.c.build_path)
 
   def symlink_chromium_into_android_tree_step(self):
     if self.m.path.exists(self.c.slave_chromium_in_android_path):

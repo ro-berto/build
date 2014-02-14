@@ -264,14 +264,6 @@
   },
   {
     "cmd": [
-      "[SLAVE_BUILD]/src/android_webview/buildbot/generate_local_manifest.py",
-      "[SLAVE_BUILD]/android-src",
-      "external/chromium_org"
-    ],
-    "name": "generate local manifest"
-  },
-  {
-    "cmd": [
       "python",
       "-u",
       "\nimport os, sys\n\nto_delete = sys.argv[1]\nif os.path.exists(to_delete) and os.path.islink(to_delete):\n  os.unlink(to_delete)\n",
@@ -294,7 +286,9 @@
       "sync",
       "-j6",
       "-d",
-      "-f"
+      "-f",
+      "-m",
+      "[SLAVE_BUILD]/src/android_webview/buildbot/aosp_manifest.xml"
     ],
     "cwd": "[SLAVE_BUILD]/android-src",
     "name": "repo sync"
@@ -336,8 +330,7 @@
       "[SLAVE_BUILD]/android-src",
       "full-eng",
       "[BUILD]/scripts/slave/compile.py",
-      "libwebviewchromium",
-      "android_webview_java",
+      "webviewchromium",
       "--build-dir",
       "[SLAVE_BUILD]",
       "--src-dir",

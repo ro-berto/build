@@ -18,6 +18,9 @@ def BaseConfig(USE_MIRROR=False):
       sync_flags = List(basestring),
     ),
     USE_MIRROR = Static(bool(USE_MIRROR)),
+    # If present causes the sync step to use the specified manifest instead of
+    # the one associated with the repo.branch.
+    sync_manifest_override = Single(Path, required=False),
 
     # Path stuff
     chromium_in_android_subpath = Static('/'.join(chromium_in_android_subpath)),
@@ -38,3 +41,8 @@ def AOSP(c):
   c.repo.url = 'https://android.googlesource.com/platform/manifest'
   c.repo.branch = 'android-4.4_r1'
   c.repo.sync_flags = ['-j6', '-d', '-f']
+
+@config_ctx(includes=['AOSP'])
+def AOSP_webview(c):
+  c.sync_manifest_override = Path('[CHECKOUT]', 'android_webview', 'buildbot',
+                                  'aosp_manifest.xml')
