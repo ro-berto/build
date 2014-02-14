@@ -50,7 +50,6 @@ from slave import process_log_utils
 from slave import results_dashboard
 from slave import slave_utils
 from slave import xvfb
-from slave.gtest.json_results_generator import GetSvnRevision
 
 USAGE = '%s [options] test.exe [test args]' % os.path.basename(sys.argv[0])
 
@@ -175,6 +174,62 @@ def _GetMasterString(master):
   return '[Running for master: "%s"]' % master
 
 
+def _is_git_directory(dir_path):
+  """Returns true if the given directory is in a git repository.
+
+  Args:
+    dir_path: The directory path to be tested.
+  """
+  if os.path.exists(os.path.join(dir_path, '.git')):
+    return True
+  parent = os.path.dirname(dir_path)
+  if parent == dir_path:
+    return False
+  return _is_git_directory(parent)
+
+
+def _GetSvnRevision(in_directory):
+  """Returns the svn revision for the given directory.
+
+  Args:
+    in_directory: The directory where svn is to be run.
+  """
+  import subprocess
+  import xml.dom.minidom
+  if not os.path.exists(os.path.join(in_directory, '.svn')):
+    if _is_git_directory(in_directory):
+      return _get_git_revision(in_directory)
+    else:
+      return ''
+
+  # Note: Not thread safe: http://bugs.python.org/issue2320
+  output = subprocess.Popen(['svn', 'info', '--xml'],
+                            cwd=in_directory,
+                            shell=(sys.platform == 'win32'),
+                            stdout=subprocess.PIPE).communicate()[0]
+  try:
+    dom = xml.dom.minidom.parseString(output)
+    return dom.getElementsByTagName('entry')[0].getAttribute('revision')
+  except xml.parsers.expat.ExpatError:
+    return ''
+  return ''
+
+
+def _get_git_revision(in_directory):
+  """Returns the git hash tag for the given directory.
+
+  Args:
+    in_directory: The directory where git is to be run.
+  """
+  import subprocess
+  command_line = ['git', 'log', '-1', '--pretty=oneline']
+  output = subprocess.Popen(command_line,
+                            cwd=in_directory,
+                            shell=(sys.platform == 'win32'),
+                            stdout=subprocess.PIPE).communicate()[0]
+  return output[0:40]
+
+
 def _GenerateJSONForTestResults(options, results_tracker):
   """Generate (update) a JSON file from the gtest results XML and
   upload the file to the archive server.
@@ -224,7 +279,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   generate_json_options.input_results_xml = options.test_output_xml
   generate_json_options.builder_base_url = '%s/%s/%s/%s' % (
       config.Master.archive_url, DEST_DIR, slave_name, options.test_type)
-  generate_json_options.master_name = _GetMaster()
+  generate_json_options.master_name = options.master_name or _GetMaster()
   generate_json_options.test_results_server = config.Master.test_results_server
 
   # Print out master name for log_parser
@@ -233,15 +288,18 @@ def _GenerateJSONForTestResults(options, results_tracker):
   generator = None
 
   try:
-    # Set webkit and chrome directory (they are used only to get the
-    # repository revisions).
-    generate_json_options.webkit_dir = chromium_utils.FindUpward(
+    if options.revision:
+      generate_json_options.chrome_revision = options.revision
+    else:
+      chrome_dir = chromium_utils.FindUpwardParent(build_dir, 'third_party')
+      generate_json_options.chrome_revision = _GetSvnRevision(chrome_dir)
+
+    if options.webkit_revision:
+      generate_json_options.webkit_revision = options.webkit_revision
+    else:
+      webkit_dir = chromium_utils.FindUpward(
         build_dir, 'third_party', 'WebKit', 'Source')
-    # build_dir is often 'src/out'. It seems safe to locate
-    # third_party in the parent of the build directory to find the
-    # root of the Chromium repo.
-    generate_json_options.chrome_dir = chromium_utils.FindUpwardParent(
-        build_dir, 'third_party')
+      generate_json_options.webkit_revision = _GetSvnRevision(webkit_dir)
 
     # Generate results JSON file and upload it to the appspot server.
     generator = gtest_slave_utils.GenerateJSONResults(
@@ -449,14 +507,14 @@ def create_results_tracker(tracker_class, options):
       try:
         webkit_dir = chromium_utils.FindUpward(
             build_dir, 'third_party', 'WebKit', 'Source')
-        webkit_revision = GetSvnRevision(webkit_dir)
+        webkit_revision = _GetSvnRevision(webkit_dir)
       except:  # pylint: disable=W0702
         webkit_revision = 'undefined'
 
     if options.revision:
       revision = options.revision
     else:
-      revision = GetSvnRevision(os.path.dirname(build_dir))
+      revision = _GetSvnRevision(os.path.dirname(build_dir))
 
     tracker_obj = tracker_class(
         revision=revision,
@@ -1366,6 +1424,9 @@ def main():
                            help='The name of the builder running this script.')
   option_parser.add_option('--slave-name', default=None,
                            help='The name of the slave running this script.')
+  option_parser.add_option('--master-name', default=None,
+                           help='The name of the buildbot master running this '
+                           'script. Defaults to fetching it from slaves.cfg.')
   option_parser.add_option('--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))

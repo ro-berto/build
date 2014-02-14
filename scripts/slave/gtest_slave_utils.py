@@ -17,8 +17,8 @@ from slave.gtest.test_result import TestResult
 
 GENERATE_JSON_RESULTS_OPTIONS = [
     'builder_name', 'build_name', 'build_number', 'results_directory',
-    'builder_base_url', 'webkit_dir', 'chrome_dir', 'test_results_server',
-    'test_type', 'master_name']
+    'builder_base_url', 'webkit_revision', 'chrome_revision',
+    'test_results_server', 'test_type', 'master_name']
 
 INCREMENTAL_RESULTS_FILENAME = 'incremental_results.json'
 TIMES_MS_FILENAME = 'times_ms.json'
@@ -147,10 +147,6 @@ def GenerateJSONResults(test_results_map, options):
     logging.warn('No input results map was given.')
     return
 
-  if not os.path.exists(options.webkit_dir):
-    logging.warn('No options.webkit_dir (--webkit-dir) was given.')
-    return
-
   # Make sure we have all the required options (set empty string otherwise).
   for opt in GENERATE_JSON_RESULTS_OPTIONS:
     if not getattr(options, opt, None):
@@ -170,11 +166,11 @@ def GenerateJSONResults(test_results_map, options):
   print('Generating json: '
         'builder_name:%s, build_name:%s, build_number:%s, '
         'results_directory:%s, builder_base_url:%s, '
-        'webkit_dir:%s, chrome_dir:%s '
+        'webkit_revision:%s, chrome_revision:%s '
         'test_results_server:%s, test_type:%s, master_name:%s' %
         (options.builder_name, options.build_name, options.build_number,
          options.results_directory, options.builder_base_url,
-         options.webkit_dir, options.chrome_dir,
+         options.webkit_revision, options.chrome_revision,
          options.test_results_server, options.test_type,
          options.master_name))
 
@@ -182,8 +178,8 @@ def GenerateJSONResults(test_results_map, options):
       options.builder_name, options.build_name, options.build_number,
       options.results_directory, options.builder_base_url,
       test_results_map,
-      svn_repositories=(('webkit', options.webkit_dir),
-                        ('chrome', options.chrome_dir)),
+      svn_revisions=(('webkit', options.webkit_revision),
+                     ('chrome', options.chrome_revision)),
       test_results_server=options.test_results_server,
       test_type=options.test_type,
       master_name=options.master_name)
@@ -237,11 +233,12 @@ def main():
                                 'Both test-results-server and master-name '
                                 'need to be specified to upload the results '
                                 'to the server.')
-  option_parser.add_option('--webkit-dir', default='.',
-                           help='The WebKit code base.')
-  option_parser.add_option('--chrome-dir', default='',
-                           help='The Chromium code base. If not given '
-                                '${webkit_dir}/WebKit/chromium will be used.')
+  option_parser.add_option('--webkit-revision', default='0',
+                           help='The WebKit revision being tested. If not '
+                                'given, defaults to 0.')
+  option_parser.add_option('--chrome-revision', default='0',
+                           help='The Chromium revision being tested. If not '
+                                'given, defaults to 0.')
 
   options = option_parser.parse_args()[0]
 
@@ -257,9 +254,6 @@ def main():
     logging.warn('--test-results-server is given but '
                  '--master-name is not specified; the results won\'t be '
                  'uploaded to the server.')
-
-  if not options.chrome_dir:
-    options.chrome_dir = os.path.join(options.webkit_dir, 'WebKit', 'chromium')
 
   results_map = GetResultsMapFromXML(options.input_results_xml)
   generator = GenerateJSONResults(results_map, options)
