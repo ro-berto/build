@@ -13,6 +13,7 @@ dropin.cache
 events_*
 http.log
 master.cfg.sample
+start_slave.log
 state.sqlite
 state.sqlite-shm
 state.sqlite-wal
