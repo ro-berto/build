@@ -69,7 +69,8 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "clang=1 component=static_library gomadir=[BUILD]/goma linux_strip_binary=1 target_arch=x64 use_goma=1"
+      "GYP_DEFINES": "clang=1 component=static_library gomadir=[BUILD]/goma linux_strip_binary=1 target_arch=x64 use_goma=1",
+      "GYP_GENERATORS": "ninja"
     },
     "name": "gclient runhooks"
   },
