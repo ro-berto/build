@@ -61,6 +61,14 @@ def CreateStartSlave(filepath):
   return start_slave.WriteToFile(filepath, content)
 
 
+def log(line):
+  print(line)
+  sys.stdout.flush()
+
+
+def call(cmd):
+  log('Running: %s' % ' '.join(cmd))
+  return subprocess.call(cmd)
 
 
 def main():
@@ -89,37 +97,43 @@ def main():
 
   options.dimensionsfile = os.path.abspath(options.dimensionsfile)
 
-  print('Generating the machine dimensions...')
+  log('Generating the machine dimensions...')
   if start_slave.GenerateAndWriteDimensions(options.dimensionsfile):
     return 1
 
-  print('Downloading newest swarm_bot code...')
+  log('Downloading newest swarm_bot code...')
   if not DownloadSwarmBot(options.swarm_server):
     return 1
 
   slave_machine = os.path.join(BASE_DIR, 'slave_machine.py')
   if not os.path.isfile(slave_machine):
-    print('Failed to find %s' % slave_machine)
+    log('Failed to find %s' % slave_machine)
     return 1
 
-  print('Create start_slave.py script...')
+  log('Create start_slave.py script...')
   if not CreateStartSlave(os.path.join(BASE_DIR, 'start_slave.py')):
     return 1
 
   if not options.no_auto_start:
-    print('Setup up swarm script to run on startup...')
+    log('Setup up swarm script to run on startup...')
     if not start_slave.SetupAutoStartup(
         slave_machine, options.swarm_server, '443', options.dimensionsfile):
       return 1
 
   if not options.no_reboot:
-    print('Rebooting...')
+    log('Rebooting...')
     if sys.platform == 'win32':
-      result = subprocess.call(['shutdown', '-r', '-f', '-t', '1'])
+      # Run the posix version first. On cygwin 1.5, this is what is necessary.
+      result_1 = call(['shutdown', '-r', 'now'])
+      # On cygwin 1.7, the windows version has to be used. Run inconditionally,
+      # better be safe than sorry.
+      result_2 = call(['shutdown', '-r', '-f', '-t', '1'])
+      result = not (not result_1 or not result_2)
     else:
-      result = subprocess.call(['sudo', 'shutdown', '-r', 'now'])
+      # Run the posix version first. On cygwin 1.5, this is what is necessary.
+      result = call(['sudo', 'shutdown', '-r', 'now'])
     if result:
-      print('Please reboot the slave manually.')
+      log('Please reboot the slave manually.')
     return result
 
   return 0

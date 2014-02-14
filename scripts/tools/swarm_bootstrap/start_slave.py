@@ -197,16 +197,28 @@ def ConvertCygwinPath(path):
 
 
 def SetupAutoStartupWin(command):
-  """Uses Startup folder in the Start Menu."""
+  """Uses Startup folder in the Start Menu.
+
+  Works both inside cygwin's python or native python.
+  """
   # TODO(maruel): Not always true. Read from registry if needed.
-  path = ('~\\AppData\\Roaming\\Microsoft\\Windows\\'
-          'Start Menu\\Programs\\Startup\\run_swarm_bot.bat')
+  print('OS version is: %s' % GetPlatformVersion())
+  if GetPlatformVersion() == '5.1':
+    startup = 'Start Menu\\Programs\\Startup'
+  else:
+    # Vista+
+    startup = (
+        'AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+
+  # On cygwin 1.5, which is still used on some slaves, '~' points inside
+  # c:\\cygwin\\home.
+  path = '%s\\%s\\run_swarm_bot.bat' % (
+      os.environ.get('USERPROFILE', 'DUMMY, ONLY USED IN TESTS'), startup)
   swarm_directory = BASE_DIR
 
-  # If we are running through cygwin, the path to write to must be
-  # changed to be in the cywgin format, but we also need to change
-  # the commands to be in non-cygwin format (since they will execute
-  # in a batch file).
+  # If we are running through cygwin, the path to write to must be changed to be
+  # in the cywgin format, but we also need to change the commands to be in
+  # non-cygwin format (since they will execute in a batch file).
   if sys.platform == 'cygwin':
     path = path.replace('\\', '/')
 
@@ -228,9 +240,8 @@ def SetupAutoStartupWin(command):
     else:
       raise Exception('Unable to find python.bat')
 
-  filepath = os.path.expanduser(path)
   content = '@cd /d ' + swarm_directory + ' && ' + ' '.join(command)
-  return WriteToFile(filepath, content)
+  return WriteToFile(path, content)
 
 
 def GenerateLaunchdPlist(command):
