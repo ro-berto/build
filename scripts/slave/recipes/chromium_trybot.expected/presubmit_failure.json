@@ -3,7 +3,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "config",
       "--spec",
       "cache_dir = None\nsolutions = [{'custom_deps': {'src/third_party/WebKit/LayoutTests': None, 'src/webkit/data/layout_tests/LayoutTests': None}, 'custom_vars': {'googlecode_url': 'svn://svn-mirror.golo.chromium.org/%s', 'nacl_trunk': 'svn://svn-mirror.golo.chromium.org/native_client/trunk', 'sourceforge_url': 'svn://svn-mirror.golo.chromium.org/%(repo)s', 'webkit_trunk': 'svn://svn-mirror.golo.chromium.org/blink/trunk'}, 'deps_file': 'DEPS', 'managed': True, 'name': 'src', 'safesync_url': 'https://build.chromium.org/p/chromium/lkcr-status/lkgr', 'url': 'svn://svn-mirror.golo.chromium.org/chrome/trunk/src'}]"
@@ -21,9 +21,9 @@
     "cmd": [
       "python",
       "-u",
-      "[BUILD]/scripts/slave/gclient_safe_revert.py",
+      "[BUILD]\\scripts\\slave\\gclient_safe_revert.py",
       ".",
-      "[DEPOT_TOOLS]/gclient"
+      "[DEPOT_TOOLS]\\gclient.bat"
     ],
     "name": "gclient revert"
   },
@@ -32,7 +32,7 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/gclient.py",
+      "[DEPOT_TOOLS]\\gclient.py",
       "sync",
       "--nohooks",
       "--delete_unversioned_trees",
@@ -79,9 +79,9 @@
     "cmd": [
       "python",
       "-u",
-      "[DEPOT_TOOLS]/apply_issue.py",
+      "[DEPOT_TOOLS]\\apply_issue.py",
       "-r",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "-i",
       "12853011",
       "-p",
@@ -94,9 +94,9 @@
   },
   {
     "cmd": [
-      "[DEPOT_TOOLS]/presubmit_support.py",
+      "[DEPOT_TOOLS]\\presubmit_support.py",
       "--root",
-      "[SLAVE_BUILD]/src",
+      "[SLAVE_BUILD]\\src",
       "--commit",
       "--verbose",
       "--verbose",
@@ -116,64 +116,10 @@
       "",
       "--rietveld_fetch"
     ],
-    "name": "presubmit"
-  },
-  {
-    "cmd": [
-      "python",
-      "-u",
-      "[DEPOT_TOOLS]/gclient.py",
-      "runhooks"
-    ],
-    "env": {
-      "GYP_DEFINES": "clang=1 component=static_library dcheck_always_on=1 fastbuild=1 gomadir=[BUILD]/goma target_arch=x64 use_goma=1"
-    },
-    "name": "gclient runhooks"
-  },
-  {
-    "abort_on_failure": false,
-    "can_fail_build": false,
-    "cmd": [
-      "python",
-      "-u",
-      "[BUILD]/scripts/slave/compile.py",
-      "--target",
-      "Release",
-      "--src-dir",
-      "[SLAVE_BUILD]/src",
-      "--build-tool",
-      "ninja",
-      "--compiler",
-      "goma-clang",
-      "--goma-dir",
-      "[BUILD]/goma",
-      "--",
-      "base_unittests",
-      "cacheinvalidation_unittests",
-      "cc_unittests",
-      "chromedriver_unittests",
-      "components_unittests",
-      "content_unittests",
-      "crypto_unittests",
-      "google_apis_unittests",
-      "gpu_unittests",
-      "ipc_tests",
-      "jingle_unittests",
-      "media_unittests",
-      "net_unittests",
-      "ppapi_unittests",
-      "printing_unittests",
-      "remoting_unittests",
-      "sql_unittests",
-      "sync_unit_tests",
-      "ui_unittests",
-      "unit_tests",
-      "browser_tests",
-      "content_browsertests",
-      "interactive_ui_tests",
-      "sync_integration_tests",
-      "chrome"
-    ],
-    "name": "compile (with patch)"
+    "name": "presubmit",
+    "~followup_annotations": [
+      "step returned non-zero exit code: 1",
+      "@@@STEP_FAILURE@@@"
+    ]
   }
 ]

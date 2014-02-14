@@ -13,8 +13,7 @@
       "gclient setup",
       "gclient revert",
       "gclient sync",
-      "apply_issue",
-      "gclient runhooks"
+      "apply_issue"
     ]
   },
   {
