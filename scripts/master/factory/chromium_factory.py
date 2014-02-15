@@ -677,6 +677,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'octane',
         'robohornet_pro',
         'scheduler.tough_scheduling_cases',
+        'smoothness.key_silk_cases',
         'spaceport',
         'sunspider',
         'silk',
