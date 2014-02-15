@@ -31,6 +31,12 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'site_config'))
 import config_bootstrap
 from slave import bootstrap
 
+# These are ports likely to be running on a developer's machine, which may break
+# presubmit tests.
+PORT_BLACKLIST = set([
+    8080,  # dev_appserver.py
+    8088,  # goma
+])
 
 def get_args():
   """Process command-line arguments."""
@@ -150,11 +156,24 @@ def master_audit(masters, output, opts):
   web_ports = {}
   slave_ports = {}
   alt_ports = {}
+  all_ports = {}
   for master in masters:
     web_ports.setdefault(master['port'], []).append(master)
     slave_ports.setdefault(master['slave_port'], []).append(master)
     alt_ports.setdefault(master['alt_port'], []).append(master)
 
+    for port_type in ('port', 'slave_port', 'alt_port'):
+      all_ports.setdefault(master[port_type], []).append(master)
+
+  # Check for blacklisted ports.
+  lines = [['Blacklisted port', 'Master', 'Host']]
+  for port, lst in all_ports.iteritems():
+    if port in PORT_BLACKLIST:
+      for m in lst:
+        lines.append([port, m['name'], m['host']])
+  output(lines, opts.verbose)
+
+  # Check for conflicting web ports.
   lines = [['Web port', 'Master', 'Host']]
   for port, lst in web_ports.iteritems():
     if len(lst) > 1:
@@ -163,6 +182,7 @@ def master_audit(masters, output, opts):
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
 
+  # Check for conflicting slave ports.
   lines = [['Slave port', 'Master', 'Host']]
   for port, lst in slave_ports.iteritems():
     if len(lst) > 1:
@@ -171,6 +191,7 @@ def master_audit(masters, output, opts):
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
 
+  # Check for conflicting alt ports.
   lines = [['Alt port', 'Master', 'Host']]
   for port, lst in alt_ports.iteritems():
     if len(lst) > 1:
@@ -179,7 +200,7 @@ def master_audit(masters, output, opts):
         lines.append([port, m['name'], m['host']])
   output(lines, opts.verbose)
 
-  # Look for masters whose port, slave_port, alt_port aren't separated by 100
+  # Look for masters whose port, slave_port, alt_port aren't separated by 100.
   lines = [['Master', 'Host', 'Web port', 'Slave port', 'Alt port']]
   for master in masters:
     if (getint(master['slave_port']) - getint(master['port']) != 100 or
@@ -201,6 +222,9 @@ def find_port(masters, output, opts):
 
   # Remove 0 from the set.
   ports = ports - {0}
+
+  # Add blacklisted ports.
+  ports = ports | PORT_BLACKLIST
 
   lines = [['Web port', 'Slave port', 'Alt port']]
   # In case we've hit saturation, search one past the end of the port list.
