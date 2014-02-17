@@ -80,7 +80,7 @@ mac_asan_options = [
   'sql_unittests',
   'sync_unit_tests',
   'ui_unittests',
-  # TODO(glider): unit_tests is too large on 32-bit OSX to run under ASAN.  See
+  # TODO(glider): unit_tests is too large on 32-bit OSX to run under ASan. See
   # http://crbug.com/238398
   # 'unit_tests',
   'url_unittests',
@@ -124,14 +124,14 @@ mac_asan_tests_3 = [
 
 mac_asan_archive = master_config.GetArchiveUrl(
     'ChromiumMemory',
-    'Mac ASAN Builder',
-    'Mac_ASAN_Builder',
+    'Mac ASan Builder',
+    'Mac_ASan_Builder',
     'mac')
 
 mac_asan_64_archive = master_config.GetArchiveUrl(
     'ChromiumMemory',
-    'Mac ASAN 64 Builder',
-    'Mac_ASAN_64_Builder',
+    'Mac ASan 64 Builder',
+    'Mac_ASan_64_Builder',
     'mac')
 
 gclient_env = {
@@ -149,9 +149,9 @@ gclient_64_env = {
 }
 
 #
-# Mac ASAN Rel Builder
+# Mac ASan Rel Builder
 #
-B('Mac ASAN Builder', 'mac_asan_rel', 'compile', 'mac_asan_rel',
+B('Mac ASan Builder', 'mac_asan_rel', 'compile', 'mac_asan_rel',
   auto_reboot=False, notify_on_missing=True)
 F('mac_asan_rel', mac().ChromiumASANFactory(
     target='Release',
@@ -169,9 +169,9 @@ F('mac_asan_rel', mac().ChromiumASANFactory(
 ))
 
 #
-# Mac ASAN Rel testers
+# Mac ASan Rel testers
 #
-B('Mac ASAN Tests (1)', 'mac_asan_rel_tests_1', 'testers',
+B('Mac ASan Tests (1)', 'mac_asan_rel_tests_1', 'testers',
   'mac_asan_rel_trigger', notify_on_missing=True)
 F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
     slave_type='Tester',
@@ -186,7 +186,7 @@ F('mac_asan_rel_tests_1', mac().ChromiumASANFactory(
     }))
 
 
-B('Mac ASAN Tests (2)', 'mac_asan_rel_tests_2', 'testers',
+B('Mac ASan Tests (2)', 'mac_asan_rel_tests_2', 'testers',
   'mac_asan_rel_trigger', notify_on_missing=True)
 F('mac_asan_rel_tests_2', mac().ChromiumASANFactory(
     slave_type='Tester',
@@ -200,7 +200,7 @@ F('mac_asan_rel_tests_2', mac().ChromiumASANFactory(
       'sharded_tests': sharded_tests,
     }))
 
-B('Mac ASAN Tests (3)', 'mac_asan_rel_tests_3', 'testers',
+B('Mac ASan Tests (3)', 'mac_asan_rel_tests_3', 'testers',
   'mac_asan_rel_trigger', notify_on_missing=True)
 F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
     slave_type='Tester',
@@ -215,9 +215,9 @@ F('mac_asan_rel_tests_3', mac().ChromiumASANFactory(
     }))
 
 #
-# Mac ASAN 64-bit Rel Builder
+# Mac ASan 64-bit Rel Builder
 #
-B('Mac ASAN 64 Builder', 'mac_asan_64_rel_f', 'compile', 'mac_asan_rel',
+B('Mac ASan 64 Builder', 'mac_asan_64_rel_f', 'compile', 'mac_asan_rel',
   auto_reboot=False, notify_on_missing=True)
 F('mac_asan_64_rel_f', mac().ChromiumASANFactory(
     target='Release',
@@ -235,9 +235,9 @@ F('mac_asan_64_rel_f', mac().ChromiumASANFactory(
 ))
 
 #
-# Mac ASAN 64-bit Rel testers
+# Mac ASan 64-bit Rel testers
 #
-B('Mac ASAN 64 Tests (1)', 'mac_asan_64_rel_tests_1', 'testers',
+B('Mac ASan 64 Tests (1)', 'mac_asan_64_rel_tests_1', 'testers',
   'mac_asan_64_rel_trigger', notify_on_missing=True)
 F('mac_asan_64_rel_tests_1', mac().ChromiumASANFactory(
     slave_type='Tester',
@@ -252,7 +252,7 @@ F('mac_asan_64_rel_tests_1', mac().ChromiumASANFactory(
     }))
 
 
-B('Mac ASAN 64 Tests (2)', 'mac_asan_64_rel_tests_2', 'testers',
+B('Mac ASan 64 Tests (2)', 'mac_asan_64_rel_tests_2', 'testers',
   'mac_asan_64_rel_trigger', notify_on_missing=True)
 F('mac_asan_64_rel_tests_2', mac().ChromiumASANFactory(
     slave_type='Tester',
@@ -266,7 +266,7 @@ F('mac_asan_64_rel_tests_2', mac().ChromiumASANFactory(
       'sharded_tests': sharded_tests,
     }))
 
-B('Mac ASAN 64 Tests (3)', 'mac_asan_64_rel_tests_3', 'testers',
+B('Mac ASan 64 Tests (3)', 'mac_asan_64_rel_tests_3', 'testers',
   'mac_asan_64_rel_trigger', notify_on_missing=True)
 F('mac_asan_64_rel_tests_3', mac().ChromiumASANFactory(
     slave_type='Tester',
