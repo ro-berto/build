@@ -11,7 +11,7 @@ changes.pck
 changes.pck.old
 dropin.cache
 events_*
-http.log
+http.log*
 master.cfg.sample
 start_slave.log
 state.sqlite
