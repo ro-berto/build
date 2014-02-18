@@ -322,16 +322,6 @@ CHROMIUM_LKCR_STEPS = {
       'runhooks',
       'update',
     ],
-    'iOS Device': [
-      'compile',
-      'runhooks',
-      'update',
-    ],
-    'iOS Simulator (dbg)': [
-      'compile',
-      'runhooks',
-      'update',
-    ],
   },  # chromium.mac
   'chromium.linux': {
     'Linux GTK Builder': [
@@ -375,33 +365,6 @@ CHROMIUM_LKCR_STEPS = {
       'update',
     ],
   },  # chromium.linux
-  'chromium.chrome': {
-    'Google Chrome ChromeOS': [
-      'compile',
-      'gclient runhooks',
-      'gclient sync',
-    ],
-    'Google Chrome Linux': [
-      'compile',
-      'gclient runhooks',
-      'gclient sync',
-    ],
-    'Google Chrome Linux x64': [
-      'compile',
-      'gclient runhooks',
-      'gclient sync',
-    ],
-    'Google Chrome Mac': [
-      'compile',
-      'gclient runhooks',
-      'gclient sync',
-    ],
-    'Google Chrome Win': [
-      'compile',
-      'gclient runhooks',
-      'gclient sync',
-    ],
-  },  # chromium.chrome
 }
 
 # For blink, for the moment, we only want to test bots that also exist
