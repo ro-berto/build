@@ -1,4 +1,4 @@
-# Copyright (c) 2012 The Chromium Authors. All rights reserved.
+# Copyright 2014 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
@@ -22,21 +22,21 @@ U = helper.URLScheduler
 
 win = lambda: chromium_factory.ChromiumFactory('src/out', 'win32')
 
-defaults['category'] = 'win asan'
+defaults['category'] = 'win syzyasan'
 
 #
-# Main asan release scheduler for src/
+# Main syzyasan release scheduler for src/
 #
-S('win_asan_rel', branch='src', treeStableTimer=60)
+S('win_syzyasan_rel', branch='src', treeStableTimer=60)
 
 #
-# Triggerable scheduler for the rel asan builder
+# Triggerable scheduler for the rel syzyasan builder
 #
-T('win_asan_rel_trigger')
+T('win_syzyasan_rel_trigger')
 
-win_asan_archive = master_config.GetArchiveUrl('ChromiumFYI',
-                                               'Win ASAN Builder',
-                                               'Win_ASAN_Builder',
+win_syzyasan_archive = master_config.GetArchiveUrl('ChromiumFYI',
+                                               'Win SyzyASAN Builder',
+                                               'Win_SyzyASAN_Builder',
                                                'win32')
 
 tests_1 = [
@@ -87,24 +87,24 @@ else:
   code_tally_upload_url = None
 
 #
-# Windows ASAN Rel Builder
+# Windows SyzyASAN Rel Builder
 #
 builder_factory_properties = {
   'asan': True,
   'code_tally_upload_url': code_tally_upload_url,
   'gclient_env': {
     'GYP_DEFINES': (
-      'asan=1 win_z7=1 chromium_win_pch=0 '
+      'syzyasan=1 win_z7=1 chromium_win_pch=0 '
       'component=static_library '
     ),
     'GYP_GENERATORS': 'ninja',
     'GYP_USE_SEPARATE_MSPDBSRV': '1',
   },
-  'trigger': 'win_asan_rel_trigger',
+  'trigger': 'win_syzyasan_rel_trigger',
 }
-B('Win ASAN Builder', 'win_asan_rel', 'compile_noclose', 'win_asan_rel',
-  auto_reboot=False, notify_on_missing=True)
-F('win_asan_rel', win().ChromiumASANFactory(
+B('Win SyzyASAN Builder', 'win_syzyasan_rel', 'compile_noclose',
+  'win_syzyasan_rel', auto_reboot=False, notify_on_missing=True)
+F('win_syzyasan_rel', win().ChromiumASANFactory(
     slave_type='Builder',
     target='Release',
     options=['--build-tool=ninja', '--', 'chromium_builder_tests'],
@@ -112,13 +112,13 @@ F('win_asan_rel', win().ChromiumASANFactory(
     factory_properties=builder_factory_properties))
 
 #
-# Win ASAN Rel testers
+# Win SyzyASAN Rel testers
 #
-B('Win ASAN Tests (1)', 'win_asan_rel_tests_1', 'testers_noclose',
-  'win_asan_rel_trigger', notify_on_missing=True)
-F('win_asan_rel_tests_1', win().ChromiumASANFactory(
+B('Win SyzyASAN Tests (1)', 'win_syzyasan_rel_tests_1', 'testers_noclose',
+  'win_syzyasan_rel_trigger', notify_on_missing=True)
+F('win_syzyasan_rel_tests_1', win().ChromiumASANFactory(
     slave_type='Tester',
-    build_url=win_asan_archive,
+    build_url=win_syzyasan_archive,
     tests=tests_1,
     factory_properties={
         'asan': True,
@@ -135,11 +135,11 @@ F('win_asan_rel_tests_1', win().ChromiumASANFactory(
         },
     }))
 
-B('Win ASAN Tests (2)', 'win_asan_rel_tests_2', 'testers_noclose',
-  'win_asan_rel_trigger', notify_on_missing=True)
-F('win_asan_rel_tests_2', win().ChromiumASANFactory(
+B('Win SyzyASAN Tests (2)', 'win_syzyasan_rel_tests_2', 'testers_noclose',
+  'win_syzyasan_rel_trigger', notify_on_missing=True)
+F('win_syzyasan_rel_tests_2', win().ChromiumASANFactory(
     slave_type='Tester',
-    build_url=win_asan_archive,
+    build_url=win_syzyasan_archive,
     tests=tests_2,
     factory_properties={
         'asan': True,
@@ -158,19 +158,19 @@ F('win_asan_rel_tests_2', win().ChromiumASANFactory(
 
 
 U('LKGR', 'https://chromium-status.appspot.com/lkgr', include_revision=True)
-B('Win ASAN LKGR', 'win_asan_lkgr_rel', 'lkgr', 'LKGR',
+B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr_rel', 'lkgr', 'LKGR',
   notify_on_missing=True)
 lkgr_factory_properties = {
   'cf_archive_build': ActiveMaster.is_production_host,
-  'cf_archive_name': 'asan',
+  'cf_archive_name': 'syzyasan',
   'gs_acl': 'public-read',
   'gs_bucket': 'gs://chromium-browser-syzyasan',
 }
 lkgr_factory_properties.update(builder_factory_properties)
-F('win_asan_lkgr_rel', win().ChromiumASANFactory(
+F('win_syzyasan_lkgr_rel', win().ChromiumASANFactory(
     clobber=True,
     slave_type='Builder',
-    options=['--build-tool=ninja', '--', 'chromium_builder_asan'],
+    options=['--build-tool=ninja', '--', 'chromium_builder_syzyasan'],
     compile_timeout=7200,
     factory_properties=lkgr_factory_properties))
 
