@@ -82,7 +82,11 @@ cache_dir = %(cache_dir)s
 """
 
 ENABLED_MASTERS = ['chromium.git']
-ENABLED_BUILDERS = {}
+ENABLED_BUILDERS = {
+    # Experimental builders used by slave101-c4, which has no other builders
+    # and isn't used by anyone else.
+    'tryserver.chromium': ['linux_rel_alt'],
+}
 ENABLED_SLAVES = {}
 
 # Disabled filters get run AFTER enabled filters, so for example if a builder
