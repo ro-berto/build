@@ -125,7 +125,7 @@ def Reboot():
   try:
     import config_bootstrap
     master = getattr(config_bootstrap.Master, 'active_master', None)
-    should_reboot = getattr(master, 'reboot_on_step_timeout', False)
+    should_reboot = getattr(master, 'reboot_on_step_timeout', True)
     Log('Reboot: reboot_on_step_timeout = %r (from master_site_config: %r)'
         % (should_reboot, master))
   except:  # pylint: disable=W0702

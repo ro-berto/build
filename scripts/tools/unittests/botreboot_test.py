@@ -34,6 +34,8 @@ class DummyMasterNoReboot(config_bootstrap.Master.Master1):
   project_name = 'Dummy Master No Reboot'
   reboot_on_step_timeout = False
 
+class DummyMasterDefault(config_bootstrap.Master.Master1):
+  project_name = 'Dummy Master Default'
 
 class SleepException(Exception):
   pass
@@ -70,6 +72,14 @@ class BotRebootTest(auto_stub.TestCase):
     setattr(config_bootstrap.Master, 'active_master', DummyMasterReboot)
     # Run in test mode, don't actually reboot
     os.environ['TESTING_MASTER'] = 'DummyMasterReboot'
+    slave.reboot_tools.Reboot()
+    msg = 'Reboot: Testing mode enabled, skipping the actual reboot'
+    self.assertIn(msg, self.log_messages)
+
+  def test_no_record(self):
+    setattr(config_bootstrap.Master, 'active_master', DummyMasterDefault)
+    # Run in test mode, don't actually reboot
+    os.environ['TESTING_MASTER'] = 'DummyMasterDefault'
     slave.reboot_tools.Reboot()
     msg = 'Reboot: Testing mode enabled, skipping the actual reboot'
     self.assertIn(msg, self.log_messages)
