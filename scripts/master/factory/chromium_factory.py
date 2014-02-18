@@ -680,7 +680,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'smoothness.key_silk_cases',
         'spaceport',
         'sunspider',
-        'silk',
+        'thread_times.key_silk_cases',
       ]
     for test_name in synthetic_benchmarks:
       Telemetry(test_name)
@@ -706,7 +706,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
 
     # Real-world benchmarks:
     real_world_benchmarks = [
-        'fast_path.key_mobile_sites',
         'maps',
         'memory.mobile_memory',
         'memory.reload.2012Q3',
@@ -720,6 +719,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'smoothness.top_25',
         'smoothness.tough_canvas_cases',
         'tab_switching.top_10',
+        'thread_times.key_mobile_sites',
       ]
     for test_name in real_world_benchmarks:
       Telemetry(test_name)
