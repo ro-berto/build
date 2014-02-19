@@ -17,8 +17,6 @@ class BaseAndroidApi(recipe_api.RecipeApi):
     with settings in the chromium recipe module config.
     """
     envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]
-    if self.target_arch:
-      envsetup_cmd += ['--target-arch=%s' % self.target_arch]
 
     cmd = ([self.m.path.build('scripts', 'slave', 'env_dump.py'),
             '--output-json', self.m.json.output()] + envsetup_cmd)
@@ -27,15 +25,6 @@ class BaseAndroidApi(recipe_api.RecipeApi):
     env_diff = self.m.step_history.last_step().json.output
     self._env.update((k, v) for k, v in env_diff.iteritems()
                      if not k.startswith('GYP_'))
-
-  @property
-  def target_arch(self):
-    """Convert from recipe arch to Android architecture string."""
-    return {
-      'intel': 'x86',
-      'arm':   'arm',
-      'mips':  'mips',
-    }.get(self.m.chromium.c.TARGET_ARCH, '')
 
   def runhooks(self):
     return self.m.chromium.runhooks(env=self._env)

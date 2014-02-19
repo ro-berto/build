@@ -97,8 +97,7 @@
       "[BUILD]/scripts/slave/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh",
-      "--target-arch=x86"
+      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
     ],
     "name": "envsetup",
     "~followup_annotations": [

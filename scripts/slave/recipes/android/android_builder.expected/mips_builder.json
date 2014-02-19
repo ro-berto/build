@@ -79,8 +79,7 @@
       "[BUILD]/scripts/slave/env_dump.py",
       "--output-json",
       "/path/to/tmp/json",
-      "[SLAVE_BUILD]/src/build/android/envsetup.sh",
-      "--target-arch=mips"
+      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
     ],
     "env": {
       "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
