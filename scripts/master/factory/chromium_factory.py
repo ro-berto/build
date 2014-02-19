@@ -681,6 +681,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'spaceport',
         'sunspider',
         'thread_times.key_silk_cases',
+        'webrtc',
       ]
     for test_name in synthetic_benchmarks:
       Telemetry(test_name)
