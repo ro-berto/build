@@ -23,7 +23,7 @@ class V8Commands(commands.FactoryCommands):
   def __init__(self, factory=None, target=None, build_dir=None,
                target_platform=None, target_arch=None,
                shard_count=1, shard_run=1, shell_flags=None, isolates=False,
-               command_prefix=None):
+               command_prefix=None, test_env=None, test_options=None):
 
     commands.FactoryCommands.__init__(self, factory, target, build_dir,
                                       target_platform, target_arch)
@@ -45,6 +45,8 @@ class V8Commands(commands.FactoryCommands):
     self._shell_flags = shell_flags
     self._isolates = isolates
     self._command_prefix = command_prefix
+    self._test_env = test_env
+    self._test_options = test_options or []
 
     if self._target_platform == 'win32':
       # Override to use the right python
@@ -97,12 +99,11 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, 'Static-Initializers', cmd,
                      workdir='build/v8/')
 
-  def AddV8Test(self, name, step_name, properties=None, env=None,
-                options=None, flaky_tests='dontcare'):
+  def AddV8Test(self, name, step_name, options=None, flaky_tests='dontcare'):
     options = options or []
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
-    cmd = self.GetV8TestingCommand() + options
+    cmd = self.GetV8TestingCommand() + self._test_options + options
     if name:
       cmd += ['--testname', name]
     if flaky_tests == 'run' or flaky_tests == 'skip':
@@ -110,30 +111,23 @@ class V8Commands(commands.FactoryCommands):
     self.AddTestStep(shell.ShellCommand, step_name, cmd,
                      timeout=3600,
                      workdir='build/v8/',
-                     env=env)
+                     env=self._test_env)
 
-  def AddV8TestTC(self, name, step_name, properties=None, env=None,
-                  options=None):
+  def AddV8TestTC(self, name, step_name, options=None):
     """Adds a tree closer step without flaky tests and another step with."""
-    self.AddV8Test(name, step_name, properties, env, options,
-                   flaky_tests='skip')
-    self.AddV8Test(name, "%s - flaky" % step_name, properties, env, options,
-                   flaky_tests='run')
+    self.AddV8Test(name, step_name, options, flaky_tests='skip')
+    self.AddV8Test(name, "%s - flaky" % step_name, options, flaky_tests='run')
 
-  def AddPresubmitTest(self, properties=None):
-    cmd = [self._python, self._v8testing_tool,
-           '--testname', 'presubmit']
-    self.AddTestStep(shell.ShellCommand, 'Presubmit', cmd,
-                     workdir='build/v8/')
+  def AddPresubmitTest(self):
+    cmd = [self._python, self._v8testing_tool, '--testname', 'presubmit']
+    self.AddTestStep(shell.ShellCommand, 'Presubmit', cmd, workdir='build/v8/')
 
-  def AddFuzzer(self, properties=None):
+  def AddFuzzer(self):
     binary = 'out/' + self._target + '/d8'
     cmd = ['bash', './tools/fuzz-harness.sh', binary]
-    self.AddTestStep(shell.ShellCommand, 'Fuzz', cmd,
-                     workdir='build/v8/')
+    self.AddTestStep(shell.ShellCommand, 'Fuzz', cmd, workdir='build/v8/')
 
-  def AddDeoptFuzzer(self, properties=None, env=None, options=None):
-    options = options or []
+  def AddDeoptFuzzer(self):
     if self._target_platform == 'win32':
       self.AddTaskkillStep()
     cmd = [self._python, './tools/run-deopt-fuzzer.py',
@@ -149,15 +143,14 @@ class V8Commands(commands.FactoryCommands):
       cmd += ['--command_prefix', self._command_prefix]
     if self._isolates:
       cmd += ['--isolates']
-    cmd += options
+    cmd += self._test_options
     self.AddTestStep(shell.ShellCommand, 'Deopt Fuzz', cmd,
                      timeout=3600,
                      workdir='build/v8/',
-                     env=env)
+                     env=self._test_env)
 
-  def AddLeakTests(self, properties=None):
-    cmd = [self._python, self._v8testing_tool,
-           '--testname', 'leak']
+  def AddLeakTests(self):
+    cmd = [self._python, self._v8testing_tool, '--testname', 'leak']
     env = {
       'PATH': (
         self._build_dir + '../src/third_party/valgrind/linux_x86/bin;'
@@ -183,5 +176,4 @@ class V8Commands(commands.FactoryCommands):
       extra_archive_paths=None):
     """Adds a step to the factory to archive a build."""
     cmd = [self._python, self._v8archive_tool, '--target', self._target]
-    self.AddTestStep(shell.ShellCommand, 'Archiving', cmd,
-                 workdir='build/v8')
+    self.AddTestStep(shell.ShellCommand, 'Archiving', cmd, workdir='build/v8')

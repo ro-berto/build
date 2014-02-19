@@ -56,33 +56,23 @@ class V8Factory(gclient_factory.GClientFactory):
     if R('presubmit'): f.AddPresubmitTest()
     if R('v8initializers'): f.AddV8Initializers()
     if R('v8testing'):
-      f.AddV8TestTC('mjsunit cctest message preparser', 'Check',
-                    env=factory_properties.get('test_env', {}),
-                    options=factory_properties.get('test_options', []))
+      f.AddV8TestTC('mjsunit cctest message preparser', 'Check')
     if R('v8try'):
       f.AddV8Test('mjsunit cctest message preparser', 'Check',
                   options=['--quickcheck'])
     if R('experimental_parser'):
-      f.AddV8TestTC('', 'CheckParser',
-                    env=factory_properties.get('test_env', {}),
-                    options=factory_properties.get('test_options', []))
+      f.AddV8TestTC('', 'CheckParser')
     if R('mjsunit'):
-      f.AddV8TestTC('mjsunit', 'Mjsunit',
-                    env=factory_properties.get('test_env', {}),
-                    options=factory_properties.get('test_options', []))
+      f.AddV8TestTC('mjsunit', 'Mjsunit')
     if R('optimize_for_size'):
       f.AddV8TestTC('cctest mjsunit webkit', 'OptimizeForSize',
                     options=['--no-variants',
                              '--shell_flags="--optimize-for-size"'])
     if R('fuzz'): f.AddFuzzer()
-    if R('deopt'):
-      f.AddDeoptFuzzer(env=factory_properties.get('test_env', {}),
-                       options=factory_properties.get('test_options', []))
+    if R('deopt'): f.AddDeoptFuzzer()
     if R('webkit'): f.AddV8TestTC('webkit', 'Webkit')
     if R('benchmarks'): f.AddV8Test('benchmarks', 'Benchmarks')
-    if R('test262'):
-      f.AddV8Test('test262', 'Test262',
-                  options=factory_properties.get('test_options', []))
+    if R('test262'): f.AddV8Test('test262', 'Test262')
     if R('mozilla'): f.AddV8Test('mozilla', 'Mozilla')
     if R('gcmole'): f.AddV8GCMole()
     if R('simpleleak'): f.AddSimpleLeakTest()
@@ -128,6 +118,9 @@ class V8Factory(gclient_factory.GClientFactory):
                                 factory_properties=factory_properties,
                                 target_arch=target_arch)
 
+    test_env = factory_properties.get('test_env', {})
+    test_options = factory_properties.get('test_options', [])
+
     # Get the factory command object to create new steps to the factory.
     # Note - we give '' as build_dir as we use our own build in test tools
     v8_cmd_obj = v8_commands.V8Commands(factory,
@@ -139,7 +132,9 @@ class V8Factory(gclient_factory.GClientFactory):
                                         shard_run,
                                         shell_flags,
                                         isolates,
-                                        command_prefix)
+                                        command_prefix,
+                                        test_env=test_env,
+                                        test_options=test_options)
     if factory_properties.get('archive_build'):
       v8_cmd_obj.AddArchiveBuild(
           extra_archive_paths=factory_properties.get('extra_archive_paths'))
