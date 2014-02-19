@@ -31,10 +31,12 @@ class V8Factory(gclient_factory.GClientFactory):
                           '/deps/third_party/mozilla-tests')
 
   def __init__(self, build_dir, target_platform=None,
-               branch='branches/bleeding_edge'):
+               branch='branches/bleeding_edge',
+               custom_deps_list=None):
     self.checkout_url = config.Master.v8_url + '/' + branch
 
-    main = gclient_factory.GClientSolution(self.checkout_url, name='v8')
+    main = gclient_factory.GClientSolution(self.checkout_url, name='v8',
+                                           custom_deps_list=custom_deps_list)
     custom_deps_list = [main]
 
     gclient_factory.GClientFactory.__init__(self, build_dir, custom_deps_list,

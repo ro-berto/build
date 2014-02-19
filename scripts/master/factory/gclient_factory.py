@@ -241,11 +241,15 @@ class GClientFactory(object):
                                slave_type=slave_type,
                                gclient_deps=gclient_deps)
 
+    # Optional repository root (default: 'src').
+    repository_root = factory_properties.get('repository_root', 'src')
+
     # Get the factory command object to create new steps to the factory.
     factory_cmd_obj = commands.FactoryCommands(factory, target,
                                                self._build_dir,
                                                self._target_platform,
-                                               target_arch)
+                                               target_arch,
+                                               repository_root)
 
     # Update clang if necessary.
     if ('clang=1' in gclient_env.get('GYP_DEFINES', '') or

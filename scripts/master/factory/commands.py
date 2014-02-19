@@ -313,7 +313,7 @@ class FactoryCommands(object):
   # TODO(maruel): DEFAULT_GTEST_FILTER = '-*.FLAKY_*:*.FAILS_*'
 
   def __init__(self, factory=None, target=None, build_dir=None,
-               target_platform=None, target_arch=None):
+               target_platform=None, target_arch=None, repository_root='src'):
     """Initializes the SlaveCommands class.
     Args:
       factory: BuildFactory to configure.
@@ -322,6 +322,8 @@ class FactoryCommands(object):
       build_dir: name of the directory within the buildbot working directory
         in which the solution, Debug, and Release directories are found.
       target_platform: Slave's OS.
+      repository_root: Relative root directory of the sources (e.g. 'src' for
+        Chromium or 'v8' for stand-alone v8)
     """
 
     self._factory = factory
@@ -348,7 +350,7 @@ class FactoryCommands(object):
       self._python = 'python'
 
     self.working_dir = 'build'
-    self._repository_root = 'src'
+    self._repository_root = repository_root
 
     self._kill_tool = self.PathJoin(self._script_dir, 'kill_processes.py')
     self._compile_tool = self.PathJoin(self._script_dir, 'compile.py')
