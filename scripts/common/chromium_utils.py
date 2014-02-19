@@ -994,13 +994,8 @@ def RunCommand(command, parser_func=None, filter_obj=None, pipes=None,
 
 def GetStatusOutput(command, **kwargs):
   """Runs the command list, returning its result and output."""
-  env = kwargs.pop('env', {}).copy()
-  # This is necessary on masters and slaves using a different locale than en_US.
-  # Some tools, like svn and git, have localized packages which will alter the
-  # output. This affects scripts that parse the output and expect English text.
-  env.setdefault('LANG', 'en_US.UTF-8')
   proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT, bufsize=1, env=env,
+                          stderr=subprocess.STDOUT, bufsize=1,
                           **kwargs)
   output = proc.communicate()[0]
   result = proc.returncode
