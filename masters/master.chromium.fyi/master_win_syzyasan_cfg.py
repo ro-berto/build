@@ -162,7 +162,7 @@ B('Win SyzyASAN LKGR', 'win_syzyasan_lkgr_rel', 'lkgr', 'LKGR',
   notify_on_missing=True)
 lkgr_factory_properties = {
   'cf_archive_build': ActiveMaster.is_production_host,
-  'cf_archive_name': 'syzyasan',
+  'cf_archive_name': 'asan',
   'gs_acl': 'public-read',
   'gs_bucket': 'gs://chromium-browser-syzyasan',
 }
