@@ -6,10 +6,7 @@
 
 Contains the Native Client specific commands. Based on commands.py"""
 
-import logging
-
 from buildbot.steps import trigger
-from buildbot.steps.transfer import FileUpload
 from buildbot.process.properties import WithProperties
 
 from master import chromium_step
@@ -38,31 +35,6 @@ class NativeClientCommands(commands.FactoryCommands):
             'triggered_by_revision': WithProperties(
                 '%(revision:-None)s'),
         }))
-
-  def AddModularBuildStep(self, modular_build_type, timeout=1200):
-    self._factory.addStep(chromium_step.AnnotatedCommand,
-                          name='modular_build',
-                          description='modular_build',
-                          timeout=timeout,
-                          haltOnFailure=True,
-                          workdir='build/native_client/tools/modular-build',
-                          command='python build_for_buildbot.py %s' %
-                            modular_build_type)
-
-  def AddUploadPerfExpectations(self, factory_properties=None):
-    """Adds a step to the factory to upload perf_expectations.json to the
-    master.
-    """
-    perf_id = factory_properties.get('perf_id')
-    if not perf_id:
-      logging.error("Error: cannot upload perf expectations: perf_id is unset")
-      return
-    slavesrc = ('native_client/tools/nacl_perf_expectations/'
-                'nacl_perf_expectations.json')
-    masterdest = ('../../scripts/master/log_parser/perf_expectations/%s.json' %
-                  perf_id)
-    self._factory.addStep(FileUpload(slavesrc=slavesrc,
-                                     masterdest=masterdest))
 
   def AddAnnotatedStep(self, command, timeout=1200,
                        workdir='build/native_client', haltOnFailure=True,
