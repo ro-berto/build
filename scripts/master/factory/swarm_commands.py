@@ -26,16 +26,6 @@ def TestStepFilterTriggerSwarm(bStep):
   return bool(commands.GetSwarmTests(bStep))
 
 
-class SwarmClientSVN(source.SVN):
-  """Uses the revision specified by use_swarm_client_revision."""
-
-  def start(self):
-    """Contrary to source.Source, ignores the branch, source stamp and patch."""
-    self.args['workdir'] = self.workdir
-    revision = commands.GetProp(self, 'use_swarm_client_revision', None)
-    self.startVC(None, revision, None)
-
-
 class SwarmingClientGIT(source.Git):
   """Uses the revision specified by use_swarming_client_revision."""
 
@@ -49,31 +39,15 @@ class SwarmingClientGIT(source.Git):
 class SwarmCommands(commands.FactoryCommands):
   """Encapsulates methods to add swarm commands to a buildbot factory"""
 
-  def AddUpdateSwarmClientStep(self):
+  def AddUpdateSwarmingClientStep(self):
     """Checks out swarming_client so it can be used at the right revision."""
-    def doSwarmingStepIf(b):
-      return bool(commands.GetProp(b, 'use_swarming_client_revision', None))
-    def doSwarmStepIf(b):
-      return not doSwarmingStepIf(b)
-
     # Emulate the path of a src/DEPS checkout, to keep things simpler.
     relpath = 'build/src/tools/swarming_client'
-    url = (
-        config.Master.server_url +
-        config.Master.repo_root +
-        '/trunk/tools/swarm_client')
-    self._factory.addStep(
-        SwarmClientSVN,
-        svnurl=url,
-        workdir=relpath,
-        doStepIf=doSwarmStepIf)
-
     url = config.Master.git_server_url + '/external/swarming.client'
     self._factory.addStep(
         SwarmingClientGIT,
         repourl=url,
-        workdir=relpath,
-        doStepIf=doSwarmingStepIf)
+        workdir=relpath)
 
   def AddSwarmingStep(self, swarming_server, isolate_server):
     """Adds the step to run and get results from Swarming."""

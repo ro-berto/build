@@ -22,15 +22,6 @@ from master.factory import chromium_factory
 from master.factory import swarm_commands
 
 
-class SwarmTest(object):
-  """A small helper class containing any required details to run a
-     swarm test.
-  """
-  def __init__(self, test_name, shards):
-    self.test_name = test_name
-    self.shards = shards
-
-
 def SwarmTestBuilder(swarm_server, isolation_server, tests):
   """Create a basic swarm builder that runs tests via Swarming.
 
@@ -51,7 +42,7 @@ def SwarmTestBuilder(swarm_server, isolation_server, tests):
   swarm_command_obj.AddUpdateScriptStep()
 
   # Checks out the scripts at the right revision so the trigger can happen.
-  swarm_command_obj.AddUpdateSwarmClientStep()
+  swarm_command_obj.AddUpdateSwarmingClientStep()
 
   swarm_command_obj.AddSwarmingStep(swarm_server, isolation_server)
   return f
