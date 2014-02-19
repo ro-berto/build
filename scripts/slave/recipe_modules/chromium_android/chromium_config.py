@@ -57,6 +57,7 @@ def dartium_builder(c):
 @CONFIG_CTX(includes=['main_builder'])
 def klp_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
+  gyp_defs['android_sdk_build_tools_version'] = 'android-4.4'
   gyp_defs['android_sdk_version'] = '4.4'
   gyp_defs['android_sdk_root'] = Path(
     '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk')

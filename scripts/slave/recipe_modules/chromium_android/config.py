@@ -91,12 +91,7 @@ def dartium_builder(c):
 
 @config_ctx()
 def klp_builder(c):
-  c.extra_env = {
-    'ANDROID_SDK_BUILD_TOOLS_VERSION': 'android-4.4',
-    'ANDROID_SDK_ROOT': Path(
-      '[CHECKOUT]', 'third_party', 'android_tools_internal', 'sdk'),
-    'ANDROID_SDK_VERSION': '4.4'
-  }
+  pass
 
 @config_ctx()
 def try_base(c):
