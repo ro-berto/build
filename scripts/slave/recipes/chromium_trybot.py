@@ -81,6 +81,10 @@ RECIPE_CONFIGS = {
     'chromium_config': 'chromium_clang',
     'compile_only': True,
   },
+  'compile': {
+    'chromium_config': 'chromium',
+    'compile_only': True,
+  },
 }
 
 
