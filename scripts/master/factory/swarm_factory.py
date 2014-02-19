@@ -31,25 +31,6 @@ class SwarmTest(object):
     self.shards = shards
 
 
-SWARM_TESTS = [
-    # The test listed below must be in the REVERSE ORDER of latency to get
-    # results, e.g. the slowest test should be LAST.
-    #
-    # The goal here is to take ~5m of actual test run per shard, e.g. the
-    # 'RunTest' section in the logs, so that the trade-off of setup time
-    # overhead vs latency is reasonable. The overhead is in the 15~90s range,
-    # with the vast majority being downloading the executable files. While it
-    # can be lowered, it'll stay in the "few seconds" range due to the sheer
-    # size of the executables to map.
-    SwarmTest('base_unittests', 1),
-    SwarmTest('net_unittests', 1),
-    SwarmTest('unit_tests', 2),
-    SwarmTest('interactive_ui_tests', 3),
-    SwarmTest('sync_integration_tests', 4),
-    SwarmTest('browser_tests', 5),
-]
-
-
 def SwarmTestBuilder(swarm_server, isolation_server, tests):
   """Create a basic swarm builder that runs tests via Swarming.
 
@@ -142,12 +123,6 @@ class IsolatedFactory(chromium_factory.ChromiumFactory):
         self._build_dir,
         self._target_platform)
 
-    # Reorder the tests by the order specified in SWARM_TESTS. E.g. the slower
-    # tests are retrieved last.
-    for swarm_test in SWARM_TESTS:
-      if swarm_test.test_name in tests:
-        tests.remove(swarm_test.test_name)
-        swarm_command_obj.AddIsolateTest(swarm_test.test_name)
-
-    assert not tests
+    for test in tests:
+      swarm_command_obj.AddIsolateTest(test)
     return f
