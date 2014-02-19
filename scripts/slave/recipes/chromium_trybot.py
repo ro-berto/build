@@ -214,15 +214,8 @@ def GenSteps(api):
 
   api.chromium.set_config(recipe_config['chromium_config'])
   api.chromium.apply_config('trybot_flavor')
-  api.gclient.set_config('chromium_lkcr')
+  api.gclient.set_config('chromium')
   api.step.auto_resolve_conflicts = True
-
-  tests = []
-  tests.append(CheckdepsTest())
-  tests.append(Deps2GitTest())
-  for name in GTEST_TESTS:
-    tests.append(GTestTest(name))
-  tests.append(NaclIntegrationTest())
 
   yield (
     api.gclient.checkout(revert=True),
@@ -249,6 +242,13 @@ def GenSteps(api):
 
   yield api.chromium.runhooks()
 
+  tests = []
+  tests.append(CheckdepsTest())
+  tests.append(Deps2GitTest())
+  for name in GTEST_TESTS:
+    tests.append(GTestTest(name))
+  tests.append(NaclIntegrationTest())
+
   compile_targets = list(api.itertools.chain(
                              *[t.compile_targets() for t in tests]))
   yield api.chromium.compile(compile_targets,
@@ -256,9 +256,20 @@ def GenSteps(api):
                              abort_on_failure=False,
                              can_fail_build=False)
   if api.step_history['compile (with patch)'].retcode != 0:
-    yield api.chromium.compile(compile_targets,
-                               name='compile (with patch, clobber)',
-                               force_clobber=True)
+    # Only use LKCR when compile fails. Note that requested specific revision
+    # can still override this.
+    api.gclient.set_config('chromium_lkcr')
+
+    yield (
+      # Since we're likely to switch to an earlier revision, revert the patch,
+      # sync with the new config, and apply issue again.
+      api.gclient.checkout(revert=True),
+      api.rietveld.apply_issue(),
+
+      api.chromium.compile(compile_targets,
+                           name='compile (with patch, lkcr, clobber)',
+                           force_clobber=True)
+    )
 
   # Do not run tests if the build is already in a failed state.
   if api.step_history.failed:
@@ -315,6 +326,7 @@ def GenTests(api):
   }
   canned_test = api.json.canned_gtest_output
   def props(config='Release', git_mode=False, **kwargs):
+    kwargs.setdefault('revision', None)
     return api.properties.tryserver(
       build_config=config,
       GIT_MODE=git_mode,
@@ -511,5 +523,5 @@ def GenTests(api):
     props() +
     api.platform.name('win') +
     api.step_data('compile (with patch)', retcode=1) +
-    api.step_data('compile (with patch, clobber)', retcode=1)
+    api.step_data('compile (with patch, lkcr, clobber)', retcode=1)
   )
