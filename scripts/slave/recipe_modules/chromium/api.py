@@ -87,7 +87,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               results_url=None, perf_dashboard_id=None, test_type=None,
               generate_json_file=False, results_directory=None,
               python_mode=False, spawn_dbus=True, parallel=False,
-              revision=None, **kwargs):
+              revision=None, webkit_revision=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -132,6 +132,8 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--parallel')
     if revision:
       full_args.append('--revision=%s' % revision)
+    if webkit_revision:
+      full_args.append('--webkit-revision=%s' % webkit_revision)
     full_args.append(test)
     full_args.extend(args)
 
@@ -151,7 +153,7 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_telemetry_test(self, runner, test, name='', args=None,
                          prefix_args=None, results_directory='',
-                         spawn_dbus=False):
+                         spawn_dbus=False, revision=None, webkit_revision=None):
     """Runs a Telemetry based test with 'runner' as the executable.
     Automatically passes certain flags like --output-format=gtest to the
     test runner. 'prefix_args' are passed before the built-in arguments and
@@ -194,6 +196,8 @@ class ChromiumApi(recipe_api.RecipeApi):
         results_directory=results_directory,
         python_mode=True,
         spawn_dbus=spawn_dbus,
+        revision=revision,
+        webkit_revision=webkit_revision,
         env=env)
 
   def run_telemetry_unittests(self, name):

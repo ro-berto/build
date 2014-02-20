@@ -84,7 +84,10 @@ def GenTests(api):
   # Test one configuration skipping the checkout.
   yield (
     api.test('mac_release_skip_checkout') +
-    api.properties.git_scheduled(build_config='Release', skip_checkout=True) +
+    api.properties.git_scheduled(
+      build_config='Release',
+      skip_checkout=True,
+      parent_got_webkit_revision=10001) +
     api.platform.name('mac')
   )
 

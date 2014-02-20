@@ -26,16 +26,6 @@ class GpuApi(recipe_api.RecipeApi):
     # To use, pass "use_git=True" as an argument to run_recipe.py.
     self._use_git = self.m.properties.get('use_git', False)
 
-    # TODO(kbr): currently the pixel and maps tests use the build revision
-    # (which is assumed to be the SVN revision of src/) when uploading
-    # error images to cloud storage, only for naming purposes. This should
-    # be changed to use a different identifier, for example, the build
-    # number on the slave. For now, pass down the intended value. Note that
-    # this is overridden below using the correct values from gclient. This
-    # is here in order to still support commenting out the block of code
-    # below while testing locally.
-    self._build_revision = self.m.properties['revision']
-
     self._configuration = 'chromium'
     if self.m.gclient.is_blink_mode:
       self._configuration = 'blink'
@@ -74,13 +64,45 @@ class GpuApi(recipe_api.RecipeApi):
     if self._use_isolates:
       self.m.isolate.set_isolate_environment(self.m.chromium.c)
 
+  @property
+  def _build_revision(self):
+    """Returns the revision of the current build. The pixel and maps
+    tests use this value when uploading error images to cloud storage,
+    only for naming purposes. This could be changed to use a different
+    identifier (for example, the build number on the slave), but using
+    this value is convenient for easily identifying results."""
+    # At this point, the 'revision' build property is reliably specified on
+    # all bots, both builders and testers, even if we are not going to
+    # check out the workspace.
+    return self.m.properties['revision']
+
+  @property
+  def _webkit_revision(self):
+    """Returns the webkit revision of the current build."""
+    # In all cases on the waterfall, the tester is triggered from a
+    # builder which sends down parent_got_webkit_revision. The only
+    # situation where this doesn't happen is when running the
+    # build_and_test recipe locally for testing purposes.
+    wk_rev = self.m.properties.get('parent_got_webkit_revision')
+    if wk_rev:
+      return wk_rev
+    # Fall back to querying the workspace as a last resort. This should
+    # only be necessary on combined builder/testers, which isn't a
+    # configuration which actually exists on any waterfall any more.
+    gclient_data = self.m.step_history['gclient sync'].json.output
+    return gclient_data['solutions']['src/third_party/WebKit/']['revision']
+
+  @property
+  def using_isolates(self):
+    """Indicates whether this slave is prepared to use isolates. Querying
+    this is only really useful on testers, not builders."""
+    return self._use_isolates
+
   def checkout_steps(self):
     # Always force a gclient-revert in order to avoid problems when
     # directories are added to, removed from, and re-added to the repo.
     # crbug.com/329577
     yield self.m.gclient.checkout(revert=True)
-    gclient_data = self.m.step_history['gclient sync'].json.output
-    self._build_revision = gclient_data['solutions']['src/']['revision']
     # If being run as a try server, apply the CL.
     yield self.m.tryserver.maybe_apply_issue()
 
@@ -232,9 +254,15 @@ class GpuApi(recipe_api.RecipeApi):
     depending on whether isolates are in use for this build."""
     if self._use_isolates:
       # If the name is supplied, treat that as the name of the isolate.
-      yield self.m.isolate.runtest(kwargs.get('name', test), **kwargs)
+      yield self.m.isolate.runtest(kwargs.get('name', test),
+                                   self._build_revision,
+                                   self._webkit_revision,
+                                   **kwargs)
     else:
-      yield self.m.chromium.runtest(test, **kwargs)
+      yield self.m.chromium.runtest(test,
+                                    revision=self._build_revision,
+                                    webkit_revision=self._webkit_revision,
+                                    **kwargs)
 
   def _maybe_run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
                                              **kwargs):
@@ -246,6 +274,8 @@ class GpuApi(recipe_api.RecipeApi):
         test_args.extend(args)
       yield self.m.isolate.run_telemetry_test('telemetry_gpu_test',
                                               test,
+                                              self._build_revision,
+                                              self._webkit_revision,
                                               args=test_args,
                                               name=name,
                                               spawn_dbus=True,
@@ -264,4 +294,5 @@ class GpuApi(recipe_api.RecipeApi):
 
     return self.m.chromium.run_telemetry_test(
         str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test.py')),
-        test, name, test_args, results_directory, spawn_dbus=True)
+        test, name, test_args, results_directory, spawn_dbus=True,
+        revision=self._build_revision, webkit_revision=self._webkit_revision)

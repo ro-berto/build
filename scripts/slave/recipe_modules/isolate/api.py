@@ -12,6 +12,7 @@ class IsolateApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(IsolateApi, self).__init__(**kwargs)
     self._manifest_hashes = {}
+    self._using_separate_swarming_client = False
 
   @staticmethod
   def set_isolate_environment(config):
@@ -23,6 +24,28 @@ class IsolateApi(recipe_api.RecipeApi):
       "isolates don't work with the component build yet; see crbug.com/333473")
     config.gyp_env.GYP_DEFINES['test_isolation_mode'] = 'archive'
     config.gyp_env.GYP_DEFINES['test_isolation_outdir'] = ISOLATE_SERVER
+
+  def checkout_swarming_client(self):
+    """Returns a step which checks out the swarming_client tools into a
+    separate directory from the Chromium checkout. Ordinarily this is
+    checked out via DEPS into src/tools/swarming_client. Configures this
+    recipe module to use this separate checkout.
+
+    This requires the build property 'parent_got_swarming_client_revision'
+    to be present, and raises an exception otherwise. Fail-fast behavior is
+    used because if machines silently fell back to checking out the entire
+    workspace, that would cause dramatic increases in cycle time if a
+    misconfiguration were made and it were no longer possible for the bot
+    to check out swarming_client separately."""
+    # If the following line throws an exception, it either means the
+    # bot is misconfigured, or, if you're testing locally, that you
+    # need to pass in some recent legal revision for this property.
+    swarming_client_rev = self.m.properties[
+      'parent_got_swarming_client_revision']
+    self._using_separate_swarming_client = True
+    return self.m.git.checkout(
+      'https://chromium.googlesource.com/external/swarming.client.git',
+      swarming_client_rev)
 
   def manifest_to_hash(self, targets):
     """Returns a step which runs manifest_to_hash.py against the given array
@@ -49,9 +72,12 @@ class IsolateApi(recipe_api.RecipeApi):
     return self.m.properties.get('swarm_hashes', self._manifest_hashes)
 
   @property
-  def run_isolated_path(self):
+  def _run_isolated_path(self):
     """Returns the path to run_isolated.py."""
-    return self.m.path.checkout('tools', 'swarming_client', 'run_isolated.py')
+    if self._using_separate_swarming_client:
+      return self.m.path.checkout('run_isolated.py')
+    else:
+      return self.m.path.checkout('tools', 'swarming_client', 'run_isolated.py')
 
   def runtest_args_list(self, test, args=None):
     """Returns the array of arguments for running the given test which has
@@ -70,24 +96,28 @@ class IsolateApi(recipe_api.RecipeApi):
       full_args.extend(args)
     return full_args
 
-  def runtest(self, test, args=None, name=None, **runtest_kwargs):
+  def runtest(self, test, revision, webkit_revision, args=None, name=None,
+              **runtest_kwargs):
     """Runs a test which has previously been uploaded to the isolate server.
     Uses runtest_args_list, above, and delegates to api.chromium.runtest."""
     return self.m.chromium.runtest(
-      self.run_isolated_path,
+      self._run_isolated_path,
       args=self.runtest_args_list(test, args),
       # We must use the name of the test as the name in order to avoid
       # duplicate steps called "run_isolated".
       name=name or test,
+      revision=revision,
+      webkit_revision=webkit_revision,
       **runtest_kwargs)
 
   def run_telemetry_test(self, isolate_name, test,
+                         revision, webkit_revision,
                          args=None, name=None, **runtest_kwargs):
     """Runs a Telemetry test which has previously been uploaded to the
     isolate server. Uses runtest_args_list, above, and delegates to
     api.chromium.run_telemetry_test."""
     return self.m.chromium.run_telemetry_test(
-      self.run_isolated_path,
+      self._run_isolated_path,
       test,
       # When running the Telemetry test via an isolate we need to tell
       # run_isolated.py the hash and isolate server first, and then give
@@ -95,4 +125,6 @@ class IsolateApi(recipe_api.RecipeApi):
       prefix_args=self.runtest_args_list(isolate_name) + ['--'],
       args=args,
       name=name,
+      revision=revision,
+      webkit_revision=webkit_revision,
       **runtest_kwargs)
