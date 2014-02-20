@@ -46,6 +46,33 @@ F('win', win().ChromiumFactory(
       'gs_bucket': 'gs://chromium-browser-snapshots',
       'gs_acl': 'public-read',
       'show_perf_results': True,
+      'perf_id': 'chromium-rel-win-git',
+      'expectations': True,
+      'process_dumps': True,
+      'start_crash_handler': True,
+      'generate_gtest_json': ActiveMaster.is_production_host,
+      'gclient_env': {
+        'GYP_DEFINES': 'test_isolation_mode=noop',
+        'GYP_USE_SEPARATE_MSPDBSRV': '1',
+      },
+    }))
+
+B('WinGit XP', 'winxp', 'compile|testers', 'chromium-git',
+  notify_on_missing=True)
+F('winxp', win().ChromiumFactory(
+    clobber=True,
+    project='all.sln',
+    tests=[
+      'check_bins',
+      'check_deps2git',
+      'sizes',
+    ],
+    options=['--compiler=goma'],
+    factory_properties={
+      'archive_build': ActiveMaster.is_production_host,
+      'gs_bucket': 'gs://chromium-browser-snapshots',
+      'gs_acl': 'public-read',
+      'show_perf_results': True,
       'perf_id': 'chromium-rel-xp-git',
       'expectations': True,
       'process_dumps': True,
