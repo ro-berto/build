@@ -11,7 +11,7 @@ Common usage:
   - One ChromiumFactory() builder with 'run_default_swarm_tests' set to the list
     of tests to run on Swarm on the 'tester'.
   - One SwarmTestBuilder() builder named something like 'linux_swarm_triggered'.
-    It is defined as fp['triggered_builder']
+    It is defined as fp['swarming_triggered_builder']
 
 - For a single buildertester configuration, use:
   - SwarmFactory()
@@ -57,7 +57,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
   chromium.swarm canary for simplicity purpose.
   """
   def SwarmFactory(
-      self, tests, options, factory_properties, swarm_server, isolate_server):
+      self, options, factory_properties, swarm_server, isolate_server):
     """Only Release is supported for now.
 
     Caller must not reuse factory_properties since it is modified in-place.
@@ -80,7 +80,7 @@ class SwarmFactory(chromium_factory.ChromiumFactory):
         self._build_dir,
         self._target_platform)
 
-    swarm_command_obj.AddGenerateIsolatedHashesStep(tests=tests, doStepIf=True)
+    swarm_command_obj.AddGenerateIsolatedHashesStep(doStepIf=True)
     swarm_command_obj.AddSwarmingStep(swarm_server, isolate_server)
     return f
 

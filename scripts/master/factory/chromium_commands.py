@@ -1439,33 +1439,31 @@ class ChromiumCommands(commands.FactoryCommands):
                      halt_on_failure=True, timeout=600,
                      do_step_if=self.TestStepFilter)
 
-  # TODO(csharp): Move this function into commands once swarm test can be added
-  # via AddTestStep.
-  def AddTriggerSwarmTests(self, tests, run_default_swarm_tests,
-                           factory_properties):
-    """Generates the hash for each .isolated file and then trigger a swarm job
-    for each test.
+  def AddTriggerSwarmingTests(self, run_default_swarm_tests,
+                              factory_properties):
+    """Prepares a build to be run on the builder specified by
+    'swarming_triggered_builder'.
 
-    This doesn't add a step to get the actual results.
+    1. Generates the hash for each .isolated file and saves it in the build
+       property 'swarm_hashes'.
+    2. Triggers a dependent build which will actually talk to the Swarming
+       master.
     """
-    assert not tests or all(i.endswith('_swarm') for i in tests)
     self._factory.properties.setProperty(
         'run_default_swarm_tests', run_default_swarm_tests, 'BuildFactory')
 
+    # This step sets the build property 'swarm_hashes'.
     self.AddGenerateIsolatedHashesStep(
-        [t[:-len('_swarm')] for t in tests],
-        doStepIf=swarm_commands.TestStepFilterTriggerSwarm)
+        swarm_commands.TestStepFilterTriggerSwarm)
 
-    # Trigger the swarm test builder. The only issue here is that
+    # Trigger the swarming test builder. The only issue here is that
     # updateSourceStamp=False cannot be used because we want the user to get the
     # email, e.g. the blamelist to be properly set, but that causes any patch to
     # be caried over, which is annoying but benign.
     self._factory.addStep(commands.CreateTriggerStep(
-        trigger_name=factory_properties['triggered_builder'],
+        trigger_name=factory_properties['swarming_triggered_builder'],
         trigger_set_properties={
             'target_os': self._target_platform,
-            'use_swarm_client_revision':
-              WithProperties('%(got_swarm_client_revision:-)s'),
             'use_swarming_client_revision':
               WithProperties('%(got_swarming_client_revision:-)s'),
         },

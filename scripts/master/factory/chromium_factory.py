@@ -1075,6 +1075,13 @@ class ChromiumFactory(gclient_factory.GClientFactory):
       chromium_cmd_obj.AddZipBuild(halt_on_failure=True,
                                    factory_properties=factory_properties)
 
+    # Trigger Swarming tester. This buildbot builder does nothing else than
+    # running swarming jobs.
+    if (factory_properties.get('swarming_triggered_builder') or
+        run_default_swarm_tests):
+      chromium_cmd_obj.AddTriggerSwarmingTests(
+          run_default_swarm_tests, factory_properties)
+
     # Add check/start step for virtual webcams, if needed.
     if factory_properties.get('virtual_webcam'):
       chromium_cmd_obj.AddVirtualWebcamCheck()
@@ -1094,17 +1101,6 @@ class ChromiumFactory(gclient_factory.GClientFactory):
     # Add a trigger step if needed.
     self.TriggerFactory(factory, slave_type=slave_type,
                         factory_properties=factory_properties)
-
-    if run_default_swarm_tests:
-      # Trigger swarm tests. Extract all the swarm tests from |tests|. Note that
-      # this only triggers the swarm job but do not add the steps to get the
-      # results.
-      swarm_tests = []
-      for i in reversed(range(len(tests))):
-        if tests[i].endswith('_swarm'):
-          swarm_tests.append(tests.pop(i))
-      chromium_cmd_obj.AddTriggerSwarmTests(
-          swarm_tests, run_default_swarm_tests, factory_properties)
 
     # Start the crash handler process.
     if factory_properties.get('start_crash_handler'):

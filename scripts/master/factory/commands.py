@@ -127,8 +127,10 @@ def BuildIsolatedFiles(test_filters, run_default_swarm_tests):
 
 
 class RunHooksShell(shell.ShellCommand):
-  """A special run hooks shell command to allow modifying its environment
-  right before it starts up."""
+  """Runs 'gclient runhooks'.
+
+  Allows modifying its environment right before it starts up.
+  """
   def setupEnvironment(self, cmd):
     test_filters = GetTestfilter(self)
     run_default_swarm_tests = GetProp(self, 'run_default_swarm_tests', [])
@@ -138,6 +140,7 @@ class RunHooksShell(shell.ShellCommand):
       environ = cmd.args.get('env', {}).copy()
       environ.setdefault('GYP_DEFINES', '')
       environ['GYP_DEFINES'] += ' test_isolation_mode=archive'
+      # TODO(maruel): Set it to be a factory property?
       environ['GYP_DEFINES'] += (' test_isolation_outdir=' +
                                  config.Master.swarm_hashtable_server_internal)
 
@@ -149,35 +152,25 @@ class RunHooksShell(shell.ShellCommand):
 class CalculateIsolatedSha1s(shell.ShellCommand):
   """Build step that prints out the sha-1 of each .isolated file found.
 
-  The script runs the equivalent of sha1sum on the specified .isolated files.
+  The script manifest_to_hash.py runs the equivalent of sha1sum on the specified
+  .isolated files, then deletes the files.
+
   The values found are saved in the build property 'swarm_hashes'.
 
   This class assumes the script it runs will output a list of property names and
   hashvalues, with each pair on its own line.
   """
-  def __init__(self, *args, **kwargs):
-    self.tests = kwargs.pop('tests')[:]
-    shell.ShellCommand.__init__(self, *args, **kwargs)
+  RE_HASH_MAPPING = re.compile(r'^([a-z_]+) ([0-9a-f]{40})$')
 
-  def start(self):
-    """Appends all the swarm steps specified in 'testfilter' or hard coded tests
-    to trigger.
-    """
-    command = self.command[:]
-    tests = set(self.tests).union(GetSwarmTests(self))
-    command.extend(sorted(tests))
-    self.setCommand(command)
-    return shell.ShellCommand.start(self)
+  def __init__(self, *args, **kwargs):
+    shell.ShellCommand.__init__(self, *args, **kwargs)
 
   def commandComplete(self, cmd):
     shell.ShellCommand.commandComplete(self, cmd)
-
-    re_hash_mapping = re.compile(r'^([a-z_]+) ([0-9a-f]{40})$')
     matches = (
-        re_hash_mapping.match(l.strip()) for l in self.stdio_log.readlines())
-    swarm_hashes = dict(x.groups() for x in matches if x)
-
-    self.setProperty('swarm_hashes', swarm_hashes)
+        self.RE_HASH_MAPPING.match(l.strip())
+        for l in self.stdio_log.readlines())
+    self.setProperty('swarm_hashes', dict(x.groups() for x in matches if x))
 
 
 def GetSwarmTestsFromTestFilter(test_filters, run_default_swarm_tests):
@@ -1168,15 +1161,11 @@ class FactoryCommands(object):
         perf_name = self.PERF_TEST_MAPPINGS[self._target][perf_id]
     return perf_name
 
-  def AddGenerateIsolatedHashesStep(self, tests, doStepIf):
+  def AddGenerateIsolatedHashesStep(self, doStepIf):
     """Adds a step to generate the .isolated files hashes.
 
-    |tests| must be the list of targets, e.g. base_unittests, not
-    base_unittests_swarm nor base_unittests_run, for which the .isolated file
-    should be processed.
-
-    This is used by swarm to download the dependent files on the swarm slave via
-    run_isolated.py.
+    This is used by swarming to download the dependent files on the swarming
+    slave via run_isolated.py.
     """
     if not self._target:
       log.msg('No target specified, unable to find result files to '
@@ -1185,13 +1174,11 @@ class FactoryCommands(object):
 
     script_path = self.PathJoin(
         self._script_dir, 'swarming', 'manifest_to_hash.py')
-    cmd = [self._python, script_path,
-        '--target', self._target]
+    cmd = [self._python, script_path, '--target', self._target]
     self._factory.addStep(CalculateIsolatedSha1s,
                           name='manifests_to_hashes',
                           description='manifests_to_hashes',
                           command=cmd,
-                          tests=tests,
                           doStepIf=doStepIf)
 
   def AddProfileCreationStep(self, profile_type_to_create):

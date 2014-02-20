@@ -37,7 +37,10 @@ class SwarmingClientGIT(source.Git):
 
 
 class SwarmCommands(commands.FactoryCommands):
-  """Encapsulates methods to add swarm commands to a buildbot factory"""
+  """Encapsulates methods to add swarming commands to a buildbot factory.
+
+  The builder would be one that only runs swarmed tests.
+  """
 
   def AddUpdateSwarmingClientStep(self):
     """Checks out swarming_client so it can be used at the right revision."""
