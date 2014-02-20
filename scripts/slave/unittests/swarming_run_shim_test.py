@@ -101,7 +101,6 @@ class SwarmingRunTest(auto_stub.TestCase):
         'buildername': 'win_rel',
         'buildnumber': 18,
         'buildbotURL': 'http://build.chromium.org/p/chromium.win/',
-        'run_default_swarm_tests': ['base_test'],
         'swarm_hashes': {'base_test': '1234'},
         'target_os': 'darwin',
         'testfilter': ['base_test_swarm'],
@@ -249,7 +248,6 @@ class SwarmingRunTest(auto_stub.TestCase):
     props = {
         'buildername': 'win_rel',
         'buildnumber': 18,
-        'run_default_swarm_tests': ['base_test', 'slow_test'],
         'swarm_hashes': {
             'base_test': '1234',
             'bloa_test': '0000',

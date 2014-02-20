@@ -247,7 +247,7 @@ def collect(stream, steps_annotations, last_cursor, out):
     out.task_done()
 
 
-def determine_steps_to_run(isolated_hashes, default_swarming_tests, testfilter):
+def determine_steps_to_run(isolated_hashes, testfilter):
   """Returns a dict of test:hash for the test that should be run through
   Swarming.
 
@@ -255,8 +255,7 @@ def determine_steps_to_run(isolated_hashes, default_swarming_tests, testfilter):
   run.
   """
   logging.info(
-      'determine_steps_to_run(%s, %s, %s)',
-      isolated_hashes, default_swarming_tests, testfilter)
+      'determine_steps_to_run(%s, %s)', isolated_hashes, testfilter)
   # TODO(maruel): Support gtest filter.
 
   # If testfilter == [], make it behave the same as if defaulttests was
@@ -264,10 +263,9 @@ def determine_steps_to_run(isolated_hashes, default_swarming_tests, testfilter):
   testfilter = testfilter or ['defaulttests']
 
   def should_run(name):
-    return (
-        ((name in default_swarming_tests or not default_swarming_tests) and
-          'defaulttests' in testfilter) or
-         (name + '_swarm' in testfilter))
+    if 'defaulttests' in testfilter:
+      return True
+    return any(t.startswith(name + '_swarm') for t in testfilter)
 
   return dict(
       (name, isolated_hash)
@@ -284,7 +282,6 @@ def process_build_properties(options):
   priority = swarming_utils.build_to_priority(options.build_properties)
   steps = determine_steps_to_run(
       options.build_properties.get('swarm_hashes', {}),
-      options.build_properties.get('run_default_swarm_tests', []),
       options.build_properties.get('testfilter', ['defaulttests']))
   builder = options.build_properties.get('buildername', 'unknown')
   build_number = options.build_properties.get('buildnumber', 0)
