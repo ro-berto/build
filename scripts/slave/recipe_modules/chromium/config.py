@@ -2,6 +2,8 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import pipes
+
 from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import Dict, Single, Static, Set, BadConf
 from slave.recipe_config_types import Path
@@ -25,7 +27,7 @@ def check(val, potentials):
 def BaseConfig(HOST_PLATFORM, HOST_ARCH, HOST_BITS,
                TARGET_PLATFORM, TARGET_ARCH, TARGET_BITS,
                BUILD_CONFIG, **_kwargs):
-  equal_fn = lambda tup: ('%s=%s' % tup)
+  equal_fn = lambda tup: ('%s=%s' % (tup[0], pipes.quote(str(tup[1]))))
   return ConfigGroup(
     compile_py = ConfigGroup(
       default_targets = Set(basestring),
