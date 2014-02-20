@@ -350,8 +350,8 @@ def GenTests(api):
 
         test += api.step_data('checkdeps (with patch)',
                               api.json.output(canned_checkdeps[True]))
-        test += api.step_data('deps2git (with patch)',
-                              api.json.output(canned_deps2git[True]))
+        test += api.override_step_data('deps2git (with patch)',
+                                       api.json.output(canned_deps2git[True]))
         test += api.step_data('nacl_integration (with patch)',
                               api.json.output(canned_nacl[True]))
         for gtest_test in GTEST_TESTS:
@@ -372,8 +372,8 @@ def GenTests(api):
       if not RECIPE_CONFIGS[config]['compile_only']:
         test += api.step_data('checkdeps (with patch)',
                               api.json.output(canned_checkdeps[True]))
-        test += api.step_data('deps2git (with patch)',
-                              api.json.output(canned_deps2git[True]))
+        test += api.override_step_data('deps2git (with patch)',
+                                       api.json.output(canned_deps2git[True]))
         test += api.step_data('nacl_integration (with patch)',
                               api.json.output(canned_nacl[True]))
         for gtest_test in GTEST_TESTS:
@@ -418,10 +418,10 @@ def GenTests(api):
 
     passing = 'deps2git' not in (really_failing_test,
                                  spuriously_failing_test)
-    test += api.step_data('deps2git (with patch)',
-                          api.json.output(canned_deps2git[passing]))
+    test += api.override_step_data('deps2git (with patch)',
+                                   api.json.output(canned_deps2git[passing]))
     if not passing:
-      test += api.step_data(
+      test += api.override_step_data(
           'deps2git (without patch)',
           api.json.output(
               canned_deps2git[really_failing_test=='deps2git']))
@@ -458,7 +458,7 @@ def GenTests(api):
     props() +
     api.platform.name('linux') +
     api.step_data('checkdeps (with patch)', api.json.output(None)) +
-    api.step_data('deps2git (with patch)', api.json.output(None)) +
+    api.override_step_data('deps2git (with patch)', api.json.output(None)) +
     api.step_data('nacl_integration (with patch)', api.json.output(None)) +
     reduce(
       lambda a, b: a + b,
@@ -476,7 +476,7 @@ def GenTests(api):
     props() +
     api.platform.name('win') +
     api.step_data('checkdeps (with patch)', api.json.output(None)) +
-    api.step_data('deps2git (with patch)', api.json.output(None)) +
+    api.override_step_data('deps2git (with patch)', api.json.output(None)) +
     api.step_data('nacl_integration (with patch)', api.json.output(None))
   )
   for gtest_test in GTEST_TESTS:
@@ -493,7 +493,7 @@ def GenTests(api):
   invalid_json_without_patch_test += api.step_data(
       'checkdeps (with patch)',
       api.json.output(canned_checkdeps[False]))
-  invalid_json_without_patch_test += api.step_data(
+  invalid_json_without_patch_test += api.override_step_data(
       'deps2git (with patch)',
       api.json.output(canned_deps2git[True]))
   invalid_json_without_patch_test += api.step_data(

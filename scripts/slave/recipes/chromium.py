@@ -18,6 +18,49 @@ DEPS = [
 ]
 
 
+class ArchiveBuildStep(object):
+  def __init__(self, gs_bucket):
+    self.gs_bucket = gs_bucket
+
+  def run(self, api):
+    return api.chromium.archive_build(
+        'archive build', self.gs_bucket)
+
+  @staticmethod
+  def compile_targets():
+    return []
+
+
+class CheckpermsTest(object):
+  @staticmethod
+  def run(api):
+    return api.chromium.checkperms()
+
+  @staticmethod
+  def compile_targets():
+    return []
+
+
+class Deps2GitTest(object):
+  @staticmethod
+  def run(api):
+    return api.chromium.deps2git()
+
+  @staticmethod
+  def compile_targets():
+    return []
+
+
+class Deps2SubmodulesTest(object):
+  @staticmethod
+  def run(api):
+    return api.chromium.deps2submodules()
+
+  @staticmethod
+  def compile_targets():
+    return []
+
+
 class GTestTest(object):
   def __init__(self, name, args=None):
     self.name = name
@@ -126,6 +169,339 @@ BUILDERS = {
         },
         'testing': {
           'platform': 'win',
+        },
+      },
+    },
+  },
+  'chromium.chromiumos': {
+    'settings': {
+      'build_gs_bucket': 'chromium-chromiumos-archive',
+    },
+    'builders': {
+      'Linux ChromiumOS Full': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder_tester',
+        'compile_targets': [
+          'app_list_unittests',
+          'aura_builder',
+          'base_unittests',
+          'browser_tests',
+          'cacheinvalidation_unittests',
+          'chromeos_unittests',
+          'components_unittests',
+          'compositor_unittests',
+          'content_browsertests',
+          'content_unittests',
+          'crypto_unittests',
+          'dbus_unittests',
+          'device_unittests',
+          'google_apis_unittests',
+          'gpu_unittests',
+          'interactive_ui_tests',
+          'ipc_tests',
+          'jingle_unittests',
+          'media_unittests',
+          'message_center_unittests',
+          'net_unittests',
+          'ppapi_unittests',
+          'printing_unittests',
+          'remoting_unittests',
+          'sandbox_linux_unittests',
+          'sql_unittests',
+          'sync_unit_tests',
+          'ui_unittests',
+          'unit_tests',
+          'url_unittests',
+          'views_unittests',
+        ],
+        'tests': [
+          ArchiveBuildStep('chromium-browser-snapshots'),
+          Deps2GitTest(),
+          Deps2SubmodulesTest(),
+          CheckpermsTest(),
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+
+      'Linux ChromiumOS Builder': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'app_list_unittests',
+          'ash_unittests',
+          'aura_builder',
+          'aura_unittests',
+          'base_unittests',
+          'browser_tests',
+          'cacheinvalidation_unittests',
+          'chromeos_unittests',
+          'components_unittests',
+          'compositor_unittests',
+          'content_browsertests',
+          'content_unittests',
+          'crypto_unittests',
+          'dbus_unittests',
+          'device_unittests',
+          'events_unittests',
+          'google_apis_unittests',
+          'gpu_unittests',
+          'interactive_ui_tests',
+          'ipc_tests',
+          'jingle_unittests',
+          'media_unittests',
+          'message_center_unittests',
+          'net_unittests',
+          'ppapi_unittests',
+          'printing_unittests',
+          'remoting_unittests',
+          'sandbox_linux_unittests',
+          'sql_unittests',
+          'sync_unit_tests',
+          'ui_unittests',
+          'unit_tests',
+          'url_unittests',
+          'views_unittests',
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux ChromiumOS Tests (1)': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('base_unittests'),
+          GTestTest('cacheinvalidation_unittests'),
+          GTestTest('chromeos_unittests'),
+          GTestTest('components_unittests'),
+          GTestTest('crypto_unittests'),
+          GTestTest('dbus_unittests'),
+          GTestTest('google_apis_unittests'),
+          GTestTest('gpu_unittests'),
+          GTestTest('url_unittests'),
+          GTestTest('jingle_unittests'),
+          GTestTest('content_unittests'),
+          GTestTest('device_unittests'),
+          GTestTest('media_unittests'),
+          GTestTest('net_unittests'),
+          GTestTest('ppapi_unittests'),
+          GTestTest('printing_unittests'),
+          GTestTest('remoting_unittests'),
+          GTestTest('sandbox_linux_unittests'),
+          GTestTest('ui_unittests'),
+          GTestTest('views_unittests'),
+          GTestTest('aura_unittests'),
+          GTestTest('ash_unittests'),
+          GTestTest('app_list_unittests'),
+          GTestTest('message_center_unittests'),
+          GTestTest('compositor_unittests'),
+          GTestTest('events_unittests'),
+          GTestTest('ipc_tests'),
+          GTestTest('sync_unit_tests'),
+          GTestTest('unit_tests'),
+          GTestTest('sql_unittests'),
+        ],
+        'testing': {
+          'platform': 'linux',
+          'parent_buildername': 'Linux ChromiumOS Builder',
+        },
+      },
+      'Linux ChromiumOS Tests (2)': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('interactive_ui_tests'),
+          GTestTest('browser_tests'),
+          GTestTest('content_browsertests'),
+        ],
+        'testing': {
+          'platform': 'linux',
+          'parent_buildername': 'Linux ChromiumOS Builder',
+        },
+      },
+
+      'Linux ChromiumOS (Clang dbg)': {
+        'recipe_config': 'chromium_chromeos_clang',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_targets': [
+          'app_list_unittests',
+          'aura_builder',
+          'base_unittests',
+          'browser_tests',
+          'cacheinvalidation_unittests',
+          'chromeos_unittests',
+          'components_unittests',
+          'compositor_unittests',
+          'content_browsertests',
+          'content_unittests',
+          'crypto_unittests',
+          'dbus_unittests',
+          'device_unittests',
+          'google_apis_unittests',
+          'gpu_unittests',
+          'interactive_ui_tests',
+          'ipc_tests',
+          'jingle_unittests',
+          'media_unittests',
+          'message_center_unittests',
+          'net_unittests',
+          'ppapi_unittests',
+          'printing_unittests',
+          'remoting_unittests',
+          'sandbox_linux_unittests',
+          'sql_unittests',
+          'sync_unit_tests',
+          'ui_unittests',
+          'unit_tests',
+          'url_unittests',
+          'views_unittests',
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+
+      'Linux ChromiumOS Builder (dbg)': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'builder',
+        'compile_targets': [
+          'app_list_unittests',
+          'ash_unittests',
+          'aura_builder',
+          'aura_unittests',
+          'base_unittests',
+          'browser_tests',
+          'cacheinvalidation_unittests',
+          'chromeos_unittests',
+          'components_unittests',
+          'compositor_unittests',
+          'content_browsertests',
+          'content_unittests',
+          'crypto_unittests',
+          'dbus_unittests',
+          'device_unittests',
+          'events_unittests',
+          'google_apis_unittests',
+          'gpu_unittests',
+          'interactive_ui_tests',
+          'ipc_tests',
+          'jingle_unittests',
+          'media_unittests',
+          'message_center_unittests',
+          'net_unittests',
+          'ppapi_unittests',
+          'printing_unittests',
+          'remoting_unittests',
+          'sandbox_linux_unittests',
+          'sql_unittests',
+          'sync_unit_tests',
+          'ui_unittests',
+          'unit_tests',
+          'url_unittests',
+          'views_unittests',
+        ],
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'Linux ChromiumOS Tests (dbg)(1)': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('base_unittests'),
+          GTestTest('cacheinvalidation_unittests'),
+          GTestTest('chromeos_unittests'),
+          GTestTest('components_unittests'),
+          GTestTest('crypto_unittests'),
+          GTestTest('dbus_unittests'),
+          GTestTest('google_apis_unittests'),
+          GTestTest('gpu_unittests'),
+          GTestTest('url_unittests'),
+          GTestTest('jingle_unittests'),
+          GTestTest('content_unittests'),
+          GTestTest('device_unittests'),
+          GTestTest('media_unittests'),
+          GTestTest('net_unittests'),
+          GTestTest('ppapi_unittests'),
+          GTestTest('printing_unittests'),
+          GTestTest('remoting_unittests'),
+          GTestTest('sandbox_linux_unittests'),
+          GTestTest('ui_unittests'),
+          GTestTest('views_unittests'),
+          GTestTest('aura_unittests'),
+          GTestTest('ash_unittests'),
+          GTestTest('app_list_unittests'),
+          GTestTest('message_center_unittests'),
+          GTestTest('compositor_unittests'),
+          GTestTest('events_unittests'),
+          GTestTest('ipc_tests'),
+          GTestTest('sync_unit_tests'),
+          GTestTest('unit_tests'),
+          GTestTest('sql_unittests'),
+        ],
+        'testing': {
+          'platform': 'linux',
+          'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
+        },
+      },
+      'Linux ChromiumOS Tests (dbg)(2)': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('browser_tests'),
+          GTestTest('content_browsertests'),
+        ],
+        'testing': {
+          'platform': 'linux',
+          'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
+        },
+      },
+      'Linux ChromiumOS Tests (dbg)(3)': {
+        'recipe_config': 'chromium_chromeos',
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'bot_type': 'tester',
+        'tests': [
+          GTestTest('interactive_ui_tests'),
+        ],
+        'testing': {
+          'platform': 'linux',
+          'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         },
       },
     },
@@ -632,6 +1008,16 @@ RECIPE_CONFIGS = {
     'chromium_apply_config': ['gtk'],
     'gclient_config': 'chromium',
   },
+  'chromium_chromeos': {
+    'chromium_config': 'chromium',
+    'chromium_apply_config': ['chromeos'],
+    'gclient_config': 'chromium',
+  },
+  'chromium_chromeos_clang': {
+    'chromium_config': 'chromium_clang',
+    'chromium_apply_config': ['chromeos'],
+    'gclient_config': 'chromium',
+  },
   'official': {
     'chromium_config': 'chromium_official',
     'gclient_config': 'chromium',
@@ -726,7 +1112,9 @@ def GenTests(api):
       bot_type = bot_config.get('bot_type', 'builder_tester')
 
       if bot_type in ['builder', 'builder_tester']:
-        assert bot_config['testing'].get('parent_buildername') is None
+        assert bot_config['testing'].get('parent_buildername') is None, (
+            'Unexpected parent_buildername for builder %r on master %r.' %
+                (buildername, mastername))
 
       # Verify that required targets are in fact compiled. This is a common
       # class of errors (mismatch of what is compiled on builder and required

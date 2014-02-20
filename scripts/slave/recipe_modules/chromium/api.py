@@ -215,6 +215,26 @@ class ChromiumApi(recipe_api.RecipeApi):
       'cleanup_temp',
       self.m.path.build('scripts', 'slave', 'cleanup_temp.py'))
 
+  def archive_build(self, step_name, gs_bucket, **kwargs):
+    """Returns a step invoking archive_build.py to archive a Chromium build."""
+
+    # archive_build.py insists on inspecting factory properties. For now just
+    # provide these options in the format it expects.
+    fake_factory_properties = {
+        'gclient_env': self.c.gyp_env.as_jsonish(),
+        'gs_bucket': 'gs://%s' % gs_bucket,
+    }
+
+    args = [
+        '--target', self.c.BUILD_CONFIG,
+        '--factory-properties', self.m.json.dumps(fake_factory_properties),
+    ]
+    return self.m.python(
+      step_name,
+      self.m.path.build('scripts', 'slave', 'chromium', 'archive_build.py'),
+      args,
+      **kwargs)
+
   def checkdeps(self, suffix=None, **kwargs):
     name = 'checkdeps'
     if suffix:
@@ -223,6 +243,13 @@ class ChromiumApi(recipe_api.RecipeApi):
         name,
         self.m.path.checkout('tools', 'checkdeps', 'checkdeps.py'),
         args=['--json', self.m.json.output()],
+        **kwargs)
+
+  def checkperms(self, **kwargs):
+    return self.m.python(
+        'checkperms',
+        self.m.path.checkout('tools', 'checkperms', 'checkperms.py'),
+        args=['--root', self.m.path.checkout()],
         **kwargs)
 
   def deps2git(self, suffix=None, **kwargs):
@@ -236,6 +263,7 @@ class ChromiumApi(recipe_api.RecipeApi):
               '-o', self.m.path.checkout('.DEPS.git'),
               '--verify',
               '--json', self.m.json.output()],
+        step_test_data=lambda: self.m.json.test_api.output([]),
         **kwargs)
 
   def deps2submodules(self, **kwargs):
