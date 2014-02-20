@@ -52,7 +52,7 @@ config = {
         properties: Properties(**{}),
       },
       'name': 'x86-generic paladin',
-      'slavenames': ['build80-m2'],
+      'slavenames': ['build119-m2'],
     },
     {
       'auto_reboot': False,
@@ -765,12 +765,12 @@ config = {
     <BuildSlave 'build24-m2', (no builders yet)>,
     <BuildSlave 'build14-m2', (no builders yet)>,
     <BuildSlave 'build11-m2', (no builders yet)>,
-    <BuildSlave 'build80-m2', (no builders yet)>,
     <BuildSlave 'vm16-m2', (no builders yet)>,
     <BuildSlave 'build90-m2', (no builders yet)>,
     <BuildSlave 'build19-m2', (no builders yet)>,
     <BuildSlave 'vm17-m2', (no builders yet)>,
     <BuildSlave 'build12-m2', (no builders yet)>,
+    <BuildSlave 'build119-m2', (no builders yet)>,
   ],
   'status': [<WebStatus on port tcp:8014>, <WebStatus on port tcp:8214>],
 }
