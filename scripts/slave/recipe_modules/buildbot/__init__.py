@@ -1,4 +1,5 @@
 DEPS = [
   'path',
+  'properties',
   'python',
 ]

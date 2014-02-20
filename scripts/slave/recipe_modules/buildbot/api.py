@@ -12,3 +12,15 @@ class BuildbotApi(recipe_api.RecipeApi):
       'cleanup temp',
       self.m.path.build('scripts', 'slave', 'cleanup_temp.py')
     )
+
+  def copy_parent_got_revision_to_got_revision(self):
+    """Returns a step which copies the 'parent_got_revision' build property
+    to the 'got_revision' build property. This is needed for recipes which
+    use isolates for testing and which skip the src/ checkout."""
+    def followup_fn(step_result):
+      step_result.presentation.properties['got_revision'] = \
+          self.m.properties['parent_got_revision']
+    return self.m.python.inline(
+      'copy parent_got_revision to got_revision',
+      'exit()',
+      followup_fn=followup_fn)

@@ -79,6 +79,19 @@
     "name": "submodule update"
   },
   {
+    "cmd": [
+      "python",
+      "-u",
+      "exit()"
+    ],
+    "name": "copy parent_got_revision to got_revision",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@exit()@@@",
+      "@@@STEP_LOG_END@python.inline@@@",
+      "@@@SET_BUILD_PROPERTY@got_revision@160000@@@"
+    ]
+  },
+  {
     "always_run": true,
     "cmd": [
       "python",

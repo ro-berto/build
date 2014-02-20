@@ -38,6 +38,7 @@ def GenSteps(api):
 
   if api.gpu.using_isolates:
     yield api.isolate.checkout_swarming_client()
+    yield api.buildbot.copy_parent_got_revision_to_got_revision()
   else:
     if not api.properties.get('skip_checkout', False):
       yield api.gpu.checkout_steps()
