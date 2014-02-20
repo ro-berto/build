@@ -125,7 +125,7 @@ def GenTests(api):
       for use_mirror in (True, False):
         yield (
           api.test('basic_%s_%s_Mirror%s' % (plat, bits, use_mirror)) +
-          api.properties(
+          api.properties.generic(
               TARGET_BITS=bits,
               USE_MIRROR=use_mirror,
               perf_id='dartium-linux-release',

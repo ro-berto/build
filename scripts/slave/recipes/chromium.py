@@ -1143,10 +1143,10 @@ def GenTests(api):
       test = (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
-        api.properties(mastername=mastername,
-                       buildername=buildername,
-                       parent_buildername=bot_config['testing'].get(
-                           'parent_buildername')) +
+        api.properties.generic(mastername=mastername,
+                               buildername=buildername,
+                               parent_buildername=bot_config['testing'].get(
+                                   'parent_buildername')) +
         api.platform(bot_config['testing']['platform'],
                      bot_config.get(
                          'chromium_config_kwargs', {}).get('TARGET_BITS', 64))

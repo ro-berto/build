@@ -110,9 +110,9 @@
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Linux Builder/full-build-linux.zip",
       "--factory-properties",
-      "{\"buildername\": \"Linux Sync\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Linux Sync\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "extract build"
   },
@@ -127,10 +127,14 @@
       "Release",
       "--xvfb",
       "--factory-properties",
-      "{\"buildername\": \"Linux Sync\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Linux Sync\", \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Sync\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": \"Linux Builder\", \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=gtest",
+      "--builder-name=Linux Sync",
+      "--slave-name=TestSlavename",
+      "--master-name=chromium.linux",
+      "--build-number=571",
       "--parallel",
       "sync_integration_tests",
       "--ui-test-action-max-timeout=120000"

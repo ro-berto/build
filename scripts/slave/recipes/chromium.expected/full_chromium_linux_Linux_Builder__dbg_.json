@@ -163,9 +163,9 @@
       "--build-url",
       "gs://chromium-linux-archive/chromium.linux/Linux Builder (dbg)",
       "--factory-properties",
-      "{\"buildername\": \"Linux Builder (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Linux Builder (dbg)\", \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.linux\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   }

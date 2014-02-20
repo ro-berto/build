@@ -162,9 +162,9 @@
       "--build-url",
       "gs://chromium-chromiumos-archive/chromium.chromiumos/Linux ChromiumOS Builder (dbg)",
       "--factory-properties",
-      "{\"buildername\": \"Linux ChromiumOS Builder (dbg)\", \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\"}",
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"buildername\": \"Linux ChromiumOS Builder (dbg)\", \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\"}"
+      "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"Linux ChromiumOS Builder (dbg)\", \"buildnumber\": 571, \"mastername\": \"chromium.chromiumos\", \"parent_buildername\": null, \"recipe\": \"chromium\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}"
     ],
     "name": "package build"
   }

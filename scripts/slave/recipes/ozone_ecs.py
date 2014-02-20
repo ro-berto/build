@@ -98,5 +98,5 @@ def GenSteps(api):
 
 
 def GenTests(api):
-  yield api.test('basic')
+  yield api.test('basic') + api.properties.scheduled()
   yield api.test('trybot') + api.properties.tryserver()

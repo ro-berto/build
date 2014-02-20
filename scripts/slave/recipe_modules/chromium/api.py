@@ -86,8 +86,8 @@ class ChromiumApi(recipe_api.RecipeApi):
   def runtest(self, test, args=None, xvfb=False, name=None, annotate=None,
               results_url=None, perf_dashboard_id=None, test_type=None,
               generate_json_file=False, results_directory=None,
-              build_number=None, builder_name=None, python_mode=False,
-              spawn_dbus=True, parallel=False, revision=None, **kwargs):
+              python_mode=False, spawn_dbus=True, parallel=False,
+              revision=None, **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -115,10 +115,15 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--generate-json-file')
     if results_directory:
       full_args.append('--results-directory=%s' % results_directory)
-    if build_number:
-      full_args.append('--build-number=%s' % build_number)
-    if builder_name:
-      full_args.append('--builder-name=%s' % builder_name)
+    # These properties are specified on every bot, so pass them down
+    # unconditionally.
+    full_args.append('--builder-name=%s' % self.m.properties['buildername'])
+    full_args.append('--slave-name=%s' % self.m.properties['slavename'])
+    full_args.append('--master-name=%s' % self.m.properties['mastername'])
+    # A couple of the recipes contain tests which don't specify a buildnumber,
+    # so make this optional.
+    if self.m.properties.get('buildnumber'):
+      full_args.append('--build-number=%s' % self.m.properties['buildnumber'])
     if ext == '.py' or python_mode:
       full_args.append('--run-python-script')
     if not spawn_dbus:
@@ -187,8 +192,6 @@ class ChromiumApi(recipe_api.RecipeApi):
         test_type=name,
         generate_json_file=True,
         results_directory=results_directory,
-        build_number=self.m.properties['buildnumber'],
-        builder_name=self.m.properties['buildername'],
         python_mode=True,
         spawn_dbus=spawn_dbus,
         env=env)

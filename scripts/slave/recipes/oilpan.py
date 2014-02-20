@@ -119,6 +119,6 @@ def GenTests(api):
   for plat in ('linux', 'win', 'mac'):
     yield (
       api.test('basic_%s' % plat) +
-      api.properties(TARGET_BITS=64, perf_id="%s-release" % plat) +
+      api.properties.generic(TARGET_BITS=64, perf_id="%s-release" % plat) +
       api.platform(plat, 64)
     )
