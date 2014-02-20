@@ -105,7 +105,14 @@ def goma_setup(options, env):
   # waterfall. Remove this as soon as that is fixed. (12 June, 2013).
   env['NO_NACL_GOMA'] = 'true'
   hostname = socket.gethostname().split('.')[0]
+  # Linux
   if hostname in ['slave%d-c4' % i for i in range(300, 400)]:
+    del env['NO_NACL_GOMA']
+  # Mac
+  if hostname in ['vm%d-m4' % i for i in range(700, 710)]:
+    del env['NO_NACL_GOMA']
+  # Win
+  if hostname in ['vm%d-m4' % i for i in range(300, 310)]:
     del env['NO_NACL_GOMA']
 
   # goma is requested.
