@@ -14,7 +14,6 @@ def android_defaults(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = 'android'
-  gyp_defs['host_os'] = 'linux'
 
   if c.HOST_PLATFORM != 'linux':
     raise recipe_config.BadConf('Can only build android on linux.')

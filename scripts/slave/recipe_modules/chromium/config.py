@@ -319,4 +319,3 @@ def android(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = c.TARGET_PLATFORM
-  gyp_defs['host_os'] = c.HOST_PLATFORM
