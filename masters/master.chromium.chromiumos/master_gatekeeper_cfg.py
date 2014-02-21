@@ -11,7 +11,7 @@ from master import master_utils
 # Note: don't include 'update scripts' since we can't do much about it when
 # it's failing and the tree is still technically fine.
 chromium_categories_steps = {
-  '': ['update', 'runhooks'],
+  '': ['steps', 'update', 'runhooks'],
   'tester': [
     'app_list_unittests',
     'aura_unit_tests',
