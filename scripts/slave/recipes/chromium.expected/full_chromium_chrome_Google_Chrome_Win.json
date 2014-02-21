@@ -71,7 +71,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "branding=Chrome buildtype=Official chromium_win_pch=0 component=static_library fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2010"
     },
     "name": "gclient runhooks"
@@ -100,6 +100,8 @@
       "goma",
       "--mode",
       "official",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--clobber",
       "--",
       "chrome_official_builder"

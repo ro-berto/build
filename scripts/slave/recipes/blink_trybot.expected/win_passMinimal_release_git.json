@@ -131,7 +131,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2010"
     },
     "name": "gclient runhooks"
@@ -150,6 +150,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--",
       "blink_tests"
     ],
@@ -377,7 +379,7 @@
       "runhooks"
     ],
     "env": {
-      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 target_arch=ia32",
+      "GYP_DEFINES": "chromium_win_pch=0 component=static_library dcheck_always_on=1 fastbuild=1 gomadir='[BUILD]\\goma' target_arch=ia32 use_goma=1",
       "GYP_MSVS_VERSION": "2010"
     },
     "name": "gclient runhooks (2)"
@@ -396,6 +398,8 @@
       "ninja",
       "--compiler",
       "goma",
+      "--goma-dir",
+      "[BUILD]\\goma",
       "--",
       "blink_tests"
     ],

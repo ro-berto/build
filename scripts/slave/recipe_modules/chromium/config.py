@@ -197,14 +197,11 @@ def goma(c):
   else:  # pragma: no cover
     raise BadConf('goma config dosen\'t understand %s' % c.compile_py.compiler)
 
-  if c.HOST_PLATFORM != 'win':
-    # TODO(phajdan): The gyp conversion to ninja for these options does not
-    # work correctly on windows (as of Feb 04, 2014).
-    c.gyp_env.GYP_DEFINES['use_goma'] = 1
+  c.gyp_env.GYP_DEFINES['use_goma'] = 1
 
-    goma_dir = Path('[BUILD]', 'goma')
-    c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
-    c.compile_py.goma_dir = goma_dir
+  goma_dir = Path('[BUILD]', 'goma')
+  c.gyp_env.GYP_DEFINES['gomadir'] = goma_dir
+  c.compile_py.goma_dir = goma_dir
 
   if c.TARGET_PLATFORM == 'win':
     fastbuild(c)
