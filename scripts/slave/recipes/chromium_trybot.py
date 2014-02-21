@@ -226,19 +226,22 @@ def GenSteps(api):
     api.rietveld.apply_issue(),
   )
 
-  yield api.step('presubmit', [
+  yield api.python(
+    'presubmit',
     api.path.depot_tools('presubmit_support.py'),
-    '--root', api.path.checkout(api.rietveld.calculate_issue_root()),
-    '--commit',
-    '--verbose', '--verbose',
-    '--issue', api.properties['issue'],
-    '--patchset', api.properties['patchset'],
-    '--skip_canned', 'CheckRietveldTryJobExecution',
-    '--skip_canned', 'CheckTreeIsOpen',
-    '--skip_canned', 'CheckBuildbotPendingBuilds',
-    '--rietveld_url', api.properties['rietveld'],
-    '--rietveld_email', '',  # activates anonymous mode
-    '--rietveld_fetch'])
+    [
+      '--root', api.path.checkout(api.rietveld.calculate_issue_root()),
+      '--commit',
+      '--verbose', '--verbose',
+      '--issue', api.properties['issue'],
+      '--patchset', api.properties['patchset'],
+      '--skip_canned', 'CheckRietveldTryJobExecution',
+      '--skip_canned', 'CheckTreeIsOpen',
+      '--skip_canned', 'CheckBuildbotPendingBuilds',
+      '--rietveld_url', api.properties['rietveld'],
+      '--rietveld_email', '',  # activates anonymous mode
+      '--rietveld_fetch'
+    ])
 
   # Do not proceed if presubmit or any of the earlier steps failed.
   if api.step_history.failed:
