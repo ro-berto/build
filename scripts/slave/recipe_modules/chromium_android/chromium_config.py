@@ -11,7 +11,6 @@ from RECIPE_MODULES.chromium import CONFIG_CTX
             config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32})
 def android_defaults(c):
   c.compile_py.default_targets=[]
-  c.gyp_env.GYP_CROSSCOMPILE = 1
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
   gyp_defs['OS'] = 'android'
