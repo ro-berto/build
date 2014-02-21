@@ -5,8 +5,6 @@
 
 import codecs
 import copy
-import cStringIO
-import json
 import optparse
 import os
 import pprint
@@ -15,7 +13,6 @@ import socket
 import subprocess
 import sys
 import time
-import urllib2
 import urlparse
 
 import os.path as path
@@ -119,15 +116,6 @@ CACHE_DIR = path.join(SLAVE_DIR, 'cache_dir')
 if sys.platform.startswith('win'):
   CACHE_DIR = CACHE_DIR.replace('\\', '\\\\')
 
-# Find the patch tool.
-ROOT_BUILD_DIR = path.dirname(SLAVE_DIR)
-ROOT_B_DIR = path.dirname(ROOT_BUILD_DIR)
-BUILD_INTERNAL_DIR = path.join(ROOT_B_DIR, 'build_internal')
-if sys.platform.startswith('win'):
-  PATCH_TOOL = path.join(BUILD_INTERNAL_DIR, 'tools', 'patch.EXE')
-else:
-  PATCH_TOOL = '/usr/bin/patch'
-
 
 class SubprocessFailed(Exception):
   def __init__(self, message, code):
@@ -139,18 +127,11 @@ def call(*args, **kwargs):
   """Interactive subprocess call."""
   kwargs['stdout'] = subprocess.PIPE
   kwargs['stderr'] = subprocess.STDOUT
-  stdin_data = kwargs.pop('stdin_data', None)
-  if stdin_data:
-    kwargs['stdin'] = subprocess.PIPE
-  out = cStringIO.StringIO()
   for attempt in xrange(RETRIES):
     attempt_msg = ' (retry #%d)' % attempt if attempt else ''
     print '===Running %s%s===' % (' '.join(args), attempt_msg)
     start_time = time.time()
     proc = subprocess.Popen(args, **kwargs)
-    if stdin_data:
-      proc.stdin.write(stdin_data)
-      proc.stdin.close()
     # This is here because passing 'sys.stdout' into stdout for proc will
     # produce out of order output.
     while True:
@@ -158,13 +139,12 @@ def call(*args, **kwargs):
       if not buf:
         break
       sys.stdout.write(buf)
-      out.write(buf)
     code = proc.wait()
     elapsed_time = ((time.time() - start_time) / 60.0)
     if not code:
       print '===Succeeded in %.1f mins===' % elapsed_time
       print
-      return out.getvalue()
+      return 0
     print '===Failed in %.1f mins===' % elapsed_time
     print
 
@@ -180,7 +160,7 @@ def git(*args, **kwargs):
   if sys.platform.startswith('win'):
     git_executable += '.bat'
   cmd = (git_executable,) + args
-  return call(*cmd, **kwargs)
+  call(*cmd, **kwargs)
 
 
 def get_gclient_spec(solutions):
@@ -304,84 +284,10 @@ def gclient_sync():
        '--nohooks', '--noprehooks')
 
 
-def create_less_than_or_equal_regex(number):
-  """ Return a regular expression to test whether an integer less than or equal
-      to 'number' is present in a given string.
-  """
-
-  # In three parts, build a regular expression that match any numbers smaller
-  # than 'number'.
-  # For example, 78656 would give a regular expression that looks like:
-  # Part 1
-  # (78356|            # 78356
-  # Part 2
-  #  7835[0-5]|        # 78350-78355
-  #  783[0-4][0-9]|    # 78300-78349
-  #  78[0-2][0-9]{2}|  # 78000-78299
-  #  7[0-7][0-9]{3}|   # 70000-77999
-  #  [0-6][0-9]{4}|    # 10000-69999
-  # Part 3
-  #  [0-9]{1,4}        # 0-9999
-
-  # Part 1: Create an array with all the regexes, as described above.
-  # Prepopulate it with the number itself.
-  number = str(number)
-  expressions = [number]
-
-  # Convert the number to a list, so we can translate digits in it to
-  # expressions.
-  num_list = list(number)
-  num_len = len(num_list)
-
-  # Part 2: Go through all the digits in the number, starting from the end.
-  # Each iteration appends a line to 'expressions'.
-  for index in range (num_len - 1, -1, -1):
-    # Convert this digit back to an integer.
-    digit = int(num_list[index])
-
-    # Part 2.1: No processing if this digit is a zero.
-    if digit == 0:
-      continue
-
-    # Part 2.2: We switch the current digit X by a range "[0-(X-1)]".
-    if digit == 1:
-      num_list[index] = '0'
-    else:
-      num_list[index] = '[0-%d]' % (digit - 1)
-
-    # Part 2.3: We set all following digits to be "[0-9]".
-    # Since we just decrementented a digit in a most important position, all
-    # following digits don't matter. The possible numbers will always be smaller
-    # than before we decremented.
-    if (index + 1) < num_len:
-      if (num_len - (index + 1)) == 1:
-        num_list[index + 1] = '[0-9]'
-      else:
-        num_list[index + 1] = '[0-9]{%s}' % (num_len - (index + 1))
-
-    # Part 2.4: Add this new sub-expression to the list.
-    expressions.append(''.join(num_list[:min(index+2, num_len)]))
-
-  # Part 3: We add all the full ranges to match all numbers that are at least
-  # one order of magnitude smaller than the original numbers.
-  if num_len == 2:
-    expressions.append('[0-9]')
-  elif num_len > 2:
-    expressions.append('[0-9]{1,%s}' % (num_len - 1))
-
-  # All done. We now have our final regular expression.
-  regex = '(%s)' % ('|'.join(expressions))
-  return regex
-
-
 def get_git_hash(revision, dir_name):
-  match = "^git-svn-id: [^ ]*@%s " % create_less_than_or_equal_regex(revision)
-  cmd = ['git', 'log', '-E', '--grep', match, '--format=%H', '--max-count=1']
-  results = call(*cmd, cwd=dir_name).strip().splitlines()
-  if results:
-    return results[0]
-  raise Exception('We can\'t resolve svn revision %s into a git hash' %
-                  revision)
+  match = "^git-svn-id: [^ ]*@%d" % revision
+  cmd = ['git', 'log', '--grep', match, '--format=%H', dir_name]
+  return subprocess.check_output(cmd).strip() or None
 
 
 def deps2git(sln_dirs):
@@ -396,9 +302,6 @@ def deps2git(sln_dirs):
          '--cache_dir=%s' % CACHE_DIR,
          '--deps=%s' % deps_file, '--out=%s' % deps_git_file)
 
-
-def emit_got_revision(revision):
-  print '@@@SET_BUILD_PROPERTY@got_revision@%s@@@' % revision
 
 def git_checkout(solutions, revision):
   build_dir = os.getcwd()
@@ -428,55 +331,21 @@ def git_checkout(solutions, revision):
     git('pull', 'origin', 'master', cwd=sln_dir)
     # TODO(hinoka): We probably have to make use of revision mapping.
     if first_solution and revision and revision.lower() != 'head':
-      emit_got_revision(revision)
       if revision and revision.isdigit() and len(revision) < 40:
         # rev_num is really a svn revision number, convert it into a git hash.
-        git_ref = get_git_hash(int(revision), name)
+        git_ref = get_git_hash(revision, name)
       else:
         # rev_num is actually a git hash or ref, we can just use it.
         git_ref = revision
       git('checkout', git_ref, cwd=sln_dir)
     else:
       git('checkout', 'origin/master', cwd=sln_dir)
-      if first_solution:
-        git_ref = git('log', '--format=%H', '--max-count=1',
-                      cwd=sln_dir).strip()
 
     first_solution = False
-  return git_ref
 
 
-def _download(url):
-  """Fetch url and return content, with retries for flake."""
-  for attempt in xrange(RETRIES):
-    try:
-      return urllib2.urlopen(url).read()
-    except Exception:
-      if attempt == RETRIES - 1:
-        raise
-
-
-def apply_issue_svn(root, patch_url):
-  patch_data = call('svn', 'cat', patch_url)
-  call(PATCH_TOOL, '-p0', '--remove-empty-files', '--force', '--forward',
-       stdin_data=patch_data, cwd=root)
-
-
-def apply_issue_rietveld(issue, patchset, root, server, rev_map, revision):
-  apply_issue_bin = ('apply_issue.bat' if sys.platform.startswith('win')
-                     else 'apply_issue')
-  rev_map = json.loads(rev_map)
-  if root in rev_map and rev_map[root] == 'got_revision':
-    rev_map[root] = revision
-  call(apply_issue_bin,
-       '--root_dir', root,
-       '--issue', issue,
-       '--patchset', patchset,
-       '--no-auth',
-       '--server', server,
-       '--revision-mapping', json.dumps(rev_map),
-       '--base_ref', revision,
-       '--force')
+def apply_issue(issue, patchset, root, server):
+  pass
 
 
 def check_flag(flag_file):
@@ -505,15 +374,14 @@ def parse_args():
                    help='Patchset from issue to patch from, if applicable.')
   parse.add_option('--patch_url', help='Optional URL to SVN patch.')
   parse.add_option('--root', help='Repository root.')
-  parse.add_option('--rietveld_server',
-                   default='codereview.chromium.org',
-                   help='Rietveld server.')
+  parse.add_option('--rietveld_server', help='Rietveld server.')
   parse.add_option('--specs', help='Gcilent spec.')
   parse.add_option('--master', help='Master name.')
   parse.add_option('-f', '--force', action='store_true',
                    help='Bypass check to see if we want to be run. '
                         'Should ONLY be used locally.')
-  parse.add_option('--revision_mapping')
+  # TODO(hinoka): We don't actually use this yet, we should factor this in.
+  parse.add_option('--revision-mapping')
   parse.add_option('--revision')
   parse.add_option('--slave_name', default=socket.getfqdn().split('.')[0],
                    help='Hostname of the current machine, '
@@ -569,15 +437,11 @@ def main():
   # Calling git directory because there is no way to run Gclient without
   # invoking DEPS.
   print 'Fetching Git checkout'
-  got_revision = git_checkout(git_solutions, options.revision)
+  git_checkout(git_solutions, options.revision)
 
-  options.root =  options.root or dir_names[0]
-  if options.patch_url:
-    apply_issue_svn(options.root, options.patch_url)
-  elif options.issue:
-    apply_issue_rietveld(options.issue, options.patchset, options.root,
-                         options.rietveld_server, options.revision_mapping,
-                         got_revision)
+  # TODO(hinoka): This must be implemented before we can turn this on for TS.
+  # if options.issue:
+  #   apply_issue(options.issue, options.patchset, options.root, options.server)
 
   # Magic to get deps2git to work with internal DEPS.
   shutil.copyfile(S2G_INTERNAL_FROM_PATH, S2G_INTERNAL_DEST_PATH)

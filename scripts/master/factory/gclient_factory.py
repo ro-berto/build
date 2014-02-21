@@ -197,8 +197,7 @@ class GClientFactory(object):
     # this does activate, it will emit a BOT_UPDATED file in the build/
     # directory to signal to the other gclient update steps to no-op.
     code_review_site = config.Master.Master4.code_review_site
-    factory_cmd_obj.AddBotUpdateStep(env, gclient_spec, self._revision_mapping,
-                                     server=code_review_site)
+    factory_cmd_obj.AddBotUpdateStep(env, gclient_spec, code_review_site)
 
 
     # svn timeout is 2 min; we allow 5

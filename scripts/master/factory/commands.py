@@ -951,7 +951,7 @@ class FactoryCommands(object):
       cmd.extend(['--rietveld_server', server])
 
     if revision_mapping:
-      cmd.extend(['--revision_mapping=%s' % json.dumps(revision_mapping)])
+      cmd.extend(['--revision-mapping=%s' % json.dumps(revision_mapping)])
 
     self._factory.addStep(
         chromium_step.AnnotatedCommand,
