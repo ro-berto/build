@@ -9,6 +9,7 @@ DEPS = [
   'path',
   'platform',
   'properties',
+  'python',
 ]
 
 PERF_TESTS = [
@@ -74,6 +75,9 @@ def GenSteps(api):
   api.path.set_dynamic_path('checkout', api.path.slave_build(('src')))
 
   yield api.chromium.runhooks()
+  yield api.python('fetch_reference_build',
+                   api.path.checkout('dart', 'tools', 'bots',
+                                     'fetch_reference_build.py'))
   yield api.chromium.compile()
 
   results_dir = api.path.slave_build('layout-test-results')
