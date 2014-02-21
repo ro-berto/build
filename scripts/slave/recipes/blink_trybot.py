@@ -105,9 +105,26 @@ def GenSteps(api):
   webkit_python_tests = api.path.build('scripts', 'slave', 'chromium',
                                        'test_webkitpy_wrapper.py')
 
+  root = api.rietveld.calculate_issue_root()
+
   yield (
     api.gclient.checkout(revert=True),
-    api.rietveld.apply_issue('third_party', 'WebKit'),
+    api.rietveld.apply_issue(root),
+    api.python(
+      'presubmit',
+      api.path.depot_tools('presubmit_support.py'), [
+        '--root', api.path.checkout(root),
+        '--commit',
+        '--verbose', '--verbose',
+        '--issue', api.properties['issue'],
+        '--patchset', api.properties['patchset'],
+        '--skip_canned', 'CheckRietveldTryJobExecution',
+        '--skip_canned', 'CheckTreeIsOpen',
+        '--skip_canned', 'CheckBuildbotPendingBuilds',
+        '--rietveld_url', api.properties['rietveld'],
+        '--rietveld_email', '',  # activates anonymous mode
+        '--rietveld_fetch'
+      ]),
     api.chromium.runhooks(),
     api.chromium.compile(),
     api.python('webkit_lint', webkit_lint, [
