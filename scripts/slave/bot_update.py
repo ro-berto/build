@@ -413,6 +413,9 @@ def git_checkout(solutions, revision):
 
     # Clean out .DEPS.git changes first.
     try:
+      # Make sure we start on a known branch first, and not where ever
+      # apply_issue left us at before.
+      git('checkout', '--force', 'origin/master', cwd=sln_dir)
       git('reset', '--hard', cwd=sln_dir)
     except SubprocessFailed as e:
       if e.code == 128:
