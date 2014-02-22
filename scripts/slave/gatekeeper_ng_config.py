@@ -35,7 +35,7 @@ formatting arguments are found at https://chromium.googlesource.com/chromium/
 reproduced here:
 
   %(result)s: 'warning' or 'failure'
-  %(projectName): 'Chromium', 'Chromium Perf', etc.
+  %(project_name): 'Chromium', 'Chromium Perf', etc.
   %(builder): the builder name
   %(reason): reason for launching the build
   %(revision): build revision
@@ -113,7 +113,7 @@ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Keys which have defaults besides None or set([]).
 DEFAULTS = {
-    'subject_template': ('buildbot %(result)s in %(projectName)s on '
+    'subject_template': ('buildbot %(result)s in %(project_name)s on '
                          '%(builder)s, revision %(revision)s'),
 }
 

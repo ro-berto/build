@@ -634,7 +634,7 @@ class GatekeeperTest(unittest.TestCase):
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
     mailer_data = GatekeeperTest.decode_param_json(self.url_calls[-1]['params'])
     self.assertEquals(mailer_data['subject_template'], unicode(
-        'buildbot %(result)s in %(projectName)s on %(builder)s, '
+        'buildbot %(result)s in %(project_name)s on %(builder)s, '
         'revision %(revision)s'))
 
 
