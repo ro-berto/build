@@ -39,17 +39,25 @@ def getAllRevisions(build):
     pass
 
 
-def getLatestRevision(build):
+def getLatestRevision(build, git_repo=None):
   """Helper method to extract the latest revision associated to a build.
 
   Args:
     build: The build we want to extract the latest revision of.
+    git_repo: The GitHelper object associated with build's respository.
+        If passed, the VCS is assumed to be Git.
 
   Returns:
     The latest revision of that build, or None, if none.
   """
   revisions = getAllRevisions(build)
-  if revisions:
+  if not revisions:
+    return None
+
+  if git_repo:
+    with_numbers = zip(revisions, git_repo.number(revisions))
+    return max(with_numbers, lambda t: t[1])[0]
+  else:
     return max(revisions)
 
 
