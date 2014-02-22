@@ -43,9 +43,9 @@ def x86_builder(c):
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
 @CONFIG_CTX(includes=['android_defaults', 'default_compiler'],
-            config_vars={'TARGET_ARCH': 'mips'})
-def mips_builder(c):
-  if c.TARGET_ARCH != 'mips':
+            config_vars={'TARGET_ARCH': 'mipsel'})
+def mipsel_builder(c):
+  if c.TARGET_ARCH != 'mipsel':
     raise recipe_config.BadConf('I dunno what to put in a mips builder!')
 
 @CONFIG_CTX(includes=['main_builder'])

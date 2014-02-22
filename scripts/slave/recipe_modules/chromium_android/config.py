@@ -75,11 +75,11 @@ def x86_builder(c):
   pass
 
 @config_ctx()
-def mips_base(c):
+def mipsel_base(c):
   pass
 
-@config_ctx(includes=['mips_base'])
-def mips_builder(c):
+@config_ctx(includes=['mipsel_base'])
+def mipsel_builder(c):
   pass
 
 @config_ctx(includes=['main_builder'])

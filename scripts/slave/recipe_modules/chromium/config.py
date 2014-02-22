@@ -16,7 +16,7 @@ HOST_PLATFORMS = ('linux', 'win', 'mac')
 TARGET_PLATFORMS = HOST_PLATFORMS + ('ios', 'android', 'chromeos')
 HOST_TARGET_BITS = (32, 64)
 HOST_ARCHS = ('intel',)
-TARGET_ARCHS = HOST_ARCHS + ('arm', 'mips')
+TARGET_ARCHS = HOST_ARCHS + ('arm', 'mipsel')
 BUILD_CONFIGS = ('Release', 'Debug')
 
 def check(val, potentials):
@@ -135,8 +135,8 @@ def BASE(c):
     ('intel', 64): 'x64',
     ('arm',   32): 'arm',
     ('arm',   64): 'arm',
-    ('mips',  32): 'mips',
-    ('mips',  64): 'mips',
+    ('mipsel',  32): 'mipsel',
+    ('mipsel',  64): 'mipsel',
   }.get((c.TARGET_ARCH, c.TARGET_BITS))
   if gyp_arch:
     c.gyp_env.GYP_DEFINES['target_arch'] = gyp_arch

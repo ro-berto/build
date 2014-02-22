@@ -34,7 +34,7 @@ def GenTests(api):
 
   yield (
     api.test('mips_target') +
-    api.properties(build_config='Release', target_arch='mips')
+    api.properties(build_config='Release', target_arch='mipsel')
   )
 
   yield api.test('default_platform') + api.platform('linux', 64)
