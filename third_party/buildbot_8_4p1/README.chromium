@@ -3265,3 +3265,16 @@ Provide support for messageFormatter to create custom subject lines.
              
          m = self.createEmail(msgdict, name, self.master_status.getTitle(),
                               results, builds, patches, logs)
+
+
+Change minimum cache size to 50 to prevent waterfall and console view bustage.
+--- a/third_party/buildbot_8_4p1/buildbot/master.py
++++ b/third_party/buildbot_8_4p1/buildbot/master.py
+@@ -796,7 +796,7 @@ class BuildMaster(service.MultiService):
+             if self.autoBuildCacheRatio:
+                 builder_status = builder.builder_status
+                 slavecount = len(builder_status.slavenames)
+-                max_size = max(self.autoBuildCacheRatio * slavecount, 30)
++                max_size = max(self.autoBuildCacheRatio * slavecount, 50)
+                 builder_status.buildCache.set_max_size(max_size)
+                 builder_status.buildCacheSize = max_size
