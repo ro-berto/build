@@ -36,7 +36,7 @@ reproduced here:
 
   %(result)s: 'warning' or 'failure'
   %(project_name): 'Chromium', 'Chromium Perf', etc.
-  %(builder): the builder name
+  %(builder_name): the builder name
   %(reason): reason for launching the build
   %(revision): build revision
   %(buildnumber): buildnumber
@@ -83,7 +83,7 @@ The 'comment' key can be put anywhere and is ignored by the parser.
     },
     'win_extra': {
       'closing_steps': ['extra_win_step']
-      'subject_template': 'windows heads up on %(builder)',
+      'subject_template': 'windows heads up on %(builder_name)',
     }
   }
 }
@@ -114,7 +114,7 @@ DATA_DIR = os.path.dirname(os.path.abspath(__file__))
 # Keys which have defaults besides None or set([]).
 DEFAULTS = {
     'subject_template': ('buildbot %(result)s in %(project_name)s on '
-                         '%(builder)s, revision %(revision)s'),
+                         '%(builder_name)s, revision %(revision)s'),
 }
 
 

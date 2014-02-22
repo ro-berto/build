@@ -104,7 +104,7 @@
 
         "forgive_all": "true",
 
-        "subject_template": "%(project_name)s %(builder)s %(result)s",
+        "subject_template": "%(project_name)s %(builder_name)s %(result)s",
 
         "categories": [
           "chromium_perf_steps",
