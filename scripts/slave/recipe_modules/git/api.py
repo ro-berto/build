@@ -19,13 +19,14 @@ class GitApi(recipe_api.RecipeApi):
     return self.m.step(name, [git_cmd] + list(args), **kwargs)
 
   def checkout(self, url, ref='master', dir_path=None, recursive=False,
-               keep_paths=None):
+               submodules=True, keep_paths=None):
     """Returns an iterable of steps to perform a full git checkout.
     Args:
       url (string): url of remote repo to use as upstream
       ref (string): ref to check out after fetching
       dir_path (Path): optional directory to clone into
       recursive (bool): whether to recursively fetch submodules or not
+      submodules (bool): whether to sync and update submodules or not
       keep_paths (iterable of strings): paths to ignore during git-clean;
           paths are gitignore-style patterns relative to checkout_path.
     """
@@ -52,7 +53,7 @@ class GitApi(recipe_api.RecipeApi):
     if self.m.platform.is_win:
       git_setup_args += ['--git_cmd_path', self.m.path.depot_tools('git.bat')]
 
-    return [
+    steps = [
       self.m.python('git setup',
                     self.m.path.build('scripts', 'slave', 'git_setup.py'),
                     git_setup_args),
@@ -60,7 +61,11 @@ class GitApi(recipe_api.RecipeApi):
            *fetch_args, cwd=dir_path),
       self('clean', '-f', '-d', '-x', *clean_args, cwd=dir_path),
       self('checkout', '-f', remote_ref, cwd=dir_path),
-      self('submodule', 'sync', name='submodule sync', cwd=dir_path),
-      self('submodule', 'update', '--init', '--recursive',
-           name='submodule update', cwd=dir_path),
     ]
+    if submodules:
+      steps += [
+        self('submodule', 'sync', name='submodule sync', cwd=dir_path),
+        self('submodule', 'update', '--init', '--recursive',
+             name='submodule update', cwd=dir_path),
+      ]
+    return steps
