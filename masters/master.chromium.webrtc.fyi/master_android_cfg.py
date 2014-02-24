@@ -32,7 +32,7 @@ android_dbg_archive = master_config.GetGSUtilUrl('chromium-webrtc',
 B('Android Builder (dbg)', 'android_builder_dbg_factory',
   scheduler='android_webrtc_scheduler|android_periodic_scheduler',
   notify_on_missing=True)
-F('android_builder_dbg_factory', android().ChromiumWebRTCAndroidFactory(
+F('android_builder_dbg_factory', android().ChromiumWebRTCAndroidLatestFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -44,7 +44,7 @@ F('android_builder_dbg_factory', android().ChromiumWebRTCAndroidFactory(
 # Testers.
 B('Android Tests (dbg) (JB Nexus7.2)', 'android_tests_dbg_factory',
   scheduler='android_trigger_dbg', notify_on_missing=True)
-F('android_tests_dbg_factory', android().ChromiumWebRTCAndroidFactory(
+F('android_tests_dbg_factory', android().ChromiumWebRTCAndroidLatestFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={

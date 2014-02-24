@@ -40,7 +40,7 @@ T('android_trigger_rel')
 
 
 def f_dbg_android_tests(bot_id_suffix):
-  return android_apk_tester().ChromiumWebRTCAndroidFactory(
+  return android_apk_tester().ChromiumWebRTCAndroidLatestFactory(
     target='Debug',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -53,7 +53,7 @@ def f_dbg_android_tests(bot_id_suffix):
 
 
 def f_rel_android_tests(bot_id_suffix):
-  return android_apk_tester().ChromiumWebRTCAndroidFactory(
+  return android_apk_tester().ChromiumWebRTCAndroidLatestFactory(
     target='Release',
     annotation_script='src/build/android/buildbot/bb_run_bot.py',
     factory_properties={
@@ -95,7 +95,7 @@ F('f_android_clang_dbg', android_webrtc().ChromiumAnnotationFactory(
 # WebRTC native test APKs: builders.
 B('Android Chromium-APK Builder (dbg)', 'f_android_apk_dbg', 'android',
   scheduler, notify_on_missing=True, slavebuilddir='android_apk')
-F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidFactory(
+F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidLatestFactory(
   target='Debug',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
@@ -106,7 +106,7 @@ F('f_android_apk_dbg', android_apk_builder().ChromiumWebRTCAndroidFactory(
 
 B('Android Chromium-APK Builder', 'f_android_apk_rel', 'android', scheduler,
   notify_on_missing=True, slavebuilddir='android_apk')
-F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidFactory(
+F('f_android_apk_rel', android_apk_builder().ChromiumWebRTCAndroidLatestFactory(
   target='Release',
   annotation_script='src/build/android/buildbot/bb_run_bot.py',
   factory_properties={
