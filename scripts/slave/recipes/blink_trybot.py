@@ -106,10 +106,13 @@ def GenSteps(api):
 
   root = api.rietveld.calculate_issue_root()
 
-  yield (
+  steps = [
     api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(root),
-    api.python(
+  ]
+
+  if not api.platform.is_win:
+    steps.append(api.python(
       'presubmit',
       api.path.depot_tools('presubmit_support.py'), [
         '--root', api.path.checkout(root),
@@ -123,7 +126,9 @@ def GenSteps(api):
         '--rietveld_url', api.properties['rietveld'],
         '--rietveld_email', '',  # activates anonymous mode
         '--rietveld_fetch'
-      ]),
+      ]))
+
+  steps.extend([
     api.chromium.runhooks(),
     api.chromium.compile(),
     api.python('webkit_lint', webkit_lint, [
@@ -137,7 +142,9 @@ def GenSteps(api):
     api.chromium.runtest('blink_platform_unittests'),
     api.chromium.runtest('blink_heap_unittests'),
     api.chromium.runtest('wtf_unittests'),
-  )
+  ])
+
+  yield steps
 
   def deapply_patch_fn(failing_steps):
     yield (
