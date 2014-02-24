@@ -88,6 +88,9 @@ def GenSteps(api):
                           'layout_test_wrapper.py')
     args = ['--target', api.chromium.c.BUILD_CONFIG,
             '-o', results_dir,
+            '--additional-expectations',
+            api.path.checkout('third_party', 'WebKit', 'LayoutTests',
+                              'OilpanExpectations'),
             '--build-dir', api.chromium.c.build_dir]
     yield api.chromium.runtest(test, args, name='webkit_tests')
 

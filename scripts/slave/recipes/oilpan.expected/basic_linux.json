@@ -241,6 +241,8 @@
       "Release",
       "-o",
       "[SLAVE_BUILD]/layout-test-results",
+      "--additional-expectations",
+      "[SLAVE_BUILD]/src/third_party/WebKit/LayoutTests/OilpanExpectations",
       "--build-dir",
       "[SLAVE_BUILD]/src/out"
     ],
