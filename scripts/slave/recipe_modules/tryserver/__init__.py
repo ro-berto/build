@@ -3,10 +3,6 @@
 # found in the LICENSE file.
 
 DEPS = [
-  'path',
   'properties',
-  'raw_io',
   'rietveld',
-  'step',
-  'step_history',
 ]
