@@ -25,7 +25,7 @@
       "--nohooks",
       "--delete_unversioned_trees",
       "--revision",
-      "polymer-dev@HEAD",
+      "polymer-dev@origin/master",
       "--output-json",
       "/path/to/tmp/json"
     ],

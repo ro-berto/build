@@ -41,7 +41,7 @@ def _CheckoutSteps(api):
     if name == 'polymer-dev':
       cfg.solutions.insert(0, {})
       soln = cfg.solutions[0]
-      soln.revision = 'HEAD'
+      soln.revision = 'origin/master'
     else:
       soln = cfg.solutions.add()
     soln.name = name
@@ -113,7 +113,7 @@ def GenTests(api):
       api.properties.scheduled(
         buildername='polymer %s' % plat,
         repository='https://github.com/Polymer/polymer-dev',
-        revision='HEAD',
+        revision='origin/master',
       ) +
       api.platform.name(plat)
     )
@@ -124,7 +124,7 @@ def GenTests(api):
     api.properties.scheduled(
       buildername='polymer linux',
       repository='https://github.com/Polymer/platform-dev',
-      revision='HEAD',
+      revision='origin/master',
       scheduler='polymer-platform',
     )
   )
