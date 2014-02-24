@@ -96,8 +96,7 @@ def GenSteps(api):
 
   api.chromium.set_config('blink')
   api.chromium.apply_config('trybot_flavor')
-  api.gclient.set_config('blink_internal',
-                         GIT_MODE=api.properties.get('GIT_MODE', False))
+  api.gclient.set_config('blink_internal')
   api.step.auto_resolve_conflicts = True
 
   webkit_lint = api.path.build('scripts', 'slave', 'chromium',
@@ -154,12 +153,11 @@ def GenTests(api):
   canned_test = api.json.canned_test_output
   with_patch = 'webkit_tests (with patch)'
   without_patch = 'webkit_tests (without patch)'
-  def props(config='Release', git_mode=False):
+  def props(config='Release'):
     return api.properties.tryserver(
       build_config=config,
       config_name='blink',
       root='src/third_party/WebKit',
-      GIT_MODE=git_mode,
     )
 
   # This general loop tests
@@ -173,20 +171,18 @@ def GenTests(api):
   for passFirst in (True, False):
     for build_config in ['Release', 'Debug']:
       for plat in ('win', 'mac', 'linux'):
-        for git_mode in True, False:
-          tag = 'passFirst' if passFirst else 'passMinimal'
-          suffix = '_git' if git_mode else ''
-          name = '%s_%s_%s%s' % (plat, tag, build_config.lower(), suffix)
-          test = (
-            api.test(name) +
-            props(build_config, git_mode) +
-            api.platform.name(plat) +
-            api.override_step_data(with_patch, canned_test(passing=passFirst))
-          )
-          if not passFirst:
-            test += api.override_step_data(
-              without_patch, canned_test(passing=False, minimal=True))
-          yield test
+        tag = 'passFirst' if passFirst else 'passMinimal'
+        name = '%s_%s_%s' % (plat, tag, build_config.lower())
+        test = (
+          api.test(name) +
+          props(build_config) +
+          api.platform.name(plat) +
+          api.override_step_data(with_patch, canned_test(passing=passFirst))
+        )
+        if not passFirst:
+          test += api.override_step_data(
+            without_patch, canned_test(passing=False, minimal=True))
+        yield test
 
   # This tests that if the first fails, but the second pass succeeds
   # that we fail the whole build.
