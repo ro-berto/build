@@ -95,7 +95,7 @@ def dartium_builder(c):
   c.managed = True
 
 @config_ctx()
-def klp_builder(c):
+def arm_builder(c):
   pass
 
 @config_ctx()
