@@ -13,6 +13,10 @@ DEPS = [
 
 def GenSteps(api):
   droid = api.chromium_android
+
+  bot_id = api.properties['android_bot_id']
+  droid.configure_from_properties(bot_id)
+
   internal = api.properties.get('internal')
 
   yield droid.init_and_sync()
@@ -62,35 +66,14 @@ def GenTests(api):
       managed=True,
     )
     if 'try_builder' in bot_id:
-      props += api.properties(revision='')
+      props += api.properties(revision='refs/remotes/origin/master')
+      props += api.properties(upload_tag=1337)
       props += api.properties(patch_url='try_job_svn_patch')
 
-    test_data = (
-        api.test(bot_id) +
-        props
-    )
-
-    if bot_id != "dartium_builder":
-      yield (
-        test_data +
-        api.step_data(
-        'get_internal_names',
-        api.json.output({
-            'BUILD_BUCKET': 'build-bucket',
-            'SCREENSHOT_BUCKET': 'screenshot-archive',
-            'INSTRUMENTATION_TEST_DATA': 'a:b/test/data/android/device_files',
-            'FLAKINESS_DASHBOARD_SERVER': 'test-results.appspot.com'
-            })
-        ) +
-        api.step_data(
-          'get app_manifest_vars',
-          api.json.output({
-              'version_code': 10,
-              'version_name': 'some_builder_1234',
-              'build_id': 3333,
-              'date_string': 6001
-              })
-          )
-        )
+    # dartium_builder does not use any step_data
+    if bot_id == 'dartium_builder':
+      add_step_data = lambda p: p
     else:
-      yield (test_data)
+      add_step_data = lambda p: p + api.chromium_android.default_step_data(api)
+
+    yield add_step_data(api.test(bot_id) + props)

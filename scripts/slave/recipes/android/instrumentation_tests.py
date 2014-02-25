@@ -11,6 +11,8 @@ DEPS = [
 
 def GenSteps(api):
   droid = api.chromium_android
+  bot_id = api.properties['android_bot_id']
+  droid.configure_from_properties(bot_id)
   yield droid.common_tree_setup_steps()
   if droid.c.apply_svn_patch:
     yield droid.apply_svn_patch()
@@ -26,24 +28,7 @@ def GenTests(api):
   def common_test_data(props, include_tests=True):
     test_data = (
         props +
-        api.step_data(
-          'get app_manifest_vars',
-          api.json.output({
-            'version_code': 10,
-            'version_name': 'some_builder_1234',
-            'build_id': 3333,
-            'date_string': 6001
-          })
-        ) +
-        api.step_data(
-          'get_internal_names',
-          api.json.output({
-            'BUILD_BUCKET': 'build-bucket',
-            'SCREENSHOT_BUCKET': 'screenshot-archive',
-            'INSTRUMENTATION_TEST_DATA': 'a:b/test/data/android/device_files',
-            'FLAKINESS_DASHBOARD_SERVER': 'test-results.appspot.com'
-          })
-        )
+        api.chromium_android.default_step_data(api)
     )
     if include_tests:
       # TODO(sivachandra): Move this generator script's test to
@@ -68,7 +53,7 @@ def GenTests(api):
   for bot_id in bot_ids:
     p = props(bot_id)
     if 'try_instrumentation_tests' in bot_id:
-      p += api.properties(revision='')
+      p += api.properties(revision='refs/remotes/origin/master')
       p += api.properties(parent_buildnumber=1357)
       p += api.properties(patch_url='try_job_svn_patch')
 

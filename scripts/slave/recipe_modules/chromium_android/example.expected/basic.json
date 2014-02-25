@@ -1,0 +1,226 @@
+[
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "config",
+      "--spec",
+      "cache_dir = None\nsolutions = [{'deps_file': '.DEPS.git', 'managed': True, 'name': 'src/repo', 'url': 'svn://svn.chromium.org/chrome/trunk/src'}]\ntarget_os = ['android']"
+    ],
+    "name": "gclient setup",
+    "seed_steps": [
+      "gclient setup",
+      "gclient sync"
+    ]
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "sync",
+      "--nohooks",
+      "--delete_unversioned_trees",
+      "--revision",
+      "src/repo@4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00",
+      "--output-json",
+      "/path/to/tmp/json"
+    ],
+    "name": "gclient sync",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"solutions\": {}@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "[BUILD]/scripts/slave/env_dump.py",
+      "--output-json",
+      "/path/to/tmp/json",
+      "[SLAVE_BUILD]/src/build/android/envsetup.sh"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:%(PATH)s"
+    },
+    "name": "envsetup",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"GYP_DEFINES\": \"my_new_gyp_def=aaa\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"GYP_SOMETHING\": \"gyp_something_value\", @@@",
+      "@@@STEP_LOG_LINE@json.output@  \"PATH\": \"./\"@@@",
+      "@@@STEP_LOG_LINE@json.output@}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "[DEPOT_TOOLS]/gclient.py",
+      "runhooks"
+    ],
+    "env": {
+      "GYP_DEFINES": "OS=android component=static_library fastbuild=1 target_arch=arm",
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "gclient runhooks"
+  },
+  {
+    "abort_on_failure": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/compile.py",
+      "--target",
+      "Debug",
+      "--src-dir",
+      "[SLAVE_BUILD]/src",
+      "--build-tool",
+      "ninja",
+      "--"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "compile"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport subprocess\nimport sys\nimport json\n\ncmd = eval(sys.argv[1])\noutFileName = sys.argv[2]\n\noutput = subprocess.check_output(cmd)\ndevices = [line.split()[0] for line in output.splitlines()\n                           if line\n                           if 'List of devices attached' not in line]\n\nwith open(outFileName, 'w') as outFile:\n  json.dump(devices, outFile)\n",
+      "['[BUILD_INTERNAL]/scripts/slave/android/adb', 'devices']",
+      "/path/to/tmp/json"
+    ],
+    "name": "List adb devices",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[@@@",
+      "@@@STEP_LOG_LINE@json.output@  \"014E1F310401C009\"@@@",
+      "@@@STEP_LOG_LINE@json.output@]@@@",
+      "@@@STEP_LOG_END@json.output@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import subprocess@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@import json@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@cmd = eval(sys.argv[1])@@@",
+      "@@@STEP_LOG_LINE@python.inline@outFileName = sys.argv[2]@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@output = subprocess.check_output(cmd)@@@",
+      "@@@STEP_LOG_LINE@python.inline@devices = [line.split()[0] for line in output.splitlines()@@@",
+      "@@@STEP_LOG_LINE@python.inline@                           if line@@@",
+      "@@@STEP_LOG_LINE@python.inline@                           if 'List of devices attached' not in line]@@@",
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@with open(outFileName, 'w') as outFile:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  json.dump(devices, outFile)@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport sys\nadb_path = sys.argv[1]\nfor device in sys.argv[2:]:\n  subprocess.check_call([adb_path, '-s', device, 'root'])\n  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])\n",
+      "[BUILD_INTERNAL]/scripts/slave/android/adb",
+      "014E1F310401C009"
+    ],
+    "name": "Root devives",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@python.inline@@@@",
+      "@@@STEP_LOG_LINE@python.inline@import sys@@@",
+      "@@@STEP_LOG_LINE@python.inline@adb_path = sys.argv[1]@@@",
+      "@@@STEP_LOG_LINE@python.inline@for device in sys.argv[2:]:@@@",
+      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'root'])@@@",
+      "@@@STEP_LOG_LINE@python.inline@  subprocess.check_call([adb_path, '-s', device, 'wait-for-device'])@@@",
+      "@@@STEP_LOG_END@python.inline@@@"
+    ]
+  },
+  {
+    "can_fail_build": false,
+    "cmd": [
+      "[BUILD]/scripts/slave/daemonizer.py",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_monitor.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "spawn_logcat_monitor"
+  },
+  {
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/buildbot/bb_device_status_check.py"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "device_status_check"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[SLAVE_BUILD]/src/build/android/test_runner.py",
+      "monkey",
+      "-v",
+      "--package=chrome",
+      "--event-count=50000"
+    ],
+    "env": {
+      "BUILDTYPE": "Debug"
+    },
+    "name": "Monkey Test"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "--",
+      "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
+      "[SLAVE_BUILD]/src/out/logcat"
+    ],
+    "name": "logcat_dump"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "[SLAVE_BUILD]/src/third_party/android_platform/development/scripts/stack",
+      "--more-info",
+      "[SLAVE_BUILD]/src/out/Debug/full_log"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "stack_tool_with_logcat_dump"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "[SLAVE_BUILD]/src/build/android/tombstones.py",
+      "-a",
+      "-s",
+      "-w"
+    ],
+    "env": {
+      "PATH": "[BUILD_INTERNAL]/scripts/slave/android:./:%(PATH)s"
+    },
+    "name": "stack_tool_for_tombstones"
+  },
+  {
+    "always_run": true,
+    "cmd": [
+      "rm",
+      "-rf"
+    ],
+    "name": "cleanup_build"
+  }
+]

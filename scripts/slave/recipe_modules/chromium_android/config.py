@@ -6,11 +6,13 @@ from slave.recipe_config import config_item_context, ConfigGroup
 from slave.recipe_config import ConfigList, Dict, List, Single, Static
 from slave.recipe_config_types import Path
 
-def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
+def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, BUILD_CONFIG='Debug', **_kwargs):
   return ConfigGroup(
     INTERNAL = Static(INTERNAL),
     REPO_NAME = Static(REPO_NAME),
     REPO_URL = Static(REPO_URL),
+    BUILD_CONFIG = Static(BUILD_CONFIG),
+    revision = Single(basestring),
     extra_env = Dict(value_type=(basestring,int,Path)),
     run_findbugs = Single(bool, required=False, empty_val=False),
     run_lint = Single(bool, required=False, empty_val=False),
@@ -28,13 +30,15 @@ def BaseConfig(INTERNAL, REPO_NAME, REPO_URL, **_kwargs):
                                          'scripts', 'slave', 'android')),
     cr_build_android = Static(Path('[CHECKOUT]', 'build', 'android')),
     internal_dir = Single(Path),
+    gclient_custom_deps = Single(Dict(value_type=basestring)), # possibly wrong
   )
 
 
 VAR_TEST_MAP = {
   'INTERNAL': [True, False],
-  'REPO_NAME': ['src', 'internal'],
-  'REPO_URL': ['bob_dot_org', 'mike_dot_org'],
+  'REPO_NAME': ['src/clank'],
+  'REPO_URL': ['<hidden>'],  # supplied in build properties
+  'BUILD_CONFIG': ['Debug', 'Release'],
 }
 
 def TEST_NAME_FORMAT(kwargs):
@@ -50,6 +54,7 @@ config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 def base_config(c):
   if c.INTERNAL:
     c.internal_dir = Path('[CHECKOUT]', c.REPO_NAME.split('/', 1)[-1])
+  c.revision = 'refs/remotes/origin/master'
 
 @config_ctx()
 def main_builder(c):

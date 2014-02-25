@@ -8,6 +8,7 @@ class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
     self._env = dict()
+    self._app_manifest_vars = dict()
     self._internal_names = dict()
     self._cleanup_list = []
 
@@ -23,6 +24,23 @@ class AndroidApi(recipe_api.RecipeApi):
       '%(PATH)s'
     )))
     return env_dict
+
+  def configure_from_properties(self, config_name, **kwargs):
+    def set_property(prop, var):
+      if prop in self.m.properties:
+        if var in kwargs:
+          assert kwargs[var] == self.m.properties[prop], (
+              "Property/Config conflict: %s=%s but %s=%s", (
+                  prop, self.m.properties[prop],
+                  var, kwargs[var]))
+        kwargs[var] = self.m.properties[prop]
+
+    set_property('target', 'BUILD_CONFIG')
+    set_property('internal', 'INTERNAL')
+    set_property('repo_name', 'REPO_NAME')
+    set_property('repo_url', 'REPO_URL')
+
+    self.set_config(config_name, **kwargs)
 
   def make_zip_archive(self, step_name, zip_file, paths, **kwargs):
     assert isinstance(paths, list)
@@ -44,34 +62,17 @@ class AndroidApi(recipe_api.RecipeApi):
     )
 
   def init_and_sync(self):
-    internal = self.m.properties['internal']
-    bot_id = self.m.properties['android_bot_id']
-    target = self.m.properties.get('target', 'Debug')
-    repo_name = self.m.properties['repo_name']
-    repo_url = self.m.properties['repo_url']
-    revision = self.m.properties.get('revision')
-    gclient_custom_deps = self.m.properties.get('gclient_custom_deps')
-
-    self.set_config(bot_id,
-                    INTERNAL=internal,
-                    REPO_NAME=repo_name,
-                    REPO_URL=repo_url,
-                    BUILD_CONFIG=target)
-
     # TODO(sivachandra): Move the setting of the gclient spec below to an
     # internal config extension when they are supported by the recipe system.
     spec = self.m.gclient.make_config('android_bare')
     spec.target_os = ['android']
     s = spec.solutions[0]
-    s.name = repo_name
-    s.url = repo_url
-    s.custom_deps = gclient_custom_deps or {}
+    s.name = self.c.REPO_NAME
+    s.url = self.c.REPO_URL
+    s.custom_deps = self.c.gclient_custom_deps or {}
     s.deps_file = self.c.deps_file
     s.managed = self.c.managed
-    if revision:
-      s.revision = revision
-    else:
-      s.revision = 'refs/remotes/origin/master'
+    s.revision = self.m.properties.get('revision') or self.c.revision
 
     yield self.m.gclient.checkout(spec)
 
@@ -82,7 +83,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
     gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
 
-    if internal and self.c.get_app_manifest_vars:
+    if self.c.INTERNAL and self.c.get_app_manifest_vars:
       yield self.m.step(
           'get app_manifest_vars',
           [self.c.internal_dir('build', 'dump_app_manifest_vars.py'),
@@ -91,11 +92,13 @@ class AndroidApi(recipe_api.RecipeApi):
            '--output-json', self.m.json.output()]
       )
 
-      app_manifest_vars = self.m.step_history.last_step().json.output
+      self._app_manifest_vars = self.m.step_history.last_step().json.output
       gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
-      gyp_defs['app_manifest_version_code'] = app_manifest_vars['version_code']
-      gyp_defs['app_manifest_version_name'] = app_manifest_vars['version_name']
-      gyp_defs['chrome_build_id'] = app_manifest_vars['build_id']
+      gyp_defs['app_manifest_version_code'] = (
+        self._app_manifest_vars['version_code'])
+      gyp_defs['app_manifest_version_name'] = (
+        self._app_manifest_vars['version_name'])
+      gyp_defs['chrome_build_id'] = self._app_manifest_vars['build_id']
 
       yield self.m.step(
           'get_internal_names',
@@ -125,7 +128,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
 
   def clean_local_files(self):
-    target = self.m.properties.get('target', 'Debug')
+    target = self.c.BUILD_CONFIG
     debug_info_dumps = self.m.path.checkout('out', target, 'debug_info_dumps')
     test_logs = self.m.path.checkout('out', target, 'test_logs')
     return self.m.python.inline(
@@ -157,7 +160,7 @@ class AndroidApi(recipe_api.RecipeApi):
 
   def runhooks(self):
     run_hooks_env = self.get_env()
-    if self.m.properties.get('internal'):
+    if self.c.INTERNAL:
       run_hooks_env['EXTRA_LANDMINES_SCRIPT'] = self.c.internal_dir(
         'build', 'get_internal_landmines.py')
     return self.m.chromium.runhooks(env=run_hooks_env)
@@ -201,9 +204,9 @@ class AndroidApi(recipe_api.RecipeApi):
           env=self.get_env())
 
   def upload_build(self):
-    revision = (self.m.properties.get('revision') or
-                self.m.properties.get('buildnumber'))
-    zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % revision)
+    # TODO(luqui) remove dependency on property
+    upload_tag = self.m.properties.get('upload_tag') or self.m.properties.get('revision')
+    zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % upload_tag)
     self._cleanup_list.append(zipfile)
     yield self.make_zip_archive(
         'zip_build_product',
@@ -219,13 +222,15 @@ class AndroidApi(recipe_api.RecipeApi):
     )
 
   def download_build(self):
-    revision = (self.m.properties.get('revision') or
-                self.m.properties.get('parent_buildnumber'))
+    # TODO(luqui) remove dependency on property
+    revision = (self.m.properties.get('parent_buildnumber') or
+                self.m.properties.get('revision'))
     zipfile = self.m.path.checkout('out', 'build_product_%s.zip' % revision)
     self._cleanup_list.append(zipfile)
     yield self.m.gsutil.download(
         name='download_build_product',
         bucket=self._internal_names['BUILD_BUCKET'],
+        # TODO(luqui) remove property
         source='%s/%s' % (self.m.properties['parent_buildername'],
                           'build_product_%s.zip' % revision),
         dest=self.m.path.checkout('out')
@@ -244,16 +249,20 @@ class AndroidApi(recipe_api.RecipeApi):
          self.m.chromium.c.build_dir('logcat')],
         env=self.get_env(), can_fail_build=False)
 
+  def device_status_check(self):
+    yield self.m.step(
+        'device_status_check',
+        [self.m.path.checkout('build', 'android', 'buildbot',
+                              'bb_device_status_check.py')],
+        env=self.get_env())
+
   def detect_and_setup_devices(self):
     yield self.m.step(
         'provision_devices',
         [self.c.cr_build_android('provision_devices.py'),
          '-t', self.m.chromium.c.BUILD_CONFIG],
         env=self.get_env(), can_fail_build=False)
-    yield self.m.step(
-        'device_status_check',
-        [self.c.cr_build_android('buildbot', 'bb_device_status_check.py')],
-        env=self.get_env())
+    yield self.device_status_check()
 
     if self.c.INTERNAL:
       yield self.m.step(
@@ -293,12 +302,24 @@ class AndroidApi(recipe_api.RecipeApi):
             env=self.get_env()
         )
 
+  def monkey_test(self):
+    yield self.m.python(
+        'Monkey Test',
+        str(self.m.path.checkout('build', 'android', 'test_runner.py')),
+        [ 'monkey', '-v', '--package=chrome', '--event-count=50000' ],
+        env={'BUILDTYPE': self.c.BUILD_CONFIG},
+        always_run=True)
+
   def logcat_dump(self):
     if self.m.step_history.get('spawn_logcat_monitor'):
-      return self.m.step(
+      return self.m.python(
           'logcat_dump',
-          [self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
-           self.m.path.checkout('out', 'logcat')], always_run=True)
+          self.m.path.build('scripts', 'slave', 'tee.py'),
+          [self.m.chromium.output_dir('full_log'),
+           '--',
+           self.m.path.checkout('build', 'android', 'adb_logcat_printer.py'),
+           self.m.path.checkout('out', 'logcat')],
+          always_run=True)
 
   def stack_tool_steps(self):
     if self.c.run_stack_tool_steps:

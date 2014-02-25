@@ -8,8 +8,9 @@ from slave import recipe_config
 from RECIPE_MODULES.chromium import CONFIG_CTX
 
 @CONFIG_CTX(includes=['ninja', 'static_library'],
-            config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32})
-def android_defaults(c):
+            config_vars={'TARGET_ARCH': 'arm', 'TARGET_BITS': 32,
+                         'BUILD_CONFIG': 'Debug'})
+def base_config(c):
   c.compile_py.default_targets=[]
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['fastbuild'] = 1
@@ -21,13 +22,13 @@ def android_defaults(c):
     raise recipe_config.BadConf('Android cannot target %d bits' % c.TARGET_BITS)
 
 
-@CONFIG_CTX(includes=['android_defaults', 'default_compiler', 'goma'])
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'])
 def main_builder(c):
   if c.TARGET_ARCH != 'arm':
     raise recipe_config.BadConf(
       'Cannot target arm with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['android_defaults', 'clang', 'goma'])
+@CONFIG_CTX(includes=['base_config', 'clang', 'goma'])
 def clang_builder(c):
   pass
 
@@ -35,14 +36,14 @@ def clang_builder(c):
 def component_builder(c):
   c.gyp_env.GYP_DEFINES['component'] = 'shared_library'
 
-@CONFIG_CTX(includes=['android_defaults', 'default_compiler', 'goma'],
+@CONFIG_CTX(includes=['base_config', 'default_compiler', 'goma'],
             config_vars={'TARGET_ARCH': 'intel'})
 def x86_builder(c):
   if c.TARGET_ARCH != 'intel':
     raise recipe_config.BadConf(
       'Cannot target x86 with TARGET_ARCH == %s' % c.TARGET_ARCH)
 
-@CONFIG_CTX(includes=['android_defaults', 'default_compiler'],
+@CONFIG_CTX(includes=['base_config', 'default_compiler'],
             config_vars={'TARGET_ARCH': 'mipsel'})
 def mipsel_builder(c):
   if c.TARGET_ARCH != 'mipsel':
@@ -68,7 +69,7 @@ def try_builder(c):
 def x86_try_builder(c):
   pass
 
-@CONFIG_CTX(includes=['android_defaults'])
+@CONFIG_CTX(includes=['base_config'])
 def tests_base(c):
   pass
 

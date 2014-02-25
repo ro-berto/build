@@ -258,6 +258,11 @@
   {
     "always_run": true,
     "cmd": [
+      "python",
+      "-u",
+      "[BUILD]/scripts/slave/tee.py",
+      "[SLAVE_BUILD]/src/out/Debug/full_log",
+      "--",
       "[SLAVE_BUILD]/src/build/android/adb_logcat_printer.py",
       "[SLAVE_BUILD]/src/out/logcat"
     ],
