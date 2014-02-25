@@ -97,7 +97,7 @@ def load_from_json(f):
 
   if json_build_db.get('build_db_version') != BUILD_DB_VERSION:
     raise BadConf('file is an older db version: %r (expecting %d)' % (
-        json.build_db.get('build_db_version', 0), BUILD_DB_VERSION))
+        json_build_db.get('build_db_version'), BUILD_DB_VERSION))
 
   masters = json_build_db.get('masters', {})
   # Convert build dicts into BuildDBBuilds.
