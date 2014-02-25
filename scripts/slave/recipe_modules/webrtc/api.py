@@ -25,14 +25,49 @@ class WebRTCApi(recipe_api.RecipeApi):
 
   ANDROID_APK_TESTS = COMMON_TESTS
 
-  LINUX_TESTS = sorted(COMMON_TESTS + [
-      'libjingle_media_unittest',
-      'libjingle_p2p_unittest',
-      'libjingle_peerconnection_unittest',
-      'libjingle_sound_unittest',
-      'libjingle_unittest',
-      'video_engine_tests',
-  ])
+  def add_baremetal_tests(self):
+    """Adds baremetal tests, which are different depending on the platform."""
+    vie_auto_test_args = [
+      '--automated',
+      '--capture_test_ensure_resolution_alignment_in_capture_device=false',
+    ]
+
+    c = self.m.chromium
+    path = self.m.path
+
+    if self.m.platform.is_win:
+      yield (
+        c.runtest('audio_device_tests'),
+        c.runtest('vie_auto_test', args=vie_auto_test_args),
+        c.runtest('video_capture_tests'),
+        c.runtest('voe_auto_test', args=['--automated']),
+      )
+    elif self.m.platform.is_mac:
+      yield (
+        c.runtest('audio_device_tests'),
+        c.runtest(('libjingle_peerconnection_objc_test.app/Contents/MacOS/'
+                   'libjingle_peerconnection_objc_test'),
+                  name='libjingle_peerconnection_objc_test',
+                  args=vie_auto_test_args),
+        c.runtest('vie_auto_test', args=vie_auto_test_args),
+        c.runtest('video_capture_tests'),
+        c.runtest('voe_auto_test', args=['--automated']),
+      )
+    elif self.m.platform.is_linux:
+      yield (
+        c.runtest('audioproc', name='audioproc_perf',
+                  args=['-aecm', '-ns', '-agc', '--fixed_digital', '--perf',
+                        '-pb', path.checkout('resources/audioproc.aecdump')]),
+        c.runtest('iSACFixtest', name='isac_fixed_perf',
+                  args=['32000',
+                        path.checkout('resources/speech_and_misc_wb.pcm'),
+                        'isac_speech_and_misc_wb.pcm']),
+        c.runtest('libjingle_peerconnection_java_unittest',
+                  env={'LD_PRELOAD': '/usr/lib/x86_64-linux-gnu/libpulse.so.0'}),
+        c.runtest('vie_auto_test', args=vie_auto_test_args),
+        c.runtest('video_capture_tests'),
+        c.runtest('voe_auto_test', args=['--automated']),
+      )
 
   def apply_svn_patch(self):
     script = self.m.path.build('scripts', 'slave', 'apply_svn_patch.py')

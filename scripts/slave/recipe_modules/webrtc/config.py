@@ -7,7 +7,7 @@ from slave.recipe_config import Single, Static
 from slave.recipe_config_types import Path
 
 
-def BaseConfig(ANDROID_APK=True, **_kwargs):
+def BaseConfig(ANDROID_APK=False, **_kwargs):
   return ConfigGroup(
     ANDROID_APK = Static(bool(ANDROID_APK)),
 
@@ -31,6 +31,11 @@ def TEST_NAME_FORMAT(kwargs):
   return name
 
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
+
+
+@config_ctx()
+def webrtc_standalone(c):
+  pass
 
 
 @config_ctx()

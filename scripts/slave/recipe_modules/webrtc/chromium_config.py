@@ -9,6 +9,12 @@ from RECIPE_MODULES.chromium import CONFIG_CTX
 
 SUPPORTED_TARGET_ARCHS = ('intel', 'arm')
 
+
+@CONFIG_CTX(includes=['ninja'])
+def webrtc_standalone(c):
+  c.compile_py.default_targets = ['All']
+
+
 @CONFIG_CTX(includes=['android'])
 def webrtc_android_apk_try_builder(c):
   if c.TARGET_PLATFORM != 'android':

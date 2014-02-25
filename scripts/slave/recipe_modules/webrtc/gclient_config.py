@@ -8,6 +8,15 @@ from slave.recipe_modules.gclient.config import ChromeSvnSubURL,\
   ChromiumSvnSubURL
 
 
+@CONFIG_CTX()
+def webrtc_standalone(c):
+  s = c.solutions.add()
+  s.name = 'src'
+  s.url = 'http://webrtc.googlecode.com/svn/trunk'
+  s.custom_vars['root_dir'] = 'src'
+  c.got_revision_mapping['webrtc'] = 'got_revision'
+
+
 @CONFIG_CTX(includes=['chromium', '_webrtc_additional_solutions'])
 def webrtc_android_apk_try_builder(c):
   c.target_os = ['android']
