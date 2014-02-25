@@ -9,7 +9,7 @@ from master.factory import annotator_factory
 
 m_annotator = annotator_factory.AnnotatorFactory()
 
-def Update(_config, _active_master, c):
+def Update(_config, active_master, c):
   c['schedulers'].extend([
       SingleBranchScheduler(name='linux_src',
                             branch='src',
@@ -37,29 +37,32 @@ def Update(_config, _active_master, c):
           'Linux Tests (dbg)(2)',
       ]),
   ])
+  specs = [
+    {
+      'name': 'Linux Builder',
+      'triggers': ['linux_rel_trigger'],
+    },
+    {'name': 'Linux Tests'},
+    {'name': 'Linux Sync'},
+    {'name': 'Linux GTK Builder', 'triggers': ['linux_gtk_trigger']},
+    {'name': 'Linux GTK Tests'},
+    {'name': 'Linux Builder (dbg)(32)', 'triggers': ['linux_dbg_32_trigger']},
+    {'name': 'Linux Tests (dbg)(1)(32)'},
+    {'name': 'Linux Tests (dbg)(2)(32)'},
+    {'name': 'Linux Builder (dbg)', 'triggers': ['linux_dbg_trigger']},
+    {'name': 'Linux Tests (dbg)(1)'},
+    {'name': 'Linux Tests (dbg)(2)'},
+    {'name': 'Linux Clang (dbg)'},
+  ]
+
   c['builders'].extend([
       {
-        'name': spec['buildername'],
-        'factory': m_annotator.BaseFactory('chromium',
-                                           triggers=spec.get('triggers')),
+        'name': spec['name'],
+        'factory': m_annotator.BaseFactory(
+            'chromium',
+            factory_properties=spec.get('factory_properties'),
+            triggers=spec.get('triggers')),
         'notify_on_missing': True,
         'category': '4linux',
-      } for spec in [
-          {'buildername': 'Linux Builder',
-           'triggers': ['linux_rel_trigger']},
-          {'buildername': 'Linux Tests'},
-          {'buildername': 'Linux Sync'},
-          {'buildername': 'Linux GTK Builder',
-           'triggers': ['linux_gtk_trigger']},
-          {'buildername': 'Linux GTK Tests'},
-          {'buildername': 'Linux Builder (dbg)(32)',
-           'triggers': ['linux_dbg_32_trigger']},
-          {'buildername': 'Linux Tests (dbg)(1)(32)'},
-          {'buildername': 'Linux Tests (dbg)(2)(32)'},
-          {'buildername': 'Linux Builder (dbg)',
-           'triggers': ['linux_dbg_trigger']},
-          {'buildername': 'Linux Tests (dbg)(1)'},
-          {'buildername': 'Linux Tests (dbg)(2)'},
-          {'buildername': 'Linux Clang (dbg)'},
-      ]
+      } for spec in specs
   ])
