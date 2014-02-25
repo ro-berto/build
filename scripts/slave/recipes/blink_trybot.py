@@ -26,6 +26,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 64,
         },
+        'compile_only': False,
         'testing': {
           'platform': 'linux',
         },
@@ -35,6 +36,27 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 64,
         },
+        'compile_only': False,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_compile': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'compile_only': True,
         'testing': {
           'platform': 'linux',
         },
@@ -44,6 +66,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
+        'compile_only': False,
         'testing': {
           'platform': 'mac',
         },
@@ -53,6 +76,27 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
+        'compile_only': False,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_compile': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
         'testing': {
           'platform': 'mac',
         },
@@ -62,6 +106,7 @@ BUILDERS = {
           'BUILD_CONFIG': 'Debug',
           'TARGET_BITS': 32,
         },
+        'compile_only': False,
         'testing': {
           'platform': 'win',
         },
@@ -71,6 +116,27 @@ BUILDERS = {
           'BUILD_CONFIG': 'Release',
           'TARGET_BITS': 32,
         },
+        'compile_only': False,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_compile': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_compile_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'compile_only': True,
         'testing': {
           'platform': 'win',
         },
@@ -177,35 +243,37 @@ def GenSteps(api):
   steps = [
     api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(root),
-  ]
-
-  steps.extend([
     api.chromium.runhooks(),
     api.chromium.compile(),
-    api.python('webkit_lint', webkit_lint, [
-      '--build-dir', api.path.checkout('out'),
-      '--target', api.chromium.c.BUILD_CONFIG
-    ]),
-    api.python('webkit_python_tests', webkit_python_tests, [
-      '--build-dir', api.path.checkout('out'),
-      '--target', api.chromium.c.BUILD_CONFIG,
-    ]),
-    api.chromium.runtest('webkit_unit_tests', xvfb=True),
-    api.chromium.runtest('blink_platform_unittests'),
-    api.chromium.runtest('blink_heap_unittests'),
-    api.chromium.runtest('wtf_unittests'),
-  ])
+  ]
+
+  if not bot_config['compile_only']:
+    steps.extend([
+      api.python('webkit_lint', webkit_lint, [
+        '--build-dir', api.path.checkout('out'),
+        '--target', api.chromium.c.BUILD_CONFIG
+      ]),
+      api.python('webkit_python_tests', webkit_python_tests, [
+        '--build-dir', api.path.checkout('out'),
+        '--target', api.chromium.c.BUILD_CONFIG,
+      ]),
+      api.chromium.runtest('webkit_unit_tests', xvfb=True),
+      api.chromium.runtest('blink_platform_unittests'),
+      api.chromium.runtest('blink_heap_unittests'),
+      api.chromium.runtest('wtf_unittests'),
+    ])
 
   yield steps
 
-  def deapply_patch_fn(failing_steps):
-    yield (
-      api.gclient.revert(),
-      api.chromium.runhooks(),
-      api.chromium.compile(),
-    )
+  if not bot_config['compile_only']:
+    def deapply_patch_fn(failing_steps):
+      yield (
+        api.gclient.revert(),
+        api.chromium.runhooks(),
+        api.chromium.compile(),
+      )
 
-  yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
+    yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
 
 
 def _sanitize_nonalpha(text):
@@ -228,15 +296,18 @@ def GenTests(api):
       test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
                                   _sanitize_nonalpha(buildername))
       tests = []
-      for pass_first in (True, False):
-        test = (
-          api.test(test_name + ('_pass' if pass_first else '_fail')) +
-          api.step_data(with_patch, canned_test(passing=pass_first))
-        )
-        if not pass_first:
-          test += api.step_data(
-              without_patch, canned_test(passing=False, minimal=True))
-        tests.append(test)
+      if bot_config['compile_only']:
+        tests.append(api.test(test_name))
+      else:
+        for pass_first in (True, False):
+          test = (
+            api.test(test_name + ('_pass' if pass_first else '_fail')) +
+            api.step_data(with_patch, canned_test(passing=pass_first))
+          )
+          if not pass_first:
+            test += api.step_data(
+                without_patch, canned_test(passing=False, minimal=True))
+          tests.append(test)
 
       for test in tests:
         test += (
