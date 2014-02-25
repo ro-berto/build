@@ -54,7 +54,7 @@ def dartium_builder(c):
   c.compile_py.default_targets=['chrome_apk', 'content_shell_apk']
 
 @CONFIG_CTX(includes=['main_builder'])
-def klp_builder(c):
+def arm_builder(c):
   gyp_defs = c.gyp_env.GYP_DEFINES
   gyp_defs['android_sdk_build_tools_version'] = 'android-4.4'
   gyp_defs['android_sdk_version'] = '4.4'
