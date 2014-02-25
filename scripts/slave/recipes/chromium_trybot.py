@@ -224,13 +224,20 @@ def GenSteps(api):
   yield (
     api.gclient.checkout(revert=True),
     api.rietveld.apply_issue(),
+    api.json.read(
+      'read test spec',
+      api.path.checkout('testing', 'buildbot', 'chromium_trybot.json'),
+      step_test_data=lambda: api.json.test_api.output([])),
     api.chromium.runhooks(),
   )
+
+  test_spec = api.step_history['read test spec'].json.output
+  test_spec = [s.encode('utf-8') for s in test_spec]
 
   tests = []
   tests.append(CheckdepsTest())
   tests.append(Deps2GitTest())
-  for name in GTEST_TESTS:
+  for name in GTEST_TESTS + test_spec:
     tests.append(GTestTest(name))
   tests.append(NaclIntegrationTest())
 

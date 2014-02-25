@@ -14,6 +14,7 @@
       "gclient revert",
       "gclient sync",
       "apply_issue",
+      "read test spec",
       "gclient runhooks"
     ]
   },
@@ -90,6 +91,20 @@
       "--no-auth"
     ],
     "name": "apply_issue"
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]\\src\\testing\\buildbot\\chromium_trybot.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@[]@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
   },
   {
     "cmd": [
