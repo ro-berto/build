@@ -679,6 +679,7 @@ class ChromiumFactory(gclient_factory.GClientFactory):
         'scheduler.tough_scheduling_cases',
         'smoothness.gpu_rasterization.key_silk_cases',
         'smoothness.key_silk_cases',
+        'smoothness.tough_animation_cases',
         'spaceport',
         'sunspider',
         'thread_times.key_silk_cases',
