@@ -18,6 +18,68 @@ DEPS = [
 ]
 
 
+BUILDERS = {
+  'tryserver.chromium': {
+    'builders': {
+      'linux_blink': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 64,
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'linux_blink_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 64,
+        },
+        'testing': {
+          'platform': 'linux',
+        },
+      },
+      'mac_blink': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'mac_blink_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {
+          'platform': 'mac',
+        },
+      },
+      'win_blink': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Debug',
+          'TARGET_BITS': 32,
+        },
+        'testing': {
+          'platform': 'win',
+        },
+      },
+      'win_blink_rel': {
+        'chromium_config_kwargs': {
+          'BUILD_CONFIG': 'Release',
+          'TARGET_BITS': 32,
+        },
+        'testing': {
+          'platform': 'win',
+        },
+      },
+    },
+  },
+}
+
+
 def GenSteps(api):
   class BlinkTest(api.test_utils.Test):
     name = 'webkit_tests'
@@ -94,7 +156,13 @@ def GenSteps(api):
       sn = self._step_name(suffix)
       return api.step_history[sn].json.test_results.unexpected_failures
 
-  api.chromium.set_config('blink')
+  mastername = api.properties.get('mastername')
+  buildername = api.properties.get('buildername')
+  master_dict = BUILDERS.get(mastername, {})
+  bot_config = master_dict.get('builders', {}).get(buildername)
+
+  api.chromium.set_config('blink',
+                          **bot_config.get('chromium_config_kwargs', {}))
   api.chromium.apply_config('trybot_flavor')
   api.gclient.set_config('blink_internal')
   api.step.auto_resolve_conflicts = True
@@ -116,10 +184,11 @@ def GenSteps(api):
     api.chromium.compile(),
     api.python('webkit_lint', webkit_lint, [
       '--build-dir', api.path.checkout('out'),
-      '--target', api.properties['build_config']]),
+      '--target', api.chromium.c.BUILD_CONFIG
+    ]),
     api.python('webkit_python_tests', webkit_python_tests, [
       '--build-dir', api.path.checkout('out'),
-      '--target', api.properties['build_config']
+      '--target', api.chromium.c.BUILD_CONFIG,
     ]),
     api.chromium.runtest('webkit_unit_tests', xvfb=True),
     api.chromium.runtest('blink_platform_unittests'),
@@ -139,46 +208,51 @@ def GenSteps(api):
   yield api.test_utils.determine_new_failures([BlinkTest()], deapply_patch_fn)
 
 
+def _sanitize_nonalpha(text):
+  return ''.join(c if c.isalnum() else '_' for c in text)
+
+
 def GenTests(api):
   canned_test = api.json.canned_test_output
   with_patch = 'webkit_tests (with patch)'
   without_patch = 'webkit_tests (without patch)'
-  def props(config='Release'):
-    return api.properties.tryserver(
-      build_config=config,
-      config_name='blink',
-      root='src/third_party/WebKit',
-    )
 
-  # This general loop tests
-  #   * 'all tests pass on the first try'  (passFirst)
-  #   * 'the tests never pass' (i.e. the minimal pass causes the build to
-  #                             succeed. passMinimal)
-  # across all platform/config combinations.
+  def properties(mastername, buildername, **kwargs):
+    return api.properties.tryserver(mastername=mastername,
+                                    buildername=buildername,
+                                    root='src/third_party/WebKit',
+                                    **kwargs)
 
-  # The passWithout versions should end up emitting warnings on the summary
-  # step because they indicate the presence of new unexpected failures.
-  for passFirst in (True, False):
-    for build_config in ['Release', 'Debug']:
-      for plat in ('win', 'mac', 'linux'):
-        tag = 'passFirst' if passFirst else 'passMinimal'
-        name = '%s_%s_%s' % (plat, tag, build_config.lower())
+  for mastername, master_config in BUILDERS.iteritems():
+    for buildername, bot_config in master_config['builders'].iteritems():
+      test_name = 'full_%s_%s' % (_sanitize_nonalpha(mastername),
+                                  _sanitize_nonalpha(buildername))
+      tests = []
+      for pass_first in (True, False):
         test = (
-          api.test(name) +
-          props(build_config) +
-          api.platform.name(plat) +
-          api.override_step_data(with_patch, canned_test(passing=passFirst))
+          api.test(test_name + ('_pass' if pass_first else '_fail')) +
+          api.step_data(with_patch, canned_test(passing=pass_first))
         )
-        if not passFirst:
-          test += api.override_step_data(
-            without_patch, canned_test(passing=False, minimal=True))
+        if not pass_first:
+          test += api.step_data(
+              without_patch, canned_test(passing=False, minimal=True))
+        tests.append(test)
+
+      for test in tests:
+        test += (
+          properties(mastername, buildername) +
+          api.platform(bot_config['testing']['platform'],
+                       bot_config.get(
+                           'chromium_config_kwargs', {}).get('TARGET_BITS', 64))
+        )
+
         yield test
 
   # This tests that if the first fails, but the second pass succeeds
   # that we fail the whole build.
   yield (
     api.test('minimal_pass_continues') +
-    props() +
+    properties('tryserver.chromium', 'linux_blink_rel') +
     api.override_step_data(with_patch, canned_test(passing=False)) +
     api.override_step_data(without_patch,
                            canned_test(passing=True, minimal=True))
@@ -186,12 +260,12 @@ def GenTests(api):
 
   yield (
     api.test('bad_revert_bails') +
-    props() +
+    properties('tryserver.chromium', 'linux_blink_rel') +
     api.step_data('gclient revert', retcode=1)
   )
 
   yield (
     api.test('bad_sync_bails') +
-    props() +
+    properties('tryserver.chromium', 'linux_blink_rel') +
     api.step_data('gclient sync', retcode=1)
   )
