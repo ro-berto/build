@@ -109,6 +109,9 @@ def GenSteps(api):
     'target_platform':  target_platform,
     'tools_dir':  str(api.path.slave_build('src', 'tools')),
   }
+  if 'reference_build_executable' in api.properties:
+    factory_properties['reference_build_executable'] = api.properties[
+        'reference_build_executable']
 
   for test in PERF_TESTS:
     factory_properties['test_name'] = test
@@ -134,6 +137,7 @@ def GenTests(api):
               USE_MIRROR=use_mirror,
               perf_id='dartium-linux-release',
               deps='dartium.deps',
-              revision='12345') +
+              revision='12345',
+              reference_build_executable='src/chrome/tools/refbuild/chrome') +
           api.platform(plat, bits)
       )

@@ -114,9 +114,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=TestBuilder",
       "--slave-name=TestSlavename",
       "--master-name=chromium.testing.master",
@@ -143,9 +143,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=blink_perf.animation",
@@ -157,7 +157,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"blink_perf.animation\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"blink_perf.animation\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"blink_perf.animation\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"blink_perf.animation\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "blink_perf.animation"
   },
@@ -172,9 +172,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=canvasmark",
@@ -186,7 +186,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"canvasmark\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"canvasmark\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"canvasmark\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"canvasmark\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "canvasmark"
   },
@@ -201,9 +201,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.domcoreattr",
@@ -215,7 +215,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoreattr\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoreattr\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoreattr\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoreattr\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.domcoreattr"
   },
@@ -230,9 +230,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.domcoremodify",
@@ -244,7 +244,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoremodify\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoremodify\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoremodify\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoremodify\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.domcoremodify"
   },
@@ -259,9 +259,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.domcorequery",
@@ -273,7 +273,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcorequery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcorequery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcorequery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcorequery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.domcorequery"
   },
@@ -288,9 +288,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.domcoretraverse",
@@ -302,7 +302,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoretraverse\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoretraverse\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.domcoretraverse\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.domcoretraverse\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.domcoretraverse"
   },
@@ -317,9 +317,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibattrjquery",
@@ -331,7 +331,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrjquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrjquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibattrjquery"
   },
@@ -346,9 +346,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibattrprototype",
@@ -360,7 +360,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibattrprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibattrprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibattrprototype"
   },
@@ -375,9 +375,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibeventjquery",
@@ -389,7 +389,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventjquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventjquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibeventjquery"
   },
@@ -404,9 +404,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibeventprototype",
@@ -418,7 +418,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibeventprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibeventprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibeventprototype"
   },
@@ -433,9 +433,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibmodifyjquery",
@@ -447,7 +447,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyjquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyjquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyjquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibmodifyjquery"
   },
@@ -462,9 +462,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibmodifyprototype",
@@ -476,7 +476,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibmodifyprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibmodifyprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibmodifyprototype"
   },
@@ -491,9 +491,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibstylejquery",
@@ -505,7 +505,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstylejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstylejquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstylejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstylejquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibstylejquery"
   },
@@ -520,9 +520,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibstyleprototype",
@@ -534,7 +534,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstyleprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstyleprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibstyleprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibstyleprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibstyleprototype"
   },
@@ -549,9 +549,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibtraversejquery",
@@ -563,7 +563,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraversejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraversejquery\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraversejquery\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraversejquery\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibtraversejquery"
   },
@@ -578,9 +578,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=dromaeo.jslibtraverseprototype",
@@ -592,7 +592,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraverseprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraverseprototype\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"dromaeo.jslibtraverseprototype\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"dromaeo.jslibtraverseprototype\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "dromaeo.jslibtraverseprototype"
   },
@@ -607,9 +607,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=image_decoding.image_decoding_measurement",
@@ -621,7 +621,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"image_decoding.image_decoding_measurement\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"image_decoding.image_decoding_measurement\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"image_decoding.image_decoding_measurement\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"image_decoding.image_decoding_measurement\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "image_decoding.image_decoding_measurement"
   },
@@ -636,9 +636,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=kraken",
@@ -650,7 +650,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"kraken\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"kraken\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"kraken\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"kraken\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "kraken"
   },
@@ -665,9 +665,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=octane",
@@ -679,7 +679,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"octane\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"octane\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"octane\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"octane\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "octane"
   },
@@ -694,9 +694,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=pica.pica",
@@ -708,7 +708,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"pica.pica\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"pica.pica\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"pica.pica\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"pica.pica\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "pica.pica"
   },
@@ -723,9 +723,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=spaceport",
@@ -737,7 +737,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"spaceport\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"spaceport\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"spaceport\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"spaceport\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "spaceport"
   },
@@ -752,9 +752,9 @@
       "Release",
       "--no-xvfb",
       "--factory-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--build-properties",
-      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
+      "{\"TARGET_BITS\": 64, \"USE_MIRROR\": false, \"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"buildername\": \"TestBuilder\", \"buildnumber\": 571, \"deps\": \"dartium.deps\", \"mastername\": \"chromium.testing.master\", \"perf_id\": \"dartium-linux-release\", \"recipe\": \"dart/dartium\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\", \"revision\": \"12345\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--annotate=graphing",
       "--results-url=https://chromeperf.appspot.com",
       "--perf-dashboard-id=sunspider",
@@ -766,7 +766,7 @@
       "--run-python-script",
       "--revision=12345",
       "[BUILD]/scripts/slave/telemetry.py",
-      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"sunspider\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"sunspider\"}"
+      "--factory-properties={\"browser_exe\": \"[SLAVE_BUILD]/src/out/Release/chrome\", \"blink_config\": \"chromium\", \"expectations\": true, \"show_perf_results\": true, \"test_name\": \"sunspider\", \"tools_dir\": \"[SLAVE_BUILD]/src/tools\", \"target_platform\": \"linux2\", \"target_os\": null, \"halt_on_missing_build\": true, \"target\": \"Release\", \"run_reference_build\": true, \"build_dir\": \"src/out\", \"step_name\": \"sunspider\", \"reference_build_executable\": \"src/chrome/tools/refbuild/chrome\"}"
     ],
     "name": "sunspider"
   }

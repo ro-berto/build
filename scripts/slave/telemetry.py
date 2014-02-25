@@ -137,6 +137,7 @@ def _GenerateTelemetryCommandSequence(options):
 
   # Run the test against the reference build on platforms where it exists.
   ref_build = _GetReferenceBuildPath(target_os, target_platform)
+  ref_build = fp.get('reference_build_executable', ref_build)
   if ref_build and fp.get('run_reference_build', True):
     ref_args = list(common_args)
     ref_args.extend(['--browser=exact',
