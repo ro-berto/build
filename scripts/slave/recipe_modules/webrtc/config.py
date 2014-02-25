@@ -7,10 +7,8 @@ from slave.recipe_config import Single, Static
 from slave.recipe_config_types import Path
 
 
-def BaseConfig(ANDROID_APK=False, **_kwargs):
+def BaseConfig(**_kwargs):
   return ConfigGroup(
-    ANDROID_APK = Static(bool(ANDROID_APK)),
-
     patch_root_dir = Single(Path, required=False, empty_val=Path('[CHECKOUT]')),
 
     # Allow manipulating patches for try jobs.
@@ -20,15 +18,10 @@ def BaseConfig(ANDROID_APK=False, **_kwargs):
   )
 
 VAR_TEST_MAP = {
-  'ANDROID_APK':     (True, False),
 }
 
-
 def TEST_NAME_FORMAT(kwargs):
-  name = 'webrtc'
-  if kwargs['ANDROID_APK']:
-    name += '-android_apk'
-  return name
+  return 'webrtc'
 
 config_ctx = config_item_context(BaseConfig, VAR_TEST_MAP, TEST_NAME_FORMAT)
 
@@ -39,6 +32,11 @@ def webrtc_standalone(c):
 
 
 @config_ctx()
+def webrtc_android_apk(c):
+  pass
+
+
+@config_ctx(includes=['webrtc_android_apk'])
 def webrtc_android_apk_try_builder(c):
   """ Trybot building WebRTC native tests for Android as APKs."""
   c.patch_root_dir = Path('[CHECKOUT]', 'third_party', 'webrtc')

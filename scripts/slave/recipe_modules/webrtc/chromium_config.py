@@ -16,7 +16,7 @@ def webrtc_standalone(c):
 
 
 @CONFIG_CTX(includes=['android'])
-def webrtc_android_apk_try_builder(c):
+def webrtc_android_apk(c):
   if c.TARGET_PLATFORM != 'android':
     raise BadConf('Only "android" platform is supported (got: "%s")' %
                   c.TARGET_PLATFORM)
@@ -28,3 +28,7 @@ def webrtc_android_apk_try_builder(c):
   c.gyp_env.GYP_GENERATOR_FLAGS['default_target'] = 'android_builder_webrtc'
   c.gyp_env.GYP_DEFINES['include_tests'] = 1
 
+
+@CONFIG_CTX(includes=['webrtc_android_apk'])
+def webrtc_android_apk_try_builder(c):
+  pass

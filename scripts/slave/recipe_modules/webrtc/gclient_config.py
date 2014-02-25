@@ -18,7 +18,7 @@ def webrtc_standalone(c):
 
 
 @CONFIG_CTX(includes=['chromium', '_webrtc_additional_solutions'])
-def webrtc_android_apk_try_builder(c):
+def webrtc_android_apk(c):
   c.target_os = ['android']
 
   # TODO(kjellander): Switch to use the webrtc_revision gyp variable in DEPS
@@ -26,6 +26,11 @@ def webrtc_android_apk_try_builder(c):
   # branch (which is about to be retired).
   c.solutions[0].custom_deps['src/third_party/webrtc'] = (
        'http://webrtc.googlecode.com/svn/trunk/webrtc')
+
+
+@CONFIG_CTX(includes=['webrtc_android_apk'])
+def webrtc_android_apk_try_builder(c):
+  pass
 
 
 @CONFIG_CTX()
