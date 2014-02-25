@@ -111,23 +111,6 @@ def GenSteps(api):
     api.rietveld.apply_issue(root),
   ]
 
-  if not api.platform.is_win:
-    steps.append(api.python(
-      'presubmit',
-      api.path.depot_tools('presubmit_support.py'), [
-        '--root', api.path.checkout(root),
-        '--commit',
-        '--verbose', '--verbose',
-        '--issue', api.properties['issue'],
-        '--patchset', api.properties['patchset'],
-        '--skip_canned', 'CheckRietveldTryJobExecution',
-        '--skip_canned', 'CheckTreeIsOpen',
-        '--skip_canned', 'CheckBuildbotPendingBuilds',
-        '--rietveld_url', api.properties['rietveld'],
-        '--rietveld_email', '',  # activates anonymous mode
-        '--rietveld_fetch'
-      ]))
-
   steps.extend([
     api.chromium.runhooks(),
     api.chromium.compile(),
