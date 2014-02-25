@@ -27,6 +27,7 @@ import urlparse
 import test_env  # pylint: disable=W0403,W0611
 
 from slave import gatekeeper_ng
+from slave import gatekeeper_ng_db
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -136,6 +137,7 @@ class GatekeeperTest(unittest.TestCase):
     self.masters = [self.create_generic_build_tree('Chromium FYI',
                                                    'chromium.fyi')]
 
+    self.build_db_file = self.fill_tempfile('{}')
     self.gatekeeper_file = self.fill_tempfile('{}')
     self.email_secret_file = self.fill_tempfile('seekrit')
     self.status_secret_file = self.fill_tempfile('reindeerflotilla')
@@ -230,18 +232,54 @@ class GatekeeperTest(unittest.TestCase):
     return Master(master_title, self.master_url_root + master_url_chunk,
                   [builder])
 
-  def call_gatekeeper(self):
+  def call_gatekeeper(self, build_db=None, json=None):  # pylint: disable=W0621
     """Sets up handlers for all the json and actually calls gatekeeper."""
+    self.url_calls = []
     self.handle_build_tree(self.masters)
-    ret = gatekeeper_ng.main()
+    json = json or self.gatekeeper_file
+    self._gatekeeper_config = self._gatekeeper_config or {}
+    if not build_db:
+      build_db = gatekeeper_ng_db.gen_db(masters={
+          self.masters[0].url: {
+              'mybuilder': {
+                  0: gatekeeper_ng_db.gen_build(finished=True)
+              }
+          }
+      })
+
+    with open(self.build_db_file, 'w') as f:
+      gatekeeper_ng_db.convert_db_to_json(build_db, self._gatekeeper_config, f)
+
+    old_argv = sys.argv[:]
+    sys.argv.extend(['--build-db=%s' % self.build_db_file,
+                     '--json', json])
+
+    try:
+      ret = gatekeeper_ng.main()
+    finally:
+      sys.argv = old_argv
+
     if ret != 0:
       raise ValueError('return code was %d' % ret)
 
     # Return urls as a convenience.
     return [call['url'] for call in self.url_calls]
 
+
+  def process_build_db(self, master, builder):
+    """Reads the build_db from a file and splits out finished/unfinished."""
+    new_build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    builds = new_build_db.masters[master][builder]
+    finished_new_builds = dict(
+        (k, v) for k, v in builds.iteritems() if v.finished)
+    unfinished_new_builds = dict(
+        (k, v) for k, v in builds.iteritems() if not v.finished)
+    return unfinished_new_builds, finished_new_builds
+
+
   @contextlib.contextmanager
   def gatekeeper_config_editor(self):
+    """Wrapper to edit the gatekeeper_config, then reserialize it."""
     if not self._gatekeeper_config:
       with open(self.gatekeeper_file) as f:
         self._gatekeeper_config = json.load(f)
@@ -327,22 +365,11 @@ class GatekeeperTest(unittest.TestCase):
 
   #### Email and status.
 
-  def testBasicURLQuery(self):
-    """Check that things are basically sane."""
-    sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
-                     '--no-email-app'])
-
-    self.handle_build_tree([self.masters[0]])
-    gatekeeper_ng.main()
-
   def testIgnoreNoGatekeeper(self):
     """Check that logs aren't read unless the builder is noted in the config."""
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--no-email-app'])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -352,24 +379,10 @@ class GatekeeperTest(unittest.TestCase):
     urls = self.call_gatekeeper()
     self.assertEquals(urls, [self.masters[0].url + '/json'])
 
-  def testIgnoreSuccessfulBuildNoGatekeeperSteps(self):
-    """If gatekeeper_spec doesn't have any annotations, don't fail build."""
-    sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
-                     '--email-app-secret-file=%s' % self.email_secret_file])
-
-
-    self.handle_build_tree([self.masters[0]])
-    gatekeeper_ng.main()
-    urls = [call['url'] for call in self.url_calls]
-    self.assertNotIn(self.mailer_url, urls)
-
   def testFailedBuildDetected(self):
     """Test that an erroneous build result closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].results = 3
@@ -380,10 +393,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {},
                                 idx=0)
 
-    self.handle_url_str(self.mailer_url, '')
-
-    self.handle_build_tree([self.masters[0]])
-    gatekeeper_ng.main()
+    self.call_gatekeeper()
 
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
     mailer_data = GatekeeperTest.decode_param_json(
@@ -394,7 +404,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that no email is sent if there are no watchers."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
 
@@ -416,7 +425,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a non-closing failure is ignored."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
@@ -431,7 +439,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a failed closing step closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -451,7 +458,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a failed closing_optional step closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -471,7 +477,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a failed closing_optional * step closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -491,7 +496,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that the lack of a closing step closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -509,7 +513,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that the lack of a closing_optional step doesn't close the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -525,7 +528,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that the lack of a forgiving_optional step doesn't close tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -542,7 +544,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a skipped closing step closes the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -564,7 +565,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that gatekeeper_spec works even if not the first step."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -588,7 +588,6 @@ class GatekeeperTest(unittest.TestCase):
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
                      '--no-email-app', '--set-status',
-                     '--json', self.gatekeeper_file,
                      '--password-file', self.status_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -604,7 +603,6 @@ class GatekeeperTest(unittest.TestCase):
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
                      '--no-email-app', '--set-status',
-                     '--json', self.gatekeeper_file,
                      '--password-file', self.status_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -621,7 +619,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that the subject template is set by default."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -642,7 +639,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that the email json is formatted correctly."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     subject_template = 'build %(result)s, oh no!'
@@ -700,15 +696,13 @@ class GatekeeperTest(unittest.TestCase):
 
   def testIncrementalScanning(self):
     """Test that builds in the build DB are skipped."""
-    fd, dbfilename = tempfile.mkstemp()
-    build_db = {self.masters[0].url: { 'mybuilder': 1 }}
-    os.write(fd, json.dumps(build_db))
-    os.close(fd)
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                1: gatekeeper_ng_db.gen_build(finished=True)}}})
 
     sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--build-db=%s' % dbfilename,
-                     '--json', self.gatekeeper_file,
-                     '--email-app-secret-file=%s' % self.email_secret_file])
+    sys.argv.extend(['--email-app-secret-file=%s' % self.email_secret_file])
 
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -721,18 +715,15 @@ class GatekeeperTest(unittest.TestCase):
             'a_second_committer@chromium.org']))
     self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
 
-    @contextlib.contextmanager
-    def delfile(filename):
-      yield
-      os.unlink(filename)
+    self.call_gatekeeper(build_db=build_db)
+    _, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(finished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build(finished=True, triggered=[
+                          '0e321975189099b8f623a4dc29602e76'
+                          'f33fd8f5bacf3c7018d0499214372e5b'])})
 
-    with delfile(dbfilename):
-      self.call_gatekeeper()
-      with open(dbfilename) as f:
-        new_build_db = json.load(f)
-    self.assertEquals(new_build_db, {self.masters[0].url: {'mybuilder': 2}})
-
-    #check that gatekeeper indeed sent an email.
+    # Check that gatekeeper indeed sent an email.
     self.assertEquals(self.url_calls[-1]['url'], self.mailer_url)
     mailer_data = GatekeeperTest.decode_param_json(
         self.url_calls[-1]['params'])
@@ -748,7 +739,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that sheriff annotations are properly parsed."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -780,7 +770,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a no-sheriff condition works OK (weekends)."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].blame = []
@@ -806,7 +795,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that no-sheriff works ok with a blamelist."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -831,7 +819,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that multiple sheriff lists can be merged."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
@@ -868,7 +855,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that additional watchers can be merged to the mailing list."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -896,7 +882,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that notify works with no blamelist."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].blame = []
@@ -919,7 +904,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that forgiving steps set status but don't email blamelist."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -937,7 +921,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that forgiving_optional steps set status but don't email."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -955,7 +938,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that forgiving_optional * sets status but doesn't email."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -973,7 +955,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that setting forgive_all prevents emailing the blamelist."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -992,7 +973,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that setting forgive_all prevents emailing the blamelist."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -1013,7 +993,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that the status app is only hit once if many failures are seen."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -1046,7 +1025,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that failing builds aren't mixed with good ones."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
@@ -1075,7 +1053,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that * captures failures across all builders."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.add_gatekeeper_section(self.masters[0].url,
@@ -1093,7 +1070,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that * can be explicitly overridden."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     # step3 won't fail the build.
@@ -1118,7 +1094,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that * doesn't propagate to other builders."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     # step4 will fail the build.
@@ -1140,10 +1115,17 @@ class GatekeeperTest(unittest.TestCase):
     """Test that failure in one build doesn't affect another."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
+
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: gatekeeper_ng_db.gen_build(finished=True)},
+            'mybuilder2': {
+                0: gatekeeper_ng_db.gen_build(finished=True)},
+            }})
 
     new_build = self.create_generic_build(2,
                                           ['a_second_committer@chromium.org'])
@@ -1159,7 +1141,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']},
                                 idx=0)
 
-    urls = self.call_gatekeeper()
+    urls = self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 1)
     self.assertEquals(urls.count(self.mailer_url), 1)
 
@@ -1174,10 +1156,17 @@ class GatekeeperTest(unittest.TestCase):
     master_url = 'http://build.chromium.org/p/chromium.fyi'
     sys.argv.extend([master_url,
                      '--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
+
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: gatekeeper_ng_db.gen_build(finished=True)},
+            'mybuilder2': {
+                0: gatekeeper_ng_db.gen_build(finished=True)},
+            }})
 
     new_build = self.create_generic_build(2,
                                           ['a_second_committer@chromium.org'])
@@ -1194,7 +1183,7 @@ class GatekeeperTest(unittest.TestCase):
                                 {'closing_steps': ['step1']},
                                 idx=0)
 
-    urls = self.call_gatekeeper()
+    urls = self.call_gatekeeper(build_db=build_db)
     self.assertEquals(urls.count(self.status_url), 1)
 
     self.assertEquals(self.url_calls[-2]['url'], self.mailer_url)
@@ -1214,10 +1203,20 @@ class GatekeeperTest(unittest.TestCase):
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--set-status', '--password-file', self.status_secret_file
                      ])
+
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                0: gatekeeper_ng_db.gen_build(finished=True)},
+        },
+        self.masters[1].url: {
+            'mybuilder': {
+                0: gatekeeper_ng_db.gen_build(finished=True)},
+        },
+    })
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
     self.add_gatekeeper_section(self.masters[0].url,
@@ -1231,7 +1230,7 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step1']})
 
-    urls = self.call_gatekeeper()
+    urls = self.call_gatekeeper(build_db)
     self.assertEquals(urls.count(self.status_url), 1)
 
     self.assertEquals(urls[-1], self.mailer_url)
@@ -1251,7 +1250,6 @@ class GatekeeperTest(unittest.TestCase):
     """Don't fail a running build because of omitted steps."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--no-email-app', '--set-status',
                      '--password-file', self.status_secret_file])
 
@@ -1271,7 +1269,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that a still-running build can close the tree."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--no-email-app', '--set-status',
                      '--password-file', self.status_secret_file])
 
@@ -1288,15 +1285,13 @@ class GatekeeperTest(unittest.TestCase):
 
   def testUpdateBuildDBNotCompletedButFailed(self):
     """Test that partial builds increment the DB if they failed."""
-    fd, dbfilename = tempfile.mkstemp()
-    build_db = {self.masters[0].url: { 'mybuilder': 1 }}
-    os.write(fd, json.dumps(build_db))
-    os.close(fd)
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                1: gatekeeper_ng_db.gen_build(finished=True)}}})
 
     sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--build-db=%s' % dbfilename,
-                     '--json', self.gatekeeper_file,
-                     '--no-email-app', '--set-status',
+    sys.argv.extend(['--no-email-app', '--set-status',
                      '--password-file', self.status_secret_file])
 
     mybuild = self.create_generic_build(2, ['a_second_committer@chromium.org'])
@@ -1307,29 +1302,29 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step1']})
 
-    @contextlib.contextmanager
-    def delfile(filename):
-      yield
-      os.unlink(filename)
+    urls = self.call_gatekeeper(build_db=build_db)
+    unfinished_new_builds, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
 
-    with delfile(dbfilename):
-      urls = self.call_gatekeeper()
-      with open(dbfilename) as f:
-        new_build_db = json.load(f)
-    self.assertEquals(new_build_db, {self.masters[0].url: {'mybuilder': 2}})
+    self.assertEquals(finished_new_builds,
+                      {1: gatekeeper_ng_db.gen_build(finished=True)})
+    self.assertEquals(unfinished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build(triggered=[
+                          '0e321975189099b8f623a4dc29602e76'
+                          'f33fd8f5bacf3c7018d0499214372e5b'])})
+
     self.assertIn(self.status_url, urls)
 
   def testDontUpdateBuildDBIfNotCompleted(self):
-    """Test that partial builds don't increment the DB if still running."""
-    fd, dbfilename = tempfile.mkstemp()
-    build_db = {self.masters[0].url: { 'mybuilder': 1 }}
-    os.write(fd, json.dumps(build_db))
-    os.close(fd)
+    """Test that partial builds aren't marked as finished."""
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                1: gatekeeper_ng_db.gen_build(finished=True),
+                2: gatekeeper_ng_db.gen_build()}}})
 
     sys.argv.extend([m.url for m in self.masters])
-    sys.argv.extend(['--build-db=%s' % dbfilename,
-                     '--json', self.gatekeeper_file,
-                     '--no-email-app', '--set-status',
+    sys.argv.extend(['--no-email-app', '--set-status',
                      '--password-file', self.status_secret_file])
 
     mybuild = self.create_generic_build(2, ['a_second_committer@chromium.org'])
@@ -1339,17 +1334,79 @@ class GatekeeperTest(unittest.TestCase):
                                 self.masters[0].builders[0].name,
                                 {'closing_steps': ['step4']})
 
-    @contextlib.contextmanager
-    def delfile(filename):
-      yield
-      os.unlink(filename)
+    urls = self.call_gatekeeper(build_db=build_db)
+    unfinished_new_builds, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
 
-    with delfile(dbfilename):
-      urls = self.call_gatekeeper()
-      with open(dbfilename) as f:
-        new_build_db = json.load(f)
-    self.assertEquals(new_build_db, {self.masters[0].url: {'mybuilder': 1}})
+    self.assertEquals(finished_new_builds,
+                      {1: gatekeeper_ng_db.gen_build(finished=True)})
+    self.assertEquals(unfinished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build()})
     self.assertNotIn(self.status_url, urls)
+
+  def testTriggeringDoesntTriggerOnSameBuild(self):
+    """Test that a section won't fire twice on a build."""
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file])
+
+    self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
+    self.masters[0].builders[0].builds[0].finished = False
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper()
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    unfinished_new_builds, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(finished_new_builds,
+                      {0: gatekeeper_ng_db.gen_build(finished=True)})
+    self.assertEquals(unfinished_new_builds,
+                      {1: gatekeeper_ng_db.gen_build(triggered=[
+                          '0e321975189099b8f623a4dc29602e76'
+                          'f33fd8f5bacf3c7018d0499214372e5b'])})
+    self.assertEquals(1, len([u for u in urls if u == self.status_url]))
+
+  def testTriggeringOneHashDoesntStopAnother(self):
+    """Test that firing on one hash doesn't prevent another hash triggering."""
+    build_db = gatekeeper_ng_db.gen_db(masters={
+        self.masters[0].url: {
+            'mybuilder': {
+                1: gatekeeper_ng_db.gen_build(finished=True)}}})
+
+    sys.argv.extend([m.url for m in self.masters])
+    sys.argv.extend(['--no-email-app', '--set-status',
+                     '--password-file', self.status_secret_file])
+
+    mybuild = self.create_generic_build(2, ['a_second_committer@chromium.org'])
+    mybuild.finished = False
+    self.masters[0].builders[0].builds.append(mybuild)
+    self.masters[0].builders[0].builds[1].steps[1].results = [2, None]
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step1']})
+
+    urls = self.call_gatekeeper(build_db=build_db)
+    self.add_gatekeeper_section(self.masters[0].url,
+                                self.masters[0].builders[0].name,
+                                {'closing_steps': ['step2']})
+    self.masters[0].builders[0].builds[1].steps[2].results = [2, None]
+    build_db = gatekeeper_ng_db.get_build_db(self.build_db_file)
+    urls += self.call_gatekeeper(build_db=build_db)
+    unfinished_new_builds, finished_new_builds = self.process_build_db(
+        self.masters[0].url, 'mybuilder')
+    self.assertEquals(finished_new_builds,
+                      {1: gatekeeper_ng_db.gen_build(finished=True)})
+    self.assertEquals(unfinished_new_builds,
+                      {2: gatekeeper_ng_db.gen_build(triggered=[
+                          '0e321975189099b8f623a4dc29602e76'
+                          'f33fd8f5bacf3c7018d0499214372e5b',
+
+                          'fbe3ad95b8cb242309b17896ad2c3ba0'
+                          '2999a22ca5f7b8c7887878b611679cd5'])})
+    self.assertEquals(2, len([u for u in urls if u == self.status_url]))
 
   ### JSON config file tests.
 
@@ -1357,7 +1414,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that steps in categories are inherited by builders."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1378,7 +1434,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that steps in categories are inherited by builders."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[2].results = [2, None]
@@ -1400,7 +1455,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that builders can add-on to categories."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1422,7 +1476,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that steps in masters are inherited by builders."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1455,7 +1508,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that steps in masters can be added by builders."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1496,7 +1548,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that steps can inherit categories from masters."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1520,7 +1571,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that master sections work correctly."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1549,7 +1599,6 @@ class GatekeeperTest(unittest.TestCase):
     """Check that master section handles email properly."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1580,7 +1629,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that no email is sent if the email isn't in the domain filter."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--filter-domain=squirrels.net,squirrels.com'])
 
@@ -1596,7 +1644,6 @@ class GatekeeperTest(unittest.TestCase):
     """Test that no email is sent if the email isn't in the domain filter."""
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--email-app-secret-file=%s' % self.email_secret_file,
                      '--disable-domain-filter',
                      '--filter-domain=squirrels.net,squirrels.com'])
@@ -1619,7 +1666,6 @@ class GatekeeperTest(unittest.TestCase):
 
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
-                     '--json', self.gatekeeper_file,
                      '--no-email-app'])
     with self.assertRaises(ValueError):
       self.call_gatekeeper()
@@ -1629,7 +1675,6 @@ class GatekeeperTest(unittest.TestCase):
     sys.argv.extend([m.url for m in self.masters])
     sys.argv.extend(['--skip-build-db-update',
                      '--no-email-app', '--set-status',
-                     '--json', self.gatekeeper_file,
                      '--password-file', self.status_secret_file])
 
     self.masters[0].builders[0].builds[0].steps[1].results = [2, None]
@@ -1646,8 +1691,7 @@ class GatekeeperTest(unittest.TestCase):
     self.assertNotIn(self.status_url, urls)
 
   def testInvalidConfigIsCaught(self):
-    sys.argv.extend(['--verify',
-                     '--json', self.gatekeeper_file])
+    sys.argv.extend(['--verify'])
 
     self.add_gatekeeper_section(self.masters[0].url,
                                 self.masters[0].builders[0].name,
@@ -1657,10 +1701,9 @@ class GatekeeperTest(unittest.TestCase):
 
   # Check that the checked in gatekeeper.json is valid.
   def testCheckedInConfigIsValid(self):
-    sys.argv.extend(['--verify',
-                     '--json',
-                     os.path.join(SCRIPT_DIR, os.pardir, 'gatekeeper.json')])
-    self.call_gatekeeper()
+    sys.argv.extend(['--verify'])
+    self.call_gatekeeper(
+        json=os.path.join(SCRIPT_DIR, os.pardir, 'gatekeeper.json'))
 
 
 if __name__ == '__main__':

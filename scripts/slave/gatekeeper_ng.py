@@ -30,6 +30,7 @@ import urllib2
 
 from common import chromium_utils
 from slave import gatekeeper_ng_config
+from slave import gatekeeper_ng_db
 
 SCRIPTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            '..', '..')
@@ -69,7 +70,7 @@ def get_root_json(master_url):
 def find_new_builds(master_url, root_json, build_db):
   """Given a dict of previously-seen builds, find new builds on each builder.
 
-  Note that we use the 'cachedBuilds here since it should be faster, and this
+  Note that we use the 'cachedBuilds' here since it should be faster, and this
   script is meant to be run frequently enough that it shouldn't skip any builds.
 
   'Frequently enough' means 1 minute in the case of Buildbot or cron, so the
@@ -79,20 +80,31 @@ def find_new_builds(master_url, root_json, build_db):
   takes < 1 minute to complete.
   """
   new_builds = {}
-  build_db[master_url] = build_db.get(master_url, {})
-  for buildername, builder in root_json['builders'].iteritems():
-    candidate_builds = set(builder['cachedBuilds'] + builder['currentBuilds'])
-    if buildername in build_db[master_url]:
-      new_builds[buildername] = [x for x in candidate_builds
-                                 if x > build_db[master_url][buildername]]
-    else:
-      new_builds[buildername] = candidate_builds
+  build_db.masters[master_url] = build_db.masters.get(master_url, {})
 
-    # This is a heuristic, as currentBuilds may become completed by the time we
-    # scan them. The buildDB is fixed up later to account for this.
-    completed = set(builder['cachedBuilds']) - set(builder['currentBuilds'])
-    if completed:
-      build_db[master_url][buildername] = max(completed)
+  last_finished_build = {}
+  for builder, builds in build_db.masters[master_url].iteritems():
+    finished = [int(y[0]) for y in filter(
+        lambda x: x[1].finished, builds.iteritems())]
+    if finished:
+      last_finished_build[builder] = max(finished)
+
+  for buildername, builder in root_json['builders'].iteritems():
+    # cachedBuilds are the builds in the cache, while currentBuilds are the
+    # currently running builds. Thus cachedBuilds can be unfinished or finished,
+    # while currentBuilds are always unfinished.
+    candidate_builds = set(builder['cachedBuilds'] + builder['currentBuilds'])
+    if buildername in last_finished_build:
+      new_builds[buildername] = [
+          buildnum for buildnum in candidate_builds
+          if buildnum > last_finished_build[buildername]]
+    else:
+      if buildername in build_db.masters[master_url]:
+        # Scan finished builds as well as unfinished.
+        new_builds[buildername] = candidate_builds
+      else:
+        # New builder or master, ignore past builds.
+        new_builds[buildername] = builder['currentBuilds']
 
   return new_builds
 
@@ -108,14 +120,15 @@ def find_new_builds_per_master(masters, build_db):
   return builds, master_jsons
 
 
-def get_build_json(url_pair):
-  url, master = url_pair
+def get_build_json(url_tuple):
+  """Downloads the json of a specific build."""
+  url, master, builder, buildnum = url_tuple
   logging.debug('opening %s...' % url)
   with closing(urllib2.urlopen(url)) as f:
-    return json.load(f), master
+    return json.load(f), master, builder, buildnum
 
 
-def get_build_jsons(master_builds, build_db, processes):
+def get_build_jsons(master_builds, processes):
   """Get all new builds on specified masters.
 
   This takes a dict in the form of [master][builder][build], formats that URL
@@ -125,36 +138,55 @@ def get_build_jsons(master_builds, build_db, processes):
   url_list = []
   for master, builder_dict in master_builds.iteritems():
     for builder, new_builds in builder_dict.iteritems():
-      for build in new_builds:
+      for buildnum in new_builds:
         safe_builder = urllib.quote(builder)
-        url = master + '/json/builders/%s/builds/%s' % (safe_builder, build)
-        url_list.append((url, master))
-  # The async/get is so that ctrl-c can interrupt the scans.
-  # See http://stackoverflow.com/questions/1408356/
-  # keyboard-interrupts-with-pythons-multiprocessing-pool
-  with chromium_utils.MultiPool(processes) as pool:
-    builds = filter(bool, pool.map_async(get_build_json, url_list).get(9999999))
+        url = master + '/json/builders/%s/builds/%s' % (safe_builder,
+                                                        buildnum)
+        url_list.append((url, master, builder, buildnum))
 
-  for build_json, master in builds:
-    if build_json.get('results', None) is not None:
-      build_db[master][build_json['builderName']] = max(
-          build_json['number'],
-          build_db[master][build_json['builderName']])
+  # Prevent map from hanging, see http://bugs.python.org/issue12157.
+  if url_list:
+    # The async/get is so that ctrl-c can interrupt the scans.
+    # See http://stackoverflow.com/questions/1408356/
+    # keyboard-interrupts-with-pythons-multiprocessing-pool
+    with chromium_utils.MultiPool(processes) as pool:
+      builds = filter(bool, pool.map_async(get_build_json, url_list).get(
+          9999999))
+  else:
+    builds = []
+
   return builds
 
 
-def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
+def propagate_build_json_to_db(build_db, builds):
+  """Propagates build status changes from build_json to build_db."""
+  for build_json, master, builder, buildnum in builds:
+    build = build_db.masters[master].setdefault(builder, {}).get(buildnum)
+    if not build:
+      build = gatekeeper_ng_db.gen_build()
+
+    if build_json.get('results', None) is not None:
+      build = build._replace(finished=True)  # pylint: disable=W0212
+
+    build_db.masters[master][builder][buildnum] = build
+
+
+def check_builds(master_builds, master_jsons, gatekeeper_config):
   """Given a gatekeeper configuration, see which builds have failed."""
   failed_builds = []
-  for build_json, master_url in master_builds:
+  for build_json, master_url, builder, buildnum in master_builds:
     gatekeeper_sections = gatekeeper_config.get(master_url, [])
     for gatekeeper_section in gatekeeper_sections:
+      section_hash = gatekeeper_ng_config.gatekeeper_section_hash(
+          gatekeeper_section)
+
       if build_json['builderName'] in gatekeeper_section:
         gatekeeper = gatekeeper_section[build_json['builderName']]
       elif '*' in gatekeeper_section:
         gatekeeper = gatekeeper_section['*']
       else:
         gatekeeper = {}
+
       steps = build_json['steps']
       forgiving = set(gatekeeper.get('forgiving_steps', []))
       forgiving_optional = set(gatekeeper.get('forgiving_optional', []))
@@ -198,38 +230,55 @@ def check_builds(master_builds, master_jsons, build_db, gatekeeper_config):
       buildbot_url = master_jsons[master_url]['project']['buildbotURL']
       project_name = master_jsons[master_url]['project']['title']
 
-      logging.debug('%sbuilders/%s/builds/%d ----', buildbot_url,
-                    build_json['builderName'], build_json['number'])
-      logging.debug('  build steps: %s', ', '.join(s['name'] for s in steps))
-      logging.debug('  closing steps: %s', ', '.join(closing_steps))
-      logging.debug('  closing optional steps: %s', ', '.join(closing_optional))
-      logging.debug('  finished steps: %s', ', '.join(finished_steps))
-      logging.debug('  successful: %s', ', '.join(successful_steps))
-      logging.debug('  build complete: %s', bool(
-          build_json.get('results', None) is not None))
-      logging.debug('  unsatisfied steps: %s', ', '.join(unsatisfied_steps))
-      logging.debug('  set to close tree: %s', close_tree)
-      logging.debug('  build failed: %s', bool(unsatisfied_steps))
-      logging.debug('----')
-
-
       if unsatisfied_steps:
-        build_db[master_url][build_json['builderName']] = max(
-            build_json['number'],
-            build_db[master_url][build_json['builderName']])
-
-        failed_builds.append({'base_url': buildbot_url,
-                              'build': build_json,
-                              'close_tree': close_tree,
-                              'forgiving_steps': forgiving | forgiving_optional,
-                              'project_name': project_name,
-                              'sheriff_classes': sheriff_classes,
-                              'subject_template': subject_template,
-                              'tree_notify': tree_notify,
-                              'unsatisfied': unsatisfied_steps,
-                             })
+        failed_builds.append(({'base_url': buildbot_url,
+                               'build': build_json,
+                               'close_tree': close_tree,
+                               'forgiving_steps': (
+                                   forgiving | forgiving_optional),
+                               'project_name': project_name,
+                               'sheriff_classes': sheriff_classes,
+                               'subject_template': subject_template,
+                               'tree_notify': tree_notify,
+                               'unsatisfied': unsatisfied_steps,
+                              },
+                              master_url,
+                              builder,
+                              buildnum,
+                              section_hash))
 
   return failed_builds
+
+
+def debounce_failures(failed_builds, build_db):
+  """Using trigger information in build_db, make sure we don't double-fire."""
+  true_failed_builds = []
+  for build, master_url, builder, buildnum, section_hash in failed_builds:
+    logging.debug('%sbuilders/%s/builds/%d ----', build['base_url'],
+                  builder, buildnum)
+
+    build_db_builder = build_db.masters[master_url][builder]
+    triggered = build_db_builder[buildnum].triggered
+    if section_hash in triggered:
+      logging.debug('  section has already been triggered for this build, '
+                    'skipping...')
+    else:
+      # Propagates since the dictionary is the same as in build_db.
+      triggered.append(section_hash)
+      true_failed_builds.append(build)
+
+      logging.debug('  section hash: %s', section_hash)
+      logging.debug('  build steps: %s', ', '.join(
+          s['name'] for s in build['build']['steps']))
+      logging.debug('  build complete: %s', bool(
+          build['build'].get('results', None) is not None))
+      logging.debug('  unsatisfied steps: %s', ', '.join(build['unsatisfied']))
+      logging.debug('  set to close tree: %s', build['close_tree'])
+      logging.debug('  build failed: %s', bool(build['unsatisfied']))
+
+    logging.debug('----')
+
+  return true_failed_builds
 
 
 def parse_sheriff_file(url):
@@ -394,32 +443,6 @@ def close_tree_if_failure(failed_builds, username, password, tree_status_url,
     submit_email(email_app_url, build_data, secret)
 
 
-
-def get_build_db(filename):
-  """Open the build_db file.
-
-  filename: the filename of the build db.
-  """
-  build_db = None
-  if os.path.isfile(filename):
-    print 'loading build_db from', filename
-    with open(filename) as f:
-      build_db = json.load(f)
-
-  return build_db or {}
-
-
-def save_build_db(build_db, filename):
-  """Save the build_db file.
-
-  build_db: dictionary to jsonize and store as build_db.
-  filename: the filename of the build db.
-  """
-  print 'saving build_db to', filename
-  with open(filename, 'wb') as f:
-    json.dump(build_db, f)
-
-
 def get_options():
   prog_desc = 'Closes the tree if annotated builds fail.'
   usage = '%prog [options] <one or more master urls>'
@@ -526,6 +549,9 @@ def main():
     print
     return 0
 
+  if options.set_status:
+    options.password = get_pwd(options.password_file)
+
   masters = set(args)
   if not masters <= set(gatekeeper_config):
     print 'The following masters are not present in the gatekeeper config:'
@@ -535,19 +561,22 @@ def main():
 
   if options.clear_build_db:
     build_db = {}
-    save_build_db(build_db, options.build_db)
+    gatekeeper_ng_db.save_build_db(build_db, gatekeeper_config,
+                                   options.build_db)
   else:
-    build_db = get_build_db(options.build_db)
+    build_db = gatekeeper_ng_db.get_build_db(options.build_db)
 
   new_builds, master_jsons = find_new_builds_per_master(masters, build_db)
+  build_jsons = get_build_jsons(new_builds, options.parallelism)
+  propagate_build_json_to_db(build_db, build_jsons)
+
   if options.sync_build_db:
-    save_build_db(build_db, options.build_db)
+    gatekeeper_ng_db.save_build_db(build_db, gatekeeper_config,
+                                   options.build_db)
     return 0
-  build_jsons = get_build_jsons(new_builds, build_db, options.parallelism)
-  failed_builds = check_builds(build_jsons, master_jsons, build_db,
-                               gatekeeper_config)
-  if options.set_status:
-    options.password = get_pwd(options.password_file)
+
+  failed_builds = check_builds(build_jsons, master_jsons, gatekeeper_config)
+  failed_builds = debounce_failures(failed_builds, build_db)
 
   close_tree_if_failure(failed_builds, options.status_user, options.password,
                         options.status_url, options.set_status,
@@ -557,7 +586,8 @@ def main():
                         options.disable_domain_filter)
 
   if not options.skip_build_db_update:
-    save_build_db(build_db, options.build_db)
+    gatekeeper_ng_db.save_build_db(build_db, gatekeeper_config,
+                                   options.build_db)
 
   return 0
 

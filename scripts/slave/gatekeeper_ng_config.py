@@ -247,15 +247,16 @@ def inject_hashes(gatekeeper_config):
   return new_config
 
 
-def flatten_to_json(gatekeeper_config, stream):
-  # Python's sets aren't JSON-encodable, so we convert them to lists here.
-  class SetEncoder(json.JSONEncoder):
-    # pylint: disable=E0202
-    def default(self, obj):
-      if isinstance(obj, set):
-        return sorted(list(obj))
-      return json.JSONEncoder.default(self, obj)
+# Python's sets aren't JSON-encodable, so we convert them to lists here.
+class SetEncoder(json.JSONEncoder):
+  # pylint: disable=E0202
+  def default(self, obj):
+    if isinstance(obj, set):
+      return sorted(list(obj))
+    return json.JSONEncoder.default(self, obj)
 
+
+def flatten_to_json(gatekeeper_config, stream):
   json.dump(gatekeeper_config, stream, cls=SetEncoder, sort_keys=True)
 
 
