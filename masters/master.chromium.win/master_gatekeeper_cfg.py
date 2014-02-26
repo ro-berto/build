@@ -21,6 +21,7 @@ categories_steps = {
     'cacheinvalidation_unittests',
     'cast_unittests',
     'cc_unittests',
+    'chrome_elf_unittests',
     'chromedriver_unittests',
     'components_unittests',
     'compositor_unittests',
