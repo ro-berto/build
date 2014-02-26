@@ -73,6 +73,7 @@ def CreateTriggerStep(trigger_name, trigger_set_properties=None,
       'issue': WithProperties('%(issue:-)s'),
       'patchset': WithProperties('%(patchset:-)s'),
       'patch_url': WithProperties('%(patch_url:-)s'),
+      'rietveld': WithProperties('%(rietveld:-)s'),
       'root': WithProperties('%(root:-)s'),
       'requester': WithProperties('%(requester:-)s'),
 
