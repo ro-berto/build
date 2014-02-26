@@ -115,16 +115,16 @@
       "all",
       "base_unittests",
       "components_unittests",
-      "crypto_unittests",
-      "google_apis_unittests",
       "content_unittests",
+      "crypto_unittests",
       "device_unittests",
-      "sandbox_linux_unittests",
-      "ui_unittests",
+      "google_apis_unittests",
       "ipc_tests",
+      "sandbox_linux_unittests",
+      "sql_unittests",
       "sync_unit_tests",
-      "unit_tests",
-      "sql_unittests"
+      "ui_unittests",
+      "unit_tests"
     ],
     "name": "compile"
   },

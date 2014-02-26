@@ -2,9 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-import itertools
-
-
 DEPS = [
   'archive',
   'chromium',
@@ -237,40 +234,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'app_list_unittests',
-          'ash_unittests',
           'aura_builder',
-          'aura_unittests',
-          'base_unittests',
-          'browser_tests',
-          'cacheinvalidation_unittests',
-          'chromeos_unittests',
-          'components_unittests',
-          'compositor_unittests',
-          'content_browsertests',
-          'content_unittests',
-          'crypto_unittests',
-          'dbus_unittests',
-          'device_unittests',
-          'events_unittests',
-          'google_apis_unittests',
-          'gpu_unittests',
-          'interactive_ui_tests',
-          'ipc_tests',
-          'jingle_unittests',
-          'media_unittests',
-          'message_center_unittests',
-          'net_unittests',
-          'ppapi_unittests',
-          'printing_unittests',
-          'remoting_unittests',
-          'sandbox_linux_unittests',
-          'sql_unittests',
-          'sync_unit_tests',
-          'ui_unittests',
-          'unit_tests',
-          'url_unittests',
-          'views_unittests',
         ],
         'testing': {
           'platform': 'linux',
@@ -315,9 +279,9 @@ BUILDERS = {
           GTestTest('unit_tests'),
           GTestTest('sql_unittests'),
         ],
+        'parent_buildername': 'Linux ChromiumOS Builder',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux ChromiumOS Builder',
         },
       },
       'Linux ChromiumOS Tests (2)': {
@@ -332,9 +296,9 @@ BUILDERS = {
           GTestTest('browser_tests'),
           GTestTest('content_browsertests'),
         ],
+        'parent_buildername': 'Linux ChromiumOS Builder',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux ChromiumOS Builder',
         },
       },
 
@@ -390,40 +354,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'app_list_unittests',
-          'ash_unittests',
           'aura_builder',
-          'aura_unittests',
-          'base_unittests',
-          'browser_tests',
-          'cacheinvalidation_unittests',
-          'chromeos_unittests',
-          'components_unittests',
-          'compositor_unittests',
-          'content_browsertests',
-          'content_unittests',
-          'crypto_unittests',
-          'dbus_unittests',
-          'device_unittests',
-          'events_unittests',
-          'google_apis_unittests',
-          'gpu_unittests',
-          'interactive_ui_tests',
-          'ipc_tests',
-          'jingle_unittests',
-          'media_unittests',
-          'message_center_unittests',
-          'net_unittests',
-          'ppapi_unittests',
-          'printing_unittests',
-          'remoting_unittests',
-          'sandbox_linux_unittests',
-          'sql_unittests',
-          'sync_unit_tests',
-          'ui_unittests',
-          'unit_tests',
-          'url_unittests',
-          'views_unittests',
         ],
         'testing': {
           'platform': 'linux',
@@ -468,9 +399,9 @@ BUILDERS = {
           GTestTest('unit_tests'),
           GTestTest('sql_unittests'),
         ],
+        'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         },
       },
       'Linux ChromiumOS Tests (dbg)(2)': {
@@ -484,9 +415,9 @@ BUILDERS = {
           GTestTest('browser_tests'),
           GTestTest('content_browsertests'),
         ],
+        'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         },
       },
       'Linux ChromiumOS Tests (dbg)(3)': {
@@ -499,9 +430,9 @@ BUILDERS = {
         'tests': [
           GTestTest('interactive_ui_tests'),
         ],
+        'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         },
       },
     },
@@ -519,43 +450,7 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'app_list_unittests',
-          'aura_unittests',
-          'base_unittests',
-          'browser_tests',
-          'cacheinvalidation_unittests',
-          'cast_unittests',
-          'cc_unittests',
-          'chrome',
-          'chromedriver_unittests',
           'chromium_swarm_tests',
-          'components_unittests',
-          'compositor_unittests',
-          'content_browsertests',
-          'content_unittests',
-          'crypto_unittests',
-          'dbus_unittests',
-          'device_unittests',
-          'events_unittests',
-          'google_apis_unittests',
-          'gpu_unittests',
-          'interactive_ui_tests',
-          'ipc_tests',
-          'jingle_unittests',
-          'media_unittests',
-          'net_unittests',
-          'ppapi_unittests',
-          'printing_unittests',
-          'remoting_unittests',
-          'sandbox_linux_unittests',
-          'sql_unittests',
-          'sync_integration_tests',
-          'sync_unit_tests',
-          'ui_unittests',
-          'unit_tests',
-          'url_unittests',
-          'views_unittests',
-          'webkit_compositor_bindings_unittests',
         ],
         'testing': {
           'platform': 'linux',
@@ -606,9 +501,9 @@ BUILDERS = {
           GTestTest('content_browsertests'),
           GTestTest('webkit_compositor_bindings_unittests'),
         ],
+        'parent_buildername': 'Linux Builder',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux Builder',
         },
       },
       'Linux Sync': {
@@ -623,9 +518,9 @@ BUILDERS = {
               '--ui-test-action-max-timeout=120000'
           ]),
         ],
+        'parent_buildername': 'Linux Builder',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux Builder',
         },
       },
 
@@ -637,39 +532,10 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'base_unittests',
-          'browser_tests',
-          'cacheinvalidation_unittests',
-          'cast_unittests',
-          'cc_unittests',
           'chrome',
-          'chromedriver_unittests',
           'chromium_swarm_tests',
-          'components_unittests',
           'compositor_unittests',
-          'content_browsertests',
-          'content_unittests',
-          'crypto_unittests',
-          'dbus_unittests',
-          'device_unittests',
-          'google_apis_unittests',
-          'gpu_unittests',
-          'interactive_ui_tests',
-          'ipc_tests',
-          'jingle_unittests',
-          'media_unittests',
-          'net_unittests',
-          'ppapi_unittests',
-          'printing_unittests',
-          'remoting_unittests',
-          'sandbox_linux_unittests',
-          'sql_unittests',
           'sync_integration_tests',
-          'sync_unit_tests',
-          'ui_unittests',
-          'unit_tests',
-          'url_unittests',
-          'webkit_compositor_bindings_unittests',
         ],
         'testing': {
           'platform': 'linux',
@@ -713,9 +579,9 @@ BUILDERS = {
           GTestTest('content_browsertests'),
           GTestTest('webkit_compositor_bindings_unittests'),
         ],
+        'parent_buildername': 'Linux GTK Builder',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux GTK Builder',
         },
       },
 
@@ -727,42 +593,8 @@ BUILDERS = {
         },
         'bot_type': 'builder',
         'compile_targets': [
-          'app_list_unittests',
-          'aura_unittests',
-          'base_unittests',
-          'browser_tests',
-          'cacheinvalidation_unittests',
-          'cast_unittests',
-          'cc_unittests',
-          'chrome',
-          'chromedriver_unittests',
-          'components_unittests',
-          'compositor_unittests',
-          'content_browsertests',
-          'content_unittests',
-          'crypto_unittests',
-          'dbus_unittests',
-          'device_unittests',
-          'events_unittests',
           'google_apis_unittests',
-          'gpu_unittests',
-          'interactive_ui_tests',
-          'ipc_tests',
-          'jingle_unittests',
-          'media_unittests',
-          'net_unittests',
-          'ppapi_unittests',
-          'printing_unittests',
-          'remoting_unittests',
-          'sandbox_linux_unittests',
-          'sql_unittests',
           'sync_integration_tests',
-          'sync_unit_tests',
-          'ui_unittests',
-          'unit_tests',
-          'url_unittests',
-          'views_unittests',
-          'webkit_compositor_bindings_unittests',
         ],
         'testing': {
           'platform': 'linux',
@@ -780,9 +612,9 @@ BUILDERS = {
           GTestTest('browser_tests'),
           GTestTest('content_browsertests'),
         ],
+        'parent_buildername': 'Linux Builder (dbg)(32)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux Builder (dbg)(32)',
         },
       },
       'Linux Tests (dbg)(2)(32)': {
@@ -825,9 +657,9 @@ BUILDERS = {
           GTestTest('webkit_compositor_bindings_unittests'),
           NaclIntegrationTest(),
         ],
+        'parent_buildername': 'Linux Builder (dbg)(32)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux Builder (dbg)(32)',
         },
       },
 
@@ -838,43 +670,6 @@ BUILDERS = {
           'TARGET_BITS': 64,
         },
         'bot_type': 'builder',
-        'compile_targets': [
-          'app_list_unittests',
-          'aura_unittests',
-          'base_unittests',
-          'browser_tests',
-          'cacheinvalidation_unittests',
-          'cast_unittests',
-          'cc_unittests',
-          'chrome',
-          'chromedriver_unittests',
-          'components_unittests',
-          'compositor_unittests',
-          'content_browsertests',
-          'content_unittests',
-          'crypto_unittests',
-          'dbus_unittests',
-          'device_unittests',
-          'events_unittests',
-          'google_apis_unittests',
-          'gpu_unittests',
-          'interactive_ui_tests',
-          'ipc_tests',
-          'jingle_unittests',
-          'media_unittests',
-          'net_unittests',
-          'ppapi_unittests',
-          'printing_unittests',
-          'remoting_unittests',
-          'sandbox_linux_unittests',
-          'sql_unittests',
-          'sync_unit_tests',
-          'ui_unittests',
-          'unit_tests',
-          'url_unittests',
-          'views_unittests',
-          'webkit_compositor_bindings_unittests',
-        ],
         'testing': {
           'platform': 'linux',
         },
@@ -891,9 +686,9 @@ BUILDERS = {
           GTestTest('browser_tests'),
           GTestTest('content_browsertests'),
         ],
+        'parent_buildername': 'Linux Builder (dbg)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux Builder (dbg)',
         },
       },
       'Linux Tests (dbg)(2)': {
@@ -937,9 +732,9 @@ BUILDERS = {
           GTestTest('webkit_compositor_bindings_unittests'),
           NaclIntegrationTest(),
         ],
+        'parent_buildername': 'Linux Builder (dbg)',
         'testing': {
           'platform': 'linux',
-          'parent_buildername': 'Linux Builder (dbg)',
         },
       },
 
@@ -951,18 +746,6 @@ BUILDERS = {
         },
         'compile_targets': [
           'all',
-          'base_unittests',
-          'components_unittests',
-          'crypto_unittests',
-          'google_apis_unittests',
-          'content_unittests',
-          'device_unittests',
-          'sandbox_linux_unittests',
-          'ui_unittests',
-          'ipc_tests',
-          'sync_unit_tests',
-          'unit_tests',
-          'sql_unittests',
         ],
         'tests': [
           GTestTest('base_unittests'),
@@ -1058,8 +841,15 @@ def GenSteps(api):
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
   if bot_type in ['builder', 'builder_tester']:
+    compile_targets = set(bot_config.get('compile_targets', []))
+    for test in bot_config.get('tests', []):
+      compile_targets.update(test.compile_targets())
+    for builder_dict in master_dict.get('builders', {}).itervalues():
+      if builder_dict.get('parent_buildername') == buildername:
+        for test in builder_dict.get('tests', []):
+          compile_targets.update(test.compile_targets())
     steps.extend([
-        api.chromium.compile(targets=bot_config.get('compile_targets')),
+        api.chromium.compile(targets=sorted(compile_targets)),
         api.chromium.checkdeps(),
     ])
 
@@ -1112,40 +902,16 @@ def GenTests(api):
       bot_type = bot_config.get('bot_type', 'builder_tester')
 
       if bot_type in ['builder', 'builder_tester']:
-        assert bot_config['testing'].get('parent_buildername') is None, (
+        assert bot_config.get('parent_buildername') is None, (
             'Unexpected parent_buildername for builder %r on master %r.' %
                 (buildername, mastername))
-
-      # Verify that required targets are in fact compiled. This is a common
-      # class of errors (mismatch of what is compiled on builder and required
-      # on tester), and preventing it at recipe writing/testing time is a big
-      # win for stability of production infrastructure.
-      if bot_type in ['tester', 'builder_tester']:
-        required_targets = set(itertools.chain(
-            *[t.compile_targets() for t in bot_config.get('tests', [])]))
-
-        if bot_type == 'tester':
-          parent_buildername = bot_config['testing']['parent_buildername']
-          compile_config = master_config['builders'][parent_buildername]
-          compiled_targets = set(compile_config['compile_targets'])
-        elif bot_type == 'builder_tester':
-          parent_buildername = buildername
-          compiled_targets = set(bot_config.get('compile_targets', []))
-
-        assert required_targets.issubset(compiled_targets), (
-            'On master "%s" builder "%s" requires the following targets to be '
-            'compiled on builder "%s": %s' % (
-                mastername,
-                buildername,
-                parent_buildername,
-                ', '.join(required_targets - compiled_targets)))
 
       test = (
         api.test('full_%s_%s' % (_sanitize_nonalpha(mastername),
                                  _sanitize_nonalpha(buildername))) +
         api.properties.generic(mastername=mastername,
                                buildername=buildername,
-                               parent_buildername=bot_config['testing'].get(
+                               parent_buildername=bot_config.get(
                                    'parent_buildername')) +
         api.platform(bot_config['testing']['platform'],
                      bot_config.get(
