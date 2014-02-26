@@ -8,7 +8,6 @@ class AndroidApi(recipe_api.RecipeApi):
   def __init__(self, **kwargs):
     super(AndroidApi, self).__init__(**kwargs)
     self._env = dict()
-    self._app_manifest_vars = dict()
     self._internal_names = dict()
     self._cleanup_list = []
 
@@ -92,13 +91,11 @@ class AndroidApi(recipe_api.RecipeApi):
            '--output-json', self.m.json.output()]
       )
 
-      self._app_manifest_vars = self.m.step_history.last_step().json.output
+      app_manifest_vars = self.m.step_history.last_step().json.output
       gyp_defs = self.m.chromium.c.gyp_env.GYP_DEFINES
-      gyp_defs['app_manifest_version_code'] = (
-        self._app_manifest_vars['version_code'])
-      gyp_defs['app_manifest_version_name'] = (
-        self._app_manifest_vars['version_name'])
-      gyp_defs['chrome_build_id'] = self._app_manifest_vars['build_id']
+      gyp_defs['app_manifest_version_code'] = app_manifest_vars['version_code']
+      gyp_defs['app_manifest_version_name'] = app_manifest_vars['version_name']
+      gyp_defs['chrome_build_id'] = app_manifest_vars['build_id']
 
       yield self.m.step(
           'get_internal_names',
@@ -107,6 +104,11 @@ class AndroidApi(recipe_api.RecipeApi):
       )
 
       self._internal_names = self.m.step_history.last_step().json.output
+
+  @property
+  def version_name(self):
+    app_manifest_vars = self.m.step_history['get app_manifest_vars']
+    return app_manifest_vars.json.output['version_name']
 
   def envsetup(self):
     envsetup_cmd = [self.m.path.checkout('build', 'android', 'envsetup.sh')]

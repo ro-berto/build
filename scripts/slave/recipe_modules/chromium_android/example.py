@@ -10,10 +10,16 @@ DEPS = [
 ]
 
 def GenSteps(api):
-  api.chromium_android.configure_from_properties('base_config', INTERNAL=False)
+  api.chromium_android.configure_from_properties('base_config', INTERNAL=True)
+  api.chromium_android.c.get_app_manifest_vars = True
   api.chromium_android.c.run_stack_tool_steps = True
 
   yield api.chromium_android.init_and_sync()
+
+  version_name = api.chromium_android.version_name
+  assert isinstance(version_name, basestring) and version_name, (
+      'Could not get a valid version name.')
+
   yield api.chromium_android.envsetup()
   yield api.chromium_android.runhooks()
   yield api.chromium_android.compile()
@@ -32,8 +38,10 @@ def GenTests(api):
   yield (
       api.test('basic') +
       api.properties(
+        buildername='tehbuilder',
         repo_name='src/repo',
         repo_url='svn://svn.chromium.org/chrome/trunk/src',
         revision='4f4b02f6b7fa20a3a25682c457bbc8ad589c8a00',
-        internal=False,
-      ))
+        internal=True,
+      ) +
+      api.chromium_android.default_step_data(api))
