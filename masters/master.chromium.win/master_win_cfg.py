@@ -283,6 +283,7 @@ F('rel_x64_unit_3', win_tester().ChromiumFactory(
       'browser_tests',
       'components_unittests',
       'content_unittests',
+      'gfx_unittests',
       'ipc_tests',
       'sql_unittests',
       'sync_unit_tests',

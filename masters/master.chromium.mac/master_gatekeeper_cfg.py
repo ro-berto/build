@@ -66,6 +66,7 @@ categories_steps = {
     'components_unittests',
     'content_unittests',
     'crypto_unittests',
+    'gfx_unittests,'
     'net_unittests',
     'sql_unittests',
     'sync_unit_tests',

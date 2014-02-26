@@ -338,6 +338,7 @@ F('ios_dbg', ios().ChromiumFactory(
     'components_unittests',
     'content_unittests',
     'crypto_unittests',
+    'gfx_unittests',
     'googleurl',
     'net',
     'ui_unittests',
