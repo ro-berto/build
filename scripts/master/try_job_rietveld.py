@@ -17,6 +17,7 @@ from twisted.internet import defer
 from twisted.python import log
 from twisted.web import client
 
+from master import master_utils
 from master.try_job_base import TryJobBase
 
 
@@ -178,7 +179,7 @@ class TryJobRietveld(TryJobBase):
   """A try job source that gets jobs from pending Rietveld patch sets."""
 
   def __init__(self, name, pools, properties=None, last_good_urls=None,
-               code_review_sites=None, project=None):
+               code_review_sites=None, project=None, filter_master=False):
     """Creates a try job source for Rietveld patch sets.
 
     Args:
@@ -189,11 +190,16 @@ class TryJobRietveld(TryJobBase):
       code_review_sites: Dictionary of project to code review site.  This
           class care only about the 'chrome' project.
       project: The name of the project whose review site URL to extract.
-          If the project is not found in the dictionary, an exception is raised.
+          If the project is not found in the dictionary, an exception is
+          raised.
+      filter_master: Filter try jobs by master name. Necessary if several try
+          masters share the same rietveld instance.
     """
     TryJobBase.__init__(self, name, pools, properties,
                         last_good_urls, code_review_sites)
-    endpoint = self._GetRietveldEndPointForProject(code_review_sites, project)
+    endpoint = self._GetRietveldEndPointForProject(
+        code_review_sites, project, filter_master)
+
     self._poller = _RietveldPoller(endpoint, interval=10)
     self._valid_users = _ValidUserPoller(interval=12 * 60 * 60)
     self._project = project
@@ -205,13 +211,17 @@ class TryJobRietveld(TryJobBase):
             'project=%s' % (endpoint, project))
 
   @staticmethod
-  def _GetRietveldEndPointForProject(code_review_sites, project):
+  def _GetRietveldEndPointForProject(code_review_sites, project,
+                                     filter_master):
     """Determines the correct endpoint for the chrome review site URL.
 
     Args:
       code_review_sites: Dictionary of project name to review site URL.
       project: The name of the project whose review site URL to extract.
-          If the project is not found in the dictionary, an exception is raised.
+          If the project is not found in the dictionary, an exception is
+          raised.
+      filter_master: Filter try jobs by master name. Necessary if several try
+          masters share the same rietveld instance.
 
     Returns: A string with the endpoint extracted from the chrome
         review site URL, which is the URL to poll for new patch
@@ -220,8 +230,13 @@ class TryJobRietveld(TryJobBase):
     if project not in code_review_sites:
       raise Exception('No review site for "%s"' % project)
 
-    return urlparse.urljoin(code_review_sites[project],
-                            'get_pending_try_patchsets?limit=100')
+    url = 'get_pending_try_patchsets?limit=100'
+
+    # Filter by master name if specified.
+    if filter_master:
+      url += '&master=%s' % urllib.quote_plus(master_utils.GetMastername())
+
+    return urlparse.urljoin(code_review_sites[project], url)
 
   @defer.inlineCallbacks
   def SubmitJobs(self, jobs):
