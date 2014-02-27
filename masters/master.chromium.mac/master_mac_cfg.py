@@ -129,6 +129,7 @@ F('rel_unit_2', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'components_unittests',
+    'gfx_unittests',
     'google_apis_unittests',
     'unit',
   ],
@@ -246,6 +247,7 @@ F('dbg_unit_2', mac_tester().ChromiumFactory(
   tests=[
     'browser_tests',
     'check_deps',
+    'gfx_unittests',
     'media',
     'net',
   ],
