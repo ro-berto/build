@@ -108,6 +108,7 @@ F('rel_unit_1', win_tester().ChromiumFactory(
       'content_browsertests',
       'courgette_unittests',
       'crypto_unittests',
+      'gfx_unittests',
       'googleurl',
       'gpu',
       'installer',
