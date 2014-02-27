@@ -155,6 +155,8 @@ def call(*args, **kwargs):
     # produce out of order output.
     while True:
       buf = proc.stdout.read(1)
+      if buf == '\r':
+        buf = '\n'
       if not buf:
         break
       sys.stdout.write(buf)
@@ -392,9 +394,12 @@ def deps2git(sln_dirs):
       return
     # Do we have a better way of doing this....?
     repo_type = 'internal' if 'internal' in sln_dir else 'public'
-    call(sys.executable, DEPS2GIT_PATH, '-t', repo_type,
+    call(sys.executable, DEPS2GIT_PATH,
+         '-t', repo_type,
          '--cache_dir=%s' % CACHE_DIR,
-         '--deps=%s' % deps_file, '--out=%s' % deps_git_file)
+         '--shallow',
+         '--deps=%s' % deps_file,
+         '--out=%s' % deps_git_file)
 
 
 def emit_got_revision(revision):
@@ -402,16 +407,23 @@ def emit_got_revision(revision):
 
 def git_checkout(solutions, revision):
   build_dir = os.getcwd()
+  # Before we do anything, break all git_cache locks.
+  if path.isdir(CACHE_DIR):
+    git('cache', 'unlock', '-vv', '--force', '--all', '--cache-dir', CACHE_DIR)
+    for item in os.listdir(CACHE_DIR):
+      filename = os.path.join(CACHE_DIR, item)
+      if item.endswith('.lock'):
+        raise Exception('%s exists after cache unlock' % filename)
   # Revision only applies to the first solution.
   first_solution = True
   for sln in solutions:
     name = sln['name']
     url = sln['url']
     sln_dir = path.join(build_dir, name)
+    git('cache', 'populate', '-v', '--cache-dir', CACHE_DIR, '--shallow', url)
+    mirror_dir = git('cache', 'exists', '--cache-dir', CACHE_DIR, url).strip()
     if not path.isdir(sln_dir):
-      git('clone', url, sln_dir)
-
-    # Clean out .DEPS.git changes first.
+      git('clone', mirror_dir, sln_dir)
     try:
       # Make sure we start on a known branch first, and not where ever
       # apply_issue left us at before.
@@ -422,7 +434,8 @@ def git_checkout(solutions, revision):
         # Exited abnormally, theres probably something wrong with the checkout.
         # Lets wipe the checkout and try again.
         chromium_utils.RemoveDirectory(sln_dir)
-        git('clone', url, sln_dir)
+        git('clone', mirror_dir, sln_dir)
+        git('checkout', '--force', 'origin/master', cwd=sln_dir)
         git('reset', '--hard', cwd=sln_dir)
       else:
         raise
