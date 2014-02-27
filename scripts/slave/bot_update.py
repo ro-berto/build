@@ -403,7 +403,7 @@ def deps2git(sln_dirs):
 
 
 def emit_got_revision(revision):
-  print '@@@SET_BUILD_PROPERTY@got_revision@%s@@@' % revision
+  print '@@@SET_BUILD_PROPERTY@got_revision@"%s"@@@' % revision
 
 def git_checkout(solutions, revision):
   build_dir = os.getcwd()
