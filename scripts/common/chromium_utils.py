@@ -1363,3 +1363,76 @@ def MultiPool(processes):
     raise
   finally:
     pool.join()
+
+
+def ReadJsonAsUtf8(filename=None, text=None):
+  """Read a json file or string and output a dict.
+
+  This function is different from json.load and json.loads in that it
+  returns utf8-encoded string for keys and values instead of unicode.
+
+  Args:
+  filename: path of a file to parse
+  text: json string to parse
+
+  If both 'filename' and 'text' are provided, 'filename' is used.
+  """
+  def _decode_list(data):
+    rv = []
+    for item in data:
+      if isinstance(item, unicode):
+        item = item.encode('utf-8')
+      elif isinstance(item, list):
+        item = _decode_list(item)
+      elif isinstance(item, dict):
+        item = _decode_dict(item)
+      rv.append(item)
+    return rv
+
+  def _decode_dict(data):
+    rv = {}
+    for key, value in data.iteritems():
+      if isinstance(key, unicode):
+        key = key.encode('utf-8')
+      if isinstance(value, unicode):
+        value = value.encode('utf-8')
+      elif isinstance(value, list):
+        value = _decode_list(value)
+      elif isinstance(value, dict):
+        value = _decode_dict(value)
+      rv[key] = value
+    return rv
+
+  if filename:
+    with open(filename, 'rb') as f:
+      return json.load(f, object_hook=_decode_dict)
+  if text:
+    return json.loads(text, object_hook=_decode_dict)
+
+
+def GetMasterDevParameters(filename='dev_config.json'):
+  """Look for dev_config.json in the master directory,
+
+  Return the parsed content if the file exists, as a dictionary.
+  Every string value in the dictionary is utf8-encoded str.
+
+  If the file is not found, returns an empty dict.
+  """
+  if os.path.isfile(filename):
+    return ReadJsonAsUtf8(filename=filename)
+  return {}
+
+
+def DatabaseSetup(buildmaster_config, require_dbconfig=False):
+  """Read database credentials in the master directory."""
+  if os.path.isfile('.dbconfig'):
+    values = {}
+    execfile('.dbconfig', values)
+    if 'password' not in values:
+      raise Exception('could not get db password')
+
+    buildmaster_config['db_url'] = 'postgresql://%s:%s@%s/%s' % (
+        values['username'], values['password'],
+        values.get('hostname', 'localhost'), values['dbname'])
+  else:
+    assert(not require_dbconfig)
