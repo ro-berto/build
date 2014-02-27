@@ -145,6 +145,7 @@ def goma_setup(options, env):
   # options.goma_dir will be used to check if goma is ready
   # when options.compiler=jsonclang.
   options.goma_dir = None
+  env['GOMA_DISABLED'] = '1'
   return False
 
 
