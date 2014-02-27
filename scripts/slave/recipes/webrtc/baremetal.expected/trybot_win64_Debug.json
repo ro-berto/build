@@ -109,7 +109,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--builder-name=trybot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "audio_device_tests.exe"
     ],
     "name": "audio_device_tests",
@@ -134,7 +133,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--builder-name=trybot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "vie_auto_test.exe",
       "--automated",
       "--capture_test_ensure_resolution_alignment_in_capture_device=false"
@@ -155,7 +153,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--builder-name=trybot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "video_capture_tests.exe"
     ],
     "name": "video_capture_tests"
@@ -174,7 +171,6 @@
       "{\"BUILD_CONFIG\": \"Debug\", \"TARGET_BITS\": 64, \"buildername\": \"trybot builder\", \"mastername\": \"mastername\", \"patch_url\": \"try_job_svn_patch\", \"recipe\": \"webrtc/baremetal\", \"revision\": \"12345\", \"slavename\": \"slavename\"}",
       "--builder-name=trybot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "voe_auto_test.exe",
       "--automated"
     ],

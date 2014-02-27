@@ -83,7 +83,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
       "--builder-name=buildbot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "audio_device_tests.exe"
     ],
     "name": "audio_device_tests",
@@ -108,7 +107,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
       "--builder-name=buildbot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "vie_auto_test.exe",
       "--automated",
       "--capture_test_ensure_resolution_alignment_in_capture_device=false"
@@ -129,7 +127,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
       "--builder-name=buildbot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "video_capture_tests.exe"
     ],
     "name": "video_capture_tests"
@@ -148,7 +145,6 @@
       "{\"BUILD_CONFIG\": \"Release\", \"TARGET_BITS\": 64, \"buildername\": \"buildbot builder\", \"mastername\": \"mastername\", \"recipe\": \"webrtc/baremetal\", \"slavename\": \"slavename\"}",
       "--builder-name=buildbot builder",
       "--slave-name=slavename",
-      "--master-name=mastername",
       "voe_auto_test.exe",
       "--automated"
     ],

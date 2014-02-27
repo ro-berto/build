@@ -172,7 +172,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=win_blink",
       "--slave-name=TestSlavename",
-      "--master-name=tryserver.chromium",
       "--build-number=571",
       "webkit_unit_tests.exe"
     ],
@@ -192,7 +191,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=win_blink",
       "--slave-name=TestSlavename",
-      "--master-name=tryserver.chromium",
       "--build-number=571",
       "blink_platform_unittests.exe"
     ],
@@ -212,7 +210,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=win_blink",
       "--slave-name=TestSlavename",
-      "--master-name=tryserver.chromium",
       "--build-number=571",
       "blink_heap_unittests.exe"
     ],
@@ -232,7 +229,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=win_blink",
       "--slave-name=TestSlavename",
-      "--master-name=tryserver.chromium",
       "--build-number=571",
       "wtf_unittests.exe"
     ],
@@ -253,7 +249,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=win_blink",
       "--slave-name=TestSlavename",
-      "--master-name=tryserver.chromium",
       "--build-number=571",
       "--run-python-script",
       "[BUILD]\\scripts\\slave\\chromium\\layout_test_wrapper.py",
@@ -397,7 +392,6 @@
       "{\"blamelist\": [\"cool_dev1337@chromium.org\", \"hax@chromium.org\"], \"branch\": \"\", \"buildername\": \"win_blink\", \"buildnumber\": 571, \"issue\": 12853011, \"mastername\": \"tryserver.chromium\", \"patchset\": 1, \"project\": \"chrome\", \"recipe\": \"blink_trybot\", \"repository\": \"\", \"requester\": \"commit-bot@chromium.org\", \"revision\": \"HEAD\", \"rietveld\": \"https://codereview.chromium.org\", \"root\": \"src/third_party/WebKit\", \"slavename\": \"TestSlavename\", \"workdir\": \"/path/to/workdir/TestSlavename\"}",
       "--builder-name=win_blink",
       "--slave-name=TestSlavename",
-      "--master-name=tryserver.chromium",
       "--build-number=571",
       "--run-python-script",
       "[BUILD]\\scripts\\slave\\chromium\\layout_test_wrapper.py",

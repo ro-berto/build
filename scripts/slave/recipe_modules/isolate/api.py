@@ -97,7 +97,7 @@ class IsolateApi(recipe_api.RecipeApi):
     return full_args
 
   def runtest(self, test, revision, webkit_revision, args=None, name=None,
-              **runtest_kwargs):
+              master_class_name=None, **runtest_kwargs):
     """Runs a test which has previously been uploaded to the isolate server.
     Uses runtest_args_list, above, and delegates to api.chromium.runtest."""
     return self.m.chromium.runtest(
@@ -108,11 +108,13 @@ class IsolateApi(recipe_api.RecipeApi):
       name=name or test,
       revision=revision,
       webkit_revision=webkit_revision,
+      master_class_name=master_class_name,
       **runtest_kwargs)
 
   def run_telemetry_test(self, isolate_name, test,
                          revision, webkit_revision,
-                         args=None, name=None, **runtest_kwargs):
+                         args=None, name=None, master_class_name=None,
+                         **runtest_kwargs):
     """Runs a Telemetry test which has previously been uploaded to the
     isolate server. Uses runtest_args_list, above, and delegates to
     api.chromium.run_telemetry_test."""
@@ -127,4 +129,5 @@ class IsolateApi(recipe_api.RecipeApi):
       name=name,
       revision=revision,
       webkit_revision=webkit_revision,
+      master_class_name=master_class_name,
       **runtest_kwargs)

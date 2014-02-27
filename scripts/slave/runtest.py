@@ -279,7 +279,7 @@ def _GenerateJSONForTestResults(options, results_tracker):
   generate_json_options.input_results_xml = options.test_output_xml
   generate_json_options.builder_base_url = '%s/%s/%s/%s' % (
       config.Master.archive_url, DEST_DIR, slave_name, options.test_type)
-  generate_json_options.master_name = options.master_name or _GetMaster()
+  generate_json_options.master_name = options.master_class_name or _GetMaster()
   generate_json_options.test_results_server = config.Master.test_results_server
 
   # Print out master name for log_parser
@@ -1424,9 +1424,14 @@ def main():
                            help='The name of the builder running this script.')
   option_parser.add_option('--slave-name', default=None,
                            help='The name of the slave running this script.')
-  option_parser.add_option('--master-name', default=None,
-                           help='The name of the buildbot master running this '
-                           'script. Defaults to fetching it from slaves.cfg.')
+  option_parser.add_option('--master-class-name', default=None,
+                           help='The class name of the buildbot master running '
+                           'this script: examples include "Chromium", '
+                           '"ChromiumWebkit", and "ChromiumGPU". The flakiness '
+                           'dashboard uses this value to categorize results. '
+                           'See buildershandler.py in the flakiness dashboard '
+                           'code (use codesearch) for the known values. '
+                           'Defaults to fetching it from slaves.cfg.')
   option_parser.add_option('--build-number', default=None,
                            help=('The build number of the builder running'
                                  'this script.'))

@@ -87,7 +87,8 @@ class ChromiumApi(recipe_api.RecipeApi):
               results_url=None, perf_dashboard_id=None, test_type=None,
               generate_json_file=False, results_directory=None,
               python_mode=False, spawn_dbus=True, parallel=False,
-              revision=None, webkit_revision=None, **kwargs):
+              revision=None, webkit_revision=None, master_class_name=None,
+              **kwargs):
     """Return a runtest.py invocation."""
     args = args or []
     assert isinstance(args, list)
@@ -119,7 +120,6 @@ class ChromiumApi(recipe_api.RecipeApi):
     # unconditionally.
     full_args.append('--builder-name=%s' % self.m.properties['buildername'])
     full_args.append('--slave-name=%s' % self.m.properties['slavename'])
-    full_args.append('--master-name=%s' % self.m.properties['mastername'])
     # A couple of the recipes contain tests which don't specify a buildnumber,
     # so make this optional.
     if self.m.properties.get('buildnumber'):
@@ -134,6 +134,13 @@ class ChromiumApi(recipe_api.RecipeApi):
       full_args.append('--revision=%s' % revision)
     if webkit_revision:
       full_args.append('--webkit-revision=%s' % webkit_revision)
+    # The master_class_name is normally computed by runtest.py itself.
+    # The only reason it is settable via this API is to enable easier
+    # local testing of recipes. Be very careful when passing this
+    # argument.
+    if master_class_name:
+      full_args.append('--master-class-name=%s' % master_class_name)
+
     full_args.append(test)
     full_args.extend(args)
 
@@ -153,7 +160,8 @@ class ChromiumApi(recipe_api.RecipeApi):
 
   def run_telemetry_test(self, runner, test, name='', args=None,
                          prefix_args=None, results_directory='',
-                         spawn_dbus=False, revision=None, webkit_revision=None):
+                         spawn_dbus=False, revision=None, webkit_revision=None,
+                         master_class_name=None):
     """Runs a Telemetry based test with 'runner' as the executable.
     Automatically passes certain flags like --output-format=gtest to the
     test runner. 'prefix_args' are passed before the built-in arguments and
@@ -198,6 +206,7 @@ class ChromiumApi(recipe_api.RecipeApi):
         spawn_dbus=spawn_dbus,
         revision=revision,
         webkit_revision=webkit_revision,
+        master_class_name=master_class_name,
         env=env)
 
   def run_telemetry_unittests(self, name):

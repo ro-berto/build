@@ -93,6 +93,18 @@ class GpuApi(recipe_api.RecipeApi):
     return gclient_data['solutions']['src/third_party/WebKit/']['revision']
 
   @property
+  def _master_class_name_for_testing(self):
+    """Allows the class name of the build master to be mocked for
+    local testing by setting the build property
+    "master_class_name_for_testing" on the command line. The bots do
+    not need to, and should not, set this property. Class names follow
+    the naming convention like "ChromiumWebkit" and "ChromiumGPU".
+    This value is used by the flakiness dashboard when uploading
+    results. See the documentation of the --master-class-name argument
+    to runtest.py for full documentation."""
+    return self.m.properties.get('master_class_name_for_testing')
+
+  @property
   def using_isolates(self):
     """Indicates whether this slave is prepared to use isolates. Querying
     this is only really useful on testers, not builders."""
@@ -254,15 +266,19 @@ class GpuApi(recipe_api.RecipeApi):
     depending on whether isolates are in use for this build."""
     if self._use_isolates:
       # If the name is supplied, treat that as the name of the isolate.
-      yield self.m.isolate.runtest(kwargs.get('name', test),
-                                   self._build_revision,
-                                   self._webkit_revision,
-                                   **kwargs)
+      yield self.m.isolate.runtest(
+        kwargs.get('name', test),
+        self._build_revision,
+        self._webkit_revision,
+        master_class_name=self._master_class_name_for_testing,
+        **kwargs)
     else:
-      yield self.m.chromium.runtest(test,
-                                    revision=self._build_revision,
-                                    webkit_revision=self._webkit_revision,
-                                    **kwargs)
+      yield self.m.chromium.runtest(
+        test,
+        revision=self._build_revision,
+        webkit_revision=self._webkit_revision,
+        master_class_name=self._master_class_name_for_testing,
+        **kwargs)
 
   def _maybe_run_isolated_telemetry_gpu_test(self, test, args=None, name=None,
                                              **kwargs):
@@ -272,14 +288,16 @@ class GpuApi(recipe_api.RecipeApi):
       test_args = ['-v']
       if args:
         test_args.extend(args)
-      yield self.m.isolate.run_telemetry_test('telemetry_gpu_test',
-                                              test,
-                                              self._build_revision,
-                                              self._webkit_revision,
-                                              args=test_args,
-                                              name=name,
-                                              spawn_dbus=True,
-                                              **kwargs)
+      yield self.m.isolate.run_telemetry_test(
+        'telemetry_gpu_test',
+        test,
+        self._build_revision,
+        self._webkit_revision,
+        args=test_args,
+        name=name,
+        master_class_name=self._master_class_name_for_testing,
+        spawn_dbus=True,
+        **kwargs)
     else:
       yield self._run_telemetry_gpu_test(test, name, args)
 
@@ -295,4 +313,5 @@ class GpuApi(recipe_api.RecipeApi):
     return self.m.chromium.run_telemetry_test(
         str(self.m.path.checkout('content', 'test', 'gpu', 'run_gpu_test.py')),
         test, name, test_args, results_directory, spawn_dbus=True,
-        revision=self._build_revision, webkit_revision=self._webkit_revision)
+        revision=self._build_revision, webkit_revision=self._webkit_revision,
+        master_class_name=self._master_class_name_for_testing)

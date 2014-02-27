@@ -150,7 +150,6 @@
       "--annotate=gtest",
       "--builder-name=Linux Sync",
       "--slave-name=TestSlavename",
-      "--master-name=chromium.linux",
       "--build-number=571",
       "--parallel",
       "sync_integration_tests",
