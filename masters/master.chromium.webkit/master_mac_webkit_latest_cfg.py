@@ -148,6 +148,9 @@ F('f_webkit_mac_oilpan_rel', mac().ChromiumFactory(
     options=['--build-tool=ninja', '--compiler=goma-clang', '--',
         'blink_tests'],
     factory_properties={
+        'additional_expectations': [
+            ['third_party', 'WebKit', 'LayoutTests', 'OilpanExpectations' ],
+        ],
         'archive_webkit_results': ActiveMaster.is_production_host,
         'blink_config': 'blink',
         'generate_gtest_json': True,
