@@ -13,13 +13,8 @@
       "gclient setup",
       "gclient sync",
       "gclient runhooks",
-      "cleanup_temp",
-      "compile",
-      "checkdeps",
-      "archive build",
-      "deps2git",
-      "deps2submodules",
-      "checkperms"
+      "read test spec",
+      "cleanup_temp"
     ]
   },
   {
@@ -83,6 +78,20 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.chromiumos.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
@@ -136,7 +145,15 @@
       "url_unittests",
       "views_unittests"
     ],
-    "name": "compile"
+    "name": "compile",
+    "seed_steps": [
+      "compile",
+      "checkdeps",
+      "archive build",
+      "deps2git",
+      "deps2submodules",
+      "checkperms"
+    ]
   },
   {
     "cmd": [

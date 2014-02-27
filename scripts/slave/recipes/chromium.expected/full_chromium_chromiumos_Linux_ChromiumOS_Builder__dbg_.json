@@ -13,10 +13,8 @@
       "gclient setup",
       "gclient sync",
       "gclient runhooks",
-      "cleanup_temp",
-      "compile",
-      "checkdeps",
-      "package build"
+      "read test spec",
+      "cleanup_temp"
     ]
   },
   {
@@ -80,6 +78,20 @@
     "cmd": [
       "python",
       "-u",
+      "\nimport shutil\nimport sys\nshutil.copy(sys.argv[1], sys.argv[2])\n",
+      "[SLAVE_BUILD]/src/testing/buildbot/chromium.chromiumos.json",
+      "/path/to/tmp/json"
+    ],
+    "name": "read test spec",
+    "~followup_annotations": [
+      "@@@STEP_LOG_LINE@json.output@{}@@@",
+      "@@@STEP_LOG_END@json.output@@@"
+    ]
+  },
+  {
+    "cmd": [
+      "python",
+      "-u",
       "[BUILD]/scripts/slave/cleanup_temp.py"
     ],
     "name": "cleanup_temp"
@@ -101,42 +113,14 @@
       "--goma-dir",
       "[BUILD]/goma",
       "--",
-      "app_list_unittests",
-      "ash_unittests",
-      "aura_builder",
-      "aura_unittests",
-      "base_unittests",
-      "browser_tests",
-      "cacheinvalidation_unittests",
-      "chromeos_unittests",
-      "components_unittests",
-      "compositor_unittests",
-      "content_browsertests",
-      "content_unittests",
-      "crypto_unittests",
-      "dbus_unittests",
-      "device_unittests",
-      "events_unittests",
-      "google_apis_unittests",
-      "gpu_unittests",
-      "interactive_ui_tests",
-      "ipc_tests",
-      "jingle_unittests",
-      "media_unittests",
-      "message_center_unittests",
-      "net_unittests",
-      "ppapi_unittests",
-      "printing_unittests",
-      "remoting_unittests",
-      "sandbox_linux_unittests",
-      "sql_unittests",
-      "sync_unit_tests",
-      "ui_unittests",
-      "unit_tests",
-      "url_unittests",
-      "views_unittests"
+      "aura_builder"
     ],
-    "name": "compile"
+    "name": "compile",
+    "seed_steps": [
+      "compile",
+      "checkdeps",
+      "package build"
+    ]
   },
   {
     "cmd": [

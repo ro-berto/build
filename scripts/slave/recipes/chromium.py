@@ -24,7 +24,7 @@ class ArchiveBuildStep(object):
         'archive build', self.gs_bucket)
 
   @staticmethod
-  def compile_targets():
+  def compile_targets(_):
     return []
 
 
@@ -34,7 +34,7 @@ class CheckpermsTest(object):
     return api.chromium.checkperms()
 
   @staticmethod
-  def compile_targets():
+  def compile_targets(_):
     return []
 
 
@@ -44,7 +44,7 @@ class Deps2GitTest(object):
     return api.chromium.deps2git()
 
   @staticmethod
-  def compile_targets():
+  def compile_targets(_):
     return []
 
 
@@ -54,7 +54,7 @@ class Deps2SubmodulesTest(object):
     return api.chromium.deps2submodules()
 
   @staticmethod
-  def compile_targets():
+  def compile_targets(_):
     return []
 
 
@@ -70,8 +70,25 @@ class GTestTest(object):
                                 xvfb=True,
                                 parallel=True)
 
-  def compile_targets(self):
+  def compile_targets(self, _):
     return [self.name]
+
+
+class DynamicGTestTests(object):
+  def __init__(self, buildername):
+    self.buildername = buildername
+
+  def _get_tests(self, api):
+    return api.step_history['read test spec'].json.output.get(
+        self.buildername, {}).get('gtest_tests', [])
+
+  def run(self, api):
+    return [api.chromium.runtest(
+                test, annotate='gtest', xvfb=True, parallel=True)
+            for test in self._get_tests(api)]
+
+  def compile_targets(self, api):
+    return self._get_tests(api)
 
 
 class TelemetryTest(object):
@@ -82,7 +99,7 @@ class TelemetryTest(object):
     return api.chromium.run_telemetry_unittests(self.name)
 
   @staticmethod
-  def compile_targets():
+  def compile_targets(_):
     return ['chrome']
 
 
@@ -101,7 +118,7 @@ class NaclIntegrationTest(object):
         args)
 
   @staticmethod
-  def compile_targets():
+  def compile_targets(_):
     return ['chrome']
 
 
@@ -248,36 +265,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('base_unittests'),
-          GTestTest('cacheinvalidation_unittests'),
-          GTestTest('chromeos_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('dbus_unittests'),
-          GTestTest('google_apis_unittests'),
-          GTestTest('gpu_unittests'),
-          GTestTest('url_unittests'),
-          GTestTest('jingle_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('media_unittests'),
-          GTestTest('net_unittests'),
-          GTestTest('ppapi_unittests'),
-          GTestTest('printing_unittests'),
-          GTestTest('remoting_unittests'),
-          GTestTest('sandbox_linux_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('views_unittests'),
-          GTestTest('aura_unittests'),
-          GTestTest('ash_unittests'),
-          GTestTest('app_list_unittests'),
-          GTestTest('message_center_unittests'),
-          GTestTest('compositor_unittests'),
-          GTestTest('events_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('sql_unittests'),
+          DynamicGTestTests('Linux ChromiumOS Tests (1)'),
         ],
         'parent_buildername': 'Linux ChromiumOS Builder',
         'testing': {
@@ -292,9 +280,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('interactive_ui_tests'),
-          GTestTest('browser_tests'),
-          GTestTest('content_browsertests'),
+          DynamicGTestTests('Linux ChromiumOS Tests (2)'),
         ],
         'parent_buildername': 'Linux ChromiumOS Builder',
         'testing': {
@@ -368,36 +354,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('base_unittests'),
-          GTestTest('cacheinvalidation_unittests'),
-          GTestTest('chromeos_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('dbus_unittests'),
-          GTestTest('google_apis_unittests'),
-          GTestTest('gpu_unittests'),
-          GTestTest('url_unittests'),
-          GTestTest('jingle_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('media_unittests'),
-          GTestTest('net_unittests'),
-          GTestTest('ppapi_unittests'),
-          GTestTest('printing_unittests'),
-          GTestTest('remoting_unittests'),
-          GTestTest('sandbox_linux_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('views_unittests'),
-          GTestTest('aura_unittests'),
-          GTestTest('ash_unittests'),
-          GTestTest('app_list_unittests'),
-          GTestTest('message_center_unittests'),
-          GTestTest('compositor_unittests'),
-          GTestTest('events_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('sql_unittests'),
+          DynamicGTestTests('Linux ChromiumOS Tests (dbg)(1)'),
         ],
         'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         'testing': {
@@ -412,8 +369,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('browser_tests'),
-          GTestTest('content_browsertests'),
+          DynamicGTestTests('Linux ChromiumOS Tests (dbg)(2)'),
         ],
         'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         'testing': {
@@ -428,7 +384,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('interactive_ui_tests'),
+          DynamicGTestTests('Linux ChromiumOS Tests (dbg)(3)'),
         ],
         'parent_buildername': 'Linux ChromiumOS Builder (dbg)',
         'testing': {
@@ -464,42 +420,9 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('app_list_unittests'),
-          GTestTest('aura_unittests'),
-          GTestTest('interactive_ui_tests'),
-          GTestTest('base_unittests'),
-          GTestTest('cacheinvalidation_unittests'),
-          GTestTest('cast_unittests'),
-          GTestTest('cc_unittests'),
-          GTestTest('chromedriver_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('compositor_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('dbus_unittests'),
-          GTestTest('google_apis_unittests'),
-          GTestTest('gpu_unittests'),
-          GTestTest('url_unittests'),
-          GTestTest('jingle_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('events_unittests'),
-          GTestTest('media_unittests'),
-          GTestTest('net_unittests'),
-          GTestTest('ppapi_unittests'),
-          GTestTest('printing_unittests'),
-          GTestTest('remoting_unittests'),
-          GTestTest('sandbox_linux_unittests'),
+          DynamicGTestTests('Linux Tests'),
           TelemetryTest('telemetry_unittests'),
           TelemetryTest('telemetry_perf_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('views_unittests'),
-          GTestTest('sql_unittests'),
-          GTestTest('browser_tests'),
-          GTestTest('content_browsertests'),
-          GTestTest('webkit_compositor_bindings_unittests'),
         ],
         'parent_buildername': 'Linux Builder',
         'testing': {
@@ -549,35 +472,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('interactive_ui_tests'),
-          GTestTest('base_unittests'),
-          GTestTest('cacheinvalidation_unittests'),
-          GTestTest('cast_unittests'),
-          GTestTest('cc_unittests'),
-          GTestTest('chromedriver_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('dbus_unittests'),
-          GTestTest('google_apis_unittests'),
-          GTestTest('gpu_unittests'),
-          GTestTest('url_unittests'),
-          GTestTest('jingle_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('media_unittests'),
-          GTestTest('net_unittests'),
-          GTestTest('ppapi_unittests'),
-          GTestTest('printing_unittests'),
-          GTestTest('remoting_unittests'),
-          GTestTest('sandbox_linux_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('sql_unittests'),
-          GTestTest('browser_tests'),
-          GTestTest('content_browsertests'),
-          GTestTest('webkit_compositor_bindings_unittests'),
+          DynamicGTestTests('Linux GTK Tests'),
         ],
         'parent_buildername': 'Linux GTK Builder',
         'testing': {
@@ -608,9 +503,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('net_unittests'),
-          GTestTest('browser_tests'),
-          GTestTest('content_browsertests'),
+          DynamicGTestTests('Linux Tests (dbg)(1)(32)'),
         ],
         'parent_buildername': 'Linux Builder (dbg)(32)',
         'testing': {
@@ -625,36 +518,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('app_list_unittests'),
-          GTestTest('aura_unittests'),
-          GTestTest('interactive_ui_tests'),
-          GTestTest('base_unittests'),
-          GTestTest('cacheinvalidation_unittests'),
-          GTestTest('cast_unittests'),
-          GTestTest('cc_unittests'),
-          GTestTest('chromedriver_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('compositor_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('dbus_unittests'),
-          GTestTest('gpu_unittests'),
-          GTestTest('url_unittests'),
-          GTestTest('jingle_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('events_unittests'),
-          GTestTest('media_unittests'),
-          GTestTest('ppapi_unittests'),
-          GTestTest('printing_unittests'),
-          GTestTest('remoting_unittests'),
-          GTestTest('sandbox_linux_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('views_unittests'),
-          GTestTest('sql_unittests'),
-          GTestTest('webkit_compositor_bindings_unittests'),
+          DynamicGTestTests('Linux Tests (dbg)(2)(32)'),
           NaclIntegrationTest(),
         ],
         'parent_buildername': 'Linux Builder (dbg)(32)',
@@ -682,9 +546,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('net_unittests'),
-          GTestTest('browser_tests'),
-          GTestTest('content_browsertests'),
+          DynamicGTestTests('Linux Tests (dbg)(1)'),
         ],
         'parent_buildername': 'Linux Builder (dbg)',
         'testing': {
@@ -699,37 +561,7 @@ BUILDERS = {
         },
         'bot_type': 'tester',
         'tests': [
-          GTestTest('app_list_unittests'),
-          GTestTest('aura_unittests'),
-          GTestTest('interactive_ui_tests'),
-          GTestTest('base_unittests'),
-          GTestTest('cacheinvalidation_unittests'),
-          GTestTest('cast_unittests'),
-          GTestTest('cc_unittests'),
-          GTestTest('chromedriver_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('compositor_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('dbus_unittests'),
-          GTestTest('google_apis_unittests'),
-          GTestTest('gpu_unittests'),
-          GTestTest('url_unittests'),
-          GTestTest('jingle_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('events_unittests'),
-          GTestTest('media_unittests'),
-          GTestTest('ppapi_unittests'),
-          GTestTest('printing_unittests'),
-          GTestTest('remoting_unittests'),
-          GTestTest('sandbox_linux_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('views_unittests'),
-          GTestTest('sql_unittests'),
-          GTestTest('webkit_compositor_bindings_unittests'),
+          DynamicGTestTests('Linux Tests (dbg)(2)'),
           NaclIntegrationTest(),
         ],
         'parent_buildername': 'Linux Builder (dbg)',
@@ -748,18 +580,7 @@ BUILDERS = {
           'all',
         ],
         'tests': [
-          GTestTest('base_unittests'),
-          GTestTest('components_unittests'),
-          GTestTest('crypto_unittests'),
-          GTestTest('google_apis_unittests'),
-          GTestTest('content_unittests'),
-          GTestTest('device_unittests'),
-          GTestTest('sandbox_linux_unittests'),
-          GTestTest('ui_unittests'),
-          GTestTest('ipc_tests'),
-          GTestTest('sync_unit_tests'),
-          GTestTest('unit_tests'),
-          GTestTest('sql_unittests'),
+          DynamicGTestTests('Linux Clang (dbg)'),
         ],
         'testing': {
           'platform': 'linux',
@@ -829,25 +650,31 @@ def GenSteps(api):
   for c in recipe_config.get('gclient_apply_config', []):
     api.gclient.apply_config(c)
 
-  # For non-trybot recipes we should know (seed) all steps in advance,
-  # at the beginning of each build. Instead of yielding single steps
-  # or groups of steps, yield all of them at the end.
-  steps = [
+  yield (
     api.gclient.checkout(),
     api.chromium.runhooks(),
+    api.json.read(
+      'read test spec',
+      api.path.checkout('testing', 'buildbot', '%s.json' % mastername),
+      step_test_data=lambda: api.json.test_api.output({})),
     api.chromium.cleanup_temp(),
-  ]
+  )
+
+  # For non-trybot recipes we should know (seed) all steps in advance,
+  # once we read the test spec. Instead of yielding single steps
+  # or groups of steps, yield all of them at the end.
+  steps = []
 
   bot_type = bot_config.get('bot_type', 'builder_tester')
 
   if bot_type in ['builder', 'builder_tester']:
     compile_targets = set(bot_config.get('compile_targets', []))
     for test in bot_config.get('tests', []):
-      compile_targets.update(test.compile_targets())
+      compile_targets.update(test.compile_targets(api))
     for builder_dict in master_dict.get('builders', {}).itervalues():
       if builder_dict.get('parent_buildername') == buildername:
         for test in builder_dict.get('tests', []):
-          compile_targets.update(test.compile_targets())
+          compile_targets.update(test.compile_targets(api))
     steps.extend([
         api.chromium.compile(targets=sorted(compile_targets)),
         api.chromium.checkdeps(),
