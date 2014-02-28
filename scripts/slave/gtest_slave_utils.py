@@ -178,7 +178,7 @@ def GenerateJSONResults(test_results_map, options):
       options.builder_name, options.build_name, options.build_number,
       options.results_directory, options.builder_base_url,
       test_results_map,
-      svn_revisions=(('webkit', options.webkit_revision),
+      svn_revisions=(('blink', options.webkit_revision),
                      ('chrome', options.chrome_revision)),
       test_results_server=options.test_results_server,
       test_type=options.test_type,
