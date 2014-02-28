@@ -71,10 +71,24 @@ class GpuApi(recipe_api.RecipeApi):
     only for naming purposes. This could be changed to use a different
     identifier (for example, the build number on the slave), but using
     this value is convenient for easily identifying results."""
-    # At this point, the 'revision' build property is reliably specified on
-    # all bots, both builders and testers, even if we are not going to
-    # check out the workspace.
-    return self.m.properties['revision']
+    # On the Blink bots, the 'revision' property alternates between a
+    # Chromium and a Blink revision, so is not a good value to use.
+    #
+    # In all cases on the waterfall, the tester is triggered from a
+    # builder which sends down parent_got_revision. The only situation
+    # where this doesn't happen is when running the build_and_test
+    # recipe locally for testing purposes.
+    rev = self.m.properties.get('parent_got_revision')
+    if rev:
+      return rev
+    # Fall back to querying the workspace as a last resort. This should
+    # only be necessary on combined builder/testers, which isn't a
+    # configuration which actually exists on any waterfall any more. If the
+    # build_and_test recipe is being run locally and the checkout is being
+    # skipped, then the 'parent_got_revision' property can be specified on
+    # the command line as a workaround.
+    gclient_data = self.m.step_history['gclient sync'].json.output
+    return gclient_data['solutions']['src/']['revision']
 
   @property
   def _webkit_revision(self):
@@ -88,7 +102,10 @@ class GpuApi(recipe_api.RecipeApi):
       return wk_rev
     # Fall back to querying the workspace as a last resort. This should
     # only be necessary on combined builder/testers, which isn't a
-    # configuration which actually exists on any waterfall any more.
+    # configuration which actually exists on any waterfall any more. If the
+    # build_and_test recipe is being run locally and the checkout is being
+    # skipped, then the 'parent_got_webkit_revision' property can be
+    # specified on the command line as a workaround.
     gclient_data = self.m.step_history['gclient sync'].json.output
     return gclient_data['solutions']['src/third_party/WebKit/']['revision']
 

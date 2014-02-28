@@ -87,6 +87,7 @@ def GenTests(api):
     api.properties.git_scheduled(
       build_config='Release',
       skip_checkout=True,
+      parent_got_revision=10000,
       parent_got_webkit_revision=10001) +
     api.platform.name('mac')
   )
