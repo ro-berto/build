@@ -78,17 +78,31 @@ class DynamicGTestTests(object):
   def __init__(self, buildername):
     self.buildername = buildername
 
+  @staticmethod
+  def _canonicalize_test(test):
+    if isinstance(test, basestring):
+      return {'test': test, 'shard_index': 0, 'total_shards': 1}
+    return test
+
   def _get_tests(self, api):
-    return api.step_history['read test spec'].json.output.get(
-        self.buildername, {}).get('gtest_tests', [])
+    test_spec = api.step_history['read test spec'].json.output
+    return [self._canonicalize_test(t) for t in
+            test_spec.get(self.buildername, {}).get('gtest_tests', [])]
 
   def run(self, api):
-    return [api.chromium.runtest(
-                test, annotate='gtest', xvfb=True, parallel=True)
-            for test in self._get_tests(api)]
+    steps = []
+    for test in self._get_tests(api):
+      args = []
+      if test['shard_index'] != 0 or test['total_shards'] != 1:
+        args.extend(['--test-launcher-shard-index=%d' % test['shard_index'],
+                     '--test-launcher-total-shards=%d' % test['total_shards']])
+      steps.append(api.chromium.runtest(
+          test['test'], args=args, annotate='gtest', xvfb=True, parallel=True))
+
+    return steps
 
   def compile_targets(self, api):
-    return self._get_tests(api)
+    return [t['test'] for t in self._get_tests(api)]
 
 
 class TelemetryTest(object):
@@ -749,3 +763,19 @@ def GenTests(api):
         test += api.step_data('checkdeps', api.json.output([]))
 
       yield test
+
+  yield (
+    api.test('dynamic_gtest') +
+    api.properties.generic(mastername='chromium.linux',
+                           buildername='Linux Tests',
+                           parent_buildername='Linux Builder') +
+    api.platform('linux', 64) +
+    api.override_step_data('read test spec', api.json.output({
+      'Linux Tests': {
+        'gtest_tests': [
+          'base_unittests',
+          {'test': 'browser_tests', 'shard_index': 0, 'total_shards': 2},
+        ],
+      },
+    }))
+  )
